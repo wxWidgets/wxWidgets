@@ -407,6 +407,7 @@ public:
 //---------------------------------------------------------------------------
 %newgroup;
 
+// WXWIN_COMPATIBILITY_2_4
 
 class wxBookCtrlSizer: public wxSizer
 {

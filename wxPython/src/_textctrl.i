@@ -99,6 +99,12 @@ enum wxTextCtrlHitTestResult
     wxTE_HT_BEYOND          // after [the end of line]
 };
 
+
+enum {
+    wxOutOfRangeTextCoord,
+    wxInvalidTextCoord
+};
+
 //---------------------------------------------------------------------------
 
 // wxTextAttr: a structure containing the visual attributes of a text

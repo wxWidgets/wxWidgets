@@ -73,6 +73,8 @@
 %rename(TE_HT_ON_TEXT)                      wxTE_HT_ON_TEXT;
 %rename(TE_HT_BELOW)                        wxTE_HT_BELOW;
 %rename(TE_HT_BEYOND)                       wxTE_HT_BEYOND;
+%rename(OutOfRangeTextCoord)                wxOutOfRangeTextCoord;
+%rename(InvalidTextCoord)                   wxInvalidTextCoord;
 %rename(TextAttr)                           wxTextAttr;
 %rename(TextCtrl)                           wxTextCtrl;
 %rename(TextUrlEvent)                       wxTextUrlEvent;

@@ -19,7 +19,7 @@
 #include <wx/listctrl.h>
 %}
 
-MAKE_CONST_WXSTRING2(ListCtrlNameStr, _T("wxListCtrl"));
+MAKE_CONST_WXSTRING(ListCtrlNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup
@@ -288,8 +288,6 @@ public:
 %constant wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT;
 %constant wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM;
 %constant wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-%constant wxEventType wxEVT_COMMAND_LIST_GET_INFO;
-%constant wxEventType wxEVT_COMMAND_LIST_SET_INFO;
 %constant wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED;
 %constant wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED;
 %constant wxEventType wxEVT_COMMAND_LIST_KEY_DOWN;
@@ -305,6 +303,9 @@ public:
 %constant wxEventType wxEVT_COMMAND_LIST_COL_END_DRAG;
 %constant wxEventType wxEVT_COMMAND_LIST_ITEM_FOCUSED;
 
+// WXWIN_COMPATIBILITY_2_4
+%constant wxEventType wxEVT_COMMAND_LIST_GET_INFO;
+%constant wxEventType wxEVT_COMMAND_LIST_SET_INFO;
 
 
 %pythoncode {

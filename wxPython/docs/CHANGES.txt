@@ -124,7 +124,7 @@ morbidly curious, here are a few more details:
     * The %name directive is now deprecated so I replaced most uses of
       it with a custom %Rename macro that uses %rename internally.
       These will evetually need to be replaced with a DocDecl macro
-      when docstrings are added.
+      when docstrings are added for those items.
 
     * The "this" attribute of all SWIGged classes is no longer a
       string containing a "swigified pointer", but rather a custom
@@ -160,6 +160,25 @@ lots of surplus events)
 
 wxGTK: Applied patch for proper menu highlight colour detection in
 wx.SystemSettings.
+
+wxGTK: Commited scrollbar patch #1093339 which sends lineup, linedown
+events based on intercepting the mouse down events.
+
+wxGTK: Applied patch #1102789 which solved conflicts between wxWidgets
+and GTK+'s context menu code.
+
+wxGTK: Applied patch #1100327 for correct feedback from DND actions
+(not all actions are allowed).
+
+Fixed memory leak in wxGRID::UpdateAttr[Rows][Or][Cols] (patch 1104355)
+
+For efficiency reasons, text controls no longer set the string for
+each text updated event, but rather query for the string value only
+when GetString is called from an event handler.
+
+Added wx.SL_INVERSE style which will cause wx.Slider to invert the min
+and max ends of the slider.  (Only for wxGTK so far.)
+
 
 
 

@@ -19,7 +19,6 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
-wxDateTimeFormatStr = wx.grid.DateTimeFormatStr
 wxGRID_VALUE_STRING = wx.grid.GRID_VALUE_STRING
 wxGRID_VALUE_BOOL = wx.grid.GRID_VALUE_BOOL
 wxGRID_VALUE_NUMBER = wx.grid.GRID_VALUE_NUMBER

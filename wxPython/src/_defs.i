@@ -370,6 +370,13 @@ FORWARD_DECLARE(wxStaticBox,      StaticBox);
 
 //---------------------------------------------------------------------------
 
+%{
+#if !WXWIN_COMPATIBILITY_2_4
+    #define wxHIDE_READONLY  0
+#endif
+%}    
+
+
 // General numeric #define's and etc.  Making them all enums makes SWIG use the
 // real macro when making the Python Int
 
@@ -437,16 +444,6 @@ enum {
     wxRA_SPECIFY_COLS,
     wxRB_GROUP,
     wxRB_SINGLE,
-    wxSL_HORIZONTAL,
-    wxSL_VERTICAL,
-    wxSL_AUTOTICKS,
-    wxSL_LABELS,
-    wxSL_LEFT,
-    wxSL_TOP,
-    wxSL_RIGHT,
-    wxSL_BOTTOM,
-    wxSL_BOTH,
-    wxSL_SELRANGE,
     wxSB_HORIZONTAL,
     wxSB_VERTICAL,
     wxST_SIZEGRIP,

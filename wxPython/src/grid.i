@@ -39,8 +39,7 @@
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
-MAKE_CONST_WXSTRING2(DateTimeFormatStr, wxT("%c"));
-
+MAKE_CONST_WXSTRING_NOSWIG(DefaultDateTimeFormat);
 
 //---------------------------------------------------------------------------
 // OOR related typemaps and helper functions
@@ -736,8 +735,8 @@ class wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
     %pythonAppend wxGridCellDateTimeRenderer "self._setOORInfo(self)"
-    wxGridCellDateTimeRenderer(wxString outformat = wxPyDateTimeFormatStr,
-                               wxString informat =  wxPyDateTimeFormatStr);
+    wxGridCellDateTimeRenderer(wxString outformat = wxPyDefaultDateTimeFormat,
+                               wxString informat =  wxPyDefaultDateTimeFormat);
 };
 
 

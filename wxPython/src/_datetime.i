@@ -18,10 +18,10 @@
 
 %{
 #include <wx/datetime.h>
-
 %}
-MAKE_CONST_WXSTRING2(DateFormatStr, wxT("%c"));
-MAKE_CONST_WXSTRING2(TimeSpanFormatStr, wxT("%H:%M:%S"));
+
+MAKE_CONST_WXSTRING(DefaultDateTimeFormat);
+MAKE_CONST_WXSTRING(DefaultTimeSpanFormat);
 
 //---------------------------------------------------------------------------
 
@@ -783,7 +783,7 @@ public:
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
         int ParseFormat(const wxString& date,
-                        const wxString& format = wxPyDateFormatStr,
+                        const wxString& format = wxPyDefaultDateTimeFormat,
                         const wxDateTime& dateDef = wxDefaultDateTime) {
             const wxChar* rv;
             const wxChar* _date = date;
@@ -828,7 +828,7 @@ public:
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxString& format = wxPyDateFormatStr,
+    wxString Format(const wxString& format = wxPyDefaultDateTimeFormat,
                     const wxDateTime::TimeZone& tz = LOCAL_TZ) const;
 
         // preferred date representation for the current locale
@@ -995,7 +995,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxString& format = wxPyTimeSpanFormatStr) const;
+    wxString Format(const wxString& format = wxPyDefaultTimeSpanFormat) const;
 
     %pythoncode {
      def __repr__(self):

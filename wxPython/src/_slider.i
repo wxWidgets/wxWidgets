@@ -25,6 +25,21 @@ MAKE_CONST_WXSTRING(SliderNameStr);
 //---------------------------------------------------------------------------
 %newgroup
 
+enum {
+    wxSL_HORIZONTAL,
+    wxSL_VERTICAL,
+    wxSL_AUTOTICKS,
+    wxSL_LABELS,
+    wxSL_LEFT,
+    wxSL_TOP,
+    wxSL_RIGHT,
+    wxSL_BOTTOM,
+    wxSL_BOTH,
+    wxSL_SELRANGE,
+    wxSL_INVERSE
+};
+
+
 MustHaveApp(wxSlider);
 
 class wxSlider : public wxControl {

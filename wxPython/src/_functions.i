@@ -202,6 +202,7 @@ int wxMessageBox(const wxString& message,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
 
+// WXWIN_COMPATIBILITY_2_4
 MustHaveApp(wxGetNumberFromUser);
 long wxGetNumberFromUser(const wxString& message,
                          const wxString& prompt,
@@ -322,6 +323,41 @@ MustHaveApp(wxThread);
 #endif
     }
 %}
+
+//---------------------------------------------------------------------------
+
+// enum wxPowerType
+// {
+//     wxPOWER_SOCKET,
+//     wxPOWER_BATTERY,
+//     wxPOWER_UNKNOWN
+// };
+
+// DocDeclStr(
+//     wxPowerType , wxGetPowerType(),
+//     "Returns the type of power source as one of wx.POWER_SOCKET,
+// wx.POWER_BATTERY or wx.POWER_UNKNOWN.  wx.POWER_UNKNOWN is also the
+// default on platforms where this feature is not implemented.", "");
+
+
+// enum wxBatteryState
+// {
+//     wxBATTERY_NORMAL_STATE,    // system is fully usable
+//     wxBATTERY_LOW_STATE,       // start to worry
+//     wxBATTERY_CRITICAL_STATE,  // save quickly
+//     wxBATTERY_SHUTDOWN_STATE,  // too late
+//     wxBATTERY_UNKNOWN_STATE
+// };
+
+// DocDeclStr(
+//     wxBatteryState , wxGetBatteryState(),
+//     "Returns battery state as one of wx.BATTERY_NORMAL_STATE,
+// wx.BATTERY_LOW_STATE}, wx.BATTERY_CRITICAL_STATE,
+// wx.BATTERY_SHUTDOWN_STATE or wx.BATTERY_UNKNOWN_STATE.
+// wx.BATTERY_UNKNOWN_STATE is also the default on platforms where this
+// feature is not implemented.", "");
+
+
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

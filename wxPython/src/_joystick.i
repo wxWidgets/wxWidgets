@@ -172,12 +172,6 @@ public:
 class wxJoystickEvent : public wxEvent
 {
 public:
-    wxPoint   m_pos;
-    int       m_zPosition;
-    int       m_buttonChange;   // Which button changed?
-    int       m_buttonState;    // Which buttons are down?
-    int       m_joyStick;       // Which joystick?
-
     wxJoystickEvent(wxEventType type = wxEVT_NULL,
                     int state = 0,
                     int joystick = wxJOYSTICK1,
@@ -212,6 +206,14 @@ public:
 
     // Was the given button 1,2,3,4 or any in Down state?
     bool ButtonIsDown(int but =  wxJOY_BUTTON_ANY) const;
+
+    %pythoncode {
+        m_pos = property(GetPosition, SetPosition)
+        m_zPosition = property(GetZPosition, SetZPosition)
+        m_buttonChange = property(GetButtonChange, SetButtonChange)
+        m_buttonState = property(GetButtonState, SetButtonState)
+        m_joyStick = property(GetJoystick, SetJoystick)
+    }
 };
 
 

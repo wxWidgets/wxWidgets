@@ -809,15 +809,13 @@ public:
 
     wxPoint GetPosition() const;
     wxRect GetRect() const;
-    void SetRect(wxRect rect);
-    %extend {
-        void SetPosition(wxPoint pos) {
-            self->m_pos = pos;
-        }
-    }
+    void SetRect(const wxRect& rect);
+    void SetPosition(const wxPoint& pos);
 
-    wxPoint m_pos;
-    wxRect m_rect;
+    %pythoncode {
+        m_pos =  property(GetPosition, SetPosition)
+        m_rect = property(GetRect, SetRect)
+    }
 };
 
 //---------------------------------------------------------------------------
