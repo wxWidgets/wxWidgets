@@ -136,7 +136,8 @@ void MyFrame::OnAngle (wxCommandEvent &)
                                   degrees,
                                   -180, +180,
                                   this);
-    m_angle = (degrees * M_PI) / 180.0;
+    if ( degrees != -1 )
+        m_angle = (degrees * M_PI) / 180.0;
 }
 
 void MyFrame::OnQuit (wxCommandEvent &)
