@@ -454,16 +454,16 @@ void wxFileName::Clear()
 }
 
 /* static */
-wxFileName wxFileName::FileName(const wxString& file)
+wxFileName wxFileName::FileName(const wxString& file, wxPathFormat format)
 {
-    return wxFileName(file);
+    return wxFileName(file, format);
 }
 
 /* static */
-wxFileName wxFileName::DirName(const wxString& dir)
+wxFileName wxFileName::DirName(const wxString& dir, wxPathFormat format)
 {
     wxFileName fn;
-    fn.AssignDir(dir);
+    fn.AssignDir(dir, format);
     return fn;
 }
 

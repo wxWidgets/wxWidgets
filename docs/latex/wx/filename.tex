@@ -265,9 +265,11 @@ Returns true if the directory with this name exists.
 
 \membersection{wxFileName::DirName}\label{wxfilenamedirname}
 
-\func{wxFileName}{DirName}{\param{const wxString\& }{dir}}
+\func{static wxFileName}{DirName}{\param{const wxString\& }{dir}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Returns the directory name.
+Returns the object corresponding to the directory with the given name.
+The {\it dir} parameter may have trailing path separator or not.
+
 
 \membersection{wxFileName::FileExists}\label{wxfilenamefileexists}
 
@@ -281,11 +283,14 @@ Returns true if the file with this name exists.
 
 \helpref{DirExists}{wxfilenamedirexists}
 
+
 \membersection{wxFileName::FileName}\label{wxfilenamefilename}
 
-\func{wxFileName}{FileName}{\param{const wxString\& }{file}}
+\func{static wxFileName}{FileName}{\param{const wxString\& }{file}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Static pseudo constructors.
+Returns the file name object corresponding to the given {\it file}. This
+function exists mainly for symmetry with \helpref{DirName}{wxfilenamedirname}.
+
 
 \membersection{wxFileName::GetCwd}\label{wxfilenamegetcwd}
 

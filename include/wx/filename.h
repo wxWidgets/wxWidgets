@@ -98,7 +98,7 @@ public:
 
         // the usual stuff
     wxFileName() { Clear(); }
-    wxFileName( const wxFileName &filepath ) { Assign(filepath); }
+    wxFileName(const wxFileName& filepath) { Assign(filepath); }
 
         // from a full filename: if it terminates with a '/', a directory path
         // is contructed (the name will be empty), otherwise a file name and
@@ -167,8 +167,10 @@ public:
     void Clear();
 
         // static pseudo constructors
-    static wxFileName FileName(const wxString& file);
-    static wxFileName DirName(const wxString& dir);
+    static wxFileName FileName(const wxString& file,
+                               wxPathFormat format = wxPATH_NATIVE);
+    static wxFileName DirName(const wxString& dir,
+                              wxPathFormat format = wxPATH_NATIVE);
 
     // file tests
 
