@@ -145,10 +145,6 @@ public:
     static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);
     static void DoChangeBackgroundColour(WXWindow widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
     
-    // For implementation purposes - sometimes decorations make the client area
-    // smaller
-    virtual wxPoint GetClientAreaOrigin() const;
-    
     // I don't want users to override what's done in idle so everything that
     // has to be done in idle time in order for wxX11 to work is done in
     // OnInternalIdle

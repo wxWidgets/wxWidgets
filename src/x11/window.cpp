@@ -873,13 +873,6 @@ void wxWindowX11::DoSetClientSize(int width, int height)
     }
 }
 
-// For implementation purposes - sometimes decorations make the client area
-// smaller
-wxPoint wxWindowX11::GetClientAreaOrigin() const
-{
-    return wxPoint(0, 0);
-}
-
 void wxWindowX11::DoMoveWindow(int x, int y, int width, int height)
 {
     Window xwindow = (Window) m_mainWindow;
