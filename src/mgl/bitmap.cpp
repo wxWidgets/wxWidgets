@@ -52,6 +52,26 @@ static pixel_format_t gs_pixel_format_wxImage =
 	{0xFF,0x00,0, 0xFF,0x08,0, 0xFF,0x10,0, 0x00,0x00,0}; // RGB 24bpp for wxImage
 
 //-----------------------------------------------------------------------------
+// helpers
+//-----------------------------------------------------------------------------
+
+// Convert wxColour into it's quantized value in lower-precision
+// pixel format (needed for masking by colour).
+static wxColour wxQuantizeColour(const wxColour& clr, const wxBitmap& bmp)
+{
+    pixel_format_t *pf = bmp.GetMGLbitmap_t()->pf;
+    
+    if ( pf->redAdjust == 0 && pf->greenAdjust == 0 && pf->blueAdjust == 0 )
+        return clr;
+    else
+        return wxColour((clr.Red() >> pf->redAdjust) << pf->redAdjust,
+                        (clr.Green() >> pf->greenAdjust) << pf->greenAdjust,
+                        (clr.Blue() >> pf->blueAdjust) << pf->blueAdjust);
+}
+
+
+
+//-----------------------------------------------------------------------------
 // wxMask
 //-----------------------------------------------------------------------------
 
@@ -89,11 +109,14 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     delete m_bitmap;
     m_bitmap = NULL;
-
-    wxImage image = bitmap.ConvertToImage().ConvertToMono(
-                                colour.Red(), colour.Green(), colour.Blue());
-    if ( !image.Ok() ) return FALSE;
     
+    wxColour clr(wxQuantizeColour(colour, bitmap));
+
+    wxImage imgSrc(bitmap.ConvertToImage());
+    imgSrc.SetMask(FALSE);
+    wxImage image(imgSrc.ConvertToMono(clr.Red(), clr.Green(), clr.Blue()));
+    if ( !image.Ok() ) return FALSE;
+
     m_bitmap = new wxBitmap(image, 1);
 
     return m_bitmap->Ok();
