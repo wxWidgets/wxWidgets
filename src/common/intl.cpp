@@ -2420,14 +2420,14 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
             if ( szDomain != NULL )
             {
                 wxLogTrace(_T("i18n"),
-                           _T("string '%s'[%d] not found in domain '%s' for locale '%s'."),
+                           _T("string '%s'[%ld] not found in domain '%s' for locale '%s'."),
                            szOrigString, n, szDomain, m_strLocale.c_str());
 
             }
             else
             {
                 wxLogTrace(_T("i18n"),
-                           _T("string '%s'[%d] not found in locale '%s'."),
+                           _T("string '%s'[%ld] not found in locale '%s'."),
                            szOrigString, n, m_strLocale.c_str());
             }
         }
