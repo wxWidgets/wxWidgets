@@ -19,7 +19,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_ZIPSTREAM
+#if wxUSE_FILESYSTEM && wxUSE_FS_ZIP && wxUSE_ZIPSTREAM && wxUSE_ZLIB
 
 #ifndef WXPRECOMP
     #include "wx/intl.h"
