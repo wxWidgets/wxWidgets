@@ -82,7 +82,7 @@ class Diagram(object):
     def ShowAll(self, show):
         """Call Show for each shape in the diagram."""
         for shape in self._shapeList:
-            shape.Show()
+            shape.Show(show)
 
     def DrawOutline(self, dc, x1, y1, x2, y2):
         """Draw an outline rectangle on the current device context."""
