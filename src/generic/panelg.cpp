@@ -91,8 +91,13 @@ void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
   // first of all, find the window which currently has the focus
   wxNode *node = GetChildren()->First();
   wxWindow *winFocus = event.GetCurrentFocus();
-  if ( winFocus == NULL )
-    winFocus = wxWindow::FindFocus();
+  
+  // @@@ no FindFocus() in wxGTK
+  #ifndef __GTK__
+    if ( winFocus == NULL )
+      winFocus = wxWindow::FindFocus();
+  #endif
+  
   while ( node != NULL ) {
     if ( node->Data() == winFocus )
       break;
