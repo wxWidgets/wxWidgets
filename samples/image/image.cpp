@@ -30,6 +30,7 @@
     #include "smile.xpm"
 #endif
 
+#define wxHAVE_RAW_BITMAP
 
 // derived classes
 
@@ -114,6 +115,9 @@ public:
 
     void OnAbout( wxCommandEvent &event );
     void OnNewFrame( wxCommandEvent &event );
+#ifdef wxHAVE_RAW_BITMAP
+    void OnTestRawBitmap( wxCommandEvent &event );
+#endif // wxHAVE_RAW_BITMAP
     void OnQuit( wxCommandEvent &event );
 
     MyCanvas         *m_canvas;
@@ -224,6 +228,77 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+#ifdef wxHAVE_RAW_BITMAP
+
+#include "wx/rawbmp.h"
+
+class MyRawBitmapFrame : public wxFrame
+{
+public:
+    enum
+    {
+        BORDER = 15,
+        SIZE = 150,
+        REAL_SIZE = SIZE - 2*BORDER
+    };
+
+    MyRawBitmapFrame(wxFrame *parent)
+        : wxFrame(parent, -1, _T("Raw bitmaps (how exciting)")),
+          m_bitmap(SIZE, SIZE, 32)
+    {
+        SetClientSize(SIZE, SIZE);
+
+        wxRawBitmapData data(m_bitmap);
+        if ( !data )
+        {
+            wxLogError(_T("Failed to gain raw access to bitmap data"));
+            return;
+        }
+
+        wxRawBitmapIterator p(data);
+
+        p.Offset(BORDER, BORDER);
+
+        for ( int y = 0; y < REAL_SIZE; ++y )
+        {
+            wxRawBitmapIterator rowStart = p;
+
+            int r = y < REAL_SIZE/3 ? 255 : 0,
+                g = (REAL_SIZE/3 <= y) && (y < 2*(REAL_SIZE/3)) ? 255 : 0,
+                b = 2*(REAL_SIZE/3) <= y ? 255 : 0;
+
+            for ( int x = 0; x < REAL_SIZE; ++x )
+            {
+                p.Red() = r;
+                p.Green() = g;
+                p.Blue() = b;
+                p.Alpha() = x;
+
+                ++p; // same as p.OffsetX(1)
+            }
+
+            p = rowStart;
+            p.OffsetY(1);
+        }
+    }
+
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
+    {
+        wxPaintDC dc( this );
+        dc.DrawText(_T("This is alpha and raw bitmap test"), 0, BORDER);
+        dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE/2 - BORDER);
+        dc.DrawText(_T("This is alpha and raw bitmap test"), 0, SIZE - 2*BORDER);
+        dc.DrawBitmap( m_bitmap, 0, 0, TRUE /* use mask */ );
+    }
+
+private:
+    wxBitmap m_bitmap;
+
+    DECLARE_EVENT_TABLE()
+};
+
+#endif // wxHAVE_RAW_BITMAP
+
 // MyApp
 
 class MyApp: public wxApp
@@ -245,6 +320,14 @@ BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_PAINT(MyImageFrame::OnPaint)
     EVT_LEFT_DCLICK(MyImageFrame::OnSave)
 END_EVENT_TABLE()
+
+#ifdef wxHAVE_RAW_BITMAP
+
+BEGIN_EVENT_TABLE(MyRawBitmapFrame, wxFrame)
+    EVT_PAINT(MyRawBitmapFrame::OnPaint)
+END_EVENT_TABLE()
+
+#endif // wxHAVE_RAW_BITMAP
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_PAINT(MyCanvas::OnPaint)
@@ -703,9 +786,13 @@ void MyCanvas::CreateAntiAliasedBitmap()
 
 // MyFrame
 
-const int ID_QUIT  = 108;
-const int ID_ABOUT = 109;
-const int ID_NEW = 110;
+enum
+{
+    ID_QUIT  = 108,
+    ID_ABOUT,
+    ID_NEW,
+    ID_SHOWRAW
+};
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
@@ -713,6 +800,9 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
   EVT_MENU    (ID_NEW,  MyFrame::OnNewFrame)
+#ifdef wxHAVE_RAW_BITMAP
+  EVT_MENU    (ID_SHOWRAW,  MyFrame::OnTestRawBitmap)
+#endif
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -720,11 +810,14 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
-  file_menu->Append( ID_NEW, _T("&Show image..."));
+  file_menu->Append( ID_NEW, _T("&Show image...\tCtrl-O"));
+#ifdef wxHAVE_RAW_BITMAP
+  file_menu->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
+#endif
   file_menu->AppendSeparator();
   file_menu->Append( ID_ABOUT, _T("&About..."));
   file_menu->AppendSeparator();
-  file_menu->Append( ID_QUIT, _T("E&xit"));
+  file_menu->Append( ID_QUIT, _T("E&xit\tCtrl-Q"));
 
   wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu, _T("&File"));
@@ -769,6 +862,15 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
 
     (new MyImageFrame(this, wxBitmap(image)))->Show();
 }
+
+#ifdef wxHAVE_RAW_BITMAP
+
+void MyFrame::OnTestRawBitmap( wxCommandEvent &event )
+{
+    (new MyRawBitmapFrame(this))->Show();
+}
+
+#endif // wxHAVE_RAW_BITMAP
 
 //-----------------------------------------------------------------------------
 // MyApp
