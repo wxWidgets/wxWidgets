@@ -80,6 +80,10 @@ public:
             m_ct = ct;
         }
 
+    ~wxSTCCallTip() {
+        if (HasCapture()) ReleaseMouse();
+    }
+
     void OnPaint(wxPaintEvent& evt) {
         wxPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
@@ -106,12 +110,10 @@ public:
 
     virtual bool Show( bool show = TRUE ) {
         bool retval = wxSTCCallTipBase::Show(show);
-        if (show) {
+        if (show)
             CaptureMouse();
-        }
-        else {
+        else
             if (HasCapture()) ReleaseMouse();
-        }
         return retval;
     }
 
