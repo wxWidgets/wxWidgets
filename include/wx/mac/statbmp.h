@@ -45,7 +45,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
 
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void OnPaint( wxPaintEvent &event ) ;
+  void         OnPaint( wxPaintEvent &event ) ;
 
   wxBitmap GetBitmap() const { return m_bitmap; }
   wxIcon GetIcon() const

@@ -76,9 +76,9 @@ public:
    virtual bool		 MacCanFocus() const ;
    
    virtual void  	 DoSetSize(int x, int y,int width, int height,int sizeFlags = wxSIZE_AUTO ) ;
-   virtual void 	 OnKeyDown( wxKeyEvent &event ) ;
-   virtual void		 OnMouseEvent( wxMouseEvent &event ) ;
-   virtual void 	 OnPaint(wxPaintEvent& event) ;
+   void 	         OnKeyDown( wxKeyEvent &event ) ;
+   void		         OnMouseEvent( wxMouseEvent &event ) ;
+   void 	         OnPaint(wxPaintEvent& event) ;
    virtual void		 Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL) ;
    WXWidget	 GetMacControl() { return m_macControl ;}
 

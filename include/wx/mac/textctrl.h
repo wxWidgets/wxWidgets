@@ -78,6 +78,16 @@ public:
   // clears the dirty flag
   virtual void DiscardEdits();
 
+  // set the max number of characters which may be entered in a single line
+  // text control
+  virtual void SetMaxLength(unsigned long len) ;
+
+  // text control under some platforms supports the text styles: these
+  // methods allow to apply the given text style to the given selection or to
+  // set/get the style which will be used for all appended text
+  virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+  virtual bool SetDefaultStyle(const wxTextAttr& style);
+
   // writing text inserts it at the current position, appending always
   // inserts it at the end
   virtual void WriteText(const wxString& text);
@@ -155,6 +165,7 @@ protected:
   void*  m_macTXN ;
   void*  m_macTXNvars ;
   bool  m_macUsesTXN ;
+  unsigned long  m_maxLength ;
   
   DECLARE_EVENT_TABLE()
 };
