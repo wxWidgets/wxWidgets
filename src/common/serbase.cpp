@@ -13,8 +13,6 @@
 #pragma implementation "serbase.h"
 #endif
 
-#ifdef wxUSE_SERIAL
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -25,6 +23,8 @@
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+#ifdef wxUSE_SERIAL
 
 // ----------------------------------------------------------------------------
 // wxObject_Serialize
@@ -121,4 +121,4 @@ void WXSERIAL(wxHashTable)::LoadObject(wxObjectInputStream& s)
     table->hash_table[i] = (wxList *)s.GetChild();
 }
 
-#endif
+#endif // wxUSE_SERIAL
