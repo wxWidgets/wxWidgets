@@ -170,7 +170,9 @@ shell.py is an interesting implementaion of an interactive Python
 shell in wxWindows.  floatbar.py has a class derived from wxTooBar
 that can sense mouse drags and then reparent itself into another
 frame. Moving the new frame close to where it came from puts the tool
-bar back into the original parent.
+bar back into the original parent.  (Unfortunately there is currently
+a bug in wxGTK's wxFrame.SetToolBar so the FloatBar has some
+problems...)
 
 
 
