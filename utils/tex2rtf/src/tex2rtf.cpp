@@ -399,6 +399,7 @@ int MyApp::OnExit()
   MacroDefs.Clear();
 #ifdef __WXMSW__
   delete TheTex2RTFServer;
+  wxDDECleanUp();
 #endif
   delete HelpInstance;
 
@@ -466,10 +467,6 @@ void MyFrame::OnCloseWindow(wxCloseEvent& event)
   }
   else if (OkToClose)
   {
-#ifdef __WXMSW__
-    delete TheTex2RTFServer;
-    wxDDECleanUp();
-#endif
     this->Destroy();
   }
 }
