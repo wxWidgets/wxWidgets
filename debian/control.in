@@ -81,7 +81,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ runtime)
 Package: libwxgtk=V-dev
 Architecture: any
 Section: devel
-Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libgtk1.2-dev, zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, libc6-dev
+Depends: wxwin=V-headers (= ${Source-Version}), libwxgtk=V (= ${Source-Version}), libgtk1.2-dev, zlib1g-dev, libjpeg62-dev, libpng2-dev (<<1.2.0), libtiff3g-dev, libc6-dev
 Suggests: wxwin=V-doc, libstdc++-dev, gettext, libgl-dev
 Conflicts: libwxgtk-dev
 Replaces: libwxgtk-dev, wxgtk2.1-dev

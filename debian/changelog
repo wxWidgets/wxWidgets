@@ -1,6 +1,9 @@
 wxwindows2.2 (2.2.9.2) unstable; urgency=high
 
   * Fix wxPython gl bug.  Closes: #130758
+  * Add versioned build dep on the -dev package too
+    to help avoid the 'png fiasco' for packages built
+    with wx.  (Thanks Joshua)  Closes: #131355
 
  -- Ron Lee <ron@debian.org>  Fri, 25 Jan 2002 03:11:28 -0800
 
