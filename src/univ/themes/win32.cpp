@@ -1797,11 +1797,16 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
                 // fall through
 
             case wxTOP:
-                rect.Inflate(indent.x, indent.y);
-                rect.height--;
+                rect.Inflate(indent.x, 0);
+                rect.y -= indent.y;
+                rect.height += indent.y;
                 break;
 
             case wxBOTTOM:
+                rect.Inflate(indent.x, 0);
+                rect.height += indent.y;
+                break;
+
             case wxLEFT:
             case wxRIGHT:
                 wxFAIL_MSG(_T("TODO"));
@@ -1816,12 +1821,14 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
                     flags, wxALIGN_CENTRE, indexAccel);
 
     // now draw the tab border itself (maybe use DrawRoundedRectangle()?)
-    static const wxCoord CUTOFF = 2;
+    static const wxCoord CUTOFF = 2; // radius of the rounded corner
     wxCoord x = rect.x,
             y = rect.y,
             x2 = rect.GetRight(),
             y2 = rect.GetBottom();
 
+    // FIXME: all this code will break if the tab indent or the border width,
+    //        it is tied to the fact that both of them are equal to 2
     switch ( dir )
     {
         default:
@@ -1843,14 +1850,43 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
                 dc.SetPen(m_penLightGrey);
 
                 // overwrite the part of the border below this tab
-                dc.DrawLine(x + 1, y2, x2 - 1, y2);
+                dc.DrawLine(x + 1, y2 + 1, x2 - 1, y2 + 1);
 
                 // and the shadow of the tab to the left of us
-                dc.DrawLine(x + 1, y2, x + 1, y + CUTOFF + indent.y - 1);
+                dc.DrawLine(x + 1, y + CUTOFF + 1, x + 1, y2 + 1);
             }
             break;
 
         case wxBOTTOM:
+            dc.SetPen(m_penHighlight);
+            // we need to continue one pixel further to overwrite the corner of
+            // the border for the selected tab
+            dc.DrawLine(x, y - (flags & wxCONTROL_SELECTED ? 1 : 0),
+                        x, y2 - CUTOFF);
+            dc.DrawLine(x, y2 - CUTOFF, x + CUTOFF, y2);
+
+            dc.SetPen(m_penBlack);
+            dc.DrawLine(x + CUTOFF, y2, x2 - CUTOFF + 1, y2);
+            dc.DrawLine(x2, y, x2, y2 - CUTOFF);
+            dc.DrawLine(x2, y2 - CUTOFF, x2 - CUTOFF, y2);
+
+            dc.SetPen(m_penDarkGrey);
+            dc.DrawLine(x + CUTOFF, y2 - 1, x2 - CUTOFF + 1, y2 - 1);
+            dc.DrawLine(x2 - 1, y, x2 - 1, y2 - CUTOFF + 1);
+
+            if ( flags & wxCONTROL_SELECTED )
+            {
+                dc.SetPen(m_penLightGrey);
+
+                // overwrite the part of the (double!) border above this tab
+                dc.DrawLine(x + 1, y - 1, x2 - 1, y - 1);
+                dc.DrawLine(x + 1, y - 2, x2 - 1, y - 2);
+
+                // and the shadow of the tab to the left of us
+                dc.DrawLine(x + 1, y2 - CUTOFF, x + 1, y - 1);
+            }
+            break;
+
         case wxLEFT:
         case wxRIGHT:
             wxFAIL_MSG(_T("TODO"));

@@ -166,7 +166,7 @@ int wxNotebook::SetSelection(int nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
-    if ( nPage == m_sel )
+    if ( (size_t)nPage == m_sel )
     {
         // don't do anything if there is nothing to do
         return m_sel;
@@ -194,7 +194,9 @@ int wxNotebook::SetSelection(int nPage)
 
 void wxNotebook::ChangePage(int nPage)
 {
-    if ( nPage == m_sel )
+    wxCHECK_RET( IS_VALID_PAGE(nPage), _T("invalid notebook page") );
+
+    if ( (size_t)nPage == m_sel )
     {
         // nothing to do
         return;
@@ -549,8 +551,8 @@ wxRect wxNotebook::GetAllTabsRect() const
 
         if ( IsVertical() )
         {
-            rect.x = GetTabOrientation() == wxLEFT ? 0 : size.x - m_heightTab;
             rect.width = m_heightTab + indent.x;
+            rect.x = GetTabOrientation() == wxLEFT ? 0 : size.x - rect.width;
             rect.y = 0;
             rect.height = size.y;
         }
@@ -558,8 +560,8 @@ wxRect wxNotebook::GetAllTabsRect() const
         {
             rect.x = 0;
             rect.width = size.x;
-            rect.y = GetTabOrientation() == wxTOP ? 0 : size.y - m_heightTab;
             rect.height = m_heightTab + indent.y;
+            rect.y = GetTabOrientation() == wxTOP ? 0 : size.y - rect.height;
         }
     }
     //else: no pages
@@ -571,6 +573,8 @@ wxRect wxNotebook::GetTabsPart() const
 {
     wxRect rect = GetAllTabsRect();
 
+    wxDirection dir = GetTabOrientation();
+
     const wxSize indent = GetRenderer()->GetTabIndent();
     if ( IsVertical() )
     {
@@ -580,7 +584,15 @@ wxRect wxNotebook::GetTabsPart() const
     else // horz
     {
         rect.x += indent.x;
-        rect.y += indent.y;
+        if ( dir == wxTOP )
+        {
+            rect.y += indent.y;
+            rect.height -= indent.y;
+        }
+        else // wxBOTTOM
+        {
+            rect.height -= indent.y;
+        }
     }
 
     return rect;

@@ -474,8 +474,18 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_COMBO
 
 #ifdef TEST_NOTEBOOK
+#if 1
     wxNotebook *nb = new wxNotebook(this, -1,
                                     wxPoint(10, 30), wxSize(300, 200));
+    nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
+#else
+    wxNotebook *
+#endif
+    nb = new wxNotebook(this, -1, wxPoint(10, 300), wxSize(300, 200),
+                        wxNB_BOTTOM);
+
     nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
     nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
     nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
