@@ -2,7 +2,7 @@
 // Name:        treelay.h
 // Purpose:     wxTreeLayout class
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     7/4/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
@@ -14,7 +14,7 @@
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -26,7 +26,7 @@
 
 #if wxUSE_TREELAYOUT
 
-#include <wx/treelay.h>
+#include "wx/treelay.h"
 
 /*
  * Abstract tree
@@ -49,7 +49,7 @@ void wxTreeLayout::DoLayout(wxDC& dc, long topId)
 {
     if (topId != -1)
         SetTopNode(topId);
-    
+
     long actualTopId = GetTopNode();
     long id = actualTopId;
     while (id != -1)
@@ -72,7 +72,7 @@ void wxTreeLayout::Draw(wxDC& dc)
 }
 
 void wxTreeLayout::DrawNodes(wxDC& dc)
-{  
+{
     long id = GetTopNode();
     while (id != -1)
     {
@@ -83,7 +83,7 @@ void wxTreeLayout::DrawNodes(wxDC& dc)
 }
 
 void wxTreeLayout::DrawBranches(wxDC& dc)
-{  
+{
     long id = GetTopNode();
     while (id != -1)
     {
@@ -105,7 +105,7 @@ void wxTreeLayout::DrawNode(long id, wxDC& dc)
         wxSprintf(buf, wxT("%s"), (const wxChar*) name);
     else
         wxSprintf(buf, wxT("<unnamed>"));
-    
+
     long x = 80;
     long y = 20;
     dc.GetTextExtent(buf, &x, &y);
@@ -140,7 +140,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
     wxList children;
     GetChildren(nodeId, children);
     int n = children.Number();
-    
+
     if (m_orientation == FALSE)
     {
         // Left to right
@@ -156,18 +156,18 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
                 GetNodeSize(parentId, &x, &y, dc);
             SetNodeX(nodeId, (long)(GetNodeX(parentId) + m_xSpacing + x));
         }
-        
+
         wxNode *node = children.First();
         while (node)
         {
             CalcLayout((long)node->Data(), level+1, dc);
             node = node->Next();
         }
-        
+
         // Y Calculations
         long averageY;
         ActivateNode(nodeId, TRUE);
-        
+
         if (n > 0)
         {
             averageY = 0;
@@ -185,14 +185,14 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeY(nodeId, m_lastY);
             long x, y;
             GetNodeSize(nodeId, &x, &y, dc);
-            
+
             m_lastY = m_lastY + y + m_ySpacing;
         }
     }
     else
     {
         // Top to bottom
-        
+
         // Y Calculations
         if (level == 0)
             SetNodeY(nodeId, m_topMargin);
@@ -205,18 +205,18 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
                 GetNodeSize(parentId, &x, &y, dc);
             SetNodeY(nodeId, (long)(GetNodeY(parentId) + m_ySpacing + y));
         }
-        
+
         wxNode *node = children.First();
         while (node)
         {
             CalcLayout((long)node->Data(), level+1, dc);
             node = node->Next();
         }
-        
+
         // X Calculations
         long averageX;
         ActivateNode(nodeId, TRUE);
-        
+
         if (n > 0)
         {
             averageX = 0;
@@ -234,7 +234,7 @@ void wxTreeLayout::CalcLayout(long nodeId, int level, wxDC& dc)
             SetNodeX(nodeId, m_lastX);
             long x, y;
             GetNodeSize(nodeId, &x, &y, dc);
-            
+
             m_lastX = m_lastX + x + m_xSpacing;
         }
     }
@@ -286,13 +286,13 @@ long wxTreeLayoutStored::AddChild(const wxString& name, const wxString& parent)
         if (parent != wxT(""))
             i = NameToId(parent);
         else m_parentNode = m_num;
-        
+
         m_nodes[m_num].m_parentId = i;
         m_nodes[m_num].m_name = name;
         m_nodes[m_num].m_x = m_nodes[m_num].m_y = 0;
         m_nodes[m_num].m_clientData = 0;
         m_num ++;
-        
+
         return (m_num - 1);
     }
     else
@@ -322,49 +322,49 @@ void wxTreeLayoutStored::GetChildren(long id, wxList& list)
 wxStoredNode* wxTreeLayoutStored::GetNode(long idx) const
 {
     wxASSERT(idx < m_num);
-    
+
     return &m_nodes[idx];
 };
 
 long wxTreeLayoutStored::GetNodeX(long id)
 {
     wxASSERT(id < m_num);
-    
+
     return (long)m_nodes[id].m_x;
 }
 
 long wxTreeLayoutStored::GetNodeY(long id)
 {
     wxASSERT(id < m_num);
-    
+
     return (long)m_nodes[id].m_y;
 }
 
 void wxTreeLayoutStored::SetNodeX(long id, long x)
 {
     wxASSERT(id < m_num);
-    
+
     m_nodes[id].m_x = (int)x;
 }
 
 void wxTreeLayoutStored::SetNodeY(long id, long y)
 {
     wxASSERT(id < m_num);
-    
+
     m_nodes[id].m_y = (int)y;
 }
 
 void wxTreeLayoutStored::SetNodeName(long id, const wxString& name)
 {
     wxASSERT(id < m_num);
-    
+
     m_nodes[id].m_name = name;
 }
 
 wxString wxTreeLayoutStored::GetNodeName(long id)
 {
     wxASSERT(id < m_num);
-    
+
     return m_nodes[id].m_name;
 }
 
@@ -373,7 +373,7 @@ long wxTreeLayoutStored::GetNodeParent(long id)
     if (id != -1)
     {
         wxASSERT(id < m_num);
-        
+
         return m_nodes[id].m_parentId;
     }
     else
@@ -383,7 +383,7 @@ long wxTreeLayoutStored::GetNodeParent(long id)
 long wxTreeLayoutStored::GetNextNode(long id)
 {
     wxASSERT(id < m_num);
-    
+
     if ((id != -1) && (id < (m_num - 1)))
         return id + 1;
     else
@@ -393,28 +393,28 @@ long wxTreeLayoutStored::GetNextNode(long id)
 void wxTreeLayoutStored::SetClientData(long id, long clientData)
 {
     wxASSERT(id < m_num);
-    
+
     m_nodes[id].m_clientData = clientData;
 }
 
 long wxTreeLayoutStored::GetClientData(long id) const
 {
     wxASSERT(id < m_num);
-    
+
     return m_nodes[id].m_clientData;
 }
 
 void wxTreeLayoutStored::ActivateNode(long id, bool active)
 {
     wxASSERT(id < m_num);
-    
+
     m_nodes[id].m_active = active;
 }
 
 bool wxTreeLayoutStored::NodeActive(long id)
 {
     wxASSERT(id < m_num);
-    
+
     return m_nodes[id].m_active;
 }
 
@@ -423,20 +423,20 @@ wxString wxTreeLayoutStored::HitTest(wxMouseEvent& event, wxDC& dc)
     wxPoint pt = event.GetPosition();
     wxCoord x = pt.x;
     wxCoord y = pt.y;
-    
+
     int i;
     for (i = 0; i < m_maxNodes; i++)
     {
         long width, height;
         dc.GetTextExtent(m_nodes[i].m_name, &width, &height);
-        
+
         if ( (x >= (m_nodes[i].m_x-10)) && (x < (m_nodes[i].m_x + width+10)) &&
             (y >= m_nodes[i].m_y-10) && (y < (m_nodes[i].m_y + height+10)) )
         {
             return m_nodes[i].m_name;
         }
     }
-    
+
     return wxString("");
 }
 
