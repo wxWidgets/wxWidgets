@@ -1,11 +1,13 @@
-/*
- * Program: image
- *
- * Author: Robert Roebling
- *
- * Copyright: (C) 1998, Robert Roebling
- *
- */
+///////////////////////////////////////////////////////////////////////////////
+// Name:        samples/image/image.cpp
+// Purpose:     sample showing operations with wxImage
+// Author:      Robert Roebling
+// Modified by:
+// Created:     1998
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998-2005 Robert Roebling
+// License:     wxWindows licence
+///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -20,6 +22,7 @@
 
 #include "wx/image.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/quantize.h"
@@ -91,31 +94,6 @@ private:
 };
 
 
-const int nChoices = 8 ;
-static const wxString bppchoices[nChoices] =
-{
-    _T("1 bpp color"),
-    _T("1 bpp B&W"),
-    _T("4 bpp color"),
-    _T("8 bpp color"),
-    _T("8 bpp greyscale"),
-    _T("8 bpp red"),
-    _T("8 bpp own palette"),
-    _T("24 bpp")
-};
-
-static const int bppvalues[nChoices] =
-{
-    wxBMP_1BPP,
-    wxBMP_1BPP_BW,
-    wxBMP_4BPP,
-    wxBMP_8BPP,
-    wxBMP_8BPP_GREY,
-    wxBMP_8BPP_RED,
-    wxBMP_8BPP_PALETTE,
-    wxBMP_24BPP
-};
-
 // MyFrame
 
 
@@ -170,25 +148,9 @@ public:
     {
         wxImage image = m_bitmap.ConvertToImage();
 
-        int bppselection = wxGetSingleChoiceIndex(_T("Set BMP BPP"),
-                                                  _T("Set BMP BPP"),
-                                                  nChoices,
-                                                  bppchoices,
-                                                  this);
-        if ( bppselection == -1 )
-        {
-            // cancelled
-            return;
-        }
-
-        image.SetOption(wxIMAGE_OPTION_BMP_FORMAT, bppvalues[bppselection]);
-
-        wxString deffilename = bppchoices[bppselection];
-        deffilename.Replace(wxT(" "), wxT("_"));
-        deffilename += wxT(".bmp");
         wxString savefilename = wxFileSelector( wxT("Save Image"),
                                                 wxT(""),
-                                                deffilename,
+                                                wxT(""),
                                                 (const wxChar *)NULL,
                                             wxT("BMP files (*.bmp)|*.bmp|")
                                             wxT("PNG files (*.png)|*.png|")
@@ -204,39 +166,106 @@ public:
         if ( savefilename.empty() )
             return;
 
-        if ( image.GetOptionInt(wxIMAGE_OPTION_BMP_FORMAT) == wxBMP_8BPP_PALETTE )
+        wxString extension;
+        wxFileName::SplitPath(savefilename, NULL, NULL, &extension);
+
+        bool saved = false;
+        if ( extension == _T("bpp") )
         {
-            unsigned char *cmap = new unsigned char [256];
-            for ( int i = 0; i < 256; i++ )
-                cmap[i] = (unsigned char)i;
-            image.SetPalette(wxPalette(256, cmap, cmap, cmap));
+            static const int bppvalues[] =
+            {
+                wxBMP_1BPP,
+                wxBMP_1BPP_BW,
+                wxBMP_4BPP,
+                wxBMP_8BPP,
+                wxBMP_8BPP_GREY,
+                wxBMP_8BPP_RED,
+                wxBMP_8BPP_PALETTE,
+                wxBMP_24BPP
+            };
 
-            delete cmap;
+            static const wxString bppchoices[] =
+            {
+                _T("1 bpp color"),
+                _T("1 bpp B&W"),
+                _T("4 bpp color"),
+                _T("8 bpp color"),
+                _T("8 bpp greyscale"),
+                _T("8 bpp red"),
+                _T("8 bpp own palette"),
+                _T("24 bpp")
+            };
+
+            int bppselection = wxGetSingleChoiceIndex(_T("Set BMP BPP"),
+                                                      _T("Image sample: save file"),
+                                                      WXSIZEOF(bppchoices),
+                                                      bppchoices,
+                                                      this);
+            if ( bppselection != -1 )
+            {
+                int format = bppvalues[bppselection];
+                image.SetOption(wxIMAGE_OPTION_BMP_FORMAT, format);
+
+                if ( format == wxBMP_8BPP_PALETTE )
+                {
+                    unsigned char *cmap = new unsigned char [256];
+                    for ( int i = 0; i < 256; i++ )
+                        cmap[i] = (unsigned char)i;
+                    image.SetPalette(wxPalette(256, cmap, cmap, cmap));
+
+                    delete cmap;
+                }
+            }
         }
+        else if ( extension == _T("png") )
+        {
+            static const int pngvalues[] =
+            {
+                wxPNG_TYPE_COLOUR,
+                wxPNG_TYPE_COLOUR,
+                wxPNG_TYPE_GREY,
+                wxPNG_TYPE_GREY,
+                wxPNG_TYPE_GREY_RED,
+                wxPNG_TYPE_GREY_RED,
+            };
 
-        bool loaded;
-        wxString extension = savefilename.AfterLast('.').Lower();
+            static const wxString pngchoices[] =
+            {
+                _T("Colour 8bpp"),
+                _T("Colour 16bpp"),
+                _T("Grey 8bpp"),
+                _T("Grey 16bpp"),
+                _T("Grey red 8bpp"),
+                _T("Grey red 16bpp"),
+            };
 
-        if (extension == _T("cur"))
+            int sel = wxGetSingleChoiceIndex(_T("Set PNG format"),
+                                             _T("Image sample: save file"),
+                                             WXSIZEOF(pngchoices),
+                                             pngchoices,
+                                             this);
+            if ( sel != -1 )
+            {
+                image.SetOption(wxIMAGE_OPTION_PNG_FORMAT, pngvalues[sel]);
+                image.SetOption(wxIMAGE_OPTION_PNG_BITDEPTH, sel % 2 ? 16 : 8);
+            }
+        }
+        else if ( extension == _T("cur") )
         {
             image.Rescale(32,32);
             image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 0);
             image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 0);
             // This shows how you can save an image with explicitly
             // specified image format:
-            loaded = image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
+            saved = image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
         }
-        else
+
+        if ( !saved )
         {
             // This one guesses image format from filename extension
             // (it may fail if the extension is not recognized):
-            loaded = image.SaveFile(savefilename);
+            image.SaveFile(savefilename);
         }
-
-        if ( !loaded )
-            wxMessageBox(_T("No handler for this file type."),
-                         _T("File was not saved"),
-                         wxOK|wxCENTRE, this);
     }
 
 private:
