@@ -33,7 +33,7 @@
 #include "scoredg.h"
 
 #if wxUSE_HTML
-#include "wx/file.h"
+#include "wx/textfile.h"
 #include "wx/html/htmlwin.h"
 #endif
 
@@ -331,15 +331,13 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
 //        wxSetWorkingDirectory(wxGetApp().GetAppDir());
 //        wxString htmlFile(wxGetApp().GetFullAppPath(wxT("about.htm")));
         
-        if (wxFileExists(htmlFile))
+        wxTextFile file(htmlFile);
+        if (file.Exists())
         {
-            wxFile file;
-            file.Open(htmlFile, wxFile::read);
-            long len = file.Length();
-            wxChar* buf = htmlText.GetWriteBuf(len + 1);
-            file.Read(buf, len);
-            buf[len] = 0;
-            htmlText.UngetWriteBuf();
+            file.Open();
+            for ( htmlText = file.GetFirstLine(); 
+                  !file.Eof(); 
+                  htmlText << file.GetNextLine() << _T("\n") ) ;
         }
     }
 
