@@ -223,10 +223,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+    // create the listbox in which we will show misc messages as they come
+    m_listbox = new wxListBox(this, -1);
+
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
-    SetStatusText(_T("Welcome to wxWindows!"));
+    SetStatusText(_T("Welcome to wxWindows exec sample!"));
 #endif // wxUSE_STATUSBAR
 }
 

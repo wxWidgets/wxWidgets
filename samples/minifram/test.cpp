@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -49,7 +49,7 @@ wxButton      *button     = (wxButton*) NULL;
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
   // Create the mini frame window
   mini_frame = new MyMiniFrame((wxFrame *) NULL, -1, "wxMiniFrame sample",
@@ -58,14 +58,14 @@ bool MyApp::OnInit(void)
 
   mini_frame->CreateToolBar(wxNO_BORDER|wxTB_HORIZONTAL|wxTB_FLAT, ID_TOOLBAR);
   InitToolbar(mini_frame->GetToolBar());
-  
+
   // Create the main frame window
   main_frame = new MyMainFrame((wxFrame *) NULL, -1, "wxFrame sample",
      wxPoint(100, 100), wxSize(300, 200));
-     
+
   main_frame->CreateToolBar(wxNO_BORDER|wxTB_VERTICAL, ID_TOOLBAR);
   InitToolbar(main_frame->GetToolBar());
-  
+
   button = new wxButton( main_frame, ID_REPARENT, "Press to reparent!" );
 
 #ifdef __WXMSW__
@@ -77,7 +77,7 @@ bool MyApp::OnInit(void)
 #endif
 
   SetTopWindow(main_frame);
-  
+
   main_frame->Show(TRUE);
   mini_frame->Show(TRUE);
 
@@ -139,7 +139,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
   toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Help");
 
   toolBar->Realize();
-  
+
   toolBar->EnableTool( wxID_HELP, FALSE );
 
   // Can delete the bitmaps since they're reference counted
@@ -201,8 +201,8 @@ void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
   // after closing the mini_frame. We'll have the last laugh.
   if (! mini_frame_exists)
     wxMessageBox("The miniframe no longer exists.\n"
-	"You don't want to make this button an orphan, do you?",
-	"You got to be kidding");
+                 "You don't want to make this button an orphan, do you?",
+                 "You got to be kidding");
   else
     button->Reparent( mini_frame );
 }

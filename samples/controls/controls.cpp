@@ -111,6 +111,7 @@ public:
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
     void OnTestButton(wxCommandEvent& event);
+    void OnBmpButton(wxCommandEvent& event);
 
     wxListBox     *m_listbox,
                   *m_listboxSorted;
@@ -263,7 +264,6 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menu_bar);
 
     frame->Show(TRUE);
-    frame->SetCursor(wxCursor(wxCURSOR_HAND));
 
     //frame->GetPanel()->m_notebook->SetSelection(6);
 
@@ -328,6 +328,7 @@ const int  ID_SPINCTRL          = 185;
 
 const int  ID_BUTTON_TEST1      = 190;
 const int  ID_BUTTON_TEST2      = 191;
+const int  ID_BITMAP_BTN        = 192;
 
 const int  ID_CHANGE_COLOUR     = 200;
 
@@ -383,6 +384,7 @@ EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
+EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
@@ -502,6 +504,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_TOOLTIPS
     (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, "&Toggle colour",
                           wxPoint(110,170) );
+    panel->SetCursor(wxCursor(wxCURSOR_HAND));
     m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
     panel = new wxPanel(m_notebook);
@@ -631,7 +634,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     dc.DrawText("Bitmap", 30, 40);
     dc.SelectObject( wxNullBitmap );
 
-    (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
+    (void)new wxBitmapButton(panel, ID_BITMAP_BTN, bitmap, wxPoint(100, 20));
 
 #ifdef __WXMSW__
     // test for masked bitmap display
@@ -743,6 +746,11 @@ void MyPanel::OnTestButton(wxCommandEvent& event)
 {
     wxLogMessage(_T("Button %c clicked."),
                  event.GetId() == ID_BUTTON_TEST1 ? _T('1') : _T('2'));
+}
+
+void MyPanel::OnBmpButton(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Bitmap button clicked."));
 }
 
 void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
@@ -1222,7 +1230,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxBusyCursor bc;
 
-#if 0 // VZ: my temp test code, will remove
+#if 1 // VZ: my temp test code, will remove
     wxGetTextFromUser("msg", "caption", "val", this);
     return;
 #endif // 0
