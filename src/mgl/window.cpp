@@ -546,14 +546,9 @@ void wxWindowMGL::Init()
             wxLogFatalError(_("Cannot initialize display."));
     }
 
-    // generic:
-    InitBase();
-
     // mgl specific:
     m_wnd = NULL;
     m_isShown = TRUE;
-    m_isBeingDeleted = FALSE;
-    m_isEnabled = TRUE;
     m_frozen = FALSE;
     m_paintMGLDC = NULL;
     m_eraseBackground = -1;

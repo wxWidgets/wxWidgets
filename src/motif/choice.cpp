@@ -52,8 +52,6 @@ wxChoice::wxChoice()
 
 void wxChoice::Init()
 {
-    InitBase();
-
     m_noStrings = 0;
     m_buttonWidget = (WXWidget) 0;
     m_menuWidget = (WXWidget) 0;

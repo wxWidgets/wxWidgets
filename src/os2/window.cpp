@@ -295,16 +295,10 @@ bool wxWindowOS2::OS2Command(
 void wxWindowOS2::Init()
 {
     //
-    // Generic
-    //
-    InitBase();
-
-    //
     // PM specific
     //
     m_bWinCaptured = FALSE;
 
-    m_isBeingDeleted        = FALSE;
     m_fnOldWndProc          = NULL;
     m_bUseCtl3D             = FALSE;
     m_bMouseInWindow        = FALSE;

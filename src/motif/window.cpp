@@ -200,9 +200,6 @@ bool wxWindow::MapOrUnmap(WXWidget widget, bool domap)
 
 void wxWindow::Init()
 {
-    // generic initializations first
-    InitBase();
-
     // Motif-specific
     m_needsRefresh = TRUE;
     m_mainWidget = (WXWidget) 0;
@@ -210,7 +207,6 @@ void wxWindow::Init()
     m_winCaptured = FALSE;
 
     m_isShown = TRUE;
-    m_isBeingDeleted = FALSE;
     
     m_hScrollBar =
     m_vScrollBar =

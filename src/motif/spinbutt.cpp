@@ -274,8 +274,6 @@ bool wxSpinButton::Create( wxWindow *parent, wxWindowID id,
 
     SetName(name);
 
-    InitBase();
-
     m_windowId = ( id == -1 ) ? NewControlId() : id;
 
     bool isVert = IsVertical();

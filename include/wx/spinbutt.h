@@ -39,7 +39,8 @@
 class WXDLLEXPORT wxSpinButtonBase : public wxControl
 {
 public:
-    wxSpinButtonBase() { InitBase(); }
+    // ctor intiializes the range with the default (0..100) values
+    wxSpinButtonBase() { m_min = 0; m_max = 100; }
 
     // accessors
     virtual int GetValue() const = 0;
@@ -60,13 +61,6 @@ public:
     bool IsVertical() const { return (m_windowStyle & wxSP_VERTICAL) != 0; }
 
 protected:
-    // init the base part of the control
-    void InitBase()
-    {
-        m_min = 0;
-        m_max = 100;
-    }
-
     // the range value
     int   m_min;
     int   m_max;

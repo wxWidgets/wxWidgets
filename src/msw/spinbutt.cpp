@@ -127,8 +127,6 @@ bool wxSpinButton::Create(wxWindow *parent,
                           const wxString& name)
 {
     // basic initialization
-    InitBase();
-
     m_windowId = (id == -1) ? NewControlId() : id;
 
     m_backgroundColour = parent->GetBackgroundColour() ;

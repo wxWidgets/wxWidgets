@@ -100,10 +100,6 @@ END_EVENT_TABLE()
 
 void wxWindowMac::Init()
 {
-    // generic
-    InitBase();
-
-    m_isBeingDeleted = FALSE;
     m_backgroundTransparent = FALSE;
 
     // as all windows are created with WS_VISIBLE style...
@@ -116,8 +112,6 @@ void wxWindowMac::Init()
 
     m_hScrollBar = NULL ;
     m_vScrollBar = NULL ;
-
-    m_label = wxEmptyString;
 }
 
 // Destructor

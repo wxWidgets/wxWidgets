@@ -2446,9 +2446,6 @@ wxWindow *wxGetActiveWindow()
 
 void wxWindowGTK::Init()
 {
-    // common init
-    InitBase();
-
     // GTK specific
     m_widget = (GtkWidget *) NULL;
     m_wxwindow = (GtkWidget *) NULL;

@@ -109,7 +109,7 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 
 // the default initialization
-void wxWindowBase::InitBase()
+wxWindowBase::wxWindowBase()
 {
     // no window yet, no parent nor children
     m_parent = (wxWindow *)NULL;

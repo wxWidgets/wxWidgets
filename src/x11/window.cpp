@@ -99,9 +99,6 @@ END_EVENT_TABLE()
 
 void wxWindowX11::Init()
 {
-    // generic initializations first
-    InitBase();
-
     // X11-specific
     m_mainWindow = (WXWindow) 0;
     m_clientWindow = (WXWindow) 0;
@@ -111,7 +108,6 @@ void wxWindowX11::Init()
     m_winCaptured = FALSE;
     m_needsInputFocus = FALSE;
     m_isShown = TRUE;
-    m_isBeingDeleted = FALSE;
     m_lastTS = 0;
     m_lastButton = 0;
 }
