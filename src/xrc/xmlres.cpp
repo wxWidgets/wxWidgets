@@ -287,7 +287,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
             while (tkn.HasMoreTokens())
             {
                 s = tkn.GetNextToken();
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
                 if (s == wxT("win")) isok = true;
 #endif
 #ifdef __UNIX__
