@@ -119,6 +119,10 @@
         $project{"WXGTK_HEADERS"} .= "gtk/" . $file . " "
     }
     
+    foreach $file (sort keys %wxMSWINCLUDE) {
+        $project{"WXMSW_HEADERS"} .= "msw/" . $file . " "
+    }
+    
     foreach $file (sort keys %wxHTMLINCLUDE) {
         $project{"WXHTML_HEADERS"} .= "html/" . $file . " "
     }
@@ -234,6 +238,11 @@ INCDIR  = $(WXDIR)/include
 
 DOCDIR = $(WXDIR)/docs
 
+########################## Archive name ###############################
+
+WXARCHIVE = wx$(TOOLKIT)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+DISTDIR = ./_dist_dir/wx$(TOOLKIT)
+
 ############################## Files ##################################
 
 WX_HEADERS = \
@@ -244,6 +253,9 @@ GTK_HEADERS = \
 
 MOTIF_HEADERS = \
 		#$ ExpandList("WXMOTIF_HEADERS");
+
+MSW_HEADERS = \
+		#$ ExpandList("WXMSW_HEADERS");
 
 UNIX_HEADERS = \
 		#$ ExpandList("WXUNIX_HEADERS");
@@ -519,6 +531,57 @@ uninstall:
 	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi
 	@if test -d $(includedir)/wx/protocol; then rmdir $(includedir)/wx/protocol; fi
 	@if test -d $(includedir)/wx; then rmdir $(includedir)/wx; fi
+
+predist:
+	mkdir _dist_dir
+	mkdir $(DISTDIR)
+	cp $(WXDIR)/wx$(TOOLKIT).spec $(DISTDIR)
+	cp $(WXDIR)/configure $(DISTDIR)
+	cp $(WXDIR)/config.sub $(DISTDIR)
+	cp $(WXDIR)/config.guess $(DISTDIR)
+	cp $(WXDIR)/install-sh $(DISTDIR)
+	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
+	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/setup.h.in $(DISTDIR)
+	cp $(WXDIR)/Makefile.in $(DISTDIR)
+	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
+	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
+	cp $(DOCDIR)/symbols.txt $(DISTDIR)/SYMBOLS.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
+	mkdir $(DISTDIR)/include
+	mkdir $(DISTDIR)/include/wx
+	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
+	mkdir $(DISTDIR)/include/wx/generic
+	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/unix
+	mkdir $(DISTDIR)/include/wx/protocol
+	cp $(INCDIR)/wx/*.h $(DISTDIR)/include/wx 
+	cp $(INCDIR)/wx/*.cpp $(DISTDIR)/include/wx
+	cp $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
+	cp $(INCDIR)/wx/generic/*.xpm $(DISTDIR)/include/wx/generic
+	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
+	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
+	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
+
+GTK_DIST:
+	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
+
+MOTIF_DIST:
+	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
+
+MSW_DIST:
+	cp $(INCDIR)/wx/msw/*.h $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.cur $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.ico $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.bmp $(DISTDIR)/include/wx/msw
+	cp $(INCDIR)/wx/msw/*.rc $(DISTDIR)/include/wx/msw
+
+dist: predist @GUIDIST@
+	cd _dist_dir; tar ch wx$(TOOLKIT) | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
+	rm -f -r _dist_dir
 
 clean:
 	rm -f ./src/msw/*.o

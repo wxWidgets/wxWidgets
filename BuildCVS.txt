@@ -52,8 +52,7 @@ II) Unix ports
 Building wxGTK or wxMotif completely without configure
 won't ever work, but there is now a new makefile system
 that works without libtool and automake, using only
-configure to create what is needed. So far, only shared
-libraries can be build with this system.
+configure to create what is needed. 
 
 Set WXWIN environment variable to the base directory such
 as ~/wxWindows (this is actually not really needed).
@@ -68,6 +67,11 @@ or type: ../configure --with-gtk
 -> type: make install
 -> type: ldconfig
 -> type: exit
+
+Call configure with --disable-shared to create a static
+library. Calling "make uninstall" will remove the installed
+library and "make dist" will create a distribution (not
+yet complete).
 
 III) Windows using configure
 ----------------------------------------

@@ -17,6 +17,7 @@
 #  W	/include/wx
 #  K	/include/wx/gtk        K for gtK
 #  F    /include/wx/motif      F for motiF
+#  B    /include/wx/msw        B for Bill Gates
 #  N    /include/wx/generic    N for geNeric
 #  L    /include/wx/html       L for htmL
 #  P    /include/wx/protocol
@@ -682,6 +683,120 @@ textctrl.h	F
 timer.h	F
 toolbar.h	F
 window.h	F
+
+accel.h	B
+app.h	B
+bitmap.h	B
+bmpbuttn.h	B
+brush.h	B
+button.h	B
+caret.h	B
+checkbox.h	B
+checklst.h	B
+choice.h	B
+clipbrd.h	B
+colordlg.h	B
+colour.h	B
+combobox.h	B
+control.h	B
+curico.h	B
+curicop.h	B
+cursor.h	B
+dc.h	B
+dcclient.h	B
+dcmemory.h	B
+dcprint.h	B
+dcscreen.h	B
+dde.h	B
+dialog.h	B
+dib.h	B
+dibutils.h	B
+dirdlg.h	B
+dragimag.h	B
+filedlg.h	B
+font.h	B
+fontdlg.h	B
+frame.h	B
+gauge.h	B
+gauge95.h	B
+gaugemsw.h	B
+gdiobj.h	B
+helpwin.h	B
+icon.h	B
+imaglist.h	B
+iniconf.h	B
+joystick.h	B
+listbox.h	B
+listctrl.h	B
+mdi.h	B
+menu.h	B
+menuitem.h	B
+metafile.h	B
+minifram.h	B
+msgdlg.h	B
+msvcrt.h	B
+notebook.h	B
+palette.h	B
+pen.h	B
+pnghand.h	B
+pngread.h	B
+printdlg.h	B
+printwin.h	B
+private.h	B
+radiobox.h	B
+radiobut.h	B
+regconf.h	B
+region.h	B
+registry.h	B
+scrolbar.h	B
+settings.h	B
+setup0.h	B
+slider.h	B
+slider95.h	B
+slidrmsw.h	B
+spinbutt.h	B
+statbmp.h	B
+statbox.h	B
+statbr95.h	B
+statline.h	B
+stattext.h	B
+tabctrl.h	B
+taskbar.h	B
+tbar95.h	B
+tbarmsw.h	B
+textctrl.h	B
+timer.h	B
+tooltip.h	B
+treectrl.h	B
+wave.h	B
+window.h	B
+winundef.h	B
+xpmhand.h	B
+# blank.cur	B
+# bullseye.cur	B
+# child.ico	B
+# clock.cur	B
+# error.ico	B
+# hand.cur	B
+# heart.cur	B
+# info.ico	B
+# magnif1.cur	B
+# mdi.ico	B
+# noentry.cur	B
+# pbrush.cur	B
+# pencil.cur	B
+# pntleft.cur	B
+# pntright.cur	B
+# query.cur	B
+# question.ico	B
+# roller.cur	B
+# size.cur	B
+# std.ico	B
+# tip.ico	B
+# warning.ico	B
+# watch1.cur	B
+# disable.bmp	B
+# wx.rc	B
 
 execute.h	S
 
