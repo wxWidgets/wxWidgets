@@ -1059,7 +1059,8 @@ class wxHtmlHelpFrameOptionsDialog : public wxDialog
 
                 topsizer->Add(new wxStaticText(this, -1, _("Preview:")),
                                 0, wxLEFT | wxTOP, 10);
-                topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(-1, 150)),
+                topsizer->Add(TestWin = new wxHtmlWindow(this, -1, wxDefaultPosition, wxSize(-1, 150),
+                                                         wxHW_SCROLLBAR_AUTO | wxSUNKEN_BORDER),
                                 1, wxEXPAND | wxLEFT|wxTOP|wxRIGHT, 10);
 
                 sizer = new wxBoxSizer(wxHORIZONTAL);
