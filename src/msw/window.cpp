@@ -2400,6 +2400,61 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                         wParam);
             break;
 
+#ifndef __WXWINCE__
+        case WM_MOUSELEAVE:
+           {
+            wxASSERT_MSG( !m_mouseInWindow, wxT("the mouse should be in a window to generate this event!") );
+           
+            // only process this message if the mouse is not in the window,
+            // This can also check for children in composite windows. 
+            // however, this may mean the the wxEVT_LEAVE_WINDOW is never sent
+            // if the mouse does not enter the window from it's child before 
+            // leaving the scope of the window. ( perhaps this can be picked
+            // up in the OnIdle code as before, for this special case )
+            if ( /*IsComposite() && */ !IsMouseInWindow() )
+            {
+                m_mouseInWindow = FALSE;
+
+                // Unfortunately no mouse state is passed with a WM_MOUSE_LEAVE 
+                int state = 0;
+                if ( wxIsShiftDown() )
+                    state |= MK_SHIFT;
+                if ( wxIsCtrlDown() )
+                    state |= MK_CONTROL;
+                if ( GetKeyState( VK_LBUTTON ) )
+                    state |= MK_LBUTTON;
+                if ( GetKeyState( VK_MBUTTON ) )
+                    state |= MK_MBUTTON;
+                if ( GetKeyState( VK_RBUTTON ) )
+                    state |= MK_RBUTTON;
+
+                POINT pt;
+                if ( !::GetCursorPos(&pt) )
+                {
+                    wxLogLastError(_T("GetCursorPos"));
+                }
+
+                // we need to have client coordinates here for symmetry with
+                // wxEVT_ENTER_WINDOW
+                RECT rect = wxGetWindowRect(GetHwnd());
+                pt.x -= rect.left;
+                pt.y -= rect.top;
+
+                wxMouseEvent event2(wxEVT_LEAVE_WINDOW);
+                InitMouseEvent(event2, pt.x, pt.y, state);
+
+                (void)GetEventHandler()->ProcessEvent(event2);
+            }
+            // always pass processed back as false, this allows the window
+            // manager to process the message too.  This is needed to ensure
+            // windows XP themes work properly as the mouse moves over widgets
+            // like buttons.
+            processed = false;
+           }
+           break;
+#endif
+ // __WXWINCE__
+           
 #if wxUSE_MOUSEWHEEL
         case WM_MOUSEWHEEL:
             processed = HandleMouseWheel(wParam, lParam);
@@ -4342,6 +4397,18 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             // Generate an ENTER event
             m_mouseInWindow = TRUE;
 
+#ifndef __WXWINCE__
+            TRACKMOUSEEVENT trackinfo;
+
+            trackinfo.cbSize = sizeof(trackinfo);
+            trackinfo.dwFlags = TME_LEAVE;
+            trackinfo.hwndTrack = GetHwnd();
+            //Use the commctrl.h _TrackMouseEvent, which will call the
+            // appropriate TrackMouseEvent or emulate it ( win95 )
+            // else we need _WIN32_WINNT >= 0x0400 
+            _TrackMouseEvent(&trackinfo);
+#endif
+            
             wxMouseEvent event(wxEVT_ENTER_WINDOW);
             InitMouseEvent(event, x, y, flags);
 
