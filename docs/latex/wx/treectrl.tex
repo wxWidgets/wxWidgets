@@ -1,7 +1,10 @@
 \section{\class{wxTreeCtrl}}\label{wxtreectrl}
 
-A tree control presents information as a hierarchy, with items that may be expanded
-to show further items. Items in a tree control are referenced by wxTreeItemId handles.
+A tree control presents information as a hierarchy, with items that may be
+expanded to show further items. Items in a tree control are referenced by
+wxTreeItemId handles. The only method of wxTreeItemId class which can be used
+is {\it IsOk()} which returns {\tt TRUE} if the handle is valid and 
+{\tt FALSE} otherwise.
 
 To intercept events from a tree control, use the event table macros described in \helpref{wxTreeEvent}{wxtreeevent}.
 
