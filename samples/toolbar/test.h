@@ -17,6 +17,17 @@ class MyApp: public wxApp
     bool InitToolbar(wxToolBar* toolBar);
 };
 
+class MyTimer : public wxTimer
+{
+public:
+  MyTimer(wxFrame *frame) { m_frame = frame; }
+
+  virtual void Notify() { wxLogStatus(m_frame, "Timer arrived!"); }
+
+private:
+  wxFrame *m_frame;
+};
+
 // Define a new frame
 class MyFrame: public wxFrame
 {
@@ -33,6 +44,8 @@ public:
 
 private:
     wxTextCtrl*         m_textWindow;
+
+    MyTimer m_timer;
 
 DECLARE_EVENT_TABLE()
 };

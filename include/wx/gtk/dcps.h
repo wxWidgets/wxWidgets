@@ -82,7 +82,7 @@ public:
 
   void DrawIcon( const wxIcon& icon, long x, long y );
   void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
-  
+
   void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
 
   void Clear();
@@ -91,7 +91,7 @@ public:
   void SetBrush( const wxBrush& brush );
   void SetLogicalFunction( int function );
   void SetBackground( const wxBrush& brush );
-  
+
   void SetClippingRegion(long x, long y, long width, long height);
   void SetClippingRegion( const wxRegion &region );
   void DestroyClippingRegion();
@@ -108,16 +108,16 @@ public:
                      long *descent = (long *) NULL,
                      long *externalLeading = (long *) NULL,
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
-		     
+
   void GetSize(int* width, int* height) const;
   void GetSizeMM(long *width, long *height) const;
 
   void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
   void SetDeviceOrigin( long x, long y );
-  
+
   inline void SetBackgroundMode(int WXUNUSED(mode)) {}
   inline void SetPalette(const wxPalette& WXUNUSED(palette)) {}
-  
+
   inline ofstream *GetStream(void) const { return m_pstream; }
 
 protected:
@@ -133,7 +133,7 @@ protected:
   double            m_underlineThickness;
 };
 
-#endif 
+#endif
     // wxUSE_POSTSCRIPT
 
 #endif

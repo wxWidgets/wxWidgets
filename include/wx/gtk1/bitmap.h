@@ -55,7 +55,7 @@ public:
   ~wxMask();
 
  // implementation
-    
+
   GdkBitmap   *m_bitmap;
   GdkBitmap *GetBitmap() const;
 };
@@ -75,14 +75,13 @@ public:
   wxBitmap( const char **bits );
   wxBitmap( char **bits );
   wxBitmap( const wxBitmap& bmp );
-  wxBitmap( const wxBitmap* bmp );
   wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
   ~wxBitmap();
   wxBitmap& operator = ( const wxBitmap& bmp );
   bool operator == ( const wxBitmap& bmp );
   bool operator != ( const wxBitmap& bmp );
   bool Ok() const;
-    
+
   int GetHeight() const;
   int GetWidth() const;
   int GetDepth() const;
@@ -96,14 +95,14 @@ public:
   wxPalette *GetPalette() const;
   wxPalette *GetColourMap() const
     { return GetPalette(); };
-      
-// implementation      
+
+// implementation
 
   void SetHeight( int height );
   void SetWidth( int width );
   void SetDepth( int depth );
   void SetPixmap( GdkPixmap *pixmap );
-  
+
   GdkPixmap *GetPixmap() const;
   GdkBitmap *GetBitmap() const;
 

@@ -50,7 +50,9 @@ public:
 
     // the item's text = name
   void SetName(const wxString& str);
+  void SetText(const wxString& str) { SetName(str); } // compatibility
   const wxString& GetName() const { return m_text; }
+  const wxString& GetText() const { return GetName(); }
 
     // what kind of menu item we are
   void SetCheckable(bool checkable) { m_isCheckMenu = checkable; }
@@ -60,7 +62,7 @@ public:
   bool IsSubMenu() const { return m_subMenu != NULL; }
 
     // state
-  void Enable( bool enable = TRUE ); 
+  void Enable( bool enable = TRUE );
   bool IsEnabled() const { return m_isEnabled; }
   void Check( bool check = TRUE );
   bool IsChecked() const;
@@ -86,5 +88,5 @@ private:
 };
 
 
-#endif  
+#endif
         //__GTKMENUITEMH__

@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -36,17 +36,16 @@ class wxPalette: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxPalette)
 
   public:
-  
-    wxPalette(void);
+
+    wxPalette();
     wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue );
     wxPalette( const wxPalette& palette );
-    wxPalette( const wxPalette* palette );
-    ~wxPalette(void);
+    ~wxPalette();
     wxPalette& operator = ( const wxPalette& palette );
     bool operator == ( const wxPalette& palette );
     bool operator != ( const wxPalette& palette );
-    bool Ok(void) const;
-    
+    bool Ok() const;
+
     bool Create( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue);
     int GetPixel( const unsigned char red, const unsigned char green, const unsigned char blue ) const;
     bool GetRGB( int pixel, unsigned char *red, unsigned char *green, unsigned char *blue ) const;

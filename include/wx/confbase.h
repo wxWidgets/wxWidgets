@@ -76,7 +76,7 @@ extern wxString wxExpandEnvVars(const wxString &sz);
 extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 
 // ----------------------------------------------------------------------------
-// abstract base class wxConfigBase which defines the interface for derived 
+// abstract base class wxConfigBase which defines the interface for derived
 // classes
 //
 // wxConfig organizes the items in a tree-like structure (modeled after the
@@ -222,14 +222,14 @@ public:
 
 protected:
   static bool IsImmutable(const wxString& key)
-    { return key[0u] == wxCONFIG_IMMUTABLE_PREFIX; }
+    { return !key.IsEmpty() && key[0u] == wxCONFIG_IMMUTABLE_PREFIX; }
 
 private:
   // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
   // do we record default values?
   bool m_bRecordDefaults;
-  
+
   // static variables
   static wxConfigBase *ms_pConfig;
   static bool          ms_bAutoCreate;

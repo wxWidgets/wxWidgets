@@ -83,7 +83,7 @@ public:
     wxStringClientData( wxString &data ) { m_data = data; }
     void SetData( wxString &data ) { m_data = data; }
     wxString GetData() const { return m_data; }
-    
+
 private:
     wxString  m_data;
 };
@@ -95,7 +95,7 @@ private:
 class wxWindow: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxWindow)
-  
+
 public:
   wxWindow();
   wxWindow(wxWindow *parent, wxWindowID id,
@@ -110,7 +110,7 @@ public:
            const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
 
-  virtual bool LoadFromResource( wxWindow *parent, const wxString& resourceName, 
+  virtual bool LoadFromResource( wxWindow *parent, const wxString& resourceName,
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
   virtual wxControl *CreateItem(const wxItemResource* childResource, const wxItemResource* parentResource,
                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
@@ -155,7 +155,8 @@ public:
   virtual bool OnClose();
 
   virtual void AddChild( wxWindow *child );
-  wxList& GetChildren() const;
+  wxList& GetChildren() { return m_children; }
+
   virtual void RemoveChild( wxWindow *child );
   void SetReturnCode( int retCode );
   int GetReturnCode();
@@ -167,7 +168,7 @@ public:
     { m_parent = p; }
   virtual wxWindow *ReParent( wxWindow *newParent );
 
-  wxEvtHandler *GetEventHandler();
+  wxEvtHandler *GetEventHandler() const;
   void SetEventHandler( wxEvtHandler *handler );
   void PushEventHandler( wxEvtHandler *handler );
   wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
@@ -177,23 +178,23 @@ public:
 
   virtual void SetClientObject( wxClientData *data );
   virtual wxClientData *GetClientObject();
-    
+
   virtual void SetClientData( void *data );
   virtual void *GetClientData();
-  
+
   virtual void SetAcceleratorTable( const wxAcceleratorTable& accel );
   virtual wxAcceleratorTable *GetAcceleratorTable() { return &m_acceleratorTable; }
-  
+
   bool IsBeingDeleted();
 
   void SetId( wxWindowID id );
-  wxWindowID GetId();
+  wxWindowID GetId() const;
 
   void SetCursor( const wxCursor &cursor );
 
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
-  
+
   virtual wxRegion GetUpdateRegion() const;
   virtual bool IsExposed(int x, int y) const;
   virtual bool IsExposed(int x, int y, int w, int h) const;
@@ -213,20 +214,20 @@ public:
                              const wxFont *theFont = (const wxFont *) NULL, bool use16 = FALSE) const;
 
   virtual void SetFont( const wxFont &font );
-  virtual wxFont *GetFont();
-  
+  virtual const wxFont& GetFont() { return m_font; }
+
     // For backward compatibility
   inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
   inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
-  inline virtual wxFont *GetLabelFont() { return GetFont(); };
-  inline virtual wxFont *GetButtonFont() { return GetFont(); };
-  
+  inline virtual const wxFont& GetLabelFont() { return GetFont(); };
+  inline virtual const wxFont& GetButtonFont() { return GetFont(); };
+
   virtual void SetWindowStyleFlag( long flag );
   virtual long GetWindowStyleFlag() const;
-  
+
   virtual void CaptureMouse();
   virtual void ReleaseMouse();
-  
+
   virtual void SetTitle( const wxString &title );
   virtual wxString GetTitle() const;
   virtual void SetName( const wxString &name );
@@ -243,10 +244,10 @@ public:
   virtual bool IsRetained();
   virtual wxWindow *FindWindow( long id );
   virtual wxWindow *FindWindow( const wxString& name );
-  
+
   void AllowDoubleClick( bool WXUNUSED(allow) ) {};
   void SetDoubleClick( bool WXUNUSED(allow) ) {};
-  
+
   virtual void ClientToScreen( int *x, int *y );
   virtual void ScreenToClient( int *x, int *y );
 
@@ -270,27 +271,27 @@ public:
   virtual void ScrollWindow( int dx, int dy, const wxRect* rect = (wxRect *) NULL );
 
   virtual bool AcceptsFocus() const;
-  
+
   void UpdateWindowUI();
 
   // implementation
-  
+
           void        PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                                    const wxSize &size, long style, const wxString &name );
           void        PostCreation();
   virtual GtkWidget  *GetConnectWidget();
   virtual bool        IsOwnGtkWindow( GdkWindow *window );
           void        ConnectWidget( GtkWidget *widget );
-  
+
           bool        HasVMT();
-  
+
   virtual wxPoint     GetClientAreaOrigin() const;
   virtual void        AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
 
           GtkStyle   *GetWidgetStyle();
           void        SetWidgetStyle();
   virtual void        ApplyWidgetStyle();
-  
+
 
   wxWindow            *m_parent;
   wxList               m_children;
@@ -329,7 +330,7 @@ public:
   bool                 m_resizing;
   GdkGC               *m_scrollGC;
   GtkStyle            *m_widgetStyle;
-  
+
   wxInsertChildFunction  m_insertCallback;
 
 public:

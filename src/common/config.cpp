@@ -211,15 +211,14 @@ bool wxConfigBase::Write(const wxString& key, bool value)
 }
 
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
-    {
-        wxString tmp; // Required for BC++
-        if (IsExpandingEnvVars())
-            tmp = wxExpandEnvVars(str);
-        else
-            tmp = str;
-        return tmp;
-    }
-
+{
+    wxString tmp; // Required for BC++
+    if (IsExpandingEnvVars())
+        tmp = wxExpandEnvVars(str);
+    else
+        tmp = str;
+    return tmp;
+}
 
 // ----------------------------------------------------------------------------
 // wxConfigPathChanger
@@ -410,5 +409,3 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
     pc++;
   }
 }
-
-

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -72,13 +72,13 @@ wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
   y = topLeft.y;
   width = bottomRight.x - topLeft.x;
   height = bottomRight.y - topLeft.y;
-  
+
   if (width < 0)
   {
     width = -width;
     x -= width;
   }
-  
+
   if (height < 0)
   {
     height = -height;
@@ -94,9 +94,9 @@ wxRect::wxRect(const wxPoint& point, const wxSize& size)
 
 wxRect::wxRect(const wxRect& rect)
 {
-    x = rect.x; 
-    y = rect.y; 
-    width = rect.width; 
+    x = rect.x;
+    y = rect.y;
+    width = rect.width;
     height = rect.height;
 }
 
@@ -146,14 +146,14 @@ void wxColourDatabase::Initialize ()
   // Don't initialize for X: colours are found
   // in FindColour below.
   // Added: Not all
-  
+
   struct cdef {
    char *name;
    int r,g,b;
   };
   cdef cc;
   static cdef table[]={
-  
+
 // #ifdef __WXMSW__
    {"AQUAMARINE",112, 219, 147},
    {"BLACK",0, 0, 0},
@@ -234,7 +234,7 @@ void wxColourDatabase::Initialize ()
    {"LIGHT MAGENTA", 255, 0, 255},
    {"MEDIUM GREY", 100, 100, 100},
 #endif
-   
+
    {0,0,0,0}
   };
   int i;
@@ -263,7 +263,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
   wxNode *node = Find(str);
   if (node)
     return (wxColour *)node->Data();
-    
+
 #ifdef __WXMSW__
   else return NULL;
 #endif
@@ -277,7 +277,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 #ifdef __WXGTK__
   else {
     wxColour *col = new wxColour( colour );
-    
+
     if (!(col->Ok())) {
       delete col;
       return (wxColour *) NULL;
@@ -321,19 +321,19 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
   unsigned char red = colour.Red ();
   unsigned char green = colour.Green ();
   unsigned char blue = colour.Blue ();
-  
+
   for (wxNode * node = First (); node; node = node->Next ())
   {
       wxColour *col = (wxColour *) node->Data ();
-      
+
       if (col->Red () == red && col->Green () == green && col->Blue () == blue)
-	{
-	  const char *found = node->GetKeyString();
-	  if (found)
-	    return wxString(found);
-	}
+        {
+          const char *found = node->GetKeyString();
+          if (found)
+            return wxString(found);
+        }
   }
-  return wxString("");			// Not Found
+  return wxString("");                        // Not Found
 
 }
 
@@ -393,8 +393,7 @@ void wxInitializeStockObjects ()
   wxCROSS_CURSOR = new wxCursor (wxCURSOR_CROSS);
 }
 
-void 
-wxDeleteStockObjects ()
+void wxDeleteStockObjects ()
 {
   wxDELETE(wxNORMAL_FONT);
   wxDELETE(wxSMALL_FONT);
@@ -494,12 +493,12 @@ wxPen *wxPenList::FindOrCreatePen (const wxColour& colour, int width, int style)
     {
       wxPen *each_pen = (wxPen *) node->Data ();
       if (each_pen && each_pen->GetVisible() &&
-	  each_pen->GetWidth () == width &&
-	  each_pen->GetStyle () == style &&
-	  each_pen->GetColour ().Red () == colour.Red () &&
-	  each_pen->GetColour ().Green () == colour.Green () &&
-	  each_pen->GetColour ().Blue () == colour.Blue ())
-	return each_pen;
+          each_pen->GetWidth () == width &&
+          each_pen->GetStyle () == style &&
+          each_pen->GetColour ().Red () == colour.Red () &&
+          each_pen->GetColour ().Green () == colour.Green () &&
+          each_pen->GetColour ().Blue () == colour.Blue ())
+        return each_pen;
     }
   wxPen *pen = new wxPen (colour, width, style);
 
@@ -537,11 +536,11 @@ wxBrush *wxBrushList::FindOrCreateBrush (const wxColour& colour, int style)
     {
       wxBrush *each_brush = (wxBrush *) node->Data ();
       if (each_brush && each_brush->GetVisible() &&
-	  each_brush->GetStyle () == style &&
-	  each_brush->GetColour ().Red () == colour.Red () &&
-	  each_brush->GetColour ().Green () == colour.Green () &&
-	  each_brush->GetColour ().Blue () == colour.Blue ())
-	return each_brush;
+          each_brush->GetStyle () == style &&
+          each_brush->GetColour ().Red () == colour.Red () &&
+          each_brush->GetColour ().Green () == colour.Green () &&
+          each_brush->GetColour ().Blue () == colour.Blue ())
+        return each_brush;
     }
   // Yes, we can return a pointer to this in a later FindOrCreateBrush call,
   // because we created it within FindOrCreateBrush. Safeguards against
@@ -562,14 +561,14 @@ wxFontList::~wxFontList ()
   wxNode *node = First ();
   while (node)
     {
-	  // Only delete objects that are 'visible', i.e.
-	  // that have been created using FindOrCreate...,
-	  // where the pointers are expected to be shared
-	  // (and therefore not deleted by any one part of an app).
+          // Only delete objects that are 'visible', i.e.
+          // that have been created using FindOrCreate...,
+          // where the pointers are expected to be shared
+          // (and therefore not deleted by any one part of an app).
       wxFont *font = (wxFont *) node->Data ();
       wxNode *next = node->Next ();
-	  if (font->GetVisible())
-		delete font;
+          if (font->GetVisible())
+                delete font;
       node = next;
 }
 }
@@ -585,23 +584,23 @@ void wxFontList::RemoveFont (wxFont * font)
 }
 
 wxFont *wxFontList::
-	FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face)
+        FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face)
 {
   for (wxNode * node = First (); node; node = node->Next ())
     {
       wxFont *each_font = (wxFont *) node->Data ();
       if (each_font && each_font->GetVisible() && each_font->Ok() &&
-	  each_font->GetPointSize () == PointSize &&
-	  each_font->GetStyle () == Style &&
-	  each_font->GetWeight () == Weight &&
-	  each_font->GetUnderlined () == underline &&
-	  //#if defined(__X__)
-	  //	  each_font->GetFontId () == FamilyOrFontId) /* New font system */
-	  //#else
-	  each_font->GetFamily () == FamilyOrFontId &&
+          each_font->GetPointSize () == PointSize &&
+          each_font->GetStyle () == Style &&
+          each_font->GetWeight () == Weight &&
+          each_font->GetUnderlined () == underline &&
+          //#if defined(__X__)
+          //          each_font->GetFontId () == FamilyOrFontId) /* New font system */
+          //#else
+          each_font->GetFamily () == FamilyOrFontId &&
           (!each_font->GetFaceName() || each_font->GetFaceName() == Face))
-	//#endif
-	return each_font;
+        //#endif
+        return each_font;
     }
   wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face);
   font->SetVisible(TRUE);
@@ -609,9 +608,14 @@ wxFont *wxFontList::
 }
 
 void wxBitmapList::AddBitmap(wxBitmap *bitmap)
-{ Append(bitmap); }
+{
+    Append(bitmap);
+}
+
 void wxBitmapList::RemoveBitmap(wxBitmap *bitmap)
-{ DeleteObject(bitmap); }
+{
+    DeleteObject(bitmap);
+}
 
 wxSize wxGetDisplaySize()
 {
@@ -620,7 +624,8 @@ wxSize wxGetDisplaySize()
     return wxSize(x, y);
 }
 
-wxResourceCache::~wxResourceCache () {
+wxResourceCache::~wxResourceCache ()
+{
   wxNode *node = First ();
   while (node) {
     wxGDIObject *item = (wxGDIObject *)node->Data();

@@ -109,7 +109,7 @@ static char *GetIniFile(char *dest, const char *filename)
     return dest;
 }
 
-static void wxXMergeDatabases(void)
+static void wxXMergeDatabases()
 {
     XrmDatabase homeDB, serverDB, applicationDB;
     char filenamebuf[1024];
@@ -159,7 +159,7 @@ static void wxXMergeDatabases(void)
 // called on application exit
 //-----------------------------------------------------------------------------
 
-void wxFlushResources(void)
+void wxFlushResources()
 {
     char nameBuffer[512];
 

@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -50,7 +50,6 @@ public:
 
     // copy ctors and assignment operators
   wxColour( const wxColour& col );
-  wxColour( const wxColour* col );
   wxColour& operator = ( const wxColour& col );
 
     // dtor
@@ -59,7 +58,7 @@ public:
   // comparison
   bool operator == ( const wxColour& col );
   bool operator != ( const wxColour& col );
-  
+
   // accessors
   void Set( unsigned char red, unsigned char green, unsigned char blue );
   unsigned char Red() const;

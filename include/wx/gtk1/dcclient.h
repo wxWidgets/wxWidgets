@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -37,9 +37,9 @@ class wxWindowDC: public wxDC
 public:
   wxWindowDC();
   wxWindowDC( wxWindow *win );
-    
+
   ~wxWindowDC();
-    
+
   virtual void FloodFill( long x, long y, const wxColour& col, int style=wxFLOOD_SURFACE );
   virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
 
@@ -48,18 +48,18 @@ public:
   virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc );
   virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
   virtual void DrawPoint( long x, long y );
-    
+
   virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 );
   virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
-  virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0, 
+  virtual void DrawPolygon( int n, wxPoint points[], long xoffset = 0, long yoffset = 0,
                             int fillStyle=wxODDEVEN_RULE );
-  virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0, 
+  virtual void DrawPolygon( wxList *lines, long xoffset = 0, long yoffset = 0,
                             int fillStyle=wxODDEVEN_RULE );
-    
+
   virtual void DrawRectangle( long x, long y, long width, long height );
   virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
   virtual void DrawEllipse( long x, long y, long width, long height );
-    
+
   virtual bool CanDrawBitmap() const;
   virtual void DrawIcon( const wxIcon &icon, long x, long y );
   virtual void DrawBitmap( const wxBitmap &bitmap, long x, long y, bool useMask=FALSE );
@@ -73,9 +73,9 @@ public:
                      wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE );
   virtual long GetCharWidth();
   virtual long GetCharHeight();
-    
+
   virtual void Clear();
-            
+
   virtual void SetFont( const wxFont &font );
   virtual void SetPen( const wxPen &pen );
   virtual void SetBrush( const wxBrush &brush );
@@ -85,15 +85,15 @@ public:
   virtual void SetTextBackground( const wxColour &col );
   virtual void SetBackgroundMode( int mode );
   virtual void SetPalette( const wxPalette& palette );
-    
+
   virtual void SetClippingRegion( long x, long y, long width, long height );
   virtual void DestroyClippingRegion();
   virtual void SetClippingRegion( const wxRegion &region  );
-    
+
   virtual void DrawSpline( wxList *points );
-    
+
   // implementation
-    
+
   GdkWindow    *m_window;
   GdkGC        *m_penGC;
   GdkGC        *m_brushGC;
@@ -101,7 +101,7 @@ public:
   GdkGC        *m_bgGC;
   GdkColormap  *m_cmap;
   bool          m_isMemDC;
-    
+
   void SetUpDC();
   void Destroy();
   GdkWindow *GetWindow();

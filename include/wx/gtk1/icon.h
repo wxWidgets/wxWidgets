@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -35,9 +35,8 @@ class wxIcon: public wxBitmap
 
 public:
 
-  wxIcon(void);
+  wxIcon();
   wxIcon( const wxIcon& icon);
-  wxIcon( const wxIcon* icon);
   wxIcon( const char **bits, int width=-1, int height=-1 );
   wxIcon( char **bits, int width=-1, int height=-1 );
 

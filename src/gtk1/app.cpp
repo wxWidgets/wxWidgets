@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -213,8 +213,8 @@ bool wxApp::SendIdleEvents(void)
     wxNode* node = wxTopLevelWindows.First();
     while (node)
     {
-	wxWindow* win = (wxWindow*) node->Data();
-	if (SendIdleEvents(win))
+  wxWindow* win = (wxWindow*) node->Data();
+  if (SendIdleEvents(win))
             needMore = TRUE;
         node = node->Next();
     }
@@ -225,22 +225,22 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 {
     bool needMore = FALSE;
 
-	wxIdleEvent event;
-	event.SetEventObject(win);
-	win->ProcessEvent(event);
+    wxIdleEvent event;
+    event.SetEventObject(win);
+    win->ProcessEvent(event);
 
     if (event.MoreRequested())
         needMore = TRUE;
 
-	wxNode* node = win->GetChildren()->First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
+    wxNode* node = win->GetChildren().First();
+    while (node)
+    {
+        wxWindow* win = (wxWindow*) node->Data();
+        if (SendIdleEvents(win))
             needMore = TRUE;
 
-		node = node->Next();
-	}
+        node = node->Next();
+    }
     return needMore ;
 }
 

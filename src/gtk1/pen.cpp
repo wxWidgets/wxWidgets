@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -21,10 +21,10 @@
 class wxPenRefData: public wxObjectRefData
 {
 public:
-  
+
   wxPenRefData(void);
   wxPenRefData(const wxPenRefData& data);
-  
+
   int        m_width;
   int        m_style;
   int        m_joinStyle;
@@ -55,7 +55,7 @@ wxPenRefData::wxPenRefData( const wxPenRefData& data )
 
 IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
 
-wxPen::wxPen(void)
+wxPen::wxPen()
 {
     if (wxThePenList) wxThePenList->AddPen( this );
 }
@@ -66,21 +66,13 @@ wxPen::wxPen( const wxColour &colour, int width, int style )
     M_PENDATA->m_width = width;
     M_PENDATA->m_style = style;
     M_PENDATA->m_colour = colour;
-  
+
     if (wxThePenList) wxThePenList->AddPen( this );
 }
 
 wxPen::wxPen( const wxPen& pen )
 {
     Ref( pen );
-    if (wxThePenList) wxThePenList->AddPen( this );
-}
-
-wxPen::wxPen( const wxPen* pen )
-{
-    UnRef();
-    if (pen) Ref( *pen ); 
-  
     if (wxThePenList) wxThePenList->AddPen( this );
 }
 
@@ -91,19 +83,19 @@ wxPen::~wxPen()
 
 wxPen& wxPen::operator = ( const wxPen& pen )
 {
-    if (*this == pen) return (*this); 
-    Ref( pen ); 
-    return *this; 
+    if (*this == pen) return (*this);
+    Ref( pen );
+    return *this;
 }
 
 bool wxPen::operator == ( const wxPen& pen )
 {
-    return m_refData == pen.m_refData; 
+    return m_refData == pen.m_refData;
 }
 
 bool wxPen::operator != ( const wxPen& pen )
 {
-    return m_refData != pen.m_refData; 
+    return m_refData != pen.m_refData;
 }
 
 void wxPen::SetColour( const wxColour &colour )
@@ -145,35 +137,35 @@ void wxPen::SetWidth( int width )
 int wxPen::GetCap() const
 {
     wxCHECK_MSG( Ok(), -1, "invalid pen" );
-  
+
     return M_PENDATA->m_capStyle;
 }
 
 int wxPen::GetJoin() const
 {
     wxCHECK_MSG( Ok(), -1, "invalid pen" );
-  
+
     return M_PENDATA->m_joinStyle;
 }
 
 int wxPen::GetStyle() const
 {
     wxCHECK_MSG( Ok(), -1, "invalid pen" );
-  
+
     return M_PENDATA->m_style;
 }
 
 int wxPen::GetWidth() const
 {
     wxCHECK_MSG( Ok(), -1, "invalid pen" );
-  
+
     return M_PENDATA->m_width;
 }
 
 wxColour &wxPen::GetColour() const
 {
     wxCHECK_MSG( Ok(), wxNullColour, "invalid pen" );
-  
+
     return M_PENDATA->m_colour;
 }
 

@@ -31,7 +31,7 @@ wxMenuBar::wxMenuBar()
   m_menus.DeleteContents( TRUE );
 
   m_menubar = gtk_menu_bar_new();
-  
+
   m_widget = GTK_WIDGET(m_menubar);
 
   PostCreation();
@@ -159,7 +159,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
   wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, id );
   event.SetEventObject( menu );
   event.SetInt(id );
-  
+
   if (menu->m_callback)
   {
      (void) (*(menu->m_callback)) (*menu, event);
@@ -187,7 +187,7 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
   wxCommandEvent event( wxEVT_MENU_HIGHLIGHT, id );
   event.SetEventObject( menu );
   event.SetInt(id );
-  
+
 /* wxMSW doesn't call callback here either
   if (menu->m_callback)
   {
@@ -218,22 +218,24 @@ wxMenuItem::wxMenuItem()
   m_menuItem = (GtkWidget *) NULL;
 }
 
+// it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::SetName(const wxString& str)
 {
-  wxCHECK_RET( m_menuItem, "invalid menu item" );
-
   m_text = "";
-  for ( const char *pc = str; *pc != '\0'; pc++ ) 
+  for ( const char *pc = str; *pc != '\0'; pc++ )
   {
     if ( *pc == '&' )
       pc++; // skip it
 
     m_text << *pc;
   }
-  
-  GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-  
-  gtk_label_set( label, m_text.c_str());
+
+  if ( m_menuItem )
+  {
+    GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+
+    gtk_label_set( label, m_text.c_str());
+  }
 }
 
 void wxMenuItem::Check( bool check )
@@ -246,12 +248,12 @@ void wxMenuItem::Check( bool check )
   gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
 }
 
-void wxMenuItem::Enable( bool enable ) 
-{ 
+void wxMenuItem::Enable( bool enable )
+{
   wxCHECK_RET( m_menuItem, "invalid menu item" );
 
   gtk_widget_set_sensitive( m_menuItem, enable );
-  m_isEnabled = enable; 
+  m_isEnabled = enable;
 }
 
 bool wxMenuItem::IsChecked() const
@@ -279,11 +281,11 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
   m_items.DeleteContents( TRUE );
   m_invokingWindow = (wxWindow *) NULL;
   m_menu = gtk_menu_new();  // Do not show!
-  
+
   m_callback = func;
   m_eventHandler = this;
   m_clientData = (void*) NULL;
-  
+
   if (m_title.IsNull()) m_title = "";
   if (m_title != "")
   {
@@ -325,7 +327,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
   const char *text = mitem->GetText();
   GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label(text)
                                   : gtk_menu_item_new_with_label(text);
-				  
+
   mitem->SetMenuItem(menuItem);
 
   gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
@@ -466,7 +468,7 @@ wxMenuItem *wxMenu::FindItem(int id) const
   // Not finding anything here can be correct
   // when search the entire menu system for
   // an entry -> no error message.
-  
+
   return (wxMenuItem *) NULL;
 }
 

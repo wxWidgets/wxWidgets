@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -20,14 +20,6 @@
 #include "wx/gdicmn.h"
 
 //-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxWindow;
-
-class wxCursor;
-
-//-----------------------------------------------------------------------------
 // wxCursor
 //-----------------------------------------------------------------------------
 
@@ -37,22 +29,16 @@ class wxCursor: public wxObject
 
   public:
 
-    wxCursor(void);
+    wxCursor();
     wxCursor( int cursorId );
     wxCursor( const wxCursor &cursor );
-    wxCursor( const wxCursor *cursor );
-    ~wxCursor(void);
+    ~wxCursor();
     wxCursor& operator = ( const wxCursor& cursor );
-    bool operator == ( const wxCursor& cursor );
-    bool operator != ( const wxCursor& cursor );
-    bool Ok(void) const;
-    
-  private:
-  public:
-  
-    friend wxWindow;
-  
-    GdkCursor *GetCursor(void) const;
+    bool operator == ( const wxCursor& cursor ) const;
+    bool operator != ( const wxCursor& cursor ) const;
+    bool Ok() const;
+
+    GdkCursor *GetCursor() const;
 
     // no data :-)
 };

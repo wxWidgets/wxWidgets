@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -37,29 +37,28 @@ class wxBrush: public wxGDIObject
 
   public:
 
-    wxBrush(void);
+    wxBrush();
     wxBrush( const wxColour &colour, int style );
     wxBrush( const wxBitmap &stippleBitmap );
     wxBrush( const wxBrush &brush );
-    wxBrush( const wxBrush *brush );
-    ~wxBrush(void);
+    ~wxBrush();
     wxBrush& operator = ( const wxBrush& brush );
     bool operator == ( const wxBrush& brush );
     bool operator != ( const wxBrush& brush );
-    bool Ok(void) const;
+    bool Ok() const;
 
-    int GetStyle(void) const;
-    wxColour &GetColour(void) const;
-    wxBitmap *GetStipple(void) const;
-    
-    
+    int GetStyle() const;
+    wxColour &GetColour() const;
+    wxBitmap *GetStipple() const;
+
+
     void SetColour( const wxColour& col );
     void SetColour( unsigned char r, unsigned char g, unsigned char b );
     void SetStyle( int style );
     void SetStipple( const wxBitmap& stipple );
-    
-    void Unshare(void);
-  
+
+    void Unshare();
+
     // no data :-)
 };
 

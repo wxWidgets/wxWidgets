@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -36,31 +36,30 @@ class wxPen: public wxGDIObject
   DECLARE_DYNAMIC_CLASS(wxPen)
 
   public:
-  
-    wxPen(void);
+
+    wxPen();
     wxPen( const wxColour &colour, int width, int style );
     wxPen( const wxPen& pen );
-    wxPen( const wxPen* pen );
-    ~wxPen(void);
+    ~wxPen();
     wxPen& operator = ( const wxPen& pen );
     bool operator == ( const wxPen& pen );
     bool operator != ( const wxPen& pen );
-    
+
     void SetColour( const wxColour &colour );
     void SetColour( int red, int green, int blue );
     void SetCap( int capStyle );
     void SetJoin( int joinStyle );
     void SetStyle( int style );
     void SetWidth( int width );
-    wxColour &GetColour(void) const;
-    int GetCap(void) const;
-    int GetJoin(void) const;
-    int GetStyle(void) const;
-    int GetWidth(void) const;
-    bool Ok(void) const;
-    
-    void Unshare(void);
-    
+    wxColour &GetColour() const;
+    int GetCap() const;
+    int GetJoin() const;
+    int GetStyle() const;
+    int GetWidth() const;
+    bool Ok() const;
+
+    void Unshare();
+
     // no data :-)
 };
 

@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -39,8 +39,8 @@ public:
   virtual void SelectObject( const wxBitmap& bitmap );
   void GetSize( int *width, int *height ) const;
 
-  // implementation      
-    
+  // implementation
+
   wxBitmap  m_selected;
 };
 

@@ -26,7 +26,7 @@
 static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
   win->SetModified();
-  
+
   wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
   wxString val( win->GetValue() );
   if (!val.IsNull()) event.m_commandString = WXSTRINGCAST val;
@@ -89,7 +89,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                        0, 0);
 
     // put the horizontal scrollbar in the lower left hand corner
-    if (bHasHScrollbar) 
+    if (bHasHScrollbar)
     {
       GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
       gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
@@ -107,7 +107,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                      0, 0);
     gtk_widget_show( vscrollbar );
   }
-  else 
+  else
   {
     // a single-line text control: no need for scrollbars
     m_widget =
@@ -122,10 +122,10 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   m_parent->AddChild( this );
 
   (m_parent->m_insertCallback)( m_parent, this );
-  
+
   PostCreation();
 
-  if (multi_line) 
+  if (multi_line)
   {
     gtk_widget_realize(m_text);
     gtk_widget_show(m_text);
@@ -148,9 +148,9 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     if (!multi_line)
       gtk_entry_set_visibility( GTK_ENTRY(m_text), FALSE );
   }
-  
+
   if (style & wxTE_READONLY)
-  {    
+  {
     if (!multi_line)
       gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
   }
@@ -171,7 +171,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
 wxString wxTextCtrl::GetValue() const
 {
   wxCHECK_MSG( m_text != NULL, "", "invalid text ctrl" );
-  
+
   wxString tmp;
   if (m_windowStyle & wxTE_MULTILINE)
   {
@@ -190,7 +190,7 @@ wxString wxTextCtrl::GetValue() const
 void wxTextCtrl::SetValue( const wxString &value )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   wxString tmp = "";
   if (!value.IsNull()) tmp = value;
   if (m_windowStyle & wxTE_MULTILINE)
@@ -209,7 +209,7 @@ void wxTextCtrl::SetValue( const wxString &value )
 void wxTextCtrl::WriteText( const wxString &text )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   if (text.IsNull()) return;
 
   if (m_windowStyle & wxTE_MULTILINE)
@@ -226,14 +226,14 @@ void wxTextCtrl::WriteText( const wxString &text )
 bool wxTextCtrl::LoadFile( const wxString &file )
 {
   wxCHECK_MSG( m_text != NULL, FALSE, "invalid text ctrl" );
-  
+
   if (!wxFileExists(file)) return FALSE;
 
   Clear();
 
   FILE *fp = NULL;
   struct stat statb;
-  
+
   if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
       !(fp = fopen ((char*) (const char*) file, "r")))
   {
@@ -254,7 +254,7 @@ bool wxTextCtrl::LoadFile( const wxString &file )
     fclose (fp);
 
     text[len] = 0;
-    
+
     if (m_windowStyle & wxTE_MULTILINE)
     {
       gtk_editable_insert_text( GTK_EDITABLE(m_text), text, 0, &len );
@@ -263,7 +263,7 @@ bool wxTextCtrl::LoadFile( const wxString &file )
     {
       gtk_entry_set_text( GTK_ENTRY(m_text), text );
     }
-    
+
     free (text);
     m_modified = FALSE;
     return TRUE;
@@ -274,9 +274,9 @@ bool wxTextCtrl::LoadFile( const wxString &file )
 bool wxTextCtrl::SaveFile( const wxString &file )
 {
   wxCHECK_MSG( m_text != NULL, FALSE, "invalid text ctrl" );
-  
+
   if (file == "") return FALSE;
-  
+
   FILE *fp;
 
   if (!(fp = fopen ((char*) (const char*) file, "w")))
@@ -287,7 +287,7 @@ bool wxTextCtrl::SaveFile( const wxString &file )
     {
       char *text = NULL;
       gint len = 0;
-       
+
       if (m_windowStyle & wxTE_MULTILINE)
       {
         len = gtk_text_get_length( GTK_TEXT(m_text) );
@@ -297,20 +297,20 @@ bool wxTextCtrl::SaveFile( const wxString &file )
       {
         text = gtk_entry_get_text( GTK_ENTRY(m_text) );
       }
-      
+
       if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
 	{
 	  // Did not write whole file
 	}
-	
+
       // Make sure newline terminates the file
       if (text[len - 1] != '\n')
 	fputc ('\n', fp);
 
       fclose (fp);
-      
+
       if (m_windowStyle & wxTE_MULTILINE) g_free( text );
-      
+
       m_modified = FALSE;
       return TRUE;
     }
@@ -337,7 +337,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
         int j;
         for (j = 0; text[i] && text[i] != '\n'; i++, j++ )
             buf += text[i];
-    
+
         g_free( text );
         return buf;
     }
@@ -366,7 +366,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     return 0;
   if( pos >= len)
     return pos=len-1;
-  
+
   *x=1;   // Col 1
   *y=1;   // Line 1
   for (int i = 0; i < pos; i++ )
@@ -378,7 +378,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 	}
       else
 	(*x)++;
-    } 
+    }
   g_free( text );
   return 1;
 }
@@ -388,7 +388,7 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
   if (!(m_windowStyle & wxTE_MULTILINE))
     return 0;
   long pos=0;
-  
+
   for(int i=1;i<y;i++)
       pos +=GetLineLength(i);
   pos +=x-1; // Pos start with 0
@@ -414,7 +414,7 @@ int wxTextCtrl::GetNumberOfLines() const
         for (int i = 0; i < len; i++ )
           if (text[i] == '\n')
             currentLine++;
-    
+
         g_free( text );
         return currentLine;
     }
@@ -430,7 +430,7 @@ int wxTextCtrl::GetNumberOfLines() const
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   int tmp = (int) pos;
   if (m_windowStyle & wxTE_MULTILINE)
     gtk_text_set_point( GTK_TEXT(m_text), tmp );
@@ -441,7 +441,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 void wxTextCtrl::SetInsertionPointEnd()
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
     pos = gtk_text_get_length( GTK_TEXT(m_text) );
@@ -453,7 +453,7 @@ void wxTextCtrl::SetInsertionPointEnd()
 void wxTextCtrl::SetEditable( bool editable )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   if (m_windowStyle & wxTE_MULTILINE)
     gtk_text_set_editable( GTK_TEXT(m_text), editable );
   else
@@ -463,7 +463,7 @@ void wxTextCtrl::SetEditable( bool editable )
 void wxTextCtrl::SetSelection( long from, long to )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
@@ -475,14 +475,14 @@ void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 long wxTextCtrl::GetInsertionPoint() const
 {
   wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
-  
+
   return (long) GTK_EDITABLE(m_text)->current_pos;
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
   wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
-  
+
   int pos = 0;
   if (m_windowStyle & wxTE_MULTILINE)
     pos = gtk_text_get_length( GTK_TEXT(m_text) );
@@ -494,14 +494,14 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Remove( long from, long to )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
   if (value.IsNull()) return;
   gint pos = (gint)to;
@@ -511,7 +511,7 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
 void wxTextCtrl::Cut()
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
 #else
@@ -522,7 +522,7 @@ void wxTextCtrl::Cut()
 void wxTextCtrl::Copy()
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
 #else
@@ -533,7 +533,7 @@ void wxTextCtrl::Copy()
 void wxTextCtrl::Paste()
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
 #if (GTK_MINOR_VERSION == 1)
   gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
 #else
@@ -554,7 +554,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     event.SetEventObject(this);
     if (GetEventHandler()->ProcessEvent(event)) return;
   }
-  else if (key_event.KeyCode() == WXK_TAB) 
+  else if (key_event.KeyCode() == WXK_TAB)
   {
     wxNavigationKeyEvent event;
     event.SetDirection( key_event.m_shiftDown );
@@ -659,14 +659,14 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
 void wxTextCtrl::SetFont( const wxFont &WXUNUSED(font) )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   // doesn't work
 }
 
 void wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-  
+
   // doesn't work
 }
 
@@ -675,9 +675,9 @@ void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
   wxControl::SetBackgroundColour( colour );
-    
+
   if (!m_backgroundColour.Ok()) return;
-  
+
   if (m_windowStyle & wxTE_MULTILINE)
   {
     GdkWindow *window = GTK_TEXT(m_text)->text_area;

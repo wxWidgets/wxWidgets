@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -50,7 +50,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
  * wxColourData
  */
 
-wxColourData::wxColourData(void)
+wxColourData::wxColourData()
 {
   int i;
   for (i = 0; i < 16; i++)
@@ -58,9 +58,9 @@ wxColourData::wxColourData(void)
 
   chooseFull = FALSE;
   dataColour.Set(0,0,0);
-} 
+}
 
-wxColourData::~wxColourData(void)
+wxColourData::~wxColourData()
 {
 }
 
@@ -94,7 +94,7 @@ void wxColourData::operator=(const wxColourData& data)
  * Font data
  */
 
-wxFontData::wxFontData(void)
+wxFontData::wxFontData()
 {
   // Intialize colour to black.
   fontColour.Set(0, 0, 0);
@@ -106,7 +106,7 @@ wxFontData::wxFontData(void)
   maxSize = 0;
 }
 
-wxFontData::~wxFontData(void)
+wxFontData::~wxFontData()
 {
 }
 
@@ -126,7 +126,7 @@ void wxFontData::operator=(const wxFontData& data)
  * Print data
  */
 
-wxPrintData::wxPrintData(void)
+wxPrintData::wxPrintData()
 {
 #ifdef __WXMSW__
     printData = NULL;
@@ -147,7 +147,7 @@ wxPrintData::wxPrintData(void)
     printSetupDialog = FALSE;
 }
 
-wxPrintData::~wxPrintData(void)
+wxPrintData::~wxPrintData()
 {
 #ifdef __WXMSW__
     PRINTDLG *pd = (PRINTDLG *)printData;
@@ -159,7 +159,7 @@ wxPrintData::~wxPrintData(void)
 }
 
 #ifdef __WXMSW__
-void wxPrintData::ConvertToNative(void)
+void wxPrintData::ConvertToNative()
 {
     PRINTDLG *pd = (PRINTDLG*) printData;
     if ( pd == NULL )
@@ -174,8 +174,6 @@ void wxPrintData::ConvertToNative(void)
         pd->hDevMode       = NULL; // Will be created by PrintDlg
         pd->hDevNames      = NULL; // Ditto
 
-        // Why had I put this #ifdef in?? Seems fine to me.
-#if 1
         pd->Flags          = PD_RETURNDEFAULT;
         pd->nCopies        = 1;
 
@@ -196,7 +194,6 @@ void wxPrintData::ConvertToNative(void)
                 GlobalFree(pd->hDevNames);
             pd->hDevNames = NULL;
         }
-#endif
     }
 
     if ( pd->hDevMode )
@@ -245,7 +242,7 @@ void wxPrintData::ConvertToNative(void)
       pd->Flags |= PD_PRINTSETUP;
 }
 
-void wxPrintData::ConvertFromNative(void)
+void wxPrintData::ConvertFromNative()
 {
     PRINTDLG *pd = (PRINTDLG*) printData;
     if ( pd == NULL )
@@ -308,7 +305,7 @@ void wxPrintData::operator=(const wxPrintData& data)
  * wxPageSetupData
  */
 
-wxPageSetupData::wxPageSetupData(void)
+wxPageSetupData::wxPageSetupData()
 {
 #if defined(__WIN95__)
   m_pageSetupData = NULL;
@@ -330,7 +327,7 @@ wxPageSetupData::wxPageSetupData(void)
   m_getDefaultInfo = FALSE;
 }
 
-wxPageSetupData::~wxPageSetupData(void)
+wxPageSetupData::~wxPageSetupData()
 {
 #if defined(__WIN95__) && defined(__WXMSW__)
     PAGESETUPDLG *pd = (PAGESETUPDLG *)m_pageSetupData;
@@ -360,7 +357,7 @@ void wxPageSetupData::operator=(const wxPageSetupData& data)
 }
 
 #if defined(__WXMSW__) && defined(__WIN95__)
-void wxPageSetupData::ConvertToNative(void)
+void wxPageSetupData::ConvertToNative()
 {
     PAGESETUPDLG *pd = (PAGESETUPDLG*) m_pageSetupData;
     if ( m_pageSetupData == NULL )
@@ -369,7 +366,7 @@ void wxPageSetupData::ConvertToNative(void)
       pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
       m_pageSetupData = (void *)pd;
     }
-  
+
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
 
     if ( m_defaultMinMargins )
@@ -422,7 +419,7 @@ void wxPageSetupData::ConvertToNative(void)
     }
 }
 
-void wxPageSetupData::ConvertFromNative(void)
+void wxPageSetupData::ConvertFromNative()
 {
     PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageSetupData ;
     if ( !pd )

@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -42,40 +42,39 @@ class wxFontNameDirectory;
 // wxFont
 //-----------------------------------------------------------------------------
 
-class wxFont: public wxGDIObject 
+class wxFont: public wxGDIObject
 {
   DECLARE_DYNAMIC_CLASS(wxFont)
-  
+
   public:
-    wxFont(void);
+    wxFont();
     wxFont( int PointSize, int FontIdOrFamily, int Style, int Weight,
-	   bool underlined = FALSE, const char *Face= ( const char *) NULL );
-    wxFont( int PointSize, const char *Face, int Family, int Style, int Weight, 
-	   bool underlined = FALSE );
+            bool underlined = FALSE, const char *Face = ( const char *) NULL );
+    wxFont( int PointSize, const char *Face, int Family,
+            int Style, int Weight, bool underlined = FALSE );
     wxFont( const wxFont& font );
-    wxFont( const wxFont* font );
-    ~wxFont(void);
+    ~wxFont();
     wxFont& operator = ( const wxFont& font );
     bool operator == ( const wxFont& font );
     bool operator != ( const wxFont& font );
     bool Ok() const;
 
-    int GetPointSize(void) const;
-    wxString GetFaceName(void) const;
-    int GetFamily(void) const;
-    wxString GetFamilyString(void) const;
-    int GetFontId(void) const;
-    wxString GetFaceString(void) const;
-    int GetStyle(void) const;
-    wxString GetStyleString(void) const;
-    int GetWeight(void) const;
-    wxString GetWeightString(void) const;
-    bool GetUnderlined(void) const;
+    int GetPointSize() const;
+    wxString GetFaceName() const;
+    int GetFamily() const;
+    wxString GetFamilyString() const;
+    int GetFontId() const;
+    wxString GetFaceString() const;
+    int GetStyle() const;
+    wxString GetStyleString() const;
+    int GetWeight() const;
+    wxString GetWeightString() const;
+    bool GetUnderlined() const;
 
     wxFont( char *xFontName );
 
-  // implementation        
-    
+  // implementation
+
     GdkFont* GetInternalFont(float scale = 1.0) const;
 
     // no data :-)
@@ -85,15 +84,15 @@ class wxFont: public wxGDIObject
 // wxFontDirectory
 //-----------------------------------------------------------------------------
 
-class wxFontNameDirectory: public wxObject 
+class wxFontNameDirectory: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxFontNameDirectory)
-  
+
   public:
-    wxFontNameDirectory(void);
+    wxFontNameDirectory();
     ~wxFontNameDirectory();
 
-    void  Initialize(void);
+    void  Initialize();
     void  Initialize(int fontid, int family, const char *name);
 
     int   FindOrCreateFontId(const char *name, int family);
@@ -101,11 +100,10 @@ class wxFontNameDirectory: public wxObject
     int   GetFamily(int fontid);
     int   GetFontId(const char *name);
     char* GetFontName(int fontid);
-    int   GetNewFontId(void);
+    int   GetNewFontId();
     char* GetPostScriptName(int fontid, int weight, int style);
     char* GetScreenName(int fontid, int weight, int style);
-    
-    
+
     class wxHashTable *table;
     int   nextFontId;
 };

@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -23,15 +23,15 @@
 class wxColourRefData: public wxObjectRefData
 {
   public:
-  
+
     wxColourRefData();
     ~wxColourRefData();
     void FreeColour();
-  
+
     GdkColor     m_color;
     GdkColormap *m_colormap;
     bool         m_hasPixel;
-    
+
     friend wxColour;
 };
 
@@ -75,17 +75,17 @@ wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
   M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
   M_COLDATA->m_color.pixel = 0;
 }
-  
+
 void wxColour::InitFromName( const wxString &colourName )
 {
   wxNode *node = (wxNode *) NULL;
-  if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) ) 
+  if ( (wxTheColourDatabase) && (node = wxTheColourDatabase->Find(colourName)) )
   {
     wxColour *col = (wxColour*)node->Data();
     UnRef();
     if (col) Ref( *col );
-  } 
-  else 
+  }
+  else
   {
     m_refData = new wxColourRefData();
     if (!gdk_color_parse( colourName, &M_COLDATA->m_color ))
@@ -98,34 +98,29 @@ void wxColour::InitFromName( const wxString &colourName )
 }
 
 wxColour::wxColour( const wxColour& col )
-{ 
-  Ref( col ); 
-}
-
-wxColour::wxColour( const wxColour* col ) 
-{ 
-  if (col) Ref( *col ); 
+{
+  Ref( col );
 }
 
 wxColour::~wxColour()
 {
 }
 
-wxColour& wxColour::operator = ( const wxColour& col ) 
-{ 
-  if (*this == col) return (*this); 
-  Ref( col ); 
-  return *this; 
+wxColour& wxColour::operator = ( const wxColour& col )
+{
+  if (*this == col) return (*this);
+  Ref( col );
+  return *this;
 }
 
-bool wxColour::operator == ( const wxColour& col ) 
-{ 
-  return m_refData == col.m_refData; 
+bool wxColour::operator == ( const wxColour& col )
+{
+  return m_refData == col.m_refData;
 }
 
-bool wxColour::operator != ( const wxColour& col) 
-{ 
-  return m_refData != col.m_refData; 
+bool wxColour::operator != ( const wxColour& col)
+{
+  return m_refData != col.m_refData;
 }
 
 void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
@@ -145,7 +140,7 @@ unsigned char wxColour::Red() const
      wxFAIL_MSG( "invalid colour" );
      return 0;
   }
-  
+
   return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
 }
 
@@ -156,7 +151,7 @@ unsigned char wxColour::Green() const
      wxFAIL_MSG( "invalid colour" );
      return 0;
   }
-  
+
   return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
 }
 
@@ -167,7 +162,7 @@ unsigned char wxColour::Blue() const
      wxFAIL_MSG( "invalid colour" );
      return 0;
   }
-  
+
   return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
 }
 
@@ -179,10 +174,10 @@ bool wxColour::Ok() const
 void wxColour::CalcPixel( GdkColormap *cmap )
 {
   if (!Ok()) return;
-  
+
   if ((M_COLDATA->m_hasPixel) && (M_COLDATA->m_colormap == cmap)) return;
   M_COLDATA->FreeColour();
-  
+
   GdkColormapPrivate *private_colormap = (GdkColormapPrivate*) cmap;
   if ((private_colormap->visual->type == GDK_VISUAL_GRAYSCALE) ||
       (private_colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR))
@@ -199,7 +194,7 @@ void wxColour::CalcPixel( GdkColormap *cmap )
       int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
       if (sum < max) { index = i; max = sum; }
     }
-    
+
     M_COLDATA->m_hasPixel = TRUE;
     M_COLDATA->m_color.pixel = index;
   }
@@ -207,21 +202,21 @@ void wxColour::CalcPixel( GdkColormap *cmap )
   {
     M_COLDATA->m_hasPixel = gdk_color_alloc( cmap, &M_COLDATA->m_color );
   }
-  
+
   M_COLDATA->m_colormap = cmap;
 }
 
 int wxColour::GetPixel() const
 {
   if (!Ok()) return 0;
-  
+
   return M_COLDATA->m_color.pixel;
 }
 
 GdkColor *wxColour::GetColor() const
 {
   if (!Ok()) return (GdkColor *) NULL;
-  
+
   return &M_COLDATA->m_color;
 }
 

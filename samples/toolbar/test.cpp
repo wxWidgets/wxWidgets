@@ -21,6 +21,8 @@
 #endif
 
 #include "wx/toolbar.h"
+#include <wx/log.h>
+
 #include "test.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
@@ -38,7 +40,6 @@
 
 IMPLEMENT_APP(MyApp)
 
-
 // The `main program' equivalent, creating the windows and returning the
 // main frame
 bool MyApp::OnInit(void)
@@ -51,11 +52,7 @@ bool MyApp::OnInit(void)
   frame->CreateStatusBar();
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#else
-  frame->SetIcon( wxIcon(mondrian_xpm) );
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *fileMenu = new wxMenu;
@@ -92,8 +89,6 @@ bool MyApp::OnInit(void)
 
 bool MyApp::InitToolbar(wxToolBar* toolBar)
 {
-  toolBar->SetMargins(5, 5);
-
   // Set up toolbar
   wxBitmap* toolBarBitmaps[8];
 
@@ -167,7 +162,7 @@ END_EVENT_TABLE()
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame* parent, wxWindowID id, const wxString& title, const wxPoint& pos,
         const wxSize& size, long style):
-  wxFrame(parent, id, title, pos, size, style)
+  wxFrame(parent, id, title, pos, size, style), m_timer(this)
 {
   m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 }
@@ -179,7 +174,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox("wxWindows wxToolBar demo\n", "About wxToolBar");
+//    (void)wxMessageBox("wxWindows wxToolBar demo\n", "About wxToolBar");
+  wxLogStatus("Started timer.");
+
+  m_timer.Start(500, TRUE);
 }
 
 // Define the behaviour for the frame closing

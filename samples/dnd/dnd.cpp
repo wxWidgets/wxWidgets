@@ -4,9 +4,9 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     04/01/98
-// RCS-ID:
+// RCS-ID:      $Id$
 // Copyright:
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -59,7 +59,7 @@ private:
 // Define a new application type
 // ----------------------------------------------------------------------------
 class DnDApp : public wxApp
-{ 
+{
 public:
   bool OnInit();
 };
@@ -70,7 +70,7 @@ IMPLEMENT_APP(DnDApp);
 // Define a new frame type
 // ----------------------------------------------------------------------------
 class DnDFrame : public wxFrame
-{ 
+{
 public:
   DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
  ~DnDFrame();
@@ -84,9 +84,9 @@ public:
 
   void OnLeftDown(wxMouseEvent& event);
   void OnRightDown(wxMouseEvent& event);
-  
+
   bool OnClose();
-  
+
   DECLARE_EVENT_TABLE()
 
 private:
@@ -123,10 +123,10 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
 END_EVENT_TABLE()
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool DnDApp::OnInit(void)
+bool DnDApp::OnInit()
 {
   // create the main frame window
-  DnDFrame *frame = new DnDFrame((wxFrame  *) NULL, "Drag & Drop wxWindows App", 
+  DnDFrame *frame = new DnDFrame((wxFrame  *) NULL, "Drag & Drop wxWindows App",
                                  50, 50, 450, 340);
 
   // activate it
@@ -145,7 +145,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   // frame icon and status bar
   SetIcon(wxICON(mondrian));
-  
+
 //  const int widths[] = { -1 };
   CreateStatusBar();
 
@@ -169,7 +169,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   menu_bar->Append(help_menu, "&Help");
 
   SetMenuBar(menu_bar);
-  
+
   // make a panel with 3 subwindows
   wxPoint pos(0, 0);
   wxSize  size(400, 200);
@@ -179,8 +179,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL);
   m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
 
-  m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size, 
-                               wxTE_MULTILINE | wxTE_READONLY | 
+  m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
+                               wxTE_MULTILINE | wxTE_READONLY |
                                wxSUNKEN_BORDER| wxHSCROLL);
 
   // redirect log messages to the text window (don't forget to delete it!)
@@ -189,14 +189,14 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
+  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
 
   wxLayoutConstraints *c;
 
   // Top-left listbox
   c = new wxLayoutConstraints;
-  c->left.SameAs		(this, wxLeft);
-  c->top.SameAs			(this, wxTop);
+  c->left.SameAs(this, wxLeft);
+  c->top.SameAs(this, wxTop);
   c->right.PercentOf(this, wxRight, 50);
   c->height.PercentOf(this, wxHeight, 40);
   m_ctrlFile->SetConstraints(c);
@@ -230,7 +230,7 @@ void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
   int w = 0;
   int h = 0;
   GetClientSize( &w, &h );
-  
+
   wxPaintDC dc(this);
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL ) );
   dc.DrawText( "Drag text from here!", 20, h-20 );
@@ -252,7 +252,7 @@ void DnDFrame::OnDrag(wxCommandEvent& /* event */)
 
 void DnDFrame::OnAbout(wxCommandEvent& /* event */)
 {
-  wxMessageDialog dialog(this, 
+  wxMessageDialog dialog(this,
                          "Drag-&-Drop Demo\n"
                          "Please see \"Help|Help...\" for details\n"
                          "Copyright (c) 1998 Vadim Zeitlin",
@@ -263,22 +263,22 @@ void DnDFrame::OnAbout(wxCommandEvent& /* event */)
 
 void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 {
-  wxMessageDialog dialog(this, 
+  wxMessageDialog dialog(this,
 "This small program demonstrates drag & drop support in wxWindows. The program window\n"
 "consists of 3 parts: the bottom pane is for debug messages, so that you can see what's\n"
-"going on inside. The top part is split into 2 listboxes, the left one accepts files\n" 
+"going on inside. The top part is split into 2 listboxes, the left one accepts files\n"
 "and the right one accepts text.\n"
 "\n"
-"To test wxDropTarget: open wordpad (write.exe), select some text in it and drag it to\n" 
-"the right listbox (you'll notice the usual visual feedback, i.e. the cursor will change).\n" 
+"To test wxDropTarget: open wordpad (write.exe), select some text in it and drag it to\n"
+"the right listbox (you'll notice the usual visual feedback, i.e. the cursor will change).\n"
 "Also, try dragging some files (you can select several at once) from Windows Explorer (or \n"
 "File Manager) to the left pane. Hold down Ctrl/Shift keys when you drop text (doesn't \n"
 "work with files) and see what changes.\n"
 "\n"
-"To test wxDropSource: just press any mouse button on the empty zone of the window and drag\n" 
+"To test wxDropSource: just press any mouse button on the empty zone of the window and drag\n"
 "it to wordpad or any other droptarget accepting text (and of course you can just drag it\n"
 "to the right pane). Due to a lot of trace messages, the cursor might take some time to \n"
-"change, don't release the mouse button until it does. You can change the string being\n" 
+"change, don't release the mouse button until it does. You can change the string being\n"
 "dragged in in \"File|Test drag...\" dialog.\n"
 "\n"
 "\n"
@@ -291,19 +291,19 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 
 void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 {
-//  m_ctrlLog->Clear();
+  m_ctrlLog->Clear();
 }
 
-bool DnDFrame::OnClose() 
-{ 
-  return TRUE; 
+bool DnDFrame::OnClose()
+{
+  return TRUE;
 }
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
   if ( !m_strText.IsEmpty() ) {
     // start drag operation
-    
+
     wxTextDataObject data(m_strText);
     wxDropSource dragSource(data, this);
     const char *pc;
@@ -324,11 +324,11 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 void DnDFrame::OnRightDown(wxMouseEvent &event )
 {
   wxMenu *menu = new wxMenu;
-  
+
   menu->Append(Menu_Drag, "&Test drag...");
   menu->Append(Menu_About, "&About");
   menu->Append(Menu_Quit, "E&xit");
-  
+
   PopupMenu( menu, event.GetX(), event.GetY() );
 }
 
@@ -350,7 +350,7 @@ bool DnDText::OnDropText(long, long, const char *psz)
   return TRUE;
 }
 
-bool DnDFile::OnDropFiles(long, long, size_t nFiles, 
+bool DnDFile::OnDropFiles(long, long, size_t nFiles,
                           const char * const aszFiles[])
 {
   wxString str;

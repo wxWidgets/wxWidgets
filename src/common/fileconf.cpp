@@ -111,9 +111,9 @@ wxString wxFileConfig::GetGlobalDir()
 wxString wxFileConfig::GetLocalDir()
 {
   wxString strDir;
-  
+
   wxGetHomeDir(&strDir);
-  
+
 #ifdef  __UNIX__
   if (strDir.Last() != '/') strDir << '/';
 #else
@@ -152,7 +152,7 @@ wxString wxFileConfig::GetLocalFileName(const char *szFile)
     if ( strchr(szFile, '.') == NULL )
       str << ".ini";
   #endif
-  
+
   return str;
 }
 
@@ -762,7 +762,7 @@ void wxFileConfig::LineListRemove(LineList *pLine)
   // last entry?
   if ( pNext == NULL )
     m_linesTail = pPrev;
-  else    
+  else
     pNext->SetPrev(pPrev);
 
   delete pLine;
@@ -1328,7 +1328,7 @@ wxString FilterOut(const wxString& str)
 {
    if(str.IsEmpty())
       return str;
-   
+
   wxString strResult;
   strResult.Alloc(str.Len());
 

@@ -22,19 +22,19 @@
 class wxPaletteRefData: public wxObjectRefData
 {
   public:
-  
+
     wxPaletteRefData(void);
     ~wxPaletteRefData(void);
-  
+
     GdkColormap  *m_colormap;
 };
 
-wxPaletteRefData::wxPaletteRefData(void)
+wxPaletteRefData::wxPaletteRefData()
 {
   m_colormap = (GdkColormap *) NULL;
 };
 
-wxPaletteRefData::~wxPaletteRefData(void)
+wxPaletteRefData::~wxPaletteRefData()
 {
   if (m_colormap) gdk_colormap_unref( m_colormap );
 };
@@ -45,7 +45,7 @@ wxPaletteRefData::~wxPaletteRefData(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject)
 
-wxPalette::wxPalette(void)
+wxPalette::wxPalette()
 {
 };
 
@@ -60,31 +60,25 @@ wxPalette::wxPalette( const wxPalette& palette )
   Ref( palette );
 };
 
-wxPalette::wxPalette( const wxPalette* palette )
-{
-  UnRef();
-  if (palette) Ref( *palette ); 
-};
-
-wxPalette::~wxPalette(void)
+wxPalette::~wxPalette()
 {
 };
 
 wxPalette& wxPalette::operator = ( const wxPalette& palette )
 {
-  if (*this == palette) return (*this); 
-  Ref( palette ); 
-  return *this; 
+  if (*this == palette) return (*this);
+  Ref( palette );
+  return *this;
 };
 
 bool wxPalette::operator == ( const wxPalette& palette )
 {
-  return m_refData == palette.m_refData; 
+  return m_refData == palette.m_refData;
 };
 
 bool wxPalette::operator != ( const wxPalette& palette )
 {
-  return m_refData != palette.m_refData; 
+  return m_refData != palette.m_refData;
 };
 
 bool wxPalette::Ok(void) const

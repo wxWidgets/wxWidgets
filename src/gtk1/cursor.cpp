@@ -4,7 +4,7 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -21,19 +21,19 @@
 class wxCursorRefData: public wxObjectRefData
 {
   public:
-  
-    wxCursorRefData(void);
-    ~wxCursorRefData(void);
-  
+
+    wxCursorRefData();
+    ~wxCursorRefData();
+
     GdkCursor *m_cursor;
 };
 
-wxCursorRefData::wxCursorRefData(void)
+wxCursorRefData::wxCursorRefData()
 {
   m_cursor = (GdkCursor *) NULL;
 }
 
-wxCursorRefData::~wxCursorRefData(void)
+wxCursorRefData::~wxCursorRefData()
 {
   if (m_cursor) gdk_cursor_destroy( m_cursor );
 }
@@ -44,14 +44,14 @@ wxCursorRefData::~wxCursorRefData(void)
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor,wxObject)
 
-wxCursor::wxCursor(void)
+wxCursor::wxCursor()
 {
 }
 
 wxCursor::wxCursor( int cursorId )
 {
   m_refData = new wxCursorRefData();
-  
+
   GdkCursorType gdk_cur = GDK_LEFT_PTR;
   switch (cursorId)
   {
@@ -67,12 +67,12 @@ wxCursor::wxCursor( int cursorId )
     case wxCURSOR_PENCIL:     gdk_cur = GDK_PENCIL; break;
     case wxCURSOR_NO_ENTRY:   gdk_cur = GDK_PIRATE; break;
   }
-  
+
   M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
-  
+
 /*
   do that yourself
-   
+
   wxCURSOR_BULLSEYE,
   wxCURSOR_CHAR,
   wxCURSOR_LEFT_BUTTON,
@@ -95,7 +95,7 @@ wxCursor::wxCursor( int cursorId )
   wxCURSOR_BASED_ARROW_UP,
   wxCURSOR_BASED_ARROW_DOWN
 */
-   
+
 }
 
 wxCursor::wxCursor( const wxCursor &cursor )
@@ -103,39 +103,33 @@ wxCursor::wxCursor( const wxCursor &cursor )
   Ref( cursor );
 }
 
-wxCursor::wxCursor( const wxCursor *cursor )
-{
-  UnRef();
-  if (cursor) Ref( *cursor );
-}
-
-wxCursor::~wxCursor(void)
+wxCursor::~wxCursor()
 {
 }
 
 wxCursor& wxCursor::operator = ( const wxCursor& cursor )
 {
-  if (*this == cursor) return (*this); 
-  Ref( cursor ); 
-  return *this; 
+  if (*this == cursor) return (*this);
+  Ref( cursor );
+  return *this;
 }
 
-bool wxCursor::operator == ( const wxCursor& cursor )
+bool wxCursor::operator == ( const wxCursor& cursor ) const
 {
-  return m_refData == cursor.m_refData; 
+  return m_refData == cursor.m_refData;
 }
 
-bool wxCursor::operator != ( const wxCursor& cursor )
+bool wxCursor::operator != ( const wxCursor& cursor ) const
 {
-  return m_refData != cursor.m_refData; 
+  return m_refData != cursor.m_refData;
 }
 
-bool wxCursor::Ok(void) const
+bool wxCursor::Ok() const
 {
   return (m_refData != NULL);
 }
 
-GdkCursor *wxCursor::GetCursor(void) const
+GdkCursor *wxCursor::GetCursor() const
 {
   return M_CURSORDATA->m_cursor;
 }
@@ -146,7 +140,7 @@ GdkCursor *wxCursor::GetCursor(void) const
 
 bool g_isBusy = FALSE;
 
-void wxEndBusyCursor(void)
+void wxEndBusyCursor()
 {
   g_isBusy = FALSE;
 }
@@ -156,7 +150,7 @@ void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
   g_isBusy = TRUE;
 }
 
-bool wxIsBusy(void)
+bool wxIsBusy()
 {
   return g_isBusy;
 }
