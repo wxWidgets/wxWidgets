@@ -1136,6 +1136,54 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// colour setting for the rich edit controls
+// ----------------------------------------------------------------------------
+
+#if wxUSE_RICHEDIT
+
+bool wxTextCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxTextCtrlBase::SetBackgroundColour(colour) )
+    {
+        // colour didn't really change
+        return FALSE;
+    }
+
+    if ( IsRich() )
+    {
+        // rich edit doesn't use WM_CTLCOLOR, hence we need to send
+        // EM_SETBKGNDCOLOR additionally
+        ::SendMessage(GetHwnd(), EM_SETBKGNDCOLOR, 0, wxColourToRGB(colour));
+    }
+
+    return TRUE;
+}
+
+bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxTextCtrlBase::SetForegroundColour(colour) )
+    {
+        // colour didn't really change
+        return FALSE;
+    }
+
+    if ( IsRich() )
+    {
+        // change the colour of everything
+        CHARFORMAT cf;
+        wxZeroMemory(cf);
+        cf.cbSize = sizeof(cf);
+        cf.dwMask = CFM_COLOR;
+        cf.crTextColor = wxColourToRGB(colour);
+        ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
+    }
+
+    return TRUE;
+}
+
+#endif // wxUSE_RICHEDIT
+
+// ----------------------------------------------------------------------------
 // wxRichEditModule
 // ----------------------------------------------------------------------------
 

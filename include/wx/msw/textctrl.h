@@ -127,6 +127,11 @@ public:
 #if wxUSE_RICHEDIT
     bool IsRich() const { return m_isRich; }
     void SetRichEdit(bool isRich) { m_isRich = isRich; }
+
+    // rich edit controls are not compatible with normal ones and wem ust set
+    // the colours for them otherwise
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
 #endif // wxUSE_RICHEDIT
 
     virtual void AdoptAttributesFromHWND();
