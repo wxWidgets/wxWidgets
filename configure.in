@@ -418,6 +418,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_SOUND=no
   DEFAULT_wxUSE_MEDIACTRL=no  
+  DEFAULT_wxUSE_DIRECTSHOW=no  
   DEFAULT_wxUSE_INTL=no
   DEFAULT_wxUSE_CONFIG=no
   DEFAULT_wxUSE_FONTMAP=no
@@ -607,6 +608,7 @@ else
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_SOUND=yes
   DEFAULT_wxUSE_MEDIACTRL=no
+  DEFAULT_wxUSE_DIRECTSHOW=no  
   DEFAULT_wxUSE_INTL=yes
   DEFAULT_wxUSE_CONFIG=yes
   DEFAULT_wxUSE_FONTMAP=yes
@@ -3160,6 +3162,28 @@ dnl ---------------------------------------------------------------------------
             wxUSE_DISPLAY="no"
             AC_MSG_WARN([ddraw.h or multimon.h not found; disabling wxDisplay])
           ] )
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl wxMediaCtrl 
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_MEDIACTRL" = "yes"; then
+    if test "$wxUSE_MSW" = 1; then
+dnl ---------------------------------------------------------------------------
+dnl DirectShow MSW
+dnl ---------------------------------------------------------------------------
+        wxUSE_DIRECTSHOW="yes"
+        AC_CHECK_HEADERS([dshow.h], [], [
+            wxUSE_DIRECTSHOW="no"
+            AC_MSG_WARN([DirectShow not installed; consider installing the DirectX7 SDK or higher])
+          ] )
+
+       if test "$wxUSE_DIRECTSHOW" = "yes"; then
+          AC_DEFINE(wxUSE_DIRECTSHOW)
+	    LIBS="$LIBS -lstrmiids"          
+       if
     fi
 fi
 
