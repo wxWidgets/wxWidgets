@@ -267,9 +267,12 @@ static void gtk_listitem_select_cb( GtkWidget *widget, wxListBox *listbox, bool 
 
     if (!listbox->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
+    
+    if (listbox->m_blockEvent) return;
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
+    
 //    MSW doesn't do that either
 //    event.SetExtraLong( (long) is_selection );
 
@@ -335,6 +338,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_acceptsFocus = TRUE;
     m_isListBox = TRUE;
     m_prevSelection = 0;  // or -1 ??
+    m_blockEvent = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -856,7 +860,7 @@ void wxListBox::SetSelection( int n, bool select )
 {
     wxCHECK_RET( m_list != NULL, wxT("invalid listbox") );
 
-    GtkDisableEvents();
+    m_blockEvent = TRUE;
 
     if (select)
     {
@@ -868,7 +872,7 @@ void wxListBox::SetSelection( int n, bool select )
     else
         gtk_list_unselect_item( m_list, n );
 
-    GtkEnableEvents();
+    m_blockEvent = FALSE;    
 }
 
 void wxListBox::DoSetFirstItem( int n )
@@ -939,38 +943,6 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
     }
 }
 #endif // wxUSE_TOOLTIPS
-
-void wxListBox::GtkDisableEvents()
-{
-    GList *child = m_list->children;
-    while (child)
-    {
-        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
-          GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
-
-        if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-            gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
-              GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
-
-        child = child->next;
-    }
-}
-
-void wxListBox::GtkEnableEvents()
-{
-    GList *child = m_list->children;
-    while (child)
-    {
-        gtk_signal_connect( GTK_OBJECT(child->data), "select",
-          GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
-
-        if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
-            gtk_signal_connect( GTK_OBJECT(child->data), "deselect",
-              GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
-
-        child = child->next;
-    }
-}
 
 GtkWidget *wxListBox::GetConnectWidget()
 {
