@@ -118,6 +118,12 @@ Move the caret to given position (in logical coordinates).
 
 Sets the blink time for all the carets.
 
+\wxheading{Remarks}
+
+Under Windows, this function will change the blink time for {\bf all} carets
+permanently (until the next time it is called), even for the carets in other
+applications.
+
 \wxheading{See also}
 
 \helpref{GetBlinkTime}{wxcaretgetblinktime}
