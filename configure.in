@@ -1962,6 +1962,7 @@ AC_OUTPUT([
             samples/proplist/Makefile
             samples/regtest/Makefile
             samples/resource/Makefile
+            samples/richedit/Makefile
             samples/sashtest/Makefile
             samples/scroll/Makefile
             samples/splitter/Makefile
