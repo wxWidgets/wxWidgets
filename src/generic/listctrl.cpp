@@ -3920,10 +3920,26 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
     else
         iconSpacing = 0;
 
+    // Note that we do not call GetClientSize() here but
+    // GetSize() and substract the border size for sunken
+    // borders manually. This is technically incorrect,
+    // but we need to know the client area's size WITHOUT
+    // scrollbars here. Since we don't know if there are
+    // any scrollbars, we use GetSize() instead. Another
+    // solution would be to call SetScrollbars() here to
+    // remove the scrollbars and call GetClientSize() then,
+    // but this might result in flicker and - worse - will
+    // reset the scrollbars to 0 which is not good at all
+    // if you resize a dialog/window, but don't want to
+    // reset the window scrolling. RR.
+    // Furthermore, we actually do NOT subtract the border
+    // width as 2 pixels is just the extra space which we
+    // need around the actual content in the window. Other-
+    // wise the text would e.g. touch the upper border. RR.
     int clientWidth,
         clientHeight;
-    GetClientSize( &clientWidth, &clientHeight );
-
+    GetSize( &clientWidth, &clientHeight );
+    
     if ( HasFlag(wxLC_REPORT) )
     {
         // all lines have the same height
@@ -3952,13 +3968,13 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         // fit into the window, we recalculate after subtracting an
         // approximated 15 pt for the horizontal scrollbar
 
-        clientHeight -= 4;  // sunken frame
-
         int entireWidth = 0;
 
         for (int tries = 0; tries < 2; tries++)
         {
             entireWidth = 0;
+            
+            // Start at 2,2 so the text does not touch the border
             int x = 2;
             int y = 2;
             int maxWidth = 0;
@@ -3971,7 +3987,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                 currentlyVisibleLines++;
                 wxListLineData *line = GetLine(i);
                 line->CalculateSize( &dc, iconSpacing );
-                line->SetPosition( x, y, clientWidth, iconSpacing );
+                line->SetPosition( x, y, clientWidth, iconSpacing );  // why clientWidth (FIXME)
 
                 wxSize sizeLine = GetLineSize(i);
 
@@ -3983,7 +3999,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     m_linesPerPage = currentlyVisibleLines;
 
                 // assume that the size of the next one is the same... (FIXME)
-                if ( y + sizeLine.y - 6 >= clientHeight )
+                if ( y + sizeLine.y >= clientHeight )
                 {
                     currentlyVisibleLines = 0;
                     y = 2;
@@ -3995,7 +4011,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
                     entireWidth += maxWidth;
                 if ((tries == 0) && (entireWidth > clientWidth))
                 {
-                    clientHeight -= 15; // scrollbar height
+                    clientHeight -= 15; // guessed scrollbar height (FIXME)
                     m_linesPerPage = 0;
                     currentlyVisibleLines = 0;
                     break;
