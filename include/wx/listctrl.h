@@ -38,6 +38,21 @@ public:
     wxPoint       m_pointDrag;
 
     wxListItem    m_item;
+    
+    inline int GetCode() { return m_code; }
+    inline long GetIndex() { return m_itemIndex; }
+    inline long GetOldIndex() { return m_oldItemIndex; }
+    inline long GetItem() { return m_itemIndex; }
+    inline long GetOldItem() { return m_oldItemIndex; }
+    inline int GetColumn() { return m_col; }
+    inline bool Cancelled() { return m_cancelled; }
+    inline wxPoint GetPoint() { return m_pointDrag; }
+    inline const wxString &GetLabel() const { return m_item.m_text; }
+    inline const wxString &GetText() const { return m_item.m_text; }
+    inline int GetImage() { return m_item.m_image; }
+    inline long GetData() { return m_item.m_data; }
+    inline long GetMask() { return m_item.m_mask; }
+    inline const wxListItem &GetItem() const { return m_item; }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxListEvent)

@@ -21,8 +21,6 @@
 #include "wx/dialog.h"
 #include "wx/checkbox.h"
 #include "wx/listctrl.h"
-#include "wx/button.h"
-#include "wx/validate.h"
 #include "wx/textctrl.h"
 #include "wx/choice.h"
 
@@ -72,9 +70,8 @@ public:
     bool IsLink();
     bool IsExe();
     long GetSize();
-    bool NewNameIsLegal( const wxString &s );
-    bool Rename( const wxString &s );
     void MakeItem( wxListItem &item );
+    void SetNewName( const wxString &name, const wxString &fname );
     
 private:
     DECLARE_DYNAMIC_CLASS(wxFileData);
@@ -89,10 +86,12 @@ class wxFileCtrl : public wxListCtrl
 private:
     wxString      m_dirName;
     bool          m_showHidden;
+    wxString      m_wild;
 
 public:
     wxFileCtrl();
-    wxFileCtrl( wxWindow *win, const wxWindowID id, const wxString &dirName,
+    wxFileCtrl( wxWindow *win, const wxWindowID id, 
+      const wxString &dirName, const wxString &wild,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
       const long style = wxLC_LIST, const wxValidator &validator = wxDefaultValidator,
       const wxString &name = _T("filelist") );
@@ -100,20 +99,16 @@ public:
     void ChangeToReportMode();
     void ChangeToIconMode();
     void ShowHidden( bool show = TRUE );
+    long Add( wxFileData *fd, wxListItem &item );
     void Update();
     virtual void StatusbarText( char *WXUNUSED(text) ) {};
-    int FillList( wxStringList &list );
-    void DeleteFiles();
-    void CopyFiles( char *dest );
-    void MoveFiles( char *dest );
-    void RenameFile();
     void MakeDir();
     void GoToParentDir();
     void GoToHomeDir();
     void GoToDir( const wxString &dir );
+    void SetWild( const wxString &wild );
     void GetDir( wxString &dir );
     void OnListDeleteItem( wxListEvent &event );
-    void OnListKeyDown( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
 
 private:    
@@ -158,10 +153,10 @@ public:
     void OnActivated( wxListEvent &event );
     void OnList( wxCommandEvent &event );
     void OnReport( wxCommandEvent &event );
-    void OnIcon( wxCommandEvent &event );
     void OnUp( wxCommandEvent &event );
     void OnHome( wxCommandEvent &event );
     void OnListOk( wxCommandEvent &event );
+    void OnNew( wxCommandEvent &event );
     
 protected:    
     wxString    m_message;
