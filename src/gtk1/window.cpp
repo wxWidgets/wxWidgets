@@ -2336,10 +2336,10 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
         {
             if (HasScrolling())
             {
-#if 0 // unused - if this is ok, just remove this line (VZ)
                 GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(m_widget);
-#endif // 0
+#if 0 // unused - if this is ok, just remove this line (VZ)
                 GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
+#endif // 0
 
                 GtkWidget *viewport = scroll_window->viewport;
                 GtkStyleClass *viewport_class = viewport->style->klass;

@@ -193,7 +193,7 @@ enum
     wxOVERWRITE_PROMPT = 4,
     wxHIDE_READONLY = 8,
     wxFILE_MUST_EXIST = 16
-}
+};
 
 // File selector - backward compatibility
 WXDLLEXPORT wxString
