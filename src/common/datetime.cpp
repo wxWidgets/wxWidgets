@@ -67,6 +67,7 @@
     #include "wx/string.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/module.h"
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
@@ -98,6 +99,31 @@
         #define WX_TIMEZONE timezone
     #endif
 #endif // !WX_TIMEZONE
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+class wxDateTimeHolidaysModule : public wxModule
+{
+public:
+    virtual bool OnInit()
+    {
+        wxDateTimeHolidayAuthority::AddAuthority(new wxDateTimeWorkDays);
+
+        return TRUE;
+    }
+
+    virtual void OnExit()
+    {
+        wxDateTimeHolidayAuthority::ClearAllAuthorities();
+    }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDateTimeHolidaysModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxDateTimeHolidaysModule, wxModule)
 
 // ----------------------------------------------------------------------------
 // constants
@@ -159,6 +185,18 @@ wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
+
+// debugger helper: shows what the date really is
+#ifdef __WXDEBUG__
+extern const wxChar *wxDumpDate(const wxDateTime* dt)
+{
+    static wxChar buf[20];
+
+    wxStrcpy(buf, dt->Format(_T("%Y-%m-%d (%a) %H:%M:%S")));
+
+    return buf;
+}
+#endif // Debug
 
 // get the number of days in the given month of the given year
 static inline
@@ -437,6 +475,9 @@ void wxDateTime::Tm::AddMonths(int monDiff)
     mon = (wxDateTime::Month)(mon + monDiff);
 
     wxASSERT_MSG( mon >= 0 && mon < MONTHS_IN_YEAR, _T("logic error") );
+
+    // NB: we don't check here that the resulting date is valid, this function
+    //     is private and the caller must check it if needed
 }
 
 void wxDateTime::Tm::AddDays(int dayDiff)
@@ -1358,6 +1399,20 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 
     tm.year += diff.GetYears();
     tm.AddMonths(diff.GetMonths());
+
+    // check that the resulting date is valid
+    if ( tm.mday > GetNumOfDaysInMonth(tm.year, tm.mon) )
+    {
+        // We suppose that when adding one month to Jan 31 we want to get Feb
+        // 28 (or 29), i.e. adding a month to the last day of the month should
+        // give the last day of the next month which is quite logical.
+        //
+        // Unfortunately, there is no logic way to understand what should
+        // Jan 30 + 1 month be - Feb 28 too or Feb 27 (assuming non leap year)?
+        // We make it Feb 28 (last day too), but it is highly questionable.
+        tm.mday = GetNumOfDaysInMonth(tm.year, tm.mon);
+    }
+
     tm.AddDays(diff.GetTotalDays());
 
     Set(tm);
@@ -1371,6 +1426,23 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 // ----------------------------------------------------------------------------
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
+
+bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday)
+{
+    int year = GetYear();
+
+    // Jan 4 always lies in the 1st week of the year
+    Set(4, Jan, year);
+    SetToWeekDayInSameWeek(weekday) += wxDateSpan::Weeks(numWeek);
+
+    if ( GetYear() != year )
+    {
+        // oops... numWeek was too big
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
                                           int year)
@@ -1396,11 +1468,11 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
     }
     else if ( weekday < wdayThis )
     {
-        return Substract(wxTimeSpan::Days(wdayThis - weekday));
+        return Substract(wxDateSpan::Days(wdayThis - weekday));
     }
     else // weekday > wdayThis
     {
-        return Add(wxTimeSpan::Days(weekday - wdayThis));
+        return Add(wxDateSpan::Days(weekday - wdayThis));
     }
 }
 
@@ -1425,7 +1497,7 @@ wxDateTime& wxDateTime::SetToNextWeekDay(WeekDay weekday)
         diff = weekday - wdayThis;
     }
 
-    return Add(wxTimeSpan::Days(diff));
+    return Add(wxDateSpan::Days(diff));
 }
 
 wxDateTime& wxDateTime::SetToPrevWeekDay(WeekDay weekday)
@@ -1449,7 +1521,7 @@ wxDateTime& wxDateTime::SetToPrevWeekDay(WeekDay weekday)
         diff = wdayThis - weekday;
     }
 
-    return Substract(wxTimeSpan::Days(diff));
+    return Substract(wxDateSpan::Days(diff));
 }
 
 bool wxDateTime::SetToWeekDay(WeekDay weekday,
@@ -3240,6 +3312,15 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
     return result;
 }
 
+// ----------------------------------------------------------------------------
+// Workdays and holidays support
+// ----------------------------------------------------------------------------
+
+bool wxDateTime::IsWorkDay(Country WXUNUSED(country)) const
+{
+    return !wxDateTimeHolidayAuthority::IsHoliday(*this);
+}
+
 // ============================================================================
 // wxTimeSpan
 // ============================================================================
@@ -3324,4 +3405,122 @@ wxString wxTimeSpan::Format(const wxChar *format) const
     }
 
     return str;
+}
+
+// ============================================================================
+// wxDateTimeHolidayAuthority and related classes
+// ============================================================================
+
+#include "wx/arrimpl.cpp"
+
+WX_DEFINE_OBJARRAY(wxDateTimeArray)
+
+static int wxCMPFUNC_CONV
+wxDateTimeCompareFunc(wxDateTime **first, wxDateTime **second)
+{
+    wxDateTime dt1 = **first,
+               dt2 = **second;
+
+    return dt1 == dt2 ? 0 : dt1 < dt2 ? -1 : +1;
+}
+
+// ----------------------------------------------------------------------------
+// wxDateTimeHolidayAuthority
+// ----------------------------------------------------------------------------
+
+wxHolidayAuthoritiesArray wxDateTimeHolidayAuthority::ms_authorities;
+
+/* static */
+bool wxDateTimeHolidayAuthority::IsHoliday(const wxDateTime& dt)
+{
+    size_t count = ms_authorities.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( ms_authorities[n]->DoIsHoliday(dt) )
+        {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+/* static */
+size_t
+wxDateTimeHolidayAuthority::GetHolidaysInRange(const wxDateTime& dtStart,
+                                               const wxDateTime& dtEnd,
+                                               wxDateTimeArray& holidays)
+{
+    wxDateTimeArray hol;
+
+    holidays.Empty();
+
+    size_t count = ms_authorities.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        ms_authorities[n]->DoGetHolidaysInRange(dtStart, dtEnd, hol);
+
+        WX_APPEND_ARRAY(holidays, hol);
+    }
+
+    holidays.Sort(wxDateTimeCompareFunc);
+
+    return holidays.GetCount();
+}
+
+/* static */
+void wxDateTimeHolidayAuthority::ClearAllAuthorities()
+{
+    WX_CLEAR_ARRAY(ms_authorities);
+}
+
+/* static */
+void wxDateTimeHolidayAuthority::AddAuthority(wxDateTimeHolidayAuthority *auth)
+{
+    ms_authorities.Add(auth);
+}
+
+// ----------------------------------------------------------------------------
+// wxDateTimeWorkDays
+// ----------------------------------------------------------------------------
+
+bool wxDateTimeWorkDays::DoIsHoliday(const wxDateTime& dt) const
+{
+    wxDateTime::WeekDay wd = dt.GetWeekDay();
+
+    return (wd == wxDateTime::Sun) || (wd == wxDateTime::Sat);
+}
+
+size_t wxDateTimeWorkDays::DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                                const wxDateTime& dtEnd,
+                                                wxDateTimeArray& holidays) const
+{
+    if ( dtStart > dtEnd )
+    {
+        wxFAIL_MSG( _T("invalid date range in GetHolidaysInRange") );
+
+        return 0u;
+    }
+
+    holidays.Empty();
+
+    // instead of checking all days, start with the first Sat after dtStart and
+    // end with the last Sun before dtEnd
+    wxDateTime dtSatFirst = dtStart.GetNextWeekDay(wxDateTime::Sat),
+               dtSatLast = dtEnd.GetPrevWeekDay(wxDateTime::Sat),
+               dtSunFirst = dtStart.GetNextWeekDay(wxDateTime::Sun),
+               dtSunLast = dtEnd.GetPrevWeekDay(wxDateTime::Sun),
+               dt;
+
+    for ( dt = dtSatFirst; dt <= dtSatLast; dt += wxDateSpan::Week() )
+    {
+        holidays.Add(dt);
+    }
+
+    for ( dt = dtSunFirst; dt <= dtSunLast; dt += wxDateSpan::Week() )
+    {
+        holidays.Add(dt);
+    }
+
+    return holidays.GetCount();
 }

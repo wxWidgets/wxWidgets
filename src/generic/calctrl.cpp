@@ -32,6 +32,7 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/brush.h"
+    #include "wx/combobox.h"
 #endif //WX_PRECOMP
 
 #include "wx/calctrl.h"
@@ -79,6 +80,9 @@ BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
 
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
     EVT_LEFT_DCLICK(wxCalendarCtrl::OnDClick)
+
+    EVT_CALENDAR_MONTH(-1, wxCalendarCtrl::OnCalMonthChange)
+    EVT_CALENDAR_YEAR(-1, wxCalendarCtrl::OnCalMonthChange)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxMonthComboBox, wxComboBox)
@@ -146,6 +150,21 @@ void wxCalendarCtrl::Init()
     {
         m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr);
     }
+
+    for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
+    {
+        m_attrs[n] = NULL;
+    }
+
+    wxSystemSettings ss;
+    m_colHighlightFg = ss.GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_colHighlightBg = ss.GetSystemColour(wxSYS_COLOUR_HIGHLIGHT);
+
+    m_colHolidayFg = *wxRED;
+    // don't set m_colHolidayBg - by default, same as our bg colour
+
+    m_colHeaderFg = *wxBLUE;
+    m_colHeaderBg = *wxLIGHT_GREY;
 }
 
 bool wxCalendarCtrl::Create(wxWindow * WXUNUSED(parent),
@@ -182,15 +201,17 @@ bool wxCalendarCtrl::Create(wxWindow * WXUNUSED(parent),
     SetBackgroundColour(*wxWHITE);
     SetFont(*wxSWISS_FONT);
 
+    SetHolidayAttrs();
+
     return TRUE;
 }
 
 wxCalendarCtrl::~wxCalendarCtrl()
 {
-#if 0
-    m_comboMonth->PopEventHandler();
-    m_spinYear->PopEventHandler();
-#endif // 0
+    for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
+    {
+        delete m_attrs[n];
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -285,7 +306,7 @@ void wxCalendarCtrl::SetDateAndNotify(const wxDateTime& date)
 
     SetDate(date);
 
-    GenerateEvent(type);
+    GenerateEvents(type, wxEVT_CALENDAR_SEL_CHANGED);
 }
 
 // ----------------------------------------------------------------------------
@@ -301,9 +322,6 @@ wxDateTime wxCalendarCtrl::GetStartDate() const
     // rewind back
     date.SetToPrevWeekDay(GetWindowStyle() & wxCAL_MONDAY_FIRST
                           ? wxDateTime::Mon : wxDateTime::Sun);
-
-    // be sure to do it or it might gain 1 hour if DST changed in between
-    date.ResetTime();
 
     return date;
 }
@@ -444,10 +462,10 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         puts("painting the header");
 #endif
 
-        dc.SetTextForeground(*wxBLUE);
-        dc.SetBrush(wxBrush(*wxLIGHT_GREY, wxSOLID));
         dc.SetBackgroundMode(wxTRANSPARENT);
-        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.SetTextForeground(m_colHeaderFg);
+        dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
+        dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
         dc.DrawRectangle(0, 0, 7*m_widthCol, m_heightRow);
 
         bool startOnMonday = (GetWindowStyle() & wxCAL_MONDAY_FIRST) != 0;
@@ -495,23 +513,103 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             if ( IsDateShown(date) )
             {
                 // don't use wxDate::Format() which prepends 0s
-                wxString day = wxString::Format(_T("%u"), date.GetDay());
+                unsigned int day = date.GetDay();
+                wxString dayStr = wxString::Format(_T("%u"), day);
                 wxCoord width;
-                dc.GetTextExtent(day, &width, (wxCoord *)NULL);
+                dc.GetTextExtent(dayStr, &width, (wxCoord *)NULL);
+
+                bool changedColours = FALSE,
+                     changedFont = FALSE;
+
+                wxCalendarDateAttr *attr = m_attrs[day - 1];
 
                 bool isSel = m_date == date;
                 if ( isSel )
                 {
-                    dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT));
-                    dc.SetTextBackground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT));
+                    dc.SetTextForeground(m_colHighlightFg);
+                    dc.SetTextBackground(m_colHighlightBg);
+
+                    changedColours = TRUE;
+                }
+                else if ( attr )
+                {
+                    wxColour colFg, colBg;
+
+                    if ( attr->IsHoliday() )
+                    {
+                        colFg = m_colHolidayFg;
+                        colBg = m_colHolidayBg;
+                    }
+                    else
+                    {
+                        colFg = attr->GetTextColour();
+                        colBg = attr->GetBackgroundColour();
+                    }
+
+                    if ( colFg.Ok() )
+                    {
+                        dc.SetTextForeground(colFg);
+                        changedColours = TRUE;
+                    }
+
+                    if ( colBg.Ok() )
+                    {
+                        dc.SetTextBackground(colBg);
+                        changedColours = TRUE;
+                    }
+
+                    if ( attr->HasFont() )
+                    {
+                        dc.SetFont(attr->GetFont());
+                        changedFont = TRUE;
+                    }
                 }
 
-                dc.DrawText(day, wd*m_widthCol + (m_widthCol - width) / 2, y);
+                wxCoord x = wd*m_widthCol + (m_widthCol - width) / 2;
+                dc.DrawText(dayStr, x, y + 1);
 
-                if ( isSel )
+                if ( !isSel && attr && attr->HasBorder() )
+                {
+                    wxColour colBorder;
+                    if ( attr->HasBorderColour() )
+                    {
+                        colBorder = attr->GetBorderColour();
+                    }
+                    else
+                    {
+                        colBorder = m_foregroundColour;
+                    }
+
+                    wxPen pen(colBorder, 1, wxSOLID);
+                    dc.SetPen(pen);
+                    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+                    switch ( attr->GetBorder() )
+                    {
+                        case wxCAL_BORDER_SQUARE:
+                            dc.DrawRectangle(x - 2, y,
+                                             width + 4, m_heightRow);
+                            break;
+
+                        case wxCAL_BORDER_ROUND:
+                            dc.DrawEllipse(x - 2, y,
+                                           width + 4, m_heightRow);
+                            break;
+
+                        default:
+                            wxFAIL_MSG(_T("unknown border type"));
+                    }
+                }
+
+                if ( changedColours )
                 {
                     dc.SetTextForeground(m_foregroundColour);
                     dc.SetTextBackground(m_backgroundColour);
+                }
+
+                if ( changedFont )
+                {
+                    dc.SetFont(m_font);
                 }
             }
             //else: just don't draw it
@@ -560,7 +658,7 @@ void wxCalendarCtrl::OnDClick(wxMouseEvent& event)
     }
     else
     {
-        GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED, FALSE);
+        GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
     }
 }
 
@@ -573,7 +671,8 @@ void wxCalendarCtrl::OnClick(wxMouseEvent& event)
         case wxCAL_HITTEST_DAY:
             ChangeDay(date);
 
-            GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
+            GenerateEvents(wxEVT_CALENDAR_DAY_CHANGED,
+                           wxEVT_CALENDAR_SEL_CHANGED);
             break;
 
         case wxCAL_HITTEST_HEADER:
@@ -655,7 +754,7 @@ void wxCalendarCtrl::OnMonthChange(wxCommandEvent& event)
 
     SetDate(wxDateTime(tm.mday, mon, tm.year));
 
-    GenerateEvent(wxEVT_CALENDAR_MONTH_CHANGED);
+    GenerateEvents(wxEVT_CALENDAR_MONTH_CHANGED, wxEVT_CALENDAR_SEL_CHANGED);
 }
 
 void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
@@ -670,7 +769,7 @@ void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
 
     SetDate(wxDateTime(tm.mday, tm.mon, year));
 
-    GenerateEvent(wxEVT_CALENDAR_YEAR_CHANGED);
+    GenerateEvents(wxEVT_CALENDAR_YEAR_CHANGED, wxEVT_CALENDAR_SEL_CHANGED);
 }
 
 // ----------------------------------------------------------------------------
@@ -736,29 +835,95 @@ void wxCalendarCtrl::OnChar(wxKeyEvent& event)
             SetDateAndNotify(wxDateTime(m_date).SetToLastMonthDay());
             break;
 
+        case WXK_RETURN:
+            GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+            break;
+
         default:
             event.Skip();
     }
 }
 
 // ----------------------------------------------------------------------------
-// wxCalendarEvent
+// holidays handling
 // ----------------------------------------------------------------------------
 
-void wxCalendarCtrl::GenerateEvent(wxEventType type, bool selChanged)
+void wxCalendarCtrl::OnCalMonthChange(wxCalendarEvent& event)
 {
-    // we're called for a change in some particular date field but we always
-    // also generate a generic "changed" event
-    wxCalendarEvent event(this, type);
-    (void)GetEventHandler()->ProcessEvent(event);
+    SetHolidayAttrs();
 
-    if ( selChanged )
+    event.Skip();
+}
+
+void wxCalendarCtrl::EnableHolidayDisplay(bool display)
+{
+    long style = GetWindowStyle();
+    if ( display )
+        style |= wxCAL_SHOW_HOLIDAYS;
+    else
+        style &= ~wxCAL_SHOW_HOLIDAYS;
+
+    SetWindowStyle(style);
+
+    if ( display )
+        SetHolidayAttrs();
+    else
+        ResetHolidayAttrs();
+
+    Refresh();
+}
+
+void wxCalendarCtrl::SetHolidayAttrs()
+{
+    if ( GetWindowStyle() & wxCAL_SHOW_HOLIDAYS )
     {
-        wxCalendarEvent event2(this, wxEVT_CALENDAR_SEL_CHANGED);
+        ResetHolidayAttrs();
 
-        (void)GetEventHandler()->ProcessEvent(event2);
+        wxDateTime::Tm tm = m_date.GetTm();
+        wxDateTime dtStart(1, tm.mon, tm.year),
+                   dtEnd = dtStart.GetLastMonthDay();
+
+        wxDateTimeArray hol;
+        wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
+
+        size_t count = hol.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            SetHoliday(hol[n].GetDay());
+        }
     }
 }
+
+void wxCalendarCtrl::SetHoliday(size_t day)
+{
+    wxCHECK_RET( day > 0 && day < 32, _T("invalid day in SetHoliday") );
+
+    wxCalendarDateAttr *attr = GetAttr(day);
+    if ( !attr )
+    {
+        attr = new wxCalendarDateAttr;
+    }
+
+    attr->SetHoliday(TRUE);
+
+    // can't use SetAttr() because it would delete this pointer
+    m_attrs[day - 1] = attr;
+}
+
+void wxCalendarCtrl::ResetHolidayAttrs()
+{
+    for ( size_t day = 0; day < 31; day++ )
+    {
+        if ( m_attrs[day] )
+        {
+            m_attrs[day]->SetHoliday(FALSE);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxCalendarEvent
+// ----------------------------------------------------------------------------
 
 void wxCalendarEvent::Init()
 {

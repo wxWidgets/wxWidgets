@@ -38,9 +38,10 @@ class WXDLLEXPORT wxDateSpan;
  * TODO Well, everything :-)
  *
  * + 1. Time zones with minutes (make TimeZone a class)
- *   2. getdate() function like under Solaris
+ * ? 2. getdate() function like under Solaris
  * + 3. text conversion for wxDateSpan
- *   4. pluggable modules for the workdays calculations
+ * + 4. pluggable modules for the workdays calculations
+ *   5. wxDateTimeHolidayAuthority for Easter and other christian feasts
  */
 
 /*
@@ -618,17 +619,21 @@ public:
         // default assignment operator is ok
 
     // calendar calculations (functions which set the date only leave the time
-    // unchanged, e.g. don't explictly zero it)
+    // unchanged, e.g. don't explictly zero it): SetXXX() functions modify the
+    // object itself, GetXXX() ones return a new object.
     // ------------------------------------------------------------------------
 
         // set to the given week day in the same week as this one
     wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday);
+    inline wxDateTime GetWeekDayInSameWeek(WeekDay weekday) const;
 
         // set to the next week day following this one
     wxDateTime& SetToNextWeekDay(WeekDay weekday);
+    inline wxDateTime GetNextWeekDay(WeekDay weekday) const;
 
         // set to the previous week day before this one
     wxDateTime& SetToPrevWeekDay(WeekDay weekday);
+    inline wxDateTime GetPrevWeekDay(WeekDay weekday) const;
 
         // set to Nth occurence of given weekday in the given month of the
         // given year (time is set to 0), return TRUE on success and FALSE on
@@ -638,24 +643,35 @@ public:
                       int n = 1,
                       Month month = Inv_Month,
                       int year = Inv_Year);
+    inline wxDateTime GetWeekDay(WeekDay weekday,
+                                 int n = 1,
+                                 Month month = Inv_Month,
+                                 int year = Inv_Year) const;
 
         // sets to the last weekday in the given month, year
     inline bool SetToLastWeekDay(WeekDay weekday,
                                  Month month = Inv_Month,
                                  int year = Inv_Year);
+    inline wxDateTime GetLastWeekDay(WeekDay weekday,
+                                     Month month = Inv_Month,
+                                     int year = Inv_Year);
 
         // sets the date to the given day of the given week in the year,
         // returns TRUE on success and FALSE if given date doesn't exist (e.g.
         // numWeek is > 53)
     bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon);
+    inline wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon) const;
 
         // sets the date to the last day of the given (or current) month or the
         // given (or current) year
     wxDateTime& SetToLastMonthDay(Month month = Inv_Month,
                                   int year = Inv_Year);
+    inline wxDateTime GetLastMonthDay(Month month = Inv_Month,
+                                      int year = Inv_Year) const;
 
         // sets to the given year day (1..365 or 366)
     wxDateTime& SetToYearDay(wxDateTime_t yday);
+    inline wxDateTime GetYearDay(wxDateTime_t yday) const;
 
         // The definitions below were taken verbatim from
         //
@@ -784,13 +800,12 @@ public:
 
         // is this date a work day? This depends on a country, of course,
         // because the holidays are different in different countries
-    bool IsWorkDay(Country country = Country_Default,
-                   const TimeZone& tz = Local) const;
+    bool IsWorkDay(Country country = Country_Default) const;
 
         // is this date later than Gregorian calendar introduction for the
         // given country (see enum GregorianAdoption)?
         //
-        // NB: this function shouldn't be considered as absolute authoiruty in
+        // NB: this function shouldn't be considered as absolute authority in
         //     the matter. Besides, for some countries the exact date of
         //     adoption of the Gregorian calendar is simply unknown.
     bool IsGregorianDate(GregorianAdoption country = Gr_Standard) const;
@@ -891,9 +906,12 @@ public:
     wxString FormatDate() const { return Format(_T("%x")); }
         // preferred time representation for the current locale
     wxString FormatTime() const { return Format(_T("%X")); }
-        // return the string representing the date in ISO 8601 format
+        // returns the string representing the date in ISO 8601 format
         // (YYYY-MM-DD)
     wxString FormatISODate() const { return Format(_T("%Y-%m-%d")); }
+        // returns the string representing the time in ISO 8601 format
+        // (HH:MM:SS)
+    wxString FormatISOTime() const { return Format(_T("%H:%M:%S")); }
 
     // implementation
     // ------------------------------------------------------------------------
@@ -1098,7 +1116,12 @@ private:
 // one month to Feb, 15 - we want to get Mar, 15, of course).
 //
 // When adding a month to the date, all lesser components (days, hours, ...)
-// won't be changed.
+// won't be changed unless the resulting date would be invalid: for example,
+// Jan 31 + 1 month will be Feb 28, not (non existing) Feb 31.
+//
+// Because of this feature, adding and substracting back again the same
+// wxDateSpan will *not*, in general give back the original date: Feb 28 - 1
+// month will be Jan 28, not Jan 31!
 //
 // wxDateSpan can be either positive or negative. They may be
 // multiplied by scalars which multiply all deltas by the scalar: i.e. 2*(1
@@ -1210,10 +1233,75 @@ private:
         m_days;
 };
 
-WXDLLEXPORT_DATA(extern wxDateSpan) wxYear;
-WXDLLEXPORT_DATA(extern wxDateSpan) wxMonth;
-WXDLLEXPORT_DATA(extern wxDateSpan) wxWeek;
-WXDLLEXPORT_DATA(extern wxDateSpan) wxDay;
+// ----------------------------------------------------------------------------
+// wxDateTimeArray: array of dates.
+// ----------------------------------------------------------------------------
+
+#include "wx/dynarray.h"
+
+WX_DECLARE_OBJARRAY(wxDateTime, wxDateTimeArray);
+
+// ----------------------------------------------------------------------------
+// wxDateTimeHolidayAuthority: an object of this class will decide whether a
+// given date is a holiday and is used by all functions working with "work
+// days".
+//
+// NB: the base class is an ABC, derived classes must implement the pure
+//     virtual methods to work with the holidays they correspond to.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDateTimeHolidayAuthority;
+WX_DEFINE_ARRAY(wxDateTimeHolidayAuthority *, wxHolidayAuthoritiesArray);
+
+class WXDLLEXPORT wxDateTimeHolidayAuthority
+{
+public:
+    // returns TRUE if the given date is a holiday
+    static bool IsHoliday(const wxDateTime& dt);
+
+    // fills the provided array with all holidays in the given range, returns
+    // the number of them
+    static size_t GetHolidaysInRange(const wxDateTime& dtStart,
+                                     const wxDateTime& dtEnd,
+                                     wxDateTimeArray& holidays);
+
+    // clear the list of holiday authorities
+    static void ClearAllAuthorities();
+
+    // add a new holiday authority (the pointer will be deleted by
+    // wxDateTimeHolidayAuthority)
+    static void AddAuthority(wxDateTimeHolidayAuthority *auth);
+
+protected:
+    // this function is called to determine whether a given day is a holiday
+    virtual bool DoIsHoliday(const wxDateTime& dt) const = 0;
+
+    // this function should fill the array with all holidays between the two
+    // given dates - it is implemented in the base class, but in a very
+    // inefficient way (it just iterates over all days and uses IsHoliday() for
+    // each of them), so it must be overridden in the derived class where the
+    // base class version may be explicitly used if needed
+    //
+    // returns the number of holidays in the given range and fills holidays
+    // array
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const = 0;
+
+private:
+    // all holiday authorities
+    static wxHolidayAuthoritiesArray ms_authorities;
+};
+
+// the holidays for this class are all Saturdays and Sundays
+class WXDLLEXPORT wxDateTimeWorkDays : public wxDateTimeHolidayAuthority
+{
+protected:
+    virtual bool DoIsHoliday(const wxDateTime& dt) const;
+    virtual size_t DoGetHolidaysInRange(const wxDateTime& dtStart,
+                                        const wxDateTime& dtEnd,
+                                        wxDateTimeArray& holidays) const;
+};
 
 // ============================================================================
 // inline functions implementation

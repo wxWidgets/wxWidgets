@@ -448,6 +448,16 @@ WX_DEFINE_EXPORTED_ARRAY(void *, wxArrayPtrVoid);
 // convinience macros
 // -----------------------------------------------------------------------------
 
+// append all element of one array to another one
+#define WX_APPEND_ARRAY(array, other)                                         \
+    {                                                                         \
+        size_t count = other.Count();                                         \
+        for ( size_t n = 0; n < count; n++ )                                  \
+        {                                                                     \
+            array.Add(other[n]);                                              \
+        }                                                                     \
+    }
+
 // delete all array elements
 //
 // NB: the class declaration of the array elements must be visible from the

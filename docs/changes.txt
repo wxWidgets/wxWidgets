@@ -6,6 +6,11 @@ next release (2.1.12 or 2.2?)
 
 wxBase:
 
+- wxDateTime replaces and extends old wxDate and wxTime classes (still
+  available but strongly deprecated) with many new features
+
+- wxLongLong class provides support for (signed) 64 bit integers
+
 - it is now possible to build wxBase under Win32 (using VC++ only so far)
   and BeOS (without thread support yet)
 
@@ -22,10 +27,14 @@ wxBase:
 - wxArray::RemoveAt() replaces deprectaed wxArray::Remove(index)
 
 all (GUI):
+
+- new wxCalendarCtrl class for picking a date interactively
+
 - wxMenu(Bar)::Insert() and Remove() functions for dynamic menu menagament
 - wxToolBar supports arbitrary controls (not only buttons) and can be
   dynamically changed (Delete/Insert functions)
 - vertical toolbars supported by MSW and GTK native wxToolBar classes
+
 - wxTreeCtrl and wxListCtrl allow setting colour/fonts for individual items
 - "file open" dialog allows selecting multiple files at once (contributed by
   John Norris)

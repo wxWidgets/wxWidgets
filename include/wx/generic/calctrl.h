@@ -18,9 +18,9 @@
 
 #include "wx/control.h"         // the base class
 
-#include "wx/datetime.h"        // for m_date
-#include "wx/combobox.h"        // for m_comboMonth
-#include "wx/spinctrl.h"        // for m_spinYear
+#include "wx/spinctrl.h"        // for wxSpinEvent
+
+class WXDLLEXPORT wxComboBox;
 
 #define wxCalendarNameStr _T("CalendarCtrl")
 
@@ -41,7 +41,7 @@ public:
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = 0,
+                   long style = wxCAL_SHOW_HOLIDAYS,
                    const wxString& name = wxCalendarNameStr)
         : wxControl(parent, id, pos, size,
                     style | wxWANTS_CHARS, wxDefaultValidator, name)
@@ -56,14 +56,80 @@ public:
                 const wxDateTime& date = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxCAL_SHOW_HOLIDAYS,
                 const wxString& name = wxCalendarNameStr);
 
     virtual ~wxCalendarCtrl();
 
     // set/get the current date
+    // ------------------------
+
     void SetDate(const wxDateTime& date);
     const wxDateTime& GetDate() const { return m_date; }
+
+    // customization
+    // -------------
+
+    // header colours are used for painting the weekdays at the top
+    void SetHeaderColours(const wxColour& colFg, const wxColour& colBg)
+    {
+        m_colHeaderFg = colFg;
+        m_colHeaderBg = colBg;
+    }
+
+    const wxColour& GetHeaderColourFg() const { return m_colHeaderFg; }
+    const wxColour& GetHeaderColourBg() const { return m_colHeaderBg; }
+
+    // highlight colour is used for the currently selected date
+    void SetHighlightColours(const wxColour& colFg, const wxColour& colBg)
+    {
+        m_colHighlightFg = colFg;
+        m_colHighlightBg = colBg;
+    }
+
+    const wxColour& GetHighlightColourFg() const { return m_colHighlightFg; }
+    const wxColour& GetHighlightColourBg() const { return m_colHighlightBg; }
+
+    // holiday colour is used for the holidays (if style & wxCAL_SHOW_HOLIDAYS)
+    void SetHolidayColours(const wxColour& colFg, const wxColour& colBg)
+    {
+        m_colHolidayFg = colFg;
+        m_colHolidayBg = colBg;
+    }
+
+    const wxColour& GetHolidayColourFg() const { return m_colHolidayFg; }
+    const wxColour& GetHolidayColourBg() const { return m_colHolidayBg; }
+
+    // this function should be called instead of directly changing the
+    // wxCAL_SHOW_HOLIDAYS bit in the control style after the control creation
+    // (this won't work)
+    void EnableHolidayDisplay(bool display = TRUE);
+
+    // an item without custom attributes is drawn with the default colours and
+    // font and without border, setting custom attributes allows to modify this
+    //
+    // the day parameter should be in 1..31 range, for days 29, 30, 31 the
+    // corresponding attribute is just unused if there is no such day in the
+    // current month
+
+    wxCalendarDateAttr *GetAttr(size_t day) const
+    {
+        wxCHECK_MSG( day > 0 && day < 32, NULL, _T("invalid day") );
+
+        return m_attrs[day - 1];
+    }
+
+    void SetAttr(size_t day, wxCalendarDateAttr *attr)
+    {
+        wxCHECK_RET( day > 0 && day < 32, _T("invalid day") );
+
+        delete m_attrs[day - 1];
+        m_attrs[day - 1] = attr;
+    }
+
+    void SetHoliday(size_t day);
+
+    void ResetAttr(size_t day) { SetAttr(day, (wxCalendarDateAttr *)NULL); }
 
     // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
     // with the corresponding value (none for NOWHERE, the date for DAY and wd
@@ -90,6 +156,7 @@ private:
     void OnChar(wxKeyEvent& event);
     void OnMonthChange(wxCommandEvent& event);
     void OnYearChange(wxSpinEvent& event);
+    void OnCalMonthChange(wxCalendarEvent& event);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
@@ -119,15 +186,42 @@ private:
     // change the date inside the same month/year
     void ChangeDay(const wxDateTime& date);
 
-    // generate the given calendar event and a "selection changed" one if
-    // selChanged is TRUE
-    void GenerateEvent(wxEventType type, bool selChanged = TRUE);
+    // set the attributes for the holidays if needed
+    void SetHolidayAttrs();
+
+    // reset all holidays
+    void ResetHolidayAttrs();
+
+    // generate the given calendar event(s)
+    void GenerateEvent(wxEventType type)
+    {
+        wxCalendarEvent event(this, type);
+        (void)GetEventHandler()->ProcessEvent(event);
+    }
+
+    void GenerateEvents(wxEventType type1, wxEventType type2)
+    {
+        GenerateEvent(type1);
+        GenerateEvent(type2);
+    }
 
     // the subcontrols
     wxComboBox *m_comboMonth;
     wxSpinCtrl *m_spinYear;
 
+    // the current selection
     wxDateTime m_date;
+
+    // default attributes
+    wxColour m_colHighlightFg,
+             m_colHighlightBg,
+             m_colHolidayFg,
+             m_colHolidayBg,
+             m_colHeaderFg,
+             m_colHeaderBg;
+
+    // the attributes for each of the month days
+    wxCalendarDateAttr *m_attrs[31];
 
     // the width and height of one column/row in the calendar
     wxCoord m_widthCol,

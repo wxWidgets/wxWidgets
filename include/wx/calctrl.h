@@ -9,8 +9,17 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+/*
+   TODO
+
+   1. implement multiple selections for date ranges
+   2. background bitmap for the calendar?
+ */
+
 #ifndef _WX_CALCTRL_H
 #define _WX_CALCTRL_H
+
+#include "wx/datetime.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -24,16 +33,84 @@ enum wxCalendarHitTestResult
     wxCAL_HITTEST_DAY           // on a day in the calendar
 };
 
+// border types for a date
+enum wxCalendarDateBorder
+{
+    wxCAL_BORDER_NONE,          // no border (default)
+    wxCAL_BORDER_SQUARE,        // a rectangular border
+    wxCAL_BORDER_ROUND          // a round border
+};
+
 // ----------------------------------------------------------------------------
-// wxCalendarCtrl
+// wxCalendarDateAttr: custom attributes for a calendar date
 // ----------------------------------------------------------------------------
 
-// so far we only have a generic version, so keep it simple
-#include "wx/generic/calctrl.h"
+class WXDLLEXPORT wxCalendarDateAttr
+{
+public:
+    // ctors
+    wxCalendarDateAttr() { Init(); }
+    wxCalendarDateAttr(const wxColour& colText,
+                       const wxColour& colBack = wxNullColour,
+                       const wxColour& colBorder = wxNullColour,
+                       const wxFont& font = wxNullFont,
+                       wxCalendarDateBorder border = wxCAL_BORDER_NONE)
+        : m_colText(colText), m_colBack(colBack),
+          m_colBorder(colBorder), m_font(font)
+    {
+        Init(border);
+    }
+    wxCalendarDateAttr(wxCalendarDateBorder border,
+                       const wxColour& colBorder = wxNullColour)
+        : m_colBorder(colBorder)
+    {
+        Init(border);
+    }
+
+    // setters
+    void SetTextColour(const wxColour& colText) { m_colText = colText; }
+    void SetBackgroundColour(const wxColour& colBack) { m_colBack = colBack; }
+    void SetBorderColour(const wxColour& col) { m_colBorder = col; }
+    void SetFont(const wxFont& font) { m_font = font; }
+    void SetBorder(wxCalendarDateBorder border) { m_border = border; }
+    void SetHoliday(bool holiday) { m_holiday = holiday; }
+
+    // accessors
+    bool HasTextColour() const { return m_colText.Ok(); }
+    bool HasBackgroundColour() const { return m_colBack.Ok(); }
+    bool HasBorderColour() const { return m_colBorder.Ok(); }
+    bool HasFont() const { return m_font.Ok(); }
+    bool HasBorder() const { return m_border != wxCAL_BORDER_NONE; }
+
+    bool IsHoliday() const { return m_holiday; }
+
+    const wxColour& GetTextColour() const { return m_colText; }
+    const wxColour& GetBackgroundColour() const { return m_colBack; }
+    const wxColour& GetBorderColour() const { return m_colBorder; }
+    const wxFont& GetFont() const { return m_font; }
+    wxCalendarDateBorder GetBorder() const { return m_border; }
+
+protected:
+    void Init(wxCalendarDateBorder border = wxCAL_BORDER_NONE)
+    {
+        m_border = border;
+        m_holiday = FALSE;
+    }
+
+private:
+    wxColour m_colText,
+             m_colBack,
+             m_colBorder;
+    wxFont   m_font;
+    wxCalendarDateBorder m_border;
+    bool m_holiday;
+};
 
 // ----------------------------------------------------------------------------
 // wxCalendarCtrl events
 // ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxCalendarCtrl;
 
 class WXDLLEXPORT wxCalendarEvent : public wxCommandEvent
 {
@@ -52,6 +129,17 @@ private:
     wxDateTime m_date;
     wxDateTime::WeekDay m_wday;
 };
+
+// ----------------------------------------------------------------------------
+// wxCalendarCtrl
+// ----------------------------------------------------------------------------
+
+// so far we only have a generic version, so keep it simple
+#include "wx/generic/calctrl.h"
+
+// ----------------------------------------------------------------------------
+// calendar events macros
+// ----------------------------------------------------------------------------
 
 #define EVT_CALENDAR(id, fn) { wxEVT_CALENDAR_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 #define EVT_CALENDAR_SEL_CHANGED(id, fn) { wxEVT_CALENDAR_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },

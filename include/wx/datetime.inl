@@ -16,7 +16,20 @@
     #error "This file is only included by wx/datetime.h, don't include it manually!"
 #endif
 
+// ----------------------------------------------------------------------------
+// private macros
+// ----------------------------------------------------------------------------
+
 #define MILLISECONDS_PER_DAY 86400000l
+
+// some broken compilers (HP-UX CC) refuse to compile the "normal" version, but
+// using a temp variable always might prevent other compilers from optimising
+// it away - hence use of this ugly macro
+#ifndef __HPUX__
+    #define MODIFY_AND_RETURN(op) return wxDateTime(*this).op
+#else
+    #define MODIFY_AND_RETURN(op) wxDateTime dt(*this); dt.op; return dt
+#endif
 
 // ----------------------------------------------------------------------------
 // wxDateTime construction
@@ -136,6 +149,57 @@ bool wxDateTime::SetToLastWeekDay(WeekDay weekday,
                                   int year)
 {
     return SetToWeekDay(weekday, -1, month, year);
+}
+
+wxDateTime wxDateTime::GetWeekDayInSameWeek(WeekDay weekday) const
+{
+    MODIFY_AND_RETURN( SetToWeekDayInSameWeek(weekday) );
+}
+
+wxDateTime wxDateTime::GetNextWeekDay(WeekDay weekday) const
+{
+    MODIFY_AND_RETURN( SetToNextWeekDay(weekday) );
+}
+
+wxDateTime wxDateTime::GetPrevWeekDay(WeekDay weekday) const
+{
+    MODIFY_AND_RETURN( SetToPrevWeekDay(weekday) );
+}
+
+wxDateTime wxDateTime::GetWeekDay(WeekDay weekday,
+                                  int n,
+                                  Month month,
+                                  int year) const
+{
+    wxDateTime dt(*this);
+
+    return dt.SetToWeekDay(weekday, n, month, year) ? dt : wxInvalidDateTime;
+}
+
+wxDateTime wxDateTime::GetLastWeekDay(WeekDay weekday,
+                                      Month month,
+                                      int year)
+{
+    wxDateTime dt(*this);
+
+    return dt.SetToLastWeekDay(weekday, month, year) ? dt : wxInvalidDateTime;
+}
+
+wxDateTime wxDateTime::GetWeek(wxDateTime_t numWeek, WeekDay weekday) const
+{
+    wxDateTime dt(*this);
+
+    return dt.SetToTheWeek(numWeek, weekday) ? dt : wxInvalidDateTime;
+}
+
+wxDateTime wxDateTime::GetLastMonthDay(Month month, int year) const
+{
+    MODIFY_AND_RETURN( SetToLastMonthDay(month, year) );
+}
+
+wxDateTime wxDateTime::GetYearDay(wxDateTime_t yday) const
+{
+    MODIFY_AND_RETURN( SetToYearDay(yday) );
 }
 
 // ----------------------------------------------------------------------------
@@ -287,8 +351,7 @@ wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
 wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz,
                                   bool noDST) const
 {
-    wxDateTime dt(*this);
-    return dt.MakeTimezone(tz, noDST);
+    MODIFY_AND_RETURN( MakeTimezone(tz, noDST) );
 }
 
 // ----------------------------------------------------------------------------
@@ -437,3 +500,5 @@ wxDateSpan& wxDateSpan::Neg()
 }
 
 #undef MILLISECONDS_PER_DAY
+
+#undef MODIFY_AND_RETURN
