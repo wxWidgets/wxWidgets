@@ -156,9 +156,9 @@ public:
             return tup;
         }
 
-        wxRect* __add__(const wxRect* rect) {
-            if (! rect) return self;
-            return &(*self + *rect);
+        wxRect __add__(const wxRect* rect) {
+            if (! rect) return *self;
+            return *self + *rect;
         }
 
         int __cmp__(const wxRect* rect) {
