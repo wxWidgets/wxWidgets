@@ -1123,30 +1123,28 @@ void wxEvtHandler::ProcessPendingEvents()
 
     wxENTER_CRIT_SECT( Lock() );
 
-    // remember last event to process during this iteration
-    wxList::compatibility_iterator lastPendingNode = m_pendingEvents->GetLast();
-
-    wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
-    while ( node )
+    // we leave the loop once we have processed all events that were present at
+    // the start of ProcessPendingEvents because otherwise we could get into
+    // infinite loop if the pending event handler execution resulted in another
+    // event being posted
+    size_t n = m_pendingEvents->size();
+    for ( wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
+          node;
+          node = m_pendingEvents->GetFirst() )
     {
         wxEvent *event = (wxEvent *)node->GetData();
+
         m_pendingEvents->Erase(node);
 
-        // In ProcessEvent, new events might get added and
-        // we can safely leave the crtical section here.
         wxLEAVE_CRIT_SECT( Lock() );
+
         ProcessEvent(*event);
         delete event;
+
         wxENTER_CRIT_SECT( Lock() );
 
-        // leave the loop once we have processed all events that were present
-        // at the start of ProcessPendingEvents because otherwise we could get
-        // into infinite loop if the pending event handler execution resulted
-        // in another event being posted
-        if ( node == lastPendingNode )
+        if ( !--n )
             break;
-
-        node = m_pendingEvents->GetFirst();
     }
 
     wxLEAVE_CRIT_SECT( Lock() );
