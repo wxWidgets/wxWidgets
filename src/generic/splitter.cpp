@@ -288,6 +288,8 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             SetCursor(* wxSTANDARD_CURSOR);
         }
 #endif // __WXGTK__
+
+        m_needUpdating = FALSE;
     }
     else if (event.Dragging() && (m_dragMode == wxSPLIT_DRAG_DRAGGING))
     {
