@@ -306,7 +306,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
     if ( !wxMenuBarBase::Replace(pos, menu, title) )
-        return FALSE;
+        return NULL;
 
     wxFAIL_MSG(wxT("TODO"));
 
