@@ -279,7 +279,7 @@ static void gtk_listitem_deselect_callback( GtkWidget *widget, wxListBox *listbo
     gtk_listitem_select_cb( widget, listbox, FALSE );
 }
 
-static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *listbox, bool is_selection );
+static void gtk_listitem_select_cb( GtkWidget *WXUNUSED(widget), wxListBox *listbox, bool is_selection )
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
@@ -425,7 +425,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-    m_hasVMT = FALSE;
+    m_hasVMT = FALSE;  // prevent deselect events upon destrcution
 
     Clear();
 }
