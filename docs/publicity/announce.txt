@@ -1,16 +1,17 @@
-Announcing wxWindows 2.3.3, September 8th, 2002
+Announcing wxWindows 2.3.3, September 9th, 2002
 ----------------------------------------------------------------
 
 Announcing the release of a development snapshot of the mature
 cross-platform C++ application framework, wxWindows.
 
-The following versions are provided:
+The following platforms are supported:
 
 - Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
-- Most Unix variants with GTK+
-- Most Unix variants with X11
-- Most Unix variants with Motif/Lesstif
-- MacOS 9.x and 10.x
+- Unix with GTK+ 1.x and 2.0
+- Unix with X11
+- Unix with Motif/Lesstif
+- VMS with GTK+ 1.x
+- MacOS 8.6, 9.x and 10.x
 - OS/2 (alpha)
 
 To get wxWindows, go to the Download page at:
@@ -30,7 +31,7 @@ invented the GUI.
 
 For most ports, wxWindows adopts the native look and feel of
 each platform since it uses the native widget sets. There is also
-a generic widget set, used for the wxX11 port -- no other widget set
+a generic widget set, used for the wxX11 port - no other widget set
 is required, giving the potential for embedded use.
 
 An extraordinary range of classes is provided - but don't be put
