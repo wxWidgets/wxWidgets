@@ -88,7 +88,7 @@ public:
    inline void SetMouseTracking(bool doIt = true) { m_doSendEvents = doIt; }
 
    virtual ~wxLayoutWindow() { if(m_PopupMenu) delete m_PopupMenu; }
-   
+
    // dirty flag access
    bool IsDirty() const { return m_llist.IsDirty(); }
    void ResetDirty()    { m_llist.ResetDirty();     }

@@ -81,7 +81,8 @@ public:
    */
    virtual void Layout(wxDC & dc,
                        wxPoint position,
-                       CoordType baseLine) {}
+                       CoordType baseLine)
+      { m_Position = position; }
 
    /** Draws an object.
        @param dc the wxDC to draw on
