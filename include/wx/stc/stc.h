@@ -35,6 +35,15 @@
 #endif // SWIG
 
 
+// SWIG can't handle "#if" type of conditionals, only "#ifdef"
+#ifdef SWIG
+#define STC_USE_DND 1
+#else
+#if wxUSE_DRAG_AND_DROP
+#define STC_USE_DND 1
+#endif
+#endif
+
 //----------------------------------------------------------------------
 
 // Should a wxPopupWindow be used for the call tips and autocomplete windows?
@@ -2275,13 +2284,14 @@ public:
     // Load the contents of filename into the editor
     bool LoadFile(const wxString& filename);
 
-#if wxUSE_DRAG_AND_DROP
+#ifdef STC_USE_DND
     // Allow for simulating a DnD DragOver
     wxDragResult DoDragOver(wxCoord x, wxCoord y, wxDragResult def); 
 
     // Allow for simulating a DnD DropText
     bool DoDropText(long x, long y, const wxString& data);
- #endif
+#endif
+
 
 
 //----------------------------------------------------------------------
@@ -2333,15 +2343,6 @@ protected:
 };
 
 //----------------------------------------------------------------------
-
-// SWIG can't handle "#if" type of conditionals, only "#ifdef"
-#ifdef SWIG
-#define STC_USE_DND 1
-#else
-#if wxUSE_DRAG_AND_DROP
-#define STC_USE_DND 1
-#endif
-#endif
 
 #ifndef SWIG
 class WXDLLIMPEXP_STC wxStyledTextEvent : public wxCommandEvent {
