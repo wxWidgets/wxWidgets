@@ -146,6 +146,7 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 
 
 ScintillaWX::~ScintillaWX() {
+    Finalise();
 }
 
 //----------------------------------------------------------------------
