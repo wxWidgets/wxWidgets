@@ -963,6 +963,7 @@ wxDefaultSize = wxSizePtr(wxc.cvar.wxDefaultSize)
 wxPYAPP_ASSERT_SUPPRESS = wxc.wxPYAPP_ASSERT_SUPPRESS
 wxPYAPP_ASSERT_EXCEPTION = wxc.wxPYAPP_ASSERT_EXCEPTION
 wxPYAPP_ASSERT_DIALOG = wxc.wxPYAPP_ASSERT_DIALOG
+wxPYAPP_ASSERT_LOG = wxc.wxPYAPP_ASSERT_LOG
 
 
 #-------------- USER INCLUDE -----------------------

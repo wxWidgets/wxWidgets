@@ -3020,6 +3020,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_SUPPRESS", PyInt_FromLong((long) wxPYAPP_ASSERT_SUPPRESS));
 	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_EXCEPTION", PyInt_FromLong((long) wxPYAPP_ASSERT_EXCEPTION));
 	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_DIALOG", PyInt_FromLong((long) wxPYAPP_ASSERT_DIALOG));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_LOG", PyInt_FromLong((long) wxPYAPP_ASSERT_LOG));
 
     // Make our API structure a CObject so other modules can import it
     // from this module.
