@@ -24588,18 +24588,8 @@ WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 
 case "${host}" in
     *-*-cygwin* | *-*-mingw32* )
-
-
-
-        if test "$cross_compiling" != "yes" -a "$TOOLKIT_DIR" = "msw"; then
-            WX_LIBRARY="wxmsw${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
-            WX_LIBRARY_GL="wxmsw_gl${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
-            WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
-            WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.${SO_SUFFIX}"
-        else
-            WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}"
-            WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
-        fi
+        WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}"
+        WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
         ;;
 
     *-*-darwin* )
