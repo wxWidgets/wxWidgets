@@ -41,7 +41,6 @@
 #include "wx/statline.h"
 
 #include "widgets.h"
-#if 1
 #include "icons/statbox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -73,25 +72,63 @@ enum
     StaticVAlign_Max
 };
 
-class DerivedStaticText: public wxStaticText
+// ----------------------------------------------------------------------------
+// MyStaticText and MyStaticBox
+// ----------------------------------------------------------------------------
+
+// these 2 classes simply show that the static controls can get the mouse
+// clicks too -- this used to be broken under MSW but works now
+
+class MyStaticText : public wxStaticText
 {
 public:
-    DerivedStaticText(wxWindow* parent, wxWindowID id, const wxString& label,
-        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = 0):
-        wxStaticText(parent, id, label, pos, size, style)
+    MyStaticText(wxWindow* parent,
+                      wxWindowID id,
+                      const wxString& label,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0)
+        : wxStaticText(parent, id, label, pos, size, style)
     {
     }
+
+protected:
     void OnMouseEvent(wxMouseEvent& event)
     {
-        if (event.LeftDown())
-            wxMessageBox(wxT("Clicked on static text"));
+        wxLogMessage(wxT("Clicked on static text"));
     }
-DECLARE_EVENT_TABLE()
+
+    DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(DerivedStaticText, wxStaticText)
-    EVT_MOUSE_EVENTS(DerivedStaticText::OnMouseEvent)
+class MyStaticBox : public wxStaticBox
+{
+public:
+    MyStaticBox(wxWindow* parent,
+                wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0)
+        : wxStaticBox(parent, id, label, pos, size, style)
+    {
+    }
+
+protected:
+    void OnMouseEvent(wxMouseEvent& event)
+    {
+        wxLogMessage(wxT("Clicked on static box"));
+    }
+
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(MyStaticText, wxStaticText)
+    EVT_LEFT_UP(MyStaticText::OnMouseEvent)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyStaticBox, wxStaticBox)
+    EVT_LEFT_UP(MyStaticBox::OnMouseEvent)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -339,13 +376,13 @@ void StaticWidgetsPage::CreateStatic()
     flagsText |= align;
     flagsBox |= align;
 
-    wxStaticBox *box = new wxStaticBox(this, -1, m_textBox->GetValue(),
+    wxStaticBox *box = new MyStaticBox(this, -1, m_textBox->GetValue(),
                                        wxDefaultPosition, wxDefaultSize,
                                        flagsBox);
     m_sizerStatBox = new wxStaticBoxSizer(box, isVert ? wxHORIZONTAL
                                                       : wxVERTICAL);
 
-    m_statText = new DerivedStaticText(this, -1, m_textLabel->GetValue(),
+    m_statText = new MyStaticText(this, -1, m_textLabel->GetValue(),
                                   wxDefaultPosition, wxDefaultSize,
                                   flagsText);
 
@@ -388,4 +425,3 @@ void StaticWidgetsPage::OnButtonLabelText(wxCommandEvent& event)
     m_statText->SetLabel(m_textLabel->GetValue());
 }
 
-#endif
