@@ -981,6 +981,7 @@ proplist.h	WXH
 quantize.h	WXH
 radiobox.h	WXH
 radiobut.h	WXH
+rawbmp.h	WXH
 regex.h	WXH	Base
 region.h	WXH
 resource.h	WXH
