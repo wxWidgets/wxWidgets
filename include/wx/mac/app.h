@@ -141,6 +141,27 @@ public:
 protected:
   bool                  m_keepGoing ;
 
+// mac specifics
+
+public :
+
+	void									MacDoOneEvent() ;
+	
+	void									MacHandleOneEvent( EventRecord *ev ) ;
+  void                  MacHandleNullEvent( EventRecord *ev ) ;
+  void                  MacHandleHighLevelEvent( EventRecord *ev ) ;
+  void                  MacHandleMouseDownEvent( EventRecord *ev ) ;
+  void                  MacHandleMouseUpEvent( EventRecord *ev ) ;
+  void                  MacHandleKeyDownEvent( EventRecord *ev ) ;
+  void                  MacHandleKeyUpEvent( EventRecord *ev ) ;
+  void                  MacHandleAutoKeyEvent( EventRecord *ev ) ;
+  void                  MacHandleActivateEvent( EventRecord *ev ) ;
+  void                  MacHandleUpdateEvent( EventRecord *ev ) ;
+  void                  MacHandleDiskEvent( EventRecord *ev ) ;
+  void                  MacHandleOSEvent( EventRecord *ev ) ;
+
+	
+
 DECLARE_EVENT_TABLE()
 };
 

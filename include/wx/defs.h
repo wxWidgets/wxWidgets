@@ -49,6 +49,8 @@
             #endif // Sun CC
         #endif
     #endif // Sun
+#elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
+		// MacOS
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__

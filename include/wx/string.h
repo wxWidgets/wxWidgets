@@ -79,7 +79,7 @@ inline size_t WXDLLEXPORT Strlen(const char *psz)
 // portable strcasecmp/_stricmp
 inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
 {
-#if     defined(__VISUALC__) || defined(__MWERKS__)
+#if     defined(__VISUALC__) || ( defined(__MWERKS__) && defined(__INTEL__) )
   return _stricmp(psz1, psz2);
 #elif     defined(__SC__)
   return _stricmp(psz1, psz2);
@@ -91,7 +91,7 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif   defined(__UNIX__) || defined(__GNUWIN32__)
   return strcasecmp(psz1, psz2);
-#elif defined(__MWERKS__) && !defined(_MSC_VER)
+#elif defined(__MWERKS__) && !defined(__INTEL__)
   register char c1, c2;
   do {
     c1 = tolower(*psz1++);

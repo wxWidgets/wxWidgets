@@ -189,26 +189,49 @@ public:
 
   // Get overall window size
   virtual void GetSize(int *width, int *height) const;
+  wxSize GetSize() const { int w, h; GetSize(& w, & h); return wxSize(w, h); }
 
   // Get window position, relative to parent (or screen if no parent)
   virtual void GetPosition(int *x, int *y) const;
+  wxPoint GetPosition() const
+    { int x, y; GetPosition(&x, &y); return wxPoint(x, y); }
+
+  // Get size and position
+  wxRect GetRect() const
+    { int x, y, w, h; GetPosition(& x, & y); GetSize(& w, & h); return wxRect(x, y, w, h); }
 
   // Get client (application-useable) size
   virtual void GetClientSize(int *width, int *height) const;
+  wxSize GetClientSize() const { int w, h; GetClientSize(& w, & h); return wxSize(w, h); }
 
   // Set overall size and position
   virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  inline virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
-  inline virtual void Move(int x, int y) { SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING); }
+  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+    { SetSize(rect.x, rect.y, rect.width, rect.height, sizeFlags); }
+
+    // set size only
+  void SetSize(int width, int height)
+    { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+  void SetSize(const wxSize& size)
+   { SetSize(-1, -1, size.x, size.y, wxSIZE_USE_EXISTING); }
+
+    // set position only
+  virtual void Move(int x, int y) { SetSize(x, y, -1, -1, wxSIZE_USE_EXISTING); }
+  void Move(const wxPoint& pt) { SetSize(pt.x, pt.y, -1, -1, wxSIZE_USE_EXISTING); }
 
   // Set client size
-  virtual void SetClientSize(int width, int size);
+  virtual void SetClientSize(int width, int height);
+  void SetClientSize(const wxSize& sz) { SetClientSize(sz.x, sz.y); }
 
   // Convert client to screen coordinates
   virtual void ClientToScreen(int *x, int *y) const;
+  wxPoint ClientToScreen(const wxPoint& pt) const
+    { int x = pt.x; int y = pt.y; ClientToScreen(& x, & y); return wxPoint(x, y); }
 
   // Convert screen to client coordinates
   virtual void ScreenToClient(int *x, int *y) const;
+  wxPoint ScreenToClient(const wxPoint& pt) const
+    { int x = pt.x; int y = pt.y; ScreenToClient(& x, & y); return wxPoint(x, y); }
 
   // Set the focus to this window
   virtual void SetFocus();

@@ -57,7 +57,7 @@ WXDLLEXPORT wxString wxFileSelector(const char *title,
         return wxBuffer;
     }
     else
-        return NULL;
+        return wxGetEmptyString();
 }
 
 WXDLLEXPORT wxString wxFileSelectorEx(const char *title,
@@ -81,7 +81,7 @@ WXDLLEXPORT wxString wxFileSelectorEx(const char *title,
         return wxBuffer;
     }
     else
-        return NULL;
+        return wxGetEmptyString();
 }
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,

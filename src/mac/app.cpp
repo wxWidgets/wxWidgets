@@ -35,6 +35,10 @@
 
 #include <string.h>
 
+// mac
+
+#include "apprsrc.h"
+
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
 
@@ -47,41 +51,116 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
 END_EVENT_TABLE()
 #endif
 
-// platform layer
-
-typedef void * PLEventHandle ;
-
-int PLTestMinimalRequirements() ;
-void PLErrorMessage( int errorCode ) ;
-int PLStartupPhase1() ;
-int PLStartupPhase2() ;
-void PLCleanup() ;
-
-bool PLDoOneEvent() ;
-bool PLHandleOneEvent( PLEventHandle event ) ; // true if really event
-bool PLCallbackIdle() ;
-bool PLCallbackRepeat() ;
-
 long wxApp::sm_lastMessageTime = 0;
+
+const short	kMacMinHeap = (29 * 1024) ;
+// platform specific static variables
+
+bool					gMacHasAppearance = false ;
+long					gMacAppearanceVersion = 0 ;
+RgnHandle			gMacCursorRgn = NULL ;
+
 
 bool wxApp::Initialize()
 {
   int error = 0 ;
 	
-  error = PLStartupPhase1() ;
-  if ( !error )
-  {
-    error = PLTestMinimalRequirements() ;
-    if ( !error )
-      error = PLStartupPhase2() ;
-  }
+  // Mac-specific
+	long total,contig;
+  
+  // init all managers
+
+	::InitGraf(&qd.thePort);
+	::InitFonts();
+	::InitWindows();
+	::InitMenus();
+	::TEInit();
+	::InitDialogs(0L);
+	::InitCursor();
+	CursHandle aCursHandle = ::GetCursor(watchCursor);	// Watch should be in system
+	if (aCursHandle)
+		::SetCursor(*aCursHandle);											
+	::FlushEvents(everyEvent, 0);
 	
+	// setup memory of application 
+	
+	::MaxApplZone();
+	for (long i = 1; i <= 4; i++)
+		::MoreMasters();
+	PurgeSpace(&total, &contig);
+	::SetCursor( &qd.arrow ) ; 
+
+#if 0
+	InitAEHandlers();
+	InitializeAECore() ;
+	GUSISetup(GUSIwithInternetSockets);
+#endif
+
+  // test the minimal configuration necessary
+
+	long theSystem ;
+	long theMachine;
+	long theAppearance ;
+
+	if (Gestalt(gestaltMachineType, &theMachine) != noErr)
+	{
+		error = kMacSTRWrongMachine;
+	}
+	else if (theMachine < gestaltMacPlus)
+	{
+		error = kMacSTRWrongMachine;
+	}
+	else if (Gestalt(gestaltSystemVersion, &theSystem) != noErr )
+	{
+		error = kMacSTROldSystem  ;
+	}	
+	else if ( theSystem < 0x0700 )
+	{
+		error = kMacSTROldSystem  ;
+	}
+	else if ((long)GetApplLimit() - (long)ApplicationZone() < kMacMinHeap)
+	{
+		error = kMacSTRSmallSize;
+	}
+	else
+	{
+		if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
+		{
+			gMacHasAppearance = true ;
+			RegisterAppearanceClient();
+			if ( Gestalt( gestaltAppearanceVersion, &theAppearance ) == noErr )
+			{
+				gMacAppearanceVersion = theAppearance ;
+			}
+			else
+			{
+				gMacAppearanceVersion = 0x0100 ;
+			}
+		}
+		else
+			error = kMacSTRNoPre8Yet ;
+	}
+
+	// if we encountered any problems so far, give the error code and exit immediately
+  	
   if ( error )
-  {
-    PLErrorMessage( error ) ;
-    return FALSE ;
+  {  	
+		short itemHit;
+		Str255 message;
+	
+		SetCursor(&qd.arrow);
+		GetIndString(message, 128, error);
+		ParamText(message, (ConstStr255Param)"\p", (ConstStr255Param)"\p", (ConstStr255Param)"\p");
+		itemHit = Alert(129, nil);
+	  return FALSE ;
   }  
   
+  // now avoid exceptions thrown for new (bad_alloc)
+  
+  std::__throws_bad_alloc = FALSE ;
+  
+	gMacCursorRgn = ::NewRgn() ;
+
 #ifdef __WXMSW__
   wxBuffer = new char[1500];
 #else
@@ -173,7 +252,12 @@ void wxApp::CleanUp()
   // do it as the very last thing because everything else can log messages
   delete wxLog::SetActiveTarget(NULL);
 
-	PLCleanup() ;
+	::PrClose() ;
+	if (gMacCursorRgn)
+		::DisposeRgn(gMacCursorRgn);
+	#if 0
+		TerminateAE() ;
+	#endif
 }
 
 int wxEntry( int argc, char *argv[] )
@@ -264,7 +348,7 @@ int wxApp::MainLoop()
 
   while (m_keepGoing)
   {
-		PLDoOneEvent() ;
+		MacDoOneEvent() ;
   }
 
   return 0;
@@ -403,354 +487,127 @@ wxWindow* wxApp::GetTopWindow() const
 void wxExit()
 {
   wxApp::CleanUp();
-/*
- * TODO: Exit in some platform-specific way. Not recommended that the app calls this:
- * only for emergencies.
- */
+	::ExitToShell() ;
 }
 
 // Yield to other processes
 bool wxYield()
 {
-  /*
-   * TODO
-   */
+#if 0
+	::YieldToOtherThreads() ;
+	::SystemTime() ;
+#endif
   return TRUE;
 }
 
-// -------------------------------------------------------------------
-// Portability Layer PL
-// -------------------------------------------------------------------
-// this is the c-api part, the only part of this file that needs to be
-// adapted for supporting a new platform
-// there are two flavours of PL... functions, Callbacks and normal functions
-// Callbacks are called by other PLxxx functions and allow to trigger idle 
-// processing etc. the callbacks don't have to be adapted for every platform
-// but only in case of changes to the underlying wx framework
+// platform specifics 
 
-// callbacks
-
-bool PLCallbackIdle() 
-{
-	return wxTheApp->ProcessIdle() ;
-}
-
-bool PLCallbackRepeat() 
-{
-	// wxMacProcessSocketEvents() ;  
-	return false ;
-}
-
-// platform specific static variables
-
-bool					gMacHasAppearance = false ;
-long					gMacAppearanceVersion = 0 ;
-RgnHandle			gMacCursorRgn = NULL ;
-
-#define	kMinHeap				 (29 * 1024)
-#define	kMinSpace				(20 * 1024)
-#define	eWrongMachine			1
-#define	eSmallSize				2
-#define	eNoMemory				3
-#define	eOldSystem				4
-#define	eGenericAbout			5
-
-// platform specific prototypes
-
-void DoMacNullEvent( EventRecord *ev ) ;
-void DoMacHighLevelEvent( EventRecord *ev ) ;
-void DoMacMouseDownEvent( EventRecord *ev ) ;
-void DoMacMouseUpEvent( EventRecord *ev ) ;
-void DoMacKeyDownEvent( EventRecord *ev ) ;
-void DoMacKeyUpEvent( EventRecord *ev ) ;
-void DoMacAutoKeyEvent( EventRecord *ev ) ;
-void DoMacActivateEvent( EventRecord *ev ) ;
-void DoMacUpdateEvent( EventRecord *ev ) ;
-void DoMacDiskEvent( EventRecord *ev ) ;
-void DoMacOSEvent( EventRecord *ev ) ;
-
-// platform specific functions
-
-// -------------------------------------------------------------------
-// PLStartupPhase1
-// -------------------------------------------------------------------
-// Initializes the system so that at least the requirements can be tested
-// and that error messages will shop up at all ;-)
-// 
-// parameters   : none
-// return value : non zero for a implementation specific error code
-
-int PLStartupPhase1()
-{
-	::InitGraf(&qd.thePort);
-	::InitFonts();
-	::InitWindows();
-	::InitMenus();
-	::TEInit();
-	::InitDialogs(0L);
-	::InitCursor();
-	CursHandle aCursHandle = ::GetCursor(watchCursor);	// Watch should be in system
-	if (aCursHandle)
-		::SetCursor(*aCursHandle);						// Change cursor to watch 
-	::FlushEvents(everyEvent, 0);
-	
-	gMacCursorRgn = ::NewRgn() ;
-
-	return 0 ;
-}
-
-// -------------------------------------------------------------------
-// PLStartupPhase2
-// -------------------------------------------------------------------
-// booting the system further until all subsystems are running
-// 
-// parameters   : none
-// return value : non zero for a implementation specific error code
-
-int PLStartupPhase2()
-{
-	long total,contig;
-
-	::MaxApplZone();
-	for (long i = 1; i <= 4; i++)
-		::MoreMasters();
-	PurgeSpace(&total, &contig);
-	::SetCursor( &qd.arrow ) ; 
-
-#if 0
-	InitAEHandlers();
-	InitializeAECore() ;
-	GUSISetup(GUSIwithInternetSockets);
-#endif
-
-	return 0 ;
-}
-
-// -------------------------------------------------------------------
-// PLErrorMessage
-// -------------------------------------------------------------------
-// notifies the user of a implementation specific error
-// is useful for messages before the wx System is up and running
-// 
-// parameters   : int error = error code (implementation specific)
-// return value : none
-
-void PLErrorMessage( int error )
-{
-	short itemHit;
-	Str255 message;
-
-	SetCursor(&qd.arrow);
-	GetIndString(message, 128, error);
-	ParamText(message, (ConstStr255Param)"\p", (ConstStr255Param)"\p", (ConstStr255Param)"\p");
-	itemHit = Alert(129, nil);
-}
-
-// -------------------------------------------------------------------
-// PLCleanup
-// -------------------------------------------------------------------
-// notifies the user of a implementation specific error
-// is useful for messages before the wx System is up and running
-// 
-// parameters   : int error = error code (implementation specific)
-// return value : none
-
-void PLCleanup()
-{
-	::PrClose() ;
-	if (gMacCursorRgn)
-		::DisposeRgn(gMacCursorRgn);
-#if 0
-	TerminateAE() ;
-#endif
-}
-
-// -------------------------------------------------------------------
-// PLTestMinimalRequirements
-// -------------------------------------------------------------------
-// test whether we are on the correct runnable system and read out any
-// useful informations from the system
-// 
-// parameters	: none
-// return value : non zero for a implementation specific error code
-
-int PLTestMinimalRequirements()
-{
-	long theSystem ;
-	long theMachine;
-	long theAppearance ;
-
-	if (Gestalt(gestaltMachineType, &theMachine) != noErr)
-	{
-		return(eWrongMachine);
-	}
-
-	if (theMachine < gestaltMacPlus)
-	{
-		return(eWrongMachine);
-	}
-
-	if (Gestalt(gestaltSystemVersion, &theSystem) != noErr )
-	{
-		return( eOldSystem ) ;
-	}
-		
-	if ( theSystem < 0x0700 )
-	{
-		return( eOldSystem ) ;
-	}
-
-	if ((long)GetApplLimit() - (long)ApplicationZone() < kMinHeap)
-	{
-		return(eSmallSize);
-	}
-
-	if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
-	{
-		gMacHasAppearance = true ;
-		RegisterAppearanceClient();
-		if ( Gestalt( gestaltAppearanceVersion, &theAppearance ) == noErr )
-		{
-			gMacAppearanceVersion = theAppearance ;
-		}
-		else
-		{
-			gMacAppearanceVersion = 0x0100 ;
-		}
-	}
-
-	return 0 ;
-}
-
-// -------------------------------------------------------------------
-// PLDoOneEvent
-// -------------------------------------------------------------------
-// 
-// parameters	: none
-// return value : returns true if a real event occured (no null or timeout event)
-
-bool PLDoOneEvent() 
+void wxApp::MacDoOneEvent() 
 {
   EventRecord event ;
 
 	long sleepTime = 60;
 
-	bool gotEvent = false ;
-  
-
 	if (WaitNextEvent(everyEvent, &event,sleepTime, gMacCursorRgn))
 	{
-    gotEvent = PLHandleOneEvent( &event );
+    MacHandleOneEvent( &event );
 	}
 	else
 	{
-    PLCallbackIdle();
+		// idlers
+		wxTheApp->ProcessIdle() ;
 	}
-		
-	PLCallbackRepeat() ;
-  
-  return gotEvent ;
+	
+	// repeaters
+#if 0
+	wxMacProcessSocketEvents() ;  
+#endif
 }
 
-// -------------------------------------------------------------------
-// PLHandleOneEvent
-// -------------------------------------------------------------------
-// 
-// parameters	: event = event handle of the platform specific event to be handled
-// return value : returns true if a real event occured (no null or timeout event)
-
-bool PLHandleOneEvent( PLEventHandle event ) 
+void wxApp::MacHandleOneEvent( EventRecord *ev ) 
 {
-	bool realEvent = true ;
-
-	EventRecord* ev = (EventRecord*) event ;
-
 	switch (ev->what)
 	{
 		case nullEvent:
-			DoMacNullEvent( ev ) ;
-			realEvent = false ;
+			MacHandleNullEvent( ev ) ;
 			break ;
 		case kHighLevelEvent:
-			DoMacHighLevelEvent( ev ) ;
+			MacHandleHighLevelEvent( ev ) ;
 			break;
 		case mouseDown:
-			DoMacMouseDownEvent( ev ) ;
+			MacHandleMouseDownEvent( ev ) ;
 			wxTheApp->ExitMainLoop() ;
 			break;
 		case mouseUp:
-			DoMacMouseUpEvent( ev ) ;
+			MacHandleMouseUpEvent( ev ) ;
 			break;
 		case keyDown:
-			DoMacKeyDownEvent( ev ) ;
+			MacHandleKeyDownEvent( ev ) ;
 			break;
 		case autoKey:
-			DoMacAutoKeyEvent( ev ) ;
+			MacHandleAutoKeyEvent( ev ) ;
 			break;
 		case keyUp:
-			DoMacKeyUpEvent( ev ) ;
+			MacHandleKeyUpEvent( ev ) ;
 			break;
 		case activateEvt:
-			DoMacActivateEvent( ev ) ;
+			MacHandleActivateEvent( ev ) ;
 			break;
 		case updateEvt:
-			DoMacUpdateEvent( ev ) ;
+			MacHandleUpdateEvent( ev ) ;
 			break;
 		case diskEvt:
-			DoMacDiskEvent( ev ) ;
+			MacHandleDiskEvent( ev ) ;
 			break;
 		case osEvt:
-			DoMacOSEvent( ev ) ;
+			MacHandleOSEvent( ev ) ;
 			break;
 		default:
 			break;
 	}
-  return realEvent ;
 }
 
-// platform specific functions (non PLxxx functions)
-
-void DoMacNullEvent( EventRecord *ev ) 
+void wxApp::MacHandleNullEvent( EventRecord *ev ) 
 {
 }
 
-void DoMacHighLevelEvent( EventRecord *ev )
+void wxApp::MacHandleHighLevelEvent( EventRecord *ev )
 {
 }
 
-void DoMacMouseDownEvent( EventRecord *ev )
+void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
 {
 }
 
-void DoMacMouseUpEvent( EventRecord *ev )
+void wxApp::MacHandleMouseUpEvent( EventRecord *ev )
 {
 }
 
-void DoMacKeyDownEvent( EventRecord *ev )
+void wxApp::MacHandleKeyDownEvent( EventRecord *ev )
 {
 }
 
-void DoMacKeyUpEvent( EventRecord *ev )
+void wxApp::MacHandleKeyUpEvent( EventRecord *ev )
 {
 }
 
-void DoMacAutoKeyEvent( EventRecord *ev )
+void wxApp::MacHandleAutoKeyEvent( EventRecord *ev )
 {
 }
 
-void DoMacActivateEvent( EventRecord *ev )
+void wxApp::MacHandleActivateEvent( EventRecord *ev )
 {
 }
 
-void DoMacUpdateEvent( EventRecord *ev )
+void wxApp::MacHandleUpdateEvent( EventRecord *ev )
 {
 }
 
-void DoMacDiskEvent( EventRecord *ev )
+void wxApp::MacHandleDiskEvent( EventRecord *ev )
 {
 }
 
-void DoMacOSEvent( EventRecord *ev )
+void wxApp::MacHandleOSEvent( EventRecord *ev )
 {
 }
 

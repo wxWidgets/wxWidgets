@@ -32,42 +32,42 @@
 
 #define wxUSE_AUTOTRANS   0
                                 // Define wxTString
-#define wxUSE_POSTSCRIPT  1
+#define wxUSE_POSTSCRIPT  0
                         	// 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
                                 // 1 to use font metric files in GetTextExtent
-#define wxUSE_METAFILE    1
+#define wxUSE_METAFILE    0
                                 // 0 for no Metafile and metafile device context
 #define wxUSE_FORM        0
                                 // 0 for no wxForm
-#define wxUSE_IPC         1
+#define wxUSE_IPC         0
                                 // 0 for no interprocess comms
-#define wxUSE_HELP        1
+#define wxUSE_HELP        0
                                 // 0 for no help facility
-#define wxUSE_RESOURCES   1
+#define wxUSE_RESOURCES   0
                         	// 0 for no wxGetResource/wxWriteResource
-#define wxUSE_CLIPBOARD   1
+#define wxUSE_CLIPBOARD   0
                         	// 0 for no clipboard functions
-#define wxUSE_SPLINES     1
+#define wxUSE_SPLINES     0
                             	// 0 for no splines
-#define wxUSE_XFIG_SPLINE_CODE  1
+#define wxUSE_XFIG_SPLINE_CODE  0
                            	// 1 for XFIG spline code, 0 for AIAI spline code.
 // AIAI spline code is slower, but freer of copyright issues.
                             	// 0 for no splines
 
-#define wxUSE_TOOLBAR     1
+#define wxUSE_TOOLBAR     0
                             // Use toolbars
-#define wxUSE_DRAG_AND_DROP 1
+#define wxUSE_DRAG_AND_DROP 0
                         	// 0 for no drag and drop
 
-#define wxUSE_WX_RESOURCES        1
+#define wxUSE_WX_RESOURCES        0
                                   // Use .wxr resource mechanism (requires PrologIO library)
 
 #define wxUSE_DOC_VIEW_ARCHITECTURE 1
                                   // Set to 0 to disable document/view architecture
-#define wxUSE_PRINTING_ARCHITECTURE  1
+#define wxUSE_PRINTING_ARCHITECTURE  0
                                     // Set to 0 to disable print/preview architecture code
-#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 0
                                     // Set to 0 to disable PostScript print/preview architecture code
                                     // under Windows (just use Windows printing).
 #define wxUSE_DYNAMIC_CLASSES     1
@@ -111,7 +111,7 @@
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
 
-#define wxUSE_WXCONFIG      1
+#define wxUSE_WXCONFIG      0
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations

@@ -1,4 +1,16 @@
 #include <Types.r>
+#include "apprsrc.h"
+
+resource 'STR#' ( 128 , "Simple Alert Messages" )
+{
+	{
+	"This application needs at least a MacPlus" ,
+	"This application needs more memory" ,
+	"This application is out of memory" ,
+	"This application needs at least System 7" ,
+	"This application needs Appearance extension (built in with System 8) - this restriction will be relieved in the final release"
+	}
+} ;
 
 data 'alis' (128, "Libs alias") {
 	$"0000 0000 00CE 0002 0001 0A58 5858 5858"           
