@@ -171,10 +171,13 @@ WXDLLEXPORT void wxUnix2DosFilename(wxChar *s);
 #ifdef __WXMAC__
 WXDLLEXPORT wxString wxMacFSSpec2MacFilename( const FSSpec *spec ) ;
 WXDLLEXPORT void wxMacFilename2FSSpec( const char *path , FSSpec *spec ) ;
+#  ifndef __DARWIN__
+// Mac file names are POSIX (Unix style) under Darwin, so these are not needed
 WXDLLEXPORT wxString wxMacFSSpec2UnixFilename( const FSSpec *spec ) ;
 WXDLLEXPORT void wxUnixFilename2FSSpec( const char *path , FSSpec *spec ) ;
 WXDLLEXPORT wxString wxMac2UnixFilename( const char *s) ;
 WXDLLEXPORT wxString wxUnix2MacFilename( const char *s);
+#  endif
 #endif
 
 // Strip the extension, in situ

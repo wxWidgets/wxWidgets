@@ -845,35 +845,57 @@ wxString wxPathOnly (const wxString& path)
 #if defined(__WXMAC__)
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
+#ifdef __DARWIN__
+    FSRef theRef;
+    char  thePath[FILENAME_MAX];
+
+    // convert the FSSpec to an FSRef
+    (void) FSpMakeFSRef( spec, &theRef );
+    // get the POSIX path associated with the FSRef
+    (void) FSRefMakePath( &theRef, (UInt8 *)thePath, sizeof(thePath) );
+    
+    // create path string for return value
+    wxString result( thePath ) ;
+#else
     Handle    myPath ;
     short     length ;
 
+    // get length of path and allocate handle
     FSpGetFullPath( spec , &length , &myPath ) ;
     ::SetHandleSize( myPath , length + 1 ) ;
     ::HLock( myPath ) ;
     (*myPath)[length] = 0 ;
-    if ( length > 0 && (*myPath)[length-1] ==':' )
+    if ((length > 0) && ((*myPath)[length-1] == ':'))
         (*myPath)[length-1] = 0 ;
-
-#ifdef __DARWIN__
-    wxString result( wxMac2UnixFilename((char*) *myPath) ) ;
-#else
+    
+    // create path string for return value
     wxString result( (char*) *myPath ) ;
-#endif
+
+    // free allocated handle
     ::HUnlock( myPath ) ;
     ::DisposeHandle( myPath ) ;
+#endif
+
     return result ;
 }
 
 void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
 {
 #ifdef __DARWIN__
-    const char *s = wxUnix2MacFilename(path);
-    FSpLocationFromFullPath( strlen(s) , s , spec ) ;
+    FSRef theRef;
+
+    // get the FSRef associated with the POSIX path
+    (void) FSPathMakeRef((const UInt8 *) path, &theRef, NULL);
+    // convert the FSRef to an FSSpec
+    (void) FSGetCatalogInfo(&theRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
 #else
     FSpLocationFromFullPath( strlen(path) , path , spec ) ;
 #endif
 }
+
+#ifndef __DARWIN__
+// Mac file names are POSIX (Unix style) under Darwin
+// therefore the conversion functions below are not needed
 
 static char sMacFileNameConversion[ 1000 ] ;
 
@@ -881,64 +903,63 @@ wxString wxMac2UnixFilename (const char *str)
 {
     char *s = sMacFileNameConversion ;
     strcpy( s , str ) ;
-  if (s)
-  {
-    memmove( s+1 , s ,strlen( s ) + 1) ;
-    if ( *s == ':' )
-            *s = '.' ;
-    else
-            *s = '/' ;
-
-    while (*s)
+    if (s)
     {
+        memmove( s+1 , s ,strlen( s ) + 1) ;
+        if ( *s == ':' )
+            *s = '.' ;
+        else
+            *s = '/' ;
+        
+        while (*s)
+        {
             if (*s == ':')
-              *s = '/';
+                *s = '/';
             else
-              *s = wxTolower (*s);        // Case INDEPENDENT
+                *s = wxTolower(*s);        // Case INDEPENDENT
             s++;
+        }
     }
-  }
-  return wxString (sMacFileNameConversion) ;
+    return wxString(sMacFileNameConversion) ;
 }
 
 wxString wxUnix2MacFilename (const char *str)
 {
     char *s = sMacFileNameConversion ;
     strcpy( s , str ) ;
-  if (s)
-  {
-    if ( *s == '.' )
+    if (s)
     {
-      // relative path , since it goes on with slash which is translated to a :
-      memmove( s , s+1 ,strlen( s ) ) ;
+        if ( *s == '.' )
+        {
+            // relative path , since it goes on with slash which is translated to a :
+            memmove( s , s+1 ,strlen( s ) ) ;
+        }
+        else if ( *s == '/' )
+        {
+            // absolute path -> on mac just start with the drive name
+            memmove( s , s+1 ,strlen( s ) ) ;
+        }
+        else
+        {
+            wxASSERT_MSG( 1 , "unkown path beginning" ) ;
+        }
+        while (*s)
+        {
+            if (*s == '/' || *s == '\\')
+            {
+                // convert any back-directory situations
+                if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
+                {
+                    *s = ':';
+                    memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
+                }
+                else
+                    *s = ':';
+            }
+            s++ ;
+        }
     }
-    else if ( *s == '/' )
-    {
-      // absolute path -> on mac just start with the drive name
-      memmove( s , s+1 ,strlen( s ) ) ;
-    }
-    else
-    {
-      wxASSERT_MSG( 1 , "unkown path beginning" ) ;
-    }
-    while (*s)
-    {
-      if (*s == '/' || *s == '\\')
-      {
-          // convert any back-directory situations
-          if ( *(s+1) == '.' && *(s+2) == '.' && ( (*(s+3) == '/' || *(s+3) == '\\') ) )
-          {
-          *s = ':';
-                memmove( s+1 , s+3 ,strlen( s+3 ) + 1 ) ;
-          }
-          else
-          *s = ':';
-      }
-
-      s++ ;
-    }
-  }
-  return wxString (sMacFileNameConversion) ;
+    return wxString (sMacFileNameConversion) ;
 }
 
 wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
@@ -951,6 +972,7 @@ void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
     wxString var = wxUnix2MacFilename( path ) ;
     wxMacFilename2FSSpec( var , spec ) ;
 }
+#endif // ! __DARWIN__
 
 #endif // __WXMAC__
 
@@ -1297,7 +1319,7 @@ bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 
 // Get first file name matching given wild card.
 
-#if defined(__UNIX__) && !defined(__WXMAC__)
+#if defined(__UNIX__)
 
 // Get first file name matching given wild card.
 // Flags are reserved for future use.
@@ -1460,16 +1482,9 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
 
     // Find path only so we can concatenate found file onto path
     wxString path(wxPathOnly(spec));
-#ifdef __DARWIN__
-    // TODO:check whether is necessary/correct
-    if ( !path.IsEmpty() )
-        result << path << wxT('/');
-#else
-    result = path ;
-#endif
     FSSpec fsspec ;
 
-    wxMacFilename2FSSpec( result , &fsspec ) ;
+    wxMacFilename2FSSpec( path , &fsspec ) ;
     g_iter.m_CPB.hFileInfo.ioVRefNum = fsspec.vRefNum ;
     g_iter.m_CPB.hFileInfo.ioNamePtr = g_iter.m_name ;
     g_iter.m_index = 0 ;
