@@ -256,6 +256,122 @@ class wxPyTimer(wxPyTimerPtr):
 
 
 
+class wxLogPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Flush(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLog_Flush,(self,) + _args, _kwargs)
+        return val
+    def HasPendingMessages(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLog_HasPendingMessages,(self,) + _args, _kwargs)
+        return val
+    def SetVerbose(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLog_SetVerbose,(self,) + _args, _kwargs)
+        return val
+    def GetVerbose(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLog_GetVerbose,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxLog instance at %s>" % (self.this,)
+class wxLog(wxLogPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLog,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogStderrPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxLogStderr instance at %s>" % (self.this,)
+class wxLogStderr(wxLogStderrPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogStderr,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogTextCtrlPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxLogTextCtrl instance at %s>" % (self.this,)
+class wxLogTextCtrl(wxLogTextCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogTextCtrl,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogGuiPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxLogGui instance at %s>" % (self.this,)
+class wxLogGui(wxLogGuiPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogGui,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogWindowPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Show(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogWindow_Show,(self,) + _args, _kwargs)
+        return val
+    def GetFrame(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogWindow_GetFrame,(self,) + _args, _kwargs)
+        if val: val = wxFramePtr(val) 
+        return val
+    def GetOldLog(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogWindow_GetOldLog,(self,) + _args, _kwargs)
+        if val: val = wxLogPtr(val) 
+        return val
+    def IsPassingMessages(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogWindow_IsPassingMessages,(self,) + _args, _kwargs)
+        return val
+    def PassMessages(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogWindow_PassMessages,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxLogWindow instance at %s>" % (self.this,)
+class wxLogWindow(wxLogWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogWindow,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogNullPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxLogNull(self)
+    def __repr__(self):
+        return "<C wxLogNull instance at %s>" % (self.this,)
+class wxLogNull(wxLogNullPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogNull,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -373,6 +489,62 @@ def wxDragListItem(*_args, **_kwargs):
     if val: val = wxDragImagePtr(val); val.thisown = 1
     return val
 
+wxSysErrorCode = misc2c.wxSysErrorCode
+
+wxSysErrorMsg = misc2c.wxSysErrorMsg
+
+wxLogFatalError = misc2c.wxLogFatalError
+
+wxLogError = misc2c.wxLogError
+
+wxLogWarning = misc2c.wxLogWarning
+
+wxLogMessage = misc2c.wxLogMessage
+
+wxLogInfo = misc2c.wxLogInfo
+
+wxLogVerbose = misc2c.wxLogVerbose
+
+wxLogStatus = misc2c.wxLogStatus
+
+wxLogStatusFrame = misc2c.wxLogStatusFrame
+
+wxLogSysError = misc2c.wxLogSysError
+
+wxLog_IsEnabled = misc2c.wxLog_IsEnabled
+
+wxLog_EnableLogging = misc2c.wxLog_EnableLogging
+
+wxLog_OnLog = misc2c.wxLog_OnLog
+
+wxLog_FlushActive = misc2c.wxLog_FlushActive
+
+def wxLog_GetActiveTarget(*_args, **_kwargs):
+    val = apply(misc2c.wxLog_GetActiveTarget,_args,_kwargs)
+    if val: val = wxLogPtr(val)
+    return val
+
+def wxLog_SetActiveTarget(*_args, **_kwargs):
+    val = apply(misc2c.wxLog_SetActiveTarget,_args,_kwargs)
+    if val: val = wxLogPtr(val)
+    return val
+
+wxLog_Suspend = misc2c.wxLog_Suspend
+
+wxLog_Resume = misc2c.wxLog_Resume
+
+wxLog_DontCreateOnDemand = misc2c.wxLog_DontCreateOnDemand
+
+wxLog_SetTraceMask = misc2c.wxLog_SetTraceMask
+
+wxLog_AddTraceMask = misc2c.wxLog_AddTraceMask
+
+wxLog_RemoveTraceMask = misc2c.wxLog_RemoveTraceMask
+
+wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
+
+wxLog_IsAllowedTraceMask = misc2c.wxLog_IsAllowedTraceMask
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
@@ -463,3 +635,13 @@ wxSYS_NETWORK_PRESENT = misc2c.wxSYS_NETWORK_PRESENT
 wxSYS_PENWINDOWS_PRESENT = misc2c.wxSYS_PENWINDOWS_PRESENT
 wxSYS_SHOW_SOUNDS = misc2c.wxSYS_SHOW_SOUNDS
 wxSYS_SWAP_BUTTONS = misc2c.wxSYS_SWAP_BUTTONS
+wxLOG_FatalError = misc2c.wxLOG_FatalError
+wxLOG_Error = misc2c.wxLOG_Error
+wxLOG_Warning = misc2c.wxLOG_Warning
+wxLOG_Message = misc2c.wxLOG_Message
+wxLOG_Info = misc2c.wxLOG_Info
+wxLOG_Status = misc2c.wxLOG_Status
+wxLOG_Debug = misc2c.wxLOG_Debug
+wxLOG_Trace = misc2c.wxLOG_Trace
+wxLOG_Progress = misc2c.wxLOG_Progress
+wxLOG_User = misc2c.wxLOG_User

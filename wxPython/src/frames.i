@@ -85,8 +85,9 @@ public:
     wxPoint GetClientAreaOrigin() const;
     bool Command(int id);
     bool ProcessCommand(int id);
-
+#ifdef __WXMSW__
     bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
+#endif
 };
 
 //---------------------------------------------------------------------------

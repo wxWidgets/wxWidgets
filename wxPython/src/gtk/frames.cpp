@@ -1174,6 +1174,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_class_wxCustomDataObject","_wxCustomDataObject",0},
+    { "_wxSpinCtrl","_class_wxSpinCtrl",0},
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
@@ -1260,6 +1261,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPoint","_class_wxPoint",0},
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
+    { "_class_wxSpinCtrl","_wxSpinCtrl",0},
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
@@ -1494,6 +1496,12 @@ SWIGEXPORT(void) initframesc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("framesc", framescMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOMENUBAR", PyInt_FromLong((long) wxFULLSCREEN_NOMENUBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOTOOLBAR", PyInt_FromLong((long) wxFULLSCREEN_NOTOOLBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOSTATUSBAR", PyInt_FromLong((long) wxFULLSCREEN_NOSTATUSBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOBORDER", PyInt_FromLong((long) wxFULLSCREEN_NOBORDER));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOCAPTION", PyInt_FromLong((long) wxFULLSCREEN_NOCAPTION));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_ALL", PyInt_FromLong((long) wxFULLSCREEN_ALL));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

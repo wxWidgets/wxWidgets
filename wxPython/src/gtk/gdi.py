@@ -779,6 +779,9 @@ class wxImageListPtr :
     def RemoveAll(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_RemoveAll,(self,) + _args, _kwargs)
         return val
+    def GetSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxImageList_GetSize,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxImageList instance at %s>" % (self.this,)
 class wxImageList(wxImageListPtr):

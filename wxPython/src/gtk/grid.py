@@ -67,6 +67,12 @@ class wxGridCellRendererPtr :
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellRenderer_SetParameters,(self,) + _args, _kwargs)
         return val
+    def IncRef(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellRenderer_IncRef,(self,) + _args, _kwargs)
+        return val
+    def DecRef(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellRenderer_DecRef,(self,) + _args, _kwargs)
+        return val
     def Draw(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellRenderer_Draw,(self,) + _args, _kwargs)
         return val
@@ -193,6 +199,12 @@ class wxGridCellEditorPtr :
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetParameters,(self,) + _args, _kwargs)
         return val
+    def IncRef(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_IncRef,(self,) + _args, _kwargs)
+        return val
+    def DecRef(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_DecRef,(self,) + _args, _kwargs)
+        return val
     def Create(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_Create,(self,) + _args, _kwargs)
         return val
@@ -217,6 +229,9 @@ class wxGridCellEditorPtr :
         return val
     def PaintBackground(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_PaintBackground,(self,) + _args, _kwargs)
+        return val
+    def IsAcceptedKey(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_IsAcceptedKey,(self,) + _args, _kwargs)
         return val
     def StartingKey(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_StartingKey,(self,) + _args, _kwargs)

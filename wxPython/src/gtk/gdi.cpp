@@ -7213,7 +7213,56 @@ static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxImageList_GetSize(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->GetSize(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxImageList_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImageList * _arg0;
+    int  _arg1;
+    int * _arg2;
+    int  temp;
+    int * _arg3;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","index", NULL };
+
+    self = self;
+{
+  _arg2 = &temp;
+}
+{
+  _arg3 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxImageList_GetSize",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_GetSize. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxImageList_GetSize(_arg0,_arg1,*_arg2,*_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
 static PyMethodDef gdicMethods[] = {
+	 { "wxImageList_GetSize", (PyCFunction) _wrap_wxImageList_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_RemoveAll", (PyCFunction) _wrap_wxImageList_RemoveAll, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_Remove", (PyCFunction) _wrap_wxImageList_Remove, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_GetImageCount", (PyCFunction) _wrap_wxImageList_GetImageCount, METH_VARARGS | METH_KEYWORDS },

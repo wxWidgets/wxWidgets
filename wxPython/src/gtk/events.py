@@ -324,6 +324,12 @@ class wxKeyEventPtr(wxEventPtr):
     def KeyCode(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_KeyCode,(self,) + _args, _kwargs)
         return val
+    def GetKeyCode(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_GetKeyCode,(self,) + _args, _kwargs)
+        return val
+    def HasModifiers(self, *_args, **_kwargs):
+        val = apply(eventsc.wxKeyEvent_HasModifiers,(self,) + _args, _kwargs)
+        return val
     def GetX(self, *_args, **_kwargs):
         val = apply(eventsc.wxKeyEvent_GetX,(self,) + _args, _kwargs)
         return val

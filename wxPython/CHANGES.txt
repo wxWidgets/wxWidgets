@@ -7,7 +7,7 @@ New in 2.2.0
 
 Added wxLog and friends.
 
-Added wxFrame.ShowFullScreen.
+Added wxFrame.ShowFullScreen for MSW.
 
 
 
