@@ -482,6 +482,7 @@ clean: debian/control
 		&& ./setup.py clean \
 		&& rm -rf licence \
 		&& rm -rf build \
+		&& rm -rf contrib/gizmos/contrib \
 		&& rm -rf contrib/ogl/contrib \
 		&& rm -rf contrib/stc/contrib \
 		&& rm -rf contrib/xrc/contrib \
