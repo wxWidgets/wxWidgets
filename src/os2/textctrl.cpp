@@ -128,7 +128,7 @@ bool wxTextCtrl::Create(
     m_windowStyle = lStyle;
     m_bIsMLE = FALSE;
 
-    long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
+    long                            lSstyle = WS_TABSTOP;
 
     //
     // Single and multiline edit fields are two different controls in PM
