@@ -28,7 +28,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\b16\b/;
+        next if $wxCommon{$file} =~ /\b(16|U)\b/;
 
         $file =~ s/cp?p?$/obj/;
         $project{"WXCOMMONOBJS"} .= "\$(COMMDIR)\\\$D\\" . $file . " "
