@@ -50,7 +50,7 @@ private:
     bool DoChangeModeWindows(const wxVideoMode& mode);
 
     
-    DECLARE_NO_COPY_CLASS(wxDisplay);
+    DECLARE_NO_COPY_CLASS(wxDisplay)
 };
 
 #endif // _WX_MSW_DISPLAY_H_
