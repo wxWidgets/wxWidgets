@@ -10,7 +10,7 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=test
+TARGET=toolbar
 OBJECTS = $(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.msc

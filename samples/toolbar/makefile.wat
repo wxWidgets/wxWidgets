@@ -7,7 +7,7 @@
 
 WXDIR = $(%WXWIN)
 
-PROGRAM = test
+PROGRAM = toolbar
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat

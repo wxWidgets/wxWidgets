@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        toolbar.cpp
 // Purpose:     wxToolBar sample
 // Author:      Julian Smart
 // Modified by:
@@ -214,8 +214,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
   toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
-  currentX += width + 5;
-  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
 
   wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO);
   combo->Append("This");
@@ -227,6 +225,8 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
 
   if ( !smallicons )
   {
+      currentX += width + 5;
+      toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
       currentX += width + 5;
       toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
       currentX += width + 5;
@@ -243,7 +243,7 @@ bool MyApp::InitToolbar(wxToolBar* toolBar, bool smallicons)
   toolBar->Realize();
 
   // Can delete the bitmaps since they're reference counted
-  int i, max = smallicons ? 3 : WXSIZEOF(toolBarBitmaps);
+  int i, max = smallicons ? 2 : WXSIZEOF(toolBarBitmaps);
   for (i = 0; i < max; i++)
     delete toolBarBitmaps[i];
 
@@ -274,11 +274,11 @@ MyFrame::MyFrame(wxFrame* parent,
 
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar", "Change the toolbar kind");
-    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button", "");
-    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, "&Delete print button", "");
-    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, "&Insert print button", "");
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button", "");
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLETOOLBAR, "&Toggle toolbar\tCtrl-T", "Change the toolbar kind");
+    tbarMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button\tCtrl-E", "");
+    tbarMenu->Append(IDM_TOOLBAR_DELETEPRINT, "&Delete print button\tCtrl-D", "");
+    tbarMenu->Append(IDM_TOOLBAR_INSERTPRINT, "&Insert print button\tCtrl-I", "");
+    tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button\tCtrl-T", "");
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
@@ -378,12 +378,7 @@ void MyFrame::DoDeletePrint()
 {
     wxToolBar *tb = GetToolBar();
 
-    // only implemented in wxGTK and wxMSW for now
-#if !defined(__WXGTK__) && !defined(__WXMSW__)
-    wxMessageBox("Sorry, wxToolBar::DeleteTool is not implemented.");
-#else
     tb->DeleteTool( wxID_PRINT );
-#endif
 }
 
 void MyFrame::DoToggleHelp()
@@ -400,9 +395,8 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
     wxBitmap bmp(print_xpm);
 #endif
 
-    GetToolBar()->AddTool(wxID_PRINT, bmp, wxNullBitmap,
-                          FALSE, 0, -1,
-                          (wxObject *) NULL, "Delete this tool");
+    GetToolBar()->InsertTool(0, wxID_PRINT, bmp, wxNullBitmap,
+                              FALSE, (wxObject *) NULL, "Delete this tool");
 
     GetToolBar()->Realize();
 }

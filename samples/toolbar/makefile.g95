@@ -9,7 +9,7 @@
 
 WXDIR = ../..
 
-TARGET=test
+TARGET=toolbar
 OBJECTS = $(TARGET).o
 
 include $(WXDIR)/src/makeprog.g95
