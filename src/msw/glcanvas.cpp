@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        glcanvas.cpp
+// Name:        src/msw/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWindows under MS Windows
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:       wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -725,7 +725,7 @@ bool wxGLApp::InitGLVisual(int *attribList)
   AdjustPFDForAttributes(pfd, attribList);
 
   // use DC for whole (root) screen, since no windows have yet been created
-  pixelFormat = ChoosePixelFormat((HDC) ::GetDC(NULL), &pfd);
+  pixelFormat = ChoosePixelFormat(ScreenHDC(), &pfd);
 
   if (pixelFormat == 0) {
     wxLogError(_("Failed to initialize OpenGL"));
