@@ -53,6 +53,13 @@ protected:
 // ------------------------------------------------------------------------
 protected:
     virtual void Cocoa_wxMenuItemAction(wxMenuItem& item);
+
+    // Helper function to position status/tool bars
+    void UpdateFrameNSView();
+
+    virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
+    // frameNSView is used whenever a statusbar/generic toolbar are present
+    WX_NSView m_frameNSView;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
@@ -70,9 +77,21 @@ public:
     // if the frame has a toolbar) in client coordinates
     virtual wxPoint GetClientAreaOrigin() const;
 
+    // create the main status bar by calling OnCreateStatusBar()
+    virtual wxStatusBar* CreateStatusBar(int number = 1,
+                                         long style = wxST_SIZEGRIP,
+                                         wxWindowID winid = 0,
+                                         const wxString& name =
+                                            wxStatusLineNameStr);
+    // sets the main status bar
+    void SetStatusBar(wxStatusBar *statBar);
+    // create main toolbar bycalling OnCreateToolBar()
+    virtual wxToolBar* CreateToolBar(long style = -1,
+                                     wxWindowID winid = -1,
+                                     const wxString& name = wxToolBarNameStr);
+    // sets the main tool bar
+    virtual void SetToolBar(wxToolBar *toolbar);
 protected:
-    // Catch the Cocoa size event
-    virtual void Cocoa_FrameChanged(void);
     void PositionStatusBar();
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;

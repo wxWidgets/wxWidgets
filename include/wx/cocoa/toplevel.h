@@ -66,6 +66,7 @@ protected:
     void SetNSWindow(WX_NSWindow cocoaNSWindow);
     WX_NSWindow m_cocoaNSWindow;
     static wxCocoaNSWindowHash sm_cocoaHash;
+    virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
 
 // ------------------------------------------------------------------------
 // Implementation

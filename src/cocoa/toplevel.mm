@@ -122,6 +122,12 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
     if(need_debug) wxLogDebug("wxTopLevelWindowCocoa=%p::SetNSWindow [cocoaNSWindow=%p retainCount]=%d",this,cocoaNSWindow,[cocoaNSWindow retainCount]);
 }
 
+void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
+{
+    if([m_cocoaNSWindow contentView] == oldView)
+        [m_cocoaNSWindow setContentView:newView];
+}
+
 void wxTopLevelWindowCocoa::Cocoa_wxMenuItemAction(wxMenuItem& item)
 {
 }
