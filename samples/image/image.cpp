@@ -201,55 +201,69 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
-  wxPaintDC dc( this );
-  PrepareDC( dc );
+    wxPaintDC dc( this );
+    PrepareDC( dc );
 
-  dc.DrawText( "Loaded image", 30, 10 );
-  if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
+    dc.DrawText( "Loaded image", 30, 10 );
+    if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
 
-  dc.DrawText( "Drawn directly", 150, 10 );
-  dc.SetBrush( wxBrush( "orange", wxSOLID ) );
-  dc.SetPen( *wxWHITE_PEN );
-  dc.DrawRectangle( 150, 30, 100, 100 );
+    dc.DrawText( "Drawn directly", 150, 10 );
+    dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+    dc.SetPen( *wxWHITE_PEN );
+    dc.DrawRectangle( 150, 30, 100, 100 );
 
-  if (my_anti && my_anti->Ok()) dc.DrawBitmap( *my_anti, 280, 30 );
+    if (my_anti && my_anti->Ok()) 
+        dc.DrawBitmap( *my_anti, 280, 30 );
 
-  dc.DrawText( "PNG handler", 30, 135 );
-  if (my_horse_png && my_horse_png->Ok())
-  { 
-    dc.DrawBitmap( *my_horse_png, 30, 150 );
-    wxRect rect(0,0,100,100);
-    wxBitmap sub( my_horse_png->GetSubBitmap(rect) );
-    dc.DrawText( "GetSubBitmap()", 280, 190 );
-    dc.DrawBitmap( sub, 280, 210 );
-  }
+    dc.DrawText( "PNG handler", 30, 135 );
+    if (my_horse_png && my_horse_png->Ok())
+    { 
+        dc.DrawBitmap( *my_horse_png, 30, 150 );
+        wxRect rect(0,0,100,100);
+        wxBitmap sub( my_horse_png->GetSubBitmap(rect) );
+        dc.DrawText( "GetSubBitmap()", 280, 190 );
+        dc.DrawBitmap( sub, 280, 210 );
+    }
 
-  dc.DrawText( "JPEG handler", 30, 365 );
-  if (my_horse_jpeg && my_horse_jpeg->Ok()) dc.DrawBitmap( *my_horse_jpeg, 30, 380 );
+    dc.DrawText( "JPEG handler", 30, 365 );
+    if (my_horse_jpeg && my_horse_jpeg->Ok()) 
+        dc.DrawBitmap( *my_horse_jpeg, 30, 380 );
 
-  dc.DrawText( "GIF handler", 30, 595 );
-  if (my_horse_gif && my_horse_gif->Ok()) dc.DrawBitmap( *my_horse_gif, 30, 610 );
+    dc.DrawText( "GIF handler", 30, 595 );
+    if (my_horse_gif && my_horse_gif->Ok()) 
+        dc.DrawBitmap( *my_horse_gif, 30, 610 );
 
-  dc.DrawText( "PCX handler", 30, 825 );
-  if (my_horse_pcx && my_horse_pcx->Ok()) dc.DrawBitmap( *my_horse_pcx, 30, 840 );
+    dc.DrawText( "PCX handler", 30, 825 );
+    if (my_horse_pcx && my_horse_pcx->Ok()) 
+        dc.DrawBitmap( *my_horse_pcx, 30, 840 );
 
-  dc.DrawText( "BMP handler", 30, 1055 );
-  if (my_horse_bmp && my_horse_bmp->Ok()) dc.DrawBitmap( *my_horse_bmp, 30, 1070 );
+    dc.DrawText( "BMP handler", 30, 1055 );
+    if (my_horse_bmp && my_horse_bmp->Ok()) 
+        dc.DrawBitmap( *my_horse_bmp, 30, 1070 );
 
-  dc.DrawText( "PNM handler", 30, 1285 );
-  if (my_horse_pnm && my_horse_pnm->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
+    dc.DrawText( "PNM handler", 30, 1285 );
+    if (my_horse_pnm && my_horse_pnm->Ok()) 
+        dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
   
-  dc.DrawText( "TIFF handler", 30, 1515 );
-  if (my_horse_tiff && my_horse_tiff->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1530 );
+    dc.DrawText( "TIFF handler", 30, 1515 );
+    if (my_horse_tiff && my_horse_tiff->Ok()) 
+        dc.DrawBitmap( *my_horse_pnm, 30, 1530 );
 
-  dc.DrawText( "XBM bitmap", 30, 1745 );
-  dc.SetPen( *wxRED_PEN );
-  if (my_smile_xbm && my_smile_xbm->Ok()) {
-    dc.DrawBitmap( *my_smile_xbm, 30, 1760 );
-    dc.DrawText( "..after wxImage conversion", 150, 1745 );
-    wxImage i( *my_smile_xbm );
-    dc.DrawBitmap( i.ConvertToBitmap(), 150, 1760 );
-  }
+    if (my_smile_xbm && my_smile_xbm->Ok()) 
+    {
+        dc.DrawText( "XBM bitmap", 30, 1745 );
+        dc.SetPen( *wxRED_PEN );
+        dc.DrawBitmap( *my_smile_xbm, 30, 1760 );
+	
+        dc.DrawText( "After wxImage conversion", 150, 1745 );
+        wxImage i( *my_smile_xbm );
+	i.SetMaskColour( 0,0,0 );
+	i.Replace( 255,255,255, 
+               wxRED_PEN->GetColour().Red(),
+               wxRED_PEN->GetColour().Green(),
+               wxRED_PEN->GetColour().Blue() );
+        dc.DrawBitmap( i.ConvertToBitmap(), 150, 1760, TRUE );
+    }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()

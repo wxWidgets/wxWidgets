@@ -224,6 +224,29 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     return image;
 }
 
+void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
+                       unsigned char r2, unsigned char g2, unsigned char b2 )
+{
+    wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    char unsigned *data = GetData();
+    
+    const int w = GetWidth();
+    const int h = GetHeight();
+
+    for (int j = 0; j < h; j++)
+        for (int i = 0; i < w; i++)
+	{
+	    if ((data[0] == r1) && (data[1] == g1) && (data[2] == b1))
+	    {
+	        data[0] = r2;
+		data[1] = g2;
+		data[2] = b2;
+	    }
+	    data += 3;
+	}
+}
+
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
@@ -1541,15 +1564,19 @@ wxImage::wxImage( const wxBitmap &bitmap )
         SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
     }
 
-    GdkVisual *visual = (GdkVisual*) NULL;
+    int bpp = -1;
     if (bitmap.GetPixmap())
-        visual = gdk_window_get_visual( bitmap.GetPixmap() );
-    else
-        visual = gdk_window_get_visual( bitmap.GetBitmap() );
+    {
+        GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
 
-    if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
-    int bpp = visual->depth;
-    if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+        if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
+        bpp = visual->depth;
+        if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
+    }
+    if (bitmap.GetBitmap())
+    {
+        bpp = 1;
+    }
 
     GdkColormap *cmap = gtk_widget_get_default_colormap();
 
@@ -1559,7 +1586,21 @@ wxImage::wxImage( const wxBitmap &bitmap )
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
             wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-            if (bpp <= 8)
+	    if (bpp == 1)
+	    {
+	        if (pixel == 0)
+		{
+                    data[pos] = 0;
+                    data[pos+1] = 0;
+                    data[pos+2] = 0;
+		}
+		else
+		{
+                    data[pos] = 255;
+                    data[pos+1] = 255;
+                    data[pos+2] = 255;
+		}
+	    } else if (bpp <= 8)
             {
                 data[pos] = cmap->colors[pixel].red >> 8;
                 data[pos+1] = cmap->colors[pixel].green >> 8;
