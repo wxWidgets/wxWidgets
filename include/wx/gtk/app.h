@@ -16,6 +16,7 @@
 
 #include "wx/frame.h"
 #include "wx/icon.h"
+#include "wx/strconv.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -67,6 +68,11 @@ public:
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
+    
+#ifdef __WXGTK20__
+    wxConvBrokenFileNames *m_convBrokenFileNames;
+    wxMBConv *m_oldConvFileName;
+#endif
 
 private:
     // true if we're inside an assert modal dialog

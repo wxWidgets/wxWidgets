@@ -360,28 +360,11 @@ size_t wxMBConvLibc::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return wxWC2MB(buf, psz, n);
 }
 
-#ifdef __WXGTK20__
+#ifdef __UNIX__
 
 // ----------------------------------------------------------------------------
-// wxConvBrokenFileNames is made for GTK2 in Unicode mode when
-// files are accidentally written in an encoding which is not
-// the system encoding. Typically, the system encoding will be
-// UTF8 but there might be files stored in ISO8859-1 on disk.
+// wxConvBrokenFileNames 
 // ----------------------------------------------------------------------------
-
-class wxConvBrokenFileNames : public wxMBConv
-{
-public:
-    wxConvBrokenFileNames();
-    virtual ~wxConvBrokenFileNames() { delete m_conv; }
-
-    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
-    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
-
-private:
-    // the conversion object we forward to
-    wxMBConv *m_conv;
-};
 
 wxConvBrokenFileNames::wxConvBrokenFileNames()
 {
@@ -429,7 +412,7 @@ wxConvBrokenFileNames::WC2MB(char *outputBuf,
     return m_conv->WC2MB( outputBuf, psz, outputSize );
 }
 
-#endif // __WXGTK20__
+#endif
 
 // ----------------------------------------------------------------------------
 // UTF-7
@@ -2764,10 +2747,6 @@ static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
 static wxMBConvUTF7 wxConvUTF7Obj;
 static wxMBConvUTF8 wxConvUTF8Obj;
 
-#ifdef __WXGTK20__
-    static wxConvBrokenFileNames wxConvBrokenFileNamesObj;
-#endif
-
 WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
 WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1 = wxConvISO8859_1Obj;
@@ -2777,8 +2756,6 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
 WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
 #ifdef __WXOSX__
                                     wxConvUTF8Obj;
-#elif __WXGTK20__
-                                    wxConvBrokenFileNamesObj;
 #else
                                     wxConvLibcObj;
 #endif

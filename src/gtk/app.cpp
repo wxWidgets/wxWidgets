@@ -606,6 +606,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxConvCurrent = (wxMBConv*) NULL;
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
+#ifdef __WXGTK20__
+    m_convBrokenFileNames = new wxConvBrokenFileNames;
+    m_oldConvFileName = wxConvFileName;
+    wxConvFileName = m_convBrokenFileNames;
+#endif
+
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
     int i;
@@ -680,6 +686,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
 void wxApp::CleanUp()
 {
+#ifdef __WXGTK20__
+    delete m_convBrokenFileNames;
+    wxConvFileName = m_oldConvFileName;
+#endif
+
     gdk_threads_leave();
 
     wxAppBase::CleanUp();
