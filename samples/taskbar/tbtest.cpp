@@ -110,7 +110,7 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
-    EVT_TASKBAR_RIGHT_UP     (MyTaskBarIcon::OnRButtonUp)
+    EVT_TASKBAR_RIGHT_DOWN   (MyTaskBarIcon::OnRButtonDown)
     EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLButtonDClick)
 END_EVENT_TABLE()
 
@@ -138,7 +138,7 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
 }
 
 // Overridables
-void MyTaskBarIcon::OnRButtonUp(wxEvent&)
+void MyTaskBarIcon::OnRButtonDown(wxEvent&)
 {
     wxMenu      menu;
 

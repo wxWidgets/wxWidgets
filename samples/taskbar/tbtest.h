@@ -14,7 +14,7 @@ class MyTaskBarIcon: public wxTaskBarIcon
 public:
     MyTaskBarIcon() {};
 
-    void OnRButtonUp(wxEvent&);
+    void OnRButtonDown(wxEvent&);
     void OnLButtonDClick(wxEvent&);
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
