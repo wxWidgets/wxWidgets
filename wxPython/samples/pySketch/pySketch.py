@@ -182,11 +182,11 @@ class DrawingFrame(wxFrame):
 	menuBar.Append(self.editMenu, "Edit")
 
 	self.toolsMenu = wxMenu()
-	self.toolsMenu.Append(menu_SELECT,  "Selection", checkable=true)
-	self.toolsMenu.Append(menu_LINE,    "Line",      checkable=true)
-	self.toolsMenu.Append(menu_RECT,    "Rectangle", checkable=true)
-	self.toolsMenu.Append(menu_ELLIPSE, "Ellipse",   checkable=true)
-	self.toolsMenu.Append(menu_TEXT,    "Text",      checkable=true)
+	self.toolsMenu.Append(menu_SELECT,  "Selection", kind=wxITEM_CHECK)
+	self.toolsMenu.Append(menu_LINE,    "Line",      kind=wxITEM_CHECK)
+	self.toolsMenu.Append(menu_RECT,    "Rectangle", kind=wxITEM_CHECK)
+	self.toolsMenu.Append(menu_ELLIPSE, "Ellipse",   kind=wxITEM_CHECK)
+	self.toolsMenu.Append(menu_TEXT,    "Text",      kind=wxITEM_CHECK)
 
 	menuBar.Append(self.toolsMenu, "Tools")
 
@@ -1595,12 +1595,12 @@ class DrawingFrame(wxFrame):
 	    is checked in the pop-up menu.
 	"""
 	menu = wxMenu()
-	menu.Append(id_LINESIZE_0, "no line",      checkable=true)
-	menu.Append(id_LINESIZE_1, "1-pixel line", checkable=true)
-	menu.Append(id_LINESIZE_2, "2-pixel line", checkable=true)
-	menu.Append(id_LINESIZE_3, "3-pixel line", checkable=true)
-	menu.Append(id_LINESIZE_4, "4-pixel line", checkable=true)
-	menu.Append(id_LINESIZE_5, "5-pixel line", checkable=true)
+	menu.Append(id_LINESIZE_0, "no line",      kind=wxITEM_CHECK)
+	menu.Append(id_LINESIZE_1, "1-pixel line", kind=wxITEM_CHECK)
+	menu.Append(id_LINESIZE_2, "2-pixel line", kind=wxITEM_CHECK)
+	menu.Append(id_LINESIZE_3, "3-pixel line", kind=wxITEM_CHECK)
+	menu.Append(id_LINESIZE_4, "4-pixel line", kind=wxITEM_CHECK)
+	menu.Append(id_LINESIZE_5, "5-pixel line", kind=wxITEM_CHECK)
 
 	if   lineSize == 0: menu.Check(id_LINESIZE_0, true)
 	elif lineSize == 1: menu.Check(id_LINESIZE_1, true)
