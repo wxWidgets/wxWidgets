@@ -62,8 +62,8 @@ static const int idMenuTitle = -2;
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 
 // ============================================================================
 // implementation
