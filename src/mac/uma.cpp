@@ -292,68 +292,15 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
         SInt16 macKey = key ;
         if ( key >= WXK_F1 && key <= WXK_F15 )
         {
-            macKey = kFunctionKeyCharCode ;
+            // for some reasons this must be 0 right now
+            // everything else leads to just the first function key item
+            // to be selected. Thanks to Ryan Wilcox for finding out.
+            macKey = 0 ; 
             glyph = kMenuF1Glyph + ( key - WXK_F1 ) ;
             if ( key >= WXK_F13 )
                 glyph += 13 ;
             if ( !explicitCommandKey )
                 modifiers |= kMenuNoCommandModifier ;
-
-            switch( key )
-            {
-                case WXK_F1 :
-                    macKey += ( 0x7a << 8 ) ;
-                    break ;
-                case WXK_F2 :
-                    macKey += ( 0x78 << 8 ) ;
-                    break ;
-                case WXK_F3 :
-                    macKey += ( 0x63 << 8 ) ;
-                    break ;
-                case WXK_F4 :
-                    macKey += ( 0x76 << 8 ) ;
-                    break ;
-                case WXK_F5 :
-                    macKey += ( 0x60 << 8 ) ;
-                    break ;
-                case WXK_F6 :
-                    macKey += ( 0x61 << 8 ) ;
-                    break ;
-                case WXK_F7 :
-                    macKey += ( 0x62 << 8 ) ;
-                    break ;
-                case WXK_F8 :
-                    macKey += ( 0x64 << 8 ) ;
-                    break ;
-                case WXK_F9 :
-                    macKey += ( 0x65 << 8 ) ;
-                    break ;
-                case WXK_F10 :
-                    macKey += ( 0x6D << 8 ) ;
-                    break ;
-                case WXK_F11 :
-                    macKey += ( 0x67 << 8 ) ;
-                    break ;
-                case WXK_F12 :
-                    macKey += ( 0x6F << 8 ) ;
-                    break ;
-                case WXK_F13 :
-                    macKey += ( 0x69 << 8 ) ;
-                    break ;
-                case WXK_F14 :
-                    macKey += ( 0x6B << 8 ) ;
-                    break ;
-                case WXK_F15 :
-                    macKey += ( 0x71 << 8 ) ;
-                    break ;
-                default :
-                    break ;
-            } ;
-            // unfortunately this does not yet trigger the right key ,
-            // for some reason mac justs picks the first function key menu
-            // defined, so we turn this off
-            macKey = 0 ;
-            glyph = 0 ;
           }
         else
         {
