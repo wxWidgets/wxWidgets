@@ -162,7 +162,7 @@ public:
   void AddStdKeys();
 
 private:
-  DECLARE_EVENT_TABLE();
+  DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -194,7 +194,7 @@ public:
 
   void OnInfo     (wxCommandEvent& event);
 
-  DECLARE_EVENT_TABLE();
+  DECLARE_EVENT_TABLE()
 
 private:
   RegTreeCtrl *m_treeCtrl;
