@@ -50,8 +50,10 @@ $O(N)$ for the usual arrays but the \helpref{Add()}{wxarrayadd} method is
 slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
 memory allocation routine). However, in a usual situation elements are added to
 an array much less often than searched inside it, so wxSortedArray may lead to
-huge performance improvements compared to wxArray. As wxArray this array can not
-be used 
+huge performance improvements compared to wxArray. Finally, it should be
+noticed that, as wxArray, wxSortedArray can not be used to store anything of
+sizeof() larger than max(sizeof(long), sizeof(void *)) - an assertion failure
+will be raised from the constructor otherwise.
 
 wxObjArray class treats its elements like "objects". It may delete them when
 they are removed from the array (invoking the correct destructor) and copies
