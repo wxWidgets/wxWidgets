@@ -270,14 +270,17 @@ public:
     virtual void Select(int n);
     virtual int GetSelection() const;
     void SetSelection(int n) { Select(n); }
-    
+
     void SetStringSelection(const wxString& s) {  }
 
     // we have to redefine these functions here to avoid ambiguities in classes
-    // deriving from us which would arise otherwise because both base classses
-    // have the methods with the same names - hopefully, a smart compiler can
-    // optimize away these simple inline wrappers so we don't suffer much from
-    // this
+    // deriving from us which would arise otherwise because we inherit these
+    // methods (with different signatures) from both wxItemContainer via
+    // wxComboBoxBase (with "int n" parameter) and from wxEvtHandler via
+    // wxControl and wxComboControl (without)
+    //
+    // hopefully, a smart compiler can optimize away these simple inline
+    // wrappers so we don't suffer much from this
 
     void SetClientData(void *data)
     {
