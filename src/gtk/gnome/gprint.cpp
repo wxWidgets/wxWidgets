@@ -88,23 +88,23 @@ wxPrintPreviewBase *wxGnomePrintFactory::CreatePrintPreview( wxPrintout *preview
 wxPrintDialogBase *wxGnomePrintFactory::CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintDialogData *data )
 {
-    return new wxGenericPrintDialog( parent, data );
+    return new wxGnomePrintDialog( parent, data );
 }
 
 wxPrintDialogBase *wxGnomePrintFactory::CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data )
 {
-    return new wxGenericPrintDialog( parent, data );
+    return new wxGnomePrintDialog( parent, data );
 }
                                                   
 bool wxGnomePrintFactory::HasPrintSetupDialog()
 {
-    return true;
+    return false;
 }
 
 wxDialog *wxGnomePrintFactory::CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data )
 {
-    return new wxGnomePrintSetupDialog( parent, data );
+    return NULL;
 }
 
 bool wxGnomePrintFactory::HasOwnPrintToFile()
@@ -119,19 +119,20 @@ bool wxGnomePrintFactory::HasPrinterLine()
 
 wxString wxGnomePrintFactory::CreatePrinterLine()
 {
-    // We should query "gnome_config_default" here
-    return _("GNOME print");
+    // redundant now
+    return wxEmptyString;
 }
 
 bool wxGnomePrintFactory::HasStatusLine()
 {
+    // redundant now
     return true;    
 }
 
 wxString wxGnomePrintFactory::CreateStatusLine()
 {
-    // We should query "gnome_config_default" here
-    return _("Ready");
+    // redundant now
+    return wxEmptyString;
 }
 
 wxPrintNativeDataBase *wxGnomePrintFactory::CreatePrintNativeData()
@@ -143,23 +144,53 @@ wxPrintNativeDataBase *wxGnomePrintFactory::CreatePrintNativeData()
 // wxGnomePrintSetupDialog
 //----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGnomePrintSetupDialog, wxDialog)
+IMPLEMENT_CLASS(wxGnomePrintDialog, wxPrintDialogBase)
 
-wxGnomePrintSetupDialog::wxGnomePrintSetupDialog( wxWindow *parent, wxPrintData *data )
+wxGnomePrintDialog::wxGnomePrintDialog( wxWindow *parent, wxPrintDialogData *data )
+                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
+                               wxPoint(0, 0), wxSize(600, 600),
+                               wxDEFAULT_DIALOG_STYLE |
+                               wxTAB_TRAVERSAL)
 {
-    wxGnomePrintNativeData *native =
-      (wxGnomePrintNativeData*) data->GetNativeData();
-      
-    m_widget = gnome_print_dialog_new (native->GetPrintJob(), (guchar*)"Print setup", 0);
+    if (data)
+        m_printDialogData = *data;
+    
+    Init();
 }
 
-wxGnomePrintSetupDialog::~wxGnomePrintSetupDialog()
+wxGnomePrintDialog::wxGnomePrintDialog( wxWindow *parent, wxPrintData *data )
+                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
+                               wxPoint(0, 0), wxSize(600, 600),
+                               wxDEFAULT_DIALOG_STYLE |
+                               wxTAB_TRAVERSAL)
+{
+    if (data)
+        m_printDialogData = *data;
+
+    Init();
+}
+
+void wxGnomePrintDialog::Init()
+{
+    wxPrintData data = m_printDialogData.GetPrintData();
+
+    wxGnomePrintNativeData *native =
+      (wxGnomePrintNativeData*) data.GetNativeData();
+      
+    m_widget = gnome_print_dialog_new( native->GetPrintJob(), 
+                                       (guchar*)"Print",  
+                                       GNOME_PRINT_DIALOG_RANGE|GNOME_PRINT_DIALOG_COPIES );
+}
+
+wxGnomePrintDialog::~wxGnomePrintDialog()
 {
     m_widget = NULL;
 }
 
-int wxGnomePrintSetupDialog::ShowModal()
+int wxGnomePrintDialog::ShowModal()
 {
+    // Transfer data from m_printDalogData to dialog here
+
     int response = gtk_dialog_run (GTK_DIALOG (m_widget));
     gtk_widget_destroy(m_widget);
     m_widget = NULL;
@@ -167,24 +198,31 @@ int wxGnomePrintSetupDialog::ShowModal()
 	if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
         return wxID_CANCEL;
 
+    // Transfer data back here
+
     return wxID_OK;
 }
 
-bool wxGnomePrintSetupDialog::Validate()
+wxDC *wxGnomePrintDialog::GetPrintDC()
+{
+    // Later
+    return NULL;
+}
+
+bool wxGnomePrintDialog::Validate()
 {
     return true;
 }
 
-bool wxGnomePrintSetupDialog::TransferDataToWindow()
+bool wxGnomePrintDialog::TransferDataToWindow()
 {
     return true;
 }
 
-bool wxGnomePrintSetupDialog::TransferDataFromWindow()
+bool wxGnomePrintDialog::TransferDataFromWindow()
 {
     return true;
 }
-
 
 //----------------------------------------------------------------------------
 // wxGnomePrinter
@@ -215,7 +253,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         (wxGnomePrintNativeData*) printdata.GetNativeData();
 
     // The GnomePrintJob is temporarily stored in the 
-    // native print data as the native print setup dialog
+    // native print data as the native print dialog
     // needs to access it.
     GnomePrintJob *job = data->GetPrintJob();
     m_gpc = gnome_print_job_get_context (job);
@@ -287,7 +325,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
 wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
 {
-    wxPrintDialog dialog( parent, &m_printDialogData );
+    wxGnomePrintDialog dialog( parent, &m_printDialogData );
     if (dialog.ShowModal() == wxID_CANCEL)
     {
         sm_lastError = wxPRINTER_ERROR;
@@ -449,18 +487,38 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 {
     if (!bitmap.Ok()) return;
     
-#if 0
-    // TODO do something clever here
     if (bitmap.HasPixbuf())
     {
+        GdkPixbuf *pixbuf = bitmap.GetPixbuf();
+	    guchar *raw_image = gdk_pixbuf_get_pixels( pixbuf );
+	    bool has_alpha = gdk_pixbuf_get_has_alpha( pixbuf );
+	    int rowstride = gdk_pixbuf_get_rowstride( pixbuf );
+	    int height = gdk_pixbuf_get_height( pixbuf );
+	    int width = gdk_pixbuf_get_width( pixbuf );
+        
+        gnome_print_gsave( m_gpc );        
+        double matrix[6];
+    	matrix[0] = XLOG2DEVREL(width);
+    	matrix[1] = 0;
+    	matrix[2] = 0;
+    	matrix[3] = YLOG2DEVREL(height);
+    	matrix[4] = XLOG2DEV(x);
+        matrix[5] = YLOG2DEV(y+height);
+    	gnome_print_concat( m_gpc, matrix );
+	    gnome_print_moveto(  m_gpc, 0, 0 );
+        if (has_alpha)
+            gnome_print_rgbaimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
+        else
+            gnome_print_rgbimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
+        gnome_print_grestore( m_gpc );
     }
     else
-#endif
     {
         wxImage image = bitmap.ConvertToImage();
 
         if (!image.Ok()) return;
-        
+
+        gnome_print_gsave( m_gpc );        
         double matrix[6];
     	matrix[0] = XLOG2DEVREL(image.GetWidth());
     	matrix[1] = 0;
@@ -471,31 +529,12 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     	gnome_print_concat( m_gpc, matrix );
 	    gnome_print_moveto(  m_gpc, 0, 0 );
         gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
+        gnome_print_grestore( m_gpc );
     }
 }
 
 void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
 {
-    if (m_textForegroundColour.Ok())
-    {
-        unsigned char red = m_textForegroundColour.Red();
-        unsigned char blue = m_textForegroundColour.Blue();
-        unsigned char green = m_textForegroundColour.Green();
-
-        if (!(red == m_currentRed && green == m_currentGreen && blue == m_currentBlue))
-        {
-            double redPS = (double)(red) / 255.0;
-            double bluePS = (double)(blue) / 255.0;
-            double greenPS = (double)(green) / 255.0;
-
-            gnome_print_setrgbcolor( m_gpc, redPS, bluePS, greenPS );
-
-            m_currentRed = red;
-            m_currentBlue = blue;
-            m_currentGreen = green;
-        }
-    }
-
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
     
@@ -522,6 +561,15 @@ void wxGnomePrintDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y )
         pango_attr_list_insert(attrs, a);
         pango_layout_set_attributes(m_layout, attrs);
         pango_attr_list_unref(attrs);
+    }
+
+    if (m_textForegroundColour.Ok())
+    {
+        unsigned char red = m_textForegroundColour.Red();
+        unsigned char blue = m_textForegroundColour.Blue();
+        unsigned char green = m_textForegroundColour.Green();
+
+        // Set the equivalent PangoAttrStyle
     }
 
     int w,h;

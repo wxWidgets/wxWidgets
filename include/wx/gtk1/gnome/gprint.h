@@ -90,14 +90,23 @@ public:
 };
 
 //----------------------------------------------------------------------------
-// wxGnomePrintSetupDialog
+// wxGnomePrintDialog
 //----------------------------------------------------------------------------
 
-class wxGnomePrintSetupDialog: public wxDialog
+class wxGnomePrintDialog: public wxPrintDialogBase
 {
 public:
-    wxGnomePrintSetupDialog( wxWindow *parent, wxPrintData *data );
-    ~wxGnomePrintSetupDialog();
+    wxGnomePrintDialog( wxWindow *parent,
+                         wxPrintDialogData* data = (wxPrintDialogData*)NULL );
+    wxGnomePrintDialog( wxWindow *parent, wxPrintData* data);
+    ~wxGnomePrintDialog();
+
+    wxPrintData& GetPrintData()
+        { return m_printDialogData.GetPrintData(); }
+    wxPrintDialogData& GetPrintDialogData()
+        { return m_printDialogData; }
+        
+    wxDC *GetPrintDC();
 
     virtual int ShowModal();
 
@@ -113,8 +122,12 @@ private:
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
+                              
+    void Init();
+    wxPrintDialogData   m_printDialogData;
+    
 private:
-    DECLARE_DYNAMIC_CLASS(wxGnomePrintSetupDialog)
+    DECLARE_DYNAMIC_CLASS(wxGnomePrintDialog)
 };
 
 //----------------------------------------------------------------------------
