@@ -11,10 +11,6 @@ AC_OUTPUT([
             wxMMedia2/Makefile
             wxMMedia2/lib/Makefile
             wxMMedia2/sample/Makefile
-            glcanvas/Makefile
-            glcanvas/${GL_TOOLKIT_DIR}/Makefile
-            ogl/Makefile
-            ogl/src/Makefile
             makegen/Makefile
             HelpGen/Makefile
             HelpGen/src/Makefile

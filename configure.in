@@ -288,48 +288,6 @@ AC_DEFUN(WX_ARG_CACHE_FLUSH,
           mv ${wx_arg_cache_file}.tmp ${wx_arg_cache_file}
         ])
 
-dnl this macro checks for a three-valued command line --with argument:
-dnl   possible arguments are 'yes', 'no', or 'sys'
-dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
-AC_DEFUN(WX_ARG_SYS_WITH,
-        [
-          AC_MSG_CHECKING("for --with-$1")
-          no_cache=0
-          AC_ARG_WITH($1, $2,
-                      [
-                        if test "$withval" = yes; then
-                          ac_cv_use_$1='$3=yes'
-                        elif test "$withval" = sys; then
-                          ac_cv_use_$1='$3=sys'
-                        else
-                          ac_cv_use_$1='$3=no'
-                        fi
-                      ],
-                      [
-                        LINE=`grep "$3" ${wx_arg_cache_file}`
-                        if test "x$LINE" != x ; then
-                          eval "DEFAULT_$LINE"
-                        else
-                          no_cache=1
-                        fi
-
-                        ac_cv_use_$1='$3='$DEFAULT_$3
-                      ])
-
-          eval "$ac_cv_use_$1"
-          if test "$no_cache" != 1; then
-            echo $ac_cv_use_$1 >> ${wx_arg_cache_file}.tmp
-          fi
-
-          if test "$$3" = yes; then
-            AC_MSG_RESULT(yes)
-          elif test "$$3" = no; then
-            AC_MSG_RESULT(no)
-          else
-            AC_MSG_RESULT(system version)
-          fi
-        ])
-
 dnl this macro checks for a command line argument and caches the result
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_WITH,
@@ -694,6 +652,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LIBJPEG=no
   DEFAULT_wxUSE_LIBTIFF=no
   DEFAULT_wxUSE_ODBC=no
+  DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=no
@@ -813,6 +772,7 @@ else
   DEFAULT_wxUSE_LIBJPEG=yes
   DEFAULT_wxUSE_LIBTIFF=yes
   DEFAULT_wxUSE_ODBC=no
+  DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
@@ -958,7 +918,7 @@ fi
 dnl for GUI only
 
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
-WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
+WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
 dnl ====================
@@ -1825,8 +1785,8 @@ if test "$wxUSE_MOTIF" = 1; then
                 version = XpmLibraryVersion();
             ],
             [
-            XPM_LINK="-lXpm "
-            AC_DEFINE(wxHAVE_LIB_XPM)
+	        XPM_LINK="-lXpm "
+        	AC_DEFINE(wxHAVE_LIB_XPM)
                 AC_MSG_RESULT(found in default search path)
                 COMPILED_X_PROGRAM=0
             ],
@@ -1882,7 +1842,7 @@ fi
     WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS)"
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(OGLOBJS)"
 
     dnl ODBC objects are Unix only
     if test "$TOOLKIT" != "MSW"; then
@@ -1903,7 +1863,7 @@ fi
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
     fi
-    ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
+    ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
@@ -1936,17 +1896,23 @@ fi
 
 dnl the name of the (libtool) library
 WX_LIBRARY_NAME="lib${WX_LIBRARY}.la"
+WX_LIBRARY_NAME_GL="lib${WX_LIBRARY}_gl.la"
 
 dnl the name of the static library
 WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
+WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY}_gl.a"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
 
 dnl the name of the links to the shared library
 WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}"
 WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.so"
 WX_LIBRARY_LINK3="lib${WX_LIBRARY}.so"
+WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}"
+WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so"
+WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.so"
 
 dnl shared library settings
 SHARED_LD=
@@ -1968,6 +1934,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             PIC_FLAG="+Z"
         fi
         WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
+        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_DIR}_gl.sl"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
 
@@ -1975,11 +1942,12 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-linux* )
         SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
             BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
+            BURNT_LIBRARY_NAME_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
         fi
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
       ;;
       *-*-irix5* | *-*-irix6* )
         if test "$GCC" = yes ; then
@@ -1989,7 +1957,7 @@ if test "$wxUSE_SHARED" = "yes"; then
            SHARED_LD="${CXX} -shared -o"
         fi
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
+        WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
       ;;
       *-*-solaris2* )
         if test "$GCC" = yes ; then
@@ -2000,7 +1968,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             PIC_FLAG="-KPIC"
         fi
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
+        WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
       ;;
       *-*-sunos4* )
         SHARED_LD="${CC} -shared -o"
@@ -2039,11 +2007,13 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-cygwin32* )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
       ;;
       *-*-mingw32* )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
       ;;
       *-pc-os2_emx )
@@ -2066,10 +2036,12 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl set target to shared if not explicitly chose static before
     if test "x$WX_TARGET_LIBRARY" = "x"; then
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
+        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
     fi
 else
     dnl set target to static
     WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+    WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
     WX_ALL="${WX_LIBRARY_NAME_STATIC}"
 fi
 
@@ -2545,18 +2517,9 @@ dnl Optional libraries
 dnl ---------------------------------------------------------------------------
 
 ZLIB_INCLUDE=
-if test "$wxUSE_ZLIB" = "yes" -o "$wxUSE_ZLIB" = "sys" ; then
+if test "$wxUSE_ZLIB" = "yes" ; then
   AC_DEFINE(wxUSE_ZLIB)
-  if test "$wxUSE_ZLIB" = "yes" ; then
-    ZLIB_INCLUDE="-I\${top_srcdir}/src/zlib"
-  else
-    ZLIB_LINK=
-    AC_CHECK_HEADER(zlib.h, AC_CHECK_LIB(z, deflate, [ ZLIB_LINK="-lz" ]))
-
-    if test "x$ZLIB_LINK" = "x" ; then
-      AC_MSG_ERROR(system zlib compression library not found! Use --with-zlib=yes to use built-in zlib)
-    fi
-  fi
+  ZLIB_INCLUDE="-I\${top_srcdir}/src/zlib"
 fi
 
 PNG_INCLUDE=
@@ -2580,17 +2543,15 @@ fi
 
 if test "$wxUSE_OPENGL" = "yes"; then
   AC_CHECK_HEADER(GL/gl.h, [
-    AC_CHECK_LIB(GL, glInitNames, [
+    AC_DEFINE(wxUSE_OPENGL)
+    AC_DEFINE(wxUSE_GLCANVAS)
+    AC_CHECK_LIB(GL, glFlush, [
       OPENGL_LINK="-lGL"
-      AC_DEFINE(wxUSE_OPENGL)
-      UTILS_SUBDIRS="$UTILS_SUBDIRS glcanvas/src"
     ],[
-        AC_CHECK_LIB(MesaGL, glInitNames, [
+        AC_CHECK_LIB(MesaGL, glFlush, [
         OPENGL_LINK="-lMesaGL"
-        AC_DEFINE(wxUSE_OPENGL)
-        UTILS_SUBDIRS="$UTILS_SUBDIRS glcanvas/src"
-      ],wxUSE_OPENGL=0)
-     ],wxUSE_OPENGL=0)
+      ],)
+     ],)
     ],wxUSE_OPENGL=0)
 fi
 
@@ -3413,7 +3374,7 @@ dnl ---------------------------------------------------------------------------
 dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
-GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $LIBPNG_LINK $ZLIB_LINK $TOOLKIT_LINK"
+GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $TOOLKIT_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
 EXTRA_LIBS="$LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
@@ -3485,6 +3446,16 @@ AC_SUBST(WX_LIBRARY_LINK2)
 AC_SUBST(WX_LIBRARY_LINK3)
 AC_SUBST(PROGRAM_EXT)
 
+dnl global gl options
+AC_SUBST(WX_LIBRARY_NAME_GL)
+AC_SUBST(WX_LIBRARY_NAME_STATIC_GL)
+AC_SUBST(WX_LIBRARY_NAME_SHARED_GL)
+AC_SUBST(WX_LIBRARY_GL)
+AC_SUBST(WX_TARGET_LIBRARY_GL)
+AC_SUBST(WX_LIBRARY_LINK1_GL)
+AC_SUBST(WX_LIBRARY_LINK2_GL)
+AC_SUBST(WX_LIBRARY_LINK3_GL)
+
 dnl are we supposed to create the links?
 AC_SUBST(WX_ALL)
 AC_SUBST(WX_ALL_INSTALLED)
@@ -3494,6 +3465,7 @@ AC_SUBST(PIC_FLAG)
 AC_SUBST(DEP_INFO_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(BURNT_LIBRARY_NAME)
+AC_SUBST(BURNT_LIBRARY_NAME_GL)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
@@ -3562,22 +3534,7 @@ AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
 if test "$wxUSE_GUI" = "yes"; then
-    AC_CACHE_CHECK([glcanvas subdirectory to use], wx_cv_path_glcanvas,
-    [
-        dnl Duh! glcanvas/$(TOOLKIT_DIR) doesn't work for msw because some
-        dnl genius called it "win"
-        if test "${TOOLKIT_DIR}" = "msw" ; then
-          wx_cv_path_glcanvas="win"
-        else
-          wx_cv_path_glcanvas="${TOOLKIT_DIR}"
-        fi
-    ])
-
-    dnl It's needed in glcanvas/Makefile.in so we even have to subst this hack!
-    GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
-    AC_SUBST(GL_TOOLKIT_DIR)
-
-    dnl another hack: we need to pass SAMPLES_SUBDIRS to the configure in
+    dnl we need to pass SAMPLES_SUBDIRS to the configure in
     dnl samples and the only way to do it is, again, use the cache
     wx_cv_path_samplesubdirs=$SAMPLES_SUBDIRS
     AC_CONFIG_SUBDIRS(demos samples utils)

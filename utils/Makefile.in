@@ -9,8 +9,6 @@ all:
 	cd HelpGen; make
 	cd dialoged; make
 	cd wxMMedia2; make
-	cd glcanvas; make
-	cd ogl; make
 
 clean:
 	cd tex2rtf; make clean
@@ -19,6 +17,4 @@ clean:
 	cd HelpGen; make clean
 	cd dialoged; make clean
 	cd wxMMedia2; make clean
-	cd glcanvas; make clean
-	cd ogl; make clean
 

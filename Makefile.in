@@ -42,11 +42,12 @@ VP8 = @top_srcdir@/src/jpeg
 VP9 = @top_srcdir@/src/tiff
 VP10 = @top_srcdir@/src/zlib
 VP11 = @top_srcdir@/src/iodbc
+VP12 = @top_srcdir@/src/ogl
 
 # the comment at the end of the next line is needed because otherwise autoconf
 # would remove this line completely - it contains a built-in hack to remove
 # any VPATH assignment not containing ':'
-VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11) # ':' for autoconf
+VPATH = $(VP1)@PATH_IFS@$(VP2)@PATH_IFS@$(VP3)@PATH_IFS@$(VP4)@PATH_IFS@$(VP5)@PATH_IFS@$(VP6)@PATH_IFS@$(VP7)@PATH_IFS@$(VP8)@PATH_IFS@$(VP9)@PATH_IFS@$(VP10)@PATH_IFS@$(VP11)@PATH_IFS@$(VP12) # ':' for autoconf
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -107,6 +108,7 @@ SRCDIR   = $(WXDIR)/src
 GENDIR   = $(WXDIR)/src/generic
 COMMDIR  = $(WXDIR)/src/common
 HTMLDIR  = $(WXDIR)/src/html
+OGLDIR   = $(WXDIR)/src/ogl
 UNIXDIR  = $(WXDIR)/src/unix
 PNGDIR   = $(WXDIR)/src/png
 JPEGDIR  = $(WXDIR)/src/jpeg
@@ -128,6 +130,7 @@ DOCDIR = $(WXDIR)/docs
 ########################## Archive name ###############################
 
 WXARCHIVE = @DISTDIR@-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
+WXGLARCHIVE = @DISTDIR@-gl-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
 WXSAMPLES = wx$(TOOLKIT)-samples-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
 WXDEMOS = wx$(TOOLKIT)-demos-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER).tgz
 DISTDIR = ./_dist_dir/@DISTDIR@
@@ -286,6 +289,7 @@ IODBCOBJS = \
 ############################## Rules ##################################
 
 BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@
+BURNT_LIBRARY_NAME_GL = @BURNT_LIBRARY_NAME_GL@
 
 all: @WX_ALL@
 
@@ -294,9 +298,18 @@ all: @WX_ALL@
 	$(AR) $(AROPTIONS) ./lib/$@ $(OBJECTS)
 	$(RANLIB) ./lib/$@
 
+@WX_LIBRARY_NAME_STATIC_GL@:  glcanvas.o
+	@$(INSTALL) -d ./lib
+	$(AR) $(AROPTIONS) ./lib/$@ glcanvas.o
+	$(RANLIB) ./lib/$@
+
 @WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
 	@$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME) $(OBJECTS) $(EXTRALIBS)
+	
+@WX_LIBRARY_NAME_SHARED_GL@:  glcanvas.o
+	@$(INSTALL) -d ./lib
+	$(SHARED_LD) ./lib/$@ $(BURNT_LIBRARY_NAME_GL) glcanvas.o $(EXTRALIBS)
 	
 CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
@@ -307,6 +320,15 @@ CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK2@ \
 		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK3@
 	
+CREATE_LINKS_GL: @WX_LIBRARY_NAME_SHARED_GL@
+	@$(RM) ./lib/@WX_LIBRARY_LINK1_GL@
+	@$(RM) ./lib/@WX_LIBRARY_LINK2_GL@
+	@$(RM) ./lib/@WX_LIBRARY_LINK3_GL@
+	cd lib \
+		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK1_GL@ \
+		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK2_GL@ \
+		&& $(LN_S) @WX_TARGET_LIBRARY_GL@ @WX_LIBRARY_LINK3_GL@
+	
 CREATE_INSTALLED_LINKS: preinstall
 	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
@@ -315,6 +337,15 @@ CREATE_INSTALLED_LINKS: preinstall
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@ \
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK3@
+	
+CREATE_INSTALLED_LINKS_GL: preinstall
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK3_GL@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK3_GL@
 	
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
@@ -403,6 +434,11 @@ uninstall:
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK1@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK2@
 	@$(RM) $(libdir)/@WX_LIBRARY_LINK3@
+	@echo " Removing GL library..."
+	@$(RM) $(libdir)/@WX_TARGET_LIBRARY_GL@
+	@$(RM) $(libdir)/@WX_LIBRARY_LINK1_GL@
+	@$(RM) $(libdir)/@WX_LIBRARY_LINK2_GL@
+	@$(RM) $(libdir)/@WX_LIBRARY_LINK3_GL@
 	@echo " Removing helper files..."
 	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	@$(RM) $(bindir)/wx-config
@@ -426,6 +462,7 @@ uninstall:
 	@if test -d $(includedir)/wx/motif; then rmdir $(includedir)/wx/motif; fi
 	@if test -d $(includedir)/wx/msw; then rmdir $(includedir)/wx/msw; fi
 	@if test -d $(includedir)/wx/html; then rmdir $(includedir)/wx/html; fi
+	@if test -d $(includedir)/wx/ogl; then rmdir $(includedir)/wx/ogl; fi
 	@if test -d $(includedir)/wx/unix; then rmdir $(includedir)/wx/unix; fi
 	@if test -d $(includedir)/wx/generic; then rmdir $(includedir)/wx/generic; fi
 	@if test -d $(includedir)/wx/protocol; then rmdir $(includedir)/wx/protocol; fi
@@ -462,6 +499,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/include/wx/generic
 	mkdir $(DISTDIR)/include/wx/html
+	mkdir $(DISTDIR)/include/wx/ogl
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
 	cp $(INCDIR)/wx/*.h $(DISTDIR)/include/wx
@@ -470,12 +508,14 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(INCDIR)/wx/generic/*.h $(DISTDIR)/include/wx/generic
 	cp $(INCDIR)/wx/generic/*.xpm $(DISTDIR)/include/wx/generic
 	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
+	cp $(INCDIR)/wx/ogl/*.h $(DISTDIR)/include/wx/ogl
 	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/src
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
+	mkdir $(DISTDIR)/src/ogl
 	mkdir $(DISTDIR)/src/html/bitmaps
 	mkdir $(DISTDIR)/src/$(TOOLKITDIR)
 	mkdir $(DISTDIR)/src/png
@@ -495,6 +535,7 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(COMMDIR)/*.h $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.y $(DISTDIR)/src/common
 	cp $(GENDIR)/*.cpp $(DISTDIR)/src/generic
+	cp $(OGLDIR)/*.cpp $(DISTDIR)/src/ogl
 	cp $(HTMLDIR)/*.cpp $(DISTDIR)/src/html
 	cp $(HTMLDIR)/bitmaps/*.xpm $(DISTDIR)/src/html/bitmaps
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
@@ -995,33 +1036,7 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
 	cp $(UTILSDIR)/configure $(DISTDIR)/utils
 	cp $(UTILSDIR)/configure.in $(DISTDIR)/utils
-	
-	mkdir $(DISTDIR)/utils/wxMMedia2
-	mkdir $(DISTDIR)/utils/wxMMedia2/lib
-	mkdir $(DISTDIR)/utils/wxMMedia2/sample
-	cp $(UTILSDIR)/wxMMedia2/Makefile.in $(DISTDIR)/utils/wxMMedia2
-	cp $(UTILSDIR)/wxMMedia2/lib/Makefile.in $(DISTDIR)/utils/wxMMedia2/lib
-	cp $(UTILSDIR)/wxMMedia2/lib/*.h $(DISTDIR)/utils/wxMMedia2/lib
-	cp $(UTILSDIR)/wxMMedia2/lib/*.cpp $(DISTDIR)/utils/wxMMedia2/lib
-	cp $(UTILSDIR)/wxMMedia2/lib/*.def $(DISTDIR)/utils/wxMMedia2/lib
-	cp $(UTILSDIR)/wxMMedia2/sample/Makefile.in $(DISTDIR)/utils/wxMMedia2/sample
-	cp $(UTILSDIR)/wxMMedia2/sample/*.cpp $(DISTDIR)/utils/wxMMedia2/sample
-	
-	mkdir $(DISTDIR)/utils/glcanvas
-	mkdir $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
-	cp $(UTILSDIR)/glcanvas/Makefile.in $(DISTDIR)/utils/glcanvas
-	cp $(UTILSDIR)/glcanvas/docs/notes.txt $(DISTDIR)/utils/glcanvas/NOTES.txt
-	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/Makefile.in $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
-	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.h $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
-	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.cpp $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
-	
-	mkdir $(DISTDIR)/utils/ogl
-	mkdir $(DISTDIR)/utils/ogl/src
-	cp $(UTILSDIR)/ogl/Makefile.in $(DISTDIR)/utils/ogl
-	cp $(UTILSDIR)/ogl/src/Makefile.in $(DISTDIR)/utils/ogl/src
-	cp $(UTILSDIR)/ogl/src/*.h $(DISTDIR)/utils/ogl/src
-	cp $(UTILSDIR)/ogl/src/*.cpp $(DISTDIR)/utils/ogl/src
-	
+
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc
 	mkdir $(DISTDIR)/misc/afm

@@ -64,6 +64,16 @@
         $project{"HTMLOBJS"} .= $fileobj . " ";
         $project{"HTMLDEPS"} .= $filedep . " "
     }
+    
+    foreach $file (sort keys %wxOGL) {
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+        ($filedep = $file) =~ s/cp?p?$/\d/;
+
+        $project{"GTK_SOURCES"} .= "ogl/" . $file . " ";
+        $project{"OGLOBJS"} .= $fileobj . " ";
+        $project{"OGLDEPS"} .= $filedep . " "
+    }
+    
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
         $project{"GTK_HEADERS"} .= $file . " "
@@ -83,6 +93,10 @@
 
     foreach $file (sort keys %wxHTMLINCLUDE) {
         $project{"GTK_HEADERS"} .= "html/" . $file . " "
+    }
+
+    foreach $file (sort keys %wxOGLINCLUDE) {
+        $project{"GTK_HEADERS"} .= "ogl/" . $file . " "
     }
 
     foreach $file (sort keys %wxPROTOCOLINCLUDE) {
@@ -126,4 +140,10 @@ HTMLOBJS = \
 
 HTMLDEPS = \
 		#$ ExpandList("HTMLDEPS");
+
+OGLOBJS = \
+		#$ ExpandList("OGLOBJS");
+
+OGLDEPS = \
+		#$ ExpandList("OGLDEPS");
 
