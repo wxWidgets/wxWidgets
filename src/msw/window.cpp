@@ -1749,7 +1749,7 @@ static void wxYieldForCommandsOnly()
     MSG msg;
     while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE) )
     {
-        if ( msg.message != WM_QUIT )
+        if ( msg.message == WM_QUIT )
         {
             // if we retrieved a WM_QUIT, insert back into the message queue.
             ::PostQuitMessage(0);
