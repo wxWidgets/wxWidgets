@@ -1114,9 +1114,11 @@ void wxDC::SetPalette(const wxPalette& palette)
 
 void wxDC::SetFont(const wxFont& font)
 {
-    wxCHECK_RET( font.Ok(), wxT("invalid font") );
-    m_font = font;
-    m_mglFont = NULL;
+    if ( font.Ok() )
+    {
+        m_font = font;
+        m_mglFont = NULL;
+    }
 }
 
 void wxDC::SetBackground(const wxBrush& brush)
