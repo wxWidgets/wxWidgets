@@ -775,6 +775,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
     }
 */
 
+#ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
 
     if (win->GetThemeEnabled())
@@ -794,6 +795,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                             (char *)"base",
                             0, 0, -1, -1);
     }
+#endif
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
@@ -801,6 +803,7 @@ static int gtk_window_expose_callback( GtkWidget *widget,
                                   gdk_event->area.height );
 
     // Actual redrawing takes place in idle time.
+    win->Update();
 
     return TRUE;
 }
@@ -865,6 +868,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     }
 */
 
+#ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA (widget);
 
     if (win->GetThemeEnabled())
@@ -892,10 +896,13 @@ static void gtk_window_draw_callback( GtkWidget *widget,
         gdk_window_clear_area( pizza->bin_window,
                                rect->x, rect->y, rect->width, rect->height);
     }
+#endif
 
     win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
     // Actual redrawing takes place in idle time.
+    
+    win->Update();
 
 #ifndef __WXUNIVERSAL__
     // Redraw child widgets
@@ -3388,7 +3395,7 @@ void wxWindowGTK::GtkSendPaintEvents()
 
     m_clipPaintRegion = TRUE;
 
-    if (!m_clearRegion.IsEmpty())
+    // if (!m_clearRegion.IsEmpty())   // always send an erase event
     {
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );

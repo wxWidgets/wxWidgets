@@ -1259,7 +1259,7 @@ void wxMenu::Popup(const wxPoint& pos, const wxSize& size, bool selectFirst)
     {
         m_popupMenu->SelectFirst();
     }
-
+    
     // the geometry might have changed since the last time we were shown, so
     // always resize
     m_popupMenu->SetClientSize(GetGeometryInfo().GetSize());
