@@ -127,74 +127,17 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    wxString text(wxGetWindowText(GetHWND()));
+    wxClientDC dc(wx_const_cast(wxStaticText *, this));
+    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-    int widthTextMax = 0, widthLine,
-        heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
+    wxCoord widthTextMax, heightTextTotal;
+    dc.GetMultiLineTextExtent(GetLabel(), &widthTextMax, &heightTextTotal);
 
-    bool lastWasAmpersand = false;
-
-    wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ )
-    {
-        if ( *pc == wxT('\n') || *pc == wxT('\0') )
-        {
-            if ( !curLine )
-            {
-                // we can't use GetTextExtent - it will return 0 for both width
-                // and height and an empty line should count in height
-                // calculation
-                if ( !heightLineDefault )
-                    heightLineDefault = heightLine;
-                if ( !heightLineDefault )
-                    GetTextExtent(_T("W"), NULL, &heightLineDefault);
-
-                heightTextTotal += heightLineDefault;
-            }
-            else
-            {
-                GetTextExtent(curLine, &widthLine, &heightLine);
-                if ( widthLine > widthTextMax )
-                    widthTextMax = widthLine;
-                heightTextTotal += heightLine;
-            }
-
-            if ( *pc == wxT('\n') )
-            {
-               curLine.Empty();
-            }
-            else
-            {
-               // the end of string
-               break;
-            }
-        }
-        else
-        {
-            // we shouldn't take into account the '&' which just introduces the
-            // mnemonic characters and so are not shown on the screen -- except
-            // when it is preceded by another '&' in which case it stands for a
-            // literal ampersand
-            if ( *pc == _T('&') )
-            {
-                if ( !lastWasAmpersand )
-                {
-                    lastWasAmpersand = true;
-
-                    // skip the statement adding pc to curLine below
-                    continue;
-                }
-
-                // it is a literal ampersand
-                lastWasAmpersand = false;
-            }
-
-            curLine += *pc;
-        }
-    }
 #ifdef __WXWINCE__
-    if(widthTextMax) widthTextMax += 2;
-#endif
+    if ( widthTextMax )
+        widthTextMax += 2;
+#endif // __WXWINCE__
+
     return wxSize(widthTextMax, heightTextTotal);
 }
 
