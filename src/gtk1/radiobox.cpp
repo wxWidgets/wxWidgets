@@ -648,16 +648,6 @@ int wxRadioBox::GetCount() const
     return m_boxes.GetCount();
 }
 
-int wxRadioBox::GetNumberOfRowsOrCols() const
-{
-    return 1;
-}
-
-void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
-{
-    wxFAIL_MSG(wxT("wxRadioBox::SetNumberOfRowsOrCols not implemented."));
-}
-
 void wxRadioBox::GtkDisableEvents()
 {
     wxList::compatibility_iterator node = m_boxes.GetFirst();

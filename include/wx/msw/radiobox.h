@@ -16,16 +16,18 @@
     #pragma interface "radiobox.h"
 #endif
 
-class WXDLLEXPORT wxBitmap;
+#include "wx/statbox.h"
+
+class WXDLLEXPORT wxSubwindows;
 
 // ----------------------------------------------------------------------------
 // wxRadioBox
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
+class WXDLLEXPORT wxRadioBox : public wxStaticBox, public wxRadioBoxBase
 {
 public:
-    wxRadioBox();
+    wxRadioBox() { Init(); }
 
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
@@ -38,9 +40,12 @@ public:
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
+        Init();
+
         (void)Create(parent, id, title, pos, size, n, choices, majorDim,
                      style, val, name);
     }
+
     wxRadioBox(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -52,6 +57,8 @@ public:
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
+        Init();
+
         (void)Create(parent, id, title, pos, size, choices, majorDim,
                      style, val, name);
     }
@@ -81,50 +88,42 @@ public:
 
     // implement the radiobox interface
     virtual void SetSelection(int n);
-    virtual int GetSelection() const;
+    virtual int GetSelection() const { return m_selectedButton; }
     virtual int GetCount() const;
     virtual wxString GetString(int n) const;
     virtual void SetString(int n, const wxString& label);
     virtual void Enable(int n, bool enable = true);
     virtual void Show(int n, bool show = true);
-    virtual int GetColumnCount() const;
-    virtual int GetRowCount() const;
+    virtual int GetColumnCount() const { return GetNumHor(); }
+    virtual int GetRowCount() const { return GetNumVer(); }
 
+    // override some base class methods
     virtual bool Show(bool show = true);
-    void SetFocus();
     virtual bool Enable(bool enable = true);
+    virtual void SetFocus();
+    virtual bool SetFont(const wxFont& font);
+    virtual bool ContainsHWND(WXHWND hWnd) const;
+
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
-    void Command(wxCommandEvent& event);
-
-    int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
-    void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
     // implementation only from now on
     // -------------------------------
 
     virtual bool MSWCommand(WXUINT param, WXWORD id);
+    void Command(wxCommandEvent& event);
 
-    // FIXME: are they used? missing "Do" prefix?
-    void GetSize(int *x, int *y) const;
-    void GetPosition(int *x, int *y) const;
-
-    virtual bool SetFont(const wxFont& font);
-
-    WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-    WXHWND *GetRadioButtons() const { return m_radioButtons; }
-    bool ContainsHWND(WXHWND hWnd) const;
     void SendNotificationEvent();
 
     // get the number of buttons per column/row
     int GetNumVer() const;
     int GetNumHor() const;
 
-    virtual void ApplyParentThemeBackground(const wxColour& bg)
-        { SetBackgroundColour(bg); }
-
 protected:
+    // common part of all ctors
+    void Init();
+
     // we can't compute our best size before the items are added to the control
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) { }
 
@@ -137,19 +136,26 @@ protected:
     // get the total size occupied by the radio box buttons
     wxSize GetTotalButtonSize(const wxSize& sizeBtn) const;
 
-    WXHWND *          m_radioButtons;
-    int               m_majorDim;
-    int *             m_radioWidth;  // for bitmaps
-    int *             m_radioHeight;
-
-    int               m_noItems;
-    int               m_noRowsOrCols;
-    int               m_selectedButton;
-
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
+
+
+    // the buttons we contain
+    wxSubwindows *m_radioButtons;
+
+    // array of widths and heights of the buttons, may be wxDefaultCoord if the
+    // corresponding quantity should be computed
+    int *m_radioWidth;
+    int *m_radioHeight;
+
+    // the number of elements in major dimension (i.e. number of columns if
+    // wxRA_SPECIFY_COLS or the number of rows if wxRA_SPECIFY_ROWS)
+    int m_majorDim;
+
+    // currently selected button or wxNOT_FOUND if none
+    int m_selectedButton;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)

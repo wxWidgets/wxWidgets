@@ -134,5 +134,15 @@ int wxRadioBoxBase::GetNextItem(int item, wxDirection dir, long style) const
     return item;
 }
 
+// these functions are deprecated and don't do anything
+int wxRadioBoxBase::GetNumberOfRowsOrCols() const
+{
+    return 1;
+}
+
+void wxRadioBoxBase::SetNumberOfRowsOrCols(int WXUNUSED(n))
+{
+}
+
 #endif // wxUSE_RADIOBOX
 

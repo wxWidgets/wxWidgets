@@ -94,8 +94,6 @@ public:
     virtual bool SetStringSelection( const wxString& s );
 
     int GetCount() const;
-    int GetNumberOfRowsOrCols() const;
-    void SetNumberOfRowsOrCols( int n );
 
     // for compatibility only, don't use these methods in new code!
 #if WXWIN_COMPATIBILITY_2_2
