@@ -712,6 +712,7 @@ WXHBRUSH wxListBox::OnCtlColor(const WXHDC pDC, const WXHWND pWnd, const WXUINT 
 
 long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+#if 0
   switch (nMsg)
   {
         case WM_INITDIALOG:
@@ -761,6 +762,7 @@ long wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 		case WM_NCHITTEST:
             return MSWDefWindowProc(nMsg, wParam, lParam );
     }
+#endif
   return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 

@@ -578,7 +578,7 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, cons
     }
 
   // it's probably not found
-  wxLogError("Can't load bitmap '%s' from ressources!", name.c_str());
+  wxLogError("Can't load bitmap '%s' from resources! Check .rc file.", name.c_str());
 
   return FALSE;
 }

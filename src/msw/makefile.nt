@@ -992,6 +992,7 @@ clean_rcp:
 clean: $(PERIPH_CLEAN_TARGET)
         -erase *.obj
         -erase $(LIBTARGET)
+        -erase $(WXDIR)\lib\*.pdb
         -erase ..\..\lib\wx200.dll
         -erase ..\..\lib\wx200.lib
         -erase ..\..\lib\wx200.exp

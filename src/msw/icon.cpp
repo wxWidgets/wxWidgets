@@ -154,13 +154,8 @@ bool wxICOResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, cons
     }
 
 #ifdef __WIN32__
-/***
-    	DWORD vers = GetVersion() ;
-    	WORD  high = HIWORD(vers) ; // high bit=0 for NT, 1 for Win32s
     	// Win32s doesn't have GetIconInfo function...
-    	if (M_ICONHANDLERDATA->m_hIcon && (high&0x8000)==0 )
-***/
-    	if (M_ICONHANDLERDATA->m_hIcon && wxGetOsVersion()==wxWINDOWS_NT)
+    	if (M_ICONHANDLERDATA->m_hIcon && wxGetOsVersion()!=wxWIN32S)
     	{
       		ICONINFO info ;
       		if (::GetIconInfo((HICON) M_ICONHANDLERDATA->m_hIcon, &info))

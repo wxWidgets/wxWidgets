@@ -68,38 +68,18 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 // Default constructor
 wxDC::wxDC(void)
 {
-  // Stop internal GDI objects being found and pointers kept
-  // after these objects have been deleted.
-  // No - it's OK; these lists won't return them
-  // because their 'visible' status will be FALSE.
-/*
-  wxTheFontList->RemoveFont(&m_font);
-  wxThePenList->RemovePen(&m_pen);
-  wxTheBrushList->RemoveBrush(&m_brush);
-  wxTheBrushList->RemoveBrush(&m_backgroundBrush);
-*/
-
   m_minX = 0; m_minY = 0; m_maxX = 0; m_maxY = 0;
   m_clipping = FALSE;
   m_autoSetting = TRUE ;
-//  m_scaleGDI = TRUE;
 
   m_filename = "";
-//  m_selectedBitmap = NULL;
   m_canvas = NULL;
-/*
-  cur_dc = NULL ;
-  cur_bk = 0 ;
-  cur_cpen = NULL ;
-  cur_cbrush = NULL ;
-*/
   m_oldBitmap = 0;
   m_oldPen = 0;
   m_oldBrush = 0;
   m_oldFont = 0;
   m_oldPalette = 0;
   m_minX = 0; m_minY = 0; m_maxX = 0; m_maxY = 0;
-//  m_font = NULL;
   m_logicalOriginX = 0;
   m_logicalOriginY = 0;
   m_deviceOriginX = 0;
@@ -113,7 +93,6 @@ wxDC::wxDC(void)
   m_systemScaleX = 1.0;
   m_systemScaleY = 1.0;
   m_mappingMode = MM_TEXT;
-//  m_dontDelete = FALSE;
   m_bOwnsDC = FALSE;
   m_hDC = 0;
   m_clipping = FALSE;
@@ -123,7 +102,6 @@ wxDC::wxDC(void)
   m_logicalFunction = -1;
 
   m_backgroundBrush = *wxWHITE_BRUSH;
-//  m_backgroundBrush.UseResource();
 
   m_textForegroundColour = *wxBLACK;
   m_textBackgroundColour = *wxWHITE;
@@ -146,13 +124,6 @@ wxDC::~wxDC(void)
     }
   }
 
-/*
-  if (m_hDC)
-  {
-    SelectOldObjects(m_hDC);
-    ::DeleteDC((HDC) m_hDC);
-  }
-*/
 }
 
 // This will select current objects out of the DC,
@@ -213,16 +184,6 @@ void wxDC::SelectOldObjects(WXHDC dc)
 #endif
     m_oldPalette = 0 ;
   }
-/*
-  if (m_font.Ok())
-    m_font.ReleaseResource();
-  if (m_pen.Ok())
-    m_pen.ReleaseResource();
-  if (m_brush.Ok())
-    m_brush.ReleaseResource();
-  if (m_backgroundBrush.Ok())
-    m_backgroundBrush.ReleaseResource();
-*/
 
   m_brush = wxNullBrush ;
   m_pen = wxNullPen;
@@ -240,11 +201,7 @@ void wxDC::SetClippingRegion(long cx, long cy, long cw, long ch)
   m_clipX2 = (int)(cx + cw);
   m_clipY2 = (int)(cy + ch);
 
-  BeginDrawing();
-
   DoClipping((WXHDC) m_hDC);
-
-  EndDrawing();
 }
 
 void wxDC::DoClipping(WXHDC dc)
@@ -253,31 +210,13 @@ void wxDC::DoClipping(WXHDC dc)
   {
     IntersectClipRect((HDC) dc, XLOG2DEV(m_clipX1), YLOG2DEV(m_clipY1),
                           XLOG2DEV(m_clipX2), YLOG2DEV(m_clipY2));
-#if 0
-    int x_off = 0;
-    int y_off = 0;
-    if (m_canvas)
-    {
-      m_canvas->CalcScrolledPosition(0, 0, &x_off, &y_off);
-    }
-//    HRGN rgn = CreateRectRgn(XLOG2DEV(m_clipX1 + x_off), YLOG2DEV(m_clipY1 + y_off),
-//                          XLOG2DEV(m_clipX2 + x_off), YLOG2DEV(m_clipY2 + y_off));
-
-//    SelectClipRgn(dc, rgn);
-//    DeleteObject(rgn);
-    IntersectClipRect((HDC) dc, XLOG2DEV(m_clipX1 + x_off), YLOG2DEV(m_clipY1 + y_off),
-                          XLOG2DEV(m_clipX2 + x_off), YLOG2DEV(m_clipY2 + y_off));
-#endif
   }
 }
 
 void wxDC::DestroyClippingRegion(void)
 {
-  BeginDrawing();
-
   if (m_clipping && m_hDC)
   {
-//        SelectClipRgn(dc, NULL);
     HRGN rgn = CreateRectRgn(0, 0, 32000, 32000);
 #if DEBUG > 1
     wxDebugMsg("wxDC::DestroyClippingRegion: Selecting HRGN %X\n", rgn);
@@ -289,8 +228,6 @@ void wxDC::DestroyClippingRegion(void)
     DeleteObject(rgn);
    }
    m_clipping = FALSE;
-
-   EndDrawing();
 }
 
 bool wxDC::CanDrawBitmap(void) const
@@ -314,7 +251,13 @@ bool wxDC::CanGetTextExtent(void) const
 
 void wxDC::SetPalette(const wxPalette& palette)
 {
-  BeginDrawing();
+  // Set the old object temporarily, in case the assignment deletes an object
+  // that's not yet selected out.
+  if (m_oldPalette)
+  {
+    ::SelectPalette((HDC) m_hDC, (HPALETTE) m_oldPalette, TRUE);
+    m_oldPalette = 0;
+  }
 
   m_palette = m_palette;
 
@@ -349,14 +292,10 @@ void wxDC::SetPalette(const wxPalette& palette)
 #endif
     ::RealizePalette((HDC) m_hDC);
   }
-
-  EndDrawing();
 }
 
 void wxDC::Clear(void)
 {
-  BeginDrawing();
-
   RECT rect;
   if (m_canvas)
     GetClientRect((HWND) m_canvas->GetHWND(), &rect);
@@ -378,8 +317,6 @@ void wxDC::Clear(void)
   ::SetWindowExtEx((HDC) m_hDC, m_windowExtX, m_windowExtY, NULL);
   ::SetViewportOrgEx((HDC) m_hDC, (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
   ::SetWindowOrgEx((HDC) m_hDC, (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
-
-  EndDrawing();
 }
 
 void wxDC::FloodFill(long x, long y, wxColour *col, int style)
@@ -390,18 +327,11 @@ void wxDC::FloodFill(long x, long y, wxColour *col, int style)
   if (m_brush.Ok() && m_autoSetting)
     SetBrush(m_brush);
 
-//  if (m_canvas)
-//    m_canvas->CalcScrolledPosition((int)x, (int)y, &xx, &yy);
-
-  BeginDrawing();
-
   (void)ExtFloodFill((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y),
                         col->GetPixel(),
                         style==wxFLOOD_SURFACE?
                           FLOODFILLSURFACE:FLOODFILLBORDER
                         );
-
-  EndDrawing();
 
   CalcBoundingBox(x, y);
 }
@@ -442,15 +372,11 @@ void wxDC::CrossHair(long x, long y)
       long x2 = x+2000;
       long y2 = y+2000;
 
-      BeginDrawing();
-
       (void)MoveToEx((HDC) m_hDC, XLOG2DEV(x1), YLOG2DEV(y), NULL);
       (void)LineTo((HDC) m_hDC, XLOG2DEV(x2), YLOG2DEV(y));
 
       (void)MoveToEx((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y1), NULL);
       (void)LineTo((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y2));
-
-      EndDrawing();
 
       CalcBoundingBox(x1, y1);
       CalcBoundingBox(x2, y2);
@@ -462,8 +388,6 @@ void wxDC::DrawLine(long x1, long y1, long x2, long y2)
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen);
 
-  BeginDrawing();
-
   (void)MoveToEx((HDC) m_hDC, XLOG2DEV(x1), YLOG2DEV(y1), NULL);
   (void)LineTo((HDC) m_hDC, XLOG2DEV(x2), YLOG2DEV(y2));
 
@@ -471,8 +395,6 @@ void wxDC::DrawLine(long x1, long y1, long x2, long y2)
 #if WX_STANDARD_GRAPHICS
   (void)LineTo((HDC) m_hDC, XLOG2DEV(x2) + 1, YLOG2DEV(y2));
 #endif
-
-  EndDrawing();
 
   CalcBoundingBox(x1, y1);
   CalcBoundingBox(x2, y2);
@@ -492,8 +414,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-
-  BeginDrawing();
 
   long xx1 = XLOG2DEV(x1) ;
   long yy1 = YLOG2DEV(y1) ;
@@ -520,8 +440,6 @@ void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
     Arc((HDC) m_hDC,xxx1,yyy1,xxx2,yyy2,
         xx1,yy1,xx2,yy2) ;
 
-  EndDrawing();
-
   CalcBoundingBox((xc-radius), (yc-radius));
   CalcBoundingBox((xc+radius), (yc+radius));
 }
@@ -532,18 +450,13 @@ void wxDC::DrawPoint(long x, long y)
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
 
-  BeginDrawing();
-
   COLORREF color = 0x00ffffff;
   if (m_pen.Ok())
   {
-//    m_pen.RealizeResource();
     color = m_pen.GetColour().GetPixel() ;
   }
 
   SetPixel((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), color);
-
-  EndDrawing();
 
   CalcBoundingBox(x, y);
 }
@@ -553,8 +466,6 @@ void wxDC::DrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int f
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-
-  BeginDrawing();
 
   POINT *cpoints = new POINT[n];
   int i;
@@ -570,8 +481,6 @@ void wxDC::DrawPolygon(int n, wxPoint points[], long xoffset, long yoffset,int f
   (void)Polygon((HDC) m_hDC, cpoints, n);
   SetPolyFillMode((HDC) m_hDC,prev) ;
 
-  EndDrawing();
-
   delete[] cpoints;
 }
 
@@ -580,8 +489,6 @@ void wxDC::DrawLines(int n, wxPoint points[], long xoffset, long yoffset)
 // BUGBUG - is this necessary?
   if (m_pen.Ok() && m_autoSetting)
     SetPen(m_pen) ;
-
-  BeginDrawing();
 
   POINT *cpoints = new POINT[n];
   int i;
@@ -595,8 +502,6 @@ void wxDC::DrawLines(int n, wxPoint points[], long xoffset, long yoffset)
 
  (void)Polyline((HDC) m_hDC, cpoints, n);
 
-  EndDrawing();
-
   delete[] cpoints;
 }
 
@@ -608,8 +513,6 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
 
   long x2 = x + width;
   long y2 = y + height;
-
-  BeginDrawing();
 
 /* MATTHEW: [6] new normalization */
 #if WX_STANDARD_GRAPHICS
@@ -648,8 +551,6 @@ void wxDC::DrawRectangle(long x, long y, long width, long height)
 
   CalcBoundingBox(x, y);
   CalcBoundingBox(x2, y2);
-
-  EndDrawing();
 }
 
 void wxDC::DrawRoundedRectangle(long x, long y, long width, long height, double radius)
@@ -674,15 +575,11 @@ void wxDC::DrawRoundedRectangle(long x, long y, long width, long height, double 
   long x2 = (x+width);
   long y2 = (y+height);
 
-  BeginDrawing();
-
   (void)RoundRect((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2),
                       YLOG2DEV(y2), 2*XLOG2DEV(radius), 2*YLOG2DEV(radius));
 
   CalcBoundingBox(x, y);
   CalcBoundingBox(x2, y2);
-
-  EndDrawing();
 }
 
 void wxDC::DrawEllipse(long x, long y, long width, long height)
@@ -694,11 +591,7 @@ void wxDC::DrawEllipse(long x, long y, long width, long height)
   long x2 = (x+width);
   long y2 = (y+height);
 
-  BeginDrawing();
-
   (void)Ellipse((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2));
-
-  EndDrawing();
 
   CalcBoundingBox(x, y);
   CalcBoundingBox(x2, y2);
@@ -713,8 +606,6 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 
   long x2 = (x+w);
   long y2 = (y+h);
-
-  BeginDrawing();
 
   const double deg2rad = 3.14159265359 / 180.0;
   int rx1 = XLOG2DEV(x+w/2);
@@ -743,30 +634,26 @@ void wxDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
   (void)Arc((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y2),
 	  rx1, ry1, rx2, ry2);
 
-  EndDrawing();
-
   CalcBoundingBox(x, y);
   CalcBoundingBox(x2, y2);
 }
 
 void wxDC::DrawIcon(const wxIcon& icon, long x, long y)
 {
-  BeginDrawing();
-
   ::DrawIcon((HDC) m_hDC, XLOG2DEV(x), YLOG2DEV(y), (HICON) icon.GetHICON());
   CalcBoundingBox(x, y);
   CalcBoundingBox(x+icon.GetWidth(), y+icon.GetHeight());
-
-  EndDrawing();
 }
 
 void wxDC::SetFont(const wxFont& the_font)
 {
-  // Release the current font from servitude (decrements the usage count)
-//  if (m_font.Ok())
-//    m_font.ReleaseResource();
-
-  BeginDrawing();
+  // Set the old object temporarily, in case the assignment deletes an object
+  // that's not yet selected out.
+  if (m_oldFont)
+  {
+    ::SelectObject((HDC) m_hDC, (HFONT) m_oldFont);
+    m_oldFont = 0;
+  }
 
   m_font = the_font;
 
@@ -786,15 +673,17 @@ void wxDC::SetFont(const wxFont& the_font)
     if (!m_oldFont)
       m_oldFont = (WXHFONT) f;
   }
-  EndDrawing();
 }
 
 void wxDC::SetPen(const wxPen& pen)
 {
-  BeginDrawing();
-
-//  if (m_pen.Ok())
-//    m_pen.ReleaseResource();
+  // Set the old object temporarily, in case the assignment deletes an object
+  // that's not yet selected out.
+  if (m_oldPen)
+  {
+    ::SelectObject((HDC) m_hDC, (HPEN) m_oldPen);
+    m_oldPen = 0;
+  }
 
   m_pen = pen;
 
@@ -807,8 +696,6 @@ void wxDC::SetPen(const wxPen& pen)
 
   if (m_pen.Ok())
   {
-//    m_pen.UseResource();
-//    m_pen.RealizeResource();
     if (m_pen.GetResourceHandle())
     {
       HPEN p = (HPEN) ::SelectObject((HDC) m_hDC, (HPEN)m_pen.GetResourceHandle()) ;
@@ -816,16 +703,17 @@ void wxDC::SetPen(const wxPen& pen)
         m_oldPen = (WXHPEN) p;
     }
   }
-
-  EndDrawing();
 }
 
 void wxDC::SetBrush(const wxBrush& brush)
 {
-  BeginDrawing();
-
-//  if (m_brush.Ok())
-//    m_brush.ReleaseResource();
+  // Set the old object temporarily, in case the assignment deletes an object
+  // that's not yet selected out.
+  if (m_oldBrush)
+  {
+    ::SelectObject((HDC) m_hDC, (HBRUSH) m_oldBrush);
+    m_oldBrush = 0;
+  }
 
   m_brush = brush;
 
@@ -838,9 +726,6 @@ void wxDC::SetBrush(const wxBrush& brush)
 
   if (m_brush.Ok())
   {
-//    m_brush.UseResource();
-//    m_brush.RealizeResource();
-
     if (m_brush.GetResourceHandle())
     {
       HBRUSH b = 0;
@@ -849,13 +734,10 @@ void wxDC::SetBrush(const wxBrush& brush)
         m_oldBrush = (WXHBRUSH) b;
     }
   }
-  EndDrawing();
 }
 
 void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
 {
-  BeginDrawing();
-
   if (m_font.Ok() && m_font.GetResourceHandle())
   {
 #if DEBUG > 1
@@ -890,22 +772,14 @@ void wxDC::DrawText(const wxString& text, long x, long y, bool use16bit)
   long w, h;
   GetTextExtent(text, &w, &h);
   CalcBoundingBox((x + w), (y + h));
-
-  EndDrawing();
 }
 
 void wxDC::SetBackground(const wxBrush& brush)
 {
-//  if (m_backgroundBrush.Ok())
-//    m_backgroundBrush.ReleaseResource();
-
   m_backgroundBrush = brush;
 
   if (!m_backgroundBrush.Ok())
     return;
-
-//  m_backgroundBrush.UseResource();
-//  m_backgroundBrush.RealizeResource() ;
 
   if (m_canvas)
   {
@@ -917,8 +791,6 @@ void wxDC::SetBackground(const wxBrush& brush)
       
     if (customColours)
     {
-//      HBRUSH br = (m_backgroundBrush.GetStyle()==wxTRANSPARENT) ?
-//                              GetStockObject(NULL_BRUSH) : (HBRUSH) m_backgroundBrush.GetResourceHandle();
       if (m_backgroundBrush.GetStyle()==wxTRANSPARENT)
       {
         m_canvas->m_backgroundTransparent = TRUE;
@@ -930,39 +802,27 @@ void wxDC::SetBackground(const wxBrush& brush)
       }
     }
   }
-  BeginDrawing();
-
   COLORREF new_color = m_backgroundBrush.GetColour().GetPixel() ;
   {
     (void)SetBkColor((HDC) m_hDC, new_color);
   }
-
-  EndDrawing();
 }
 
 void wxDC::SetBackgroundMode(int mode)
 {
   m_backgroundMode = mode;
 
-  BeginDrawing();
-
   if (m_backgroundMode == wxTRANSPARENT)
     ::SetBkMode((HDC) m_hDC, TRANSPARENT);
   else
     ::SetBkMode((HDC) m_hDC, OPAQUE);
-
-  EndDrawing();
 }
 
 void wxDC::SetLogicalFunction(int function)
 {
   m_logicalFunction = function;
 
-  BeginDrawing();
-
   SetRop((WXHDC) m_hDC);
-
-  EndDrawing();
 }
 
 void wxDC::SetRop(WXHDC dc)
@@ -1096,8 +956,6 @@ void wxDC::SetMapMode(int mode)
   int mm_width = 0;
   int mm_height = 0;
 
-  BeginDrawing();
-
   pixel_width = GetDeviceCaps((HDC) m_hDC, HORZRES);
   pixel_height = GetDeviceCaps((HDC) m_hDC, VERTRES);
   mm_width = GetDeviceCaps((HDC) m_hDC, HORZSIZE);
@@ -1105,8 +963,6 @@ void wxDC::SetMapMode(int mode)
 
   if ((pixel_width == 0) || (pixel_height == 0) || (mm_width == 0) || (mm_height == 0))
   {
-//    if (!m_hDC && m_canvas)
-//      m_canvas->ReleaseHDC() ;
     return;
   }
 
@@ -1157,8 +1013,6 @@ void wxDC::SetMapMode(int mode)
   ::SetWindowExtEx((HDC) m_hDC, m_windowExtX, m_windowExtY, NULL);
   ::SetViewportOrgEx((HDC) m_hDC, (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
   ::SetWindowOrgEx((HDC) m_hDC, (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
-
-  EndDrawing();
 }
 
 void wxDC::SetUserScale(double x, double y)
@@ -1190,11 +1044,7 @@ void wxDC::SetLogicalOrigin(long x, long y)
   m_logicalOriginX = x;
   m_logicalOriginY = y;
 
-  BeginDrawing();
-
   ::SetWindowOrgEx((HDC) m_hDC, (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
-
-  EndDrawing();
 }
 
 void wxDC::SetDeviceOrigin(long x, long y)
@@ -1202,11 +1052,7 @@ void wxDC::SetDeviceOrigin(long x, long y)
   m_deviceOriginX = x;
   m_deviceOriginY = y;
 
-  BeginDrawing();
-
   ::SetViewportOrgEx((HDC) m_hDC, (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
-
-  EndDrawing();
 }
 
 long wxDC::DeviceToLogicalX(long x) const
@@ -1304,9 +1150,6 @@ long wxDC::ImplLogicalToDeviceYRel(long y) const
 bool wxDC::Blit(long xdest, long ydest, long width, long height,
                 wxDC *source, long xsrc, long ysrc, int rop, bool useMask)
 {
-  BeginDrawing();
-  source->BeginDrawing();
-
   long xdest1 = xdest;
   long ydest1 = ydest;
   long xsrc1 = xsrc;
@@ -1415,8 +1258,6 @@ bool wxDC::Blit(long xdest, long ydest, long width, long height,
   }
   ::SetTextColor((HDC)m_hDC, old_textground);
   ::SetBkColor((HDC)m_hDC, old_background);
-  source->EndDrawing();
-  EndDrawing();
 
   return success;
 }
@@ -1436,16 +1277,6 @@ void wxDC::GetSizeMM(long *width, long *height) const
   *width = w;
   *height = h;
 }
-
-/*
-#if USE_SPLINES
-# if USE_XFIG_SPLINE_CODE
-#  include "../common/xfspline.inc"
-# else
-#  include "../common/wxspline.inc"
-# endif
-#endif // USE_SPLINES
-*/
 
 #if USE_SPLINES
 #include "xfspline.inc"
@@ -1516,12 +1347,6 @@ void wxDC::DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
     delete p;
   }
   delete point_list;
-/*
-  wxSpline spline(point_list);
-
-  wx_draw_open_spline(this, &spline);
-  spline.DeletePoints();
- */
 }
 #endif
 

@@ -2001,51 +2001,6 @@ bool wxWindow::MSWOnPaint(void)
   GetEventHandler()->ProcessEvent(event);
 #endif
   return TRUE;
-  
-#if 0
-
-#if DEBUG > 1
-  wxDebugMsg("wxWindow::MSWOnPaint %d\n", m_hWnd);
-#endif
-#ifdef __WIN32__
-  HRGN	tRgn=CreateRectRgn(0,0,0,0);	//Dummy call to get a handle!
-  if (GetUpdateRgn(m_hWnd, tRgn, FALSE))
-#else
-  RECT tRect;
-  if (GetUpdateRect((HWND) m_hWnd, &tRect, FALSE))
-#endif
-  {
-    PAINTSTRUCT ps;
-    // Hold a pointer to the dc so long as the OnPaint() message
-    // is being processed
-    HDC dc = BeginPaint(m_hWnd, &ps);
-    bool isPanel = IsKindOf(CLASSINFO(wxWindow));
-    m_paintHDC = (WXHDC) dc;
-    RECT updateRect1 = ps.rcPaint;
-	m_updateRect.x = updateRect1.left;
-	m_updateRect.y = updateRect1.top;
-	m_updateRect.width = updateRect1.right - updateRect1.left;
-	m_updateRect.height = updateRect1.bottom - updateRect1.top;
-
-    GetEventHandler()->OldOnPaint();
-
-    m_paintHDC = 0;
-    EndPaint((HWND) m_hWnd, &ps);
-#ifdef __WIN32__
-    DeleteObject(tRgn);
-#endif
-
-    if (isPanel)
-      // Do default processing
-      return FALSE;
-    else
-      return TRUE;
-  }
-#ifdef __WIN32__
-  DeleteObject(tRgn);
-#endif
-  return FALSE;
-#endif
 }
 
 void wxWindow::MSWOnSize(const int w, const int h, const WXUINT WXUNUSED(flag))
