@@ -107,7 +107,7 @@ public:
     // Does the region contain the rectangle rect?
     wxRegionContain Contains(const wxRect& rect) const;
 
-    // Convert the region to a B&W bitmap with the black pixels being inside
+    // Convert the region to a B&W bitmap with the white pixels being inside
     // the region.
     wxBitmap ConvertToBitmap() const;
 
