@@ -40,8 +40,12 @@ rem for %%c in (b32 bcc dos g95 sc vc wat) %TM% -t %c% wxwin.pro -o %WXDIR%\src\
 
 echo Generating for for Visual C++ 6.0 wxBase C++ (32 bits)...
 %tmakecmd% -t basevc wxwin.pro -o %WXDIR%\src\msw\makebase.vc
+echo Generating for for Visual C++ 6.0 wxWindows.dsp
+%tmakecmd% -t vc6msw wxwin.pro -o %WXDIR%\src\wxWindows.dsp
+echo Generating for for Visual C++ 6.0 wxUniv.dsp
+%tmakecmd% -t vc6univ wxwin.pro -o %WXDIR%\src\wxUniv.dsp
 echo Generating for for Visual C++ 6.0 wxBase.dsp
-%tmakecmd% -t vc6base wxwin.pro -o %WXDIR%\wxBase.dsp
+%tmakecmd% -t vc6base wxwin.pro -o %WXDIR%\src\wxBase.dsp
 echo Generating for Visual C++ 4.0...
 %tmakecmd% -t vc wxwin.pro -o %WXDIR%\src\msw\makefile.vc
 echo Generating for Borland C++ (32 bits)...

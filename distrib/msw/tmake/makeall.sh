@@ -13,7 +13,8 @@
 # Assume we are in distrib/msw/tmake
 #
 topdir="../../.."
-mswdir="$topdir/src/msw"
+srcdir="$topdir/src"
+mswdir="$srcdir/msw"
 
 for tname in `ls *.t` 
 do
@@ -41,6 +42,18 @@ do
 	vc.t) 
 	    echo "Generating $mswdir/makefile.vc for Visual C++ 4.0..."
 	    tmake -t vc wxwin.pro -o $mswdir/makefile.vc;;
+
+	vc6msw.t) 
+	    echo "Generating $srcdir/wxWindows.dsp for Visual C++ 6.0..."
+	    tmake -t vc6msw wxwin.pro -o $srcdir/wxWindows.dsp;;
+
+	vc6base.t) 
+	    echo "Generating $srcdir/wxBase.dsp for Visual C++ 6.0..."
+	    tmake -t vc6base wxwin.pro -o $srcdir/wxBase.dsp;;
+
+	vc6univ.t) 
+	    echo "Generating $srcdir/wxUniv.dsp for Visual C++ 6.0..."
+	    tmake -t vc6univ wxwin.pro -o $srcdir/wxUniv.dsp;;
 
 	wat.t)
 	    echo "Generating $mswdir/makefile.wat for Watcom C++..."
