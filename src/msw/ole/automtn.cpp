@@ -267,6 +267,16 @@ wxVariant wxAutomationObject::CallMethod(const wxString& member, int noArgs, wxV
 	return retVariant;
 }
 
+wxVariant wxAutomationObject::CallMethodArray(const wxString& member, int noArgs, const wxVariant **args)
+{
+	wxVariant retVariant;
+	if (!Invoke(member, DISPATCH_METHOD, retVariant, noArgs, NULL, args))
+	{
+		retVariant.MakeNull();
+	}
+	return retVariant;
+}
+
 wxVariant wxAutomationObject::CallMethod(const wxString& member,
 		const wxVariant& arg1, const wxVariant& arg2,
 		const wxVariant& arg3, const wxVariant& arg4,
@@ -314,6 +324,15 @@ wxVariant wxAutomationObject::CallMethod(const wxString& member,
 }
 
 // Get/Set property
+wxVariant wxAutomationObject::GetPropertyArray(const wxString& property, int noArgs, const wxVariant **args) const
+{
+	wxVariant retVariant;
+	if (!Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, NULL, args))
+	{
+		retVariant.MakeNull();
+	}
+	return retVariant;
+}
 wxVariant wxAutomationObject::GetProperty(const wxString& property, int noArgs, wxVariant args[]) const
 {
 	wxVariant retVariant;
@@ -374,6 +393,16 @@ bool wxAutomationObject::PutProperty(const wxString& property, int noArgs, wxVar
 {
 	wxVariant retVariant;
 	if (!Invoke(property, DISPATCH_PROPERTYPUT, retVariant, noArgs, args))
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+
+bool wxAutomationObject::PutPropertyArray(const wxString& property, int noArgs, const wxVariant **args)
+{
+	wxVariant retVariant;
+	if (!Invoke(property, DISPATCH_PROPERTYPUT, retVariant, noArgs, NULL, args))
 	{
 		return FALSE;
 	}
@@ -442,8 +471,40 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
 	return (WXIDISPATCH*) NULL;
 }
 
+// Uses DISPATCH_PROPERTYGET
+// and returns a dispatch pointer. The calling code should call Release
+// on the pointer, though this could be implicit by constructing an wxAutomationObject
+// with it and letting the destructor call Release.
+WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, int noArgs, const wxVariant **args) const
+{
+	wxVariant retVariant;
+	if (Invoke(property, DISPATCH_PROPERTYGET, retVariant, noArgs, NULL, args))
+	{
+		if (retVariant.GetType() == wxT("void*"))
+		{
+			return (WXIDISPATCH*) retVariant.GetVoidPtr();
+		}
+	}
+
+	return (WXIDISPATCH*) NULL;
+}
+
+
 // A way of initialising another wxAutomationObject with a dispatch object
 bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& property, int noArgs, wxVariant args[]) const
+{
+	WXIDISPATCH* dispatch = GetDispatchProperty(property, noArgs, args);
+	if (dispatch)
+	{
+		obj.SetDispatchPtr(dispatch);
+		return TRUE;
+	}
+	else
+		return FALSE;
+}
+
+// A way of initialising another wxAutomationObject with a dispatch object
+bool wxAutomationObject::GetObject(wxAutomationObject& obj, const wxString& property, int noArgs, const wxVariant **args) const
 {
 	WXIDISPATCH* dispatch = GetDispatchProperty(property, noArgs, args);
 	if (dispatch)
@@ -527,7 +588,12 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
 
     wxString type(variant.GetType());
 
-    if (type == wxT("long"))
+		if (type == wxT("char"))
+		{
+			oleVariant.vt=VT_I1;			// Signed Char
+			oleVariant.cVal=variant.GetChar();
+		}
+    else if (type == wxT("long"))
     {
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;

@@ -55,6 +55,7 @@ public:
 
 	// Invoke a member function
 	wxVariant CallMethod(const wxString& method, int noArgs, wxVariant args[]);
+	wxVariant CallMethodArray(const wxString& method, int noArgs, const wxVariant **args);
 
 	// Convenience function
 	wxVariant CallMethod(const wxString& method,
@@ -64,11 +65,13 @@ public:
 
 	// Get/Put property
     wxVariant GetProperty(const wxString& property, int noArgs = 0, wxVariant args[] = (wxVariant*) NULL) const;
+	wxVariant GetPropertyArray(const wxString& property, int noArgs, const wxVariant **args) const;
 	wxVariant GetProperty(const wxString& property,
 		const wxVariant& arg1, const wxVariant& arg2 = wxNullVariant,
 		const wxVariant& arg3 = wxNullVariant, const wxVariant& arg4 = wxNullVariant,
 		const wxVariant& arg5 = wxNullVariant, const wxVariant& arg6 = wxNullVariant);
 
+	 bool wxAutomationObject::PutPropertyArray(const wxString& property, int noArgs, const wxVariant **args);
     bool PutProperty(const wxString& property, int noArgs, wxVariant args[]) ;
 	bool PutProperty(const wxString& property,
 		const wxVariant& arg1, const wxVariant& arg2 = wxNullVariant,
@@ -80,10 +83,12 @@ public:
 	// on the pointer, though this could be implicit by constructing an wxAutomationObject
 	// with it and letting the destructor call Release.
     WXIDISPATCH* GetDispatchProperty(const wxString& property, int noArgs, wxVariant args[]) const;
+    WXIDISPATCH* GetDispatchProperty(const wxString& property, int noArgs, const wxVariant **args) const;
 
 	// A way of initialising another wxAutomationObject with a dispatch object,
 	// without having to deal with nasty IDispatch pointers.
 	bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs = 0, wxVariant args[] = (wxVariant*) NULL) const;
+	bool GetObject(wxAutomationObject& obj, const wxString& property, int noArgs, const wxVariant **args) const;
 
 public:
     WXIDISPATCH*  m_dispatchPtr;
