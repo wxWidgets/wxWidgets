@@ -477,6 +477,10 @@ typedef struct {
 // Misc stuff
 // ----------------------------------------------------------------------------
 
+#ifndef CCM_SETUNICODEFORMAT
+    #define CCM_SETUNICODEFORMAT 8197
+#endif
+
 #ifndef QS_ALLPOSTMESSAGE
     #define QS_ALLPOSTMESSAGE    0x0100
 #endif
