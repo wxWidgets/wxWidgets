@@ -434,16 +434,38 @@ _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 
 _WX_DEFINE_BASEARRAY(wxString, wxBaseArrayStringBase);
 
+// some compilers (Sun CC being the only known example) distinguish between
+// extern "C" functions and the functions with C++ linkage and ptr_fun and
+// wxStringCompareLess can't take wxStrcmp/wxStricmp directly as arguments in
+// this case, we need the wrappers below to make this work
+inline int wxStrcmpCppWrapper(const wxChar *p, const wxChar *q)
+{
+    return wxStrcmp(p, q);
+}
+
+inline int wxStricmpCppWrapper(const wxChar *p, const wxChar *q)
+{
+    return wxStricmp(p, q);
+}
+
 int wxArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFromEnd)) const
 {
     wxArrayString::const_iterator it;
 
     if (bCase)
+    {
         it = std::find_if(begin(), end(),
-                          std::not1(std::bind2nd(std::ptr_fun(wxStrcmp), sz)));
-    else
+                          std::not1(
+                              std::bind2nd(
+                                  std::ptr_fun(wxStrcmpCppWrapper), sz)));
+    }
+    else // !bCase
+    {
         it = std::find_if(begin(), end(),
-                          std::not1(std::bind2nd(std::ptr_fun(wxStricmp), sz)));
+                          std::not1(
+                              std::bind2nd(
+                                  std::ptr_fun(wxStricmpCppWrapper), sz)));
+    }
 
     return it == end() ? wxNOT_FOUND : it - begin();
 }
@@ -466,10 +488,10 @@ int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFrom
 
     if (bCase)
         it = std::lower_bound(begin(), end(), sz,
-                              wxStringCompareLess(wxStrcmp));
+                              wxStringCompareLess(wxStrcmpCppWrapper));
     else
         it = std::lower_bound(begin(), end(), sz,
-                              wxStringCompareLess(wxStricmp));
+                              wxStringCompareLess(wxStricmpCppWrapper));
 
     if (it == end() || (bCase ? wxStrcmp : wxStricmp)(it->c_str(), sz) != 0)
         return wxNOT_FOUND;
