@@ -217,10 +217,13 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
         }
     }
 
-    m_hWnd = (WXHWND)::CreateDialogIndirect(wxGetInstance(),
-                                    (DLGTEMPLATE*)dlgTemplate,
-                                    parent ? GetHwndOf(parent) : NULL,
-                                    (DLGPROC)wxDlgProc);
+    m_hWnd = (WXHWND)::CreateDialogIndirect
+                       (
+                        wxGetInstance(),
+                        (DLGTEMPLATE*)dlgTemplate,
+                        parent ? GetHwndOf(parent) : NULL,
+                        (DLGPROC)wxDlgProc
+                       );
 
     if ( !m_hWnd )
     {
@@ -344,36 +347,37 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
     if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
     {
-        // TODO: it would be better to construct the dialog template in memory
-        //       during run-time than to rely on the limited number of
-        //       templates in wx.rc because:
-        //          a) you wouldn't have to include wx.rc in all wxWin programs
-        //             (and the number of complaints about it would dtop)
-        //          b) we'd be able to provide more templates simply, i.e.
-        //             we could generate the templates for all style
-        //             combinations
-
         // we have different dialog templates to allows creation of dialogs
         // with & without captions under MSWindows, resizeable or not (but a
         // resizeable dialog always has caption - otherwise it would look too
         // strange)
-        int dlgsize = sizeof(DLGTEMPLATE) + (sizeof(WORD) * 3);
-        DLGTEMPLATE* dlgTemplate = (DLGTEMPLATE*)malloc( dlgsize );
-        memset (dlgTemplate, 0, dlgsize );
+
+        // we need 3 additional WORDs for dialog menu, class and title (as we
+        // don't use DS_SETFONT we don't need the fourth WORD for the font)
+        static const int dlgsize = sizeof(DLGTEMPLATE) + (sizeof(WORD) * 3);
+        DLGTEMPLATE *dlgTemplate = (DLGTEMPLATE *)malloc(dlgsize);
+        memset(dlgTemplate, 0, dlgsize);
+
+        // these values are arbitrary, they won't be used normally anyhow
         dlgTemplate->x  = 34;
         dlgTemplate->y  = 22;
         dlgTemplate->cx = 144;
         dlgTemplate->cy = 75;
 
-        if ( style & wxRESIZE_BORDER )
-          dlgTemplate->style = DS_MODALFRAME | WS_CAPTION | WS_POPUP | WS_SYSMENU | WS_THICKFRAME;
-        else if ( style & wxCAPTION )
-          dlgTemplate->style = DS_MODALFRAME | WS_CAPTION | WS_POPUP | WS_SYSMENU;
-        else
-          dlgTemplate->style = WS_POPUP;
+        // reuse the code in MSWGetStyle() but correct the results slightly for
+        // the dialog
+        dlgTemplate->style = MSWGetStyle(style, NULL);
+
+        // all dialogs are popups
+        dlgTemplate->style |= WS_POPUP;
+
+        // force 3D-look if necessary, it looks impossibly ugly otherwise
+        if ( style & (wxRESIZE_BORDER | wxCAPTION) )
+            dlgTemplate->style |= DS_MODALFRAME;
 
         bool ret = CreateDialog(dlgTemplate, title, pos, size);
         free(dlgTemplate);
+
         return ret;
     }
     else // !dialog
