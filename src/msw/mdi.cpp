@@ -41,6 +41,7 @@
 #include <string.h>
 
 extern wxList wxModelessWindows;
+extern wxMenu *wxCurrentPopupMenu;
 
 #define IDM_WINDOWTILE  4001
 #define IDM_WINDOWCASCADE 4002
@@ -485,6 +486,14 @@ bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     wxWindow *win = wxFindWinFromHandle(control);
     if (win)
       return win->MSWCommand(cmd, id);
+
+    if (wxCurrentPopupMenu)
+    {
+        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxCurrentPopupMenu = NULL;
+        if (!popupMenu->MSWCommand(cmd, id))
+            return TRUE;
+    }
 
     switch (id)
     {
@@ -936,6 +945,14 @@ bool wxMDIChildFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     wxWindow *win = wxFindWinFromHandle(control);
     if (win)
       return win->MSWCommand(cmd, id);
+
+    if (wxCurrentPopupMenu)
+    {
+        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxCurrentPopupMenu = NULL;
+        if (popupMenu->MSWCommand(cmd, id))
+            return TRUE;
+    }
 
     if (GetMenuBar() && GetMenuBar()->FindItemForId(id))
     {

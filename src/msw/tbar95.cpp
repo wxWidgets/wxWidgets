@@ -105,7 +105,7 @@ bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, co
   	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
 
   if (style & wxTB_VERTICAL)
-    wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports vertical tiling.", "wxToolBar95 usage", wxOK);
+    wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports horizontal orientation.", "wxToolBar95 usage", wxOK);
   m_maxWidth = -1;
   m_maxHeight = -1;
   

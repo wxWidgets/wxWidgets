@@ -47,6 +47,7 @@
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
 extern char wxFrameClassName[];
+extern wxMenu *wxCurrentPopupMenu;
 
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
@@ -734,6 +735,14 @@ bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
     wxWindow *win = wxFindWinFromHandle(control);
     if (win)
       return win->MSWCommand(cmd, id);
+
+    if (wxCurrentPopupMenu)
+    {
+        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxCurrentPopupMenu = NULL;
+        if (popupMenu->MSWCommand(cmd, id))
+            return TRUE;
+    }
 
     if (GetMenuBar() && GetMenuBar()->FindItemForId(id))
     {
