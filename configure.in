@@ -3109,6 +3109,13 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
                                           [
                                             AC_DEFINE(HAVE_SHL_LOAD)
                                             HAVE_SHL_FUNCS=1
+                                          ],
+                                          [
+                                            AC_CHECK_LIB(shl_load, dld,
+                                                         [
+                                                            HAVE_SHL_FUNCS=1
+                                                            LIBS="$LIBS -ldld"
+                                                         ])
                                           ])
                         ])
         ])
