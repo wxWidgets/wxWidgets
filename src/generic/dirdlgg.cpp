@@ -38,6 +38,8 @@
 #include "wx/statline.h"
 #include "wx/generic/dirctrlg.h"
 #include "wx/generic/dirdlgg.h"
+#include "wx/artprov.h"
+#include "wx/bmpbuttn.h"
 
 //-----------------------------------------------------------------------------
 // wxGenericDirDialog
@@ -49,6 +51,7 @@ static const int ID_OK = 1002;
 static const int ID_CANCEL = 1003;
 static const int ID_NEW = 1004;
 static const int ID_SHOW_HIDDEN = 1005;
+static const int ID_GO_HOME = 1006;
 
 BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_CLOSE                (wxGenericDirDialog::OnCloseWindow)
@@ -76,6 +79,28 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
+    // 0) 'New' and 'Home' Buttons
+    wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
+
+    wxBitmapButton* homeButton = 
+        new wxBitmapButton(this, ID_GO_HOME,
+                           wxArtProvider::GetBitmap(wxART_GO_HOME, wxART_CMN_DIALOG));
+    buttonsizer->Add( homeButton, 0, wxLEFT|wxRIGHT, 10 );
+    
+    // I'm not convinced we need a New button, and we tend to get annoying
+    // accidental-editing with label editing enabled.
+    wxBitmapButton* newButton = 
+        new wxBitmapButton(this, ID_NEW,
+                           wxArtProvider::GetBitmap(wxART_NEW_DIR, wxART_CMN_DIALOG));
+    buttonsizer->Add( newButton, 0, wxRIGHT, 10 );
+
+#if wxUSE_TOOLTIPS
+    homeButton->SetToolTip(_("Go to home directory"));
+    newButton->SetToolTip(_("Create new directory"));
+#endif
+
+    topsizer->Add( buttonsizer, 0, wxTOP | wxALIGN_RIGHT, 10 );
+
     // 1) dir ctrl
     m_dirCtrl = NULL; // this is neccessary, event handler called from 
                       // wxGenericDirCtrl would crash otherwise!
@@ -100,20 +125,15 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 #endif
 
     // 4) Buttons
-    wxSizer* buttonsizer = new wxBoxSizer( wxHORIZONTAL );
+    buttonsizer = new wxBoxSizer( wxHORIZONTAL );
     
-    // I'm not convinced we need a New button, and we tend to get annoying
-    // accidental-editing with label editing enabled.
-    wxButton* newButton = new wxButton( this, ID_NEW, _("New...") );
-    buttonsizer->Add( newButton, 0, wxLEFT|wxRIGHT, 10 );
-
     // OK and Cancel button should be at the right bottom
     wxButton* okButton = new wxButton(this, wxID_OK, _("OK"));
     buttonsizer->Add( okButton, 0, wxLEFT|wxRIGHT, 10 );
     wxButton* cancelButton = new wxButton(this, wxID_CANCEL, _("Cancel"));
     buttonsizer->Add( cancelButton, 0, wxLEFT|wxRIGHT, 10 );
 
-    topsizer->Add( buttonsizer, 0, wxALL | wxCENTER, 10 );
+    topsizer->Add( buttonsizer, 0, wxALL | wxALIGN_RIGHT, 10 );
 
     okButton->SetDefault();
     m_dirCtrl->SetFocus();
