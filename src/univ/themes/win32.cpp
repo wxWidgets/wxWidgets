@@ -1090,8 +1090,6 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 {
     switch ( col )
     {
-        case WINDOW:            return *wxWHITE;
-
         // use the system colours under Windows
 #if defined(__WXMSW__)
         case WINDOW:            return wxColour(GetSysColor(COLOR_WINDOW));
@@ -1123,6 +1121,8 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
         case SHADOW_OUT:        return wxColour(GetSysColor(COLOR_BTNSHADOW));
 #else // !__WXMSW__
         // use the standard Windows colours elsewhere
+        case WINDOW:            return *wxWHITE;
+
         case CONTROL_PRESSED:
         case CONTROL_CURRENT:
         case CONTROL:           return wxColour(0xc0c0c0);
