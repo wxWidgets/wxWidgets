@@ -666,8 +666,6 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     
         if ((bm_width != bm_ww) || (bm_height != bm_hh))
         {
-	    printf( "scaling.\n" );
-	
             wxImage image( memDC->m_selected );
 	    image = image.Scale( bm_ww, bm_hh );
 	
