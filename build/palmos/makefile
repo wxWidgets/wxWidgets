@@ -98,8 +98,125 @@ BASE_CMN_SRC = \
 ../../src/common/zipstrm.cpp \
 ../../src/common/zstream.cpp
 
-SOURCES =  ../../samples/minimal/minimal.cpp \
-$(BASE_CMN_SRC) \
+BASE_PALMOS_SRC = \
+../../src/palmos/base.cpp \
+../../src/palmos/dir.cpp \
+../../src/palmos/prefconf.cpp \
+../../src/palmos/snglinst.cpp \
+../../src/palmos/thread.cpp \
+../../src/palmos/utils.cpp \
+../../src/palmos/utilsexc.cpp
+
+BASE_AND_GUI_CMN_SRC = \
+../../src/common/event.cpp \
+../../src/common/fs_mem.cpp \
+../../src/common/msgout.cpp \
+../../src/common/utilscmn.cpp
+
+BASE_AND_GUI_PALMOS_SRC = \
+../../src/palmos/main.cpp \
+../../src/palmos/volume.cpp
+
+NET_CMN_SRC = \
+../../src/common/fs_inet.cpp \
+../../src/common/ftp.cpp \
+../../src/common/http.cpp \
+../../src/common/protocol.cpp \
+../../src/common/sckaddr.cpp \
+../../src/common/sckfile.cpp \
+../../src/common/sckipc.cpp \
+../../src/common/sckstrm.cpp \
+../../src/common/socket.cpp \
+../../src/common/url.cpp
+
+PALMOS_LOWLEVEL_SRC = \
+../../src/palmos/app.cpp \
+../../src/palmos/bitmap.cpp \
+../../src/palmos/brush.cpp \
+../../src/palmos/caret.cpp \
+../../src/palmos/clipbrd.cpp \
+../../src/palmos/colour.cpp \
+../../src/palmos/cursor.cpp \
+../../src/palmos/data.cpp \
+../../src/palmos/dc.cpp \
+../../src/palmos/dcclient.cpp \
+../../src/palmos/dcmemory.cpp \
+../../src/palmos/dcprint.cpp \
+../../src/palmos/dcscreen.cpp \
+../../src/palmos/dib.cpp \
+../../src/palmos/display.cpp \
+../../src/palmos/enhmeta.cpp \
+../../src/palmos/evtloop.cpp \
+../../src/palmos/font.cpp \
+../../src/palmos/fontenum.cpp \
+../../src/palmos/fontutil.cpp \
+../../src/palmos/gdiimage.cpp \
+../../src/palmos/gdiobj.cpp \
+../../src/palmos/icon.cpp \
+../../src/palmos/minifram.cpp \
+../../src/palmos/palette.cpp \
+../../src/palmos/pen.cpp \
+../../src/palmos/popupwin.cpp \
+../../src/palmos/printdlg.cpp \
+../../src/palmos/printpalm.cpp \
+../../src/palmos/region.cpp \
+../../src/palmos/settings.cpp \
+../../src/palmos/timer.cpp \
+../../src/palmos/tooltip.cpp \
+../../src/palmos/toplevel.cpp \
+../../src/palmos/utilsgui.cpp \
+../../src/palmos/window.cpp 
+
+PALMOS_DESKTOP_LOWLEVEL_SRC = \
+../../src/palmos/help.cpp
+
+PALMOS_SRC = \
+../../src/palmos/accel.cpp \
+../../src/palmos/bmpbuttn.cpp \
+../../src/palmos/button.cpp \
+../../src/palmos/checkbox.cpp \
+../../src/palmos/checklst.cpp \
+../../src/palmos/choice.cpp \
+../../src/palmos/colordlg.cpp \
+../../src/palmos/combobox.cpp \
+../../src/palmos/control.cpp \
+../../src/palmos/dialog.cpp \
+../../src/palmos/dirdlg.cpp \
+../../src/palmos/dragimag.cpp \
+../../src/palmos/fdrepdlg.cpp \
+../../src/palmos/filedlg.cpp \
+../../src/palmos/fontdlg.cpp \
+../../src/palmos/frame.cpp \
+../../src/palmos/gauge.cpp \
+../../src/palmos/imaglist.cpp \
+../../src/palmos/listbox.cpp \
+../../src/palmos/listctrl.cpp \
+../../src/palmos/mdi.cpp \
+../../src/palmos/menu.cpp \
+../../src/palmos/menuitem.cpp \
+../../src/palmos/metafile.cpp \
+../../src/palmos/msgdlg.cpp \
+../../src/palmos/nativdlg.cpp \
+../../src/palmos/notebook.cpp \
+../../src/palmos/ownerdrw.cpp \
+../../src/palmos/radiobox.cpp \
+../../src/palmos/radiobut.cpp \
+../../src/palmos/scrolbar.cpp \
+../../src/palmos/slider.cpp \
+../../src/palmos/spinbutt.cpp \
+../../src/palmos/spinctrl.cpp \
+../../src/palmos/statbmp.cpp \
+../../src/palmos/statbox.cpp \
+../../src/palmos/statbrpalm.cpp \
+../../src/palmos/statline.cpp \
+../../src/palmos/stattext.cpp \
+../../src/palmos/taskbar.cpp \
+../../src/palmos/toolbar.cpp \
+../../src/palmos/textctrl.cpp \
+../../src/palmos/tglbtn.cpp \
+../../src/palmos/treectrl.cpp
+
+GUI_CMN_SRC = \
 ../../src/common/accesscmn.cpp \
 ../../src/common/appcmn.cpp \
 ../../src/common/artprov.cpp \
@@ -115,9 +232,6 @@ $(BASE_CMN_SRC) \
 ../../src/common/ctrlcmn.cpp \
 ../../src/common/ctrlsub.cpp \
 ../../src/common/datacmn.cpp \
-../../src/common/db.cpp \
-../../src/common/dbgrid.cpp \
-../../src/common/dbtable.cpp \
 ../../src/common/dcbase.cpp \
 ../../src/common/dlgcmn.cpp \
 ../../src/common/dndcmn.cpp \
@@ -127,22 +241,17 @@ $(BASE_CMN_SRC) \
 ../../src/common/dpycmn.cpp \
 ../../src/common/dseldlg.cpp \
 ../../src/common/effects.cpp \
-../../src/common/event.cpp \
 ../../src/common/fddlgcmn.cpp \
 ../../src/common/fldlgcmn.cpp \
 ../../src/common/fontcmn.cpp \
 ../../src/common/fontmap.cpp \
 ../../src/common/framecmn.cpp \
-../../src/common/fs_inet.cpp \
-../../src/common/fs_mem.cpp \
-../../src/common/ftp.cpp \
 ../../src/common/gaugecmn.cpp \
 ../../src/common/gbsizer.cpp \
 ../../src/common/gdicmn.cpp \
 ../../src/common/geometry.cpp \
 ../../src/common/gifdecod.cpp \
 ../../src/common/helpbase.cpp \
-../../src/common/http.cpp \
 ../../src/common/iconbndl.cpp \
 ../../src/common/imagall.cpp \
 ../../src/common/imagbmp.cpp \
@@ -160,136 +269,76 @@ $(BASE_CMN_SRC) \
 ../../src/common/lboxcmn.cpp \
 ../../src/common/matrix.cpp \
 ../../src/common/menucmn.cpp \
-../../src/common/msgout.cpp \
 ../../src/common/nbkbase.cpp \
 ../../src/common/paper.cpp \
 ../../src/common/popupcmn.cpp \
 ../../src/common/prntbase.cpp \
-../../src/common/protocol.cpp \
 ../../src/common/quantize.cpp \
 ../../src/common/radiocmn.cpp \
 ../../src/common/rendcmn.cpp \
 ../../src/common/rgncmn.cpp \
-../../src/common/sckaddr.cpp \
-../../src/common/sckfile.cpp \
-../../src/common/sckipc.cpp \
-../../src/common/sckstrm.cpp \
 ../../src/common/settcmn.cpp \
 ../../src/common/sizer.cpp \
-../../src/common/socket.cpp \
 ../../src/common/statbar.cpp \
 ../../src/common/stockitem.cpp \
-../../src/common/taskbarcmn.cpp \
 ../../src/common/tbarbase.cpp \
 ../../src/common/textcmn.cpp \
 ../../src/common/timercmn.cpp \
 ../../src/common/toplvcmn.cpp \
 ../../src/common/treebase.cpp \
-../../src/common/url.cpp \
-../../src/common/utilscmn.cpp \
 ../../src/common/valgen.cpp \
 ../../src/common/validate.cpp \
 ../../src/common/valtext.cpp \
 ../../src/common/wincmn.cpp \
-../../src/common/xpmdecod.cpp \
+../../src/common/xpmdecod.cpp
+
+LOWLEVEL_SRC = $(PALMOS_LOWLEVEL_SRC)
+
+GUI_SRC = $(PALMOS_SRC) $(PALMOS_DESKTOP_SRC)
+
+BASE_PLATFORM_SRC = $(BASE_PALMOS_SRC)
+
+BASE_AND_GUI_PLATFORM_SRC = $(BASE_AND_GUI_PALMOS_SRC)
+
+BASE_SRC = $(BASE_CMN_SRC) $(BASE_PLATFORM_SRC)
+
+BASE_AND_GUI_SRC = $(BASE_AND_GUI_CMN_SRC) $(BASE_AND_GUI_PLATFORM_SRC)
+
+NET_SRC = $(NET_CMN_SRC)
+
+CORE_SRC = $(LOWLEVEL_SRC) $(GUI_SRC) $(GUI_CMN_SRC)
+
+# ADVANCED_SRC =
+# MEDIA_SRC =
+# HTML_SRC =
+# ODBC_SRC =
+# DBGRID_SRC =
+# XRC_SRC =
+# XML_SRC = 
+
+SOURCES =  ../../samples/minimal/minimal.cpp \
+$(BASE_SRC) \
+$(BASE_AND_GUI_SRC) \
+$(NET_SRC) \
+$(CORE_SRC) \
+$(ADVANCED_SRC) \
+$(MEDIA_SRC) \
+$(HTML_SRC) \
+$(ODBC_SRC) \
+$(DBGRID_SRC) \
+$(XRC_SRC) \
+$(XML_SRC) \
+../../src/common/db.cpp \
+../../src/common/dbgrid.cpp \
+../../src/common/dbtable.cpp \
+../../src/common/taskbarcmn.cpp \
 ../../src/common/xtixml.cpp \
 ../../src/generic/renderg.cpp \
-../../src/palmos/accel.cpp \
-../../src/palmos/app.cpp \
-../../src/palmos/base.cpp \
-../../src/palmos/bitmap.cpp \
-../../src/palmos/bmpbuttn.cpp \
-../../src/palmos/brush.cpp \
-../../src/palmos/button.cpp \
-../../src/palmos/caret.cpp \
-../../src/palmos/checkbox.cpp \
-../../src/palmos/checklst.cpp \
-../../src/palmos/choice.cpp \
-../../src/palmos/clipbrd.cpp \
-../../src/palmos/colordlg.cpp \
-../../src/palmos/colour.cpp \
-../../src/palmos/combobox.cpp \
-../../src/palmos/control.cpp \
-../../src/palmos/cursor.cpp \
-../../src/palmos/data.cpp \
 ../../src/palmos/datectrl.cpp \
-../../src/palmos/dc.cpp \
-../../src/palmos/dcclient.cpp \
-../../src/palmos/dcmemory.cpp \
-../../src/palmos/dcprint.cpp \
-../../src/palmos/dcscreen.cpp \
-../../src/palmos/dialog.cpp \
-../../src/palmos/dib.cpp \
-../../src/palmos/dir.cpp \
-../../src/palmos/dirdlg.cpp \
-../../src/palmos/display.cpp \
-../../src/palmos/dragimag.cpp \
-../../src/palmos/dummy.cpp \
-../../src/palmos/enhmeta.cpp \
-../../src/palmos/evtloop.cpp \
-../../src/palmos/fdrepdlg.cpp \
-../../src/palmos/filedlg.cpp \
-../../src/palmos/font.cpp \
-../../src/palmos/fontdlg.cpp \
-../../src/palmos/fontenum.cpp \
-../../src/palmos/fontutil.cpp \
-../../src/palmos/frame.cpp \
-../../src/palmos/gauge.cpp \
-../../src/palmos/gdiimage.cpp \
-../../src/palmos/gdiobj.cpp \
 ../../src/palmos/glcanvas.cpp \
-../../src/palmos/help.cpp \
-../../src/palmos/icon.cpp \
-../../src/palmos/imaglist.cpp \
 ../../src/palmos/joystick.cpp \
-../../src/palmos/listbox.cpp \
-../../src/palmos/listctrl.cpp \
-../../src/palmos/main.cpp \
-../../src/palmos/mdi.cpp \
-../../src/palmos/menu.cpp \
-../../src/palmos/menuitem.cpp \
-../../src/palmos/metafile.cpp \
-../../src/palmos/minifram.cpp \
-../../src/palmos/msgdlg.cpp \
-../../src/palmos/nativdlg.cpp \
-../../src/palmos/notebook.cpp \
-../../src/palmos/ownerdrw.cpp \
-../../src/palmos/palette.cpp \
-../../src/palmos/pen.cpp \
-../../src/palmos/popupwin.cpp \
-../../src/palmos/prefconf.cpp \
-../../src/palmos/printdlg.cpp \
-../../src/palmos/printpalm.cpp \
 ../../src/palmos/progdlg.cpp \
-../../src/palmos/radiobox.cpp \
-../../src/palmos/radiobut.cpp \
-../../src/palmos/region.cpp \
-../../src/palmos/scrolbar.cpp \
-../../src/palmos/settings.cpp \
-../../src/palmos/slider.cpp \
-../../src/palmos/snglinst.cpp \
-../../src/palmos/sound.cpp \
-../../src/palmos/spinbutt.cpp \
-../../src/palmos/spinctrl.cpp \
-../../src/palmos/statbmp.cpp \
-../../src/palmos/statbox.cpp \
-../../src/palmos/statbrpalm.cpp \
-../../src/palmos/statline.cpp \
-../../src/palmos/stattext.cpp \
-../../src/palmos/taskbar.cpp \
-../../src/palmos/toolbar.cpp \
-../../src/palmos/textctrl.cpp \
-../../src/palmos/tglbtn.cpp \
-../../src/palmos/thread.cpp \
-../../src/palmos/timer.cpp \
-../../src/palmos/tooltip.cpp \
-../../src/palmos/toplevel.cpp \
-../../src/palmos/treectrl.cpp \
-../../src/palmos/utils.cpp \
-../../src/palmos/utilsexc.cpp \
-../../src/palmos/utilsgui.cpp \
-../../src/palmos/volume.cpp \
-../../src/palmos/window.cpp 
+../../src/palmos/sound.cpp
 
 RESOURCES = ../../include/wx/palmos/wxWidgets.xrd ../../include/wx/palmos/Version.xrd
 DEFS_FILE = ../../include/wx/palmos/wxWidgets.def
