@@ -24,7 +24,7 @@ all :
 
 caret.exe : caret.obj
 .ifdef __WXMOTIF__
-	cxxlink caret,caret/opt
+	cxxlink caret,[--.lib]vms/opt
 .endif
 
 caret.obj : caret.cpp
