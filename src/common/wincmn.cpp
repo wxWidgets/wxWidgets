@@ -1116,14 +1116,11 @@ void wxWindowBase::UpdateWindowUI()
                 if ( event.GetSetChecked() )
                     ((wxCheckBox *)this)->SetValue(event.GetChecked());
             }
-            // TODO No radio buttons in wxGTK yet
-#ifndef __WXGTK__
             else if ( IsKindOf(CLASSINFO(wxRadioButton)) )
             {
                 if ( event.GetSetChecked() )
                     ((wxRadioButton *) this)->SetValue(event.GetChecked());
             }
-#endif // !wxGTK
         }
     }
 }
