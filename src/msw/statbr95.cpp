@@ -69,10 +69,23 @@ LRESULT APIENTRY wxStatusBarProc(HWND hwnd,
                                  WPARAM wParam,
                                  LPARAM lParam)
 {
-    if ( message == WM_COMMAND )
-    {
-        wxStatusBar95 *sb = (wxStatusBar95 *)GetWindowLong(hwnd, GWL_USERDATA);
-        sb->MSWWindowProc(message, wParam, lParam);
+    switch (message) {
+        case WM_COMMAND:
+        case WM_SIZE:
+        case WM_MOVE:
+        case WM_MOUSEMOVE:
+        case WM_MOUSEMOVE:
+        case WM_LBUTTONUP:
+        case WM_LBUTTONDBLCLK:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_RBUTTONDBLCLK:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        case WM_MBUTTONDBLCLK:
+            wxStatusBar95 *sb = (wxStatusBar95 *)GetWindowLong(hwnd, GWL_USERDATA);
+            sb->MSWWindowProc(message, wParam, lParam);
+            break;
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocStatBar, hwnd, message, wParam, lParam);
