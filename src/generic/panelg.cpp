@@ -124,6 +124,9 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
+    // so that non-solid background renders correctly under GTK+:
+    SetThemeEnabled(true);
+    
 #ifdef __WXMSW__
     // panels don't have the same colour as normal windows under Windows
     SetDefaultBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
