@@ -330,33 +330,34 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
     {
         case 1:
             // This one only partially works.  Appears to be an undocumented
-            // convention that not all widgets adhear to.  For example, for
-            // some widgets backgrounds or non-client areas may not be
-            // painted.
+            // "standard" convention that not all widgets adhear to.  For
+            // example, for some widgets backgrounds or non-client areas may
+            // not be painted.
             ::SendMessage(GetHwndOf(window), WM_PAINT, (long)GetHdcOf(dc), 0);
             break;
 
         case 2:
-            // This one works much better, except for on XP.  On Win2k all
-            // widgets and their children are captured correctly[**].  On XP
-            // with Themes activated most native widgets draw only partially,
-            // if at all.  Without themes it works just like on Win2k.
+            // This one works much better, except for on XP.  On Win2k nearly
+            // all widgets and their children are captured correctly[**].  On
+            // XP with Themes activated most native widgets draw only
+            // partially, if at all.  Without themes it works just like on
+            // Win2k.
             //
-            // ** The radio buttons in a wxRadioBox are not its children by
-            // default, but you can capture the panel instead...
+            // ** For example the radio buttons in a wxRadioBox are not its
+            // children by default, but you can capture it via the panel
+            // instead, or change RADIOBTN_PARENT_IS_RADIOBOX in radiobox.cpp.
             ::SendMessage(GetHwndOf(window), WM_PRINT, (long)GetHdcOf(dc),
                           PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN |
                           PRF_ERASEBKGND | PRF_OWNED );
             break;
 
         case 3:
-            // This one is only defined in the latest SDK and only available
-            // on XP.  MSDN says it is similar to sending WM_PRINT so I expect
-            // that it will work similar to the above.  Since it is avaialble
-            // only on XP, it can't be compiled like this and will have to be
-            // loaded dynamically.
-            //::PrintWindow(GetHwndOf(window), GetHdcOf(dc), 0);
-            //break;
+            // This one is only defined in the latest SDK and is only
+            // available on XP.  MSDN says it is similar to sending WM_PRINT
+            // so I expect that it will work similar to the above.  Since it
+            // is avaialble only on XP, it can't be compiled like this and
+            // will have to be loaded dynamically.
+            // //::PrintWindow(GetHwndOf(window), GetHdcOf(dc), 0); //break;
 
             // fall through
 
