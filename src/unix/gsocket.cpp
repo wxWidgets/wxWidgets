@@ -87,6 +87,10 @@ int _System bsdselect(int,
 int _System soclose(int);
 #  endif
 #endif
+#ifdef __EMX__
+#include <sys/select.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
