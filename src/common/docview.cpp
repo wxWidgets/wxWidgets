@@ -1100,6 +1100,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             {
                 if (!CloseDocument(docToClose, FALSE))
                 {
+                    delete[] templates;
                     return NULL;
                 }
             }
