@@ -111,9 +111,9 @@ void wxGLContext::SetColour(const char *colour)
  * wxGLCanvas implementation
  */
 
-IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
+IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
-BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
     EVT_SIZE(wxGLCanvas::OnSize)
 END_EVENT_TABLE()
 
@@ -217,7 +217,7 @@ bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID 
 			int *attribList, const wxPalette& palette)
 {
   	m_macEraseOnRedraw = false ;
-    wxScrolledWindow::Create( parent, id, pos, size, style, name );
+    wxWindow::Create( parent, id, pos, size, style, name );
 
     AGLPixelFormat fmt = ChoosePixelFormat(attribList);
     wxCHECK_MSG( fmt, false, wxT("Couldn't create OpenGl pixel format") );

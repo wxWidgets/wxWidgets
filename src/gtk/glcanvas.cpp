@@ -237,9 +237,9 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
 // wxGlCanvas
 //---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
+IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
-BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
     EVT_SIZE(wxGLCanvas::OnSize)
 END_EVENT_TABLE()
 
@@ -309,7 +309,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_widget_push_colormap( colormap );
     gtk_widget_push_visual( visual );
 
-    wxScrolledWindow::Create( parent, id, pos, size, style, name );
+    wxWindow::Create( parent, id, pos, size, style, name );
 
     m_glWidget = m_wxwindow;
     

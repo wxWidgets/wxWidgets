@@ -125,9 +125,9 @@ void wxGLContext::SetColour(const char *colour)
  * wxGLCanvas implementation
  */
 
-IMPLEMENT_CLASS(wxGLCanvas, wxScrolledWindow)
+IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
-BEGIN_EVENT_TABLE(wxGLCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
     EVT_SIZE(wxGLCanvas::OnSize)
     EVT_PALETTE_CHANGED(wxGLCanvas::OnPaletteChanged)
     EVT_QUERY_NEW_PALETTE(wxGLCanvas::OnQueryNewPalette)
@@ -135,7 +135,7 @@ END_EVENT_TABLE()
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-    int *attribList, const wxPalette& palette) : wxScrolledWindow()
+    int *attribList, const wxPalette& palette) : wxWindow()
 {
   m_glContext = (wxGLContext*) NULL;
 
@@ -159,7 +159,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
               const wxGLContext *shared, wxWindowID id,
               const wxPoint& pos, const wxSize& size, long style, const wxString& name,
               int *attribList, const wxPalette& palette )
-  : wxScrolledWindow()
+  : wxWindow()
 {
   m_glContext = (wxGLContext*) NULL;
 
@@ -184,7 +184,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
 wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID id,
                         const wxPoint& pos, const wxSize& size, long style, const wxString& name,
                         int *attribList, const wxPalette& palette ):
-  wxScrolledWindow()
+  wxWindow()
 {
   m_glContext = (wxGLContext*) NULL;
 

@@ -100,7 +100,7 @@ private:
 // wxGLCanvas
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLCanvas: public wxScrolledWindow
+class WXDLLEXPORT wxGLCanvas: public wxWindow
 {
 public:
    inline wxGLCanvas() {

@@ -79,7 +79,7 @@ public:
    wxWindow*        m_window;
 };
 
-class WXDLLEXPORT wxGLCanvas: public wxScrolledWindow
+class WXDLLEXPORT wxGLCanvas: public wxWindow
 {
    DECLARE_CLASS(wxGLCanvas)
  public:

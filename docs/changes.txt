@@ -6,6 +6,8 @@ INCOMPATIBLE CHANGES SINCE 2.2.x
 
 All (GUI):
 
+- wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
+
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
 
