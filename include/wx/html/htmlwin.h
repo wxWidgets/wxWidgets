@@ -26,6 +26,7 @@
 #include "wx/filesys.h"
 #include "wx/html/htmlfilt.h"
 #include "wx/filename.h"
+#include "wx/bitmap.h"
 
 class wxHtmlProcessor;
 class wxHtmlWinModule;
