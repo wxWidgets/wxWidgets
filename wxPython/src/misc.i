@@ -359,7 +359,6 @@ void wxUsleep(unsigned long milliseconds);
 bool wxYield();
 bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
-void wxFlushEvents();
 
 %inline %{
     char* wxGetResource(char *section, char *entry, char *file = NULL) {

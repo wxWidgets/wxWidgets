@@ -141,7 +141,11 @@ wxWindow * wxGetActiveWindow();
 
 wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
+
+#ifdef __WXMSW__
 bool wxCheckForInterrupt(wxWindow *wnd);
+void wxFlushEvents();
+#endif
 
 //---------------------------------------------------------------------------
 // Resource System

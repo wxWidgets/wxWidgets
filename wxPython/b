@@ -32,6 +32,11 @@ elif [ "$1" = "d" ]; then
     shift
     CMD="rm -f wxPython/*.so"
 
+# "t" --> touch *.i files
+elif [ "$1" = "t" ]; then
+    shift
+    CMD="set CMD=touch src\*.i; touch contrib\glcanvas\*.i; touch contrib\ogl\*.i; touch contrib\stc\*.i"
+
 # "i" --> install
 elif [ "$1" = "i" ]; then
     shift

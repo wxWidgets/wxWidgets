@@ -58,25 +58,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include "export.h"
 #include <wx/calctrl.h>
 
-static PyObject* l_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    if (!target) {
-        target = o;
-    } else if (target == Py_None) {
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyList_Check(target)) {
-            o2 = target;
-            target = PyList_New(0);
-            PyList_Append(target, o2);
-	    Py_XDECREF(o2);
-        }
-        PyList_Append(target,o);
-	Py_XDECREF(o);
-    }
-    return target;
-}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -163,6 +144,7 @@ static PyObject *_wrap_new_wxCalendarDateAttr(PyObject *self, PyObject *args, Py
         _result = (wxCalendarDateAttr *)new_wxCalendarDateAttr(*_arg0,*_arg1,*_arg2,*_arg3,_arg4);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarDateAttr_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -198,6 +180,7 @@ static PyObject *_wrap_new_wxCalendarDateAttrBorder(PyObject *self, PyObject *ar
         _result = (wxCalendarDateAttr *)new_wxCalendarDateAttrBorder(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarDateAttr_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -238,6 +221,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetTextColour(PyObject *self, PyObject
         wxCalendarDateAttr_SetTextColour(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -273,6 +257,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetBackgroundColour(PyObject *self, Py
         wxCalendarDateAttr_SetBackgroundColour(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -308,6 +293,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetBorderColour(PyObject *self, PyObje
         wxCalendarDateAttr_SetBorderColour(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -344,6 +330,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetFont(PyObject *self, PyObject *args
         wxCalendarDateAttr_SetFont(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -372,6 +359,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetBorder(PyObject *self, PyObject *ar
         wxCalendarDateAttr_SetBorder(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -402,6 +390,7 @@ static PyObject *_wrap_wxCalendarDateAttr_SetHoliday(PyObject *self, PyObject *a
         wxCalendarDateAttr_SetHoliday(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -430,6 +419,7 @@ static PyObject *_wrap_wxCalendarDateAttr_HasTextColour(PyObject *self, PyObject
         _result = (bool )wxCalendarDateAttr_HasTextColour(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -457,6 +447,7 @@ static PyObject *_wrap_wxCalendarDateAttr_HasBackgroundColour(PyObject *self, Py
         _result = (bool )wxCalendarDateAttr_HasBackgroundColour(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -484,6 +475,7 @@ static PyObject *_wrap_wxCalendarDateAttr_HasBorderColour(PyObject *self, PyObje
         _result = (bool )wxCalendarDateAttr_HasBorderColour(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -511,6 +503,7 @@ static PyObject *_wrap_wxCalendarDateAttr_HasFont(PyObject *self, PyObject *args
         _result = (bool )wxCalendarDateAttr_HasFont(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -538,6 +531,7 @@ static PyObject *_wrap_wxCalendarDateAttr_HasBorder(PyObject *self, PyObject *ar
         _result = (bool )wxCalendarDateAttr_HasBorder(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -565,6 +559,7 @@ static PyObject *_wrap_wxCalendarDateAttr_IsHoliday(PyObject *self, PyObject *ar
         _result = (bool )wxCalendarDateAttr_IsHoliday(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -594,6 +589,7 @@ static PyObject *_wrap_wxCalendarDateAttr_GetTextColour(PyObject *self, PyObject
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -629,6 +625,7 @@ static PyObject *_wrap_wxCalendarDateAttr_GetBackgroundColour(PyObject *self, Py
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -664,6 +661,7 @@ static PyObject *_wrap_wxCalendarDateAttr_GetBorderColour(PyObject *self, PyObje
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -699,6 +697,7 @@ static PyObject *_wrap_wxCalendarDateAttr_GetFont(PyObject *self, PyObject *args
     _result = (wxFont *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -732,6 +731,7 @@ static PyObject *_wrap_wxCalendarDateAttr_GetBorder(PyObject *self, PyObject *ar
         _result = (wxCalendarDateBorder )wxCalendarDateAttr_GetBorder(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -785,6 +785,7 @@ static PyObject *_wrap_new_wxCalendarEvent(PyObject *self, PyObject *args, PyObj
         _result = (wxCalendarEvent *)new_wxCalendarEvent(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarEvent_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -820,6 +821,7 @@ static PyObject *_wrap_wxCalendarEvent_GetDate(PyObject *self, PyObject *args, P
     _result = (wxDateTime *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateTime_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -853,6 +855,7 @@ static PyObject *_wrap_wxCalendarEvent_GetWeekDay(PyObject *self, PyObject *args
         _result = (wxDateTime::WeekDay )wxCalendarEvent_GetWeekDay(_arg0);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -943,6 +946,7 @@ static PyObject *_wrap_new_wxCalendarCtrl(PyObject *self, PyObject *args, PyObje
         _result = (wxCalendarCtrl *)new_wxCalendarCtrl(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarCtrl_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -984,6 +988,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetDate(PyObject *self, PyObject *args, Py
         wxCalendarCtrl_SetDate(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1014,6 +1019,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetDate(PyObject *self, PyObject *args, Py
     _result = (wxDateTime *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxDateTime_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1049,6 +1055,7 @@ static PyObject *_wrap_wxCalendarCtrl_EnableYearChange(PyObject *self, PyObject 
         wxCalendarCtrl_EnableYearChange(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1079,6 +1086,7 @@ static PyObject *_wrap_wxCalendarCtrl_EnableMonthChange(PyObject *self, PyObject
         wxCalendarCtrl_EnableMonthChange(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1109,6 +1117,7 @@ static PyObject *_wrap_wxCalendarCtrl_EnableHolidayDisplay(PyObject *self, PyObj
         wxCalendarCtrl_EnableHolidayDisplay(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1152,6 +1161,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetHeaderColours(PyObject *self, PyObject 
         wxCalendarCtrl_SetHeaderColours(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1182,6 +1192,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHeaderColourFg(PyObject *self, PyObject
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1217,6 +1228,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHeaderColourBg(PyObject *self, PyObject
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1265,6 +1277,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetHighlightColours(PyObject *self, PyObje
         wxCalendarCtrl_SetHighlightColours(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1295,6 +1308,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHighlightColourFg(PyObject *self, PyObj
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1330,6 +1344,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHighlightColourBg(PyObject *self, PyObj
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1378,6 +1393,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetHolidayColours(PyObject *self, PyObject
         wxCalendarCtrl_SetHolidayColours(_arg0,*_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1408,6 +1424,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHolidayColourFg(PyObject *self, PyObjec
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1443,6 +1460,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetHolidayColourBg(PyObject *self, PyObjec
     _result = (wxColour *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1478,6 +1496,7 @@ static PyObject *_wrap_wxCalendarCtrl_GetAttr(PyObject *self, PyObject *args, Py
         _result = (wxCalendarDateAttr *)wxCalendarCtrl_GetAttr(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    if (_result) {
         SWIG_MakePtr(_ptemp, (char *) _result,"_wxCalendarDateAttr_p");
         _resultobj = Py_BuildValue("s",_ptemp);
@@ -1520,6 +1539,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetAttr(PyObject *self, PyObject *args, Py
         wxCalendarCtrl_SetAttr(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1548,6 +1568,7 @@ static PyObject *_wrap_wxCalendarCtrl_SetHoliday(PyObject *self, PyObject *args,
         wxCalendarCtrl_SetHoliday(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1576,6 +1597,7 @@ static PyObject *_wrap_wxCalendarCtrl_ResetAttr(PyObject *self, PyObject *args, 
         wxCalendarCtrl_ResetAttr(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1630,6 +1652,7 @@ static PyObject *_wrap_wxCalendarCtrl_HitTest(PyObject *self, PyObject *args, Py
         _result = (wxCalendarHitTestResult )wxCalendarCtrl_HitTest(_arg0,*_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -1686,17 +1709,9 @@ static PyMethodDef calendarcMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
-    { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
     { "_wxEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
     { "_wxEvent","_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
-    { "_wxEvent","_class_wxEvent",0},
-    { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
-    { "_wxMenuEvent","_class_wxMenuEvent",0},
-    { "_wxPyBitmapDataObject","_class_wxPyBitmapDataObject",0},
-    { "_wxBitmapDataObject","_class_wxBitmapDataObject",0},
-    { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
-    { "_class_wxDateTime","_wxDateTime",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
@@ -1706,47 +1721,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
-    { "_class_wxCustomDataObject","_wxCustomDataObject",0},
-    { "_wxSpinCtrl","_class_wxSpinCtrl",0},
-    { "_class_wxRegionIterator","_wxRegionIterator",0},
-    { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
-    { "_class_wxMenuBar","_wxMenuBar",0},
     { "_class_wxEvtHandler","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
     { "_class_wxEvtHandler","_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
-    { "_class_wxEvtHandler","_wxEvtHandler",0},
-    { "_wxPaintEvent","_class_wxPaintEvent",0},
-    { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
-    { "_wxCursor","_class_wxCursor",0},
-    { "_wxNotifyEvent","_class_wxNotifyEvent",0},
-    { "_wxMask","_class_wxMask",0},
-    { "_wxPen","_class_wxPen",0},
-    { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
     { "_byte","_unsigned_char",0},
-    { "_wxDataObject","_class_wxDataObject",0},
-    { "_wxStaticBox","_class_wxStaticBox",0},
-    { "_wxColourDatabase","_class_wxColourDatabase",0},
-    { "_wxPyDataObjectSimple","_class_wxPyDataObjectSimple",0},
-    { "_wxPyDropSource","_class_wxPyDropSource",0},
-    { "_wxChoice","_class_wxChoice",0},
-    { "_wxSlider","_class_wxSlider",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
-    { "_wxImageList","_class_wxImageList",0},
-    { "_wxDataObjectSimple","_class_wxDataObjectSimple",0},
-    { "_wxDropFilesEvent","_class_wxDropFilesEvent",0},
-    { "_wxBitmapButton","_class_wxBitmapButton",0},
-    { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
-    { "_class_wxClipboard","_wxClipboard",0},
-    { "_class_wxGauge","_wxGauge",0},
-    { "_wxGDIObject","_class_wxGDIObject",0},
-    { "_wxDC","_class_wxDC",0},
-    { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
     { "_class_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
     { "_class_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
     { "_class_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
     { "_class_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
-    { "_class_wxObject","_wxObject",0},
-    { "_wxSpinEvent","_class_wxSpinEvent",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
     { "_size_t","_time_t",0},
@@ -1754,34 +1737,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
-    { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
-    { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
-    { "_class_wxMenuItem","_wxMenuItem",0},
-    { "_class_wxPaintEvent","_wxPaintEvent",0},
-    { "_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0},
-    { "_class_wxPostScriptDC","_wxPostScriptDC",0},
-    { "_wxPanel","_class_wxPanel",0},
-    { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
-    { "_wxCheckBox","_class_wxCheckBox",0},
-    { "_wxPyEvent","_class_wxPyEvent",0},
-    { "_wxTextCtrl","_class_wxTextCtrl",0},
-    { "_class_wxMask","_wxMask",0},
-    { "_wxTextDataObject","_class_wxTextDataObject",0},
-    { "_class_wxKeyEvent","_wxKeyEvent",0},
-    { "_wxFileConfig","_class_wxFileConfig",0},
-    { "_wxColour","_class_wxColour",0},
-    { "_class_wxDialog","_wxDialog",0},
-    { "_class_wxFileDataObject","_wxFileDataObject",0},
-    { "_wxIdleEvent","_class_wxIdleEvent",0},
-    { "_class_wxUpdateUIEvent","_wxUpdateUIEvent",0},
-    { "_class_wxDataObject","_wxDataObject",0},
-    { "_wxStaticLine","_class_wxStaticLine",0},
-    { "_wxBrush","_class_wxBrush",0},
-    { "_wxToggleButton","_class_wxToggleButton",0},
-    { "_wxDataFormat","_class_wxDataFormat",0},
-    { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
-    { "_wxShowEvent","_class_wxShowEvent",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -1790,138 +1745,40 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
-    { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
     { "_class_wxEvent","_wxCalendarEvent",SwigwxCalendarEventTowxEvent},
-    { "_class_wxEvent","_wxEvent",0},
-    { "_wxCheckListBox","_class_wxCheckListBox",0},
-    { "_wxRect","_class_wxRect",0},
     { "_wxCommandEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_wxCommandEvent","_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxCommandEvent",0},
-    { "_wxSizeEvent","_class_wxSizeEvent",0},
-    { "_wxPoint","_class_wxPoint",0},
-    { "_class_wxButton","_wxButton",0},
-    { "_wxRadioBox","_class_wxRadioBox",0},
-    { "_class_wxSpinCtrl","_wxSpinCtrl",0},
     { "_char","_wxChar",0},
-    { "_wxBitmap","_class_wxBitmap",0},
-    { "_wxPenList","_class_wxPenList",0},
-    { "_wxWindowDC","_class_wxWindowDC",0},
-    { "_wxTimerEvent","_class_wxTimerEvent",0},
-    { "_wxScrollBar","_class_wxScrollBar",0},
-    { "_wxSpinButton","_class_wxSpinButton",0},
-    { "_wxCalendarEvent","_class_wxCalendarEvent",0},
-    { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
-    { "_class_wxNotifyEvent","_wxNotifyEvent",0},
-    { "_class_wxValidator","_wxValidator",0},
-    { "_class_wxPyEvent","_wxPyEvent",0},
-    { "_wxConfig","_class_wxConfig",0},
-    { "_class_wxIconizeEvent","_wxIconizeEvent",0},
-    { "_class_wxStaticBitmap","_wxStaticBitmap",0},
-    { "_class_wxFileConfig","_wxFileConfig",0},
-    { "_wxDropTarget","_class_wxDropTarget",0},
-    { "_class_wxStaticLine","_wxStaticLine",0},
-    { "_class_wxColourDatabase","_wxColourDatabase",0},
-    { "_wxScrollEvent","_class_wxScrollEvent",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
-    { "_class_wxRegion","_wxRegion",0},
-    { "_class_wxDataFormat","_wxDataFormat",0},
-    { "_class_wxDropFilesEvent","_wxDropFilesEvent",0},
-    { "_wxWindowDestroyEvent","_class_wxWindowDestroyEvent",0},
-    { "_wxStaticText","_class_wxStaticText",0},
-    { "_wxFont","_class_wxFont",0},
-    { "_class_wxPyDropTarget","_wxPyDropTarget",0},
-    { "_wxCloseEvent","_class_wxCloseEvent",0},
     { "_unsigned_long","_long",0},
-    { "_class_wxRect","_wxRect",0},
-    { "_class_wxDC","_wxDC",0},
-    { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
-    { "_class_wxBrushList","_wxBrushList",0},
-    { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
-    { "_class_wxPenList","_wxPenList",0},
-    { "_class_wxWindowCreateEvent","_wxWindowCreateEvent",0},
-    { "_wxTimeSpan","_class_wxTimeSpan",0},
-    { "_wxFocusEvent","_class_wxFocusEvent",0},
-    { "_wxMaximizeEvent","_class_wxMaximizeEvent",0},
-    { "_class_wxTimerEvent","_wxTimerEvent",0},
-    { "_class_wxSpinButton","_wxSpinButton",0},
-    { "_class_wxCalendarEvent","_wxCalendarEvent",0},
-    { "_wxAcceleratorEntry","_class_wxAcceleratorEntry",0},
-    { "_class_wxPanel","_wxPanel",0},
-    { "_class_wxCheckBox","_wxCheckBox",0},
-    { "_wxComboBox","_class_wxComboBox",0},
-    { "_wxRadioButton","_class_wxRadioButton",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
-    { "_class_wxTextCtrl","_wxTextCtrl",0},
-    { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
-    { "_class_wxTextDataObject","_wxTextDataObject",0},
-    { "_wxMenu","_class_wxMenu",0},
-    { "_class_wxMoveEvent","_wxMoveEvent",0},
-    { "_wxListBox","_class_wxListBox",0},
-    { "_wxScreenDC","_class_wxScreenDC",0},
-    { "_class_wxCalendarCtrl","_wxCalendarCtrl",0},
     { "_WXTYPE","_wxDateTime_t",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
-    { "_class_wxDropTarget","_wxDropTarget",0},
-    { "_class_wxBrush","_wxBrush",0},
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
     { "_class_wxWindow","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
     { "_class_wxWindow","_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
-    { "_class_wxWindow","_wxWindow",0},
-    { "_wxDateSpan","_class_wxDateSpan",0},
-    { "_class_wxStaticText","_wxStaticText",0},
-    { "_class_wxFont","_wxFont",0},
-    { "_wxClipboard","_class_wxClipboard",0},
-    { "_class_wxPyValidator","_wxPyValidator",0},
-    { "_class_wxCloseEvent","_wxCloseEvent",0},
-    { "_wxBusyInfo","_class_wxBusyInfo",0},
-    { "_wxFontList","_class_wxFontList",0},
-    { "_class_wxMenuEvent","_wxMenuEvent",0},
-    { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
-    { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
-    { "_wxClientDC","_class_wxClientDC",0},
-    { "_wxMouseEvent","_class_wxMouseEvent",0},
     { "_wxObject","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
     { "_wxObject","_wxCalendarCtrl",SwigwxCalendarCtrlTowxObject},
     { "_wxObject","_class_wxCalendarEvent",SwigwxCalendarEventTowxObject},
     { "_wxObject","_wxCalendarEvent",SwigwxCalendarEventTowxObject},
-    { "_wxObject","_class_wxObject",0},
-    { "_class_wxPoint","_wxPoint",0},
-    { "_wxRealPoint","_class_wxRealPoint",0},
-    { "_class_wxRadioBox","_wxRadioBox",0},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
-    { "_wxMemoryDC","_class_wxMemoryDC",0},
-    { "_wxPyTextDataObject","_class_wxPyTextDataObject",0},
-    { "_wxPaintDC","_class_wxPaintDC",0},
-    { "_class_wxWindowDC","_wxWindowDC",0},
-    { "_class_wxFocusEvent","_wxFocusEvent",0},
-    { "_class_wxMaximizeEvent","_wxMaximizeEvent",0},
-    { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
-    { "_class_wxCursor","_wxCursor",0},
-    { "_wxPostScriptDC","_class_wxPostScriptDC",0},
-    { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
-    { "_wxScrolledWindow","_class_wxScrolledWindow",0},
-    { "_wxCalendarDateAttr","_class_wxCalendarDateAttr",0},
     { "_unsigned_char","_byte",0},
-    { "_class_wxMenu","_wxMenu",0},
     { "_wxControl","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
     { "_wxControl","_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
-    { "_wxControl","_class_wxControl",0},
-    { "_class_wxListBox","_wxListBox",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
     { "_unsigned_int","_time_t",0},
@@ -1929,24 +1786,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
-    { "_wxIcon","_class_wxIcon",0},
-    { "_wxDialog","_class_wxDialog",0},
-    { "_class_wxPen","_wxPen",0},
-    { "_wxConfigBase","_class_wxConfigBase",0},
     { "_short","_wxDateTime_t",0},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
-    { "_class_wxStaticBox","_wxStaticBox",0},
-    { "_class_wxPyDataObjectSimple","_wxPyDataObjectSimple",0},
-    { "_class_wxPyDropSource","_wxPyDropSource",0},
-    { "_class_wxScrollEvent","_wxScrollEvent",0},
-    { "_wxJoystickEvent","_class_wxJoystickEvent",0},
-    { "_class_wxChoice","_wxChoice",0},
-    { "_class_wxSlider","_wxSlider",0},
-    { "_class_wxImageList","_wxImageList",0},
-    { "_class_wxBitmapButton","_wxBitmapButton",0},
-    { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_time_t",0},
@@ -1956,8 +1799,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
-    { "_class_wxGDIObject","_wxGDIObject",0},
-    { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_time_t",0},
@@ -1967,14 +1808,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_wxWindowID",0},
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
-    { "_class_wxMouseEvent","_wxMouseEvent",0},
-    { "_wxPyCommandEvent","_class_wxPyCommandEvent",0},
     { "_wxDateTime_t","_unsigned_short",0},
     { "_wxDateTime_t","_short",0},
     { "_wxDateTime_t","_WXTYPE",0},
-    { "_class_wxSpinEvent","_wxSpinEvent",0},
-    { "_class_wxQueryNewPaletteEvent","_wxQueryNewPaletteEvent",0},
-    { "_wxDateTime","_class_wxDateTime",0},
     { "_time_t","_wxCoord",0},
     { "_time_t","_wxPrintQuality",0},
     { "_time_t","_unsigned_int",0},
@@ -1982,32 +1818,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_wxWindowID",0},
     { "_time_t","_uint",0},
     { "_time_t","_size_t",0},
-    { "_class_wxNavigationKeyEvent","_wxNavigationKeyEvent",0},
-    { "_wxButton","_class_wxButton",0},
-    { "_wxSize","_class_wxSize",0},
-    { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
-    { "_class_wxTimeSpan","_wxTimeSpan",0},
-    { "_class_wxPaintDC","_wxPaintDC",0},
-    { "_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0},
-    { "_class_wxPyFileDropTarget","_wxPyFileDropTarget",0},
-    { "_class_wxInitDialogEvent","_wxInitDialogEvent",0},
-    { "_class_wxComboBox","_wxComboBox",0},
-    { "_class_wxRadioButton","_wxRadioButton",0},
-    { "_wxValidator","_class_wxValidator",0},
-    { "_class_wxCalendarDateAttr","_wxCalendarDateAttr",0},
-    { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
-    { "_wxIconizeEvent","_class_wxIconizeEvent",0},
     { "_class_wxControl","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
     { "_class_wxControl","_wxCalendarCtrl",SwigwxCalendarCtrlTowxControl},
-    { "_class_wxControl","_wxControl",0},
-    { "_wxStaticBitmap","_class_wxStaticBitmap",0},
-    { "_class_wxIcon","_wxIcon",0},
-    { "_class_wxColour","_wxColour",0},
-    { "_class_wxScreenDC","_wxScreenDC",0},
-    { "_wxPalette","_class_wxPalette",0},
-    { "_class_wxIdleEvent","_wxIdleEvent",0},
-    { "_class_wxConfigBase","_wxConfigBase",0},
     { "_wxCoord","_int",0},
     { "_wxCoord","_signed_int",0},
     { "_wxCoord","_unsigned_int",0},
@@ -2017,49 +1829,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
-    { "_wxEraseEvent","_class_wxEraseEvent",0},
-    { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
-    { "_class_wxJoystickEvent","_wxJoystickEvent",0},
-    { "_class_wxToggleButton","_wxToggleButton",0},
-    { "_wxRegion","_class_wxRegion",0},
-    { "_class_wxDateSpan","_wxDateSpan",0},
-    { "_class_wxShowEvent","_wxShowEvent",0},
-    { "_wxPyDropTarget","_class_wxPyDropTarget",0},
-    { "_wxActivateEvent","_class_wxActivateEvent",0},
-    { "_wxGauge","_class_wxGauge",0},
-    { "_class_wxCheckListBox","_wxCheckListBox",0},
-    { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxFontList","_wxFontList",0},
     { "_class_wxCommandEvent","_class_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxCalendarEvent",SwigwxCalendarEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxCommandEvent",0},
-    { "_class_wxClientDC","_wxClientDC",0},
-    { "_class_wxSizeEvent","_wxSizeEvent",0},
-    { "_wxBrushList","_class_wxBrushList",0},
-    { "_wxCustomDataObject","_class_wxCustomDataObject",0},
-    { "_class_wxSize","_wxSize",0},
-    { "_class_wxBitmap","_wxBitmap",0},
-    { "_class_wxMemoryDC","_wxMemoryDC",0},
-    { "_wxPyTextDropTarget","_class_wxPyTextDropTarget",0},
-    { "_wxMenuBar","_class_wxMenuBar",0},
     { "_wxEvtHandler","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxCalendarCtrl",SwigwxCalendarCtrlTowxEvtHandler},
-    { "_wxEvtHandler","_class_wxEvtHandler",0},
-    { "_wxMenuItem","_class_wxMenuItem",0},
-    { "_class_wxScrollBar","_wxScrollBar",0},
-    { "_class_wxScrolledWindow","_wxScrolledWindow",0},
-    { "_class_wxConfig","_wxConfig",0},
-    { "_wxKeyEvent","_class_wxKeyEvent",0},
-    { "_wxMoveEvent","_class_wxMoveEvent",0},
-    { "_wxCalendarCtrl","_class_wxCalendarCtrl",0},
-    { "_class_wxPalette","_wxPalette",0},
-    { "_wxFileDataObject","_class_wxFileDataObject",0},
-    { "_class_wxEraseEvent","_wxEraseEvent",0},
-    { "_class_wxDataObjectComposite","_wxDataObjectComposite",0},
     { "_wxWindow","_class_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
     { "_wxWindow","_wxCalendarCtrl",SwigwxCalendarCtrlTowxWindow},
-    { "_wxWindow","_class_wxWindow",0},
-    { "_class_wxWindowDestroyEvent","_wxWindowDestroyEvent",0},
 {0,0,0}};
 
 static PyObject *SWIG_globals;
