@@ -154,7 +154,7 @@ public:
     wxString GetHistoryFile(int i) const;
 
     int GetCount() const;
-    %pragma(python) addtoclass = "GetNoHistoryFiles = GetCount"
+    %pythoncode { GetNoHistoryFiles = GetCount }
 
 };
 
