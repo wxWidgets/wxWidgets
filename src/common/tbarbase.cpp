@@ -229,12 +229,20 @@ wxControl *wxToolBarBase::FindControl( int id )
           node;
           node = node->GetNext() )
     {
-        wxControl *control = node->GetData()->GetControl();
-
-        if (control)
+        const wxToolBarToolBase * const tool = node->GetData();
+        if ( tool->IsControl() )
         {
-            if (control->GetId() == id)
+            wxControl * const control = tool->GetControl();
+
+            if ( !control )
+            {
+                wxFAIL_MSG( _T("NULL control in toolbar?") );
+            }
+            else if ( control->GetId() == id )
+            {
+                // found
                 return control;
+            }
         }
     }
 
