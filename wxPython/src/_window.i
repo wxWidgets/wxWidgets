@@ -1227,6 +1227,12 @@ Use this function with care under GTK+ as the new appearance of the
 window might not look equally well when used with themes, i.e GTK+'s
 ability to change its look as the user wishes with run-time loadable
 modules.");
+
+    DocDeclStr(
+        void , SetDefaultBackgroundColour(const wxColour& colour),
+        "");
+    
+
     
     DocDeclStr(
         virtual bool , SetForegroundColour( const wxColour &colour ),
@@ -1235,7 +1241,12 @@ was changed.  The interpretation of foreground colour is dependent on
 the window class; it may be the text colour or other colour, or it may
 not be used at all.");
 
+    DocDeclStr(
+        void , SetDefaultForegroundColour(const wxColour& colour),
+        "");
+    
 
+    
     DocDeclStr(
         wxColour , GetBackgroundColour() const,
         "Returns the background colour of the window.");
@@ -1266,6 +1277,12 @@ be reset back to default.");
     DocDeclStr(
         virtual bool , SetFont( const wxFont &font ),
         "Sets the font for this window.");
+    
+    DocDeclStr(
+        void , SetDefaultFont(const wxFont& font),
+        "");
+    
+
     
     DocDeclStr(
         wxFont& , GetFont(),
@@ -1704,6 +1721,20 @@ the window can remove itself from the sizer when it is destroyed.");
 #endif
 
 
+// TODO: These are currently protected, but woudl be nice ot have them in wxPython...
+//
+//     // inherit the parents visual attributes if they had been explicitly set
+//     // by the user (i.e. we don't inherit default attributes) and if we don't
+//     // have our own explicitly set
+//     virtual void InheritAttributes();
+
+//     // returns false from here if this window doesn't want to inherit the
+//     // parents colours even if InheritAttributes() would normally do it
+//     //
+//     // this just provides a simple way to customize InheritAttributes()
+//     // behaviour in the most common case
+//     virtual bool ShouldInheritColours() const { return false; }
+    
 
     %pythoncode {
     def PostCreate(self, pre):
