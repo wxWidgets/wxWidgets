@@ -652,7 +652,7 @@ public:
     bool LoadPage(const wxString& location);
 
     // Loads HTML page from file
-//TODO    bool LoadFile(const wxString& filename);
+    bool LoadFile(const wxString& filename);
 
     // Append to current page
     bool AppendToPage(const wxString& source);

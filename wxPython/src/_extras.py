@@ -774,6 +774,34 @@ class _wxPyDeadObject:
     def __nonzero__(self):
         return 0
 
+#----------------------------------------------------------------------
+
+class wxNotebookPage(wxPanel):
+    """
+    There is an old (and apparently unsolvable) bug when placing a
+    window with a nonstandard background colour in a wxNotebook, as
+    the notbooks's background colour would always be used when the
+    window is refreshed.  The solution is to place a panel in the
+    notbook and the coloured window o nthe panel, sized to cover the
+    panel.  This simple class does that for you, just put an instance
+    of this in the notebook and make your regular window a child of
+    this one and it will handle the resize for you.
+    """
+    def __init__(self, parent, id=-1,
+                 pos=wxDefaultPosition, size=wxDefaultSize,
+                 style=wxTAB_TRAVERSAL, name="panel"):
+        wxPanel.__init__(self, parent, id, pos, size, style, name)
+        self.child = None
+        EVT_SIZE(self, self.OnSize)
+    def OnSize(self, evt):
+        if self.child is None:
+            children = self.GetChildren()
+            if len(children):
+                self.child = children[0]
+        if self.child:
+            self.child.SetPosition((0,0))
+            self.child.SetSize(self.GetSize())
+
 
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
