@@ -168,6 +168,9 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("DELETE") ) {
                         keyCode = WXK_DELETE;
                     }
+                    else if ( current == wxT("BACK") ) {
+                        keyCode = WXK_BACK;
+                    }
                     else if ( current == wxT("INS") ) {
                         keyCode = WXK_INSERT;
                     }
