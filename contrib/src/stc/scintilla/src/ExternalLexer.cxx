@@ -232,8 +232,9 @@ void LexerManager::Clear()
 {
 	if (NULL != first) {
 		LexerLibrary *cur = first;
-		LexerLibrary *next = first->next;
+		LexerLibrary *next;
 		while (cur) {
+			next = cur->next;
 			delete cur;
 			cur = next;
 		}

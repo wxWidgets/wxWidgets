@@ -57,48 +57,56 @@ STCDLL_OBJECTS =  \
 	stcdll_CallTip.o \
 	stcdll_CellBuffer.o \
 	stcdll_ContractionState.o \
-	stcdll_Document.o \
 	stcdll_DocumentAccessor.o \
+	stcdll_Document.o \
 	stcdll_Editor.o \
 	stcdll_ExternalLexer.o \
 	stcdll_Indicator.o \
 	stcdll_KeyMap.o \
 	stcdll_KeyWords.o \
-	stcdll_LexAVE.o \
 	stcdll_LexAda.o \
 	stcdll_LexAsm.o \
+	stcdll_LexAVE.o \
 	stcdll_LexBaan.o \
 	stcdll_LexBullant.o \
-	stcdll_LexCPP.o \
-	stcdll_LexCSS.o \
+	stcdll_LexCLW.o \
 	stcdll_LexConf.o \
+	stcdll_LexCPP.o \
 	stcdll_LexCrontab.o \
+	stcdll_LexCSS.o \
 	stcdll_LexEiffel.o \
+	stcdll_LexErlang.o \
 	stcdll_LexEScript.o \
+	stcdll_LexForth.o \
 	stcdll_LexFortran.o \
 	stcdll_LexHTML.o \
 	stcdll_LexLisp.o \
 	stcdll_LexLout.o \
 	stcdll_LexLua.o \
-	stcdll_LexMMIXAL.o \
 	stcdll_LexMatlab.o \
+	stcdll_LexMetapost.o \
+	stcdll_LexMMIXAL.o \
+	stcdll_LexMPT.o \
 	stcdll_LexNsis.o \
 	stcdll_LexOthers.o \
+	stcdll_LexPascal.o \
+	stcdll_LexPB.o \
+	stcdll_LexPerl.o \
 	stcdll_LexPOV.o \
 	stcdll_LexPS.o \
-	stcdll_LexPascal.o \
-	stcdll_LexPerl.o \
 	stcdll_LexPython.o \
 	stcdll_LexRuby.o \
-	stcdll_LexSQL.o \
 	stcdll_LexScriptol.o \
+	stcdll_LexSQL.o \
+	stcdll_LexTeX.o \
 	stcdll_LexVB.o \
+	stcdll_LexYAML.o \
 	stcdll_LineMarker.o \
 	stcdll_PropSet.o \
 	stcdll_RESearch.o \
 	stcdll_ScintillaBase.o \
-	stcdll_Style.o \
 	stcdll_StyleContext.o \
+	stcdll_Style.o \
 	stcdll_UniConversion.o \
 	stcdll_ViewStyle.o \
 	stcdll_WindowAccessor.o \
@@ -115,48 +123,56 @@ STCLIB_OBJECTS =  \
 	stclib_CallTip.o \
 	stclib_CellBuffer.o \
 	stclib_ContractionState.o \
-	stclib_Document.o \
 	stclib_DocumentAccessor.o \
+	stclib_Document.o \
 	stclib_Editor.o \
 	stclib_ExternalLexer.o \
 	stclib_Indicator.o \
 	stclib_KeyMap.o \
 	stclib_KeyWords.o \
-	stclib_LexAVE.o \
 	stclib_LexAda.o \
 	stclib_LexAsm.o \
+	stclib_LexAVE.o \
 	stclib_LexBaan.o \
 	stclib_LexBullant.o \
-	stclib_LexCPP.o \
-	stclib_LexCSS.o \
+	stclib_LexCLW.o \
 	stclib_LexConf.o \
+	stclib_LexCPP.o \
 	stclib_LexCrontab.o \
+	stclib_LexCSS.o \
 	stclib_LexEiffel.o \
+	stclib_LexErlang.o \
 	stclib_LexEScript.o \
+	stclib_LexForth.o \
 	stclib_LexFortran.o \
 	stclib_LexHTML.o \
 	stclib_LexLisp.o \
 	stclib_LexLout.o \
 	stclib_LexLua.o \
-	stclib_LexMMIXAL.o \
 	stclib_LexMatlab.o \
+	stclib_LexMetapost.o \
+	stclib_LexMMIXAL.o \
+	stclib_LexMPT.o \
 	stclib_LexNsis.o \
 	stclib_LexOthers.o \
+	stclib_LexPascal.o \
+	stclib_LexPB.o \
+	stclib_LexPerl.o \
 	stclib_LexPOV.o \
 	stclib_LexPS.o \
-	stclib_LexPascal.o \
-	stclib_LexPerl.o \
 	stclib_LexPython.o \
 	stclib_LexRuby.o \
-	stclib_LexSQL.o \
 	stclib_LexScriptol.o \
+	stclib_LexSQL.o \
+	stclib_LexTeX.o \
 	stclib_LexVB.o \
+	stclib_LexYAML.o \
 	stclib_LineMarker.o \
 	stclib_PropSet.o \
 	stclib_RESearch.o \
 	stclib_ScintillaBase.o \
-	stclib_Style.o \
 	stclib_StyleContext.o \
+	stclib_Style.o \
 	stclib_UniConversion.o \
 	stclib_ViewStyle.o \
 	stclib_WindowAccessor.o \
@@ -332,10 +348,10 @@ stcdll_CellBuffer.o: $(srcdir)/scintilla/src/CellBuffer.cxx
 stcdll_ContractionState.o: $(srcdir)/scintilla/src/ContractionState.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_Document.o: $(srcdir)/scintilla/src/Document.cxx
+stcdll_DocumentAccessor.o: $(srcdir)/scintilla/src/DocumentAccessor.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_DocumentAccessor.o: $(srcdir)/scintilla/src/DocumentAccessor.cxx
+stcdll_Document.o: $(srcdir)/scintilla/src/Document.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_Editor.o: $(srcdir)/scintilla/src/Editor.cxx
@@ -353,13 +369,13 @@ stcdll_KeyMap.o: $(srcdir)/scintilla/src/KeyMap.cxx
 stcdll_KeyWords.o: $(srcdir)/scintilla/src/KeyWords.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_LexAVE.o: $(srcdir)/scintilla/src/LexAVE.cxx
-	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
-
 stcdll_LexAda.o: $(srcdir)/scintilla/src/LexAda.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexAsm.o: $(srcdir)/scintilla/src/LexAsm.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexAVE.o: $(srcdir)/scintilla/src/LexAVE.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
@@ -368,22 +384,31 @@ stcdll_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
 stcdll_LexBullant.o: $(srcdir)/scintilla/src/LexBullant.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
-	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
-
-stcdll_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
+stcdll_LexCLW.o: $(srcdir)/scintilla/src/LexCLW.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexConf.o: $(srcdir)/scintilla/src/LexConf.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LexCrontab.o: $(srcdir)/scintilla/src/LexCrontab.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexEiffel.o: $(srcdir)/scintilla/src/LexEiffel.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexErlang.o: $(srcdir)/scintilla/src/LexErlang.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LexEScript.o: $(srcdir)/scintilla/src/LexEScript.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexForth.o: $(srcdir)/scintilla/src/LexForth.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexFortran.o: $(srcdir)/scintilla/src/LexFortran.cxx
@@ -401,10 +426,16 @@ stcdll_LexLout.o: $(srcdir)/scintilla/src/LexLout.cxx
 stcdll_LexLua.o: $(srcdir)/scintilla/src/LexLua.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexMatlab.o: $(srcdir)/scintilla/src/LexMatlab.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexMetapost.o: $(srcdir)/scintilla/src/LexMetapost.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LexMMIXAL.o: $(srcdir)/scintilla/src/LexMMIXAL.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_LexMatlab.o: $(srcdir)/scintilla/src/LexMatlab.cxx
+stcdll_LexMPT.o: $(srcdir)/scintilla/src/LexMPT.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexNsis.o: $(srcdir)/scintilla/src/LexNsis.cxx
@@ -413,16 +444,19 @@ stcdll_LexNsis.o: $(srcdir)/scintilla/src/LexNsis.cxx
 stcdll_LexOthers.o: $(srcdir)/scintilla/src/LexOthers.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexPascal.o: $(srcdir)/scintilla/src/LexPascal.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexPB.o: $(srcdir)/scintilla/src/LexPB.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LexPOV.o: $(srcdir)/scintilla/src/LexPOV.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexPS.o: $(srcdir)/scintilla/src/LexPS.cxx
-	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
-
-stcdll_LexPascal.o: $(srcdir)/scintilla/src/LexPascal.cxx
-	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
-
-stcdll_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
@@ -431,13 +465,19 @@ stcdll_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
 stcdll_LexRuby.o: $(srcdir)/scintilla/src/LexRuby.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
-	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
-
 stcdll_LexScriptol.o: $(srcdir)/scintilla/src/LexScriptol.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+stcdll_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexTeX.o: $(srcdir)/scintilla/src/LexTeX.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 stcdll_LexVB.o: $(srcdir)/scintilla/src/LexVB.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+stcdll_LexYAML.o: $(srcdir)/scintilla/src/LexYAML.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_LineMarker.o: $(srcdir)/scintilla/src/LineMarker.cxx
@@ -452,10 +492,10 @@ stcdll_RESearch.o: $(srcdir)/scintilla/src/RESearch.cxx
 stcdll_ScintillaBase.o: $(srcdir)/scintilla/src/ScintillaBase.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_Style.o: $(srcdir)/scintilla/src/Style.cxx
+stcdll_StyleContext.o: $(srcdir)/scintilla/src/StyleContext.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-stcdll_StyleContext.o: $(srcdir)/scintilla/src/StyleContext.cxx
+stcdll_Style.o: $(srcdir)/scintilla/src/Style.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 stcdll_UniConversion.o: $(srcdir)/scintilla/src/UniConversion.cxx
@@ -491,10 +531,10 @@ stclib_CellBuffer.o: $(srcdir)/scintilla/src/CellBuffer.cxx
 stclib_ContractionState.o: $(srcdir)/scintilla/src/ContractionState.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_Document.o: $(srcdir)/scintilla/src/Document.cxx
+stclib_DocumentAccessor.o: $(srcdir)/scintilla/src/DocumentAccessor.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_DocumentAccessor.o: $(srcdir)/scintilla/src/DocumentAccessor.cxx
+stclib_Document.o: $(srcdir)/scintilla/src/Document.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_Editor.o: $(srcdir)/scintilla/src/Editor.cxx
@@ -512,13 +552,13 @@ stclib_KeyMap.o: $(srcdir)/scintilla/src/KeyMap.cxx
 stclib_KeyWords.o: $(srcdir)/scintilla/src/KeyWords.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_LexAVE.o: $(srcdir)/scintilla/src/LexAVE.cxx
-	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
-
 stclib_LexAda.o: $(srcdir)/scintilla/src/LexAda.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexAsm.o: $(srcdir)/scintilla/src/LexAsm.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexAVE.o: $(srcdir)/scintilla/src/LexAVE.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
@@ -527,22 +567,31 @@ stclib_LexBaan.o: $(srcdir)/scintilla/src/LexBaan.cxx
 stclib_LexBullant.o: $(srcdir)/scintilla/src/LexBullant.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
-	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
-
-stclib_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
+stclib_LexCLW.o: $(srcdir)/scintilla/src/LexCLW.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexConf.o: $(srcdir)/scintilla/src/LexConf.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+stclib_LexCPP.o: $(srcdir)/scintilla/src/LexCPP.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 stclib_LexCrontab.o: $(srcdir)/scintilla/src/LexCrontab.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexCSS.o: $(srcdir)/scintilla/src/LexCSS.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexEiffel.o: $(srcdir)/scintilla/src/LexEiffel.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+stclib_LexErlang.o: $(srcdir)/scintilla/src/LexErlang.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 stclib_LexEScript.o: $(srcdir)/scintilla/src/LexEScript.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexForth.o: $(srcdir)/scintilla/src/LexForth.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexFortran.o: $(srcdir)/scintilla/src/LexFortran.cxx
@@ -560,10 +609,16 @@ stclib_LexLout.o: $(srcdir)/scintilla/src/LexLout.cxx
 stclib_LexLua.o: $(srcdir)/scintilla/src/LexLua.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+stclib_LexMatlab.o: $(srcdir)/scintilla/src/LexMatlab.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexMetapost.o: $(srcdir)/scintilla/src/LexMetapost.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 stclib_LexMMIXAL.o: $(srcdir)/scintilla/src/LexMMIXAL.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_LexMatlab.o: $(srcdir)/scintilla/src/LexMatlab.cxx
+stclib_LexMPT.o: $(srcdir)/scintilla/src/LexMPT.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexNsis.o: $(srcdir)/scintilla/src/LexNsis.cxx
@@ -572,16 +627,19 @@ stclib_LexNsis.o: $(srcdir)/scintilla/src/LexNsis.cxx
 stclib_LexOthers.o: $(srcdir)/scintilla/src/LexOthers.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+stclib_LexPascal.o: $(srcdir)/scintilla/src/LexPascal.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexPB.o: $(srcdir)/scintilla/src/LexPB.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 stclib_LexPOV.o: $(srcdir)/scintilla/src/LexPOV.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexPS.o: $(srcdir)/scintilla/src/LexPS.cxx
-	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
-
-stclib_LexPascal.o: $(srcdir)/scintilla/src/LexPascal.cxx
-	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
-
-stclib_LexPerl.o: $(srcdir)/scintilla/src/LexPerl.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
@@ -590,13 +648,19 @@ stclib_LexPython.o: $(srcdir)/scintilla/src/LexPython.cxx
 stclib_LexRuby.o: $(srcdir)/scintilla/src/LexRuby.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
-	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
-
 stclib_LexScriptol.o: $(srcdir)/scintilla/src/LexScriptol.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+stclib_LexSQL.o: $(srcdir)/scintilla/src/LexSQL.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexTeX.o: $(srcdir)/scintilla/src/LexTeX.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 stclib_LexVB.o: $(srcdir)/scintilla/src/LexVB.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+stclib_LexYAML.o: $(srcdir)/scintilla/src/LexYAML.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_LineMarker.o: $(srcdir)/scintilla/src/LineMarker.cxx
@@ -611,10 +675,10 @@ stclib_RESearch.o: $(srcdir)/scintilla/src/RESearch.cxx
 stclib_ScintillaBase.o: $(srcdir)/scintilla/src/ScintillaBase.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_Style.o: $(srcdir)/scintilla/src/Style.cxx
+stclib_StyleContext.o: $(srcdir)/scintilla/src/StyleContext.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-stclib_StyleContext.o: $(srcdir)/scintilla/src/StyleContext.cxx
+stclib_Style.o: $(srcdir)/scintilla/src/Style.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 stclib_UniConversion.o: $(srcdir)/scintilla/src/UniConversion.cxx

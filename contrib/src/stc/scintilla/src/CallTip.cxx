@@ -48,6 +48,10 @@ void CallTip::RefreshColourPalette(Palette &pal, bool want) {
 	pal.WantFind(colourLight, want);
 }
 
+static bool IsArrowCharacter(char ch) {
+	return (ch >= 0) && (ch <= '\002');
+}
+
 void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 	int posStart, int posEnd, int ytext, PRectangle rcClient,
 	bool highlight, bool draw) {
@@ -56,7 +60,7 @@ void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 	int maxEnd = 0;
 	int ends[10];
 	for (int i=0;i<len;i++) {
-		if (s[i] <= '\002') {
+		if (IsArrowCharacter(s[i])) {
 			if (i > 0)
 				ends[maxEnd++] = i;
 			ends[maxEnd++] = i+1;
@@ -68,7 +72,7 @@ void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 	for (int seg = 0; seg<maxEnd; seg++) {
 		int endSeg = ends[seg];
 		if (endSeg > startSeg) {
-			if (s[startSeg] <= '\002') {
+			if (IsArrowCharacter(s[startSeg])) {
 				xEnd = x + widthArrow;
 				offsetMain = xEnd;
 				if (draw) {

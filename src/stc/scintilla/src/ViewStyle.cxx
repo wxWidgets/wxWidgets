@@ -84,6 +84,7 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	hotspotBackgroundSet = source.hotspotBackgroundSet;
 	hotspotBackground.desired = source.hotspotBackground.desired;
 	hotspotUnderline = source.hotspotUnderline;
+	hotspotSingleLine = source.hotspotSingleLine;
 
 	whitespaceForegroundSet = source.whitespaceForegroundSet;
 	whitespaceForeground.desired = source.whitespaceForeground.desired;
@@ -164,6 +165,7 @@ void ViewStyle::Init() {
 	hotspotBackgroundSet = false;
 	hotspotBackground.desired = ColourDesired(0xff, 0xff, 0xff);
 	hotspotUnderline = true;
+	hotspotSingleLine = true;
 
 	leftMarginWidth = 1;
 	rightMarginWidth = 1;

@@ -1,6 +1,6 @@
 // Scintilla source code edit control
 /** @file XPM.h
- ** Define a class that holds data in the X Pixmap (XPM) format,
+ ** Define a class that holds data in the X Pixmap (XPM) format.
  **/
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -31,11 +31,11 @@ public:
 	void Init(const char *textForm);
 	void Init(const char * const *linesForm);
 	void Clear();
-	// Similar to same named method in ViewStyle:
+	/// Similar to same named method in ViewStyle:
 	void RefreshColourPalette(Palette &pal, bool want);
-	// No palette used, so just copy the desired colours to the allocated colours:
+	/// No palette used, so just copy the desired colours to the allocated colours
 	void CopyDesiredColours();
-	// Decompose image into runs and use FillRectangle for each run:
+	/// Decompose image into runs and use FillRectangle for each run
 	void Draw(Surface *surface, PRectangle &rc);
 	char **InLinesForm() { return lines; }
 	void SetId(int id_) { id = id_; }
@@ -49,18 +49,23 @@ public:
  * A collection of pixmaps indexed by integer id.
  */
 class XPMSet {
-	XPM **set;
-	int len;
-	int maximum;
-	int height;
-	int width;
+	XPM **set;	///< The stored XPMs.
+	int len;	///< Current number of XPMs.
+	int maximum;	///< Current maximum number of XPMs, increased by steps if reached.
+	int height;	///< Memorize largest height of the set.
+	int width;	///< Memorize largest width of the set.
 public:
 	XPMSet();
 	~XPMSet();
+	/// Remove all XPMs.
 	void Clear();
+	/// Add a XPM.
 	void Add(int id, const char *textForm);
+	/// Get XPM by id.
 	XPM *Get(int id);
+	/// Give the largest height of the set.
 	int GetHeight();
+	/// Give the largest width of the set.
 	int GetWidth();
 };
 

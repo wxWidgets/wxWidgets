@@ -2,7 +2,7 @@
 /** @file LexVB.cxx
  ** Lexer for Visual Basic and VBScript.
  **/
-// Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
@@ -24,16 +24,19 @@ static bool IsVBComment(Accessor &styler, int pos, int len) {
 	return len>0 && styler[pos]=='\'';
 }
 
-static inline bool IsTypeCharacter(const int ch) {
+static inline bool IsTypeCharacter(int ch) {
 	return ch == '%' || ch == '&' || ch == '@' || ch == '!' || ch == '#' || ch == '$';
 }
 
-static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+// Extended to accept accented characters
+static inline bool IsAWordChar(int ch) {
+	return ch >= 0x80 ||
+	       (isalnum(ch) || ch == '.' || ch == '_');
 }
 
-static inline bool IsAWordStart(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+static inline bool IsAWordStart(int ch) {
+	return ch >= 0x80 ||
+	       (isalnum(ch) || ch == '_');
 }
 
 static inline bool IsADateCharacter(const int ch) {
@@ -45,6 +48,9 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
                            WordList *keywordlists[], Accessor &styler, bool vbScriptSyntax) {
 
 	WordList &keywords = *keywordlists[0];
+	WordList &keywords2 = *keywordlists[1];
+	WordList &keywords3 = *keywordlists[2];
+	WordList &keywords4 = *keywordlists[3];
 
 	styler.StartAt(startPos);
 
@@ -56,26 +62,37 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 
 		if (sc.state == SCE_B_OPERATOR) {
 			sc.SetState(SCE_B_DEFAULT);
-		} else if (sc.state == SCE_B_KEYWORD) {
+		} else if (sc.state == SCE_B_IDENTIFIER) {
 			if (!IsAWordChar(sc.ch)) {
-				if (vbScriptSyntax || !IsTypeCharacter(sc.ch)) {
-					if (sc.ch == ']')
-						sc.Forward();
-					char s[100];
-					sc.GetCurrentLowered(s, sizeof(s));
+				// In Basic (except VBScript), a variable name or a function name
+				// can end with a special character indicating the type of the value
+				// held or returned.
+				bool skipType = false;
+				if (!vbScriptSyntax && IsTypeCharacter(sc.ch)) {
+					sc.Forward();	// Skip it
+					skipType = true;
+				}
+				if (sc.ch == ']') {
+					sc.Forward();
+				}
+				char s[100];
+				sc.GetCurrentLowered(s, sizeof(s));
+				if (skipType) {
+					s[strlen(s) - 1] = '\0';
+				}
+				if (strcmp(s, "rem") == 0) {
+					sc.ChangeState(SCE_B_COMMENT);
+				} else {
 					if (keywords.InList(s)) {
-						if (strcmp(s, "rem") == 0) {
-							sc.ChangeState(SCE_B_COMMENT);
-							if (sc.atLineEnd) {
-								sc.SetState(SCE_B_DEFAULT);
-							}
-						} else {
-							sc.SetState(SCE_B_DEFAULT);
-						}
-					} else {
-						sc.ChangeState(SCE_B_IDENTIFIER);
-						sc.SetState(SCE_B_DEFAULT);
-					}
+						sc.ChangeState(SCE_B_KEYWORD);
+					} else if (keywords2.InList(s)) {
+						sc.ChangeState(SCE_B_KEYWORD2);
+					} else if (keywords3.InList(s)) {
+						sc.ChangeState(SCE_B_KEYWORD3);
+					} else if (keywords4.InList(s)) {
+						sc.ChangeState(SCE_B_KEYWORD4);
+					}	// Else, it is really an identifier...
+					sc.SetState(SCE_B_DEFAULT);
 				}
 			}
 		} else if (sc.state == SCE_B_NUMBER) {
@@ -89,6 +106,9 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 				if (tolower(sc.chNext) == 'c') {
 					sc.Forward();
 				}
+				sc.ForwardSetState(SCE_B_DEFAULT);
+			} else if (sc.atLineEnd) {
+				sc.ChangeState(SCE_B_STRINGEOL);
 				sc.ForwardSetState(SCE_B_DEFAULT);
 			}
 		} else if (sc.state == SCE_B_COMMENT) {
@@ -132,7 +152,7 @@ static void ColouriseVBDoc(unsigned int startPos, int length, int initStyle,
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				sc.SetState(SCE_B_NUMBER);
 			} else if (IsAWordStart(sc.ch) || (sc.ch == '[')) {
-				sc.SetState(SCE_B_KEYWORD);
+				sc.SetState(SCE_B_IDENTIFIER);
 			} else if (isoperator(static_cast<char>(sc.ch)) || (sc.ch == '\\')) {
 				sc.SetState(SCE_B_OPERATOR);
 			}
@@ -202,6 +222,9 @@ static void ColouriseVBScriptDoc(unsigned int startPos, int length, int initStyl
 
 static const char * const vbWordListDesc[] = {
 	"Keywords",
+	"user1",
+	"user2",
+	"user3",
 	0
 };
 

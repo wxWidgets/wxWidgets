@@ -2,6 +2,10 @@
 /** @file LexMatlab.cxx
  ** Lexer for Matlab.
  ** Written by José Fonseca
+ **
+ ** Changes by Christoph Dalitz 2003/12/04:
+ **   - added support for Octave
+ **   - Strings can now be included both in single or double quotes
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -21,8 +25,21 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+
+static bool IsMatlabCommentChar(int c) {
+	return (c == '%') ;
+}
+
+static bool IsOctaveCommentChar(int c) {
+	return (c == '%' || c == '#') ;
+}
+
 static bool IsMatlabComment(Accessor &styler, int pos, int len) {
-	return len > 0 && (styler[pos] == '%' || styler[pos] == '!') ;
+	return len > 0 && IsMatlabCommentChar(styler[pos]) ;
+}
+
+static bool IsOctaveComment(Accessor &styler, int pos, int len) {
+	return len > 0 && IsOctaveCommentChar(styler[pos]) ;
 }
 
 static inline bool IsAWordChar(const int ch) {
@@ -33,8 +50,10 @@ static inline bool IsAWordStart(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
 
-static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
-                               WordList *keywordlists[], Accessor &styler) {
+static void ColouriseMatlabOctaveDoc(
+            unsigned int startPos, int length, int initStyle,
+            WordList *keywordlists[], Accessor &styler,
+            bool (*IsCommentChar)(int)) {
 
 	WordList &keywords = *keywordlists[0];
 
@@ -81,9 +100,11 @@ static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
 				transpose = true;
 			}
 		} else if (sc.state == SCE_MATLAB_STRING) {
-			// Matlab doubles quotes to preserve them, so just end this string
-			// state now as a following quote will start again
-			if (sc.ch == '\'') {
+			if (sc.ch == '\'' && sc.chPrev != '\\') {
+				sc.ForwardSetState(SCE_MATLAB_DEFAULT);
+			}
+		} else if (sc.state == SCE_MATLAB_DOUBLEQUOTESTRING) {
+			if (sc.ch == '"' && sc.chPrev != '\\') {
 				sc.ForwardSetState(SCE_MATLAB_DEFAULT);
 			}
 		} else if (sc.state == SCE_MATLAB_COMMENT || sc.state == SCE_MATLAB_COMMAND) {
@@ -94,7 +115,7 @@ static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
 		}
 
 		if (sc.state == SCE_MATLAB_DEFAULT) {
-			if (sc.ch == '%') {
+			if (IsCommentChar(sc.ch)) {
 				sc.SetState(SCE_MATLAB_COMMENT);
 			} else if (sc.ch == '!') {
 				sc.SetState(SCE_MATLAB_COMMAND);
@@ -104,6 +125,8 @@ static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
 				} else {
 					sc.SetState(SCE_MATLAB_STRING);
 				}
+			} else if (sc.ch == '"') {
+              sc.SetState(SCE_MATLAB_DOUBLEQUOTESTRING);
 			} else if (isdigit(sc.ch) || (sc.ch == '.' && isdigit(sc.chNext))) {
 				sc.SetState(SCE_MATLAB_NUMBER);
 			} else if (isalpha(sc.ch)) {
@@ -123,8 +146,20 @@ static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
 	sc.Complete();
 }
 
-static void FoldMatlabDoc(unsigned int startPos, int length, int,
-                          WordList *[], Accessor &styler) {
+static void ColouriseMatlabDoc(unsigned int startPos, int length, int initStyle,
+                               WordList *keywordlists[], Accessor &styler) {
+  ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabCommentChar);
+}
+
+static void ColouriseOctaveDoc(unsigned int startPos, int length, int initStyle,
+                               WordList *keywordlists[], Accessor &styler) {
+  ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveCommentChar);
+}
+
+static void FoldMatlabOctaveDoc(unsigned int startPos, int length, int,
+                          WordList *[], Accessor &styler,
+                          bool (*IsComment)(Accessor&,int,int)) {
+
 	int endPos = startPos + length;
 
 	// Backtrack to previous line in case need to fix its fold status
@@ -136,7 +171,7 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 		}
 	}
 	int spaceFlags = 0;
-	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsMatlabComment);
+	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsComment);
 	char chNext = styler[startPos];
 	for (int i = startPos; i < endPos; i++) {
 		char ch = chNext;
@@ -144,7 +179,7 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 
 		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == endPos)) {
 			int lev = indentCurrent;
-			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsMatlabComment);
+			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsComment);
 			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
 				// Only non whitespace lines can be headers
 				if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK)) {
@@ -152,7 +187,7 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 				} else if (indentNext & SC_FOLDLEVELWHITEFLAG) {
 					// Line after is blank so check the next - maybe should continue further?
 					int spaceFlags2 = 0;
-					int indentNext2 = styler.IndentAmount(lineCurrent + 2, &spaceFlags2, IsMatlabComment);
+					int indentNext2 = styler.IndentAmount(lineCurrent + 2, &spaceFlags2, IsComment);
 					if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext2 & SC_FOLDLEVELNUMBERMASK)) {
 						lev |= SC_FOLDLEVELHEADERFLAG;
 					}
@@ -165,9 +200,26 @@ static void FoldMatlabDoc(unsigned int startPos, int length, int,
 	}
 }
 
+static void FoldMatlabDoc(unsigned int startPos, int length, int initStyle,
+                          WordList *keywordlists[], Accessor &styler) {
+  FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabComment);
+}
+
+static void FoldOctaveDoc(unsigned int startPos, int length, int initStyle,
+                          WordList *keywordlists[], Accessor &styler) {
+  FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveComment);
+}
+
 static const char * const matlabWordListDesc[] = {
 	"Keywords",
 	0
 };
 
+static const char * const octaveWordListDesc[] = {
+	"Keywords",
+	0
+};
+
 LexerModule lmMatlab(SCLEX_MATLAB, ColouriseMatlabDoc, "matlab", FoldMatlabDoc, matlabWordListDesc);
+
+LexerModule lmOctave(SCLEX_OCTAVE, ColouriseOctaveDoc, "octave", FoldOctaveDoc, octaveWordListDesc);

@@ -44,6 +44,7 @@ cmdValues = [ (2300, 2349),
               (2395, 2396),
               2404,
               (2413, 2416),
+              (2426, 2442),
               (2450, 2454),
             ]
 
@@ -275,6 +276,7 @@ methodOverrideMap = {
     'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0,0),
     'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0, 0),
     'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0, 0),
+    'AutoCGetCurrent'       : ('AutoCompGetCurrent', 0, 0, 0),
 
     'RegisterImage' :
     (0,
@@ -330,14 +332,14 @@ methodOverrideMap = {
                int    startPos,
                int    endPos,
                wxDC*  draw,
-               wxDC*  target,  // Why does it use two? Can they be the same?
+               wxDC*  target, 
                wxRect renderRect,
                wxRect pageRect);''',
      ''' int %s(bool   doDraw,
                 int    startPos,
                 int    endPos,
                 wxDC*  draw,
-                wxDC*  target,  // Why does it use two? Can they be the same?
+                wxDC*  target, 
                 wxRect renderRect,
                 wxRect pageRect) {
              RangeToFormat fr;
@@ -615,8 +617,23 @@ methodOverrideMap = {
     'ParaDownExtend' : (None, 0, 0, 0),
     'ParaUp' : (None, 0, 0, 0),
     'ParaUpExtend' : (None, 0, 0, 0),
-
-
+    'LineDownRectExtend' : (None, 0, 0, 0),
+    'LineUpRectExtend' : (None, 0, 0, 0),
+    'CharLeftRectExtend' : (None, 0, 0, 0),
+    'CharRightRectExtend' : (None, 0, 0, 0),
+    'HomeRectExtend' : (None, 0, 0, 0),
+    'VCHomeRectExtend' : (None, 0, 0, 0),
+    'LineEndRectExtend' : (None, 0, 0, 0),
+    'PageUpRectExtend' : (None, 0, 0, 0),
+    'PageDownRectExtend' : (None, 0, 0, 0),
+    'StutteredPageUp' : (None, 0, 0, 0),
+    'StutteredPageUpExtend' : (None, 0, 0, 0),
+    'StutteredPageDown' : (None, 0, 0, 0),
+    'StutteredPageDownExtend' : (None, 0, 0, 0),
+    'WordLeftEnd' : (None, 0, 0, 0),
+    'WordLeftEndExtend' : (None, 0, 0, 0),
+    'WordRightEnd' : (None, 0, 0, 0),
+    'WordRightEndExtend' : (None, 0, 0, 0),
 
     '' : ('', 0, 0, 0),
 

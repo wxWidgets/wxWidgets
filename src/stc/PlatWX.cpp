@@ -855,7 +855,6 @@ public:
     virtual int GetSelection();
     virtual int Find(const char *prefix);
     virtual void GetValue(int n, char *value, int len);
-    virtual void Sort();
     virtual void RegisterImage(int type, const char *xpm_data);
     virtual void ClearRegisteredImages();
     virtual void SetDoubleClickAction(CallBackAction, void *);
@@ -1006,9 +1005,6 @@ void ListBoxImpl::GetValue(int n, char *value, int len) {
     GETLB(id)->GetItem(item);
     strncpy(value, wx2stc(item.GetText()), len);
     value[len-1] = '\0';
-}
-
-void ListBoxImpl::Sort() {
 }
 
 

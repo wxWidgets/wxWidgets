@@ -2,7 +2,7 @@
 
 ## This file defines the interface to Scintilla
 
-## Copyright 2000-2002 by Neil Hodgson <neilh@scintilla.org>
+## Copyright 2000-2003 by Neil Hodgson <neilh@scintilla.org>
 ## The License.txt file describes the conditions under which this software may be distributed.
 
 ## A line starting with ## is a pure comment and should be stripped by readers.
@@ -26,7 +26,8 @@
 ## A property may be subscripted, in which case the first parameter is the subscript.
 ## fun, get, and set features have a strict syntax:
 ## <featureType><ws><returnType><ws><name>[=<number](<param>,<param>)
-## param is <paramType><ws><paramName>[=<value>]
+## where <ws> stands for white space.
+## param may be empty (null value) or is <paramType><ws><paramName>[=<value>]
 ## Additional white space is allowed between elements.
 ## The syntax for evt is <featureType><ws><returnType><ws><name>[=<number]([<param>[,<param>]*])
 ## Feature names that contain an underscore are defined by Windows, so in these
@@ -80,7 +81,7 @@ cat Basics
 ################################################
 ## For Scintilla.h
 val INVALID_POSITION=-1
-# Define start of Scintilla messages to be greater than all edit (EM_*) messages
+# Define start of Scintilla messages to be greater than all Windows edit (EM_*) messages
 # as many EM_ messages can be used although that use is deprecated.
 val SCI_START=2000
 val SCI_OPTIONAL_START=3000
@@ -131,7 +132,7 @@ fun void SelectAll=2013(,)
 fun void SetSavePoint=2014(,)
 
 # Retrieve a buffer of cells.
-# Returns the number of bytes in the buffer not including terminating nulls.
+# Returns the number of bytes in the buffer not including terminating NULs.
 fun int GetStyledText=2015(, textrange tr)
 
 # Are there any redoable actions in the undo history?
@@ -159,11 +160,11 @@ get int GetViewWS=2020(,)
 set void SetViewWS=2021(int viewWS,)
 
 # Find the position from a point within the window.
-fun int PositionFromPoint=2022(int x, int y)
+fun position PositionFromPoint=2022(int x, int y)
 
 # Find the position from a point within the window but return
 # INVALID_POSITION if not close to text.
-fun int PositionFromPointClose=2023(int x, int y)
+fun position PositionFromPointClose=2023(int x, int y)
 
 # Set caret to start of a line and ensure it is visible.
 fun void GotoLine=2024(int line,)
@@ -427,7 +428,7 @@ set void SetCaretFore=2069(colour fore,)
 # When key+modifier combination km is pressed perform msg.
 fun void AssignCmdKey=2070(keymod km, int msg)
 
-# When key+modifier combination km do nothing.
+# When key+modifier combination km is pressed do nothing.
 fun void ClearCmdKey=2071(keymod km,)
 
 # Drop all key mappings.
@@ -446,6 +447,7 @@ get int GetCaretPeriod=2075(,)
 set void SetCaretPeriod=2076(int periodMilliseconds,)
 
 # Set the set of characters making up words for when moving or selecting by word.
+# First sets deaults like SetCharsDefault.
 set void SetWordChars=2077(, string characters)
 
 # Start a sequence of actions that is undone and redone as a unit.
@@ -463,6 +465,7 @@ val INDIC_TT=2
 val INDIC_DIAGONAL=3
 val INDIC_STRIKE=4
 val INDIC_HIDDEN=5
+val INDIC_BOX=6
 val INDIC0_MASK=0x20
 val INDIC1_MASK=0x40
 val INDIC2_MASK=0x80
@@ -711,7 +714,7 @@ val SCFIND_POSIX=0x00400000
 fun position FindText=2150(int flags, findtext ft)
 
 # On Windows, will draw the document into a display context such as a printer.
-fun void FormatRange=2151(bool draw, formatrange fr)
+fun position FormatRange=2151(bool draw, formatrange fr)
 
 # Retrieve the display line at the top of the display.
 get int GetFirstVisibleLine=2152(,)
@@ -743,7 +746,7 @@ fun void SetSel=2160(position start, position end)
 
 # Retrieve the selected text.
 # Return the length of the text.
-fun int GetSelText=2161(,stringresult text)
+fun int GetSelText=2161(, stringresult text)
 
 # Retrieve a range of text.
 # Return the length of the text.
@@ -762,7 +765,7 @@ fun int PointYFromPosition=2165(, position pos)
 fun int LineFromPosition=2166(position pos,)
 
 # Retrieve the position at the start of a line.
-fun int PositionFromLine=2167(int line,)
+fun position PositionFromLine=2167(int line,)
 
 # Scroll horizontally and vertically.
 fun void LineScroll=2168(int columns, int lines)
@@ -847,12 +850,12 @@ set void SetTargetEnd=2192(position pos,)
 get position GetTargetEnd=2193(,)
 
 # Replace the target text with the argument text.
-# Text is counted so it can contain nulls.
+# Text is counted so it can contain NULs.
 # Returns the length of the replacement text.
 fun int ReplaceTarget=2194(int length, string text)
 
 # Replace the target text with the argument text after \d processing.
-# Text is counted so it can contain nulls.
+# Text is counted so it can contain NULs.
 # Looks for \d where d is between 1 and 9 and replaces these with the strings
 # matched in the last search operation which were surrounded by \( and \).
 # Returns the length of the replacement text including any change
@@ -860,7 +863,7 @@ fun int ReplaceTarget=2194(int length, string text)
 fun int ReplaceTargetRE=2195(int length, string text)
 
 # Search for a counted string in the target and set the target to the found
-# range. Text is counted so it can contain nulls.
+# range. Text is counted so it can contain NULs.
 # Returns length of range or -1 for failure in which case target is not moved.
 fun int SearchInTarget=2197(int length, string text)
 
@@ -1015,7 +1018,7 @@ set void SetScrollWidth=2274(int pixelWidth,)
 get int GetScrollWidth=2275(,)
 
 # Measure the pixel width of some text in a particular style.
-# Nul terminated text argument.
+# NUL terminated text argument.
 # Does not handle tab or control characters.
 fun int TextWidth=2276(int style, string text)
 
@@ -1223,7 +1226,7 @@ fun void LineEndDisplayExtend=2348(,)
 # except they behave differently when word-wrap is enabled:
 # They go first to the start / end of the display line, like (Home|LineEnd)Display
 # The difference is that, the cursor is already at the point, it goes on to the start
-# or end of the document line, as appropriate for (Home|LineEnd|VCHome)Extend.
+# or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
 
 fun void HomeWrap=2349(,)
 fun void HomeWrapExtend=2450(,)
@@ -1260,7 +1263,7 @@ set void SetViewEOL=2356(bool visible,)
 get int GetDocPointer=2357(,)
 
 # Change the document object used.
-set void SetDocPointer=2358(,int pointer)
+set void SetDocPointer=2358(, int pointer)
 
 # Set which document modification events are sent to the container.
 set void SetModEventMask=2359(int mask,)
@@ -1385,7 +1388,7 @@ fun void DelLineRight=2396(,)
 set void SetXOffset=2397(int newOffset,)
 get int GetXOffset=2398(,)
 
-# Set the last x chosen value to be the caret x position
+# Set the last x chosen value to be the caret x position.
 fun void ChooseCaretX=2399(,)
 
 # Set the focus to this Scintilla widget.
@@ -1427,7 +1430,7 @@ fun void SetYCaretPolicy=2403(int caretPolicy, int caretSlop)
 # Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
 set void SetPrintWrapMode=2406(int mode,)
 
-# Is printing line wrapped.
+# Is printing line wrapped?
 get int GetPrintWrapMode=2407(,)
 
 # Set a fore colour for active hotspots.
@@ -1439,7 +1442,10 @@ set void SetHotspotActiveBack=2411(bool useSetting, colour back)
 # Enable / Disable underlining active hotspots.
 set void SetHotspotActiveUnderline=2412(bool underline,)
 
-# Move caret between paragraphs (delimited by empty lines)
+# Limit hotspots to single line so hotspots on two lines don't merge.
+set void SetHotspotSingleLine=2421(bool singleLine,)
+
+# Move caret between paragraphs (delimited by empty lines).
 fun void ParaDown=2413(,)
 fun void ParaDownExtend=2414(,)
 fun void ParaUp=2415(,)
@@ -1458,6 +1464,91 @@ fun void CopyRange=2419(position start, position end)
 
 # Copy argument text to the clipboard.
 fun void CopyText=2420(int length, string text)
+
+# Selection modes
+enu SelectionMode=SC_SEL_
+val SC_SEL_STREAM=0
+val SC_SEL_RECTANGLE=1
+val SC_SEL_LINES=2
+
+# Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE) or
+# by lines (SC_SEL_LINES).
+set void SetSelectionMode=2422(int mode,)
+
+# Get the mode of the current selection.
+get int GetSelectionMode=2423(,)
+
+# Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+fun position GetLineSelStartPosition=2424(int line,)
+
+# Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+fun position GetLineSelEndPosition=2425(int line,)
+
+## RectExtended rectangular selection moves
+# Move caret down one line, extending rectangular selection to new caret position.
+fun void LineDownRectExtend=2426(,)
+
+# Move caret up one line, extending rectangular selection to new caret position.
+fun void LineUpRectExtend=2427(,)
+
+# Move caret left one character, extending rectangular selection to new caret position.
+fun void CharLeftRectExtend=2428(,)
+
+# Move caret right one character, extending rectangular selection to new caret position.
+fun void CharRightRectExtend=2429(,)
+
+# Move caret to first position on line, extending rectangular selection to new caret position.
+fun void HomeRectExtend=2430(,)
+
+# Move caret to before first visible character on line.
+# If already there move to first character on line.
+# In either case, extend rectangular selection to new caret position.
+fun void VCHomeRectExtend=2431(,)
+
+# Move caret to last position on line, extending rectangular selection to new caret position.
+fun void LineEndRectExtend=2432(,)
+
+# Move caret one page up, extending rectangular selection to new caret position.
+fun void PageUpRectExtend=2433(,)
+
+# Move caret one page down, extending rectangular selection to new caret position.
+fun void PageDownRectExtend=2434(,)
+
+
+# Move caret to top of page, or one page up if already at top of page.
+fun void StutteredPageUp=2435(,)
+
+# Move caret to top of page, or one page up if already at top of page, extending selection to new caret position.
+fun void StutteredPageUpExtend=2436(,)
+
+# Move caret to bottom of page, or one page down if already at bottom of page.
+fun void StutteredPageDown=2437(,)
+
+# Move caret to bottom of page, or one page down if already at bottom of page, extending selection to new caret position.
+fun void StutteredPageDownExtend=2438(,)
+
+
+# Move caret left one word, position cursor at end of word.
+fun void WordLeftEnd=2439(,)
+
+# Move caret left one word, position cursor at end of word, extending selection to new caret position.
+fun void WordLeftEndExtend=2440(,)
+
+# Move caret right one word, position cursor at end of word.
+fun void WordRightEnd=2441(,)
+
+# Move caret right one word, position cursor at end of word, extending selection to new caret position.
+fun void WordRightEndExtend=2442(,)
+
+# Set the set of characters making up whitespace for when moving or selecting by word.
+# Should be called after SetWordChars.
+set void SetWhitespaceChars=2443(, string characters)
+
+# Reset the set of characters for whitespace and word characters to the defaults.
+fun void SetCharsDefault=2444(,)
+
+# Get currently selected item position in the auto-completion list
+fun int AutoCGetCurrent=2445(,)
 
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
@@ -1486,7 +1577,7 @@ set void SetKeyWords=4005(int keywordSet, string keyWords)
 # Set the lexing language of the document based on string name.
 set void SetLexerLanguage=4006(, string language)
 
-# Load a lexer library (dll / so)
+# Load a lexer library (dll / so).
 fun void LoadLexerLibrary=4007(, string path)
 
 # Notifications
@@ -1591,6 +1682,16 @@ val SCLEX_ESCRIPT=41
 val SCLEX_PS=42
 val SCLEX_NSIS=43
 val SCLEX_MMIXAL=44
+val SCLEX_CLW=45
+val SCLEX_CLWNOCASE=46
+val SCLEX_LOT=47
+val SCLEX_YAML=48
+val SCLEX_TEX=49
+val SCLEX_METAPOST=50
+val SCLEX_POWERBASIC=51
+val SCLEX_FORTH=52
+val SCLEX_ERLANG=53
+val SCLEX_OCTAVE=54
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1796,9 +1897,10 @@ val SCE_PL_STRING_QQ=27
 val SCE_PL_STRING_QX=28
 val SCE_PL_STRING_QR=29
 val SCE_PL_STRING_QW=30
-# Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
+# Lexical states for SCLEX_VB, SCLEX_VBSCRIPT, SCLEX_POWERBASIC
 lex VB=SCLEX_VB SCE_B_
 lex VBScript=SCLEX_VBSCRIPT SCE_B_
+lex PowerBasic=SCLEX_POWERBASIC SCE_B_
 val SCE_B_DEFAULT=0
 val SCE_B_COMMENT=1
 val SCE_B_NUMBER=2
@@ -1808,6 +1910,10 @@ val SCE_B_PREPROCESSOR=5
 val SCE_B_OPERATOR=6
 val SCE_B_IDENTIFIER=7
 val SCE_B_DATE=8
+val SCE_B_STRINGEOL=9
+val SCE_B_KEYWORD2=10
+val SCE_B_KEYWORD3=11
+val SCE_B_KEYWORD4=12
 # Lexical states for SCLEX_PROPERTIES
 lex Properties=SCLEX_PROPERTIES SCE_PROPS_
 val SCE_PROPS_DEFAULT=0
@@ -1863,6 +1969,8 @@ val SCE_ERR_DIFF_MESSAGE=13
 val SCE_ERR_PHP=14
 val SCE_ERR_ELF=15
 val SCE_ERR_IFC=16
+val SCE_ERR_IFORT=17
+val SCE_ERR_ABSF=18
 # Lexical states for SCLEX_BATCH
 lex Batch=SCLEX_BATCH SCE_BAT_
 val SCE_BAT_DEFAULT=0
@@ -1982,6 +2090,20 @@ val SCE_NNCRONTAB_NUMBER=7
 val SCE_NNCRONTAB_STRING=8
 val SCE_NNCRONTAB_ENVIRONMENT=9
 val SCE_NNCRONTAB_IDENTIFIER=10
+# Lexical states for SCLEX_FORTH (Forth Lexer)
+lex Forth=SCLEX_FORTH SCE_FORTH_
+val SCE_FORTH_DEFAULT=0
+val SCE_FORTH_COMMENT=1
+val SCE_FORTH_COMMENT_ML=2
+val SCE_FORTH_IDENTIFIER=3
+val SCE_FORTH_CONTROL=4
+val SCE_FORTH_KEYWORD=5
+val SCE_FORTH_DEFWORD=6
+val SCE_FORTH_PREWORD1=7
+val SCE_FORTH_PREWORD2=8
+val SCE_FORTH_NUMBER=9
+val SCE_FORTH_STRING=10
+val SCE_FORTH_LOCALE=11
 # Lexical states for SCLEX_MATLAB
 lex MatLab=SCLEX_MATLAB SCE_MATLAB_
 val SCE_MATLAB_DEFAULT=0
@@ -1989,31 +2111,29 @@ val SCE_MATLAB_COMMENT=1
 val SCE_MATLAB_COMMAND=2
 val SCE_MATLAB_NUMBER=3
 val SCE_MATLAB_KEYWORD=4
+# single quoted string
 val SCE_MATLAB_STRING=5
 val SCE_MATLAB_OPERATOR=6
 val SCE_MATLAB_IDENTIFIER=7
+val SCE_MATLAB_DOUBLEQUOTESTRING=8
 # Lexical states for SCLEX_SCRIPTOL
 lex Sol=SCLEX_SCRIPTOL SCE_SCRIPTOL_
 val SCE_SCRIPTOL_DEFAULT=0
-val SCE_SCRIPTOL_COMMENT=1
+val SCE_SCRIPTOL_WHITE=1
 val SCE_SCRIPTOL_COMMENTLINE=2
-val SCE_SCRIPTOL_COMMENTDOC=3
-val SCE_SCRIPTOL_NUMBER=4
-val SCE_SCRIPTOL_WORD=5
-val SCE_SCRIPTOL_STRING=6
-val SCE_SCRIPTOL_CHARACTER=7
-val SCE_SCRIPTOL_UUID=8
-val SCE_SCRIPTOL_PREPROCESSOR=9
-val SCE_SCRIPTOL_OPERATOR=10
-val SCE_SCRIPTOL_IDENTIFIER=11
-val SCE_SCRIPTOL_STRINGEOL=12
-val SCE_SCRIPTOL_VERBATIM=13
-val SCE_SCRIPTOL_REGEX=14
-val SCE_SCRIPTOL_COMMENTLINEDOC=15
-val SCE_SCRIPTOL_WORD2=16
-val SCE_SCRIPTOL_COMMENTDOCKEYWORD=17
-val SCE_SCRIPTOL_COMMENTDOCKEYWORDERROR=18
-val SCE_SCRIPTOL_COMMENTBASIC=19
+val SCE_SCRIPTOL_PERSISTENT=3
+val SCE_SCRIPTOL_CSTYLE=4
+val SCE_SCRIPTOL_COMMENTBLOCK=5
+val SCE_SCRIPTOL_NUMBER=6
+val SCE_SCRIPTOL_STRING=7
+val SCE_SCRIPTOL_CHARACTER=8
+val SCE_SCRIPTOL_STRINGEOL=9
+val SCE_SCRIPTOL_KEYWORD=10
+val SCE_SCRIPTOL_OPERATOR=11
+val SCE_SCRIPTOL_IDENTIFIER=12
+val SCE_SCRIPTOL_TRIPLE=13
+val SCE_SCRIPTOL_CLASSNAME=14
+val SCE_SCRIPTOL_PREPROCESSOR=15
 # Lexical states for SCLEX_ASM
 lex Asm=SCLEX_ASM SCE_ASM_
 val SCE_ASM_DEFAULT=0
@@ -2027,6 +2147,10 @@ val SCE_ASM_MATHINSTRUCTION=7
 val SCE_ASM_REGISTER=8
 val SCE_ASM_DIRECTIVE=9
 val SCE_ASM_DIRECTIVEOPERAND=10
+val SCE_ASM_COMMENTBLOCK=11
+val SCE_ASM_CHARACTER=12
+val SCE_ASM_STRINGEOL=13
+val SCE_ASM_EXTINSTRUCTION=14
 # Lexical states for SCLEX_FORTRAN
 lex Fortran=SCLEX_FORTRAN SCE_F_
 lex F77=SCLEX_F77 SCE_F_
@@ -2162,6 +2286,78 @@ val SCE_MMIXAL_HEX=14
 val SCE_MMIXAL_OPERATOR=15
 val SCE_MMIXAL_SYMBOL=16
 val SCE_MMIXAL_INCLUDE=17
+# Lexical states for SCLEX_CLW
+lex Clarion=SCLEX_CLW SCE_CLW_
+val SCE_CLW_DEFAULT=0
+val SCE_CLW_LABEL=1
+val SCE_CLW_COMMENT=2
+val SCE_CLW_STRING=3
+val SCE_CLW_USER_IDENTIFIER=4
+val SCE_CLW_INTEGER_CONSTANT=5
+val SCE_CLW_REAL_CONSTANT=6
+val SCE_CLW_PICTURE_STRING=7
+val SCE_CLW_KEYWORD=8
+val SCE_CLW_COMPILER_DIRECTIVE=9
+val SCE_CLW_BUILTIN_PROCEDURES_FUNCTION=10
+val SCE_CLW_STRUCTURE_DATA_TYPE=11
+val SCE_CLW_ATTRIBUTE=12
+val SCE_CLW_STANDARD_EQUATE=13
+val SCE_CLW_ERROR=14
+# Lexical states for SCLEX_LOT
+lex LOT=SCLEX_LOT SCE_LOT_
+val SCE_LOT_DEFAULT=0
+val SCE_LOT_HEADER=1
+val SCE_LOT_BREAK=2
+val SCE_LOT_SET=3
+val SCE_LOT_PASS=4
+val SCE_LOT_FAIL=5
+val SCE_LOT_ABORT=6
+# Lexical states for SCLEX_YAML
+lex YAML=SCLEX_YAML SCE_YAML_
+val SCE_YAML_DEFAULT=0
+val SCE_YAML_COMMENT=1
+val SCE_YAML_IDENTIFIER=2
+val SCE_YAML_KEYWORD=3
+val SCE_YAML_NUMBER=4
+val SCE_YAML_REFERENCE=5
+val SCE_YAML_DOCUMENT=6
+val SCE_YAML_TEXT=7
+val SCE_YAML_ERROR=8
+# Lexical states for SCLEX_TEX
+lex TeX=SCLEX_TEX SCE_TEX_
+val SCE_TEX_DEFAULT=0
+val SCE_TEX_SPECIAL=1
+val SCE_TEX_GROUP=2
+val SCE_TEX_SYMBOL=3
+val SCE_TEX_COMMAND=4
+val SCE_TEX_TEXT=5
+lex Metapost=SCLEX_METAPOST SCE_METAPOST_
+val SCE_METAPOST_DEFAULT=0
+val SCE_METAPOST_SPECIAL=1
+val SCE_METAPOST_GROUP=2
+val SCE_METAPOST_SYMBOL=3
+val SCE_METAPOST_COMMAND=4
+val SCE_METAPOST_TEXT=5
+val SCE_METAPOST_EXTRA=6
+# Lexical states for SCLEX_ERLANG
+lex Erlang=SCLEX_ERLANG SCE_ERLANG_
+val SCE_ERLANG_DEFAULT=0
+val SCE_ERLANG_COMMENT=1
+val SCE_ERLANG_VARIABLE=2
+val SCE_ERLANG_NUMBER=3
+val SCE_ERLANG_KEYWORD=4
+val SCE_ERLANG_STRING=5
+val SCE_ERLANG_OPERATOR=6
+val SCE_ERLANG_ATOM=7
+val SCE_ERLANG_FUNCTION_NAME=8
+val SCE_ERLANG_CHARACTER=9
+val SCE_ERLANG_MACRO=10
+val SCE_ERLANG_RECORD=11
+val SCE_ERLANG_SEPARATOR=12
+val SCE_ERLANG_NODE_NAME=13
+val SCE_ERLANG_UNKNOWN=31
+# Lexical states for SCLEX_OCTAVE are identical to MatLab
+lex Octave=SCLEX_OCTAVE SCE_MATLAB_
 
 # Events
 

@@ -87,11 +87,12 @@ public:
 			userData = 0;
 		}
 	};
+	
+	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
 
 private:
 	int refCount;
 	CellBuffer cb;
-	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
 	charClassification charClass[256];
 	char stylingMask;
 	int endStyled;
@@ -190,6 +191,7 @@ public:
 	void Indent(bool forwards);
 	int ExtendWordSelect(int pos, int delta, bool onlyWordCharacters=false);
 	int NextWordStart(int pos, int delta);
+	int NextWordEnd(int pos, int delta);
 	int Length() { return cb.Length(); }
 	long FindText(int minPos, int maxPos, const char *s,
 		bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix, int *length);
@@ -198,8 +200,9 @@ public:
 	int LinesTotal();
 
 	void ChangeCase(Range r, bool makeUpperCase);
-
-	void SetWordChars(unsigned char *chars);
+	
+	void SetDefaultCharClasses();
+	void SetCharClasses(unsigned char *chars, charClassification newCharClass);
 	void SetStylingBits(int bits);
 	void StartStyling(int position, char mask);
 	bool SetStyleFor(int length, char style);
@@ -220,7 +223,7 @@ public:
 	bool IsWordPartSeparator(char ch);
 	int WordPartLeft(int pos);
 	int WordPartRight(int pos);
-	int ExtendStyleRange(int pos, int delta);
+	int ExtendStyleRange(int pos, int delta, bool singleLine = false);
 	int ParaUp(int pos);
 	int ParaDown(int pos);
 

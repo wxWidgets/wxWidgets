@@ -57,7 +57,7 @@
 
 #define wxSTC_INVALID_POSITION -1
 
-// Define start of Scintilla messages to be greater than all edit (EM_*) messages
+// Define start of Scintilla messages to be greater than all Windows edit (EM_*) messages
 // as many EM_ messages can be used although that use is deprecated.
 #define wxSTC_START 2000
 #define wxSTC_OPTIONAL_START 3000
@@ -162,6 +162,7 @@
 #define wxSTC_INDIC_DIAGONAL 3
 #define wxSTC_INDIC_STRIKE 4
 #define wxSTC_INDIC_HIDDEN 5
+#define wxSTC_INDIC_BOX 6
 #define wxSTC_INDIC0_MASK 0x20
 #define wxSTC_INDIC1_MASK 0x40
 #define wxSTC_INDIC2_MASK 0x80
@@ -242,6 +243,11 @@
 // This way, we favour the displaying of useful information: the begining of lines,
 // where most code reside, and the lines after the caret, eg. the body of a function.
 #define wxSTC_CARET_EVEN 0x08
+
+// Selection modes
+#define wxSTC_SEL_STREAM 0
+#define wxSTC_SEL_RECTANGLE 1
+#define wxSTC_SEL_LINES 2
 
 // Maximum value of keywordSet parameter of SetKeyWords.
 #define wxSTC_KEYWORDSET_MAX 8
@@ -333,6 +339,16 @@
 #define wxSTC_LEX_PS 42
 #define wxSTC_LEX_NSIS 43
 #define wxSTC_LEX_MMIXAL 44
+#define wxSTC_LEX_CLW 45
+#define wxSTC_LEX_CLWNOCASE 46
+#define wxSTC_LEX_LOT 47
+#define wxSTC_LEX_YAML 48
+#define wxSTC_LEX_TEX 49
+#define wxSTC_LEX_METAPOST 50
+#define wxSTC_LEX_POWERBASIC 51
+#define wxSTC_LEX_FORTH 52
+#define wxSTC_LEX_ERLANG 53
+#define wxSTC_LEX_OCTAVE 54
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -542,7 +558,7 @@
 #define wxSTC_PL_STRING_QR 29
 #define wxSTC_PL_STRING_QW 30
 
-// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
+// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT, SCLEX_POWERBASIC
 #define wxSTC_B_DEFAULT 0
 #define wxSTC_B_COMMENT 1
 #define wxSTC_B_NUMBER 2
@@ -552,6 +568,10 @@
 #define wxSTC_B_OPERATOR 6
 #define wxSTC_B_IDENTIFIER 7
 #define wxSTC_B_DATE 8
+#define wxSTC_B_STRINGEOL 9
+#define wxSTC_B_KEYWORD2 10
+#define wxSTC_B_KEYWORD3 11
+#define wxSTC_B_KEYWORD4 12
 
 // Lexical states for SCLEX_PROPERTIES
 #define wxSTC_PROPS_DEFAULT 0
@@ -607,6 +627,8 @@
 #define wxSTC_ERR_PHP 14
 #define wxSTC_ERR_ELF 15
 #define wxSTC_ERR_IFC 16
+#define wxSTC_ERR_IFORT 17
+#define wxSTC_ERR_ABSF 18
 
 // Lexical states for SCLEX_BATCH
 #define wxSTC_BAT_DEFAULT 0
@@ -726,37 +748,50 @@
 #define wxSTC_NNCRONTAB_ENVIRONMENT 9
 #define wxSTC_NNCRONTAB_IDENTIFIER 10
 
+// Lexical states for SCLEX_FORTH (Forth Lexer)
+#define wxSTC_FORTH_DEFAULT 0
+#define wxSTC_FORTH_COMMENT 1
+#define wxSTC_FORTH_COMMENT_ML 2
+#define wxSTC_FORTH_IDENTIFIER 3
+#define wxSTC_FORTH_CONTROL 4
+#define wxSTC_FORTH_KEYWORD 5
+#define wxSTC_FORTH_DEFWORD 6
+#define wxSTC_FORTH_PREWORD1 7
+#define wxSTC_FORTH_PREWORD2 8
+#define wxSTC_FORTH_NUMBER 9
+#define wxSTC_FORTH_STRING 10
+#define wxSTC_FORTH_LOCALE 11
+
 // Lexical states for SCLEX_MATLAB
 #define wxSTC_MATLAB_DEFAULT 0
 #define wxSTC_MATLAB_COMMENT 1
 #define wxSTC_MATLAB_COMMAND 2
 #define wxSTC_MATLAB_NUMBER 3
 #define wxSTC_MATLAB_KEYWORD 4
+
+// single quoted string
 #define wxSTC_MATLAB_STRING 5
 #define wxSTC_MATLAB_OPERATOR 6
 #define wxSTC_MATLAB_IDENTIFIER 7
+#define wxSTC_MATLAB_DOUBLEQUOTESTRING 8
 
 // Lexical states for SCLEX_SCRIPTOL
 #define wxSTC_SCRIPTOL_DEFAULT 0
-#define wxSTC_SCRIPTOL_COMMENT 1
+#define wxSTC_SCRIPTOL_WHITE 1
 #define wxSTC_SCRIPTOL_COMMENTLINE 2
-#define wxSTC_SCRIPTOL_COMMENTDOC 3
-#define wxSTC_SCRIPTOL_NUMBER 4
-#define wxSTC_SCRIPTOL_WORD 5
-#define wxSTC_SCRIPTOL_STRING 6
-#define wxSTC_SCRIPTOL_CHARACTER 7
-#define wxSTC_SCRIPTOL_UUID 8
-#define wxSTC_SCRIPTOL_PREPROCESSOR 9
-#define wxSTC_SCRIPTOL_OPERATOR 10
-#define wxSTC_SCRIPTOL_IDENTIFIER 11
-#define wxSTC_SCRIPTOL_STRINGEOL 12
-#define wxSTC_SCRIPTOL_VERBATIM 13
-#define wxSTC_SCRIPTOL_REGEX 14
-#define wxSTC_SCRIPTOL_COMMENTLINEDOC 15
-#define wxSTC_SCRIPTOL_WORD2 16
-#define wxSTC_SCRIPTOL_COMMENTDOCKEYWORD 17
-#define wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR 18
-#define wxSTC_SCRIPTOL_COMMENTBASIC 19
+#define wxSTC_SCRIPTOL_PERSISTENT 3
+#define wxSTC_SCRIPTOL_CSTYLE 4
+#define wxSTC_SCRIPTOL_COMMENTBLOCK 5
+#define wxSTC_SCRIPTOL_NUMBER 6
+#define wxSTC_SCRIPTOL_STRING 7
+#define wxSTC_SCRIPTOL_CHARACTER 8
+#define wxSTC_SCRIPTOL_STRINGEOL 9
+#define wxSTC_SCRIPTOL_KEYWORD 10
+#define wxSTC_SCRIPTOL_OPERATOR 11
+#define wxSTC_SCRIPTOL_IDENTIFIER 12
+#define wxSTC_SCRIPTOL_TRIPLE 13
+#define wxSTC_SCRIPTOL_CLASSNAME 14
+#define wxSTC_SCRIPTOL_PREPROCESSOR 15
 
 // Lexical states for SCLEX_ASM
 #define wxSTC_ASM_DEFAULT 0
@@ -770,6 +805,10 @@
 #define wxSTC_ASM_REGISTER 8
 #define wxSTC_ASM_DIRECTIVE 9
 #define wxSTC_ASM_DIRECTIVEOPERAND 10
+#define wxSTC_ASM_COMMENTBLOCK 11
+#define wxSTC_ASM_CHARACTER 12
+#define wxSTC_ASM_STRINGEOL 13
+#define wxSTC_ASM_EXTINSTRUCTION 14
 
 // Lexical states for SCLEX_FORTRAN
 #define wxSTC_F_DEFAULT 0
@@ -904,6 +943,75 @@
 #define wxSTC_MMIXAL_OPERATOR 15
 #define wxSTC_MMIXAL_SYMBOL 16
 #define wxSTC_MMIXAL_INCLUDE 17
+
+// Lexical states for SCLEX_CLW
+#define wxSTC_CLW_DEFAULT 0
+#define wxSTC_CLW_LABEL 1
+#define wxSTC_CLW_COMMENT 2
+#define wxSTC_CLW_STRING 3
+#define wxSTC_CLW_USER_IDENTIFIER 4
+#define wxSTC_CLW_INTEGER_CONSTANT 5
+#define wxSTC_CLW_REAL_CONSTANT 6
+#define wxSTC_CLW_PICTURE_STRING 7
+#define wxSTC_CLW_KEYWORD 8
+#define wxSTC_CLW_COMPILER_DIRECTIVE 9
+#define wxSTC_CLW_BUILTIN_PROCEDURES_FUNCTION 10
+#define wxSTC_CLW_STRUCTURE_DATA_TYPE 11
+#define wxSTC_CLW_ATTRIBUTE 12
+#define wxSTC_CLW_STANDARD_EQUATE 13
+#define wxSTC_CLW_ERROR 14
+
+// Lexical states for SCLEX_LOT
+#define wxSTC_LOT_DEFAULT 0
+#define wxSTC_LOT_HEADER 1
+#define wxSTC_LOT_BREAK 2
+#define wxSTC_LOT_SET 3
+#define wxSTC_LOT_PASS 4
+#define wxSTC_LOT_FAIL 5
+#define wxSTC_LOT_ABORT 6
+
+// Lexical states for SCLEX_YAML
+#define wxSTC_YAML_DEFAULT 0
+#define wxSTC_YAML_COMMENT 1
+#define wxSTC_YAML_IDENTIFIER 2
+#define wxSTC_YAML_KEYWORD 3
+#define wxSTC_YAML_NUMBER 4
+#define wxSTC_YAML_REFERENCE 5
+#define wxSTC_YAML_DOCUMENT 6
+#define wxSTC_YAML_TEXT 7
+#define wxSTC_YAML_ERROR 8
+
+// Lexical states for SCLEX_TEX
+#define wxSTC_TEX_DEFAULT 0
+#define wxSTC_TEX_SPECIAL 1
+#define wxSTC_TEX_GROUP 2
+#define wxSTC_TEX_SYMBOL 3
+#define wxSTC_TEX_COMMAND 4
+#define wxSTC_TEX_TEXT 5
+#define wxSTC_METAPOST_DEFAULT 0
+#define wxSTC_METAPOST_SPECIAL 1
+#define wxSTC_METAPOST_GROUP 2
+#define wxSTC_METAPOST_SYMBOL 3
+#define wxSTC_METAPOST_COMMAND 4
+#define wxSTC_METAPOST_TEXT 5
+#define wxSTC_METAPOST_EXTRA 6
+
+// Lexical states for SCLEX_ERLANG
+#define wxSTC_ERLANG_DEFAULT 0
+#define wxSTC_ERLANG_COMMENT 1
+#define wxSTC_ERLANG_VARIABLE 2
+#define wxSTC_ERLANG_NUMBER 3
+#define wxSTC_ERLANG_KEYWORD 4
+#define wxSTC_ERLANG_STRING 5
+#define wxSTC_ERLANG_OPERATOR 6
+#define wxSTC_ERLANG_ATOM 7
+#define wxSTC_ERLANG_FUNCTION_NAME 8
+#define wxSTC_ERLANG_CHARACTER 9
+#define wxSTC_ERLANG_MACRO 10
+#define wxSTC_ERLANG_RECORD 11
+#define wxSTC_ERLANG_SEPARATOR 12
+#define wxSTC_ERLANG_NODE_NAME 13
+#define wxSTC_ERLANG_UNKNOWN 31
 
 
 //-----------------------------------------
@@ -1090,7 +1198,7 @@
 // except they behave differently when word-wrap is enabled:
 // They go first to the start / end of the display line, like (Home|LineEnd)Display
 // The difference is that, the cursor is already at the point, it goes on to the start
-// or end of the document line, as appropriate for (Home|LineEnd|VCHome)Extend.
+// or end of the document line, as appropriate for (Home|LineEnd|VCHome)(Extend)?.
 #define wxSTC_CMD_HOMEWRAP 2349
 #define wxSTC_CMD_HOMEWRAPEXTEND 2450
 #define wxSTC_CMD_LINEENDWRAP 2451
@@ -1118,11 +1226,64 @@
 // Delete forwards from the current position to the end of the line.
 #define wxSTC_CMD_DELLINERIGHT 2396
 
-// Move caret between paragraphs (delimited by empty lines)
+// Move caret between paragraphs (delimited by empty lines).
 #define wxSTC_CMD_PARADOWN 2413
 #define wxSTC_CMD_PARADOWNEXTEND 2414
 #define wxSTC_CMD_PARAUP 2415
 #define wxSTC_CMD_PARAUPEXTEND 2416
+
+// Move caret down one line, extending rectangular selection to new caret position.
+#define wxSTC_CMD_LINEDOWNRECTEXTEND 2426
+
+// Move caret up one line, extending rectangular selection to new caret position.
+#define wxSTC_CMD_LINEUPRECTEXTEND 2427
+
+// Move caret left one character, extending rectangular selection to new caret position.
+#define wxSTC_CMD_CHARLEFTRECTEXTEND 2428
+
+// Move caret right one character, extending rectangular selection to new caret position.
+#define wxSTC_CMD_CHARRIGHTRECTEXTEND 2429
+
+// Move caret to first position on line, extending rectangular selection to new caret position.
+#define wxSTC_CMD_HOMERECTEXTEND 2430
+
+// Move caret to before first visible character on line.
+// If already there move to first character on line.
+// In either case, extend rectangular selection to new caret position.
+#define wxSTC_CMD_VCHOMERECTEXTEND 2431
+
+// Move caret to last position on line, extending rectangular selection to new caret position.
+#define wxSTC_CMD_LINEENDRECTEXTEND 2432
+
+// Move caret one page up, extending rectangular selection to new caret position.
+#define wxSTC_CMD_PAGEUPRECTEXTEND 2433
+
+// Move caret one page down, extending rectangular selection to new caret position.
+#define wxSTC_CMD_PAGEDOWNRECTEXTEND 2434
+
+// Move caret to top of page, or one page up if already at top of page.
+#define wxSTC_CMD_STUTTEREDPAGEUP 2435
+
+// Move caret to top of page, or one page up if already at top of page, extending selection to new caret position.
+#define wxSTC_CMD_STUTTEREDPAGEUPEXTEND 2436
+
+// Move caret to bottom of page, or one page down if already at bottom of page.
+#define wxSTC_CMD_STUTTEREDPAGEDOWN 2437
+
+// Move caret to bottom of page, or one page down if already at bottom of page, extending selection to new caret position.
+#define wxSTC_CMD_STUTTEREDPAGEDOWNEXTEND 2438
+
+// Move caret left one word, position cursor at end of word.
+#define wxSTC_CMD_WORDLEFTEND 2439
+
+// Move caret left one word, position cursor at end of word, extending selection to new caret position.
+#define wxSTC_CMD_WORDLEFTENDEXTEND 2440
+
+// Move caret right one word, position cursor at end of word.
+#define wxSTC_CMD_WORDRIGHTEND 2441
+
+// Move caret right one word, position cursor at end of word, extending selection to new caret position.
+#define wxSTC_CMD_WORDRIGHTENDEXTEND 2442
 
 
 // END of generated section
@@ -1410,7 +1571,7 @@ public:
     // When key+modifier combination km is pressed perform msg.
     void CmdKeyAssign(int key, int modifiers, int cmd);
 
-    // When key+modifier combination km do nothing.
+    // When key+modifier combination km is pressed do nothing.
     void CmdKeyClear(int key, int modifiers);
 
     // Drop all key mappings.
@@ -1429,6 +1590,7 @@ public:
     void SetCaretPeriod(int periodMilliseconds);
 
     // Set the set of characters making up words for when moving or selecting by word.
+    // First sets deaults like SetCharsDefault.
     void SetWordChars(const wxString& characters);
 
     // Start a sequence of actions that is undone and redone as a unit.
@@ -1663,7 +1825,7 @@ public:
                int    startPos,
                int    endPos,
                wxDC*  draw,
-               wxDC*  target,  // Why does it use two? Can they be the same?
+               wxDC*  target, 
                wxRect renderRect,
                wxRect pageRect);
 
@@ -1781,12 +1943,12 @@ public:
     int GetTargetEnd();
 
     // Replace the target text with the argument text.
-    // Text is counted so it can contain nulls.
+    // Text is counted so it can contain NULs.
     // Returns the length of the replacement text.
     int ReplaceTarget(const wxString& text);
 
     // Replace the target text with the argument text after \d processing.
-    // Text is counted so it can contain nulls.
+    // Text is counted so it can contain NULs.
     // Looks for \d where d is between 1 and 9 and replaces these with the strings
     // matched in the last search operation which were surrounded by \( and \).
     // Returns the length of the replacement text including any change
@@ -1794,7 +1956,7 @@ public:
     int ReplaceTargetRE(const wxString& text);
 
     // Search for a counted string in the target and set the target to the found
-    // range. Text is counted so it can contain nulls.
+    // range. Text is counted so it can contain NULs.
     // Returns length of range or -1 for failure in which case target is not moved.
     int SearchInTarget(const wxString& text);
 
@@ -1919,7 +2081,7 @@ public:
     int GetScrollWidth();
 
     // Measure the pixel width of some text in a particular style.
-    // Nul terminated text argument.
+    // NUL terminated text argument.
     // Does not handle tab or control characters.
     int TextWidth(int style, const wxString& text);
 
@@ -2135,7 +2297,7 @@ public:
     void SetXOffset(int newOffset);
     int GetXOffset();
 
-    // Set the last x chosen value to be the caret x position
+    // Set the last x chosen value to be the caret x position.
     void ChooseCaretX();
 
     // Set the way the caret is kept visible when going sideway.
@@ -2149,7 +2311,7 @@ public:
     // Set printing to line wrapped (SC_WRAP_WORD) or not line wrapped (SC_WRAP_NONE).
     void SetPrintWrapMode(int mode);
 
-    // Is printing line wrapped.
+    // Is printing line wrapped?
     int GetPrintWrapMode();
 
     // Set a fore colour for active hotspots.
@@ -2160,6 +2322,9 @@ public:
 
     // Enable / Disable underlining active hotspots.
     void SetHotspotActiveUnderline(bool underline);
+
+    // Limit hotspots to single line so hotspots on two lines don't merge.
+    void SetHotspotSingleLine(bool singleLine);
 
     // Given a valid document position, return the previous position taking code
     // page into account. Returns 0 if passed 0.
@@ -2174,6 +2339,29 @@ public:
 
     // Copy argument text to the clipboard.
     void CopyText(int length, const wxString& text);
+
+    // Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE) or
+    // by lines (SC_SEL_LINES).
+    void SetSelectionMode(int mode);
+
+    // Get the mode of the current selection.
+    int GetSelectionMode();
+
+    // Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+    int GetLineSelStartPosition(int line);
+
+    // Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+    int GetLineSelEndPosition(int line);
+
+    // Set the set of characters making up whitespace for when moving or selecting by word.
+    // Should be called after SetWordChars.
+    void SetWhitespaceChars(const wxString& characters);
+
+    // Reset the set of characters for whitespace and word characters to the defaults.
+    void SetCharsDefault();
+
+    // Get currently selected item position in the auto-completion list
+    int AutoCompGetCurrent();
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();
@@ -2321,7 +2509,8 @@ private:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);
     void OnListBox(wxCommandEvent& evt);
-
+    void OnIdle(wxIdleEvent& evt);
+    
 
     // Turn notifications from Scintilla into events
     void NotifyChange();

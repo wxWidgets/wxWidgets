@@ -175,6 +175,7 @@ void ContractionState::DeleteLines(int lineDoc, int lineCount) {
 		if (i != 0) // Line zero is always visible
 			lines[i].visible = lines[i + lineCount].visible;
 		lines[i].expanded = lines[i + lineCount].expanded;
+		lines[i].height = lines[i + lineCount].height;
 	}
 	linesInDoc -= lineCount;
 	linesInDisplay += deltaDisplayed;

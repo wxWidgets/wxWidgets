@@ -81,7 +81,7 @@ public:
 	void SetFromAllocated();
 	bool InList(const char *s);
 	const char *GetNearestWord(const char *wordStart, int searchLen = -1,
-		bool ignoreCase = false, SString wordCharacters="");
+		bool ignoreCase = false, SString wordCharacters="", int wordIndex = -1);
 	char *GetNearestWords(const char *wordStart, int searchLen=-1,
 		bool ignoreCase=false, char otherSeparator='\0');
 };

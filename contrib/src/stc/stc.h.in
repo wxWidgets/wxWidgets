@@ -237,7 +237,8 @@ private:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnMenu(wxCommandEvent& evt);
     void OnListBox(wxCommandEvent& evt);
-
+    void OnIdle(wxIdleEvent& evt);
+    
 
     // Turn notifications from Scintilla into events
     void NotifyChange();

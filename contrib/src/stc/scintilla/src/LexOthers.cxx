@@ -427,6 +427,12 @@ static void ColouriseErrorListLine(
 		styler.ColourTo(endPos, SCE_ERR_DIFF_ADDITION);
 	} else if (lineBuffer[0] == '-' && lineBuffer[1] == '-' && lineBuffer[2] == '-') {
 		styler.ColourTo(endPos, SCE_ERR_DIFF_MESSAGE);
+	} else if (strstart(lineBuffer, "cf90-")) {
+		// Absoft Pro Fortran 90/95 v8.2 error and/or warning message
+		styler.ColourTo(endPos, SCE_ERR_ABSF);
+	} else if (strstart(lineBuffer, "fortcom:")) {
+		// Intel Fortran Compiler v8.0 error/warning message
+		styler.ColourTo(endPos, SCE_ERR_IFORT);
 	} else if (lineBuffer[0] == '-') {
 		styler.ColourTo(endPos, SCE_ERR_DIFF_DELETION);
 	} else if (strstr(lineBuffer, "File \"") && strstr(lineBuffer, ", line ")) {

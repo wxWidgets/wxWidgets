@@ -154,7 +154,7 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
     style |= wxVSCROLL | wxHSCROLL;
 #endif
     wxControl::Create(parent, id, pos, size,
-                      style | wxWANTS_CHARS | wxCLIP_CHILDREN,
+              style | wxWANTS_CHARS | wxCLIP_CHILDREN,
               wxDefaultValidator, name);
 
 #ifdef LINK_LEXERS
@@ -619,7 +619,7 @@ void wxStyledTextCtrl::CmdKeyAssign(int key, int modifiers, int cmd) {
          SendMsg(2070, MAKELONG(key, modifiers), cmd);
 }
 
-// When key+modifier combination km do nothing.
+// When key+modifier combination km is pressed do nothing.
 void wxStyledTextCtrl::CmdKeyClear(int key, int modifiers) {
          SendMsg(2071, MAKELONG(key, modifiers));
 }
@@ -650,6 +650,7 @@ void wxStyledTextCtrl::SetCaretPeriod(int periodMilliseconds) {
 }
 
 // Set the set of characters making up words for when moving or selecting by word.
+// First sets deaults like SetCharsDefault.
 void wxStyledTextCtrl::SetWordChars(const wxString& characters) {
     SendMsg(2077, 0, (long)(const char*)wx2stc(characters));
 }
@@ -1049,7 +1050,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                 int    startPos,
                 int    endPos,
                 wxDC*  draw,
-                wxDC*  target,  // Why does it use two? Can they be the same?
+                wxDC*  target, 
                 wxRect renderRect,
                 wxRect pageRect) {
              RangeToFormat fr;
@@ -1305,7 +1306,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Replace the target text with the argument text.
-// Text is counted so it can contain nulls.
+// Text is counted so it can contain NULs.
 // Returns the length of the replacement text.
 
      int wxStyledTextCtrl::ReplaceTarget(const wxString& text) {
@@ -1314,7 +1315,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Replace the target text with the argument text after \d processing.
-// Text is counted so it can contain nulls.
+// Text is counted so it can contain NULs.
 // Looks for \d where d is between 1 and 9 and replaces these with the strings
 // matched in the last search operation which were surrounded by \( and \).
 // Returns the length of the replacement text including any change
@@ -1326,7 +1327,7 @@ int wxStyledTextCtrl::GetTargetEnd() {
 }
 
 // Search for a counted string in the target and set the target to the found
-// range. Text is counted so it can contain nulls.
+// range. Text is counted so it can contain NULs.
 // Returns length of range or -1 for failure in which case target is not moved.
 
      int wxStyledTextCtrl::SearchInTarget(const wxString& text) {
@@ -1533,7 +1534,7 @@ int wxStyledTextCtrl::GetScrollWidth() {
 }
 
 // Measure the pixel width of some text in a particular style.
-// Nul terminated text argument.
+// NUL terminated text argument.
 // Does not handle tab or control characters.
 int wxStyledTextCtrl::TextWidth(int style, const wxString& text) {
     return SendMsg(2276, style, (long)(const char*)wx2stc(text));
@@ -1884,7 +1885,7 @@ int wxStyledTextCtrl::GetXOffset() {
     return SendMsg(2398, 0, 0);
 }
 
-// Set the last x chosen value to be the caret x position
+// Set the last x chosen value to be the caret x position.
 void wxStyledTextCtrl::ChooseCaretX() {
     SendMsg(2399, 0, 0);
 }
@@ -1906,7 +1907,7 @@ void wxStyledTextCtrl::SetPrintWrapMode(int mode) {
     SendMsg(2406, mode, 0);
 }
 
-// Is printing line wrapped.
+// Is printing line wrapped?
 int wxStyledTextCtrl::GetPrintWrapMode() {
     return SendMsg(2407, 0, 0);
 }
@@ -1924,6 +1925,11 @@ void wxStyledTextCtrl::SetHotspotActiveBackground(bool useSetting, const wxColou
 // Enable / Disable underlining active hotspots.
 void wxStyledTextCtrl::SetHotspotActiveUnderline(bool underline) {
     SendMsg(2412, underline, 0);
+}
+
+// Limit hotspots to single line so hotspots on two lines don't merge.
+void wxStyledTextCtrl::SetHotspotSingleLine(bool singleLine) {
+    SendMsg(2421, singleLine, 0);
 }
 
 // Given a valid document position, return the previous position taking code
@@ -1946,6 +1952,43 @@ void wxStyledTextCtrl::CopyRange(int start, int end) {
 // Copy argument text to the clipboard.
 void wxStyledTextCtrl::CopyText(int length, const wxString& text) {
     SendMsg(2420, length, (long)(const char*)wx2stc(text));
+}
+
+// Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE) or
+// by lines (SC_SEL_LINES).
+void wxStyledTextCtrl::SetSelectionMode(int mode) {
+    SendMsg(2422, mode, 0);
+}
+
+// Get the mode of the current selection.
+int wxStyledTextCtrl::GetSelectionMode() {
+    return SendMsg(2423, 0, 0);
+}
+
+// Retrieve the position of the start of the selection at the given line (INVALID_POSITION if no selection on this line).
+int wxStyledTextCtrl::GetLineSelStartPosition(int line) {
+    return SendMsg(2424, line, 0);
+}
+
+// Retrieve the position of the end of the selection at the given line (INVALID_POSITION if no selection on this line).
+int wxStyledTextCtrl::GetLineSelEndPosition(int line) {
+    return SendMsg(2425, line, 0);
+}
+
+// Set the set of characters making up whitespace for when moving or selecting by word.
+// Should be called after SetWordChars.
+void wxStyledTextCtrl::SetWhitespaceChars(const wxString& characters) {
+    SendMsg(2443, 0, (long)(const char*)wx2stc(characters));
+}
+
+// Reset the set of characters for whitespace and word characters to the defaults.
+void wxStyledTextCtrl::SetCharsDefault() {
+    SendMsg(2444, 0, 0);
+}
+
+// Get currently selected item position in the auto-completion list
+int wxStyledTextCtrl::AutoCompGetCurrent() {
+    return SendMsg(2445, 0, 0);
 }
 
 // Start notifying the container of all key presses and commands.
@@ -2333,6 +2376,11 @@ void wxStyledTextCtrl::OnMenu(wxCommandEvent& evt) {
 
 void wxStyledTextCtrl::OnListBox(wxCommandEvent& WXUNUSED(evt)) {
     m_swx->DoOnListBox();
+}
+
+
+void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
+    m_swx->DoOnIdle(evt);
 }
 
 

@@ -33,8 +33,16 @@ static inline bool IsAWordChar(const int ch) {
 	return ch < 0x80 && (isalnum(ch) || ch == '_');
 }
 
-inline bool IsAWordStart(const int ch) {
+static inline bool IsAWordStart(const int ch) {
 	return ch < 0x80 && isalpha(ch);
+}
+
+static inline bool IsANumberChar(const int ch) {
+	// Not exactly following number definition (several dots are seen as OK, etc.)
+	// but probably enough in most cases.
+	return (ch < 0x80) &&
+	        (isdigit(ch) || toupper(ch) == 'E' ||
+             ch == '.' || ch == '-' || ch == '+');
 }
 
 static void ColourisePovDoc(
@@ -91,11 +99,8 @@ static void ColourisePovDoc(
 			sc.SetState(SCE_POV_DEFAULT);
 		} else if (sc.state == SCE_POV_NUMBER) {
 			// We stop the number definition on non-numerical non-dot non-eE non-sign char
-			if (!(isdigit(sc.ch) || sc.ch == '.' ||
-				  toupper(sc.ch) == 'E' || sc.ch == '-' || sc.ch == '+')) {
-					// Not exactly following number definition (several dots are seen as OK, etc.)
-					// but probably enough in most cases.
-					sc.SetState(SCE_POV_DEFAULT);
+			if (!IsANumberChar(sc.ch)) {
+				sc.SetState(SCE_POV_DEFAULT);
 			}
 		} else if (sc.state == SCE_POV_IDENTIFIER) {
 			if (!IsAWordChar(sc.ch)) {

@@ -96,6 +96,11 @@ static int GetRbStringState(Accessor &styler, int i, int *nextIndex) {
 		return SCE_P_DEFAULT;
 	}
 
+	if (i>0 && styler.SafeGetCharAt(i-1) == '$') {
+		*nextIndex = i + 1;
+		return SCE_P_DEFAULT;
+	}
+
 	if (ch == chNext && ch == styler.SafeGetCharAt(i + 2)) {
 		*nextIndex = i + 3;
 

@@ -99,6 +99,7 @@ public:
     virtual void Initialise();
     virtual void Finalise();
     virtual void StartDrag();
+    virtual bool SetIdle(bool on);
     virtual void SetTicking(bool on);
     virtual void SetMouseCapture(bool on);
     virtual bool HaveMouseCapture();
@@ -142,7 +143,8 @@ public:
     void DoAddChar(int key);
     int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed);
     void DoTick() { Tick(); }
-
+    void DoOnIdle(wxIdleEvent& evt);
+    
 #if wxUSE_DRAG_AND_DROP
     bool DoDropText(long x, long y, const wxString& data);
     wxDragResult DoDragEnter(wxCoord x, wxCoord y, wxDragResult def);

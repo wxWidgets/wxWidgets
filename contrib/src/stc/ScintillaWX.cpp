@@ -146,7 +146,6 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
 
 
 ScintillaWX::~ScintillaWX() {
-    SetTicking(false);
 }
 
 //----------------------------------------------------------------------
@@ -165,6 +164,8 @@ void ScintillaWX::Initialise() {
 
 void ScintillaWX::Finalise() {
     ScintillaBase::Finalise();
+    SetTicking(false);
+    SetIdle(false);
 }
 
 
@@ -199,6 +200,19 @@ void ScintillaWX::StartDrag() {
 }
 
 
+bool ScintillaWX::SetIdle(bool on) {
+    if (idler.state != on) {
+        // connect or disconnect the EVT_IDLE handler
+        if (on) 
+            stc->Connect(-1, wxEVT_IDLE, (wxObjectEventFunction)&wxStyledTextCtrl::OnIdle);
+        else
+            stc->Disconnect(-1, wxEVT_IDLE, (wxObjectEventFunction)&wxStyledTextCtrl::OnIdle);
+        idler.state = on;
+    }
+    return idler.state;
+}
+
+    
 void ScintillaWX::SetTicking(bool on) {
     wxSTCTimer* steTimer;
     if (timer.ticking != on) {
@@ -219,11 +233,13 @@ void ScintillaWX::SetTicking(bool on) {
 
 
 void ScintillaWX::SetMouseCapture(bool on) {
-    if (on && !capturedMouse)
-        stc->CaptureMouse();
-    else if (!on && capturedMouse && stc->HasCapture())
-        stc->ReleaseMouse();
-    capturedMouse = on;
+    if (mouseDownCaptures) {
+        if (on && !capturedMouse)
+            stc->CaptureMouse();
+        else if (!on && capturedMouse && stc->HasCapture())
+            stc->ReleaseMouse();
+        capturedMouse = on;
+    }
 }
 
 
@@ -652,7 +668,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     // Set the current position to the mouse click point and
     // then paste in the PRIMARY selection, if any.  wxGTK only.
     int newPos = PositionFromLocation(pt);
-    MovePositionTo(newPos, 0, 1);
+    MovePositionTo(newPos, noSel, true);
 
     pdoc->BeginUndoAction();
     wxTextDataObject data;
@@ -775,6 +791,15 @@ void ScintillaWX::DoOnListBox() {
     AutoCompleteCompleted();
 }
 
+ 
+void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
+
+    if ( Idle() )
+        evt.RequestMore();
+    else
+        SetIdle(false);
+}
+ 
 //----------------------------------------------------------------------
 
 #if wxUSE_DRAG_AND_DROP
