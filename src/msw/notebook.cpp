@@ -2,7 +2,7 @@
 // Name:        msw/notebook.cpp
 // Purpose:     implementation of wxNotebook
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.06.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -169,9 +169,9 @@ bool wxNotebook::Create(wxWindow *parent,
                   (WPARAM)::GetStockObject(DEFAULT_GUI_FONT),TRUE);
 
 
-  if ( parent != NULL ) 
+  if ( parent != NULL )
     parent->AddChild(this);
-  
+
   SubclassWin(m_hWnd);
 
   return TRUE;
@@ -267,7 +267,7 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 }
 
 void wxNotebook::SetImageList(wxImageList* imageList)
-{ 
+{
   m_pImageList = imageList;
   TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
 }
@@ -304,14 +304,14 @@ bool wxNotebook::RemovePage(int nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-  TabCtrl_DeleteAllItems(m_hwnd);
-
   int nPageCount = GetPageCount();
   int nPage;
   for ( nPage = 0; nPage < nPageCount; nPage++ )
     delete m_aPages[nPage];
 
   m_aPages.Clear();
+
+  TabCtrl_DeleteAllItems(m_hwnd);
 
   return TRUE;
 }
@@ -363,7 +363,7 @@ bool wxNotebook::InsertPage(int nPage,
   // save the pointer to the page
   m_aPages.Insert(pPage, nPage);
 
-  // some page must be selected: either this one or the first one if there is 
+  // some page must be selected: either this one or the first one if there is
   // still no selection
   if ( bSelect )
     m_nSelection = nPage;
