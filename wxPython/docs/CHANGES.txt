@@ -105,6 +105,10 @@ constructed with only the parent window arg.  In some cases other args
 may be required for normal operation, but they can usually be set
 after construction.
 
+Removed the deprecated ErrorDialogs and PythonBitmaps modules.  If you
+were using these in your apps then please join wxPython-dev and assist
+with a more modern reimplementation.
+
 
 
 
