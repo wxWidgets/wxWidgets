@@ -847,7 +847,7 @@ void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
+    wxConnectionBase *conn = client.MakeConnection(_T(""), m_server, m_topic);
     if ( !conn )
     {
         wxLogError(_T("Failed to connect to the DDE server '%s'."),
@@ -873,7 +873,7 @@ void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
         return;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection("", m_server, m_topic);
+    wxConnectionBase *conn = client.MakeConnection(_T(""), m_server, m_topic);
     if ( !conn )
     {
         wxLogError(_T("Failed to connect to the DDE server '%s'."),

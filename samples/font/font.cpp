@@ -792,7 +792,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // draw the lines between them
-    dc.SetPen(wxPen(wxColour("blue"), 1, wxSOLID));
+    dc.SetPen(wxPen(wxColour(_T("blue")), 1, wxSOLID));
     int l;
 
     // horizontal

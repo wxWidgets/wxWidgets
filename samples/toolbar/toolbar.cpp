@@ -89,7 +89,7 @@ class MyFrame: public wxFrame
 public:
     MyFrame(wxFrame *parent,
             wxWindowID id = -1,
-            const wxString& title = "wxToolBar Sample",
+            const wxString& title = _T("wxToolBar Sample"),
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE);
@@ -232,12 +232,12 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, -1,
-                                 "wxToolBar Sample",
+                                 _T("wxToolBar Sample"),
                                  wxPoint(100, 100), wxSize(550, 300));
 
     frame->Show(TRUE);
 
-    frame->SetStatusText("Hello, wxWindows");
+    frame->SetStatusText(_T("Hello, wxWindows"));
 
     SetTopWindow(frame);
 
@@ -303,7 +303,7 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( m_horzToolbar )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, "", wxDefaultPosition, wxSize(200,-1) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, _T(""), wxDefaultPosition, wxSize(200,-1) );
         combo->Append(_T("This"));
         combo->Append(_T("is a"));
         combo->Append(_T("combobox"));

@@ -38,7 +38,7 @@ class MyApp: public wxApp
 // Define a new frame type
 class MyFrame: public wxFrame
 { public:
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
 
  public:
     void OnQuit(wxCommandEvent& event);
@@ -57,7 +57,7 @@ IMPLEMENT_APP  (MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Dynamic wxWindows App", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame(NULL, _T("Dynamic wxWindows App"), 50, 50, 450, 340);
 
   frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED,
                   (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
@@ -68,7 +68,7 @@ bool MyApp::OnInit(void)
 
   // Give it an icon
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
+  frame->SetIcon(wxIcon(_T("mondrian")));
 #else
   frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
@@ -76,16 +76,16 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(DYNAMIC_ABOUT, "&About");
-  file_menu->Append(DYNAMIC_QUIT, "E&xit");
+  file_menu->Append(DYNAMIC_ABOUT, _T("&About"));
+  file_menu->Append(DYNAMIC_QUIT, _T("E&xit"));
   wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(file_menu, _T("&File"));
   frame->SetMenuBar(menu_bar);
 
   // Make a panel with a message
   wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 200), wxTAB_TRAVERSAL);
 
-  (void)new wxStaticText(panel, 311, "Hello!", wxPoint(10, 10), wxSize(-1, -1), 0);
+  (void)new wxStaticText(panel, 311, _T("Hello!"), wxPoint(10, 10), wxSize(-1, -1), 0);
 
   // Show the frame
   frame->Show(TRUE);
@@ -96,7 +96,7 @@ bool MyApp::OnInit(void)
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
+MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {}
 
@@ -107,8 +107,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-  wxMessageDialog dialog(this, "This demonstrates dynamic event handling",
-    "About Dynamic", wxYES_NO|wxCANCEL);
+  wxMessageDialog dialog(this, _T("This demonstrates dynamic event handling"),
+    _T("About Dynamic"), wxYES_NO|wxCANCEL);
 
   dialog.ShowModal();
 }
