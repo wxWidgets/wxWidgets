@@ -126,6 +126,14 @@ name::~name()                       \
     wxCHECKED_DELETE(m_ptr);        \
 }
 
+// this macro can be used for the most common case when you want to declare and
+// define the scoped pointer at the same time and want to use the standard
+// naming convention: auto pointer to Foo is called FooPtr
+#define wxDEFINE_SCOPED_PTR_TYPE(T)                                           \
+    wxDECLARE_SCOPED_PTR(T, T ## Ptr);                                        \
+    wxDEFINE_SCOPED_PTR(T, T ## Ptr)
+
+// the same but for arrays instead of simple pointers
 #define wxDECLARE_SCOPED_ARRAY(T, name)\
 class name                          \
 {                                   \
@@ -174,4 +182,5 @@ void name::reset(T * p){                \
     }                                   \
 }
 
-#endif
+#endif // __WX_SCOPED_POINTER__
+

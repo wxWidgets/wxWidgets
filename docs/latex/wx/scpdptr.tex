@@ -1,8 +1,14 @@
 \section{\class{wxScopedPtr}}\label{wxscopedptr}
 
 This is a simple scoped smart pointer implementation that is similar to 
-the \urlref{Boost}{http://www.boost.org} smart pointers but rewritten to
+the \urlref{Boost}{http://www.boost.org/} smart pointers but rewritten to
 use macros instead.
+
+A smart pointer holds a pointer to an object. The memory used by the object is
+deleted when the smart pointer goes out of scope. This class is different from
+the \texttt{std::auto\_ptr<>} in so far as it doesn't provide copy constructor
+nor assignment operator. This limits what you can do with it but is much less
+surprizing than the ``destructive copy'' behaviour of the standard class.
 
 \wxheading{Example}
 
@@ -41,18 +47,32 @@ pointer array.
 
 \wxheading{Declaring new smart pointer types}
 
+To declare the smart pointer class \texttt{CLASSNAME} containing pointes to a
+(possibly incomplete) type \texttt{TYPE} you should use
 \begin{verbatim}
-    wxDECLAR_SCOPED_PTR( TYPE,     // type of the values
+    wxDECLARE_SCOPED_PTR( TYPE,     // type of the values
                                 CLASSNAME ); // name of the class
 \end{verbatim}
 
-A smart pointer holds a pointer to an object (which must be complete
-when wxDEFINE\_SCOPED\_PTR() is called). The memory used by the object is
-deleted when the smart pointer goes out of scope. The first argument
-of the macro is the pointer type, the second is the name of the new
-smart pointer class being created.  Below we will use wxScopedPtr to
+And later, when \texttt{TYPE} is fully defined, you must also use
+\begin{verbatim}
+    wxDEFINE_SCOPED_PTR( TYPE, CLASSNAME );
+\end{verbatim}
+to implement the scoped pointer class.
+
+The first argument of these macro is the pointer type, the second is the name
+of the new smart pointer class being created.  Below we will use wxScopedPtr to
 represent the scoped pointer class, but the user may create the class with any
 legal name.
+
+Alternatively, if you don't have to separate the point of declaration and
+definition of this class and if you accept the standard naming convention, that
+is that the scoped pointer for the class \texttt{Foo} is called 
+\texttt{FooPtr}, you can use a single macro which replaces two macros above:
+\begin{verbatim}
+    wxDEFINE_SCOPED_PTR_TYPE( TYPE );
+\end{verbatim}
+Once again, in this cass \texttt{CLASSNAME} will be \texttt{TYPEPtr}.
 
 \wxheading{Include files}
 
