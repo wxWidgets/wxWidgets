@@ -83,7 +83,7 @@ int wxSpinButton::GetValue() const
 
 void wxSpinButton::SetValue(int val)
 {
-	MacHandleValueChanged( val - m_value ) ;
+	m_value = val ;
 }
 
 void wxSpinButton::SetRange(int minVal, int maxVal)
