@@ -137,7 +137,8 @@
 
 // frame constructor
    MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-   : wxFrame((wxFrame *)NULL, -1, title, pos, size), help(wxHF_DEFAULTSTYLE | wxHF_OPENFILES)
+   : wxFrame((wxFrame *)NULL, -1, title, pos, size), 
+     help(wxHF_DEFAULT_STYLE | wxHF_OPEN_FILES)
    {
     // create a menu bar
       wxMenu *menuFile = new wxMenu;
