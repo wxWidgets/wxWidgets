@@ -52,6 +52,8 @@ Fixed method name clash in wxIEHtmlWin, renamed Refresh to RefreshPage.
 
 Added Throbber from Cliff Wells to the library and the demo.
 
+Windows installer prompts to uninstall old version first.
+
 
 
 
