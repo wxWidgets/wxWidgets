@@ -42,6 +42,10 @@
 size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   if (buf) {
+    if (!n || !*psz) {
+      if (n) *buf = _T('\0');
+      return 0;
+    }
     return mbstowcs(buf, psz, n);
   }
 
@@ -60,6 +64,11 @@ size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 {
   if (buf) {
+    if (!n || !*pwz) {
+      // glibc2.1 chokes on null input
+      if (n) *buf = '\0';
+      return 0;
+    }
     return wcstombs(buf, pwz, n);
   }
 
