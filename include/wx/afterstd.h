@@ -16,7 +16,8 @@
 #if defined(__WXMSW__) && defined(__MINGW32__)
     #include "wx/msw/winundef.h"
 #endif
-#ifdef _MSC_VER
+// VC 7.x isn't as bad as VC6 and doesn't give these warnings
+#if defined(__VISUALC__) && __VISUALC__ <= 1200
     // MSVC 5 does not have this
     #if _MSC_VER > 1100
         #pragma warning(pop)
