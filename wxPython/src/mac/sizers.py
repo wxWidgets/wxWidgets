@@ -18,6 +18,9 @@ class wxSizerItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def DeleteWindows(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizerItem_DeleteWindows,(self,) + _args, _kwargs)
+        return val
     def GetPosition(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizerItem_GetPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
@@ -180,6 +183,12 @@ class wxSizerPtr(wxObjectPtr):
         return val
     def SetSizeHints(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_SetSizeHints,(self,) + _args, _kwargs)
+        return val
+    def Clear(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_Clear,(self,) + _args, _kwargs)
+        return val
+    def DeleteWindows(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_DeleteWindows,(self,) + _args, _kwargs)
         return val
     def GetChildren(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_GetChildren,(self,) + _args, _kwargs)

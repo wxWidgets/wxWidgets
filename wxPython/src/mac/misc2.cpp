@@ -295,6 +295,8 @@ public:
 extern wxMimeTypesManager * wxTheMimeTypesManager; 
 
 #endif
+
+#include <wx/docview.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9327,7 +9329,482 @@ static PyObject *_wrap_delete_wxMimeTypesManager(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+static void *SwigwxFileHistoryTowxObject(void *ptr) {
+    wxFileHistory *src;
+    wxObject *dest;
+    src = (wxFileHistory *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxFileHistory(_swigarg0) (new wxFileHistory(_swigarg0))
+static PyObject *_wrap_new_wxFileHistory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _result;
+    int  _arg0 = (int ) 9;
+    char *_kwnames[] = { "maxFiles", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxFileHistory",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFileHistory *)new_wxFileHistory(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFileHistory_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxFileHistory(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxFileHistory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxFileHistory",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxFileHistory. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxFileHistory(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_AddFileToHistory(_swigobj,_swigarg0)  (_swigobj->AddFileToHistory(_swigarg0))
+static PyObject *_wrap_wxFileHistory_AddFileToHistory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","file", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_AddFileToHistory",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_AddFileToHistory. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_AddFileToHistory(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFileHistory_RemoveFileFromHistory(_swigobj,_swigarg0)  (_swigobj->RemoveFileFromHistory(_swigarg0))
+static PyObject *_wrap_wxFileHistory_RemoveFileFromHistory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","i", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFileHistory_RemoveFileFromHistory",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_RemoveFileFromHistory. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_RemoveFileFromHistory(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_GetMaxFiles(_swigobj)  (_swigobj->GetMaxFiles())
+static PyObject *_wrap_wxFileHistory_GetMaxFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFileHistory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileHistory_GetMaxFiles",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_GetMaxFiles. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFileHistory_GetMaxFiles(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFileHistory_UseMenu(_swigobj,_swigarg0)  (_swigobj->UseMenu(_swigarg0))
+static PyObject *_wrap_wxFileHistory_UseMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_UseMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_UseMenu. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_UseMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_UseMenu(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_RemoveMenu(_swigobj,_swigarg0)  (_swigobj->RemoveMenu(_swigarg0))
+static PyObject *_wrap_wxFileHistory_RemoveMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_RemoveMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_RemoveMenu. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_RemoveMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_RemoveMenu(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_Load(_swigobj,_swigarg0)  (_swigobj->Load(_swigarg0))
+static PyObject *_wrap_wxFileHistory_Load(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxConfigBase * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","config", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_Load",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_Load. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Load. Expected _wxConfigBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_Load(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_Save(_swigobj,_swigarg0)  (_swigobj->Save(_swigarg0))
+static PyObject *_wrap_wxFileHistory_Save(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxConfigBase * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","config", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_Save",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_Save. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxConfigBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_Save. Expected _wxConfigBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_Save(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_AddFilesToMenu(_swigobj)  (_swigobj->AddFilesToMenu())
+static PyObject *_wrap_wxFileHistory_AddFilesToMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileHistory_AddFilesToMenu",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_AddFilesToMenu. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_AddFilesToMenu(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_AddFilesToSingleMenu(_swigobj,_swigarg0)  (_swigobj->AddFilesToMenu(_swigarg0))
+static PyObject *_wrap_wxFileHistory_AddFilesToSingleMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileHistory * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileHistory_AddFilesToSingleMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_AddFilesToSingleMenu. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFileHistory_AddFilesToSingleMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileHistory_AddFilesToSingleMenu(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileHistory_GetHistoryFile(_swigobj,_swigarg0)  (_swigobj->GetHistoryFile(_swigarg0))
+static PyObject *_wrap_wxFileHistory_GetHistoryFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileHistory * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","i", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFileHistory_GetHistoryFile",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_GetHistoryFile. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFileHistory_GetHistoryFile(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileHistory_GetCount(_swigobj)  (_swigobj->GetCount())
+static PyObject *_wrap_wxFileHistory_GetCount(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFileHistory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileHistory_GetCount",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_GetCount. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFileHistory_GetCount(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFileHistory_GetNoHistoryFiles(_swigobj)  (_swigobj->GetNoHistoryFiles())
+static PyObject *_wrap_wxFileHistory_GetNoHistoryFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFileHistory * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileHistory_GetNoHistoryFiles",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_GetNoHistoryFiles. Expected _wxFileHistory_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFileHistory_GetNoHistoryFiles(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef misc2cMethods[] = {
+	 { "wxFileHistory_GetNoHistoryFiles", (PyCFunction) _wrap_wxFileHistory_GetNoHistoryFiles, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_GetCount", (PyCFunction) _wrap_wxFileHistory_GetCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_GetHistoryFile", (PyCFunction) _wrap_wxFileHistory_GetHistoryFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_AddFilesToSingleMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToSingleMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_AddFilesToMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_Save", (PyCFunction) _wrap_wxFileHistory_Save, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_Load", (PyCFunction) _wrap_wxFileHistory_Load, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_RemoveMenu", (PyCFunction) _wrap_wxFileHistory_RemoveMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_UseMenu", (PyCFunction) _wrap_wxFileHistory_UseMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_GetMaxFiles", (PyCFunction) _wrap_wxFileHistory_GetMaxFiles, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_RemoveFileFromHistory", (PyCFunction) _wrap_wxFileHistory_RemoveFileFromHistory, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileHistory_AddFileToHistory", (PyCFunction) _wrap_wxFileHistory_AddFileToHistory, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxFileHistory", (PyCFunction) _wrap_delete_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFileHistory", (PyCFunction) _wrap_new_wxFileHistory, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxMimeTypesManager", (PyCFunction) _wrap_delete_wxMimeTypesManager, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMimeTypesManager_Unassociate", (PyCFunction) _wrap_wxMimeTypesManager_Unassociate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMimeTypesManager_Associate", (PyCFunction) _wrap_wxMimeTypesManager_Associate, METH_VARARGS | METH_KEYWORDS },
@@ -9661,12 +10138,15 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
+    { "_WXTYPE","_wxDateTime_t",0},
     { "_WXTYPE","_short",0},
     { "_WXTYPE","_signed_short",0},
     { "_WXTYPE","_unsigned_short",0},
     { "_wxTipProvider","_wxPyTipProvider",SwigwxPyTipProviderTowxTipProvider},
+    { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxFileHistory",SwigwxFileHistoryTowxObject},
     { "_wxObject","_wxWave",SwigwxWaveTowxObject},
     { "_wxObject","_wxJoystick",SwigwxJoystickTowxObject},
     { "_wxObject","_wxPyProcess",SwigwxPyProcessTowxObject},
@@ -9684,6 +10164,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
+    { "_short","_wxDateTime_t",0},
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
@@ -9705,6 +10186,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_wxWindowID",0},
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
+    { "_wxDateTime_t","_unsigned_short",0},
+    { "_wxDateTime_t","_short",0},
+    { "_wxDateTime_t","_WXTYPE",0},
     { "_time_t","_wxCoord",0},
     { "_time_t","_wxPrintQuality",0},
     { "_time_t","_unsigned_int",0},
