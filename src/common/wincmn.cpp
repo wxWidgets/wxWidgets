@@ -57,7 +57,7 @@
 // static data
 // ----------------------------------------------------------------------------
 
-int wxWindowBase::ms_lastControlId = -2;
+int wxWindowBase::ms_lastControlId = -200;
 
 IMPLEMENT_ABSTRACT_CLASS(wxWindowBase, wxEvtHandler)
 
@@ -309,6 +309,14 @@ void wxWindowBase::Fit()
     while ( node )
     {
         wxWindow *win = node->GetData();
+        if ( win->IsKindOf(CLASSINFO(wxFrame)) ||
+             win->IsKindOf(CLASSINFO(wxDialog)) )
+        {
+            // dialogs and frames line in different top level windows - don't
+            // deal with them here
+            continue;
+        }
+
         int wx, wy, ww, wh;
         win->GetPosition(&wx, &wy);
         win->GetSize(&ww, &wh);

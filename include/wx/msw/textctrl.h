@@ -152,7 +152,6 @@ public:
     // ---------
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event); // Process 'enter' if required
-    void OnEraseBackground(wxEraseEvent& event);
 
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);

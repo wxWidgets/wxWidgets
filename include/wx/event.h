@@ -19,8 +19,9 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/gdicmn.h"
+
 #if wxUSE_THREADS
-#include "wx/thread.h"
+    #include "wx/thread.h"
 #endif
 
 /*
@@ -217,6 +218,11 @@ const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED =     wxEVT_FIRST + 802;
 const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
 #endif
 
+/* Splitter events */
+const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxEVT_FIRST + 850;
+const wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxEVT_FIRST + 851;
+const wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT = wxEVT_FIRST + 852;
+
 const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
 
 /* Compatibility */
@@ -307,13 +313,12 @@ public:
     void CopyObject(wxObject& object_dest) const;
 
 public:
-    bool              m_skipped;
     wxObject*         m_eventObject;
-    char*             m_eventHandle;         // Handle of an underlying windowing system event
     wxEventType       m_eventType;
     long              m_timeStamp;
     int               m_id;
     wxObject*         m_callbackUserData;
+    bool              m_skipped;
 
     // optimization: instead of using costly IsKindOf() we keep a flag telling
     // whether we're a command event (by far the most common case)
@@ -1166,7 +1171,7 @@ protected:
  wxEVT_NAVIGATION_KEY
  */
 // must derive from command event to be propagated to the parent
-class WXDLLEXPORT wxNavigationKeyEvent  : public wxCommandEvent
+class WXDLLEXPORT wxNavigationKeyEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS(wxNavigationKeyEvent)
 
@@ -1188,10 +1193,38 @@ public:
     void SetCurrentFocus(wxWindow *win) { m_clientData = (void *)win; }
 };
 
+// Window creation/destruction events: the first is sent as soon as window is
+// created (i.e. the underlying GUI object exists), but when the C++ object is
+// fully initialized (so virtual functions may be called). The second,
+// wxEVT_DESTROY, is sent right before the window is destroyed - again, it's
+// still safe to call virtual functions at this moment
+/*
+ wxEVT_CREATE
+ wxEVT_DESTROY
+ */
+
+class WXDLLEXPORT wxWindowCreateEvent : public wxEvent
+{
+    DECLARE_DYNAMIC_CLASS(wxWindowCreateEvent)
+
+public:
+    wxWindowCreateEvent(wxWindow *win = NULL);
+
+    wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
+};
+
+class WXDLLEXPORT wxWindowDestroyEvent : public wxEvent
+{
+    DECLARE_DYNAMIC_CLASS(wxWindowDestroyEvent)
+
+public:
+    wxWindowDestroyEvent(wxWindow *win = NULL);
+
+    wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
+};
+
 /* TODO
  wxEVT_POWER,
- wxEVT_CREATE,
- wxEVT_DESTROY,
  wxEVT_MOUSE_CAPTURE_CHANGED,
  wxEVT_SETTING_CHANGED, // WM_WININICHANGE (NT) / WM_SETTINGCHANGE (Win95)
 // wxEVT_FONT_CHANGED,  // WM_FONTCHANGE: roll into wxEVT_SETTING_CHANGED, but remember to propagate
@@ -1242,6 +1275,7 @@ public:
     void SetEvtHandlerEnabled(bool en) { m_enabled = en; }
     bool GetEvtHandlerEnabled() const { return m_enabled; }
 
+#if WXWIN_COMPATIBILITY_2
     virtual void OnCommand(wxWindow& WXUNUSED(win),
                            wxCommandEvent& WXUNUSED(event))
     {
@@ -1252,6 +1286,7 @@ public:
     // Default behaviour
     virtual long Default()
         { return GetNextHandler() ? GetNextHandler()->Default() : 0; };
+#endif // WXWIN_COMPATIBILITY_2
 
 #if WXWIN_COMPATIBILITY
     virtual bool OnClose();
@@ -1295,7 +1330,7 @@ protected:
     wxEvtHandler*       m_previousHandler;
     bool                m_enabled;           // Is event handler enabled?
     wxList*             m_dynamicEvents;
-    wxList*	            m_pendingEvents;
+    wxList*             m_pendingEvents;
 #if wxUSE_THREADS
     wxCriticalSection*  m_eventsLocker;
 #endif
@@ -1388,6 +1423,8 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 #define EVT_NAVIGATION_KEY(func) { wxEVT_NAVIGATION_KEY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxNavigationKeyEventFunction) & func, (wxObject *) NULL },
 #define EVT_PALETTE_CHANGED(func) { wxEVT_PALETTE_CHANGED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaletteChangedEventFunction) & func, (wxObject *) NULL },
 #define EVT_QUERY_NEW_PALETTE(func) { wxEVT_QUERY_NEW_PALETTE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
+#define EVT_WINDOW_CREATE(func) { wxEVT_CREATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
+#define EVT_WINDOW_DESTROY(func) { wxEVT_DESTROY, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryNewPaletteEventFunction) & func, (wxObject *) NULL },
 
 // Mouse events
 #define EVT_LEFT_DOWN(func) { wxEVT_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMouseEventFunction) & func, (wxObject *) NULL },

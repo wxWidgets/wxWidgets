@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -52,10 +52,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
-	EVT_SIZE(wxTabCtrl::OnSize)
-	EVT_PAINT(wxTabCtrl::OnPaint)
-	EVT_KILL_FOCUS(wxTabCtrl::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxTabCtrl::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxTabCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
 #endif
@@ -71,7 +67,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
   m_imageList = NULL;
 
   m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
+      GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
   m_foregroundColour = *wxBLACK ;
 
   SetName(name);
@@ -139,29 +135,20 @@ wxTabCtrl::~wxTabCtrl()
   UnsubclassWin();
 }
 
-void wxTabCtrl::Command(wxCommandEvent& event)
-{
-}
-
-bool wxTabCtrl::MSWCommand(WXUINT cmd, WXWORD id)
-{
-  return FALSE;
-}
-
 bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
-	wxTabEvent event(wxEVT_NULL, m_windowId);
-	wxEventType eventType = wxEVT_NULL;
-	NMHDR* hdr1 = (NMHDR*) lParam;
-	switch ( hdr1->code )
-	{
-		case TCN_SELCHANGE:
-			eventType = wxEVT_COMMAND_TAB_SEL_CHANGED;
-			break;
+    wxTabEvent event(wxEVT_NULL, m_windowId);
+    wxEventType eventType = wxEVT_NULL;
+    NMHDR* hdr1 = (NMHDR*) lParam;
+    switch ( hdr1->code )
+    {
+        case TCN_SELCHANGE:
+            eventType = wxEVT_COMMAND_TAB_SEL_CHANGED;
+            break;
 
-		case TCN_SELCHANGING:
-			eventType = wxEVT_COMMAND_TAB_SEL_CHANGING;
-			break;
+        case TCN_SELCHANGING:
+            eventType = wxEVT_COMMAND_TAB_SEL_CHANGING;
+            break;
 
         case TTN_NEEDTEXT:
         {
@@ -170,27 +157,23 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 //                ttText->lpszText = (char *) (const char *)tool->m_shortHelpString;
         }
 
-		default :
-			return wxControl::MSWOnNotify(idCtrl, lParam, result);
-	}
+        default :
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
+    }
 
-	event.SetEventObject( this );
-	event.SetEventType(eventType);
-	event.SetInt(idCtrl) ;
+    event.SetEventObject( this );
+    event.SetEventType(eventType);
+    event.SetInt(idCtrl) ;
 
-	return ProcessEvent(event);
+    return ProcessEvent(event);
 }
 
 // Responds to colour changes, and passes event on to children.
 void wxTabCtrl::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	    GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
-
-    // Remap the buttons
-//    CreateTools();
-
-    Default();
+                                  GetGValue(GetSysColor(COLOR_BTNFACE)),
+                                  GetBValue(GetSysColor(COLOR_BTNFACE)));
 
     Refresh();
 

@@ -441,7 +441,7 @@ bool wxThread::IsMain()
 }
 
 #ifdef Yield
-#undef Yield
+    #undef Yield
 #endif
 
 void wxThread::Yield()

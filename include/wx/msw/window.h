@@ -20,14 +20,7 @@
     #pragma interface "window.h"
 #endif
 
-// windows.h #defines the following identifiers which are also used in wxWin
-#ifdef GetCharWidth
-    #undef GetCharWidth
-#endif
-
-#ifdef FindWindow
-    #undef FindWindow
-#endif
+#include "wx/msw/winundef.h"
 
 // VZ: apparently some version of Windows send extra mouse move messages after
 //     a mouse click. My tests under NT 4.0 and 95 didn't show it so I'm
@@ -84,6 +77,9 @@ public:
                 const wxString& name = wxPanelNameStr);
 
     // implement base class pure virtuals
+    virtual void SetTitle( const wxString& title);
+    virtual wxString GetTitle() const;
+
     virtual void Raise();
     virtual void Lower();
 
@@ -145,6 +141,14 @@ public:
     virtual void SetScrollPage(int orient, int page, bool refresh = TRUE);
     virtual int OldGetScrollRange(int orient) const;
     virtual int GetScrollPage(int orient) const;
+
+    // event handlers
+        // Handle a control command
+    virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
+
+        // Override to define new behaviour for default action (e.g. double
+        // clicking on a listbox)
+    virtual void OnDefaultAction(wxControl * WXUNUSED(initiatingItem)) { }
 #endif // WXWIN_COMPATIBILITY
 
     // caret manipulation (MSW only)
@@ -155,20 +159,12 @@ public:
     virtual void SetCaretPos(int x, int y);
     virtual void GetCaretPos(int *x, int *y) const;
 
-    // event handlers (FIXME: shouldn't they be inside WXWIN_COMPATIBILITY?)
-        // Handle a control command
-    virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
-
-        // Override to define new behaviour for default action (e.g. double
-        // clicking on a listbox)
-    virtual void OnDefaultAction(wxControl *initiatingItem);
-
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
     // FIXME: should they really be all virtual?
     virtual bool LoadNativeDialog(wxWindow* parent, wxWindowID& id);
     virtual bool LoadNativeDialog(wxWindow* parent, const wxString& name);
-    virtual wxWindow* GetWindowChild1(wxWindowID id);
-    virtual wxWindow* GetWindowChild(wxWindowID id);
+    wxWindow* GetWindowChild1(wxWindowID id);
+    wxWindow* GetWindowChild(wxWindowID id);
 
     // implementation from now on
     // --------------------------
@@ -206,14 +202,12 @@ public:
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
     WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
     void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
 
-    virtual wxWindow *FindItem(int id) const;
-    virtual wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const ;
-    virtual void PreDelete(WXHDC dc);              // Allows system cleanup
+    wxWindow *FindItem(int id) const;
+    wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = FALSE) const;
 
     // Make a Windows extended style from the given wxWindows window style
     virtual WXDWORD MakeExtendedStyle(long style, bool eliminateBorders = TRUE);
@@ -222,8 +216,6 @@ public:
 
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
-
-    wxObject *GetChild(int number) const ;
 
     // returns TRUE if the window has been created
     bool MSWCreate(int id,
@@ -235,9 +227,12 @@ public:
                    WXDWORD style,
                    const char *dialog_template = NULL,
                    WXDWORD exendedStyle = 0);
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
-    // Actually defined in wx_canvs.cc since requires wxCanvas declaration
-    virtual void MSWDeviceToLogical(float *x, float *y) const ;
+#if WXWIN_COMPATIBILITY
+    wxObject *GetChild(int number) const;
+    virtual void MSWDeviceToLogical(float *x, float *y) const;
+#endif // WXWIN_COMPATIBILITY
 
     // Create an appropriate wxWindow from a HWND
     virtual wxWindow* CreateWindowFromHWND(wxWindow* parent, WXHWND hWnd);
@@ -249,32 +244,67 @@ public:
     virtual void SetupColours();
 
     // ------------------------------------------------------------------------
+    // helpers for message handlers: these perform the same function as the
+    // message crackers from <windowsx.h> - they unpack WPARAM and LPARAM into
+    // the correct parameters
+    // ------------------------------------------------------------------------
+
+    void UnpackCommand(WXWPARAM wParam, WXLPARAM lParam,
+                       WXWORD *id, WXHWND *hwnd, WXWORD *cmd);
+    void UnpackActivate(WXWPARAM wParam, WXLPARAM lParam,
+                        WXWORD *state, WXWORD *minimized, WXHWND *hwnd);
+    void UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
+                      WXWORD *code, WXWORD *pos, WXHWND *hwnd);
+    void UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
+                        WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd);
+    void UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
+                          WXWORD *item, WXWORD *flags, WXHMENU *hmenu);
+
+    // ------------------------------------------------------------------------
     // internal handlers for MSW messages: all handlers return a boolen value:
     // TRUE means that the handler processed the event and FALSE that it didn't
     // ------------------------------------------------------------------------
 
-    // TODO: all this should go away, overriding MSWWindowProc() is enough to
-    //       implement this functionality
-    virtual bool MSWOnCreate(WXLPCREATESTRUCT cs, bool *mayCreate);
-    virtual bool MSWOnPaint();
-    virtual bool MSWOnEraseBkgnd(WXHDC pDC);
-    virtual bool MSWOnSize(int x, int y, WXUINT flag);
+    // there are several cases where we have virtual functions for Windows
+    // message processing: this is because these messages often require to be
+    // processed in a different manner in the derived classes. For all other
+    // messages, however, we do *not* have corresponding MSWOnXXX() function
+    // and if the derived class wants to process them, it should override
+    // MSWWindowProc() directly.
 
-    virtual bool MSWOnQueryDragIcon(WXHICON *hIcon);
-    virtual bool MSWOnWindowPosChanging(void *lpPos);
-
-    // both horizontal and vertical
+    // scroll event (both horizontal and vertical)
     virtual bool MSWOnScroll(int orientation, WXWORD nSBCode,
                              WXWORD pos, WXHWND control);
 
-    virtual bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    virtual bool MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam);
-
+    // child control notifications
 #ifdef __WIN95__
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #endif // __WIN95__
 
-    virtual bool MSWOnCtlColor(WXHBRUSH *hBrush,
+    // owner-drawn controls need to process these messages
+    virtual bool MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
+    virtual bool MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *item);
+
+    // the rest are not virtual
+    bool HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate);
+    bool HandleInitDialog(WXHWND hWndFocus);
+    bool HandleDestroy();
+
+    bool HandlePaint();
+    bool HandleEraseBkgnd(WXHDC pDC);
+
+    bool HandleMinimize();
+    bool HandleMaximize();
+    bool HandleSize(int x, int y, WXUINT flag);
+    bool HandleGetMinMaxInfo(void *mmInfo);
+
+    bool HandleShow(bool show, int status);
+    bool HandleActivate(int flag, bool minimized, WXHWND activate);
+
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+    bool HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam);
+
+    bool HandleCtlColor(WXHBRUSH *hBrush,
                                WXHDC hdc,
                                WXHWND hWnd,
                                WXUINT nCtlColor,
@@ -282,31 +312,28 @@ public:
                                WXWPARAM wParam,
                                WXLPARAM lParam);
 
-    virtual bool MSWOnPaletteChanged(WXHWND hWndPalChange);
-    virtual bool MSWOnQueryNewPalette();
+    bool HandlePaletteChanged(WXHWND hWndPalChange);
+    bool HandleQueryNewPalette();
+    bool HandleSysColorChange();
 
-    virtual bool MSWOnQueryEndSession(long logOff, bool *mayEnd);
-    virtual bool MSWOnEndSession(bool endSession, long logOff);
+    bool HandleQueryEndSession(long logOff, bool *mayEnd);
+    bool HandleEndSession(bool endSession, long logOff);
 
-    virtual bool MSWOnDestroy();
-    virtual bool MSWOnSetFocus(WXHWND wnd);
-    virtual bool MSWOnKillFocus(WXHWND wnd);
-    virtual bool MSWOnDropFiles(WXWPARAM wParam);
-    virtual bool MSWOnInitDialog(WXHWND hWndFocus);
-    virtual bool MSWOnShow(bool show, int status);
+    bool HandleSetFocus(WXHWND wnd);
+    bool HandleKillFocus(WXHWND wnd);
 
-    virtual bool MSWOnMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
-    virtual bool MSWOnMouseMove(int x, int y, WXUINT flags);
+    bool HandleDropFiles(WXWPARAM wParam);
 
-    virtual bool MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
-    virtual bool MSWOnKeyDown(WXWORD wParam, WXLPARAM lParam);
-    virtual bool MSWOnKeyUp(WXWORD wParam, WXLPARAM lParam);
+    bool HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags);
+    bool HandleMouseMove(int x, int y, WXUINT flags);
 
-    virtual bool MSWOnActivate(int flag, bool minimized, WXHWND activate);
-    virtual bool MSWOnMDIActivate(long flag, WXHWND activate, WXHWND deactivate);
+    bool HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII = FALSE);
+    bool HandleKeyDown(WXWORD wParam, WXLPARAM lParam);
+    bool HandleKeyUp(WXWORD wParam, WXLPARAM lParam);
 
-    virtual bool MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *item);
-    virtual bool MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *item);
+    bool HandleQueryDragIcon(WXHICON *hIcon);
+
+    bool HandleSetCursor(WXHWND hWnd, short nHitTest, int mouseMsg);
 
     // Window procedure
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -32,7 +32,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
-	EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
+    EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
 END_EVENT_TABLE()
 
 #endif
@@ -56,9 +56,9 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
   SetForegroundColour(parent->GetForegroundColour()) ;
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+      m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+    m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -80,7 +80,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
   if (want3D)
   {
     Ctl3dSubclassCtl(wx_button);
-	  m_useCtl3D = TRUE;
+      m_useCtl3D = TRUE;
   }
 #endif
 
@@ -144,7 +144,7 @@ void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 }
 
 WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
 #if wxUSE_CTL3D
   if ( m_useCtl3D )
@@ -206,12 +206,14 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
         ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
   }
   else
-	Default();
+  {
+    event.Skip();
+  }
 }
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-	if (nMsg == WM_NCHITTEST)
+    if (nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor
         int yPos = HIWORD(lParam);  // vertical position of cursor
@@ -224,6 +226,6 @@ long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             return (long)HTCLIENT;
     }
 
-	return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 

@@ -63,9 +63,6 @@ public:
     virtual bool AcceptsFocus() const { return FALSE; }
 
     // IMPLEMENTATION
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) { }
-
 #ifdef __WIN16__
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

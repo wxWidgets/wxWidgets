@@ -21,17 +21,16 @@
 #endif
 
 #include "wx/log.h"
-#include "wx/msw/ole/automtn.h"
 
-#include <windows.h>
-#include <ole2ver.h>
-#include <oleauto.h>
 #include <math.h>
 #include <time.h>
 
-#ifdef GetObject
-#undef GetObject
-#endif
+#include "wx/msw/ole/automtn.h"
+
+#include "wx/msw/private.h"
+
+#include <ole2ver.h>
+#include <oleauto.h>
 
 // wrapper around BSTR type (by Vadim Zeitlin)
 

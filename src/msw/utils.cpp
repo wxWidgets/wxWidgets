@@ -853,12 +853,12 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
     return str;
 }
 
-wxWindowID WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
+WXWORD WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 {
 #ifndef __WIN32__
-    return (wxWindowID)GetWindowWord((HWND)hWnd, GWW_ID);
+    return GetWindowWord((HWND)hWnd, GWW_ID);
 #else // Win32
-    return (wxWindowID)GetWindowLong((HWND)hWnd, GWL_ID);
+    return GetWindowLong((HWND)hWnd, GWL_ID);
 #endif // Win16/32
 }
 

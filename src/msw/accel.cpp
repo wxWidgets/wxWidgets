@@ -30,10 +30,6 @@
 
 #include "wx/msw/private.h"
 
-#ifdef LoadAccelerators
-#undef LoadAccelerators
-#endif
-
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 #endif

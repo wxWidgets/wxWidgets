@@ -39,10 +39,6 @@
     #endif
 #endif
 
-#ifdef GetCharWidth
-    #undef GetCharWidth
-#endif
-
 #if wxUSE_OWNER_DRAWN
     #include  "wx/ownerdrw.h"
 #endif
@@ -165,7 +161,8 @@ bool wxListBox::Create(wxWindow *parent,
     int height = size.y;
     m_windowStyle = style;
 
-    DWORD wstyle = WS_VSCROLL | WS_TABSTOP | LBS_NOTIFY | LBS_HASSTRINGS;
+    DWORD wstyle = WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
+                   LBS_NOTIFY | LBS_HASSTRINGS;
     if (m_windowStyle & wxLB_MULTIPLE)
         wstyle |= LBS_MULTIPLESEL;
     else if (m_windowStyle & wxLB_EXTENDED)

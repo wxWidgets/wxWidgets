@@ -13,27 +13,35 @@
 #define __SPLITTERH_G__
 
 #ifdef __GNUG__
-#pragma interface "splitter.h"
+    #pragma interface "splitter.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/window.h"
-#include "wx/string.h"
+#include "wx/window.h"                      // base class declaration
 
-#define WXSPLITTER_VERSION      1.0
+class WXDLLEXPORT wxSplitterEvent;
 
-#define wxSPLIT_HORIZONTAL      1
-#define wxSPLIT_VERTICAL        2
+// ---------------------------------------------------------------------------
+// splitter constants
+// ---------------------------------------------------------------------------
 
-#define wxSPLIT_DRAG_NONE       0
-#define wxSPLIT_DRAG_DRAGGING   1
-#define wxSPLIT_DRAG_LEFT_DOWN  2
+enum
+{
+    wxSPLIT_HORIZONTAL = 1,
+    wxSPLIT_VERTICAL
+};
 
-/*
- * wxSplitterWindow maintains one or two panes, with
- * an optional vertical or horizontal split which
- * can be used with the mouse or programmatically.
- */
+enum
+{
+    wxSPLIT_DRAG_NONE,
+    wxSPLIT_DRAG_DRAGGING,
+    wxSPLIT_DRAG_LEFT_DOWN
+};
+
+// ---------------------------------------------------------------------------
+// wxSplitterWindow maintains one or two panes, with
+// an optional vertical or horizontal split which
+// can be used with the mouse or programmatically.
+// ---------------------------------------------------------------------------
 
 // TODO:
 // 1) Perhaps make the borders sensitive to dragging in order to create a split.
@@ -114,7 +122,7 @@ public:
     int GetBorderSize() const { return m_borderSize; }
 
     // Set the sash position
-    void SetSashPosition(int position, bool redaw = TRUE);
+    void SetSashPosition(int position, bool redraw = TRUE);
 
     // Gets the sash position
     int GetSashPosition() const { return m_sashPosition; }
@@ -127,17 +135,18 @@ public:
     // FALSE from here to prevent the change from taking place.
     // Repositions sash to minimum position if pane would be too small.
     // newSashPosition here is always positive or zero.
-    virtual bool OnSashPositionChange(int& newSashPosition);
+    virtual bool OnSashPositionChange(int WXUNUSED(newSashPosition))
+        { return TRUE; }
 
     // If the sash is moved to an extreme position, a subwindow
     // is removed from the splitter window, and the app is
     // notified. The app should delete or hide the window.
-    virtual void OnUnsplit(wxWindow *removed) { removed->Show(FALSE); }
+    virtual void OnUnsplit(wxWindow *WXUNUSED(removed)) { }
 
     // Called when the sash is double-clicked.
     // The default behaviour is to remove the sash if the
     // minimum pane size is zero.
-    virtual void OnDoubleClickSash(int x, int y);
+    virtual void OnDoubleClickSash(int WXUNUSED(x), int WXUNUSED(y)) { }
 
 ////////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -170,6 +179,13 @@ public:
     void InitColours();
 
 protected:
+    // our event handlers
+    void OnSashPosChanged(wxSplitterEvent& event);
+    void OnDoubleClick(wxSplitterEvent& event);
+    void OnUnsplitEvent(wxSplitterEvent& event);
+
+    void SendUnsplitEvent(wxWindow *winRemoved);
+
     int         m_splitMode;
     wxWindow*   m_windowOne;
     wxWindow*   m_windowTwo;
@@ -196,5 +212,110 @@ private:
     DECLARE_DYNAMIC_CLASS(wxSplitterWindow)
     DECLARE_EVENT_TABLE()
 };
+
+// ----------------------------------------------------------------------------
+// event class and macros
+// ----------------------------------------------------------------------------
+
+// we reuse the same class for all splitter event types because this is the
+// usual wxWin convention, but the three event types have different kind of
+// data associated with them, so the accessors can be only used if the real
+// event type matches with the one for which the accessors make sense
+class WXDLLEXPORT wxSplitterEvent : public wxCommandEvent
+{
+public:
+    wxSplitterEvent(wxEventType type = wxEVT_NULL,
+                    wxSplitterWindow *splitter = (wxSplitterWindow *)NULL)
+        : wxCommandEvent(type)
+    {
+        SetEventObject(splitter);
+    }
+
+    // SASH_POS_CHANGED methods
+
+    // setting the sash position to -1 prevents the change from taking place at
+    // all
+    void SetSashPosition(int pos)
+    {
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED );
+
+        m_data.pos = pos;
+    }
+
+    int GetSashPosition() const
+    {
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED );
+
+        return m_data.pos;
+    }
+
+    // UNSPLIT event methods
+    wxWindow *GetWindowBeingRemoved() const
+    {
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_UNSPLIT );
+
+        return m_data.win;
+    }
+
+    // DCLICK event methods
+    int GetX() const
+    {
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_DOUBLECLICKED );
+
+        return m_data.pt.x;
+    }
+
+    int GetY() const
+    {
+        wxASSERT( GetEventType() == wxEVT_COMMAND_SPLITTER_DOUBLECLICKED );
+
+        return m_data.pt.y;
+    }
+
+private:
+    friend wxSplitterWindow;
+
+    // data for the different types of event
+    union
+    {
+        int pos;            // position for SASH_POS_CHANGED event
+        wxWindow *win;      // window being removed for UNSPLIT event
+        struct
+        {
+            int x, y;
+        } pt;               // position of double click for DCLICK event
+    } m_data;
+
+    DECLARE_DYNAMIC_CLASS(wxSplitterEvent)
+};
+
+typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
+
+#define EVT_SPLITTER_SASH_POS_CHANGED(id, fn)                               \
+  {                                                                         \
+    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,                                \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    NULL                                                                    \
+  },
+
+#define EVT_SPLITTER_DCLICK(id, fn)                                   \
+  {                                                                         \
+    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                    \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    NULL                                                                    \
+  },
+
+#define EVT_SPLITTER_UNSPLIT(id, fn)                                        \
+  {                                                                         \
+    wxEVT_COMMAND_SPLITTER_UNSPLIT,                                         \
+    id,                                                                     \
+    -1,                                                                     \
+    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    NULL                                                                    \
+  },
 
 #endif // __SPLITTERH_G__

@@ -72,21 +72,25 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   else
     m_windowId = id;
 
-  DWORD exStyle = MakeExtendedStyle(m_windowStyle);
-  HWND wx_button =
-    CreateWindowEx(exStyle, "BUTTON", label, BS_PUSHBUTTON | WS_TABSTOP | WS_CHILD,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
-
-  m_hWnd = (WXHWND)wx_button;
+  m_hWnd = (WXHWND)CreateWindowEx
+                   (
+                    MakeExtendedStyle(m_windowStyle),
+                    "BUTTON",
+                    label,
+                    WS_VISIBLE | WS_TABSTOP | WS_CHILD,
+                    0, 0, 0, 0, 
+                    GetWinHwnd(parent),
+                    (HMENU)m_windowId,
+                    wxGetInstance(),
+                    NULL
+                   );
 
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND)wx_button);
+  SubclassWin(m_hWnd);
 
   SetFont(parent->GetFont());
 
   SetSize(x, y, width, height);
-  ShowWindow(wx_button, SW_SHOW);
 
   return TRUE;
 }

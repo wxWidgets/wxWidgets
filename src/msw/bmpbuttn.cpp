@@ -72,20 +72,25 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   if ( height == -1 && bitmap.Ok())
     height = bitmap.GetHeight() + 2*m_marginY;
 
-  HWND wx_button =
-    CreateWindowEx(0, "BUTTON", "", BS_OWNERDRAW | WS_TABSTOP | WS_CHILD,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
-
-  m_hWnd = (WXHWND)wx_button;
+  m_hWnd = (WXHWND)CreateWindowEx
+                   (
+                    0,
+                    "BUTTON",
+                    "",
+                    WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ,
+                    0, 0, 0, 0, 
+                    GetWinHwnd(parent),
+                    (HMENU)m_windowId,
+                    wxGetInstance(),
+                    NULL
+                   );
 
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND)wx_button);
+  SubclassWin(m_hWnd);
 
   SetFont(parent->GetFont()) ;
 
   SetSize(x, y, width, height);
-  ShowWindow(wx_button, SW_SHOW);
 
   return TRUE;
 }
@@ -101,9 +106,6 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     long style = GetWindowLong((HWND) GetHWND(), GWL_STYLE);
     if (style & BS_BITMAP)
     {
-        // Should we call Default() here?
-//      Default();
-
         // Let default procedure draw the bitmap, which is defined
         // in the Windows resource.
         return FALSE;
@@ -114,33 +116,33 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     wxBitmap* bitmap = &m_buttonBitmap;
 
-	UINT state = lpDIS->itemState;
-	if ((state & ODS_SELECTED) && m_buttonBitmapSelected.Ok())
-		bitmap = &m_buttonBitmapSelected;
-	else if ((state & ODS_FOCUS) && m_buttonBitmapFocus.Ok())
-		bitmap = &m_buttonBitmapFocus;
-	else if ((state & ODS_DISABLED) && m_buttonBitmapDisabled.Ok())
-		bitmap = &m_buttonBitmapDisabled;
+    UINT state = lpDIS->itemState;
+    if ((state & ODS_SELECTED) && m_buttonBitmapSelected.Ok())
+        bitmap = &m_buttonBitmapSelected;
+    else if ((state & ODS_FOCUS) && m_buttonBitmapFocus.Ok())
+        bitmap = &m_buttonBitmapFocus;
+    else if ((state & ODS_DISABLED) && m_buttonBitmapDisabled.Ok())
+        bitmap = &m_buttonBitmapDisabled;
 
-	if ( !bitmap->Ok() )
-		return FALSE;
+    if ( !bitmap->Ok() )
+        return FALSE;
 
-	HDC hDC = lpDIS->hDC;
-	HDC memDC = ::CreateCompatibleDC(hDC);
+    HDC hDC = lpDIS->hDC;
+    HDC memDC = ::CreateCompatibleDC(hDC);
 
-	HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
+    HBITMAP old = (HBITMAP) ::SelectObject(memDC, (HBITMAP) bitmap->GetHBITMAP());
 
-	if (!old)
-		return FALSE;
+    if (!old)
+        return FALSE;
 
-	int x = lpDIS->rcItem.left;
-	int y = lpDIS->rcItem.top;
-	int width = lpDIS->rcItem.right - x;
-	int height = lpDIS->rcItem.bottom - y;
+    int x = lpDIS->rcItem.left;
+    int y = lpDIS->rcItem.top;
+    int width = lpDIS->rcItem.right - x;
+    int height = lpDIS->rcItem.bottom - y;
 
-	// Draw the face, if auto-drawing
-	if ( GetWindowStyleFlag() & wxBU_AUTODRAW )
-		DrawFace((WXHDC) hDC, lpDIS->rcItem.left, lpDIS->rcItem.top, lpDIS->rcItem.right, lpDIS->rcItem.bottom,
+    // Draw the face, if auto-drawing
+    if ( GetWindowStyleFlag() & wxBU_AUTODRAW )
+        DrawFace((WXHDC) hDC, lpDIS->rcItem.left, lpDIS->rcItem.top, lpDIS->rcItem.right, lpDIS->rcItem.bottom,
             ((state & ODS_SELECTED) == ODS_SELECTED));
 
     // Centre the bitmap in the control area

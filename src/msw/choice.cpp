@@ -313,7 +313,7 @@ long wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
        // with x = 65535 and y = 65535.
        // Filter out this nonsense.
        if (x == 65535 && y == 65535)
-         return Default();
+         return 0;
        break;
       }
     }

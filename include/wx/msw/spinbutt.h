@@ -73,8 +73,6 @@ public:
     // Operations
     ////////////////////////////////////////////////////////////////////////////
 
-    void Command(wxCommandEvent& event) { ProcessCommand(event); };
-
     // IMPLEMENTATION
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,

@@ -73,7 +73,9 @@ BEGIN
     POPUP "&Window"
     BEGIN
         MENUITEM "&Cascade",                    4002
-        MENUITEM "&Tile",                       4001
+        MENUITEM "Tile &Horizontally",          4001
+        MENUITEM "Tile &Vertically",            4005
+	MENUITEM "", -1
         MENUITEM "&Arrange Icons",              4003
         MENUITEM "&Next",                       4004
     END

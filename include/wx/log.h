@@ -431,11 +431,23 @@ extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
 #endif
 
 #ifdef  __WXDEBUG__
-#define wxLogApiError(api, rc)                                              \
-    wxLogDebug(_T("At %s(%d) '%s' failed with error %lx (%s)."),  \
-            __TFILE__, __LINE__, api,                       \
-            rc, wxSysErrorMsg(rc))
-#define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
+    // make life easier for people using VC++ IDE: clicking on the message
+    // will take us immediately to the place of the failed API
+#ifdef __VISUALC__
+    #define wxLogApiError(api, rc)                                              \
+        wxLogDebug(_T("%s(%d): '%s' failed with error 0x%08lx (%s)."),          \
+                   __TFILE__, __LINE__, api,                                    \
+                   rc, wxSysErrorMsg(rc))
+#else // !VC++
+    #define wxLogApiError(api, rc)                                              \
+        wxLogDebug(_T("In file %s at line %d: '%s' failed with "                \
+                      "error 0x%08lx (%s)."),                                   \
+                   __TFILE__, __LINE__, api,                                    \
+                   rc, wxSysErrorMsg(rc))
+#endif // VC++/!VC++
+
+    #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
+
 #else   //!debug
     inline void wxLogApiError(const wxChar *, long) { }
     inline void wxLogLastError(const wxChar *) { }

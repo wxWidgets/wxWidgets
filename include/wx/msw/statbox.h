@@ -45,9 +45,6 @@ public:
         long style = 0,
         const wxString& name = wxStaticBoxNameStr);
     
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) { }
-    
     void OnEraseBackground(wxEraseEvent& event);
     
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

@@ -74,7 +74,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
   EVT_CHAR(wxTextCtrl::OnChar)
   EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
-  EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
 
   EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
   EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
@@ -1070,7 +1069,7 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-    switch( event.KeyCode() )
+    switch ( event.KeyCode() )
     {
         case WXK_RETURN:
             if ( !(m_windowStyle & wxTE_MULTILINE) )
@@ -1111,8 +1110,9 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // don't just call event.Skip() because this will cause TABs and ENTERs
     // be passed upwards and we don't always want this - instead process it
     // right here
-    Default();
-//    event.Skip();
+
+    // FIXME
+    event.Skip();
 }
 
 long wxTextCtrl::MSWGetDlgCode()
@@ -1133,27 +1133,6 @@ long wxTextCtrl::MSWGetDlgCode()
         lRc |= DLGC_WANTTAB;
 
     return lRc;
-}
-
-void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
-{
-    if ( m_windowStyle & wxTE_MULTILINE )
-    {
-        // No flicker - only problem is we probably can't change the background
-        Default();
-/*
-        RECT rect;
-        ::GetClientRect((HWND) GetHWND(), &rect);
-
-        HBRUSH hBrush = ::CreateSolidBrush(PALETTERGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-        int mode = ::SetMapMode((HDC) event.GetDC()->GetHDC(), MM_TEXT);
-
-        ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
-        ::DeleteObject(hBrush);
-        ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
-*/
-    }
-//        wxWindow::OnEraseBackground(event);
 }
 
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))

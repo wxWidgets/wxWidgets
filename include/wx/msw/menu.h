@@ -103,19 +103,11 @@ public:
     // menu or associated window will be used.
     void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
 
-    void ProcessCommand(wxCommandEvent& event);
+    bool ProcessCommand(wxCommandEvent& event);
 
     virtual void SetParent(wxEvtHandler *parent) { m_parent = parent; }
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
-
-#ifdef WXWIN_COMPATIBILITY
-    void Callback(const wxFunction func) { m_callback = func; }
-
-    // compatibility: these functions are deprecated
-    bool Enabled(int id) const { return IsEnabled(id); }
-    bool Checked(int id) const { return IsChecked(id); }
-#endif // WXWIN_COMPATIBILITY
 
     // IMPLEMENTATION
     bool MSWCommand(WXUINT param, WXWORD id);
@@ -133,6 +125,20 @@ public:
     void Attach(wxMenuBar *menubar);
     void Detach();
 
+    size_t GetAccelCount() const { return m_accelKeyCodes.GetCount(); }
+    size_t CopyAccels(wxAcceleratorEntry *accels) const;
+
+#ifdef WXWIN_COMPATIBILITY
+    void Callback(const wxFunction func) { m_callback = func; }
+
+    // compatibility: these functions are deprecated
+    bool Enabled(int id) const { return IsEnabled(id); }
+    bool Checked(int id) const { return IsChecked(id); }
+
+private:
+    wxFunction        m_callback;
+#endif // WXWIN_COMPATIBILITY
+
 private:
     bool              m_doBreak;
 
@@ -142,7 +148,6 @@ private:
     // Might be better to have a flag saying whether it's deleteable or not.
     WXHMENU           m_savehMenu ; // Used for Enable() on popup
     WXHMENU           m_hMenu;
-    wxFunction        m_callback;
 
     int               m_noItems;
     wxString          m_title;
@@ -153,6 +158,9 @@ private:
     wxEvtHandler *    m_eventHandler;
     wxWindow         *m_pInvokingWindow;
     void*             m_clientData;
+
+    // the accelerators data
+    wxArrayInt        m_accelKeyCodes, m_accelFlags, m_accelIds;
 };
 
 // ----------------------------------------------------------------------------
@@ -235,12 +243,10 @@ public:
         // get the frame we live in
     wxFrame *GetFrame() const { return m_menuBarFrame; }
         // attach to a frame
-    void Attach(wxFrame *frame)
-    {
-        wxASSERT_MSG( !m_menuBarFrame, _T("menubar already attached!") );
+    void Attach(wxFrame *frame);
 
-        m_menuBarFrame = frame;
-    }
+        // get the accel table for the menus
+    const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
         // get the menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
@@ -258,6 +264,9 @@ protected:
     wxString     *m_titles;
     wxFrame      *m_menuBarFrame;
     WXHMENU       m_hMenu;
+
+    // the accelerator table for all accelerators in all our menus
+    wxAcceleratorTable m_accelTable;
 };
 
 #endif // _WX_MENU_H_

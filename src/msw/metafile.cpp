@@ -202,10 +202,14 @@ void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
 
   ReleaseDC(NULL, dc);
 
-  *x = XDEV2LOGREL(sizeRect.cx);
-  *y = YDEV2LOGREL(sizeRect.cy);
-  if (descent) *descent = tm.tmDescent;
-  if (externalLeading) *externalLeading = tm.tmExternalLeading;
+  if ( x )
+      *x = sizeRect.cx;
+  if ( y )
+    *y = sizeRect.cy;
+  if ( descent )
+      *descent = tm.tmDescent;
+  if ( externalLeading )
+      *externalLeading = tm.tmExternalLeading;
 }
 
 wxMetafile *wxMetafileDC::Close(void)

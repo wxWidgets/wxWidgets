@@ -26,8 +26,8 @@ class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
-#define wxPRINT_WINDOWS         1
-#define wxPRINT_POSTSCRIPT      2
+static const int wxPRINT_WINDOWS = 1;
+static const int wxPRINT_POSTSCRIPT = 2;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 
@@ -72,30 +72,30 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // to do anything which might provoke a nested exception!
   virtual void OnFatalException() { }
 
-  inline void SetPrintMode(int mode) { m_printMode = mode; }
-  inline int GetPrintMode() const { return m_printMode; }
+  void SetPrintMode(int mode) { m_printMode = mode; }
+  int GetPrintMode() const { return m_printMode; }
 
-  inline void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
-  inline bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
+  void SetExitOnFrameDelete(bool flag) { m_exitOnFrameDelete = flag; }
+  bool GetExitOnFrameDelete() const { return m_exitOnFrameDelete; }
 
-  inline const wxString& GetAppName() const {
+  const wxString& GetAppName() const {
       if (m_appName != _T(""))
         return m_appName;
       else return m_className;
     }
 
-  inline void SetAppName(const wxString& name) { m_appName = name; };
-  inline wxString GetClassName() const { return m_className; }
-  inline void SetClassName(const wxString& name) { m_className = name; }
+  void SetAppName(const wxString& name) { m_appName = name; };
+  wxString GetClassName() const { return m_className; }
+  void SetClassName(const wxString& name) { m_className = name; }
 
   void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
   const wxString& GetVendorName() const { return m_vendorName; }
 
   wxWindow *GetTopWindow() const ;
-  inline void SetTopWindow(wxWindow *win) { m_topWindow = win; }
+  void SetTopWindow(wxWindow *win) { m_topWindow = win; }
 
-  inline void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
-  inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
+  void SetWantDebugOutput(bool flag) { m_wantDebugOutput = flag; }
+  bool GetWantDebugOutput() { return m_wantDebugOutput; }
 
   // Send idle event to all top-level windows.
   // Returns TRUE if more idle time is requested.
@@ -105,14 +105,13 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Returns TRUE if more idle time is requested.
   bool SendIdleEvents(wxWindow* win);
 
-  inline void SetAuto3D(bool flag) { m_auto3D = flag; }
-  inline bool GetAuto3D() const { return m_auto3D; }
+  void SetAuto3D(bool flag) { m_auto3D = flag; }
+  bool GetAuto3D() const { return m_auto3D; }
 
   // Creates a log object
   virtual wxLog* CreateLogTarget();
 
 public:
-//  void (*work_proc)(wxApp*app); // work procedure;
   int               argc;
   char **           argv;
 
@@ -127,7 +126,7 @@ protected:
   int               m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
   bool              m_auto3D ;   // Always use 3D controls, except
                                  // where overriden
-  static wxAppInitializerFunction	m_appInitFn;
+  static wxAppInitializerFunction m_appInitFn;
 
 /* Windows-specific wxApp definitions */
 
@@ -150,7 +149,6 @@ public:
   int GetComCtl32Version() const;
 
 public:
-  static long       sm_lastMessageTime;
   int               m_nCmdShow;
 
 protected:

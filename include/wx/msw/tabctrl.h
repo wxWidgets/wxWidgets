@@ -113,17 +113,8 @@ class WXDLLEXPORT wxTabCtrl: public wxControl
     // Insert an item
     bool InsertItem(int item, const wxString& text, int imageId = -1, void* data = NULL);
 
-// Implementation
+    // Implementation
 
-    // Call default behaviour
-    void OnPaint(wxPaintEvent& event) { Default() ; }
-    void OnSize(wxSizeEvent& event) { Default() ; }
-    void OnMouseEvent(wxMouseEvent& event) { Default() ; }
-    void OnKillFocus(wxFocusEvent& event) { Default() ; }
-
-    void Command(wxCommandEvent& event);
-
-    virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
     // Responds to colour changes

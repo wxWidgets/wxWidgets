@@ -68,9 +68,10 @@
   BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
 
-    EVT_SIZE(wxNotebook::OnSize)
-    EVT_ERASE_BACKGROUND(wxNotebook::OnEraseBackground)
+    EVT_WINDOW_CREATE(wxNotebook::OnWindowCreate)
+
     EVT_SET_FOCUS(wxNotebook::OnSetFocus)
+
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
   END_EVENT_TABLE()
 
@@ -164,7 +165,6 @@ bool wxNotebook::Create(wxWindow *parent,
   }
 
   // Not all compilers recognise SetWindowFont
-//  SetWindowFont((HWND)m_hwnd, ::GetStockObject(DEFAULT_GUI_FONT), FALSE);
   ::SendMessage((HWND) m_hwnd, WM_SETFONT,
                   (WPARAM)::GetStockObject(DEFAULT_GUI_FONT),TRUE);
 
@@ -272,6 +272,14 @@ void wxNotebook::SetImageList(wxImageList* imageList)
   TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
 }
 
+
+// Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
+// style.
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    ::SendMessage(GetHwnd(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook operations
 // ----------------------------------------------------------------------------
@@ -371,8 +379,11 @@ bool wxNotebook::InsertPage(int nPage,
     m_nSelection = 0;
 
   // don't show pages by default (we'll need to adjust their size first)
-  HWND hwnd = (HWND)pPage->GetHWND();
+  HWND hwnd = GetWinHwnd(pPage);
   SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_VISIBLE);
+
+  // this updates internal flag too - otherwise it will get out of sync
+  pPage->Show(FALSE);
 
   return TRUE;
 }
@@ -381,7 +392,7 @@ bool wxNotebook::InsertPage(int nPage,
 // wxNotebook callbacks
 // ----------------------------------------------------------------------------
 
-void wxNotebook::OnSize(wxSizeEvent& event)
+void wxNotebook::OnWindowCreate(wxWindowCreateEvent& event)
 {
   // make sure the current page is shown and has focus (it's useful because all
   // pages are created invisible initially)
@@ -459,11 +470,6 @@ bool wxNotebook::DoPhase(int /* nPhase */)
   return TRUE;
 }
 
-void wxNotebook::Command(wxCommandEvent& event)
-{
-  wxFAIL_MSG("wxNotebook::Command not implemented");
-}
-
 bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
 {
   wxNotebookEvent event(wxEVT_NULL, m_windowId);
@@ -538,16 +544,3 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
   m_nSelection = nSel;
   s_bInsideChangePage = FALSE;
 }
-
-void wxNotebook::OnEraseBackground(wxEraseEvent& event)
-{
-    Default();
-}
-
-// Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
-// style.
-void wxNotebook::SetTabSize(const wxSize& sz)
-{
-    ::SendMessage((HWND) GetHWND(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
-}
-

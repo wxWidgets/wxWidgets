@@ -407,16 +407,6 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // data is arbitrary data to be passed to the sort function.
   bool SortItems(wxListCtrlCompare fn, long data);
 
-/* Why should we need this function? Leave for now.
- * WE NEED IT because item data may have changed,
- * but the display needs refreshing (in string callback mode)
-  // Updates an item. If the list control has the wxLI_AUTO_ARRANGE style,
-  // the items will be rearranged.
-  bool Update(long item);
-*/
-
-  void Command(wxCommandEvent& event) { ProcessCommand(event); };
-
   // IMPLEMENTATION
   virtual bool MSWCommand(WXUINT param, WXWORD id);
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);

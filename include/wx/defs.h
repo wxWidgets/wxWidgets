@@ -202,6 +202,12 @@
 
 typedef unsigned char wxByte;
 typedef short int WXTYPE;
+
+// special care should be taken with this type under Windows where the real
+// window id is unsigned, so we must always do the cast before comparing them
+// (or else they would be always different!). Usign wxGetWindowId() which does
+// the cast itself is recommended. Note that this type can't be unsigned
+// because -1 is a valid (and largely used) value for window id.
 typedef int wxWindowID;
 
 // Macro to cut down on compiler warnings.

@@ -627,3 +627,27 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
   Refresh();
 #endif
 }
+
+// ---------------------------------------------------------------------------
+// dialog window proc
+// ---------------------------------------------------------------------------
+
+long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+{
+    long rc = 0;
+    bool processed = FALSE;
+
+    switch ( message )
+    {
+        case WM_CLOSE:
+            // if we can't close, tell the system that we processed the
+            // message - otherwise it would close us
+            processed = !Close();
+            break;
+    }
+
+    if ( !processed )
+        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+
+    return rc;
+}

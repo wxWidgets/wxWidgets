@@ -100,7 +100,7 @@ extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor *g_globalCursor;
 
 HINSTANCE wxhInstance = 0;
-static MSG s_currentMsg;
+MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
 // FIXME why not const? and not static?
@@ -150,8 +150,6 @@ LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
     END_EVENT_TABLE()
 #endif
 
-long wxApp::sm_lastMessageTime = 0;
-
 //// Initialize
 bool wxApp::Initialize()
 {
@@ -169,7 +167,8 @@ bool wxApp::Initialize()
     wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
 #endif
 
-    // I'm annoyed ... I don't know where to put this and I don't want to create    // a module for that as it's part of the core.
+    // I'm annoyed ... I don't know where to put this and I don't want to
+    // create a module for that as it's part of the core.
 #if wxUSE_THREADS
     wxPendingEvents = new wxList();
     wxPendingEventsLocker = new wxCriticalSection();
@@ -205,18 +204,6 @@ bool wxApp::Initialize()
     int iMsg = 96;
     while (!SetMessageQueue(iMsg) && (iMsg -= 8));
 
-    /*
-       DWORD dwOleVer;
-       dwOleVer = CoBuildVersion();
-
-    // check the OLE library version
-    if (rmm != HIWORD(dwOleVer))
-    {
-    wxMessageBox("Incorrect version of OLE libraries.");
-    return FALSE;
-    }
-     */
-
 #if wxUSE_OLE
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
@@ -244,11 +231,11 @@ bool wxApp::Initialize()
 
     // Create the brush for disabling bitmap buttons
 
-    LOGBRUSH lb ;
+    LOGBRUSH lb;
     lb.lbStyle = BS_PATTERN;
-    lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" ) ;
-    wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
-    ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
+    lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" );
+    wxDisableButtonBrush = ::CreateBrushIndirect( & lb );
+    ::DeleteObject( (HGDIOBJ)lb.lbHatch );
 
 #if wxUSE_PENWINDOWS
     wxRegisterPenWin();
@@ -271,131 +258,88 @@ bool wxApp::Initialize()
     return TRUE;
 }
 
-//// RegisterWindowClasses
+// ---------------------------------------------------------------------------
+// RegisterWindowClasses
+// ---------------------------------------------------------------------------
 
 bool wxApp::RegisterWindowClasses()
 {
-    ///////////////////////////////////////////////////////////////////////
-    // Register the frame window class.
-    WNDCLASS wndclass;   // Structure used to register Windows class.
+    WNDCLASS wndclass;
 
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
+    // the fields which are common to all classes
+    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
     wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = sizeof( DWORD ); // was 4
+    wndclass.cbWndExtra    = sizeof( DWORD ); // what is this DWORD used for?
     wndclass.hInstance     = wxhInstance;
-    wndclass.hIcon         = (HICON) NULL;        // wxSTD_FRAME_ICON;
-    wndclass.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
-    wndclass.hbrBackground =  (HBRUSH)(COLOR_APPWORKSPACE+1) ;
-    //  wndclass.hbrBackground = GetStockObject( WHITE_BRUSH );
+    wndclass.hIcon         = (HICON) NULL;
+    wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
     wndclass.lpszMenuName  = NULL;
+
+    // Register the frame window class.
+    wndclass.hbrBackground = (HBRUSH)(COLOR_APPWORKSPACE + 1);
 #ifdef _MULTIPLE_INSTANCES
     sprintf( wxFrameClassName,"wxFrameClass%d", wxhInstance );
 #endif
     wndclass.lpszClassName = wxFrameClassName;
 
-    if (!RegisterClass( &wndclass ))
+    if ( !RegisterClass(&wndclass) )
     {
-        // wxFatalError("Can't register Frame Window class");
+        wxLogLastError("RegisterClass(frame)");
+
+        return FALSE;
     }
 
-    ///////////////////////////////////////////////////////////////////////
     // Register the MDI frame window class.
-    WNDCLASS wndclass1;   // Structure used to register Windows class.
+    wndclass.hbrBackground = (HBRUSH)NULL; // paint MDI frame ourselves
+    wndclass.lpszClassName = wxMDIFrameClassName;
 
-    wndclass1.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
-    wndclass1.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass1.cbClsExtra    = 0;
-    wndclass1.cbWndExtra    = sizeof( DWORD ); // was 4
-    wndclass1.hInstance     = wxhInstance;
-    wndclass1.hIcon         = (HICON) NULL; // wxSTD_MDIPARENTFRAME_ICON;
-    wndclass1.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
-    //  wndclass1.hbrBackground =  (HBRUSH)(COLOR_APPWORKSPACE+1) ;
-    wndclass1.hbrBackground = (HBRUSH) NULL;
-    wndclass1.lpszMenuName  = NULL;
-
-    wndclass1.lpszClassName = wxMDIFrameClassName;
-    if (!RegisterClass( &wndclass1 ))
+    if ( !RegisterClass(&wndclass) )
     {
-        //    wxFatalError("Can't register MDI Frame window class");
-        //  return FALSE;
+        wxLogLastError("RegisterClass(MDI parent)");
+
+        return FALSE;
     }
 
-    ///////////////////////////////////////////////////////////////////////
     // Register the MDI child frame window class.
-    WNDCLASS wndclass4;   // Structure used to register Windows class.
+    wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wndclass.lpszClassName = wxMDIChildFrameClassName;
 
-    wndclass4.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
-    wndclass4.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass4.cbClsExtra    = 0;
-    wndclass4.cbWndExtra    = sizeof( DWORD ); // was 4
-    wndclass4.hInstance     = wxhInstance;
-    wndclass4.hIcon         = (HICON) NULL;       // wxSTD_MDICHILDFRAME_ICON;
-    wndclass4.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
-    // TODO: perhaps this should be NULL so that Windows doesn't
-    // paint the background itself (would OnEraseBackground duplicate
-    // this?)
-    wndclass4.hbrBackground =  (HBRUSH)(COLOR_WINDOW+1) ;
-    //  wndclass4.hbrBackground = NULL;
-    wndclass4.lpszMenuName  = NULL;
-    wndclass4.lpszClassName = wxMDIChildFrameClassName;
-
-    if (!RegisterClass( &wndclass4 ))
+    if ( !RegisterClass(&wndclass) )
     {
-        //   wxFatalError("Can't register MDI child frame window class");
-        //   return FALSE;
+        wxLogLastError("RegisterClass(MDI child)");
+
+        return FALSE;
     }
 
-    ///////////////////////////////////////////////////////////////////////
     // Register the panel window class.
-    WNDCLASS wndclass2;   // Structure used to register Windows class.
-    memset(&wndclass2, 0, sizeof(WNDCLASS));   // start with NULL defaults
-    wndclass2.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
-    wndclass2.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass2.cbClsExtra    = 0;
-    wndclass2.cbWndExtra    = sizeof( DWORD ); // was 4
-    wndclass2.hInstance     = wxhInstance;
-    wndclass2.hIcon         = (HICON) NULL;
-    wndclass2.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
-    //  wndclass2.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1) ;
-    wndclass2.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
-    wndclass2.lpszMenuName  = NULL;
-    wndclass2.lpszClassName = wxPanelClassName;
-    if (!RegisterClass( &wndclass2 ))
+    wndclass.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
+    wndclass.lpszClassName = wxPanelClassName;
+
+    if ( !RegisterClass(&wndclass) )
     {
-        //   wxFatalError("Can't register Panel Window class");
-        //   return FALSE;
+        wxLogLastError("RegisterClass(panel)");
+
+        return FALSE;
     }
 
-    ///////////////////////////////////////////////////////////////////////
     // Register the canvas and textsubwindow class name
-    WNDCLASS wndclass3;   // Structure used to register Windows class.
-    memset(&wndclass3, 0, sizeof(WNDCLASS));   // start with NULL defaults
-    // Use CS_OWNDC to avoid messing about restoring the context
-    // for every graphic operation.
-    //  wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS ;
-    // wxWin 2.0
-    wndclass3.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
-    wndclass3.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass3.cbClsExtra    = 0;
-    wndclass3.cbWndExtra    = sizeof( DWORD ); // was 4
-    wndclass3.hInstance     = wxhInstance;
-    wndclass3.hIcon         = (HICON) NULL;
-    wndclass3.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
-    //  wndclass3.hbrBackground = (HBRUSH)(COLOR_WINDOW+1) ;
-    wndclass3.hbrBackground = (HBRUSH) NULL;
-    wndclass3.lpszMenuName  = NULL;
-    wndclass3.lpszClassName = wxCanvasClassName;
-    if (!RegisterClass( &wndclass3))
+    wndclass.hbrBackground = (HBRUSH)NULL;
+    wndclass.lpszClassName = wxCanvasClassName;
+
+    if ( !RegisterClass(&wndclass) )
     {
-        //   wxFatalError("Can't register Canvas class");
-        //   return FALSE;
+        wxLogLastError("RegisterClass(canvas)");
+
+        return FALSE;
     }
 
     return TRUE;
 }
 
-//// Convert Windows to argc, argv style
+// ---------------------------------------------------------------------------
+// Convert Windows to argc, argv style
+// ---------------------------------------------------------------------------
 
 void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 {
@@ -499,7 +443,7 @@ void wxApp::CleanUp()
     delete g_globalCursor;
     g_globalCursor = NULL;
 
-    wxDeleteStockObjects() ;
+    wxDeleteStockObjects();
 
     // Destroy all GDI lists, etc.
     wxDeleteStockLists();
@@ -544,7 +488,7 @@ void wxApp::CleanUp()
         DestroyIcon(wxDEFAULT_MDIPARENTFRAME_ICON);
 
     if ( wxDisableButtonBrush )
-        ::DeleteObject( wxDisableButtonBrush ) ;
+        ::DeleteObject( wxDisableButtonBrush );
 
 #if wxUSE_OLE
     ::OleUninitialize();
@@ -555,7 +499,7 @@ void wxApp::CleanUp()
 #endif
 
     if (wxWinHandleList)
-        delete wxWinHandleList ;
+        delete wxWinHandleList;
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to 
     // create a module for that as it's part of the core.
@@ -646,7 +590,7 @@ int wxEntry(WXHINSTANCE hInstance,
 
         // GUI-specific initialisation. In fact on Windows we don't have any,
         // but this call is provided for compatibility across platforms.
-        wxTheApp->OnInitGui() ;
+        wxTheApp->OnInitGui();
 
         int retValue = 0;
 
@@ -759,16 +703,11 @@ wxApp::wxApp()
 {
     m_topWindow = NULL;
     wxTheApp = this;
-    m_className = "";
-    m_wantDebugOutput = TRUE ;
-    m_appName = "";
+    m_wantDebugOutput = TRUE;
+
     argc = 0;
     argv = NULL;
-#ifdef __WXMSW__
     m_printMode = wxPRINT_WINDOWS;
-#else
-    m_printMode = wxPRINT_POSTSCRIPT;
-#endif
     m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
 }
@@ -875,7 +814,6 @@ bool wxApp::DoMessage()
         if ( !ProcessMessage((WXMSG *)&s_currentMsg) )
         {
             ::TranslateMessage(&s_currentMsg);
-            wxApp::sm_lastMessageTime = s_currentMsg.time; /* MATTHEW: timeStamp impl. */
             ::DispatchMessage(&s_currentMsg);
         }
     }
@@ -955,7 +893,7 @@ void wxApp::ExitMainLoop()
 
 bool wxApp::Pending()
 {
-    return (::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0) ;
+    return (::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0);
 }
 
 void wxApp::Dispatch()
@@ -1064,7 +1002,7 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
         node = node->Next();
     }
-    return needMore ;
+    return needMore;
 }
 
 void wxApp::DeletePendingObjects()

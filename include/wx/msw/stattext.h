@@ -47,16 +47,12 @@ public:
     // accessors
     void SetLabel(const wxString& label);
     
-    // operations
-    virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
-    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) { }
-    
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
     
     // callbacks
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-        WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:

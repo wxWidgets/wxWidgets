@@ -58,17 +58,15 @@ public:
     // accessors
     // ---------
 
-    void SetMenuBar(wxMenuBar *menu_bar);
-
     // Get the active MDI child window (Windows only)
-    wxMDIChildFrame *GetActiveChild() const ;
+    wxMDIChildFrame *GetActiveChild() const;
 
     // Get the client window
     wxMDIClientWindow *GetClientWindow() const { return m_clientWindow; }
 
     // Create the client window class (don't Create the window,
     // just return a new class)
-    virtual wxMDIClientWindow *OnCreateClient(void) ;
+    virtual wxMDIClientWindow *OnCreateClient(void);
 
     WXHMENU GetWindowMenu() const { return m_windowMenu; }
 
@@ -87,25 +85,25 @@ public:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     void OnSize(wxSizeEvent& event);
-    void OnActivate(wxActivateEvent& event);
 
-    virtual bool MSWOnActivate(int state, bool minimized, WXHWND activate);
-    virtual bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
+    bool HandleActivate(int state, bool minimized, WXHWND activate);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
     // override window proc for MDI-specific message processing
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual long MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
-    virtual bool MSWProcessMessage(WXMSG* msg);
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
 protected:
+    virtual void InternalSetMenuBar();
+
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
     WXHMENU                         m_windowMenu;
 
     // TRUE if MDI Frame is intercepting commands, not child
-    bool m_parentFrameActive; 
+    bool m_parentFrameActive;
 
 private:
     friend class WXDLLEXPORT wxMDIChildFrame;
@@ -144,9 +142,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    // Set menu bar
-    void SetMenuBar(wxMenuBar *menu_bar);
-
     // MDI operations
     virtual void Maximize();
     virtual void Restore();
@@ -154,21 +149,24 @@ public:
 
     // Handlers
 
-    bool MSWOnMDIActivate(long bActivate, WXHWND, WXHWND);
-    bool MSWOnSize(int x, int y, WXUINT);
-    bool MSWOnWindowPosChanging(void *lpPos);
-    bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    bool MSWProcessMessage(WXMSG *msg);
-    bool MSWTranslateMessage(WXMSG *msg);
-    void MSWDestroyWindow();
+    bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
+    bool HandleSize(int x, int y, WXUINT);
+    bool HandleWindowPosChanging(void *lpPos);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+
+    virtual long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual bool MSWTranslateMessage(WXMSG *msg);
+
+    virtual void MSWDestroyWindow();
 
     // Implementation
     bool ResetWindowStyle(void *vrect);
 
 protected:
-    virtual void DoGetPosition(int *x, int *y) const ;
+    virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
+    virtual void InternalSetMenuBar();
 };
 
 // ---------------------------------------------------------------------------
@@ -180,13 +178,13 @@ class WXDLLEXPORT wxMDIClientWindow : public wxWindow
     DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 
 public:
-    wxMDIClientWindow();
+    wxMDIClientWindow() { Init(); }
     wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
     {
+        Init();
+
         CreateClient(parent, style);
     }
-
-    ~wxMDIClientWindow();
 
     // Note: this is virtual, to allow overridden behaviour.
     virtual bool CreateClient(wxMDIParentFrame *parent,
@@ -195,13 +193,9 @@ public:
     // Explicitly call default scroll behaviour
     void OnScroll(wxScrollEvent& event);
 
-    // Window procedure
-    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-    // Calls an appropriate default window procedure
-    virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
 protected:
+    void Init() { m_scrollX = m_scrollY = 0; }
+
     int m_scrollX, m_scrollY;
 
 private:

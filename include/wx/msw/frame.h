@@ -13,7 +13,7 @@
 #define _WX_FRAME_H_
 
 #ifdef __GNUG__
-#pragma interface "frame.h"
+    #pragma interface "frame.h"
 #endif
 
 #include "wx/window.h"
@@ -30,7 +30,7 @@ class WXDLLEXPORT wxStatusBar;
 
 class WXDLLEXPORT wxFrame : public wxWindow
 {
-DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrame)
 
 public:
     wxFrame();
@@ -70,17 +70,13 @@ public:
 
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
-    virtual wxMenuBar *GetMenuBar() const ;
-
-    // Set title
-    void SetTitle(const wxString& title);
-    wxString GetTitle() const ;
-
-    void Centre(int direction = wxBOTH);
+    virtual wxMenuBar *GetMenuBar() const;
 
     // Call this to simulate a menu command
-    virtual void Command(int id);
-    virtual void ProcessCommand(int id);
+    bool Command(int id) { ProcessCommand(id); }
+
+    // process menu command: returns TRUE if processed
+    bool ProcessCommand(int id);
 
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
@@ -123,16 +119,13 @@ public:
     static void UseNativeStatusBar(bool useNative) { m_useNativeStatusBar = useNative; };
     static bool UsesNativeStatusBar() { return m_useNativeStatusBar; };
 
-    // Fit frame around subwindows
-    virtual void Fit();
-
     // Iconize
     virtual void Iconize(bool iconize);
 
-    virtual bool IsIconized() const ;
+    virtual bool IsIconized() const;
 
     // Is it maximized?
-    virtual bool IsMaximized() const ;
+    virtual bool IsMaximized() const;
 
     // Compatibility
     bool Iconized() const { return IsIconized(); }
@@ -147,7 +140,7 @@ public:
     void DoMenuUpdates();
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 
-    WXHMENU GetWinMenu() const ;
+    WXHMENU GetWinMenu() const { return m_hMenu; }
 
     // Returns the origin of client area (may be different from (0,0) if the
     // frame has a toolbar)
@@ -155,18 +148,14 @@ public:
 
     // Implementation only from here
         // event handlers
-    bool MSWOnPaint();
-    WXHICON MSWOnQueryDragIcon();
-    bool MSWOnSize(int x, int y, WXUINT flag);
-    bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
-    bool MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
-    bool MSWProcessMessage(WXMSG *msg);
-    bool MSWTranslateMessage(WXMSG *msg);
+    bool HandlePaint();
+    bool HandleSize(int x, int y, WXUINT flag);
+    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
+    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
+
     bool MSWCreate(int id, wxWindow *parent, const char *wclass,
                    wxWindow *wx_win, const char *title,
                    int x, int y, int width, int height, long style);
-
-    bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
 
   // tooltip management
 #if wxUSE_TOOLTIPS
@@ -177,16 +166,23 @@ public:
 protected:
     // override base class virtuals
     virtual void DoGetClientSize(int *width, int *height) const;
-    virtual void DoGetSize(int *width, int *height) const ;
-    virtual void DoGetPosition(int *x, int *y) const ;
+    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetPosition(int *x, int *y) const;
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
 
+    // a plug in for MDI frame classes which need to do something special when
+    // the menubar is set
+    virtual void InternalSetMenuBar();
+
     // propagate our state change to all child frames
     void IconizeChildFrames(bool bIconize);
+
+    // we add menu bar accel processing
+    bool MSWTranslateMessage(WXMSG* pMsg);
 
     // window proc for the frames
     long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
@@ -196,7 +192,7 @@ protected:
     wxIcon                m_icon;
     bool                  m_iconized;
     WXHICON               m_defaultIcon;
-    wxToolBar *           m_frameToolBar ;
+    wxToolBar *           m_frameToolBar;
 
     static bool           m_useNativeStatusBar;
 

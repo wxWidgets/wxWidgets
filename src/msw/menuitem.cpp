@@ -40,15 +40,7 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
-#include <windows.h>
-
-#ifdef GetClassInfo
-    #undef GetClassInfo
-#endif
-
-#ifdef GetClassName
-    #undef GetClassName
-#endif
+#include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------
 // convenience macro

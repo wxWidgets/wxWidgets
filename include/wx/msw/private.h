@@ -16,7 +16,27 @@
 
 #include <windows.h>
 
+// undefine conflicting symbols which were defined in windows.h
+#include "wx/msw/winundef.h"
+
 class WXDLLEXPORT wxFont;
+
+// ---------------------------------------------------------------------------
+// private constants
+// ---------------------------------------------------------------------------
+
+// Conversion
+static const double METRIC_CONVERSION_CONSTANT = 0.0393700787;
+
+// Scaling factors for various unit conversions
+static const double mm2inches = (METRIC_CONVERSION_CONSTANT);
+static const double inches2mm = (1/METRIC_CONVERSION_CONSTANT);
+
+static const double mm2twips = (METRIC_CONVERSION_CONSTANT*1440);
+static const double twips2mm = (1/(METRIC_CONVERSION_CONSTANT*1440));
+
+static const double mm2pt = (METRIC_CONVERSION_CONSTANT*72);
+static const double pt2mm = (1/(METRIC_CONVERSION_CONSTANT*72));
 
 // ---------------------------------------------------------------------------
 // standard icons from the resources
@@ -178,7 +198,9 @@ extern LONG APIENTRY _EXPORT
 #endif // USE_DBWIN32
 
 // ---------------------------------------------------------------------------
-// macros to make casting between WXFOO and FOO a bit easier
+// macros to make casting between WXFOO and FOO a bit easier: the GetFoo()
+// returns Foo cast to the Windows type for oruselves, while GetFoosFoo() takes
+// an argument which should be a pointer to wxFoo (is this really clear?)
 // ---------------------------------------------------------------------------
 
 #define GetHwnd()               ((HWND)GetHWND())
@@ -186,8 +208,11 @@ extern LONG APIENTRY _EXPORT
 
 #define GetHdc()                ((HDC)GetHDC())
 
+#define GetHicon()              ((HICON)GetHICON())
+#define GetIconHicon(icon)      ((HICON)(icon).GetHICON())
+
 #define GetHaccel()             ((HACCEL)GetHACCEL())
-#define GetTableHaccel(table)   ((HACCEL)((table)->GetHACCEL()))
+#define GetTableHaccel(table)   ((HACCEL)((table).GetHACCEL()))
 
 // ---------------------------------------------------------------------------
 // global data
@@ -226,8 +251,9 @@ WXDLLEXPORT extern wxString wxGetWindowText(WXHWND hWnd);
 // get the window class name
 WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
 
-// get the window id
-WXDLLEXPORT extern wxWindowID wxGetWindowId(WXHWND hWnd);
+// get the window id (should be unsigned, hence this is not wxWindowID which
+// is, for mainly historical reasons, signed)
+WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)

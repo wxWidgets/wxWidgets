@@ -172,15 +172,13 @@ public:
 
   // callbacks
   // ---------
-  void OnSize(wxSizeEvent& event);
+  void OnWindowCreate(wxWindowCreateEvent& event);
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  void OnEraseBackground(wxEraseEvent& event);
 
   // base class virtuals
   // -------------------
-  virtual void Command(wxCommandEvent& event);
   virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
   virtual void SetConstraintSizes(bool recurse = TRUE);
   virtual bool DoPhase(int nPhase);

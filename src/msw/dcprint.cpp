@@ -27,7 +27,7 @@
 #include "wx/log.h"
 #include "math.h"
 
-#include <windows.h>
+#include "wx/msw/private.h"
 
 #if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>
@@ -35,18 +35,6 @@
 
 #ifndef __WIN32__
 #include <print.h>
-#endif
-
-#ifdef DrawText
-#undef DrawText
-#endif
-
-#ifdef GetCharWidth
-#undef GetCharWidth
-#endif
-
-#ifdef StartDoc
-#undef StartDoc
 #endif
 
 #if !USE_SHARED_LIBRARY

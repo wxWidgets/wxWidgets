@@ -447,7 +447,6 @@ public:
 
     // implementation
     // --------------
-    void Command(wxCommandEvent& event) { ProcessCommand(event); };
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 

@@ -31,11 +31,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
-#include <windows.h>
-
-#ifdef DrawText
-#undef DrawText
-#endif
+#include "wx/msw/private.h"
 
 // ============================================================================
 // implementation of wxOwnerDrawn class

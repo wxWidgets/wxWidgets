@@ -60,6 +60,8 @@
     IMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxQueryNewPaletteEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowCreateEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxWindowDestroyEvent, wxEvent)
 
     const wxEventTable *wxEvtHandler::GetEventTable() const
         { return &wxEvtHandler::sm_eventTable; }
@@ -91,7 +93,6 @@ wxEvent::wxEvent(int theId)
 {
     m_eventType = wxEVT_NULL;
     m_eventObject = (wxObject *) NULL;
-    m_eventHandle = (char *) NULL;
     m_timeStamp = 0;
     m_id = theId;
     m_skipped = FALSE;
@@ -106,7 +107,6 @@ void wxEvent::CopyObject(wxObject& object_dest) const
 
     obj->m_eventType = m_eventType;
     obj->m_eventObject = m_eventObject;
-    obj->m_eventHandle = m_eventHandle;
     obj->m_timeStamp = m_timeStamp;
     obj->m_id = m_id;
     obj->m_skipped = m_skipped;
@@ -465,6 +465,18 @@ void wxQueryNewPaletteEvent::CopyObject(wxObject& obj_d) const
     wxEvent::CopyObject(obj_d);
 
     obj->m_paletteRealized = m_paletteRealized;
+}
+
+wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
+                   : wxEvent(wxEVT_CREATE)
+{
+    SetEventObject(win);
+}
+
+wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
+                    : wxEvent(wxEVT_DESTROY)
+{
+    SetEventObject(win);
 }
 
 /*

@@ -110,6 +110,8 @@ public:
     // implementation
     // --------------
 
+    long MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 

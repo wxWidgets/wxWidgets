@@ -28,6 +28,31 @@ See also \helpref{window styles overview}{windowstyles}.
 
 <wx/splitter.h>
 
+\wxheading{Event handling}
+
+To process input from a splitter control, use the following event handler
+macros to direct input to member functions that take a 
+\helpref{wxSplitterEvent}{wxsplitterevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGED(id, func)}
+    {The sash position was changed. May be used to prevent the change from
+     taking place. Processes wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
+\twocolitem{{\bf EVT\_SPLITTER\_UNSPLIT(id, func)}}
+    {The splitter has been just unsplit. Processes wxEVT\_COMMAND\_SPLITTER\_UNSPLIT
+     event.}
+\twocolitem{{\bf EVT\_SPLITTER\_DOUBLECLICKED(id, func)}}
+    {The sash was double clicked. The default behaviour is to unsplit the
+     window when this happens (unless the minimum pane size has been set to a
+     value greater than zero). Processes wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED
+     event}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxSplitterEvent}{wxsplitterevent}
+
 \latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxSplitterWindow::wxSplitterWindow}\label{wxsplitterwindowconstr}

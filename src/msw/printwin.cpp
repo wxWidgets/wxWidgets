@@ -44,13 +44,10 @@
 #include "wx/msw/private.h"
 
 #include <stdlib.h>
-#include <windows.h>
-#include <commdlg.h>
 
-// Clash with Windows header files
-#ifdef StartDoc
-    #undef StartDoc
-#endif
+#include "wx/msw/private.h"
+
+#include <commdlg.h>
 
 #ifndef __WIN32__
     #include <print.h>

@@ -398,8 +398,6 @@ public:
         if ( x ) *x = m_userScaleX;
         if ( y ) *y = m_userScaleY;
     }
-    void SetSystemScale(double x, double y)
-        { SetUserScale(x, y); }
     virtual void SetUserScale(double x, double y) = 0;
 
     virtual void GetLogicalScale(double *x, double *y)

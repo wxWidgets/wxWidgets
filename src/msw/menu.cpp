@@ -145,6 +145,67 @@ void wxMenu::Append(wxMenuItem *pItem)
 {
     wxCHECK_RET( pItem != NULL, "can't append NULL item to the menu" );
 
+    // check for accelerators: they are given after '\t'
+    wxString label = pItem->GetName();
+    int posTab = label.Find('\t');
+    if ( posTab != wxNOT_FOUND ) {
+        // parse the accelerator string
+        int keyCode = 0;
+        int accelFlags = wxACCEL_NORMAL;
+        wxString current;
+        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
+            if ( (label[n] == '+') || (label[n] == '-') ) {
+                if ( current == _("ctrl") )
+                    accelFlags |= wxACCEL_CTRL;
+                else if ( current == _("alt") )
+                    accelFlags |= wxACCEL_ALT;
+                else if ( current == _("shift") )
+                    accelFlags |= wxACCEL_SHIFT;
+                else {
+                    wxLogDebug(_T("Unknown accel modifier: '%s'"),
+                               current.c_str());
+                }
+
+                current.Empty();
+            }
+            else {
+                current += wxTolower(label[n]);
+            }
+        }
+
+        if ( current.IsEmpty() ) {
+            wxLogDebug(_T("No accel key found, accel string ignored."));
+        }
+        else {
+            if ( current.Len() == 1 ) {
+                // it's a letter
+                keyCode = wxToupper(current[0]);
+            }
+            else {
+                // it should be a function key
+                if ( current[0] == 'f' && isdigit(current[1]) &&
+                     (current.Len() == 2 ||
+                     (current.Len() == 3 && isdigit(current[2]))) ) {
+                    int n;
+                    sscanf(current.c_str() + 1, "%d", &n);
+
+                    keyCode = VK_F1 + n - 1;
+                }
+                else {
+                    wxLogDebug(_T("Unreckognized accel key '%s', accel "
+                                  "string ignored."), current.c_str());
+                }
+            }
+        }
+
+        if ( keyCode ) {
+            // do add an entry
+            m_accelKeyCodes.Add(keyCode);
+            m_accelFlags.Add(accelFlags);
+            m_accelIds.Add(pItem->GetId());
+        }
+    }
+
     UINT flags = 0;
 
     // if "Break" has just been called, insert a menu break before this item
@@ -190,13 +251,7 @@ void wxMenu::Append(wxMenuItem *pItem)
     {
         // menu is just a normal string (passed in data parameter)
         flags |= MF_STRING;
-        pData = pItem->GetName();
-    }
-
-    // visually select the menu title
-    if ( id == idMenuTitle )
-    {
-        // TODO use SetMenuItemInfo(MFS_DEFAULT) to put it in bold face
+        pData = label;
     }
 
     if ( !::AppendMenu(GetHMENU(), flags, id, pData) )
@@ -205,6 +260,22 @@ void wxMenu::Append(wxMenuItem *pItem)
     }
     else
     {
+#ifdef __WIN32__
+        if ( id == idMenuTitle )
+        {
+            // visually select the menu title
+            MENUITEMINFO mii;
+            mii.cbSize = sizeof(mii);
+            mii.fMask = MIIM_STATE;
+            mii.fState = MFS_DEFAULT;
+
+            if ( !SetMenuItemInfo(GetHMENU(), (unsigned)id, FALSE, &mii) )
+            {
+                wxLogLastError("SetMenuItemInfo");
+            }
+        }
+#endif // __WIN32__
+
         m_menuItems.Append(pItem);
         m_noItems++;
     }
@@ -270,6 +341,23 @@ void wxMenu::Delete(int id)
 
     m_menuItems.DeleteNode(node);
     delete item;
+}
+
+// ---------------------------------------------------------------------------
+// accelerator helpers
+// ---------------------------------------------------------------------------
+
+// create the wxAcceleratorEntries for our accels and put them into provided
+// array - return the number of accels we have
+size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
+{
+    size_t count = GetAccelCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        (*accels++).Set(m_accelFlags[n], m_accelKeyCodes[n], m_accelIds[n]);
+    }
+
+    return count;
 }
 
 // ---------------------------------------------------------------------------
@@ -395,7 +483,7 @@ void wxMenu::SetTitle(const wxString& label)
         }
     }
 
-#ifndef __WIN16__
+#ifdef __WIN32__
     // put the title string in bold face
     if ( !m_title.IsEmpty() )
     {
@@ -438,7 +526,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     return TRUE;
 }
 
-void wxMenu::ProcessCommand(wxCommandEvent & event)
+bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
     bool processed = FALSE;
 
@@ -462,6 +550,8 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
     wxWindow *win = GetInvokingWindow();
     if ( !processed && win )
         processed = win->GetEventHandler()->ProcessEvent(event);
+
+    return processed;
 }
 
 // ---------------------------------------------------------------------------
@@ -915,6 +1005,34 @@ void wxMenuBar::Delete(wxMenu * menu, int i)
         m_menus[j] = m_menus[j + 1];
         m_titles[j] = m_titles[j + 1];
     }
+}
+
+void wxMenuBar::Attach(wxFrame *frame)
+{
+    wxASSERT_MSG( !m_menuBarFrame, _T("menubar already attached!") );
+
+    m_menuBarFrame = frame;
+
+    // create the accel table - we consider that the toolbar construction is
+    // finished
+    size_t nAccelCount = 0;
+    int i;
+    for ( i = 0; i < m_menuCount; i++ )
+    {
+        nAccelCount += m_menus[i]->GetAccelCount();
+    }
+
+    wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
+
+    nAccelCount = 0;
+    for ( i = 0; i < m_menuCount; i++ )
+    {
+        nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
+    }
+
+    m_accelTable = wxAcceleratorTable(nAccelCount, accelEntries);
+
+    delete [] accelEntries;
 }
 
 // ---------------------------------------------------------------------------

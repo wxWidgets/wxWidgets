@@ -29,24 +29,21 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
    * Public interface
    */
 
-  wxToolBar95(void);
+  wxToolBar95();
 
-  inline wxToolBar95(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+  wxToolBar95(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr)
   {
     Create(parent, id, pos, size, style, name);
   }
-  ~wxToolBar95(void);
+  ~wxToolBar95();
 
   bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr);
 
   // Call default behaviour
-  void OnPaint(wxPaintEvent& WXUNUSED(event)) { Default() ; }
-  void OnSize(wxSizeEvent& WXUNUSED(event)) { Default() ; }
-  void OnKillFocus(wxFocusEvent& WXUNUSED(event)) { Default() ; }
   void OnMouseEvent(wxMouseEvent& event);
 
   // Handle wxToolBar95 events
@@ -62,21 +59,21 @@ class WXDLLEXPORT wxToolBar95: public wxToolBarBase
   void SetToolBitmapSize(const wxSize& size);
   void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
   void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
-  void ClearTools(void);
+  void ClearTools();
 
   // The button size is bigger than the bitmap size
-  wxSize GetToolSize(void) const;
+  wxSize GetToolSize() const;
 
-  wxSize GetMaxSize(void) const;
+  wxSize GetMaxSize() const;
 
   void GetSize(int *w, int *y) const;
 
   virtual bool GetToolState(int toolIndex) const;
 
   // Add all the buttons: required for Win95.
-  virtual bool CreateTools(void);
+  virtual bool CreateTools();
   virtual void SetRows(int nRows);
-  virtual void LayoutButtons(void) {}
+  virtual void LayoutButtons() {}
 
   // The post-tool-addition call
   bool Realize() { return CreateTools(); };

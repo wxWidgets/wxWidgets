@@ -33,19 +33,11 @@
 #include "wx/generic/statusbr.h"
 #include "wx/msw/statbr95.h"
 
-#include  <windows.h>
-#include  <windowsx.h>
+#include "wx/msw/private.h"
+#include <windowsx.h>
 
 #if !defined(__GNUWIN32__) || defined(__TWIN32__)
-#include  <commctrl.h>
-#endif
-
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
-#ifdef GetClassName
-#undef GetClassName
+#include <commctrl.h>
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR

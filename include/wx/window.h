@@ -156,7 +156,8 @@ public:
 
         // label is just the same as the title (but for, e.g., buttons it
         // makes more sense to speak about labels)
-    virtual wxString GetLabel() const { return GetTitle(); }
+    void SetLabel(const wxString& label) { SetTitle(label); }
+    wxString GetLabel() const { return GetTitle(); }
 
         // the window name is used for ressource setting in X, it is not the
         // same as the window title/label

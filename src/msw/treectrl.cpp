@@ -48,22 +48,6 @@
     #include <commctrl.h>
 #endif
 
-#ifdef GetFirstChild
-#undef GetFirstChild
-#endif
-
-#ifdef GetNextChild
-#undef GetNextChild
-#endif
-
-#ifdef GetNextSibling
-#undef GetNextSibling
-#endif
-
-#ifdef GetClassInfo
-#undef GetClassInfo
-#endif
-
 // Bug in headers, sometimes
 #ifndef TVIS_FOCUSED
     #define TVIS_FOCUSED            0x0001
