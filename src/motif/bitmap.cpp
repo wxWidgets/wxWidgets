@@ -17,17 +17,17 @@
 #define XtParent XTPARENT
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/utils.h"
 #include "wx/palette.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/log.h"
-#include "wx/control.h"
 #include "wx/dcmemory.h"
 #include "wx/image.h"
 #include "wx/app.h"
 
+#if 0
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -35,8 +35,10 @@
 #ifdef __VMS__
 #pragma message enable nosimpint
 #endif
+#endif
 
-// #include "wx/motif/private.h"
+#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
 
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
@@ -161,6 +163,7 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
     LoadFile(filename, type);
 }
 
+#if 0
 // Create from XPM data
 static wxControl* sg_Control = NULL;
 wxBitmap::wxBitmap(char **data, wxControl* control)
@@ -172,6 +175,7 @@ wxBitmap::wxBitmap(char **data, wxControl* control)
 
     sg_Control = (wxControl*) NULL;
 }
+#endif
 
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
@@ -694,6 +698,7 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
 
     xpmAttr.valuemask = XpmReturnInfos;    /* nothing yet, but get infos back */
 
+#if 0
     XpmColorSymbol symbolicColors[4];
     if (sg_Control && sg_Control->GetMainWidget())
     {
@@ -708,6 +713,7 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
         xpmAttr.colorsymbols = symbolicColors;
         xpmAttr.valuemask |= XpmColorSymbols;    // add flag
     }
+#endif
 
     Pixmap pixmap = 0;
     Pixmap mask = 0;
@@ -899,100 +905,6 @@ WXPixmap wxBitmap::GetInsensPixmap (WXWidget w)
 #endif
 }
 #endif
-
-// We may need this sometime...
-
-/****************************************************************************
-
-  NAME
-  XCreateInsensitivePixmap - create a grayed-out copy of a pixmap
-
-  SYNOPSIS
-  Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
-
-  DESCRIPTION
-  This function creates a grayed-out copy of the argument pixmap, suitable
-  for use as a XmLabel's XmNlabelInsensitivePixmap resource.
-
-  RETURN VALUES
-  The return value is the new Pixmap id or zero on error.  Errors include
-  a NULL display argument or an invalid Pixmap argument.
-
-  ERRORS
-  If one of the XLib functions fail, it will produce a X error.  The
-  default X error handler prints a diagnostic and calls exit().
-
-  SEE ALSO
-  XCopyArea(3), XCreateBitmapFromData(3), XCreateGC(3), XCreatePixmap(3),
-  XFillRectangle(3), exit(2)
-
-  AUTHOR
-  John R Veregge - john@puente.jpl.nasa.gov
-  Advanced Engineering and Prototyping Group (AEG)
-  Information Systems Technology Section (395)
-  Jet Propulsion Lab - Calif Institute of Technology
-
-*****************************************************************************/
-
-Pixmap
-XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
-
-{
-    static char stipple_data[] =
-        {
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
-            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA
-        };
-    GC        gc;
-    Pixmap    ipixmap, stipple;
-    unsigned    width, height, depth;
-
-    Window    window;    /* These return values */
-    unsigned    border;    /* from XGetGeometry() */
-    int        x, y;    /* are not needed.     */
-
-    ipixmap = 0;
-
-    if ( NULL == display || 0 == pixmap )
-        return ipixmap;
-
-    if ( 0 == XGetGeometry( display, pixmap, &window, &x, &y,
-                &width, &height, &border, &depth )
-       )
-        return ipixmap; /* BadDrawable: probably an invalid pixmap */
-
-    /* Get the stipple pixmap to be used to 'gray-out' the argument pixmap.
-     */
-    stipple = XCreateBitmapFromData( display, pixmap, stipple_data, 16, 16 );
-    if ( 0 != stipple )
-    {
-        gc = XCreateGC( display, pixmap, (XtGCMask)0, (XGCValues*)NULL );
-        if ( NULL != gc )
-        {
-            /* Create an identical copy of the argument pixmap.
-             */
-            ipixmap = XCreatePixmap( display, pixmap, width, height, depth );
-            if ( 0 != ipixmap )
-            {
-                /* Copy the argument pixmap into the new pixmap.
-                 */
-                XCopyArea( display, pixmap, ipixmap,
-                        gc, 0, 0, width, height, 0, 0 );
-
-                /* Refill the new pixmap using the stipple algorithm/pixmap.
-                 */
-                XSetStipple( display, gc, stipple );
-                XSetFillStyle( display, gc, FillStippled );
-                XFillRectangle( display, ipixmap, gc, 0, 0, width, height );
-            }
-            XFreeGC( display, gc );
-        }
-        XFreePixmap( display, stipple );
-    }
-    return ipixmap;
-}
 
 // Creates a bitmap with transparent areas drawn in
 // the given colour.

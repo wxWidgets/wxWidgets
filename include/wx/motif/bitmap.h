@@ -153,10 +153,12 @@ public:
     // from XPM
     wxBitmap(const char **data) { (void)CreateFromXpm(data); }
     wxBitmap(char **data) { (void)CreateFromXpm((const char **)data); }
-    
+
+#if 0
     // Initialize with XPM data -- deprecated
     wxBitmap(char **data, wxControl* control);
-    
+#endif
+
     // Load a file or resource
     wxBitmap(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM);
     

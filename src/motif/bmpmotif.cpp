@@ -202,3 +202,99 @@ WXPixmap wxBitmapCache::GetInsensPixmap( WXWidget w )
     m_recalcPixmaps.insens = !m_insensPixmap;
     return m_insensPixmap;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+// Utility function
+//////////////////////////////////////////////////////////////////////////////
+
+/****************************************************************************
+
+  NAME
+  XCreateInsensitivePixmap - create a grayed-out copy of a pixmap
+
+  SYNOPSIS
+  Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
+
+  DESCRIPTION
+  This function creates a grayed-out copy of the argument pixmap, suitable
+  for use as a XmLabel's XmNlabelInsensitivePixmap resource.
+
+  RETURN VALUES
+  The return value is the new Pixmap id or zero on error.  Errors include
+  a NULL display argument or an invalid Pixmap argument.
+
+  ERRORS
+  If one of the XLib functions fail, it will produce a X error.  The
+  default X error handler prints a diagnostic and calls exit().
+
+  SEE ALSO
+  XCopyArea(3), XCreateBitmapFromData(3), XCreateGC(3), XCreatePixmap(3),
+  XFillRectangle(3), exit(2)
+
+  AUTHOR
+  John R Veregge - john@puente.jpl.nasa.gov
+  Advanced Engineering and Prototyping Group (AEG)
+  Information Systems Technology Section (395)
+  Jet Propulsion Lab - Calif Institute of Technology
+
+*****************************************************************************/
+
+Pixmap
+XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
+
+{
+    static char stipple_data[] =
+        {
+            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
+            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
+            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA,
+            0x55, 0x55, 0xAA, 0xAA, 0x55, 0x55, 0xAA, 0xAA
+        };
+    GC        gc;
+    Pixmap    ipixmap, stipple;
+    unsigned    width, height, depth;
+
+    Window    window;    /* These return values */
+    unsigned    border;    /* from XGetGeometry() */
+    int        x, y;    /* are not needed.     */
+
+    ipixmap = 0;
+
+    if ( NULL == display || 0 == pixmap )
+        return ipixmap;
+
+    if ( 0 == XGetGeometry( display, pixmap, &window, &x, &y,
+                &width, &height, &border, &depth )
+       )
+        return ipixmap; /* BadDrawable: probably an invalid pixmap */
+
+    /* Get the stipple pixmap to be used to 'gray-out' the argument pixmap.
+     */
+    stipple = XCreateBitmapFromData( display, pixmap, stipple_data, 16, 16 );
+    if ( 0 != stipple )
+    {
+        gc = XCreateGC( display, pixmap, (XtGCMask)0, (XGCValues*)NULL );
+        if ( NULL != gc )
+        {
+            /* Create an identical copy of the argument pixmap.
+             */
+            ipixmap = XCreatePixmap( display, pixmap, width, height, depth );
+            if ( 0 != ipixmap )
+            {
+                /* Copy the argument pixmap into the new pixmap.
+                 */
+                XCopyArea( display, pixmap, ipixmap,
+                        gc, 0, 0, width, height, 0, 0 );
+
+                /* Refill the new pixmap using the stipple algorithm/pixmap.
+                 */
+                XSetStipple( display, gc, stipple );
+                XSetFillStyle( display, gc, FillStippled );
+                XFillRectangle( display, ipixmap, gc, 0, 0, width, height );
+            }
+            XFreeGC( display, gc );
+        }
+        XFreePixmap( display, stipple );
+    }
+    return ipixmap;
+}
