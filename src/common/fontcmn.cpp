@@ -374,7 +374,7 @@ void wxNativeFontInfo::SetFaceName(wxString facename_)
     facename = facename_;
 }
 
-void wxNativeFontInfo::SetFamily(wxFontFamily family)
+void wxNativeFontInfo::SetFamily(wxFontFamily family_)
 {
     family = family_;
 }
