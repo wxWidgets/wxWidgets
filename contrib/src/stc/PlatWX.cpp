@@ -18,11 +18,6 @@
 #include "wx/stc/stc.h"
 
 
-#ifdef __WXGTK__
-#include <gtk/gtk.h>
-#endif
-
-
 Point Point::FromLong(long lpoint) {
     return Point(lpoint & 0xFFFF, lpoint >> 16);
 }
