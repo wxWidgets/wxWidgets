@@ -1221,6 +1221,15 @@
 #           define wxUSE_BMPBUTTON 1
 #       endif
 #   endif
+
+#   if !wxUSE_CHOICEDLG
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_HELP requires wxUSE_CHOICEDLG"
+#       else
+#           undef wxUSE_CHOICEDLG
+#           define wxUSE_CHOICEDLG 1
+#       endif
+#   endif
 #endif /* wxUSE_HELP */
 
 #if wxUSE_WXHTML_HELP
@@ -1345,6 +1354,15 @@
 #        else
 #            undef wxUSE_MENUS
 #            define wxUSE_MENUS 1
+#        endif
+#   endif
+
+#   if !wxUSE_CHOICEDLG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "DocView requires wxUSE_CHOICEDLG"
+#        else
+#            undef wxUSE_CHOICEDLG
+#            define wxUSE_CHOICEDLG 1
 #        endif
 #   endif
 

@@ -175,6 +175,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
         // chosen to suppress this the last time)
         encoding = wxFONTENCODING_SYSTEM;
     }
+#if wxUSE_CHOICEDLG
     else if ( (encoding == wxFONTENCODING_SYSTEM) && interactive )
     {
         // prepare the dialog data
@@ -233,6 +234,9 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
         }
 #endif // wxUSE_CONFIG
     }
+#else
+    wxUnusedVar(interactive);
+#endif // wxUSE_CHOICEDLG
 
     return (wxFontEncoding)encoding;
 }
