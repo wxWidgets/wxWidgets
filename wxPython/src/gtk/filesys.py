@@ -13,7 +13,6 @@ from fonts import *
 
 from streams import *
 import wx
-import string
 
 import types
 def wxMemoryFSHandler_AddFile(filename, a, b=''):

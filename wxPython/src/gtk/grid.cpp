@@ -12675,8 +12675,7 @@ static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxArrayInt & _result_ref = wxGrid_GetSelectedRows(_arg0);
-    _result = (wxArrayInt *) &_result_ref;
+    _result = new wxArrayInt (wxGrid_GetSelectedRows(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -12688,6 +12687,7 @@ static PyObject *_wrap_wxGrid_GetSelectedRows(PyObject *self, PyObject *args, Py
         PyList_Append(_resultobj, val);
         Py_DECREF(val);
     }
+    delete _result;
 }
     return _resultobj;
 }
@@ -12712,8 +12712,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    const wxArrayInt & _result_ref = wxGrid_GetSelectedCols(_arg0);
-    _result = (wxArrayInt *) &_result_ref;
+    _result = new wxArrayInt (wxGrid_GetSelectedCols(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -12725,6 +12724,7 @@ static PyObject *_wrap_wxGrid_GetSelectedCols(PyObject *self, PyObject *args, Py
         PyList_Append(_resultobj, val);
         Py_DECREF(val);
     }
+    delete _result;
 }
     return _resultobj;
 }
