@@ -1515,13 +1515,19 @@ void wxWindow::OnIdle(wxIdleEvent& event)
 // Raise the window to the top of the Z order
 void wxWindow::Raise()
 {
-    // TODO
+    if ( m_macWindowData )
+    {
+        UMABringToFront( m_macWindowData->m_macWindow ) ;
+    }
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindow::Lower()
 {
-    // TODO
+    if ( m_macWindowData )
+    {
+        UMASendBehind( m_macWindowData->m_macWindow , NULL ) ;
+    }
 }
 
 void wxWindow::DoSetClientSize(int width, int height)
