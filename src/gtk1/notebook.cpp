@@ -16,6 +16,8 @@
 #include "wx/panel.h"
 #include "wx/utils.h"
 #include "wx/imaglist.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // wxNotebookPage
@@ -30,9 +32,10 @@ class wxNotebookPage: public wxObject
    int                m_image;
    void              *m_clientData;
    GtkNotebookPage   *m_page;
+   GtkLabel          *m_label;
    wxWindow          *m_clientPanel;
    
-   wxNotebookPage(void)
+   wxNotebookPage()
    {
      m_id = -1;
      m_text = "";
@@ -56,7 +59,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 wxNotebook::wxNotebook(void)
 {
   m_imageList = NULL;
-  m_frame = NULL;
   m_pages.DeleteContents( TRUE );
 };
 
@@ -65,7 +67,6 @@ wxNotebook::wxNotebook( wxWindow *parent, const wxWindowID id,
       const long style, const wxString& name )
 {
   m_imageList = NULL;
-  m_frame = NULL;
   m_pages.DeleteContents( TRUE );
   Create( parent, id, pos, size, style, name );
 };
@@ -144,7 +145,7 @@ int wxNotebook::GetPageImage( const int page ) const
   if (nb_page)
     return nb_page->m_image;
   else
-    return NULL;
+    return 0;
 };
 
 void* wxNotebook::GetPageData( const int page ) const
@@ -282,35 +283,36 @@ bool wxNotebook::DeletePage( const int page )
   return TRUE;
 };
 
-bool wxNotebook::AddPage( const int item, const wxString &text, wxWindow* win, const int imageId, void* data )
+bool wxNotebook::AddPage(wxWindow* win, const wxString& text, const int imageId, void* data)
 {
-  wxNotebookPage *page = new wxNotebookPage;
+  // we've created the notebook page in AddChild(). Now we just have to set
+  // the caption for the page and set the others parameters.
 
+  // first, find the page
+  wxNotebookPage *page = NULL;
+
+  wxNode *node = m_pages.First();
+  while (node)
+  {
+    page = (wxNotebookPage*)node->Data();
+    if ( page->m_clientPanel == win ) 
+      break; // found
+    node = node->Next();
+  };
+  
+  if ( page == NULL ) {
+    wxFAIL_MSG("Can't add a page whose parent is not the notebook!");
+
+    return FALSE;
+  }
+  
+  // then set the attributes
   page->m_text = text;
-  if (page->m_text.IsNull()) page->m_text = "";
-  page->m_id = item;
+  if ( page->m_text.IsEmpty() )
+    page->m_text = "";
   page->m_image = imageId;
   page->m_clientData = data;
-  
-  m_frame = gtk_label_new( page->m_text );
-  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, m_frame );
-
-  gtk_misc_set_alignment( GTK_MISC(m_frame), 0.0, 0.5 );
-
-  page->m_clientPanel = win;
-//  page->m_clientPanel = new wxPanel( this, -1, wxPoint(0,0), wxSize(100,100) );
-    
-  m_frame = NULL;
-  
-  page->m_page = (GtkNotebookPage*)( g_list_last( GTK_NOTEBOOK(m_widget)->children )->data );
-  
-  if (!page->m_page)
-  {
-     wxFatalError( "Notebook page creation error" );
-     return FALSE;
-  }
-
-  m_pages.Append( page );
+  gtk_label_set(page->m_label, page->m_text);
 
   return TRUE;
 };
@@ -325,9 +327,27 @@ wxWindow *wxNotebook::GetPageWindow( const int page ) const
 
 void wxNotebook::AddChild( wxWindow *win )
 {
-  if (!m_frame) wxFatalError( "Notebook::Addchild() must not be called directly." );
+  wxNotebookPage *page = new wxNotebookPage();
+
+  page->m_id = GetPageCount();
+  page->m_label = (GtkLabel *)gtk_label_new("no caption");
+  page->m_clientPanel = win;
+  gtk_notebook_append_page(GTK_NOTEBOOK(m_widget), win->m_widget, 
+                           (GtkWidget *)page->m_label);
+  gtk_misc_set_alignment(GTK_MISC(page->m_label), 0.0, 0.5);
+    
+  page->m_page = (GtkNotebookPage*)
+                 (
+                    g_list_last(GTK_NOTEBOOK(m_widget)->children)->data
+                 );
   
-//  gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget, m_frame );
+  if (!page->m_page)
+  {
+     wxLogFatalError( "Notebook page creation error" );
+     return;
+  }
+
+  m_pages.Append( page );
 };
 
 //-----------------------------------------------------------------------------

@@ -68,7 +68,7 @@ class wxNotebook: public wxControl
     void SetPadding( const wxSize& padding );
     bool DeleteAllPages(void);
     bool DeletePage( const int page );
-    bool AddPage( const int page, const wxString& text, wxWindow* win, const int imageId = -1, void* data = NULL );
+    bool AddPage(wxWindow* win, const wxString& text, const int imageId = -1, void* data = NULL );
     wxWindow *GetPageWindow( const int page ) const;
     
     // overriden to do nothing
@@ -78,7 +78,6 @@ class wxNotebook: public wxControl
   
     wxImageList*    m_imageList;
     wxList          m_pages;
-    GtkWidget      *m_frame; 
 
   DECLARE_EVENT_TABLE()
 };

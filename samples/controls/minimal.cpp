@@ -162,21 +162,21 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "think?"
   };
   
-  wxPanel *panel = m_notebook->CreatePage( 0, "wxList" );
-  
+  wxPanel *panel = new wxPanel(m_notebook);
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 9, choices );
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
+  m_notebook->AddPage(panel, "wxList");
   
-  panel = m_notebook->CreatePage( 1, "wxChoice" );
-  
+  panel = new wxPanel(m_notebook);
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 9, choices );
+  m_notebook->AddPage(panel, "wxChoice");
   
-  panel = m_notebook->CreatePage( 2, "wxComboBox" );
-  
+  panel = new wxPanel(m_notebook);
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 9, choices );
+  m_notebook->AddPage(panel, "wxComboBox");
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
