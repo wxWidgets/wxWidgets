@@ -127,7 +127,16 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
 {
     int i, l = location.Length();
     int l2 = l + 1;
-    for (i = l-1; (i >= 0) && ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':'))); i--) {if (location[i] == wxT('#')) l2 = i + 1;}
+//    for (i = l-1; (i >= 0) && ((location[i] != wxT(':')) || (i == 1) || (location[i-2] == wxT(':'))); i--)
+    for (i = l-1;
+        (i >= 0) &&
+            (((location[i] != wxT(':')) || ((i >= 2) && (location[i-2] == wxT('/')))) || // Ignore e.g. /c:/ component
+            (i == 1) ||
+            (location[i-2] == wxT(':'))
+            ); i--)
+    {
+        if (location[i] == wxT('#')) l2 = i + 1;
+    }
     if (i == 0) return wxEmptyString;
     else return location.Mid(i + 1, l2 - i - 2);
 }
