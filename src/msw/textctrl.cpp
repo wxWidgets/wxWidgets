@@ -1276,8 +1276,21 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
         wxChar *buf = tmp;
 
         *(WORD *)buf = (WORD)len;
-        len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE,
-                                    lineNo, (LPARAM)buf);
+        len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
+
+#if wxUSE_RICHEDIT
+        if ( IsRich() )
+        {
+            // remove the '\r' returned by the rich edit control, the user code
+            // should never see it
+            if ( buf[len - 2] == _T('\r') && buf[len - 1] == _T('\n') )
+            {
+                buf[len - 2] = _T('\n');
+                len--;
+            }
+        }
+#endif // wxUSE_RICHEDIT
+
         buf[len] = 0;
         tmp.SetLength(len);
     }
