@@ -26,6 +26,7 @@ copy /s %WXWIN%\contrib\include\wx\stc       %BASE%\include\wx\stc
 copy /s %WXWIN%\wxPython\include\wx\*        %BASE%\include\wx
 mkdir %BASE%\include\wx\wxPython\i_files
 copy  %WXWIN%\wxPython\src\*.i               %BASE%\include\wx\wxPython\i_files
+copy  %WXWIN%\wxPython\src\*.py              %BASE%\include\wx\wxPython\i_files
 
 mkdir %BASE%\lib
 mkdir %BASE%\lib\vc_dll
