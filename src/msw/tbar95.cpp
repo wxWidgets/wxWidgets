@@ -43,10 +43,6 @@
 
 #include "wx/toolbar.h"
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
-    #include "malloc.h"
-#endif
-
 #include "wx/msw/private.h"
 
 // include <commctrl.h> "properly"

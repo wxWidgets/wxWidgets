@@ -26,10 +26,6 @@
 
 #if defined(__WIN95__)
 
-#if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
-#include "malloc.h"
-#endif
-
 #include "wx/msw/private.h"
 
 #if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
