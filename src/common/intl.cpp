@@ -2505,7 +2505,7 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
 wxString wxLocale::GetHeaderValue( const wxChar* szHeader,
                                    const wxChar* szDomain ) const
 {
-    if ( wxIsEmpty(Header) )
+    if ( wxIsEmpty(szHeader) )
         return wxEmptyString;
 
     wxChar const * pszTrans = NULL;
@@ -2535,11 +2535,11 @@ wxString wxLocale::GetHeaderValue( const wxChar* szHeader,
     if ( wxIsEmpty(pszTrans) )
       return wxEmptyString;
 
-    wxChar const * pszFound = wxStrstr(pszTrans, Header);
+    wxChar const * pszFound = wxStrstr(pszTrans, szHeader);
     if ( pszFound == NULL )
       return wxEmptyString;
     
-    pszFound += wxStrlen(Header) + 2 /* ': ' */;
+    pszFound += wxStrlen(szHeader) + 2 /* ': ' */;
 
     // Every header is separated by \n
     

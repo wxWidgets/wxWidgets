@@ -4290,17 +4290,18 @@ long wxListMainWindow::FindItem(long start, long data)
 
 long wxListMainWindow::FindItem( const wxPoint& pt )
 {
-  wxPoint p;
-  long topItem = GetTopItem();
+    size_t topItem;
+    GetVisibleLinesRange(&topItem, NULL);
 
-  GetItemPosition( GetItemCount()-1, p );
-  if( p.y == 0 )
-    return topItem;
-  long id = (long) floor( pt.y*(GetItemCount()-topItem-1)/p.y+topItem );
-  if( id >= 0 && id < (long)GetItemCount() )
-    return id;
+    wxPoint p;
+    GetItemPosition( GetItemCount()-1, p );
+    if( p.y == 0 )
+        return topItem;
+    long id = (long) floor( pt.y*(GetItemCount()-topItem-1)/p.y+topItem );
+    if( id >= 0 && id < (long)GetItemCount() )
+        return id;
 
-  return wxNOT_FOUND;
+    return wxNOT_FOUND;
 }
 
 long wxListMainWindow::HitTest( int x, int y, int &flags )
