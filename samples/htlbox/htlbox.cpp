@@ -45,7 +45,7 @@
 
 // you can also have a file containing HTML strings for testing, enable this if
 // you want to use it
-#define USE_HTML_FILE
+//#define USE_HTML_FILE
 #ifdef USE_HTML_FILE
     #include "wx/textfile.h"
 #endif
@@ -405,9 +405,9 @@ MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
     SetMargins(5, 5);
 
 #ifdef USE_HTML_FILE
-    if ( !m_file.Open("results") )
+    if ( !m_file.Open(_T("results")) )
     {
-        wxLogError("Failed to open results file");
+        wxLogError(_T("Failed to open results file"));
     }
     else
     {
