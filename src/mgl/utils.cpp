@@ -175,11 +175,14 @@ void wxDisplaySize(int *width, int *height)
 void wxDisplaySizeMM(int *width, int *height)
 {
     wxASSERT_MSG( g_displayDC, wxT("You must call wxApp::SetDisplayMode before using this function") );
+
+    int xDPI, yDPI;
+    MGL_getDotsPerInch(&xDPI, &yDPI);    
+    
     if ( width ) 
-        *width = (g_displayDC->sizex()+1) * 25/72;
+        *width = (int)((g_displayDC->sizex()+1) * 25.4 / xDPI);
     if ( height ) 
-        *height = (g_displayDC->sizey()+1) * 25/72;
-    // FIXME_MGL -- what about returning *real* monitor dimensions?
+        *height = (int)((g_displayDC->sizey()+1) * 25.4 / yDPI);
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
