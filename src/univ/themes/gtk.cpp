@@ -1582,11 +1582,15 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
 
         if ( flags & wxCONTROL_PRESSED )
         {
-            DrawBorder(dc, wxBORDER_SUNKEN, rect, flags);
+            DrawBorder(dc, wxBORDER_SUNKEN, rect, flags, &rect);
+
+            DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL_PRESSED), rect);
         }
         else if ( flags & wxCONTROL_CURRENT )
         {
-            DrawBorder(dc, wxBORDER_RAISED, rect, flags);
+            DrawBorder(dc, wxBORDER_RAISED, rect, flags, &rect);
+
+            DrawBackground(dc, wxSCHEME_COLOUR(m_scheme, CONTROL_CURRENT), rect);
         }
 
         dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
