@@ -51,9 +51,10 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetProperty("tab.timmy.whinge.level", "1")
         self.SetMargins(0,0)
 
-        self.SetViewWhiteSpace(False)
+        #self.SetViewWhiteSpace(True)
         #self.SetBufferedDraw(False)
         #self.SetViewEOL(True)
+        #self.SetTwoPhaseDraw(False)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
