@@ -86,6 +86,8 @@ public:
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   inline wxEvtHandler *GetEventHandler(void) { return m_eventHandler; }
 
+  inline wxList& GetItems() const { return (wxList&) m_menuItems; }
+
   // IMPLEMENTATION
   bool MSWCommand(WXUINT param, WXWORD id);
 
@@ -161,6 +163,9 @@ class WXDLLEXPORT wxMenuBar: public wxEvtHandler
 
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   inline wxEvtHandler *GetEventHandler(void) { return m_eventHandler; }
+
+  inline int GetMenuCount() const { return m_menuCount; }
+  inline wxMenu* GetMenu(int i) const { return m_menus[i]; }
 
  public:
   wxEvtHandler *            m_eventHandler;
