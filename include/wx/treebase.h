@@ -145,6 +145,7 @@ enum wxTreeItemIcon
 #define wxTR_HAS_BUTTONS             0x0001     // draw collapsed/expanded btns
 #define wxTR_NO_LINES                0x0004     // don't draw lines at all
 #define wxTR_LINES_AT_ROOT           0x0008     // connect top-level nodes
+#define wxTR_TWIST_BUTTONS           0x0010     // still used by wxTreeListCtrl
 
 #define wxTR_SINGLE                  0x0000     // for convenience
 #define wxTR_MULTIPLE                0x0020     // can select multiple items
@@ -160,7 +161,6 @@ enum wxTreeItemIcon
 #define wxTR_DEFAULT_STYLE           (wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT)
 
 // deprecated, don't use
-#define wxTR_TWIST_BUTTONS           0
 #define wxTR_MAC_BUTTONS             0
 #define wxTR_AQUA_BUTTONS            0
 
