@@ -55,7 +55,7 @@
 #elif defined(__DARWIN__)
     typedef void *wxDllType;
 #elif defined(__WXMAC__)
-    typedef CFragConnectionID wxDllType;
+    typedef void *wxDllType;
 #else
 #   error "wxLibrary can't be compiled on this platform, sorry."
 #endif // OS
