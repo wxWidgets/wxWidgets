@@ -139,6 +139,13 @@ class wxDiagramPtr :
         return val
     def __repr__(self):
         return "<C wxDiagram instance at %s>" % (self.this,)
+    # replaces broken shadow methods
+    def FindShape(self, *_args, **_kwargs):
+        from oglbasic import wxPyShapePtr
+        val = apply(oglcanvasc.wxDiagram_FindShape,(self,) + _args, _kwargs)
+        if val: val = wxPyShapePtr(val)
+        return val
+    
 class wxDiagram(wxDiagramPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglcanvasc.new_wxDiagram,_args,_kwargs)

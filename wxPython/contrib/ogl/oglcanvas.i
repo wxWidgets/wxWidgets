@@ -49,7 +49,16 @@ public:
     void Clear(wxDC& dc);
     void DeleteAllShapes();
     void DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2);
+
     wxPyShape* FindShape(long id);
+    %pragma(python) addtoclass = "# replaces broken shadow methods
+    def FindShape(self, *_args, **_kwargs):
+        from oglbasic import wxPyShapePtr
+        val = apply(oglcanvasc.wxDiagram_FindShape,(self,) + _args, _kwargs)
+        if val: val = wxPyShapePtr(val)
+        return val
+    "
+
     wxPyShapeCanvas* GetCanvas();
     int GetCount();
     double GetGridSpacing();
