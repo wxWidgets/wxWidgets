@@ -33,5 +33,7 @@
     <lib id="plotlib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(PLOT_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">plot=plotdll+plotlib</set>
 
 </makefile>

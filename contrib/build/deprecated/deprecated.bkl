@@ -44,6 +44,8 @@
     <lib id="deprecatedlib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(DEPRECATED_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">deprecated=deprecateddll+deprecatedlib</set>
 
 </makefile>
 

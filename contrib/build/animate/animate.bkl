@@ -27,4 +27,6 @@
         <sources>$(ANIMATE_SRC)</sources>
     </lib>
 
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">animate=animatedll+animatelib</set>
+
 </makefile>

@@ -84,6 +84,8 @@
     <lib id="mmedialib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(MMEDIA_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">mmedia=mmediadll+mmedialib</set>
 
 </makefile>
 

@@ -31,5 +31,7 @@
     <lib id="netutilslib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(NETUTILS_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">netutils=netutilsdll+netutilslib</set>
 
 </makefile>

@@ -26,5 +26,7 @@
     <lib id="svglib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(SVG_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">svg=svgdll+svglib</set>
 
 </makefile>

@@ -37,5 +37,7 @@
     <lib id="gizmoslib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(GIZMOS_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">gizmos=gizmosdll+gizmoslib</set>
 
 </makefile>

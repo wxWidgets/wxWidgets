@@ -51,5 +51,7 @@
     <lib id="ogllib" template="wx_contrib_lib" cond="SHARED=='0'">
         <sources>$(OGL_SRC)</sources>
     </lib>
+    
+    <set var="MSVC6PRJ_MERGED_TARGETS" append="1">ogl=ogldll+ogllib</set>
 
 </makefile>
