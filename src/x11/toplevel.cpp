@@ -424,7 +424,7 @@ void wxTopLevelWindowX11::SetIcons(const wxIconBundle& icons )
     wxTopLevelWindowBase::SetIcons( icons );
 
     DoSetIcon( icons.GetIcon( -1 ) );
-    wxSetIconsX11( GetXDisplay(), GetXWindow(), icons );
+    wxSetIconsX11( wxGlobalDisplay(), GetMainWindow(), icons );
 }
 
 void wxTopLevelWindowX11::SetTitle(const wxString& title)
