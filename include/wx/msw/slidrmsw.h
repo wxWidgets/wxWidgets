@@ -112,7 +112,9 @@ public:
   int           m_pageSize;
   int           m_lineSize;
   int           m_tickFreq;
+#if WXWIN_COMPATIBILITY
 DECLARE_EVENT_TABLE()
+#endif
 };
 
 #endif
