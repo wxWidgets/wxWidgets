@@ -322,7 +322,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
             {
                 m_pRGB += PixelFormat::SizePixel;
                 if ( m_pAlpha )
-                    m_pAlpha += PixelFormat::SizePixel;
+                    ++m_pAlpha;
 
                 return *this;
             }
