@@ -195,7 +195,7 @@ textcmn.cpp	C
 textfile.cpp	C	B
 timercmn.cpp	C	B
 tokenzr.cpp	C	B
-treebase.cpp	C	B
+treebase.cpp	C
 txtstrm.cpp	C	B
 unzip.c	C	B
 url.cpp	C	S,B

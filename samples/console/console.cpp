@@ -41,7 +41,7 @@
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
-#define TEST_FILE
+//#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
 //#define TEST_LIST
@@ -50,6 +50,7 @@
 //#define TEST_MIME
 //#define TEST_INFO_FUNCTIONS
 //#define TEST_SOCKETS
+#define TEST_STREAMS
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
@@ -1300,6 +1301,33 @@ static void TestProtocolFtpUpload()
 }
 
 #endif // TEST_SOCKETS
+
+// ----------------------------------------------------------------------------
+// streams
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_STREAMS
+
+#include <wx/mstream.h>
+
+static void TestMemoryStream()
+{
+    puts("*** Testing wxMemoryInputStream ***");
+
+    wxChar buf[1024];
+    wxStrncpy(buf, _T("Hello, stream!"), WXSIZEOF(buf));
+
+    wxMemoryInputStream memInpStream(buf, wxStrlen(buf));
+    printf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
+    while ( !memInpStream.Eof() )
+    {
+        putchar(memInpStream.GetC());
+    }
+
+    puts("\n*** wxMemoryInputStream test done ***");
+}
+
+#endif // TEST_STREAMS
 
 // ----------------------------------------------------------------------------
 // timers
@@ -3593,6 +3621,10 @@ int main(int argc, char **argv)
     }
         TestProtocolFtpUpload();
 #endif // TEST_SOCKETS
+
+#ifdef TEST_STREAMS
+    TestMemoryStream();
+#endif // TEST_STREAMS
 
 #ifdef TEST_TIMER
     TestStopWatch();
