@@ -236,11 +236,11 @@ config.o:	config.c
 
 # Setup is copied from Setup.in *only* if it doesn't yet exist
 Setup:
-		cp $(srcdir)/Setup.in Setup
+		cp Setup.in Setup
 
 # Make the intermediate Makefile.pre from Makefile.pre.in
 Makefile.pre: Makefile.pre.in sedscript
-		sed -f sedscript $(srcdir)/Makefile.pre.in >Makefile.pre
+		sed -f sedscript Makefile.pre.in >Makefile.pre
 
 # Shortcuts to make the sed arguments on one line
 P=prefix
@@ -286,7 +286,7 @@ boot:	clobber
 	VERSION=`$(PYTHON) -c "import sys; print sys.version[:3]"`; \
 	installdir=`$(PYTHON) -c "import sys; print sys.prefix"`; \
 	exec_installdir=`$(PYTHON) -c "import sys; print sys.exec_prefix"`; \
-	$(MAKE) -f $(srcdir)/Makefile.pre.in VPATH=$(VPATH) srcdir=$(srcdir) \
+	$(MAKE) -f Makefile.pre.in VPATH=$(VPATH) srcdir=$(srcdir) \
 		VERSION=$$VERSION \
 		installdir=$$installdir \
 		exec_installdir=$$exec_installdir \
@@ -314,6 +314,10 @@ distclean:	clobber
 # Custom rules and dependencies added for wxPython
 #
 
+ifdef MY_LDSHARED
+LDSHARED=$(MY_LDSHARED)
+endif
+
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
 
 
@@ -328,17 +332,14 @@ PYMODULES = $(GENCODEDIR)/wxp.py       $(GENCODEDIR)/events.py    \
 # Implicit rules to run SWIG
 $(GENCODEDIR)/%.cpp : %.i
 	swig $(SWIGFLAGS) -c -o $@ $<
-	move $*.py $(GENCODEDIR)
 
 $(GENCODEDIR)/%.py : %.i
 	swig $(SWIGFLAGS) -c -o $@ $<
-	move $*.py $(GENCODEDIR)
 
 
 # This one must leave out the -c flag so we define the whole rule
 $(GENCODEDIR)/wxp.cpp $(GENCODEDIR)/wxp.py : wxp.i my_typemaps.i _defs.i _extras.py
 	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wxp.cpp wxp.i
-	move wxp.py $(GENCODEDIR)
 
 
 # define some dependencies
@@ -352,16 +353,17 @@ $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemap
 $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py : controls2.i  my_typemaps.i _defs.i
 $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemaps.i _defs.i
 
+$(GENCODEDIR)/helpers.cpp:
+	ln -s `pwd`/helpers.cpp $@
 
 
 wxInstall :	sharedmods $(PYMODULES)
 	if test ! -d $(TARGETDIR) ; then \
 		mkdir $(TARGETDIR) ; else true ; fi
-	-for i in $(SHAREDMODS); do \
-		$(INSTALL_SHARED) $$i $(TARGETDIR)/$$i; \
-	done
+	-chmod 755 $(SHAREDMODS); \
+	 cp $(SHAREDMODS) $(TARGETDIR);
 	-for i in $(PYMODULES); do \
-		$(INSTALL) $$i $(TARGETDIR)/$$i; \
+		cp $$i $(TARGETDIR); \
 	done
 	python $(LIBDEST)/compileall.py -l $(TARGETDIR)
 	python -O $(LIBDEST)/compileall.py -l $(TARGETDIR)
