@@ -729,7 +729,7 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
     *(WXHTREEITEM *)&rect = (WXHTREEITEM)item;
 
     // FALSE means get item rect for the whole item, not only text
-    return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, &rect) != 0;
+    return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
 
 }
 
