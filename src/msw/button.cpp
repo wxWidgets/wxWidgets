@@ -88,6 +88,13 @@ bool wxButton::Create(wxWindow *parent,
                       NULL
                      );
 
+    if (m_hWnd == 0)
+    {
+        wxString msg;
+        msg.Printf(wxT("CreateWindowEx failed with error number %ld"), (long) GetLastError());
+        wxFAIL_MSG(msg);
+    }
+
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
 

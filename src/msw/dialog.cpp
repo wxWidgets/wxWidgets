@@ -174,7 +174,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
     if ( !hwnd )
     {
-        wxLogError(_("Failed to create dialog."));
+        wxFAIL_MSG(_("Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your resources."));
 
         return FALSE;
     }
