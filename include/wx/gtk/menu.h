@@ -123,7 +123,7 @@ DECLARE_DYNAMIC_CLASS(wxMenu)
 
 public:
   // construction
-  wxMenu( const wxString &title = "" );
+  wxMenu( const wxString& title = wxEmptyString, const wxFunction func = NULL );
 
   // operations
     // menu creation
@@ -149,16 +149,23 @@ public:
   // accessors
   wxList& GetItems() { return m_items; }
 
+  inline void Callback(const wxFunction func) { m_callback = func; }
+  
+  inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
+  inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
+  
 public:
   int FindMenuIdByMenuItem( GtkWidget *menuItem ) const;
   void SetInvokingWindow( wxWindow *win );
   wxWindow *GetInvokingWindow();
 
-  wxString    m_title;
-  wxList      m_items;
-  wxWindow   *m_invokingWindow;
+  wxString       m_title;
+  wxList         m_items;
+  wxWindow      *m_invokingWindow;
+  wxFunction     m_callback;
+  wxEvtHandler  *m_eventHandler;
 
-  GtkWidget  *m_menu;  // GtkMenu
+  GtkWidget     *m_menu;  // GtkMenu
 };
 
 #endif // __GTKMENUH__

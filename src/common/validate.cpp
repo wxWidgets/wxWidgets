@@ -21,7 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx.h"
+#include "wx/wx.h"
 #endif
 
 #include "wx/validate.h"

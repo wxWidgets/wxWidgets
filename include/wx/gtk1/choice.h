@@ -44,14 +44,23 @@ class wxChoice: public wxControl
   public:
 
     wxChoice(void);
-    wxChoice( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxChoiceNameStr );
+    inline wxChoice( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr )
+    {
+      Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
     bool Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxChoiceNameStr );
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxChoiceNameStr );
     void Append( const wxString &item );
     void Clear(void);
     int FindString( const wxString &string ) const;

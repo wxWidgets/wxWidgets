@@ -21,6 +21,7 @@
 #include <wx/utils.h>
 #include <wx/frame.h>
 #include <wx/panel.h>
+#include <wx/menu.h>
 #include <wx/serbase.h>
 #include "serwnd.h"
 

@@ -34,7 +34,7 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
   event.SetInt( cb->GetValue() );
   event.SetEventObject(cb);
   cb->GetEventHandler()->ProcessEvent(event);
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -42,22 +42,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox,wxControl)
 
 wxCheckBox::wxCheckBox(void)
 {
-};
-
-wxCheckBox::wxCheckBox( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  Create( parent, id, label, pos, size, style, name );
-};
+}
 
 bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
+
+  SetValidator( validator );
 
   SetLabel( label );
 
@@ -76,7 +71,7 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 void wxCheckBox::SetValue( bool state )
 {
@@ -84,11 +79,11 @@ void wxCheckBox::SetValue( bool state )
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_ACTIVE );
   else
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_NORMAL );
-};
+}
 
 bool wxCheckBox::GetValue(void) const
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON(m_widget);
   return tb->active;
-};
+}
 

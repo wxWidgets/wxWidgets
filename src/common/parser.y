@@ -117,7 +117,11 @@ arg1	:	WORD
 
 %%
 
+#ifdef __WXGTK__
+#include "lexer.c"
+#else
 #include "../common/lex_yy.c"
+#endif
 
 /*
 void yyerror(s)

@@ -43,17 +43,22 @@ class wxScrollBar: public wxControl
   public:
   
     wxScrollBar(void) { m_adjust = NULL; m_oldPos = 0.0; };
-    wxScrollBar(wxWindow *parent, wxWindowID id,
+    inline wxScrollBar( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSB_HORIZONTAL,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxScrollBarNameStr )
+    {
+      Create( parent, id, pos, size, style, validator, name );
+    }
+    bool Create( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = wxSB_HORIZONTAL,
+           const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr );
     ~wxScrollBar(void);
-    bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxSB_HORIZONTAL,
-           const wxString& name = wxScrollBarNameStr);
     int GetPosition(void) const;
     int GetThumbSize() const;
     int GetPageSize() const;

@@ -46,16 +46,21 @@ class wxRadioBox: public wxControl
   public:
   
     wxRadioBox(void);
-    wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      int majorDim = 0, long style = wxRA_HORIZONTAL,
-      const wxString &name = wxRadioBoxNameStr );
+    inline wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
+             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+             int n = 0, const wxString choices[] = NULL,
+             int majorDim = 0, long style = wxRA_HORIZONTAL,
+             const wxValidator& val = wxDefaultValidator, 
+	     const wxString& name = wxRadioBoxNameStr )
+    {
+      Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
+    }
     bool Create( wxWindow *parent, wxWindowID id, const wxString& title,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int n = 0, const wxString choices[] = NULL,
-      int majorDim = 0, long style = wxRA_HORIZONTAL,
-      const wxString &name = wxRadioBoxNameStr );
+             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+             int n = 0, const wxString choices[] = NULL,
+             int majorDim = 0, long style = wxRA_HORIZONTAL,
+             const wxValidator& val = wxDefaultValidator, 
+	     const wxString& name = wxRadioBoxNameStr );
     int FindString( const wxString& s) const;
     void SetSelection( int n );
     int GetSelection(void) const;

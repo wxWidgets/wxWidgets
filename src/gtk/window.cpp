@@ -754,21 +754,15 @@ wxWindow::wxWindow()
   m_resizing = FALSE;
 }
 
-wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-  m_cursor = NULL;
-  Create( parent, id, pos, size, style, name );
-}
-
 bool wxWindow::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
+      long style, const wxString &name  )
 {
   m_isShown = FALSE;
   m_isEnabled = TRUE;
   m_needParent = TRUE;
+  
+  m_cursor = NULL;
   
   PreCreation( parent, id, pos, size, style, name );
   
@@ -887,8 +881,7 @@ wxWindow::~wxWindow(void)
     m_windowSizer = NULL;
   }
   // If this is a child of a sizer, remove self from parent
-  if (m_sizerParent)
-    m_sizerParent->RemoveChild((wxWindow *)this);
+  if (m_sizerParent) m_sizerParent->RemoveChild((wxWindow *)this);
 
   // Just in case the window has been Closed, but
   // we're then deleting immediately: don't leave
@@ -900,6 +893,7 @@ wxWindow::~wxWindow(void)
   // class
   wxTopLevelWindows.DeleteObject(this);
     
+  if (m_windowValidator) delete m_windowValidator;
 }
 
 void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
@@ -921,7 +915,6 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   if (m_height == -1) m_height = 20;
   m_retCode = 0;
   m_eventHandler = this;
-  m_windowValidator = NULL;
   m_windowId = id;
   m_sizeSet = FALSE;
   if (m_cursor == NULL)
@@ -940,6 +933,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
   m_resizing = FALSE;
+  m_windowValidator = NULL;
 }
 
 void wxWindow::PostCreation(void)
@@ -1580,9 +1574,11 @@ wxValidator *wxWindow::GetValidator(void)
   return m_windowValidator;
 }
 
-void wxWindow::SetValidator( wxValidator *validator )
+void wxWindow::SetValidator( const wxValidator& validator )
 {
-  m_windowValidator = validator;
+  if (m_windowValidator) delete m_windowValidator;
+  m_windowValidator = validator.Clone();
+  if (m_windowValidator) m_windowValidator->SetWindow(this);
 }
 
 bool wxWindow::IsBeingDeleted(void)
@@ -1694,6 +1690,16 @@ void wxWindow::SetBackgroundColour( const wxColour &colour )
     gdk_window_clear( m_wxwindow->window );
   }
   // do something ?
+}
+
+wxColour wxWindow::GetForegroundColour(void) const
+{
+  return m_foregroundColour;
+}
+
+void wxWindow::SetForegroundColour( const wxColour &colour )
+{
+  m_foregroundColour = colour;
 }
 
 bool wxWindow::Validate(void)

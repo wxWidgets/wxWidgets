@@ -42,7 +42,7 @@ wxMenuBar::wxMenuBar()
   PostCreation();
 
   Show( TRUE );
-};
+}
 
 void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
@@ -61,7 +61,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(root_menu), menu->m_menu );
 
   gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), root_menu );
-};
+}
 
 static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString, const wxString &itemString )
 {
@@ -69,7 +69,7 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
   {
     int res = menu->FindItem( itemString );
     if (res != -1) return res;
-  };
+  }
   wxNode *node = menu->m_items.First();
   while (node)
   {
@@ -77,9 +77,9 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
     if (item->IsSubMenu())
       return FindMenuItemRecursive(item->GetSubMenu(), menuString, itemString);
     node = node->Next();
-  };
+  }
   return -1;
-};
+}
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
 {
@@ -90,9 +90,9 @@ int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemStr
     int res = FindMenuItemRecursive( menu, menuString, itemString);
     if (res != -1) return res;
     node = node->Next();
-  };
+  }
   return -1;
-};
+}
 
 // Find a wxMenuItem using its id. Recurses down into sub-menus
 static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
@@ -105,10 +105,10 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
     if ( item->IsSubMenu() )
       result = FindMenuItemByIdRecursive( item->GetSubMenu(), id );
     node = node->Next();
-  };
+  }
 
   return result;
-};
+}
 
 wxMenuItem* wxMenuBar::FindMenuItemById( int id ) const
 {
@@ -127,48 +127,55 @@ void wxMenuBar::Check( int id, bool check )
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) item->Check(check);
-};
+}
 
 bool wxMenuBar::Checked( int id ) const
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) return item->IsChecked();
   return FALSE;
-};
+}
 
 void wxMenuBar::Enable( int id, bool enable )
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) item->Enable(enable);
-};
+}
 
 bool wxMenuBar::Enabled( int id ) const
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) return item->IsEnabled();
   return FALSE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxMenu
 //-----------------------------------------------------------------------------
 
-void gtk_menu_clicked_callback( GtkWidget *widget, gpointer data )
+static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
-  wxMenu *menu = (wxMenu*)data;
   int id = menu->FindMenuIdByMenuItem(widget);
 
   wxASSERT( id != -1 ); // should find it!
 
-  if (!menu->IsEnabled(id))
-    return;
+  if (!menu->IsEnabled(id)) return;
 
   wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, id );
   event.SetEventObject( menu );
   event.SetInt(id );
+  
+  if (menu->m_callback)
+  {
+     (void) (*(menu->m_callback)) (*menu, event);
+     return;
+  }
+
+  if (menu->GetEventHandler()->ProcessEvent(event)) return;
+
   wxWindow *win = menu->GetInvokingWindow();
   if (win) win->GetEventHandler()->ProcessEvent( event );
-};
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem,wxObject)
 
@@ -180,7 +187,7 @@ wxMenuItem::wxMenuItem()
   m_isEnabled = TRUE;
   m_subMenu = NULL;
   m_menuItem = NULL;
-};
+}
 
 void wxMenuItem::SetText(const wxString& str)
 {
@@ -214,13 +221,21 @@ bool wxMenuItem::IsChecked() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
-wxMenu::wxMenu( const wxString &title )
+wxMenu::wxMenu( const wxString& title, const wxFunction func )
 {
   m_title = title;
   m_items.DeleteContents( TRUE );
   m_invokingWindow = NULL;
   m_menu = gtk_menu_new();  // Do not show!
-};
+  m_callback = func;
+  m_eventHandler = this;
+  if (m_title.IsNull()) m_title = "";
+  if (m_title != "")
+  {
+    Append(-2, m_title);
+    AppendSeparator();
+  }
+}
 
 void wxMenu::AppendSeparator()
 {
@@ -232,7 +247,7 @@ void wxMenu::AppendSeparator()
   gtk_widget_show( menuItem );
   mitem->SetMenuItem(menuItem);
   m_items.Append( mitem );
-};
+}
 
 void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool checkable )
 {
@@ -253,7 +268,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
   gtk_menu_append( GTK_MENU(m_menu), menuItem );
   gtk_widget_show( menuItem );
   m_items.Append( mitem );
-};
+}
 
 void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxString &helpStr )
 {
@@ -270,7 +285,7 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
   gtk_menu_append( GTK_MENU(m_menu), menuItem );
   gtk_widget_show( menuItem );
   m_items.Append( mitem );
-};
+}
 
 int wxMenu::FindItem( const wxString itemString ) const
 {
@@ -289,17 +304,17 @@ int wxMenu::FindItem( const wxString itemString ) const
     if (item->GetText() == s)
       return item->GetId();
     node = node->Next();
-  };
+  }
 
   return -1;
-};
+}
 
 void wxMenu::Enable( int id, bool enable )
 {
   wxMenuItem *item = FindItem(id);
   if ( item )
     item->Enable(enable);
-};
+}
 
 bool wxMenu::IsEnabled( int id ) const
 {
@@ -308,14 +323,14 @@ bool wxMenu::IsEnabled( int id ) const
     return item->IsEnabled();
   else
     return FALSE;
-};
+}
 
 void wxMenu::Check( int id, bool enable )
 {
   wxMenuItem *item = FindItem(id);
   if ( item )
     item->Check(enable);
-};
+}
 
 bool wxMenu::IsChecked( int id ) const
 {
@@ -324,14 +339,14 @@ bool wxMenu::IsChecked( int id ) const
     return item->IsChecked();
   else
     return FALSE;
-};
+}
 
 void wxMenu::SetLabel( int id, const wxString &label )
 {
   wxMenuItem *item = FindItem(id);
   if ( item )
     item->SetText(label);
-};
+}
 
 int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 {
@@ -342,10 +357,10 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
     if (item->GetMenuItem() == menuItem)
       return item->GetId();
     node = node->Next();
-  };
+  }
 
   return -1;
-};
+}
 
 wxMenuItem *wxMenu::FindItem(int id) const
 {
@@ -355,7 +370,7 @@ wxMenuItem *wxMenu::FindItem(int id) const
     if ( item->GetId() == id )
       return item;
     node = node->Next();
-  };
+  }
 
   wxLogDebug(_("wxMenu::FindItem: item %d not found."), id);
 
@@ -365,11 +380,11 @@ wxMenuItem *wxMenu::FindItem(int id) const
 void wxMenu::SetInvokingWindow( wxWindow *win )
 {
   m_invokingWindow = win;
-};
+}
 
 wxWindow *wxMenu::GetInvokingWindow()
 {
   return m_invokingWindow;
-};
+}
 
 

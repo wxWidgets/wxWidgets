@@ -31,6 +31,7 @@
 #include "wx/menu.h"
 #include "wx/stattext.h"
 #include "wx/button.h"
+#include "wx/bmpbuttn.h"
 #include "wx/radiobox.h"
 #include "wx/listbox.h"
 #include "wx/choice.h"
@@ -41,7 +42,8 @@
 #include "wx/gauge.h"
 #endif
 #include "wx/textctrl.h"
-#include "wx/msgbxdlg.h"
+#include "wx/msgdlg.h"
+#include "wx/intl.h"
 #endif
 
 #if USE_SCROLLBAR
@@ -2125,7 +2127,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
           break;
         }
 #endif
-#ifdef __X__
+#ifdef __WXGTK__
         case RESOURCE_PLATFORM_X:
         {
           if (!optResource && ((noColours == 0) || (noColours <= thisNoColours)))
@@ -2169,7 +2171,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
     {
       case wxBITMAP_TYPE_XBM_DATA:
       {
-#ifdef __X__
+#ifdef __WXGTK__
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2185,7 +2187,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {
-#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
+#if (defined(__WXGTK__)) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2292,7 +2294,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
           break;
         }
 #endif
-#ifdef __X__
+#ifdef __WXGTK__
         case RESOURCE_PLATFORM_X:
         {
           if (!optResource && ((noColours == 0) || (noColours <= thisNoColours)))
@@ -2336,7 +2338,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
     {
       case wxBITMAP_TYPE_XBM_DATA:
       {
-#ifdef __X__
+#ifdef __WXGTK__
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2344,7 +2346,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
                          "Forgot to use wxResourceLoadIconData?"), name);
           return NULL;
         }
-        icon = new wxIcon((char *)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
+        icon = new wxIcon((char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
 #else
         wxLogWarning(_("No XBM facility available!"));
 #endif
@@ -2354,7 +2356,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
       {
       // *** XPM ICON NOT YET IMPLEMENTED IN WXWINDOWS ***
 /*
-#if (defined(__X__) && USE_XPM_IN_X) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
+#if (defined(__WXGTK__)) || (defined(__WXMSW__) && USE_XPM_IN_MSW)
         wxItemResource *item = table->FindResource(name);
         if (!item)
         {
@@ -2373,7 +2375,11 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
       }
       default:
       {
+#ifdef __WXGTK__
+        wxLogWarning(_("Icon resource specification %s not found."), resource);
+#else
         icon = new wxIcon(name, bitmapType);
+#endif
         break;
       }
     }

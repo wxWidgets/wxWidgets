@@ -598,7 +598,7 @@ class wxListCtrl: public wxControl
     void SetSingleStyle( long style, bool add = TRUE ) ;
     void SetWindowStyleFlag(long style);
     void RecreateWindow(void) {};
-    long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE);
+    long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
     wxImageList *GetImageList(int which);
     void SetImageList(wxImageList *imageList, int which) ;
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC

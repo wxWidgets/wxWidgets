@@ -88,6 +88,8 @@ public:
   virtual wxString GetTitle() const { return m_title; }
   
   virtual void SetIcon( const wxIcon &icon );
+  void Iconize( bool WXUNUSED(iconize)) { }
+  bool IsIconized(void) const { return FALSE; }
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );

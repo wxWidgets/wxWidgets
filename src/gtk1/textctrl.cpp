@@ -22,10 +22,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
-void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
+static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
   win->SetModified();
-};
+}
 
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
@@ -34,30 +34,30 @@ END_EVENT_TABLE()
 
 wxTextCtrl::wxTextCtrl(void) : streambuf()
 {
-    if( allocate() )
-  setp(base(),ebuf());
+  if (allocate()) setp(base(),ebuf());
 
   m_modified = FALSE;
-};
+}
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
-      int style, const wxString &name ) : streambuf()
+      int style, const wxValidator& validator, const wxString &name ) : streambuf()
 {
-  if( allocate() )
-    setp(base(),ebuf());
+  if (allocate()) setp(base(),ebuf());
 
   m_modified = FALSE;
-  Create( parent, id, value, pos, size, style, name );
-};
+  Create( parent, id, value, pos, size, style, validator, name );
+}
 
 bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
-      int style, const wxString &name )
+      int style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
 
   PreCreation( parent, id, pos, size, style, name );
+
+  SetValidator( validator );
 
   bool bMultiLine = (style & wxTE_MULTILINE) != 0;
   if ( bMultiLine )
@@ -121,7 +121,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   {
     gint tmp = 0;
     gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
-  };
+  }
 
   if (style & wxTE_READONLY)
   {
@@ -130,12 +130,12 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
   {
     if ( bMultiLine )
       gtk_text_set_editable( GTK_TEXT(m_text), 1 );
-  };
+  }
 
   Show( TRUE );
 
   return TRUE;
-};
+}
 
 wxString wxTextCtrl::GetValue(void) const
 {
@@ -148,9 +148,9 @@ wxString wxTextCtrl::GetValue(void) const
   else
   {
     tmp = gtk_entry_get_text( GTK_ENTRY(m_text) );
-  };
+  }
   return tmp;
-};
+}
 
 void wxTextCtrl::SetValue( const wxString &value )
 {
@@ -166,8 +166,8 @@ void wxTextCtrl::SetValue( const wxString &value )
   else
   {
     gtk_entry_set_text( GTK_ENTRY(m_text), tmp );
-  };
-};
+  }
+}
 
 void wxTextCtrl::WriteText( const wxString &text )
 {
@@ -181,44 +181,44 @@ void wxTextCtrl::WriteText( const wxString &text )
   else
   {
     gtk_entry_append_text( GTK_ENTRY(m_text), text );
-  };
-};
+  }
+}
 
 bool wxTextCtrl::LoadFile( const wxString &WXUNUSED(file) )
 {
-  wxFAIL_MSG(_("wxTextCtrl::LoadFile not implemented"));
+  wxFAIL_MSG( "wxTextCtrl::LoadFile not implemented" );
 
   return FALSE;
-};
+}
 
 bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
 {
-  wxFAIL_MSG(_("wxTextCtrl::SaveFile not implemented"));
+  wxFAIL_MSG( "wxTextCtrl::SaveFile not implemented" );
 
   return FALSE;
-};
+}
 
 /*
 wxString wxTextCtrl::GetLineText( long lineNo ) const
 {
-};
+}
 
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &event )
 {
-};
+}
 
 long wxTextCtrl::PositionToXY( long pos, long *x, long *y ) const
 {
-};
+}
 
 long wxTextCtrl::XYToPosition( long x, long y )
 {
-};
+}
 
 int wxTextCtrl::GetNumberOfLines(void)
 {
-};
+}
 
 */
 void wxTextCtrl::SetInsertionPoint( long pos )
@@ -228,7 +228,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
     gtk_text_set_point( GTK_TEXT(m_text), tmp );
   else
     gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
-};
+}
 
 void wxTextCtrl::SetInsertionPointEnd(void)
 {
@@ -238,7 +238,7 @@ void wxTextCtrl::SetInsertionPointEnd(void)
   else
     pos = GTK_ENTRY(m_text)->text_length;
   SetInsertionPoint( pos-1 );
-};
+}
 
 void wxTextCtrl::SetEditable( bool editable )
 {
@@ -246,22 +246,22 @@ void wxTextCtrl::SetEditable( bool editable )
     gtk_text_set_editable( GTK_TEXT(m_text), editable );
   else
     gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
-};
+}
 
 void wxTextCtrl::SetSelection( long from, long to )
 {
   gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-};
+}
 
 void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 {
   wxFAIL_MSG(_("wxTextCtrl::ShowPosition not implemented"));
-};
+}
 
 long wxTextCtrl::GetInsertionPoint(void) const
 {
   return (long) GTK_EDITABLE(m_text)->current_pos;
-};
+}
 
 long wxTextCtrl::GetLastPosition(void) const
 {
@@ -271,12 +271,12 @@ long wxTextCtrl::GetLastPosition(void) const
   else
     pos = GTK_ENTRY(m_text)->text_length;
   return (long)pos-1;
-};
+}
 
 void wxTextCtrl::Remove( long from, long to )
 {
   gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-};
+}
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
@@ -284,31 +284,31 @@ void wxTextCtrl::Replace( long from, long to, const wxString &value )
   if (value.IsNull()) return;
   gint pos = (gint)to;
   gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
-};
+}
 
 void wxTextCtrl::Cut(void)
 {
   gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
-};
+}
 
 void wxTextCtrl::Copy(void)
 {
   gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
-};
+}
 
 void wxTextCtrl::Paste(void)
 {
   gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
-};
+}
 
 void wxTextCtrl::Delete(void)
 {
   SetValue( "" );
-};
+}
 
 void wxTextCtrl::OnChar( wxKeyEvent &WXUNUSED(event) )
 {
-};
+}
 
 int wxTextCtrl::overflow( int WXUNUSED(c) )
 {
@@ -320,7 +320,7 @@ int wxTextCtrl::overflow( int WXUNUSED(c) )
   setp(pbase(), epptr());
   delete[] txt;
   return EOF;
-};
+}
 
 int wxTextCtrl::sync(void)
 {
@@ -332,12 +332,12 @@ int wxTextCtrl::sync(void)
   setp(pbase(), epptr());
   delete[] txt;
   return 0;
-};
+}
 
 int wxTextCtrl::underflow(void)
 {
   return EOF;
-};
+}
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
@@ -390,7 +390,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 GtkWidget* wxTextCtrl::GetConnectWidget(void)
 {
   return GTK_WIDGET(m_text);
-};
+}
 
 
 

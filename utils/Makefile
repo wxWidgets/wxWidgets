@@ -1,1 +1,1 @@
-include ../src/gtk/setup/general/makedirs
+include ../install/unix/setup/general/makedirs

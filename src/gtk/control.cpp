@@ -23,18 +23,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl,wxWindow)
 wxControl::wxControl(void)
 {
   m_needParent = TRUE;
-};
+}
 
 wxControl::wxControl( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name ) :
   wxWindow( parent, id, pos, size, style, name )
 {
-};
+}
 
 void wxControl::Command( wxCommandEvent &WXUNUSED(event) )
 {
-};
+}
 
 void wxControl::SetLabel( const wxString &label )
 {
@@ -50,12 +50,12 @@ void wxControl::SetLabel( const wxString &label )
 
     m_label << *pc;
   }
-};
+}
 
 wxString wxControl::GetLabel(void) const
 {
   return m_label;
-};
+}
 
 
 

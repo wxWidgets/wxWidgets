@@ -47,7 +47,7 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
   event.SetString( WXSTRINGCAST(tmp) );
   event.SetEventObject( rb );
   rb->GetEventHandler()->ProcessEvent(event);
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -55,27 +55,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
 wxRadioBox::wxRadioBox(void)
 {
-};
-
-wxRadioBox::wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      int majorDim, long style,
-      const wxString &name )
-{
-  Create( parent, id, title, pos, size, n, choices, majorDim, style, name );
-};
+}
 
 bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      int WXUNUSED(majorDim), long style,
-      const wxString &name )
+      int n, const wxString choices[], int WXUNUSED(majorDim), 
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_alreadySent = FALSE;
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
+
+  SetValidator( validator );
 
   m_widget = gtk_frame_new( title );
   
@@ -111,8 +103,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
       y += 20;
       height += 20;
       
-    };
-  };
+    }
+  }
 
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = maxLen+10;
@@ -124,7 +116,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 bool wxRadioBox::Show( bool show )
 {
@@ -136,10 +128,10 @@ bool wxRadioBox::Show( bool show )
     GtkWidget *w = GTK_WIDGET( item->data );
     if (show) gtk_widget_show( w ); else gtk_widget_hide( w );
     item = item->next;
-  };
+  }
 
   return TRUE;
-};
+}
 
 int wxRadioBox::FindString( const wxString &s ) const
 {
@@ -154,10 +146,10 @@ int wxRadioBox::FindString( const wxString &s ) const
     if (s == l->label) return count;
     count--;
     item = item->next;
-  };
+  }
 
   return -1;
-};
+}
 
 void wxRadioBox::SetSelection( int n )
 {
@@ -168,7 +160,7 @@ void wxRadioBox::SetSelection( int n )
   GtkToggleButton *button = GTK_TOGGLE_BUTTON( item->data );
   
   gtk_toggle_button_set_state( button, 1 );
-};
+}
 
 int wxRadioBox::GetSelection(void) const
 {
@@ -180,9 +172,9 @@ int wxRadioBox::GetSelection(void) const
     if (GTK_TOGGLE_BUTTON(button)->active) return count;
     count++;
     item = item->next;
-  };
+  }
   return -1;
-};
+}
 
 wxString wxRadioBox::GetString( int n ) const
 {
@@ -196,48 +188,48 @@ wxString wxRadioBox::GetString( int n ) const
   GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
   
   return wxString( label->label );
-};
+}
 
 wxString wxRadioBox::GetLabel(void) const
 {
   return wxControl::GetLabel();
-};
+}
 
 void wxRadioBox::SetLabel( const wxString& WXUNUSED(label) )
 {
   wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
-};
+}
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), const wxString& WXUNUSED(label) )
 {
   wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
-};
+}
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
 {
   wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
-};
+}
 
 wxString wxRadioBox::GetLabel( int WXUNUSED(item) ) const
 {
   wxFAIL_MSG("wxRadioBox::GetLabel not implemented.");
   return "";
-};
+}
 
 void wxRadioBox::Enable( bool WXUNUSED(enable) )
 {
   wxFAIL_MSG("wxRadioBox::Enable not implemented.");
-};
+}
 
 void wxRadioBox::Enable( int WXUNUSED(item), bool WXUNUSED(enable) )
 {
   wxFAIL_MSG("wxRadioBox::Enable not implemented.");
-};
+}
 
 void wxRadioBox::Show( int WXUNUSED(item), bool WXUNUSED(show) )
 {
   wxFAIL_MSG("wxRadioBox::Show not implemented.");
-};
+}
 
 wxString wxRadioBox::GetStringSelection(void) const
 {
@@ -249,11 +241,11 @@ wxString wxRadioBox::GetStringSelection(void) const
     {
       GtkLabel *label = GTK_LABEL( button->child );
       return label->label;
-    };
+    }
     item = item->next;
-  };
+  }
   return "";
-};
+}
 
 bool wxRadioBox::SetStringSelection( const wxString&s )
 {
@@ -261,7 +253,7 @@ bool wxRadioBox::SetStringSelection( const wxString&s )
   if (res == -1) return FALSE;
   SetSelection( res );
   return TRUE;
-};
+}
 
 int wxRadioBox::Number(void) const
 {
@@ -271,17 +263,17 @@ int wxRadioBox::Number(void) const
   {
     item = item->next;
     count++;
-  };
+  }
   return count;
-};
+}
 
 int wxRadioBox::GetNumberOfRowsOrCols(void) const
 {
   return 1;
-};
+}
 
 void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 {
   wxFAIL_MSG("wxRadioBox::SetNumberOfRowsOrCols not implemented.");
-};
+}
 

@@ -55,7 +55,7 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 
   listbox->GetEventHandler()->ProcessEvent( event );
   if (event.m_commandString) delete[] event.m_commandString ;
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -64,25 +64,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 wxListBox::wxListBox(void)
 {
   m_list = NULL;
-};
-
-wxListBox::wxListBox( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos, const wxSize &size, 
-      int n, const wxString choices[],
-      long style, const wxString &name )
-{
-  Create( parent, id, pos, size, n, choices, style, name );
-};
+}
 
 bool wxListBox::Create( wxWindow *parent, wxWindowID id, 
       const wxPoint &pos, const wxSize &size, 
       int n, const wxString choices[],
-      long style, const wxString &name )
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
   
+  SetValidator( validator );
+
   m_widget = gtk_scrolled_window_new( NULL, NULL );
   gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
@@ -118,7 +112,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     m_clientData.Append( (wxObject*)NULL );
     
     gtk_widget_show( list_item );
-  };
+  }
  
   PostCreation();
   
@@ -127,12 +121,12 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   Show( TRUE );
   
   return TRUE;
-};
+}
 
 void wxListBox::Append( const wxString &item )
 {
   Append( item, (char*)NULL );
-};
+}
 
 void wxListBox::Append( const wxString &item, char *clientData )
 {
@@ -151,14 +145,14 @@ void wxListBox::Append( const wxString &item, char *clientData )
   m_clientData.Append( (wxObject*)clientData );
   
   gtk_widget_show( list_item );
-};
+}
 
 void wxListBox::Clear(void)
 {
   gtk_list_clear_items( m_list, 0, Number() );
   
   m_clientData.Clear();
-};
+}
 
 void wxListBox::Delete( int n )
 {
@@ -171,12 +165,12 @@ void wxListBox::Delete( int n )
   }
   else
     m_clientData.DeleteNode( node );
-};
+}
 
 void wxListBox::Deselect( int n )
 {
   gtk_list_unselect_item( m_list, n );
-};
+}
 
 int wxListBox::FindString( const wxString &item ) const
 {
@@ -189,16 +183,16 @@ int wxListBox::FindString( const wxString &item ) const
     if (item == label->label) return count;
     count++;
     child = child->next;
-  };
+  }
   return -1;
-};
+}
 
 char *wxListBox::GetClientData( int n ) const
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) return ((char*)node->Data());
   return NULL;
-};
+}
 
 int wxListBox::GetSelection(void) const
 {
@@ -212,10 +206,10 @@ int wxListBox::GetSelection(void) const
       if (child->data == selection->data) return count;
       count++;
       child = child->next;
-    };
-  };
+    }
+  }
   return -1;
-};
+}
 
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
@@ -240,7 +234,7 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
   }
   
   return count;
-};
+}
 
 wxString wxListBox::GetString( int n ) const
 {
@@ -250,9 +244,9 @@ wxString wxListBox::GetString( int n ) const
     GtkBin *bin = GTK_BIN( child->data );
     GtkLabel *label = GTK_LABEL( bin->child );
     return label->label;
-  };
+  }
   return "";
-};
+}
 
 wxString wxListBox::GetStringSelection(void) const
 {
@@ -262,17 +256,17 @@ wxString wxListBox::GetStringSelection(void) const
     GtkBin *bin = GTK_BIN( selection->data );
     wxString tmp = GTK_LABEL( bin->child )->label;
     return tmp;
-  };
+  }
   return "";
-};
+}
 
 int wxListBox::Number(void)
 {
   GList *child = m_list->children;
   int count = 0;
-  while (child) { count++; child = child->next; };
+  while (child) { count++; child = child->next; }
   return count;
-};
+}
 
 bool wxListBox::Selected( int n )
 {
@@ -284,28 +278,28 @@ bool wxListBox::Selected( int n )
     {
       if (child->data == target->data) return TRUE;
       child = child->next;
-    };
-  };
+    }
+  }
   return FALSE;
-};
+}
 
 void wxListBox::Set( int WXUNUSED(n), const wxString *WXUNUSED(choices) )
 {
-};
+}
 
 void wxListBox::SetClientData( int n, char *clientData )
 {
   wxNode *node = m_clientData.Nth( n );
   if (node) node->SetData( (wxObject*)clientData );
-};
+}
 
 void wxListBox::SetFirstItem( int WXUNUSED(n) )
 {
-};
+}
 
 void wxListBox::SetFirstItem( const wxString &WXUNUSED(item) )
 {
-};
+}
 
 void wxListBox::SetSelection( int n, bool select )
 {
@@ -313,7 +307,7 @@ void wxListBox::SetSelection( int n, bool select )
     gtk_list_select_item( m_list, n );
   else
     gtk_list_unselect_item( m_list, n );
-};
+}
 
 void wxListBox::SetString( int n, const wxString &string )
 {
@@ -323,13 +317,13 @@ void wxListBox::SetString( int n, const wxString &string )
     GtkBin *bin = GTK_BIN( child->data );
     GtkLabel *label = GTK_LABEL( bin->child );
     gtk_label_set( label, string );
-  };
-};
+  }
+}
 
 void wxListBox::SetStringSelection( const wxString &string, bool select )
 {
   SetSelection( FindString(string), select );
-};
+}
 
 int wxListBox::GetIndex( GtkWidget *item ) const
 {
@@ -342,15 +336,15 @@ int wxListBox::GetIndex( GtkWidget *item ) const
       if (GTK_WIDGET(child->data) == item) return count;
       count++;
       child = child->next;
-    };
-  };
+    }
+  }
   return -1;
-};
+}
 
 GtkWidget *wxListBox::GetConnectWidget(void)
 {
   return GTK_WIDGET(m_list);
-};
+}
 
 
 

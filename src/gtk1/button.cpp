@@ -40,30 +40,25 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
   button->GetEventHandler()->ProcessEvent(event);
-};
+}
 
 //-----------------------------------------------------------------------------
 
 wxButton::wxButton(void)
 {
-};
-
-wxButton::wxButton( wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
-{
-  Create( parent, id, label, pos, size, style, name );
-};
+}
 
 bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
-      long style, const wxString &name )
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
 
   wxSize newSize = size;
 
   PreCreation( parent, id, pos, newSize, style, name );
+  
+  SetValidator( validator );
 
   m_widget = gtk_button_new_with_label( m_label );
   SetLabel(label);
@@ -80,11 +75,12 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
   Show( TRUE );
 
   return TRUE;
-};
+}
 
 void wxButton::SetDefault(void)
 {
-};
+  gtk_widget_grab_default( m_widget );
+}
 
 void wxButton::SetLabel( const wxString &label )
 {
@@ -92,5 +88,5 @@ void wxButton::SetLabel( const wxString &label )
   GtkButton *bin = GTK_BUTTON( m_widget );
   GtkLabel *g_label = GTK_LABEL( bin->child );
   gtk_label_set( g_label, GetLabel() );
-};
+}
 

@@ -40,24 +40,17 @@ static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitma
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
   button->GetEventHandler()->ProcessEvent(event);
-};
+}
 
 //-----------------------------------------------------------------------------
 
 wxBitmapButton::wxBitmapButton(void)
 {
-};
-
-wxBitmapButton::wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-      const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
-{
-  Create( parent, id, bitmap, pos, size, style, name );
-};
+}
 
 bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
       const wxPoint &pos, const wxSize &size, 
-      long style, const wxString &name )
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
   
@@ -65,6 +58,8 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
 
   PreCreation( parent, id, pos, newSize, style, name );
   
+  SetValidator( validator );
+
   m_bitmap = bitmap;
   m_label = "";
   
@@ -78,7 +73,7 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
     
     gtk_widget_show( pixmap );
     gtk_container_add( GTK_CONTAINER(m_widget), pixmap );
-  };
+  }
   
   if (newSize.x == -1) newSize.x = m_bitmap.GetHeight()+10;
   if (newSize.y == -1) newSize.y = m_bitmap.GetWidth()+10;
@@ -92,18 +87,19 @@ bool wxBitmapButton::Create(  wxWindow *parent, wxWindowID id, const wxBitmap &b
   Show( TRUE );
     
   return TRUE;
-};
+}
       
 void wxBitmapButton::SetDefault(void)
 {
-};
+  gtk_widget_grab_default( m_widget );
+}
 
 void wxBitmapButton::SetLabel( const wxString &label )
 {
   wxControl::SetLabel( label );
-};
+}
 
 wxString wxBitmapButton::GetLabel(void) const
 {
   return wxControl::GetLabel();
-};
+}

@@ -36,7 +36,7 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
   event.SetString( WXSTRINGCAST(tmp) );
   event.SetEventObject(choice);
   choice->GetEventHandler()->ProcessEvent(event);
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -44,25 +44,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
 
 wxChoice::wxChoice(void)
 {
-};
-
-wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      long style, const wxString &name )
-{
-  Create( parent, id, pos, size, n, choices, style, name );
-};
+}
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       int n, const wxString choices[],
-      long style, const wxString &name )
+      long style, const wxValidator& validator, const wxString &name )
 {
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
   
+  SetValidator( validator );
+
   m_widget = gtk_option_menu_new();
   
   wxSize newSize = size;
@@ -81,7 +75,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
       GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
     gtk_menu_append( GTK_MENU(menu), item );
     gtk_widget_show( item );
-  };
+  }
   gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
   
   PostCreation();
@@ -89,7 +83,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
   Show( TRUE );
     
   return TRUE;
-};
+}
       
 void wxChoice::Append( const wxString &item )
 {
@@ -100,14 +94,14 @@ void wxChoice::Append( const wxString &item )
     GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
   gtk_menu_append( GTK_MENU(menu), menu_item );
   gtk_widget_show( menu_item );
-};
+}
  
 void wxChoice::Clear(void)
 {
   gtk_option_menu_remove_menu( GTK_OPTION_MENU(m_widget) );
   GtkWidget *menu = gtk_menu_new();
   gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
-};
+}
 
 int wxChoice::FindString( const wxString &string ) const
 {
@@ -129,17 +123,17 @@ int wxChoice::FindString( const wxString &string ) const
     if (string == label->label) return count;
     child = child->next;
     count++;
-  };
+  }
   
   wxFAIL_MSG( "wxChoice: string not found" );
   
   return -1;
-};
+}
 
 int wxChoice::GetColumns(void) const
 {
   return 1;
-};
+}
 
 int wxChoice::GetSelection(void)
 {
@@ -152,12 +146,12 @@ int wxChoice::GetSelection(void)
     if (!bin->child) return count;
     child = child->next;
     count++;
-  };
+  }
   
   wxFAIL_MSG( "wxChoice: no selection" );
   
   return -1;
-};
+}
 
 wxString wxChoice::GetString( int n ) const
 {
@@ -176,15 +170,15 @@ wxString wxChoice::GetString( int n ) const
       
       if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       return label->label;
-    };
+    }
     child = child->next;
     count++;
-  };
+  }
   
   wxFAIL_MSG( "wxChoice: string not found" );
   
   return "";
-};
+}
 
 wxString wxChoice::GetStringSelection(void) const
 {
@@ -193,7 +187,7 @@ wxString wxChoice::GetStringSelection(void) const
   wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
   
   return label->label;
-};
+}
 
 int wxChoice::Number(void) const
 {
@@ -204,13 +198,13 @@ int wxChoice::Number(void) const
   {
     count++;
     child = child->next;
-  };
+  }
   return count;
-};
+}
 
 void wxChoice::SetColumns( int WXUNUSED(n) )
 {
-};
+}
 
 void wxChoice::SetSelection( int n )
 {
@@ -218,11 +212,11 @@ void wxChoice::SetSelection( int n )
   gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
   
   gtk_choice_clicked_callback( NULL, this );
-};
+}
 
 void wxChoice::SetStringSelection( const wxString &string )
 {
   int n = FindString( string );
   if (n != -1) SetSelection( n );
-};
+}
 

@@ -40,6 +40,8 @@ extern wxList wxTopLevelWindows;
 
 class wxLayoutConstraints;
 class wxSizer;
+class wxResourceTable;
+class wxItemResource;
 
 class wxWindow;
 class wxCanvas;
@@ -60,13 +62,24 @@ class wxWindow: public wxEvtHandler
 {
 public:
   wxWindow();
-  wxWindow( wxWindow *parent, wxWindowID id,
-    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-    long style = 0, const wxString &name = wxPanelNameStr );
-  bool Create( wxWindow *parent, wxWindowID id,
-    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-    long style = 0, const wxString &name = wxPanelNameStr );
+  inline wxWindow(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = 0,
+           const wxString& name = wxPanelNameStr)
+  {
+      Create(parent, id, pos, size, style, name);
+  }
+  bool Create(wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           long style = 0,
+           const wxString& name = wxPanelNameStr);
   virtual ~wxWindow();
+  
+  virtual bool LoadFromResource(wxWindow *parent, const wxString& resourceName, const wxResourceTable *table = NULL);
+  virtual wxControl *CreateItem(const wxItemResource *childResource, const wxResourceTable *table = NULL);
+  
   bool Close( bool force = FALSE );
   virtual bool Destroy();
   virtual bool DestroyChildren();
@@ -107,7 +120,7 @@ public:
   wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
 
   virtual wxValidator *GetValidator();
-  virtual void SetValidator( wxValidator *validator );
+  virtual void SetValidator( const wxValidator &validator );
 
   bool IsBeingDeleted();
 
@@ -123,6 +136,8 @@ public:
 
   virtual wxColour GetBackgroundColour() const;
   virtual void SetBackgroundColour( const wxColour &colour );
+  virtual wxColour GetForegroundColour() const;
+  virtual void SetForegroundColour( const wxColour &colour );
 
   virtual void SetDefaultBackgroundColour( const wxColour& col )
     { m_defaultBackgroundColour = col; };

@@ -57,40 +57,29 @@ static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
   wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, win->GetId() );
   cevent.SetEventObject( win );
   win->ProcessEvent( cevent );
-};
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
 
 wxSlider::wxSlider(void)
 {
-};
-
-wxSlider::wxSlider( wxWindow *parent, wxWindowID id,
-        int value, int minValue, int maxValue,
-        const wxPoint& pos, const wxSize& size,
-        long style,
-/*      const wxValidator& validator = wxDefaultValidator, */
-        const wxString& name )
-{
-  Create( parent, id, value, minValue, maxValue,
-          pos, size, style, name );
-};
+}
 
 wxSlider::~wxSlider(void)
 {
-};
+}
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         int value, int minValue, int maxValue,
         const wxPoint& pos, const wxSize& size,
-        long style,
-/*      const wxValidator& validator = wxDefaultValidator, */
-        const wxString& name )
+        long style, const wxValidator& validator, const wxString& name )
 {
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
   
+  SetValidator( validator );
+
   m_oldPos = 0.0;
 
   if (style & wxSL_VERTICAL == wxSL_VERTICAL)
@@ -110,12 +99,12 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 int wxSlider::GetValue(void) const
 {
   return (int)(m_adjust->value+0.5);
-};
+}
 
 void wxSlider::SetValue( int value )
 {
@@ -125,7 +114,7 @@ void wxSlider::SetValue( int value )
   m_adjust->value = fpos;
   
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
-};
+}
 
 void wxSlider::SetRange( int minValue, int maxValue )
 {
@@ -140,17 +129,17 @@ void wxSlider::SetRange( int minValue, int maxValue )
   m_adjust->upper = fmax;
 
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
-};
+}
 
 int wxSlider::GetMin(void) const
 {
   return (int)(m_adjust->lower+0.5);
-};
+}
 
 int wxSlider::GetMax(void) const
 {
   return (int)(m_adjust->upper+0.5);
-};
+}
 
 void wxSlider::SetPageSize( int pageSize )
 {
@@ -161,12 +150,12 @@ void wxSlider::SetPageSize( int pageSize )
   m_adjust->page_increment = fpage;
 
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
-};
+}
 
 int wxSlider::GetPageSize(void) const
 {
   return (int)(m_adjust->page_increment+0.5);
-};
+}
 
 void wxSlider::SetThumbLength( int len )
 {
@@ -177,71 +166,71 @@ void wxSlider::SetThumbLength( int len )
   m_adjust->page_size = flen;
 
   gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "changed" );
-};
+}
 
 int wxSlider::GetThumbLength(void) const
 {
   return (int)(m_adjust->page_size+0.5);
-};
+}
 
 void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 {
-};
+}
 
 int wxSlider::GetLineSize(void) const
 {
   return 0;
-};
+}
 
 // not supported in wxGTK (and GTK)
 
 void wxSlider::GetSize( int *x, int *y ) const
 {
   wxWindow::GetSize( x, y );
-};
+}
 
 void wxSlider::SetSize( int x, int y, int width, int height, int sizeFlags )
 {
   wxWindow::SetSize( x, y, width, height, sizeFlags );
-};
+}
 
 void wxSlider::GetPosition( int *x, int *y ) const
 {
   wxWindow::GetPosition( x, y );
-};
+}
 
 void wxSlider::SetTick( int WXUNUSED(tickPos) )
 {
-};
+}
 
 void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
 {
-};
+}
 
 int wxSlider::GetTickFreq(void) const
 {
   return 0;
-};
+}
 
 void wxSlider::ClearTicks(void)
 {
-};
+}
 
 void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
 {
-};
+}
 
 int wxSlider::GetSelEnd(void) const
 {
   return 0;
-};
+}
 
 int wxSlider::GetSelStart(void) const
 {
   return 0;
-};
+}
 
 void wxSlider::ClearSel(void)
 {
-};
+}
 

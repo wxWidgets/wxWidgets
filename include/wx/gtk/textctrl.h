@@ -52,10 +52,12 @@ public:
     wxTextCtrl();
     wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int style = 0, const wxString &name = wxTextCtrlNameStr );
+      int style = 0, const wxValidator& validator = wxDefaultValidator,
+      const wxString &name = wxTextCtrlNameStr );
     bool Create( wxWindow *parent, wxWindowID id, const wxString &value = "",
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
-      int style = 0, const wxString &name = wxTextCtrlNameStr );
+      int style = 0, const wxValidator& validator = wxDefaultValidator,
+      const wxString &name = wxTextCtrlNameStr );
     wxString GetValue() const;
     void SetValue( const wxString &value );
     void WriteText( const wxString &text );

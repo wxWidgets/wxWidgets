@@ -2326,7 +2326,7 @@ long wxListCtrl::GetTopItem(void)
   return 0;
 };
 
-long wxListCtrl::GetNextItem( long item, int geom, int state )
+long wxListCtrl::GetNextItem( long item, int geom, int state ) const
 {
   return m_mainWin->GetNextItem( item, geom, state );
 };

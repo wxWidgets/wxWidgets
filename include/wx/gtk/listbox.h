@@ -45,14 +45,23 @@ class wxListBox: public wxControl
   public:
 
     wxListBox(void);
-    wxListBox( wxWindow *parent, wxWindowID id, 
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxListBoxNameStr );
+    inline wxListBox( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxListBoxNameStr )
+    {
+      Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
     bool Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      int n = 0, const wxString choices[] = NULL,
-      long style = 0, const wxString &name = wxListBoxNameStr );
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize,
+           int n = 0, const wxString choices[] = NULL,
+           long style = 0,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxListBoxNameStr );
     void Append( const wxString &item );
     void Append( const wxString &item, char *clientData );
     void Clear(void);

@@ -43,21 +43,24 @@ class wxSlider: public wxControl
 
   public:
     wxSlider(void);
-    wxSlider( wxWindow *parent, wxWindowID id,
+    inline wxSlider( wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSL_HORIZONTAL,
-/*           const wxValidator& validator = wxDefaultValidator, */
-           const wxString& name = wxSliderNameStr);
-   ~wxSlider(void);
-   bool Create(wxWindow *parent, wxWindowID id,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxSliderNameStr )
+    {
+      Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
+    }
+    ~wxSlider(void);
+    bool Create(wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSL_HORIZONTAL,
-/*           const wxValidator& validator = wxDefaultValidator, */
-           const wxString& name = wxSliderNameStr);
+           const wxValidator& validator = wxDefaultValidator, 
+           const wxString& name = wxSliderNameStr );
     virtual int GetValue(void) const;
     virtual void SetValue( int );
     void GetSize( int *x, int *y ) const;

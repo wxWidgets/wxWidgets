@@ -57,6 +57,25 @@ void wxDisplaySize( int *width, int *height )
   if (height) *height = gdk_screen_height();
 }
 
+void wxGetMousePosition( int* x, int* y )
+{
+  wxFAIL_MSG( "GetMousePosition not yet implemented" );
+  if (x) *x = 0;
+  if (y) *y = 0;
+};
+
+bool wxColourDisplay(void)
+{
+  wxFAIL_MSG( "wxColourDisplay always returns TRUE" );
+  return TRUE;
+}
+
+int wxDisplayDepth(void)
+{
+  wxFAIL_MSG( "wxDisplayDepth always returns 8" );
+  return 8;
+}
+
 //------------------------------------------------------------------------
 // user and home routines
 //------------------------------------------------------------------------

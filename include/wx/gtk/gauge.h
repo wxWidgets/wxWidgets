@@ -44,34 +44,34 @@ class wxGauge: public wxControl
   public:
     inline wxGauge(void) { m_rangeMax = 0; m_gaugePos = 0; m_useProgressBar = TRUE; }
 
-  inline wxGauge(wxWindow *parent, wxWindowID id,
+    inline wxGauge( wxWindow *parent, wxWindowID id,
            int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
-           const wxString& name = wxGaugeNameStr)
-  {
-    Create(parent, id, range, pos, size, style, name);
-  };
-
-  bool Create(wxWindow *parent, wxWindowID id,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxGaugeNameStr )
+    {
+      Create(parent, id, range, pos, size, style, validator, name);
+    }
+    bool Create( wxWindow *parent, wxWindowID id,
            int range,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
+           const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxGaugeNameStr );
+    void SetShadowWidth( int WXUNUSED(w) ) {};
+    void SetBezelFace( int WXUNUSED(w) ) {};
+    void SetRange( int r );
+    void SetValue( int pos );
+    int GetShadowWidth(void) const { return 0; };
+    int GetBezelFace(void) const { return 0; };
+    int GetRange(void) const;
+    int GetValue(void) const;
 
-  void SetShadowWidth( int WXUNUSED(w) ) {};
-  void SetBezelFace( int WXUNUSED(w) ) {};
-  void SetRange( int r );
-  void SetValue( int pos );
-  int GetShadowWidth(void) const { return 0; };
-  int GetBezelFace(void) const { return 0; };
-  int GetRange(void) const;
-  int GetValue(void) const;
-
-  // Are we a Win95/GTK progress bar, or a normal gauge?
-  inline bool GetProgressBar(void) const { return m_useProgressBar; }
+    // Are we a Win95/GTK progress bar, or a normal gauge?
+    inline bool GetProgressBar(void) const { return m_useProgressBar; }
 
  protected:
  

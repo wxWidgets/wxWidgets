@@ -22,12 +22,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxGauge,wxControl)
 
 bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
     const wxPoint& pos, const wxSize& size,
-    long style, const wxString& name )
+    long style, const wxValidator& validator, const wxString& name )
 {
   m_needParent = TRUE;
   
   PreCreation( parent, id, pos, size, style, name );
   
+  SetValidator( validator );
+
   m_rangeMax = range;
   m_gaugePos = 0;
   m_useProgressBar = TRUE;
@@ -39,7 +41,7 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 void wxGauge::SetRange( int r )
 {
@@ -47,7 +49,7 @@ void wxGauge::SetRange( int r )
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
   gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
-};
+}
 
 void wxGauge::SetValue( int pos )
 {
@@ -55,15 +57,15 @@ void wxGauge::SetValue( int pos )
   if (m_gaugePos > m_rangeMax) m_gaugePos = m_rangeMax;
   
   gtk_progress_bar_update( GTK_PROGRESS_BAR(m_widget), ((float)m_gaugePos)/m_rangeMax );
-};
+}
 
 int wxGauge::GetRange(void) const
 {
   return m_rangeMax;
-};
+}
 
 int wxGauge::GetValue(void) const
 {
   return m_gaugePos;
-};
+}
 

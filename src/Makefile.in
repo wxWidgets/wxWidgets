@@ -20,13 +20,23 @@ include @MAKEINCLUDE@
 
 LIB_CPP_ALL_SRC=$(LIB_CPP_SRC) @GTK_JOYSTICK@ @UNIX_THREAD@
 
+LIB_C_ALL_SRC=$(LIB_C_SRC) parser.c
+
 #define library objects
 LIB_OBJ=\
  $(LIB_CPP_ALL_SRC:.cpp=.o) \
- $(LIB_C_SRC:.c=.o)
+ $(LIB_C_ALL_SRC:.c=.o)
 
 all::
-	-../mkdirs
+	@if test ! -d gtk; then mkdir gtk; fi
+	@if test ! -d qt; then mkdir qt; fi
+	@if test ! -d motif; then mkdir motif; fi
+	@if test ! -d common; then mkdir common; fi
+	@if test ! -d generic; then mkdir generic; fi
+	@if test ! -d png; then mkdir png; fi
+	@if test ! -d zlib; then mkdir zlib; fi
+	@if test ! -d gdk_imlib; then mkdir gdk_imlib; fi
+	@if test ! -d iodbc; then mkdir iodbc; fi
 
 clean::
 	$(RM) -rf gtk
@@ -38,6 +48,7 @@ clean::
 	$(RM) -rf zlib
 	$(RM) -rf gdk_imlib
 	$(RM) -rf iodbc
+	@$(RM) lexer.c parser.c
 
 #additional things needed for compile
 ADD_COMPILE= \
@@ -45,3 +56,34 @@ ADD_COMPILE= \
 
 # include the definitions now
 include ../../template.mak
+
+# things for the prolog stuff
+
+parser.c: ../common/parser.y lexer.c 
+	@if test ! -f parser.y; then \
+	  cp -f ../common/parser.y . ; \
+	fi
+	@$(YACC) parser.y
+	@sed -e "s/y.tab.c/parser.y/g"       < y.tab.c | \
+	sed -e "s/BUFSIZ/5000/g"            | \
+	sed -e "s/YYLMAX 200/YYLMAX 5000/g" | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > parser.c
+	@$(RM) y.tab.c
+	@$(RM) parser.y
+
+lexer.c: ../common/lexer.l
+	@if test ! -f lexer.l; then \
+	  cp -f ../common/lexer.l . ;\
+	fi
+	@$(LEX) lexer.l
+	@sed -e "s/lex.yy.c/lexer.l/g"       < lex.yy.c | \
+	sed -e "s/yy/PROIO_yy/g"            | \
+	sed -e "s/input/PROIO_input/g"      | \
+	sed -e "s/unput/PROIO_unput/g"      > lexer.c
+	@$(RM) lex.yy.c
+	@$(RM) lexer.l
+
+clean::
+	

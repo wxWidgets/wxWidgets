@@ -44,12 +44,19 @@ class wxBitmapButton: public wxControl
   public:
 
     wxBitmapButton(void);
-    wxBitmapButton( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxButtonNameStr  );
-    bool Create(  wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
-      const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize, 
-      long style = 0, const wxString &name = wxButtonNameStr  );
+    inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr)
+    {
+      Create(parent, id, bitmap, pos, size, style, validator, name);
+    }
+    bool Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+           const wxValidator& validator = wxDefaultValidator,
+           const wxString& name = wxButtonNameStr);
     void SetDefault(void);
     void SetLabel( const wxString &label );
     wxString GetLabel(void) const;

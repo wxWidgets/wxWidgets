@@ -36,6 +36,7 @@ LIB_CPP_SRC=\
  common/odbc.cpp \
  common/postscrp.cpp \
  common/prntbase.cpp \
+ common/resource.cpp \
  common/serbase.cpp \
  common/string.cpp \
  common/textfile.cpp \
@@ -50,9 +51,12 @@ LIB_CPP_SRC=\
  common/mstream.cpp \
  common/zstream.cpp \
  common/objstrm.cpp \
+ common/validate.cpp \
+ common/wxexpr.cpp \
 \
  gtk/app.cpp \
  gtk/bitmap.cpp \
+ gtk/bmpbuttn.cpp \
  gtk/brush.cpp \
  gtk/button.cpp \
  gtk/checkbox.cpp \
