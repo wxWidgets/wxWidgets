@@ -523,14 +523,15 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-#define  ID_LIST_MODE     5000
-#define  ID_REPORT_MODE   5001
-#define  ID_UP_DIR        5005
-#define  ID_PARENT_DIR    5006
-#define  ID_NEW_DIR       5007
-#define  ID_CHOICE        5008
-#define  ID_TEXT          5009
-#define  ID_LIST_CTRL     5010
+#define  ID_LIST_MODE     wxID_FILEDLGG
+#define  ID_REPORT_MODE   wxID_FILEDLGG + 1
+#define  ID_UP_DIR        wxID_FILEDLGG + 5
+#define  ID_PARENT_DIR    wxID_FILEDLGG + 6
+#define  ID_NEW_DIR       wxID_FILEDLGG + 7
+#define  ID_CHOICE        wxID_FILEDLGG + 8
+#define  ID_TEXT          wxID_FILEDLGG + 9
+#define  ID_LIST_CTRL     wxID_FILEDLGG + 10
+#define  ID_ACTIVATED     wxID_FILEDLGG + 11
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
 

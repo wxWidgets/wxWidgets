@@ -20,6 +20,7 @@
 #pragma hdrstop
 #endif
 
+#include "wx/setup.h"
 #include "wx/image.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
