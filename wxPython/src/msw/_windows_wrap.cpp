@@ -30367,6 +30367,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"IDM_WINDOWTILEVERT", SWIG_From_int((int)(4005))); 
     }
     {
+        PyDict_SetItemString(d,"IDM_WINDOWPREV", SWIG_From_int((int)(4006))); 
+    }
+    {
         PyDict_SetItemString(d,"FIRST_MDI_CHILD", SWIG_From_int((int)(4100))); 
     }
     {

@@ -2471,6 +2471,7 @@ static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsi
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONX(wxIMAGE_OPTION_RESOLUTIONX); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONY(wxIMAGE_OPTION_RESOLUTIONY); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONUNIT(wxIMAGE_OPTION_RESOLUTIONUNIT); 
+ static const wxString wxPyIMAGE_OPTION_QUALITY(wxIMAGE_OPTION_QUALITY); 
  static const wxString wxPyIMAGE_OPTION_BITSPERSAMPLE(wxIMAGE_OPTION_BITSPERSAMPLE); 
  static const wxString wxPyIMAGE_OPTION_SAMPLESPERPIXEL(wxIMAGE_OPTION_SAMPLESPERPIXEL); 
  static const wxString wxPyIMAGE_OPTION_COMPRESSION(wxIMAGE_OPTION_COMPRESSION); 
@@ -13552,6 +13553,26 @@ static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get(void) {
         pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->c_str(), (&wxPyIMAGE_OPTION_RESOLUTIONUNIT)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_QUALITY_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_QUALITY is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_QUALITY_get(void) {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIMAGE_OPTION_QUALITY)->c_str(), (&wxPyIMAGE_OPTION_QUALITY)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIMAGE_OPTION_QUALITY)->c_str(), (&wxPyIMAGE_OPTION_QUALITY)->Len());
 #endif
     }
     return pyobj;
@@ -48914,6 +48935,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONX",_wrap_IMAGE_OPTION_RESOLUTIONX_get, _wrap_IMAGE_OPTION_RESOLUTIONX_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONY",_wrap_IMAGE_OPTION_RESOLUTIONY_get, _wrap_IMAGE_OPTION_RESOLUTIONY_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONUNIT",_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get, _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_QUALITY",_wrap_IMAGE_OPTION_QUALITY_get, _wrap_IMAGE_OPTION_QUALITY_set);
     {
         PyDict_SetItemString(d,"IMAGE_RESOLUTION_INCHES", SWIG_From_int((int)(wxIMAGE_RESOLUTION_INCHES))); 
     }
