@@ -11,7 +11,7 @@
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section" id="id1">
-<h1><a name="id1">2.5.2.3</a></h1>
+<h1><a name="id1">2.5.2.5</a></h1>
 <p>wx.ADJUST_MINSIZE is now the default behaviour for window items in
 sizers.  This means that the item's GetMinSize and/or GetBestSize will
 be called when calculating layout and the return value from that will
@@ -86,6 +86,23 @@ in a subpackage of wx.lib.</p>
 <p>It is now possible to change the tab traversal order of controls on a
 panel or dialog.  For details see the new MoveAfterInTabOrder and
 MoveBeforeInTabOrder methods of wx.Window.</p>
+<p>Applied (and heavily modified) a patch from Eugene
+&lt;<a class="reference" href="mailto:svip123&#64;fastmail.fm">svip123&#64;fastmail.fm</a>&gt; that allows the sample modules in the demo to be
+edited and reloaded, all from within the demo.  You can switch back
+and forth between the default and your edited version, and any errors
+ocurring upon the reload are reported on the Demo tab.</p>
+<p>Added a menu item in the demo that will open a PyShell window that has
+the app and demo frame preloaded in the namespace.  This is another
+good way to explore and play with the objects in the currently running
+sample.  For example, load the Button sample and then do the following
+in the PyShell:</p>
+<pre class="literal-block">
+&gt;&gt;&gt; b = frame.demoPage.GetChildren()[0]
+&gt;&gt;&gt; for x in range(0, 500, 10):
+...     b.Move((x, 50))
+...     app.Yield(True)
+...     wx.MilliSleep(10)
+</pre>
 </div>
 <div class="section" id="id2">
 <h1><a name="id2">2.5.1.5</a></h1>
