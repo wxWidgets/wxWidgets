@@ -9,6 +9,10 @@
 #
 # Makefile for proplist example (UNIX).
 
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+program_dir = samples/proplist
+
 PROGRAM=test
 
 OBJECTS=$(PROGRAM).o
