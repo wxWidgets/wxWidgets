@@ -106,7 +106,7 @@ RefDoc(wxSplitterWindow, "
 class wxSplitterWindow: public wxWindow
 {
 public:
-    %pythonPrepend wxSplitterWindow         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']"
+    %pythonPrepend wxSplitterWindow         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']"
     %pythonPrepend wxSplitterWindow()       ""
     %pythonAppend  wxSplitterWindow         "self._setOORInfo(self)"
     %pythonAppend  wxSplitterWindow()       ""
