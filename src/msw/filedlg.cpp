@@ -157,13 +157,12 @@ int wxFileDialog::ShowModal()
     {
         msw_flags |= OFN_NOCHANGEDIR;
     }
-/* chris elliott for some reason this does not work usefully if no extension
-   is given, as it test for junk instead of junk.ext
+
     if ( m_dialogStyle & wxOVERWRITE_PROMPT )
     {
         msw_flags |= OFN_OVERWRITEPROMPT;
     }
-*/
+
     OPENFILENAME of;
     wxZeroMemory(of);
 
@@ -367,18 +366,6 @@ int wxFileDialog::ShowModal()
             m_fileName = wxFileNameFromPath(fileNameBuffer);
             m_fileNames.Add(m_fileName);
             m_dir = wxPathOnly(fileNameBuffer);
-        }
-        //=== Simulating the wxOVERWRITE_PROMPT >>============================
-        //should we also test for file save style ??
-        if ( (m_dialogStyle & wxOVERWRITE_PROMPT) &&
-             ::wxFileExists( fileNameBuffer ) )
-             {
-             wxString messageText;
-             messageText.Printf(_("File '%s' already exists.\nDo you want to replace it?"), fileNameBuffer);
-             if ( wxMessageBox(messageText, _("Save File As"), wxYES_NO | wxICON_EXCLAMATION	 ) != wxYES )
-             {
-                 success = FALSE;
-             }            
         }
     }
     else
