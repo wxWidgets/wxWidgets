@@ -65,7 +65,12 @@ static void TestMimeEnum()
     {
         wxFileType *filetype = mimeTM.GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
+        {
+            printf("nothing known about the filetype '%s'!\n", 
+                   mimetypes[n].c_str()); 
             continue;
+        }
+
         filetype->GetDescription(&desc);
         filetype->GetExtensions(exts);
 

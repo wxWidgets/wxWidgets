@@ -13,7 +13,7 @@
 #define _WX_FILEDLG_H_
 
 #ifdef __GNUG__
-#pragma interface "filedlg.h"
+    #pragma interface "filedlg.h"
 #endif
 
 #include "wx/dialog.h"
@@ -27,47 +27,45 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
 
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxFileDialog)
-
 public:
     wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
         const wxString& defaultDir = wxEmptyString, const wxString& defaultFile = wxEmptyString, const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
-    inline void SetMessage(const wxString& message) { m_message = message; }
-    inline void SetPath(const wxString& path) { m_path = path; }
-    inline void SetDirectory(const wxString& dir) { m_dir = dir; }
-    inline void SetFilename(const wxString& name) { m_fileName = name; }
-    inline void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
-    inline void SetStyle(long style) { m_dialogStyle = style; }
-    inline void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
+    void SetMessage(const wxString& message) { m_message = message; }
+    void SetPath(const wxString& path) { m_path = path; }
+    void SetDirectory(const wxString& dir) { m_dir = dir; }
+    void SetFilename(const wxString& name) { m_fileName = name; }
+    void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
+    void SetStyle(long style) { m_dialogStyle = style; }
+    void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
 
-    inline wxString GetMessage(void) const { return m_message; }
-    inline wxString GetPath(void) const { return m_path; }
-    inline wxString GetDirectory(void) const { return m_dir; }
-    inline wxString GetFilename(void) const { return m_fileName; }
-    inline wxString GetWildcard(void) const { return m_wildCard; }
-    inline long GetStyle(void) const { return m_dialogStyle; }
-    inline int GetFilterIndex(void) const { return m_filterIndex ; }
+    wxString GetMessage() const { return m_message; }
+    wxString GetPath() const { return m_path; }
+    void GetPaths(wxArrayString& paths) const;
+    wxString GetDirectory() const { return m_dir; }
+    wxString GetFilename() const { return m_fileName; }
+    void GetFilenames(wxArrayString& files) const { files = m_fileNames; }
+    wxString GetWildcard() const { return m_wildCard; }
+    long GetStyle() const { return m_dialogStyle; }
+    int GetFilterIndex() const { return m_filterIndex ; }
 
-    int ShowModal(void);
+    int ShowModal();
 
 protected:
-    wxString    m_message;
-    long        m_dialogStyle;
-    wxWindow *  m_parent;
-    wxString    m_dir;
-    wxString    m_path; // Full path
-    wxString    m_fileName;
-    wxString    m_wildCard;
-    int         m_filterIndex;
-};
+    wxString      m_message;
+    long          m_dialogStyle;
+    wxWindow *    m_parent;
+    wxString      m_dir;
+    wxString      m_path;       // Full path
+    wxString      m_fileName;
+    wxArrayString m_fileNames;
+    wxString      m_wildCard;
+    int           m_filterIndex;
 
-#define wxOPEN              0x0001
-#define wxSAVE              0x0002
-#define wxOVERWRITE_PROMPT  0x0004
-#define wxHIDE_READONLY     0x0008
-#define wxFILE_MUST_EXIST   0x0010
+private:
+    DECLARE_DYNAMIC_CLASS(wxFileDialog)
+};
 
 // File selector - backward compatibility
 WXDLLEXPORT wxString
@@ -107,3 +105,4 @@ wxSaveFileSelector(const wxChar *what,
 
 #endif
     // _WX_FILEDLG_H_
+

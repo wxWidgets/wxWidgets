@@ -155,7 +155,7 @@ public:
     wxString GetWildcard() const { return m_wildCard; }
     long GetStyle() const { return m_dialogStyle; }
     int GetFilterIndex() const { return m_filterIndex; }
-    
+
     // for multiple file selection
     void GetPaths(wxArrayString& paths) const;
     void GetFilenames(wxArrayString& files) const;
@@ -171,7 +171,7 @@ public:
     void OnChoice( wxCommandEvent &event );
     void OnTextEnter( wxCommandEvent &event );
     void OnCheck( wxCommandEvent &event );
-    
+
     void HandleAction( const wxString &fn );
 
 protected:
@@ -191,16 +191,6 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
-};
-
-enum
-{
-    wxOPEN  = 1,
-    wxSAVE = 2,
-    wxOVERWRITE_PROMPT = 4,
-    wxHIDE_READONLY = 8,
-    wxFILE_MUST_EXIST = 16,
-    wxMULTIPLE = 32
 };
 
 // File selector - backward compatibility

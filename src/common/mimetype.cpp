@@ -119,8 +119,8 @@ private:
 
     // we use either m_info or read the data from the registry if m_info == NULL
     const wxFileTypeInfo *m_info;
-    wxString        m_strFileType,
-                    m_ext;
+    wxString m_strFileType,         // may be empty
+             m_ext;
 };
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
@@ -670,9 +670,20 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
     // suppress possible error messages
     wxLogNull nolog;
     wxString strKey;
-    strKey << m_strFileType << wxT("\\shell\\") << verb << wxT("\\command");
-    wxRegKey key(wxRegKey::HKCR, strKey);
 
+    if ( wxRegKey(wxRegKey::HKCR, m_ext + _T("\\shell")).Exists() )
+        strKey = m_ext;
+    if ( wxRegKey(wxRegKey::HKCR, m_strFileType + _T("\\shell")).Exists() )
+        strKey = m_strFileType;
+
+    if ( !strKey )
+    {
+        // no info
+        return wxEmptyString;
+    }
+
+    strKey << wxT("\\shell\\") << verb << wxT("\\command");
+    wxRegKey key(wxRegKey::HKCR, strKey);
     wxString command;
     if ( key.Open() ) {
         // it's the default value of the key
@@ -701,8 +712,8 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
             }
         }
     }
+    //else: no such file type or no value, will return empty string
 
-    // no such file type or no value
     return command;
 }
 
@@ -775,7 +786,7 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 
     // suppress possible error messages
     wxLogNull nolog;
-    wxRegKey key(wxRegKey::HKCR, /*m_strFileType*/ wxT(".") + m_ext);
+    wxRegKey key(wxRegKey::HKCR, wxT(".") + m_ext);
     if ( key.Open() && key.QueryValue(wxT("Content Type"), *mimeType) ) {
         return TRUE;
     }
@@ -877,6 +888,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     // suppress possible error messages
     wxLogNull nolog;
 
+    bool knownExtension = FALSE;
+
     wxString strFileType;
     wxRegKey key(wxRegKey::HKCR, str);
     if ( key.Open() ) {
@@ -887,6 +900,12 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
             fileType->m_impl->Init(strFileType, ext);
 
             return fileType;
+        }
+        else {
+            // this extension doesn't have a filetype, but it's known to the
+            // system and may be has some other useful keys (open command or
+            // content-type), so still return a file type object for it
+            knownExtension = TRUE;
         }
     }
 
@@ -903,8 +922,18 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
         }
     }
 
-    // unknown extension
-    return NULL;
+    if ( knownExtension )
+    {
+        wxFileType *fileType = new wxFileType;
+        fileType->m_impl->Init(wxEmptyString, ext);
+
+        return fileType;
+    }
+    else
+    {
+        // unknown extension
+        return NULL;
+    }
 }
 
 // MIME type -> extension -> file type

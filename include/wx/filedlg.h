@@ -1,6 +1,16 @@
 #ifndef _WX_FILEDLG_H_BASE_
 #define _WX_FILEDLG_H_BASE_
 
+enum
+{
+    wxOPEN  = 1,
+    wxSAVE = 2,
+    wxOVERWRITE_PROMPT = 4,
+    wxHIDE_READONLY = 8,
+    wxFILE_MUST_EXIST = 16,
+    wxMULTIPLE = 32
+};
+
 #if defined(__WXMSW__)
 #include "wx/msw/filedlg.h"
 #elif defined(__WXMOTIF__)

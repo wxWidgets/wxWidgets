@@ -180,15 +180,32 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 {
     m_message = message;
     m_dialogStyle = style;
+    if ( ( m_dialogStyle & wxMULTIPLE ) && ( m_dialogStyle & wxSAVE ) )
+        m_dialogStyle &= ~wxMULTIPLE;
     m_parent = parent;
     m_path = wxT("");
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;
-    m_filterIndex = 0;
+    m_filterIndex = 1;
 }
 
-int wxFileDialog::ShowModal(void)
+void wxFileDialog::GetPaths(wxArrayString& paths) const
+{
+    paths.Empty();
+
+    wxString dir(m_dir);
+    if ( m_dir.Last() != _T('\\') )
+        dir += _T('\\');
+
+    size_t count = m_fileNames.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        paths.Add(dir + m_fileNames[n]);
+    }
+}
+
+int wxFileDialog::ShowModal()
 {
     HWND hWnd = 0;
     if (m_parent) hWnd = (HWND) m_parent->GetHWND();
@@ -204,6 +221,12 @@ int wxFileDialog::ShowModal(void)
         msw_flags |= OFN_HIDEREADONLY;
     if ( m_dialogStyle & wxFILE_MUST_EXIST )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+    if (m_dialogStyle & wxMULTIPLE )
+        msw_flags |=
+#if defined(OFN_EXPLORER)
+        OFN_EXPLORER |
+#endif // OFN_EXPLORER
+        OFN_ALLOWMULTISELECT;
 
     OPENFILENAME of;
     memset(&of, 0, sizeof(OPENFILENAME));
@@ -274,7 +297,7 @@ int wxFileDialog::ShowModal(void)
     }
 
     of.lpstrFilter  = (LPTSTR)(const wxChar *)filterBuffer;
-    of.nFilterIndex = m_filterIndex + 1; // m_filterIndex is zero-based, but nFilterIndex is 1-based
+    of.nFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 
@@ -291,42 +314,84 @@ int wxFileDialog::ShowModal(void)
 
     if ( success )
     {
-        const wxChar* extension = NULL;
+        m_fileNames.Empty();
 
-        //=== Adding the correct extension >>=================================
+        if ( ( m_dialogStyle & wxMULTIPLE ) &&
+#if defined(OFN_EXPLORER)
+             ( fileNameBuffer[of.nFileOffset-1] == wxT('\0') ) )
+#else
+             ( fileNameBuffer[of.nFileOffset-1] == wxT(' ') ) )
+#endif // OFN_EXPLORER
+        {
+#if defined(OFN_EXPLORER)
+            m_dir = fileNameBuffer;
+            i = of.nFileOffset;
+            m_fileName = &fileNameBuffer[i];
+            m_fileNames.Add(m_fileName);
+            i += m_fileName.Len() + 1;
 
-        m_filterIndex = wxMax((int)of.nFilterIndex - 1, 0);
-
-        if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.') )
-        {                                    // user has typed an filename
-            // without an extension:
-
-            int   maxFilter = (int)(of.nFilterIndex*2L-1L);
-            extension = filterBuffer;
-
-            for( int i = 0; i < maxFilter; i++ ) {          // get extension
-                extension = extension + wxStrlen( extension ) +1;
-            }
-
-            extension = wxStrrchr( extension, wxT('.') );
-            if (  extension                                 // != "blabla"
-                    && !wxStrrchr( extension, wxT('*') )       // != "blabla.*"
-                    && !wxStrrchr( extension, wxT('?') )       // != "blabla.?"
-                    && extension[1]                           // != "blabla."
-                    && extension[1] != wxT(' ') )              // != "blabla. "
+            while (fileNameBuffer[i] != wxT('\0'))
             {
-                // now concat extension to the fileName:
-                m_fileName = wxString(fileNameBuffer) + extension;
-
-                int len = wxStrlen( fileNameBuffer );
-                wxStrncpy( fileNameBuffer + len, extension, MAXPATH - len );
-                fileNameBuffer[ MAXPATH -1 ] = wxT('\0');
+                m_fileNames.Add(&fileNameBuffer[i]);
+                i += wxStrlen(&fileNameBuffer[i]) + 1;
             }
-        }
+#else
+            wxStringTokenizer toke(fileNameBuffer, " \t\r\n");
+            m_dir = toke.GetNextToken();
+            m_fileName = toke.GetNextToken();
+            m_fileNames.Add(m_fileName);
 
-        m_path = fileNameBuffer;
-        m_fileName = wxFileNameFromPath(fileNameBuffer);
-        m_dir = wxPathOnly(fileNameBuffer);
+            while (toke.HasMoreTokens())
+                m_fileNames.Add(toke.GetNextToken());
+#endif // OFN_EXPLORER
+
+            wxString dir(m_dir);
+            if ( m_dir.Last() != _T('\\') )
+                dir += _T('\\');
+
+            m_fileNames.Sort();
+            m_path = dir + m_fileName;
+        }
+        else
+        {
+            const wxChar* extension = NULL;
+
+            //=== Adding the correct extension >>=================================
+
+            m_filterIndex = (int)of.nFilterIndex;
+
+            if ( of.nFileExtension && fileNameBuffer[ of.nFileExtension-1] != wxT('.') )
+            {                                    // user has typed an filename
+                // without an extension:
+
+                int   maxFilter = (int)(of.nFilterIndex*2L-1L);
+                extension = filterBuffer;
+
+                for( int i = 0; i < maxFilter; i++ ) {          // get extension
+                    extension = extension + wxStrlen( extension ) +1;
+                }
+
+                extension = wxStrrchr( extension, wxT('.') );
+                if (  extension                                 // != "blabla"
+                        && !wxStrrchr( extension, wxT('*') )       // != "blabla.*"
+                        && !wxStrrchr( extension, wxT('?') )       // != "blabla.?"
+                        && extension[1]                           // != "blabla."
+                        && extension[1] != wxT(' ') )              // != "blabla. "
+                {
+                    // now concat extension to the fileName:
+                    m_fileName = wxString(fileNameBuffer) + extension;
+
+                    int len = wxStrlen( fileNameBuffer );
+                    wxStrncpy( fileNameBuffer + len, extension, MAXPATH - len );
+                    fileNameBuffer[ MAXPATH -1 ] = wxT('\0');
+                }
+            }
+
+            m_path = fileNameBuffer;
+            m_fileName = wxFileNameFromPath(fileNameBuffer);
+            m_fileNames.Add(m_fileName);
+            m_dir = wxPathOnly(fileNameBuffer);
+        }
 
 
         //=== Simulating the wxOVERWRITE_PROMPT >>============================
@@ -404,4 +469,5 @@ WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what,
 {
     return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
 }
+
 

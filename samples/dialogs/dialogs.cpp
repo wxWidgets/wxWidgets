@@ -75,18 +75,19 @@ bool MyApp::OnInit(void)
 
 #endif
   file_menu->AppendSeparator();
-  file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box");
-  file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry");
+  file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box\tCtrl-M");
+  file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry\tCtrl-E");
   file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
-  file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice");
+  file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-S");
   file_menu->AppendSeparator();
-  file_menu->Append(DIALOGS_TIP,  "&Tip of the day");
+  file_menu->Append(DIALOGS_TIP,  "&Tip of the day\tCtrl-T");
   file_menu->AppendSeparator();
-  file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file");
+  file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
+  file_menu->Append(DIALOGS_FILES_OPEN,  "&Open files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
-  file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory");
+  file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
   file_menu->AppendSeparator();
-  file_menu->Append(wxID_EXIT, "E&xit");
+  file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
   frame->SetMenuBar(menu_bar);
@@ -269,6 +270,33 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
+{
+    wxFileDialog dialog(this, "Testing open multiple file dialog",
+                        "", "", "*.*", wxMULTIPLE);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxArrayString paths, filenames;
+
+        dialog.GetPaths(paths);
+        dialog.GetFilenames(filenames);
+
+        wxString msg, s;
+        size_t count = paths.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            s.Printf(_T("File %d: %s (%s)\n"),
+                     n, paths[n].c_str(), filenames[n].c_str());
+
+            msg += s;
+        }
+
+        wxMessageDialog dialog2(this, msg, "Selected files");
+        dialog2.ShowModal();
+    }
+}
+
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog(this, "Testing save file dialog", "", "myletter.txt",
@@ -354,6 +382,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_NUM_ENTRY,                MyFrame::NumericEntry)
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                MyFrame::SingleChoice)
     EVT_MENU(DIALOGS_FILE_OPEN,                    MyFrame::FileOpen)
+    EVT_MENU(DIALOGS_FILES_OPEN,                   MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                    MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                MyFrame::DirChoose)
     EVT_MENU(DIALOGS_TIP,                        MyFrame::ShowTip)

@@ -36,6 +36,7 @@ public:
     void TextEntry(wxCommandEvent& event);
     void NumericEntry(wxCommandEvent& event);
     void FileOpen(wxCommandEvent& event);
+    void FilesOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
@@ -70,9 +71,10 @@ public:
 #define DIALOGS_SINGLE_CHOICE               6
 #define DIALOGS_TEXT_ENTRY                  7
 #define DIALOGS_FILE_OPEN                   8
-#define DIALOGS_FILE_SAVE                   9
-#define DIALOGS_DIR_CHOOSE                  10
-#define DIALOGS_TIP                         11
+#define DIALOGS_FILES_OPEN                  9
+#define DIALOGS_FILE_SAVE                   10
+#define DIALOGS_DIR_CHOOSE                  11
+#define DIALOGS_TIP                         12
 #define DIALOGS_NUM_ENTRY                   13
 
 #endif
