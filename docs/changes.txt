@@ -87,6 +87,7 @@ All (GUI):
 
 wxMSW:
 
+- small appearance fixes for native look under Windows XP
 - huge (40*) speed up in wxMask::Create() (=> much faster toolbar creation)
 - fixed flicker in wxTreeCtrl::SetItemXXX()
 - fixed redraw problems in dynamically resized wxStaticText

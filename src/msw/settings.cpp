@@ -97,9 +97,98 @@ void wxSystemSettingsModule::OnExit()
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    wxColour col;
-    wxRGBToColour(col, ::GetSysColor(index));
-    return col;
+    // we use 0 as the default value just to avoid compiler warnings, as there
+    // is no invalid colour value we use hasCol as the real indicator of
+    // whether colSys was initialized or not
+    COLORREF colSys = 0;
+    bool hasCol = FALSE;
+
+    // the default colours for the entries after BTNHIGHLIGHT
+    static const COLORREF s_defaultSysColors[] =
+    {
+        0x000000,   // 3DDKSHADOW
+        0xdfdfdf,   // 3DLIGHT
+        0x000000,   // INFOTEXT
+        0xe1ffff,   // INFOBK
+
+        0,          // filler - no std colour with this index
+
+        // TODO: please fill in the standard values of those, I don't have them
+        0,          // HOTLIGHT
+        0,          // GRADIENTACTIVECAPTION
+        0,          // GRADIENTINACTIVECAPTION
+        0,          // MENU
+        0,          // MENUBAR (unused)
+    };
+
+    if ( index == wxSYS_COLOUR_LISTBOX )
+    {
+        // there is no standard colour with this index, map to another one
+        index = wxSYS_COLOUR_WINDOW;
+    }
+    else if ( index > wxSYS_COLOUR_BTNHIGHLIGHT )
+    {
+        // the indices before BTNHIGHLIGHT are understood by GetSysColor() in
+        // all Windows version, for the other ones we have to check
+        bool useDefault;
+
+        // none of the is supported under Win16 anyhow
+#ifdef __WIN32__
+        int verMaj, verMin;
+        wxGetOsVersion(&verMaj, &verMin);
+        if ( verMaj < 4 )
+        {
+            // NT 3.5
+            useDefault = TRUE;
+        }
+        else if ( verMaj == 4 )
+        {
+            // Win95/NT 4.0
+            useDefault = index > wxSYS_COLOUR_INFOBK;
+        }
+        else if ( verMaj == 5 && verMin == 0 )
+        {
+            // Win98/Win2K
+            useDefault = index > wxSYS_COLOUR_GRADIENTINACTIVECAPTION;
+        }
+        else // >= 5.1
+        {
+            // 5.1 is Windows XP
+            useDefault = FALSE;
+        }
+#else
+        useDefault = TRUE;
+#endif // __WIN32__
+
+        if ( useDefault )
+        {
+            // special handling for MENUBAR colour: we use this in wxToolBar
+            // and wxStatusBar to have correct bg colour under Windows XP
+            // (which uses COLOR_MENUBAR for them) but they should still look
+            // correctly under previous Windows versions as well
+            if ( index == wxSYS_COLOUR_MENUBAR )
+            {
+                index = wxSYS_COLOUR_3DFACE;
+            }
+            else // replace with default colour
+            {
+                int n = index - wxSYS_COLOUR_BTNHIGHLIGHT;
+
+                wxASSERT_MSG( n < WXSIZEOF(s_defaultSysColors),
+                              _T("forgot tp update the default colours array") );
+
+                colSys = s_defaultSysColors[n];
+                hasCol = TRUE;
+            }
+        }
+    }
+
+    if ( !hasCol )
+    {
+        colSys = ::GetSysColor(index);
+    }
+
+    return wxRGBToColour(colSys);
 }
 
 // ----------------------------------------------------------------------------

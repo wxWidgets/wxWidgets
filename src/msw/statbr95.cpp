@@ -115,6 +115,8 @@ bool wxStatusBar95::Create(wxWindow *parent,
     SetFieldsCount(1);
     SubclassWin(m_hWnd);
 
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+
     return TRUE;
 }
 

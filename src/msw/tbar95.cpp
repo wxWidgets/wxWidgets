@@ -96,7 +96,6 @@
     #define TBSTYLE_FLAT            0x0800
     #define TBSTYLE_TRANSPARENT     0x8000
 #endif
- // use TBSTYLE_TRANSPARENT if you use TBSTYLE_FLAT
 
 // Messages
 #ifndef TB_GETSTYLE
@@ -232,8 +231,17 @@ bool wxToolBar::Create(wxWindow *parent,
 
     if (style & wxTB_FLAT)
     {
-        if (wxTheApp->GetComCtl32Version() > 400)
-            msflags |= TBSTYLE_FLAT;
+        // static as it doesn't change during the program lifetime
+        static int s_verComCtl = wxTheApp->GetComCtl32Version();
+
+        // comctl32.dll 4.00 doesn't support the flat toolbars and using this
+        // style with 6.00 (part of Windows XP) leads to the toolbar with
+        // incorrect background colour - and not using it still results in the
+        // correct (flat) toolbar, so don't use it there
+        if ( s_verComCtl > 400 && s_verComCtl < 600 )
+        {
+            msflags |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
+        }
     }
 
     // MSW-specific initialisation
@@ -244,9 +252,7 @@ bool wxToolBar::Create(wxWindow *parent,
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
     // set up the colors and fonts
-    wxRGBToColour(m_backgroundColour, GetSysColor(COLOR_BTNFACE));
-    m_foregroundColour = *wxBLACK;
-
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // position it
