@@ -133,12 +133,10 @@ protected:
     void InitFromNative();
 
 private:
-#ifdef __WXGTK20__
-    void ClearGdkFonts() { }
-#else // GTK 1.x
-    // clear m_scaled_xfonts
+    // clear m_scaled_xfonts if any
     void ClearGdkFonts();
 
+#ifndef __WXGTK20__
     // the map of font sizes to "GdkFont *"
     wxScaledFontList  m_scaled_xfonts;
 #endif // GTK 2.0/1.x
@@ -159,12 +157,8 @@ private:
     friend class wxFont;
 };
 
-// ============================================================================
-// wxFontRefData implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
-// wxFontRefData creation
+// wxFontRefData 
 // ----------------------------------------------------------------------------
 
 void wxFontRefData::Init(int pointSize,
@@ -423,9 +417,9 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
     InitFromNative();
 }
 
-#ifndef __WXGTK20__
 void wxFontRefData::ClearGdkFonts()
 {
+#ifndef __WXGTK20__
     for ( wxScaledFontList::iterator i = m_scaled_xfonts.begin();
           i != m_scaled_xfonts.end();
           ++i )
@@ -435,8 +429,8 @@ void wxFontRefData::ClearGdkFonts()
     }
 
     m_scaled_xfonts.clear();
-}
 #endif // GTK 1.x
+}
 
 wxFontRefData::~wxFontRefData()
 {
@@ -606,10 +600,6 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
     InitFromNative();
 }
 
-// ============================================================================
-// wxFont implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // wxFont creation
 // ----------------------------------------------------------------------------
@@ -633,7 +623,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
             info.GetFaceName(),
             info.GetEncoding() );
 #else
-    Create(info.GetXFontName());
+    (void) Create(info.GetXFontName());
 #endif
 }
 
@@ -645,6 +635,8 @@ bool wxFont::Create( int pointSize,
                      const wxString& face,
                      wxFontEncoding encoding)
 {
+    UnRef();
+
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, face, encoding);
 
@@ -687,9 +679,6 @@ wxFont::~wxFont()
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
-
-// all accessors are just forwarded to wxFontRefData which has everything we
-// need
 
 int wxFont::GetPointSize() const
 {

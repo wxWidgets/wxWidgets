@@ -2084,16 +2084,24 @@ typedef GtkWidget *WXWidget;
 #endif
 
 #ifdef __WXGTK20__
+/* Input method thing */
+typedef struct _GtkIMMulticontext    GtkIMMulticontext;
+#endif // __WXGTK20__
+
+#endif // __WXGTK__
+
+#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#define wxUSE_PANGO 1
+#else
+#define wxUSE_PANGO 0
+#endif
+
+#if wxUSE_PANGO
 /* Stand-ins for Pango types */
 typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
-
-/* Input method thing */
-typedef struct _GtkIMMulticontext    GtkIMMulticontext;
-#endif // GTK+ 2.0
-
-#endif // GTK
+#endif
 
 #ifdef __WXMGL__
 typedef struct window_t *WXWidget;

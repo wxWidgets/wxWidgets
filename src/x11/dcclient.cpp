@@ -19,10 +19,19 @@
 #include "wx/app.h"
 #include "wx/image.h"
 #include "wx/module.h"
+#include "wx/fontutil.h"
 
 #include "wx/x11/private.h"
 
 #include <math.h>
+
+#if wxUSE_UNICODE
+#include "glib.h"
+#include "pango/pangox.h"
+#include "pango/pangoxft.h"
+
+#include "pangox11.cpp"
+#endif
 
 //-----------------------------------------------------------------------------
 // local defines
@@ -163,6 +172,11 @@ wxWindowDC::wxWindowDC()
     m_isMemDC = FALSE;
     m_isScreenDC = FALSE;
     m_owner = (wxWindow *)NULL;
+    
+#if wxUSE_UNICODE
+    m_context = (PangoContext *)NULL;
+    m_fontdesc = (PangoFontDescription *)NULL;
+#endif
 }
 
 wxWindowDC::wxWindowDC( wxWindow *window )
@@ -193,6 +207,11 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     m_display = (WXDisplay *) wxGlobalDisplay();
     
+#if wxUSE_UNICODE
+    m_context = wxTheApp->GetPangoContext();
+    m_fontdesc = window->GetFont().GetNativeFontInfo()->description;
+#endif
+
     int screen = DefaultScreen( (Display*) m_display );
     m_cmap = (WXColormap) DefaultColormap( (Display*) m_display, screen );
 
@@ -1368,19 +1387,35 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     if (!m_window) return;
-    
-#if wxUSE_UNICODE
-
-    // later
-    
-#else
-    XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
-
-    wxCHECK_RET( xfont, wxT("invalid font") );
 
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new(m_context);
+    pango_layout_set_font_description(layout, m_fontdesc);
+    
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
+    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+    
+    // Measure layout.
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    wxCoord width = w;
+    wxCoord height = h;
+    
+    // Draw layout.
+    x11_draw_layout( (Drawable) m_window, (GC) m_textGC, x, y, layout );
+    
+    g_object_unref( G_OBJECT( layout ) );
+    
+    CalcBoundingBox (x + width, y + height);
+    CalcBoundingBox (x, y);
+#else
+    XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
+
+    wxCHECK_RET( xfont, wxT("invalid font") );
+    
     // First draw a rectangle representing the text background, if a text
     // background is specified
     if (m_textBackgroundColour.Ok () && (m_backgroundMode != wxTRANSPARENT))
@@ -1445,6 +1480,39 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 
+    if (string.IsEmpty())
+    {
+        if (width) (*width) = 0;
+        if (height) (*height) = 0;
+        return;
+    }
+    
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new( m_context );
+
+    if (font)
+        pango_layout_set_font_description( layout, font->GetNativeFontInfo()->description );
+    else
+        pango_layout_set_font_description(layout, m_fontdesc);
+        
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+ 
+    // Measure text.
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    
+    if (width) (*width) = (wxCoord) w; 
+    if (height) (*height) = (wxCoord) h;
+    if (descent)
+    {
+        // Do something about metrics here. TODO.
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+    
+    g_object_unref( G_OBJECT( layout ) );
+#else
     wxFont fontToUse = m_font;
     if (font) fontToUse = *font;
 
@@ -1468,12 +1536,30 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
         *descent = (wxCoord)(descent2 / m_scaleY );
     if (externalLeading)
         *externalLeading = 0; // ??
+#endif
 }
 
 wxCoord wxWindowDC::GetCharWidth() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new( m_context );
+    
+    if (!m_fontdesc)
+    {
+        char *crash = NULL;
+        *crash = 0;
+    }
+    
+    pango_layout_set_font_description(layout, m_fontdesc);
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return w;
+#else
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
 
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
@@ -1486,12 +1572,31 @@ wxCoord wxWindowDC::GetCharWidth() const
     XTextExtents( xfont, "H", 1, &direction, &ascent, &descent, &overall );
         
     return (wxCoord)(overall.width / m_scaleX);
+#endif
 }
 
 wxCoord wxWindowDC::GetCharHeight() const
 {
     wxCHECK_MSG( Ok(), 0, "invalid dc" );
     
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new( m_context );
+    
+    if (!m_fontdesc)
+    {
+        char *crash = NULL;
+        *crash = 0;
+    }
+    
+    pango_layout_set_font_description(layout, m_fontdesc);
+    
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return h;
+#else
     wxCHECK_MSG( m_font.Ok(), 0, "invalid font" );
 
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
@@ -1504,6 +1609,7 @@ wxCoord wxWindowDC::GetCharHeight() const
     XTextExtents( xfont, "H", 1, &direction, &ascent, &descent, &overall );
         
     return (wxCoord)((ascent+descent) / m_scaleY);
+#endif
 }
 
 void wxWindowDC::Clear()

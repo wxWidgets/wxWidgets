@@ -2213,6 +2213,15 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                         wxUSE_PRINTING_ARCHITECTURE="no"
                     ]
                 )
+                PKG_CHECK_MODULES(PANGOXFT, pangoxft,
+                    [
+                        CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
+                        LIBS="$LIBS $PANGOXFT_LIBS"
+                    ],
+                    [
+                        AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
+                    ]
+                )
         fi
 
         wxUSE_UNIVERSAL="yes"

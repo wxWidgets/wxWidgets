@@ -40,6 +40,7 @@
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/fontutil.h"
 #include "wx/univ/renderer.h"
 
 #if  wxUSE_DRAG_AND_DROP
@@ -987,6 +988,17 @@ int wxWindowX11::GetCharHeight() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
+#if wxUSE_UNICODE
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return h;
+#else
     WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
@@ -996,12 +1008,24 @@ int wxWindowX11::GetCharHeight() const
 
     //  return (overall.ascent + overall.descent);
     return (ascent + descent);
+#endif
 }
 
 int wxWindowX11::GetCharWidth() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
+#if wxUSE_UNICODE
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return w;
+#else
     WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
@@ -1010,6 +1034,7 @@ int wxWindowX11::GetCharWidth() const
         &descent, &overall);
 
     return overall.width;
+#endif
 }
 
 void wxWindowX11::GetTextExtent(const wxString& string,
@@ -1022,17 +1047,44 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
+    if (string.IsEmpty())
+    {
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
+        return;
+    }
+
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    
+    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
+    pango_layout_set_font_description(layout, desc);
+    
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+        
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+    
+    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE);
+    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE);
+    if (descent)
+    {
+        // Do something about metrics here
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+
+    g_object_unref( G_OBJECT( layout ) );
+#else
     WXFontStructPtr pFontStruct = fontToUse.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
     int slen = string.Len();
-
-#if 0
-    if (use16)
-        XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *) (char*) (const char*) string, slen, &direction,
-        &ascent, &descent2, &overall);
-#endif
 
     XTextExtents((XFontStruct*) pFontStruct, (char*) string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);
@@ -1045,7 +1097,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
         *descent = descent2;
     if (externalLeading)
         *externalLeading = 0;
-
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1477,7 +1529,9 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             // id may be WXK_xxx code - these are outside ASCII range, so we
             // can't just use toupper() on id
             if (id >= 'a' && id <= 'z')
-                id = toupper(id);
+            {
+                id = id + 'A' - 'a';
+            }
 
             wxevent.m_shiftDown = XKeyEventShiftIsDown(xevent);
             wxevent.m_controlDown = XKeyEventCtrlIsDown(xevent);

@@ -238,7 +238,6 @@ int wxEntryStart( int& argc, char *argv[] )
 
     }
 
-
     // X11 display stuff    
     Display* xdisplay = XOpenDisplay( displayName );
     if (!xdisplay)
@@ -254,31 +253,13 @@ int wxEntryStart( int& argc, char *argv[] )
     
     XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
 
-
-    // Command line argument stuff
-    wxTheApp->argc = argc;
-#if wxUSE_UNICODE
-    wxTheApp->argv = new wxChar*[argc+1];
-    int mb_argc = 0;
-    while (mb_argc < argc)
-    {
-        wxString tmp = wxString::FromAscii( argv[mb_argc] );
-        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
-        mb_argc++;
-    }
-    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
-#else
-    wxTheApp->argv = argv;
-#endif
-
-    if (wxTheApp->argc > 0)
-    {
-        wxFileName fname( wxTheApp->argv[0] );
-        wxTheApp->SetAppName( fname.GetName() );
-    }
-
     // Misc.
     wxSetDetectableAutoRepeat( TRUE );
+
+#if wxUSE_UNICODE
+    // Glib's type system required by Pango
+    g_type_init();
+#endif    
 
     if (!wxApp::Initialize())
         return -1;
@@ -327,6 +308,28 @@ int wxEntry( int argc, char *argv[] )
     {
         printf( "wxWindows error: wxTheApp == NULL\n" );
         return 0;
+    }
+
+    // Command line argument stuff
+    wxTheApp->argc = argc;
+#if wxUSE_UNICODE
+    wxTheApp->argv = new wxChar*[argc+1];
+    int mb_argc = 0;
+    while (mb_argc < argc)
+    {
+        wxString tmp = wxString::FromAscii( argv[mb_argc] );
+        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
+        mb_argc++;
+    }
+    wxTheApp->argv[mb_argc] = (wxChar *)NULL;
+#else
+    wxTheApp->argv = argv;
+#endif
+
+    if (wxTheApp->argc > 0)
+    {
+        wxFileName fname( wxTheApp->argv[0] );
+        wxTheApp->SetAppName( fname.GetName() );
     }
 
     wxTheApp->m_showIconic = g_showIconic;
@@ -1098,6 +1101,40 @@ bool wxApp::OnInitGui()
 
     return TRUE;
 }
+
+#if wxUSE_UNICODE
+
+#include <pango/pango.h>
+#include <pango/pangox.h>
+#include <pango/pangoxft.h>
+
+PangoContext* wxApp::GetPangoContext()
+{
+    static int use_xft = -1;
+    if (use_xft == -1)
+    {
+        wxString val = wxGetenv( L"GDK_USE_XFT" );
+        use_xft = (val == L"1");
+    }
+  
+    Display *xdisplay = (Display*) wxApp::GetDisplay();
+    int xscreen = DefaultScreen(xdisplay);
+    
+    PangoContext *ret = NULL;
+    
+#if 0
+    if (use_xft)
+        ret = pango_xft_get_context( xdisplay, xscreen );
+    else
+#endif
+        ret = pango_x_get_context( xdisplay );
+        
+    if (!PANGO_IS_CONTEXT(ret))
+        wxLogError( wxT("No pango context.") );
+        
+    return ret;
+}
+#endif
 
 WXColormap wxApp::GetMainColormap(WXDisplay* display)
 {

@@ -37,9 +37,15 @@
 #include "wx/hash.h"
 #include "wx/module.h"
 
-#ifdef __WXGTK20__
+#if wxUSE_PANGO
 
+#include "pango/pango.h"
+
+#ifdef __WXGTK20__
 #include "wx/gtk/private.h"
+#else
+#include "wx/x11/private.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo
