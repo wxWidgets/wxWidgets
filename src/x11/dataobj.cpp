@@ -102,7 +102,7 @@ wxString wxDataFormat::GetId() const
     return wxEmptyString;
 #else
     char *t = XGetAtomName ((Display*) wxGetDisplay(), m_format);
-    wxString ret( t );  // this will convert from ascii to Unicode
+    wxString ret = wxString::FromAscii( t );
     if (t) 
         XFree( t );
     return ret;
@@ -132,7 +132,7 @@ void wxDataFormat::SetId( const wxChar *id )
     PrepareFormats();
     m_type = wxDF_PRIVATE;
     wxString tmp( id );
-    m_format = XInternAtom( (Display*) wxGetDisplay(), wxMBSTRINGCAST tmp.mbc_str(), FALSE );  // what is the string cast for?
+    m_format = XInternAtom( (Display*) wxGetDisplay(), tmp.ToAscii(), FALSE ); 
 #endif
 }
 

@@ -1368,7 +1368,12 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
     if (!m_window) return;
+    
+#if wxUSE_UNICODE
 
+    // later
+    
+#else
     XFontStruct *xfont = (XFontStruct*) m_font.GetFontStruct( m_scaleY, m_display );
 
     wxCHECK_RET( xfont, wxT("invalid font") );
@@ -1425,6 +1430,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     
     CalcBoundingBox (x + width, y + height);
     CalcBoundingBox (x, y);
+#endif
 #endif
 }
 
