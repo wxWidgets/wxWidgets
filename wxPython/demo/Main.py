@@ -35,7 +35,7 @@ _treeList = [
                                 'wxRightTextCtrl',
                                 'URLDragAndDrop',
                                 'wxMimeTypesManager',
-                                ##'wxPopupWindow',
+                                'wxPopupWindow',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',

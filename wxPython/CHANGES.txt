@@ -81,6 +81,11 @@ Added wxStopWatch.
 
 Added wxMimeTypesManager and wxFileType.
 
+Passing None for the handler parameter to one of the EVT_** functions
+will now Disconnect the event.
+
+Added wxPopupWindow and wxPopupTransientWindow.
+
 
 
 
