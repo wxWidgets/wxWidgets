@@ -494,21 +494,21 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
         wxString strTmp;
 
         char buf[1024];
-        for ( ;; )
+        do
         {
             inStream.Read(buf, WXSIZEOF(buf));
 
-            if ( !inStream.IsOk() )
+            const wxStreamError err = inStream.GetLastError();
+
+            if ( err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF )
             {
                 wxLogError(_("Error reading config options."));
                 break;
             }
 
             strTmp.append(wxConvertMB2WX(buf), inStream.LastRead());
-
-            if ( inStream.Eof() )
-                break;
         }
+        while ( !inStream.Eof() );
 
         strTrans = wxTextBuffer::Translate(strTmp);
     }
