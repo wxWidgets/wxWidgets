@@ -522,6 +522,8 @@
 %rename(Image)                              wxImage;
 %rename(InitAllImageHandlers)               wxInitAllImageHandlers;
 %rename(NullImage)                          wxNullImage;
+%rename(IMAGE_RESOLUTION_INCHES)            wxIMAGE_RESOLUTION_INCHES;
+%rename(IMAGE_RESOLUTION_CM)                wxIMAGE_RESOLUTION_CM;
 %rename(BMP_24BPP)                          wxBMP_24BPP;
 %rename(BMP_8BPP)                           wxBMP_8BPP;
 %rename(BMP_8BPP_GREY)                      wxBMP_8BPP_GREY;
