@@ -7,7 +7,7 @@
 #pragma interface
 #endif
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 
 #include "wxllist.h"
 #include "wxlwindow.h"

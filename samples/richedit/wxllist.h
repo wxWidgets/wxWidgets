@@ -16,12 +16,12 @@
 
 #include   "kbList.h"
 
-#include   "wx/wx.h"
-#include   "wx/print.h"
-#include   "wx/printdlg.h"
-#include   "wx/generic/printps.h"
-#include   "wx/generic/prntdlgg.h"
-#include   "wx/dataobj.h"
+#include   <wx/wx.h>
+#include   <wx/print.h>
+#include   <wx/printdlg.h>
+#include   <wx/generic/printps.h>
+#include   <wx/generic/prntdlgg.h>
+#include   <wx/dataobj.h>
 
 // skip the following defines if embedded in M application
 #ifndef   M_BASEDIR
