@@ -982,6 +982,7 @@ bool wxRemoveFile(const wxString& file)
 
 bool wxMkdir(const wxString& dir, int perm)
 {
+/*
 #if defined( __WXMAC__ )
     strcpy( gwxMacFileName , dir ) ;
     wxUnix2MacFilename( gwxMacFileName ) ;
@@ -998,6 +999,22 @@ bool wxMkdir(const wxString& dir, int perm)
     }
 
     return TRUE;
+*/
+
+#if defined(__WXSTUBS__)
+  return FALSE;
+#elif defined(__VMS__)
+        return FALSE;
+#elif defined( __WXMAC__ )
+  strcpy( gwxMacFileName , dir ) ;
+  wxUnix2MacFilename( gwxMacFileName ) ;
+  return (mkdir(gwxMacFileName , 0 ) == 0);
+#elif (defined(__GNUWIN32__) && !defined(__MINGW32__)) || !defined(__WXMSW__)
+  return (mkdir (WXSTRINGCAST dir, S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH) == 0);
+#else
+  return (mkdir(WXSTRINGCAST dir) == 0);
+#endif
+
 }
 
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
