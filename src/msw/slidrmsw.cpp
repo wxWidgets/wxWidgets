@@ -97,9 +97,6 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                          wxGetInstance(), NULL);
 
-  // Now create slider
-  m_windowId = (int)NewControlId();
-
   msStyle = 0;
   if (m_windowStyle & wxSL_VERTICAL)
     msStyle = SBS_VERT | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;

@@ -118,6 +118,12 @@ public:
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
+    // In WIN16, need to override normal erasing because
+    // Ctl3D doesn't use the wxWindows background colour.
+#ifdef __WIN16__
+    void OnEraseBackground(wxEraseEvent& event);
+#endif
+
 #if wxUSE_RICHEDIT
     bool IsRich() const { return m_isRich; }
     void SetRichEdit(bool isRich) { m_isRich = isRich; }

@@ -594,7 +594,6 @@
 #define wxUSE_CTL3D                      0
 #else
 // Define 1 to use Microsoft CTL3D library.
-// See note above about using FAFA and CTL3D.
 #define wxUSE_CTL3D                      1
 #endif
 

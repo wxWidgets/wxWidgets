@@ -64,7 +64,7 @@ bool wxChoice::Create(wxWindow *parent,
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
-    // the experience shows that wxChoice vs. wxComboBox distinction confuses
+    // Experience shows that wxChoice vs. wxComboBox distinction confuses
     // quite a few people - try to help them
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
                   !(style & wxCB_READONLY) &&

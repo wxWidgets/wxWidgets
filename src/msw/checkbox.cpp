@@ -184,7 +184,7 @@ bool wxCheckBox::GetValue() const
 #ifdef __WIN32__
   return (SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) == BST_CHECKED);
 #else
-  return ((0x003 & SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)) == 0x003);
+  return ((0x001 & SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)) == 0x001);
 #endif
 }
 

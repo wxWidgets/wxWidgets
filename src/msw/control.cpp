@@ -79,9 +79,11 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxString& label,
                                  WXDWORD exstyle)
 {
-    // VZ: if someone could put a comment here explaining what exactly this is
-    //     needed for, it would be nice...
-    bool want3D;
+    // want3D tells us whether or not the style specified a 3D border.
+    // If so, under WIN16 we can use Ctl3D to give it an appropriate style.
+    // Sometimes want3D is used to indicate that the non-extended style should have
+    // WS_BORDER.
+    bool want3D = TRUE;
 
     // if no extended style given, determine it ourselves
     if ( exstyle == (WXDWORD)-1 )

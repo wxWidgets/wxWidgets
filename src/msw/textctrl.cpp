@@ -121,6 +121,9 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_PASTE, wxTextCtrl::OnUpdatePaste)
     EVT_UPDATE_UI(wxID_UNDO, wxTextCtrl::OnUpdateUndo)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
+#ifdef __WIN16__
+    EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
+#endif
 END_EVENT_TABLE()
 
 
@@ -985,6 +988,39 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
     return (WXHBRUSH)brush->GetResourceHandle();
 }
+
+// In WIN16, need to override normal erasing because
+// Ctl3D doesn't use the wxWindows background colour.
+#ifdef __WIN16__
+void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
+{
+    wxColour col(m_backgroundColour);
+
+#if wxUSE_CTL3D
+    if (m_useCtl3D)
+        col = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
+#endif
+
+    RECT rect;
+    ::GetClientRect(GetHwnd(), &rect);
+
+    COLORREF ref = PALETTERGB(col.Red(),
+                              col.Green(),
+                              col.Blue());
+    HBRUSH hBrush = ::CreateSolidBrush(ref);
+    if ( !hBrush )
+        wxLogLastError(wxT("CreateSolidBrush"));
+
+    HDC hdc = (HDC)event.GetDC()->GetHDC();
+
+    int mode = ::SetMapMode(hdc, MM_TEXT);
+
+    ::FillRect(hdc, &rect, hBrush);
+    ::DeleteObject(hBrush);
+    ::SetMapMode(hdc, mode);
+
+}
+#endif
 
 void wxTextCtrl::AdjustSpaceLimit()
 {
