@@ -187,6 +187,9 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 #endif
 
     m_Container->InsertCell(new wxHtmlColourCell(m_ActualColor));
+    m_Container->InsertCell(
+            new wxHtmlColourCell(GetWindow()->GetBackgroundColour(),
+                                 wxHTML_CLR_BACKGROUND));
     m_Container->InsertCell(new wxHtmlFontCell(CreateCurrentFont()));
 }
 
