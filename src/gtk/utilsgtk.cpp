@@ -36,15 +36,19 @@
 #include <gtk/gtkfeatures.h>
 #include <gdk/gdkx.h>
 
-#ifdef __HPUX__
-    // under HP-UX XKBlib.h defines structures with field named "explicit" -
-    // which is, of course, an error for a C++ compiler
+#ifdef HAVE_X11_XKBLIB_H
+  #ifdef __HPUX__
+    /* under HP-UX XKBlib.h defines structures with field named "explicit" -
+     * which is, of course, an error for a C++ compiler */
     #define explicit __wx_explicit
-#endif
-    #include "X11/XKBlib.h"
-#ifdef __HPUX__
+  #endif
+  
+  #include "X11/XKBlib.h"
+  
+  #ifdef __HPUX__
     #undef explicit
-#endif // __HPUX__
+  #endif // __HPUX__
+#endif // HAVE_X11_XKBLIB_H
 
 // ----------------------------------------------------------------------------
 // misc.
@@ -55,14 +59,21 @@ void wxBell()
     gdk_beep();
 }
 
-// Synthesize KeyUp events holding down a key and producing
-// KeyDown events with autorepeat.
+/* Don't synthesize KeyUp events holding down a key and producing
+   KeyDown events with autorepeat. */
+#ifdef HAVE_X11_XKBLIB_H
 bool wxSetDetectableAutoRepeat( bool flag )
 {
     Bool result;
     XkbSetDetectableAutoRepeat( GDK_DISPLAY(), flag, &result );
-    return result;       // true if keyboard hardware supports this mode
+    return result;       /* TRUE if keyboard hardware supports this mode */
 }
+#else
+bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
+{
+    return FALSE;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // display characterstics

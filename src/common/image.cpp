@@ -585,22 +585,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 #endif
 
 #if wxUSE_STREAMS
-bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
-{
-    unsigned char      *data, *ptr;
-    int                 done, i, bpp, planes, comp, ncolors, line, column,
-        linesize, linepos, rshift = 0, gshift = 0, bshift = 0;
-    unsigned char       aByte;
-    short int           word;
-    long int            dbuf[4], dword, rmask = 0, gmask = 0, bmask = 0, offset,
-        size;
-    off_t               start_offset = stream.TellI();
-    signed char         bbuf[4];
-    struct _cmap
-    {
-        unsigned char       r, g, b;
-    }
-    *cmap = NULL;
+
 #ifndef BI_RGB
 #define BI_RGB       0
 #define BI_RLE8      1
@@ -611,23 +596,37 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 #define BI_BITFIELDS 3
 #endif
 
+#define poffset (line * width * 3 + column * 3)
+
+bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
+{
+    int             rshift = 0, gshift = 0, bshift = 0;
+    wxUint8         aByte;
+    wxUint16        aWord;
+    wxInt32         dbuf[4], aDword, 
+                    rmask = 0, gmask = 0, bmask = 0;
+    wxInt8          bbuf[4];
+    struct _cmap {
+        unsigned char r, g, b;
+    } *cmap = NULL;
+    
+    off_t start_offset = stream.TellI();
+
     image->Destroy();
 
-    done = 0;
     /*
-    * Reading the bmp header
-    */
+     * Read the BMP header
+     */
 
-    stream.Read(&bbuf, 2);
+    stream.Read( &bbuf, 2 );
+    stream.Read( dbuf, 4 * 4 );
 
-    stream.Read(dbuf, 4 * 4);
-
-    size = dbuf[0];
-    offset = dbuf[2];
+    wxInt32 size = wxINT32_SWAP_FROM_LE( dbuf[0] );
+    wxInt32 offset = wxINT32_SWAP_FROM_LE( dbuf[2] );
 
     stream.Read(dbuf, 4 * 2);
-    int width = (int)dbuf[0];
-    int height = (int)dbuf[1];
+    int width = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
+    int height = (int)wxINT32_SWAP_FROM_LE( dbuf[1] );
     if (width > 32767)
     {
         wxLogError( _T("Image width > 32767 pixels for file.") );
@@ -638,28 +637,36 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         wxLogError( _T("Image height > 32767 pixels for file.") );
         return FALSE;
     }
-    stream.Read(&word, 2);
-    planes = (int)word;
-    stream.Read(&word, 2);
-    bpp = (int)word;
+    
+    stream.Read( &aWord, 2 );
+/*
+    TODO
+    int planes = (int)wxUINT16_SWAP_FROM_LE( aWord );
+*/
+    stream.Read( &aWord, 2 );
+    int bpp = (int)wxUINT16_SWAP_FROM_LE( aWord );
     if (bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32)
     {
         wxLogError( _T("unknown bitdepth in file.") );
         return FALSE;
     }
-    stream.Read(dbuf, 4 * 4);
-    comp = (int)dbuf[0];
+    
+    stream.Read( dbuf, 4 * 4 );
+    int comp = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
     if (comp != BI_RGB && comp != BI_RLE4 && comp != BI_RLE8 && comp != BI_BITFIELDS)
     {
         wxLogError( _T("unknown encoding in Windows BMP file.") );
         return FALSE;
     }
-    stream.Read(dbuf, 4 * 2);
-    ncolors = (int)dbuf[0];
+    
+    stream.Read( dbuf, 4 * 2 );
+    int ncolors = (int)wxINT32_SWAP_FROM_LE( dbuf[0] );
     if (ncolors == 0)
         ncolors = 1 << bpp;
     /* some more sanity checks */
-    if (((comp == BI_RLE4) && (bpp != 4)) || ((comp == BI_RLE8) && (bpp != 8)) || ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
+    if (((comp == BI_RLE4) && (bpp != 4)) || 
+        ((comp == BI_RLE8) && (bpp != 8)) || 
+	((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
     {
         wxLogError( _T("encoding of BMP doesn't match bitdepth.") );
         return FALSE;
@@ -667,7 +674,6 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     if (bpp < 16)
     {
         cmap = (struct _cmap *)malloc(sizeof(struct _cmap) * ncolors);
-
         if (!cmap)
         {
             wxLogError( _T("Cannot allocate RAM for color map in BMP file.") );
@@ -678,7 +684,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         cmap = NULL;
 
     image->Create( width, height );
-    ptr = image->GetData();
+    unsigned char *ptr = image->GetData();
     if (!ptr)
     {
         wxLogError( _T("Cannot allocate RAM for RGB data in file.") );
@@ -688,28 +694,27 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
 
     /*
-    * Reading the palette, if it exists.
-    */
+     * Reading the palette, if it exists.
+     */
     if (bpp < 16 && ncolors != 0)
     {
-        for (i = 0; i < ncolors; i++)
+        for (int j = 0; j < ncolors; j++)
         {
-            stream.Read(bbuf, 4);
-            cmap[i].b = bbuf[0];
-            cmap[i].g = bbuf[1];
-            cmap[i].r = bbuf[2];
+            stream.Read( bbuf, 4 );
+            cmap[j].b = bbuf[0];
+            cmap[j].g = bbuf[1];
+            cmap[j].r = bbuf[2];
         }
     }
     else if (bpp == 16 || bpp == 32)
     {
         if (comp == BI_BITFIELDS)
         {
-            int                 bit = 0;
-
-            stream.Read(dbuf, 4 * 3);
-            bmask = dbuf[0];
-            gmask = dbuf[1];
-            rmask = dbuf[2];
+            int bit = 0;
+            stream.Read( dbuf, 4 * 3 );
+            bmask = wxINT32_SWAP_FROM_LE( dbuf[0] );
+            gmask = wxINT32_SWAP_FROM_LE( dbuf[1] );
+            rmask = wxINT32_SWAP_FROM_LE( dbuf[2] );
             /* find shift amount.. ugly, but i can't think of a better way */
             for (bit = 0; bit < bpp; bit++)
             {
@@ -742,15 +747,15 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
     }
 
     /*
-    * Reading the image data
-    */
-    stream.SeekI(start_offset + offset);
-    data = ptr;
+     * Reading the image data
+     */
+    stream.SeekI( start_offset + offset );
+    unsigned char *data = ptr;
 
     /* set the whole image to the background color */
     if (bpp < 16 && (comp == BI_RLE4 || comp == BI_RLE8))
     {
-        for (i = 0; i < width * height; i++)
+        for (int i = 0; i < width * height; i++)
         {
             *ptr++ = cmap[0].r;
             *ptr++ = cmap[0].g;
@@ -758,30 +763,25 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
         }
         ptr = data;
     }
-    line = 0;
-    column = 0;
-#define poffset (line * width * 3 + column * 3)
+    
+    int line = 0;
+    int column = 0;
+    int linesize = ((width * bpp + 31) / 32) * 4;
 
-    /*
-    * BMPs are stored upside down... hmmmmmmmmmm....
-    */
-
-    linesize = ((width * bpp + 31) / 32) * 4;
-    for (line = (height - 1); line >= 0; line--)
+    /* BMPs are stored upside down */
+    for (line = (height - 1); line >= 0; line--) 
     {
-        linepos = 0;
+        int linepos = 0;
         for (column = 0; column < width;)
         {
             if (bpp < 16)
             {
-                int                 index;
-
+                int index = 0;
                 linepos++;
                 aByte = stream.GetC();
                 if (bpp == 1)
                 {
-                    int                 bit = 0;
-
+                    int bit = 0;
                     for (bit = 0; bit < 8; bit++)
                     {
                         index = ((aByte & (0x80 >> bit)) ? 1 : 0);
@@ -795,15 +795,14 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                 {
                     if (comp == BI_RLE4)
                     {
-                        wxLogError( _T("can't deal with 4bit encoded yet.") );
+                        wxLogError( _T("Can't deal with 4bit encoded yet.") );
                         image->Destroy();
                         free(cmap);
                         return FALSE;
                     }
                     else
                     {
-                        int                 nibble = 0;
-
+                        int nibble = 0;
                         for (nibble = 0; nibble < 2; nibble++)
                         {
                             index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
@@ -820,15 +819,14 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                 {
                     if (comp == BI_RLE8)
                     {
-                        unsigned char       first;
-
+                        unsigned char first;
                         first = aByte;
                         aByte = stream.GetC();
                         if (first == 0)
                         {
                             if (aByte == 0)
                             {
-                                /*                                    column = width; */
+                                /* column = width; */
                             }
                             else if (aByte == 1)
                             {
@@ -845,13 +843,12 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                             }
                             else
                             {
-                                int                 absolute = aByte;
-
-                                for (i = 0; i < absolute; i++)
+                                int absolute = aByte;
+                                for (int k = 0; k < absolute; k++)
                                 {
                                     linepos++;
                                     aByte = stream.GetC();
-                                    ptr[poffset] = cmap[aByte].r;
+                                    ptr[poffset    ] = cmap[aByte].r;
                                     ptr[poffset + 1] = cmap[aByte].g;
                                     ptr[poffset + 2] = cmap[aByte].b;
                                     column++;
@@ -862,9 +859,9 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                         }
                         else
                         {
-                            for (i = 0; i < first; i++)
+                            for (int l = 0; l < first; l++)
                             {
-                                ptr[poffset] = cmap[aByte].r;
+                                ptr[poffset    ] = cmap[aByte].r;
                                 ptr[poffset + 1] = cmap[aByte].g;
                                 ptr[poffset + 2] = cmap[aByte].b;
                                 column++;
@@ -874,7 +871,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                     }
                     else
                     {
-                        ptr[poffset] = cmap[aByte].r;
+                        ptr[poffset    ] = cmap[aByte].r;
                         ptr[poffset + 1] = cmap[aByte].g;
                         ptr[poffset + 2] = cmap[aByte].b;
                         column++;
@@ -884,51 +881,52 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                }
                else if (bpp == 24)
                {
-                   stream.Read(&bbuf, 3);
+                   stream.Read( &bbuf, 3 );
                    linepos += 3;
-                   ptr[poffset] = (unsigned char)bbuf[2];
+                   ptr[poffset    ] = (unsigned char)bbuf[2];
                    ptr[poffset + 1] = (unsigned char)bbuf[1];
                    ptr[poffset + 2] = (unsigned char)bbuf[0];
                    column++;
                }
                else if (bpp == 16)
                {
-                   unsigned char       temp;
-
-                   stream.Read(&word, 2);
+                   unsigned char temp;
+                   stream.Read( &aWord, 2 );
+		   aWord = wxUINT16_SWAP_FROM_LE( aWord );
                    linepos += 2;
-                   temp = (word & rmask) >> rshift;
+                   temp = (aWord & rmask) >> rshift;
                    ptr[poffset] = temp;
-                   temp = (word & gmask) >> gshift;
+                   temp = (aWord & gmask) >> gshift;
                    ptr[poffset + 1] = temp;
-                   temp = (word & bmask) >> gshift;
+                   temp = (aWord & bmask) >> gshift;
                    ptr[poffset + 2] = temp;
                    column++;
                }
                else
                {
-                   unsigned char       temp;
-
-                   stream.Read(&dword, 4);
+                   unsigned char temp;
+                   stream.Read( &aDword, 4 );
+		   aDword = wxINT32_SWAP_FROM_LE( aDword );
                    linepos += 4;
-                   temp = (dword & rmask) >> rshift;
+                   temp = (aDword & rmask) >> rshift;
                    ptr[poffset] = temp;
-                   temp = (dword & gmask) >> gshift;
+                   temp = (aDword & gmask) >> gshift;
                    ptr[poffset + 1] = temp;
-                   temp = (dword & bmask) >> bshift;
+                   temp = (aDword & bmask) >> bshift;
                    ptr[poffset + 2] = temp;
                    column++;
                }
           }
           while ((linepos < linesize) && (comp != 1) && (comp != 2))
           {
-              stream.Read(&aByte, 1);
+              stream.Read( &aByte, 1 );
               linepos += 1;
               if (stream.LastError() != wxStream_NOERROR)
                   break;
           }
      }
-     if (cmap) free(cmap);
+     if (cmap) 
+       free(cmap);
 
      image->SetMask( FALSE );
 

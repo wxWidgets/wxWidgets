@@ -438,7 +438,7 @@ private:
                                     (nodetype *)prev, (nodetype *)next,     \
                                     (T *)data, key);                        \
             }                                                               \
-    }
+    };
 
 #define WX_DECLARE_LIST_2(elementtype, listname, nodename)                  \
     WX_DECLARE_LIST_3(elementtype, elementtype, listname, nodename)

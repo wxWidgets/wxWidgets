@@ -1015,6 +1015,8 @@ dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
+dnl defines HAVE_XKBLIB_H
+AC_CHECK_HEADERS(X11/XKBlib.h)
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for typedefs
@@ -1961,6 +1963,7 @@ AC_OUTPUT([
             samples/splitter/Makefile
             samples/tab/Makefile
             samples/taskbar/Makefile
+            samples/text/Makefile
             samples/thread/Makefile
             samples/toolbar/Makefile
             samples/treectrl/Makefile
