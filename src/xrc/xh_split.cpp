@@ -35,6 +35,7 @@ wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler(
     XRC_ADD_STYLE(wxSP_NOBORDER);
     XRC_ADD_STYLE(wxSP_PERMIT_UNSPLIT);
     XRC_ADD_STYLE(wxSP_LIVE_UPDATE);
+    XRC_ADD_STYLE(wxSP_NO_XP_THEME);
     AddWindowStyles();
 }
 

@@ -43,6 +43,9 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
     XRC_ADD_STYLE(wxLC_SORT_ASCENDING);
     XRC_ADD_STYLE(wxLC_SORT_DESCENDING);
     XRC_ADD_STYLE(wxLC_VIRTUAL);
+    XRC_ADD_STYLE(wxLC_HRULES);
+    XRC_ADD_STYLE(wxLC_VRULES);
+    XRC_ADD_STYLE(wxLC_NO_SORT_HEADER);
     AddWindowStyles();
 }
 
