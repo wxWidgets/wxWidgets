@@ -8,7 +8,7 @@
         <set var="wxUSE_REGEX">builtin</set>
     </if>
     <set var="LIB_REGEX">
-        <if cond="wxUSE_REGEX=='builtin'">wxregex</if>
+        <if cond="wxUSE_REGEX=='builtin'">wxregex$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_REGEX">
         <if cond="wxUSE_REGEX=='builtin'">$(SRCDIR)/src/regex</if>

@@ -8,7 +8,7 @@
         <set var="wxUSE_LIBTIFF">builtin</set>
     </if>
     <set var="LIB_TIFF">
-        <if cond="wxUSE_LIBTIFF=='builtin'">wxtiff</if>
+        <if cond="wxUSE_LIBTIFF=='builtin'">wxtiff$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_TIFF">
         <if cond="wxUSE_LIBTIFF=='builtin'">$(SRCDIR)/src/tiff</if>

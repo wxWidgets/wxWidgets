@@ -8,7 +8,7 @@
         <set var="wxUSE_LIBJPEG">builtin</set>
     </if>
     <set var="LIB_JPEG">
-        <if cond="wxUSE_LIBJPEG=='builtin'">wxjpeg</if>
+        <if cond="wxUSE_LIBJPEG=='builtin'">wxjpeg$(WXDEBUGFLAG)</if>
     </set>
     <set var="INC_JPEG">
         <if cond="wxUSE_LIBJPEG=='builtin'">$(SRCDIR)/src/jpeg</if>
