@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/list.h"
+#include "wx/dynarray.h"
 
 // the default size of the hash
 #define wxHASH_SIZE_DEFAULT     (1000)
@@ -69,6 +70,42 @@ protected:
 private:
     // no copy ctor/assignment operator (yet)
     DECLARE_NO_COPY_CLASS(wxHashTableBase);
+};
+
+// ----------------------------------------------------------------------------
+// a hash table which stores longs
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxHashTableLong : public wxObject
+{
+public:
+    wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT) { Init(size); }
+
+    void Create(size_t size = wxHASH_SIZE_DEFAULT);
+    void Destroy();
+
+    size_t GetSize() const { return m_hashSize; }
+    size_t GetCount() const { return m_count; }
+
+    void Put(long key, long value);
+    long Get(long key) const;
+    long Delete(long key);
+
+protected:
+    void Init(size_t size);
+
+private:
+    wxArrayLong **m_values,
+                **m_keys;
+
+    // the size of array above
+    size_t m_hashSize;
+
+    // the total number of elements in the hash
+    size_t m_count;
+
+    // not implemented yet
+    DECLARE_NO_COPY_CLASS(wxHashTableLong);
 };
 
 // ----------------------------------------------------------------------------

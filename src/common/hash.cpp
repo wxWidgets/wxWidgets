@@ -120,6 +120,108 @@ wxNodeBase *wxHashTableBase::GetNode(long key, long value) const
 }
 
 // ----------------------------------------------------------------------------
+// wxHashTableLong
+// ----------------------------------------------------------------------------
+
+void wxHashTableLong::Init(size_t size)
+{
+    m_hashSize = size;
+    m_values = new wxArrayLong *[size];
+    m_keys = new wxArrayLong *[size];
+
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        m_values[n] =
+        m_keys[n] = (wxArrayLong *)NULL;
+    }
+
+    m_count = 0;
+}
+
+void wxHashTableLong::Destroy()
+{
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        delete m_values[n];
+        delete m_keys[n];
+    }
+
+    delete [] m_values;
+    delete [] m_keys;
+    m_hashSize = 0;
+    m_count = 0;
+}
+
+void wxHashTableLong::Put(long key, long value)
+{
+    wxCHECK_RET( m_hashSize, _T("must call Create() first") );
+
+    size_t slot = (size_t)abs(key % m_hashSize);
+
+    if ( !m_keys[slot] )
+    {
+        m_keys[slot] = new wxArrayLong;
+        m_values[slot] = new wxArrayLong;
+    }
+
+    m_keys[slot]->Add(key);
+    m_values[slot]->Add(value);
+
+    m_count++;
+}
+
+long wxHashTableLong::Get(long key) const
+{
+    wxCHECK_MSG( m_hashSize, wxNOT_FOUND, _T("must call Create() first") );
+
+    size_t slot = (size_t)abs(key % m_hashSize);
+
+    wxArrayLong *keys = m_keys[slot];
+    if ( keys )
+    {
+        size_t count = keys->GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( keys->Item(n) == key )
+            {
+                return m_values[slot]->Item(n);
+            }
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
+long wxHashTableLong::Delete(long key)
+{
+    wxCHECK_MSG( m_hashSize, wxNOT_FOUND, _T("must call Create() first") );
+
+    size_t slot = (size_t)abs(key % m_hashSize);
+
+    wxArrayLong *keys = m_keys[slot];
+    if ( keys )
+    {
+        size_t count = keys->GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( keys->Item(n) == key )
+            {
+                long val = m_values[slot]->Item(n);
+
+                keys->RemoveAt(n);
+                m_values[slot]->RemoveAt(n);
+
+                m_count--;
+
+                return val;
+            }
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
+// ----------------------------------------------------------------------------
 // old not type safe wxHashTable
 // ----------------------------------------------------------------------------
 
