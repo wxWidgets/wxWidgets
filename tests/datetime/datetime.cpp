@@ -325,8 +325,6 @@ for n in range(20):
         { {  3, wxDateTime::Dec, 2074 }, -5, wxDateTime::Mon, wxDateTime::Dec, 2074 },
     };
 
-    static const wxChar *fmt = _T("%d-%b-%Y");
-
     wxDateTime dt;
     for ( n = 0; n < WXSIZEOF(weekDatesTestData); n++ )
     {
