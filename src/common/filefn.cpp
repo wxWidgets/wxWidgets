@@ -1500,29 +1500,35 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
                              wxString *pstrName,
                              wxString *pstrExt)
 {
-  wxCHECK_RET( pszFileName, _("NULL file name in wxSplitPath") );
+  wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
 
   const char *pDot = strrchr(pszFileName, FILE_SEP_EXT);
   const char *pSepUnix = strrchr(pszFileName, FILE_SEP_PATH_UNIX);
   const char *pSepDos = strrchr(pszFileName, FILE_SEP_PATH_DOS);
 
-  // take the last of the two
+  // take the last of the two: nPosUnix containts the last slash in the
+  // filename
   size_t nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;
   size_t nPosDos = pSepDos ? pSepDos - pszFileName : 0;
   if ( nPosDos > nPosUnix )
     nPosUnix = nPosDos;
-//  size_t nLen = Strlen(pszFileName);
 
   if ( pstrPath )
     *pstrPath = wxString(pszFileName, nPosUnix);
-  if ( pDot ) {
-    size_t nPosDot = pDot - pszFileName;
+
+  size_t nPosDot = 0;
+  if ( pDot )
+    nPosDot = pDot - pszFileName;
+
+  if ( nPosDot > nPosUnix ) {
+    // the file name looks like "path/name.ext"
     if ( pstrName )
       *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix);
     if ( pstrExt )
       *pstrExt = wxString(pszFileName + nPosDot + 1);
   }
   else {
+    // there is either no dot at all or there is a '/' after it
     if ( pstrName )
       *pstrName = wxString(pszFileName + nPosUnix + 1);
     if ( pstrExt )
