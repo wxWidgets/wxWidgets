@@ -56,7 +56,7 @@ public:
     void ScaleTo(double w, double h);
     void Translate(double x, double y);
     void Rotate(double x, double y, double theta);
-    bool LoadFromMetaFile(char* filename, double *width, double *height);
+    bool LoadFromMetaFile(const wxString& filename, double *width, double *height);
     void GetBounds(double *minX, double *minY, double *maxX, double *maxY);
     void CalculateSize(wxPyDrawnShape* shape);
 
@@ -281,7 +281,7 @@ public:
     wxPseudoMetaFile& GetMetaFile();
 
     double GetRotation();
-    bool LoadFromMetaFile(char * filename);
+    bool LoadFromMetaFile(const wxString& filename);
     void Rotate(double x, double y, double theta);
     void SetClippingRect(const wxRect& rect);
     void SetDrawnBackgroundColour(const wxColour& colour);

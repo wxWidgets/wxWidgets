@@ -318,7 +318,7 @@ public:
         if (dest != wxRect(0,0,0,0)) {
             wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
-            obj = wxPyConstructObject((void*)newRect, "wxRect");
+            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"));
             PyObject* one = PyInt_FromLong(1);
             PyObject_SetAttrString(obj, "thisown", one);
             Py_DECREF(one);

@@ -391,16 +391,17 @@ static PyObject *_wrap_wxPseudoMetaFile_LoadFromMetaFile(PyObject *self, PyObjec
     PyObject * _resultobj;
     bool  _result;
     wxPseudoMetaFile * _arg0;
-    char * _arg1;
+    wxString * _arg1;
     double * _arg2;
     double * _arg3;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
     char *_kwnames[] = { "self","filename","width","height", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OsOO:wxPseudoMetaFile_LoadFromMetaFile",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxPseudoMetaFile_LoadFromMetaFile",_kwnames,&_argo0,&_obj1,&_argo2,&_argo3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -409,6 +410,11 @@ static PyObject *_wrap_wxPseudoMetaFile_LoadFromMetaFile(PyObject *self, PyObjec
         return NULL;
         }
     }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
         else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_double_p")) {
@@ -425,11 +431,15 @@ static PyObject *_wrap_wxPseudoMetaFile_LoadFromMetaFile(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPseudoMetaFile_LoadFromMetaFile(_arg0,_arg1,_arg2,_arg3);
+    _result = (bool )wxPseudoMetaFile_LoadFromMetaFile(_arg0,*_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -5938,12 +5948,13 @@ static PyObject *_wrap_wxPyDrawnShape_LoadFromMetaFile(PyObject *self, PyObject 
     PyObject * _resultobj;
     bool  _result;
     wxPyDrawnShape * _arg0;
-    char * _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","filename", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxPyDrawnShape_LoadFromMetaFile",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyDrawnShape_LoadFromMetaFile",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5953,12 +5964,21 @@ static PyObject *_wrap_wxPyDrawnShape_LoadFromMetaFile(PyObject *self, PyObject 
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPyDrawnShape_LoadFromMetaFile(_arg0,_arg1);
+    _result = (bool )wxPyDrawnShape_LoadFromMetaFile(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 

@@ -61,7 +61,7 @@
     if ($source) {
         _ptr = new wxPyInputStream($source);
     }
-    $target = wxPyConstructObject(_ptr, "wxInputStream", TRUE);
+    $target = wxPyConstructObject(_ptr, wxT("wxInputStream"), TRUE);
 }
 
 //----------------------------------------------------------------------
