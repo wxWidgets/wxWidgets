@@ -16,19 +16,17 @@
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
+
 //-----------------------------------------------------------------------------
 // wxRegion
 //-----------------------------------------------------------------------------
 
 class wxRegionRefData: public wxObjectRefData
 {
-  public:
-  
+public:
     wxRegionRefData();
     ~wxRegionRefData();
   
-  public:    
-
     GdkRegion  *m_region;
     wxList      m_rects;
 };
@@ -259,40 +257,12 @@ void wxRegion::GetBox( long& x, long& y, long&w, long &h ) const
     y = 0;
     w = -1;
     h = -1;
-    wxNode *node = GetRectList()->First();
-    while (node)
-    {
-        wxRect *r = (wxRect*)node->Data();
-        if (node == GetRectList()->First())
-        {
-            x = r->x;
-            y = r->y;
-            w = r->width;
-            h = r->height;
-        }
-        else
-        {
-            if (r->x < x)
-            {
-                x = r->x;
-                w += x - r->x;
-            }
-            if (r->y < y) 
-            {
-                y = r->y;
-                h += y - r->y;
-            }
-            if (r->width+r->x > x+w) 
-            {
-                w = r->x + r->width - x;
-            }
-            if (r->height+r->y > y+h) 
-            {
-                h = r->y + r->height - y;
-            }
-        }
-        node = node->Next();
-    }
+    GdkRectangle rect;
+    gdk_region_get_clipbox( M_REGIONDATA->m_region, &rect );
+    x = rect.x;
+    y = rect.y;
+    w = rect.width;
+    h = rect.height;
 }
 
 wxRect wxRegion::GetBox() const
