@@ -179,11 +179,12 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             }
             else
             {
+#if !TARGET_CARBON
                 GrafPtr thePort ;
                 GetPort( &thePort ) ;
                 wxSafeYield(win,true);
                 SetPort( thePort ) ;
-                
+#endif                
                 dc->StartPage();
                 keepGoing = printout->OnPrintPage(pn);
                 dc->EndPage();
