@@ -69,9 +69,9 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     wxSize actualSize(size);
     // work around the cases where the bitmap is a wxNull(Icon/Bitmap)
     if (actualSize.x == -1)
-        actualSize.x = bitmap.GetWidth() ? bitmap.GetWidth() : 1;
+        actualSize.x = bitmap.Ok() ? bitmap.GetWidth() : 1;
     if (actualSize.y == -1)
-        actualSize.y = bitmap.GetHeight() ? bitmap.GetHeight() : 1;
+        actualSize.y = bitmap.Ok() ? bitmap.GetHeight() : 1;
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, actualSize.x, actualSize.y);
 
@@ -86,9 +86,7 @@ wxStaticBitmap::~wxStaticBitmap()
 void wxStaticBitmap::DoSetBitmap()
 {
     Widget widget = (Widget) m_mainWidget;
-    int x, y, w1, h1, w2, h2;
-
-    GetPosition(&x, &y);
+    int w2, h2;
 
     if (m_messageBitmapOriginal.Ok())
     {
@@ -123,10 +121,8 @@ void wxStaticBitmap::DoSetBitmap()
             XmNlabelPixmap, pixmap,
             XmNlabelType, XmPIXMAP,
             NULL);
-        GetSize(&w1, &h1);
 
-        if (! (w1 == w2) && (h1 == h2))
-            SetSize(x, y, w2, h2);
+        SetSize(w2, h2);
     }
     else
     {
