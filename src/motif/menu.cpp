@@ -224,7 +224,7 @@ wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long WX
 {
     Init();
 
-    for ( int i = 0; i < n; i++ )
+    for ( size_t i = 0; i < n; i++ )
     {
         m_menus.Append(menus[i]);
         m_titles.Add(titles[i]);
