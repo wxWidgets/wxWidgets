@@ -347,9 +347,6 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             DoLogString(szString, t);
 #endif
             break;
-
-        default:
-            wxFAIL_MSG(_("unknown log level in wxLog::DoLog"));
     }
 }
 
@@ -569,9 +566,6 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 m_aMessages.Add(szString);
                 m_aTimes.Add((long)t);
                 break;
-
-        default:
-                wxFAIL_MSG(_("unknown log level in wxLogGui::DoLog"));
     }
 }
 
