@@ -61,6 +61,7 @@ public:
 #ifndef __WXWINCE__
     virtual bool SetShape(const wxRegion& region);
 #endif // __WXWINCE__
+    virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
 
     virtual bool Show(bool show = true);
 

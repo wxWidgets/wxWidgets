@@ -40,6 +40,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/module.h"
+#include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
@@ -900,6 +901,50 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 }
 
 #endif // !__WXWINCE__
+
+void wxTopLevelWindowMSW::RequestUserAttention(int flags)
+{
+    // check if we can use FlashWindowEx()
+#ifdef FLASHW_STOP
+    // available in the headers, check if it is supported by the system
+    typedef BOOL (WINAPI *FlashWindowEx_t)(FLASHWINFO *pfwi);
+    FlashWindowEx_t s_pfnFlashWindowEx = NULL;
+    if ( !s_pfnFlashWindowEx )
+    {
+        wxDynamicLibrary dllUser32(_T("user32.dll"));
+        s_pfnFlashWindowEx = (FlashWindowEx_t)
+                                dllUser32.GetSymbol(_T("FlashWindowEx"));
+
+        // we can safely unload user32.dll here, it's goign to remain loaded as
+        // long as the program is running anyhow
+    }
+
+    if ( s_pfnFlashWindowEx )
+    {
+        WinStruct<FLASHWINFO> fwi;
+        fwi.hwnd = GetHwnd();
+        fwi.dwFlags = FLASHW_ALL;
+        if ( flags & wxUSER_ATTENTION_INFO )
+        {
+            // just flash a few times
+            fwi.uCount = 3;
+        }
+        else // wxUSER_ATTENTION_ERROR
+        {
+            // flash until the user notices it
+            fwi.dwFlags |= FLASHW_TIMERNOFG;
+        }
+
+        s_pfnFlashWindowEx(&fwi);
+    }
+    else // FlashWindowEx() not available
+#endif // FLASHW_STOP
+    {
+        wxUnusedVar(flags);
+
+        ::FlashWindow(GetHwnd(), TRUE);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindow event handling

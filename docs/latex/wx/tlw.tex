@@ -116,6 +116,24 @@ This function only works under Windows.
 \helpref{wxTopLevelWindow::Iconize}{wxtoplevelwindowiconize}
 
 
+\membersection{wxTopLevelWindow::RequestUserAttention}\label{wxtoplevelwindowrequestuserattention}
+
+\func{void}{RequestUserAttention}{\param{int }{flags = wxUSER\_ATTENTION\_INFO}}
+
+Use a system-dependent way to attract users attention to the window when it is
+in background.
+
+\arg{flags} may have the value of either \texttt{wxUSER\_ATTENTION\_INFO}
+(default) or \texttt{wxUSER\_ATTENTION\_ERROR} which results in a more drastic
+action. When in doubt, use the default value.
+
+Note that this function should normally be only used when the application is
+not already in foreground.
+
+This function is currently only implemented for Win32 where it flashes the
+window icon in the taskbar.
+
+
 \membersection{wxTopLevelWindow::SetIcon}\label{wxtoplevelwindowseticon}
 
 \func{void}{SetIcon}{\param{const wxIcon\& }{icon}}
