@@ -710,7 +710,7 @@ of a given handler class in an application session.}
 
 \membersection{wxImage::IsTransparent}\label{wximageistransparent}
 
-\constfunc{IsTransparent}{\param{int }{x}, \param{int }{y}, \param{unsigned char threshold = $128$}}
+\constfunc{bool}{IsTransparent}{\param{int }{x}, \param{int }{y}, \param{unsigned char}{ threshold = $128$}}
 
 Returns \true if the given pixel is transparent, i.e. either has the mask
 colour if this image has a mask or if this image has alpha channel and alpha

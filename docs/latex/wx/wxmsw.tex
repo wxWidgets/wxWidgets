@@ -252,6 +252,13 @@ Tooltips are not currently supported for controls, since on PocketPC controls wi
 tooltips are distinct controls, and it will be hard to add dynamic
 tooltip support.
 
+Control borders on PocketPC and Smartphone should normally be specified with
+wxSIMPLE\_BORDER instead of wxSUNKEN\_BORDER. Controls will usually adapt
+appropriately by virtue of their GetDefaultBorder() function, but if you
+wish to specify a style explicitly you can use wxDEFAULT\_CONTROL\_BORDER
+which will give a simple border on PocketPC and Smartphone, and the sunken border on
+other platforms.
+
 \subsubsection{Online help in wxWinCE}
 
 You can use the help controller wxWinceHelpController which controls
