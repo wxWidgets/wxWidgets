@@ -290,7 +290,7 @@ void wxDCBase::DoDrawSpline( wxList *points )
 
     wx_spline_add_point(x1, y1);
 
-    while ((node = node->GetNext()))
+    while ((node = node->GetNext()) != NULL)
     {
         p = (wxPoint *)node->GetData();
         x1 = x2;
