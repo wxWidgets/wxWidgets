@@ -508,7 +508,7 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        SetClientSize(GetBestSize());
+        SetSize(GetBestSize());
     }
     //else: do nothing if we have no children
 }
@@ -553,9 +553,11 @@ void wxWindowBase::InvalidateBestSize()
 // return the size best suited for the current window
 wxSize wxWindowBase::DoGetBestSize() const
 {
+    wxSize best;
+    
     if ( m_windowSizer )
     {
-        return m_windowSizer->GetMinSize();
+        best = m_windowSizer->GetMinSize();
     }
 #if wxUSE_CONSTRAINTS
     else if ( m_constraints )
@@ -591,7 +593,7 @@ wxSize wxWindowBase::DoGetBestSize() const
             //       will never return a size bigger than the current one :-(
         }
 
-        return wxSize(maxX, maxY);
+        best = wxSize(maxX, maxY);
     }
 #endif // wxUSE_CONSTRAINTS
     else if ( !GetChildren().empty()
@@ -643,17 +645,25 @@ wxSize wxWindowBase::DoGetBestSize() const
         maxX += 7;
         maxY += 14;
 
-        return wxSize(maxX, maxY);
+        best = wxSize(maxX, maxY);
     }
     else // ! has children
     {
-        // for a generic window there is no natural best size - just use either the
-        // minimum size if there is one, or the current size
+        // For a generic window there is no natural best size - just use
+        // either the minimum size if there is one, or the current size.
+        // These are returned as-is, unadjusted by the client size difference.
         if ( GetMinSize().IsFullySpecified() )
             return GetMinSize();
         else
             return GetSize();
     }
+
+    // Add any difference between size and client size
+    wxSize diff = GetSize() - GetClientSize();
+    best.x += wxMax(0, diff.x);
+    best.y += wxMax(0, diff.y);
+
+    return best;
 }
 
 

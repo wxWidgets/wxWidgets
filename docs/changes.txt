@@ -39,6 +39,11 @@ All:
 - wxGetPowerType() and wxGetBatteryState() addition
 - wxSystemSettings::GetSystem*() members deprecated and replaced with
   wxSystemSettings::Get*()
+- wxWindowBase::DoGetBestSize now includes the difference (if any) between 
+  the client size and total size of the window.  Code that sets the 
+  client size using the best size, or that added extra space to sizers
+  to compensate for this bug may need to be changed.
+
 
 All (GUI):
 
