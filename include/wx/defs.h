@@ -309,7 +309,7 @@ typedef int wxWindowID;
 // wxCALLBACK should be used for the functions which are called back by
 // Windows (such as compare function for wxListCtrl)
 #if defined(__WXMSW__)
-    #if defined(__MINGW32__)
+    #if defined(__MINGW32__) || defined(__GNUWIN32__)
         #define wxCALLBACK __attribute__((stdcall))
     #else
         // both VC++ and Borland understand this

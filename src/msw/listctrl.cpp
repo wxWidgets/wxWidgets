@@ -1365,6 +1365,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #endif
     		::GetCursorPos(&(lvhti.pt));
 		    ::ScreenToClient(GetHwnd(),&(lvhti.pt));
+
+#ifndef LVHT_ONITEM
+#define LVHT_ONITEM	(LVHT_ONITEMICON|LVHT_ONITEMLABEL|LVHT_ONITEMSTATEICON)
+#endif
+
 		    if(ListView_HitTest(GetHwnd(),&lvhti)!=-1) {
     			if(lvhti.flags & LVHT_ONITEM) {
 				    eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;

@@ -67,7 +67,10 @@
 // ----------------------------------------------------------------------------
 
 // a convenient wrapper around TV_ITEM struct which adds a ctor
+#ifdef __VISUALC__
 #pragma warning( disable : 4097 )
+#endif
+
 struct wxTreeViewItem : public TV_ITEM
 {
     wxTreeViewItem(const wxTreeItemId& item,    // the item handle
@@ -80,7 +83,10 @@ struct wxTreeViewItem : public TV_ITEM
         hItem = (HTREEITEM) (WXHTREEITEM) item;
     }
 };
+
+#ifdef __VISUALC__
 #pragma warning( default : 4097 )
+#endif
 
 // a class which encapsulates the tree traversal logic: it vists all (unless
 // OnVisit() returns FALSE) items under the given one
@@ -1349,8 +1355,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 	    TV_HITTESTINFO tvhti;
 	    ::GetCursorPos(&(tvhti.pt));
 	    ::ScreenToClient(GetHwnd(),&(tvhti.pt));
-	    if(TreeView_HitTest(GetHwnd(),&tvhti)!=NULL) {
-		if(tvhti.flags & TVHT_ONITEM) {
+	    if ((HTREEITEM) TreeView_HitTest(GetHwnd(),&tvhti) != (HTREEITEM) NULL) {
+		if (tvhti.flags & TVHT_ONITEM) {
 		    event.m_item = (WXHTREEITEM) tvhti.hItem;
 		    eventType=wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
 		}
