@@ -23,12 +23,16 @@ public:
     static const wxColour& BackgroundColour();
     static const wxColour& TextColour();
     static const wxBrush&  BackgroundBrush();
+    const wxString& GetDir() const { return m_dir; }
 
 private:
     static wxColour* m_backgroundColour;
     static wxColour* m_textColour;
     static wxBrush*  m_backgroundBrush;
+    wxString m_dir;
 };
+
+DECLARE_APP(FortyApp)
 
 class FortyCanvas;
 class FortyFrame: public wxFrame

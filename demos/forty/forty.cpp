@@ -75,6 +75,7 @@ FortyApp::~FortyApp()
 bool FortyApp::OnInit()
 {
     bool largecards = false;
+    m_dir = wxGetCwd();
 
     wxSize size(668,510);
 
@@ -233,7 +234,8 @@ void
 FortyFrame::Help(wxCommandEvent& event)
 {
 #if wxUSE_HTML
-    if (wxFileExists(wxT("about.htm")))
+    wxString htmlFile = wxGetApp().GetDir() + wxFILE_SEP_PATH + wxT("about.htm");
+    if (wxFileExists(htmlFile))
     {
         FortyAboutDialog dialog(this, wxID_ANY, wxT("Forty Thieves Instructions"));
         if (dialog.ShowModal() == wxID_OK)
@@ -324,13 +326,9 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
 {
 #if wxUSE_HTML
     wxString htmlText;
-    wxString htmlFile(wxT("about.htm"));
+    wxString htmlFile = wxGetApp().GetDir() + wxFILE_SEP_PATH + wxT("about.htm");
 
-    //if (!wxGetApp().GetMemoryTextResource(wxT("about.htm"), htmlText))
     {
-//        wxSetWorkingDirectory(wxGetApp().GetAppDir());
-//        wxString htmlFile(wxGetApp().GetFullAppPath(wxT("about.htm")));
-        
         wxTextFile file(htmlFile);
         if (file.Exists())
         {
@@ -347,11 +345,6 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     }
 
     // Customize the HTML
-#if 0
-    wxString verString;
-    verString.Printf("%.2f", stVERSION_NUMBER);
-    htmlText.Replace(wxT("$VERSION$"), verString);
-#endif
     htmlText.Replace(wxT("$DATE$"), _T(__DATE__));
 
     wxSize htmlSize(400, 290);
