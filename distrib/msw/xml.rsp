@@ -38,7 +38,6 @@ contrib/src/xrc/*.txt
 contrib/src/xrc/*.ico
 contrib/src/xrc/*.bmp
 contrib/src/xrc/README
-contrib/src/xrc/FORMAT.txt
 contrib/src/xrc/README.EXPAT
 
 contrib/src/xrc/expat/copying.txt
@@ -72,8 +71,8 @@ contrib/samples/xrc/XrcDemoVC.dsw
 contrib/samples/xrc/rc/*.bmp
 contrib/samples/xrc/rc/*.gif
 contrib/samples/xrc/rc/*.ico
-contrib/samples/xrc/rc/.xpm
-contrib/samples/xrc/rc/.xrc
+contrib/samples/xrc/rc/*.xpm
+contrib/samples/xrc/rc/*.xrc
 
 contrib/utils/convertrc/*.cpp
 contrib/utils/convertrc/*.h

@@ -78,6 +78,19 @@ contrib/samples/gizmos/splittree/*.rc
 contrib/samples/gizmos/splittree/TreeVC.dsp
 contrib/samples/gizmos/splittree/TreeVC.dsw
 
+contrib/samples/gizmos/editlbox/*.cpp
+contrib/samples/gizmos/editlbox/*.h
+contrib/samples/gizmos/editlbox/*.def
+contrib/samples/gizmos/editlbox/makefile*
+contrib/samples/gizmos/editlbox/*.xbm
+contrib/samples/gizmos/editlbox/*.xpm
+contrib/samples/gizmos/editlbox/*.txt
+contrib/samples/gizmos/editlbox/*.ico
+contrib/samples/gizmos/editlbox/*.bmp
+contrib/samples/gizmos/editlbox/*.rc
+contrib/samples/gizmos/editlbox/EditlboxVC.dsp
+contrib/samples/gizmos/editlbox/EditlboxVC.dsw
+
 contrib/src/canvas/*.cpp
 contrib/src/canvas/*.h
 contrib/src/canvas/make*
@@ -98,6 +111,8 @@ contrib/include/wx/plot/*.rc
 contrib/src/gizmos/*.cpp
 contrib/src/gizmos/*.h
 contrib/src/gizmos/make*
+contrib/src/gizmos/*.xpm
+contrib/src/gizmos/*.bmp
 contrib/src/gizmos/GizmosVC.dsp
 contrib/src/gizmos/GizmosVC.dsw
 contrib/include/wx/gizmos/*.h

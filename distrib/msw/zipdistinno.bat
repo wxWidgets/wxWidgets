@@ -65,6 +65,8 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\tex2rtf.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\dialoged.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\ogl.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\xml.rsp
+zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
+zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 Rem Below is the old-style separated-out format. This is retained only
 Rem for local use, and for creating wxMSW-xxx.zip.
@@ -180,6 +182,8 @@ unzip32 -o ..\extradoc-%version%.zip
 Rem Need Word file, for Remstar DB classes
 unzip32 -o ..\wxWindows-%version%-Word.zip
 unzip32 -o ..\ogl3-%version%.zip
+unzip32 -o ..\mmedia-%version%.zip
+unzip32 -o ..\stc-%version%.zip
 unzip32 -o ..\jpeg-%version%.zip
 unzip32 -o ..\tiff-%version%.zip
 unzip32 -o ..\wxxrc-%version%.zip
@@ -193,11 +197,11 @@ erase /Y configure samples\configure samples\*.in demos\configure demos\*.in con
 erase /Y setup.h.in setup.h_vms
 erase /SY Makefile.in
 erase /Y docs\html\wxbook.htm docs\html\roadmap.htm
-erase /Y contrib\docs\winhelp\mmedia.*
-erase /Y contrib\docs\winhelp\stc.*
-erase /Y contrib\docs\htmlhelp\mmedia.*
-erase /Y contrib\docs\htmlhelp\stc.*
-erase /Y contrib\docs\pdf\*.*
+Rem erase /Y contrib\docs\winhelp\mmedia.*
+Rem erase /Y contrib\docs\winhelp\stc.*
+Rem erase /Y contrib\docs\htmlhelp\mmedia.*
+Rem erase /Y contrib\docs\htmlhelp\stc.*
+Rem erase /Y contrib\docs\pdf\*.*
 erase /sxzy contrib\docs\latex\ogl
 erase /Y src\mingegcs.bat
 erase /Y distrib

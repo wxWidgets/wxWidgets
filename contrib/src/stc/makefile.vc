@@ -47,9 +47,7 @@ OBJECTS = \
 	$(D)\stc.obj		\
 
 
-
-
-LIBTARGET = $(WXDIR)\contrib\lib\stc$(LIBEXT).lib
+LIBTARGET = $(WXDIR)\lib\stc$(LIBEXT).lib
 
 all:    $(D) $(LIBTARGET)
 

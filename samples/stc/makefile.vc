@@ -7,7 +7,7 @@ WXDIR = $(WXWIN)
 PROGRAM = stctest
 
 OBJECTS = $(PROGRAM).obj
-EXTRALIBS = $(WXDIR)\contrib\lib\stc$(LIBEXT).lib
+EXTRALIBS = $(WXDIR)\lib\stc$(LIBEXT).lib
 EXTRAINC = -I$(WXDIR)\contrib\include
 
 !include $(WXDIR)\src\makeprog.vc
