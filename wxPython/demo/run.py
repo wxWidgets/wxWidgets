@@ -59,7 +59,7 @@ class RunDemoApp(wx.App):
         menuBar = wx.MenuBar()
         menu = wx.Menu()
         item = menu.Append(-1, "E&xit\tAlt-X", "Exit demo")
-        self.Bind(wx.EVT_MENU, self.OnButton, item)
+        self.Bind(wx.EVT_MENU, self.OnExit, item)
         menuBar.Append(menu, "&File")
 
         ns = {}
@@ -85,20 +85,10 @@ class RunDemoApp(wx.App):
             frect = frame.GetRect()
 
         else:
-            # otherwise the demo made its own frame, so just put a
-            # button in this one
-            if hasattr(frame, 'otherWin'):
-                ns['win'] = frame.otherWin
-                frect = frame.otherWin.GetRect()
-                p = wx.Panel(frame, -1)
-                b = wx.Button(p, -1, " Exit ", (10,10))
-                wx.CallAfter(frame.SetClientSize, (200, 100))
-                frame.Bind(wx.EVT_BUTTON, self.OnButton, b)
-            else:
-                # It was probably a dialog or something that is already
-                # gone, so we're done.
-                frame.Destroy()
-                return True
+            # It was probably a dialog or something that is already
+            # gone, so we're done.
+            frame.Destroy()
+            return True
 
         self.SetTopWindow(frame)
         self.frame = frame
@@ -125,7 +115,7 @@ class RunDemoApp(wx.App):
         return True
 
 
-    def OnButton(self, evt):
+    def OnExit(self, evt):
         self.frame.Close(True)
 
 
