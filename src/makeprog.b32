@@ -49,17 +49,19 @@ DEBUG_FLAGS =
 
 CPPFLAGS=$(CPPFLAGS) $(DEBUG_FLAGS) $(OPT)
 
+TARGETDEF =
 !if "$(wxUSE_GUI)" == "0"
 TARGETRES = 
 STARTUP = c0x32.obj	
 !else
+if exist $(TARGET).def TARGETDEF = $(TARGET).def
 TARGETRES = $(TARGET).res
 STARTUP = c0w32.obj
 !endif
 
 all: $(TARGET).exe $(EXTRATARGETS)
 
-$(TARGET).exe:	$(OBJECTS) $(TARGETRES)
+$(TARGET).exe:	$(OBJECTS) $(TARGETDEF) $(TARGETRES)
   $(LINK) $(LINKFLAGS) @&&!
 $(STARTUP) $(OBJECTS)
 $(TARGET)
