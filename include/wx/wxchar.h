@@ -304,15 +304,18 @@
     #define  wxScanf     _tscanf
     #if defined(__DMC__)
         /* Digital Mars adds count to _stprintf (C99) so it does not fit wxWindows needs */
-        /* Instead of it we can use function from MSW api (FIXME: doesn't work) */
-        #ifdef wxUSE_UNICODE
-            #define wxSprintf wsprintfW
+        /* and there is a bug in D Mars tchar.h prior to 8.39.4n, so define as sprintf */
+        /* for non-unicode builds CE */
+        /* Unicode broken 10 Feb 04 Fixme */
+        #if wxUSE_UNICODE
+            #define wxSprintf swprintf
         #else
-            #define wxSprintf wsprintfA
+            #define wxSprintf sprintf
         #endif
     #else
-    #define  wxSprintf   _stprintf
+        #define  wxSprintf   _stprintf
     #endif
+
     #define  wxSscanf    _stscanf
     #define  wxTmpnam    _ttmpnam
     #define  wxUngetc    _tungetc
