@@ -247,17 +247,17 @@ bool wxGetFullHostName(
 #if wxUSE_NET_API
     char                            zServer[256];
     char                            zComputer[256];
-    unsigned short                  nLevel = 0;
+    unsigned long                   ulLevel = 0;
     unsigned char*                  zBuffer;
-    unsigned short                  nBuffer;
-    unsigned short*                 pnTotalAvail;
+    unsigned long                   ulBuffer;
+    unsigned long*                  pulTotalAvail;
 
     NetBios32GetInfo( (const unsigned char*)zServer
                      ,(const unsigned char*)zComputer
-                     ,nLevel
+                     ,ulLevel
                      ,zBuffer
-                     ,nBuffer
-                     ,pnTotalAvail
+                     ,ulBuffer
+                     ,pulTotalAvail
                     );
     strncpy(zBuf, zComputer, nMaxSize);
     zBuf[nMaxSize] = _T('\0');
