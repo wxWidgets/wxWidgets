@@ -1,17 +1,23 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for joytest example (UNIX).
+# Purpose: makefile for joytest example (Unix)
+# Created: 2000-03-14
 
-PROGRAM=joytest
+CC = gcc
 
-OBJECTS=$(PROGRAM).o
+PROGRAM = joytest
 
-include ../../src/makeprog.env
+OBJECTS = $(PROGRAM).o
 
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)

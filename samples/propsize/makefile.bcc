@@ -1,0 +1,14 @@
+# Purpose: makefile for propsize example (BC++ 16bit)
+# Created: 2000-03-14
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+
+TARGET=propsize
+OBJECTS=$(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.bcc
+

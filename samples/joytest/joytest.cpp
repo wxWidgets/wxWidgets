@@ -20,8 +20,8 @@
 #include "wx/wx.h"
 #endif
 
-#include <wx/msw/wave.h>
-#include <wx/msw/joystick.h>
+#include <wx/wave.h>
+#include <wx/joystick.h>
 
 #include "joytest.h"
 

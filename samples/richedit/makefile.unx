@@ -1,0 +1,22 @@
+# Purpose: makefile for richedit example (Unix)
+# Created: 2000-03-14
+# hand hacked from template file by Ron <ron@debian.org>
+
+CC = gcc
+
+PROGRAM = wxLayout
+
+OBJECTS = $(PROGRAM).o kbList.o wxllist.o wxlparser.o wxlwindow.o
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+$(PROGRAM): $(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+	
+clean:
+	rm -f *.o $(PROGRAM)

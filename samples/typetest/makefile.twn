@@ -1,0 +1,35 @@
+# Purpose: makefile for typetest example (TWIN)
+# Created: 2000-03-14
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/typetest.$(OBJSUFF) $(OBJDIR)/typetest.$(OBJSUFF)
+
+all:    $(OBJDIR) typetest$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+typetest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o typetest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/typetest.$(OBJSUFF):	typetest.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ typetest.$(SRCSUFF)
+
+typetest.c:  typetest.rc
+	$(RESCOMP) $(RCINPUTSWITCH) typetest.rc $(RCOUTPUTSWITCH) typetest.c $(RESFLAGS)
+
+$(OBJDIR)/typetest.$(OBJSUFF):	typetest.c
+	$(CC) -c $(CPPFLAGS) -o $@ typetest.c
+
+#$(OBJDIR)/typetest.o:  typetest.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) typetest.rc $(RCOUTPUTSWITCH) $(OBJDIR)/typetest.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) typetest$(GUISUFFIX).exe core *.rsc *.res

@@ -1,11 +1,5 @@
-#
-# File:		makefile.b32
-# Author:	Julian Smart
-# Created:	1999
-# Updated:	
-# Copyright:
-#
-# Makefile : Builds sample for 32-bit BC++
+# Purpose: makefile for exec example (BC++ 32bit)
+# Created: 2000-03-14
 
 WXDIR = $(WXWIN)
 

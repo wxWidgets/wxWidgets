@@ -1,13 +1,5 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for validate example (UNIX).
+# Purpose: makefile for validate example (UNIX).
+# Created: 2000-03-14
 
 top_srcdir = @top_srcdir@/..
 top_builddir = ../..

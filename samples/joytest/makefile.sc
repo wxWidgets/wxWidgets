@@ -1,37 +1,37 @@
-;    Last change:  JS   12 Apr 98   10:45 am
-# Symantec C++ makefile for joytest example
-# NOTE that peripheral libraries are now dealt in main wxWindows makefile.
+# Purpose: makefile for joytest example (Symantec C++)
+# Created: 2000-03-14
 
 WXDIR = $(WXWIN)
-!include $(WXDIR)\src\makesc.env
-
 WXLIB = $(WXDIR)\lib\wx.lib
 INCDIR = $(WXDIR)\include
-MSWINC = $(INCDIR)\msw
-BASEINC = $(INCDIR)\base
+INCLUDE=$(INCDIR)
+TARGET=joytest
 
-CC=sc
-RC=rc
-CFLAGS = -o -ml -W -Dwx_msw
-LDFLAGS = -ml -W
+include $(WXDIR)\src\makesc.env
 
-INCLUDE=$(BASEINC);$(MSWINC)
+joytest.exe: joytest.obj $(DEFFILE) joytest.res
+	*$(CC) $(LDFLAGS) -o$@ $** $(LIBS)
+    *$(RC) -k joytest.res
 
-LIBS=$(WXLIB) libw.lib commdlg.lib shell.lib
+sc32.def:
+     echo EXETYPE NT > sc32.def
+     echo SUBSYSTEM WINDOWS >> sc32.def
 
-.$(SRCSUFF).obj:
-	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $<
-
-.rc.res:
-	*$(RC) -r -I$(INCLUDE) $<
-
-joytest.exe: joytest.obj joytest.def joytest.res
-	*$(CC) $(LDFLAGS) -o$@ joytest.obj joytest.def $(LIBS)
-	*$(RC) -k joytest.res
+sc16.def:
+     echo NAME $(TARGET) > sc16.def
+     echo EXETYPE WINDOWS >> sc16.def
+     echo STUB         'WINSTUB.EXE' >> sc16.def
+     echo CODE         PRELOAD MOVEABLE DISCARDABLE >> sc16.def
+     echo DATA         PRELOAD MOVEABLE MULTIPLE >> sc16.def
+     echo HEAPSIZE     1024 >> sc16.def
+     echo STACKSIZE    8192 >> sc16.def
 
 clean:
-        -del *.obj
+    -del *.obj
 	-del *.exe
 	-del *.res
 	-del *.map
 	-del *.rws
+    -del sc32.def
+    -del sc16.def
+

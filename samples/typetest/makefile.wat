@@ -1,9 +1,5 @@
-#
-# Makefile for WATCOM
-#
-# Created by Julian Smart, January 1999
-# 
-#
+# Purpose: makefile for typetest example (Watcom)
+# Created: 2000-03-14
 
 WXDIR = $(%WXWIN)
 

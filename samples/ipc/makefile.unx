@@ -1,0 +1,25 @@
+# Purpose: makefile for ipc example (Unix)
+# Created: 2000-03-14
+# hand hacked from template file by Ron <ron@debian.org>
+
+CC = gcc
+
+PROGRAMS = client server
+
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all: $(PROGRAMS)
+
+client: client.o
+	$(CC) -o $@ $< `wx-config --libs`
+
+server: server.o
+	$(CC) -o $@ $< `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAMS)
