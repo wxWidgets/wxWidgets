@@ -387,19 +387,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 
 #endif
 
-  wxButton *button = (wxButton*)NULL;
-
-//  m_notebook->SetBackgroundColour("cadet blue");
-
+  wxButton *button = (wxButton*) NULL;  /* who did this ? */
   wxPanel *panel = (wxPanel*) NULL;
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
   m_listbox->SetToolTip( "This is a list box" );
 
-//  m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -408,17 +402,13 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
   button->SetToolTip( "Press here to set italic font" );
 
-//  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
   m_checkbox->SetToolTip( "Click here to disable the listbox" );
   m_notebook->AddPage(panel, "wxList", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
   m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
-//  m_choice->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -429,10 +419,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
   m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 5, choices );
-//  m_combo->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -443,21 +430,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxComboBox", FALSE, Image_Combo);
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
-  m_textentry = new MyTextCtrl( panel, -1, "Write text here.",
-                                wxPoint(10,10), wxSize(320,28),
+  m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
                                 wxTE_PROCESS_ENTER);
   (*m_textentry) << " More text.";
-//  m_textentry->SetBackgroundColour("wheat");
-  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.",
-                                wxPoint(10,50), wxSize(320,80),
+  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,70),
                                 wxTE_MULTILINE );
-  (*m_multitext) << " More text."
-                 << "\nPress Fn keys to test different wxTextCtrl functions";
-//  m_multitext->SetBackgroundColour("wheat");
-  (void)new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
-                        wxPoint(10,140), wxSize(320,80), wxTE_MULTILINE | wxTE_PROCESS_TAB);
+  (*m_multitext) << " More text.\nPress function keys to test different \nwxTextCtrl functions.";
+  new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
+                             wxPoint(10,120), wxSize(320,70), wxTE_MULTILINE | wxTE_PROCESS_TAB);
 
   (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:",
                          wxPoint(345, 0), wxSize(160, 100) );
@@ -465,9 +445,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
                      wxPoint(370, 20), wxSize(110, 30));
   (void)new wxButton(panel, ID_MOVE_END_ZONE, "Text &zone",
                      wxPoint(370, 60), wxSize(110, 30));
-  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,120), wxSize(160,100) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(370,140), wxSize(110,30) );
-  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(370,180), wxSize(110,30) );
+  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(338,120), wxSize(160,100) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(362,140), wxSize(110,30) );
+  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(362,180), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
 
   wxString choices2[] =
@@ -477,15 +457,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   };
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
   (void)new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
-  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 2, wxRA_SPECIFY_COLS );
-//  m_radio->SetBackgroundColour("wheat");
+  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 1, wxRA_SPECIFY_COLS );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
   m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
-//  m_fontButton->SetForegroundColour("blue");
   (void)new wxButton( panel, ID_RADIOBOX_FONT, "Set Italic font", wxPoint(340,80), wxSize(140,30) );
   (void)new wxCheckBox( panel, ID_RADIOBOX_ENABLE, "Disable", wxPoint(340,130), wxSize(140,30) );
   wxRadioButton *rb = new wxRadioButton( panel, ID_RADIOBUTTON_1, "Radiobutton1", wxPoint(210,170), wxSize(110,30) );
@@ -494,13 +470,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   m_notebook->AddPage(panel, "wxRadioBox", FALSE, Image_Radio);
 
   panel = new wxPanel(m_notebook);
-//  panel->SetBackgroundColour("cadet blue");
-//  panel->SetForegroundColour("blue");
   (void)new wxStaticBox( panel, -1, "wxGauge and wxSlider", wxPoint(10,10), wxSize(180,130) );
   m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30) );
-//  m_gauge->SetBackgroundColour("wheat");
   m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1) );
-//  m_slider->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "Explanation", wxPoint(200,10), wxSize(290,130) );
 #ifdef __WXMOTIF__
   // No wrapping text in wxStaticText yet :-(
@@ -518,15 +490,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "This is also supposed to demonstrate how\n"
     "to use static controls.\n",
     wxPoint(208,25),
-    wxSize(210, 110)
+    wxSize(250, 110)
     );
 #endif
   m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
-//  m_spintext->SetBackgroundColour("wheat");
   m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
-//  m_spinbutton->SetBackgroundColour("wheat");
   m_spinbutton->SetRange(0,100);
-
   m_notebook->AddPage(panel, "wxGauge", FALSE, Image_Gauge);
 }
 
@@ -658,13 +627,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     case ID_LISTBOX_ENABLE:
     {
       m_text->WriteText("Checkbox clicked.\n");
-#ifdef __WXGTK__
       wxCheckBox *cb = (wxCheckBox*)event.GetEventObject();
       if (event.GetInt())
         cb->SetToolTip( "Click to enable listbox" );
       else
         cb->SetToolTip( "Click to disable listbox" );
-#endif
       m_listbox->Enable( event.GetInt() == 0 );
       break;
     }

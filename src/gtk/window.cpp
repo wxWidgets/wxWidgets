@@ -347,7 +347,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     }
 
     // win is a control: tab can be propagated up
-    if ((!ret) && (gdk_event->keyval == GDK_Tab))
+    if ((!ret) && (gdk_event->keyval == GDK_Tab) && ((win->m_windowStyle & wxTE_PROCESS_TAB) == 0))
     {
         wxNavigationKeyEvent new_event;
         new_event.SetDirection( !(gdk_event->state & GDK_SHIFT_MASK) );

@@ -182,11 +182,17 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
-    if (!value.IsNull())
+    if (!value.IsEmpty())
     {
         gint tmp = 0;
         gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
-        SetInsertionPointEnd();
+	
+        if (multi_line)
+        {
+	    /* bring editable's cursor uptodate. bug in GTK. */
+	
+	    GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+	}
     }
 
     if (style & wxTE_PASSWORD)
@@ -286,12 +292,16 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        //gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-        // Find the current insertion point 
+        /* this moves the cursor pos to behind the inserted text */
+	
 	gint len = GTK_EDITABLE(m_text)->current_pos;
-	// Insert text at this point
+
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
-	// Note: the insertion point is now at 'len' (past our insertion).
+	
+	/* bring editable's cursor uptodate. bug in GTK. */
+	
+	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
+    
     }
     else
     {
@@ -527,22 +537,35 @@ int wxTextCtrl::GetNumberOfLines() const
 
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
-    int len;
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-    if (m_windowStyle & wxTE_MULTILINE) {
-        //gtk_text_set_point( GTK_TEXT(m_text), (int)pos );
-        /* HH: The call commented out above doesn't do anything. Don't know
-	 * why. The code below isn't perfect either; it doesn't move the
-	 * actual cursor, but subsequent calls to WriteText will insert
-	 * text at the set position and move the displayed cursor behind it as 
-	 * well. I guess this is good enough for most uses. */
-        len = gtk_text_get_length( GTK_TEXT(m_text) );
-	if ( (pos < 0) || (pos > len) )
-	  pos = len;
-	GTK_EDITABLE(m_text)->current_pos = (int)pos;
+    
+    if (m_windowStyle & wxTE_MULTILINE) 
+    {
+        /* seems to be broken in GTK 1.0.X:
+	   gtk_text_set_point( GTK_TEXT(m_text), (int)pos ); */
+      
+        gtk_signal_disconnect_by_func( GTK_OBJECT(m_text),
+          GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+      
+        /* we fake a set_point by inserting and deleting. as the user
+	   isn't supposed to get to know about thos non-sense, we
+	   disconnect so that no events are sent to the user program. */
+      
+        gint tmp = (gint)pos;
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), " ", 1, &tmp );
+	gtk_editable_delete_text( GTK_EDITABLE(m_text), tmp-1, tmp );
+	
+        gtk_signal_connect( GTK_OBJECT(m_text), "changed",
+          GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
+	  
+	/* bring editable's cursor uptodate. another bug in GTK. */
+	
+	GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
     else
+    {
         gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
+    }
 }
 
 void wxTextCtrl::SetInsertionPointEnd()

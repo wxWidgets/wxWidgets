@@ -588,12 +588,12 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             }
 	    
             gdk_draw_pixmap( m_window, m_penGC, pmap,
-                             source->DeviceToLogicalX(xsrc), 
-	                     source->DeviceToLogicalY(ysrc),
+                             source->LogicalToDeviceX(xsrc), 
+	                     source->LogicalToDeviceY(ysrc),
                              xx, 
 	                     yy,
-                             source->DeviceToLogicalXRel(width), 
-	                     source->DeviceToLogicalYRel(height) );
+                             source->LogicalToDeviceXRel(width), 
+	                     source->LogicalToDeviceYRel(height) );
 	  
             if (useMask && mask) 
             {
@@ -621,12 +621,12 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
             }
   
             gdk_draw_bitmap( m_window, m_textGC, bmap,
-                             source->DeviceToLogicalX(xsrc), 
-	                     source->DeviceToLogicalY(ysrc),
+                             source->LogicalToDeviceX(xsrc), 
+	                     source->LogicalToDeviceY(ysrc),
                              xx, 
 	                     yy,
-                             source->DeviceToLogicalXRel(width), 
-	                     source->DeviceToLogicalYRel(height) );
+                             source->LogicalToDeviceXRel(width), 
+	                     source->LogicalToDeviceYRel(height) );
 	  
             if (useMask && mask) 
             {
@@ -642,10 +642,10 @@ bool wxWindowDC::Blit( long xdest, long ydest, long width, long height,
     gdk_window_copy_area ( m_window, m_penGC,
                            XLOG2DEV(xdest), YLOG2DEV(ydest),
                            csrc->GetWindow(),
-                           source->DeviceToLogicalX(xsrc), 
-			   source->DeviceToLogicalY(ysrc),
-                           source->DeviceToLogicalXRel(width), 
-			   source->DeviceToLogicalYRel(height) );
+                           source->LogicalToDeviceX(xsrc), 
+			   source->LogicalToDeviceY(ysrc),
+                           source->LogicalToDeviceXRel(width), 
+			   source->LogicalToDeviceYRel(height) );
 
     SetLogicalFunction( old_logical_func );
     return TRUE;

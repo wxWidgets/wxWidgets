@@ -19,9 +19,29 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
-// wxFileDialog
+// "delete_event"
 //-----------------------------------------------------------------------------
 
+static 
+bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
+{ 
+/*
+    printf( "OnDelete from " );
+    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
+        printf( win->GetClassInfo()->GetClassName() );
+    printf( ".\n" );
+*/
+  
+    win->Close();
+
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// "clicked" for OK-button
+//-----------------------------------------------------------------------------
+
+static 
 void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
     wxFileDialog *dialog = (wxFileDialog*)data;
@@ -43,12 +63,21 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
     dialog->OnOK( event );
 }
 
+//-----------------------------------------------------------------------------
+// "clicked" for Cancel-button
+//-----------------------------------------------------------------------------
+
+static 
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
     wxFileDialog *dialog = (wxFileDialog*)data;
     wxCommandEvent event(wxEVT_NULL);
     dialog->OnCancel( event );
 }
+
+//-----------------------------------------------------------------------------
+// wxFileDialog
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
 
@@ -87,6 +116,10 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
 
     gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
       GTK_SIGNAL_FUNC(gtk_filedialog_cancel_callback), (gpointer*)this );
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event", 
+        GTK_SIGNAL_FUNC(gtk_filedialog_delete_callback), (gpointer)this );
+    
 }
 
 int wxFileDialog::ShowModal(void)

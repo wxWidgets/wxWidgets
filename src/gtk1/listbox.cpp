@@ -17,7 +17,10 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/checklst.h"
+
+#if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
+#endif
 
 #if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
@@ -347,7 +350,9 @@ void wxListBox::AppendCommon( const wxString &item )
 #endif
 #endif
 
+#if wxUSE_TOOLTIPS
     if (m_toolTip) m_toolTip->Apply( this );
+#endif
 }
 
 void wxListBox::Append( const wxString &item )
