@@ -16,6 +16,7 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/stockitem.h"
 #include "wx/cocoa/autorelease.h"
 
 #import <AppKit/NSButton.h>
@@ -27,10 +28,12 @@ END_EVENT_TABLE()
 WX_IMPLEMENT_COCOA_OWNER(wxButton,NSButton,NSControl,NSView)
 
 bool wxButton::Create(wxWindow *parent, wxWindowID winid,
-            const wxString& label, const wxPoint& pos,
+            const wxString& lbl, const wxPoint& pos,
             const wxSize& size, long style,
             const wxValidator& validator, const wxString& name)
 {
+    wxString label((lbl.empty() && wxIsStockID(winid))?wxGetStockLabel(winid):lbl);
+
     wxAutoNSAutoreleasePool pool;
     wxLogTrace(wxTRACE_COCOA,wxT("Creating control with id=%d"),winid);
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
