@@ -146,8 +146,6 @@ void XmlResApp::CompileRes()
 
     wxRemoveFile(parOutput);
 
-    printf("TODO: include bitmaps, list of handlers\n");
-
     if (!retCode)
     {        
         if (flagCPP)
@@ -303,7 +301,7 @@ void " + parFuncname + "()\n\
         s.Printf("    wxMemoryFSHandler::AddFile(\"xml_resource/" + flist[i] +
                  "\", xml_res_file_%i, xml_res_size_%i);\n"
                  "    wxTheXmlResource->Load(\"memory:xml_resource/" + flist[i] + 
-                 "\", wxXML_BINARY);\n", i, i);
+                 "\");\n", i, i);
         file.Write(s);
     }
     
