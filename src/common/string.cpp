@@ -85,6 +85,31 @@ static const struct
 extern const char *g_szNul = &g_strEmpty.dummy;
 
 // ----------------------------------------------------------------------------
+// conditional compilation
+// ----------------------------------------------------------------------------
+
+// we want to find out if the current platform supports vsnprintf()-like
+// function: for Unix this is done with configure, for Windows we test the
+// compiler explicitly.
+#ifdef __WXMSW__
+    #ifdef _MSC_VER
+        #define wxVsprintf     _vsnprintf
+    #endif
+#else   // !Windows
+    #ifdef HAVE_VSNPRINTF
+        #define wxVsprintf       vsnprintf
+    #endif
+#endif  // Windows/!Windows
+
+#ifndef wxVsprintf
+    // in this case we'll use vsprintf() (which is ANSI and thus should be
+    // always available), but it's unsafe because it doesn't check for buffer
+    // size - so give a warning
+    #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
+    #pragma message("Using sprintf() because no snprintf()-like function defined")
+#endif
+
+// ----------------------------------------------------------------------------
 // global functions
 // ----------------------------------------------------------------------------
 
@@ -947,9 +972,11 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
   // static buffer to avoid dynamic memory allocation each time
   static char s_szScratch[1024];
 
+  // NB: wxVsprintf() may return either less than the buffer size or -1 if there
+  //     is not enough place depending on implementation
   int iLen = wxVsprintf(s_szScratch, WXSIZEOF(s_szScratch), pszFormat, argptr);
   char *buffer;
-  if ( (size_t)iLen < WXSIZEOF(s_szScratch) ) {
+  if ( iLen < (int)WXSIZEOF(s_szScratch) ) {
     buffer = s_szScratch;
   }
   else {

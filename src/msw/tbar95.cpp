@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -72,19 +72,21 @@ NM_CUSTOMDRAW message and do your custom drawing.
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar95, wxToolBarBase)
-
-BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
-	EVT_SIZE(wxToolBar95::OnSize)
-	EVT_PAINT(wxToolBar95::OnPaint)
-	EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
-    EVT_SYS_COLOUR_CHANGED(wxToolBar95::OnSysColourChanged)
-END_EVENT_TABLE()
 #endif
 
-void wxMapBitmap(HBITMAP hBitmap, int width, int height);
+BEGIN_EVENT_TABLE(wxToolBar95, wxToolBarBase)
+#if 0 // it seems like none of these functions does anything anyhow
+    EVT_SIZE(wxToolBar95::OnSize)
+    EVT_PAINT(wxToolBar95::OnPaint)
+    EVT_KILL_FOCUS(wxToolBar95::OnKillFocus)
+    EVT_MOUSE_EVENTS(wxToolBar95::OnMouseEvent)
+#endif // 0
+    EVT_SYS_COLOUR_CHANGED(wxToolBar95::OnSysColourChanged)
+END_EVENT_TABLE()
 
-wxToolBar95::wxToolBar95(void)
+static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
+
+wxToolBar95::wxToolBar95()
 {
   m_maxWidth = -1;
   m_maxHeight = -1;
@@ -93,40 +95,41 @@ wxToolBar95::wxToolBar95(void)
   m_defaultHeight = DEFAULTBITMAPY;
 }
 
-bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+bool wxToolBar95::Create(wxWindow *parent,
+                         wxWindowID id,
+                         const wxPoint& pos,
+                         const wxSize& size,
+                         long style,
+                         const wxString& name)
 {
   m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
+                                GetGValue(GetSysColor(COLOR_BTNFACE)),
+                                GetBValue(GetSysColor(COLOR_BTNFACE)));
   m_foregroundColour = *wxBLACK ;
 
-  if (style & wxTB_VERTICAL)
-    wxMessageBox("Sorry, wxToolBar95 under Windows 95 only supports horizontal orientation.", "wxToolBar95 usage", wxOK);
+  wxASSERT_MSG( (style & wxTB_VERTICAL) == 0,
+                "Sorry, wxToolBar95 under Windows 95 only "
+                "supports horizontal orientation." );
+
   m_maxWidth = -1;
   m_maxHeight = -1;
-  
+
   m_hBitmap = 0;
 
   m_defaultWidth = DEFAULTBITMAPX;
   m_defaultHeight = DEFAULTBITMAPY;
   SetName(name);
 
+  m_windowStyle = style;
+
+  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+  SetParent(parent);
+
   int x = pos.x;
   int y = pos.y;
   int width = size.x;
   int height = size.y;
 
-  m_windowStyle = style;
-
-  SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
-
-  SetParent(parent);
-
-  DWORD msflags = 0;
-  if (style & wxBORDER)
-    msflags |= WS_BORDER;
-  msflags |= WS_CHILD | WS_VISIBLE;
-  
   if (width <= 0)
     width = 100;
   if (height <= 0)
@@ -137,37 +140,47 @@ bool wxToolBar95::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, co
     y = 0;
 
   m_windowId = (id < 0 ? NewControlId() : id);
-  DWORD msStyle = WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS;
+  DWORD msflags = 0;
+  if (style & wxBORDER)
+    msflags |= WS_BORDER;
+  msflags |= WS_CHILD | WS_VISIBLE | TBSTYLE_TOOLTIPS;
 
   if (style & wxTB_FLAT)
   {
     if (wxTheApp->GetComCtl32Version() > 400)
-        msStyle |= TBSTYLE_FLAT;
+        msflags |= TBSTYLE_FLAT;
   }
 
   // Create the toolbar control.
-  HWND hWndToolbar = CreateWindowEx(0L,   // No extended styles.
-    TOOLBARCLASSNAME,                 // Class name for the toolbar.
-    "",                               // No default text.
-    msStyle,    // Styles and defaults.
-    x, y, width, height,                    // Standard toolbar size and position.
-    (HWND) parent->GetHWND(),                       // Parent window of the toolbar.
-    (HMENU)m_windowId,                // Toolbar ID.
-    wxGetInstance(),                            // Current instance.
-    NULL );                           // No class data.
+  HWND hWndToolbar = CreateWindowEx
+                     (
+                      0L,                       // No extended styles.
+                      TOOLBARCLASSNAME,         // Class name for the toolbar.
+                      "",                       // No default text.
+                      msflags,                  // Styles
+                      x, y, width, height,      // Standard toolbar size and position.
+                      (HWND) parent->GetHWND(), // Parent window of the toolbar.
+                      (HMENU)m_windowId,        // Toolbar ID.
+                      wxGetInstance(),          // Current instance.
+                      NULL                      // No class data.
+                     );
+
+  wxCHECK_MSG( hWndToolbar, FALSE, "Toolbar creation failed" );
 
   // Toolbar-specific initialisation
-  ::SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), (LPARAM)0);
+  ::SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE,
+                (WPARAM)sizeof(TBBUTTON), (LPARAM)0);
 
   m_hWnd = (WXHWND) hWndToolbar;
-  if (parent) parent->AddChild(this);
-  
-  SubclassWin((WXHWND) hWndToolbar);
+  if (parent)
+      parent->AddChild(this);
+
+  SubclassWin((WXHWND)hWndToolbar);
 
   return TRUE;
 }
 
-wxToolBar95::~wxToolBar95(void)
+wxToolBar95::~wxToolBar95()
 {
   UnsubclassWin();
 
@@ -178,13 +191,13 @@ wxToolBar95::~wxToolBar95(void)
   }
 }
 
-bool wxToolBar95::CreateTools(void)
+bool wxToolBar95::CreateTools()
 {
   if (m_tools.Number() == 0)
     return FALSE;
 
   HBITMAP oldToolBarBitmap = (HBITMAP) m_hBitmap;
-    
+
   int totalBitmapWidth = (int)(m_defaultWidth * m_tools.Number());
   int totalBitmapHeight = (int)m_defaultHeight;
 
@@ -192,7 +205,7 @@ bool wxToolBar95::CreateTools(void)
   HDC dc = ::GetDC(NULL);
   m_hBitmap = (WXHBITMAP) ::CreateCompatibleBitmap(dc, totalBitmapWidth, totalBitmapHeight);
   ::ReleaseDC(NULL, dc);
-  
+
   // Now blit all the tools onto this bitmap
   HDC memoryDC = ::CreateCompatibleDC(NULL);
   HBITMAP oldBitmap = (HBITMAP) ::SelectObject(memoryDC, (HBITMAP) m_hBitmap);
@@ -210,7 +223,7 @@ bool wxToolBar95::CreateTools(void)
 
       HBITMAP oldBitmap2 = (HBITMAP) ::SelectObject(memoryDC2, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
       /* int bltResult = */
-	  BitBlt(memoryDC, x, 0, (int) m_defaultWidth, (int) m_defaultHeight, memoryDC2,
+      BitBlt(memoryDC, x, 0, (int) m_defaultWidth, (int) m_defaultHeight, memoryDC2,
                         0, 0, SRCCOPY);
       ::SelectObject(memoryDC2, oldBitmap2);
       x += (int)m_defaultWidth;
@@ -291,18 +304,18 @@ bool wxToolBar95::CreateTools(void)
 
       bitmapId ++;
     }
-        
+
     i ++;
     node = node->Next();
   }
 
-  int ans = (int)::SendMessage((HWND) GetHWND(), TB_ADDBUTTONS, (WPARAM)i, (LPARAM)& buttons);
-  ans = (int)::SendMessage((HWND) GetHWND(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
+  long rc = ::SendMessage((HWND) GetHWND(), TB_ADDBUTTONS, (WPARAM)i, (LPARAM)& buttons);
 
-  RECT rect;
-  ::SendMessage((HWND) GetHWND(), TB_SETROWS, MAKEWPARAM(m_maxRows, TRUE), (LPARAM) & rect);
-  m_maxWidth = (rect.right - rect.left + 2);
-  m_maxHeight = (rect.bottom - rect.top + 2);
+  wxCHECK_MSG( rc, FALSE, "failed to add buttons to the toolbar" );
+
+  (void)::SendMessage((HWND) GetHWND(), TB_AUTOSIZE, (WPARAM)0, (LPARAM) 0);
+
+  SetRows(m_maxRows);
 
   return TRUE;
 }
@@ -329,45 +342,60 @@ bool wxToolBar95::MSWNotify(WXWPARAM WXUNUSED(wParam),
                             WXLPARAM lParam,
                             WXLPARAM *result)
 {
-	// First check if this applies to us
+    // First check if this applies to us
     NMHDR *hdr = (NMHDR *)lParam;
-    if (hdr->code != TTN_NEEDTEXT)
-		return FALSE;
 
- 	HWND toolTipWnd = (HWND) ::SendMessage((HWND) GetHWND(), TB_GETTOOLTIPS, 0, 0);
-	if ( toolTipWnd != hdr->hwndFrom )
-		return FALSE;
+    // the tooltips control created by the toolbar is sometimes Unicode, even in
+    // an ANSI application
+    if ( (hdr->code != TTN_NEEDTEXTA) && (hdr->code != TTN_NEEDTEXTW) )
+        return FALSE;
 
-  LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT) lParam;
-  int id = (int)ttText->hdr.idFrom;
-  wxNode *node = m_tools.Find((long)id);
-  if (!node)
-    return FALSE;
-  
-  wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+    HWND toolTipWnd = (HWND)::SendMessage((HWND)GetHWND(), TB_GETTOOLTIPS, 0, 0);
+    if ( toolTipWnd != hdr->hwndFrom )
+        return FALSE;
 
-  switch (ttText->hdr.code)
-  {
-    case TTN_NEEDTEXT:
+    LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
+    int id = (int)ttText->hdr.idFrom;
+    wxNode *node = m_tools.Find((long)id);
+    if (!node)
+        return FALSE;
+
+    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+
+    if ( tool->m_shortHelpString != "" )
     {
-      if (tool->m_shortHelpString != "")
-        ttText->lpszText = (char *) (const char *)tool->m_shortHelpString;
+        if ( hdr->code == TTN_NEEDTEXTA )
+        {
+            ttText->lpszText = (char *)(const char *)tool->m_shortHelpString;
+        }
+#if (_WIN32_IE >= 0x0300)
+        else
+        {
+            // FIXME this is a temp hack only until I understand better what
+            //       must be done in both ANSI and Unicode builds
+            size_t lenAnsi = tool->m_shortHelpString.Len();
+            size_t lenUnicode = mbstowcs(NULL, tool->m_shortHelpString, lenAnsi);
+            wchar_t *pwz = new wchar_t[lenUnicode + 1];
+            mbstowcs(pwz, tool->m_shortHelpString, lenAnsi + 1);
+            memcpy(ttText->szText, pwz,
+                   (sizeof(ttText->szText) - 1)/sizeof(ttText->szText[0]));
+            ttText->szText[WXSIZEOF(ttText->szText)] = 0;
 
-      // For backward compatibility...
-      OnMouseEnter(tool->m_index);
-      break;
+            delete [] pwz;
+        }
+#endif // _WIN32_IE >= 0x0300
     }
-    default:
-      return FALSE;
-      break;
-  }
-  
-  return TRUE;
+
+    // For backward compatibility...
+    OnMouseEnter(tool->m_index);
+
+    return TRUE;
 }
 
 void wxToolBar95::SetToolBitmapSize(const wxSize& size)
 {
-  m_defaultWidth = size.x; m_defaultHeight = size.y;
+  m_defaultWidth = size.x;
+  m_defaultHeight = size.y;
   ::SendMessage((HWND) GetHWND(), TB_SETBITMAPSIZE, 0, (LPARAM) MAKELONG ((int)size.x, (int)size.y));
 }
 
@@ -379,7 +407,7 @@ void wxToolBar95::SetRows(int nRows)
   m_maxHeight = (rect.bottom - rect.top + 2);
 }
 
-wxSize wxToolBar95::GetMaxSize(void) const
+wxSize wxToolBar95::GetMaxSize() const
 {
   if ((m_maxWidth == -1) || (m_maxHeight == -1))
   {
@@ -400,7 +428,7 @@ void wxToolBar95::GetSize(int *w, int *h) const
 }
 
 // The button size is bigger than the bitmap size
-wxSize wxToolBar95::GetToolSize(void) const
+wxSize wxToolBar95::GetToolSize() const
 {
   return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
@@ -435,7 +463,7 @@ bool wxToolBar95::GetToolState(int toolIndex) const
     return (::SendMessage((HWND) GetHWND(), TB_ISBUTTONCHECKED, (WPARAM)toolIndex, (LPARAM)0) != 0);
 }
 
-void wxToolBar95::ClearTools(void)
+void wxToolBar95::ClearTools()
 {
   // TODO: Don't know how to reset the toolbar bitmap, as yet.
   // But adding tools and calling CreateTools should probably
@@ -472,7 +500,7 @@ wxToolBarTool *wxToolBar95::AddTool(int index, const wxBitmap& bitmap, const wxB
 void wxToolBar95::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     m_backgroundColour = wxColour(GetRValue(GetSysColor(COLOR_BTNFACE)),
-  	    GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
+          GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
 
     // Remap the buttons
     CreateTools();

@@ -154,6 +154,7 @@ const char *wxUserResourceStr = "TEXT";
 #endif
 
 #if wxUSE_POSTSCRIPT
+class wxPrintPaperDatabase;
 wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 #endif
 
