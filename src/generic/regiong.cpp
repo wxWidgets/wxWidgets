@@ -166,7 +166,7 @@ public:
     /* XCreateRegion */
     {   size = 1;
         numRects = 0;
-        rects = NULL;
+        rects = ( BOX * )malloc( (unsigned) sizeof( BOX ));
         extents.x1 = 0;
         extents.x2 = 0;
         extents.y1 = 0;
