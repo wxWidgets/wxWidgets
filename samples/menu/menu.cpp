@@ -817,8 +817,8 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            wxLogMessage(wxT("Menu item %d in menu %d has label '%s'"),
-                         index, menuindex, label.c_str());
+            wxLogMessage(wxT("Menu item %d in menu %lu has label '%s'"),
+                         index, (unsigned long)menuindex, label.c_str());
         }
     }
 }
