@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/window.h"                      // base class declaration
+#include "wx/containr.h"                    // wxControlContainer
 
 class WXDLLEXPORT wxSplitterEvent;
 
@@ -36,8 +37,6 @@ enum
     wxSPLIT_DRAG_DRAGGING,
     wxSPLIT_DRAG_LEFT_DOWN
 };
-
-class WXDLLEXPORT wxControlContainer;
 
 // ---------------------------------------------------------------------------
 // wxSplitterWindow maintains one or two panes, with
