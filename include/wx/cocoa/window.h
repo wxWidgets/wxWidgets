@@ -95,6 +95,7 @@ protected:
     virtual bool Cocoa_otherMouseDown(WX_NSEvent theEvent);
     virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent);
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent);
+    virtual bool Cocoa_resetCursorRects();
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     wxWindowCocoaHider *m_cocoaHider;
@@ -160,6 +161,8 @@ public:
     // Get/set client (application-useable) size
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int size);
+    // Set this window's tooltip
+    virtual void DoSetToolTip( wxToolTip *tip );
     // Set the size of the wxWindow (the contentView of an NSWindow)
     // wxTopLevelWindow will override this and set the NSWindow size
     // such that the contentView will be this size

@@ -55,6 +55,8 @@ public:
     {   return false; }
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent)
     {   return false; }
+    virtual bool Cocoa_resetCursorRects()
+    {	return false; }
 };
 
 #endif // _WX_COCOA_NSVIEW_H_

@@ -121,6 +121,7 @@ void wxWindowCocoaHider::Cocoa_FrameChanged(void)
     [m_owner->GetNSViewForHiding() setFrame:[m_dummyNSView frame]];
 }
 
+
 #ifdef WXCOCOA_FILL_DUMMY_VIEW
 bool wxWindowCocoaHider::Cocoa_drawRect(const NSRect& rect)
 {
@@ -479,6 +480,16 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
     wxSizeEvent event(GetSize(), m_windowId);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowCocoa::Cocoa_resetCursorRects()
+{
+    if(!m_cursor.GetNSCursor())
+        return false;
+    
+    [GetNSView() addCursorRect: [GetNSView() visibleRect]  cursor: m_cursor.GetNSCursor()];    
+        
+    return true;
 }
 
 bool wxWindow::Close(bool force)
@@ -873,7 +884,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 }
 
 // Get the window with the focus
-wxWindow *wxWindowBase::DoFindFocus()
+wxWindow *wxWindowBase::FindFocus()
 {
     // TODO
     return NULL;

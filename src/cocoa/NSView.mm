@@ -73,6 +73,7 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 - (void)otherMouseDown:(NSEvent *)theEvent;
 - (void)otherMouseDragged:(NSEvent *)theEvent;
 - (void)otherMouseUp:(NSEvent *)theEvent;
+- (void)resetCursorRects;
 @end // wxPoserNSView
 
 WX_IMPLEMENT_POSER(wxPoserNSView);
@@ -167,6 +168,13 @@ WX_IMPLEMENT_POSER(wxPoserNSView);
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
     if( !win || !win->Cocoa_otherMouseUp(theEvent) )
         [super otherMouseUp:theEvent];
+}
+
+- (void)resetCursorRects
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_resetCursorRects() )
+        [super resetCursorRects];
 }
 
 @end // implementation wxPoserNSView

@@ -30,6 +30,7 @@ public:
 
 protected:
     int m_width, m_height;
+    WX_NSCursor m_hCursor;
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -62,6 +63,11 @@ public:
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
+  
+  inline WX_NSCursor GetNSCursor() const
+  {	
+    return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
+  }
 
 };
 

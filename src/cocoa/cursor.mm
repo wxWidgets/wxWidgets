@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cursor.cpp
-// Purpose:     wxCursor class
-// Author:      AUTHOR
+// Name:        cursor.mm
+// Purpose:     wxCursor class for wxCocoa
+// Author:      Ryan Norton
 // Modified by:
-// Created:     ??/??/98
+// Created:     2004-10-05
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) Ryan Norton
 // Licence:   	wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,22 +19,23 @@
     #include "wx/cursor.h"
 #endif //WX_PRECOMP
 
+#import <AppKit/NSCursor.h>
+#import <AppKit/NSImage.h>
+#include <wx/cocoa/string.h>
+
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 #endif
 
-wxCursorRefData::wxCursorRefData()
+wxCursorRefData::wxCursorRefData() :
+    m_width(32), m_height(32), m_hCursor(nil)
 {
-    m_width = 32; m_height = 32;
-
-/* TODO
-    m_hCursor = 0 ;
-*/
 }
 
 wxCursorRefData::~wxCursorRefData()
 {
-    // TODO: destroy cursor
+    if (m_hCursor)
+        [m_hCursor release];
 }
 
 // Cursors
@@ -45,13 +46,35 @@ wxCursor::wxCursor()
 wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height),
     int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
 {
+    
 }
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
     m_refData = new wxCursorRefData;
-
-    // TODO: create cursor from a file
+    
+    //TODO:  Not sure if this works or not
+    NSImage* theImage;
+    
+    if (flags & wxBITMAP_TYPE_MACCURSOR_RESOURCE)
+    {
+        //[NSBundle bundleForClass:[self class]]?
+        theImage = [[NSImage alloc] 
+                        initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:wxNSStringWithWxString(cursor_file) ofType:nil]
+                    ];
+        
+    }
+    else 
+        theImage = [[NSImage alloc] initByReferencingFile:wxNSStringWithWxString(cursor_file)
+                ];
+    
+    wxASSERT(theImage);
+    
+    M_CURSORDATA->m_hCursor = [[NSCursor alloc] initWithImage:theImage
+                                        hotSpot:NSMakePoint(hotSpotX, hotSpotY)
+                                ];
+    
+    [theImage release];
 }
 
 // Cursors by stock number
@@ -59,14 +82,17 @@ wxCursor::wxCursor(int cursor_type)
 {
   m_refData = new wxCursorRefData;
 
-/* TODO
   switch (cursor_type)
   {
+    case wxCURSOR_IBEAM:
+      M_CURSORDATA->m_hCursor = [[NSCursor IBeamCursor] retain];
+      break;
+    case wxCURSOR_ARROW:
+      M_CURSORDATA->m_hCursor = [[NSCursor arrowCursor] retain];
+      break;
+/* TODO
     case wxCURSOR_WAIT:
       M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_WAIT);
-      break;
-    case wxCURSOR_IBEAM:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_IBEAM);
       break;
     case wxCURSOR_CROSS:
       M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_CROSS);
@@ -168,12 +194,10 @@ wxCursor::wxCursor(int cursor_type)
       M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), "wxCURSOR_BLANK");
       break;
     }
-    default:
-    case wxCURSOR_ARROW:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(NULL, IDC_ARROW);
-      break;
-  }
 */
+    default:
+    break;
+  }
 
 }
 
@@ -184,7 +208,8 @@ wxCursor::~wxCursor()
 // Global cursor setting
 void wxSetCursor(const wxCursor& cursor)
 {
-  // TODO (optional on platforms with no global cursor)
+    if (cursor.GetNSCursor())
+        [cursor.GetNSCursor() push];
 }
 
 static int wxBusyCursorCount = 0;
