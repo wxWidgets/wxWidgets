@@ -497,6 +497,14 @@ extern long wxCharsetToCodepage(const wxChar *name)
 
 #endif // Win32
 
+// ============================================================================
+// wxCharacterSet and derived classes
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxCharacterSet is the ABC for the classes below
+// ----------------------------------------------------------------------------
+
 class wxCharacterSet
 {
 public:
@@ -514,10 +522,14 @@ public:
     const wxChar*cname;
 };
 
+// ----------------------------------------------------------------------------
+// ID_CharSet: implementation of wxCharacterSet using an existing wxMBConv
+// ----------------------------------------------------------------------------
+
 class ID_CharSet : public wxCharacterSet
 {
 public:
-    ID_CharSet(const wxChar *name,wxMBConv *cnv)
+    ID_CharSet(const wxChar *name, wxMBConv *cnv)
         : wxCharacterSet(name), work(cnv) {}
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
@@ -533,10 +545,11 @@ public:
 };
 
 
-#ifdef HAVE_ICONV_H
+// ============================================================================
+// The classes doing conversion using the iconv_xxx() functions
+// ============================================================================
 
-bool g_wcNeedsSwap = FALSE;
-static const char *g_wcCharset = NULL;
+#ifdef HAVE_ICONV_H
 
 // VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with E2BIG
 //     if output buffer is _exactly_ as big as needed. Such case is (unless there's
@@ -552,213 +565,246 @@ static const char *g_wcCharset = NULL;
 #define ICONV_FAILED(cres, bufLeft)  (cres == (size_t)-1)
 #endif
 
+#ifdef WX_ICONV_TAKES_CHAR
+    #define ICONV_CHAR_CAST(x)  (char **)x
+#else
+    #define ICONV_CHAR_CAST(x)  (const char **)x
+#endif
+
+// ----------------------------------------------------------------------------
+// IC_CharSet: encapsulates an iconv character set
+// ----------------------------------------------------------------------------
+
 class IC_CharSet : public wxCharacterSet
 {
 public:
-    IC_CharSet(const wxChar *name)
-        : wxCharacterSet(name)
-    {
-        // check for charset that represents wchar_t:
-        if (g_wcCharset == NULL)
-        {
-            g_wcNeedsSwap = FALSE;
+    IC_CharSet(const wxChar *name);
+    virtual ~IC_CharSet();
 
-            // try charset with explicit bytesex info (e.g. "UCS-4LE"):
-            g_wcCharset = WC_NAME_BEST;
-            m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
 
-            if (m2w == (iconv_t)-1)
-            {
-                // try charset w/o bytesex info (e.g. "UCS4")
-                // and check for bytesex ourselves: 
-                g_wcCharset = WC_NAME;
-                m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
-
-                // last bet, try if it knows WCHAR_T pseudo-charset
-                if (m2w == (iconv_t)-1)
-                {
-                    g_wcCharset = "WCHAR_T";
-                    m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
-                }
-                
-                if (m2w != (iconv_t)-1)
-                {
-                    char    buf[2], *bufPtr;
-                    wchar_t wbuf[2], *wbufPtr;
-                    size_t  insz, outsz;
-                    size_t  res;
-                    
-                    buf[0] = 'A';
-                    buf[1] = 0;
-                    wbuf[0] = 0;
-                    insz = 2;
-                    outsz = SIZEOF_WCHAR_T * 2;
-                    wbufPtr = wbuf;
-                    bufPtr = buf;
-
-                    #ifdef WX_ICONV_TAKES_CHAR
-                    res = iconv(m2w, (char**)&bufPtr, &insz, (char**)&wbufPtr, &outsz);
-                    #else
-                    res = iconv(m2w, (const char**)&bufPtr, &insz, (char**)&wbufPtr, &outsz);
-                    #endif
-                    if (ICONV_FAILED(res, insz))
-                    {
-                        g_wcCharset = NULL;
-                        wxLogLastError(wxT("iconv"));
-                        wxLogError(_("Convertion to charset '%s' doesn't work."), name);
-                    }
-                    else
-                    {
-                        g_wcNeedsSwap = (wbuf[0] != (wchar_t)buf[0]);
-                    }
-                }
-                else
-                {
-                    g_wcCharset = NULL;
-                    wxLogError(_("Don't know how to convert to/from charset '%s'."), name);
-                }
-            }
-            wxLogTrace(wxT("strconv"), wxT("wchar_t charset is '%s', needs swap: %i"), g_wcCharset, g_wcNeedsSwap);
-        }
-        else
-            m2w = iconv_open(g_wcCharset, wxConvLibc.cWX2MB(name));
-    
-        w2m = iconv_open(wxConvLibc.cWX2MB(name), g_wcCharset);
-    }
-    
-    ~IC_CharSet() 
-    {
-        if ( m2w != (iconv_t)-1 )
-            iconv_close(m2w);
-        if ( w2m != (iconv_t)-1 )
-            iconv_close(w2m);
-    }
-
-    size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
-    {
-        size_t inbuf = strlen(psz);
-        size_t outbuf = n * SIZEOF_WCHAR_T;
-        size_t res, cres;
-        // VS: Use these instead of psz, buf because iconv() modifies its arguments:
-        wchar_t *bufPtr = buf;
-        const char *pszPtr = psz;
-
-        if (buf)
-        {
-            // have destination buffer, convert there
-#ifdef WX_ICONV_TAKES_CHAR
-            cres = iconv(m2w, (char**)&pszPtr, &inbuf, (char**)&bufPtr, &outbuf);
-#else
-            cres = iconv(m2w, &pszPtr, &inbuf, (char**)&bufPtr, &outbuf);
-#endif
-            res = n - (outbuf / SIZEOF_WCHAR_T);
-
-            if (g_wcNeedsSwap)
-            {
-                // convert to native endianness
-                WC_BSWAP(buf /* _not_ bufPtr */, res)
-            }
-        }
-        else
-        {
-            // no destination buffer... convert using temp buffer
-            // to calculate destination buffer requirement
-            wchar_t tbuf[8];
-            res = 0;
-            do {
-                bufPtr = tbuf; outbuf = 8*SIZEOF_WCHAR_T;
-#ifdef WX_ICONV_TAKES_CHAR
-                cres = iconv( m2w, (char**)&pszPtr, &inbuf, (char**)&bufPtr, &outbuf );
-#else
-                cres = iconv( m2w, &pszPtr, &inbuf, (char**)&bufPtr, &outbuf );
-#endif
-                res += 8-(outbuf/SIZEOF_WCHAR_T);
-            } while ((cres==(size_t)-1) && (errno==E2BIG));
-        }
-
-        if (ICONV_FAILED(cres, inbuf))
-        {
-            //VS: it is ok if iconv fails, hence trace only
-            wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
-            return (size_t)-1;
-        }
-
-        return res;
-    }
-
-    size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
-    {
-#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
-        size_t inbuf = std::wcslen(psz) * SIZEOF_WCHAR_T;
-#else
-        size_t inbuf = ::wcslen(psz) * SIZEOF_WCHAR_T;
-#endif
-        size_t outbuf = n;
-        size_t res, cres;
-        
-        wchar_t *tmpbuf = 0;
-
-        if (g_wcNeedsSwap)
-        {
-            // need to copy to temp buffer to switch endianness
-            // this absolutely doesn't rock!
-            // (no, doing WC_BSWAP twice on the original buffer won't help, as it
-            //  could be in read-only memory, or be accessed in some other thread)
-            tmpbuf=(wchar_t*)malloc((inbuf+1)*SIZEOF_WCHAR_T);
-            memcpy(tmpbuf,psz,(inbuf+1)*SIZEOF_WCHAR_T);
-            WC_BSWAP(tmpbuf, inbuf)
-            psz=tmpbuf;
-        }
-
-        if (buf)
-        {
-            // have destination buffer, convert there
-#ifdef WX_ICONV_TAKES_CHAR
-            cres = iconv( w2m, (char**)&psz, &inbuf, &buf, &outbuf );
-#else
-            cres = iconv( w2m, (const char**)&psz, &inbuf, &buf, &outbuf );
-#endif
-            res = n-outbuf;
-        }
-        else
-        {
-            // no destination buffer... convert using temp buffer
-            // to calculate destination buffer requirement
-            char tbuf[16];
-            res = 0;
-            do {
-                buf = tbuf; outbuf = 16;
-#ifdef WX_ICONV_TAKES_CHAR
-                cres = iconv( w2m, (char**)&psz, &inbuf, &buf, &outbuf );
-#else
-                cres = iconv( w2m, (const char**)&psz, &inbuf, &buf, &outbuf );
-#endif
-                res += 16 - outbuf;
-            } while ((cres==(size_t)-1) && (errno==E2BIG));
-        }
-
-        if (g_wcNeedsSwap)
-        {
-            free(tmpbuf);
-        }
-
-        if (ICONV_FAILED(cres, inbuf))
-        {
-            //VS: it is ok if iconv fails, hence trace only
-            wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
-            return (size_t)-1;
-        }
-
-        return res;
-    }
-
-    bool usable()
+    bool usable() const
         { return (m2w != (iconv_t)-1) && (w2m != (iconv_t)-1); }
 
 protected:
-    iconv_t m2w, w2m;
+    // the iconv handlers used to translate from multibyte to wide char and in
+    // the other direction
+    iconv_t m2w,
+            w2m;
+
+private:
+    // the name (for iconv_open()) of a wide char charset - if none is
+    // available on this machine, it will remain NULL
+    static const char *ms_wcCharsetName;
+
+    // true if the wide char encoding we use (i.e. ms_wcCharsetName) has
+    // different endian-ness than the native one
+    static bool ms_wcNeedsSwap = FALSE;
 };
+
+const char *IC_CharSet::ms_wcCharsetName = NULL;
+
+IC_CharSet::IC_CharSet(const wxChar *name)
+          : wxCharacterSet(name)
+{
+    // check for charset that represents wchar_t:
+    if (ms_wcCharsetName == NULL)
+    {
+        ms_wcNeedsSwap = FALSE;
+
+        // try charset with explicit bytesex info (e.g. "UCS-4LE"):
+        ms_wcCharsetName = WC_NAME_BEST;
+        m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+
+        if (m2w == (iconv_t)-1)
+        {
+            // try charset w/o bytesex info (e.g. "UCS4")
+            // and check for bytesex ourselves:
+            ms_wcCharsetName = WC_NAME;
+            m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+
+            // last bet, try if it knows WCHAR_T pseudo-charset
+            if (m2w == (iconv_t)-1)
+            {
+                ms_wcCharsetName = "WCHAR_T";
+                m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+            }
+
+            if (m2w != (iconv_t)-1)
+            {
+                char    buf[2], *bufPtr;
+                wchar_t wbuf[2], *wbufPtr;
+                size_t  insz, outsz;
+                size_t  res;
+
+                buf[0] = 'A';
+                buf[1] = 0;
+                wbuf[0] = 0;
+                insz = 2;
+                outsz = SIZEOF_WCHAR_T * 2;
+                wbufPtr = wbuf;
+                bufPtr = buf;
+
+                res = iconv(m2w, ICONV_CHAR_CAST(&bufPtr), &insz,
+                            (char**)&wbufPtr, &outsz);
+
+                if (ICONV_FAILED(res, insz))
+                {
+                    ms_wcCharsetName = NULL;
+                    wxLogLastError(wxT("iconv"));
+                    wxLogError(_("Convertion to charset '%s' doesn't work."), name);
+                }
+                else
+                {
+                    ms_wcNeedsSwap = wbuf[0] != (wchar_t)buf[0];
+                }
+            }
+            else
+            {
+                ms_wcCharsetName = NULL;
+                wxLogError(_("Impossible to convert to/from charset '%s'."), name);
+            }
+        }
+        wxLogTrace(wxT("strconv"), wxT("wchar_t charset is '%s', needs swap: %i"), ms_wcCharsetName, ms_wcNeedsSwap);
+    }
+    else // we already have ms_wcCharsetName
+    {
+        m2w = iconv_open(ms_wcCharsetName, wxConvLibc.cWX2MB(name));
+    }
+
+    // NB: don't ever pass NULL to iconv_open(), it may crash!
+    if ( ms_wcCharsetName )
+    {
+        w2m = iconv_open(wxConvLibc.cWX2MB(name), ms_wcCharsetName);
+    }
+}
+
+IC_CharSet::~IC_CharSet()
+{
+    if ( m2w != (iconv_t)-1 )
+        iconv_close(m2w);
+    if ( w2m != (iconv_t)-1 )
+        iconv_close(w2m);
+}
+
+size_t IC_CharSet::MB2WC(wchar_t *buf, const char *psz, size_t n)
+{
+    size_t inbuf = strlen(psz);
+    size_t outbuf = n * SIZEOF_WCHAR_T;
+    size_t res, cres;
+    // VS: Use these instead of psz, buf because iconv() modifies its arguments:
+    wchar_t *bufPtr = buf;
+    const char *pszPtr = psz;
+
+    if (buf)
+    {
+        // have destination buffer, convert there
+        cres = iconv(m2w,
+                     ICONV_CHAR_CAST(&pszPtr), &inbuf,
+                     (char**)&bufPtr, &outbuf);
+        res = n - (outbuf / SIZEOF_WCHAR_T);
+
+        if (ms_wcNeedsSwap)
+        {
+            // convert to native endianness
+            WC_BSWAP(buf /* _not_ bufPtr */, res)
+        }
+    }
+    else
+    {
+        // no destination buffer... convert using temp buffer
+        // to calculate destination buffer requirement
+        wchar_t tbuf[8];
+        res = 0;
+        do {
+            bufPtr = tbuf;
+            outbuf = 8*SIZEOF_WCHAR_T;
+
+            cres = iconv(m2w,
+                         ICONV_CHAR_CAST(&pszPtr), &inbuf,
+                         (char**)&bufPtr, &outbuf );
+
+            res += 8-(outbuf/SIZEOF_WCHAR_T);
+        } while ((cres==(size_t)-1) && (errno==E2BIG));
+    }
+
+    if (ICONV_FAILED(cres, inbuf))
+    {
+        //VS: it is ok if iconv fails, hence trace only
+        wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
+        return (size_t)-1;
+    }
+
+    return res;
+}
+
+size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
+{
+#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
+    size_t inbuf = std::wcslen(psz) * SIZEOF_WCHAR_T;
+#else
+    size_t inbuf = ::wcslen(psz) * SIZEOF_WCHAR_T;
 #endif
+    size_t outbuf = n;
+    size_t res, cres;
+
+    wchar_t *tmpbuf = 0;
+
+    if (ms_wcNeedsSwap)
+    {
+        // need to copy to temp buffer to switch endianness
+        // this absolutely doesn't rock!
+        // (no, doing WC_BSWAP twice on the original buffer won't help, as it
+        //  could be in read-only memory, or be accessed in some other thread)
+        tmpbuf=(wchar_t*)malloc((inbuf+1)*SIZEOF_WCHAR_T);
+        memcpy(tmpbuf,psz,(inbuf+1)*SIZEOF_WCHAR_T);
+        WC_BSWAP(tmpbuf, inbuf)
+        psz=tmpbuf;
+    }
+
+    if (buf)
+    {
+        // have destination buffer, convert there
+        cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
+
+        res = n-outbuf;
+    }
+    else
+    {
+        // no destination buffer... convert using temp buffer
+        // to calculate destination buffer requirement
+        char tbuf[16];
+        res = 0;
+        do {
+            buf = tbuf; outbuf = 16;
+
+            cres = iconv( w2m, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
+
+            res += 16 - outbuf;
+        } while ((cres==(size_t)-1) && (errno==E2BIG));
+    }
+
+    if (ms_wcNeedsSwap)
+    {
+        free(tmpbuf);
+    }
+
+    if (ICONV_FAILED(cres, inbuf))
+    {
+        //VS: it is ok if iconv fails, hence trace only
+        wxLogTrace(wxT("strconv"), wxT("iconv failed: %s"), wxSysErrorMsg(wxSysErrorCode()));
+        return (size_t)-1;
+    }
+
+    return res;
+}
+
+#endif // HAVE_ICONV_H
+
+// ============================================================================
+// Win32 conversion classes
+// ============================================================================
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
 class CP_CharSet : public wxCharacterSet
@@ -795,6 +841,10 @@ public:
     long m_CodePage;
 };
 #endif // __WIN32__
+
+// ============================================================================
+// wxEncodingConverter based conversion classes
+// ============================================================================
 
 #if wxUSE_FONTMAP
 
@@ -844,6 +894,11 @@ public:
 
 #endif // wxUSE_FONTMAP
 
+// ----------------------------------------------------------------------------
+// the function creating the wxCharacterSet for the specified charset on the
+// current system, trying all possibilities
+// ----------------------------------------------------------------------------
+
 static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 {
     wxCharacterSet *cset = NULL;
@@ -888,6 +943,10 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     wxLogError(_("Unknown encoding '%s'!"), name);
     return NULL;
 }
+
+// ============================================================================
+// wxCSConv implementation
+// ============================================================================
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
@@ -972,6 +1031,9 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     return len;
 }
 
+// VZ: are the classes below used at all??
+#if 0
+
 #ifdef HAVE_ICONV_H
 
 class IC_CharSetConverter
@@ -993,11 +1055,7 @@ public:
     {
         size_t inbuf = strlen(psz);
         size_t outbuf = n;
-#ifdef WX_ICONV_TAKES_CHAR
-        size_t res = iconv( cnv, (char**)&psz, &inbuf, &buf, &outbuf );
-#else
-        size_t res = iconv( cnv, &psz, &inbuf, &buf, &outbuf );
-#endif
+        size_t res = iconv( cnv, ICONV_CHAR_CAST(&psz), &inbuf, &buf, &outbuf );
         if (res == (size_t)-1)
             return (size_t)-1;
         return (n - outbuf);
@@ -1025,6 +1083,8 @@ public:
 public:
     wxEncodingConverter cnv;
 };
+
+#endif // 0
 
 #else // !wxUSE_WCHAR_T
 
