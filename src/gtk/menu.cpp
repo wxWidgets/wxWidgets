@@ -552,7 +552,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
         s << *pc;
     }
     
-    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, s );
+    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s );
     
 #else
 

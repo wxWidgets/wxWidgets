@@ -112,6 +112,7 @@ void wxMDIParentFrame::OnInternalIdle()
     wxFrame::OnInternalIdle();
 
     wxMDIChildFrame *active_child_frame = GetActiveChild();
+    bool visible_child_menu = FALSE;
 
     wxNode *node = m_clientWindow->m_children.First();
     while (node)
@@ -120,7 +121,10 @@ void wxMDIParentFrame::OnInternalIdle()
         if (child_frame->m_menuBar)
         {
             if (child_frame == active_child_frame)
+	    {
                gtk_widget_show( child_frame->m_menuBar->m_widget );
+	       visible_child_menu = TRUE;
+	    }
             else
                gtk_widget_hide( child_frame->m_menuBar->m_widget );
         }
@@ -128,7 +132,7 @@ void wxMDIParentFrame::OnInternalIdle()
     }
 
     /* show/hide parent menu bar as required */
-    if (m_frameMenuBar) m_frameMenuBar->Show( (active_child_frame == NULL) );
+    if (m_frameMenuBar) m_frameMenuBar->Show( !visible_child_menu );
 }
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height ) const

@@ -136,6 +136,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     gtk_widget_realize( GTK_COMBO(m_widget)->entry );
     gtk_widget_realize( GTK_COMBO(m_widget)->button );
 
+    if (style & wxCB_READONLY)
+        gtk_entry_set_editable( GTK_ENTRY( GTK_COMBO(m_widget)->entry ), FALSE );
+
     gtk_signal_connect( GTK_OBJECT(GTK_COMBO(m_widget)->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
