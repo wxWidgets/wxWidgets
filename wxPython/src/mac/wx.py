@@ -1565,6 +1565,29 @@ def wxPyTypeCast(obj, typeStr):
 
 
 #----------------------------------------------------------------------------
+_wxCallAfterId = None
+
+def wxCallAfter(callable, *args, **kw):
+    """
+    Call the specified function after the current and pending event
+    handlers have been completed.
+    """
+    app = wxGetApp()
+    assert app, 'No wxApp created yet'
+
+    global _wxCallAfterId
+    if _wxCallAfterId is None:
+        _wxCallAfterId = wxNewId()
+        app.Connect(-1, -1, _wxCallAfterId,
+              lambda event: apply(event.callable, event.args, event.kw) )
+    evt = wxPyEvent()
+    evt.SetEventType(_wxCallAfterId)
+    evt.callable = callable
+    evt.args = args
+    evt.kw = kw
+    wxPostEvent(app, evt)
+
+#----------------------------------------------------------------------
 
 class wxPyDeadObjectError(AttributeError):
     pass

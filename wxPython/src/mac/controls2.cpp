@@ -100,6 +100,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
 
     static const wxString wxPyEmptyString(wxT(""));
+
+    static const long longzero = 0;
   // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
@@ -211,11 +213,13 @@ public:
         int rval = 0;
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = m_myInst.findCallback("OnCompareItems")))
-            rval = m_myInst.callCallback(Py_BuildValue(
-                "(OO)",
-                wxPyConstructObject((void*)&item1, "wxTreeItemId"),
-                wxPyConstructObject((void*)&item2, "wxTreeItemId")));
+        if ((found = m_myInst.findCallback("OnCompareItems"))) {
+            PyObject *o1 = wxPyConstructObject((void*)&item1, "wxTreeItemId");
+            PyObject *o2 = wxPyConstructObject((void*)&item2, "wxTreeItemId");
+            rval = m_myInst.callCallback(Py_BuildValue("(OO)",o1,o2));
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+        }
         wxPyEndBlockThreads();
         if (! found)
             rval = wxTreeCtrl::OnCompareItems(item1, item2);
@@ -7692,7 +7696,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
     wxTreeItemId * _result;
     wxPyTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
-    long * _arg2;
+    long * _arg2 = (long *) &longzero;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     long  temp;
@@ -7701,7 +7705,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_GetFirstChild",_kwnames,&_argo0,&_argo1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxTreeCtrl_GetFirstChild",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7717,6 +7721,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
+    if (_obj2)
 {
   temp = (long) PyInt_AsLong(_obj2);
   _arg2 = &temp;

@@ -1755,11 +1755,13 @@ static PyObject *_wrap_wxSizer_Layout(PyObject *self, PyObject *args, PyObject *
 #define wxSizer_Fit(_swigobj,_swigarg0)  (_swigobj->Fit(_swigarg0))
 static PyObject *_wrap_wxSizer_Fit(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxSize * _result;
     wxSizer * _arg0;
     wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","window", NULL };
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_Fit",_kwnames,&_argo0,&_argo1)) 
@@ -1780,12 +1782,12 @@ static PyObject *_wrap_wxSizer_Fit(PyObject *self, PyObject *args, PyObject *kwa
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSizer_Fit(_arg0,_arg1);
+    _result = new wxSize (wxSizer_Fit(_arg0,_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
