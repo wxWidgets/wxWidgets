@@ -118,12 +118,19 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
         { fontId , (fontSize << 16) ,kTXNDefaultFontStyle, kTXNSystemDefaultEncoding } ,
     } ;
     int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
-#if TARGET_CARBON  
+#if 0 // TARGET_CARBON  
     --noOfFontDescriptions ;
 #endif
   	// kTXNAlwaysUseQuickDrawTextMask might be desirable because of speed increases but it crashes the app under OS X upon key stroke
-  	TXNInitTextension(fontDescriptions,  noOfFontDescriptions, ( kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
-	}
+  	OptionBits options = kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask ;
+#if TARGET_CARBON
+    if ( !UMAHasAquaLayout() )
+#endif
+    {
+        options |= kTXNAlwaysUseQuickDrawTextMask ;
+    }
+  	TXNInitTextension(fontDescriptions,  noOfFontDescriptions, options );
+  }
 
   long menuMgrAttr ;
   Gestalt( gestaltMenuMgrAttr , &menuMgrAttr ) ;
