@@ -1016,6 +1016,7 @@ wxImage wxBitmap::ConvertToImage() const
 
     bool hasAlpha = false ;
     bool hasMask = false ;
+    int maskBytesPerRow = 0 ;
     unsigned char *alpha = NULL ;
     unsigned char *mask = NULL ;
     if ( HasAlpha() )
@@ -1027,6 +1028,7 @@ wxImage wxBitmap::ConvertToImage() const
     {
         hasMask = true ;
         mask = (unsigned char*) GetMask()->GetRawAccess() ;
+        maskBytesPerRow = GetMask()->GetBytesPerRow() ;
     }
 
     if ( hasAlpha )
@@ -1044,8 +1046,9 @@ wxImage wxBitmap::ConvertToImage() const
     static const int MASK_BLUE = 3;
     static const int MASK_BLUE_REPLACEMENT = 2;
 
-    for (int yy = 0; yy < height; yy++)
+    for (int yy = 0; yy < height; yy++ , mask += maskBytesPerRow )
     {
+        unsigned char * maskp = mask ;
         for (int xx = 0; xx < width; xx++)
         {
             long color = *((long*) source) ;
@@ -1055,7 +1058,7 @@ wxImage wxBitmap::ConvertToImage() const
             unsigned char b = (color&0x000000FF);
             if ( hasMask )
             {
-                if ( *mask++ == 0 )
+                if ( *maskp++ == 0 )
                 {
                     if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                         b = MASK_BLUE_REPLACEMENT ;
