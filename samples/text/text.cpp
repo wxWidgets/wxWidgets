@@ -599,8 +599,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
                                              FALSE, "",
                                              wxFONTENCODING_ISO8859_2));
-                //wxFONTENCODING_KOI8));
-                //m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
                 m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
                 break;
 

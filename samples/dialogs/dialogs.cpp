@@ -179,7 +179,6 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
       {
         wxColourData retData = dialog->GetColourData();
         wxColour col = retData.GetColour();
-//        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(&col, wxSOLID);
         myCanvas->SetBackgroundColour(col);
         myCanvas->Clear();
         myCanvas->Refresh();
