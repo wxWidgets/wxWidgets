@@ -2768,9 +2768,9 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                   (keyCode >= 'A' && keyCode <= 'Z' )))
             {
                 // find the next item starting with the given prefix
-                char ch = (char)keyCode;
+                wxChar ch = (wxChar)keyCode;
 
-                wxTreeItemId id = FindItem(m_current, m_findPrefix + (wxChar)ch);
+                wxTreeItemId id = FindItem(m_current, m_findPrefix + ch);
                 if ( !id.IsOk() )
                 {
                     // no such item
