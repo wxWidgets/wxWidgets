@@ -338,21 +338,20 @@ void wxToolWindow::DrawHintRect( const wxRect& r )
 
 void wxToolWindow::SetHintCursor( int type )
 {
-	if ( mResizeStarted ) return;
+	if ( mResizeStarted )
+        return;
 
 	if ( type == HITS_WND_NOTHING || type == HITS_WND_CLIENT )
 	{
 		// the cursor is out of window - reset to arrow
 
-		if ( mMouseCaptured && !mResizeStarted )
+		if ( mMouseCaptured )
 		{
 			ReleaseMouse();
 			mMouseCaptured = FALSE;
 		}
 
-		if ( mCursorType == HITS_WND_NOTHING && !mResizeStarted )
-
-			SetCursor( wxCURSOR_ARROW );
+		SetCursor( wxCURSOR_ARROW );
 
 		mCursorType = type;
 
