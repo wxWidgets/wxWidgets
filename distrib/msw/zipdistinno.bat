@@ -26,6 +26,7 @@ pause
 erase %dest\wx*.zip
 erase %dest\*.htb
 erase %dest\ogl3.zip
+erase %dest\contrib.zip
 erase %dest\tex2rtf2.zip
 erase %dest\jpeg.zip
 erase %dest\tiff.zip
@@ -106,6 +107,8 @@ zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
 
 zip32 -@ %dest\wxxml.zip < %src\distrib\msw\xml.rsp
 
+zip32 -@ %dest\contrib.zip < %src\distrib\msw\contrib.rsp
+
 rem Dialog Editor source and binary
 erase %dest\dialoged_source.zip
 zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
@@ -161,6 +164,7 @@ unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
 unzip32 -o ..\tiff.zip
 unzip32 -o ..\xml.zip
+unzip32 -o ..\contrib.zip
 unzip32 -o ..\tex2rtf2.zip
 
 rem Now delete a few files that are unnecessary
