@@ -295,14 +295,19 @@ int wxDC::GetDepth() const
 void wxDC::Clear()
 {
     RECT rect;
-    if (m_canvas)
-        GetClientRect((HWND) m_canvas->GetHWND(), &rect);
-    else if (m_selectedBitmap.Ok())
+    if ( m_canvas )
     {
+        GetClientRect((HWND) m_canvas->GetHWND(), &rect);
+    }
+    else
+    {
+        wxCHECK_RET( m_selectedBitmap.Ok(), _T("this DC can't be cleared") );
+
         rect.left = 0; rect.top = 0;
         rect.right = m_selectedBitmap.GetWidth();
         rect.bottom = m_selectedBitmap.GetHeight();
     }
+
     (void) ::SetMapMode(GetHdc(), MM_TEXT);
 
     DWORD colour = GetBkColor(GetHdc());
