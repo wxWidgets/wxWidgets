@@ -387,7 +387,9 @@ samples/controls/*.xpm
 samples/controls/*.ico
 samples/controls/*.bmp
 samples/controls/*.rc
-samples/controls/icons/*
+samples/controls/icons/*.bmp
+samples/controls/icons/*.ico
+samples/controls/icons/*.xpm
 
 samples/fractal/*.cpp
 samples/fractal/*.h
@@ -627,6 +629,8 @@ samples/internat/*.po
 samples/internat/*.ico
 samples/internat/*.bmp
 samples/internat/*.mo
+samples/internat/fr/*.mo
+samples/internat/fr/*.po
 
 samples/checklst/*.cpp
 samples/checklst/*.h
