@@ -1314,6 +1314,12 @@ public:
 
     bool IsSelection();
 
+    // ------ deselection
+    //
+    void DeselectRow( int row );
+    void DeselectCol( int col );
+    void DeselectCell( int row, int col );
+
     void ClearSelection();
 
     bool IsInSelection( int row, int col );

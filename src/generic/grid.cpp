@@ -8275,6 +8275,52 @@ void wxGrid::SelectAll()
     m_selection->SelectBlock( 0, 0, m_numRows-1, m_numCols-1 );
 }
 
+//
+// ------ Cell, row and col deselection
+//
+
+void wxGrid::DeselectRow( int row )
+{
+    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    {
+        if ( m_selection->IsInSelection(row, 0 ) )
+            m_selection->ToggleCellSelection( row, 0);
+    } 
+    else
+    {
+        int nCols = GetNumberCols();
+        for ( int i = 0; i < nCols ; i++ )
+        {
+            if ( m_selection->IsInSelection(row, i ) )
+                m_selection->ToggleCellSelection( row, i);
+        }
+    }
+}
+
+void wxGrid::DeselectCol( int col )
+{
+    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
+    {
+        if ( m_selection->IsInSelection(0, col ) )
+            m_selection->ToggleCellSelection( 0, col);
+    }
+    else
+    {
+        int nRows = GetNumberRows();
+        for ( int i = 0; i < nRows ; i++ )
+        {
+            if ( m_selection->IsInSelection(i, col ) )
+                m_selection->ToggleCellSelection(i, col);
+        }
+    }
+}
+
+void wxGrid::DeselectCell( int row, int col )
+{
+    if ( m_selection->IsInSelection(row, col) )
+        m_selection->ToggleCellSelection(row, col);
+}
+
 bool wxGrid::IsSelection()
 {
     return ( m_selection->IsSelection() ||
