@@ -39557,14 +39557,10 @@ fi
     BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
 
 
-
-
-
 BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.4"
 
 
 
-
     # Check whether --enable-precomp-headers or --disable-precomp-headers was given.
 if test "${enable_precomp_headers+set}" = set; then
   enableval="$enable_precomp_headers"
@@ -39820,7 +39816,6 @@ EOF
             fi
         fi
     fi
-
 
 
 
@@ -40572,6 +40567,16 @@ EOF
     COND_PLATFORM_MACOSX_1_TOOLKIT_MAC="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xMAC" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_MAC=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xMOTIF" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_TOOLKIT_X11="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xX11" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_X11=""
     fi
 
     COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
@@ -41844,6 +41849,7 @@ cat >>$CONFIG_STATUS <<_ACEOF
 
             TOOLCHAIN_NAME="${TOOLCHAIN_NAME}"
             WXCONFIG_DATA_FILE="${WXCONFIG_DATA_FILE}"
+            WX_RELEASE="${WX_RELEASE}"
             LN_S="${LN_S}"
 
 
@@ -42865,18 +42871,20 @@ echo "$as_me: executing $ac_dest commands" >&6;}
               mv -f setup.h lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h
             fi
 
-            if test -f wx-config; then
+                                                                                                if test ! -h wx-config; then
                 chmod +x wx-config
                 mv -f wx-config lib/wx/config/${WXCONFIG_DATA_FILE}
-                ( cd lib/wx/config ;
-                  rm -f ${TOOLCHAIN_NAME}
-                  ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
+                ${LN_S} wx-config-${WX_RELEASE} wx-config
             fi
+            ( cd lib/wx/config ;
+              rm -f ${TOOLCHAIN_NAME}
+              ${LN_S} ${WXCONFIG_DATA_FILE} ${TOOLCHAIN_NAME} )
+
             if test -f wx-config-wrapper; then
                 chmod +x wx-config-wrapper
-                mv -f wx-config-wrapper wx-config
+                mv -f wx-config-wrapper wx-config-${WX_RELEASE}
                 rm -f wx${TOOLCHAIN_NAME}-config
-                ${LN_S} wx-config wx${TOOLCHAIN_NAME}-config
+                ${LN_S} wx-config-${WX_RELEASE} wx${TOOLCHAIN_NAME}-config
             fi
            ;;
   esac

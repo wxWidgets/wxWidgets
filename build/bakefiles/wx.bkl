@@ -67,7 +67,8 @@
                 $(INSTALL_DIR) $(DESTDIR)$(LIBDIR)/wx/config
                 $(INSTALL_PROGRAM) lib/wx/config/@WXCONFIG_DATA_FILE@ $(DESTDIR)$(LIBDIR)/wx/config
                 (cd $(DESTDIR)$(LIBDIR)/wx/config &amp;&amp; rm -f $(TOOLCHAIN_NAME) &amp;&amp; $(LN_S) @WXCONFIG_DATA_FILE@ $(TOOLCHAIN_NAME))
-                $(INSTALL_PROGRAM) wx-config $(DESTDIR)$(BINDIR)
+                $(INSTALL_PROGRAM) wx-config-$(WXVER_MAJOR).$(WXVER_MINOR) $(DESTDIR)$(BINDIR)
+                (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx-config &amp;&amp; $(LN_S) wx-config-$(WXVER_MAJOR).$(WXVER_MINOR) wx-config)
                 (cd $(DESTDIR)$(BINDIR) &amp;&amp; rm -f wx$(TOOLCHAIN_NAME)-config &amp;&amp; $(LN_S) wx-config wx$(TOOLCHAIN_NAME)-config)
             </command>
         </action>
