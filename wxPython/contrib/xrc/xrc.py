@@ -41,12 +41,14 @@ from sizers import *
 
 from filesys import *
 
-def XMLID(str_id):
-    return wxXmlResource_GetXMLID(str_id)
+def XRCID(str_id):
+    return wxXmlResource_GetXRCID(str_id)
 
-def XMLCTRL(window, str_id, *args):
-    return window.FindWindowById(XMLID(str_id))
+def XRCCTRL(window, str_id, *ignoreargs):
+    return window.FindWindowById(XRCID(str_id))
 
+XMLID = XRCID
+XMLCTRL = XRCCTRL
 
 class wxXmlResourcePtr(wxObjectPtr):
     def __init__(self,this):
@@ -129,7 +131,7 @@ def wxXmlResource(*_args,**_kwargs):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
-wxXmlResource_GetXMLID = xrcc.wxXmlResource_GetXMLID
+wxXmlResource_GetXRCID = xrcc.wxXmlResource_GetXRCID
 
 def wxXmlResource_Get(*_args, **_kwargs):
     val = apply(xrcc.wxXmlResource_Get,_args,_kwargs)

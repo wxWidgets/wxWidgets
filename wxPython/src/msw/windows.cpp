@@ -3317,6 +3317,43 @@ static PyObject *_wrap_wxWindow_PushEventHandler(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxWindow_RemoveEventHandler(_swigobj,_swigarg0)  (_swigobj->RemoveEventHandler(_swigarg0))
+static PyObject *_wrap_wxWindow_RemoveEventHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    wxEvtHandler * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","handler", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_RemoveEventHandler",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_RemoveEventHandler. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_RemoveEventHandler. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxWindow_RemoveEventHandler(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxWindow_PopupMenuXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PopupMenu(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxWindow_PopupMenuXY(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10675,6 +10712,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Raise", (PyCFunction) _wrap_wxWindow_Raise, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PopupMenu", (PyCFunction) _wrap_wxWindow_PopupMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PopupMenuXY", (PyCFunction) _wrap_wxWindow_PopupMenuXY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_RemoveEventHandler", (PyCFunction) _wrap_wxWindow_RemoveEventHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PushEventHandler", (PyCFunction) _wrap_wxWindow_PushEventHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PopEventHandler", (PyCFunction) _wrap_wxWindow_PopEventHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Move", (PyCFunction) _wrap_wxWindow_Move, METH_VARARGS | METH_KEYWORDS },

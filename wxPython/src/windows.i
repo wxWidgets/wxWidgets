@@ -283,6 +283,13 @@ public:
     wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
     void PushEventHandler(wxEvtHandler* handler);
 
+        // find the given handler in the event handler chain and remove (but
+        // not delete) it from the event handler chain, return TRUE if it was
+        // found and FALSE otherwise (this also results in an assert failure so
+        // this function should only be called when the handler is supposed to
+        // be there)
+    bool RemoveEventHandler(wxEvtHandler *handler);
+
     %name(PopupMenuXY)bool PopupMenu(wxMenu *menu, int x, int y);
     bool PopupMenu(wxMenu *menu, const wxPoint& pos);
 

@@ -1046,18 +1046,18 @@ static PyObject *_wrap_wxXmlResource_AttachUnknownControl(PyObject *self, PyObje
     return _resultobj;
 }
 
-static PyObject *_wrap_wxXmlResource_GetXMLID(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxXmlResource_GetXRCID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     char * _arg0;
     char *_kwnames[] = { "str_id", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxXmlResource_GetXMLID",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxXmlResource_GetXRCID",_kwnames,&_arg0)) 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxXmlResource::GetXMLID(_arg0);
+        _result = (int )wxXmlResource::GetXRCID(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1189,7 +1189,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "wxXmlResource_Get", (PyCFunction) _wrap_wxXmlResource_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_CompareVersion", (PyCFunction) _wrap_wxXmlResource_CompareVersion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_GetVersion", (PyCFunction) _wrap_wxXmlResource_GetVersion, METH_VARARGS | METH_KEYWORDS },
-	 { "wxXmlResource_GetXMLID", (PyCFunction) _wrap_wxXmlResource_GetXMLID, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_GetXRCID", (PyCFunction) _wrap_wxXmlResource_GetXRCID, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_AttachUnknownControl", (PyCFunction) _wrap_wxXmlResource_AttachUnknownControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadIcon", (PyCFunction) _wrap_wxXmlResource_LoadIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_LoadBitmap", (PyCFunction) _wrap_wxXmlResource_LoadBitmap, METH_VARARGS | METH_KEYWORDS },

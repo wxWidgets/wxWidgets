@@ -377,7 +377,7 @@ wxString wxGetFullHostName();
 wxString wxGetUserId();
 wxString wxGetUserName();
 wxString wxGetHomeDir();
-
+wxString wxGetUserHome(const char* user = "");
 
 //----------------------------------------------------------------------
 

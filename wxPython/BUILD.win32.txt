@@ -81,6 +81,7 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
          wxUSE_DEBUG_NEW_ALWAYS        0
          wxUSE_CMDLINE_PARSER          0
          wxUSE_DIALUP_MANAGER          0
+         wxUSE_DYNAMIC_LOADER          0
          wxUSE_TREELAYOUT              0
          wxUSE_POSTSCRIPT              1
 

@@ -331,6 +331,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def PushEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PushEventHandler,(self,) + _args, _kwargs)
         return val
+    def RemoveEventHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_RemoveEventHandler,(self,) + _args, _kwargs)
+        return val
     def PopupMenuXY(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PopupMenuXY,(self,) + _args, _kwargs)
         return val

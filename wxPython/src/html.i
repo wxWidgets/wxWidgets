@@ -73,6 +73,27 @@ enum {
 };
 
 
+enum {
+    wxHW_SCROLLBAR_NEVER,
+    wxHW_SCROLLBAR_AUTO,
+};
+
+
+// enums for wxHtmlWindow::OnOpeningURL
+enum wxHtmlOpeningStatus
+{
+    wxHTML_OPEN,
+    wxHTML_BLOCK,
+    wxHTML_REDIRECT
+};
+
+enum wxHtmlURLType
+{
+    wxHTML_URL_PAGE,
+    wxHTML_URL_IMAGE,
+    wxHTML_URL_OTHER
+};
+
 //---------------------------------------------------------------------------
 
 class wxHtmlLinkInfo : public wxObject {
@@ -127,9 +148,7 @@ public:
     void PushTagHandler(wxHtmlTagHandler* handler, wxString tags);
     void PopTagHandler();
 
-    // Returns TRUE if the parser is allowed to open given URL (may be forbidden
-    // for security reasons)
-    virtual bool CanOpenURL(const wxString& url) const { return TRUE; }
+    // virtual wxFSFile *OpenURL(wxHtmlURLType type, const wxString& url) const;
 
     // void AddText(const char* txt) = 0;
     // void AddTag(const wxHtmlTag& tag);
@@ -427,10 +446,14 @@ public:
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
 
+     wxHtmlOpeningStatus OnOpeningURL(wxHtmlURLType type,
+                                      const wxString& url,
+                                      wxString *redirect) const;
+
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
-    DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
+//     DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -438,7 +461,7 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
-IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
+// IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
@@ -456,6 +479,40 @@ void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
     wxHtmlWindow::OnLinkClicked(link);
 }
+
+
+wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
+                                                 const wxString& url,
+                                                 wxString *redirect) const {
+    bool found;
+    wxHtmlOpeningStatus rval;
+    wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
+        PyObject* ro;
+        ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(is)", type, url.c_str()));
+        if (PyString_Check(ro)
+#if PYTHON_API_VERSION >= 1009
+            || PyUnicode_Check(ro)
+#endif
+            ) {
+            PyObject* str = PyObject_Str(ro);
+            *redirect = PyString_AsString(str);
+            Py_DECREF(str);
+            rval = wxHTML_REDIRECT;
+        }
+        else {
+            PyObject* num = PyNumber_Int(ro);
+            rval = (wxHtmlOpeningStatus)PyInt_AsLong(num);
+            Py_DECREF(num);
+        }
+        Py_DECREF(ro);
+    }
+    wxPyEndBlockThreads();
+    if (! found)
+        rval = wxHtmlWindow::OnOpeningURL(type, url, redirect);
+    return rval;
+}
+
 
 %}
 

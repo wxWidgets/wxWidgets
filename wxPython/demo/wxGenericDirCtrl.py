@@ -8,13 +8,13 @@ class TestPanel(wxPanel):
         self.log = log
 
         txt1 = wxStaticText(self, -1, "style=0")
-        dir1 = wxGenericDirCtrl(self, -1, size=(200,250), style=0)
+        dir1 = wxGenericDirCtrl(self, -1, size=(200,225), style=0)
 
         txt2 = wxStaticText(self, -1, "wxDIRCTRL_DIR_ONLY")
-        dir2 = wxGenericDirCtrl(self, -1, size=(200,250), style=wxDIRCTRL_DIR_ONLY)
+        dir2 = wxGenericDirCtrl(self, -1, size=(200,225), style=wxDIRCTRL_DIR_ONLY)
 
         txt3 = wxStaticText(self, -1, "wxDIRCTRL_SHOW_FILTERS")
-        dir3 = wxGenericDirCtrl(self, -1, size=(200,250), style=wxDIRCTRL_SHOW_FILTERS,
+        dir3 = wxGenericDirCtrl(self, -1, size=(200,225), style=wxDIRCTRL_SHOW_FILTERS,
                                 filter="All files (*.*)|*.*|Python files (*.py)|*.py")
 
         sz = wxFlexGridSizer(cols=3, hgap=5, vgap=5)

@@ -465,9 +465,6 @@ enum {
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,
 
-    wxHW_SCROLLBAR_NEVER,
-    wxHW_SCROLLBAR_AUTO,
-
     wxJOYSTICK1,
     wxJOYSTICK2,
     wxJOY_BUTTON1,
