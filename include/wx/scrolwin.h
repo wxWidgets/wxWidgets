@@ -14,6 +14,7 @@
 
 #include "wx/window.h"
 
+class WXDLLEXPORT wxScrollHelperEvtHandler;
 class WXDLLEXPORT wxTimer;
 
 // ----------------------------------------------------------------------------
@@ -139,6 +140,13 @@ protected:
             *h = size.y;
     }
 
+    // change just the target window (unlike SetWindow which changes m_win as
+    // well)
+    void DoSetTargetWindow(wxWindow *target);
+
+    // delete the event handler we installed
+    void DeleteEvtHandler();
+
     wxWindow             *m_win,
                          *m_targetWindow;
 
@@ -164,6 +172,8 @@ protected:
 #if wxUSE_MOUSEWHEEL
     int m_wheelRotation;
 #endif // wxUSE_MOUSEWHEEL
+
+    wxScrollHelperEvtHandler *m_handler;
 };
 
 // ----------------------------------------------------------------------------

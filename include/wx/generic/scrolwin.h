@@ -66,8 +66,14 @@ class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel,
 
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
 
+protected:
+    // this is needed for wxEVT_PAINT processing hack described in
+    // wxScrollHelperEvtHandler::ProcessEvent()
+    void OnPaint(wxPaintEvent& event);
+
 private:
     DECLARE_ABSTRACT_CLASS(wxGenericScrolledWindow)
+    DECLARE_EVENT_TABLE()
 };
 
 #ifdef __VISUALC__

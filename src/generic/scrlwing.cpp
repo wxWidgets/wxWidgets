@@ -64,7 +64,7 @@ IMPLEMENT_CLASS(wxScrolledWindow, wxGenericScrolledWindow)
 // them to wxScrollHelper
 // ----------------------------------------------------------------------------
 
-class wxScrollHelperEvtHandler : public wxEvtHandler
+class WXDLLEXPORT wxScrollHelperEvtHandler : public wxEvtHandler
 {
 public:
     wxScrollHelperEvtHandler(wxScrollHelper *scrollHelper)
@@ -74,8 +74,12 @@ public:
 
     virtual bool ProcessEvent(wxEvent& event);
 
+    void ResetDrawnFlag() { m_hasDrawnWindow = FALSE; }
+
 private:
     wxScrollHelper *m_scrollHelper;
+
+    bool m_hasDrawnWindow;
 };
 
 // ----------------------------------------------------------------------------
@@ -169,13 +173,41 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 {
     wxEventType evType = event.GetEventType();
 
+    // always process the size events ourselves, even if the user code handles
+    // them as well, as we need to AdjustScrollbars()
     if ( evType == wxEVT_SIZE )
     {
         m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
     }
 
+    // the explanation of wxEVT_PAINT processing hack: for historic reasons
+    // there are 2 ways to process this event in classes deriving from
+    // wxScrolledWindow. The user code may
+    //
+    //  1. override wxScrolledWindow::OnDraw(dc)
+    //  2. define its own OnPaint() handler
+    //
+    // In addition, in wxUniversal wxWindow defines OnPaint() itself and
+    // always processes the draw event, so we can't just try the window
+    // OnPaint() first and call our HandleOnPaint() if it doesn't process it
+    // (the latter would never be called in wxUniversal).
+    //
+    // So the solution is to have a flag telling us whether the user code drew
+    // anything in the window. We set it to true here but reset it to false in
+    // wxScrolledWindow::OnPaint() handler (which wouldn't be called if the
+    // user code defined OnPaint() in the derived class)
+    m_hasDrawnWindow = TRUE;
+
     if ( wxEvtHandler::ProcessEvent(event) )
-        return TRUE;
+    {
+        // normally, nothing more to do here - except if it was a paint event
+        // which wasn't really processed, then we'll try to call our
+        // OnDraw() below (from HandleOnPaint)
+        if ( !m_hasDrawnWindow )
+        {
+            return TRUE;
+        }
+    }
 
     // reset the skipped flag to FALSE as it might have been set to TRUE in
     // ProcessEvent() above
@@ -252,29 +284,17 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
 
     m_timerAutoScroll = (wxTimer *)NULL;
 
+    m_handler = NULL;
+
     if ( win )
         SetWindow(win);
-}
-
-void wxScrollHelper::SetWindow(wxWindow *win)
-{
-    wxCHECK_RET( win, _T("wxScrollHelper needs a window to scroll") );
-
-    m_targetWindow = m_win = win;
-
-    // install the event handler which will intercept the events we're
-    // interested in
-    m_win->PushEventHandler(new wxScrollHelperEvtHandler(this));
 }
 
 wxScrollHelper::~wxScrollHelper()
 {
     StopAutoScrolling();
 
-    if ( m_targetWindow )
-        m_targetWindow->PopEventHandler(TRUE /* do delete it */);
-    if ( m_win && m_win != m_targetWindow)
-        m_win->PopEventHandler(TRUE /* do delete it */);
+    DeleteEvtHandler();
 }
 
 // ----------------------------------------------------------------------------
@@ -357,20 +377,44 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 // target window handling
 // ----------------------------------------------------------------------------
 
+void wxScrollHelper::DeleteEvtHandler()
+{
+    // FIXME: we should search for m_handler in the handler list
+    if ( m_targetWindow )
+    {
+        m_targetWindow->PopEventHandler(TRUE /* Delete old event handler*/);
+    }
+}
+
+void wxScrollHelper::SetWindow(wxWindow *win)
+{
+    wxCHECK_RET( win, _T("wxScrollHelper needs a window to scroll") );
+
+    m_win = win;
+
+    DoSetTargetWindow(win);
+}
+
+void wxScrollHelper::DoSetTargetWindow(wxWindow *target)
+{
+    m_targetWindow = target;
+
+    // install the event handler which will intercept the events we're
+    // interested in
+    m_handler = new wxScrollHelperEvtHandler(this);
+    m_targetWindow->PushEventHandler(m_handler);
+}
+
 void wxScrollHelper::SetTargetWindow( wxWindow *target )
 {
-    wxASSERT_MSG( target, wxT("target window must not be NULL") );
-    // FIXME: There is a potential problem with this way of deleting
-    // event handlers, basically you can not be sure that you delete
-    // the event handler that was create by this wxScrollHelper.
-    // Remove the old event handler from the previous target scroll window.
-    if (m_targetWindow && m_targetWindow != m_win)
-        m_targetWindow->PopEventHandler(TRUE /* Delete old event handler*/);
-    m_targetWindow = target;
-    // Install a new event handler, which will intercept the events we're
-    // interested in from the target scroll window.
-    if (m_targetWindow != m_win)
-        m_targetWindow->PushEventHandler(new wxScrollHelperEvtHandler(this));
+    wxCHECK_RET( target, wxT("target window must not be NULL") );
+
+    if ( target == m_targetWindow )
+        return;
+
+    DeleteEvtHandler();
+
+    DoSetTargetWindow(target);
 }
 
 wxWindow *wxScrollHelper::GetTargetWindow() const
@@ -1019,6 +1063,10 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericScrolledWindow, wxPanel)
 
+BEGIN_EVENT_TABLE(wxGenericScrolledWindow, wxPanel)
+    EVT_PAINT(wxGenericScrolledWindow::OnPaint)
+END_EVENT_TABLE()
+
 bool wxGenericScrolledWindow::Create(wxWindow *parent,
                               wxWindowID id,
                               const wxPoint& pos,
@@ -1042,7 +1090,17 @@ wxGenericScrolledWindow::~wxGenericScrolledWindow()
 {
 }
 
+void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
+{
+    // the user code didn't really draw the window if we got here, so set this
+    // flag to try to call OnDraw() later
+    m_handler->ResetDrawnFlag();
+
+    event.Skip();
+}
+
 #if WXWIN_COMPATIBILITY
+
 void wxGenericScrolledWindow::GetScrollUnitsPerPage (int *x_page, int *y_page) const
 {
       *x_page = GetScrollPageSize(wxHORIZONTAL);
@@ -1056,6 +1114,7 @@ void wxGenericScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, fl
     if ( yy )
         *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);
 }
+
 #endif // WXWIN_COMPATIBILITY
 
 #endif // !wxGTK
