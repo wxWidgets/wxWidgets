@@ -167,7 +167,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     printout->SetPageSizeMM((int)w, (int)h);
 
     // Create an abort window
-    wxBeginBusyCursor();
+    wxBusyCursor busyCursor;
 
     printout->OnPreparePrinting();
 
@@ -179,7 +179,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     if (maxPage == 0)
     {
         sm_lastError = wxPRINTER_ERROR;
-        wxEndBusyCursor();
         return false;
     }
 
@@ -212,7 +211,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
 
     if (!win)
     {
-        wxEndBusyCursor();
         wxLogDebug(wxT("Could not create an abort dialog."));
         sm_lastError = wxPRINTER_ERROR;
 
@@ -241,7 +239,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     {
         if ( !printout->OnBeginDocument(minPageNum, maxPageNum) )
         {
-            wxEndBusyCursor();
             wxLogError(_("Could not start printing."));
             sm_lastError = wxPRINTER_ERROR;
             break;
@@ -286,8 +283,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         delete sm_abortWindow;
         sm_abortWindow = NULL;
     }
-
-    wxEndBusyCursor();
 
     delete dc;
 
