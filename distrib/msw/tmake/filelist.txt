@@ -444,6 +444,7 @@ combobox.h	W
 confbase.h	W
 config.h	W
 control.h	W
+ctrlsub.h	W
 cursor.h	W
 dataobj.h	W
 date.h	W	B

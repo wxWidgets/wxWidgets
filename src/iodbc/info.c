@@ -198,7 +198,7 @@ SQLDataSources (
    *  And find the description that goes with this entry
    */
   _iodbcdm_getkeyvalbydsn (sect[cur_entry], strlen (sect[cur_entry]),
-      "Description", szDesc, cbDescMax);
+      "Description", (char*) szDesc, cbDescMax);
 
   /*
    *  Next record

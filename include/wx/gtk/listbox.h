@@ -76,14 +76,10 @@ public:
 
     // implementation from now on
 
-#if wxUSE_DRAG_AND_DROP
-    void SetDropTarget( wxDropTarget *dropTarget );
-#endif
-
-    void DisableEvents();
-    void EnableEvents();
-    void AppendWithoutSorting( const wxString &item );
-    int GetIndex( GtkWidget *item ) const;
+    void GtkDisableEvents();
+    void GtkEnableEvents();
+    void GtkAddItem( const wxString &item, int pos=-1 );
+    int GtkGetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
@@ -94,7 +90,7 @@ public:
 #endif // wxUSE_TOOLTIPS
 
     GtkList   *m_list;
-    wxList     m_clientData;
+    wxList     m_clientList;
 
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;

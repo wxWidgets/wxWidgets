@@ -849,7 +849,7 @@ SQLDriverConnect (
 	   break;
 	 }
 
-       sprintf (cnstr2drv, "DSN=%s;", dsn);
+       sprintf ((char*)cnstr2drv, "DSN=%s;", dsn);
        cbConnStrIn += STRLEN (cnstr2drv);
        STRNCAT (cnstr2drv, szConnStrIn, cbConnStrIn);
        szConnStrIn = cnstr2drv;

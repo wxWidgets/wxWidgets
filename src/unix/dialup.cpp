@@ -124,7 +124,7 @@ public:
    // NB: this won't result in DISCONNECTED event being sent
    virtual bool CancelDialing();
 
-   unsigned int GetISPNames(class wxArrayString &) const
+   size_t GetISPNames(class wxArrayString &) const
       { return 0; }
    
    // sometimes the built-in logic for determining the online status may fail,

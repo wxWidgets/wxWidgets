@@ -281,7 +281,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 {
     style = style | wxSIMPLE_BORDER;
     style = style | wxCAPTION;
-    style = style | wxSYSTEM_MENU;
 
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
         m_miniTitle = 13;

@@ -557,7 +557,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   // layout constraints
 
   panel = new wxPanel(m_notebook);
-  panel->SetAutoLayout( true );
+  panel->SetAutoLayout( TRUE );
 
   wxLayoutConstraints *c;
   c = new wxLayoutConstraints;
@@ -583,7 +583,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
   // sizer
 
   panel = new wxPanel(m_notebook);
-  panel->SetAutoLayout( true );
+  panel->SetAutoLayout( TRUE );
 
   wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
 

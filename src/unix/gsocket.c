@@ -906,7 +906,7 @@ void _GSocket_Detected_Write(GSocket *socket)
     socket->m_establishing = FALSE;
 
     len = sizeof(error);
-    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
+    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
 
     if (error)
     {

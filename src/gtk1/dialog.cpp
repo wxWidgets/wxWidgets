@@ -463,6 +463,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
         m_height = height;
     }
 
+/*
     if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
     {
         if (width == -1) m_width = 80;
@@ -472,6 +473,7 @@ void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     {
        if (height == -1) m_height = 26;
     }
+*/
 
     if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;

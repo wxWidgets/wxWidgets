@@ -378,10 +378,10 @@ wxDragResult wxDropTarget::OnData( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                                    wxDragResult def )
 {
     if (!m_dataObject)
-        return FALSE;
+        return wxDragNone;
 
     if (GetMatchingPair() == (GdkAtom) 0)
-        return FALSE;
+        return wxDragNone;
 
     return GetData() ? def : wxDragNone;
 }
@@ -401,8 +401,7 @@ GdkAtom wxDropTarget::GetMatchingPair()
         wxDataFormat format( formatAtom );
 
 #ifdef __WXDEBUG__
-        char *name = gdk_atom_name( formatAtom );
-        wxLogDebug("Drop target: drag has format: %s", name ? name : "unnamed");
+        wxLogDebug("Drop target: drag has format: %s", format.GetId().c_str() );
 #endif // Debug
 
         if (m_dataObject->IsSupportedFormat( format ))

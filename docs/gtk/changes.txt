@@ -17,14 +17,19 @@ Support for GTK 1.0 has been dropped. This version has
 been tested with GTK 1.2.3 and GTK 1.2.6 - it is known
 not work with some other versions.
 
-wxChoice can now handle only either void client data
-(which it will not delete on destruction) or client
-data of the wxClientData type (which it will delete),
+Rewritten the support for multiple-format Drag'n'Drop and
+clipboard under both GTK and MSW. There are probably some
+problems here and there left.
+
+wxListBox and wxChoice can now handle only either void 
+client data (which it will not delete on destruction) or 
+client data of the wxClientData type (which it will delete),
 instead of both at the same time. The same will happen
-to wxListBox and wxComboBox some time.
+to wxComboBox some time. Also, wxListBox can now sort its
+items.
 
 Many build fixes for various platforms have been applied,
-try again, poor HP-UX and *BSD users, but don't reckon
+try again, poor AIX, HP-UX and *BSD users, but don't reckon
 with immediate success. Actually, when using GNU compilers,
 your chances are quite good.
 
@@ -78,7 +83,15 @@ wxSlider, wxWindow, wxScrollBar now emit the correct events
 for scrolling (like page up, line up etc) instead of just
 "thumb-track" as before.
 
-Corrected bug in Reparent() code.
+Corrected Reparent() code.
+
+Corrected key accelerator code for toplevel child windows.
+
+Corrected cursor handling in a number of special cases.
+
+wxGLCanvas now waits until all expose events have been sent
+and then emits its own redraw event. Also removed flicker
+for wxGLCanvas and in some other places.
 
 A handler to read PCX file (in most variants) has been added.
 

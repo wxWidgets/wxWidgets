@@ -4,9 +4,14 @@
    Read unzip.h for more info
 */
 
+#if 0   
+for what compiler ?
 #if !defined(__VISAGECPP__)
 #   pragma warning(disable:4001)    /* non standard extension used: single line comment */
 #endif
+#endif
+
+
 #include "wx/setup.h"
 
 #if wxUSE_ZLIB && wxUSE_ZIPSTREAM

@@ -409,7 +409,7 @@ size_t wxChoice::AppendHelper(GtkWidget *menu, const wxString& item)
 
         // don't call wxChoice::GetCount() from here because it doesn't work
         // if we're called from ctor (and GtkMenuShell is still NULL)
-        index = m_clientList.GetCount();
+        index = m_clientList.GetCount() - 1;
     }
 
     if (GTK_WIDGET_REALIZED(m_widget))

@@ -504,7 +504,7 @@ void MyPanel::DoPasteFromClipboard()
     {
         *m_log << "Clipboard supports requested format.\n";
 
-        if (wxTheClipboard->GetData( &data ))
+        if (wxTheClipboard->GetData( data ))
         {
             *m_log << "Successfully retrieved data from the clipboard.\n";
             *m_multitext << data.GetText() << "\n";

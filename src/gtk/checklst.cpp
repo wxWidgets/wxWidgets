@@ -54,7 +54,7 @@ bool wxCheckListBox::IsChecked( int index ) const
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        return (str[1] == wxT('X'));
+        return (str.GetChar(1) == wxT('X'));
     }
 
     wxFAIL_MSG(wxT("wrong checklistbox index"));
@@ -73,7 +73,7 @@ void wxCheckListBox::Check( int index, bool check )
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        if (check == (str[1] == wxT('X'))) return;
+        if (check == (str.GetChar(1) == wxT('X'))) return;
 
         if (check)
             str.SetChar( 1, wxT('X') );
