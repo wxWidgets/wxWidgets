@@ -1736,6 +1736,7 @@ class wxPySimpleApp(wxApp):
     def __init__(self, flag=0):
         wxApp.__init__(self, flag)
     def OnInit(self):
+        wxInitAllImageHandlers()
         return true
 
 
