@@ -108,10 +108,10 @@ static void gtk_filedialog_response_callback(GtkWidget *w,
 {
     wxapp_install_idle_handler();
     
-    if (response == GTK_RESPONSE_CANCEL)
-        gtk_filedialog_cancel_callback(w, dialog);
-    else
+    if (response == GTK_RESPONSE_ACCEPT)
         gtk_filedialog_ok_callback(w, dialog);
+    else
+        gtk_filedialog_cancel_callback(w, dialog);
 }
 
 //-----------------------------------------------------------------------------
@@ -182,7 +182,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
 wxFileDialog::~wxFileDialog()
 {
-    m_widget = NULL;
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const 

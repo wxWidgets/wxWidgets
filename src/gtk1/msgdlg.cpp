@@ -97,7 +97,6 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
  
 wxMessageDialog::~wxMessageDialog()
 {
-    m_widget = NULL;
 }
 
 int wxMessageDialog::ShowModal()
