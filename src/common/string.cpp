@@ -755,6 +755,16 @@ wxString wxString::FromAscii(const char *ascii)
     return res;
 }
 
+wxString wxString::FromAscii(const char ascii)
+{
+    // What do we do with '\0' ?
+
+    wxString res;
+    res += (wchar_t)(unsigned char) ascii;
+    
+    return res;
+}
+
 const wxCharBuffer wxString::ToAscii() const
 {
     // this will allocate enough space for the terminating NUL too

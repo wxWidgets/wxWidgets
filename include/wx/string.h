@@ -461,10 +461,12 @@ public:
     // the behaviour of these functions with the strings containing anything
     // else than 7 bit ASCII characters is undefined, use at your own risk.
 #if wxUSE_UNICODE
-    static wxString FromAscii(const char *ascii);
+    static wxString FromAscii(const char *ascii);  // string
+    static wxString FromAscii(const char ascii);   // char
     const wxCharBuffer ToAscii() const;
 #else // ANSI
     static wxString FromAscii(const char *ascii) { return wxString( ascii ); }
+    static wxString FromAscii(const char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
