@@ -4955,7 +4955,7 @@ int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam)
         case VK_SCROLL:     id = WXK_SCROLL; break;
 
         case VK_OEM_1:      id = ';'; break;
-        case VK_OEM_PLUS:   id = '+'; break;
+        case VK_OEM_PLUS:   id = '='; break;
         case VK_OEM_COMMA:  id = ','; break;
         case VK_OEM_MINUS:  id = '-'; break;
         case VK_OEM_PERIOD: id = '.'; break;
