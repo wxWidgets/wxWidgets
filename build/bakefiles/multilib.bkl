@@ -29,8 +29,7 @@
         <define>WXMAKINGDLL</define>
         <define>wxUSE_BASE=0</define> 
         <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
-        
-        <wx-lib>base</wx-lib>
+        <library>basedll</library>
     </dll>
     
     <lib id="corelib" template="wx_lib"
@@ -48,8 +47,8 @@
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL</define>
         <sources>$(HTML_SRC)</sources>
-        <wx-lib>core</wx-lib>
-        <wx-lib>base</wx-lib>
+        <library>coredll</library>
+        <library>basedll</library>
     </dll>
     
     <lib id="htmllib" template="wx_lib"
