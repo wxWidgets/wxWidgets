@@ -271,7 +271,7 @@ void wxFileName::Assign(const wxString& volume,
                 m_relative = ( (my_path[0u] != wxT('/')) && (my_path[0u] != wxT('\\')) );
                 break;
             default:
-                wxFAIL_MSG( "error" );
+                wxFAIL_MSG( wxT("error") );
                 break;
         }
         
@@ -1070,7 +1070,7 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
                 }
                 default:
                 {
-                    wxFAIL_MSG( "error" );
+                    wxFAIL_MSG( wxT("error") );
                 }
             }
         }
@@ -1172,7 +1172,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
                 }
                 default:
                 {
-                    wxFAIL_MSG( "error" );
+                    wxFAIL_MSG( wxT("error") );
                 }
             }
         }
