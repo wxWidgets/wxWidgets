@@ -73,6 +73,7 @@ dnl ------------------------------------------------------------------------
 
 dnl OS (assume Unix)
 USE_UNIX=1
+USE_OS2=0
 USE_WIN32=0
 USE_DOS=0
 USE_BEOS=0
@@ -288,12 +289,14 @@ case "${host}" in
 
   *-pc-os2_emx | *-pc-os2-emx )
     AC_DEFINE(__EMX__)
+    USE_OS2=1
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
     dnl "c++" wrapper is not always available, so always use plain gcc.
     CXX=gcc
     dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
     LIBS="$LIBS -lstdcpp"
+    LDFLAGS="$LDFLAGS -Zcrtdll -Zsysv-signals"
     dnl
     dnl Some special code that's automatically added by autoconf-2.57 for OS/2
     dnl and hopefully also by autoconf-2.58 and newer on all other platforms.
@@ -2789,8 +2792,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
-        AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
-        wxUSE_THREADS="no"
     fi
 
     dnl the name of the directory where the files for this toolkit live
@@ -3745,12 +3746,13 @@ dnl flush the cache
 AC_CACHE_SAVE
 
 dnl ---------------------------------------------------------------------------
-dnl thread support for Unix (for Win32 see past the next matching "else")
+dnl thread support for Unix (for Win32 and OS/2 see past
+dnl                          the next matching "else")
 dnl ---------------------------------------------------------------------------
 
 dnl under MSW (except mingw32) we always have thread support
 CPP_MT_FLAG=
-if test "$TOOLKIT" != "MSW"; then
+if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
 
     dnl the code below:
     dnl
@@ -4070,6 +4072,11 @@ else
                 dnl it doesn't
                 CFLAGS="$CFLAGS_OLD"
             fi
+        ;;
+        *-pc-os2*emx )
+            CFLAGS="$CFLAGS -Zmt"
+            CXXFLAGS="$CXXFLAGS -Zmt"
+            LDFLAGS="$LDFLAGS -Zmt"
         ;;
       esac
     fi

@@ -119,7 +119,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="BASE_OS2_SRC" hints="files">
+    src/unix/baseunix.cpp
     src/os2/dir.cpp
+    src/os2/mimetype.cpp
+    src/os2/thread.cpp
     src/os2/utils.cpp
     src/os2/utilsexc.cpp
 </set>
@@ -1375,7 +1378,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/menu.cpp
     src/os2/menuitem.cpp
     src/os2/metafile.cpp
-    src/os2/mimetype.cpp
     src/os2/msgdlg.cpp
     src/os2/nativdlg.cpp
     src/os2/notebook.cpp
@@ -1397,7 +1399,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/stattext.cpp
     src/os2/tabctrl.cpp
     src/os2/textctrl.cpp
-    src/os2/thread.cpp
     src/os2/timer.cpp
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
