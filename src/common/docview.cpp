@@ -920,8 +920,13 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
     if (printout)
     {
         // Pass two printout objects: for preview, and possible printing.
-        wxPrintPreviewBase *preview = (wxPrintPreviewBase *) NULL;
-        preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        wxPrintPreviewBase *preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        if ( !preview->Ok() )
+        {
+            delete preview;
+            wxMessageBox( _("Sorry, print preview needs a printer to be installed.") );
+            return;
+        }
 
         wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
                 wxPoint(100, 100), wxSize(600, 650));
