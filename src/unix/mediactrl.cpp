@@ -46,7 +46,13 @@
 //
 //  wxGStreamerMediaBackend
 //
-// Uses nanoseconds...
+//TODO:
+//TODO:  This is really not the best way to play-stop -
+//TODO:  it should just have one playbin and stick with it the whole
+//TODO:  instance of wxGStreamerMediaBackend - but stopping appears
+//TODO:  to invalidate the playbin object...
+//TODO:
+//
 //---------------------------------------------------------------------------
 #if wxUSE_GSTREAMER
 
@@ -67,12 +73,6 @@
 #    include <gtk/gtksignal.h>
 #endif
 
-//FIXME:
-//FIXME:  This is really not the best way to play-stop -
-//FIXME:  it should just have one playbin and stick with it the whole
-//FIXME:  instance of wxGStreamerMediaBackend - but stopping appears
-//FIXME:  to invalidate the playbin object...
-//FIXME:
 
 class WXDLLIMPEXP_MEDIA wxGStreamerMediaBackend : public wxMediaBackend
 {
@@ -124,18 +124,12 @@ public:
 #endif
 
     GstElement* m_player;       //GStreamer media element
-    GstElement* m_audiosink;
+//    GstElement* m_audiosink;
     GstElement* m_videosink;
     
     wxSize      m_videoSize;
     wxControl*  m_ctrl;
     
-    //FIXME:
-    //FIXME: In lue of the last big FIXME, when you pause and seek gstreamer
-    //FIXME: doesn't update the position sometimes, so we need to keep track of whether    
-    //FIXME: we have paused or not and keep track of the time after the pause
-    //FIXME: and whenever the user seeks while paused
-    //FIXME:
     wxLongLong m_nPausedPos;
 
     DECLARE_DYNAMIC_CLASS(wxGStreamerMediaBackend);
@@ -150,15 +144,35 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxGStreamerMediaBackend, wxMediaBackend);
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend Constructor
+//
+// Sets m_player to NULL signifying we havn't loaded anything yet
+//---------------------------------------------------------------------------
 wxGStreamerMediaBackend::wxGStreamerMediaBackend() : m_player(NULL), m_videoSize(0,0)
 {
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend Destructor
+//
+// Stops/cleans up memory  
+//---------------------------------------------------------------------------
 wxGStreamerMediaBackend::~wxGStreamerMediaBackend()
 {
     Cleanup();
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::OnGTKRealize
+//
+// If the window wasn't realized when Load was called, this is the
+// callback for when it is.
+//
+// 1) Installs GTK idle handler if it doesn't exist
+// 2) Yeilds to avoid an X11 bug (?)
+// 3) Tells GStreamer to play the video in our control
+//---------------------------------------------------------------------------
 #ifdef __WXGTK__
 
 #ifdef __WXDEBUG__
@@ -184,7 +198,7 @@ gint wxGStreamerMediaBackend::OnGTKRealize(GtkWidget* theWidget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    wxYield();    //X Server gets an error if I don't do this or a messagebox beforehand?!?!??
+    wxYield();    //FIXME: X Server gets an error if I don't do this or a messagebox beforehand?!?!??
     
     GdkWindow *window = GTK_PIZZA(theWidget)->bin_window;
     wxASSERT(window);
@@ -199,20 +213,32 @@ gint wxGStreamerMediaBackend::OnGTKRealize(GtkWidget* theWidget,
 
 #endif
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Cleanup
+//
+// Frees the gstreamer interfaces if there were any created
+//TODO: Do we need to free the video interface?  I'm getting segfaults
+//if I do...
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::Cleanup()
 {
     if(m_player && GST_IS_OBJECT(m_player))
     {
-        //    wxASSERT(GST_IS_OBJECT(m_audiosink));
-        //    wxASSERT(GST_IS_OBJECT(m_videosink));
-    
         gst_element_set_state (m_player, GST_STATE_NULL);
         gst_object_unref (GST_OBJECT (m_player));
-        //gst_object_unref (GST_OBJECT (m_videosink));
-        //gst_object_unref (GST_OBJECT (m_audiosink));
+        
+        //if(GST_IS_OBJECT(m_videosink))
+        //    gst_object_unref (GST_OBJECT (m_videosink));
+        //if(GST_IS_OBJECT(m_audiosink))
+        //    gst_object_unref (GST_OBJECT (m_audiosink));
     }
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::CreateControl
+//
+// Initializes GStreamer and creates the wx side of our media control
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                                 wxWindowID id,
                                 const wxPoint& pos,
@@ -231,6 +257,11 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
                             validator, name);
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::TransCapsToVideoSize
+//
+// Gets the size of our video (in wxSize) from a GstPad
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::TransCapsToVideoSize(wxGStreamerMediaBackend* be, GstPad* pad)
 {
     const GstCaps* caps = GST_PAD_CAPS (pad);
@@ -266,8 +297,12 @@ bool wxGStreamerMediaBackend::TransCapsToVideoSize(wxGStreamerMediaBackend* be, 
     return false;
 }
 
-//forces parent to recalc its layout if it has sizers to update
-//to the new video size
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::PostRecalcSize
+//
+// Forces parent to recalc its layout if it has sizers to update
+// to the new video size
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::PostRecalcSize()
 {
         m_ctrl->InvalidateBestSize();
@@ -276,6 +311,16 @@ void wxGStreamerMediaBackend::PostRecalcSize()
         m_ctrl->GetParent()->Update();
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::OnFinish
+//
+// Called by gstreamer when the media is done playing
+//
+// 1) Send a wxEVT_MEDIA_STOP to the control
+// 2) If veteod, break out
+// 3) really stop the media
+// 4) Send a wxEVT_MEDIA_FINISHED to the control
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::OnFinish(GstElement *play, gpointer    data)
 {
     wxGStreamerMediaBackend* m_parent = (wxGStreamerMediaBackend*) data;
@@ -296,6 +341,13 @@ void wxGStreamerMediaBackend::OnFinish(GstElement *play, gpointer    data)
     }
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::OnError
+//
+// Called by gstreamer when an error is encountered playing the media
+//
+// TODO: Make this better - maybe some more intelligent wxLog stuff
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::OnError(GstElement *play,
     GstElement *src,
     GError     *err,
@@ -306,6 +358,11 @@ void wxGStreamerMediaBackend::OnError(GstElement *play,
 }
 
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Load (File version)
+//
+// Just calls the URI version
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxString& fileName)
 {
     return Load( 
@@ -315,52 +372,76 @@ bool wxGStreamerMediaBackend::Load(const wxString& fileName)
                );
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::OnVideoCapsReady
+//
+// Called by gstreamer when the video caps for the media is ready
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::OnVideoCapsReady(GstPad* pad, GParamSpec* pspec, gpointer data)
 {
     wxGStreamerMediaBackend::TransCapsToVideoSize((wxGStreamerMediaBackend*) data, pad);    
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Load (URI version)
+//
+// 1) Stops/Cleanups the previous instance if there is any
+// 2) Creates the gstreamer interfaces - playbin and xvimagesink for video
+// 3) If there is no playbin or video sink it bails out
+// 4) Sets the playbin to have our video sink so we can set the window later
+// 5) Set up the error and end-of-stream callbacks for our player
+// 6) Make sure our video sink can support the x overlay interface
+// 7) Make sure the passed URI is valid and tell playbin to load it
+// 8) Use the xoverlay extension to tell gstreamer to play in our window
+// 9) Get the video size - pause required to set the stream in action
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Load(const wxURI& location)
 {
+    //1
     Cleanup();
     
+    //2
     m_player    = gst_element_factory_make ("playbin", "play");
-    m_audiosink = gst_element_factory_make ("alsasink", "audiosink");
+//    m_audiosink = gst_element_factory_make ("alsasink", "audiosink");
     m_videosink = gst_element_factory_make ("xvimagesink", "videosink");
 
+    //3
     //no playbin -- outta here :)
-    if (!m_player)
+    if (!m_player || !GST_IS_OBJECT(m_videosink))
         return false;
         
-    //have alsa?
-    if (GST_IS_OBJECT(m_audiosink) == false)
-    {
-        //nope, try OSS
-        m_audiosink = gst_element_factory_make ("osssink", "audiosink");
-         wxASSERT_MSG(GST_IS_OBJECT(m_audiosink), wxT("WARNING: Alsa and OSS drivers for gstreamer not found - audio will be unavailable for wxMediaCtrl"));
-    }
+//    //have alsa?
+//    if (GST_IS_OBJECT(m_audiosink) == false)
+//    {
+//        //nope, try OSS
+//        m_audiosink = gst_element_factory_make ("osssink", "audiosink");
+//         wxASSERT_MSG(GST_IS_OBJECT(m_audiosink), wxT("WARNING: Alsa and OSS drivers for gstreamer not found - audio will be unavailable for wxMediaCtrl"));
+//    }
     
-        
-    wxASSERT_MSG(GST_IS_OBJECT(m_videosink), wxT("WARNING: No X video driver for gstreamer not found - video will be unavailable for wxMediaCtrl"));
 
+    //4        
     g_object_set (G_OBJECT (m_player),
                     "video-sink", m_videosink,
-                    "audio-sink", m_audiosink,
+//                    "audio-sink", m_audiosink,
                     NULL);
 
+    //5
     g_signal_connect (m_player, "eos", G_CALLBACK (OnError), this);
     g_signal_connect (m_player, "error", G_CALLBACK (OnFinish), this);
 
+    //6
     wxASSERT( GST_IS_X_OVERLAY(m_videosink) );
     if ( ! GST_IS_X_OVERLAY(m_videosink) )
         return false;
     
+    //7
     wxString locstring = location.BuildUnescapedURI();
     wxASSERT(gst_uri_protocol_is_valid("file"));
     wxASSERT(gst_uri_is_valid(locstring.mb_str()));
 
     g_object_set (G_OBJECT (m_player), "uri", (const char*)locstring.mb_str(), NULL);
-        
+    
+    //8    
 #ifdef __WXGTK__
     if(!GTK_WIDGET_REALIZED(m_ctrl->m_wxwindow))
     {
@@ -389,7 +470,8 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
 #ifdef __WXGTK__                                  
     } //end else block
 #endif 
-
+ 
+    //9
     wxASSERT(gst_element_set_state (m_player,
                     GST_STATE_PAUSED)    == GST_STATE_SUCCESS);            
     
@@ -445,6 +527,11 @@ bool wxGStreamerMediaBackend::Load(const wxURI& location)
     return true;
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Play
+//
+// Sets the stream to a playing state
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Play()
 {
     if (gst_element_set_state (m_player, GST_STATE_PLAYING)
@@ -453,6 +540,11 @@ bool wxGStreamerMediaBackend::Play()
     return true;
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Pause
+//
+// Marks where we paused and pauses the stream
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Pause()
 {
     m_nPausedPos = GetPosition();
@@ -462,6 +554,11 @@ bool wxGStreamerMediaBackend::Pause()
     return true;
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Stop
+//
+// Pauses the stream and sets the position to 0
+//---------------------------------------------------------------------------
 bool wxGStreamerMediaBackend::Stop()
 {
     if (gst_element_set_state (m_player,
@@ -470,6 +567,11 @@ bool wxGStreamerMediaBackend::Stop()
     return wxGStreamerMediaBackend::SetPosition(0);
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::GetState
+//
+// Gets the state of the stream
+//---------------------------------------------------------------------------
 wxMediaState wxGStreamerMediaBackend::GetState()
 {
     switch(GST_STATE(m_player))
@@ -486,21 +588,19 @@ wxMediaState wxGStreamerMediaBackend::GetState()
     }
 }
 
-bool wxGStreamerMediaBackend::SetPosition(wxLongLong where)
-{
-    if( gst_element_seek (m_player, (GstSeekType) (GST_SEEK_METHOD_SET |
-            GST_FORMAT_TIME | GST_SEEK_FLAG_FLUSH),
-            where.GetValue() * GST_MSECOND ) )
-    {
-        if (GetState() != wxMEDIASTATE_PLAYING)
-            m_nPausedPos = where;
-        
-        return true;
-    }        
-            
-    return false;
-}
-
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::GetPosition
+//
+// If paused, returns our marked position - otherwise it queries the 
+// GStreamer playbin for the position and returns that
+//
+//TODO:
+//TODO: In lue of the last big TODO, when you pause and seek gstreamer
+//TODO: doesn't update the position sometimes, so we need to keep track of whether    
+//TODO: we have paused or not and keep track of the time after the pause
+//TODO: and whenever the user seeks while paused
+//TODO:
+//---------------------------------------------------------------------------
 wxLongLong wxGStreamerMediaBackend::GetPosition()
 {
     if(GetState() != wxMEDIASTATE_PLAYING)
@@ -516,6 +616,35 @@ wxLongLong wxGStreamerMediaBackend::GetPosition()
     }
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::SetPosition
+//
+// Sets the position of the stream
+// Note that GST_MSECOND is 1000000 (GStreamer uses nanoseconds - so
+// there is 1000000 nanoseconds in a millisecond)
+//
+// If paused marks where we seeked to 
+//---------------------------------------------------------------------------
+bool wxGStreamerMediaBackend::SetPosition(wxLongLong where)
+{
+    if( gst_element_seek (m_player, (GstSeekType) (GST_SEEK_METHOD_SET |
+            GST_FORMAT_TIME | GST_SEEK_FLAG_FLUSH),
+            where.GetValue() * GST_MSECOND ) )
+    {
+        if (GetState() != wxMEDIASTATE_PLAYING)
+            m_nPausedPos = where;
+        
+        return true;
+    }        
+            
+    return false;
+}
+
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::GetDuration
+//
+// Obtains the total time of our stream
+//---------------------------------------------------------------------------
 wxLongLong wxGStreamerMediaBackend::GetDuration()
 {
     gint64 length;
@@ -526,31 +655,46 @@ wxLongLong wxGStreamerMediaBackend::GetDuration()
     return length / GST_MSECOND ;
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::Move
+//
+// Called when the window is moved - GStreamer takes care of this
+// for us so nothing is needed
+//---------------------------------------------------------------------------
 void wxGStreamerMediaBackend::Move(int x, int y, int w, int h)
 {
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::GetVideoSize
+//
+// Returns our cached video size from Load/OnVideoCapsReady
+//---------------------------------------------------------------------------
 wxSize wxGStreamerMediaBackend::GetVideoSize() const
 {    
     return m_videoSize;
 }
 
+//---------------------------------------------------------------------------
+// wxGStreamerMediaBackend::GetPlaybackRate
+// wxGStreamerMediaBackend::SetPlaybackRate
 //
-//PlaybackRate not currently supported via playbin directly -
-// Ronald S. Bultje noted on gstreamer-devel:
+// Obtains/Sets the playback rate of the stream
 //
-// Like "play at twice normal speed"? Or "play at 25 fps and 44,1 kHz"? As
-// for the first, yes, we have elements for that, btu they"re not part of
-// playbin. You can create a bin (with a ghost pad) containing the actual
-// video/audiosink and the speed-changing element for this, and set that
-// element as video-sink or audio-sink property in playbin. The
-// audio-element is called "speed", the video-element is called "videodrop"
-// (although that appears to be deprecated in favour of "videorate", which
-// again cannot do this, so this may not work at all in the end). For
-// forcing frame/samplerates, see audioscale and videorate. Audioscale is
-// part of playbin.
-//
-
+//TODO: PlaybackRate not currently supported via playbin directly -
+//TODO: Ronald S. Bultje noted on gstreamer-devel:
+//TODO:
+//TODO: Like "play at twice normal speed"? Or "play at 25 fps and 44,1 kHz"? As
+//TODO: for the first, yes, we have elements for that, btu they"re not part of
+//TODO: playbin. You can create a bin (with a ghost pad) containing the actual
+//TODO: video/audiosink and the speed-changing element for this, and set that
+//TODO: element as video-sink or audio-sink property in playbin. The
+//TODO: audio-element is called "speed", the video-element is called "videodrop"
+//TODO: (although that appears to be deprecated in favour of "videorate", which
+//TODO: again cannot do this, so this may not work at all in the end). For
+//TODO: forcing frame/samplerates, see audioscale and videorate. Audioscale is
+//TODO: part of playbin.
+//---------------------------------------------------------------------------
 double wxGStreamerMediaBackend::GetPlaybackRate()
 {
     //not currently supported via playbin

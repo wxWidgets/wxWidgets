@@ -1982,11 +1982,6 @@ SEARCH_INCLUDE="\
     /usr/include/wine         \
     /usr/local/include/wine   \
                               \
-    /usr/include/gstreamer-0.8 \
-    /usr/local/include/gstreamer-0.8 \
-    /usr/include/libxml2       \
-    /usr/local/include/libxml2 \
-                              \
     /usr/unsupported/include  \
     /usr/athena/include       \
     /usr/local/x11r5/include  \
@@ -6004,120 +5999,76 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
     if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="yes"
         
-        dnl ---------------------------------------------------------------
-        dnl check for libxml2 lib
-        dnl ---------------------------------------------------------------
-        AC_MSG_CHECKING([for libxml2])
-        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],xml2)
-        if test "$ac_find_libraries" != "" ; then
-            dnl -----------------------------------------------------------
-            dnl Check for libxml2's xmlstring.h header
-            dnl Break out if not found
-            dnl -----------------------------------------------------------                
-            AC_MSG_RESULT([yes])
-            AC_MSG_CHECKING(for libxml2 headers)
-            WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, libxml/xmlstring.h)
-            if test "$ac_find_includes" != "" ; then
-                AC_MSG_RESULT(found in $ac_find_includes)
-                WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-                TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
-            else
-                AC_TRY_COMPILE(
-                    [
-                        #include <libxml/xmlstring.h>
-                    ],
-                    [],
-                    [AC_MSG_RESULT(found in default search path)],
-                    [wxUSE_GSTREAMER="no"])
-            fi
-        else
-            dnl -----------------------------------------------------------
-            dnl libxml2 lib not found - break out
-            dnl -----------------------------------------------------------
+        dnl -------------------------------------------------------------------
+        dnl Test for gstreamer module from pkg-config
+        dnl -------------------------------------------------------------------
+        PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.8,
+        [
+            CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
+            LIBS="$LIBS $GSTREAMER_LIBS -lgstplay-0.8"
+        ],
+        [
+            AC_MSG_WARN([GStreamer installation not found])
             wxUSE_GSTREAMER="no"
+        ])
+        
+        dnl -------------------------------------------------------------------
+        dnl Perform a check for a GStreamer element using gst-inspect
+        dnl Thomas Vander Stichele <thomas at apestaart dot org>
+        dnl Last modification: 25/01/2005
+        dnl
+        dnl AM_GST_ELEMENT_CHECK(ELEMENT-NAME, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+        dnl -------------------------------------------------------------------
+        AC_DEFUN([AM_GST_ELEMENT_CHECK],
+        [
+        if test "x$GST_INSPECT" == "x"; then
+            AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
         fi
-            
-        if test "$wxUSE_GSTREAMER" = "yes"; then
-            dnl -----------------------------------------------------------
-            dnl    test for gstreamer main lib
-            dnl -----------------------------------------------------------
-            AC_MSG_CHECKING([for gstreamer 0.8])
-            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstreamer-0.8)
-            if test "$ac_find_libraries" != "" ; then                
-                dnl -------------------------------------------------------
-                dnl Check for GStreamer gstplay lib
-                dnl -------------------------------------------------------                
-                AC_MSG_RESULT([yes])
-                AC_MSG_CHECKING([for gstplay 0.8])
-                WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)                    
-                if test "$ac_find_libraries" != "" ; then
-                    dnl ---------------------------------------------------
-                    dnl gstplay lib found - check for gstinterfaces lib
-                    dnl ---------------------------------------------------
-                    AC_MSG_RESULT([yes])
-                    AC_MSG_CHECKING([for gstinterfaces 0.8])
-                    WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstinterfaces-0.8)
-                    if test "$ac_find_libraries" != "" ; then
-                        dnl -----------------------------------------------
-                        dnl GStreamer libs found - check for gstreamer 
-                        dnl include path and header
-                        dnl -----------------------------------------------
-                        AC_MSG_RESULT([yes])
-                        AC_MSG_CHECKING(for GStreamer headers)
-                        WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, gst/gst.h)
-                        if test "$ac_find_includes" != "" ; then
-                            AC_MSG_RESULT(found in $ac_find_includes)
-                            WX_INCLUDE_PATH_EXIST($ac_find_includes, $TOOLKIT_INCLUDE)
-                            TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE$ac_path_to_include"
-                        else
-                            AC_TRY_COMPILE(
-                                [
-                                    #include <gst/gst.h>
-                                ],
-                                [],
-                                [AC_MSG_RESULT(found in default search path)],
-                                [wxUSE_GSTREAMER="no"])
-                        fi
-                    else
-                        dnl -----------------------------------------------
-                        dnl gstinterfaces lib not found - break out
-                        dnl -----------------------------------------------
-                        wxUSE_GSTREAMER="no"
-                    fi
-                else
-                    dnl ---------------------------------------------------
-                    dnl gstplay lib not found - break out
-                    dnl --------------------------------------------------- 
-                    wxUSE_GSTREAMER="no"
-                fi    
-            else 
-                dnl -------------------------------------------------------
-                dnl Main GStreamer lib not found - break out
-                dnl -------------------------------------------------------                
-                wxUSE_GSTREAMER="no"
-            fi    
-
-            dnl -----------------------------------------------------------
-            dnl Check if everything went ok - if not then print no 
-            dnl and break out
-            dnl -----------------------------------------------------------                
-            if test "$wxUSE_GSTREAMER" = "yes"; then
-                dnl -------------------------------------------------------
-                dnl Success!  Define wxUSE_GSTREAMER to 1 so that 
-                dnl src/unix/mediactrl.cpp will build with GStreamer 
-                dnl enabled, and add the 3 gstreamer libs and the libxml2
-                dnl to the linker's library includes
-                dnl -------------------------------------------------------
-                AC_DEFINE(wxUSE_GSTREAMER)
-                LIBS="$LIBS -lgstreamer-0.8 -lgstplay-0.8"
-                LIBS="$LIBS -lgstinterfaces-0.8 -lxml2"
+        
+        if test "x$GST_INSPECT" != "x"; then
+            AC_MSG_CHECKING(GStreamer element $1)
+            if [ $GST_INSPECT $1 > /dev/null 2> /dev/null ]; then
+            AC_MSG_RESULT(found.)
+            $2
             else
-                dnl -------------------------------------------------------
-                dnl Generic "NO" message - triggered if any of the above
-                dnl conditions doesn't pan out
-                dnl -------------------------------------------------------
-                AC_MSG_RESULT([no])
-            fi            
+            AC_MSG_RESULT(not found.)
+            $3
+            fi
+        fi
+        ])
+        
+        dnl -------------------------------------------------------------------
+        dnl Test for x video sink (video useless without)
+        dnl -------------------------------------------------------------------
+        AM_GST_ELEMENT_CHECK(xvimagesink,[], 
+                        [
+                            wxUSE_GSTREAMER="no"
+                            AC_MSG_WARN([x video sink not found - cannot use GStreamer])
+                        ])
+                            
+        dnl -------------------------------------------------------------------
+        dnl Check for gstplay-0.8 lib and corresponding x overlay header
+        dnl -------------------------------------------------------------------        
+        AC_CHECK_HEADER(gst/xoverlay/xoverlay.h, [], 
+                        [
+                            wxUSE_GSTREAMER="no"
+                            AC_MSG_WARN([xoverlay header not found, cannot use GStreamer])
+                        ],
+                        [#include <gst/gst.h>])
+        
+        AC_MSG_CHECKING([for gstplay 0.8])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)           
+        
+        if test "$ac_find_libraries" = "" ; then
+            AC_MSG_RESULT([no])
+            wxUSE_GSTREAMER="no"
+        else
+            AC_MSG_RESULT([yes])        
+        fi
+        
+        if test "$wxUSE_GSTREAMER" = "yes"; then
+            AC_DEFINE(wxUSE_GSTREAMER)
+            AC_MSG_RESULT([GStreamer detection successful])
         fi
     fi
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mediaplayer"

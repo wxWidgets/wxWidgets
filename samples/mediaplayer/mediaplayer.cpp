@@ -870,7 +870,12 @@ MyNotebookPage::MyNotebookPage(wxNotebook* theBook) :
     //
     //  Create our media control
     //
-    m_mediactrl = new wxMediaCtrl(this, wxID_MEDIACTRL);
+    m_mediactrl = new wxMediaCtrl();
+    
+    //  Make sure creation was successful
+    bool bOK = m_mediactrl->Create(this, wxID_MEDIACTRL);
+    wxASSERT_MSG(bOK, wxT("Could not create media control!"));
+    
     vertsizer->Add(m_mediactrl, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     //
