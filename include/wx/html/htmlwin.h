@@ -21,7 +21,6 @@
 #include "wx/window.h"
 #include "wx/scrolwin.h"
 #include "wx/config.h"
-#include "wx/treectrl.h"
 #include "wx/html/winpars.h"
 #include "wx/html/htmlcell.h"
 #include "wx/filesys.h"

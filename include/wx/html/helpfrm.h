@@ -36,6 +36,8 @@
 
 class WXDLLIMPEXP_CORE wxButton;
 class WXDLLIMPEXP_CORE wxTextCtrl;
+class WXDLLIMPEXP_CORE wxTreeEvent;
+class WXDLLIMPEXP_CORE wxTreeCtrl;
 
 
 // style flags for the Help Frame
