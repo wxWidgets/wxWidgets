@@ -408,21 +408,41 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 {
 #ifdef __WXGTK__
 
-  if (!wxTheClipboard->IsSupportedFormat( wxDF_TEXT )) return;
+  if (!wxTheClipboard->IsSupportedFormat( wxDF_TEXT ))
+  {
+     *m_text << "The clipboard doesn't contain any data in the requested format." << "\n";
+     
+     return;
+  }
+
+  if (!wxTheClipboard->Open())
+  {
+     *m_text << "Error opening the clipboard." << "\n";
+     
+     return;
+  }
+  else
+  {
+     *m_text << "Successfully opened the clipboard." << "\n";
+  }
+
+  wxTextDataObject *data = new wxTextDataObject();
   
-  if (!wxTheClipboard->ObtainData( wxDF_TEXT )) return;
+  if (wxTheClipboard->GetData( data ))
+  {
+     *m_text << "Successfully retrieved data from the clipboard." << "\n";
+     *m_multitext << data->GetText() << "\n";
+  }
+  else
+  {
+     *m_text << "Error getting data from the clipboard." << "\n";
+  }
+     
+  wxTheClipboard->Close();
   
-  int size = wxTheClipboard->GetDataSize()+1;
+  *m_text << "Closed the clipboard." << "\n";
   
-  char *data = new char[size];
-  
-  data[size-1] = 0;
-  
-  wxTheClipboard->GetDataHere( data );
-  
-  *m_multitext << data << "\n";
-  
-  delete[] data;
+  delete data;
 
 #endif
 }
@@ -437,8 +457,30 @@ void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
   
   wxTextDataObject *data = new wxTextDataObject( text );
   
-  wxTheClipboard->SetData( data );
+  if (!wxTheClipboard->Open())
+  {
+     *m_text << "Error opening the clipboard." << "\n";
+     
+     return;
+  }
+  else
+  {
+     *m_text << "Successfully opened the clipboard." << "\n";
+  }
 
+  if (!wxTheClipboard->SetData( data ))
+  {
+     *m_text << "Error while copying to the clipboard." << "\n";
+  }
+  else
+  {
+     *m_text << "Successfully copied data to the clipboard." << "\n";
+  }
+
+  wxTheClipboard->Close();
+  
+  *m_text << "Closed the clipboard." << "\n";
+  
 #endif
 }
 

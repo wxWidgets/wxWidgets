@@ -1913,7 +1913,7 @@ void wxListMainWindow::CalculatePositions( void )
         int y = 1;
         int entireHeight = m_lines.Number() * lineSpacing + 2;
         int scroll_pos = GetScrollPos( wxVERTICAL );
-        SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+15-6) / m_yScroll, 0, scroll_pos, TRUE );
+        SetScrollbars( m_xScroll, m_yScroll, 0, (entireHeight+15) / m_yScroll, 0, scroll_pos, TRUE );
         GetClientSize( &clientWidth, &clientHeight );
 
         wxNode* node = m_lines.First();
@@ -1959,11 +1959,11 @@ void wxListMainWindow::CalculatePositions( void )
                 line->GetSize( lineWidth, lineHeight );
                 if (lineWidth > maxWidth) maxWidth = lineWidth;
                 y += lineSpacing;
-                if (y+lineSpacing-7 >= clientHeight) // -7 for earlier "line breaking"
+                if (y+lineSpacing-6 >= clientHeight) // -6 for earlier "line breaking"
                 {
                     y = 5;
-                    x += maxWidth+5;
-                    entireWidth += maxWidth+5;
+                    x += maxWidth+6;
+                    entireWidth += maxWidth+6;
                     maxWidth = 0;
                 }
                 node = node->Next();
@@ -1976,7 +1976,7 @@ void wxListMainWindow::CalculatePositions( void )
                 if (!node) tries = 1;  // everything fits, no second try required
             }
         }
-        m_visibleLines = (clientHeight+7) / (lineSpacing); // +7 for earlier "line breaking"
+        m_visibleLines = (clientHeight+6) / (lineSpacing); // +6 for earlier "line breaking"
 	
         int scroll_pos = GetScrollPos( wxHORIZONTAL );
         SetScrollbars( m_xScroll, m_yScroll, (entireWidth+15) / m_xScroll, 0, scroll_pos, 0, TRUE );

@@ -632,15 +632,43 @@ shape_motion (GtkWidget      *widget,
 
 void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source )
 {
-  wxDataObject *data = source->m_data;
-  
-  size_t size = data->GetDataSize();
-  char *ptr = new char[size];
-  data->GetDataHere( ptr );
-  
-  gtk_widget_dnd_data_set( widget, event, ptr, size );
-  
-  delete ptr;
+    wxDataObject *data = source->m_data;
+
+    switch (data->GetFormat())
+    {
+        case wxDF_TEXT:
+	{
+	    wxTextDataObject *text_object = (wxTextDataObject*) data;
+	    
+	    wxString text = text_object->GetText();
+	    
+            gtk_widget_dnd_data_set( widget, 
+	                             event, 
+				     (unsigned char*) text.c_str, 
+				     (int) text.Length() );
+	
+	    break;
+	}
+	
+        case wxDF_FILENAME:
+	{
+	    wxFileDataObject *file_object = (wxFileDataObject*) data;
+	    
+	    wxString text = file_object->GetFiles();
+	    
+            gtk_widget_dnd_data_set( widget, 
+	                             event, 
+				     (unsigned char*) text.c_str, 
+				     (int) text.Length() );
+	
+	    break;
+	}
+	
+	default:
+	{
+	    return;
+	}
+   }
   
   source->m_retValue = wxDragCopy;
 }
@@ -695,7 +723,6 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   wxASSERT_MSG( m_data, "wxDragSource: no data" );
   
   if (!m_data) return (wxDragResult) wxDragNone;
-  if (m_data->GetDataSize() == 0) return (wxDragResult) wxDragNone;
   
   static GtkWidget *drag_icon = NULL;
   static GtkWidget *drop_icon = NULL;
@@ -801,7 +828,7 @@ void wxDropSource::RegisterWindow(void)
 
   wxString formats;
     
-  wxDataFormat df = m_data->GetPreferredFormat();
+  wxDataFormat df = m_data->GetFormat();
   
     switch (df) 
     {

@@ -80,6 +80,7 @@ LIB_CPP_SRC=\
  gtk/combobox.cpp \
  gtk/cursor.cpp \
  gtk/data.cpp \
+ gtk/dataobj.cpp \
  gtk/dc.cpp \
  gtk/dcclient.cpp \
  gtk/dcmemory.cpp \

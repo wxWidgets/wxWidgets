@@ -721,7 +721,8 @@ enum wxDataFormat
   wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
   wxDF_DIB =              8,  /* CF_DIB */
   wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
-  wxDF_FILENAME =         15  /* CF_HDROP */
+  wxDF_FILENAME =         15, /* CF_HDROP */
+  wxDF_PRIVATE =          20
 };
 
 // Virtual keycodes

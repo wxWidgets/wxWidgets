@@ -18,8 +18,8 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/list.h"
+#include "wx/dataobj.h"
 #include "wx/control.h"
-#include "wx/dnd.h"      // for wxDataObject
 #include "wx/module.h"
 
 //-----------------------------------------------------------------------------
@@ -48,21 +48,32 @@ public:
   wxClipboard();
   ~wxClipboard();
 
-  virtual void SetData( wxDataObject *data );
+  // open the clipboard before SetData() and GetData()
+  virtual bool Open();
   
-  virtual bool IsSupportedFormat( wxDataFormat format );
-  virtual bool ObtainData( wxDataFormat format );
+  // close the clipboard after SetData() and GetData()
+  virtual void Close();
   
-  // call these after ObtainData()
-  virtual size_t GetDataSize() const;
-  virtual void GetDataHere( void *data ) const;
+  // can be called several times
+  virtual bool SetData( wxDataObject *data );
+
+  // format available on the clipboard ? 
+  // supply ID if private format, the same as wxPrivateDataObject::SetId() 
+  virtual bool IsSupportedFormat( wxDataFormat format, const wxString &id = "" );
+  
+  // fill data with data on the clipboard (if available)
+  virtual bool GetData( wxDataObject *data );
   
   // clears wxTheClipboard and the system's clipboard if possible
   virtual void Clear();
 
  // implementation 
+ 
+  GdkAtom    GetTargetAtom( wxDataFormat format, const wxString &id = "" );
+ 
+  bool              m_open;
   
-  wxDataObject     *m_data;
+  wxList            m_dataObjects;
   char             *m_sentString, 
 		   *m_receivedString;
   void             *m_receivedTargets;
@@ -71,8 +82,7 @@ public:
   bool              m_formatSupported;
   GdkAtom           m_targetRequested;
 
-  size_t            m_receivedSize;
-  char              *m_receivedData;
+  wxDataObject      *m_receivedData;
 };
 
 //-----------------------------------------------------------------------------

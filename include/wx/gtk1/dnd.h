@@ -18,6 +18,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
+#include "wx/dataobj.h"
 #include "wx/cursor.h"
 
 //-------------------------------------------------------------------------
@@ -36,91 +37,12 @@
 
 class wxWindow;
 
-class wxDataObject;
-class wxTextDataObject;
-class wxFileDataObject;
-
 class wxDropTarget;
 class wxTextDropTarget;
 class wxFileDropTarget;
 
 class wxDropSource;
 
-//-------------------------------------------------------------------------
-// wxDataObject
-//-------------------------------------------------------------------------
-
-class wxDataObject: public wxObject
-{
-public:
-
-  wxDataObject() {};
-  ~wxDataObject() {};
-
-  virtual wxDataFormat GetPreferredFormat() const = 0;
-  virtual bool IsSupportedFormat( wxDataFormat format ) const = 0;
-  virtual size_t GetDataSize() const = 0;
-  virtual void GetDataHere( void *data ) const = 0;
-
-};
-
-// ----------------------------------------------------------------------------
-// wxTextDataObject is a specialization of wxDataObject for text data
-// ----------------------------------------------------------------------------
-
-class wxTextDataObject : public wxDataObject
-{
-public:
-
-  wxTextDataObject() { }
-  wxTextDataObject(const wxString& strText) : m_strText(strText) { }
-  void Init(const wxString& strText) { m_strText = strText; }
-
-  virtual wxDataFormat GetPreferredFormat() const
-    { return wxDF_TEXT; }
-    
-  virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDF_TEXT; }
-
-  virtual size_t GetDataSize() const
-    { return m_strText.Len() + 1; } // +1 for trailing '\0'
-    
-  virtual void GetDataHere( void *data ) const
-    { memcpy(data, m_strText.c_str(), GetDataSize()); }
-
-private:
-  wxString  m_strText;
-  
-};
-
-// ----------------------------------------------------------------------------
-// wxFileDataObject is a specialization of wxDataObject for file names
-// ----------------------------------------------------------------------------
-
-class wxFileDataObject : public wxDataObject
-{
-public:
-
-  wxFileDataObject(void) { }
-  void AddFile( const wxString &file )
-    { m_files += file; m_files += '\0'; }
-
-  virtual wxDataFormat GetPreferredFormat() const
-    { return wxDF_FILENAME; }
-    
-  virtual bool IsSupportedFormat( wxDataFormat format ) const
-    { return format == wxDF_FILENAME; }
-    
-  virtual size_t GetDataSize() const
-    { return m_files.Len(); } // no trailing '\0'
-    
-  virtual void GetDataHere( void *data ) const
-    { memcpy(data, m_files.c_str(), GetDataSize()); }
-
-private:
-  wxString  m_files;
-  
-};
 //-------------------------------------------------------------------------
 // wxDropTarget
 //-------------------------------------------------------------------------

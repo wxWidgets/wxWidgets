@@ -77,8 +77,6 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, const wxSize &size ) 
   : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ) 
 {
-  wxImage image;
-
   wxBitmap bitmap( 100, 100 );
   
   wxMemoryDC dc;
@@ -88,14 +86,14 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
   
-  image = bitmap.ConvertToImage();
+  wxImage image( bitmap );
   image.SaveFile( "../test.png", wxBITMAP_TYPE_PNG );
   
   image.LoadFile( "../horse.png", wxBITMAP_TYPE_PNG );
-  my_horse = new wxBitmap( image );
+  my_horse = new wxBitmap( image.ConvertToBitmap() );
   
   image.LoadFile( "../test.png", wxBITMAP_TYPE_PNG );
-  my_square = new wxBitmap( image );
+  my_square = new wxBitmap( image.ConvertToBitmap() );
 }
 
 MyCanvas::~MyCanvas(void)

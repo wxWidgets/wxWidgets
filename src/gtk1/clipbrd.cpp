@@ -57,26 +57,26 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
                             GtkSelectionData *selection_data, 
 		            wxClipboard *clipboard )
 {
-  if (!wxTheClipboard) return;
+    if (!wxTheClipboard) return;
   
-  if (selection_data->length <= 0) return;
+    if (selection_data->length <= 0) return;
   
-  // make sure we got the data in the correct form 
-  if (selection_data->type != GDK_SELECTION_TYPE_ATOM) return;
+    // make sure we got the data in the correct form 
+    if (selection_data->type != GDK_SELECTION_TYPE_ATOM) return;
   
-  // the atoms we received, holding a list of targets (= formats) 
-  GdkAtom *atoms = (GdkAtom *)selection_data->data;
+    // the atoms we received, holding a list of targets (= formats) 
+    GdkAtom *atoms = (GdkAtom *)selection_data->data;
 
-  for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
-  {
-     if (atoms[i] == clipboard->m_targetRequested)
-     {
-       clipboard->m_formatSupported = TRUE;
-       return;
-     }
-  }
+    for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
+    {
+        if (atoms[i] == clipboard->m_targetRequested)
+        {
+            clipboard->m_formatSupported = TRUE;
+            return;
+        }
+    }
 
-  return;
+    return;
 }
 
 //-----------------------------------------------------------------------------
@@ -88,20 +88,63 @@ selection_received( GtkWidget *WXUNUSED(widget),
                     GtkSelectionData *selection_data, 
 		    wxClipboard *clipboard )
 {
-  if (!wxTheClipboard) return;
+    if (!wxTheClipboard) return;
   
-  if (selection_data->length <= 0) return;
+    wxDataObject *data_object = clipboard->m_receivedData;
+    
+    if (!data_object) return;
+    
+    if (selection_data->length <= 0) return;
   
-  size_t size = (size_t) selection_data->length;
-  
-  // make sure we got the data in the correct form 
-  if (selection_data->type != GDK_SELECTION_TYPE_STRING) return;
-  
-  clipboard->m_receivedSize = size;
-  
-  clipboard->m_receivedData = new char[size+1];
-  
-  memcpy( clipboard->m_receivedData, selection_data->data, size);  
+    // make sure we got the data in the correct format
+    
+    if (data_object->m_formatAtom != selection_data->target) return;
+    
+    // make sure we got the data in the correct form (selection type).
+    // if so, copy data to target object
+    
+    switch (data_object->GetFormat())
+    {
+        case wxDF_TEXT:
+	{
+            if (selection_data->type != GDK_SELECTION_TYPE_STRING) return;
+	    
+	    wxTextDataObject *text_object = (wxTextDataObject *) data_object;
+	    
+	    wxString text = (const char*) selection_data->data;
+	    
+	    text_object->SetText( text );
+	    
+	    break;
+	}
+	
+	case wxDF_BITMAP:
+	{
+            if (selection_data->type != GDK_SELECTION_TYPE_BITMAP) return;
+	    
+	    return;
+	    
+	    break;
+	}
+	
+	case wxDF_PRIVATE:
+	{
+            if (selection_data->type != GDK_SELECTION_TYPE_STRING) return;
+	    
+	    wxPrivateDataObject *private_object = (wxPrivateDataObject *) data_object;
+	    
+	    private_object->SetData( (const char*) selection_data->data, (size_t) selection_data->length );
+	    
+	    break;
+	}
+	
+	default:
+	{
+	    return;
+	}
+    }
+    
+    wxTheClipboard->m_formatSupported = TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -111,14 +154,14 @@ selection_received( GtkWidget *WXUNUSED(widget),
 static gint
 selection_clear( GtkWidget *WXUNUSED(widget), GdkEventSelection *WXUNUSED(event) )
 {
-  if (!wxTheClipboard) return TRUE;
+    if (!wxTheClipboard) return TRUE;
   
-  /* the clipboard is no longer in our hands. we can delete the
-   * clipboard data. I hope I got that one right... */
+    // the clipboard is no longer in our hands. we have to delete the
+    // clipboard data.
     
-  wxTheClipboard->SetData( (wxDataObject*) NULL );
+    wxTheClipboard->m_dataObjects.Clear();
   
-  return TRUE;
+    return TRUE;
 }
 
 //-----------------------------------------------------------------------------
@@ -128,33 +171,70 @@ selection_clear( GtkWidget *WXUNUSED(widget), GdkEventSelection *WXUNUSED(event)
 static void
 selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data, gpointer WXUNUSED(data) )
 {
-  if (!wxTheClipboard) return;
+    if (!wxTheClipboard) return;
   
-  wxDataObject *data_object = wxTheClipboard->m_data;
-  
-  if (!data_object) return;
-  
-  if (data_object->GetDataSize() == 0) return;
-
-  
-  
-  gint len = data_object->GetDataSize();
-  guchar *bin_data = (guchar*) malloc( len );
-  data_object->GetDataHere( (void*)bin_data );
-  
-  if (selection_data->target == GDK_TARGET_STRING)
-  {
-    gtk_selection_data_set( 
-      selection_data, GDK_SELECTION_TYPE_STRING, 8*sizeof(gchar), bin_data, len );
-  }
-/*
-  else if (selection_data->target == g_textAtom)
-  {
-    gtk_selection_data_set( 
-      selection_data, g_textAtom, 8*sizeof(gchar), bin_data, len );
-  }
-*/
-  free( bin_data );
+    wxNode *node = wxTheClipboard->m_dataObjects.First();
+    
+    while (node)
+    {
+        wxDataObject *data_object = (wxDataObject *)node->Data();
+    
+	if (data_object->m_formatAtom != selection_data->target)
+	{
+	    node = node->Next();
+	    break;
+	}
+	
+	switch (data_object->GetFormat())
+	{
+	    case wxDF_TEXT:
+	    {
+	        wxTextDataObject *text_object = (wxTextDataObject*) data_object;
+	    
+	        wxString text = text_object->GetText();
+	    
+		char *s = WXSTRINGCAST text;
+		int len = (int) text.Length();
+		
+                gtk_selection_data_set( 
+                    selection_data, 
+		    GDK_SELECTION_TYPE_STRING, 
+		    8*sizeof(gchar),
+		    (unsigned char*) s, 
+		    len ); 
+		    
+		break;
+	    }
+	    
+	    case wxDF_BITMAP:
+	    {
+	        // wxBitmapDataObject *private_object = (wxBitmapDataObject*) data_object;
+	    
+		// how do we do that ?
+		
+		break;
+	    }
+	    
+	    case wxDF_PRIVATE:
+            {
+	        wxPrivateDataObject *private_object = (wxPrivateDataObject*) data_object;
+	    
+	        if (private_object->GetDataSize() == 0) return;
+	    
+                gtk_selection_data_set( 
+                    selection_data, 
+		    GDK_SELECTION_TYPE_STRING, 
+		    8*sizeof(gchar), 
+		    (unsigned char*) private_object->GetData(), 
+		    (int) private_object->GetDataSize() );
+	    }
+	    
+	    default:
+	      break;
+        }
+	
+	node = node->Next();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -165,185 +245,222 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
 {
-  m_data = (wxDataObject*) NULL;
-  
-  m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
-  gtk_widget_realize( m_clipboardWidget );
+    m_open = FALSE;
 
-  gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
-                      "selection_clear_event",
-		      GTK_SIGNAL_FUNC( selection_clear ), 
-		      (gpointer) NULL );
-		      
-  if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
-  if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
-  if (!g_targetsAtom) g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
+    m_dataObjects.DeleteContents( TRUE );
   
-  m_receivedData = (char*)NULL;
-  m_receivedSize = 0;
-  m_formatSupported = FALSE;
-  m_targetRequested = 0;
+    m_receivedData = (wxDataObject*) NULL;
+
+    m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
+    gtk_widget_realize( m_clipboardWidget );
+
+    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
+                        "selection_clear_event",
+		        GTK_SIGNAL_FUNC( selection_clear ), 
+		        (gpointer) NULL );
+		      
+    if (!g_clipboardAtom) g_clipboardAtom = gdk_atom_intern( "CLIPBOARD", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_targetsAtom) g_targetsAtom = gdk_atom_intern ("TARGETS", FALSE);
+  
+    m_formatSupported = FALSE;
+    m_targetRequested = 0;
 }
 
 wxClipboard::~wxClipboard()
 {
-  Clear();  
+    Clear();  
   
-  if (m_clipboardWidget) gtk_widget_destroy( m_clipboardWidget );
+    if (m_clipboardWidget) gtk_widget_destroy( m_clipboardWidget );
 }
 
 void wxClipboard::Clear()
 {
-  /* As we have data we also own the clipboard. Once we no longer own
-     it, clear_selection is called which will set m_data to zero */
+    if (m_dataObjects.GetCount())
+    { 
+        /*  As we have data we also own the clipboard. Once we no longer own
+            it, clear_selection is called which will set m_data to zero */
      
-  if (m_data)
-  { 
-    if (gdk_selection_owner_get( g_clipboardAtom) == m_clipboardWidget->window)
+        if (gdk_selection_owner_get( g_clipboardAtom) == m_clipboardWidget->window)
+        {
+            gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+        }
+    
+        m_dataObjects.Clear();
+    }
+  
+    m_targetRequested = 0;
+  
+    m_formatSupported = FALSE;
+}
+
+bool wxClipboard::Open()
+{
+    wxCHECK_MSG( !m_open, FALSE, "clipboard already open" );
+  
+    m_open = TRUE;
+  
+    return TRUE;
+}
+
+bool wxClipboard::SetData( wxDataObject *data )
+{
+    wxCHECK_MSG( data, FALSE, "data is invalid" );
+  
+    m_dataObjects.Append( data );
+  
+    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
+  
+    if (data->GetFormat() == wxDF_PRIVATE)
     {
-        gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom, GDK_CURRENT_TIME );
+        wxPrivateDataObject* pd = (wxPrivateDataObject*) data;
+	
+        wxCHECK_MSG( !pd->GetId().IsEmpty(), FALSE, "private clipboard format requires ID string" );
+	
+        data->m_formatAtom = GetTargetAtom( data->GetFormat(), pd->GetId() );
+    }
+    else
+    {
+        data->m_formatAtom = GetTargetAtom( data->GetFormat() );
+    }
+      
+    // Add handlers if someone requests data
+  
+    gtk_selection_add_handler( m_clipboardWidget, 
+                               g_clipboardAtom,
+			       data->m_formatAtom,
+			       selection_handler,
+			       NULL );
+			       
+    // Tell the world we offer clipboard data
+  
+    if (!gtk_selection_owner_set( m_clipboardWidget, 
+                                  g_clipboardAtom,
+				  GDK_CURRENT_TIME ))
+    {
+        return FALSE;
+    }
+			     
+    return TRUE;
+}
+
+void wxClipboard::Close()
+{
+    wxCHECK_RET( m_open, "clipboard not open" );
+    
+    m_open = FALSE;
+}
+
+bool wxClipboard::IsSupportedFormat( wxDataFormat format, const wxString &id )
+{
+    m_targetRequested = GetTargetAtom( format, id );
+  
+    if (m_targetRequested == 0) return FALSE;
+    
+    // add handler for target (= format) query
+
+    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
+                        "selection_received",
+		        GTK_SIGNAL_FUNC( targets_selection_received ), 
+		        (gpointer) this );
+  
+    m_formatSupported = FALSE;
+  
+    // perform query. this will set m_formatSupported to 
+    // TRUE if m_targetRequested is supported
+    
+    gtk_selection_convert( m_clipboardWidget,
+			   g_clipboardAtom, 
+			   g_targetsAtom,
+			   GDK_CURRENT_TIME );
+
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
+		                   GTK_SIGNAL_FUNC( targets_selection_received ),
+		                   (gpointer) this );
+  
+    if (!m_formatSupported) return FALSE;
+  
+    return TRUE;
+}
+
+bool wxClipboard::GetData( wxDataObject *data )
+{
+    wxCHECK_MSG( m_open, FALSE, "clipboard not open" );
+    
+    m_receivedData = data;
+    
+    wxCHECK_MSG( m_receivedData, FALSE, "invalid data object" );
+    
+    if (m_receivedData->GetFormat() == wxDF_PRIVATE)
+    {
+        wxPrivateDataObject* pd = (wxPrivateDataObject*) m_receivedData;
+	
+        wxCHECK_MSG( !pd->GetId().IsEmpty(), FALSE, "private clipboard format requires ID string" );
+	
+        m_targetRequested = GetTargetAtom( m_receivedData->GetFormat(), pd->GetId() );
+    }
+    else
+    {
+        m_targetRequested = GetTargetAtom( m_receivedData->GetFormat() );
     }
     
-    delete m_data;
-    m_data = (wxDataObject*) NULL;
-  }
+    data->m_formatAtom = m_targetRequested;
   
-  m_receivedSize = 0;
+    wxCHECK_MSG( m_targetRequested, FALSE, "unsupported clipboard format" );
   
-  if (m_receivedData)
-  {
-    delete[] m_receivedData;
-    m_receivedData = (char*) NULL;
-  }
+    m_formatSupported = FALSE;
   
-  m_targetRequested = 0;
+    gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
+                        "selection_received",
+		        GTK_SIGNAL_FUNC( selection_received ), 
+		        (gpointer) this );
+
+    gtk_selection_convert( m_clipboardWidget,
+			   g_clipboardAtom, 
+			   m_targetRequested,
+			   GDK_CURRENT_TIME );
   
-  m_formatSupported = FALSE;
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
+		                   GTK_SIGNAL_FUNC( selection_received ),
+		                   (gpointer) this );
+
+    wxCHECK_MSG( m_formatSupported, FALSE, "error retrieving data from clipboard" );
+  
+    return TRUE;
 }
 
-void wxClipboard::SetData( wxDataObject *data )
+GdkAtom wxClipboard::GetTargetAtom( wxDataFormat format, const wxString &id )
 {
-  Clear();
+    // What is X representation of that format?
   
-/*
-   GTK 1.0.X cannot remove a target from a widget so if a widget
-   at first offers text and then a bitmap (and no longer text) to 
-   the clipboard, we seem too have to delete it.
-*/
-
-  if (m_clipboardWidget) gtk_widget_destroy( m_clipboardWidget );
-  
-  m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
-  gtk_widget_realize( m_clipboardWidget );
-
-  if (m_data) delete m_data;
-  m_data = data;
-  if (!m_data) return;
- 
-  if (!gtk_selection_owner_set( m_clipboardWidget, 
-                                g_clipboardAtom,
-				GDK_CURRENT_TIME))
-  {
-    delete m_data;
-    m_data = (wxDataObject*) NULL;
-    return;
-  }
-  
-  switch (m_data->GetPreferredFormat())
-  {
-    case wxDF_TEXT:
-      gtk_selection_add_handler( m_clipboardWidget, 
-                                 g_clipboardAtom, 
-				// g_textAtom,
-				 GDK_TARGET_STRING,
-				 selection_handler,
-				 NULL );
-      break;
-    default:
-      break;
-  }
-}
-
-bool wxClipboard::IsSupportedFormat( wxDataFormat format )
-{
-  m_targetRequested = 0;
-  
-  if (format == wxDF_TEXT)
-  {
-//     m_targetRequested = g_textAtom;
-     m_targetRequested = GDK_TARGET_STRING;
-  }
-  
-  if (m_targetRequested == 0) return FALSE;
-
-  gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
-                      "selection_received",
-		      GTK_SIGNAL_FUNC( targets_selection_received ), 
-		      (gpointer) this );
-  
-  m_formatSupported = FALSE;
-  
-  gtk_selection_convert( m_clipboardWidget,
-			 g_clipboardAtom, 
-			 g_targetsAtom,
-			 GDK_CURRENT_TIME );
-
-  gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
-		                 GTK_SIGNAL_FUNC( targets_selection_received ),
-		                 (gpointer) this );
-  
-  if (!m_formatSupported) return FALSE;
-  
-  return TRUE;
-}
-
-bool wxClipboard::ObtainData( wxDataFormat format )
-{
-  m_receivedSize = 0;
-  
-  if (m_receivedData)
-  {
-    delete[] m_receivedData;
-    m_receivedData = (char*) NULL;
-  }
-  
-  m_targetRequested = 0;
-  
-  if (format == wxDF_TEXT)
-  {
-//     m_targetRequested = g_textAtom;
-     m_targetRequested = GDK_TARGET_STRING;
-  }
-  
-  if (m_targetRequested == 0) return FALSE;
-
-  gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
-                      "selection_received",
-		      GTK_SIGNAL_FUNC( selection_received ), 
-		      (gpointer) this );
-
-  gtk_selection_convert( m_clipboardWidget,
-			 g_clipboardAtom, 
-			 m_targetRequested,
-			 GDK_CURRENT_TIME );
-  
-  gtk_signal_disconnect_by_func( GTK_OBJECT(m_clipboardWidget), 
-		                 GTK_SIGNAL_FUNC( selection_received ),
-		                 (gpointer) this );
+    switch (format)
+    {
+        case wxDF_TEXT:
+        {
+            return GDK_TARGET_STRING;
+				// g_textAtom
+        }
+      
+        case wxDF_BITMAP:
+        {
+            return GDK_TARGET_BITMAP;
+            break;
+        }
+      
+        case wxDF_PRIVATE:
+        {
+            // we create our own X representation
     
-  if (m_receivedSize == 0) return FALSE;
-  
-  return TRUE;
-}
-
-size_t wxClipboard::GetDataSize() const
-{
-  return m_receivedSize;
-}
-
-void wxClipboard::GetDataHere( void *data ) const
-{
-  memcpy(data, m_receivedData, m_receivedSize );
+            return gdk_atom_intern( WXSTRINGCAST( id ), FALSE );
+        }
+	
+	default:
+	{
+	    return (GdkAtom) 0;
+	}
+    }
+	
+    return (GdkAtom) 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -354,13 +471,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboardModule,wxModule)
 
 bool wxClipboardModule::OnInit()
 {
-  wxTheClipboard = new wxClipboard();
+    wxTheClipboard = new wxClipboard();
   
-  return TRUE;
+    return TRUE;
 }
 
 void wxClipboardModule::OnExit()
 {
-  if (wxTheClipboard) delete wxTheClipboard;
-  wxTheClipboard = (wxClipboard*) NULL;
+    if (wxTheClipboard) delete wxTheClipboard;
+    wxTheClipboard = (wxClipboard*) NULL;
 }

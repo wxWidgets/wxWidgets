@@ -771,13 +771,13 @@ bool wxVariantDataTime::Write(wxString& str) const
     return TRUE;
 }
 
-bool wxVariantDataTime::Read(istream& str)
+bool wxVariantDataTime::Read(istream& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
 }
 
-bool wxVariantDataTime::Read(wxString& str)
+bool wxVariantDataTime::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
@@ -844,13 +844,13 @@ bool wxVariantDataDate::Write(wxString& str) const
     return TRUE;
 }
 
-bool wxVariantDataDate::Read(istream& str)
+bool wxVariantDataDate::Read(istream& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
 }
 
-bool wxVariantDataDate::Read(wxString& str)
+bool wxVariantDataDate::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
@@ -921,13 +921,13 @@ bool wxVariantDataVoidPtr::Write(wxString& str) const
     return TRUE;
 }
 
-bool wxVariantDataVoidPtr::Read(istream& str)
+bool wxVariantDataVoidPtr::Read(istream& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
 }
 
-bool wxVariantDataVoidPtr::Read(wxString& str)
+bool wxVariantDataVoidPtr::Read(wxString& WXUNUSED(str))
 {
     // Not implemented
     return FALSE;
