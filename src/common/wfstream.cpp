@@ -73,6 +73,7 @@ size_t wxFileInputStream::OnSysRead(void *buffer, size_t size)
 
   ret = m_file->Read(buffer, size);
 
+  m_lasterror = wxStream_NOERROR;
   if (m_file->Eof())
     m_lasterror = wxStream_EOF;
   if (ret == wxInvalidOffset) {
