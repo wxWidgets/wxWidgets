@@ -44,28 +44,44 @@ class Crust(wx.wxSplitterWindow):
                                rootIsNamespace=rootIsNamespace)
         # Add 'filling' to the interpreter's locals.
         self.shell.interp.locals['filling'] = self.filling
-##        self.notebook.AddPage(pPage=self.filling, strText='Namespace', bSelect=True)
-        self.notebook.AddPage(self.filling, 'Namespace', True)
+        self.notebook.AddPage(page=self.filling, text='Namespace', select=True)
+        self.calltip = Calltip(parent=self.notebook)
+        self.notebook.AddPage(page=self.calltip, text='Calltip')
         self.sessionlisting = SessionListing(parent=self.notebook)
-        self.notebook.AddPage(self.sessionlisting, 'Session')
+        self.notebook.AddPage(page=self.sessionlisting, text='Session')
         self.dispatcherlisting = DispatcherListing(parent=self.notebook)
-        self.notebook.AddPage(self.dispatcherlisting, 'Dispatcher')
+        self.notebook.AddPage(page=self.dispatcherlisting, text='Dispatcher')
         from wxd import wx_
         self.wxdocs = Filling(parent=self.notebook, 
                               rootObject=wx_,
                               rootLabel='wx', 
                               rootIsNamespace=False,
                               static=True)
-        self.notebook.AddPage(self.wxdocs, 'wxPython Docs')
+        self.notebook.AddPage(page=self.wxdocs, text='wxPython Docs')
         from wxd import stc_
         self.stcdocs = Filling(parent=self.notebook, 
                                rootObject=stc_.StyledTextCtrl,
                                rootLabel='StyledTextCtrl', 
                                rootIsNamespace=False,
                                static=True)
-        self.notebook.AddPage(self.stcdocs, 'StyledTextCtrl Docs')
+        self.notebook.AddPage(page=self.stcdocs, text='StyledTextCtrl Docs')
         self.SplitHorizontally(self.shell, self.notebook, 300)
         self.SetMinimumPaneSize(1)
+
+
+class Calltip(wx.wxTextCtrl):
+    """Text control containing the most recent shell calltip."""
+
+    def __init__(self, parent=None, id=-1):
+        import dispatcher
+        style = wx.wxTE_MULTILINE | wx.wxTE_READONLY | wx.wxTE_RICH2
+        wx.wxTextCtrl.__init__(self, parent=parent, id=id, style=style)
+        self.SetBackgroundColour(wx.wxColour(255, 255, 232))
+        dispatcher.connect(receiver=self.display, signal='Shell.calltip')
+
+    def display(self, calltip):
+        """Receiver for Shell.calltip signal."""
+        self.SetValue(calltip)
 
 
 class SessionListing(wx.wxTextCtrl):

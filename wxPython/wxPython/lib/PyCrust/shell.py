@@ -996,6 +996,7 @@ Platform: %s""" % \
             # In case there isn't enough room, only go back to the
             # fallback.
             tippos = max(tippos, fallback)
+            dispatcher.send(signal='Shell.calltip', sender=self, calltip=tip)
             self.CallTipShow(tippos, tip)
 
     def writeOut(self, text):

@@ -15,6 +15,12 @@ __revision__ = "$Revision$"[11:-2]
 from Base import EvtHandler
 import Parameters as wx
 
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
 
 class Validator(EvtHandler):
     """"""

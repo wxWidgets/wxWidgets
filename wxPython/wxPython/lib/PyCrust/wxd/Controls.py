@@ -16,6 +16,12 @@ from Base import Object
 import Parameters as wx
 from Window import Window
 
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
 
 class Control(Window):
     """Base class for a control or 'widget'.

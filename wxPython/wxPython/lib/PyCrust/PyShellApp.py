@@ -29,17 +29,17 @@ class App(wx.wxApp):
         wx.wxInitAllImageHandlers()
         locals = __main__.__dict__
         from shell import ShellFrame
-        self.shellFrame = ShellFrame(locals=locals)
-        self.shellFrame.SetSize((750, 525))
-        self.shellFrame.Show()
-        self.SetTopWindow(self.shellFrame)
-        self.shellFrame.shell.SetFocus()
+        self.frame = ShellFrame(locals=locals)
+        self.frame.SetSize((750, 525))
+        self.frame.Show()
+        self.SetTopWindow(self.frame)
+        self.frame.shell.SetFocus()
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:
         # >>> import sys
-        # >>> sys.application.whatever
+        # >>> sys.app.whatever
         import sys
-        sys.application = self
+        sys.app = self
         return 1
 
 '''
@@ -60,12 +60,12 @@ def main():
     for key in md.keys():
         if key not in keepers:
             del md[key]
-    application = App(0)
+    app = App(0)
     if md.has_key('App') and md['App'] is App:
         del md['App']
     if md.has_key('__main__') and md['__main__'] is __main__:
         del md['__main__']
-    application.MainLoop()
+    app.MainLoop()
 
 if __name__ == '__main__':
     main()

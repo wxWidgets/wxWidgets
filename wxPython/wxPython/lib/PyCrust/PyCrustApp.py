@@ -29,16 +29,16 @@ class App(wx.wxApp):
         wx.wxInitAllImageHandlers()
         locals = __main__.__dict__
         from crust import CrustFrame
-        self.crustFrame = CrustFrame(locals=locals)
-        self.crustFrame.SetSize((800, 600))
-        self.crustFrame.Show()
-        self.SetTopWindow(self.crustFrame)
+        self.frame = CrustFrame(locals=locals)
+        self.frame.SetSize((800, 600))
+        self.frame.Show()
+        self.SetTopWindow(self.frame)
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:
         # >>> import sys
-        # >>> sys.application.whatever
+        # >>> sys.app.whatever
         import sys
-        sys.application = self
+        sys.app = self
         return 1
 
 '''
@@ -59,12 +59,12 @@ def main():
     for key in md.keys():
         if key not in keepers:
             del md[key]
-    application = App(0)
+    app = App(0)
     if md.has_key('App') and md['App'] is App:
         del md['App']
     if md.has_key('__main__') and md['__main__'] is __main__:
         del md['__main__']
-    application.MainLoop()
+    app.MainLoop()
 
 if __name__ == '__main__':
     main()

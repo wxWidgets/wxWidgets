@@ -13,6 +13,13 @@ __revision__ = "$Revision$"[11:-2]
 
 
 from Base import EvtHandler
+import Parameters as wx
+
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
 
 
 class PyApp(EvtHandler):
@@ -27,18 +34,10 @@ class PyApp(EvtHandler):
     - initiate application processing via App.OnInit;
 
     - allow default processing of events not handled by other objects
-    in the application."""
+      in the application."""
 
     def __init__(self):
         """Create a PyApp instance."""
-        pass
-
-    def __del__(self):
-        """"""
-        pass
-
-    def _setCallbackInfo(self):
-        """"""
         pass
 
     def Dispatch(self):
@@ -153,7 +152,10 @@ class PyApp(EvtHandler):
         pass
 
     def OnInitGui(self):
-        """"""
+        """Called just after the platform's GUI has been initialized,
+        but before the App.OnInit() gets called. Rarely needed in
+        practice. Unlike App.OnInit(), does not need to return
+        True/False."""
         pass
     
     def Pending(self):
@@ -258,62 +260,27 @@ class PyApp(EvtHandler):
         pass
 
 
+from wxPython.wx import wxPlatform
+_redirect = (wxPlatform == '__WXMSW__' or wxPlatform == '__WXMAC__')
+del wxPlatform
+
+
 class App(PyApp):
     """The main application class.
 
     Inherit from this class and implement an OnInit method that
     creates a frame and then calls self.SetTopWindow(frame)."""
 
+    def __init__(self, redirect=_redirect, filename=None, useBestVisual=False):
+        """Create an App instance.
 
-##    The following implementation was taken from the wx.py source
-##    file.  It is included here simply as a reference:
+        redirect defaults to True on Windows and Mac. If redirect is
+        True, stdio goes to an output window or a file if filename is
+        not None."""
+        pass
 
-## _defRedirect = (wxPlatform == '__WXMSW__' or wxPlatform == '__WXMAC__')
 
-## class wxApp(wxPyApp):
-##    error = 'wxApp.error'
-##    outputWindowClass = wxPyOnDemandOutputWindow
-
-##    def __init__(self, redirect=_defRedirect, filename=None,
-##                 useBestVisual=false):
-##        pass
-##        wxPyApp.__init__(self)
-##        self.stdioWin = None
-##        self.saveStdio = (sys.stdout, sys.stderr)
-
-##        # This has to be done before OnInit
-##        self.SetUseBestVisual(useBestVisual)
-
-##        if redirect:
-##            self.RedirectStdio(filename)
-
-##        # this initializes wxWindows and then calls our OnInit
-##        _wxStart(self.OnInit)
-
-##    def __del__(self):
-##        try:
-##            self.RestoreStdio()
-##        except:
-##            pass
-
-##    def SetTopWindow(self, frame):
-##        if self.stdioWin:
-##            self.stdioWin.SetParent(frame)
-##        wxPyApp.SetTopWindow(self, frame)
-
-##    def MainLoop(self):
-##        wxPyApp.MainLoop(self)
-##        self.RestoreStdio()
-
-##    def RedirectStdio(self, filename):
-##        if filename:
-##            sys.stdout = sys.stderr = open(filename, 'a')
-##        else:
-##            self.stdioWin = self.outputWindowClass()
-##            sys.stdout = sys.stderr = self.stdioWin
-
-##    def RestoreStdio(self):
-##        sys.stdout, sys.stderr = self.saveStdio
+del _redirect
 
 
 class PyOnDemandOutputWindow:
@@ -339,32 +306,53 @@ class PySimpleApp(App):
 
 
 class PyWidgetTester(App):
-    """"""
+    """Use instead of App for testing widgets. Provides a frame
+    containing an instance of a widget.
 
-    def __init__(self):
-        """"""
+    Create a PyWidgetTester instance with the desired size for the
+    frame, then create the widget and show the frame using SetWidget."""
+
+    def __init__(self, size=(250, 100)):
+        """Create a PyWidgetTester instance, with no stdio redirection.
+
+        size is for the frame to hold the widget."""
         pass
 
     def OnInit(self):
-        """"""
+        """Creates a frame that will hold the widget to be tested."""
         pass
 
-    def SetWidget(self):
-        """"""
+    def SetWidget(self, widgetClass, *args):
+        """Create a widgetClass instance using the supplied args and
+        with a frame as parent, then show the frame."""
         pass
 
 
 class SingleInstanceChecker:
-    """"""
+    """Allows one to check that only a single instance of a program is
+    running. To do it, you should create an object of this class. As
+    long as this object is alive, calls to IsAnotherRunning() from
+    other processes will return True.
 
-    def __init__(self):
-        """"""
+    As the object should have the life span as big as possible, it
+    makes sense to create it either as a global or in App.OnInit()."""
+
+    def __init__(self, name, path=wx.EmptyString):
+        """Create a SingleInstanceChecker instance.
+
+        name should be as unique as possible. It is used as the mutex
+        name under Win32 and the lock file name under Unix.
+        App.GetAppName() and wx.GetUserId() are commonly used.
+
+        path is optional and is ignored under Win32 and used as the
+        directory to create the lock file in under Unix (default is
+        wx.GetHomeDir())."""
         pass
 
-    def Create(self):
-        """"""
+    def Create(self, name, path=wx.EmptyString):
+        """Create a SingleInstanceChecker instance."""
         pass
 
     def IsAnotherRunning(self):
-        """"""
+        """Return True if another copy of this program is already running."""
         pass

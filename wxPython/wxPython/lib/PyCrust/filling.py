@@ -117,11 +117,11 @@ class FillingTree(wx.wxTreeCtrl):
         """Return dictionary with attributes or contents of object."""
         busy = wx.wxBusyCursor()
         otype = type(obj)
-        if otype is dict \
+        if otype is types.DictType \
         or str(otype)[17:23] == 'BTrees' and hasattr(obj, 'keys'):
             return obj
         d = {}
-        if isinstance(obj, (list, tuple)):
+        if otype is types.ListType or otype is types.TupleType:
             for n in range(len(obj)):
                 key = '[' + str(n) + ']'
                 d[key] = obj[n]

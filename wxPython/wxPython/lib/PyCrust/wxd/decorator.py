@@ -7,10 +7,16 @@ __revision__ = "$Revision$"[11:-2]
 
 import inspect
 
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
 def decorate(real, decoration):
     """Decorate real module with docstrings from decoration module."""
     realdict = real.__dict__
-    for item in decoration.__dict__.itervalues():
+    for item in decoration.__dict__.values():
         if inspect.isclass(item):
             decorateClass(item, realdict)
         elif inspect.isfunction(item):

@@ -12,13 +12,13 @@ __revision__ = "$Revision$"[11:-2]
 # C-language classes.
 
 
-class Param:
+class _Param:
     """Used by this module to represent default wxPython parameter values,
     including parameter representations like style=wx.HSCROLL|wx.VSCROLL."""
 
     def __init__(self, value=None):
         if value is None:
-            value = self.__class__.__name__
+            value = 'wx.' + self.__class__.__name__
         self.value = value
 
     def __repr__(self):
@@ -28,55 +28,41 @@ class Param:
         value = '%s|%s' % (self, other)
         return self.__class__(value)
 
+_params = (
+    'BOTH',
+    'DEFAULT_FRAME_STYLE',
+    'DefaultPosition',
+    'DefaultSize',
+    'DefaultValidator',
+    'EmptyString',
+    'EVT_NULL',
+    'HSCROLL',
+    'NO_BORDER',
+    'NULL',
+    'NullColour',
+    'PyFrameNameStr',
+    'PyNOTEBOOK_NAME',
+    'PyPanelNameStr',
+    'PyStatusLineNameStr',
+    'PySTCNameStr',
+    'PyToolBarNameStr',
+    'SIZE_AUTO',
+    'SIZE_USE_EXISTING',
+    'ST_SIZEGRIP',
+    'TAB_TRAVERSAL',
+    'TB_HORIZONTAL',
+    'VSCROLL',
+    )
 
-class NULL(Param): pass
-NULL = NULL()
+## Create classes, then instances, like this:
 
-class BOTH(Param): pass
-BOTH = BOTH()
+## class BOTH(Param): pass
+## BOTH = BOTH()
 
-class DEFAULT_FRAME_STYLE(Param): pass
-DEFAULT_FRAME_STYLE = DEFAULT_FRAME_STYLE()
+for _param in _params:
+    exec 'class %s(_Param): pass' % _param
+    exec '%s = %s()' % (_param, _param)
 
-class DefaultPosition(Param): pass
-DefaultPosition = DefaultPosition()
-
-class DefaultSize(Param): pass
-DefaultSize = DefaultSize()
-
-class DefaultValidator(Param): pass
-DefaultValidator = DefaultValidator()
-
-class EVT_NULL(Param): pass
-EVT_NULL = EVT_NULL()
-
-class HSCROLL(Param): pass
-HSCROLL = HSCROLL()
-
-class NullColour(Param): pass
-NullColour = NullColour()
-
-class PyFrameNameStr(Param): pass
-PyFrameNameStr = PyFrameNameStr()
-
-class PyNOTEBOOK_NAME(Param): pass
-PyNOTEBOOK_NAME = PyNOTEBOOK_NAME()
-
-class PyPanelNameStr(Param): pass
-PyPanelNameStr = PyPanelNameStr()
-
-class PySTCNameStr(Param): pass
-PySTCNameStr = PySTCNameStr()
-
-class SIZE_AUTO(Param): pass
-SIZE_AUTO = SIZE_AUTO()
-
-class SIZE_USE_EXISTING(Param): pass
-SIZE_USE_EXISTING = SIZE_USE_EXISTING()
-
-class TAB_TRAVERSAL(Param): pass
-TAB_TRAVERSAL = TAB_TRAVERSAL()
-
-class VSCROLL(Param): pass
-VSCROLL = VSCROLL()
-
+del _param
+del _params
+del _Param

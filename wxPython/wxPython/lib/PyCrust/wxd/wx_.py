@@ -50,8 +50,13 @@ _topics = {
     'Window': None,
     }
 
-for topic in _topics:
+for topic in _topics.keys():
     _topics[topic] = __import__(topic, globals())
     exec 'from %s import *' % topic
 
 del topic  # Cleanup the namespace.
+
+try:
+    del wx  # Cleanup any module that imports Parameters as wx.
+except:
+    pass

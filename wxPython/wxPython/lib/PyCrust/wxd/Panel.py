@@ -15,6 +15,12 @@ __revision__ = "$Revision$"[11:-2]
 import Parameters as wx
 from Window import Window
 
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
 
 class Panel(Window):
     """"""

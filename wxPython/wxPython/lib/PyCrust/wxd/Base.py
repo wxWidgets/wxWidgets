@@ -42,10 +42,6 @@ class EvtHandler(Object):
         """Create a EvtHandler instance."""
         pass
 
-    def _setOORInfo(self):
-        """"""
-        pass
-
     def AddPendingEvent(self, event):
         """Post an event to be processed later.
 
