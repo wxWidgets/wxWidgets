@@ -68,6 +68,7 @@ extern const wxChar *wxMDIChildFrameClassName;
 extern wxWindow *wxWndHook;                 // from window.cpp
 
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
+extern void wxRemoveHandleAssociation(wxWindow *win);
 
 static HWND invalidHandle = 0;
 
@@ -1042,6 +1043,7 @@ void wxMDIChildFrame::MSWDestroyWindow()
         ::DestroyMenu((HMENU) m_hMenu);
         m_hMenu = 0;
     }
+    wxRemoveHandleAssociation(this);
     m_hWnd = 0;
 }
 
