@@ -27,8 +27,13 @@
     // Put some wx default wxChar* values into wxStrings.
     static const wxChar* wxPrintoutTitleStr = wxT("Printout");
     DECLARE_DEF_STRING(PrintoutTitleStr);
+    static const wxChar* wxPreviewCanvasNameStr = wxT("previewcanvas");
+    DECLARE_DEF_STRING(PreviewCanvasNameStr);
 
     DECLARE_DEF_STRING(FrameNameStr);
+    DECLARE_DEF_STRING(PanelNameStr);
+    DECLARE_DEF_STRING(DialogNameStr);
+
 %}
 
 //----------------------------------------------------------------------
@@ -381,32 +386,65 @@ public:
 
 //----------------------------------------------------------------------
 
+class wxPrintAbortDialog: public wxDialog
+{
+public:
+    wxPrintAbortDialog(wxWindow *parent,
+                       const wxString& title,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = 0,
+                       const wxString& name = wxPyDialogNameStr);
+
+};
+
+//----------------------------------------------------------------------
+
 class wxPrintPreview : public wxObject {
 public:
-    wxPrintPreview(wxPyPrintout* printout, wxPyPrintout* printoutForPrinting, wxPrintData* data=NULL);
-//    ~wxPrintPreview();   **** ????
+    wxPrintPreview(wxPyPrintout* printout,
+                   wxPyPrintout* printoutForPrinting,
+                   wxPrintData* data=NULL);
 
-    wxWindow* GetCanvas();
+    virtual bool SetCurrentPage(int pageNum);
     int GetCurrentPage();
-    wxFrame * GetFrame();
+
+    void SetPrintout(wxPyPrintout *printout);
+    wxPyPrintout *GetPrintout();
+    wxPyPrintout *GetPrintoutForPrinting();
+
+    void SetFrame(wxFrame *frame);
+    void SetCanvas(wxWindow *canvas);
+
+    virtual wxFrame *GetFrame();
+    virtual wxWindow *GetCanvas();
+
+    // The preview canvas should call this from OnPaint
+    virtual bool PaintPage(wxWindow *canvas, wxDC& dc);
+
+    // This draws a blank page onto the preview canvas
+    virtual bool DrawBlankPage(wxWindow *canvas, wxDC& dc);
+
+    // This is called by wxPrintPreview to render a page into a wxMemoryDC.
+    virtual bool RenderPage(int pageNum);
+
+    wxPrintDialogData& GetPrintDialogData();
+
+    virtual void SetZoom(int percent);
+    int GetZoom();
+
     int GetMaxPage();
     int GetMinPage();
-    wxPrintDialogData& GetPrintDialogData();
-    wxPyPrintout * GetPrintout();
-    wxPyPrintout * GetPrintoutForPrinting();
-    int GetZoom();
+
     bool Ok();
-    bool Print(bool prompt);
-    void SetCanvas(wxWindow* window);
-    void SetCurrentPage(int pageNum);
-    void SetFrame(wxFrame *frame);
-    void SetPrintout(wxPyPrintout *printout);
-    void SetZoom(int percent);
+    void SetOk(bool ok);
+
+    virtual bool Print(bool interactive);
+    virtual void DetermineScaling();
 
     %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
-//----------------------------------------------------------------------
 
 class wxPreviewFrame : public wxFrame {
 public:
@@ -419,12 +457,233 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void Initialize();
-
-    // ****  need to use derived class so these can be properly overridden:
-    //void CreateControlBar()
-    //void CreateCanvas()
-
+    void CreateControlBar();
+    void CreateCanvas();
 };
+
+
+class wxPreviewCanvas: public wxScrolledWindow
+{
+public:
+    wxPreviewCanvas(wxPrintPreview *preview,
+                    wxWindow *parent,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxString& name = wxPyPreviewCanvasNameStr);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+};
+
+
+
+enum {
+    wxPREVIEW_PRINT,
+    wxPREVIEW_PREVIOUS,
+    wxPREVIEW_NEXT,
+    wxPREVIEW_ZOOM,
+    wxPREVIEW_FIRST,
+    wxPREVIEW_LAST,
+    wxPREVIEW_GOTO,
+    wxPREVIEW_DEFAULT,
+
+    wxID_PREVIEW_CLOSE,
+    wxID_PREVIEW_NEXT,
+    wxID_PREVIEW_PREVIOUS,
+    wxID_PREVIEW_PRINT,
+    wxID_PREVIEW_ZOOM,
+    wxID_PREVIEW_FIRST,
+    wxID_PREVIEW_LAST,
+    wxID_PREVIEW_GOTO
+};
+
+class wxPreviewControlBar: public wxPanel
+{
+public:
+    wxPreviewControlBar(wxPrintPreview *preview,
+                        long buttons,
+                        wxWindow *parent,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    int GetZoomControl();
+    void SetZoomControl(int zoom);
+    wxPrintPreview* GetPrintPreview();
+
+    void OnNext();
+    void OnPrevious();
+    void OnFirst();
+    void OnLast();
+    void OnGoto();
+};
+
+
+//----------------------------------------------------------------------
+// Python-derivable versions of the above preview classes
+
+%{
+class wxPyPrintPreview : public wxPrintPreview
+{
+    DECLARE_CLASS(wxPyPrintPreview)
+public:
+    wxPyPrintPreview(wxPyPrintout* printout,
+                     wxPyPrintout* printoutForPrinting,
+                     wxPrintData* data=NULL)
+        : wxPrintPreview(printout, printoutForPrinting, data)
+    {}
+
+    DEC_PYCALLBACK_BOOL_INT(SetCurrentPage);
+    DEC_PYCALLBACK_BOOL_WXWINDC(PaintPage);
+    DEC_PYCALLBACK_BOOL_WXWINDC(DrawBlankPage);
+    DEC_PYCALLBACK_BOOL_INT(RenderPage);
+    DEC_PYCALLBACK_VOID_INT(SetZoom);
+    DEC_PYCALLBACK_BOOL_BOOL(Print);
+    DEC_PYCALLBACK_VOID_(DetermineScaling);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_CLASS( wxPyPrintPreview, wxPrintPreview );
+
+IMP_PYCALLBACK_BOOL_INT    (wxPyPrintPreview, wxPrintPreview, SetCurrentPage);
+IMP_PYCALLBACK_BOOL_WXWINDC(wxPyPrintPreview, wxPrintPreview, PaintPage);
+IMP_PYCALLBACK_BOOL_WXWINDC(wxPyPrintPreview, wxPrintPreview, DrawBlankPage);
+IMP_PYCALLBACK_BOOL_INT    (wxPyPrintPreview, wxPrintPreview, RenderPage);
+IMP_PYCALLBACK_VOID_INT    (wxPyPrintPreview, wxPrintPreview, SetZoom);
+IMP_PYCALLBACK_BOOL_BOOL   (wxPyPrintPreview, wxPrintPreview, Print);
+IMP_PYCALLBACK_VOID_       (wxPyPrintPreview, wxPrintPreview, DetermineScaling);
+%}
+
+
+class wxPyPrintPreview : public wxPrintPreview
+{
+public:
+    wxPyPrintPreview(wxPyPrintout* printout,
+                     wxPyPrintout* printoutForPrinting,
+                     wxPrintData* data=NULL);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPrintPreview)"
+
+    bool base_SetCurrentPage(int pageNum);
+    bool base_PaintPage(wxWindow *canvas, wxDC& dc);
+    bool base_DrawBlankPage(wxWindow *canvas, wxDC& dc);
+    bool base_RenderPage(int pageNum);
+    void base_SetZoom(int percent);
+    bool base_Print(bool interactive);
+    void base_DetermineScaling();
+};
+
+
+
+
+%{
+class wxPyPreviewFrame : public wxPreviewFrame
+{
+    DECLARE_CLASS(wxPyPreviewFrame);
+public:
+    wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize&  size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxPyFrameNameStr)
+        : wxPreviewFrame(preview, parent, title, pos, size, style, name)
+    {}
+
+    void SetPreviewCanvas(wxWindow* canvas) { m_previewCanvas = canvas; }
+    void SetControlBar(wxPreviewControlBar* bar) { m_controlBar = bar; }
+
+    DEC_PYCALLBACK_VOID_(Initialize);
+    DEC_PYCALLBACK_VOID_(CreateCanvas);
+    DEC_PYCALLBACK_VOID_(CreateControlBar);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_CLASS(wxPyPreviewFrame, wxPreviewFrame);
+
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, Initialize);
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateCanvas);
+IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateControlBar);
+%}
+
+class wxPyPreviewFrame : public wxPreviewFrame
+{
+public:
+    wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize&  size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxPyFrameNameStr);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPreviewFrame)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    void SetPreviewCanvas(wxWindow* canvas);
+    void SetControlBar(wxPreviewControlBar* bar);
+
+    void base_Initialize();
+    void base_CreateCanvas();
+    void base_CreateControlBar();
+};
+
+
+
+
+%{
+class wxPyPreviewControlBar : public wxPreviewControlBar
+{
+    DECLARE_CLASS(wxPyPreviewControlBar);
+public:
+    wxPyPreviewControlBar(wxPrintPreview *preview,
+                          long buttons,
+                          wxWindow *parent,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          long style = 0,
+                          const wxString& name = wxPyPanelNameStr)
+        : wxPreviewControlBar(preview, buttons, parent, pos, size, style, name)
+    {}
+
+    void SetPrintPreview(wxPrintPreview* preview) { m_printPreview = preview; }
+
+    DEC_PYCALLBACK_VOID_(CreateButtons);
+    DEC_PYCALLBACK_VOID_INT(SetZoomControl);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_CLASS(wxPyPreviewControlBar, wxPreviewControlBar);
+IMP_PYCALLBACK_VOID_(wxPyPreviewControlBar, wxPreviewControlBar, CreateButtons);
+IMP_PYCALLBACK_VOID_INT(wxPyPreviewControlBar, wxPreviewControlBar, SetZoomControl);
+%}
+
+class wxPyPreviewControlBar : public wxPreviewControlBar
+{
+public:
+    wxPyPreviewControlBar(wxPrintPreview *preview,
+                          long buttons,
+                          wxWindow *parent,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          long style = 0,
+                          const wxString& name = wxPyPanelNameStr);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPreviewControlBar)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    void SetPrintPreview(wxPrintPreview* preview);
+
+    void base_CreateButtons();
+    void base_SetZoomControl(int zoom);
+};
+
 
 //----------------------------------------------------------------------
 

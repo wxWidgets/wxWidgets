@@ -526,6 +526,27 @@ extern wxPyApp *wxPythonApp;
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_VOID_(CBNAME)                    \
+    void CBNAME();                                      \
+    void base_##CBNAME();
+
+
+#define IMP_PYCALLBACK_VOID_(CLASS, PCLASS, CBNAME)                     \
+    void CLASS::CBNAME() {                                              \
+        bool found;                                                     \
+        wxPyBeginBlockThreads();                                        \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));        \
+        wxPyEndBlockThreads();                                          \
+        if (! found)                                                    \
+            PCLASS::CBNAME();                                           \
+    }                                                                   \
+    void CLASS::base_##CBNAME() {                                       \
+        PCLASS::CBNAME();                                               \
+    }
+
+//---------------------------------------------------------------------------
+
 #define DEC_PYCALLBACK_VOID_INTINT(CBNAME)                      \
     void CBNAME(int a, int b);                                  \
     void base_##CBNAME(int a, int b);
@@ -543,6 +564,27 @@ extern wxPyApp *wxPythonApp;
     }                                                                   \
     void CLASS::base_##CBNAME(int a, int b) {                           \
         PCLASS::CBNAME(a,b);                                            \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_VOID_INT(CBNAME)                         \
+    void CBNAME(int a);                                         \
+    void base_##CBNAME(int a);
+
+
+#define IMP_PYCALLBACK_VOID_INT(CLASS, PCLASS, CBNAME)                  \
+    void CLASS::CBNAME(int a) {                                         \
+        bool found;                                                     \
+        wxPyBeginBlockThreads();                                        \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)",a));     \
+        wxPyEndBlockThreads();                                          \
+        if (! found)                                                    \
+            PCLASS::CBNAME(a);                                          \
+    }                                                                   \
+    void CLASS::base_##CBNAME(int a) {                                  \
+        PCLASS::CBNAME(a);                                              \
     }
 
 //---------------------------------------------------------------------------
@@ -671,6 +713,28 @@ extern wxPyApp *wxPythonApp;
         return PCLASS::CBNAME();                                                \
     }
 
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_BOOL_BOOL(CBNAME)                         \
+    bool CBNAME(bool a);                                         \
+    bool base_##CBNAME(bool a);
+
+
+#define IMP_PYCALLBACK_BOOL_BOOL(CLASS, PCLASS, CBNAME)                 \
+    bool CLASS::CBNAME(bool a) {                                        \
+        bool rval=FALSE, found;                                         \
+        wxPyBeginBlockThreads();                                        \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(i)",a));\
+        wxPyEndBlockThreads();                                          \
+        if (! found)                                                    \
+            rval = PCLASS::CBNAME(a);                                   \
+        return rval;                                                    \
+    }                                                                   \
+    bool CLASS::base_##CBNAME(bool a) {                                 \
+        return PCLASS::CBNAME(a);                                       \
+    }
 
 //---------------------------------------------------------------------------
 
@@ -1404,6 +1468,34 @@ extern wxPyApp *wxPythonApp;
     }                                                                           \
     bool CLASS::base_##CBNAME(wxWindow* a) {                                    \
         return PCLASS::CBNAME(a);                                               \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_BOOL_WXWINDC(CBNAME)                             \
+    bool CBNAME(wxWindow* a, wxDC& b);                                  \
+    bool base_##CBNAME(wxWindow* a, wxDC& b);
+
+
+#define IMP_PYCALLBACK_BOOL_WXWINDC(CLASS, PCLASS, CBNAME)                        \
+    bool CLASS::CBNAME(wxWindow* a, wxDC& b) {                                  \
+        bool rval=FALSE;                                                        \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* win = wxPyMake_wxObject(a);                               \
+            PyObject* dc  = wxPyMake_wxObject(&b);                              \
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)", win, dc));\
+            Py_DECREF(win);                                                     \
+            Py_DECREF(dc);                                                      \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        if (! found)                                                            \
+            rval = PCLASS::CBNAME(a, b);                                        \
+        return rval;                                                            \
+    }                                                                           \
+    bool CLASS::base_##CBNAME(wxWindow* a, wxDC& b) {                           \
+        return PCLASS::CBNAME(a, b);                                            \
     }
 
 //---------------------------------------------------------------------------
