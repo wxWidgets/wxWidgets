@@ -190,6 +190,10 @@ wxMSW:
 - fixed crashes in wxListCtrl under XP
 - added context menu for rich edit wxTextCtrl
 
+wxHTML:
+
+- fixed wxHTML to work in Unicode build
+
 2.3.3
 -----
 
