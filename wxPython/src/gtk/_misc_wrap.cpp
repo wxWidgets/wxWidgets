@@ -527,10 +527,6 @@ SWIG_FromUnsignedLong(unsigned long value)
 }
 
 
-    bool wxGetKeyState(wxKeyCode key)
-        {  wxPyRaiseNotImplemented(); return False; }
-
-
     void wxWakeUpMainThread() {}
 
 

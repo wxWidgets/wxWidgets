@@ -29,6 +29,7 @@
 #include <gdk/gdkprivate.h>
 #include <wx/gtk/win_gtk.h>
 #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
+#include <locale.h>
 #endif
 
 #ifdef __WXX11__
@@ -398,15 +399,28 @@ void wxPyApp::_BootstrapApp()
     }
     wxPyEndBlockThreads(blocked);
 
+    // Initialize wxWidgets
     result = wxEntryStart(argc, argv);
     delete [] argv;
 
     blocked = wxPyBeginBlockThreads();
     if (! result)  {
-        PyErr_SetString(PyExc_SystemError, "wxEntryStart failed!");
+        PyErr_SetString(PyExc_SystemError,
+                        "wxEntryStart failed, unable to initialize wxWidgets!"
+#ifdef __WXGTK__
+                        "  (Is DISPLAY set properly?)"
+#endif
+            );
         goto error;
     }
 
+    // On wxGTK the locale will be changed to match the system settings, but
+    // Python needs to have LC_NUMERIC set to "C" in order for the floating
+    // point conversions and such to work right.
+#ifdef __WXGTK__
+    setlocale(LC_NUMERIC, "C");
+#endif
+    
     // The stock objects were all NULL when they were loaded into
     // SWIG generated proxies, so re-init those now...
     wxPy_ReinitStockObjects(3);
@@ -436,7 +450,6 @@ void wxPyApp::_BootstrapApp()
         // Is it okay if there is no OnInit?  Probably so...
         result = True;
     }
-
 
     if (! result) {
         PyErr_SetString(PyExc_SystemExit, "OnInit returned False, exiting...");

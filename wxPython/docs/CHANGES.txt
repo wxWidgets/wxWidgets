@@ -50,9 +50,19 @@ a very small amount of overhead and removes several unneccessary
 problems.
 
 Replaced wx/lib/pubsub.py with a version that uses weak references to
-track the subscribers.  Thanks go to Oliver Schoenborn and Robb
-Shecter.
+track the subscribers, plus other fixes/additions.  Thanks go to
+Oliver Schoenborn and Robb Shecter.
 
+wxGTK now uses gtk_init_check so wxPython can raise an exception if
+there is no DISPLAY available or other initializaion problem.
+
+wx.GetKeyState now has an implementation for wxGTK and is able to
+detect the up/down or toggle state of modifier and toggle keys.
+
+The LC_NUMERIC locale is now reset back to "C" (compatibility) when
+running on wxGTK to work around the fact that GTK requires the locale
+to be set to the system settings but Python depends on LC_NUMERIC
+remaining compatible with "C".
 
 
 
