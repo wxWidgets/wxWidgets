@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utilsunx.cpp
+// Name:        unix/utilsunx.cpp
 // Purpose:     generic Unix implementation of many wx functions
 // Author:      Vadim Zeitlin
 // Id:          $Id$
@@ -354,19 +354,22 @@ void wxHandleProcessTermination(wxEndProcessData *proc_data)
 #if wxUSE_STREAMS
 
 // ----------------------------------------------------------------------------
-// wxProcessFileInputStream: stream for reading from a pipe
+// wxPipeInputStream: stream for reading from a pipe
 // ----------------------------------------------------------------------------
 
-class wxProcessFileInputStream : public wxFileInputStream
+class wxPipeInputStream : public wxFileInputStream
 {
 public:
-    wxProcessFileInputStream(int fd) : wxFileInputStream(fd) { }
+    wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
+
+    // return TRUE if the pipe is still opened
+    bool IsOpened() const { return TRUE; } // TODO
 
     // return TRUE if we have anything to read, don't block
     bool IsAvailable() const;
 };
 
-bool wxProcessFileInputStream::IsAvailable() const
+bool wxPipeInputStream::IsAvailable() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
         return TRUE;
@@ -400,109 +403,9 @@ bool wxProcessFileInputStream::IsAvailable() const
     }
 }
 
-// ----------------------------------------------------------------------------
-// wxStreamTempInputBuffer
-// ----------------------------------------------------------------------------
-
-/*
-   Extract of a mail to wx-users to give the context of the problem we are
-   trying to solve here:
-
-    MC> If I run the command:
-    MC>    find . -name "*.h" -exec grep linux {} \;
-    MC> in the exec sample synchronously from the 'Capture command output'
-    MC> menu, wxExecute never returns.  I have to xkill it.  Has anyone
-    MC> else encountered this?
-
-     Yes, I can reproduce it too.
-
-     I even think I understand why it happens: before launching the external
-    command we set up a pipe with a valid file descriptor on the reading side
-    when the output is redirected. So the subprocess happily writes to it ...
-    until the pipe buffer (which is usually quite big on Unix, I think the
-    default is 4Kb) is full. Then the writing process stops and waits until we
-    read some data from the pipe to be able to continue writing to it but we
-    never do it because we wait until it terminates to start reading and so we
-    have a classical deadlock.
-
-   Here is the fix: we now read the output as soon as it appears into a temp
-   buffer (wxStreamTempInputBuffer object) and later just stuff it back into the
-   stream when the process terminates. See supporting code in wxExecute()
-   itself as well.
-
-   Note that this is horribly inefficient for large amounts of output (count
-   the number of times we copy the data around) and so a better API is badly
-   needed!
-*/
-
-class wxStreamTempInputBuffer
-{
-public:
-    wxStreamTempInputBuffer();
-
-    // call to associate a stream with this buffer, otherwise nothing happens
-    // at all
-    void Init(wxProcessFileInputStream *stream);
-
-    // check for input on our stream and cache it in our buffer if any
-    void Update();
-
-    ~wxStreamTempInputBuffer();
-
-private:
-    // the stream we're buffering, if NULL we don't do anything at all
-    wxProcessFileInputStream *m_stream;
-
-    // the buffer of size m_size (NULL if m_size == 0)
-    void *m_buffer;
-
-    // the size of the buffer
-    size_t m_size;
-};
-
-wxStreamTempInputBuffer::wxStreamTempInputBuffer()
-{
-    m_stream = NULL;
-    m_buffer = NULL;
-    m_size = 0;
-}
-
-void wxStreamTempInputBuffer::Init(wxProcessFileInputStream *stream)
-{
-    m_stream = stream;
-}
-
-void wxStreamTempInputBuffer::Update()
-{
-    if ( m_stream && m_stream->IsAvailable() )
-    {
-        // realloc in blocks of 4Kb: this is the default (and minimal) buffer
-        // size of the Unix pipes so it should be the optimal step
-        static const size_t incSize = 4096;
-
-        void *buf = realloc(m_buffer, m_size + incSize);
-        if ( !buf )
-        {
-            // don't read any more, we don't have enough memory to do it
-            m_stream = NULL;
-        }
-        else // got memory for the buffer
-        {
-            m_buffer = buf;
-            m_stream->Read((char *)m_buffer + m_size, incSize);
-            m_size += m_stream->LastRead();
-        }
-    }
-}
-
-wxStreamTempInputBuffer::~wxStreamTempInputBuffer()
-{
-    if ( m_buffer )
-    {
-        m_stream->Ungetch(m_buffer, m_size);
-        free(m_buffer);
-    }
-}
+// define this to let wxexec.cpp know that we know what we're doing
+#define _WX_USED_BY_WXEXECUTE_
+#include "../common/execcmn.cpp"
 
 #endif // wxUSE_STREAMS
 
@@ -586,8 +489,9 @@ private:
 // ----------------------------------------------------------------------------
 // wxExecute: the real worker function
 // ----------------------------------------------------------------------------
+
 #ifdef __VMS
-#pragma message disable codeunreachable
+    #pragma message disable codeunreachable
 #endif
 
 long wxExecute(wxChar **argv,
@@ -764,11 +668,11 @@ long wxExecute(wxChar **argv,
             wxOutputStream *inStream =
                 new wxFileOutputStream(pipeIn.Detach(wxPipe::Write));
 
-            wxProcessFileInputStream *outStream =
-                new wxProcessFileInputStream(pipeOut.Detach(wxPipe::Read));
+            wxPipeInputStream *outStream =
+                new wxPipeInputStream(pipeOut.Detach(wxPipe::Read));
 
-            wxProcessFileInputStream *errStream =
-                new wxProcessFileInputStream(pipeErr.Detach(wxPipe::Read));
+            wxPipeInputStream *errStream =
+                new wxPipeInputStream(pipeErr.Detach(wxPipe::Read));
 
             process->SetPipeStreams(outStream, inStream, errStream);
 
@@ -854,8 +758,9 @@ long wxExecute(wxChar **argv,
 
     return ERROR_RETURN_CODE;
 }
+
 #ifdef __VMS
-#pragma message enable codeunreachable
+    #pragma message enable codeunreachable
 #endif
 
 #undef ERROR_RETURN_CODE
@@ -868,13 +773,13 @@ long wxExecute(wxChar **argv,
 const wxChar* wxGetHomeDir( wxString *home  )
 {
     *home = wxGetUserHome( wxString() );
-   wxString tmp;
+    wxString tmp;
     if ( home->IsEmpty() )
         *home = wxT("/");
 #ifdef __VMS
-   tmp = *home;
-   if ( tmp.Last() != wxT(']'))
-     if ( tmp.Last() != wxT('/')) *home << wxT('/');
+    tmp = *home;
+    if ( tmp.Last() != wxT(']'))
+        if ( tmp.Last() != wxT('/')) *home << wxT('/');
 #endif
     return home->c_str();
 }

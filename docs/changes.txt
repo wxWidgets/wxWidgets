@@ -227,6 +227,7 @@ All (GUI):
 wxMSW:
 
 - small appearance fixes for native look under Windows XP
+- fixed multiple bugs in wxExecute() with IO redirection
 - refresh the buttons properly when the window is resized (Hans Van Leemputten)
 - huge (40*) speed up in wxMask::Create()
 - changing wxWindows styles also changes the underlying Windows window style
@@ -256,12 +257,9 @@ wxMSW:
 - multiple events avoided in wxComboBox
 - tooltip asserts avoided for read-only wxComboBox
 - fixed a race condition during a thread exit and a join
-- fixed a condition where a thread can hang during
-  message/event processing
+- fixed a condition where a thread can hang during message/event processing
 - increased space between wxRadioBox label and first radio button
 - don't fail to register remaining window classes if one fails to register
-- set window proc for non-control windows to avoid problems
-  with multiple wxWindows apps running simultaneously
 
 wxGTK:
 
