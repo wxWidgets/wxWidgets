@@ -211,5 +211,5 @@ web site.
 
 Have fun!
 
-The wxWindows Team, August 2003
+The wxWindows Team, September 2003
 
