@@ -244,7 +244,12 @@ protected:
     int ConvertSashPosition(int sashPos) const;
 
     // set the real sash position, sashPos here must be positive
-    void DoSetSashPosition(int sashPos);
+    //
+    // returns TRUE if the sash position has been changed, FALSE otherwise
+    bool DoSetSashPosition(int sashPos);
+
+    // set the sash position and send an event about it having been changed
+    void SetSashPositionAndNotify(int sashPos);
 
     // set the cursor appropriate for the current split mode
     void SetResizeCursor();

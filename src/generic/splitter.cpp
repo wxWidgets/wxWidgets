@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        splitter.cpp
+// Name:        src/generic/splitter.cpp
 // Purpose:     wxSplitterWindow implementation
 // Author:      Julian Smart
 // Modified by:
@@ -243,7 +243,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 m_windowOne = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
-                DoSetSashPosition(0);
+                SetSashPositionAndNotify(0);
             }
             else if ( posSashNew == GetWindowSize() )
             {
@@ -251,16 +251,16 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
                 wxWindow *removedWindow = m_windowTwo;
                 m_windowTwo = (wxWindow *) NULL;
                 OnUnsplit(removedWindow);
-                DoSetSashPosition(0);
+                SetSashPositionAndNotify(0);
             }
             else
             {
-                DoSetSashPosition(posSashNew);
+                SetSashPositionAndNotify(posSashNew);
             }
         }
         else
         {
-            DoSetSashPosition(posSashNew);
+            SetSashPositionAndNotify(posSashNew);
         }
 
         SizeWindows();
@@ -343,7 +343,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         }
         else
         {
-            DoSetSashPosition(posSashNew);
+            SetSashPositionAndNotify(posSashNew);
             m_needUpdating = TRUE;
         }
     }
@@ -384,7 +384,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         iconized = FALSE;
     }
 #endif
-    
+
     if ( iconized )
     {
         event.Skip();
@@ -399,12 +399,12 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
             if ( m_sashPosition >= (cw - 5) )
-                DoSetSashPosition(wxMax(10, cw - 40));
+                SetSashPositionAndNotify(wxMax(10, cw - 40));
         }
         else // m_splitMode == wxSPLIT_HORIZONTAL
         {
             if ( m_sashPosition >= (ch - 5) )
-                DoSetSashPosition(wxMax(10, ch - 40));
+                SetSashPositionAndNotify(wxMax(10, ch - 40));
         }
     }
 
@@ -712,14 +712,22 @@ int wxSplitterWindow::AdjustSashPosition(int sashPos) const
     return sashPos;
 }
 
-void wxSplitterWindow::DoSetSashPosition(int sashPos)
+bool wxSplitterWindow::DoSetSashPosition(int sashPos)
 {
     int newSashPosition = AdjustSashPosition(sashPos);
 
-    if ( newSashPosition != m_sashPosition )
-    {
-        m_sashPosition = newSashPosition;
+    if ( newSashPosition == m_sashPosition )
+        return FALSE;
 
+    m_sashPosition = newSashPosition;
+
+    return TRUE;
+}
+
+void wxSplitterWindow::SetSashPositionAndNotify(int sashPos)
+{
+    if ( DoSetSashPosition(sashPos) )
+    {
         wxSplitterEvent event(wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, this);
         event.m_data.pos = m_sashPosition;
 
@@ -753,7 +761,7 @@ void wxSplitterWindow::SizeWindows()
 
     if ( GetWindow1() && !GetWindow2() )
     {
-        GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(), 
+        GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(),
                               w - 2*GetBorderSize(), h - 2*GetBorderSize());
     }
     else if ( GetWindow1() && GetWindow2() )
