@@ -368,7 +368,7 @@ class xxxDialog(xxxContainer):
     required = ['title']
     default = {'title': ''}
     winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxSTAY_ON_TOP',
-                 'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
+##                 'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
                  'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER', 'wxRESIZE_BOX',
                  'wxTHICK_FRAME',
                  'wxNO_3D', 'wxTAB_TRAVERSAL', 'wxCLIP_CHILDREN']

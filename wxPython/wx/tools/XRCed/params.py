@@ -94,8 +94,10 @@ class ParamBinaryOr(PPanel):
 class ParamFlag(ParamBinaryOr):
     values = ['wxTOP', 'wxBOTTOM', 'wxLEFT', 'wxRIGHT', 'wxALL',
               'wxEXPAND', 'wxGROW', 'wxSHAPED', 'wxALIGN_CENTRE', 'wxALIGN_RIGHT',
+              'wxFIXED_MINSIZE',
               'wxALIGN_BOTTOM', 'wxALIGN_CENTRE_VERTICAL',
-              'wxALIGN_CENTRE_HORIZONTAL']
+              'wxALIGN_CENTRE_HORIZONTAL',
+              ]
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE',
              'wxALIGN_CENTER_VERTICAL': 'wxALIGN_CENTRE_VERTICAL',
              'wxALIGN_CENTER_HORIZONTAL': 'wxALIGN_CENTRE_HORIZONTAL'}
