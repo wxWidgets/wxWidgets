@@ -25,6 +25,9 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification;
 - (void)applicationWillResignActive:(NSNotification *)notification;
 - (void)applicationDidResignActive:(NSNotification *)notification;
+
+// Other notifications
+- (void)controlTintChanged:(NSNotification *)notification;
 @end // interface wxNSApplicationDelegate : NSObject
 
 #endif //ndef _WX_COCOA_NSAPPLICATION_H__

@@ -34,6 +34,8 @@
 #import <Foundation/NSThread.h>
 #import <AppKit/NSEvent.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSNotification.h>
+#import <AppKit/NSCell.h>
 
 // ========================================================================
 // wxPoseAsInitializer
@@ -146,6 +148,11 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     wxTheApp->CocoaDelegate_applicationDidResignActive();
 }
 
+- (void)controlTintChanged:(NSNotification *)notification
+{
+    wxLogDebug("TODO: send EVT_SYS_COLOUR_CHANGED as appropriate");
+}
+
 @end // implementation wxNSApplicationDelegate : NSObject
 
 // ========================================================================
@@ -199,6 +206,8 @@ void wxApp::CleanUp()
     wxMenuBarManager::DestroyInstance();
 
     [m_cocoaApp setDelegate:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:m_cocoaAppDelegate
+        name:NSControlTintDidChangeNotification object:nil];
     [m_cocoaAppDelegate release];
     m_cocoaAppDelegate = NULL;
 
@@ -252,11 +261,13 @@ bool wxApp::OnInitGui()
     m_cocoaApp = [NSApplication sharedApplication];
     m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
     [m_cocoaApp setDelegate:m_cocoaAppDelegate];
+    [[NSNotificationCenter defaultCenter] addObserver:m_cocoaAppDelegate
+        selector:@selector(controlTintChanged:)
+        name:NSControlTintDidChangeNotification object:nil];
 
     wxMenuBarManager::CreateInstance();
 
     wxDC::CocoaInitializeTextSystem();
-//    [ m_cocoaApp setDelegate:m_cocoaApp ];
     return TRUE;
 }
 
