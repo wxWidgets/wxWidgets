@@ -383,6 +383,7 @@ protected:
 
   long m_curitemId;
 
+  void SendMessage(wxEventType command, const wxTreeItemId& item);
 //  GtkTreeItem *findGtkTreeItem(wxTreeCtrlId &id) const;
 
     // the common part of all ctors
