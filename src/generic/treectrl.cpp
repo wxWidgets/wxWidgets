@@ -1453,7 +1453,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId &item)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxGenericTreeItem *gitem = item.m_pItem;
 
@@ -2077,7 +2077,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxClientDC dc(this);
     PrepareDC(dc);
@@ -2113,7 +2113,7 @@ void wxTreeCtrl::Edit( const wxTreeItemId& item )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxString s = m_currentEdit->GetText();
     int x = m_currentEdit->GetX();

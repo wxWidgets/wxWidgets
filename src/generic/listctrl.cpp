@@ -1754,7 +1754,7 @@ void wxListMainWindow::EditLabel( long item )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxString s;
     m_currentEdit->GetText( 0, s );
@@ -2896,7 +2896,7 @@ void wxListMainWindow::EnsureVisible( long index )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYield();
+    if (m_dirty) wxYieldIfNeeded();
 
     wxListLineData *oldCurrent = m_current;
     m_current = (wxListLineData *) NULL;
