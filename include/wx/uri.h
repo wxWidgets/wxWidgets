@@ -122,7 +122,7 @@ protected:
     static void Escape  (wxString& s, const wxChar& c);
     static bool IsEscape(const wxChar*& uri);
 
-    static wxInt32 CharToHex(const wxChar& c);
+    static wxChar CharToHex(const wxChar& c);
 
     static bool IsUnreserved (const wxChar& c);
     static bool IsReserved (const wxChar& c);

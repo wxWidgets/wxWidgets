@@ -117,7 +117,7 @@ wxChar wxURI::TranslateEscape(const wxChar* s)
 {
     wxASSERT_MSG(IsHex(*s) && IsHex(*(s+1)), wxT("Invalid escape!"));
 
-    return (wxChar)( CharToHex(*s) * 0x10 + CharToHex(*++s) );
+    return CharToHex(*s) * 0x10 + CharToHex(*++s);
 }
 
 wxString wxURI::Unescape(const wxString& uri)
@@ -1150,7 +1150,7 @@ bool wxURI::ParseIPvFuture(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 
 //static
-wxInt32 wxURI::CharToHex(const wxChar& c)
+wxChar wxURI::CharToHex(const wxChar& c)
 {
     if ((c >= wxT('A')) && (c <= wxT('Z')))    return c - wxT('A') + 0x0A;
     if ((c >= wxT('a')) && (c <= wxT('z')))    return c - wxT('a') + 0x0a;
