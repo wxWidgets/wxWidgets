@@ -249,7 +249,7 @@ bool wxMenu::DoInsertOrAppend(
 
         m_vMenuData.iPosition = 0; // submenus have a 0 position
         m_vMenuData.id = (USHORT)pSubmenu->GetHMenu();
-        m_vMenuData.afStyle |= MIS_SUBMENU;
+        m_vMenuData.afStyle |= MIS_SUBMENU | MIS_TEXT;
     }
     else
     {
@@ -657,7 +657,18 @@ WXHMENU wxMenuBar::Create()
         hMenuBar = GetHwnd();
         for (size_t i = 0; i < nCount; i++)
         {
-            ::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
+            APIRET                  rc;
+            ERRORID                 vError;
+            wxString                sError;
+
+            rc = (APIRET)::WinSendMsg(hMenuBar, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
+            if (rc == MIT_MEMERROR || rc == MIT_ERROR)
+            {
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+                wxLogError("Error inserting or appending a menuitem. Error: %s\n", sError);
+                return NULLHANDLE;
+            }
         }
     }
     return hMenuBar;
