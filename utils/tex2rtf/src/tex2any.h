@@ -248,6 +248,7 @@ extern char *linkColourString; // HTML link colour
 extern char *followedLinkColourString; // HTML followed link colour
 extern bool combineSubSections; // Stop splitting files below section
 extern bool htmlWorkshopFiles;  // generate HTML Help Workshop project files
+extern bool ignoreBadRefs;      // Don't insert (REF NOT FOUND)
 
 // Names to help with internationalisation
 extern char *ContentsNameString;

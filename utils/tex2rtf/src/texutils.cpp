@@ -1183,6 +1183,8 @@ char *RegisterSetting(char *settingName, char *settingValue, bool interactive)
     htmlFrameContents = StringTobool(settingValue);
   else if (StringMatch(settingName, "upperCaseNames", FALSE, TRUE))
     upperCaseNames = StringTobool(settingValue);
+  else if (StringMatch(settingName, "ignoreBadRefs", FALSE, TRUE))
+    ignoreBadRefs = StringTobool(settingValue);
   else if (StringMatch(settingName, "winHelpTitle", FALSE, TRUE))
   {
     if (winHelpTitle)

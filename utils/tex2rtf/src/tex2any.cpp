@@ -144,6 +144,7 @@ char            *linkColourString = NULL;
 char            *followedLinkColourString = NULL;
 bool            combineSubSections = FALSE;
 bool            htmlWorkshopFiles = FALSE;
+bool            ignoreBadRefs = FALSE;
 
 extern int passNumber;
 

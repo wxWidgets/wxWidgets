@@ -1906,7 +1906,8 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
           {
             if (helpRefText)
               TraverseChildrenFromChunk(helpRefText);
-            TexOutput(" (REF NOT FOUND)");
+            if (!ignoreBadRefs)
+              TexOutput(" (REF NOT FOUND)");
             wxString errBuf;
             errBuf.Printf("Warning: unresolved reference '%s'", refName);
             OnInform((char *)errBuf.c_str());

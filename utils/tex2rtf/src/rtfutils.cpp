@@ -59,9 +59,7 @@ extern char *RTFCharset;
 // This is defined in the Tex2Any library and isn't in use after parsing
 extern char *BigBuffer;
 
-
 extern wxHashTable TexReferences;
-
 
 // Are we in verbatim mode? If so, format differently.
 static bool inVerbatim = FALSE;
@@ -95,6 +93,8 @@ static int TwoColWidthB = 3000;
 
 const int PageWidth = 12242; // 8.25 inches wide for A4
 
+// Remember the anchor in a helpref
+static TexChunk *helpRefText = NULL;
 
 /*
  * Flag to say we've just issued a \par\pard command, so don't
@@ -3343,46 +3343,61 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
           TexOutput("{\\i ");
         else
           TexOutput("}");
+
+        if (start)
+          helpRefText = GetArgChunk();
+
         return TRUE;
       }
       else if ((GetNoArgs() - arg_no) == 0) // Arg = 2, or 3 if first is optional
       {
         if (macroId != ltHELPREFN)
         {
+          char *refName = GetArgData();
+          TexRef *texRef = NULL;
+          if (refName)
+            texRef = FindReference(refName);
           if (start)
           {
-            TexOutput(" (");
-            char *refName = GetArgData();
+            if (texRef || !ignoreBadRefs)
+              TexOutput(" (");
             if (refName)
             {
-                if (useWord)
+                if (texRef || !ignoreBadRefs)
                 {
-                    char *s = GetArgData();
-                    TexOutput("p. ");
-                    TexOutput("{\\field{\\*\\fldinst  PAGEREF ");
-                    TexOutput(refName);
-                    TexOutput(" \\\\* MERGEFORMAT }{\\fldrslt ??}}");
-                }
-                else
-                {
-                  // Only print section name if we're not in Word mode,
-                  // so can't do page references
-                  TexRef *texRef = FindReference(refName);
-                  if (texRef)
+                  if (useWord)
                   {
-                    TexOutput(texRef->sectionName) ; TexOutput(" "); TexOutput(texRef->sectionNumber);
+                      char *s = GetArgData();
+                      TexOutput("p. ");
+                      TexOutput("{\\field{\\*\\fldinst  PAGEREF ");
+                      TexOutput(refName);
+                      TexOutput(" \\\\* MERGEFORMAT }{\\fldrslt ??}}");
                   }
                   else
                   {
-                    TexOutput("??");
-                    sprintf(buf, "Warning: unresolved reference '%s'", refName);
-                    OnInform(buf);
+                    // Only print section name if we're not in Word mode,
+                    // so can't do page references
+                    if (texRef)
+                    {
+                      TexOutput(texRef->sectionName) ; TexOutput(" "); TexOutput(texRef->sectionNumber);
+                    }
+                    else
+                    {
+                      if (!ignoreBadRefs)
+                        TexOutput("??");
+                      sprintf(buf, "Warning: unresolved reference '%s'", refName);
+                      OnInform(buf);
+                    }
                   }
                 }
             }
             else TexOutput("??");
           }
-          else TexOutput(")");
+          else
+          {
+            if (texRef || !ignoreBadRefs)
+              TexOutput(")");
+          }
         }
         return FALSE;
       }
