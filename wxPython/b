@@ -24,8 +24,22 @@ python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
 
 SETUP="python$PYVER -u setup.py"
-FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" # BUILD_GLCANVAS=0"
+FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" 
 OTHERFLAGS=""
+PORTFLAGS=""
+
+
+if [ "$1" = "gtk1" ]; then 
+    PORTFLAGS=""
+    shift
+elif [ "$1" = "gtk2" ]; then 
+    PORTFLAGS="WXPORT=gtk2 UNICODE=1"
+    shift
+fi
+
+FLAGS="$FLAGS $PORTFLAGS"
+
+
 
 
 # "c" --> clean
@@ -42,7 +56,6 @@ elif [ "$1" = "d" ]; then
 # "t" --> touch *.i files
 elif [ "$1" = "t" ]; then
     shift
-    #CMD="set CMD=touch src\*.i; touch contrib\glcanvas\*.i; touch contrib\ogl\*.i; touch contrib\stc\*.i"
     CMD='find . -name "*.i" | xargs touch'
 
 # "i" --> install
