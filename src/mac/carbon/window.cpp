@@ -146,28 +146,33 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
-                else
-                {
-                    // unfortunately this update region may be incorrect (tree ctrl sample )
-                    // so we have to reset it
-                    // updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
-                }
                 // GrafPtr myport = cEvent.GetParameter<GrafPtr>(kEventParamGrafPort,typeGrafPtr) ;
 
-#if 0 // in case we would need a coregraphics compliant background erase first
+#if 0 
+                // in case we would need a coregraphics compliant background erase first
+                // now usable to track redraws
                 CGContextRef cgContext = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef) ;
                 if ( thisWindow->MacIsUserPane() )
                 {
+                    static float color = 0.5 ;
+                    static channel = 0 ;
  	                HIRect bounds;
-                   	err = HIViewGetBounds( controlRef, &bounds );
-				    CGContextSetRGBFillColor( cgContext, 1 , 1 , 1 , 1 );
-//				    CGContextSetRGBFillColor( cgContext, .95, .95, .95, 1 );
+                   	HIViewGetBounds( controlRef, &bounds );
+				    CGContextSetRGBFillColor( cgContext, channel == 0 ? color : 0.5 , 
+				        channel == 1 ? color : 0.5 , channel == 2 ? color : 0.5 , 1 );
 				    CGContextFillRect( cgContext, bounds );
+				    color += 0.1 ;
+				    if ( color > 0.9 )
+				    {
+				        color = 0.5 ;
+				        channel++ ;
+				        if ( channel == 3 )
+				            channel = 0 ;
+				    }
                 }
 #endif
-                if ( !thisWindow->MacIsUserPane() && thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
+                if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                     result = noErr ;
-
             }
             break ;
         case kEventControlVisibilityChanged :
@@ -264,7 +269,12 @@ static pascal void wxMacControlUserPaneBackgroundProc(ControlRef control, Contro
 
 void wxWindowMac::MacControlUserPaneDrawProc(wxInt16 part) 
 {
-    MacDoRedraw( MacGetVisibleRegion().GetWXHRGN() , 0 ) ;
+    RgnHandle rgn = NewRgn() ;
+    GetClip( rgn ) ;
+    wxMacWindowStateSaver sv( this ) ;
+    SectRgn( rgn , (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , rgn ) ;
+    MacDoRedraw( rgn , 0 ) ;
+    DisposeRgn( rgn ) ;
 }
 
 wxInt16 wxWindowMac::MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) 
@@ -559,9 +569,9 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
         ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, kControlSupportsEmbedding , (ControlRef*) &m_macControl); 
 
         MacPostControlCreate(pos,size) ;
+#if !TARGET_API_MAC_OSX
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneDrawProcTag, 
                sizeof(gControlUserPaneDrawUPP),(Ptr) &gControlUserPaneDrawUPP);
-#if !TARGET_API_MAC_OSX
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneHitTestProcTag, 
                sizeof(gControlUserPaneHitTestUPP),(Ptr) &gControlUserPaneHitTestUPP);
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneTrackingProcTag, 
