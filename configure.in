@@ -1312,8 +1312,7 @@ dnl ----------------------------------------------------------------
 dnl select  dynamic loader (used by iODBC to load drivers)
 dnl ----------------------------------------------------------------
 
-DL_LIBRARY=-ldl
-
+AC_CHECK_LIB(dl,main,[DL_LIBRARY=-ldl],[DL_LIBRARY=])
 AC_SUBST(DL_LIBRARY)
 
 dnl ----------------------------------------------------------------

@@ -45,7 +45,7 @@ while test $# -gt 0; do
       echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@
       ;;
     --libs)
-      echo -L@libdir@ -lwx_gtk -ldl @GUI_TK_LIBRARY@ @THREADS_LINK@ @EXTRA_LINK@
+      echo -L@libdir@ -lwx_gtk @DL_LIBRARY@ @GUI_TK_LIBRARY@ @THREADS_LINK@ @EXTRA_LINK@
       ;;
     *)
       echo "${usage}" 1>&2
