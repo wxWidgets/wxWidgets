@@ -20,7 +20,6 @@
 // put wxSpinCtrl here too because it doesn't have a separate file for it in
 // wxMotif (yet)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),

@@ -214,6 +214,24 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
     return FALSE;
 }
 
+// set the size (the same for all pages)
+void wxNotebook::SetPageSize(const wxSize& size)
+{
+    // TODO
+}
+
+// set the padding between tabs (in pixels)
+void wxNotebook::SetPadding(const wxSize& padding)
+{
+    // TODO
+}
+
+// set the size of the tabs for wxNB_FIXEDWIDTH controls
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    // TODO
+}
+
 // ----------------------------------------------------------------------------
 // wxNotebook operations
 // ----------------------------------------------------------------------------

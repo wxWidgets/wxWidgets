@@ -286,7 +286,7 @@ bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
         menu->SetButtonWidget(w);
     }
 
-    menu->SetMenuBar(this);
+    //menu->SetMenuBar(this);
 
     m_titles.Add(title);
 

@@ -587,6 +587,16 @@
 #   endif
 #endif /* wxGTK && !wxUniv */
 
+/* wxMotif-specific dependencies */
+#if defined(__WXMOTIF__) && wxUSE_NOTEBOOK && !wxUSE_TAB_DIALOG
+#  undef wxUSE_TAB_DIALOG
+#  define wxUSE_TAB_DIALOG 1
+#endif
+#if defined(__WXMOTIF__) && wxUSE_TOGGLEBTN
+#  undef wxUSE_TOGGLEBTN
+#  define wxUSE_TOGGLEBTN 0
+#endif
+
 /* generic controls dependencies */
 #if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
 #   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG

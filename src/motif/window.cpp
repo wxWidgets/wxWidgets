@@ -80,6 +80,8 @@ static const int SCROLL_MARGIN = 4;
 // ----------------------------------------------------------------------------
 
 extern wxHashTable *wxWidgetHashTable;
+static wxWindow* g_captureWindow = NULL;
+
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -383,6 +385,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 // Destructor
 wxWindow::~wxWindow()
 {
+    if (g_captureWindow == this)
+	g_captureWindow = NULL;
+    
     m_isBeingDeleted = TRUE;
     
     // Motif-specific actions first
@@ -710,6 +715,7 @@ wxString wxWindow::GetTitle() const
 
 void wxWindow::CaptureMouse()
 {
+    g_captureWindow = this;
     if ( m_winCaptured )
         return;
 
@@ -722,6 +728,7 @@ void wxWindow::CaptureMouse()
 
 void wxWindow::ReleaseMouse()
 {
+    g_captureWindow = NULL;
     if ( !m_winCaptured )
         return;
 
@@ -2977,6 +2984,13 @@ wxWindow *wxGetActiveWindow()
     return NULL;
 }
 
+/* static */
+wxWindow *wxWindowBase::GetCapture()
+{
+    return (wxWindow *)g_captureWindow;
+}
+
+
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
 wxWindow* wxFindWindowAtPointer(wxPoint& pt)
@@ -3001,12 +3015,10 @@ wxPoint wxGetMousePosition()
     return wxPoint(rootX, rootY);
 }
 
+
 // ----------------------------------------------------------------------------
 // wxNoOptimize: switch off size optimization
 // ----------------------------------------------------------------------------
 
 int wxNoOptimize::ms_count = 0;
-
-
-
 

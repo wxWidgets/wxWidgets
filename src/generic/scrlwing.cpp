@@ -319,22 +319,22 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 
         int totalPixelWidth = m_xScrollLines * m_xScrollPixelsPerLine;
         int totalPixelHeight = m_yScrollLines * m_yScrollPixelsPerLine;
-        if (m_targetWindow->m_backingPixmap &&
-           !((m_targetWindow->m_pixmapWidth == totalPixelWidth) &&
-             (m_targetWindow->m_pixmapHeight == totalPixelHeight)))
+        if (m_targetWindow->GetBackingPixmap() &&
+           !((m_targetWindow->GetPixmapWidth() == totalPixelWidth) &&
+             (m_targetWindow->GetPixmapHeight() == totalPixelHeight)))
         {
-            XFreePixmap (dpy, (Pixmap) m_targetWindow->m_backingPixmap);
-            m_targetWindow->m_backingPixmap = (WXPixmap) 0;
+            XFreePixmap (dpy, (Pixmap) m_targetWindow->GetBackingPixmap());
+            m_targetWindow->SetBackingPixmap((WXPixmap) 0);
         }
 
-        if (!m_targetWindow->m_backingPixmap &&
+        if (!m_targetWindow->GetBackingPixmap() &&
            (noUnitsX != 0) && (noUnitsY != 0))
         {
             int depth = wxDisplayDepth();
-            m_pixmapWidth = totalPixelWidth;
-            m_pixmapHeight = totalPixelHeight;
-            m_backingPixmap = (WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-            m_pixmapWidth, m_pixmapHeight, depth);
+            m_targetWindow->SetPixmapWidth(totalPixelWidth);
+            m_targetWindow->SetPixmapHeight(totalPixelHeight);
+            m_targetWindow->SetBackingPixmap((WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
+              m_targetWindow->GetPixmapWidth(), m_targetWindow->GetPixmapHeight(), depth));
         }
 
     }

@@ -76,6 +76,10 @@
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100
 
+/* Motif defines this as a macro */
+#ifdef Below
+#undef Below
+#endif
 
 //--------------------------------------------------------------------------
 // wxHtmlHelpTreeItemData (private)

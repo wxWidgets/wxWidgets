@@ -203,11 +203,14 @@ protected:
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }
 
+public:
     WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
+    void SetBackingPixmap(WXPixmap pixmap) { m_backingPixmap = pixmap; }
     int GetPixmapWidth() const { return m_pixmapWidth; }
     int GetPixmapHeight() const { return m_pixmapHeight; }
+    void SetPixmapWidth(int w) { m_pixmapWidth = w; }
+    void SetPixmapHeight(int h) { m_pixmapHeight = h; }
 
-public:
     // Change properties
     virtual void ChangeFont(bool keepOriginalSize = TRUE);             // Change to the current font (often overridden)
 

@@ -42,7 +42,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel,
                                             public wxScrollHelper
 {
-public:
+ public:
     wxGenericScrolledWindow() : wxScrollHelper(this) { }
     wxGenericScrolledWindow(wxWindow *parent,
                      wxWindowID id = -1,
