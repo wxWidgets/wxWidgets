@@ -85,6 +85,7 @@ public:
     static bool Initialize();
     static void CleanUp();
     
+    virtual bool OnInit();
     void DeletePendingObjects();
     bool ProcessIdle();
     bool IsExiting() { return !m_keepGoing ; }
