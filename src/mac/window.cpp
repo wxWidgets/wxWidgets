@@ -564,13 +564,12 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 		else
 		{
 			// erase former position
+			wxMacDrawingHelper focus( this ) ;
+			if ( focus.Ok() )
 			{
-				wxMacDrawingClientHelper focus( this ) ;
-				if ( focus.Ok() )
-				{
-			  	Rect clientrect = { 0 , 0 , m_height , m_width } ;
-			    InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
-				}
+		  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
+				ClipRect( &clientrect ) ;
+		    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 			}
 		}
 		m_x = actualX ;
@@ -597,14 +596,17 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 		else
 		{
 			// erase new position
+			
 			{
-				wxMacDrawingClientHelper focus( this ) ;
+				wxMacDrawingHelper focus( this ) ;
 				if ( focus.Ok() )
 				{
 			  		Rect clientrect = { 0 , 0 , m_height , m_width } ;
+  					ClipRect( &clientrect ) ;
 			    	InvalWindowRect( GetMacRootWindow() , &clientrect ) ;
 				}
 			}
+			
 			if ( doMove )
 				wxWindow::MacSuperChangedPosition() ; // like this only children will be notified
 		}
