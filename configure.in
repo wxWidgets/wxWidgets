@@ -2130,6 +2130,13 @@ if test "$wxUSE_THREADS" = "yes"; then
   CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
+else
+  dnl on some systems, _REENTRANT should bedefined if we want to use any _r()
+  dnl functions - add tests for other functions here as well
+  if test "$ac_cv_func_strtok_r" = "yes"; then
+    CFLAGS="${CFLAGS} -D_REENTRANT"
+    CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+  fi
 fi
 
 if test "$WXGTK12" = 1 ; then
