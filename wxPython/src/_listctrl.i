@@ -717,7 +717,7 @@ details in the second return value (see wx.LIST_HITTEST flags.)", "");
 
     def IsSelected(self, idx):
         '''return True if the item is selected'''
-        return self.GetItemState(idx, wx.LIST_STATE_SELECTED) != 0
+        return (self.GetItemState(idx, wx.LIST_STATE_SELECTED) & wx.LIST_STATE_SELECTED) != 0
 
     def SetColumnImage(self, col, image):
         item = self.GetColumn(col)
