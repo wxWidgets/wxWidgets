@@ -177,16 +177,17 @@ update) e.g. wxGTK or wxX11 as well.
 
 In the following, let's assume you decided to build in
 \wx\wxWindows-2.5.1\build\pm. Now we need to set some environment
-variables, namely MAKE_SHELL (to a Unix like shell, let's assume ash)
+variables, namely MAKESHELL (to a Unix like shell, let's assume ash)
 and INSTALL (to point to the install script. If you omit this, configure
 might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
-SET MAKE_SHELL=ash
+SET MAKESHELL=ash
 SET INSTALL=/wx/wxWindows-2.5.1/install-sh.
 
-Be warned that depending on the precise version of your make, setting
-MAKE_SHELL might not be sufficient, it might be necessary to set SHELL
-and even COMSPEC to a unix like shell as well.
+Be warned that depending on the precise version of your make, the
+variable that needs to be set might be MAKE_SHELL instead of MAKESHELL.
+If you have a really deficient version of GNU make, it might even be
+necessary to set SHELL or even COMSPEC to a unix like shell as well.
 
 Now run the provided configure script by executing e.g.
 `ash -c "../../configure \
@@ -200,18 +201,6 @@ directories which each essentially contain a suitable makefile.
 
 Calling `make' now should start a compile run which hopefully ends
 with a library being placed in the lib subdirectory.
-
-Note however, that the auto-generated .d files (containing depency
-information) use a mixture of "/" and "\" path separators, that
-confuses many make versions. Therefore you'll often get error messages
-indicating that some file with a random character in place of a path
-separator cannot be found on subsequent calls to make. The only solution
-currently available for this requires "sed": Run
- for %1 in (*.d) do @(sed "s/\//\\/g" < %1 > dep.sed && copy dep.sed %1)
-under "cmd" in the build directory (or a suitable variant of it under a 
-unix like shell). Note however, that a new call to make will generate
-new .d files, so you will likely have to run that between any two calls
-to make.
 
 Now you can change in the samples subdirectory and call make to compile
 all samples, however currently not all will work on OS/2, so you might
