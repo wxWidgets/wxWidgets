@@ -430,6 +430,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHECKLST=no
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_NEW_GRID=no
@@ -605,6 +606,7 @@ else
   DEFAULT_wxUSE_CHECKLST=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_COMBOBOX=yes
+  DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_NEW_GRID=yes
@@ -855,11 +857,11 @@ dnl ---------------------------------------------------------------------------
 dnl IPC &c
 dnl ---------------------------------------------------------------------------
 
-WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard classes], wxUSE_CLIPBOARD)
+WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard class], wxUSE_CLIPBOARD)
 WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
 WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
-WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout classes], wxUSE_TREELAYOUT)
+WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout class], wxUSE_TREELAYOUT)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
@@ -958,7 +960,8 @@ WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
-WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox classes], wxUSE_COMBOBOX)
+WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
+WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
 WX_ARG_ENABLE(newgrid,     [  --enable-newgrid        use new wxGrid class], wxUSE_NEW_GRID)
@@ -4787,6 +4790,11 @@ if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+    AC_DEFINE(wxUSE_DISPLAY)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display"
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then
