@@ -309,6 +309,16 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 
     // adjust fields widths to the new size
     SetFieldsWidth();
+
+    // we have to trigger wxSizeEvent if there are children window in status 
+    // bar because GetFieldRect returned incorrect (not updated) values up to
+    // here, which almost certainly resulted in incorrectly redrawn statusbar
+    if ( m_children.GetCount() > 0 )
+    {
+        wxSizeEvent event(GetClientSize(), m_windowId);
+        event.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(event);
+    }
 }
 
 #endif // __WIN95__ && wxUSE_NATIVE_STATUSBAR
