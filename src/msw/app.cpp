@@ -51,6 +51,7 @@
 #include "wx/apptrait.h"
 #include "wx/filename.h"
 #include "wx/module.h"
+#include "wx/dynlib.h"
 
 #include "wx/msw/private.h"
 
@@ -102,15 +103,17 @@
 // 0x0300                      4.70              IE 3.x
 // 0x0400                      4.71              IE 4.0
 // 0x0401                      4.72              IE 4.01 and Win98
-// 0x0500                      5.00              IE 5.x and NT 5.0 (Win2000)
+// 0x0500                      5.80              IE 5.x
+// 0x0500                      5.81              Win2k/ME
+// 0x0600                      6.00              WinXP
 
 #ifndef _WIN32_IE
-    // minimal set of features by default
-    #define _WIN32_IE 0x0200
+    // use maximal set of features by default, we check for them during
+    // run-time anyhow
+    #define _WIN32_IE 0x0600
 #endif
 
-#if _WIN32_IE >= 0x0300 && \
-    (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
+#if (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
     !defined(__CYGWIN__) && !defined(__WXWINCE__) && \
     (!defined(_MSC_VER) || (_MSC_VER > 1100))
     #include <shlwapi.h>
@@ -851,16 +854,8 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
     }
 }
 
-typedef struct _WXADllVersionInfo
-{
-        DWORD cbSize;
-        DWORD dwMajorVersion;                   // Major version
-        DWORD dwMinorVersion;                   // Minor version
-        DWORD dwBuildNumber;                    // Build number
-        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
-} WXADLLVERSIONINFO;
-
-typedef HRESULT (CALLBACK* WXADLLGETVERSIONPROC)(WXADLLVERSIONINFO *);
+#define wxDYNLIB_FUNCTION(type, name, dll)                                    \
+    type pfn ## name = (type)dll.GetSymbol(_T(#name))
 
 /* static */
 int wxApp::GetComCtl32Version()
@@ -869,100 +864,80 @@ int wxApp::GetComCtl32Version()
     return 0;
 #else
     // cache the result
+    //
+    // NB: this is MT-ok as in the worst case we'd compute s_verComCtl32 twice,
+    //     but as its value should be the same both times it doesn't matter
     static int s_verComCtl32 = -1;
-
-    wxCRIT_SECT_DECLARE(csComCtl32);
-    wxCRIT_SECT_LOCKER(lock, csComCtl32);
 
     if ( s_verComCtl32 == -1 )
     {
         // initally assume no comctl32.dll at all
         s_verComCtl32 = 0;
 
+        // we're prepared to handle the errors
+        wxLogNull noLog;
+
         // do we have it?
-        HMODULE hModuleComCtl32 = ::GetModuleHandle(wxT("COMCTL32"));
-        BOOL bFreeComCtl32 = FALSE ;
-        if(!hModuleComCtl32)
-        {
-            hModuleComCtl32 = ::LoadLibrary(wxT("COMCTL32.DLL")) ;
-            if(hModuleComCtl32)
-            {
-                bFreeComCtl32 = TRUE ;
-            }
-        }
+        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
 
         // if so, then we can check for the version
-        if ( hModuleComCtl32 )
+        if ( dllComCtl32.IsLoaded() )
         {
             // try to use DllGetVersion() if available in _headers_
-                WXADLLGETVERSIONPROC pfnDllGetVersion = (WXADLLGETVERSIONPROC)
-                    ::GetProcAddress(hModuleComCtl32, "DllGetVersion");
-                if ( pfnDllGetVersion )
-                {
-                    WXADLLVERSIONINFO dvi;
-                    dvi.cbSize = sizeof(dvi);
+            wxDYNLIB_FUNCTION( DLLGETVERSIONPROC, DllGetVersion, dllComCtl32 );
+            if ( pfnDllGetVersion )
+            {
+                DLLVERSIONINFO dvi;
+                dvi.cbSize = sizeof(dvi);
 
-                    HRESULT hr = (*pfnDllGetVersion)(&dvi);
-                    if ( FAILED(hr) )
+                HRESULT hr = (*pfnDllGetVersion)(&dvi);
+                if ( FAILED(hr) )
+                {
+                    wxLogApiError(_T("DllGetVersion"), hr);
+                }
+                else
+                {
+                    // this is incompatible with _WIN32_IE values, but
+                    // compatible with the other values returned by
+                    // GetComCtl32Version()
+                    s_verComCtl32 = 100*dvi.dwMajorVersion +
+                                        dvi.dwMinorVersion;
+                }
+            }
+
+            // if DllGetVersion() is unavailable either during compile or
+            // run-time, try to guess the version otherwise
+            if ( !s_verComCtl32 )
+            {
+                // InitCommonControlsEx is unique to 4.70 and later
+                void *pfn = dllComCtl32.GetSymbol(_T("InitCommonControlsEx"));
+                if ( !pfn )
+                {
+                    // not found, must be 4.00
+                    s_verComCtl32 = 400;
+                }
+                else // 4.70+
+                {
+                    // many symbols appeared in comctl32 4.71, could use any of
+                    // them except may be DllInstall()
+                    pfn = dllComCtl32.GetSymbol(_T("InitializeFlatSB"));
+                    if ( !pfn )
                     {
-                        wxLogApiError(_T("DllGetVersion"), hr);
+                        // not found, must be 4.70
+                        s_verComCtl32 = 470;
                     }
                     else
                     {
-                        // this is incompatible with _WIN32_IE values, but
-                        // compatible with the other values returned by
-                        // GetComCtl32Version()
-                        s_verComCtl32 = 100*dvi.dwMajorVersion +
-                                            dvi.dwMinorVersion;
+                        // found, must be 4.71 or later
+                        s_verComCtl32 = 471;
                     }
                 }
-                // DllGetVersion() unavailable either during compile or
-                // run-time, try to guess the version otherwise
-                if ( !s_verComCtl32 )
-                {
-                    // InitCommonControlsEx is unique to 4.70 and later
-                    FARPROC theProc = ::GetProcAddress
-                                        (
-                                         hModuleComCtl32,
-                                         "InitCommonControlsEx"
-                                        );
-
-                    if ( !theProc )
-                    {
-                        // not found, must be 4.00
-                        s_verComCtl32 = 400;
-                    }
-                    else
-                    {
-                        // many symbols appeared in comctl32 4.71, could use
-                        // any of them except may be DllInstall
-                        theProc = ::GetProcAddress
-                                    (
-                                     hModuleComCtl32,
-                                     "InitializeFlatSB"
-                                    );
-                        if ( !theProc )
-                        {
-                            // not found, must be 4.70
-                            s_verComCtl32 = 470;
-                        }
-                        else
-                        {
-                            // found, must be 4.71
-                            s_verComCtl32 = 471;
-                        }
-                    }
-                }
-        }
-
-        if(bFreeComCtl32)
-        {
-            ::FreeLibrary(hModuleComCtl32) ;
+            }
         }
     }
 
     return s_verComCtl32;
-#endif
+#endif // Microwin/!Microwin
 }
 
 // Yield to incoming messages
