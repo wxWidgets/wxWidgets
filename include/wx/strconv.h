@@ -149,7 +149,7 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
     #define wxMBFILES 0
 #endif
 
-#if wxMBFILES
+#if wxMBFILES && wxUSE_UNICODE
     #define wxFNCONV(name) wxConvFile.cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
 #else
