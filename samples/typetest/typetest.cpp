@@ -1028,9 +1028,9 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     wxUnusedVar(l);
     wxUnusedVar(v);
 
-    wxStringList stringList;
-    stringList.Add(_T("one")); stringList.Add(_T("two")); stringList.Add(_T("three"));
-    var1 = stringList;
+    wxArrayString stringArray;
+    stringArray.Add(_T("one")); stringArray.Add(_T("two")); stringArray.Add(_T("three"));
+    var1 = stringArray;
     textCtrl << _T("var1 = ") << var1.MakeString() << _T("\n");
 
     var1.ClearList();

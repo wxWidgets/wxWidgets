@@ -127,7 +127,7 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent ) :
     size.y = m_button->GetRect().GetBottom();
     m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, wxT("Hello"), wxPoint(0, size.y + 5));
     size.y = m_spinCtrl->GetRect().GetBottom();
-    
+
     m_panel->SetSize( size.x+20, size.y+20 );
     SetClientSize( size.x+20, size.y+20 );
 }
@@ -138,54 +138,54 @@ SimpleTransientPopup::~SimpleTransientPopup()
 
 void SimpleTransientPopup::Popup(wxWindow *focus)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::Popup"), long(this) );
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::Popup"), int(this) );
     wxPopupTransientWindow::Popup(focus);
 }
 
 void SimpleTransientPopup::OnDismiss()
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnDismiss"), long(this) );
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnDismiss"), int(this) );
     wxPopupTransientWindow::OnDismiss();
 }
 
 bool SimpleTransientPopup::ProcessLeftDown(wxMouseEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::ProcessLeftDown pos(%d, %d)"), long(this), event.GetX(), event.GetY());
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::ProcessLeftDown pos(%d, %d)"), int(this), event.GetX(), event.GetY());
     return wxPopupTransientWindow::ProcessLeftDown(event);
 }
 bool SimpleTransientPopup::Show( bool show )
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::Show %d"), long(this), int(show));
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::Show %d"), int(this), int(show));
     return wxPopupTransientWindow::Show(show);
 }
 
 void SimpleTransientPopup::OnSize(wxSizeEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSize"), long(this) );
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSize"), int(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnSetFocus(wxFocusEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSetFocus"), long(this) );
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSetFocus"), int(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnKillFocus(wxFocusEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnKillFocus"), long(this) );
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnKillFocus"), int(this) );
     event.Skip();
 }
 
 void SimpleTransientPopup::OnMouse(wxMouseEvent &event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnMouse pos(%d, %d)"), long(this), event.GetX(), event.GetY());
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnMouse pos(%d, %d)"), int(this), event.GetX(), event.GetY());
     event.Skip();
 }
 
 void SimpleTransientPopup::OnButton(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnButton ID %d"), long(this), event.GetId());
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnButton ID %d"), int(this), event.GetId());
 
     wxButton *button = wxDynamicCast(event.GetEventObject(), wxButton);
     if (button->GetLabel() == wxT("Press Me"))
@@ -198,7 +198,7 @@ void SimpleTransientPopup::OnButton(wxCommandEvent& event)
 
 void SimpleTransientPopup::OnSpinCtrl(wxSpinEvent& event)
 {
-    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSpinCtrl ID %d Value %d"), long(this), event.GetId(), event.GetInt());
+    wxLogMessage( wxT("0x%x SimpleTransientPopup::OnSpinCtrl ID %d Value %d"), int(this), event.GetId(), event.GetInt());
     event.Skip();
 }
 
