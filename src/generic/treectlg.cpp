@@ -1511,6 +1511,7 @@ void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
         m_select_me = item;
     }
     if (item != m_current && IsDescendantOf(item, m_current)) {
+        m_current->SetHilight( false );
         m_current = NULL;
         m_select_me = item;
     }
