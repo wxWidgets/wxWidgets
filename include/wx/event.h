@@ -780,7 +780,10 @@ public:
     bool AltDown() const { return m_altDown; }
     bool ShiftDown() const { return m_shiftDown; }
 
-    bool HasModifiers() const { return ControlDown() || AltDown() || MetaDown(); }
+    // exclude MetaDown() from HasModifiers() because NumLock under X is often
+    // configured as mod2 modifier, yet the key events even when it is pressed
+    // should be processed normally, not like Ctrl- or Alt-key
+    bool HasModifiers() const { return ControlDown() || AltDown(); }
 
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
