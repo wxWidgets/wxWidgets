@@ -630,10 +630,10 @@ void MyScrolledWindowSmart::OnDraw(wxDC& dc)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyAutoTimedScrollingWindow, wxScrolledWindow)
-    EVT_LEFT_DOWN(OnMouseLeftDown)
-    EVT_LEFT_UP(OnMouseLeftUp)
-    EVT_MOTION(OnMouseMove)
-    EVT_SCROLLWIN(OnScroll)
+    EVT_LEFT_DOWN(MyAutoTimedScrollingWindow::OnMouseLeftDown)
+    EVT_LEFT_UP(MyAutoTimedScrollingWindow::OnMouseLeftUp)
+    EVT_MOTION(MyAutoTimedScrollingWindow::OnMouseMove)
+    EVT_SCROLLWIN(MyAutoTimedScrollingWindow::OnScroll)
 END_EVENT_TABLE()
 
 MyAutoTimedScrollingWindow::MyAutoTimedScrollingWindow(wxWindow* parent)
