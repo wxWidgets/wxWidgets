@@ -1778,18 +1778,40 @@ if test "$wxUSE_LIBPNG" != "no" ; then
     if test "$wxUSE_MGL" != 1 ; then
         dnl Don't check for libpng when building wxMGL, libmgl contains it
         if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
-            AC_CHECK_HEADER(png.h,
-                            AC_CHECK_LIB(png, png_check_sig,
-                                         PNG_LINK=" -lpng",
-                                         ,
-                                         [-lz -lm])
-                           )
+            dnl libpng version 0.9 is known to not work, if an even newer
+            dnl version is required, just bump it up in the test below
+            AC_CACHE_CHECK([for png.h > 0.90], ac_cv_header_png_h,
+                AC_TRY_RUN(
+                    [
+                        dnl png.h defines PNG_LIBPNG_VER=number
+                        #include <png.h>
+                        #include <stdio.h>
+
+                        int main()
+                        {
+                            FILE *f=fopen("conftestval", "w");
+                            if (!f) exit(1);
+                            fprintf(f, "%s",
+                                     PNG_LIBPNG_VER > 90 ? "yes" : "no");
+                            exit(0);
+                        }
+                    ],
+                    ac_cv_header_png_h=`cat conftestval`,
+                    ac_cv_header_png_h=no,
+                    dnl cross-compiling: test if we have any png.h
+                    AC_CHECK_HEADER(png.h)
+                )
+            )
+
+            if test "$ac_cv_header_png_h" = "yes"; then
+                AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng", , [-lz -lm])
+            fi
 
             if test "x$PNG_LINK" = "x" ; then
                 if test "$wxUSE_LIBPNG" = "sys" ; then
                     AC_MSG_ERROR([system png library not found! Use --with-libpng=builtin to use built-in version])
                 else
-                    AC_MSG_WARN([system png library not found, will use built-in instead])
+                    AC_MSG_WARN([png library not found or too old, will use built-in instead])
                     wxUSE_LIBPNG=builtin
                 fi
             else
