@@ -45,9 +45,16 @@
     <set var="WXNAMESUFFIX">
         $(WXUNICODEFLAG)$(WXDEBUGFLAG)
     </set>
+    
+    <set var="WXUNIVNAME">
+        <if cond="WXUNIV=='1'">univ</if>
+    </set>
+    <set var="WXUNIV_DEFINE">
+        <if cond="WXUNIV=='1'">__WXUNIVERSAL__</if>
+    </set>
 
     <set var="WXNAMEPREFIX">wx</set>
-    <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)</set>
+    <set var="WXNAMEPREFIXGUI">wx_$(PORTNAME)$(WXUNIVNAME)</set>
     <set var="WXVERSIONTAG">-$(WXVER_MAJOR).$(WXVER_MINOR)</set>
     
     
@@ -94,6 +101,7 @@
     <template id="wx">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
+        <define>$(WXUNIV_DEFINE)</define>
         <include>$(SRCDIR)$(WXTOPDIR)/include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
     </template>

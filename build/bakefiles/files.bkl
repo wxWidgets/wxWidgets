@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
 <makefile>
 
 <!-- ======================================================================
@@ -24,95 +25,6 @@
      ====================================================================== -->
 
 
-
-<!-- ====================================================================== -->
-<!--                              wxUniversal                               -->
-<!-- ====================================================================== -->
-
-     
-<set var="UNIV_THEMES_SRC">
-    src/univ/gtk.cpp
-    src/univ/win32.cpp
-    src/univ/metal.cpp
-</set>
-<set var="UNIV_THEMES_HDR">
-</set>
-<set var="UNIV_SRC">
-    src/univ/bmpbuttn.cpp
-    src/univ/button.cpp
-    src/univ/checkbox.cpp
-    src/univ/checklst.cpp
-    src/univ/choice.cpp
-    src/univ/colschem.cpp
-    src/univ/combobox.cpp
-    src/univ/control.cpp
-    src/univ/dialog.cpp
-    src/univ/framuniv.cpp
-    src/univ/topluniv.cpp
-    src/univ/gauge.cpp
-    src/univ/inpcons.cpp
-    src/univ/inphand.cpp
-    src/univ/listbox.cpp
-    src/univ/menu.cpp
-    src/univ/notebook.cpp
-    src/univ/radiobox.cpp
-    src/univ/radiobut.cpp
-    src/univ/renderer.cpp
-    src/univ/scrarrow.cpp
-    src/univ/scrolbar.cpp
-    src/univ/scrthumb.cpp
-    src/univ/slider.cpp
-    src/univ/spinbutt.cpp
-    src/univ/statbmp.cpp
-    src/univ/statbox.cpp
-    src/univ/statline.cpp
-    src/univ/stattext.cpp
-    src/univ/statusbr.cpp
-    src/univ/textctrl.cpp
-    src/univ/toolbar.cpp
-    src/univ/theme.cpp
-    src/univ/winuniv.cpp    
-</set>
-<set var="UNIV_HDR">
-    include/wx/univ/app.h
-    include/wx/univ/bmpbuttn.h
-    include/wx/univ/button.h
-    include/wx/univ/checkbox.h
-    include/wx/univ/checklst.h
-    include/wx/univ/choice.h
-    include/wx/univ/colschem.h
-    include/wx/univ/combobox.h
-    include/wx/univ/control.h
-    include/wx/univ/dialog.h
-    include/wx/univ/frame.h
-    include/wx/univ/toplevel.h
-    include/wx/univ/gauge.h
-    include/wx/univ/inpcons.h
-    include/wx/univ/inphand.h
-    include/wx/univ/listbox.h
-    include/wx/univ/menu.h
-    include/wx/univ/menuitem.h
-    include/wx/univ/notebook.h
-    include/wx/univ/radiobox.h
-    include/wx/univ/radiobut.h
-    include/wx/univ/renderer.h
-    include/wx/univ/scrarrow.h
-    include/wx/univ/scrolbar.h
-    include/wx/univ/scrthumb.h
-    include/wx/univ/scrtimer.h
-    include/wx/univ/setup.h
-    include/wx/univ/slider.h
-    include/wx/univ/spinbutt.h
-    include/wx/univ/statbmp.h
-    include/wx/univ/statbox.h
-    include/wx/univ/statline.h
-    include/wx/univ/stattext.h
-    include/wx/univ/statusbr.h
-    include/wx/univ/textctrl.h
-    include/wx/univ/theme.h
-    include/wx/univ/toolbar.h
-    include/wx/univ/window.h
-</set>
 
 
 <!-- ====================================================================== -->
@@ -350,7 +262,6 @@
     src/generic/spinctlg.cpp
     src/generic/splash.cpp
     src/generic/splitter.cpp
-    src/generic/statusbr.cpp
     src/generic/tbarsmpl.cpp
     src/generic/textdlgg.cpp
     src/generic/tipdlg.cpp
@@ -452,7 +363,6 @@
     include/wx/generic/spinctlg.h
     include/wx/generic/splash.h
     include/wx/generic/splitter.h
-    include/wx/generic/statusbr.h
     include/wx/generic/textdlgg.h
     include/wx/generic/timer.h
     include/wx/generic/wizard.h
@@ -531,6 +441,7 @@
     src/generic/msgdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/tabg.cpp
+    src/generic/statusbr.cpp
     <!-- GTK+ specific files: -->
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
@@ -634,6 +545,7 @@
     include/wx/generic/fdrepdlg.h
     include/wx/generic/tabg.h
     include/wx/generic/dirdlgg.h
+    include/wx/generic/statusbr.h
 </set>
 
 
@@ -717,6 +629,7 @@
     src/generic/tabg.cpp
     src/generic/dirdlgg.cpp
     src/generic/prntdlgg.cpp
+    src/generic/statusbr.cpp
 </set>
 <set var="MOTIF_HDR">
     include/wx/motif/accel.h
@@ -783,6 +696,7 @@
     include/wx/generic/tabg.h
     include/wx/generic/dirdlgg.h
     include/wx/generic/prntdlgg.h
+    include/wx/generic/statusbr.h
 </set>
 
 
@@ -792,10 +706,6 @@
 
 
 <set var="X11_LOWLEVEL_SRC">
-</set>
-<set var="X11_LOWLEVEL_HDR">
-</set>
-<set var="X11_SRC">
     src/x11/gsockx11.c
     src/x11/nanox.c
     src/x11/app.cpp
@@ -809,7 +719,6 @@
     src/x11/dc.cpp
     src/x11/dcclient.cpp
     src/x11/dcmemory.cpp
-    src/x11/dcscreen.cpp
     src/x11/dcscreen.cpp
     src/x11/evtloop.cpp
     src/x11/font.cpp
@@ -829,8 +738,9 @@
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
+    src/generic/timer.cpp
 </set>
-<set var="X11_HDR">
+<set var="X11_LOWLEVEL_HDR">
     include/wx/x11/app.h
     include/wx/x11/bitmap.h
     include/wx/x11/brush.h
@@ -862,6 +772,7 @@
     include/wx/x11/textctrl.h
     include/wx/x11/toplevel.h
     include/wx/x11/window.h
+    src/generic/timer.h
 </set>
 
 
@@ -1574,6 +1485,106 @@
 
 
 <!-- ====================================================================== -->
+<!--                              wxUniversal                               -->
+<!-- ====================================================================== -->
+
+     
+<set var="UNIV_THEMES_SRC">
+    src/univ/themes/gtk.cpp
+    src/univ/themes/win32.cpp
+    src/univ/themes/metal.cpp
+</set>
+<set var="UNIV_THEMES_HDR">
+</set>
+
+<!-- don't ask... wxX11 must have something extra I guess -->
+<set var="UNIV_TEXTCTRL">
+    <if cond="TOOLKIT=='X11'">src/x11/textctrl.cpp</if>
+    <if cond="TOOLKIT=='MGL'">src/univ/textctrl.cpp</if>
+    <if cond="TOOLKIT=='GTK'">src/univ/textctrl.cpp</if>
+    <if cond="TOOLKIT=='MSW'">src/univ/textctrl.cpp</if>
+</set>
+
+<set var="UNIV_SRC">
+    $(UNIV_TEXTCTRL)
+    src/univ/bmpbuttn.cpp
+    src/univ/button.cpp
+    src/univ/checkbox.cpp
+    src/univ/checklst.cpp
+    src/univ/choice.cpp
+    src/univ/colschem.cpp
+    src/univ/combobox.cpp
+    src/univ/control.cpp
+    src/univ/dialog.cpp
+    src/univ/framuniv.cpp
+    src/univ/topluniv.cpp
+    src/univ/gauge.cpp
+    src/univ/inpcons.cpp
+    src/univ/inphand.cpp
+    src/univ/listbox.cpp
+    src/univ/menu.cpp
+    src/univ/notebook.cpp
+    src/univ/radiobox.cpp
+    src/univ/radiobut.cpp
+    src/univ/renderer.cpp
+    src/univ/scrarrow.cpp
+    src/univ/scrolbar.cpp
+    src/univ/scrthumb.cpp
+    src/univ/slider.cpp
+    src/univ/spinbutt.cpp
+    src/univ/statbmp.cpp
+    src/univ/statbox.cpp
+    src/univ/statline.cpp
+    src/univ/stattext.cpp
+    src/univ/statusbr.cpp
+    src/univ/toolbar.cpp
+    src/univ/theme.cpp
+    src/univ/winuniv.cpp    
+</set>
+<set var="UNIV_HDR">
+    include/wx/univ/app.h
+    include/wx/univ/bmpbuttn.h
+    include/wx/univ/button.h
+    include/wx/univ/checkbox.h
+    include/wx/univ/checklst.h
+    include/wx/univ/choice.h
+    include/wx/univ/colschem.h
+    include/wx/univ/combobox.h
+    include/wx/univ/control.h
+    include/wx/univ/dialog.h
+    include/wx/univ/frame.h
+    include/wx/univ/toplevel.h
+    include/wx/univ/gauge.h
+    include/wx/univ/inpcons.h
+    include/wx/univ/inphand.h
+    include/wx/univ/listbox.h
+    include/wx/univ/menu.h
+    include/wx/univ/menuitem.h
+    include/wx/univ/notebook.h
+    include/wx/univ/radiobox.h
+    include/wx/univ/radiobut.h
+    include/wx/univ/renderer.h
+    include/wx/univ/scrarrow.h
+    include/wx/univ/scrolbar.h
+    include/wx/univ/scrthumb.h
+    include/wx/univ/scrtimer.h
+    include/wx/univ/setup.h
+    include/wx/univ/slider.h
+    include/wx/univ/spinbutt.h
+    include/wx/univ/statbmp.h
+    include/wx/univ/statbox.h
+    include/wx/univ/statline.h
+    include/wx/univ/stattext.h
+    include/wx/univ/statusbr.h
+    include/wx/univ/textctrl.h
+    include/wx/univ/theme.h
+    include/wx/univ/toolbar.h
+    include/wx/univ/window.h
+</set>
+
+
+
+<!-- ====================================================================== -->
 <!--                               wxHTML                                   -->
 <!-- ====================================================================== -->
 
@@ -1622,6 +1633,7 @@
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MSW_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
     </set>
     
     <set var="GUI_SRC">
@@ -1635,8 +1647,12 @@
         <if cond="USE_GUI=='0'">
             src/common/init.cpp
         </if>
-        <if cond="USE_GUI=='1'">
+        <if cond="USE_GUI=='1' and WXUNIV=='0'">
             $(LOWLEVEL_SRC) $(GUI_SRC) $(GUICMN_SRC) $(HTML_SRC)
+        </if>
+        <if cond="USE_GUI=='1' and WXUNIV=='1'">
+            $(LOWLEVEL_SRC) $(UNIV_SRC) $(UNIV_THEMES_SRC)
+            $(GUICMN_SRC) $(HTML_SRC)
         </if>
     </set>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
-<makefile>
+<!-- $Id$ -->
 
+<makefile>
 
     <option name="UNICODE">
         <values>0 1</values>
@@ -35,6 +36,13 @@
         </description>
     </option>
 
+    <option name="WXUNIV">
+        <values>0 1</values>
+        <default-value>0</default-value>
+        <description>
+            Build wxUniversal instead of native port?
+        </description>
+    </option>
 
     <!-- Autoconf options: -->
     <if cond="FORMAT=='autoconf'"> 
