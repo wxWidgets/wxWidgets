@@ -14,6 +14,7 @@
             regex/regex.cpp
             filesys/filesys.cpp
             arrays/arrays.cpp
+            longlong/longlong.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
