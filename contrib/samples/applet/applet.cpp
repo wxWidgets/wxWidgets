@@ -2,21 +2,20 @@
 *
 *                       wxWindows HTML Applet Package
 *
+*               Copyright (C) 1991-2001 SciTech Software, Inc.
+*                            All rights reserved.
+*
 *  ========================================================================
 *
-*    The contents of this file are subject to the wxWindows licence; you
-*    may not use this file except in compliance with the License. You may
-*    obtain a copy of the License at http://www.wxwindows.org/licence.htm
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
 *
 *    Software distributed under the License is distributed on an
 *    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
 *    implied. See the License for the specific language governing
 *    rights and limitations under the License.
-*
-*    The Original Code is Copyright (C) 2001 SciTech Software, Inc.
-*
-*    The Initial Developer of the Original Code is SciTech Software, Inc.
-*    All Rights Reserved.
 *
 *  ========================================================================
 *
@@ -77,17 +76,17 @@ MyFrame::MyFrame(
     menuFile->Append(Minimal_Quit, "E&xit");
     menuNav->Append(Minimal_Back, "Go &back");
     menuNav->Append(Minimal_Forward, "Go &forward");
-    
+
     // Now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
     menuBar->Append(menuFile, "&File");
     menuBar->Append(menuNav, "&Navigate");
-    
+
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
     CreateStatusBar(2);
 
-    // Create the HTML window   
+    // Create the HTML window
     html = new wxHtmlAppletWindow(this);
     html->SetRelatedFrame(this, "wxApplet Demo: '%s'");
     html->SetRelatedStatusBar(1);

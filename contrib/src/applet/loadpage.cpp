@@ -22,63 +22,77 @@
 * Language:     ANSI C++
 * Environment:  Any
 *
-* Description:  Main wxApplet class implementation
+* Description:  Loadpage event class implementation
 *
 ****************************************************************************/
 
 // For compilers that support precompilation
 #include "wx/wxprec.h"
+#include "wx/html/forcelnk.h"
 
 // Include private headers
-#include "wx/applet/applet.h"
-#include "wx/applet/window.h"
+#include "wx/applet/loadpage.h"
 
 /*------------------------- Implementation --------------------------------*/
 
-// Empty event handler. We include this event handler simply so that
-// sub-classes of wxApplet can reference wxApplet in the event tables
-// that they create as necessary.
-BEGIN_EVENT_TABLE(wxApplet, wxPanel)
-     EVT_ERASE_BACKGROUND(wxApplet::OnEraseBackground)
-END_EVENT_TABLE()
+// Implement the class functions for wxLoadPageEvent
+IMPLEMENT_DYNAMIC_CLASS(wxLoadPageEvent, wxEvent)
 
-// Implement the abstract class functions
-IMPLEMENT_ABSTRACT_CLASS(wxApplet, wxPanel);
+// Implement the class functions for wxPageLoadedEvent
+IMPLEMENT_DYNAMIC_CLASS(wxPageLoadedEvent, wxEvent)
+
+// Define our custom event ID for load page
+DEFINE_EVENT_TYPE(wxEVT_LOAD_PAGE);
+
+// Define our custom event ID for page loaded
+DEFINE_EVENT_TYPE(wxEVT_PAGE_LOADED);
 
 /****************************************************************************
 REMARKS:
-Psuedo virtual constructor for the wxApplet class.
+Constructor for the wxLoadPageEvent class
 ****************************************************************************/
-bool wxApplet::Create(
-    wxHtmlAppletWindow *parent,
-    const wxHtmlTag& ,
-    const wxSize& size,
-    long style)
+wxLoadPageEvent::wxLoadPageEvent(
+    const wxString &hRef,
+    wxHtmlAppletWindow *htmlWindow)
+    : m_hRef(hRef), m_htmlWindow(htmlWindow)
 {
-    bool ret = wxPanel::Create(parent, -1, wxDefaultPosition, size, style);
-    if (ret) {
-        m_parent = parent;
-        }
-    return ret;
+    m_eventType = wxEVT_LOAD_PAGE;
 }
 
 /****************************************************************************
 REMARKS:
-Destructor for the wxApplet class.
+Function to copy the wxLoadPageEvent object
 ****************************************************************************/
-wxApplet::~wxApplet()
+void wxLoadPageEvent::CopyObject(
+    wxObject& obj_d) const
 {
-    ((wxHtmlAppletWindow *) m_parent)->RemoveApplet(this);
+    wxLoadPageEvent *obj = (wxLoadPageEvent*)&obj_d;
+    wxEvent::CopyObject(obj_d);
+    obj->m_hRef         = m_hRef;
+    obj->m_htmlWindow   = m_htmlWindow;
+}
+
+
+/****************************************************************************
+REMARKS:
+Constructor for the wxPageLoadedEvent class
+****************************************************************************/
+wxPageLoadedEvent::wxPageLoadedEvent()
+{
+    m_eventType = wxEVT_LOAD_PAGE;
 }
 
 /****************************************************************************
 REMARKS:
-Special handler for background erase messages. We do nothing in here which
-causes the background to not be erased which is exactly what we want. All
-the wxApplet classes display over an HTML window, so we want the HTML
-background to show through.
+Function to copy the wxPageLoadedEvent object
 ****************************************************************************/
-void wxApplet::OnEraseBackground(wxEraseEvent&)
+void wxPageLoadedEvent::CopyObject(
+    wxObject& obj_d) const
 {
+    wxPageLoadedEvent *obj = (wxPageLoadedEvent*)&obj_d;
+    wxEvent::CopyObject(obj_d);
 }
+
+// This is out little force link hack
+FORCE_LINK_ME(loadpage)
 

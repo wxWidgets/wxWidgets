@@ -5,23 +5,19 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ======================================================================
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  |                                                                    |
-*  |This copyrighted computer code is a proprietary trade secret of     |
-*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
-*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
-*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
-*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
-*  |written authorization from SciTech to possess or use this code, you |
-*  |may be subject to civil and/or criminal penalties.                  |
-*  |                                                                    |
-*  |If you received this code in error or you would like to report      |
-*  |improper use, please immediately contact SciTech Software, Inc. at  |
-*  |530-894-8400.                                                       |
-*  |                                                                    |
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  ======================================================================
+*  ========================================================================
+*
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
+*
+*    Software distributed under the License is distributed on an
+*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+*    implied. See the License for the specific language governing
+*    rights and limitations under the License.
+*
+*  ========================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -41,7 +37,7 @@
 
 // Implement the dynamic class so it can be constructed dynamically
 IMPLEMENT_DYNAMIC_CLASS(MonitorApplet, wxApplet);
-    
+
 // Event handler table.
 BEGIN_EVENT_TABLE(MonitorApplet, wxApplet)
     EVT_LISTBOX(ID_LISTBOX_MFTR,        MonitorApplet::OnChange)
@@ -51,8 +47,8 @@ END_EVENT_TABLE()
 // Include database of known monitors. Normally this would come from a
 // real database on disk, but for this simple example we hard code all
 // the values into a table.
-#include "monitors.c"   
-    
+#include "monitors.c"
+
 /*------------------------- Implementation --------------------------------*/
 
 /****************************************************************************
@@ -62,7 +58,7 @@ internal values for the class so that it can be properly created later
 via the virtual Create member function.
 ****************************************************************************/
 MonitorApplet::MonitorApplet()
-{   
+{
     m_Mfr = NULL;
     m_Model = NULL;
     m_Data = NULL;
@@ -85,7 +81,7 @@ bool MonitorApplet::Create(
             memset(&m_Data->m_Monitor,0,sizeof(m_Data->m_Monitor));
             parent->RegisterCookie(MONITOR_COOKIE_NAME,m_Data);
             }
-        
+
         // Create all the controls and initialise them
         MonitorDialogFunc(this,true,true);
         if ((m_Mfr = new ComboBox(this , ID_LISTBOX_MFTR, ID_TEXTCTRL_MFTR)) == NULL)
@@ -97,7 +93,7 @@ bool MonitorApplet::Create(
         }
     return ret;
 }
-                
+
 /****************************************************************************
 REMARKS:
 Destructor for the MonitorApplet class.
@@ -124,11 +120,11 @@ REMARKS:
 Handles user navigation away from the applet via an HTML link
 ****************************************************************************/
 void MonitorApplet::OnLinkClicked(
-    const wxHtmlLinkInfo&)  
+    const wxHtmlLinkInfo&)
 {
     SaveCurrentState();
 }
-            
+
 /****************************************************************************
 REMARKS:
 Handles user navigation away from the applet via the history forward command
@@ -137,7 +133,7 @@ void MonitorApplet::OnHistoryForward()
 {
     SaveCurrentState();
 }
-            
+
 /****************************************************************************
 REMARKS:
 Handles user navigation away from the applet via the history back command
@@ -146,12 +142,12 @@ void MonitorApplet::OnHistoryBack()
 {
     SaveCurrentState();
 }
-            
+
 /****************************************************************************
 REMARKS:
 Handles inter applet communication messages
 ****************************************************************************/
-void MonitorApplet::OnMessage(  
+void MonitorApplet::OnMessage(
     wxEvent& msg)
 {
     msg.Skip(true);
@@ -168,7 +164,7 @@ void MonitorApplet::OnChange(
         ReadModelList(true);
         }
     else if (evt.GetId() == m_Model->GetListBoxId()) {
-        m_Model->OnChange(evt);     
+        m_Model->OnChange(evt);
         }
 }
 
@@ -177,7 +173,7 @@ REMARKS:
 Updates the manufacturer list for the dialog box from the database.
 ****************************************************************************/
 void MonitorApplet::ReadMfrList()
-{               
+{
     char            buf[80] = "";
     int             i,selected = 0;
     MonitorEntry    *m;
@@ -202,11 +198,11 @@ manufacturer type.
 ****************************************************************************/
 void MonitorApplet::ReadModelList(
     bool selectCurrent)
-{               
+{
     int             i,selected = 0;
     MonitorEntry    *m;
     wxString        mfrStr;
-    
+
     mfrStr = m_Mfr->GetStringSelection();
     m_Model->Clear();
     for (m = m_Monitors,i = 0; m->m_Mfr[0] != 0; m++) {

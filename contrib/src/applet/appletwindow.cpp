@@ -5,23 +5,19 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ======================================================================
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  |                                                                    |
-*  |This copyrighted computer code is a proprietary trade secret of     |
-*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
-*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
-*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
-*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
-*  |written authorization from SciTech to possess or use this code, you |
-*  |may be subject to civil and/or criminal penalties.                  |
-*  |                                                                    |
-*  |If you received this code in error or you would like to report      |
-*  |improper use, please immediately contact SciTech Software, Inc. at  |
-*  |530-894-8400.                                                       |
-*  |                                                                    |
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  ======================================================================
+*  ========================================================================
+*
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
+*
+*    Software distributed under the License is distributed on an
+*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+*    implied. See the License for the specific language governing
+*    rights and limitations under the License.
+*
+*  ========================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -82,7 +78,10 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     const wxString& name)
     : wxHtmlWindow(parent,id,pos,size,style,name)
 {
-    //setup client navbars
+    // Init our locks
+    UnLock();
+
+    // setup client navbars
     if (navBar) {
         m_NavBar = navBar;
         m_NavBackId = navBackId;
@@ -92,7 +91,7 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
         m_NavBar = NULL;
         }
 
-    //Add HTML preprocessors
+    // Add HTML preprocessors
     // deleting preprocessors is done by the code within the window
 
     incPreprocessor = new wxIncludePrep(); // #include preprocessor
@@ -102,8 +101,6 @@ wxHtmlAppletWindow::wxHtmlAppletWindow(
     this->AddProcessor(incPreprocessor);
     this->AddProcessor(echoPreprocessor);
     this->AddProcessor(ifPreprocessor);
-
-
 }
 
 /****************************************************************************
@@ -240,22 +237,20 @@ bool wxHtmlAppletWindow::LoadPage(
             }
         }
 
-    // Grab the directory from the string for use in the include preprocessor
-    // make sure we get either type of / or \.
-    int ch = link.Find('\\', true);
-    if (ch == -1) ch = link.Find('/', true);
-    if (ch != -1) {
-        wxFileSystem fs;
-        wxString tmp = link.Mid(0, ch+1);
-        fs.ChangePathTo(incPreprocessor->GetDirectory(), true);
-        fs.ChangePathTo(tmp, true);
-        incPreprocessor->ChangeDirectory(fs.GetPath());
-        }
+    // Make a copy of the current path the translate for <!-- include files from what will be the new path
+    // we cannot just grab this value from the base class since it is not correct until after LoadPage is
+    // called. And we need the incPreprocessor to know the right path before LoadPage.
+    wxFileSystem fs;
+    fs.ChangePathTo(m_FS->GetPath(), true);
+    fs.ChangePathTo(link);
+    incPreprocessor->ChangeDirectory(fs.GetPath());
 
     // Inform all the applets that the new page is being loaded
     for (wxAppletList::Node *node = m_AppletList.GetFirst(); node; node = node->GetNext())
         (node->GetData())->OnLinkClicked(wxHtmlLinkInfo(href));
     bool stat = wxHtmlWindow::LoadPage(href);
+
+
 
     // Enable/Dis the navbar tools
     if (m_NavBar) {
@@ -431,10 +426,20 @@ need to change the page for the current window to a new window.
 void wxHtmlAppletWindow::OnLoadPage(
     wxLoadPageEvent &event)
 {
-    if (event.GetHtmlWindow() == this){
-        if (LoadPage(event.GetHRef())){
-            wxPageLoadedEvent evt;
+    // Test the mutex lock. We have to do this here because wxHTML constantly
+    // calls wxYield which processes the message queue. This in turns means
+    // that we may end up processing a new 'loadPage' event while the new
+    // page is still loading! We need to avoid this so we use a simple
+    // lock to avoid loading a page while presently loading another page.
+    if (TryLock()) {
+        if (event.GetHtmlWindow() == this){
+            if (LoadPage(event.GetHRef())){
+                // wxPageLoadedEvent evt;
+                // NOTE: This is reserved for later use as we might need to send
+                // page loaded events to applets.
+                }
             }
+        UnLock();
         }
 }
 
@@ -450,6 +455,23 @@ void wxHtmlAppletWindow::OnPageLoaded(
     wxPageLoadedEvent &)
 {
     Enable(true);
+}
+
+/****************************************************************************
+PARAMETERS:
+none
+
+REMARKS:
+This function tries to lock the mutex. If it can't, returns
+immediately with false.
+***************************************************************************/
+bool wxHtmlAppletWindow::TryLock()
+{
+    if (!m_mutexLock) {
+        m_mutexLock = true;
+        return true;
+        }
+    return false;
 }
 
 /****************************************************************************

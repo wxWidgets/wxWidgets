@@ -28,6 +28,7 @@
 #include "wx/log.h"
 #include "wx/app.h"
 #include "wx/filefn.h"
+#include "wx/filesys.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
@@ -762,18 +763,19 @@ bool wxImage::HasOption(const wxString& name) const
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
 #if wxUSE_STREAMS
-    if (wxFileExists(filename))
-    {
-        wxFileInputStream stream(filename);
-        wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, type);
-    }
-    else
-    {
-        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
-
+    // We want to use wxFileSystem for virtual FS compatibility
+    wxFileSystem fsys;
+    wxFSFile *file = fsys.OpenFile(filename);
+    if (!file) {
+        wxLogError(_("Can't open file '%s'"), filename);
         return FALSE;
-    }
+        }
+    wxInputStream *stream = file->GetStream();
+    if (!stream) {
+        wxLogError(_("Can't open stream for file '%s'"), filename);
+        return FALSE;
+        }
+    return LoadFile(*stream, type);
 #else // !wxUSE_STREAMS
     return FALSE;
 #endif // wxUSE_STREAMS
@@ -782,18 +784,19 @@ bool wxImage::LoadFile( const wxString& filename, long type )
 bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
 {
 #if wxUSE_STREAMS
-    if (wxFileExists(filename))
-    {
-        wxFileInputStream stream(filename);
-        wxBufferedInputStream bstream( stream );
-        return LoadFile(bstream, mimetype);
-    }
-    else
-    {
-        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
-
+    // We want to use wxFileSystem for virtual FS compatibility
+    wxFileSystem fsys;
+    wxFSFile *file = fsys.OpenFile(filename);
+    if (!file) {
+        wxLogError(_("Can't open file '%s'"), filename);
         return FALSE;
-    }
+        }
+    wxInputStream *stream = file->GetStream();
+    if (!stream) {
+        wxLogError(_("Can't open stream for file '%s'"), filename);
+        return FALSE;
+        }
+    return LoadFile(*stream, mimetype);
 #else // !wxUSE_STREAMS
     return FALSE;
 #endif // wxUSE_STREAMS

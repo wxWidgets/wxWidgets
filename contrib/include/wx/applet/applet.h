@@ -5,23 +5,19 @@
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
 *
-*  ======================================================================
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  |                                                                    |
-*  |This copyrighted computer code is a proprietary trade secret of     |
-*  |SciTech Software, Inc., located at 505 Wall Street, Chico, CA 95928 |
-*  |USA (www.scitechsoft.com).  ANY UNAUTHORIZED POSSESSION, USE,       |
-*  |VIEWING, COPYING, MODIFICATION OR DISSEMINATION OF THIS CODE IS     |
-*  |STRICTLY PROHIBITED BY LAW.  Unless you have current, express       |
-*  |written authorization from SciTech to possess or use this code, you |
-*  |may be subject to civil and/or criminal penalties.                  |
-*  |                                                                    |
-*  |If you received this code in error or you would like to report      |
-*  |improper use, please immediately contact SciTech Software, Inc. at  |
-*  |530-894-8400.                                                       |
-*  |                                                                    |
-*  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
-*  ======================================================================
+*  ========================================================================
+*
+*    The contents of this file are subject to the wxWindows License
+*    Version 3.0 (the "License"); you may not use this file except in
+*    compliance with the License. You may obtain a copy of the License at
+*    http://www.wxwindows.org/licence3.txt
+*
+*    Software distributed under the License is distributed on an
+*    "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+*    implied. See the License for the specific language governing
+*    rights and limitations under the License.
+*
+*  ========================================================================
 *
 * Language:     ANSI C++
 * Environment:  Any
@@ -51,7 +47,7 @@ private:
     DECLARE_EVENT_TABLE();
 
 protected:
-    wxHtmlAppletWindow  *m_parent;
+    //wxHtmlAppletWindow  *m_parent;
 
             // Special handler for background erase messages
             void OnEraseBackground(wxEraseEvent&);
