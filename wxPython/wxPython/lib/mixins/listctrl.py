@@ -17,7 +17,7 @@ from wxPython.wx import *
 class wxColumnSorterMixin:
     """
     A mixin class that handles sorting of a wxListCtrl in REPORT mode when
-    the coilumn header is clicked on.
+    the column header is clicked on.
 
     There are a few requirments needed in order for this to work genericly:
 
