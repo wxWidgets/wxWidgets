@@ -29,6 +29,7 @@
 #include "wx/listbox.h"
 #include "wx/choice.h"
 #include "wx/combobox.h"
+#include "wx/checkbox.h"
 #include "wx/stattext.h"
 #include "wx/html/htmlwin.h"
 
@@ -198,6 +199,8 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxListBox *m_SearchList;
         wxChoice *m_SearchChoice;
         wxStaticText *m_IndexCountInfo;
+        wxCheckBox *m_SearchCaseSensitive;
+        wxCheckBox *m_SearchWholeWords;
 
         wxComboBox *m_Bookmarks;
         wxArrayString m_BookmarksNames, m_BookmarksPages;

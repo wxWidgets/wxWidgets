@@ -129,6 +129,9 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_NavigPan = NULL;
     m_HtmlWin = NULL;
     m_Bookmarks = NULL;
+    m_SearchCaseSensitive = NULL;
+    m_SearchWholeWords = NULL;
+
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
 
@@ -331,9 +334,25 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         b4 -> height.AsIs();
         m_SearchChoice -> SetConstraints(b4);
 
+        wxLayoutConstraints *b5 = new wxLayoutConstraints;
+        m_SearchCaseSensitive = new wxCheckBox(dummy, -1, _("Case sensitive"));
+        b5 -> top.Below (m_SearchButton, 10);
+        b5 -> left.SameAs (dummy, wxLeft, 10);
+        b5 -> right.SameAs (dummy, wxRight, 10);
+        b5 -> height.AsIs ();
+        m_SearchCaseSensitive -> SetConstraints(b5);
+
+        wxLayoutConstraints *b6 = new wxLayoutConstraints;
+        m_SearchWholeWords = new wxCheckBox(dummy, -1, _("Whole words only"));
+        b6 -> top.Below (m_SearchCaseSensitive, 0);
+        b6 -> left.SameAs (dummy, wxLeft, 10);
+        b6 -> right.SameAs (dummy, wxRight, 10);
+        b6 -> height.AsIs ();
+        m_SearchWholeWords -> SetConstraints(b6);
+
         wxLayoutConstraints *b3 = new wxLayoutConstraints;
         m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
-        b3 -> top.Below (m_SearchButton, 10);
+        b3 -> top.Below (m_SearchWholeWords, 10);
         b3 -> left.SameAs (dummy, wxLeft, 0);
         b3 -> right.SameAs (dummy, wxRight, 0);
         b3 -> bottom.SameAs (dummy, wxBottom, 0);
@@ -434,7 +453,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
     if (! (m_SearchList && m_SearchButton && m_SearchText && m_SearchChoice))
         return FALSE;
 
-    int foundcnt = 0;
+    int foundcnt = 0, curi;
     wxString foundstr;
     wxString book = wxEmptyString;
 
@@ -451,14 +470,17 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
     if (m_SearchChoice->GetSelection() != 0)
         book = m_SearchChoice->GetStringSelection();
 
-    wxHtmlSearchStatus status(m_Data, keyword, book);
+    wxHtmlSearchStatus status(m_Data, keyword, 
+                              m_SearchCaseSensitive -> GetValue(), m_SearchWholeWords -> GetValue(), 
+                              book);
 
     wxProgressDialog progress(_("Searching..."), _("No matching page found yet"),
                               status.GetMaxIndex(), this,
                               wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
 
     while (status.IsActive()) {
-        if (progress.Update(status.GetCurIndex()) == FALSE)
+        curi = status.GetCurIndex();
+        if (curi % 10 == 0 && progress.Update(curi) == FALSE)
             break;
         if (status.Search()) {
             foundstr.Printf(_("Found %i matches"), ++foundcnt);

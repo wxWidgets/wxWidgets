@@ -82,21 +82,22 @@ wxHtmlContentsItem;
 //------------------------------------------------------------------------------
 class WXDLLEXPORT wxSearchEngine : public wxObject
 {
-    private:
-        wxChar *m_Keyword;
-
     public:
         wxSearchEngine() : wxObject() {m_Keyword = NULL; }
         ~wxSearchEngine() {if (m_Keyword) free(m_Keyword); }
 
-        virtual void LookFor(const wxString& keyword);
+        virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
         // Sets the keyword we will be searching for
 
         virtual bool Scan(wxInputStream *stream);
         // Scans the stream for the keyword.
         // Returns TRUE if the stream contains keyword, fALSE otherwise
-}
-;
+
+    private:
+        wxChar *m_Keyword;
+        bool m_CaseSensitive;
+        bool m_WholeWords;
+};
 
 class wxHtmlHelpData;
 
@@ -111,6 +112,7 @@ class WXDLLEXPORT wxHtmlSearchStatus
         // title of the book to search. By default, all books are searched.
 
         wxHtmlSearchStatus(wxHtmlHelpData* base, const wxString& keyword,
+                           bool case_sensitive, bool whole_words_only,
                            const wxString& book = wxEmptyString);
         bool Search();  // do the next iteration
         bool IsActive() { return m_Active; }

@@ -556,6 +556,7 @@ wxString wxHtmlHelpData::FindPageById(int id)
 //----------------------------------------------------------------------------------
 
 wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& keyword,
+                                       bool case_sensitive, bool whole_words_only,
                                        const wxString& book)
 {
     m_Data = data;
@@ -579,7 +580,7 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
         m_CurIndex = 0;
         m_MaxIndex = m_Data->m_ContentsCnt;
     }
-    m_Engine.LookFor(keyword);
+    m_Engine.LookFor(keyword, case_sensitive, whole_words_only);
     m_Active = (m_CurIndex < m_MaxIndex);
     m_LastPage = wxEmptyString;
 }
@@ -604,8 +605,7 @@ bool wxHtmlSearchStatus::Search()
     m_ContentsItem = NULL;
     m_Name = wxEmptyString;
 
-    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() +
-                         m_Data->m_Contents[i].m_Page);
+    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() + m_Data->m_Contents[i].m_Page);
     if (file) {
         if (m_LastPage != file->GetLocation()) {
             m_LastPage = file->GetLocation();
@@ -632,17 +632,23 @@ bool wxHtmlSearchStatus::Search()
 // wxSearchEngine
 //--------------------------------------------------------------------------------
 
-void wxSearchEngine::LookFor(const wxString& keyword)
+void wxSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only)
 {
+    m_CaseSensitive = case_sensitive;
+    m_WholeWords = whole_words_only;
     if (m_Keyword) delete[] m_Keyword;
     m_Keyword = new wxChar[keyword.Length() + 1];
     wxStrcpy(m_Keyword, keyword.c_str());
-    for (int i = wxStrlen(m_Keyword) - 1; i >= 0; i--)
-        if ((m_Keyword[i] >= wxT('A')) && (m_Keyword[i] <= wxT('Z')))
-            m_Keyword[i] += wxT('a') - wxT('A');
+    
+    if (!m_CaseSensitive)
+        for (int i = wxStrlen(m_Keyword) - 1; i >= 0; i--)
+            if ((m_Keyword[i] >= wxT('A')) && (m_Keyword[i] <= wxT('Z')))
+                m_Keyword[i] += wxT('a') - wxT('A');
 }
 
 
+
+#define WHITESPACE(c)  (c == ' ' || c == '\n' || c == '\r' || c == '\t')
 
 bool wxSearchEngine::Scan(wxInputStream *stream)
 {
@@ -656,13 +662,27 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     stream -> Read(buf, lng);
     buf[lng] = 0;
 
-    for (i = 0; i < lng; i++)
-        if ((buf[i] >= 'A') && (buf[i] <= 'Z')) buf[i] += 'a' - 'A';
+    if (!m_CaseSensitive)
+        for (i = 0; i < lng; i++)
+            if ((buf[i] >= 'A') && (buf[i] <= 'Z')) buf[i] += 'a' - 'A';
 
-    for (i = 0; i < lng - wrd; i++) {
-        j = 0;
-        while ((j < wrd) && (buf[i + j] == m_Keyword[j])) j++;
-        if (j == wrd) {found = TRUE; break; }
+    if (m_WholeWords)
+    {
+        for (i = 0; i < lng - wrd; i++) {
+            if (WHITESPACE(buf[i])) continue;
+            j = 0;
+            while ((j < wrd) && (buf[i + j] == m_Keyword[j])) j++;
+            if (j == wrd && WHITESPACE(buf[i + j])) {found = TRUE; break; }
+        }
+    }
+    
+    else
+    {
+        for (i = 0; i < lng - wrd; i++) {
+            j = 0;
+            while ((j < wrd) && (buf[i + j] == m_Keyword[j])) j++;
+            if (j == wrd) {found = TRUE; break; }
+        }
     }
 
     delete[] buf;
