@@ -426,7 +426,7 @@ void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ModelessDlg(wxCommandEvent& event)
 {
-    bool show = GetMenuBar()->IsChecked(event.GetInt());
+    bool show = GetMenuBar()->IsChecked(event.GetId());
 
     if ( show )
     {
