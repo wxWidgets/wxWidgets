@@ -120,9 +120,7 @@ public:
     void Lower();
     void MakeModal(bool flag);
     %name(MoveXY)void Move(int x, int y);
-#ifndef __WXGTK__
     void Move(const wxPoint& point);
-#endif
 
     //wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
     bool PopupMenu(wxMenu *menu, int x, int y);
@@ -164,9 +162,7 @@ public:
 
     void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
-#ifndef __WXGTK__
     void SetClientSize(const wxSize& size);
-#endif
     //void SetPalette(wxPalette* palette);
     void SetCursor(const wxCursor&cursor);
     //void SetEventHandler(wxEvtHandler* handler);
@@ -380,7 +376,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/02/23 23:48:33  RD
+// reenabled some methods for wxPython on wxGTK
+//
 // Revision 1.13  1999/02/20 10:02:38  RD
+//
 // Changes needed to enable wxGTK compatibility.
 //
 // Revision 1.12  1999/02/20 09:03:03  RD

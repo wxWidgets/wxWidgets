@@ -1441,6 +1441,35 @@ static PyObject *_wrap_wxWindow_MoveXY(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxWindow_Move(_swigobj,_swigarg0)  (_swigobj->Move(_swigarg0))
+static PyObject *_wrap_wxWindow_Move(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxPoint * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxWindow_Move",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_Move. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_Move. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    wxWindow_Move(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxWindow_PopupMenu(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PopupMenu(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxWindow_PopupMenu(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2101,6 +2130,35 @@ static PyObject *_wrap_wxWindow_SetClientSizeWH(PyObject *self, PyObject *args) 
         }
     }
     wxWindow_SetClientSizeWH(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_SetClientSize(_swigobj,_swigarg0)  (_swigobj->SetClientSize(_swigarg0))
+static PyObject *_wrap_wxWindow_SetClientSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxSize * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxWindow_SetClientSize",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetClientSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetClientSize. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+    wxWindow_SetClientSize(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -4433,6 +4491,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Show", _wrap_wxWindow_Show, 1 },
 	 { "wxWindow_SetTitle", _wrap_wxWindow_SetTitle, 1 },
 	 { "wxWindow_SetCursor", _wrap_wxWindow_SetCursor, 1 },
+	 { "wxWindow_SetClientSize", _wrap_wxWindow_SetClientSize, 1 },
 	 { "wxWindow_SetClientSizeWH", _wrap_wxWindow_SetClientSizeWH, 1 },
 	 { "wxWindow_SetSizeHints", _wrap_wxWindow_SetSizeHints, 1 },
 	 { "wxWindow_SetPosition", _wrap_wxWindow_SetPosition, 1 },
@@ -4457,6 +4516,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Refresh", _wrap_wxWindow_Refresh, 1 },
 	 { "wxWindow_Raise", _wrap_wxWindow_Raise, 1 },
 	 { "wxWindow_PopupMenu", _wrap_wxWindow_PopupMenu, 1 },
+	 { "wxWindow_Move", _wrap_wxWindow_Move, 1 },
 	 { "wxWindow_MoveXY", _wrap_wxWindow_MoveXY, 1 },
 	 { "wxWindow_MakeModal", _wrap_wxWindow_MakeModal, 1 },
 	 { "wxWindow_Lower", _wrap_wxWindow_Lower, 1 },

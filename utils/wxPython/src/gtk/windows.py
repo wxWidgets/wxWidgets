@@ -192,6 +192,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def MoveXY(self,arg0,arg1):
         val = windowsc.wxWindow_MoveXY(self.this,arg0,arg1)
         return val
+    def Move(self,arg0):
+        val = windowsc.wxWindow_Move(self.this,arg0.this)
+        return val
     def PopupMenu(self,arg0,arg1,arg2):
         val = windowsc.wxWindow_PopupMenu(self.this,arg0.this,arg1,arg2)
         return val
@@ -271,6 +274,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetClientSizeWH(self,arg0,arg1):
         val = windowsc.wxWindow_SetClientSizeWH(self.this,arg0,arg1)
+        return val
+    def SetClientSize(self,arg0):
+        val = windowsc.wxWindow_SetClientSize(self.this,arg0.this)
         return val
     def SetCursor(self,arg0):
         val = windowsc.wxWindow_SetCursor(self.this,arg0.this)
