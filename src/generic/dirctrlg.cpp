@@ -512,6 +512,7 @@ wxBEGIN_PROPERTIES_TABLE(wxGenericDirCtrl)
 	wxPROPERTY( DefaultPath , wxString , SetDefaultPath , GetDefaultPath  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 	wxPROPERTY( Filter , wxString , SetFilter , GetFilter  ,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 	wxPROPERTY( DefaultFilter , int , SetFilterIndex, GetFilterIndex,, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY_FLAGS( WindowStyle, wxGenericDirCtrlStyle, long, SetWindowStyleFlag, GetWindowStyleFlag, , 0, wxT("Helpstring"), wxT("group") )
 wxEND_PROPERTIES_TABLE()
 
 wxBEGIN_HANDLERS_TABLE(wxGenericDirCtrl)
