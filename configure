@@ -1925,7 +1925,7 @@ fi
 # Check whether --with-msw or --without-msw was given.
 if test "${with_msw+set}" = set; then
   withval="$with_msw"
-  wxUSE_MSW="$withval" CACHE_MSW TOOLKIT_GIVEN=1
+  wxUSE_MSW="$withval" CACHE_MSW=1 TOOLKIT_GIVEN=1
 fi
 
 # Check whether --with-pm or --without-pm was given.
