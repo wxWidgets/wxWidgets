@@ -512,6 +512,10 @@ void wxToolBar::Press()
 {
     wxCHECK_RET( m_toolCurrent, _T("no tool to press?") );
 
+    wxLogTrace(_T("toolbar"),
+               _T("Button '%s' pressed."),
+               m_toolCurrent->GetShortHelp().c_str());
+
     // this is the tool whose state is going to change
     m_toolPressed = (wxToolBarTool *)m_toolCurrent;
 
@@ -526,14 +530,15 @@ void wxToolBar::Release()
 {
     wxCHECK_RET( m_toolPressed, _T("no tool to release?") );
 
+    wxLogTrace(_T("toolbar"),
+               _T("Button '%s' released."),
+               m_toolCurrent->GetShortHelp().c_str());
+
     wxASSERT_MSG( m_toolPressed->IsInverted(), _T("release unpressed button?") );
 
     m_toolPressed->Invert();
 
     RefreshTool(m_toolPressed);
-
-    // we're going to lose the mouse capture
-    m_toolPressed = NULL;
 }
 
 void wxToolBar::Toggle()
@@ -637,6 +642,20 @@ bool wxStdToolbarInputHandler::HandleKey(wxInputConsumer *consumer,
     // TODO: when we have a current button we should allow the arrow
     //       keys to move it
     return wxStdInputHandler::HandleKey(consumer, event, pressed);
+}
+
+bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
+                                           const wxMouseEvent& event)
+{
+    // don't let the base class press the disabled buttons but simply ignore
+    // all events on them
+    wxToolBar *tbar = wxStaticCast(consumer->GetInputWindow(), wxToolBar);
+    wxToolBarToolBase *tool = tbar->FindToolForPosition(event.GetX(), event.GetY());
+
+    if ( tool && !tool->IsEnabled() )
+        return TRUE;
+
+    return wxStdButtonInputHandler::HandleMouse(consumer, event);
 }
 
 bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,

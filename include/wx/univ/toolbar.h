@@ -152,6 +152,8 @@ public:
     virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed);
+    virtual bool HandleMouse(wxInputConsumer *consumer,
+                             const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
     virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
     virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
