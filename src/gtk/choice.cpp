@@ -287,8 +287,6 @@ int wxChoice::GetSelection()
         count++;
     }
 
-    wxFAIL_MSG( _T("wxChoice: no selection") );
-
     return -1;
 }
 
