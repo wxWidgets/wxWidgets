@@ -327,6 +327,20 @@ Selects the text between the two positions, in the combobox text field.
 \pythonnote{The second form of this method is called {\tt SetMark} in
 wxPython.}
 
+\membersection{wxComboBox::SetString}\label{wxcomboboxsetstring}
+
+\func{void}{SetString}{\param{int }{n}, \param{const wxString\& }{text}}
+
+Replaces the specified string in the control with another one.
+
+\wxheading{Parameters}
+
+\docparam{n}{The zero-based index of the string to replace}
+
+\docparam{text}{The new value for this item}
+
+{\bf NB:} This method is currently not implemented in wxGTK.
+
 \membersection{wxComboBox::SetValue}\label{wxcomboboxsetvalue}
 
 \func{void}{SetValue}{\param{const wxString\& }{text}}
