@@ -4116,6 +4116,7 @@ void wxGrid::CalcDimensions()
     SetScrollbars( GRID_SCROLL_LINE_X, GRID_SCROLL_LINE_Y,
                    GetScrollX(w), GetScrollY(h), x, y,
                    GetBatchCount() != 0);
+    AdjustScrollbars();
 
     // if our OnSize() hadn't been called (it would if we have scrollbars), we
     // still must reposition the children
