@@ -383,9 +383,6 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
     else
     {
         // otherwise this has been done by AdjustScrollbars, above
-#ifdef __WXMAC__
-        m_targetWindow->Update() ;
-#endif
     }
 #endif // !__WXUNIVERSAL__
 }
@@ -513,10 +510,6 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     {
         m_targetWindow->ScrollWindow(dx, dy, GetScrollRect());
     }
-
-#ifdef __WXMAC__
-    m_targetWindow->Update() ;
-#endif
 }
 
 int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
@@ -634,10 +627,6 @@ void wxScrollHelper::AdjustScrollbars()
         // AdjustScrollbars() call
         return;
     }
-
-#ifdef __WXMAC__
-    m_targetWindow->Update();
-#endif
 
     int w = 0, h = 0;
     int oldw, oldh;
@@ -788,10 +777,6 @@ void wxScrollHelper::AdjustScrollbars()
         else
             m_targetWindow->Refresh(TRUE, GetScrollRect());
     }
-
-#ifdef __WXMAC__
-    m_targetWindow->Update();
-#endif
 }
 
 void wxScrollHelper::DoPrepareDC(wxDC& dc)
@@ -855,10 +840,6 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
     if (((x_pos == -1) || (x_pos == m_xScrollPosition)) &&
         ((y_pos == -1) || (y_pos == m_yScrollPosition))) return;
 
-#ifdef __WXMAC__
-    m_targetWindow->Update();
-#endif
-
     int w, h;
     GetTargetSize(&w, &h);
 
@@ -904,11 +885,6 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
                                           GetScrollRect() );
         }
     }
-
-#ifdef __WXMAC__
-    m_targetWindow->Update();
-#endif
-
 }
 
 void wxScrollHelper::EnableScrolling (bool x_scroll, bool y_scroll)
