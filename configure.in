@@ -1191,7 +1191,18 @@ else
 fi
 
 dnl we suppose that expr exists...
-NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0} + ${wxUSE_PM:-0}`
+NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_WINE:-0} + ${wxUSE_MINGW:-0} + ${wxUSE_CYGWIN:-0}`
+case "${host}" in
+  *-pc-os2_emx )
+    NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
+    # PATH_IFS is autodetected by OS/2's configure (usually ';')
+    LEX_STEM="lexyy"
+  ;;
+  *)
+    PATH_IFS=':'
+    LEX_STEM="lex.yy"
+  ;;
+esac
 
 case "$NUM_TOOLKITS" in
   1)
@@ -1397,6 +1408,8 @@ SEARCH_INCLUDE="\
     /usr/X386/include         \
     /usr/x386/include         \
     /usr/XFree86/include/X11  \
+                              \
+    X:/XFree86/include/X11    \
                               \
     /usr/include/gtk          \
     /usr/local/include/gtk    \
@@ -3173,7 +3186,14 @@ dnl for convenience, sort the samples in alphabetical order
 dnl
 dnl FIXME For some mysterious reasons, sometimes the directories are duplicated
 dnl       in this list - hence uniq. But normally, this shouldn't be needed!
-SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '`"
+dnl       Unfortunately, there is a bug in OS/2's tr, such that 
+dnl       tr ' ' '\n' introduces DOS-like line breaks, whereas tr '\n' ' '
+dnl       only removes the Unix-like part of the introduced line break.
+SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
+
+dnl makefile variables
+AC_SUBST(LEX_STEM)
+AC_SUBST(PATH_IFS)
 
 dnl global options
 AC_SUBST(WX_MAJOR_VERSION_NUMBER)
