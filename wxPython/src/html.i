@@ -487,6 +487,8 @@ public:
     int GetWidth();
     int GetHeight();
     int GetDescent();
+    const wxString& GetId() const;
+    void SetId(const wxString& id);
     wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
     wxHtmlCell* GetNext();
     wxHtmlContainerCell* GetParent();
