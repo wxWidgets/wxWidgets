@@ -30,6 +30,8 @@ gtk : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [--.demos.bombs]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--.samples.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 
