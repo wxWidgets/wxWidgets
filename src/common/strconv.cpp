@@ -239,19 +239,16 @@ const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
         return wxWCharBuffer((wchar_t *) NULL);
 }
 
-const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
+const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 {
-    if (psz)
-    {
-        size_t nLen = WC2MB((char *) NULL, psz, 0);  // return value excludes /0
-        if (nLen == (size_t)-1)
-            return wxCharBuffer((char *) NULL);
-        wxCharBuffer buf(nLen);                      // this allocates nLen+1
-        WC2MB((char *)(const char *) buf, psz, nLen+1);
-        return buf;
-    }
-    else
-        return wxCharBuffer((char *) NULL);
+    // return value excludes NUL
+    size_t nLen = pwz ? WC2MB((char *) NULL, pwz, 0) : (size_t)-1;
+    if (nLen == (size_t)-1)
+        return wxCharBuffer(NULL);
+
+    wxCharBuffer buf(nLen);                      // this allocates nLen+1
+    WC2MB((char *)(const char *) buf, pwz, nLen+1);
+    return buf;
 }
 
 // ----------------------------------------------------------------------------
