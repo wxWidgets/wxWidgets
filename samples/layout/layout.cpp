@@ -262,9 +262,7 @@ MyConstraintsFrame::MyConstraintsFrame(const wxChar *title, int x, int y)
   list->SetConstraints(b2);
 
   wxTextCtrl *mtext = new wxTextCtrl(panel, -1,
-                                     _T("This frame is laid out using\n"
-                                        "constraints, but the preferred\n"
-                                        "layout mechanism now are sizers."),
+      _T("This frame is laid out using\nconstraints, but the preferred\nlayout mechanism now are sizers."),
                                      wxDefaultPosition,
                                      wxDefaultSize,
                                      wxTE_MULTILINE);
@@ -465,16 +463,15 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxChar *title)
 // ----------------------------------------------------------------------------
 
 // some simple macros to help make the sample code below more clear
-#define TEXTCTRL(text)   new wxTextCtrl(p, -1, wxT(text))
-#define MLTEXTCTRL(text) new wxTextCtrl(p, -1, wxT(text), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
+#define TEXTCTRL(text)   new wxTextCtrl(p, -1, _T(text))
+#define MLTEXTCTRL(text) new wxTextCtrl(p, -1, _T(text), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
 #define POS(r, c)        wxGBPosition(r,c)
 #define SPAN(r, c)       wxGBSpan(r,c)
 
-wxChar* gbsDescription =wxT("\
-The wxGridBagSizer is similar to the wxFlexGridSizer except the \
-items are explicitly posisioned in a virtual 'cell' in the \n\
-layout grid, and column or row spanning is allowed.  For example, \
-this static text is positioned at (0,0) and it spans 9 columns.");
+wxChar* gbsDescription =_T("\
+The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
+in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
+static text is positioned at (0,0) and it spans 7 columns.");
 
 
 // Some IDs
@@ -505,8 +502,8 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(const wxChar *title, int x, int y )
 
     
     m_gbs->Add( new wxStaticText(p, -1, gbsDescription),
-              POS(0,0), SPAN(1, 9),
-              wxALIGN_CENTER | wxALL, 5);
+                POS(0,0), SPAN(1, 7),
+                wxALIGN_CENTER | wxALL, 5);
     
     m_gbs->Add( TEXTCTRL("pos(1,0)"),   POS(1,0) );
     m_gbs->Add( TEXTCTRL("pos(1,1)"),   POS(1,1) );
@@ -519,26 +516,24 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(const wxChar *title, int x, int y )
     m_gbs->Add( TEXTCTRL("pos(5,4)"),   POS(5,4), wxDefaultSpan, wxEXPAND );
     m_gbs->Add( TEXTCTRL("pos(6,5)"),   POS(6,5), wxDefaultSpan, wxEXPAND );
     m_gbs->Add( TEXTCTRL("pos(7,6)"),   POS(7,6) );
-    m_gbs->Add( TEXTCTRL("pos(8,7)"),   POS(8,7) );
-    m_gbs->Add( TEXTCTRL("pos(9,8)"),   POS(9,8) );
-
+    
     //m_gbs->Add( TEXTCTRL("bad position"), POS(4,3) );  // Test for assert
     //m_gbs->Add( TEXTCTRL("bad position"), POS(5,3) );  // Test for assert
 
 
-    m_moveBtn1 = new wxButton(p, GBS_MOVE_BTN1, wxT("Move this to (3,6)"));
-    m_moveBtn2 = new wxButton(p, GBS_MOVE_BTN2, wxT("Move this to (3,6)"));
+    m_moveBtn1 = new wxButton(p, GBS_MOVE_BTN1, _T("Move this to (3,6)"));
+    m_moveBtn2 = new wxButton(p, GBS_MOVE_BTN2, _T("Move this to (3,6)"));
     m_gbs->Add( m_moveBtn1, POS(10,2) );
     m_gbs->Add( m_moveBtn2, POS(10,3) );
     
-    m_hideBtn = new wxButton(p, GBS_HIDE_BTN, wxT("Hide this item -->"));
+    m_hideBtn = new wxButton(p, GBS_HIDE_BTN, _T("Hide this item -->"));
     m_gbs->Add(m_hideBtn, POS(12, 3));
 
-    m_hideTxt = new wxTextCtrl(p, -1, wxT("pos(12,4), size(250, -1)"),
+    m_hideTxt = new wxTextCtrl(p, -1, _T("pos(12,4), size(250, -1)"),
                                 wxDefaultPosition, wxSize(250,-1));
     m_gbs->Add( m_hideTxt, POS(12,4) );
     
-    m_showBtn = new wxButton(p, GBS_SHOW_BTN, wxT("<-- Show it again"));
+    m_showBtn = new wxButton(p, GBS_SHOW_BTN, _T("<-- Show it again"));
     m_gbs->Add(m_showBtn, POS(12, 5));
     m_showBtn->Disable();
 
@@ -578,12 +573,21 @@ void MyGridBagSizerFrame::OnMoveBtn(wxCommandEvent& event)
     if (curPos == wxGBPosition(3,6))
     {
         m_gbs->SetItemPosition(btn, m_lastPos);
-        btn->SetLabel(wxT("Move this to (3,6)"));
+        btn->SetLabel(_T("Move this to (3,6)"));
     }
-    else if ( m_gbs->SetItemPosition(btn, wxGBPosition(3,6)) )
+    else 
     {
-        m_lastPos = curPos;
-        btn->SetLabel(wxT("Move it back"));
+        if ( m_gbs->CheckForIntersection(wxGBPosition(3,6), wxGBSpan(1,1)) )
+            wxMessageBox(
+_T("wxGridBagSizer will not allow items to be in the same cell as\n\
+another item, so this operation will fail.  You will also get an assert\n\
+when compiled in debug mode."), _T("Warning"), wxOK | wxICON_INFORMATION);
+        
+        if ( m_gbs->SetItemPosition(btn, wxGBPosition(3,6)) )
+        {
+            m_lastPos = curPos;
+            btn->SetLabel(_T("Move it back"));
+        }
     }
     m_gbs->Layout();
 }
