@@ -968,7 +968,7 @@ void wxScrollHelper::HandleOnSize(wxSizeEvent& WXUNUSED(event))
         wxSize size = m_targetWindow->GetBestVirtualSize();
         
         // This will call ::Layout() and ::AdjustScrollbars()
-        SetVirtualSize( size );
+        m_win->SetVirtualSize( size );
     }
     else
     {
