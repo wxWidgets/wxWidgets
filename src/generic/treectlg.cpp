@@ -291,7 +291,7 @@ private:
     short               m_images[wxTreeItemIcon_Max];
 
     wxCoord             m_x;            // (virtual) offset from top
-    short               m_y;            // (virtual) offset from left
+    wxCoord             m_y;            // (virtual) offset from left
     short               m_width;        // width of this item
     unsigned char       m_height;       // height of this item
 
@@ -2329,8 +2329,8 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                     MacWindowToRootWindow( & loc_x , & loc_y ) ;
                     Rect bounds = { loc_y , loc_x , loc_y + 18 , loc_x + 12 } ;
                     ThemeButtonDrawInfo info = { kThemeStateActive , item->IsExpanded() ? kThemeDisclosureDown : kThemeDisclosureRight ,
-                        kThemeAdornmentNone }; 
-                    DrawThemeButton( &bounds, kThemeDisclosureButton , 
+                        kThemeAdornmentNone };
+                    DrawThemeButton( &bounds, kThemeDisclosureButton ,
                         &info , NULL , NULL , NULL , NULL ) ;
 #else
                     if (item->IsExpanded())
@@ -2410,7 +2410,23 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 // draw line down to last child
                 oldY += GetLineHeight(children[n-1])>>1;
                 if (HasButtons()) y_mid += 5;
-                dc.DrawLine(x, y_mid, x, oldY);
+
+                // Only draw the portion of the line that is visible, in case it is huge
+                wxCoord	xOrigin=0, yOrigin=0, width, height;
+                dc.GetDeviceOrigin(&xOrigin, &yOrigin);
+                yOrigin = abs(yOrigin);
+                GetClientSize(&width, &height);
+
+                // Move end points to the begining/end of the view?
+                if (y_mid < yOrigin)
+                    y_mid = yOrigin;
+                if (oldY > yOrigin + height)
+                    oldY = yOrigin + height;
+
+                // after the adjustments if y_mid is larger than oldY then the line
+                // isn't visible at all so don't draw anything
+                if (y_mid < oldY)
+                    dc.DrawLine(x, y_mid, x, oldY);
             }
         }
     }
