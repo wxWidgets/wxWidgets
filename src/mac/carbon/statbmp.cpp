@@ -74,6 +74,10 @@ void wxStaticBitmap::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
-    return DoGetSizeFromClientSize( wxSize( m_bitmap.GetWidth() , m_bitmap.GetHeight() ) ) ;
+    if ( m_bitmap.Ok() )
+        return DoGetSizeFromClientSize( wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight()) );
+
+    // this is completely arbitrary
+    return DoGetSizeFromClientSize( wxSize(16, 16) ); 
 }
 
