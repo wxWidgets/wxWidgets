@@ -222,7 +222,7 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
  */
 
 BEGIN_EVENT_TABLE(wxPreviewControlBar, wxPanel)
-	EVT_BUTTON(wxID_PREVIEW_CLOSE, 		wxPreviewControlBar::OnClose)
+	EVT_BUTTON(wxID_PREVIEW_CLOSE, 		wxPreviewControlBar::OnWindowClose)
 	EVT_BUTTON(wxID_PREVIEW_PRINT, 		wxPreviewControlBar::OnPrint)
 	EVT_BUTTON(wxID_PREVIEW_PREVIOUS, 	wxPreviewControlBar::OnPrevious)
 	EVT_BUTTON(wxID_PREVIEW_NEXT, 		wxPreviewControlBar::OnNext)
@@ -259,7 +259,7 @@ void wxPreviewControlBar::OnPaint(wxPaintEvent& WXUNUSED(event))
   dc.DrawLine( 0, h-1, w, h-1 );
 }
 
-void wxPreviewControlBar::OnClose(wxCommandEvent& WXUNUSED(event))
+void wxPreviewControlBar::OnWindowClose(wxCommandEvent& WXUNUSED(event))
 {
   wxPreviewFrame *frame = (wxPreviewFrame *)GetParent();
   frame->Close(TRUE);

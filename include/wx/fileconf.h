@@ -202,9 +202,17 @@ public:
     { return wxConfigBase::Read(key, val); }
   bool Read(const wxString& key, double* val, double defVal) const
     { return wxConfigBase::Read(key, val, defVal); }
+  bool Read(const wxString& key, bool* val) const
+    { return wxConfigBase::Read(key, val); }
+  bool Read(const wxString& key, bool* val, bool defVal) const
+    { return wxConfigBase::Read(key, val, defVal); }
 
   virtual bool Write(const wxString& key, const wxString& szValue);
   virtual bool Write(const wxString& key, long lValue);
+  bool Write(const wxString& key, double value)
+    { return wxConfigBase::Write(key, value); }
+  bool Write(const wxString& key, bool value)
+    { return wxConfigBase::Write(key, value); }
 
   virtual bool Flush(bool bCurrentOnly = FALSE);
 

@@ -96,7 +96,7 @@ wxString wxFileSelectorEx(const char *title,
     if ( fileDialog.ShowModal() == wxID_OK )
     {
         *defaultFilterIndex = fileDialog.GetFilterIndex();
-        return fileDialog.GetPath());
+        return fileDialog.GetPath();
     }
     else
         return wxEmptyString;

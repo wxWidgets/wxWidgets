@@ -28,7 +28,10 @@
 #include "wx/imaglist.h"
 #include "wx/spinbutt.h"
 #include "wx/clipbrd.h"
+
+#ifdef __WXGTK__
 #include "wx/tooltip.h"
+#endif
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #define USE_XPM
@@ -337,7 +340,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
+
+#ifdef __WXGTK__
   wxToolTip::Add( button, "Press here to set italic font" );
+#endif
 //  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);

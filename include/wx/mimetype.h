@@ -50,7 +50,7 @@ public:
         const wxString& GetMimeType() const { return m_mimetype; }
 
         // override this function in derived class
-        virtual wxString GetParamValue(const wxString& paramName) const
+        virtual wxString GetParamValue(const wxString& WXUNUSED(paramName)) const
             { return ""; }
 
         // virtual dtor as in any base class

@@ -210,7 +210,11 @@ class WXDLLEXPORT wxPathList : public wxStringList
 {
 public:
     void AddEnvList(const wxString& envVariable);    // Adds all paths in environment variable
+
     void Add(const wxString& path);
+    // Avoid compiler warning
+    wxNode *Add(const char *s) { return wxStringList::Add(s); }
+
     wxString FindValidPath(const wxString& filename);   // Find the first full path
     // for which the file exists
     wxString FindAbsoluteValidPath(const wxString& filename);   // Find the first full path

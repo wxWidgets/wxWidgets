@@ -67,6 +67,7 @@ public:
   virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
     { wxWindow::SetSize(rect, sizeFlags); }
   virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
   bool Show(bool show);
   void Iconize(bool iconize);

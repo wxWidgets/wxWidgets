@@ -44,13 +44,44 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     ~wxWindowDC(void);
     
     virtual void FloodFill( long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE );
+    inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
+    {
+        FloodFill(pt.x, pt.y, col, style);
+    }
+
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
+    inline bool GetPixel(const wxPoint& pt, wxColour *col) const
+    {
+        return GetPixel(pt.x, pt.y, col);
+    }
 
     virtual void DrawLine( long x1, long y1, long x2, long y2 );
+    inline void DrawLine(const wxPoint& pt1, const wxPoint& pt2)
+    {
+        DrawLine(pt1.x, pt1.y, pt2.x, pt2.y);
+    }
+
     virtual void CrossHair( long x, long y );
+    inline void CrossHair(const wxPoint& pt)
+    {
+        CrossHair(pt.x, pt.y);
+    }
+
     virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc );
+    inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
+    {
+        DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
+    }
+
     virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
+    virtual void DrawEllipticArc (const wxPoint& pt, const wxSize& sz, double sa, double ea)
+    {
+        DrawEllipticArc(pt.x, pt.y, sz.x, sz.y, sa, ea);
+    }
+
     virtual void DrawPoint( long x, long y );
+    inline void DrawPoint( wxPoint& point )
+      { DrawPoint(point.x, point.y); }
     
     virtual void DrawLines( int n, wxPoint points[], long xoffset = 0, long yoffset = 0 );
     virtual void DrawLines( wxList *points, long xoffset = 0, long yoffset = 0 );
@@ -60,15 +91,57 @@ class WXDLLEXPORT wxWindowDC: public wxDC
                               int fillStyle=wxODDEVEN_RULE );
     
     virtual void DrawRectangle( long x, long y, long width, long height );
+    inline void DrawRectangle(const wxPoint& pt, const wxSize& sz)
+    {
+        DrawRectangle(pt.x, pt.y, sz.x, sz.y);
+    }
+    inline void DrawRectangle(const wxRect& rect)
+    {
+        DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    }
+
     virtual void DrawRoundedRectangle( long x, long y, long width, long height, double radius = 20.0 );
+    inline void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz, double radius = 20.0)
+    {
+        DrawRoundedRectangle(pt.x, pt.y, sz.x, sz.y, radius);
+    }
+    inline void DrawRoundedRectangle(const wxRect& rect, double radius = 20.0)
+    {
+        DrawRoundedRectangle(rect.x, rect.y, rect.width, rect.height, radius);
+    }
+
     virtual void DrawEllipse( long x, long y, long width, long height );
+    inline void DrawEllipse(const wxPoint& pt, const wxSize& sz)
+    {
+        DrawEllipse(pt.x, pt.y, sz.x, sz.y);
+    }
+    inline void DrawEllipse(const wxRect& rect)
+    {
+        DrawEllipse(rect.x, rect.y, rect.width, rect.height);
+    }
     
     virtual bool CanDrawBitmap(void) const;
+
     virtual void DrawIcon( const wxIcon &icon, long x, long y);
+    inline void DrawIcon(const wxIcon& icon, const wxPoint& pt)
+    {
+        DrawIcon(icon, pt.x, pt.y);
+    }
+
     virtual bool Blit( long xdest, long ydest, long width, long height,
        wxDC *source, long xsrc, long ysrc, int logical_func = wxCOPY, bool useMask=FALSE );
+    inline bool Blit(const wxPoint& destPt, const wxSize& sz,
+            wxDC *source, const wxPoint& srcPt, int rop = wxCOPY, bool useMask = FALSE)
+    {
+        return Blit(destPt.x, destPt.y, sz.x, sz.y, source, srcPt.x, srcPt.y, rop, useMask);
+    }
 
     virtual void DrawText( const wxString &text, long x, long y, bool use16 = FALSE );
+    inline void DrawText(const wxString& text, const wxPoint& pt, bool use16bit = FALSE)
+    {
+        DrawText(text, pt.x, pt.y, use16bit);
+    }
+
     virtual bool CanGetTextExtent(void) const;
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
@@ -94,6 +167,10 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     virtual void DestroyClippingRegion(void);
     
     virtual void DrawSpline( wxList *points );
+    virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 )
+    { wxDC::DrawSpline(x1, y1, x2, y2, x3, y3); }
+    virtual void DrawSpline( int n, wxPoint points[] )
+    { wxDC::DrawSpline(n, points); }
 
     // Motif-specific
     void SetDCClipping (); // Helper function for setting clipping

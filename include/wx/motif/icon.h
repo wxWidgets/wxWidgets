@@ -56,6 +56,8 @@ public:
 
   bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
       int desiredWidth = -1, int desiredHeight = -1);
+  bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XBM)
+    { return wxBitmap::LoadFile(name, type); }
 
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }

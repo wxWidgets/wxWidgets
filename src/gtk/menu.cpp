@@ -168,7 +168,7 @@ void wxMenuBar::SetLabel( int id, const wxString &label )
 {
     wxMenuItem* item = FindMenuItemById( id );
     
-    if (item) return item->SetText( label );
+    if (item) item->SetText( label );
 }
 
 void wxMenuBar::EnableTop( int pos, bool flag )

@@ -155,6 +155,7 @@ public:
   virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
     { wxWindow::SetSize(rect, sizeFlags); }
   virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
   void GetSize(int *width, int *height) const;
   wxSize GetSize() const { return wxWindow::GetSize(); }
@@ -226,6 +227,7 @@ class WXDLLEXPORT wxMDIClientWindow: public wxNotebook
    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
     { wxWindow::SetSize(rect, sizeFlags); }
    void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
    void SetClientSize(int width, int height);
    void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }

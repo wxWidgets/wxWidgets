@@ -67,7 +67,9 @@ class WXDLLEXPORT wxListBox: public wxControl
   virtual int GetSelection() const ;
   virtual void Delete(int n);
   virtual char *GetClientData(int n) const ;
+  virtual void *GetClientData() { return wxWindow::GetClientData(); }
   virtual void SetClientData(int n, char *clientData);
+  virtual void SetClientData( void *data ) { wxWindow::SetClientData(data); }
   virtual void SetString(int n, const wxString& s);
 
   // For single or multiple choice list item
@@ -79,6 +81,7 @@ class WXDLLEXPORT wxListBox: public wxControl
   virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
     { wxWindow::SetSize(rect, sizeFlags); }
   virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
   // Set the specified item at the first visible item
   // or scroll to max range.

@@ -221,7 +221,7 @@ public:
   inline virtual wxPrintPreviewBase *GetPrintPreview() const { return m_printPreview; }
 
   void OnPrint(wxCommandEvent& event);
-  void OnClose(wxCommandEvent& event);
+  void OnWindowClose(wxCommandEvent& event);
   void OnNext(wxCommandEvent& event);
   void OnPrevious(wxCommandEvent& event);
   void OnZoom(wxCommandEvent& event);
