@@ -407,7 +407,10 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
     // a sizer might override this manual scrollbar setting in old code.
     // m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
-    m_targetWindow->SetVirtualSize( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    int w = noUnitsX * pixelsPerUnitX;
+    int h = noUnitsY * pixelsPerUnitY;
+    m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
+                                    h ? h : wxDefaultCoord);
 
     if (!noRefresh)
     {

@@ -365,7 +365,11 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX,
 
     // The above should arguably be deprecated, this however we still need.
 
-    m_targetWindow->SetVirtualSize( w, h );
+    // take care not to set 0 virtual size, 0 means that we don't have any
+    // scrollbars and hence we should use the real size instead of the virtual
+    // one which is indicated by using wxDefaultCoord
+    m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
+                                    h ? h : wxDefaultCoord);
 
     if (do_refresh && !noRefresh)
         m_targetWindow->Refresh(true, GetScrollRect());
