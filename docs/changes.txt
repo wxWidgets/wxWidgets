@@ -216,6 +216,7 @@ wxMSW:
 - wxLongLong formatting with MinGW corrected
 - wxFileDialog now returns correct filter index for multiple-file dialogs
 - Fixed a bug in wxSpinCtrl::DoGetBestSize that would make wxSpinCtrl too tall
+- Fixed wxTextCtrl::SetMaxLength for rich edit controls
 
 wxGTK:
 

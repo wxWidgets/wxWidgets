@@ -1247,6 +1247,11 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
 
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
+#if wxUSE_RICHEDIT
+    if (IsRich())
+        ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, (LPARAM) (DWORD) len);
+    else
+#endif
     ::SendMessage(GetHwnd(), EM_LIMITTEXT, len, 0);
 }
 
