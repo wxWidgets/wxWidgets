@@ -368,17 +368,23 @@ public:
     void SetEventObject(wxObject *obj);
     long GetTimestamp() const;
     void SetTimestamp(long ts = 0);
-    int GetId() const;
+    int  GetId() const;
     void SetId(int Id);
 
 
     bool IsCommandEvent() const;
 
-    // Can instruct event processor that we wish to ignore this event
-    // (treat as if the event table entry had not been found): this must be done
-    // to allow the event processing by the base classes (calling event.Skip()
-    // is the analog of calling the base class verstion of a virtual function)
-    void Skip(bool skip = true);
+    DocDeclStr(
+        void , Skip(bool skip = true),
+        "Called by an event handler, it controls whether additional event
+handlers bound to this event will be called after the current event
+handler returns.  Skip(false) (the default setting) will prevent
+additional event handlers from being called and control will be
+returned to the sender of the event immediately after the current
+handler has finished.  Skip(True) will cause the event processing
+system to continue searching for a handler function for this event.
+", "");
+    
     bool GetSkipped() const;
 
     // Determine if this event should be propagating to the parent window.

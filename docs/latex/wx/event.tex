@@ -187,9 +187,14 @@ is currently greater than $0$.
 
 \func{void}{Skip}{\param{bool}{ skip = true}}
 
-Called by an event handler to tell the event system that the
-event handler should be skipped, and the next valid handler used
-instead.
+Called by an event handler, it controls whether additional event
+handlers bound to this event will be called after the current event
+handler returns.  Skip(false) (the default setting) will prevent
+additional event handlers from being called and control will be
+returned to the sender of the event immediately after the current
+handler has finished.  Skip(True) will cause the event processing
+system to continue searching for a handler function for this event.
+
 
 \membersection{wxEvent::StopPropagation}\label{wxeventstoppropagation}
 
