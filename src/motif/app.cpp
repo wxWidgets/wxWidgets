@@ -264,14 +264,8 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-    m_className = "";
-    m_wantDebugOutput = TRUE ;
-    m_appName = "";
     argc = 0;
     argv = NULL;
-    m_exitOnFrameDelete = TRUE;
 
     m_mainColormap = (WXColormap) NULL;
     m_appContext = (WXAppContext) NULL;
