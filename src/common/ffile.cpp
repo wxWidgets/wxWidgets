@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        ffile.cpp
-// Purpose:     wxFFile - encapsulates "FILE *" IO stream
+// Purpose:     wxFFile encapsulates "FILE *" IO stream
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     14.07.99
@@ -45,32 +45,18 @@
 // opening the file
 // ----------------------------------------------------------------------------
 
-wxFFile::wxFFile(const wxChar *filename, const char *mode)
+wxFFile::wxFFile(const wxChar *filename, const wxChar *mode)
 {
     Detach();
 
     (void)Open(filename, mode);
 }
 
-bool wxFFile::Open(const wxChar *filename, const char *mode)
+bool wxFFile::Open(const wxChar *filename, const wxChar *mode)
 {
     wxASSERT_MSG( !m_fp, wxT("should close or detach the old file first") );
 
-#if wxUSE_UNICODE
-    char *tmp_fname;
-    size_t fname_len;
-
-    fname_len = wxStrlen(filename)+1;
-    tmp_fname = new char[fname_len];
-    wxWX2MB(tmp_fname, filename, fname_len);
-
-    m_fp = fopen(tmp_fname, mode);
-
-    delete tmp_fname;
-#else
-    m_fp = fopen(filename, mode);
-#endif
-
+    m_fp = wxFopen(filename, mode);
 
     if ( !m_fp )
     {
