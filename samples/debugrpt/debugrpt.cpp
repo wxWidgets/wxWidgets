@@ -37,7 +37,7 @@ class MyDebugReport : public wxDebugReportUpload
 public:
     MyDebugReport() : wxDebugReportUpload
                        (
-                        _T("http://iml2.hitchcock.org/intranet/crashes/wxtest"),
+                        _T("http://your.url.here/"),
                         _T("report:file"),
                         _T("action")
                        )
