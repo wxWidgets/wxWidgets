@@ -193,6 +193,8 @@ All (GUI):
 Generic:
 
 - file dialog and directory dialog now support drive letters on OS/2
+- fixed scrollbar problem in wxGrid (not showing scrollbars
+  when sizing smaller) (Shane Harper)
 
 Unix:
 
@@ -202,6 +204,11 @@ wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()
 - fixed bug in wxIniConfig::DeleteEntry() (Parinya Thipchart)
+- wxLongLong formatting with MinGW corrected
+
+wxGTK:
+
+- allow calling wxWindow::SetFont if window not yet created
 
 wxOS2:
 - fixed various problems in file handling
@@ -210,7 +217,6 @@ wxOS2:
 - partly fixed wxMouseEvent (reversed coordinate system again, handling of
   CTRL and SHIFT keys. ALT still doesn't work as expected by wxWindows, though)
 
- 
 
 2.4.2
 -----
