@@ -48,7 +48,7 @@
 #include "wx/log.h"
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
-#include "wx/msw/treectrl.h"
+#include "wx/treectrl.h"
 
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"
