@@ -520,6 +520,14 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
     // creation instead of Win32 API one because otherwise we will have memory
     // leaks if the thread uses C RTL (and most threads do)
 #ifdef wxUSE_BEGIN_THREAD
+
+    // Watcom is reported to not like 0 stack size (which means "use default"
+    // for the other compilers and is also the default value for stackSize)
+#ifdef __WATCOMC__
+    if ( !stackSize )
+        stackSize = 10240;
+#endif // __WATCOMC__
+
     m_hThread = (HANDLE)_beginthreadex
                         (
                           NULL,                             // default security
@@ -533,7 +541,7 @@ bool wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
     m_hThread = ::CreateThread
                   (
                     NULL,                               // default security
-                    stackSize,                          // default stack size
+                    stackSize,                          // stack size
                     wxThreadInternal::WinThreadStart,   // thread entry point
                     (LPVOID)thread,                     // parameter
                     CREATE_SUSPENDED,                   // flags

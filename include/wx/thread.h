@@ -307,11 +307,7 @@ public:
         // platforms that support that - call Run() to start it
         // (special cased for watcom which won't accept 0 default)
 
-#ifdef __WATCOMC__
-    wxThreadError Create(unsigned int stackSize = 10240);
-#else
     wxThreadError Create(unsigned int stackSize = 0);
-#endif
 
         // starts execution of the thread - from the moment Run() is called
         // the execution of wxThread::Entry() may start at any moment, caller
