@@ -64,6 +64,9 @@ MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
 MyDialog::~MyDialog()
 {
     delete m_taskBarIcon;
+#if defined(__WXCOCOA__)
+    delete m_dockIcon;
+#endif
 }
 
 void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event))
@@ -94,6 +97,9 @@ void MyDialog::Init(void)
   Centre(wxBOTH);
    
   m_taskBarIcon = new MyTaskBarIcon();
+#if defined(__WXCOCOA__)
+  m_dockIcon = new MyTaskBarIcon(wxTaskBarIcon::DOCK);
+#endif
   if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
         wxMessageBox(wxT("Could not set icon."));
 }
