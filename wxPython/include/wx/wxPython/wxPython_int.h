@@ -2125,6 +2125,30 @@ extern wxPyApp *wxPythonApp;
     }
 
 
+
+
+#define DEC_PYCALLBACK_INT_LONG_virtual(CBNAME)                                 \
+    int CBNAME(long a) const;
+
+
+#define IMP_PYCALLBACK_INT_LONG_virtual(CLASS, PCLASS, CBNAME)                  \
+    int CLASS::CBNAME(long a) const {                                           \
+        int rval=-1;    /* this rval is important for OnGetItemImage */         \
+        bool found;                                                             \
+        bool blocked = wxPyBeginBlockThreads();                                 \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(l)",a));     \
+            if (ro) {                                                           \
+                rval = PyInt_AsLong(ro);                                        \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads(blocked);                                           \
+        return rval;                                                            \
+    }  
+
+
 //---------------------------------------------------------------------------
 
 #define DEC_PYCALLBACK_LISTATTR_LONG(CBNAME)                                    \

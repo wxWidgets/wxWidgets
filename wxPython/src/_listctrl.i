@@ -384,8 +384,10 @@ public:
     }
 
     DEC_PYCALLBACK_STRING_LONGLONG(OnGetItemText);
-    DEC_PYCALLBACK_INT_LONG(OnGetItemImage);
     DEC_PYCALLBACK_LISTATTR_LONG(OnGetItemAttr);
+
+    // use the virtual version to avoid a confusing assert in the base class
+    DEC_PYCALLBACK_INT_LONG_virtual(OnGetItemImage);
 
     PYPRIVATE;
 };
@@ -393,8 +395,9 @@ public:
 IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
 
 IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
-IMP_PYCALLBACK_INT_LONG(wxPyListCtrl, wxListCtrl, OnGetItemImage);
 IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
+IMP_PYCALLBACK_INT_LONG_virtual(wxPyListCtrl, wxListCtrl, OnGetItemImage);
+ 
 %}
 
 
@@ -408,7 +411,7 @@ public:
 
     %pythonAppend wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
     %pythonAppend wxPyListCtrl()       ""
-   
+
     wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -426,7 +429,7 @@ public:
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    
+
     // Set the control colours
     bool SetForegroundColour(const wxColour& col);
     bool SetBackgroundColour(const wxColour& col);
@@ -468,7 +471,7 @@ public:
 
     // return the total area occupied by all the items (icon/small icon only)
     wxRect GetViewRect() const;
-    
+
 #ifdef __WXMSW__
     // Gets the edit control for editing labels.
     wxTextCtrl* GetEditControl() const;
@@ -586,10 +589,10 @@ public:
     %apply SWIGTYPE *DISOWN { wxImageList *imageList };
     void AssignImageList(wxImageList *imageList, int which);
     %clear wxImageList *imageList;
-    
+
     // are we in report mode?
     bool InReportView() const;
-        
+
     // returns True if it is a virtual list control
     bool IsVirtual() const;
 
