@@ -392,49 +392,49 @@ public:
 class WXDLLEXPORT wxPoint2DInt
 {
 public :
-        inline wxPoint2DInt();
-        inline wxPoint2DInt( wxInt32 x , wxInt32 y );
-        inline wxPoint2DInt( const wxPoint2DInt &pt );
-        inline wxPoint2DInt( const wxPoint &pt );
+    inline wxPoint2DInt();
+    inline wxPoint2DInt( wxInt32 x , wxInt32 y );
+    inline wxPoint2DInt( const wxPoint2DInt &pt );
+    inline wxPoint2DInt( const wxPoint &pt );
 
-        // two different conversions to integers, floor and rounding
-        inline void GetFloor( wxInt32 *x , wxInt32 *y );
-        inline void GetRounded( wxInt32 *x , wxInt32 *y );
+    // noops for this class, just return the coords
+    inline void GetFloor( wxInt32 *x , wxInt32 *y );
+    inline void GetRounded( wxInt32 *x , wxInt32 *y );
 
-        inline wxDouble GetVectorLength();
-               wxDouble GetVectorAngle();
-        inline void SetVectorLength( wxDouble length );
-               void SetVectorAngle( wxDouble degrees );
-               void SetPolarCoordinates( wxInt32 angle , wxInt32 length );
-        // set the vector length to 1.0, preserving the angle
-        inline void Normalize();
+    inline wxDouble GetVectorLength();
+           wxDouble GetVectorAngle();
+    inline void SetVectorLength( wxDouble length );
+           void SetVectorAngle( wxDouble degrees );
+           void SetPolarCoordinates( wxInt32 angle , wxInt32 length );
+    // set the vector length to 1.0, preserving the angle
+    inline void Normalize();
 
-        inline wxDouble GetDistance( const wxPoint2DInt &pt ) const;
-        inline wxDouble GetDistanceSquare( const wxPoint2DInt &pt ) const;
-        inline wxInt32 GetDotProduct( const wxPoint2DInt &vec ) const;
-        inline wxInt32 GetCrossProduct( const wxPoint2DInt &vec ) const;
+    inline wxDouble GetDistance( const wxPoint2DInt &pt ) const;
+    inline wxDouble GetDistanceSquare( const wxPoint2DInt &pt ) const;
+    inline wxInt32 GetDotProduct( const wxPoint2DInt &vec ) const;
+    inline wxInt32 GetCrossProduct( const wxPoint2DInt &vec ) const;
 
-        // the reflection of this point
-        inline wxPoint2DInt operator-();
+    // the reflection of this point
+    inline wxPoint2DInt operator-();
 
-        inline wxPoint2DInt& operator=(const wxPoint2DInt& pt);
-        inline wxPoint2DInt& operator+=(const wxPoint2DInt& pt);
-        inline wxPoint2DInt& operator-=(const wxPoint2DInt& pt);
-        inline wxPoint2DInt& operator*=(const wxPoint2DInt& pt);
-        inline wxPoint2DInt& operator*=(wxDouble n);
-        inline wxPoint2DInt& operator*=(wxInt32 n);
-        inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt);
-        inline wxPoint2DInt& operator/=(wxDouble n);
-        inline wxPoint2DInt& operator/=(wxInt32 n);
-        inline operator wxPoint() const;
-        inline bool operator==(const wxPoint2DInt& pt) const;
-        inline bool operator!=(const wxPoint2DInt& pt) const;
+    inline wxPoint2DInt& operator=(const wxPoint2DInt& pt);
+    inline wxPoint2DInt& operator+=(const wxPoint2DInt& pt);
+    inline wxPoint2DInt& operator-=(const wxPoint2DInt& pt);
+    inline wxPoint2DInt& operator*=(const wxPoint2DInt& pt);
+    inline wxPoint2DInt& operator*=(wxDouble n);
+    inline wxPoint2DInt& operator*=(wxInt32 n);
+    inline wxPoint2DInt& operator/=(const wxPoint2DInt& pt);
+    inline wxPoint2DInt& operator/=(wxDouble n);
+    inline wxPoint2DInt& operator/=(wxInt32 n);
+    inline operator wxPoint() const;
+    inline bool operator==(const wxPoint2DInt& pt) const;
+    inline bool operator!=(const wxPoint2DInt& pt) const;
 
-        void WriteTo( wxDataOutputStream &stream ) const;
-        void ReadFrom( wxDataInputStream &stream );
+    void WriteTo( wxDataOutputStream &stream ) const;
+    void ReadFrom( wxDataInputStream &stream );
 
-        wxInt32 m_x;
-        wxInt32 m_y;
+    wxInt32 m_x;
+    wxInt32 m_y;
 };
 
 wxPoint2DInt operator+(const wxPoint2DInt& pt1 , const wxPoint2DInt& pt2);
@@ -474,20 +474,20 @@ inline wxPoint2DInt::wxPoint2DInt( const wxPoint &pt )
 
 inline void wxPoint2DInt::GetFloor( wxInt32 *x , wxInt32 *y )
 {
-    // casts needed MIPSpro compiler under SGI
-    *x = (wxInt32) floor( (double)m_x );
-    *y = (wxInt32) floor( (double)m_y );
+    if ( x )
+        *x = m_x;
+    if ( y )
+        *y = m_y;
 }
 
 inline void wxPoint2DInt::GetRounded( wxInt32 *x , wxInt32 *y )
 {
-    *x = (wxInt32) floor( m_x + 0.5 );
-    *y = (wxInt32) floor( m_y + 0.5);
+    GetFloor(x, y);
 }
 
 inline wxDouble wxPoint2DInt::GetVectorLength()
 {
-    // casts needed MIPSpro compiler under SGI
+    // cast needed MIPSpro compiler under SGI
     return sqrt( (double)(m_x)*(m_x) + (m_y)*(m_y) );
 }
 
