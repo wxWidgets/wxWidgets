@@ -1936,7 +1936,18 @@ wxFileKind wxGetFileKind(int fd)
     return wxFILE_KIND_DISK;
 
 #else
+    #define wxFILEKIND_STUB
     (void)fd;
+    return wxFILE_KIND_DISK;
+#endif
+}
+
+wxFileKind wxGetFileKind(FILE *fp)
+{
+#ifndef wxFILEKIND_STUB
+    return wxGetFileKind(fileno(fp));
+#else
+    (void)fp;
     return wxFILE_KIND_DISK;
 #endif
 }

@@ -459,7 +459,7 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 
 // Return the type of an open file
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
-inline wxFileKind wxGetFileKind (FILE *fp) { return wxGetFileKind(fileno(fp)); }
+WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
 
 // compatibility defines, don't use in new code
 #define wxDirExists wxPathExists
