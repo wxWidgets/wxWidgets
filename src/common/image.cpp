@@ -961,7 +961,7 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
     {
         for (int x = 0; x < w; x++, imgdata += 3, alphadata++)
         {
-            if ((unsigned)(*alphadata) < threshold)
+            if (*alphadata < threshold)
             {
                 imgdata[0] = mr;
                 imgdata[1] = mg;
