@@ -29,6 +29,12 @@ parameters.
 Added wx.lib.mixins.listctrl.TextEditMixin, a mixin class that allows
 all columns of a wx.ListCtrl in report mode to be edited.
 
+Deprecated the wx.iewin module.
+
+Deprecated the wx.Sizer.AddWindow, AddSizer, AddSpacer methods as well
+as their Insert* and Prepend* counterparts.
+
+
 
 
 2.5.1.5

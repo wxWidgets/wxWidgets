@@ -6,6 +6,10 @@ import _iewin
 import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
+import warnings
+warnings.warn("This module is deprecated.  Please use the wx.lib.iewin module instead.",    
+              DeprecationWarning, stacklevel=2)
+
 class MSHTMLEvent(_core.NotifyEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMSHTMLEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

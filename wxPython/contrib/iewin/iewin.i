@@ -26,6 +26,11 @@
 %import core.i
 %pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__DocFilter(globals()) }
+%pythoncode {
+    import warnings
+    warnings.warn("This module is deprecated.  Please use the wx.lib.iewin module instead.",    
+                  DeprecationWarning, stacklevel=2)
+}
 
 MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 
