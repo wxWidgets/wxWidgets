@@ -392,20 +392,27 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         parent = parent->GetParent();
     }
 
-    bool iconized;
+    bool iconized = FALSE;
 
+    // wxMotif doesn't yet have a wxTopLevelWindow implementation
+#ifdef __WXMOTIF__
+    wxFrame *winTop = wxDynamicCast(parent, wxFrame);
+#else
     wxTopLevelWindow *winTop = wxDynamicCast(parent, wxTopLevelWindow);
+#endif
     if ( winTop )
     {
         iconized = winTop->IsIconized();
     }
+#ifndef __WXMOTIF__
     else
     {
         wxFAIL_MSG(wxT("should have a top level parent!"));
 
         iconized = FALSE;
     }
-
+#endif
+    
     if ( iconized )
     {
         event.Skip();
