@@ -6498,6 +6498,42 @@ static PyObject *_wrap_wxTreeEvent_GetPoint(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxTreeEvent_GetKeyEvent(_swigobj)  (_swigobj->GetKeyEvent())
+static PyObject *_wrap_wxTreeEvent_GetKeyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxKeyEvent * _result;
+    wxTreeEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeEvent_GetKeyEvent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_GetKeyEvent. Expected _wxTreeEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxKeyEvent & _result_ref = wxTreeEvent_GetKeyEvent(_arg0);
+    _result = (wxKeyEvent *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxKeyEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxTreeEvent_GetCode(_swigobj)  (_swigobj->GetCode())
 static PyObject *_wrap_wxTreeEvent_GetCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9473,6 +9509,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetLabel", (PyCFunction) _wrap_wxTreeEvent_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetCode", (PyCFunction) _wrap_wxTreeEvent_GetCode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeEvent_GetKeyEvent", (PyCFunction) _wrap_wxTreeEvent_GetKeyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetPoint", (PyCFunction) _wrap_wxTreeEvent_GetPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetOldItem", (PyCFunction) _wrap_wxTreeEvent_GetOldItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeEvent_GetItem", (PyCFunction) _wrap_wxTreeEvent_GetItem, METH_VARARGS | METH_KEYWORDS },

@@ -338,10 +338,6 @@ class wxDateTimePtr :
     def SetToWeekDay(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateTime_SetToWeekDay,(self,) + _args, _kwargs)
         return val
-    def GetWeekDay(self, *_args, **_kwargs):
-        val = apply(utilsc.wxDateTime_GetWeekDay,(self,) + _args, _kwargs)
-        if val: val = wxDateTimePtr(val) ; val.thisown = 1
-        return val
     def SetToLastWeekDay(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateTime_SetToLastWeekDay,(self,) + _args, _kwargs)
         return val
@@ -420,6 +416,9 @@ class wxDateTimePtr :
         return val
     def GetDay(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateTime_GetDay,(self,) + _args, _kwargs)
+        return val
+    def GetWeekDay(self, *_args, **_kwargs):
+        val = apply(utilsc.wxDateTime_GetWeekDay,(self,) + _args, _kwargs)
         return val
     def GetHour(self, *_args, **_kwargs):
         val = apply(utilsc.wxDateTime_GetHour,(self,) + _args, _kwargs)

@@ -544,6 +544,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def PageDown(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PageDown,(self,) + _args, _kwargs)
         return val
+    def GetAcceleratorTable(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetAcceleratorTable,(self,) + _args, _kwargs)
+        if val: val = wxAcceleratorTablePtr(val) 
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
     # replaces broken shadow method
@@ -593,70 +597,6 @@ class wxPanel(wxPanelPtr):
 
 def wxPrePanel(*_args,**_kwargs):
     val = wxPanelPtr(apply(windowsc.new_wxPrePanel,_args,_kwargs))
-    val.thisown = 1
-    return val
-
-
-class wxDialogPtr(wxPanelPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def Create(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_Create,(self,) + _args, _kwargs)
-        return val
-    def Centre(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_Centre,(self,) + _args, _kwargs)
-        return val
-    def EndModal(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_EndModal,(self,) + _args, _kwargs)
-        return val
-    def GetTitle(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_GetTitle,(self,) + _args, _kwargs)
-        return val
-    def Iconize(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_Iconize,(self,) + _args, _kwargs)
-        return val
-    def IsIconized(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_IsIconized,(self,) + _args, _kwargs)
-        return val
-    def SetModal(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_SetModal,(self,) + _args, _kwargs)
-        return val
-    def IsModal(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_IsModal,(self,) + _args, _kwargs)
-        return val
-    def SetTitle(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_SetTitle,(self,) + _args, _kwargs)
-        return val
-    def Show(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_Show,(self,) + _args, _kwargs)
-        return val
-    def ShowModal(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_ShowModal,(self,) + _args, _kwargs)
-        return val
-    def GetReturnCode(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_GetReturnCode,(self,) + _args, _kwargs)
-        return val
-    def SetReturnCode(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_SetReturnCode,(self,) + _args, _kwargs)
-        return val
-    def CreateTextSizer(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_CreateTextSizer,(self,) + _args, _kwargs)
-        return val
-    def CreateButtonSizer(self, *_args, **_kwargs):
-        val = apply(windowsc.wxDialog_CreateButtonSizer,(self,) + _args, _kwargs)
-        return val
-    def __repr__(self):
-        return "<C wxDialog instance at %s>" % (self.this,)
-class wxDialog(wxDialogPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(windowsc.new_wxDialog,_args,_kwargs)
-        self.thisown = 1
-
-
-
-def wxPreDialog(*_args,**_kwargs):
-    val = wxDialogPtr(apply(windowsc.new_wxPreDialog,_args,_kwargs))
     val.thisown = 1
     return val
 
