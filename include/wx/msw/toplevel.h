@@ -58,7 +58,7 @@ public:
     virtual void SetIcons(const wxIconBundle& icons );
     virtual void Restore();
 
-    virtual bool SetShape(const wxRegion& region);
+    /*virtual*/ bool SetShape(const wxRegion& region);
 
     virtual bool Show(bool show = TRUE);
 
