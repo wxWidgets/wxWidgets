@@ -70,7 +70,8 @@
 #endif
 
 #include "wx/setup.h"
-#ifdef HAVE_FNMATCH_H
+
+#if defined(HAVE_FNMATCH_H) || defined(__GNUWIN32__)
 #include   "fnmatch.h"
 #endif
 
@@ -1404,7 +1405,8 @@ bool wxIsWild( const wxString& pattern )
 };
 
 bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
-#ifdef HAVE_FNMATCH_H
+
+#if defined(HAVE_FNMATCH_H) || defined(__GNUWIN32__)
 {
    if(dot_special)
       return fnmatch(pat.c_str(), text.c_str(), FNM_PERIOD) == 0;
