@@ -38,3 +38,14 @@ to the "filtered" stream.
 
 \helpref{wxOutputStream}{wxoutputstream}
 
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxZlibOutputStream::wxZlibOutputStream}
+
+\func{}{wxZlibOutputStream}{\param{wxOutputStream\&}{ stream},\param{int}{ level = -1}}
+
+Creates a new write-only compressed stream. {\it level} means level of 
+compression. It is number between 0 and 9 (including these values) where
+0 means no compression and 9 best but slowest compression. -1 is default
+value (currently equivalent to 6).

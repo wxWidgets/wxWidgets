@@ -37,7 +37,7 @@ class WXDLLEXPORT wxZlibInputStream: public wxFilterInputStream {
 
 class WXDLLEXPORT wxZlibOutputStream: public wxFilterOutputStream {
  public:
-  wxZlibOutputStream(wxOutputStream& stream);
+  wxZlibOutputStream(wxOutputStream& stream, int level = -1);
   virtual ~wxZlibOutputStream();
 
   void Sync();

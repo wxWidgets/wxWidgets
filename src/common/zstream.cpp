@@ -104,7 +104,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
 // wxZlibOutputStream
 //////////////////////
 
-wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
+wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream, int level)
  : wxFilterOutputStream(stream)
 {
   int err;
@@ -115,7 +115,10 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream)
   m_deflate->zfree = (free_func)0;
   m_deflate->opaque = (voidpf)0;
 
-  err = deflateInit(m_deflate, Z_DEFAULT_COMPRESSION);
+  if (level == -1) level = Z_DEFAULT_COMPRESSION;
+  wxASSERT_MSG(level >= 0 && level <= 9, wxT("wxZlibOutputStream compression level must be between 0 and 9!"));
+
+  err = deflateInit(m_deflate, level);
   if (err != Z_OK) {
     deflateEnd(m_deflate);
     return;
