@@ -115,12 +115,12 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
       // Make another frame, containing a canvas
-      MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(4, 4), wxSize(100, 100),
+      MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(-1, -1), wxSize(-1, -1),
                              wxDEFAULT_FRAME);
 
-      char titleBuf[100];
-      sprintf(titleBuf, "Canvas Frame %d", winNumber);
-      subframe->SetTitle(titleBuf);
+      wxString title;
+      title.Printf("Canvas Frame %d", winNumber);
+      subframe->SetTitle(title);
       winNumber ++;
 
       // Give it an icon (this is ignored in MDI mode: uses resources)

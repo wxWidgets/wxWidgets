@@ -1123,7 +1123,7 @@ cleanall: clean
 
 # Making documents
 docs:   hlp
-hlp:    wxhlp refhlp portinghlp # faqhlp
+hlp:    wxhlp portinghlp # faqhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
 faqhlp: $(DOCDIR)/winhelp/faq.hlp
 refhlp: $(DOCDIR)/winhelp/techref.hlp
