@@ -727,6 +727,10 @@ char wxFindMnemonic (const char *s)
 
 char * wxFindAccelerator (const char *s)
 {
+    // VZ: this function returns incorrect keysym which completely breaks kbd
+    //     handling
+    return NULL;
+
     // The accelerator text is after the \t char.
     while (*s && *s != '\t')
         s++;
@@ -778,6 +782,10 @@ char * wxFindAccelerator (const char *s)
 
 XmString wxFindAcceleratorText (const char *s)
 {
+    // VZ: this function returns incorrect keysym which completely breaks kbd
+    //     handling
+    return NULL;
+
     // The accelerator text is after the \t char.
     while (*s && *s != '\t')
         s++;
