@@ -439,7 +439,7 @@ STDMETHODIMP wxIDataObject::SetData(FORMATETC *pformatetc,
                 // as we can't fix this bug in explorer (it's a bug because it
                 // should only use formats returned by EnumFormatEtc), do the
                 // check here
-                if ( !m_pDataObject->IsSupportedFormat(format) ) {
+                if ( !m_pDataObject->IsSupported(format, wxDataObject::Set) ) {
                     // go away!
                     return DV_E_FORMATETC;
                 }
