@@ -8,6 +8,47 @@ controls on a panel, etc. to be loaded from an XML file.
 
 import _xrc
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
@@ -21,6 +62,7 @@ XRC_USE_LOCALE = _xrc.XRC_USE_LOCALE
 XRC_NO_SUBCLASSING = _xrc.XRC_NO_SUBCLASSING
 XRC_NO_RELOADING = _xrc.XRC_NO_RELOADING
 class XmlResource(_core.Object):
+    """Proxy of C++ XmlResource class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -205,6 +247,7 @@ def XRCCTRL(window, str_id, *ignoreargs):
 #---------------------------------------------------------------------------
 
 class XmlSubclassFactory(object):
+    """Proxy of C++ XmlSubclassFactory class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyXmlSubclassFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -243,6 +286,7 @@ XML_DOCUMENT_FRAG_NODE = _xrc.XML_DOCUMENT_FRAG_NODE
 XML_NOTATION_NODE = _xrc.XML_NOTATION_NODE
 XML_HTML_DOCUMENT_NODE = _xrc.XML_HTML_DOCUMENT_NODE
 class XmlProperty(object):
+    """Proxy of C++ XmlProperty class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlProperty instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -287,6 +331,7 @@ class XmlPropertyPtr(XmlProperty):
 _xrc.XmlProperty_swigregister(XmlPropertyPtr)
 
 class XmlNode(object):
+    """Proxy of C++ XmlNode class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlNode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -408,6 +453,7 @@ def XmlNodeEasy(*args, **kwargs):
     return val
 
 class XmlDocument(_core.Object):
+    """Proxy of C++ XmlDocument class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -489,6 +535,7 @@ def EmptyXmlDocument(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class XmlResourceHandler(_core.Object):
+    """Proxy of C++ XmlResourceHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyXmlResourceHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

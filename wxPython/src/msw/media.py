@@ -2,10 +2,51 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-Classes for a medai player control
+Classes for a media player control
 """
 
 import _media
+
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
 
 import _core
 wx = _core 
@@ -13,8 +54,8 @@ __docfilter__ = wx.__DocFilter(globals())
 MEDIASTATE_STOPPED = _media.MEDIASTATE_STOPPED
 MEDIASTATE_PAUSED = _media.MEDIASTATE_PAUSED
 MEDIASTATE_PLAYING = _media.MEDIASTATE_PLAYING
-MEDIATIMEFORMAT_TIME = _media.MEDIATIMEFORMAT_TIME
 class MediaEvent(_core.NotifyEvent):
+    """Proxy of C++ MediaEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMediaEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -32,6 +73,7 @@ class MediaEventPtr(MediaEvent):
 _media.MediaEvent_swigregister(MediaEventPtr)
 
 class MediaCtrl(_core.Control):
+    """Proxy of C++ MediaCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMediaCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -47,16 +89,6 @@ class MediaCtrl(_core.Control):
         self.thisown = 1
         del newobj.thisown
         self._setOORInfo(self)
-
-    def CreateFromURI(*args, **kwargs):
-        """
-        CreateFromURI(self, Window parent, int id=-1, String location=EmptyString, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String szBackend=EmptyString, 
-            Validator validator=DefaultValidator, 
-            String name=MediaCtrlNameStr) -> bool
-        """
-        return _media.MediaCtrl_CreateFromURI(*args, **kwargs)
 
     def Create(*args, **kwargs):
         """
@@ -108,21 +140,17 @@ class MediaCtrl(_core.Control):
         """SetPlaybackRate(self, double dRate) -> bool"""
         return _media.MediaCtrl_SetPlaybackRate(*args, **kwargs)
 
-    def SetMediaPosition(*args, **kwargs):
-        """SetMediaPosition(self, wxLongLong where) -> bool"""
-        return _media.MediaCtrl_SetMediaPosition(*args, **kwargs)
+    def Seek(*args, **kwargs):
+        """Seek(self, wxFileOffset where, int mode=FromStart) -> wxFileOffset"""
+        return _media.MediaCtrl_Seek(*args, **kwargs)
 
-    def GetMediaPosition(*args, **kwargs):
-        """
-        GetMediaPosition(self) -> wxLongLong
+    def Tell(*args, **kwargs):
+        """Tell(self) -> wxFileOffset"""
+        return _media.MediaCtrl_Tell(*args, **kwargs)
 
-        Get the window's position.
-        """
-        return _media.MediaCtrl_GetMediaPosition(*args, **kwargs)
-
-    def GetMediaDuration(*args, **kwargs):
-        """GetMediaDuration(self) -> wxLongLong"""
-        return _media.MediaCtrl_GetMediaDuration(*args, **kwargs)
+    def Length(*args, **kwargs):
+        """Length(self) -> wxFileOffset"""
+        return _media.MediaCtrl_Length(*args, **kwargs)
 
 
 class MediaCtrlPtr(MediaCtrl):
@@ -138,19 +166,6 @@ def PreMediaCtrl(*args, **kwargs):
     """PreMediaCtrl() -> MediaCtrl"""
     val = _media.new_PreMediaCtrl(*args, **kwargs)
     val.thisown = 1
-    return val
-
-def MediaCtrlFromURI(*args, **kwargs):
-    """
-    MediaCtrlFromURI(Window parent, int id=-1, String location=EmptyString, 
-        Point pos=DefaultPosition, Size size=DefaultSize, 
-        long style=0, String szBackend=EmptyString, 
-        Validator validator=DefaultValidator, 
-        String name=MediaCtrlNameStr) -> MediaCtrl
-    """
-    val = _media.new_MediaCtrlFromURI(*args, **kwargs)
-    val.thisown = 1
-    self._setOORInfo(self)
     return val
 
 wxEVT_MEDIA_FINISHED = _media.wxEVT_MEDIA_FINISHED

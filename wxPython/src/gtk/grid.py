@@ -7,6 +7,47 @@ Classes for implementing a spreadsheet-like control.
 
 import _grid
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _windows
 import _core
 wx = _core 
@@ -31,6 +72,7 @@ GRID_MIN_ROW_HEIGHT = _grid.GRID_MIN_ROW_HEIGHT
 GRID_MIN_COL_WIDTH = _grid.GRID_MIN_COL_WIDTH
 GRID_DEFAULT_SCROLLBAR_WIDTH = _grid.GRID_DEFAULT_SCROLLBAR_WIDTH
 class GridCellRenderer(object):
+    """Proxy of C++ GridCellRenderer class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -78,6 +120,7 @@ GridNoCellCoords = cvar.GridNoCellCoords
 GridNoCellRect = cvar.GridNoCellRect
 
 class PyGridCellRenderer(GridCellRenderer):
+    """Proxy of C++ PyGridCellRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -105,6 +148,7 @@ class PyGridCellRendererPtr(PyGridCellRenderer):
 _grid.PyGridCellRenderer_swigregister(PyGridCellRendererPtr)
 
 class GridCellStringRenderer(GridCellRenderer):
+    """Proxy of C++ GridCellStringRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -124,6 +168,7 @@ class GridCellStringRendererPtr(GridCellStringRenderer):
 _grid.GridCellStringRenderer_swigregister(GridCellStringRendererPtr)
 
 class GridCellNumberRenderer(GridCellStringRenderer):
+    """Proxy of C++ GridCellNumberRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellNumberRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -143,6 +188,7 @@ class GridCellNumberRendererPtr(GridCellNumberRenderer):
 _grid.GridCellNumberRenderer_swigregister(GridCellNumberRendererPtr)
 
 class GridCellFloatRenderer(GridCellStringRenderer):
+    """Proxy of C++ GridCellFloatRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellFloatRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -178,6 +224,7 @@ class GridCellFloatRendererPtr(GridCellFloatRenderer):
 _grid.GridCellFloatRenderer_swigregister(GridCellFloatRendererPtr)
 
 class GridCellBoolRenderer(GridCellRenderer):
+    """Proxy of C++ GridCellBoolRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellBoolRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -197,6 +244,7 @@ class GridCellBoolRendererPtr(GridCellBoolRenderer):
 _grid.GridCellBoolRenderer_swigregister(GridCellBoolRendererPtr)
 
 class GridCellDateTimeRenderer(GridCellStringRenderer):
+    """Proxy of C++ GridCellDateTimeRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellDateTimeRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -216,6 +264,7 @@ class GridCellDateTimeRendererPtr(GridCellDateTimeRenderer):
 _grid.GridCellDateTimeRenderer_swigregister(GridCellDateTimeRendererPtr)
 
 class GridCellEnumRenderer(GridCellStringRenderer):
+    """Proxy of C++ GridCellEnumRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEnumRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -235,6 +284,7 @@ class GridCellEnumRendererPtr(GridCellEnumRenderer):
 _grid.GridCellEnumRenderer_swigregister(GridCellEnumRendererPtr)
 
 class GridCellAutoWrapStringRenderer(GridCellStringRenderer):
+    """Proxy of C++ GridCellAutoWrapStringRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -254,6 +304,7 @@ class GridCellAutoWrapStringRendererPtr(GridCellAutoWrapStringRenderer):
 _grid.GridCellAutoWrapStringRenderer_swigregister(GridCellAutoWrapStringRendererPtr)
 
 class GridCellEditor(object):
+    """Proxy of C++ GridCellEditor class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -354,6 +405,7 @@ class GridCellEditorPtr(GridCellEditor):
 _grid.GridCellEditor_swigregister(GridCellEditorPtr)
 
 class PyGridCellEditor(GridCellEditor):
+    """Proxy of C++ PyGridCellEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -413,6 +465,7 @@ class PyGridCellEditorPtr(PyGridCellEditor):
 _grid.PyGridCellEditor_swigregister(PyGridCellEditorPtr)
 
 class GridCellTextEditor(GridCellEditor):
+    """Proxy of C++ GridCellTextEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellTextEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -436,6 +489,7 @@ class GridCellTextEditorPtr(GridCellTextEditor):
 _grid.GridCellTextEditor_swigregister(GridCellTextEditorPtr)
 
 class GridCellNumberEditor(GridCellTextEditor):
+    """Proxy of C++ GridCellNumberEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellNumberEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -459,6 +513,7 @@ class GridCellNumberEditorPtr(GridCellNumberEditor):
 _grid.GridCellNumberEditor_swigregister(GridCellNumberEditorPtr)
 
 class GridCellFloatEditor(GridCellTextEditor):
+    """Proxy of C++ GridCellFloatEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellFloatEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -482,6 +537,7 @@ class GridCellFloatEditorPtr(GridCellFloatEditor):
 _grid.GridCellFloatEditor_swigregister(GridCellFloatEditorPtr)
 
 class GridCellBoolEditor(GridCellEditor):
+    """Proxy of C++ GridCellBoolEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellBoolEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -505,10 +561,11 @@ class GridCellBoolEditorPtr(GridCellBoolEditor):
 _grid.GridCellBoolEditor_swigregister(GridCellBoolEditorPtr)
 
 class GridCellChoiceEditor(GridCellEditor):
+    """Proxy of C++ GridCellChoiceEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellChoiceEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int choices=0, String choices_array=None, bool allowOthers=False) -> GridCellChoiceEditor"""
+        """__init__(self, int choices=0, bool allowOthers=False) -> GridCellChoiceEditor"""
         newobj = _grid.new_GridCellChoiceEditor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -528,6 +585,7 @@ class GridCellChoiceEditorPtr(GridCellChoiceEditor):
 _grid.GridCellChoiceEditor_swigregister(GridCellChoiceEditorPtr)
 
 class GridCellEnumEditor(GridCellChoiceEditor):
+    """Proxy of C++ GridCellEnumEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellEnumEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -551,6 +609,7 @@ class GridCellEnumEditorPtr(GridCellEnumEditor):
 _grid.GridCellEnumEditor_swigregister(GridCellEnumEditorPtr)
 
 class GridCellAutoWrapStringEditor(GridCellTextEditor):
+    """Proxy of C++ GridCellAutoWrapStringEditor class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAutoWrapStringEditor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -574,6 +633,7 @@ class GridCellAutoWrapStringEditorPtr(GridCellAutoWrapStringEditor):
 _grid.GridCellAutoWrapStringEditor_swigregister(GridCellAutoWrapStringEditorPtr)
 
 class GridCellAttr(object):
+    """Proxy of C++ GridCellAttr class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     Any = _grid.GridCellAttr_Any
@@ -735,6 +795,7 @@ class GridCellAttrPtr(GridCellAttr):
 _grid.GridCellAttr_swigregister(GridCellAttrPtr)
 
 class GridCellAttrProvider(object):
+    """Proxy of C++ GridCellAttrProvider class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -782,6 +843,7 @@ class GridCellAttrProviderPtr(GridCellAttrProvider):
 _grid.GridCellAttrProvider_swigregister(GridCellAttrProviderPtr)
 
 class PyGridCellAttrProvider(GridCellAttrProvider):
+    """Proxy of C++ PyGridCellAttrProvider class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridCellAttrProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -821,6 +883,7 @@ class PyGridCellAttrProviderPtr(PyGridCellAttrProvider):
 _grid.PyGridCellAttrProvider_swigregister(PyGridCellAttrProviderPtr)
 
 class GridTableBase(_core.Object):
+    """Proxy of C++ GridTableBase class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -973,6 +1036,7 @@ class GridTableBasePtr(GridTableBase):
 _grid.GridTableBase_swigregister(GridTableBasePtr)
 
 class PyGridTableBase(GridTableBase):
+    """Proxy of C++ PyGridTableBase class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyGridTableBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1080,6 +1144,7 @@ class PyGridTableBasePtr(PyGridTableBase):
 _grid.PyGridTableBase_swigregister(PyGridTableBasePtr)
 
 class GridStringTable(GridTableBase):
+    """Proxy of C++ GridStringTable class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridStringTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1107,6 +1172,7 @@ GRIDTABLE_NOTIFY_COLS_INSERTED = _grid.GRIDTABLE_NOTIFY_COLS_INSERTED
 GRIDTABLE_NOTIFY_COLS_APPENDED = _grid.GRIDTABLE_NOTIFY_COLS_APPENDED
 GRIDTABLE_NOTIFY_COLS_DELETED = _grid.GRIDTABLE_NOTIFY_COLS_DELETED
 class GridTableMessage(object):
+    """Proxy of C++ GridTableMessage class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridTableMessage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1162,6 +1228,7 @@ class GridTableMessagePtr(GridTableMessage):
 _grid.GridTableMessage_swigregister(GridTableMessagePtr)
 
 class GridCellCoords(object):
+    """Proxy of C++ GridCellCoords class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellCoords instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1227,6 +1294,7 @@ class GridCellCoordsPtr(GridCellCoords):
 _grid.GridCellCoords_swigregister(GridCellCoordsPtr)
 
 class Grid(_windows.ScrolledWindow):
+    """Proxy of C++ Grid class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGrid instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2100,6 +2168,7 @@ def Grid_GetClassDefaultAttributes(*args, **kwargs):
     return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
 class GridEvent(_core.NotifyEvent):
+    """Proxy of C++ GridEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2154,6 +2223,7 @@ class GridEventPtr(GridEvent):
 _grid.GridEvent_swigregister(GridEventPtr)
 
 class GridSizeEvent(_core.NotifyEvent):
+    """Proxy of C++ GridSizeEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2199,6 +2269,7 @@ class GridSizeEventPtr(GridSizeEvent):
 _grid.GridSizeEvent_swigregister(GridSizeEventPtr)
 
 class GridRangeSelectEvent(_core.NotifyEvent):
+    """Proxy of C++ GridRangeSelectEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridRangeSelectEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2265,6 +2336,7 @@ class GridRangeSelectEventPtr(GridRangeSelectEvent):
 _grid.GridRangeSelectEvent_swigregister(GridRangeSelectEventPtr)
 
 class GridEditorCreatedEvent(_core.CommandEvent):
+    """Proxy of C++ GridEditorCreatedEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridEditorCreatedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

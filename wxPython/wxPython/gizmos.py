@@ -42,6 +42,7 @@ wxRemotelyScrolledTreeCtrl = wx.gizmos.RemotelyScrolledTreeCtrl
 wxRemotelyScrolledTreeCtrlPtr = wx.gizmos.RemotelyScrolledTreeCtrlPtr
 wxTreeCompanionWindow = wx.gizmos.TreeCompanionWindow
 wxTreeCompanionWindowPtr = wx.gizmos.TreeCompanionWindowPtr
+wxTreeCompanionWindow = wx.gizmos.TreeCompanionWindow
 wxThinSplitterWindow = wx.gizmos.ThinSplitterWindow
 wxThinSplitterWindowPtr = wx.gizmos.ThinSplitterWindowPtr
 wxSplitterScrolledWindow = wx.gizmos.SplitterScrolledWindow
@@ -68,6 +69,7 @@ wxTreeListColumnInfo = wx.gizmos.TreeListColumnInfo
 wxTreeListColumnInfoPtr = wx.gizmos.TreeListColumnInfoPtr
 wxTreeListCtrl = wx.gizmos.TreeListCtrl
 wxTreeListCtrlPtr = wx.gizmos.TreeListCtrlPtr
+wxTreeListCtrl = wx.gizmos.TreeListCtrl
 wxPreTreeListCtrl = wx.gizmos.PreTreeListCtrl
 
 

@@ -3,6 +3,47 @@
 
 import _iewin
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
@@ -11,6 +52,7 @@ warnings.warn("This module is deprecated.  Please use the wx.lib.iewin module in
               DeprecationWarning, stacklevel=2)
 
 class MSHTMLEvent(_core.NotifyEvent):
+    """Proxy of C++ MSHTMLEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMSHTMLEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -57,6 +99,7 @@ IEHTML_REFRESH_IFEXPIRED = _iewin.IEHTML_REFRESH_IFEXPIRED
 IEHTML_REFRESH_CONTINUE = _iewin.IEHTML_REFRESH_CONTINUE
 IEHTML_REFRESH_COMPLETELY = _iewin.IEHTML_REFRESH_COMPLETELY
 class IEHtmlWin(_core.Window):
+    """Proxy of C++ IEHtmlWin class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIEHtmlWin instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

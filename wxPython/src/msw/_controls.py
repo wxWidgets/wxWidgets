@@ -3,6 +3,47 @@
 
 import _controls_
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 #---------------------------------------------------------------------------
@@ -848,6 +889,7 @@ GA_VERTICAL = _controls_.GA_VERTICAL
 GA_SMOOTH = _controls_.GA_SMOOTH
 GA_PROGRESSBAR = _controls_.GA_PROGRESSBAR
 class Gauge(_core.Control):
+    """Proxy of C++ Gauge class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGauge instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -961,6 +1003,7 @@ def Gauge_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticBox(_core.Control):
+    """Proxy of C++ StaticBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1038,6 +1081,7 @@ def StaticBox_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticLine(_core.Control):
+    """Proxy of C++ StaticLine class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticLine instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1125,6 +1169,7 @@ def StaticLine_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticText(_core.Control):
+    """Proxy of C++ StaticText class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticText instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1199,6 +1244,7 @@ def StaticText_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class StaticBitmap(_core.Control):
+    """Proxy of C++ StaticBitmap class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStaticBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1285,6 +1331,7 @@ def StaticBitmap_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ListBox(_core.ControlWithItems):
+    """Proxy of C++ ListBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1443,6 +1490,7 @@ def ListBox_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class CheckListBox(ListBox):
+    """Proxy of C++ CheckListBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1553,6 +1601,7 @@ TE_HT_ON_TEXT = _controls_.TE_HT_ON_TEXT
 TE_HT_BELOW = _controls_.TE_HT_BELOW
 TE_HT_BEYOND = _controls_.TE_HT_BEYOND
 class TextAttr(object):
+    """Proxy of C++ TextAttr class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1697,6 +1746,7 @@ def TextAttr_Combine(*args, **kwargs):
     return _controls_.TextAttr_Combine(*args, **kwargs)
 
 class TextCtrl(_core.Control):
+    """Proxy of C++ TextCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2003,6 +2053,7 @@ wxEVT_COMMAND_TEXT_ENTER = _controls_.wxEVT_COMMAND_TEXT_ENTER
 wxEVT_COMMAND_TEXT_URL = _controls_.wxEVT_COMMAND_TEXT_URL
 wxEVT_COMMAND_TEXT_MAXLEN = _controls_.wxEVT_COMMAND_TEXT_MAXLEN
 class TextUrlEvent(_core.CommandEvent):
+    """Proxy of C++ TextUrlEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextUrlEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2039,6 +2090,7 @@ EVT_TEXT_MAXLEN = wx.PyEventBinder( wxEVT_COMMAND_TEXT_MAXLEN, 1)
 #---------------------------------------------------------------------------
 
 class ScrollBar(_core.Control):
+    """Proxy of C++ ScrollBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2154,6 +2206,7 @@ SP_VERTICAL = _controls_.SP_VERTICAL
 SP_ARROW_KEYS = _controls_.SP_ARROW_KEYS
 SP_WRAP = _controls_.SP_WRAP
 class SpinButton(_core.Control):
+    """Proxy of C++ SpinButton class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSpinButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2260,6 +2313,7 @@ def SpinButton_GetClassDefaultAttributes(*args, **kwargs):
     return _controls_.SpinButton_GetClassDefaultAttributes(*args, **kwargs)
 
 class SpinCtrl(_core.Control):
+    """Proxy of C++ SpinCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSpinCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2362,6 +2416,7 @@ def SpinCtrl_GetClassDefaultAttributes(*args, **kwargs):
     return _controls_.SpinCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
 class SpinEvent(_core.NotifyEvent):
+    """Proxy of C++ SpinEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSpinEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2395,6 +2450,7 @@ EVT_SPINCTRL  = wx.PyEventBinder( wxEVT_COMMAND_SPINCTRL_UPDATED, 1)
 #---------------------------------------------------------------------------
 
 class RadioBox(_core.Control):
+    """Proxy of C++ RadioBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRadioBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2532,6 +2588,7 @@ def RadioBox_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class RadioButton(_core.Control):
+    """Proxy of C++ RadioButton class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRadioButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2616,6 +2673,7 @@ def RadioButton_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Slider(_core.Control):
+    """Proxy of C++ Slider class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSlider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2783,6 +2841,7 @@ wxEVT_COMMAND_TOGGLEBUTTON_CLICKED = _controls_.wxEVT_COMMAND_TOGGLEBUTTON_CLICK
 EVT_TOGGLEBUTTON = wx.PyEventBinder( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, 1)
 
 class ToggleButton(_core.Control):
+    """Proxy of C++ ToggleButton class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToggleButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2876,6 +2935,7 @@ def ToggleButton_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class BookCtrlBase(_core.Control):
+    """Proxy of C++ BookCtrlBase class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3007,6 +3067,7 @@ def BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs):
     return _controls_.BookCtrlBase_GetClassDefaultAttributes(*args, **kwargs)
 
 class BookCtrlBaseEvent(_core.NotifyEvent):
+    """Proxy of C++ BookCtrlBaseEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlBaseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3055,6 +3116,7 @@ NB_HITTEST_ONICON = _controls_.NB_HITTEST_ONICON
 NB_HITTEST_ONLABEL = _controls_.NB_HITTEST_ONLABEL
 NB_HITTEST_ONITEM = _controls_.NB_HITTEST_ONITEM
 class Notebook(BookCtrlBase):
+    """Proxy of C++ Notebook class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3150,6 +3212,7 @@ def Notebook_GetClassDefaultAttributes(*args, **kwargs):
     return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
 class NotebookEvent(BookCtrlBaseEvent):
+    """Proxy of C++ NotebookEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3214,6 +3277,7 @@ LB_LEFT = _controls_.LB_LEFT
 LB_RIGHT = _controls_.LB_RIGHT
 LB_ALIGN_MASK = _controls_.LB_ALIGN_MASK
 class Listbook(BookCtrlBase):
+    """Proxy of C++ Listbook class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3257,6 +3321,7 @@ def PreListbook(*args, **kwargs):
     return val
 
 class ListbookEvent(BookCtrlBaseEvent):
+    """Proxy of C++ ListbookEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListbookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3288,6 +3353,7 @@ CHB_LEFT = _controls_.CHB_LEFT
 CHB_RIGHT = _controls_.CHB_RIGHT
 CHB_ALIGN_MASK = _controls_.CHB_ALIGN_MASK
 class Choicebook(BookCtrlBase):
+    """Proxy of C++ Choicebook class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoicebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3331,6 +3397,7 @@ def PreChoicebook(*args, **kwargs):
     return val
 
 class ChoicebookEvent(BookCtrlBaseEvent):
+    """Proxy of C++ ChoicebookEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoicebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3358,6 +3425,7 @@ EVT_CHOICEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_C
 #---------------------------------------------------------------------------
 
 class BookCtrlSizer(_core.Sizer):
+    """Proxy of C++ BookCtrlSizer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBookCtrlSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3401,6 +3469,7 @@ class BookCtrlSizerPtr(BookCtrlSizer):
 _controls_.BookCtrlSizer_swigregister(BookCtrlSizerPtr)
 
 class NotebookSizer(_core.Sizer):
+    """Proxy of C++ NotebookSizer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotebookSizer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3462,6 +3531,7 @@ TB_NOALIGN = _controls_.TB_NOALIGN
 TB_HORZ_LAYOUT = _controls_.TB_HORZ_LAYOUT
 TB_HORZ_TEXT = _controls_.TB_HORZ_TEXT
 class ToolBarToolBase(_core.Object):
+    """Proxy of C++ ToolBarToolBase class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBarToolBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3595,6 +3665,7 @@ class ToolBarToolBasePtr(ToolBarToolBase):
 _controls_.ToolBarToolBase_swigregister(ToolBarToolBasePtr)
 
 class ToolBarBase(_core.Control):
+    """Proxy of C++ ToolBarBase class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBarBase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3917,6 +3988,7 @@ class ToolBarBasePtr(ToolBarBase):
 _controls_.ToolBarBase_swigregister(ToolBarBasePtr)
 
 class ToolBar(ToolBarBase):
+    """Proxy of C++ ToolBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxToolBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4065,6 +4137,7 @@ LIST_FIND_RIGHT = _controls_.LIST_FIND_RIGHT
 #---------------------------------------------------------------------------
 
 class ListItemAttr(object):
+    """Proxy of C++ ListItemAttr class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListItemAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4128,6 +4201,7 @@ ListCtrlNameStr = cvar.ListCtrlNameStr
 #---------------------------------------------------------------------------
 
 class ListItem(_core.Object):
+    """Proxy of C++ ListItem class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4279,6 +4353,7 @@ _controls_.ListItem_swigregister(ListItemPtr)
 #---------------------------------------------------------------------------
 
 class ListEvent(_core.NotifyEvent):
+    """Proxy of C++ ListEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4410,6 +4485,7 @@ EVT_LIST_SET_INFO = wx._deprecated(EVT_LIST_SET_INFO)
 #---------------------------------------------------------------------------
 
 class ListCtrl(_core.Control):
+    """Proxy of C++ ListCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4439,11 +4515,35 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl__setCallbackInfo(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """SetForegroundColour(self, Colour col) -> bool"""
+        """
+        SetForegroundColour(self, Colour col) -> bool
+
+        Sets the foreground colour of the window.  Returns True is the colour
+        was changed.  The interpretation of foreground colour is dependent on
+        the window class; it may be the text colour or other colour, or it may
+        not be used at all.
+        """
         return _controls_.ListCtrl_SetForegroundColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(self, Colour col) -> bool"""
+        """
+        SetBackgroundColour(self, Colour col) -> bool
+
+        Sets the background colour of the window.  Returns True if the colour
+        was changed.  The background colour is usually painted by the default
+        EVT_ERASE_BACKGROUND event handler function under Windows and
+        automatically under GTK.  Using `wx.NullColour` will reset the window
+        to the default background colour.
+
+        Note that setting the background colour may not cause an immediate
+        refresh, so you may wish to call `ClearBackground` or `Refresh` after
+        calling this function.
+
+        Using this function will disable attempts to use themes for this
+        window, if the system supports them.  Use with care since usually the
+        themes represent the appearance chosen by the user to be used for all
+        applications on the system.
+        """
         return _controls_.ListCtrl_SetBackgroundColour(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
@@ -4832,6 +4932,7 @@ def ListCtrl_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ListView(ListCtrl):
+    """Proxy of C++ ListView class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxListView instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4942,6 +5043,7 @@ TREE_HITTEST_ONITEM = _controls_.TREE_HITTEST_ONITEM
 #---------------------------------------------------------------------------
 
 class TreeItemId(object):
+    """Proxy of C++ TreeItemId class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeItemId instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4981,6 +5083,7 @@ _controls_.TreeItemId_swigregister(TreeItemIdPtr)
 TreeCtrlNameStr = cvar.TreeCtrlNameStr
 
 class TreeItemData(object):
+    """Proxy of C++ TreeItemData class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeItemData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5061,6 +5164,7 @@ EVT_TREE_STATE_IMAGE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_TREE_STATE_IMAGE_CLI
 EVT_TREE_ITEM_GETTOOLTIP   = wx.PyEventBinder(wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP,   1)
 
 class TreeEvent(_core.NotifyEvent):
+    """Proxy of C++ TreeEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTreeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5136,6 +5240,7 @@ _controls_.TreeEvent_swigregister(TreeEventPtr)
 #---------------------------------------------------------------------------
 
 class TreeCtrl(_core.Control):
+    """Proxy of C++ TreeCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5536,6 +5641,7 @@ DIRCTRL_SHOW_FILTERS = _controls_.DIRCTRL_SHOW_FILTERS
 DIRCTRL_3D_INTERNAL = _controls_.DIRCTRL_3D_INTERNAL
 DIRCTRL_EDIT_LABELS = _controls_.DIRCTRL_EDIT_LABELS
 class GenericDirCtrl(_core.Control):
+    """Proxy of C++ GenericDirCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGenericDirCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5658,6 +5764,7 @@ def PreGenericDirCtrl(*args, **kwargs):
     return val
 
 class DirFilterListCtrl(Choice):
+    """Proxy of C++ DirFilterListCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirFilterListCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5699,6 +5806,7 @@ def PreDirFilterListCtrl(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyControl(_core.Control):
+    """Proxy of C++ PyControl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6170,6 +6278,7 @@ _controls_.SimpleHelpProvider_swigregister(SimpleHelpProviderPtr)
 #---------------------------------------------------------------------------
 
 class DragImage(_core.Object):
+    """Proxy of C++ DragImage class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGenericDragImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

@@ -7,6 +7,47 @@ Classes for a simple HTML rendering window, HTML Help Window, etc.
 
 import _html
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _windows
 import _core
 wx = _core 
@@ -50,6 +91,7 @@ HTML_URL_PAGE = _html.HTML_URL_PAGE
 HTML_URL_IMAGE = _html.HTML_URL_IMAGE
 HTML_URL_OTHER = _html.HTML_URL_OTHER
 class HtmlLinkInfo(_core.Object):
+    """Proxy of C++ HtmlLinkInfo class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlLinkInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -95,6 +137,7 @@ HtmlPrintoutTitleStr = cvar.HtmlPrintoutTitleStr
 HtmlPrintingTitleStr = cvar.HtmlPrintingTitleStr
 
 class HtmlTag(_core.Object):
+    """Proxy of C++ HtmlTag class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlTag instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -139,6 +182,7 @@ class HtmlTagPtr(HtmlTag):
 _html.HtmlTag_swigregister(HtmlTagPtr)
 
 class HtmlParser(_core.Object):
+    """Proxy of C++ HtmlParser class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -195,6 +239,7 @@ class HtmlParserPtr(HtmlParser):
 _html.HtmlParser_swigregister(HtmlParserPtr)
 
 class HtmlWinParser(HtmlParser):
+    """Proxy of C++ HtmlWinParser class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWinParser instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -332,6 +377,7 @@ class HtmlWinParserPtr(HtmlWinParser):
 _html.HtmlWinParser_swigregister(HtmlWinParserPtr)
 
 class HtmlTagHandler(_core.Object):
+    """Proxy of C++ HtmlTagHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -367,6 +413,7 @@ class HtmlTagHandlerPtr(HtmlTagHandler):
 _html.HtmlTagHandler_swigregister(HtmlTagHandlerPtr)
 
 class HtmlWinTagHandler(HtmlTagHandler):
+    """Proxy of C++ HtmlWinTagHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlWinTagHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -408,6 +455,7 @@ def HtmlWinParser_AddTagHandler(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class HtmlSelection(object):
+    """Proxy of C++ HtmlSelection class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlSelection instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -482,6 +530,7 @@ HTML_SEL_OUT = _html.HTML_SEL_OUT
 HTML_SEL_IN = _html.HTML_SEL_IN
 HTML_SEL_CHANGING = _html.HTML_SEL_CHANGING
 class HtmlRenderingState(object):
+    """Proxy of C++ HtmlRenderingState class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingState instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -529,6 +578,7 @@ class HtmlRenderingStatePtr(HtmlRenderingState):
 _html.HtmlRenderingState_swigregister(HtmlRenderingStatePtr)
 
 class HtmlRenderingStyle(object):
+    """Proxy of C++ HtmlRenderingStyle class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -549,6 +599,7 @@ class HtmlRenderingStylePtr(HtmlRenderingStyle):
 _html.HtmlRenderingStyle_swigregister(HtmlRenderingStylePtr)
 
 class DefaultHtmlRenderingStyle(HtmlRenderingStyle):
+    """Proxy of C++ DefaultHtmlRenderingStyle class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDefaultHtmlRenderingStyle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -569,6 +620,7 @@ class DefaultHtmlRenderingStylePtr(DefaultHtmlRenderingStyle):
 _html.DefaultHtmlRenderingStyle_swigregister(DefaultHtmlRenderingStylePtr)
 
 class HtmlRenderingInfo(object):
+    """Proxy of C++ HtmlRenderingInfo class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlRenderingInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -617,6 +669,7 @@ HTML_FIND_EXACT = _html.HTML_FIND_EXACT
 HTML_FIND_NEAREST_BEFORE = _html.HTML_FIND_NEAREST_BEFORE
 HTML_FIND_NEAREST_AFTER = _html.HTML_FIND_NEAREST_AFTER
 class HtmlCell(_core.Object):
+    """Proxy of C++ HtmlCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -766,6 +819,7 @@ class HtmlCellPtr(HtmlCell):
 _html.HtmlCell_swigregister(HtmlCellPtr)
 
 class HtmlWordCell(HtmlCell):
+    """Proxy of C++ HtmlWordCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWordCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -783,6 +837,7 @@ class HtmlWordCellPtr(HtmlWordCell):
 _html.HtmlWordCell_swigregister(HtmlWordCellPtr)
 
 class HtmlContainerCell(HtmlCell):
+    """Proxy of C++ HtmlContainerCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlContainerCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -864,6 +919,7 @@ class HtmlContainerCellPtr(HtmlContainerCell):
 _html.HtmlContainerCell_swigregister(HtmlContainerCellPtr)
 
 class HtmlColourCell(HtmlCell):
+    """Proxy of C++ HtmlColourCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlColourCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -881,6 +937,7 @@ class HtmlColourCellPtr(HtmlColourCell):
 _html.HtmlColourCell_swigregister(HtmlColourCellPtr)
 
 class HtmlFontCell(HtmlCell):
+    """Proxy of C++ HtmlFontCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlFontCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -898,6 +955,7 @@ class HtmlFontCellPtr(HtmlFontCell):
 _html.HtmlFontCell_swigregister(HtmlFontCellPtr)
 
 class HtmlWidgetCell(HtmlCell):
+    """Proxy of C++ HtmlWidgetCell class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlWidgetCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -917,6 +975,7 @@ _html.HtmlWidgetCell_swigregister(HtmlWidgetCellPtr)
 #---------------------------------------------------------------------------
 
 class HtmlFilter(_core.Object):
+    """Proxy of C++ HtmlFilter class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlFilter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -942,6 +1001,7 @@ _html.HtmlFilter_swigregister(HtmlFilterPtr)
 #---------------------------------------------------------------------------
 
 class HtmlWindow(_windows.ScrolledWindow):
+    """Proxy of C++ HtmlWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1165,6 +1225,7 @@ def HtmlWindow_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class HtmlDCRenderer(_core.Object):
+    """Proxy of C++ HtmlDCRenderer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlDCRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1222,6 +1283,7 @@ PAGE_ODD = _html.PAGE_ODD
 PAGE_EVEN = _html.PAGE_EVEN
 PAGE_ALL = _html.PAGE_ALL
 class HtmlPrintout(_windows.Printout):
+    """Proxy of C++ HtmlPrintout class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1288,6 +1350,7 @@ def HtmlPrintout_CleanUpStatics(*args, **kwargs):
     return _html.HtmlPrintout_CleanUpStatics(*args, **kwargs)
 
 class HtmlEasyPrinting(_core.Object):
+    """Proxy of C++ HtmlEasyPrinting class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlEasyPrinting instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1357,6 +1420,7 @@ _html.HtmlEasyPrinting_swigregister(HtmlEasyPrintingPtr)
 #---------------------------------------------------------------------------
 
 class HtmlBookRecord(object):
+    """Proxy of C++ HtmlBookRecord class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlBookRecord instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1418,6 +1482,7 @@ class HtmlBookRecordPtr(HtmlBookRecord):
 _html.HtmlBookRecord_swigregister(HtmlBookRecordPtr)
 
 class HtmlContentsItem(object):
+    """Proxy of C++ HtmlContentsItem class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlContentsItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1450,6 +1515,7 @@ class HtmlContentsItemPtr(HtmlContentsItem):
 _html.HtmlContentsItem_swigregister(HtmlContentsItemPtr)
 
 class HtmlSearchStatus(object):
+    """Proxy of C++ HtmlSearchStatus class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlSearchStatus instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1486,6 +1552,7 @@ class HtmlSearchStatusPtr(HtmlSearchStatus):
 _html.HtmlSearchStatus_swigregister(HtmlSearchStatusPtr)
 
 class HtmlHelpData(object):
+    """Proxy of C++ HtmlHelpData class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1545,6 +1612,7 @@ class HtmlHelpDataPtr(HtmlHelpData):
 _html.HtmlHelpData_swigregister(HtmlHelpDataPtr)
 
 class HtmlHelpFrame(_windows.Frame):
+    """Proxy of C++ HtmlHelpFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1616,6 +1684,7 @@ HF_OPENFILES = _html.HF_OPENFILES
 HF_PRINT = _html.HF_PRINT
 HF_DEFAULTSTYLE = _html.HF_DEFAULTSTYLE
 class HtmlHelpController(_core.Object):
+    """Proxy of C++ HtmlHelpController class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlHelpController instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

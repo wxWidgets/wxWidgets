@@ -7,6 +7,47 @@ Classes for a media player control
 
 import _media
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
@@ -14,6 +55,7 @@ MEDIASTATE_STOPPED = _media.MEDIASTATE_STOPPED
 MEDIASTATE_PAUSED = _media.MEDIASTATE_PAUSED
 MEDIASTATE_PLAYING = _media.MEDIASTATE_PLAYING
 class MediaEvent(_core.NotifyEvent):
+    """Proxy of C++ MediaEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMediaEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -31,6 +73,7 @@ class MediaEventPtr(MediaEvent):
 _media.MediaEvent_swigregister(MediaEventPtr)
 
 class MediaCtrl(_core.Control):
+    """Proxy of C++ MediaCtrl class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMediaCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

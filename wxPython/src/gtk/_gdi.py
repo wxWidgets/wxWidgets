@@ -3,11 +3,53 @@
 
 import _gdi_
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 #---------------------------------------------------------------------------
 
 class GDIObject(_core.Object):
+    """Proxy of C++ GDIObject class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGDIObject instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -227,6 +269,7 @@ NamedColor = NamedColour
 ColorRGB = ColourRGB
 
 class Palette(GDIObject):
+    """Proxy of C++ Palette class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -269,6 +312,7 @@ _gdi_.Palette_swigregister(PalettePtr)
 #---------------------------------------------------------------------------
 
 class Pen(GDIObject):
+    """Proxy of C++ Pen class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -328,7 +372,7 @@ class Pen(GDIObject):
         return _gdi_.Pen_SetWidth(*args, **kwargs)
 
     def SetDashes(*args, **kwargs):
-        """SetDashes(self, int dashes, wxDash dashes_array)"""
+        """SetDashes(self, int dashes)"""
         return _gdi_.Pen_SetDashes(*args, **kwargs)
 
     def GetDashes(*args, **kwargs):
@@ -757,6 +801,7 @@ _gdi_.Mask_swigregister(MaskPtr)
 
 MaskColour = wx._deprecated(Mask, "wx.MaskColour is deprecated, use `wx.Mask` instead.") 
 class Icon(GDIObject):
+    """Proxy of C++ Icon class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -841,6 +886,7 @@ def IconFromXPMData(*args, **kwargs):
     return val
 
 class IconLocation(object):
+    """Proxy of C++ IconLocation class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconLocation instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -885,6 +931,7 @@ class IconLocationPtr(IconLocation):
 _gdi_.IconLocation_swigregister(IconLocationPtr)
 
 class IconBundle(object):
+    """Proxy of C++ IconBundle class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconBundle instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1009,6 +1056,7 @@ OutRegion = _gdi_.OutRegion
 PartRegion = _gdi_.PartRegion
 InRegion = _gdi_.InRegion
 class Region(GDIObject):
+    """Proxy of C++ Region class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1136,12 +1184,13 @@ def RegionFromBitmapColour(*args, **kwargs):
     return val
 
 def RegionFromPoints(*args, **kwargs):
-    """RegionFromPoints(int points, Point points_array, int fillStyle=WINDING_RULE) -> Region"""
+    """RegionFromPoints(int points, int fillStyle=WINDING_RULE) -> Region"""
     val = _gdi_.new_RegionFromPoints(*args, **kwargs)
     val.thisown = 1
     return val
 
 class RegionIterator(_core.Object):
+    """Proxy of C++ RegionIterator class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRegionIterator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1337,6 +1386,7 @@ FONTENCODING_SHIFT_JIS = _gdi_.FONTENCODING_SHIFT_JIS
 #---------------------------------------------------------------------------
 
 class NativeFontInfo(object):
+    """Proxy of C++ NativeFontInfo class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNativeFontInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1444,6 +1494,7 @@ class NativeFontInfoPtr(NativeFontInfo):
 _gdi_.NativeFontInfo_swigregister(NativeFontInfoPtr)
 
 class NativeEncodingInfo(object):
+    """Proxy of C++ NativeEncodingInfo class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNativeEncodingInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     facename = property(_gdi_.NativeEncodingInfo_facename_get, _gdi_.NativeEncodingInfo_facename_set)
@@ -1487,6 +1538,7 @@ def TestFontEncoding(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class FontMapper(object):
+    """Proxy of C++ FontMapper class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontMapper instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1612,6 +1664,7 @@ def FontMapper_GetDefaultConfigPath(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Font(GDIObject):
+    """Proxy of C++ Font class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFont instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1824,6 +1877,7 @@ def Font_SetDefaultEncoding(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class FontEnumerator(object):
+    """Proxy of C++ FontEnumerator class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFontEnumerator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2102,6 +2156,7 @@ LANGUAGE_ZHUANG = _gdi_.LANGUAGE_ZHUANG
 LANGUAGE_ZULU = _gdi_.LANGUAGE_ZULU
 LANGUAGE_USER_DEFINED = _gdi_.LANGUAGE_USER_DEFINED
 class LanguageInfo(object):
+    """Proxy of C++ LanguageInfo class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLanguageInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2125,6 +2180,7 @@ LOCALE_DECIMAL_POINT = _gdi_.LOCALE_DECIMAL_POINT
 LOCALE_LOAD_DEFAULT = _gdi_.LOCALE_LOAD_DEFAULT
 LOCALE_CONV_ENCODING = _gdi_.LOCALE_CONV_ENCODING
 class Locale(object):
+    """Proxy of C++ Locale class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLocale instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2289,6 +2345,7 @@ PLATFORM_WINDOWS = _gdi_.PLATFORM_WINDOWS
 PLATFORM_OS2 = _gdi_.PLATFORM_OS2
 PLATFORM_MAC = _gdi_.PLATFORM_MAC
 class EncodingConverter(_core.Object):
+    """Proxy of C++ EncodingConverter class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEncodingConverter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4282,6 +4339,7 @@ def PostScriptDC_GetResolution(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class MetaFile(_core.Object):
+    """Proxy of C++ MetaFile class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4299,6 +4357,7 @@ class MetaFilePtr(MetaFile):
 _gdi_.MetaFile_swigregister(MetaFilePtr)
 
 class MetaFileDC(DC):
+    """Proxy of C++ MetaFileDC class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMetaFileDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4319,6 +4378,7 @@ class MetaFileDCPtr(MetaFileDC):
 _gdi_.MetaFileDC_swigregister(MetaFileDCPtr)
 
 class PrinterDC(DC):
+    """Proxy of C++ PrinterDC class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrinterDC instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4345,6 +4405,7 @@ IMAGE_LIST_NORMAL = _gdi_.IMAGE_LIST_NORMAL
 IMAGE_LIST_SMALL = _gdi_.IMAGE_LIST_SMALL
 IMAGE_LIST_STATE = _gdi_.IMAGE_LIST_STATE
 class ImageList(_core.Object):
+    """Proxy of C++ ImageList class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4409,6 +4470,7 @@ _gdi_.ImageList_swigregister(ImageListPtr)
 #---------------------------------------------------------------------------
 
 class PenList(_core.Object):
+    """Proxy of C++ PenList class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPenList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4480,6 +4542,7 @@ NullFont = cvar.NullFont
 NullColour = cvar.NullColour
 
 class BrushList(_core.Object):
+    """Proxy of C++ BrushList class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrushList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4508,6 +4571,7 @@ class BrushListPtr(BrushList):
 _gdi_.BrushList_swigregister(BrushListPtr)
 
 class ColourDatabase(_core.Object):
+    """Proxy of C++ ColourDatabase class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourDatabase instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4548,6 +4612,7 @@ class ColourDatabasePtr(ColourDatabase):
 _gdi_.ColourDatabase_swigregister(ColourDatabasePtr)
 
 class FontList(_core.Object):
+    """Proxy of C++ FontList class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontList instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4585,6 +4650,7 @@ NullColor = NullColour
 #---------------------------------------------------------------------------
 
 class Effects(_core.Object):
+    """Proxy of C++ Effects class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEffects instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

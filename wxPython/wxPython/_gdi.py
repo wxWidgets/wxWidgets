@@ -216,6 +216,7 @@ wxFont_GetDefaultEncoding = wx._gdi.Font_GetDefaultEncoding
 wxFont_SetDefaultEncoding = wx._gdi.Font_SetDefaultEncoding
 wxFontEnumerator = wx._gdi.FontEnumerator
 wxFontEnumeratorPtr = wx._gdi.FontEnumeratorPtr
+wxFontEnumerator = wx._gdi.FontEnumerator
 wxLANGUAGE_DEFAULT = wx._gdi.LANGUAGE_DEFAULT
 wxLANGUAGE_UNKNOWN = wx._gdi.LANGUAGE_UNKNOWN
 wxLANGUAGE_ABKHAZIAN = wx._gdi.LANGUAGE_ABKHAZIAN

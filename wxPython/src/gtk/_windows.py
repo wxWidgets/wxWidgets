@@ -3,11 +3,53 @@
 
 import _windows_
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _core
 wx = _core 
 #---------------------------------------------------------------------------
 
 class Panel(_core.Window):
+    """Proxy of C++ Panel class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -115,6 +157,7 @@ def Panel_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ScrolledWindow(Panel):
+    """Proxy of C++ ScrolledWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -323,6 +366,7 @@ TOPLEVEL_EX_DIALOG = _windows_.TOPLEVEL_EX_DIALOG
 USER_ATTENTION_INFO = _windows_.USER_ATTENTION_INFO
 USER_ATTENTION_ERROR = _windows_.USER_ATTENTION_ERROR
 class TopLevelWindow(_core.Window):
+    """Proxy of C++ TopLevelWindow class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTopLevelWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -418,6 +462,7 @@ ToolBarNameStr = cvar.ToolBarNameStr
 #---------------------------------------------------------------------------
 
 class Frame(TopLevelWindow):
+    """Proxy of C++ Frame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -487,7 +532,7 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_SetStatusText(*args, **kwargs)
 
     def SetStatusWidths(*args, **kwargs):
-        """SetStatusWidths(self, int widths, int widths_field)"""
+        """SetStatusWidths(self, int widths)"""
         return _windows_.Frame_SetStatusWidths(*args, **kwargs)
 
     def PushStatusText(*args, **kwargs):
@@ -578,6 +623,7 @@ def Frame_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Dialog(TopLevelWindow):
+    """Proxy of C++ Dialog class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -683,6 +729,7 @@ def Dialog_GetClassDefaultAttributes(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class MiniFrame(Frame):
+    """Proxy of C++ MiniFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMiniFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -727,6 +774,7 @@ SPLASH_NO_CENTRE = _windows_.SPLASH_NO_CENTRE
 SPLASH_TIMEOUT = _windows_.SPLASH_TIMEOUT
 SPLASH_NO_TIMEOUT = _windows_.SPLASH_NO_TIMEOUT
 class SplashScreenWindow(_core.Window):
+    """Proxy of C++ SplashScreenWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplashScreenWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -757,6 +805,7 @@ class SplashScreenWindowPtr(SplashScreenWindow):
 _windows_.SplashScreenWindow_swigregister(SplashScreenWindowPtr)
 
 class SplashScreen(Frame):
+    """Proxy of C++ SplashScreen class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplashScreen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -797,6 +846,7 @@ SB_NORMAL = _windows_.SB_NORMAL
 SB_FLAT = _windows_.SB_FLAT
 SB_RAISED = _windows_.SB_RAISED
 class StatusBar(_core.Window):
+    """Proxy of C++ StatusBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -839,11 +889,11 @@ class StatusBar(_core.Window):
         return _windows_.StatusBar_PopStatusText(*args, **kwargs)
 
     def SetStatusWidths(*args, **kwargs):
-        """SetStatusWidths(self, int widths, int widths_field)"""
+        """SetStatusWidths(self, int widths)"""
         return _windows_.StatusBar_SetStatusWidths(*args, **kwargs)
 
     def SetStatusStyles(*args, **kwargs):
-        """SetStatusStyles(self, int styles, int styles_field)"""
+        """SetStatusStyles(self, int styles)"""
         return _windows_.StatusBar_SetStatusStyles(*args, **kwargs)
 
     def GetFieldRect(*args, **kwargs):
@@ -1344,6 +1394,7 @@ SASH_BOTTOM = _windows_.SASH_BOTTOM
 SASH_LEFT = _windows_.SASH_LEFT
 SASH_NONE = _windows_.SASH_NONE
 class SashWindow(_core.Window):
+    """Proxy of C++ SashWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1461,6 +1512,7 @@ def PreSashWindow(*args, **kwargs):
 SASH_STATUS_OK = _windows_.SASH_STATUS_OK
 SASH_STATUS_OUT_OF_RANGE = _windows_.SASH_STATUS_OUT_OF_RANGE
 class SashEvent(_core.CommandEvent):
+    """Proxy of C++ SashEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1521,6 +1573,7 @@ LAYOUT_QUERY = _windows_.LAYOUT_QUERY
 wxEVT_QUERY_LAYOUT_INFO = _windows_.wxEVT_QUERY_LAYOUT_INFO
 wxEVT_CALCULATE_LAYOUT = _windows_.wxEVT_CALCULATE_LAYOUT
 class QueryLayoutInfoEvent(_core.Event):
+    """Proxy of C++ QueryLayoutInfoEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxQueryLayoutInfoEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1578,6 +1631,7 @@ class QueryLayoutInfoEventPtr(QueryLayoutInfoEvent):
 _windows_.QueryLayoutInfoEvent_swigregister(QueryLayoutInfoEventPtr)
 
 class CalculateLayoutEvent(_core.Event):
+    """Proxy of C++ CalculateLayoutEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalculateLayoutEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1614,6 +1668,7 @@ EVT_QUERY_LAYOUT_INFO = wx.PyEventBinder( wxEVT_QUERY_LAYOUT_INFO )
 EVT_CALCULATE_LAYOUT = wx.PyEventBinder( wxEVT_CALCULATE_LAYOUT )
 
 class SashLayoutWindow(SashWindow):
+    """Proxy of C++ SashLayoutWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSashLayoutWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1671,6 +1726,7 @@ def PreSashLayoutWindow(*args, **kwargs):
     return val
 
 class LayoutAlgorithm(_core.Object):
+    """Proxy of C++ LayoutAlgorithm class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLayoutAlgorithm instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1708,6 +1764,7 @@ _windows_.LayoutAlgorithm_swigregister(LayoutAlgorithmPtr)
 #---------------------------------------------------------------------------
 
 class PopupWindow(_core.Window):
+    """Proxy of C++ PopupWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPopupWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1743,6 +1800,7 @@ def PrePopupWindow(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PopupTransientWindow(PopupWindow):
+    """Proxy of C++ PopupTransientWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPopupTransientWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1782,6 +1840,7 @@ def PrePopupTransientWindow(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class TipWindow(PopupTransientWindow):
+    """Proxy of C++ TipWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTipWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1797,7 +1856,14 @@ class TipWindow(PopupTransientWindow):
         return _windows_.TipWindow_SetBoundingRect(*args, **kwargs)
 
     def Close(*args, **kwargs):
-        """Close(self)"""
+        """
+        Close(self)
+
+        This function simply generates a EVT_CLOSE event whose handler usually
+        tries to close the window. It doesn't close the window itself,
+        however.  If force is False (the default) then the window's close
+        handler will be allowed to veto the destruction of the window.
+        """
         return _windows_.TipWindow_Close(*args, **kwargs)
 
 
@@ -1811,6 +1877,7 @@ _windows_.TipWindow_swigregister(TipWindowPtr)
 #---------------------------------------------------------------------------
 
 class VScrolledWindow(Panel):
+    """Proxy of C++ VScrolledWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyVScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1924,6 +1991,7 @@ def PreVScrolledWindow(*args, **kwargs):
     return val
 
 class VListBox(VScrolledWindow):
+    """Proxy of C++ VListBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyVListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2048,6 +2116,7 @@ def PreVListBox(*args, **kwargs):
     return val
 
 class HtmlListBox(VListBox):
+    """Proxy of C++ HtmlListBox class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyHtmlListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2101,6 +2170,7 @@ def PreHtmlListBox(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class TaskBarIcon(_core.EvtHandler):
+    """Proxy of C++ TaskBarIcon class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2153,6 +2223,7 @@ class TaskBarIconPtr(TaskBarIcon):
 _windows_.TaskBarIcon_swigregister(TaskBarIconPtr)
 
 class TaskBarIconEvent(_core.Event):
+    """Proxy of C++ TaskBarIconEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTaskBarIconEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2693,6 +2764,7 @@ class TextEntryDialogPtr(TextEntryDialog):
 _windows_.TextEntryDialog_swigregister(TextEntryDialogPtr)
 
 class PasswordEntryDialog(TextEntryDialog):
+    """Proxy of C++ PasswordEntryDialog class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPasswordEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3245,6 +3317,7 @@ IDM_WINDOWTILEVERT = _windows_.IDM_WINDOWTILEVERT
 FIRST_MDI_CHILD = _windows_.FIRST_MDI_CHILD
 LAST_MDI_CHILD = _windows_.LAST_MDI_CHILD
 class MDIParentFrame(Frame):
+    """Proxy of C++ MDIParentFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIParentFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3316,6 +3389,7 @@ def PreMDIParentFrame(*args, **kwargs):
     return val
 
 class MDIChildFrame(Frame):
+    """Proxy of C++ MDIChildFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIChildFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3367,6 +3441,7 @@ def PreMDIChildFrame(*args, **kwargs):
     return val
 
 class MDIClientWindow(_core.Window):
+    """Proxy of C++ MDIClientWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMDIClientWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3398,6 +3473,7 @@ def PreMDIClientWindow(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyWindow(_core.Window):
+    """Proxy of C++ PyWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3518,6 +3594,7 @@ def PrePyWindow(*args, **kwargs):
     return val
 
 class PyPanel(Panel):
+    """Proxy of C++ PyPanel class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3638,6 +3715,7 @@ def PrePyPanel(*args, **kwargs):
     return val
 
 class PyScrolledWindow(ScrolledWindow):
+    """Proxy of C++ PyScrolledWindow class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3780,6 +3858,7 @@ PRINTBIN_CASSETTE = _windows_.PRINTBIN_CASSETTE
 PRINTBIN_FORMSOURCE = _windows_.PRINTBIN_FORMSOURCE
 PRINTBIN_USER = _windows_.PRINTBIN_USER
 class PrintData(_core.Object):
+    """Proxy of C++ PrintData class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
@@ -3981,6 +4060,7 @@ PrintoutTitleStr = cvar.PrintoutTitleStr
 PreviewCanvasNameStr = cvar.PreviewCanvasNameStr
 
 class PageSetupDialogData(_core.Object):
+    """Proxy of C++ PageSetupDialogData class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
@@ -4124,6 +4204,7 @@ class PageSetupDialogDataPtr(PageSetupDialogData):
 _windows_.PageSetupDialogData_swigregister(PageSetupDialogDataPtr)
 
 class PageSetupDialog(_core.Object):
+    """Proxy of C++ PageSetupDialog class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPageSetupDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4153,6 +4234,7 @@ class PageSetupDialogPtr(PageSetupDialog):
 _windows_.PageSetupDialog_swigregister(PageSetupDialogPtr)
 
 class PrintDialogData(_core.Object):
+    """Proxy of C++ PrintDialogData class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialogData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
@@ -4304,6 +4386,7 @@ class PrintDialogDataPtr(PrintDialogData):
 _windows_.PrintDialogData_swigregister(PrintDialogDataPtr)
 
 class PrintDialog(_core.Object):
+    """Proxy of C++ PrintDialog class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4340,6 +4423,7 @@ PRINTER_NO_ERROR = _windows_.PRINTER_NO_ERROR
 PRINTER_CANCELLED = _windows_.PRINTER_CANCELLED
 PRINTER_ERROR = _windows_.PRINTER_ERROR
 class Printer(_core.Object):
+    """Proxy of C++ Printer class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrinter instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4400,6 +4484,7 @@ def Printer_GetLastError(*args, **kwargs):
     return _windows_.Printer_GetLastError(*args, **kwargs)
 
 class Printout(_core.Object):
+    """Proxy of C++ Printout class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4503,6 +4588,7 @@ class PrintoutPtr(Printout):
 _windows_.Printout_swigregister(PrintoutPtr)
 
 class PreviewCanvas(ScrolledWindow):
+    """Proxy of C++ PreviewCanvas class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4526,6 +4612,7 @@ class PreviewCanvasPtr(PreviewCanvas):
 _windows_.PreviewCanvas_swigregister(PreviewCanvasPtr)
 
 class PreviewFrame(Frame):
+    """Proxy of C++ PreviewFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4581,6 +4668,7 @@ ID_PREVIEW_FIRST = _windows_.ID_PREVIEW_FIRST
 ID_PREVIEW_LAST = _windows_.ID_PREVIEW_LAST
 ID_PREVIEW_GOTO = _windows_.ID_PREVIEW_GOTO
 class PreviewControlBar(Panel):
+    """Proxy of C++ PreviewControlBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4636,6 +4724,7 @@ class PreviewControlBarPtr(PreviewControlBar):
 _windows_.PreviewControlBar_swigregister(PreviewControlBarPtr)
 
 class PrintPreview(_core.Object):
+    """Proxy of C++ PrintPreview class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
@@ -4745,6 +4834,7 @@ class PrintPreviewPtr(PrintPreview):
 _windows_.PrintPreview_swigregister(PrintPreviewPtr)
 
 class PyPrintPreview(PrintPreview):
+    """Proxy of C++ PyPrintPreview class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintPreview instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args):
@@ -4799,6 +4889,7 @@ class PyPrintPreviewPtr(PyPrintPreview):
 _windows_.PyPrintPreview_swigregister(PyPrintPreviewPtr)
 
 class PyPreviewFrame(PreviewFrame):
+    """Proxy of C++ PyPreviewFrame class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPreviewFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4846,6 +4937,7 @@ class PyPreviewFramePtr(PyPreviewFrame):
 _windows_.PyPreviewFrame_swigregister(PyPreviewFramePtr)
 
 class PyPreviewControlBar(PreviewControlBar):
+    """Proxy of C++ PyPreviewControlBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPreviewControlBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
