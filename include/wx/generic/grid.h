@@ -1537,11 +1537,6 @@ protected:
     wxGridTableBase          *m_table;
     bool                      m_ownTable;
 
-    int m_left;
-    int m_top;
-    int m_right;
-    int m_bottom;
-
     int m_numRows;
     int m_numCols;
 

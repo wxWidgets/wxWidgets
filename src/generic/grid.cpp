@@ -7362,7 +7362,7 @@ void wxGrid::SetRowLabelValue( int row, const wxString& s )
             if ( rect.height > 0 )
             {
                 CalcScrolledPosition(0, rect.y, &rect.x, &rect.y);
-                rect.x = m_left;
+                rect.x = 0;
                 rect.width = m_rowLabelWidth;
                 m_rowLabelWin->Refresh( TRUE, &rect );
             }
@@ -7381,7 +7381,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
             if ( rect.width > 0 )
             {
                 CalcScrolledPosition(rect.x, 0, &rect.x, &rect.y);
-                rect.y = m_top;
+                rect.y = 0;
                 rect.height = m_colLabelHeight;
                 m_colLabelWin->Refresh( TRUE, &rect );
             }
