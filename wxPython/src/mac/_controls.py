@@ -23,9 +23,10 @@ class Button(_core.Control):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=ButtonNameStr) -> Button
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=ButtonNameStr) -> Button
 
         Create and show a button.
         """
@@ -37,9 +38,10 @@ class Button(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=ButtonNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=ButtonNameStr) -> bool
 
         Acutally create the GUI Button for 2-phase creation.
         """
@@ -136,9 +138,9 @@ class BitmapButton(Button):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=BU_AUTODRAW, 
-            Validator validator=DefaultValidator, 
+        __init__(self, Window parent, int id=-1, Bitmap bitmap=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=BU_AUTODRAW, Validator validator=DefaultValidator, 
             String name=ButtonNameStr) -> BitmapButton
 
         Create and show a button with a bitmap for the label.
@@ -151,9 +153,9 @@ class BitmapButton(Button):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=BU_AUTODRAW, 
-            Validator validator=DefaultValidator, 
+        Create(self, Window parent, int id=-1, Bitmap bitmap=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=BU_AUTODRAW, Validator validator=DefaultValidator, 
             String name=ButtonNameStr) -> bool
 
         Acutally create the GUI BitmapButton for 2-phase creation.
@@ -275,9 +277,10 @@ class CheckBox(_core.Control):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> CheckBox
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=CheckBoxNameStr) -> CheckBox
 
         Creates and shows a CheckBox control
         """
@@ -289,9 +292,10 @@ class CheckBox(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=CheckBoxNameStr) -> bool
 
         Actually create the GUI CheckBox for 2-phase creation.
         """
@@ -752,7 +756,7 @@ class Gauge(_core.Control):
         return "<%s.%s; proxy of C++ wxGauge instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, int range, Point pos=DefaultPosition, 
+        __init__(self, Window parent, int id=-1, int range=100, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
             String name=GaugeNameStr) -> Gauge
@@ -765,7 +769,7 @@ class Gauge(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, int range, Point pos=DefaultPosition, 
+        Create(self, Window parent, int id=-1, int range=100, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
             String name=GaugeNameStr) -> bool
@@ -865,9 +869,9 @@ class StaticBox(_core.Control):
         return "<%s.%s; proxy of C++ wxStaticBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticBoxNameStr) -> StaticBox
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticBoxNameStr) -> StaticBox
         """
         newobj = _controls_.new_StaticBox(*args, **kwargs)
         self.this = newobj.this
@@ -877,9 +881,9 @@ class StaticBox(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticBoxNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticBoxNameStr) -> bool
         """
         return _controls_.StaticBox_Create(*args, **kwargs)
 
@@ -942,8 +946,8 @@ class StaticLine(_core.Control):
         return "<%s.%s; proxy of C++ wxStaticLine instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=LI_HORIZONTAL, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LI_HORIZONTAL, 
             String name=StaticTextNameStr) -> StaticLine
         """
         newobj = _controls_.new_StaticLine(*args, **kwargs)
@@ -954,8 +958,8 @@ class StaticLine(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=LI_HORIZONTAL, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=LI_HORIZONTAL, 
             String name=StaticTextNameStr) -> bool
         """
         return _controls_.StaticLine_Create(*args, **kwargs)
@@ -1029,9 +1033,9 @@ class StaticText(_core.Control):
         return "<%s.%s; proxy of C++ wxStaticText instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticTextNameStr) -> StaticText
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticTextNameStr) -> StaticText
         """
         newobj = _controls_.new_StaticText(*args, **kwargs)
         self.this = newobj.this
@@ -1041,9 +1045,9 @@ class StaticText(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticTextNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticTextNameStr) -> bool
         """
         return _controls_.StaticText_Create(*args, **kwargs)
 
@@ -1103,9 +1107,9 @@ class StaticBitmap(_core.Control):
         return "<%s.%s; proxy of C++ wxStaticBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticBitmapNameStr) -> StaticBitmap
+        __init__(self, Window parent, int id=-1, Bitmap bitmap=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticBitmapNameStr) -> StaticBitmap
         """
         newobj = _controls_.new_StaticBitmap(*args, **kwargs)
         self.this = newobj.this
@@ -1115,9 +1119,9 @@ class StaticBitmap(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            String name=StaticBitmapNameStr) -> bool
+        Create(self, Window parent, int id=-1, Bitmap bitmap=wxNullBitmap, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, String name=StaticBitmapNameStr) -> bool
         """
         return _controls_.StaticBitmap_Create(*args, **kwargs)
 
@@ -1189,8 +1193,8 @@ class ListBox(_core.ControlWithItems):
         return "<%s.%s; proxy of C++ wxListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> ListBox
         """
@@ -1202,8 +1206,8 @@ class ListBox(_core.ControlWithItems):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> bool
         """
@@ -1347,8 +1351,8 @@ class CheckListBox(ListBox):
         return "<%s.%s; proxy of C++ wxCheckListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> CheckListBox
         """
@@ -1360,8 +1364,8 @@ class CheckListBox(ListBox):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            wxArrayString choices=wxPyEmptyStringArray, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> bool
         """
@@ -1598,8 +1602,8 @@ class TextCtrl(_core.Control):
         return "<%s.%s; proxy of C++ wxTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
-            Size size=DefaultSize, 
+        __init__(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=TextCtrlNameStr) -> TextCtrl
         """
@@ -1611,8 +1615,8 @@ class TextCtrl(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
-            Size size=DefaultSize, 
+        Create(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=TextCtrlNameStr) -> bool
         """
@@ -2268,10 +2272,11 @@ class RadioBox(_core.Control):
         return "<%s.%s; proxy of C++ wxRadioBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
-            int majorDimension=0, 
-            long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            wxArrayString choices=wxPyEmptyStringArray, 
+            int majorDimension=0, long style=RA_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> RadioBox
         """
         if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
@@ -2283,10 +2288,11 @@ class RadioBox(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
-            int majorDimension=0, 
-            long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            wxArrayString choices=wxPyEmptyStringArray, 
+            int majorDimension=0, long style=RA_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> bool
         """
         return _controls_.RadioBox_Create(*args, **kwargs)
@@ -2403,9 +2409,10 @@ class RadioButton(_core.Control):
         return "<%s.%s; proxy of C++ wxRadioButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> RadioButton
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=RadioButtonNameStr) -> RadioButton
         """
         newobj = _controls_.new_RadioButton(*args, **kwargs)
         self.this = newobj.this
@@ -2415,9 +2422,10 @@ class RadioButton(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=RadioButtonNameStr) -> bool
         """
         return _controls_.RadioButton_Create(*args, **kwargs)
 
@@ -2485,9 +2493,10 @@ class Slider(_core.Control):
         return "<%s.%s; proxy of C++ wxSlider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, int value, int minValue, int maxValue, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
+        __init__(self, Window parent, int id=-1, int value=0, int minValue=0, 
+            int maxValue=100, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SL_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> Slider
         """
         if kwargs.has_key('point'): kwargs['pos'] = kwargs['point'];del kwargs['point']
@@ -2499,9 +2508,10 @@ class Slider(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, int value, int minValue, int maxValue, 
-            Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
+        Create(self, Window parent, int id=-1, int value=0, int minValue=0, 
+            int maxValue=100, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=SL_HORIZONTAL, 
+            Validator validator=DefaultValidator, 
             String name=SliderNameStr) -> bool
         """
         return _controls_.Slider_Create(*args, **kwargs)
@@ -2650,9 +2660,10 @@ class ToggleButton(_core.Control):
         return "<%s.%s; proxy of C++ wxToggleButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> ToggleButton
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=ToggleButtonNameStr) -> ToggleButton
         """
         newobj = _controls_.new_ToggleButton(*args, **kwargs)
         self.this = newobj.this
@@ -2662,9 +2673,10 @@ class ToggleButton(_core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> bool
+        Create(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=ToggleButtonNameStr) -> bool
         """
         return _controls_.ToggleButton_Create(*args, **kwargs)
 
@@ -2927,8 +2939,8 @@ class Notebook(BookCtrl):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=NOTEBOOK_NAME) -> bool
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=NOTEBOOK_NAME) -> bool
         """
         return _controls_.Notebook_Create(*args, **kwargs)
 
@@ -3081,8 +3093,8 @@ class Listbook(BookCtrl):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=EmptyString) -> bool
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=EmptyString) -> bool
         """
         return _controls_.Listbook_Create(*args, **kwargs)
 
@@ -3143,11 +3155,23 @@ class BookCtrlSizer(_core.Sizer):
         self._setOORInfo(self)
 
     def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
+        """
+        RecalcSizes(self)
+
+        Using the sizes calculated by `CalcMin` reposition and resize all the
+        items managed by this sizer.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _controls_.BookCtrlSizer_RecalcSizes(*args, **kwargs)
 
     def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
+        """
+        CalcMin(self) -> Size
+
+        This method is where the sizer will do the actual calculation of its
+        children's minimal sizes.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _controls_.BookCtrlSizer_CalcMin(*args, **kwargs)
 
     def GetControl(*args, **kwargs):
@@ -3174,11 +3198,23 @@ class NotebookSizer(_core.Sizer):
         self._setOORInfo(self)
 
     def RecalcSizes(*args, **kwargs):
-        """RecalcSizes(self)"""
+        """
+        RecalcSizes(self)
+
+        Using the sizes calculated by `CalcMin` reposition and resize all the
+        items managed by this sizer.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _controls_.NotebookSizer_RecalcSizes(*args, **kwargs)
 
     def CalcMin(*args, **kwargs):
-        """CalcMin(self) -> Size"""
+        """
+        CalcMin(self) -> Size
+
+        This method is where the sizer will do the actual calculation of its
+        children's minimal sizes.  You should not need to call this directly as
+        it is called by `Layout`.
+        """
         return _controls_.NotebookSizer_CalcMin(*args, **kwargs)
 
     def GetNotebook(*args, **kwargs):
@@ -3468,6 +3504,7 @@ class ToolBarBase(_core.Control):
 
     # For consistency with the backwards compatible methods above, here are
     # some non-'Label' versions of the Check and Radio methods
+
     def AddCheckTool(self, id, bitmap,
                      bmpDisabled = wx.NullBitmap,
                      shortHelp = '', longHelp = '',
@@ -3668,8 +3705,8 @@ class ToolBar(ToolBarBase):
         return "<%s.%s; proxy of C++ wxToolBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxNO_BORDER|wxTB_HORIZONTAL, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxNO_BORDER|wxTB_HORIZONTAL, 
             String name=wxPyToolBarNameStr) -> ToolBar
         """
         newobj = _controls_.new_ToolBar(*args, **kwargs)
@@ -3680,8 +3717,8 @@ class ToolBar(ToolBarBase):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxNO_BORDER|wxTB_HORIZONTAL, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxNO_BORDER|wxTB_HORIZONTAL, 
             String name=wxPyToolBarNameStr) -> bool
         """
         return _controls_.ToolBar_Create(*args, **kwargs)
@@ -5407,8 +5444,8 @@ class PyControl(_core.Control):
         return "<%s.%s; proxy of C++ wxPyControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, Validator validator=DefaultValidator, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> PyControl
         """
         newobj = _controls_.new_PyControl(*args, **kwargs)

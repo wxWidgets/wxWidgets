@@ -27,8 +27,6 @@ class Panel(_core.Window):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
             String name=PanelNameStr) -> bool
-
-        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.Panel_Create(*args, **kwargs)
 
@@ -112,8 +110,6 @@ class ScrolledWindow(Panel):
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
             String name=PanelNameStr) -> bool
-
-        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _windows_.ScrolledWindow_Create(*args, **kwargs)
 
@@ -381,9 +377,9 @@ class Frame(TopLevelWindow):
         return "<%s.%s; proxy of C++ wxFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=FrameNameStr) -> Frame
+        __init__(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> Frame
         """
         newobj = _windows_.new_Frame(*args, **kwargs)
         self.this = newobj.this
@@ -393,9 +389,9 @@ class Frame(TopLevelWindow):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=FrameNameStr) -> bool
+        Create(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> bool
         """
         return _windows_.Frame_Create(*args, **kwargs)
 
@@ -541,9 +537,9 @@ class Dialog(TopLevelWindow):
         return "<%s.%s; proxy of C++ wxDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-            String name=DialogNameStr) -> Dialog
+        __init__(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_DIALOG_STYLE, String name=DialogNameStr) -> Dialog
         """
         newobj = _windows_.new_Dialog(*args, **kwargs)
         self.this = newobj.this
@@ -553,9 +549,9 @@ class Dialog(TopLevelWindow):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-            String name=DialogNameStr) -> bool
+        Create(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_DIALOG_STYLE, String name=DialogNameStr) -> bool
         """
         return _windows_.Dialog_Create(*args, **kwargs)
 
@@ -643,9 +639,9 @@ class MiniFrame(Frame):
         return "<%s.%s; proxy of C++ wxMiniFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=FrameNameStr) -> MiniFrame
+        __init__(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> MiniFrame
         """
         newobj = _windows_.new_MiniFrame(*args, **kwargs)
         self.this = newobj.this
@@ -655,9 +651,9 @@ class MiniFrame(Frame):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=FrameNameStr) -> bool
+        Create(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> bool
         """
         return _windows_.MiniFrame_Create(*args, **kwargs)
 
@@ -718,7 +714,7 @@ class SplashScreen(Frame):
     def __init__(self, *args, **kwargs):
         """
         __init__(self, Bitmap bitmap, long splashStyle, int milliseconds, 
-            Window parent, int id, Point pos=DefaultPosition, 
+            Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP) -> SplashScreen
         """
         newobj = _windows_.new_SplashScreen(*args, **kwargs)
@@ -761,7 +757,7 @@ class StatusBar(_core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(self, Window parent, int id, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> bool"""
+        """Create(self, Window parent, int id=-1, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> bool"""
         return _windows_.StatusBar_Create(*args, **kwargs)
 
     def SetFieldsCount(*args, **kwargs):
@@ -1272,8 +1268,8 @@ class SashWindow(_core.Window):
         return "<%s.%s; proxy of C++ wxSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxSW_3D, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxSW_3D, 
             String name=SashNameStr) -> SashWindow
         """
         newobj = _windows_.new_SashWindow(*args, **kwargs)
@@ -1284,8 +1280,8 @@ class SashWindow(_core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxSW_3D, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxSW_3D, 
             String name=SashNameStr) -> bool
         """
         return _windows_.SashWindow_Create(*args, **kwargs)
@@ -1542,8 +1538,8 @@ class SashLayoutWindow(SashWindow):
         return "<%s.%s; proxy of C++ wxSashLayoutWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxSW_3D, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxSW_3D, 
             String name=SashLayoutNameStr) -> SashLayoutWindow
         """
         newobj = _windows_.new_SashLayoutWindow(*args, **kwargs)
@@ -1554,8 +1550,8 @@ class SashLayoutWindow(SashWindow):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxSW_3D, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxSW_3D, 
             String name=SashLayoutNameStr) -> bool
         """
         return _windows_.SashLayoutWindow_Create(*args, **kwargs)
@@ -2109,7 +2105,7 @@ class ColourData(_core.Object):
 
         Gets the i'th custom colour associated with the colour dialog. i
         should be an integer between 0 and 15. The default custom colours are
-        all white.
+        all invalid colours.
         """
         return _windows_.ColourData_GetCustomColour(*args, **kwargs)
 
@@ -2137,7 +2133,7 @@ class ColourData(_core.Object):
         SetCustomColour(self, int i, Colour colour)
 
         Sets the i'th custom colour for the colour dialog. i should be an
-        integer between 0 and 15. The default custom colours are all white.
+        integer between 0 and 15. The default custom colours are all invalid colours.
         """
         return _windows_.ColourData_SetCustomColour(*args, **kwargs)
 
@@ -3094,8 +3090,9 @@ class MDIParentFrame(Frame):
         return "<%s.%s; proxy of C++ wxMDIParentFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+        __init__(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
             String name=FrameNameStr) -> MDIParentFrame
         """
         newobj = _windows_.new_MDIParentFrame(*args, **kwargs)
@@ -3106,8 +3103,9 @@ class MDIParentFrame(Frame):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+        Create(self, Window parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
             String name=FrameNameStr) -> bool
         """
         return _windows_.MDIParentFrame_Create(*args, **kwargs)
@@ -3163,8 +3161,9 @@ class MDIChildFrame(Frame):
         return "<%s.%s; proxy of C++ wxMDIChildFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, MDIParentFrame parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+        __init__(self, MDIParentFrame parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, 
             String name=FrameNameStr) -> MDIChildFrame
         """
         newobj = _windows_.new_MDIChildFrame(*args, **kwargs)
@@ -3175,8 +3174,9 @@ class MDIChildFrame(Frame):
 
     def Create(*args, **kwargs):
         """
-        Create(self, MDIParentFrame parent, int id, String title, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
+        Create(self, MDIParentFrame parent, int id=-1, String title=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, 
             String name=FrameNameStr) -> bool
         """
         return _windows_.MDIChildFrame_Create(*args, **kwargs)
@@ -3243,8 +3243,8 @@ class PyWindow(_core.Window):
         return "<%s.%s; proxy of C++ wxPyWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=PanelNameStr) -> PyWindow
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyWindow
         """
         newobj = _windows_.new_PyWindow(*args, **kwargs)
         self.this = newobj.this
@@ -3363,8 +3363,8 @@ class PyPanel(Panel):
         return "<%s.%s; proxy of C++ wxPyPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=PanelNameStr) -> PyPanel
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyPanel
         """
         newobj = _windows_.new_PyPanel(*args, **kwargs)
         self.this = newobj.this
@@ -3483,8 +3483,8 @@ class PyScrolledWindow(ScrolledWindow):
         return "<%s.%s; proxy of C++ wxPyScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=PanelNameStr) -> PyScrolledWindow
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyScrolledWindow
         """
         newobj = _windows_.new_PyScrolledWindow(*args, **kwargs)
         self.this = newobj.this

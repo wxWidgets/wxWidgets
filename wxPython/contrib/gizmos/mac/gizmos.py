@@ -60,8 +60,8 @@ class DynamicSashWindow(_core.Window):
         return "<%s.%s; proxy of C++ wxDynamicSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
             String name=DynamicSashNameStr) -> DynamicSashWindow
         """
         newobj = _gizmos.new_DynamicSashWindow(*args, **kwargs)
@@ -72,8 +72,8 @@ class DynamicSashWindow(_core.Window):
 
     def Create(*args, **kwargs):
         """
-        Create(self, Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
             String name=DynamicSashNameStr) -> bool
         """
         return _gizmos.DynamicSashWindow_Create(*args, **kwargs)
@@ -111,8 +111,9 @@ class EditableListBox(_windows.Panel):
         return "<%s.%s; proxy of C++ wxEditableListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
+        __init__(self, Window parent, int id=-1, String label=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
             String name=EditableListBoxNameStr) -> EditableListBox
         """
         newobj = _gizmos.new_EditableListBox(*args, **kwargs)
