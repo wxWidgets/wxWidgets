@@ -245,6 +245,18 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
   #define   ToRGB(col)  PALETTERGB(col.Red(), col.Green(), col.Blue())
   #define   UnRGB(col)  GetRValue(col), GetGValue(col), GetBValue(col)
 
+
+  // this flag determines whether or not an edge will
+  // be drawn around the bitmap. In most "windows classic"
+  // applications, a 1-pixel highlight edge is drawn around
+  // the bitmap of an item when it is selected.  However,
+  // with the new "luna" theme, no edge is drawn around
+  // the bitmap because the background is white (this applies
+  // only to "non-XP style" menus w/ bitmaps --
+  // see IE 6 menus for an example)
+
+  bool draw_bitmap_edge = true;
+
   // set the colors
   // --------------
   DWORD colBack, colText;
@@ -264,6 +276,17 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     colBack = m_colBack.Ok() ? ToRGB(m_colBack) : GetSysColor(COLOR_WINDOW);
     colText = m_colText.Ok() ? ToRGB(m_colText) : GetSysColor(COLOR_WINDOWTEXT);
   }
+
+
+  // if background is white, don't draw an edge around the bitmap
+  DWORD menu_bg_color = GetSysColor(COLOR_MENU);
+  if (GetRValue(menu_bg_color) >= 0xf0 &&
+      GetGValue(menu_bg_color) >= 0xf0 &&
+      GetBValue(menu_bg_color) >= 0xf0)
+  {
+      draw_bitmap_edge = false;
+  }
+
 
   #ifdef  O_DRAW_NATIVE_API
     #define  hdc           (HDC)dc.GetHDC()
@@ -291,7 +314,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     RECT rectFill = { rc.GetLeft(), rc.GetTop(), rc.GetRight()+1, rc.GetBottom() };
 
-    if ( st & wxODSelected && m_bmpChecked.Ok()) {
+    if ( st & wxODSelected && m_bmpChecked.Ok() && draw_bitmap_edge) {
         // only draw the highlight under the text, not under
         // the bitmap or checkmark; leave a 1-pixel gap.
         rectFill.left = GetMarginWidth() + 1;
@@ -398,13 +421,13 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               nBmpWidth, nBmpHeight,
               &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
 
-      if ( st & wxODSelected ) {
+      if ( st & wxODSelected && draw_bitmap_edge ) {
         #ifdef  O_DRAW_NATIVE_API
           RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
                            rc.GetLeft() + GetMarginWidth(),
                            rc.GetTop() + m_nHeight-1 };
           SetBkColor(hdc, colBack);
-          DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);
+          DrawEdge(hdc, &rectBmp, BDR_RAISEDOUTER, BF_SOFT | BF_RECT);
         #else
           int x1, y1, x2, y2;
           x1 = rc.x;
