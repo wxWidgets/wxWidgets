@@ -4171,11 +4171,8 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
         case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
         case VK_MULTIPLY:   id = WXK_NUMPAD_MULTIPLY; break;
-        case 0xBB:          id = WXK_NUMPAD_ADD; break; // VK_OEM_PLUS
         case VK_ADD:        id = WXK_NUMPAD_ADD; break;
-        case 0xBD:          id = WXK_NUMPAD_SUBTRACT; break; // VK_OEM_MINUS
         case VK_SUBTRACT:   id = WXK_NUMPAD_SUBTRACT; break;
-        case 0xBE:          id = WXK_NUMPAD_DECIMAL; break; // VK_OEM_PERIOD
         case VK_DECIMAL:    id = WXK_NUMPAD_DECIMAL; break;
         case VK_DIVIDE:     id = WXK_NUMPAD_DIVIDE; break;
         case VK_F1:         id = WXK_F1; break;
