@@ -2400,7 +2400,8 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                         wParam);
             break;
 
-#ifndef __WXWINCE__
+            // Seems to be broken currently
+#if 0 // ndef __WXWINCE__
         case WM_MOUSELEAVE:
            {
             wxASSERT_MSG( !m_mouseInWindow, wxT("the mouse should be in a window to generate this event!") );
