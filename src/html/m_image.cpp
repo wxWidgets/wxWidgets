@@ -272,6 +272,7 @@ class wxHtmlImageCell : public wxHtmlCell
 {
     public:
         wxBitmap *m_Image;
+        double m_Scale;
         wxHtmlImageMapCell *m_ImageMap;
         wxString m_MapName;
 
@@ -291,25 +292,25 @@ class wxHtmlImageCell : public wxHtmlCell
 wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, double scale, int align, wxString mapname) : wxHtmlCell()
 {
     wxImage *img;
-    int ww, hh;
+    int ww, hh, bw, bh;
     wxInputStream *s = input->GetStream();
-
+    
+    m_Scale = scale;
     img = new wxImage(*s, wxBITMAP_TYPE_ANY);
-
     m_Image = NULL;
     if (img && (img->Ok())) 
     {
         ww = img->GetWidth();
         hh = img->GetHeight();
-        if (w != -1) m_Width = w; else m_Width = ww;
-        if (h != -1) m_Height = h; else m_Height = hh;
+        if (w != -1) bw = w; else bw = ww;
+        if (h != -1) bh = h; else bh = hh;
 
-        m_Width = (int)(scale * (double)m_Width);
-        m_Height = (int)(scale * (double)m_Height);
+        m_Width = (int)(scale * (double)bw);
+        m_Height = (int)(scale * (double)bh);
 
-        if ((m_Width != ww) || (m_Height != hh)) 
+        if ((bw != ww) || (bh != hh)) 
 	    {
-            wxImage img2 = img->Scale(m_Width, m_Height);
+            wxImage img2 = img->Scale(bw, bh);
             m_Image = new wxBitmap(img2.ConvertToBitmap());
         } 
 	    else
@@ -340,8 +341,16 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, double scale, in
 void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     if (m_Image)
-//        dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, (m_Image->GetMask() != (wxMask*) 0));
-        dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, TRUE);
+    {
+        double us_x, us_y;
+        dc.GetUserScale(&us_x, &us_y);
+        dc.SetUserScale(us_x * m_Scale, us_y * m_Scale);
+    
+//      dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, (m_Image->GetMask() != (wxMask*) 0));
+        dc.DrawBitmap(*m_Image, (x + m_PosX) / m_Scale, 
+                                (y + m_PosY) / m_Scale, TRUE);
+        dc.SetUserScale(us_x, us_y);
+    }
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
