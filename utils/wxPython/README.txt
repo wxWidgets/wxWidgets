@@ -45,6 +45,15 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
+What's new in 2.1.12
+--------------------
+Updated wxMVCTree and added a demo for it.
+
+Added a wrapper class for the Visualization ToolKit (or VTK) in the
+wxPython.lib.vtk module.  (http://www.kitware.com/)
+
+
+
 
 What's new in 2.1.11
 --------------------

@@ -21,6 +21,8 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
+    ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow']),
+
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
     ('Non-Managed Windows', ['wxGrid', 'wxSashWindow',
@@ -47,7 +49,7 @@ _treeList = [
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
-                          'PyShell', 'wxCalendar']),
+                          'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
