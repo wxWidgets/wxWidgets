@@ -257,7 +257,7 @@ Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.ex
 
 Name: "{group}\Sample Apps";           Filename: "{app}\wx\samples"; Components: samples
 
-Name: "{group}\wxWindows Reference";   Filename: "{app}\wx\docs\wx.chm";                Components: docs
+Name: "{group}\wxWidgets Reference";   Filename: "{app}\wx\docs\wx.chm";                Components: docs
 Name: "{group}\Migration Guide";       Filename: "{app}\wx\docs\MigrationGuide.html";   Components: docs
 Name: "{group}\Recent Changes";        Filename: "{app}\wx\docs\CHANGES.html";          Components: docs
 Name: "{group}\Other Docs";            Filename: "{app}\wx\docs";                       Components: docs
