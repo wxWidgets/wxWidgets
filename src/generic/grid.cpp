@@ -1556,11 +1556,19 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                                     bool isSelected)
 {
     wxRect rect = rectCell;
+    rect.Inflate(-1);
+
+    // erase only this cells background, overflow cells should have been erased
+    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
+
+    int hAlign, vAlign;
+    attr.GetAlignment(&hAlign, &vAlign);
 
     if (attr.GetOverflow())
     {
         int cols = grid.GetNumberCols();
         int best_width = GetBestSize(grid,attr,dc,row,col).GetWidth();
+        int overflowCols = 0;
         int cell_rows, cell_cols;
         attr.GetSize( &cell_rows, &cell_cols ); // shouldn't get here if <=0
         if ((best_width > rectCell.width) && (col < cols) && grid.GetTable())
@@ -1576,22 +1584,46 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
                     rect.width += grid.GetColSize(i);
                     if (rect.width >= best_width) break;
                 }
-                else break;
+                else
+                {
+                    i--;
+                    break;
+                }
             }
-        }
-    }
+            overflowCols = i - col - cell_cols;
+            if (overflowCols >= cols) overflowCols = cols - 1;
+       }
 
-    // erase only this cells background, overflow cells should have been erased
-    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
+        if (overflowCols > 0) // redraw overflow cells w/ proper hilight
+        {
+            wxRect clip = rect; 
+
+            // draw each overflow cell individually
+            int col_end = col+cell_cols+overflowCols;
+            if (col_end >= grid.GetNumberCols())
+                col_end = grid.GetNumberCols() - 1;
+
+            for (int i = col+cell_cols; i <= col_end; i++)
+            {
+                clip.x += grid.GetColSize(i-1) - 1;
+                clip.width = grid.GetColSize(i) - 1;
+                dc.DestroyClippingRegion();
+                dc.SetClippingRegion(clip);
+ 
+                SetTextColoursAndFont(grid, attr, dc, grid.IsInSelection(row,i));
+                grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
+                                       rect, hAlign, vAlign);
+            }
+
+            rect = rectCell; 
+            rect.Inflate(-1);
+            rect.width++;
+            dc.DestroyClippingRegion(); // DrawTextRectangle sets it again
+        }
+    }    
 
     // now we only have to draw the text
     SetTextColoursAndFont(grid, attr, dc, isSelected);
-
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-
-    rect.Inflate(-1);
-
     grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
                            rect, hAlign, vAlign);
 }
@@ -6378,7 +6410,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
 {
     if ( !m_numRows || !m_numCols ) return;
 
-    int i, j, k, l, numCells = cells.GetCount();
+    int i, numCells = cells.GetCount();
     int row, col, cell_rows, cell_cols;
     wxGridCellCoordsArray redrawCells;
 
@@ -6393,7 +6425,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         {
             wxGridCellCoords cell(row+cell_rows, col+cell_cols);
             bool marked = FALSE;
-            for ( j = 0;  j < numCells;  j++ )
+            for ( int j = 0;  j < numCells;  j++ )
             {
                 if ( cell == cells[j] )
                 {
@@ -6404,7 +6436,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
             if (!marked)
             {
                 int count = redrawCells.GetCount();
-                for (j = 0; j < count; j++)
+                for (int j = 0; j < count; j++)
                 {
                     if ( cell == redrawCells[j] )
                     {
@@ -6420,9 +6452,18 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         // If this cell is empty, find cell to left that might want to overflow
         if (m_table && m_table->IsEmptyCell(row, col))
         {
-            for ( l = 0; l < cell_rows; l++ )
+            for ( int l = 0; l < cell_rows; l++ )
             {
-                for (j = col-1; j >= 0; j--)
+                // find a cell in this row to left alreay marked for repaint
+                int left = col;
+                for (int k = 0; k < int(redrawCells.GetCount()); k++)
+                    if ((redrawCells[k].GetCol() < left) &&
+                        (redrawCells[k].GetRow() == row))
+                        left=redrawCells[k].GetCol();
+
+                if (left == col) left = 0; // oh well
+
+                for (int j = col-1; j >= left; j--)
                 {
                     if (!m_table->IsEmptyCell(row+l, j))
                     {
@@ -6431,7 +6472,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                             wxGridCellCoords cell(row+l, j);
                             bool marked = FALSE;
 
-                            for (k = 0; k < numCells; k++)
+                            for (int k = 0; k < numCells; k++)
                             {
                                 if ( cell == cells[k] )
                                 {
@@ -6442,7 +6483,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                             if (!marked)
                             {
                                 int count = redrawCells.GetCount();
-                                for (k = 0; k < count; k++)
+                                for (int k = 0; k < count; k++)
                                 {
                                     if ( cell == redrawCells[k] )
                                     {
@@ -7213,30 +7254,34 @@ void wxGrid::ShowCellEditControl()
             editor->Show( TRUE, attr );
 
             // resize editor to overflow into righthand cells if allowed
+            wxCoord maxRight = rect.width;
             wxString value = GetCellValue(row, col);
             if ( (value != wxEmptyString) && (attr->GetOverflow()) )
             {
                 wxClientDC dc(m_gridWin);
-                wxCoord y = 0, best_width = 0;
+                wxCoord y = 0;
                 dc.SetFont(attr->GetFont());
-                dc.GetTextExtent(value, &best_width, &y);
+                dc.GetTextExtent(value, &maxRight, &y);
+                if (maxRight > m_gridWin->GetClientSize().GetWidth())
+                    maxRight = m_gridWin->GetClientSize().GetWidth();
 
                 int cell_rows, cell_cols;
                 attr->GetSize( &cell_rows, &cell_cols );
 
-                if ((best_width > rect.width) && (col < m_numCols) && m_table)
+                if ((maxRight > rect.width) && (col < m_numCols) && m_table)
                 {
                     int i;
                     for (i = col+cell_cols; i < m_numCols; i++)
                     {
-                        if (m_table->IsEmptyCell(row,i))
-                        {
-                            rect.width += GetColWidth(i);
-                            if (rect.width >= best_width) break;
-                        }
-                        else
-                            break;
+                      int c_rows, c_cols;
+                      // looks weird going over a multicell
+                      GetCellSize( row, i, &c_rows, &c_cols );
+                      if (m_table->IsEmptyCell(row,i) && (rect.GetRight() < maxRight) && (c_rows == 1))
+                          rect.width += GetColWidth(i);
+                      else
+                          break;
                     }
+                    if (rect.GetRight() > maxRight) rect.SetRight(maxRight-1);
                 }
             }
             editor->SetSize( rect );
