@@ -90,10 +90,11 @@ wxDC::wxDC()
 	m_macPenInstalled = false ;
 	
 	m_macLocalOrigin.h = m_macLocalOrigin.v = 0 ;
-	m_macClipRect.left = -32000 ;
-	m_macClipRect.top = -32000 ;
-	m_macClipRect.right = 32000 ;
-	m_macClipRect.bottom = 32000 ;
+	m_macBoundaryClipRgn = NewRgn() ;
+	m_macCurrentClipRgn = NewRgn() ;
+
+	SetRectRgn( m_macBoundaryClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
+	SetRectRgn( m_macCurrentClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
@@ -113,23 +114,14 @@ wxMacPortSetter::~wxMacPortSetter()
 
 wxDC::~wxDC(void)
 {
+  DisposeRgn( m_macBoundaryClipRgn ) ;
+  DisposeRgn( m_macCurrentClipRgn ) ;
 }
 void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
 //	help->Setup( m_macPort ) ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
-
-	if ( m_clipping )
-	{
-		Rect clip = { m_clipY1 , m_clipX1 , m_clipY2 , m_clipX2 } ;
-		::SectRect( &clip , &m_macClipRect , &clip ) ;
-	  	::ClipRect( &clip ) ;
-	}
-	else
-	{
-		::ClipRect(&m_macClipRect);
-	}
-
+	SetClip( m_macCurrentClipRgn);
 
 	m_macFontInstalled = false ;
 	m_macBrushInstalled = false ;
@@ -251,6 +243,9 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     ww = XLOG2DEVREL(width);
     hh = YLOG2DEVREL(height);
 
+    SetRectRgn( m_macCurrentClipRgn , xx , yy , xx + ww , yy + hh ) ;
+    SectRgn( m_macCurrentClipRgn , m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+    
     if( m_clipping )
     {
         m_clipX1 = wxMax( m_clipX1 , xx );
@@ -279,14 +274,53 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
         return;
     }
 
+    wxCoord x, y, w, h;
+    region.GetBox( x, y, w, h );
     wxCoord xx, yy, ww, hh;
-    region.GetBox( xx, yy, ww, hh );
-    wxDC::DoSetClippingRegion( xx, yy, ww, hh );
+
+    xx = XLOG2DEV(x);
+    yy = YLOG2DEV(y);
+    ww = XLOG2DEVREL(w);
+    hh = YLOG2DEVREL(h);
+
+    // if we have a scaling that we cannot map onto native regions
+    // we must use the box
+
+    if ( ww != w || hh != h )
+    {
+        wxDC::DoSetClippingRegion( x, y, w, h );
+    }
+    else
+    {
+        CopyRgn( region.GetWXHRGN() , m_macCurrentClipRgn ) ;
+        if ( xx != x || yy != y )
+        {
+            OffsetRgn( m_macCurrentClipRgn , xx - x , yy - y ) ;
+        }
+        SectRgn( m_macCurrentClipRgn , m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
+        if( m_clipping )
+        {
+            m_clipX1 = wxMax( m_clipX1 , xx );
+            m_clipY1 = wxMax( m_clipY1 , yy );
+            m_clipX2 = wxMin( m_clipX2, (xx + ww));
+            m_clipY2 = wxMin( m_clipY2, (yy + hh));
+        }
+        else
+        {
+            m_clipping = TRUE;
+            m_clipX1 = xx;
+            m_clipY1 = yy;
+            m_clipX2 = xx + ww;
+            m_clipY2 = yy + hh;
+        }
+    }
+
 }
 
 void wxDC::DestroyClippingRegion()
 {
   wxMacPortSetter helper(this) ;
+  CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
   m_clipping = FALSE;
 }    
 void wxDC::DoGetSize( int* width, int* height ) const
