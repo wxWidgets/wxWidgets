@@ -1068,10 +1068,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif // USE_MENU_BITMAPS
     else // a normal item
     {
-        /* text has "_" instead of "&" after mitem->SetText() */
+        // text has "_" instead of "&" after mitem->SetText() so don't use it
         wxString text( mitem->GetText() );
 
-        /* local buffer in multibyte form */
+        // buffer containing the menu text in multibyte form
         char buf[200];
         strcpy( buf, "/" );
         strncat( buf, wxGTK_CONV(text), WXSIZEOF(buf) - 2 );
@@ -1083,7 +1083,6 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         entry.callback_action = 0;
 
         wxString pathRadio;
-        char buf2[200];
         const char *item_type;
         switch ( mitem->GetKind() )
         {
@@ -1103,7 +1102,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                     pathRadio = m_pathLastRadio;
                     pathRadio.Replace(wxT("_"), wxT(""));
                     pathRadio.Prepend(wxT("<main>/"));
-                    strncat( buf2, wxGTK_CONV(pathRadio), WXSIZEOF(buf2) - 2 );
+
+                    char buf2[200];
+                    strncpy(buf2, wxGTK_CONV(pathRadio), WXSIZEOF(buf2));
                     buf2[WXSIZEOF(buf2) - 1] = '\0';
                     item_type = buf2;
                 }
@@ -1128,9 +1129,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // due to an apparent bug in GTK+, we have to use a static buffer here -
         // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
         // somehow! (VZ)
-        static char s_accel[50]; // must be big enough
+        char s_accel[50]; // should be big enough, we check for overruns
         wxString tmp( GetHotKey(*mitem) );
         strncpy(s_accel, wxGTK_CONV( tmp ), WXSIZEOF(s_accel));
+        s_accel[WXSIZEOF(s_accel) - 1] = '\0';
         entry.accelerator = s_accel;
 #else // !wxUSE_ACCEL
         entry.accelerator = (char*) NULL;
