@@ -9649,71 +9649,6 @@ static PyObject *_wrap_wxMenu_IsAttached(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxMenu_Attach(_swigobj,_swigarg0)  (_swigobj->Attach(_swigarg0))
-static PyObject *_wrap_wxMenu_Attach(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMenu * _arg0;
-    wxMenuBar * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","menubar", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMenu_Attach",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenu_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenu_Attach. Expected _wxMenu_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenuBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenu_Attach. Expected _wxMenuBar_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxMenu_Attach(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxMenu_Detach(_swigobj)  (_swigobj->Detach())
-static PyObject *_wrap_wxMenu_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxMenu * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenu_Detach",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMenu_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenu_Detach. Expected _wxMenu_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxMenu_Detach(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxMenu_SetParent(_swigobj,_swigarg0)  (_swigobj->SetParent(_swigarg0))
 static PyObject *_wrap_wxMenu_SetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11532,8 +11467,6 @@ static PyMethodDef windowscMethods[] = {
 	 { "new_wxMenuBar", (PyCFunction) _wrap_new_wxMenuBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_GetParent", (PyCFunction) _wrap_wxMenu_GetParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_SetParent", (PyCFunction) _wrap_wxMenu_SetParent, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenu_Detach", (PyCFunction) _wrap_wxMenu_Detach, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMenu_Attach", (PyCFunction) _wrap_wxMenu_Attach, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_IsAttached", (PyCFunction) _wrap_wxMenu_IsAttached, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_GetStyle", (PyCFunction) _wrap_wxMenu_GetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_GetInvokingWindow", (PyCFunction) _wrap_wxMenu_GetInvokingWindow, METH_VARARGS | METH_KEYWORDS },

@@ -3231,11 +3231,12 @@ static PyObject *_wrap_wxHtmlCell_AdjustPagebreak(PyObject *self, PyObject *args
     wxHtmlCell * _arg0;
     int * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","pagebreak", NULL };
+    int  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","INOUT", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlCell_AdjustPagebreak",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlCell_AdjustPagebreak",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3244,13 +3245,10 @@ static PyObject *_wrap_wxHtmlCell_AdjustPagebreak(PyObject *self, PyObject *args
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlCell_AdjustPagebreak. Expected _int_p.");
-        return NULL;
-        }
-    }
+{
+  temp = (int) PyInt_AsLong(_obj1);
+  _arg1 = &temp;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxHtmlCell_AdjustPagebreak(_arg0,_arg1);
@@ -3258,6 +3256,11 @@ static PyObject *_wrap_wxHtmlCell_AdjustPagebreak(PyObject *self, PyObject *args
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
