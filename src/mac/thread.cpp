@@ -35,7 +35,7 @@
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
-#include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -69,11 +69,13 @@ class wxMacStCritical
 public :
     wxMacStCritical() 
     {
-        ThreadBeginCritical() ;
+        if ( UMASystemIsInitialized() )
+            ThreadBeginCritical() ;
     }
     ~wxMacStCritical()
     {
-        ThreadEndCritical() ;
+        if ( UMASystemIsInitialized() )
+            ThreadEndCritical() ;
     }
 };
 
@@ -118,19 +120,21 @@ wxMutex::~wxMutex()
 wxMutexError wxMutex::Lock()
 {
     wxMacStCritical critical ;
-    
-    OSErr err ;
-    ThreadID current = kNoThreadID;
-    err = ::MacGetCurrentThread(&current);
-    // if we are not the owner, add this thread to the list of waiting threads, stop this thread
-    // and invoke the scheduler to continue executing the owner's thread
-    while ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current) 
+    if ( UMASystemIsInitialized() )
     {
-        m_internal->m_waiters.Add(current);
-        err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_internal->m_owner);
-        err = ::ThreadBeginCritical();
+        OSErr err ;
+        ThreadID current = kNoThreadID;
+        err = ::MacGetCurrentThread(&current);
+        // if we are not the owner, add this thread to the list of waiting threads, stop this thread
+        // and invoke the scheduler to continue executing the owner's thread
+        while ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current) 
+        {
+            m_internal->m_waiters.Add(current);
+            err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_internal->m_owner);
+            err = ::ThreadBeginCritical();
+        }
+        m_internal->m_owner = current;
     }
-    m_internal->m_owner = current;
     m_locked++;
 
     return wxMUTEX_NO_ERROR;
@@ -139,15 +143,17 @@ wxMutexError wxMutex::Lock()
 wxMutexError wxMutex::TryLock()
 {
     wxMacStCritical critical ;
-    
-    OSErr err ;
-    ThreadID current = kNoThreadID;
-    ::MacGetCurrentThread(&current);
-    // if we are not the owner, give an error back
-    if ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current ) 
-        return wxMUTEX_BUSY;
-        
-    m_internal->m_owner = current;
+    if ( UMASystemIsInitialized() )
+    {    
+        OSErr err ;
+        ThreadID current = kNoThreadID;
+        ::MacGetCurrentThread(&current);
+        // if we are not the owner, give an error back
+        if ( m_internal->m_owner != kNoThreadID && m_internal->m_owner != current ) 
+            return wxMUTEX_BUSY;
+            
+        m_internal->m_owner = current;
+    }
     m_locked++;
 
    return wxMUTEX_NO_ERROR;
@@ -155,32 +161,39 @@ wxMutexError wxMutex::TryLock()
 
 wxMutexError wxMutex::Unlock()
 {
-    OSErr err;
-    err = ::ThreadBeginCritical();
-    
-    if (m_locked > 0)
-        m_locked--;
+    if ( UMASystemIsInitialized() )
+    {    
+        OSErr err;
+        err = ::ThreadBeginCritical();
+        
+        if (m_locked > 0)
+            m_locked--;
 
-    // this mutex is not owned by anybody anmore
-    m_internal->m_owner = kNoThreadID;
+        // this mutex is not owned by anybody anmore
+        m_internal->m_owner = kNoThreadID;
 
-    // now pass on to the first waiting thread
-    ThreadID firstWaiting = kNoThreadID;
-    bool found = false;
-    while (!m_internal->m_waiters.IsEmpty() && !found) 
-    {
-        firstWaiting = m_internal->m_waiters[0];
-        err = ::SetThreadState(firstWaiting, kReadyThreadState, kNoThreadID);
-        // in case this was not successful (dead thread), we just loop on and reset the id
-        found = (err != threadNotFoundErr);    
-        if ( !found )
-            firstWaiting = kNoThreadID ;
-        m_internal->m_waiters.RemoveAt(0) ;
+        // now pass on to the first waiting thread
+        ThreadID firstWaiting = kNoThreadID;
+        bool found = false;
+        while (!m_internal->m_waiters.IsEmpty() && !found) 
+        {
+            firstWaiting = m_internal->m_waiters[0];
+            err = ::SetThreadState(firstWaiting, kReadyThreadState, kNoThreadID);
+            // in case this was not successful (dead thread), we just loop on and reset the id
+            found = (err != threadNotFoundErr);    
+            if ( !found )
+                firstWaiting = kNoThreadID ;
+            m_internal->m_waiters.RemoveAt(0) ;
+        }
+        // now we have a valid firstWaiting thread, which has been scheduled to run next, just end the
+        // critical section and invoke the scheduler
+        err = ::SetThreadStateEndCritical(kCurrentThreadID, kReadyThreadState, firstWaiting);
     }
-    // now we have a valid firstWaiting thread, which has been scheduled to run next, just end the
-    // critical section and invoke the scheduler
-    err = ::SetThreadStateEndCritical(kCurrentThreadID, kReadyThreadState, firstWaiting);
-
+    else
+    {
+        if (m_locked > 0)
+            m_locked--;
+    }
     return wxMUTEX_NO_ERROR;
 }
 
