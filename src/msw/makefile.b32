@@ -50,9 +50,9 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(PERIPH_LIBS)
-PERIPH_TARGET=zlib $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_zlib $(PERIPH_CLEAN_TARGET)
+PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(PERIPH_LIBS)
+PERIPH_TARGET=zlib png $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_png $(PERIPH_CLEAN_TARGET)
 
 !if "$(DLL)" == "0"
 DUMMY=dummy
@@ -176,6 +176,7 @@ MSWOBJS = \
   $(MSWDIR)\dde.obj \
   $(MSWDIR)\dialog.obj \
   $(MSWDIR)\dib.obj \
+  $(MSWDIR)\dibutils.obj \
   $(MSWDIR)\dirdlg.obj \
   $(MSWDIR)\filedlg.obj \
   $(MSWDIR)\font.obj \
@@ -203,6 +204,7 @@ MSWOBJS = \
   $(MSWDIR)\palette.obj \
   $(MSWDIR)\pen.obj \
   $(MSWDIR)\penwin.obj \
+  $(MSWDIR)\pnghand.obj \
   $(MSWDIR)\printdlg.obj \
   $(MSWDIR)\printwin.obj \
   $(MSWDIR)\radiobox.obj \
@@ -641,6 +643,16 @@ wxxpm:	$(CFG)
 	cd $(WXDIR)\src\common\wxxpm
 	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
 	cd $(WXDIR)\src\msw
+
+png:    $(CFG)
+        cd $(WXDIR)\src\png
+        make -f makefile.b32 
+        cd $(WXDIR)\src\msw
+
+clean_png:
+        cd $(WXDIR)\src\png
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
 
 zlib:   $(CFG)
         cd $(WXDIR)\src\zlib

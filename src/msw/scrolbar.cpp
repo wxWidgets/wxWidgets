@@ -34,11 +34,11 @@ extern void wxFindMaxSize(HWND hwnd, RECT *rect);
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
-#if WXWIN_COMPATIBILITY
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
+#if WXWIN_COMPATIBILITY
   EVT_SCROLL(wxScrollBar::OnScroll)
-END_EVENT_TABLE()
 #endif
+END_EVENT_TABLE()
 
 #endif
 
@@ -183,7 +183,7 @@ void wxScrollBar::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
         if (new_pos > maxPos)
             new_pos = maxPos;
 
-        SetValue(new_pos);
+        SetThumbPosition(new_pos);
         wxScrollEvent event(scrollEvent, m_windowId);
         event.SetPosition(new_pos);
         event.SetEventObject( this );
@@ -331,7 +331,7 @@ WXHBRUSH wxScrollBar::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 void wxScrollBar::Command(wxCommandEvent& event)
 {
-    SetValue(event.m_commandInt);
+    SetThumbPosition(event.m_commandInt);
     ProcessCommand(event);
 }
 

@@ -488,7 +488,7 @@ wxToolBarTool *wxToolBar95::AddTool(int index, const wxBitmap& bitmap, const wxB
   else
     tool->m_y = m_yMargin;
 
-  tool->SetSize(GetDefaultButtonWidth(), GetDefaultButtonHeight());
+  tool->SetSize(GetToolSize().x, GetToolSize().y);
 
   m_tools.Append((long)index, tool);
   return tool;

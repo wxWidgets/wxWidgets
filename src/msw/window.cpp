@@ -3189,7 +3189,7 @@ int wxWindow::GetScrollRange(int orient) const
 #if defined(__WIN95__)
         // Try to adjust the range to cope with page size > 1
         // - a Windows API quirk
-        int pageSize = GetScrollPage(orient);
+        int pageSize = GetScrollThumb(orient);
         if ( pageSize > 1 )
         {
             maxPos -= (pageSize - 1);

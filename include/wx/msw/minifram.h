@@ -29,7 +29,7 @@ public:
            const wxString& title,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME|wxTINY_CAPTION_HORIZ,
+           long style = wxDEFAULT_FRAME_STYLE|wxTINY_CAPTION_HORIZ,
            const wxString& name = wxFrameNameStr)
   {
       Create(parent, id, title, pos, size, style, name);
