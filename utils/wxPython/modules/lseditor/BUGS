@@ -1,26 +1,4 @@
-Known bugs
-
-html, all:
-        - keys can move the vertical scrollbar, but the window moveth not.
-        problem in wxHTML.
-
-        - widgets are not removed when the HTML contents is changed
-        (this can be fixed by adding ~HtmlWidgetCell { wnd->Destroy(); } )
-
-        - potential problem with the use of ThreadState in html.i
-        (mainly because I don't really know what I'm doing there)
-
-html, msw:
-        - vertical scrollbar behaves erratically when content smaller than
-        window
-
-        - page with widgets takes forever to draw when constructed
-        in frame constructor
-
-html, gtk:
-        - segfault on exit; sometimes warning about assert failure
-        (m_Object->refcount > 0)
-
+Known bugs/features
 
 editor, all:
         - (missing feature, really) syntax highlighting data is
