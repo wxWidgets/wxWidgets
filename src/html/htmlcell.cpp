@@ -205,7 +205,7 @@ wxPoint wxHtmlCell::GetAbsPos() const
     }
     return p;
 }
-    
+
 unsigned wxHtmlCell::GetDepth() const
 {
     unsigned d = 0;
@@ -213,7 +213,7 @@ unsigned wxHtmlCell::GetDepth() const
         d++;
     return d;
 }
-    
+
 bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
 {
     const wxHtmlCell *c1 = this;
@@ -240,7 +240,7 @@ bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
                 if ( c1 == c2 )
                     return true;
                 c1 = c1->GetNext();
-            }            
+            }
             return false;
         }
         else
@@ -318,19 +318,19 @@ void wxHtmlWordCell::Split(wxDC& dc,
 void wxHtmlWordCell::SetSelectionPrivPos(wxDC& dc, wxHtmlSelection *s) const
 {
     unsigned p1, p2;
-        
-    Split(dc, 
+
+    Split(dc,
           this == s->GetFromCell() ? s->GetFromPos() : wxDefaultPosition,
           this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
           p1, p2);
 
     wxPoint p(0, m_Word.length());
-    
+
     if ( this == s->GetFromCell() )
         p.x = p1; // selection starts here
     if ( this == s->GetToCell() )
         p.y = p2; // selection ends here
-    
+
     if ( this == s->GetFromCell() )
         s->SetFromPrivPos(p);
     if ( this == s->GetToCell() )
@@ -343,7 +343,7 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
 {
     wxColour fg = info.GetState().GetFgColour();
     wxColour bg = info.GetState().GetBgColour();
-    
+
     if ( toSelection )
     {
         dc.SetBackgroundMode(wxSOLID);
@@ -374,8 +374,8 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         wxString txt;
         int w, h;
         int ofs = 0;
-       
-        wxPoint priv = (this == s->GetFromCell()) ? 
+
+        wxPoint priv = (this == s->GetFromCell()) ?
                            s->GetFromPrivPos() : s->GetToPrivPos();
 
         // NB: this is quite a hack: in order to compute selection boundaries
@@ -386,10 +386,10 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         if ( priv == wxDefaultPosition )
         {
             SetSelectionPrivPos(dc, s);
-            priv = (this == s->GetFromCell()) ? 
+            priv = (this == s->GetFromCell()) ?
                     s->GetFromPrivPos() : s->GetToPrivPos();
         }
-        
+
         int part1 = priv.x;
         int part2 = priv.y;
 
@@ -400,9 +400,9 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
             dc.GetTextExtent(txt, &w, &h);
             ofs += w;
         }
-        
+
         SwitchSelState(dc, info, true);
-        
+
         txt = m_Word.Mid(part1, part2-part1);
         dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
 
@@ -432,20 +432,32 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         dc.DrawText(m_Word, x + m_PosX, y + m_PosY);
     }
 }
-    
+
 
 wxString wxHtmlWordCell::ConvertToText(wxHtmlSelection *s) const
 {
     if ( s && (this == s->GetFromCell() || this == s->GetToCell()) )
     {
-        wxPoint priv = (this == s->GetFromCell()) ? 
-                           s->GetFromPrivPos() : s->GetToPrivPos();
-        int part1 = priv.x;
-        int part2 = priv.y;
-        return m_Word.Mid(part1, part2-part1);
+        wxPoint priv = this == s->GetFromCell() ? s->GetFromPrivPos()
+                                                : s->GetToPrivPos();
+
+        // VZ: we may be called before we had a chance to re-render ourselves
+        //     and in this case GetFrom/ToPrivPos() is not set yet -- assume
+        //     that this only happens in case of a double/triple click (which
+        //     seems to be the case now) and so it makes sense to select the
+        //     entire contents of the cell in this case
+        //
+        // TODO: but this really needs to be fixed in some better way later...
+        if ( priv != wxDefaultPosition )
+        {
+            int part1 = priv.x;
+            int part2 = priv.y;
+            return m_Word.Mid(part1, part2-part1);
+        }
+        //else: return the whole word below
     }
-    else
-        return m_Word;
+
+    return m_Word;
 }
 
 wxCursor wxHtmlWordCell::GetCursor() const
@@ -459,7 +471,6 @@ wxCursor wxHtmlWordCell::GetCursor() const
     else
         return wxHtmlCell::GetCursor();
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -944,7 +955,7 @@ wxHtmlCell *wxHtmlContainerCell::FindCellByPos(wxCoord x, wxCoord y,
         wxHtmlCell *c2, *c = NULL;
         for ( const wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext() )
         {
-            if (cell->GetPosY() > y || 
+            if (cell->GetPosY() > y ||
                     (cell->GetPosY() == y && cell->GetPosX() > x))
                 break;
             c2 = cell->FindCellByPos(x - cell->GetPosX(), y - cell->GetPosY(),
@@ -991,7 +1002,7 @@ void wxHtmlContainerCell::GetHorizontalConstraints(int *left, int *right) const
         *right = cright;
 }
 
-    
+
 wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const
 {
     if ( m_Cells )
@@ -1196,7 +1207,7 @@ const wxHtmlCell* wxHtmlTerminalCellsInterator::operator++()
         while ( m_pos->GetFirstChild() != NULL )
             m_pos = m_pos->GetFirstChild();
     } while ( !m_pos->IsTerminalCell() );
-    
+
     return m_pos;
 }
 
