@@ -435,12 +435,18 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         wxString text = GetValue();
 
-        if( pos >= (long)text.Len()  )
+       // cast to prevent warning. But pos really should've been unsigned.
+        if( (unsigned long)pos > text.Len()  )
             return FALSE;
 
         *x=1;   // Col 1
         *y=1;   // Line 1
-        for ( const char *p = text.c_str(); *p; p++ )
+
+        if (pos == 0)
+            return TRUE;
+
+        const char* stop = text.c_str() + pos + 1;
+        for ( const char *p = text.c_str(); p <= stop; p++ )
         {
             if (*p == '\n')
             {
@@ -453,7 +459,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     }
     else // single line control
     {
-        if ( pos < GTK_ENTRY(m_text)->text_length )
+        if ( pos <= GTK_ENTRY(m_text)->text_length )
         {
             *y = 1;
             *x = pos;
@@ -473,10 +479,11 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
     if (!(m_windowStyle & wxTE_MULTILINE)) return 0;
 
     long pos=0;
+    /* This is a kludge; our XY values are 1-based, but GetLineLength()
+     * and --Text() start counting at 0. (and so say the docs) */
+    for( int i=1; i<y; i++ ) pos += GetLineLength(i-1) + 1; // one for '\n'
 
-    for( int i=1; i<y; i++ ) pos += GetLineLength(i);
-
-    pos +=x-1; // Pos start with 0
+    pos += x-1; // Pos start with 0
     return pos;
 }
 
@@ -502,7 +509,9 @@ int wxTextCtrl::GetNumberOfLines() const
                     currentLine++;
             }
             g_free( text );
-            return currentLine;
+
+            // currentLine is 0 based, add 1 to get number of lines
+            return currentLine + 1;
         }
         else
         {
