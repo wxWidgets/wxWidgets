@@ -54,9 +54,41 @@
 #elif defined(__VISUALC__)
     #define __WX_BO_COMPILER ",Visual C++"
 #elif defined(__BORLANDC__)
-    #define __WX_BO_COMPILER ",Borland C++"
+
+    #if __BORLANDC__ >= 0x600                        /* BCCX */
+        #define __WX_BO_COMPILER_VER " 6.0"
+    #elif __BORLANDC__ >= 0x570                      /* Kylix */
+        #define __WX_BO_COMPILER_VER " 5.7"
+    #elif __BORLANDC__ >= 0x560                      /* BCB++ 6 */
+        #define __WX_BO_COMPILER_VER " 5.6"
+    #elif __BORLANDC__ >= 0x550                      /* BCB++ 5, free command line */
+        #define __WX_BO_COMPILER_VER " 5.5"
+    #elif __BORLANDC__ >= 0x520                      /* BCB++ 1-4 */
+        #define __WX_BO_COMPILER_VER " 5.02"
+    #elif __BORLANDC__ >= 0x500                      /* BC++ 5 */
+        #define __WX_BO_COMPILER_VER " 5.0"
+    #elif __BORLANDC__ >= 0x452                      /* BC++ 4 */
+        #define __WX_BO_COMPILER_VER " 4.0"
+    #elif __BORLANDC__ >= 0x410                      /* BC++ 3.1 */
+        #define __WX_BO_COMPILER_VER " 3.1"
+    #elif __BORLANDC__ >= 0x400                      /* BC++ 3.0 */
+        #define __WX_BO_COMPILER_VER " 3.0"
+    #elif __BORLANDC__ >= 0x200                      /* BC++ 2.0 */
+        #define __WX_BO_COMPILER_VER " 2.0"
+    #else
+        #define __WX_BO_COMPILER_VER
+    #endif
+
+    #define __WX_BO_COMPILER ",Borland C++" __WX_BO_COMPILER_VER
+
 #elif defined(__DIGITALMARS__)
-    #define __WX_BO_COMPILER ",DigitalMars"
+
+    #if defined(__DMC_VERSION_STRING__)
+        #define __WX_BO_COMPILER "," __DMC_VERSION_STRING__
+    #else
+        #define __WX_BO_COMPILER ",DigitalMars"
+    #endif
+
 #elif defined(__WATCOMC__)
     #define __WX_BO_COMPILER ",Watcom C++"
 #else
