@@ -624,6 +624,7 @@ public:
     bool         CreateView(const wxString &viewName, const wxString &colList, const wxString &pSqlStmt, bool attemptDrop=true);
     bool         DropView(const wxString &viewName);
     bool         ExecSql(const wxString &pSqlStmt);
+    bool         ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcols);
     bool         GetNext(void);
     bool         GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned);
     bool         Grant(int privileges, const wxString &tableName, const wxString &userList = wxT("PUBLIC"));
