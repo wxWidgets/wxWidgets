@@ -25,17 +25,19 @@
     #include "wx/gtk/win_gtk.h"
 #endif
 
-#define USE_FREETYPE 1
+#ifndef wxUSE_FREETYPE
+    #define wxUSE_FREETYPE 1
+#endif
 
-#if USE_FREETYPE
-#include <freetype/freetype.h>
+#if wxUSE_FREETYPE
+    #include <freetype/freetype.h>
 #endif
 
 //----------------------------------------------------------------------------
 // globals
 //----------------------------------------------------------------------------
 
-#if USE_FREETYPE
+#if wxUSE_FREETYPE
 FT_Library g_freetypeLibrary;
 #endif
 
@@ -80,11 +82,15 @@ bool wxCanvasObject::IsHit( int x, int y, int margin )
             (y <= m_area.y+m_area.height+margin));
 }
 
-void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
+void wxCanvasObject::Render( int clip_x, int clip_y, int clip_width, int clip_height )
 {
 }
 
-void wxCanvasObject::Render( int clip_x, int clip_y, int clip_width, int clip_height )
+void wxCanvasObject::Rerender()
+{
+}
+
+void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
 {
 }
 
@@ -198,6 +204,7 @@ void wxCanvasLine::Render( int clip_x, int clip_y, int clip_width, int clip_heig
 
 void wxCanvasLine::WriteSVG( wxTextOutputStream &stream )
 {
+    // no idea
 }
 
 //----------------------------------------------------------------------------
@@ -272,7 +279,7 @@ void wxCanvasControl::UpdateSize()
 class wxFaceData
 {
 public:
-#if USE_FREETYPE
+#if wxUSE_FREETYPE
      FT_Face   m_face;
 #else
      void     *m_dummy;
@@ -296,7 +303,7 @@ wxCanvasText::wxCanvasText( const wxString &text, int x, int y, const wxString &
     m_alpha = new unsigned char[100*m_size];
     memset( m_alpha, 0, m_area.width*m_area.height );
     
-#if USE_FREETYPE    
+#if wxUSE_FREETYPE    
     wxFaceData *data = new wxFaceData;
     m_faceData = data;
     
@@ -316,7 +323,7 @@ wxCanvasText::wxCanvasText( const wxString &text, int x, int y, const wxString &
 
 wxCanvasText::~wxCanvasText()
 {
-#if USE_FREETYPE    
+#if wxUSE_FREETYPE    
     wxFaceData *data = (wxFaceData*) m_faceData;
     delete data;
 #endif
@@ -384,7 +391,7 @@ void wxCanvasText::WriteSVG( wxTextOutputStream &stream )
 
 void wxCanvasText::CreateBuffer()
 {
-#if USE_FREETYPE    
+#if wxUSE_FREETYPE    
     FT_Face face = ((wxFaceData*)m_faceData)->m_face;
     FT_GlyphSlot slot = face->glyph;
     int pen_x = 0;
@@ -761,8 +768,8 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
                 {
                     wxMouseEvent child_event( wxEVT_MOTION );
                     child_event.SetEventObject( obj );
-                    child_event.m_x = x + obj->GetX();
-                    child_event.m_y = y + obj->GetY();
+                    child_event.m_x = x - obj->GetX();
+                    child_event.m_y = y - obj->GetY();
                     child_event.m_leftDown = event.m_leftDown;
                     child_event.m_rightDown = event.m_rightDown;
                     child_event.m_middleDown = event.m_middleDown;
@@ -775,15 +782,15 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
                     {
                         child_event.SetEventType( wxEVT_LEAVE_WINDOW );
                         child_event.SetEventObject( m_lastMouse );
-                        child_event.m_x = x + m_lastMouse->GetX();
-                        child_event.m_y = y + m_lastMouse->GetY();
+                        child_event.m_x = x - m_lastMouse->GetX();
+                        child_event.m_y = y - m_lastMouse->GetY();
                         m_lastMouse->ProcessEvent( child_event );
                         
                         m_lastMouse = obj;
                         child_event.SetEventType( wxEVT_ENTER_WINDOW );
                         child_event.SetEventObject( m_lastMouse );
-                        child_event.m_x = x + m_lastMouse->GetX();
-                        child_event.m_y = y + m_lastMouse->GetY();
+                        child_event.m_x = x - m_lastMouse->GetX();
+                        child_event.m_y = y - m_lastMouse->GetY();
                         m_lastMouse->ProcessEvent( child_event );
                         
                         child_event.SetEventType( wxEVT_MOTION );
@@ -799,8 +806,8 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
         {
             wxMouseEvent child_event( wxEVT_LEAVE_WINDOW );
             child_event.SetEventObject( m_lastMouse );
-            child_event.m_x = x + m_lastMouse->GetX();
-            child_event.m_y = y + m_lastMouse->GetY();
+            child_event.m_x = x - m_lastMouse->GetX();
+            child_event.m_y = y - m_lastMouse->GetY();
             child_event.m_leftDown = event.m_leftDown;
             child_event.m_rightDown = event.m_rightDown;
             child_event.m_middleDown = event.m_middleDown;
@@ -859,7 +866,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCanvasModule, wxModule)
 
 bool wxCanvasModule::OnInit()
 {
-#if USE_FREETYPE
+#if wxUSE_FREETYPE
     int error = FT_Init_FreeType( &g_freetypeLibrary );
     if (error) return FALSE;
 #endif
@@ -869,7 +876,7 @@ bool wxCanvasModule::OnInit()
 
 void wxCanvasModule::OnExit()
 {
-#if USE_FREETYPE
+#if wxUSE_FREETYPE
     FT_Done_FreeType( g_freetypeLibrary );
 #endif
 }

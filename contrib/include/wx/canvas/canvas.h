@@ -33,10 +33,18 @@ class wxCanvasObject: public wxEvtHandler
 public:
     wxCanvasObject( int x, int y, int width, int height );
     
+    // These are for screen output only therefore use
+    // int as coordinates.
     virtual void Move( int x, int y );
     virtual bool IsHit( int x, int y, int margin = 0 );
-    
     virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    
+    // Once we have world coordinates in doubles, this will get
+    // called for every object if the world coordinate system
+    // changes (zooming).
+    virtual void Rerender();
+
+    // Later...
     virtual void WriteSVG( wxTextOutputStream &stream );
     
     wxCanvas   *GetOwner()              { return m_owner; }
@@ -188,6 +196,7 @@ public:
     
     wxImage *GetBuffer()         { return &m_buffer; }
     bool NeedUpdate()            { return m_needUpdate; }
+    bool IsFrozen()              { return m_frozen; }
     
     void BlitBuffer( wxDC &dc );
     
@@ -199,7 +208,6 @@ private:
     unsigned char    m_green,m_red,m_blue;
     bool             m_frozen;
     wxCanvasObject  *m_lastMouse;
-    
     
     friend class wxCanvasObject;
     
