@@ -142,6 +142,17 @@ public:
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 #endif // wxUSE_MENUS
 
+    // if there is no real wxTopLevelWindow on this platform we have to define
+    // some wxTopLevelWindowBase pure virtual functions here to avoid breaking
+    // old ports (wxMotif) which don't define them in wxFrame
+#ifndef wxTopLevelWindowNative
+    virtual bool ShowFullScreen(bool WXUNUSED(show),
+                                long WXUNUSED(style) = wxFULLSCREEN_ALL)
+        { return FALSE; }
+    virtual bool IsFullScreen() const
+        { return FALSE; }
+#endif // no wxTopLevelWindowNative
+
 protected:
     // the frame main menu/status/tool bars
     // ------------------------------------
