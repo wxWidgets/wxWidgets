@@ -2482,6 +2482,13 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxCoord xOrig, yOrig;
         CalcUnscrolledPosition(0, 0, &xOrig, &yOrig);
 
+        // tell the caller cache to cache the data
+        wxListEvent evCache(wxEVT_COMMAND_LIST_CACHE_HINT, GetParent()->GetId());
+        evCache.SetEventObject( GetParent() );
+        evCache.m_oldItemIndex = visibleFrom;
+        evCache.m_itemIndex = visibleTo;
+        GetParent()->GetEventHandler()->ProcessEvent( evCache );
+
         for ( size_t line = visibleFrom; line <= visibleTo; line++ )
         {
             rectLine = GetLineRect(line);
