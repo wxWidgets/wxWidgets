@@ -12,7 +12,7 @@ rem the root directory of wxWindows installation. TMAKE program should be in
 rem path or, alternatively, TMAKE environment variable should be set.
 
 rem set tmakecmd=E:\Perl\5.00471\bin\MSWin32-x86\perl.exe g:\Unix\tmake\bin\tmake
-set tmakecmd=c:\progra~1\tmake\bin\tmake
+set tmakecmd=d:\programs\tmake\bin\tmake
 
 if "x%WX%" == "x" goto skip
 set WXDIR=%WX%
@@ -38,6 +38,10 @@ rem this loop just doesn't want to work under command.com and cmd.exe and
 rem 4nt.exe, so I preferred to unroll it.
 rem for %%c in (b32 bcc dos g95 sc vc wat) %TM% -t %c% wxwin.pro -o %WXDIR%\src\msw\makefile.%c%
 
+echo Generating for for Visual C++ 6.0 wxBase C++ (32 bits)...
+%tmakecmd% -t basevc wxwin.pro -o %WXDIR%\src\msw\makebase.vc
+echo Generating for for Visual C++ 6.0 wxBase.dsp
+%tmakecmd% -t vc6base wxwin.pro -o %WXDIR%\wxBase.dsp
 echo Generating for Visual C++ 4.0...
 %tmakecmd% -t vc wxwin.pro -o %WXDIR%\src\msw\makefile.vc
 echo Generating for Borland C++ (32 bits)...
