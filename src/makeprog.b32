@@ -26,10 +26,16 @@ IMGLIBS=
 IMGLIBS= png_$(DEBUG_SUFFIX) jpeg_$(DEBUG_SUFFIX) tiff_$(DEBUG_SUFFIX)
 !endif
 
-!if "$(WXUSINGDLL)" == "1"
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mti import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS) 
+!if "$(FINAL)" == "0"
+EX_LIBS=$(EXTRALIBS:.lib=_d.lib)
 !else
-LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS)
+EX_LIBS=$(EXTRALIBS)
+!endif
+
+!if "$(WXUSINGDLL)" == "1"
+LIBS=$(WXLIB) $(EX_LIBS) cw32mti import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS) 
+!else
+LIBS=$(WXLIB) $(EX_LIBS) cw32mt import32 ole2w32 regex_$(DEBUG_SUFFIX) zlib_$(DEBUG_SUFFIX) $(IMGLIBS)
 !endif
 
 !if "$(wxUSE_ODBC)" == "1"

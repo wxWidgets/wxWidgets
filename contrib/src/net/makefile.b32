@@ -9,9 +9,17 @@
 
 WXDIR = $(WXWIN)
 
-LIBTARGET=$(WXDIR)\lib\net.lib
+LIBTARGET=net
 
-OBJECTS = smapi.obj email.obj web.obj
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS = \
+	$(OBJ_PATH)\smapi.obj \
+	$(OBJ_PATH)\email.obj \
+	$(OBJ_PATH)\web.obj
 
 !include $(WXDIR)\src\makelib.b32
 
+$(OBJ_PATH)\smapi.obj : smapi.cpp
+$(OBJ_PATH)\email.obj : email.cpp
+$(OBJ_PATH)\web.obj : web.cpp

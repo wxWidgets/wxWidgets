@@ -9,12 +9,56 @@
 
 WXDIR = $(WXWIN)
 
-LIBTARGET=$(WXDIR)\contrib\lib\mmedia.lib
+LIBTARGET=mmedia
 
-OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj \
-  g723_40.obj g72x.obj sndaiff.obj sndbase.obj sndcodec.obj \
-  sndcpcm.obj sndfile.obj sndg72x.obj sndmsad.obj sndpcm.obj sndulaw.obj \
-  sndwav.obj sndwin.obj vidbase.obj vidwin.obj
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS =  \
+	$(OBJ_PATH)\cdbase.obj \
+	$(OBJ_PATH)\cdwin.obj \
+	$(OBJ_PATH)\g711.obj \
+	$(OBJ_PATH)\g721.obj \
+	$(OBJ_PATH)\g723_24.obj \
+  	$(OBJ_PATH)\g723_40.obj \
+	$(OBJ_PATH)\g72x.obj \
+	$(OBJ_PATH)\sndaiff.obj \
+	$(OBJ_PATH)\sndbase.obj \
+	$(OBJ_PATH)\sndcodec.obj \
+	$(OBJ_PATH)\sndcpcm.obj \
+	$(OBJ_PATH)\sndfile.obj \
+	$(OBJ_PATH)\sndg72x.obj \
+	$(OBJ_PATH)\sndmsad.obj \
+	$(OBJ_PATH)\sndpcm.obj \
+	$(OBJ_PATH)\sndulaw.obj \
+	$(OBJ_PATH)\sndwav.obj \
+	$(OBJ_PATH)\sndwin.obj \
+	$(OBJ_PATH)\vidbase.obj \
+	$(OBJ_PATH)\vidwin.obj 
+
+
+
 
 !include $(WXDIR)\src\makelib.b32
+
+$(OBJ_PATH)\cdbase.obj : cdbase.cpp
+$(OBJ_PATH)\cdwin.obj : cdwin.cpp
+$(OBJ_PATH)\g711.obj : g711.cpp
+$(OBJ_PATH)\g721.obj : g721.cpp
+$(OBJ_PATH)\g723_24.obj : g723_24.cpp
+$(OBJ_PATH)\g723_40.obj: g723_40.cpp
+$(OBJ_PATH)\g72x.obj : g72x.cpp
+$(OBJ_PATH)\sndaiff.obj : sndaiff.cpp
+$(OBJ_PATH)\sndbase.obj : sndbase.cpp
+$(OBJ_PATH)\sndcodec.obj : sndcodec.cpp
+$(OBJ_PATH)\sndcpcm.obj : sndcpcm.cpp
+$(OBJ_PATH)\sndfile.obj : sndfile.cpp
+$(OBJ_PATH)\sndg72x.obj : sndg72x.cpp
+$(OBJ_PATH)\sndmsad.obj : sndmsad.cpp
+$(OBJ_PATH)\sndpcm.obj : sndpcm.cpp
+$(OBJ_PATH)\sndulaw.obj : sndulaw.cpp
+$(OBJ_PATH)\sndwav.obj : sndwav.cpp
+$(OBJ_PATH)\sndwin.obj : sndwin.cpp
+$(OBJ_PATH)\vidbase.obj : vidbase.cpp
+$(OBJ_PATH)\vidwin.obj : vidwin.cpp
+
 

@@ -13,111 +13,83 @@
 
 WXDIR = $(WXWIN)
 
+LIBTARGET=stc
+
+!include $(WXDIR)\src\makeb32.env
+
 SCINTILLA=.\scintilla
 
 S=$(SCINTILLA)\src
 
-STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S)
+EXTRASTCCPPFLAGS = -D__WX__ -DSCI_LEXER -DLINK_LEXERS -I$(SCINTILLA)/include -I$(S)
 
-LIBTARGET=$(WXDIR)\contrib\lib\stc.lib
+
 
 OBJECTS = \
-        AutoComplete.obj	\
-        CallTip.obj	        \
-        CellBuffer.obj	    	\
-        ContractionState.obj  	\
-        Document.obj	        \
-	DocumentAccessor.obj	\
-        Editor.obj		\
-        Indicator.obj	        \
-        KeyMap.obj		\
-        KeyWords.obj	        \
-	LexAVE.obj		\
-	LexAda.obj		\
-	LexAsm.obj		\
-	LexBaan.obj		\
-	LexBullant.obj		\
-	LexMatlab.obj		\
-	LexCPP.obj		\
-	LexConf.obj		\
-	LexCrontab.obj		\
-	LexCSS.obj		\
-	LexEiffel.obj		\
-	LexFortran.obj		\
-	LexHTML.obj		\
-	LexLisp.obj		\
-	LexLua.obj		\
-	LexOthers.obj		\
-	LexPOV.obj		\
-	LexPascal.obj		\
-	LexPerl.obj		\
-	LexPython.obj		\
-	LexRuby.obj		\
-	LexSQL.obj		\
-	LexVB.obj		\
-        LineMarker.obj	    	\
-        PropSet.obj	        \
-	RESearch.obj		\
-        ScintillaBase.obj	\
-        Style.obj		\
-	StyleContext.obj	\
-	UniConversion.obj	\
-        ViewStyle.obj		\
-	WindowAccessor.obj	\
-	XPM.obj  		\
-                            	\
-	PlatWX.obj              \
-	ScintillaWX.obj         \
-	stc.obj                 \
+        $(OBJ_PATH)\AutoComplete.obj		\
+        $(OBJ_PATH)\CallTip.obj	        	\
+        $(OBJ_PATH)\CellBuffer.obj	    	\
+        $(OBJ_PATH)\ContractionState.obj  	\
+        $(OBJ_PATH)\Document.obj	        \
+	$(OBJ_PATH)\DocumentAccessor.obj	\
+        $(OBJ_PATH)\Editor.obj			\
+        $(OBJ_PATH)\Indicator.obj	        \
+        $(OBJ_PATH)\KeyMap.obj			\
+        $(OBJ_PATH)\KeyWords.obj	        \
+	$(OBJ_PATH)\LexAVE.obj			\
+	$(OBJ_PATH)\LexAda.obj			\
+	$(OBJ_PATH)\LexAsm.obj			\
+	$(OBJ_PATH)\LexBaan.obj			\
+	$(OBJ_PATH)\LexBullant.obj		\
+	$(OBJ_PATH)\LexMatlab.obj		\
+	$(OBJ_PATH)\LexCPP.obj			\
+	$(OBJ_PATH)\LexConf.obj			\
+	$(OBJ_PATH)\LexCrontab.obj		\
+	$(OBJ_PATH)\LexCSS.obj			\
+	$(OBJ_PATH)\LexEiffel.obj		\
+	$(OBJ_PATH)\LexFortran.obj		\
+	$(OBJ_PATH)\LexHTML.obj			\
+	$(OBJ_PATH)\LexLisp.obj			\
+	$(OBJ_PATH)\LexLua.obj			\
+	$(OBJ_PATH)\LexOthers.obj		\
+	$(OBJ_PATH)\LexPOV.obj			\
+	$(OBJ_PATH)\LexPascal.obj		\
+	$(OBJ_PATH)\LexPerl.obj			\
+	$(OBJ_PATH)\LexPython.obj		\
+	$(OBJ_PATH)\LexRuby.obj			\
+	$(OBJ_PATH)\LexSQL.obj			\
+	$(OBJ_PATH)\LexVB.obj			\
+        $(OBJ_PATH)\LineMarker.obj	    	\
+        $(OBJ_PATH)\PropSet.obj	        	\
+	$(OBJ_PATH)\RESearch.obj		\
+        $(OBJ_PATH)\ScintillaBase.obj		\
+        $(OBJ_PATH)\Style.obj			\
+	$(OBJ_PATH)\StyleContext.obj		\
+	$(OBJ_PATH)\UniConversion.obj		\
+        $(OBJ_PATH)\ViewStyle.obj		\
+	$(OBJ_PATH)\WindowAccessor.obj		\
+	$(OBJ_PATH)\XPM.obj  			\
+                            			\
+	$(OBJ_PATH)\PlatWX.obj              	\
+	$(OBJ_PATH)\ScintillaWX.obj         	\
+	$(OBJ_PATH)\stc.obj                 	\
 
 
-STCCFG = stc.cfg
-STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) @$(STCCFG)
+STCCPPFLAGS=$(DLL_FLAGS) $(EXTRACPPFLAGS) $(EXTRASTCCPPFLAGS)
 
-default: $(STCCFG) $(LIBTARGET)
-
-cleancfg:
-	del $(STCCFG)
+.path.obj = $(OBJ_PATH)
 
 {$(S)}.cxx.obj:
-	bcc32 $(STCCPPFLAGS) -P -c {$< }
+	bcc32 $(STCCPPFLAGS) $(CPPFLAGS) -P -c -o$(OBJ_PATH)\$(<B).obj {$< }
 
-
-
-$(STCCFG): makefile.b32
-	copy &&!
--H=$(WXDIR)\src\msw\wx32.csm
--3
--d
--a1 # byte alignment
--R-
--X
--w-par
--w-aus
--w-hid # virtual function A hides virtual function B
--tWM
-
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/jpeg;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm;$(WXDIR)/src/tiff
--I$(WXDIR)\include\wx\msw\gnuwin32;$(ARCHINCDIR)
-
-
--L$(BCCDIR)\lib
--D__WXWIN__
--D__WXMSW__
--D__WINDOWS__
--DWIN32
-$(OPT)
-$(DEBUG_FLAGS)
-$(WIN95FLAG)
-$(STCEXTRACPPFLAGS)
-! $(STCCFG)
-
+.cpp.obj:
+	bcc32 $(STCCPPFLAGS) $(CPPFLAGS) -P -c -o$(OBJ_PATH)\$(<B).obj {$< }
 
 !include $(WXDIR)\src\makelib.b32
 
-{$(S)}.cpp.obj:
-	bcc32 $(STCCPPFLAGS) -P -c {$< }
+$(OBJ_PATH)\PlatWX.obj : PlatWX.cpp
 
-.$(SRCSUFF).obj:
-	bcc32 $(STCCPPFLAGS) -c {$< }
+$(OBJ_PATH)\ScintillaWX.obj : ScintillaWX.cpp
+
+$(OBJ_PATH)\stc.obj : stc.cpp
 

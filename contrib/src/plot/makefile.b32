@@ -9,9 +9,16 @@
 
 WXDIR = $(WXWIN)
 
-LIBTARGET=$(WXDIR)\lib\plot.lib
+LIBTARGET=plot
 
-OBJECTS = plot.obj
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS = $(OBJ_PATH)\plot.obj
 
 !include $(WXDIR)\src\makelib.b32
+
+
+$(OBJ_PATH)\plot.obj : plot.cpp
+
+
 

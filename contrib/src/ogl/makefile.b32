@@ -9,10 +9,38 @@
 
 WXDIR = $(WXWIN)
 
-LIBTARGET=$(WXDIR)\lib\ogl.lib
+LIBTARGET=ogl
 
-OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj misc.obj divided.obj constrnt.obj\
- composit.obj drawn.obj bmpshape.obj mfutils.obj
+!include $(WXDIR)\src\makeb32.env
+
+OBJECTS = \
+	$(OBJ_PATH)\basic.obj \
+	$(OBJ_PATH)\basic2.obj \
+	$(OBJ_PATH)\canvas.obj \
+	$(OBJ_PATH)\ogldiag.obj \
+	$(OBJ_PATH)\lines.obj \
+	$(OBJ_PATH)\misc.obj \
+	$(OBJ_PATH)\divided.obj \
+	$(OBJ_PATH)\constrnt.obj\
+	$(OBJ_PATH)\composit.obj \
+	$(OBJ_PATH)\drawn.obj \
+	$(OBJ_PATH)\bmpshape.obj \
+	$(OBJ_PATH)\mfutils.obj
 
 !include $(WXDIR)\src\makelib.b32
+
+$(OBJ_PATH)\basic.obj : basic.cpp
+$(OBJ_PATH)\basic2.obj : basic2.cpp
+$(OBJ_PATH)\canvas.obj : canvas.cpp
+$(OBJ_PATH)\ogldiag.obj : ogldiag.cpp
+$(OBJ_PATH)\lines.obj : lines.cpp
+$(OBJ_PATH)\misc.obj : misc.cpp
+$(OBJ_PATH)\divided.obj : divided.cpp
+$(OBJ_PATH)\constrnt.obj: constrnt.cpp
+$(OBJ_PATH)\composit.obj : composit.cpp
+$(OBJ_PATH)\drawn.obj : drawn.cpp
+$(OBJ_PATH)\bmpshape.obj : bmpshape.cpp
+$(OBJ_PATH)\mfutils.obj : mfutils.cpp
+
+
 
