@@ -23038,7 +23038,7 @@ echo "$as_me: WARNING: pangoxft library not found, library will be compiled with
             TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DUNIX=1 -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$(MICROWIN)/src/lib/libnano-X.a"
         else
-            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11$xpm_link"
+            GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11"
         fi
 
         TOOLKIT_VPATH="\${top_srcdir}/src/x11"
@@ -24215,7 +24215,7 @@ echo $ECHO_N "checking if we need -lXp and/or -lSM -lICE... $ECHO_C" >&6
                 for libsm_ice in "" " -lSM -lICE"; do
                     if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
-                        LIBS="$GUI_TK_LIBRARY -lXm${xpm_link} ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
+                        LIBS="$GUI_TK_LIBRARY -lXm ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
                         CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
 
@@ -24348,7 +24348,7 @@ fi
 rm -f conftest.$ac_objext conftest.$ac_ext
         CFLAGS=$save_CFLAGS
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
@@ -24444,7 +24444,7 @@ echo "$as_me:$LINENO: result: $wx_cv_x11_xpm_h" >&5
 echo "${ECHO_T}$wx_cv_x11_xpm_h" >&6
 
                 if test $wx_cv_x11_xpm_h = "yes"; then
-                    xpm_link=" -lXpm"
+                    GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXpm"
                     cat >>confdefs.h <<\_ACEOF
 #define wxHAVE_LIB_XPM 1
 _ACEOF
