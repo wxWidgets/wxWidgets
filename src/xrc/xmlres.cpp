@@ -895,6 +895,8 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
 
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
+    wxCHECK_MSG(m_node, NULL, wxT("You can't access handler data before it was initialized!"));
+
     wxXmlNode *n = m_node->GetChildren();
 
     while (n)
