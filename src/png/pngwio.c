@@ -1,11 +1,11 @@
 
 /* pngwio.c - functions for data output
  *
- * libpng 1.0.3 - January 14, 1999
+ * libpng 1.2.4 - July 8, 2002
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
- * Copyright (c) 1996, 1997 Andreas Dilger
- * Copyright (c) 1998, 1999 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2002 Glenn Randers-Pehrson
+ * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
+ * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
  * This file provides a location for all output.  Users who need
  * special handling are expected to write functions that have the same
@@ -17,6 +17,7 @@
 
 #define PNG_INTERNAL
 #include "png.h"
+#ifdef PNG_WRITE_SUPPORTED
 
 /* Write the data to whatever output you are using.  The default routine
    writes to a file pointer.  Note that this routine sometimes gets called
@@ -24,7 +25,7 @@
    buffering if you are using unbuffered writes.  This should never be asked
    to write more than 64K on a 16 bit machine.  */
 
-void
+void /* PRIVATE */
 png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    if (png_ptr->write_data_fn != NULL )
@@ -39,21 +40,19 @@ png_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    write_data function and use it at run time with png_set_write_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
-#ifdef __VISAGECPP__
-static void _Optlink
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#else
-static void
-png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#endif
 {
    png_uint_32 check;
 
-   check = fwrite(data, 1, length, (FILE *)(png_ptr->io_ptr));
+#if defined(_WIN32_WCE)
+   if ( !WriteFile((HANDLE)(png_ptr->io_ptr), data, length, &check, NULL) )
+      check = 0;
+#else
+   check = fwrite(data, 1, length, (png_FILE_p)(png_ptr->io_ptr));
+#endif
    if (check != length)
-   {
       png_error(png_ptr, "Write Error");
-   }
 }
 #else
 /* this is the model-independent version. Since the standard I/O library
@@ -64,24 +63,24 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define NEAR_BUF_SIZE 1024
 #define MIN(a,b) (a <= b ? a : b)
 
-#ifdef __VISAGECPP__
-static void _Optlink
+void PNGAPI
 png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#else
-static void
-png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#endif
 {
    png_uint_32 check;
    png_byte *near_data;  /* Needs to be "png_byte *" instead of "png_bytep" */
-   FILE *io_ptr;
+   png_FILE_p io_ptr;
 
    /* Check if data really is near. If so, use usual code. */
    near_data = (png_byte *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE *)CVT_PTR(png_ptr->io_ptr);
+   io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)near_data == data)
    {
+#if defined(_WIN32_WCE)
+      if ( !WriteFile(io_ptr, near_data, length, &check, NULL) )
+         check = 0;
+#else
       check = fwrite(near_data, 1, length, io_ptr);
+#endif
    }
    else
    {
@@ -93,7 +92,12 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
       {
          written = MIN(NEAR_BUF_SIZE, remaining);
          png_memcpy(buf, data, written); /* copy far buffer to near buffer */
+#if defined(_WIN32_WCE)
+         if ( !WriteFile(io_ptr, buf, written, &err, NULL) )
+            err = 0;
+#else
          err = fwrite(buf, 1, written, io_ptr);
+#endif
          if (err != written)
             break;
          else
@@ -104,9 +108,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
       while (remaining != 0);
    }
    if (check != length)
-   {
       png_error(png_ptr, "Write Error");
-   }
 }
 
 #endif
@@ -116,7 +118,7 @@ png_default_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
    to disk).  After png_flush is called, there should be no data pending
    writing in any buffers. */
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
-void
+void /* PRIVATE */
 png_flush(png_structp png_ptr)
 {
    if (png_ptr->output_flush_fn != NULL)
@@ -124,18 +126,15 @@ png_flush(png_structp png_ptr)
 }
 
 #if !defined(PNG_NO_STDIO)
-#ifdef __VISAGECPP__
-static void _Optlink
+void PNGAPI
 png_default_flush(png_structp png_ptr)
-#else
-static void
-png_default_flush(png_structp png_ptr)
-#endif
 {
-   FILE *io_ptr;
-   io_ptr = (FILE *)CVT_PTR((png_ptr->io_ptr));
+#if !defined(_WIN32_WCE)
+   png_FILE_p io_ptr;
+   io_ptr = (png_FILE_p)CVT_PTR((png_ptr->io_ptr));
    if (io_ptr != NULL)
       fflush(io_ptr);
+#endif
 }
 #endif
 #endif
@@ -162,7 +161,7 @@ png_default_flush(png_structp png_ptr)
                    PNG_WRITE_FLUSH_SUPPORTED is not defined at libpng compile
                    time, output_flush_fn will be ignored, although it must be
                    supplied for compatibility. */
-void
+void PNGAPI
 png_set_write_fn(png_structp png_ptr, png_voidp io_ptr,
    png_rw_ptr write_data_fn, png_flush_ptr output_flush_fn)
 {
@@ -226,3 +225,4 @@ void *png_far_to_near(png_structp png_ptr,png_voidp ptr, int check)
 }
 #   endif
 #   endif
+#endif /* PNG_WRITE_SUPPORTED */

@@ -1,11 +1,11 @@
 
 /* pngrio.c - functions for data input
  *
- * libpng 1.0.3 - January 14, 1999
+ * libpng 1.2.4 - July 8, 2002
  * For conditions of distribution and use, see copyright notice in png.h
- * Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
- * Copyright (c) 1996, 1997 Andreas Dilger
- * Copyright (c) 1998, 1999 Glenn Randers-Pehrson
+ * Copyright (c) 1998-2002 Glenn Randers-Pehrson
+ * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
+ * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
  * This file provides a location for all input.  Users who need
  * special handling are expected to write a function that has the same
@@ -23,10 +23,10 @@
    with very small lengths, so you should implement some kind of simple
    buffering if you are using unbuffered reads.  This should never be asked
    to read more then 64K on a 16 bit machine. */
-void
+void /* PRIVATE */
 png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-   png_debug1(4,"reading %d bytes\n", length);
+   png_debug1(4,"reading %d bytes\n", (int)length);
    if (png_ptr->read_data_fn != NULL)
       (*(png_ptr->read_data_fn))(png_ptr, data, length);
    else
@@ -39,26 +39,24 @@ png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
    read_data function and use it at run time with png_set_read_fn(), rather
    than changing the library. */
 #ifndef USE_FAR_KEYWORD
-#ifdef __VISAGECPP__
-static void _Optlink
+void PNGAPI
 png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#else
-static void
-png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
-#endif
 {
    png_size_t check;
 
    /* fread() returns 0 on error, so it is OK to store this in a png_size_t
     * instead of an int, which is what fread() actually returns.
     */
+#if defined(_WIN32_WCE)
+   if ( !ReadFile((HANDLE)(png_ptr->io_ptr), data, length, &check, NULL) )
+      check = 0;
+#else
    check = (png_size_t)fread(data, (png_size_t)1, length,
-      (FILE *)png_ptr->io_ptr);
+      (png_FILE_p)png_ptr->io_ptr);
+#endif
 
    if (check != length)
-   {
       png_error(png_ptr, "Read Error");
-   }
 }
 #else
 /* this is the model-independent version. Since the standard I/O library
@@ -69,19 +67,24 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 #define NEAR_BUF_SIZE 1024
 #define MIN(a,b) (a <= b ? a : b)
 
-static void
+static void /* PRIVATE */
 png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
    int check;
    png_byte *n_data;
-   FILE *io_ptr;
+   png_FILE_p io_ptr;
 
    /* Check if data really is near. If so, use usual code. */
    n_data = (png_byte *)CVT_PTR_NOCHECK(data);
-   io_ptr = (FILE *)CVT_PTR(png_ptr->io_ptr);
+   io_ptr = (png_FILE_p)CVT_PTR(png_ptr->io_ptr);
    if ((png_bytep)n_data == data)
    {
+#if defined(_WIN32_WCE)
+      if ( !ReadFile((HANDLE)(png_ptr->io_ptr), data, length, &check, NULL) )
+         check = 0;
+#else
       check = fread(n_data, 1, length, io_ptr);
+#endif
    }
    else
    {
@@ -92,7 +95,12 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
       do
       {
          read = MIN(NEAR_BUF_SIZE, remaining);
+#if defined(_WIN32_WCE)
+         if ( !ReadFile((HANDLE)(io_ptr), buf, read, &err, NULL) )
+            err = 0;
+#else
          err = fread(buf, (png_size_t)1, read, io_ptr);
+#endif
          png_memcpy(data, buf, read); /* copy far buffer to near buffer */
          if(err != read)
             break;
@@ -104,9 +112,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
       while (remaining != 0);
    }
    if ((png_uint_32)check != (png_uint_32)length)
-   {
       png_error(png_ptr, "read Error");
-   }
 }
 #endif
 #endif
@@ -124,7 +130,7 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
                   unsigned int that is the number of bytes to be read.
                   To exit and output any fatal error messages the new write
                   function should call png_error(png_ptr, "Error msg"). */
-void
+void PNGAPI
 png_set_read_fn(png_structp png_ptr, png_voidp io_ptr,
    png_rw_ptr read_data_fn)
 {
@@ -151,6 +157,5 @@ png_set_read_fn(png_structp png_ptr, png_voidp io_ptr,
 
 #if defined(PNG_WRITE_FLUSH_SUPPORTED)
    png_ptr->output_flush_fn = NULL;
-#endif /* PNG_WRITE_FLUSH_SUPPORTED */
+#endif
 }
-
