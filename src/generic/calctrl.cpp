@@ -321,6 +321,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     // above it
     SetSize(pos.x, pos.y, sizeReal.x, sizeReal.y);
 
+    SetForegroundColour(*wxBLACK);
     SetBackgroundColour(*wxWHITE);
     SetFont(*wxSWISS_FONT);
 
