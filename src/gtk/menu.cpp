@@ -33,13 +33,13 @@
 #ifdef __WXGTK20__
     #include <glib-object.h>
 
-    #define gtk_accel_group_attach(g, o) _gtk_accel_group_attach((g), (o))
-    #define gtk_accel_group_detach(g, o) _gtk_accel_group_detach((g), (o))
+    #define gtk_accel_group_attach(g, o) gtk_window_add_accel_group((o), (g))
+    #define gtk_accel_group_detach(g, o) gtk_window_remove_accel_group((o), (g))
     #define gtk_menu_ensure_uline_accel_group(m) gtk_menu_get_accel_group(m)
 
-    #define ACCEL_OBJECT        GObject
+    #define ACCEL_OBJECT        GtkWindow
     #define ACCEL_OBJECTS(a)    (a)->acceleratables
-    #define ACCEL_OBJ_CAST(obj) G_OBJECT(obj)
+    #define ACCEL_OBJ_CAST(obj) ((GtkWindow*) obj)
 #else // GTK+ 1.x
     #define ACCEL_OBJECT        GtkObject
     #define ACCEL_OBJECTS(a)    (a)->attach_objects
@@ -53,8 +53,8 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
-#if GTK_CHECK_VERSION(1, 2, 0) && wxUSE_ACCEL
-    static wxString GetHotKey( const wxMenuItem& item );
+#if wxUSE_ACCEL
+static wxString GetHotKey( const wxMenuItem& item );
 #endif
 
 //-----------------------------------------------------------------------------
@@ -108,7 +108,7 @@ static wxString wxReplaceUnderscore( const wxString& title )
 {
     const wxChar *pc;
 
-    /* GTK 1.2 wants to have "_" instead of "&" for accelerators */
+    // GTK 1.2 wants to have "_" instead of "&" for accelerators
     wxString str;
     pc = title;
     while (*pc != wxT('\0'))
@@ -121,40 +121,24 @@ static wxString wxReplaceUnderscore( const wxString& title )
         }
         else if (*pc == wxT('&'))
         {
-#if GTK_CHECK_VERSION(1, 2, 0)
             str << wxT('_');
-#endif
         }
-#if GTK_CHECK_VERSION(2, 0, 0)
-        else if (*pc == wxT('/'))
-        {
-            str << wxT("\\/");
-        }
-        else if (*pc == wxT('\\'))
-        {
-            str << wxT("\\\\");
-        }
-#elif GTK_CHECK_VERSION(1, 2, 0)
-        else if (*pc == wxT('/'))
-        {
-            str << wxT('\\');
-        }
-#endif
         else
         {
-#ifdef __WXGTK12__
             if ( *pc == wxT('_') )
             {
                 // underscores must be doubled to prevent them from being
                 // interpreted as accelerator character prefix by GTK
                 str << *pc;
             }
-#endif // GTK+ 1.2
 
             str << *pc;
         }
         ++pc;
     }
+    
+    // wxPrintf( wxT("before %s after %s\n"), title.c_str(), str.c_str() );
+    
     return str;
 }
 
@@ -185,7 +169,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 wxMenuBar::wxMenuBar( long style )
 {
-    /* the parent window is known after wxFrame::SetMenu() */
+    // the parent window is known after wxFrame::SetMenu()
     m_needParent = FALSE;
     m_style = style;
     m_invokingWindow = (wxWindow*) NULL;
@@ -197,13 +181,9 @@ wxMenuBar::wxMenuBar( long style )
         return;
     }
 
-    /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
-#if GTK_CHECK_VERSION(1, 2, 1)
-    m_accel = gtk_accel_group_new();
-    m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
-    m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
-#else
     m_menubar = gtk_menu_bar_new();
+#ifndef __WXGTK20__
+    m_accel = gtk_accel_group_new();
 #endif
 
     if (style & wxMB_DOCKABLE)
@@ -224,7 +204,7 @@ wxMenuBar::wxMenuBar( long style )
 
 wxMenuBar::wxMenuBar()
 {
-    /* the parent window is known after wxFrame::SetMenu() */
+    // the parent window is known after wxFrame::SetMenu()
     m_needParent = FALSE;
     m_style = 0;
     m_invokingWindow = (wxWindow*) NULL;
@@ -236,13 +216,9 @@ wxMenuBar::wxMenuBar()
         return;
     }
 
-    /* GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has. */
-#if GTK_CHECK_VERSION(1, 2, 1)
-    m_accel = gtk_accel_group_new();
-    m_factory = gtk_item_factory_new( GTK_TYPE_MENU_BAR, "<main>", m_accel );
-    m_menubar = gtk_item_factory_get_widget( m_factory, "<main>" );
-#else
     m_menubar = gtk_menu_bar_new();
+#ifndef __WXGTK20__
+    m_accel = gtk_accel_group_new();
 #endif
 
     m_widget = GTK_WIDGET(m_menubar);
@@ -254,7 +230,6 @@ wxMenuBar::wxMenuBar()
 
 wxMenuBar::~wxMenuBar()
 {
-//    gtk_object_unref( GTK_OBJECT(m_factory) );  why not ?
 }
 
 static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
@@ -265,8 +240,10 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
-    /* support for native hot keys */
+#ifndef __WXGTK20__
+    // support for native hot keys
     gtk_accel_group_detach( menu->m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
+#endif
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -282,16 +259,14 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
 
-#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
-    /* support for native hot keys  */
+    // support for native hot keys
     ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
     if ( !g_slist_find( ACCEL_OBJECTS(menu->m_accel), obj ) )
         gtk_accel_group_attach( menu->m_accel, obj );
-#endif // GTK+ 1.2.1+
 
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
     while (node)
@@ -306,16 +281,16 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxMenuBar::SetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = win;
-#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
-    /* support for native key accelerators indicated by underscroes */
+#ifndef __WXGTK20__
+    // support for native key accelerators indicated by underscroes
     ACCEL_OBJECT *obj = ACCEL_OBJ_CAST(top_frame->m_widget);
     if ( !g_slist_find( ACCEL_OBJECTS(m_accel), obj ) )
         gtk_accel_group_attach( m_accel, obj );
-#endif // GTK+ 1.2.1+
+#endif
 
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
@@ -329,14 +304,14 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
     m_invokingWindow = (wxWindow*) NULL;
-#if GTK_CHECK_VERSION(1, 2, 1)
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
-
+        
+#ifndef __WXGTK20__
     // support for native key accelerators indicated by underscroes
     gtk_accel_group_detach( m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
-#endif // GTK+ 1.2.1+
+#endif
 
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
@@ -362,48 +337,33 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     // This doesn't have much effect right now.
     menu->SetTitle( str );
 
-    // GTK 1.2.0 doesn't have gtk_item_factory_get_item(), but GTK 1.2.1 has.
-#if GTK_CHECK_VERSION(1, 2, 1)
-
-    wxString buf;
-    buf << wxT('/') << str.c_str();
-
-    // local buffer in multibyte form
-    char cbuf[400];
-    strcpy(cbuf, wxGTK_CONV(buf) );
-
-    GtkItemFactoryEntry entry;
-    entry.path = (gchar *)cbuf;  // const_cast
-    entry.accelerator = (gchar*) NULL;
-    entry.callback = (GtkItemFactoryCallback) NULL;
-    entry.callback_action = 0;
-    entry.item_type = (char *)"<Branch>";
-
-    gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  // what is 2 ?
-    // in order to get the pointer to the item we need the item text _without_ underscores
-    wxString tmp = wxT("<main>/");
-    const wxChar *pc;
-    for ( pc = str; *pc != wxT('\0'); pc++ )
-    {
-       // contrary to the common sense, we must throw out _all_ underscores,
-       // (i.e. "Hello__World" => "HelloWorld" and not "Hello_World" as we
-       // might naively think). IMHO it's a bug in GTK+ (VZ)
-       while (*pc == wxT('_'))
-           pc++;
-       tmp << *pc;
-    }
-    menu->m_owner = gtk_item_factory_get_item( m_factory, wxGTK_CONV( tmp ) );
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
+    // The "m_owner" is the "menu item"
+#ifdef __WXGTK20__
+    menu->m_owner = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( str ) );
 #else
-
     menu->m_owner = gtk_menu_item_new_with_label( wxGTK_CONV( str ) );
-    gtk_widget_show( menu->m_owner );
-    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
-
-    gtk_menu_bar_append( GTK_MENU_BAR(m_menubar), menu->m_owner );
-
+    GtkLabel *label = GTK_LABEL( GTK_BIN(menu->m_owner)->child );
+    // set new text
+    gtk_label_set_text( label, wxGTK_CONV( str ) );
+    // reparse key accel
+    guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( str ) );
+    if (accel_key != GDK_VoidSymbol)
+    {
+        gtk_widget_add_accelerator (menu->m_owner,
+                                       "activate_item",
+                                        m_accel,//gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menubar)),
+                                        accel_key,
+                                        GDK_MOD1_MASK,
+                                        GTK_ACCEL_LOCKED);
+    }
 #endif
 
+    gtk_widget_show( menu->m_owner );
+    
+    gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
+    
+    gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
+    
     gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_open_callback),
                         (gpointer)menu );
@@ -434,19 +394,10 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !wxMenuBarBase::Insert(pos, menu, title) )
         return FALSE;
 
-    // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
-    // of version 1.2.6), so we first append the item and then change its
-    // index
+    // TODO
+    
     if ( !GtkAppend(menu, title) )
         return FALSE;
-
-    if (pos+1 >= m_menus.GetCount())
-        return TRUE;
-
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
-    gpointer data = g_list_last(menu_shell->children)->data;
-    menu_shell->children = g_list_remove(menu_shell->children, data);
-    menu_shell->children = g_list_insert(menu_shell->children, data, pos);
 
     return TRUE;
 }
@@ -500,13 +451,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return (wxMenu*) NULL;
 
-/*
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
-
-    printf( "factory entries before %d\n", (int)g_slist_length(m_factory->items) );
-    printf( "menu shell entries before %d\n", (int)g_list_length( menu_shell->children ) );
-*/
-
     wxMenu *menucopy = CopyMenu( menu );
 
     // unparent calls unref() and that would delete the widget so we raise
@@ -518,18 +462,13 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     delete menu;
 
     menu = menucopy;
-/*
-    printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
-    printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
-*/
 
     if (m_invokingWindow)
     {
-            // OPTIMISE ME:  see comment in GtkAppend
+        // OPTIMISE ME:  see comment in GtkAppend
+        wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
 
-    wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
-
-    if( frame )
+        if( frame )
             frame->UpdateMenuBarSize();
     }
 
@@ -871,7 +810,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
             continue;
         }
 
-#if GTK_CHECK_VERSION(2, 0, 0)
+#ifdef __WXGTK20__
         if ( *pc == wxT('\\')  )
         {
             // GTK 2.0 escapes "xxx/xxx" to "xxx\/xxx"
@@ -891,7 +830,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
         label += *pc;
     }
 
-    // wxPrintf( L"text %s label %s\n", text.c_str(), label.c_str() );
+    // wxPrintf( wxT("GetLabelFromText(): text %s label %s\n"), text.c_str(), label.c_str() );
 
     return label;
 }
@@ -916,16 +855,8 @@ void wxMenuItem::SetText( const wxString& str )
         else
             label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
-#if GTK_CHECK_VERSION(2, 0, 0)
-        // We have to imitate item_factory_unescape_label here
-        wxString tmp;
-        for (size_t n = 0; n < m_text.Len(); n++)
-        {
-            if (m_text[n] != wxT('\\'))
-                tmp += m_text[n];
-        }
-
-        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(tmp) );
+#ifdef __WXGTK20__
+        gtk_label_set_text_with_mnemonic( GTK_LABEL(label), wxGTK_CONV(m_text) );
 #else
         // set new text
         gtk_label_set( label, wxGTK_CONV( m_text ) );
@@ -955,37 +886,18 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             m_text << wxT('_');
         }
-#if GTK_CHECK_VERSION(2, 0, 0)
-        else if ( *pc == wxT('_') )    // escape underscores
-        {
-            // m_text << wxT("__");    doesn't work
-            m_text << wxT("__");
-        }
-        else if (*pc == wxT('/'))      // we have to escape slashes
-        {
-            m_text << wxT("\\/");
-        }
-        else if (*pc == wxT('\\'))     // we have to double backslashes
-        {
-            m_text << wxT("\\\\");
-        }
-#else
         else if ( *pc == wxT('_') )    // escape underscores
         {
             m_text << wxT("__");
         }
-        else if (*pc == wxT('/'))      /* we have to filter out slashes ... */
+        else 
         {
-            m_text << wxT('\\');  /* ... and replace them with back slashes */
-        }
-#endif
-        else {
             m_text << *pc;
         }
         ++pc;
     }
 
-    // wxPrintf( L"str %s m_text %s\n", str.c_str(), m_text.c_str() );
+    // wxPrintf( wxT("DoSetText(): str %s m_text %s\n"), str.c_str(), m_text.c_str() );
 
     m_hotKey = wxT("");
 
@@ -1054,33 +966,6 @@ bool wxMenuItem::IsChecked() const
     return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
 }
 
-wxString wxMenuItem::GetFactoryPath() const
-{
-    // In order to get the pointer to the item we need the item
-    // text _without_ underscores in GTK 1.2
-    wxString path( wxT("<main>/") );
-
-    for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
-    {
-        if ( *pc == wxT('_') )
-        {
-#ifdef __WXGTK20__
-            pc++;
-#else
-            // remove '_' unconditionally
-            continue;
-#endif
-        }
-
-        // don't remove ampersands '&' since if we have them in the menu item title
-        // it means that they were doubled to indicate "&" instead of accelerator
-
-        path += *pc;
-    }
-
-    return path;
-}
-
 //-----------------------------------------------------------------------------
 // wxMenu
 //-----------------------------------------------------------------------------
@@ -1090,8 +975,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 void wxMenu::Init()
 {
     m_accel = gtk_accel_group_new();
-    m_factory = gtk_item_factory_new( GTK_TYPE_MENU, "<main>", m_accel );
-    m_menu = gtk_item_factory_get_widget( m_factory, "<main>" );
+    m_menu = gtk_menu_new();
 
     m_owner = (GtkWidget*) NULL;
 
@@ -1100,15 +984,12 @@ void wxMenu::Init()
     // immediately.
     if(m_style & wxMENU_TEAROFF)
     {
-       GtkItemFactoryEntry entry;
-       entry.path = (char *)"/tearoff";
-       entry.callback = (GtkItemFactoryCallback) NULL;
-       entry.callback_action = 0;
-       entry.item_type = (char *)"<Tearoff>";
-       entry.accelerator = (gchar*) NULL;
-       gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  // what is 2 ?
-       //GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, "<main>/tearoff" );
-    }
+		GtkWidget *tearoff = gtk_tearoff_menu_item_new();
+
+		gtk_menu_append(GTK_MENU(m_menu), tearoff);
+	}
+
+	m_prevRadio = NULL;
 
     // append the title as the very first entry if we have it
     if ( !!m_title )
@@ -1124,70 +1005,82 @@ wxMenu::~wxMenu()
 
    if ( GTK_IS_WIDGET( m_menu ))
        gtk_widget_destroy( m_menu );
-
-   gtk_object_unref( GTK_OBJECT(m_factory) );
 }
 
 bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
-    // does this item terminate the current radio group?
-    bool endOfRadioGroup = TRUE;
-
     if ( mitem->IsSeparator() )
     {
-        GtkItemFactoryEntry entry;
-        entry.path = (char *)"/sep";
-        entry.callback = (GtkItemFactoryCallback) NULL;
-        entry.callback_action = 0;
-        entry.item_type = (char *)"<Separator>";
-        entry.accelerator = (gchar*) NULL;
+#ifdef __WXGTK20__
+        menuItem = gtk_separator_menu_item_new();
+#else
+        // TODO
+        menuItem = gtk_menu_item_new();
+#endif
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
 
-        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  // what is 2 ?
-
-        // this will be wrong for more than one separator. do we care?
-        menuItem = gtk_item_factory_get_widget( m_factory, "<main>/sep" );
-
-        // we might have a separator inside a radio group
-        endOfRadioGroup = FALSE;
     }
     else if ( mitem->IsSubMenu() )
     {
         // text has "_" instead of "&" after mitem->SetText()
         wxString text( mitem->GetText() );
 
-        // local buffer in multibyte form
-        char buf[200];
-        strcpy( buf, "/" );
-        strcat( buf, wxGTK_CONV( text ) );
-
-        GtkItemFactoryEntry entry;
-        entry.path = buf;
-        entry.callback = (GtkItemFactoryCallback) 0;
-        entry.callback_action = 0;
-        entry.item_type = (char *)"<Branch>";
-        entry.accelerator = (gchar*) NULL;
-
-        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  // what is 2 ?
-
-        wxString path( mitem->GetFactoryPath() );
-        menuItem = gtk_item_factory_get_item( m_factory, wxGTK_CONV( path ) );
+#ifdef __WXGTK20__
+        menuItem = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+#else
+        menuItem = gtk_menu_item_new_with_label( wxGTK_CONV( text ) );
+        GtkLabel *label = GTK_LABEL( GTK_BIN(menuItem)->child );
+        // set new text
+        gtk_label_set_text( label, wxGTK_CONV( text ) );
+        // reparse key accel
+        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+        if (accel_key != GDK_VoidSymbol)
+        {
+            gtk_widget_add_accelerator (menuItem,
+                                        "activate_item",
+                                        gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menu)),
+                                        accel_key,
+                                        GDK_MOD1_MASK,
+                                        GTK_ACCEL_LOCKED);
+        }
+#endif
 
         gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+ 
+        gtk_widget_show( mitem->GetSubMenu()->m_menu );
 
         // if adding a submenu to a menu already existing in the menu bar, we
         // must set invoking window to allow processing events from this
         // submenu
         if ( m_invokingWindow )
             wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
+
+        m_prevRadio = NULL;
     }
-#ifndef __WXGTK20__
     else if (mitem->GetBitmap().Ok())
     {
-        // Our extra code for Bitmaps in GTK 1.2
-        wxString text( mitem->GetText() );
+        wxString text = mitem->GetText();
         const wxBitmap *bitmap = &mitem->GetBitmap();
+        GdkPixmap *gdk_pixmap = bitmap->GetPixmap();
+        GdkBitmap *gdk_bitmap = bitmap->GetMask() ? bitmap->GetMask()->GetBitmap() : (GdkBitmap*) NULL;
+        
+#ifdef __WXGTK20__
+        menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+        
+        GtkWidget *image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
+        gtk_widget_show(image);
+        
+        gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(menuItem), image );
+        
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                            GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                            (gpointer)this );
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
+#else
 
         menuItem = gtk_pixmap_menu_item_new ();
         GtkWidget *label = gtk_accel_label_new ( wxGTK_CONV( text ) );
@@ -1206,8 +1099,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
-                                        gtk_menu_get_accel_group(
-                                            GTK_MENU(m_menu)),
+                                        m_accel,
                                         accel_key, accel_mods,
                                         GTK_ACCEL_VISIBLE);
         }
@@ -1218,9 +1110,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         {
             gtk_widget_add_accelerator (menuItem,
                                         "activate_item",
-                                        gtk_menu_ensure_uline_accel_group (
-                                            GTK_MENU (m_menu)),
-                                        accel_key, (GdkModifierType) 0,
+                                        gtk_menu_ensure_uline_accel_group(GTK_MENU (m_menu)),
+                                        accel_key,
+                                        GDK_MOD1_MASK,
                                         GTK_ACCEL_LOCKED);
         }
 
@@ -1228,7 +1120,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         mitem->SetLabelWidget(label);
 
-        GtkWidget* pixmap = gtk_pixmap_new( bitmap->GetPixmap(), bitmap->GetMask() ? bitmap->GetMask()->GetBitmap() : (GdkBitmap* )NULL);
+        GtkWidget* pixmap = gtk_pixmap_new( gdk_pixmap, gdk_bitmap );
         gtk_widget_show(pixmap);
         gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), pixmap);
 
@@ -1238,148 +1130,149 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
         gtk_menu_append( GTK_MENU(m_menu), menuItem );
         gtk_widget_show( menuItem );
-    }
 #endif
+
+        m_prevRadio = NULL;
+    }
     else // a normal item
     {
         // text has "_" instead of "&" after mitem->SetText() so don't use it
         wxString text( mitem->GetText() );
 
-        // buffers containing the menu item path and type in multibyte form
-        char bufPath[256],
-             bufType[256];
-
-        strcpy( bufPath, "/" );
-        strncat( bufPath, wxGTK_CONV(text), WXSIZEOF(bufPath) - 2 );
-        bufPath[WXSIZEOF(bufPath) - 1] = '\0';
-
-        GtkItemFactoryEntry entry;
-        entry.path = bufPath;
-        entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
-        entry.callback_action = 0;
-
-        wxString pathRadio;
-        const char *item_type;
         switch ( mitem->GetKind() )
         {
             case wxITEM_CHECK:
-                item_type = "<CheckItem>";
+            {
+#ifdef __WXGTK20__
+                menuItem = gtk_check_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+#else
+                menuItem = gtk_check_menu_item_new_with_label( wxGTK_CONV( text ) );
+                GtkLabel *label = GTK_LABEL( GTK_BIN(menuItem)->child );
+                // set new text
+                gtk_label_set_text( label, wxGTK_CONV( text ) );
+                // reparse key accel
+                guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+                if (accel_key != GDK_VoidSymbol)
+                {
+                    gtk_widget_add_accelerator (menuItem,
+                                                "activate_item",
+                                                gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menu)),
+                                                accel_key,
+                                                GDK_MOD1_MASK,
+                                                GTK_ACCEL_LOCKED);
+                }
+#endif
+                m_prevRadio = NULL;
                 break;
+            }
 
             case wxITEM_RADIO:
-                if ( m_pathLastRadio.empty() )
+            {
+                GSList *group = NULL;
+                if ( m_prevRadio == NULL )
                 {
                     // start of a new radio group
-                    item_type = "<RadioItem>";
-                    wxString tmp( wxGTK_CONV_BACK( bufPath ) );
-                    tmp.Remove(0,1);
-                    m_pathLastRadio = tmp;
+#ifdef __WXGTK20__
+                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV( text ) );
+#else
+                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_label( group, wxGTK_CONV( text ) );
+                    GtkLabel *label = GTK_LABEL( GTK_BIN(menuItem)->child );
+                    // set new text
+                    gtk_label_set_text( label, wxGTK_CONV( text ) );
+                    // reparse key accel
+                    guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+                    if (accel_key != GDK_VoidSymbol)
+                    {
+                        gtk_widget_add_accelerator (menuItem,
+                                                    "activate_item",
+                                                    gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menu)),
+                                                    accel_key,
+                                                    GDK_MOD1_MASK,
+                                                    GTK_ACCEL_LOCKED);
+                    }
+#endif
                 }
                 else // continue the radio group
                 {
-                    pathRadio = m_pathLastRadio;
-                    pathRadio.Replace(wxT("_"), wxT(""));
-                    pathRadio.Prepend(wxT("<main>/"));
-
-                    strncpy(bufType, wxGTK_CONV(pathRadio), WXSIZEOF(bufType));
-                    bufType[WXSIZEOF(bufType) - 1] = '\0';
-                    item_type = bufType;
+#ifdef __WXGTK20__
+                    group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (m_prevRadio));
+                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_mnemonic( group, wxGTK_CONV( text ) );
+#else
+                    group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (m_prevRadio));
+                    m_prevRadio = menuItem = gtk_radio_menu_item_new_with_label( group, wxGTK_CONV( text ) );
+                    GtkLabel *label = GTK_LABEL( GTK_BIN(menuItem)->child );
+                    // set new text
+                    gtk_label_set_text( label, wxGTK_CONV( text ) );
+                    // reparse key accel
+                    guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+                    if (accel_key != GDK_VoidSymbol)
+                    {
+                        gtk_widget_add_accelerator (menuItem,
+                                                    "activate_item",
+                                                    gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menu)),
+                                                    accel_key,
+                                                    GDK_MOD1_MASK,
+                                                    GTK_ACCEL_LOCKED);
+                    }
+#endif
                 }
-
-                // continue the existing radio group, if any
-                endOfRadioGroup = FALSE;
-                break;
+            }
 
             default:
                 wxFAIL_MSG( _T("unexpected menu item kind") );
                 // fall through
 
             case wxITEM_NORMAL:
-                item_type = "<Item>";
-#if defined(__WXGTK20__) && wxUSE_IMAGE
-                if (mitem->GetBitmap().Ok())
+            {
+#ifdef __WXGTK20__
+                menuItem = gtk_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
+#else
+                menuItem = gtk_menu_item_new_with_label( wxGTK_CONV( text ) );
+                GtkLabel *label = GTK_LABEL( GTK_BIN(menuItem)->child );
+                // set new text
+                gtk_label_set_text( label, wxGTK_CONV( text ) );
+                // reparse key accel
+                guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), wxGTK_CONV( text ) );
+                if (accel_key != GDK_VoidSymbol)
                 {
-                    item_type = "<ImageItem>";
-                    // GTK2's image factory know about image items, but they need to
-                    // get a GdkPixbuf structure, which we need to create on the fly.
-                    // This Pixbuf structure needs to be static so we create it and
-                    // just make it a memory leak...
-                    wxImage image( mitem->GetBitmap().ConvertToImage() );
-                    size_t size = 4 +   // magic
-                                  20 +  // header
-                                  image.GetHeight() * image.GetWidth() * 4; // RGBA
-
-                    unsigned char *dest = new unsigned char[size];
-                    entry.extra_data = dest;
-
-                    unsigned char *source = image.GetData();
-                    bool has_mask = image.HasMask();
-                    unsigned char mask_r = image.GetMaskRed();
-                    unsigned char mask_b = image.GetMaskBlue();
-                    unsigned char mask_g = image.GetMaskGreen();
-                    wxUint32 tmp;
-
-                    // Magic
-                    *dest = 'G'; dest++; *dest = 'd'; dest++; *dest = 'k'; dest++; *dest = 'P'; dest++;
-                    // Data size
-                    tmp = size;
-                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
-                    // Pixdata type
-                    *dest = 1; dest++; *dest = 1; dest++; *dest = 0; dest++; *dest = 2; dest++;
-                    // Rowstride
-                    tmp = image.GetWidth()*4;
-                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
-                    // Width
-                    tmp = image.GetWidth();
-                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
-                    // Height
-                    tmp = image.GetHeight();
-                    *dest = tmp >> 24; dest++; *dest = tmp >> 16; dest++; *dest = tmp >> 8; dest++; *dest = tmp; dest++;
-
-                    for (int i = 0; i < image.GetWidth()*image.GetHeight(); i++)
-                    {
-                        unsigned char r = *source; source++;
-                        unsigned char g = *source; source++;
-                        unsigned char b = *source; source++;
-                        *dest = r; dest++;
-                        *dest = g; dest++;
-                        *dest = b; dest++;
-                        if (has_mask && (r == mask_r)  && (g == mask_g)  && (b == mask_b))
-                             *dest = 0;
-                        else
-                             *dest = 255;
-                        dest++;
-                    }
-                    break;
+                    gtk_widget_add_accelerator (menuItem,
+                                                    "activate_item",
+                                                    gtk_menu_ensure_uline_accel_group(GTK_MENU(m_menu)),
+                                                    accel_key,
+                                                    GDK_MOD1_MASK,
+                                                    GTK_ACCEL_LOCKED);
                 }
-#endif // GTK 2.0+
+#endif
+                m_prevRadio = NULL;
                 break;
+            }
         }
 
-        entry.item_type = (char *)item_type; // cast needed for GTK+
-        entry.accelerator = (gchar*) NULL;
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                            GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                            (gpointer)this );
 
-#if wxUSE_ACCEL
-        // due to an apparent bug in GTK+, we have to use a static buffer here -
-        // otherwise GTK+ 1.2.2 manages to override the memory we pass to it
-        // somehow! (VZ)
-        char s_accel[50]; // should be big enough, we check for overruns
-        wxString tmp( GetHotKey(*mitem) );
-        strncpy(s_accel, wxGTK_CONV( tmp ), WXSIZEOF(s_accel));
-        s_accel[WXSIZEOF(s_accel) - 1] = '\0';
-        entry.accelerator = s_accel;
-#else // !wxUSE_ACCEL
-        entry.accelerator = (char*) NULL;
-#endif // wxUSE_ACCEL/!wxUSE_ACCEL
-
-        gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
-
-        wxString path( mitem->GetFactoryPath() );
-        menuItem = gtk_item_factory_get_widget( m_factory, wxGTK_CONV( path ) );
-
-        if (!menuItem)
-            wxLogError( wxT("Wrong menu path: %s\n"), path.c_str() );
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
     }
+    
+    guint accel_key;
+    GdkModifierType accel_mods;
+    wxCharBuffer buf = wxGTK_CONV( GetHotKey(*mitem) );
+    
+    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetHotKey(*mitem).c_str() ); 
+    
+    gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
+    if (accel_key != 0)
+    {
+        gtk_widget_add_accelerator (GTK_WIDGET(menuItem), 
+                                    "activate", 
+                                    m_accel,
+                                    accel_key, 
+                                    accel_mods,
+                                    GTK_ACCEL_VISIBLE);
+    }
+ 
+    gtk_widget_show( menuItem );
 
     if ( !mitem->IsSeparator() )
     {
@@ -1396,9 +1289,10 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 
     mitem->SetMenuItem(menuItem);
 
-    if ( endOfRadioGroup )
+    if (ms_locked)
     {
-        m_pathLastRadio.clear();
+        // This doesn't even exist!
+        // gtk_widget_lock_accelerators(mitem->GetMenuItem());
     }
 
     return TRUE;
@@ -1408,6 +1302,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
 {
     if (!GtkAppend(mitem))
         return NULL;
+        
     return wxMenuBase::DoAppend(mitem);
 }
 
@@ -1416,22 +1311,9 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
     if ( !wxMenuBase::DoInsert(pos, item) )
         return NULL;
 
-    // GTK+ doesn't have a function to insert a menu using GtkItemFactory (as
-    // of version 1.2.6), so we first append the item and then change its
-    // index
+    // TODO
     if ( !GtkAppend(item) )
         return NULL;
-
-    if ( m_style & wxMENU_TEAROFF )
-    {
-        // change the position as the first item is the tear-off marker
-        pos++;
-    }
-
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
-    gpointer data = g_list_last(menu_shell->children)->data;
-    menu_shell->children = g_list_remove(menu_shell->children, data);
-    menu_shell->children = g_list_insert(menu_shell->children, data, pos);
 
     return item;
 }
@@ -1466,7 +1348,7 @@ int wxMenu::FindMenuIdByMenuItem( GtkWidget *menuItem ) const
 // helpers
 // ----------------------------------------------------------------------------
 
-#if GTK_CHECK_VERSION(1, 2, 0) && wxUSE_ACCEL
+#if wxUSE_ACCEL
 
 static wxString GetHotKey( const wxMenuItem& item )
 {

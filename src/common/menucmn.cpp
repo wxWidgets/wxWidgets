@@ -98,6 +98,8 @@ static inline bool CompareAccelString(const wxString& str, const wxChar *accel)
 // specified
 wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
 {
+    // wxPrintf( wxT("label %s\n"), label.c_str() );
+
     // check for accelerators: they are given after '\t'
     int posTab = label.Find(wxT('\t'));
     if ( posTab != wxNOT_FOUND ) {
@@ -275,6 +277,8 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
 }
 
 #endif // wxUSE_ACCEL
+
+bool wxMenuBase::ms_locked = true;
 
 // ----------------------------------------------------------------------------
 // wxMenu ctor and dtor

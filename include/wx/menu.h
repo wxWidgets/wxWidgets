@@ -330,6 +330,11 @@ public:
         Insert(0u, itemid, text, help, isCheckable);
     }
 
+    static void LockAccels(bool locked)
+    {
+        ms_locked = locked;
+    }
+    
 protected:
     // virtuals to override in derived classes
     // ---------------------------------------
@@ -362,6 +367,8 @@ protected:
 
     wxEvtHandler  *m_eventHandler;      // a pluggable in event handler
 
+    static bool      ms_locked;
+    
     DECLARE_NO_COPY_CLASS(wxMenuBase)
 };
 
