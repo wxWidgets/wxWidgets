@@ -81,6 +81,31 @@ void wxCanvasObject::Render( int clip_x, int clip_y, int clip_width, int clip_he
 }
 
 //----------------------------------------------------------------------------
+// wxCanvasRect
+//----------------------------------------------------------------------------
+
+wxCanvasRect::wxCanvasRect( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue )
+   : wxCanvasObject( x, y, w, h )
+{
+    m_red = red;
+    m_green = green;
+    m_blue = blue;
+}
+
+void wxCanvasRect::Render( int clip_x, int clip_y, int clip_width, int clip_height )
+{
+    wxImage *image = m_owner->GetBuffer();
+    // speed up later
+    for (int y = clip_y; y < clip_y+clip_height; y++)
+        for (int x = clip_x; x < clip_x+clip_width; x++)
+            image->SetRGB( x, y, m_red, m_green, m_blue );
+}
+
+void wxCanvasRect::WriteSVG( wxTextOutputStream &stream )
+{
+}
+
+//----------------------------------------------------------------------------
 // wxCanvasImage
 //----------------------------------------------------------------------------
 
@@ -93,26 +118,22 @@ wxCanvasImage::wxCanvasImage( const wxImage &image, int x, int y )
 
 void wxCanvasImage::Render( int clip_x, int clip_y, int clip_width, int clip_height )
 {
-    int start_x = wxMax( 0, clip_x-m_area.x );
-    int end_x = wxMin( m_area.width, clip_width+clip_x-m_area.x );
-    int start_y = wxMax( 0, clip_y-m_area.y );
-    int end_y = wxMin( m_area.height, clip_height+clip_y-m_area.y );
-    
-    if (end_x < start_x) return;
-    if (end_y < start_y) return;
-    
-    if ((start_x == 0) && 
-        (start_y == 0) && 
-        (end_x == m_area.width) &&
-        (end_y == m_area.height))
+    if ((clip_x == m_area.x) && 
+        (clip_y == m_area.y) && 
+        (clip_width == m_area.width) &&
+        (clip_height == m_area.height))
     {
-        m_owner->GetBuffer()->Paste( m_image, m_area.x, m_area.y );
+        m_owner->GetBuffer()->Paste( m_image, clip_x, clip_y );
     }
     else
     {
-        wxRect rect( start_x, start_y, end_x-start_x, end_y-start_y );
+        // local coordinates
+        int start_x = clip_x - m_area.x;
+        int start_y = clip_y - m_area.y;
+    
+        wxRect rect( start_x, start_y, clip_width, clip_height );
         wxImage sub_image( m_image.GetSubImage( rect ) );
-        m_owner->GetBuffer()->Paste( sub_image, m_area.x+start_x, m_area.y+start_y );
+        m_owner->GetBuffer()->Paste( sub_image, clip_x, clip_y );
     }
 }
 
@@ -128,6 +149,7 @@ void wxCanvasImage::WriteSVG( wxTextOutputStream &stream )
 wxCanvasControl::wxCanvasControl( wxWindow *control )
    : wxCanvasObject( -1, -1, -1, -1 )
 {
+    m_isControl = TRUE;
     m_control = control;
     UpdateSize();
 }
@@ -225,10 +247,11 @@ void wxCanvasText::Render( int clip_x, int clip_y, int clip_width, int clip_heig
     
     wxImage *image = m_owner->GetBuffer();
 
-    int start_x = wxMax( 0, clip_x-m_area.x );
-    int end_x = wxMin( m_area.width, clip_width+clip_x-m_area.x );
-    int start_y = wxMax( 0, clip_y-m_area.y );
-    int end_y = wxMin( m_area.height, clip_height+clip_y-m_area.y );
+    // local coordinates
+    int start_x = clip_x - m_area.x;
+    int end_x = clip_width + start_x;
+    int start_y = clip_y - m_area.y;
+    int end_y = clip_height + start_y;
     
     for (int y = start_y; y < end_y; y++)
         for (int x = start_x; x < end_x; x++)
@@ -368,29 +391,87 @@ void wxCanvas::SetColour( unsigned char red, unsigned char green, unsigned char 
 
 void wxCanvas::Update( int x, int y, int width, int height )
 {
+    // clip to buffer
+    if (x < 0)
+    {
+        width -= x;
+        x = 0;
+    }
+    if (width < 0) return;
+    
+    if (y < 0)
+    {
+        height -= y;
+        y = 0;
+    }
+    if (height < 0) return;
+    
+    if (x+width > m_buffer.GetWidth())
+    {
+        width = m_buffer.GetWidth() - x;
+    }
+    if (width < 0) return;
+    
+    if (y+height > m_buffer.GetHeight())
+    {
+        height = m_buffer.GetHeight() - y;
+    }
+    if (height < 0) return;
+    
+    // update is within the buffer
     m_needUpdate = TRUE;
     
+    // has to be blitted to screen later
     m_updateRects.Append(
         (wxObject*) new wxRect( x,y,width,height ) );
     
-    // speed up with direct access, maybe add wxImage::Clear(x,y,w,h)
-    int xx,yy,ww,hh;
-    for (yy = y; yy < y+height; yy++)
-        for (xx = x; xx < x+width; xx++)
+    // speed up with direct access, maybe add wxImage::Clear(x,y,w,h,r,g,b)
+    for (int yy = y; yy < y+height; yy++)
+        for (int xx = x; xx < x+width; xx++)
             m_buffer.SetRGB( xx, yy, m_red, m_green, m_blue );
 
+    // cycle through all objects
     wxNode *node = m_objects.First();
     while (node)
     {
         wxCanvasObject *obj = (wxCanvasObject*) node->Data();
-        xx = obj->GetX();
-        yy = obj->GetY();
-        ww = obj->GetWidth();
-        hh = obj->GetHeight();
-            
-        if (!obj->IsControl())  // calc intersection !
+        
+        if (!obj->IsControl())
         {
-            obj->Render( x, y, width, height );
+            // If we have 10.000 objects, we will go through
+            // this 10.000 times for each update, so we have
+            // to optimise carefully.
+            int clip_x = obj->GetX();
+            int clip_width = obj->GetWidth();
+            if (clip_x < x)
+            {
+                clip_width -= x-clip_x;
+                clip_x = x;
+            }
+            if (clip_width > 0)
+            {
+                if (clip_x + clip_width > x + width)
+                    clip_width = x+width-clip_x;
+                    
+                if (clip_width > 0)
+                {
+                    int clip_y = obj->GetY();
+                    int clip_height = obj->GetHeight();
+                    if (clip_y < y)
+                    {
+                        clip_height -= y-clip_y;
+                        clip_y = y;
+                    }
+                    if (clip_height > 0)
+                    {
+                        if (clip_y + clip_height > y + height)
+                            clip_height = y+height-clip_y;
+                
+                        if (clip_height > 0)
+                            obj->Render( clip_x, clip_y, clip_width, clip_height );
+                    }
+                }
+            }
         }
             
         node = node->Next();
@@ -522,12 +603,14 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
         
         int w = it.GetWidth();
         int h = it.GetHeight();
-        if (x + w > m_buffer.GetWidth())
-            w = m_buffer.GetWidth()-x;
-        if (y + h > m_buffer.GetHeight())
-            h = m_buffer.GetHeight()-y;
         
-        m_updateRects.Append( (wxObject*) new wxRect( x, y, w, h ) );
+        if (x+w > m_buffer.GetWidth())
+            w = m_buffer.GetWidth() - x;
+        if (y+h > m_buffer.GetHeight())
+            h = m_buffer.GetHeight() - y;
+        
+        if ((w > 0) && (h > 0))
+            m_updateRects.Append( (wxObject*) new wxRect( x, y, w, h ) );
         
         it++;
     }

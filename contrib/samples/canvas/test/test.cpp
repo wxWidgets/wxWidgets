@@ -44,7 +44,8 @@ public:
     void OnTimer( wxTimerEvent &event );
 
     wxCanvas        *m_canvas;
-    wxCanvasObject  *m_co;
+    wxCanvasObject  *m_sm1;
+    wxCanvasObject  *m_sm2;
     wxTimer         *m_timer;
 
 private:
@@ -102,11 +103,20 @@ MyFrame::MyFrame()
   
   wxBitmap bitmap( smile_xpm );
   wxImage image( bitmap );
-  m_co = new wxCanvasImage( image, 10, 50 );
-  m_canvas->Append( m_co );
   
-  m_canvas->Append( new wxCanvasImage( image, 40, 50 ) );
+  m_sm1 = new wxCanvasImage( image, 0, 70 );
+  m_canvas->Append( m_sm1 );
   
+  int i;
+  for (i = 10; i < 300; i+=10)
+      m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
+  
+  m_sm2 = new wxCanvasImage( image, 0, 140 );
+  m_canvas->Append( m_sm2 );
+  
+  for (i = 15; i < 300; i+=10)
+      m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
+      
   wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(80,50) );
   m_canvas->Append( new wxCanvasControl( button ) );
 
@@ -128,7 +138,8 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnTimer( wxTimerEvent &WXUNUSED(event) )
 {
-    m_co->Move( m_co->GetX()+1, m_co->GetY() );
+    m_sm1->Move( m_sm1->GetX()+1, m_sm1->GetY() );
+    m_sm2->Move( m_sm2->GetX()+1, m_sm2->GetY() );
     wxWakeUpIdle();
 }
 

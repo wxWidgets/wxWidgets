@@ -59,6 +59,24 @@ protected:
 };
 
 //----------------------------------------------------------------------------
+// wxCanvasRect
+//----------------------------------------------------------------------------
+
+class wxCanvasRect: public wxCanvasObject
+{
+public:
+    wxCanvasRect( int x, int y, int w, int h, unsigned char red, unsigned char green, unsigned char blue );
+    
+    virtual void Render( int clip_x, int clip_y, int clip_width, int clip_height );
+    virtual void WriteSVG( wxTextOutputStream &stream );
+    
+private:
+    unsigned char m_red;
+    unsigned char m_green;
+    unsigned char m_blue;
+};
+
+//----------------------------------------------------------------------------
 // wxCanvasImage
 //----------------------------------------------------------------------------
 
