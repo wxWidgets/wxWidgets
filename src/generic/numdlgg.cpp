@@ -169,6 +169,7 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     if ( m_value < m_min || m_value > m_max )
     {
         // not a number or out of range
+        m_value = -1;
         EndModal(wxID_CANCEL);
     }
 
@@ -198,7 +199,7 @@ long wxGetNumberFromUser(const wxString& msg,
     wxNumberEntryDialog dialog(parent, msg, prompt, title,
                                value, min, max, pos);
     if (dialog.ShowModal() == wxID_OK)
-    return dialog.GetValue();
+        return dialog.GetValue();
 
     return -1;
 }
