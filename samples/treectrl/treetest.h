@@ -23,7 +23,7 @@
 class MyApp : public wxApp
 {
 public:
-    MyApp() { m_showImages = TRUE; m_showButtons = FALSE; }
+    MyApp() { m_showImages = true; m_showButtons = false; }
 
     bool OnInit();
 
@@ -96,7 +96,7 @@ public:
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
-    void DoSortChildren(const wxTreeItemId& item, bool reverse = FALSE)
+    void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
         { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
     void DoEnsureVisible() { if (m_lastItem.IsOk()) EnsureVisible(m_lastItem); }
 
@@ -190,8 +190,8 @@ public:
     void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
 
-    void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
-    void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(FALSE); }
+    void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(true); }
+    void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(false); }
 
     void OnEnsureVisible(wxCommandEvent& event);
 
@@ -200,7 +200,7 @@ public:
 
     void OnRename(wxCommandEvent& event);
     void OnSort(wxCommandEvent& WXUNUSED(event)) { DoSort(); }
-    void OnSortRev(wxCommandEvent& WXUNUSED(event)) { DoSort(TRUE); }
+    void OnSortRev(wxCommandEvent& WXUNUSED(event)) { DoSort(true); }
 
     void OnAddItem(wxCommandEvent& event);
     void OnInsertItem(wxCommandEvent& event);
@@ -219,7 +219,7 @@ public:
 private:
     void TogStyle(int id, long flag);
 
-    void DoSort(bool reverse = FALSE);
+    void DoSort(bool reverse = false);
 
     void Resize();
 
@@ -229,7 +229,7 @@ private:
     MyTreeCtrl *m_treeCtrl;
     wxTextCtrl *m_textCtrl;
 
-    void DoSetBold(bool bold = TRUE);
+    void DoSetBold(bool bold = true);
 
     DECLARE_EVENT_TABLE()
 };

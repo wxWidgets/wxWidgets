@@ -155,16 +155,16 @@ bool MyApp::OnInit()
     MyFrame *frame = new MyFrame(wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
 
     // Show the frame
-    frame->Show(TRUE);
+    frame->Show(true);
     SetTopWindow(frame);
 
-    return TRUE;
+    return true;
 }
 
 
 // My frame constructor
 MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
-       : wxFrame((wxFrame *)NULL, -1, title, wxPoint(x, y), wxSize(w, h)),
+       : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
          m_treeCtrl(NULL), m_textCtrl(NULL)
 {
     // This reduces flicker effects - even better would be to define
@@ -186,20 +186,20 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
-    style_menu->Append(TreeTest_TogButtons, wxT("Toggle &normal buttons"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogTwist, wxT("Toggle &twister buttons"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_ToggleButtons, wxT("Toggle image &buttons"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogButtons, wxT("Toggle &normal buttons"), wxT(""), true);
+    style_menu->Append(TreeTest_TogTwist, wxT("Toggle &twister buttons"), wxT(""), true);
+    style_menu->Append(TreeTest_ToggleButtons, wxT("Toggle image &buttons"), wxT(""), true);
     style_menu->AppendSeparator();
-    style_menu->Append(TreeTest_TogLines, wxT("Toggle &connecting lines"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogRootLines, wxT("Toggle &lines at root"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogHideRoot, wxT("Toggle &hidden root"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogBorder, wxT("Toggle &item border"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"), wxT(""), TRUE);
-    style_menu->Append(TreeTest_TogEdit, wxT("Toggle &edit mode"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogLines, wxT("Toggle &connecting lines"), wxT(""), true);
+    style_menu->Append(TreeTest_TogRootLines, wxT("Toggle &lines at root"), wxT(""), true);
+    style_menu->Append(TreeTest_TogHideRoot, wxT("Toggle &hidden root"), wxT(""), true);
+    style_menu->Append(TreeTest_TogBorder, wxT("Toggle &item border"), wxT(""), true);
+    style_menu->Append(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"), wxT(""), true);
+    style_menu->Append(TreeTest_TogEdit, wxT("Toggle &edit mode"), wxT(""), true);
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), wxT(""), true);
 #endif // NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), wxT(""), true);
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
@@ -256,13 +256,13 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #endif // wxUSE_MENUS
 
     // create the controls
-    m_textCtrl = new wxTextCtrl(this, -1, wxT(""),
+    m_textCtrl = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
     CreateTreeWithDefStyle();
 
-    menu_bar->Check(TreeTest_ToggleImages, TRUE);
+    menu_bar->Check(TreeTest_ToggleImages, true);
 
 #if wxUSE_STATUSBAR
     // create a status bar
@@ -371,7 +371,7 @@ void MyFrame::Resize()
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -409,7 +409,7 @@ void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
 
     CHECK_ITEM( item );
 
-    int i = m_treeCtrl->GetChildrenCount( item, FALSE );
+    int i = m_treeCtrl->GetChildrenCount( item, false );
 
     wxLogMessage(wxT("%d children"), i);
 }
@@ -528,7 +528,7 @@ void MyFrame::OnSetImageSize(wxCommandEvent& WXUNUSED(event))
         return;
 
     m_treeCtrl->CreateImageList(size);
-    wxGetApp().SetShowImages(TRUE);
+    wxGetApp().SetShowImages(true);
 }
 
 void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
@@ -536,12 +536,12 @@ void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
     if ( wxGetApp().ShowImages() )
     {
         m_treeCtrl->CreateImageList(-1);
-        wxGetApp().SetShowImages(FALSE);
+        wxGetApp().SetShowImages(false);
     }
     else
     {
         m_treeCtrl->CreateImageList(0);
-        wxGetApp().SetShowImages(TRUE);
+        wxGetApp().SetShowImages(true);
     }
 }
 
@@ -551,12 +551,12 @@ void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
     if ( wxGetApp().ShowButtons() )
     {
         m_treeCtrl->CreateButtonsImageList(-1);
-        wxGetApp().SetShowButtons(FALSE);
+        wxGetApp().SetShowButtons(false);
     }
     else
     {
         m_treeCtrl->CreateButtonsImageList(15);
-        wxGetApp().SetShowButtons(TRUE);
+        wxGetApp().SetShowButtons(true);
     }
 #endif
 }
@@ -652,7 +652,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
-    m_reverseSort = FALSE;
+    m_reverseSort = false;
 
     CreateImageList();
 
@@ -673,7 +673,7 @@ void MyTreeCtrl::CreateImageList(int size)
         m_imageSize = size;
 
     // Make an image list containing small icons
-    wxImageList *images = new wxImageList(size, size, TRUE);
+    wxImageList *images = new wxImageList(size, size, true);
 
     // should correspond to TreeCtrlIcon_xxx enum
     wxBusyCursor wait;
@@ -710,7 +710,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
     }
 
     // Make an image list containing small icons
-    wxImageList *images = new wxImageList(size, size, TRUE);
+    wxImageList *images = new wxImageList(size, size, true);
 
     // should correspond to TreeCtrlIcon_xxx enum
     wxBusyCursor wait;
@@ -1218,5 +1218,5 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
                  Bool2String(tree->IsExpanded(GetId())),
                  Bool2String(tree->IsBold(GetId())),
                  tree->GetChildrenCount(GetId()),
-                 tree->GetChildrenCount(GetId(), FALSE));
+                 tree->GetChildrenCount(GetId(), false));
 }
