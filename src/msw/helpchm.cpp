@@ -25,7 +25,7 @@
 #include "wx/filefn.h"
 #include "wx/msw/helpchm.h"
 
-#include "wx/dynlib.h"
+#include "wx/dynload.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
