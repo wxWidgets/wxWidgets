@@ -603,7 +603,7 @@ wxString wxString::Before(char ch) const
   wxString str;
   int iPos = Find(ch, TRUE);
   if ( iPos != NOT_FOUND && iPos != 0 )
-    str = wxString(c_str(), iPos - 1);
+    str = wxString(c_str(), iPos);
 
   return str;
 }
