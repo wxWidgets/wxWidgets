@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        encconv.h
+// Name:        wx/encconv.h
 // Purpose:     wxEncodingConverter class for converting between different
 //              font encodings
 // Author:      Vaclav Slavik
@@ -7,26 +7,31 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ENCCONV_H__
-#define __ENCCONV_H__
+#ifndef _WX_ENCCONV_H_
+#define _WX_ENCCONV_H_
 
 #ifdef __GNUG__
 #pragma interface "encconv.h"
 #endif
 
 #include "wx/defs.h"
-#include "wx/font.h"
+#include "wx/object.h"
+#include "wx/fontenc.h"
 #include "wx/dynarray.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-
-enum {
+enum
+{
     wxCONVERT_STRICT,
     wxCONVERT_SUBSTITUTE
 };
 
 
-enum {
+enum
+{
     wxPLATFORM_CURRENT = -1,
 
     wxPLATFORM_UNIX = 0,
@@ -35,8 +40,11 @@ enum {
     wxPLATFORM_MAC
 };
 
-WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
 
+WX_DEFINE_ARRAY(wxFontEncoding, wxFontEncodingArray);
 
 //--------------------------------------------------------------------------------
 // wxEncodingConverter
@@ -140,4 +148,4 @@ class WXDLLEXPORT wxEncodingConverter : public wxObject
 };
 
 
-#endif  // __ENCCONV_H__
+#endif  // _WX_ENCCONV_H_

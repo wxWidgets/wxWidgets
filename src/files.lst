@@ -137,6 +137,8 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 BASE_OBJS = \
+		fontmap.o \
+		encconv.o \
 		init.o \
 		appcmn.o \
 		cmdline.o \
