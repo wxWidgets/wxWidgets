@@ -35,6 +35,10 @@
     #include "wx/wx.h"
 #endif
 
+#if !wxUSE_DIALUP_MANAGER
+#error You must set wxUSE_DIALUP_MANAGER to 1 in setup.h!
+#endif
+
 #include "wx/dialup.h"
 
 // ----------------------------------------------------------------------------
