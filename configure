@@ -11529,7 +11529,7 @@ rm -f conftest*
         ALL_OBJECTS="\$(GUIOBJS)"
     fi
 
-    ALL_OBJECTS="${ALL_OBJECTS} \$(COMMONOBJS)"
+    ALL_OBJECTS="${ALL_OBJECTS} \$(COMMONOBJS) \$(GENERICOBJECTS)"
 
     if test "$TOOLKIT" != "MSW"; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(UNIXOBJS)"
