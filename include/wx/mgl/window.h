@@ -134,6 +134,8 @@ protected:
     // ::MoveWindow() except for composite controls which will want to arrange
     // themselves inside the given rectangle
     virtual void DoMoveWindow(int x, int y, int width, int height);
+    
+    void OnIdle(wxIdleEvent& event);
 
 private:
     // common part of all ctors
