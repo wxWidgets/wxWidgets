@@ -193,11 +193,17 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
   
   if (!ret)
   {
-    int command = win->GetAcceleratorTable()->GetCommand( event );
-    if (command != -1)
-    {
-      wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-      ret = win->GetEventHandler()->ProcessEvent( command_event );
+    wxWindow *ancestor = win;
+    while (ancestor)
+    {    
+      int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+      if (command != -1)
+      {
+        wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+        ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
+	break;
+      }
+      ancestor = ancestor->GetParent();
     }
   }
   
@@ -1404,7 +1410,7 @@ void wxWindow::GetTextExtent( const wxString& string, int *x, int *y,
   if (theFont) fontToUse = *theFont;
   
   GdkFont *font = fontToUse.GetInternalFont( 1.0 );
-  if (x) (*y) = gdk_string_width( font, string );
+  if (x) (*x) = gdk_string_width( font, string );
   if (y) (*y) = font->ascent + font->descent;
   if (descent) (*descent) = font->descent;
   if (externalLeading) (*externalLeading) = 0;  // ??

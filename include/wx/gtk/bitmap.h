@@ -130,6 +130,7 @@ class wxBitmap: public wxObject
     friend wxFrame;
     friend wxDialog;
     friend wxTreeCtrl;
+    friend wxNotebook;
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
