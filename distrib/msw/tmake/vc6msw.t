@@ -9,6 +9,9 @@
 #! Version: $Id$
 #!#############################################################################
 #${
+    use lib './lib';
+    use wxVersion qw(GetVersion);
+
     #! include the code which parses filelist.txt file and initializes
     #! %wxCommon, %wxGeneric and %wxMSW hashes.
     IncludeTemplate("filelist.t");
@@ -60,7 +63,12 @@
 	$project{"WXHTMLHEADERS"} .= $file . " "
     }
 
-    $project{"WXVERSION"} = "250";
+    #! LINK_VERSION is the value of the linker /version switch,
+    #! DLL_VERSION is the version string for the DLL filename
+    my %versions = GetVersion();
+    my ($verMaj, $verMin) = ( $versions{'MAJOR'}, $versions{'MINOR'} );
+    $project{"LINK_VERSION"} = "$verMaj.$verMin";
+    $project{"DLL_VERSION"} = "$verMaj$verMin";
 #$}
 # Microsoft Developer Studio Project File - Name="wxWindows" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -122,8 +130,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'u.dll"'
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'u.dll"'
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"DLL_VERSION"} . 'u.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo #$ $text = '/version:' . $project{LINK_VERSION} . ' /dll /machine:I386 /out:"../lib/wxmsw' . $project{DLL_VERSION} . 'u.dll"'
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
 
@@ -148,8 +156,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'ud.dll"'
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'ud.dll"'
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"DLL_VERSION"} . 'ud.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo #$ $text = '/version:' . $project{LINK_VERSION} . ' /dll /machine:I386 /out:"../lib/wxmsw' . $project{DLL_VERSION} . 'ud.dll"'
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
 
@@ -220,8 +228,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . '.dll"'
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /version:2.3 /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . '.dll"'
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo /dll /machine:I386 /out:"../lib/wxmsw#$ $text = $project{"DLL_VERSION"} . '.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpeg.lib ..\lib\tiff.lib ..\lib\png.lib ..\lib\regex.lib ..\lib\zlib.lib /nologo #$ $text = '/version:' . $project{LINK_VERSION} . ' /dll /machine:I386 /out:"../lib/wxmsw' . $project{DLL_VERSION} . '.dll"'
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
 
@@ -246,8 +254,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'd.dll"'
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo /version:2.3 /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"WXVERSION"} . 'd.dll"'
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /dll /debug /machine:I386 /pdbtype:sept /out:"../lib/wxmsw#$ $text = $project{"DLL_VERSION"} . 'd.dll"'
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib advapi32.lib comdlg32.lib shell32.lib ole32.lib oleaut32.lib odbc32.lib uuid.lib rpcrt4.lib comctl32.lib wsock32.lib winmm.lib ..\lib\jpegd.lib ..\lib\tiffd.lib ..\lib\pngd.lib ..\lib\regexd.lib ..\lib\zlibd.lib /nologo #$ $text = '/version:' . $project{LINK_VERSION} . ' /dll /machine:I386 /out:"../lib/wxmsw' . $project{DLL_VERSION} . 'd.dll"'
 
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
 
