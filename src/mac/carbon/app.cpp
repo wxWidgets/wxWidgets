@@ -791,7 +791,7 @@ void wxApp::CleanUp()
 
 // extern variable for shared library resource id
 // need to be able to find it with NSLookupAndBindSymbol
-short gSharedLibraryResource = kResFileNotOpened ;
+short WXDLLEXPORT gSharedLibraryResource = kResFileNotOpened ;
 
 #if defined(WXMAKINGDLL_CORE) && defined(__DARWIN__)
 CFBundleRef gSharedLibraryBundle = NULL;
