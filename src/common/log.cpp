@@ -246,7 +246,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
       p += 2;
 
       wxVsnprintf(p, len, szFormat, argptr);
-      
+
       wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
     }
   }
@@ -349,7 +349,7 @@ wxLog::wxLog()
     m_bHasMessages = FALSE;
 }
 
-wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size = 0 )
+wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size)
 {
     wxChar *oldbuf = s_szBuf;
 
@@ -561,7 +561,7 @@ Boolean IsCompatibleVersion(short inVersion)
         result = (inVersion <= block->apiHiVersion);
     }
 
-    return result;    
+    return result;
 }
 
 /* ---------------------------------------------------------------------------
