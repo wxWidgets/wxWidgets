@@ -30,10 +30,7 @@
 #endif // wxUSE_CLIPBOARD
 
 #include "smile.xbm"
-
-#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
-    #include "smile.xpm"
-#endif
+#include "smile.xpm"
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
     #ifdef wxHAVE_RAW_BITMAP
@@ -354,10 +351,8 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER )
-#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
           , m_bmpSmileXpm((const char **) smile_xpm)
           , m_iconSmileXpm((const char **) smile_xpm)
-#endif
 {
     my_horse_png = (wxBitmap*) NULL;
     my_horse_jpeg = (wxBitmap*) NULL;
@@ -490,11 +485,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_smile_xbm = new wxBitmap( (const char*)smile_bits, smile_width,
                                  smile_height, 1 );
 
-#if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     // demonstrates XPM automatically using the mask when saving
     if ( m_bmpSmileXpm.Ok() )
         m_bmpSmileXpm.SaveFile(_T("saved.xpm"), wxBITMAP_TYPE_XPM);
-#endif
 
 #if wxUSE_ICO_CUR
     image.Destroy();
@@ -730,27 +723,30 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     
     // testing icon -> bitmap conversion    
     wxBitmap to_blit( m_iconSmileXpm );
+    if (to_blit.Ok())
+    {
+        dc.DrawText( _T("SubBitmap"), 170, 2230 );
+        wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
+        if (sub.Ok())
+            dc.DrawBitmap( sub, 170, 2250, TRUE );
 
-    dc.DrawText( _T("SubBitmap"), 170, 2230 );
-    wxBitmap sub = to_blit.GetSubBitmap( wxRect(0,0,15,15) );
-    dc.DrawBitmap( sub, 170, 2250, TRUE );
-
-    dc.DrawText( _T("Enlarged"), 250, 2230 );
-    dc.SetUserScale( 1.5, 1.5 );
-    dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), TRUE );
-    dc.SetUserScale( 2, 2 );
-    dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), TRUE );
-    dc.SetUserScale( 1.0, 1.0 );
-    
-    dc.DrawText( _T("Blit"), 400, 2230);
-    wxMemoryDC blit_dc;
-    blit_dc.SelectObject( to_blit );
-    dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
-    dc.SetUserScale( 1.5, 1.5 );
-    dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
-    dc.SetUserScale( 2, 2 );
-    dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
-    dc.SetUserScale( 1.0, 1.0 );
+        dc.DrawText( _T("Enlarged"), 250, 2230 );
+        dc.SetUserScale( 1.5, 1.5 );
+        dc.DrawBitmap( to_blit, (int)(250/1.5), (int)(2250/1.5), TRUE );
+        dc.SetUserScale( 2, 2 );
+        dc.DrawBitmap( to_blit, (int)(300/2), (int)(2250/2), TRUE );
+        dc.SetUserScale( 1.0, 1.0 );
+        
+        dc.DrawText( _T("Blit"), 400, 2230);
+        wxMemoryDC blit_dc;
+        blit_dc.SelectObject( to_blit );
+        dc.Blit( 400, 2250, to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.SetUserScale( 1.5, 1.5 );
+        dc.Blit( (int)(450/1.5), (int)(2250/1.5), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.SetUserScale( 2, 2 );
+        dc.Blit( (int)(500/2), (int)(2250/2), to_blit.GetWidth(), to_blit.GetHeight(), &blit_dc, 0, 0, wxCOPY, TRUE );
+        dc.SetUserScale( 1.0, 1.0 );
+    }
 
     dc.DrawText( _T("ICO handler (1st image)"), 30, 2290 );
     if (my_horse_ico32 && my_horse_ico32->Ok())
