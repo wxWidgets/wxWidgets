@@ -37,7 +37,6 @@
 #include "bitmaps/paste.xpm"
 #include "bitmaps/open.xpm"
 #include "bitmaps/save.xpm"
-#include "bitmaps/print.xpm"
 #include "bitmaps/new.xpm"
 #include "bitmaps/help.xpm"
 #include "bitmaps/undo.xpm"
