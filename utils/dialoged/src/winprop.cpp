@@ -2357,7 +2357,6 @@ void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView 
   {
     wxString symbolName(dialog->GetSymbol());
     long id = dialog->GetId();
-    dialog->Destroy();
 
     wxString str;
     str.Printf("%d", id);
@@ -2367,6 +2366,8 @@ void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView 
     view->UpdatePropertyDisplayInList(property);
     view->OnPropertyChanged(property);
   }
+  // Moved from the 'if' branch on suggestion of Roman Pavlov
+  dialog->Destroy();
 }
 
 BEGIN_EVENT_TABLE(wxResourceSymbolDialog, wxDialog)

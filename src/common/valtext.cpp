@@ -128,9 +128,9 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     wxTextCtrl *control = (wxTextCtrl *) m_validatorWindow ;
 
-    // If window is disabled, don't validate
+    // If window is disabled, simply return
     if ( !control->Enabled() )
-        return FALSE;
+        return TRUE;
 
     wxString val(control->GetValue());
 
