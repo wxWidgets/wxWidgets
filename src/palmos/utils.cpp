@@ -151,6 +151,17 @@ bool wxShutdown(wxShutdownFlags wFlags)
     return false;
 }
 
+wxPowerType wxGetPowerType()
+{
+    return wxPOWER_BATTERY;
+}
+
+wxBatteryState wxGetBatteryState()
+{
+    // TODO
+    return wxBATTERY_UNKNOWN_STATE;
+}
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------

@@ -239,7 +239,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 
 long wxExecute( const wxString& command, int flags, wxProcess *process )
 {
-    wxCHECK_MSG( !command.IsEmpty(), 0, wxT("can't exec empty command") );
+    wxCHECK_MSG( !command.empty(), 0, wxT("can't exec empty command") );
 
 #if wxUSE_THREADS
     // fork() doesn't mix well with POSIX threads: on many systems the program
@@ -372,6 +372,17 @@ bool wxShutdown(wxShutdownFlags wFlags)
     return system(wxString::Format(_T("init %c"), level).mb_str()) == 0;
 }
 
+wxPowerType wxGetPowerType()
+{
+    // TODO
+    return wxPOWER_UNKNOWN;
+}
+
+wxBatteryState wxGetBatteryState()
+{
+    // TODO
+    return wxBATTERY_UNKNOWN_STATE;
+}
 
 // ----------------------------------------------------------------------------
 // wxStream classes to support IO redirection in wxExecute
@@ -660,9 +671,9 @@ long wxExecute(wxChar **argv,
 
 const wxChar* wxGetHomeDir( wxString *home  )
 {
-    *home = wxGetUserHome( wxString() );
+    *home = wxGetUserHome( wxEmptyString );
     wxString tmp;
-    if ( home->IsEmpty() )
+    if ( home->empty() )
         *home = wxT("/");
 #ifdef __VMS
     tmp = *home;

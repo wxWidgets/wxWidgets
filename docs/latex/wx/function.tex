@@ -96,6 +96,7 @@ the corresponding topic.
 \helpref{wxFinite}{wxfinite}\\
 \helpref{wxGetActiveWindow}{wxgetactivewindow}\\
 \helpref{wxGetApp}{wxgetapp}\\
+\helpref{wxGetBatteryState}{wxgetbatterystate}\\
 \helpref{wxGetClipboardData}{wxgetclipboarddata}\\
 \helpref{wxGetClipboardFormatName}{wxgetclipboardformatname}\\
 \helpref{wxGetColourFromUser}{wxgetcolourfromuser}\\
@@ -123,6 +124,7 @@ the corresponding topic.
 \helpref{wxGetOsDescription}{wxgetosdescription}\\
 \helpref{wxGetOsVersion}{wxgetosversion}\\
 \helpref{wxGetPasswordFromUser}{wxgetpasswordfromuser}\\
+\helpref{wxGetPowerType}{wxgetpowertype}\\
 \helpref{wxGetPrinterCommand}{wxgetprintercommand}\\
 \helpref{wxGetPrinterFile}{wxgetprinterfile}\\
 \helpref{wxGetPrinterMode}{wxgetprintermode}\\
@@ -974,7 +976,7 @@ For example:
 
 \begin{verbatim}
   wxString f = wxFindFirstFile("/home/project/*.*");
-  while ( !f.IsEmpty() )
+  while ( !f.empty() )
   {
     ...
     f = wxFindNextFile();
@@ -1606,7 +1608,7 @@ initialization.
 
 Here is an example which should make it more clear: suppose that you have a
 static array of strings containing the weekday names and which have to be
-translated (note that it is a bad example, really, as 
+translated (note that it is a bad example, really, as
 \helpref{wxDateTime}{wxdatetime} already can be used to get the localized week
 day names already). If you write
 
@@ -1649,7 +1651,7 @@ argument instead of arbitrary number of parameters.
 
 \func{const wxChar *}{\_}{\param{const char *}{s}}
 
-This macro expands into a call to \helpref{wxGetTranslation}{wxgettranslation} 
+This macro expands into a call to \helpref{wxGetTranslation}{wxgettranslation}
 function, so it marks the message for the extraction by {\tt xgettext} just as
 \helpref{wxTRANSLATE}{wxtranslate} does, but also returns the translation of
 the string for the current locale during execution.
@@ -2179,7 +2181,7 @@ checkbox which is shown in the tips dialog.}
 
 \func{int}{wxFinite}{\param{double }{x}}
 
-Returns a non-zero value if {\it x} is neither infinite or NaN (not a number), 
+Returns a non-zero value if {\it x} is neither infinite or NaN (not a number),
 returns 0 otherwise.
 
 
@@ -2596,7 +2598,7 @@ This macro returns the concatenation of two tokens \arg{x} and \arg{y}.
 
 \func{}{wxDYNLIB\_FUNCTION}{\param{}{type}, \param{}{name}, \param{}{dynlib}}
 
-When loading a function from a DLL you always have to cast the returned 
+When loading a function from a DLL you always have to cast the returned
 {\tt void *} pointer to the correct type and, even more annoyingly, you have to
 repeat this type twice if you want to declare and define a function pointer all
 in one line
@@ -2604,7 +2606,7 @@ in one line
 This macro makes this slightly less painful by allowing you to specify the
 type only once, as the first parameter, and creating a variable of this type
 named after the function but with {\tt pfn} prefix and initialized with the
-function \arg{name} from the \helpref{wxDynamicLibrary}{wxdynamiclibrary} 
+function \arg{name} from the \helpref{wxDynamicLibrary}{wxdynamiclibrary}
 \arg{dynlib}.
 
 \wxheading{Parameters}
@@ -2823,11 +2825,40 @@ Gets the currently active window (Windows only).
 <wx/windows.h>
 
 
+\membersection{::wxGetBatteryState}\label{wxgetbatterystate}
+
+\func{wxBatteryState}{wxGetBatteryState}{\void}
+
+Returns battery state as one of \texttt{wxBATTERY_NORMAL_STATE},
+\texttt{wxBATTERY_LOW_STATE}, \texttt{wxBATTERY_CRITICAL_STATE},
+\texttt{wxBATTERY_SHUTDOWN_STATE} or \texttt{wxBATTERY_UNKNOWN_STATE}.
+\texttt{wxBATTERY_UNKNOWN_STATE} is also the default on platforms where
+this feature is not implemented.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
 \membersection{::wxGetDisplayName}\label{wxgetdisplayname}
 
 \func{wxString}{wxGetDisplayName}{\void}
 
 Under X only, returns the current display name. See also \helpref{wxSetDisplayName}{wxsetdisplayname}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
+
+\membersection{::wxGetPowerType}\label{wxgetpowertype}
+
+\func{wxPowerType}{wxGetPowerType}{\void}
+
+Returns the type of power source as one of \texttt{wxPOWER_SOCKET},
+\texttt{wxPOWER_BATTERY} or \texttt{wxPOWER_UNKNOWN}.
+\texttt{wxPOWER_UNKNOWN} is also the default on platforms where this
+feature is not implemented.
 
 \wxheading{Include files}
 
@@ -3012,7 +3043,7 @@ which support it or its replacement for those that don't. It must be used to
 preserve the value of a \texttt{va\_list} object if you need to use it after
 passing it to another function because it can be modified by the latter.
 
-As with \texttt{va\_start}, each call to \texttt{wxVaCopy} must have a matching 
+As with \texttt{va\_start}, each call to \texttt{wxVaCopy} must have a matching
 \texttt{va\_end}.
 
 
@@ -3171,9 +3202,9 @@ class wxCommand: public wxObject
 
 \func{}{DECLARE\_APP}{className}
 
-This is used in headers to create a forward declaration of the 
-\helpref{wxGetApp}{wxgetapp} function implemented by 
-\helpref{IMPLEMENT\_APP}{implementapp}. It creates the declaration 
+This is used in headers to create a forward declaration of the
+\helpref{wxGetApp}{wxgetapp} function implemented by
+\helpref{IMPLEMENT\_APP}{implementapp}. It creates the declaration
 {\tt className\& wxGetApp(void)}.
 
 Example:
@@ -3458,7 +3489,7 @@ result of executing an equivalent of {\tt static\_cast<classname *>(ptr)}.
 
 \func{T}{wx\_const\_cast}{T, x}
 
-Same as \texttt{const\_cast<T>(x)} if the compiler supports const cast or 
+Same as \texttt{const\_cast<T>(x)} if the compiler supports const cast or
 \texttt{(T)x} for old compilers. Unlike \helpref{wxConstCast}{wxconstcast},
 the cast it to the type \arg{T} and not to \texttt{T *} and also the order of
 arguments is the same as for the standard cast.
@@ -3473,7 +3504,7 @@ arguments is the same as for the standard cast.
 
 \func{T}{wx\_reinterpret\_cast}{T, x}
 
-Same as \texttt{reinterpret\_cast<T>(x)} if the compiler supports reinterpret cast or 
+Same as \texttt{reinterpret\_cast<T>(x)} if the compiler supports reinterpret cast or
 \texttt{(T)x} for old compilers.
 
 \wxheading{See also}
@@ -3486,7 +3517,7 @@ Same as \texttt{reinterpret\_cast<T>(x)} if the compiler supports reinterpret ca
 
 \func{T}{wx\_static\_cast}{T, x}
 
-Same as \texttt{static\_cast<T>(x)} if the compiler supports static cast or 
+Same as \texttt{static\_cast<T>(x)} if the compiler supports static cast or
 \texttt{(T)x} for old compilers. Unlike \helpref{wxStaticCast}{wxstaticcast},
 there are no checks being done and the meaning of the macro arguments is exactly
 the same as for the standard static cast, i.e. \arg{T} is the full type name and
@@ -3933,7 +3964,7 @@ Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 
 Sleeps for the specified number of microseconds. The microsecond resolution may
 not, in fact, be available on all platforms (currently only Unix platforms with
-nanosleep(2) may provide it) in which case this is the same as 
+nanosleep(2) may provide it) in which case this is the same as
 \helpref{wxMilliSleep}{wxmillisleep}(\arg{microseconds}$/1000$).
 
 \wxheading{Include files}
@@ -3994,8 +4025,8 @@ See also \helpref{wxTimer}{wxtimer}.
 \func{void}{wxUsleep}{\param{unsigned long}{ milliseconds}}
 
 This function is deprecated because its name is misleading: notice that the
-argument is in milliseconds, not microseconds. Please use either 
-\helpref{wxMilliSleep}{wxmillisleep} or \helpref{wxMicroSleep}{wxmicrosleep} 
+argument is in milliseconds, not microseconds. Please use either
+\helpref{wxMilliSleep}{wxmillisleep} or \helpref{wxMicroSleep}{wxmicrosleep}
 depending on the resolution you need.
 
 

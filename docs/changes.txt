@@ -36,6 +36,7 @@ All:
 - The samples\db sample program now includes an optional example of using a BLOB
   datatype (if BLOB support is enabled and supported by the database)
 - added wxDynamicLibrary::ListLoaded()
+- wxGetPowerType() and wxGetBatteryState() addition
 
 All (GUI):
 

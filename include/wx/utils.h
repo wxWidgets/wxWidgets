@@ -262,6 +262,26 @@ enum wxShutdownFlags
 // Shutdown or reboot the PC
 WXDLLIMPEXP_BASE bool wxShutdown(wxShutdownFlags wFlags);
 
+enum wxPowerType
+{
+    wxPOWER_SOCKET,
+    wxPOWER_BATTERY,
+    wxPOWER_UNKNOWN
+};
+
+WXDLLIMPEXP_BASE wxPowerType wxGetPowerType();
+
+enum wxBatteryState
+{
+    wxBATTERY_NORMAL_STATE,    // system is fully usable
+    wxBATTERY_LOW_STATE,       // start to worry
+    wxBATTERY_CRITICAL_STATE,  // save quickly
+    wxBATTERY_SHUTDOWN_STATE,  // too late
+    wxBATTERY_UNKNOWN_STATE
+};
+
+WXDLLIMPEXP_BASE wxBatteryState wxGetBatteryState();
+
 // send the given signal to the process (only NONE and KILL are supported under
 // Windows, all others mean TERM), return 0 if ok and -1 on error
 //

@@ -190,6 +190,18 @@ bool wxShutdown(wxShutdownFlags wFlags)
     return false;
 }
 
+wxPowerType wxGetPowerType()
+{
+    // TODO
+    return wxPOWER_UNKNOWN;
+}
+
+wxBatteryState wxGetBatteryState()
+{
+    // TODO
+    return wxBATTERY_UNKNOWN_STATE;
+}
+
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 wxMemorySize wxGetFreeMemory()
 {
