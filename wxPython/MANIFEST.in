@@ -1,3 +1,5 @@
+# This is way out of date.  (It's not activly used anymore...)
+
 include *.txt
 include my_distutils.py
 ## include my_install_data.py

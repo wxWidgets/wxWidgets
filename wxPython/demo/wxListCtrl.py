@@ -281,37 +281,22 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             self.popupID4 = wxNewId()
             self.popupID5 = wxNewId()
             self.popupID6 = wxNewId()
-            self.popupID7 = wxNewId()
-            self.popupID8 = wxNewId()
-            self.popupID9 = wxNewId()
             EVT_MENU(self, self.popupID1, self.OnPopupOne)
             EVT_MENU(self, self.popupID2, self.OnPopupTwo)
             EVT_MENU(self, self.popupID3, self.OnPopupThree)
             EVT_MENU(self, self.popupID4, self.OnPopupFour)
             EVT_MENU(self, self.popupID5, self.OnPopupFive)
             EVT_MENU(self, self.popupID6, self.OnPopupSix)
-            EVT_MENU(self, self.popupID7, self.OnPopupSeven)
-            EVT_MENU(self, self.popupID8, self.OnPopupEIght)
-            EVT_MENU(self, self.popupID9, self.OnPopupNine)
 
         # make a menu
         menu = wxMenu()
-        # Show how to put an icon in the menu
-        item = wxMenuItem(menu, self.popupID1,"One")
-        item.SetBitmap(images.getSmilesBitmap())
-        menu.AppendItem(item)
-        # add some other items
-        menu.Append(self.popupID2, "Two")
+        # add some items
+        menu.Append(self.popupID1, "FindItem tests")
+#        menu.Append(self.popupID2, "Two")
         menu.Append(self.popupID3, "ClearAll and repopulate")
         menu.Append(self.popupID4, "DeleteAllItems")
         menu.Append(self.popupID5, "GetItem")
         menu.Append(self.popupID6, "Edit")
-        # make a submenu
-        sm = wxMenu()
-        sm.Append(self.popupID8, "sub item 1")
-        sm.Append(self.popupID9, "sub item 1")
-        menu.AppendMenu(self.popupID7, "Test Submenu", sm)
-
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
@@ -331,8 +316,6 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.log.WriteText("Popup three\n")
         self.list.ClearAll()
         wxCallAfter(self.PopulateList)
-        #wxYield()
-        #self.PopulateList()
 
     def OnPopupFour(self, event):
         self.list.DeleteAllItems()
@@ -344,15 +327,6 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def OnPopupSix(self, event):
         self.list.EditLabel(self.currentItem)
 
-
-    def OnPopupSeven(self, event):
-        self.log.WriteText("Popup seven\n")
-
-    def OnPopupEIght(self, event):
-        self.log.WriteText("Popup eight\n")
-
-    def OnPopupNine(self, event):
-        self.log.WriteText("Popup nine\n")
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

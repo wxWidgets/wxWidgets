@@ -26,11 +26,11 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions', [
-        'wxIntCtrl',
-        'wxPyColourChooser',
         'wxScrolledPanel',
         'ShapedWindow',
+        'NewNamespace',
         'PopupMenu',
+        'AnalogClockWindow',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -104,7 +104,8 @@ _treeList = [
     ('More Windows/Controls', [
         #'wxFloatBar',          deprecated
         #'wxMVCTree',           deprecated
-        #'wxRightTextCtrl',    deprecated as we have wxTE_RIGHT now.
+        #'wxRightTextCtrl',     deprecated as we have wxTE_RIGHT now.
+        'AnalogClockWindow',
         'ColourSelect',
         'ContextHelp',
         'FancyText',
@@ -326,7 +327,8 @@ class wxPythonDemo(wxFrame):
             aTable = wxAcceleratorTable([(wxACCEL_ALT,  ord('X'), exitID),
                                          (wxACCEL_CTRL, ord('H'), helpID),
                                          (wxACCEL_CTRL, ord('F'), findID),
-                                         (wxACCEL_NORMAL, WXK_F3, findnextID)])
+                                         (wxACCEL_NORMAL, WXK_F3, findnextID)
+                                         ])
             self.SetAcceleratorTable(aTable)
 
 
@@ -366,7 +368,7 @@ class wxPythonDemo(wxFrame):
             self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
             self.nb.AddPage(self.ovr, self.overviewText)
 
-        else:  # hopefully I can remove this hacky code soon, see bug #216861
+        else:  # hopefully I can remove this hacky code soon, see SF bug #216861
             panel = wxPanel(self.nb, -1, style=wxCLIP_CHILDREN)
             self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
             self.nb.AddPage(panel, self.overviewText)

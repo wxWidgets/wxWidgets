@@ -41,6 +41,11 @@ Added __nonzero__ method to wxTreeItemId, wxBitmap, wxImage, wxFont,
 and most other classes that have an Ok or IsOK method.  This allows
 code like "if obj: ..." to be the same as "if obj.IsOk(): ..."
 
+Toolbars on wxMac can now have controls on them.
+
+Added wxPython.lib.analogclock module based on samples that were
+passed back and forth on wxPython-users a while back.
+
 
 
 
