@@ -384,12 +384,12 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
         m_xScrollPosition += nScrollInc;
-        m_targetWindow->SetScrollPos(wxHORIZONTAL, m_xScrollPosition, FALSE);
+        m_targetWindow->SetScrollPos(wxHORIZONTAL, m_xScrollPosition);
     }
     else
     {
         m_yScrollPosition += nScrollInc;
-        m_targetWindow->SetScrollPos(wxVERTICAL, m_yScrollPosition, FALSE);
+        m_targetWindow->SetScrollPos(wxVERTICAL, m_yScrollPosition);
     }
 
     bool needsRefresh = FALSE;
@@ -677,7 +677,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
         if (old_x != m_xScrollPosition) {
-            m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, FALSE );
+            m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition );
             m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0,
                                           GetRect() );
         }
@@ -698,7 +698,7 @@ void wxScrollHelper::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
         if (old_y != m_yScrollPosition) {
-            m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, FALSE );
+            m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition );
             m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine,
                                           GetRect() );
         }
