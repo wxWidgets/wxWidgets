@@ -73,6 +73,7 @@ calctrl.cpp	Generic
 caret.cpp	Generic	NotMSW,NotMicro
 choicdgg.cpp	Generic
 colrdlgg.cpp	Generic	Generic
+dcbuffer.cpp	Generic
 dcpsg.cpp	Generic
 dirctrlg.cpp	Generic
 dirdlgg.cpp	Generic	NotWin32,NotOS2
@@ -782,6 +783,7 @@ dbgrid.h	WXH
 dbtable.h	WXH	Base
 dc.h	WXH
 dcclient.h	WXH
+dcbuffer.h	WXH
 dcmemory.h	WXH
 dcprint.h	WXH
 dcps.h	WXH

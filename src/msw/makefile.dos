@@ -52,6 +52,7 @@ MSWDIR=.
 GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\calctrl.obj \
 		$(GENDIR)\choicdgg.obj \
+		$(GENDIR)\dcbuffer.obj \
 		$(GENDIR)\dcpsg.obj \
 		$(GENDIR)\dirctrlg.obj \
 		$(GENDIR)\dirdlgg.obj \
@@ -1335,6 +1336,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(GENDIR)/choicdgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(GENDIR)/dcbuffer.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

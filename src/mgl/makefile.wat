@@ -46,6 +46,7 @@ GENERICOBJS= accel.obj &
 	caret.obj &
 	choicdgg.obj &
 	colrdlgg.obj &
+	dcbuffer.obj &
 	dcpsg.obj &
 	dirctrlg.obj &
 	dirdlgg.obj &
@@ -932,6 +933,9 @@ choicdgg.obj:     $(GENDIR)\choicdgg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 colrdlgg.obj:     $(GENDIR)\colrdlgg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+dcbuffer.obj:     $(GENDIR)\dcbuffer.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 dcpsg.obj:     $(GENDIR)\dcpsg.cpp

@@ -4,6 +4,7 @@ ALL_SOURCES = \
 		generic/busyinfo.cpp \
 		generic/calctrl.cpp \
 		generic/choicdgg.cpp \
+		generic/dcbuffer.cpp \
 		generic/dcpsg.cpp \
 		generic/dirctrlg.cpp \
 		generic/dragimgg.cpp \
@@ -327,6 +328,7 @@ ALL_HEADERS = \
 		dbkeyg.h \
 		dbtable.h \
 		dc.h \
+		dcbuffer.h \
 		dcclient.h \
 		dcmemory.h \
 		dcprint.h \
@@ -810,6 +812,7 @@ GENERICOBJS = \
 		busyinfo.o \
 		calctrl.o \
 		choicdgg.o \
+		dcbuffer.o \
 		dcpsg.o \
 		dirctrlg.o \
 		dragimgg.o \

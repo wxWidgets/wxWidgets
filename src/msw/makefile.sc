@@ -28,6 +28,7 @@ MSWDIR=$(WXDIR)\src\msw
 GENERICOBJS= $(GENDIR)\busyinfo.obj \
 		$(GENDIR)\calctrl.obj \
 		$(GENDIR)\choicdgg.obj \
+		$(GENDIR)\dcbuffer.obj \
 		$(GENDIR)\dcpsg.obj \
 		$(GENDIR)\dirctrlg.obj \
 		$(GENDIR)\dragimgg.obj \

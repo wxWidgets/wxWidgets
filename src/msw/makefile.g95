@@ -82,6 +82,7 @@ GENERICOBJS = \
                 $(GENDIR)/busyinfo.$(OBJSUFF) \
 		$(GENDIR)/calctrl.$(OBJSUFF) \
 		$(GENDIR)/choicdgg.$(OBJSUFF) \
+		$(GENDIR)/dcbuffer.$(OBJSUFF) \
 		$(GENDIR)/dcpsg.$(OBJSUFF) \
 		$(GENDIR)/dirctrlg.$(OBJSUFF) \
 		$(GENDIR)/dragimgg.$(OBJSUFF) \

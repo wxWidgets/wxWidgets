@@ -91,6 +91,7 @@ $(CPPFLAGS) /Fo$@ /c /Tp $<
 GENERICOBJS= $(GENDIR)\$D\busyinfo.obj \
 		$(GENDIR)\$D\calctrl.obj \
 		$(GENDIR)\$D\choicdgg.obj \
+		$(GENDIR)\$D\dcbuffer.obj \
 		$(GENDIR)\$D\dcpsg.obj \
 		$(GENDIR)\$D\dirctrlg.obj \
 		$(GENDIR)\$D\dragimgg.obj \

@@ -69,6 +69,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 		$(MSWDIR)\calctrl.obj \
 		$(MSWDIR)\choicdgg.obj \
+		$(MSWDIR)\dcbuffer.obj \
 		$(MSWDIR)\dcpsg.obj \
 		$(MSWDIR)\dirctrlg.obj \
 		$(MSWDIR)\dirdlgg.obj \
@@ -731,6 +732,8 @@ $(MSWDIR)\busyinfo.obj: $(GENDIR)\busyinfo.$(SRCSUFF)
 $(MSWDIR)\calctrl.obj: $(GENDIR)\calctrl.$(SRCSUFF)
 
 $(MSWDIR)\choicdgg.obj: $(GENDIR)\choicdgg.$(SRCSUFF)
+
+$(MSWDIR)\dcbuffer.obj: $(GENDIR)\dcbuffer.$(SRCSUFF)
 
 $(MSWDIR)\dcpsg.obj: $(GENDIR)\dcpsg.$(SRCSUFF)
 

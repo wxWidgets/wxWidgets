@@ -613,6 +613,10 @@ SOURCE=.\generic\colrdlgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\dcbuffer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\dcpsg.cpp
 # End Source File
 # Begin Source File
@@ -1379,6 +1383,10 @@ SOURCE=..\include\wx\dbtable.h
 # Begin Source File
 
 SOURCE=..\include\wx\dc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\dcbuffer.h
 # End Source File
 # Begin Source File
 

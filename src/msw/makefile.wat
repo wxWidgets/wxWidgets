@@ -44,6 +44,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= busyinfo.obj &
 	calctrl.obj &
 	choicdgg.obj &
+	dcbuffer.obj &
 	dcpsg.obj &
 	dirctrlg.obj &
 	dragimgg.obj &
@@ -1129,6 +1130,9 @@ calctrl.obj:     $(GENDIR)\calctrl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 choicdgg.obj:     $(GENDIR)\choicdgg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+dcbuffer.obj:     $(GENDIR)\dcbuffer.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 dcpsg.obj:     $(GENDIR)\dcpsg.cpp
