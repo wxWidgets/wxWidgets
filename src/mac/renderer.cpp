@@ -26,6 +26,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/dc.h"
+    #include "wx/bitmap.h"
+    #include "wx/settings.h"
 #endif //WX_PRECOMP
 
 #include "wx/renderer.h"
