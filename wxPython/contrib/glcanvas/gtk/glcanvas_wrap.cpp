@@ -43,6 +43,7 @@ private:
 #define SWIG_TypeCast        SWIG_Python_TypeCast
 #define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
 #define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypePrettyName  SWIG_Python_TypePrettyName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
 #define SWIG_PackData        SWIG_Python_PackData 
@@ -113,6 +114,7 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
 SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(const char *)     SWIG_TypePrettyName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
@@ -123,6 +125,7 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 }
 #endif
 
+
 /***********************************************************************
  * pyrun.swg for wxPython
  *
@@ -132,8 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  * anyway.
  *
  ************************************************************************/
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -204,6 +205,7 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #endif
 
 
+
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_wxWindow swig_types[0] 
@@ -226,47 +228,64 @@ static swig_type_info *swig_types[9];
 
 #define SWIG_name    "_glcanvas"
 
-/* Auxiliar swig  macros */
+/* Auxiliar swig  macros that appear in the header */
+
+#define SWIG_OLDOBJ  1
+#define SWIG_NEWOBJ  SWIG_OLDOBJ + 1
+#define SWIG_PYSTR   SWIG_NEWOBJ + 1
 
 #ifdef __cplusplus
 #define SWIGSTATICINLINE(a) static inline a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) (new type[(size)])
+#define swig_new_array(size,Type) (new Type[(size)])
+#define swig_delete(cptr) delete cptr
 #define swig_delete_array(cptr) delete[] cptr
-#define swig_const_cast(type,a) const_cast<type>(a)
-#define swig_static_cast(type,a) static_cast<type>(a)
-#define swig_reinterpret_cast(type,a) reinterpret_cast<type>(a)
-
-#ifdef HAVE_NUMERIC_CAST
-#define swig_numeric_cast(type,a) numeric_cast<type>(a)
-#else
-#define swig_numeric_cast(type,a) static_cast<type>(a)
-#endif
+#define swig_const_cast(a,Type) const_cast<Type >(a)
+#define swig_static_cast(a,Type) static_cast<Type >(a)
+#define swig_reinterpret_cast(a,Type) reinterpret_cast<Type >(a)
+#define swig_new_copy(ptr,Type) (new Type(*ptr))
+#define swig_numeric_cast(a,Type) static_cast<Type >(a)
 
 #else /* C case */
 
 #define SWIGSTATICINLINE(a) static a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) ((type*) malloc((size)*sizeof(type)))
+#define swig_new_array(size,Type) ((Type*) malloc((size)*sizeof(Type)))
+#define swig_delete(cptr) free((char*)cptr)
 #define swig_delete_array(cptr) free((char*)cptr)
-#define swig_const_cast(type,a) (type)(a)
-#define swig_static_cast(type,a) (type)(a)
-#define swig_reinterpret_cast(type,a) (type)(a)
-#define swig_numeric_cast(type,a) (type)(a)
+#define swig_const_cast(a,Type) (Type)(a)
+#define swig_static_cast(a,Type) (Type)(a)
+#define swig_reinterpret_cast(a,Type) (Type)(a)
+#define swig_numeric_cast(a,Type) (Type)(a)
+#define swig_new_copy(ptr,Type)  ((Type*)memcpy(malloc(sizeof(Type)),ptr,sizeof(Type)))
 
 #endif /* __cplusplus */
 
 
-#define SWIG_FromSignedChar     PyInt_FromLong
-#define SWIG_FromUnsignedChar   PyInt_FromLong
-#define SWIG_FromShort         PyInt_FromLong
-#define SWIG_FromUnsignedShort  PyInt_FromLong
-#define SWIG_FromInt           PyInt_FromLong
-#define SWIG_FromLong          PyInt_FromLong
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_signed_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_char PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_short PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_int PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_long PyInt_FromLong
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_float PyFloat_FromDouble
+/*@@*/
+/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_double PyFloat_FromDouble
+/*@@*/
 
 
 #include "wx/wxPython/wxPython.h"
@@ -278,110 +297,176 @@ static swig_type_info *swig_types[9];
  static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas")); 
  static const wxString wxPyEmptyString(wxEmptyString); 
 
-SWIGSTATICINLINE(bool)
-SWIG_AsBool(PyObject *obj)
-{
-  return PyObject_IsTrue(obj) ? true : false;
-}
-
-
-SWIGSTATICINLINE(int)
-SWIG_CheckBool(PyObject* obj)
-{
-  SWIG_AsBool(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
-  }
-}
-
-
 #include <limits.h>
 
 
-SWIGSTATICINLINE(long)
-SWIG_CheckLongInRange(long value, const char* type,
-		      long min_value, long max_value)
+SWIGSTATICINLINE(int)
+  SWIG_CheckLongInRange(long value, long min_value, long max_value,
+			const char *errmsg)
 {
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is less than '%s' minimum %ld", 
-			    value, type, min_value);
-      
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
-    } else if (value > max_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is greater than '%s' maximum %ld", 
-			    value, type, max_value);
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
+  if (value < min_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError, 
+		   "value %ld is less than '%s' minimum %ld", 
+		   value, errmsg, min_value);
     }
+    return 0;    
+  } else if (value > max_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError,
+		   "value %ld is greater than '%s' maximum %ld", 
+		   value, errmsg, max_value);
+    }
+    return 0;
   }
-  return value;
+  return 1;
 }
 
 
-SWIGSTATICINLINE(long)
-SWIG_AsLong(PyObject * obj)
+// See my_fragments.i
+SWIGSTATICINLINE(int)
+SWIG_AsVal_long(PyObject* obj, long* val)
 {
-    if (PyNumber_Check(obj))
-        return PyInt_AsLong(obj);
+    if (PyNumber_Check(obj)) {
+        if (val) *val = PyInt_AsLong(obj);
+        return 1;
+    }
     else {
         PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
                                                obj->ob_type->tp_name);
         PyErr_SetObject(PyExc_TypeError, errmsg);
         Py_DECREF(errmsg);
-        return 0;
     }
+    return 0;
 }
 
 
 #if INT_MAX != LONG_MAX
 SWIGSTATICINLINE(int)
-SWIG_AsInt(PyObject *obj)
+  SWIG_AsVal_int(PyObject *obj, int *val)
 { 
-  return swig_numeric_cast(int,
-    SWIG_CheckLongInRange(SWIG_AsLong(obj),
-			  "int", INT_MIN, INT_MAX));
+  const char* errmsg = val ? "int" : 0;
+  long v;
+  if (SWIG_AsVal_long(obj, &v)) {
+    if (SWIG_CheckLongInRange(v, INT_MIN,INT_MAX, errmsg)) {
+      if (val) *val = swig_numeric_cast(v, int);
+      return 1;
+    } else {
+      return 0;
+    }
+  } else {
+    PyErr_Clear();
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "an int is expected");
+  }
+  return 0;    
 }
 #else
-#define SWIG_AsInt SWIG_AsLong
+SWIGSTATICINLINE(int)
+  SWIG_AsVal_int(PyObject *obj, int *val)
+{
+  return SWIG_AsVal_long(obj,(long*)val);
+}
 #endif
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckInt(PyObject* obj)
+  SWIG_AsVal_bool(PyObject *obj, bool *val)
 {
-  SWIG_AsInt(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
+  /*  if (val) *val = PyObject_IsTrue(obj); return 1; */
+  if (obj == Py_True) {
+    if (val) *val = true;
     return 1;
   }
+  if (obj == Py_False) {
+    if (val) *val = false;
+    return 1;
+  }
+  int res = 0;
+  if (SWIG_AsVal_int(obj, &res)) {    
+    if (val) *val = (bool)res;
+    return 1;
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "a bool is expected");
+  }
+  return 0;
+}
+
+
+SWIGSTATICINLINE(bool)
+SWIG_As_bool(PyObject* obj)
+{
+  bool v;
+  if (!SWIG_AsVal_bool(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(bool));
+  }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_bool(PyObject* obj)
+{
+  return SWIG_AsVal_bool(obj, (bool*)0);
 }
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckLong(PyObject* obj)
+SWIG_As_int(PyObject* obj)
 {
-  SWIG_AsLong(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
+  int v;
+  if (!SWIG_AsVal_int(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(int));
   }
+  return v;
+}
+
+
+SWIGSTATICINLINE(long)
+SWIG_As_long(PyObject* obj)
+{
+  long v;
+  if (!SWIG_AsVal_long(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(long));
+  }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_int(PyObject* obj)
+{
+  return SWIG_AsVal_int(obj, (int*)0);
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_long(PyObject* obj)
+{
+  return SWIG_AsVal_long(obj, (long*)0);
 }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_GLCanvasNameStr_set(PyObject *_val) {
+static int _wrap_GLCanvasNameStr_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable GLCanvasNameStr is read-only.");
     return 1;
 }
@@ -401,7 +486,7 @@ static PyObject *_wrap_GLCanvasNameStr_get() {
 }
 
 
-static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLContext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool arg1 ;
     wxGLCanvas *arg2 = (wxGLCanvas *) 0 ;
@@ -418,7 +503,7 @@ static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *k
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:new_GLContext",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
-    arg1 = (bool) SWIG_AsBool(obj0); 
+    arg1 = (bool)SWIG_As_bool(obj0); 
     if (PyErr_Occurred()) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxGLCanvas,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
@@ -450,7 +535,7 @@ static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_delete_GLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_GLContext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -475,7 +560,7 @@ static PyObject *_wrap_delete_GLContext(PyObject *self, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_GLContext_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetCurrent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -500,7 +585,7 @@ static PyObject *_wrap_GLContext_SetCurrent(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GLContext_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxString *arg2 = 0 ;
@@ -541,7 +626,7 @@ static PyObject *_wrap_GLContext_SetColour(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GLContext_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SwapBuffers(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -566,7 +651,7 @@ static PyObject *_wrap_GLContext_SwapBuffers(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GLContext_SetupPixelFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetupPixelFormat(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     PyObject * obj0 = 0 ;
@@ -591,7 +676,7 @@ static PyObject *_wrap_GLContext_SetupPixelFormat(PyObject *self, PyObject *args
 }
 
 
-static PyObject *_wrap_GLContext_SetupPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_SetupPalette(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxPalette *arg2 = 0 ;
@@ -625,7 +710,7 @@ static PyObject *_wrap_GLContext_SetupPalette(PyObject *self, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_GLContext_CreateDefaultPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_CreateDefaultPalette(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxPalette result;
@@ -655,7 +740,7 @@ static PyObject *_wrap_GLContext_CreateDefaultPalette(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_GLContext_GetPalette(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_GetPalette(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxPalette *result;
@@ -681,7 +766,7 @@ static PyObject *_wrap_GLContext_GetPalette(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GLContext_GetWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLContext_GetWindow(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLContext *arg1 = (wxGLContext *) 0 ;
     wxWindow *result;
@@ -709,14 +794,14 @@ static PyObject *_wrap_GLContext_GetWindow(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject * GLContext_swigregister(PyObject *self, PyObject *args) {
+static PyObject * GLContext_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGLContext, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLCanvas(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
@@ -751,7 +836,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        arg2 = (int) SWIG_AsInt(obj1); 
+        arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj2) {
@@ -767,7 +852,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
         }
     }
     if (obj4) {
-        arg5 = (long) SWIG_AsLong(obj4); 
+        arg5 = (long)SWIG_As_long(obj4); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj5) {
@@ -829,7 +914,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLCanvasWithContext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxGLContext *arg2 = (wxGLContext *) NULL ;
@@ -870,7 +955,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, P
         SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     }
     if (obj2) {
-        arg3 = (int) SWIG_AsInt(obj2); 
+        arg3 = (int)SWIG_As_int(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj3) {
@@ -886,7 +971,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, P
         }
     }
     if (obj5) {
-        arg6 = (long) SWIG_AsLong(obj5); 
+        arg6 = (long)SWIG_As_long(obj5); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj6) {
@@ -948,7 +1033,7 @@ static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     PyObject * obj0 = 0 ;
@@ -973,7 +1058,7 @@ static PyObject *_wrap_GLCanvas_SetCurrent(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_GLCanvas_SetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SetColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxString *arg2 = 0 ;
@@ -1014,7 +1099,7 @@ static PyObject *_wrap_GLCanvas_SetColour(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1039,7 +1124,7 @@ static PyObject *_wrap_GLCanvas_SwapBuffers(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GLCanvas_GetContext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GLCanvas_GetContext(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
     wxGLContext *result;
@@ -1065,7 +1150,7 @@ static PyObject *_wrap_GLCanvas_GetContext(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject * GLCanvas_swigregister(PyObject *self, PyObject *args) {
+static PyObject * GLCanvas_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxGLCanvas, obj);
@@ -1073,25 +1158,25 @@ static PyObject * GLCanvas_swigregister(PyObject *self, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_GLContext", (PyCFunction) _wrap_new_GLContext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"delete_GLContext", (PyCFunction) _wrap_delete_GLContext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_SetCurrent", (PyCFunction) _wrap_GLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_SetColour", (PyCFunction) _wrap_GLContext_SetColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_SwapBuffers", (PyCFunction) _wrap_GLContext_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_SetupPixelFormat", (PyCFunction) _wrap_GLContext_SetupPixelFormat, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_SetupPalette", (PyCFunction) _wrap_GLContext_SetupPalette, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_CreateDefaultPalette", (PyCFunction) _wrap_GLContext_CreateDefaultPalette, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_GetPalette", (PyCFunction) _wrap_GLContext_GetPalette, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_GetWindow", (PyCFunction) _wrap_GLContext_GetWindow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS },
-	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLCanvas_SetCurrent", (PyCFunction) _wrap_GLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction) _wrap_GLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLCanvas_GetContext", (PyCFunction) _wrap_GLCanvas_GetContext, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS },
-	 { NULL, NULL }
+	 { (char *)"new_GLContext", (PyCFunction) _wrap_new_GLContext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"delete_GLContext", (PyCFunction) _wrap_delete_GLContext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_SetCurrent", (PyCFunction) _wrap_GLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_SetColour", (PyCFunction) _wrap_GLContext_SetColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_SwapBuffers", (PyCFunction) _wrap_GLContext_SwapBuffers, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_SetupPixelFormat", (PyCFunction) _wrap_GLContext_SetupPixelFormat, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_SetupPalette", (PyCFunction) _wrap_GLContext_SetupPalette, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_CreateDefaultPalette", (PyCFunction) _wrap_GLContext_CreateDefaultPalette, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_GetPalette", (PyCFunction) _wrap_GLContext_GetPalette, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_GetWindow", (PyCFunction) _wrap_GLContext_GetWindow, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLCanvas_SetCurrent", (PyCFunction) _wrap_GLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction) _wrap_GLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLCanvas_GetContext", (PyCFunction) _wrap_GLCanvas_GetContext, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS, NULL },
+	 { NULL, NULL, 0, NULL }
 };
 
 
@@ -1386,7 +1471,7 @@ _swigt__p_int,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0}};
+{0, 0, 0, 0.0, 0, 0}};
 
 #ifdef __cplusplus
 }
@@ -1414,22 +1499,22 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"GLCanvasNameStr",_wrap_GLCanvasNameStr_get, _wrap_GLCanvasNameStr_set);
-    PyDict_SetItemString(d,"WX_GL_RGBA", SWIG_FromInt((int)WX_GL_RGBA));
-    PyDict_SetItemString(d,"WX_GL_BUFFER_SIZE", SWIG_FromInt((int)WX_GL_BUFFER_SIZE));
-    PyDict_SetItemString(d,"WX_GL_LEVEL", SWIG_FromInt((int)WX_GL_LEVEL));
-    PyDict_SetItemString(d,"WX_GL_DOUBLEBUFFER", SWIG_FromInt((int)WX_GL_DOUBLEBUFFER));
-    PyDict_SetItemString(d,"WX_GL_STEREO", SWIG_FromInt((int)WX_GL_STEREO));
-    PyDict_SetItemString(d,"WX_GL_AUX_BUFFERS", SWIG_FromInt((int)WX_GL_AUX_BUFFERS));
-    PyDict_SetItemString(d,"WX_GL_MIN_RED", SWIG_FromInt((int)WX_GL_MIN_RED));
-    PyDict_SetItemString(d,"WX_GL_MIN_GREEN", SWIG_FromInt((int)WX_GL_MIN_GREEN));
-    PyDict_SetItemString(d,"WX_GL_MIN_BLUE", SWIG_FromInt((int)WX_GL_MIN_BLUE));
-    PyDict_SetItemString(d,"WX_GL_MIN_ALPHA", SWIG_FromInt((int)WX_GL_MIN_ALPHA));
-    PyDict_SetItemString(d,"WX_GL_DEPTH_SIZE", SWIG_FromInt((int)WX_GL_DEPTH_SIZE));
-    PyDict_SetItemString(d,"WX_GL_STENCIL_SIZE", SWIG_FromInt((int)WX_GL_STENCIL_SIZE));
-    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_RED", SWIG_FromInt((int)WX_GL_MIN_ACCUM_RED));
-    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_GREEN", SWIG_FromInt((int)WX_GL_MIN_ACCUM_GREEN));
-    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_BLUE", SWIG_FromInt((int)WX_GL_MIN_ACCUM_BLUE));
-    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_ALPHA", SWIG_FromInt((int)WX_GL_MIN_ACCUM_ALPHA));
+    PyDict_SetItemString(d,"WX_GL_RGBA", SWIG_From_int((int)WX_GL_RGBA));
+    PyDict_SetItemString(d,"WX_GL_BUFFER_SIZE", SWIG_From_int((int)WX_GL_BUFFER_SIZE));
+    PyDict_SetItemString(d,"WX_GL_LEVEL", SWIG_From_int((int)WX_GL_LEVEL));
+    PyDict_SetItemString(d,"WX_GL_DOUBLEBUFFER", SWIG_From_int((int)WX_GL_DOUBLEBUFFER));
+    PyDict_SetItemString(d,"WX_GL_STEREO", SWIG_From_int((int)WX_GL_STEREO));
+    PyDict_SetItemString(d,"WX_GL_AUX_BUFFERS", SWIG_From_int((int)WX_GL_AUX_BUFFERS));
+    PyDict_SetItemString(d,"WX_GL_MIN_RED", SWIG_From_int((int)WX_GL_MIN_RED));
+    PyDict_SetItemString(d,"WX_GL_MIN_GREEN", SWIG_From_int((int)WX_GL_MIN_GREEN));
+    PyDict_SetItemString(d,"WX_GL_MIN_BLUE", SWIG_From_int((int)WX_GL_MIN_BLUE));
+    PyDict_SetItemString(d,"WX_GL_MIN_ALPHA", SWIG_From_int((int)WX_GL_MIN_ALPHA));
+    PyDict_SetItemString(d,"WX_GL_DEPTH_SIZE", SWIG_From_int((int)WX_GL_DEPTH_SIZE));
+    PyDict_SetItemString(d,"WX_GL_STENCIL_SIZE", SWIG_From_int((int)WX_GL_STENCIL_SIZE));
+    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_RED", SWIG_From_int((int)WX_GL_MIN_ACCUM_RED));
+    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_GREEN", SWIG_From_int((int)WX_GL_MIN_ACCUM_GREEN));
+    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_BLUE", SWIG_From_int((int)WX_GL_MIN_ACCUM_BLUE));
+    PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_ALPHA", SWIG_From_int((int)WX_GL_MIN_ACCUM_ALPHA));
     
     
     

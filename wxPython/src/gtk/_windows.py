@@ -297,6 +297,8 @@ FULLSCREEN_NOBORDER = _windows_.FULLSCREEN_NOBORDER
 FULLSCREEN_NOCAPTION = _windows_.FULLSCREEN_NOCAPTION
 FULLSCREEN_ALL = _windows_.FULLSCREEN_ALL
 TOPLEVEL_EX_DIALOG = _windows_.TOPLEVEL_EX_DIALOG
+USER_ATTENTION_INFO = _windows_.USER_ATTENTION_INFO
+USER_ATTENTION_ERROR = _windows_.USER_ATTENTION_ERROR
 class TopLevelWindow(_core.Window):
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
@@ -360,6 +362,10 @@ class TopLevelWindow(_core.Window):
     def SetShape(*args, **kwargs):
         """SetShape(self, Region region) -> bool"""
         return _windows_.TopLevelWindow_SetShape(*args, **kwargs)
+
+    def RequestUserAttention(*args, **kwargs):
+        """RequestUserAttention(self, int flags=USER_ATTENTION_INFO)"""
+        return _windows_.TopLevelWindow_RequestUserAttention(*args, **kwargs)
 
 
 class TopLevelWindowPtr(TopLevelWindow):

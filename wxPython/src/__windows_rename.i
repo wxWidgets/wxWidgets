@@ -37,6 +37,8 @@
 %rename(FULLSCREEN_NOCAPTION)               wxFULLSCREEN_NOCAPTION;
 %rename(FULLSCREEN_ALL)                     wxFULLSCREEN_ALL;
 %rename(TOPLEVEL_EX_DIALOG)                 wxTOPLEVEL_EX_DIALOG;
+%rename(USER_ATTENTION_INFO)                wxUSER_ATTENTION_INFO;
+%rename(USER_ATTENTION_ERROR)               wxUSER_ATTENTION_ERROR;
 %rename(TopLevelWindow)                     wxTopLevelWindow;
 %rename(Frame)                              wxFrame;
 %rename(Dialog)                             wxDialog;

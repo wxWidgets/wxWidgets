@@ -43,6 +43,7 @@ private:
 #define SWIG_TypeCast        SWIG_Python_TypeCast
 #define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
 #define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypePrettyName  SWIG_Python_TypePrettyName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
 #define SWIG_PackData        SWIG_Python_PackData 
@@ -113,6 +114,7 @@ SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
 SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
 SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(const char *)     SWIG_TypePrettyName(const swig_type_info *);
 SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
 SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 SWIGIMPORT(char *)           SWIG_PackData(char *, void *, int);
@@ -123,6 +125,7 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 }
 #endif
 
+
 /***********************************************************************
  * pyrun.swg for wxPython
  *
@@ -132,8 +135,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
  * anyway.
  *
  ************************************************************************/
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -204,6 +205,7 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #endif
 
 
+
 /* -------- TYPES TABLE (BEGIN) -------- */
 
 #define  SWIGTYPE_p_wxMSHTMLEvent swig_types[0] 
@@ -229,47 +231,64 @@ static swig_type_info *swig_types[12];
 
 #define SWIG_name    "_iewin"
 
-/* Auxiliar swig  macros */
+/* Auxiliar swig  macros that appear in the header */
+
+#define SWIG_OLDOBJ  1
+#define SWIG_NEWOBJ  SWIG_OLDOBJ + 1
+#define SWIG_PYSTR   SWIG_NEWOBJ + 1
 
 #ifdef __cplusplus
 #define SWIGSTATICINLINE(a) static inline a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) (new type[(size)])
+#define swig_new_array(size,Type) (new Type[(size)])
+#define swig_delete(cptr) delete cptr
 #define swig_delete_array(cptr) delete[] cptr
-#define swig_const_cast(type,a) const_cast<type>(a)
-#define swig_static_cast(type,a) static_cast<type>(a)
-#define swig_reinterpret_cast(type,a) reinterpret_cast<type>(a)
-
-#ifdef HAVE_NUMERIC_CAST
-#define swig_numeric_cast(type,a) numeric_cast<type>(a)
-#else
-#define swig_numeric_cast(type,a) static_cast<type>(a)
-#endif
+#define swig_const_cast(a,Type) const_cast<Type >(a)
+#define swig_static_cast(a,Type) static_cast<Type >(a)
+#define swig_reinterpret_cast(a,Type) reinterpret_cast<Type >(a)
+#define swig_new_copy(ptr,Type) (new Type(*ptr))
+#define swig_numeric_cast(a,Type) static_cast<Type >(a)
 
 #else /* C case */
 
 #define SWIGSTATICINLINE(a) static a
 #define SWIGSTATIC(a) static a
-#define swig_new_array(type, size) ((type*) malloc((size)*sizeof(type)))
+#define swig_new_array(size,Type) ((Type*) malloc((size)*sizeof(Type)))
+#define swig_delete(cptr) free((char*)cptr)
 #define swig_delete_array(cptr) free((char*)cptr)
-#define swig_const_cast(type,a) (type)(a)
-#define swig_static_cast(type,a) (type)(a)
-#define swig_reinterpret_cast(type,a) (type)(a)
-#define swig_numeric_cast(type,a) (type)(a)
+#define swig_const_cast(a,Type) (Type)(a)
+#define swig_static_cast(a,Type) (Type)(a)
+#define swig_reinterpret_cast(a,Type) (Type)(a)
+#define swig_numeric_cast(a,Type) (Type)(a)
+#define swig_new_copy(ptr,Type)  ((Type*)memcpy(malloc(sizeof(Type)),ptr,sizeof(Type)))
 
 #endif /* __cplusplus */
 
 
-#define SWIG_FromSignedChar     PyInt_FromLong
-#define SWIG_FromUnsignedChar   PyInt_FromLong
-#define SWIG_FromShort         PyInt_FromLong
-#define SWIG_FromUnsignedShort  PyInt_FromLong
-#define SWIG_FromInt           PyInt_FromLong
-#define SWIG_FromLong          PyInt_FromLong
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
-#define SWIG_FromFloat         PyFloat_FromDouble
-#define SWIG_FromDouble        PyFloat_FromDouble
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_signed_SS_char PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_char PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_short PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_unsigned_SS_short PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_int PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_long PyInt_FromLong
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_float PyFloat_FromDouble
+/*@@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
+#define SWIG_From_double PyFloat_FromDouble
+/*@@*/
 
 
 #include "wx/wxPython/wxPython.h"
@@ -283,107 +302,173 @@ static swig_type_info *swig_types[12];
 #include <limits.h>
 
 
-SWIGSTATICINLINE(long)
-SWIG_CheckLongInRange(long value, const char* type,
-		      long min_value, long max_value)
+SWIGSTATICINLINE(int)
+  SWIG_CheckLongInRange(long value, long min_value, long max_value,
+			const char *errmsg)
 {
-  if (!PyErr_Occurred()) {
-    if (value < min_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is less than '%s' minimum %ld", 
-			    value, type, min_value);
-      
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
-    } else if (value > max_value) {
-      PyObject *err = 
-	PyString_FromFormat("value %ld is greater than '%s' maximum %ld", 
-			    value, type, max_value);
-      PyErr_SetObject(PyExc_OverflowError, err);
-      Py_DECREF(err);
+  if (value < min_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError, 
+		   "value %ld is less than '%s' minimum %ld", 
+		   value, errmsg, min_value);
     }
+    return 0;    
+  } else if (value > max_value) {
+    if (errmsg) {
+      PyErr_Format(PyExc_OverflowError,
+		   "value %ld is greater than '%s' maximum %ld", 
+		   value, errmsg, max_value);
+    }
+    return 0;
   }
-  return value;
+  return 1;
 }
 
 
-SWIGSTATICINLINE(long)
-SWIG_AsLong(PyObject * obj)
+// See my_fragments.i
+SWIGSTATICINLINE(int)
+SWIG_AsVal_long(PyObject* obj, long* val)
 {
-    if (PyNumber_Check(obj))
-        return PyInt_AsLong(obj);
+    if (PyNumber_Check(obj)) {
+        if (val) *val = PyInt_AsLong(obj);
+        return 1;
+    }
     else {
         PyObject* errmsg = PyString_FromFormat("Expected number, got %s",
                                                obj->ob_type->tp_name);
         PyErr_SetObject(PyExc_TypeError, errmsg);
         Py_DECREF(errmsg);
-        return 0;
     }
+    return 0;
 }
 
 
 #if INT_MAX != LONG_MAX
 SWIGSTATICINLINE(int)
-SWIG_AsInt(PyObject *obj)
+  SWIG_AsVal_int(PyObject *obj, int *val)
 { 
-  return swig_numeric_cast(int,
-    SWIG_CheckLongInRange(SWIG_AsLong(obj),
-			  "int", INT_MIN, INT_MAX));
+  const char* errmsg = val ? "int" : 0;
+  long v;
+  if (SWIG_AsVal_long(obj, &v)) {
+    if (SWIG_CheckLongInRange(v, INT_MIN,INT_MAX, errmsg)) {
+      if (val) *val = swig_numeric_cast(v, int);
+      return 1;
+    } else {
+      return 0;
+    }
+  } else {
+    PyErr_Clear();
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "an int is expected");
+  }
+  return 0;    
 }
 #else
-#define SWIG_AsInt SWIG_AsLong
+SWIGSTATICINLINE(int)
+  SWIG_AsVal_int(PyObject *obj, int *val)
+{
+  return SWIG_AsVal_long(obj,(long*)val);
+}
 #endif
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckInt(PyObject* obj)
+SWIG_As_int(PyObject* obj)
 {
-  SWIG_AsInt(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
+  int v;
+  if (!SWIG_AsVal_int(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(int));
   }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_int(PyObject* obj)
+{
+  return SWIG_AsVal_int(obj, (int*)0);
+}
+
+
+SWIGSTATICINLINE(long)
+SWIG_As_long(PyObject* obj)
+{
+  long v;
+  if (!SWIG_AsVal_long(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(long));
+  }
+  return v;
+}
+
+  
+SWIGSTATICINLINE(int)
+SWIG_Check_long(PyObject* obj)
+{
+  return SWIG_AsVal_long(obj, (long*)0);
 }
 
 
 SWIGSTATICINLINE(int)
-SWIG_CheckLong(PyObject* obj)
+  SWIG_AsVal_bool(PyObject *obj, bool *val)
 {
-  SWIG_AsLong(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
+  /*  if (val) *val = PyObject_IsTrue(obj); return 1; */
+  if (obj == Py_True) {
+    if (val) *val = true;
     return 1;
   }
+  if (obj == Py_False) {
+    if (val) *val = false;
+    return 1;
+  }
+  int res = 0;
+  if (SWIG_AsVal_int(obj, &res)) {    
+    if (val) *val = (bool)res;
+    return 1;
+  }
+  if (val) {
+    PyErr_SetString(PyExc_TypeError, "a bool is expected");
+  }
+  return 0;
 }
 
 
 SWIGSTATICINLINE(bool)
-SWIG_AsBool(PyObject *obj)
+SWIG_As_bool(PyObject* obj)
 {
-  return PyObject_IsTrue(obj) ? true : false;
+  bool v;
+  if (!SWIG_AsVal_bool(obj, &v)) {
+    /*
+      this is needed to make valgrind/purify happier.  the other
+      solution is throw an exception, but since this code should work
+      with plain C ....
+     */
+    memset((void*)&v, 0, sizeof(bool));
+  }
+  return v;
 }
 
-
+  
 SWIGSTATICINLINE(int)
-SWIG_CheckBool(PyObject* obj)
+SWIG_Check_bool(PyObject* obj)
 {
-  SWIG_AsBool(obj);
-  if (PyErr_Occurred()) {
-    PyErr_Clear();
-    return 0;
-  } else {
-    return 1;
-  }
+  return SWIG_AsVal_bool(obj, (bool*)0);
 }
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-static PyObject *_wrap_new_MSHTMLEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_MSHTMLEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
     int arg2 = (int) 0 ;
@@ -396,11 +481,11 @@ static PyObject *_wrap_new_MSHTMLEvent(PyObject *self, PyObject *args, PyObject 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_MSHTMLEvent",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
-        arg1 = (wxEventType) SWIG_AsInt(obj0); 
+        arg1 = (wxEventType)SWIG_As_int(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj1) {
-        arg2 = (int) SWIG_AsInt(obj1); 
+        arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -417,7 +502,7 @@ static PyObject *_wrap_new_MSHTMLEvent(PyObject *self, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_MSHTMLEvent_GetText1(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MSHTMLEvent_GetText1(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMSHTMLEvent *arg1 = (wxMSHTMLEvent *) 0 ;
     wxString result;
@@ -449,7 +534,7 @@ static PyObject *_wrap_MSHTMLEvent_GetText1(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_MSHTMLEvent_GetLong1(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MSHTMLEvent_GetLong1(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMSHTMLEvent *arg1 = (wxMSHTMLEvent *) 0 ;
     long result;
@@ -468,14 +553,14 @@ static PyObject *_wrap_MSHTMLEvent_GetLong1(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromLong((long)result);
+    resultobj = SWIG_From_long((long)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_MSHTMLEvent_GetLong2(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_MSHTMLEvent_GetLong2(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMSHTMLEvent *arg1 = (wxMSHTMLEvent *) 0 ;
     long result;
@@ -494,21 +579,21 @@ static PyObject *_wrap_MSHTMLEvent_GetLong2(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_FromLong((long)result);
+    resultobj = SWIG_From_long((long)result);
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject * MSHTMLEvent_swigregister(PyObject *self, PyObject *args) {
+static PyObject * MSHTMLEvent_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxMSHTMLEvent, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_IEHtmlWin(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_IEHtmlWin(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
@@ -537,7 +622,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *self, PyObject *args, PyObject *k
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        arg2 = (int) SWIG_AsInt(obj1); 
+        arg2 = (int)SWIG_As_int(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj2) {
@@ -553,7 +638,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *self, PyObject *args, PyObject *k
         }
     }
     if (obj4) {
-        arg5 = (long) SWIG_AsLong(obj4); 
+        arg5 = (long)SWIG_As_long(obj4); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj5) {
@@ -586,7 +671,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *self, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_IEHtmlWin_LoadUrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_LoadUrl(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     wxString *arg2 = 0 ;
@@ -627,7 +712,7 @@ static PyObject *_wrap_IEHtmlWin_LoadUrl(PyObject *self, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_IEHtmlWin_LoadString(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_LoadString(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     wxString arg2 ;
@@ -663,7 +748,7 @@ static PyObject *_wrap_IEHtmlWin_LoadString(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_IEHtmlWin_LoadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_LoadStream(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     wxInputStream *arg2 = (wxInputStream *) 0 ;
@@ -717,7 +802,7 @@ static PyObject *_wrap_IEHtmlWin_LoadStream(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_IEHtmlWin_SetCharset(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_SetCharset(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     wxString arg2 ;
@@ -750,7 +835,7 @@ static PyObject *_wrap_IEHtmlWin_SetCharset(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_IEHtmlWin_SetEditMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_SetEditMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool arg2 ;
@@ -763,7 +848,7 @@ static PyObject *_wrap_IEHtmlWin_SetEditMode(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IEHtmlWin_SetEditMode",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxIEHtmlWin,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (bool) SWIG_AsBool(obj1); 
+    arg2 = (bool)SWIG_As_bool(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -779,7 +864,7 @@ static PyObject *_wrap_IEHtmlWin_SetEditMode(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GetEditMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GetEditMode(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -807,7 +892,7 @@ static PyObject *_wrap_IEHtmlWin_GetEditMode(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool arg2 = (bool) False ;
@@ -822,7 +907,7 @@ static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *self, PyObject *ar
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxIEHtmlWin,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        arg2 = (bool) SWIG_AsBool(obj1); 
+        arg2 = (bool)SWIG_As_bool(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -845,7 +930,7 @@ static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *self, PyObject *ar
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool arg2 = (bool) False ;
@@ -860,7 +945,7 @@ static PyObject *_wrap_IEHtmlWin_GetText(PyObject *self, PyObject *args, PyObjec
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxIEHtmlWin,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        arg2 = (bool) SWIG_AsBool(obj1); 
+        arg2 = (bool)SWIG_As_bool(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -883,7 +968,7 @@ static PyObject *_wrap_IEHtmlWin_GetText(PyObject *self, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GoBack(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GoBack(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -911,7 +996,7 @@ static PyObject *_wrap_IEHtmlWin_GoBack(PyObject *self, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GoForward(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GoForward(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -939,7 +1024,7 @@ static PyObject *_wrap_IEHtmlWin_GoForward(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GoHome(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GoHome(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -967,7 +1052,7 @@ static PyObject *_wrap_IEHtmlWin_GoHome(PyObject *self, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_IEHtmlWin_GoSearch(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_GoSearch(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -995,7 +1080,7 @@ static PyObject *_wrap_IEHtmlWin_GoSearch(PyObject *self, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_IEHtmlWin_RefreshPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_RefreshPage(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     int arg2 ;
@@ -1009,7 +1094,7 @@ static PyObject *_wrap_IEHtmlWin_RefreshPage(PyObject *self, PyObject *args, PyO
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IEHtmlWin_RefreshPage",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxIEHtmlWin,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (wxIEHtmlRefreshLevel) SWIG_AsInt(obj1); 
+    arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1027,7 +1112,7 @@ static PyObject *_wrap_IEHtmlWin_RefreshPage(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_IEHtmlWin_Stop(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_IEHtmlWin_Stop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     bool result;
@@ -1055,7 +1140,7 @@ static PyObject *_wrap_IEHtmlWin_Stop(PyObject *self, PyObject *args, PyObject *
 }
 
 
-static PyObject * IEHtmlWin_swigregister(PyObject *self, PyObject *args) {
+static PyObject * IEHtmlWin_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxIEHtmlWin, obj);
@@ -1063,28 +1148,28 @@ static PyObject * IEHtmlWin_swigregister(PyObject *self, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_MSHTMLEvent", (PyCFunction) _wrap_new_MSHTMLEvent, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MSHTMLEvent_GetText1", (PyCFunction) _wrap_MSHTMLEvent_GetText1, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MSHTMLEvent_GetLong1", (PyCFunction) _wrap_MSHTMLEvent_GetLong1, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MSHTMLEvent_GetLong2", (PyCFunction) _wrap_MSHTMLEvent_GetLong2, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MSHTMLEvent_swigregister", MSHTMLEvent_swigregister, METH_VARARGS },
-	 { (char *)"new_IEHtmlWin", (PyCFunction) _wrap_new_IEHtmlWin, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_LoadUrl", (PyCFunction) _wrap_IEHtmlWin_LoadUrl, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_LoadString", (PyCFunction) _wrap_IEHtmlWin_LoadString, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_LoadStream", (PyCFunction) _wrap_IEHtmlWin_LoadStream, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_SetCharset", (PyCFunction) _wrap_IEHtmlWin_SetCharset, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_SetEditMode", (PyCFunction) _wrap_IEHtmlWin_SetEditMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GetEditMode", (PyCFunction) _wrap_IEHtmlWin_GetEditMode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GetStringSelection", (PyCFunction) _wrap_IEHtmlWin_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GetText", (PyCFunction) _wrap_IEHtmlWin_GetText, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GoBack", (PyCFunction) _wrap_IEHtmlWin_GoBack, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GoForward", (PyCFunction) _wrap_IEHtmlWin_GoForward, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GoHome", (PyCFunction) _wrap_IEHtmlWin_GoHome, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_GoSearch", (PyCFunction) _wrap_IEHtmlWin_GoSearch, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_RefreshPage", (PyCFunction) _wrap_IEHtmlWin_RefreshPage, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_Stop", (PyCFunction) _wrap_IEHtmlWin_Stop, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"IEHtmlWin_swigregister", IEHtmlWin_swigregister, METH_VARARGS },
-	 { NULL, NULL }
+	 { (char *)"new_MSHTMLEvent", (PyCFunction) _wrap_new_MSHTMLEvent, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MSHTMLEvent_GetText1", (PyCFunction) _wrap_MSHTMLEvent_GetText1, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MSHTMLEvent_GetLong1", (PyCFunction) _wrap_MSHTMLEvent_GetLong1, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MSHTMLEvent_GetLong2", (PyCFunction) _wrap_MSHTMLEvent_GetLong2, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"MSHTMLEvent_swigregister", MSHTMLEvent_swigregister, METH_VARARGS, NULL },
+	 { (char *)"new_IEHtmlWin", (PyCFunction) _wrap_new_IEHtmlWin, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_LoadUrl", (PyCFunction) _wrap_IEHtmlWin_LoadUrl, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_LoadString", (PyCFunction) _wrap_IEHtmlWin_LoadString, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_LoadStream", (PyCFunction) _wrap_IEHtmlWin_LoadStream, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_SetCharset", (PyCFunction) _wrap_IEHtmlWin_SetCharset, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_SetEditMode", (PyCFunction) _wrap_IEHtmlWin_SetEditMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GetEditMode", (PyCFunction) _wrap_IEHtmlWin_GetEditMode, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GetStringSelection", (PyCFunction) _wrap_IEHtmlWin_GetStringSelection, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GetText", (PyCFunction) _wrap_IEHtmlWin_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GoBack", (PyCFunction) _wrap_IEHtmlWin_GoBack, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GoForward", (PyCFunction) _wrap_IEHtmlWin_GoForward, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GoHome", (PyCFunction) _wrap_IEHtmlWin_GoHome, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_GoSearch", (PyCFunction) _wrap_IEHtmlWin_GoSearch, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_RefreshPage", (PyCFunction) _wrap_IEHtmlWin_RefreshPage, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_Stop", (PyCFunction) _wrap_IEHtmlWin_Stop, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"IEHtmlWin_swigregister", IEHtmlWin_swigregister, METH_VARARGS, NULL },
+	 { NULL, NULL, 0, NULL }
 };
 
 
@@ -1523,7 +1608,7 @@ _swigt__p_wxInputStream,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0}};
+{0, 0, 0, 0.0, 0, 0}};
 
 #ifdef __cplusplus
 }
@@ -1549,15 +1634,15 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2));
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_NEWWINDOW2", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_NEWWINDOW2));
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE));
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_PROGRESSCHANGE", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_PROGRESSCHANGE));
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE));
-    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_TITLECHANGE", SWIG_FromInt((int)wxEVT_COMMAND_MSHTML_TITLECHANGE));
-    PyDict_SetItemString(d,"IEHTML_REFRESH_NORMAL", SWIG_FromInt((int)wxIEHTML_REFRESH_NORMAL));
-    PyDict_SetItemString(d,"IEHTML_REFRESH_IFEXPIRED", SWIG_FromInt((int)wxIEHTML_REFRESH_IFEXPIRED));
-    PyDict_SetItemString(d,"IEHTML_REFRESH_CONTINUE", SWIG_FromInt((int)wxIEHTML_REFRESH_CONTINUE));
-    PyDict_SetItemString(d,"IEHTML_REFRESH_COMPLETELY", SWIG_FromInt((int)wxIEHTML_REFRESH_COMPLETELY));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_NEWWINDOW2", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_NEWWINDOW2));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_PROGRESSCHANGE", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_PROGRESSCHANGE));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE));
+    PyDict_SetItemString(d,"wxEVT_COMMAND_MSHTML_TITLECHANGE", SWIG_From_int((int)wxEVT_COMMAND_MSHTML_TITLECHANGE));
+    PyDict_SetItemString(d,"IEHTML_REFRESH_NORMAL", SWIG_From_int((int)wxIEHTML_REFRESH_NORMAL));
+    PyDict_SetItemString(d,"IEHTML_REFRESH_IFEXPIRED", SWIG_From_int((int)wxIEHTML_REFRESH_IFEXPIRED));
+    PyDict_SetItemString(d,"IEHTML_REFRESH_CONTINUE", SWIG_From_int((int)wxIEHTML_REFRESH_CONTINUE));
+    PyDict_SetItemString(d,"IEHTML_REFRESH_COMPLETELY", SWIG_From_int((int)wxIEHTML_REFRESH_COMPLETELY));
 }
 
