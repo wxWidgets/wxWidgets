@@ -41,7 +41,7 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
-    #include "windows.h"
+    #include "wx/msw/private.h"
 #endif // OS
 
 #include "wx/msw/mimetype.h"
@@ -374,6 +374,8 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
 
                 default:
                     icon->SetHICON((WXHICON)hIcon);
+                    wxSize size = wxGetHiconSize(hIcon);
+                    icon->SetSize(size);
                     if ( iconIndex )
                         *iconIndex = nIndex;
                     if ( iconFile )

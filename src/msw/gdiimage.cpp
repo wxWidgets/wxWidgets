@@ -184,7 +184,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxObject)
 // private functions
 // ----------------------------------------------------------------------------
 
-static wxSize GetHiconSize(HICON hicon);
 #endif
     // __MICROWIN__
 
@@ -466,7 +465,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         return FALSE;
     }
 
-    size = GetHiconSize(hicon);
+    size = wxGetHiconSize(hicon);
 #else // Win16
     HICON hicon = ReadIconFile((wxChar *)name.c_str(),
                                wxGetInstance(),
@@ -551,7 +550,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
         }
     }
 
-    wxSize size = GetHiconSize(hicon);
+    wxSize size = wxGetHiconSize(hicon);
     icon->SetSize(size.x, size.y);
 
     icon->SetHICON((WXHICON)hicon);
@@ -563,7 +562,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 // private functions
 // ----------------------------------------------------------------------------
 
-static wxSize GetHiconSize(HICON hicon)
+wxSize wxGetHiconSize(HICON hicon)
 {
     wxSize size(32, 32);    // default
 

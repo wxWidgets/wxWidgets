@@ -478,6 +478,11 @@ inline bool wxStyleHasBorder(long style)
 // may return NULL
 extern wxWindow *wxGetWindowFromHWND(WXHWND hwnd);
 
+
+// Get the size of an icon
+wxSize wxGetHiconSize(HICON hicon);
+
+
 #endif // wxUSE_GUI
 
 #endif
