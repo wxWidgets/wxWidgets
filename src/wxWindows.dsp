@@ -1546,6 +1546,10 @@ SOURCE=.\msw\treectrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\urlmsw.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\utils.cpp
 # End Source File
 # Begin Source File
@@ -2335,6 +2339,10 @@ SOURCE=..\include\wx\mstream.h
 # Begin Source File
 
 SOURCE=..\include\wx\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\numdlg.h
 # End Source File
 # Begin Source File
 
@@ -3275,6 +3283,10 @@ SOURCE=..\include\wx\generic\msgdlgg.h
 # Begin Source File
 
 SOURCE=..\include\wx\generic\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\generic\numdlgg.h
 # End Source File
 # Begin Source File
 

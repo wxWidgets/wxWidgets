@@ -7656,6 +7656,10 @@ SOURCE=..\..\include\wx\generic\notebook.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\numdlgg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\panelg.h
 # End Source File
 # Begin Source File
@@ -8317,6 +8321,10 @@ SOURCE=..\..\include\wx\msgdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\notebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\numdlg.h
 # End Source File
 # Begin Source File
 

@@ -505,6 +505,10 @@ SOURCE=..\..\src\msw\dummy.cpp
 SOURCE=..\..\src\msw\gsocket.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\urlmsw.cpp
+# End Source File
 # End Group
 # Begin Group "Setup Headers"
 
