@@ -36,13 +36,14 @@ public:
                               const wxSize& size = wxDefaultSize)
         : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL | wxNO_BORDER,
                   controlName + wxT("_container")),
-          m_controlName(controlName), m_controlAdded(FALSE)
+          m_controlName(controlName), m_controlAdded(false)
     {
         m_bg = GetBackgroundColour();
         SetBackgroundColour(wxColour(255, 0, 255));
     }
 
     virtual void AddChild(wxWindowBase *child);
+    virtual void RemoveChild(wxWindowBase *child);
 
 protected:
     wxString m_controlName;
@@ -59,15 +60,21 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
     SetBackgroundColour(m_bg);
     child->SetName(m_controlName);
     child->SetId(wxXmlResource::GetXRCID(m_controlName));
-    m_controlAdded = TRUE;
+    m_controlAdded = true;
 
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add((wxWindow*)child, 1, wxEXPAND);
     SetSizer(sizer);
-    SetAutoLayout(TRUE);
+    SetAutoLayout(true);
     Layout();
 }
 
+void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)
+{
+    wxPanel::RemoveChild(child);
+    m_controlAdded = false;
+    GetSizer()->Detach((wxWindow*)child);
+}
 
 
 wxUnknownWidgetXmlHandler::wxUnknownWidgetXmlHandler()
