@@ -51,6 +51,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "isosurf"=.\UTILS\GLCANVAS\SAMPLES\isosurf\isosurf.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name glcanvas
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxWin
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "wxWin"=.\Wxwin.dsp - Package Owner=<4>
 
 Package=<5>
