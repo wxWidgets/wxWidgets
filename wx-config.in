@@ -174,10 +174,11 @@ for it to take effect.
 --static must come before --cppflags, --cflags, --cxxflags,
 --libs and --gl-libs and --libs must come before the other ones.
 
---libs can take optional argument that contains comma-separated list of
-wxWidgets libraries to link against. This list can include both core
-and contrib libraries. Special value "std" stands for all libraries linked
-in by default.
+wx-config can take optional argument that contains comma- or space-separated
+list of wxWidgets libraries to compile and link against. This list can
+include both core and contrib libraries. Special value "std" stands for all
+libraries linked in by default. Examples: "wx-config --libs core,base"
+or "wx-config --cxxflags core,base".
 
 --gl-libs option is deprecated, use "--libs gl" instead.
 
