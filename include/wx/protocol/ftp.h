@@ -32,8 +32,8 @@ public:
   bool Connect(wxSockAddress& addr, bool wait = TRUE);
   bool Connect(const wxString& host);
 
-  // [forcibly] close the connection
-  bool Close(bool force = FALSE);
+  // close the connection
+  virtual bool Close();
 
   void SetUser(const wxString& user) { m_user = user; }
   void SetPassword(const wxString& passwd) { m_passwd = passwd; }

@@ -71,6 +71,11 @@ wxFTP::wxFTP()
 
 wxFTP::~wxFTP()
 {
+    if ( m_streaming )
+    {
+        (void)Abort();
+    }
+
     Close();
 }
 
@@ -122,17 +127,12 @@ bool wxFTP::Connect(const wxString& host)
   return Connect(addr);
 }
 
-bool wxFTP::Close(bool force)
+bool wxFTP::Close()
 {
     if ( m_streaming )
     {
-        if ( !force )
-        {
-            m_lastError = wxPROTO_STREAMING;
-            return FALSE;
-        }
-
-        (void)Abort();
+        m_lastError = wxPROTO_STREAMING;
+        return FALSE;
     }
 
     if ( IsConnected() )
