@@ -7,7 +7,16 @@ program_dir = utils/makegen
 
 PROGRAM=makegen
 
+DATADIRS = templates
+DATAFILES = templates/Makefile.in templates/makefile.b32 \
+            templates/makefile.bcc templates/makefile.dos \
+            templates/makefile.g95 templates/makefile.sc \
+            templates/makefile.sl templates/makefile.twn \
+            templates/makefile.unx templates/makefile.vc \
+            templates/makefile.wat
+
 OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env
+
 

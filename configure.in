@@ -3364,6 +3364,13 @@ AC_OUTPUT([
             utils/glcanvas/${GL_TOOLKIT_DIR}/Makefile
             utils/ogl/Makefile
             utils/ogl/src/Makefile
+            utils/makegen/Makefile
+            utils/HelpGen/Makefile
+            utils/HelpGen/src/Makefile
+            utils/tex2rtf/Makefile
+            utils/tex2rtf/src/Makefile
+            utils/dialoged/Makefile
+            utils/dialoged/src/Makefile
           ],
           [
             chmod +x wx-config
