@@ -90,6 +90,8 @@ wxMSW:
 - fixes for compilation with OpenWatcom compiler
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown
+- all libraries built with makefile.g95 have a _min or _cyg suffix
+  (for MinGW and Cygwin)
 
 wxMotif:
 
@@ -102,7 +104,7 @@ wxMotif:
   with Motif 1.x compatibility
 - implemented wxToggleButton
 - wxRadioBox and wxStaticBox now use the default shadow (border) style
-  instead of 
+  instead of a sunken border
 
 wxUniv:
 

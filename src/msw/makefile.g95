@@ -183,6 +183,7 @@ COMMONOBJS_BASEONLY  = \
 COMMONOBJS  = \
                 $(COMMONOBJS_BASE) \
 		$(COMMDIR)/y_tab.$(OBJSUFF) \
+		$(COMMDIR)/accesscmn.$(OBJSUFF) \
 		$(COMMDIR)/artprov.$(OBJSUFF) \
 		$(COMMDIR)/artstd.$(OBJSUFF) \
 		$(COMMDIR)/choiccmn.$(OBJSUFF) \
@@ -200,6 +201,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/dobjcmn.$(OBJSUFF) \
 		$(COMMDIR)/docmdi.$(OBJSUFF) \
 		$(COMMDIR)/docview.$(OBJSUFF) \
+		$(COMMDIR)/dpycmn.$(OBJSUFF) \
 		$(COMMDIR)/dseldlg.$(OBJSUFF) \
 		$(COMMDIR)/effects.$(OBJSUFF) \
 		$(COMMDIR)/fddlgcmn.$(OBJSUFF) \
@@ -313,6 +315,7 @@ MSWOBJS     = \
 		$(MSWDIR)/dialog.$(OBJSUFF) \
 		$(MSWDIR)/dialup.$(OBJSUFF) \
 		$(MSWDIR)/dib.$(OBJSUFF) \
+		$(MSWDIR)/display.$(OBJSUFF) \
 		$(MSWDIR)/dragimag.$(OBJSUFF) \
 		$(MSWDIR)/enhmeta.$(OBJSUFF) \
 		$(MSWDIR)/evtloop.$(OBJSUFF) \
@@ -382,6 +385,7 @@ ADVANCEDOBJS_BASE = \
 ADVANCEDOBJS     = \
                 $(ADVANCEDOBJS_BASE) \
 		$(COMMDIR)/odbc.$(OBJSUFF) \
+		$(MSWDIR)/ole/access.$(OBJSUFF) \
 		$(MSWDIR)/ole/automtn.$(OBJSUFF) \
 		$(MSWDIR)/ole/dataobj.$(OBJSUFF) \
 		$(MSWDIR)/ole/dropsrc.$(OBJSUFF) \

@@ -100,11 +100,13 @@ include $(WXDIR)/src/makeg95.env
 
 # DLL Name, if building wxWindows as a DLL.
 ifdef WXMAKINGDLL
-WXDLL = $(WXDIR)/lib/wx$(TOOLKIT)$(WXVERSION)$(UNIEXT)$(DEBEXT).dll
+WXDLL = $(WXDIR)/lib/wx$(TOOLKIT)$(WXVERSION)$(UNIEXT)$(DEBEXT)$(MIN_SUFFIX).dll
 WXDEF = wx$(TOOLKIT)$(WXVERSION)$(UNIEXT)$(DEBEXT).def
-DLL_EXTRA_LIBS = $(WXDIR)/lib/libzlib.a \
-                 $(WXDIR)/lib/libpng.a $(WXDIR)/lib/libjpeg.a \
-	             $(WXDIR)/lib/libtiff.a $(WXDIR)/lib/libregex.a
+DLL_EXTRA_LIBS = $(WXDIR)/lib/libzlib$(MIN_SUFFIX).a \
+                 $(WXDIR)/lib/libpng$(MIN_SUFFIX).a \
+                 $(WXDIR)/lib/libjpeg$(MIN_SUFFIX).a \
+                 $(WXDIR)/lib/libtiff$(MIN_SUFFIX).a \
+                 $(WXDIR)/lib/libregex$(MIN_SUFFIX).a
 DLL_LDFLAGS = -L$(WXDIR)/lib
 DLL_BASE_LDLIBS = $(DLL_EXTRA_LIBS) -lstdc++ -lwsock32
 ifeq ($(wxUSE_GUI),0)
@@ -131,11 +133,11 @@ OLEDIR  = $(WXDIR)/src/msw/ole
 MSWDIR  = $(WXDIR)/src/msw
 REGEXDIR= $(WXDIR)/src/regex
 
-ZLIBLIB = $(WXDIR)/lib/libzlib.a
-PNGLIB  = $(WXDIR)/lib/libpng.a
-JPEGLIB = $(WXDIR)/lib/libjpeg.a
-TIFFLIB = $(WXDIR)/lib/libtiff.a
-REGEXLIB= $(WXDIR)/lib/libregex.a
+ZLIBLIB = $(WXDIR)/lib/libzlib$(MIN_SUFFIX).a
+PNGLIB  = $(WXDIR)/lib/libpng$(MIN_SUFFIX).a
+JPEGLIB = $(WXDIR)/lib/libjpeg$(MIN_SUFFIX).a
+TIFFLIB = $(WXDIR)/lib/libtiff$(MIN_SUFFIX).a
+REGEXLIB= $(WXDIR)/lib/libregex$(MIN_SUFFIX).a
 
 DOCDIR = $(WXDIR)/docs
 
@@ -413,7 +415,7 @@ $(TIFFLIB): $(TIFFOBJS)
 	$(RANLIB) $@
 
 $(REGEXLIB):
-	$(MAKE) -C $(REGEXDIR) -f makefile.g95 WXDIR=$(WXDIR) WXWIN=$(WXDIR)
+	$(MAKE) -C $(REGEXDIR) -f makefile.g95 MINGW32=$(MINGW32) WXDIR=$(WXDIR) WXWIN=$(WXDIR)
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
