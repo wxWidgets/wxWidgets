@@ -495,6 +495,12 @@ wxObject* wxWindow::GetChild(int number) const
     return((wxObject*)this);
 }
 
+WXWidget wxWindow::GetHandle() const
+{
+    // TODO:
+    return((WXWidget)m_hWnd);
+}
+
 void wxWindow::PMDetachWindowMenu()
 {
     if ( m_hMenu )

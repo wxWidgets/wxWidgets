@@ -55,7 +55,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   SetName(name);
-  
+
   if (!parent)
     wxTopLevelWindows.Append(this);
 
@@ -78,7 +78,7 @@ void wxDialog::SetModal(bool flag)
 	else
 		if ( m_windowStyle & wxDIALOG_MODAL )
   			m_windowStyle -= wxDIALOG_MODAL ;
-  
+
   wxModelessWindows.DeleteObject(this);
   if (!flag)
     wxModelessWindows.Append(this);
@@ -130,11 +130,6 @@ bool wxDialog::IsIconized() const
 {
     // TODO
     return FALSE;
-}
-
-void wxDialog::SetClientSize(int width, int height)
-{
-    // TODO
 }
 
 void wxDialog::GetPosition(int *x, int *y) const
@@ -254,12 +249,12 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     // The default OnCancel (above) simply ends a modal dialog, and hides a modeless dialog.
 
     static wxList closing;
-    
+
     if ( closing.Member(this) )
         return;
-    
+
     closing.Append(this);
-    
+
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog

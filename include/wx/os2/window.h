@@ -146,6 +146,7 @@ public:
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height);
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+    virtual WXWidget GetHandle() const;
 
 // ---------------------------------------------------------------------------
 // wxWindowBase virtual implementations that need to be overriden

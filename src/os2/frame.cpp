@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/frame.h"
+#include "wx/event.h"
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
@@ -47,12 +48,12 @@ bool wxFrame::m_useNativeStatusBar = FALSE;
 
 wxFrame::wxFrame()
 {
-  m_frameToolBar = NULL ;
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
 
-  m_windowParent = NULL;
   m_iconized = FALSE;
+
+  m_frameToolBar = NULL ;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -200,7 +201,7 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     dc.SetFont(statusBar->GetFont());
 
     long x, y;
-    dc.GetTextExtent("X", &x, &y);
+    dc.GetTextExtent("X", &x, &y, NULL, NULL, NULL, FALSE);
 
     int height = (int)( (y  * 1.1) + 2* statusBar->GetBorderY());
 
@@ -214,7 +215,7 @@ wxStatusBar* wxFrame::CreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
   // Calling CreateStatusBar twice is an error.
-  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, 
+  wxCHECK_MSG( m_frameStatusBar == NULL, FALSE,
                "recreating status bar in wxFrame" );
 
   m_frameStatusBar = OnCreateStatusBar(number, style, id,
@@ -262,7 +263,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
         m_frameMenuBar = NULL;
         return;
     }
-  
+
     m_frameMenuBar = menuBar;
 
     // TODO
@@ -332,7 +333,7 @@ void wxFrame::OnSize(wxSizeEvent& event)
   {
     wxWindow *win = (wxWindow *)node->Data();
     if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
-         !win->IsKindOf(CLASSINFO(wxDialog)) && 
+         !win->IsKindOf(CLASSINFO(wxDialog)) &&
          (win != GetStatusBar()) &&
          (win != GetToolBar()) )
     {
@@ -435,7 +436,7 @@ void wxFrame::Command(int id)
 
 void wxFrame::ProcessCommand(int id)
 {
-  wxCommandEvent commandEvent(wxEVENT_TYPE_MENU_COMMAND, id);
+  wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
   commandEvent.SetInt( id );
   commandEvent.SetEventObject( this );
 

@@ -21,7 +21,7 @@
 #include "wx/validate.h"
 
 // General item class
-class WXDLLEXPORT wxControl: public wxWindow
+class WXDLLEXPORT wxControl: public wxControlBase
 {
   DECLARE_ABSTRACT_CLASS(wxControl)
 public:

@@ -16,6 +16,7 @@
 #pragma interface "dc.h"
 #endif
 
+#include "wx/window.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/icon.h"
@@ -155,16 +156,6 @@ class WXDLLEXPORT wxDC: public wxDCBase
     virtual void GetInternalDeviceOrigin( long *x, long *y );
 
 private:
-
-    void ComputeScaleAndOrigin(void);
-    long XDEV2LOG(long x) const;
-    long XDEV2LOGREL(long x) const;
-    long YDEV2LOG(long y) const;
-    long YDEV2LOGREL(long y) const;
-    long XLOG2DEV(long x) const;
-    long XLOG2DEVREL(long x) const;
-    long YLOG2DEV(long y) const;
-    long YLOG2DEVREL(long y) const;
 
 #if WXWIN_COMPATIBILITY
     // function hiding warning supression
