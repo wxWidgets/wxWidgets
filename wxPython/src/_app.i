@@ -252,8 +252,9 @@ public:
         "For internal use only");
 
     DocStr(GetComCtl32Version,
-           "Returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it\n"
-           "wasn't found at all.  Raises an exception on non-Windows platforms.");
+           "Returns 400, 470, 471, etc. for comctl32.dll 4.00, 4.70, 4.71 or
+0 if it wasn't found at all.  Raises an exception on non-Windows
+platforms.");
 #ifdef __WXMSW__
     static int GetComCtl32Version();
 #else

@@ -24,13 +24,37 @@ MAKE_CONST_WXSTRING(PanelNameStr);
 %newgroup
 
 
+DocStr(wxVisualAttributes,
+    "struct containing all the visual attributes of a control");
+
+struct wxVisualAttributes
+{
+    %extend {
+        wxVisualAttributes() {}
+        ~wxVisualAttributes() {}
+    }
+    
+    // the font used for control label/text inside it
+    wxFont font;
+
+    // the foreground colour
+    wxColour colFg;
+
+    // the background colour, may be wxNullColour if the controls background
+    // colour is not solid
+    wxColour colBg;
+};
+
+
+
+
 enum wxWindowVariant 
 {
-    wxWINDOW_VARIANT_DEFAULT,       // Default size (usually == normal, may be set by a wxSystemOptions entry)
     wxWINDOW_VARIANT_NORMAL,        // Normal size
     wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
     wxWINDOW_VARIANT_MINI,          // Mini size (about 33 % smaller than normal )
     wxWINDOW_VARIANT_LARGE,         // Large size (about 25 % larger than normal )
+    wxWINDOW_VARIANT_MAX
 };
 
 
@@ -270,12 +294,10 @@ identification purposes.  The interpretation of this function
 differs from class to class. For frames and dialogs, the value
 returned is the title. For buttons or static text controls, it is
 the button text. This function can be useful for meta-programs
-(such as testing tools or special-needs access programs) which
+such as testing tools or special-needs access programs)which
 need to identify windows by name.");
     
 
-    // the window name is used for ressource setting in X, it is not the
-    // same as the window title/label
     DocDeclStr(
         virtual void , SetName( const wxString &name ),
         "Sets the window's name.  The window name is used for ressource
@@ -283,16 +305,21 @@ setting in X, it is not the same as the window title/label");
     
     DocDeclStr(
         virtual wxString , GetName() const,
-        "Returns the window's name.  This name is not guaranteed to be
+        "Returns the windows name.  This name is not guaranteed to be
 unique; it is up to the programmer to supply an appropriate name
 in the window constructor or via wx.Window.SetName.");
-
     
     
     DocDeclStr(
         void , SetWindowVariant( wxWindowVariant variant ),
         "Sets the variant of the window/font size to use for this window,
-if the platform supports variants, (for example, wxMac.)");
+if the platform supports variants, for example, wxMac.  Variant values are:
+
+    wx.WINDOW_VARIANT_NORMAL    Normal size
+    wx.WINDOW_VARIANT_SMALL     Smaller size (about 25 % smaller than normal)
+    wx.WINDOW_VARIANT_MINI      Mini size (about 33 % smaller than normal)
+    wx.WINDOW_VARIANT_LARGE     Large size (about 25 % larger than normal)
+");
     
     DocDeclStr(
         wxWindowVariant , GetWindowVariant() const,
@@ -1119,10 +1146,30 @@ exposed.");
     // colours, fonts and cursors
     // --------------------------
 
-    // set/retrieve the window colours (system defaults are used by
-    // default): Set functions return True if colour was changed
 
+    DocDeclStr(
+        wxVisualAttributes , GetDefaultAttributes() const,
+        "Get the default attributes for an instance of this class.  This
+is useful if you want to use the same font or colour in your own
+control as in a standard control -- which is a much better idea
+than hard coding specific colours or fonts which might look
+completely out of place on the users system, especially if it
+uses themes.");
+    
 
+    DocDeclStr(
+        static wxVisualAttributes ,
+        GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL),
+        "Get the default attributes for this class.  This is useful if
+you want to use the same font or colour in your own control as
+in a standard control -- which is a much better idea than hard
+coding specific colours or fonts which might look completely out
+of place on the users system, especially if it uses themes.
+
+The variant parameter is only relevant under Mac currently and is
+ignore under other platforms. Under Mac, it will change the size of the
+returned font. See SetWindowVariant for more about this.");
+    
     
     DocDeclStr(
         virtual bool , SetBackgroundColour( const wxColour &colour ),
@@ -1146,7 +1193,7 @@ modules.");
 was changed.  The interpretation of foreground colour is dependent on
 the window class; it may be the text colour or other colour, or it may
 not be used at all.");
-    
+
 
     DocDeclStr(
         wxColour , GetBackgroundColour() const,

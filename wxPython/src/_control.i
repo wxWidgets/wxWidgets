@@ -63,7 +63,7 @@ public:
     DocDeclStr(
         void , Command(wxCommandEvent& event),
         "Simulates the effect of the user issuing a command to the\n"
-        "item. See wxCommandEvent.");
+        "item. See wx.CommandEvent.");
    
     DocDeclStr(
         wxString , GetLabel(),
@@ -72,6 +72,10 @@ public:
     DocDeclStr(
         void , SetLabel(const wxString& label),
         "Sets the item's text.");
+
+    
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
 
 
