@@ -3695,7 +3695,13 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
 #else // !wxUSE_OWNER_DRAWN
     // we may still have owner-drawn buttons internally because we have to make
     // them owner-drawn to support colour change
-    wxControl *item = wxDynamicCast(FindItem(id), wxButton);
+    wxControl *item = 
+#                     if wxUSE_BUTTON
+                         wxDynamicCast(FindItem(id), wxButton)
+#                     else
+                         NULL
+#                     endif
+                    ;
 #endif // USE_OWNER_DRAWN
 
     if ( item )
