@@ -58,6 +58,27 @@ Width member.
 
 Height member.
 
+\membersection{wxRect::Deflate}\label{wxrectdeflate}
+
+\func{void}{Deflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
+
+\func{void}{Deflate}{\param{wxCoord }{diff}}
+
+\constfunc{wxRect}{Deflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
+
+Decrease the rectangle size by {\it dx} in x direction and {\it dy} in y
+direction. Both (or one of) parameters may be negative to increase the
+rectngle size. This method is the opposite of \helpref{Inflate}{wxrectinflate}.
+
+The second form uses the same {\it diff} for both {\it dx} and {\it dy}.
+
+The first two versions modify the rectangle in place, the last one returns a
+new rectangle leaving this one unchanged.
+
+\wxheading{See also}
+
+\helpref{Inflate}{wxrectinflate}
+
 \membersection{wxRect::GetBottom}\label{wxrectgetbottom}
 
 \constfunc{int}{GetBottom}{\void}
@@ -124,11 +145,46 @@ Gets the y member.
 
 \func{void}{Inflate}{\param{wxCoord }{diff}}
 
+\constfunc{wxRect}{Inflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
+
 Increase the rectangle size by {\it dx} in x direction and {\it dy} in y
 direction. Both (or one of) parameters may be negative to decrease the
 rectngle size.
 
 The second form uses the same {\it diff} for both {\it dx} and {\it dy}.
+
+The first two versions modify the rectangle in place, the last one returns a
+new rectangle leaving this one unchanged.
+
+\wxheading{See also}
+
+\helpref{Deflate}{wxrectdeflate}
+
+\membersection{wxRect:Inside}\label{wxrectinside}
+
+\constfunc{bool}{Inside}{\param{int }{x}, \param{int }{y}}
+
+\constfunc{bool}{Inside}{\param{const wxPoint\& }{pt}}
+
+Returns {\tt TRUE} if the given point is inside the rectangle (or on its
+boundary) and {\tt FALSE} otherwise.
+
+\membersection{wxRect:Intersects}\label{wxrectintersects}
+
+\constfunc{bool}{Intersects}{\param{const wxRect\& }{rect}}
+
+Returns {\tt TRUE} if this rectangle has a non empty intersection with the
+rectangle {\it rect} and {\tt FALSE} otherwise.
+
+\membersection{wxRect::Offset}\label{wxrectoffset}
+
+\func{void}{Offset}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
+
+\func{void}{Offset}{\param{const wxPoint\& }{pt}}
+
+Moves the rectangle by the specified offset. If {\it dx} is positive, the
+rectangle is moved to the right, if {\it dy} is positive, it is moved to the
+bottom, otherwise it is moved to the left or top respectively.
 
 \membersection{wxRect::SetHeight}\label{wxrectsetheight}
 
