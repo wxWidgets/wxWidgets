@@ -146,6 +146,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\imagall.obj \
 		$(COMMDIR)\imagbmp.obj \
 		$(COMMDIR)\image.obj \
+		$(COMMDIR)\imagfill.obj \
 		$(COMMDIR)\imaggif.obj \
 		$(COMMDIR)\imagiff.obj \
 		$(COMMDIR)\imagxpm.obj \
@@ -1074,6 +1075,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/image.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/imagfill.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

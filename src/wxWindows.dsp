@@ -484,6 +484,10 @@ SOURCE=.\common\image.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\imagfill.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\imaggif.cpp
 # End Source File
 # Begin Source File

@@ -175,6 +175,7 @@ COMMONOBJS = \
 		$(MSWDIR)\imagall.obj \
 		$(MSWDIR)\imagbmp.obj \
 		$(MSWDIR)\image.obj \
+		$(MSWDIR)\imagfill.obj \
 		$(MSWDIR)\imaggif.obj \
 		$(MSWDIR)\imagiff.obj \
 		$(MSWDIR)\imagjpeg.obj \
@@ -771,6 +772,8 @@ $(MSWDIR)\imagall.obj: $(COMMDIR)\imagall.$(SRCSUFF)
 $(MSWDIR)\imagbmp.obj: $(COMMDIR)\imagbmp.$(SRCSUFF)
 
 $(MSWDIR)\image.obj: $(COMMDIR)\image.$(SRCSUFF)
+
+$(MSWDIR)\imagfill.obj: $(COMMDIR)\imagfill.$(SRCSUFF)
 
 $(MSWDIR)\imaggif.obj: $(COMMDIR)\imaggif.$(SRCSUFF)
 

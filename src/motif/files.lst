@@ -107,6 +107,7 @@ ALL_SOURCES = \
 		common/imagall.cpp \
 		common/imagbmp.cpp \
 		common/image.cpp \
+		common/imagfill.cpp \
 		common/imaggif.cpp \
 		common/imagiff.cpp \
 		common/imagjpeg.cpp \
@@ -676,6 +677,7 @@ COMMONOBJS = \
 		imagall.o \
 		imagbmp.o \
 		image.o \
+		imagfill.o \
 		imaggif.o \
 		imagiff.o \
 		imagjpeg.o \

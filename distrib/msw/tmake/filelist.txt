@@ -180,6 +180,7 @@ iconbndl.cpp	Common
 imagall.cpp	Common
 imagbmp.cpp	Common
 image.cpp	Common
+imagfill.cpp	Common
 imaggif.cpp	Common
 imagiff.cpp	Common
 imagjpeg.cpp	Common	Win32Only

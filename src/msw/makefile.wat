@@ -157,6 +157,7 @@ COMMONOBJS = &
 	imagall.obj &
 	imagbmp.obj &
 	image.obj &
+	imagfill.obj &
 	imaggif.obj &
 	imagiff.obj &
 	imagjpeg.obj &
@@ -914,6 +915,9 @@ imagbmp.obj:     $(COMMDIR)\imagbmp.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 image.obj:     $(COMMDIR)\image.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+imagfill.obj:     $(COMMDIR)\imagfill.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imaggif.obj:     $(COMMDIR)\imaggif.cpp

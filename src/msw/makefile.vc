@@ -195,6 +195,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\imagall.obj \
 		$(COMMDIR)\$D\imagbmp.obj \
 		$(COMMDIR)\$D\image.obj \
+		$(COMMDIR)\$D\imagfill.obj \
 		$(COMMDIR)\$D\imaggif.obj \
 		$(COMMDIR)\$D\imagiff.obj \
 		$(COMMDIR)\$D\imagjpeg.obj \

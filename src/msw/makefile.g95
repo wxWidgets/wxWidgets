@@ -214,6 +214,7 @@ COMMONOBJS  = \
 		$(COMMDIR)/imagall.$(OBJSUFF) \
 		$(COMMDIR)/imagbmp.$(OBJSUFF) \
 		$(COMMDIR)/image.$(OBJSUFF) \
+		$(COMMDIR)/imagfill.$(OBJSUFF) \
 		$(COMMDIR)/imaggif.$(OBJSUFF) \
 		$(COMMDIR)/imagiff.$(OBJSUFF) \
 		$(COMMDIR)/imagjpeg.$(OBJSUFF) \
