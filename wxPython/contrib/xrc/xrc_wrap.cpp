@@ -97,10 +97,10 @@ typedef void *(*swig_converter_func)(void *);
 typedef struct swig_type_info *(*swig_dycast_func)(void **);
 
 typedef struct swig_type_info {
-  const char             *name;
+  const char             *name;                 
   swig_converter_func     converter;
   const char             *str;
-  void                   *clientdata;
+  void                   *clientdata;	
   swig_dycast_func        dcast;
   struct swig_type_info  *next;
   struct swig_type_info  *prev;
@@ -118,6 +118,7 @@ SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
 
 #ifdef __cplusplus
 }
+
 #endif
 
 /***********************************************************************
@@ -203,15 +204,8 @@ SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 
 /* Contract support */
 
-#define SWIG_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
 
-#define SWIG_inherit_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_inherit_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-
-#define SWIG_invariant(expr, msg)       if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_begin(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
-#define SWIG_invariant_end(expr, msg)   if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
 
 #ifdef __cplusplus
 }
