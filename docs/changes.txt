@@ -229,6 +229,7 @@ All (GUI):
 - recursive wxSizer::Show for subsizer and return value if element was found
 - added wxChoicebook control
 - smoother time estimation updates in wxProgressDialog (Christian Sturmlechner)
+- the XRC contrib library was moved to the core
 
 Unix:
 
