@@ -139,6 +139,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     else
         msStyle |= ES_AUTOHSCROLL;
 
+    if (m_windowStyle & wxHSCROLL)
+        msStyle |= (WS_HSCROLL | ES_AUTOHSCROLL);
+
     if (m_windowStyle & wxTE_READONLY)
         msStyle |= ES_READONLY;
 
