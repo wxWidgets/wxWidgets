@@ -22,7 +22,7 @@
 
 #include "wx/toolbar.h"
 
-#if wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR_NATIVE
 
 #include "wx/frame.h"
 
@@ -41,6 +41,40 @@ extern bool g_isIdle;
 // data
 extern bool       g_blockEventsOnDrag;
 extern wxCursor   g_globalCursor;
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+class wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxBitmap& bitmap1,
+                  const wxBitmap& bitmap2,
+                  bool toggle,
+                  wxObject *clientData,
+                  const wxString& shortHelpString,
+                  const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
+                            clientData, shortHelpString, longHelpString)
+    {
+        Init();
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control)
+        : wxToolBarToolBase(tbar, control)
+    {
+        Init();
+    }
+
+    GtkWidget            *m_item;
+    GtkWidget            *m_pixmap;
+
+protected:
+    void Init();
+};
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -62,7 +96,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
-    wxToolBar *tbar = tool->GetToolBar();
+    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
     if ( tbar->m_blockNextEvent )
     { 
         tbar->m_blockNextEvent = FALSE;
@@ -103,7 +137,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
 
     if (g_blockEventsOnDrag) return TRUE;
     
-    wxToolBar *tb = tool->GetToolBar();
+    wxToolBar *tb = (wxToolBar *)tool->GetToolBar();
     
 #if (GTK_MINOR_VERSION == 0)
     /* we grey-out the tip text of disabled tool in GTK 1.0 */
@@ -153,8 +187,13 @@ static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar,
-                                         int id,
+void wxToolBarTool::Init()
+{
+    m_item =
+    m_pixmap = (GtkWidget *)NULL;
+}
+
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
                                          const wxBitmap& bitmap1,
                                          const wxBitmap& bitmap2,
                                          bool toggle,
@@ -162,19 +201,13 @@ wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar,
                                          const wxString& shortHelpString,
                                          const wxString& longHelpString)
 {
-    return new wxToolBarTool(tbar, id, bitmap1, bitmap2, toggle,
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
                              clientData, shortHelpString, longHelpString);
 }
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar, wxControl *control)
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    return new wxToolBarTool(tbar, control);
-}
-
-void wxToolBarTool::Init()
-{
-    m_item =
-    m_pixmap = (GtkWidget *)NULL;
+    return new wxToolBarTool(this, control);
 }
 
 //-----------------------------------------------------------------------------
@@ -279,8 +312,10 @@ bool wxToolBar::Create( wxWindow *parent,
     return TRUE;
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarTool *tool)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     if ( tool->IsButton() )
     {
         wxBitmap bitmap = tool->GetBitmap1();
@@ -369,8 +404,10 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarTool *tool)
     return TRUE;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarTool *tool)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *toolBase)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
@@ -391,9 +428,11 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarTool *tool)
 // wxToolBar tools state
 // ----------------------------------------------------------------------------
 
-void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase *toolBase, bool enable)
 {
 #if (GTK_MINOR_VERSION > 0)
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     /* we don't disable the tools for GTK 1.0 as the bitmaps don't get
        greyed anyway and this also disables tooltips */
     if (tool->m_item)
@@ -401,8 +440,10 @@ void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool enable)
 #endif
 }
 
-void wxToolBar::DoToggleTool( wxToolBarTool *tool, bool toggle ) 
+void wxToolBar::DoToggleTool( wxToolBarToolBase *toolBase, bool toggle ) 
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     GtkWidget *item = tool->m_item;
     if ( item && GTK_IS_TOGGLE_BUTTON(item) )
     {
@@ -423,7 +464,7 @@ void wxToolBar::DoToggleTool( wxToolBarTool *tool, bool toggle )
     }
 }
 
-void wxToolBar::DoSetToggle(wxToolBarTool * WXUNUSED(tool),
+void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
                             bool WXUNUSED(toggle))
 {
     // VZ: absolutely no idea about how to do it
@@ -434,13 +475,13 @@ void wxToolBar::DoSetToggle(wxToolBarTool * WXUNUSED(tool),
 // wxToolBar geometry
 // ----------------------------------------------------------------------------
 
-wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
-                                              wxCoord WXUNUSED(y)) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
+                                                  wxCoord WXUNUSED(y)) const
 {
     // VZ: GTK+ doesn't seem to have such thing
     wxFAIL_MSG( _T("wxToolBar::FindToolForPosition() not implemented") );
 
-    return (wxToolBarTool *)NULL;
+    return (wxToolBarToolBase *)NULL;
 }
 
 void wxToolBar::SetMargins( int x, int y )

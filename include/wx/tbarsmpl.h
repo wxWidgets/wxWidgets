@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/tbarsmpl.h
-// Purpose:     wxToolBar class
+// Purpose:     wxToolBarSimple class
 // Author:      Julian Smart
-// Modified by: VZ on 14.12.99 during wxToolBar reorganization
+// Modified by: VZ on 14.12.99 during wxToolBar classes reorganization
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
@@ -18,26 +18,26 @@
 
 #include "wx/tbarbase.h"
 
-#if wxUSE_TOOLBAR
+#if wxUSE_TOOLBAR_SIMPLE
 
 class WXDLLEXPORT wxMemoryDC;
 
 // ----------------------------------------------------------------------------
-// wxToolBar is a generic toolbar implementation in pure wxWindows
+// wxToolBarSimple is a generic toolbar implementation in pure wxWindows
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxToolBar : public wxToolBarBase
+class WXDLLEXPORT wxToolBarSimple : public wxToolBarBase
 {
 public:
     // ctors and dtor
-    wxToolBar() { Init(); }
+    wxToolBarSimple() { Init(); }
 
-    wxToolBar(wxWindow *parent,
-              wxWindowID id,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = wxNO_BORDER | wxTB_HORIZONTAL,
-              const wxString& name = wxToolBarNameStr)
+    wxToolBarSimple(wxWindow *parent,
+                    wxWindowID id,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                    const wxString& name = wxToolBarNameStr)
     {
         Init();
 
@@ -51,10 +51,12 @@ public:
                 long style = wxNO_BORDER | wxTB_HORIZONTAL,
                 const wxString& name = wxToolBarNameStr);
 
-    virtual ~wxToolBar();
+    virtual ~wxToolBarSimple();
 
     // override/implement base class virtuals
-    virtual wxToolBarTool *AddTool(int id,
+    virtual wxToolBarToolBase *AddTool
+                               (
+                                   int id,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& pushedBitmap,
                                    bool toggle,
@@ -62,18 +64,21 @@ public:
                                    wxCoord yPos = -1,
                                    wxObject *clientData = NULL,
                                    const wxString& helpString1 = wxEmptyString,
-                                   const wxString& helpString2 = wxEmptyString);
+                                   const wxString& helpString2 = wxEmptyString
+                               );
 
-    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     virtual bool Realize();
+
+    virtual void SetRows(int nRows);
 
     // implementation from now on
     // --------------------------
 
     // SCROLLING: this has to be copied from wxScrolledWindow since
     // wxToolBarBase inherits from wxControl. This could have been put into
-    // wxToolBar, but we might want any derived toolbar class to be
+    // wxToolBarSimple, but we might want any derived toolbar class to be
     // scrollable.
 
     // Number of pixels per user unit (0 or -1 for no scrollbar)
@@ -114,12 +119,21 @@ protected:
     void Init();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
-    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
     // helpers
     void DrawTool(wxToolBarToolBase *tool);
@@ -149,10 +163,11 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxToolBar)
+    DECLARE_DYNAMIC_CLASS(wxToolBarSimple)
 };
 
-#endif // wxUSE_TOOLBAR
+#endif // wxUSE_TOOLBAR_SIMPLE
+
 #endif
     // _WX_TBARSMPLH__
 

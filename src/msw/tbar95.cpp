@@ -29,6 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
@@ -36,7 +37,7 @@
     #include "wx/bitmap.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && defined(__WIN95__) && !wxUSE_TOOLBAR_SIMPLE
+#if wxUSE_TOOLBAR && defined(__WIN95__) && wxUSE_TOOLBAR_NATIVE
 
 #include "wx/toolbar.h"
 
@@ -100,9 +101,7 @@ static void wxMapBitmap(HBITMAP hBitmap, int width, int height);
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
-    IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
-#endif
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
@@ -154,22 +153,21 @@ private:
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar,
-                                          int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
-                                          wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString)
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
 {
-    return new wxToolBarTool(tbar, id, bitmap1, bitmap2, toggle,
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
                              clientData, shortHelpString, longHelpString);
 }
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar, wxControl *control)
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    return new wxToolBarTool(tbar, control);
+    return new wxToolBarTool(this, control);
 }
 
 // ----------------------------------------------------------------------------
@@ -255,7 +253,7 @@ wxToolBar::~wxToolBar()
 // ----------------------------------------------------------------------------
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarTool *tool)
+                             wxToolBarToolBase *tool)
 {
     // nothing special to do here - we really create the toolbar buttons in
     // Realize() later
@@ -264,7 +262,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
     return TRUE;
 }
 
-bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarTool *tool)
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 {
     // normally, we only delete one button, but we use several separators to
     // cover the space used by one control sometimes (with old comctl32.dll)
@@ -281,7 +279,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarTool *tool)
 
     if ( tool->IsControl() )
     {
-        nButtonsToDelete = tool->GetSeparatorsCount();
+        nButtonsToDelete = ((wxToolBarTool *)tool)->GetSeparatorsCount();
 
         width *= nButtonsToDelete;
     }
@@ -769,7 +767,7 @@ wxSize wxToolBar::GetToolSize() const
     }
 }
 
-wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     POINT pt;
     pt.x = x;
@@ -778,10 +776,10 @@ wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     if ( index < 0 )
     {
         // it's a separator or there is no tool at all there
-        return (wxToolBarTool *)NULL;
+        return (wxToolBarToolBase *)NULL;
     }
 
-    return (wxToolBarTool *)m_tools.Item((size_t)index)->GetData();
+    return m_tools.Item((size_t)index)->GetData();
 }
 
 void wxToolBar::UpdateSize()
@@ -807,19 +805,19 @@ void wxToolBar::UpdateSize()
 // tool state
 // ----------------------------------------------------------------------------
 
-void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool enable)
 {
     ::SendMessage(GetHwnd(), TB_ENABLEBUTTON,
                   (WPARAM)tool->GetId(), (LPARAM)MAKELONG(enable, 0));
 }
 
-void wxToolBar::DoToggleTool(wxToolBarTool *tool, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool toggle)
 {
     ::SendMessage(GetHwnd(), TB_CHECKBUTTON,
                   (WPARAM)tool->GetId(), (LPARAM)MAKELONG(toggle, 0));
 }
 
-void wxToolBar::DoSetToggle(wxToolBarTool *tool, bool toggle)
+void wxToolBar::DoSetToggle(wxToolBarToolBase *tool, bool toggle)
 {
     // VZ: AFAIK, the button has to be created either with TBSTYLE_CHECK or
     //     without, so we really need to delete the button and recreate it here
@@ -1007,4 +1005,4 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 #endif
 
 
-#endif // !(wxUSE_TOOLBAR && Win95)
+#endif // wxUSE_TOOLBAR && Win95

@@ -56,17 +56,17 @@ public:
     ~wxToolBar();
 
     // implement/override base class (pure) virtuals
-    virtual wxToolBarTool *AddTool(int id,
-                                   const wxBitmap& bitmap,
-                                   const wxBitmap& pushedBitmap,
-                                   bool toggle,
-                                   wxCoord xPos,
-                                   wxCoord yPos = -1,
-                                   wxObject *clientData = NULL,
-                                   const wxString& helpString1 = wxEmptyString,
-                                   const wxString& helpString2 = wxEmptyString);
+    virtual wxToolBarToolBase *AddTool(int id,
+                                       const wxBitmap& bitmap,
+                                       const wxBitmap& pushedBitmap,
+                                       bool toggle,
+                                       wxCoord xPos,
+                                       wxCoord yPos = -1,
+                                       wxObject *clientData = NULL,
+                                       const wxString& helpString1 = wxEmptyString,
+                                       const wxString& helpString2 = wxEmptyString);
 
-    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const ;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     virtual void SetToolBitmapSize(const wxSize& size);
     virtual wxSize GetToolSize() const;
@@ -83,16 +83,25 @@ public:
 protected:
     void Init();
 
-    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
-    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
 
-    void DoRedrawTool(wxToolBarTool *tool);
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
-    void DrawTool(wxDC& dc, wxToolBarTool *tool);
-    void DrawTool(wxDC& dc, wxToolBarTool *tool, int state);
+    void DoRedrawTool(wxToolBarToolBase *tool);
+
+    void DrawTool(wxDC& dc, wxToolBarToolBase *tool);
+    void DrawTool(wxDC& dc, wxToolBarToolBase *tool, int state);
 
     void GetSysColors();
     bool InitGlobalObjects();
@@ -100,7 +109,8 @@ protected:
     void PatB(WXHDC hdc,int x,int y,int dx,int dy, long rgb);
     void CreateMask(WXHDC hDC, int xoffset, int yoffset, int dx, int dy);
     void DrawBlankButton(WXHDC hdc, int x, int y, int dx, int dy, int state);
-    void DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBarTool *tool, int state);
+    void DrawButton(WXHDC hdc, int x, int y, int dx, int dy,
+                    wxToolBarTool *tool, int state);
     WXHBITMAP CreateDitherBitmap();
     bool CreateDitherBrush();
     bool FreeDitherBrush();

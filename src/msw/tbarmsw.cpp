@@ -135,22 +135,21 @@ END_EVENT_TABLE()
 // wxToolBarTool
 // ----------------------------------------------------------------------------
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar,
-                                          int id,
-                                          const wxBitmap& bitmap1,
-                                          const wxBitmap& bitmap2,
-                                          bool toggle,
-                                          wxObject *clientData,
-                                          const wxString& shortHelpString,
-                                          const wxString& longHelpString)
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
 {
-    return new wxToolBarTool(tbar, id, bitmap1, bitmap2, toggle,
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
                              clientData, shortHelpString, longHelpString);
 }
 
-wxToolBarToolBase *wxToolBarToolBase::New(wxToolBar *tbar, wxControl *control)
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    return new wxToolBarTool(tbar, control);
+    return new wxToolBarTool(this, control);
 }
 
 // ----------------------------------------------------------------------------
@@ -229,7 +228,7 @@ wxSize wxToolBar::GetToolSize() const
     return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
 
-wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     wxToolBarToolsList::Node *node = m_tools.GetFirst();
     while (node)
@@ -245,18 +244,18 @@ wxToolBarTool *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         node = node->GetNext();
     }
 
-    return (wxToolBarTool *)NULL;
+    return (wxToolBarToolBase *)NULL;
 }
 
-wxToolBarTool *wxToolBar::AddTool(int id,
-                                  const wxBitmap& bitmap,
-                                  const wxBitmap& pushedBitmap,
-                                  bool toggle,
-                                  wxCoord xPos,
-                                  wxCoord yPos,
-                                  wxObject *clientData,
-                                  const wxString& helpString1,
-                                  const wxString& helpString2)
+wxToolBarToolBase *wxToolBar::AddTool(int id,
+                                      const wxBitmap& bitmap,
+                                      const wxBitmap& pushedBitmap,
+                                      bool toggle,
+                                      wxCoord xPos,
+                                      wxCoord yPos,
+                                      wxObject *clientData,
+                                      const wxString& helpString1,
+                                      const wxString& helpString2)
 {
     // rememeber the position for DoInsertTool()
     m_xPos = xPos;
@@ -289,7 +288,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
             if ( tool->IsToggled() )
                 state |= wxTBSTATE_CHECKED;
 
-            DrawTool(dc, (wxToolBarTool *)tool, state);
+            DrawTool(dc, tool, state);
         }
 
         node = node->GetNext();
@@ -303,7 +302,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 // of 'enabled' testing (Stefan Hammes).
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 {
-    static wxToolBarTool *eventCurrentTool = NULL;
+    static wxToolBarToolBase *eventCurrentTool = NULL;
     wxClientDC dc(this);
 
     if (event.Leaving())
@@ -324,7 +323,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 
     wxCoord x, y;
     event.GetPosition(&x, &y);
-    wxToolBarTool *tool = FindToolForPosition(x, y);
+    wxToolBarToolBase *tool = FindToolForPosition(x, y);
 
     if (!tool)
     {
@@ -426,38 +425,40 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-void wxToolBar::DoEnableTool(wxToolBarTool *tool, bool WXUNUSED(enable))
+void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool WXUNUSED(enable))
 {
     DoRedrawTool(tool);
 }
 
-void wxToolBar::DoToggleTool(wxToolBarTool *tool, bool WXUNUSED(toggle))
+void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
 {
     DoRedrawTool(tool);
 }
 
-void wxToolBar::DoSetToggle(wxToolBarTool * WXUNUSED(tool),
+void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
                             bool WXUNUSED(toggle))
 {
     // nothing to do
 }
 
-void wxToolBar::DoRedrawTool(wxToolBarTool *tool)
+void wxToolBar::DoRedrawTool(wxToolBarToolBase *tool)
 {
     wxClientDC dc(this);
 
     DrawTool(dc, tool);
 }
 
-void wxToolBar::DrawTool(wxDC& dc, wxToolBarTool *tool, int state)
+void wxToolBar::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase, int state)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     DrawButton(dc.GetHDC(),
                tool->m_x, tool->m_y,
                tool->GetWidth(), tool->GetHeight(),
                tool, state);
 }
 
-void wxToolBar::DrawTool(wxDC& dc, wxToolBarTool *tool)
+void wxToolBar::DrawTool(wxDC& dc, wxToolBarToolBase *tool)
 {
     int state = 0;
     if (tool->IsEnabled())
@@ -470,7 +471,7 @@ void wxToolBar::DrawTool(wxDC& dc, wxToolBarTool *tool)
 }
 
 bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
-                             wxToolBarTool *tool)
+                             wxToolBarToolBase *tool)
 {
     // VZ: didn't test whether it works, but why not...
     tool->Detach();
@@ -480,8 +481,10 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
     return TRUE;
 }
 
-bool wxToolBar::DoInsertTool(size_t pos, wxToolBarTool *tool)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     wxCHECK_MSG( !tool->IsControl(), FALSE,
                  _T("generic wxToolBar doesn't support controls") );
 

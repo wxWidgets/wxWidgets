@@ -62,7 +62,7 @@ WX_DEFINE_LIST(wxToolBarToolsList);
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxToolBarTool
+// wxToolBarToolBase
 // ----------------------------------------------------------------------------
 
 bool wxToolBarToolBase::Enable(bool enable)
@@ -135,38 +135,36 @@ wxToolBarBase::wxToolBarBase()
     m_maxRows = m_maxCols = 0;
 }
 
-wxToolBarTool *wxToolBarBase::AddTool(int id,
-                                      const wxBitmap& bitmap,
-                                      const wxBitmap& pushedBitmap,
-                                      bool toggle,
-                                      wxCoord WXUNUSED(xPos),
-                                      wxCoord WXUNUSED(yPos),
-                                      wxObject *clientData,
-                                      const wxString& helpString1,
-                                      const wxString& helpString2)
+wxToolBarToolBase *wxToolBarBase::AddTool(int id,
+                                          const wxBitmap& bitmap,
+                                          const wxBitmap& pushedBitmap,
+                                          bool toggle,
+                                          wxCoord WXUNUSED(xPos),
+                                          wxCoord WXUNUSED(yPos),
+                                          wxObject *clientData,
+                                          const wxString& helpString1,
+                                          const wxString& helpString2)
 {
     return InsertTool(GetToolsCount(), id, bitmap, pushedBitmap,
                       toggle, clientData, helpString1, helpString2);
 }
 
-wxToolBarTool *wxToolBarBase::InsertTool(size_t pos,
-                                         int id,
-                                         const wxBitmap& bitmap,
-                                         const wxBitmap& pushedBitmap,
-                                         bool toggle,
-                                         wxObject *clientData,
-                                         const wxString& helpString1,
-                                         const wxString& helpString2)
+wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
+                                             int id,
+                                             const wxBitmap& bitmap,
+                                             const wxBitmap& pushedBitmap,
+                                             bool toggle,
+                                             wxObject *clientData,
+                                             const wxString& helpString1,
+                                             const wxString& helpString2)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
                  _T("invalid position in wxToolBar::InsertTool()") );
 
-    wxToolBarToolBase *tool = wxToolBarToolBase::New((wxToolBar *)this, id,
-                                                     bitmap, pushedBitmap,
-                                                     toggle, clientData,
-                                                     helpString1, helpString2);
+    wxToolBarToolBase *tool = CreateTool(id, bitmap, pushedBitmap, toggle,
+                                         clientData, helpString1, helpString2);
 
-    if ( !tool || !DoInsertTool(pos, (wxToolBarTool *)tool) )
+    if ( !tool || !DoInsertTool(pos, tool) )
     {
         delete tool;
 
@@ -175,28 +173,28 @@ wxToolBarTool *wxToolBarBase::InsertTool(size_t pos,
 
     m_tools.Insert(pos, tool);
 
-    return (wxToolBarTool *)tool;
+    return tool;
 }
 
-wxToolBarTool *wxToolBarBase::AddControl(wxControl *control)
+wxToolBarToolBase *wxToolBarBase::AddControl(wxControl *control)
 {
     return InsertControl(GetToolsCount(), control);
 }
 
-wxToolBarTool *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
+wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
 {
-    wxCHECK_MSG( control, NULL, _T("toolbar: can't insert NULL control") );
+    wxCHECK_MSG( control, (wxToolBarToolBase *)NULL,
+                 _T("toolbar: can't insert NULL control") );
 
-    wxCHECK_MSG( control->GetParent() == this, NULL,
+    wxCHECK_MSG( control->GetParent() == this, (wxToolBarToolBase *)NULL,
                  _T("control must have toolbar as parent") );
 
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
                  _T("invalid position in wxToolBar::InsertControl()") );
 
-    wxToolBarToolBase *tool = wxToolBarToolBase::New((wxToolBar *)this,
-                                                     control);
+    wxToolBarToolBase *tool = CreateTool(control);
 
-    if ( !tool || !DoInsertTool(pos, (wxToolBarTool *)tool) )
+    if ( !tool || !DoInsertTool(pos, tool) )
     {
         delete tool;
 
@@ -205,23 +203,25 @@ wxToolBarTool *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
 
     m_tools.Insert(pos, tool);
 
-    return (wxToolBarTool *)tool;
+    return tool;
 }
 
-wxToolBarTool *wxToolBarBase::AddSeparator()
+wxToolBarToolBase *wxToolBarBase::AddSeparator()
 {
     return InsertSeparator(GetToolsCount());
 }
 
-wxToolBarTool *wxToolBarBase::InsertSeparator(size_t pos)
+wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarTool *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
                  _T("invalid position in wxToolBar::InsertSeparator()") );
 
-    wxToolBarToolBase *tool = wxToolBarToolBase::New((wxToolBar *)this,
-                                                     wxID_SEPARATOR);
+    wxToolBarToolBase *tool = CreateTool(wxID_SEPARATOR,
+                                         wxNullBitmap, wxNullBitmap,
+                                         FALSE, (wxObject *)NULL,
+                                         wxEmptyString, wxEmptyString);
 
-    if ( !tool || !DoInsertTool(pos, (wxToolBarTool *)tool) )
+    if ( !tool || !DoInsertTool(pos, tool) )
     {
         delete tool;
 
@@ -230,10 +230,10 @@ wxToolBarTool *wxToolBarBase::InsertSeparator(size_t pos)
 
     m_tools.Insert(pos, tool);
 
-    return (wxToolBarTool *)tool;
+    return tool;
 }
 
-wxToolBarTool *wxToolBarBase::RemoveTool(int id)
+wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
 {
     size_t pos = 0;
     wxToolBarToolsList::Node *node;
@@ -249,13 +249,13 @@ wxToolBarTool *wxToolBarBase::RemoveTool(int id)
     {
         // don't give any error messages - sometimes we might call RemoveTool()
         // without knowing whether the tool is or not in the toolbar
-        return (wxToolBarTool *)NULL;
+        return (wxToolBarToolBase *)NULL;
     }
 
-    wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+    wxToolBarToolBase *tool = node->GetData();
     if ( !DoDeleteTool(pos, tool) )
     {
-        return (wxToolBarTool *)NULL;
+        return (wxToolBarToolBase *)NULL;
     }
 
     // the node would delete the data, so set it to NULL to avoid this
@@ -273,7 +273,7 @@ bool wxToolBarBase::DeleteToolByPos(size_t pos)
 
     wxToolBarToolsList::Node *node = m_tools.Item(pos);
 
-    if ( !DoDeleteTool(pos, (wxToolBarTool *)node->GetData()) )
+    if ( !DoDeleteTool(pos, node->GetData()) )
     {
         return FALSE;
     }
@@ -295,7 +295,7 @@ bool wxToolBarBase::DeleteTool(int id)
         pos++;
     }
 
-    if ( !DoDeleteTool(pos, (wxToolBarTool *)node->GetData()) )
+    if ( !node || !DoDeleteTool(pos, node->GetData()) )
     {
         return FALSE;
     }
@@ -349,7 +349,7 @@ void wxToolBarBase::EnableTool(int id, bool enable)
     {
         if ( tool->Enable(enable) )
         {
-            DoEnableTool((wxToolBarTool *)tool, enable);
+            DoEnableTool(tool, enable);
         }
     }
 }
@@ -361,7 +361,7 @@ void wxToolBarBase::ToggleTool(int id, bool toggle)
     {
         if ( tool->Toggle(toggle) )
         {
-            DoToggleTool((wxToolBarTool *)tool, toggle);
+            DoToggleTool(tool, toggle);
         }
     }
 }
@@ -373,7 +373,7 @@ void wxToolBarBase::SetToggle(int id, bool toggle)
     {
         if ( tool->SetToggle(toggle) )
         {
-            DoSetToggle((wxToolBarTool *)tool, toggle);
+            DoSetToggle(tool, toggle);
         }
     }
 }

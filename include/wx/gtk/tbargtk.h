@@ -17,40 +17,6 @@
 #if wxUSE_TOOLBAR
 
 // ----------------------------------------------------------------------------
-// wxToolBarTool
-// ----------------------------------------------------------------------------
-
-class wxToolBarTool : public wxToolBarToolBase
-{
-public:
-    wxToolBarTool(wxToolBar *tbar,
-                  int id,
-                  const wxBitmap& bitmap1,
-                  const wxBitmap& bitmap2,
-                  bool toggle,
-                  wxObject *clientData,
-                  const wxString& shortHelpString,
-                  const wxString& longHelpString)
-        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
-                            clientData, shortHelpString, longHelpString)
-    {
-        Init();
-    }
-
-    wxToolBarTool(wxToolBar *tbar, wxControl *control)
-        : wxToolBarToolBase(tbar, control)
-    {
-        Init();
-    }
-
-    GtkWidget            *m_item;
-    GtkWidget            *m_pixmap;
-
-protected:
-    void Init();
-};
-
-// ----------------------------------------------------------------------------
 // wxToolBar
 // ----------------------------------------------------------------------------
 
@@ -76,7 +42,7 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 const wxString& name = wxToolBarNameStr);
+                 const wxString& name = wxToolBarNameStr );
 
     virtual ~wxToolBar();
 
@@ -84,7 +50,7 @@ public:
     virtual void SetMargins(int x, int y);
     virtual void SetToolSeparation(int separation);
 
-    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
     // implementation from now on
     // --------------------------
@@ -103,12 +69,21 @@ protected:
     void Init();
 
     // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
-    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)

@@ -26,9 +26,7 @@
 #include "wx/list.h"
 #include "wx/control.h"
 
-class WXDLLEXPORT wxToolBar;
 class WXDLLEXPORT wxToolBarBase;
-class WXDLLEXPORT wxToolBarTool;
 class WXDLLEXPORT wxToolBarToolBase;
 
 // ----------------------------------------------------------------------------
@@ -63,7 +61,7 @@ public:
     // ctors & dtor
     // ------------
 
-    wxToolBarToolBase(wxToolBar *tbar = (wxToolBar *)NULL,
+    wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
                       int id = wxID_SEPARATOR,
                       const wxBitmap& bitmap1 = wxNullBitmap,
                       const wxBitmap& bitmap2 = wxNullBitmap,
@@ -89,7 +87,7 @@ public:
                                            : wxTOOL_STYLE_BUTTON;
     }
 
-    wxToolBarToolBase(wxToolBar *tbar, wxControl *control)
+    wxToolBarToolBase(wxToolBarBase *tbar, wxControl *control)
     {
         m_tbar = tbar;
         m_control = control;
@@ -101,19 +99,6 @@ public:
 
         m_toolStyle = wxTOOL_STYLE_CONTROL;
     }
-
-    // this static function should be used to create tools - its implemented in
-    // platform-specific sources
-    static wxToolBarToolBase *New(wxToolBar *tbar,
-                              int id = wxID_SEPARATOR,
-                              const wxBitmap& bitmap1 = wxNullBitmap,
-                              const wxBitmap& bitmap2 = wxNullBitmap,
-                              bool toggle = FALSE,
-                              wxObject *clientData = (wxObject *) NULL,
-                              const wxString& shortHelpString = wxEmptyString,
-                              const wxString& longHelpString = wxEmptyString);
-
-    static wxToolBarToolBase *New(wxToolBar *tbar, wxControl *control);
 
     ~wxToolBarToolBase();
 
@@ -130,7 +115,7 @@ public:
         return m_control;
     }
 
-    wxToolBar *GetToolBar() const { return m_tbar; }
+    wxToolBarBase *GetToolBar() const { return m_tbar; }
 
     // style
     int IsButton() const { return m_toolStyle == wxTOOL_STYLE_BUTTON; }
@@ -174,11 +159,11 @@ public:
     void SetBitmap2(const wxBitmap& bmp) { m_bitmap2 = bmp; }
 
     // add tool to/remove it from a toolbar
-    virtual void Detach() { m_tbar = (wxToolBar *)NULL; }
-    virtual void Attach(wxToolBar *tbar) { m_tbar = tbar; }
+    virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
+    virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
 
 protected:
-    wxToolBar *m_tbar;  // the toolbar to which we belong (may be NULL)
+    wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
 
     int m_toolStyle; // see enum wxToolBarToolStyle
     int m_id;        // the tool id, wxID_SEPARATOR for separator
@@ -223,20 +208,22 @@ public:
     // If pushedBitmap is NULL, a reversed version of bitmap is created and
     // used as the pushed/toggled image. If toggle is TRUE, the button toggles
     // between the two states.
-    wxToolBarTool *AddTool(int id,
-                           const wxBitmap& bitmap,
-                           const wxBitmap& pushedBitmap = wxNullBitmap,
-                           bool toggle = FALSE,
-                           wxObject *clientData = NULL,
-                           const wxString& shortHelpString = wxEmptyString,
-                           const wxString& longHelpString = wxEmptyString)
+    wxToolBarToolBase *AddTool(int id,
+                               const wxBitmap& bitmap,
+                               const wxBitmap& pushedBitmap = wxNullBitmap,
+                               bool toggle = FALSE,
+                               wxObject *clientData = NULL,
+                               const wxString& shortHelpString = wxEmptyString,
+                               const wxString& longHelpString = wxEmptyString)
     {
         return AddTool(id, bitmap, pushedBitmap, toggle,
                        -1, -1, clientData, shortHelpString, longHelpString);
     }
 
     // the old version of AddTool() kept for compatibility
-    virtual wxToolBarTool *AddTool(int id,
+    virtual wxToolBarToolBase *AddTool
+                               (
+                                   int id,
                                    const wxBitmap& bitmap,
                                    const wxBitmap& pushedBitmap,
                                    bool toggle,
@@ -244,33 +231,38 @@ public:
                                    wxCoord yPos = -1,
                                    wxObject *clientData = NULL,
                                    const wxString& helpString1 = wxEmptyString,
-                                   const wxString& helpString2 = wxEmptyString);
+                                   const wxString& helpString2 = wxEmptyString
+                               );
 
     // insert the new tool at the given position, if pos == GetToolsCount(), it
     // is equivalent to AddTool()
-    virtual wxToolBarTool *InsertTool(size_t pos, int id,
-                                      const wxBitmap& bitmap,
-                                      const wxBitmap& pushedBitmap = wxNullBitmap,
-                                      bool toggle = FALSE,
-                                      wxObject *clientData = NULL,
-                                      const wxString& help1 = wxEmptyString,
-                                      const wxString& help2 = wxEmptyString);
+    virtual wxToolBarToolBase *InsertTool
+                               (
+                                    size_t pos,
+                                    int id,
+                                    const wxBitmap& bitmap,
+                                    const wxBitmap& pushedBitmap = wxNullBitmap,
+                                    bool toggle = FALSE,
+                                    wxObject *clientData = NULL,
+                                    const wxString& help1 = wxEmptyString,
+                                    const wxString& help2 = wxEmptyString
+                               );
 
     // add an arbitrary control to the toolbar, return TRUE if ok (notice that
     // the control will be deleted by the toolbar and that it will also adjust
     // its position/size)
     //
     // NB: the control should have toolbar as its parent
-    virtual wxToolBarTool *AddControl(wxControl *control);
-    virtual wxToolBarTool *InsertControl(size_t pos, wxControl *control);
+    virtual wxToolBarToolBase *AddControl(wxControl *control);
+    virtual wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
 
     // add a separator to the toolbar
-    virtual wxToolBarTool *AddSeparator();
-    virtual wxToolBarTool *InsertSeparator(size_t pos);
+    virtual wxToolBarToolBase *AddSeparator();
+    virtual wxToolBarToolBase *InsertSeparator(size_t pos);
 
     // remove the tool from the toolbar: the caller is responsible for actually
     // deleting the pointer
-    virtual wxToolBarTool *RemoveTool(int id);
+    virtual wxToolBarToolBase *RemoveTool(int id);
 
     // delete tool either by index or by position
     virtual bool DeleteToolByPos(size_t pos);
@@ -345,10 +337,11 @@ public:
 
     // returns a (non separator) tool containing the point (x, y) or NULL if
     // there is no tool at this point (corrdinates are client)
-    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const = 0;
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x,
+                                                   wxCoord y) const = 0;
 
-    // Handle wxToolBar events
-    // -----------------------
+    // event handlers
+    // --------------
 
     // NB: these functions are deprecated, use EVT_TOOL_XXX() instead!
 
@@ -392,20 +385,30 @@ protected:
 
     // the tool is not yet inserted into m_tools list when this function is
     // called and will only be added to it if this function succeeds
-    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool) = 0;
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) = 0;
 
     // the tool is still in m_tools list when this function is called, it will
     // only be deleted from it if it succeeds
-    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool) = 0;
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) = 0;
 
     // called when the tools enabled flag changes
-    virtual void DoEnableTool(wxToolBarTool *tool, bool enable) = 0;
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable) = 0;
 
     // called when the tool is toggled
-    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle) = 0;
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle) = 0;
 
     // called when the tools "can be toggled" flag changes
-    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle) = 0;
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) = 0;
+
+    // the functions to create toolbar tools
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString) = 0;
+    virtual wxToolBarToolBase *CreateTool(wxControl *control) = 0;
 
     // helper functions
     // ----------------
