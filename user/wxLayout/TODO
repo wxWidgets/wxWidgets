@@ -17,7 +17,6 @@ BUGS
 TODO
 =====================================================================
 
-- selections should get highlighted, add COPY
 - searching for text
 - moving cursor in non-edit mode
 - cursor screen positioning ignores font sizes once again :-(
