@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.h
-// Purpose:     wxSystemSettings defines; includes platform settings.h
+// Name:        wx/settings.h
+// Purpose:     wxSystemSettingsBase class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -12,118 +12,169 @@
 #ifndef _WX_SETTINGS_H_BASE_
 #define _WX_SETTINGS_H_BASE_
 
-#define wxSYS_WHITE_BRUSH         0
-#define wxSYS_LTGRAY_BRUSH        1
-#define wxSYS_GRAY_BRUSH          2
-#define wxSYS_DKGRAY_BRUSH        3
-#define wxSYS_BLACK_BRUSH         4
-#define wxSYS_NULL_BRUSH          5
-#define wxSYS_HOLLOW_BRUSH        wxSYS_NULL_BRUSH
-#define wxSYS_WHITE_PEN           6
-#define wxSYS_BLACK_PEN           7
-#define wxSYS_NULL_PEN            8
-#define wxSYS_OEM_FIXED_FONT      10
-#define wxSYS_ANSI_FIXED_FONT     11
-#define wxSYS_ANSI_VAR_FONT       12
-#define wxSYS_SYSTEM_FONT         13
-#define wxSYS_DEVICE_DEFAULT_FONT 14
-#define wxSYS_DEFAULT_PALETTE     15
-#define wxSYS_SYSTEM_FIXED_FONT   16
-#define wxSYS_DEFAULT_GUI_FONT    17
+#include "wx/colour.h"
+#include "wx/font.h"
 
-#define wxSYS_COLOUR_SCROLLBAR         0
-#define wxSYS_COLOUR_BACKGROUND        1
-#define wxSYS_COLOUR_ACTIVECAPTION     2
-#define wxSYS_COLOUR_INACTIVECAPTION   3
-#define wxSYS_COLOUR_MENU              4
-#define wxSYS_COLOUR_WINDOW            5
-#define wxSYS_COLOUR_WINDOWFRAME       6
-#define wxSYS_COLOUR_MENUTEXT          7
-#define wxSYS_COLOUR_WINDOWTEXT        8
-#define wxSYS_COLOUR_CAPTIONTEXT       9
-#define wxSYS_COLOUR_ACTIVEBORDER      10
-#define wxSYS_COLOUR_INACTIVEBORDER    11
-#define wxSYS_COLOUR_APPWORKSPACE      12
-#define wxSYS_COLOUR_HIGHLIGHT         13
-#define wxSYS_COLOUR_HIGHLIGHTTEXT     14
-#define wxSYS_COLOUR_BTNFACE           15
-#define wxSYS_COLOUR_BTNSHADOW         16
-#define wxSYS_COLOUR_GRAYTEXT          17
-#define wxSYS_COLOUR_BTNTEXT           18
-#define wxSYS_COLOUR_INACTIVECAPTIONTEXT 19
-#define wxSYS_COLOUR_BTNHIGHLIGHT      20
+// possible values for wxSystemSettings::GetFont() parameter
+//
+// NB: wxMSW assumes that they have the same values as the parameters of
+//     Windows GetStockObject() API, don't change the values!
+enum wxSystemFont
+{
+    wxSYS_OEM_FIXED_FONT = 10,
+    wxSYS_ANSI_FIXED_FONT,
+    wxSYS_ANSI_VAR_FONT,
+    wxSYS_SYSTEM_FONT,
+    wxSYS_DEVICE_DEFAULT_FONT,
+    wxSYS_DEFAULT_PALETTE,
+    wxSYS_SYSTEM_FIXED_FONT,
+    wxSYS_DEFAULT_GUI_FONT
+};
 
-#define wxSYS_COLOUR_3DDKSHADOW        21
-#define wxSYS_COLOUR_3DLIGHT           22
-#define wxSYS_COLOUR_INFOTEXT          23
-#define wxSYS_COLOUR_INFOBK            24
+// possible values for wxSystemSettings::GetColour() parameter
+//
+// NB: wxMSW assumes that they have the same values as the parameters of
+//     Windows GetSysColor() API, don't change the values!
+enum wxSystemColour
+{
+    wxSYS_COLOUR_SCROLLBAR,
+    wxSYS_COLOUR_BACKGROUND,
+    wxSYS_COLOUR_ACTIVECAPTION,
+    wxSYS_COLOUR_INACTIVECAPTION,
+    wxSYS_COLOUR_MENU,
+    wxSYS_COLOUR_WINDOW,
+    wxSYS_COLOUR_WINDOWFRAME,
+    wxSYS_COLOUR_MENUTEXT,
+    wxSYS_COLOUR_WINDOWTEXT,
+    wxSYS_COLOUR_CAPTIONTEXT,
+    wxSYS_COLOUR_ACTIVEBORDER,
+    wxSYS_COLOUR_INACTIVEBORDER,
+    wxSYS_COLOUR_APPWORKSPACE,
+    wxSYS_COLOUR_HIGHLIGHT,
+    wxSYS_COLOUR_HIGHLIGHTTEXT,
+    wxSYS_COLOUR_BTNFACE,
+    wxSYS_COLOUR_BTNSHADOW,
+    wxSYS_COLOUR_GRAYTEXT,
+    wxSYS_COLOUR_BTNTEXT,
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT,
+    wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_3DDKSHADOW,
+    wxSYS_COLOUR_3DLIGHT,
+    wxSYS_COLOUR_INFOTEXT,
+    wxSYS_COLOUR_INFOBK,
+    wxSYS_COLOUR_LISTBOX,
 
-#define wxSYS_COLOUR_LISTBOX           25
+    wxSYS_COLOUR_DESKTOP = wxSYS_COLOUR_BACKGROUND,
+    wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
+    wxSYS_COLOUR_3DSHADOW = wxSYS_COLOUR_BTNSHADOW,
+    wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT
+};
 
-#define wxSYS_COLOUR_DESKTOP           wxSYS_COLOUR_BACKGROUND
-#define wxSYS_COLOUR_3DFACE            wxSYS_COLOUR_BTNFACE
-#define wxSYS_COLOUR_3DSHADOW          wxSYS_COLOUR_BTNSHADOW
-#define wxSYS_COLOUR_3DHIGHLIGHT       wxSYS_COLOUR_BTNHIGHLIGHT
-#define wxSYS_COLOUR_3DHILIGHT         wxSYS_COLOUR_BTNHIGHLIGHT
-#define wxSYS_COLOUR_BTNHILIGHT        wxSYS_COLOUR_BTNHIGHLIGHT
+// possible values for wxSystemSettings::GetMetric() parameter
+enum wxSystemMetric
+{
+    wxSYS_MOUSE_BUTTONS = 1,
+    wxSYS_BORDER_X,
+    wxSYS_BORDER_Y,
+    wxSYS_CURSOR_X,
+    wxSYS_CURSOR_Y,
+    wxSYS_DCLICK_X,
+    wxSYS_DCLICK_Y,
+    wxSYS_DRAG_X,
+    wxSYS_DRAG_Y,
+    wxSYS_EDGE_X,
+    wxSYS_EDGE_Y,
+    wxSYS_HSCROLL_ARROW_X,
+    wxSYS_HSCROLL_ARROW_Y,
+    wxSYS_HTHUMB_X,
+    wxSYS_ICON_X,
+    wxSYS_ICON_Y,
+    wxSYS_ICONSPACING_X,
+    wxSYS_ICONSPACING_Y,
+    wxSYS_WINDOWMIN_X,
+    wxSYS_WINDOWMIN_Y,
+    wxSYS_SCREEN_X,
+    wxSYS_SCREEN_Y,
+    wxSYS_FRAMESIZE_X,
+    wxSYS_FRAMESIZE_Y,
+    wxSYS_SMALLICON_X,
+    wxSYS_SMALLICON_Y,
+    wxSYS_HSCROLL_Y,
+    wxSYS_VSCROLL_X,
+    wxSYS_VSCROLL_ARROW_X,
+    wxSYS_VSCROLL_ARROW_Y,
+    wxSYS_VTHUMB_Y,
+    wxSYS_CAPTION_Y,
+    wxSYS_MENU_Y,
+    wxSYS_NETWORK_PRESENT,
+    wxSYS_PENWINDOWS_PRESENT,
+    wxSYS_SHOW_SOUNDS,
+    wxSYS_SWAP_BUTTONS
+};
 
-// Metrics
-#define wxSYS_MOUSE_BUTTONS           1
-#define wxSYS_BORDER_X                2
-#define wxSYS_BORDER_Y                3
-#define wxSYS_CURSOR_X                4
-#define wxSYS_CURSOR_Y                5
-#define wxSYS_DCLICK_X                6
-#define wxSYS_DCLICK_Y                7
-#define wxSYS_DRAG_X                  8
-#define wxSYS_DRAG_Y                  9
-#define wxSYS_EDGE_X                  10
-#define wxSYS_EDGE_Y                  11
-#define wxSYS_HSCROLL_ARROW_X         12
-#define wxSYS_HSCROLL_ARROW_Y         13
-#define wxSYS_HTHUMB_X                14
-#define wxSYS_ICON_X                  15
-#define wxSYS_ICON_Y                  16
-#define wxSYS_ICONSPACING_X           17
-#define wxSYS_ICONSPACING_Y           18
-#define wxSYS_WINDOWMIN_X             19
-#define wxSYS_WINDOWMIN_Y             20
-#define wxSYS_SCREEN_X                21
-#define wxSYS_SCREEN_Y                22
-#define wxSYS_FRAMESIZE_X             23
-#define wxSYS_FRAMESIZE_Y             24
-#define wxSYS_SMALLICON_X             25
-#define wxSYS_SMALLICON_Y             26
-#define wxSYS_HSCROLL_Y               27
-#define wxSYS_VSCROLL_X               28
-#define wxSYS_VSCROLL_ARROW_X         29
-#define wxSYS_VSCROLL_ARROW_Y         30
-#define wxSYS_VTHUMB_Y                31
-#define wxSYS_CAPTION_Y               32
-#define wxSYS_MENU_Y                  33
-#define wxSYS_NETWORK_PRESENT         34
-#define wxSYS_PENWINDOWS_PRESENT      35
-#define wxSYS_SHOW_SOUNDS             36
-#define wxSYS_SWAP_BUTTONS            37
+// possible values for wxSystemSettings::HasFeature() parameter
+enum wxSystemFeature
+{
+    wxSYS_CAN_DRAW_FRAME_DECORATIONS = 1,
+    wxSYS_CAN_ICONIZE_FRAME
+};
 
-// Platform capabilities
-#define wxSYS_CAN_DRAW_FRAME_DECORATIONS  1
-#define wxSYS_CAN_ICONIZE_FRAME           2
+// ----------------------------------------------------------------------------
+// wxSystemSettingsBase: defines the API for wxSystemSettings class
+// ----------------------------------------------------------------------------
+
+// this is a namespace rather than a class: it has only non virtual static
+// functions
+//
+// also note that the methods are implemented in the platform-specific source
+// files (i.e. this is not a real base class as we can't override its virtual
+// functions because it doesn't have any)
+class WXDLLEXPORT wxSystemSettingsBase
+{
+public:
+    // get a standard system colour
+    static wxColour GetColour(wxSystemColour index);
+
+    // get a standard system font
+    static wxFont GetFont(wxSystemFont index);
+
+    // get a system-dependent metric
+    static int GetMetric(wxSystemMetric index);
+
+    // return true if the port has certain feature
+    static bool HasFeature(wxSystemFeature index);
+
+
+    // the backwards compatible versions, don't use these methods in the new
+    // code!
+    static wxColour GetSystemColour(int index)
+        { return GetColour((wxSystemColour)index); }
+    static wxFont GetSystemFont(int index)
+        { return GetFont((wxSystemFont)index); }
+    static int GetSystemMetric(int index)
+        { return GetMetric((wxSystemMetric)index); }
+    static bool GetCapability(int index)
+        { return HasFeature((wxSystemFeature)index); }
+};
+
+// ----------------------------------------------------------------------------
+// include the declaration of the real platform-dependent class
+// ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
-#include "wx/msw/settings.h"
+    #include "wx/msw/settings.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/settings.h"
+    #include "wx/motif/settings.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/settings.h"
+    #include "wx/gtk/settings.h"
 #elif defined(__WXMGL__)
-#include "wx/mgl/settings.h"
+    #include "wx/mgl/settings.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/settings.h"
+    #include "wx/mac/settings.h"
 #elif defined(__WXPM__)
-#include "wx/os2/settings.h"
-#elif defined(__WXSTUBS__)
-#include "wx/stubs/settings.h"
+    #include "wx/os2/settings.h"
 #endif
 
 #endif
