@@ -84,12 +84,20 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  if (argc == 2 && wxString(argv[1]) == "french")
-      m_locale.Init(wxLANGUAGE_FRENCH);
-  else if (argc == 2 && wxString(argv[1]) == "german")
-      m_locale.Init(wxLANGUAGE_GERMAN);
-  else
-      m_locale.Init(wxLANGUAGE_DEFAULT);
+  wxString langs[] = {"(System default)","French","German"};
+  SetExitOnFrameDelete(FALSE);
+  int lng = wxGetSingleChoiceIndex("Please choose language:", "Language", 
+                                   3, langs);
+  SetExitOnFrameDelete(TRUE);
+
+  switch (lng)
+  {
+      case 0 : m_locale.Init(wxLANGUAGE_DEFAULT); break;
+      case 1 : m_locale.Init(wxLANGUAGE_FRENCH); break;
+      case 2 : m_locale.Init(wxLANGUAGE_GERMAN); break;
+      default:
+          return FALSE;
+  }
 
 
   // Initialize the catalogs we'll be using
