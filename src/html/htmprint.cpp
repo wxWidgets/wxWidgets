@@ -303,7 +303,12 @@ void wxHtmlPrintout::SetHtmlText(const wxString& html, const wxString &basepath,
 void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
-    wxFSFile *ff = fs.OpenFile(htmlfile);
+    wxFSFile *ff;
+    
+    if (wxFileExists(htmlfile))
+        ff = fs.OpenFile(wxFileSystem::FileNameToURL(htmlfile));
+    else
+        ff = fs.OpenFile(htmlfile);
 
     if (ff == NULL)
     {
