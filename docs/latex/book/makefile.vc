@@ -14,6 +14,8 @@ WXDIR=d:\wx2\wxWindows
 
 DOCDIR = $(WXDIR)\docs
 
+WAITFLAG=/wait
+
 # Making documents
 docs:   bookhlp bookhtml bookpdfrtf htb htmlhelp
 alldocs: docs
@@ -61,8 +63,9 @@ $(DOCDIR)\html\book\book.htm:         $(DOCDIR)\latex\book\book.tex
 $(DOCDIR)\htmlhelp\book.chm : $(DOCDIR)\html\book\book.htm $(DOCDIR)\html\book\book.hhp
 	cd $(DOCDIR)\html\book
 	-hhc book.hhp
-    -mkdir ..\..\htmlhelp
-    move book.chm ..\..\htmlhelp
+        -mkdir ..\..\htmlhelp
+        -erase ..\..\htmlhelp\book.chm
+        move book.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
 $(WXDIR)\docs\latex\book\book.dvi:	$(DOCDIR)/latex/book/body.tex $(DOCDIR)/latex/book/book.tex
@@ -100,11 +103,11 @@ touchbook:
 updatedocs: touchbook alldocs
 
 cleandocs:
-    -erase /Y $(DOCDIR)\html\book\book.htm
-    -erase /Y $(DOCDIR)\pdf\book.rtf
-    -erase /Y $(DOCDIR)\latex\book\book.rtf
-    -erase /Y $(DOCDIR)\htmlhelp\book.chm
-    -erase /Y $(DOCDIR)\htb\book.htb
+    -erase $(DOCDIR)\html\book\*.htm
+    -erase $(DOCDIR)\pdf\book.rtf
+    -erase $(DOCDIR)\latex\book\book.rtf
+    -erase $(DOCDIR)\htmlhelp\book.chm
+    -erase $(DOCDIR)\htb\book.htb
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
