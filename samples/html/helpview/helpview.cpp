@@ -79,7 +79,7 @@ bool MyApp::OnInit()
     }
 
     for (int i = 1; i < argc; i++)
-        help -> AddBook(argv[i]);
+        help->AddBook(wxFileName(argv[i]));
 
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogGui);
