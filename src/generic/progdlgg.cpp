@@ -67,8 +67,6 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label);
 BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
 
-    EVT_SHOW(wxProgressDialog::OnShow)
-
     EVT_CLOSE(wxProgressDialog::OnClose)
 END_EVENT_TABLE()
 
@@ -435,16 +433,6 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
     {
         // next Update() will notice it
         m_state = Canceled;
-    }
-}
-
-void wxProgressDialog::OnShow(wxShowEvent& event)
-{
-    // if the dialog is being hidden, it was closed, so reenable other windows
-    // now
-    if ( event.GetShow() )
-    {
-        ReenableOtherWindows();
     }
 }
 

@@ -70,9 +70,6 @@ protected:
    // callback to disable "hard" window closing
    void OnClose(wxCloseEvent& event);
 
-   // callback to detect when the dialog is closed
-   void OnShow(wxShowEvent& event);
-
    // must be called to reenable the other windows temporarily disabled while
    // the dialog was shown
    void ReenableOtherWindows();
