@@ -1663,31 +1663,18 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
                              int *descent, int *externalLeading,
                              const wxFont *theFont) const
 {
-    const wxFont *fontToUse = theFont;
-    if ( !fontToUse )
-        fontToUse = &m_font;
+    wxASSERT_MSG( !theFont || theFont->Ok(),
+                    _T("invalid font in GetTextExtent()") );
 
-    HWND hWnd = GetHwnd();
-    HDC dc = ::GetDC(hWnd);
+    const wxFont fontToUse(theFont ? *theFont : GetFont());
 
-    HFONT fnt = 0;
-    HFONT hfontOld = 0;
-    if ( fontToUse && fontToUse->Ok() )
-    {
-        fnt = (HFONT)((wxFont *)fontToUse)->GetResourceHandle(); // const_cast
-        if ( fnt )
-            hfontOld = (HFONT)SelectObject(dc,fnt);
-    }
+    WindowHDC hdc(GetHwnd());
+    SelectInHDC selectFont(hdc, GetHfontOf(fontToUse));
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    GetTextExtentPoint(dc, string, (int)string.Length(), &sizeRect);
-    GetTextMetrics(dc, &tm);
-
-    if ( fontToUse && fnt && hfontOld )
-        SelectObject(dc, hfontOld);
-
-    ReleaseDC(hWnd, dc);
+    GetTextExtentPoint(hdc, string, string.length(), &sizeRect);
+    GetTextMetrics(hdc, &tm);
 
     if ( x )
         *x = sizeRect.cx;
