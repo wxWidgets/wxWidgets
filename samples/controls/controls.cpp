@@ -88,6 +88,8 @@ public:
     void OnChoice( wxCommandEvent &event );
     void OnChoiceButtons( wxCommandEvent &event );
     void OnCombo( wxCommandEvent &event );
+    void OnComboTextChanged( wxCommandEvent &event );
+    void OnComboTextEnter( wxCommandEvent &event );
     void OnComboButtons( wxCommandEvent &event );
     void OnRadio( wxCommandEvent &event );
     void OnRadioButtons( wxCommandEvent &event );
@@ -200,6 +202,8 @@ public:
 
 protected:
     void OnChar(wxKeyEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
 
 private:
     DECLARE_EVENT_TABLE()
@@ -378,6 +382,8 @@ EVT_BUTTON    (ID_CHOICE_DELETE,        MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_FONT,          MyPanel::OnChoiceButtons)
 EVT_CHECKBOX  (ID_CHOICE_ENABLE,        MyPanel::OnChoiceButtons)
 EVT_COMBOBOX  (ID_COMBO,                MyPanel::OnCombo)
+EVT_TEXT      (ID_COMBO,                MyPanel::OnComboTextChanged)
+EVT_TEXT_ENTER(ID_COMBO,                MyPanel::OnComboTextEnter)
 EVT_BUTTON    (ID_COMBO_SEL_NUM,        MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_SEL_STR,        MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_CLEAR,          MyPanel::OnComboButtons)
@@ -411,6 +417,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
     EVT_CHAR(MyComboBox::OnChar)
+    EVT_KEY_DOWN(MyComboBox::OnKeyDown)
+    EVT_KEY_UP(MyComboBox::OnKeyUp)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -562,8 +570,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     (void)new wxStaticBox( panel, -1, "&Box around combobox",
                            wxPoint(5, 5), wxSize(150, 100));
-    m_combo = new MyComboBox( panel, ID_COMBO, "This", wxPoint(20,25),
-            wxSize(120,-1), 5, choices); //, wxCB_READONLY );
+    m_combo = new MyComboBox( panel, ID_COMBO, "This",
+                              wxPoint(20,25), wxSize(120, -1),
+                              5, choices,
+                              /* wxCB_READONLY | */ wxPROCESS_ENTER);
+
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #&2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, "&Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_CLEAR, "&Clear", wxPoint(180,80), wxSize(140,30) );
@@ -1013,6 +1024,18 @@ void MyPanel::OnCombo( wxCommandEvent &event )
     m_text->AppendText( "\n" );
 }
 
+void MyPanel::OnComboTextChanged(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Text in the combobox changed: now is '%s'."),
+                 m_combo->GetValue().c_str());
+}
+
+void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Enter pressed in the combobox: value is '%s'."),
+                 m_combo->GetValue().c_str());
+}
+
 void MyPanel::OnComboButtons( wxCommandEvent &event )
 {
     switch (event.GetId())
@@ -1354,9 +1377,31 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
     }
 }
 
-void MyComboBox::OnChar(wxKeyEvent& WXUNUSED(event))
+void MyComboBox::OnChar(wxKeyEvent& event)
 {
     wxLogMessage(_T("MyComboBox::OnChar"));
+
+    if ( event.KeyCode() == 'w' )
+        wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    else
+        event.Skip();
+}
+
+void MyComboBox::OnKeyDown(wxKeyEvent& event)
+{
+    wxLogMessage(_T("MyComboBox::OnKeyDown"));
+
+    if ( event.KeyCode() == 'w' )
+        wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    else
+        event.Skip();
+}
+
+void MyComboBox::OnKeyUp(wxKeyEvent& event)
+{
+    wxLogMessage(_T("MyComboBox::OnKeyUp"));
+
+    event.Skip();
 }
 
 static void SetControlClientData(const char *name,
