@@ -208,7 +208,7 @@ private :
 // ----------------------------------------------------------------------------
 
 // in order to remove dependancy on string tokenizer
-void wxSetStringToArray( const wxString &s , wxArrayString &array ) ;
+void WXDLLIMPEXP_BASE wxSetStringToArray( const wxString &s , wxArrayString &array ) ;
 
 template<typename e>
 void wxSetFromString(const wxString &s , wxBitset<e> &data )
@@ -750,7 +750,7 @@ private :
     wxString m_name ;
 } ;
 
-template<typename coll_t> void wxCollectionToVariantArray( const coll_t& coll , wxxVariantArray& result ) ;
+template<typename coll_t> void WXDLLIMPEXP_BASE wxCollectionToVariantArray( const coll_t& coll , wxxVariantArray& result ) ;
 
 class WXDLLIMPEXP_BASE wxAdder
 {
