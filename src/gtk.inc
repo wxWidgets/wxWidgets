@@ -116,6 +116,7 @@ LIB_CPP_SRC=\
  gtk/tbargtk.cpp \
  gtk/textctrl.cpp \
  gtk/timer.cpp \
+ gtk/tooltip.cpp \
  gtk/utilsgtk.cpp \
  gtk/utilsres.cpp \
  gtk/window.cpp \
