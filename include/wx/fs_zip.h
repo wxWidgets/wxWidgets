@@ -21,6 +21,10 @@
 #include "wx/filesys.h"
 #include "wx/hashmap.h"
 
+
+WX_DECLARE_STRING_HASH_MAP(int, wxZipFilenameHashMap);
+
+
 //---------------------------------------------------------------------------
 // wxZipFSHandler
 //---------------------------------------------------------------------------
@@ -40,7 +44,7 @@ class WXDLLIMPEXP_BASE wxZipFSHandler : public wxFileSystemHandler
         class wxZipInputStream *m_Archive;
         wxString m_Pattern, m_BaseDir, m_ZipFile;
         bool m_AllowDirs, m_AllowFiles;
-        wxLongToLongHashMap *m_DirsFound;
+        wxZipFilenameHashMap *m_DirsFound;
 
         wxString DoFind();
         void CloseArchive(class wxZipInputStream *archive);

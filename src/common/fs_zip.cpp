@@ -166,7 +166,7 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
         if (m_AllowDirs)
         {
             delete m_DirsFound;
-            m_DirsFound = new wxLongToLongHashMap();
+            m_DirsFound = new wxZipFilenameHashMap();
         }
         return DoFind();
     }
@@ -205,12 +205,9 @@ wxString wxZipFSHandler::DoFind()
             dir = namestr.BeforeLast(wxT('/'));
             while (!dir.IsEmpty())
             {
-                long key = 0;
-                for (size_t i = 0; i < dir.Length(); i++) key += (wxUChar)dir[i];
-                wxLongToLongHashMap::iterator it = m_DirsFound->find(key);
-                if (it == m_DirsFound->end())
+                if( m_DirsFound->find(dir) == m_DirsFound->end() )
                 {
-                    (*m_DirsFound)[key] = 1;
+                    (*m_DirsFound)[dir] = 1;
                     filename = dir.AfterLast(wxT('/'));
                     dir = dir.BeforeLast(wxT('/'));
                     if (!filename.IsEmpty() && m_BaseDir == dir &&
