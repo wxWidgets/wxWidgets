@@ -119,8 +119,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     wxASSERT_MSG( widget, wxT("DC needs a widget") );
 
-    GtkMyFixed *myfixed = GTK_MYFIXED( widget );
-    m_window = myfixed->bin_window;
+    GtkPizza *pizza = GTK_PIZZA( widget );
+    m_window = pizza->bin_window;
 
     /* not realized ? */
     if (!m_window)

@@ -85,6 +85,10 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl,wxControl)
 
+BEGIN_EVENT_TABLE(wxSpinCtrl, wxControl)
+    EVT_CHAR(wxSpinCtrl::OnChar)
+END_EVENT_TABLE()
+
 bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxString& value,
                         const wxPoint& pos,  const wxSize& size,
@@ -203,6 +207,27 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     // these two calls are required due to some bug in GTK
     Refresh();
     SetFocus();
+}
+
+void wxSpinCtrl::OnChar( wxKeyEvent &event )
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid spin ctrl") );
+
+    if (event.KeyCode() == WXK_RETURN)
+    {
+        wxWindow *top_frame = m_parent;
+        while (top_frame->GetParent() && !(top_frame->GetParent()->m_isFrame))
+            top_frame = top_frame->GetParent();
+	GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+	
+	if (window->default_widget)
+        {
+            gtk_widget_activate (window->default_widget);
+	    return;
+	}
+    }
+
+    event.Skip();
 }
 
 bool wxSpinCtrl::IsOwnGtkWindow( GdkWindow *window )

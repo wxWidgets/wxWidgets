@@ -64,14 +64,12 @@ wxButton::wxButton()
 
 wxButton::~wxButton()
 {
-    if (m_clientData) delete m_clientData;
 }
 
 bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxValidator& validator, const wxString &name )
 {
-    m_clientData = (wxClientData*) NULL;
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
@@ -126,7 +124,7 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
     return TRUE;
 }
 
-void wxButton::SetDefault(void)
+void wxButton::SetDefault()
 {
     GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     gtk_widget_grab_default( m_widget );

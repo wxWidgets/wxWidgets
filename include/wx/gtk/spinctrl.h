@@ -53,6 +53,8 @@ public:
     virtual int GetMax() const;
 
     // implementation
+    void OnChar( wxKeyEvent &event );
+    
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
 
@@ -61,6 +63,7 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

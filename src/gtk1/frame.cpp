@@ -300,7 +300,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
     {
         /* these are outside the client area */
         wxFrame* frame = (wxFrame*) parent;
-        gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
+        gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
                          child->m_y,
@@ -327,7 +327,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
     else
     {
         /* these are inside the client area */
-        gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
+        gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                          GTK_WIDGET(child->m_widget),
                          child->m_x,
                          child->m_y,
@@ -418,7 +418,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
         GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
 
     /* m_mainWidget holds the toolbar, the menubar and the client area */
-    m_mainWidget = gtk_myfixed_new();
+    m_mainWidget = gtk_pizza_new();
     gtk_widget_show( m_mainWidget );
     GTK_WIDGET_UNSET_FLAGS( m_mainWidget, GTK_CAN_FOCUS );
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
@@ -428,7 +428,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 #endif
 
     /* m_wxwindow only represents the client area without toolbar and menubar */
-    m_wxwindow = gtk_myfixed_new();
+    m_wxwindow = gtk_pizza_new();
     gtk_widget_show( m_wxwindow );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
 
@@ -726,7 +726,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
             m_frameMenuBar->m_height = hh;
-            gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget),
+            gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameMenuBar->m_widget,
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
@@ -752,7 +752,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             m_frameToolBar->m_y = yy;
             /* m_frameToolBar->m_height = hh;   don't change the toolbar's reported size
                m_frameToolBar->m_width = ww; */
-            gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget),
+            gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                                   m_frameToolBar->m_widget,
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
@@ -763,7 +763,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
         int client_w = m_width - 2*m_miniEdge;
         int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
-        gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget),
+        gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,
                               client_x, client_y, client_w, client_h );
     }
@@ -784,7 +784,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         m_frameStatusBar->m_y = yy;
         m_frameStatusBar->m_width = ww;
         m_frameStatusBar->m_height = hh;
-        gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow),
+        gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                               m_frameStatusBar->m_widget,
                               xx, yy, ww, hh );
     }
@@ -902,7 +902,7 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
         if (m_frameMenuBar->GetParent() != this)
         {
             m_frameMenuBar->SetParent(this);
-            gtk_myfixed_put( GTK_MYFIXED(m_mainWidget),
+            gtk_pizza_put( GTK_PIZZA(m_mainWidget),
                 m_frameMenuBar->m_widget,
                 m_frameMenuBar->m_x,
                 m_frameMenuBar->m_y,

@@ -1,6 +1,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Name:        win_gtk.h
-// Purpose:     wxWindows's GTK base widget
+// Purpose:     wxWindows's GTK base widget = GtkPizza
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 
-#ifndef __GTK_MYFIXED_H__
-#define __GTK_MYFIXED_H__
+#ifndef __GTK_PIZZA_H__
+#define __GTK_PIZZA_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
@@ -21,9 +21,9 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_MYFIXED(obj)          GTK_CHECK_CAST (obj, gtk_myfixed_get_type (), GtkMyFixed)
-#define GTK_MYFIXED_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_myfixed_get_type (), GtkMyFixedClass)
-#define GTK_IS_MYFIXED(obj)       GTK_CHECK_TYPE (obj, gtk_myfixed_get_type ())
+#define GTK_PIZZA(obj)          GTK_CHECK_CAST (obj, gtk_pizza_get_type (), GtkPizza)
+#define GTK_PIZZA_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_pizza_get_type (), GtkPizzaClass)
+#define GTK_IS_PIZZA(obj)       GTK_CHECK_TYPE (obj, gtk_pizza_get_type ())
 
 /* Shadow types */
 typedef enum
@@ -34,10 +34,10 @@ typedef enum
   GTK_MYSHADOW_OUT
 } GtkMyShadowType;
 
-typedef struct _GtkMyFixed        GtkMyFixed;
-typedef struct _GtkMyFixedClass   GtkMyFixedClass;
+typedef struct _GtkPizza        GtkPizza;
+typedef struct _GtkPizzaClass   GtkPizzaClass;
 
-struct _GtkMyFixed
+struct _GtkPizza
 {
   GtkContainer container;
   GList *children;
@@ -59,46 +59,46 @@ struct _GtkMyFixed
   gboolean clear_on_draw;
 };
 
-struct _GtkMyFixedClass
+struct _GtkPizzaClass
 {
   GtkContainerClass parent_class;
 
-  void  (*set_scroll_adjustments)   (GtkMyFixed     *myfixed,
+  void  (*set_scroll_adjustments)   (GtkPizza     *pizza,
 				     GtkAdjustment  *hadjustment,
 				     GtkAdjustment  *vadjustment);
 };
 
-guint      gtk_myfixed_get_type        (void);
-GtkWidget* gtk_myfixed_new             (void);
+guint      gtk_pizza_get_type        (void);
+GtkWidget* gtk_pizza_new             (void);
 
-void       gtk_myfixed_set_shadow_type (GtkMyFixed     *myfixed,
+void       gtk_pizza_set_shadow_type (GtkPizza     *pizza,
 				        GtkMyShadowType  type);
 					
-void       gtk_my_fixed_set_clear      (GtkMyFixed     *myfixed,
+void       gtk_pizza_set_clear      (GtkPizza     *pizza,
                                         gboolean        clear);		
 					
-void       gtk_myfixed_scroll          	(GtkMyFixed     *myfixed,	
+void       gtk_pizza_scroll          	(GtkPizza     *pizza,	
                                          gint         dx,
                                          gint         dy);
 					
-void       gtk_myfixed_put             (GtkMyFixed     *myfixed,
+void       gtk_pizza_put             (GtkPizza     *pizza,
                                         GtkWidget      *widget,
                                         gint         x,
                                         gint         y,
 					gint         width,
 					gint         height);
 
-void       gtk_myfixed_move            (GtkMyFixed     *myfixed,
+void       gtk_pizza_move            (GtkPizza     *pizza,
                                         GtkWidget      *widget,
                                         gint         x,
                                         gint         y );
 					
-void       gtk_myfixed_resize          (GtkMyFixed     *myfixed,
+void       gtk_pizza_resize          (GtkPizza     *pizza,
                                         GtkWidget      *widget,
                                         gint         width,
                                         gint         height );
 					
-void       gtk_myfixed_set_size        (GtkMyFixed     *myfixed,
+void       gtk_pizza_set_size        (GtkPizza     *pizza,
                                         GtkWidget      *widget,
                                         gint         x,
                                         gint         y,
@@ -109,4 +109,4 @@ void       gtk_myfixed_set_size        (GtkMyFixed     *myfixed,
 #endif /* __cplusplus */
 
 
-#endif /* __GTK_MYFIXED_H__ */
+#endif /* __GTK_PIZZA_H__ */

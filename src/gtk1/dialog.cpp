@@ -194,7 +194,7 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 
 static void wxInsertChildInDialog( wxDialog* parent, wxWindow* child )
 {
-    gtk_myfixed_put( GTK_MYFIXED(parent->m_wxwindow),
+    gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                      GTK_WIDGET(child->m_widget),
                      child->m_x,
                      child->m_y,
@@ -269,7 +269,7 @@ bool wxDialog::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
         GTK_SIGNAL_FUNC(gtk_dialog_delete_callback), (gpointer)this );
 
-    m_wxwindow = gtk_myfixed_new();
+    m_wxwindow = gtk_pizza_new();
     gtk_widget_show( m_wxwindow );
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 

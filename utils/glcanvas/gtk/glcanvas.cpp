@@ -95,7 +95,7 @@ void wxGLContext::SwapBuffers()
 {
     if (m_glContext)
     {
-        GdkWindow *window = GTK_MYFIXED(m_widget)->bin_window;
+        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
         glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
     }
 }
@@ -104,7 +104,7 @@ void wxGLContext::SetCurrent()
 {
     if (m_glContext) 
     { 
-        GdkWindow *window = GTK_MYFIXED(m_widget)->bin_window;
+        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
         glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), m_glContext );
     }
 }
@@ -304,7 +304,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     m_glWidget = m_wxwindow;
     
-    gtk_my_fixed_set_clear( GTK_MYFIXED(m_wxwindow), FALSE );
+    gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
     
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
                             GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );

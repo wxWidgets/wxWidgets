@@ -71,10 +71,10 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
     if (!win->m_hasVMT) return;
     if (gdk_event->count > 0) return;
     
-    GtkMyFixed *myfixed = GTK_MYFIXED(widget);
+    GtkPizza *pizza = GTK_PIZZA(widget);
     
     gtk_draw_shadow( widget->style, 
-                     myfixed->bin_window,
+                     pizza->bin_window,
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
                      0, 0,
@@ -85,20 +85,20 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
          (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) || 
          (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
     {
-        GdkGC *gc = gdk_gc_new( myfixed->bin_window );
+        GdkGC *gc = gdk_gc_new( pizza->bin_window );
         GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
         int x = 2;
         if (win->GetWindowStyle() & wxSYSTEM_MENU) x = 18;
         
         gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
-        gdk_draw_rectangle( myfixed->bin_window, gc, TRUE, 
+        gdk_draw_rectangle( pizza->bin_window, gc, TRUE, 
                             x, 
                             3, 
                             win->m_width - 4 - x,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
-        gdk_draw_string( myfixed->bin_window, font, gc, 
+        gdk_draw_string( pizza->bin_window, font, gc, 
                          x+2, 
                          3+font->ascent, 
                          win->m_title.mb_str() );
@@ -117,10 +117,10 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
     if (!win->m_hasVMT) return;
     
-    GtkMyFixed *myfixed = GTK_MYFIXED(widget);
+    GtkPizza *pizza = GTK_PIZZA(widget);
     
     gtk_draw_shadow( widget->style, 
-                     myfixed->bin_window,
+                     pizza->bin_window,
                      GTK_STATE_NORMAL,
                      GTK_SHADOW_OUT,
                      0, 0,
@@ -131,20 +131,20 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
          (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) || 
          (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
     {
-        GdkGC *gc = gdk_gc_new( myfixed->bin_window );
+        GdkGC *gc = gdk_gc_new( pizza->bin_window );
         GdkFont *font = wxSMALL_FONT->GetInternalFont(1.0);
         int x = 2;
         if (win->GetWindowStyle() & wxSYSTEM_MENU) x = 17;
         
         gdk_gc_set_foreground( gc, &widget->style->bg[GTK_STATE_SELECTED] );
-        gdk_draw_rectangle( myfixed->bin_window, gc, TRUE, 
+        gdk_draw_rectangle( pizza->bin_window, gc, TRUE, 
                             x, 
                             3, 
                             win->m_width - 4 - x,
                             font->ascent + font->descent+1 );
                             
         gdk_gc_set_foreground( gc, &widget->style->white );
-        gdk_draw_string( myfixed->bin_window, font, gc, 
+        gdk_draw_string( pizza->bin_window, font, gc, 
                          x+2, 
                          3+font->ascent, 
                          win->m_title.mb_str() );
@@ -299,7 +299,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     {
         GtkWidget *close_button = gtk_button_new_with_label( "x" );
     
-        gtk_myfixed_put( GTK_MYFIXED(m_mainWidget), 
+        gtk_pizza_put( GTK_PIZZA(m_mainWidget), 
                          close_button, 
                          4, 4, 12, 11 );
     
