@@ -160,7 +160,10 @@ public:
     wxImageList*    m_imageList;
     bool            m_ownsImageList;
     wxList          m_pages;
-    int             m_lastSelection;  /* hack */
+
+    // for reasons explained in gtk/notebook.cpp we store the current
+    // selection internally instead of querying the notebook for it
+    int             m_selection;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxNotebook)

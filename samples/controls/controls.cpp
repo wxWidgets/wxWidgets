@@ -869,12 +869,16 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
         }
     }
 
-    *m_text << "Notebook selection is being changed from " << selOld << "\n";
+    *m_text << "Notebook selection is being changed from " << selOld
+            << " to " << event.GetSelection()
+            << " (current page from notebook is "
+            << m_notebook->GetSelection() << ")\n";
 }
 
 void MyPanel::OnPageChanged( wxNotebookEvent &event )
 {
-    *m_text << "Notebook selection is " << event.GetSelection() << "\n";
+    *m_text << "Notebook selection is now " << event.GetSelection()
+            << " (from notebook: " << m_notebook->GetSelection() << ")\n";
 }
 
 void MyPanel::OnTestButton(wxCommandEvent& event)

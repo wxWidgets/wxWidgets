@@ -89,27 +89,44 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               gint page,
                                               wxNotebook *notebook )
 {
+    static bool s_inPageChange = FALSE;
+
+    // are you trying to call SetSelection() from a notebook event handler?
+    // you shouldn't!
+    wxCHECK_RET( !s_inPageChange,
+                 _T("gtk_notebook_page_change_callback reentered") );
+
+    s_inPageChange = TRUE;
     if (g_isIdle)
         wxapp_install_idle_handler();
 
     int old = notebook->GetSelection();
 
-    wxNotebookEvent event1( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
-                            notebook->GetId(), page, old );
-    event1.SetEventObject( notebook );
+    wxNotebookEvent eventChanging( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+                                   notebook->GetId(), page, old );
+    eventChanging.SetEventObject( notebook );
 
-    if ((notebook->GetEventHandler()->ProcessEvent( event1 )) &&
-        !event1.IsAllowed() )
+    if ( (notebook->GetEventHandler()->ProcessEvent(eventChanging)) &&
+         !eventChanging.IsAllowed() )
     {
         /* program doesn't allow the page change */
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(notebook->m_widget), "switch_page" );
-        return;
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(notebook->m_widget),
+                                      "switch_page" );
+    }
+    else // change allowed
+    {
+        // make wxNotebook::GetSelection() return the correct (i.e. consistent
+        // with wxNotebookEvent::GetSelection()) value even though the page is
+        // not really changed in GTK+
+        notebook->m_selection = page;
+
+        wxNotebookEvent eventChanged( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+                                      notebook->GetId(), page, old );
+        eventChanged.SetEventObject( notebook );
+        notebook->GetEventHandler()->ProcessEvent( eventChanged );
     }
 
-    wxNotebookEvent event2( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-                            notebook->GetId(), page, old );
-    event2.SetEventObject( notebook );
-    notebook->GetEventHandler()->ProcessEvent( event2 );
+    s_inPageChange = FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -223,7 +240,7 @@ void wxNotebook::Init()
     m_imageList = (wxImageList *) NULL;
     m_ownsImageList = FALSE;
     m_pages.DeleteContents( TRUE );
-    m_lastSelection = -1;
+    m_selection = -1;
     m_themeEnabled = TRUE;
 }
 
@@ -305,15 +322,24 @@ int wxNotebook::GetSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
 
-    GList *pages = GTK_NOTEBOOK(m_widget)->children;
+    if ( m_selection == -1 )
+    {
+        GList *pages = GTK_NOTEBOOK(m_widget)->children;
 
-    if (g_list_length(pages) == 0) return -1;
+        if (g_list_length(pages) != 0)
+        {
+            GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
 
-    GtkNotebook *notebook = GTK_NOTEBOOK(m_widget);
+            gpointer cur = notebook->cur_page;
+            if ( cur != NULL )
+            {
+                wxConstCast(this, wxNotebook)->m_selection =
+                    g_list_index( pages, cur );
+            }
+        }
+    }
 
-    if (notebook->cur_page == NULL) return m_lastSelection;
-
-    return g_list_index( pages, (gpointer)(notebook->cur_page) );
+    return m_selection;
 }
 
 int wxNotebook::GetPageCount() const
@@ -367,6 +393,8 @@ int wxNotebook::SetSelection( int page )
 
     int selOld = GetSelection();
 
+    // cache the selection
+    m_selection = page;
     gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), page );
     
     wxGtkNotebookPage* g_page = GetNotebookPage( page );
@@ -536,16 +564,22 @@ bool wxNotebook::DeleteAllPages()
 bool wxNotebook::DeletePage( int page )
 {
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
-    if (!nb_page) return FALSE;
+    wxCHECK_MSG( nb_page, FALSE, _T("invalid page in wxNotebook::DeletePage") );
 
-    /* GTK sets GtkNotebook.cur_page to NULL before sending
-       the switch page event */
-    m_lastSelection = GetSelection();
+    // GTK sets GtkNotebook.cur_page to NULL before sending the switch page
+    // event so we have to store the selection internally
+    if ( m_selection == -1 )
+    {
+        m_selection = GetSelection();
+        if ( m_selection == (int)m_pages.GetCount() - 1 )
+        {
+            // the index will become invalid after the page is deleted
+            m_selection = -1;
+        }
+    }
 
     nb_page->m_client->Destroy();
     m_pages.DeleteObject( nb_page );
-
-    m_lastSelection = -1;
 
     return TRUE;
 }
