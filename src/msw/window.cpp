@@ -2030,6 +2030,7 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = HandleKeyUp((WORD) wParam, lParam);
             break;
 
+        case WM_SYSCHAR:
         case WM_CHAR: // Always an ASCII character
             processed = HandleChar((WORD)wParam, lParam, TRUE);
             break;
