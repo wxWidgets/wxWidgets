@@ -512,11 +512,11 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
     return FALSE;
 }
 
-template <class PixelData>
+template <typename PixelData>
 static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colour, unsigned char *dstData)
 {
     wxCHECK_MSG(dstData,false,wxT("Couldn't access mask data"));
-    class PixelData::Iterator p(srcData);
+    typename PixelData::Iterator p(srcData);
     const int nRows = srcData.GetHeight();
     const int nCols = srcData.GetWidth();
     // Total number of bytes per destination column
@@ -525,7 +525,7 @@ static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colou
     const int width_aligned = nCols/8*8;
     for(int y=0; y<nRows; ++y)
     {
-        class PixelData::Iterator rowStart(p);
+        typename PixelData::Iterator rowStart(p);
         unsigned char *dstRow = dstData + y*dstRowLength;
         for(int x=0; x<width_aligned; x+=8)
         {
