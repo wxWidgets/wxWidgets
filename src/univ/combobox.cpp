@@ -787,7 +787,7 @@ int wxComboBox::FindString(const wxString& s) const
 
 void wxComboBox::Select(int n)
 {
-    wxCHECK_RET( (n >= 0) && (n < GetCount()), _T("invalid index in wxComboBox::Select") );
+	wxCHECK_RET( (n >= 0) && (n < GetCount()) && (GetCount() > 0), _T("invalid index in wxComboBox::Select ") );
 
     GetLBox()->SetSelection(n);
     GetText()->SetValue(GetLBox()->GetString(n));
