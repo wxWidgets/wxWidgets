@@ -539,13 +539,13 @@ public:
 
 #if !wxUSE_GUI || defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__)
     #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry( int argc, char *argv[] ); \
-        int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
+        extern int wxEntry( int argc, char **argv ); \
+        int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMAC__) && defined(__UNIX__)
     // wxMac seems to have a specific wxEntry prototype
     #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry( int argc, char *argv[], bool enterLoop = TRUE ); \
-        int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
+        extern int wxEntry( int argc, char **argv, bool enterLoop = TRUE ); \
+        int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     // NT defines APIENTRY, 3.x not
     #if !defined(WXAPIENTRY)
