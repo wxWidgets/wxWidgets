@@ -29,6 +29,28 @@
 // standard
 #if 	defined(__WXMSW__) && !defined(__GNUWIN32__)
   #include  <io.h>
+
+  #define   WIN32_LEAN_AND_MEAN
+  #define   NOSERVICE
+  #define   NOIME
+  #define   NOATOM
+  #define   NOGDI
+  #define   NOGDICAPMASKS
+  #define   NOMETAFILE
+  #define   NOMINMAX
+  #define   NOMSG
+  #define   NOOPENFILE
+  #define   NORASTEROPS
+  #define   NOSCROLL
+  #define   NOSOUND
+  #define   NOSYSMETRICS
+  #define   NOTEXTMETRIC
+  #define   NOWH
+  #define   NOCOMM
+  #define   NOKANJI
+  #define   NOCRYPT
+  #define   NOMCX
+  #include  <windows.h>     // for GetTempFileName
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
   #include  <unistd.h>
 #else
@@ -376,10 +398,15 @@ bool wxTempFile::Open(const wxString& strName)
   #ifdef  __UNIX__
     static const char *szMktempSuffix = "XXXXXX";
     m_strTemp << strName << szMktempSuffix;
-    mktemp((char *)m_strTemp.c_str()); // @@@ even if the length doesn't change
-    //m_strTemp.UngetWriteBuf();
+    mktemp((char *)m_strTemp.c_str()); // will do because length doesn't change
   #else // Windows
-    m_strTemp = tmpnam(NULL);
+    wxString strPath;
+    wxSplitPath(strName, &strPath, NULL, NULL);
+    if ( strPath.IsEmpty() )
+      strPath = '.';  // GetTempFileName will fail if we give it empty string
+    if ( !GetTempFileName(strPath, "wx_",0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+      wxLogLastError("GetTempFileName");
+    m_strTemp.UngetWriteBuf();
   #endif  // Windows/Unix
     
   return m_file.Open(m_strTemp, wxFile::write);
