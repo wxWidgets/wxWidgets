@@ -60,9 +60,13 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
         {
             win = winParent;
             winParent = win->GetParent();
-        }
 
-        wxASSERT_MSG( win, _T("attempt to set last focus to not a child?") );
+            // Yes, this can happen, though in a totally pathological case.
+            // like when detaching a menubar from a frame with a child which
+            // has pushed itself as an event handler for the menubar.  (wxGtk)
+
+            wxASSERT_MSG( winParent, _T("Setting last focus for a window that is not our child?") );
+        }
     }
 
     m_winLastFocused = win;
