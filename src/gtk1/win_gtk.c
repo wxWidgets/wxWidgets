@@ -417,8 +417,10 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
   if (myfixed->shadow_type == GTK_SHADOW_NONE)
     border = 0;
   else
-#endif
     border = 2;
+#else
+  border = 0;
+#endif
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))

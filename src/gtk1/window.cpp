@@ -121,12 +121,6 @@
 
 */
 
-//-------------------------------------------------------------------------
-// constants
-//-------------------------------------------------------------------------
-
-#define FRAME_BORDER_WIDTH 2
-
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -140,6 +134,8 @@ static wxWindow  *g_focusWindow = (wxWindow*) NULL;
 /* hack: we need something to pass to gtk_menu_popup, so we store the time of
    the last click here */
 static guint32 gs_timeLastClick = 0;
+
+#if (GTK_MINOR_VERSION > 0)
 
 //-----------------------------------------------------------------------------
 // local code (see below)
@@ -226,6 +222,8 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 {
     draw_frame( widget, win );
 }
+
+#endif
 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
@@ -1740,12 +1738,14 @@ void wxWindow::PostCreation()
         gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
           GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 	  
+#if (GTK_MINOR_VERSION > 0)
 	/* these are called when the "sunken" or "raised" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
         gtk_signal_connect( GTK_OBJECT(m_widget), "draw",
           GTK_SIGNAL_FUNC(gtk_window_own_draw_callback), (gpointer)this );
+#endif
     }
 
     ConnectWidget( GetConnectWidget() );
