@@ -249,9 +249,13 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
                 short keychar ;
                 keychar = short(rec.message & charCodeMask);
                 keycode = short(rec.message & keyCodeMask) >> 8 ;
-                long keyval = wxMacTranslateKey(keychar, keycode) ;
                 wxWindow* focus = wxWindow::FindFocus() ;
-
+                // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
+                if ( (rec.modifiers & controlKey) && keychar >= 0 && keychar < 0x20 )
+                {
+                    keychar += 0x40 ;
+                }
+                long keyval = wxMacTranslateKey(keychar, keycode) ;
                 if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( focus , keyval , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
                 {
                     // was handled internally
