@@ -112,13 +112,13 @@ public:
     }
 
     // insert a separator
-    bool InsertSeparator(size_t pos)
+    void InsertSeparator(size_t pos)
     {
         Insert(pos, wxMenuItem::New((wxMenu *)this));
     }
 
     // insert a submenu
-    bool Insert(size_t pos,
+    void Insert(size_t pos,
                 int id,
                 const wxString& text,
                 wxMenu *submenu,
@@ -128,7 +128,7 @@ public:
     }
 
     // prepend an item to the menu
-    bool Prepend(wxMenuItem *item)
+    void Prepend(wxMenuItem *item)
     {
         Insert(0u, item);
     }
@@ -142,13 +142,13 @@ public:
     }
 
     // insert a separator
-    bool PrependSeparator()
+    void PrependSeparator()
     {
         InsertSeparator(0u);
     }
 
     // insert a submenu
-    bool Prepend(int id,
+    void Prepend(int id,
                  const wxString& text,
                  wxMenu *submenu,
                  const wxString& help = wxEmptyString)
