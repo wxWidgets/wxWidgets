@@ -2,7 +2,7 @@
 # File:		makefile.nt
 # Author:	Julian Smart
 # Created:	1993
-# Updated:	
+# Updated:
 # Copyright:	(c) 1993, AIAI, University of Edinburgh
 #
 # "%W% %G%"
@@ -19,15 +19,32 @@ EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
 DOCDIR=$(WXDIR)\docs
 LOCALDOCDIR=$(WXDIR)\utils\glcanvas\docs
 
-LIBTARGET=$(WXDIR)\lib\glcanvas.lib
-OBJECTS = glcanvas.obj
 
-!include $(WXDIR)\src\makelib.vc
+!include $(WXDIR)\src\makevc.env
 
-glcanvas.obj:      glcanvas.h glcanvas.$(SRCSUFF) $(DUMMYOBJ)
-        $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+LIBTARGET=$(WXDIR)\lib\glcanvas$(LIBEXT).lib
+OBJECTS = $(D)\glcanvas.obj
+
+all:    $(D) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
+
+$(LIBTARGET): $(OBJECTS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$(LIBTARGET)
+-machine:$(CPU)
+$(OBJECTS)
 <<
+
+$(D)\glcanvas.obj:      glcanvas.h glcanvas.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Fo$@ /Tp $(*B).$(SRCSUFF)
+<<
+
+
+
 
 DOCSOURCES=$(LOCALDOCDIR)\manual.tex $(LOCALDOCDIR)\classes.tex
 
