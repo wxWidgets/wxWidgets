@@ -229,8 +229,9 @@ Compiling using the makefiles (updated 24 Seot 02):
 
 1. Make sure your WXWIN variable is set [e.g add
    set WXWIN=c:\wxwindows
-   to your autoexec.bat file], and that it uses the FAT (short
-   name) form with no spaces.
+   to your autoexec.bat file], The WXWIN variable should contain neither spaces nor -
+   You may like to use the short form as shown by a dos directory listing ; 
+   eg instead of c:\wxwindows-2.3.3 use c:\wxwind~1.3
    Reboot if needed for the changes to autoexec.bat to take effect.   
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the compiler warnings.
