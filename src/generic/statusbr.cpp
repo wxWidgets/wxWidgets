@@ -31,10 +31,12 @@
 
 #include "wx/statusbr.h"
 
-// with wxUSE_NATIVE_STATUSBAR it is not included from wx/statusbr.h
-#include "wx/generic/statusbr.h"
+// if !wxUSE_NATIVE_STATUSBAR, this is already done in common/statbar.cpp
+#if defined(wxUSE_NATIVE_STATUSBAR) && wxUSE_NATIVE_STATUSBAR
+    #include "wx/generic/statusbr.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
+    IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
+#endif // wxUSE_NATIVE_STATUSBAR
 
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
