@@ -3,7 +3,7 @@ Installing wxWindows 2.4.0
 --------------------------
 
 This is wxWindows 2.4.0 for Microsoft Windows 9x/ME, Windows NT,
-Windows 2000 and Windows XP. This is an unstable development release.
+Windows 2000 and Windows XP. This is an official release.
 
 Please note that the library naming conventions for VC++
 compilation have changed after 2.3.1. This means that
