@@ -187,7 +187,7 @@ class WXDLLEXPORT wxDataObjectSimple : public wxDataObject
 public:
     // ctor takes the format we support, but it can also be set later with
     // SetFormat()
-    wxDataObjectSimple(const wxDataFormat& format = wxDataFormat(wxDF_INVALID))
+    wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid)
         : m_format(format)
         {
         }

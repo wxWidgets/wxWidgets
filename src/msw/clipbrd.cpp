@@ -578,10 +578,8 @@ bool wxClipboard::IsSupported( wxDataFormat format )
     return wxIsClipboardFormatAvailable(format);
 }
 
-bool wxClipboard::GetData( wxDataObject *data )
+bool wxClipboard::GetData( wxDataObject& data )
 {
-    wxCHECK_MSG( data, FALSE, wxT("invalid data object") );
-
 #if wxUSE_OLE_CLIPBOARD
     IDataObject *pDataObject = NULL;
     HRESULT hr = OleGetClipboard(&pDataObject);
@@ -593,7 +591,7 @@ bool wxClipboard::GetData( wxDataObject *data )
     }
 
     // build the list of supported formats
-    size_t nFormats = data->GetFormatCount(wxDataObject::Set);
+    size_t nFormats = data.GetFormatCount(wxDataObject::Set);
     wxDataFormat format, *formats;
     if ( nFormats == 1 )
     {
@@ -606,7 +604,7 @@ bool wxClipboard::GetData( wxDataObject *data )
         formats = new wxDataFormat[nFormats];
     }
 
-    data->GetAllFormats(formats, wxDataObject::Set);
+    data.GetAllFormats(formats, wxDataObject::Set);
 
     // get the format enumerator
     bool result = FALSE;
@@ -693,7 +691,7 @@ bool wxClipboard::GetData( wxDataObject *data )
             if ( SUCCEEDED(hr) )
             {
                 // pass the data to the data object
-                hr = data->GetInterface()->SetData(&formatEtc, &medium, TRUE);
+                hr = data.GetInterface()->SetData(&formatEtc, &medium, TRUE);
                 if ( FAILED(hr) )
                 {
                     wxLogDebug(wxT("Failed to set data in wxIDataObject"));
@@ -719,72 +717,56 @@ bool wxClipboard::GetData( wxDataObject *data )
 #elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-    wxDataFormat format = data->GetFormat();
+    wxDataFormat format = data.GetFormat();
     switch ( format )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
         {
-            wxTextDataObject* textDataObject = (wxTextDataObject*) data;
-            char* s = (char*) wxGetClipboardData(format);
-            if ( s )
-            {
-                textDataObject->SetText(s);
-                delete[] s;
-                return TRUE;
-            }
-            else
+            wxTextDataObject& textDataObject = (wxTextDataObject &)data;
+            char* s = (char*)wxGetClipboardData(format);
+            if ( !s )
                 return FALSE;
+
+            textDataObject.SetText(s);
+            delete [] s;
+
+            return TRUE;
         }
 
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
-            wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject *)data;
+            wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
             wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetFormat());
-            if (bitmap)
-            {
-                bitmapDataObject->SetBitmap(* bitmap);
-                delete bitmap;
-                return TRUE;
-            }
-            else
+            if ( !bitmap )
                 return FALSE;
+
+            bitmapDataObject.SetBitmap(*bitmap);
+            delete bitmap;
+
+            return TRUE;
         }
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
         {
-            wxMetafileDataObject* metaFileDataObject = (wxMetafileDataObject *)data;
+            wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
             wxMetafile* metaFile = (wxMetafile *)wxGetClipboardData(wxDF_METAFILE);
-            if (metaFile)
-            {
-                metaFileDataObject->SetMetafile(*metaFile);
-                delete metaFile;
-                return TRUE;
-            }
-            else
+            if ( !metaFile )
                 return FALSE;
+
+            metaFileDataObject.SetMetafile(*metaFile);
+            delete metaFile;
+
+            return TRUE;
         }
-#endif
-        default:
-            {
-                long len;
-                void *buf = wxGetClipboardData(format, &len);
-                if ( buf )
-                {
-                    // FIXME this is for testing only!!
-                    ((wxPrivateDataObject *)data)->SetData(buf, len);
-                    free(buf);
-
-                    return TRUE;
-                }
-            }
-
-            return FALSE;
+#endif // wxUSE_METAFILE
     }
 #else // !wxUSE_DATAOBJ
+    wxFAIL_MSG( wxT("no clipboard implementation") );
+#endif // wxUSE_OLE_CLIPBOARD/wxUSE_DATAOBJ
+
     return FALSE;
-#endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
 }
 
 #else

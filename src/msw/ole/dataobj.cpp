@@ -56,7 +56,9 @@
 
 #ifdef __WXDEBUG__
     static const wxChar *GetTymedName(DWORD tymed);
-#endif // Debug
+#else // !Debug
+    #define GetTymedName(tymed) ""
+#endif // Debug/!Debug
 
 // to be moved into wx/msw/bitmap.h
 extern size_t wxConvertBitmapToDIB(BITMAPINFO *pbi, const wxBitmap& bitmap);
@@ -531,15 +533,13 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     // and now check the type of data requested
     wxDataFormat format = pformatetc->cfFormat;
     if ( m_pDataObject->IsSupportedFormat(format) ) {
-#ifdef __WXDEBUG__
         wxLogTrace(wxTRACE_OleCalls, wxT("wxIDataObject::QueryGetData: %s ok"),
-                   wxDataObject::GetFormatName(format));
-#endif // Debug
+                   wxGetFormatName(format));
     }
     else {
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: %s unsupported"),
-                   wxDataObject::GetFormatName(format));
+                   wxGetFormatName(format));
 
         return DV_E_FORMATETC;
     }
@@ -549,13 +549,11 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
     if ( (format == wxDF_BITMAP && !(tymed & TYMED_GDI)) &&
          !(tymed & TYMED_HGLOBAL) ) {
         // it's not what we're waiting for
-#ifdef __WXDEBUG__
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: %s != %s"),
                    GetTymedName(tymed),
                    GetTymedName(format == wxDF_BITMAP ? TYMED_GDI
                                                       : TYMED_HGLOBAL));
-#endif // Debug
 
         return DV_E_TYMED;
     }
@@ -668,6 +666,8 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format) const
     }
 }
 
+#ifdef __WXDEBUG__
+
 const char *wxDataObject::GetFormatName(wxDataFormat format)
 {
   // case 'xxx' is not a valid value for switch of enum 'wxDataFormat'
@@ -702,6 +702,8 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
     #pragma warning(default:4063)
   #endif // VC++
 }
+
+#endif // Debug
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject supports CF_DIB format
