@@ -53,7 +53,7 @@ EVT_BUTTON(wxID_PROP_REVERT, wxPropertyFormView::OnRevert)
 EVT_BUTTON(wxID_PROP_UPDATE, wxPropertyFormView::OnUpdate)
 END_EVENT_TABLE()
 
-bool wxPropertyFormView::sm_dialogCancelled = FALSE;
+bool wxPropertyFormView::sm_dialogCancelled = false;
 
 wxPropertyFormView::wxPropertyFormView(wxWindow *propPanel, long flags):wxPropertyView(flags)
 {
@@ -64,7 +64,7 @@ wxPropertyFormView::wxPropertyFormView(wxWindow *propPanel, long flags):wxProper
     m_windowCancelButton = NULL;
     m_windowHelpButton = NULL;
 
-    m_detailedEditing = FALSE;
+    m_detailedEditing = false;
 }
 
 wxPropertyFormView::~wxPropertyFormView(void)
@@ -84,13 +84,13 @@ void wxPropertyFormView::ShowView(wxPropertySheet *ps, wxWindow *panel)
 // the object itself.
 bool wxPropertyFormView::OnUpdateView(void)
 {
-    return TRUE;
+    return true;
 }
 
 bool wxPropertyFormView::Check(void)
 {
     if (!m_propertySheet)
-        return FALSE;
+        return false;
 
     wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
@@ -101,17 +101,17 @@ bool wxPropertyFormView::Check(void)
         {
             wxPropertyFormValidator *formValidator = (wxPropertyFormValidator *)validator;
             if (!formValidator->OnCheckValue(prop, this, m_propertyWindow))
-                return FALSE;
+                return false;
         }
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 bool wxPropertyFormView::TransferToPropertySheet(void)
 {
     if (!m_propertySheet)
-        return FALSE;
+        return false;
 
     wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
@@ -125,13 +125,13 @@ bool wxPropertyFormView::TransferToPropertySheet(void)
         }
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 bool wxPropertyFormView::TransferToDialog(void)
 {
     if (!m_propertySheet)
-        return FALSE;
+        return false;
 
     wxNode *node = m_propertySheet->GetProperties().GetFirst();
     while (node)
@@ -145,13 +145,13 @@ bool wxPropertyFormView::TransferToDialog(void)
         }
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 bool wxPropertyFormView::AssociateNames(void)
 {
     if (!m_propertySheet || !m_propertyWindow)
-        return FALSE;
+        return false;
 
     wxWindowList::Node  *node = m_propertyWindow->GetChildren().GetFirst();
     while (node)
@@ -165,7 +165,7 @@ bool wxPropertyFormView::AssociateNames(void)
         }
         node = node->GetNext();
     }
-    return TRUE;
+    return true;
 }
 
 
@@ -176,7 +176,7 @@ bool wxPropertyFormView::OnClose(void)
         ((wxPropertyFormPanel*)m_propertyWindow)->SetView(NULL);
     }
     delete this;
-    return TRUE;
+    return true;
 }
 
 void wxPropertyFormView::OnOk(wxCommandEvent& WXUNUSED(event))
@@ -185,17 +185,17 @@ void wxPropertyFormView::OnOk(wxCommandEvent& WXUNUSED(event))
     if (!Check())
         return;
 
-    sm_dialogCancelled = FALSE;
+    sm_dialogCancelled = false;
     TransferToPropertySheet();
 
-    m_managedWindow->Close(TRUE);
+    m_managedWindow->Close(true);
 }
 
 void wxPropertyFormView::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    sm_dialogCancelled = TRUE;
+    sm_dialogCancelled = true;
 
-    m_managedWindow->Close(TRUE);
+    m_managedWindow->Close(true);
 }
 
 void wxPropertyFormView::OnHelp(wxCommandEvent& WXUNUSED(event))
@@ -257,14 +257,14 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
 bool wxPropertyFormView::ProcessEvent(wxEvent& event)
 {
     if (wxEvtHandler::ProcessEvent(event))
-        return TRUE;
+        return true;
     else if (event.IsCommandEvent() && !event.IsKindOf(CLASSINFO(wxUpdateUIEvent)) && event.GetEventObject())
     {
         OnCommand(* ((wxWindow*) event.GetEventObject()), (wxCommandEvent&) event);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 void wxPropertyFormView::OnDoubleClick(wxControl *item)
@@ -303,12 +303,12 @@ END_EVENT_TABLE()
 
 wxPropertyFormDialog::wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
                                            const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-wxDialog(parent, -1, title, pos, size, style, name)
+wxDialog(parent, wxID_ANY, title, pos, size, style, name)
 {
     m_view = v;
     m_view->AssociatePanel(this);
     m_view->SetManagedWindow(this);
-    //  SetAutoLayout(TRUE);
+    //  SetAutoLayout(true);
 }
 
 void wxPropertyFormDialog::OnCloseWindow(wxCloseEvent& event)
@@ -340,7 +340,7 @@ bool wxPropertyFormDialog::ProcessEvent(wxEvent& event)
     if ( !m_view || ! m_view->ProcessEvent(event) )
         return wxEvtHandler::ProcessEvent(event);
     else
-        return TRUE;
+        return true;
 }
 
 
@@ -366,7 +366,7 @@ bool wxPropertyFormPanel::ProcessEvent(wxEvent& event)
     if ( !m_view || ! m_view->ProcessEvent(event) )
         return wxEvtHandler::ProcessEvent(event);
     else
-        return TRUE;
+        return true;
 }
 
 /*
@@ -399,10 +399,10 @@ bool wxPropertyFormFrame::Initialize(void)
     {
         m_view->AssociatePanel(m_propertyPanel);
         m_view->SetManagedWindow(this);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 /*
@@ -425,12 +425,12 @@ bool wxRealFormValidator::OnCheckValue( wxProperty *property, wxPropertyFormView
                                        wxWindow *parentWindow)
 {
     if (m_realMin == 0.0 && m_realMax == 0.0)
-        return TRUE;
+        return true;
 
     // The item used for viewing the real number: should be a text item.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
-        return FALSE;
+        return false;
 
     wxString value(((wxTextCtrl *)m_propertyWindow)->GetValue());
 
@@ -440,7 +440,7 @@ bool wxRealFormValidator::OnCheckValue( wxProperty *property, wxPropertyFormView
         wxChar buf[200];
         wxSprintf(buf, wxT("Value %s is not a valid real number!"), (const wxChar *)value);
         wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
-        return FALSE;
+        return false;
     }
 
     if (val < m_realMin || val > m_realMax)
@@ -448,9 +448,9 @@ bool wxRealFormValidator::OnCheckValue( wxProperty *property, wxPropertyFormView
         wxChar buf[200];
         wxSprintf(buf, wxT("Value must be a real number between %.2f and %.2f!"), m_realMin, m_realMax);
         wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxRealFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -459,16 +459,16 @@ bool wxRealFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormVi
     // The item used for viewing the real number: should be a text item.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
-        return FALSE;
+        return false;
 
     wxString value(((wxTextCtrl *)m_propertyWindow)->GetValue());
 
     if (value.Length() == 0)
-        return FALSE;
+        return false;
 
     float f = (float)wxAtof((const wxChar *)value);
     property->GetValue() = f;
-    return TRUE;
+    return true;
 }
 
 bool wxRealFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -477,11 +477,11 @@ bool wxRealFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormVie
     // The item used for viewing the real number: should be a text item.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
-        return FALSE;
+        return false;
 
     wxTextCtrl *textItem = (wxTextCtrl *)m_propertyWindow;
     textItem->SetValue(FloatToString(property->GetValue().RealValue()));
-    return TRUE;
+    return true;
 }
 
 ///
@@ -493,12 +493,12 @@ bool wxIntegerFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVi
                                           wxWindow *parentWindow)
 {
     if (m_integerMin == 0.0 && m_integerMax == 0.0)
-        return TRUE;
+        return true;
 
     // The item used for viewing the real number: should be a text item or a slider
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
 
     long val = 0;
 
@@ -511,7 +511,7 @@ bool wxIntegerFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVi
             wxChar buf[200];
             wxSprintf(buf, wxT("Value %s is not a valid integer!"), (const wxChar *)value);
             wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
-            return FALSE;
+            return false;
         }
     }
     else if (m_propertyWindow->IsKindOf(CLASSINFO(wxSlider)))
@@ -519,16 +519,16 @@ bool wxIntegerFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVi
         val = (long)((wxSlider *)m_propertyWindow)->GetValue();
     }
     else
-        return FALSE;
+        return false;
 
     if (val < m_integerMin || val > m_integerMax)
     {
         wxChar buf[200];
         wxSprintf(buf, wxT("Value must be an integer between %ld and %ld!"), m_integerMin, m_integerMax);
         wxMessageBox(buf, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 bool wxIntegerFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -537,14 +537,14 @@ bool wxIntegerFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFor
     // The item used for viewing the real number: should be a text item or a slider
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
 
     if (m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
     {
         wxString value(((wxTextCtrl *)m_propertyWindow)->GetValue());
 
         if (value.Length() == 0)
-            return FALSE;
+            return false;
 
         long i = wxAtol((const wxChar *)value);
         property->GetValue() = i;
@@ -554,9 +554,9 @@ bool wxIntegerFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFor
         property->GetValue() = (long)((wxSlider *)m_propertyWindow)->GetValue();
     }
     else
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxIntegerFormValidator::OnDisplayValue( wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -565,7 +565,7 @@ bool wxIntegerFormValidator::OnDisplayValue( wxProperty *property, wxPropertyFor
     // The item used for viewing the real number: should be a text item or a slider
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
 
     if (m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
     {
@@ -577,8 +577,8 @@ bool wxIntegerFormValidator::OnDisplayValue( wxProperty *property, wxPropertyFor
         ((wxSlider *)m_propertyWindow)->SetValue((int)property->GetValue().IntegerValue());
     }
     else
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 ///
@@ -592,9 +592,9 @@ bool wxBoolFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormView 
     // The item used for viewing the boolean: should be a checkbox
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxCheckBox)))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxBoolFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -603,12 +603,12 @@ bool wxBoolFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormVi
     // The item used for viewing the boolean: should be a checkbox.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxCheckBox)))
-        return FALSE;
+        return false;
 
     wxCheckBox *checkBox = (wxCheckBox *)m_propertyWindow;
 
     property->GetValue() = (bool)checkBox->GetValue();
-    return TRUE;
+    return true;
 }
 
 bool wxBoolFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -617,11 +617,11 @@ bool wxBoolFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormVie
     // The item used for viewing the boolean: should be a checkbox.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow || !m_propertyWindow->IsKindOf(CLASSINFO(wxCheckBox)))
-        return FALSE;
+        return false;
 
     wxCheckBox *checkBox = (wxCheckBox *)m_propertyWindow;
     checkBox->SetValue((bool)property->GetValue().BoolValue());
-    return TRUE;
+    return true;
 }
 
 ///
@@ -639,12 +639,12 @@ bool wxStringFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVie
                                          wxWindow *parentWindow )
 {
     if (!m_strings)
-        return TRUE;
+        return true;
 
     // The item used for viewing the string: should be a text item, choice item or listbox.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
     if (m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
     {
         wxTextCtrl *text = (wxTextCtrl *)m_propertyWindow;
@@ -654,7 +654,7 @@ bool wxStringFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVie
             str += text->GetValue();
             str += wxT(" is not valid.");
             wxMessageBox(str, wxT("Property value error"), wxOK | wxICON_EXCLAMATION, parentWindow);
-            return FALSE;
+            return false;
         }
     }
     else
@@ -662,7 +662,7 @@ bool wxStringFormValidator::OnCheckValue(wxProperty *property, wxPropertyFormVie
         // Any other item constrains the string value,
         // so we don't have to check it.
     }
-    return TRUE;
+    return true;
 }
 
 bool wxStringFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -671,7 +671,7 @@ bool wxStringFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyForm
     // The item used for viewing the string: should be a text item, choice item or listbox.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
     if (m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
     {
         wxTextCtrl *text = (wxTextCtrl *)m_propertyWindow;
@@ -699,8 +699,8 @@ bool wxStringFormValidator::OnRetrieveValue(wxProperty *property, wxPropertyForm
             property->GetValue() = choice->GetStringSelection();
     }
     else
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormView *WXUNUSED(view),
@@ -709,7 +709,7 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
     // The item used for viewing the string: should be a text item, choice item or listbox.
     wxWindow *m_propertyWindow = property->GetWindow();
     if (!m_propertyWindow)
-        return FALSE;
+        return false;
     if (m_propertyWindow->IsKindOf(CLASSINFO(wxTextCtrl)))
     {
         wxTextCtrl *text = (wxTextCtrl *)m_propertyWindow;
@@ -756,8 +756,8 @@ bool wxStringFormValidator::OnDisplayValue(wxProperty *property, wxPropertyFormV
         choice->SetStringSelection(property->GetValue().StringValue());
     }
     else
-        return FALSE;
-    return TRUE;
+        return false;
+    return true;
 }
 
 #endif // wxUSE_PROPSHEET

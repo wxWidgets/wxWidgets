@@ -97,14 +97,14 @@ public:
   virtual bool UpdatePropertyDisplayInList(wxProperty *property);
 
   // Update the whole list
-  virtual bool UpdatePropertyList(bool clearEditArea = TRUE);
+  virtual bool UpdatePropertyList(bool clearEditArea = true);
 
   // Find the wxListBox index corresponding to this property
   virtual int FindListIndexForProperty(wxProperty *property);
 
   // Select and show string representation in editor the given
   // property. NULL resets to show no property.
-  virtual bool ShowProperty(wxProperty *property, bool select = TRUE);
+  virtual bool ShowProperty(wxProperty *property, bool select = true);
   virtual bool EditProperty(wxProperty *property);
 
   // Update the display from the property
@@ -200,7 +200,7 @@ class WXDLLIMPEXP_DEPRECATED wxPropertyTextEdit: public wxTextCtrl
 public:
     wxPropertyTextEdit(wxPropertyListView *v = NULL,
                        wxWindow *parent = NULL,
-                       const wxWindowID id = -1,
+                       const wxWindowID id = wxID_ANY,
                        const wxString& value = wxEmptyString,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
@@ -236,7 +236,7 @@ public:
    // cycling through possible values.
    inline virtual bool OnDoubleClick(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
-     { return TRUE; }
+     { return true; }
 
    // Called when the value listbox is selected. Default behaviour is to copy
    // string to text control, and retrieve the value into the property.
@@ -245,19 +245,19 @@ public:
    // Called when the property value is edited using standard text control
    inline virtual bool OnPrepareControls(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
-     { return TRUE; }
+     { return true; }
 
    virtual bool OnClearControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 
       // Called when the property is edited in detail
    inline virtual bool OnPrepareDetailControls(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
-     { return TRUE; }
+     { return true; }
 
    // Called if focus lost, IF we're in a modeless property editing situation.
    inline virtual bool OnClearDetailControls(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
-     { return TRUE; }
+     { return true; }
 
    // Called when the edit (...) button is pressed. The default implementation
    // calls view->BeginDetailedEditing; the filename validator (for example) overrides
@@ -268,7 +268,7 @@ public:
    // Return FALSE if value didn't check out; signal to restore old value.
    inline virtual bool OnCheckValue(
      wxProperty *WXUNUSED(property), wxPropertyListView *WXUNUSED(view), wxWindow *WXUNUSED(parentWindow) )
-     { return TRUE; }
+     { return true; }
 
    // Called when TICK is pressed or focus is lost or view wants to update
    // the property list.
@@ -324,7 +324,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
                         const wxString& name = wxT("panel"))
-        : wxPanel(parent, -1, pos, size, style, name)
+        : wxPanel(parent, wxID_ANY, pos, size, style, name)
         {
             m_view = v;
         }
@@ -362,7 +362,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = _T("frame"))
-        : wxFrame(parent, -1, title, pos, size, style, name)
+        : wxFrame(parent, wxID_ANY, title, pos, size, style, name)
         {
             m_view = v;
             m_propertyPanel = NULL;

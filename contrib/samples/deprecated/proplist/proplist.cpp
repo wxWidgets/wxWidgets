@@ -72,11 +72,11 @@ bool MyApp::OnInit(void)
   m_mainFrame->SetMenuBar(menu_bar);
 
   m_mainFrame->Centre(wxBOTH);
-  m_mainFrame->Show(TRUE);
+  m_mainFrame->Show(true);
 
   SetTopWindow(m_mainFrame);
     
-  return TRUE;
+  return true;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -91,7 +91,7 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, long type):
-  wxFrame(frame, -1, title, pos, size, type)
+  wxFrame(frame, wxID_ANY, title, pos, size, type)
 {
 }
 
@@ -101,7 +101,7 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     if (wxGetApp().m_childWindow)
     {
-        wxGetApp().m_childWindow->Close(TRUE);
+        wxGetApp().m_childWindow->Close(true);
     }
 
     Destroy();
@@ -109,27 +109,27 @@ void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void MyFrame::OnDialogList(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().PropertyListTest(TRUE);
+    wxGetApp().PropertyListTest(true);
 }
 
 void MyFrame::OnFrameList(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().PropertyListTest(FALSE);
+    wxGetApp().PropertyListTest(false);
 }
 
 void MyFrame::OnDialogForm(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().PropertyFormTest(TRUE);
+    wxGetApp().PropertyFormTest(true);
 }
 
 void MyFrame::OnFrameForm(wxCommandEvent& WXUNUSED(event))
 {
-    wxGetApp().PropertyFormTest(FALSE);
+    wxGetApp().PropertyFormTest(false);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -159,7 +159,7 @@ void MyApp::PropertyListTest(bool useDialog)
     wxPropertySheet *sheet = new wxPropertySheet;
 
     sheet->AddProperty(new wxProperty(_T("fred"), 1.0, _T("real")));
-    sheet->AddProperty(new wxProperty(_T("tough choice"), (bool)TRUE, _T("bool")));
+    sheet->AddProperty(new wxProperty(_T("tough choice"), true, _T("bool")));
     sheet->AddProperty(new wxProperty(_T("ian"), (long)45, _T("integer"), new wxIntegerListValidator(-50, 50)));
     sheet->AddProperty(new wxProperty(_T("bill"), 25.0, _T("real"), new wxRealListValidator(0.0, 100.0)));
     sheet->AddProperty(new wxProperty(_T("julian"), _T("one"), _T("string")));
@@ -174,20 +174,21 @@ void MyApp::PropertyListTest(bool useDialog)
         (
             NULL,
             wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL | wxPROP_BUTTON_CHECK_CROSS
-            |wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES
+            | wxPROP_DYNAMIC_VALUE_FIELD | wxPROP_PULLDOWN | wxPROP_SHOWVALUES
         );
 
-    wxDialog *propDialog = NULL;
-    wxPropertyListFrame *propFrame = NULL;
+    PropListDialog *propDialog = NULL;
+    PropListFrame *propFrame = NULL;
     if (useDialog)
     {
         propDialog = new PropListDialog(view, NULL, _T("Property Sheet Test"),
-        wxPoint(-1, -1), wxSize(400, 500), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODELESS);
+            wxDefaultPosition, wxSize(400, 500), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODELESS);
         m_childWindow = propDialog;
     }
     else
     {
-        propFrame = new PropListFrame(view, NULL, _T("Property Sheet Test"), wxPoint(-1, -1), wxSize(400, 500));
+        propFrame = new PropListFrame(view, NULL, _T("Property Sheet Test"),
+            wxDefaultPosition, wxSize(400, 500));
         m_childWindow = propFrame;
     }
 
@@ -196,17 +197,15 @@ void MyApp::PropertyListTest(bool useDialog)
     if (useDialog)
     {
         view->ShowView(sheet, (wxPanel *)propDialog);
-        propDialog->Centre(wxBOTH);
-        propDialog->Show(TRUE);
     }
     else
     {
         propFrame->Initialize();
         view->ShowView(sheet, propFrame->GetPropertyPanel());
-
-        propFrame->Centre(wxBOTH);
-        propFrame->Show(TRUE);
     }
+
+    m_childWindow->Centre(wxBOTH);
+    m_childWindow->Show(true);
 }
 
 void MyApp::PropertyFormTest(bool useDialog)
@@ -217,7 +216,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     wxPropertySheet *sheet = new wxPropertySheet;
 
     sheet->AddProperty(new wxProperty(_T("fred"), 25.0, _T("real"), new wxRealFormValidator(0.0, 100.0)));
-    sheet->AddProperty(new wxProperty(_T("tough choice"), (bool)TRUE, _T("bool")));
+    sheet->AddProperty(new wxProperty(_T("tough choice"), true, _T("bool")));
     sheet->AddProperty(new wxProperty(_T("ian"), (long)45, _T("integer"), new wxIntegerFormValidator(-50, 50)));
     sheet->AddProperty(new wxProperty(_T("julian"), _T("one"), _T("string")));
     wxStringList *strings = new wxStringList(wxT("one"), wxT("two"), wxT("three"), NULL);
@@ -231,13 +230,13 @@ void MyApp::PropertyFormTest(bool useDialog)
     if (useDialog)
     {
         propDialog = new PropFormDialog(view, NULL, _T("Property Form Test"),
-        wxPoint(-1, -1), wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+            wxDefaultPosition, wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
         m_childWindow = propDialog;
     }
     else
     {
         propFrame = new PropFormFrame(view, NULL, _T("Property Form Test"),
-            wxPoint(-1, -1), wxSize(380, 250));
+            wxDefaultPosition, wxSize(380, 250));
         propFrame->Initialize();
         m_childWindow = propFrame;
     }
@@ -269,13 +268,13 @@ void MyApp::PropertyFormTest(bool useDialog)
 #endif
  
     // Add items to the panel
-    wxButton *okButton = new wxButton(panel, wxID_OK, _T("OK"), wxPoint(-1, -1),
+    wxButton *okButton = new wxButton(panel, wxID_OK, _T("OK"), wxDefaultPosition,
         wxSize(80, 26), 0, wxDefaultValidator, _T("ok"));
-    wxButton *cancelButton = new wxButton(panel, wxID_CANCEL, _T("Cancel"),  wxPoint(-1, -1),
+    wxButton *cancelButton = new wxButton(panel, wxID_CANCEL, _T("Cancel"),  wxDefaultPosition,
         wxSize(80, 26), 0, wxDefaultValidator, _T("cancel"));
-    wxButton *updateButton = new wxButton(panel, wxID_PROP_UPDATE, _T("Update"),  wxPoint(-1, -1),
+    wxButton *updateButton = new wxButton(panel, wxID_PROP_UPDATE, _T("Update"),  wxDefaultPosition,
         wxSize(80, 26), 0, wxDefaultValidator, _T("update"));
-    wxButton *revertButton = new wxButton(panel, wxID_PROP_REVERT, _T("Revert"),  wxPoint(-1, -1),
+    wxButton *revertButton = new wxButton(panel, wxID_PROP_REVERT, _T("Revert"),  wxDefaultPosition,
         wxSize(80, 26), 0, wxDefaultValidator, _T("revert"));
 
     c = new wxLayoutConstraints;
@@ -307,8 +306,8 @@ void MyApp::PropertyFormTest(bool useDialog)
     okButton->SetConstraints(c);
 
     // The name of this text item matches the "fred" property
-    wxTextCtrl *text = new wxTextCtrl(panel, -1, _T("Fred"), wxPoint(-1, -1), wxSize(
-    200, -1), 0, wxDefaultValidator, _T("fred"));
+    wxTextCtrl *text = new wxTextCtrl(panel, wxID_ANY, _T("Fred"), wxDefaultPosition, 
+        wxSize( 200, wxDefaultSize.y), 0, wxDefaultValidator, _T("fred"));
 
     c = new wxLayoutConstraints;
     c->left.SameAs(panel, wxLeft, 4);
@@ -317,8 +316,8 @@ void MyApp::PropertyFormTest(bool useDialog)
     c->width.AsIs();
     text->SetConstraints(c);
 
-    wxCheckBox *checkBox = new wxCheckBox(panel, -1, _T("Yes or no"), wxPoint(-1, -1),
-        wxSize(-1, -1), 0, wxDefaultValidator, _T("tough choice"));
+    wxCheckBox *checkBox = new wxCheckBox(panel, wxID_ANY, _T("Yes or no"), wxDefaultPosition,
+        wxDefaultSize, 0, wxDefaultValidator, _T("tough choice"));
 
     c = new wxLayoutConstraints;
     c->left.SameAs(text, wxRight, 20);
@@ -327,7 +326,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     c->width.AsIs();
     checkBox->SetConstraints(c);
 
-  wxSlider *slider = new wxSlider(panel, -1, -50, 50, 150, wxPoint(-1, -1),
+    wxSlider *slider = new wxSlider(panel, wxID_ANY, -50, 50, 150, wxDefaultPosition,
     wxSize(200,10), 0, wxDefaultValidator, _T("ian"));
 
     c = new wxLayoutConstraints;
@@ -337,7 +336,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     c->width.AsIs();
     slider->SetConstraints(c);
 
-    wxListBox *listBox = new wxListBox(panel, -1, wxPoint(-1, -1),
+    wxListBox *listBox = new wxListBox(panel, wxID_ANY, wxDefaultPosition,
         wxSize(200, 100), 0, NULL, 0, wxDefaultValidator, _T("constrained"));
 
     c = new wxLayoutConstraints;
@@ -349,7 +348,7 @@ void MyApp::PropertyFormTest(bool useDialog)
 
     view->AddRegistry(&myFormValidatorRegistry);
 
-    panel->SetAutoLayout(TRUE);
+    panel->SetAutoLayout(true);
 
     view->ShowView(sheet, panel);
     view->AssociateNames();
@@ -357,15 +356,13 @@ void MyApp::PropertyFormTest(bool useDialog)
 
     if (useDialog) {
         propDialog->Layout();
-        propDialog->Centre(wxBOTH);
-        propDialog->Show(TRUE);
     }
     else
     {
         // panel->Layout();
-        propFrame->Centre(wxBOTH);
-        propFrame->Show(TRUE);
     }
+    m_childWindow->Centre(wxBOTH);
+    m_childWindow->Show(true);
 }
 
 BEGIN_EVENT_TABLE(PropListFrame, wxPropertyListFrame)

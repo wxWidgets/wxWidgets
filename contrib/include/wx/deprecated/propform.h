@@ -131,7 +131,7 @@ class WXDLLIMPEXP_DEPRECATED wxPropertyFormValidator: public wxPropertyValidator
    // Called to check value is OK (e.g. when OK is pressed)
    // Return FALSE if value didn't check out; signal to restore old value.
    virtual bool OnCheckValue( wxProperty *WXUNUSED(property), wxPropertyFormView *WXUNUSED(view),
-     wxWindow *WXUNUSED(parentWindow) ) { return TRUE; }
+     wxWindow *WXUNUSED(parentWindow) ) { return true; }
 
    // Does the transferance from the property editing area to the property itself.
    // Called by the view, e.g. when closing the window.
@@ -279,7 +279,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = 0,
                         const wxString& name = _T("panel"))
-        : wxPanel(parent, -1, pos, size, style, name)
+        : wxPanel(parent, wxID_ANY, pos, size, style, name)
         {
             m_view = v;
         }
@@ -311,7 +311,7 @@ public:
                         const wxSize& size = wxDefaultSize,
                         long style = wxDEFAULT_FRAME_STYLE,
                         const wxString& name = _T("frame"))
-        : wxFrame(parent, -1, title, pos, size, style, name)
+        : wxFrame(parent, wxID_ANY, title, pos, size, style, name)
         {
             m_view = v;
             m_propertyPanel = NULL;
