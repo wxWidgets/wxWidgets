@@ -7,7 +7,7 @@
 #ifndef __styles_H__
 #define __styles_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "styles.cpp"
 #endif
 

@@ -16,6 +16,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/image.h"
+
 // Include private headers
 #include "styles.h"
 
@@ -37,7 +39,6 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     CreateMyMenuBar();
     CreateStatusBar(1);
     SetStatusText( "Welcome to Styles!" );
-    
     
     wxImage image;
     image.LoadFile( "marble.jpg", wxBITMAP_TYPE_JPEG );
