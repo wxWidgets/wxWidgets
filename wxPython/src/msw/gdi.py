@@ -591,6 +591,9 @@ class wxDCPtr(wxObjectPtr):
     def DrawRectangle(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawRectangle,(self,) + _args, _kwargs)
         return val
+    def DrawRectangleRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_DrawRectangleRect,(self,) + _args, _kwargs)
+        return val
     def DrawRotatedText(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_DrawRotatedText,(self,) + _args, _kwargs)
         return val
@@ -725,6 +728,9 @@ class wxDCPtr(wxObjectPtr):
         return val
     def SetClippingRegionAsRegion(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetClippingRegionAsRegion,(self,) + _args, _kwargs)
+        return val
+    def SetClippingRect(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_SetClippingRect,(self,) + _args, _kwargs)
         return val
     def SetPalette(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_SetPalette,(self,) + _args, _kwargs)

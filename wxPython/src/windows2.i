@@ -305,7 +305,7 @@ public:
 // wxPyWindow derives from wxWindow and adds support for overriding many of
 // the virtual methods in Python derived classes.
 
-//      Which of these should be done???
+//      Which (any?) of these should be done also???
 //      AddChild
 //      Destroy
 //      DoCaptureMouse
