@@ -56,6 +56,7 @@ public:
     wxString ReadString();  // deprecated: use ReadLine or ReadWord instead
     wxString ReadLine();
     wxString ReadWord();
+    wxChar   GetChar() { wxChar c = NextChar(); return c != wxEOT ? c : 0; }
 
     wxString GetStringSeparators() const { return m_separators; }
     void SetStringSeparators(const wxString &c) { m_separators = c; }
