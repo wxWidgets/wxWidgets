@@ -75,9 +75,9 @@ public:
     bool operator!=(const wxAcceleratorEntry& entry) const
         { return !(*this == entry); }
 
-#if defined(__WXMOTIF__) || defined(__WXX11__)
+#if defined(__WXMOTIF__)
     // Implementation use only
-    bool MatchesEvent(const wxKeyEvent& event) const ;
+    bool MatchesEvent(const wxKeyEvent& event) const;
 #endif
     
 private:
