@@ -158,7 +158,7 @@ ShapedFrame::ShapedFrame()
            )
 {
     m_hasShape = FALSE;
-    m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
+    m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
 #ifndef __WXMAC__
     // On wxMac the tooltip gets clipped by the window shape, YUCK!!

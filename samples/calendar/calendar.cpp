@@ -251,8 +251,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                     _T("Allow changing the year in the calendar"),
                     TRUE);
     menuCal->AppendSeparator();
-    menuCal->Append(Calendar_Cal_SetDate, "SetDate()", "Set date to 2005-12-24.");
-    menuCal->Append(Calendar_Cal_Today, "Today()", "Set the current date.");
+    menuCal->Append(Calendar_Cal_SetDate, _T("SetDate()"), _T("Set date to 2005-12-24."));
+    menuCal->Append(Calendar_Cal_Today, _T("Today()"), _T("Set the current date."));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
