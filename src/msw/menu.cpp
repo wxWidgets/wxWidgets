@@ -61,7 +61,8 @@ static const int idMenuTitle = -2;
 #endif
 
 // convenience macro
-#define GetHMENU()      ((HMENU)GetHMenu())
+#define GetHMENU()          ((HMENU)GetHMenu())
+#define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
 
 // ============================================================================
 // implementation
@@ -222,18 +223,18 @@ void wxMenu::AppendSeparator()
 }
 
 // Pullright item
-void wxMenu::Append(int Id, const wxString& label,
+void wxMenu::Append(int id, const wxString& label,
                     wxMenu *SubMenu, const wxString& helpString)
 {
-    Append(new wxMenuItem(this, Id, label, helpString, FALSE, SubMenu));
+    Append(new wxMenuItem(this, id, label, helpString, FALSE, SubMenu));
 }
 
 // Ordinary menu item
-void wxMenu::Append(int Id, const wxString& label,
+void wxMenu::Append(int id, const wxString& label,
         const wxString& helpString, bool checkable)
 {
     // 'checkable' parameter is useless for Windows.
-    Append(new wxMenuItem(this, Id, label, helpString, checkable));
+    Append(new wxMenuItem(this, id, label, helpString, checkable));
 }
 
 void wxMenu::Delete(int id)
@@ -273,34 +274,34 @@ void wxMenu::Delete(int id)
     delete item;
 }
 
-void wxMenu::Enable(int Id, bool Flag)
+void wxMenu::Enable(int id, bool Flag)
 {
-    wxMenuItem *item = FindItemForId(Id);
+    wxMenuItem *item = FindItemForId(id);
     wxCHECK_RET( item != NULL, "can't enable non-existing menu item" );
 
     item->Enable(Flag);
 }
 
-bool wxMenu::IsEnabled(int Id) const
+bool wxMenu::IsEnabled(int id) const
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK( item != NULL, FALSE, "invalid item id" );
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_MSG( item != NULL, FALSE, "invalid item id" );
 
     return item->IsEnabled();
 }
 
-void wxMenu::Check(int Id, bool Flag)
+void wxMenu::Check(int id, bool Flag)
 {
-    wxMenuItem *item = FindItemForId(Id);
+    wxMenuItem *item = FindItemForId(id);
     wxCHECK_RET( item != NULL, "can't get status of non-existing menu item" );
 
     item->Check(Flag);
 }
 
-bool wxMenu::IsChecked(int Id) const
+bool wxMenu::IsChecked(int id) const
 {
-    wxMenuItem *item = FindItemForId(Id);
-    wxCHECK( item != NULL, FALSE, "invalid item id" );
+    wxMenuItem *item = FindItemForId(id);
+    wxCHECK_MSG( item != NULL, FALSE, "invalid item id" );
 
     return item->IsChecked();
 }
@@ -369,9 +370,9 @@ const wxString wxMenu::GetTitle() const
     return m_title;
 }
 
-void wxMenu::SetLabel(int Id, const wxString& label)
+void wxMenu::SetLabel(int id, const wxString& label)
 {
-    wxMenuItem *item = FindItemForId(Id) ;
+    wxMenuItem *item = FindItemForId(id) ;
     if (item==NULL)
         return;
 
@@ -379,8 +380,8 @@ void wxMenu::SetLabel(int Id, const wxString& label)
     {
         HMENU hMenu = GetHMENU();
 
-        UINT was_flag = GetMenuState(hMenu, Id, MF_BYCOMMAND);
-        ModifyMenu(hMenu, Id, MF_BYCOMMAND | MF_STRING | was_flag, Id, label);
+        UINT was_flag = GetMenuState(hMenu, id, MF_BYCOMMAND);
+        ModifyMenu(hMenu, id, MF_BYCOMMAND | MF_STRING | was_flag, id, label);
     }
     else
     {
@@ -632,16 +633,16 @@ wxMenuBar::~wxMenuBar()
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus to enable/disable items
-void wxMenuBar::Enable(int Id, bool enable)
+void wxMenuBar::Enable(int id, bool enable)
 {
     int flag = enable ? MF_ENABLED : MF_GRAYED;
 
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     wxCHECK_RET( item, "attempt to enable an item which doesn't exist" );
 
-    EnableMenuItem(GetHMENU(), Id, MF_BYCOMMAND | flag);
+    EnableMenuItem(GetHMenuOf(itemMenu), id, MF_BYCOMMAND | flag);
 }
 
 void wxMenuBar::EnableTop(int pos, bool enable)
@@ -649,93 +650,106 @@ void wxMenuBar::EnableTop(int pos, bool enable)
     int flag = enable ? MF_ENABLED : MF_GRAYED;;
 
     EnableMenuItem((HMENU)m_hMenu, pos, MF_BYPOSITION | flag);
-    DrawMenuBar((HWND) m_menuBarFrame->GetHWND()) ;
+    DrawMenuBar((HWND)m_menuBarFrame->GetHWND()) ;
 }
 
 // Must only be used AFTER menu has been attached to frame,
 // otherwise use individual menus
-void wxMenuBar::Check(int Id, bool check)
+void wxMenuBar::Check(int id, bool check)
 {
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     wxCHECK_RET( item, "attempt to check an item which doesn't exist" );
     wxCHECK_RET( item->IsCheckable(), "attempt to check an uncheckable item" );
 
     int flag = check ? MF_CHECKED : MF_UNCHECKED;
-    CheckMenuItem(GetHMENU(), Id, MF_BYCOMMAND | flag);
+    CheckMenuItem(GetHMenuOf(itemMenu), id, MF_BYCOMMAND | flag);
 }
 
-bool wxMenuBar::IsChecked(int Id) const
+bool wxMenuBar::IsChecked(int id) const
 {
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     wxCHECK_MSG( item, FALSE, "wxMenuItem::IsChecked(): no such item" );
 
-    int flag = ::GetMenuState(GetHMENU(), Id, MF_BYCOMMAND);
+    int flag = ::GetMenuState(GetHMenuOf(itemMenu), id, MF_BYCOMMAND);
 
     return (flag & MF_CHECKED) != 0;
 }
 
-bool wxMenuBar::IsEnabled(int Id) const
+bool wxMenuBar::IsEnabled(int id) const
 {
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     wxCHECK_MSG( item, FALSE, "wxMenuItem::IsEnabled(): no such item" );
 
-    int flag = ::GetMenuState(GetHMENU(), Id, MF_BYCOMMAND) ;
+    int flag = ::GetMenuState(GetHMenuOf(itemMenu), id, MF_BYCOMMAND) ;
 
     return (flag & MF_ENABLED) != 0;
 }
 
-void wxMenuBar::SetLabel(int Id, const wxString& label)
+void wxMenuBar::SetLabel(int id, const wxString& label)
 {
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     if (!item)
         return;
 
-    HMENU hMenu = GetHMENU();
-    UINT was_flag = ::GetMenuState(hMenu, Id, MF_BYCOMMAND);
-    ::ModifyMenu(hMenu, Id, MF_BYCOMMAND | MF_STRING | was_flag, Id, label);
+    HMENU hMenu = GetHMenuOf(itemMenu);
+    UINT was_flag = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
+    ::ModifyMenu(hMenu, id, MF_BYCOMMAND | MF_STRING | was_flag, id, label);
 }
 
-wxString wxMenuBar::GetLabel(int Id) const
+wxString wxMenuBar::GetLabel(int id) const
 {
     wxMenu *itemMenu = NULL;
-    wxMenuItem *item = FindItemForId(Id, &itemMenu) ;
+    wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
     wxCHECK_MSG( item, "", "wxMenuItem::GetLabel(): no such item" );
 
-    char tmp[128];
-    int len = GetMenuString(GetHMENU(), Id, tmp, WXSIZEOF(tmp), MF_BYCOMMAND);
-    tmp[len] = '\0' ;
+    HMENU hMenu = GetHMenuOf(itemMenu);
+    int len = ::GetMenuString(hMenu, id, NULL, 0, MF_BYCOMMAND);
 
-    return wxString(tmp);
+    len++;  // for the NUL character
+    wxString label;
+    ::GetMenuString(hMenu, id, label.GetWriteBuf(len), len, MF_BYCOMMAND);
+    label.UngetWriteBuf();
+
+    return label;
 }
 
 void wxMenuBar::SetLabelTop(int pos, const wxString& label)
 {
-    UINT was_flag = GetMenuState((HMENU)m_hMenu,pos,MF_BYPOSITION) ;
-    if (was_flag&MF_POPUP)
+    UINT id;
+    UINT was_flag = ::GetMenuState((HMENU)m_hMenu, pos, MF_BYPOSITION);
+    if (was_flag & MF_POPUP)
     {
         was_flag &= 0xff ;
-        HMENU popup = GetSubMenu((HMENU)m_hMenu,pos) ;
-        ModifyMenu((HMENU)m_hMenu,pos,MF_BYPOSITION|MF_STRING|was_flag,(UINT)popup,(const char *)label) ;
+        id = (UINT)::GetSubMenu((HMENU)m_hMenu, pos) ;
     }
     else
-        ModifyMenu((HMENU)m_hMenu,pos,MF_BYPOSITION|MF_STRING|was_flag,pos,(const char *)label) ;
+    {
+        id = pos;
+    }
+
+    ::ModifyMenu((HMENU)m_hMenu, pos, MF_BYPOSITION | MF_STRING | was_flag,
+                  id, label) ;
 }
 
 wxString wxMenuBar::GetLabelTop(int pos) const
 {
-    static char tmp[128] ;
-    int len = GetMenuString((HMENU)m_hMenu,pos,tmp,127,MF_BYPOSITION) ;
-    tmp[len] = '\0' ;
-    return wxString(tmp);
+    int len = ::GetMenuString((HMENU)m_hMenu, pos, NULL, 0, MF_BYCOMMAND);
+
+    len++;  // for the NUL character
+    wxString label;
+    ::GetMenuString((HMENU)m_hMenu, pos, label.GetWriteBuf(len), len, MF_BYCOMMAND);
+    label.UngetWriteBuf();
+
+    return label;
 }
 
 bool wxMenuBar::OnDelete(wxMenu *a_menu, int pos)
@@ -854,7 +868,7 @@ int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemStr
     return -1;
 }
 
-wxMenuItem *wxMenuBar::FindItemForId (int Id, wxMenu ** itemMenu) const
+wxMenuItem *wxMenuBar::FindItemForId (int id, wxMenu ** itemMenu) const
 {
     if (itemMenu)
         *itemMenu = NULL;
@@ -863,33 +877,33 @@ wxMenuItem *wxMenuBar::FindItemForId (int Id, wxMenu ** itemMenu) const
     int i;
     for (i = 0; i < m_menuCount; i++)
     {
-        item = m_menus[i]->FindItemForId (Id, itemMenu);
+        item = m_menus[i]->FindItemForId (id, itemMenu);
         if (item)
             return item;
     }
     return NULL;
 }
 
-void wxMenuBar::SetHelpString (int Id, const wxString& helpString)
+void wxMenuBar::SetHelpString (int id, const wxString& helpString)
 {
     int i;
     for (i = 0; i < m_menuCount; i++)
     {
-        if (m_menus[i]->FindItemForId (Id))
+        if (m_menus[i]->FindItemForId (id))
         {
-            m_menus[i]->SetHelpString (Id, helpString);
+            m_menus[i]->SetHelpString (id, helpString);
             return;
         }
     }
 }
 
-wxString wxMenuBar::GetHelpString (int Id) const
+wxString wxMenuBar::GetHelpString (int id) const
 {
     wxString helpString;
 
     for (int i = 0; i < m_menuCount; i++)
     {
-        wxMenuItem *item = m_menus[i]->FindItemForId(Id);
+        wxMenuItem *item = m_menus[i]->FindItemForId(id);
         if ( item )
         {
             helpString = item->GetHelp();
