@@ -356,6 +356,14 @@
 #   endif
 #endif /* !defined(wxUSE_DATAOBJ) */
 
+#ifndef wxUSE_DATEPICKCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DATEPICKCTRL must be defined."
+#   else
+#       define wxUSE_DATEPICKCTRL 0
+#   endif
+#endif /* !defined(wxUSE_DATEPICKCTRL) */
+
 #ifndef wxUSE_DISPLAY
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DISPLAY must be defined."
