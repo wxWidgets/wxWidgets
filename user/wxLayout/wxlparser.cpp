@@ -158,12 +158,13 @@ wxLayoutExportStatus::wxLayoutExportStatus(wxLayoutList *list,
    m_fromPos = fromPos;
    m_toPos = toPos;
 
-   if(m_fromPos != wxLayoutExportNoPosition)
+   if(m_fromPos.x != -1)
    {
-      while(m_line && (*m_line)->GetLineNumber() != m_fromPos.y)
-         m_line->GetNextLine();
+      while(m_line && m_line->GetLineNumber() != m_fromPos.y)
+         m_line = m_line->GetNextLine();
       wxASSERT(m_line);
-      m_iterator = (**i).FindObject(fromPos.x);
+      CoordType dummy;
+      m_iterator = m_line->FindObject(fromPos.x, &dummy);
    }
 }
    

@@ -110,21 +110,6 @@ bool Contains(const wxRect &r, const wxPoint &p)
 }
 
 
-/// Starts highlighting the selection
-static
-inline void StartHighlighting(wxDC &dc)
-{
-   dc.SetBrush(*wxBLACK_BRUSH);
-   dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
-   dc.SetLogicalFunction(wxINVERT);
-}
-
-/// Ends highlighting the selection
-static
-inline void EndHighlighting(wxDC &dc)
-{
-   dc.SetLogicalFunction(wxCOPY);
-}
 //@}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -164,6 +149,7 @@ wxLayoutObjectText::GetSize(CoordType *top, CoordType *bottom) const
 
 void
 wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
+                         wxLayoutList *wxllist,
                          CoordType begin, CoordType end)
 {
    if(begin == -1)
@@ -181,12 +167,12 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords,
       dc.DrawText(str, xpos, ypos);
       dc.GetTextExtent(str, &width, &height, &descent);
       xpos += width;
-      StartHighlighting(dc);
+      wxllist->StartHighlighting(dc);
       str = m_Text.Mid(begin, end-begin);
       dc.DrawText(str, xpos, ypos);
       dc.GetTextExtent(str, &width, &height, &descent);
       xpos += width;
-      dc.SetLogicalFunction(wxCOPY);
+      wxllist->EndHighlighting(dc);
       str = m_Text.Mid(end, m_Text.Length()-end);
       dc.DrawText(str, xpos, ypos);
    }
@@ -263,11 +249,9 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxBitmap *icon)
 
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint const &coords,
+                         wxLayoutList *wxllist,
                          CoordType begin, CoordType /* len */)
 {
-   if(begin == 0)
-      StartHighlighting(dc);
-   
    dc.DrawBitmap(*m_Icon, coords.x, coords.y-m_Icon->GetHeight(),
                  (m_Icon->GetMask() == NULL) ? FALSE : TRUE);
 }
@@ -341,6 +325,7 @@ wxLayoutObjectCmd::GetStyle(wxLayoutStyleInfo *si) const
 
 void
 wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */,
+                        wxLayoutList *wxllist,
                         CoordType begin, CoordType /* len */)
 {
    wxASSERT(m_font);
@@ -353,7 +338,7 @@ void
 wxLayoutObjectCmd::Layout(wxDC &dc)
 {
    // this get called, so that recalculation uses right font sizes
-   Draw(dc, wxPoint(0,0));
+   Draw(dc, wxPoint(0,0), NULL);
 }
 
 
@@ -687,9 +672,9 @@ wxLayoutLine::Draw(wxDC &dc,
    CoordType from, to, tempto;
    int highlight = llist->IsSelected(this, &from, &to);
    if(highlight == 1) // we need to draw the whole line inverted!
-      StartHighlighting(dc);
+      llist->StartHighlighting(dc);
    else
-      EndHighlighting(dc);
+      llist->EndHighlighting(dc);
 
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
@@ -697,18 +682,23 @@ wxLayoutLine::Draw(wxDC &dc,
       {
          // parts of the line need highlighting
          tempto = xpos+(**i).GetLength();
-         if(tempto >= from && tempto <= to)
+         if(tempto >= from && xpos <= to)
          {
             tempto = to-xpos;
             if(tempto > (**i).GetLength())
                tempto = (**i).GetLength();
-            (**i).Draw(dc, pos, from-xpos, to);
+            CoordType tmp = from-xpos;
+            if(tmp < 0) tmp = 0;
+            (**i).Draw(dc, pos, llist, from-xpos, to);
          }
          else
-            EndHighlighting(dc);
+         {
+            llist->EndHighlighting(dc); // FIXME! inefficient
+            (**i).Draw(dc, pos, llist);
+         }
       }
       else
-         (**i).Draw(dc, pos);
+         (**i).Draw(dc, pos, llist);
       pos.x += (**i).GetWidth();
       xpos += (**i).GetLength();
    }
@@ -1418,7 +1408,7 @@ wxLayoutList::Draw(wxDC &dc,
    wxLayoutLine *line = m_FirstLine;
 
    Layout(dc, bottom);
-   m_DefaultSetting->Draw(dc, wxPoint(0,0));
+   m_DefaultSetting->Draw(dc, wxPoint(0,0), this);
    wxBrush brush(m_ColourBG, wxSOLID);
    dc.SetBrush(brush);
    
@@ -1436,6 +1426,11 @@ wxLayoutList::Draw(wxDC &dc,
                                     m_CursorLine->GetNextLine() == NULL &&
                                     m_CursorLine == m_FirstLine));
    InvalidateUpdateRect();
+
+   wxLogDebug("Selection is %s : l%d,%ld/%ld,%ld",
+              m_Selection.m_valid ? "valid" : "invalid",
+              m_Selection.m_CursorA.x, m_Selection.m_CursorA.y,
+              m_Selection.m_CursorB.x, m_Selection.m_CursorB.y);
 }
 
 wxLayoutObject *
@@ -1550,13 +1545,12 @@ wxLayoutList::StartSelection(void)
 }
 
 void
-wxLayoutList::EndSelection(void)
+wxLayoutList::ContinueSelection(void)
 {
-   wxLogDebug("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
+   wxASSERT(m_Selection.m_selecting == true);
+   wxASSERT(m_Selection.m_valid == false);
+   wxLogDebug("Continuing selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
    m_Selection.m_CursorB = m_CursorPos;
-   m_Selection.m_selecting = false;
-   m_Selection.m_valid = true;
-
    // We always want m_CursorA <= m_CursorB!
    if(! (m_Selection.m_CursorA <= m_Selection.m_CursorB))
    {
@@ -1565,6 +1559,16 @@ wxLayoutList::EndSelection(void)
       m_Selection.m_CursorA = help;
    }
 }
+
+void
+wxLayoutList::EndSelection(void)
+{
+   ContinueSelection();
+   wxLogDebug("Ending selection at %ld/%ld", m_CursorPos.x, m_CursorPos.y);
+   m_Selection.m_selecting = false;
+   m_Selection.m_valid = true;
+}
+
 
 bool
 wxLayoutList::IsSelecting(void)
@@ -1575,6 +1579,8 @@ wxLayoutList::IsSelecting(void)
 bool
 wxLayoutList::IsSelected(const wxPoint &cursor)
 {
+   if(! m_Selection.m_valid && ! m_Selection.m_selecting)
+      return false;
    return m_Selection.m_CursorA <= cursor
       && cursor <= m_Selection.m_CursorB;
 }
@@ -1591,6 +1597,9 @@ wxLayoutList::IsSelected(const wxLayoutLine *line, CoordType *from,
                          CoordType *to)
 {
    wxASSERT(line); wxASSERT(to); wxASSERT(from);
+
+   if(! m_Selection.m_valid && ! m_Selection.m_selecting)
+      return 0;
 
    CoordType y = line->GetLineNumber();
    if(m_Selection.m_CursorA.y < y && m_Selection.m_CursorB.y > y)
@@ -1616,6 +1625,24 @@ wxLayoutList::IsSelected(const wxLayoutLine *line, CoordType *from,
    else
       return 0;
 }
+
+
+/// Starts highlighting the selection
+void
+wxLayoutList::StartHighlighting(wxDC &dc)
+{
+   dc.SetTextForeground(m_ColourBG);
+   dc.SetTextBackground(m_ColourFG);
+}
+
+/// Ends highlighting the selection
+void
+wxLayoutList::EndHighlighting(wxDC &dc)
+{
+   dc.SetTextForeground(m_ColourFG);
+   dc.SetTextBackground(m_ColourBG);
+}
+
 
 #ifdef WXLAYOUT_DEBUG
 

@@ -111,11 +111,13 @@ public:
    /** Draws an object.
        @param dc the wxDC to draw on
        @param coords where to draw the baseline of the object.
+       @param wxllist pointer to wxLayoutList
        @param begin if !=-1, from which position on to highlight it
        @param end if begin !=-1, how many positions to highlight it
    */
    virtual void Draw(wxDC & /* dc */,
                      wxPoint const & /* coords */,
+                     class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1)  { }
 
@@ -193,6 +195,7 @@ public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_TEXT; }
    virtual void Layout(wxDC &dc);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1);
    /** Calculates and returns the size of the object. 
@@ -252,6 +255,7 @@ public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_ICON; }
    virtual void Layout(wxDC &dc);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1);
 
@@ -298,6 +302,7 @@ public:
    virtual wxLayoutObjectType GetType(void) const { return WXLO_TYPE_CMD; }
    virtual void Layout(wxDC &dc);
    virtual void Draw(wxDC &dc, wxPoint const &coords,
+                     class wxLayoutList *wxllist,
                      CoordType begin = -1,
                      CoordType end = -1);
    wxLayoutObjectCmd(int size, int family, int style, int weight,
@@ -825,12 +830,19 @@ public:
 
    /// Begin selecting text.
    void StartSelection(void);
+   // Continue selecting text
+   void ContinueSelection(void);
    /// End selecting text.
    void EndSelection(void);
    /// Are we still selecting text?
    bool IsSelecting(void);
    bool IsSelected(const wxPoint &cursor);
 
+   /// starts highlighting of text for selections
+   void StartHighlighting(wxDC &dc);
+   /// ends highlighting of text for selections
+   void EndHighlighting(wxDC &dc);
+   
    /** Tests whether this layout line is selected and needs
        highlighting.
        @param line to test for

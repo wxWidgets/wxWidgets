@@ -207,21 +207,55 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    }
 #endif
    
+   long keyCode = event.KeyCode();
+   if(m_Selecting && ! event.ShiftDown())
+   {
+      m_llist->EndSelection();
+      m_Selecting = false;
+   }
+   else
+      if(! m_Selecting && event.ShiftDown())
+      {
+         switch(keyCode)
+         {
+         case WXK_UP:
+         case WXK_DOWN:
+         case WXK_RIGHT:
+         case WXK_LEFT:
+         case WXK_PRIOR:
+         case WXK_NEXT:
+         case WXK_HOME:
+         case WXK_END:
+            m_Selecting = true;
+            m_llist->StartSelection();
+            break;
+         default:
+            ;
+         }
+      }
+   
    if(!IsEditable()) // do nothing
    {
-      event.Skip();
+      switch(keyCode)
+      {
+      case WXK_UP:
+         m_llist->MoveCursorVertically(-1);
+         break;
+      case WXK_DOWN:
+         m_llist->MoveCursorVertically(1);
+         break;
+      case WXK_PRIOR:
+         m_llist->MoveCursorVertically(-20);
+         break;
+      case WXK_NEXT:
+         m_llist->MoveCursorVertically(20);
+         break;
+      default:
+         ;
+      }
       return;
    }
    
-   long keyCode = event.KeyCode();
-   if(event.ShiftDown())
-      m_Selecting = true;
-   else
-   {
-      if(m_Selecting)
-         m_llist->EndSelection();
-      m_Selecting = false;
-   }
    /* First, handle control keys */
    if(event.ControlDown() && ! event.AltDown())
    {
@@ -271,35 +305,27 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       switch(keyCode)
       {
       case WXK_RIGHT:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorHorizontally(1);
          break;
       case WXK_LEFT:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorHorizontally(-1);
          break;
       case WXK_UP:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorVertically(-1);
          break;
       case WXK_DOWN:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorVertically(1);
          break;
       case WXK_PRIOR:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorVertically(-20);
          break;
       case WXK_NEXT:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorVertically(20);
          break;
       case WXK_HOME:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorToBeginOfLine();
          break;
       case WXK_END:
-         if(m_Selecting) m_llist->StartSelection();
          m_llist->MoveCursorToEndOfLine();
          break;
       case WXK_DELETE :
@@ -441,7 +467,6 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // Device origins on the memDC are suspect, we translate manually
    // with the translate parameter of Draw().
    m_memDC->SetDeviceOrigin(0,0);
-   m_memDC->SetBackgroundMode(wxTRANSPARENT);
    m_memDC->SetBrush(wxBrush(m_llist->GetDefaults()->GetBGColour(), wxSOLID));                                  
    m_memDC->SetPen(wxPen(m_llist->GetDefaults()->GetBGColour(),0,wxTRANSPARENT));                               
    m_memDC->SetLogicalFunction(wxCOPY);
@@ -454,10 +479,13 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
       for(y = 0; y < y1; y+=h)
          for(x = 0; x < x1; x+=w)
             m_memDC->DrawBitmap(*m_BGbitmap, x, y);
+      m_memDC->SetBackgroundMode(wxTRANSPARENT);
    }
    else
+   {
+      m_memDC->SetBackgroundMode(wxSOLID);
       m_memDC->DrawRectangle(0,0,x1, y1);
-
+   }
 
    
    /* This is the important bit: we tell the list to draw itself: */
