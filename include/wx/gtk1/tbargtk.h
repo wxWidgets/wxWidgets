@@ -74,7 +74,7 @@ public:
     // If toggle is TRUE, the button toggles between the two states.
     virtual wxToolBarTool *AddTool( int toolIndex, const wxBitmap& bitmap, 
       const wxBitmap& pushedBitmap = wxNullBitmap, bool toggle = FALSE,
-      float xPos = -1, float yPos = -1, wxObject *clientData = (wxObject *)NULL,
+      wxCoord xPos = -1, wxCoord yPos = -1, wxObject *clientData = (wxObject *)NULL,
       const wxString& helpString1 = "", const wxString& helpString2 = "");
     virtual void AddSeparator(void);
     virtual void ClearTools(void);

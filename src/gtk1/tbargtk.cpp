@@ -265,7 +265,7 @@ void wxToolBar::OnMouseEnter( int toolIndex )
 
 wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   const wxBitmap& pushedBitmap, bool toggle,
-  float WXUNUSED(xPos), float WXUNUSED(yPos), wxObject *clientData,
+  wxCoord WXUNUSED(xPos), wxCoord WXUNUSED(yPos), wxObject *clientData,
   const wxString& helpString1, const wxString& helpString2 )
 {
     m_hasToolAlready = TRUE;
