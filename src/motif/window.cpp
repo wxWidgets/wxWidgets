@@ -1330,7 +1330,7 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
                              int sizeFlags, bool fromCtor)
 {
     // A bit of optimization to help sort out the flickers.
-    int oldX = 0, oldY = 0, oldW = 0, oldH = 0;
+    int oldX = -1, oldY = -1, oldW = -1, oldH = -1;
     if( !fromCtor )
     {
         GetSize(& oldW, & oldH);
@@ -2442,7 +2442,7 @@ void wxWindow::CanvasSetSizeIntr(int x, int y, int w, int h, int sizeFlags,
                                  bool fromCtor)
 {
     // A bit of optimization to help sort out the flickers.
-    int oldX = 0, oldY = 0, oldW = 0, oldH = 0;
+    int oldX = -1, oldY = -1, oldW = -1, oldH = -1;
     // see the top of the file, near DoSetSizeIntr
     if( !fromCtor )
     {
