@@ -713,6 +713,10 @@ SOURCE=..\include\wx\db.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\dbkeyg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\dbtable.h
 # End Source File
 # Begin Source File
