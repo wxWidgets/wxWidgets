@@ -360,8 +360,9 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     (void)MoveToEx(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y1), NULL);
     (void)LineTo(GetHdc(), XLOG2DEV(x2), YLOG2DEV(y2));
 
-    // Normalization: Windows doesn't draw the last point of the line
-    (void)LineTo(GetHdc(), XLOG2DEV(x2) + 1, YLOG2DEV(y2));
+    // Normalization: Windows doesn't draw the last point of the line.
+    // But apparently neither does GTK+, so we take it out again.
+//    (void)LineTo(GetHdc(), XLOG2DEV(x2) + 1, YLOG2DEV(y2));
 
     CalcBoundingBox(x1, y1);
     CalcBoundingBox(x2, y2);

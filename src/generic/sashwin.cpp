@@ -513,14 +513,14 @@ void wxSashWindow::DrawSash(wxSashEdgePosition edge, wxDC& dc)
                 // Draw a light grey line on the bottom to indicate that the
                 // sash is raised
                 dc.SetPen(lightShadowPen);
-                dc.DrawLine(0, h - GetEdgeMargin(edge), w-1, h - GetEdgeMargin(edge));
+                dc.DrawLine(0, h - GetEdgeMargin(edge), w, h - GetEdgeMargin(edge));
             }
             else
             {
                 // Draw a drak grey line on the top to indicate that the
                 // sash is raised
                 dc.SetPen(mediumShadowPen);
-                dc.DrawLine(1, GetEdgeMargin(edge), w-1, GetEdgeMargin(edge));
+                dc.DrawLine(1, GetEdgeMargin(edge), w, GetEdgeMargin(edge));
             }
         }
     }
