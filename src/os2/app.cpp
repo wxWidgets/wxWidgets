@@ -975,13 +975,15 @@ void wxWakeUpIdle()
     }
 } // end of wxWakeUpIdle
 
-HINSTANCE wxGetInstance()
+HAB wxGetInstance()
 {
-    return wxhInstance;
+    return vHabmain;
 }
 
-void wxSetInstance(HINSTANCE hInst)
+void wxSetInstance(
+  HAB                               vHab
+)
 {
-    wxhInstance = hInst;
+    vHabmain = vHab;
 }
 

@@ -89,9 +89,6 @@ public:
     virtual bool ProcessMessage(WXMSG* pMsg);
     void         DeletePendingObjects(void);
     bool         ProcessIdle(void);
-#if wxUSE_THREADS
-    void         ProcessPendingEvents(void);
-#endif
 
 public:
     int                             m_nCmdShow;
