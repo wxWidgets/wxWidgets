@@ -4,7 +4,7 @@
  * Author:  Julian Smart
  * Created:  1993
  * Updated:
- * Copyright:   (c) 1993, AIAI, University of Edinburgh
+ * Copyright:   (c) Julian Smart
  */
 
 /* A dummy file to include wx.h. If precompiling wx.h, I
