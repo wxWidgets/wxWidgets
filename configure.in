@@ -3303,7 +3303,6 @@ dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
 if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
-      *-pc-os2_emx | *-pc-os2-emx | \
       *-pc-msdosdjgpp )
         dnl only static for now
         wxUSE_SHARED=no

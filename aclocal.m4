@@ -1402,6 +1402,8 @@ AC_DEFUN(AC_BAKEFILE_SUFFIXES,
             DLLPREFIX=""
         ;;
         *-pc-os2_emx | *-pc-os2-emx )
+            SO_SUFFIX="dll"
+            SO_SUFFIX_MODULE="dll"
             EXEEXT=".exe"
             DLLPREFIX=""
             LIBPREFIX=""
@@ -1653,11 +1655,16 @@ EOF
         PIC_FLAG=""
       ;;
       
+      *-pc-os2_emx | *-pc-os2-emx )
+        SHARED_LD_CC="dllar.sh -o"
+        SHARED_LD_CXX="dllar.sh -o"
+        PIC_FLAG=""
+      ;;
+      
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
       *-*-dgux5* | \
-      *-pc-os2_emx | *-pc-os2-emx | \
       *-*-sysv5* )
         dnl defaults are ok
       ;;
