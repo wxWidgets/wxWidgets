@@ -79,7 +79,9 @@ public:
     wxVariant();
     wxVariant(double val, const wxString& name = g_szNul);
     wxVariant(long val, const wxString& name = g_szNul);
+#ifdef HAVE_BOOL
     wxVariant(bool val, const wxString& name = g_szNul);
+#endif
     wxVariant(char val, const wxString& name = g_szNul);
     wxVariant(const wxString& val, const wxString& name = g_szNul);
     wxVariant(const char* val, const wxString& name = g_szNul); // Necessary or VC++ assumes bool!
@@ -114,9 +116,11 @@ public:
     bool operator== (char value) const;
     bool operator!= (char value) const;
     void operator= (char value) ;
+#ifdef HAVE_BOOL
     bool operator== (bool value) const;
     bool operator!= (bool value) const;
     void operator= (bool value) ;
+#endif
     bool operator== (const wxString& value) const;
     bool operator!= (const wxString& value) const;
     void operator= (const wxString& value) ;

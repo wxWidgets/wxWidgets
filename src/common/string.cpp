@@ -104,25 +104,14 @@ extern const char WXDLLEXPORT *g_szNul = &g_strEmpty.dummy;
     // always available), but it's unsafe because it doesn't check for buffer
     // size - so give a warning
     #define wxVsprintf(buffer,len,format,argptr) vsprintf(buffer,format, argptr)
-#if defined(__VISUALC__)
-    #pragma message("Using sprintf() because no snprintf()-like function defined")
-#elif defined(__GNUG__)
-    #warning "Using sprintf() because no snprintf()-like function defined"
-#elif defined(__MWERKS__)
- 	#warning "Using sprintf() because no snprintf()-like function defined"
-#elif defined(__WATCOMC__)
-    // No warning
-#elif defined(__BORLANDC__)
- 	// No warning
-#elif defined(__SUNCC__)
-    // nothing -- I don't know about "#warning" for Sun's CC
-#elif defined(__DECCXX)
-   // nothing
-#else
-    // change this to some analogue of '#warning' for your compiler
-    #error "Using sprintf() because no snprintf()-like function defined"
-#endif //compiler
 
+    #if defined(__VISUALC__)
+        #pragma message("Using sprintf() because no snprintf()-like function defined")
+    #elif defined(__GNUG__) && !defined(__UNIX__)
+        #warning "Using sprintf() because no snprintf()-like function defined"
+    #elif defined(__MWERKS__)
+ 	    #warning "Using sprintf() because no snprintf()-like function defined"
+    #endif //compiler
 #endif // no vsnprintf
 
 // ----------------------------------------------------------------------------

@@ -457,6 +457,7 @@ bool wxVariantDataReal::Read(wxString& str)
     return TRUE;
 }
 
+#ifdef HAVE_BOOL
 /*
  * wxVariantDataBool
  */
@@ -547,6 +548,7 @@ bool wxVariantDataBool::Read(wxString& str)
     m_value = (atol((const char*) str) != 0);
     return TRUE;
 }
+#endif // HAVE_BOOL
 
 /*
  * wxVariantDataChar
@@ -991,11 +993,13 @@ wxVariant::wxVariant(long val, const wxString& name)
     m_name = name;
 }
 
+#ifdef HAVE_BOOL
 wxVariant::wxVariant(bool val, const wxString& name)
 {
     m_data = new wxVariantDataBool(val);
     m_name = name;
 }
+#endif
 
 wxVariant::wxVariant(char val, const wxString& name)
 {
@@ -1205,6 +1209,7 @@ void wxVariant::operator= (char value)
     }
 }
 
+#ifdef HAVE_BOOL
 bool wxVariant::operator== (bool value) const
 {
     bool thisValue;
@@ -1232,6 +1237,7 @@ void wxVariant::operator= (bool value)
         m_data = new wxVariantDataBool(value);
     }
 }
+#endif // HAVE_BOOL
 
 bool wxVariant::operator== (const wxString& value) const
 {

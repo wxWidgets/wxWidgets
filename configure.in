@@ -452,43 +452,40 @@ if test "$ac_cv_header_linux_joystick_h" = "yes"; then
 fi
 AC_SUBST(GTK_JOYSTICK)
 
+dnl some systems (AIX) define some of string function in strings.h
+AC_CHECK_HEADERS(strings.h)
+
+dnl #######################
+dnl # check for functions #
+dnl #######################
+
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
 
-dnl check for several standard functions we use if they are available
-AC_CHECK_FUNCS(vsnprintf vfork)
+dnl check for vsnprintf() - a safe version of vsprintf()
+AC_CHECK_FUNCS(vsnprintf,
+               AC_DEFINE(HAVE_VSNPRINTF),
+               AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
+              )
+
+dnl check for vfork() (even if it's the same as fork() in modern Unices)
+AC_CHECK_FUNCS(vfork)
 
 POSIX4_LINK=
-dnl check for usleep() and nanosleep() which is better in MT programs
-dnl AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
-dnl                [
-dnl                 AC_CHECK_LIB(posix4, nanosleep,
-dnl                    AC_DEFINE(HAVE_NANOSLEEP),
-dnl                    AC_CHECK_FUNCS(usleep))
-dnl                ]
-dnl               )
-AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
-[AC_CHECK_LIB(posix4, nanosleep, [
-	AC_DEFINE(HAVE_NANOSLEEP)
-	POSIX4_LINK="-lposix4" ],
- [AC_CHECK_FUNCS(usleep, AC_DEFINE(HAVE_USLEEP),
-                         AC_MSG_WARN(Sleep() function will not work)
-  )]
- )]
-)
+AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
+    AC_CHECK_LIB(posix4, nanosleep, [
+	    AC_DEFINE(HAVE_NANOSLEEP)
+	    POSIX4_LINK="-lposix4"
+    ], [
+    AC_CHECK_FUNCS(usleep,
+        AC_DEFINE(HAVE_USLEEP),
+        AC_MSG_WARN(Sleep() function will not work))
+    ])
+])
 
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
 
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_CHECK_HEADERS(iostream)
-if test "x$HAVE_IOSTREAM" = "x" ; then
-  AC_DEFINE(wxUSE_IOSTREAMH)
-fi
-AC_LANG_RESTORE
-
-dnl   defines HAVE_IOSTREAM
 dnl ###################
 dnl # checks typedefs #
 dnl ###################
@@ -533,7 +530,6 @@ dnl   defines HAVE_TZNAME if external array tzname is found
 dnl ###################################
 dnl # checks compiler characteristics #
 dnl ###################################
-dnl AC_C_CROSS
 
 AC_C_CONST
 dnl   defines const to be empty if c-compiler does not support const fully
@@ -547,11 +543,12 @@ dnl   defines HAVE_LONGDOUBLE if compiler supports long double
 AC_C_BIGENDIAN
 dnl   defines WORDS_BIGENDIAN if system is big endian
 
-AC_CHECK_SIZEOF(int *)
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(long long)
-dnl   defines the size of certain types of variables in SIZEOF_???
+dnl give some default values for cross-compiling
+AC_CHECK_SIZEOF(int *, 4)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(long long, 0)
+dnl   defines the size of certain types of variables in SIZEOF_<TYPE>
 
 dnl ######################
 dnl # check C++ features #
@@ -560,14 +557,54 @@ dnl ######################
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
+dnl check for iostream (as opposed to iostream.h) standard header
+AC_CHECK_HEADERS(iostream)
+if test "x$HAVE_IOSTREAM" = "x" ; then
+  AC_DEFINE(wxUSE_IOSTREAMH)
+fi
+
 dnl Check for existence of builtin 'bool' data type
 dnl
 dnl do nothing for cross-compilation - assume bool is not defined 
 AC_MSG_CHECKING(if C++ compiler supports bool)
-AC_TRY_RUN([ int main() {bool b = true; return 0;} ],
+AC_TRY_RUN([
+
+int main()
+{
+    bool b = true;
+
+    return 0;
+}
+       ],
 	   AC_DEFINE(HAVE_BOOL) AC_MSG_RESULT(yes),
 	   AC_MSG_RESULT(no),
 	   AC_MSG_RESULT(no assumed for cross-compilation))
+
+dnl Check whether overloading on size_t/int parameter works
+AC_MSG_CHECKING(if size_t and int are different types)
+AC_TRY_RUN([
+#include <stdlib.h>
+
+void wxFoo(int i) { }
+void wxFoo(size_t n) { }
+
+int main()
+{
+    int i;
+    size_t n;
+    wxFoo(0);
+    wxFoo(1);
+    wxFoo(0u);
+    wxFoo(i);
+    wxFoo(n);
+
+    return 0;
+}
+
+    ],
+    AC_DEFINE(wxUSE_SIZE_T_STRING_OPERATOR) AC_MSG_RESULT(yes),
+    AC_MSG_RESULT(no),
+    AC_MSG_RESULT(no assumed for cross-compilation))
 
 AC_LANG_RESTORE
 
@@ -1100,49 +1137,60 @@ if test "$wxUSE_QT" = 1; then
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
-   AC_MSG_CHECKING(for Motif/Lesstif includes)
-   AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE,Xm/Xm.h)
-   if test "$ac_find_includes" != "" ; then
-     AC_MSG_RESULT(found $ac_find_includes)
-     AC_MSG_CHECKING(for Motif/Lesstif library)
-     AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xm)
-     if test "$ac_find_libraries" != "" ; then
-       AC_INCLUDE_PATH_EXIST($ac_find_includes,$CHECK_INCLUDE)
-       AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-       CHECK_LINK="$CHECK_LIB $ac_path_to_link"
-       CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
-       AC_MSG_RESULT(found at $ac_find_libraries)
-       AC_MSG_CHECKING(for Xt library)
-       AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
-       if test "$ac_find_libraries" != "" ; then
-         AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-         CHECK_LINK="$CHECK_LIB $ac_path_to_link"
-         AC_MSG_RESULT(found at $ac_find_libraries)
-         AC_MSG_CHECKING(for Xpm library)
-         AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
-         if test "$ac_find_libraries" != "" ; then
-           AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
-           CHECK_LINK="$CHECK_LIB $ac_path_to_link"
-           AC_MSG_RESULT(found at $ac_find_libraries)
-         else
-           AC_MSG_ERROR(no)
-         fi
-       else
-         AC_MSG_ERROR(no)
-       fi
-     else
-       AC_MSG_ERROR(no)
-     fi
-  else
-     AC_MSG_ERROR(no)
-  fi
+    AC_MSG_CHECKING(for Motif/Lesstif includes)
+    AC_PATH_FIND_INCLUDES($SEARCH_INCLUDE, Xm/Xm.h)
+    if test "$ac_find_includes" != "" ; then
+        AC_MSG_RESULT(found $ac_find_includes)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set CFLAGS to contain the location of Xm/Xm.h)
+    fi
 
-  GUI_TK_LINK="-lXm -lXpm -lXmu -lXt -lX11 -lm"
-  GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
-  TOOLKIT=MOTIF
-  TOOLKIT_DEF=__WXMOTIF__
-  WX_LINK=-lwx_motif2
-  MAKEINCLUDE=../motif.inc
+    AC_MSG_CHECKING(for Motif/Lesstif library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB, Xm)
+    if test "$ac_find_libraries" != "" ; then
+        AC_INCLUDE_PATH_EXIST($ac_find_includes, $CHECK_INCLUDE)
+        AC_LINK_PATH_EXIST($ac_find_libraries, $CHECK_LIB)
+
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        CHECK_INCLUDE="$CHECK_INCLUDE $ac_path_to_include"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXm)
+    fi
+	
+    AC_MSG_CHECKING(for Xt library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xt)
+    if test "$ac_find_libraries" != "" ; then
+        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(please set LDFLAGS to contain the location of libXt)
+    fi
+        
+    XPM_LINK=""
+    AC_MSG_CHECKING(for Xpm library)
+    AC_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
+    if test "$ac_find_libraries" != "" ; then
+        AC_LINK_PATH_EXIST($ac_find_libraries,$CHECK_LIB)
+        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
+        XPM_LINK="-lXpm "
+        AC_DEFINE(wxHAVE_LIB_XPM)
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_RESULT(no)
+        AC_MSG_WARN(library will be compiled without support for images in XPM format)
+    fi
+
+    GUI_TK_LINK="-lXm " $XPM_LINK "-lXmu -lXt -lX11 -lm"
+    GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
+    TOOLKIT=MOTIF
+    TOOLKIT_DEF=__WXMOTIF__
+    WX_LINK=-lwx_motif2
+    MAKEINCLUDE=../motif.inc
 fi
 
 if test "$TOOLKIT" = ""; then
@@ -1288,6 +1336,26 @@ fi
 
 if test "$wxUSE_SERIAL" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_SERIAL,$wxUSE_SERIAL)
+fi
+
+dnl ------------------------------------------------------------------------
+dnl wxSocket
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_SOCKETS" = "1"; then
+    dnl determine the type of third argument for getsockname
+    AC_MSG_CHECKING(the type of the third argument of getsockname)
+    AC_TRY_COMPILE(
+        [#include <sys/socket.h>],
+        [size_t len; getsockname(0, NULL, &len);],
+        AC_DEFINE(SOCKLEN_T, size_t) AC_MSG_RESULT(size_t),
+        AC_TRY_COMPILE(
+            [#include <sys/socket.h>],
+            [int len; getsockname(0, NULL, &len);],
+            AC_DEFINE(SOCKLEN_T, int) AC_MSG_RESULT(int),
+            AC_MSG_RESULT(unknown)
+        )
+    )
 fi
 
 dnl ------------------------------------------------------------------------

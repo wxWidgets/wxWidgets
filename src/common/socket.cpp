@@ -73,23 +73,24 @@ void wxMacProcessEvents() ;
 #endif
 
 #if defined(__WINDOWS__)
-#include <winsock.h>
+    #include <winsock.h>
 #endif // __WINDOWS__
 
 #if defined(__UNIX__)
 
 #ifdef VMS
-#include <socket.h>
-#else
-#include <sys/socket.h>
-#endif
+    #include <socket.h>
+#else // !VMS
+    #include <sys/socket.h>
+#endif // VMS/!VMS
+
 #include <sys/ioctl.h>
 
 #include <sys/time.h>
 #include <unistd.h>
 
 #ifdef sun
-#include <sys/filio.h>
+    #include <sys/filio.h>
 #endif
 
 #endif // __UNIX__
@@ -98,30 +99,31 @@ void wxMacProcessEvents() ;
 #include <errno.h>
 
 #ifdef __VISUALC__
-#include <io.h>
+    #include <io.h>
 #endif
 
 #if defined(__WXMOTIF__) || defined(__WXXT__)
-#include <X11/Intrinsic.h>
+    #include <X11/Intrinsic.h>
 
-/////////////////////////////
-// Needs internal variables
-/////////////////////////////
-#ifdef __WXXT__
-#define Uses_XtIntrinsic
-#endif
-
-#endif
+    /////////////////////////////
+    // Needs internal variables
+    /////////////////////////////
+    #ifdef __WXXT__
+        #define Uses_XtIntrinsic
+    #endif
+#endif // Motif or Xt
 
 #if defined(__WXGTK__)
-#include <gtk/gtk.h>
+    #include <gtk/gtk.h>
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
 #include "wx/module.h"
+
 #define WXSOCK_INTERNAL
+
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
@@ -174,11 +176,11 @@ int PASCAL FAR __WSAFDIsSet(SOCKET fd, fd_set FAR *set)
 #endif
 
 #if defined(__WINDOWS__)
-#define PROCESS_EVENTS() wxYield()
+    #define PROCESS_EVENTS() wxYield()
 #elif defined(__WXXT__) || defined(__WXMOTIF__)
-#define PROCESS_EVENTS() XtAppProcessEvent(wxAPP_CONTEXT, XtIMAll)
+    #define PROCESS_EVENTS() XtAppProcessEvent(wxAPP_CONTEXT, XtIMAll)
 #elif defined(__WXGTK__)
-#define PROCESS_EVENTS() gtk_main_iteration()
+    #define PROCESS_EVENTS() gtk_main_iteration()
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -205,12 +207,12 @@ public:
 // ClassInfos
 // --------------------------------------------------------------
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxSocketBase, wxObject)
-IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
-IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
-IMPLEMENT_CLASS(wxSocketHandler, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
-IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
+    IMPLEMENT_CLASS(wxSocketBase, wxObject)
+    IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
+    IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
+    IMPLEMENT_CLASS(wxSocketHandler, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 #endif
 
 class wxSockWakeUp : public wxTimer 
@@ -532,24 +534,14 @@ void wxSocketBase::Discard()
 #undef MAX_BUFSIZE
 }
 
-// If what? Who seems to need unsigned int?
-// BTW uint isn't even defined on wxMSW for VC++ for some reason. Even if it
-// were, getpeername/getsockname don't take unsigned int*, they take int*.
-//
-// Under glibc 2.0.7, socketbits.h declares socklen_t to be unsigned int
-// and it uses *socklen_t as the 3rd parameter. Robert.
-
-// JACS - How can we detect this?
-// Meanwhile, if your compiler complains about socklen_t,
-// switch lines below.
-
-#if wxHAVE_GLIBC2
-#   typedef socklen_t wxSOCKET_INT;
-#elif defined(__AIX__)
-#   typedef size_t wxSOCKET_INT;
-#else
-#   typedef int wxSOCKET_INT;
-#endif
+// this is normally defined by configure, but if it wasn't try to do it here
+#ifndef SOCKLEN_T
+    #if wxHAVE_GLIBC2
+        typedef socklen_t SOCKLEN_T;
+    #else
+        typedef int SOCKET_INT;
+    #endif
+#endif // SOCKLEN_T
 
 // --------------------------------------------------------------
 // wxSocketBase socket info functions
@@ -558,7 +550,7 @@ void wxSocketBase::Discard()
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  wxSOCKET_INT len_addr = sizeof(my_addr);
+  SOCKLEN_T len_addr = (SOCKLEN_T)sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
@@ -573,13 +565,12 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
 bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 {
   struct sockaddr my_addr;
-  wxSOCKET_INT len_addr = sizeof(my_addr);
+  SOCKLEN_T len_addr = (SOCKLEN_T)sizeof(my_addr);
 
   if (m_fd < 0)
     return FALSE;
 
   if (getsockname(m_fd, (struct sockaddr *)&my_addr, &len_addr) < 0)
-
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);

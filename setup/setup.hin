@@ -72,6 +72,10 @@
  * Have glibc2
  */
 #define wxHAVE_GLIBC2 0
+/*
+ * Use libXpm
+ */
+#define wxHAVE_LIB_XPM 0
 
 /* ------------------------------------------------------------------------ */
 /* GUI control options (always enabled in wxGTK)                            */
@@ -167,6 +171,13 @@
  * thread-safe version of wcstombs()).
  */
 #define wxUSE_WCSRTOMBS 0
+
+/*
+ * On some platforms overloading on size_t/int doesn't work, yet we'd like
+ * to define both size_t and int version of wxString::operator[] because it
+ * should really be size_t, but a lot of old, broken code uses int indices.
+ */
+#define wxUSE_SIZE_T_STRING_OPERATOR 1
 
 /* ------------------------------------------------------------------------ */
 /* misc options                                                             */
@@ -353,6 +364,9 @@
    Usually this is either `int' or `gid_t'.  */
 #undef GETGROUPS_T
 
+/* The type of 3rd argument to getsockname() - usually size_t or int */
+#undef SOCKLEN_T
+
 /* Define if the `getloadavg' function needs to be run setuid or setgid.  */
 #undef GETLOADAVG_PRIVILEGED
 
@@ -373,6 +387,9 @@
 
 /* Define if you have sched.h */
 #undef HAVE_SCHED_H
+
+/* Define if you have strings.h */
+#undef HAVE_STRINGS_H
 
 /* Define if you have vprintf() */
 #undef HAVE_VPRINTF

@@ -26,7 +26,7 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#ifdef __AIX__
+#ifdef HAVE_STRINGS_H
     #include <strings.h>    // for strcasecmp()
 #endif // AIX
 
@@ -320,8 +320,10 @@ public:
     char& Last()
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
-    // on Linux-Alpha and AIX this gives overload problems
-#if !(defined(__ALPHA__) || defined(__AIX__))
+    // under Unix it is tested with configure, assume it works on other
+    // platforms (there might be overloading problems if size_t and int are
+    // the same type)
+#if !defined(__UNIX__) || defined(wxUSE_SIZE_T_STRING_OPERATOR)
     // operator version of GetChar
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }

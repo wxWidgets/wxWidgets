@@ -141,6 +141,14 @@
     #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXSTUBS__]"
 #endif
 
+// ============================================================================
+// non portable C++ features
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// check for native bool type and TRUE/FALSE constants
+// ----------------------------------------------------------------------------
+
 #if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXSTUBS__)
     // Bool is now obsolete, use bool instead
     // typedef int Bool;
@@ -157,43 +165,35 @@
     #endif
 #endif // TRUE/FALSE
 
-// VC++ 4.0 is 1000.
+// Add more tests here for Windows compilers that already define bool
+// (under Unix, configure tests for this)
+#ifndef HAVE_BOOL
+    #if defined( __MWERKS__ )
+        #if (__MWERKS__ >= 0x1000) && !__option(bool)
+            #define HAVE_BOOL
+        #endif
+    #elif defined(__VISUALC__) && (__VISUALC__ == 1020)
+        // in VC++ 4.2 the bool keyword is reserved (hence can't be typedefed)
+        // but not implemented, so we must #define it
+        #define bool unsigned int
+    #elif defined(__VISUALC__) && (__VISUALC__ > 1020)
+        // VC++ supports bool since 4.2
+        #define HAVE_BOOL
+    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)
+        // Borland 5.0+ supports bool
+        #define HAVE_BOOL
+    #elif defined(__WATCOMC__) && (__WATCOMC__ >= 1100)
+        // Watcom 11+ supports bool
+        #define HAVE_BOOL
+    #endif // compilers
+#endif // HAVE_BOOL
 
-// Add more tests here for compilers that don't already define bool.
-#if defined( __MWERKS__ )
-    #if (__MWERKS__ < 0x1000) || !__option(bool)
-        typedef unsigned int bool;
-    #endif
-#elif defined(__SC__)
+#if !defined(HAVE_BOOL) && !defined(bool)
+    // NB: of course, this doesn't replace the standard type, because, for
+    //     example, overloading based on bool/int parameter doesn't work and
+    //     so should be avoided in portable programs
     typedef unsigned int bool;
-#elif defined(__SALFORDC__)
-    typedef unsigned int bool;
-#elif defined(__VISUALC__) && (__VISUALC__ <= 1000)
-    typedef unsigned int bool;
-#elif defined(__VISUALC__) && (__VISUALC__ == 1020)
-    #define bool unsigned int
-#elif defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
-    typedef unsigned int bool;
-#elif defined(__WATCOMC__)
-    #if (__WATCOMC__ < 1100)
-        typedef unsigned int bool;
-    #endif
-#elif defined(__SUNCC__) || defined(__SUNPRO_CC)
-    #ifdef __SUNPRO_CC
-        // starting from version 5.0 Sun CC understands 'bool'
-        #if __SUNPRO_CC <= 0x0420
-            // If we use int, we get identically overloaded functions in config.cpp
-            typedef unsigned char bool;
-        #endif // Sun CC version
-    #else
-        #error "Unknown compiler: only Sun's CC and gcc are currently recognised."
-    #endif // Sun CC
-#elif defined(__SGI_CC__)
-    // test is taken from SGI "C++ Programming Guide"
-    #ifndef _BOOL 
-        typedef unsigned char bool; 
-    #endif // _BOOL
-#endif
+#endif // bool
 
 typedef unsigned char wxByte;
 typedef short int WXTYPE;
@@ -201,9 +201,9 @@ typedef int wxWindowID;
 
 // Macro to cut down on compiler warnings.
 #if REMOVE_UNUSED_ARG
-#define WXUNUSED(identifier) /* identifier */
+    #define WXUNUSED(identifier) /* identifier */
 #else  // stupid, broken compiler
-#define WXUNUSED(identifier) identifier
+    #define WXUNUSED(identifier) identifier
 #endif
 
 /*
@@ -211,26 +211,6 @@ typedef int wxWindowID;
  */
 
 #ifdef __WXMSW__
-
-/*
-#ifdef __BORLANDC__
-
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT __export
-#    define WXDLLEXPORT_DATA(type) type __export
-#    define WXDLLEXPORT_CTORFN __export
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT __import
-#    define WXDLLEXPORT_DATA(type) type __import
-#    define WXDLLEXPORT_CTORFN
-#  else
-#    define WXDLLEXPORT
-#    define WXDLLEXPORT_DATA(type) type
-#    define WXDLLEXPORT_CTORFN
-#  endif
-
-#else
-*/
 
 // _declspec works in BC++ 5 and later, as well as VC++
 #if defined(__VISUALC__) || defined(__BORLANDC__)
@@ -255,12 +235,11 @@ typedef int wxWindowID;
 #  define WXDLLEXPORT_CTORFN
 #endif
 
-#else
-// Non-Windows
+#else // !Windows
 #  define WXDLLEXPORT
 #  define WXDLLEXPORT_DATA(type) type
 #  define WXDLLEXPORT_CTORFN
-#endif
+#endif // Win/!Win
 
 // For ostream, istream ofstream
 #if defined(__BORLANDC__) && defined( _RTLDLL )
@@ -275,27 +254,6 @@ class WXDLLEXPORT wxEvent;
  /** symbolic constant used by all Find()-like functions returning positive
       integer on success as failure indicator */
 #define wxNOT_FOUND       (-1)
-
-// ----------------------------------------------------------------------------
-// Error codes
-// ----------------------------------------------------------------------------
-
-#ifdef ERR_PARAM
-#undef ERR_PARAM
-#endif
-
-/// Standard error codes
-enum  ErrCode
-{
-  /// invalid parameter (in broad sense)
-  ERR_PARAM = (-4000),
-  /// no more data (iteration functions usually return this)
-  ERR_NODATA,
-  /// user cancelled the operation
-  ERR_CANCEL,
-  /// no error (the only non negative error code)
-  ERR_SUCCESS = 0
-};
 
 // ----------------------------------------------------------------------------
 /** @name Very common macros */
