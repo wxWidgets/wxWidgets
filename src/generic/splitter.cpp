@@ -352,24 +352,54 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-void wxSplitterWindow::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxSplitterWindow::OnSize(wxSizeEvent& event)
 {
-    int cw, ch;
-    GetClientSize( &cw, &ch );
-    if ( m_windowTwo )
+    // only process this message if we're not iconized - otherwise iconizing
+    // and restoring a window containing the splitter has a funny side effect
+    // of changing the splitter position!
+    wxWindow *parent = GetParent();
+    while ( parent && !parent->IsTopLevel() )
     {
-        if ( m_splitMode == wxSPLIT_VERTICAL )
-        {
-            if ( m_sashPosition >= (cw - 5) )
-                m_sashPosition = wxMax(10, cw - 40);
-        }
-        if ( m_splitMode == wxSPLIT_HORIZONTAL )
-        {
-            if ( m_sashPosition >= (ch - 5) )
-                m_sashPosition = wxMax(10, ch - 40);
-        }
+        parent = parent->GetParent();
     }
-    SizeWindows();
+
+    bool iconized = false;
+    wxFrame *frame = wxDynamicCast(parent, wxFrame);
+    if ( frame )
+        iconized = frame->IsIconized();
+    else
+    {
+        wxDialog *dialog = wxDynamicCast(parent, wxDialog);
+        if ( dialog )
+            iconized = dialog->IsIconized();
+        else
+            wxFAIL_MSG(_T("should have a top level frame or dialog parent!"));
+    }
+
+    if ( iconized )
+    {
+        event.Skip();
+    }
+    else
+    {
+        int cw, ch;
+        GetClientSize( &cw, &ch );
+        if ( m_windowTwo )
+        {
+            if ( m_splitMode == wxSPLIT_VERTICAL )
+            {
+                if ( m_sashPosition >= (cw - 5) )
+                    m_sashPosition = wxMax(10, cw - 40);
+            }
+            if ( m_splitMode == wxSPLIT_HORIZONTAL )
+            {
+                if ( m_sashPosition >= (ch - 5) )
+                    m_sashPosition = wxMax(10, ch - 40);
+            }
+        }
+
+        SizeWindows();
+    }
 }
 
 bool wxSplitterWindow::SashHitTest(int x, int y, int tolerance)
