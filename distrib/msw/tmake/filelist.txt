@@ -112,6 +112,7 @@ fs_inet.cpp	C
 fs_zip.cpp	C
 ftp.cpp	C	S
 gdicmn.cpp	C
+gifdecod.cpp	C
 hash.cpp	C
 helpbase.cpp	C
 http.cpp	C	S
@@ -120,6 +121,7 @@ image.cpp	C
 imaggif.cpp	C
 imagjpeg.cpp	C
 imagpng.cpp	C
+imagpnm.cpp	C
 intl.cpp	C
 ipcbase.cpp	C
 layout.cpp	C
@@ -456,6 +458,7 @@ fs_zip.h	W
 gauge.h	W
 gdicmn.h	W
 gdiobj.h	W
+gifdecod.h	W
 grid.h	W
 gsocket.h	W
 hash.h	W
@@ -828,6 +831,7 @@ colrdlgg.h	N
 dcpsg.h	N
 dirdlgg.h	N
 fontdlgg.h	N
+filedlgg.h	N
 gridg.h	N
 helpext.h	N
 helpwxht.h	N
