@@ -62,11 +62,11 @@ WX_DEFINE_LIST(wxToolBarToolsList);
 bool wxToolBarToolBase::Enable(bool enable)
 {
     if ( m_enabled == enable )
-        return FALSE;
+        return false;
 
     m_enabled = enable;
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarToolBase::Toggle(bool toggle)
@@ -74,42 +74,42 @@ bool wxToolBarToolBase::Toggle(bool toggle)
     wxASSERT_MSG( CanBeToggled(), _T("can't toggle this tool") );
 
     if ( m_toggled == toggle )
-        return FALSE;
+        return false;
 
     m_toggled = toggle;
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarToolBase::SetToggle(bool toggle)
 {
     wxItemKind kind = toggle ? wxITEM_CHECK : wxITEM_NORMAL;
     if ( m_kind == kind )
-        return FALSE;
+        return false;
 
     m_kind = kind;
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarToolBase::SetShortHelp(const wxString& help)
 {
     if ( m_shortHelpString == help )
-        return FALSE;
+        return false;
 
     m_shortHelpString = help;
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarToolBase::SetLongHelp(const wxString& help)
 {
     if ( m_longHelpString == help )
-        return FALSE;
+        return false;
 
     m_longHelpString = help;
 
-    return TRUE;
+    return true;
 }
 
 wxToolBarToolBase::~wxToolBarToolBase()
@@ -304,20 +304,20 @@ wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
 
 bool wxToolBarBase::DeleteToolByPos(size_t pos)
 {
-    wxCHECK_MSG( pos < GetToolsCount(), FALSE,
+    wxCHECK_MSG( pos < GetToolsCount(), false,
                  _T("invalid position in wxToolBar::DeleteToolByPos()") );
 
     wxToolBarToolsList::compatibility_iterator node = m_tools.Item(pos);
 
     if ( !DoDeleteTool(pos, node->GetData()) )
     {
-        return FALSE;
+        return false;
     }
 
     delete node->GetData();
     m_tools.Erase(node);
 
-    return TRUE;
+    return true;
 }
 
 bool wxToolBarBase::DeleteTool(int id)
@@ -334,13 +334,13 @@ bool wxToolBarBase::DeleteTool(int id)
 
     if ( !node || !DoDeleteTool(pos, node->GetData()) )
     {
-        return FALSE;
+        return false;
     }
 
     delete node->GetData();
     m_tools.Erase(node);
 
-    return TRUE;
+    return true;
 }
 
 wxToolBarToolBase *wxToolBarBase::FindById(int id) const
@@ -364,6 +364,43 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
     return tool;
 }
 
+void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
+{
+    wxCHECK_RET( tool, _T("NULL tool in wxToolBarTool::UnToggleRadioGroup") );
+
+    if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+        return;
+
+    wxToolBarToolsList::compatibility_iterator node = m_tools.Find(tool);
+    wxCHECK_RET( node, _T("invalid tool in wxToolBarTool::UnToggleRadioGroup") );
+
+    wxToolBarToolsList::compatibility_iterator nodeNext = node->GetNext();
+    while ( nodeNext )
+    {
+        wxToolBarToolBase *tool = nodeNext->GetData();
+
+        if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+            break;
+
+        tool->Toggle(false);
+
+        nodeNext = nodeNext->GetNext();
+    }
+
+    wxToolBarToolsList::compatibility_iterator nodePrev = node->GetPrevious();
+    while ( nodePrev )
+    {
+        wxToolBarToolBase *tool = nodePrev->GetData();
+
+        if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+            break;
+
+        tool->Toggle(false);
+
+        nodePrev = nodePrev->GetPrevious();
+    }
+}
+
 void wxToolBarBase::ClearTools()
 {
     WX_CLEAR_LIST(wxToolBarToolsList, m_tools);
@@ -371,7 +408,7 @@ void wxToolBarBase::ClearTools()
 
 bool wxToolBarBase::Realize()
 {
-    return TRUE;
+    return true;
 }
 
 wxToolBarBase::~wxToolBarBase()
@@ -402,6 +439,7 @@ void wxToolBarBase::ToggleTool(int id, bool toggle)
     {
         if ( tool->Toggle(toggle) )
         {
+            UnToggleRadioGroup(tool);
             DoToggleTool(tool, toggle);
         }
     }
@@ -472,7 +510,7 @@ int wxToolBarBase::GetToolPos(int id) const
 bool wxToolBarBase::GetToolState(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+    wxCHECK_MSG( tool, false, _T("no such tool") );
 
     return tool->IsToggled();
 }
@@ -480,7 +518,7 @@ bool wxToolBarBase::GetToolState(int id) const
 bool wxToolBarBase::GetToolEnabled(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, FALSE, _T("no such tool") );
+    wxCHECK_MSG( tool, false, _T("no such tool") );
 
     return tool->IsEnabled();
 }
@@ -520,7 +558,7 @@ void wxToolBarBase::SetRows(int WXUNUSED(nRows))
 // event processing
 // ----------------------------------------------------------------------------
 
-// Only allow toggle if returns TRUE
+// Only allow toggle if returns true
 bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, id);
@@ -535,7 +573,7 @@ bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
     // Send events to this toolbar instead (and thence up the window hierarchy)
     GetEventHandler()->ProcessEvent(event);
 
-    return TRUE;
+    return true;
 }
 
 // Call when right button down.
@@ -663,7 +701,7 @@ bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
 
     wxGreyOutImage(in, out, darkCol, lightCol, bgCol);
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_TOOLBAR
