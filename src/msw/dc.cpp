@@ -844,8 +844,11 @@ void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
     wxCHECK_RET( icon.Ok(), wxT("invalid icon in DrawIcon") );
 
-    //::DrawIcon(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon));
+#ifdef __WIN32__
     ::DrawIconEx(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon), icon.GetWidth(), icon.GetHeight(), 0, NULL, DI_NORMAL);
+#else
+    ::DrawIcon(GetHdc(), XLOG2DEV(x), YLOG2DEV(y), GetHiconOf(icon));
+#endif
 
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + icon.GetWidth(), y + icon.GetHeight());
