@@ -106,6 +106,13 @@ public:
     // return the tab at this position or -1 if none
     int HitTest(const wxPoint& pt) const;
 
+    // input handling
+    // --------------
+
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = 0l,
+                               const wxString& strArg = wxEmptyString);
+
 protected:
     virtual wxNotebookPage *DoRemovePage(int nPage);
 
@@ -119,11 +126,6 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-
-    // input handling
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = 0l,
-                               const wxString& strArg = wxEmptyString);
 
     // common part of all ctors
     void Init();

@@ -49,6 +49,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/imaglist.h"
 #include "wx/notebook.h"
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
@@ -125,6 +126,7 @@ class MyUnivFrame : public wxFrame
 public:
     // ctor(s)
     MyUnivFrame(const wxString& title);
+    virtual ~MyUnivFrame();
 
 protected:
     // event handlers
@@ -141,6 +143,10 @@ protected:
 
 private:
     void TestTextCtrlReplace(wxTextCtrl *text, const wxString& value);
+
+#ifdef TEST_NOTEBOOK
+    wxImageList *m_imagelist;
+#endif // TEST_NOTEBOOK
 
 #ifdef TEST_SPIN
     wxTextCtrl *m_textSpin1,
@@ -474,12 +480,20 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif // TEST_COMBO
 
 #ifdef TEST_NOTEBOOK
+    m_imagelist = new wxImageList(32, 32);
+    m_imagelist->Add(wxTheApp->GetStdIcon(wxICON_INFORMATION));
+    m_imagelist->Add(wxTheApp->GetStdIcon(wxICON_WARNING));
+    m_imagelist->Add(wxTheApp->GetStdIcon(wxICON_ERROR));
 #if 1
     wxNotebook *nb = new wxNotebook(this, -1,
                                     wxPoint(10, 30), wxSize(300, 200));
-    nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
-    nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
-    nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
+    nb->SetImageList(m_imagelist);
+    nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"),
+                FALSE, 0);
+    nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"),
+                TRUE, 1);
+    nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"),
+                FALSE, 2);
 #else
     wxNotebook *
 #endif
@@ -489,6 +503,22 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
     nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
     nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
+
+#if 0
+    nb = new wxNotebook(this, -1, wxPoint(350, 30), wxSize(300, 200),
+                        wxNB_LEFT);
+
+    nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
+
+    nb = new wxNotebook(this, -1, wxPoint(350, 300), wxSize(300, 200),
+                        wxNB_RIGHT);
+
+    nb->AddPage(new wxStaticText(nb, _T("&First label")), _T("&First page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Second label")), _T("&Second page"));
+    nb->AddPage(new wxStaticText(nb, _T("&Third label")), _T("&Third page"));
+#endif
 #endif // TEST_NOTEBOOK
 
 #ifdef TEST_TEXT
@@ -539,6 +569,13 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 
 #endif
 #endif // TEST_TEXT
+}
+
+MyUnivFrame::~MyUnivFrame()
+{
+#ifdef TEST_NOTEBOOK
+    delete m_imagelist;
+#endif // TEST_NOTEBOOK
 }
 
 void MyUnivFrame::TestTextCtrlReplace(wxTextCtrl *text, const wxString& value)

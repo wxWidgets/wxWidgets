@@ -346,12 +346,18 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
     wxBitmap bmp;
     if ( HasImage(n) )
     {
+        int image = m_images[n];
+
 #ifdef __WXMSW__    // FIXME
+        int w, h;
+        m_imageList->GetSize(n, w, h);
+        bmp.Create(w, h);
         wxMemoryDC dc;
         dc.SelectObject(bmp);
-        m_imageList->Draw(m_images[n], dc, 0, 0);
+        dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
+        m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, TRUE);
 #else
-        bmp = *m_imageList->GetBitmap(m_images[n]);
+        bmp = *m_imageList->GetBitmap(image);
 #endif
     }
 
@@ -842,6 +848,52 @@ bool wxStdNotebookInputHandler::HandleKey(wxControl *control,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
+    // ignore the key releases
+    if ( pressed )
+    {
+        wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+
+        int page = 0;
+        wxControlAction action;
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_UP:
+                if ( notebook->IsVertical() )
+                    action = wxACTION_NOTEBOOK_PREV;
+                break;
+
+            case WXK_LEFT:
+                if ( !notebook->IsVertical() )
+                    action = wxACTION_NOTEBOOK_PREV;
+                break;
+
+            case WXK_DOWN:
+                if ( notebook->IsVertical() )
+                    action = wxACTION_NOTEBOOK_NEXT;
+                break;
+
+            case WXK_RIGHT:
+                if ( !notebook->IsVertical() )
+                    action = wxACTION_NOTEBOOK_NEXT;
+                break;
+
+            case WXK_HOME:
+                action = wxACTION_NOTEBOOK_GOTO;
+                // page = 0; -- already has this value
+                break;
+
+            case WXK_END:
+                action = wxACTION_NOTEBOOK_GOTO;
+                page = notebook->GetPageCount() - 1;
+                break;
+        }
+
+        if ( !!action )
+        {
+            return control->PerformAction(action, page);
+        }
+    }
+
     return wxStdInputHandler::HandleKey(control, event, pressed);
 }
 
