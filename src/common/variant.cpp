@@ -35,7 +35,7 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 
-wxVariant wxNullVariant;
+wxVariant WXDLLEXPORT wxNullVariant;
 
 /*
  * wxVariantDataList

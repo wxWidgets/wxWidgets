@@ -242,7 +242,7 @@ protected:
     wxString        m_name;
 };
 
-extern wxVariant wxNullVariant;
+extern wxVariant WXDLLEXPORT wxNullVariant;
 
 #endif
     // _WX_VARIANT_H_
