@@ -185,7 +185,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, char *title, int x, int y, int 
                                       "-------", "owner-drawn", "listbox" };
 
   wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
-  uint ui;
+  unsigned int ui;
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
     astrChoices[ui] = aszChoices[ui];
 
@@ -211,7 +211,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, char *title, int x, int y, int 
   static const char* aszColors[] = { "Red", "Blue", "Pink",
                                      "Green", "Yellow", 
                                      "Black", "Violet"  };
-  struct { uint r, g, b; } aColors[] = { {255,0,0}, {0,0,255}, {255,128,192},
+  struct { unsigned int r, g, b; } aColors[] = { {255,0,0}, {0,0,255}, {255,128,192},
                                         {0,255,0}, {255,255,128}, 
                                         {0,0,0}, {128,0,255} };
   astrChoices = new wxString[WXSIZEOF(aszColors)];
@@ -269,7 +269,7 @@ void OwnerDrawnFrame::OnAbout(wxCommandEvent& event)
 void OwnerDrawnFrame::OnListboxSelect(wxCommandEvent& event)
 {
   wxString strSelection;
-  uint nSel = event.GetSelection();
+  unsigned int nSel = event.GetSelection();
   strSelection.sprintf("item %d selected (%schecked)", nSel,
                        m_pListBox->IsChecked(nSel) ? "" : "not ");
   SetStatusText(strSelection);
@@ -286,7 +286,7 @@ void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& event)
 void OwnerDrawnFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
   wxString strSelection;
-  uint nItem = event.GetInt();
+  unsigned int nItem = event.GetInt();
   strSelection.sprintf("item %d was %schecked", nItem,
                        m_pListBox->IsChecked(nItem) ? "" : "un");
   SetStatusText(strSelection);
