@@ -9,11 +9,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __GTKPALETTEH__
-#define __GTKPALETTEH__
+#ifndef __WX_PALETTEG_H__
+#define __WX_PALETTEG_H__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "paletteg.h"
 #endif
 
 #include "wx/defs.h"
@@ -56,4 +56,4 @@ class wxPalette: public wxGDIObject
 #define wxColorMap wxPalette
 #define wxColourMap wxPalette
 
-#endif // __GTKPALETTEH__
+#endif // __WX_PALETTEG_H__
