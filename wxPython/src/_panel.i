@@ -51,6 +51,25 @@ public:
 
     void InitDialog();
 
+
+    DocDeclStr(
+        virtual void , SetFocus(),
+        "Overrides `wx.Window.SetFocus`.  This method
+uses the (undocumented) mix-in class wxControlContainer which manages
+the focus and TAB logic for controls which usually have child controls.
+In practice, if you call this method and the panel has at least
+one child window, then the focus will be given to the child window.
+", "
+:see: `wx.FocusEvent`, `wx.Window.SetFocus`, `SetFocusIgnoringChildren`");
+    
+
+    DocDeclStr(
+        virtual void , SetFocusIgnoringChildren(),
+        "In contrast to `SetFocus` (see above) this will set the focus to the
+panel even of there are child windows in the panel. This is only
+rarely needed.", "");
+    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
