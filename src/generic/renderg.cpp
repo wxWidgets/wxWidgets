@@ -75,7 +75,7 @@ wxRendererNative& wxRendererNative::GetGeneric()
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK__)
 
 /* static */
-wxRendererNative& wxRendererGeneric::Get()
+wxRendererNative& wxRendererNative::Get()
 {
     return GetGeneric();
 }
