@@ -712,8 +712,14 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
     }
     dialogItem->SetStyle(windowStyle);
     dialogItem->SetValue1(isModal);
-    if (windowStyle & wxDIALOG_MODAL) // Uses style in wxWin 2
+#ifdef __VMS
+#pragma message disable CODCAUUNR
+#endif
+   if (windowStyle & wxDIALOG_MODAL) // Uses style in wxWin 2
         dialogItem->SetValue1(TRUE);
+#ifdef __VMS
+#pragma message enable CODCAUUNR
+#endif
 
     dialogItem->SetName(name);
     dialogItem->SetTitle(title);
