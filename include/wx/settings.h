@@ -171,7 +171,7 @@ public:
 // include the declaration of the real platform-dependent class
 // ----------------------------------------------------------------------------
 
-class wxSystemSettings : public wxSystemSettingsNative
+class WXDLLEXPORT wxSystemSettings : public wxSystemSettingsNative
 {
 public:
 #ifdef __WXUNIVERSAL__
@@ -184,10 +184,10 @@ public:
     // Get system screen design (desktop, pda, ..) used for
     // laying out various dialogs.
     static wxSystemScreen GetScreen();
-    
+
     // Override default.
     static void SetScreen( wxSystemScreen screen );
-    
+
     // Value
     static wxSystemScreen ms_screen;
 

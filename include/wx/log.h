@@ -241,7 +241,7 @@ private:
 class WXDLLEXPORT wxLogStderr : public wxLog
 {
     DECLARE_NO_COPY_CLASS(wxLogStderr)
-        
+
 public:
     // redirect log output to a FILE
     wxLogStderr(FILE *fp = (FILE *) NULL);
@@ -563,7 +563,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
-extern void wxSafeShowMessage(const wxString& title, const wxString& text);
+void WXDLLEXPORT wxSafeShowMessage(const wxString& title, const wxString& text);
 
 // ----------------------------------------------------------------------------
 // debug only logging functions: use them with API name and error code
