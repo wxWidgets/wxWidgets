@@ -108,7 +108,7 @@ wxVideoXANIM::wxVideoXANIM()
     m_xanim_detector = new wxVideoXANIMProcess(this);
     m_xanim_started  = FALSE;
     m_paused         = FALSE;
-    m_filename       = "";
+    m_filename       = wxEmptyString;
     m_remove_file    = FALSE;
 }
 
@@ -122,7 +122,7 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
     m_size[0]        = 0;
     m_size[1]        = 0;
     
-    m_filename       = wxGetTempFileName("vidxa");
+    m_filename       = wxGetTempFileName(_T("vidxa"));
     m_remove_file    = TRUE;
     wxFileOutputStream fout(m_filename);
     
@@ -381,7 +381,7 @@ bool wxVideoXANIM::CollectInfo()
         
         line[infoStream->LastRead()] = 0;
        
-        totalOutput += line;        
+        totalOutput += wxString::FromAscii(line); 
     }
 
     // This is good for everything ... :-)
@@ -393,7 +393,7 @@ bool wxVideoXANIM::CollectInfo()
     m_movieCodec = totalOutput(0, position);
 
     totalOutput.Remove(0, position);
-    tokenizer.SetString(totalOutput, "\n\r");
+    tokenizer.SetString(totalOutput, wxT("\n\r"));
 
     // the rest of the line
     wxString token = tokenizer.GetNextToken();
