@@ -253,7 +253,7 @@ void wxFrame::DoSetClientSize(
     HWND                            hWnd = GetHwnd();
     HWND                            hWndClient;
     RECTL                           vRect;
-    RECT                            vRect2;
+    RECTL                           vRect2;
 
     hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
     ::WinQueryWindowRect(hWndClient, &vRect);

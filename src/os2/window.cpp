@@ -979,111 +979,153 @@ void wxWindow::DoSetToolTip(
 // ---------------------------------------------------------------------------
 
 // Get total size
-void wxWindow::DoGetSize( int *width, int *height ) const
+void wxWindow::DoGetSize( 
+  int*                              pWidth
+, int*                              pHeight
+) const
 {
-    HWND hWnd = GetHwnd();
-    RECT rect;
-    GetWindowRect(hWnd, &rect);
+    HWND                            hWnd = GetHwnd();
+    RECTL                           vRect;
 
-    if ( x )
-        *x = rect.right - rect.left;
-    if ( y )
-        *y = rect.bottom - rect.top;
-}
+    ::WinQueryWindowRect(hWnd, &vRect);
 
-void wxWindow::DoGetPosition( int *x, int *y ) const
+    if (pWidth)
+        *pWidth = vRect.xRight - vRect.xLeft;
+    if (pHeight )
+        // OS/2 PM is backwards from windows
+        *pHeight = vRect.yTop - vRect.yBottom;
+} // end of wxWindow::DoGetSize
+
+void wxWindow::DoGetPosition(
+  int*                              pX
+, int*                              pY
+) const
 {
-    HWND hWnd = GetHwnd();
+    HWND                            hWnd = GetHwnd();
+    RECT                            vRect;
+    POINTL                          vPoint;
 
-    RECT rect;
-    GetWindowRect(hWnd, &rect);
+    ::WinQueryWindowRect(hWnd, &vRect);
 
-    POINT point;
-    point.x = rect.left;
-    point.y = rect.top;
+    vPoint.x = vRect.xLeft;
+    vPoint.y = vRect.yBottom;
 
-    // we do the adjustments with respect to the parent only for the "real"
+    //
+    // We do the adjustments with respect to the parent only for the "real"
     // children, not for the dialogs/frames
-    if ( !IsTopLevel() )
+    //
+    if (!IsTopLevel())
     {
-        HWND hParentWnd = 0;
-        wxWindow *parent = GetParent();
-        if ( parent )
-            hParentWnd = GetWinHwnd(parent);
+        HWND                        hParentWnd = 0;
+        wxWindow*                   pParent = GetParent();
 
+        if (pParent)
+            hParentWnd = GetWinHwnd(pParent);
+
+        //
         // Since we now have the absolute screen coords, if there's a parent we
-        // must subtract its top left corner
-        if ( hParentWnd )
+        // must subtract its bottom left corner
+        //
+        if (hParentWnd)
         {
-            ::ScreenToClient(hParentWnd, &point);
+            RECTL                   vRect2;
+
+            ::WinQueryWindowRect(hParentWnd, vRect2);
+            vPoint.x -= vRect.xLeft;
+            vPoint.y -= vRect.yBottom;
         }
 
+        //
         // We may be faking the client origin. So a window that's really at (0,
         // 30) may appear (to wxWin apps) to be at (0, 0).
-        wxPoint pt(parent->GetClientAreaOrigin());
-        point.x -= pt.x;
-        point.y -= pt.y;
+        //
+        wxPoint                     vPt(pParent->GetClientAreaOrigin());
+
+        vPoint.x -= vPt.x;
+        vPoint.y -= vPt.y;
     }
 
-    if ( x )
-        *x = point.x;
-    if ( y )
-        *y = point.y;
-}
+    if (pX)
+        *pX = vPoint.x;
+    if  y)
+        *pY = vPoint.y;
+} // end of wxWindow::DoGetPosition
 
-void wxWindow::DoScreenToClient( int *x, int *y ) const
+void wxWindow::DoScreenToClient(
+  int*                              pX
+, int*                              pY
+) const
 {
-    POINT pt;
-    if ( x )
-        pt.x = *x;
-    if ( y )
-        pt.y = *y;
+    HWND                            hWnd = GetHwnd();
+    RECTL                           vRect;
 
-    HWND hWnd = GetHwnd();
-    ::ScreenToClient(hWnd, &pt);
+    ::WinQueryWindowPos(hWnd, &vRect);
+    
+    if (pX)
+        *pX -= vRect.xLeft;
+    if (pY)
+        *pY -= vRect.yBottom;
+} // end of wxWindow::DoScreenToClient
 
-    if ( x )
-        *x = pt.x;
-    if ( y )
-        *y = pt.y;
-}
-
-void wxWindow::DoClientToScreen( int *x, int *y ) const
+void wxWindow::DoClientToScreen(
+  int*                              pX
+, int*                              pY
+) const
 {
-    POINT pt;
-    if ( x )
-        pt.x = *x;
-    if ( y )
-        pt.y = *y;
+    HWND                            hWnd = GetHwnd();
+    RECTL                           vRect;
 
-    HWND hWnd = GetHwnd();
-    ::ClientToScreen(hWnd, &pt);
+    ::WinQueryWindowPos(hWnd, &vRect);
 
-    if ( x )
-        *x = pt.x;
-    if ( y )
-        *y = pt.y;
-}
+    if (pX)
+        *pX += vRect.xLeft;
+    if (pY)
+        *pY += vRect.yBottom;
+} // end of wxWindow::DoClientToScreen
 
+//
 // Get size *available for subwindows* i.e. excluding menu bar etc.
-void wxWindow::DoGetClientSize( int *width, int *height ) const
+// Must be a frame type window
+//
+void wxWindow::DoGetClientSize(
+  int*                              pWidth
+, int*                              pHeight
+) const
 {
-    HWND hWnd = GetHwnd();
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-    if ( x )
-        *x = rect.right;
-    if ( y )
-        *y = rect.bottom;
-}
+    HWND                            hWnd = GetHwnd();
+    HWND                            hWndClient;
+    RECTL                           vRect;
 
-void wxWindow::DoMoveWindow(int x, int y, int width, int height)
+    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    ::WinQueryWindowRect(hWndClient, &vRect);
+
+    if (pX)
+        *pWidth  = vRect.xRight;
+    if (pY)
+        *pHeight = vRect.yTop;
+} // end of wxWindow::DoGetClientSize
+
+void wxWindow::DoMoveWindow(
+  int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+)
 {
-    if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
+    ::WinSetWindowPos(
+    if ( !::MoveWindow( GetHwnd()
+                       ,HWND_TOP
+                       ,(LONG)nX
+                       ,(LONG)nY
+                       ,(LONG)nWidth
+                       ,(LONG)nHeight
+                       ,SWP_SIZE | SWP_MOVE
+                       ,
+                      ))
     {
         wxLogLastError("MoveWindow");
     }
-}
+} // end of wxWindow::DoMoveWindow
 
 //
 // Set the size of the window: if the dimensions are positive, just use them,
@@ -1095,150 +1137,259 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 // the width/height to best suit our contents, otherwise we reuse the current
 // width/height
 //
-void wxWindow::DoSetSize(int x, int y,
-                         int width, int height,
-                         int sizeFlags)
+void wxWindow::DoSetSize(
+  int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+, int                               nSizeFlags
+)
 {
-    // get the current size and position...
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-    int currentW,currentH;
-    GetSize(&currentW, &currentH);
+    //
+    // Get the current size and position...
+    //
+    int                             nCurrentX;
+    int                             nCurrentY;
+    int                             nCurrentWidth;
+    int                             nCurrentHeight;
+    wxSize                          size(-1, -1);
 
+    GetPosition( &nCurrentX
+                ,&nCurrentY
+               );
+    GetSize( &nCurrentWidth
+            ,&nCurrentHeight
+           );
+
+    //
     // ... and don't do anything (avoiding flicker) if it's already ok
-    if ( x == currentX && y == currentY &&
-         width == currentW && height == currentH )
+    //
+    if ( nX == nCurrentX && 
+         nY == nCurrentY &&
+         nWidth == nCurrentWidth && 
+         nHeight == nCurrentHeight
+       )
     {
         return;
     }
 
-    if ( x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
-        x = currentX;
-    if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
-        y = currentY;
+    if (nX == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        nX = nCurrentX;
+    if (y == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        nY = nCurrentY;
 
-    AdjustForParentClientOrigin(x, y, sizeFlags);
+    AdjustForParentClientOrigin( nX
+                                ,nY
+                                ,nSizeFlags
+                               );
 
-    wxSize size(-1, -1);
-    if ( width == -1 )
+    if (nWidth == -1)
     {
-        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+        if (nSizeFlags & wxSIZE_AUTO_WIDTH)
         {
-            size = DoGetBestSize();
-            width = size.x;
+            vSize  = DoGetBestSize();
+            nWidth = vSize.x;
         }
         else
         {
-            // just take the current one
-            width = currentW;
+            //
+            // Just take the current one
+            //
+            nWidth = nCurrentWidth;
         }
     }
 
-    if ( height == -1 )
+    if (nHeight == -1)
     {
-        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+        if (nSizeFlags & wxSIZE_AUTO_HEIGHT)
         {
-            if ( size.x == -1 )
+            if (vSize.x == -1)
             {
-                size = DoGetBestSize();
+                vSize = DoGetBestSize();
             }
-            //else: already called DoGetBestSize() above
-
-            height = size.y;
+            nHeight = vSize.y;
         }
         else
         {
             // just take the current one
-            height = currentH;
+            nHeight = nCurrentHeight;
         }
     }
 
-    DoMoveWindow(x, y, width, height);
-}
+    DoMoveWindow( nX
+                 ,nY
+                 ,nWidth
+                 ,nHeight
+                );
+} // end of wxWindow::DoSetSize
 
-void wxWindow::DoSetClientSize(int width, int height)
+void wxWindow::DoSetClientSize(
+  int                               nWidth
+, int                               nHeight
+)
 {
-    wxWindow *parent = GetParent();
-    HWND hWnd = GetHwnd();
-    HWND hParentWnd = (HWND) 0;
-    if ( parent )
-        hParentWnd = (HWND) parent->GetHWND();
+    wxWindow*                       pParent = GetParent();
+    HWND                            hWnd = GetHwnd();
+    HWND                            hParentWnd = (HWND)0;
+    HWND                            hClientWnd = (HWND)0;
+    RECTL                           vRect;
+    RECT                            vRect2;
+    RECT                            vRect3;
 
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
+    hWndClient = ::WinWindowFromID(GetHwnd(), FID_CLIENT);
+    ::WinQueryWindowRect(hClientWnd, &vRect2);
 
-    RECT rect2;
-    GetWindowRect(hWnd, &rect2);
+    if (pParent)
+        hParentWnd = (HWND) pParent->GetHWND();
 
+    ::WinQueryWindowRect(hWnd, &vRect);
+    ::WinQueryWindowRect(hParentWnd, &vRect3);
+    //
     // Find the difference between the entire window (title bar and all)
     // and the client area; add this to the new client size to move the
-    // window
-    int actual_width = rect2.right - rect2.left - rect.right + width;
-    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
+    // window. OS/2 is backward from windows on height
+    //
+    int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
+    int                             nActualHeight = vRect2.yTop - vRect2.yBottom - vRect.yTop + nHeight;
 
-    // If there's a parent, must subtract the parent's top left corner
+    //
+    // If there's a parent, must subtract the parent's bottom left corner
     // since MoveWindow moves relative to the parent
+    //
+    POINTL                          vPoint;
 
-    POINT point;
-    point.x = rect2.left;
-    point.y = rect2.top;
-    if ( parent )
+    vPoint.x = vRect2.xLeft;
+    vPoint.y = vRect2.yBottom;
+    if (pParent)
     {
-        ::ScreenToClient(hParentWnd, &point);
+        vPoint.x -= vRect3.xLeft;
+        vPoint.y -= vRect3.xBottom;
     }
 
-    DoMoveWindow(point.x, point.y, actual_width, actual_height);
+    DoMoveWindow( vPoint.x
+                 ,vPoint.y
+                 ,nActualWidth
+                 ,nActualHeight
+                );
 
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
-}
+    wxSizeEvent                     vEvent( wxSize( nWidth
+                                                  ,nHeight
+                                                 )
+                                           ,m_windowId
+                                          );
+
+    vEvent.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::DoSetClientSize
 
 wxPoint wxWindow::GetClientAreaOrigin() const
 {
     return wxPoint(0, 0);
-}
+} // end of wxWindow::GetClientAreaOrigin
 
-void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
+void wxWindow::AdjustForParentClientOrigin(
+  int&                              rX
+, int&                              rY
+, int                               nSizeFlags
+)
 {
-    // don't do it for the dialogs/frames - they float independently of their
+    //
+    // Don't do it for the dialogs/frames - they float independently of their
     // parent
-    if ( !IsTopLevel() )
+    //
+    if (!IsTopLevel())
     {
-        wxWindow *parent = GetParent();
-        if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
+        wxWindow*                   pParent = GetParent();
+
+        if (!(nSizeFlags & wxSIZE_NO_ADJUSTMENTS) && pParent)
         {
-            wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x; y += pt.y;
+            wxPoint                 vPoint(pParent->GetClientAreaOrigin());
+            rX += vPoint.x; 
+            rY += vPoint.y;
         }
     }
-}
+} // end of wxWindow::AdjustForParentClientOrigin
 
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------
 
-int  wxWindow::GetCharHeight() const
+int wxWindow::GetCharHeight() const
 {
-    // TODO:
-    return(1);
-}
+    HPS                             hPs;
+    FONTMETRICS                     vFontMetrics;
+    BOOL                            bRc;
 
-int  wxWindow::GetCharWidth() const
-{
-    // TODO:
-    return(1);
-}
+    hPs = ::WinGetPS(GetHwnd());
 
-void wxWindow::GetTextExtent( const wxString& string
-                             ,int*            x
-                             ,int*            y
-                             ,int*            descent
-                             ,int*            externalLeading
-                             ,const wxFont*   theFont
-                            ) const
+    if(!GipQueryFontMetrics(hPs, sizeof(FONTMETIRCS), &vFontMetrics);
+        return (0);
+    else
+        return(vFontMetrics.lMaxAscender + vFontMetrics.lMaxDescender);
+    ::WinReleasePS(hPs);
+} // end of wxWindow::GetCharHeight
+
+int wxWindow::GetCharWidth() const
 {
-    // TODO:
+    hPs = ::WinGetPS(GetHwnd());
+
+    if(!GipQueryFontMetrics(hPs, sizeof(FONTMETIRCS), &vFontMetrics);
+        return (0);
+    else
+        return(vFontMetrics.lAveCharWidth);
+    ::WinReleasePS(hPs);
+} // end of wxWindow::GetCharWidth
+
+void wxWindow::GetTextExtent( 
+  const wxString&                   rString
+, int*                              pX
+, int*                              pY
+, int*                              pDescent
+, int*                              pExternalLeading
+, const wxFont*                     pTheFont
+) const
+{
+    const wxFont*                   pFontToUse = pTheFont;
+    HPS                             hPs;
+
+    hPs = ::WinGetPS(GetHwnd());
+/*
+// TODO: Will have to play with fonts later
+
+    if (!pFontToUse)
+        pFontToUse = &m_font;
+
+    HFONT                           hFnt = 0;
+    HFONT                           hFfontOld = 0;
+
+    if (pFontToUse && pFontToUse->Ok())
+    {
+        ::GpiCreateLog
+        hFnt = (HFONT)((wxFont *)pFontToUse)->GetResourceHandle(); // const_cast
+        if (hFnt)
+            hFontOld = (HFONT)SelectObject(dc,fnt);
+    }
+
+    SIZE sizeRect;
+    TEXTMETRIC tm;
+    GetTextExtentPoint(dc, string, (int)string.Length(), &sizeRect);
+    GetTextMetrics(dc, &tm);
+
+    if ( fontToUse && fnt && hfontOld )
+        SelectObject(dc, hfontOld);
+
+    ReleaseDC(hWnd, dc);
+
+    if ( x )
+        *x = sizeRect.cx;
+    if ( y )
+        *y = sizeRect.cy;
+    if ( descent )
+        *descent = tm.tmDescent;
+    if ( externalLeading )
+        *externalLeading = tm.tmExternalLeading;
+*/
+    ::WinReleasePS(hPs);
 }
 
 #if wxUSE_CARET && WXWIN_COMPATIBILITY
@@ -1246,35 +1397,60 @@ void wxWindow::GetTextExtent( const wxString& string
 // Caret manipulation
 // ---------------------------------------------------------------------------
 
-void wxWindow::CreateCaret(int w, int h)
+void wxWindow::CreateCaret(
+  int                               nWidth
+, int                               nHeight
+)
 {
-    // TODO:
-}
+    SetCaret(new wxCaret( this
+                         ,nWidth
+                         ,nHeight
+                        ));
+} // end of wxWindow::CreateCaret
 
-void wxWindow::CreateCaret(const wxBitmap *bitmap)
+void wxWindow::CreateCaret(
+  const wxBitmap*                   pBitmap
+)
 {
-    // TODO:
-}
+    wxFAIL_MSG("not implemented");
+} // end of wxWindow::CreateCaret
 
-void wxWindow::ShowCaret(bool show)
+void wxWindow::ShowCaret(
+  bool                              bShow
+)
 {
-    // TODO:
-}
+    wxCHECK_RET( m_caret, "no caret to show" );
+
+    m_caret->Show(bShow);
+} // end of wxWindow::ShowCaret
 
 void wxWindow::DestroyCaret()
 {
-    // TODO:
-}
+    SetCaret(NULL);
+} // end of wxWindow::DestroyCaret
 
-void wxWindow::SetCaretPos(int x, int y)
+void wxWindow::SetCaretPos(
+  int                               nX
+, int                               nY)
 {
-    // TODO:
-}
+    wxCHECK_RET( m_caret, "no caret to move" );
 
-void wxWindow::GetCaretPos(int *x, int *y) const
+    m_caret->Move( nX
+                  ,nY
+                 );
+} // end of wxWindow::SetCaretPos
+
+void wxWindow::GetCaretPos(
+  int*                              pX
+, int*                              pY
+) const
 {
-    // TODO:
-}
+    wxCHECK_RET( m_caret, "no caret to get position of" );
+
+    m_caret->GetPosition( pX
+                         ,pY
+                        );
+} // end of wxWindow::GetCaretPos
 
 #endif //wxUSE_CARET
 
