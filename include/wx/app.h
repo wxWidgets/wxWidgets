@@ -21,7 +21,7 @@
 // typedefs
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__) || defined (__WXPM__)
+#if (defined(__WXMSW__) && !defined(__WXMICROWIN__)) || defined (__WXPM__)
     class WXDLLEXPORT wxApp;
     typedef wxApp* (*wxAppInitializerFunction)();
 #else

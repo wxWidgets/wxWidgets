@@ -84,7 +84,7 @@
 
 #include <string.h>
 
-#if !defined(__GNUWIN32_OLD__) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
     #include <shellapi.h>
     #include <mmsystem.h>
 #endif
@@ -93,11 +93,11 @@
     #include <windowsx.h>
 #endif
 
-#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__)) || defined(__CYGWIN10__)
+#if (!defined(__GNUWIN32_OLD__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__)) || defined(__CYGWIN10__)
     #ifdef __WIN95__
         #include <commctrl.h>
     #endif
-#else // broken compiler
+#elif !defined(__WXMICROWIN__) // broken compiler
     #ifndef __TWIN32__
         #include "wx/msw/gnuwin32/extra.h"
     #endif
@@ -740,7 +740,11 @@ int wxWindowMSW::GetScrollPos(int orient) const
     HWND hWnd = GetHwnd();
     if ( hWnd )
     {
+#ifdef __WXMICROWIN__
+        return ::GetScrollPosWX(hWnd, wOrient);
+#else
         return ::GetScrollPos(hWnd, wOrient);
+#endif
     }
     else
         return 0;
@@ -1883,9 +1887,11 @@ void wxWindowMSW::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
 void wxWindowMSW::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
                               WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
 {
+#ifndef __WXMICROWIN__
     *nCtlColor = CTLCOLOR_BTN;
     *hwnd = (WXHWND)lParam;
     *hdc = (WXHDC)wParam;
+#endif
 }
 
 void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
@@ -2145,6 +2151,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                          wParam);
             break;
 
+#ifdef MM_JOY1MOVE // __WXMICROWIN__
         case MM_JOY1MOVE:
         case MM_JOY2MOVE:
         case MM_JOY1ZMOVE:
@@ -2158,6 +2165,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                             GET_Y_LPARAM(lParam),
                                             wParam);
             break;
+#endif
 
         case WM_SYSCOMMAND:
             processed = HandleSysCommand(wParam, lParam);
@@ -2180,6 +2188,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 #endif  // Win95
 
             // for these messages we must return TRUE if process the message
+#ifdef WM_DRAWITEM // __WXMICROWIN__
         case WM_DRAWITEM:
         case WM_MEASUREITEM:
             {
@@ -2199,7 +2208,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     rc.result = TRUE;
             }
             break;
-
+#endif
         case WM_GETDLGCODE:
             if ( m_lDlgCode )
             {
@@ -2307,7 +2316,8 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             break;
 
         // CTLCOLOR messages are sent by children to query the parent for their
-        // colors
+        // colors#ifndef __WXMICROWIN__
+#ifndef __WXMICROWIN__
 #ifdef __WIN32__
         case WM_CTLCOLORMSGBOX:
         case WM_CTLCOLOREDIT:
@@ -2334,6 +2344,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                                            lParam);
             }
             break;
+#endif
 
             // the return value for this message is ignored
         case WM_SYSCOLORCHANGE:
@@ -2397,7 +2408,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             }
             break;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && defined(WM_HELP)
         case WM_HELP:
             {
                 HELPINFO* info = (HELPINFO*) lParam;
@@ -2636,6 +2647,7 @@ bool wxWindowMSW::MSWCreate(int id,
 
     if ( dialog_template )
     {
+#ifndef __WXMICROWIN__
         // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
         // app window as parent - this avoids creating modal dialogs without
         // parent
@@ -2707,6 +2719,9 @@ bool wxWindowMSW::MSWCreate(int id,
         {
             wxLogLastError(wxT("MoveWindow"));
         }
+#endif
+	// __WXMICROWIN__
+
     }
     else // creating a normal window, not a dialog
     {
@@ -2779,6 +2794,7 @@ bool wxWindowMSW::MSWCreate(int id,
 // FIXME: VZ: I'm not sure at all that the order of processing is correct
 bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
+#ifndef __WXMICROWIN__
     LPNMHDR hdr = (LPNMHDR)lParam;
     HWND hWnd = hdr->hwndFrom;
     wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
@@ -2804,6 +2820,9 @@ bool wxWindowMSW::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     // finally try this window too (catches toolbar case)
     return MSWOnNotify(idCtrl, lParam, result);
+#else
+    return FALSE;
+#endif
 }
 
 bool wxWindowMSW::MSWOnNotify(int WXUNUSED(idCtrl),
@@ -3004,6 +3023,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
+#ifndef __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
     POINT dropPoint;
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
@@ -3035,12 +3055,16 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     delete[] files;
 
     return rc;
+#else
+    return FALSE;
+#endif
 }
 
 bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
                                   short nHitTest,
                                   int WXUNUSED(mouseMsg))
 {
+#ifndef __WXMICROWIN__
     // the logic is as follows:
     // -1. don't set cursor for non client area, including but not limited to
     //     the title bar, scrollbars, &c
@@ -3117,7 +3141,7 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
         // cursor set, stop here
         return TRUE;
     }
-
+#endif
     // pass up the window chain
     return FALSE;
 }
@@ -3213,6 +3237,7 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
                               WXWPARAM wParam,
                               WXLPARAM lParam)
 {
+#ifndef __WXMICROWIN__
     WXHBRUSH hBrush = 0;
 
     if ( nCtlColor == CTLCOLOR_DLG )
@@ -3232,6 +3257,9 @@ bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
         *brush = hBrush;
 
     return hBrush != 0;
+#else
+    return FALSE;
+#endif
 }
 
 // Define for each class of dialog and control
@@ -4222,6 +4250,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     return win;
 }
 
+#ifndef __WXMICROWIN__
+
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
@@ -4298,6 +4328,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 
     return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
 }
+#endif
 
 #ifdef __WXDEBUG__
 const char *wxGetMessageName(int message)

@@ -40,11 +40,11 @@ public:
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
-    wxFont(const wxNativeFontInfo& info)
+    wxFont(const wxNativeFontInfo& info, WXHFONT hFont = 0)
     {
         Init();
 
-        Create(info);
+        Create(info, hFont);
     }
 
     wxFont(const wxString& fontDesc);
@@ -57,7 +57,7 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    bool Create(const wxNativeFontInfo& info);
+    bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
 
     virtual ~wxFont();
 

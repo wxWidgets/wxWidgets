@@ -157,7 +157,7 @@ bool wxPen::RealizeResource()
        // Join style, Cap style, Pen Stippling only on Win32.
        // Currently no time to find equivalent on Win3.1, sorry
        // [if such equiv exist!!]
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
        if (M_PENDATA->m_join==wxJOIN_ROUND        &&
            M_PENDATA->m_cap==wxCAP_ROUND          &&
            M_PENDATA->m_style!=wxUSER_DASH        &&
@@ -405,6 +405,7 @@ int wx2msPenStyle(int wx_style)
     int cstyle;
     switch (wx_style)
     {
+#if !defined(__WXMICROWIN__)
        case wxDOT:
            cstyle = PS_DOT;
            break;
@@ -421,8 +422,10 @@ int wx2msPenStyle(int wx_style)
        case wxTRANSPARENT:
            cstyle = PS_NULL;
            break;
+#endif
 
        case wxUSER_DASH:
+#if !defined(__WXMICROWIN__)
 #ifdef __WIN32__
            // Win32s doesn't have PS_USERSTYLE
            if (wxGetOsVersion()==wxWINDOWS_NT || wxGetOsVersion()==wxWIN95)
@@ -431,6 +434,7 @@ int wx2msPenStyle(int wx_style)
                cstyle = PS_DOT; // We must make a choice... This is mine!
 #else
            cstyle = PS_DASH;
+#endif
 #endif
            break;
        case wxSOLID:

@@ -86,9 +86,9 @@ public:
         Init(size, family, style, weight, underlined, faceName, encoding);
     }
 
-    wxFontRefData(const wxNativeFontInfo& info)
+    wxFontRefData(const wxNativeFontInfo& info, WXHFONT hFont = 0)
     {
-        Init(info);
+        Init(info, hFont);
     }
 
     virtual ~wxFontRefData();
@@ -103,7 +103,7 @@ protected:
               const wxString& faceName,
               wxFontEncoding encoding);
 
-    void Init(const wxNativeFontInfo& info);
+    void Init(const wxNativeFontInfo& info, WXHFONT hFont = 0);
 
     // If TRUE, the pointer to the actual font is temporary and SHOULD NOT BE
     // DELETED by destructor
@@ -161,7 +161,7 @@ void wxFontRefData::Init(int pointSize,
     m_nativeFontInfoOk = FALSE;
 }
 
-void wxFontRefData::Init(const wxNativeFontInfo& info)
+void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     // extract family from pitch-and-family
     int lfFamily = info.lf.lfPitchAndFamily;
@@ -230,7 +230,11 @@ void wxFontRefData::Init(const wxNativeFontInfo& info)
     m_fontId = 0;
     m_temporary = FALSE;
 
-    m_hFont = 0;
+    // hFont may be zero, or it be passed in case we really want to
+    // use the exact font created in the underlying system
+    // (for example where we can't guarantee conversion from HFONT
+    // to LOGFONT back to HFONT)
+    m_hFont = hFont;
 
     m_nativeFontInfoOk = TRUE;
     m_nativeFontInfo = info;
@@ -370,11 +374,11 @@ void wxFont::Init()
         wxTheFontList->Append(this);
 }
 
-bool wxFont::Create(const wxNativeFontInfo& info)
+bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     UnRef();
 
-    m_refData = new wxFontRefData(info);
+    m_refData = new wxFontRefData(info, hFont);
 
     RealizeResource();
 

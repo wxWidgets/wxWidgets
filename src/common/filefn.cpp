@@ -1002,7 +1002,7 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 bool
 wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 {
-#if defined(__WIN32__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // CopyFile() copies file attributes and modification time too, so use it
     // instead of our code if available
     //
@@ -1197,7 +1197,7 @@ bool wxPathExists(const wxChar *pszPathName)
 // Get a temporary filename, opening and closing the file.
 wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 {
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
 
 #ifndef        __WIN32__
   wxChar tmp[144];
@@ -1816,7 +1816,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 // On non-Windows platform, probably just return the empty string.
 wxString wxGetOSDirectory()
 {
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
     wxChar buf[256];
     GetWindowsDirectory(buf, 256);
     return wxString(buf);

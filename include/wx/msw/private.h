@@ -16,6 +16,11 @@
 
 #include <windows.h>
 
+#ifdef __WXMICROWIN__
+/* Extra prototypes and symbols not defined by MicroWindows */
+#include "wx/msw/microwin.h"
+#endif
+
 // undefine conflicting symbols which were defined in windows.h
 #include "wx/msw/winundef.h"
 
@@ -184,7 +189,7 @@ extern LONG APIENTRY _EXPORT
 // ---------------------------------------------------------------------------
 
 // a wrapper macro for ZeroMemory()
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 #define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
 #else
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))

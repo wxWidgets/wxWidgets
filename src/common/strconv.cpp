@@ -402,7 +402,7 @@ WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
 // - perhaps common encodings to objects ("UTF8" -> wxConvUTF8)
 // - move wxEncodingConverter meat in here
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 #include "wx/msw/registry.h"
 // this should work if M$ Internet Exploiter is installed
 static long CharsetToCodepage(const wxChar *name)
@@ -616,7 +616,7 @@ public:
 };
 #endif
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
 class CP_CharSet : public wxCharacterSet
 {
 public:
@@ -722,7 +722,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         cset = NULL;
     }
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     cset = new CP_CharSet(name); // may take NULL
     if (cset->usable())
         return cset;

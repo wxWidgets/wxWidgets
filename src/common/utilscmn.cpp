@@ -180,7 +180,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 }
 #endif // __VMS__
 
-#ifdef __WINDOWS__
+#if defined(__WINDOWS__) && !defined(__WXMICROWIN__)
 
 #ifndef __GNUWIN32__
 #ifndef __MWERKS__

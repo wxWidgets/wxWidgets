@@ -86,11 +86,13 @@
 #include <string.h>
 #include <ctype.h>
 
-#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
+#if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__) || defined(__WXMICROWIN__)) && !defined(__CYGWIN10__))
     #include <commctrl.h>
 #endif
 
+#ifndef __WXMICROWIN__
 #include "wx/msw/msvcrt.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -124,7 +126,9 @@
 extern wxChar *wxBuffer;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
+#ifndef __WXMICROWIN__
 extern void wxSetKeyboardHook(bool doIt);
+#endif
 
 MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
@@ -234,9 +238,8 @@ bool wxApp::Initialize()
 
     wxBitmap::InitStandardHandlers();
 
-#if defined(__WIN95__)
+#if defined(__WIN95__) && !defined(__WXMICROWIN__)
     InitCommonControls();
-
 #endif // __WIN95__
 
 #if wxUSE_OLE || wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
@@ -273,6 +276,7 @@ bool wxApp::Initialize()
 
     RegisterWindowClasses();
 
+#ifndef __WXMICROWIN__
     // Create the brush for disabling bitmap buttons
 
     LOGBRUSH lb;
@@ -284,6 +288,7 @@ bool wxApp::Initialize()
         ::DeleteObject( (HGDIOBJ)lb.lbHatch );
     }
     //else: wxWindows resources are probably not linked in
+#endif
 
 #if wxUSE_PENWINDOWS
     wxRegisterPenWin();
@@ -298,7 +303,9 @@ bool wxApp::Initialize()
     if (wxDummyChar) wxDummyChar++;
 #endif
 
+#ifndef __WXMICROWIN__
     wxSetKeyboardHook(TRUE);
+#endif
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules())
@@ -562,7 +569,9 @@ void wxApp::CleanUp()
 
     //// WINDOWS-SPECIFIC CLEANUP
 
+#ifndef __WXMICROWIN__
     wxSetKeyboardHook(FALSE);
+#endif
 
 #if wxUSE_PENWINDOWS
     wxCleanUpPenWin();
@@ -673,7 +682,10 @@ int wxEntry(WXHINSTANCE hInstance,
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
+#ifndef __WXMICROWIN__
     wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+#endif
+
 #ifdef __MWERKS__
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // This seems to be necessary since there are 'rogue'
@@ -1188,6 +1200,9 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
 /* static */
 int wxApp::GetComCtl32Version()
 {
+#ifdef __WXMICROWIN__
+    return 0;
+#else
     // cache the result
     static int s_verComCtl32 = -1;
 
@@ -1270,6 +1285,7 @@ int wxApp::GetComCtl32Version()
     }
 
     return s_verComCtl32;
+#endif
 }
 
 void wxExit()

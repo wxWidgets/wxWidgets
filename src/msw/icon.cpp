@@ -63,7 +63,9 @@ void wxIconRefData::Free()
 {
     if ( m_hIcon )
     {
+#ifndef __WXMICROWIN__
         ::DestroyIcon((HICON) m_hIcon);
+#endif
 
         m_hIcon = 0;
     }
@@ -94,6 +96,7 @@ wxIcon::~wxIcon()
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 {
+#ifndef __WXMICROWIN__
 #ifdef __WIN32__
     wxMask *mask = bmp.GetMask();
     if ( !mask )
@@ -154,6 +157,7 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 
 //    wxFAIL_MSG("Bitmap to icon conversion (including use of XPMs for icons) not implemented");
 #endif // Win32/16
+#endif
 }
 
 void wxIcon::CreateIconFromXpm(const char **data)

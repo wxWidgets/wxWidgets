@@ -380,21 +380,31 @@ void wxFrameMSW::Restore()
 
 bool wxFrameMSW::IsIconized() const
 {
+#ifdef __WXMICROWIN__
+  // TODO
+  return FALSE;
+#else
   ((wxFrameMSW *)this)->m_iconized = (::IsIconic(GetHwnd()) != 0);
   return m_iconized;
+#endif
 }
 
 // Is it maximized?
 bool wxFrameMSW::IsMaximized() const
 {
+#ifdef __WXMICROWIN__
+  // TODO
+  return FALSE;
+#else
     return (::IsZoomed(GetHwnd()) != 0);
+#endif
 }
 
 void wxFrameMSW::SetIcon(const wxIcon& icon)
 {
     wxFrameBase::SetIcon(icon);
 
-#if defined(__WIN95__)
+#if defined(__WIN95__) && !defined(__WXMICROWIN__)
     if ( m_icon.Ok() )
     {
         SendMessage(GetHwnd(), WM_SETICON,
@@ -533,10 +543,12 @@ void wxFrameMSW::SetMenuBar(wxMenuBar *menubar)
 
 void wxFrameMSW::InternalSetMenuBar()
 {
+#ifndef __WXMICROWIN__
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
         wxLogLastError(wxT("SetMenu"));
     }
+#endif
 }
 
 #endif // wxUSE_MENUS_NATIVE
@@ -585,8 +597,10 @@ bool wxFrameMSW::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_TOOLBAR
 
+#ifndef __WXMICROWIN__
         if (style & wxFULLSCREEN_NOMENUBAR)
             SetMenu((HWND)GetHWND(), (HMENU) NULL);
+#endif
 
 #if wxUSE_STATUSBAR
         wxStatusBar *theStatusBar = GetStatusBar();
@@ -676,8 +690,10 @@ bool wxFrameMSW::ShowFullScreen(bool show, long style)
         }
 #endif // wxUSE_STATUSBAR
 
+#ifndef __WXMICROWIN__
         if ((m_fsStyle & wxFULLSCREEN_NOMENUBAR) && (m_hMenu != 0))
             SetMenu((HWND)GetHWND(), (HMENU)m_hMenu);
+#endif
 
         Maximize(m_fsIsMaximized);
         SetWindowLong((HWND)GetHWND(),GWL_STYLE, m_fsOldWindowStyle);
@@ -956,6 +972,7 @@ bool wxFrameMSW::HandlePaint()
     RECT rect;
     if ( GetUpdateRect(GetHwnd(), &rect, FALSE) )
     {
+#ifndef __WXMICROWIN__
         if ( m_iconized )
         {
             HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
@@ -989,6 +1006,7 @@ bool wxFrameMSW::HandlePaint()
             return TRUE;
         }
         else
+ #endif
         {
             return wxWindow::HandlePaint();
         }
@@ -1003,6 +1021,7 @@ bool wxFrameMSW::HandlePaint()
 bool wxFrameMSW::HandleSize(int x, int y, WXUINT id)
 {
     bool processed = FALSE;
+#ifndef __WXMICROWIN__
 
     switch ( id )
     {
@@ -1033,6 +1052,7 @@ bool wxFrameMSW::HandleSize(int x, int y, WXUINT id)
             m_iconized = TRUE;
             break;
     }
+#endif
 
     if ( !m_iconized )
     {
@@ -1092,10 +1112,12 @@ bool wxFrameMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         // menu was removed from screen
         item = -1;
     }
+#ifndef __WXMICROWIN__
     else if ( !(flags & MF_POPUP) && !(flags & MF_SEPARATOR) )
     {
         item = nItem;
     }
+#endif
     else
     {
 #if wxUSE_STATUSBAR
@@ -1147,6 +1169,7 @@ long wxFrameMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             }
             break;
 
+#ifndef __WXMICROWIN__
         case WM_MENUSELECT:
             {
                 WXWORD item, flags;
@@ -1156,11 +1179,13 @@ long wxFrameMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = HandleMenuSelect(item, flags, hmenu);
             }
             break;
+#endif
 
         case WM_PAINT:
             processed = HandlePaint();
             break;
 
+#ifndef __WXMICROWIN__
         case WM_QUERYDRAGICON:
             {
                 HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
@@ -1169,6 +1194,7 @@ long wxFrameMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 processed = rc != 0;
             }
             break;
+#endif
 
         case WM_SIZE:
             processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);

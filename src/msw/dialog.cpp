@@ -624,6 +624,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             processed = !Close();
             break;
 
+#ifndef __WXMICROWIN__
         case WM_SETCURSOR:
             // we want to override the busy cursor for modal dialogs:
             // typically, wxBeginBusyCursor() is called and then a modal dialog
@@ -649,6 +650,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
                 rc = FALSE;
             }
             break;
+#endif
     }
 
     if ( !processed )

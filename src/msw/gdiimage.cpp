@@ -37,7 +37,10 @@
 
 #include "wx/app.h"
 
+#ifndef __WXMICROWIN__
 #include "wx/msw/dib.h"
+#endif
+
 #include "wx/msw/bitmap.h"
 #include "wx/msw/gdiimage.h"
 #include "wx/bitmap.h"
@@ -49,6 +52,8 @@
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
+
+#ifndef __WXMICROWIN__
 
 // all image handlers are declared/defined in this file because the outside
 // world doesn't have to know about them (but only about wxBITMAP_TYPE_XXX ids)
@@ -180,6 +185,8 @@ private:
 // ----------------------------------------------------------------------------
 
 static wxSize GetHiconSize(HICON hicon);
+#endif
+    // __MICROWIN__
 
 // ============================================================================
 // implementation
@@ -295,11 +302,15 @@ void wxGDIImage::CleanUpHandlers()
 
 void wxGDIImage::InitStandardHandlers()
 {
+#ifndef __WXMICROWIN__
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
     AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);
+#endif
 }
+
+#ifndef __WXMICROWIN__
 
 // ----------------------------------------------------------------------------
 // wxBitmap handlers
@@ -533,3 +544,5 @@ static wxSize GetHiconSize(HICON hicon)
 
     return size;
 }
+#endif
+    // __WXMICROWIN__

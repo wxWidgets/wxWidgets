@@ -43,7 +43,10 @@
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
+#if !defined(__WXMICROWIN__)
 #include "wx/msw/dib.h"
+#endif
+
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
@@ -112,6 +115,7 @@ void wxBitmap::Init()
 
 bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 {
+#ifndef __WXMICROWIN__
     // it may be either HICON or HCURSOR
     HICON hicon = (HICON)icon.GetHandle();
 
@@ -145,6 +149,9 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 #endif // WXWIN_COMPATIBILITY_2
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 #endif // Win32
@@ -219,6 +226,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     Init();
 
+#ifndef __WXMICROWIN__
     wxBitmapRefData *refData = new wxBitmapRefData;
     m_refData = refData;
 
@@ -279,6 +287,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     }
 
     SetHBITMAP((WXHBITMAP)hbmp);
+#endif
 }
 
 // Create from XPM data
@@ -323,6 +332,7 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 
 bool wxBitmap::Create(int w, int h, int d)
 {
+#ifndef __WXMICROWIN__
     UnRef();
 
     m_refData = new wxBitmapRefData;
@@ -358,8 +368,10 @@ bool wxBitmap::Create(int w, int h, int d)
 #if WXWIN_COMPATIBILITY_2
     GetBitmapData()->m_ok = hbmp != 0;
 #endif // WXWIN_COMPATIBILITY_2
-
     return Ok();
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -799,6 +811,7 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
 
 wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
+#ifndef __WXMICROWIN__
     wxCHECK_MSG( Ok() &&
                  (rect.x >= 0) && (rect.y >= 0) &&
                  (rect.x+rect.width <= GetWidth()) &&
@@ -834,6 +847,9 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     DeleteDC(dcSrc);
 
     return ret;
+#else
+    return wxBitmap();
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -876,6 +892,9 @@ void wxBitmap::SetMask(wxMask *mask)
 // Contributed by Frederic Villeneuve <frederic.villeneuve@natinst.com>
 wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
 {
+#ifdef __WXMICROWIN__
+    return wxBitmap();
+#else
     wxMemoryDC      memDC;
     wxBitmap        tmpBitmap(GetWidth(), GetHeight(), dc.GetDepth());
     HPALETTE        hPal = (HPALETTE) NULL;
@@ -920,6 +939,7 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
     wxFreeDIB(lpDib);
 
     return tmpBitmap;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -963,6 +983,7 @@ wxMask::~wxMask()
 // Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::Create(const wxBitmap& bitmap)
 {
+#ifndef __WXMICROWIN__
     wxCHECK_MSG( bitmap.Ok() && bitmap.GetDepth() == 1, FALSE,
                  _T("can't create mask from invalid or not monochrome bitmap") );
 
@@ -987,6 +1008,9 @@ bool wxMask::Create(const wxBitmap& bitmap)
     SelectObject(destDC, 0);
     DeleteDC(destDC);
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 // Create a mask from a bitmap and a palette index indicating
@@ -1014,6 +1038,7 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 // the transparent area
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
+#ifndef __WXMICROWIN__
     wxCHECK_MSG( bitmap.Ok(), FALSE, _T("invalid bitmap in wxMask::Create") );
 
     if ( m_maskBitmap )
@@ -1093,6 +1118,9 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     ::DeleteDC(destDC);
 
     return ok;
+#else
+    return FALSE;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1159,6 +1187,7 @@ bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
 // DIB functions
 // ----------------------------------------------------------------------------
 
+#ifndef __WXMICROWIN__
 bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
                  HPALETTE hPal, LPBITMAPINFO* lpDIBHeader)
 {
@@ -1206,6 +1235,7 @@ void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
 {
     free(lpDIBHeader);
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // other helper functions
@@ -1213,6 +1243,7 @@ void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
 
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
 {
+#ifndef __WXMICROWIN__
     wxCHECK_MSG( hbmpMask, 0, _T("invalid bitmap in wxInvertMask") );
 
     // get width/height from the bitmap if not given
@@ -1250,4 +1281,7 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
     ::DeleteDC(hdcDst);
 
     return hbmpInvMask;
+#else
+    return 0;
+#endif
 }

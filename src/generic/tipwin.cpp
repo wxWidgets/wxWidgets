@@ -99,7 +99,14 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-    SetBackgroundColour(wxColour(255, 255, 231));
+
+#ifdef __WXMSW__
+    wxColour bkCol(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_INFOBK));
+#else
+    wxColour bkCol(wxColour(255, 255, 225));
+#endif
+    SetBackgroundColour(bkCol);
+
     // set position and size
     int x, y;
     wxGetMousePosition(&x, &y);
@@ -154,7 +161,12 @@ wxTipWindowView::wxTipWindowView(wxWindow *parent)
 {
     // set colours
     SetForegroundColour(*wxBLACK);
-    SetBackgroundColour(wxColour(255, 255, 231));
+#ifdef __WXMSW__
+    wxColour bkCol(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_INFOBK));
+#else
+    wxColour bkCol(wxColour(255, 255, 225));
+#endif
+    SetBackgroundColour(bkCol);
     m_creationTime = wxGetLocalTime();
 }
 

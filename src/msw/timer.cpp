@@ -82,11 +82,18 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
     wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
 
     wxTimerList.DeleteObject(this);
+
+#ifdef __WXMICROWIN__
+    m_id = SetTimer(NULL, (UINT)(m_id ? m_id : 1),
+                    (UINT)milliseconds, (TIMERPROC) wxTimerProc);
+#else
     TIMERPROC wxTimerProcInst = (TIMERPROC)
         MakeProcInstance((FARPROC)wxTimerProc, wxGetInstance());
 
     m_id = SetTimer(NULL, (UINT)(m_id ? m_id : 1),
                     (UINT)milliseconds, wxTimerProcInst);
+#endif
+
     if ( m_id > 0 )
     {
         wxTimerList.Append(m_id, this);

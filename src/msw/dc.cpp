@@ -343,10 +343,15 @@ bool wxDC::CanDrawBitmap() const
 
 bool wxDC::CanGetTextExtent() const
 {
+#ifdef __WXMICROWIN__
+    // TODO Extend MicroWindows' GetDeviceCaps function
+    return TRUE;
+#else
     // What sort of display is it?
     int technology = ::GetDeviceCaps(GetHdc(), TECHNOLOGY);
 
     return (technology == DT_RASDISPLAY) || (technology == DT_RASPRINTER);
+#endif
 }
 
 int wxDC::GetDepth() const
@@ -516,7 +521,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) && !defined(__SC__) && !defined(__WXMICROWIN__)
     RECT rect;
     rect.left   = x1;
     rect.top    = y1;
@@ -901,6 +906,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
     {
         DoDrawText(text, x, y);
     }
+#ifndef __WXMICROWIN__
     else
     {
         // NB: don't take DEFAULT_GUI_FONT because it's not TrueType and so
@@ -951,6 +957,7 @@ void wxDC::DoDrawRotatedText(const wxString& text,
         CalcBoundingBox(x, y);
         CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
     }
+#endif
 }
 
 // ---------------------------------------------------------------------------

@@ -409,7 +409,7 @@ typedef int wxWindowID;
 
 // wxCALLBACK should be used for the functions which are called back by
 // Windows (such as compare function for wxListCtrl)
-#if defined(__WIN32__)
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
     #define wxCALLBACK wxSTDCALL
 #else
     // no stdcall under Unix nor Win16
@@ -2010,7 +2010,7 @@ typedef struct tagLOGPALETTE
 } LOGPALETTE;
 #endif //__WXPM__
 
-#if defined(__GNUWIN32__) || defined(__WXWINE__)
+#if defined(__GNUWIN32__) || defined(__WXWINE__) || defined(__WXMICROWIN__)
     typedef int (*WXFARPROC)();
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();

@@ -123,7 +123,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             info->charset = ANSI_CHARSET;
             break;
 
-#if !defined(__WIN16__)
+#if !defined(__WIN16__) && !defined(__WXMICROWIN__)
         case wxFONTENCODING_CP1250:
             info->charset = EASTEUROPE_CHARSET;
             break;
@@ -213,7 +213,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
             fontEncoding = wxFONTENCODING_CP1252;
             break;
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXMICROWIN__)
         case EASTEUROPE_CHARSET:
             fontEncoding = wxFONTENCODING_CP1250;
             break;
