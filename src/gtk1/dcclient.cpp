@@ -203,7 +203,7 @@ static void wxInitGCPool()
 
 static void wxCleanUpGCPool()
 {
-    for (int i = 0; i < GC_POOL_SIZE; i++)
+    for (int i = 0; i < wxGCPoolSize; i++)
     {
         if (wxGCPool[i].m_gc)
             gdk_gc_unref( wxGCPool[i].m_gc );
