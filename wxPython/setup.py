@@ -1205,8 +1205,8 @@ if __name__ == "__main__":
                           'wx.lib.editor',
                           'wx.lib.mixins',
                           'wx.py',
-                          #'wx.tools',            ???
-                          #'wx.tools.XRCed',      ???
+                          'wx.tools',
+                          'wx.tools.XRCed',
                           ],
 
               ext_package = PKGDIR,

@@ -28,8 +28,12 @@
 # build the name of the real wx-config from the port, flags, etc.
 %define dbgflg %(if [ "%{debug_flag}" = "1" ]; then echo d; fi)
 %define uniflg %(if [ "%{unicode}" = "1" ]; then echo u; fi)
+%define DBGFLG %(if [ "%{debug_flag}" = "1" ]; then echo D; fi)
+%define UNIFLG %(if [ "%{unicode}" = "1" ]; then echo U; fi)
 %define wxconfigname %{wxpref}/bin/wx%{lcport}%{uniflg}%{dbgflg}-%{ver2}-config
 
+# turn off the generation of debuginfo rpm  (RH9)
+%define debug_package %{nil}
 
 #----------------------------------------------------------------
 Summary:   Cross platform GUI toolkit for Python using wx%{port}
@@ -48,8 +52,15 @@ Prefix:    %{pref}
 Provides: wxPython  = %{version}
 Provides: wxPython%{port}  = %{version}
 
+Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so
+Provides: libwx_%{lcport}%{uniflg}%{dbgflg}-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
+Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so
+Provides: libwx_%{lcport}%{uniflg}%{dbgflg}_gl-%{ver2}.so(WX%{port}%{UNIFLG}%{DBGFLG}_%{ver2})
+
+
+
 # old wxPython packages
-Obsoletes: wxPython
+Obsoletes: wxPython wxPython%{port}
 
 
 %description
@@ -189,8 +200,10 @@ for s in \
 	img2png \
 	img2py \
 	img2xpm \
+	pyalacarte \
+	pyalamode \
 	pycrust \
-	pycwrap \
+	pywrap \
 	pyshell \
 	xrced; do
     cp scripts/$s $RPM_BUILD_ROOT/%{pref}/bin
@@ -228,7 +241,7 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 
 #----------------------------------------------------------------
 %clean
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+##[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 
 #----------------------------------------------------------------
@@ -237,7 +250,7 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 %defattr(-,root,root)
 %doc docs/preamble.txt docs/licence.txt docs/readme.txt docs/changes.txt
 %doc wxPython/README.txt wxPython/CHANGES.txt
-
+%doc wxPython/docs/*
 
 %files -n wxPython%{port}-devel -f DEVELLIST
 %defattr(-,root,root)

@@ -136,14 +136,16 @@ if [ -z "${skipcopy}" ]; then
     cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
 
     # copy all top dirs except CVS, build, demos, utils, samples, and wxPython
-    for d in art contrib debian distrib docs include lib locale misc src; do
-	cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
+    for d in art contrib debian distrib docs include lib locale misc patches src; do
+	if [ -e ${wxdir}/$d ]; then
+	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
+	fi
     done
 
     # now do the same thing for wxPython, skipping it's build dirs and such
     mkdir ${tarver}/wxPython
     cp -pf --link ${wxdir}/wxPython/* ${tarver}/wxPython > /dev/null 2>&1
-    for d in contrib demo distrib distutils samples scripts src wxPython; do
+    for d in contrib demo distrib distutils docs licence samples scripts src wx wxPython; do
 	cp -Rpf --link ${wxdir}/wxPython/$d ${tarver}/wxPython #> /dev/null 2>&1
     done
 

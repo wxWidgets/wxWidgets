@@ -1450,19 +1450,22 @@ PYTHON_DIST:
 		wxPython/demo/bmp_source \
 		wxPython/demo/data \
 		wxPython/demo/dllwidget \
+		wxPython/distrib \
+		wxPython/distutils \
+		wxPython/distutils/command \
+		wxPython/docs \
+		wxPython/docs/screenshots \
 		wxPython/samples/StyleEditor \
 		wxPython/samples/doodle \
 		wxPython/samples/embedded \
 		wxPython/samples/frogedit \
+		wxPython/samples/hangman \
 		wxPython/samples/pySketch \
 		wxPython/samples/pySketch/images \
 		wxPython/samples/wxProject \
 		wxPython/samples/wx_examples \
 		wxPython/samples/wx_examples/basic \
 		wxPython/samples/wx_examples/hello \
-		wxPython/samples/wx_examples/screenshots \
-		wxPython/distutils \
-		wxPython/distutils/command \
 		wxPython/scripts \
 		wxPython/src \
 		wxPython/src/gtk \
@@ -1472,6 +1475,8 @@ PYTHON_DIST:
 		wxPython/wx/lib/editor \
 		wxPython/wx/lib/mixins \
 		wxPython/wx/py \
+		wxPython/wx/tools \
+		wxPython/wx/tools/XRCed \
 		wxPython/wxPython \
 		wxPython/wxPython/lib \
 		wxPython/wxPython/lib/PyCrust \
