@@ -162,10 +162,10 @@ bool wxControl::MSWOnNotify(int idCtrl,
                             WXLPARAM lParam,
                             WXLPARAM* result)
 {
-    wxCommandEvent event(wxEVT_NULL, m_windowId);
     wxEventType eventType = wxEVT_NULL;
-    NMHDR *hdr1 = (NMHDR*) lParam;
-    switch ( hdr1->code )
+
+    NMHDR *hdr = (NMHDR*) lParam;
+    switch ( hdr->code )
     {
         case NM_CLICK:
             eventType = wxEVT_COMMAND_LEFT_CLICK;
@@ -199,6 +199,7 @@ bool wxControl::MSWOnNotify(int idCtrl,
             return wxWindow::MSWOnNotify(idCtrl, lParam, result);
     }
 
+    wxCommandEvent event(wxEVT_NULL, m_windowId);
     event.SetEventType(eventType);
     event.SetEventObject(this);
 
