@@ -138,6 +138,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
     case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+    case wxSYS_COLOUR_BTNTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     {
       return *wxBLACK;
