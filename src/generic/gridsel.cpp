@@ -90,7 +90,7 @@ bool wxGridSelection::IsInSelection ( int row, int col )
     return false;
 }
 
-void wxGridSelection::SelectRow( int row, bool addToSelected = FALSE )
+void wxGridSelection::SelectRow( int row, bool addToSelected )
 {
     if ( m_selectionMode == wxGrid::wxGridSelectColumns )
         return;
@@ -115,7 +115,8 @@ void wxGridSelection::SelectRow( int row, bool addToSelected = FALSE )
 
     // If possible, merge row with existing selected block
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    size_t n;
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -145,7 +146,7 @@ void wxGridSelection::SelectRow( int row, bool addToSelected = FALSE )
 
     // Check whether row is already selected.
     count = m_rowSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         if ( row == m_rowSelection[n] )
             return;
@@ -161,7 +162,7 @@ void wxGridSelection::SelectRow( int row, bool addToSelected = FALSE )
         ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
 }
 
-void wxGridSelection::SelectCol( int col, bool addToSelected = FALSE )
+void wxGridSelection::SelectCol( int col, bool addToSelected )
 {
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
         return;
@@ -186,7 +187,8 @@ void wxGridSelection::SelectCol( int col, bool addToSelected = FALSE )
 
     // If possible, merge col with existing selected block
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    size_t n;
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -216,7 +218,7 @@ void wxGridSelection::SelectCol( int col, bool addToSelected = FALSE )
 
     // Check whether col is already selected.
     count = m_colSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         if ( col == m_colSelection[n] )
             return;
@@ -550,7 +552,8 @@ void wxGridSelection::ClearSelection()
 void wxGridSelection::UpdateRows( size_t pos, int numRows )
 {
     size_t count = m_cellSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    size_t n;
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords = m_cellSelection[n];
         wxCoord row = coords.GetRow();
@@ -580,7 +583,7 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
     }
 
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -623,7 +626,7 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
     }
 
     count = m_rowSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         int & rowOrCol = m_rowSelection[n];
         if ( (size_t)rowOrCol >= pos )
@@ -651,7 +654,8 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
 void wxGridSelection::UpdateCols( size_t pos, int numCols )
 {
     size_t count = m_cellSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    size_t n;
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords = m_cellSelection[n];
         wxCoord col = coords.GetCol();
@@ -681,7 +685,7 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
     }
 
     count = m_blockSelectionTopLeft.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
         wxGridCellCoords& coords2 = m_blockSelectionBottomRight[n];
@@ -724,7 +728,7 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
     }
 
     count = m_colSelection.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    for ( n = 0; n < count; n++ )
     {
         int & rowOrCol = m_colSelection[n];
         if ( (size_t)rowOrCol >= pos )
