@@ -309,7 +309,6 @@ fontenum.cpp	MSW	LowLevel
 fontutil.cpp	MSW	LowLevel
 frame.cpp	MSW
 gauge95.cpp	MSW	Win32Only
-gaugemsw.cpp	MSW	NotWin32
 gdiimage.cpp	MSW	LowLevel
 gdiobj.cpp	MSW	LowLevel
 glcanvas.cpp	MSW	LowLevel
@@ -1397,7 +1396,6 @@ font.h	MSWH
 fontdlg.h	MSWH
 frame.h	MSWH
 gauge95.h	MSWH
-gaugemsw.h	MSWH
 gccpriv.h	MSWH	Base
 gdiimage.h	MSWH
 gdiobj.h	MSWH
