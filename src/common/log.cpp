@@ -50,6 +50,8 @@
 #include  "wx/log.h"
 #include  "wx/thread.h"
 
+#if wxUSE_LOG
+
 // other standard headers
 #include  <errno.h>
 #include  <stdlib.h>
@@ -790,3 +792,4 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 
 #endif  //WXDEBUG
 
+#endif //wxUSE_LOG

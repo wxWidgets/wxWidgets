@@ -50,6 +50,8 @@
 #include "wx/textfile.h"
 #include "wx/statline.h"
 
+#if wxUSE_LOG
+
 #ifdef  __WXMSW__
   // for OutputDebugString()
   #include  "wx/msw/private.h"
@@ -60,7 +62,6 @@
 #define wxUSE_LOG_DIALOG 1
 
 #if wxUSE_LOG_DIALOG
-    #include "wx/datetime.h"
     #include "wx/listctrl.h"
     #include "wx/imaglist.h"
     #include "wx/image.h"
@@ -73,6 +74,20 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_LOG_DIALOG
+
+// this function is a wrapper around strftime(3)
+// allows to exclude the usage of wxDateTime
+static wxString TimeStamp(const wxChar *format, time_t t)
+{
+    wxChar buf[4096];
+    if ( !wxStrftime(buf, WXSIZEOF(buf), format, localtime(&t)) )
+    {
+        // buffer is too small?
+        wxFAIL_MSG(_T("strftime() failed"));
+    }
+    return wxString(buf);
+}
+
 
 class wxLogDialog : public wxDialog
 {
@@ -861,7 +876,7 @@ void wxLogDialog::CreateDetailsControls()
             m_listctrl->InsertItem(n, m_messages[n]);
 
         m_listctrl->SetItem(n, 1,
-                            wxDateTime((time_t)m_times[n]).Format(fmt));
+                            TimeStamp(fmt, (time_t)m_times[n]));
     }
 
     // let the columns size themselves
@@ -917,7 +932,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
     for ( size_t n = 0; ok && (n < count); n++ )
     {
         wxString line;
-        line << wxDateTime((time_t)m_times[n]).Format(fmt)
+        line << TimeStamp(fmt, (time_t)m_times[n])
              << _T(": ")
              << m_messages[n]
              << wxTextFile::GetEOL();
@@ -1056,3 +1071,4 @@ static int OpenLogFile(wxFile& file, wxString *pFilename)
 
 #endif // wxUSE_FILE
 
+#endif // wxUSE_LOG

@@ -24,6 +24,7 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/dcclient.h"
+#include "wx/log.h"
 #endif
 
 #include "wx/control.h"

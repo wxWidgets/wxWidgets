@@ -35,6 +35,7 @@
     #include "wx/app.h"
     #include "wx/icon.h"
     #include "wx/bitmap.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/msw/private.h"
