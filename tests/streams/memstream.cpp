@@ -56,10 +56,12 @@ public:
         CPPUNIT_TEST(Output_TellO);
 
         // Other test specific for Memory stream test case.
+        CPPUNIT_TEST(Ctor_InFromOut);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
     // Add own test here.
+    void Ctor_InFromOut();
 
 private:
     const char *GetDataBuffer();
@@ -103,6 +105,21 @@ wxMemoryOutputStream *memStream::DoCreateOutStream()
     return pMemOutStream;
 }
 
+void memStream::Ctor_InFromOut()
+{
+    wxMemoryOutputStream *pMemOutStream = DoCreateOutStream();
+    pMemOutStream->Write(GetDataBuffer(), DATABUFFER_SIZE);
+    wxMemoryInputStream *pMemInStream = new wxMemoryInputStream(*pMemOutStream);
+    CPPUNIT_ASSERT(pMemInStream->IsOk());
+    CPPUNIT_ASSERT(pMemInStream->GetLength() == pMemOutStream->GetLength());
+    int len = pMemInStream->GetLength();
+    wxStreamBuffer *in = pMemInStream->GetInputStreamBuffer();
+    wxStreamBuffer *out = pMemOutStream->GetOutputStreamBuffer();
+    void *pIn = in->GetBufferStart();
+    void *pOut = out->GetBufferStart();
+    CPPUNIT_ASSERT(pIn != pOut);
+    CPPUNIT_ASSERT(memcmp(pIn, pOut, len) == 0);
+}
 
 // Register the stream sub suite, by using some stream helper macro.
 // Note: Don't forget to connect it to the base suite (See: bstream.cpp => StreamCase::suite())

@@ -15,6 +15,7 @@ All:
 - Added WXK_SPECIAL keycodes for special hardware buttons.
 - Fixed bug with wxFile::Seek(-1, wxFromCurrent).
 - Added wxString/C array constructors to wxArrayString.
+- Added wxMemoryInputStream(wxMemoryOutputStream&) constructor (Stas Sergeev)
 
 All (GUI):
 

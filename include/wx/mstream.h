@@ -18,10 +18,13 @@
 
 #include "wx/stream.h"
 
+class WXDLLIMPEXP_BASE wxMemoryOutputStream;
+
 class WXDLLIMPEXP_BASE wxMemoryInputStream : public wxInputStream
 {
 public:
     wxMemoryInputStream(const void *data, size_t length);
+    wxMemoryInputStream(const wxMemoryOutputStream& stream);
     virtual ~wxMemoryInputStream();
     virtual wxFileOffset GetLength() const { return m_length; }
     virtual bool Eof() const;
