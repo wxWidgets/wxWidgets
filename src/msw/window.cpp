@@ -4223,7 +4223,10 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     // so simply test for negative value.
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
+#ifndef __WXWINCE__
     event.SetTimestamp(::GetMessageTime());
+#endif
+
     event.m_eventObject = this;
     event.SetId(GetId());
 
@@ -4421,7 +4424,9 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
     event.m_keyCode = id;
     event.m_rawCode = (wxUint32) wParam;
     event.m_rawFlags = (wxUint32) lParam;
+#ifndef __WXWINCE__
     event.SetTimestamp(::GetMessageTime());
+#endif
 
     // translate the position to client coords
     POINT pt;
@@ -5095,8 +5100,9 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
             event.m_keyCode = id;
             event.m_shiftDown = wxIsShiftDown();
             event.m_controlDown = wxIsCtrlDown();
+#ifndef __WXWINCE__
             event.SetTimestamp(::GetMessageTime());
-
+#endif
             wxWindow *win = wxGetActiveWindow();
             wxEvtHandler *handler;
             if ( win )
