@@ -1423,6 +1423,13 @@ case "${host}" in
     arm-*-linux* )
         AC_CHECK_SIZEOF(long long, 8)
     ;;
+    *-hp-hpux* )
+        AC_CHECK_SIZEOF(long long, 0)
+        if test "$ac_cv_sizeof_long_long" != "0"; then
+            dnl HPUX 10.20 headers need this define in order to use long long definitions
+            CPPFLAGS="$CPPFLAGS -D_INCLUDE_LONGLONG"
+        fi
+    ;;
     * )
         AC_CHECK_SIZEOF(long long, 0)
 esac
