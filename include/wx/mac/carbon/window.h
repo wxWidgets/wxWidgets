@@ -230,6 +230,9 @@ public:
     // calculates the real window position and size from the native control
     void                MacGetPositionAndSizeFromControl(int& x, int& y,
                                            int& w, int& h) const ;
+    // gets the inset from every part
+    virtual void        MacGetContentAreaInset( int &left , int &top , int &right , int &bottom ) ;
+
 protected:
     // For controls like radiobuttons which are really composite
     wxList              m_subControls;

@@ -102,6 +102,8 @@ public:
 
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
 
+    virtual void        MacGetContentAreaInset( int &left , int &top , int &right , int &bottom ) ;
+
 protected:
     // common part of all ctors
     void Init();
