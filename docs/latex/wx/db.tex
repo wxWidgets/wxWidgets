@@ -179,7 +179,16 @@ See the remarks in \helpref{wxDb::Dbms}{wxdbdbms} for exceptions/issues with eac
    DB_ERR_TIMEOUT_EXPIRED                     // SqlState = 'S1T00'
 \end{verbatim}
 
-\docparam{struct {\bf wxDb::dbInf}}{This structure is internal to the wxDb class and contains details of the ODBC datasource that the current instance of the wxDb is connected to in its members.  When the datasource is opened, all of the information contained in the dbInf structure is queried from the datasource.  This information is used almost exclusively within the ODBC class library.  Where there may be a need for particular portions of this information outside of the class library, member functions (e.g. wxDbTable::IsCursorClosedOnCommit()) have been added for ease of use.}
+\docparam{struct {\bf wxDb::dbInf}}{This structure is internal to the 
+wxDb class and contains details of the ODBC datasource that the current 
+instance of the wxDb is connected to in its members.  When the datasource 
+is opened, all of the information contained in the dbInf structure is 
+queried from the datasource.  This information is used almost exclusively 
+within the ODBC class library.  Where there may be a need for particular 
+portions of this information outside of the class library, member 
+functions (e.g. 
+\helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit}) 
+have been added for ease of use.}
 
 \begin{verbatim}
    char   dbmsName[40]        - Name of the dbms product
@@ -299,7 +308,7 @@ Searches the list of cached database connections connection for one matching
 the passed in wxDb instance.  If found, that cached connection is freed.
 
 Freeing a connection means that it is marked as available (free) in the 
-cahce of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions} 
+cache of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions} 
 is able to return a pointer to the wxDb instance for use.  Freeing a 
 connection does NOT close the connection, it only makes the connection 
 available again.
@@ -506,7 +515,7 @@ dependent, and with some databases this behavior can be controlled through
 management functions.  This means you would need to
 requery the datasource before you can perform any additional work using this 
 cursor.  This is only necessary however if the datasource closes the cursor after a
-commit or rollback.  Use the wxDbTable::IsCursorClosedOnCommit() member function to
+commit or rollback.  Use the \helpref{wxDbTable::IsCursorClosedOnCommit}{wxdbtableiscursorclosedoncommit} member function to
 determine the datasource's transaction behavior.  Note, in many situations 
 it is very inefficient to assume the cursor is closed and always requery.  This could put
 a significant, unnecessary load on datasources that leave the cursors open after a
@@ -1240,7 +1249,7 @@ When called with {\it sqlLogON}, all commands sent to the datasource engine are 
 When called with {\it sqlLogOFF}, the logging file is closed, and any calls to \helpref{wxDb::WriteSqlLog}{wxdbwritesqllog} are ignored.
 
 
-\membersection{wxDb::TableExists}\label{wxdbtablexists}
+\membersection{wxDb::TableExists}\label{wxdbtableexists}
 
 \func{bool}{TableExists}{\param{const char *}{tableName}, \param{const char *}{userID=NULL}, \param{const char *}{path=NULL}}
 
@@ -1339,6 +1348,11 @@ For example, the privilege UPDATE might allow the connected user to update
 all columns in a table on one datasource, but only those columns for 
 which the grantor (the user that granted the connected user) has the UPDATE 
 privilege on another datasource.
+
+Looking up a user's privileges to a table can be time consuming depending on the 
+datasource and ODBC driver.  This time can be minimized by passing a {\it schema} 
+as a parameter.  With some datasources/drivers, the difference can be several 
+seconds of time difference.
 
 
 \membersection{wxDb::TranslateSqlState}\label{wxdbtranslatesqlstate}
@@ -1789,6 +1803,10 @@ Not all datasources support the "FOR UPDATE" clause, so you must use this
 member function to determine if the datasource currently connected to supports
 this behavior or not before trying to select using "FOR UPDATE".
 
+If the wxDbTable instance was created with the parameter wxDB_QUERY_ONLY, then 
+this function will return FALSE.  For all known databases which do not support 
+the FOR UPDATE clause, this function will return FALSE also.
+
 
 \membersection{wxDbTable::CanUpdateByROWID}\label{wxdbtablecanupdatebyrowid}
 
@@ -1839,8 +1857,8 @@ to an Oracle datasource or not.
 \func{void}{ClearMemberVar}{\param{int }{colNo}, \param{bool }{setToNull=FALSE}}
 
 Same as \helpref{wxDbTable::ClearMemberVars}{wxdbtableclearmembervars} except
-that it clears only the specified column of its values, and optionally sets 
-the column to be a NULL column.
+that this function clears only the specified column of its values, and 
+optionally sets the column to be a NULL column.
 
 \docparam{colNo}{Column number that is to be cleared.  This number (between 0 and (noCols-1)) is the index of the column definition created using the \helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} function.}
 \docparam{setToNull}{{\it OPTIONAL}.  Indicates whether the column should be flagged as being a NULL value stored in the bound memory variable.  If TRUE, then any value stored in the bound member variable is cleared.  Default is FALSE.}
@@ -2174,7 +2192,7 @@ of actions that insert/update/delete rows in a table.
 \func{bool}{DeleteWhere}{\param{const char *}{pWhereClause}}
 
 Deletes all rows from the table which match the criteria specified in the 
-WHERE clause that is passed in as the sole parameter.
+WHERE clause that is passed in.
 
 \wxheading{Parameters}
 
@@ -2206,6 +2224,10 @@ segment varies from database to database, and is user configurable in
 most databases.  Therefore it is usually best to try to perform a commit 
 or rollback at relatively small intervals when processing a larger number 
 of actions that insert/update/delete rows in a table.
+
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+this function.
 
 \wxheading{Example}
 
@@ -2251,7 +2273,7 @@ supported databases (see \helpref{wxDb::Dbms}{wxdbdbms}).  If a datasource
 is not specifically supported, and this function is called, the function 
 will return FALSE.
 
-Some datasources/ODBC drivers will delete any indexes associated with the 
+Most datasources/ODBC drivers will delete any indexes associated with the 
 table automatically, and others may not.  Check the documentation for your 
 database to determine the behavior.
 
@@ -2262,6 +2284,7 @@ after executing this function.
 \membersection{wxDbTable::From}\label{wxdbtablefrom}
 
 \func{const char *}{From}{}
+
 \func{void}{From}{\param{const wxString &}{From}}
 
 Accessor function for the private class member wxDbTable::from.  Can be used 
@@ -2284,7 +2307,8 @@ in constructing query statements.}
 The first form of this function returns the current value of the wxDbTable 
 member variable ::from.  
 
-The second form of the function has no return value.
+The second form of the function has no return value, as it will always set 
+the from clause successfully. 
 
 \wxheading{See also}
 
@@ -2397,16 +2421,20 @@ return FALSE, and the data contained in the bound columns will be undefined.
 
 \func{HSTMT *}{GetNewCursor}{\param{bool }{setCursor=FALSE}, \param{bool }{bindColumns=TRUE}}
 
-\begin{comment}
-% George: @@@@@@@@STILL TO DO
-\end{comment}
+This function will create a new cursor that can be used to access the table 
+being referenced by this wxDbTable instance, or to execute direct SQL commands 
+on without affecting the cursors that are already defined and possibly positioned.
 
 \wxheading{Parameters}
 
-\docparam{setCursor}{{\it OPTIONAL}.  Default is FALSE.}
-\docparam{bindColumns}{{\it OPTIONAL}.  Default is TRUE.}
+\docparam{setCursor}{{\it OPTIONAL}.  Should this new cursor be set to be the current cursor after successfully creating the new cursor.  Default is FALSE.}
+\docparam{bindColumns}{{\it OPTIONAL}.  Should this new cursor be bound to all the memory variables that the default cursor is bound to.  Default is TRUE.}
 
 \wxheading{Remarks}
+
+This new cursor must be closed using \helpref{wxDbTable::DeleteCursor}{wxdbtabledeletecursor} 
+by the calling program before the wxDbTable instance is deleted, or both memory 
+and resource leaks will occur.
 
 
 \membersection{wxDbTable::GetNext}\label{wxdbtablegetnext}
@@ -2425,6 +2453,10 @@ performed using \helpref{wxDbTable::Query}{wxdbtablequery},
 This function returns FALSE when the current cursor has reached the end of 
 the result set.  When FALSE is returned, data in the bound columns is 
 undefined.
+
+\wxheading{Remarks}
+
+This function works with both forward and backward scrolling cursors.
 
 \wxheading{See also}
 \helpref{wxDbTable::++}{wxdbtableplusplus}
@@ -2504,6 +2536,10 @@ Returns the ODBC row number for performing positioned updates and deletes.
 This function is not being used within the ODBC class library and may be a 
 candidate for removal if no use is found for it.
 
+Row nuumber with some datasources/ODBC drivers is the position in the result set, 
+while in others it may be a physical position in the database.  Check your 
+database documentation to find out which behavior is supported.
+
 
 \membersection{wxDbTable::GetTableName}\label{wxdbtablegettablename}
 
@@ -2543,7 +2579,7 @@ Accessor function that returns the current WHERE setting assigned with the
 
 Inserts a new record into the table being referenced by this wxDbTable 
 instance.  The values in the member variables of the wxDbTable instance are 
-inserted into the columns of the new row in the database
+inserted into the columns of the new row in the database.
  
 \wxheading{Return value}
 
@@ -2600,7 +2636,7 @@ to "NULL".  Works for all data types supported by the ODBC class library.
 \wxheading{Parameters}
 
 \docparam{colNo}{The column number of the bound column as defined by the 
-\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs}
+\helpref{wxDbTable::SetColDefs}{wxdbtablesetcoldefs} 
 calls which defined the columns accesible to this wxDbTable instance.}
 
 \wxheading{Remarks}
@@ -2613,12 +2649,20 @@ NULL column support is currently not fully implemented as of wxWindows 2.4
 \func{bool}{IsCursorClosedOnCommit}{\void}
 
 Accessor function to return information collected during the opening of the 
-datasource connection that is used by this wxDbTable instance.
+datasource connection that is used by this wxDbTable instance.  The result 
+returned by this function indicates whether an implicit closing of the curosr is 
+done after a commit on the database connection.
 
 \wxheading{Return value}
 
 Returns TRUE if the cursor associated with this wxDbTable object is closed 
 after a commit or rollback operation.  Returns FALSE otherwise.
+
+\wxheading{Remarks}
+
+If more than one wxDbTable instance used the same database connection, all cursors 
+which use the database connection are closed on the commit if this function 
+indicates TRUE.
 
 
 \membersection{wxDbTable::IsQueryOnly}\label{wxdbtableisqueryonly}
@@ -2633,13 +2677,19 @@ wxDbTable instance that would modify (insert/delete/update) the table's data.
 
 \membersection{wxDbTable::Open}\label{wxdbtableopen}
 
-\func{bool}{Open}{\void}
+\func{bool}{Open}{\param{bool }{checkPrivileges=FALSE}}
 
 Every wxDbTable instance must be opened before it can be used.  This function 
-checks for the existence of the requested table, binds columns to the 
-internal cursors needed (insert/update/select) and constructs the insert 
-statement that is used for inserting data to the columns of a new row in 
-the datasource.
+checks for the existence of the requested table, binds columns, creates required 
+cursors, (insert/select and update if connection is not wxDB_QUERY_ONLY) and 
+constructs the insert statement that is to be used for inserting data as a new 
+row in the datasource.
+
+\wxheading{Parameters}
+
+\docparam{checkPrivileges}{Indicates whether the Open() function should check 
+whether the current connected user has at least SELECT privileges to access the 
+table to which they are trying to open.  Default is FALSE.}
 
 \wxheading{Remarks}
 
@@ -2649,16 +2699,28 @@ that was detected when checking for table existence.  Note that it is usually
 best for the calling routine to check for the existence of the table and for 
 sufficent user privileges to access the table in the mode (wxDB_QUERY_ONLY or 
 !wxDB_QUERY_ONLY) before trying to open the table for the best possible 
-return results as to why a table cannot be opened.
+explanation as to why a table cannot be opened.
+
+Checking the user's privileges on a table can be quite time consuming during 
+the open phase.  With most applications, the programmer already knows that the 
+user has sufficient privileges to access the table, so this check is normally 
+not required.
+
+For best performance, open the table, and then use the 
+\helpref{wxDb::TablePrivileges}{wxdbtableprivileges} function 
+to check the users privileges.  Passing a schema to the TablePrivileges() 
+function can significantly speed up the privileges checks.
 
 \wxheading{See also}
 
-\helpref{wxDb::TableExists}{wxdbtableexists}, \helpref{wxDb::TablePrivileges}{wxdbtableprivileges}
+\helpref{wxDb::TableExists}{wxdbtableexists}, 
+\helpref{wxDb::TablePrivileges}{wxdbtableprivileges}
 
 
 \membersection{wxDbTable::OrderBy}\label{wxdbtableorderby}
 
 \func{const char *}{OrderBy}{}
+
 \func{void}{OrderBy}{\param{const wxString &}{OrderBy}}
 
 Accessor function for the private class member wxDbTable::orderBy.  Can be 
@@ -2669,10 +2731,10 @@ used as a synonym for \helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyc
 \wxheading{Parameters}
 
 \docparam{OrderBy}{A comma separated list of column names that indicate the 
-alphabetized sorting sequence that the result set is to be returned in.  If 
-a FROM clause has also been specified, each column name specified in the 
-ORDER BY clause should be prefaced with the table name to which the column 
-belongs using DOT notation (TABLE.COLUMN).}
+alphabetized/numeric sorting sequence that the result set is to be returned 
+in.  If a FROM clause has also been specified, each column name specified in 
+the ORDER BY clause should be prefaced with the table name to which the column 
+belongs using DOT notation (TABLE_NAME.COLUMN_NAME).}
 
 \wxheading{Return value}
 
@@ -2694,8 +2756,8 @@ The second form of the function has no return value.
 \wxheading{Parameters}
 
 \docparam{forUpdate}{{\it OPTIONAL}.  Gives you the option of locking records 
-as they are queried (SELECT ... FOR UPDATE).  If the RDBMS is not capable of 
-the FOR UPDATE clause, this argument is ignored.  See 
+as they are retrieved.  If the RDBMS is not capable of the FOR UPDATE clause, 
+this argument is ignored.  See 
 \helpref{wxDbTable::CanSelectForUpdate}{wxdbtablecanselectforupdate} for 
 additional information regarding this argument.  Default is FALSE.}
 \docparam{distinct}{{\it OPTIONAL}.  Allows selection of only distinct values 
@@ -2705,7 +2767,7 @@ Default is FALSE.}
 
 \wxheading{Remarks}
 
-This function queries records from the datasource based on the three  
+This function queries records from the datasource based on the three 
 wxDbTable members: "where", "orderBy", and "from".  Use 
 \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} to filter on 
 records to be retrieved (e.g. All users with a first name of "JOHN").  
@@ -2733,21 +2795,26 @@ the event that the FROM clause has been set (is non-null) using
 \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}.
 
 The cursor for the result set is positioned {\it before} the first record in 
-the record set after the query.  To retrieve the first record, call 
-\helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
+the result set after the query.  To retrieve the first record, call either 
+\helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} (only if backward scrolling 
+cursors are available) or 
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.  Typically, no data from the 
-result set is returned to the client driver until a request to such as 
+result set is returned to the client driver until a request such as 
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext} is performed, so network 
 traffic and database load are not overwhelmed transmitting data until the 
 data is actually requested by the client.  This behavior is solely dependent 
 on the ODBC driver though, so refer to the ODBC driver's reference material 
 for information on its behaviors.
 
+Values in the bound columns' memory variables are undefined after executing a 
+call to this function and remain that way until a row in the result set is 
+requested to be returned.
+
 The wxDbTable::Query() function is defined as "virtual" so that it may be 
 overridden for application specific purposes.
 
-\normalbox{Be sure and set the wxDbTable's "where", "orderBy", and "from" 
-member variables to "" if they are not being used in the query.  Otherwise, 
+\normalbox{Be sure to set the wxDbTable's "where", "orderBy", and "from" 
+member variables to "" if they are not to be used in the query.  Otherwise, 
 the results returned may have unexpected results (or no results) due to 
 improper or incorrect query parameters constructed from the uninitialized 
 clauses.}
@@ -2777,7 +2844,7 @@ SQL SELECT statement passed to the function.
 
 \wxheading{Parameters}
 
-\docparam{pSqlStmt}{A pointer to the SQL SELECT statement to be executed.}
+\docparam{pSqlStmt}{Pointer to the SQL SELECT statement to be executed.}
 
 \wxheading{Remarks}
 
@@ -2791,33 +2858,37 @@ specific function calls.
 The requirements of the SELECT statement are the following:
 
 \begin{verbatim}
-    1. Must return the correct number of columns.  In the derived wxDbTable 
-       constructor, it is specified how many columns are in the wxDbTable 
-       object.  The SELECT statement must return exactly that many columns.
+    1. Must return the correct number of columns.  In the derived 
+       wxDbTable constructor, it is specified how many columns are in 
+       the wxDbTable object.  The SELECT statement must return exactly 
+       that many columns.
 
     2. The columns must be returned in the same sequence as specified 
-       when defining the bounds columns using wxDbTable::SetColDefs(), and 
-       the columns returned must be of the proper data type.  For example, 
-       if column 3 is defined in the wxDbTable bound column definitions to be a float, 
-       the SELECT statement must return a float for column 3 (e.g. 
-       PRICE * 1.10 to increase the price by 10%).
+       when defining the bounds columns using wxDbTable::SetColDefs(), 
+       and the columns returned must be of the proper data type.  For 
+       example, if column 3 is defined in the wxDbTable bound column 
+       definitions to be a float, the SELECT statement must return a 
+       float for column 3 (e.g. PRICE * 1.10 to increase the price by 
+       10%).
 
-    3. The ROWID can be included in your SELECT statement as the last column 
-       selected, if the datasource supports it.  Use wxDbTable::CanUpdByROWID() 
-       to determine if the ROWID can be selected from the datasource.  If it 
-       can, much better performance can be achieved on updates and deletes 
-       by including the ROWID in the SELECT statement.
+    3. The ROWID can be included in your SELECT statement as the {\bf last}
+       column selected, if the datasource supports it.  Use 
+       wxDbTable::CanUpdByROWID() to determine if the ROWID can be 
+       selected from the datasource.  If it can, much better 
+       performance can be achieved on updates and deletes by including
+       the ROWID in the SELECT statement.
 \end{verbatim}
 
-Even though data can be selected from multiple tables in your select 
-statement (joins), only the base table associated with this wxDbTable object
+Even though data can be selected from multiple tables (joins) in your select 
+statement, only the base table associated with this wxDbTable object
 is automatically updated through the ODBC class library.  Data from multiple 
 tables can be selected for display purposes however.  Include columns in 
 the wxDbTable object and mark them as non-updateable (See 
 \helpref{wxDbColDef}{wxdbcoldef} for details).  This way columns can be 
 selected and displayed from other tables, but only the base table will be 
-updated automatically through the \helpref{wxDbTable::Update}{wxdbtableupdate} 
-function.  To update tables other than the base table, use the 
+updated automatically when performed through the 
+\helpref{wxDbTable::Update}{wxdbtableupdate} function after using this type of 
+query.  To update tables other than the base table, use the 
 \helpref{wxDbTable::Update}{wxdbtableupdate} function passing a SQL statement.
 
 After this function has been called, the cursor is positioned before the 
@@ -2843,9 +2914,11 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
     // Table Join returning 3 columns
     SELECT part_no, part_desc, sd_name
         from parts, storage_devices
-        where parts.storage_device_id = storage_devices.storage_device_id
+        where parts.storage_device_id = 
+              storage_devices.storage_device_id
 
-    // Aggregate function returning total number of parts in container 99
+    // Aggregate function returning total number of 
+    // parts in container 99
     SELECT count(*) from PARTS where container = 99
 
     // Order by clause; ROWID, scalar function
@@ -2908,6 +2981,10 @@ the query is performed.  To retrieve the first record, the program must call
 either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.
 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+this function.
+
 \wxheading{Example}
 
 \begin{verbatim}
@@ -2955,6 +3032,10 @@ the query is performed.  To retrieve the first record, the program must call
 either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or 
 \helpref{wxDbTable::GetNext}{wxdbtablegetnext}.
 
+WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} 
+and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by 
+this function.
+
 \wxheading{Example}
 
 \begin{verbatim}
@@ -2971,8 +3052,8 @@ either \helpref{wxDbTable::GetFirst}{wxdbtablegetfirst} or
 
 \func{bool}{Refresh}{\void}
 
-Refreshes (re-reads into the bound columns) the current record for the 
-current active cursor of the wxDbTable object.  
+This function re-reads the bound columns into the memory variables, setting 
+them to the current values stored on the disk.
 
 The cursor position and result set are unaffected by calls to this function.
 (The one exception is in the case where the record to be refreshed has been 
@@ -3039,7 +3120,7 @@ primary index.  Default is FALSE.}
 Default is TRUE.}
 \docparam{insAllow}{{\it OPTIONAL}.  Inserts allowed on this column?  
 Default is TRUE.}
-\docparam{derivedCol}{{\it OPTIONAL}.  Is this a derived column (non base 
+\docparam{derivedCol}{{\it OPTIONAL}.  Is this a derived column (non-base 
 table column for query only)?  Default is FALSE.}
 
 \docparam{colInfs}{Pointer to an array of wxDbColInf instances which contains 
@@ -3086,7 +3167,7 @@ were to be copied over to another datasource or table.
 
 \membersection{wxDbTable::SetCursor}\label{wxdbtablesetcursor}
 
-\func{bool}{Open}{\param{HSTMT *}{hstmtActivate = (void **) wxDB_DEFAULT_CURSOR}}
+\func{bool}{SetCursor}{\param{HSTMT *}{hstmtActivate = (void **) wxDB_DEFAULT_CURSOR}}
 
 \wxheading{Parameters}
 
@@ -3103,8 +3184,8 @@ current cursor is positioned at (if any).  If the cursor is not positioned,
 then the data in member variables is undefined.
 
 The only way to return back to the cursor that was in use before this 
-function was called is to programmatically determine the current cursor 
-BEFORE calling this function using \helpref{wxDbTable::GetCursor}{wxdbtablegetcursor} 
+function was called is to programmatically determine the current cursor's HSTMT 
+{\bf BEFORE} calling this function using \helpref{wxDbTable::GetCursor}{wxdbtablegetcursor} 
 and saving a pointer to that cursor.
 
 \wxheading{See also}
@@ -3160,14 +3241,14 @@ the datasource knows on which column values the tables should be joined on.
 \wxheading{See also}
 
 \helpref{wxDbTable::From}{wxdbtablefrom}, 
-\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+\helpref{wxDbTable::GetFromClause}{wxdbtablegetfromclause}
 
 
-\membersection{wxDbTable::SetNull}\label{wxdbtablesetnull}
+\membersection{wxDbTable::SetColNull}\label{wxdbtablesetcolnull}
 
-\func{bool}{SetNull}{\param{int }{colNo}}
+\func{bool}{SetColNull}{\param{int }{colNo}, \param{bool }{set=TRUE}}
 
-\func{bool}{SetNull}{\param{const char *}{colName}}
+\func{bool}{SetColNull}{\param{const char *}{colName}, \param{bool }{set=TRUE}}
 
 Both forms of this function allow a member variable representing a column 
 in the table associated with this wxDbTable object to be set to NULL.
@@ -3181,6 +3262,10 @@ the actual column name to be specified.
 \docparam{colNo}{Index into the column definitions used when first defining 
 this wxDbTable object.}
 \docparam{colName}{Actual data table column name that is to be set to NULL.}
+\docparam{set}{Whether the column is set to NULL or not.  Passing TRUE sets 
+the column to NULL, passing FALSE sets the column to be non-NULL.  Default is 
+TRUE.}
+
 
 \wxheading{Remarks}
 
@@ -3197,7 +3282,7 @@ Accessor function for setting the private class member wxDbTable::orderBy
 which determines sequence/ordering of the rows returned in the result set 
 of a query.
 
-Synonym to this function is one form of \helpref{wxDbTable::OrderBy}{wxdbtableorderby}
+A synonym to this function is one form of the function \helpref{wxDbTable::OrderBy}{wxdbtableorderby}
 
 \wxheading{Parameters}
 
@@ -3205,7 +3290,7 @@ Synonym to this function is one form of \helpref{wxDbTable::OrderBy}{wxdbtableor
 alphabetized sorting sequence that the result set is to be returned in.  If 
 a FROM clause has also been specified, each column name specified in the 
 ORDER BY clause should be prefaced with the table name to which the column 
-belongs using DOT notation (TABLE.COLUMN).}
+belongs using DOT notation (TABLE_NAME.COLUMN_NAME).}
 
 \wxheading{Remarks}
 
@@ -3226,7 +3311,7 @@ Do {\bf not} include the keywords "ORDER BY" when setting the ORDER BY clause.
 \wxheading{See also}
 
 \helpref{wxDbTable::OrderBy}{wxdbtableorderby}, 
-\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause}
+\helpref{wxDbTable::GetOrderByClause}{wxdbtablegetorderbyclause}
 
 
 \membersection{wxDbTable::SetQueryTimeout}\label{wxdbtablesetquerytimeout}
@@ -3254,7 +3339,7 @@ correctly.
 Accessor function for setting the private class member wxDbTable::where 
 that determines which rows are returned in the result set by the datasource.
 
-Synonym to this function is one form of \helpref{wxDbTable::Where}{wxdbtablewhere}
+A synonym to this function is one form of the function \helpref{wxDbTable::Where}{wxdbtablewhere}
 
 \wxheading{Parameters}
 
@@ -3262,7 +3347,7 @@ Synonym to this function is one form of \helpref{wxDbTable::Where}{wxdbtablewher
 that is legal in standard where clauses.  If a FROM clause has also been 
 specified, each column name specified in the ORDER BY clause should be 
 prefaced with the table name to which the column belongs using DOT notation 
-(TABLE.COLUMN).}
+(TABLE_NAME.COLUMN_NAME).}
 
 \wxheading{Remarks}
 
@@ -3292,14 +3377,17 @@ Do {\bf not} include the keywords "WHERE" when setting the WHERE clause.
                   LOCATION.PART_NUMBER > 0");
 \end{verbatim}
 
+\wxheading{See also}
+
+\helpref{wxDbTable::Where}{wxdbtablewhere}, 
+\helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause}
+
 
 \membersection{wxDbTable::Update}\label{wxdbtableupdate}
 
 \func{bool}{Update}{\void}
 
 \func{bool}{Update}{\param{const char *}{pSqlStmt}}
-
-This member function   
 
 The first form of this function will update the row that the current cursor 
 is currently positioned at with the values in the memory variables that 
@@ -3322,12 +3410,6 @@ the update.  This usually is in the form of:
 \docparam{pSqlStmt}{Pointer to SQL UPDATE statement to be executed.}
 
 \wxheading{Remarks}
-
-Note that using this function when it is associated with the table that the 
-wxDbTable instance is associated with does not prevent updating 
-columns in any other table in the database for which the connected user 
-has update privileges on.  Constructing the appropriate full SQL statement, 
-columns in other tables can also be updated as well.
 
 A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or 
 \helpref{wxDb::RollbackTrans}{wxdbrollbacktrans} must be called after use of 
@@ -3366,6 +3448,37 @@ A \helpref{wxDb::CommitTrans}{wxdbcommittrans} or
 this function to commit or rollback the update(s).
 
 
+\membersection{wxDbTable::Where}\label{wxdbtablewhere}
+
+\func{const char *}{Where}{}
+
+\func{void}{Where}{\param{const wxString& }{Where}}
+
+Accessor function for the private class member wxDbTable::where.  Can be used 
+as a synonym for \helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause} 
+(the first form of this function) to return the current where clause or  
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause} (the second form 
+of this function) to set the where clause for this table instance.
+
+\wxheading{Parameters}
+
+\docparam{Where}{A valid SQL WHERE clause.  Do not include the keyword 'WHERE'.}
+
+\wxheading{Return value}
+
+The first form of this function returns the current value of the wxDbTable 
+member variable ::where.  
+
+The second form of the function has no return value, as it will always set 
+the where clause successfully. 
+
+\wxheading{See also}
+
+\helpref{wxDbTable::GetWhereClause}{wxdbtablegetwhereclause}, 
+\helpref{wxDbTable::SetWhereClause}{wxdbtablesetwhereclause}
+
+
+
 \membersection{wxDbTable::operator $++$}\label{wxdbtableplusplus}
 
 \func{bool}{operator $++$}{\void}
@@ -3390,10 +3503,20 @@ Synonym for \helpref{wxDbTable::GetPrev}{wxdbtablegetprev}
 
 \section{\class{wxDbTableInf}}\label{wxdbtableinf}
 
-Currently only used by wxDb::GetCatalog() internally and wxDbInf class,
-but may be used in future releases for  user functions.  Contains information
-describing the table (Name, type, etc). A pointer to a wxDbColInf array 
-instance is included so a program can create a wxDbColInf array instance
-(using \helpref{wxDb::GetColumns}{wxdbgetcolumns}) to maintain all information about the columns
-of a table in one memory structure.
+\begin{verbatim}
+    tableName[0]    = 0;
+    tableType[0]    = 0;
+    tableRemarks[0] = 0;
+    numCols         = 0;
+    pColInf         = NULL;
+\end{verbatim}
+
+
+Currently only used by \helpref{wxDb::GetCatalog}{wxdbgetcatalog} internally 
+and \helpref{wxDbInf}{wxdbinf} class, but may be used in future releases for 
+user functions.  Contains information describing the table (Name, type, etc). 
+A pointer to a wxDbColInf array instance is included so a program can create a 
+\helpref{wxDbColInf}{wxdbcolinf} array instance (using \helpref{wxDb::GetColumns}{wxdbgetcolumns}) 
+to maintain all information about the columns of a table in one memory 
+structure.
 
