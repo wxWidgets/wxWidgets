@@ -170,9 +170,9 @@ typedef  _TUCHAR     wxUChar;
    // wchar_t is available
 #  undef wxUSE_WCHAR_T
 // This test is for C++Builder
-#if __BORLANDC__ == 0x530
+#if __BORLANDC__ >= 0x530
 #  define wxUSE_WCHAR_T 0
-#elif
+#else
 #  define wxUSE_WCHAR_T 1
 #  define wxNEED_WCSLEN
 #endif

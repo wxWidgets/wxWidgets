@@ -46,7 +46,7 @@
 // TODO: #define WX_GMTOFF_IN_TM for Windows compilers which have it here
 
 #if defined(__WIN32__) && !defined(WX_GMTOFF_IN_TM)
-    #include <winbase.h>
+    #include <windows.h>
 #endif
 
 #if defined(HAVE_GETTIMEOFDAY)

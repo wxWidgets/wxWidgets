@@ -21,6 +21,9 @@
 #include "gsocket.h"
 #endif
 
+#if defined(__BORLANDC__)
+#include <windows.h>
+#endif
 #include <winsock.h>
 
 #ifdef __cplusplus
