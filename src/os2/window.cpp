@@ -1430,9 +1430,9 @@ void wxWindowOS2::Refresh(
             RECTL                   vOs2Rect;
 
             vOs2Rect.xLeft   = pRect->x;
-            vOs2Rect.yTop    = pRect->y;
+            vOs2Rect.yBottom = pRect->y;
             vOs2Rect.xRight  = pRect->x + pRect->width;
-            vOs2Rect.yBottom = pRect->y + pRect->height;
+            vOs2Rect.yTop    = pRect->y + pRect->height;
 
             ::WinInvalidateRect(hWnd, &vOs2Rect, bEraseBack);
         }
