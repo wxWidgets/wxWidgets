@@ -58,13 +58,13 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            const wxString& name)
 {
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-    
-    
+
+
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
-    
+
     MacCreateRealWindow( title , pos , size , MacRemoveBordersFromStyle(style) & ~(wxYES|wxOK|wxNO|wxCANCEL) , name ) ;
-    
+
     m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
     SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
 
@@ -76,7 +76,7 @@ void wxDialog::SetModal(bool flag)
     if ( flag )
     {
         m_windowStyle |= wxDIALOG_MODAL;
-        
+
         wxModelessWindows.DeleteObject(this);
 #if TARGET_CARBON
         SetWindowModality( (WindowRef) MacGetWindowRef() , kWindowModalityAppModal , NULL ) ;
@@ -85,7 +85,7 @@ void wxDialog::SetModal(bool flag)
     else
     {
         m_windowStyle &= ~wxDIALOG_MODAL;
-        
+
         wxModelessWindows.Append(this);
     }
 }
@@ -99,7 +99,7 @@ wxDialog::~wxDialog()
 // By default, pressing escape cancels the dialog , on mac command-stop does the same thing
 void wxDialog::OnCharHook(wxKeyEvent& event)
 {
-    if (( event.m_keyCode == WXK_ESCAPE || 
+    if (( event.m_keyCode == WXK_ESCAPE ||
         ( event.m_keyCode == '.' && event.MetaDown() ) )
         && FindWindow(wxID_CANCEL) )
     {
@@ -108,7 +108,7 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
         wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
         cancelEvent.SetEventObject( this );
         GetEventHandler()->ProcessEvent(cancelEvent);
-        
+
         return;
     }
     // We didn't process this event.
@@ -167,8 +167,6 @@ void wxDialog::DoShowModal()
 
     wxModalDialogs.Append(this);
 
-    wxWindow *parent = GetParent();
-
 #if TARGET_CARBON
     BeginAppModalStateForWindow(  (WindowRef) MacGetWindowRef()) ;
 #else
@@ -181,7 +179,7 @@ void wxDialog::DoShowModal()
         wxTheApp->MacDoOneEvent() ;
         // calls process idle itself
     }
-    
+
 #if TARGET_CARBON
     EndAppModalStateForWindow( (WindowRef) MacGetWindowRef() ) ;
 #else
