@@ -87,18 +87,42 @@ void wxSystemSettings::Done()
 }
 
 // kind of widget to use in GetColourFromGTKWidget
-enum GtkWidgetType
+enum wxGtkWidgetType
 {
-    GTK_BUTTON,
-    GTK_LIST
+    wxGTK_BUTTON,
+    wxGTK_LIST
+};
+
+// the colour we need
+enum wxGtkColourType
+{
+    wxGTK_FG,
+    wxGTK_BG,
+    wxGTK_BASE
 };
 
 // wxSystemSettings::GetSystemColour() helper: get the colours from a GTK+
 // widget style, return true if we did get them, false to use defaults
-static bool GetColourFromGTKWidget(GtkWidgetType type, GtkStateType state,
-                                   int& red, int& green, int& blue)
+static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
+                                   wxGtkWidgetType type = wxGTK_BUTTON,
+                                   GtkStateType state = GTK_STATE_NORMAL,
+                                   wxGtkColourType colour = wxGTK_BG)
 {
-    GtkWidget *widget = type == GTK_BUTTON ? gtk_button_new() : gtk_list_new();
+    GtkWidget *widget;
+    switch ( type )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected GTK widget type") );
+            // fall through
+
+        case wxGTK_BUTTON:
+            widget = gtk_button_new();
+            break;
+
+        case wxGTK_LIST:
+            widget = gtk_list_new();
+    }
+
     GtkStyle *def = gtk_rc_get_style( widget );
     if ( !def )
         def = gtk_widget_get_default_style();
@@ -106,10 +130,26 @@ static bool GetColourFromGTKWidget(GtkWidgetType type, GtkStateType state,
     bool ok;
     if ( def )
     {
-        // ok, it's a hack: we really should have different functions to
-        // access GtkStyle::bg and ::base but as we only use base for listbox
-        // for now, this code works too
-        GdkColor *col = type == GTK_BUTTON ? def->bg : def->base;
+        GdkColor *col;
+        switch ( colour )
+        {
+            default:
+                wxFAIL_MSG( _T("unexpected GTK colour type") );
+                // fall through
+
+            case wxGTK_FG:
+                col = def->fg;
+                break;
+
+            case wxGTK_BG:
+                col = def->bg;
+                break;
+
+            case wxGTK_BASE:
+                col = def->base;
+                break;
+        }
+
         red = col[state].red;
         green = col[state].green;
         blue = col[state].blue;
@@ -143,8 +183,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             if (!g_systemBtnFaceColour)
             {
                 int red, green, blue;
-                if ( !GetColourFromGTKWidget(GTK_BUTTON, GTK_STATE_NORMAL,
-                                             red, green, blue) )
+                if ( !GetColourFromGTKWidget(red, green, blue) )
                 {
                     red =
                     green = 0;
@@ -197,8 +236,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             if (!g_systemHighlightColour)
             {
                 int red, green, blue;
-                if ( !GetColourFromGTKWidget(GTK_BUTTON, GTK_STATE_SELECTED,
-                                             red, green, blue) )
+                if ( !GetColourFromGTKWidget(red, green, blue,
+                                             wxGTK_BUTTON,
+                                             GTK_STATE_SELECTED) )
                 {
                     red =
                     green = 0;
@@ -215,8 +255,10 @@ wxColour wxSystemSettings::GetSystemColour( int index )
             if (!g_systemListBoxColour)
             {
                 int red, green, blue;
-                if ( GetColourFromGTKWidget(GTK_LIST, GTK_STATE_NORMAL,
-                                            red, green, blue) )
+                if ( GetColourFromGTKWidget(red, green, blue,
+                                            wxGTK_LIST,
+                                            GTK_STATE_NORMAL,
+                                            wxGTK_BASE) )
                 {
                     g_systemListBoxColour = new wxColour( red   >> SHIFT,
                                                           green >> SHIFT,
@@ -237,26 +279,20 @@ wxColour wxSystemSettings::GetSystemColour( int index )
         case wxSYS_COLOUR_INFOTEXT:
             if (!g_systemBtnTextColour)
             {
-                GtkWidget *widget = gtk_button_new();
-                GtkStyle *def = gtk_rc_get_style( widget );
-                if (!def)
-                    def = gtk_widget_get_default_style();
-                if (def)
+                int red, green, blue;
+                if ( !GetColourFromGTKWidget(red, green, blue,
+                                             wxGTK_BUTTON,
+                                             GTK_STATE_NORMAL,
+                                             wxGTK_FG) )
                 {
-                    int red = def->fg[GTK_STATE_NORMAL].red;
-                    int green = def->fg[GTK_STATE_NORMAL].green;
-                    int blue = def->fg[GTK_STATE_NORMAL].blue;
-                    g_systemBtnTextColour =
-                        new wxColour( red    >> SHIFT,
-                                green  >> SHIFT,
-                                blue   >> SHIFT );
+                    red =
+                    green =
+                    blue = 0;
                 }
-                else
-                {
-                    g_systemBtnTextColour =
-                        new wxColour(0, 0, 0);
-                }
-                gtk_widget_destroy( widget );
+
+                g_systemBtnTextColour = new wxColour( red   >> SHIFT,
+                                                      green >> SHIFT,
+                                                      blue  >> SHIFT );
             }
             return *g_systemBtnTextColour;
 
