@@ -130,11 +130,20 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_bDown->SetToolTip(wxT("Move down"));
 #endif
 
-    subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL);
-    subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL);
-    subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL);
-    subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL);
-    subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL);
+#ifdef __WXMSW__
+    #define BTN_BORDER 4
+    // FIXME - why is this needed? There's some reason why sunken border is 
+    //         ignored by sizers in wxMSW but not in wxGTK that I can't 
+    //         figure out...
+#else
+    #define BTN_BORDER 0
+#endif
+
+    subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
 
     subp->SetAutoLayout(TRUE);
     subp->SetSizer(subsizer);
