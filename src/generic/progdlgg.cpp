@@ -266,12 +266,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         SetTimeLabel(0, m_elapsed);
     }
 
-#ifdef __WXMAC__
     Update();
-#else
-    // Update the display (especially on X, GTK)
-    wxYield();
-#endif
 }
 
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
@@ -331,11 +326,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     {
         m_msg->SetLabel(newmsg);
 
-#ifdef __WXMAC__
         wxYieldIfNeeded() ;
-#else
-        wxYield();
-#endif
     }
 
     if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
@@ -374,11 +365,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
                 m_msg->SetLabel(_("Done."));
             }
 
-#ifdef __WXMAC__
             wxYieldIfNeeded() ;
-#else
-            wxYield();
-#endif
 
             (void)ShowModal();
         }
@@ -394,17 +381,13 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
     }
     else
     {
-        // update the display
-#ifdef __WXMAC__
+        // we have to yield because not only we want to update the display but
+        // also to process the clicks on the cancel button
         wxYieldIfNeeded() ;
-#else
-        wxYield();
-#endif
     }
 
-#ifdef __WXMAC__
+    // update the display in case yielding above didn't do it
     Update();
-#endif
 
     return m_state != Canceled;
 }
