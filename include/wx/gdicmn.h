@@ -133,13 +133,19 @@ public:
    inline long  GetHeight() const       { return height; }
    inline void SetHeight(long h)  { height = h; }
 
-   inline wxPoint GetPosition() { return wxPoint(x, y); }
-   inline wxSize GetSize() { return wxSize(width, height); }
+   inline wxPoint GetPosition() const { return wxPoint(x, y); }
+   inline wxSize GetSize() const { return wxSize(width, height); }
 
    inline long  GetLeft()   const { return x; }
    inline long  GetTop()    const { return y; }
    inline long  GetBottom() const { return y + height; }
    inline long  GetRight()  const { return x + width; }
+
+   // MFC-like functions
+   inline void SetLeft(long left) { x = left; }
+   inline void SetRight(long right) { width = right - x; }
+   inline void SetTop(long top) { y = top; }
+   inline void SetBottom(long bottom) { height = bottom - y; }
 
    wxRect& operator = (const wxRect& rect);
    bool operator == (const wxRect& rect);

@@ -1111,22 +1111,22 @@ long wxDC::DeviceToLogicalYRel(long y) const
 
 long wxDC::LogicalToDeviceX(long x) const
 {
-    return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX + m_deviceOriginX) ;
+    return (long) (((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX + m_deviceOriginX) ;
 }
 
 long wxDC::LogicalToDeviceXRel(long x) const
 {
-    return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) ;
+    return (long) (x*m_logicalScaleX*m_userScaleX*m_signX*m_systemScaleX) ;
 }
 
 long wxDC::LogicalToDeviceY(long y) const
 {
-    return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY + m_deviceOriginY);
+    return (long) (((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY + m_deviceOriginY);
 }
 
 long wxDC::LogicalToDeviceYRel(long y) const
 {
-    return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) ;
+    return (long) (y*m_logicalScaleY*m_userScaleY*m_signY*m_systemScaleY) ;
 }
 
 // This group of functions may not do any conversion
