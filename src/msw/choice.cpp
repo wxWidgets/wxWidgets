@@ -414,7 +414,8 @@ int wxChoice::GetVisibleHeight() const
 
 void wxChoice::UpdateVisibleHeight()
 {
-    DoSetSize(-1, -1, -1, GetVisibleHeight());
+    // be careful to not change the width here
+    DoSetSize(-1, -1, -1, GetVisibleHeight(), wxSIZE_USE_EXISTING);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
