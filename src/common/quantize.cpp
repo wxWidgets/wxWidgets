@@ -48,6 +48,10 @@
 #include "wx/image.h"
 #include "wx/quantize.h"
 
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 

@@ -94,6 +94,7 @@ GENERICOBJS = \
 		$(GENDIR)/tbarsmpl.$(OBJSUFF) \
 		$(GENDIR)/textdlgg.$(OBJSUFF) \
 		$(GENDIR)/tipdlg.$(OBJSUFF) \
+		$(GENDIR)/treectlg.$(OBJSUFF) \
 		$(GENDIR)/treelay.$(OBJSUFF) \
 		$(GENDIR)/wizard.$(OBJSUFF)
 

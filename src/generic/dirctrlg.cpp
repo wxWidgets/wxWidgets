@@ -47,6 +47,7 @@
 #include "wx/generic/dirctrlg.h"
 
 #ifdef __WXMSW__
+#include <windows.h>
 #include <direct.h>
 #include <stdlib.h>
 #include <ctype.h>
