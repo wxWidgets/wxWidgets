@@ -28,6 +28,9 @@ wxSoundStreamPcm::~wxSoundStreamPcm()
 
 #include "converter.def"
 
+// -----------------------------------------------------------------------
+// Main PCM stream converter table
+// -----------------------------------------------------------------------
 wxSoundStreamPcm::ConverterType s_converters[] = {
   NULL,
   Convert_8_8_sign,			/* 8 -> 8 sign */
@@ -72,7 +75,7 @@ wxSoundStreamPcm::ConverterType s_converters[] = {
 
 //
 // TODO: Read() and Write() aren't really safe. If you give it a buffer which
-// is not aligned on 8, you may crash (See converter.def).
+// is not aligned on 2, you may crash (See converter.def).
 //
 
 wxSoundStream& wxSoundStreamPcm::Read(void *buffer, wxUint32 len)
@@ -152,6 +155,13 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
   pcm_format = (wxSoundFormatPcm *)&format;
   pcm_format2 = (wxSoundFormatPcm *)new_format;
 
+  // ----------------------------------------------------
+  // Select table to use:
+  //     * 8 bits -> 8 bits
+  //     * 16 bits -> 8 bits
+  //     * 8 bits -> 16 bits
+  //     * 16 bits -> 16 bits
+
   m_16_to_8 = FALSE;
   if (pcm_format->GetBPS() != pcm_format2->GetBPS()) {
     m_16_to_8 = TRUE;
@@ -178,6 +188,10 @@ bool wxSoundStreamPcm::SetSoundFormat(const wxSoundFormatBase& format)
 #else
 #define OTHER_ORDER wxLITTLE_ENDIAN
 #endif
+
+  // --------------------------------------------------------
+  // Find the good converter !
+
 
   if (pcm_format->GetOrder() == OTHER_ORDER &&
       pcm_format2->GetOrder() == OTHER_ORDER && change_sign) 

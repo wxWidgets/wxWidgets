@@ -67,7 +67,8 @@ class wxSoundFileStream: public wxSoundStream {
   bool StartProduction(int evt);
   bool StopProduction();
 
-  unsigned long GetLength() const;
+  wxUint32 GetLength();
+  wxUint32 GetPosition();
 
   wxSoundStream& Read(void *buffer, wxUint32 len); 
   wxSoundStream& Write(const void *buffer, wxUint32 len);
@@ -85,12 +86,14 @@ class wxSoundFileStream: public wxSoundStream {
   wxOutputStream *m_output;
 
   wxSoundFileState m_state, m_oldstate;
-  wxUint32 m_len;
+  wxUint32 m_length, m_bytes_left;
+  bool m_prepared;
 
  protected:
   virtual bool PrepareToPlay() = 0; 
   virtual bool PrepareToRecord(unsigned long time) = 0;
   virtual bool FinishRecording() = 0;
+  void FinishPreparation(wxUint32 len);
 
   virtual wxUint32 GetData(void *buffer, wxUint32 len) = 0;
   virtual wxUint32 PutData(const void *buffer, wxUint32 len) = 0;

@@ -168,6 +168,7 @@ bool wxSoundWave::PrepareToPlay()
     }
     case DATA_SIGNATURE: // "data"
       end_headers = TRUE;
+      FinishPreparation(len);
       break;
     default:
       m_input->SeekI(len, wxFromCurrent);
@@ -308,10 +309,8 @@ bool wxSoundWave::FinishRecording()
     // We can't but there is no error.
     return TRUE;
 
-  if (m_len == 0)
+  if (m_bytes_left == 0)
     return TRUE;
-
-  
 
   // TODO: Update headers when we stop before the specified time (if possible)
   return TRUE;

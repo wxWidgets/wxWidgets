@@ -175,6 +175,9 @@ wxSoundFileStream::wxSoundFileStream(wxInputStream& stream,
   : m_codec(io_sound), m_sndio(&io_sound),
     m_input(&stream), m_output(NULL), m_state(wxSOUND_FILE_STOPPED)
 {
+  m_length = 0;
+  m_bytes_left = 0;
+  m_prepared = FALSE;
 }
 
 wxSoundFileStream::wxSoundFileStream(wxOutputStream& stream,
@@ -182,6 +185,9 @@ wxSoundFileStream::wxSoundFileStream(wxOutputStream& stream,
   : m_codec(io_sound), m_sndio(&io_sound),
     m_input(NULL), m_output(&stream), m_state(wxSOUND_FILE_STOPPED)
 {
+  m_length = 0;
+  m_bytes_left = 0;
+  m_prepared = FALSE;
 }
 
 wxSoundFileStream::~wxSoundFileStream()
@@ -195,8 +201,9 @@ bool wxSoundFileStream::Play()
   if (m_state != wxSOUND_FILE_STOPPED)
     return FALSE;
 
-  if (!PrepareToPlay())
-    return FALSE;
+  if (!m_prepared)
+    if (!PrepareToPlay())
+      return FALSE;
 
   m_state = wxSOUND_FILE_PLAYING;
 
@@ -214,7 +221,7 @@ bool wxSoundFileStream::Record(unsigned long time)
   if (!PrepareToRecord(time))
     return FALSE;
 
-  m_len = m_sndformat->GetBytesFromTime(time);
+  FinishPreparation(m_sndformat->GetBytesFromTime(time));
 
   m_state = wxSOUND_FILE_RECORDING;
   if (!StartProduction(wxSOUND_INPUT))
@@ -230,6 +237,8 @@ bool wxSoundFileStream::Stop()
 
   if (!StopProduction())
     return FALSE;
+
+  m_prepared = FALSE;
 
   if (m_state == wxSOUND_FILE_RECORDING)
     if (!FinishRecording()) {
@@ -306,6 +315,28 @@ bool wxSoundFileStream::StopProduction()
   return m_codec.StopProduction();
 }
 
+void wxSoundFileStream::FinishPreparation(wxUint32 len)
+{
+  m_bytes_left = m_length = len;
+  m_prepared = TRUE;
+}
+
+wxUint32 wxSoundFileStream::GetLength()
+{
+  if (m_input && !m_prepared && GetError() == wxSOUND_NOERR)
+    return (PrepareToPlay()) ? m_length : 0;
+
+  return m_length;
+}
+
+wxUint32 wxSoundFileStream::GetPosition()
+{
+  if (!m_prepared && m_input != NULL && GetError() == wxSOUND_NOERR)
+    PrepareToPlay();
+
+  return m_length-m_bytes_left;
+}
+
 void wxSoundFileStream::OnSoundEvent(int evt)
 {
   wxUint32 len = m_codec.GetBestSize();
@@ -317,21 +348,25 @@ void wxSoundFileStream::OnSoundEvent(int evt)
   while (!m_sndio->QueueFilled()) {
     switch(evt) {
     case wxSOUND_INPUT:
-      if (len > m_len)
-        len = m_len;
+      if (len > m_bytes_left)
+        len = m_bytes_left;
 
       len = m_codec.Read(buffer, len).GetLastAccess();
       PutData(buffer, len);
-      m_len -= len;
-      if (m_len == 0) {
+      m_bytes_left -= len;
+      if (m_bytes_left == 0) {
         Stop();
         delete[] buffer;
         return;
       }
       break;
     case wxSOUND_OUTPUT:
+      if (len > m_bytes_left)
+        len = m_bytes_left;
+
       len = GetData(buffer, len);
-      if (len == 0) {
+      m_bytes_left -= len;
+      if (m_bytes_left == 0) {
         Stop();
         delete[] buffer;
         return;

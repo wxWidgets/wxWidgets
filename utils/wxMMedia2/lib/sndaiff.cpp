@@ -141,6 +141,7 @@ bool wxSoundAiff::PrepareToPlay()
       // m_input->SeekI(4, wxFromCurrent);  // Pass an INT32
       // m_input->SeekI(len-4, wxFromCurrent); // Pass the rest
       m_input->SeekI(ssnd + 4, wxFromCurrent);
+      FinishPreparation(len - 4);
       end_headers = TRUE;
       break;
     }
