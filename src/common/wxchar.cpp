@@ -1109,16 +1109,16 @@ WXDLLEXPORT size_t	wxInternalWcstombs (char * out, const wchar_t * in, size_t ou
 
 #include <CoreFoundation/CoreFoundation.h>
 
-CFCharacterSetRef cfalnumset = CFCharacterSetGetPredefined(kCFCharacterSetAlphaNumeric);
-CFCharacterSetRef cfalphaset = CFCharacterSetGetPredefined(kCFCharacterSetLetter);
-CFCharacterSetRef cfcntrlset = CFCharacterSetGetPredefined(kCFCharacterSetControl);
-CFCharacterSetRef cfdigitset = CFCharacterSetGetPredefined(kCFCharacterSetDecimalDigit);
+#define cfalnumset CFCharacterSetGetPredefined(kCFCharacterSetAlphaNumeric)
+#define cfalphaset CFCharacterSetGetPredefined(kCFCharacterSetLetter)
+#define cfcntrlset CFCharacterSetGetPredefined(kCFCharacterSetControl)
+#define cfdigitset CFCharacterSetGetPredefined(kCFCharacterSetDecimalDigit)
 //CFCharacterSetRef cfgraphset = kCFCharacterSetControl && !' '
-CFCharacterSetRef cflowerset = CFCharacterSetGetPredefined(kCFCharacterSetLowercaseLetter);
+#define cflowerset CFCharacterSetGetPredefined(kCFCharacterSetLowercaseLetter)
 //CFCharacterSetRef cfprintset = !kCFCharacterSetControl
-CFCharacterSetRef cfpunctset = CFCharacterSetGetPredefined(kCFCharacterSetPunctuation);
-CFCharacterSetRef cfspaceset = CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline);
-CFCharacterSetRef cfupperset = CFCharacterSetGetPredefined(kCFCharacterSetUppercaseLetter);
+#define cfpunctset CFCharacterSetGetPredefined(kCFCharacterSetPunctuation)
+#define cfspaceset CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline)
+#define cfupperset CFCharacterSetGetPredefined(kCFCharacterSetUppercaseLetter)
 
 WXDLLEXPORT int wxIsalnum(wxChar ch) { return CFCharacterSetIsCharacterMember(cfalnumset, ch); }
 WXDLLEXPORT int wxIsalpha(wxChar ch) { return CFCharacterSetIsCharacterMember(cfalphaset, ch); }
