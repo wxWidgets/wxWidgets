@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/generic/prntdlgg.h"
+#include "wx/generic/dcpsg.h"
 #include "wx/printdlg.h"
 
 #include <stdlib.h>

@@ -620,13 +620,18 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long
     M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ::LoadBitmap(wxGetInstance(), name);
     if (M_BITMAPHANDLERDATA->m_hBitmap)
     {
-      M_BITMAPHANDLERDATA->m_ok = TRUE;
-      BITMAP bm;
-      GetObject((HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap, sizeof(BITMAP), (LPSTR) &bm);
-      M_BITMAPHANDLERDATA->m_width = bm.bmWidth;
-      M_BITMAPHANDLERDATA->m_height = bm.bmHeight;
-      M_BITMAPHANDLERDATA->m_depth = bm.bmBitsPixel;
-      return TRUE;
+        M_BITMAPHANDLERDATA->m_ok = TRUE;
+        BITMAP bm;
+        GetObject((HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap, sizeof(BITMAP), (LPSTR) &bm);
+        M_BITMAPHANDLERDATA->m_width = bm.bmWidth;
+        M_BITMAPHANDLERDATA->m_height = bm.bmHeight;
+        M_BITMAPHANDLERDATA->m_depth = bm.bmBitsPixel;
+
+        if ( bitmap->IsKindOf(CLASSINFO(wxIcon)) )
+        {
+        }
+
+        return TRUE;
     }
 
   // it's probably not found
