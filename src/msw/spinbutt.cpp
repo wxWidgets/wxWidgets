@@ -91,7 +91,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     m_windowId,
     wxGetInstance(),
     0,
-	m_min, m_max, 0);
+	m_min, m_max, m_min);
 
   m_hWnd = (WXHWND) hWndListControl;
   if (parent) parent->AddChild(this);
@@ -126,7 +126,8 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 	m_min = minVal;
 	m_max = maxVal;
-	::SendMessage((HWND) GetHWND(), UDM_SETRANGE, 0, (LPARAM) MAKELONG((short) minVal, (short) maxVal));
+	::SendMessage((HWND) GetHWND(), UDM_SETRANGE, 0,
+                   (LPARAM) MAKELONG((short)maxVal, (short)minVal));
 }
 
 void wxSpinButton::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
