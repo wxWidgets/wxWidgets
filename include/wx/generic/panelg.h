@@ -21,27 +21,28 @@
 WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
 
 
-class WXDLLEXPORT wxPanel: public wxWindow
+class WXDLLEXPORT wxPanel : public wxWindow
 {
 public:
   wxPanel();
 
   // Old-style constructor (no default values for coordinates to avoid ambiguity
   // with the new one)
-  inline wxPanel(wxWindow *parent,
-                 int x, int y, int width, int height,
-                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-                 const wxString& name = wxPanelNameStr)
+  wxPanel(wxWindow *parent,
+          int x, int y, int width, int height,
+          long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+          const wxString& name = wxPanelNameStr)
   {
       Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
   }
 
   // Constructor
-  inline wxPanel(wxWindow *parent, wxWindowID id = -1,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
-                 const wxString& name = wxPanelNameStr)
+  wxPanel(wxWindow *parent,
+          wxWindowID id = -1,
+          const wxPoint& pos = wxDefaultPosition,
+          const wxSize& size = wxDefaultSize,
+          long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+          const wxString& name = wxPanelNameStr)
   {
       Create(parent, id, pos, size, style, name);
   }
@@ -61,10 +62,14 @@ public:
   
     // Process a keyboard navigation message (Tab traversal)
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  
 
-DECLARE_DYNAMIC_CLASS(wxPanel)
-DECLARE_EVENT_TABLE()
+  // override base class virtuals
+    // we don't want focus for ourselves
+  virtual bool AcceptsFocus() const { return FALSE; }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPanel)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

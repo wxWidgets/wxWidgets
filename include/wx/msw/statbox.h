@@ -21,45 +21,52 @@
 WXDLLEXPORT_DATA(extern const char*) wxStaticBoxNameStr;
 
 // Group box
-class WXDLLEXPORT wxStaticBox: public wxControl
+class WXDLLEXPORT wxStaticBox : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticBox)
+DECLARE_DYNAMIC_CLASS(wxStaticBox)
+        
+public:
+    wxStaticBox() {}
 
- public:
-  inline wxStaticBox(void) {}
-  inline wxStaticBox(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticBoxNameStr)
-  {
-    Create(parent, id, label, pos, size, style, name);
-  }
+    wxStaticBox(wxWindow *parent, wxWindowID id,
+        const wxString& label,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxStaticBoxNameStr)
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
+    
+    bool Create(wxWindow *parent, wxWindowID id,
+        const wxString& label,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxStaticBoxNameStr);
+    
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
+    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) { }
+    
+    void OnEraseBackground(wxEraseEvent& event);
+    
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    
+    void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+        { wxWindow::SetSize(rect, sizeFlags); }
+    void SetSize(const wxSize& size)
+        { wxWindow::SetSize(size); }
+    void SetLabel(const wxString& label);
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticBoxNameStr);
-
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
-
-  void OnEraseBackground(wxEraseEvent& event);
-
-  virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  void SetLabel(const wxString& label);
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
-DECLARE_EVENT_TABLE()
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
+    
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif
