@@ -108,6 +108,33 @@ is preferably to proliferating many #ifdefs in the
 wxMSW/wxMicroWindows port itself.
 
 
+Errors/warnings
+===============
+
+In file ../../src/msw/window.cpp at line 1294: 'UpdateWindow' failed with error 0x00000000 (Success).
+
+  - caused because there are no paint messages pending. Presumed
+    harmless.
+
+In file ../../src/msw/dc.cpp at line 1838: 'BitBlt' failed with error 0x00000000 (Success).
+
+  - caused because the window isn't mapped, and MwPrepareDC in wingdi.c
+    fails (hwnd->unmapcount is non-zero). Presumed harmless.
+
+Recursive paint problem, e.g. when clicking the 'Press Me!'
+button in the widgets sample a few times, until the text control
+is full.
+
+  - possibly the scrollbar is causing the text control to be
+    updated, which somehow effects the scrollbar, which causes
+    a window update, etc.
+
+Sluggish updates.
+
+  - probably because many image to bitmap conversions are being
+    done on update, and bitmaps should probably be cached.
+
+
 Things missing from MicroWindows that need to be worked around
 ==============================================================
 
@@ -136,13 +163,11 @@ So how can we convert from wxImage to wxBitmap in MicroWindows?
 Well, a simple-minded way would be to use CreateCompatibleBitmap
 which returns an HBITMAP, select it into an HDC, and draw
 the pixels from the wxImage to the HDC one by one with SetPixel.
-This is now implemented, but without any mask handling, which will
-be needed.
-
-Unfortunately, there's a crash in malloc, within DeleteObject, when
-passed a bitmap created by CreateCompatibleBitmap, but only after a few
-deletions. This has yet to be tracked down, maybe by trying to create/delete
-some wxBitmaps from XPMs, from within e.g. the minimal sample.
+This is now implemented, but there are problems with masks.
+(a) masks have to be created at screen depth because BitBlt/GrDraw
+can't cope with differing depths, and (b) masked blitting
+is still not working (try enabling mask creation in
+wxBitmap::CreateFromImage by setting USE_MASKS to 1).
 
 
 Other missing features

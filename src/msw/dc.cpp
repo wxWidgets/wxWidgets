@@ -886,7 +886,6 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             useMask = FALSE;
         }
     }
-
     if ( useMask )
     {
 #ifdef __WIN32__
@@ -902,8 +901,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             HDC cdc = GetHdc();
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
-            ::SelectObject(hdcMem, GetHbitmapOf(bmp));
-
+            HBITMAP hOldBitmap = ::SelectObject(hdcMem, GetHbitmapOf(bmp));
 #if wxUSE_PALETTE
             wxPalette *pal = bmp.GetPalette();
             if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
@@ -923,6 +921,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
                 ::SelectPalette(hdcMem, oldPal, FALSE);
 #endif // wxUSE_PALETTE
 
+	    ::SelectObject(hdcMem, hOldBitmap);
             ::DeleteDC(hdcMem);
         }
 
@@ -959,15 +958,15 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         }
 
 #if wxUSE_PALETTE
-            wxPalette *pal = bmp.GetPalette();
-            if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
-            {
-                oldPal = ::SelectPalette(memdc, GetHpaletteOf(pal), FALSE);
-                ::RealizePalette(memdc);
-            }
+        wxPalette *pal = bmp.GetPalette();
+        if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
+        {
+            oldPal = ::SelectPalette(memdc, GetHpaletteOf(pal), FALSE);
+            ::RealizePalette(memdc);
+        }
 #endif // wxUSE_PALETTE
 
-        ::SelectObject( memdc, hbitmap );
+        HBITMAP hOldBitmap = ::SelectObject( memdc, hbitmap );
         ::BitBlt( cdc, x, y, width, height, memdc, 0, 0, SRCCOPY);
 
 #if wxUSE_PALETTE
@@ -975,6 +974,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             ::SelectPalette(memdc, oldPal, FALSE);
 #endif // wxUSE_PALETTE
 
+        ::SelectObject( memdc, hOldBitmap );
         ::DeleteDC( memdc );
 
         ::SetTextColor(GetHdc(), old_textground);
@@ -1769,8 +1769,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             dc_buffer = ::CreateCompatibleDC(GetHdc());
             buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
 #endif // wxUSE_DC_CACHEING/!wxUSE_DC_CACHEING
-            ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
-            ::SelectObject(dc_buffer, buffer_bmap);
+            HBITMAP hOldMaskBitmap = ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
+            HBITMAP hOldBufferBitmap = ::SelectObject(dc_buffer, buffer_bmap);
 
             // copy dest to buffer
             if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
@@ -1816,8 +1816,8 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
             }
 
             // tidy up temporary DCs and bitmap
-            ::SelectObject(dc_mask, 0);
-            ::SelectObject(dc_buffer, 0);
+            ::SelectObject(dc_mask, hOldMaskBitmap);
+            ::SelectObject(dc_buffer, hOldBufferBitmap);
 
 #if !wxUSE_DC_CACHEING
             {

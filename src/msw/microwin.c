@@ -283,3 +283,87 @@ int GetObject(HGDIOBJ hObj, int sz, LPVOID logObj)
         return 0;
     }
 }
+
+/* Not in wingdi.c in earlier versions of MicroWindows */
+#if 0
+HBITMAP WINAPI
+CreateCompatibleBitmap(HDC hdc, int nWidth, int nHeight)
+{
+	MWBITMAPOBJ *	hbitmap;
+	int		size;
+	int		linelen;
+
+	if(!hdc)
+		return NULL;
+
+	nWidth = MWMAX(nWidth, 1);
+	nHeight = MWMAX(nHeight, 1);
+
+	/* calc memory allocation size and linelen from width and height*/
+	if(!GdCalcMemGCAlloc(hdc->psd, nWidth, nHeight, 0, 0, &size, &linelen))
+		return NULL;
+
+	/* allocate gdi object*/
+	hbitmap = (MWBITMAPOBJ *)GdItemAlloc(sizeof(MWBITMAPOBJ)-1+size);
+	if(!hbitmap)
+		return NULL;
+	hbitmap->hdr.type = OBJ_BITMAP;
+	hbitmap->hdr.stockobj = FALSE;
+	hbitmap->width = nWidth;
+	hbitmap->height = nHeight;
+
+	/* create compatible with hdc*/
+	hbitmap->planes = hdc->psd->planes;
+	hbitmap->bpp = hdc->psd->bpp;
+	hbitmap->linelen = linelen;
+	hbitmap->size = size;
+
+	return (HBRUSH)hbitmap;
+}
+#endif
+
+/* Attempt by JACS to create arbitrary bitmap
+ * TODO: make use of lpData
+ */
+
+HBITMAP WINAPI
+CreateBitmap( int nWidth, int nHeight, int nPlanes, int bPP, LPCVOID lpData)
+{
+	MWBITMAPOBJ *	hbitmap;
+	int		size;
+	int		linelen;
+
+        HDC hScreenDC;
+
+        hScreenDC = GetDC(NULL);
+
+	nWidth = MWMAX(nWidth, 1);
+	nHeight = MWMAX(nHeight, 1);
+
+	/* calc memory allocation size and linelen from width and height*/
+	if(!GdCalcMemGCAlloc(hScreenDC->psd, nWidth, nHeight, nPlanes, bPP, &size, &linelen))
+        {
+                ReleaseDC(NULL, hScreenDC);
+		return NULL;
+	}
+        ReleaseDC(NULL, hScreenDC);
+
+	/* allocate gdi object*/
+	hbitmap = (MWBITMAPOBJ *)GdItemAlloc(sizeof(MWBITMAPOBJ)-1+size);
+	if(!hbitmap)
+		return NULL;
+	hbitmap->hdr.type = OBJ_BITMAP;
+	hbitmap->hdr.stockobj = FALSE;
+	hbitmap->width = nWidth;
+	hbitmap->height = nHeight;
+
+	/* create with specified parameters */
+	hbitmap->planes = nPlanes;
+	hbitmap->bpp = bPP;
+	hbitmap->linelen = linelen;
+	hbitmap->size = size;
+
+        /* TODO: copy data */
+
+	return (HBRUSH)hbitmap;
+}

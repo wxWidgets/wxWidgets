@@ -40,6 +40,8 @@
     #include "wx/icon.h"
 #endif
 
+//#include "device.h"
+
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
@@ -89,10 +91,12 @@ void wxBitmapRefData::Free()
     if ( m_hBitmap)
     {
 	//	printf("About to delete bitmap %d\n", (int) (HBITMAP) m_hBitmap);
+#if 1
         if ( !::DeleteObject((HBITMAP)m_hBitmap) )
         {
             wxLogLastError(wxT("DeleteObject(hbitmap)"));
         }
+#endif
     }
 
     delete m_bitmapMask;
@@ -381,17 +385,29 @@ bool wxBitmap::Create(int w, int h, int d)
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
 #ifdef __WXMICROWIN__
+
+  // Set this to 1 to experiment with mask code,
+  // which currently doesn't work
+#define USE_MASKS 0
+
     m_refData = new wxBitmapRefData();
 
     // Initial attempt at a simple-minded implementation.
     // The bitmap will always be created at the screen depth,
     // so the 'depth' argument is ignored.
-    // TODO: transparency (create a mask image)
     
     HDC hScreenDC = ::GetDC(NULL);
+    //    printf("Screen planes = %d, bpp = %d\n", hScreenDC->psd->planes, hScreenDC->psd->bpp);
     int screenDepth = ::GetDeviceCaps(hScreenDC, BITSPIXEL);
 
     HBITMAP hBitmap = ::CreateCompatibleBitmap(hScreenDC, image.GetWidth(), image.GetHeight());
+    HBITMAP hMaskBitmap = NULL;
+    HBITMAP hOldMaskBitmap = NULL;
+    HDC hMaskDC = NULL;
+    unsigned char maskR = 0;
+    unsigned char maskG = 0;
+    unsigned char maskB = 0;
+
     //    printf("Created bitmap %d\n", (int) hBitmap);
     if (hBitmap == NULL)
     {
@@ -399,9 +415,43 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 	return FALSE;
     }
     HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
-    ::ReleaseDC(NULL, hScreenDC);
 
     HBITMAP hOldBitmap = ::SelectObject(hMemDC, hBitmap);
+    ::ReleaseDC(NULL, hScreenDC);
+
+    // created an mono-bitmap for the possible mask
+    bool hasMask = image.HasMask();
+
+    if ( hasMask )
+    {
+#if USE_MASKS
+        // FIXME: we should be able to pass bpp = 1, but
+        // GdBlit can't handle a different depth
+#if 0
+        hMaskBitmap = ::CreateBitmap( (WORD)image.GetWidth(), (WORD)image.GetHeight(), 1, 1, NULL );
+#else
+        hMaskBitmap = ::CreateCompatibleBitmap( hMemDC, (WORD)image.GetWidth(), (WORD)image.GetHeight());
+#endif
+        maskR = image.GetMaskRed();
+        maskG = image.GetMaskGreen();
+        maskB = image.GetMaskBlue();
+
+        if (!hMaskBitmap)
+        {
+            hasMask = FALSE;
+	}
+        else
+        {
+            hScreenDC = ::GetDC(NULL);
+            hMaskDC = ::CreateCompatibleDC(hScreenDC);
+           ::ReleaseDC(NULL, hScreenDC);
+
+            hOldMaskBitmap = ::SelectObject( hMaskDC, hMaskBitmap);
+	}
+#else
+        hasMask = FALSE;
+#endif
+    }
 
     int i, j;
     for (i = 0; i < image.GetWidth(); i++)
@@ -413,11 +463,28 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 	    unsigned char blue = image.GetBlue(i, j);
 
 	    ::SetPixel(hMemDC, i, j, PALETTERGB(red, green, blue));
+
+            if (hasMask)
+            {
+                // scan the bitmap for the transparent colour and set the corresponding
+                // pixels in the mask to BLACK and the rest to WHITE
+                if (maskR == red && maskG == green && maskB == blue)
+                    ::SetPixel(hMaskDC, i, j, PALETTERGB(0, 0, 0));
+                else
+                    ::SetPixel(hMaskDC, i, j, PALETTERGB(255, 255, 255));
+	    }
 	}
     }
 
     ::SelectObject(hMemDC, hOldBitmap);
     ::DeleteDC(hMemDC);
+    if (hasMask)
+    {
+        ::SelectObject(hMaskDC, hOldMaskBitmap);
+	::DeleteDC(hMaskDC);
+
+        ((wxBitmapRefData*)m_refData)->m_bitmapMask = new wxMask((WXHBITMAP) hMaskBitmap);
+    }
     
     SetWidth(image.GetWidth());
     SetHeight(image.GetHeight());

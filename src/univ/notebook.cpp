@@ -466,6 +466,7 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
         dc.SelectObject(bmp);
         dc.SetBackground(wxBrush(GetBackgroundColour(), wxSOLID));
         m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, TRUE);
+        dc.SelectObject(wxNullBitmap);
 #else
         bmp = *m_imageList->GetBitmap(image);
 #endif

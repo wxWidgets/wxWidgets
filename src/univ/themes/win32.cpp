@@ -2239,6 +2239,7 @@ void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
         rectLabel.SetRight(rect.GetRight());
     }
 
+    // THIS IS THE CULPRIT -- JACS
     dc.DrawBitmap(bitmap, xBmp, yBmp, TRUE /* use mask */);
 
     DoDrawLabel(
@@ -2291,10 +2292,12 @@ void wxWin32Renderer::DrawCheckButton(wxDC& dc,
     else
     {
 	wxBitmap cbitmap(GetCheckBitmap(flags));
+#if 1
         DrawCheckOrRadioButton(dc, label,
                              cbitmap,
                              rect, flags, align, indexAccel,
 			       0); // no focus rect offset for checkboxes
+#endif
     }
 }
 

@@ -1446,6 +1446,12 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
 
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
 {
+    // TODO: is this consistent with other platforms?
+    // Still, negative width or height shouldn't be allowed
+    if (width < 0)
+        width = 0;
+    if (height < 0)
+        height = 0;
     if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
     {
         wxLogLastError(wxT("MoveWindow"));

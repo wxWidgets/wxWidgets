@@ -50,7 +50,7 @@ LIBNAME =
 include $(TOP)/Makefile.rules
 
 # List of objects to compile
-OBJS = widgets.o button.o # combobox.o gauge.o listbox.o notebook.o radiobox.o # slider.o spinbtn.o \
+OBJS = widgets.o button.o combobox.o gauge.o listbox.o notebook.o radiobox.o slider.o spinbtn.o \
  static.o textctrl.o 
 
 all: widgets

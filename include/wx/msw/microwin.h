@@ -77,6 +77,8 @@ BOOL  SetScrollInfo (HWND hWnd, int iSBar,
 		     LPCSCROLLINFO lpsi, BOOL fRedraw);
 BOOL  GetScrollInfo(HWND hWnd, int iSBar, LPSCROLLINFO lpsi);
 BOOL  ShowScrollBar (HWND hWnd, int iSBar, BOOL bShow);
+HBITMAP WINAPI
+CreateBitmap( int width, int height, int nPlanes, int bPP, LPCVOID lpData);
 
 #ifdef __cplusplus
 }

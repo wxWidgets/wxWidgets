@@ -154,10 +154,12 @@ void wxCheckBox::DoDraw(wxControlRenderer *renderer)
     if ( m_status == Status_Checked )
         flags |= wxCONTROL_CHECKED;
 
+    wxBitmap bitmap(GetBitmap(GetState(flags), m_status));
+
     renderer->GetRenderer()->
         DrawCheckButton(dc,
                         GetLabel(),
-                        GetBitmap(GetState(flags), m_status),
+                        bitmap,
                         renderer->GetRect(),
                         flags,
                         GetWindowStyle() & wxALIGN_RIGHT ? wxALIGN_RIGHT
