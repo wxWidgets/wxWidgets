@@ -26,7 +26,76 @@ END_EVENT_TABLE()
 
 #include <wx/mac/uma.h>
 
-wxToolBar::wxToolBar()
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+class wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxBitmap& bitmap1,
+                  const wxBitmap& bitmap2,
+                  bool toggle,
+                  wxObject *clientData,
+                  const wxString& shortHelpString,
+                  const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
+                            clientData, shortHelpString, longHelpString)
+    {
+        m_nSepCount = 0;
+        m_index = 0 ;
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control)
+        : wxToolBarToolBase(tbar, control)
+    {
+        m_nSepCount = 1;
+        m_index = 0 ;
+    }
+
+    // set/get the number of separators which we use to cover the space used by
+    // a control in the toolbar
+    void SetSeparatorsCount(size_t count) { m_nSepCount = count; }
+    size_t GetSeparatorsCount() const { return m_nSepCount; }
+
+    int		m_index ;
+private:
+    size_t m_nSepCount;
+};
+
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
+
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
+{
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
+                             clientData, shortHelpString, longHelpString);
+}
+
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
+{
+    return new wxToolBarTool(this, control);
+}
+
+// ----------------------------------------------------------------------------
+// wxToolBar construction
+// ----------------------------------------------------------------------------
+
+void wxToolBar::Init()
 {
   m_maxWidth = -1;
   m_maxHeight = -1;
@@ -135,7 +204,7 @@ PicHandle MakePictWhite(GWorldPtr wp)
 const short kwxMacToolBarTopMargin = 2 ;
 const short kwxMacToolBarLeftMargin = 2 ;
 
-bool wxToolBar::CreateTools()
+bool wxToolBar::Realize()
 {
   if (m_tools.Number() == 0)
       return FALSE;
@@ -155,9 +224,9 @@ bool wxToolBar::CreateTools()
 	while (node)
 	{
 		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->m_bitmap1.GetRefData()) ;
+		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
 		
-		if( tool->m_toolStyle != wxTOOL_STYLE_SEPARATOR )
+		if( !tool->IsSeparator() )
 		{
 			Rect toolrect = { toolbarrect.top + kwxMacToolBarTopMargin , toolbarrect.left + x + kwxMacToolBarLeftMargin , 0 , 0 } ;
 			toolrect.right = toolrect.left + toolSize.x ;
@@ -235,11 +304,6 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
     m_defaultWidth = size.x; m_defaultHeight = size.y;
 }
 
-wxSize wxToolBar::GetMaxSize() const
-{
-    return wxSize(m_maxWidth, m_maxHeight);
-}
-
 // The button size is bigger than the bitmap size
 wxSize wxToolBar::GetToolSize() const
 {
@@ -253,73 +317,69 @@ void wxToolBar::MacHandleControlClick( ControlHandle control , SInt16 controlpar
 	{
 		if ( m_macToolHandles[index] == (void*) control )
 		{
-			OnLeftClick( ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->m_index , ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->m_toggleState ) ;
+			OnLeftClick( ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->m_index , ( (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ) ->IsToggled() ) ;
 		}
 	}
 }
 
-void wxToolBar::EnableTool(int toolIndex, bool enable)
+void wxToolBar::SetRows(int nRows)
 {
-    wxNode *node = m_tools.Find((long)toolIndex);
-    if (node)
+    if ( nRows == m_maxRows )
     {
-        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-        tool->m_enabled = enable;
-        // TODO enable button
+        // avoid resizing the frame uselessly
+        return;
     }
+
+    m_maxRows = nRows;
 }
 
-void wxToolBar::ToggleTool(int toolIndex, bool toggle)
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
-    wxNode *node = m_tools.Find((long)toolIndex);
-    if (node)
-    {
-        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-        if (tool->m_isToggle)
-        {
-            tool->m_toggleState = toggle;
-            // TODO: set toggle state
-        }
-    }
+    MacClientToRootWindow( &x , &y ) ;
+    Point pt = { x ,y } ;
+
+	int index = 0 ;
+	for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
+	{
+		if ( PtInRect( pt , &(**(ControlHandle)(m_macToolHandles[index])).contrlRect) )
+		{
+			return  (wxToolBarTool*) (m_tools.Nth( index )->Data() ) ;
+		}
+	}
+
+    return (wxToolBarToolBase *)NULL;
 }
 
-void wxToolBar::ClearTools()
+void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
 {
-    // TODO
-    wxToolBarBase::ClearTools();
+        wxToolBarTool *tool = (wxToolBarTool *)t;
 }
 
-// If pushedBitmap is NULL, a reversed version of bitmap is
-// created and used as the pushed/toggled image.
-// If toggle is TRUE, the button toggles between the two states.
-
-wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
-             bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 {
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
-  tool->m_clientData = clientData;
-
-  if (xPos > -1)
-    tool->m_x = xPos;
-  else
-    tool->m_x = m_xMargin;
-
-  if (yPos > -1)
-    tool->m_y = yPos;
-  else
-    tool->m_y = m_yMargin;
-
-  tool->SetSize(GetToolSize().x, GetToolSize().y);
-
-  if ((tool->m_x + bitmap.GetWidth() + m_xMargin) > m_maxWidth)
-    m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
-
-  if ((tool->m_y + bitmap.GetHeight() + m_yMargin) > m_maxHeight)
-    m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
-
-  m_tools.Append((long)index, tool);
-  return tool;
+       wxToolBarTool *tool = (wxToolBarTool *)t;
+       // TODO: set toggle state
 }
 
+bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
+                             wxToolBarToolBase *tool)
+{
+    // nothing special to do here - we really create the toolbar buttons in
+    // Realize() later
+    tool->Attach(this);
+
+    return TRUE;
+}
+
+void wxToolBar::DoSetToggle(wxToolBarToolBase *t, bool toggle)
+{
+       wxToolBarTool *tool = (wxToolBarTool *)t;
+       // TODO: set toggle state
+}
+
+bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
+{
+		return TRUE ;
+}
 #endif // wxUSE_TOOLBAR
 

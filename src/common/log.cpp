@@ -398,6 +398,9 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 #if defined(__WXMSW__) && wxUSE_GUI
     OutputDebugString(str + wxT("\r\n"));
 #endif // MSW
+#if defined(__WXMAC__) && wxUSE_GUI
+    debugstr(str + wxT("\r\n"));
+#endif // MSW
 }
 
 // ----------------------------------------------------------------------------

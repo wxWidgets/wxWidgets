@@ -28,6 +28,12 @@
   IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 void wxMacBuildMenuString(StringPtr outMacItemText, char *outMacShortcutChar , short *outMacModifiers , const char *inItemName , bool useShortcuts ) ;
+
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
+{
+    return wxStripMenuCodes(text);
+}
+
 // ----------------------------------------------------------------------------
 // wxMenuItem
 // ----------------------------------------------------------------------------

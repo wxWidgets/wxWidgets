@@ -1113,37 +1113,6 @@ wxBitmap wxImage::ConvertToBitmap() const
     int index = 0;
     for (int y = 0; y < height; y++)
     {
-#if 0
-    	unsigned char lastr = 0 ;
-    	unsigned char lastg = 0 ;
-    	unsigned char lastb = 0 ;
-       	RGBColor lastcolor ;
-
-		MoveTo( 0 , y ) ;       	
-        for (int x = 0; x < width; x++)
-        {
-	    	unsigned char r = data[index++];
-    		unsigned char g = data[index++];
-    		unsigned char b = data[index++];
-
- 			if ( r != lastr || g != lastg || b != lastb )
- 			{
-       			lastcolor.red = ( lastr  << 8 ) + lastr ;
-       			lastcolor.green = ( lastg << 8 ) + lastg ;
-       			lastcolor.blue = ( lastb << 8 ) + lastb ;
-				RGBForeColor( &lastcolor ) ;
- 				LineTo( x , y ) ;
- 				lastr = r ;
- 				lastg = g ;
- 				lastb = b ;	
- 			}
-        } // for width
-		lastcolor.red = ( lastr  << 8 ) + lastr ;
-		lastcolor.green = ( lastg << 8 ) + lastg ;
-		lastcolor.blue = ( lastb << 8 ) + lastb ;
-		RGBForeColor( &lastcolor ) ;
-        LineTo( width - 1 , y ) ;
-#else
         for (int x = 0; x < width; x++)
         {
 	    	unsigned char r = data[index++];
@@ -1155,7 +1124,6 @@ wxBitmap wxImage::ConvertToBitmap() const
        		color.blue = ( b << 8 ) + b ;
        		SetCPixel( x , y , &color ) ;
        	}
-#endif
     }  // for height
 
    	SetGWorld( origPort , origDevice ) ;

@@ -56,7 +56,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , 
 		kControlBehaviorOffsetContents + kControlContentPictHandle , 0, 
-	  	kControlBevelButtonNormalBevelProc , (long) this ) ;
+	  	(( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
 	wxASSERT_MSG( m_macControl != NULL , "No valid mac control" ) ;
 	
     m_buttonBitmap = bitmap;

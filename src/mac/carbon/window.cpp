@@ -318,18 +318,9 @@ void wxWindow::DoGetPosition(int *x, int *y) const
     }
 }
 
-wxSize wxWindow::DoGetBestSize()
-{
-	return wxSize( 0 , 0 ) ;
-}
 
-bool wxWindow::Reparent(wxWindow *parent)
-{
-    if ( !wxWindowBase::Reparent(parent) )
-        return FALSE;
 
-    return TRUE;
-}
+
 
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {

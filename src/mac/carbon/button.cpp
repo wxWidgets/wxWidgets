@@ -64,7 +64,7 @@ void wxButton::SetDefault()
   }
 }
 
-wxSize wxButton::DoGetBestSize()
+wxSize wxButton::DoGetBestSize() const
 {
     int wBtn = m_label.Length() * 8 + 12 + 2 * m_macHorizontalBorder;
 	int hBtn = 13 + 2 * m_macVerticalBorder;

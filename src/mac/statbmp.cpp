@@ -46,7 +46,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
-    bool ret = wxControl::Create( parent, id, pos, size, style , name );
+    bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
     
 	SetSizeOrDefault() ;
 	

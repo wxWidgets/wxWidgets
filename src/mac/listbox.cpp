@@ -369,7 +369,7 @@ void wxListBox::SetString(int N, const wxString& s)
 	MacSet( N , s ) ;
 }
 
-wxSize wxListBox::DoGetBestSize()
+wxSize wxListBox::DoGetBestSize() const
 {
     return wxSize(100, 100);
 }

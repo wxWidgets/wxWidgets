@@ -18,9 +18,9 @@
 #include "wx/tabctrl.h"
 #include "wx/spinbutt.h"
 
-IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
+IMPLEMENT_ABSTRACT_CLASS(wxControl, wxControlBase)
 
-BEGIN_EVENT_TABLE(wxControl, wxWindow)
+BEGIN_EVENT_TABLE(wxControl, wxControlBase)
 	EVT_MOUSE_EVENTS( wxControl::OnMouseEvent ) 
 	EVT_CHAR( wxControl::OnKeyDown ) 
 	EVT_PAINT( wxControl::OnPaint ) 
@@ -79,6 +79,21 @@ wxControl::~wxControl()
     }
 }
 
+bool wxControl::Create(wxWindow *parent, wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size, long style,
+                       const wxValidator& validator,
+                       const wxString& name)
+{
+    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
+    if (rval) {
+#if wxUSE_VALIDATORS
+        SetValidator(validator);
+#endif
+    }
+    return rval;
+}
+
 void wxControl::SetLabel(const wxString& title)
 {
 	m_label = title ;
@@ -100,7 +115,7 @@ void wxControl::SetLabel(const wxString& title)
 	}
 }
 
-wxSize wxControl::DoGetBestSize()
+wxSize wxControl::DoGetBestSize() const
 {
     return wxSize(20, 20);
 }

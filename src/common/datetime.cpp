@@ -95,6 +95,9 @@
 #ifndef WX_TIMEZONE
     #if defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
+    #elif defined(__WXMAC__)
+    	long wxmac_timezone = 28800;
+    	#define WX_TIMEZONE wxmac_timezone ;
     #else // unknown platform - try timezone
         #define WX_TIMEZONE timezone
     #endif

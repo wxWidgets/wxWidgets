@@ -79,6 +79,7 @@
 #include "wx/wxexpr.h"
 
 #include "wx/settings.h"
+#include "wx/stream.h"
 
 // Forward (private) declarations
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
@@ -93,6 +94,7 @@ wxItemResource *wxResourceInterpretIcon(wxResourceTable& table, wxExpr *expr);
 wxFont wxResourceInterpretFontSpec(wxExpr *expr);
 
 bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table = (wxResourceTable *) NULL);
+bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table) ;
 bool wxResourceParseIncludeFile(const wxString& f, wxResourceTable *table = (wxResourceTable *) NULL);
 
 wxResourceTable *wxDefaultResourceTable = (wxResourceTable *) NULL;
@@ -206,6 +208,19 @@ bool wxResourceTable::DeleteResource(const wxString& name)
   }
   else
     return FALSE;
+}
+
+bool wxResourceTable::ParseResourceFile( wxInputStream *is )
+{
+  wxExprDatabase db;
+	int len = is->StreamSize() ;
+
+  bool eof = FALSE;
+  while ( is->TellI() + 10 < len) // it's a hack because the streams dont support EOF
+  {
+		wxResourceReadOneResource(is, db, &eof, this) ;
+  }
+  return wxResourceInterpretResources(*this, db);
 }
 
 bool wxResourceTable::ParseResourceFile(const wxString& filename)
@@ -1537,6 +1552,49 @@ static bool wxEatWhiteSpace(FILE *fd)
       }
    return FALSE;
 }
+static bool wxEatWhiteSpace(wxInputStream *is)
+{
+  int ch = is->GetC() ;
+  if ((ch != ' ') && (ch != '/') && (ch != ' ') && (ch != 10) && (ch != 13) && (ch != 9))
+  {
+    is->Ungetch(ch);
+    return TRUE;
+  }
+
+  // Eat whitespace
+  while (ch == ' ' || ch == 10 || ch == 13 || ch == 9)
+    ch = is->GetC();
+  // Check for comment
+  if (ch == '/')
+  {
+    ch = is->GetC();
+    if (ch == '*')
+    {
+      bool finished = FALSE;
+      while (!finished)
+      {
+        ch = is->GetC();
+        if (ch == EOF)
+          return FALSE;
+        if (ch == '*')
+        {
+          int newCh = is->GetC();
+          if (newCh == '/')
+            finished = TRUE;
+          else
+          {
+   					is->Ungetch(ch);
+          }
+        }
+      }
+    }
+    else // False alarm
+      return FALSE;
+  }
+  else
+    is->Ungetch(ch);
+  return wxEatWhiteSpace(is);
+}
 
 bool wxGetResourceToken(FILE *fd)
 {
@@ -1593,6 +1651,71 @@ bool wxGetResourceToken(FILE *fd)
       wxResourceBufferCount ++;
 
       ch = getc(fd);
+    }
+    wxResourceBuffer[wxResourceBufferCount] = 0;
+    if (ch == EOF)
+      return FALSE;
+  }
+  return TRUE;
+}
+
+bool wxGetResourceToken(wxInputStream *is)
+{
+  if (!wxResourceBuffer)
+    wxReallocateResourceBuffer();
+  wxResourceBuffer[0] = 0;
+  wxEatWhiteSpace(is);
+
+  int ch = is->GetC() ;
+  if (ch == '"')
+  {
+    // Get string
+    wxResourceBufferCount = 0;
+    ch = is->GetC();
+    while (ch != '"')
+    {
+      int actualCh = ch;
+      if (ch == EOF)
+      {
+        wxResourceBuffer[wxResourceBufferCount] = 0;
+        return FALSE;
+      }
+      // Escaped characters
+      else if (ch == '\\')
+      {
+        int newCh = is->GetC();
+        if (newCh == '"')
+          actualCh = '"';
+        else if (newCh == 10)
+          actualCh = 10;
+        else if (newCh == 13) // mac
+          actualCh = 10;
+        else
+        {
+    			is->Ungetch(newCh);
+        }
+      }
+
+      if (wxResourceBufferCount >= wxResourceBufferSize-1)
+        wxReallocateResourceBuffer();
+      wxResourceBuffer[wxResourceBufferCount] = (char)actualCh;
+      wxResourceBufferCount ++;
+      ch = is->GetC();
+    }
+    wxResourceBuffer[wxResourceBufferCount] = 0;
+  }
+  else
+  {
+    wxResourceBufferCount = 0;
+    // Any other token
+    while (ch != ' ' && ch != EOF && ch != ' ' && ch != 13 && ch != 9 && ch != 10)
+    {
+      if (wxResourceBufferCount >= wxResourceBufferSize-1)
+        wxReallocateResourceBuffer();
+      wxResourceBuffer[wxResourceBufferCount] = (char)ch;
+      wxResourceBufferCount ++;
+
+      ch = is->GetC();
     }
     wxResourceBuffer[wxResourceBufferCount] = 0;
     if (ch == EOF)
@@ -1699,6 +1822,135 @@ bool wxResourceReadOneResource(FILE *fd, wxExprDatabase& db, bool *eof, wxResour
   wxChar nameBuf[100];
   wxMB2WX(nameBuf, wxResourceBuffer+1, 99);
   nameBuf[99] = 0;
+
+  // =
+  if (!wxGetResourceToken(fd))
+  {
+    wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+    *eof = TRUE;
+    return FALSE;
+  }
+
+  if (strcmp(wxResourceBuffer, "=") != 0)
+  {
+    wxLogWarning(_("Expected '=' whilst parsing resource."));
+    return FALSE;
+  }
+
+  // String
+  if (!wxGetResourceToken(fd))
+  {
+    wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+    *eof = TRUE;
+    return FALSE;
+  }
+  else
+  {
+    if (!db.ReadPrologFromString(wxResourceBuffer))
+    {
+      wxLogWarning(_("%s: ill-formed resource file syntax."), nameBuf);
+      return FALSE;
+    }
+  }
+  // Semicolon
+  if (!wxGetResourceToken(fd))
+  {
+    *eof = TRUE;
+  }
+  return TRUE;
+}
+
+bool wxResourceReadOneResource(wxInputStream *fd, wxExprDatabase& db, bool *eof, wxResourceTable *table)
+{
+  if (!table)
+    table = wxDefaultResourceTable;
+
+  // static or #define
+  if (!wxGetResourceToken(fd))
+  {
+    *eof = TRUE;
+    return FALSE;
+  }
+
+  if (strcmp(wxResourceBuffer, "#define") == 0)
+  {
+    wxGetResourceToken(fd);
+    char *name = copystring(wxResourceBuffer);
+    wxGetResourceToken(fd);
+    char *value = copystring(wxResourceBuffer);
+    if (isalpha(value[0]))
+    {
+      int val = (int)atol(value);
+      wxResourceAddIdentifier(name, val, table);
+    }
+    else
+    {
+      wxLogWarning(_("#define %s must be an integer."), name);
+      delete[] name;
+      delete[] value;
+      return FALSE;
+    }
+    delete[] name;
+    delete[] value;
+
+    return TRUE;
+  }
+  else if (strcmp(wxResourceBuffer, "#include") == 0)
+  {
+    wxGetResourceToken(fd);
+    char *name = copystring(wxResourceBuffer);
+    char *actualName = name;
+    if (name[0] == '"')
+      actualName = name + 1;
+    int len = strlen(name);
+    if ((len > 0) && (name[len-1] == '"'))
+      name[len-1] = 0;
+    if (!wxResourceParseIncludeFile(actualName, table))
+    {
+      wxLogWarning(_("Could not find resource include file %s."), actualName);
+    }
+    delete[] name;
+    return TRUE;
+  }
+  else if (strcmp(wxResourceBuffer, "static") != 0)
+  {
+    char buf[300];
+    strcpy(buf, _("Found "));
+    strncat(buf, wxResourceBuffer, 30);
+    strcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
+    wxLogWarning(buf);
+    return FALSE;
+  }
+
+  // char
+  if (!wxGetResourceToken(fd))
+  {
+    wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+    *eof = TRUE;
+    return FALSE;
+  }
+
+  if (strcmp(wxResourceBuffer, "char") != 0)
+  {
+    wxLogWarning(_("Expected 'char' whilst parsing resource."));
+    return FALSE;
+  }
+
+  // *name
+  if (!wxGetResourceToken(fd))
+  {
+    wxLogWarning(_("Unexpected end of file whilst parsing resource."));
+    *eof = TRUE;
+    return FALSE;
+  }
+
+  if (wxResourceBuffer[0] != '*')
+  {
+    wxLogWarning(_("Expected '*' whilst parsing resource."));
+    return FALSE;
+  }
+  char nameBuf[100];
+  strncpy(nameBuf, wxResourceBuffer+1, 99);
 
   // =
   if (!wxGetResourceToken(fd))
