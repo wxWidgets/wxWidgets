@@ -76,7 +76,15 @@ private:
 class wxPopupFocusHandler : public wxEvtHandler
 {
 public:
-    wxPopupFocusHandler(wxPopupTransientWindow *popup) { m_popup = popup; }
+    wxPopupFocusHandler(wxPopupTransientWindow *popup)
+    {
+        m_popup = popup;
+
+#ifdef __WXGTK__
+        // ignore the next few OnKillFocus() calls
+        m_creationTime = time(NULL);
+#endif // __WXGTK__
+    }
 
 protected:
     // event handlers
@@ -85,6 +93,12 @@ protected:
 
 private:
     wxPopupTransientWindow *m_popup;
+
+    // hack around wxGTK bug: we always get several kill focus events
+    // immediately after creation!
+#ifdef __WXGTK__
+    time_t m_creationTime;
+#endif // __WXGTK__
 
     DECLARE_EVENT_TABLE()
 };
@@ -206,33 +220,27 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
         m_child = this;
     }
 
-    // we can't capture mouse before the window is shown in wxGTK
-#ifdef __WXGTK__
+    // we can't capture mouse before the window is shown in wxGTK, so do it
+    // first
     Show();
-#endif
 
     m_child->CaptureMouse();
     m_child->PushEventHandler(new wxPopupWindowHandler(this));
 
-#ifndef __WXGTK__
-    Show();
-#endif
-
     m_focus = winFocus ? winFocus : this;
     m_focus->SetFocus();
 
+#ifdef __WXMSW__
     // FIXME: I don't know why does this happen but sometimes SetFocus() simply
     //        refuses to work under MSW - no error happens but the focus is not
     //        given to the window, i.e. the assert below is triggered
     //
     //        Try work around this as we can...
-#if 0
-    wxASSERT_MSG( FindFocus() == m_focus, _T("setting focus failed") );
-#else
-    m_focus = FindFocus();
-#endif
 
+    //wxASSERT_MSG( FindFocus() == m_focus, _T("setting focus failed") );
+    m_focus = FindFocus();
     if ( m_focus )
+#endif // __WXMSW__
     {
         m_focus->PushEventHandler(new wxPopupFocusHandler(this));
     }
@@ -379,6 +387,16 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
+#ifdef __WXGTK__
+    // ignore the next OnKillFocus() call
+    if ( time(NULL) < m_creationTime + 1 )
+    {
+        event.Skip();
+
+        return;
+    }
+#endif // __WXGTK__
+
     // when we lose focus we always disappear - unless it goes to the popup (in
     // which case we don't really lose it)
     if ( event.GetWindow() != m_popup )
