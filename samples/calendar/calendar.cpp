@@ -599,9 +599,10 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
 
     wxSizer *sizerText = new wxBoxSizer(wxHORIZONTAL);
     sizerText->Add(new wxStaticText(this, -1, _T("Date in ISO format: ")),
-                    wxSizerFlags().Border());
+                    wxSizerFlags().Border().Align(wxALIGN_CENTRE_VERTICAL));
     m_text = new wxTextCtrl(this, -1);
-    sizerText->Add(m_text, wxSizerFlags().Expand().Border());
+    sizerText->Add(m_text, wxSizerFlags().
+                        Expand().Border().Align(wxALIGN_CENTRE_VERTICAL));
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(new wxStaticText
@@ -638,7 +639,8 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
 
 void MyDialog::OnDateChange(wxDateEvent& event)
 {
-    m_text->SetValue(event.GetDate().FormatISODate());
+    const wxDateTime dt = event.GetDate();
+    m_text->SetValue(dt.IsValid()? dt.FormatISODate() : wxString());
 }
 
 #endif // wxUSE_DATEPICKCTRL
