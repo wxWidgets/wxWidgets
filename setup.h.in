@@ -750,6 +750,12 @@
 /* Define if you have the nanosleep function.  */
 #undef HAVE_NANOSLEEP
 
+/* Define if you have the putenv function.  */
+#undef HAVE_PUTENV
+
+/* Define if you have the setenv function.  */
+#undef HAVE_SETENV
+
 /* Define if you have the shl_load function.  */
 #undef HAVE_SHL_LOAD
 

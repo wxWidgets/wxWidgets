@@ -2446,6 +2446,9 @@ AC_CHECK_FUNCS(vfork)
 dnl check for timegm() used by datetime.cpp
 AC_CHECK_FUNCS(timegm)
 
+dnl look for a functiopn to modify the environment
+AC_CHECK_FUNCS(putenv setenv, break)
+
 HAVE_SOME_SLEEP_FUNC=0
 if test "$USE_BEOS" = 1; then
     dnl BeOS has its own (wonder where did they get it from) sleep() function

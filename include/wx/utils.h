@@ -59,7 +59,7 @@ class WXDLLEXPORT wxPoint;
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
-// Useful buffer (FIXME VZ: yeah, that is. To be removed!)
+// Useful buffer (FIXME VZ: To be removed!!!)
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 
 // Make a copy of this string using 'new'
@@ -202,6 +202,20 @@ WXDLLEXPORT long wxGetFreeMemory();
 
 // should wxApp::OnFatalException() be called?
 WXDLLEXPORT bool wxHandleFatalExceptions(bool doit = TRUE);
+
+// ----------------------------------------------------------------------------
+// Environment variables
+// ----------------------------------------------------------------------------
+
+// wxGetenv is declared in wxchar.h, but define a wrapper/synonym for it for
+// consistency with wxSetEnv
+inline const wxChar *wxGetEnv(const wxString& var) { return wxGetenv(var); }
+
+// set the env var name to the given value, return TRUE on success
+WXDLLEXPORT bool wxSetEnv(const wxString& var, const wxChar *value);
+
+// remove the env var from environment
+inline bool wxUnsetEnv(const wxString& var) { return wxSetEnv(var, NULL); }
 
 // ----------------------------------------------------------------------------
 // Network and username functions.

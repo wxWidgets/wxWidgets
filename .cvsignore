@@ -37,6 +37,10 @@ base
 gtk
 motif
 win32
+base-debug
+gtk-debug
+motif-debug
+win32-debug
 base-release
 gtk-release
 motif-release

@@ -40,7 +40,8 @@
 //#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
-#define TEST_EXECUTE
+#define TEST_ENVIRON
+//#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
 //#define TEST_HASH
@@ -282,6 +283,31 @@ static void TestDllLoad()
 }
 
 #endif // TEST_DLLLOADER
+
+// ----------------------------------------------------------------------------
+// wxGet/SetEnv
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_ENVIRON
+
+#include <wx/utils.h>
+
+static void TestEnvironment()
+{
+    const wxChar *var = _T("wxTestVar");
+
+    puts("*** testing environment access functions ***");
+
+    printf("Initially getenv(%s) = '%s'\n", var, wxGetenv(var));
+    wxSetEnv(var, _T("value for wxTestVar"));
+    printf("After wxSetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+    wxSetEnv(var, _T("another value"));
+    printf("After 2nd wxSetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+    wxUnsetEnv(var);
+    printf("After wxUnsetEnv: getenv(%s) = '%s'\n",  var, wxGetenv(var));
+}
+
+#endif // TEST_ENVIRON
 
 // ----------------------------------------------------------------------------
 // wxExecute
@@ -3683,6 +3709,10 @@ int main(int argc, char **argv)
 #ifdef TEST_DLLLOADER
     TestDllLoad();
 #endif // TEST_DLLLOADER
+
+#ifdef TEST_ENVIRON
+    TestEnvironment();
+#endif // TEST_ENVIRON
 
 #ifdef TEST_EXECUTE
     TestExecute();
