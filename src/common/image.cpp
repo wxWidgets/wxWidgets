@@ -437,7 +437,31 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
         return FALSE;
 }
 
+bool wxImage::CanRead( const wxString &name )
+{
 #if wxUSE_STREAMS
+  wxFileInputStream stream(name);
+  return CanRead(stream);
+#else
+  return FALSE;
+#endif
+}
+
+#if wxUSE_STREAMS
+
+bool wxImage::CanRead( wxInputStream &stream )
+{
+  wxList &list=GetHandlers();
+  
+  for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+    {  
+      wxImageHandler *handler=(wxImageHandler*)node->GetData();
+      if (handler->CanRead( stream ))
+	return TRUE;
+    }
+
+  return FALSE;
+}
 
 bool wxImage::LoadFile( wxInputStream& stream, long type )
 {

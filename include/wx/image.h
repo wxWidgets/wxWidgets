@@ -290,10 +290,12 @@ public:
   unsigned char GetGreen( int x, int y );
   unsigned char GetBlue( int x, int y );
 
+  static bool CanRead( const wxString& name );
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
   virtual bool LoadFile( const wxString& name, const wxString& mimetype );
 
 #if wxUSE_STREAMS
+  static bool CanRead( wxInputStream& stream );
   virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
   virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype );
 #endif
