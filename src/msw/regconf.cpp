@@ -309,8 +309,12 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
                         totalSlashes++;
                     }
-                    //else: nothing to do, we squeeze several subseuquent
-                    //      slashes into one
+                    else // previous char was a slash too
+                    {
+                        // squeeze several subsequent slashes into one: i.e.
+                        // just ignore this one
+                        dst--;
+                    }
                 }
             }
             else // normal character
