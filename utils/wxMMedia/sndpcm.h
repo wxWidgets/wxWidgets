@@ -13,11 +13,6 @@ class wxSoundPcmCodec : public wxSoundCodec {
   wxSoundPcmCodec();
   virtual ~wxSoundPcmCodec();
 
-  void SetSampleRate(int srate) { m_orig_format.SetSampleRate(srate); }
-  void SetBits(int bits) { m_orig_format.SetBps(bits); }
-  void SetByteOrder(int order) { m_orig_format.SetByteOrder(order); }
-  void SetSign(int sample_sign) { m_orig_format.SetSign(sample_sign); }
-
   size_t GetByteRate() const;
   wxSoundDataFormat GetPreferredFormat(int codec = 0) const;
 
@@ -31,6 +26,7 @@ class wxSoundPcmCodec : public wxSoundCodec {
   void OutputSwapAndSign16();
 
  protected:
+  friend class wxSoundDataFormat;
   wxSoundDataFormat m_orig_format;
   char m_char_stack;
   bool m_char_bool;

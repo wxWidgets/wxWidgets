@@ -1,0 +1,7 @@
+------------------------------------------------------------------------------
+| WARNING: This sub-package doesn't work, so don't try to compile it if you  |
+| don't want to make some development on it.                                 |
+------------------------------------------------------------------------------
+
+If you want to build it rename Makefile.bd in Makefile and Makefile.ibd in
+Makefile.in. After that, rerun config.status.

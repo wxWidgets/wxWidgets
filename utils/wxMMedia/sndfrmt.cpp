@@ -106,9 +106,11 @@ void wxSoundDataFormat::CodecChange()
   case WXSOUND_PCM: {
       wxSoundPcmCodec *pcm_codec = (wxSoundPcmCodec *)codec;
 
-      pcm_codec->SetBits(m_bps);
-      pcm_codec->SetByteOrder(m_byteorder);
-      pcm_codec->SetSign(m_sign);
+      pcm_codec->m_orig_format.SetSampleRate(m_srate);
+      pcm_codec->m_orig_format.SetBps(m_bps);
+      pcm_codec->m_orig_format.SetChannels(m_channels);
+      pcm_codec->m_orig_format.SetByteOrder(m_byteorder);
+      pcm_codec->m_orig_format.SetSign(m_sign);
       break;
     }
   default:
