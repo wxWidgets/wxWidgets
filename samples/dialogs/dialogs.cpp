@@ -48,7 +48,7 @@
 
 #define wxUSE_DIRDLGG 0
 
-#if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
+#if !(defined(__WXMSW__) || defined(__WXMAC__)) || wxUSE_DIRDLGG
 #include "wx/generic/dirdlgg.h"
 #endif
 
@@ -590,7 +590,7 @@ void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
 {
-#if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
+#if !(defined(__WXMSW__) || defined(__WXMAC__)) || wxUSE_DIRDLGG
     // pass some initial dir to wxDirDialog
     wxString dirHome;
     wxGetHomeDir(&dirHome);
