@@ -119,7 +119,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/wrapwin.h
 </set>
 <set var="BASE_WINCE_HDR" hints="files">
-    <if cond="TOOLKIT=='WINCE'">wx/msw/wince/time.h</if>
+    <if cond="TOOLKIT=='WINCE'">
+        wx/msw/wince/time.h
+        wx/msw/wince/chkconf.h
+    </if>
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
