@@ -542,6 +542,35 @@ inline wxObject *wxCheckDynamicCast(wxObject *obj, wxClassInfo *classInfo)
     return obj && obj->GetClassInfo()->IsKindOf(classInfo) ? obj : NULL;
 }
 
+#if wxUSE_EXTENDED_RTTI
+class WXDLLIMPEXP_BASE wxDynamicObject : public wxObject
+{
+public:
+    // instantiates this object with an instance of its superclass
+    wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) ;
+    ~wxDynamicObject();
+
+    void SetProperty (const wxChar *PropertyName, const wxxVariant &Value);
+    wxxVariant GetProperty (const wxChar *PropertyName) const ;
+
+    // get the runtime identity of this object
+    wxClassInfo *GetClassInfo() const
+    {
+		return const_cast<wxClassInfo*>((const wxClassInfo*)m_classInfo);
+    }
+
+    wxObject* GetSuperClassInstance() const
+    {
+        return m_superClassInstance ;
+    }
+private :
+    wxObject *m_superClassInstance ;
+    const wxDynamicClassInfo *m_classInfo;
+    struct wxDynamicObjectInternal;
+    wxDynamicObjectInternal *m_data;
+};
+#endif
+
 // ----------------------------------------------------------------------------
 // more debugging macros
 // ----------------------------------------------------------------------------

@@ -63,12 +63,25 @@ void wxWriter::WriteObject(const wxObject *object, const wxClassInfo *classInfo 
 {
     if ( persister->BeforeWriteObject( object , classInfo , name ) )
     {
-        int oid = m_data->m_nextId++ ;
-        m_data->m_writtenObjects[object] = oid ;
-        DoBeginWriteObject( object , classInfo , oid , name ) ;
-        wxWriterInternalPropertiesData data ;
-        WriteAllProperties( object , classInfo , persister , &data ) ;
-        DoEndWriteObject( object , classInfo , oid , name  ) ;
+        if ( object == NULL || IsObjectKnown( object ) )
+        {
+            DoWriteObjectReference( NULL , NULL , object , classInfo , GetObjectID(object) , NULL ) ;
+        }
+        else
+        {
+            int oid = m_data->m_nextId++ ;
+            m_data->m_writtenObjects[object] = oid ;
+            // in case this object is a wxDynamicObject we also have to insert is superclass
+            // instance with the same id, so that object relations are streamed out correctly
+            const wxDynamicObject* dynobj = dynamic_cast<const wxDynamicObject *>( object ) ;
+            if ( dynobj )
+                m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid ;
+
+            DoBeginWriteObject( object , classInfo , oid , name ) ;
+            wxWriterInternalPropertiesData data ;
+            WriteAllProperties( object , classInfo , persister , &data ) ;
+            DoEndWriteObject( object , classInfo , oid , name  ) ;
+        }
     }
 }
 
@@ -98,7 +111,15 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
                     {
                         int oid = m_data->m_nextId++ ;
                         if ( !embeddedObject)
+                        {
+                            // insert this object and its id
                             m_data->m_writtenObjects[vobj] = oid ;
+                            // in case this object is a wxDynamicObject we also have to insert is superclass
+                            // instance with the same id, so that object relations are streamed out correctly
+                            const wxDynamicObject* dynobj = dynamic_cast<const wxDynamicObject *>( vobj ) ;
+                            if ( dynobj )
+                                m_data->m_writtenObjects[dynobj->GetSuperClassInstance()] = oid ;
+                        }
 
                         DoBeginWriteParamAsObject( obj , ci , vobj , pci , oid , pi ) ;
                         if ( vobj != NULL )
@@ -177,6 +198,11 @@ void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci 
         }
         pi = pi->GetNext() ;
     }
+    // in case this object is wxDynamic object we have to hand over the streaming
+    // of the properties of the superclasses to the real super class instance
+    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (obj ) ;
+    if ( dynobj )
+        obj = dynobj->GetSuperClassInstance() ;
     const wxClassInfo** parents = ci->GetParents() ;
     for ( int i = 0 ; parents[i] ; ++ i )
     {
@@ -589,6 +615,13 @@ void wxRuntimeDepersister::CreateObject(int objectID,
         {
             wxObject *o;
             o = m_data->GetObject(objectIdValues[i]);
+            // if this is a dynamic object and we are asked for another class
+            // than wxDynamicObject we cast it down manually.
+            wxDynamicObject *dyno = dynamic_cast< wxDynamicObject * > (o) ;
+            if ( dyno!=NULL && (objectClassInfos[i] != dyno->GetClassInfo()) )
+            {
+                o = dyno->GetSuperClassInstance() ;
+            }
             params[i] = objectClassInfos[i]->InstanceToVariant(o) ;
         }
     }
@@ -603,25 +636,36 @@ void wxRuntimeDepersister::DestroyObject(int objectID, wxClassInfo *WXUNUSED(cla
 }
 
 void wxRuntimeDepersister::SetProperty(int objectID,
-                                       const wxClassInfo *WXUNUSED(classInfo),
+                                       const wxClassInfo *classInfo,
                                        const wxPropertyInfo* propertyInfo,
                                        const wxxVariant &value)
 {
     wxObject *o;
     o = m_data->GetObject(objectID);
-    propertyInfo->GetAccessor()->SetProperty( o , value ) ;
+    classInfo->SetProperty( o , propertyInfo->GetName() , value ) ;
+    // propertyInfo->GetAccessor()->SetProperty( o , value ) ;
 }
 
 void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
-                                               const wxClassInfo *WXUNUSED(classInfo),
+                                               const wxClassInfo *classInfo,
                                                const wxPropertyInfo* propertyInfo,
                                                int valueObjectId)
 {
     wxObject *o, *valo;
     o = m_data->GetObject(objectID);
     valo = m_data->GetObject(valueObjectId);
-    propertyInfo->GetAccessor()->SetProperty( o , 
-        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo()->InstanceToVariant(valo) ) ;
+    const wxClassInfo* valClassInfo = (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo() ;
+    // if this is a dynamic object and we are asked for another class
+    // than wxDynamicObject we cast it down manually.
+    wxDynamicObject *dynvalo = dynamic_cast< wxDynamicObject * > (valo) ;
+    if ( dynvalo!=NULL  && (valClassInfo != dynvalo->GetClassInfo()) )
+    {
+        valo = dynvalo->GetSuperClassInstance() ;
+    }
+
+    classInfo->SetProperty( o , propertyInfo->GetName() , valClassInfo->InstanceToVariant(valo) ) ;
+//    propertyInfo->GetAccessor()->SetProperty( o , 
+//        (dynamic_cast<const wxClassTypeInfo*>(propertyInfo->GetTypeInfo()))->GetClassInfo()->InstanceToVariant(valo) ) ;
 }
 
 void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,

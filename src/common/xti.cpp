@@ -33,6 +33,11 @@
 
 #if wxUSE_EXTENDED_RTTI
 
+#include <map>
+#include <string>
+
+using namespace std ;
+
 // ----------------------------------------------------------------------------
 // Enum Support
 // ----------------------------------------------------------------------------
@@ -407,7 +412,7 @@ void wxSetStringToArray( const wxString &s , wxArrayString &array )
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
-const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
+const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) const
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
 
@@ -417,7 +422,7 @@ const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName)
 	return NULL ;
 }
 
-const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) const
+const wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyName) const
 {
 	const wxPropertyInfo* info = GetFirstProperty() ;
 
@@ -427,6 +432,15 @@ const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) c
 			return info ;
 		info = info->GetNext() ;
 	}
+
+    return 0;
+}
+
+const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) const
+{
+	const wxPropertyInfo* info = FindPropertyInfoInThisClass( PropertyName ) ;
+    if ( info )
+        return info ;
 
 	const wxClassInfo** parents = GetParents() ;
 	for ( int i = 0 ; parents[i] ; ++ i )
@@ -438,7 +452,7 @@ const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) c
     return 0;
 }
 
-const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) const
+const wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName) const
 {
 	const wxHandlerInfo* info = GetFirstHandler() ;
 
@@ -448,6 +462,16 @@ const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) con
 			return info ;
 		info = info->GetNext() ;
 	}
+
+    return 0;
+}
+
+const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) const
+{
+	const wxHandlerInfo* info = FindHandlerInfoInThisClass( PropertyName ) ;
+
+    if ( info )
+        return info ;
 
 	const wxClassInfo** parents = GetParents() ;
 	for ( int i = 0 ; parents[i] ; ++ i )
@@ -460,7 +484,7 @@ const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) con
 }
 
 
-void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value)
+void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -469,7 +493,7 @@ void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const 
 	accessor->SetProperty( object , value ) ;
 }
 
-wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName)
+wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName) const
 {
     const wxPropertyAccessor *accessor;
 
@@ -491,5 +515,160 @@ wxObject* wxxVariant::GetAsObject()
 		return NULL ;
 }
 
+// ----------------------------------------------------------------------------
+// wxDynamicObject support
+// ----------------------------------------------------------------------------
+//
+// Dynamic Objects are objects that have a real superclass instance and carry their
+// own attributes in a hash map. Like this it is possible to create the objects and
+// stream them, as if their class information was already available from compiled data
+
+struct wxDynamicObject::wxDynamicObjectInternal
+{
+    map<string,wxxVariant> m_properties ;
+} ;
+
+// instantiates this object with an instance of its superclass
+wxDynamicObject::wxDynamicObject(wxObject* superClassInstance, const wxDynamicClassInfo *info) 
+{
+    m_superClassInstance = superClassInstance ;
+    m_classInfo = info ;
+    m_data = new wxDynamicObjectInternal ;
+}
+
+wxDynamicObject::~wxDynamicObject()
+{
+    delete m_data ;
+    delete m_superClassInstance ;
+}
+
+void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxxVariant &value)
+{
+    wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
+    m_data->m_properties[propertyName] = value ;
+}
+
+wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
+{
+   wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
+   return m_data->m_properties[propertyName] ;
+}
+
+// ----------------------------------------------------------------------------
+// wxDynamiClassInfo
+// ----------------------------------------------------------------------------
+
+wxDynamicClassInfo::wxDynamicClassInfo( const wxChar *unitName, const wxChar *className , const wxClassInfo* superClass ) :
+    wxClassInfo( unitName, className , new const wxClassInfo*[2]) 
+{
+    GetParents()[0] = superClass ;
+    GetParents()[1] = NULL ;
+}
+
+wxDynamicClassInfo::~wxDynamicClassInfo()
+{
+    delete[] GetParents() ;
+}
+
+wxObject *wxDynamicClassInfo::CreateObject() const 
+{
+    wxObject* parent = GetParents()[0]->CreateObject() ;
+    return new wxDynamicObject( parent , this ) ;
+}
+
+void wxDynamicClassInfo::Create (wxObject *object, int paramCount, wxxVariant *params) const 
+{
+    wxDynamicObject *dynobj = dynamic_cast< wxDynamicObject *>( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::Create on an object other than wxDynamicObject") ) ;
+    GetParents()[0]->Create( dynobj->GetSuperClassInstance() , paramCount , params ) ;
+}
+
+// get number of parameters for constructor
+int wxDynamicClassInfo::GetCreateParamCount() const 
+{
+    return GetParents()[0]->GetCreateParamCount() ;
+}
+
+// get i-th constructor parameter
+const wxChar* wxDynamicClassInfo::GetCreateParamName(int i) const 
+{
+    return GetParents()[0]->GetCreateParamName( i ) ;
+}
+
+void wxDynamicClassInfo::SetProperty(wxObject *object, const char *propertyName, const wxxVariant &value) const
+{
+    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
+    if ( FindPropertyInfoInThisClass(propertyName) )
+        dynobj->SetProperty( propertyName , value ) ;
+    else
+        GetParents()[0]->SetProperty( dynobj->GetSuperClassInstance() , propertyName , value ) ;
+}
+
+wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propertyName) const
+{
+    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
+    if ( FindPropertyInfoInThisClass(propertyName) )
+        return dynobj->GetProperty( propertyName ) ;
+    else
+        return GetParents()[0]->GetProperty( dynobj->GetSuperClassInstance() , propertyName ) ;
+}
+
+void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo ) 
+{
+    new wxPropertyInfo( m_firstProperty , propertyName , "" , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
+}
+
+void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) 
+{
+    new wxHandlerInfo( m_firstHandler , handlerName , address , eventClassInfo ) ;
+}
+
+// ----------------------------------------------------------------------------
+// wxGenericPropertyAccessor
+// ----------------------------------------------------------------------------
+
+struct wxGenericPropertyAccessor::wxGenericPropertyAccessorInternal
+{
+    wxString m_propertyName ;
+} ;
+
+wxGenericPropertyAccessor::wxGenericPropertyAccessor( const wxChar* propertyName ) 
+{
+    m_data = new wxGenericPropertyAccessorInternal ;
+    m_data->m_propertyName = propertyName ;
+}
+
+wxGenericPropertyAccessor::~wxGenericPropertyAccessor()
+{
+    delete m_data ;
+}
+void wxGenericPropertyAccessor::SetProperty(wxObject *object, const wxxVariant &value) const 
+{
+    wxDynamicObject* dynobj = dynamic_cast< wxDynamicObject * >( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
+    dynobj->SetProperty(m_data->m_propertyName , value ) ;
+}
+
+wxxVariant wxGenericPropertyAccessor::GetProperty(const wxObject *object) const 
+{
+    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject * >( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
+    return dynobj->GetProperty( m_data->m_propertyName ) ;
+}
+
+wxxVariant wxGenericPropertyAccessor::ReadValue( const wxString &value ) const 
+{
+    return wxxVariant(value) ;
+}
+
+void wxGenericPropertyAccessor::WriteValue( wxString& value , const wxObject *object ) const 
+{
+    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject * >( object ) ;
+    wxASSERT_MSG( dynobj , wxT("cannot call wxDynamicClassInfo::SetProperty on an object other than wxDynamicObject") ) ;
+    wxxVariant val = dynobj->GetProperty( m_data->m_propertyName ) ;
+    value = val.GetAsString() ;
+}
 
 #endif

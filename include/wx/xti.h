@@ -487,6 +487,8 @@ public :
     class SetAndGetByRefRetBool ;
     class GetByRef ;
 #endif
+    wxPropertyAccessor() { m_setterName = NULL ; m_getterName = NULL ; }
+    virtual ~wxPropertyAccessor() {}
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const = 0 ;
     virtual wxxVariant GetProperty(const wxObject *object) const = 0 ;
     virtual bool HasSetter() const = 0 ;
@@ -499,6 +501,22 @@ protected :
     const wxChar *m_setterName ;
     const wxChar *m_getterName ;
 };
+
+class WXDLLIMPEXP_BASE wxGenericPropertyAccessor : public wxPropertyAccessor
+{
+public :
+    wxGenericPropertyAccessor( const wxChar* propertyName ) ;
+    ~wxGenericPropertyAccessor() ; 
+    virtual void SetProperty(wxObject *object, const wxxVariant &value) const ;
+    virtual wxxVariant GetProperty(const wxObject *object) const ;
+    virtual bool HasSetter() const { return true ; }
+    virtual bool HasGetter() const { return true ; }
+    virtual wxxVariant ReadValue( const wxString &value ) const ;
+    virtual void WriteValue( wxString& value , const wxObject *o ) const ;
+private :
+    struct wxGenericPropertyAccessorInternal ;
+    wxGenericPropertyAccessorInternal* m_data ;
+} ;
 
 template<class Klass, typename T>
 class WXDLLIMPEXP_BASE wxPropertyAccessorT : public wxPropertyAccessor
@@ -537,7 +555,7 @@ public:
     	: m_setter_bool( NULL ) , m_setter_ref_bool( NULL ) , m_setter(NULL), m_setter(setter), m_getter(NULL) ,  m_getter_ref(getter){m_setterName = s;m_getterName=g ;}
 
     // returns true if this accessor has a setter
-    bool HasSetter() const { return m_setter != NULL || m_setter_ref != NULL ; }
+    bool HasSetter() const { return m_setter != NULL || m_setter_ref != NULL || m_setter_ref_bool != NULL || m_setter_bool ; }
 
     // return true if this accessor has a getter
     bool HasGetter() const { return m_getter != NULL || m_getter_ref != NULL ; }
@@ -654,7 +672,7 @@ private :
 };
 
 #define WX_BEGIN_PROPERTIES_TABLE(theClass) \
-    const wxPropertyInfo *theClass::GetPropertiesStatic()  \
+    wxPropertyInfo *theClass::GetPropertiesStatic()  \
     {  \
         typedef theClass class_t; \
         static wxPropertyInfo* first = NULL ;
@@ -760,7 +778,7 @@ private :
     static wxHandlerInfo _handlerInfo##name( first , #name , (wxObjectEventFunction) (wxEventFunction) &name , CLASSINFO( eventClassType ) ) ;
 
 #define WX_BEGIN_HANDLERS_TABLE(theClass) \
-    const wxHandlerInfo *theClass::GetHandlersStatic()  \
+    wxHandlerInfo *theClass::GetHandlersStatic()  \
     {  \
         typedef theClass class_t; \
         static wxHandlerInfo* first = NULL ;
@@ -970,8 +988,8 @@ public:
             const wxChar *_ClassName,
             int size,
             wxObjectConstructorFn ctor ,
-			const wxPropertyInfo *_Props ,
-			const wxHandlerInfo *_Handlers ,
+			wxPropertyInfo *_Props ,
+			wxHandlerInfo *_Handlers ,
 			wxConstructorBridge* _Constructor ,
 			const wxChar ** _ConstructorProperties ,
 			const int _ConstructorPropertiesCount ,
@@ -987,9 +1005,18 @@ public:
 		Register() ;
 	}
 
+   wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName, const wxClassInfo **_Parents) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
+			m_objectSize(0), m_objectConstructor(NULL) , m_firstProperty(NULL ) , m_firstHandler(NULL ) , m_constructor( NULL ) ,
+			m_constructorProperties(NULL) , m_constructorPropertiesCount(NULL),
+			m_variantOfPtrToObjectConverter( NULL ) , m_variantToObjectConverter( NULL ) , m_objectToVariantConverter( NULL ) , m_next(sm_first)
+	{
+		sm_first = this;
+		Register() ;
+	}
+
     virtual ~wxClassInfo() ;
 
-    wxObject *CreateObject() const { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
+    virtual wxObject *CreateObject() const { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
     const wxChar       *GetClassName() const { return m_className; }
     const wxClassInfo **GetParents() const { return m_parents; }
@@ -1047,8 +1074,8 @@ public:
     virtual const wxChar* GetCreateParamName(int i) const { return m_constructorProperties[i] ; }
 
    // Runtime access to objects by property name, and variant data
-    virtual void SetProperty (wxObject *object, const wxChar *PropertyName, const wxxVariant &Value);
-    virtual wxxVariant GetProperty (wxObject *object, const wxChar *PropertyName);
+    virtual void SetProperty (wxObject *object, const wxChar *PropertyName, const wxxVariant &Value) const ;
+    virtual wxxVariant GetProperty (wxObject *object, const wxChar *PropertyName) const;
 
 	// we must be able to cast variants to wxObject pointers, templates seem not to be suitable
 	wxObject* VariantToInstance( wxxVariant &data ) const
@@ -1066,6 +1093,11 @@ public:
     // find handler by name
     virtual const wxHandlerInfo *FindHandlerInfo (const wxChar *PropertyName) const ;
 
+    // find property by name
+    virtual const wxPropertyInfo *FindPropertyInfoInThisClass (const wxChar *PropertyName) const ;
+
+    // find handler by name
+    virtual const wxHandlerInfo *FindHandlerInfoInThisClass (const wxChar *PropertyName) const ;
 public:
     const wxChar            *m_className;
     int                      m_objectSize;
@@ -1081,10 +1113,11 @@ public:
     //        many clients)
     static wxHashTable      *sm_classTable;
 
+protected :
+ 	wxPropertyInfo *	    m_firstProperty ;
+  	wxHandlerInfo *	        m_firstHandler ;
 private:
 	const wxClassInfo**		m_parents ;
- 	const wxPropertyInfo *	m_firstProperty ;
-  	const wxHandlerInfo *	m_firstHandler ;
     const wxChar*			m_unitName;
 
 	wxConstructorBridge*	m_constructor ;
@@ -1094,11 +1127,11 @@ private:
 	wxVariantToObjectConverter m_variantToObjectConverter ;
 	wxObjectToVariantConverter m_objectToVariantConverter ;
 
-    const wxPropertyAccessor *FindAccessor (const wxChar *propertyName);
+    const wxPropertyAccessor *FindAccessor (const wxChar *propertyName) const ;
 
 
     // InitializeClasses() helper
-    static wxClassInfo *GetBaseByName(const wxChar *name);
+    static wxClassInfo *GetBaseByName(const wxChar *name) ;
     
 protected:
     // registers the class
@@ -1108,7 +1141,40 @@ protected:
     DECLARE_NO_COPY_CLASS(wxClassInfo)
 };
 
+
 WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+
+// ----------------------------------------------------------------------------
+// wxDynamicObject
+// ----------------------------------------------------------------------------
+//
+// this object leads to having a pure runtime-instantiation
+
+class wxDynamicClassInfo : public wxClassInfo
+{
+public :
+    wxDynamicClassInfo( const wxChar *_UnitName, const wxChar *_ClassName , const wxClassInfo* superClass ) ;
+    virtual ~wxDynamicClassInfo() ;
+
+    // constructs a wxDynamicObject with an instance
+    virtual wxObject *CreateObject() const ;
+
+    // Call the Create method for a class
+    virtual void Create (wxObject *object, int ParamCount, wxxVariant *Params) const ;
+
+    // get number of parameters for constructor
+    virtual int GetCreateParamCount() const ;
+
+    // get i-th constructor parameter
+    virtual const wxChar* GetCreateParamName(int i) const ;
+
+    // Runtime access to objects by property name, and variant data
+    virtual void SetProperty (wxObject *object, const wxChar *PropertyName, const wxxVariant &Value) const ;
+    virtual wxxVariant GetProperty (wxObject *object, const wxChar *PropertyName) const ;
+
+    void AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo ) ;
+    void AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) ;
+} ;
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros
@@ -1118,8 +1184,8 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
  public:                                      \
   static wxClassInfo sm_class##name;          \
   static const wxClassInfo* sm_classParents##name[] ; \
-  static const wxPropertyInfo* GetPropertiesStatic() ; \
-  static const wxHandlerInfo* GetHandlersStatic() ; \
+  static wxPropertyInfo* GetPropertiesStatic() ; \
+  static wxHandlerInfo* GetHandlersStatic() ; \
   virtual wxClassInfo *GetClassInfo() const   \
    { return &name::sm_class##name; }
 
@@ -1197,8 +1263,8 @@ WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
 _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" ) \
-const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
-const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
+wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
 WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
@@ -1265,8 +1331,8 @@ _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit )
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
 _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "") \
-const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
-const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
+wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
 WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
@@ -1298,8 +1364,8 @@ wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVaria
 
 #define IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
 _IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
-const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; }
+wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; }
 
     // Multiple inheritance with two base classes
 
