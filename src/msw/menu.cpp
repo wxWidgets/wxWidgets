@@ -341,7 +341,19 @@ void wxMenu::SetTitle(const wxString& label)
     }
   }
 
-  // TODO use SetMenuItemInfo(MFS_DEFAULT) to put it in bold face
+  // put the title string in bold face
+  if ( !m_title.IsEmpty() )
+  {
+    MENUITEMINFO mii;
+    mii.cbSize = sizeof(mii);
+    mii.fMask = MIIM_STATE;
+    mii.fState = MFS_DEFAULT;
+
+    if ( !SetMenuItemInfo(hMenu, (unsigned)idMenuTitle, FALSE, &mii) )
+    {
+      wxLogLastError("SetMenuItemInfo");
+    }
+  }
 }
 
 const wxString wxMenu::GetTitle() const
@@ -413,12 +425,19 @@ wxString wxMenu::GetLabel(int id) const
 
 bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
 {
-  wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
-  event.SetEventObject( this );
-  event.SetId( id );
-  event.SetInt( id );
-  ProcessCommand(event);
-  return TRUE;
+    // ignore commands from the menu title
+
+    // NB: VC++ generates wrong assembler for `if ( id != idMenuTitle )'!!
+    if ( id != (WXWORD)idMenuTitle )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
+        event.SetEventObject( this );
+        event.SetId( id );
+        event.SetInt( id );
+        ProcessCommand(event);
+    }
+
+    return TRUE;
 }
 
 // Finds the item id matching the given string, -1 if not found.
