@@ -535,9 +535,12 @@ void wxFileName::SplitPath(const wxString& fullpath,
 
     if ( pstrName )
     {
+        // take all characters starting from the one after the last slash and
+        // up to, but excluding, the last dot
         size_t nStart = posLastSlash == wxString::npos ? 0 : posLastSlash + 1;
-        size_t count = posLastDot == wxString::npos ? wxString::npos
-                                                    : posLastDot - posLastSlash;
+        size_t count = posLastDot == wxString::npos
+                        ? wxString::npos
+                        : posLastDot - posLastSlash - 1;
 
         *pstrName = fullpath.Mid(nStart, count);
     }

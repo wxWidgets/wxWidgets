@@ -37,14 +37,14 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
-//#define TEST_FILENAME
+#define TEST_FILENAME
 //#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
@@ -596,17 +596,19 @@ static void TestFileConfRead()
 
 #include <wx/filename.h>
 
+static const wxChar *filenames[] =
+{
+    _T("/usr/bin/ls"),
+    _T("/usr/bin/"),
+    _T("~/.zshrc"),
+    _T("../../foo"),
+    _T("~/foo.bar"),
+    _T("/tmp/wxwin.tar.bz"),
+};
+
 static void TestFileNameConstruction()
 {
     puts("*** testing wxFileName construction ***");
-
-    static const wxChar *filenames[] =
-    {
-        _T("/usr/bin/ls"),
-        _T("/usr/bin/"),
-        _T("~/.zshrc"),
-        _T("../../foo"),
-    };
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
@@ -621,6 +623,21 @@ static void TestFileNameConstruction()
         {
             printf("normalized: '%s'\n", fn.GetFullPath().c_str());
         }
+    }
+
+    puts("");
+}
+
+static void TestFileNameSplit()
+{
+    puts("*** testing wxFileName splitting ***");
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        wxString path, name, ext;
+        wxFileName::SplitPath(filenames[n], &path, &name, &ext);
+        printf("%s -> path = '%s', name = '%s', ext = '%s'\n",
+               filenames[n], path.c_str(), name.c_str(), ext.c_str());
     }
 
     puts("");
@@ -4000,9 +4017,10 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    TestFileNameConstruction();
+    TestFileNameSplit();
     if ( 0 )
     {
+        TestFileNameConstruction();
         TestFileNameCwd();
         TestFileNameComparison();
         TestFileNameOperations();
