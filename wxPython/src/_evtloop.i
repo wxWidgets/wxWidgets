@@ -20,7 +20,27 @@
 %newgroup
 
 %{
+#ifdef __WXMAC__
+
+// A dummy class that raises an exception if used...    
+class wxEventLoop
+{
+public:
+    wxEventLoop() { wxPyRaiseNotImplemented(); }
+    int Run() { return 0; }
+    void Exit(int rc = 0) {}
+    bool Pending() const { return false; }
+    bool Dispatch() { return false; }
+    bool IsRunning() const { return false; }
+    static wxEventLoop *GetActive() { wxPyRaiseNotImplemented(); return NULL; }
+    static void SetActive(wxEventLoop* loop) { wxPyRaiseNotImplemented(); }
+};
+
+#else
+ 
 #include <wx/evtloop.h>
+
+#endif
 %}
 
 class wxEventLoop
