@@ -81,7 +81,7 @@ void wxToolTip::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    strcpy(zFont, "10.Helv");
+    strcpy(zFont, "8.Helv");
     ::WinSetPresParam( m_hWnd
                       ,PP_FONTNAMESIZE
                       ,strlen(zFont) + 1
@@ -125,7 +125,7 @@ void wxToolTip::SetTip(
 
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     m_sText = rsTip;
-    lWidth = rsTip.Length() * 13;
+    lWidth = rsTip.Length() * 8;
     lHeight = 15;
     ::WinSetWindowPos( m_hWnd
                       ,HWND_TOP

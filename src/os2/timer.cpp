@@ -89,8 +89,8 @@ bool wxTimer::Start(
     // Create a windowless timer
     //
     m_ulId = ::WinStartTimer( m_Hab
-                             ,NULL
-                             ,(m_ulId ? m_ulId : 1L)
+                             ,NULLHANDLE
+                             ,0
                              ,(ULONG)nMilliseconds
                             );
     if (m_ulId > 0L)
@@ -115,7 +115,6 @@ void wxTimer::Stop()
         ::WinStopTimer(m_Hab, NULL, m_ulId);
         wxTimerList.DeleteObject(this);
     }
-    m_ulId = 0L;
 }
 
 // ----------------------------------------------------------------------------
