@@ -1216,7 +1216,6 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/demo
 	mkdir $(DISTDIR)/wxPython/demo/bitmaps
 	mkdir $(DISTDIR)/wxPython/demo/data
-	mkdir $(DISTDIR)/wxPython/distrib
 	mkdir $(DISTDIR)/wxPython/src
 	mkdir $(DISTDIR)/wxPython/src/gtk
 	mkdir $(DISTDIR)/wxPython/wxPython
@@ -1225,7 +1224,9 @@ PYTHON_DIST:
 	mkdir $(DISTDIR)/wxPython/wxPython/lib/sizers
 
 	cp $(WXDIR)/wxPython/*.txt $(DISTDIR)/wxPython
-	cp $(WXDIR)/wxPython/contrib/buildall.py $(DISTDIR)/wxPython/contrib
+	cp $(WXDIR)/wxPython/*.py $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/setup.cfg $(DISTDIR)/wxPython
+	cp $(WXDIR)/wxPython/MANIFEST.in $(DISTDIR)/wxPython
 	-cp $(WXDIR)/wxPython/contrib/glcanvas/* $(DISTDIR)/wxPython/contrib/glcanvas
 	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
@@ -1233,13 +1234,11 @@ PYTHON_DIST:
 	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
 	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
 	-cp $(WXDIR)/wxPython/demo/data/* $(DISTDIR)/wxPython/demo/data
-	cp $(WXDIR)/wxPython/distrib/build.py $(DISTDIR)/wxPython/distrib
 	-cp $(WXDIR)/wxPython/src/* $(DISTDIR)/wxPython/src
 	cp $(WXDIR)/wxPython/src/gtk/*.py $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/src/gtk/*.cpp $(DISTDIR)/wxPython/src/gtk
 	cp $(WXDIR)/wxPython/wxPython/lib/*.py $(DISTDIR)/wxPython/wxPython/lib
 	cp $(WXDIR)/wxPython/wxPython/lib/editor/*.py $(DISTDIR)/wxPython/wxPython/lib/editor
-	cp $(WXDIR)/wxPython/wxPython/lib/sizers/*.py $(DISTDIR)/wxPython/wxPython/lib/sizers
 
 distclean:
 	$(RM) -r _dist_dir

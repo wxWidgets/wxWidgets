@@ -1,3 +1,14 @@
+wxwindows2.2 (2.2.4) unstable; urgency=low
+
+  * Fixed parser.y for Alpha builds (#82949)
+  * changed mesa dependency to the virtual libgl package and
+    added Conflicts for the old 2.1 packages (which are now
+    gone from woody anyway)  Closes: #80120, #70778, #70779, #70780
+  * wxPython now builds as a single unit (including contrib)
+    so removed the libwxgtk-python-contrib package
+
+ -- Ron Lee <ron@debian.org>  Wed, 24 Jan 2001 18:51:24 -0800
+
 wxwindows2.2 (2.2.2) unstable; urgency=low
 
   * added missing dependancy for contrib-dev package.  Closes: #70880

@@ -11,8 +11,9 @@ libwxgtk		wxGTK runtime shared libraries
 libwxgtk-dev		extra files and static libs for building wxGTK apps
 libwxgtk-dbg		wxGTK libraries built with -g and __WXDEBUG__
 
-libwxgtk-python		Python binding to wxGTK
-libwxgtk-python-contrib Python binding to the contrib libs
+libwxgtk-python		Python binding to wxGTK  (from 2.2.3 onward, this
+			obsoletes the libwxgtk-python-contrib package as
+			all python modules are build into a single monolith)
 
 wxwin-contrib		wxWin contrib runtime shared libs (built with wxGTK)
 wxwin-contrib-dev	extra files and static contrib libs for building apps
