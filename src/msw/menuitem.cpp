@@ -94,6 +94,9 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
 {
     wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
 
+    m_startRadioGroup =
+    m_endRadioGroup = -1;
+
 #if  wxUSE_OWNER_DRAWN
     // set default menu colors
     #define SYS_COLOR(c) (wxSystemSettings::GetColour(wxSYS_COLOUR_##c))
@@ -167,13 +170,57 @@ void wxMenuItem::Check(bool check)
     if ( m_isChecked == check )
         return;
 
-    long rc = CheckMenuItem(GetHMenuOf(m_parentMenu),
-                            GetRealId(),
-                            MF_BYCOMMAND |
-                            (check ? MF_CHECKED : MF_UNCHECKED));
+    int flags = check ? MF_CHECKED : MF_UNCHECKED;
+    HMENU hmenu = GetHMenuOf(m_parentMenu);
 
-    if ( rc == -1 ) {
-        wxLogLastError(wxT("CheckMenuItem"));
+    if ( GetKind() == wxItem_Radio )
+    {
+        // it doesn't make sense to uncheck a radio item - what would this do?
+        if ( !check )
+            return;
+
+        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+        int pos = items.IndexOf(this);
+        wxCHECK_RET( pos != wxNOT_FOUND,
+                     _T("menuitem not found in the menu items list?") );
+
+#ifdef __WIN32__
+        if ( !::CheckMenuRadioItem(hmenu,
+                                   m_startRadioGroup,   // first group item
+                                   m_endRadioGroup,     // last one
+                                   pos,                 // the one to check
+                                   MF_BYPOSITION | flags) )
+        {
+            wxLogLastError(_T("CheckMenuRadioItem"));
+        }
+#endif // __WIN32__
+
+        // also uncheck all the other items in this radio group
+        wxMenuItemList::Node *node = items.Item(m_startRadioGroup);
+        for ( int n = m_startRadioGroup; n <= m_endRadioGroup && node; n++ )
+        {
+            if ( n != pos )
+            {
+                node->GetData()->m_isChecked = FALSE;
+            }
+
+            // we also have to do it in the menu for Win16 (under Win32
+            // CheckMenuRadioItem() does it for us)
+#ifndef __WIN32__
+            ::CheckMenuItem(hmenu, n, n == pos ? MF_CHECKED : MF_UNCHECKED);
+#endif // Win16
+
+            node = node->GetNext();
+        }
+    }
+    else // check item
+    {
+        if ( ::CheckMenuItem(hmenu,
+                             GetRealId(),
+                             MF_BYCOMMAND | flags) == -1 )
+        {
+            wxLogLastError(wxT("CheckMenuItem"));
+        }
     }
 
     wxMenuItemBase::Check(check);

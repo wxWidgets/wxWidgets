@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        menu.h
+// Name:        wx/msw/menu.h
 // Purpose:     wxMenu, wxMenuBar classes
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin (wxMenuItem is now in separate file)
@@ -63,6 +63,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    virtual void Attach(wxMenuBarBase *menubar);
+
     bool MSWCommand(WXUINT param, WXWORD id);
 
     // semi-private accessors
@@ -91,8 +93,14 @@ private:
     // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
     bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
 
+    // terminate the current radio group, if any
+    void EndRadioGroup();
+
     // if TRUE, insert a breal before appending the next item
     bool m_doBreak;
+
+    // the position of the first item in the current radio group or -1
+    int m_startRadioGroup;
 
     // the menu handle of this menu
     WXHMENU m_hMenu;

@@ -196,6 +196,7 @@ bool wxFrameBase::ProcessCommand(int id)
         if (item->IsCheckable())
         {
             item->Toggle();
+
             // use the new value
             commandEvent.SetInt(item->IsChecked());
         }

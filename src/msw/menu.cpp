@@ -61,15 +61,30 @@ extern wxMenu *wxCurrentPopupMenu;
 static const int idMenuTitle = -2;
 
 // ----------------------------------------------------------------------------
-// macros
+// private functions
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
-IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
+// make the given menu item default
+static void SetDefaultMenuItem(HMENU hmenu, UINT id)
+{
+    MENUITEMINFO mii;
+    wxZeroMemory(mii);
+    mii.cbSize = sizeof(MENUITEMINFO);
+    mii.fMask = MIIM_STATE;
+    mii.fState = MFS_DEFAULT;
+
+    if ( !::SetMenuItemInfo(hmenu, id, FALSE, &mii) )
+    {
+        wxLogLastError(wxT("SetMenuItemInfo"));
+    }
+}
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 
 // ---------------------------------------------------------------------------
 // wxMenu construction, adding and removing menu items
@@ -79,6 +94,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxWindow)
 void wxMenu::Init()
 {
     m_doBreak = FALSE;
+    m_startRadioGroup = -1;
 
     // create the menu
     m_hMenu = (WXHMENU)CreatePopupMenu();
@@ -119,6 +135,13 @@ void wxMenu::Break()
 {
     // this will take effect during the next call to Append()
     m_doBreak = TRUE;
+}
+
+void wxMenu::Attach(wxMenuBarBase *menubar)
+{
+    wxMenuBase::Attach(menubar);
+
+    EndRadioGroup();
 }
 
 #if wxUSE_ACCEL
@@ -255,37 +278,70 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
         return FALSE;
     }
-    else
-    {
-        // if we just appended the title, highlight it
-#ifdef __WIN32__
-        if ( (int)id == idMenuTitle )
-        {
-            // visually select the menu title
-            MENUITEMINFO mii;
-            mii.cbSize = sizeof(mii);
-            mii.fMask = MIIM_STATE;
-            mii.fState = MFS_DEFAULT;
 
-            if ( !SetMenuItemInfo(GetHmenu(), (unsigned)id, FALSE, &mii) )
-            {
-                wxLogLastError(wxT("SetMenuItemInfo"));
-            }
-        }
+    // if we just appended the title, highlight it
+#ifdef __WIN32__
+    if ( (int)id == idMenuTitle )
+    {
+        // visually select the menu title
+        SetDefaultMenuItem(GetHmenu(), id);
+    }
 #endif // __WIN32__
 
-        // if we're already attached to the menubar, we must update it
-        if ( IsAttached() && m_menuBar->IsAttached() )
-        {
-            m_menuBar->Refresh();
-        }
-
-        return TRUE;
+    // if we're already attached to the menubar, we must update it
+    if ( IsAttached() && m_menuBar->IsAttached() )
+    {
+        m_menuBar->Refresh();
     }
+
+    return TRUE;
+}
+
+void wxMenu::EndRadioGroup()
+{
+    if ( m_startRadioGroup == -1 )
+    {
+        // nothing to do
+        return;
+    }
+
+    wxMenuItemList::Node *nodeStart = GetMenuItems().Item(m_startRadioGroup);
+    wxCHECK_RET( nodeStart, _T("where is the radio group start item?") );
+
+    int endRadioGroup = GetMenuItemCount();
+
+    wxMenuItemList::Node *node = nodeStart;
+    for ( int n = m_startRadioGroup; n < endRadioGroup && node; n++ )
+    {
+        wxMenuItem *item = (wxMenuItem *)node->GetData();
+        item->SetRadioGroup(m_startRadioGroup, endRadioGroup - 1);
+
+        node = node->GetNext();
+    }
+
+    nodeStart->GetData()->Check(TRUE);
+
+    // we're not inside a radio group any longer
+    m_startRadioGroup = -1;
 }
 
 bool wxMenu::DoAppend(wxMenuItem *item)
 {
+    wxCHECK_MSG( item, FALSE, _T("NULL item in wxMenu::DoAppend") );
+
+    if ( item->GetKind() == wxItem_Radio )
+    {
+        if ( m_startRadioGroup == -1 )
+        {
+            // start a new radio group
+            m_startRadioGroup = GetMenuItemCount();
+        }
+    }
+    else // not a radio item
+    {
+        EndRadioGroup();
+    }
+
     return wxMenuBase::DoAppend(item) && DoInsertOrAppend(item);
 }
 
@@ -409,15 +465,7 @@ void wxMenu::SetTitle(const wxString& label)
     // put the title string in bold face
     if ( !m_title.IsEmpty() )
     {
-        MENUITEMINFO mii;
-        mii.cbSize = sizeof(mii);
-        mii.fMask = MIIM_STATE;
-        mii.fState = MFS_DEFAULT;
-
-        if ( !SetMenuItemInfo(hMenu, (unsigned)idMenuTitle, FALSE, &mii) )
-        {
-            wxLogLastError(wxT("SetMenuItemInfo"));
-        }
+        SetDefaultMenuItem(GetHmenu(), (UINT)idMenuTitle);
     }
 #endif // Win32
 }
@@ -679,9 +727,6 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     if ( !wxMenuBarBase::Append(menu, title) )
         return FALSE;
-
-    // Already done in Append above
-    //menu->Attach(this);
 
     m_titles.Add(title);
 

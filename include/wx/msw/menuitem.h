@@ -60,7 +60,19 @@ public:
     // menu handle depending on what we're
     int GetRealId() const;
 
+    // mark item as belonging to the given radio group
+    void SetRadioGroup(int start, int end)
+    {
+        m_startRadioGroup = start;
+        m_endRadioGroup = end;
+    }
+
 private:
+    // the positions of the first and last items of the radio group this item
+    // belongs to or -1
+    int m_startRadioGroup,
+        m_endRadioGroup;
+
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
 

@@ -2,10 +2,30 @@
 
 A menu is a popup (or pull down) list of items, one of which may be
 selected before the menu goes away (clicking elsewhere dismisses the
-menu).  Menus may be used to construct either menu bars or popup menus.
+menu). Menus may be used to construct either menu bars or popup menus.
 
 A menu item has an integer ID associated with it which can be used to
-identify the selection, or to change the menu item in some way.
+identify the selection, or to change the menu item in some way. A menu item
+with a special identifier $-1$ is a separator item and doesn't have an
+associated command but just makes a separator line appear in the menu.
+
+Menu items may be either normal items, check items or radio items. Normal items
+don't have any special properties while the check items have a boolean flag
+associated to them and they show a checkmark in the menu when the flag is set.
+wxWindows automatically togles the flag value when the item is clicked and its
+value may be retrieved using either \helpref{IsChecked}{wxmenuischecked} method
+of wxMenu or wxMenuBar itself or by using 
+\helpref{wxEvent::IsChecked}{wxcommandeventischecked} when you get the menu
+notification for the item in question.
+
+The radio items are similar to the check items except that all the other items
+in the same radio group are unchecked when a radio item is checked. The radio
+group is formed by a contiguous range of radio items, i.e. it starts at the
+first item of this kind and ends with the first item of a different kind (or
+the end of the menu). Notice that because the radio groups are defined in terms
+of the item positions inserting or removing the items in the menu containing
+the radio items risks to not work correctly. Finally note that the radio items
+are only supported under Windows and GTK+ currently.
 
 \wxheading{Derived from}
 

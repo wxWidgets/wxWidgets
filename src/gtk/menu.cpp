@@ -840,7 +840,12 @@ void wxMenuItem::Check( bool check )
         return;
 
     wxMenuItemBase::Check( check );
-    gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+
+    // GTK+ does it itself for the radio item
+    if ( GetKind() == wxItem_Check )
+    {
+        gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
+    }
 }
 
 void wxMenuItem::Enable( bool enable )

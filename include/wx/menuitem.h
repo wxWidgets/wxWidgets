@@ -72,7 +72,8 @@ public:
     wxItemKind GetKind() const { return m_kind; }
 
     virtual void SetCheckable(bool checkable) { m_kind = wxItem_Check; }
-    bool IsCheckable() const { return m_kind == wxItem_Check; }
+    bool IsCheckable() const
+        { return m_kind == wxItem_Check || m_kind == wxItem_Radio; }
 
     bool IsSubMenu() const { return m_subMenu != NULL; }
     void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }

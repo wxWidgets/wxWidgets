@@ -13,8 +13,8 @@
 #ifndef _WX_FEATURES_H_
 #define _WX_FEATURES_H_
 
-// radio menu items are currently only implemented in wxGTK
-#if defined(__WXGTK__) // || defined(__WXMSW__)
+// radio menu items are currently only implemented in wxGTK and wxMSW
+#if defined(__WXGTK__) || defined(__WXMSW__)
     #define wxHAS_RADIO_MENU_ITEMS
 #else
     #undef wxHAS_RADIO_MENU_ITEMS
