@@ -122,91 +122,83 @@ for a listing of a few of them.
 \section{Building wxPython}\label{wxpbuild}
 
 I used SWIG (\urlref{http://www.swig.org}{http://www.swig.org}) to
-create the source code for the extension module.  This enabled me to
-only have to deal with a small amount of code and only have to bother
-with the exceptional issues.  SWIG takes care of the rest and
-generates all the repetative code for me.  You don't need SWIG to
-build the extension module as all the generated C++ code is included
-under the src directory.  If you try to build wxPython and get errors
-because SWIG is missing, then simply touch the .cpp and .py files so
-make won't attempt to build them from the .i files.
+to create the source code for the
+extension module.  This enabled me to only have to deal with a small
+amount of code and only have to bother with the exceptional issues.
+SWIG takes care of the rest and generates all the repetative code for
+me.  You don't need SWIG to build the extension module as all the
+generated C++ code is included under the src directory.
 
 I added a few minor features to SWIG to control some of the code
-generation.  If you want to play around with this the patches are in
-wxPython/SWIG.patches and they should be applied to the 1.1p5 version
-of SWIG.  These new patches are documented at
-\urlref{this site}{http://starship.skyport.net/crew/robind/python/\#swig},
-and they should also end up in the 1.2 version of SWIG.
+generation.  If you want to play around with this you will need to get
+a recent version of SWIG from their CVS or from a daily build.  See
+\urlref{http://www.swig.org/}{http://www.swig.org/} for details.
 
 wxPython is organized as a Python package.  This means that the
 directory containing the results of the build process should be a
-subdirectory of a directory on the \tt{PYTHONPATH}, (and preferably
-should be named wxPython.)  You can control where the build process
-will dump wxPython by setting the \tt{TARGETDIR} makefile variable.
-The default is \tt{\$(WXWIN)/utils/wxPython}.  If you leave it here
-then you should add \tt{\$(WXWIN)/utils} to your \tt{PYTHONPATH}.
-However, you may prefer to use something that is already on your
-\tt{PYTHONPATH}, such as the \tt{site-packages} directory on Unix
-systems.
-
-\wxheading{Win32}
-
-These instructions assume that you have Microsoft Visual C++ 5.0 or
-6.0, that you have installed the command-line tools, and that the
-appropriate environment variables are set for these tools.  You should
-also have Python 1.5.1 installed, and wxWindows installed and built as
-specified below.
+subdirectory of a directory on the \tt{PYTHONPATH}.  (And preferably should
+be named wxPython.)  You can control where the build process will dump
+wxPython by setting the \tt{TARGETDIR} variable for the build utility, (see
+below.)
 
 \begin{enumerate}\itemsep=0pt
-\item Build wxWindows with \tt{wxUSE_RESOURCE_LOADING_IN_MSW} set to 1 in
-\tt{include/wx/msw/setup.h} so icons can be loaded dynamically.  While
-there, make sure \tt{wxUSE_OWNER_DRAWN} is also set to 1.
+\item Build wxWindows as described in its BuildCVS.txt file.  For *nix
+   systems I run configure with these flags:
+
+\begin{verbatim}
+                --with-gtk
+                --with-libjpeg
+                --without-odbc
+                --enable-unicode=no
+                --enable-threads=yes
+                --enable-socket=yes
+                --enable-static=no
+                --enable-shared=yes
+                --disable-std_iostreams
+\end{verbatim}
+
+   You can use whatever flags you want, but I know these work.
+
+   For Win32 systems I use Visual C++ 6.0, but 5.0 should work also.  The
+   build utility currently does not support any other win32 compilers.
+
+\item At this point you may want to make an alias or symlink, script,
+   batch file, whatever on the PATH that invokes
+   \tt{\$(WXWIN)/utils/wxPython/distrib/build.py} to help simplify matters
+   somewhat.  For example, on my win32 system I have a file named
+   \tt{build}.bat in a directory on the PATH that contains:
+
+   \tt{python \%WXWIN/utils/wxPython/distrib/build.py \%1 \%2 \%3 \%4 \%5 \%6}
+
+
 \item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
-\item Edit makefile.vc and specify where your python installation is at.
-You may also want to fiddle with the \tt{TARGETDIR} variable as described
-above.
-\item Run \tt{nmake -f makefile.vc}
-\item If it builds successfully, congratulations!  Move on to the next
-step.  If not then you can try mailing the wxwin-developers list for
-help.  Also, I will always have a pre-built win32 version of this extension module at
-\urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython}.
+
+\item Type "\tt{build -b}" to build wxPython and "\tt{build -i}" to
+install it, or \"\tt{build -bi}\" to do both steps at once.
+
+   The build.py script actually generates a Makefile based on what it
+   finds on your system and information found in the build.cfg file.
+   If you have troubles building or you want it built or installed in
+   a different way, take a look at the docstring in build.py.  You are
+   able to to override many configuration options in a file named
+   build.local.
+
+\item To build and install the add-on modules, change to the appropriate
+   directory under \tt{\$(WXWIN)/utils/wxPython/modules} and run the build
+   utility again.
+
 \item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
-\item Try executing the demo program.  Note that some of the demos print
-diagnositc or test info to standard output, so they will require the
-console version of python.  For example:
 
-\tt{python demo.py}
-
-To run them without requiring a console, you can use the \tt{pythonw.exe}
-version of Python either from the command line or from a shortcut.
-\end{enumerate}
-
-\wxheading{Unix}
-
-These directions assume that you have already successfully built
-wxWindows for GTK, and installed Python 1.5.1 or later.  If you build Python
-yourself, you will get everything installed that you need simply by
-doing \bftt{make install}.  If you get Python from an RPM or other
-pre-packaged source then there will probably be a separate package
-with the development libraries, etc. that you will need to install.
-
-
-\begin{enumerate}\itemsep=0pt
-\item Change into the \tt{\$(WXWIN)/utils/wxPython/src} directory.
-\item Edit \tt{Setup.in} and ensure that the flags, directories, and toolkit
-options are correct, (hopefully this will be done by \tt{configure}
-soon.)  See the above commentary about \tt{TARGETDIR}.  There are a
-few sample Setup.in.[platform] files provided.
-\item Run this command to generate a makefile:
-
-\tt{make -f Makefile.pre.in boot}
-
-\item Once you have the \tt{Makefile}, run \bftt{make} to build and then
-\bftt{make install} to install the wxPython extension module.
-\item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
 \item Try executing the demo program.  For example:
 
-\tt{python demo.py}
+    \tt{python demo.py}
+
+To run it without requiring a console on win32, you can use the
+\tt{pythonw.exe} version of Python either from the command line or from a
+shortcut.
+
+
+
 \end{enumerate}
 
 
@@ -314,7 +306,7 @@ it by issuing this command:
 \begin{enumerate}\itemsep=0pt
 \item At line 2 the wxPython classes, constants, and etc. are imported
 into the current module's namespace.  If you prefer to reduce
-namespace polution you can use "\tt{from wxPython import wx}" and
+namespace pollution you can use "\tt{from wxPython import wx}" and
 then access all the wxPython identifiers through the wx module, for
 example, "\tt{wx.wxFrame}".
 \item At line 13 the frame's sizing and moving events are connected to

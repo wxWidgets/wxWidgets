@@ -53,8 +53,8 @@ released for each drawing operation.
 \membersection{wxDC::Blit}\label{wxdcblit}
 
 \func{bool}{Blit}{\param{long}{ xdest}, \param{long}{ ydest}, \param{long}{ width}, \param{long}{ height},
-  \param{wxDC* }{source}, \param{long}{ xsrc}, \param{long}{ ysrc}, \param{int}{ logicalFunc},
-  \param{bool }{useMask}}
+  \param{wxDC* }{source}, \param{long}{ xsrc}, \param{long}{ ysrc}, \param{int}{ logicalFunc = wxCOPY},
+  \param{bool }{useMask = FALSE}}
 
 Copy from a source DC to this DC, specifying the destination
 coordinates, size of area to copy, source DC, source coordinates, and
@@ -104,7 +104,7 @@ There is partial support for Blit in wxPostScriptDC, under X.
 
 See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
-wxheading{See also}
+\wxheading{See also}
 
 \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 

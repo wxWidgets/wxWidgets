@@ -33,10 +33,15 @@ Default constructor.
 
 Constructs a mask from a monochrome bitmap.
 
+\pythonnote{This is the default constructor for wxMask in wxPython.}
+
 \func{}{wxMask}{\param{const wxBitmap\& }{bitmap}, \param{const wxColour\& }{colour}}
 
 Constructs a mask from a bitmap and a colour that indicates the background. Not
 yet implemented for GTK.
+
+\pythonnote{wxPython has an alternate wxMask constructor matching this
+form called \tt{wxMaskColour}.}
 
 \func{}{wxMask}{\param{const wxBitmap\& }{bitmap}, \param{int}{ index}}
 
