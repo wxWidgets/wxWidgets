@@ -62,6 +62,7 @@ public:
     wxChar& CharAt(int x, int y) { return *(m_text + x + m_xChars * y); }
 
     // operations
+    void SetFontSize(int fontSize);
     void CreateCaret();
     void MoveCaret(int x, int y);
 
@@ -83,6 +84,9 @@ public:
 private:
     // move the caret to m_xCaret, m_yCaret
     void DoMoveCaret();
+
+    // update the geometry
+    void ChangeSize();
 
     wxFont   m_font;
 
@@ -117,6 +121,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnSetBlinkTime(wxCommandEvent& event);
+    void OnSetFontSize(wxCommandEvent& event);
     void OnCaretMove(wxCommandEvent& event);
 
 private:
@@ -137,6 +142,7 @@ enum
     Caret_Quit = 1,
     Caret_About,
     Caret_SetBlinkTime,
+    Caret_SetFontSize,
     Caret_Move,
 
     // controls start here (the numbers are, of course, arbitrary)
@@ -154,6 +160,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_Quit,  MyFrame::OnQuit)
     EVT_MENU(Caret_About, MyFrame::OnAbout)
     EVT_MENU(Caret_SetBlinkTime, MyFrame::OnSetBlinkTime)
+    EVT_MENU(Caret_SetFontSize, MyFrame::OnSetFontSize)
     EVT_MENU(Caret_Move, MyFrame::OnCaretMove)
 END_EVENT_TABLE()
 
@@ -202,6 +209,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append(Caret_SetBlinkTime, _T("&Blink time...\tCtrl-B"));
+    menuFile->Append(Caret_SetFontSize, _T("&Font size...\tCtrl-S"));
     menuFile->Append(Caret_Move, _T("&Move caret\tCtrl-C"));
     menuFile->AppendSeparator();
     menuFile->Append(Caret_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
@@ -260,6 +268,24 @@ void MyFrame::OnSetBlinkTime(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnSetFontSize(wxCommandEvent& WXUNUSED(event))
+{
+    long fontSize = wxGetNumberFromUser
+                    (
+                        _T("The font size also determines the caret size so\n"
+                           "this demonstrates resizing the caret."),
+                        _T("Font size (in points):"),
+                        _T("wxCaret sample"),
+                        12, 1, 100,
+                        this
+                    );
+
+    if ( fontSize != -1 )
+    {
+        m_canvas->SetFontSize((int)fontSize);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // MyCanvas
 // ----------------------------------------------------------------------------
@@ -281,8 +307,7 @@ MyCanvas::MyCanvas( wxWindow *parent )
 
     SetBackgroundColour(*wxWHITE);
 
-    m_font = wxFont(12, wxFONTFAMILY_TELETYPE,
-                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    SetFontSize(12);
 
     m_xCaret = m_yCaret =
     m_xChars = m_yChars = 0;
@@ -299,16 +324,30 @@ MyCanvas::~MyCanvas()
 
 void MyCanvas::CreateCaret()
 {
-    wxClientDC dc(this);
-    dc.SetFont(m_font);
-    m_heightChar = dc.GetCharHeight();
-    m_widthChar = dc.GetCharWidth();
-
     wxCaret *caret = new wxCaret(this, m_widthChar, m_heightChar);
     SetCaret(caret);
 
     caret->Move(m_xMargin, m_yMargin);
     caret->Show();
+}
+
+void MyCanvas::SetFontSize(int fontSize)
+{
+    m_font = wxFont(fontSize, wxFONTFAMILY_TELETYPE,
+                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+
+    wxClientDC dc(this);
+    dc.SetFont(m_font);
+    m_heightChar = dc.GetCharHeight();
+    m_widthChar = dc.GetCharWidth();
+
+    wxCaret *caret = GetCaret();
+    if ( caret )
+    {
+        caret->SetSize(m_widthChar, m_heightChar);
+
+        ChangeSize();
+    }
 }
 
 void MyCanvas::MoveCaret(int x, int y)
@@ -327,10 +366,18 @@ void MyCanvas::DoMoveCaret()
                      m_yMargin + m_yCaret * m_heightChar);
 }
 
-void MyCanvas::OnSize( wxSizeEvent &event )
+void MyCanvas::OnSize(wxSizeEvent& event)
 {
-    m_xChars = (event.GetSize().x - 2*m_xMargin) / m_widthChar;
-    m_yChars = (event.GetSize().y - 2*m_yMargin) / m_heightChar;
+    ChangeSize();
+
+    event.Skip();
+}
+
+void MyCanvas::ChangeSize()
+{
+    wxSize size = GetClientSize();
+    m_xChars = (size.x - 2*m_xMargin) / m_widthChar;
+    m_yChars = (size.y - 2*m_yMargin) / m_heightChar;
     if ( !m_xChars )
         m_xChars = 1;
     if ( !m_yChars )
@@ -348,8 +395,6 @@ void MyCanvas::OnSize( wxSizeEvent &event )
 
         frame->SetStatusText(msg, 1);
     }
-
-    event.Skip();
 }
 
 // NB: this method is horrible inefficient especially because the caret
