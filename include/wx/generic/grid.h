@@ -624,6 +624,8 @@ public:
         m_hAlign = hAlign;
         m_vAlign = vAlign;
     }
+    void SetSize(int num_rows, int num_cols);
+    void SetOverflow( bool allow ) { m_overflow = allow; }
     void SetReadOnly(bool isReadOnly = TRUE)
         { m_isReadOnly = isReadOnly ? ReadOnly : ReadWrite; }
 
@@ -648,6 +650,8 @@ public:
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
+    void GetSize(int *num_rows, int *num_cols) const;
+    bool GetOverflow() const { return m_overflow; }
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
@@ -683,6 +687,9 @@ private:
     wxFont   m_font;
     int      m_hAlign,
              m_vAlign;
+    int      m_sizeRows,
+             m_sizeCols;
+    bool     m_overflow;
 
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;
@@ -1110,6 +1117,8 @@ public:
 
     int      GetBatchCount() { return m_batchCount; }
 
+    virtual void Refresh(bool eraseb=true, wxRect* rect= NULL); 
+
     // Use this, rather than wxWindow::Refresh(), to force an
     // immediate repainting of the grid. Has no effect if you are
     // already inside a BeginBatch / EndBatch block.
@@ -1227,7 +1236,8 @@ public:
     void     DisableDragGridSize() { EnableDragGridSize(FALSE); }
     bool     CanDragGridSize() { return m_canDragGridSize; }
 
-    // this sets the specified attribute for all cells in this row/col
+    // this sets the specified attribute for this cell or in this row/col
+    void     SetAttr(int row, int col, wxGridCellAttr *attr);
     void     SetRowAttr(int row, wxGridCellAttr *attr);
     void     SetColAttr(int col, wxGridCellAttr *attr);
 
@@ -1256,6 +1266,9 @@ public:
     wxFont   GetCellFont( int row, int col );
     void     GetDefaultCellAlignment( int *horiz, int *vert );
     void     GetCellAlignment( int row, int col, int *horiz, int *vert );
+    bool     GetDefaultCellOverflow();
+    bool     GetCellOverflow( int row, int col );
+    void     GetCellSize( int row, int col, int *num_rows, int *num_cols );
 
     void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
     void     SetRowSize( int row, int height );
@@ -1297,6 +1310,9 @@ public:
     void     SetCellFont( int row, int col, const wxFont& );
     void     SetDefaultCellAlignment( int horiz, int vert );
     void     SetCellAlignment( int row, int col, int horiz, int vert );
+    void     SetDefaultCellOverflow( bool allow );
+    void     SetCellOverflow( int row, int col, bool allow );
+    void     SetCellSize( int row, int col, int num_rows, int num_cols );
 
     // takes ownership of the pointer
     void SetDefaultRenderer(wxGridCellRenderer *renderer);
