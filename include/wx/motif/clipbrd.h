@@ -19,9 +19,12 @@
 #if wxUSE_CLIPBOARD
 
 class wxDataObject;
+struct wxDataIdToDataObject;
 
 #include "wx/list.h"
+
 WX_DECLARE_LIST(wxDataObject, wxDataObjectList);
+WX_DECLARE_LIST(wxDataIdToDataObject, wxDataIdToDataObjectList);
 
 bool WXDLLEXPORT wxOpenClipboard();
 bool WXDLLEXPORT wxClipboardOpen();
@@ -72,11 +75,11 @@ public:
     { m_usePrimary = primary; }
     
     // implementation from now on
-    
     bool              m_open;
     wxDataObjectList  m_data;
     bool              m_usePrimary;
-    
+    wxDataIdToDataObjectList m_idToObject;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };

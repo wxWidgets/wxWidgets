@@ -25,9 +25,6 @@
 #include "wx/dataobj.h"
 #include "wx/ptr_scpd.h"
 
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxDataObjectList);
-
 #ifdef __VMS__
 #pragma message disable nosimpint
 #endif
@@ -151,6 +148,25 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName,
 // wxClipboard
 //-----------------------------------------------------------------------------
 
+struct wxDataIdToDataObject
+{
+    wxDataIdToDataObject( wxDataObject* o, long d, size_t s )
+        : object( o ), size( s ), dataId( d ) { }
+
+    wxDataObject* object;
+    size_t        size;
+    long          dataId;
+};
+
+#include "wx/listimpl.cpp"
+
+WX_DEFINE_LIST(wxDataObjectList);
+WX_DEFINE_LIST(wxDataIdToDataObjectList);
+
+static void wxClipboardCallback( Widget widget, long* data_id,
+                                 long* priv, int* reason );
+
+
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
 
 wxClipboard::wxClipboard()
@@ -168,11 +184,15 @@ void wxClipboard::Clear()
     wxDataObjectList::Node* node = m_data.GetFirst();
     while (node)
     {
-        wxDataObject* data = node->GetData();
-        delete data;
+        delete node->GetData();
         node = node->GetNext();
     }
     m_data.Clear();
+
+    for( wxDataIdToDataObjectList::Node* node2 = m_idToObject.GetFirst();
+         node2; node2 = node2->GetNext() )
+        delete node->GetData();
+    m_idToObject.Clear();
 }
 
 bool wxClipboard::Open()
@@ -197,6 +217,42 @@ bool wxClipboard::SetData( wxDataObject *data )
 wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
 wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray );
 
+void wxClipboardCallback( Widget xwidget, long* data_id,
+                          long* priv, int* reason )
+{
+    Display* xdisplay = XtDisplay( xwidget );
+    Window xwindow = XtWindow( xwidget );
+    wxDataObject* dobj = NULL;
+    size_t size = 0;
+
+    for( wxDataIdToDataObjectList::Node* node2 =
+             wxTheClipboard->m_idToObject.GetFirst();
+         node2; node2 = node2->GetNext() )
+    {
+        wxDataIdToDataObject* dido = node2->GetData();
+        if( dido->dataId == *data_id )
+        {
+            dobj = dido->object;
+            size = dido->size;
+            break;
+        }
+    }
+
+    if( !dobj ) return;
+
+    wxCharBuffer buffer(size);
+    size_t count = dobj->GetFormatCount( wxDataObject::Get );
+    wxDataFormatScopedArray dfarr( new wxDataFormat[count] );
+    dobj->GetAllFormats( dfarr.get(), wxDataObject::Get );
+
+    if( !dobj->GetDataHere( dfarr[*priv], buffer.data() ) )
+        return;
+
+    while( XmClipboardCopyByName( xdisplay, xwindow, *data_id,
+                                  buffer.data(), size, 0 )
+           == XmClipboardLocked );
+}
+
 bool wxClipboard::AddData( wxDataObject *data )
 {
     wxCHECK_MSG( data, false, "data is invalid" );
@@ -205,7 +261,8 @@ bool wxClipboard::AddData( wxDataObject *data )
     m_data.Append( data );
 
     Display* xdisplay = wxGlobalDisplay();
-    Window xwindow = XtWindow( (Widget)wxTheApp->GetTopLevelWidget() );
+    Widget xwidget = (Widget)wxTheApp->GetTopLevelWidget();
+    Window xwindow = XtWindow( xwidget );
     wxXmString label( wxTheApp->GetAppName() );
     Time timestamp = XtLastTimestampProcessed( xdisplay );
     long itemId;
@@ -213,8 +270,8 @@ bool wxClipboard::AddData( wxDataObject *data )
     int retval;
 
     while( ( retval = XmClipboardStartCopy( xdisplay, xwindow, label(),
-                                            timestamp, (Widget)NULL,
-                                            (XmCutPasteProc)NULL,
+                                            timestamp, xwidget,
+                                            wxClipboardCallback,
                                             &itemId ) )
            == XmClipboardLocked );
     if( retval != XmClipboardSuccess )
@@ -227,17 +284,15 @@ bool wxClipboard::AddData( wxDataObject *data )
     for( size_t i = 0; i < count; ++i )
     {
         size_t size = data->GetDataSize( dfarr[i] );
-        wxCharBuffer buffer(size);
-
-        if( !data->GetDataHere( dfarr[i], buffer.data() ) )
-            continue;
-
+        long data_id;
         wxString id = dfarr[i].GetId();
 
         while( ( retval = XmClipboardCopy( xdisplay, xwindow, itemId,
                                            wxConstCast(id.c_str(), char),
-                                           buffer.data(), size, 0, NULL ) )
+                                           NULL, size, i, &data_id ) )
                == XmClipboardLocked );
+
+        m_idToObject.Append( new wxDataIdToDataObject( data, data_id, size ) );
     }
 
     while( XmClipboardEndCopy( xdisplay, xwindow, itemId )
