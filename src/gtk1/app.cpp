@@ -96,7 +96,7 @@ bool wxYield()
     if (has_idle)
     {
         /* re-add idle handler (very low priority) */
-        wxTheApp->m_idleTag = gtk_idle_add_priority( 500, wxapp_idle_callback, (gpointer) NULL );
+        wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
     }
 
     // disable log flushing from here because a call to wxYield() shouldn't

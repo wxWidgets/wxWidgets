@@ -32,6 +32,7 @@
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/statbmp.h"
+    #include "wx/button.h"
 #endif //WX_PRECOMP
 
 #include "wx/statline.h"
