@@ -19,5 +19,5 @@
 #define OLDP2C 1
 #include "wx/wx_cw_cm.h"
 #ifdef WX_PRECOMP
-#include "wx/wxprec.h"
+   #include "wx/wxprec.h"
 #endif
