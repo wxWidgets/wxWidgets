@@ -735,6 +735,8 @@ void wxWindowX11::DoGetClientSize(int *x, int *y) const
 
 void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+    //    wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
+
     Window xwindow = (Window) GetMainWindow();
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
@@ -775,10 +777,18 @@ void wxWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
     
     DoMoveWindow( new_x, new_y, new_w, new_h );
+
+#if 0
+    wxSizeEvent event(wxSize(new_w, new_h), GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+#endif
 }
 
 void wxWindowX11::DoSetClientSize(int width, int height)
 {
+    //    wxLogDebug("DoSetClientSize: %s (%ld) %dx%d", GetClassInfo()->GetClassName(), GetId(), width, height);
+
     Window xwindow = (Window) GetMainWindow();
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
@@ -787,6 +797,12 @@ void wxWindowX11::DoSetClientSize(int width, int height)
 
     XResizeWindow( wxGlobalDisplay(), xwindow, width, height );
 
+#if 0
+    wxSizeEvent event(wxSize(width, height), GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+#endif
+    
 #else
 
     XWindowAttributes attr;
@@ -1053,6 +1069,8 @@ void wxWindowX11::SendEraseEvents()
 
 void wxWindowX11::SendPaintEvents()
 {
+    //    wxLogDebug("SendPaintEvents: %s (%ld)", GetClassInfo()->GetClassName(), GetId());
+
     m_clipPaintRegion = TRUE;
     
     wxNcPaintEvent nc_paint_event( GetId() );

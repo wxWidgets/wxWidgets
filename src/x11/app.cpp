@@ -991,6 +991,16 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     s_inYield = TRUE;
 
+    // Make sure we have an event loop object,
+    // or Pending/Dispatch will fail
+    wxEventLoop* eventLoop = wxEventLoop::GetActive();
+    wxEventLoop* newEventLoop = NULL;
+    if (!eventLoop)
+    {
+        newEventLoop = new wxEventLoop;
+        wxEventLoop::SetActive(newEventLoop);
+    }
+
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
 
@@ -998,6 +1008,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxTimer::NotifyTimers();
 #endif
     ProcessIdle();
+
+    if (newEventLoop)
+    {
+        wxEventLoop::SetActive(NULL);
+        delete newEventLoop;
+    }
 
     s_inYield = FALSE;
 

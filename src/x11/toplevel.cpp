@@ -280,7 +280,6 @@ bool wxTopLevelWindowX11::Show(bool show)
         
         m_needResizeInIdle = FALSE;
     }
-
     if (show)
     {
         // This does the layout _before_ the
@@ -292,8 +291,10 @@ bool wxTopLevelWindowX11::Show(bool show)
             Layout();
         }
     }
+    wxYield();
 
-    return wxWindowX11::Show(show);
+    bool ret = wxWindowX11::Show(show);
+    return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -637,8 +638,9 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+    //    wxLogDebug("DoSetSize: %s (%ld) %d, %d %dx%d", GetClassInfo()->GetClassName(), GetId(), x, y, width, height);
+
 #if 0
-    // wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 #endif
     XSync(wxGlobalDisplay(), False);
@@ -714,6 +716,11 @@ void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int siz
     // box of the minimal sample probably won't be resized right.
     XSync(wxGlobalDisplay(), False);
     XSync(wxGlobalDisplay(), False);
+#endif
+#if 1
+    wxSizeEvent event(wxSize(width, height), GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 #endif
 }
 

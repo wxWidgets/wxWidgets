@@ -47,6 +47,9 @@ public:
     // return currently active (running) event loop, may be NULL
     static wxEventLoop *GetActive() { return ms_activeLoop; }
 
+    // set currently active (running) event loop
+    static void SetActive(wxEventLoop* loop) { ms_activeLoop = loop; }
+
 protected:
     // the pointer to the port specific implementation class
     class WXDLLEXPORT wxEventLoopImpl *m_impl;
