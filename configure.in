@@ -1613,9 +1613,10 @@ case "${host}" in
       if test "$wxUSE_SHARED" = "yes" -a "$wxUSE_OMF" = "no"; then
         AC_MSG_WARN([Building DLLs requires OMF mode, enabled])
         wxUSE_OMF=yes
+	enable_omf=yes
       fi
       if test "$wxUSE_OMF" = "yes"; then
-        LDFLAGS="$LDFLAGS -Zomf -Zlinker /PMTYPE:PM -Zlinker /EXEPACK"
+        LDFLAGS="$LDFLAGS -Zlinker /EXEPACK -Zlinker /PMTYPE:PM"
       fi
       dnl (end of OS/2-only piece)
   ;;
