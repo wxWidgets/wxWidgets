@@ -134,8 +134,8 @@ public:
     // select or unselect the specified or current (if -1) item
     void Select(bool sel = TRUE, int item = -1);
 
-    // ensure that the current item is visible by scrolling it into view
-    void EnsureVisible();
+    // ensure that the given item is visible by scrolling it into view
+    virtual void EnsureVisible(int n);
 
     // find the first item after the current one which starts with the given
     // string and make it the current one, return TRUE if the current item
@@ -175,7 +175,6 @@ protected:
     void Init();
 
     // event handlers
-    void OnChar(wxKeyEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
@@ -201,6 +200,9 @@ protected:
     // redraw the items in the given range only: called from DoDraw()
     virtual void DoDrawRange(wxControlRenderer *renderer,
                              int itemFirst, int itemLast);
+
+    // update the scrollbars and then ensure that the item is visible
+    void DoEnsureVisible(int n);
 
     // mark horz scrollbar for updating
     void RefreshHorzScrollbar();

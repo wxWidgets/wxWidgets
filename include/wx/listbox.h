@@ -74,10 +74,18 @@ public:
     // GetSelection which only works for listboxes with single selection)
     virtual int GetSelections(wxArrayInt& aSelections) const = 0;
 
-    // Set the specified item at the first visible item or scroll to max
+    // set the specified item at the first visible item or scroll to max
     // range.
     void SetFirstItem(int n) { DoSetFirstItem(n); }
     void SetFirstItem(const wxString& s);
+
+    // ensures that the given item is visible scrolling the listbox if
+    // necessary
+    virtual void EnsureVisible(int n);
+
+    // a combination of Append() and EnsureVisible(): appends the item to the
+    // listbox and ensures that it is visible i.e. not scrolled out of view
+    void AppendAndEnsureVisible(const wxString& s);
 
     // return TRUE if the listbox allows multiple selection
     bool HasMultipleSelection() const

@@ -115,6 +115,10 @@ void wxListBoxBase::Command(wxCommandEvent& event)
     (void)ProcessEvent(event);
 }
 
+// ----------------------------------------------------------------------------
+// SetFirstItem() and such
+// ----------------------------------------------------------------------------
+
 void wxListBoxBase::SetFirstItem(const wxString& s)
 {
     int n = FindString(s);
@@ -122,6 +126,18 @@ void wxListBoxBase::SetFirstItem(const wxString& s)
     wxCHECK_RET( n != -1, wxT("invalid string in wxListBox::SetFirstItem") );
 
     DoSetFirstItem(n);
+}
+
+void wxListBoxBase::AppendAndEnsureVisible(const wxString& s)
+{
+    Append(s);
+    EnsureVisible(GetCount() - 1);
+}
+
+void wxListBoxBase::EnsureVisible(int WXUNUSED(n))
+{
+    // the base class version does nothing (the only alternative would be to
+    // call SetFirstItem() but this is probably even more stupid)
 }
 
 #endif // wxUSE_LISTBOX

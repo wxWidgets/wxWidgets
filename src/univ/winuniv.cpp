@@ -308,7 +308,7 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
 
 bool wxWindow::Enable(bool enable)
 {
-    if ( !wxWindowBase::Enable(enable) )
+    if ( !wxWindowNative::Enable(enable) )
         return FALSE;
 
     // disabled window can't keep focus

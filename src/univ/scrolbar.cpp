@@ -271,7 +271,6 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
 #endif // 0/1
                     }
 
-                    // FIXME: rect is client or win (must be client)?
                     Refresh(TRUE, &rect);
                 }
 

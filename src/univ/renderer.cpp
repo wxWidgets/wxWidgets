@@ -75,6 +75,37 @@ void wxRenderer::StandardDrawFrame(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 /* static */
+void wxRenderer::StandardScrollBarThumbSize(wxCoord length,
+                                            int thumbPos,
+                                            int thumbSize,
+                                            int range,
+                                            wxCoord *thumbStart,
+                                            wxCoord *thumbEnd)
+{
+    // the thumb can't be made less than this number of pixels
+    static const wxCoord thumbMinWidth = 8; // FIXME: should be configurable
+
+    *thumbStart = (length*thumbPos) / range;
+    *thumbEnd = (length*(thumbPos + thumbSize)) / range;
+
+    if ( *thumbEnd - *thumbStart < thumbMinWidth )
+    {
+        // adjust the end if possible
+        if ( *thumbStart <= length - thumbMinWidth )
+        {
+            // yes, just make it wider
+            *thumbEnd = *thumbStart + thumbMinWidth;
+        }
+        else // it is at the bottom of the scrollbar
+        {
+            // so move it a bit up
+            *thumbStart = length - thumbMinWidth;
+            *thumbEnd = length;
+        }
+    }
+}
+
+/* static */
 wxRect wxRenderer::StandardGetScrollbarRect(const wxScrollBar *scrollbar,
                                             wxScrollBar::Element elem,
                                             int thumbPos,
@@ -139,10 +170,12 @@ wxRect wxRenderer::StandardGetScrollbarRect(const wxScrollBar *scrollbar,
                 }
                 else
                 {
-                    int thumbSize = scrollbar->GetThumbSize();
-
-                    thumbStart = (length*thumbPos) / range;
-                    thumbEnd = (length*(thumbPos + thumbSize)) / range;
+                    StandardScrollBarThumbSize(length,
+                                               thumbPos,
+                                               scrollbar->GetThumbSize(),
+                                               range,
+                                               &thumbStart,
+                                               &thumbEnd);
                 }
 
                 if ( elem == wxScrollBar::Element_Thumb )
@@ -280,11 +313,12 @@ wxHitTest wxRenderer::StandardHitTestScrollbar(const wxScrollBar *scrollbar,
         }
         else
         {
-            int posThumb = scrollbar->GetThumbPosition(),
-                sizeThumb = scrollbar->GetThumbSize();
-
-            thumbStart = (sizeTotal*posThumb) / range;
-            thumbEnd = (sizeTotal*(posThumb + sizeThumb)) / range;
+            StandardScrollBarThumbSize(sizeTotal,
+                                       scrollbar->GetThumbPosition(),
+                                       scrollbar->GetThumbSize(),
+                                       range,
+                                       &thumbStart,
+                                       &thumbEnd);
         }
 
         // now compare with the thumb position

@@ -2,6 +2,10 @@
 TODO
 ----------------------------------------------------------------------------
 
+samples:
+
+    add SetString button to lboxtest
+
 wxTextCtrl
 
 *   display corrupted when typing text in quickly
@@ -22,6 +26,8 @@ All
 *   popup menu for text ctrls
 
 MSW
+
+    scrollbar behaves strangely in log lbox with many strings
 
 GTK
 

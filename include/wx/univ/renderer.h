@@ -262,6 +262,12 @@ protected:
                                         const wxSize& sizeArrow);
     static wxCoord StandardScrollBarSize(const wxScrollBar *scrollbar,
                                          const wxSize& sizeArrow);
+    static void StandardScrollBarThumbSize(wxCoord lenBar,
+                                           int thumbPos,
+                                           int thumbSize,
+                                           int range,
+                                           wxCoord *thumbStart,
+                                           wxCoord *thumbEnd);
 };
 
 // ----------------------------------------------------------------------------

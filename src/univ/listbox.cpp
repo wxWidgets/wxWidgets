@@ -48,8 +48,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
-    EVT_CHAR(wxListBox::OnChar)
-
     EVT_SIZE(wxListBox::OnSize)
 
     EVT_IDLE(wxListBox::OnIdle)
@@ -582,7 +580,7 @@ void wxListBox::OnIdle(wxIdleEvent& event)
 
     if ( m_currentChanged )
     {
-        EnsureVisible();
+        DoEnsureVisible(m_current);
 
         m_currentChanged = FALSE;
     }
@@ -808,17 +806,10 @@ bool wxListBox::FindItem(const wxString& prefix)
 {
     size_t len = prefix.length();
     int count = GetCount();
-    for ( int item = m_current + 1; item != m_current; item++ )
+    int first = m_current == count - 1 ? 0 : m_current + 1;
+    int last = m_current == -1 ? count : m_current;
+    for ( int item = first; item != last; item < count - 1 ? item++ : item = 0 )
     {
-        if ( item == count )
-        {
-            // wrap
-            item = 0;
-
-            if ( m_current == -1 )
-                break;
-        }
-
         if ( wxStrnicmp(m_strings[item], prefix, len) == 0 )
         {
             SetCurrentItem(item);
@@ -840,7 +831,20 @@ bool wxListBox::FindItem(const wxString& prefix)
     return FALSE;
 }
 
-void wxListBox::EnsureVisible()
+void wxListBox::EnsureVisible(int n)
+{
+    if ( m_updateScrollbarY )
+    {
+        UpdateScrollbars();
+
+        m_updateScrollbarX =
+        m_updateScrollbarY = FALSE;
+    }
+
+    DoEnsureVisible(n);
+}
+
+void wxListBox::DoEnsureVisible(int n)
 {
     if ( !m_showScrollbarY )
     {
@@ -850,20 +854,20 @@ void wxListBox::EnsureVisible()
 
     int first;
     GetViewStart(0, &first);
-    if ( first > m_current )
+    if ( first > n )
     {
         // we need to scroll upwards, so make the current item appear on top
         // of the shown range
-        Scroll(0, m_current);
+        Scroll(0, n);
     }
     else
     {
         int last = first + GetClientSize().y / GetLineHeight() - 1;
-        if ( last < m_current )
+        if ( last < n )
         {
             // scroll down: the current item appears at the bottom of the
             // range
-            Scroll(0, m_current - (last - first));
+            Scroll(0, n - (last - first));
         }
     }
 }
@@ -951,35 +955,6 @@ void wxListBox::Activate(int item)
 
         SendEvent(m_current, wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
     }
-}
-
-// ----------------------------------------------------------------------------
-// built-in keyboard interface (should it be implemented in the inp handler?)
-// ----------------------------------------------------------------------------
-
-void wxListBox::OnChar(wxKeyEvent& event)
-{
-    int keycode = event.GetKeyCode();
-    if ( isalnum(keycode) )
-    {
-        // find the next item after this one which starts with this letter
-        int count = GetCount();
-        int last = m_current == -1 ? count : m_current;
-        for ( int n = m_current + 1; n != last; n++ )
-        {
-            if ( n == count )
-                n = 0;
-
-            wxString str = m_strings[n];
-            if ( !str.empty() && (str[0u] == (wxChar)keycode) )
-            {
-                SetCurrentItem(n);
-                return;
-            }
-        }
-    }
-
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

@@ -97,6 +97,23 @@ wxButton::~wxButton()
 // size management
 // ----------------------------------------------------------------------------
 
+/* static */
+wxSize wxButtonBase::GetDefaultSize()
+{
+    static wxSize s_sizeBtn;
+
+    if ( s_sizeBtn.x == 0 )
+    {
+        wxScreenDC dc;
+
+        // this corresponds more or less to wxMSW standard
+        s_sizeBtn.x = (50 * dc.GetCharWidth())/4;
+        s_sizeBtn.y = (14 * dc.GetCharHeight())/8;
+    }
+
+    return s_sizeBtn;
+}
+
 wxSize wxButton::DoGetBestClientSize() const
 {
     wxClientDC dc(wxConstCast(this, wxButton));

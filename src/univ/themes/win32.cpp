@@ -1772,6 +1772,10 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     {
         // TODO
         size->x += 3*window->GetCharWidth();
+        wxSize sizeDef = wxButton::GetDefaultSize();
+        if ( size->x < sizeDef.x )
+            size->x = sizeDef.x;
+
         wxCoord heightBtn = (11*(window->GetCharHeight() + 8))/10;
         if ( size->y < heightBtn - 8 )
             size->y = heightBtn;

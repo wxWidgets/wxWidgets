@@ -1507,6 +1507,8 @@ long wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
 
 bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 {
+    // wxUniversal implements tab traversal itself
+#ifndef __WXUNIVERSAL__
     if ( m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL) )
     {
         // intercept dialog navigation keys
@@ -1672,6 +1674,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             return TRUE;
         }
     }
+#endif // __WXUNIVERSAL__
 
 #if wxUSE_TOOLTIPS
     if ( m_tooltip )
@@ -2425,8 +2428,15 @@ bool wxWindowMSW::MSWCreate(int id,
         if ( style & WS_CHILD )
           {
             controlId = id;
-            // all child windows should clip their siblings
-            // style |= /* WS_CLIPSIBLINGS */ ;
+
+#if 0 // def __WXUNIVERSAL__
+            // all child windows should clip their siblings except those which
+            // contain other controls
+            if ( !wxDynamicCast(this, wxStaticBox) )
+            {
+                style |= WS_CLIPSIBLINGS;
+            }
+#endif // __WXUNIVERSAL__
           }
 
         wxString className(wclass);
