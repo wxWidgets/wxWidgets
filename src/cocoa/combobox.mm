@@ -3,10 +3,10 @@
 // Purpose:     wxComboBox
 // Author:      David Elliott
 // Modified by:
-// Created:     2003/03/16
-// RCS-ID:      $Id: 
+// Created:     2003/07/14
+// RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:   	wxWindows license
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/app.h"
