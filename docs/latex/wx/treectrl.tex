@@ -136,6 +136,25 @@ Appends an item to the end of the branch identified by {\it parent}, return a ne
 If {\it image} > -1 and {\it selImage} is -1, the same image is used for
 both selected and unselected items.
 
+\membersection{wxTreeCtrl::AssignImageList}\label{wxtreectrlassignimagelist}
+
+\func{void}{AssignImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the normal image list. Image list assigned with this method will
+be deleted by wxTreeCtrl's destructor (i.e. it takes ownership of it).
+
+See also \helpref{SetImageList}{wxtreectrlsetimagelist}.
+
+\membersection{wxTreeCtrl::AssignStateImageList}\label{wxtreectrlassignstateimagelist}
+
+\func{void}{AssignStateImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the state image list. Image list assigned with this method will
+be deleted by wxTreeCtrl's destructor (i.e. it takes ownership of it).
+
+See also \helpref{SetStateImageList}{wxtreectrlsetstateimagelist}.
+
+
 \membersection{wxTreeCtrl::Collapse}\label{wxtreectrlcollapse}
 
 \func{void}{Collapse}{\param{const wxTreeItemId\&}{ item}}
@@ -560,7 +579,11 @@ Sets the indentation for the tree control.
 
 \func{void}{SetImageList}{\param{wxImageList*}{ imageList}}
 
-Sets the normal image list.
+Sets the normal image list. Image list assigned with this method will
+{\bf not} be deleted by wxTreeCtrl's destructor, you must delete it yourself.
+
+See also \helpref{AssignImageList}{wxtreectrlassignimagelist}.
+
 
 \membersection{wxTreeCtrl::SetItemBackgroundColour}\label{wxtreectrlsetitembackgroundcolour}
 
@@ -642,6 +665,10 @@ Sets the colour of the items text.
 \func{void}{SetStateImageList}{\param{wxImageList*}{ imageList}}
 
 Sets the state image list (from which application-defined state images are taken).
+Image list assigned with this method will
+{\bf not} be deleted by wxTreeCtrl's destructor, you must delete it yourself.
+
+See also \helpref{AssignStateImageList}{wxtreectrlassignstateimagelist}.
 
 \membersection{wxTreeCtrl::SortChildren}\label{wxtreectrlsortchildren}
 

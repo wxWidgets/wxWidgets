@@ -615,6 +615,8 @@ void wxGenericTreeCtrl::Init()
 
     m_imageListNormal =
     m_imageListState = (wxImageList *) NULL;
+    m_ownsImageListNormal = 
+    m_ownsImageListState = FALSE;
 
     m_dragCount = 0;
     m_isDragging = FALSE;
@@ -658,6 +660,8 @@ wxGenericTreeCtrl::~wxGenericTreeCtrl()
     DeleteAllItems();
 
     delete m_renameTimer;
+    if (m_ownsImageListNormal) delete m_imageListNormal;
+    if (m_ownsImageListState) delete m_imageListState;
 }
 
 // -----------------------------------------------------------------------------
@@ -1629,7 +1633,10 @@ wxImageList *wxGenericTreeCtrl::GetStateImageList() const
 
 void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
 {
+    if (m_ownsImageListNormal) delete m_imageListNormal;
+
     m_imageListNormal = imageList;
+    m_ownsImageListNormal = FALSE;
 
     if ( !m_imageListNormal )
         return;
@@ -1656,7 +1663,21 @@ void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
 
 void wxGenericTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
+    if (m_ownsImageListState) delete m_imageListState;
     m_imageListState = imageList;
+    m_ownsImageListState = FALSE;
+}
+
+void wxGenericTreeCtrl::AssignImageList(wxImageList *imageList)
+{
+    SetImageList(imageList);
+    m_ownsImageListNormal = TRUE;
+}
+
+void wxGenericTreeCtrl::AssignStateImageList(wxImageList *imageList)
+{
+    SetStateImageList(imageList);
+    m_ownsImageListState = TRUE;
 }
 
 // -----------------------------------------------------------------------------

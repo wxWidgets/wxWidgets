@@ -87,9 +87,11 @@ public:
     void SetSpacing(unsigned int spacing);
 
         // image list: these functions allow to associate an image list with
-        // the control and retrieve it. Note that the control does _not_ delete
+        // the control and retrieve it. Note that when assigned with 
+        // SetImageList, the control does _not_ delete
         // the associated image list when it's deleted in order to allow image
-        // lists to be shared between different controls.
+        // lists to be shared between different controls. If you use 
+        // AssignImageList, the control _does_ delete the image list.
         //
         // The normal image list is for the icons which correspond to the
         // normal tree item state (whether it is selected or not).
@@ -101,6 +103,8 @@ public:
 
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
+    void AssignImageList(wxImageList *imageList);
+    void AssignStateImageList(wxImageList *imageList);
 
     // Functions to work with tree ctrl items.
 
@@ -353,6 +357,8 @@ protected:
     wxBrush             *m_hilightBrush;
     wxImageList         *m_imageListNormal,
                         *m_imageListState;
+    bool                 m_ownsImageListNormal, 
+                         m_ownsImageListState;
 
     int                  m_dragCount;
     wxPoint              m_dragStart;
