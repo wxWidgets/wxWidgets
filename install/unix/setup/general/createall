@@ -1,5 +1,40 @@
 #! /bin/sh
 
+# Just grab dirbase/dir(s)
+readbase ()
+{
+    DIRBASE=$1
+    DIRCONTENTS=$2
+    for each in $DIRBASE/*
+    do
+	if test -d $each
+	then
+	    DIRCONTENTS="$DIRCONTENTS $each"
+	fi
+    done
+    echo $DIRCONTENTS
+}
+
+# Prefer subdir/src over subdir, use whichever available
+readbase2 ()
+{
+    DIRBASE=$1
+    DIRCONTENTS=$2
+    for each in $DIRBASE/*
+    do
+	if test -d $each
+	then
+	    if test -d $each/src
+	    then
+		DIRCONTENTS="$DIRCONTENTS $each/src"
+	    else
+		DIRCONTENTS="$DIRCONTENTS $each"
+	    fi
+	fi
+    done
+    echo $DIRCONTENTS
+}
+
 OS=$OSTYPE
 
 if test "x$OS" = x; then 
@@ -10,37 +45,10 @@ if test "x$OS" = x; then
   exit 1
 fi
 
-TMP_CONT=`ls src`
-SRC_DIR=src
-for each in $TMP_CONT; do
-  if test -d src/$each ; then 
-    SRC_DIR="$SRC_DIR src/$each"
-  fi
-done
-
-TMP_CONT=`ls samples`
-SAMPLES_DIR=
-for each in $TMP_CONT; do
-  if test -d samples/$each ; then 
-    SAMPLES_DIR="$SAMPLES_DIR samples/$each"
-  fi
-done
-
-TMP_CONT=`ls utils`
-UTILS_DIR=
-for each in $TMP_CONT; do
-  if test -d utils/$each ; then 
-    UTILS_DIR="$UTILS_DIR utils/$each"
-  fi
-done
-
-TMP_CONT=`ls user`
-USER_DIR=
-for each in $TMP_CONT; do
-  if test -d user/$each ; then 
-    USER_DIR="$USER_DIR user/$each"
-  fi
-done
+SRC_DIR=`readbase src src`
+SAMPLES_DIR=`readbase2 samples`
+UTILS_DIR=`readbase2 utils`
+USER_DIR=`readbase2 user`
 
 ALL_DIR="$SRC_DIR $SAMPLES_DIR $UTILS_DIR $USER_DIR"
 
