@@ -391,7 +391,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
 
     // set bitmap parameters
-    wxCHECK_MSG( Ok(), *this, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid image") );
     SetWidth( width );
     SetHeight( bmpHeight );
     if (depth == -1) depth = wxDisplayDepth();
@@ -400,7 +400,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // create a DIB header
     int headersize = sizeof(BITMAPINFOHEADER);
     BITMAPINFO *lpDIBh = (BITMAPINFO *) malloc( headersize );
-    wxCHECK_MSG( lpDIBh, bitmap, wxT("could not allocate memory for DIB header") );
+    wxCHECK_MSG( lpDIBh, FALSE, wxT("could not allocate memory for DIB header") );
     // Fill in the DIB header
     lpDIBh->bmiHeader.biSize = headersize;
     lpDIBh->bmiHeader.biWidth = (DWORD)width;
