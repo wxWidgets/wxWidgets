@@ -48,6 +48,7 @@ ALL_SOURCES = \
 		common/cmdline.cpp \
 		common/cmdproc.cpp \
 		common/cmndata.cpp \
+		common/containr.cpp \
 		common/config.cpp \
 		common/cshelp.cpp \
 		common/ctrlcmn.cpp \
@@ -199,6 +200,7 @@ ALL_HEADERS = \
 		combobox.h \
 		confbase.h \
 		config.h \
+		containr.h \
 		control.h \
 		cshelp.h \
 		ctrlsub.h \
@@ -446,6 +448,7 @@ COMMONOBJS = \
 		cmdproc.o \
 		cmndata.o \
 		config.o \
+		containr.o \
 		cshelp.o \
 		ctrlcmn.o \
 		ctrlsub.o \
