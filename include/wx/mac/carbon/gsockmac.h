@@ -33,7 +33,7 @@ class GSocket
 public:
     GSocket();
     ~GSocket();
-    bool IsOK() { return m_ok; }
+    bool IsOk() { return m_ok; }
 
     void Shutdown();
     GSocketError SetLocal(GAddress *address);
