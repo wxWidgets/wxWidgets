@@ -78,36 +78,42 @@
   */
   extern void WXDLLEXPORT wxOnAssert(const wxChar *szFile,
                                      int nLine,
+                                     const wxChar *szCond,
                                      const wxChar *szMsg = NULL);
 
   // call this function to break into the debugger uncodnitionally (assuming
   // the program is running under debugger, of course)
   extern void WXDLLEXPORT wxTrap();
 
-  /*
-    notice the usage of else at the end of wxASSERT macro: this ensures that
-    the following code
-
-        if ( ... )
-            wxASSERT(...);
-        else
-            ...
-
-    works like expected: if there were no "else", the one in the code above
-    would be matched with a wrong "if"
-  */
+  // helper function used to implement wxASSERT and wxASSERT_MSG
+  //
+  // note using "int" and not "bool" for cond to avoid VC++ warnings about
+  // implicit conversions when doing "wxAssert( pointer )" and also use of
+  // "!!cond" below to ensure that everything is converted to int
+  inline void WXDLLEXPORT wxAssert(int cond,
+                                   const wxChar *szFile,
+                                   int nLine,
+                                   const wxChar *szCond,
+                                   const wxChar *szMsg = NULL)
+  {
+      if ( !cond )
+          wxOnAssert(szFile, nLine, szCond, szMsg);
+  }
 
   // generic assert macro
-  #define wxASSERT(cond) if ( !(cond) ) wxOnAssert(__TFILE__, __LINE__); else
+  #define wxASSERT(cond) wxAssert(!!(cond), __TFILE__, __LINE__, _T(#cond))
 
   // assert with additional message explaining it's cause
   #define wxASSERT_MSG(cond, msg) \
-                    if ( !(cond) ) wxOnAssert(__TFILE__, __LINE__, msg); else
+    wxAssert(!!(cond), __TFILE__, __LINE__, _T(#cond), msg)
 
   // an assert helper used to avoid warning when testing constant expressions,
   // i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about
   // expression being always true, but not using
   // wxASSERT( wxAssertIsEqual(sizeof(int), 4) )
+  //
+  // NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and shouldn't be
+  //     used any longer
   extern bool WXDLLEXPORT wxAssertIsEqual(int x, int y);
 #else
   #define wxTrap()

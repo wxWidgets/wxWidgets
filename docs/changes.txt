@@ -34,6 +34,10 @@ wxBase:
   a function returning a pointer would stop compiling now (but this change
   is not supposed to have any effects on valid code)
 
+- another minor change: wxApp::OnAssert() has a new "cond" argument, you
+  must modify YourApp::OnAssert() signature if you were using it to override
+  the default assert handling.
+
 All (GUI):
 
 ! the event type constants are not constants any more but are dynamically

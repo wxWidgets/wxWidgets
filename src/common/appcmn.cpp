@@ -424,23 +424,22 @@ void wxTrap()
 
 // show the assert modal dialog
 static
-void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
+void ShowAssertDialog(const wxChar *szFile,
+                      int nLine,
+                      const wxChar *szCond,
+                      const wxChar *szMsg)
 {
     // this variable can be set to true to suppress "assert failure" messages
     static bool s_bNoAsserts = FALSE;
 
     wxChar szBuf[4096];
 
-    // make life easier for people using VC++ IDE: clicking on the message
-    // will take us immediately to the place of the failed assert
+    // make life easier for people using VC++ IDE by using this format: like
+    // this, clicking on the message will take us immediately to the place of
+    // the failed assert
     wxSnprintf(szBuf, WXSIZEOF(szBuf),
-#ifdef __VISUALC__
-               wxT("%s(%d): assert failed"),
-#else  // !VC++
-    // make the error message more clear for all the others
-               wxT("Assert failed in file %s at line %d"),
-#endif // VC/!VC
-               szFile, nLine);
+               wxT("%s(%d): assert \"%s\" failed"),
+               szFile, nLine, szCond);
 
     if ( szMsg != NULL )
     {
@@ -501,7 +500,10 @@ void ShowAssertDialog(const wxChar *szFile, int nLine, const wxChar *szMsg)
 }
 
 // this function is called when an assert fails
-void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
+void wxOnAssert(const wxChar *szFile,
+                int nLine,
+                const wxChar *szCond,
+                const wxChar *szMsg)
 {
     // FIXME MT-unsafe
     static bool s_bInAssert = FALSE;
@@ -522,20 +524,23 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
     {
         // by default, show the assert dialog box - we can't customize this
         // behaviour
-        ShowAssertDialog(szFile, nLine, szMsg);
+        ShowAssertDialog(szFile, nLine, szCond, szMsg);
     }
     else
     {
         // let the app process it as it wants
-        wxTheApp->OnAssert(szFile, nLine, szMsg);
+        wxTheApp->OnAssert(szFile, nLine, szCond, szMsg);
     }
 
     s_bInAssert = FALSE;
 }
 
-void wxAppBase::OnAssert(const wxChar *file, int line, const wxChar *msg)
+void wxAppBase::OnAssert(const wxChar *file,
+                         int line,
+                         const wxChar *cond,
+                         const wxChar *msg)
 {
-    ShowAssertDialog(file, line, msg);
+    ShowAssertDialog(file, line, cond, msg);
 }
 
 #endif  //WXDEBUG
