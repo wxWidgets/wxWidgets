@@ -126,8 +126,7 @@ int  DBTree::OnPopulate()
   if (ct_BrowserDB)
   { // Use the wxDatabase Information
    Temp0.Printf("%s - (%s) (%s)", s_DSN.c_str(),ct_BrowserDB->catalog, ct_BrowserDB->schema);
-   // Root = AddRoot(Temp0,TreeIc_DsnOpen,TreeIc_DsnOpen,new DBTreeData("Root"));
-   Root = AddRoot(Temp0,TreeIc_Smile,TreeIc_Smile,new DBTreeData("Root"));
+   Root = AddRoot(Temp0,TreeIc_DsnOpen,TreeIc_DsnOpen,new DBTreeData("Root"));
    for (x=0;x<ct_BrowserDB->numTables;x++)
    {
     wxYield();
