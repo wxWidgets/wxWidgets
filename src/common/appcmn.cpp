@@ -47,22 +47,31 @@
 void wxAppBase::ProcessPendingEvents()
 {
     // ensure that we're the only thread to modify the pending events list
-    wxCRIT_SECT_LOCKER(locker, *wxPendingEventsLocker);
+    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
 
     if ( !wxPendingEvents )
+    {
+        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
         return;
+    }
 
     // iterate until the list becomes empty
     wxNode *node = wxPendingEvents->First();
     while (node)
     {
         wxEvtHandler *handler = (wxEvtHandler *)node->Data();
-
-        handler->ProcessPendingEvents();
-
         delete node;
+
+        // In ProcessPendingEvents(), new handlers might be add
+	// and we can safely leave the critical section here.
+        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+        handler->ProcessPendingEvents();
+        wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+
         node = wxPendingEvents->First();
     }
+    
+    wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 
 int wxAppBase::OnExit()

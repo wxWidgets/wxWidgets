@@ -11,8 +11,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "gdk/gdk.h"
-#include "glib.h"
+
+#include <gdk/gdk.h>
+#include <glib.h>
+
 #include "wx/gsocket.h"
 #include "wx/unix/gsockunx.h"
 

@@ -583,12 +583,6 @@ wxEvtHandler::~wxEvtHandler()
 
 bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 {
-#if defined(__VISAGECPP__)
-    wxCriticalSectionLocker locker(m_eventsLocker);
-#else
-    wxCriticalSectionLocker locker(*m_eventsLocker);
-#endif
-
     // check that we are really in a child thread
     wxASSERT_MSG( !wxThread::IsMain(),
                   wxT("use ProcessEvent() in main thread") );
@@ -602,6 +596,14 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 
 void wxEvtHandler::AddPendingEvent(wxEvent& event)
 {
+    // 1) Add event to list of pending events of this event handler
+
+#if defined(__VISAGECPP__)
+    wxENTER_CRIT_SECT( m_eventsLocker);
+#else
+    wxENTER_CRIT_SECT( *m_eventsLocker);
+#endif
+
     if ( !m_pendingEvents )
       m_pendingEvents = new wxList;
 
@@ -609,6 +611,15 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     m_pendingEvents->Append(event2);
 
+#if defined(__VISAGECPP__)
+    wxLEAVE_CRIT_SECT( m_eventsLocker);
+#else
+    wxLEAVE_CRIT_SECT( *m_eventsLocker);
+#endif
+
+    // 2) Add this event handler to list of event handlers that
+    //    have pending events.
+    
     wxENTER_CRIT_SECT(*wxPendingEventsLocker);
 
     if ( !wxPendingEvents )
@@ -617,28 +628,49 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
 
+    // 3) Inform the system that new pending events are somwehere,
+    //    and that these should be processed in idle time.
+    
     wxWakeUpIdle();
 }
 
 void wxEvtHandler::ProcessPendingEvents()
 {
 #if defined(__VISAGECPP__)
-    wxCRIT_SECT_LOCKER(locker, m_eventsLocker);
+    wxENTER_CRIT_SECT( m_eventsLocker);
 #else
-    wxCRIT_SECT_LOCKER(locker, *m_eventsLocker);
+    wxENTER_CRIT_SECT( *m_eventsLocker);
 #endif
 
     wxNode *node = m_pendingEvents->First();
-    wxEvent *event;
-
     while ( node )
     {
-        event = (wxEvent *)node->Data();
+        wxEvent *event = (wxEvent *)node->Data();
+        delete node;
+	
+        // In ProcessEvent, new events might get added and
+	// we can safely leave the crtical section here.
+#if defined(__VISAGECPP__)
+        wxLEAVE_CRIT_SECT( m_eventsLocker);
+#else
+        wxLEAVE_CRIT_SECT( *m_eventsLocker);
+#endif
         ProcessEvent(*event);
         delete event;
-        delete node;
+#if defined(__VISAGECPP__)
+        wxENTER_CRIT_SECT( m_eventsLocker);
+#else
+        wxENTER_CRIT_SECT( *m_eventsLocker);
+#endif
+	
         node = m_pendingEvents->First();
     }
+    
+#if defined(__VISAGECPP__)
+    wxLEAVE_CRIT_SECT( m_eventsLocker);
+#else
+    wxLEAVE_CRIT_SECT( *m_eventsLocker);
+#endif
 }
 
 /*

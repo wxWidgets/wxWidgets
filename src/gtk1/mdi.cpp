@@ -19,9 +19,9 @@
 #include "wx/menu.h"
 #include "wx/intl.h"
 
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <glib.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
