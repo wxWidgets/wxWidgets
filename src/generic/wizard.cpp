@@ -190,6 +190,13 @@ void wxWizard::DoCreateControls()
     // margin between "Next >" and "Cancel" buttons
     static const int BUTTON_MARGIN = 10;
 
+    // margin between Back and Next buttons
+#ifdef __WXMAC__
+    static const int BACKNEXT_MARGIN = 10;
+#else
+    static const int BACKNEXT_MARGIN = 0;
+#endif
+
     // default width and height of the page
     static const int DEFAULT_PAGE_WIDTH = 270;
     static const int DEFAULT_PAGE_HEIGHT = 290;
@@ -238,7 +245,7 @@ void wxWizard::DoCreateControls()
                            wxSize(m_x + m_width - x, 2));
 #endif // wxUSE_STATLINE
 
-    x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN;
+    x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN - BACKNEXT_MARGIN;
     y += SEPARATOR_LINE_MARGIN;
 
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
@@ -254,6 +261,8 @@ void wxWizard::DoCreateControls()
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x;
+    x += BACKNEXT_MARGIN;
+
     m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x + BUTTON_MARGIN;
