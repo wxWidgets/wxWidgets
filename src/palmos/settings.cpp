@@ -30,25 +30,8 @@
 #endif
 
 #include "wx/settings.h"
-
-#ifndef SPI_GETFLATMENU
-#define SPI_GETFLATMENU                     0x1022
-#endif
-
 #include "wx/module.h"
 #include "wx/fontutil.h"
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// global data
-// ----------------------------------------------------------------------------
-
-// the font returned by GetFont(wxSYS_DEFAULT_GUI_FONT): it is created when
-// GetFont() is called for the first time and deleted by wxSystemSettingsModule
-static wxFont *gs_fontDefault = NULL;
 
 // ============================================================================
 // implementation
@@ -64,7 +47,59 @@ static wxFont *gs_fontDefault = NULL;
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    return wxNullColour;
+    // point to unused entry to mark lack of assignment
+    UIColorTableEntries which = UILastColorTableEntry;
+
+    switch( index )
+    {
+        case wxSYS_COLOUR_BACKGROUND:
+        case wxSYS_COLOUR_WINDOW:
+            which = UIFormFill;
+            break;
+        case wxSYS_COLOUR_WINDOWFRAME:
+        case wxSYS_COLOUR_ACTIVECAPTION:
+            which = UIFormFrame;
+            break;
+        case wxSYS_COLOUR_SCROLLBAR:
+            which = UIObjectFill;
+            break;
+/*
+        case wxSYS_COLOUR_INACTIVECAPTION:
+        case wxSYS_COLOUR_MENU:
+        case wxSYS_COLOUR_MENUTEXT:
+        case wxSYS_COLOUR_WINDOWTEXT:
+        case wxSYS_COLOUR_CAPTIONTEXT:
+        case wxSYS_COLOUR_ACTIVEBORDER:
+        case wxSYS_COLOUR_INACTIVEBORDER:
+        case wxSYS_COLOUR_APPWORKSPACE:
+        case wxSYS_COLOUR_HIGHLIGHT:
+        case wxSYS_COLOUR_HIGHLIGHTTEXT:
+        case wxSYS_COLOUR_BTNFACE:
+        case wxSYS_COLOUR_BTNSHADOW:
+        case wxSYS_COLOUR_GRAYTEXT:
+        case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_BTNHIGHLIGHT:
+        case wxSYS_COLOUR_3DDKSHADOW:
+        case wxSYS_COLOUR_3DLIGHT:
+        case wxSYS_COLOUR_INFOTEXT:
+        case wxSYS_COLOUR_INFOBK:
+        case wxSYS_COLOUR_LISTBOX:
+        case wxSYS_COLOUR_HOTLIGHT:
+        case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
+        case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+        case wxSYS_COLOUR_MENUHILIGHT:
+        case wxSYS_COLOUR_MENUBAR:
+*/
+    }
+    if ( which == UILastColorTableEntry )
+        return wxNullColour;
+
+    RGBColorType rgbP;
+
+    UIColorGetTableEntryRGB (which,&rgbP);
+
+    return wxColour(rgbP.r,rgbP.g,rgbP.b);
 }
 
 // ----------------------------------------------------------------------------
@@ -90,24 +125,10 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
 {
-    return 0;
+    return -1;
 }
 
 bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
 {
     return false;
 }
-
-// ----------------------------------------------------------------------------
-// function from wx/msw/wrapcctl.h: there is really no other place for it...
-// ----------------------------------------------------------------------------
-
-#if wxUSE_LISTCTRL || wxUSE_TREECTRL
-
-extern wxFont wxGetCCDefaultFont()
-{
-    wxFont font;
-    return font;
-}
-
-#endif // wxUSE_LISTCTRL || wxUSE_TREECTRL

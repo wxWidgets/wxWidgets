@@ -20,7 +20,7 @@ All:
 - added versions of MB2WC and WC2MB for wxMBConv that for embedded null chars
 - Unicode support in wxODBC is now fully implemented
 - A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
-  SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent 
+  SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent
   behavior between Unicode and non-unicode builds
 - BLOB example added to samples/db (thanks to Casey ODonnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
@@ -102,6 +102,7 @@ wxPalmOS:
 - enumeration of available volumes
 - native wxPrefConfig around Preferences database
 - native wxProgressDialog implementation
+- native wxSystemSettings colours
 
 
 2.5.3
@@ -167,16 +168,16 @@ Unix:
 wxCocoa:
 
 - added Unicode compatibility layer for OSX 10.2
-- fixed so that wxCocoa runs in OSX 10.2 
+- fixed so that wxCocoa runs in OSX 10.2
 - Tooltips now supported
 - wxSound now supported
-- wxDisplay now supported 
-- Some stock cursors now supported 
+- wxDisplay now supported
+- Some stock cursors now supported
 
 wxMac:
 
-- fixed MLTE text control GetLineText and GetLineLength on OSX 
-- added OSX wxTaskBarIcon implementation for the OSX Dock 
+- fixed MLTE text control GetLineText and GetLineLength on OSX
+- added OSX wxTaskBarIcon implementation for the OSX Dock
 - added Unicode compatibility layer for OSX 10.2
 - wxGetKeyState now works with nearly all wx key codes
 
