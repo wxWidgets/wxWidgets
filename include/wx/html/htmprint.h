@@ -140,7 +140,7 @@ class wxHtmlPrintout : public wxPrintout
         bool OnPrintPage(int page);
         bool HasPage(int page);
         void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
-        bool OnBeginDocument(int start, int end);
+        void OnBeginPrinting();
         
     private:
 
@@ -154,7 +154,7 @@ class wxHtmlPrintout : public wxPrintout
         
     private:
         int m_NumPages;
-        int m_PageBreaks[HTML_PRINT_MAX_PAGES];
+        int m_PageBreaks[wxHTML_PRINT_MAX_PAGES];
 
         wxString m_Document, m_BasePath;
         bool m_BasePathIsDir;

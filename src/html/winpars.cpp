@@ -106,7 +106,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_Link = "";
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
-    m_Align = HTML_ALIGN_LEFT;
+    m_Align = wxHTML_ALIGN_LEFT;
     m_tmpLastWasSpace = FALSE;
 
     OpenContainer();
@@ -132,7 +132,7 @@ wxObject* wxHtmlWinParser::GetProduct()
 
     CloseContainer();
     OpenContainer();
-    GetContainer() -> SetIndent(m_CharHeight, HTML_INDENT_TOP);
+    GetContainer() -> SetIndent(m_CharHeight, wxHTML_INDENT_TOP);
     top = m_Container;
     while (top -> GetParent()) top = top -> GetParent();
     return top;
@@ -166,7 +166,7 @@ void wxHtmlWinParser::AddText(const char* txt)
 {
     wxHtmlCell *c;
     int i = 0, x, lng = strlen(txt);
-    char temp[HTML_BUFLEN];
+    char temp[wxHTML_BUFLEN];
     register char d;
     int templen = 0;
 

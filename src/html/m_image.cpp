@@ -220,7 +220,7 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
 // wxHtmlImageMapCell
 //                  0-width, 0-height cell that represents map from imagemaps
 //                  it is always placed before wxHtmlImageMapAreaCells
-//                  It responds to Find(HTML_COND_ISIMAGEMAP)
+//                  It responds to Find(wxHTML_COND_ISIMAGEMAP)
 //--------------------------------------------------------------------------------
 
 
@@ -251,7 +251,7 @@ wxString wxHtmlImageMapCell::GetLink( int x, int y ) const
 
 const wxHtmlCell *wxHtmlImageMapCell::Find( int cond, const void *param ) const
 {
-	if (cond == HTML_COND_ISIMAGEMAP)
+	if (cond == wxHTML_COND_ISIMAGEMAP)
 	{
 		if (m_Name == *((wxString*)(param)))
 			return this;
@@ -275,7 +275,7 @@ class wxHtmlImageCell : public wxHtmlCell
     	wxHtmlImageMapCell *m_ImageMap;
     	wxString m_MapName;
 
-        wxHtmlImageCell(wxFSFile *input, int w = -1, int h = -1, int align = HTML_ALIGN_BOTTOM, wxString mapname = wxEmptyString);
+        wxHtmlImageCell(wxFSFile *input, int w = -1, int h = -1, int align = wxHTML_ALIGN_BOTTOM, wxString mapname = wxEmptyString);
         ~wxHtmlImageCell() {if (m_Image) delete m_Image;}
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
 	    virtual wxString GetLink( int x = 0, int y = 0 ) const;
@@ -311,11 +311,11 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxStr
         delete img;
     }
     switch (align) {
-        case HTML_ALIGN_TOP :
+        case wxHTML_ALIGN_TOP :
                         m_Descent = m_Height; break;
-        case HTML_ALIGN_CENTER :
+        case wxHTML_ALIGN_CENTER :
                         m_Descent = m_Height / 2; break;
-        case HTML_ALIGN_BOTTOM : default :
+        case wxHTML_ALIGN_BOTTOM : default :
                         m_Descent = 0; break;
     }
 
@@ -347,7 +347,7 @@ wxString wxHtmlImageCell::GetLink( int x, int y ) const
 			p = p->GetParent();
 		}
 		p = op;
-		wxHtmlCell *cell = (wxHtmlCell*)p->Find( HTML_COND_ISIMAGEMAP, (const void*)(&m_MapName));
+		wxHtmlCell *cell = (wxHtmlCell*)p->Find( wxHTML_COND_ISIMAGEMAP, (const void*)(&m_MapName));
 		if (!cell)
 		{
 			((wxString&)m_MapName).Clear();
@@ -384,12 +384,12 @@ TAG_HANDLER_BEGIN(IMG, "IMG, MAP, AREA")
 		    str = m_WParser -> GetFS() -> OpenFile(tmp);
 		    if (tag.HasParam("WIDTH")) tag.ScanParam("WIDTH", "%i", &w);
 		    if (tag.HasParam("HEIGHT")) tag.ScanParam("HEIGHT", "%i", &h);
-		    al = HTML_ALIGN_BOTTOM;
+		    al = wxHTML_ALIGN_BOTTOM;
 		    if (tag.HasParam("ALIGN")) {
 			wxString alstr = tag.GetParam("ALIGN");
 			alstr.MakeUpper(); // for the case alignment was in ".."
-			if (alstr == "TEXTTOP") al = HTML_ALIGN_TOP;
-			else if ((alstr == "CENTER") || (alstr == "ABSCENTER")) al = HTML_ALIGN_CENTER;
+			if (alstr == "TEXTTOP") al = wxHTML_ALIGN_TOP;
+			else if ((alstr == "CENTER") || (alstr == "ABSCENTER")) al = wxHTML_ALIGN_CENTER;
 		    }
 		    if (tag.HasParam("USEMAP"))
 		    {

@@ -40,7 +40,7 @@ class wxHtmlAnchorCell : public wxHtmlCell
         wxHtmlAnchorCell(const wxString& name) : wxHtmlCell() {m_AnchorName = name;}
         virtual const wxHtmlCell* Find(int condition, const void* param) const
         {
-            if ((condition == HTML_COND_ISANCHOR) && (m_AnchorName == (*((const wxString*)param))))
+            if ((condition == wxHTML_COND_ISANCHOR) && (m_AnchorName == (*((const wxString*)param))))
                 return this;
             else
                 return wxHtmlCell::Find(condition, param);

@@ -154,7 +154,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
 
         c -> SetAlign(tag);
         c -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_TOP);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser -> SetAlign(c -> GetAlignHor());
 
         ParseInner(tag);
@@ -170,7 +170,7 @@ TAG_HANDLER_BEGIN(Hx, "H1,H2,H3,H4,H5,H6")
         m_WParser -> CloseContainer();
         m_WParser -> OpenContainer();
         c = m_WParser -> GetContainer();
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_TOP);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
 
         return TRUE;
     }

@@ -38,7 +38,7 @@ TAG_HANDLER_BEGIN(P, "P")
             m_WParser -> CloseContainer();
             m_WParser -> OpenContainer();
     }
-        m_WParser -> GetContainer() -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_TOP);
+        m_WParser -> GetContainer() -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser -> GetContainer() -> SetAlign(tag);
         return FALSE;
     }
@@ -72,13 +72,13 @@ TAG_HANDLER_BEGIN(CENTER, "CENTER")
         int old = m_WParser -> GetAlign();
         wxHtmlContainerCell *c = m_WParser -> GetContainer();
 
-        m_WParser -> SetAlign(HTML_ALIGN_CENTER);
+        m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
         if (c -> GetFirstCell() != NULL) {
             m_WParser -> CloseContainer();
             m_WParser -> OpenContainer();
         }
         else
-            c -> SetAlignHor(HTML_ALIGN_CENTER);
+            c -> SetAlignHor(wxHTML_ALIGN_CENTER);
 
         if (tag.HasEnding()) {
             ParseInner(tag);
@@ -183,7 +183,7 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
         if (tag.HasParam("BGCOLOR")) {
             if (tag.ScanParam("BGCOLOR", "#%lX", &tmp) == 1) {
                 clr = wxColour((tmp & 0xFF0000) >> 16 , (tmp & 0x00FF00) >> 8, (tmp & 0x0000FF));
-                m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr, HTML_CLR_BACKGROUND));
+                m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
                 if (m_WParser -> GetWindow() != NULL)
                     m_WParser -> GetWindow() -> SetBackgroundColour(clr);
 	    }
@@ -203,15 +203,15 @@ TAG_HANDLER_BEGIN(BLOCKQUOTE, "BLOCKQUOTE")
     
         m_WParser -> CloseContainer();
         c = m_WParser -> OpenContainer();
-        if (c -> GetAlignHor() == HTML_ALIGN_RIGHT)
-            c -> SetIndent(5 * m_WParser -> GetCharWidth(), HTML_INDENT_RIGHT);
+        if (c -> GetAlignHor() == wxHTML_ALIGN_RIGHT)
+            c -> SetIndent(5 * m_WParser -> GetCharWidth(), wxHTML_INDENT_RIGHT);
         else
-            c -> SetIndent(5 * m_WParser -> GetCharWidth(), HTML_INDENT_LEFT);
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_TOP);
+            c -> SetIndent(5 * m_WParser -> GetCharWidth(), wxHTML_INDENT_LEFT);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser -> OpenContainer();
         ParseInner(tag);
         c = m_WParser -> CloseContainer();
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_BOTTOM);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_BOTTOM);
         m_WParser -> CloseContainer();
         m_WParser -> OpenContainer();
         return TRUE;

@@ -96,7 +96,7 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     m_FS -> ChangePathTo(basepath, isdir);
     m_DC -> SetUserScale(1.0, 1.0);
     m_Cells = (wxHtmlContainerCell*) m_Parser -> Parse(html);
-    m_Cells -> SetIndent(0, HTML_INDENT_ALL, HTML_UNITS_PIXELS);
+    m_Cells -> SetIndent(0, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
     m_Cells -> Layout(m_Width);
 }
 
@@ -163,7 +163,7 @@ wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
     m_Renderer = new wxHtmlDCRenderer;
     m_RendererHdr = new wxHtmlDCRenderer;
-    m_NumPages = HTML_PRINT_MAX_PAGES;
+    m_NumPages = wxHTML_PRINT_MAX_PAGES;
     m_Document = m_BasePath = wxEmptyString; m_BasePathIsDir = TRUE;
     m_Headers[0] = m_Headers[1] = wxEmptyString;
     m_Footers[0] = m_Footers[1] = wxEmptyString;
@@ -181,12 +181,12 @@ wxHtmlPrintout::~wxHtmlPrintout()
 
 
 
-bool wxHtmlPrintout::OnBeginDocument(int start, int end)
+void wxHtmlPrintout::OnBeginPrinting()
 {
     int pageWidth, pageHeight, mm_w, mm_h;
     float ppmm_h, ppmm_v;
     
-    if (!wxPrintout::OnBeginDocument(start, end)) return FALSE;
+    wxPrintout::OnBeginPrinting();
 
     GetPageSizePixels(&pageWidth, &pageHeight);
     GetPageSizeMM(&mm_w, &mm_h);
@@ -225,8 +225,6 @@ bool wxHtmlPrintout::OnBeginDocument(int start, int end)
                           );
     m_Renderer -> SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
     CountPages();
-    
-    return TRUE;
 }
 
 
@@ -245,9 +243,9 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    *maxPage = HTML_PRINT_MAX_PAGES;
+    *maxPage = wxHTML_PRINT_MAX_PAGES;
     *selPageFrom = 1;
-    *selPageTo = 1;
+    *selPageTo = wxHTML_PRINT_MAX_PAGES;
 }
 
 
@@ -480,7 +478,7 @@ void wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
     else {
         wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame, 
                                                    m_Name + _(" Preview"), 
-                                                   wxPoint(100, 100), wxSize(500, 500));
+                                                   wxPoint(100, 100), wxSize(650, 500));
         frame -> Centre(wxBOTH);
         frame -> Initialize();
         frame -> Show(TRUE);

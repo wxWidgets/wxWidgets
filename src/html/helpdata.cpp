@@ -123,8 +123,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
         if (m_Page != wxEmptyString) {
-            if (m_ItemsCnt % HTML_REALLOC_STEP == 0)
-                m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + HTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+            if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
+                m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
             m_Items[m_ItemsCnt].m_Level = m_Level;
             m_Items[m_ItemsCnt].m_ID = m_ID;
             m_Items[m_ItemsCnt].m_Page = new char[m_Page.Length() + 1];
@@ -248,7 +248,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
     f -> Read(&x, sizeof(x));
     st = m_ContentsCnt;
     m_ContentsCnt += x;
-    m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt / HTML_REALLOC_STEP + 1) * HTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
+    m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt / wxHTML_REALLOC_STEP + 1) * wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
     for (i = st; i < m_ContentsCnt; i++) {
         f -> Read(&x, sizeof(x));
         m_Contents[i].m_Level = x;
@@ -268,7 +268,7 @@ bool wxHtmlHelpData::LoadCachedBook(wxHtmlBookRecord *book, wxInputStream *f)
     f -> Read(&x, sizeof(x));
     st = m_IndexCnt;
     m_IndexCnt += x;
-    m_Index = (wxHtmlContentsItem*) realloc(m_Index, (m_IndexCnt / HTML_REALLOC_STEP + 1) * HTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
+    m_Index = (wxHtmlContentsItem*) realloc(m_Index, (m_IndexCnt / wxHTML_REALLOC_STEP + 1) * wxHTML_REALLOC_STEP * sizeof(wxHtmlContentsItem));
     for (i = st; i < m_IndexCnt; i++) {
         f -> Read(&x, sizeof(x));
         m_Index[i].m_Name = new char[x];
@@ -352,8 +352,8 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
 
     bookr = new wxHtmlBookRecord(path+'/', title, deftopic);
 
-    if (m_ContentsCnt % HTML_REALLOC_STEP == 0)
-        m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + HTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+    if (m_ContentsCnt % wxHTML_REALLOC_STEP == 0)
+        m_Contents = (wxHtmlContentsItem*) realloc(m_Contents, (m_ContentsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
     m_Contents[m_ContentsCnt].m_Level = 0;
     m_Contents[m_ContentsCnt].m_ID = 0;
     m_Contents[m_ContentsCnt].m_Page = new char[deftopic.Length() + 1];

@@ -20,13 +20,13 @@
 //                  Describes alignment of text etc. in containers
 //--------------------------------------------------------------------------------
 
-#define HTML_ALIGN_LEFT            0x0000
-#define HTML_ALIGN_RIGHT           0x0002
+#define wxHTML_ALIGN_LEFT            0x0000
+#define wxHTML_ALIGN_RIGHT           0x0002
 
-#define HTML_ALIGN_TOP             0x0004
-#define HTML_ALIGN_BOTTOM          0x0008
+#define wxHTML_ALIGN_TOP             0x0004
+#define wxHTML_ALIGN_BOTTOM          0x0008
 
-#define HTML_ALIGN_CENTER          0x0001
+#define wxHTML_ALIGN_CENTER          0x0001
 
 
 
@@ -35,8 +35,8 @@
 //                  Used by wxHtmlColourCell to determine clr of what is changing
 //--------------------------------------------------------------------------------
 
-#define HTML_CLR_FOREGROUND        0x0001
-#define HTML_CLR_BACKGROUND        0x0002
+#define wxHTML_CLR_FOREGROUND        0x0001
+#define wxHTML_CLR_BACKGROUND        0x0002
 
 
 
@@ -45,8 +45,8 @@
 //                  Used to specify units
 //--------------------------------------------------------------------------------
 
-#define HTML_UNITS_PIXELS          0x0001
-#define HTML_UNITS_PERCENT         0x0002
+#define wxHTML_UNITS_PIXELS          0x0001
+#define wxHTML_UNITS_PERCENT         0x0002
 
 
 
@@ -55,14 +55,14 @@
 //                  Used to specify indetation relatives
 //--------------------------------------------------------------------------------
 
-#define HTML_INDENT_LEFT           0x0010
-#define HTML_INDENT_RIGHT          0x0020
-#define HTML_INDENT_TOP            0x0040
-#define HTML_INDENT_BOTTOM         0x0080
+#define wxHTML_INDENT_LEFT           0x0010
+#define wxHTML_INDENT_RIGHT          0x0020
+#define wxHTML_INDENT_TOP            0x0040
+#define wxHTML_INDENT_BOTTOM         0x0080
 
-#define HTML_INDENT_HORIZONTAL     HTML_INDENT_LEFT | HTML_INDENT_RIGHT
-#define HTML_INDENT_VERTICAL       HTML_INDENT_TOP | HTML_INDENT_BOTTOM
-#define HTML_INDENT_ALL            HTML_INDENT_VERTICAL | HTML_INDENT_HORIZONTAL
+#define wxHTML_INDENT_HORIZONTAL     wxHTML_INDENT_LEFT | wxHTML_INDENT_RIGHT
+#define wxHTML_INDENT_VERTICAL       wxHTML_INDENT_TOP | wxHTML_INDENT_BOTTOM
+#define wxHTML_INDENT_ALL            wxHTML_INDENT_VERTICAL | wxHTML_INDENT_HORIZONTAL
 
 
 
@@ -72,14 +72,14 @@
 //                  Identifiers of wxHtmlCell's Find() conditions
 //--------------------------------------------------------------------------------
 
-#define HTML_COND_ISANCHOR              1
+#define wxHTML_COND_ISANCHOR              1
         // Finds the anchor of 'param' name (pointer to wxString).
 	
-#define HTML_COND_ISIMAGEMAP            2
+#define wxHTML_COND_ISIMAGEMAP            2
         // Finds imagemap of 'param' name (pointer to wxString).
 	// (used exclusively by m_image.cpp)
 	
-#define HTML_COND_USER              10000
+#define wxHTML_COND_USER              10000
         // User-defined conditions should start from this number
 
 
@@ -88,14 +88,47 @@
 //                  wxHTML internal constants
 //--------------------------------------------------------------------------------
 
-#define HTML_SCROLL_STEP               16
+#define wxHTML_SCROLL_STEP               16
     /* size of one scroll step of wxHtmlWindow in pixels */
-#define HTML_BUFLEN                  1024
+#define wxHTML_BUFLEN                  1024
     /* size of temporary buffer used during parsing */
-#define HTML_REALLOC_STEP              32
+#define wxHTML_REALLOC_STEP              32
     /* steps of array reallocation */
-#define HTML_PRINT_MAX_PAGES          999
+#define wxHTML_PRINT_MAX_PAGES          999
     /* maximum number of pages printable via html printing */
+
+
+
+
+
+
+
+
+#if WXWIN_COMPATIBILITY_2
+
+#define HTML_ALIGN_LEFT            wxHTML_ALIGN_LEFT
+#define HTML_ALIGN_RIGHT           wxHTML_ALIGN_RIGHT
+#define HTML_ALIGN_TOP             wxHTML_ALIGN_TOP
+#define HTML_ALIGN_BOTTOM          wxHTML_ALIGN_BOTTOM
+#define HTML_ALIGN_CENTER          wxHTML_ALIGN_CENTER
+#define HTML_CLR_FOREGROUND        wxHTML_CLR_FOREGROUND
+#define HTML_CLR_BACKGROUND        wxHTML_CLR_BACKGROUND
+#define HTML_UNITS_PIXELS          wxHTML_UNITS_PIXELS
+#define HTML_UNITS_PERCENT         wxHTML_UNITS_PERCENT
+#define HTML_INDENT_LEFT           wxHTML_INDENT_LEFT
+#define HTML_INDENT_RIGHT          wxHTML_INDENT_RIGHT
+#define HTML_INDENT_TOP            wxHTML_INDENT_TOP
+#define HTML_INDENT_BOTTOM         wxHTML_INDENT_BOTTOM
+#define HTML_INDENT_HORIZONTAL     wxHTML_INDENT_HORIZONTAL
+#define HTML_INDENT_VERTICAL       wxHTML_INDENT_VERTICAL
+#define HTML_INDENT_ALL            wxHTML_INDENT_ALL
+#define HTML_COND_ISANCHOR         wxHTML_COND_ISANCHOR
+#define HTML_COND_ISIMAGEMAP       wxHTML_COND_ISIMAGEMAP
+#define HTML_COND_USER             wxHTML_COND_USER
+
+#endif
+
+
 
 #endif
 #endif

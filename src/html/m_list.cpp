@@ -92,8 +92,8 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
                 m_WParser -> CloseContainer();
 
                 c = m_WParser -> OpenContainer();
-                c -> SetWidthFloat(2 * m_WParser -> GetCharWidth(), HTML_UNITS_PIXELS);
-                c -> SetAlignHor(HTML_ALIGN_RIGHT);
+                c -> SetWidthFloat(2 * m_WParser -> GetCharWidth(), wxHTML_UNITS_PIXELS);
+                c -> SetAlignHor(wxHTML_ALIGN_RIGHT);
                 if (m_Numbering == 0)
                     c -> InsertCell(new wxHtmlListmarkCell(m_WParser -> GetDC(), m_WParser -> GetActualColor()));
                 else {
@@ -104,8 +104,8 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
                 m_WParser -> CloseContainer();
 
                 c = m_WParser -> OpenContainer();
-                c -> SetIndent(m_WParser -> GetCharWidth() / 4, HTML_INDENT_LEFT);
-                c -> SetWidthFloat(-2 * m_WParser -> GetCharWidth(), HTML_UNITS_PIXELS);
+                c -> SetIndent(m_WParser -> GetCharWidth() / 4, wxHTML_INDENT_LEFT);
+                c -> SetWidthFloat(-2 * m_WParser -> GetCharWidth(), wxHTML_UNITS_PIXELS);
 
                 m_WParser -> OpenContainer();
 
@@ -127,9 +127,9 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
                 m_WParser -> OpenContainer();
                 c = m_WParser -> GetContainer();
             }
-            c -> SetAlignHor(HTML_ALIGN_LEFT);
-            c -> SetIndent(2 * m_WParser -> GetCharWidth(), HTML_INDENT_LEFT);
-            m_WParser -> OpenContainer() -> SetAlignVer(HTML_ALIGN_TOP);
+            c -> SetAlignHor(wxHTML_ALIGN_LEFT);
+            c -> SetIndent(2 * m_WParser -> GetCharWidth(), wxHTML_INDENT_LEFT);
+            m_WParser -> OpenContainer() -> SetAlignVer(wxHTML_ALIGN_TOP);
 
             m_WParser -> OpenContainer();
             m_WParser -> OpenContainer();

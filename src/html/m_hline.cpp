@@ -75,8 +75,8 @@ TAG_HANDLER_BEGIN(HR, "HR")
         m_WParser -> CloseContainer();
         c = m_WParser -> OpenContainer();
 
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_VERTICAL);
-        c -> SetAlignHor(HTML_ALIGN_CENTER);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_VERTICAL);
+        c -> SetAlignHor(wxHTML_ALIGN_CENTER);
         c -> SetAlign(tag);
         c -> SetWidthFloat(tag);
         if (tag.HasParam("SIZE") && tag.ScanParam("SIZE", "%i", &sz) == 1) {}

@@ -101,35 +101,35 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_Cells = m_LastCell = NULL;
     m_Parent = parent;
     if (m_Parent) m_Parent -> InsertCell(this);
-    m_AlignHor = HTML_ALIGN_LEFT;
-    m_AlignVer = HTML_ALIGN_BOTTOM;
+    m_AlignHor = wxHTML_ALIGN_LEFT;
+    m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
-    m_WidthFloat = 100; m_WidthFloatUnits = HTML_UNITS_PERCENT;
+    m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
     m_UseBkColour = FALSE;
     m_UseBorder = FALSE;
     m_MinHeight = m_MaxLineWidth = 0;
-    m_MinHeightAlign = HTML_ALIGN_TOP;
+    m_MinHeightAlign = wxHTML_ALIGN_TOP;
 }
 
 
 
 void wxHtmlContainerCell::SetIndent(int i, int what, int units)
 {
-    int val = (units == HTML_UNITS_PIXELS) ? i : -i;
-    if (what & HTML_INDENT_LEFT) m_IndentLeft = val;
-    if (what & HTML_INDENT_RIGHT) m_IndentRight = val;
-    if (what & HTML_INDENT_TOP) m_IndentTop = val;
-    if (what & HTML_INDENT_BOTTOM) m_IndentBottom = val;
+    int val = (units == wxHTML_UNITS_PIXELS) ? i : -i;
+    if (what & wxHTML_INDENT_LEFT) m_IndentLeft = val;
+    if (what & wxHTML_INDENT_RIGHT) m_IndentRight = val;
+    if (what & wxHTML_INDENT_TOP) m_IndentTop = val;
+    if (what & wxHTML_INDENT_BOTTOM) m_IndentBottom = val;
 }
 
 
 
 int wxHtmlContainerCell::GetIndent(int ind) const
 {
-    if (ind & HTML_INDENT_LEFT) return m_IndentLeft;
-    else if (ind & HTML_INDENT_RIGHT) return m_IndentRight;
-    else if (ind & HTML_INDENT_TOP) return m_IndentTop;
-    else if (ind & HTML_INDENT_BOTTOM) return m_IndentBottom;
+    if (ind & wxHTML_INDENT_LEFT) return m_IndentLeft;
+    else if (ind & wxHTML_INDENT_RIGHT) return m_IndentRight;
+    else if (ind & wxHTML_INDENT_TOP) return m_IndentTop;
+    else if (ind & wxHTML_INDENT_BOTTOM) return m_IndentBottom;
     else return -1; /* BUG! Should not be called... */
 }
 
@@ -139,12 +139,12 @@ int wxHtmlContainerCell::GetIndent(int ind) const
 int wxHtmlContainerCell::GetIndentUnits(int ind) const
 {
     bool p = FALSE;
-    if (ind & HTML_INDENT_LEFT) p = m_IndentLeft < 0;
-    else if (ind & HTML_INDENT_RIGHT) p = m_IndentRight < 0;
-    else if (ind & HTML_INDENT_TOP) p = m_IndentTop < 0;
-    else if (ind & HTML_INDENT_BOTTOM) p = m_IndentBottom < 0;
-    if (p) return HTML_UNITS_PERCENT;
-    else return HTML_UNITS_PIXELS;
+    if (ind & wxHTML_INDENT_LEFT) p = m_IndentLeft < 0;
+    else if (ind & wxHTML_INDENT_RIGHT) p = m_IndentRight < 0;
+    else if (ind & wxHTML_INDENT_TOP) p = m_IndentTop < 0;
+    else if (ind & wxHTML_INDENT_BOTTOM) p = m_IndentBottom < 0;
+    if (p) return wxHTML_UNITS_PERCENT;
+    else return wxHTML_UNITS_PIXELS;
 }
 
 
@@ -184,7 +184,7 @@ void wxHtmlContainerCell::Layout(int w)
 
     */
 
-    if (m_WidthFloatUnits == HTML_UNITS_PERCENT) {
+    if (m_WidthFloatUnits == wxHTML_UNITS_PERCENT) {
         if (m_WidthFloat < 0) m_Width = (100 + m_WidthFloat) * w / 100;
         else m_Width = m_WidthFloat * w / 100;
     }
@@ -214,9 +214,9 @@ void wxHtmlContainerCell::Layout(int w)
     // my own layouting:
     while (cell != NULL) {
         switch (m_AlignVer) {
-            case HTML_ALIGN_TOP :      ybasicpos = 0; break;
-            case HTML_ALIGN_BOTTOM :   ybasicpos = - cell -> GetHeight(); break;
-            case HTML_ALIGN_CENTER :   ybasicpos = - cell -> GetHeight() / 2; break;
+            case wxHTML_ALIGN_TOP :      ybasicpos = 0; break;
+            case wxHTML_ALIGN_BOTTOM :   ybasicpos = - cell -> GetHeight(); break;
+            case wxHTML_ALIGN_CENTER :   ybasicpos = - cell -> GetHeight() / 2; break;
         }
         ydiff = cell -> GetHeight() + ybasicpos;
 
@@ -233,9 +233,9 @@ void wxHtmlContainerCell::Layout(int w)
             if (ysizeup < 0) ysizeup = 0;
             if (ysizedown < 0) ysizedown = 0;
             switch (m_AlignHor) {
-                case HTML_ALIGN_LEFT : xdelta = 0; break;
-                case HTML_ALIGN_RIGHT : xdelta = 0 + (s_width - xpos); break;
-                case HTML_ALIGN_CENTER : xdelta = 0 + (s_width - xpos) / 2; break;
+                case wxHTML_ALIGN_LEFT : xdelta = 0; break;
+                case wxHTML_ALIGN_RIGHT : xdelta = 0 + (s_width - xpos); break;
+                case wxHTML_ALIGN_CENTER : xdelta = 0 + (s_width - xpos) / 2; break;
             }
             if (xdelta < 0) xdelta = 0;
             xdelta += s_indent;
@@ -257,9 +257,9 @@ void wxHtmlContainerCell::Layout(int w)
     m_Height = ypos + (ysizedown + ysizeup) + m_IndentBottom;
 
     if (m_Height < m_MinHeight) {
-        if (m_MinHeightAlign != HTML_ALIGN_TOP) {
+        if (m_MinHeightAlign != wxHTML_ALIGN_TOP) {
             int diff = m_MinHeight - m_Height;
-            if (m_MinHeightAlign == HTML_ALIGN_CENTER) diff /= 2;
+            if (m_MinHeightAlign == wxHTML_ALIGN_CENTER) diff /= 2;
             cell = m_Cells;
             while (cell) {
                 cell -> SetPos(cell -> GetPosX(), cell -> GetPosY() + diff);
@@ -363,11 +363,11 @@ void wxHtmlContainerCell::SetAlign(const wxHtmlTag& tag)
         wxString alg = tag.GetParam("ALIGN");
         alg.MakeUpper();
         if (alg == "CENTER")
-            SetAlignHor(HTML_ALIGN_CENTER);
+            SetAlignHor(wxHTML_ALIGN_CENTER);
         else if (alg == "LEFT")
-            SetAlignHor(HTML_ALIGN_LEFT);
+            SetAlignHor(wxHTML_ALIGN_LEFT);
         else if (alg == "RIGHT")
-            SetAlignHor(HTML_ALIGN_RIGHT);
+            SetAlignHor(wxHTML_ALIGN_RIGHT);
     }
 }
 
@@ -381,11 +381,11 @@ void wxHtmlContainerCell::SetWidthFloat(const wxHtmlTag& tag)
 
         if (wd[wd.Length()-1] == '%') {
             sscanf(wd.c_str(), "%i%%", &wdi);
-            SetWidthFloat(wdi, HTML_UNITS_PERCENT);
+            SetWidthFloat(wdi, wxHTML_UNITS_PERCENT);
         }
         else {
             sscanf(wd.c_str(), "%i", &wdi);
-            SetWidthFloat(wdi, HTML_UNITS_PIXELS);
+            SetWidthFloat(wdi, wxHTML_UNITS_PIXELS);
         }
     }
 }
@@ -433,9 +433,9 @@ void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, bool left
 
 void wxHtmlColourCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
-    if (m_Flags & HTML_CLR_FOREGROUND)
+    if (m_Flags & wxHTML_CLR_FOREGROUND)
         dc.SetTextForeground(m_Colour);
-    if (m_Flags & HTML_CLR_BACKGROUND) {
+    if (m_Flags & wxHTML_CLR_BACKGROUND) {
         dc.SetBackground(wxBrush(m_Colour, wxSOLID));
         dc.SetTextBackground(m_Colour);
     }
@@ -444,9 +444,9 @@ void wxHtmlColourCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 
 void wxHtmlColourCell::DrawInvisible(wxDC& dc, int x, int y)
 {
-    if (m_Flags & HTML_CLR_FOREGROUND)
+    if (m_Flags & wxHTML_CLR_FOREGROUND)
         dc.SetTextForeground(m_Colour);
-    if (m_Flags & HTML_CLR_BACKGROUND) {
+    if (m_Flags & wxHTML_CLR_BACKGROUND) {
         dc.SetBackground(wxBrush(m_Colour, wxSOLID));
         dc.SetTextBackground(m_Colour);
     }
@@ -505,7 +505,7 @@ void wxHtmlWidgetCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     }
 
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
-    m_Wnd -> SetSize(absx - HTML_SCROLL_STEP * stx, absy  - HTML_SCROLL_STEP * sty, m_Width, m_Height);
+    m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
 
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
@@ -524,7 +524,7 @@ void wxHtmlWidgetCell::DrawInvisible(wxDC& dc, int x, int y)
     }
 
     ((wxScrolledWindow*)(m_Wnd -> GetParent())) -> ViewStart(&stx, &sty);
-    m_Wnd -> SetSize(absx - HTML_SCROLL_STEP * stx, absy  - HTML_SCROLL_STEP * sty, m_Width, m_Height);
+    m_Wnd -> SetSize(absx - wxHTML_SCROLL_STEP * stx, absy  - wxHTML_SCROLL_STEP * sty, m_Width, m_Height);
 
     wxHtmlCell::DrawInvisible(dc, x, y);
 }

@@ -116,8 +116,8 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     }
     m_Cell = (wxHtmlContainerCell*) m_Parser -> Parse(source);
     delete dc;
-    m_Cell -> SetIndent(m_Borders, HTML_INDENT_ALL, HTML_UNITS_PIXELS);
-    m_Cell -> SetAlignHor(HTML_ALIGN_CENTER);
+    m_Cell -> SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
+    m_Cell -> SetAlignHor(wxHTML_ALIGN_CENTER);
     CreateLayout();
     Refresh();
     return TRUE;
@@ -218,13 +218,13 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 
 bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
 {
-    const wxHtmlCell *c = m_Cell -> Find(HTML_COND_ISANCHOR, &anchor);
+    const wxHtmlCell *c = m_Cell -> Find(wxHTML_COND_ISANCHOR, &anchor);
     if (!c) return FALSE;
     else {
         int y;
 
         for (y = 0; c != NULL; c = c -> GetParent()) y += c -> GetPosY();
-        Scroll(-1, y / HTML_SCROLL_STEP);
+        Scroll(-1, y / wxHTML_SCROLL_STEP);
         m_OpenedAnchor = anchor;
         return TRUE;
     }
@@ -265,9 +265,9 @@ void wxHtmlWindow::CreateLayout()
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
      	if (ClientHeight < m_Cell -> GetHeight()) {
-            SetScrollbars(HTML_SCROLL_STEP, HTML_SCROLL_STEP,
-                          m_Cell -> GetWidth() / HTML_SCROLL_STEP,
-                          m_Cell -> GetHeight() / HTML_SCROLL_STEP
+            SetScrollbars(wxHTML_SCROLL_STEP, wxHTML_SCROLL_STEP,
+                          m_Cell -> GetWidth() / wxHTML_SCROLL_STEP,
+                          m_Cell -> GetHeight() / wxHTML_SCROLL_STEP
                           /*cheat: top-level frag is always container*/);
         }
 	    else { /* we fit into window, no need for scrollbars */
@@ -430,7 +430,7 @@ void wxHtmlWindow::OnDraw(wxDC& dc)
     while (upd) {
         v_y = upd.GetY();
         v_h = upd.GetH();
-        if (m_Cell) m_Cell -> Draw(dc, 0, 0, y * HTML_SCROLL_STEP + v_y, y * HTML_SCROLL_STEP + v_h + v_y);
+        if (m_Cell) m_Cell -> Draw(dc, 0, 0, y * wxHTML_SCROLL_STEP + v_y, y * wxHTML_SCROLL_STEP + v_h + v_y);
         upd++;
     }
 }
@@ -452,8 +452,8 @@ void wxHtmlWindow::OnKeyDown(wxKeyEvent& event)
     int sty, szy, cliy;
 
     ViewStart(&dummy, &sty);
-    GetClientSize(&dummy, &cliy); cliy /= HTML_SCROLL_STEP;
-    GetVirtualSize(&dummy, &szy); szy /= HTML_SCROLL_STEP;
+    GetClientSize(&dummy, &cliy); cliy /= wxHTML_SCROLL_STEP;
+    GetVirtualSize(&dummy, &szy); szy /= wxHTML_SCROLL_STEP;
 
     switch (event.KeyCode()) {
         case WXK_PAGEUP :
@@ -490,7 +490,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
         wxPoint pos;
         wxString lnk;
 
-        ViewStart(&sx, &sy); sx *= HTML_SCROLL_STEP; sy *= HTML_SCROLL_STEP;
+        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         pos = event.GetPosition();
 
         if (m_Cell)
@@ -509,7 +509,7 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
         int x, y;
         wxString lnk;
 
-        ViewStart(&sx, &sy); sx *= HTML_SCROLL_STEP; sy *= HTML_SCROLL_STEP;
+        ViewStart(&sx, &sy); sx *= wxHTML_SCROLL_STEP; sy *= wxHTML_SCROLL_STEP;
         wxGetMousePosition(&x, &y);
         ScreenToClient(&x, &y);
         lnk = m_Cell -> GetLink(sx + x, sy + y);

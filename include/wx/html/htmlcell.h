@@ -84,7 +84,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // Condition is unique condition identifier (see htmldefs.h)
                 // (user-defined condition IDs should start from 10000)
                 // and param is optional parameter
-                // Example : m_Cell -> Find(HTML_COND_ISANCHOR, "news");
+                // Example : m_Cell -> Find(wxHTML_COND_ISANCHOR, "news");
                 //   returns pointer to anchor news
 
         virtual void OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right);
@@ -200,11 +200,11 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         void SetAlignVer(int al) {m_AlignVer = al;}
                 // sets horizontal/vertical alignment
         int GetAlignVer() const {return m_AlignVer;}
-        void SetIndent(int i, int what, int units = HTML_UNITS_PIXELS);
-                // sets left-border indentation. units is one of HTML_UNITS_* constants
-                // what is combination of HTML_INDENT_*
+        void SetIndent(int i, int what, int units = wxHTML_UNITS_PIXELS);
+                // sets left-border indentation. units is one of wxHTML_UNITS_* constants
+                // what is combination of wxHTML_INDENT_*
         int GetIndent(int ind) const;
-                // returns the indentation. ind is one of HTML_INDENT_* constants
+                // returns the indentation. ind is one of wxHTML_INDENT_* constants
         int GetIndentUnits(int ind) const;
                 // returns type of value returned by GetIndent(ind)
         void SetAlign(const wxHtmlTag& tag);
@@ -214,7 +214,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
                 // sets floating width adjustment
                 // (examples : 32 percent of parent container,
                 // -15 pixels percent (this means 100 % - 15 pixels)
-        void SetMinHeight(int h, int align = HTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align;}
+        void SetMinHeight(int h, int align = wxHTML_ALIGN_TOP) {m_MinHeight = h; m_MinHeightAlign = align;}
                 // sets minimal height of this container.
         int GetMaxLineWidth() const {return m_MaxLineWidth;}
             // returns maximal line width in this container.
@@ -245,7 +245,7 @@ class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
         wxColour m_Colour;
         unsigned m_Flags;
 
-        wxHtmlColourCell(wxColour clr, int flags = HTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
+        wxHtmlColourCell(wxColour clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
 };

@@ -157,7 +157,7 @@ void wxHtmlTableCell::ReallocCols(int cols)
     m_ColsInfo = (colStruct*) realloc(m_ColsInfo, sizeof(colStruct) * cols);
     for (j = m_NumCols; j < cols; j++) {
            m_ColsInfo[j].width = 0;
-           m_ColsInfo[j].units = HTML_UNITS_PERCENT;
+           m_ColsInfo[j].units = wxHTML_UNITS_PERCENT;
     }
 
     m_NumCols = cols;
@@ -211,7 +211,7 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
     m_CellInfo[r][c].rowspan = 1;
     m_CellInfo[r][c].flag = cellUsed;
     m_CellInfo[r][c].minheight = 0;
-    m_CellInfo[r][c].valign = HTML_ALIGN_TOP;
+    m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
 
     /* scan for parameters: */
 
@@ -222,11 +222,11 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
             if (wd[wd.Length()-1] == '%') {
                 sscanf(wd.c_str(), "%i%%", &m_ColsInfo[c].width);
-                m_ColsInfo[c].units = HTML_UNITS_PERCENT;
+                m_ColsInfo[c].units = wxHTML_UNITS_PERCENT;
             }
             else {
                 sscanf(wd.c_str(), "%i", &m_ColsInfo[c].width);
-                m_ColsInfo[c].units = HTML_UNITS_PIXELS;
+                m_ColsInfo[c].units = wxHTML_UNITS_PIXELS;
             }
         }
     }
@@ -265,12 +265,12 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
         wxString valign;
         if (tag.HasParam("VALIGN")) valign = tag.GetParam("VALIGN"); else valign = m_tValign;
         valign.MakeUpper();
-        if (valign == "TOP") m_CellInfo[r][c].valign = HTML_ALIGN_TOP;
-        else if (valign == "BOTTOM") m_CellInfo[r][c].valign = HTML_ALIGN_BOTTOM;
-        else m_CellInfo[r][c].valign = HTML_ALIGN_CENTER;
+        if (valign == "TOP") m_CellInfo[r][c].valign = wxHTML_ALIGN_TOP;
+        else if (valign == "BOTTOM") m_CellInfo[r][c].valign = wxHTML_ALIGN_BOTTOM;
+        else m_CellInfo[r][c].valign = wxHTML_ALIGN_CENTER;
     }
 
-    cell -> SetIndent(m_Padding, HTML_INDENT_ALL, HTML_UNITS_PIXELS);
+    cell -> SetIndent(m_Padding, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
 }
 
 
@@ -285,7 +285,7 @@ void wxHtmlTableCell::Layout(int w)
 
     */
 
-    if (m_WidthFloatUnits == HTML_UNITS_PERCENT) {
+    if (m_WidthFloatUnits == wxHTML_UNITS_PERCENT) {
         if (m_WidthFloat < 0) m_Width = (100 + m_WidthFloat) * w / 100;
         else m_Width = m_WidthFloat * w / 100;
     }
@@ -309,12 +309,12 @@ void wxHtmlTableCell::Layout(int w)
 
         // 1a. setup fixed-width columns:
         for (i = 0; i < m_NumCols; i++)
-            if (m_ColsInfo[i].units == HTML_UNITS_PIXELS)
+            if (m_ColsInfo[i].units == wxHTML_UNITS_PIXELS)
                 wpix -= (m_ColsInfo[i].pixwidth = m_ColsInfo[i].width);
 
         // 1b. setup floating-width columns:
         for (i = 0; i < m_NumCols; i++)
-            if ((m_ColsInfo[i].units == HTML_UNITS_PERCENT) && (m_ColsInfo[i].width != 0))
+            if ((m_ColsInfo[i].units == wxHTML_UNITS_PERCENT) && (m_ColsInfo[i].width != 0))
                 wtemp += (m_ColsInfo[i].pixwidth = m_ColsInfo[i].width * wpix / 100);
         wpix -= wtemp;
 
@@ -411,7 +411,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
     {
         m_Table = NULL;
     m_tAlign = m_rAlign = wxEmptyString;
-    m_OldAlign = HTML_ALIGN_LEFT;
+    m_OldAlign = wxHTML_ALIGN_LEFT;
     }
 
 
@@ -460,7 +460,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 m_WParser -> OpenContainer();
 
                 if (tag.GetName() == "TH") /*header style*/ {
-                    m_WParser -> SetAlign(HTML_ALIGN_CENTER);
+                    m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
                 }
 
                 {
@@ -469,8 +469,8 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                     als = m_rAlign;
                     if (tag.HasParam("ALIGN")) als = tag.GetParam("ALIGN");
                     als.MakeUpper();
-                    if (als == "RIGHT") m_WParser -> SetAlign(HTML_ALIGN_RIGHT);
-                    else if (als == "CENTER") m_WParser -> SetAlign(HTML_ALIGN_CENTER);
+                    if (als == "RIGHT") m_WParser -> SetAlign(wxHTML_ALIGN_RIGHT);
+                    else if (als == "CENTER") m_WParser -> SetAlign(wxHTML_ALIGN_CENTER);
                 }
                 m_WParser -> OpenContainer();
             }

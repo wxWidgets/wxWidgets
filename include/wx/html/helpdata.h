@@ -61,7 +61,6 @@ protected:
 WX_DECLARE_EXPORTED_OBJARRAY(wxHtmlBookRecord, wxHtmlBookRecArray);
 
 
-
 typedef struct
 {
     short int m_Level;

@@ -124,8 +124,8 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
 
         m_WParser -> CloseContainer();
         c = m_WParser -> OpenContainer();
-        c -> SetAlignHor(HTML_ALIGN_LEFT);
-        c -> SetIndent(m_WParser -> GetCharHeight(), HTML_INDENT_VERTICAL);
+        c -> SetAlignHor(wxHTML_ALIGN_LEFT);
+        c -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_VERTICAL);
 
         m_WParser -> SetFontUnderlined(FALSE);
         m_WParser -> SetFontBold(FALSE);
