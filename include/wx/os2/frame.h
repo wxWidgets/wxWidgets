@@ -15,7 +15,7 @@
 //
 // Get the default resource ID's for frames
 //
-#include "wx/os2/wxOs2.h"
+#include "wx/os2/wxrsc.h"
 
 class WXDLLEXPORT wxFrame : public wxFrameBase
 {
