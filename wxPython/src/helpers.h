@@ -48,6 +48,9 @@ void      wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
 PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
 long      wxPyGetWinHandle(wxWindow* win);
 
+void wxPy_ReinitStockObjects();
+
+
 //----------------------------------------------------------------------
 
 // if we want to handle threads and Python threads are available...

@@ -3275,6 +3275,52 @@ static PyObject *_wrap_wxColourDatabase_FindColour(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxColourDatabase_FindColourNoAdd(_swigobj,_swigarg0)  (_swigobj->FindColourNoAdd(_swigarg0))
+static PyObject *_wrap_wxColourDatabase_FindColourNoAdd(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxColourDatabase * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","colour", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxColourDatabase_FindColourNoAdd",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxColourDatabase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxColourDatabase_FindColourNoAdd. Expected _wxColourDatabase_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxColour *)wxColourDatabase_FindColourNoAdd(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 #define wxColourDatabase_FindName(_swigobj,_swigarg0)  (_swigobj->FindName(_swigarg0))
 static PyObject *_wrap_wxColourDatabase_FindName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3320,27 +3366,60 @@ static PyObject *_wrap_wxColourDatabase_FindName(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+static void  wxColourDatabase_AddColour(wxColourDatabase *self,const wxString & name,wxColour * colour) {
+            // make a copy since the python one will be GC'd
+            wxColour* c = new wxColour(*colour);
+            self->AddColour(name, c);
+        }
+static PyObject *_wrap_wxColourDatabase_AddColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColourDatabase * _arg0;
+    wxString * _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","name","colour", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxColourDatabase_AddColour",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxColourDatabase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxColourDatabase_AddColour. Expected _wxColourDatabase_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxColourDatabase_AddColour(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void  wxColourDatabase_Append(wxColourDatabase *self,const wxString & name,int  red,int  green,int  blue) {
-            // first see if the name is already there
-            wxString cName = name;
-            cName.MakeUpper();
-            wxString cName2 = cName;
-            if ( !cName2.Replace(wxT("GRAY"), wxT("GREY")) )
-                cName2.clear();
-
-            wxNode *node = self->GetFirst();
-            while ( node ) {
-                const wxChar *key = node->GetKeyString();
-                if ( cName == key || cName2 == key ) {
-                    wxColour* c = (wxColour *)node->GetData();
-                    c->Set(red, green, blue);
-                    return;
-                }
-                node = node->GetNext();
-            }
-
-            // otherwise append the new colour
-            self->Append(name.c_str(), new wxColour(red, green, blue));
+            wxColour* c = new wxColour(red, green, blue);
+            self->AddColour(name, c);
         }
 static PyObject *_wrap_wxColourDatabase_Append(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10874,7 +10953,9 @@ static PyMethodDef gdicMethods[] = {
 	 { "delete_wxPen", (PyCFunction) _wrap_delete_wxPen, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPen", (PyCFunction) _wrap_new_wxPen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDatabase_Append", (PyCFunction) _wrap_wxColourDatabase_Append, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColourDatabase_AddColour", (PyCFunction) _wrap_wxColourDatabase_AddColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDatabase_FindName", (PyCFunction) _wrap_wxColourDatabase_FindName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxColourDatabase_FindColourNoAdd", (PyCFunction) _wrap_wxColourDatabase_FindColourNoAdd, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDatabase_FindColour", (PyCFunction) _wrap_wxColourDatabase_FindColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColour___ne__", (PyCFunction) _wrap_wxColour___ne__, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColour___eq__", (PyCFunction) _wrap_wxColour___eq__, METH_VARARGS | METH_KEYWORDS },

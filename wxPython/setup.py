@@ -748,7 +748,7 @@ if BUILD_OGL:
                              '%s/composit.cpp' % OGLLOC,
                              '%s/divided.cpp' % OGLLOC,
                              '%s/lines.cpp' % OGLLOC,
-                             '%s/misc.cpp' % OGLLOC,
+                             '%s/oglmisc.cpp' % OGLLOC,
                              '%s/basic2.cpp' % OGLLOC,
                              '%s/canvas.cpp' % OGLLOC,
                              '%s/constrnt.cpp' % OGLLOC,
@@ -758,7 +758,7 @@ if BUILD_OGL:
                              ] + swig_sources,
 
                     include_dirs =  [OGLINC] + includes,
-                    define_macros = defines,
+                    define_macros = defines + [('wxUSE_DEPRECATED', '0')],
 
                     library_dirs = libdirs,
                     libraries = libs,

@@ -369,6 +369,103 @@ private:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
+
+// wxHtmlSelection is data holder with information about text selection.
+// Selection is defined by two positions (beginning and end of the selection)
+// and two leaf(!) cells at these positions.
+class wxHtmlSelection
+{
+public:
+    wxHtmlSelection();
+    ~wxHtmlSelection();
+
+    void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
+             const wxPoint& toPos, const wxHtmlCell *toCell);
+    %name(SetCells)void Set(const wxHtmlCell *fromCell, const wxHtmlCell *toCell);
+
+    const wxHtmlCell *GetFromCell() const;
+    const wxHtmlCell *GetToCell() const;
+
+    // these values are in absolute coordinates:
+    const wxPoint& GetFromPos() const;
+    const wxPoint& GetToPos() const;
+
+    // these are From/ToCell's private data
+    const wxPoint& GetFromPrivPos() const;
+    const wxPoint& GetToPrivPos() const;
+    void SetFromPrivPos(const wxPoint& pos);
+    void SetToPrivPos(const wxPoint& pos);
+    void ClearPrivPos();
+
+    const bool IsEmpty() const;
+
+};
+
+
+enum wxHtmlSelectionState
+{
+    wxHTML_SEL_OUT,     // currently rendered cell is outside the selection
+    wxHTML_SEL_IN,      // ... is inside selection
+    wxHTML_SEL_CHANGING // ... is the cell on which selection state changes
+};
+
+// Selection state is passed to wxHtmlCell::Draw so that it can render itself
+// differently e.g. when inside text selection or outside it.
+class wxHtmlRenderingState
+{
+public:
+    wxHtmlRenderingState();
+    ~wxHtmlRenderingState();
+
+    void SetSelectionState(wxHtmlSelectionState s);
+    wxHtmlSelectionState GetSelectionState() const;
+
+    void SetFgColour(const wxColour& c);
+    const wxColour& GetFgColour() const;
+    void SetBgColour(const wxColour& c);
+    const wxColour& GetBgColour() const;
+};
+
+
+// HTML rendering customization. This class is used when rendering wxHtmlCells
+// as a callback:
+class wxHtmlRenderingStyle
+{
+public:
+    virtual wxColour GetSelectedTextColour(const wxColour& clr) = 0;
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
+};
+
+// Standard style:
+class wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
+{
+public:
+    virtual wxColour GetSelectedTextColour(const wxColour& clr);
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr);
+};
+
+
+
+// Information given to cells when drawing them. Contains rendering state,
+// selection information and rendering style object that can be used to
+// customize the output.
+class wxHtmlRenderingInfo
+{
+public:
+    wxHtmlRenderingInfo();
+    ~wxHtmlRenderingInfo();
+
+    void SetSelection(wxHtmlSelection *s);
+    wxHtmlSelection *GetSelection() const;
+
+    void SetStyle(wxHtmlRenderingStyle *style);
+    wxHtmlRenderingStyle& GetStyle();
+
+    wxHtmlRenderingState& GetState();
+};
+
+//---------------------------------------------------------------------------
+
 class wxHtmlCell : public wxObject {
 public:
     wxHtmlCell();
@@ -386,8 +483,10 @@ public:
     void SetParent(wxHtmlContainerCell *p);
     void SetPos(int x, int y);
     void Layout(int w);
-    void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-    void DrawInvisible(wxDC& dc, int x, int y);
+    void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
+              wxHtmlRenderingInfo& info);
+    void DrawInvisible(wxDC& dc, int x, int y,
+              wxHtmlRenderingInfo& info);
     const wxHtmlCell* Find(int condition, const void* param);
 
     bool AdjustPagebreak(int* INOUT);
@@ -422,7 +521,8 @@ public:
     void SetBackgroundColour(const wxColour& clr);
     wxColour GetBackgroundColour();
     void SetBorder(const wxColour& clr1, const wxColour& clr2);
-    wxHtmlCell* GetFirstCell();
+    wxHtmlCell* GetFirstChild();
+    %pragma(python) addtoclass = "GetFirstCell = GetFirstChild"
 };
 
 

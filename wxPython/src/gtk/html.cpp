@@ -2651,6 +2651,1160 @@ static PyObject *_wrap_wxHtmlWinTagHandler_ParseInner(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define new_wxHtmlSelection() (new wxHtmlSelection())
+static PyObject *_wrap_new_wxHtmlSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxHtmlSelection",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlSelection *)new_wxHtmlSelection();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlSelection_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxHtmlSelection(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxHtmlSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxHtmlSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxHtmlSelection. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxHtmlSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_Set(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->Set(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxHtmlSelection_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    wxPoint * _arg1;
+    wxHtmlCell * _arg2;
+    wxPoint * _arg3;
+    wxHtmlCell * _arg4;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    PyObject * _argo2 = 0;
+    wxPoint  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _argo4 = 0;
+    char *_kwnames[] = { "self","fromPos","fromCell","toPos","toCell", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOOO:wxHtmlSelection_Set",_kwnames,&_argo0,&_obj1,&_argo2,&_obj3,&_argo4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_Set. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxHtmlSelection_Set. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+{
+    _arg3 = &temp0;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxHtmlSelection_Set. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlSelection_Set(_arg0,*_arg1,_arg2,*_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_SetCells(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Set(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxHtmlSelection_SetCells(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    wxHtmlCell * _arg1;
+    wxHtmlCell * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","fromCell","toCell", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxHtmlSelection_SetCells",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_SetCells. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlSelection_SetCells. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxHtmlCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxHtmlSelection_SetCells. Expected _wxHtmlCell_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlSelection_SetCells(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetFromCell(_swigobj)  (_swigobj->GetFromCell())
+static PyObject *_wrap_wxHtmlSelection_GetFromCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlCell * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetFromCell",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetFromCell. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlCell *)wxHtmlSelection_GetFromCell(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetToCell(_swigobj)  (_swigobj->GetToCell())
+static PyObject *_wrap_wxHtmlSelection_GetToCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlCell * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetToCell",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetToCell. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlCell *)wxHtmlSelection_GetToCell(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlCell_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetFromPos(_swigobj)  (_swigobj->GetFromPos())
+static PyObject *_wrap_wxHtmlSelection_GetFromPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetFromPos",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetFromPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxPoint & _result_ref = wxHtmlSelection_GetFromPos(_arg0);
+    _result = (wxPoint *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetToPos(_swigobj)  (_swigobj->GetToPos())
+static PyObject *_wrap_wxHtmlSelection_GetToPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetToPos",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetToPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxPoint & _result_ref = wxHtmlSelection_GetToPos(_arg0);
+    _result = (wxPoint *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetFromPrivPos(_swigobj)  (_swigobj->GetFromPrivPos())
+static PyObject *_wrap_wxHtmlSelection_GetFromPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetFromPrivPos",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetFromPrivPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxPoint & _result_ref = wxHtmlSelection_GetFromPrivPos(_arg0);
+    _result = (wxPoint *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_GetToPrivPos(_swigobj)  (_swigobj->GetToPrivPos())
+static PyObject *_wrap_wxHtmlSelection_GetToPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_GetToPrivPos",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_GetToPrivPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxPoint & _result_ref = wxHtmlSelection_GetToPrivPos(_arg0);
+    _result = (wxPoint *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlSelection_SetFromPrivPos(_swigobj,_swigarg0)  (_swigobj->SetFromPrivPos(_swigarg0))
+static PyObject *_wrap_wxHtmlSelection_SetFromPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlSelection_SetFromPrivPos",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_SetFromPrivPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlSelection_SetFromPrivPos(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_SetToPrivPos(_swigobj,_swigarg0)  (_swigobj->SetToPrivPos(_swigarg0))
+static PyObject *_wrap_wxHtmlSelection_SetToPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    wxPoint * _arg1;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlSelection_SetToPrivPos",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_SetToPrivPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlSelection_SetToPrivPos(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_ClearPrivPos(_swigobj)  (_swigobj->ClearPrivPos())
+static PyObject *_wrap_wxHtmlSelection_ClearPrivPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_ClearPrivPos",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_ClearPrivPos. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlSelection_ClearPrivPos(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlSelection_IsEmpty(_swigobj)  (_swigobj->IsEmpty())
+static PyObject *_wrap_wxHtmlSelection_IsEmpty(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxHtmlSelection * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlSelection_IsEmpty",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlSelection_IsEmpty. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxHtmlSelection_IsEmpty(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define new_wxHtmlRenderingState() (new wxHtmlRenderingState())
+static PyObject *_wrap_new_wxHtmlRenderingState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxHtmlRenderingState",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlRenderingState *)new_wxHtmlRenderingState();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlRenderingState_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxHtmlRenderingState(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxHtmlRenderingState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxHtmlRenderingState",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxHtmlRenderingState. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxHtmlRenderingState(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_SetSelectionState(_swigobj,_swigarg0)  (_swigobj->SetSelectionState(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingState_SetSelectionState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _arg0;
+    wxHtmlSelectionState  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","s", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxHtmlRenderingState_SetSelectionState",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_SetSelectionState. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingState_SetSelectionState(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_GetSelectionState(_swigobj)  (_swigobj->GetSelectionState())
+static PyObject *_wrap_wxHtmlRenderingState_GetSelectionState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelectionState  _result;
+    wxHtmlRenderingState * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingState_GetSelectionState",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_GetSelectionState. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlSelectionState )wxHtmlRenderingState_GetSelectionState(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_SetFgColour(_swigobj,_swigarg0)  (_swigobj->SetFgColour(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingState_SetFgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingState_SetFgColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_SetFgColour. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingState_SetFgColour(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_GetFgColour(_swigobj)  (_swigobj->GetFgColour())
+static PyObject *_wrap_wxHtmlRenderingState_GetFgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxHtmlRenderingState * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingState_GetFgColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_GetFgColour. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxColour & _result_ref = wxHtmlRenderingState_GetFgColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_SetBgColour(_swigobj,_swigarg0)  (_swigobj->SetBgColour(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingState_SetBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","c", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingState_SetBgColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_SetBgColour. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingState_SetBgColour(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingState_GetBgColour(_swigobj)  (_swigobj->GetBgColour())
+static PyObject *_wrap_wxHtmlRenderingState_GetBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxHtmlRenderingState * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingState_GetBgColour",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingState_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingState_GetBgColour. Expected _wxHtmlRenderingState_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxColour & _result_ref = wxHtmlRenderingState_GetBgColour(_arg0);
+    _result = (wxColour *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlRenderingStyle_GetSelectedTextColour(_swigobj,_swigarg0)  (_swigobj->GetSelectedTextColour(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingStyle_GetSelectedTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxHtmlRenderingStyle * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","clr", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingStyle_GetSelectedTextColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingStyle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingStyle_GetSelectedTextColour. Expected _wxHtmlRenderingStyle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxHtmlRenderingStyle_GetSelectedTextColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxHtmlRenderingStyle_GetSelectedTextBgColour(_swigobj,_swigarg0)  (_swigobj->GetSelectedTextBgColour(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingStyle_GetSelectedTextBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxHtmlRenderingStyle * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","clr", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingStyle_GetSelectedTextBgColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingStyle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingStyle_GetSelectedTextBgColour. Expected _wxHtmlRenderingStyle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxHtmlRenderingStyle_GetSelectedTextBgColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static void *SwigwxDefaultHtmlRenderingStyleTowxHtmlRenderingStyle(void *ptr) {
+    wxDefaultHtmlRenderingStyle *src;
+    wxHtmlRenderingStyle *dest;
+    src = (wxDefaultHtmlRenderingStyle *) ptr;
+    dest = (wxHtmlRenderingStyle *) src;
+    return (void *) dest;
+}
+
+#define wxDefaultHtmlRenderingStyle_GetSelectedTextColour(_swigobj,_swigarg0)  (_swigobj->GetSelectedTextColour(_swigarg0))
+static PyObject *_wrap_wxDefaultHtmlRenderingStyle_GetSelectedTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxDefaultHtmlRenderingStyle * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","clr", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDefaultHtmlRenderingStyle_GetSelectedTextColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDefaultHtmlRenderingStyle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDefaultHtmlRenderingStyle_GetSelectedTextColour. Expected _wxDefaultHtmlRenderingStyle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxDefaultHtmlRenderingStyle_GetSelectedTextColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour(_swigobj,_swigarg0)  (_swigobj->GetSelectedTextBgColour(_swigarg0))
+static PyObject *_wrap_wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxDefaultHtmlRenderingStyle * _arg0;
+    wxColour * _arg1;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","clr", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxDefaultHtmlRenderingStyle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour. Expected _wxDefaultHtmlRenderingStyle_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour(_arg0,*_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define new_wxHtmlRenderingInfo() (new wxHtmlRenderingInfo())
+static PyObject *_wrap_new_wxHtmlRenderingInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingInfo * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxHtmlRenderingInfo",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlRenderingInfo *)new_wxHtmlRenderingInfo();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlRenderingInfo_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxHtmlRenderingInfo(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxHtmlRenderingInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxHtmlRenderingInfo",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxHtmlRenderingInfo. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxHtmlRenderingInfo(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingInfo_SetSelection(_swigobj,_swigarg0)  (_swigobj->SetSelection(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingInfo_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingInfo * _arg0;
+    wxHtmlSelection * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","s", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingInfo_SetSelection",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingInfo_SetSelection. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlSelection_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlRenderingInfo_SetSelection. Expected _wxHtmlSelection_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingInfo_SetSelection(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingInfo_GetSelection(_swigobj)  (_swigobj->GetSelection())
+static PyObject *_wrap_wxHtmlRenderingInfo_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlSelection * _result;
+    wxHtmlRenderingInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingInfo_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingInfo_GetSelection. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxHtmlSelection *)wxHtmlRenderingInfo_GetSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlSelection_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlRenderingInfo_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
+static PyObject *_wrap_wxHtmlRenderingInfo_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingInfo * _arg0;
+    wxHtmlRenderingStyle * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlRenderingInfo_SetStyle",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingInfo_SetStyle. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlRenderingStyle_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlRenderingInfo_SetStyle. Expected _wxHtmlRenderingStyle_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingInfo_SetStyle(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxHtmlRenderingInfo_GetStyle(_swigobj)  (_swigobj->GetStyle())
+static PyObject *_wrap_wxHtmlRenderingInfo_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingStyle * _result;
+    wxHtmlRenderingInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingInfo_GetStyle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingInfo_GetStyle. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingStyle & _result_ref = wxHtmlRenderingInfo_GetStyle(_arg0);
+    _result = (wxHtmlRenderingStyle *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlRenderingStyle_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlRenderingInfo_GetState(_swigobj)  (_swigobj->GetState())
+static PyObject *_wrap_wxHtmlRenderingInfo_GetState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxHtmlRenderingState * _result;
+    wxHtmlRenderingInfo * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlRenderingInfo_GetState",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlRenderingInfo_GetState. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxHtmlRenderingState & _result_ref = wxHtmlRenderingInfo_GetState(_arg0);
+    _result = (wxHtmlRenderingState *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlRenderingState_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxHtmlCellTowxObject(void *ptr) {
     wxHtmlCell *src;
     wxObject *dest;
@@ -3101,7 +4255,7 @@ static PyObject *_wrap_wxHtmlCell_Layout(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxHtmlCell_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define wxHtmlCell_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_wxHtmlCell_Draw(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlCell * _arg0;
@@ -3110,12 +4264,14 @@ static PyObject *_wrap_wxHtmlCell_Draw(PyObject *self, PyObject *args, PyObject 
     int  _arg3;
     int  _arg4;
     int  _arg5;
+    wxHtmlRenderingInfo * _arg6;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","dc","x","y","view_y1","view_y2", NULL };
+    PyObject * _argo6 = 0;
+    char *_kwnames[] = { "self","dc","x","y","view_y1","view_y2","info", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiiii:wxHtmlCell_Draw",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiiiiO:wxHtmlCell_Draw",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3130,9 +4286,15 @@ static PyObject *_wrap_wxHtmlCell_Draw(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
+    if (_argo6) {
+        if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxHtmlCell_Draw. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxHtmlCell_Draw(_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5);
+    wxHtmlCell_Draw(_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3141,19 +4303,21 @@ static PyObject *_wrap_wxHtmlCell_Draw(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
-#define wxHtmlCell_DrawInvisible(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->DrawInvisible(_swigarg0,_swigarg1,_swigarg2))
+#define wxHtmlCell_DrawInvisible(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->DrawInvisible(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_wxHtmlCell_DrawInvisible(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlCell * _arg0;
     wxDC * _arg1;
     int  _arg2;
     int  _arg3;
+    wxHtmlRenderingInfo * _arg4;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","dc","x","y", NULL };
+    PyObject * _argo4 = 0;
+    char *_kwnames[] = { "self","dc","x","y","info", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOii:wxHtmlCell_DrawInvisible",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOiiO:wxHtmlCell_DrawInvisible",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3,&_argo4)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3168,9 +4332,15 @@ static PyObject *_wrap_wxHtmlCell_DrawInvisible(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
+    if (_argo4) {
+        if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxHtmlRenderingInfo_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxHtmlCell_DrawInvisible. Expected _wxHtmlRenderingInfo_p.");
+        return NULL;
+        }
+    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxHtmlCell_DrawInvisible(_arg0,*_arg1,_arg2,_arg3);
+    wxHtmlCell_DrawInvisible(_arg0,*_arg1,_arg2,_arg3,*_arg4);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3889,8 +5059,8 @@ static PyObject *_wrap_wxHtmlContainerCell_SetBorder(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxHtmlContainerCell_GetFirstCell(_swigobj)  (_swigobj->GetFirstCell())
-static PyObject *_wrap_wxHtmlContainerCell_GetFirstCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxHtmlContainerCell_GetFirstChild(_swigobj)  (_swigobj->GetFirstChild())
+static PyObject *_wrap_wxHtmlContainerCell_GetFirstChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlCell * _result;
     wxHtmlContainerCell * _arg0;
@@ -3899,18 +5069,18 @@ static PyObject *_wrap_wxHtmlContainerCell_GetFirstCell(PyObject *self, PyObject
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContainerCell_GetFirstCell",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContainerCell_GetFirstChild",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContainerCell_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContainerCell_GetFirstCell. Expected _wxHtmlContainerCell_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContainerCell_GetFirstChild. Expected _wxHtmlContainerCell_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxHtmlCell *)wxHtmlContainerCell_GetFirstCell(_arg0);
+    _result = (wxHtmlCell *)wxHtmlContainerCell_GetFirstChild(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6692,7 +7862,7 @@ static PyMethodDef htmlcMethods[] = {
 	 { "new_wxHtmlWidgetCell", (PyCFunction) _wrap_new_wxHtmlWidgetCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlFontCell", (PyCFunction) _wrap_new_wxHtmlFontCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlColourCell", (PyCFunction) _wrap_new_wxHtmlColourCell, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContainerCell_GetFirstCell", (PyCFunction) _wrap_wxHtmlContainerCell_GetFirstCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContainerCell_GetFirstChild", (PyCFunction) _wrap_wxHtmlContainerCell_GetFirstChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetBorder", (PyCFunction) _wrap_wxHtmlContainerCell_SetBorder, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_GetBackgroundColour", (PyCFunction) _wrap_wxHtmlContainerCell_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContainerCell_SetBackgroundColour", (PyCFunction) _wrap_wxHtmlContainerCell_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
@@ -6729,6 +7899,39 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlCell_GetPosY", (PyCFunction) _wrap_wxHtmlCell_GetPosY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlCell_GetPosX", (PyCFunction) _wrap_wxHtmlCell_GetPosX, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlCell", (PyCFunction) _wrap_new_wxHtmlCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingInfo_GetState", (PyCFunction) _wrap_wxHtmlRenderingInfo_GetState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingInfo_GetStyle", (PyCFunction) _wrap_wxHtmlRenderingInfo_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingInfo_SetStyle", (PyCFunction) _wrap_wxHtmlRenderingInfo_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingInfo_GetSelection", (PyCFunction) _wrap_wxHtmlRenderingInfo_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingInfo_SetSelection", (PyCFunction) _wrap_wxHtmlRenderingInfo_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxHtmlRenderingInfo", (PyCFunction) _wrap_delete_wxHtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlRenderingInfo", (PyCFunction) _wrap_new_wxHtmlRenderingInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_wxDefaultHtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDefaultHtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_wxDefaultHtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingStyle_GetSelectedTextBgColour", (PyCFunction) _wrap_wxHtmlRenderingStyle_GetSelectedTextBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingStyle_GetSelectedTextColour", (PyCFunction) _wrap_wxHtmlRenderingStyle_GetSelectedTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_GetBgColour", (PyCFunction) _wrap_wxHtmlRenderingState_GetBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_SetBgColour", (PyCFunction) _wrap_wxHtmlRenderingState_SetBgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_GetFgColour", (PyCFunction) _wrap_wxHtmlRenderingState_GetFgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_SetFgColour", (PyCFunction) _wrap_wxHtmlRenderingState_SetFgColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_GetSelectionState", (PyCFunction) _wrap_wxHtmlRenderingState_GetSelectionState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlRenderingState_SetSelectionState", (PyCFunction) _wrap_wxHtmlRenderingState_SetSelectionState, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxHtmlRenderingState", (PyCFunction) _wrap_delete_wxHtmlRenderingState, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlRenderingState", (PyCFunction) _wrap_new_wxHtmlRenderingState, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_IsEmpty", (PyCFunction) _wrap_wxHtmlSelection_IsEmpty, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_ClearPrivPos", (PyCFunction) _wrap_wxHtmlSelection_ClearPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_SetToPrivPos", (PyCFunction) _wrap_wxHtmlSelection_SetToPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_SetFromPrivPos", (PyCFunction) _wrap_wxHtmlSelection_SetFromPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetToPrivPos", (PyCFunction) _wrap_wxHtmlSelection_GetToPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetFromPrivPos", (PyCFunction) _wrap_wxHtmlSelection_GetFromPrivPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetToPos", (PyCFunction) _wrap_wxHtmlSelection_GetToPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetFromPos", (PyCFunction) _wrap_wxHtmlSelection_GetFromPos, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetToCell", (PyCFunction) _wrap_wxHtmlSelection_GetToCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_GetFromCell", (PyCFunction) _wrap_wxHtmlSelection_GetFromCell, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_SetCells", (PyCFunction) _wrap_wxHtmlSelection_SetCells, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlSelection_Set", (PyCFunction) _wrap_wxHtmlSelection_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxHtmlSelection", (PyCFunction) _wrap_delete_wxHtmlSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxHtmlSelection", (PyCFunction) _wrap_new_wxHtmlSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinTagHandler_ParseInner", (PyCFunction) _wrap_wxHtmlWinTagHandler_ParseInner, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinTagHandler_GetParser", (PyCFunction) _wrap_wxHtmlWinTagHandler_GetParser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWinTagHandler_SetParser", (PyCFunction) _wrap_wxHtmlWinTagHandler_SetParser, METH_VARARGS | METH_KEYWORDS },
@@ -6841,6 +8044,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxHtmlCell","_wxHtmlContainerCell",SwigwxHtmlContainerCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_char","_wxChar",0},
+    { "_wxHtmlRenderingStyle","_wxDefaultHtmlRenderingStyle",SwigwxDefaultHtmlRenderingStyleTowxHtmlRenderingStyle},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_wxPyHtmlTagHandler","_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler},
     { "_EBool","_wxCoord",0},
@@ -6972,6 +8176,9 @@ SWIGEXPORT(void) inithtmlc() {
 	 PyDict_SetItemString(d,"wxHTML_URL_PAGE", PyInt_FromLong((long) wxHTML_URL_PAGE));
 	 PyDict_SetItemString(d,"wxHTML_URL_IMAGE", PyInt_FromLong((long) wxHTML_URL_IMAGE));
 	 PyDict_SetItemString(d,"wxHTML_URL_OTHER", PyInt_FromLong((long) wxHTML_URL_OTHER));
+	 PyDict_SetItemString(d,"wxHTML_SEL_OUT", PyInt_FromLong((long) wxHTML_SEL_OUT));
+	 PyDict_SetItemString(d,"wxHTML_SEL_IN", PyInt_FromLong((long) wxHTML_SEL_IN));
+	 PyDict_SetItemString(d,"wxHTML_SEL_CHANGING", PyInt_FromLong((long) wxHTML_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxPAGE_ODD", PyInt_FromLong((long) wxPAGE_ODD));
 	 PyDict_SetItemString(d,"wxPAGE_EVEN", PyInt_FromLong((long) wxPAGE_EVEN));
 	 PyDict_SetItemString(d,"wxPAGE_ALL", PyInt_FromLong((long) wxPAGE_ALL));

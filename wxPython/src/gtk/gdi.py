@@ -294,8 +294,15 @@ class wxColourDatabasePtr(wxObjectPtr):
         val = gdic.wxColourDatabase_FindColour(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) 
         return val
+    def FindColourNoAdd(self, *_args, **_kwargs):
+        val = gdic.wxColourDatabase_FindColourNoAdd(self, *_args, **_kwargs)
+        if val: val = wxColourPtr(val) 
+        return val
     def FindName(self, *_args, **_kwargs):
         val = gdic.wxColourDatabase_FindName(self, *_args, **_kwargs)
+        return val
+    def AddColour(self, *_args, **_kwargs):
+        val = gdic.wxColourDatabase_AddColour(self, *_args, **_kwargs)
         return val
     def Append(self, *_args, **_kwargs):
         val = gdic.wxColourDatabase_Append(self, *_args, **_kwargs)

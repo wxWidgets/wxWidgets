@@ -141,12 +141,22 @@ public:
     static void AddHandler(wxFileSystemHandler *handler);
     static void CleanUpHandlers();
 
-//     // Returns the native path for a file URL
-//     static wxFileName URLToFileName(const wxString& url);
+    // Returns the file URL for a native path
+    static wxString FileNameToURL(const wxString& filename);
 
-//     // Returns the file URL for a native path
-//     static wxString FileNameToURL(const wxFileName& filename);
+    // Returns the native path for a file URL
+    //static wxFileName URLToFileName(const wxString& url);  *** See below
 };
+
+
+// Returns the native path for a file URL
+wxString wxFileSystem_URLToFileName(const wxString& url);
+%{
+    wxString wxFileSystem_URLToFileName(const wxString& url) {
+        wxFileName fname = wxFileSystem::URLToFileName(url);
+        return fname.GetFullPath();
+    }
+%}
 
 //---------------------------------------------------------------------------
 

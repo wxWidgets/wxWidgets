@@ -17,7 +17,6 @@
 %{
 #include "helpers.h"
 #include "pyistream.h"
-#include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
 #include <wx/tipdlg.h>
@@ -34,7 +33,6 @@
 #include <wx/mimetype.h>
 #include <wx/snglinst.h>
 #include <wx/effects.h>
-//#include <wx/spawnbrowser.h>
 %}
 
 //----------------------------------------------------------------------
@@ -1251,9 +1249,9 @@ public:
     %addmethods {
         // Get the icon corresponding to this file type
         %new wxIcon* GetIcon() {
-            wxIcon icon;
-            if (self->GetIcon(&icon))
-                return new wxIcon(icon);
+            wxIconLocation loc;
+            if (self->GetIcon(&loc))
+                return new wxIcon(loc);
             else
                 return NULL;
         }
@@ -1261,14 +1259,18 @@ public:
         // Get the icon corresponding to this file type, the name of the file
         // where this icon resides, and its index in this file if applicable.
         PyObject* GetIconInfo() {
-            wxIcon icon;
-            wxString iconFile;
-            int iconIndex;
-            if (self->GetIcon(&icon, &iconFile, &iconIndex)) {
+            wxIconLocation loc;
+            if (self->GetIcon(&loc)) {
+                wxString iconFile = loc.GetFileName();
+                int iconIndex     = -1;
+#ifdef __WXMSW__
+                iconIndex = loc.GetIndex();
+#endif
+                // Make a tuple and put the values in it
                 wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
-                PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
-                                                              wxT("wxIcon"), TRUE));
+                PyTuple_SetItem(tuple, 0,
+                                wxPyConstructObject(new wxIcon(loc), wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
                 PyTuple_SetItem(tuple, 1, PyUnicode_FromWideChar(iconFile.c_str(), iconFile.Len()));
 #else
@@ -1470,6 +1472,7 @@ public:
 %{
 #if 0
 %}
+// See also wxPy_ReinitStockObjects in helpers.cpp
 extern wxMimeTypesManager* wxTheMimeTypesManager;
 %{
 #endif
@@ -1627,9 +1630,8 @@ public:
     // Accessors
     wxString GetHistoryFile(int i) const;
 
-    // A synonym for GetNoHistoryFiles
     int GetCount() const;
-    int GetNoHistoryFiles() const;
+    %pragma(python) addtoclass = "GetNoHistoryFiles = GetCount"
 
 };
 

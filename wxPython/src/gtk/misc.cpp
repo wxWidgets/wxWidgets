@@ -55,7 +55,6 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "miscc"
 
 #include "helpers.h"
-#include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/busyinfo.h>
 #include <wx/geometry.h>

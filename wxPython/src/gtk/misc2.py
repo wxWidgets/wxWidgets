@@ -1060,11 +1060,9 @@ class wxFileHistoryPtr(wxObjectPtr):
     def GetCount(self, *_args, **_kwargs):
         val = misc2c.wxFileHistory_GetCount(self, *_args, **_kwargs)
         return val
-    def GetNoHistoryFiles(self, *_args, **_kwargs):
-        val = misc2c.wxFileHistory_GetNoHistoryFiles(self, *_args, **_kwargs)
-        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxFileHistory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+    GetNoHistoryFiles = GetCount
 class wxFileHistory(wxFileHistoryPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = misc2c.new_wxFileHistory(*_args,**_kwargs)

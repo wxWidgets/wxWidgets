@@ -399,6 +399,7 @@ void wxInitAllImageHandlers();
 #if 0
 %}
 
+// See also wxPy_ReinitStockObjects in helpers.cpp
 extern wxImage    wxNullImage;
 
 %readwrite

@@ -49,6 +49,7 @@
 //----------------------------------------------------------------------
 
 %readonly
+// See also wxPy_ReinitStockObjects in helpers.cpp
 wxValidator wxDefaultValidator;
 %readwrite
 

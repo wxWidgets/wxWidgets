@@ -418,12 +418,10 @@ public:
     void UsePrimarySelection( int primary = FALSE );
 };
 
-%{
-    // See below in the init function...
-    wxClipboard* wxPyTheClipboard;
-%}
+
 %readonly
-%name(wxTheClipboard) wxClipboard* wxPyTheClipboard;
+// See also wxPy_ReinitStockObjects in helpers.cpp
+extern wxClipboard* wxTheClipboard;
 %readwrite
 
 //----------------------------------------------------------------------
@@ -674,7 +672,6 @@ public:
 
 %init %{
 
-    wxPyTheClipboard = wxTheClipboard;
     wxPyPtrTypeMap_Add("wxDropSource", "wxPyDropSource");
     wxPyPtrTypeMap_Add("wxTextDropTarget", "wxPyTextDropTarget");
     wxPyPtrTypeMap_Add("wxFileDropTarget", "wxPyFileDropTarget");

@@ -432,31 +432,20 @@ public:
 class wxColourDatabase : public wxObject {
 public:
 
-    wxColour *FindColour(const wxString& colour);
+    wxColour *FindColour(const wxString& colour) ;
+    wxColour *FindColourNoAdd(const wxString& colour) const;
     wxString FindName(const wxColour& colour) const;
 
     %addmethods {
+        void AddColour(const wxString& name, wxColour* colour) {
+            // make a copy since the python one will be GC'd
+            wxColour* c = new wxColour(*colour);
+            self->AddColour(name, c);
+        }
+
         void Append(const wxString& name, int red, int green, int blue) {
-            // first see if the name is already there
-            wxString cName = name;
-            cName.MakeUpper();
-            wxString cName2 = cName;
-            if ( !cName2.Replace(wxT("GRAY"), wxT("GREY")) )
-                cName2.clear();
-
-            wxNode *node = self->GetFirst();
-            while ( node ) {
-                const wxChar *key = node->GetKeyString();
-                if ( cName == key || cName2 == key ) {
-                    wxColour* c = (wxColour *)node->GetData();
-                    c->Set(red, green, blue);
-                    return;
-                }
-                node = node->GetNext();
-            }
-
-            // otherwise append the new colour
-            self->Append(name.c_str(), new wxColour(red, green, blue));
+            wxColour* c = new wxColour(red, green, blue);
+            self->AddColour(name, c);
         }
     }
 };
@@ -1163,6 +1152,8 @@ public:
 %{
 #if 0
 %}
+
+// See also wxPy_ReinitStockObjects in helpers.cpp
 
 extern wxFont *wxNORMAL_FONT;
 extern wxFont *wxSMALL_FONT;

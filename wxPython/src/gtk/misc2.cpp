@@ -56,7 +56,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include "pyistream.h"
-#include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
 #include <wx/tipdlg.h>
@@ -73,7 +72,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/mimetype.h>
 #include <wx/snglinst.h>
 #include <wx/effects.h>
-//#include <wx/spawnbrowser.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -8593,9 +8591,9 @@ static PyObject *_wrap_wxFileType_GetExtensions(PyObject *self, PyObject *args, 
 }
 
 static wxIcon * wxFileType_GetIcon(wxFileType *self) {
-            wxIcon icon;
-            if (self->GetIcon(&icon))
-                return new wxIcon(icon);
+            wxIconLocation loc;
+            if (self->GetIcon(&loc))
+                return new wxIcon(loc);
             else
                 return NULL;
         }
@@ -8634,14 +8632,18 @@ static PyObject *_wrap_wxFileType_GetIcon(PyObject *self, PyObject *args, PyObje
 }
 
 static PyObject * wxFileType_GetIconInfo(wxFileType *self) {
-            wxIcon icon;
-            wxString iconFile;
-            int iconIndex;
-            if (self->GetIcon(&icon, &iconFile, &iconIndex)) {
+            wxIconLocation loc;
+            if (self->GetIcon(&loc)) {
+                wxString iconFile = loc.GetFileName();
+                int iconIndex     = -1;
+#ifdef __WXMSW__
+                iconIndex = loc.GetIndex();
+#endif
+                // Make a tuple and put the values in it
                 wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
-                PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
-                                                              wxT("wxIcon"), TRUE));
+                PyTuple_SetItem(tuple, 0,
+                                wxPyConstructObject(new wxIcon(loc), wxT("wxIcon"), TRUE));
 #if wxUSE_UNICODE
                 PyTuple_SetItem(tuple, 1, PyUnicode_FromWideChar(iconFile.c_str(), iconFile.Len()));
 #else
@@ -10282,34 +10284,6 @@ static PyObject *_wrap_wxFileHistory_GetCount(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxFileHistory_GetNoHistoryFiles(_swigobj)  (_swigobj->GetNoHistoryFiles())
-static PyObject *_wrap_wxFileHistory_GetNoHistoryFiles(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxFileHistory * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileHistory_GetNoHistoryFiles",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileHistory_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileHistory_GetNoHistoryFiles. Expected _wxFileHistory_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxFileHistory_GetNoHistoryFiles(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static void *SwigwxEffectsTowxObject(void *ptr) {
     wxEffects *src;
     wxObject *dest;
@@ -11041,7 +11015,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxEffects_GetLightShadow", (PyCFunction) _wrap_wxEffects_GetLightShadow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEffects_GetHighlightColour", (PyCFunction) _wrap_wxEffects_GetHighlightColour, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxEffects", (PyCFunction) _wrap_new_wxEffects, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileHistory_GetNoHistoryFiles", (PyCFunction) _wrap_wxFileHistory_GetNoHistoryFiles, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetCount", (PyCFunction) _wrap_wxFileHistory_GetCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_GetHistoryFile", (PyCFunction) _wrap_wxFileHistory_GetHistoryFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileHistory_AddFilesToThisMenu", (PyCFunction) _wrap_wxFileHistory_AddFilesToThisMenu, METH_VARARGS | METH_KEYWORDS },
