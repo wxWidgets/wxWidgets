@@ -52,6 +52,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 		Str255 title ;
 
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
+                SetValidator(validator);
 
 		m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 ,
 	  	kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ;
