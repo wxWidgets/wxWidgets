@@ -62,6 +62,13 @@ public:
   void AddTestItemsToTree(size_t numChildren,
                           size_t depth);
 
+  void DoSortChildren(const wxTreeItemId& item, bool reverse = FALSE)
+    { m_reverseSort = reverse; wxTreeCtrl::SortChildren(item); }
+
+protected:
+  virtual int OnCompareItems(const wxTreeItemId& item1,
+                             const wxTreeItemId& item2);
+
 private:
   void AddItemsRecursively(const wxTreeItemId& idParent,
                            size_t nChildren,
@@ -69,6 +76,7 @@ private:
                            size_t folder);
 
   wxImageList *m_imageListNormal;
+  bool         m_reverseSort;           // flag for OnCompareItems
 
   DECLARE_EVENT_TABLE()
 };
@@ -93,7 +101,13 @@ public:
   void OnSetBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(TRUE); }
   void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(FALSE); }
 
+  void OnRename(wxCommandEvent& event);
+  void OnSort(wxCommandEvent& event) { DoSort(); }
+  void OnSortRev(wxCommandEvent& event) { DoSort(TRUE); }
+
 private:
+  void DoSort(bool reverse = FALSE);
+
   MyTreeCtrl *m_treeCtrl;
 
   void DoSetBold(bool bold = TRUE);
@@ -107,8 +121,11 @@ enum
   TreeTest_Quit,
   TreeTest_About,
   TreeTest_Dump,
+  TreeTest_Sort,
+  TreeTest_SortRev,
   TreeTest_Bold,
   TreeTest_UnBold,
+  TreeTest_Rename,
   TreeTest_Delete,
   TreeTest_DeleteChildren,
   TreeTest_DeleteAll,

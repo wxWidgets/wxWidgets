@@ -46,7 +46,6 @@ class wxImageList;
 class wxGenericTreeItem;
 
 class wxTreeItemData;
-typedef int (*wxTreeItemCmpFunc)(wxTreeItemData *item1, wxTreeItemData *item2);
 
 // -----------------------------------------------------------------------------
 // wxTreeItemId - unique identifier of a tree element
@@ -415,13 +414,17 @@ public:
         // end editing and accept or discard the changes to item label
     void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
 
-        // sort the children of this item using the specified callback function
-        // (it should return -1, 0 or +1 as usual), if it's not specified
-        // alphabetical comparaison is performed.
+    // sorting
+        // this function is called to compare 2 items and should return -1, 0
+        // or +1 if the first item is less than, equal to or greater than the
+        // second one. The base class version performs alphabetic comparaison
+        // of item labels (GetText)
+    virtual int OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2);
+        // sort the children of this item using OnCompareItems
         //
-        // NB: this function is not reentrant!
-    void SortChildren(const wxTreeItemId& item,
-                      wxTreeItemCmpFunc *cmpFunction = NULL);
+        // NB: this function is not reentrant and not MT-safe (FIXME)!
+    void SortChildren(const wxTreeItemId& item);
 
     // callbacks
     void OnPaint( wxPaintEvent &event );

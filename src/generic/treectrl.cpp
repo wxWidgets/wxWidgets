@@ -935,37 +935,42 @@ void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool WXUNUSED(
     wxFAIL_MSG("not implemented");
 }
 
-wxTreeItemCmpFunc tree_ctrl_compare_func_2;
+// FIXME: tree sorting functions are not reentrant and not MT-safe!
+static wxTreeCtrl *s_treeBeingSorted = NULL;
 
-int tree_ctrl_compare_func_1( wxGenericTreeItem **line1, wxGenericTreeItem **line2 )
+static int tree_ctrl_compare_func(wxGenericTreeItem **item1,
+                                  wxGenericTreeItem **item2)
 {
-    if (tree_ctrl_compare_func_2 == NULL)
-    {
-        return strcmp( (*line1)->GetText(), (*line2)->GetText() );
-    }
-    else
-    {
-        wxTreeItemData *data1 = (*line1)->GetData();
-        wxTreeItemData *data2 = (*line2)->GetData();
-        return tree_ctrl_compare_func_2( data1, data2 );
-    }
+    wxCHECK_MSG( s_treeBeingSorted, 0, "bug in wxTreeCtrl::SortChildren()" );
+
+    return s_treeBeingSorted->OnCompareItems(*item1, *item2);
 }
 
-void wxTreeCtrl::SortChildren( const wxTreeItemId& item,
-                               wxTreeItemCmpFunc *cmpFunction)
+int wxTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2)
 {
-    wxGenericTreeItem *gitem = item.m_pItem;
+    return strcmp(GetItemText(item1), GetItemText(item2));
+}
+
+void wxTreeCtrl::SortChildren(const wxTreeItemId& itemId)
+{
+    wxCHECK_RET( itemId.IsOk(), "invalid tree item" );
+
+    wxGenericTreeItem *item = itemId.m_pItem;
     
-    if (!gitem) return;
+    wxCHECK_RET( !s_treeBeingSorted,
+                 "wxTreeCtrl::SortChildren is not reentrant" );
+
+    wxArrayTreeItems& children = item->GetChildren();
+    if ( children.Count() > 1 )
+    {
+        s_treeBeingSorted = this;
+        children.Sort(tree_ctrl_compare_func);
+        s_treeBeingSorted = NULL;
     
-    if (cmpFunction == NULL)
-       tree_ctrl_compare_func_2 = NULL;
-    else
-       tree_ctrl_compare_func_2 = *cmpFunction;
-       
-    gitem->GetChildren().Sort( *tree_ctrl_compare_func_1 );
-    
-    m_dirty = TRUE;
+        m_dirty = TRUE;
+    }
+    //else: don't make the tree dirty as nothing changed
 }
 
 wxImageList *wxTreeCtrl::GetImageList() const

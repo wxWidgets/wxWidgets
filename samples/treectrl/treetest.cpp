@@ -39,10 +39,22 @@
 
 #include "treetest.h"
 
+// verify that the item is ok and insult the user if it is not
+#define CHECK_ITEM( item ) if ( !item.IsOk() ) {                            \
+                             wxMessageBox("Please select some item first!", \
+                                          "Tree sample error",              \
+                                          wxOK | wxICON_EXCLAMATION,        \
+                                          this);                            \
+                             return;                                        \
+                           }  
+                                          
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
   EVT_MENU(TreeTest_About, MyFrame::OnAbout)
   EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
+  EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
+  EVT_MENU(TreeTest_Sort, MyFrame::OnSort)
+  EVT_MENU(TreeTest_SortRev, MyFrame::OnSortRev)
   EVT_MENU(TreeTest_Bold, MyFrame::OnSetBold)
   EVT_MENU(TreeTest_UnBold, MyFrame::OnClearBold)
   EVT_MENU(TreeTest_Delete, MyFrame::OnDelete)
@@ -98,24 +110,30 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   SetIcon(wxICON(mondrian));
 
   // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+  wxMenu *file_menu = new wxMenu,
+         *tree_menu = new wxMenu;
 
-  file_menu->Append(TreeTest_Dump, "D&ump tree items");
-  file_menu->Append(TreeTest_Recreate, "&Recreate the tree");
-  file_menu->AppendSeparator();
-  file_menu->Append(TreeTest_Delete, "&Delete this item");
-  file_menu->Append(TreeTest_DeleteChildren, "Delete &children");
-  file_menu->Append(TreeTest_DeleteAll, "Delete &all items");
-  file_menu->AppendSeparator();
-  file_menu->Append(TreeTest_Bold, "Make item &bold");
-  file_menu->Append(TreeTest_UnBold, "Make item &not bold");
-  file_menu->AppendSeparator();
   file_menu->Append(TreeTest_About, "&About...");
   file_menu->AppendSeparator();
   file_menu->Append(TreeTest_Quit, "E&xit");
 
+  tree_menu->Append(TreeTest_Dump, "D&ump tree items");
+  tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
+  tree_menu->AppendSeparator();
+  tree_menu->Append(TreeTest_Delete, "&Delete this item");
+  tree_menu->Append(TreeTest_DeleteChildren, "Delete &children");
+  tree_menu->Append(TreeTest_DeleteAll, "Delete &all items");
+  tree_menu->AppendSeparator();
+  tree_menu->Append(TreeTest_Sort, "Sort children of current item");
+  tree_menu->Append(TreeTest_SortRev, "Sort in reversed order");
+  tree_menu->Append(TreeTest_Rename, "Rename item...");
+  tree_menu->AppendSeparator();
+  tree_menu->Append(TreeTest_Bold, "Make item &bold");
+  tree_menu->Append(TreeTest_UnBold, "Make item &not bold");
+
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, "&File");
+  menu_bar->Append(tree_menu, "&Tree");
   SetMenuBar(menu_bar);
 
   // Make a panel with a message
@@ -168,34 +186,70 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog dialog(this,
-                         "Tree test sample\n"
-                         "Julian Smart (c) 1997",
-                         "About tree test", wxOK);
+  wxMessageBox("Tree test sample\n"
+               "Julian Smart (c) 1997,\n"
+               "Vadim Zeitlin (c) 1998",
+               "About tree test",
+               wxOK | wxICON_INFORMATION, this);
+}
 
-  dialog.ShowModal();
+void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
+{
+  wxTreeItemId item = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( item );
+
+  static wxString s_text;
+  s_text = wxGetTextFromUser("New name: ", "Tree sample question",
+                             s_text, this);
+  if ( !s_text.IsEmpty() )
+  {
+    m_treeCtrl->SetItemText(item, s_text);
+  }
+}
+
+void MyFrame::DoSort(bool reverse)
+{
+  wxTreeItemId item = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( item );
+
+  m_treeCtrl->DoSortChildren(item, reverse);
 }
 
 void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 {
   wxTreeItemId root = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( root );
+
   m_treeCtrl->GetItemsRecursively(root, -1);
 }
 
 void MyFrame::DoSetBold(bool bold)
 {
-  m_treeCtrl->SetItemBold(m_treeCtrl->GetSelection(), bold);
+  wxTreeItemId item = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( item );
+
+  m_treeCtrl->SetItemBold(item, bold);
 }
 
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   wxTreeItemId item = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( item );
+
   m_treeCtrl->Delete(item);
 }
 
 void MyFrame::OnDeleteChildren(wxCommandEvent& WXUNUSED(event))
 {
   wxTreeItemId item = m_treeCtrl->GetSelection();
+
+  CHECK_ITEM( item );
+
   m_treeCtrl->DeleteChildren(item);
 }
 
@@ -216,6 +270,8 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        long style)
           : wxTreeCtrl(parent, id, pos, size, style)
 {
+  m_reverseSort = FALSE;
+
   // Make an image list containing small icons
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
@@ -232,6 +288,20 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
 MyTreeCtrl::~MyTreeCtrl()
 {
   delete m_imageListNormal;
+}
+
+int MyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
+                               const wxTreeItemId& item2)
+{
+  if ( m_reverseSort )
+  {
+    // just exchange 1st and 2nd items
+    return wxTreeCtrl::OnCompareItems(item2, item1);
+  }
+  else
+  {
+    return wxTreeCtrl::OnCompareItems(item1, item2);
+  }
 }
 
 void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
