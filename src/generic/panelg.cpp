@@ -102,11 +102,12 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
-void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxPanel::OnSize(wxSizeEvent& event)
 {
 #if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
 #endif // wxUSE_CONSTRAINTS
+    event.Skip();
 }
 
