@@ -151,7 +151,7 @@ void wxCalendarCtrl::Init()
     {
         m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr);
     }
-    m_weekdaysLen = m_weekdays[0].Length();   // mj10777 : length of Day name
+
     for ( size_t n = 0; n < WXSIZEOF(m_attrs); n++ )
     {
         m_attrs[n] = NULL;
@@ -527,7 +527,9 @@ void wxCalendarCtrl::RecalcGeometry()
         return;
 
     wxClientDC dc(this);
+
     dc.SetFont(m_font);
+
     // determine the column width (we assume that the weekday names are always
     // wider (in any language) than the numbers)
     m_widthCol = 0;
@@ -541,6 +543,7 @@ void wxCalendarCtrl::RecalcGeometry()
             m_widthCol = width;
         }
     }
+
     // leave some margins
     m_widthCol += 2;
     m_heightRow += 2;
@@ -552,38 +555,11 @@ void wxCalendarCtrl::RecalcGeometry()
 
 void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxCoord width;          // mj10777 : moved to top of function
-    RecalcGeometry();       // mj10777 : needed for wxDefaultSize
-    wxSize size;            // mj10777 : size of Ctrl
-
     wxPaintDC dc(this);
-    size = GetSize();
-    m_font.SetPointSize(size.y/14); // Font in proportion to height
-    dc.SetFont(m_font);
-    if ((m_widthCol != size.x/7) || (m_heightRow != size.y/9))
-    {  // mj10777 : only if size has changed
-        // ShowCurrentControls();        // Turn off ?
-        m_widthCol = size.x/7;
-        m_heightRow = size.y/9;
-        SetSize(m_widthCol*7,m_heightRow*9);  // mj10777 : Set to fit full number
-        m_weekdaysLen = m_weekdays[0].Length();
-        dc.GetTextExtent(m_weekdays[0], &width, (wxCoord *)NULL);
-        while (width >= m_widthCol)
-        { // mj10777 : how many letters fit in the Column ?
-#if DEBUG_PAINT
-            printf("%d) : m_widthCol(%d) ; width(%d)\n",m_weekdaysLen,m_widthCol,width);
-#endif
-            m_weekdaysLen--;
-            dc.GetTextExtent(m_weekdays[0].Mid(0, m_weekdaysLen), &width, (wxCoord *)NULL);
-        }
-        // ShowCurrentControls();        // Turn on ?
-        wxSize combosize = m_comboMonth->GetSize();
-        combosize.x = size.x / 2;  // When small, the Year cannot not be seen if the month is to big
-        m_comboMonth->SetSize(combosize);
-    }  // mj10777 : only if size has changed
 
-    if (m_weekdaysLen < 1)
-        m_weekdaysLen = 1;  // mj10777 : must never be less that 1
+    dc.SetFont(m_font);
+
+    RecalcGeometry();
 
 #if DEBUG_PAINT
     printf("--- starting to paint, selection: %s, week %u\n",
@@ -613,9 +589,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             else
                 n = wd;
 
-            dc.GetTextExtent(m_weekdays[n].Mid(0,m_weekdaysLen), &width, (wxCoord *)NULL); // mj10777
-            width = wd*m_widthCol + (m_widthCol - width) / 2;       // mj10777
-            dc.DrawText(m_weekdays[n].Mid(0,m_weekdaysLen), width, 0); // mj10777
+            dc.DrawText(m_weekdays[n], wd*m_widthCol + 1, 0);
         }
     }
 
@@ -653,6 +627,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 // don't use wxDate::Format() which prepends 0s
                 unsigned int day = date.GetDay();
                 wxString dayStr = wxString::Format(_T("%u"), day);
+                wxCoord width;
                 dc.GetTextExtent(dayStr, &width, (wxCoord *)NULL);
 
                 bool changedColours = FALSE,
