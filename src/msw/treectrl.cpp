@@ -463,11 +463,11 @@ wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
     long cookie;
 
     wxTreeItemId childLast,
-    child = GetFirstChild(last, cookie);
+    child = GetFirstChild(item, cookie);
     while ( child.IsOk() )
     {
         childLast = child;
-        child = GetNextChild(last, cookie);
+        child = GetNextChild(item, cookie);
     }
 
     return childLast;
