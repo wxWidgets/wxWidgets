@@ -48,7 +48,7 @@ class WXDLLEXPORT wxBookCtrlBase;
 // kind of book control.
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPropertySheetDialog : public wxDialog
+class WXDLLIMPEXP_ADV wxPropertySheetDialog : public wxDialog
 {
 public:
     wxPropertySheetDialog() : wxDialog() { Init(); }
