@@ -452,6 +452,46 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
                 {
                     /* non-interlaced */
                     y++;
+/*
+Normally image decoding is finished when an End of Information code is
+encountered (code == ab_fin) however some broken encoders write wrong
+"block byte counts" (The first byte value after the "code size" byte),
+being one value too high. It might very well be possible other variants
+of this problem occur as well. The only sensible solution seems to
+be to check for clipping.
+Example of wrong encoding:
+(1 * 1 B/W image, raster data stream follows in hex bytes)
+
+02  << B/W images have a code size of 2
+02  << Block byte count
+44  << LZW packed
+00  << Zero byte count (terminates data stream)
+
+Because the block byte count is 2, the zero byte count is used in the
+decoding process, and decoding is continued after this byte. (While it
+should signal an end of image)
+
+It should be:
+02
+02
+44
+01  << When decoded this correctly includes the End of Information code
+00
+
+Or (Worse solution):
+02
+01
+44
+00
+(The 44 doesn't include an End of Information code, but at least the
+decoder correctly skips to 00 now after decoding, and signals this
+as an End of Information itself)
+*/
+                    if (y >= img->h)
+                    {
+                        code = ab_fin;
+                        break;
+                    }
                 }
             }
         }
