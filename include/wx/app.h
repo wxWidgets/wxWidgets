@@ -61,7 +61,7 @@ static const int wxPRINT_POSTSCRIPT = 2;
 #if wxUSE_GUI
 // VS: Fullscreen/framebuffer application needs to choose display mode prior
 //     to wxWindows initialization. This class holds information about display
-//     mode. An instance of it is returned by virtual wxApp::GetDisplayMode.
+//     mode. It is used by  wxApp::Set/GetDisplayMode.
 class WXDLLEXPORT wxDisplayModeInfo
 {
 public:
@@ -279,10 +279,12 @@ public:
         // wxICON_XXX values
     virtual wxIcon GetStdIcon(int which) const = 0;
 
-        // get display mode to use. This is only used in framebuffer wxWin ports
-        // (such as wxMGL). This method is called early in wxWin initialization
-        // process and is supposed to be overriden in derived classes.
+        // Get display mode that is used use. This is only used in framebuffer wxWin ports
+        // (such as wxMGL).
     virtual wxDisplayModeInfo GetDisplayMode() const { return wxDisplayModeInfo(); }
+        // Set display mode to use. This is only used in framebuffer wxWin ports
+        // (such as wxMGL). This method should be called from wxApp:OnInitGui
+    virtual bool SetDisplayMode(const wxDisplayModeInfo& WXUNUSED(info)) { return TRUE; }
 
         // VZ: what does this do exactly?
     void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
