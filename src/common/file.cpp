@@ -345,6 +345,13 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             break;
     }
 
+#ifdef __WINDOWS__
+    // only read/write bits for "all" are supported by this function under
+    // Windows, and VC++ 8 returns EINVAL if any other bits are used in
+    // accessMode, so clear them as they have at best no effect anyhow
+    accessMode &= wxS_IRUSR | wxS_IWUSR;
+#endif // __WINDOWS__
+
     int fd = wxOpen( szFileName, flags ACCESS(accessMode));
 #endif
     if ( fd == -1 )
