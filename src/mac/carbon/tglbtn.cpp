@@ -6,8 +6,8 @@
 // Modified by:
 // Created:     08.02.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2000 Johnny C. Norris II
-// License:     Rocketeer license
+// Copyright:   (c) Stefan Csomor
+// License:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
