@@ -6073,7 +6073,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         if ( IsVisible( m_currentCellCoords, FALSE ) )
         {
             wxRect r;
-            r = BlockToDeviceRect(m_currentCellCoords, coords);
+            r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
             if ( !m_gridLinesEnabled )
             {
                 r.x--;
@@ -6082,7 +6082,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
                 r.height++;
             }
 
-             wxGridCellCoordsArray cells = CalcCellsExposed( r );
+            wxGridCellCoordsArray cells = CalcCellsExposed( r );
 
             // Otherwise refresh redraws the highlight!
             m_currentCellCoords = coords;
@@ -6136,8 +6136,18 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
     updateTopLeft = wxGridCellCoords( topRow, leftCol );
     updateBottomRight = wxGridCellCoords( bottomRow, rightCol );
 
-    if ( m_selectingTopLeft != updateTopLeft ||
-         m_selectingBottomRight != updateBottomRight )
+    // First the case that we selected a completely new area
+    if ( m_selectingTopLeft == wxGridNoCellCoords ||
+         m_selectingBottomRight == wxGridNoCellCoords )
+    {
+        wxRect rect;
+        rect = BlockToDeviceRect( wxGridCellCoords ( topRow, leftCol ),
+                                  wxGridCellCoords ( bottomRow, rightCol ) );
+        m_gridWin->Refresh( FALSE, &rect );     
+    }
+    // Now handle changing an existing selection area.
+    else if ( m_selectingTopLeft != updateTopLeft ||
+              m_selectingBottomRight != updateBottomRight )
     {
         // Compute two optimal update rectangles:
         // Either one rectangle is a real subset of the
@@ -6188,6 +6198,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
         if ( oldLeft < leftCol )
         {
+            // Refresh the newly selected or deselected
+            // area to the left of the old or new selection.
             need_refresh[0] = TRUE;
             rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
                                                             oldLeft ),
@@ -6197,6 +6209,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
         if ( oldTop  < topRow )
         {
+            // Refresh the newly selected or deselected
+            // area above the old or new selection.
             need_refresh[1] = TRUE;
             rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
                                                             leftCol ),
@@ -6206,6 +6220,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
         if ( oldRight > rightCol )
         {
+            // Refresh the newly selected or deselected
+            // area to the right of the old or new selection.
             need_refresh[2] = TRUE;
             rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
                                                             rightCol + 1 ),
@@ -6215,6 +6231,8 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
 
         if ( oldBottom > bottomRow )
         {
+            // Refresh the newly selected or deselected
+            // area below the old or new selection.
             need_refresh[3] = TRUE;
             rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
                                                             leftCol ),
@@ -6222,20 +6240,14 @@ void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCo
                                                             rightCol ) );
         }
 
-
-        // Change Selection
-        m_selectingTopLeft = updateTopLeft;
-        m_selectingBottomRight = updateBottomRight;
-
         // various Refresh() calls
         for (i = 0; i < 4; i++ )
             if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
                 m_gridWin->Refresh( FALSE, &(rect[i]) );
     }
-
-    // never generate an event as it will be generated from
-    // wxGridSelection::SelectBlock!
-    // (old comment from when this was the body of SelectBlock)
+    // Change Selection
+    m_selectingTopLeft = updateTopLeft;
+    m_selectingBottomRight = updateBottomRight;
 }
 
 //
@@ -6306,7 +6318,7 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
                 if ( cell == cells[j] )
                 {
                     marked = TRUE;
-                    break;;
+                    break;
                 }
             }
             if (!marked)
@@ -8520,12 +8532,12 @@ wxGridCellAttr *wxGrid::GetCellAttr(int row, int col) const
     // wxNoCellCoords, as this will confuse memory management.
     if ( row >= 0 )
     {
-	if ( !LookupAttr(row, col, &attr) )
-	{
-	    attr = m_table ? m_table->GetAttr(row, col , wxGridCellAttr::Any)
-	                   : (wxGridCellAttr *)NULL;
-	    CacheAttr(row, col, attr);
-	}
+        if ( !LookupAttr(row, col, &attr) )
+        {
+            attr = m_table ? m_table->GetAttr(row, col , wxGridCellAttr::Any)
+                           : (wxGridCellAttr *)NULL;
+            CacheAttr(row, col, attr);
+        }
     }
     if (attr)
     {
@@ -9412,6 +9424,27 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
     int rightCol = bottomRight.GetCol();
     int bottomRow = bottomRight.GetRow();
 
+    if (left > right)
+    {
+        i = left;
+        left = right;
+        right = i;
+        i = leftCol;
+        leftCol=rightCol;
+        rightCol = i;
+    }
+
+    if (top > bottom)
+    {
+        i = top;
+        top = bottom;
+        bottom = i;
+        i = topRow;
+        topRow = bottomRow;
+        bottomRow = i;
+    }
+
+
     for ( j = topRow; j <= bottomRow; j++ )
     {
         for ( i = leftCol; i <= rightCol; i++ )
@@ -9429,6 +9462,7 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
                 if (cellRect.y + cellRect.height > bottom)
                     bottom = cellRect.y + cellRect.height;
             }
+            else i = rightCol; // jump over inner cells.
         }
     }
 
