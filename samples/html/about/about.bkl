@@ -13,7 +13,7 @@
         <win32-res>about.rc</win32-res>
     </exe>
 
-    <wx-data id="data">
+    <wx-data id="data_files">
         <dstdir>$(BUILDDIR)/data</dstdir>
         <srcdir>$(SRCDIR)/data</srcdir>
         <files>
