@@ -350,6 +350,7 @@ public:
         , m_col(0)
         , m_pointDrag()
         , m_item()
+        , m_editCancelled(false)
         { }
 
     wxListEvent(const wxListEvent& event)
@@ -360,6 +361,7 @@ public:
         , m_col(event.m_col)
         , m_pointDrag(event.m_pointDrag)
         , m_item(event.m_item)
+        , m_editCancelled(event.m_editCancelled)
         { }
 
     int GetKeyCode() const { return m_code; }
@@ -376,6 +378,10 @@ public:
     // for wxEVT_COMMAND_LIST_CACHE_HINT only
     long GetCacheFrom() const { return m_oldItemIndex; }
     long GetCacheTo() const { return m_itemIndex; }
+
+    // was label editing canceled? (for wxEVT_COMMAND_LIST_END_LABEL_EDIT only)
+    bool IsEditCancelled() const { return m_editCancelled; }
+    void SetEditCanceled(bool editCancelled) { m_editCancelled = editCancelled; }
 
 #if WXWIN_COMPATIBILITY_2_2
     // these methods don't do anything at all
@@ -396,6 +402,9 @@ public:
     wxPoint       m_pointDrag;
 
     wxListItem    m_item;
+
+protected:
+    bool          m_editCancelled;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxListEvent)

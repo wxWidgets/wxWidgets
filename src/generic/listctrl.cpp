@@ -2834,25 +2834,12 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
                 le.IsAllowed();
 }
 
-#ifdef __VMS__ // Ignore unreacheable code
-# pragma message disable initnotreach
-#endif
-
 void wxListMainWindow::OnRenameCancelled(size_t WXUNUSED(itemEdit))
 {
-    // wxMSW seems not to notify the program about
-    // cancelled label edits.
-    return;
-
-  #if 0
-    // above unconditional return cause warning about not reachable code
-
     // let owner know that the edit was cancelled
     wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, GetParent()->GetId() );
 
-    // These only exist for wxTreeCtrl, which should probably be changed
-    // le.m_editCancelled = TRUE;
-    // le.m_label = wxEmptyString;
+    le.SetEditCanceled(TRUE);
 
     le.SetEventObject( GetParent() );
     le.m_itemIndex = itemEdit;
@@ -2863,11 +2850,7 @@ void wxListMainWindow::OnRenameCancelled(size_t WXUNUSED(itemEdit))
     data->GetItem( 0, le.m_item );
 
     GetEventHandler()->ProcessEvent( le );
-  #endif
 }
-#ifdef __VMS__
-# pragma message enable initnotreach
-#endif
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {

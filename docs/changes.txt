@@ -79,6 +79,7 @@ All (GUI):
 - added wxListCtrl::GetViewRect()
 - added wxTextCtrl::MarkDirty()
 - wxToolBar::ToggleTool() now works for radio buttons (Dag Ågren)
+- wxListCtrl now sends an END_LABEL event if editing was cancelled, too
 - bug in wxRect ctor from two [out of order] wxPoints fixed (Steve Cornett)
 
 wxMSW:
@@ -90,6 +91,7 @@ wxMSW:
 - several fixes to owner drawn menu items (Christian Sturmlechner)
 - wxGauge now supports full 32 bit range (Miroslav Rajcic)
 - make it possible to give focus to the notebook tabs (Hajo Kirchhoff)
+- MDI child frames are not always resizeable any more (Andrei Fortuna)
 
 wxGTK:
 

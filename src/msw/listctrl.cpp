@@ -73,60 +73,77 @@ static void wxConvertToMSWListCol(int col, const wxListItem& item,
 // ----------------------------------------------------------------------------
 
 // We have to handle both fooW and fooA notifications in several cases
-// because of broken commctl.dll and/or unicows.dll. This class is used to
+// because of broken comctl32.dll and/or unicows.dll. This class is used to
 // convert LV_ITEMA and LV_ITEMW to LV_ITEM (which is either LV_ITEMA or
 // LV_ITEMW depending on wxUSE_UNICODE setting), so that it can be processed
 // by wxConvertToMSWListItem().
+#if wxUSE_UNICODE
+    #define LV_ITEM_NATIVE  LV_ITEMW
+    #define LV_ITEM_OTHER   LV_ITEMA
+
+    #define LV_CONV_TO_WX   cMB2WX
+    #define LV_CONV_BUF     wxMB2WXbuf
+#else // ANSI
+    #define LV_ITEM_NATIVE  LV_ITEMA
+    #define LV_ITEM_OTHER   LV_ITEMW
+
+    #define LV_CONV_TO_WX   cWC2WX
+    #define LV_CONV_BUF     wxWC2WXbuf
+#endif // Unicode/ANSI
+
 class wxLV_ITEM
 {
 public:
+    // default ctor, use Init() later
+    wxLV_ITEM() { m_buf = NULL; m_pItem = NULL; }
+
+    // init without conversion
+    void Init(LV_ITEM_NATIVE& item)
+    {
+        wxASSERT_MSG( !m_pItem, _T("Init() called twice?") );
+
+        m_pItem = &item;
+    }
+
+    // init with conversion
+    void Init(LV_ITEM_OTHER& item)
+    {
+        // avoid unnecessary dynamic memory allocation, jjust make m_pItem
+        // point to our own m_item
+
+        // memcpy() can't work if the struct sizes are different
+        wxCOMPILE_TIME_ASSERT( sizeof(LV_ITEM_OTHER) == sizeof(LV_ITEM_NATIVE),
+                                CodeCantWorkIfDiffSizes);
+
+        memcpy(&m_item, &item, sizeof(LV_ITEM_NATIVE));
+
+        // convert text from ANSI to Unicod if necessary
+        if ( (item.mask & LVIF_TEXT) && item.pszText )
+        {
+            m_buf = new LV_CONV_BUF(wxConvLocal.LV_CONV_TO_WX(item.pszText));
+            m_item.pszText = (wxChar *)m_buf->data();
+        }
+    }
+
+    // ctor without conversion
+    wxLV_ITEM(LV_ITEM_NATIVE& item) : m_buf(NULL), m_pItem(&item) { }
+
+    // ctor with conversion
+    wxLV_ITEM(LV_ITEM_OTHER& item) : m_buf(NULL)
+    {
+        Init(item);
+    }
+
     ~wxLV_ITEM() { delete m_buf; }
-    operator LV_ITEM&() const { return *m_item; }
 
-#if wxUSE_UNICODE
-    wxLV_ITEM(LV_ITEMW &item) : m_buf(NULL), m_item(&item) {}
-    wxLV_ITEM(LV_ITEMA &item)
-    {
-        m_item = new LV_ITEM((LV_ITEM&)item);
-        if ( (item.mask & LVIF_TEXT) && item.pszText )
-        {
-            m_buf = new wxMB2WXbuf(wxConvLocal.cMB2WX(item.pszText));
-            m_item->pszText = (wxChar*)m_buf->data();
-        }
-        else
-            m_buf = NULL;
-    }
+    // conversion to the real LV_ITEM
+    operator LV_ITEM_NATIVE&() const { return *m_pItem; }
+
 private:
-    wxMB2WXbuf *m_buf;
+    LV_CONV_BUF *m_buf;
 
-#else // !wxUSE_UNICODE
-    wxLV_ITEM(LV_ITEMW &item)
-    {
-        m_item = new LV_ITEM((LV_ITEM&)item);
-
-        // the code below doesn't compile without wxUSE_WCHAR_T and as I don't
-        // know if it's useful to have it at all (do we ever get Unicode
-        // notifications in ANSI mode? I don't think so...) I'm not going to
-        // write alternative implementation right now
-        //
-        // but if it is indeed used, we should simply directly use
-        // ::WideCharToMultiByte() here
-#if wxUSE_WCHAR_T
-        if ( (item.mask & LVIF_TEXT) && item.pszText )
-        {
-            m_buf = new wxWC2WXbuf(wxConvLocal.cWC2WX(item.pszText));
-            m_item->pszText = (wxChar*)m_buf->data();
-        }
-        else
-#endif // wxUSE_WCHAR_T
-            m_buf = NULL;
-    }
-    wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
-private:
-    wxWC2WXbuf *m_buf;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
-    LV_ITEM *m_item;
+    LV_ITEM_NATIVE *m_pItem;
+    LV_ITEM_NATIVE m_item;
 
     DECLARE_NO_COPY_CLASS(wxLV_ITEM)
 };
@@ -1896,55 +1913,43 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 break;
 
             // NB: we have to handle both *A and *W versions here because some
-            //    versions of comctl32.dll send ANSI message to an Unicode app
+            //     versions of comctl32.dll send ANSI messages even to the
+            //     Unicode windows
             case LVN_BEGINLABELEDITA:
-                {
-                    eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-                    wxLV_ITEM item(((LV_DISPINFOA *)lParam)->item);
-                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, item);
-                    event.m_itemIndex = event.m_item.m_itemId;
-                }
-                break;
             case LVN_BEGINLABELEDITW:
                 {
+                    wxLV_ITEM item;
+                    if ( nmhdr->code == LVN_BEGINLABELEDITA )
+                    {
+                        item.Init(((LV_DISPINFOA *)lParam)->item);
+                    }
+                    else // LVN_BEGINLABELEDITW
+                    {
+                        item.Init(((LV_DISPINFOW *)lParam)->item);
+                    }
+
                     eventType = wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-                    wxLV_ITEM item(((LV_DISPINFOW *)lParam)->item);
                     wxConvertFromMSWListItem(GetHwnd(), event.m_item, item);
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
 
             case LVN_ENDLABELEDITA:
-                {
-                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-                    wxLV_ITEM item(((LV_DISPINFOA *)lParam)->item);
-                    wxConvertFromMSWListItem(NULL, event.m_item, item);
-                    if ( ((LV_ITEM)item).pszText == NULL ||
-                         ((LV_ITEM)item).iItem == -1 )
-                    {
-                        // don't keep a stale wxTextCtrl around
-                        if ( m_textCtrl )
-                        {
-                            // EDIT control will be deleted by the list control itself so
-                            // prevent us from deleting it as well
-                            m_textCtrl->UnsubclassWin();
-                            m_textCtrl->SetHWND(0);
-                            delete m_textCtrl;
-                            m_textCtrl = NULL;
-                        }
-                        return FALSE;
-                    }
-
-                    event.m_itemIndex = event.m_item.m_itemId;
-                }
-                break;
             case LVN_ENDLABELEDITW:
                 {
-                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-                    wxLV_ITEM item(((LV_DISPINFOW *)lParam)->item);
-                    wxConvertFromMSWListItem(NULL, event.m_item, item);
-                    if ( ((LV_ITEM)item).pszText == NULL ||
-                         ((LV_ITEM)item).iItem == -1 )
+                    wxLV_ITEM item;
+                    if ( nmhdr->code == LVN_ENDLABELEDITA )
+                    {
+                        item.Init(((LV_DISPINFOA *)lParam)->item);
+                    }
+                    else // LVN_ENDLABELEDITW
+                    {
+                        item.Init(((LV_DISPINFOW *)lParam)->item);
+                    }
+
+                    // was editing cancelled?
+                    const LV_ITEM& lvi = (LV_ITEM)item;
+                    if ( !lvi.pszText || lvi.iItem == -1 )
                     {
                         // don't keep a stale wxTextCtrl around
                         if ( m_textCtrl )
@@ -1956,9 +1961,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             delete m_textCtrl;
                             m_textCtrl = NULL;
                         }
-                        return FALSE;
+
+                        event.SetEditCanceled(true);
                     }
 
+                    eventType = wxEVT_COMMAND_LIST_END_LABEL_EDIT;
+                    wxConvertFromMSWListItem(NULL, event.m_item, item);
                     event.m_itemIndex = event.m_item.m_itemId;
                 }
                 break;
