@@ -211,24 +211,21 @@ wxCursor::wxCursor( const wxImage & image )
         keyMaskColor = 0;
     }
 
-    // find the most frequent color(s) it seems a waste of effort to copy the
-    // image but otherwise we need to remove the const modifier ??
-    wxImage tmpImage = image.Copy();
+    // find the most frequent color(s)
     wxImageHistogram histogram;
+    image.ComputeHistogram(histogram);
 
     // colors as rrggbb
     unsigned long key;
     unsigned long value;
 
-    tmpImage.ComputeHistogram(histogram);
-
-    long MostFreqCol = 0;
+    long colMostFreq = 0;
     unsigned long nMost = 0;
-    long NextFreqCol = 0;
+    long colNextMostFreq = 0;
     unsigned long nNext = 0;
-    wxImageHistogram::iterator entry = histogram.begin();
-
-    while ( entry != histogram.end() )
+    for ( wxImageHistogram::iterator entry = histogram.begin();
+          entry != histogram.end();
+          ++entry )
     {
         value = entry->second.value;
         key = entry->first;
@@ -237,46 +234,55 @@ wxCursor::wxCursor( const wxImage & image )
             if (value > nMost)
             {
                 nMost = value;
-                MostFreqCol = key;
+                colMostFreq = key;
             }
             else if (value > nNext)
             {
                 nNext = value;
-                NextFreqCol = key;
+                colNextMostFreq = key;
             }
         }
     }
 
-    wxColour fg = wxColour ( (unsigned char)(MostFreqCol >> 16),
-                             (unsigned char)(MostFreqCol >> 8),
-                             (unsigned char)(MostFreqCol) );
+    wxColour fg = wxColour ( (unsigned char)(colMostFreq >> 16),
+                             (unsigned char)(colMostFreq >> 8),
+                             (unsigned char)(colMostFreq) );
 
-    wxColour bg = wxColour ( (unsigned char)(NextFreqCol >> 16),
-                             (unsigned char)(NextFreqCol >> 8),
-                             (unsigned char)(NextFreqCol) );
+    wxColour bg = wxColour ( (unsigned char)(colNextMostFreq >> 16),
+                             (unsigned char)(colNextMostFreq >> 8),
+                             (unsigned char)(colNextMostFreq) );
 
-    int hotSpotX=0;
-    int hotSpotY=0;
+    int hotSpotX;
+    int hotSpotY;
 
     if (image.HasOption(wxCUR_HOTSPOT_X))
         hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    else
+        hotSpotX = 0;
+
     if (image.HasOption(wxCUR_HOTSPOT_Y))
         hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
+    else
+        hotSpotY = 0;
 
     if (hotSpotX < 0 || hotSpotX >= w)
         hotSpotX = 0;
     if (hotSpotY < 0 || hotSpotY >= h)
         hotSpotY = 0;
 
-    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits,
-        w, h );
-    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits,
-        w, h );
+    GdkBitmap *data = gdk_bitmap_create_from_data(wxGetRootWindow()->window,
+                                                  (gchar *) bits, w, h);
+    GdkBitmap *mask = gdk_bitmap_create_from_data(wxGetRootWindow()->window,
+                                                  (gchar *) maskBits, w, h);
 
     m_refData = new wxCursorRefData;
-    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
-        data, mask, fg.GetColor(), bg.GetColor(),
-        hotSpotX, hotSpotY );
+    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap
+                             (
+                                data,
+                                mask,
+                                fg.GetColor(), bg.GetColor(),
+                                hotSpotX, hotSpotY
+                             );
 
     gdk_bitmap_unref( data );
     gdk_bitmap_unref( mask );
