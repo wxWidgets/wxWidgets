@@ -112,8 +112,7 @@ public:
     virtual wxStatusBar *GetStatusBar() const { return m_frameStatusBar; }
 
     // sets the main status bar
-    void SetStatusBar(wxStatusBar *statBar)
-        { m_frameStatusBar = statBar; PositionStatusBar(); }
+    virtual void SetStatusBar(wxStatusBar *statBar);
 
     // forward these to status bar
     virtual void SetStatusText(const wxString &text, int number = 0);
@@ -141,7 +140,7 @@ public:
 
     // get/set the main toolbar
     virtual wxToolBar *GetToolBar() const { return m_frameToolBar; }
-    virtual void SetToolBar(wxToolBar *toolbar) { m_frameToolBar = toolbar; }
+    virtual void SetToolBar(wxToolBar *toolbar);
 #endif // wxUSE_TOOLBAR
 
     // implementation only from now on

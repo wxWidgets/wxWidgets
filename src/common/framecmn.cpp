@@ -309,9 +309,7 @@ wxStatusBar* wxFrameBase::CreateStatusBar(int number,
     wxCHECK_MSG( !m_frameStatusBar, (wxStatusBar *)NULL,
                  wxT("recreating status bar in wxFrame") );
 
-    m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
-    if ( m_frameStatusBar )
-        PositionStatusBar();
+    SetStatusBar(OnCreateStatusBar(number, style, id, name));
 
     return m_frameStatusBar;
 }
@@ -384,6 +382,19 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 #else // !wxUSE_MENUS
     return false;
 #endif // wxUSE_MENUS/!wxUSE_MENUS
+}
+
+void wxFrameBase::SetStatusBar(wxStatusBar *statBar)
+{
+    bool hadBar = m_frameStatusBar != NULL;
+    m_frameStatusBar = statBar;
+
+    if ( (m_frameStatusBar != NULL) != hadBar )
+    {
+        PositionStatusBar();
+
+        DoLayout();
+    }
 }
 
 #endif // wxUSE_STATUSBAR
@@ -460,7 +471,7 @@ wxToolBar* wxFrameBase::CreateToolBar(long style,
         style = wxBORDER_NONE | wxTB_HORIZONTAL | wxTB_FLAT;
     }
 
-    m_frameToolBar = OnCreateToolBar(style, id, name);
+    SetToolBar(OnCreateToolBar(style, id, name));
 
     return m_frameToolBar;
 }
@@ -472,6 +483,19 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
     return new wxToolBar(this, id,
                          wxDefaultPosition, wxDefaultSize,
                          style, name);
+}
+
+void wxFrameBase::SetToolBar(wxToolBar *toolbar)
+{
+    bool hadBar = m_frameToolBar != NULL;
+    m_frameToolBar = toolbar;
+
+    if ( (m_frameToolBar != NULL) != hadBar )
+    {
+        PositionToolBar();
+
+        DoLayout();
+    }
 }
 
 #endif // wxUSE_TOOLBAR
