@@ -137,17 +137,17 @@ wxWindow* wxWindow::GetWindowChild1 (
     if (m_windowId == vId)
         return this;
 
-    wxWindowList::Node*             pNode = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
 
-    while (pNode)
+    while (node)
     {
-        wxWindow*                   pChild = pNode->GetData();
+        wxWindow*                   pChild = node->GetData();
         wxWindow*                   pWin   = pChild->GetWindowChild1(vId);
 
         if (pWin)
             return pWin;
 
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
     return NULL;
 } // end of wxWindow::GetWindowChild1

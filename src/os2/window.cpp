@@ -128,8 +128,6 @@ QMSG                      s_currentMsg;
 wxMenu*                   wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
-wxList*                   wxWinHandleList = NULL;
-
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
@@ -218,17 +216,17 @@ wxWindow* wxWindowOS2::FindItem(
     }
 #endif // wxUSE_CONTROLS
 
-    wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator  current = GetChildren().GetFirst();
 
-    while (pCurrent)
+    while (current)
     {
-        wxWindow*                   pChildWin = pCurrent->GetData();
+        wxWindow*                   pChildWin = current->GetData();
         wxWindow*                   pWnd = pChildWin->FindItem(lId);
 
         if (pWnd)
             return pWnd;
 
-        pCurrent = pCurrent->GetNext();
+        current = current->GetNext();
     }
     return(NULL);
 } // end of wxWindowOS2::FindItem
@@ -241,11 +239,11 @@ wxWindow* wxWindowOS2::FindItemByHWND(
 , bool                              bControlOnly
 ) const
 {
-    wxWindowList::Node*             pCurrent = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
 
-    while (pCurrent)
+    while (current)
     {
-        wxWindow*                   pParent = pCurrent->GetData();
+        wxWindow*                   pParent = current->GetData();
 
         //
         // Do a recursive search.
@@ -261,7 +259,7 @@ wxWindow* wxWindowOS2::FindItemByHWND(
 #endif // wxUSE_CONTROLS
             )
         {
-            wxWindow*               pItem = pCurrent->GetData();
+            wxWindow*               pItem = current->GetData();
 
             if (pItem->GetHWND() == hWnd)
                 return(pItem);
@@ -271,7 +269,7 @@ wxWindow* wxWindowOS2::FindItemByHWND(
                     return(pItem);
             }
         }
-        pCurrent = pCurrent->GetNext();
+        current = current->GetNext();
     }
     return(NULL);
 } // end of wxWindowOS2::FindItemByHWND
@@ -506,11 +504,11 @@ bool wxWindowOS2::Enable(
     if (IsTopLevel())
         return TRUE;
 
-    wxWindowList::Node*             pNode = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator     node = GetChildren().GetFirst();
 
-    while (pNode)
+    while (node)
     {
-        wxWindow*                   pChild = pNode->GetData();
+        wxWindow*                   pChild = node->GetData();
 
         if (bEnable)
         {
@@ -540,7 +538,7 @@ bool wxWindowOS2::Enable(
                 m_pChildrenDisabled->Append(pChild);
             }
         }
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
     if (bEnable && m_pChildrenDisabled)
     {
@@ -3006,15 +3004,17 @@ MRESULT wxWindowOS2::OS2WindowProc(
     return mResult;
 } // end of wxWindowOS2::OS2WindowProc
 
+// ----------------------------------------------------------------------------
+// wxWindow <-> HWND map
+// ----------------------------------------------------------------------------
+
+wxWinHashTable *wxWinHandleHash = NULL;
+
 wxWindow* wxFindWinFromHandle(
   WXHWND                            hWnd
 )
 {
-    wxNode*                         pNode = wxWinHandleList->Find((long)hWnd);
-
-    if (!pNode)
-        return NULL;
-    return (wxWindow *)pNode->GetData();
+    return (wxWindow *)wxWinHandleHash->Get((long)hWnd);
 } // end of wxFindWinFromHandle
 
 void wxAssociateWinWithHandle(
@@ -3042,9 +3042,9 @@ void wxAssociateWinWithHandle(
     }
     else if (!pOldWin)
     {
-        wxWinHandleList->Append( (long)hWnd
-                                ,pWin
-                               );
+        wxWinHandleHash->Put( (long)hWnd
+                             ,(wxWindow *)pWin
+                            );
     }
 } // end of wxAssociateWinWithHandle
 
@@ -3052,7 +3052,7 @@ void wxRemoveHandleAssociation(
   wxWindowOS2*                      pWin
 )
 {
-    wxWinHandleList->DeleteObject(pWin);
+    wxWinHandleHash->Delete((long)pWin->GetHWND());
 } // end of wxRemoveHandleAssociation
 
 //
@@ -3660,14 +3660,14 @@ void wxWindowOS2::OnSysColourChanged(
   wxSysColourChangedEvent&          rEvent
 )
 {
-    wxWindowListNode*               pNode = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
 
-    while (pNode)
+    while (node)
     {
         //
         // Only propagate to non-top-level windows
         //
-        wxWindow*                   pWin = (wxWindow *)pNode->GetData();
+        wxWindow*                   pWin = (wxWindow *)node->GetData();
 
         if (pWin->GetParent())
         {
@@ -3676,7 +3676,7 @@ void wxWindowOS2::OnSysColourChanged(
             rEvent.m_eventObject = pWin;
             pWin->GetEventHandler()->ProcessEvent(vEvent);
         }
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
 } // end of wxWindowOS2::OnSysColourChanged
 
@@ -4412,11 +4412,11 @@ void wxWindowOS2::MoveChildren(
     {
         SWP                         vSwp;
 
-        for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-             pNode;
-             pNode = pNode->GetNext())
+        for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+             node;
+             node = node->GetNext())
         {
-            wxWindow*               pWin = pNode->GetData();
+            wxWindow*               pWin = node->GetData();
 
             ::WinQueryWindowPos( GetHwndOf(pWin)
                                 ,&vSwp
@@ -5311,7 +5311,7 @@ wxWindowOS2* FindWindowForMouseEvent(
 
         if (pWinUnderMouse)
         {
-            wxWindowList::Node*     pCurrent = pWinUnderMouse->GetChildren().GetFirst();
+            wxWindowList::compatibility_iterator current = pWinUnderMouse->GetChildren().GetFirst();
             wxWindow*               pGrandChild = NULL;
             RECTL                   vRect;
             POINTL                  vPoint2;
@@ -5320,9 +5320,9 @@ wxWindowOS2* FindWindowForMouseEvent(
             //
             // Find a child window mouse might be under
             //
-            while (pCurrent)
+            while (current)
             {
-                wxWindow*                   pChild = pCurrent->GetData();
+                wxWindow*                   pChild = current->GetData();
 
                 vPoint2.x = vPoint.x;
                 vPoint2.y = vPoint.y;
@@ -5333,11 +5333,11 @@ wxWindowOS2* FindWindowForMouseEvent(
                     if (pChild->IsTopLevel())
                     {
                         POINTL                  vPoint3;
-                        wxWindowList::Node*     pCurrent2 =pChild->GetChildren().GetFirst();
+                        wxWindowList::compatibility_iterator current2 =pChild->GetChildren().GetFirst();
 
-                        while (pCurrent2)
+                        while (current2)
                         {
-                            wxWindow*           pGrandChild = pCurrent2->GetData();
+                            wxWindow*           pGrandChild = current2->GetData();
 
                             vPoint3.x = vPoint2.x;
                             vPoint3.y = vPoint2.y;
@@ -5353,7 +5353,7 @@ wxWindowOS2* FindWindowForMouseEvent(
                                 pWinUnderMouse = pGrandChild;
                                 break;
                             }
-                            pCurrent2 = pCurrent2->GetNext();
+                            current2 = current2->GetNext();
                         }
                         if (pGrandChild)
                             break;
@@ -5365,7 +5365,7 @@ wxWindowOS2* FindWindowForMouseEvent(
                     if (rcVisible && rcEnabled)
                         break;
                 }
-                pCurrent = pCurrent->GetNext();
+                current = current->GetNext();
             }
         }
     }

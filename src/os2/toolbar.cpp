@@ -445,11 +445,11 @@ bool wxToolBar::Realize()
     //
     // Find the maximum tool width and height
     //
-    wxToolBarToolsList::Node*       pNode = m_tools.GetFirst();
+    wxToolBarToolsList::compatibility_iterator     node = m_tools.GetFirst();
 
-    while (pNode )
+    while (node )
     {
-        wxToolBarTool*              pTool = (wxToolBarTool *)pNode->GetData();
+        wxToolBarTool*              pTool = (wxToolBarTool *)node->GetData();
 
         if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsEmpty())
         {
@@ -470,7 +470,7 @@ bool wxToolBar::Realize()
             if (pTool->GetHeight() > nMaxToolHeight)
                 nMaxToolHeight = pTool->GetHeight();
         }
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
 
     wxCoord                         vTbWidth = 0L;
@@ -497,10 +497,10 @@ bool wxToolBar::Realize()
 
     int                             nSeparatorSize = m_toolSeparation;
 
-    pNode = m_tools.GetFirst();
-    while (pNode)
+    node = m_tools.GetFirst();
+    while (node)
     {
-        wxToolBarTool*              pTool = (wxToolBarTool *)pNode->GetData();
+        wxToolBarTool*              pTool = (wxToolBarTool *)node->GetData();
 
         if (pTool->IsSeparator())
         {
@@ -567,7 +567,7 @@ bool wxToolBar::Realize()
         if (m_vLastY > m_maxHeight)
             m_maxHeight = m_vLastY;
 
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
 
     if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
@@ -603,11 +603,11 @@ void wxToolBar::OnPaint (
     nCount++;
 
     ::WinFillRect(vDc.GetHPS(), &vDc.m_vRclPaint, GetBackgroundColour().GetPixel());
-    for ( wxToolBarToolsList::Node* pNode = m_tools.GetFirst();
-          pNode;
-          pNode = pNode->GetNext() )
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxToolBarTool*              pTool = (wxToolBarTool*)pNode->GetData();
+        wxToolBarTool*              pTool = (wxToolBarTool*)node->GetData();
 
         if (pTool->IsButton() )
             DrawTool(vDc, pTool);
@@ -976,10 +976,10 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
             ,&vTBarHeight
            );
     vY = vTBarHeight - vY;
-    wxToolBarToolsList::Node* pNode = m_tools.GetFirst();
-    while (pNode)
+    wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+    while (node)
     {
-        wxToolBarTool*              pTool = (wxToolBarTool *)pNode->GetData();
+        wxToolBarTool*              pTool = (wxToolBarTool *)node->GetData();
 
         if (HasFlag(wxTB_TEXT) && !pTool->GetLabel().IsNull())
         {
@@ -1001,7 +1001,7 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
                 return pTool;
             }
         }
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
     return (wxToolBarToolBase *)NULL;
 } // end of wxToolBar::FindToolForPosition

@@ -223,9 +223,9 @@ void wxRadioButton::SetValue(
     if (bValue)
     {
         const wxWindowList&         rSiblings = GetParent()->GetChildren();
-        wxWindowList::Node*         pNodeThis = rSiblings.Find(this);
+        wxWindowList::compatibility_iterator nodeThis = rSiblings.Find(this);
 
-        wxCHECK_RET(pNodeThis, _T("radio button not a child of its parent?"));
+        wxCHECK_RET(nodeThis, _T("radio button not a child of its parent?"));
 
         //
         // If it's not the first item of the group ...
@@ -235,11 +235,11 @@ void wxRadioButton::SetValue(
             //
             // ...turn off all radio buttons before this one
             //
-            for ( wxWindowList::Node* pNodeBefore = pNodeThis->GetPrevious();
-                  pNodeBefore;
-                  pNodeBefore = pNodeBefore->GetPrevious() )
+            for ( wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
+                  nodeBefore;
+                  nodeBefore = nodeBefore->GetPrevious() )
             {
-                wxRadioButton*      pBtn = wxDynamicCast( pNodeBefore->GetData()
+                wxRadioButton*      pBtn = wxDynamicCast( nodeBefore->GetData()
                                                          ,wxRadioButton
                                                         );
                 if (!pBtn)
@@ -265,11 +265,11 @@ void wxRadioButton::SetValue(
         //
         // ... and all after this one
         //
-        for (wxWindowList::Node* pNodeAfter = pNodeThis->GetNext();
-             pNodeAfter;
-             pNodeAfter = pNodeAfter->GetNext())
+        for (wxWindowList::compatibility_iterator nodeAfter = nodeThis->GetNext();
+             nodeAfter;
+             nodeAfter = nodeAfter->GetNext())
         {
-            wxRadioButton*          pBtn = wxDynamicCast( pNodeAfter->GetData()
+            wxRadioButton*          pBtn = wxDynamicCast( nodeAfter->GetData()
                                                          ,wxRadioButton
                                                         );
 

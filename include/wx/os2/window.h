@@ -575,5 +575,19 @@ WXDLLEXPORT int wxCharCodeOS2ToWX(int nKeySym);
 WXDLLEXPORT int wxCharCodeWXToOS2( int   nId
                                   ,bool* pbIsVirtual
                                  );
+
+// ----------------------------------------------------------------------------
+// global objects
+// ----------------------------------------------------------------------------
+
+// notice that this hash must be defined after wxWindow declaration as it
+// needs to "see" its dtor and not just forward declaration
+#include "wx/hash.h"
+
+// pseudo-template HWND <-> wxWindow hash table
+WX_DECLARE_HASH(wxWindowOS2, wxWindowList, wxWinHashTable);
+
+extern wxWinHashTable *wxWinHandleHash;
+
 #endif
     // _WX_WINDOW_H_

@@ -82,7 +82,6 @@ extern "C" int _System bsdselect(int,
 // ---------------------------------------------------------------------------
 
 extern wxChar*                      wxBuffer;
-extern wxList*                      wxWinHandleList;
 extern wxList WXDLLEXPORT           wxPendingDelete;
 extern wxCursor*                    g_globalCursor;
 
@@ -240,7 +239,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     //    wxRedirectIOToConsole();
 #endif
 
-    wxWinHandleList = new wxList(wxKEY_INTEGER);
+    wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
 
     // This is to foil optimizations in Visual C++ that throw out dummy.obj.
     // PLEASE DO NOT ALTER THIS.
@@ -419,8 +418,8 @@ void wxApp::CleanUp()
 // TODO:        ::DeleteObject( wxDisableButtonBrush );
     }
 
-    if (wxWinHandleList)
-        delete wxWinHandleList;
+    delete wxWinHandleHash;
+    wxWinHandleHash = NULL;
 
     // Delete Message queue
     if (wxTheApp->m_hMq)

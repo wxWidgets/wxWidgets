@@ -321,9 +321,9 @@ void wxMenuItem::Check(
         //
         // Also uncheck all the other items in this radio group
         //
-        wxMenuItemList::Node*       pNode = rItems.Item(nStart);
+        wxMenuItemList::compatibility_iterator node = rItems.Item(nStart);
 
-        for (int n = nStart; n <= nEnd && pNode; n++)
+        for (int n = nStart; n <= nEnd && node; n++)
         {
             if (n == nPos)
             {
@@ -335,14 +335,14 @@ void wxMenuItem::Check(
             }
             if (n != nPos)
             {
-                pNode->GetData()->m_isChecked = FALSE;
+                node->GetData()->m_isChecked = FALSE;
                 ::WinSendMsg( hMenu
                              ,MM_SETITEMATTR
                              ,MPFROM2SHORT(n, TRUE)
                              ,MPFROM2SHORT(MIA_CHECKED, FALSE)
                             );
             }
-            pNode = pNode->GetNext();
+            node = node->GetNext();
         }
     }
     else // check item

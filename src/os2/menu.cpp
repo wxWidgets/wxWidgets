@@ -179,12 +179,12 @@ void wxMenu::UpdateAccel(
     if (pItem->IsSubMenu())
     {
         wxMenu*                     pSubmenu = pItem->GetSubMenu();
-        wxMenuItemList::Node*       pNode = pSubmenu->GetMenuItems().GetFirst();
+        wxMenuItemList::compatibility_iterator node = pSubmenu->GetMenuItems().GetFirst();
 
-        while (pNode)
+        while (node)
         {
-            UpdateAccel(pNode->GetData());
-            pNode = pNode->GetNext();
+            UpdateAccel(node->GetData());
+            node = node->GetNext();
         }
     }
     else if (!pItem->IsSeparator())
@@ -416,11 +416,11 @@ wxMenuItem* wxMenu::DoAppend(
             //
             pItem->SetRadioGroupStart(m_nStartRadioGroup);
 
-            wxMenuItemList::Node*   pNode = GetMenuItems().Item(m_nStartRadioGroup);
+            wxMenuItemList::compatibility_iterator node = GetMenuItems().Item(m_nStartRadioGroup);
 
-            if (pNode)
+            if (node)
             {
-                pNode->GetData()->SetRadioGroupEnd(nCount);
+                node->GetData()->SetRadioGroupEnd(nCount);
             }
             else
             {
@@ -470,19 +470,19 @@ wxMenuItem* wxMenu::DoRemove(
     // We need to find the items position in the child list
     //
     size_t                          nPos;
-    wxMenuItemList::Node*           pNode = GetMenuItems().GetFirst();
+    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
 
-    for (nPos = 0; pNode; nPos++)
+    for (nPos = 0; node; nPos++)
     {
-        if (pNode->GetData() == pItem)
+        if (node->GetData() == pItem)
             break;
-        pNode = pNode->GetNext();
+        node = node->GetNext();
     }
 
     //
     // DoRemove() (unlike Remove) can only be called for existing item!
     //
-    wxCHECK_MSG(pNode, NULL, wxT("bug in wxMenu::Remove logic"));
+    wxCHECK_MSG(node, NULL, wxT("bug in wxMenu::Remove logic"));
 
 #if wxUSE_ACCEL
     //
@@ -641,7 +641,7 @@ wxMenuItem* wxMenu::FindItem(
 
     wxMenuItem*                     pItem = NULL;
 
-    for ( wxMenuItemList::Node *node = m_items.GetFirst();
+    for ( wxMenuItemList::compatibility_iterator node = m_items.GetFirst();
           node && !pItem;
           node = node->GetNext() )
     {
@@ -772,9 +772,9 @@ WXHMENU wxMenuBar::Create()
     }
     else
     {
-        size_t                      nCount = GetMenuCount();
-
-        for (size_t i = 0; i < nCount; i++)
+        size_t                      nCount = GetMenuCount(), i;
+	wxMenuList::iterator it;
+        for (i = 0, it = m_menus.begin(); i < nCount; i++, it++)
         {
             APIRET                  rc;
             ERRORID                 vError;
@@ -784,8 +784,8 @@ WXHMENU wxMenuBar::Create()
             //
             // Set the parent and owner of the submenues to be the menubar, not the desktop
             //
-            hSubMenu = m_menus[i]->m_vMenuData.hwndSubMenu;
-            if (!::WinSetParent(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu, FALSE))
+            hSubMenu = (*it)->m_vMenuData.hwndSubMenu;
+            if (!::WinSetParent((*it)->m_vMenuData.hwndSubMenu, m_hMenu, FALSE))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -793,7 +793,7 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
-            if (!::WinSetOwner(m_menus[i]->m_vMenuData.hwndSubMenu, m_hMenu))
+            if (!::WinSetOwner((*it)->m_vMenuData.hwndSubMenu, m_hMenu))
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);
@@ -801,9 +801,9 @@ WXHMENU wxMenuBar::Create()
                 return NULLHANDLE;
             }
 
-            m_menus[i]->m_vMenuData.iPosition = i;
+            (*it)->m_vMenuData.iPosition = i;
 
-            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
+            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&(*it)->m_vMenuData, (MPARAM)m_titles[i].c_str());
             if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
             {
                 vError = ::WinGetLastError(vHabmain);
@@ -1051,7 +1051,7 @@ wxMenu* wxMenuBar::Remove(
 #endif // wxUSE_ACCEL
         Refresh();
     }
-    m_titles.Remove(nPos);
+    m_titles.RemoveAt(nPos);
     return pMenu;
 } // end of wxMenuBar::Remove
 
@@ -1065,10 +1065,10 @@ void wxMenuBar::RebuildAccelTable()
     size_t                          nAccelCount = 0;
     size_t                          i;
     size_t                          nCount = GetMenuCount();
-
-    for (i = 0; i < nCount; i++)
+    wxMenuList::iterator it;
+    for (i = 0, it = m_menus.begin(); i < nCount; i++, it++)
     {
-        nAccelCount += m_menus[i]->GetAccelCount();
+        nAccelCount += (*it)->GetAccelCount();
     }
 
     if (nAccelCount)
@@ -1076,9 +1076,9 @@ void wxMenuBar::RebuildAccelTable()
         wxAcceleratorEntry*         pAccelEntries = new wxAcceleratorEntry[nAccelCount];
 
         nAccelCount = 0;
-        for (i = 0; i < nCount; i++)
+        for (i = 0, it = m_menus.begin(); i < nCount; i++, it++)
         {
-            nAccelCount += m_menus[i]->CopyAccels(&pAccelEntries[nAccelCount]);
+            nAccelCount += (*it)->CopyAccels(&pAccelEntries[nAccelCount]);
         }
         m_vAccelTable = wxAcceleratorTable( nAccelCount
                                            ,pAccelEntries
@@ -1128,14 +1128,14 @@ int wxMenuBar::FindMenuItem(
 ) const
 {
     wxString                        sMenuLabel = wxStripMenuCodes(rMenuString);
-    size_t                          nCount = GetMenuCount();
-
-    for (size_t i = 0; i < nCount; i++)
+    size_t                          nCount = GetMenuCount(), i;
+    wxMenuList::const_iterator it;
+    for (i = 0, it = m_menus.begin(); i < nCount; i++, it++)
     {
         wxString                    sTitle = wxStripMenuCodes(m_titles[i]);
 
         if (rMenuString == sTitle)
-            return m_menus[i]->FindItem(rItemString);
+            return (*it)->FindItem(rItemString);
     }
     return wxNOT_FOUND;
 } // end of wxMenuBar::FindMenuItem
@@ -1149,13 +1149,13 @@ wxMenuItem* wxMenuBar::FindItem(
         *ppItemMenu = NULL;
 
     wxMenuItem*                     pItem = NULL;
-    size_t                          nCount = GetMenuCount();
-
-    for (size_t i = 0; !pItem && (i < nCount); i++)
+    size_t                          nCount = GetMenuCount(), i;
+    wxMenuList::const_iterator it;
+    for (i = 0, it = m_menus.begin(); !pItem && (i < nCount); i++, it++)
     {
-        pItem = m_menus[i]->FindItem( nId
-                                     ,ppItemMenu
-                                    );
+        pItem = (*it)->FindItem( nId
+                                ,ppItemMenu
+                               );
     }
     return pItem;
 } // end of wxMenuBar::FindItem
@@ -1170,14 +1170,14 @@ wxMenuItem* wxMenuBar::FindItem(
         *ppItemMenu = NULL;
 
     wxMenuItem*                     pItem = NULL;
-    size_t                          nCount = GetMenuCount();
-
-    for (size_t i = 0; !pItem && (i < nCount); i++)
+    size_t                          nCount = GetMenuCount(), i;
+    wxMenuList::const_iterator it;
+    for (i = 0, it = m_menus.begin(); !pItem && (i < nCount); i++, it++)
     {
-        pItem = m_menus[i]->FindItem( nId
-                                     ,hItem
-                                     ,ppItemMenu
-                                    );
+        pItem = (*it)->FindItem( nId
+                                ,hItem
+                                ,ppItemMenu
+                               );
     }
     return pItem;
 } // end of wxMenuBar::FindItem
