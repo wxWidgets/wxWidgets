@@ -24,6 +24,7 @@
   #include "wx/dcmemory.h"
   #include "wx/menu.h"
   #include "wx/utils.h"
+  #include "wx/settings.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN
