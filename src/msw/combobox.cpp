@@ -158,7 +158,7 @@ WXHBRUSH wxComboBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     else
         SetBkMode(hdc, OPAQUE);
 
-    wxColour& colBack = GetBackgroundColour();
+    wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled())
         colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);

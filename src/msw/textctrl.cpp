@@ -526,17 +526,8 @@ bool wxTextCtrl::CanPaste() const
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-    bool isEditable = IsEditable();
-
     HWND hWnd = GetHwnd();
     SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
-/*
-    if (editable != isEditable)
-    {
-       SetupColours();
-       Refresh();
-    }
-*/
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
@@ -982,7 +973,7 @@ WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     else
         SetBkMode(hdc, OPAQUE);
 
-    wxColour& colBack = GetBackgroundColour();
+    wxColour colBack = GetBackgroundColour();
 
     if (!IsEnabled() && (GetWindowStyle() & wxTE_MULTILINE) == 0)
         colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
