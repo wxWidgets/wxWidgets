@@ -13,6 +13,8 @@
 #pragma implementation "app.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/button.h"
@@ -35,7 +37,7 @@
 #include "wx/textctrl.h"
 #include "wx/menu.h"
 #if wxUSE_WX_RESOURCES
-#include "wx/resource.h"
+#  include "wx/resource.h"
 #endif
 
 #include <string.h>
@@ -53,16 +55,14 @@
 #include "wx/mac/uma.h"
 #include "wx/mac/macnotfy.h"
 
-#if wxUSE_SOCKETS
-    #ifdef __DARWIN__
-        #include <CoreServices/CoreServices.h>
-    #else
-        #include <Sound.h>
-        #include <Threads.h>
-        #include <ToolUtils.h>
-        #include <DiskInit.h>
-        #include <Devices.h>
-    #endif
+#ifdef __DARWIN__
+#  include <CoreServices/CoreServices.h>
+#else
+#  include <Sound.h>
+#  include <Threads.h>
+#  include <ToolUtils.h>
+#  include <DiskInit.h>
+#  include <Devices.h>
 #endif
 
 extern char *wxBuffer;
@@ -162,7 +162,7 @@ short wxApp::MacHandleAEQuit(const WXEVENTREF event , WXEVENTREF reply)
     return noErr ;
 }
 
-char StringMac[] =     "\x0d\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f"
+char StringMac[] =  "\x0d\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f"
                     "\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f"
                     "\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xae\xaf"
                     "\xb1\xb4\xb5\xb6\xbb\xbc\xbe\xbf"
