@@ -9,6 +9,4 @@
 // Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-
-IMPLEMENT_WXWIN_MAIN
+// We don't put main() in the library any more. GD.
