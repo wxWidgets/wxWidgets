@@ -11,7 +11,7 @@ dnl AM_PATH_GTK([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl Test for GTK, and define GTK_CFLAGS and GTK_LIBS
 dnl
 AC_DEFUN(AM_PATH_GTK,
-[dnl 
+[dnl
 dnl Get the cflags and libraries from the gtk-config script
 dnl
 AC_ARG_WITH(gtk-prefix,[**--with-gtk-prefix=PFX       Prefix where GTK is installed],
@@ -51,7 +51,7 @@ dnl
 #include <gtk/gtk.h>
 #include <stdio.h>
 
-int 
+int
 main ()
 {
   int major, minor, micro;
@@ -64,8 +64,8 @@ main ()
    if (gtk_minor_version > 0) return FALSE;
 
    return !((gtk_major_version > major) ||
-   	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
- 	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
+	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
+	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
 }
 ],, no_gtk=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
      CFLAGS="$ac_save_CFLAGS"
@@ -75,7 +75,7 @@ main ()
   fi
   if test "x$no_gtk" = x ; then
      AC_MSG_RESULT(yes)
-     ifelse([$2], , :, [$2])     
+     ifelse([$2], , :, [$2])
   else
      AC_MSG_RESULT(no)
      GTK_CFLAGS=""
@@ -185,7 +185,7 @@ AC_DEFUN(AC_INCLUDE_PATH_EXIST,
   if test $result = 0; then
     ac_path_to_include=""
   else
-    ac_path_to_include="-I$1"    
+    ac_path_to_include="-I$1"
   fi
 ])
 
@@ -197,7 +197,7 @@ AC_DEFUN(AC_LINK_PATH_EXIST,
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$1"    
+    ac_path_to_link="-L$1"
   fi
 ])
 
@@ -246,7 +246,7 @@ SEARCH_INCLUDE="\
     /usr/Motif1.2/include     \
     /usr/dt/include           \
     /usr/include/Xm           \
-			                  \
+                              \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
@@ -317,7 +317,7 @@ CFLAGS=`echo "$CFLAGS" | sed 's/-g//g'`
 
 dnl does compiler support -c and -o simultaniously
 AC_PROG_CC_C_O
-dnl   defines NO_MINUS_C_MINUS_O if compiler does not accept 
+dnl   defines NO_MINUS_C_MINUS_O if compiler does not accept
 dnl                              both switches simultaniously
 dnl what is the c-preprocessor
 AC_PROG_CPP
@@ -388,7 +388,7 @@ echo dummy > sub/file
 ${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
 RESULT=$?
 rm -f sub/file check final_file confMake
-rmdir sub 
+rmdir sub
 if test "$RESULT" = 0; then
   AC_MSG_RESULT(yes)
 else
@@ -403,7 +403,7 @@ export MAKE=gmake; ./configure  for sh-type shells
 setenv MAKE gmake; ./configure  for csh-type shells
 Also please do remember to use gmake in this case every time
 you are trying to compile.
-) 
+)
 fi
 
 dnl ####################
@@ -490,16 +490,16 @@ dnl # checks structures #
 dnl #####################
 
 AC_HEADER_STAT
-dnl   defines STAT_MACROS_BROKEN if S_ISDIR and S_ISREG 
+dnl   defines STAT_MACROS_BROKEN if S_ISDIR and S_ISREG
 dnl                              do not work properly
 AC_HEADER_TIME
 dnl   defines TIME_WITH_SYS_TIME if time.h and sys/time.h can
 dnl                              both be included
-AC_STRUCT_ST_BLKSIZE 
+AC_STRUCT_ST_BLKSIZE
 dnl   defines HAVE_ST_BLKSIZE if struct stat contains st_blksize
-AC_STRUCT_ST_BLOCKS 
+AC_STRUCT_ST_BLOCKS
 dnl   defines HAVE_ST_BLOCKS if struct stat contains st_blocks
-AC_STRUCT_ST_RDEV 
+AC_STRUCT_ST_RDEV
 dnl   defines HAVE_ST_RDEV if struct stat contains st_rdev
 AC_STRUCT_TM
 dnl   defines TM_IN_SYS_TIME if struct tm is not in time.h
@@ -545,10 +545,10 @@ dnl   defines HAVE_LONG_FILENAMES if filenames longer then
 dnl                               14 chars are supported
 
 dnl AC_SYS_RESTARTABLE_SYSCALLS
-dnl   defines HAVE_RESTARTABLE_SYSCALLS if the system restarts a 
+dnl   defines HAVE_RESTARTABLE_SYSCALLS if the system restarts a
 dnl                                     system call that is interrupted
 dnl                                     by a signal
-                                          
+
 dnl #################
 dnl # checks PARSER #
 dnl #################
@@ -566,7 +566,7 @@ dnl   defines LEXLIB with the appropriate library
 dnl what type is yytext
 AC_DECL_YYTEXT
 dnl   defines YYTEXT_POINTER  if yytext is char*
-dnl   defines LEX_OUTPUT_ROOT as to the base of the 
+dnl   defines LEX_OUTPUT_ROOT as to the base of the
 dnl                           filename output by the lexer
 
 dnl ###################################
@@ -605,7 +605,7 @@ if test x"$libltdl_cv_uscore" = xyes; then
 fnord() { int i=42;}
 main() { void *self, *ptr1, *ptr2; self=dlopen(NULL,RTLD_LAZY);
     if(self) { ptr1=dlsym(self,"fnord"); ptr2=dlsym(self,"_fnord");
-    if(ptr1 && !ptr2) exit(0); } exit(1); } 
+    if(ptr1 && !ptr2) exit(0); } exit(1); }
 ],	libltdl_cv_need_uscore=no, libltdl_cv_need_uscore=yes,
 	libltdl_cv_need_uscore=no
 )])
@@ -677,13 +677,13 @@ case "${canonical}" in
       AC_DEFINE(__ALPHA__)
     fi
   ;;
-  *-*-irix5* | *-*-irix6* ) 
+  *-*-irix5* | *-*-irix6* )
     USE_SGI=1
     USE_SVR4=1
     AC_DEFINE(__SGI__)
     AC_DEFINE(__SVR4__)
   ;;
-  *-*-solaris2* ) 
+  *-*-solaris2* )
     USE_SUN=1
     USE_SOLARIS=1
     USE_SVR4=1
@@ -691,7 +691,7 @@ case "${canonical}" in
     AC_DEFINE(__SOLARIS__)
     AC_DEFINE(__SVR4__)
   ;;
-  *-*-sunos4* ) 
+  *-*-sunos4* )
     USE_SUN=1
     USE_SUNOS=1
     USE_BSD=1
@@ -705,25 +705,25 @@ case "${canonical}" in
     AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__BSD__)
   ;;
-  *-*-osf* ) 
+  *-*-osf* )
     USE_ALPHA=1
     USE_OSF=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__OSF__)
   ;;
-  *-*-dgux5* ) 
+  *-*-dgux5* )
     USE_ALPHA=1
     USE_SVR4=1
     AC_DEFINE(__ALPHA__)
     AC_DEFINE(__SVR4__)
   ;;
-  *-*-sysv5* ) 
+  *-*-sysv5* )
     USE_SYSV=1
     USE_SVR4=1
     AC_DEFINE(__SYSV__)
     AC_DEFINE(__SVR4__)
   ;;
-  *-*-aix* ) 
+  *-*-aix* )
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
@@ -1096,17 +1096,17 @@ if test "$wxUSE_MOTIF" = 1; then
   else
      AC_MSG_ERROR(no)
   fi
-  
+
   GUI_TK_LINK="-lXm -lXpm -lXmu -lXt -lX11 -lm"
   GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
   TOOLKIT=MOTIF
-  TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
+  TOOLKIT_DEF=__WXMOTIF__
   WX_LINK=-lwx_motif2
   MAKEINCLUDE=../motif.inc
 fi
 
 if test "$TOOLKIT" = ""; then
-  AC_MSG_ERROR(You must specify a toolkit: --with-gtk --with-qt --with-motif) 
+  AC_MSG_ERROR(You must specify a toolkit: --with-gtk --with-qt --with-motif)
 fi
 
 AC_SUBST(GUI_TK_INCLUDE)
@@ -1204,7 +1204,7 @@ fi
 AC_SUBST(Z_C_SRC)
 
 if test "$wxUSE_LIBPNG" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_LIBPNG,$wxUSE_LIBPNG) 
+  AC_DEFINE_UNQUOTED(wxUSE_LIBPNG,$wxUSE_LIBPNG)
   PNG_C_SRC="\$(PNG_C_SRC)"
 fi
 AC_SUBST(PNG_C_SRC)
@@ -1212,14 +1212,14 @@ AC_SUBST(PNG_C_SRC)
 JPEG_LINK=""
 if test "$wxUSE_LIBJPEG" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_LIBJPEG,$wxUSE_LIBJPEG)
-  AC_CHECK_LIB(jpeg) 
+  AC_CHECK_LIB(jpeg)
   JPEG_LINK="-ljpeg"
 fi
 AC_SUBST(JPEG_LINK)
 
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_ODBC,$wxUSE_ODBC) 
+  AC_DEFINE_UNQUOTED(wxUSE_ODBC,$wxUSE_ODBC)
   IODBC_C_SRC="\$(IODBC_C_SRC)"
 fi
 AC_SUBST(IODBC_C_SRC)
@@ -1396,6 +1396,15 @@ if test "$wxUSE_THREADS" = "1"; then
      ])
     ])
 
+    if test "x$THREADS_LINK" = "x"; then
+        dnl thread functions are in libc_r under FreeBSD
+        AC_CHECK_LIB(c_r, pthread_create,
+                    [
+                        UNIX_THREAD="gtk/threadpsx.cpp"
+                        THREADS_LINK="-lc_r"
+                    ])
+    fi
+
     if test "$THREADS_LINK" != ""; then
       AC_DEFINE(wxUSE_THREADS)
     fi
@@ -1405,7 +1414,7 @@ if test "$wxUSE_THREADS" = "1"; then
     AC_CHECK_LIB(posix4, printf, [
       THREADS_LINK="$THREADS_LINK -lposix4"
     ])
-    
+
 fi
 
 if test "$wxUSE_MOTIF" = "1"; then
@@ -1448,14 +1457,14 @@ case "${canonical}" in
     CREATE_SHARED=sharedLinux
   ;;
 
-  *-*-irix5* | *-*-irix6* ) 
+  *-*-irix5* | *-*-irix6* )
     # PICFLAGS can remain empty, as pic is the default
     LDFLAGS="-Wl,+s"
     CREATE_SHARED=sharedIrix
     AC_DEFINE(SVR4)
   ;;
 
-  *-*-solaris2* ) 
+  *-*-solaris2* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-KPIC"
     else
@@ -1465,7 +1474,7 @@ case "${canonical}" in
     AC_DEFINE(SVR4)
   ;;
 
-  *-*-sunos4* ) 
+  *-*-sunos4* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-PIC"
     else
@@ -1482,12 +1491,12 @@ case "${canonical}" in
     AC_DEFINE(BSD)
   ;;
 
-  *-*-osf* ) 
+  *-*-osf* )
     PICFLAGS="-fPIC"
     CREATE_SHARED=sharedOSF
   ;;
 
-  *-*-dgux5* ) 
+  *-*-dgux5* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
@@ -1497,7 +1506,7 @@ case "${canonical}" in
     AC_DEFINE(SVR4)
   ;;
 
-  *-*-sysv5* ) 
+  *-*-sysv5* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
@@ -1507,7 +1516,7 @@ case "${canonical}" in
     AC_DEFINE(SVR4)
   ;;
 
-  *-*-aix* ) 
+  *-*-aix* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-bM\:SRE"
     else

@@ -636,7 +636,7 @@ SEARCH_INCLUDE="\
     /usr/Motif1.2/include     \
     /usr/dt/include           \
     /usr/include/Xm           \
-			                  \
+                              \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
@@ -1415,14 +1415,14 @@ echo dummy > sub/file
 ${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
 RESULT=$?
 rm -f sub/file check final_file confMake
-rmdir sub 
+rmdir sub
 if test "$RESULT" = 0; then
   echo "$ac_t""yes" 1>&6
 else
   echo "$ac_t""no" 1>&6
   { echo "configure: error: You need a make-utility that is able to use the variable
 VPATH correctly.
-If your version of make does not support VPATH correctly" 1>&2; exit 1; } 
+If your version of make does not support VPATH correctly" 1>&2; exit 1; }
 fi
 
 
@@ -3636,7 +3636,7 @@ if test $ac_cv_struct_st_blksize = yes; then
 EOF
 
 fi
- 
+
 echo $ac_n "checking for st_blocks in struct stat""... $ac_c" 1>&6
 echo "configure:3642: checking for st_blocks in struct stat" >&5
 if eval "test \"`echo '$''{'ac_cv_struct_st_blocks'+set}'`\" = set"; then
@@ -3672,7 +3672,7 @@ EOF
 else
   LIBOBJS="$LIBOBJS fileblocks.o"
 fi
- 
+
 echo $ac_n "checking for st_rdev in struct stat""... $ac_c" 1>&6
 echo "configure:3678: checking for st_rdev in struct stat" >&5
 if eval "test \"`echo '$''{'ac_cv_struct_st_rdev'+set}'`\" = set"; then
@@ -3706,7 +3706,7 @@ if test $ac_cv_struct_st_rdev = yes; then
 EOF
 
 fi
- 
+
 echo $ac_n "checking whether struct tm is in sys/time.h or time.h""... $ac_c" 1>&6
 echo "configure:3712: checking whether struct tm is in sys/time.h or time.h" >&5
 if eval "test \"`echo '$''{'ac_cv_struct_tm'+set}'`\" = set"; then
@@ -4331,7 +4331,7 @@ EOF
 fi
 
 
-                                          
+
 
 for ac_prog in 'bison -y' byacc
 do
@@ -4757,7 +4757,7 @@ else
 fnord() { int i=42;}
 main() { void *self, *ptr1, *ptr2; self=dlopen(NULL,RTLD_LAZY);
     if(self) { ptr1=dlsym(self,"fnord"); ptr2=dlsym(self,"_fnord");
-    if(ptr1 && !ptr2) exit(0); } exit(1); } 
+    if(ptr1 && !ptr2) exit(0); } exit(1); }
 
 EOF
 if { (eval echo configure:4764: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
@@ -4925,7 +4925,7 @@ EOF
 
     fi
   ;;
-  *-*-irix5* | *-*-irix6* ) 
+  *-*-irix5* | *-*-irix6* )
     USE_SGI=1
     USE_SVR4=1
     cat >> confdefs.h <<\EOF
@@ -4937,7 +4937,7 @@ EOF
 EOF
 
   ;;
-  *-*-solaris2* ) 
+  *-*-solaris2* )
     USE_SUN=1
     USE_SOLARIS=1
     USE_SVR4=1
@@ -4954,7 +4954,7 @@ EOF
 EOF
 
   ;;
-  *-*-sunos4* ) 
+  *-*-sunos4* )
     USE_SUN=1
     USE_SUNOS=1
     USE_BSD=1
@@ -4983,7 +4983,7 @@ EOF
 EOF
 
   ;;
-  *-*-osf* ) 
+  *-*-osf* )
     USE_ALPHA=1
     USE_OSF=1
     cat >> confdefs.h <<\EOF
@@ -4995,7 +4995,7 @@ EOF
 EOF
 
   ;;
-  *-*-dgux5* ) 
+  *-*-dgux5* )
     USE_ALPHA=1
     USE_SVR4=1
     cat >> confdefs.h <<\EOF
@@ -5007,7 +5007,7 @@ EOF
 EOF
 
   ;;
-  *-*-sysv5* ) 
+  *-*-sysv5* )
     USE_SYSV=1
     USE_SVR4=1
     cat >> confdefs.h <<\EOF
@@ -5019,7 +5019,7 @@ EOF
 EOF
 
   ;;
-  *-*-aix* ) 
+  *-*-aix* )
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
@@ -6487,7 +6487,7 @@ else
 #include <gtk/gtk.h>
 #include <stdio.h>
 
-int 
+int
 main ()
 {
   int major, minor, micro;
@@ -6500,8 +6500,8 @@ main ()
    if (gtk_minor_version > 0) return FALSE;
 
    return !((gtk_major_version > major) ||
-   	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
- 	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
+	    ((gtk_major_version == major) && (gtk_minor_version > minor)) ||
+	    ((gtk_major_version == major) && (gtk_minor_version == minor) && (gtk_micro_version >= micro)));
 }
 
 EOF
@@ -6527,7 +6527,7 @@ fi
      
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
-       
+  
   else
      echo "$ac_t""no" 1>&6
      GTK_CFLAGS=""
@@ -6580,7 +6580,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_include=""
   else
-    ac_path_to_include="-I$ac_find_includes"    
+    ac_path_to_include="-I$ac_find_includes"
   fi
 
        
@@ -6589,7 +6589,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$ac_find_libraries"    
+    ac_path_to_link="-L$ac_find_libraries"
   fi
 
        CHECK_LINK="$CHECK_INCLUDE $ac_path_to_link"
@@ -6645,7 +6645,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_include=""
   else
-    ac_path_to_include="-I$ac_find_includes"    
+    ac_path_to_include="-I$ac_find_includes"
   fi
 
        
@@ -6654,7 +6654,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$ac_find_libraries"    
+    ac_path_to_link="-L$ac_find_libraries"
   fi
 
        CHECK_LINK="$CHECK_LIB $ac_path_to_link"
@@ -6681,7 +6681,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$ac_find_libraries"    
+    ac_path_to_link="-L$ac_find_libraries"
   fi
 
          CHECK_LINK="$CHECK_LIB $ac_path_to_link"
@@ -6707,7 +6707,7 @@ for ac_dir in $SEARCH_LIB;
   if test $result = 0; then
     ac_path_to_link=""
   else
-    ac_path_to_link="-L$ac_find_libraries"    
+    ac_path_to_link="-L$ac_find_libraries"
   fi
 
            CHECK_LINK="$CHECK_LIB $ac_path_to_link"
@@ -6724,17 +6724,17 @@ for ac_dir in $SEARCH_LIB;
   else
      { echo "configure: error: no" 1>&2; exit 1; }
   fi
-  
+
   GUI_TK_LINK="-lXm -lXpm -lXmu -lXt -lX11 -lm"
   GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
   TOOLKIT=MOTIF
-  TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
+  TOOLKIT_DEF=__WXMOTIF__
   WX_LINK=-lwx_motif2
   MAKEINCLUDE=../motif.inc
 fi
 
 if test "$TOOLKIT" = ""; then
-  { echo "configure: error: You must specify a toolkit: --with-gtk --with-qt --with-motif" 1>&2; exit 1; } 
+  { echo "configure: error: You must specify a toolkit: --with-gtk --with-qt --with-motif" 1>&2; exit 1; }
 fi
 
 
@@ -6847,7 +6847,7 @@ if test "$wxUSE_LIBPNG" = 1 ; then
   cat >> confdefs.h <<EOF
 #define wxUSE_LIBPNG $wxUSE_LIBPNG
 EOF
- 
+
   PNG_C_SRC="\$(PNG_C_SRC)"
 fi
 
@@ -6904,7 +6904,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 fi
- 
+
   JPEG_LINK="-ljpeg"
 fi
 
@@ -6914,7 +6914,7 @@ if test "$wxUSE_ODBC" = 1 ; then
   cat >> confdefs.h <<EOF
 #define wxUSE_ODBC $wxUSE_ODBC
 EOF
- 
+
   IODBC_C_SRC="\$(IODBC_C_SRC)"
 fi
 
@@ -7396,6 +7396,52 @@ fi
 fi
 
 
+    if test "x$THREADS_LINK" = "x"; then
+                echo $ac_n "checking for pthread_create in -lc_r""... $ac_c" 1>&6
+echo "configure:7402: checking for pthread_create in -lc_r" >&5
+ac_lib_var=`echo c_r'_'pthread_create | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lc_r  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 7410 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char pthread_create();
+
+int main() {
+pthread_create()
+; return 0; }
+EOF
+if { (eval echo configure:7421: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  
+                        UNIX_THREAD="gtk/threadpsx.cpp"
+                        THREADS_LINK="-lc_r"
+                    
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+    fi
+
     if test "$THREADS_LINK" != ""; then
       cat >> confdefs.h <<\EOF
 #define wxUSE_THREADS 1
@@ -7405,7 +7451,7 @@ EOF
 
     
     echo $ac_n "checking for printf in -lposix4""... $ac_c" 1>&6
-echo "configure:7409: checking for printf in -lposix4" >&5
+echo "configure:7455: checking for printf in -lposix4" >&5
 ac_lib_var=`echo posix4'_'printf | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -7413,7 +7459,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lposix4  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 7417 "configure"
+#line 7463 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -7424,7 +7470,7 @@ int main() {
 printf()
 ; return 0; }
 EOF
-if { (eval echo configure:7428: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:7474: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -7446,7 +7492,7 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-    
+
 fi
 
 if test "$wxUSE_MOTIF" = "1"; then
@@ -7483,7 +7529,7 @@ case "${canonical}" in
     CREATE_SHARED=sharedLinux
   ;;
 
-  *-*-irix5* | *-*-irix6* ) 
+  *-*-irix5* | *-*-irix6* )
     # PICFLAGS can remain empty, as pic is the default
     LDFLAGS="-Wl,+s"
     CREATE_SHARED=sharedIrix
@@ -7493,7 +7539,7 @@ EOF
 
   ;;
 
-  *-*-solaris2* ) 
+  *-*-solaris2* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-KPIC"
     else
@@ -7506,7 +7552,7 @@ EOF
 
   ;;
 
-  *-*-sunos4* ) 
+  *-*-sunos4* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-PIC"
     else
@@ -7529,12 +7575,12 @@ EOF
 
   ;;
 
-  *-*-osf* ) 
+  *-*-osf* )
     PICFLAGS="-fPIC"
     CREATE_SHARED=sharedOSF
   ;;
 
-  *-*-dgux5* ) 
+  *-*-dgux5* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
@@ -7547,7 +7593,7 @@ EOF
 
   ;;
 
-  *-*-sysv5* ) 
+  *-*-sysv5* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-K PIC"
     else
@@ -7560,7 +7606,7 @@ EOF
 
   ;;
 
-  *-*-aix* ) 
+  *-*-aix* )
     if test "$GCC" != "yes" ; then
       PICFLAGS="-bM\:SRE"
     else
