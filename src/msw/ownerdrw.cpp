@@ -73,11 +73,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   wxMemoryDC dc;
   dc.SetFont(GetFont());
 
-  // ## ugly...
-  wxChar *szStripped = new wxChar[m_strName.Len()];
-  wxStripMenuCodes((wxChar *)m_strName.c_str(), szStripped);
-  wxString str = szStripped;
-  delete [] szStripped;
+  wxString str = wxStripMenuCodes(m_strName);
 
   // # without this menu items look too tightly packed (at least under Windows)
   str += wxT('W'); // 'W' is typically the widest letter
