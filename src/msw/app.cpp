@@ -1005,6 +1005,15 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
     s_inOnIdle = TRUE;
 
+    // If there are pending events, we must process them: pending events
+    // are either events to the threads other than main or events posted
+    // with wxPostEvent() functions
+    // GRG: I have moved this here so that all pending events are processed
+    //   before starting to delete any objects. This behaves better (in
+    //   particular, wrt wxPostEvent) and is coherent with wxGTK's current
+    //   behaviour. Changed Feb/2000 before 2.1.14
+    ProcessPendingEvents();
+
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();
 
@@ -1022,11 +1031,6 @@ void wxApp::OnIdle(wxIdleEvent& event)
         // idle events
         event.RequestMore(TRUE);
     }
-
-    // If they are pending events, we must process them: pending events are
-    // either events to the threads other than main or events posted with
-    // wxPostEvent() functions
-    ProcessPendingEvents();
 
     s_inOnIdle = FALSE;
 }
