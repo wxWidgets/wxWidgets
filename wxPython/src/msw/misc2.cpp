@@ -4338,6 +4338,7 @@ static PyObject *_wrap_wxPyTimer_SetOwner(PyObject *self, PyObject *args, PyObje
 #define wxPyTimer_Start(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Start(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyTimer_Start(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    bool  _result;
     wxPyTimer * _arg0;
     int  _arg1 = (int ) -1;
     int  _arg2 = (int ) FALSE;
@@ -4356,12 +4357,11 @@ static PyObject *_wrap_wxPyTimer_Start(PyObject *self, PyObject *args, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyTimer_Start(_arg0,_arg1,_arg2);
+    _result = (bool )wxPyTimer_Start(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
