@@ -2451,7 +2451,7 @@ static PyObject *_wrap_new_wxSplashScreen(PyObject *self, PyObject *args, PyObje
     wxWindowID  _arg4;
     wxPoint * _arg5 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg6 = (wxSize *) &wxDefaultSize;
-    long  _arg7 = (long ) wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT;
+    long  _arg7 = (long ) wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP;
     PyObject * _argo0 = 0;
     PyObject * _argo3 = 0;
     wxPoint  temp;

@@ -1006,14 +1006,6 @@ def wxGetClientDisplayRect(*_args, **_kwargs):
 
 wxSetCursor = misc2c.wxSetCursor
 
-def wxFindWindowByLabel(*_args, **_kwargs):
-    val = apply(misc2c.wxFindWindowByLabel,_args,_kwargs)
-    return val
-
-def wxFindWindowByName(*_args, **_kwargs):
-    val = apply(misc2c.wxFindWindowByName,_args,_kwargs)
-    return val
-
 wxBeginBusyCursor = misc2c.wxBeginBusyCursor
 
 def wxGetActiveWindow(*_args, **_kwargs):

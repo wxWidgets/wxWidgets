@@ -1295,82 +1295,6 @@ static PyObject *_wrap_wxSetCursor(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
-static PyObject *_wrap_wxFindWindowByLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _result;
-    wxString * _arg0;
-    wxWindow * _arg1 = (wxWindow *) NULL;
-    PyObject * _obj0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "label","parent", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxFindWindowByLabel",_kwnames,&_obj0,&_argo1)) 
-        return NULL;
-{
-    _arg0 = wxString_in_helper(_obj0);
-    if (_arg0 == NULL)
-        return NULL;
-}
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindWindowByLabel. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxWindow *)wxFindWindowByLabel(*_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxFindWindowByName(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxWindow * _result;
-    wxString * _arg0;
-    wxWindow * _arg1 = (wxWindow *) NULL;
-    PyObject * _obj0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "name","parent", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxFindWindowByName",_kwnames,&_obj0,&_argo1)) 
-        return NULL;
-{
-    _arg0 = wxString_in_helper(_obj0);
-    if (_arg0 == NULL)
-        return NULL;
-}
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindWindowByName. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxWindow *)wxFindWindowByName(*_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxBeginBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxCursor * _arg0 = (wxCursor *) wxHOURGLASS_CURSOR;
@@ -10150,8 +10074,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxGenericFindWindowAtPoint", (PyCFunction) _wrap_wxGenericFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetActiveWindow", (PyCFunction) _wrap_wxGetActiveWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBeginBusyCursor", (PyCFunction) _wrap_wxBeginBusyCursor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetClientDisplayRect", (PyCFunction) _wrap_wxGetClientDisplayRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxClientDisplayRect", (PyCFunction) _wrap_wxClientDisplayRect, METH_VARARGS | METH_KEYWORDS },

@@ -362,6 +362,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def RefreshRect(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_RefreshRect,(self,) + _args, _kwargs)
         return val
+    def AddChild(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_AddChild,(self,) + _args, _kwargs)
+        return val
     def RemoveChild(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_RemoveChild,(self,) + _args, _kwargs)
         return val
@@ -459,6 +462,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetCursor(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetCursor,(self,) + _args, _kwargs)
+        return val
+    def GetCursor(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetCursor,(self,) + _args, _kwargs)
+        if val: val = wxCursorPtr(val) 
         return val
     def SetEventHandler(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetEventHandler,(self,) + _args, _kwargs)
@@ -1104,6 +1111,18 @@ class wxMenuItem(wxMenuItemPtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+def wxFindWindowById(*_args, **_kwargs):
+    val = apply(windowsc.wxFindWindowById,_args,_kwargs)
+    return val
+
+def wxFindWindowByName(*_args, **_kwargs):
+    val = apply(windowsc.wxFindWindowByName,_args,_kwargs)
+    return val
+
+def wxFindWindowByLabel(*_args, **_kwargs):
+    val = apply(windowsc.wxFindWindowByLabel,_args,_kwargs)
+    return val
 
 wxValidator_IsSilent = windowsc.wxValidator_IsSilent
 

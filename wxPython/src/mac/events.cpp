@@ -3212,6 +3212,207 @@ static PyObject *_wrap_wxMouseCaptureChangedEvent_GetCapturedWindow(PyObject *se
     return _resultobj;
 }
 
+static void *SwigwxSetCursorEventTowxEvent(void *ptr) {
+    wxSetCursorEvent *src;
+    wxEvent *dest;
+    src = (wxSetCursorEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSetCursorEventTowxObject(void *ptr) {
+    wxSetCursorEvent *src;
+    wxObject *dest;
+    src = (wxSetCursorEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxSetCursorEvent(_swigarg0,_swigarg1) (new wxSetCursorEvent(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxSetCursorEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSetCursorEvent * _result;
+    wxCoord  _arg0 = (wxCoord ) 0;
+    wxCoord  _arg1 = (wxCoord ) 0;
+    char *_kwnames[] = { "x","y", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxSetCursorEvent",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxSetCursorEvent *)new_wxSetCursorEvent(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSetCursorEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSetCursorEvent_GetX(_swigobj)  (_swigobj->GetX())
+static PyObject *_wrap_wxSetCursorEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCoord  _result;
+    wxSetCursorEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursorEvent_GetX",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSetCursorEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursorEvent_GetX. Expected _wxSetCursorEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCoord )wxSetCursorEvent_GetX(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSetCursorEvent_GetY(_swigobj)  (_swigobj->GetY())
+static PyObject *_wrap_wxSetCursorEvent_GetY(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCoord  _result;
+    wxSetCursorEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursorEvent_GetY",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSetCursorEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursorEvent_GetY. Expected _wxSetCursorEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCoord )wxSetCursorEvent_GetY(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSetCursorEvent_SetCursor(_swigobj,_swigarg0)  (_swigobj->SetCursor(_swigarg0))
+static PyObject *_wrap_wxSetCursorEvent_SetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSetCursorEvent * _arg0;
+    wxCursor * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","cursor", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSetCursorEvent_SetCursor",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSetCursorEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursorEvent_SetCursor. Expected _wxSetCursorEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSetCursorEvent_SetCursor. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSetCursorEvent_SetCursor(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSetCursorEvent_GetCursor(_swigobj)  (_swigobj->GetCursor())
+static PyObject *_wrap_wxSetCursorEvent_GetCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    wxSetCursorEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursorEvent_GetCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSetCursorEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursorEvent_GetCursor. Expected _wxSetCursorEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxCursor & _result_ref = wxSetCursorEvent_GetCursor(_arg0);
+    _result = (wxCursor *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSetCursorEvent_HasCursor(_swigobj)  (_swigobj->HasCursor())
+static PyObject *_wrap_wxSetCursorEvent_HasCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSetCursorEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSetCursorEvent_HasCursor",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSetCursorEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSetCursorEvent_HasCursor. Expected _wxSetCursorEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxSetCursorEvent_HasCursor(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxKeyEventTowxEvent(void *ptr) {
     wxKeyEvent *src;
     wxEvent *dest;
@@ -7497,6 +7698,12 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxKeyEvent_MetaDown", (PyCFunction) _wrap_wxKeyEvent_MetaDown, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_ControlDown", (PyCFunction) _wrap_wxKeyEvent_ControlDown, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxKeyEvent", (PyCFunction) _wrap_new_wxKeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursorEvent_HasCursor", (PyCFunction) _wrap_wxSetCursorEvent_HasCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursorEvent_GetCursor", (PyCFunction) _wrap_wxSetCursorEvent_GetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursorEvent_SetCursor", (PyCFunction) _wrap_wxSetCursorEvent_SetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursorEvent_GetY", (PyCFunction) _wrap_wxSetCursorEvent_GetY, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSetCursorEvent_GetX", (PyCFunction) _wrap_wxSetCursorEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxSetCursorEvent", (PyCFunction) _wrap_new_wxSetCursorEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseCaptureChangedEvent_GetCapturedWindow", (PyCFunction) _wrap_wxMouseCaptureChangedEvent_GetCapturedWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMouseCaptureChangedEvent", (PyCFunction) _wrap_new_wxMouseCaptureChangedEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMouseEvent_m_linesPerAction_get", (PyCFunction) _wrap_wxMouseEvent_m_linesPerAction_get, METH_VARARGS | METH_KEYWORDS },
@@ -7636,6 +7843,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvent","_wxMoveEvent",SwigwxMoveEventTowxEvent},
     { "_wxEvent","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxEvent},
     { "_wxEvent","_wxKeyEvent",SwigwxKeyEventTowxEvent},
+    { "_wxEvent","_wxSetCursorEvent",SwigwxSetCursorEventTowxEvent},
     { "_wxEvent","_wxMouseCaptureChangedEvent",SwigwxMouseCaptureChangedEventTowxEvent},
     { "_wxEvent","_wxMouseEvent",SwigwxMouseEventTowxEvent},
     { "_wxEvent","_wxSpinEvent",SwigwxSpinEventTowxEvent},
@@ -7728,6 +7936,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxMoveEvent",SwigwxMoveEventTowxObject},
     { "_wxObject","_wxNavigationKeyEvent",SwigwxNavigationKeyEventTowxObject},
     { "_wxObject","_wxKeyEvent",SwigwxKeyEventTowxObject},
+    { "_wxObject","_wxSetCursorEvent",SwigwxSetCursorEventTowxObject},
     { "_wxObject","_wxMouseCaptureChangedEvent",SwigwxMouseCaptureChangedEventTowxObject},
     { "_wxObject","_wxMouseEvent",SwigwxMouseEventTowxObject},
     { "_wxObject","_wxSpinEvent",SwigwxSpinEventTowxObject},
