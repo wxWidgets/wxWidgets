@@ -121,7 +121,7 @@ wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl *cal)
                             wxDefaultPosition,
                             wxDefaultSize,
                             0, NULL,
-                            wxCB_READONLY)
+                            wxCB_READONLY | wxCLIP_SIBLINGS)
 {
     m_cal = cal;
 
@@ -140,7 +140,7 @@ wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl *cal)
                            cal->GetDate().Format(_T("%Y")),
                            wxDefaultPosition,
                            wxDefaultSize,
-                           wxSP_ARROW_KEYS,
+                           wxSP_ARROW_KEYS | wxCLIP_SIBLINGS,
                            -4300, 10000, cal->GetDate().GetYear())
 {
     m_cal = cal;
@@ -189,7 +189,8 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
                             const wxString& name)
 {
     if ( !wxControl::Create(parent, id, pos, size,
-                            style | wxWANTS_CHARS, wxDefaultValidator, name) )
+                            style | wxCLIP_CHILDREN | wxWANTS_CHARS,
+                            wxDefaultValidator, name) )
     {
         return FALSE;
     }
