@@ -1,0 +1,476 @@
+<?xml version="1.0"?>
+<resource>
+  <dialog name="dlg1">
+    <title>Catalog settings</title>
+    <children>
+      <boxsizer>
+        <orient>wxVERTICAL</orient>
+        <children>
+          <sizeritem>
+            <window>
+              <notebook>
+                <usenotebooksizer>1</usenotebooksizer>
+                <children>
+                  <notebookpage>
+                    <window>
+                      <panel>
+                        <children>
+                          <boxsizer>
+                            <orient>wxVERTICAL</orient>
+                            <children>
+                              <sizeritem>
+                                <window>
+                                  <flexgridsizer>
+                                    <children>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Project name and version:</label>
+                                          </statictext>
+                                        </window>
+                                        <flag>wxLEFT|wxTOP|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="prj_name">
+                                            <size>100,-1d</size>
+                                          </textctrl>
+                                        </window>
+                                        <flag>wxEXPAND|wxRIGHT|wxTOP</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Team:</label>
+                                          </statictext>
+                                        </window>
+                                        <flag>wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="team_name"/>
+                                        </window>
+                                        <flag>wxEXPAND|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Team's e-mail address:</label>
+                                          </statictext>
+                                        </window>
+                                        <flag>wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="team_email"/>
+                                        </window>
+                                        <flag>wxEXPAND|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Language:</label>
+                                          </statictext>
+                                        </window>
+                                        <flag>wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <combobox name="language">
+                                            <style>wxCB_READONLY</style>
+                                          </combobox>
+                                        </window>
+                                        <flag>wxEXPAND|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Charset:</label>
+                                          </statictext>
+                                        </window>
+                                        <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <combobox name="charset">
+                                            <content>
+                                              <item>iso8859-1</item>
+                                              <item>iso8859-2</item>
+                                              <item>iso8859-3</item>
+                                              <item>iso8859-4</item>
+                                              <item>iso8859-5</item>
+                                              <item>iso8859-6</item>
+                                              <item>iso8859-7</item>
+                                              <item>iso8859-8</item>
+                                              <item>iso8859-9</item>
+                                              <item>iso8859-10</item>
+                                              <item>iso8859-11</item>
+                                              <item>iso8859-12</item>
+                                              <item>iso8859-13</item>
+                                              <item>iso8859-14</item>
+                                              <item>iso8859-15</item>
+                                              <item>koi8-r</item>
+                                              <item>windows-1250</item>
+                                              <item>windows-1251</item>
+                                              <item>windows-1252</item>
+                                              <item>windows-1253</item>
+                                              <item>windows-1254</item>
+                                              <item>windows-1255</item>
+                                              <item>windows-1256</item>
+                                              <item>windows-1257</item>
+                                            </content>
+                                            <style>wxCB_READONLY</style>
+                                          </combobox>
+                                        </window>
+                                        <flag>wxEXPAND|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <spacer/>
+                                    </children>
+                                    <cols>2</cols>
+                                    <vgap>10</vgap>
+                                    <hgap>5</hgap>
+                                  </flexgridsizer>
+                                </window>
+                                <flag>wxALIGN_RIGHT</flag>
+                              </sizeritem>
+                            </children>
+                          </boxsizer>
+                        </children>
+                        <style>wxTAB_TRAVERSAL</style>
+                      </panel>
+                    </window>
+                    <label>Project info</label>
+                  </notebookpage>
+                  <notebookpage>
+                    <window>
+                      <panel>
+                        <children>
+                          <boxsizer>
+                            <orient>wxVERTICAL</orient>
+                            <children>
+                              <sizeritem>
+                                <window>
+                                  <boxsizer>
+                                    <orient>wxHORIZONTAL</orient>
+                                    <children>
+                                      <sizeritem>
+                                        <window>
+                                          <statictext>
+                                            <label>Base path: </label>
+                                          </statictext>
+                                        </window>
+                                        <border>10</border>
+                                        <flag>wxALIGN_CENTER_VERTICAL</flag>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="basepath"/>
+                                        </window>
+                                        <option>1</option>
+                                      </sizeritem>
+                                    </children>
+                                  </boxsizer>
+                                </window>
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>10</border>
+                              </sizeritem>
+                              <sizeritem>
+                                <window>
+                                  <statictext>
+                                    <label>Search files in these paths (relative to base path):</label>
+                                  </statictext>
+                                </window>
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>10</border>
+                              </sizeritem>
+                              <sizeritem>
+                                <window>
+                                  <listbox name="dirs_list">
+                                    <size>-1,80d</size>
+                                  </listbox>
+                                </window>
+                                <flag>wxEXPAND|wxALL</flag>
+                                <option>1</option>
+                                <border>10</border>
+                              </sizeritem>
+                              <sizeritem>
+                                <window>
+                                  <boxsizer>
+                                    <orient>wxHORIZONTAL</orient>
+                                    <children>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="dir_input"/>
+                                        </window>
+                                        <option>1</option>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <button name="dir_add">
+                                            <label>Add</label>
+                                          </button>
+                                        </window>
+                                        <flag>wxLEFT|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <button name="dir_remove">
+                                            <label>Remove</label>
+                                          </button>
+                                        </window>
+                                      </sizeritem>
+                                    </children>
+                                  </boxsizer>
+                                </window>
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                                <border>10</border>
+                              </sizeritem>
+                            </children>
+                          </boxsizer>
+                        </children>
+                        <style>wxTAB_TRAVERSAL</style>
+                      </panel>
+                    </window>
+                    <label>Paths</label>
+                  </notebookpage>
+                  <notebookpage>
+                    <window>
+                      <panel>
+                        <children>
+                          <boxsizer>
+                            <orient>wxVERTICAL</orient>
+                            <children>
+                              <sizeritem>
+                                <window>
+                                  <statictext>
+                                    <label>Use these keywords (function names) to recognize translatable strings\nin source files, in addition to default ones:</label>
+                                  </statictext>
+                                </window>
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+                                <border>10</border>
+                              </sizeritem>
+                              <sizeritem>
+                                <window>
+                                  <listbox name="keywords_list">
+                                    <size>-1,80d</size>
+                                  </listbox>
+                                </window>
+                                <flag>wxEXPAND|wxALL</flag>
+                                <option>1</option>
+                                <border>10</border>
+                              </sizeritem>
+                              <sizeritem>
+                                <window>
+                                  <boxsizer>
+                                    <orient>wxHORIZONTAL</orient>
+                                    <children>
+                                      <sizeritem>
+                                        <window>
+                                          <textctrl name="keyword_input"/>
+                                        </window>
+                                        <option>1</option>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <button name="keyword_add">
+                                            <label>Add</label>
+                                          </button>
+                                        </window>
+                                        <flag>wxLEFT|wxRIGHT</flag>
+                                        <border>10</border>
+                                      </sizeritem>
+                                      <sizeritem>
+                                        <window>
+                                          <button name="keyword_remove">
+                                            <label>Remove</label>
+                                          </button>
+                                        </window>
+                                      </sizeritem>
+                                    </children>
+                                  </boxsizer>
+                                </window>
+                                <flag>wxEXPAND|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                                <border>10</border>
+                              </sizeritem>
+                            </children>
+                          </boxsizer>
+                        </children>
+                        <style>wxTAB_TRAVERSAL</style>
+                      </panel>
+                    </window>
+                    <label>Keywords</label>
+                  </notebookpage>
+                </children>
+              </notebook>
+            </window>
+            <option>1</option>
+            <border>10</border>
+            <flag>wxEXPAND|wxALL</flag>
+          </sizeritem>
+          <sizeritem>
+            <window>
+              <boxsizer>
+                <children>
+                  <sizeritem>
+                    <window>
+                      <button name="wxID_OK">
+                        <label>Ok</label>
+                        <default>1</default>
+                      </button>
+                    </window>
+                    <flag/>
+                  </sizeritem>
+                  <sizeritem>
+                    <window>
+                      <button name="wxID_CANCEL">
+                        <label>Cancel</label>
+                      </button>
+                    </window>
+                    <border>10</border>
+                    <flag>wxLEFT</flag>
+                  </sizeritem>
+                </children>
+              </boxsizer>
+            </window>
+            <flag>wxALL|wxALIGN_RIGHT</flag>
+            <border>10</border>
+          </sizeritem>
+        </children>
+      </boxsizer>
+    </children>
+    <style>wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL</style>
+  </dialog>
+  <menubar name="mainmenu">
+    <children>
+      <menu name="menu_file">
+        <label>$File</label>
+        <style>wxMENU_TEAROFF</style>
+        <children>
+          <menuitem name="menu_about">
+            <label>$About...</label>
+          </menuitem>
+          <separator/>
+          <menuitem name="menu_dlg1">
+            <label>Dialog 1</label>
+          </menuitem>
+          <menuitem name="menu_dlg2">
+            <label>Dialog 2</label>
+          </menuitem>
+          <separator/>
+          <menuitem name="menu_quit">
+            <label>E$xit\tAlt-X</label>
+          </menuitem>
+        </children>
+      </menu>
+    </children>
+    <style>wxMB_DOCKABLE</style>
+  </menubar>
+  <dialog name="dlg2">
+    <title>Updating catalog</title>
+    <children>
+      <boxsizer>
+        <orient>wxVERTICAL</orient>
+        <children>
+          <sizeritem>
+            <window>
+              <boxsizer>
+                <children>
+                  <sizeritem>
+                    <window>
+                      <staticbitmap>
+                        <bitmap>scanning.gif</bitmap>
+                      </staticbitmap>
+                    </window>
+                    <border>25</border>
+                    <flag>wxALL|wxALIGN_CENTER_VERTICAL</flag>
+                  </sizeritem>
+                  <sizeritem>
+                    <window>
+                      <boxsizer>
+                        <orient>wxVERTICAL</orient>
+                        <children>
+                          <sizeritem>
+                            <window>
+                              <statictext name="info">
+                                <label>Scanning files...</label>
+                              </statictext>
+                            </window>
+                            <flag>wxEXPAND|wxLEFT|wxRIGHT|wxTOP</flag>
+                            <border>10</border>
+                          </sizeritem>
+                          <spacer>
+                            <size>-1,2d</size>
+                          </spacer>
+                          <sizeritem>
+                            <window>
+                              <gauge name="progress">
+                                <size>150,10d</size>
+                                <style>wxGA_SMOOTH</style>
+                              </gauge>
+                            </window>
+                            <flag>wxEXPAND|wxLEFT|wxRIGHT</flag>
+                            <border>10</border>
+                          </sizeritem>
+                          <spacer>
+                            <size>-1,2d</size>
+                          </spacer>
+                          <sizeritem>
+                            <window>
+                              <button name="wxID_CANCEL">
+                                <label>Cancel</label>
+                              </button>
+                            </window>
+                            <flag>wxRIGHT|wxTOP|wxBOTTOM|wxALIGN_RIGHT</flag>
+                            <border>10</border>
+                          </sizeritem>
+                        </children>
+                      </boxsizer>
+                    </window>
+                    <flag>wxALIGN_CENTER_VERTICAL</flag>
+                  </sizeritem>
+                </children>
+              </boxsizer>
+            </window>
+          </sizeritem>
+        </children>
+      </boxsizer>
+    </children>
+  </dialog>
+  <toolbar name="toolbar">
+    <children>
+      <tool name="menu_open">
+        <bitmap>fileopen.gif</bitmap>
+        <tooltip>Open catalog</tooltip>
+      </tool>
+      <tool name="menu_save">
+        <bitmap>filesave.gif</bitmap>
+        <tooltip>Save catalog</tooltip>
+      </tool>
+      <tool name="menu_update">
+        <bitmap>update.gif</bitmap>
+        <tooltip>Update catalog - synchronize it with sources</tooltip>
+      </tool>
+      <separator/>
+      <tool name="menu_quotes">
+        <bitmap>quotes.gif</bitmap>
+        <toggle>1</toggle>
+        <tooltip>Display quotes around the string?</tooltip>
+      </tool>
+      <separator/>
+      <tool name="menu_fuzzy">
+        <bitmap>fuzzy.gif</bitmap>
+        <tooltip>Toggled if selected string is fuzzy translation</tooltip>
+        <toggle>1</toggle>
+      </tool>
+    </children>
+    <style>wxTB_FLAT|wxTB_DOCKABLE</style>
+    <margins>2,2</margins>
+  </toolbar>
+</resource>
