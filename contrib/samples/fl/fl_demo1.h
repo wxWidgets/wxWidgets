@@ -52,6 +52,7 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
+#if wxUSE_STATLINE
 /*
  * Quick example of your own Separator class...
  */
@@ -69,6 +70,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 };
+#endif // wxUSE_STATLINE
 
 #endif
 

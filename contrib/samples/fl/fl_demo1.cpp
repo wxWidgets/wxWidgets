@@ -219,7 +219,9 @@ MyFrame::MyFrame(wxFrame *frame)
     pToolBar->AddSeparator();
     pToolBar->AddTool( 1002, wxString(wxT(BMP_DIR)) + wxT("open.bmp") );
     pToolBar->AddTool( 1003, wxString(wxT(BMP_DIR)) + wxT("save.bmp") );
+#if wxUSE_STATLINE
     pToolBar->AddSeparator(new wxMySeparatorLine(pToolBar, wxID_ANY));    
+#endif // wxUSE_STATLINE
     pToolBar->AddTool( 1004, wxString(wxT(BMP_DIR)) + wxT("cut.bmp") );
     pToolBar->AddTool( 1005, wxString(wxT(BMP_DIR)) + wxT("copy.bmp") );
     pToolBar->AddTool( 1006, wxString(wxT(BMP_DIR)) + wxT("paste.bmp") );
@@ -243,6 +245,7 @@ MyFrame::~MyFrame()
 }
 
 #define LINE_SIZE 3
+#if wxUSE_STATLINE
 void wxMySeparatorLine::DoSetSize( int x, int y,
                                    int width, int height,
                                    int sizeFlags)
@@ -260,3 +263,4 @@ void wxMySeparatorLine::DoSetSize( int x, int y,
     
     wxStaticLine::DoSetSize(x, y, width, height, sizeFlags);
 }
+#endif // wxUSE_STATLINE
