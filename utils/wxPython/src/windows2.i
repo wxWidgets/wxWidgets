@@ -256,8 +256,8 @@ public:
     void SetSashPosition(int position, int redraw = TRUE);
     void SetMinimumPaneSize(int paneSize);
     void SetSplitMode(int mode);
-    bool SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition = -1);
-    bool SplitVertically(wxWindow* window1, wxWindow* window2, int sashPosition = -1);
+    bool SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition = 0);
+    bool SplitVertically(wxWindow* window1, wxWindow* window2, int sashPosition = 0);
     bool Unsplit(wxWindow* toRemove = NULL);
 };
 
@@ -269,7 +269,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/11/03 09:21:57  RD
+// fixed a typo
+//
 // Revision 1.4  1998/10/02 06:40:43  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:20  RD

@@ -113,7 +113,7 @@ void wxPyApp::AfterMainLoop(void) {
 
 
 // This is where we pick up the first part of the wxEntry functionality...
-// The rest is in __wxStart and  AfterMainLoop.  Thi function is called when
+// The rest is in __wxStart and  AfterMainLoop.  This function is called when
 // wxpc is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
@@ -650,6 +650,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1998/11/03 09:21:08  RD
+// fixed a typo
+//
 // Revision 1.11  1998/10/20 06:43:58  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers
