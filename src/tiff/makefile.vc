@@ -8,39 +8,39 @@ LIBTARGET=$(WXDIR)\lib\tiffd.lib
 !endif
 
 OBJECTS= \
-		$D/tif_aux.obj \
-		$D/tif_close.obj \
-		$D/tif_codec.obj \
-		$D/tif_compress.obj \
-		$D/tif_dir.obj \
-		$D/tif_dirinfo.obj \
-		$D/tif_dirread.obj \
-		$D/tif_dirwrite.obj \
-		$D/tif_dumpmode.obj \
-		$D/tif_error.obj \
-		$D/tif_fax3.obj \
-		$D/tif_fax3sm.obj \
-		$D/tif_flush.obj \
-		$D/tif_getimage.obj \
-		$D/tif_jpeg.obj \
-		$D/tif_luv.obj \
-		$D/tif_lzw.obj \
-		$D/tif_next.obj \
-		$D/tif_open.obj \
-		$D/tif_packbits.obj \
-		$D/tif_pixarlog.obj \
-		$D/tif_predict.obj \
-		$D/tif_print.obj \
-		$D/tif_read.obj \
-		$D/tif_strip.obj \
-		$D/tif_swab.obj \
-		$D/tif_thunder.obj \
-		$D/tif_tile.obj \
-		$D/tif_version.obj \
-		$D/tif_warning.obj \
-		$D/tif_win32.obj \
-		$D/tif_write.obj \
-		$D/tif_zip.obj \
+		$D\tif_aux.obj \
+		$D\tif_close.obj \
+		$D\tif_codec.obj \
+		$D\tif_compress.obj \
+		$D\tif_dir.obj \
+		$D\tif_dirinfo.obj \
+		$D\tif_dirread.obj \
+		$D\tif_dirwrite.obj \
+		$D\tif_dumpmode.obj \
+		$D\tif_error.obj \
+		$D\tif_fax3.obj \
+		$D\tif_fax3sm.obj \
+		$D\tif_flush.obj \
+		$D\tif_getimage.obj \
+		$D\tif_jpeg.obj \
+		$D\tif_luv.obj \
+		$D\tif_lzw.obj \
+		$D\tif_next.obj \
+		$D\tif_open.obj \
+		$D\tif_packbits.obj \
+		$D\tif_pixarlog.obj \
+		$D\tif_predict.obj \
+		$D\tif_print.obj \
+		$D\tif_read.obj \
+		$D\tif_strip.obj \
+		$D\tif_swab.obj \
+		$D\tif_thunder.obj \
+		$D\tif_tile.obj \
+		$D\tif_version.obj \
+		$D\tif_warning.obj \
+		$D\tif_win32.obj \
+		$D\tif_write.obj \
+		$D\tif_zip.obj \
 
 
 
