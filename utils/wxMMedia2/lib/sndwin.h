@@ -33,13 +33,15 @@ class WXDLLEXPORT wxSoundStreamWin : public wxSoundStream {
   // Internal but defined as public
   void NotifyDoneBuffer(wxUint32 dev_handle, int flag);
 
+  wxUint32 GetBestSize() const { return 4096; }
+
  protected:
   wxSoundInternal *m_internal;
   wxUint32 m_current_frag_in, m_current_frag_out;
   wxUint32 m_input_frag_in, m_output_frag_out;
   wxSoundInfoHeader **m_headers_play, **m_headers_rec;
 
-  bool m_production_started, m_queue_filled;
+  bool m_production_started, m_queue_filled, m_waiting_for;
 
  protected:
   void CreateSndWindow();
