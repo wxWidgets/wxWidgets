@@ -183,18 +183,20 @@ bool wxDocument::OnCloseDocument()
 bool wxDocument::DeleteAllViews()
 {
     wxDocManager* manager = GetDocumentManager();
+    wxList::iterator it, en;
 
-    wxList::compatibility_iterator node = m_documentViews.GetFirst();
-    while (node)
+    for ( it = m_documentViews.begin(), en = m_documentViews.end();
+          it != en;
+          )
     {
-        wxView *view = (wxView *)node->GetData();
+        wxView *view = (wxView *)*it;
         if (!view->Close())
             return FALSE;
 
-        wxList::compatibility_iterator next = node->GetNext();
+        wxList::iterator next = it; ++next;
 
         delete view; // Deletes node implicitly
-        node = next;
+        it = next;
     }
     // If we haven't yet deleted the document (for example
     // if there were no views) then delete it.
