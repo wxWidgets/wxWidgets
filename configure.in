@@ -249,6 +249,8 @@ case "${host}" in
     AC_DEFINE(__DOS__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MGL=1
+    dnl DJGPP needs explicit -lstdc++ for some reason (VS: mayb some versions only?)
+    LIBS="$LIBS -lstdc++"
   ;;
 
   *-pc-os2_emx | *-pc-os2-emx )
