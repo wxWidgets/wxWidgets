@@ -38,7 +38,7 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 extern bool   g_blockEventsOnDrag;
-static int    g_SelectionBeforePopup = -1;
+static int    g_SelectionBeforePopup = -2; // -2 <=> the popup is hidden
 //-----------------------------------------------------------------------------
 //  "changed" - typing and list item matches get changed, select-child
 //              if it doesn't match an item then just get a single changed
@@ -83,14 +83,15 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
         combo->GetEventHandler()->ProcessEvent( event );
     }
 
-    // reset the selection flag to an identifiable value
-    g_SelectionBeforePopup = -1;
+    // reset the selection flag to an identifiable value (-2 = hidden)
+    g_SelectionBeforePopup = -2;
 }
 
 static void
 gtk_popup_show_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
 {
     // store the combobox selection value before the popup is shown
+  // if there is no selection, combo->GetSelection() returns -1
     g_SelectionBeforePopup = combo->GetSelection();
 }
 
@@ -125,12 +126,12 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     gtk_signal_connect_after( GTK_OBJECT(GTK_COMBO(combo->GetHandle())->entry), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)combo );
 
-    // throw a SELECTED event only if the combobox popup is hidden
+    // throw a SELECTED event only if the combobox popup is hidden (-2)
     // because when combobox popup is shown, gtk_combo_select_child_callback is
     // called each times the mouse is over an item with a pressed button so a lot
     // of SELECTED event could be generated if the user keep the mouse button down
     // and select other items ...
-    if (g_SelectionBeforePopup == -1)
+    if (g_SelectionBeforePopup == -2)
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
         event.SetInt( curSelection );
