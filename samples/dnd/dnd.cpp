@@ -36,7 +36,7 @@
 #endif // wxUSE_METAFILES
 
 #if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #if wxUSE_DRAG_AND_DROP
     #include "dnd_copy.xpm"
     #include "dnd_move.xpm"
