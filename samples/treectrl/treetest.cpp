@@ -33,19 +33,19 @@
 
 #include "math.h"
 
-//#ifdef __WXMSW__
+#ifdef __WXMSW__
     #define NO_MULTIPLE_SELECTION
     #define NO_VARIABLE_HEIGHT
-//#endif
+#endif
 
 #include "treetest.h"
 
 // under Windows the icons are in the .rc file
 #ifndef __WXMSW__
-#ifdef NO_VARIABLE_HEIGHT
   #include "icon1.xpm"
-#endif
   #include "icon2.xpm"
+  #include "icon3.xpm"
+  #include "icon4.xpm"
   #include "mondrian.xpm"
 #endif
 
@@ -92,7 +92,9 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnBeginLabelEdit)
     EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, MyTreeCtrl::OnEndLabelEdit)
     EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, MyTreeCtrl::OnDeleteItem)
+#if 0       // there are so many of those that logging them causes flicker
     EVT_TREE_GET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnGetInfo)
+#endif
     EVT_TREE_SET_INFO(TreeTest_Ctrl, MyTreeCtrl::OnSetInfo)
     EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanded)
     EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
@@ -187,12 +189,12 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxTR_HAS_BUTTONS |
                                 wxTR_EDIT_LABELS |
 #ifndef NO_MULTIPLE_SELECTION
-				wxTR_MULTIPLE |
+                                wxTR_MULTIPLE |
 #endif
 #ifndef NO_VARIABLE_HEIGHT
-				wxTR_HAS_VARIABLE_ROW_HEIGHT |
+                                wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
-				wxSUNKEN_BORDER);
+                                wxSUNKEN_BORDER);
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
@@ -440,6 +442,9 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
     m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
 #  endif
     m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
+    m_imageListNormal->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
+    m_imageListNormal->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
+    m_imageListNormal->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
 #else
 #  ifndef NO_VARIABLE_HEIGHT
     m_imageListNormal->Add(image.ConvertToBitmap());
@@ -447,6 +452,9 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
     m_imageListNormal->Add(wxICON(icon1));
 #  endif
     m_imageListNormal->Add(wxICON(icon2));
+    m_imageListNormal->Add(wxICON(icon3));
+    m_imageListNormal->Add(wxICON(icon4));
+    m_imageListNormal->Add(wxICON(icon5));
 #endif
 
     SetImageList(m_imageListNormal);
@@ -481,21 +489,32 @@ void MyTreeCtrl::AddItemsRecursively(const wxTreeItemId& idParent,
 {
     if ( depth > 0 )
     {
+        bool hasChildren = depth > 1;
+
         wxString str;
         for ( size_t n = 0; n < numChildren; n++ )
         {
             // at depth 1 elements won't have any more children
-            if (depth == 1)
-                str.Printf("%s child %d.%d", "File", folder, n + 1);
-            else
+            if ( hasChildren )
                 str.Printf("%s child %d", "Folder", n + 1);
+            else
+                str.Printf("%s child %d.%d", "File", folder, n + 1);
 
+            // here we pass to AppendItem() normal and selected item images (we
+            // suppose that selected image follows the normal one in the enum)
             int image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
-            wxTreeItemId id = AppendItem(idParent, str, image, image,
+            wxTreeItemId id = AppendItem(idParent, str, image, image + 1,
                                          new MyTreeItemData(str));
 
+            // and now we also set the expanded one (only for the folders)
+            if ( hasChildren )
+            {
+                SetItemImage(id, TreeCtrlIcon_FolderOpened,
+                             wxTreeItemIcon_Expanded);
+            }
+
             // remember the last child for OnEnsureVisible()
-            if ( depth == 1 && n == numChildren - 1 )
+            if ( !hasChildren && n == numChildren - 1 )
             {
                 m_lastItem = id;
             }
@@ -512,6 +531,7 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     wxTreeItemId rootId = AddRoot("Root",
                                   TreeCtrlIcon_Folder, TreeCtrlIcon_Folder,
                                   new MyTreeItemData("Root item"));
+    SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
 
     AddItemsRecursively(rootId, numChildren, depth, 0);
 }

@@ -379,9 +379,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
 #endif
 #endif // if 0
 
-      // TODO: check if this is right.  MB
-      //
-      (*this) = s;
+      (*this) = (bool)(s != 0);
       
       return ;
     }

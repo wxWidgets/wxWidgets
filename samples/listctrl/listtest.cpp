@@ -482,7 +482,7 @@ void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
     text->WriteText("OnSetInfo\n");
 }
 
-void MyListCtrl::OnSelected(wxListEvent& WXUNUSED(event))
+void MyListCtrl::OnSelected(wxListEvent& event)
 {
     if ( !wxGetApp().GetTopWindow() )
         return;
@@ -490,6 +490,20 @@ void MyListCtrl::OnSelected(wxListEvent& WXUNUSED(event))
     wxTextCtrl *text = ((MyFrame *)wxGetApp().GetTopWindow())->m_logWindow;
     if ( !text )
         return;
+
+    wxListItem info;
+    info.m_itemId = event.m_itemIndex;
+    info.m_col = 1;
+    info.m_mask = wxLIST_MASK_TEXT;
+    if ( GetItem(info) )
+    {
+        *text << "Value of the 2nd field of the selected item: "
+              << info.m_text << '\n';
+    }
+    else
+    {
+        wxFAIL_MSG("wxListCtrl::GetItem() failed");
+    }
 
     text->WriteText("OnSelected\n");
 }

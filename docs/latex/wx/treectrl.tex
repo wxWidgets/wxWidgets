@@ -287,9 +287,20 @@ associated with the wxTreeItemData for the given item Id.}
 
 \membersection{wxTreeCtrl::GetItemImage}\label{wxtreectrlgetitemimage}
 
-\constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item}}
+\constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item},
+\param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
-Gets the normal item image.
+Gets the specified item image. The value of {\it which} may be:
+\begin{itemize}\itemsep=0pt
+\item{wxTreeItemIcon\_Normal} to get the normal item image
+\item{wxTreeItemIcon\_Selected} to get the selected item image (i.e. the image
+which is shown when the item is currently selected)
+\item{wxTreeItemIcon\_Expanded} to get the expanded image (this only
+makes sense for items which have children - then this image is shown when the
+item is expanded and the normal image is shown when it is collapsed)
+\item{wxTreeItemIcon\_SelectedExpanded} to get the selected expanded image
+(which is shown when an expanded item is currently selected)
+\end{itemize}
 
 \membersection{wxTreeCtrl::GetItemText}\label{wxtreectrlgetitemtext}
 
@@ -381,7 +392,8 @@ Returns the root item for the tree control.
 
 \constfunc{int}{GetItemSelectedImage}{\param{const wxTreeItemId\& }{item}}
 
-Gets the selected item image.
+Gets the selected item image (this function is obsolete, use 
+{\tt GetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::GetSelection}\label{wxtreectrlgetselection}
 
@@ -546,15 +558,19 @@ usage and loading time.
 
 \membersection{wxTreeCtrl::SetItemImage}\label{wxtreectrlsetitemimage}
 
-\func{void}{SetItemImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{image}}
+\func{void}{SetItemImage}{\param{const wxTreeItemId\&}{ item},
+\param{int }{image},
+\param{wxTreeItemIcon }{which = wxTreeItemIcon\_Normal}}
 
-Sets the normal item image. This is an index into the assciated image list.
+Sets the specified item image. See \helpref{GetItemImage}{wxtreectrlgetitemimage} 
+for the description of {\it which} parameter.
 
 \membersection{wxTreeCtrl::SetItemSelectedImage}\label{wxtreectrlsetitemselectedimage}
 
 \func{void}{SetItemSelectedImage}{\param{const wxTreeItemId\&}{ item}, \param{int }{selImage}}
 
-Sets the item selected image. This is an index into the assciated image list.
+Sets the selected item image (this function is obsolete, use 
+{\tt SetItemImage(item, wxTreeItemIcon\_Selected} instead).
 
 \membersection{wxTreeCtrl::SetItemText}\label{wxtreectrlsetitemtext}
 

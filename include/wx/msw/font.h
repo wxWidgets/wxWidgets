@@ -54,6 +54,9 @@ public:
 
     virtual ~wxFont();
 
+    // assignment
+    wxFont& operator=(const wxFont& font);
+
     // implement base class pure virtuals
     virtual int GetPointSize() const;
     virtual int GetFamily() const;

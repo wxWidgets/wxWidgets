@@ -56,6 +56,7 @@
 #include "wx/choicdlg.h"
 #include "wx/docview.h"
 #include "wx/confbase.h"
+#include "wx/file.h"
 
 #include <stdio.h>
 #include <string.h>

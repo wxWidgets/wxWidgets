@@ -149,11 +149,7 @@ public:
 
     // accessors: set/get the item associated with this node
     void SetId(const wxTreeItemId& id) { m_itemId = id; }
-#ifdef __WATCOMC__
-    const wxTreeItemId GetId() const { return m_itemId; }
-#else
-    const wxTreeItemId& GetId() const { return (wxTreeItemId&) m_itemId; }
-#endif
+    const wxTreeItemId GetId() const { return *this; }
 };
 
 // ----------------------------------------------------------------------------
@@ -197,10 +193,10 @@ public:
     unsigned int GetIndent() const;
     void SetIndent(unsigned int indent);
 
-    	// spacing is the number of pixels between the start and the Text
-	// not implemented under wxMSW
+    // spacing is the number of pixels between the start and the Text
+        // not implemented under wxMSW
     unsigned int GetSpacing() const { return 18; } // return wxGTK default
-    void SetSpacing(unsigned int ) {}
+    void SetSpacing(unsigned int WXUNUSED(spacing)) { }
 
         // image list: these functions allow to associate an image list with
         // the control and retrieve it. Note that the control does _not_ delete
@@ -228,10 +224,9 @@ public:
 
         // retrieve items label
     wxString GetItemText(const wxTreeItemId& item) const;
-        // get the normal item image
-    int GetItemImage(const wxTreeItemId& item) const;
-        // get the selected item image
-    int GetItemSelectedImage(const wxTreeItemId& item) const;
+        // get one of the images associated with the item (normal by default)
+    int GetItemImage(const wxTreeItemId& item,
+                     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
 
@@ -240,10 +235,9 @@ public:
 
         // set items label
     void SetItemText(const wxTreeItemId& item, const wxString& text);
-        // set the normal item image
-    void SetItemImage(const wxTreeItemId& item, int image);
-        // set the selected item image
-    void SetItemSelectedImage(const wxTreeItemId& item, int image);
+        // get one of the images associated with the item (normal by default)
+    void SetItemImage(const wxTreeItemId& item, int image,
+                      wxTreeItemIcon which = wxTreeItemIcon_Normal);
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
 
@@ -452,6 +446,14 @@ public:
     void SetImageList(wxImageList *imageList, int)
         { SetImageList(imageList); }
 
+    // use Set/GetItemImage directly
+        // get the selected item image
+    int GetItemSelectedImage(const wxTreeItemId& item) const
+        { return GetItemImage(item, wxTreeItemIcon_Selected); }
+        // set the selected item image
+    void SetItemSelectedImage(const wxTreeItemId& item, int image)
+        { SetItemImage(item, image, wxTreeItemIcon_Selected); }
+
     // implementation
     // --------------
     virtual bool MSWCommand(WXUINT param, WXWORD id);
@@ -465,7 +467,7 @@ protected:
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
 
-    wxTextCtrl*  m_textCtrl;        // used while editing the item label
+    wxTextCtrl  *m_textCtrl;        // used while editing the item label
     wxImageList *m_imageListNormal, // images for tree elements
                 *m_imageListState;  // special images for app defined states
 
@@ -485,9 +487,22 @@ private:
                               int image, int selectedImage,
                               wxTreeItemData *data);
 
+    int DoGetItemImageFromData(const wxTreeItemId& item,
+                               wxTreeItemIcon which) const;
+    void DoSetItemImageFromData(const wxTreeItemId& item,
+                                int image,
+                                wxTreeItemIcon which) const;
     void DoSetItemImages(const wxTreeItemId& item, int image, int imageSel);
 
     void DeleteTextCtrl();
+
+    // support for additional item images
+    friend class wxTreeItemIndirectData;
+    void SetIndirectItemData(const wxTreeItemId& item,
+                             wxTreeItemIndirectData *data);
+    bool HasIndirectData(const wxTreeItemId& item) const;
+
+    wxArrayTreeItemIds m_itemsWithIndirectData;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

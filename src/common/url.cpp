@@ -387,14 +387,11 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
 
 wxString wxURL::ConvertFromURI(const wxString& uri)
 {
-  int code;
-  int i;
   wxString new_uri;
 
-  new_uri.Empty();
-  
-  i = 0;
+  size_t i = 0;
   while (i<uri.Len()) {
+    int code;
     if (uri[i] == _T('%')) {
       i++;
       if (uri[i] >= _T('A') && uri[i] <= _T('F'))

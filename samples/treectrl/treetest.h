@@ -34,7 +34,10 @@ public:
     enum
     {
         TreeCtrlIcon_File,
-        TreeCtrlIcon_Folder
+        TreeCtrlIcon_FileSelected,
+        TreeCtrlIcon_Folder,
+        TreeCtrlIcon_FolderSelected,
+        TreeCtrlIcon_FolderOpened
     };
 
     MyTreeCtrl() { }

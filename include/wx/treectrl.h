@@ -12,10 +12,21 @@
 // constants
 // ----------------------------------------------------------------------------
 
+// enum for different images associated with a treectrl item
+enum wxTreeItemIcon
+{
+    wxTreeItemIcon_Normal,              // not selected, not expanded
+    wxTreeItemIcon_Selected,            //     selected, not expanded
+    wxTreeItemIcon_Expanded,            // not selected,     expanded
+    wxTreeItemIcon_SelectedExpanded,    //     selected,     expanded
+    wxTreeItemIcon_Max
+};
+
+// tree ctrl default name
 #ifdef __WXMSW__
-WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
+    WXDLLEXPORT_DATA(extern const char*) wxTreeCtrlNameStr;
 #else
-#define wxTreeCtrlNameStr "wxTreeCtrl"
+    #define wxTreeCtrlNameStr "wxTreeCtrl"
 #endif
 
 // ----------------------------------------------------------------------------

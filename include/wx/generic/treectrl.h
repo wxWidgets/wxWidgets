@@ -258,10 +258,9 @@ public:
 
         // retrieve items label
     wxString GetItemText(const wxTreeItemId& item) const;
-        // get the normal item image
-    int GetItemImage(const wxTreeItemId& item) const;
-        // get the selected item image
-    int GetItemSelectedImage(const wxTreeItemId& item) const;
+        // get one of the images associated with the item (normal by default)
+    int GetItemImage(const wxTreeItemId& item,
+                     wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
 
@@ -270,10 +269,9 @@ public:
 
         // set items label
     void SetItemText(const wxTreeItemId& item, const wxString& text);
-        // set the normal item image
-    void SetItemImage(const wxTreeItemId& item, int image);
-        // set the selected item image
-    void SetItemSelectedImage(const wxTreeItemId& item, int image);
+        // get one of the images associated with the item (normal by default)
+    void SetItemImage(const wxTreeItemId& item, int image,
+                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
 
@@ -432,6 +430,16 @@ public:
         //
         // NB: this function is not reentrant and not MT-safe (FIXME)!
     void SortChildren(const wxTreeItemId& item);
+
+    // deprecated functions: use Set/GetItemImage directly
+        // get the selected item image
+    int GetItemSelectedImage(const wxTreeItemId& item) const
+        { return GetItemImage(item, wxTreeItemIcon_Selected); }
+        // set the selected item image
+    void SetItemSelectedImage(const wxTreeItemId& item, int image)
+        { SetItemImage(item, image, wxTreeItemIcon_Selected); }
+
+    // implementation
 
     // callbacks
     void OnPaint( wxPaintEvent &event );

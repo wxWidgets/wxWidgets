@@ -58,7 +58,8 @@ friend class WXDLLEXPORT wxFont;
 public:
     wxFontRefData()
     {
-        Init();
+        Init(12, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
+             "", wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(const wxFontRefData& data)

@@ -241,15 +241,6 @@ void wxFrame::DoGetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
-
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-}
-
 bool wxFrame::Show(bool show)
 {
   int cshow;

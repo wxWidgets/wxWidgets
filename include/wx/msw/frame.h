@@ -177,9 +177,6 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetPosition(int *x, int *y) const;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
 
     // a plug in for MDI frame classes which need to do something special when
