@@ -108,7 +108,6 @@ OBJECTS1=fs_inet.obj,\
 		mstream.obj,\
 		nbkbase.obj,\
 		object.obj,\
-		objstrm.obj,\
 		paper.obj,\
 		popupcmn.obj,\
 		prntbase.obj,\
@@ -120,7 +119,6 @@ OBJECTS1=fs_inet.obj,\
 		sckfile.obj,\
 		sckipc.obj,\
 		sckstrm.obj,\
-		serbase.obj,\
 		sizer.obj,\
 		socket.obj,\
 		statbar.obj,\
@@ -223,7 +221,6 @@ SOURCES = \
 		mstream.cpp,\
 		nbkbase.cpp,\
 		object.cpp,\
-		objstrm.cpp,\
 		paper.cpp,\
 		popupcmn.cpp,\
 		prntbase.cpp,\
@@ -235,7 +232,6 @@ SOURCES = \
 		sckfile.cpp,\
 		sckipc.cpp,\
 		sckstrm.cpp,\
-		serbase.cpp,\
 		sizer.cpp,\
 		socket.cpp,\
 		statbar.cpp,\
@@ -370,7 +366,6 @@ module.obj : module.cpp
 mstream.obj : mstream.cpp
 nbkbase.obj : nbkbase.cpp
 object.obj : object.cpp
-objstrm.obj : objstrm.cpp
 paper.obj : paper.cpp
 popupcmn.obj : popupcmn.cpp
 prntbase.obj : prntbase.cpp
@@ -382,7 +377,6 @@ sckaddr.obj : sckaddr.cpp
 sckfile.obj : sckfile.cpp
 sckipc.obj : sckipc.cpp
 sckstrm.obj : sckstrm.cpp
-serbase.obj : serbase.cpp
 sizer.obj : sizer.cpp
 socket.obj : socket.cpp
 statbar.obj : statbar.cpp

@@ -559,13 +559,16 @@
  */
 #define wxUSE_INTL 1
 /*
+ * Use wxProtocol and related classes
+ */
+#define wxUSE_PROTOCOL 1
+#define wxUSE_PROTOCOL_FILE 1
+#define wxUSE_PROTOCOL_FTP 1
+#define wxUSE_PROTOCOL_HTTP 1
+/*
  * Use streams
  */
 #define wxUSE_STREAMS 1
-/*
- * Use class serialization
- */
-#define wxUSE_SERIAL 1
 /*
  * Use sockets
  */
@@ -583,6 +586,10 @@
  * wxLibrary class
  */
 #define wxUSE_DYNLIB_CLASS 1
+/*
+ * Use wxObjectLoader
+ */
+#define wxUSE_DYNAMIC_LOADER 0
 
 /*
  * Use wxTimer
@@ -618,6 +625,11 @@
  * Use MS Layer for Unicode on Win9X (Win32 only)?
  */
 #define wxUSE_UNICODE_MSLU 0
+
+/*
+ * Use wxURL class
+ */
+#define wxUSE_URL 1
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
