@@ -29,8 +29,9 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
-
+#include "wx/timer.h"
 #include "wx/mgl/private.h"
+#include "pmapi.h"
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -77,7 +78,22 @@ void wxEventLoopImpl::Dispatch()
 
     MGL_wmUpdateDC(g_winMng);
     
-    EVT_halt(&evt, EVT_EVERYEVT);
+    // VS: The code bellow is equal to MGL's EVT_halt implementation, with
+    //     two things added: sleeping (busy waiting is stupid, lets make CPU's
+    //     life a bit easier) and timers updating
+
+    // EVT_halt(&evt, EVT_EVERYEVT);
+    do 
+    {
+        EVT_pollJoystick();
+        EVT_getNext(&evt, EVT_EVERYEVT);
+#if wxUSE_TIMER
+        wxTimer::NotifyTimers();
+#endif
+        PM_sleep(10);
+    } while (!(evt.what & EVT_EVERYEVT));
+    // end of EVT_halt
+    
     MGL_wmProcessEvent(g_winMng, &evt);
 }
 

@@ -27,6 +27,7 @@
     #include "wx/dialog.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/resource.h"
 #endif
 
 #include "wx/app.h"
