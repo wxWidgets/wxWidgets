@@ -42,7 +42,7 @@
 //*            be created for any reason.                                     *
 //*****************************************************************************
 
-HICON ReadIconFile( char *szFileName, HINSTANCE hInst, int *W, int *H)
+HICON ReadIconFile( wxChar *szFileName, HINSTANCE hInst, int *W, int *H)
 { HICON   hIcon;
   HANDLE  hDIB;
 
@@ -65,7 +65,7 @@ HICON ReadIconFile( char *szFileName, HINSTANCE hInst, int *W, int *H)
 //*            monochrome.                                                    *
 //*****************************************************************************
 
-HICON CursorToIcon( char *szFileName, HINSTANCE hInst, int *W, int *H)
+HICON CursorToIcon( wxChar *szFileName, HINSTANCE hInst, int *W, int *H)
 { HANDLE  hDIB;     // Handle to DIB memory
   HICON   hIcon;    // Handle to Icon
 
@@ -85,7 +85,7 @@ HICON CursorToIcon( char *szFileName, HINSTANCE hInst, int *W, int *H)
 //*            is corrupt or if memory cannot be allocated for the DIB info.  *
 //*****************************************************************************
 
-HANDLE ReadIcon( char *szFileName, int *W, int *H)
+HANDLE ReadIcon( wxChar *szFileName, int *W, int *H)
 { ICONFILEHEADER iconFileHead;   // ICON file header structure
   ICONFILERES    iconFileRes;    // ICON file resource
   WORD           cbHead,
@@ -99,7 +99,7 @@ HANDLE ReadIcon( char *szFileName, int *W, int *H)
                  nDirEntries = 0;
 
    // Open and read the .ICO file header and the first ICONFILERES
-  hFile  = _lopen( szFileName, OF_READ);
+  hFile  = _lopen( wxFNCONV(szFileName), OF_READ);
   cbHead = _lread( hFile, (LPSTR)&iconFileHead, sizeof(ICONFILEHEADER));
   cbRes  = _lread( hFile, (LPSTR)&iconFileRes, sizeof(ICONFILERES));
   ++nDirEntries;
@@ -277,7 +277,7 @@ HICON MakeIcon( HANDLE hDIB, HINSTANCE hInst)
 //*            be created for any reason.                                     *
 //*****************************************************************************
 
-HCURSOR ReadCursorFile( char *szFileName, HINSTANCE hInst, int *W, int *H,
+HCURSOR ReadCursorFile( wxChar *szFileName, HINSTANCE hInst, int *W, int *H,
                         int *XHot, int *YHot)
 { HANDLE    hDIB;    // Handle to DIB memory
   HCURSOR   hCursor;
@@ -306,7 +306,7 @@ HCURSOR ReadCursorFile( char *szFileName, HINSTANCE hInst, int *W, int *H,
 //*            monochrome.                                                    *
 //*****************************************************************************
 
-HCURSOR IconToCursor( char *szFileName, HINSTANCE hInst, int XHot, int YHot,
+HCURSOR IconToCursor( wxChar *szFileName, HINSTANCE hInst, int XHot, int YHot,
                       int  *W, int *H)
 { HCURSOR   hCursor;
   HANDLE    hDIB;
@@ -332,7 +332,7 @@ HCURSOR IconToCursor( char *szFileName, HINSTANCE hInst, int XHot, int YHot,
 //*            is corrupt or if memory cannot be allocated for the DIB info.  *
 //*****************************************************************************
 
-HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
+HANDLE ReadCur( wxChar *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
 { CURFILEHEADER   curFileHead;  // CURSOR file header structure
   CURFILERES      curFileRes;   // CURSOR file resource
   WORD            cbHead,
@@ -346,7 +346,7 @@ HANDLE ReadCur( char *szFileName, LPPOINT lpptHotSpot, int *W, int *H)
                   nDirEntries = 0;
 
   // Open and read the .ICO file header and the first ICONFILERES
-  hFile  = _lopen( szFileName, OF_READ);
+  hFile  = _lopen( wxFNCONV(szFileName), OF_READ);
   cbHead = _lread( hFile,  (LPSTR )&curFileHead, sizeof( CURFILEHEADER));
   cbRes  = _lread( hFile,  (LPSTR )&curFileRes,  sizeof( CURFILERES));
   ++nDirEntries;
@@ -698,7 +698,7 @@ WORD DIBNumColors ( LPSTR pv)
 
 #if 0
 // ******************************************************************
-BOOL fGetXPixmap( BOOL fIsIcon, char *szFileName, HINSTANCE hInst,
+BOOL fGetXPixmap( BOOL fIsIcon, wxChar *szFileName, HINSTANCE hInst,
                   char cData[], int &width, int &height)
 { HDC       hdc,
             hdcMemory;
