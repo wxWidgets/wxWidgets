@@ -86,10 +86,11 @@ static void gtk_spinctrl_callback( GtkWidget *WXUNUSED(widget), wxSpinCtrl *win 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl,wxControl)
 
 bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
-                          const wxPoint& pos,  const wxSize& size,
-                          long style,
-                          int min, int max, int initial,
-                          const wxString& name)
+                        const wxString& value,
+                        const wxPoint& pos,  const wxSize& size,
+                        long style,
+                        int min, int max, int initial,
+                        const wxString& name)
 {
     m_needParent = TRUE;
 
@@ -123,6 +124,8 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
 
     SetBackgroundColour( parent->GetBackgroundColour() );
 
+    SetValue( value );
+
     Show( TRUE );
 
     return TRUE;
@@ -147,6 +150,23 @@ int wxSpinCtrl::GetValue() const
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
     return (int)ceil(m_adjust->value);
+}
+
+void wxSpinCtrl::SetValue( const wxString& value )
+{
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
+
+    int n;
+    if ( (wxSscanf(value, wxT("%d"), &n) == 1) )
+    {
+        // a number - set it
+        SetValue(n);
+    }
+    else
+    {
+        // invalid number - set text as is (wxMSW compatible)
+        gtk_entry_set_text( GTK_ENTRY(m_widget), value.c_str() );
+    }
 }
 
 void wxSpinCtrl::SetValue( int value )
