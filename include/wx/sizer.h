@@ -413,7 +413,10 @@ public:
     void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode) { m_growMode = mode; }
     wxFlexSizerGrowMode GetNonFlexibleGrowMode() const { return m_growMode; }
 
-
+    // Read-only access to the row heights and col widths arrays
+    const wxArrayInt& GetRowHeights() const { return m_rowHeights; }
+    const wxArrayInt& GetColWidths() const  { return m_colWidths; }
+    
     // implementation
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
