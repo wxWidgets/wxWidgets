@@ -106,6 +106,9 @@ public:
         for ( size_t n = 0; n < m_count; n++ )
         {
             ::SendMessage(m_hwnds[n], WM_SETFONT, (WPARAM)hfont, 0);
+
+            // otherwise the window might not be redrawn correctly
+            ::InvalidateRect(m_hwnds[n], NULL, FALSE /* don't erase bg */);
         }
     }
 
@@ -140,6 +143,53 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxSubwindows)
 };
+
+// convenient macro to forward a few methods which are usually propagated to
+// subwindows to a wxSubwindows object
+//
+// parameters should be:
+//  - cname the name of the class implementing these methods
+//  - base the name of its base class
+//  - subwins the name of the member variable of type wxSubwindows *
+#define WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(cname, base, subwins)            \
+    bool cname::ContainsHWND(WXHWND hWnd) const                               \
+    {                                                                         \
+        return subwins && subwins->HasWindow((HWND)hWnd);                     \
+    }                                                                         \
+                                                                              \
+    bool cname::Show(bool show)                                               \
+    {                                                                         \
+        if ( !base::Show(show) )                                              \
+            return false;                                                     \
+                                                                              \
+        if ( subwins )                                                        \
+            subwins->Show(show);                                              \
+                                                                              \
+        return true;                                                          \
+    }                                                                         \
+                                                                              \
+    bool cname::Enable(bool enable)                                           \
+    {                                                                         \
+        if ( !base::Enable(enable) )                                          \
+            return false;                                                     \
+                                                                              \
+        if ( subwins )                                                        \
+            subwins->Enable(enable);                                          \
+                                                                              \
+        return true;                                                          \
+    }                                                                         \
+                                                                              \
+    bool cname::SetFont(const wxFont& font)                                   \
+    {                                                                         \
+        if ( !base::SetFont(font) )                                           \
+            return false;                                                     \
+                                                                              \
+        if ( subwins )                                                        \
+            subwins->SetFont(font);                                           \
+                                                                              \
+        return true;                                                          \
+    }
+
 
 #endif // _WX_MSW_SUBWIN_H_
 
