@@ -431,6 +431,7 @@ public:
     wxColour *FindColour(const wxString& colour) ;
     wxColour *FindColourNoAdd(const wxString& colour) const;
     wxString FindName(const wxColour& colour) const;
+    void AddColour(const wxString& name, wxColour* colour);
     void Initialize();
 #ifdef __WXPM__
     // PM keeps its own type of colour table

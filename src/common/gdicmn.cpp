@@ -196,10 +196,7 @@ wxColourDatabase::wxColourDatabase ()
 
 wxColourDatabase::~wxColourDatabase ()
 {
-    typedef wxStringToColourHashMap::iterator iterator;
-
-    for( iterator it = m_map->begin(), en = m_map->end(); it != en; ++it )
-        delete it->second;
+    WX_CLEAR_HASH_MAP(wxStringToColourHashMap, *m_map);
 
     delete m_map;
     m_map = NULL;
@@ -289,6 +286,7 @@ void wxColourDatabase::Initialize ()
         {wxT("WHITE"), 255, 255, 255},
         {wxT("YELLOW"), 255, 255, 0},
         {wxT("YELLOW GREEN"), 153, 204, 50},
+        {wxT("YELLOW GREEN"), 153, 204, 50}
     };
 
     size_t      n;
@@ -296,7 +294,7 @@ void wxColourDatabase::Initialize ()
     for ( n = 0; n < WXSIZEOF(wxColourTable); n++ )
     {
         const wxColourDesc& cc = wxColourTable[n];
-        (*m_map)[cc.name] =  new wxColour(cc.r,cc.g,cc.b);
+        AddColour(cc.name, new wxColour(cc.r,cc.g,cc.b));
     }
 #ifdef __WXPM__
     m_palTable = new long[n];
@@ -326,6 +324,26 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
 wxColour *wxColourDatabase::FindColourNoAdd(const wxString& colour) const
 {
     return ((wxColourDatabase*)this)->FindColour(colour, false);
+}
+
+void wxColourDatabase::AddColour (const wxString& name, wxColour* colour)
+{
+    wxString colName = name;
+    colName.MakeUpper();
+    wxString colName2 = colName;
+    if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
+        colName2.clear();
+
+    wxStringToColourHashMap::iterator it = m_map->find(colName);
+    if ( it == m_map->end() )
+        it = m_map->find(colName2);
+    if ( it != m_map->end() )
+    {
+        delete it->second;
+        it->second = colour;
+    }
+
+    (*m_map)[name] = colour;
 }
 
 wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
@@ -377,7 +395,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
       delete col;
       return (wxColour *) NULL;
   }
-  (*m_map)[colour] = col;
+  AddColour(colour, col);
   return col;
 #endif
 
@@ -405,7 +423,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour, bool add)
 #endif
 
     wxColour *col = new wxColour(r, g, b);
-    (*m_map)[colour] = col;
+    AddColour(colour, col);
 
     return col;
 #endif // __X__

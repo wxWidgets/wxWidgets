@@ -246,8 +246,7 @@ is only one instance of this class: {\bf wxTheColourDatabase}.
 
 \wxheading{Derived from}
 
-\helpref{wxList}{wxlist}\\
-\helpref{wxObject}{wxobject}
+None
 
 \wxheading{Include files}
 
@@ -281,6 +280,13 @@ YELLOW GREEN.
 \func{}{wxColourDatabase}{\void}
 
 Constructs the colour database.
+
+\membersection{wxColourDatabase::AddColour}\label{wxcolourdatabaseaddcolour}
+
+\func{void}{AddColour}{\param{const wxString\& }{colourName}, \param{wxColour* }{colour}}
+
+Adds a colour to the database. If a colour with the same name already exists,
+it is replaced.
 
 \membersection{wxColourDatabase::FindColour}\label{wxcolourdatabasefindcolour}
 
