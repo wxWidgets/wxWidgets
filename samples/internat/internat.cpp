@@ -84,14 +84,19 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  wxString langs[] = {_T("(System default)"),
-                      _T("French"),
-                      _T("German"),
-                      _T("English"),
-                      _T("English (U.S.)")};
+  const wxChar * const langs[] =
+  {
+      _T("(System default)"),
+      _T("French"),
+      _T("German"),
+      _T("Russian"),
+      _T("English"),
+      _T("English (U.S.)")
+  };
+
   SetExitOnFrameDelete(FALSE);
   int lng = wxGetSingleChoiceIndex(_T("Please choose language:"), _T("Language"), 
-                                   5, langs);
+                                   WXSIZEOF(langs), (char **)langs);
   SetExitOnFrameDelete(TRUE);
 
   switch (lng)
@@ -99,12 +104,11 @@ bool MyApp::OnInit()
       case 0 : m_locale.Init(wxLANGUAGE_DEFAULT); break;
       case 1 : m_locale.Init(wxLANGUAGE_FRENCH); break;
       case 2 : m_locale.Init(wxLANGUAGE_GERMAN); break;
-      case 3 : m_locale.Init(wxLANGUAGE_ENGLISH); break;
-      case 4 : m_locale.Init(wxLANGUAGE_ENGLISH_US); break;
-      default:
-          return FALSE;
+      case 3 : m_locale.Init(wxLANGUAGE_RUSSIAN); break;
+      case 4 : m_locale.Init(wxLANGUAGE_ENGLISH); break;
+      case -1:
+      case 5 : m_locale.Init(wxLANGUAGE_ENGLISH_US); break;
   }
-
 
   // Initialize the catalogs we'll be using
   /* not needed any more, done in wxLocale ctor
@@ -115,7 +119,10 @@ bool MyApp::OnInit()
      it might not be installed on yours - just ignore the errrors
      or comment out this line then */
 #ifdef __LINUX__
-  //m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+  {
+    wxLogNull noLog;
+    m_locale.AddCatalog("fileutils");  // 3) and another just for testing
+  }
 #endif
   
   // Create the main frame window
