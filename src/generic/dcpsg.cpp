@@ -1011,6 +1011,10 @@ void wxPostScriptDC::SetFont( const wxFont& font )
         }
     }
 
+    // We may legitimately call SetFont before BeginDoc
+    if (!m_pstream)
+        return;
+    
     PsPrint( name );
     PsPrint( " reencodeISO def\n" );
     PsPrint( name );
