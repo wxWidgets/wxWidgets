@@ -159,8 +159,8 @@ wxWindow *wxWindow::FindItemByHWND(WXHWND hWnd, bool controlOnly) const
         return item;
       else
       {
-		if ( item->ContainsHWND(hWnd) )
-			return item;
+    if ( item->ContainsHWND(hWnd) )
+      return item;
       }
     }
     current = current->Next();
@@ -190,7 +190,7 @@ WXHWND wxWindow::GetHWND(void) const
 
 void wxWindow::SetHWND(WXHWND hWnd)
 {
-	m_hWnd = hWnd;
+  m_hWnd = hWnd;
 }
 
 // Constructor
@@ -245,7 +245,7 @@ wxWindow::wxWindow(void)
 
 /*
     wxColour(GetRValue(GetSysColor(COLOR_WINDOW)),
-  	GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
+    GetGValue(GetSysColor(COLOR_BTNFACE)), GetBValue(GetSysColor(COLOR_BTNFACE)));
 */
 
   // wxWnd
@@ -281,9 +281,9 @@ wxWindow::~wxWindow(void)
   // Restore old Window proc, if required
 //  UnsubclassWin();
 
-	// Have to delete constraints/sizer FIRST otherwise
-	// sizers may try to look at deleted windows as they
-	// delete themselves.
+  // Have to delete constraints/sizer FIRST otherwise
+  // sizers may try to look at deleted windows as they
+  // delete themselves.
 #if USE_CONSTRAINTS
   DeleteRelatedConstraints();
   if (m_constraints)
@@ -339,7 +339,7 @@ wxWindow::~wxWindow(void)
   wxTopLevelWindows.DeleteObject(this);
 
   if ( m_windowValidator )
-	delete m_windowValidator;
+  delete m_windowValidator;
 
   // Restore old Window proc, if required 
   // and remove hWnd <-> wxWindow association
@@ -425,9 +425,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   SetName(name);
 
   if ( id == -1 )
-  	m_windowId = (int)NewControlId();
+    m_windowId = (int)NewControlId();
   else
-	m_windowId = id;
+  m_windowId = id;
 
   int x = pos.x;
   int y = pos.y;
@@ -508,28 +508,28 @@ void wxWindow::ReleaseMouse(void)
 // be searched)
 void wxWindow::PushEventHandler(wxEvtHandler *handler)
 {
-	handler->SetNextHandler(GetEventHandler());
-	SetEventHandler(handler);
+  handler->SetNextHandler(GetEventHandler());
+  SetEventHandler(handler);
 }
 
 wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 {
-	if ( GetEventHandler() )
-	{
-		wxEvtHandler *handlerA = GetEventHandler();
-		wxEvtHandler *handlerB = handlerA->GetNextHandler();
-		handlerA->SetNextHandler(NULL);
-		SetEventHandler(handlerB);
-		if ( deleteHandler )
-		{
-			delete handlerA;
-			return NULL;
-		}
-		else
-			return handlerA;
-	}
-	else
-		return NULL;
+  if ( GetEventHandler() )
+  {
+    wxEvtHandler *handlerA = GetEventHandler();
+    wxEvtHandler *handlerB = handlerA->GetNextHandler();
+    handlerA->SetNextHandler(NULL);
+    SetEventHandler(handlerB);
+    if ( deleteHandler )
+    {
+      delete handlerA;
+      return NULL;
+    }
+    else
+      return handlerA;
+  }
+  else
+    return NULL;
 }
 
 #if    USE_DRAG_AND_DROP
@@ -903,9 +903,9 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
   if (!wnd && wxWndHook)
   {
-	wxAssociateWinWithHandle(hWnd, wxWndHook);
+  wxAssociateWinWithHandle(hWnd, wxWndHook);
     wnd = wxWndHook;
-	wxWndHook = NULL;
+  wxWndHook = NULL;
     wnd->m_hWnd = (WXHWND) hWnd;
   }
 #if (WXDEBUG > 1)
@@ -1600,8 +1600,8 @@ bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
     // So, since we don't know which hWnd or wxWindow originated the
     // WM_NOTIFY, we'll need to go through all the children of this window
     // trying out MSWNotify.
-	// This won't work now, though, because any number of controls
-	// could respond to the same generic messages :-(
+  // This won't work now, though, because any number of controls
+  // could respond to the same generic messages :-(
 
 /* This doesn't work for toolbars, but try for other controls first.
  */
@@ -1609,21 +1609,21 @@ bool wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
     HWND hWnd = (HWND)hdr->hwndFrom;
     wxWindow *win = wxFindWinFromHandle((WXHWND) hWnd);
 
-	if ( win )
-		return win->MSWNotify(wParam, lParam);
-	else
-	{
-		    // Rely on MSWNotify to check whether the message
-			// belongs to the window or not
-    		wxNode *node = GetChildren()->First();
-    		while (node)
-    		{
-      			wxWindow *child = (wxWindow *)node->Data();
-				if ( child->MSWNotify(wParam, lParam) )
-					return TRUE;
-				node = node->Next();
-    		}
-	}
+  if ( win )
+    return win->MSWNotify(wParam, lParam);
+  else
+  {
+        // Rely on MSWNotify to check whether the message
+      // belongs to the window or not
+        wxNode *node = GetChildren()->First();
+        while (node)
+        {
+            wxWindow *child = (wxWindow *)node->Data();
+        if ( child->MSWNotify(wParam, lParam) )
+          return TRUE;
+        node = node->Next();
+        }
+  }
 
     return FALSE;
 
@@ -1649,7 +1649,7 @@ bool wxWindow::MSWOnActivate(int state, bool WXUNUSED(minimized), WXHWND WXUNUSE
 #endif
 
   wxActivateEvent event(wxEVT_ACTIVATE, ((state == WA_ACTIVE) || (state == WA_CLICKACTIVE)),
-	  m_windowId);
+    m_windowId);
   event.SetEventObject(this);
   GetEventHandler()->ProcessEvent(event);
   return 0;
@@ -1705,7 +1705,7 @@ void wxWindow::MSWOnDropFiles(WXWPARAM wParam)
 
   // Get the total number of files dropped
   WORD gwFilesDropped = (WORD)DragQueryFile ((HDROP)hFilesInfo,
-				   (UINT)-1,
+           (UINT)-1,
                                    (LPSTR)0,
                                    (UINT)0);
 
@@ -1793,7 +1793,7 @@ WXHBRUSH wxWindow::MSWOnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 #endif
   if (nCtlColor == CTLCOLOR_DLG)
   {
-	return OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
+  return OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
   }
 
   wxControl *item = (wxControl *)FindItemByHWND(pWnd, TRUE);
@@ -1801,7 +1801,7 @@ WXHBRUSH wxWindow::MSWOnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
   WXHBRUSH hBrush = 0;
 
   if ( item )
-	hBrush = item->OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
+  hBrush = item->OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
 
   // I think that even for dialogs, we may need to call DefWindowProc (?)
   // Or maybe just rely on the usual default behaviour.
@@ -1813,7 +1813,7 @@ WXHBRUSH wxWindow::MSWOnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
 
 // Define for each class of dialog and control
 WXHBRUSH wxWindow::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     return (WXHBRUSH) MSWDefWindowProc(message, wParam, lParam);
 }
@@ -1874,9 +1874,9 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   if ( m_oldWndProc )
-  	return ::CallWindowProc(CASTWNDPROC m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+    return ::CallWindowProc(CASTWNDPROC m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
   else
-  	return ::DefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
+    return ::DefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
 }
 
 long wxWindow::Default()
@@ -2448,7 +2448,7 @@ void wxWindow::MSWOnChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
     event.m_x = pt.x; event.m_y = pt.y;
 
     if (!GetEventHandler()->ProcessEvent(event))
-		Default();
+        Default();
   }
 }
 
@@ -2563,41 +2563,41 @@ void wxWindow::MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control)
   event.SetOrientation(wxVERTICAL);
   event.m_eventObject = this;
 
-	switch ( wParam )
-	{
-		case SB_TOP:
-			event.m_eventType = wxEVT_SCROLL_TOP;
-			break;
+    switch ( wParam )
+    {
+        case SB_TOP:
+            event.m_eventType = wxEVT_SCROLL_TOP;
+            break;
 
-		case SB_BOTTOM:
-			event.m_eventType = wxEVT_SCROLL_BOTTOM;
-			break;
+        case SB_BOTTOM:
+            event.m_eventType = wxEVT_SCROLL_BOTTOM;
+            break;
 
-		case SB_LINEUP:
-			event.m_eventType = wxEVT_SCROLL_LINEUP;
-			break;
+        case SB_LINEUP:
+            event.m_eventType = wxEVT_SCROLL_LINEUP;
+            break;
 
-		case SB_LINEDOWN:
-		        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
-			break;
+        case SB_LINEDOWN:
+                event.m_eventType = wxEVT_SCROLL_LINEDOWN;
+            break;
 
-		case SB_PAGEUP:
+        case SB_PAGEUP:
                         event.m_eventType = wxEVT_SCROLL_PAGEUP;
-			break;
+            break;
 
-		case SB_PAGEDOWN:
+        case SB_PAGEDOWN:
                         event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
-			break;
+            break;
 
         case SB_THUMBTRACK:
         case SB_THUMBPOSITION:
                         event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
-			break;
+            break;
 
-		default:
+        default:
                         return;
                         break;
-	}
+    }
 
   if (!GetEventHandler()->ProcessEvent(event))
     Default();
@@ -2608,53 +2608,60 @@ void wxWindow::MSWOnHScroll( WXWORD wParam, WXWORD pos, WXHWND control)
   if (control)
   {
     wxWindow *child = wxFindWinFromHandle(control);
-    if ( child )
+    if ( child ) {
       child->MSWOnHScroll(wParam, pos, control);
-    return;
+
+      return;
+    }
   }
+  else {  
+    wxScrollEvent event;
+    event.SetPosition(pos);
+    event.SetOrientation(wxHORIZONTAL);
+    event.m_eventObject = this;
   
-  wxScrollEvent event;
-  event.SetPosition(pos);
-  event.SetOrientation(wxHORIZONTAL);
-  event.m_eventObject = this;
-  
-  switch ( wParam )
-  {
-		case SB_TOP:
-			event.m_eventType = wxEVT_SCROLL_TOP;
-			break;
+    switch ( wParam )
+    {
+      case SB_TOP:
+        event.m_eventType = wxEVT_SCROLL_TOP;
+        break;
+    
+      case SB_BOTTOM:
+        event.m_eventType = wxEVT_SCROLL_BOTTOM;
+        break;
+    
+      case SB_LINEUP:
+        event.m_eventType = wxEVT_SCROLL_LINEUP;
+        break;
+    
+      case SB_LINEDOWN:
+        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
+        break;
+    
+      case SB_PAGEUP:
+        event.m_eventType = wxEVT_SCROLL_PAGEUP;
+        break;
+    
+      case SB_PAGEDOWN:
+        event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
+        break;
+    
+      case SB_THUMBTRACK:
+      case SB_THUMBPOSITION:
+        event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
+        break;
+    
+      default:
+        return;
+    }
 
-		case SB_BOTTOM:
-			event.m_eventType = wxEVT_SCROLL_BOTTOM;
-			break;
+    if ( GetEventHandler()->ProcessEvent(event) )
+      return;
+  }
 
-		case SB_LINEUP:
-			event.m_eventType = wxEVT_SCROLL_LINEUP;
-			break;
-
-		case SB_LINEDOWN:
-		        event.m_eventType = wxEVT_SCROLL_LINEDOWN;
-			break;
-
-		case SB_PAGEUP:
-                        event.m_eventType = wxEVT_SCROLL_PAGEUP;
-			break;
-
-		case SB_PAGEDOWN:
-                        event.m_eventType = wxEVT_SCROLL_PAGEDOWN;
-			break;
-
-        case SB_THUMBTRACK:
-        case SB_THUMBPOSITION:
-                        event.m_eventType = wxEVT_SCROLL_THUMBTRACK;
-			break;
-
-		default:
-                        return;
-                        break;
-	}
-  if (!GetEventHandler()->ProcessEvent(event))
-    Default();
+  // call the default WM_HSCROLL handler: it's non trivial in some common
+  // controls (up-down control for example)
+  Default();
 }
 
 void wxWindow::MSWOnShow(bool show, int status)
@@ -2726,70 +2733,70 @@ int wxCharCodeMSWToWX(int keySym)
   {
     case VK_CANCEL:             id = WXK_CANCEL; break;
     case VK_BACK:               id = WXK_BACK; break;
-    case VK_TAB:	        id = WXK_TAB; break;
-    case VK_CLEAR:		id = WXK_CLEAR; break;
-    case VK_RETURN:		id = WXK_RETURN; break;
-    case VK_SHIFT:		id = WXK_SHIFT; break;
-    case VK_CONTROL:		id = WXK_CONTROL; break;
-    case VK_MENU :		id = WXK_MENU; break;
-    case VK_PAUSE:		id = WXK_PAUSE; break;
-    case VK_SPACE:		id = WXK_SPACE; break;
-    case VK_ESCAPE:		id = WXK_ESCAPE; break;
-    case VK_PRIOR:		id = WXK_PRIOR; break;
-    case VK_NEXT :		id = WXK_NEXT; break;
-    case VK_END:		id = WXK_END; break;
-    case VK_HOME :		id = WXK_HOME; break;
-    case VK_LEFT :		id = WXK_LEFT; break;
-    case VK_UP:		        id = WXK_UP; break;
-    case VK_RIGHT:		id = WXK_RIGHT; break;
-    case VK_DOWN :		id = WXK_DOWN; break;
-    case VK_SELECT:		id = WXK_SELECT; break;
-    case VK_PRINT:		id = WXK_PRINT; break;
-    case VK_EXECUTE:		id = WXK_EXECUTE; break;
-    case VK_INSERT:		id = WXK_INSERT; break;
-    case VK_DELETE:		id = WXK_DELETE; break;
-    case VK_HELP :		id = WXK_HELP; break;
-    case VK_NUMPAD0:		id = WXK_NUMPAD0; break;
-    case VK_NUMPAD1:		id = WXK_NUMPAD1; break;
-    case VK_NUMPAD2:		id = WXK_NUMPAD2; break;
-    case VK_NUMPAD3:		id = WXK_NUMPAD3; break;
-    case VK_NUMPAD4:		id = WXK_NUMPAD4; break;
-    case VK_NUMPAD5:		id = WXK_NUMPAD5; break;
-    case VK_NUMPAD6:		id = WXK_NUMPAD6; break;
-    case VK_NUMPAD7:		id = WXK_NUMPAD7; break;
-    case VK_NUMPAD8:		id = WXK_NUMPAD8; break;
-    case VK_NUMPAD9:		id = WXK_NUMPAD9; break;
-    case VK_MULTIPLY:		id = WXK_MULTIPLY; break;
-    case VK_ADD:		id = WXK_ADD; break;
-    case VK_SUBTRACT:		id = WXK_SUBTRACT; break;
-    case VK_DECIMAL:		id = WXK_DECIMAL; break;
-    case VK_DIVIDE:		id = WXK_DIVIDE; break;
-    case VK_F1:		id = WXK_F1; break;
-    case VK_F2:		id = WXK_F2; break;
-    case VK_F3:		id = WXK_F3; break;
-    case VK_F4:		id = WXK_F4; break;
-    case VK_F5:		id = WXK_F5; break;
-    case VK_F6:		id = WXK_F6; break;
-    case VK_F7:		id = WXK_F7; break;
-    case VK_F8:		id = WXK_F8; break;
-    case VK_F9:		id = WXK_F9; break;
-    case VK_F10:		id = WXK_F10; break;
-    case VK_F11:		id = WXK_F11; break;
-    case VK_F12:		id = WXK_F12; break;
-    case VK_F13:		id = WXK_F13; break;
-    case VK_F14:		id = WXK_F14; break;
-    case VK_F15:		id = WXK_F15; break;
-    case VK_F16:		id = WXK_F16; break;
-    case VK_F17:		id = WXK_F17; break;
-    case VK_F18:		id = WXK_F18; break;
-    case VK_F19:		id = WXK_F19; break;
-    case VK_F20:		id = WXK_F20; break;
-    case VK_F21:		id = WXK_F21; break;
-    case VK_F22:		id = WXK_F22; break;
-    case VK_F23:		id = WXK_F23; break;
-    case VK_F24:		id = WXK_F24; break;
-    case VK_NUMLOCK:		id = WXK_NUMLOCK; break;
-    case VK_SCROLL:		id = WXK_SCROLL; break;
+    case VK_TAB:            id = WXK_TAB; break;
+    case VK_CLEAR:      id = WXK_CLEAR; break;
+    case VK_RETURN:     id = WXK_RETURN; break;
+    case VK_SHIFT:      id = WXK_SHIFT; break;
+    case VK_CONTROL:        id = WXK_CONTROL; break;
+    case VK_MENU :      id = WXK_MENU; break;
+    case VK_PAUSE:      id = WXK_PAUSE; break;
+    case VK_SPACE:      id = WXK_SPACE; break;
+    case VK_ESCAPE:     id = WXK_ESCAPE; break;
+    case VK_PRIOR:      id = WXK_PRIOR; break;
+    case VK_NEXT :      id = WXK_NEXT; break;
+    case VK_END:        id = WXK_END; break;
+    case VK_HOME :      id = WXK_HOME; break;
+    case VK_LEFT :      id = WXK_LEFT; break;
+    case VK_UP:             id = WXK_UP; break;
+    case VK_RIGHT:      id = WXK_RIGHT; break;
+    case VK_DOWN :      id = WXK_DOWN; break;
+    case VK_SELECT:     id = WXK_SELECT; break;
+    case VK_PRINT:      id = WXK_PRINT; break;
+    case VK_EXECUTE:        id = WXK_EXECUTE; break;
+    case VK_INSERT:     id = WXK_INSERT; break;
+    case VK_DELETE:     id = WXK_DELETE; break;
+    case VK_HELP :      id = WXK_HELP; break;
+    case VK_NUMPAD0:        id = WXK_NUMPAD0; break;
+    case VK_NUMPAD1:        id = WXK_NUMPAD1; break;
+    case VK_NUMPAD2:        id = WXK_NUMPAD2; break;
+    case VK_NUMPAD3:        id = WXK_NUMPAD3; break;
+    case VK_NUMPAD4:        id = WXK_NUMPAD4; break;
+    case VK_NUMPAD5:        id = WXK_NUMPAD5; break;
+    case VK_NUMPAD6:        id = WXK_NUMPAD6; break;
+    case VK_NUMPAD7:        id = WXK_NUMPAD7; break;
+    case VK_NUMPAD8:        id = WXK_NUMPAD8; break;
+    case VK_NUMPAD9:        id = WXK_NUMPAD9; break;
+    case VK_MULTIPLY:       id = WXK_MULTIPLY; break;
+    case VK_ADD:        id = WXK_ADD; break;
+    case VK_SUBTRACT:       id = WXK_SUBTRACT; break;
+    case VK_DECIMAL:        id = WXK_DECIMAL; break;
+    case VK_DIVIDE:     id = WXK_DIVIDE; break;
+    case VK_F1:     id = WXK_F1; break;
+    case VK_F2:     id = WXK_F2; break;
+    case VK_F3:     id = WXK_F3; break;
+    case VK_F4:     id = WXK_F4; break;
+    case VK_F5:     id = WXK_F5; break;
+    case VK_F6:     id = WXK_F6; break;
+    case VK_F7:     id = WXK_F7; break;
+    case VK_F8:     id = WXK_F8; break;
+    case VK_F9:     id = WXK_F9; break;
+    case VK_F10:        id = WXK_F10; break;
+    case VK_F11:        id = WXK_F11; break;
+    case VK_F12:        id = WXK_F12; break;
+    case VK_F13:        id = WXK_F13; break;
+    case VK_F14:        id = WXK_F14; break;
+    case VK_F15:        id = WXK_F15; break;
+    case VK_F16:        id = WXK_F16; break;
+    case VK_F17:        id = WXK_F17; break;
+    case VK_F18:        id = WXK_F18; break;
+    case VK_F19:        id = WXK_F19; break;
+    case VK_F20:        id = WXK_F20; break;
+    case VK_F21:        id = WXK_F21; break;
+    case VK_F22:        id = WXK_F22; break;
+    case VK_F23:        id = WXK_F23; break;
+    case VK_F24:        id = WXK_F24; break;
+    case VK_NUMLOCK:        id = WXK_NUMLOCK; break;
+    case VK_SCROLL:     id = WXK_SCROLL; break;
     default:
     {
       return 0;
@@ -2805,66 +2812,66 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
   switch (id)
   {
     case WXK_CANCEL:            keySym = VK_CANCEL; break;
-    case WXK_CLEAR:		keySym = VK_CLEAR; break;
-    case WXK_SHIFT:		keySym = VK_SHIFT; break;
-    case WXK_CONTROL:		keySym = VK_CONTROL; break;
-    case WXK_MENU :		keySym = VK_MENU; break;
-    case WXK_PAUSE:		keySym = VK_PAUSE; break;
-    case WXK_PRIOR:		keySym = VK_PRIOR; break;
-    case WXK_NEXT :		keySym = VK_NEXT; break;
-    case WXK_END:		keySym = VK_END; break;
-    case WXK_HOME :		keySym = VK_HOME; break;
-    case WXK_LEFT :		keySym = VK_LEFT; break;
-    case WXK_UP:		keySym = VK_UP; break;
-    case WXK_RIGHT:		keySym = VK_RIGHT; break;
-    case WXK_DOWN :		keySym = VK_DOWN; break;
-    case WXK_SELECT:		keySym = VK_SELECT; break;
-    case WXK_PRINT:		keySym = VK_PRINT; break;
-    case WXK_EXECUTE:		keySym = VK_EXECUTE; break;
-    case WXK_INSERT:		keySym = VK_INSERT; break;
-    case WXK_DELETE:		keySym = VK_DELETE; break;
-    case WXK_HELP :		keySym = VK_HELP; break;
-    case WXK_NUMPAD0:		keySym = VK_NUMPAD0; break;
-    case WXK_NUMPAD1:		keySym = VK_NUMPAD1; break;
-    case WXK_NUMPAD2:		keySym = VK_NUMPAD2; break;
-    case WXK_NUMPAD3:		keySym = VK_NUMPAD3; break;
-    case WXK_NUMPAD4:		keySym = VK_NUMPAD4; break;
-    case WXK_NUMPAD5:		keySym = VK_NUMPAD5; break;
-    case WXK_NUMPAD6:		keySym = VK_NUMPAD6; break;
-    case WXK_NUMPAD7:		keySym = VK_NUMPAD7; break;
-    case WXK_NUMPAD8:		keySym = VK_NUMPAD8; break;
-    case WXK_NUMPAD9:		keySym = VK_NUMPAD9; break;
-    case WXK_MULTIPLY:		keySym = VK_MULTIPLY; break;
-    case WXK_ADD:		keySym = VK_ADD; break;
-    case WXK_SUBTRACT:		keySym = VK_SUBTRACT; break;
-    case WXK_DECIMAL:		keySym = VK_DECIMAL; break;
-    case WXK_DIVIDE:		keySym = VK_DIVIDE; break;
-    case WXK_F1:		keySym = VK_F1; break;
-    case WXK_F2:		keySym = VK_F2; break;
-    case WXK_F3:		keySym = VK_F3; break;
-    case WXK_F4:		keySym = VK_F4; break;
-    case WXK_F5:		keySym = VK_F5; break;
-    case WXK_F6:		keySym = VK_F6; break;
-    case WXK_F7:		keySym = VK_F7; break;
-    case WXK_F8:		keySym = VK_F8; break;
-    case WXK_F9:		keySym = VK_F9; break;
-    case WXK_F10:		keySym = VK_F10; break;
-    case WXK_F11:		keySym = VK_F11; break;
-    case WXK_F12:		keySym = VK_F12; break;
-    case WXK_F13:		keySym = VK_F13; break;
-    case WXK_F14:		keySym = VK_F14; break;
-    case WXK_F15:		keySym = VK_F15; break;
-    case WXK_F16:		keySym = VK_F16; break;
-    case WXK_F17:		keySym = VK_F17; break;
-    case WXK_F18:		keySym = VK_F18; break;
-    case WXK_F19:		keySym = VK_F19; break;
-    case WXK_F20:		keySym = VK_F20; break;
-    case WXK_F21:		keySym = VK_F21; break;
-    case WXK_F22:		keySym = VK_F22; break;
-    case WXK_F23:		keySym = VK_F23; break;
-    case WXK_F24:		keySym = VK_F24; break;
-    case WXK_NUMLOCK:		keySym = VK_NUMLOCK; break;
-    case WXK_SCROLL:		keySym = VK_SCROLL; break;
+    case WXK_CLEAR:     keySym = VK_CLEAR; break;
+    case WXK_SHIFT:     keySym = VK_SHIFT; break;
+    case WXK_CONTROL:       keySym = VK_CONTROL; break;
+    case WXK_MENU :     keySym = VK_MENU; break;
+    case WXK_PAUSE:     keySym = VK_PAUSE; break;
+    case WXK_PRIOR:     keySym = VK_PRIOR; break;
+    case WXK_NEXT :     keySym = VK_NEXT; break;
+    case WXK_END:       keySym = VK_END; break;
+    case WXK_HOME :     keySym = VK_HOME; break;
+    case WXK_LEFT :     keySym = VK_LEFT; break;
+    case WXK_UP:        keySym = VK_UP; break;
+    case WXK_RIGHT:     keySym = VK_RIGHT; break;
+    case WXK_DOWN :     keySym = VK_DOWN; break;
+    case WXK_SELECT:        keySym = VK_SELECT; break;
+    case WXK_PRINT:     keySym = VK_PRINT; break;
+    case WXK_EXECUTE:       keySym = VK_EXECUTE; break;
+    case WXK_INSERT:        keySym = VK_INSERT; break;
+    case WXK_DELETE:        keySym = VK_DELETE; break;
+    case WXK_HELP :     keySym = VK_HELP; break;
+    case WXK_NUMPAD0:       keySym = VK_NUMPAD0; break;
+    case WXK_NUMPAD1:       keySym = VK_NUMPAD1; break;
+    case WXK_NUMPAD2:       keySym = VK_NUMPAD2; break;
+    case WXK_NUMPAD3:       keySym = VK_NUMPAD3; break;
+    case WXK_NUMPAD4:       keySym = VK_NUMPAD4; break;
+    case WXK_NUMPAD5:       keySym = VK_NUMPAD5; break;
+    case WXK_NUMPAD6:       keySym = VK_NUMPAD6; break;
+    case WXK_NUMPAD7:       keySym = VK_NUMPAD7; break;
+    case WXK_NUMPAD8:       keySym = VK_NUMPAD8; break;
+    case WXK_NUMPAD9:       keySym = VK_NUMPAD9; break;
+    case WXK_MULTIPLY:      keySym = VK_MULTIPLY; break;
+    case WXK_ADD:       keySym = VK_ADD; break;
+    case WXK_SUBTRACT:      keySym = VK_SUBTRACT; break;
+    case WXK_DECIMAL:       keySym = VK_DECIMAL; break;
+    case WXK_DIVIDE:        keySym = VK_DIVIDE; break;
+    case WXK_F1:        keySym = VK_F1; break;
+    case WXK_F2:        keySym = VK_F2; break;
+    case WXK_F3:        keySym = VK_F3; break;
+    case WXK_F4:        keySym = VK_F4; break;
+    case WXK_F5:        keySym = VK_F5; break;
+    case WXK_F6:        keySym = VK_F6; break;
+    case WXK_F7:        keySym = VK_F7; break;
+    case WXK_F8:        keySym = VK_F8; break;
+    case WXK_F9:        keySym = VK_F9; break;
+    case WXK_F10:       keySym = VK_F10; break;
+    case WXK_F11:       keySym = VK_F11; break;
+    case WXK_F12:       keySym = VK_F12; break;
+    case WXK_F13:       keySym = VK_F13; break;
+    case WXK_F14:       keySym = VK_F14; break;
+    case WXK_F15:       keySym = VK_F15; break;
+    case WXK_F16:       keySym = VK_F16; break;
+    case WXK_F17:       keySym = VK_F17; break;
+    case WXK_F18:       keySym = VK_F18; break;
+    case WXK_F19:       keySym = VK_F19; break;
+    case WXK_F20:       keySym = VK_F20; break;
+    case WXK_F21:       keySym = VK_F21; break;
+    case WXK_F22:       keySym = VK_F22; break;
+    case WXK_F23:       keySym = VK_F23; break;
+    case WXK_F24:       keySym = VK_F24; break;
+    case WXK_NUMLOCK:       keySym = VK_NUMLOCK; break;
+    case WXK_SCROLL:        keySym = VK_SCROLL; break;
     default:
     {
       *isVirtual = FALSE;
@@ -2976,17 +2983,17 @@ int APIENTRY _EXPORT
 /* end Albert's fix for control and shift key 26.5 */
       event.SetTimestamp(wxApp::sm_lastMessageTime); /* MATTHEW: timeStamp */
 
-		wxWindow *win = wxGetActiveWindow();
-  		if (win)
-		{
+        wxWindow *win = wxGetActiveWindow();
+        if (win)
+        {
             if (win->GetEventHandler()->ProcessEvent(event))
-				return 1;
-		}
-		else
-		{
-			if ( wxTheApp && wxTheApp->ProcessEvent(event) )
-				return 1;
-		}
+                return 1;
+        }
+        else
+        {
+            if ( wxTheApp && wxTheApp->ProcessEvent(event) )
+                return 1;
+        }
     }
   }
   return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
@@ -3056,22 +3063,22 @@ bool wxWindow::MSWOnEraseBkgnd (WXHDC pDC)
 {
     wxDC dc ;
 
-	dc.SetHDC(pDC);
-	dc.SetWindow(this);
-	dc.BeginDrawing();
+    dc.SetHDC(pDC);
+    dc.SetWindow(this);
+    dc.BeginDrawing();
 
     wxEraseEvent event(m_windowId, &dc);
     event.m_eventObject = this;
     if (!GetEventHandler()->ProcessEvent(event))
     {
-	    dc.EndDrawing();
-	    dc.SelectOldObjects(pDC);
+        dc.EndDrawing();
+        dc.SelectOldObjects(pDC);
         return FALSE;
     }
     else
     {
-	    dc.EndDrawing();
-	    dc.SelectOldObjects(pDC);
+        dc.EndDrawing();
+        dc.SelectOldObjects(pDC);
     }
 
     dc.SetHDC((WXHDC) NULL);
@@ -3114,16 +3121,16 @@ void wxWindow::SetScrollRange(int orient, int range, bool refresh)
   int pageSize = GetScrollPage(orient);
   if ( pageSize > 1 && range > 0)
   {
-	range1 += (pageSize - 1);
+    range1 += (pageSize - 1);
   }
 
   SCROLLINFO info;
   int dir;
 
   if (orient == wxHORIZONTAL) {
-	dir = SB_HORZ;
+    dir = SB_HORZ;
   } else {
-	dir = SB_VERT;
+    dir = SB_VERT;
   }
 
   info.cbSize = sizeof(SCROLLINFO);
@@ -3156,10 +3163,10 @@ void wxWindow::SetScrollPage(int orient, int page, bool refresh)
   int dir;
 
   if (orient == wxHORIZONTAL) {
-	dir = SB_HORZ;
+    dir = SB_HORZ;
     m_xThumbSize = page;
   } else {
-	dir = SB_VERT;
+    dir = SB_VERT;
     m_yThumbSize = page;
   }
 
@@ -3202,7 +3209,7 @@ int wxWindow::OldGetScrollRange(int orient) const
     int pageSize = GetScrollPage(orient);
     if ( pageSize > 1 )
     {
- 	  maxPos -= (pageSize - 1);
+      maxPos -= (pageSize - 1);
     }
 #endif
     return maxPos;
@@ -3261,7 +3268,7 @@ int wxWindow::GetScrollRange(int orient) const
     int pageSize = GetScrollPage(orient);
     if ( pageSize > 1 )
     {
- 	  maxPos -= (pageSize - 1);
+      maxPos -= (pageSize - 1);
     }
     // October 10th: new range concept.
     maxPos += pageSize;
@@ -3288,9 +3295,9 @@ void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
   int dir;
 
   if (orient == wxHORIZONTAL) {
-	dir = SB_HORZ;
+    dir = SB_HORZ;
   } else {
-	dir = SB_VERT;
+    dir = SB_VERT;
   }
 
   info.cbSize = sizeof(SCROLLINFO);
@@ -3337,16 +3344,16 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
   int pageSize = thumbVisible;
   if ( pageSize > 1 && range > 0)
   {
-	range1 += (pageSize - 1);
+    range1 += (pageSize - 1);
   }
 
   SCROLLINFO info;
   int dir;
 
   if (orient == wxHORIZONTAL) {
-	dir = SB_HORZ;
+    dir = SB_HORZ;
   } else {
-	dir = SB_VERT;
+    dir = SB_VERT;
   }
 
   info.cbSize = sizeof(SCROLLINFO);
@@ -3382,19 +3389,19 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 
 void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 {
-	RECT rect2;
-	if ( rect )
-	{
-		rect2.left = rect->x;
-		rect2.top = rect->y;
-		rect2.right = rect->x + rect->width;
-		rect2.bottom = rect->y + rect->height;
-	}
+    RECT rect2;
+    if ( rect )
+    {
+        rect2.left = rect->x;
+        rect2.top = rect->y;
+        rect2.right = rect->x + rect->width;
+        rect2.bottom = rect->y + rect->height;
+    }
 
-	if ( rect )
-		::ScrollWindow((HWND) GetHWND(), dx, dy, &rect2, NULL);
-	else
-		::ScrollWindow((HWND) GetHWND(), dx, dy, NULL, NULL);
+    if ( rect )
+        ::ScrollWindow((HWND) GetHWND(), dx, dy, &rect2, NULL);
+    else
+        ::ScrollWindow((HWND) GetHWND(), dx, dy, NULL, NULL);
 }
 
 void wxWindow::SetFont(const wxFont& font)
@@ -3402,7 +3409,7 @@ void wxWindow::SetFont(const wxFont& font)
   m_windowFont = font;
 
   if (!m_windowFont.Ok())
-	return;
+    return;
 
   HWND hWnd = (HWND) GetHWND();
   if (hWnd != 0)
@@ -3425,38 +3432,38 @@ void wxWindow::SubclassWin(WXHWND hWnd)
 
 void wxWindow::UnsubclassWin(void)
 {
-	wxRemoveHandleAssociation(this);
+    wxRemoveHandleAssociation(this);
 
   // Restore old Window proc
   if ((HWND) GetHWND())
   {
     FARPROC farProc = (FARPROC) GetWindowLong((HWND) GetHWND(), GWL_WNDPROC);
     if ((m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc))
-	{
+    {
       SetWindowLong((HWND) GetHWND(), GWL_WNDPROC, (LONG) m_oldWndProc);
-	  m_oldWndProc = 0;
-	}
+      m_oldWndProc = 0;
+    }
   }
 }
 
 // Make a Windows extended style from the given wxWindows window style
 WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
 {
-	WXDWORD exStyle = 0;
-	if ( style & wxTRANSPARENT_WINDOW )
-		exStyle |= WS_EX_TRANSPARENT ;
+    WXDWORD exStyle = 0;
+    if ( style & wxTRANSPARENT_WINDOW )
+        exStyle |= WS_EX_TRANSPARENT ;
 
   if ( !eliminateBorders )
   {
-	if ( style & wxSUNKEN_BORDER )
-		exStyle |= WS_EX_CLIENTEDGE ;
-	if ( style & wxDOUBLE_BORDER )
-		exStyle |= WS_EX_DLGMODALFRAME ;
+    if ( style & wxSUNKEN_BORDER )
+        exStyle |= WS_EX_CLIENTEDGE ;
+    if ( style & wxDOUBLE_BORDER )
+        exStyle |= WS_EX_DLGMODALFRAME ;
 #if defined(__WIN95__)
-	if ( style & wxRAISED_BORDER )
-		exStyle |= WS_EX_WINDOWEDGE ;
-	if ( style & wxSTATIC_BORDER )
-		exStyle |= WS_EX_STATICEDGE ;
+    if ( style & wxRAISED_BORDER )
+        exStyle |= WS_EX_WINDOWEDGE ;
+    if ( style & wxSTATIC_BORDER )
+        exStyle |= WS_EX_STATICEDGE ;
 #endif
   }
   return exStyle;
@@ -3471,8 +3478,8 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
   // unless specifically requested (dealt with in MakeExtendedStyle)
   if ( !GetParent() || !IsKindOf(CLASSINFO(wxControl)) || (m_windowStyle & wxNO_BORDER) )
   {
-	*want3D = FALSE;
-	return MakeExtendedStyle(m_windowStyle, FALSE);
+    *want3D = FALSE;
+    return MakeExtendedStyle(m_windowStyle, FALSE);
   }
 
   // Determine whether we should be using 3D effects or not.
@@ -3484,26 +3491,26 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
   // 2) If the parent is being drawn with user colours, or simple border specified,
   // switch effects off. TODO: replace wxUSER_COLOURS with wxNO_3D
   if (GetParent() && (GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) || (m_windowStyle & wxSIMPLE_BORDER))
-	*want3D = FALSE;
+    *want3D = FALSE;
 
   // 3) Control can override this global setting by defining
   // a border style, e.g. wxSUNKEN_BORDER
   if (m_windowStyle & wxSUNKEN_BORDER )
-	*want3D = TRUE;
+    *want3D = TRUE;
 
   // 4) If it's a special border, CTL3D can't cope so we want a native border
   if ( (m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
        (m_windowStyle & wxSTATIC_BORDER) )
   {
-	*want3D = TRUE;
-	nativeBorder = TRUE;
+    *want3D = TRUE;
+    nativeBorder = TRUE;
   }
 
   // 5) If this isn't a Win95 app, and we are using CTL3D, remove border
   // effects from extended style
 #if CTL3D
   if ( *want3D )
-  	nativeBorder = FALSE;
+    nativeBorder = FALSE;
 #endif
 
   DWORD exStyle = MakeExtendedStyle(m_windowStyle, !nativeBorder);
@@ -3514,7 +3521,7 @@ WXDWORD wxWindow::Determine3DEffects(WXDWORD defaultBorderStyle, bool *want3D)
 #if defined(__WIN95__) && !CTL3D
   if (defaultBorderStyle && (*want3D) && ! ((m_windowStyle & wxDOUBLE_BORDER) || (m_windowStyle & wxRAISED_BORDER) ||
         (m_windowStyle & wxSTATIC_BORDER) || (m_windowStyle & wxSIMPLE_BORDER) ))
-	exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE ;
+    exStyle |= defaultBorderStyle; // WS_EX_CLIENTEDGE ;
 #endif
 
   return exStyle;
@@ -3543,12 +3550,12 @@ void wxWindow::OnChar(wxKeyEvent& event)
 
 void wxWindow::OnPaint(wxPaintEvent& event)
 {
-	Default();
+    Default();
 }
 
 bool wxWindow::IsEnabled(void) const
 {
-	return (::IsWindowEnabled((HWND) GetHWND()) != 0);
+    return (::IsWindowEnabled((HWND) GetHWND()) != 0);
 }
 
 // Dialog support: override these and call
@@ -3562,54 +3569,54 @@ bool wxWindow::IsEnabled(void) const
 // it's an application error (pops up a dialog)
 bool wxWindow::TransferDataToWindow(void)
 {
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *child = (wxWindow *)node->Data();
-		if ( child->GetValidator() && /* child->GetValidator()->Ok() && */
-		!child->GetValidator()->TransferToWindow() )
-		{
-			wxMessageBox("Application Error", "Could not transfer data to window", wxOK|wxICON_EXCLAMATION);
-			return FALSE;
-		}
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        if ( child->GetValidator() && /* child->GetValidator()->Ok() && */
+        !child->GetValidator()->TransferToWindow() )
+        {
+            wxMessageBox("Application Error", "Could not transfer data to window", wxOK|wxICON_EXCLAMATION);
+            return FALSE;
+        }
 
-		node = node->Next();
-	}
-	return TRUE;
+        node = node->Next();
+    }
+    return TRUE;
 }
 
 // Transfer values from controls. If returns FALSE,
 // validation failed: don't quit
 bool wxWindow::TransferDataFromWindow(void)
 {
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *child = (wxWindow *)node->Data();
-		if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->TransferFromWindow() )
-		{
-			return FALSE;
-		}
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->TransferFromWindow() )
+        {
+            return FALSE;
+        }
 
-		node = node->Next();
-	}
-	return TRUE;
+        node = node->Next();
+    }
+    return TRUE;
 }
 
 bool wxWindow::Validate(void)
 {
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *child = (wxWindow *)node->Data();
-		if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->Validate(this) )
-		{
-			return FALSE;
-		}
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        if ( child->GetValidator() && /* child->GetValidator()->Ok() && */ !child->GetValidator()->Validate(this) )
+        {
+            return FALSE;
+        }
 
-		node = node->Next();
-	}
-	return TRUE;
+        node = node->Next();
+    }
+    return TRUE;
 }
 
 // Get the window with the focus
@@ -3644,8 +3651,8 @@ void wxWindow::DestroyChildren(void)
       wxWindow *child;
       if ((child = (wxWindow *)node->Data()) != (wxWindow *)NULL) {
         delete child;
-		if ( GetChildren()->Member(child) )
-			delete node;
+        if ( GetChildren()->Member(child) )
+            delete node;
       }
     } /* while */
   }
@@ -3674,7 +3681,7 @@ void wxWindow::MakeModal(bool modal)
 void wxWindow::OnCommand(wxWindow& win, wxCommandEvent& event)
 {
   if (GetEventHandler()->ProcessEvent(event) )
-	return;
+    return;
   if (m_windowParent)
     m_windowParent->GetEventHandler()->OnCommand(win, event);
 }
@@ -3949,10 +3956,10 @@ void wxWindow::SetConstraintSizes(bool recurse)
     char *windowClass = this->GetClassInfo()->GetClassName();
 
     wxString winName;
-	if (GetName() == "")
-		winName = "unnamed";
-	else
-		winName = GetName();
+    if (GetName() == "")
+        winName = "unnamed";
+    else
+        winName = GetName();
     wxDebugMsg("Constraint(s) not satisfied for window of type %s, name %s:\n", (const char *)windowClass, (const char *)winName);
     if (!constr->left.GetDone())
       wxDebugMsg("  unsatisfied 'left' constraint.\n");
@@ -3983,7 +3990,7 @@ void wxWindow::SetConstraintSizes(bool recurse)
 void wxWindow::TransformSizerToActual(int *x, int *y) const
 {
   if (!m_sizerParent || m_sizerParent->IsKindOf(CLASSINFO(wxDialog)) ||
-  			 m_sizerParent->IsKindOf(CLASSINFO(wxFrame)) )
+             m_sizerParent->IsKindOf(CLASSINFO(wxFrame)) )
     return;
     
   int xp, yp;
@@ -3995,16 +4002,16 @@ void wxWindow::TransformSizerToActual(int *x, int *y) const
 
 void wxWindow::SizerSetSize(int x, int y, int w, int h)
 {
-	int xx = x;
-	int yy = y;
+    int xx = x;
+    int yy = y;
   TransformSizerToActual(&xx, &yy);
   SetSize(xx, yy, w, h);
 }
 
 void wxWindow::SizerMove(int x, int y)
 {
-	int xx = x;
-	int yy = y;
+    int xx = x;
+    int yy = y;
   TransformSizerToActual(&xx, &yy);
   Move(xx, yy);
 }
@@ -4178,7 +4185,7 @@ void wxWindow::OnDefaultAction(wxControl *initiatingItem)
 
 void wxWindow::Clear(void)
 {
-	wxClientDC dc(this);
+    wxClientDC dc(this);
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBackground(brush);
     dc.Clear();
@@ -4187,68 +4194,68 @@ void wxWindow::Clear(void)
 // Fits the panel around the items
 void wxWindow::Fit(void)
 {
-	int maxX = 0;
-	int maxY = 0;
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *win = (wxWindow *)node->Data();
-		int wx, wy, ww, wh;
-		win->GetPosition(&wx, &wy);
-		win->GetSize(&ww, &wh);
-		if ( wx + ww > maxX )
-			maxX = wx + ww;
-		if ( wy + wh > maxY )
-			maxY = wy + wh;
+    int maxX = 0;
+    int maxY = 0;
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *win = (wxWindow *)node->Data();
+        int wx, wy, ww, wh;
+        win->GetPosition(&wx, &wy);
+        win->GetSize(&ww, &wh);
+        if ( wx + ww > maxX )
+            maxX = wx + ww;
+        if ( wy + wh > maxY )
+            maxY = wy + wh;
 
-		node = node->Next();
-	}
-	SetClientSize(maxX + 5, maxY + 5);
+        node = node->Next();
+    }
+    SetClientSize(maxX + 5, maxY + 5);
 }
 
 void wxWindow::SetValidator(const wxValidator& validator)
 {
-	if ( m_windowValidator )
-		delete m_windowValidator;
-	m_windowValidator = validator.Clone();
+    if ( m_windowValidator )
+        delete m_windowValidator;
+    m_windowValidator = validator.Clone();
 
-	if ( m_windowValidator )
-		m_windowValidator->SetWindow(this) ;
+    if ( m_windowValidator )
+        m_windowValidator->SetWindow(this) ;
 }
 
 // Find a window by id or name
 wxWindow *wxWindow::FindWindow(long id)
 {
-	if ( GetId() == id)
-		return this;
+    if ( GetId() == id)
+        return this;
 
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *child = (wxWindow *)node->Data();
-		wxWindow *found = child->FindWindow(id);
-		if ( found )
-			return found;
-		node = node->Next();
-	}
-	return NULL;
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        wxWindow *found = child->FindWindow(id);
+        if ( found )
+            return found;
+        node = node->Next();
+    }
+    return NULL;
 }
 
 wxWindow *wxWindow::FindWindow(const wxString& name)
 {
-	if ( GetName() == name)
-		return this;
+    if ( GetName() == name)
+        return this;
 
-	wxNode *node = GetChildren()->First();
-	while ( node )
-	{
-		wxWindow *child = (wxWindow *)node->Data();
-		wxWindow *found = child->FindWindow(name);
-		if ( found )
-			return found;
-		node = node->Next();
-	}
-	return NULL;
+    wxNode *node = GetChildren()->First();
+    while ( node )
+    {
+        wxWindow *child = (wxWindow *)node->Data();
+        wxWindow *found = child->FindWindow(name);
+        if ( found )
+            return found;
+        node = node->Next();
+    }
+    return NULL;
 }
 
 /* TODO
@@ -4273,7 +4280,7 @@ void wxWindow::OnChar(wxKeyEvent& event)
   ViewStart(&start_x, &start_y);
   // Bugfix begin
   if (vert_units)
-	 y_pages = (int)(v_height/vert_units) - y_page;
+     y_pages = (int)(v_height/vert_units) - y_page;
 
 #ifdef __WXMSW__
   int y = 0;
@@ -4283,72 +4290,72 @@ void wxWindow::OnChar(wxKeyEvent& event)
  // Bugfix End
   switch (event.keyCode)
   {
-	 case WXK_PRIOR:
-	 {
-	 // BugFix Begin
-		if (y_page > 0)
-		  {
-		  if (start_y - y_page > 0)
-			 Scroll(start_x, start_y - y_page);
-		  else
-			 Scroll(start_x, 0);
-		  }
-		  // Bugfix End
-		break;
-	 }
-	 case WXK_NEXT:
-	 {
-	 // Bugfix Begin
-		if ((y_page > 0)  && (start_y <= y_pages-y-1))
-						 {
-			if (y_pages + y < start_y + y_page)
-			  Scroll(start_x, y_pages + y);
-			else
-			  Scroll(start_x, start_y + y_page);
-			}
-	 // Bugfix End
-		break;
-	 }
-	 case WXK_UP:
-	 {
-		if ((y_page > 0) && (start_y >= 1))
-		  Scroll(start_x, start_y - 1);
-		break;
-	 }
-	 case WXK_DOWN:
-	 {
-	 // Bugfix Begin
-		if ((y_page > 0) && (start_y <= y_pages-y-1))
-	 // Bugfix End
-		{
-		  Scroll(start_x, start_y + 1);
-		}
-		break;
-	 }
-	 case WXK_LEFT:
-	 {
-		if ((x_page > 0) && (start_x >= 1))
-		  Scroll(start_x - 1, start_y);
-		break;
-	 }
-	 case WXK_RIGHT:
-	 {
-		if (x_page > 0)
-		  Scroll(start_x + 1, start_y);
-		break;
-	 }
-	 case WXK_HOME:
-	 {
-		Scroll(0, 0);
-		break;
-	 }
-	 // This is new
-	 case WXK_END:
-	 {
-		Scroll(start_x, y_pages+y);
-		break;
-	 }
-	 // end
+     case WXK_PRIOR:
+     {
+     // BugFix Begin
+        if (y_page > 0)
+          {
+          if (start_y - y_page > 0)
+             Scroll(start_x, start_y - y_page);
+          else
+             Scroll(start_x, 0);
+          }
+          // Bugfix End
+        break;
+     }
+     case WXK_NEXT:
+     {
+     // Bugfix Begin
+        if ((y_page > 0)  && (start_y <= y_pages-y-1))
+                         {
+            if (y_pages + y < start_y + y_page)
+              Scroll(start_x, y_pages + y);
+            else
+              Scroll(start_x, start_y + y_page);
+            }
+     // Bugfix End
+        break;
+     }
+     case WXK_UP:
+     {
+        if ((y_page > 0) && (start_y >= 1))
+          Scroll(start_x, start_y - 1);
+        break;
+     }
+     case WXK_DOWN:
+     {
+     // Bugfix Begin
+        if ((y_page > 0) && (start_y <= y_pages-y-1))
+     // Bugfix End
+        {
+          Scroll(start_x, start_y + 1);
+        }
+        break;
+     }
+     case WXK_LEFT:
+     {
+        if ((x_page > 0) && (start_x >= 1))
+          Scroll(start_x - 1, start_y);
+        break;
+     }
+     case WXK_RIGHT:
+     {
+        if (x_page > 0)
+          Scroll(start_x + 1, start_y);
+        break;
+     }
+     case WXK_HOME:
+     {
+        Scroll(0, 0);
+        break;
+     }
+     // This is new
+     case WXK_END:
+     {
+        Scroll(start_x, y_pages+y);
+        break;
+     }
+     // end
   }
 }
 */
@@ -4356,8 +4363,8 @@ void wxWindow::OnChar(wxKeyEvent& event)
 // Setup background and foreground colours correctly
 void wxWindow::SetupColours(void)
 {
-	if (GetParent())
-		SetBackgroundColour(GetParent()->GetBackgroundColour());
+    if (GetParent())
+        SetBackgroundColour(GetParent()->GetBackgroundColour());
 }
 
 void wxWindow::OnIdle(wxIdleEvent& event)
@@ -4374,7 +4381,7 @@ void wxWindow::OnIdle(wxIdleEvent& event)
             MSWOnMouseLeave(pt.x, pt.y, 0);
         }
     }
-	UpdateWindowUI();
+    UpdateWindowUI();
 }
 
 // Raise the window to the top of the Z order
