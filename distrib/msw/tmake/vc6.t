@@ -117,7 +117,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" -D "_MT" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /Fr /D "_MT" #$ Substitute('$$WX_CFLAGS /Yu"wx/wxprec.h" /FD /c');
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /I "$(wx)\src\jpeg" /I "$(wx)\src\png" /I "$(wx)\src\tiff" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D "_MT" #$ Substitute('$$WX_CFLAGS /Yu"wx/wxprec.h" /FD /c');
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -152,17 +152,8 @@ SOURCE=.\src\msw\dummy.cpp
 
 SOURCE=.\src\common\y_tab.c
 
-!IF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Release"');
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Debug"');
-
 # ADD CPP /W1
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

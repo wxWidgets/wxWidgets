@@ -121,12 +121,12 @@ LINK32=link.exe
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
-# PROP BASE Intermediate_Dir  #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
+# PROP BASE Intermediate_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
-# PROP Intermediate_Dir  #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
+# PROP Intermediate_Dir #$ Substitute('"Debug$$OUTDIR_SUFFIX"');
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXWINDLL_EXPORTS" /YX /FD /GZ /c
@@ -166,23 +166,15 @@ SOURCE=.\src\msw\dummydll.cpp
 # Begin Source File
 
 SOURCE=.\src\msw\version.rc
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /d "_UNICODE"
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\common\y_tab.c
 
-!IF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Release"');
-
 # ADD CPP /W1
 # SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == #$ Substitute('"$$PROJECTNAME - Win32 Debug"');
-
-# ADD CPP /W1
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

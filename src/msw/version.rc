@@ -13,10 +13,18 @@
 
 #ifdef _DEBUG
     #define DLL_FLAGS 0x1L
-    #define DLL_SUFFIX "d"
+    #ifdef _UNICODE
+        #define DLL_SUFFIX "ud"
+    #else
+        #define DLL_SUFFIX "d"
+    #endif
 #else
     #define DLL_FLAGS 0x0L
-    #define DLL_SUFFIX ""
+    #ifdef _UNICODE
+        #define DLL_SUFFIX "u"
+    #else
+        #define DLL_SUFFIX ""
+    #endif
 #endif
 
 1 VERSIONINFO
@@ -43,7 +51,9 @@ BEGIN
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "wxWindows\0"
             VALUE "ProductVersion", "2.2.1\0"
-            VALUE "SpecialBuild", "\0"
+#ifdef _UNICODE
+            VALUE "SpecialBuild", "Unicode build\0"
+#endif
         END
     END
 END

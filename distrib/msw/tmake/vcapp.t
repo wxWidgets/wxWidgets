@@ -54,10 +54,10 @@
 
     if ( Config("unicode") ) {
 	if ( Config("dll") ) { $DLL_SUFFIX = "ud"; }
-	$UNICODE_FLAGS="/D _UNICODE /D UNICODE";
+	$UNICODE_FLAGS="/D _UNICODE /D UNICODE ";
     }
     else {
-	$UNICODE_FLAGS="";
+	$UNICODE_FLAGS=" ";
     }
 
     #! let's be smarter: first of all, if no extension is given, add .lib
@@ -93,7 +93,7 @@
 	    $vc_link_debug .= " /libpath:$_\\Debug";
 	}
 
-	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" ' . $DLL_FLAGS;
+	$vc_cpp_def_common = '/D "WIN32" /D "_WINDOWS" ' . $UNICODE_FLAGS . $DLL_FLAGS;
 	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common;
 	$vc_cpp_def_debug   = '/D "_DEBUG" ' . $vc_cpp_def_common;
     } else {
@@ -108,7 +108,7 @@
 	$vc_link_release .= '/nologo /subsystem:console /machine:I386';
 	$vc_link_debug   .= '/nologo /subsystem:console /debug /machine:I386 /pdbtype:sept';
 
-	$vc_cpp_def_common = '/D "WIN32" /D "_CONSOLE" ' . $DLL_FLAGS;
+	$vc_cpp_def_common = '/D "WIN32" /D "_CONSOLE" ' . $UNICODE_FLAGS . $DLL_FLAGS;
 	$vc_cpp_def_release = '/D "NDEBUG" ' . $vc_cpp_def_common; 
 	$vc_cpp_def_debug   = '/D "_DEBUG" ' . $vc_cpp_def_common;
     }

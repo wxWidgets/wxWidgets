@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="wxBase" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="wxBaseDll" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Static Library" 0x0104
+# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=wxBase - Win32 Debug
+CFG=wxBaseDll - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxBase.mak".
+!MESSAGE NMAKE /f "wxBaseDll.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxBase.mak" CFG="wxBase - Win32 Debug"
+!MESSAGE NMAKE /f "wxBaseDll.mak" CFG="wxBaseDll - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxBase - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxBase - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "wxBaseDll - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "wxBaseDll - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -26,65 +26,74 @@ CFG=wxBase - Win32 Debug
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxBase - Win32 Release"
+!IF  "$(CFG)" == "wxBaseDll - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "BaseRelease"
-# PROP BASE Intermediate_Dir "BaseRelease"
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "BaseRelease"
-# PROP Intermediate_Dir "BaseRelease"
+# PROP Output_Dir "BaseDllRelease"
+# PROP Intermediate_Dir "BaseDllRelease"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /Zi /O1 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /D "_MT" /Yu"wx/wxprec.h" /FD /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
+# ADD BASE CPP /nologo /MT /W3 /GX /O1 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MT /W4 /O1 /I "$(wx)\include" /I "$(wx)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /D "WXMAKINGDLL" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /i "$(wx)\include" /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"BaseDllRelease/wxbase221.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /machine:I386 /out:"BaseDllRelease/wxbase221.dll"
 
-!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+!ELSEIF  "$(CFG)" == "wxBaseDll - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "BaseDebug"
-# PROP BASE Intermediate_Dir "BaseDebug"
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "BaseDebug"
-# PROP Intermediate_Dir "BaseDebug"
+# PROP Output_Dir "BaseDllDebug"
+# PROP Intermediate_Dir "BaseDllDebug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /Fr /Yu"wx/wxprec.h" /FD /c
-# ADD BASE RSC /l 0x409
-# ADD RSC /l 0x409
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "WXBASEDLL_EXPORTS" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W4 /Gm /Zi /Od /I "$(wx)\include" /I "$(wx)\src\zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /D "WXMAKINGDLL" /D "__WXDEBUG__" /Yu"wx/wxprec.h" /FD /GZ /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "$(wx)\include" /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo /o"lib/wxBase.bsc"
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept /out:"BaseDllDebug/wxbase221d.dll"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib wsock32.lib /nologo /version:2.2 /dll /debug /machine:I386 /pdbtype:sept /out:"BaseDllDebug/wxbase221d.dll"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "wxBase - Win32 Release"
-# Name "wxBase - Win32 Debug"
-
-# PROP Default_Filter ""
+# Name "wxBaseDll - Win32 Release"
+# Name "wxBaseDll - Win32 Debug"
 # Begin Source File
 
-SOURCE=.\src\msw\dummy.cpp
+SOURCE=.\src\common\base.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\msw\dummydll.cpp
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
 # Begin Source File
@@ -363,22 +372,5 @@ SOURCE=.\src\msw\gsockmsw.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 
-
-# Begin Source File
-
-SOURCE=.\src\common\y_tab.c
-
-!IF  "$(CFG)" == "wxBase - Win32 Release"
-
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
-
-# ADD CPP /W1
-# SUBTRACT CPP /YX /Yc /Yu
-
-!ENDIF 
-
-# End Source File
 # End Target
 # End Project
