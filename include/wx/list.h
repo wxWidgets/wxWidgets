@@ -862,7 +862,7 @@ private:
             while (n < size())                                              \
                 pop_back();                                                 \
             while (n > size())                                              \
-                push_back();                                                \
+                push_back(v);                                                \
         }                                                                   \
         size_type size() const { return GetCount(); }                       \
         size_type max_size() const { return INT_MAX; }                      \
