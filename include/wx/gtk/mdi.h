@@ -152,7 +152,7 @@ public:
                                int WXUNUSED(incH) = -1) {}
 
 #if wxUSE_TOOLBAR
-    // no toolbar bars
+    // no toolbar
     virtual wxToolBar* CreateToolBar( long WXUNUSED(style),
                                        wxWindowID WXUNUSED(id),
                                        const wxString& WXUNUSED(name) )
@@ -161,8 +161,10 @@ public:
 #endif // wxUSE_TOOLBAR
 
     // no icon
-    void SetIcon( const wxIcon &icon ) { m_icons = wxIconBundle( icon ); }
-    void SetIcons( const wxIconBundle &icons ) { m_icons = icons; }
+    virtual void SetIcon(const wxIcon& icon)
+        { wxTopLevelWindowBase::SetIcon(icon); }
+    virtual void SetIcons(const wxIconBundle& icons )
+        { wxTopLevelWindowBase::SetIcons(icons); }
 
     // no title
     void SetTitle( const wxString &title );
@@ -173,8 +175,6 @@ public:
     virtual bool IsMaximized() const { return true; }
     virtual void Iconize(bool WXUNUSED(iconize) = true) { }
     virtual bool IsIconized() const { return false; }
-    virtual void SetIcon(const wxIcon& WXUNUSED(icon)) { }
-    virtual void SetIcons(const wxIconBundle& WXUNUSED(icons)) { }
     virtual void Restore() {}
 
     virtual bool IsTopLevel() const { return false; }
