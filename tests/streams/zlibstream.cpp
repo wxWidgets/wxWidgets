@@ -87,7 +87,9 @@ public:
         WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_BestComp);
         WXTEST_WITH_GZIP_CONDITION(TestStream_ZLibGZip);
         CPPUNIT_TEST(Decompress_BadData);
+#if WXWIN_COMPATIBILITY_2_4
         CPPUNIT_TEST(Decompress_wx24Data);
+#endif
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_NoHeader);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_ZLib);
         WXTEST_WITH_GZIP_CONDITION(Decompress_gzip135Data);
@@ -113,7 +115,9 @@ protected:
     // Decompress data that was compress by an external app. 
     // (like test wx 2.4.2, 2.5.1 and gzip data)
     // Note: This test is limited in testing range!
+#if WXWIN_COMPATIBILITY_2_4
     void Decompress_wx24Data();
+#endif
     void Decompress_wx251_zlib114_Data_NoHeader();
     void Decompress_wx251_zlib114_Data_ZLib();
     void Decompress_gzip135Data();    
@@ -255,6 +259,7 @@ void zlibStream::Decompress_BadData()
     CPPUNIT_ASSERT(!zstream_in.IsOk());
 }
 
+#if WXWIN_COMPATIBILITY_2_4
 void zlibStream::Decompress_wx24Data()
 {
     // The wx24_value was used in a wxWidgets 2.4(.2) 
@@ -268,6 +273,7 @@ void zlibStream::Decompress_wx24Data()
     // Perform a generic data test on the data.
     doDecompress_ExternalData(wx24_data, wx24_value, data_size, value_size, wxZLIB_24COMPATIBLE);
 }
+#endif
 
 void zlibStream::Decompress_wx251_zlib114_Data_NoHeader()
 {
