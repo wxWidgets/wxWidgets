@@ -258,7 +258,7 @@ wxString wxTextCtrl::GetValue() const
     for (size_t i = 0; i < m_lines.GetCount(); i++)
     {
         ret += m_lines[i].m_text;
-        if (i < m_lines.GetCount())
+        if (i+1 < m_lines.GetCount())
             ret += wxT('\n');
     }
     
@@ -1997,6 +1997,14 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
         }
         case WXK_RETURN:
         {
+            if (m_windowStyle & wxPROCESS_ENTER)
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                event.SetEventObject(this);
+                event.SetString(GetValue());
+                if (GetEventHandler()->ProcessEvent(event)) return;
+            }
+            
             if (IsSingleLine())
             {
                 event.Skip();
