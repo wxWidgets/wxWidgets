@@ -47,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-class wxHtmlBookRecord : public wxObject {
+class wxHtmlBookRecord {
 public:
     wxHtmlBookRecord(const wxString& bookfile, const wxString& basepath,
                      const wxString& title, const wxString& start);

@@ -102,12 +102,12 @@ class StxFrame(wxFrame):
 
     def LoadStxText(self, text):
         # Old ST
-        #html = str(StructuredText.html_with_references(text))
+        html = str(StructuredText.html_with_references(text))
 
         # NG Version
-        st = StructuredText.Basic(text)
-        doc = StructuredText.Document(st)
-        html = StructuredText.HTMLNG(doc)
+        #st = StructuredText.Basic(text)
+        #doc = StructuredText.Document(st)
+        #html = StructuredText.HTMLNG(doc)
 
         self.htmlWin.SetPage(html)
         self.editWin.SetValue(text)

@@ -579,7 +579,7 @@ public:
     static void SetTimestamp(const wxString& ts);
     static const wxString& GetTimestamp();
 
-    bool GetVerbose() const { return m_bVerbose; }
+    bool GetVerbose() const;
 
     static wxTraceMask GetTraceMask();
     static bool IsAllowedTraceMask(const wxString& mask);
@@ -632,14 +632,6 @@ public:
 };
 
 
-class wxLogNull
-{
-public:
-    wxLogNull();
-    ~wxLogNull();
-};
-
-
 class wxLogChain : public wxLog
 {
 public:
@@ -663,9 +655,19 @@ void wxLogStatus(const wxString& szFormat);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& szFormat);
 void wxLogSysError(const wxString& szFormat);
 
+// Suspress logging while an instance of this class exists
+class wxLogNull
+{
+public:
+    wxLogNull();
+    ~wxLogNull();
+};
+
+
+
 
 %{
-// A Log class that can be derived from in wxPython
+// A wxLog class that can be derived from in wxPython
 class wxPyLog : public wxLog {
 public:
     wxPyLog() : wxLog() {}
