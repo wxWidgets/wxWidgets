@@ -67,9 +67,9 @@ wxGrid(parent, id, pos, size, style)
 {
     b_EditModus = FALSE;
     //---------------------------------------------------------------------------------------
-    popupMenu1 = new wxMenu("");
+    popupMenu1 = new wxMenu(_T(""));
     popupMenu1->Append(GRID_EDIT, _("Edit Modus"));
-    popupMenu2 = new wxMenu("");
+    popupMenu2 = new wxMenu(_T(""));
     popupMenu2->Append(GRID_BROWSE, _("Browse Modus"));
 }
 
@@ -119,7 +119,7 @@ int  DBGrid::OnTableView(wxString Table)
                     // The Grid has been created, now fill it
                     for (z=0;z<(db_Br+i_Which)->i_Records;z++)                      // Loop through the Records
                     {
-                        Temp0.Printf("%06d",z+1);  SetRowLabelValue(z,Temp0);          // Set Row Lable Value
+                        Temp0.Printf(_T("%06d"),z+1);  SetRowLabelValue(z,Temp0);          // Set Row Lable Value
                         (db_Br+i_Which)->OnGetNext((ct_BrowserDB->pTableInf+ValidTable)->numCols,FALSE);
                         for (y=0;y<(ct_BrowserDB->pTableInf+ValidTable)->numCols;y++) // Loop through the Fields
                         { // BrowserDB::OnGetNext Formats the field Value into tablename
@@ -188,10 +188,10 @@ void DBGrid::OnEditorHidden( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnSelectCell( wxGridEvent& ev )
 {
-    logBuf = "";
-    logBuf << "Selected cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
-    wxLogMessage( "%s", logBuf.c_str() );
+    logBuf = _T("");
+    logBuf << _T("Selected cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
+    wxLogMessage( _T("%s"), logBuf.c_str() );
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
     ev.Skip();
@@ -206,24 +206,24 @@ void DBGrid::OnMouseMove(wxMouseEvent &event)
 //----------------------------------------------------------------------------------------
 void DBGrid::OnLabelLeftClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnLabelLeftClick : ";
+    logBuf = _T("DBGrid::OnLabelLeftClick : ");
     if ( ev.GetRow() != -1 )
     {
-        logBuf << "row label " << ev.GetRow();
+        logBuf << _T("row label ") << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << "col label " << ev.GetCol();
+        logBuf << _T("col label ") << ev.GetCol();
     }
     else
     {
-        logBuf << "corner label";
+        logBuf << _T("corner label");
     }
     if ( ev.ShiftDown() )
-        logBuf << " (shift down)";
+        logBuf << _T(" (shift down)");
 
     // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -237,24 +237,24 @@ void DBGrid::OnLabelRightClick( wxGridEvent& ev )
     else
         PopupMenu(popupMenu1,MousePos.x,MousePos.y);
     //-------------------
-    logBuf = "DBGrid::OnLabelRightClick : ";
+    logBuf = _T("DBGrid::OnLabelRightClick : ");
     if ( ev.GetRow() != -1 )
     {
-        logBuf << "row label " << ev.GetRow();
+        logBuf << _T("row label ") << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << "col label " << ev.GetCol();
+        logBuf << _T("col label ") << ev.GetCol();
     }
     else
     {
-        logBuf << "corner label";
+        logBuf << _T("corner label");
     }
     if ( ev.ShiftDown() )
-        logBuf << " (shift down)";
+        logBuf << _T(" (shift down)");
 
     // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -262,24 +262,24 @@ void DBGrid::OnLabelRightClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnLabelLeftDClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnLabelLeftDClick : ";
+    logBuf = _T("DBGrid::OnLabelLeftDClick : ");
     if ( ev.GetRow() != -1 )
     {
-        logBuf << "row label " << ev.GetRow();
+        logBuf << _T("row label ") << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << "col label " << ev.GetCol();
+        logBuf << _T("col label ") << ev.GetCol();
     }
     else
     {
-        logBuf << "corner label";
+        logBuf << _T("corner label");
     }
     if ( ev.ShiftDown() )
-        logBuf << " (shift down)";
+        logBuf << _T(" (shift down)");
 
-    // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    // wxLogMessage( _T("%s"), logBuf.c_str() );
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -287,23 +287,23 @@ void DBGrid::OnLabelLeftDClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnLabelRightDClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnLabelRightDClick : ";
+    logBuf = _T("DBGrid::OnLabelRightDClick : ");
     if ( ev.GetRow() != -1 )
     {
-        logBuf << "row label " << ev.GetRow();
+        logBuf << _T("row label ") << ev.GetRow();
     }
     else if ( ev.GetCol() != -1 )
     {
-        logBuf << "col label " << ev.GetCol();
+        logBuf << _T("col label ") << ev.GetCol();
     }
     else
     {
-        logBuf << "corner label";
+        logBuf << _T("corner label");
     }
     if ( ev.ShiftDown() )
-        logBuf << " (shift down)";
+        logBuf << _T(" (shift down)");
     // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -311,12 +311,12 @@ void DBGrid::OnLabelRightDClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnCellLeftClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnCellLeftClick : ";
-    logBuf << "Cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
+    logBuf = _T("DBGrid::OnCellLeftClick : ");
+    logBuf << _T("Cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
     // wxLogMessage( "%s", logBuf.c_str() );
     // wxMessageBox(logBuf);
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -327,12 +327,12 @@ void DBGrid::OnCellLeftClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnCellRightClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnCellRightClick : ";
-    logBuf << "Cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
+    logBuf = _T("DBGrid::OnCellRightClick : ");
+    logBuf << _T("Cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
     // wxLogMessage( "%s", logBuf.c_str() );
     // wxMessageBox(logBuf);
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -343,12 +343,12 @@ void DBGrid::OnCellRightClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnCellLeftDClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnCellLeftDClick : ";
-    logBuf << "Cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
+    logBuf = _T("DBGrid::OnCellLeftDClick : ");
+    logBuf << _T("Cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
     // wxLogMessage( "%s", logBuf.c_str() );
     // wxMessageBox(logBuf);
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -359,12 +359,12 @@ void DBGrid::OnCellLeftDClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnCellRightDClick( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnCellRightDClick : ";
-    logBuf << "Cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
+    logBuf = _T("DBGrid::OnCellRightDClick : ");
+    logBuf << _T("Cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
     // wxLogMessage( "%s", logBuf.c_str() );
     // wxMessageBox(logBuf);
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -375,12 +375,12 @@ void DBGrid::OnCellRightDClick( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnCellChange( wxGridEvent& ev )
 {
-    logBuf = "DBGrid::OnCellChange : ";
-    logBuf << "Cell at row " << ev.GetRow()
-        << " col " << ev.GetCol();
+    logBuf = _T("DBGrid::OnCellChange : ");
+    logBuf << _T("Cell at row ") << ev.GetRow()
+        << _T(" col ") << ev.GetCol();
     // wxLogMessage( "%s", logBuf.c_str() );
     // wxMessageBox(logBuf);
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     // you must call event skip if you want default grid processing
     // (cell highlighting etc.)
@@ -391,10 +391,10 @@ void DBGrid::OnCellChange( wxGridEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnRowSize( wxGridSizeEvent& ev )
 {
-    logBuf = "DBGrid::OnRowSize : ";
-    logBuf << "Resized row " << ev.GetRowOrCol();
+    logBuf = _T("DBGrid::OnRowSize : ");
+    logBuf << _T("Resized row ") << ev.GetRowOrCol();
     // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -402,10 +402,10 @@ void DBGrid::OnRowSize( wxGridSizeEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnColSize( wxGridSizeEvent& ev )
 {
-    logBuf = "DBGrid::OnColSize : ";
-    logBuf << "Resized col " << ev.GetRowOrCol();
+    logBuf = _T("DBGrid::OnColSize : ");
+    logBuf << _T("Resized col ") << ev.GetRowOrCol();
     // wxLogMessage( "%s", logBuf.c_str() );
-    logBuf += "\n";
+    logBuf += _T("\n");
     wxLogMessage(logBuf.c_str());
     ev.Skip();
 }
@@ -413,12 +413,12 @@ void DBGrid::OnColSize( wxGridSizeEvent& ev )
 //----------------------------------------------------------------------------------------
 void DBGrid::OnRangeSelected( wxGridRangeSelectEvent& ev )
 {
-    logBuf = "DBGrid::OnRangeSelected : ";
-    logBuf  << "Selected cells from row " << ev.GetTopRow()
-        << " col " << ev.GetLeftCol()
-        << " to row " << ev.GetBottomRow()
-        << " col " << ev.GetRightCol();
-    logBuf += "\n";
+    logBuf = _T("DBGrid::OnRangeSelected : ");
+    logBuf  << _T("Selected cells from row ") << ev.GetTopRow()
+        << _T(" col ") << ev.GetLeftCol()
+        << _T(" to row ") << ev.GetBottomRow()
+        << _T(" col ") << ev.GetRightCol();
+    logBuf += _T("\n");
     // wxLogMessage( "%s", logBuf.c_str() );
     wxLogMessage(logBuf.c_str());
     ev.Skip();

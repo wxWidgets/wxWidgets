@@ -43,7 +43,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     ratio = (float)2.1;
 #endif
     
-    SetBackgroundColour("wheat");
+    SetBackgroundColour(_T("wheat"));
     pDoc = p_Doc;
     wxLayoutConstraints* layout;
     SetAutoLayout(TRUE);
@@ -60,7 +60,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     int w;
     m_Label1->GetSize(&w, &chSize); 
     
-    m_UserName = new wxTextCtrl(this, -1, "");
+    m_UserName = new wxTextCtrl(this, -1, _T(""));
     m_UserName->SetFont(* pDoc->ft_Doc);
     chSize = (int) (m_UserName->GetCharHeight()*ratio);
     
@@ -82,7 +82,7 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     layout->width.SameAs(m_Label1, wxWidth);
     m_Label2->SetConstraints(layout);
     
-    m_Password = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
+    m_Password = new wxTextCtrl(this, -1, _T(""), wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD);
     m_Password->SetFont(* pDoc->ft_Doc);
     layout = new wxLayoutConstraints;
     layout->left.SameAs(m_UserName, wxLeft);
@@ -113,15 +113,15 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
     m_OK->SetDefault();
     m_UserName->SetFocus();
     
-    s_User = "";
-    s_Password = "";
+    s_User = _T("");
+    s_Password = _T("");
     Layout();
 }
 
 //----------------------------------------------------------------------------------------
 void DlgUser::OnInit()
 {
-    wxString Temp; Temp.Printf(">>> %s <<<",s_DSN.c_str());
+    wxString Temp; Temp.Printf(_T(">>> %s <<<"),s_DSN.c_str());
     SetTitle(Temp);
     m_UserName->SetLabel(s_User);
     m_Password->SetLabel(s_Password);

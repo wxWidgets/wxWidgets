@@ -70,7 +70,7 @@ public:
     bool           OnExecSql(wxString SQLStmt,int Quiet);
     bool           OnGetNext(int Cols,int Quiet);
     wxDbInf*       OnGetCatalog(int Quiet);
-    wxDbColInf*    OnGetColumns(char *tableName, UWORD numCols,int Quiet);
+    wxDbColInf*    OnGetColumns(wxChar *tableName, UWORD numCols,int Quiet);
     void           OnFillSqlTyp();
     void           OnFilldbTyp();
     //---------------------------------------------------------------------------------------

@@ -55,8 +55,8 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     wxString Temp0;            // Use as needed
     //---------------------------------------------------------------------------------------
     // set the language to use   // Help.??  (.std = english, .de = german etc.)
-    const char *language = NULL; // czech, german, french, polish
-    const char *langid   = NULL; // std = english , cz, de = german, fr = french, pl = polish
+    const wxChar *language = NULL; // czech, german, french, polish
+    const wxChar *langid   = NULL; // std = english , cz, de = german, fr = french, pl = polish
     wxString   s_LangHelp;       // Directory/Filename.hhp of the Help-Project file
     wxString   s_LangId, s_Language;
     s_Language.Empty(); s_LangId.Empty(); s_LangHelp.Empty();
@@ -96,8 +96,8 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     //---------------------------------------------------------------------------------------
     // Win-Registry : Workplace\HKEY_CURRENT_USERS\Software\%GetVendorName()\%GetAppName()
     //---------------------------------------------------------------------------------------
-    SetVendorName("mj10777");           // Needed to get Configuration Information
-    SetAppName("DBBrowse");            // "" , also needed for s_LangHelp
+    SetVendorName(_T("mj10777"));           // Needed to get Configuration Information
+    SetAppName(_T("DBBrowse"));            // "" , also needed for s_LangHelp
     //---------------------------------------------------------------------------------------
     // we're using wxConfig's "create-on-demand" feature: it will create the
     // config object when it's used for the first time. It has a number of
@@ -112,78 +112,78 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     //---------------------------------------------------------------------------------------
     p_ProgramCfg = wxConfigBase::Get();  // Get Program Configuration from Registry
     // p_ProgramCfg->DeleteAll();           // This is how the Config can be erased
-    p_ProgramCfg->SetPath("/");          // Start at root
+    p_ProgramCfg->SetPath(_T("/"));          // Start at root
     //---------------------------------------------------------------------------------------
     //-- Set the Language and remember it for the next time. --------------------------------
     //---------------------------------------------------------------------------------------
     if (langid == NULL) // No Parameter was given
     {
         Temp0.Empty();
-        p_ProgramCfg->Read("/Local/langid",&Temp0); // >const char *langid< can't be used here
-        if (Temp0 == "")
-            langid = "std";  // Standard language is "std" = english
+        p_ProgramCfg->Read(_T("/Local/langid"),&Temp0); // >const char *langid< can't be used here
+        if (Temp0 == _T(""))
+            langid = _T("std");  // Standard language is "std" = english
         else
             langid = Temp0;
     }
-    Temp0.Printf("%s",langid);
+    Temp0.Printf(_T("%s"),langid);
     //---------------------------------------------------------------------------------------
     // Support the following languages  (std = english)
-    if ((Temp0 == "a")  || (Temp0 == "cz") || (Temp0 == "de") ||
-        (Temp0 == "fr") || (Temp0 == "pl"))
+    if ((Temp0 == _T("a"))  || (Temp0 == _T("cz")) || (Temp0 == _T("de")) ||
+        (Temp0 == _T("fr")) || (Temp0 == _T("pl")))
     { // The three-letter language-string codes are only valid in Windows NT and Windows 95.
-        if (Temp0 == "cz")
-            language = "czech";  // csy or czech
-        if ((Temp0 == "de") || (Temp0 == "a"))
+        if (Temp0 == _T("cz"))
+            language = _T("czech");  // csy or czech
+        if ((Temp0 == _T("de")) || (Temp0 == _T("a")))
         {
-            language = "german";  // deu or german
-            if (Temp0 == "a")
-            { langid = Temp0 = "de"; }  // Austrian = german
+            language = _T("german");  // deu or german
+            if (Temp0 == _T("a"))
+            { langid = Temp0 = _T("de"); }  // Austrian = german
         } // german / austrian
-        if (Temp0 == "fr")
-            language = "french";  // fra or french
-        if (Temp0 == "pl")
-            language = "polish";  // plk or polish
+        if (Temp0 == _T("fr"))
+            language = _T("french");  // fra or french
+        if (Temp0 == _T("pl"))
+            language = _T("polish");  // plk or polish
         if (!m_locale.Init(language, langid, language)) // Don't do this for english (std)
         { // You should recieve errors here for cz and pl since there is no cz/ and pl/ directory
-            wxLogMessage("-E-> %s : SetLocale error : langid(%s) ; language(%s)",GetAppName().c_str(),langid,language);
-            langid = "std";
-            language = "C";  // english, english-aus , -can , -nz , -uk , -usa
+            wxLogMessage(_T("-E-> %s : SetLocale error : langid(%s) ; language(%s)"),GetAppName().c_str(),langid,language);
+            langid = _T("std");
+            language = _T("C");  // english, english-aus , -can , -nz , -uk , -usa
         }
         else
         { // Read in Foreign language's text for GetAppName() and Help
             Temp0 = GetAppName();
             Temp0 = Temp0.Lower();
             m_locale.AddCatalog(Temp0.c_str());
-            m_locale.AddCatalog("help");
+            m_locale.AddCatalog(_T("help"));
         }
     } // Support the following languages  (std = english)
     else
     {
-        langid = "std";
-        language = "C";  // english, english-aus , -can , -nz , -uk , -usa
+        langid = _T("std");
+        language = _T("C");  // english, english-aus , -can , -nz , -uk , -usa
     }
-    s_Language.Printf("%s",language);                       // language is a pointer
-    s_LangId.Printf("%s",langid);                           // langid   is a pointer
-    p_ProgramCfg->Write("/Local/language",s_Language);
-    p_ProgramCfg->Write("/Local/langid",s_LangId);
-    s_LangHelp.Printf("help.%s/%s.hhp",s_LangId.c_str(),GetAppName().c_str()); // "help.std/Garantie.hhp";
+    s_Language.Printf(_T("%s"),language);                       // language is a pointer
+    s_LangId.Printf(_T("%s"),langid);                           // langid   is a pointer
+    p_ProgramCfg->Write(_T("/Local/language"),s_Language);
+    p_ProgramCfg->Write(_T("/Local/langid"),s_LangId);
+    s_LangHelp.Printf(_T("help.%s/%s.hhp"),s_LangId.c_str(),GetAppName().c_str()); // "help.std/Garantie.hhp";
     s_LangHelp = s_LangHelp.Lower();                       // A must for Linux
     //---------------------------------------------------------------------------------------
-    Temp0 = "NONE";                               // I don't remember why I did this
-    p_ProgramCfg->Write("/NONE",Temp0);           // I don't remember why I did this
-    p_ProgramCfg->Write("/Paths/NONE",Temp0);     // I don't remember why I did this
-    p_ProgramCfg->Write("/MainFrame/NONE",Temp0); // I don't remember why I did this
+    Temp0 = _T("NONE");                               // I don't remember why I did this
+    p_ProgramCfg->Write(_T("/NONE"),Temp0);           // I don't remember why I did this
+    p_ProgramCfg->Write(_T("/Paths/NONE"),Temp0);     // I don't remember why I did this
+    p_ProgramCfg->Write(_T("/MainFrame/NONE"),Temp0); // I don't remember why I did this
     //---------------------------------------------------------------------------------------
-    p_ProgramCfg->Write("/Paths/Work",wxGetCwd()); // Get current Working Path
-    p_ProgramCfg->SetPath("/");
+    p_ProgramCfg->Write(_T("/Paths/Work"),wxGetCwd()); // Get current Working Path
+    p_ProgramCfg->SetPath(_T("/"));
     //---------------------------------------------------------------------------------------
     // restore frame position and size, if empty start Values (1,1) and (750,600)
-    int x = p_ProgramCfg->Read("/MainFrame/x", 1), y = p_ProgramCfg->Read("/MainFrame/y", 1),
-        w = p_ProgramCfg->Read("/MainFrame/w", 750), h = p_ProgramCfg->Read("/MainFrame/h", 600);
+    int x = p_ProgramCfg->Read(_T("/MainFrame/x"), 1), y = p_ProgramCfg->Read(_T("/MainFrame/y"), 1),
+        w = p_ProgramCfg->Read(_T("/MainFrame/w"), 750), h = p_ProgramCfg->Read(_T("/MainFrame/h"), 600);
     //---------------------------------------------------------------------------------------
     // Create the main frame window
-    Temp0.Printf("%s - %s",GetAppName().c_str(),GetVendorName().c_str());
-    frame = new MainFrame((wxFrame *) NULL,(char *) Temp0.c_str(),wxPoint(x,y),wxSize(w,h));
+    Temp0.Printf(_T("%s - %s"),GetAppName().c_str(),GetVendorName().c_str());
+    frame = new MainFrame((wxFrame *) NULL,(wxChar *) Temp0.c_str(),wxPoint(x,y),wxSize(w,h));
     //---------------------------------------------------------------------------------------
     // Set the Backgroundcolour (only need if your are NOT using wxSYS_COLOUR_BACKGROUND)
     frame->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BACKGROUND));
@@ -244,7 +244,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
     // You should recieve errors here for fr since there is no help.fr/ directory
     if (!frame->p_Help->AddBook(s_LangHelp))      // Use the language set
     { // You should recieve errors here for fr since there is no help.fr/ but a fr/ directory
-        wxLogMessage("-E-> %s : AddBook error : s_LangHelp(%s)",GetAppName().c_str(),s_LangHelp.c_str());
+        wxLogMessage(_T("-E-> %s : AddBook error : s_LangHelp(%s)"),GetAppName().c_str(),s_LangHelp.c_str());
     }
     frame->pDoc->p_Help = frame->p_Help;          // Save the information to the document
     //---------------------------------------------------------------------------------------
@@ -263,7 +263,7 @@ bool MainApp::OnInit(void)  // Does everything needed for a program start
 //----------------------------------------------------------------------------------------
 // My frame constructor
 //----------------------------------------------------------------------------------------
-MainFrame::MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxSize& size):
+MainFrame::MainFrame(wxFrame *frame, wxChar *title,  const wxPoint& pos, const wxSize& size):
 wxFrame(frame, -1, title,  pos, size)
 {
     p_Splitter = NULL; pDoc = NULL; p_Help = NULL;    // Keep the Pointers clean !
@@ -285,11 +285,11 @@ MainFrame::~MainFrame(void)
     int x, y, w, h;
     GetPosition(&x, &y);
     GetClientSize(&w, &h); w -= DiffW; h -= DiffH;
-    p_ProgramCfg->Write("/MainFrame/x", (long) x);
-    p_ProgramCfg->Write("/MainFrame/y", (long) y);
-    p_ProgramCfg->Write("/MainFrame/w", (long) w);
-    p_ProgramCfg->Write("/MainFrame/h", (long) h);
-    p_ProgramCfg->Write("/MainFrame/Sash", (long) pDoc->Sash);
+    p_ProgramCfg->Write(_T("/MainFrame/x"), (long) x);
+    p_ProgramCfg->Write(_T("/MainFrame/y"), (long) y);
+    p_ProgramCfg->Write(_T("/MainFrame/w"), (long) w);
+    p_ProgramCfg->Write(_T("/MainFrame/h"), (long) h);
+    p_ProgramCfg->Write(_T("/MainFrame/Sash"), (long) pDoc->Sash);
     // clean up: Set() returns the active config object as Get() does, but unlike
     // Get() it doesn't try to create one if there is none (definitely not what
     // we want here!)
@@ -318,6 +318,6 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 //----------------------------------------------------------------------------------------
 void MainFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
-    p_Help->Display("Main page");
+    p_Help->Display(_T("Main page"));
 }
 //----------------------------------------------------------------------------------------

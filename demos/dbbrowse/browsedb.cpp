@@ -31,8 +31,7 @@
 #include "std.h"
 //----------------------------------------------------------------------------------------
 // Global structure for holding ODBC connection information
-// - darf nur einmal im Projekte definiert werden ?? Extra Databasse Klasse ?
-wxDbConnectInf DbConnectInf;		// Für DBase
+wxDbConnectInf DbConnectInf;
 
 #if !wxUSE_ODBC
   #error Demo cannot be compiled unless setup.h has wxUSE_ODBC set to 1
@@ -42,21 +41,21 @@ wxDbConnectInf DbConnectInf;		// Für DBase
 extern WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList;	/* from db.cpp, used in getting back error results from db connections */
 
 //----------------------------------------------------------------------------------------
-char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
+wxChar *GetExtendedDBErrorMsg(wxChar *ErrFile, int ErrLine)
 {
     static wxString msg;
     wxString tStr;
     if (ErrFile || ErrLine)
     {
-        msg += "File: ";
+        msg += _T("File: ");
         msg += ErrFile;
-        msg += "   Line: ";
-        tStr.Printf("%d",ErrLine);
+        msg += _T("   Line: ");
+        tStr.Printf(_T("%d"),ErrLine);
         msg += tStr.GetData();
-        // msg += "\n";
+        // msg += _T("\n");
     }
-    msg.Append ("\nODBC errors:\n");
-    // msg += "\n";
+    msg.Append (_T("\nODBC errors:\n"));
+    // msg += _T("\n");
     /* Scan through each database connection displaying
     * any ODBC errors that have occured. */
     wxDbList *pDbList;
@@ -71,22 +70,22 @@ char *GetExtendedDBErrorMsg(char *ErrFile, int ErrLine)
             if (pDbList->PtrDb->errorList[i])
             {
                 msg.Append(pDbList->PtrDb->errorList[i]);
-                if (strcmp(pDbList->PtrDb->errorList[i],"") != 0)
-                    msg.Append("\n");
+                if (wxStrcmp(pDbList->PtrDb->errorList[i],_T("")) != 0)
+                    msg.Append(_T("\n"));
             }
         }
     }
-    msg += "\n";
-    return (char*) (const char*) msg;
+    msg += _T("\n");
+    return (wxChar*) (const wxChar*) msg;
 }  // GetExtendedDBErrorMsg
 
 //----------------------------------------------------------------------------------------
 BrowserDB::BrowserDB()
 {
     PointerToNULL(0);
-    ODBCSource = "";			 // ODBC data source name (created with ODBC Administrator under Win95/NT)
-    UserName   = "";			 // database username - must already exist in the data source
-    Password   = "";			 // password database username
+    ODBCSource = _T("");  // ODBC data source name (created with ODBC Administrator under Win95/NT)
+    UserName   = _T("");  // database username - must already exist in the data source
+    Password   = _T("");  // password database username
     OnFillSqlTyp();
     OnFilldbTyp();
 }  // BrowserDB Constructor
@@ -127,7 +126,7 @@ bool BrowserDB::OnStartDB(int Quiet)
     // Connect to datasource
     //---------------------------------------------------------------------------------------
     DlgUser *p_Dlg;
-    p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,"");
+    p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,_T(""));
     p_Dlg->s_DSN	  = ODBCSource;
     p_Dlg->s_User	  = UserName;
     p_Dlg->s_Password = Password;
@@ -207,7 +206,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
     SDWORD cb;
     int 	 i_dbDataType;
     int   i=0;
-    char			 s_temp[1024+1];
+    wxChar s_temp[1024+1];
     long			 l_temp;
     double			 f_temp;
     int 			 AnzError=0;
@@ -218,7 +217,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
     {
         return FALSE;
         Temp0.Printf(_("\n-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext \n-E-> "));
-        Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+        Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
         wxMessageBox(Temp0);
     }
@@ -226,7 +225,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
     {
         for (i=0;i<Cols;i++)
         {
-            strcpy((cl_BrowserDB+i)->tableName,"-E->");
+            wxStrcpy((cl_BrowserDB+i)->tableName,_T("-E->"));
             i_dbDataType = (cl_BrowserDB+i)->pColFor->i_dbDataType;
             if (i_dbDataType == 0)						  // Filter unsupported dbDataTypes
             {
@@ -250,27 +249,27 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
             switch(i_dbDataType)
             {
             case DB_DATA_TYPE_VARCHAR:
-                strcpy(s_temp,"");
+                wxStrcpy(s_temp,_T(""));
                 if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_dbDataType,&s_temp,sizeof(s_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext of >%s<.\n-E-> "),(cl_BrowserDB+i)->tableName);
-                    Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+                    Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
                     wxLogMessage(Temp0);
                 }
                 Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,s_temp);
-                strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                 break;
             case DB_DATA_TYPE_INTEGER:
                 l_temp = 0;
                 if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&l_temp,sizeof(l_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
-                    Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+                    Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
                 }
                 else
                 {
                     Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,l_temp);
-                    strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                    wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                 }
                 break;
             case DB_DATA_TYPE_FLOAT:
@@ -278,13 +277,13 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
                 if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&f_temp,sizeof(f_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
-                    Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+                    Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
                     wxMessageBox(Temp0);
                 }
                 else
                 {
                     Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,f_temp);
-                    strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                    wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                 }
                 break;
             case DB_DATA_TYPE_DATE:
@@ -292,7 +291,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
                 if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&t_temp,sizeof(t_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
-                    Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+                    Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
                 }
                 else
                 {
@@ -302,20 +301,20 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
                     {
                         Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,t_temp.year,t_temp.month,t_temp.day,
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
-                        strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                        wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                     }
                     if (((cl_BrowserDB+i)->pColFor->i_Nation == 1) ||  // EU  DD.MM.YYYY
                         ((cl_BrowserDB+i)->pColFor->i_Nation == 2))   // UK  DD/MM/YYYY
                     {
                         Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,t_temp.day,t_temp.month,t_temp.year,
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
-                        strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                        wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                     }
                     if ((cl_BrowserDB+i)->pColFor->i_Nation == 3)	   // US  MM/DD/YYYY
                     {
                         Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,t_temp.month,t_temp.day,t_temp.year,
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
-                        strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                        wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                     }
                 }
                 break;
@@ -329,7 +328,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quiet)
                 else
                     return TRUE;
                 Temp0.Printf(_("-E-> unknown Format(%d) - sql(%d)"),(cl_BrowserDB+i)->pColFor->i_dbDataType,(cl_BrowserDB+i)->pColFor->i_sqlDataType);
-                strcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
+                wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                 break;
             };  // switch
         }  // for
@@ -345,13 +344,13 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
     wxString SQLStmt;
     i_Records = 0;
     //---------------------------------------------------------------------------------------
-    SQLStmt.sprintf("SELECT * FROM %s",db_BrowserDB->SQLTableName(tb_Name.c_str()));
-    if (!db_BrowserDB->ExecSql((char *)(SQLStmt.GetData())))
+    SQLStmt.sprintf(_T("SELECT * FROM %s"),db_BrowserDB->SQLTableName(tb_Name.c_str()));
+    if (!db_BrowserDB->ExecSql((wxChar *)(SQLStmt.GetData())))
     {
         Temp0.Printf(_("\n-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n-E-> "),tb_Name.c_str());
-        Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+        Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
-        wxMessageBox("-E-> BrowserDB::OnSelect - GetData()");
+        wxMessageBox(_T("-E-> BrowserDB::OnSelect - GetData()"));
         return FALSE;
     }
     //---------------------------------------------------------------------------------------
@@ -360,10 +359,10 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
         i_Records++;
     }
     //---------------------------------------------------------------------------------------
-    if (!db_BrowserDB->ExecSql((char *)(SQLStmt.GetData())))
+    if (!db_BrowserDB->ExecSql((wxChar *)(SQLStmt.GetData())))
     {
         Temp0.Printf(_("\n-E-> BrowserDB::OnSelect - ODBC-Error with ExecSql of >%s<.\n-E-> "),tb_Name.c_str());
-        Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+        Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         wxLogMessage(Temp0);
         return FALSE;
     }
@@ -381,14 +380,14 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
 bool BrowserDB::OnExecSql(wxString SQLStmt, int Quiet)
 {
     //---------------------------------------------------------------------------------------
-    if (!db_BrowserDB->ExecSql((char *)(SQLStmt.GetData())))
+    if (!db_BrowserDB->ExecSql((wxChar *)(SQLStmt.GetData())))
     {
         Temp0.Printf(_("\n-E-> BrowserDB::OnExecSQL - ODBC-Error with ExecSql of >%s<.\n-E-> "),SQLStmt.c_str());
-        Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
+        Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
         if (!Quiet)
             wxLogMessage(Temp0);
         else
-            wxMessageBox("-E-> BrowserDB::OnExecSql - ExecSql()");
+            wxMessageBox(_T("-E-> BrowserDB::OnExecSql - ExecSql()"));
         return FALSE;
     }
     if (!Quiet)
@@ -401,18 +400,18 @@ bool BrowserDB::OnExecSql(wxString SQLStmt, int Quiet)
 //----------------------------------------------------------------------------------------
 wxDbInf* BrowserDB::OnGetCatalog(int Quiet)
 {
-    char UName[255];
-    strcpy(UName,UserName);
+    wxChar UName[255];
+    wxStrcpy(UName,UserName);
     ct_BrowserDB = db_BrowserDB->GetCatalog(UName);
     return ct_BrowserDB;
 }
 
 //----------------------------------------------------------------------------------------
-wxDbColInf* BrowserDB::OnGetColumns(char *tableName, UWORD numCols, int Quiet)
+wxDbColInf* BrowserDB::OnGetColumns(wxChar *tableName, UWORD numCols, int Quiet)
 {
-    char UName[255];
+    wxChar UName[255];
     int i;
-    strcpy(UName,UserName);
+    wxStrcpy(UName,UserName);
     cl_BrowserDB = db_BrowserDB->GetColumns(tableName,&numCols,UName);
 //    cl_BrowserDB->pColFor = new wxDbColFor[numCols];
     for (i=0;i<numCols;i++)
@@ -459,39 +458,39 @@ void BrowserDB::PointerToNULL(int Art)
 //----------------------------------------------------------------------------------------
 void BrowserDB::OnFillSqlTyp()
 {
-    i_SqlTyp[1]  = SQL_C_BINARY;	 s_SqlTyp[1]  = "SQL_C_BINARY";
-    i_SqlTyp[2]  = SQL_C_BIT;		 s_SqlTyp[2]  = "SQL_C_BIT";
-    i_SqlTyp[3]  = SQL_C_BOOKMARK;	 s_SqlTyp[3]  = "SQL_C_BOOKMARK";
-    i_SqlTyp[4]  = SQL_C_CHAR;		 s_SqlTyp[4]  = "SQL_C_CHAR";
-    i_SqlTyp[5]  = SQL_C_DATE;		 s_SqlTyp[5]  = "SQL_C_DATE";
-    i_SqlTyp[6]  = SQL_C_DEFAULT;	 s_SqlTyp[6]  = "SQL_C_DEFAULT";
-    i_SqlTyp[7]  = SQL_C_DOUBLE;	 s_SqlTyp[7]  = "SQL_C_DOUBLE";
-    i_SqlTyp[8]  = SQL_C_FLOAT; 	 s_SqlTyp[8]  = "SQL_C_FLOAT";
-    i_SqlTyp[9]  = SQL_C_LONG;		 s_SqlTyp[9]  = "SQL_C_LONG";
-    i_SqlTyp[10] = SQL_C_SHORT; 	 s_SqlTyp[10] = "SQL_C_SHORT";
-    i_SqlTyp[11] = SQL_C_SLONG; 	 s_SqlTyp[11] = "SQL_C_SLONG";
-    i_SqlTyp[12] = SQL_C_SSHORT;	 s_SqlTyp[12] = "SQL_C_SSHORT";
-    i_SqlTyp[13] = SQL_C_STINYINT;	 s_SqlTyp[13] = "SQL_C_STINYINT";
-    i_SqlTyp[14] = SQL_C_TIME;		 s_SqlTyp[14] = "SQL_C_TIME";
-    i_SqlTyp[15] = SQL_C_TIMESTAMP;  s_SqlTyp[15] = "SQL_C_TIMESTAMP";
-    i_SqlTyp[16] = SQL_C_TINYINT;	 s_SqlTyp[16] = "SQL_C_TINYINT";
-    i_SqlTyp[17] = SQL_C_ULONG; 	 s_SqlTyp[17] = "SQL_C_ULONG";
-    i_SqlTyp[18] = SQL_C_USHORT;	 s_SqlTyp[18] = "SQL_C_USHORT";
-    i_SqlTyp[19] = SQL_C_UTINYINT;	 s_SqlTyp[19] = "SQL_C_UTINYINT";
-    i_SqlTyp[20] = SQL_VARCHAR; 	 s_SqlTyp[20] = "SQL_VARCHAR";
-    i_SqlTyp[21] = SQL_NUMERIC; 	 s_SqlTyp[21] = "SQL_NUMERIC";
-    i_SqlTyp[22] = SQL_LONGVARCHAR;  s_SqlTyp[22] = "SQL_LONGVARCHAR";
-    i_SqlTyp[23] = SQL_REAL;		 s_SqlTyp[23] = "SQL_REAL";
-    i_SqlTyp[0]  = 23;				 s_SqlTyp[0]  = "";
+    i_SqlTyp[1]  = SQL_C_BINARY;    s_SqlTyp[1]  = _T("SQL_C_BINARY");
+    i_SqlTyp[2]  = SQL_C_BIT;       s_SqlTyp[2]  = _T("SQL_C_BIT");
+    i_SqlTyp[3]  = SQL_C_BOOKMARK;  s_SqlTyp[3]  = _T("SQL_C_BOOKMARK");
+    i_SqlTyp[4]  = SQL_C_CHAR;      s_SqlTyp[4]  = _T("SQL_C_CHAR");
+    i_SqlTyp[5]  = SQL_C_DATE;      s_SqlTyp[5]  = _T("SQL_C_DATE");
+    i_SqlTyp[6]  = SQL_C_DEFAULT;   s_SqlTyp[6]  = _T("SQL_C_DEFAULT");
+    i_SqlTyp[7]  = SQL_C_DOUBLE;    s_SqlTyp[7]  = _T("SQL_C_DOUBLE");
+    i_SqlTyp[8]  = SQL_C_FLOAT;     s_SqlTyp[8]  = _T("SQL_C_FLOAT");
+    i_SqlTyp[9]  = SQL_C_LONG;      s_SqlTyp[9]  = _T("SQL_C_LONG");
+    i_SqlTyp[10] = SQL_C_SHORT;     s_SqlTyp[10] = _T("SQL_C_SHORT");
+    i_SqlTyp[11] = SQL_C_SLONG;     s_SqlTyp[11] = _T("SQL_C_SLONG");
+    i_SqlTyp[12] = SQL_C_SSHORT;    s_SqlTyp[12] = _T("SQL_C_SSHORT");
+    i_SqlTyp[13] = SQL_C_STINYINT;  s_SqlTyp[13] = _T("SQL_C_STINYINT");
+    i_SqlTyp[14] = SQL_C_TIME;      s_SqlTyp[14] = _T("SQL_C_TIME");
+    i_SqlTyp[15] = SQL_C_TIMESTAMP; s_SqlTyp[15] = _T("SQL_C_TIMESTAMP");
+    i_SqlTyp[16] = SQL_C_TINYINT;   s_SqlTyp[16] = _T("SQL_C_TINYINT");
+    i_SqlTyp[17] = SQL_C_ULONG;     s_SqlTyp[17] = _T("SQL_C_ULONG");
+    i_SqlTyp[18] = SQL_C_USHORT;    s_SqlTyp[18] = _T("SQL_C_USHORT");
+    i_SqlTyp[19] = SQL_C_UTINYINT;  s_SqlTyp[19] = _T("SQL_C_UTINYINT");
+    i_SqlTyp[20] = SQL_VARCHAR;     s_SqlTyp[20] = _T("SQL_VARCHAR");
+    i_SqlTyp[21] = SQL_NUMERIC;     s_SqlTyp[21] = _T("SQL_NUMERIC");
+    i_SqlTyp[22] = SQL_LONGVARCHAR; s_SqlTyp[22] = _T("SQL_LONGVARCHAR");
+    i_SqlTyp[23] = SQL_REAL;        s_SqlTyp[23] = _T("SQL_REAL");
+    i_SqlTyp[0]  = 23;              s_SqlTyp[0]  = _T("");
 }
 
 //----------------------------------------------------------------------------------------
 void BrowserDB::OnFilldbTyp()
 {
-    i_dbTyp[1]	 = DB_DATA_TYPE_VARCHAR;	 s_dbTyp[1]  = "DB_DATA_TYPE_VARCHAR";
-    i_dbTyp[2]	 = DB_DATA_TYPE_INTEGER;	 s_dbTyp[2]  = "DB_DATA_TYPE_INTEGER";
-    i_dbTyp[3]	 = DB_DATA_TYPE_FLOAT;		 s_dbTyp[3]  = "DB_DATA_TYPE_FLOAT";
-    i_dbTyp[4]	 = DB_DATA_TYPE_DATE;		 s_dbTyp[4]  = "DB_DATA_TYPE_DATE";
-    i_dbTyp[0]	 = 4;						 s_dbTyp[0]   = "";
+    i_dbTyp[1] = DB_DATA_TYPE_VARCHAR; s_dbTyp[1] = _T("DB_DATA_TYPE_VARCHAR");
+    i_dbTyp[2] = DB_DATA_TYPE_INTEGER; s_dbTyp[2] = _T("DB_DATA_TYPE_INTEGER");
+    i_dbTyp[3] = DB_DATA_TYPE_FLOAT;   s_dbTyp[3] = _T("DB_DATA_TYPE_FLOAT");
+    i_dbTyp[4] = DB_DATA_TYPE_DATE;    s_dbTyp[4] = _T("DB_DATA_TYPE_DATE");
+    i_dbTyp[0] = 4;                    s_dbTyp[0] = _T("");
 }
 //----------------------------------------------------------------------------------------

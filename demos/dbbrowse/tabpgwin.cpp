@@ -506,7 +506,7 @@ wxFont wxTabbedWindow::GetLabelingFont()
 {
     wxFont font;
 #ifdef __WINDOWS__
-    font.SetFaceName("MS Sans Serif");
+    font.SetFaceName(_T("MS Sans Serif"));
 #else
     font.SetFamily( wxSWISS );
 #endif
@@ -736,7 +736,7 @@ wxFont wxPagedWindow::GetLabelingFont()
     wxFont font;
     
 #ifdef __WINDOWS__
-    font.SetFaceName("Comic Sans MS");
+    font.SetFaceName(_T("Comic Sans MS"));
 #else
     font.SetFamily( wxSWISS );
 #endif

@@ -56,7 +56,7 @@ MainDoc::MainDoc()
     p_PageArea     = NULL;
     i_TabNr        = 0;
     i_PageNr       = 0;
-    s_BColour      = "WHEAT";
+    s_BColour      = _T("WHEAT");
     ft_Doc         = new wxFont(wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT));
 }
 
@@ -96,7 +96,7 @@ bool MainDoc::OnNewDocument()
 //----------------------------------------------------------------------------------------
 bool MainDoc::OnInitView()
 {
-    Sash = p_ProgramCfg->Read("/MainFrame/Sash", 200);
+    Sash = p_ProgramCfg->Read(_T("/MainFrame/Sash"), 200);
     // wxMessageBox("OnInitView() - Begin ","-I->MainDoc::OnInitView");
     //---------------------------------------------------------------------------------------
     // create "workplace" window
@@ -109,9 +109,9 @@ bool MainDoc::OnInitView()
     p_PgmCtrl->i_TabArt = 0; // 0 = Tab ; 1 = Page
     p_PgmCtrl->i_ViewNr = p_TabArea->GetTabCount()-1;
     //---------------------------------------------------------------------------------------
-    wxBitmap *p_FolderClose = new wxBitmap("PgmCtrl"); //, wxBITMAP_TYPE_BMP_RESOURCE); // BJO20000115
+    wxBitmap *p_FolderClose = new wxBitmap(_T("PgmCtrl")); //, wxBITMAP_TYPE_BMP_RESOURCE); // BJO20000115
     //---------------------------------------------------------------------------------------
-    p_TabArea->AddTab(p_PgmCtrl,"PgmCtrl",p_FolderClose);
+    p_TabArea->AddTab(p_PgmCtrl,_T("PgmCtrl"),p_FolderClose);
     delete p_FolderClose;      // Memory leak
     p_FolderClose = NULL;
     //---------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ bool MainDoc::OnInitView()
     p_LogBook->SetActiveTarget(p_LogBook);
     p_LogBook->SetTimestamp( NULL );
     //---------------------------------------------------------------------------------------
-    p_PageArea->AddTab(p_LogWin,_("LogBook"), "what is this?" );
+    p_PageArea->AddTab(p_LogWin,_("LogBook"), _T("what is this?") );
     i_TabNr  = p_TabArea->GetTabCount()-1;  // Add one when a new AddTab is done;
     i_PageNr = p_PageArea->GetTabCount()-1; // Add one when a new AddTab is done;
     //---------------------------------------------------------------------------------------
@@ -152,9 +152,9 @@ bool MainDoc::OnInitView()
 //----------------------------------------------------------------------------------------
 bool MainDoc::OnInitODBC()
 {
-    char Dsn[SQL_MAX_DSN_LENGTH + 1];
-    char DsDesc[255]; // BJO20002501 instead of 512
-    Temp0 = "";
+    wxChar Dsn[SQL_MAX_DSN_LENGTH + 1];
+    wxChar DsDesc[255]; // BJO20002501 instead of 512
+    Temp0 = _T("");
     i_DSN = 0;       // Counter
     int i = 0;
     //---------------------------------------------------------------------------------------
@@ -176,15 +176,15 @@ bool MainDoc::OnInitODBC()
     while(wxDbGetDataSource(DbConnectInf.GetHenv(), Dsn, sizeof(Dsn), DsDesc, sizeof(DsDesc)))
     {
         i_DSN++;   // How many Dsn have we ?
-        KeyString.Printf("%s%c%s",Dsn, sep, DsDesc);
+        KeyString.Printf(_T("%s%c%s"),Dsn, sep, DsDesc);
         s_SortDSNList.Add(Dsn);
         s_SortDsDescList.Add(KeyString);
     }
     s_SortDSNList.Sort();     //BJO
     s_SortDsDescList.Sort();  //BJO
     
-    char ** s_SortDSN = s_SortDSNList.ListToArray();        //BJO
-    char ** s_SortDsDesc = s_SortDsDescList.ListToArray();  //BJO
+    wxChar ** s_SortDSN = s_SortDSNList.ListToArray();        //BJO
+    wxChar ** s_SortDsDesc = s_SortDsDescList.ListToArray();  //BJO
     //---------------------------------------------------------------------------------------
     // Allocate n ODBC-DSN objects to hold the information
     p_DSN = new DSN[i_DSN];  //BJO
@@ -192,12 +192,12 @@ bool MainDoc::OnInitODBC()
     {
         KeyString = s_SortDsDesc[i];
         KeyString = KeyString.AfterFirst(sep);
-        strcpy(s_SortDsDesc[i],KeyString.c_str());
+        wxStrcpy(s_SortDsDesc[i],KeyString.c_str());
         (p_DSN+i)->Dsn = s_SortDSN[i];
         (p_DSN+i)->Drv = s_SortDsDesc[i];
-        (p_DSN+i)->Usr = "";
-        (p_DSN+i)->Pas = "";
-        Temp0.Printf("%02d) Dsn(%s) DsDesc(%s)",i,(p_DSN+i)->Dsn.c_str(),(p_DSN+i)->Drv.c_str());
+        (p_DSN+i)->Usr = _T("");
+        (p_DSN+i)->Pas = _T("");
+        Temp0.Printf(_T("%02d) Dsn(%s) DsDesc(%s)"),i,(p_DSN+i)->Dsn.c_str(),(p_DSN+i)->Drv.c_str());
         wxLogMessage(Temp0);
     }
     i = 0;
@@ -221,9 +221,10 @@ bool MainDoc::OnInitODBC()
     //---------------------------------------------------------------------------------------
     if (!i_DSN)
     {
-        wxMessageBox(_("No Dataset names found in ODBC!\n" \
-            "           Program will exit!\n\n" \
-            "                       Ciao"),"-E-> Fatal situation");
+        wxString message = _("No Dataset names found in ODBC!\n");
+        message += _("           Program will exit!\n\n");
+        message += _("                       Ciao");
+        wxMessageBox( message,_("-E-> Fatal situation"));
         return FALSE;
     }
     //---------------------------------------------------------------------------------------
@@ -240,13 +241,13 @@ bool MainDoc::OnChosenDSN(int Which)
         p_TabArea->Show(FALSE);    // Deactivate the Window
         p_TabArea->RemoveTab(p_DBTree->i_ViewNr);
         p_TabArea->Show(TRUE);     // Activate the Window
-        OnChosenTbl(77,"");
+        OnChosenTbl(77,_T(""));
     }
     //-------------------------
     p_TabArea->Show(FALSE);    // Deactivate the Window
     p_DBTree = new DBTree(p_TabArea, TREE_CTRL_DB,wxDefaultPosition, wxDefaultSize,
         wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
-    p_TabArea->AddTab(p_DBTree,(p_DSN+Which)->Dsn," ? ");
+    p_TabArea->AddTab(p_DBTree,(p_DSN+Which)->Dsn,_T(" ? "));
     p_DBTree->i_ViewNr = p_TabArea->GetTabCount()-1;
     p_TabArea->Show(TRUE);    // Deactivate the Window
     p_DBTree->i_Which  = Which;
@@ -290,7 +291,7 @@ bool MainDoc::OnChosenTbl(int Tab,wxString Table)
         p_TabArea->Show(FALSE);    // Deactivate the Window
         p_DBGrid = new DBGrid(p_TabArea,GRID_CTRL_DB,wxDefaultPosition, wxDefaultSize,
             wxSUNKEN_BORDER);
-        p_TabArea->AddTab(p_DBGrid, Table, "");
+        p_TabArea->AddTab(p_DBGrid, Table, _T(""));
         p_DBGrid->i_ViewNr = p_TabArea->GetTabCount()-1;
         p_DBGrid->pDoc       = this;
         p_DBGrid->db_Br      = db_Br;
@@ -303,7 +304,7 @@ bool MainDoc::OnChosenTbl(int Tab,wxString Table)
         p_PageArea->Show(FALSE);   // Deactivate the Window
         p_DBGrid = new DBGrid(p_PageArea,GRID_CTRL_DB,wxDefaultPosition, wxDefaultSize,
             wxSUNKEN_BORDER);
-        p_PageArea->AddTab(p_DBGrid, Table, "");
+        p_PageArea->AddTab(p_DBGrid, Table, _T(""));
         p_DBGrid->i_ViewNr = p_PageArea->GetTabCount()-1;
         p_DBGrid->pDoc       = this;
         p_DBGrid->db_Br      = db_Br;

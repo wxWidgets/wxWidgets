@@ -13,7 +13,7 @@
 class MainFrame: public wxFrame
 {
 public:
-    MainFrame(wxFrame *frame, char *title,  const wxPoint& pos, const wxSize& size);
+    MainFrame(wxFrame *frame, wxChar *title,  const wxPoint& pos, const wxSize& size);
     ~MainFrame(void);
     
 public:
