@@ -2,7 +2,7 @@
 
 Classes: \helpref{wxString}{wxstring}, \helpref{wxArrayString}{wxarraystring}, \helpref{wxStringTokenizer}{wxstringtokenizer}
 
-\subsection{Introduction}
+\subsection{Introduction}\label{introductiontowxstring}
 
 wxString is a class which represents a character string of arbitrary length (limited by 
 {\it MAX\_INT} which is usually 2147483647 on 32 bit machines) and containing
@@ -22,7 +22,7 @@ replacing and both C-like \helpref{Printf()}{wxstringprintf} and stream-like
 insertion functions as well as much more - see \helpref{wxString}{wxstring} 
 for a list of all functions.
 
-\subsection{Comparison of wxString to other string classes}
+\subsection{Comparison of wxString to other string classes}\label{otherstringclasses}
 
 The advantages of using a special string class instead of working directly with
 C strings are so obvious that there is a huge number of such classes available.
@@ -131,7 +131,7 @@ strings inside the function faster because of
 strings should return {\it wxString} - this makes it safe to return local
 variables.
 
-\subsection{Other string related functions and classes}
+\subsection{Other string related functions and classes}\label{relatedtostring}
 
 As most programs use character strings, the standard C library provides quite
 a few functions to work with them. Unfortunately, some of them have rather

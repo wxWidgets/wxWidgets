@@ -142,7 +142,7 @@ correctly sized. }
 \docparam{name}{Window name.}
 
 
-\membersection{wxWindow::\destruct{wxWindow}}
+\membersection{wxWindow::\destruct{wxWindow}}\label{wxwindowdtor}
 
 \func{}{\destruct{wxWindow}}{\void}
 
@@ -158,7 +158,7 @@ can delete a window only when it is safe to do so, in idle time.
 \helpref{wxCloseEvent}{wxcloseevent}
 
 
-\membersection{wxWindow::AddChild}
+\membersection{wxWindow::AddChild}\label{wxwindowaddchild}
 
 \func{virtual void}{AddChild}{\param{wxWindow* }{child}}
 
@@ -287,7 +287,7 @@ Clears the window by filling it with the current background colour. Does not
 cause an erase background event to be generated.
 
 
-\membersection{wxWindow::ClientToScreen}
+\membersection{wxWindow::ClientToScreen}\label{wxwindowclienttoscreen}
 
 \constfunc{virtual void}{ClientToScreen}{\param{int* }{x}, \param{int* }{y}}
 
@@ -451,7 +451,7 @@ windows.
 to the list of windows pending real deletion.
 
 
-\membersection{wxWindow::DestroyChildren}
+\membersection{wxWindow::DestroyChildren}\label{wxwindowdestroychildren}
 
 \func{virtual void}{DestroyChildren}{\void}
 
@@ -764,21 +764,21 @@ Returns the currently captured window.
 \helpref{wxMouseCaptureChangedEvent}{wxmousecapturechangedevent}
 
 
-\membersection{wxWindow::GetCharHeight}
+\membersection{wxWindow::GetCharHeight}\label{wxwindowgetcharheight}
 
 \constfunc{virtual int}{GetCharHeight}{\void}
 
 Returns the character height for this window.
 
 
-\membersection{wxWindow::GetCharWidth}
+\membersection{wxWindow::GetCharWidth}\label{wxwindowgetcharwidth}
 
 \constfunc{virtual int}{GetCharWidth}{\void}
 
 Returns the average character width for this window.
 
 
-\membersection{wxWindow::GetChildren}
+\membersection{wxWindow::GetChildren}\label{wxwindowgetchildren}
 
 \func{wxList\&}{GetChildren}{\void}
 
@@ -960,7 +960,7 @@ be used at all.
 \helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour}
 
 
-\membersection{wxWindow::GetGrandParent}
+\membersection{wxWindow::GetGrandParent}\label{wxwindowgetgrandparent}
 
 \constfunc{wxWindow*}{GetGrandParent}{\void}
 
@@ -1010,7 +1010,7 @@ Each window has an integer identifier. If the application has not provided one
 \helpref{Window identifiers}{windowids}
 
 
-\membersection{wxWindow::GetLabel}
+\membersection{wxWindow::GetLabel}\label{wxwindowgetlabel}
 
 \constfunc{virtual wxString }{GetLabel}{\void}
 
@@ -1042,7 +1042,7 @@ name in the window constructor or via \helpref{wxWindow::SetName}{wxwindowsetnam
 \helpref{wxWindow::SetName}{wxwindowsetname}
 
 
-\membersection{wxWindow::GetParent}
+\membersection{wxWindow::GetParent}\label{wxwindowgetparent}
 
 \constfunc{virtual wxWindow*}{GetParent}{\void}
 
