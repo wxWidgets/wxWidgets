@@ -111,9 +111,9 @@ protected:
     #include "../../art/htmbook.xpm"
     #include "../../art/htmfoldr.xpm"
     #include "../../art/htmpage.xpm"
-    #include "../../art/missimg.xpm"
 #endif // wxUSE_HTML
 
+#include "../../art/missimg.xpm"
 #include "../../art/addbookm.xpm"
 #include "../../art/delbookm.xpm"
 #include "../../art/back.xpm"
