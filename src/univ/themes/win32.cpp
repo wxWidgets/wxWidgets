@@ -170,10 +170,10 @@ public:
 
     virtual wxRect GetTextTotalArea(const wxTextCtrl *text,
                                     const wxRect& rect)
-        { return rect; }
+        { wxRect rectTotal = rect; rectTotal.Inflate(1); return rectTotal; }
     virtual wxRect GetTextClientArea(const wxTextCtrl *text,
                                      const wxRect& rect)
-        { return rect; }
+        { wxRect rectText = rect; rectText.Inflate(-1); return rectText; }
 
 protected:
     // common part of DrawLabel() and DrawItem()

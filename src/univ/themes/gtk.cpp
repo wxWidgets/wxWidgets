@@ -17,7 +17,7 @@
 // headers
 // ---------------------------------------------------------------------------
 
-// For compilers that support precompilation, includes "wx.h".
+// for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -40,8 +40,11 @@
 #include "wx/univ/colschem.h"
 #include "wx/univ/theme.h"
 
-// define this for tons of debugging messages
-#undef DEBUG_MOUSE
+// ----------------------------------------------------------------------------
+// constants (to be removed)
+// ----------------------------------------------------------------------------
+
+static const wxCoord BORDER_THICKNESS = 10;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -676,12 +679,14 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
                                  int WXUNUSED(flags),
                                  wxRect *rectIn)
 {
+    size_t width;
+
     wxRect rect = rectTotal;
 
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            for ( int width = 0; width < 10; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
             {
                 DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
                 DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
@@ -693,8 +698,10 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_RAISED:
-            for ( int width = 0; width < 10; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
+            {
                 DrawRaisedBorder(dc, &rect);
+            }
             break;
 
         case wxBORDER_DOUBLE:

@@ -71,6 +71,10 @@ void wxTextCtrl::Init()
     m_isEditable = TRUE;
 
     m_ofsHorz = 0;
+
+    m_curPos =
+    m_curRow =
+    m_curLine = 0;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -90,7 +94,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     // FIXME use renderer
     wxCaret *caret = new wxCaret(this, 1, GetCharHeight());
+#ifndef __WXMSW__
     caret->SetBlinkTime(0);
+#endif // __WXMSW__
     SetCaret(caret);
 
     SetCursor(wxCURSOR_IBEAM);

@@ -205,6 +205,13 @@ void wxWindow::OnPaint(wxPaintEvent& event)
 bool wxWindow::DoDrawBackground(wxDC& dc)
 {
     wxRect rect = GetUpdateRegion().GetBox();
+    if ( !rect.width && !rect.height )
+    {
+        wxSize size = GetSize();
+        rect.width = size.x;
+        rect.height = size.y;
+    }
+
     if ( GetBackgroundBitmap().Ok() )
     {
         // get the bitmap and the flags
