@@ -41211,6 +41211,11 @@ else
 fi
 
 GCC_PRAGMA_FLAGS=""
+PCH_FLAGS=""
+if test $GCC_PCH = 1 ; then
+    GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
+    PCH_FLAGS="-DWX_PRECOMP"
+else
     case "${host}" in
         powerpc-*-darwin* )
                                     GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
@@ -41330,16 +41335,7 @@ rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
             fi
             ;;
     esac
-
-PCH_FLAGS=""
-if test $GCC_PCH = 1 ; then
-    if test "x$GCC_PRAGMA_FLAGS" = "x"; then
-        PCH_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
-    else
-        PCH_FLAGS="-DWX_PRECOMP"
-    fi
 fi
-
 CPPFLAGS="$PCH_FLAGS $GCC_PRAGMA_FLAGS $CPPFLAGS"
 
 

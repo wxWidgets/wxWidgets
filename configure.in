@@ -6286,8 +6286,15 @@ else
 
 fi
 
-dnl Check to see if the platform always requires NO_GCC_PRAGMA
+dnl According to Vaclav, if NO_GCC_PRAGMA is used for any reason it needs to
+dnl be in wx-config output.  Not doing so could result in link problems.
 GCC_PRAGMA_FLAGS=""
+PCH_FLAGS=""
+dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
+if test $GCC_PCH = 1 ; then
+    GCC_PRAGMA_FLAGS="-DNO_GCC_PRAGMA"
+    PCH_FLAGS="-DWX_PRECOMP"
+else
     case "${host}" in
         powerpc-*-darwin* )
             dnl Some Apple's GCC version are broken and can't handle the
@@ -6332,17 +6339,7 @@ GCC_PRAGMA_FLAGS=""
             fi
             ;;
     esac
-
-dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
-PCH_FLAGS=""
-if test $GCC_PCH = 1 ; then
-    if test "x$GCC_PRAGMA_FLAGS" = "x"; then
-        PCH_FLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA"
-    else
-        PCH_FLAGS="-DWX_PRECOMP"
-    fi
 fi
-
 CPPFLAGS="$PCH_FLAGS $GCC_PRAGMA_FLAGS $CPPFLAGS"
 
 
