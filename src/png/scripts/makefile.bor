@@ -1,29 +1,28 @@
 # Makefile for libpng
-# Borland C++ 4.5 (Note: All modules are compiled in C mode)
-# Will work with C++ 4.02 also
-# To build the library, do: 
-#       "make -fmakefile.bor -DMODEL=m"
+# 16-bit Borland C++ (Note: All modules are compiled in C mode)
+# To build the library, do:
+#       "make -fmakefile.bor -DMODEL=c"
 # or:   "make -fmakefile.bor -DMODEL=l"
 #
-# ------------- Borland C++ 4.5 -------------
+# ------------ Borland C++ ------------
 
 ### Absolutely necessary for this makefile to work
 .AUTODEPEND
 
-## Useful user options
+## Where zlib.h, zconf.h and zlib_MODEL.lib are
+ZLIB_DIR=..\zlib
 
-# Usually defined in builtins.mak or the environment
-# Currently unused.
-!ifndef BCROOT
-BCROOT=N:\BC45
-!endif
 
-# Where zlib.h and zconf.h and zlib.lib are
-ZLIB_PATH=..\zlib
+## Compiler, linker and lib stuff
+CC=bcc
+LD=bcc
+LIB=tlib
 
 !ifndef MODEL
 MODEL=l
 !endif
+
+MODEL_ARG=-m$(MODEL)
 
 #TARGET_CPU=3
 # 2 = 286, 3 = 386, etc.
@@ -31,9 +30,9 @@ MODEL=l
 TARGET_CPU=2
 !endif
 
-
-# Use this if you don't want Borland's fancy exception handling.
-NOEHLIB=noeh$(MODEL).lib
+# Use this if you don't want Borland's fancy exception handling
+# (for Borland C++ 4.0 or later)
+#NOEHLIB=noeh$(MODEL).lib
 
 !ifdef DEBUG
 CDEBUG=-v
@@ -49,59 +48,50 @@ CDEBUG=$(CDEBUG) -N
 LDEBUG=$(LDEBUG) -N
 !endif
 
-
-## Compiler, linker, and lib stuff
-CC=bcc
-LD=bcc
-LIB=tlib
-
-MODELARG=-m$(MODEL)
-
-# -X- turns on dependency generation in the object file
-# -w  sets all warnings on
+# -X- turn on dependency generation in the object file
+# -w  set all warnings on
 # -O2 optimize for speed
 # -Z  global optimization
-CFLAGS=-O2 -Z -X- -w -I$(ZLIB_PATH) -$(TARGET_CPU) $(MODELARG) $(CDEBUG)
+CFLAGS=-O2 -Z -X- -w -I$(ZLIB_DIR) -$(TARGET_CPU) $(MODEL_ARG) $(CDEBUG)
 
 # -M  generate map file
-LDFLAGS=-M $(LDEBUG)
+LDFLAGS=-M -L$(ZLIB_DIR) $(MODEL_ARG) $(LDEBUG)
 
-O=obj
 
-## variables
+## Variables
 OBJS = \
- png.$(O) \
- pngerror.$(O) \
- pngmem.$(O) \
- pngpread.$(O) \
- pngset.$(O) \
- pngget.$(O) \
- pngread.$(O) \
- pngrio.$(O) \
- pngrtran.$(O) \
- pngrutil.$(O) \
- pngtrans.$(O) \
- pngwrite.$(O) \
- pngwtran.$(O) \
- pngwio.$(O) \
- pngwutil.$(O)
+	png.obj \
+	pngerror.obj \
+	pngget.obj \
+	pngmem.obj \
+	pngpread.obj \
+	pngread.obj \
+	pngrio.obj \
+	pngrtran.obj \
+	pngrutil.obj \
+	pngset.obj \
+	pngtrans.obj \
+	pngwio.obj \
+	pngwrite.obj \
+	pngwtran.obj \
+	pngwutil.obj
 
 LIBOBJS = \
- +png.$(O) \
- +pngerror.$(O) \
- +pngmem.$(O) \
- +pngpread.$(O) \
- +pngread.$(O) \
- +pngset.$(O) \
- +pngget.$(O) \
- +pngrio.$(O) \
- +pngrtran.$(O) \
- +pngrutil.$(O) \
- +pngtrans.$(O) \
- +pngwrite.$(O) \
- +pngwtran.$(O) \
- +pngwio.$(O)
- +pngwutil.$(O)
+	+png.obj \
+	+pngerror.obj \
+	+pngget.obj \
+	+pngmem.obj \
+	+pngpread.obj \
+	+pngread.obj \
+	+pngrio.obj \
+	+pngrtran.obj \
+	+pngrutil.obj \
+	+pngset.obj \
+	+pngtrans.obj \
+	+pngwio.obj \
+	+pngwrite.obj \
+	+pngwtran.obj \
+	+pngwutil.obj
 
 LIBNAME=libpng$(MODEL).lib
 
@@ -113,32 +103,34 @@ LIBNAME=libpng$(MODEL).lib
 	$(CC) $(CFLAGS) -c {$*.c }
 
 .c.exe:
-	$(CC) $(CFLAGS) $(LDFLAGS) $*.c
+	$(CC) $(CFLAGS) $(LDFLAGS) $*.c $(LIBNAME) zlib_$(MODEL).lib $(NOEHLIB)
 
 
 ## Major targets
+all: libpng pngtest
+
 libpng: $(LIBNAME)
 
 pngtest: pngtest$(MODEL).exe
 
-test:
+test: pngtest$(MODEL).exe
 	pngtest$(MODEL)
 
 
 ## Minor Targets
 
 png.obj: png.c
-pngset.obj: pngset.c
+pngerror.obj: pngerror.c
 pngget.obj: pngget.c
-pngread.obj: pngread.c
+pngmem.obj: pngmem.c
 pngpread.obj: pngpread.c
+pngread.obj: pngread.c
+pngrio.obj: pngrio.c
 pngrtran.obj: pngrtran.c
 pngrutil.obj: pngrutil.c
-pngerror.obj: pngerror.c
-pngmem.obj: pngmem.c
-pngrio.obj: pngrio.c
-pngwio.obj: pngwio.c
+pngset.obj: pngset.c
 pngtrans.obj: pngtrans.c
+pngwio.obj: pngwio.c
 pngwrite.obj: pngwrite.c
 pngwtran.obj: pngwtran.c
 pngwutil.obj: pngwutil.c
@@ -146,7 +138,7 @@ pngwutil.obj: pngwutil.c
 
 $(LIBNAME): $(OBJS)
 	-del $(LIBNAME)
-        $(LIB) $(LIBNAME) @&&|
+	$(LIB) $(LIBNAME) @&&|
 $(LIBOBJS), libpng$(MODEL)
 |
 
@@ -155,14 +147,16 @@ pngtest$(MODEL).obj: pngtest.c
 	$(CC) $(CFLAGS) -opngtest$(MODEL) -c pngtest.c
 
 pngtest$(MODEL).exe: pngtest$(MODEL).obj
-	$(CC) $(MODELARG) $(LDFLAGS) -L$(ZLIB_PATH) pngtest$(MODEL).obj $(LIBNAME) zlib$(MODEL).lib $(NOEHLIB)
+	$(LD) $(LDFLAGS) pngtest$(MODEL).obj $(LIBNAME) zlib_$(MODEL).lib $(NOEHLIB)
 
 
 # Clean up anything else you want
 clean:
 	-del *.obj
+	-del *.exe
 	-del *.lib
 	-del *.lst
+	-del *.map
 
 
 # End of makefile for libpng

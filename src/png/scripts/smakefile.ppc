@@ -1,6 +1,7 @@
 # Amiga powerUP (TM) Makefile
 # makefile for libpng and SAS C V6.58/7.00 PPC compiler
 # Copyright (C) 1998 by Andreas R. Kleinert
+# For conditions of distribution and use, see copyright notice in png.h
 
 CC       = scppc
 CFLAGS   = NOSTKCHK NOSINT OPTIMIZE OPTGO OPTPEEP OPTINLOCAL OPTINL IDIR /zlib \

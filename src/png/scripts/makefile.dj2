@@ -1,16 +1,19 @@
 # DJGPP (DOS gcc) makefile for libpng
+# Copyright (C) 2002 Glenn Randers-Pehrson
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
 # For conditions of distribution and use, see copyright notice in png.h
+
+# where make install will put libpng.a and png.h
+#prefix=/usr/local
+prefix=.
+INCPATH=$(prefix)/include
+LIBPATH=$(prefix)/lib
 
 CC=gcc
 CFLAGS=-I../zlib -O
 LDFLAGS=-L. -L../zlib/ -lpng -lz -lm
 
 RANLIB=ranlib
-
-# where make install puts libpng.a and png.h
-#prefix=/usr/local
-prefix=.
 
 OBJS = png.o pngset.o pngget.o pngrutil.o pngtrans.o pngwutil.o \
 	pngread.o pngrio.o pngwio.o pngwrite.o pngrtran.o pngwtran.o \
