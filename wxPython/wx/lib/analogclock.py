@@ -80,7 +80,7 @@ class AnalogClockWindow(wx.PyWindow):
         self.tickMarkHoursPen = wx.Pen((0, 0, 0), 1, wx.SOLID)
         self.tickMarkHoursBrush = wx.Brush((0, 0, 0), wx.SOLID)
         self.markSizeHour = 10
-        self.tickMarkHoursFont = wx.Font(0, wx.SWISS, wx.NORMAL, wx.BOLD)
+        self.tickMarkHoursFont = wx.Font(1, wx.SWISS, wx.NORMAL, wx.BOLD)
         self.tickMarkHoursFont.SetPointSize(self.markSizeHour)
 
         self.tickMarkMinutesPen = wx.Pen((0, 0, 0), 1, wx.SOLID)
