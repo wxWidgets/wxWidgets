@@ -255,12 +255,16 @@ wxCursor::wxCursor(char **bits)
 
 bool wxCursor::CreateFromXpm(const char **bits)
 {
+#if wxUSE_IMAGE
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid cursor data") )
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(bits);
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid cursor data") )    
 	CreateFromImage( img ) ;
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 WXHCURSOR wxCursor::GetHCURSOR() const 
@@ -290,6 +294,8 @@ short GetCTabIndex( CTabHandle colors , RGBColor *col )
     }
     return retval ;
 }
+
+#if wxUSE_IMAGE
 
 void wxCursor::CreateFromImage(const wxImage & image) 
 {
@@ -402,6 +408,8 @@ void wxCursor::CreateFromImage(const wxImage & image)
     M_CURSORDATA->m_isColorCursor = true ;
 }
 
+#endif //wxUSE_IMAGE
+
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
     m_refData = new wxCursorRefData;
@@ -438,6 +446,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     }
     else
     {
+#if wxUSE_IMAGE
         wxImage image ;
         image.LoadFile( cursor_file , flags ) ;
         if( image.Ok() )
@@ -447,6 +456,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
             delete m_refData ;
             CreateFromImage(image) ;
         }
+#endif
     }
 }
 
