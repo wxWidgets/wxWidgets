@@ -228,9 +228,9 @@ ALL_HEADERS =  \
 	wx/xml/xml.h \
 	$(OPENGL_HDR) \
 	wx/db.h \
-	wx/dbgrid.h \
 	wx/dbkeyg.h \
-	wx/dbtable.h
+	wx/dbtable.h \
+	wx/dbgrid.h
 BASEDLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
@@ -391,6 +391,18 @@ CORELIB_OBJECTS =  \
 	corelib_utilscmn.o \
 	$(__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5) \
 	$(__CORE_SRC_OBJECTS_3)
+DBGRIDDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-DWXUSINGDLL -DWXMAKINGDLL_DBGRID $(CXXFLAGS) $(PIC_FLAG)
+DBGRIDDLL_OBJECTS =  \
+	dbgriddll_dbgrid.o
+DBGRIDLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
+	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	$(CXXFLAGS)
+DBGRIDLIB_OBJECTS =  \
+	dbgridlib_dbgrid.o
 GLDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
@@ -660,7 +672,6 @@ ODBCDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXUSINGDLL -DWXMAKINGDLL_ODBC $(CXXFLAGS) $(PIC_FLAG)
 ODBCDLL_OBJECTS =  \
 	odbcdll_db.o \
-	odbcdll_dbgrid.o \
 	odbcdll_dbtable.o
 ODBCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
@@ -668,7 +679,6 @@ ODBCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXFLAGS)
 ODBCLIB_OBJECTS =  \
 	odbclib_db.o \
-	odbclib_dbgrid.o \
 	odbclib_dbtable.o
 WXEXPAT_CFLAGS = $(CPPFLAGS)   -I./src/expat $(CFLAGS)
 WXEXPAT_OBJECTS =  \
@@ -5359,8 +5369,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_winpars.o \
 	monodll_htmllbox.o \
 	monodll_db.o \
-	monodll_dbgrid.o \
-	monodll_dbtable.o
+	monodll_dbtable.o \
+	monodll_dbgrid.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
@@ -5399,8 +5409,8 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_winpars.o \
 	monolib_htmllbox.o \
 	monolib_db.o \
-	monolib_dbgrid.o \
-	monolib_dbtable.o
+	monolib_dbtable.o \
+	monolib_dbgrid.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
 @COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
@@ -5586,6 +5596,44 @@ COND_USE_SOVERSOLARIS_1___coredll___soname_flags = \
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__corelib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname)
+COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___dbgriddll___depname = \
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@__dbgriddll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___dbgriddll___depname)
+COND_PLATFORM_WIN32_1___dbgriddll___importlib = \
+	-Wl,--out-implib,$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_PLATFORM_WIN32_1@__dbgriddll___importlib = $(COND_PLATFORM_WIN32_1___dbgriddll___importlib)
+COND_PLATFORM_MACOSX_1___dbgriddll___macinstnamecmd = -install_name \
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_PLATFORM_MACOSX_1@__dbgriddll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___dbgriddll___macinstnamecmd)
+COND_USE_SOSYMLINKS_1___dbgriddll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
+	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT))
+@COND_USE_SOSYMLINKS_1@__dbgriddll___so_symlinks_cmd = $(COND_USE_SOSYMLINKS_1___dbgriddll___so_symlinks_cmd)
+COND_USE_SOSYMLINKS_1___dbgriddll___so_symlinks_inst_cmd = rm -f \
+	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(LN_S) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_USE_SOSYMLINKS_1@__dbgriddll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___dbgriddll___so_symlinks_inst_cmd)
+COND_USE_SOVERLINUX_1___dbgriddll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+@COND_USE_SOVERLINUX_1@__dbgriddll___soname_flags = $(COND_USE_SOVERLINUX_1___dbgriddll___soname_flags)
+COND_USE_SOVERSOLARIS_1___dbgriddll___soname_flags = \
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+@COND_USE_SOVERSOLARIS_1@__dbgriddll___soname_flags = $(COND_USE_SOVERSOLARIS_1___dbgriddll___soname_flags)
+COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___dbgridlib___depname = \
+	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@__dbgridlib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___dbgridlib___depname)
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@__gldll___depname = $(COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname)
@@ -5673,6 +5721,10 @@ COND_MONOLITHIC_0_SHARED_0_USE_HTML_1___htmllib___depname = \
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	= install_coredll
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@__install_corelib___depname \
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	= install_corelib
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@__install_dbgriddll___depname \
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	= install_dbgriddll
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@__install_dbgridlib___depname \
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	= install_dbgridlib
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@__install_gldll___depname \
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	= install_gldll
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@__install_gllib___depname \
@@ -5781,42 +5833,42 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0@__netlib___depname = $(COND_MONOLITHIC_0_SHARED_0___netlib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___odbcdll___depname = \
-	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@__odbcdll___depname = $(COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1___odbcdll___depname)
 COND_PLATFORM_WIN32_1___odbcdll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	-Wl,--out-implib,$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_PLATFORM_WIN32_1@__odbcdll___importlib = $(COND_PLATFORM_WIN32_1___odbcdll___importlib)
 COND_PLATFORM_MACOSX_1___odbcdll___macinstnamecmd = -install_name \
-	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	$(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_PLATFORM_MACOSX_1@__odbcdll___macinstnamecmd = $(COND_PLATFORM_MACOSX_1___odbcdll___macinstnamecmd)
 COND_USE_SOSYMLINKS_1___odbcdll___so_symlinks_cmd = (cd $(LIBDIRNAME)/; rm -f \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 	$(LN_S) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 	$(LN_S) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT))
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT))
 @COND_USE_SOSYMLINKS_1@__odbcdll___so_symlinks_cmd = $(COND_USE_SOSYMLINKS_1___odbcdll___so_symlinks_cmd)
 COND_USE_SOSYMLINKS_1___odbcdll___so_symlinks_inst_cmd = rm -f \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 	$(LN_S) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) \
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2); \
 	$(LN_S) \
-	$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
-	libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2) \
+	libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 @COND_USE_SOSYMLINKS_1@__odbcdll___so_symlinks_inst_cmd = $(COND_USE_SOSYMLINKS_1___odbcdll___so_symlinks_inst_cmd)
 COND_USE_SOVERLINUX_1___odbcdll___soname_flags = \
-	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 @COND_USE_SOVERLINUX_1@__odbcdll___soname_flags = $(COND_USE_SOVERLINUX_1___odbcdll___soname_flags)
 COND_USE_SOVERSOLARIS_1___odbcdll___soname_flags = \
-	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(SONAME_FLAG)$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 @COND_USE_SOVERSOLARIS_1@__odbcdll___soname_flags = $(COND_USE_SOVERSOLARIS_1___odbcdll___soname_flags)
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___odbclib___depname = \
-	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a
+	$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@__odbclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1___odbclib___depname)
 @COND_WXUSE_EXPAT_BUILTIN@__wxexpat___depname = \
 @COND_WXUSE_EXPAT_BUILTIN@	$(LIBDIRNAME)/libwxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX).a
@@ -5886,7 +5938,7 @@ COND_MONOLITHIC_0_SHARED_0___xmllib___depname = \
 
 ### Targets: ###
 
-all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname)
+all: $(__wxregex___depname) $(__wxzlib___depname) $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(__wxodbc___depname) $(__wxexpat___depname) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__odbcdll___depname) $(__odbclib___depname) $(__dbgriddll___depname) $(__dbgridlib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__gldll___depname) $(__gllib___depname) $(__macos_res___depname)
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1@	$(SHARED_LD_CXX) $@ $(ADVDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__advdll___macinstnamecmd) $(__advdll___importlib) $(__advdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -6662,10 +6714,14 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a
-	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
-	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a
+	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
+	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf2)
@@ -10787,6 +10843,21 @@ corelib_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 @COND_USE_GUI_1@corelib_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(DBGRIDDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__advdll___depname) $(__odbcdll___depname) $(__coredll___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(SHARED_LD_CXX) $@ $(DBGRIDDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__dbgriddll___macinstnamecmd) $(__dbgriddll___importlib) $(__dbgriddll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(__dbgriddll___so_symlinks_cmd)
+
+dbgriddll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
+	$(CXXC) -c -o $@ $(DBGRIDDLL_CXXFLAGS) $<
+
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a: $(DBGRIDLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(DBGRIDLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
+
+dbgridlib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
+	$(CXXC) -c -o $@ $(DBGRIDLIB_CXXFLAGS) $<
+
 distclean: clean
 	rm -f configure config.cache config.log config.status
 	rm -f bk-deps shared-ld-sh
@@ -10971,7 +11042,7 @@ htmllib_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
 
-install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig $(__macos_res_install___depname)
+install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__install_wxpng___depname) $(__install_wxjpeg___depname) $(__install_wxtiff___depname) $(__install_wxodbc___depname) $(__install_wxexpat___depname) $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_netdll___depname) $(__install_netlib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_advdll___depname) $(__install_advlib___depname) $(__install_odbcdll___depname) $(__install_odbclib___depname) $(__install_dbgriddll___depname) $(__install_dbgridlib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname) $(__install_xmldll___depname) $(__install_xmllib___depname) $(__install_gldll___depname) $(__install_gllib___depname) $(__install_afm___depname) $(__install_gsafm___depname) install-wxconfig $(__macos_res_install___depname)
 	$(INSTALL_DIR) $(datadir)/aclocal
 	(cd $(srcdir) ; $(INSTALL_DATA)  wxwin.m4 $(datadir)/aclocal)
 	$(INSTALL_DIR) $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
@@ -10998,7 +11069,8 @@ install-strip: install
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
-	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
+	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
 	$(STRIP) $(libdir)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3)
@@ -11037,6 +11109,16 @@ install-wxconfig:
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@install_corelib: 
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DIR) $(libdir)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a $(libdir)
+
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@install_dbgriddll: 
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	(cd $(libdir) ; $(__dbgriddll___so_symlinks_inst_cmd))
+
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@install_dbgridlib: 
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@install_gldll: 
 @COND_SHARED_1_USE_GUI_1_USE_OPENGL_1@	$(INSTALL_DIR) $(libdir)
@@ -11080,13 +11162,13 @@ install-wxconfig:
 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@install_odbcdll: 
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(libdir)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(INSTALL_PROGRAM) $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3) $(libdir)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	(cd $(libdir) ; $(__odbcdll___so_symlinks_inst_cmd))
 
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@install_odbclib: 
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DIR) $(libdir)
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a $(libdir)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a $(libdir)
 
 @COND_WXUSE_EXPAT_BUILTIN@install_wxexpat: 
 @COND_WXUSE_EXPAT_BUILTIN@	$(INSTALL_DIR) $(libdir)
@@ -16270,28 +16352,22 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp
 netlib_url.o: $(srcdir)/src/common/url.cpp
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(SHARED_LD_CXX) $@ $(ODBCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__odbcdll___macinstnamecmd) $(__odbcdll___importlib) $(__odbcdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_ODBC)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(ODBCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__basedll___depname)
+@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(SHARED_LD_CXX) $@ $(ODBCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__odbcdll___macinstnamecmd) $(__odbcdll___importlib) $(__odbcdll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_ODBC)
 @COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@	$(__odbcdll___so_symlinks_cmd)
 
 odbcdll_db.o: $(srcdir)/src/common/db.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
 
-odbcdll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
-	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
-
 odbcdll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(ODBCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(ODBCLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(ODBCLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
 
 odbclib_db.o: $(srcdir)/src/common/db.cpp
-	$(CXXC) -c -o $@ $(ODBCLIB_CXXFLAGS) $<
-
-odbclib_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
 	$(CXXC) -c -o $@ $(ODBCLIB_CXXFLAGS) $<
 
 odbclib_dbtable.o: $(srcdir)/src/common/dbtable.cpp
@@ -16755,4 +16831,4 @@ xmllib_xml.o: $(srcdir)/src/xml/xml.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean distclean install install_advdll install_advlib install_basedll install_baselib install_coredll install_corelib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_netdll install_netlib install_odbcdll install_odbclib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib uninstall
+.PHONY: all clean distclean install install_advdll install_advlib install_basedll install_baselib install_coredll install_corelib install_dbgriddll install_dbgridlib install_gldll install_gllib install_htmldll install_htmllib install_monodll install_monolib install_netdll install_netlib install_odbcdll install_odbclib install_wxexpat install_wxjpeg install_wxodbc install_wxpng install_wxregex install_wxtiff install_wxzlib install_xmldll install_xmllib uninstall

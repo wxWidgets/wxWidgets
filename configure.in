@@ -5402,8 +5402,9 @@ CORE_GUI_LIBS="adv core"
 if test "$wxUSE_XML" = "yes" ; then
     CORE_BASE_LIBS="xml $CORE_BASE_LIBS"
 fi
-if test "$wxUSE_ODBC" = "yes" ; then
-    CORE_GUI_LIBS="odbc $CORE_GUI_LIBS"
+if test "$wxUSE_ODBC" != "no" ; then
+    CORE_BASE_LIBS="odbc $CORE_BASE_LIBS"
+    CORE_GUI_LIBS="dbgrid $CORE_GUI_LIBS"
 fi
 if test "$wxUSE_HTML" = "yes" ; then
     CORE_GUI_LIBS="html $CORE_GUI_LIBS"
