@@ -185,7 +185,8 @@ All:
 
 - always NUL-terminate the log messages
 - wxRegEx::Compile() now calculates the number of groups correctly
-- wxHTTP::GetHeader() didn't find headers which not all in upper case
+- wxHTTP::GetHeader() didn't find headers which were not all in upper case
+- wxHTTP input stream didn't detect EOF correctly
 - wxString::find_last_of() ignored "start" parameter (Robert Vazan)
 - a bug in wxArrayString::Shrink() fixed (Gunnar Roth)
 
