@@ -237,7 +237,12 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_bin = data.m_bin;
     m_printMode = data.m_printMode;
     m_filename = data.m_filename;   
-    
+
+    // UnRef old m_nativeData    
+    m_nativeData->m_ref--;
+    if (m_nativeData->m_ref == 0) 
+        delete m_nativeData;
+    // Set Ref new one
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;
     
