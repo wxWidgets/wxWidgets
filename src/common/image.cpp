@@ -656,7 +656,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxImageHandler,wxObject)
 #endif
 
 #if wxUSE_STREAMS
-bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
+bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose), int WXUNUSED(index) )
 {
     return FALSE;
 }
@@ -666,9 +666,13 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
     return FALSE;
 }
 
+int wxImageHandler::GetImageCount( wxInputStream& WXUNUSED(stream) )
+{
+    return 1;
+}
+
 bool wxImageHandler::CanRead( const wxString& name )
 {
-#if wxUSE_STREAMS
     if (wxFileExists(name))
     {
         wxFileInputStream stream(name);
@@ -680,12 +684,8 @@ bool wxImageHandler::CanRead( const wxString& name )
 
         return FALSE;
     }
-#else // !wxUSE_STREAMS
     return FALSE;
-#endif // wxUSE_STREAMS
 }
-
-
 
 #endif // wxUSE_STREAMS
 

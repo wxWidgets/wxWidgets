@@ -150,7 +150,7 @@ my_error_exit (j_common_ptr cinfo)
 
 
 
-bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
+bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     struct jpeg_decompress_struct cinfo;
     struct my_error_mgr jerr;

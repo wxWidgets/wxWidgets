@@ -119,7 +119,7 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 }
 
 
-bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
+bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )
 {
     image->Destroy();
     
@@ -130,6 +130,16 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         if (verbose)
             wxLogError( _("Error loading TIFF image.") );
 	    
+	return FALSE;
+    }
+    
+    if (!TIFFSetDirectory( tif, (tdir_t)index ))
+    {
+        if (verbose)
+            wxLogError( _("Invalid TIFF image index.") );
+	    
+        TIFFClose( tif );
+	
 	return FALSE;
     }
 
@@ -216,9 +226,24 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     return TRUE;
 }
 
+int wxTIFFHandler::GetImageCount( wxInputStream& stream )
+{
+    TIFF *tif = TIFFwxOpen( stream, "image", "r" );
+    
+    if (!tif)
+	return 0;
 
+    int dircount = 0;  // according to the libtiff docs, dircount should be set to 1 here???
+    do {
+        dircount++;
+    } while (TIFFReadDirectory(tif));
+    
+    TIFFClose( tif );
+    
+    return dircount;
+}
 
-bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
+bool wxTIFFHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
 {
     return FALSE;
 }

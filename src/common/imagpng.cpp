@@ -96,7 +96,7 @@ LINKAGEMODE png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WX
 {
 }
 
-bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose)
+bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     // VZ: as this function uses setjmp() the only fool proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)

@@ -40,7 +40,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 
 #if wxUSE_STREAMS
 
-bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
+bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
 {
     wxGIFDecoder *decod;
     int error;

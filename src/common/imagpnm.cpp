@@ -50,7 +50,7 @@ void Skip_Comment(wxInputStream &stream)
     }
 }
 
-bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose) )
+bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose), int WXUNUSED(index) )
 {
     wxUint32  width, height;
     wxUint16  maxval;

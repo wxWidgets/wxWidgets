@@ -446,7 +446,7 @@ bool wxGIFDecoder::CanRead()
     unsigned char buf[3];
 
     m_f->Read(buf, 3);
-    stream.SeekI(-3, wxFromCurrent);
+    m_f->SeekI(-3, wxFromCurrent);
 
     return (memcmp(buf, "GIF", 3) == 0);
 }
