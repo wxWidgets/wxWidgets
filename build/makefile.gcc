@@ -42,6 +42,10 @@ SHARED = 1
 UNICODE = 0
 # Build GUI libraries? [0,1]
 USE_GUI = 1
+# Build wxHTML library (USE_GUI must be 1)? [0,1]
+USE_HTML = 1
+# Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
+USE_OPENGL = 1
 # Use this to name your customized DLLs differently 
 VENDOR = custom
 # Build wxUniversal instead of native port? [0,1]
@@ -53,24 +57,26 @@ WXUNIV = 0
 
 ### Variables: ###
 
-MONODLL_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DWXMAKINGDLL $(CFLAGS) 
-OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex $(CXXFLAGS)
-WXREGEX_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
-WXPNG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -I..\src\zlib $(CFLAGS)
-WXZLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
-WXJPEG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) $(CFLAGS)
-CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=0 $(CXXFLAGS)
-MONOLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 $(CXXFLAGS)
-BASELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DwxUSE_GUI=0 $(CXXFLAGS)
-MONODLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS) 
-HTMLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXUSINGDLL -DWXMAKINGDLL_HTML $(CXXFLAGS) 
-MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 $(CFLAGS)
-WXTIFF_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
 BASEDLL_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 -DwxUSE_GUI=0 $(CFLAGS) 
 BASEDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXMAKINGDLL_BASE -DwxUSE_BASE=1 -DwxUSE_GUI=0 $(CXXFLAGS) 
 BASELIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DwxUSE_GUI=0 $(CFLAGS)
+BASELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DwxUSE_GUI=0 $(CXXFLAGS)
 COREDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXUSINGDLL -DWXMAKINGDLL_CORE -DwxUSE_BASE=0 $(CXXFLAGS) 
+CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=0 $(CXXFLAGS)
+GLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXUSINGDLL -DWXMAKINGDLL_GL $(CXXFLAGS) 
+GLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex $(CXXFLAGS)
+HTMLDLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DWXUSINGDLL -DWXMAKINGDLL_HTML $(CXXFLAGS) 
+HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex $(CXXFLAGS)
+MONODLL_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DWXMAKINGDLL $(CFLAGS) 
+MONODLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS) 
+MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 $(CFLAGS)
+MONOLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\include -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I..\src\tiff -I..\src\jpeg -I..\src\png -I..\src\zlib  -I..\src\regex -DwxUSE_BASE=1 $(CXXFLAGS)
+OBJS = gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+WXJPEG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -I..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) $(CFLAGS)
+WXPNG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H -I..\src\zlib $(CFLAGS)
+WXREGEX_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
+WXTIFF_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
+WXZLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H $(CFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -129,7 +135,7 @@ endif
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
-____CORE_SRC_FILENAMES_1_OBJECTS = $(OBJS)\monolib_app.o $(OBJS)\monolib_bitmap.o $(OBJS)\monolib_brush.o $(OBJS)\monolib_caret.o $(OBJS)\monolib_clipbrd.o $(OBJS)\monolib_colour.o $(OBJS)\monolib_cursor.o $(OBJS)\monolib_data.o $(OBJS)\monolib_dc.o $(OBJS)\monolib_dcclient.o $(OBJS)\monolib_dcmemory.o $(OBJS)\monolib_dcprint.o $(OBJS)\monolib_dcscreen.o $(OBJS)\monolib_dialup.o $(OBJS)\monolib_dib.o $(OBJS)\monolib_dirdlg.o $(OBJS)\monolib_display.o $(OBJS)\monolib_enhmeta.o $(OBJS)\monolib_evtloop.o $(OBJS)\monolib_font.o $(OBJS)\monolib_fontenum.o $(OBJS)\monolib_fontutil.o $(OBJS)\monolib_gdiimage.o $(OBJS)\monolib_gdiobj.o $(OBJS)\monolib_glcanvas.o $(OBJS)\monolib_helpchm.o $(OBJS)\monolib_helpwin.o $(OBJS)\monolib_icon.o $(OBJS)\monolib_joystick.o $(OBJS)\monolib_minifram.o $(OBJS)\monolib_palette.o $(OBJS)\monolib_pen.o $(OBJS)\monolib_popupwin.o $(OBJS)\monolib_region.o $(OBJS)\monolib_settings.o $(OBJS)\monolib_taskbarcmn.o $(OBJS)\monolib_taskbar.o $(OBJS)\monolib_timer.o $(OBJS)\monolib_tooltip.o $(OBJS)\monolib_toplevel.o $(OBJS)\monolib_utilsgui.o $(OBJS)\monolib_wave.o $(OBJS)\monolib_window.o $(OBJS)\monolib_automtn.o $(OBJS)\monolib_dataobj.o $(OBJS)\monolib_dropsrc.o $(OBJS)\monolib_droptgt.o $(OBJS)\monolib_oleutils.o $(OBJS)\monolib_uuid.o $(OBJS)\monolib_textctrl.o $(OBJS)\monolib_bmpbuttn.o $(OBJS)\monolib_button.o $(OBJS)\monolib_checkbox.o $(OBJS)\monolib_checklst.o $(OBJS)\monolib_choice.o $(OBJS)\monolib_colschem.o $(OBJS)\monolib_combobox.o $(OBJS)\monolib_control.o $(OBJS)\monolib_dialog.o $(OBJS)\monolib_framuniv.o $(OBJS)\monolib_topluniv.o $(OBJS)\monolib_gauge.o $(OBJS)\monolib_inpcons.o $(OBJS)\monolib_inphand.o $(OBJS)\monolib_listbox.o $(OBJS)\monolib_menu.o $(OBJS)\monolib_notebook.o $(OBJS)\monolib_radiobox.o $(OBJS)\monolib_radiobut.o $(OBJS)\monolib_renderer.o $(OBJS)\monolib_scrarrow.o $(OBJS)\monolib_scrolbar.o $(OBJS)\monolib_scrthumb.o $(OBJS)\monolib_slider.o $(OBJS)\monolib_spinbutt.o $(OBJS)\monolib_statbmp.o $(OBJS)\monolib_statbox.o $(OBJS)\monolib_statline.o $(OBJS)\monolib_stattext.o $(OBJS)\monolib_statusbr.o $(OBJS)\monolib_toolbar.o $(OBJS)\monolib_theme.o $(OBJS)\monolib_winuniv.o $(OBJS)\monolib_caret.o $(OBJS)\monolib_mdig.o $(OBJS)\monolib_imaglist.o $(OBJS)\monolib_colrdlgg.o $(OBJS)\monolib_listctrl.o $(OBJS)\monolib_filedlgg.o $(OBJS)\monolib_dirdlgg.o $(OBJS)\monolib_prntdlgg.o $(OBJS)\monolib_accel.o $(OBJS)\monolib_msgdlgg.o $(OBJS)\monolib_fdrepdlg.o $(OBJS)\monolib_fontdlgg.o $(OBJS)\monolib_tabg.o $(OBJS)\monolib_gtk.o $(OBJS)\monolib_win32.o $(OBJS)\monolib_metal.o $(OBJS)\monolib_selstore.o $(OBJS)\monolib_busyinfo.o $(OBJS)\monolib_calctrl.o $(OBJS)\monolib_choicdgg.o $(OBJS)\monolib_dcbuffer.o $(OBJS)\monolib_dcpsg.o $(OBJS)\monolib_dirctrlg.o $(OBJS)\monolib_grid.o $(OBJS)\monolib_gridctrl.o $(OBJS)\monolib_gridsel.o $(OBJS)\monolib_laywin.o $(OBJS)\monolib_logg.o $(OBJS)\monolib_numdlgg.o $(OBJS)\monolib_panelg.o $(OBJS)\monolib_progdlgg.o $(OBJS)\monolib_sashwin.o $(OBJS)\monolib_scrlwing.o $(OBJS)\monolib_spinctlg.o $(OBJS)\monolib_splash.o $(OBJS)\monolib_splitter.o $(OBJS)\monolib_tbarsmpl.o $(OBJS)\monolib_textdlgg.o $(OBJS)\monolib_tipdlg.o $(OBJS)\monolib_tipwin.o $(OBJS)\monolib_treectlg.o $(OBJS)\monolib_vlbox.o $(OBJS)\monolib_vscroll.o $(OBJS)\monolib_wizard.o $(OBJS)\monolib_appcmn.o $(OBJS)\monolib_fontmap.o $(OBJS)\monolib_accesscmn.o $(OBJS)\monolib_artprov.o $(OBJS)\monolib_artstd.o $(OBJS)\monolib_bmpbase.o $(OBJS)\monolib_choiccmn.o $(OBJS)\monolib_clipcmn.o $(OBJS)\monolib_cmdproc.o $(OBJS)\monolib_cmndata.o $(OBJS)\monolib_containr.o $(OBJS)\monolib_cshelp.o $(OBJS)\monolib_ctrlcmn.o $(OBJS)\monolib_ctrlsub.o $(OBJS)\monolib_datacmn.o $(OBJS)\monolib_dbgrid.o $(OBJS)\monolib_dcbase.o $(OBJS)\monolib_dlgcmn.o $(OBJS)\monolib_dndcmn.o $(OBJS)\monolib_dobjcmn.o $(OBJS)\monolib_docmdi.o $(OBJS)\monolib_docview.o $(OBJS)\monolib_dpycmn.o $(OBJS)\monolib_dseldlg.o $(OBJS)\monolib_effects.o $(OBJS)\monolib_fddlgcmn.o $(OBJS)\monolib_fldlgcmn.o $(OBJS)\monolib_fontcmn.o $(OBJS)\monolib_framecmn.o $(OBJS)\monolib_timercmn.o $(OBJS)\monolib_toplvcmn.o $(OBJS)\monolib_gaugecmn.o $(OBJS)\monolib_gdicmn.o $(OBJS)\monolib_geometry.o $(OBJS)\monolib_gifdecod.o $(OBJS)\monolib_helpbase.o $(OBJS)\monolib_iconbndl.o $(OBJS)\monolib_imagall.o $(OBJS)\monolib_imagbmp.o $(OBJS)\monolib_image.o $(OBJS)\monolib_imaggif.o $(OBJS)\monolib_imagiff.o $(OBJS)\monolib_imagjpeg.o $(OBJS)\monolib_imagpcx.o $(OBJS)\monolib_imagpng.o $(OBJS)\monolib_imagpnm.o $(OBJS)\monolib_imagtiff.o $(OBJS)\monolib_imagxpm.o $(OBJS)\monolib_imagfill.o $(OBJS)\monolib_layout.o $(OBJS)\monolib_lboxcmn.o $(OBJS)\monolib_matrix.o $(OBJS)\monolib_menucmn.o $(OBJS)\monolib_nbkbase.o $(OBJS)\monolib_paper.o $(OBJS)\monolib_popupcmn.o $(OBJS)\monolib_prntbase.o $(OBJS)\monolib_quantize.o $(OBJS)\monolib_radiocmn.o $(OBJS)\monolib_rgncmn.o $(OBJS)\monolib_settcmn.o $(OBJS)\monolib_sizer.o $(OBJS)\monolib_statbar.o $(OBJS)\monolib_tbarbase.o $(OBJS)\monolib_textcmn.o $(OBJS)\monolib_treebase.o $(OBJS)\monolib_valgen.o $(OBJS)\monolib_validate.o $(OBJS)\monolib_valtext.o $(OBJS)\monolib_wincmn.o $(OBJS)\monolib_xpmdecod.o
+____CORE_SRC_FILENAMES_1_OBJECTS = $(OBJS)\monolib_app.o $(OBJS)\monolib_bitmap.o $(OBJS)\monolib_brush.o $(OBJS)\monolib_caret.o $(OBJS)\monolib_clipbrd.o $(OBJS)\monolib_colour.o $(OBJS)\monolib_cursor.o $(OBJS)\monolib_data.o $(OBJS)\monolib_dc.o $(OBJS)\monolib_dcclient.o $(OBJS)\monolib_dcmemory.o $(OBJS)\monolib_dcprint.o $(OBJS)\monolib_dcscreen.o $(OBJS)\monolib_dialup.o $(OBJS)\monolib_dib.o $(OBJS)\monolib_dirdlg.o $(OBJS)\monolib_display.o $(OBJS)\monolib_enhmeta.o $(OBJS)\monolib_evtloop.o $(OBJS)\monolib_font.o $(OBJS)\monolib_fontenum.o $(OBJS)\monolib_fontutil.o $(OBJS)\monolib_gdiimage.o $(OBJS)\monolib_gdiobj.o $(OBJS)\monolib_glcanvas.o $(OBJS)\monolib_helpchm.o $(OBJS)\monolib_helpwin.o $(OBJS)\monolib_icon.o $(OBJS)\monolib_joystick.o $(OBJS)\monolib_minifram.o $(OBJS)\monolib_palette.o $(OBJS)\monolib_pen.o $(OBJS)\monolib_popupwin.o $(OBJS)\monolib_region.o $(OBJS)\monolib_settings.o $(OBJS)\monolib_taskbarcmn.o $(OBJS)\monolib_taskbar.o $(OBJS)\monolib_timer.o $(OBJS)\monolib_tooltip.o $(OBJS)\monolib_toplevel.o $(OBJS)\monolib_utilsgui.o $(OBJS)\monolib_wave.o $(OBJS)\monolib_window.o $(OBJS)\monolib_automtn.o $(OBJS)\monolib_dataobj.o $(OBJS)\monolib_dropsrc.o $(OBJS)\monolib_droptgt.o $(OBJS)\monolib_oleutils.o $(OBJS)\monolib_uuid.o $(OBJS)\monolib_textctrl.o $(OBJS)\monolib_bmpbuttn.o $(OBJS)\monolib_button.o $(OBJS)\monolib_checkbox.o $(OBJS)\monolib_checklst.o $(OBJS)\monolib_choice.o $(OBJS)\monolib_colschem.o $(OBJS)\monolib_combobox.o $(OBJS)\monolib_control.o $(OBJS)\monolib_dialog.o $(OBJS)\monolib_framuniv.o $(OBJS)\monolib_topluniv.o $(OBJS)\monolib_gauge.o $(OBJS)\monolib_inpcons.o $(OBJS)\monolib_inphand.o $(OBJS)\monolib_listbox.o $(OBJS)\monolib_menu.o $(OBJS)\monolib_notebook.o $(OBJS)\monolib_radiobox.o $(OBJS)\monolib_radiobut.o $(OBJS)\monolib_renderer.o $(OBJS)\monolib_scrarrow.o $(OBJS)\monolib_scrolbar.o $(OBJS)\monolib_scrthumb.o $(OBJS)\monolib_slider.o $(OBJS)\monolib_spinbutt.o $(OBJS)\monolib_statbmp.o $(OBJS)\monolib_statbox.o $(OBJS)\monolib_statline.o $(OBJS)\monolib_stattext.o $(OBJS)\monolib_statusbr.o $(OBJS)\monolib_toolbar.o $(OBJS)\monolib_theme.o $(OBJS)\monolib_winuniv.o $(OBJS)\monolib_mdig.o $(OBJS)\monolib_imaglist.o $(OBJS)\monolib_colrdlgg.o $(OBJS)\monolib_listctrl.o $(OBJS)\monolib_filedlgg.o $(OBJS)\monolib_dirdlgg.o $(OBJS)\monolib_prntdlgg.o $(OBJS)\monolib_accel.o $(OBJS)\monolib_msgdlgg.o $(OBJS)\monolib_fdrepdlg.o $(OBJS)\monolib_fontdlgg.o $(OBJS)\monolib_tabg.o $(OBJS)\monolib_gtk.o $(OBJS)\monolib_win32.o $(OBJS)\monolib_metal.o $(OBJS)\monolib_selstore.o $(OBJS)\monolib_busyinfo.o $(OBJS)\monolib_calctrl.o $(OBJS)\monolib_choicdgg.o $(OBJS)\monolib_dcbuffer.o $(OBJS)\monolib_dcpsg.o $(OBJS)\monolib_dirctrlg.o $(OBJS)\monolib_grid.o $(OBJS)\monolib_gridctrl.o $(OBJS)\monolib_gridsel.o $(OBJS)\monolib_laywin.o $(OBJS)\monolib_logg.o $(OBJS)\monolib_numdlgg.o $(OBJS)\monolib_panelg.o $(OBJS)\monolib_progdlgg.o $(OBJS)\monolib_sashwin.o $(OBJS)\monolib_scrlwing.o $(OBJS)\monolib_spinctlg.o $(OBJS)\monolib_splash.o $(OBJS)\monolib_splitter.o $(OBJS)\monolib_tbarsmpl.o $(OBJS)\monolib_textdlgg.o $(OBJS)\monolib_tipdlg.o $(OBJS)\monolib_tipwin.o $(OBJS)\monolib_treectlg.o $(OBJS)\monolib_vlbox.o $(OBJS)\monolib_vscroll.o $(OBJS)\monolib_wizard.o $(OBJS)\monolib_appcmn.o $(OBJS)\monolib_fontmap.o $(OBJS)\monolib_accesscmn.o $(OBJS)\monolib_artprov.o $(OBJS)\monolib_artstd.o $(OBJS)\monolib_bmpbase.o $(OBJS)\monolib_choiccmn.o $(OBJS)\monolib_clipcmn.o $(OBJS)\monolib_cmdproc.o $(OBJS)\monolib_cmndata.o $(OBJS)\monolib_containr.o $(OBJS)\monolib_cshelp.o $(OBJS)\monolib_ctrlcmn.o $(OBJS)\monolib_ctrlsub.o $(OBJS)\monolib_datacmn.o $(OBJS)\monolib_dbgrid.o $(OBJS)\monolib_dcbase.o $(OBJS)\monolib_dlgcmn.o $(OBJS)\monolib_dndcmn.o $(OBJS)\monolib_dobjcmn.o $(OBJS)\monolib_docmdi.o $(OBJS)\monolib_docview.o $(OBJS)\monolib_dpycmn.o $(OBJS)\monolib_dseldlg.o $(OBJS)\monolib_effects.o $(OBJS)\monolib_fddlgcmn.o $(OBJS)\monolib_fldlgcmn.o $(OBJS)\monolib_fontcmn.o $(OBJS)\monolib_framecmn.o $(OBJS)\monolib_timercmn.o $(OBJS)\monolib_toplvcmn.o $(OBJS)\monolib_gaugecmn.o $(OBJS)\monolib_gdicmn.o $(OBJS)\monolib_geometry.o $(OBJS)\monolib_gifdecod.o $(OBJS)\monolib_helpbase.o $(OBJS)\monolib_iconbndl.o $(OBJS)\monolib_imagall.o $(OBJS)\monolib_imagbmp.o $(OBJS)\monolib_image.o $(OBJS)\monolib_imaggif.o $(OBJS)\monolib_imagiff.o $(OBJS)\monolib_imagjpeg.o $(OBJS)\monolib_imagpcx.o $(OBJS)\monolib_imagpng.o $(OBJS)\monolib_imagpnm.o $(OBJS)\monolib_imagtiff.o $(OBJS)\monolib_imagxpm.o $(OBJS)\monolib_imagfill.o $(OBJS)\monolib_layout.o $(OBJS)\monolib_lboxcmn.o $(OBJS)\monolib_matrix.o $(OBJS)\monolib_menucmn.o $(OBJS)\monolib_nbkbase.o $(OBJS)\monolib_paper.o $(OBJS)\monolib_popupcmn.o $(OBJS)\monolib_prntbase.o $(OBJS)\monolib_quantize.o $(OBJS)\monolib_radiocmn.o $(OBJS)\monolib_rgncmn.o $(OBJS)\monolib_settcmn.o $(OBJS)\monolib_sizer.o $(OBJS)\monolib_statbar.o $(OBJS)\monolib_tbarbase.o $(OBJS)\monolib_textcmn.o $(OBJS)\monolib_treebase.o $(OBJS)\monolib_valgen.o $(OBJS)\monolib_validate.o $(OBJS)\monolib_valtext.o $(OBJS)\monolib_wincmn.o $(OBJS)\monolib_xpmdecod.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -139,7 +145,7 @@ endif
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
-____CORE_SRC_FILENAMES_2_OBJECTS = $(OBJS)\coredll_app.o $(OBJS)\coredll_bitmap.o $(OBJS)\coredll_brush.o $(OBJS)\coredll_caret.o $(OBJS)\coredll_clipbrd.o $(OBJS)\coredll_colour.o $(OBJS)\coredll_cursor.o $(OBJS)\coredll_data.o $(OBJS)\coredll_dc.o $(OBJS)\coredll_dcclient.o $(OBJS)\coredll_dcmemory.o $(OBJS)\coredll_dcprint.o $(OBJS)\coredll_dcscreen.o $(OBJS)\coredll_dialup.o $(OBJS)\coredll_dib.o $(OBJS)\coredll_dirdlg.o $(OBJS)\coredll_display.o $(OBJS)\coredll_enhmeta.o $(OBJS)\coredll_evtloop.o $(OBJS)\coredll_font.o $(OBJS)\coredll_fontenum.o $(OBJS)\coredll_fontutil.o $(OBJS)\coredll_gdiimage.o $(OBJS)\coredll_gdiobj.o $(OBJS)\coredll_glcanvas.o $(OBJS)\coredll_helpchm.o $(OBJS)\coredll_helpwin.o $(OBJS)\coredll_icon.o $(OBJS)\coredll_joystick.o $(OBJS)\coredll_minifram.o $(OBJS)\coredll_palette.o $(OBJS)\coredll_pen.o $(OBJS)\coredll_popupwin.o $(OBJS)\coredll_region.o $(OBJS)\coredll_settings.o $(OBJS)\coredll_taskbarcmn.o $(OBJS)\coredll_taskbar.o $(OBJS)\coredll_timer.o $(OBJS)\coredll_tooltip.o $(OBJS)\coredll_toplevel.o $(OBJS)\coredll_utilsgui.o $(OBJS)\coredll_wave.o $(OBJS)\coredll_window.o $(OBJS)\coredll_automtn.o $(OBJS)\coredll_dataobj.o $(OBJS)\coredll_dropsrc.o $(OBJS)\coredll_droptgt.o $(OBJS)\coredll_oleutils.o $(OBJS)\coredll_uuid.o $(OBJS)\coredll_textctrl.o $(OBJS)\coredll_bmpbuttn.o $(OBJS)\coredll_button.o $(OBJS)\coredll_checkbox.o $(OBJS)\coredll_checklst.o $(OBJS)\coredll_choice.o $(OBJS)\coredll_colschem.o $(OBJS)\coredll_combobox.o $(OBJS)\coredll_control.o $(OBJS)\coredll_dialog.o $(OBJS)\coredll_framuniv.o $(OBJS)\coredll_topluniv.o $(OBJS)\coredll_gauge.o $(OBJS)\coredll_inpcons.o $(OBJS)\coredll_inphand.o $(OBJS)\coredll_listbox.o $(OBJS)\coredll_menu.o $(OBJS)\coredll_notebook.o $(OBJS)\coredll_radiobox.o $(OBJS)\coredll_radiobut.o $(OBJS)\coredll_renderer.o $(OBJS)\coredll_scrarrow.o $(OBJS)\coredll_scrolbar.o $(OBJS)\coredll_scrthumb.o $(OBJS)\coredll_slider.o $(OBJS)\coredll_spinbutt.o $(OBJS)\coredll_statbmp.o $(OBJS)\coredll_statbox.o $(OBJS)\coredll_statline.o $(OBJS)\coredll_stattext.o $(OBJS)\coredll_statusbr.o $(OBJS)\coredll_toolbar.o $(OBJS)\coredll_theme.o $(OBJS)\coredll_winuniv.o $(OBJS)\coredll_caret.o $(OBJS)\coredll_mdig.o $(OBJS)\coredll_imaglist.o $(OBJS)\coredll_colrdlgg.o $(OBJS)\coredll_listctrl.o $(OBJS)\coredll_filedlgg.o $(OBJS)\coredll_dirdlgg.o $(OBJS)\coredll_prntdlgg.o $(OBJS)\coredll_accel.o $(OBJS)\coredll_msgdlgg.o $(OBJS)\coredll_fdrepdlg.o $(OBJS)\coredll_fontdlgg.o $(OBJS)\coredll_tabg.o $(OBJS)\coredll_gtk.o $(OBJS)\coredll_win32.o $(OBJS)\coredll_metal.o $(OBJS)\coredll_selstore.o $(OBJS)\coredll_busyinfo.o $(OBJS)\coredll_calctrl.o $(OBJS)\coredll_choicdgg.o $(OBJS)\coredll_dcbuffer.o $(OBJS)\coredll_dcpsg.o $(OBJS)\coredll_dirctrlg.o $(OBJS)\coredll_grid.o $(OBJS)\coredll_gridctrl.o $(OBJS)\coredll_gridsel.o $(OBJS)\coredll_laywin.o $(OBJS)\coredll_logg.o $(OBJS)\coredll_numdlgg.o $(OBJS)\coredll_panelg.o $(OBJS)\coredll_progdlgg.o $(OBJS)\coredll_sashwin.o $(OBJS)\coredll_scrlwing.o $(OBJS)\coredll_spinctlg.o $(OBJS)\coredll_splash.o $(OBJS)\coredll_splitter.o $(OBJS)\coredll_tbarsmpl.o $(OBJS)\coredll_textdlgg.o $(OBJS)\coredll_tipdlg.o $(OBJS)\coredll_tipwin.o $(OBJS)\coredll_treectlg.o $(OBJS)\coredll_vlbox.o $(OBJS)\coredll_vscroll.o $(OBJS)\coredll_wizard.o $(OBJS)\coredll_appcmn.o $(OBJS)\coredll_fontmap.o $(OBJS)\coredll_accesscmn.o $(OBJS)\coredll_artprov.o $(OBJS)\coredll_artstd.o $(OBJS)\coredll_bmpbase.o $(OBJS)\coredll_choiccmn.o $(OBJS)\coredll_clipcmn.o $(OBJS)\coredll_cmdproc.o $(OBJS)\coredll_cmndata.o $(OBJS)\coredll_containr.o $(OBJS)\coredll_cshelp.o $(OBJS)\coredll_ctrlcmn.o $(OBJS)\coredll_ctrlsub.o $(OBJS)\coredll_datacmn.o $(OBJS)\coredll_dbgrid.o $(OBJS)\coredll_dcbase.o $(OBJS)\coredll_dlgcmn.o $(OBJS)\coredll_dndcmn.o $(OBJS)\coredll_dobjcmn.o $(OBJS)\coredll_docmdi.o $(OBJS)\coredll_docview.o $(OBJS)\coredll_dpycmn.o $(OBJS)\coredll_dseldlg.o $(OBJS)\coredll_effects.o $(OBJS)\coredll_fddlgcmn.o $(OBJS)\coredll_fldlgcmn.o $(OBJS)\coredll_fontcmn.o $(OBJS)\coredll_framecmn.o $(OBJS)\coredll_timercmn.o $(OBJS)\coredll_toplvcmn.o $(OBJS)\coredll_gaugecmn.o $(OBJS)\coredll_gdicmn.o $(OBJS)\coredll_geometry.o $(OBJS)\coredll_gifdecod.o $(OBJS)\coredll_helpbase.o $(OBJS)\coredll_iconbndl.o $(OBJS)\coredll_imagall.o $(OBJS)\coredll_imagbmp.o $(OBJS)\coredll_image.o $(OBJS)\coredll_imaggif.o $(OBJS)\coredll_imagiff.o $(OBJS)\coredll_imagjpeg.o $(OBJS)\coredll_imagpcx.o $(OBJS)\coredll_imagpng.o $(OBJS)\coredll_imagpnm.o $(OBJS)\coredll_imagtiff.o $(OBJS)\coredll_imagxpm.o $(OBJS)\coredll_imagfill.o $(OBJS)\coredll_layout.o $(OBJS)\coredll_lboxcmn.o $(OBJS)\coredll_matrix.o $(OBJS)\coredll_menucmn.o $(OBJS)\coredll_nbkbase.o $(OBJS)\coredll_paper.o $(OBJS)\coredll_popupcmn.o $(OBJS)\coredll_prntbase.o $(OBJS)\coredll_quantize.o $(OBJS)\coredll_radiocmn.o $(OBJS)\coredll_rgncmn.o $(OBJS)\coredll_settcmn.o $(OBJS)\coredll_sizer.o $(OBJS)\coredll_statbar.o $(OBJS)\coredll_tbarbase.o $(OBJS)\coredll_textcmn.o $(OBJS)\coredll_treebase.o $(OBJS)\coredll_valgen.o $(OBJS)\coredll_validate.o $(OBJS)\coredll_valtext.o $(OBJS)\coredll_wincmn.o $(OBJS)\coredll_xpmdecod.o
+____CORE_SRC_FILENAMES_2_OBJECTS = $(OBJS)\coredll_app.o $(OBJS)\coredll_bitmap.o $(OBJS)\coredll_brush.o $(OBJS)\coredll_caret.o $(OBJS)\coredll_clipbrd.o $(OBJS)\coredll_colour.o $(OBJS)\coredll_cursor.o $(OBJS)\coredll_data.o $(OBJS)\coredll_dc.o $(OBJS)\coredll_dcclient.o $(OBJS)\coredll_dcmemory.o $(OBJS)\coredll_dcprint.o $(OBJS)\coredll_dcscreen.o $(OBJS)\coredll_dialup.o $(OBJS)\coredll_dib.o $(OBJS)\coredll_dirdlg.o $(OBJS)\coredll_display.o $(OBJS)\coredll_enhmeta.o $(OBJS)\coredll_evtloop.o $(OBJS)\coredll_font.o $(OBJS)\coredll_fontenum.o $(OBJS)\coredll_fontutil.o $(OBJS)\coredll_gdiimage.o $(OBJS)\coredll_gdiobj.o $(OBJS)\coredll_glcanvas.o $(OBJS)\coredll_helpchm.o $(OBJS)\coredll_helpwin.o $(OBJS)\coredll_icon.o $(OBJS)\coredll_joystick.o $(OBJS)\coredll_minifram.o $(OBJS)\coredll_palette.o $(OBJS)\coredll_pen.o $(OBJS)\coredll_popupwin.o $(OBJS)\coredll_region.o $(OBJS)\coredll_settings.o $(OBJS)\coredll_taskbarcmn.o $(OBJS)\coredll_taskbar.o $(OBJS)\coredll_timer.o $(OBJS)\coredll_tooltip.o $(OBJS)\coredll_toplevel.o $(OBJS)\coredll_utilsgui.o $(OBJS)\coredll_wave.o $(OBJS)\coredll_window.o $(OBJS)\coredll_automtn.o $(OBJS)\coredll_dataobj.o $(OBJS)\coredll_dropsrc.o $(OBJS)\coredll_droptgt.o $(OBJS)\coredll_oleutils.o $(OBJS)\coredll_uuid.o $(OBJS)\coredll_textctrl.o $(OBJS)\coredll_bmpbuttn.o $(OBJS)\coredll_button.o $(OBJS)\coredll_checkbox.o $(OBJS)\coredll_checklst.o $(OBJS)\coredll_choice.o $(OBJS)\coredll_colschem.o $(OBJS)\coredll_combobox.o $(OBJS)\coredll_control.o $(OBJS)\coredll_dialog.o $(OBJS)\coredll_framuniv.o $(OBJS)\coredll_topluniv.o $(OBJS)\coredll_gauge.o $(OBJS)\coredll_inpcons.o $(OBJS)\coredll_inphand.o $(OBJS)\coredll_listbox.o $(OBJS)\coredll_menu.o $(OBJS)\coredll_notebook.o $(OBJS)\coredll_radiobox.o $(OBJS)\coredll_radiobut.o $(OBJS)\coredll_renderer.o $(OBJS)\coredll_scrarrow.o $(OBJS)\coredll_scrolbar.o $(OBJS)\coredll_scrthumb.o $(OBJS)\coredll_slider.o $(OBJS)\coredll_spinbutt.o $(OBJS)\coredll_statbmp.o $(OBJS)\coredll_statbox.o $(OBJS)\coredll_statline.o $(OBJS)\coredll_stattext.o $(OBJS)\coredll_statusbr.o $(OBJS)\coredll_toolbar.o $(OBJS)\coredll_theme.o $(OBJS)\coredll_winuniv.o $(OBJS)\coredll_mdig.o $(OBJS)\coredll_imaglist.o $(OBJS)\coredll_colrdlgg.o $(OBJS)\coredll_listctrl.o $(OBJS)\coredll_filedlgg.o $(OBJS)\coredll_dirdlgg.o $(OBJS)\coredll_prntdlgg.o $(OBJS)\coredll_accel.o $(OBJS)\coredll_msgdlgg.o $(OBJS)\coredll_fdrepdlg.o $(OBJS)\coredll_fontdlgg.o $(OBJS)\coredll_tabg.o $(OBJS)\coredll_gtk.o $(OBJS)\coredll_win32.o $(OBJS)\coredll_metal.o $(OBJS)\coredll_selstore.o $(OBJS)\coredll_busyinfo.o $(OBJS)\coredll_calctrl.o $(OBJS)\coredll_choicdgg.o $(OBJS)\coredll_dcbuffer.o $(OBJS)\coredll_dcpsg.o $(OBJS)\coredll_dirctrlg.o $(OBJS)\coredll_grid.o $(OBJS)\coredll_gridctrl.o $(OBJS)\coredll_gridsel.o $(OBJS)\coredll_laywin.o $(OBJS)\coredll_logg.o $(OBJS)\coredll_numdlgg.o $(OBJS)\coredll_panelg.o $(OBJS)\coredll_progdlgg.o $(OBJS)\coredll_sashwin.o $(OBJS)\coredll_scrlwing.o $(OBJS)\coredll_spinctlg.o $(OBJS)\coredll_splash.o $(OBJS)\coredll_splitter.o $(OBJS)\coredll_tbarsmpl.o $(OBJS)\coredll_textdlgg.o $(OBJS)\coredll_tipdlg.o $(OBJS)\coredll_tipwin.o $(OBJS)\coredll_treectlg.o $(OBJS)\coredll_vlbox.o $(OBJS)\coredll_vscroll.o $(OBJS)\coredll_wizard.o $(OBJS)\coredll_appcmn.o $(OBJS)\coredll_fontmap.o $(OBJS)\coredll_accesscmn.o $(OBJS)\coredll_artprov.o $(OBJS)\coredll_artstd.o $(OBJS)\coredll_bmpbase.o $(OBJS)\coredll_choiccmn.o $(OBJS)\coredll_clipcmn.o $(OBJS)\coredll_cmdproc.o $(OBJS)\coredll_cmndata.o $(OBJS)\coredll_containr.o $(OBJS)\coredll_cshelp.o $(OBJS)\coredll_ctrlcmn.o $(OBJS)\coredll_ctrlsub.o $(OBJS)\coredll_datacmn.o $(OBJS)\coredll_dbgrid.o $(OBJS)\coredll_dcbase.o $(OBJS)\coredll_dlgcmn.o $(OBJS)\coredll_dndcmn.o $(OBJS)\coredll_dobjcmn.o $(OBJS)\coredll_docmdi.o $(OBJS)\coredll_docview.o $(OBJS)\coredll_dpycmn.o $(OBJS)\coredll_dseldlg.o $(OBJS)\coredll_effects.o $(OBJS)\coredll_fddlgcmn.o $(OBJS)\coredll_fldlgcmn.o $(OBJS)\coredll_fontcmn.o $(OBJS)\coredll_framecmn.o $(OBJS)\coredll_timercmn.o $(OBJS)\coredll_toplvcmn.o $(OBJS)\coredll_gaugecmn.o $(OBJS)\coredll_gdicmn.o $(OBJS)\coredll_geometry.o $(OBJS)\coredll_gifdecod.o $(OBJS)\coredll_helpbase.o $(OBJS)\coredll_iconbndl.o $(OBJS)\coredll_imagall.o $(OBJS)\coredll_imagbmp.o $(OBJS)\coredll_image.o $(OBJS)\coredll_imaggif.o $(OBJS)\coredll_imagiff.o $(OBJS)\coredll_imagjpeg.o $(OBJS)\coredll_imagpcx.o $(OBJS)\coredll_imagpng.o $(OBJS)\coredll_imagpnm.o $(OBJS)\coredll_imagtiff.o $(OBJS)\coredll_imagxpm.o $(OBJS)\coredll_imagfill.o $(OBJS)\coredll_layout.o $(OBJS)\coredll_lboxcmn.o $(OBJS)\coredll_matrix.o $(OBJS)\coredll_menucmn.o $(OBJS)\coredll_nbkbase.o $(OBJS)\coredll_paper.o $(OBJS)\coredll_popupcmn.o $(OBJS)\coredll_prntbase.o $(OBJS)\coredll_quantize.o $(OBJS)\coredll_radiocmn.o $(OBJS)\coredll_rgncmn.o $(OBJS)\coredll_settcmn.o $(OBJS)\coredll_sizer.o $(OBJS)\coredll_statbar.o $(OBJS)\coredll_tbarbase.o $(OBJS)\coredll_textcmn.o $(OBJS)\coredll_treebase.o $(OBJS)\coredll_valgen.o $(OBJS)\coredll_validate.o $(OBJS)\coredll_valtext.o $(OBJS)\coredll_wincmn.o $(OBJS)\coredll_xpmdecod.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -149,7 +155,7 @@ endif
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
-____CORE_SRC_FILENAMES_3_OBJECTS = $(OBJS)\corelib_app.o $(OBJS)\corelib_bitmap.o $(OBJS)\corelib_brush.o $(OBJS)\corelib_caret.o $(OBJS)\corelib_clipbrd.o $(OBJS)\corelib_colour.o $(OBJS)\corelib_cursor.o $(OBJS)\corelib_data.o $(OBJS)\corelib_dc.o $(OBJS)\corelib_dcclient.o $(OBJS)\corelib_dcmemory.o $(OBJS)\corelib_dcprint.o $(OBJS)\corelib_dcscreen.o $(OBJS)\corelib_dialup.o $(OBJS)\corelib_dib.o $(OBJS)\corelib_dirdlg.o $(OBJS)\corelib_display.o $(OBJS)\corelib_enhmeta.o $(OBJS)\corelib_evtloop.o $(OBJS)\corelib_font.o $(OBJS)\corelib_fontenum.o $(OBJS)\corelib_fontutil.o $(OBJS)\corelib_gdiimage.o $(OBJS)\corelib_gdiobj.o $(OBJS)\corelib_glcanvas.o $(OBJS)\corelib_helpchm.o $(OBJS)\corelib_helpwin.o $(OBJS)\corelib_icon.o $(OBJS)\corelib_joystick.o $(OBJS)\corelib_minifram.o $(OBJS)\corelib_palette.o $(OBJS)\corelib_pen.o $(OBJS)\corelib_popupwin.o $(OBJS)\corelib_region.o $(OBJS)\corelib_settings.o $(OBJS)\corelib_taskbarcmn.o $(OBJS)\corelib_taskbar.o $(OBJS)\corelib_timer.o $(OBJS)\corelib_tooltip.o $(OBJS)\corelib_toplevel.o $(OBJS)\corelib_utilsgui.o $(OBJS)\corelib_wave.o $(OBJS)\corelib_window.o $(OBJS)\corelib_automtn.o $(OBJS)\corelib_dataobj.o $(OBJS)\corelib_dropsrc.o $(OBJS)\corelib_droptgt.o $(OBJS)\corelib_oleutils.o $(OBJS)\corelib_uuid.o $(OBJS)\corelib_textctrl.o $(OBJS)\corelib_bmpbuttn.o $(OBJS)\corelib_button.o $(OBJS)\corelib_checkbox.o $(OBJS)\corelib_checklst.o $(OBJS)\corelib_choice.o $(OBJS)\corelib_colschem.o $(OBJS)\corelib_combobox.o $(OBJS)\corelib_control.o $(OBJS)\corelib_dialog.o $(OBJS)\corelib_framuniv.o $(OBJS)\corelib_topluniv.o $(OBJS)\corelib_gauge.o $(OBJS)\corelib_inpcons.o $(OBJS)\corelib_inphand.o $(OBJS)\corelib_listbox.o $(OBJS)\corelib_menu.o $(OBJS)\corelib_notebook.o $(OBJS)\corelib_radiobox.o $(OBJS)\corelib_radiobut.o $(OBJS)\corelib_renderer.o $(OBJS)\corelib_scrarrow.o $(OBJS)\corelib_scrolbar.o $(OBJS)\corelib_scrthumb.o $(OBJS)\corelib_slider.o $(OBJS)\corelib_spinbutt.o $(OBJS)\corelib_statbmp.o $(OBJS)\corelib_statbox.o $(OBJS)\corelib_statline.o $(OBJS)\corelib_stattext.o $(OBJS)\corelib_statusbr.o $(OBJS)\corelib_toolbar.o $(OBJS)\corelib_theme.o $(OBJS)\corelib_winuniv.o $(OBJS)\corelib_caret.o $(OBJS)\corelib_mdig.o $(OBJS)\corelib_imaglist.o $(OBJS)\corelib_colrdlgg.o $(OBJS)\corelib_listctrl.o $(OBJS)\corelib_filedlgg.o $(OBJS)\corelib_dirdlgg.o $(OBJS)\corelib_prntdlgg.o $(OBJS)\corelib_accel.o $(OBJS)\corelib_msgdlgg.o $(OBJS)\corelib_fdrepdlg.o $(OBJS)\corelib_fontdlgg.o $(OBJS)\corelib_tabg.o $(OBJS)\corelib_gtk.o $(OBJS)\corelib_win32.o $(OBJS)\corelib_metal.o $(OBJS)\corelib_selstore.o $(OBJS)\corelib_busyinfo.o $(OBJS)\corelib_calctrl.o $(OBJS)\corelib_choicdgg.o $(OBJS)\corelib_dcbuffer.o $(OBJS)\corelib_dcpsg.o $(OBJS)\corelib_dirctrlg.o $(OBJS)\corelib_grid.o $(OBJS)\corelib_gridctrl.o $(OBJS)\corelib_gridsel.o $(OBJS)\corelib_laywin.o $(OBJS)\corelib_logg.o $(OBJS)\corelib_numdlgg.o $(OBJS)\corelib_panelg.o $(OBJS)\corelib_progdlgg.o $(OBJS)\corelib_sashwin.o $(OBJS)\corelib_scrlwing.o $(OBJS)\corelib_spinctlg.o $(OBJS)\corelib_splash.o $(OBJS)\corelib_splitter.o $(OBJS)\corelib_tbarsmpl.o $(OBJS)\corelib_textdlgg.o $(OBJS)\corelib_tipdlg.o $(OBJS)\corelib_tipwin.o $(OBJS)\corelib_treectlg.o $(OBJS)\corelib_vlbox.o $(OBJS)\corelib_vscroll.o $(OBJS)\corelib_wizard.o $(OBJS)\corelib_appcmn.o $(OBJS)\corelib_fontmap.o $(OBJS)\corelib_accesscmn.o $(OBJS)\corelib_artprov.o $(OBJS)\corelib_artstd.o $(OBJS)\corelib_bmpbase.o $(OBJS)\corelib_choiccmn.o $(OBJS)\corelib_clipcmn.o $(OBJS)\corelib_cmdproc.o $(OBJS)\corelib_cmndata.o $(OBJS)\corelib_containr.o $(OBJS)\corelib_cshelp.o $(OBJS)\corelib_ctrlcmn.o $(OBJS)\corelib_ctrlsub.o $(OBJS)\corelib_datacmn.o $(OBJS)\corelib_dbgrid.o $(OBJS)\corelib_dcbase.o $(OBJS)\corelib_dlgcmn.o $(OBJS)\corelib_dndcmn.o $(OBJS)\corelib_dobjcmn.o $(OBJS)\corelib_docmdi.o $(OBJS)\corelib_docview.o $(OBJS)\corelib_dpycmn.o $(OBJS)\corelib_dseldlg.o $(OBJS)\corelib_effects.o $(OBJS)\corelib_fddlgcmn.o $(OBJS)\corelib_fldlgcmn.o $(OBJS)\corelib_fontcmn.o $(OBJS)\corelib_framecmn.o $(OBJS)\corelib_timercmn.o $(OBJS)\corelib_toplvcmn.o $(OBJS)\corelib_gaugecmn.o $(OBJS)\corelib_gdicmn.o $(OBJS)\corelib_geometry.o $(OBJS)\corelib_gifdecod.o $(OBJS)\corelib_helpbase.o $(OBJS)\corelib_iconbndl.o $(OBJS)\corelib_imagall.o $(OBJS)\corelib_imagbmp.o $(OBJS)\corelib_image.o $(OBJS)\corelib_imaggif.o $(OBJS)\corelib_imagiff.o $(OBJS)\corelib_imagjpeg.o $(OBJS)\corelib_imagpcx.o $(OBJS)\corelib_imagpng.o $(OBJS)\corelib_imagpnm.o $(OBJS)\corelib_imagtiff.o $(OBJS)\corelib_imagxpm.o $(OBJS)\corelib_imagfill.o $(OBJS)\corelib_layout.o $(OBJS)\corelib_lboxcmn.o $(OBJS)\corelib_matrix.o $(OBJS)\corelib_menucmn.o $(OBJS)\corelib_nbkbase.o $(OBJS)\corelib_paper.o $(OBJS)\corelib_popupcmn.o $(OBJS)\corelib_prntbase.o $(OBJS)\corelib_quantize.o $(OBJS)\corelib_radiocmn.o $(OBJS)\corelib_rgncmn.o $(OBJS)\corelib_settcmn.o $(OBJS)\corelib_sizer.o $(OBJS)\corelib_statbar.o $(OBJS)\corelib_tbarbase.o $(OBJS)\corelib_textcmn.o $(OBJS)\corelib_treebase.o $(OBJS)\corelib_valgen.o $(OBJS)\corelib_validate.o $(OBJS)\corelib_valtext.o $(OBJS)\corelib_wincmn.o $(OBJS)\corelib_xpmdecod.o
+____CORE_SRC_FILENAMES_3_OBJECTS = $(OBJS)\corelib_app.o $(OBJS)\corelib_bitmap.o $(OBJS)\corelib_brush.o $(OBJS)\corelib_caret.o $(OBJS)\corelib_clipbrd.o $(OBJS)\corelib_colour.o $(OBJS)\corelib_cursor.o $(OBJS)\corelib_data.o $(OBJS)\corelib_dc.o $(OBJS)\corelib_dcclient.o $(OBJS)\corelib_dcmemory.o $(OBJS)\corelib_dcprint.o $(OBJS)\corelib_dcscreen.o $(OBJS)\corelib_dialup.o $(OBJS)\corelib_dib.o $(OBJS)\corelib_dirdlg.o $(OBJS)\corelib_display.o $(OBJS)\corelib_enhmeta.o $(OBJS)\corelib_evtloop.o $(OBJS)\corelib_font.o $(OBJS)\corelib_fontenum.o $(OBJS)\corelib_fontutil.o $(OBJS)\corelib_gdiimage.o $(OBJS)\corelib_gdiobj.o $(OBJS)\corelib_glcanvas.o $(OBJS)\corelib_helpchm.o $(OBJS)\corelib_helpwin.o $(OBJS)\corelib_icon.o $(OBJS)\corelib_joystick.o $(OBJS)\corelib_minifram.o $(OBJS)\corelib_palette.o $(OBJS)\corelib_pen.o $(OBJS)\corelib_popupwin.o $(OBJS)\corelib_region.o $(OBJS)\corelib_settings.o $(OBJS)\corelib_taskbarcmn.o $(OBJS)\corelib_taskbar.o $(OBJS)\corelib_timer.o $(OBJS)\corelib_tooltip.o $(OBJS)\corelib_toplevel.o $(OBJS)\corelib_utilsgui.o $(OBJS)\corelib_wave.o $(OBJS)\corelib_window.o $(OBJS)\corelib_automtn.o $(OBJS)\corelib_dataobj.o $(OBJS)\corelib_dropsrc.o $(OBJS)\corelib_droptgt.o $(OBJS)\corelib_oleutils.o $(OBJS)\corelib_uuid.o $(OBJS)\corelib_textctrl.o $(OBJS)\corelib_bmpbuttn.o $(OBJS)\corelib_button.o $(OBJS)\corelib_checkbox.o $(OBJS)\corelib_checklst.o $(OBJS)\corelib_choice.o $(OBJS)\corelib_colschem.o $(OBJS)\corelib_combobox.o $(OBJS)\corelib_control.o $(OBJS)\corelib_dialog.o $(OBJS)\corelib_framuniv.o $(OBJS)\corelib_topluniv.o $(OBJS)\corelib_gauge.o $(OBJS)\corelib_inpcons.o $(OBJS)\corelib_inphand.o $(OBJS)\corelib_listbox.o $(OBJS)\corelib_menu.o $(OBJS)\corelib_notebook.o $(OBJS)\corelib_radiobox.o $(OBJS)\corelib_radiobut.o $(OBJS)\corelib_renderer.o $(OBJS)\corelib_scrarrow.o $(OBJS)\corelib_scrolbar.o $(OBJS)\corelib_scrthumb.o $(OBJS)\corelib_slider.o $(OBJS)\corelib_spinbutt.o $(OBJS)\corelib_statbmp.o $(OBJS)\corelib_statbox.o $(OBJS)\corelib_statline.o $(OBJS)\corelib_stattext.o $(OBJS)\corelib_statusbr.o $(OBJS)\corelib_toolbar.o $(OBJS)\corelib_theme.o $(OBJS)\corelib_winuniv.o $(OBJS)\corelib_mdig.o $(OBJS)\corelib_imaglist.o $(OBJS)\corelib_colrdlgg.o $(OBJS)\corelib_listctrl.o $(OBJS)\corelib_filedlgg.o $(OBJS)\corelib_dirdlgg.o $(OBJS)\corelib_prntdlgg.o $(OBJS)\corelib_accel.o $(OBJS)\corelib_msgdlgg.o $(OBJS)\corelib_fdrepdlg.o $(OBJS)\corelib_fontdlgg.o $(OBJS)\corelib_tabg.o $(OBJS)\corelib_gtk.o $(OBJS)\corelib_win32.o $(OBJS)\corelib_metal.o $(OBJS)\corelib_selstore.o $(OBJS)\corelib_busyinfo.o $(OBJS)\corelib_calctrl.o $(OBJS)\corelib_choicdgg.o $(OBJS)\corelib_dcbuffer.o $(OBJS)\corelib_dcpsg.o $(OBJS)\corelib_dirctrlg.o $(OBJS)\corelib_grid.o $(OBJS)\corelib_gridctrl.o $(OBJS)\corelib_gridsel.o $(OBJS)\corelib_laywin.o $(OBJS)\corelib_logg.o $(OBJS)\corelib_numdlgg.o $(OBJS)\corelib_panelg.o $(OBJS)\corelib_progdlgg.o $(OBJS)\corelib_sashwin.o $(OBJS)\corelib_scrlwing.o $(OBJS)\corelib_spinctlg.o $(OBJS)\corelib_splash.o $(OBJS)\corelib_splitter.o $(OBJS)\corelib_tbarsmpl.o $(OBJS)\corelib_textdlgg.o $(OBJS)\corelib_tipdlg.o $(OBJS)\corelib_tipwin.o $(OBJS)\corelib_treectlg.o $(OBJS)\corelib_vlbox.o $(OBJS)\corelib_vscroll.o $(OBJS)\corelib_wizard.o $(OBJS)\corelib_appcmn.o $(OBJS)\corelib_fontmap.o $(OBJS)\corelib_accesscmn.o $(OBJS)\corelib_artprov.o $(OBJS)\corelib_artstd.o $(OBJS)\corelib_bmpbase.o $(OBJS)\corelib_choiccmn.o $(OBJS)\corelib_clipcmn.o $(OBJS)\corelib_cmdproc.o $(OBJS)\corelib_cmndata.o $(OBJS)\corelib_containr.o $(OBJS)\corelib_cshelp.o $(OBJS)\corelib_ctrlcmn.o $(OBJS)\corelib_ctrlsub.o $(OBJS)\corelib_datacmn.o $(OBJS)\corelib_dbgrid.o $(OBJS)\corelib_dcbase.o $(OBJS)\corelib_dlgcmn.o $(OBJS)\corelib_dndcmn.o $(OBJS)\corelib_dobjcmn.o $(OBJS)\corelib_docmdi.o $(OBJS)\corelib_docview.o $(OBJS)\corelib_dpycmn.o $(OBJS)\corelib_dseldlg.o $(OBJS)\corelib_effects.o $(OBJS)\corelib_fddlgcmn.o $(OBJS)\corelib_fldlgcmn.o $(OBJS)\corelib_fontcmn.o $(OBJS)\corelib_framecmn.o $(OBJS)\corelib_timercmn.o $(OBJS)\corelib_toplvcmn.o $(OBJS)\corelib_gaugecmn.o $(OBJS)\corelib_gdicmn.o $(OBJS)\corelib_geometry.o $(OBJS)\corelib_gifdecod.o $(OBJS)\corelib_helpbase.o $(OBJS)\corelib_iconbndl.o $(OBJS)\corelib_imagall.o $(OBJS)\corelib_imagbmp.o $(OBJS)\corelib_image.o $(OBJS)\corelib_imaggif.o $(OBJS)\corelib_imagiff.o $(OBJS)\corelib_imagjpeg.o $(OBJS)\corelib_imagpcx.o $(OBJS)\corelib_imagpng.o $(OBJS)\corelib_imagpnm.o $(OBJS)\corelib_imagtiff.o $(OBJS)\corelib_imagxpm.o $(OBJS)\corelib_imagfill.o $(OBJS)\corelib_layout.o $(OBJS)\corelib_lboxcmn.o $(OBJS)\corelib_matrix.o $(OBJS)\corelib_menucmn.o $(OBJS)\corelib_nbkbase.o $(OBJS)\corelib_paper.o $(OBJS)\corelib_popupcmn.o $(OBJS)\corelib_prntbase.o $(OBJS)\corelib_quantize.o $(OBJS)\corelib_radiocmn.o $(OBJS)\corelib_rgncmn.o $(OBJS)\corelib_settcmn.o $(OBJS)\corelib_sizer.o $(OBJS)\corelib_statbar.o $(OBJS)\corelib_tbarbase.o $(OBJS)\corelib_textcmn.o $(OBJS)\corelib_treebase.o $(OBJS)\corelib_valgen.o $(OBJS)\corelib_validate.o $(OBJS)\corelib_valtext.o $(OBJS)\corelib_wincmn.o $(OBJS)\corelib_xpmdecod.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -159,14 +165,14 @@ endif
 endif
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
-____CORE_SRC_FILENAMES_OBJECTS = $(OBJS)\monodll_app.o $(OBJS)\monodll_bitmap.o $(OBJS)\monodll_brush.o $(OBJS)\monodll_caret.o $(OBJS)\monodll_clipbrd.o $(OBJS)\monodll_colour.o $(OBJS)\monodll_cursor.o $(OBJS)\monodll_data.o $(OBJS)\monodll_dc.o $(OBJS)\monodll_dcclient.o $(OBJS)\monodll_dcmemory.o $(OBJS)\monodll_dcprint.o $(OBJS)\monodll_dcscreen.o $(OBJS)\monodll_dialup.o $(OBJS)\monodll_dib.o $(OBJS)\monodll_dirdlg.o $(OBJS)\monodll_display.o $(OBJS)\monodll_enhmeta.o $(OBJS)\monodll_evtloop.o $(OBJS)\monodll_font.o $(OBJS)\monodll_fontenum.o $(OBJS)\monodll_fontutil.o $(OBJS)\monodll_gdiimage.o $(OBJS)\monodll_gdiobj.o $(OBJS)\monodll_glcanvas.o $(OBJS)\monodll_helpchm.o $(OBJS)\monodll_helpwin.o $(OBJS)\monodll_icon.o $(OBJS)\monodll_joystick.o $(OBJS)\monodll_minifram.o $(OBJS)\monodll_palette.o $(OBJS)\monodll_pen.o $(OBJS)\monodll_popupwin.o $(OBJS)\monodll_region.o $(OBJS)\monodll_settings.o $(OBJS)\monodll_taskbarcmn.o $(OBJS)\monodll_taskbar.o $(OBJS)\monodll_timer.o $(OBJS)\monodll_tooltip.o $(OBJS)\monodll_toplevel.o $(OBJS)\monodll_utilsgui.o $(OBJS)\monodll_wave.o $(OBJS)\monodll_window.o $(OBJS)\monodll_automtn.o $(OBJS)\monodll_dataobj.o $(OBJS)\monodll_dropsrc.o $(OBJS)\monodll_droptgt.o $(OBJS)\monodll_oleutils.o $(OBJS)\monodll_uuid.o $(OBJS)\monodll_textctrl.o $(OBJS)\monodll_bmpbuttn.o $(OBJS)\monodll_button.o $(OBJS)\monodll_checkbox.o $(OBJS)\monodll_checklst.o $(OBJS)\monodll_choice.o $(OBJS)\monodll_colschem.o $(OBJS)\monodll_combobox.o $(OBJS)\monodll_control.o $(OBJS)\monodll_dialog.o $(OBJS)\monodll_framuniv.o $(OBJS)\monodll_topluniv.o $(OBJS)\monodll_gauge.o $(OBJS)\monodll_inpcons.o $(OBJS)\monodll_inphand.o $(OBJS)\monodll_listbox.o $(OBJS)\monodll_menu.o $(OBJS)\monodll_notebook.o $(OBJS)\monodll_radiobox.o $(OBJS)\monodll_radiobut.o $(OBJS)\monodll_renderer.o $(OBJS)\monodll_scrarrow.o $(OBJS)\monodll_scrolbar.o $(OBJS)\monodll_scrthumb.o $(OBJS)\monodll_slider.o $(OBJS)\monodll_spinbutt.o $(OBJS)\monodll_statbmp.o $(OBJS)\monodll_statbox.o $(OBJS)\monodll_statline.o $(OBJS)\monodll_stattext.o $(OBJS)\monodll_statusbr.o $(OBJS)\monodll_toolbar.o $(OBJS)\monodll_theme.o $(OBJS)\monodll_winuniv.o $(OBJS)\monodll_caret.o $(OBJS)\monodll_mdig.o $(OBJS)\monodll_imaglist.o $(OBJS)\monodll_colrdlgg.o $(OBJS)\monodll_listctrl.o $(OBJS)\monodll_filedlgg.o $(OBJS)\monodll_dirdlgg.o $(OBJS)\monodll_prntdlgg.o $(OBJS)\monodll_accel.o $(OBJS)\monodll_msgdlgg.o $(OBJS)\monodll_fdrepdlg.o $(OBJS)\monodll_fontdlgg.o $(OBJS)\monodll_tabg.o $(OBJS)\monodll_gtk.o $(OBJS)\monodll_win32.o $(OBJS)\monodll_metal.o $(OBJS)\monodll_selstore.o $(OBJS)\monodll_busyinfo.o $(OBJS)\monodll_calctrl.o $(OBJS)\monodll_choicdgg.o $(OBJS)\monodll_dcbuffer.o $(OBJS)\monodll_dcpsg.o $(OBJS)\monodll_dirctrlg.o $(OBJS)\monodll_grid.o $(OBJS)\monodll_gridctrl.o $(OBJS)\monodll_gridsel.o $(OBJS)\monodll_laywin.o $(OBJS)\monodll_logg.o $(OBJS)\monodll_numdlgg.o $(OBJS)\monodll_panelg.o $(OBJS)\monodll_progdlgg.o $(OBJS)\monodll_sashwin.o $(OBJS)\monodll_scrlwing.o $(OBJS)\monodll_spinctlg.o $(OBJS)\monodll_splash.o $(OBJS)\monodll_splitter.o $(OBJS)\monodll_tbarsmpl.o $(OBJS)\monodll_textdlgg.o $(OBJS)\monodll_tipdlg.o $(OBJS)\monodll_tipwin.o $(OBJS)\monodll_treectlg.o $(OBJS)\monodll_vlbox.o $(OBJS)\monodll_vscroll.o $(OBJS)\monodll_wizard.o $(OBJS)\monodll_appcmn.o $(OBJS)\monodll_fontmap.o $(OBJS)\monodll_accesscmn.o $(OBJS)\monodll_artprov.o $(OBJS)\monodll_artstd.o $(OBJS)\monodll_bmpbase.o $(OBJS)\monodll_choiccmn.o $(OBJS)\monodll_clipcmn.o $(OBJS)\monodll_cmdproc.o $(OBJS)\monodll_cmndata.o $(OBJS)\monodll_containr.o $(OBJS)\monodll_cshelp.o $(OBJS)\monodll_ctrlcmn.o $(OBJS)\monodll_ctrlsub.o $(OBJS)\monodll_datacmn.o $(OBJS)\monodll_dbgrid.o $(OBJS)\monodll_dcbase.o $(OBJS)\monodll_dlgcmn.o $(OBJS)\monodll_dndcmn.o $(OBJS)\monodll_dobjcmn.o $(OBJS)\monodll_docmdi.o $(OBJS)\monodll_docview.o $(OBJS)\monodll_dpycmn.o $(OBJS)\monodll_dseldlg.o $(OBJS)\monodll_effects.o $(OBJS)\monodll_fddlgcmn.o $(OBJS)\monodll_fldlgcmn.o $(OBJS)\monodll_fontcmn.o $(OBJS)\monodll_framecmn.o $(OBJS)\monodll_timercmn.o $(OBJS)\monodll_toplvcmn.o $(OBJS)\monodll_gaugecmn.o $(OBJS)\monodll_gdicmn.o $(OBJS)\monodll_geometry.o $(OBJS)\monodll_gifdecod.o $(OBJS)\monodll_helpbase.o $(OBJS)\monodll_iconbndl.o $(OBJS)\monodll_imagall.o $(OBJS)\monodll_imagbmp.o $(OBJS)\monodll_image.o $(OBJS)\monodll_imaggif.o $(OBJS)\monodll_imagiff.o $(OBJS)\monodll_imagjpeg.o $(OBJS)\monodll_imagpcx.o $(OBJS)\monodll_imagpng.o $(OBJS)\monodll_imagpnm.o $(OBJS)\monodll_imagtiff.o $(OBJS)\monodll_imagxpm.o $(OBJS)\monodll_imagfill.o $(OBJS)\monodll_layout.o $(OBJS)\monodll_lboxcmn.o $(OBJS)\monodll_matrix.o $(OBJS)\monodll_menucmn.o $(OBJS)\monodll_nbkbase.o $(OBJS)\monodll_paper.o $(OBJS)\monodll_popupcmn.o $(OBJS)\monodll_prntbase.o $(OBJS)\monodll_quantize.o $(OBJS)\monodll_radiocmn.o $(OBJS)\monodll_rgncmn.o $(OBJS)\monodll_settcmn.o $(OBJS)\monodll_sizer.o $(OBJS)\monodll_statbar.o $(OBJS)\monodll_tbarbase.o $(OBJS)\monodll_textcmn.o $(OBJS)\monodll_treebase.o $(OBJS)\monodll_valgen.o $(OBJS)\monodll_validate.o $(OBJS)\monodll_valtext.o $(OBJS)\monodll_wincmn.o $(OBJS)\monodll_xpmdecod.o
+____CORE_SRC_FILENAMES_OBJECTS = $(OBJS)\monodll_app.o $(OBJS)\monodll_bitmap.o $(OBJS)\monodll_brush.o $(OBJS)\monodll_caret.o $(OBJS)\monodll_clipbrd.o $(OBJS)\monodll_colour.o $(OBJS)\monodll_cursor.o $(OBJS)\monodll_data.o $(OBJS)\monodll_dc.o $(OBJS)\monodll_dcclient.o $(OBJS)\monodll_dcmemory.o $(OBJS)\monodll_dcprint.o $(OBJS)\monodll_dcscreen.o $(OBJS)\monodll_dialup.o $(OBJS)\monodll_dib.o $(OBJS)\monodll_dirdlg.o $(OBJS)\monodll_display.o $(OBJS)\monodll_enhmeta.o $(OBJS)\monodll_evtloop.o $(OBJS)\monodll_font.o $(OBJS)\monodll_fontenum.o $(OBJS)\monodll_fontutil.o $(OBJS)\monodll_gdiimage.o $(OBJS)\monodll_gdiobj.o $(OBJS)\monodll_glcanvas.o $(OBJS)\monodll_helpchm.o $(OBJS)\monodll_helpwin.o $(OBJS)\monodll_icon.o $(OBJS)\monodll_joystick.o $(OBJS)\monodll_minifram.o $(OBJS)\monodll_palette.o $(OBJS)\monodll_pen.o $(OBJS)\monodll_popupwin.o $(OBJS)\monodll_region.o $(OBJS)\monodll_settings.o $(OBJS)\monodll_taskbarcmn.o $(OBJS)\monodll_taskbar.o $(OBJS)\monodll_timer.o $(OBJS)\monodll_tooltip.o $(OBJS)\monodll_toplevel.o $(OBJS)\monodll_utilsgui.o $(OBJS)\monodll_wave.o $(OBJS)\monodll_window.o $(OBJS)\monodll_automtn.o $(OBJS)\monodll_dataobj.o $(OBJS)\monodll_dropsrc.o $(OBJS)\monodll_droptgt.o $(OBJS)\monodll_oleutils.o $(OBJS)\monodll_uuid.o $(OBJS)\monodll_textctrl.o $(OBJS)\monodll_bmpbuttn.o $(OBJS)\monodll_button.o $(OBJS)\monodll_checkbox.o $(OBJS)\monodll_checklst.o $(OBJS)\monodll_choice.o $(OBJS)\monodll_colschem.o $(OBJS)\monodll_combobox.o $(OBJS)\monodll_control.o $(OBJS)\monodll_dialog.o $(OBJS)\monodll_framuniv.o $(OBJS)\monodll_topluniv.o $(OBJS)\monodll_gauge.o $(OBJS)\monodll_inpcons.o $(OBJS)\monodll_inphand.o $(OBJS)\monodll_listbox.o $(OBJS)\monodll_menu.o $(OBJS)\monodll_notebook.o $(OBJS)\monodll_radiobox.o $(OBJS)\monodll_radiobut.o $(OBJS)\monodll_renderer.o $(OBJS)\monodll_scrarrow.o $(OBJS)\monodll_scrolbar.o $(OBJS)\monodll_scrthumb.o $(OBJS)\monodll_slider.o $(OBJS)\monodll_spinbutt.o $(OBJS)\monodll_statbmp.o $(OBJS)\monodll_statbox.o $(OBJS)\monodll_statline.o $(OBJS)\monodll_stattext.o $(OBJS)\monodll_statusbr.o $(OBJS)\monodll_toolbar.o $(OBJS)\monodll_theme.o $(OBJS)\monodll_winuniv.o $(OBJS)\monodll_mdig.o $(OBJS)\monodll_imaglist.o $(OBJS)\monodll_colrdlgg.o $(OBJS)\monodll_listctrl.o $(OBJS)\monodll_filedlgg.o $(OBJS)\monodll_dirdlgg.o $(OBJS)\monodll_prntdlgg.o $(OBJS)\monodll_accel.o $(OBJS)\monodll_msgdlgg.o $(OBJS)\monodll_fdrepdlg.o $(OBJS)\monodll_fontdlgg.o $(OBJS)\monodll_tabg.o $(OBJS)\monodll_gtk.o $(OBJS)\monodll_win32.o $(OBJS)\monodll_metal.o $(OBJS)\monodll_selstore.o $(OBJS)\monodll_busyinfo.o $(OBJS)\monodll_calctrl.o $(OBJS)\monodll_choicdgg.o $(OBJS)\monodll_dcbuffer.o $(OBJS)\monodll_dcpsg.o $(OBJS)\monodll_dirctrlg.o $(OBJS)\monodll_grid.o $(OBJS)\monodll_gridctrl.o $(OBJS)\monodll_gridsel.o $(OBJS)\monodll_laywin.o $(OBJS)\monodll_logg.o $(OBJS)\monodll_numdlgg.o $(OBJS)\monodll_panelg.o $(OBJS)\monodll_progdlgg.o $(OBJS)\monodll_sashwin.o $(OBJS)\monodll_scrlwing.o $(OBJS)\monodll_spinctlg.o $(OBJS)\monodll_splash.o $(OBJS)\monodll_splitter.o $(OBJS)\monodll_tbarsmpl.o $(OBJS)\monodll_textdlgg.o $(OBJS)\monodll_tipdlg.o $(OBJS)\monodll_tipwin.o $(OBJS)\monodll_treectlg.o $(OBJS)\monodll_vlbox.o $(OBJS)\monodll_vscroll.o $(OBJS)\monodll_wizard.o $(OBJS)\monodll_appcmn.o $(OBJS)\monodll_fontmap.o $(OBJS)\monodll_accesscmn.o $(OBJS)\monodll_artprov.o $(OBJS)\monodll_artstd.o $(OBJS)\monodll_bmpbase.o $(OBJS)\monodll_choiccmn.o $(OBJS)\monodll_clipcmn.o $(OBJS)\monodll_cmdproc.o $(OBJS)\monodll_cmndata.o $(OBJS)\monodll_containr.o $(OBJS)\monodll_cshelp.o $(OBJS)\monodll_ctrlcmn.o $(OBJS)\monodll_ctrlsub.o $(OBJS)\monodll_datacmn.o $(OBJS)\monodll_dbgrid.o $(OBJS)\monodll_dcbase.o $(OBJS)\monodll_dlgcmn.o $(OBJS)\monodll_dndcmn.o $(OBJS)\monodll_dobjcmn.o $(OBJS)\monodll_docmdi.o $(OBJS)\monodll_docview.o $(OBJS)\monodll_dpycmn.o $(OBJS)\monodll_dseldlg.o $(OBJS)\monodll_effects.o $(OBJS)\monodll_fddlgcmn.o $(OBJS)\monodll_fldlgcmn.o $(OBJS)\monodll_fontcmn.o $(OBJS)\monodll_framecmn.o $(OBJS)\monodll_timercmn.o $(OBJS)\monodll_toplvcmn.o $(OBJS)\monodll_gaugecmn.o $(OBJS)\monodll_gdicmn.o $(OBJS)\monodll_geometry.o $(OBJS)\monodll_gifdecod.o $(OBJS)\monodll_helpbase.o $(OBJS)\monodll_iconbndl.o $(OBJS)\monodll_imagall.o $(OBJS)\monodll_imagbmp.o $(OBJS)\monodll_image.o $(OBJS)\monodll_imaggif.o $(OBJS)\monodll_imagiff.o $(OBJS)\monodll_imagjpeg.o $(OBJS)\monodll_imagpcx.o $(OBJS)\monodll_imagpng.o $(OBJS)\monodll_imagpnm.o $(OBJS)\monodll_imagtiff.o $(OBJS)\monodll_imagxpm.o $(OBJS)\monodll_imagfill.o $(OBJS)\monodll_layout.o $(OBJS)\monodll_lboxcmn.o $(OBJS)\monodll_matrix.o $(OBJS)\monodll_menucmn.o $(OBJS)\monodll_nbkbase.o $(OBJS)\monodll_paper.o $(OBJS)\monodll_popupcmn.o $(OBJS)\monodll_prntbase.o $(OBJS)\monodll_quantize.o $(OBJS)\monodll_radiocmn.o $(OBJS)\monodll_rgncmn.o $(OBJS)\monodll_settcmn.o $(OBJS)\monodll_sizer.o $(OBJS)\monodll_statbar.o $(OBJS)\monodll_tbarbase.o $(OBJS)\monodll_textcmn.o $(OBJS)\monodll_treebase.o $(OBJS)\monodll_valgen.o $(OBJS)\monodll_validate.o $(OBJS)\monodll_valtext.o $(OBJS)\monodll_wincmn.o $(OBJS)\monodll_xpmdecod.o
 endif
 endif
 ifeq ($(USE_GUI),1)
-____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS = $(____CORE_SRC_FILENAMES_1_OBJECTS) $(OBJS)\monolib_helpdata.o $(OBJS)\monolib_helpfrm.o $(OBJS)\monolib_helpctrl.o $(OBJS)\monolib_htmlcell.o $(OBJS)\monolib_htmlfilt.o $(OBJS)\monolib_htmlpars.o $(OBJS)\monolib_htmltag.o $(OBJS)\monolib_htmlwin.o $(OBJS)\monolib_winpars.o $(OBJS)\monolib_m_fonts.o $(OBJS)\monolib_m_hline.o $(OBJS)\monolib_m_image.o $(OBJS)\monolib_m_layout.o $(OBJS)\monolib_m_links.o $(OBJS)\monolib_m_list.o $(OBJS)\monolib_m_dflist.o $(OBJS)\monolib_m_pre.o $(OBJS)\monolib_m_tables.o $(OBJS)\monolib_m_style.o $(OBJS)\monolib_htmprint.o $(OBJS)\monolib_helpbest.o $(OBJS)\monolib_htmllbox.o
+____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS = $(____CORE_SRC_FILENAMES_1_OBJECTS) $(OBJS)\monolib_helpbest.o $(OBJS)\monolib_helpdata.o $(OBJS)\monolib_helpfrm.o $(OBJS)\monolib_helpctrl.o $(OBJS)\monolib_htmlcell.o $(OBJS)\monolib_htmlfilt.o $(OBJS)\monolib_htmlpars.o $(OBJS)\monolib_htmltag.o $(OBJS)\monolib_htmlwin.o $(OBJS)\monolib_winpars.o $(OBJS)\monolib_m_fonts.o $(OBJS)\monolib_m_hline.o $(OBJS)\monolib_m_image.o $(OBJS)\monolib_m_layout.o $(OBJS)\monolib_m_links.o $(OBJS)\monolib_m_list.o $(OBJS)\monolib_m_dflist.o $(OBJS)\monolib_m_pre.o $(OBJS)\monolib_m_tables.o $(OBJS)\monolib_m_style.o $(OBJS)\monolib_htmprint.o $(OBJS)\monolib_htmllbox.o
 endif
 ifeq ($(USE_GUI),1)
-____MONOLIB_GUI_SRC_FILENAMES_OBJECTS = $(____CORE_SRC_FILENAMES_OBJECTS) $(OBJS)\monodll_helpdata.o $(OBJS)\monodll_helpfrm.o $(OBJS)\monodll_helpctrl.o $(OBJS)\monodll_htmlcell.o $(OBJS)\monodll_htmlfilt.o $(OBJS)\monodll_htmlpars.o $(OBJS)\monodll_htmltag.o $(OBJS)\monodll_htmlwin.o $(OBJS)\monodll_winpars.o $(OBJS)\monodll_m_fonts.o $(OBJS)\monodll_m_hline.o $(OBJS)\monodll_m_image.o $(OBJS)\monodll_m_layout.o $(OBJS)\monodll_m_links.o $(OBJS)\monodll_m_list.o $(OBJS)\monodll_m_dflist.o $(OBJS)\monodll_m_pre.o $(OBJS)\monodll_m_tables.o $(OBJS)\monodll_m_style.o $(OBJS)\monodll_htmprint.o $(OBJS)\monodll_helpbest.o $(OBJS)\monodll_htmllbox.o
+____MONOLIB_GUI_SRC_FILENAMES_OBJECTS = $(____CORE_SRC_FILENAMES_OBJECTS) $(OBJS)\monodll_helpbest.o $(OBJS)\monodll_helpdata.o $(OBJS)\monodll_helpfrm.o $(OBJS)\monodll_helpctrl.o $(OBJS)\monodll_htmlcell.o $(OBJS)\monodll_htmlfilt.o $(OBJS)\monodll_htmlpars.o $(OBJS)\monodll_htmltag.o $(OBJS)\monodll_htmlwin.o $(OBJS)\monodll_winpars.o $(OBJS)\monodll_m_fonts.o $(OBJS)\monodll_m_hline.o $(OBJS)\monodll_m_image.o $(OBJS)\monodll_m_layout.o $(OBJS)\monodll_m_links.o $(OBJS)\monodll_m_list.o $(OBJS)\monodll_m_dflist.o $(OBJS)\monodll_m_pre.o $(OBJS)\monodll_m_tables.o $(OBJS)\monodll_m_style.o $(OBJS)\monodll_htmprint.o $(OBJS)\monodll_htmllbox.o
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -192,66 +198,32 @@ __corelib___depname = ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEB
 endif
 endif
 endif
-ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
+ifeq ($(USE_OPENGL),1)
+__gldll___depname = ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll
+endif
+endif
+endif
+ifeq ($(SHARED),0)
+ifeq ($(USE_GUI),1)
+ifeq ($(USE_OPENGL),1)
+__gllib___depname = ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a
+endif
+endif
+endif
+ifeq ($(MONOLITHIC),0)
+ifeq ($(SHARED),1)
+ifeq ($(USE_HTML),1)
 __htmldll___depname = ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll
 endif
 endif
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
-ifeq ($(USE_GUI),1)
+ifeq ($(USE_HTML),1)
 __htmllib___depname = ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a
 endif
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-__install_basedll___depname = install_basedll
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),0)
-__install_baselib___depname = install_baselib
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-__install_coredll___depname = install_coredll
-endif
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),0)
-ifeq ($(USE_GUI),1)
-__install_corelib___depname = install_corelib
-endif
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-__install_htmldll___depname = install_htmldll
-endif
-endif
-endif
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),0)
-ifeq ($(USE_GUI),1)
-__install_htmllib___depname = install_htmllib
-endif
-endif
-endif
-ifeq ($(MONOLITHIC),1)
-ifeq ($(SHARED),1)
-__install_monodll___depname = install_monodll
-endif
-endif
-ifeq ($(MONOLITHIC),1)
-ifeq ($(SHARED),0)
-__install_monolib___depname = install_monolib
 endif
 endif
 ifeq ($(MONOLITHIC),1)
@@ -272,7 +244,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname)
+all: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__coredll___depname) $(__corelib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__gldll___depname) $(__gllib___depname)
 
 $(OBJS)\basedll_appbase.o: ..\src\common\appbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -869,13 +841,6 @@ endif
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_caret.o: ..\src\msw\caret.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\coredll_caret.o: ..\src\generic\caret.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -2141,13 +2106,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
-$(OBJS)\corelib_caret.o: ..\src\generic\caret.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
 $(OBJS)\corelib_checkbox.o: ..\src\univ\checkbox.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
@@ -3302,6 +3260,18 @@ $(OBJS)\corelib_xpmdecod.o: ..\src\common\xpmdecod.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
+$(OBJS)\gldll_dummy.o: ..\src\msw\dummy.cpp
+	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $<
+
+$(OBJS)\gldll_glcanvas.o: ..\src\msw\glcanvas.cpp
+	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $<
+
+$(OBJS)\gllib_dummy.o: ..\src\msw\dummy.cpp
+	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
+$(OBJS)\gllib_glcanvas.o: ..\src\msw\glcanvas.cpp
+	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $<
+
 $(OBJS)\htmldll_dummy.o: ..\src\msw\dummy.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
 
@@ -3549,13 +3519,6 @@ endif
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_caret.o: ..\src\msw\caret.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monodll_caret.o: ..\src\generic\caret.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -5105,13 +5068,6 @@ endif
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_caret.o: ..\src\msw\caret.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monolib_caret.o: ..\src\generic\caret.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
 endif
 
 ifeq ($(USE_GUI),1)
@@ -6929,6 +6885,9 @@ clean:
 	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll
 	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a
 	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a
+	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll
+	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a
+	-if exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a del ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -6950,123 +6909,45 @@ endif
 endif
 endif
 
-ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
-..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\htmldll_dummy.o ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a $(OBJS)\htmldll_helpdata.o $(OBJS)\htmldll_helpfrm.o $(OBJS)\htmldll_helpctrl.o $(OBJS)\htmldll_htmlcell.o $(OBJS)\htmldll_htmlfilt.o $(OBJS)\htmldll_htmlpars.o $(OBJS)\htmldll_htmltag.o $(OBJS)\htmldll_htmlwin.o $(OBJS)\htmldll_winpars.o $(OBJS)\htmldll_m_fonts.o $(OBJS)\htmldll_m_hline.o $(OBJS)\htmldll_m_image.o $(OBJS)\htmldll_m_layout.o $(OBJS)\htmldll_m_links.o $(OBJS)\htmldll_m_list.o $(OBJS)\htmldll_m_dflist.o $(OBJS)\htmldll_m_pre.o $(OBJS)\htmldll_m_tables.o $(OBJS)\htmldll_m_style.o $(OBJS)\htmldll_htmprint.o $(OBJS)\htmldll_helpbest.o $(OBJS)\htmldll_htmllbox.o $(__coredll___depname) $(__basedll___depname)
-	$(CXX) -shared -o $@  $(OBJS)\htmldll_dummy.o $(OBJS)\htmldll_helpdata.o $(OBJS)\htmldll_helpfrm.o $(OBJS)\htmldll_helpctrl.o $(OBJS)\htmldll_htmlcell.o $(OBJS)\htmldll_htmlfilt.o $(OBJS)\htmldll_htmlpars.o $(OBJS)\htmldll_htmltag.o $(OBJS)\htmldll_htmlwin.o $(OBJS)\htmldll_winpars.o $(OBJS)\htmldll_m_fonts.o $(OBJS)\htmldll_m_hline.o $(OBJS)\htmldll_m_image.o $(OBJS)\htmldll_m_layout.o $(OBJS)\htmldll_m_links.o $(OBJS)\htmldll_m_list.o $(OBJS)\htmldll_m_dflist.o $(OBJS)\htmldll_m_pre.o $(OBJS)\htmldll_m_tables.o $(OBJS)\htmldll_m_style.o $(OBJS)\htmldll_htmprint.o $(OBJS)\htmldll_helpbest.o $(OBJS)\htmldll_htmllbox.o $(LDFLAGS) -Wl,--out-implib,$(OBJS)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a $(__DEBUGFLAG) -mthreads -L..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -Wl,--out-implib,..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)$(LIBPREFIX)wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a  -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
+ifeq ($(USE_OPENGL),1)
+..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_gcc$(VENDORTAG).dll: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\gldll_dummy.o ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a $(OBJS)\gldll_glcanvas.o $(__coredll___depname) $(__basedll___depname)
+	$(CXX) -shared -o $@  $(OBJS)\gldll_dummy.o $(OBJS)\gldll_glcanvas.o $(LDFLAGS) -Wl,--out-implib,$(OBJS)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a $(__DEBUGFLAG) -mthreads -L..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -Wl,--out-implib,..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)$(LIBPREFIX)wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a  -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
 endif
 endif
 endif
 
-ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
-..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\htmllib_dummy.o $(OBJS)\htmllib_helpdata.o $(OBJS)\htmllib_helpfrm.o $(OBJS)\htmllib_helpctrl.o $(OBJS)\htmllib_htmlcell.o $(OBJS)\htmllib_htmlfilt.o $(OBJS)\htmllib_htmlpars.o $(OBJS)\htmllib_htmltag.o $(OBJS)\htmllib_htmlwin.o $(OBJS)\htmllib_winpars.o $(OBJS)\htmllib_m_fonts.o $(OBJS)\htmllib_m_hline.o $(OBJS)\htmllib_m_image.o $(OBJS)\htmllib_m_layout.o $(OBJS)\htmllib_m_links.o $(OBJS)\htmllib_m_list.o $(OBJS)\htmllib_m_dflist.o $(OBJS)\htmllib_m_pre.o $(OBJS)\htmllib_m_tables.o $(OBJS)\htmllib_m_style.o $(OBJS)\htmllib_htmprint.o $(OBJS)\htmllib_helpbest.o $(OBJS)\htmllib_htmllbox.o
+ifeq ($(USE_OPENGL),1)
+..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\gllib_dummy.o $(OBJS)\gllib_glcanvas.o
 	if exist $@ del $@
-	ar rcu $@  $(OBJS)\htmllib_dummy.o $(OBJS)\htmllib_helpdata.o $(OBJS)\htmllib_helpfrm.o $(OBJS)\htmllib_helpctrl.o $(OBJS)\htmllib_htmlcell.o $(OBJS)\htmllib_htmlfilt.o $(OBJS)\htmllib_htmlpars.o $(OBJS)\htmllib_htmltag.o $(OBJS)\htmllib_htmlwin.o $(OBJS)\htmllib_winpars.o $(OBJS)\htmllib_m_fonts.o $(OBJS)\htmllib_m_hline.o $(OBJS)\htmllib_m_image.o $(OBJS)\htmllib_m_layout.o $(OBJS)\htmllib_m_links.o $(OBJS)\htmllib_m_list.o $(OBJS)\htmllib_m_dflist.o $(OBJS)\htmllib_m_pre.o $(OBJS)\htmllib_m_tables.o $(OBJS)\htmllib_m_style.o $(OBJS)\htmllib_htmprint.o $(OBJS)\htmllib_helpbest.o $(OBJS)\htmllib_htmllbox.o
+	ar rcu $@  $(OBJS)\gllib_dummy.o $(OBJS)\gllib_glcanvas.o
 	ranlib $@
 endif
 endif
 endif
 
-install: all install_wxregex install_wxzlib install_wxpng install_wxjpeg install_wxtiff $(__install_monodll___depname) $(__install_monolib___depname) $(__install_basedll___depname) $(__install_baselib___depname) $(__install_coredll___depname) $(__install_corelib___depname) $(__install_htmldll___depname) $(__install_htmllib___depname)
-
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
-install_basedll: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gcc$(VENDORTAG).dll /usr/local/lib
-endif
-endif
-
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),0)
-install_baselib: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a /usr/local/lib
-endif
-endif
-
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-install_coredll: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_gcc$(VENDORTAG).dll /usr/local/lib
+ifeq ($(USE_HTML),1)
+..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\htmldll_dummy.o ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a $(OBJS)\htmldll_helpbest.o $(OBJS)\htmldll_helpdata.o $(OBJS)\htmldll_helpfrm.o $(OBJS)\htmldll_helpctrl.o $(OBJS)\htmldll_htmlcell.o $(OBJS)\htmldll_htmlfilt.o $(OBJS)\htmldll_htmlpars.o $(OBJS)\htmldll_htmltag.o $(OBJS)\htmldll_htmlwin.o $(OBJS)\htmldll_winpars.o $(OBJS)\htmldll_m_fonts.o $(OBJS)\htmldll_m_hline.o $(OBJS)\htmldll_m_image.o $(OBJS)\htmldll_m_layout.o $(OBJS)\htmldll_m_links.o $(OBJS)\htmldll_m_list.o $(OBJS)\htmldll_m_dflist.o $(OBJS)\htmldll_m_pre.o $(OBJS)\htmldll_m_tables.o $(OBJS)\htmldll_m_style.o $(OBJS)\htmldll_htmprint.o $(OBJS)\htmldll_htmllbox.o $(__coredll___depname) $(__basedll___depname)
+	$(CXX) -shared -o $@  $(OBJS)\htmldll_dummy.o $(OBJS)\htmldll_helpbest.o $(OBJS)\htmldll_helpdata.o $(OBJS)\htmldll_helpfrm.o $(OBJS)\htmldll_helpctrl.o $(OBJS)\htmldll_htmlcell.o $(OBJS)\htmldll_htmlfilt.o $(OBJS)\htmldll_htmlpars.o $(OBJS)\htmldll_htmltag.o $(OBJS)\htmldll_htmlwin.o $(OBJS)\htmldll_winpars.o $(OBJS)\htmldll_m_fonts.o $(OBJS)\htmldll_m_hline.o $(OBJS)\htmldll_m_image.o $(OBJS)\htmldll_m_layout.o $(OBJS)\htmldll_m_links.o $(OBJS)\htmldll_m_list.o $(OBJS)\htmldll_m_dflist.o $(OBJS)\htmldll_m_pre.o $(OBJS)\htmldll_m_tables.o $(OBJS)\htmldll_m_style.o $(OBJS)\htmldll_htmprint.o $(OBJS)\htmldll_htmllbox.o $(LDFLAGS) -Wl,--out-implib,$(OBJS)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a $(__DEBUGFLAG) -mthreads -L..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -Wl,--out-implib,..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)$(LIBPREFIX)wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a  -lwxtiff$(WXDEBUGFLAG) -lwxjpeg$(WXDEBUGFLAG) -lwxpng$(WXDEBUGFLAG) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32  ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
 endif
 endif
 endif
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
-ifeq ($(USE_GUI),1)
-install_corelib: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a /usr/local/lib
+ifeq ($(USE_HTML),1)
+..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\htmllib_dummy.o $(OBJS)\htmllib_helpbest.o $(OBJS)\htmllib_helpdata.o $(OBJS)\htmllib_helpfrm.o $(OBJS)\htmllib_helpctrl.o $(OBJS)\htmllib_htmlcell.o $(OBJS)\htmllib_htmlfilt.o $(OBJS)\htmllib_htmlpars.o $(OBJS)\htmllib_htmltag.o $(OBJS)\htmllib_htmlwin.o $(OBJS)\htmllib_winpars.o $(OBJS)\htmllib_m_fonts.o $(OBJS)\htmllib_m_hline.o $(OBJS)\htmllib_m_image.o $(OBJS)\htmllib_m_layout.o $(OBJS)\htmllib_m_links.o $(OBJS)\htmllib_m_list.o $(OBJS)\htmllib_m_dflist.o $(OBJS)\htmllib_m_pre.o $(OBJS)\htmllib_m_tables.o $(OBJS)\htmllib_m_style.o $(OBJS)\htmllib_htmprint.o $(OBJS)\htmllib_htmllbox.o
+	if exist $@ del $@
+	ar rcu $@  $(OBJS)\htmllib_dummy.o $(OBJS)\htmllib_helpbest.o $(OBJS)\htmllib_helpdata.o $(OBJS)\htmllib_helpfrm.o $(OBJS)\htmllib_helpctrl.o $(OBJS)\htmllib_htmlcell.o $(OBJS)\htmllib_htmlfilt.o $(OBJS)\htmllib_htmlpars.o $(OBJS)\htmllib_htmltag.o $(OBJS)\htmllib_htmlwin.o $(OBJS)\htmllib_winpars.o $(OBJS)\htmllib_m_fonts.o $(OBJS)\htmllib_m_hline.o $(OBJS)\htmllib_m_image.o $(OBJS)\htmllib_m_layout.o $(OBJS)\htmllib_m_links.o $(OBJS)\htmllib_m_list.o $(OBJS)\htmllib_m_dflist.o $(OBJS)\htmllib_m_pre.o $(OBJS)\htmllib_m_tables.o $(OBJS)\htmllib_m_style.o $(OBJS)\htmllib_htmprint.o $(OBJS)\htmllib_htmllbox.o
+	ranlib $@
 endif
 endif
 endif
-
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),1)
-ifeq ($(USE_GUI),1)
-install_htmldll: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_gcc$(VENDORTAG).dll /usr/local/lib
-endif
-endif
-endif
-
-ifeq ($(MONOLITHIC),0)
-ifeq ($(SHARED),0)
-ifeq ($(USE_GUI),1)
-install_htmllib: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a /usr/local/lib
-endif
-endif
-endif
-
-ifeq ($(MONOLITHIC),1)
-ifeq ($(SHARED),1)
-install_monodll: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gcc$(VENDORTAG).dll /usr/local/lib
-endif
-endif
-
-ifeq ($(MONOLITHIC),1)
-ifeq ($(SHARED),0)
-install_monolib: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a /usr/local/lib
-endif
-endif
-
-install_wxjpeg: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a /usr/local/lib
-
-install_wxpng: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxpng$(WXDEBUGFLAG).a /usr/local/lib
-
-install_wxregex: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxregex$(WXDEBUGFLAG).a /usr/local/lib
-
-install_wxtiff: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxtiff$(WXDEBUGFLAG).a /usr/local/lib
-
-install_wxzlib: 
-	mkdir /usr/local/lib
-	copy /Y ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxzlib$(WXDEBUGFLAG).a /usr/local/lib
 
 ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG): 
 	if not exist ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) mkdir ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -7098,8 +6979,6 @@ endif
 
 setup_h: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h
 
-uninstall: 
-
 ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\libwxjpeg$(WXDEBUGFLAG).a: ..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxjpeg_jcomapi.o $(OBJS)\wxjpeg_jutils.o $(OBJS)\wxjpeg_jerror.o $(OBJS)\wxjpeg_jmemmgr.o $(OBJS)\wxjpeg_jmemnobs.o $(OBJS)\wxjpeg_jcapimin.o $(OBJS)\wxjpeg_jcapistd.o $(OBJS)\wxjpeg_jctrans.o $(OBJS)\wxjpeg_jcparam.o $(OBJS)\wxjpeg_jdatadst.o $(OBJS)\wxjpeg_jcinit.o $(OBJS)\wxjpeg_jcmaster.o $(OBJS)\wxjpeg_jcmarker.o $(OBJS)\wxjpeg_jcmainct.o $(OBJS)\wxjpeg_jcprepct.o $(OBJS)\wxjpeg_jccoefct.o $(OBJS)\wxjpeg_jccolor.o $(OBJS)\wxjpeg_jcsample.o $(OBJS)\wxjpeg_jchuff.o $(OBJS)\wxjpeg_jcphuff.o $(OBJS)\wxjpeg_jcdctmgr.o $(OBJS)\wxjpeg_jfdctfst.o $(OBJS)\wxjpeg_jfdctflt.o $(OBJS)\wxjpeg_jfdctint.o $(OBJS)\wxjpeg_jdapimin.o $(OBJS)\wxjpeg_jdapistd.o $(OBJS)\wxjpeg_jdtrans.o $(OBJS)\wxjpeg_jdatasrc.o $(OBJS)\wxjpeg_jdmaster.o $(OBJS)\wxjpeg_jdinput.o $(OBJS)\wxjpeg_jdmarker.o $(OBJS)\wxjpeg_jdhuff.o $(OBJS)\wxjpeg_jdphuff.o $(OBJS)\wxjpeg_jdmainct.o $(OBJS)\wxjpeg_jdcoefct.o $(OBJS)\wxjpeg_jdpostct.o $(OBJS)\wxjpeg_jddctmgr.o $(OBJS)\wxjpeg_jidctfst.o $(OBJS)\wxjpeg_jidctflt.o $(OBJS)\wxjpeg_jidctint.o $(OBJS)\wxjpeg_jidctred.o $(OBJS)\wxjpeg_jdsample.o $(OBJS)\wxjpeg_jdcolor.o $(OBJS)\wxjpeg_jquant1.o $(OBJS)\wxjpeg_jquant2.o $(OBJS)\wxjpeg_jdmerge.o
 	if exist $@ del $@
 	ar rcu $@  $(OBJS)\wxjpeg_jcomapi.o $(OBJS)\wxjpeg_jutils.o $(OBJS)\wxjpeg_jerror.o $(OBJS)\wxjpeg_jmemmgr.o $(OBJS)\wxjpeg_jmemnobs.o $(OBJS)\wxjpeg_jcapimin.o $(OBJS)\wxjpeg_jcapistd.o $(OBJS)\wxjpeg_jctrans.o $(OBJS)\wxjpeg_jcparam.o $(OBJS)\wxjpeg_jdatadst.o $(OBJS)\wxjpeg_jcinit.o $(OBJS)\wxjpeg_jcmaster.o $(OBJS)\wxjpeg_jcmarker.o $(OBJS)\wxjpeg_jcmainct.o $(OBJS)\wxjpeg_jcprepct.o $(OBJS)\wxjpeg_jccoefct.o $(OBJS)\wxjpeg_jccolor.o $(OBJS)\wxjpeg_jcsample.o $(OBJS)\wxjpeg_jchuff.o $(OBJS)\wxjpeg_jcphuff.o $(OBJS)\wxjpeg_jcdctmgr.o $(OBJS)\wxjpeg_jfdctfst.o $(OBJS)\wxjpeg_jfdctflt.o $(OBJS)\wxjpeg_jfdctint.o $(OBJS)\wxjpeg_jdapimin.o $(OBJS)\wxjpeg_jdapistd.o $(OBJS)\wxjpeg_jdtrans.o $(OBJS)\wxjpeg_jdatasrc.o $(OBJS)\wxjpeg_jdmaster.o $(OBJS)\wxjpeg_jdinput.o $(OBJS)\wxjpeg_jdmarker.o $(OBJS)\wxjpeg_jdhuff.o $(OBJS)\wxjpeg_jdphuff.o $(OBJS)\wxjpeg_jdmainct.o $(OBJS)\wxjpeg_jdcoefct.o $(OBJS)\wxjpeg_jdpostct.o $(OBJS)\wxjpeg_jddctmgr.o $(OBJS)\wxjpeg_jidctfst.o $(OBJS)\wxjpeg_jidctflt.o $(OBJS)\wxjpeg_jidctint.o $(OBJS)\wxjpeg_jidctred.o $(OBJS)\wxjpeg_jdsample.o $(OBJS)\wxjpeg_jdcolor.o $(OBJS)\wxjpeg_jquant1.o $(OBJS)\wxjpeg_jquant2.o $(OBJS)\wxjpeg_jdmerge.o
@@ -7125,4 +7004,4 @@ uninstall:
 	ar rcu $@  $(OBJS)\wxzlib_adler32.o $(OBJS)\wxzlib_compress.o $(OBJS)\wxzlib_crc32.o $(OBJS)\wxzlib_gzio.o $(OBJS)\wxzlib_uncompr.o $(OBJS)\wxzlib_deflate.o $(OBJS)\wxzlib_trees.o $(OBJS)\wxzlib_zutil.o $(OBJS)\wxzlib_inflate.o $(OBJS)\wxzlib_infblock.o $(OBJS)\wxzlib_inftrees.o $(OBJS)\wxzlib_infcodes.o $(OBJS)\wxzlib_infutil.o $(OBJS)\wxzlib_inffast.o
 	ranlib $@
 
-.PHONY: all clean install install_basedll install_baselib install_coredll install_corelib install_htmldll install_htmllib install_monodll install_monolib install_wxjpeg install_wxpng install_wxregex install_wxtiff install_wxzlib setup_h uninstall
+.PHONY: all clean setup_h
