@@ -409,12 +409,12 @@ bool wxComboBox::ProcessEditMsg(
                                       ));
 
                 case KC_PREVDOWN:
-                    return (HandleKeyDown( SHORT1FROMMP(wParam)
+                    return (HandleKeyDown( wParam
                                           ,lParam
                                          ));
 
                 case KC_KEYUP:
-                    return (HandleKeyUp( SHORT1FROMMP(wParam)
+                    return (HandleKeyUp( wParam
                                         ,lParam
                                        ));
             }

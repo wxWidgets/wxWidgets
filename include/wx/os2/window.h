@@ -409,10 +409,10 @@ public:
                     ,WXLPARAM lParam
                     ,bool     bIsASCII = FALSE
                    );
-    bool HandleKeyDown( WXWORD   wParam
+    bool HandleKeyDown( WXWPARAM wParam
                        ,WXLPARAM lParam
                       );
-    bool HandleKeyUp( WXDWORD  wParam
+    bool HandleKeyUp( WXWPARAM wParam
                      ,WXLPARAM lParam
                     );
     bool HandleQueryDragIcon(WXHICON* phIcon);
@@ -581,7 +581,11 @@ private:
                       ,WXLPARAM* pResult
                      );
     // the helper functions used by HandleChar/KeyXXX methods
-    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
+    wxKeyEvent CreateKeyEvent( wxEventType evType
+                              ,int         nId
+                              ,WXLPARAM    lParam = 0
+                              ,WXWPARAM    wParam = 0
+                             ) const;
 
 
     DECLARE_DYNAMIC_CLASS(wxWindowOS2);

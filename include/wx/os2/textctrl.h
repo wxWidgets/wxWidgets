@@ -79,6 +79,7 @@ public:
 
     virtual void WriteText(const wxString& rsText);
     virtual void AppendText(const wxString& rsText);
+    virtual bool EmulateKeyPress(const wxKeyEvent& rEvent);
 
     virtual bool SetStyle( long              lStart
                           ,long              lEnd

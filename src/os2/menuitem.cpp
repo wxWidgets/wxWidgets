@@ -262,6 +262,7 @@ void wxMenuItem::SetRadioGroupEnd(
     m_vRadioGroup.m_nEnd = nEnd;
 } // end of wxMenuItem::SetRadioGroupEnd
 
+
 // change item state
 // -----------------
 
@@ -303,7 +304,6 @@ void wxMenuItem::Check(
         return;
 
     HMENU                           hMenu = GetHmenuOf(m_parentMenu);
-
     if ( GetKind() == wxITEM_RADIO )
     {
         //

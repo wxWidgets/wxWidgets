@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -2222,12 +2222,12 @@ EXPORTS
       PrependDir__10wxFileNameFRC8wxString
       ;wxFileName::GetPathSeparators(wxPathFormat)
       GetPathSeparators__10wxFileNameF12wxPathFormat
-      ;wxFileName::Mkdir(const wxString&,int,unsigned long)
-      Mkdir__10wxFileNameFRC8wxStringiUl
       ;wxFileName::IsPathSeparator(char,wxPathFormat)
       IsPathSeparator__10wxFileNameFc12wxPathFormat
       ;wxFileName::GetFullPath(wxPathFormat) const
       GetFullPath__10wxFileNameCF12wxPathFormat
+      ;wxFileName::Mkdir(const wxString&,int,int)
+      Mkdir__10wxFileNameFRC8wxStringiT2
       ;wxFileName::Touch()
       Touch__10wxFileNameFv
       ;wxFileName::FileName(const wxString&)
@@ -2248,8 +2248,6 @@ EXPORTS
       IsAbsolute__10wxFileNameCF12wxPathFormat
       ;wxFileName::GetVolumeSeparator(wxPathFormat)
       GetVolumeSeparator__10wxFileNameF12wxPathFormat
-      ;wxFileName::GetPath(unsigned long,wxPathFormat) const
-      GetPath__10wxFileNameCFUl12wxPathFormat
       ;wxFileName::RemoveDir(int)
       RemoveDir__10wxFileNameFi
       ;wxFileName::wxPathExists()
@@ -2266,12 +2264,12 @@ EXPORTS
       SplitPath__10wxFileNameFRC8wxStringP8wxStringN3212wxPathFormat
       ;wxFileName::Normalize(int,const wxString&,wxPathFormat)
       Normalize__10wxFileNameFiRC8wxString12wxPathFormat
-      ;wxFileName::Mkdir(int,unsigned long)
-      Mkdir__10wxFileNameFiUl
       ;wxFileName::MakeRelativeTo(const wxString&,wxPathFormat)
       MakeRelativeTo__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::AssignDir(const wxString&,wxPathFormat)
       AssignDir__10wxFileNameFRC8wxString12wxPathFormat
+      ;wxFileName::Mkdir(int,int)
+      Mkdir__10wxFileNameFiT1
       ;wxFileName::SetTimes(const wxDateTime*,const wxDateTime*,const wxDateTime*)
       SetTimes__10wxFileNameFPC10wxDateTimeN21
       ;wxFileName::Rmdir()
@@ -2288,6 +2286,8 @@ EXPORTS
       SplitPath__10wxFileNameFRC8wxStringP8wxStringN2212wxPathFormat
       ;wxFileName::IsCaseSensitive(wxPathFormat)
       IsCaseSensitive__10wxFileNameF12wxPathFormat
+      ;wxFileName::GetPath(int,wxPathFormat) const
+      GetPath__10wxFileNameCFi12wxPathFormat
       ;wxFileName::GetFormat(wxPathFormat)
       GetFormat__10wxFileNameF12wxPathFormat
       ;wxFileName::Assign(const wxFileName&)
@@ -2426,6 +2426,12 @@ EXPORTS
       GetEncodingName__12wxFontMapperF14wxFontEncoding
       ;wxFontMapper::~wxFontMapper()
       __dt__12wxFontMapperFv
+      ;wxFontMapper::sm_instance
+      sm_instance__12wxFontMapper
+      ;wxFontMapper::Set(wxFontMapper*)
+      Set__12wxFontMapperFP12wxFontMapper
+      ;wxFontMapper::Get()
+      Get__12wxFontMapperFv
       ;wxFontMapper::GetDefaultConfigPath()
       GetDefaultConfigPath__12wxFontMapperFv
       ;wxFontMapper::GetEncodingDescription(wxFontEncoding)
@@ -3241,12 +3247,8 @@ EXPORTS
       HasOption__7wxImageCFRC8wxString
   ;From object file:  ..\common\imagfill.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxImage::MatchBoundaryPixel(int,int,int,int,const wxColour&,const wxColour&)
-      MatchBoundaryPixel__7wxImageFiN31RC8wxColourT5
-      ;wxImage::DoFloodFill(int,int,const wxBrush&,const wxColour&,int,int)
-      DoFloodFill__7wxImageFiT1RC7wxBrushRC8wxColourN21
-      ;wxImage::MatchPixel(int,int,int,int,const wxColour&)
-      MatchPixel__7wxImageFiN31RC8wxColour
+      ;wxDoFloodFill(wxDC*,int,int,const wxColour&,int)
+      wxDoFloodFill__FP4wxDCiT2RC8wxColourT2
   ;From object file:  ..\common\imaggif.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGIFHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
@@ -5818,6 +5820,8 @@ EXPORTS
       SaveFile__14wxTextCtrlBaseFRC8wxString
       ;wxTextCtrlBase::operator<<(const char)
       __ls__14wxTextCtrlBaseFCc
+      ;wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent&)
+      EmulateKeyPress__14wxTextCtrlBaseFRC10wxKeyEvent
       __vft14wxTextCtrlBase8wxObject
       ;wxTextAttr::Combine(const wxTextAttr&,const wxTextAttr&,const wxTextCtrlBase*)
       Combine__10wxTextAttrFRC10wxTextAttrT1PC14wxTextCtrlBase
@@ -7634,6 +7638,8 @@ EXPORTS
       ;wxGenericDirDialog::OnNew(wxCommandEvent&)
       OnNew__18wxGenericDirDialogFR14wxCommandEvent
       __vft18wxGenericDirDialog8wxObject
+      ;wxGenericDirDialog::OnGoHome(wxCommandEvent&)
+      OnGoHome__18wxGenericDirDialogFR14wxCommandEvent
       ;wxGenericDirDialog::wxGenericDirDialog(wxWindow*,const wxString&,const wxString&,long,const wxPoint&,const wxSize&,const wxString&)
       __ct__18wxGenericDirDialogFP8wxWindowRC8wxStringT2lRC7wxPointRC6wxSizeT2
       ;wxGenericDirDialog::ShowModal()
@@ -14809,10 +14815,6 @@ EXPORTS
       OS2DestroyWindow__8wxWindowFv
       ;wxWindow::IsMouseInWindow() const
       IsMouseInWindow__8wxWindowCFv
-      ;wxWindow::HandleKeyUp(unsigned long,void*)
-      HandleKeyUp__8wxWindowFUlPv
-      ;wxWindow::HandleKeyDown(unsigned short,void*)
-      HandleKeyDown__8wxWindowFUsPv
       ;wxWindow::Clear()
       Clear__8wxWindowFv
       ;wxRemoveHandleAssociation(wxWindow*)
@@ -14822,6 +14824,8 @@ EXPORTS
       Reparent__8wxWindowFP8wxWindow
       ;wxWindow::OS2GetCreateWindowCoords(const wxPoint&,const wxSize&,int&,int&,int&,int&) const
       OS2GetCreateWindowCoords__8wxWindowCFRC7wxPointRC6wxSizeRiN33
+      ;wxWindow::CreateKeyEvent(int,int,void*,void*) const
+      CreateKeyEvent__8wxWindowCFiT1PvT3
       ;wxWindow::Enable(unsigned long)
       Enable__8wxWindowFUl
       wxWinHandleList
@@ -14911,6 +14915,8 @@ EXPORTS
       HandleMove__8wxWindowFiT1
       ;wxWindow::HandleMouseEvent(unsigned int,int,int,unsigned int)
       HandleMouseEvent__8wxWindowFUiiT2T1
+      ;wxWindow::HandleKeyDown(void*,void*)
+      HandleKeyDown__8wxWindowFPvT1
       ;wxWindow::GetScrollRange(int) const
       GetScrollRange__8wxWindowCFi
       ;wxWindow::DoSetSize(int,int,int,int,int)
@@ -14943,8 +14949,6 @@ EXPORTS
       GetTitle__8wxWindowCFv
       ;wxWindow::GetCharHeight() const
       GetCharHeight__8wxWindowCFv
-      ;wxWindow::CreateKeyEvent(int,int,void*) const
-      CreateKeyEvent__8wxWindowCFiT1Pv
       ;wxWindow::OS2Command(unsigned int,unsigned short)
       OS2Command__8wxWindowFUiUs
       wxWndProc
@@ -14965,6 +14969,8 @@ EXPORTS
       HandleActivate__8wxWindowFiUl
       ;wxWindow::FindItemByHWND(unsigned long,unsigned long) const
       FindItemByHWND__8wxWindowCFUlT1
+      ;wxWindow::HandleKeyUp(void*,void*)
+      HandleKeyUp__8wxWindowFPvT1
       ;wxWindow::HandleChar(unsigned long,void*,unsigned long)
       HandleChar__8wxWindowFUlPvT1
       ;wxWindow::DoMoveWindow(int,int,int,int)

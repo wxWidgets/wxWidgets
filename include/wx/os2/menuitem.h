@@ -92,7 +92,6 @@ public:
     void SetRadioGroupStart(int nStart);
     void SetRadioGroupEnd(int nEnd);
 
-
     //
     // All OS/2PM Submenus and menus have one of these
     //

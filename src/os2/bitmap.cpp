@@ -516,10 +516,11 @@ bool wxBitmap::CreateFromImage (
 )
 {
     wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
+    m_refData = new wxBitmapRefData();
 
     int                             nSizeLimit = 1024 * 768 * 3;
-    int                             nWidth = GetWidth();
-    int                             nBmpHeight = GetHeight();
+    int                             nWidth = rImage.GetWidth();
+    int                             nBmpHeight = rImage.GetHeight();
     int                             nBytePerLine = nWidth * 3;
     int                             nSizeDWORD = sizeof(DWORD);
     int                             nLineBoundary = nBytePerLine % nSizeDWORD;

@@ -64,77 +64,29 @@ bool wxCheckBox::Create(
 , const wxString&                   rsName
 )
 {
-    SetName(rsName);
+    if (!CreateControl( pParent
+                       ,vId
+                       ,rPos
+                       ,rSize
+                       ,lStyle
 #if wxUSE_VALIDATORS
-    SetValidator(rValidator);
+                       ,wxDefaultValidator
 #endif
-    if (pParent)
-        pParent->AddChild(this);
+                       ,rsName
+                      ))
+        return FALSE;
 
-    SetBackgroundColour(pParent->GetBackgroundColour());
-    SetForegroundColour(pParent->GetForegroundColour());
-    m_windowStyle = lStyle;
+    long                            osStyle = BS_AUTOCHECKBOX |
+                                              WS_TABSTOP      |
+                                              WS_VISIBLE;
 
-    wxString                        sLabel = rsLabel;
-
-    if (sLabel == wxT(""))
-        sLabel = wxT(" "); // Apparently needed or checkbox won't show
-
-    if (vId == -1 )
-        m_windowId = NewControlId();
-    else
-        m_windowId = vId;
-
-    int                             nX      = rPos.x;
-    int                             nY      = rPos.y;
-    int                             nWidth  = rSize.x;
-    int                             nHeight = rSize.y;
-    long                            lSstyle = 0L;
-
-    lSstyle = BS_AUTOCHECKBOX |
-              WS_TABSTOP      |
-              WS_VISIBLE;
-    if (lStyle & wxCLIP_SIBLINGS )
-        lSstyle |= WS_CLIPSIBLINGS;
-
-    m_hWnd = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
-                                        ,WC_BUTTON
-                                        ,rsLabel.c_str()
-                                        ,lSstyle
-                                        ,0, 0, 0, 0
-                                        ,GetWinHwnd(pParent)
-                                        ,HWND_TOP
-                                        ,(HMENU)m_windowId
-                                        ,NULL
-                                        ,NULL
-                                       );
-
-    //
-    // Subclass again for purposes of dialog editing mode
-    //
-    SubclassWin(m_hWnd);
-
-    LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
-
-    ::WinSetPresParam( m_hWnd
-                      ,PP_BACKGROUNDCOLOR
-                      ,sizeof(LONG)
-                      ,(PVOID)&lColor
-                     );
-
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
-    SetSize( nX
-            ,nY
-            ,nWidth
-            ,nHeight
-           );
-    delete pTextFont;
-    return TRUE;
+    return OS2CreateControl( wxT("BUTTON")
+                            ,osStyle
+                            ,rPos
+                            ,rSize
+                            ,rsLabel
+                            ,0
+                           );
 } // end of wxCheckBox::Create
 
 void wxCheckBox::SetLabel(

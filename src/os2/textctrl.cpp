@@ -385,6 +385,14 @@ void wxTextCtrl::Clear()
     ::WinSetWindowText(GetHwnd(), "");
 } // end of wxTextCtrl::Clear
 
+bool wxTextCtrl::EmulateKeyPress(
+  const wxKeyEvent&                 rEvent
+)
+{
+    SetFocus();
+    return(wxTextCtrlBase::EmulateKeyPress(rEvent));
+} // end of wxTextCtrl::EmulateKeyPress
+
 // ----------------------------------------------------------------------------
 // Clipboard operations
 // ----------------------------------------------------------------------------

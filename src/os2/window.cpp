@@ -92,6 +92,20 @@
 #  define CW_USEDEFAULT    ((int)0x80000000)
 #endif
 
+#ifndef VK_OEM_1
+    #define VK_OEM_1        0xBA
+    #define VK_OEM_PLUS     0xBB
+    #define VK_OEM_COMMA    0xBC
+    #define VK_OEM_MINUS    0xBD
+    #define VK_OEM_PERIOD   0xBE
+    #define VK_OEM_2        0xBF
+    #define VK_OEM_3        0xC0
+    #define VK_OEM_4        0xDB
+    #define VK_OEM_5        0xDC
+    #define VK_OEM_6        0xDD
+    #define VK_OEM_7        0xDE
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -2701,7 +2715,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                 if (uKeyFlags & KC_KEYUP)
                 {
                     //TODO: check if the cast to WXWORD isn't causing trouble
-                    bProcessed = HandleKeyUp((WXDWORD)wParam, lParam);
+                    bProcessed = HandleKeyUp(wParam, lParam);
                     break;
                 }
                 else // keydown event
@@ -2712,8 +2726,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     // return 0 now (we've handled it). DON't RETURN
                     // we still need to process further
                     //
-                    HandleKeyDown((WXDWORD)wParam, lParam);
-                    m_bLastKeydownProcessed = TRUE;
+                    m_bLastKeydownProcessed = HandleKeyDown(wParam, lParam);
                     if (uKeyFlags & KC_VIRTUALKEY)
                     {
                         USHORT          uVk = SHORT2FROMMP((MPARAM)lParam);
@@ -2721,14 +2734,17 @@ MRESULT wxWindowOS2::OS2WindowProc(
                         //
                         // We consider these message "not interesting" to OnChar
                         //
-                        if (uVk == VK_SHIFT || uVk == VK_CTRL )
-                        {
-                            bProcessed = TRUE;
-                            break;
-                        }
                         switch(uVk)
                         {
-                            //
+                            case VK_SHIFT:
+                            case VK_CTRL:
+                            case VK_MENU:
+                            case VK_CAPSLOCK:
+                            case VK_NUMLOCK:
+                            case VK_SCRLLOCK:
+                                bProcessed = TRUE;
+                                break;
+
                             // Avoid duplicate messages to OnChar for these ASCII keys: they
                             // will be translated by TranslateMessage() and received in WM_CHAR
                             case VK_ESC:
@@ -2742,19 +2758,41 @@ MRESULT wxWindowOS2::OS2WindowProc(
                                 bProcessed = FALSE;
                                 break;
 
-                            case VK_LEFT:
-                            case VK_RIGHT:
-                            case VK_DOWN:
-                            case VK_UP:
                             default:
-                                bProcessed = HandleChar((WXDWORD)wParam, lParam);
+                                if (m_bLastKeydownProcessed)
+                                {
+                                    //
+                                    // The key was handled in the EVT_KEY_DOWN and handling
+                                    // a key in an EVT_KEY_DOWN handler is meant, by
+                                    // design, to prevent EVT_CHARs from happening
+                                    //
+                                    m_bLastKeydownProcessed = FALSE;
+                                    bProcessed = TRUE;
+                                }
+                                else // do generate a CHAR event
+                                {
+                                    bProcessed = HandleChar((WXDWORD)wParam, lParam);
+                                }
                          }
                          break;
                     }
                     else // WM_CHAR -- Always an ASCII character
                     {
-                        bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
-                        break;
+                        if (m_bLastKeydownProcessed)
+                        {
+                            //
+                            // The key was handled in the EVT_KEY_DOWN and handling
+                            // a key in an EVT_KEY_DOWN handler is meant, by
+                            // design, to prevent EVT_CHARs from happening
+                            //
+                            m_bLastKeydownProcessed = FALSE;
+                            bProcessed = TRUE;
+                        }
+                        else // do generate a CHAR event
+                        {
+                            bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
+                            break;
+                        }
                     }
                 }
             }
@@ -3971,6 +4009,7 @@ wxKeyEvent wxWindowOS2::CreateKeyEvent(
   wxEventType                       eType
 , int                               nId
 , WXLPARAM                          lParam
+, WXWPARAM                          wParam
 ) const
 {
     wxKeyEvent                      vEvent(eType);
@@ -3982,6 +4021,8 @@ wxKeyEvent wxWindowOS2::CreateKeyEvent(
 
     vEvent.m_eventObject = (wxWindow *)this; // const_cast
     vEvent.m_keyCode     = nId;
+    vEvent.m_rawCode = (wxUint32)wParam;
+    vEvent.m_rawFlags = (wxUint32)lParam;
     vEvent.SetTimestamp(s_currentMsg.time);
 
     //
@@ -4051,57 +4092,50 @@ bool wxWindowOS2::HandleChar(
 
                 default:
                     bCtrlDown = TRUE;
-                    vId = vId + 96;
+                    vId = vId + 'a' - 1;
             }
         }
     }
-    else if ( (vId = wxCharCodeOS2ToWX(wParam)) == 0)
+    else  // we're called from WM_KEYDOWN
     {
-        //
-        // It's ASCII and will be processed here only when called from
-        // WM_CHAR (i.e. when isASCII = TRUE), don't process it now
-        //
-        vId = -1;
+        vId = wxCharCodeOS2ToWX(wParam);
+        if (vId == 0)
+            return FALSE;
     }
 
-    if (vId != -1)
-    {
-        wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_CHAR
+    wxKeyEvent                      vEvent(CreateKeyEvent( wxEVT_CHAR
                                                           ,vId
                                                           ,lParam
                                                          ));
 
-        if (bCtrlDown)
-        {
-            vEvent.m_controlDown = TRUE;
-        }
-
-        if (GetEventHandler()->ProcessEvent(vEvent))
-            return TRUE;
+    if (bCtrlDown)
+    {
+        vEvent.m_controlDown = TRUE;
     }
-    return FALSE;
+    return (GetEventHandler()->ProcessEvent(vEvent));
 }
 
 bool wxWindowOS2::HandleKeyDown(
-  WXWORD                            wParam
+  WXWPARAM                          wParam
 , WXLPARAM                          lParam
 )
 {
-    int                             nId = wxCharCodeOS2ToWX(wParam);
+    int                             nId = wxCharCodeOS2ToWX((int)wParam);
 
     if (!nId)
     {
         //
         // Normal ASCII char
         //
-        nId = wParam;
+        nId = (int)wParam;
     }
 
     if (nId != -1)
     {
         wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_KEY_DOWN
                                                           ,nId
-                                                          ,lParam
+                                                          ,(MPARAM)lParam
+                                                          ,(MPARAM)wParam
                                                          ));
 
         if (GetEventHandler()->ProcessEvent(vEvent))
@@ -4113,18 +4147,18 @@ bool wxWindowOS2::HandleKeyDown(
 } // end of wxWindowOS2::HandleKeyDown
 
 bool wxWindowOS2::HandleKeyUp(
-  WXDWORD                           wParam
+  WXWPARAM                          wParam
 , WXLPARAM                          lParam
 )
 {
-    int                             nId = wxCharCodeOS2ToWX(wParam);
+    int                             nId = wxCharCodeOS2ToWX((int)wParam);
 
     if (!nId)
     {
         //
         // Normal ASCII char
         //
-        nId = wParam;
+        nId = (int)wParam;
     }
 
     if (nId != -1)
@@ -4132,6 +4166,7 @@ bool wxWindowOS2::HandleKeyUp(
         wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_KEY_UP
                                                           ,nId
                                                           ,lParam
+                                                          ,wParam
                                                          ));
 
         if (GetEventHandler()->ProcessEvent(vEvent))
@@ -4423,6 +4458,7 @@ int wxCharCodeOS2ToWX(
         case VK_PRINTSCRN:  nId = WXK_PRINT; break;
         case VK_INSERT:     nId = WXK_INSERT; break;
         case VK_DELETE:     nId = WXK_DELETE; break;
+        case VK_CAPSLOCK:   nId = WXK_CAPITAL; break;
         case VK_F1:         nId = WXK_F1; break;
         case VK_F2:         nId = WXK_F2; break;
         case VK_F3:         nId = WXK_F3; break;
@@ -4447,6 +4483,17 @@ int wxCharCodeOS2ToWX(
         case VK_F22:        nId = WXK_F22; break;
         case VK_F23:        nId = WXK_F23; break;
         case VK_F24:        nId = WXK_F24; break;
+        case VK_OEM_1:      nId = ';'; break;
+        case VK_OEM_PLUS:   nId = '+'; break;
+        case VK_OEM_COMMA:  nId = ','; break;
+        case VK_OEM_MINUS:  nId = '-'; break;
+        case VK_OEM_PERIOD: nId = '.'; break;
+        case VK_OEM_2:      nId = '/'; break;
+        case VK_OEM_3:      nId = '~'; break;
+        case VK_OEM_4:      nId = '['; break;
+        case VK_OEM_5:      nId = '\\'; break;
+        case VK_OEM_6:      nId = ']'; break;
+        case VK_OEM_7:      nId = '\''; break;
         case VK_NUMLOCK:    nId = WXK_NUMLOCK; break;
         case VK_SCRLLOCK:   nId = WXK_SCROLL; break;
         default:

@@ -215,45 +215,58 @@ void wxMenu::UpdateAccel(
   wxMenuItem*                       pItem
 )
 {
-    //
-    // Find the (new) accel for this item
-    //
-    wxAcceleratorEntry*             pAccel = wxGetAccelFromString(pItem->GetText());
-
-    if (pAccel)
-        pAccel->m_command = pItem->GetId();
-
-    //
-    // Find the old one
-    //
-    int                             n = FindAccel(pItem->GetId());
-
-    if (n == wxNOT_FOUND)
+    if (pItem->IsSubMenu())
     {
-        //
-        // No old, add new if any
-        //
-        if (pAccel)
-            m_vAccels.Add(pAccel);
-        else
-            return;     // skipping RebuildAccelTable() below
+        wxMenu*                     pSubmenu = pItem->GetSubMenu();
+        wxMenuItemList::Node*       pNode = pSubmenu->GetMenuItems().GetFirst();
+
+        while (pNode)
+        {
+            UpdateAccel(pNode->GetData());
+            pNode = pNode->GetNext();
+        }
     }
-    else
+    else if (!pItem->IsSeparator())
     {
         //
-        // Replace old with new or just remove the old one if no new
+        // Find the (new) accel for this item
         //
-        delete                      m_vAccels[n];
-
+        wxAcceleratorEntry*         pAccel = wxGetAccelFromString(pItem->GetText());
         if (pAccel)
-            m_vAccels[n] = pAccel;
-        else
-            m_vAccels.RemoveAt(n);
-    }
+            pAccel->m_command = pItem->GetId();
 
-    if (IsAttached())
-    {
-        m_menuBar->RebuildAccelTable();
+        //
+        // Find the old one
+        //
+        int                             n = FindAccel(pItem->GetId());
+
+        if (n == wxNOT_FOUND)
+        {
+            //
+            // No old, add new if any
+            //
+            if (pAccel)
+                m_vAccels.Add(pAccel);
+            else
+                return;     // skipping RebuildAccelTable() below
+        }
+        else
+        {
+            //
+            // Replace old with new or just remove the old one if no new
+            //
+            delete                      m_vAccels[n];
+
+            if (pAccel)
+                m_vAccels[n] = pAccel;
+            else
+                m_vAccels.RemoveAt(n);
+        }
+
+        if (IsAttached())
+        {
+            m_menuBar->RebuildAccelTable();
+        }
     }
 } // wxMenu::UpdateAccel
 

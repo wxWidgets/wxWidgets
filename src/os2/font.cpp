@@ -701,7 +701,6 @@ void wxNativeFontInfo::SetEncoding(
                                   ,&vInfo
                                  ))
     {
-#if wxUSE_FONTMAP
         if (wxFontMapper::Get()->GetAltForEncoding( eEncoding
                                                ,&vInfo
                                               ))
@@ -717,7 +716,6 @@ void wxNativeFontInfo::SetEncoding(
             }
         }
         else
-#endif // wxUSE_FONTMAP
         {
             // unsupported encoding, replace with the default
             vInfo.charset = 850;
