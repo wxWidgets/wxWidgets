@@ -195,7 +195,7 @@ public:
     virtual void        Update() ;
     virtual bool        MacSetupCursor( const wxPoint& pt ) ;
         
-    virtual void        MacSetBackgroundBrush( const wxBrush &brush ) { m_macBackgroundBrush = brush ; }
+    virtual void        MacSetBackgroundBrush( const wxBrush &brush ) ;
     const wxBrush&      MacGetBackgroundBrush() const { return m_macBackgroundBrush ; }
     
     // returns the visible region of this control in window ie non-client coordinates

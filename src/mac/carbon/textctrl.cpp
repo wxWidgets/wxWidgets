@@ -204,6 +204,7 @@ public :
     void    AdjustCreationAttributes( const wxColour& background , bool visible ) ;
 
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
+    virtual void SetBackground( const wxBrush &brush) ;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) ;
     virtual void Copy() ;
     virtual void Cut() ;
@@ -312,6 +313,7 @@ public :
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
+    EVT_ERASE_BACKGROUND( wxTextCtrl::OnEraseBackground )
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
@@ -756,6 +758,14 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
     {
         LoadFile(event.GetFiles()[0]);
     }
+}
+
+void wxTextCtrl::OnEraseBackground(wxEraseEvent& event)
+{
+    // all erasing should be done by the real mac control implementation
+    // while this is true for MLTE under classic, the HITextView is somehow
+    // transparent but background erase is not working correctly, so intercept
+    // things while we can...
 }
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
@@ -1252,7 +1262,7 @@ void wxMacUnicodeTextControl::WriteText(const wxString& str)
         val.Remove( start , end - start ) ;
         val.insert( start , str ) ;
         SetStringValue( val ) ;
-        SetInsertionPoint( start + str.Length() ) ;
+        SetSelection( start + str.Length() , start + str.Length() ) ;
     #endif
 }
 
@@ -1463,6 +1473,15 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
     TXNSetBackground( m_txn , &tback);
 }
 
+void wxMacMLTEControl::SetBackground( const wxBrush &brush ) 
+{
+    // currently only solid background are supported
+    TXNBackground tback;
+    tback.bgType = kTXNBackgroundTypeRGB;
+    tback.bg.color = MAC_WXCOLORREF( brush.GetColour().GetPixel() );
+    TXNSetBackground( m_txn , &tback);
+}
+
 int wxMacMLTEControl::ConvertAttribute( const wxTextAttr& style , TXNTypeAttributes typeAttr[] )
 {
     Str255 fontName = "\pMonaco" ;
@@ -1492,7 +1511,6 @@ int wxMacMLTEControl::ConvertAttribute( const wxTextAttr& style , TXNTypeAttribu
         typeAttr[attrCounter+2].size = kTXNQDFontStyleAttributeSize ;
         typeAttr[attrCounter+2].data.dataValue = fontStyle ;
         attrCounter += 3 ;
-        
     }
     if ( style.HasTextColour() )
     {
@@ -1508,7 +1526,7 @@ int wxMacMLTEControl::ConvertAttribute( const wxTextAttr& style , TXNTypeAttribu
 void wxMacMLTEControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) 
 {
     EditHelper help(m_txn) ;
-    wxTextAttr style(wxNullColour,wxNullColour,font) ;
+    wxTextAttr style(foreground,wxNullColour,font) ;
     TXNTypeAttributes typeAttr[4] ;
     int attrCounter = ConvertAttribute( style , typeAttr ) ;
     if ( attrCounter > 0 )

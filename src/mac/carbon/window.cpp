@@ -889,11 +889,14 @@ bool wxWindowMac::SetBackgroundColour(const wxColour& col )
     }
     MacSetBackgroundBrush( brush ) ;
         
-    MacUpdateControlFont() ;
-    
     return true ;
 }
 
+void wxWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
+{
+    m_macBackgroundBrush = brush ;
+    m_peer->SetBackground( brush ) ;
+}
 
 bool wxWindowMac::MacCanFocus() const
 {

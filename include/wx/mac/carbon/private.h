@@ -407,6 +407,7 @@ public :
     virtual void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
     virtual void VisibilityChanged( bool shown ) ;
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
+    virtual void SetBackground( const wxBrush &brush ) ;
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers ) ;
     void SetActionProc( ControlActionUPP   actionProc ) ;
     void SetViewSize( SInt32 viewSize ) ;

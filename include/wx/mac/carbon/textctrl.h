@@ -155,6 +155,8 @@ public:
     void OnUpdatePaste(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
+    
+    void OnEraseBackground(wxEraseEvent& event) ;
 
     virtual bool MacCanFocus() const { return true ; }
     virtual bool MacSetupCursor( const wxPoint& pt ) ;

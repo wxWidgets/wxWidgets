@@ -1597,6 +1597,12 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
 	::SetControlFontStyle( m_controlRef , &fontStyle );
 }
 
+void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) ) 
+{
+    // TODO 
+    // setting up a color proc is not recommended anymore
+}
+
 void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
 {
     ::SetControl32BitMinimum( m_controlRef , minimum ) ;
