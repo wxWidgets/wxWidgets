@@ -478,6 +478,10 @@ strings.", "");
     %pythoncode { def __nonzero__(self): return self.Ok() };
 
 
+#ifdef __WXMSW__
+    long GetHDC();
+#endif
+
 
     %extend { // See drawlist.cpp for impplementaion of these...
         PyObject* _DrawPointList(PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes)
