@@ -471,17 +471,23 @@ processes.
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{int }{sync = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
 
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteCommand}}
+
 \func{long}{wxExecute}{\param{char **}{argv}, \param{int }{flags = wxEXEC\_ASYNC}, \param{wxProcess *}{callback = NULL}}
+
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteArgs}}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
-\perlnote{In wxPerl this function only takes the {\tt command} argument,
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdout} and it
+only takes the {\tt command} argument,
 and returns a 2-element list {\tt ( status, output )}, where {\tt output} is
 an array reference.}
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
 
-\perlnote{In wxPerl this function only takes the {\tt command} argument,
+\perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdoutStderr} 
+and it only takes the {\tt command} argument,
 and returns a 3-element list {\tt ( status, output, errors )}, where
 {\tt output} and {\tt errors} are array references.}
 
