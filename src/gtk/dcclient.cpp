@@ -126,6 +126,15 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     GtkWidget *widget = window->m_wxwindow;
 
+    // some controls don't have m_wxwindow - like wxStaticBox, but the user
+    // code should still be able to create wxClientDCs for them, so we will
+    // use the parent window here then
+    if ( !widget )
+    {
+        window = window->GetParent();
+        widget = window->m_wxwindow;
+    }
+
     wxASSERT_MSG( widget, wxT("DC needs a widget") );
 
     GtkPizza *pizza = GTK_PIZZA( widget );
@@ -140,10 +149,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
          return;
     }
 
-    if (window->m_wxwindow)
-        m_cmap = gtk_widget_get_colormap( window->m_wxwindow );
-    else
-        m_cmap = gtk_widget_get_colormap( window->m_widget );
+    m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
 
     SetUpDC();
 
