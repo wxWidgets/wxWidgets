@@ -5,7 +5,7 @@
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=core - Win32 DLL Release
+CFG=core - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -14,26 +14,26 @@ CFG=core - Win32 DLL Release
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wx_core.mak" CFG="core - Win32 DLL Release"
+!MESSAGE NMAKE /f "wx_core.mak" CFG="core - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "core - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Universal Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "core - Win32 DLL Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "core - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "core - Win32 DLL Universal Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Universal Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Universal Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Universal Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Unicode Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Unicode Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 DLL Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "core - Win32 Universal Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Universal Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Universal Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Universal Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Unicode Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Unicode Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "core - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -43,339 +43,30 @@ CFG=core - Win32 DLL Release
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswd\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswd\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25d_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25d_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_msw\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_msw\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswud\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswud\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25ud_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25ud_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswu\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswu\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25u_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25u_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivd\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivd\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25d_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25d_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswuniv\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswuniv\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivud\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivud\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25ud_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25ud_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_lib"
-# PROP BASE Intermediate_Dir "vc_mswunivu\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_lib"
-# PROP Intermediate_Dir "vc_mswunivu\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_BASE=0 /c
-# ADD BASE RSC /l 0x405
-# ADD RSC /l 0x405
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25u_core.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25u_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswddll\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswddll\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25d_core.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25d_core.lib" /debug
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswdll\core"
+# PROP BASE Intermediate_Dir "vc_mswunivudll\core"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswdll\core"
+# PROP Intermediate_Dir "vc_mswunivudll\core"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25_core.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswuddll\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswuddll\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25ud_core.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25ud_core.lib" /debug
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswudll\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswudll\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25u_core.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25u_core.lib"
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivddll\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivddll\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25d_core.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25d_core.lib" /debug
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivdll\core"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivdll\core"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25_core.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25_core.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25u_core.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25u_core.lib"
 
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
@@ -402,51 +93,360 @@ LINK32=link.exe
 # ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25ud_core.lib" /debug
 # ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25ud_core.lib" /debug
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "..\..\lib\vc_dll"
-# PROP BASE Intermediate_Dir "vc_mswunivudll\core"
+# PROP BASE Intermediate_Dir "vc_mswunivdll\core"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "..\..\lib\vc_dll"
-# PROP Intermediate_Dir "vc_mswunivudll\core"
+# PROP Intermediate_Dir "vc_mswunivdll\core"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswuniv" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\include" /i "..\..\lib\vc_dll\mswuniv" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25u_core.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25u_core.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25_core.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Intermediate_Dir "vc_mswunivddll\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Intermediate_Dir "vc_mswunivddll\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswunivd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25d_core.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmswuniv251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmswuniv25d_core.lib" /debug
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Intermediate_Dir "vc_mswudll\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Intermediate_Dir "vc_mswudll\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251u_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswu" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25u_core.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25u.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251u_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25u_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Intermediate_Dir "vc_mswuddll\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Intermediate_Dir "vc_mswuddll\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\include" /i "..\..\lib\vc_dll\mswud" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25ud_core.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25ud.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251ud_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25ud_core.lib" /debug
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Intermediate_Dir "vc_mswdll\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Intermediate_Dir "vc_mswdll\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\msw" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\..\lib\vc_dll\wxmsw251_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\..\include" /i "..\..\lib\vc_dll\msw" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25_core.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_dll"
+# PROP BASE Intermediate_Dir "vc_mswddll\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_dll"
+# PROP Intermediate_Dir "vc_mswddll\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswd" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_coredll.pch" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxmsw251d_core_vc_custom.pdb /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\include" /i "..\..\lib\vc_dll\mswd" /i "..\..\src\tiff" /i "..\..\src\jpeg" /i "..\..\src\png" /i "..\..\src\zlib" /i "..\..\src\regex" /i "..\..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25d_core.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib oleacc.lib ..\..\lib\vc_dll\wxbase25d.lib /nologo /dll /machine:i386 /out:"..\..\lib\vc_dll\wxmsw251d_core_vc_custom.dll" /libpath:"..\..\lib\vc_dll" /implib:"..\..\lib\vc_dll\wxmsw25d_core.lib" /debug
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswunivu\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswunivu\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25u_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25u_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswunivud\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswunivud\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25ud_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25ud_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswuniv\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswuniv\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswuniv" /W4 /Fd..\..\lib\vc_lib\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswunivd\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswunivd\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmswuniv25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25d_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmswuniv25d_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswu\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswu\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /W4 /Fd..\..\lib\vc_lib\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25u_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25u_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswud\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswud\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25ud_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25ud_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25ud_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_msw\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_msw\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MD /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\msw" /W4 /Fd..\..\lib\vc_lib\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25_core.lib"
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "..\..\lib\vc_lib"
+# PROP BASE Intermediate_Dir "vc_mswd\core"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\lib\vc_lib"
+# PROP Intermediate_Dir "vc_mswd\core"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /GR /GX /MDd /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswd" /W4 /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxmsw25d_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_corelib.pch" /I "..\..\src\tiff" /I "..\..\src\jpeg" /I "..\..\src\png" /I "..\..\src\zlib" /I "..\..\src\regex" /I "..\..\src\expat\lib" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_BASE=0 /c
+# ADD BASE RSC /l 0x405
+# ADD RSC /l 0x405
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25d_core.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxmsw25d_core.lib"
 
 !ENDIF
 
 # Begin Target
 
-# Name "core - Win32 Debug"
-# Name "core - Win32 Release"
-# Name "core - Win32 Unicode Debug"
-# Name "core - Win32 Unicode Release"
-# Name "core - Win32 Universal Debug"
-# Name "core - Win32 Universal Release"
-# Name "core - Win32 Universal Unicode Debug"
-# Name "core - Win32 Universal Unicode Release"
-# Name "core - Win32 DLL Debug"
-# Name "core - Win32 DLL Release"
-# Name "core - Win32 DLL Unicode Debug"
-# Name "core - Win32 DLL Unicode Release"
-# Name "core - Win32 DLL Universal Debug"
-# Name "core - Win32 DLL Universal Release"
-# Name "core - Win32 DLL Universal Unicode Debug"
 # Name "core - Win32 DLL Universal Unicode Release"
+# Name "core - Win32 DLL Universal Unicode Debug"
+# Name "core - Win32 DLL Universal Release"
+# Name "core - Win32 DLL Universal Debug"
+# Name "core - Win32 DLL Unicode Release"
+# Name "core - Win32 DLL Unicode Debug"
+# Name "core - Win32 DLL Release"
+# Name "core - Win32 DLL Debug"
+# Name "core - Win32 Universal Unicode Release"
+# Name "core - Win32 Universal Unicode Debug"
+# Name "core - Win32 Universal Release"
+# Name "core - Win32 Universal Debug"
+# Name "core - Win32 Unicode Release"
+# Name "core - Win32 Unicode Debug"
+# Name "core - Win32 Release"
+# Name "core - Win32 Debug"
 # Begin Group "Common Sources"
 
 # PROP Default_Filter ""
@@ -762,51 +762,7 @@ SOURCE=..\..\src\common\xpmdecod.cpp
 
 SOURCE=..\..\src\msw\accel.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -814,9 +770,53 @@ SOURCE=..\..\src\msw\accel.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -825,51 +825,7 @@ SOURCE=..\..\src\msw\accel.cpp
 
 SOURCE=..\..\src\msw\ole\access.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -877,9 +833,53 @@ SOURCE=..\..\src\msw\ole\access.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -900,51 +900,7 @@ SOURCE=..\..\src\msw\bitmap.cpp
 
 SOURCE=..\..\src\msw\bmpbuttn.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -952,9 +908,53 @@ SOURCE=..\..\src\msw\bmpbuttn.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -967,51 +967,7 @@ SOURCE=..\..\src\msw\brush.cpp
 
 SOURCE=..\..\src\msw\button.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1019,9 +975,53 @@ SOURCE=..\..\src\msw\button.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1034,51 +1034,7 @@ SOURCE=..\..\src\msw\caret.cpp
 
 SOURCE=..\..\src\msw\checkbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1086,9 +1042,53 @@ SOURCE=..\..\src\msw\checkbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1097,51 +1097,7 @@ SOURCE=..\..\src\msw\checkbox.cpp
 
 SOURCE=..\..\src\msw\checklst.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1149,9 +1105,53 @@ SOURCE=..\..\src\msw\checklst.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1160,51 +1160,7 @@ SOURCE=..\..\src\msw\checklst.cpp
 
 SOURCE=..\..\src\msw\choice.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1212,9 +1168,53 @@ SOURCE=..\..\src\msw\choice.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1227,51 +1227,7 @@ SOURCE=..\..\src\msw\clipbrd.cpp
 
 SOURCE=..\..\src\msw\colordlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1279,9 +1235,53 @@ SOURCE=..\..\src\msw\colordlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1294,51 +1294,7 @@ SOURCE=..\..\src\msw\colour.cpp
 
 SOURCE=..\..\src\msw\combobox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1346,9 +1302,53 @@ SOURCE=..\..\src\msw\combobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1357,51 +1357,7 @@ SOURCE=..\..\src\msw\combobox.cpp
 
 SOURCE=..\..\src\msw\control.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1409,9 +1365,53 @@ SOURCE=..\..\src\msw\control.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1452,51 +1452,7 @@ SOURCE=..\..\src\msw\dcscreen.cpp
 
 SOURCE=..\..\src\msw\dialog.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1504,9 +1460,53 @@ SOURCE=..\..\src\msw\dialog.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1531,51 +1531,7 @@ SOURCE=..\..\src\msw\display.cpp
 
 SOURCE=..\..\src\msw\dragimag.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1583,9 +1539,53 @@ SOURCE=..\..\src\msw\dragimag.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1616,51 +1616,7 @@ SOURCE=..\..\src\msw\evtloop.cpp
 
 SOURCE=..\..\src\msw\fdrepdlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1668,9 +1624,53 @@ SOURCE=..\..\src\msw\fdrepdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1679,51 +1679,7 @@ SOURCE=..\..\src\msw\fdrepdlg.cpp
 
 SOURCE=..\..\src\msw\filedlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1731,9 +1687,53 @@ SOURCE=..\..\src\msw\filedlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1746,51 +1746,7 @@ SOURCE=..\..\src\msw\font.cpp
 
 SOURCE=..\..\src\msw\fontdlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1798,9 +1754,53 @@ SOURCE=..\..\src\msw\fontdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1817,51 +1817,7 @@ SOURCE=..\..\src\msw\fontutil.cpp
 
 SOURCE=..\..\src\msw\frame.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1869,9 +1825,53 @@ SOURCE=..\..\src\msw\frame.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1880,51 +1880,7 @@ SOURCE=..\..\src\msw\frame.cpp
 
 SOURCE=..\..\src\msw\gauge95.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -1932,9 +1888,53 @@ SOURCE=..\..\src\msw\gauge95.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -1968,51 +1968,7 @@ SOURCE=..\..\src\msw\icon.cpp
 
 SOURCE=..\..\src\msw\imaglist.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2020,9 +1976,53 @@ SOURCE=..\..\src\msw\imaglist.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2031,51 +2031,7 @@ SOURCE=..\..\src\msw\imaglist.cpp
 
 SOURCE=..\..\src\msw\iniconf.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2083,9 +2039,53 @@ SOURCE=..\..\src\msw\iniconf.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2094,51 +2094,7 @@ SOURCE=..\..\src\msw\iniconf.cpp
 
 SOURCE=..\..\src\msw\listbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2146,9 +2102,53 @@ SOURCE=..\..\src\msw\listbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2157,51 +2157,7 @@ SOURCE=..\..\src\msw\listbox.cpp
 
 SOURCE=..\..\src\msw\listctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2209,9 +2165,53 @@ SOURCE=..\..\src\msw\listctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2224,51 +2224,7 @@ SOURCE=..\..\src\msw\main.cpp
 
 SOURCE=..\..\src\msw\mdi.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2276,9 +2232,53 @@ SOURCE=..\..\src\msw\mdi.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2287,51 +2287,7 @@ SOURCE=..\..\src\msw\mdi.cpp
 
 SOURCE=..\..\src\msw\menu.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2339,9 +2295,53 @@ SOURCE=..\..\src\msw\menu.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2350,51 +2350,7 @@ SOURCE=..\..\src\msw\menu.cpp
 
 SOURCE=..\..\src\msw\menuitem.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2402,9 +2358,53 @@ SOURCE=..\..\src\msw\menuitem.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2413,51 +2413,7 @@ SOURCE=..\..\src\msw\menuitem.cpp
 
 SOURCE=..\..\src\msw\metafile.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2465,9 +2421,53 @@ SOURCE=..\..\src\msw\metafile.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2480,51 +2480,7 @@ SOURCE=..\..\src\msw\minifram.cpp
 
 SOURCE=..\..\src\msw\msgdlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2532,9 +2488,53 @@ SOURCE=..\..\src\msw\msgdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2547,51 +2547,7 @@ SOURCE=..\..\src\msw\mslu.cpp
 
 SOURCE=..\..\src\msw\nativdlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2599,9 +2555,53 @@ SOURCE=..\..\src\msw\nativdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2610,51 +2610,7 @@ SOURCE=..\..\src\msw\nativdlg.cpp
 
 SOURCE=..\..\src\msw\notebook.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2662,9 +2618,53 @@ SOURCE=..\..\src\msw\notebook.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2677,51 +2677,7 @@ SOURCE=..\..\src\msw\ole\oleutils.cpp
 
 SOURCE=..\..\src\msw\ownerdrw.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2729,9 +2685,53 @@ SOURCE=..\..\src\msw\ownerdrw.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2760,51 +2760,7 @@ SOURCE=..\..\src\msw\printwin.cpp
 
 SOURCE=..\..\src\msw\radiobox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2812,9 +2768,53 @@ SOURCE=..\..\src\msw\radiobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2823,51 +2823,7 @@ SOURCE=..\..\src\msw\radiobox.cpp
 
 SOURCE=..\..\src\msw\radiobut.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2875,9 +2831,53 @@ SOURCE=..\..\src\msw\radiobut.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2894,51 +2894,7 @@ SOURCE=..\..\src\msw\renderer.cpp
 
 SOURCE=..\..\src\msw\scrolbar.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -2946,9 +2902,53 @@ SOURCE=..\..\src\msw\scrolbar.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -2961,51 +2961,7 @@ SOURCE=..\..\src\msw\settings.cpp
 
 SOURCE=..\..\src\msw\slider95.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3013,9 +2969,53 @@ SOURCE=..\..\src\msw\slider95.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3024,51 +3024,7 @@ SOURCE=..\..\src\msw\slider95.cpp
 
 SOURCE=..\..\src\msw\spinbutt.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3076,9 +3032,53 @@ SOURCE=..\..\src\msw\spinbutt.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3087,51 +3087,7 @@ SOURCE=..\..\src\msw\spinbutt.cpp
 
 SOURCE=..\..\src\msw\spinctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3139,9 +3095,53 @@ SOURCE=..\..\src\msw\spinctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3150,51 +3150,7 @@ SOURCE=..\..\src\msw\spinctrl.cpp
 
 SOURCE=..\..\src\msw\statbmp.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3202,9 +3158,53 @@ SOURCE=..\..\src\msw\statbmp.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3213,51 +3213,7 @@ SOURCE=..\..\src\msw\statbmp.cpp
 
 SOURCE=..\..\src\msw\statbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3265,9 +3221,53 @@ SOURCE=..\..\src\msw\statbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3276,51 +3276,7 @@ SOURCE=..\..\src\msw\statbox.cpp
 
 SOURCE=..\..\src\msw\statbr95.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3328,9 +3284,53 @@ SOURCE=..\..\src\msw\statbr95.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3339,51 +3339,7 @@ SOURCE=..\..\src\msw\statbr95.cpp
 
 SOURCE=..\..\src\msw\statline.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3391,9 +3347,53 @@ SOURCE=..\..\src\msw\statline.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3402,51 +3402,7 @@ SOURCE=..\..\src\msw\statline.cpp
 
 SOURCE=..\..\src\msw\stattext.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3454,9 +3410,53 @@ SOURCE=..\..\src\msw\stattext.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3465,51 +3465,7 @@ SOURCE=..\..\src\msw\stattext.cpp
 
 SOURCE=..\..\src\msw\tabctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3517,9 +3473,53 @@ SOURCE=..\..\src\msw\tabctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3528,51 +3528,7 @@ SOURCE=..\..\src\msw\tabctrl.cpp
 
 SOURCE=..\..\src\msw\tbar95.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3580,9 +3536,53 @@ SOURCE=..\..\src\msw\tbar95.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3591,51 +3591,7 @@ SOURCE=..\..\src\msw\tbar95.cpp
 
 SOURCE=..\..\src\msw\textctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3643,9 +3599,53 @@ SOURCE=..\..\src\msw\textctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3654,51 +3654,7 @@ SOURCE=..\..\src\msw\textctrl.cpp
 
 SOURCE=..\..\src\msw\tglbtn.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3706,9 +3662,53 @@ SOURCE=..\..\src\msw\tglbtn.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3729,51 +3729,7 @@ SOURCE=..\..\src\msw\toplevel.cpp
 
 SOURCE=..\..\src\msw\treectrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3781,9 +3737,53 @@ SOURCE=..\..\src\msw\treectrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -3816,39 +3816,19 @@ SOURCE=..\..\src\msw\window.cpp
 
 SOURCE=..\..\src\generic\accel.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3856,21 +3836,41 @@ SOURCE=..\..\src\generic\accel.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3887,39 +3887,19 @@ SOURCE=..\..\src\generic\choicdgg.cpp
 
 SOURCE=..\..\src\generic\colrdlgg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3927,21 +3907,41 @@ SOURCE=..\..\src\generic\colrdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -3958,39 +3958,19 @@ SOURCE=..\..\src\generic\dirctrlg.cpp
 
 SOURCE=..\..\src\generic\dirdlgg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -3998,21 +3978,41 @@ SOURCE=..\..\src\generic\dirdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4025,39 +4025,19 @@ SOURCE=..\..\src\generic\dragimgg.cpp
 
 SOURCE=..\..\src\generic\fdrepdlg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4065,21 +4045,41 @@ SOURCE=..\..\src\generic\fdrepdlg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4088,39 +4088,19 @@ SOURCE=..\..\src\generic\fdrepdlg.cpp
 
 SOURCE=..\..\src\generic\filedlgg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4128,21 +4108,41 @@ SOURCE=..\..\src\generic\filedlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4151,39 +4151,19 @@ SOURCE=..\..\src\generic\filedlgg.cpp
 
 SOURCE=..\..\src\generic\fontdlgg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4191,21 +4171,41 @@ SOURCE=..\..\src\generic\fontdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4214,39 +4214,19 @@ SOURCE=..\..\src\generic\fontdlgg.cpp
 
 SOURCE=..\..\src\generic\imaglist.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4254,21 +4234,41 @@ SOURCE=..\..\src\generic\imaglist.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4281,39 +4281,19 @@ SOURCE=..\..\src\generic\listbkg.cpp
 
 SOURCE=..\..\src\generic\listctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4321,21 +4301,41 @@ SOURCE=..\..\src\generic\listctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4348,39 +4348,19 @@ SOURCE=..\..\src\generic\logg.cpp
 
 SOURCE=..\..\src\generic\mdig.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4388,21 +4368,41 @@ SOURCE=..\..\src\generic\mdig.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4411,39 +4411,19 @@ SOURCE=..\..\src\generic\mdig.cpp
 
 SOURCE=..\..\src\generic\msgdlgg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4451,21 +4431,41 @@ SOURCE=..\..\src\generic\msgdlgg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4514,51 +4514,7 @@ SOURCE=..\..\src\generic\splitter.cpp
 
 SOURCE=..\..\src\generic\statusbr.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4566,9 +4522,53 @@ SOURCE=..\..\src\generic\statusbr.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
 
 !ENDIF
 
@@ -4577,39 +4577,19 @@ SOURCE=..\..\src\generic\statusbr.cpp
 
 SOURCE=..\..\src\generic\tabg.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4617,21 +4597,41 @@ SOURCE=..\..\src\generic\tabg.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4664,39 +4664,19 @@ SOURCE=..\..\src\generic\vscroll.cpp
 
 SOURCE=..\..\src\univ\bmpbuttn.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4704,21 +4684,41 @@ SOURCE=..\..\src\univ\bmpbuttn.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4727,39 +4727,19 @@ SOURCE=..\..\src\univ\bmpbuttn.cpp
 
 SOURCE=..\..\src\univ\button.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4767,21 +4747,41 @@ SOURCE=..\..\src\univ\button.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4790,39 +4790,19 @@ SOURCE=..\..\src\univ\button.cpp
 
 SOURCE=..\..\src\univ\checkbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4830,21 +4810,41 @@ SOURCE=..\..\src\univ\checkbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4853,39 +4853,19 @@ SOURCE=..\..\src\univ\checkbox.cpp
 
 SOURCE=..\..\src\univ\checklst.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4893,21 +4873,41 @@ SOURCE=..\..\src\univ\checklst.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4916,39 +4916,19 @@ SOURCE=..\..\src\univ\checklst.cpp
 
 SOURCE=..\..\src\univ\choice.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -4956,21 +4936,41 @@ SOURCE=..\..\src\univ\choice.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -4979,39 +4979,19 @@ SOURCE=..\..\src\univ\choice.cpp
 
 SOURCE=..\..\src\univ\colschem.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5019,21 +4999,41 @@ SOURCE=..\..\src\univ\colschem.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5042,39 +5042,19 @@ SOURCE=..\..\src\univ\colschem.cpp
 
 SOURCE=..\..\src\univ\combobox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5082,21 +5062,41 @@ SOURCE=..\..\src\univ\combobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5105,39 +5105,19 @@ SOURCE=..\..\src\univ\combobox.cpp
 
 SOURCE=..\..\src\univ\control.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5145,21 +5125,41 @@ SOURCE=..\..\src\univ\control.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5168,39 +5168,19 @@ SOURCE=..\..\src\univ\control.cpp
 
 SOURCE=..\..\src\univ\ctrlrend.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5208,21 +5188,41 @@ SOURCE=..\..\src\univ\ctrlrend.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5231,39 +5231,19 @@ SOURCE=..\..\src\univ\ctrlrend.cpp
 
 SOURCE=..\..\src\univ\dialog.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5271,21 +5251,41 @@ SOURCE=..\..\src\univ\dialog.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5294,39 +5294,19 @@ SOURCE=..\..\src\univ\dialog.cpp
 
 SOURCE=..\..\src\univ\framuniv.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5334,21 +5314,41 @@ SOURCE=..\..\src\univ\framuniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5357,39 +5357,19 @@ SOURCE=..\..\src\univ\framuniv.cpp
 
 SOURCE=..\..\src\univ\gauge.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5397,21 +5377,41 @@ SOURCE=..\..\src\univ\gauge.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5420,39 +5420,19 @@ SOURCE=..\..\src\univ\gauge.cpp
 
 SOURCE=..\..\src\univ\themes\gtk.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5460,21 +5440,41 @@ SOURCE=..\..\src\univ\themes\gtk.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5483,39 +5483,19 @@ SOURCE=..\..\src\univ\themes\gtk.cpp
 
 SOURCE=..\..\src\univ\inpcons.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5523,21 +5503,41 @@ SOURCE=..\..\src\univ\inpcons.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5546,39 +5546,19 @@ SOURCE=..\..\src\univ\inpcons.cpp
 
 SOURCE=..\..\src\univ\inphand.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5586,21 +5566,41 @@ SOURCE=..\..\src\univ\inphand.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5609,39 +5609,19 @@ SOURCE=..\..\src\univ\inphand.cpp
 
 SOURCE=..\..\src\univ\listbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5649,21 +5629,41 @@ SOURCE=..\..\src\univ\listbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5672,39 +5672,19 @@ SOURCE=..\..\src\univ\listbox.cpp
 
 SOURCE=..\..\src\univ\menu.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5712,21 +5692,41 @@ SOURCE=..\..\src\univ\menu.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5735,39 +5735,19 @@ SOURCE=..\..\src\univ\menu.cpp
 
 SOURCE=..\..\src\univ\themes\metal.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5775,21 +5755,41 @@ SOURCE=..\..\src\univ\themes\metal.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5798,39 +5798,19 @@ SOURCE=..\..\src\univ\themes\metal.cpp
 
 SOURCE=..\..\src\univ\notebook.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5838,21 +5818,41 @@ SOURCE=..\..\src\univ\notebook.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5861,39 +5861,19 @@ SOURCE=..\..\src\univ\notebook.cpp
 
 SOURCE=..\..\src\univ\radiobox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5901,21 +5881,41 @@ SOURCE=..\..\src\univ\radiobox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5924,39 +5924,19 @@ SOURCE=..\..\src\univ\radiobox.cpp
 
 SOURCE=..\..\src\univ\radiobut.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -5964,21 +5944,41 @@ SOURCE=..\..\src\univ\radiobut.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5987,39 +5987,19 @@ SOURCE=..\..\src\univ\radiobut.cpp
 
 SOURCE=..\..\src\univ\scrarrow.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6027,21 +6007,41 @@ SOURCE=..\..\src\univ\scrarrow.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6050,39 +6050,19 @@ SOURCE=..\..\src\univ\scrarrow.cpp
 
 SOURCE=..\..\src\univ\scrolbar.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6090,21 +6070,41 @@ SOURCE=..\..\src\univ\scrolbar.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6113,39 +6113,19 @@ SOURCE=..\..\src\univ\scrolbar.cpp
 
 SOURCE=..\..\src\univ\scrthumb.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6153,21 +6133,41 @@ SOURCE=..\..\src\univ\scrthumb.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6176,39 +6176,19 @@ SOURCE=..\..\src\univ\scrthumb.cpp
 
 SOURCE=..\..\src\univ\slider.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6216,21 +6196,41 @@ SOURCE=..\..\src\univ\slider.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6239,39 +6239,19 @@ SOURCE=..\..\src\univ\slider.cpp
 
 SOURCE=..\..\src\univ\spinbutt.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6279,21 +6259,41 @@ SOURCE=..\..\src\univ\spinbutt.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6302,39 +6302,19 @@ SOURCE=..\..\src\univ\spinbutt.cpp
 
 SOURCE=..\..\src\univ\statbmp.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6342,21 +6322,41 @@ SOURCE=..\..\src\univ\statbmp.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6365,39 +6365,19 @@ SOURCE=..\..\src\univ\statbmp.cpp
 
 SOURCE=..\..\src\univ\statbox.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6405,21 +6385,41 @@ SOURCE=..\..\src\univ\statbox.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6428,39 +6428,19 @@ SOURCE=..\..\src\univ\statbox.cpp
 
 SOURCE=..\..\src\univ\statline.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6468,21 +6448,41 @@ SOURCE=..\..\src\univ\statline.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6491,39 +6491,19 @@ SOURCE=..\..\src\univ\statline.cpp
 
 SOURCE=..\..\src\univ\stattext.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6531,21 +6511,41 @@ SOURCE=..\..\src\univ\stattext.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6554,39 +6554,19 @@ SOURCE=..\..\src\univ\stattext.cpp
 
 SOURCE=..\..\src\univ\statusbr.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6594,21 +6574,41 @@ SOURCE=..\..\src\univ\statusbr.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6617,39 +6617,19 @@ SOURCE=..\..\src\univ\statusbr.cpp
 
 SOURCE=..\..\src\univ\textctrl.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6657,21 +6637,41 @@ SOURCE=..\..\src\univ\textctrl.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6680,39 +6680,19 @@ SOURCE=..\..\src\univ\textctrl.cpp
 
 SOURCE=..\..\src\univ\theme.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6720,21 +6700,41 @@ SOURCE=..\..\src\univ\theme.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6743,39 +6743,19 @@ SOURCE=..\..\src\univ\theme.cpp
 
 SOURCE=..\..\src\univ\toolbar.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6783,21 +6763,41 @@ SOURCE=..\..\src\univ\toolbar.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6806,39 +6806,19 @@ SOURCE=..\..\src\univ\toolbar.cpp
 
 SOURCE=..\..\src\univ\topluniv.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6846,21 +6826,41 @@ SOURCE=..\..\src\univ\topluniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6869,39 +6869,19 @@ SOURCE=..\..\src\univ\topluniv.cpp
 
 SOURCE=..\..\src\univ\themes\win32.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6909,21 +6889,41 @@ SOURCE=..\..\src\univ\themes\win32.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6932,39 +6932,19 @@ SOURCE=..\..\src\univ\themes\win32.cpp
 
 SOURCE=..\..\src\univ\winuniv.cpp
 
-!IF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # PROP Exclude_From_Build 1
 
@@ -6972,21 +6952,41 @@ SOURCE=..\..\src\univ\winuniv.cpp
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # PROP Exclude_From_Build 1
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -6999,143 +6999,13 @@ SOURCE=..\..\src\univ\winuniv.cpp
 
 SOURCE=..\..\include\wx\msw\setup.h
 
-!IF  "$(CFG)" == "core - Win32 Debug"
+!IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
+"..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
 
 # End Custom Build
 
@@ -7149,13 +7019,143 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Custom Build
 
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
 InputPath=..\include\wx\msw\setup.h
 
-"..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
+"..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
 
 # End Custom Build
 
