@@ -136,6 +136,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
                     AddLine(str, wxTextFileType_Mac);
             chLast = ch;
 #if wxUSE_UNICODE
+            conv_mbBuf[0] = ch;
             if (conv.MB2WC(conv_wcBuf, conv_mbBuf, 2) == (size_t)-1)
                 conv_wcBuf[0] = ch;
             str = conv_wcBuf[0];
@@ -146,6 +147,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
           else {
             // add to the current line
 #if wxUSE_UNICODE
+            conv_mbBuf[0] = ch;
             if (conv.MB2WC(conv_wcBuf, conv_mbBuf, 2) == (size_t)-1)
                 conv_wcBuf[0] = ch;
             str += conv_wcBuf[0];
