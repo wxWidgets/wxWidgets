@@ -7,10 +7,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-   We don't put pragma implement in this file because it is already present in
-   src/common/image.cpp
-*/
+#ifdef __GNUG__
+#pragma implementation "imagjpeg.h"
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -23,7 +22,7 @@
 
 #if wxUSE_LIBJPEG
 
-#include "wx/image.h"
+#include "wx/imagjpeg.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"
@@ -62,10 +61,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
 
 //------------- JPEG Data Source Manager
 
+#define JPEG_IO_BUFFER_SIZE   2048
+
 typedef struct {
     struct jpeg_source_mgr pub;   /* public fields */
 
     JOCTET* buffer;               /* start of buffer */
+    wxInputStream *stream;
 } my_source_mgr;
 
 typedef my_source_mgr * my_src_ptr;
@@ -74,24 +76,46 @@ METHODDEF(void) my_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr WXUNUSED(cinfo) )
+METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
 {
+    my_src_ptr src = (my_src_ptr) cinfo->src;
+
+    src->pub.next_input_byte = src->buffer;
+    src->pub.bytes_in_buffer = src->stream->Read(src->buffer, JPEG_IO_BUFFER_SIZE).LastRead();
+
+    if (src->pub.bytes_in_buffer == 0) // check for end-of-stream
+    {
+        // Insert a fake EOI marker
+        src->buffer[0] = 0xFF;
+        src->buffer[1] = JPEG_EOI;
+        src->pub.bytes_in_buffer = 2;
+    }
     return TRUE;
 }
 
 METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
 {
-    my_src_ptr src = (my_src_ptr) cinfo->src;
+    if (num_bytes > 0)
+    {
+        my_src_ptr src = (my_src_ptr) cinfo->src;
 
-    src->pub.next_input_byte += (size_t) num_bytes;
-    src->pub.bytes_in_buffer -= (size_t) num_bytes;
+        while (num_bytes > (long)src->pub.bytes_in_buffer) 
+        {
+            num_bytes -= (long) src->pub.bytes_in_buffer;
+            src->pub.fill_input_buffer(cinfo);
+        }
+        src->pub.next_input_byte += (size_t) num_bytes;
+        src->pub.bytes_in_buffer -= (size_t) num_bytes;
+    }
 }
 
 METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
 {
     my_src_ptr src = (my_src_ptr) cinfo->src;
 
-    free (src->buffer);
+    if (src->pub.bytes_in_buffer > 0)
+        src->stream->SeekI(-src->pub.bytes_in_buffer, wxFromCurrent);
+    delete[] src->buffer;
 }
 
 void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
@@ -105,10 +129,10 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
         src = (my_src_ptr) cinfo->src;
     }
     src = (my_src_ptr) cinfo->src;
-    src->pub.bytes_in_buffer = infile.GetSize(); /* forces fill_input_buffer on first read */
-    src->buffer = (JOCTET *) malloc (infile.GetSize());
-    src->pub.next_input_byte = src->buffer; /* until buffer loaded */
-    infile.Read(src->buffer, infile.GetSize());
+    src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+    src->buffer = new JOCTET[JPEG_IO_BUFFER_SIZE];
+    src->pub.next_input_byte = NULL; /* until buffer loaded */
+    src->stream = &infile;
 
     src->pub.init_source = my_init_source;
     src->pub.fill_input_buffer = my_fill_input_buffer;
