@@ -18,6 +18,22 @@
 
 #include   "wxllist.h"
 
+enum
+{
+   WXLOWIN_MENU_LARGER = 12000,
+   WXLOWIN_MENU_SMALLER,
+   WXLOWIN_MENU_UNDERLINE,
+   WXLOWIN_MENU_BOLD,
+   WXLOWIN_MENU_ITALICS,
+   WXLOWIN_MENU_ROMAN,
+   WXLOWIN_MENU_TYPEWRITER,
+   WXLOWIN_MENU_SANSSERIF,
+   WXLOWIN_MENU_RCLICK,
+   WXLOWIN_MENU_LCLICK,
+   WXLOWIN_MENU_DBLCLICK
+   
+};
+
 class wxLayoutWindow : public wxScrolledWindow
 {
 public:
@@ -47,14 +63,16 @@ public:
    void OnPaint(wxPaintEvent &event);
    
    void OnLeftMouseClick(wxMouseEvent& event)
-      { OnMouse(WXMENU_LAYOUT_LCLICK, event); }
+      { OnMouse(WXLOWIN_MENU_LCLICK, event); }
    void OnRightMouseClick(wxMouseEvent& event)
-      { OnMouse(WXMENU_LAYOUT_RCLICK, event); }
+      { OnMouse(WXLOWIN_MENU_RCLICK, event); }
    void OnMouseDblClick(wxMouseEvent& event)
-      { OnMouse(WXMENU_LAYOUT_DBLCLICK, event); }
+      { OnMouse(WXLOWIN_MENU_DBLCLICK, event); }
 
    void OnChar(wxKeyEvent& event);
+   void OnMenu(wxCommandEvent& event);
 
+   void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
    /// gets called by either Update() or OnPaint()
    void DoPaint(wxDC &dc);
 
@@ -64,17 +82,17 @@ public:
 
    void UpdateScrollbars(void);
    void Print(void);
+   wxMenu * wxLayoutWindow::MakeFormatMenu(void);
 
    /// if the flag is true, we send events when user clicks on embedded objects
    inline void SetMouseTracking(bool doIt = true) { m_doSendEvents = doIt; }
 
-   virtual ~wxLayoutWindow() { }
-
+   virtual ~wxLayoutWindow() { if(m_PopupMenu) delete m_PopupMenu; }
+   
    // dirty flag access
    bool IsDirty() const { return m_llist.IsDirty(); }
    void ResetDirty()    { m_llist.ResetDirty();     }
 
-   
 protected:
    /// generic function for mouse events processing
    void OnMouse(int eventId, wxMouseEvent& event);
@@ -97,6 +115,10 @@ protected:
    /// do we have unsaved data?
    bool m_bDirty;
 
+   /// do we handle clicks of the right mouse button?
+   bool m_DoPopupMenu;
+   /// the menu
+   wxMenu * m_PopupMenu;
 private:
    DECLARE_EVENT_TABLE()
 };
