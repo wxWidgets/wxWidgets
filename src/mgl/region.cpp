@@ -78,14 +78,14 @@ wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData;
-    MGLRect rect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+    MGLRect rect(topLeft.x, topLeft.y, bottomRight.x+1, bottomRight.y+1);
     M_REGION = rect;
 }
 
 wxRegion::wxRegion(const wxRect& r)
 {
     m_refData = new wxRegionRefData;
-    MGLRect rect(r.GetLeft(), r.GetTop(), r.GetRight(), r.GetBottom());
+    MGLRect rect(r.GetLeft(), r.GetTop(), r.GetRight()+1, r.GetBottom()+1);
     M_REGION = rect;
 }
 
