@@ -561,17 +561,21 @@ void wxRuntimeDepersister::AddToPropertyCollectionAsObject(int objectID,
 
 struct wxCodeDepersister::wxCodeDepersisterInternal
 {
+#if wxUSE_UNICODE
+    map<int,wstring> m_objectNames ;
+#else
     map<int,string> m_objectNames ;
+#endif
 
     void SetObjectName(int objectID, const wxString &name )
     {
         assert(  m_objectNames.find(objectID) == m_objectNames.end()  ) ;
-        m_objectNames[objectID] = (const char *)name;
+        m_objectNames[objectID] = (const wxChar *)name;
     }
     wxString GetObjectName( int objectID )
     {
         if ( objectID == wxNullObjectID )
-            return "NULL" ;
+            return wxT("NULL") ;
 
         assert(  m_objectNames.find(objectID) != m_objectNames.end()  ) ;
         return wxString( m_objectNames[objectID].c_str() ) ;
@@ -592,8 +596,8 @@ wxCodeDepersister::~wxCodeDepersister()
 void wxCodeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo ,
                                        wxxVariantArray &WXUNUSED(metadata))
 {
-    wxString objectName = wxString::Format( "LocalObject_%d" , objectID ) ;
-    m_fp->WriteString( wxString::Format( "\t%s *%s = new %s;\n",
+    wxString objectName = wxString::Format( wxT("LocalObject_%d") , objectID ) ;
+    m_fp->WriteString( wxString::Format( wxT("\t%s *%s = new %s;\n"),
         classInfo->GetClassName(),
         objectName.c_str(),
         classInfo->GetClassName()) );
@@ -602,7 +606,7 @@ void wxCodeDepersister::AllocateObject(int objectID, wxClassInfo *classInfo ,
 
 void wxCodeDepersister::DestroyObject(int objectID, wxClassInfo *WXUNUSED(classInfo))
 {
-    m_fp->WriteString( wxString::Format( "\tdelete %s;\n",
+    m_fp->WriteString( wxString::Format( wxT("\tdelete %s;\n"),
         m_data->GetObjectName( objectID).c_str() ) );
 }
 
@@ -614,15 +618,15 @@ wxString wxCodeDepersister::ValueAsCode( const wxxVariant &param )
     {
         const wxCustomTypeInfo* cti = dynamic_cast<const wxCustomTypeInfo*>(type) ;
         wxASSERT_MSG( cti , wxT("Internal error, illegal wxCustomTypeInfo") ) ;
-        value.Printf( "%s(%s)",cti->GetTypeName().c_str(),param.GetAsString().c_str() );
+        value.Printf( wxT("%s(%s)"), cti->GetTypeName().c_str(),param.GetAsString().c_str() );
     }
     else if ( type->GetKind() == wxT_STRING )
     {
-        value.Printf( "\"%s\"",param.GetAsString().c_str() );
+        value.Printf( wxT("\"%s\""),param.GetAsString().c_str() );
     }
     else
     {
-        value.Printf( "%s", param.GetAsString().c_str() );
+        value.Printf( wxT("%s"), param.GetAsString().c_str() );
     }
     return value ;
 }
@@ -637,19 +641,19 @@ void wxCodeDepersister::CreateObject(int objectID,
                                      )
 {
     int i;
-    m_fp->WriteString( wxString::Format( "\t%s->Create(", m_data->GetObjectName(objectID).c_str() ) );
+    m_fp->WriteString( wxString::Format( wxT("\t%s->Create("), m_data->GetObjectName(objectID).c_str() ) );
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
-            m_fp->WriteString( wxString::Format( "%s", m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
+            m_fp->WriteString( wxString::Format( wxT("%s"), m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
         else
         {
-            m_fp->WriteString( wxString::Format( "%s", ValueAsCode(params[i]).c_str() ) );
+            m_fp->WriteString( wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
         }
         if (i < paramCount - 1)
-            m_fp->WriteString( ", ");
+            m_fp->WriteString( wxT(", "));
     }
-    m_fp->WriteString( ");\n");
+    m_fp->WriteString( wxT(");\n") );
 }
 
 void wxCodeDepersister::ConstructObject(int objectID,
@@ -661,8 +665,8 @@ void wxCodeDepersister::ConstructObject(int objectID,
                                      wxxVariantArray &WXUNUSED(metadata)
                                      )
 {
-    wxString objectName = wxString::Format( "LocalObject_%d" , objectID ) ;
-    m_fp->WriteString( wxString::Format( "\t%s *%s = new %s(",
+    wxString objectName = wxString::Format( wxT("LocalObject_%d") , objectID ) ;
+    m_fp->WriteString( wxString::Format( wxT("\t%s *%s = new %s("),
         classInfo->GetClassName(),
         objectName.c_str(),
         classInfo->GetClassName()) );
@@ -672,15 +676,15 @@ void wxCodeDepersister::ConstructObject(int objectID,
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
-            m_fp->WriteString( wxString::Format( "%s", m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
+            m_fp->WriteString( wxString::Format( wxT("%s"), m_data->GetObjectName( objectIDValues[i] ).c_str() ) );
         else
         {
-            m_fp->WriteString( wxString::Format( "%s", ValueAsCode(params[i]).c_str() ) );
+            m_fp->WriteString( wxString::Format( wxT("%s"), ValueAsCode(params[i]).c_str() ) );
         }
         if (i < paramCount - 1)
-            m_fp->WriteString( ", ");
+            m_fp->WriteString( wxT(", ") );
     }
-    m_fp->WriteString( ");\n");
+    m_fp->WriteString( wxT(");\n") );
 }
 
 void wxCodeDepersister::SetProperty(int objectID,
@@ -688,7 +692,7 @@ void wxCodeDepersister::SetProperty(int objectID,
                                     const wxPropertyInfo* propertyInfo,
                                     const wxxVariant &value)
 {
-    m_fp->WriteString( wxString::Format( "\t%s->%s(%s);\n",
+    m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
         m_data->GetObjectName(objectID).c_str(),
         propertyInfo->GetAccessor()->GetSetterName().c_str(),
         ValueAsCode(value).c_str()) );
@@ -700,12 +704,12 @@ void wxCodeDepersister::SetPropertyAsObject(int objectID,
                                             int valueObjectId)
 {
     if ( propertyInfo->GetTypeInfo()->GetKind() == wxT_OBJECT )
-        m_fp->WriteString( wxString::Format( "\t%s->%s(*%s);\n",
+        m_fp->WriteString( wxString::Format( wxT("\t%s->%s(*%s);\n"),
         m_data->GetObjectName(objectID).c_str(),
         propertyInfo->GetAccessor()->GetSetterName().c_str(),
         m_data->GetObjectName( valueObjectId).c_str() ) );
     else
-        m_fp->WriteString( wxString::Format( "\t%s->%s(%s);\n",
+        m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
         m_data->GetObjectName(objectID).c_str(),
         propertyInfo->GetAccessor()->GetSetterName().c_str(),
         m_data->GetObjectName( valueObjectId).c_str() ) );
@@ -716,7 +720,7 @@ void wxCodeDepersister::AddToPropertyCollection( int objectID ,
                                                 const wxPropertyInfo* propertyInfo ,
                                                 const wxxVariant &value)
 {
-    m_fp->WriteString( wxString::Format( "\t%s->%s(%s);\n",
+    m_fp->WriteString( wxString::Format( wxT("\t%s->%s(%s);\n"),
         m_data->GetObjectName(objectID).c_str(),
         propertyInfo->GetAccessor()->GetAdderName().c_str(),
         ValueAsCode(value).c_str()) );
@@ -744,7 +748,7 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
     int eventType = delegateInfo->GetEventType() ;
     wxString handlerName = handlerInfo->GetName() ;
 
-    m_fp->WriteString( wxString::Format(  "\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;" ,
+    m_fp->WriteString( wxString::Format(  wxT("\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;") ,
         ehsource.c_str() , ehsource.c_str() , eventType , ehsinkClass.c_str() , handlerName.c_str() , ehsink.c_str() ) );
 }
 

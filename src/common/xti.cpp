@@ -538,7 +538,11 @@ wxObject* wxxVariant::GetAsObject()
 
 struct wxDynamicObject::wxDynamicObjectInternal
 {
+#if wxUSE_UNICODE
+    map<wstring,wxxVariant> m_properties ;
+#else
     map<string,wxxVariant> m_properties ;
+#endif
 } ;
 
 // instantiates this object with an instance of its superclass
