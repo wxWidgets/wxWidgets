@@ -696,6 +696,7 @@ m_dflist.cpp	HTML
 m_pre.cpp	HTML
 m_tables.cpp	HTML
 m_meta.cpp	HTML
+m_style.cpp	HTML
 htmprint.cpp	HTML
 
 arrimpl.cpp	WXH	Base

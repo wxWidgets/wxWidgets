@@ -838,6 +838,10 @@ SOURCE=.\html\m_pre.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\html\m_style.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\html\m_tables.cpp
 # End Source File
 # Begin Source File
