@@ -82,7 +82,7 @@ class WXDLLEXPORT wxExpr
 
   wxExpr(wxExprType the_type, wxChar *word_or_string, bool allocate);
   wxExpr(const wxString& functor);      // Assume this is a new clause - pass functor
-  wxExpr(wxExprType the_type, const wxString& word_or_string = "");
+  wxExpr(wxExprType the_type, const wxString& word_or_string = wxT(""));
   wxExpr(long the_integer);
   wxExpr(double the_real);
   wxExpr(wxList *the_list);
@@ -246,7 +246,10 @@ public:
 
     // Compatibility
     inline bool ReadProlog(wxChar *filename) { return Read(wxString(filename)); }
-    inline bool ReadPrologFromString(char *buffer) { return ReadFromString(wxString(buffer)); }
+    inline bool ReadPrologFromString(char *buffer)
+    {
+        return ReadFromString(wxString(buffer, wxConvLibc));
+    }
     inline void WriteProlog(FILE* stream) { Write(stream); }
 
 private:

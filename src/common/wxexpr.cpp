@@ -608,7 +608,7 @@ void wxExpr::AddAttributeValueStringList(const wxString& attribute, wxList *stri
   wxNode *node = string_list->First();
   while (node)
   {
-    char *string = (char *)node->Data();
+    wxChar *string = (wxChar*)node->GetData();
     wxExpr *expr = new wxExpr(wxExprString, wxString(string));
     listExpr->Append(expr);
     node = node->Next();
@@ -920,7 +920,7 @@ wxExpr *wxExprDatabase::FindClause(long id)  // Find a term based on an integer 
     
     if (term->Type() == wxExprList)
     {
-      wxExpr *value = term->AttributeValue("id");
+      wxExpr *value = term->AttributeValue(wxT("id"));
       if (value->Type() == wxExprInteger && value->IntegerValue() == id)
         found = term;
     }
@@ -1196,7 +1196,7 @@ char *wxmake_exp2(char *str1, char *str2, char *str3)
 
 char *wxmake_word(char *str)
 {
-  wxExpr *x = new wxExpr(wxExprWord, str);
+  wxExpr *x = new wxExpr(wxExprWord, wxString(str, wxConvLibc).c_str());
   return (char *)x;
 }
 

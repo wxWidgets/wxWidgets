@@ -183,8 +183,10 @@ WXDLLEXPORT extern wxIcon wxResourceCreateIcon(const wxString& resource, wxResou
 WXDLLEXPORT extern wxMenuBar* wxResourceCreateMenuBar(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL, wxMenuBar *menuBar = (wxMenuBar *) NULL);
 WXDLLEXPORT extern wxMenu* wxResourceCreateMenu(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern bool wxResourceParseData(const wxString& resource, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLEXPORT extern bool wxResourceParseData(const char* resource, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern bool wxResourceParseFile(const wxString& filename, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern bool wxResourceParseString(char* s, wxResourceTable *table = (wxResourceTable *) NULL);
+WXDLLEXPORT extern bool wxResourceParseString(const wxString& s, wxResourceTable *table = (wxResourceTable *) NULL);
 WXDLLEXPORT extern void wxResourceClear(wxResourceTable *table = (wxResourceTable *) NULL);
 // Register XBM/XPM data
 WXDLLEXPORT extern bool wxResourceRegisterBitmapData(const wxString& name, char bits[], int width, int height, wxResourceTable *table = (wxResourceTable *) NULL);
