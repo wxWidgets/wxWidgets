@@ -1416,27 +1416,30 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 
     wxASSERT_MSG( m_cursor.Ok(),
         wxT("cursor must be valid after call to the base version"));
-
-    /*
     
-    TODO why do we have to use current coordinates ?
     
-    Point pt ;
-    wxWindowMac *mouseWin ;
-    GetMouse( &pt ) ;
-
-    // Change the cursor NOW if we're within the correct window
-
-    
-    if ( MacGetWindowFromPoint( wxPoint( pt.h , pt.v ) , &mouseWin ) )
+    wxWindowMac *mouseWin = 0 ;
     {
-        if ( mouseWin == this && !wxIsBusy() )
-        {
-            m_cursor.MacInstall() ;
-        }
+        WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;
+        CGrafPtr savePort ;
+        Boolean swapped = QDSwapPort( GetWindowPort( window ) , &savePort ) ;
+        
+        // TODO If we ever get a GetCurrentEvent.. replacement for the mouse
+        // position, use it...
+        
+        Point pt ;
+        GetMouse( &pt ) ;
+        ControlPartCode part ;
+        ControlRef control ;
+        control = wxMacFindControlUnderMouse( pt , window , &part ) ;
+        if ( control )
+            mouseWin = wxFindControlFromMacControl( control ) ;
+        
+        if ( swapped )
+            QDSwapPort( savePort , NULL ) ;
     }
-    */
-    if ( !wxIsBusy() )
+
+    if ( mouseWin == this && !wxIsBusy() )
     {
         m_cursor.MacInstall() ;
     }
