@@ -271,6 +271,7 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
                 // if w != 0 then the m_Wnd has 'floating' width - it adjust
                 // it's width according to parent container's width
                 // (w is percent of parent's width)
+        ~wxHtmlWidgetCell() {if (m_Wnd) m_Wnd -> Destroy(); }
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
         virtual void Layout(int w);
