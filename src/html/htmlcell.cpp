@@ -33,14 +33,29 @@
 // wxHtmlCell
 //-----------------------------------------------------------------------------
 
+wxHtmlCell::wxHtmlCell() : wxObject() 
+{
+    m_Next = NULL; 
+    m_Parent = NULL; 
+    m_Width = m_Height = m_Descent = 0; 
+    m_CanLiveOnPagebreak = TRUE;
+    m_Link = NULL;
+}
+
+wxHtmlCell::~wxHtmlCell() 
+{
+    if (m_Link) delete m_Link; 
+    if (m_Next) delete m_Next;
+}
+
 
 void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
                               bool WXUNUSED(left),
                               bool WXUNUSED(middle),
                               bool WXUNUSED(right))
 {
-    wxString lnk = GetLink(x, y);
-    if (lnk != wxEmptyString)
+    wxHtmlLinkInfo *lnk = GetLink(x, y);
+    if (lnk != NULL)
         ((wxHtmlWindow*)parent) -> OnLinkClicked(lnk);
         // note : this overcasting is legal because parent is *always* wxHtmlWindow
 }
@@ -49,7 +64,6 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
 {
-
     if ((!m_CanLiveOnPagebreak) && 
                 m_PosY < *pagebreak && m_PosY + m_Height > *pagebreak) {
         *pagebreak = m_PosY;
@@ -63,6 +77,13 @@ bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
     }
 }
 
+
+
+void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link) 
+{
+    if (m_Link) delete m_Link;
+    m_Link = new wxHtmlLinkInfo(link);
+}
 
 
 
@@ -344,7 +365,7 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
 
 
 
-wxString wxHtmlContainerCell::GetLink(int x, int y) const
+wxHtmlLinkInfo *wxHtmlContainerCell::GetLink(int x, int y) const
 {
     wxHtmlCell *c = m_Cells;
     int cx, cy, cw, ch;
@@ -356,7 +377,7 @@ wxString wxHtmlContainerCell::GetLink(int x, int y) const
             return c -> GetLink(x - cx, y - cy);
         c = c -> GetNext();
     }
-    return wxEmptyString;
+    return NULL;
 }
 
 

@@ -60,7 +60,7 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
         int radius;
     public:
         wxHtmlImageMapAreaCell( celltype t, wxString &coords, double pixel_scale = 1.0);
-        virtual wxString GetLink( int x = 0, int y = 0 ) const;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
 };
 
 
@@ -80,7 +80,7 @@ wxHtmlImageMapAreaCell::wxHtmlImageMapAreaCell( wxHtmlImageMapAreaCell::celltype
     coords.Add( (int)(pixel_scale * (double)wxAtoi( x.c_str())) );
 }
 
-wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
+wxHtmlLinkInfo *wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
 {
     switch (type) {
         case RECT:
@@ -181,7 +181,7 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
         wxHtmlImageMapAreaCell  *a = (wxHtmlImageMapAreaCell*)m_Next;
         return a->GetLink( x, y );
     }
-    return wxEmptyString;
+    return NULL;
 }
 
 
@@ -206,7 +206,7 @@ class wxHtmlImageMapCell : public wxHtmlCell
     protected:
         wxString m_Name;
     public:
-        virtual wxString GetLink( int x = 0, int y = 0 ) const;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
         virtual const wxHtmlCell *Find( int cond, const void *param ) const;
 };
 
@@ -216,7 +216,7 @@ wxHtmlImageMapCell::wxHtmlImageMapCell( wxString &name )
     m_Name = name ;
 }
 
-wxString wxHtmlImageMapCell::GetLink( int x, int y ) const
+wxHtmlLinkInfo *wxHtmlImageMapCell::GetLink( int x, int y ) const
 {
     wxHtmlImageMapAreaCell  *a = (wxHtmlImageMapAreaCell*)m_Next;
     if (a)
@@ -252,7 +252,7 @@ class wxHtmlImageCell : public wxHtmlCell
         wxHtmlImageCell(wxFSFile *input, int w = -1, int h = -1, int align = wxHTML_ALIGN_BOTTOM, wxString mapname = wxEmptyString);
         ~wxHtmlImageCell() {if (m_Image) delete m_Image; }
         void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
-        virtual wxString GetLink( int x = 0, int y = 0 ) const;
+        virtual wxHtmlLinkInfo *GetLink( int x = 0, int y = 0 ) const;
 };
 
 
@@ -310,7 +310,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
-wxString wxHtmlImageCell::GetLink( int x, int y ) const
+wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
 {
     if (m_MapName.IsEmpty())
         return wxHtmlCell::GetLink( x, y );
@@ -412,7 +412,9 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 }
                 if (cel != NULL && tag.HasParam("HREF")) {
                     wxString tmp = tag.GetParam("HREF");
-                    cel->SetLink( tmp );
+                    wxString target = wxEmptyString;
+                    if (tag.HasParam("TARGET")) target = tag.GetParam("TARGET");
+                    cel->SetLink( wxHtmlLinkInfo(tmp, target));
                 }
                 if (cel != NULL) m_WParser->GetContainer()->InsertCell( cel );
             }

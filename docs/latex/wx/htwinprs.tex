@@ -147,9 +147,10 @@ Returns TRUE if actual font is underlined, FALSE otherwise.
 
 \membersection{wxHtmlWinParser::GetLink}\label{wxhtmlwinparsergetlink}
 
-\constfunc{const wxString\&}{GetLink}{\void}
+\constfunc{const wxHtmlLinkInfo\&}{GetLink}{\void}
 
-Returns actual hypertext link. (This value is non-empty string
+Returns actual hypertext link. (This value has non-empty 
+\helpref{Href}{wxhtmllinkinfogethref}} string
 if the parser is between {\tt <A>} and {\tt </A>} tags,
 wxEmptyString otherwise.
 
@@ -229,7 +230,7 @@ Sets italic flag of actualfont. {\it x} is either TRUE of FALSE.
 
 \func{void}{SetFontSize}{\param{int }{s}}
 
-Sets actual font size (HTML size varies from -2 to +4)
+Sets actual font size (HTML size varies from 1 to 7)
 
 \membersection{wxHtmlWinParser::SetFontUnderlined}\label{wxhtmlwinparsersetfontunderlined}
 
@@ -245,9 +246,11 @@ Sets fonts. This method is identical to \helpref{wxHtmlWindow::SetFonts}{wxhtmlw
 
 \membersection{wxHtmlWinParser::SetLink}\label{wxhtmlwinparsersetlink}
 
-\func{void}{SetLink}{\param{const wxString\& }{link}}
+\func{void}{SetLink}{\param{const wxHtmlLinkInfo\& }{link}}
 
-Sets actual hypertext link. wxEmptyString means no link.
+Sets actual hypertext link. Empty link is represented
+by \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo} with {\it Href} equal 
+to wxEmptyString.
 
 \membersection{wxHtmlWinParser::SetLinkColor}\label{wxhtmlwinparsersetlinkcolor}
 

@@ -129,9 +129,10 @@ Returns height of the cell (m_Height member).
 
 \membersection{wxHtmlCell::GetLink}\label{wxhtmlcellgetlink}
 
-\constfunc{virtual wxString}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
+\constfunc{virtual wxHtmlLinkInfo*}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
 
-Returns hypertext link if associated with this cell or empty string otherwise.
+Returns hypertext link if associated with this cell or NULL otherwise.
+See \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}.
 (Note: this makes sense only for visible tags).
 
 \wxheading{Parameters}
@@ -216,10 +217,10 @@ button is pressed, FALSE otherwise}
 
 \membersection{wxHtmlCell::SetLink}\label{wxhtmlcellsetlink}
 
-\func{void}{SetLink}{\param{const wxString\& }{link}}
+\func{void}{SetLink}{\param{const wxHtmlLinkInfo\& }{link}}
 
 Sets the hypertext link asocciated with this cell. (Default value
-is wxEmptyString (no link))
+is \helpref{wxHtmlLinkInfo}{wxhtmllinkinfo}("", "") (no link))
 
 \membersection{wxHtmlCell::SetNext}\label{wxhtmlcellsetnext}
 

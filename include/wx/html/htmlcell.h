@@ -24,6 +24,8 @@
 #include "wx/html/htmldefs.h"
 #include "wx/window.h"
 
+
+class wxHtmlLinkInfo;
 class wxHtmlCell;
 class wxHtmlContainerCell;
 
@@ -38,8 +40,8 @@ class wxHtmlContainerCell;
 class WXDLLEXPORT wxHtmlCell : public wxObject
 {
     public:
-        wxHtmlCell() : wxObject() {m_Next = NULL; m_Parent = NULL; m_Width = m_Height = m_Descent = 0; m_CanLiveOnPagebreak = TRUE;}
-        virtual ~wxHtmlCell() {if (m_Next) delete m_Next;};
+        wxHtmlCell();
+        virtual ~wxHtmlCell();
 
         void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
         wxHtmlContainerCell *GetParent() const {return m_Parent;}
@@ -49,7 +51,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
         int GetWidth() const {return m_Width;}
         int GetHeight() const {return m_Height;}
         int GetDescent() const {return m_Descent;}
-        virtual wxString GetLink(int WXUNUSED(x) = 0,
+        virtual wxHtmlLinkInfo* GetLink(int WXUNUSED(x) = 0,
                                  int WXUNUSED(y) = 0) const
             { return m_Link; }
                 // returns the link associated with this cell. The position is position within
@@ -58,7 +60,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // members access methods
 
         virtual void SetPos(int x, int y) {m_PosX = x, m_PosY = y;}
-        void SetLink(const wxString& link) {m_Link = link;}
+        void SetLink(const wxHtmlLinkInfo& link);
         void SetNext(wxHtmlCell *cell) {m_Next = cell;}
                 // members writin methods
 
@@ -120,7 +122,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // m_Descent is used to position text&images..
         long m_PosX, m_PosY;
                 // position where the fragment is drawn
-        wxString m_Link;
+        wxHtmlLinkInfo *m_Link;
                 // destination address if this fragment is hypertext link, "" otherwise
         bool m_CanLiveOnPagebreak;
                 // true if this cell can be placed on pagebreak, false otherwise
@@ -222,7 +224,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
             // Layout()
         void SetBackgroundColour(const wxColour& clr) {m_UseBkColour = TRUE; m_BkColour = clr;}
         void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = TRUE; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
-        virtual wxString GetLink(int x = 0, int y = 0) const;
+        virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
         virtual const wxHtmlCell* Find(int condition, const void* param) const;
         virtual void OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right);
 
@@ -301,7 +303,34 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
 
 
 
-#endif
+//--------------------------------------------------------------------------------
+// wxHtmlLinkInfo
+//                  Internal data structure. It represents hypertext link
+//--------------------------------------------------------------------------------
+
+class wxHtmlLinkInfo : public wxObject
+{
+    public:
+        wxHtmlLinkInfo() : wxObject()
+                { m_Href = m_Target = wxEmptyString; }
+        wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString) : wxObject()
+                { m_Href = href; m_Target = target; }    
+        wxHtmlLinkInfo(const wxHtmlLinkInfo& l) 
+                { m_Href = l.m_Href, m_Target = l.m_Target; }
+        wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l) 
+                { m_Href = l.m_Href, m_Target = l.m_Target; return *this; }
+
+        wxString GetHref() const { return m_Href; }
+        wxString GetTarget() const { return m_Target; }
+        
+    private:
+        wxString m_Href, m_Target;
+};
+
+
+
+
+#endif // wxUSE_HTML
 
 #endif // _WX_HTMLCELL_H_
 

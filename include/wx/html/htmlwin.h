@@ -136,7 +136,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         static void AddFilter(wxHtmlFilter *filter);
                 // Adds input filter
 
-        virtual void OnLinkClicked(const wxString& link);
+        virtual void OnLinkClicked(wxHtmlLinkInfo *link);
                 // called when users clicked on hypertext link. Default behavior is to
                 // call LoadPage(loc)
 
@@ -200,7 +200,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
         bool m_tmpMouseMoved;
                 // a flag indicated if mouse moved
                 // (if TRUE we will try to change cursor in last call to OnIdle)
-        wxString m_tmpLastLink;
+        wxHtmlLinkInfo *m_tmpLastLink;
                 // contains last link name
         int m_tmpCanDrawLocks;
                 // if >0 contents of the window is not redrawn

@@ -51,7 +51,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         double GetPixelScale() {return m_PixelScale;}
         int GetCharHeight() const {return m_CharHeight;}
         int GetCharWidth() const {return m_CharWidth;}
-            // NOTE : these functions do _not_ return _actual_
+        // NOTE : these functions do _not_ return _actual_
         // height/width. They return h/w of default font
         // for this DC. If you want actual values, call
         // GetDC() -> GetChar...()
@@ -82,7 +82,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
             // container
 
         int GetFontSize() const {return m_FontSize;}
-        void SetFontSize(int s) {m_FontSize = s;}
+        void SetFontSize(int s);
         int GetFontBold() const {return m_FontBold;}
         void SetFontBold(int x) {m_FontBold = x;}
         int GetFontItalic() const {return m_FontItalic;}
@@ -98,12 +98,11 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         void SetLinkColor(const wxColour& clr) {m_LinkColor = clr;}
         const wxColour& GetActualColor() const {return m_ActualColor;}
         void SetActualColor(const wxColour& clr) {m_ActualColor = clr;}
-        const wxString& GetLink() const {return m_Link;}
-        void SetLink(const wxString& link) {m_Link = link; m_UseLink = link.Length() > 0;}
+        const wxHtmlLinkInfo& GetLink() const {return m_Link;}
+        void SetLink(const wxHtmlLinkInfo& link);
 
         virtual wxFont* CreateCurrentFont();
             // creates font depending on m_Font* members.
-            // (note : it calls wxHtmlWindow's CreateCurrentFont...)
 
     protected:
         virtual void AddText(const char *txt);
@@ -128,7 +127,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         wxColour m_LinkColor;
         wxColour m_ActualColor;
                 // basic font parameters.
-        wxString m_Link;
+        wxHtmlLinkInfo m_Link;
                 // actual hypertext link or empty string
         bool m_UseLink;
                 // TRUE if m_Link is not empty
@@ -141,7 +140,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
                 // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
                 // state of these flags (from left to right):
                 // [bold][italic][underlined][fixed_size]
-                // last index is font size : from 0 to 7 (remapped from html sizes -2 to +4)
+                // last index is font size : from 0 to 6 (remapped from html sizes 1 to 7)
                 // Note : this table covers all possible combinations of fonts, but not
                 // all of them are used, so many items in table are usually NULL.
         int m_FontsSizes[7];

@@ -59,15 +59,17 @@ TAG_HANDLER_BEGIN(A, "A")
         }
 
         if (tag.HasParam("HREF")) {
-            wxString oldlnk = m_WParser -> GetLink();
+            wxHtmlLinkInfo oldlnk = m_WParser -> GetLink();
             wxColour oldclr = m_WParser -> GetActualColor();
             int oldund = m_WParser -> GetFontUnderlined();
+            wxString name(tag.GetParam("HREF")), target;
 
+            if (tag.HasParam("TARGET")) target = tag.GetParam("TARGET");
             m_WParser -> SetActualColor(m_WParser -> GetLinkColor());
             m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(m_WParser -> GetLinkColor()));
             m_WParser -> SetFontUnderlined(TRUE);
             m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
-            m_WParser -> SetLink(tag.GetParam("HREF"));
+            m_WParser -> SetLink(wxHtmlLinkInfo(name, target));
 
             ParseInner(tag);
 
