@@ -752,6 +752,12 @@ PyObject *wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self){
         }
 
 
+wxLocale *new_wxLocale(int language,int flags){
+            if (language == -1)
+                return new wxLocale();
+            else
+                return new wxLocale(language, flags);
+        }
 
 #include "wx/wxPython/pydrawxxx.h"
 
@@ -1004,9 +1010,9 @@ static PyObject * GDIObject_swigregister(PyObject *self, PyObject *args) {
 }
 static PyObject *_wrap_new_Colour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    unsigned char arg1 = (unsigned char) 0 ;
-    unsigned char arg2 = (unsigned char) 0 ;
-    unsigned char arg3 = (unsigned char) 0 ;
+    byte arg1 = (byte) 0 ;
+    byte arg2 = (byte) 0 ;
+    byte arg3 = (byte) 0 ;
     wxColour *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -1017,15 +1023,15 @@ static PyObject *_wrap_new_Colour(PyObject *self, PyObject *args, PyObject *kwar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_Colour",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if (obj0) {
-        arg1 = (unsigned char) SWIG_AsUnsignedChar(obj0); 
+        arg1 = (byte) SWIG_AsUnsignedChar(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj1) {
-        arg2 = (unsigned char) SWIG_AsUnsignedChar(obj1); 
+        arg2 = (byte) SWIG_AsUnsignedChar(obj1); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj2) {
-        arg3 = (unsigned char) SWIG_AsUnsignedChar(obj2); 
+        arg3 = (byte) SWIG_AsUnsignedChar(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
@@ -1134,7 +1140,7 @@ static PyObject *_wrap_delete_Colour(PyObject *self, PyObject *args, PyObject *k
 static PyObject *_wrap_Colour_Red(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -1145,7 +1151,7 @@ static PyObject *_wrap_Colour_Red(PyObject *self, PyObject *args, PyObject *kwar
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->Red();
+        result = (byte)(arg1)->Red();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -1160,7 +1166,7 @@ static PyObject *_wrap_Colour_Red(PyObject *self, PyObject *args, PyObject *kwar
 static PyObject *_wrap_Colour_Green(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -1171,7 +1177,7 @@ static PyObject *_wrap_Colour_Green(PyObject *self, PyObject *args, PyObject *kw
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->Green();
+        result = (byte)(arg1)->Green();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -1186,7 +1192,7 @@ static PyObject *_wrap_Colour_Green(PyObject *self, PyObject *args, PyObject *kw
 static PyObject *_wrap_Colour_Blue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
-    unsigned char result;
+    byte result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -1197,7 +1203,7 @@ static PyObject *_wrap_Colour_Blue(PyObject *self, PyObject *args, PyObject *kwa
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (unsigned char)(arg1)->Blue();
+        result = (byte)(arg1)->Blue();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -1240,9 +1246,9 @@ static PyObject *_wrap_Colour_Ok(PyObject *self, PyObject *args, PyObject *kwarg
 static PyObject *_wrap_Colour_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
-    unsigned char arg2 ;
-    unsigned char arg3 ;
-    unsigned char arg4 ;
+    byte arg2 ;
+    byte arg3 ;
+    byte arg4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1254,11 +1260,11 @@ static PyObject *_wrap_Colour_Set(PyObject *self, PyObject *args, PyObject *kwar
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:Colour_Set",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxColour,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    arg2 = (unsigned char) SWIG_AsUnsignedChar(obj1); 
+    arg2 = (byte) SWIG_AsUnsignedChar(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg3 = (unsigned char) SWIG_AsUnsignedChar(obj2); 
+    arg3 = (byte) SWIG_AsUnsignedChar(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
-    arg4 = (unsigned char) SWIG_AsUnsignedChar(obj3); 
+    arg4 = (byte) SWIG_AsUnsignedChar(obj3); 
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9602,7 +9608,7 @@ static PyObject * LanguageInfo_swigregister(PyObject *self, PyObject *args) {
 }
 static PyObject *_wrap_new_Locale(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    int arg1 = (int) wxLANGUAGE_DEFAULT ;
+    int arg1 = (int) -1 ;
     int arg2 = (int) wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING ;
     wxLocale *result;
     PyObject * obj0 = 0 ;
@@ -9622,7 +9628,7 @@ static PyObject *_wrap_new_Locale(PyObject *self, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxLocale *)new wxLocale(arg1,arg2);
+        result = (wxLocale *)new_wxLocale(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

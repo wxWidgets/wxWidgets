@@ -18,29 +18,6 @@ class Button(_core.Control):
     A button is a control that contains a text string, and is one of the most
     common elements of a GUI.  It may be placed on a dialog box or panel, or
     indeed almost any other window.
-
-    Window Styles
-    -------------
-        ==============   ==========================================
-        wx.BU_LEFT       Left-justifies the label. WIN32 only.
-        wx.BU_TOP        Aligns the label to the top of the button.
-                         WIN32 only.
-        wx.BU_RIGHT      Right-justifies the bitmap label. WIN32 only.
-        wx.BU_BOTTOM     Aligns the label to the bottom of the button.
-                         WIN32 only.
-        wx.BU_EXACTFIT   Creates the button as small as possible
-                         instead of making it of the standard size
-                         (which is the default behaviour.)
-        ==============   ==========================================
-
-    Events
-    ------
-        ============     ==========================================
-        EVT_BUTTON       Sent when the button is clicked.
-        ============     ==========================================
-
-    :see: `wx.BitmapButton`
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -89,15 +66,15 @@ class Button(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.Button_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -134,15 +111,15 @@ def Button_GetClassDefaultAttributes(*args, **kwargs):
     """
     Button_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.Button_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -152,35 +129,6 @@ class BitmapButton(Button):
     single bitmap, and wxWidgets will draw all button states using this bitmap. If
     the application needs more control, additional bitmaps for the selected state,
     unpressed focused state, and greyed-out state may be supplied.
-
-    Window Styles
-    -------------
-        ==============  =============================================
-        wx.BU_AUTODRAW  If this is specified, the button will be drawn
-                        automatically using the label bitmap only,
-                        providing a 3D-look border. If this style is
-                        not specified, the button will be drawn
-                        without borders and using all provided
-                        bitmaps. WIN32 only.
-        wx.BU_LEFT      Left-justifies the label. WIN32 only.
-        wx.BU_TOP       Aligns the label to the top of the button. WIN32
-                        only.
-        wx.BU_RIGHT     Right-justifies the bitmap label. WIN32 only.
-        wx.BU_BOTTOM    Aligns the label to the bottom of the
-                        button. WIN32 only.
-        wx.BU_EXACTFIT  Creates the button as small as possible
-                        instead of making it of the standard size
-                        (which is the default behaviour.)
-        ==============  =============================================
-
-    Events
-    ------
-         ===========   ==================================
-         EVT_BUTTON    Sent when the button is clicked.
-         ===========   ==================================
-
-    :see: `wx.Button`, `wx.Bitmap`
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -320,31 +268,6 @@ class CheckBox(_core.Control):
     wx.CHK_3STATE style flag is set) it can have a third state, called the
     mixed or undetermined state. Often this is used as a "Does Not
     Apply" state.
-
-    Window Styles
-    -------------
-        =================================  ===============================
-        wx.CHK_2STATE                      Create a 2-state checkbox. 
-                                           This is the default.
-        wx.CHK_3STATE                      Create a 3-state checkbox.
-        wx.CHK_ALLOW_3RD_STATE_FOR_USER    By default a user can't set a
-                                           3-state checkbox to the
-                                           third state. It can only be
-                                           done from code. Using this
-                                           flags allows the user to set
-                                           the checkbox to the third
-                                           state by clicking.
-                                           wx.ALIGN_RIGHT Makes the
-                                           text appear on the left of
-                                           the checkbox.
-        =================================  ===============================
-
-    Events
-    ------
-        ===============================  ===============================
-        EVT_CHECKBOX                     Sent when checkbox is clicked.
-        ===============================  ===============================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -443,15 +366,15 @@ class CheckBox(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.CheckBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -479,15 +402,15 @@ def CheckBox_GetClassDefaultAttributes(*args, **kwargs):
     """
     CheckBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.CheckBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -498,13 +421,6 @@ class Choice(_core.ControlWithItems):
     A Choice control is used to select one of a list of strings.
     Unlike a `wx.ListBox`, only the selection is visible until the
     user pulls down the menu of choices.
-
-    Events
-    ------
-        ================    ==========================================
-        EVT_CHOICE          Sent when an item in the list is selected.
-        ================    ==========================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoice instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -527,8 +443,6 @@ class Choice(_core.ControlWithItems):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
-
-        Actually create the GUI Choice control for 2-phase creation
         """
         return _controls_.Choice_Create(*args, **kwargs)
 
@@ -561,15 +475,15 @@ class Choice(_core.ControlWithItems):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.Choice_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -597,15 +511,15 @@ def Choice_GetClassDefaultAttributes(*args, **kwargs):
     """
     Choice_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.Choice_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -613,9 +527,12 @@ def Choice_GetClassDefaultAttributes(*args, **kwargs):
 
 class ComboBox(Choice):
     """
-    A combobox is like a combination of an edit control and a listbox. It can be
-    displayed as static list with editable or read-only text field; or a drop-down
-    list with text field.
+    A combobox is like a combination of an edit control and a
+    listbox. It can be displayed as static list with editable or
+    read-only text field; or a drop-down list with text field.
+
+    A combobox permits a single selection only. Combobox items are
+    numbered from zero.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxComboBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -623,8 +540,8 @@ class ComboBox(Choice):
         """
         __init__(Window parent, int id, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
-             List choices=[], long style=0, Validator validator=DefaultValidator,
-             String name=ComboBoxNameStr) -> ComboBox
+            List choices=[], long style=0, Validator validator=DefaultValidator,
+            String name=ComboBoxNameStr) -> ComboBox
 
         Constructor, creates and shows a ComboBox control.
         """
@@ -640,8 +557,6 @@ class ComboBox(Choice):
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=[], long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
-
-        Actually create the GUI wxComboBox control for 2-phase creation
         """
         return _controls_.ComboBox_Create(*args, **kwargs)
 
@@ -770,15 +685,15 @@ class ComboBox(Choice):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ComboBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -806,15 +721,15 @@ def ComboBox_GetClassDefaultAttributes(*args, **kwargs):
     """
     ComboBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ComboBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -889,15 +804,15 @@ class Gauge(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.Gauge_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -921,15 +836,15 @@ def Gauge_GetClassDefaultAttributes(*args, **kwargs):
     """
     Gauge_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.Gauge_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -962,15 +877,15 @@ class StaticBox(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.StaticBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -996,15 +911,15 @@ def StaticBox_GetClassDefaultAttributes(*args, **kwargs):
     """
     StaticBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.StaticBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1046,15 +961,15 @@ class StaticLine(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.StaticLine_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1081,15 +996,15 @@ def StaticLine_GetClassDefaultAttributes(*args, **kwargs):
     """
     StaticLine_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.StaticLine_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1122,15 +1037,15 @@ class StaticText(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.StaticText_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1153,15 +1068,15 @@ def StaticText_GetClassDefaultAttributes(*args, **kwargs):
     """
     StaticText_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.StaticText_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1206,15 +1121,15 @@ class StaticBitmap(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.StaticBitmap_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1237,15 +1152,15 @@ def StaticBitmap_GetClassDefaultAttributes(*args, **kwargs):
     """
     StaticBitmap_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.StaticBitmap_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1280,7 +1195,7 @@ class ListBox(_core.ControlWithItems):
         """
         Insert(self, String item, int pos, PyObject clientData=None)
 
-        Insert an item into the control before the item at the pos index,
+        Insert an item into the control before the item at the ``pos`` index,
         optionally associating some data object with the item.
         """
         return _controls_.ListBox_Insert(*args, **kwargs)
@@ -1361,15 +1276,15 @@ class ListBox(_core.ControlWithItems):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ListBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1393,15 +1308,15 @@ def ListBox_GetClassDefaultAttributes(*args, **kwargs):
     """
     ListBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ListBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1724,11 +1639,7 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_IsMultiLine(*args, **kwargs)
 
     def GetSelection(*args, **kwargs):
-        """
-        GetSelection() -> (from, to)
-
-        If the return values from and to are the same, there is no selection.
-        """
+        """GetSelection() -> (from, to)"""
         return _controls_.TextCtrl_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
@@ -1808,13 +1719,7 @@ class TextCtrl(_core.Control):
         return _controls_.TextCtrl_ShowPosition(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(Point pt) -> (result, row, col)
-
-        Find the character at position given in pixels.
-        NB: pt is in device coords (not adjusted for the client area
-        origin nor scrolling)
-        """
+        """HitTest(Point pt) -> (result, row, col)"""
         return _controls_.TextCtrl_HitTest(*args, **kwargs)
 
     def Copy(*args, **kwargs):
@@ -1905,15 +1810,15 @@ class TextCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.TextCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1936,15 +1841,15 @@ def TextCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     TextCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.TextCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2044,18 +1949,6 @@ class ScrollBar(_core.Control):
             bool refresh=True)
 
         Sets the scrollbar properties of a built-in scrollbar.
-
-            orientation: Determines the scrollbar whose page size is to be
-                         set. May be wx.HORIZONTAL or wx.VERTICAL.
-
-            position:    The position of the scrollbar in scroll units.
-
-            thumbSize:   The size of the thumb, or visible portion of the
-                         scrollbar, in scroll units.
-
-            range:       The maximum position of the scrollbar.
-
-            refresh:     True to redraw the scrollbar, false otherwise.
         """
         return _controls_.ScrollBar_SetScrollbar(*args, **kwargs)
 
@@ -2063,15 +1956,15 @@ class ScrollBar(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ScrollBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2095,15 +1988,15 @@ def ScrollBar_GetClassDefaultAttributes(*args, **kwargs):
     """
     ScrollBar_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ScrollBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2172,15 +2065,15 @@ class SpinButton(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.SpinButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2205,15 +2098,15 @@ def SpinButton_GetClassDefaultAttributes(*args, **kwargs):
     """
     SpinButton_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.SpinButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2274,15 +2167,15 @@ class SpinCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.SpinCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2305,15 +2198,15 @@ def SpinCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     SpinCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.SpinCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2436,15 +2329,15 @@ class RadioBox(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.RadioBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2469,15 +2362,15 @@ def RadioBox_GetClassDefaultAttributes(*args, **kwargs):
     """
     RadioBox_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.RadioBox_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2518,15 +2411,15 @@ class RadioButton(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.RadioButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2549,15 +2442,15 @@ def RadioButton_GetClassDefaultAttributes(*args, **kwargs):
     """
     RadioButton_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.RadioButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2677,15 +2570,15 @@ class Slider(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.Slider_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2709,15 +2602,15 @@ def Slider_GetClassDefaultAttributes(*args, **kwargs):
     """
     Slider_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.Slider_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2769,15 +2662,15 @@ class ToggleButton(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ToggleButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2801,15 +2694,15 @@ def ToggleButton_GetClassDefaultAttributes(*args, **kwargs):
     """
     ToggleButton_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ToggleButton_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2902,15 +2795,15 @@ class BookCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.BookCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2928,15 +2821,15 @@ def BookCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     BookCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.BookCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -3022,11 +2915,7 @@ class Notebook(BookCtrl):
         return _controls_.Notebook_SetTabSize(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(Point pt) -> (tab, where)
-
-        Returns the tab which is hit, and flags indicating where using wx.NB_HITTEST_ flags.
-        """
+        """HitTest(Point pt) -> (tab, where)"""
         return _controls_.Notebook_HitTest(*args, **kwargs)
 
     def CalcSizeFromPage(*args, **kwargs):
@@ -3041,15 +2930,15 @@ class Notebook(BookCtrl):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -3072,15 +2961,15 @@ def Notebook_GetClassDefaultAttributes(*args, **kwargs):
     """
     Notebook_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.Notebook_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -3777,15 +3666,15 @@ class ToolBar(ToolBarBase):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ToolBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -3808,15 +3697,15 @@ def ToolBar_GetClassDefaultAttributes(*args, **kwargs):
     """
     ToolBar_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ToolBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -4391,10 +4280,10 @@ class ListCtrl(_core.Control):
         """
         SetWindowStyleFlag(self, long style)
 
-        Sets the style of the window. Please note that some styles cannot
-        be changed after the window creation and that Refresh() might
-        need to be called after changing the others for the change to
-        take place immediately.
+        Sets the style of the window. Please note that some styles cannot be
+        changed after the window creation and that Refresh() might need to be
+        called after changing the others for the change to take place
+        immediately.
         """
         return _controls_.ListCtrl_SetWindowStyleFlag(*args, **kwargs)
 
@@ -4479,12 +4368,7 @@ class ListCtrl(_core.Control):
         return _controls_.ListCtrl_FindItemAtPos(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(Point point) -> (item, where)
-
-        Determines which item (if any) is at the specified point,
-        giving details in the second return value (see wxLIST_HITTEST_... flags.)
-        """
+        """HitTest(Point point) -> (item, where)"""
         return _controls_.ListCtrl_HitTest(*args, **kwargs)
 
     def InsertItem(*args, **kwargs):
@@ -4609,15 +4493,15 @@ class ListCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -4640,15 +4524,15 @@ def ListCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     ListCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.ListCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -5280,15 +5164,7 @@ class TreeCtrl(_core.Control):
         return _controls_.TreeCtrl_SortChildren(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """
-        HitTest(Point point) -> (item, where)
-
-        Determine which item (if any) belongs the given point.  The
-        coordinates specified are relative to the client area of tree ctrl
-        and the where return value is set to a bitmask of wxTREE_HITTEST_xxx
-        constants.
-
-        """
+        """HitTest(Point point) -> (item, where)"""
         return _controls_.TreeCtrl_HitTest(*args, **kwargs)
 
     def GetBoundingRect(*args, **kwargs):
@@ -5299,15 +5175,15 @@ class TreeCtrl(_core.Control):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _controls_.TreeCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -5330,15 +5206,15 @@ def TreeCtrl_GetClassDefaultAttributes(*args, **kwargs):
     """
     TreeCtrl_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _controls_.TreeCtrl_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -5437,14 +5313,7 @@ class GenericDirCtrl(_core.Control):
         return _controls_.GenericDirCtrl_GetFilterListCtrl(*args, **kwargs)
 
     def FindChild(*args, **kwargs):
-        """
-        FindChild(wxTreeItemId parentId, wxString path) -> (item, done)
-
-        Find the child that matches the first part of 'path'.  E.g. if a child path is
-        "/usr" and 'path' is "/usr/include" then the child for /usr is returned.
-        If the path string has been used (we're at the leaf), done is set to True
-
-        """
+        """FindChild(wxTreeItemId parentId, wxString path) -> (item, done)"""
         return _controls_.GenericDirCtrl_FindChild(*args, **kwargs)
 
     def DoResize(*args, **kwargs):
@@ -5637,29 +5506,21 @@ EVT_DETAILED_HELP_RANGE = wx.PyEventBinder( wxEVT_DETAILED_HELP, 2)
 
 class HelpEvent(_core.CommandEvent):
     """
-    A help event is sent when the user has requested
-    context-sensitive help. This can either be caused by the
-    application requesting context-sensitive help mode via
-    wx.ContextHelp, or (on MS Windows) by the system generating a
-    WM_HELP message when the user pressed F1 or clicked on the query
-    button in a dialog caption.
+    A help event is sent when the user has requested context-sensitive
+    help. This can either be caused by the application requesting
+    context-sensitive help mode via wx.ContextHelp, or (on MS Windows) by
+    the system generating a WM_HELP message when the user pressed F1 or
+    clicked on the query button in a dialog caption.
 
-    A help event is sent to the window that the user clicked on, and
-    is propagated up the window hierarchy until the event is
-    processed or there are no more event handlers. The application
-    should call event.GetId to check the identity of the clicked-on
-    window, and then either show some suitable help or call
-    event.Skip if the identifier is unrecognised. Calling Skip is
-    important because it allows wxWindows to generate further events
-    for ancestors of the clicked-on window. Otherwise it would be
-    impossible to show help for container windows, since processing
-    would stop after the first window found.
-
-     Events
-        EVT_HELP            Sent when the user has requested context-
-                            sensitive help.
-        EVT_HELP_RANGE      Allows to catch EVT_HELP for a range of IDs
-
+    A help event is sent to the window that the user clicked on, and is
+    propagated up the window hierarchy until the event is processed or
+    there are no more event handlers. The application should call
+    event.GetId to check the identity of the clicked-on window, and then
+    either show some suitable help or call event.Skip if the identifier is
+    unrecognised. Calling Skip is important because it allows wxWindows to
+    generate further events for ancestors of the clicked-on
+    window. Otherwise it would be impossible to show help for container
+    windows, since processing would stop after the first window found.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHelpEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -5729,25 +5590,26 @@ _controls_.HelpEvent_swigregister(HelpEventPtr)
 
 class ContextHelp(_core.Object):
     """
-    This class changes the cursor to a query and puts the application
-    into a 'context-sensitive help mode'. When the user left-clicks
-    on a window within the specified window, a EVT_HELP event is sent
-    to that control, and the application may respond to it by popping
-    up some help.
+    This class changes the cursor to a query and puts the application into
+    a 'context-sensitive help mode'. When the user left-clicks on a window
+    within the specified window, a ``EVT_HELP`` event is sent to that
+    control, and the application may respond to it by popping up some
+    help.
 
     There are a couple of ways to invoke this behaviour implicitly:
 
-        * Use the wx.DIALOG_EX_CONTEXTHELP extended style for a
-          dialog (Windows only). This will put a question mark in the
-          titlebar, and Windows will put the application into
-          context-sensitive help mode automatically, with further
-          programming.
+        * Use the wx.DIALOG_EX_CONTEXTHELP extended style for a dialog
+          (Windows only). This will put a question mark in the titlebar,
+          and Windows will put the application into context-sensitive help
+          mode automatically, with further programming.
 
-        * Create a wx.ContextHelpButton, whose predefined behaviour
-          is to create a context help object. Normally you will write
-          your application so that this button is only added to a
-          dialog for non-Windows platforms (use
-          wx.DIALOG_EX_CONTEXTHELP on Windows).
+        * Create a `wx.ContextHelpButton`, whose predefined behaviour is
+          to create a context help object. Normally you will write your
+          application so that this button is only added to a dialog for
+          non-Windows platforms (use ``wx.DIALOG_EX_CONTEXTHELP`` on
+          Windows).
+
+    :see: `wx.ContextHelpButton`
 
     """
     def __repr__(self):
@@ -5756,8 +5618,8 @@ class ContextHelp(_core.Object):
         """
         __init__(self, Window window=None, bool doNow=True) -> ContextHelp
 
-        Constructs a context help object, calling BeginContextHelp if
-        doNow is true (the default).
+        Constructs a context help object, calling BeginContextHelp if doNow is
+        true (the default).
 
         If window is None, the top window is used.
         """
@@ -5775,13 +5637,13 @@ class ContextHelp(_core.Object):
         """
         BeginContextHelp(self, Window window=None) -> bool
 
-        Puts the application into context-sensitive help mode. window is
-        the window which will be used to catch events; if NULL, the top
-        window will be used.
+        Puts the application into context-sensitive help mode. window is the
+        window which will be used to catch events; if NULL, the top window
+        will be used.
 
         Returns true if the application was successfully put into
-        context-sensitive help mode. This function only returns when the
-        event loop has finished.
+        context-sensitive help mode. This function only returns when the event
+        loop has finished.
         """
         return _controls_.ContextHelp_BeginContextHelp(*args, **kwargs)
 
@@ -5804,16 +5666,17 @@ _controls_.ContextHelp_swigregister(ContextHelpPtr)
 
 class ContextHelpButton(BitmapButton):
     """
-    Instances of this class may be used to add a question mark button
-    that when pressed, puts the application into context-help
-    mode. It does this by creating a wx.ContextHelp object which
-    itself generates a EVT_HELP event when the user clicks on a
-    window.
+    Instances of this class may be used to add a question mark button that
+    when pressed, puts the application into context-help mode. It does
+    this by creating a wx.ContextHelp object which itself generates a
+    ``EVT_HELP`` event when the user clicks on a window.
 
-    On Windows, you may add a question-mark icon to a dialog by use
-    of the wx.DIALOG_EX_CONTEXTHELP extra style, but on other
-    platforms you will have to add a button explicitly, usually next
-    to OK, Cancel or similar buttons.
+    On Windows, you may add a question-mark icon to a dialog by use of the
+    ``wx.DIALOG_EX_CONTEXTHELP`` extra style, but on other platforms you
+    will have to add a button explicitly, usually next to OK, Cancel or
+    similar buttons.
+
+    :see: `wx.ContextHelp`, `wx.ContextHelpButton`
 
     """
     def __repr__(self):
@@ -5855,10 +5718,9 @@ class HelpProvider(object):
         """
         Set(HelpProvider helpProvider) -> HelpProvider
 
-        Sset the current, application-wide help provider. Returns the
-        previous one.  Unlike some other classes, the help provider is
-        not created on demand. This must be explicitly done by the
-        application.
+        Sset the current, application-wide help provider. Returns the previous
+        one.  Unlike some other classes, the help provider is not created on
+        demand. This must be explicitly done by the application.
         """
         return _controls_.HelpProvider_Set(*args, **kwargs)
 
@@ -5876,9 +5738,9 @@ class HelpProvider(object):
         """
         GetHelp(self, Window window) -> String
 
-        Gets the help string for this window. Its interpretation is
-        dependent on the help provider except that empty string always
-        means that no help is associated with the window.
+        Gets the help string for this window. Its interpretation is dependent
+        on the help provider except that empty string always means that no
+        help is associated with the window.
         """
         return _controls_.HelpProvider_GetHelp(*args, **kwargs)
 
@@ -5887,10 +5749,8 @@ class HelpProvider(object):
         ShowHelp(self, Window window) -> bool
 
         Shows help for the given window. Uses GetHelp internally if
-        applicable.
-
-        Returns true if it was done, or false if no help was available
-        for this window.
+        applicable. Returns True if it was done, or False if no help was
+        available for this window.
         """
         return _controls_.HelpProvider_ShowHelp(*args, **kwargs)
 
@@ -5907,8 +5767,8 @@ class HelpProvider(object):
         AddHelpById(self, int id, String text)
 
         This version associates the given text with all windows with this
-        id. May be used to set the same help string for all Cancel
-        buttons in the application, for example.
+        id. May be used to set the same help string for all Cancel buttons in
+        the application, for example.
         """
         return _controls_.HelpProvider_AddHelpById(*args, **kwargs)
 
@@ -5917,9 +5777,9 @@ class HelpProvider(object):
         RemoveHelp(self, Window window)
 
         Removes the association between the window pointer and the help
-        text. This is called by the wx.Window destructor. Without this,
-        the table of help strings will fill up and when window pointers
-        are reused, the wrong help string will be found.
+        text. This is called by the wx.Window destructor. Without this, the
+        table of help strings will fill up and when window pointers are
+        reused, the wrong help string will be found.
         """
         return _controls_.HelpProvider_RemoveHelp(*args, **kwargs)
 
@@ -5939,10 +5799,9 @@ def HelpProvider_Set(*args, **kwargs):
     """
     HelpProvider_Set(HelpProvider helpProvider) -> HelpProvider
 
-    Sset the current, application-wide help provider. Returns the
-    previous one.  Unlike some other classes, the help provider is
-    not created on demand. This must be explicitly done by the
-    application.
+    Sset the current, application-wide help provider. Returns the previous
+    one.  Unlike some other classes, the help provider is not created on
+    demand. This must be explicitly done by the application.
     """
     return _controls_.HelpProvider_Set(*args, **kwargs)
 
@@ -5956,9 +5815,9 @@ def HelpProvider_Get(*args, **kwargs):
 
 class SimpleHelpProvider(HelpProvider):
     """
-    wx.SimpleHelpProvider is an implementation of wx.HelpProvider
-    which supports only plain text help strings, and shows the string
-    associated with the control (if any) in a tooltip.
+    wx.SimpleHelpProvider is an implementation of `wx.HelpProvider` which
+    supports only plain text help strings, and shows the string associated
+    with the control (if any) in a tooltip.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSimpleHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -5966,9 +5825,9 @@ class SimpleHelpProvider(HelpProvider):
         """
         __init__(self) -> SimpleHelpProvider
 
-        wx.SimpleHelpProvider is an implementation of wx.HelpProvider
-        which supports only plain text help strings, and shows the string
-        associated with the control (if any) in a tooltip.
+        wx.SimpleHelpProvider is an implementation of `wx.HelpProvider` which
+        supports only plain text help strings, and shows the string associated
+        with the control (if any) in a tooltip.
         """
         newobj = _controls_.new_SimpleHelpProvider(*args, **kwargs)
         self.this = newobj.this

@@ -26981,7 +26981,7 @@ static PyObject *_wrap_Window_SetScrollbar(PyObject *self, PyObject *args, PyObj
     PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "orientation",(char *) "pos",(char *) "thumbvisible",(char *) "range",(char *) "refresh", NULL 
+        (char *) "self",(char *) "orientation",(char *) "position",(char *) "thumbSize",(char *) "range",(char *) "refresh", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO|O:Window_SetScrollbar",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) goto fail;
