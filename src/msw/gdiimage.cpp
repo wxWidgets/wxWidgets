@@ -39,9 +39,14 @@
 #include "wx/msw/dib.h"
 #include "wx/msw/bitmap.h"
 #include "wx/msw/gdiimage.h"
+#include "wx/bitmap.h"
+
+#if wxUSE_XPM_IN_MSW
+#   include "wx/xpmhand.h"
+#endif // wxUSE_XPM_IN_MSW
 
 #ifdef __WIN16__
-    #include "wx/msw/curico.h"
+#   include "wx/msw/curico.h"
 #endif // __WIN16__
 
 // ----------------------------------------------------------------------------
@@ -296,10 +301,12 @@ void wxGDIImage::InitStandardHandlers()
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
 
-    // Not added by default: include xpmhand.h in your app
-    // and call these in your wxApp::OnInit.
-    //  AddHandler(new wxXPMFileHandler);
-    //  AddHandler(new wxXPMDataHandler);
+    // GRG: Add these handlers by default if XPM support is enabled
+
+#if wxUSE_XPM_IN_MSW
+    AddHandler(new wxXPMFileHandler);
+    AddHandler(new wxXPMDataHandler);
+#endif // wxUSE_XPM_IN_MSW
 
     AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);
