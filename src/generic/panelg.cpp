@@ -151,9 +151,9 @@ void wxPanel::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxPanel::OnSize(wxSizeEvent& event)
 {
-#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
+#if wxUSE_CONSTRAINTS
 #if defined(__WXPM__)
     else
     {

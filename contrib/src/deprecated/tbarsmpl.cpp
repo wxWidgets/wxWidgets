@@ -398,10 +398,8 @@ void wxToolBarSimple::OnPaint (wxPaintEvent& WXUNUSED(event))
 
 void wxToolBarSimple::OnSize (wxSizeEvent& WXUNUSED(event))
 {
-#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
-#endif
 
     AdjustScrollbars();
 }

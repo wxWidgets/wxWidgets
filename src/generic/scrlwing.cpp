@@ -1243,10 +1243,8 @@ void wxGenericScrolledWindow::DoSetVirtualSize(int x, int y)
     wxPanel::DoSetVirtualSize( x, y );
     AdjustScrollbars();
 
-#if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
         Layout();
-#endif
 }
 
 void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
