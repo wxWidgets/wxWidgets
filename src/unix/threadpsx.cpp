@@ -743,8 +743,12 @@ void wxThreadInternal::Wait()
         wxMutexGuiLeave();
 
     bool isDetached = m_isDetached;
-    long id = (long)GetId();
-    wxLogTrace(TRACE_THREADS, _T("Starting to wait for thread %ld to exit."),
+#ifdef __VMS
+   long long id = (long long)GetId();
+#else
+   long id = (long)GetId();
+#endif
+   wxLogTrace(TRACE_THREADS, _T("Starting to wait for thread %ld to exit."),
                id);
 
     // wait until the thread terminates (we're blocking in _another_ thread,
@@ -1105,9 +1109,15 @@ unsigned int wxThread::GetPriority() const
     return m_internal->GetPriority();
 }
 
+#ifdef __VMS
+unsigned long long wxThread::GetId() const
+{
+    return (unsigned long long)m_internal->GetId();
+#else
 unsigned long wxThread::GetId() const
 {
     return (unsigned long)m_internal->GetId();
+#endif
 }
 
 // -----------------------------------------------------------------------------

@@ -368,8 +368,12 @@ public:
 
     // Get the thread ID - a platform dependent number which uniquely
     // identifies a thread inside a process
-    unsigned long GetId() const;
-
+#ifdef __VMS
+   unsigned long long GetId() const;
+#else
+   unsigned long GetId() const;
+#endif
+   
     // called when the thread exits - in the context of this thread
     //
     // NB: this function will not be called if the thread is Kill()ed
