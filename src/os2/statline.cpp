@@ -60,12 +60,26 @@ bool wxStaticLine::Create(
                         ,rsName
                        ))
         return FALSE;
-    return OS2CreateControl( _T("STATIC")
-                            ,_T("")
-                            ,rPos
-                            ,vSize
-                            ,lStyle
-                           );
+    if (!OS2CreateControl( "STATIC"
+                          ,SS_FGNDFRAME
+                          ,rPos
+                          ,rSize
+                          ,rsName
+                         ))
+        return FALSE;
+
+    wxColour                        vColour;
+
+    vColour.Set(wxString("GREY"));
+
+    LONG                            lColor = (LONG)vColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    return TRUE;
 } // end of wxStaticLine::Create
 
 WXDWORD wxStaticLine::OS2GetStyle(

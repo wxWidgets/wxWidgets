@@ -421,8 +421,18 @@ bool wxListBox::IsSelected(
 
     LONG                            lItem;
 
-    lItem = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)N, (MPARAM)0));
-    return (lItem != LIT_NONE);
+    if (GetWindowStyleFlag() & wxLB_EXTENDED)
+    {
+        if (N == 0)
+            lItem = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)LIT_FIRST, (MPARAM)0));
+        else
+            lItem = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)(N - 1), (MPARAM)0));
+    }
+    else
+    {
+        lItem = LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYSELECTION, (MPARAM)LIT_FIRST, (MPARAM)0));
+    }
+    return (lItem == (LONG)N && lItem != LIT_NONE);
 } // end of wxListBox::IsSelected
 
 wxClientData* wxListBox::DoGetItemClientObject(

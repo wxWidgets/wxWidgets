@@ -125,6 +125,7 @@ bool wxTextCtrl::Create(
     }
 
     m_windowStyle = lStyle;
+    m_bIsMLE = FALSE;
 
     long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
 
@@ -200,7 +201,7 @@ bool wxTextCtrl::Create(
     //
     // Set font, position, size and initial value
     //
-    wxFont*                          pTextFont = new wxFont( 10
+    wxFont*                          pTextFont = new wxFont( 8
                                                             ,wxMODERN
                                                             ,wxNORMAL
                                                             ,wxNORMAL
@@ -218,8 +219,8 @@ bool wxTextCtrl::Create(
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     SetXComp(vSwp.x);
     SetYComp(vSwp.y);
-    SetSize( vPos.x
-            ,vPos.y
+    SetSize( vPos.x - GetXComp()
+            ,vPos.y - GetYComp()
             ,rSize.x
             ,rSize.y
            );

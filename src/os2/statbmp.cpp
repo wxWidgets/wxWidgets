@@ -32,6 +32,34 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 
+static wxGDIImage* ConvertImage(
+  const wxGDIImage&                 rBitmap
+)
+{
+    bool                            bIsIcon = rBitmap.IsKindOf( CLASSINFO(wxIcon) );
+
+    if(!bIsIcon )
+    {
+        wxASSERT_MSG( wxDynamicCast(&rBitmap, wxBitmap),
+                      _T("not an icon and not a bitmap?") );
+
+        const wxBitmap&             rBmp = (const wxBitmap&)rBitmap;
+        wxMask*                     pMask = rBmp.GetMask();
+
+        if (pMask && pMask->GetMaskBitmap())
+        {
+            wxIcon*                 pIcon = new wxIcon;
+
+            pIcon->CopyFromBitmap(rBmp);
+            return pIcon;
+        }
+        return new wxBitmap(rBmp);
+    }
+
+    // copying a bitmap is a cheap operation
+    return new wxIcon( (const wxIcon&)rBitmap );
+} // end of ConvertImage
+
 // ---------------------------------------------------------------------------
 //  wxStaticBitmap
 // ---------------------------------------------------------------------------
@@ -46,14 +74,14 @@ bool wxStaticBitmap::Create(
 , const wxString&                   rName
 )
 {
+    ERRORID                         vError;
+    wxString                        sError;
+
     Init();
 
     SetName(rName);
     if (pParent)
         pParent->AddChild(this);
-
-    m_backgroundColour = pParent->GetBackgroundColour() ;
-    m_foregroundColour = pParent->GetForegroundColour() ;
 
     if (nId == -1)
         m_windowId = (int)NewControlId();
@@ -66,16 +94,21 @@ bool wxStaticBitmap::Create(
     int                             nY = rPos.y;
     int                             nWidth = rSize.x;
     int                             nHeight = rSize.y;
+    char                            zId[16];
 
     m_windowStyle = lStyle;
 
     m_bIsIcon = rBitmap.IsKindOf(CLASSINFO(wxIcon));
 
-    int                             nWinstyle = m_bIsIcon ? SS_ICON : SS_BITMAP;
+    //
+    // For now we only support an ICON
+    //
+    int                             nWinstyle = SS_ICON;
 
+    sprintf(zId, "#%d", rBitmap.GetId());
     m_hWnd = (WXHWND)::WinCreateWindow( pParent->GetHWND()
                                        ,WC_STATIC
-                                       ,rName.c_str()
+                                       ,zId
                                        ,nWinstyle | WS_VISIBLE
                                        ,0,0,0,0
                                        ,pParent->GetHWND()
@@ -84,17 +117,20 @@ bool wxStaticBitmap::Create(
                                        ,NULL
                                        ,NULL
                                       );
-
+    if (!m_hWnd)
+    {
+        vError = ::WinGetLastError(wxGetInstance());
+        sError = wxPMErrorToStr(vError);
+        return FALSE;
+    }
     wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
-
-    SetImage(rBitmap);
+    m_pImage = ConvertImage(rBitmap);
+    m_pImage->SetHandle((WXHWND)::WinSendMsg(m_hWnd, SM_QUERYHANDLE, (MPARAM)0, (MPARAM)0));
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
-    SetFont(*wxSMALL_FONT);
-    SetSize(nX, nY, nWidth, nHeight);
-    return(FALSE);
-}
+    return(TRUE);
+} // end of wxStaticBitmap::Create
 
 bool wxStaticBitmap::ImageIsOk() const
 {
@@ -103,14 +139,17 @@ bool wxStaticBitmap::ImageIsOk() const
 
 void wxStaticBitmap::Free()
 {
-    delete m_pImage;
+    if (m_pImage)
+        delete m_pImage;
     m_pImage = NULL;
-}
+} // end of wxStaticBitmap::Free
 
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
-    // reuse the current size (as wxWindow does) instead of using some
+    //
+    // Reuse the current size (as wxWindow does) instead of using some
     // arbitrary default size (as wxControl, our immediate base class, does)
+    //
     return wxWindow::DoGetBestSize();
 }
 
@@ -118,54 +157,28 @@ void wxStaticBitmap::SetImage(
   const wxGDIImage&                 rBitmap
 )
 {
+    int                             nX = 0;
+    int                             nY = 0;
+    int                             nWidth = 0;
+    int                             nHeight = 0;
+
     Free();
-
-    m_bIsIcon = rBitmap.IsKindOf(CLASSINFO(wxIcon));
-    if (m_bIsIcon)
-        m_pImage = new wxIcon((const wxIcon&)rBitmap);
-    else
-        m_pImage = new wxBitmap((const wxBitmap &)rBitmap);
-
-    int                             nX;
-    int                             nY;
-    int                             nW;
-    int                             nH;
-
-    GetPosition(&nX, &nY);
-    GetSize(&nW, &nH);
-
     ::WinSendMsg( GetHwnd()
                  ,SM_SETHANDLE
-                 ,MPFROMHWND(m_pImage->GetHandle())
+                 ,MPFROMHWND(rBitmap.GetHandle())
                  ,NULL
                 );
-    if (ImageIsOk())
-    {
-        int                         nWidth = rBitmap.GetWidth();
-        int                         nHeight = rBitmap.GetHeight();
+    m_pImage = ConvertImage(rBitmap);
 
-        if (nWidth && nHeight)
-        {
-            nW = nWidth;
-            nW = nHeight;
-
-            ::WinSetWindowPos( GetHwnd()
-                              ,HWND_TOP
-                              ,nX
-                              ,nY
-                              ,nWidth
-                              ,nHeight
-                              ,SWP_SIZE | SWP_MOVE | SWP_SHOW
-                             );
-        }
-    }
+    GetPosition(&nX, &nY);
+    GetSize(&nWidth, &nHeight);
 
     RECTL                           vRect;
 
-    vRect.xLeft   = nW;
+    vRect.xLeft   = nX;
     vRect.yTop    = nY;
-    vRect.xRight  = nX + nW;
-    vRect.yBottom = nY + nH;
+    vRect.xRight  = nX + nWidth;
+    vRect.yBottom = nY + nHeight;
 
     ::WinInvalidateRect(GetHwndOf(GetParent()), &vRect, TRUE);
 }

@@ -1038,7 +1038,7 @@ void wxDC::DoDrawRectangle(
         if(m_brush.GetStyle() == wxTRANSPARENT)
             lControl = DRO_OUTLINE;
 
-        ::GpiSetColor(m_hPS, lColor);
+        ::GpiSetColor(m_hPS, lBorderColor);
         ::GpiBox( m_hPS       // handle to a presentation space
                  ,lControl   // draw the box outline ? or ?
                  ,&vPoint[1]  // address of the corner

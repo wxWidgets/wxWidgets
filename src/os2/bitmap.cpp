@@ -58,7 +58,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_pSelectedInto = NULL;
     m_nNumColors    = 0;
     m_pBitmapMask   = NULL;
-    m_hBitmap = (WXHBITMAP) NULL;
+    m_hBitmap       = (WXHBITMAP) NULL;
 } // end of wxBitmapRefData::wxBitmapRefData
 
 void wxBitmapRefData::Free()
@@ -303,6 +303,7 @@ wxBitmap::wxBitmap(
     LoadFile( nId
              ,(int)lType
             );
+    SetId(nId);
 } // end of wxBitmap::wxBitmap
 
 bool wxBitmap::Create(

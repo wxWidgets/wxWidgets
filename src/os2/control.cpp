@@ -168,6 +168,8 @@ bool wxControl::OS2CreateControl(
     // Controls use the same font and colours as their parent dialog by default
     //
     InheritAttributes();
+    SetXComp(0);
+    SetYComp(0);
     if (nW == 0 || nH == 0)
         SetBestSize(rSize);
     return TRUE;

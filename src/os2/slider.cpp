@@ -115,13 +115,58 @@ void wxSlider::AdjustSubControls(
                               ,(LONG)nYOffset
                               ,(LONG)nMaxLen
                               ,(LONG)nCy
-                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                              ,SWP_ZORDER | SWP_SHOW
                              );
         }
     }
-    //
-    // Now deal with a vertical slider -- OS/2 doesn't have vertical sliders
-    //
+    else
+    {
+        //
+        // Now deal with a vertical slider
+        //
+
+        if (m_lWindowStyle & winSL_LABELS )
+        {
+            int                     nMinLen = 0;
+            int                     nMaxLen = 0;
+
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            GetTextExtent(zBuf, &lMinLen, &nCyf, NULL, NULL, &this->GetFont());
+
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            GetTextExtent(zBuf, &lMaxLen, &nCyf, NULL, NULL, &this->GetFont());
+
+            if (m_hStaticValue)
+            {
+                int                 nNewWidth = (DAWUTL_MAX(nMinLen, nMaxLen));
+
+                ::WinSetWindowPos( (HWND)m_hStaticValue
+                                  ,HWND_TOP
+                                  ,(LONG)nXOffset
+                                  ,(LONG)nYOffset + nHeight + nCyf
+                                  ,(LONG)nNewWidth
+                                  ,(LONG)nCyf
+                                  ,SWP_SIZE | SWP_MOVE
+                                 );
+            }
+            ::WinSetWindowPos( (HWND)m_hStaticMax
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset + nHeight
+                              ,(LONG)nMaxLen
+                              ,(LONG)nCyf
+                              ,SWP_SIZE | SWP_MOVE
+                             );
+            ::WinSetWindowPos( (HWND)m_hStaticMin
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset - nCyf
+                              ,(LONG)nMinLen
+                              ,(LONG)nCyf
+                              ,SWP_SIZE | SWP_MOVE
+                             );
+        }
+    }
 } // end of wxSlider::AdjustSubControls
 
 void wxSlider::ClearSel()
@@ -239,9 +284,9 @@ bool wxSlider::Create(
 
     vSlData.cbSize = sizeof(SLDCDATA);
     if (m_windowStyle & wxSL_VERTICAL)
-        lMsStyle = SLS_VERTICAL | WS_VISIBLE | WS_TABSTOP;
+        lMsStyle = SLS_VERTICAL | SLS_HOMEBOTTOM | WS_VISIBLE | WS_TABSTOP;
     else
-        lMsStyle = SLS_HORIZONTAL | WS_VISIBLE | WS_TABSTOP;
+        lMsStyle = SLS_HORIZONTAL | SLS_HOMELEFT| WS_VISIBLE | WS_TABSTOP;
 
     if (m_windowStyle & wxCLIP_SIBLINGS)
         lMsStyle |= WS_CLIPSIBLINGS;
@@ -264,6 +309,7 @@ bool wxSlider::Create(
         lMsStyle |= SLS_PRIMARYSCALE1 | SLS_PRIMARYSCALE2;
     else
         lMsStyle |= SLS_PRIMARYSCALE2;
+    lMsStyle |= SLS_RIBBONSTRIP;
 
     m_nPageSize = ((nMaxValue - nMinValue)/10);
     vSlData.usScale1Increments = m_nPageSize;
@@ -288,7 +334,7 @@ bool wxSlider::Create(
     //
     ::WinSendMsg( hScrollBar
                  ,SLM_SETTICKSIZE
-                 ,MPFROM2SHORT(SMA_SETALLTICKS, 6)
+                 ,MPFROM2SHORT(SMA_SETALLTICKS, (USHORT)12)
                  ,NULL
                 );
     //
@@ -304,12 +350,7 @@ bool wxSlider::Create(
     SubclassWin(GetHWND());
     ::WinSetWindowText((HWND)m_hWnd, "");
 
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
+    SetFont(*wxSMALL_FONT);
     if (m_windowStyle & wxSL_LABELS)
     {
         //
@@ -409,6 +450,13 @@ bool wxSlider::Create(
                      );
     ::WinSetPresParam( m_hWnd
                       ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    vColour.Set(wxString("BLUE"));
+    lColor = (LONG)vColour.GetPixel();
+    ::WinSetPresParam( m_hWnd
+                      ,PP_HILITEBACKGROUNDCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
@@ -515,7 +563,7 @@ void wxSlider::DoSetSize(
             ::WinSetWindowPos( (HWND)m_hStaticMin
                               ,HWND_TOP
                               ,(LONG)nXOffset
-                              ,(LONG)nYOffset - nCyf
+                              ,(LONG)nYOffset - (nCyf * 1.2)
                               ,(LONG)nMinLen
                               ,(LONG)nCy
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
@@ -547,7 +595,7 @@ void wxSlider::DoSetSize(
             ::WinSetWindowPos( (HWND)m_hStaticMax
                               ,HWND_TOP
                               ,(LONG)nXOffset
-                              ,(LONG)nYOffset - nCyf
+                              ,(LONG)nYOffset - (nCyf * 1.2)
                               ,(LONG)nMaxLen
                               ,(LONG)nCy
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
@@ -606,27 +654,24 @@ void wxSlider::DoSetSize(
                 // The height needs to be a bit bigger under Win95 if using native
                 // 3D effects.
                 //
-                nValueHeight = (int)(nValueHeight * 1.5);
                 ::WinSetWindowPos( (HWND)m_hStaticValue
                                   ,HWND_TOP
                                   ,(LONG)nXOffset
-                                  ,(LONG)nYOffset
+                                  ,(LONG)nYOffset + lHeight
                                   ,(LONG)nNewWidth
                                   ,(LONG)nValueHeight
                                   ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                                  );
-                nYOffset -= nValueHeight;
-                nUsedHeight += nValueHeight;
+                nUsedHeight += nCy;
             }
             ::WinSetWindowPos( (HWND)m_hStaticMin
                               ,HWND_TOP
                               ,(LONG)nXOffset
-                              ,(LONG)nYOffset
+                              ,(LONG)nYOffset + lHeight -lCyf
                               ,(LONG)nMinLen
                               ,(LONG)nCy
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                              );
-            nYOffset -= nCy;
             nUsedHeight += nCy;
 
             int                  nSliderLength = nHeight1 - (nUsedHeight + (2 * nCy));
@@ -641,7 +686,7 @@ void wxSlider::DoSetSize(
             if (nSliderLength < 100)
                 nSliderLength = 100;
 
-            ::WinSetWindowPos( (HWND)m_hStaticMin
+            ::WinSetWindowPos( GetHwnd()
                               ,HWND_TOP
                               ,(LONG)nXOffset
                               ,(LONG)nYOffset
@@ -649,7 +694,6 @@ void wxSlider::DoSetSize(
                               ,(LONG)nSliderLength
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                              );
-            nYOffset -= nSliderLength;
             nUsedHeight += nSliderLength;
             ::WinSetWindowPos( (HWND)m_hStaticMax
                               ,HWND_TOP

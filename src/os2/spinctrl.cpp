@@ -337,8 +337,8 @@ int wxSpinCtrl::GetValue() const
                                ,SPBQ_UPDATEIFVALID
                               )
                 );
-    lVal - atol(zVal);
-    return lVal;
+    lVal = atol(zVal);
+    return (int)lVal;
 } // end of wxSpinCtrl::GetValue
 
 void wxSpinCtrl::OnChar (
