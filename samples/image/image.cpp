@@ -52,10 +52,16 @@ public:
     wxBitmap  *my_horse_pnm;
     wxBitmap  *my_horse_tiff;
     wxBitmap  *my_horse_xpm;
-
+    wxBitmap  *my_horse_ico32;
+    wxBitmap  *my_horse_ico16;
+    wxBitmap  *my_horse_ico;
+    wxBitmap  *my_horse_cur;
+    
     wxBitmap  *my_smile_xbm;
     wxBitmap  *my_square;
     wxBitmap  *my_anti;
+
+    int xH, yH ;
 
 protected:
     wxBitmap m_bmpSmileXpm;
@@ -126,7 +132,8 @@ public:
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc( this );
-        dc.DrawBitmap( m_bitmap, 0, 0 );
+        //TRUE for masked images
+        dc.DrawBitmap( m_bitmap, 0, 0, TRUE );
     }
 
     void OnSave(wxCommandEvent& WXUNUSED(event))
@@ -158,7 +165,9 @@ public:
                                             wxT("JPEG files (*.jpg)|*.jpg|")
                                             wxT("GIF files (*.gif)|*.gif|")
                                             wxT("TIFF files (*.tif)|*.tif|")
-                                            wxT("PCX files (*.pcx)|*.pcx"),
+                                            wxT("PCX files (*.pcx)|*.pcx|")
+                                            wxT("ICO files (*.ico)|*.ico|")
+                                            wxT("CUR files (*.cur)|*.cur"),
                                                 wxSAVE);
 
         if ( savefilename.empty() )
@@ -190,6 +199,15 @@ public:
             saved=image.SaveFile(savefilename, wxBITMAP_TYPE_JPEG);
         else if (extension == "pnm")
             saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PNM);
+        else if (extension == "ico")
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_ICO);
+        else if (extension == "cur")
+            {
+            image.Rescale(32,32);    
+            image.SetOption(wxCUR_HOTSPOT_X, 0);    
+            image.SetOption(wxCUR_HOTSPOT_Y, 0);    
+            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
+            }
         else
             wxMessageBox("Unknown file type, see options in file selector.",
                          "Unknown file type",
@@ -243,6 +261,11 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     my_horse_pnm = (wxBitmap*) NULL;
     my_horse_tiff = (wxBitmap*) NULL;
     my_horse_xpm = (wxBitmap*) NULL;
+    my_horse_ico32 = (wxBitmap*) NULL;
+    my_horse_ico16 = (wxBitmap*) NULL;
+    my_horse_ico = (wxBitmap*) NULL;
+    my_horse_cur = (wxBitmap*) NULL;
+
     my_smile_xbm = (wxBitmap*) NULL;
     my_square = (wxBitmap*) NULL;
     my_anti = (wxBitmap*) NULL;
@@ -362,6 +385,42 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     if ( m_bmpSmileXpm.Ok() )
         m_bmpSmileXpm.SaveFile("saved.xpm", wxBITMAP_TYPE_XPM);
 #endif
+
+#if wxUSE_ICO_CUR
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + wxString("horse.ico"), wxBITMAP_TYPE_ICO, 0 ) )
+        wxLogError(wxT("Can't load first ICO image"));
+    else
+        my_horse_ico32 = new wxBitmap( image );
+        
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + wxString("horse.ico"), wxBITMAP_TYPE_ICO, 1 ) )
+        wxLogError(wxT("Can't load second ICO image"));
+    else
+        my_horse_ico16 = new wxBitmap( image );
+
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + wxString("horse.ico") ) )
+        wxLogError(wxT("Can't load best ICO image"));
+    else
+        my_horse_ico = new wxBitmap( image );
+
+    image.Destroy();
+
+    if ( !image.LoadFile( dir + wxString("horse.cur"), wxBITMAP_TYPE_CUR ) )
+        wxLogError(wxT("Can't load best ICO image"));
+    else
+        {
+        my_horse_cur = new wxBitmap( image );
+        xH = 30 + image.GetOptionInt(wxCUR_HOTSPOT_X) ;
+        yH = 2420 + image.GetOptionInt(wxCUR_HOTSPOT_Y) ;
+        }
+    
+#endif
+
 }
 
 MyCanvas::~MyCanvas()
@@ -374,6 +433,9 @@ MyCanvas::~MyCanvas()
     delete my_horse_pcx;
     delete my_horse_tiff;
     delete my_horse_xpm;
+    delete my_horse_ico32;
+    delete my_horse_ico16;
+    delete my_horse_ico;
     delete my_smile_xbm;
     delete my_square;
     delete my_anti;
@@ -434,6 +496,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText( "XPM handler", 30, 1745 );
     if (my_horse_xpm && my_horse_xpm->Ok())
         dc.DrawBitmap( *my_horse_xpm, 30, 1760 );
+
 
     if (my_smile_xbm && my_smile_xbm->Ok())
     {
@@ -505,6 +568,27 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         dc.DrawIcon(m_iconSmileXpm, 150, 2250);
     }
+
+    dc.DrawText( "ICO handler (1st image)", 30, 2290 );
+    if (my_horse_ico32 && my_horse_ico32->Ok())
+        dc.DrawBitmap( *my_horse_ico32, 30, 2330, TRUE );
+
+    dc.DrawText( "ICO handler (2nd image)", 230, 2290 );
+    if (my_horse_ico16 && my_horse_ico16->Ok())
+        dc.DrawBitmap( *my_horse_ico16, 230, 2330, TRUE );
+        
+    dc.DrawText( "ICO handler (best image)", 430, 2290 );
+    if (my_horse_ico && my_horse_ico->Ok())
+        dc.DrawBitmap( *my_horse_ico, 430, 2330, TRUE );
+
+    dc.DrawText( "CUR handler", 30, 2390 );
+    if (my_horse_cur && my_horse_cur->Ok())
+        {
+        dc.DrawBitmap( *my_horse_cur, 30, 2420, TRUE );
+        dc.SetPen (*wxRED_PEN);
+        dc.DrawLine (xH-10,yH,xH+10,yH);
+        dc.DrawLine (xH,yH-10,xH,yH+10);
+        }
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
@@ -592,8 +676,8 @@ MyFrame::MyFrame()
 
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
 
-  // 500 width * 2100 height
-  m_canvas->SetScrollbars( 10, 10, 50, 220 );
+  // 500 width * 2500 height
+  m_canvas->SetScrollbars( 10, 10, 50, 250 );
 }
 
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
@@ -657,6 +741,11 @@ bool MyApp::OnInit()
 
 #if wxUSE_XPM
   wxImage::AddHandler( new wxXPMHandler );
+#endif
+
+#if wxUSE_ICO_CUR
+  wxImage::AddHandler( new wxICOHandler );
+  wxImage::AddHandler( new wxCURHandler );
 #endif
 
   wxFrame *frame = new MyFrame();
