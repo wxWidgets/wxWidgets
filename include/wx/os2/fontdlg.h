@@ -20,14 +20,14 @@
  * Font dialog
  */
 
-class WXDLLEXPORT wxFontDialog: public wxDialog
+class WXDLLEXPORT wxFontDialog: public wxFontDialogBase
 {
 DECLARE_DYNAMIC_CLASS(wxFontDialog)
 public:
     wxFontDialog();
-    wxFontDialog(wxWindow *parent, wxFontData *data = NULL);
+    wxFontDialog(wxWindow *parent, const wxFontData& rData);
 
-    bool Create(wxWindow *parent, wxFontData *data = NULL);
+    bool Create(wxWindow *parent, const wxFontData& rData);
 
     int ShowModal();
     wxFontData& GetFontData() { return m_fontData; }
