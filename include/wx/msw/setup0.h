@@ -459,6 +459,13 @@
 // wxSound class
 #define wxUSE_SOUND      1
 
+// wxMovieCtrl class
+//
+// Requires DirectX 7 & DirectMedia or above (link with STRMIIDS.LIB)
+//
+// Recommended setting: 0 (Nice to have, but SDK doesn't exist by default)
+#define wxUSE_MOVIECTRL 0
+
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1

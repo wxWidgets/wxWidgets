@@ -20,8 +20,6 @@
 #pragma hdrstop
 #endif
 
-#define wxUSE_MOVIECTRL 1
-
 #if wxUSE_MOVIECTRL
 
 #include "wx/moviectrl.h"
@@ -327,8 +325,6 @@ void wxMovieCtrl::Cleanup()
 #ifndef __WXMAC__
     TerminateQTML();
 #endif
-
-    m_bLoaded = false;
 }
 
 wxMovieCtrl::~wxMovieCtrl()

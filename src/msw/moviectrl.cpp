@@ -20,8 +20,6 @@
 #pragma hdrstop
 #endif
 
-#define wxUSE_MOVIECTRL 1
-
 #if wxUSE_MOVIECTRL
 
 #include "wx/moviectrl.h"
@@ -59,18 +57,16 @@ bool wxMovieCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
     //Set our background color to black by default
     SetBackgroundColour(*wxBLACK);
 
+    wxControl::SetLabel(label);
+
     if(!fileName.empty())
     {
         if (!Load(fileName))
             return false;
 
-        SetLabel(label);
-
         if(!Play())
             return false;
     }
-    else
-        wxControl::SetLabel(label);
 
     return true;
 }
@@ -134,6 +130,9 @@ bool wxMovieCtrl::Load(const wxString& fileName)
 
     //set the time format
     wxDSVERIFY( pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME) );
+
+
+    SetLabel(GetLabel());
 
     m_bLoaded = true;
     return true;
