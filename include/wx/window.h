@@ -299,6 +299,9 @@ public:
         // set window size to wrap around its children
     virtual void Fit();
 
+        // set virtual size to satisfy children
+    virtual void FitInside();
+
         // set min/max size of the window
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
@@ -341,6 +344,17 @@ public:
 
     virtual void DoSetVirtualSize( int x, int y );
     virtual wxSize DoGetVirtualSize() const; // { return m_virtualSize; }
+
+        // Return the largest of ClientSize and BestSize (as determined
+        // by a sizer, interior children, or other means)
+
+    virtual wxSize GetBestVirtualSize() const
+    {
+        wxSize  client( GetClientSize() );
+        wxSize  best( GetBestSize() );
+
+        return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
+    }
 
     // window state
     // ------------

@@ -50,7 +50,7 @@ wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int borde
     m_option = option;
     m_border = border;
     m_flag = flag;
-    m_show = TRUE;		// Cannot be changed
+    m_show = TRUE;                // Cannot be changed
     m_userData = userData;
 
     // minimal size is the initial size
@@ -530,8 +530,7 @@ void wxSizer::SetDimension( int x, int y, int width, int height )
     m_position.y = y;
     m_size.x = width;
     m_size.y = height;
-    CalcMin();
-    RecalcSizes();
+    Layout();
 }
 
 wxSize wxSizer::GetMinSize()
@@ -638,61 +637,68 @@ bool wxSizer::DoSetItemMinSize( int pos, int width, int height )
     return TRUE;
 }
 
-void wxSizer::Show (wxWindow *window, bool show)
+void wxSizer::Show(wxWindow *window, bool show)
 {
     wxNode *node = m_children.GetFirst();
-    while (node) {
+    while (node)
+    {
         wxSizerItem *item = (wxSizerItem*) node->Data();
 
-        if (item->IsWindow () && item->GetWindow () == window) {
-	  item->Show (show);
-	  window->Show (show);
-	  return;
-	}
-	node = node->Next();
+        if (item->IsWindow() && item->GetWindow() == window)
+        {
+            item->Show(show);
+            window->Show(show);
+            return;
+        }
+        node = node->Next();
     }
 }
 
-void wxSizer::Show (wxSizer *sizer, bool show)
+void wxSizer::Show(wxSizer *sizer, bool show)
 {
     wxNode *node = m_children.GetFirst();
-    while (node) {
+    while (node)
+    {
         wxSizerItem *item = (wxSizerItem*) node->Data();
 
-	if (item->IsSizer () && item->GetSizer () == sizer) {
-	    item->Show (show);
-	    sizer->ShowItems (show);
-	    return;
-	}
-	node = node->Next();
+        if (item->IsSizer() && item->GetSizer() == sizer)
+        {
+            item->Show(show);
+            sizer->ShowItems(show);
+            return;
+        }
+        node = node->Next();
     }
 }
 
 void wxSizer::ShowItems (bool show)
 {
     wxNode *node = m_children.GetFirst();
-    while (node) {
+    while (node)
+    {
         wxSizerItem *item = (wxSizerItem*) node->Data();
 
-	if (item->IsWindow ())
-	    item->GetWindow()->Show (show);
-	else if (item->IsSizer ())
-	    item->GetSizer ()->ShowItems (show);
+        if (item->IsWindow())
+            item->GetWindow()->Show (show);
+        else if (item->IsSizer())
+            item->GetSizer()->ShowItems (show);
 
-	node = node->Next();
+        node = node->Next();
     }
 }
 
 bool wxSizer::IsShown (wxWindow *window)
 {
     wxNode *node = m_children.GetFirst();
-    while (node) {
+    while (node)
+    {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-	
-	if (item->IsWindow () && item->GetWindow () == window) {
-	  return item->IsShown ();
-	}
-	node = node->Next();
+        
+        if (item->IsWindow() && item->GetWindow() == window)
+        {
+            return item->IsShown();
+        }
+        node = node->Next();
     }
 
     return FALSE;
@@ -701,13 +707,15 @@ bool wxSizer::IsShown (wxWindow *window)
 bool wxSizer::IsShown (wxSizer *sizer)
 {
     wxNode *node = m_children.GetFirst();
-    while (node) {
+    while (node)
+    {
         wxSizerItem *item = (wxSizerItem*) node->Data();
 
-	if (item->IsSizer () && item->GetSizer () == sizer) {
-	  return item->IsShown ();
-	}
-	node = node->Next();
+        if (item->IsSizer() && item->GetSizer() == sizer)
+        {
+            return item->IsShown();
+        }
+        node = node->Next();
     }
 
     return FALSE;
@@ -1055,65 +1063,65 @@ void wxBoxSizer::RecalcSizes()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-	if (item->IsShown ()) {
-
-        int weight = 1;
-        if (item->GetOption())
-            weight = item->GetOption();
-
-        wxSize size( item->CalcMin() );
-
-        if (m_orient == wxVERTICAL)
+        if (item->IsShown())
         {
-            wxCoord height = size.y;
+            int weight = 1;
             if (item->GetOption())
+                weight = item->GetOption();
+
+            wxSize size( item->CalcMin() );
+
+            if (m_orient == wxVERTICAL)
             {
-                height = (delta * weight) + extra;
-                extra = 0; // only the first item will get the remainder as extra size
+                wxCoord height = size.y;
+                if (item->GetOption())
+                {
+                    height = (delta * weight) + extra;
+                    extra = 0; // only the first item will get the remainder as extra size
+                }
+
+                wxPoint child_pos( pt );
+                wxSize  child_size( wxSize( size.x, height) );
+
+                if (item->GetFlag() & (wxEXPAND | wxSHAPED))
+                    child_size.x = m_size.x;
+                else if (item->GetFlag() & wxALIGN_RIGHT)
+                    child_pos.x += m_size.x - size.x;
+                else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_HORIZONTAL))
+                // XXX wxCENTER is added for backward compatibility;
+                //     wxALIGN_CENTER should be used in new code
+                    child_pos.x += (m_size.x - size.x) / 2;
+
+                item->SetDimension( child_pos, child_size );
+
+                pt.y += height;
             }
-
-            wxPoint child_pos( pt );
-            wxSize  child_size( wxSize( size.x, height) );
-
-            if (item->GetFlag() & (wxEXPAND | wxSHAPED))
-                child_size.x = m_size.x;
-            else if (item->GetFlag() & wxALIGN_RIGHT)
-                child_pos.x += m_size.x - size.x;
-            else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_HORIZONTAL))
-            // XXX wxCENTER is added for backward compatibility;
-            //     wxALIGN_CENTER should be used in new code
-                child_pos.x += (m_size.x - size.x) / 2;
-
-            item->SetDimension( child_pos, child_size );
-
-            pt.y += height;
-        }
-        else
-        {
-            wxCoord width = size.x;
-            if (item->GetOption())
+            else
             {
-                width = (delta * weight) + extra;
-                extra = 0; // only the first item will get the remainder as extra size
+                wxCoord width = size.x;
+                if (item->GetOption())
+                {
+                    width = (delta * weight) + extra;
+                    extra = 0; // only the first item will get the remainder as extra size
+                }
+
+                wxPoint child_pos( pt );
+                wxSize  child_size( wxSize(width, size.y) );
+
+                if (item->GetFlag() & (wxEXPAND | wxSHAPED))
+                    child_size.y = m_size.y;
+                else if (item->GetFlag() & wxALIGN_BOTTOM)
+                    child_pos.y += m_size.y - size.y;
+                else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_VERTICAL))
+                // XXX wxCENTER is added for backward compatibility;
+                //     wxALIGN_CENTER should be used in new code
+                    child_pos.y += (m_size.y - size.y) / 2;
+
+                item->SetDimension( child_pos, child_size );
+
+                pt.x += width;
             }
-
-            wxPoint child_pos( pt );
-            wxSize  child_size( wxSize(width, size.y) );
-
-            if (item->GetFlag() & (wxEXPAND | wxSHAPED))
-                child_size.y = m_size.y;
-            else if (item->GetFlag() & wxALIGN_BOTTOM)
-                child_pos.y += m_size.y - size.y;
-            else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_VERTICAL))
-            // XXX wxCENTER is added for backward compatibility;
-            //     wxALIGN_CENTER should be used in new code
-                child_pos.y += (m_size.y - size.y) / 2;
-
-            item->SetDimension( child_pos, child_size );
-
-            pt.x += width;
         }
-	}
 
         node = node->Next();
     }
@@ -1136,7 +1144,7 @@ wxSize wxBoxSizer::CalcMin()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-        if (item->IsShown () && item->GetOption() != 0)
+        if (item->IsShown() && item->GetOption() != 0)
         {
             int stretch = item->GetOption();
             wxSize size( item->CalcMin() );
@@ -1156,43 +1164,44 @@ wxSize wxBoxSizer::CalcMin()
     while (node)
     {
         wxSizerItem *item = (wxSizerItem*) node->Data();
-	if (item->IsShown ()) {
-        m_stretchable += item->GetOption();
-
-        wxSize size( item->CalcMin() );
-        if (item->GetOption() != 0)
+        if (item->IsShown())
         {
+            m_stretchable += item->GetOption();
+
+            wxSize size( item->CalcMin() );
+            if (item->GetOption() != 0)
+            {
+                if (m_orient == wxHORIZONTAL)
+                    size.x = stretchSize * item->GetOption();
+                else
+                    size.y = stretchSize * item->GetOption();
+            }
+
             if (m_orient == wxHORIZONTAL)
-                size.x = stretchSize * item->GetOption();
-            else
-                size.y = stretchSize * item->GetOption();
-        }
-
-        if (m_orient == wxHORIZONTAL)
-        {
-            m_minWidth += size.x;
-            m_minHeight = wxMax( m_minHeight, size.y );
-        }
-        else
-        {
-            m_minHeight += size.y;
-            m_minWidth = wxMax( m_minWidth, size.x );
-        }
-
-        if (item->GetOption() == 0)
-        {
-            if (m_orient == wxVERTICAL)
             {
-                m_fixedHeight += size.y;
-                m_fixedWidth = wxMax( m_fixedWidth, size.x );
+                m_minWidth += size.x;
+                m_minHeight = wxMax( m_minHeight, size.y );
             }
             else
             {
-                m_fixedWidth += size.x;
-                m_fixedHeight = wxMax( m_fixedHeight, size.y );
+                m_minHeight += size.y;
+                m_minWidth = wxMax( m_minWidth, size.x );
+            }
+
+            if (item->GetOption() == 0)
+            {
+                if (m_orient == wxVERTICAL)
+                {
+                    m_fixedHeight += size.y;
+                    m_fixedWidth = wxMax( m_fixedWidth, size.x );
+                }
+                else
+                {
+                    m_fixedWidth += size.x;
+                    m_fixedHeight = wxMax( m_fixedHeight, size.y );
+                }
             }
         }
-	}
         node = node->Next();
     }
 

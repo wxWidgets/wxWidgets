@@ -349,6 +349,10 @@ void wxScrolledWindow::SetScrollbars( int pixelsPerUnitX, int pixelsPerUnitY,
     m_hAdjust->value = m_xScrollPosition = xPos;
     m_vAdjust->value = m_yScrollPosition = yPos;
 
+    // For better backward compatibility we set persisting limits
+    // here not just the size.  It makes SetScrollbars 'sticky'
+    // emulating the old non-autoscroll behaviour.
+
     m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
 
     if (!noRefresh)
@@ -823,10 +827,15 @@ bool wxScrolledWindow::Layout()
 // Default OnSize resets scrollbars, if any
 void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    if( m_targetWindow != this )
-        m_targetWindow->SetVirtualSize( m_targetWindow->GetClientSize() );
+    if( GetAutoLayout() )
+    {
+        if( m_targetWindow != this )
+            m_targetWindow->FitInside();
 
-    SetVirtualSize( GetClientSize() );
+        FitInside();
+    }
+    else
+        AdjustScrollbars();
 }
 
 // This calls OnDraw, having adjusted the origin according to the current
