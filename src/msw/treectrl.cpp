@@ -1198,6 +1198,10 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
                                       int image, int selectedImage,
                                       wxTreeItemData *data)
 {
+    wxCHECK_MSG( parent.IsOk() || !TreeView_GetRoot(GetHwnd()),
+                 wxTreeItemId(),
+                 _T("can't have more than one root in the tree") );
+
     TV_INSERTSTRUCT tvIns;
     tvIns.hParent = HITEM(parent);
     tvIns.hInsertAfter = HITEM(hInsertAfter);
