@@ -23,36 +23,61 @@ if [ $# -lt 4]; then
     exit 1
 fi
 
-DESTDIR=$1
+RELEASE=$1
 SKIPCLEAN=$2
 VERSION=$3
 shift;shift;shift
 PYVER=$@
 
-# Since this is probably a VMWare guest, make sure that the date and
-# time are correct
-ntpdate gate.alldunn.com
+rpmtop=_rpm_top
+
+function DoRPMBuild {
+    echo "*** Setting up RPM build dirs"
+    for dir in SPECS BUILD RPMS SRPMS tmp; do
+	if [ ! -d $rpmtop/$dir ]; then
+	    mkdir -p $rpmtop/$dir
+	fi
+    done
+    if [ ! -e $rpmtop/SOURCES ]; then
+	ln -s $PWD $rpmtop/SOURCES
+    fi
+
+    rpmbuild --define "_topdir $PWD/$rpmtop" \
+	--define "_tmppath $PWD/$rpmtop/tmp" \
+	--define "release $RELEASE" \
+	$@
+
+    if [ $? != 0 ]; then
+	return $?
+    fi
+
+    echo "*** Moving RPMs to ."
+    find $rpmtop -name "*.rpm"
+    mv -f `find $rpmtop -name "*.rpm"` .
+
+    echo "*** Cleaning up $rpmtop"
+    rm -rf $rpmtop
+}
 
 
-cd $DESTDIR
 
 for ver in $PYVER; do 
     echo "Building the RPMs for Python $ver..."
-    myrpmbuild --rebuild wxPythonGTK-py$ver-$VERSION-1.src.rpm
-    myrpmbuild --rebuild wxPythonGTK2-py$ver-$VERSION-1.src.rpm
+    for port in GTK GTK2; do
+	rpm2cpio wxPython$port-py$ver-$VERSION-1.src.rpm | \
+	    cpio --extract -R root.
+	DoRPMBuild -ba wxPython$port.spec
+    done
 done
-
-
-#echo "Copying RPMs to $DESTDIR..."
-#cp  wxPythonGTK*.i[0-9]86.rpm $DESTDIR
-#cd $DESTDIR
 
 
 if [ $SKIPCLEAN != yes ]; then 
     echo "Cleaning up..."
     for ver in $PYVER; do 
-	rm wxPythonGTK-py$ver-$VERSION-1.src.rpm
+	rm wxPythonGTK-py$ver-$VERSION-*.src.rpm
+	rm wxPythonGTK2-py$ver-$VERSION-*.src.rpm
     done
+    rm *.spec *.tar.gz
 fi
 
 echo "-=-=-=-  Goodbye!  -=-=-=-"
