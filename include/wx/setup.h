@@ -17,8 +17,7 @@
 
 #ifdef __VMS
 #include "[--]setup.h"
-#elif
-#if defined(__WXMSW__)
+#elif defined(__WXMSW__)
 #include "wx/msw/setup.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/setup.h"
@@ -32,7 +31,6 @@
 #include "wx/stubs/setup.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/setup.h"
-#endif
 #endif
 
 /*
@@ -75,5 +73,5 @@
 #define wxUSE_COMPATIBLE_COORD_TYPES 1
 #endif /* WXWIN_COMPATIBILITY_2_MAX */
 
-#endif
+#endif // _WX_SETUP_H_BASE_
 	/* _WX_SETUP_H_BASE_ */
