@@ -29,6 +29,8 @@ private:
     #include "wx/msw/taskbar.h"
 #elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
     #include "wx/unix/taskbarx11.h"
+#elif defined(__DARWIN__)
+    #include "wx/mac/taskbarosx.h"
 #endif
 
 // ----------------------------------------------------------------------------
