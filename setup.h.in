@@ -636,6 +636,9 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #undef SOCKLEN_T
 
+/* The signal handler prototype */
+#undef wxTYPE_SA_HANDLER
+
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
 #undef WX_GETTIMEOFDAY_NO_TZ
@@ -720,6 +723,9 @@
 
 /* Define if you have the dlopen function.  */
 #undef HAVE_DLOPEN
+
+/* Define if you have the dlerror function.  */
+#undef HAVE_DLERROR
 
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME

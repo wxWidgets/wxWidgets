@@ -848,7 +848,7 @@ long wxGetFreeMemory()
 
 #include <signal.h>
 
-static void wxFatalSignalHandler(int WXUNUSED(signal))
+static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {
