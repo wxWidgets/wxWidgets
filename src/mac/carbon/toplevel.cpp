@@ -557,14 +557,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     }
     else if ( HasFlag( wxCAPTION ) )
     {
-        if ( HasFlag( wxDIALOG_MODAL ) )
-        {
-            wclass = kDocumentWindowClass ; // kMovableModalWindowClass ;
-        }
-        else 
-        {
-            wclass = kDocumentWindowClass ;
-        }
+    	wclass = kDocumentWindowClass ; 
     }
     else
     {
