@@ -473,7 +473,7 @@ size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t
             len++;
         }
 #ifndef WC_UTF16
-        else if (cc > 0xffff)
+        else if (cc > ((const wchar_t)0xffff))
         {
             // no surrogate pair generation (yet?)
             return (size_t)-1;
@@ -2334,6 +2334,13 @@ public:
         return res ;
     }
 
+    //NB: This is _broken_ - in invalid conversions, instead of returning -1
+    //like it should, it (sometimes?) converts invalid characters of the encoding to a question
+    //mark character '?'.
+    //
+    //We need to do the msw double-pass check for the question marks as Vadim
+    //lines out above (RN:  I don't recall this happening in the core foundation version,
+    //but it might do it there also, ick)
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         OSStatus status = noErr ;
