@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_THREADS
+    #define TEST_MIME
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -308,7 +308,7 @@ static void TestDirEnum()
     puts("*** Testing wxDir::GetFirst/GetNext ***");
 
     wxString cwd = wxGetCwd();
-    if ( wxDir::Exists(cwd) )
+    if ( !wxDir::Exists(cwd) )
     {
         printf("ERROR: current directory '%s' doesn't exist?\n", cwd.c_str());
         return;
