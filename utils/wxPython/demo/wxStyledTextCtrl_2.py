@@ -184,11 +184,8 @@ class PythonSTC(wxStyledTextCtrl):
 
                 if expanding:
                     self.SetFoldExpanded(lineNum, true)
-                    print lineNum,
                     lineNum = self.Expand(lineNum, true)
-                    print lineNum,
                     lineNum = lineNum - 1
-                    print lineNum
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
                     self.SetFoldExpanded(lineNum, false)

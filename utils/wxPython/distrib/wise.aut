@@ -1,5 +1,5 @@
 
-run, e:\\Tools\\Wise\\WISE32.EXE wxPython.wse
+run, c:\\Tools\\Wise\\WISE32.EXE wxPython.wse
 winwaitactive, wxPython.wse - Wise Installation System
 send, !ic
 sleep, 1000

@@ -4,10 +4,10 @@ import sys, os, string, time
 from ftplib import FTP
 
 
-logfile = 'e:\\temp\\autobuild.log'
+logfile = 'c:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_14'
-wxpVer  = '2.1.14'
+dllVer  = '21_15'
+wxpVer  = '2.1.15'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 #----------------------------------------------------------------------
@@ -57,39 +57,43 @@ def main():
     logTruncate()
 
     try:
-##         logSeparator("Cleanup")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make cleandll FINAL=1')
-##         os.chdir(WXDIR + '/utils/ogl/src')
-##         do('wxm clean FINAL=1')
-##         os.chdir(WXDIR + '/utils/glcanvas/win')
-##         do('wxm clean FINAL=1')
+        logSeparator("Cleanup")
+        os.chdir(WXDIR + '/src/msw')
+        do('make cleandll FINAL=1')
+        do('makeaddons clean FINAL=1')
 
-##         logSeparator("Building Documentation...")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make touchmanual htmlhelp')
-##         validateFile(WXDIR + '/docs/html/wx/wx.chm')
+        #os.chdir(WXDIR + '/utils/ogl/src')
+        #do('wxm clean FINAL=1')
+        #os.chdir(WXDIR + '/utils/glcanvas/win')
+        #do('wxm clean FINAL=1')
 
-##         logSeparator("Building wxWindows and libraries...")
-##         os.chdir(WXDIR + '/src/msw')
-##         do('make dll pch FINAL=1')
-##         validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
+        logSeparator("Building Documentation...")
+        os.chdir(WXDIR + '/src/msw')
+        do('make touchmanual htmlhelp')
+        validateFile(WXDIR + '/docs/htmlhelp/wx.chm')
 
-        os.chdir(WXDIR + '/contrib/src/ogl')
-        do('wxm FINAL=1')
+        logSeparator("Building wxWindows and other libraries...")
+        os.chdir(WXDIR + '/src/msw')
+        do('make dll pch FINAL=1')
+        validateFile(WXDIR + '/lib/wx'+dllVer+'.dll')
+
+        do('makeaddons FINAL=1')
+        #os.chdir(WXDIR + '/contrib/src/ogl')
+        #do('wxm FINAL=1')
         validateFile(WXDIR + '/contrib/lib/ogl.lib')
+        validateFile(WXDIR + '/contrib/lib/stc.lib')
 
         logSeparator("Cleaning wxPython build directory...")
         os.chdir(WXDIR + '/utils/wxPython')
         do("del /sxy *.*")
 
         logSeparator("Copying wxPython workspace to build directory...")
-        do("copy /s %s %s" % ('e:\\projects\\wxPython\*.*', WXDIR+'\\utils\\wxPython'))
+        do("copy /s %s %s" % ('c:\\projects\\wxPython\\*.*', WXDIR+'\\utils\\wxPython'))
         os.chdir(WXDIR + '/utils/wxPython')
         f = open("build.local", "w")
         f.write("""
-TARGETDIR = 'e:\\projects\\wx\\utils\\wxPython'
-WXPSRCDIR = 'e:\\projects\\wx\\utils\\wxPython\\src'
+TARGETDIR = 'c:\\projects\\wx\\utils\\wxPython'
+WXPSRCDIR = 'c:\\projects\\wx\\utils\\wxPython\\src'
 CRTFLAG='/MD'
 FINAL=1
 """)
@@ -116,6 +120,7 @@ FINAL=1
         validateFile(WXDIR+'\\utils\\wxPython\\htmlc.pyd')
         validateFile(WXDIR+'\\utils\\wxPython\\glcanvasc.pyd')
         validateFile(WXDIR+'\\utils\\wxPython\\oglc.pyd')
+        validateFile(WXDIR+'\\utils\\wxPython\\stc_c.pyd')
 
 
         logSeparator("Building installer executable...")
@@ -129,7 +134,7 @@ FINAL=1
             os.rename(srcName, destName)
             validateFile(destName)
         except:
-            pass
+            logSeparator("****** UNABLE TO RENAME FILE ******")
 
 
         logSeparator("Building source and docs zip files...")
@@ -153,12 +158,12 @@ FINAL=1
 
 
         # #*#*#*#*#*  Comment this out to allow upload...
-        #return
+        return
 
         logSeparator("Uploading to website...")
-        do('python d:\util32\sendwxp.py %s' % destName)
-        do('python d:\util32\sendwxp.py %s' % destZName)
-        do('python d:\util32\sendwxp.py %s' % destDName)
+        do('python c:\\utils\\sendwxp.py %s' % destName)
+        do('python c:\\utils\\sendwxp.py %s' % destZName)
+        do('python c:\\utils\\sendwxp.py %s' % destDName)
         os.unlink(destName)
         os.unlink(destZName)
 

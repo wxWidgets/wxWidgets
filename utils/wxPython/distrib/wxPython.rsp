@@ -56,9 +56,6 @@ wxPython/modules/html/*.c
 wxPython/modules/html/*.h
 wxPython/modules/html/*.def
 wxPython/modules/html/*.rc
-wxPython/modules/html/*.cpp
-wxPython/modules/html/*.h
-wxPython/modules/html/*.py
 
 wxPython/modules/glcanvas/build.cfg
 wxPython/modules/glcanvas/*.i
@@ -99,12 +96,8 @@ wxPython/modules/ogl/*.c
 wxPython/modules/ogl/*.h
 wxPython/modules/ogl/*.def
 wxPython/modules/ogl/*.rc
-wxPython/modules/ogl/*.cpp
-wxPython/modules/ogl/*.h
-wxPython/modules/ogl/*.py
 wxPython/modules/ogl/contrib/include/wx/ogl/*.h
 wxPython/modules/ogl/contrib/src/ogl/*.cpp
-
 
 wxPython/modules/stc/build.cfg
 wxPython/modules/stc/*.txt

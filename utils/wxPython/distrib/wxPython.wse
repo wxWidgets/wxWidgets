@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.1.14.exe
+  EXE Filename=wxPython-2.1.15.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -25,7 +25,7 @@ item: Global
   Variable Default1=C:\WINNT\System32
   Variable Flags1=00001000
   Variable Name2=_WISE_
-  Variable Default2=E:\Tools\Wise
+  Variable Default2=C:\Tools\Wise
   Variable Flags2=00001000
   Variable Name3=_ODBC16_
   Variable Default3=C:\WINNT\System32
@@ -191,7 +191,7 @@ end
 item: End Block
 end
 item: Display Graphic
-  Pathname=e:\Projects\wx\utils\wxPython\distrib\wxPython.BMP
+  Pathname=c:\Projects\wx\utils\wxPython\distrib\wxPython.BMP
   X Position=32784
   Y Position=16
   Flags=0000001010000000
@@ -805,156 +805,168 @@ end
 item: Remark
 end
 item: Install File
-  Source=d:\WINNT\System32\Msvcirt.dll
+  Source=c:\WINNT\System32\Msvcirt.dll
   Destination=%SYS%\Msvcirt.dll
   Flags=0000001010000011
 end
 item: Install File
-  Source=d:\WINNT\System32\Msvcrt.dll
+  Source=c:\WINNT\System32\Msvcrt.dll
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\projects\wx\lib\wx21_14.dll
-  Destination=%SYS%\wx21_14.dll
+  Source=c:\projects\wx\lib\wx21_15.dll
+  Destination=%SYS%\wx21_15.dll
   Flags=0000001010010010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\*.py
+  Source=c:\Projects\wx\utils\wxPython\*.py
   Destination=%MAINDIR%\wxPython
   Description=wxPython shadow class modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\*.pyd
+  Source=c:\Projects\wx\utils\wxPython\*.pyd
   Destination=%MAINDIR%\wxPython
   Description=wxPython extension modules
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\*.txt
+  Source=c:\Projects\wx\utils\wxPython\*.txt
   Destination=%MAINDIR%\wxPython
   Description=README file
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\lib\*.py
+  Source=c:\Projects\wx\utils\wxPython\lib\*.py
   Destination=%MAINDIR%\wxPython\lib
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\lib\sizers\*.py
+  Source=c:\Projects\wx\utils\wxPython\lib\sizers\*.py
   Destination=%MAINDIR%\wxPython\lib\sizers
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\lib\editor\*.py
+  Source=c:\Projects\wx\utils\wxPython\lib\editor\*.py
   Destination=%MAINDIR%\wxPython\lib\editor
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\*.py
+  Source=c:\Projects\wx\utils\wxPython\demo\*.py
   Destination=%MAINDIR%\wxPython\demo
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\Projects\wx\utils\wxPython\demo\README.txt
+  Source=c:\Projects\wx\utils\wxPython\demo\README.txt
   Destination=%MAINDIR%\wxPython\demo\README.txt
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\*.xml
+  Source=c:\Projects\wx\utils\wxPython\demo\*.xml
   Destination=%MAINDIR%\wxPython\demo
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.bmp
+  Source=c:\Projects\wx\utils\wxPython\demo\bitmaps\*.bmp
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.gif
+  Source=c:\Projects\wx\utils\wxPython\demo\bitmaps\*.gif
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.jpg
+  Source=c:\Projects\wx\utils\wxPython\demo\bitmaps\*.jpg
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.png
+  Source=c:\Projects\wx\utils\wxPython\demo\bitmaps\*.png
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.ico
+  Source=c:\Projects\wx\utils\wxPython\demo\bitmaps\*.ico
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\data\*.htm
+  Source=c:\Projects\wx\utils\wxPython\demo\data\*.htm
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
   Flags=0000000010000010
 end
 item: Install File
-  Source=e:\Projects\wx\utils\wxPython\demo\data\*.png
+  Source=c:\Projects\wx\utils\wxPython\demo\data\*.png
   Destination=%MAINDIR%\wxPython\demo\data
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
+  Source=C:\PROJECTS\wx\utils\wxPython\demo\data\grid.i
+  Destination=%MAINDIR%\wxPython\demo\data\grid.i
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
+  Source=C:\PROJECTS\wx\utils\wxPython\demo\data\stc.h
+  Destination=%MAINDIR%\wxPython\demo\data\stc.h
   Description=Demos
   Flags=0000000010000010
 end
 item: Remark
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\html\wx\wx.chm
+  Source=C:\PROJECTS\wx\docs\htmlhelp\wx.chm
   Destination=%MAINDIR%\wxPython\docs\wx.chm
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\html\ogl\ogl.chm
+  Source=c:\PROJECTS\wx\docs\html\ogl\ogl.chm
   Destination=%MAINDIR%\wxPython\docs\ogl.chm
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\preamble.txt
+  Source=c:\PROJECTS\wx\docs\preamble.txt
   Destination=%MAINDIR%\wxPython\docs\preamble.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\licence.txt
+  Source=c:\PROJECTS\wx\docs\licence.txt
   Destination=%MAINDIR%\wxPython\docs\licence.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\licendoc.txt
+  Source=c:\PROJECTS\wx\docs\licendoc.txt
   Destination=%MAINDIR%\wxPython\docs\licendoc.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\lgpl.txt
+  Source=c:\PROJECTS\wx\docs\lgpl.txt
   Destination=%MAINDIR%\wxPython\docs\lgpl.txt
   Description=wxPython documentation
   Flags=0000000010000010
 end
 item: Install File
-  Source=E:\PROJECTS\wx\docs\gpl.txt
+  Source=c:\PROJECTS\wx\docs\gpl.txt
   Destination=%MAINDIR%\wxPython\docs\gpl.txt
   Description=wxPython documentation
   Flags=0000000010000010
