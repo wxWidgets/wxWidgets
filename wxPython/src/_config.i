@@ -51,18 +51,19 @@ classes. It can not be used by itself (it is an abstract base
 class) and you will always use one of its derivations: wx.Config
 or wx.FileConfig.
 
-wx.ConfigBase organizes the items in a tree-like structure
-(modeled after the Unix/Dos filesystem). There are groups
-(directories) and keys (files).  There is always one current
-group given by the current path.  As in the file system case, to
-specify a key in the config class you must use a path to it.
-Config classes also support the notion of the current group,
-which makes it possible to use relative paths.
+wx.ConfigBase organizes the items in a tree-like structure,
+modeled after the Unix/Dos filesystem. There are groups that act
+like directories and entries, key/value pairs that act like
+files.  There is always one current group given by the current
+path.  As in the file system case, to specify a key in the config
+class you must use a path to it.  Config classes also support the
+notion of the current group, which makes it possible to use
+relative paths.
 
-Keys are pairs \"key_name = value\" where value may be of string, integer
-floating point or boolean, you can not store binary data without first
-encoding it as a string.  For performance reasons items should be kept small,
-no more than a couple kilobytes.
+Keys are pairs \"key_name = value\" where value may be of string,
+integer floating point or boolean, you can not store binary data
+without first encoding it as a string.  For performance reasons
+items should be kept small, no more than a couple kilobytes.
 ");
 
 
