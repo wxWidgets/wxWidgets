@@ -75,7 +75,6 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
 
     if (GetProtocol(left) != wxT("file")) 
     {
-        wxLogError(_("ZIP handler currently supports only local files!"));
         return NULL;
     }
 
