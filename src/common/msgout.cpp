@@ -113,8 +113,6 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 // wxMessageOutputLog
 // ----------------------------------------------------------------------------
 
-#if wxUSE_GUI && defined(__WXMOTIF__)
-
 void wxMessageOutputLog::Printf(const wxChar* format, ...)
 {
     va_list args;
@@ -129,5 +127,3 @@ void wxMessageOutputLog::Printf(const wxChar* format, ...)
     // wxLog, which is better than nothing
     ::wxLogMessage("%s", out.c_str());
 }
-
-#endif // wxUSE_GUI

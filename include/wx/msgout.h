@@ -58,10 +58,8 @@ public:
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
-#ifdef __WXMOTIF__
+#endif // wxUSE_GUI
 
-// use wxLog; this is only required for wxMotif, so we put this code
-// inside wxUSE_GUI; it will work even without GUI
 class WXDLLEXPORT wxMessageOutputLog : public wxMessageOutput
 {
 public:
@@ -69,10 +67,6 @@ public:
 
     virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
-
-#endif // __WXMOTIF__
-
-#endif // wxUSE_GUI
 
 #endif
     // _WX_MSGOUT_H_

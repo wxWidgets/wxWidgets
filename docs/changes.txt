@@ -96,6 +96,10 @@ All (GUI):
   for example, use wxScrolledWindow::GetViewStart() now instead of ViewStart()
   and GetCount() instead of Number() in many classes
 
+- wxCmdLineParser does not use wxLog to output messages anymore.
+  to obtain the previous behaviour, add
+  wxMessageOutput::Set(new wxMessageOutputLog); to your program
+  (you will need to #include <wx/msgout.h>)
 
 wxMSW:
 
