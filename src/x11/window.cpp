@@ -1163,14 +1163,6 @@ void wxWindowX11::Update()
     }
 }
 
-void wxWindowX11::Clear()
-{
-//    wxClientDC dc((wxWindow*) this);
-//    wxBrush brush(GetBackgroundColour(), wxSOLID);
-//    dc.SetBackground(brush);
-//    dc.Clear();
-}
-
 void wxWindowX11::SendEraseEvents()
 {
     if (m_clearRegion.IsEmpty()) return;

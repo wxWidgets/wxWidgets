@@ -977,6 +977,17 @@ bool wxWindowBase::IsExposed(int x, int y, int w, int h) const
     return m_updateRegion.Contains(x, y, w, h) != wxOutRegion;
 }
 
+void wxWindowBase::ClearBackground()
+{
+    // wxGTK uses its own version, no need to add never used code
+#ifndef __WXGTK__
+    wxClientDC dc((wxWindow *)this);
+    wxBrush brush(GetBackgroundColour(), wxSOLID);
+    dc.SetBackground(brush);
+    dc.Clear();
+#endif // __WXGTK__
+}
+
 // ----------------------------------------------------------------------------
 // find child window by id or name
 // ----------------------------------------------------------------------------

@@ -98,8 +98,6 @@ public:
     virtual void WarpPointer(int x_pos, int y_pos) ;
     // Send the window a refresh event
     virtual void Refresh(bool eraseBack = TRUE, const wxRect *rect = NULL);
-    // Clear the window
-    virtual void Clear();
     // Set/get the window's font
     virtual bool SetFont(const wxFont& f);
 //    inline virtual wxFont& GetFont() const;

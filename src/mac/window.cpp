@@ -1351,14 +1351,6 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-void wxWindowMac::Clear()
-{
-    wxClientDC dc(this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBackground(brush);
-    dc.Clear();
-}
-
 // Setup background and foreground colours correctly
 void wxWindowMac::SetupColours()
 {

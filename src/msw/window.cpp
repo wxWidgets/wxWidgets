@@ -1297,14 +1297,6 @@ bool wxWindowMSW::Reparent(wxWindowBase *parent)
     return TRUE;
 }
 
-void wxWindowMSW::Clear()
-{
-    wxClientDC dc((wxWindow *)this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBackground(brush);
-    dc.Clear();
-}
-
 static inline void SendSetRedraw(HWND hwnd, bool on)
 {
 #ifndef __WXMICROWIN__

@@ -212,8 +212,6 @@ protected:                                                          \
   void assign(const_iterator first, const_iterator last);           \
   void assign(size_type n, const_reference v);                      \
   size_type capacity() const { return m_nSize; }                    \
-  void clear() { Clear(); }                                         \
-  bool empty() const { return IsEmpty(); }                          \
   iterator erase(iterator first, iterator last)                     \
   {                                                                 \
     size_type idx = first - begin();                                \
@@ -230,17 +228,24 @@ protected:                                                          \
     return begin() + idx;                                           \
   }                                                                 \
   void insert(iterator it, const_iterator first, const_iterator last);\
-  size_type max_size() const { return INT_MAX; }                    \
   void pop_back() { RemoveAt(size() - 1); }                         \
   void push_back(const value_type& v) { Add(v); }                   \
   void reserve(size_type n) { if(n > m_nSize) Realloc(n); }         \
   void resize(size_type n, value_type v = value_type());            \
-  size_type size() const { return GetCount(); }                     \
                                                                     \
   iterator begin() { return m_pItems; }                             \
   iterator end() { return m_pItems + m_nCount; }                    \
   const_iterator begin() const { return m_pItems; }                 \
   const_iterator end() const { return m_pItems + m_nCount; }        \
+                                                                    \
+  /* the following functions may be made directly public because */ \
+  /* they don't use the type of the elements at all */              \
+public:                                                             \
+  void clear() { Clear(); }                                         \
+  bool empty() const { return IsEmpty(); }                          \
+  size_type max_size() const { return INT_MAX; }                    \
+  size_type size() const { return GetCount(); }                     \
+                                                                    \
 private:                                                            \
   void Grow(size_t nIncrement = 0);                                 \
   bool Realloc(size_t nSize);                                       \
@@ -446,8 +451,6 @@ public:                                                               \
   iterator begin() { return (iterator)base::begin(); }                \
   const_iterator begin() const { return (const_iterator)base::begin(); }\
   size_type capacity() const { return base::capacity(); }             \
-  void clear() { base::clear(); }                                     \
-  bool empty() const { return base::empty(); }                        \
   iterator end() { return (iterator)base::end(); }                    \
   const_iterator end() const { return (const_iterator)base::end(); }  \
   iterator erase(iterator first, iterator last)                       \
@@ -463,7 +466,6 @@ public:                                                               \
   void insert(iterator it, const_iterator first, const_iterator last) \
     { base::insert((biterator)it, (bconst_iterator)first,             \
                    (bconst_iterator)last); }                          \
-  size_type max_size() const { return base::max_size(); }             \
   void pop_back() { base::pop_back(); }                               \
   void push_back(const_reference v)                                   \
     { base::push_back((bconst_reference)v); }                         \
@@ -473,7 +475,6 @@ public:                                                               \
   const_reverse_iterator rend() const;                                \
   void reserve(size_type n) { base::reserve(n); };                    \
   void resize(size_type n, value_type v = value_type());              \
-  size_type size() const { return base::size(); }                     \
 }
 
 #define _WX_PTROP pointer operator->() const { return m_ptr; }

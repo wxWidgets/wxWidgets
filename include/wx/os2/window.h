@@ -103,7 +103,6 @@ public:
     virtual void     Refresh( bool          bEraseBackground = TRUE
                              ,const wxRect* pRect = (const wxRect *)NULL
                             );
-    virtual void     Clear(void);
     virtual void     Freeze(void);
     virtual void     Update(void);
     virtual void     Thaw(void);

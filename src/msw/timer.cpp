@@ -49,19 +49,13 @@ WX_DECLARE_HASH_MAP( long,
 
 wxTimerMap wxTimerList;
 
-void WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
+void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
-#ifdef __WIN32__
-    #define _EXPORT
-#else
-    #define _EXPORT _export
-#endif
-
-// should probably be in wx/msw/private.h
+// should probably be in wx/msw/missing.h
 #ifdef __WXMICROWIN__
     #define MakeProcInstance(proc, hinst) proc
 #endif
@@ -149,7 +143,7 @@ void wxProcessTimer(wxTimer& timer)
     timer.Notify();
 }
 
-void WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
+void WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 {
     
     wxTimerMap::iterator node = wxTimerList.find((long)idTimer);
@@ -157,8 +151,7 @@ void WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
     wxASSERT_MSG( node != wxTimerList.end(), wxT("bogus timer id in wxTimerProc") );
 
     wxProcessTimer(*(node->second));
-
-    // return 0;
 }
 
 #endif // wxUSE_TIMER
+

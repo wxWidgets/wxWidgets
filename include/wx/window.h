@@ -583,8 +583,8 @@ public:
         // repaint all invalid areas of the window immediately
     virtual void Update() { }
 
-        // clear the window entirely
-    virtual void Clear() = 0;
+        // clear the window background
+    virtual void ClearBackground();
 
         // freeze the window: don't redraw it until it is thawed
     virtual void Freeze() { }

@@ -1385,17 +1385,6 @@ bool wxWindowOS2::Reparent(
     return TRUE;
 } // end of wxWindowOS2::Reparent
 
-void wxWindowOS2::Clear()
-{
-    wxClientDC                      vDc((wxWindow*)this);
-    wxBrush                         vBrush( GetBackgroundColour()
-                                           ,wxSOLID
-                                          );
-
-    vDc.SetBackground(vBrush);
-    vDc.Clear();
-} // end of wxWindowOS2::Clear
-
 void wxWindowOS2::Update()
 {
     ::WinUpdateWindow(GetHwnd());

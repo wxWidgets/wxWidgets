@@ -1577,14 +1577,6 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
     XSendEvent(display, thisWindow, False, ExposureMask, (XEvent *)&dummyEvent);
 }
 
-void wxWindow::Clear()
-{
-    wxClientDC dc(this);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
-    dc.SetBackground(brush);
-    dc.Clear();
-}
-
 void wxWindow::DoPaint()
 {
     //TODO : make a temporary gc so we can do the XCopyArea below

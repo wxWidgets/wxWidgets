@@ -11,6 +11,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - also, OnExit() is not called if OnInit() fails
 - wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
+- wxWindow::Clear() is now called ClearBackground()
 
 
 DEPRECATED METHODS SINCE 2.4.x

@@ -531,11 +531,6 @@ bool wxWindow::SetFont(const wxFont& font)
     return TRUE;
 }
 
-void wxWindow::Clear()
-{
-    // TODO
-}
-
 static int CocoaRaiseWindowCompareFunction(id first, id second, void *target)
 {
     // first should be ordered higher
