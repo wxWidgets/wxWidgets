@@ -408,7 +408,7 @@ void wxSizer::Fit( wxWindow *window )
     else
         size = GetMinWindowSize( window );
 
-    window->SetSize( size );
+    window->SetClientSize( size );
 }
 
 void wxSizer::Layout()
