@@ -22,11 +22,6 @@ Please see also:
 
 - Fix TCP/IP mode in dde sample (how to use; why does it crash).
 
-- wxDB ODBC classes: it seems that there are too many
-  Sybase-specific features for it to work on e.g. MySQL,
-  PostgreSQL. Find out what Remstar uses and document
-  problems/restrictions.
-
 - In doc/view file selector, document type is selected by
   extension, not the type selected in the (Windows) file selector.
 
@@ -34,6 +29,8 @@ Please see also:
 
 - Implement wxScrolledWindow::OnChar to scroll the window using
   the keyboard.
+
+- Documentation for ODBC classes
 
 For 2.1: small changes not involving rewriting anything
 -------------------------------------------------------
