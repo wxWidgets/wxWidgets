@@ -100,19 +100,20 @@ protected:
   char *m_cdata;                // C callback data
 
   bool m_connected;             // Connected ?
-  bool m_establishing;          // Pending connections?
+  bool m_establishing;          // Pending connections ?
   bool m_notify_state;			// Notify state
   int m_id;                     // Socket id (for event handler)
 
   // Defering variables
   enum {
     DEFER_READ, DEFER_WRITE, NO_DEFER
-  } m_defering;                         // Defering state
-  char *m_defer_buffer;                 // Defering target buffer
-  wxUint32 m_defer_nbytes;              // Defering buffer size
-  wxTimer *m_defer_timer;               // Timer for defering mode
+  } m_defering;                 // Defering state
+  char *m_defer_buffer;         // Defering target buffer
+  wxUint32 m_defer_nbytes;      // Defering buffer size
+  wxTimer *m_defer_timer;       // Timer for defering mode
 
-  wxList m_states;                      // Stack of states
+  bool m_error;                 // Did an error occur in last IO call ?
+  wxList m_states;              // Stack of states
 
 public:
   wxSocketBase();
@@ -128,14 +129,9 @@ public:
   wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
   void Discard();
 
-  // Try not to use these two methods (they sould be protected)
-  void CreatePushbackAfter(const char *buffer, wxUint32 size);
-  void CreatePushbackBefore(const char *buffer, wxUint32 size);
-
   // Status
   inline bool Ok() const { return (m_socket != NULL); };
-  inline bool Error() const
-           { return (GSocket_GetError(m_socket) != GSOCK_NOERROR); };
+  inline bool Error() const { return m_error; };
   inline bool IsConnected() const { return m_connected; };
   inline bool IsDisconnected() const { return !IsConnected(); };
   inline bool IsNoWait() const { return ((m_flags & NOWAIT) != 0); };
@@ -144,13 +140,19 @@ public:
   inline wxSocketError LastError() const { return (wxSocketError)GSocket_GetError(m_socket); }
   inline wxSockType GetType() const { return m_type; }
 
+  // Some info on the socket...
+  virtual bool GetPeer(wxSockAddress& addr_man) const;
+  virtual bool GetLocal(wxSockAddress& addr_man) const;
+
+  // Set attributes and flags
   void SetFlags(wxSockFlags _flags);
   wxSockFlags GetFlags() const;
-  void SetTimeout(unsigned long sec);
+  void SetTimeout(long seconds);
 
-  // seconds = -1 means infinite wait
-  // seconds, milliseconds = 0 means no wait
-  // seconds, milliseconds > 0 means specified wait
+  // Wait functions
+  //   seconds = -1 means default timeout (change with SetTimeout)
+  //   seconds, milliseconds = 0 means no wait
+  //   seconds, milliseconds > 0 means specified wait
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
@@ -160,36 +162,31 @@ public:
   void SaveState();
   void RestoreState();
 
-  // Setup external callback
-  wxSockCbk Callback(wxSockCbk cbk_);
-  char *CallbackData(char *data);
-
   // Setup event handler
   void SetEventHandler(wxEvtHandler& evt_hdlr, int id = -1);
 
-  // Method called when something happens in the socket
+  // Tell wxSocket which events to notify
   void SetNotify(wxSocketEventFlags flags);
-  virtual void OnRequest(wxSocketNotify req_evt);
+  void Notify(bool notify);
+  static wxSocketEventFlags EventToNotify(wxSocketNotify evt);
+  inline wxSocketEventFlags NeededReq() const { return m_neededreq; }
+
+  // External callback
+  wxSockCbk Callback(wxSockCbk cbk_);
+  char *CallbackData(char *data);
 
   // Public internal callback
   virtual void OldOnNotify(wxSocketNotify WXUNUSED(evt));
 
-  // Some info on the socket...
-  virtual bool GetPeer(wxSockAddress& addr_man) const;
-  virtual bool GetLocal(wxSockAddress& addr_man) const;
-
-  // Install or uninstall callbacks
-  void Notify(bool notify);
-
-  // So you can know what the socket driver is looking for ...
-  inline wxSocketEventFlags NeededReq() const { return m_neededreq; }
-
-  static wxSocketEventFlags EventToNotify(wxSocketNotify evt);
+  // Do NOT use these functions; they should be protected!
+  void CreatePushbackAfter(const char *buffer, wxUint32 size);
+  void CreatePushbackBefore(const char *buffer, wxUint32 size);
+  void OnRequest(wxSocketNotify req_evt);
 
 protected:
   friend class wxSocketServer;
+  friend class wxSocketClient;
   friend class wxSocketHandler;
-  friend class wxSocketInternal;
 
 #ifdef __SALFORDC__
 public:
@@ -217,7 +214,6 @@ class WXDLLEXPORT wxSocketServer : public wxSocketBase
 {
   DECLARE_CLASS(wxSocketServer)
 public:
-
   // 'service' can be a name or a port-number
 
   wxSocketServer(wxSockAddress& addr_man, wxSockFlags flags = wxSocketBase::NONE);
@@ -225,7 +221,7 @@ public:
   wxSocketBase* Accept(bool wait = TRUE);
   bool AcceptWith(wxSocketBase& sock, bool wait = TRUE);
 
-  bool WaitOnAccept(long seconds = -1, long milliseconds = 0);
+  bool WaitForAccept(long seconds = -1, long milliseconds = 0);
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -241,8 +237,6 @@ public:
   virtual bool Connect(wxSockAddress& addr_man, bool wait = TRUE);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
-
-  virtual void OnRequest(wxSocketNotify flags);
 };
 
 class WXDLLEXPORT wxSocketEvent : public wxEvent {
