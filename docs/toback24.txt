@@ -133,6 +133,12 @@ http://sf.net/tracker/index.php?func=detail&aid=729758&group_id=9863&atid=309863
 Checking in src/common/intl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
 new revision: 1.95; previous revision: 1.94
+done
+Checking in intl.cpp
+/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
+new revision: 1.102; previous revision: 1.101
+done
+
 
 
 15. Fixes for mono bitmaps in wxGTK
