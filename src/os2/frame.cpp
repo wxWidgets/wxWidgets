@@ -1601,12 +1601,15 @@ MRESULT wxFrame::OS2WindowProc(
             {
                 HPS                             hPS;
                 RECTL                           vRect;
+                wxPaintEvent                    vEvent;
 
                 hPS = WinBeginPaint(m_hWnd, 0L, &vRect);
                 ::WinFillRect(hPS, &vRect,  CLR_BLUE  /* SYSCLR_WINDOW */);
                 ::WinEndPaint(hPS);
 
                 mRc = (MRESULT)FALSE;
+                vEvent.SetEventObject(this);
+                GetEventHandler()->ProcessEvent(vEvent);
                 bProcessed = TRUE;
             }
             break;

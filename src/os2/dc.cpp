@@ -204,34 +204,73 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
-#define DO_SET_CLIPPING_BOX()                   \
-{                                               \
-    RECT rect;                                  \
-                                                \
-    GetClipBox(GetHdc(), &rect);                \
-                                                \
-    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);   \
-    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);    \
-    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);  \
-    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom); \
+#define DO_SET_CLIPPING_BOX()                    \
+{                                                \
+    RECTL rect;                                  \
+                                                 \
+    ::GpiQueryClipBox(m_hPS, &rect);             \
+                                                 \
+    m_clipX1 = (wxCoord) XDEV2LOG(rect.xLeft);   \
+    m_clipY1 = (wxCoord) YDEV2LOG(rect.yTop);    \
+    m_clipX2 = (wxCoord) XDEV2LOG(rect.xRight);  \
+    m_clipY2 = (wxCoord) YDEV2LOG(rect.yBottom); \
 }
 
-void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y
-                               ,wxCoord width, wxCoord height
-                              )
+void wxDC::DoSetClippingRegion(
+  wxCoord                           x
+, wxCoord                           y
+, wxCoord                           width
+, wxCoord                           height
+)
 {
-   // TODO
-}
+    RECTL                           vRect;
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
+    m_clipping    = TRUE;
+    vRect.xLeft   = XLOG2DEV(x);
+    vRect.yTop    = YLOG2DEV(y + height);
+    vRect.xRight  = XLOG2DEV(x + width);
+    vRect.yBottom = YLOG2DEV(y);
+    ::GpiIntersectClipRectangle(m_hPS, &vRect);
+    DO_SET_CLIPPING_BOX()
+} // end of wxDC::DoSetClippingRegion
+
+void wxDC::DoSetClippingRegionAsRegion(
+  const wxRegion&                   rRegion
+)
 {
-   // TODO
-}
+     wxCHECK_RET(rRegion.GetHRGN(), wxT("invalid clipping region"));
+     HRGN                           hRgnOld;
+
+     m_clipping = TRUE;
+     ::GpiSetClipRegion( m_hPS
+                        ,(HRGN)rRegion.GetHRGN()
+                        ,&hRgnOld
+                       );
+    DO_SET_CLIPPING_BOX()
+} // end of wxDC::DoSetClippingRegionAsRegion
 
 void wxDC::DestroyClippingRegion(void)
 {
-    // TODO:
-};
+    if (m_clipping && m_hPS)
+    {
+         HRGN                       hRgnOld;
+         RECTL                      vRect;
+
+         // TODO: this should restore the previous clipped region
+         //       so that OnPaint processing works correctly, and
+         //       the update doesn't get destroyed after the first
+         //       DestroyClippingRegion
+         vRect.xLeft   = XLOG2DEV(0);
+         vRect.yTop    = YLOG2DEV(32000);
+         vRect.xRight  = XLOG2DEV(32000);
+         vRect.yBottom = YLOG2DEV(0);
+
+         HRGN                       hRgn = ::GpiCreateRegion(m_hPS, 1, &vRect);
+
+         ::GpiSetClipRegion(m_hPS, hRgn, &hRgnOld);
+     }
+      m_clipping = FALSE;
+} // end of wxDC::DestroyClippingRegion
 
 // ---------------------------------------------------------------------------
 // query capabilities
@@ -300,7 +339,7 @@ bool wxDC::DoGetPixel(
     vPoint.x = vX;
     vPoint.y = vY;
     lColor = ::GpiSetPel(m_hPS, &vPoint);
-    *pCol = lColor;
+    pCol->Set((unsigned long)lColor);
     if(lColor>= 0)
         return(TRUE);
     else
