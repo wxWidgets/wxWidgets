@@ -112,7 +112,9 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#include "wx/msw/missing.h"     // for ENDSESSION_LOGOFF
+#if defined(__GNUG__)
+#include "wx/msw/missing.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // standard constants not available with all compilers/headers
