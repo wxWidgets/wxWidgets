@@ -248,16 +248,20 @@ else
 fi
 
 # determine if at least one gui lib was used:
-nogui_flag="yes"
-for i in $libs_list; do
-  case $i in
-      base|net)
-        ;;
-      *)
-        nogui_flag="no"
-        ;;
-  esac
-done
+if test "$is_monolithic" = "0" ; then
+  nogui_flag="yes"
+  for i in $libs_list; do
+    case $i in
+        base|net)
+          ;;
+        *)
+          nogui_flag="no"
+          ;;
+    esac
+  done
+else
+  nogui_flag="no"
+fi
 
 
 # handle options:
