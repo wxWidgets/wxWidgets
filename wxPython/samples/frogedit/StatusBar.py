@@ -1,10 +1,9 @@
-from wxPython.wx import *
-
 import os.path
+import wx
 
-class CustomStatusBar(wxStatusBar):
+class CustomStatusBar(wx.StatusBar):
     def __init__(self, parent):
-        wxStatusBar.__init__(self, parent, -1)
+        wx.StatusBar.__init__(self, parent, -1)
         self.SetFieldsCount(3)
 
     def setFileName(self, fn):

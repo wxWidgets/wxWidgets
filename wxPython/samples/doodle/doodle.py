@@ -38,26 +38,28 @@ class DoodleWindow(wx.Window):
         self.thickness = 1
         self.SetColour("Black")
         self.lines = []
-        self.x = self.y = 0
+        self.pos = wx.Point(0,0)
         self.MakeMenu()
 
         self.InitBuffer()
 
+        self.SetCursor(wx.StockCursor(wx.CURSOR_PENCIL))
+
         # hook some mouse events
-        wx.EVT_LEFT_DOWN(self, self.OnLeftDown)
-        wx.EVT_LEFT_UP(self, self.OnLeftUp)
-        wx.EVT_RIGHT_UP(self, self.OnRightUp)
-        wx.EVT_MOTION(self, self.OnMotion)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+        self.Bind(wx.EVT_MOTION, self.OnMotion)
 
         # the window resize event and idle events for managing the buffer
-        wx.EVT_SIZE(self, self.OnSize)
-        wx.EVT_IDLE(self, self.OnIdle)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
 
         # and the refresh event
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
         # When the window is destroyed, clean up resources.
-        wx.EVT_WINDOW_DESTROY(self, self.Cleanup)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.Cleanup)
 
 
     def Cleanup(self, evt):
@@ -109,14 +111,15 @@ class DoodleWindow(wx.Window):
         for k in keys:
             text = self.menuColours[k]
             menu.Append(k, text, kind=wx.ITEM_CHECK)
-        wx.EVT_MENU_RANGE(self, 100, 200, self.OnMenuSetColour)
-        wx.EVT_UPDATE_UI_RANGE(self, 100, 200, self.OnCheckMenuColours)
+        self.Bind(wx.EVT_MENU_RANGE, self.OnMenuSetColour, id=100, id2=200)
+        self.Bind(wx.EVT_UPDATE_UI_RANGE, self.OnCheckMenuColours, id=100, id2=200)
         menu.Break()
 
         for x in range(1, self.maxThickness+1):
             menu.Append(x, str(x), kind=wx.ITEM_CHECK)
-        wx.EVT_MENU_RANGE(self, 1, self.maxThickness, self.OnMenuSetThickness)
-        wx.EVT_UPDATE_UI_RANGE(self, 1, self.maxThickness, self.OnCheckMenuThickness)
+
+        self.Bind(wx.EVT_MENU_RANGE, self.OnMenuSetThickness, id=1, id2=self.maxThickness)
+        self.Bind(wx.EVT_UPDATE_UI_RANGE, self.OnCheckMenuThickness, id=1, id2=self.maxThickness)
         self.menu = menu
 
 
@@ -141,7 +144,7 @@ class DoodleWindow(wx.Window):
     def OnLeftDown(self, event):
         """called when the left mouse button is pressed"""
         self.curLine = []
-        self.x, self.y = event.GetPositionTuple()
+        self.pos = event.GetPosition()
         self.CaptureMouse()
 
 
@@ -170,11 +173,11 @@ class DoodleWindow(wx.Window):
             dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
             dc.BeginDrawing()
             dc.SetPen(self.pen)
-            pos = event.GetPositionTuple()
-            coords = (self.x, self.y) + pos
+            pos = event.GetPosition()
+            coords = (self.pos, pos)
             self.curLine.append(coords)
-            dc.DrawLine(self.x, self.y, pos[0], pos[1])
-            self.x, self.y = pos
+            dc.DrawLine(*coords)
+            self.pos = pos
             dc.EndDrawing()
 
 
@@ -218,7 +221,7 @@ class DoodleWindow(wx.Window):
             pen = wx.Pen(colour, thickness, wx.SOLID)
             dc.SetPen(pen)
             for coords in line:
-                apply(dc.DrawLine, coords)
+                dc.DrawLine(*coords)
         dc.EndDrawing()
 
 

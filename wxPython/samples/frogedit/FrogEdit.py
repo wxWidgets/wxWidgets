@@ -6,9 +6,13 @@
 #
 # License: Python
 
-import os, string, re
-import sys
-from wxPython.wx         import *
+import  os
+import  re
+import  string
+import  sys
+
+import  wx
+
 from StatusBar           import *
 from FrogEditor          import FrogEditor
 
@@ -27,23 +31,23 @@ def chomp(line):
 
 ##---------------------------------------------------------------------
 
-class OutlinerPanel(wxPanel):
+class OutlinerPanel(wx.Panel):
 
     def Close(self, event):
         self.parent.Close()
-        wxPanel.Close(self)
+        wx.Panel.Close(self)
 
 ##----------------------------------------------------------------------
 
 
-class FrogEditFrame(wxFrame):
-    def __init__(self, parent, ID, title, pos=wxDefaultPosition,
-                 size=wxDefaultSize, style=wxDEFAULT_FRAME_STYLE):
+class FrogEditFrame(wx.Frame):
+    def __init__(self, parent, ID, title, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE):
 
-        wxFrame.__init__(self, parent, ID, title, pos, size, style)
+        wx.Frame.__init__(self, parent, ID, title, pos, size, style)
 
-        splitter = wxSplitterWindow(self, -1, style=wxNO_3D|wxSP_3D)
-        win = OutlinerPanel(splitter, -1, style=wxCLIP_CHILDREN)
+        splitter = wx.SplitterWindow(self, -1, style=wx.NO_3D|wx.SP_3D)
+        win = OutlinerPanel(splitter, -1, style=wx.CLIP_CHILDREN)
         win.parent = self
         log = self.MakeLogWindow(splitter)
 
@@ -61,21 +65,21 @@ class FrogEditFrame(wxFrame):
 ##------------- Init Misc
 
     def RegisterEventHandlers(self):
-        EVT_CLOSE(self,self.OnCloseWindow)
+        self.Bind(wx.EVT_CLOSE,self.OnCloseWindow)
 
     def InitVariables(self):
         self.fileName = None
         self.edl.UnTouchBuffer()
 
     def MakeMenus(self):
-        self.MainMenu = wxMenuBar()
+        self.MainMenu = wx.MenuBar()
         self.AddMenus(self.MainMenu)
         self.SetMenuBar(self.MainMenu)
 
 ##------------- Init Subwindows
 
     def MakeEditorWindow(self, win, log):
-        self.edl = FrogEditor(win, -1, style=wxSUNKEN_BORDER, statusBar = self.sb)
+        self.edl = FrogEditor(win, -1, style=wx.SUNKEN_BORDER, statusBar = self.sb)
         self.edl.SetControlFuncs = self.SetControlFuncs
         self.edl.SetAltFuncs = self.SetAltFuncs
         self.edl.SetStatus(log)
@@ -85,10 +89,10 @@ class FrogEditFrame(wxFrame):
         self.SetStatusBar(self.sb)
 
     def MakeLogWindow(self, container):
-        log = wxTextCtrl(container, -1,
-                         style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
-        wxLog_SetActiveTarget(wxLogTextCtrl(log))
-        wxLogMessage('window handle: %s' % self.GetHandle())
+        log = wx.TextCtrl(container, -1,
+                         style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
+        wx.Log_SetActiveTarget(wx.LogTextCtrl(log))
+        wx.LogMessage('window handle: %s' % self.GetHandle())
         return log
 
     def SetUpSplitter(self, splitter, win, log):
@@ -97,15 +101,15 @@ class FrogEditFrame(wxFrame):
         splitter.SetMinimumPaneSize(40)
 
     def MakeToolbar(self, win):
-        toolbarBox = wxBoxSizer(wxHORIZONTAL)
+        toolbarBox = wx.BoxSizer(wx.HORIZONTAL)
         self.AddButtons(win, toolbarBox)
         return toolbarBox
 
     def MakeMainWindow(self, win):
-        mainBox = wxBoxSizer(wxVERTICAL)
+        mainBox = wx.BoxSizer(wx.VERTICAL)
         mainBox.Add(self.MakeToolbar(win))
         borderWidth = 5
-        mainBox.Add(self.edl, 1, wxALL|wxGROW, borderWidth)
+        mainBox.Add(self.edl, 1, wx.ALL|wx.GROW, borderWidth)
         win.SetSizer(mainBox)
         win.SetAutoLayout(True)
 
@@ -118,13 +122,13 @@ class FrogEditFrame(wxFrame):
         self.AddHelpMenu(menu)
 
     def AddMenuItem(self, menu, itemText, itemDescription, itemHandler):
-        menuId = wxNewId()
+        menuId = wx.NewId()
         menu.Append(menuId, itemText, itemDescription)
-        EVT_MENU(self, menuId, itemHandler)
+        self.Bind(wx.EVT_MENU, itemHandler, id=menuId)
         return menuId
 
     def AddFileMenu(self, menu):
-        fileMenu = wxMenu()
+        fileMenu = wx.Menu()
         self.AddMenuItem(fileMenu, '&New File\tCtrl-N', 'New File', self.OnNewFile)
         self.AddMenuItem(fileMenu, '&Open File\tCtrl-O', 'Open File', self.OnOpenFile)
         self.AddMenuItem(fileMenu, '&Save File\tCtrl-S', 'Save File', self.OnSaveFile)
@@ -133,7 +137,7 @@ class FrogEditFrame(wxFrame):
         menu.Append(fileMenu, 'File')
 
     def AddEditMenu(self, menu):
-        editMenu = wxMenu()
+        editMenu = wx.Menu()
         self.AddMenuItem(editMenu, 'Cut\tCtrl-X', 'Cut', self.edl.OnCutSelection)
         self.AddMenuItem(editMenu, '&Copy\tCtrl-C', 'Copy', self.edl.OnCopySelection)
         self.AddMenuItem(editMenu, 'Paste\tCtrl-V', 'Paste', self.edl.OnPaste)
@@ -141,7 +145,7 @@ class FrogEditFrame(wxFrame):
         menu.Append(editMenu, 'Edit')
 
     def AddHelpMenu(self, menu):
-        helpMenu = wxMenu()
+        helpMenu = wx.Menu()
         self.AddMenuItem(helpMenu, 'About', 'About the program', self.OnHelpAbout)
         menu.Append(helpMenu, 'Help')
 
@@ -149,12 +153,12 @@ class FrogEditFrame(wxFrame):
 
 
     def NewButton(self, window, container, name, pos, size, handler):
-        buttonId = wxNewId()
+        buttonId = wx.NewId()
         if pos == None or size == None:
-            container.Add(wxButton(window, buttonId, name), 0, 0)
+            container.Add(wx.Button(window, buttonId, name), 0, 0)
         else:
-            container.Add(wxButton(window, buttonId, name, pos, size), 0, 0)
-        EVT_BUTTON(self, buttonId, handler)
+            container.Add(wx.Button(window, buttonId, name, pos, size), 0, 0)
+        self.Bind(wx.EVT_BUTTON, handler, id=buttonId)
         return buttonId
 
     # override this to make more buttons
@@ -169,15 +173,15 @@ class FrogEditFrame(wxFrame):
 ##-------------- Init Dialogs
 
     def MessageDialog(self, text, title):
-        messageDialog = wxMessageDialog(self, text, title, wxOK | wxICON_INFORMATION)
+        messageDialog = wx.MessageDialog(self, text, title, wx.OK | wx.ICON_INFORMATION)
         messageDialog.ShowModal()
         messageDialog.Destroy()
 
     def OkCancelDialog(self, text, title):
-        dialog = wxMessageDialog(self, text, title, wxOK | wxCANCEL | wxICON_INFORMATION)
+        dialog = wx.MessageDialog(self, text, title, wx.OK | wx.CANCEL | wx.ICON_INFORMATION)
         result = dialog.ShowModal()
         dialog.Destroy()
-        if result == wxID_OK:
+        if result == wx.ID_OK:
             return True
         else:
             return False
@@ -190,21 +194,21 @@ class FrogEditFrame(wxFrame):
         if wildCard == None:
             wildCard = "*.*"
         fileName = None
-        fileDialog = wxFileDialog(self, "Choose a file", defaultDir, defaultFile, wildCard, wxOPEN|wxMULTIPLE)
+        fileDialog = wx.FileDialog(self, "Choose a file", defaultDir, defaultFile, wildCard, wx.OPEN|wx.MULTIPLE)
         result = fileDialog.ShowModal()
-        if result == wxID_OK:
+        if result == wx.ID_OK:
             fileName = fileDialog.GetPath()
-            wxLogMessage('You selected: %s\n' % fileName)
+            wx.LogMessage('You selected: %s\n' % fileName)
         fileDialog.Destroy()
         return fileName
 
     def OpenFileError(self, fileName):
-        wxLogMessage('Open file error.')
+        wx.LogMessage('Open file error.')
         self.MessageDialog("Error opening file '%s'!" % fileName, "Error")
 
 
     def SaveFileError(self, fileName):
-        wxLogMessage('Save file error.')
+        wx.LogMessage('Save file error.')
         self.MessageDialog("Error saving file '%s'!" % fileName, "Error")
 
 ##---------------- Utility functions
@@ -293,7 +297,7 @@ class FrogEditFrame(wxFrame):
     def OnSaveFile(self, event):
         if self.fileName is None:
             return self.OnSaveFileAs(event)
-        wxLogMessage("Saving %s..." % self.fileName)
+        wx.LogMessage("Saving %s..." % self.fileName)
         if self.SaveFile(self.fileName) is not True:
             self.SaveFileError(self.fileName)
         self.edl.SetFocus()
@@ -302,7 +306,7 @@ class FrogEditFrame(wxFrame):
         fileName = self.SelectFileDialog(self.GetCurrentDir(),self.GetFileName())
         if fileName is not None:
             self.fileName = fileName
-            wxLogMessage("Saving %s..." % self.fileName)
+            wx.LogMessage("Saving %s..." % self.fileName)
             if self.SaveFile(self.fileName) is not True:
                 self.SaveFileError(self.fileName)
         self.edl.SetFocus()
@@ -322,7 +326,7 @@ class FrogEditFrame(wxFrame):
         pass
 
     def Show(self, show):
-        wxFrame.Show(self, show)
+        wx.Frame.Show(self, show)
         self.edl.SetFocus()
 
 ##------------- Startup stuff
@@ -341,7 +345,7 @@ class FrogEditLauncher:
 
     def MakeAppFrame(self):
         return FrogEditFrame(None, -1, "FrogEdit", size=(640, 480),
-                             style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
+                             style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
 
     def GetArgvFilename(self):
         if len(sys.argv) > 1:
@@ -350,7 +354,7 @@ class FrogEditLauncher:
             return None
 
     def Main(self):
-        app = wxPySimpleApp()
+        app = wx.PySimpleApp()
         win = self.MakeAppFrame()
         win.Show(True)
         win.LoadInitialFile(self.GetArgvFilename())

@@ -6,26 +6,27 @@
 # License: Python
 
 import re
-from wxPython.wx            import *
-from wxPython.lib.editor    import wxEditor
+import wx
+
+from wx.lib.editor import Editor
 
 #---------------------------------------------------------------------
 
-class FrogEditor(wxEditor):
+class FrogEditor(Editor):
     def __init__(self, parent, id,
-                 pos=wxDefaultPosition, size=wxDefaultSize, style=0, statusBar=None):
+                 pos=wx.DefaultPosition, size=wx.DefaultSize, style=0, statusBar=None):
         self.StatusBar = statusBar
-        wxEditor.__init__(self, parent, id, pos, size, style)
+        Editor.__init__(self, parent, id, pos, size, style)
         self.parent = parent
 
     ##------------------------------------
 
     def TouchBuffer(self):
-        wxEditor.TouchBuffer(self)
+        Editor.TouchBuffer(self)
         self.StatusBar.setDirty(1)
 
     def UnTouchBuffer(self):
-        wxEditor.UnTouchBuffer(self)
+        Editor.UnTouchBuffer(self)
         self.StatusBar.setDirty(0)
 
 
@@ -33,7 +34,7 @@ class FrogEditor(wxEditor):
 
     # override our base class method
     def DrawCursor(self, dc = None):
-        wxEditor.DrawCursor(self,dc)
+        Editor.DrawCursor(self,dc)
         self.StatusBar.setRowCol(self.cy,self.cx)
 
     def lastLine(self):
@@ -67,16 +68,16 @@ class FrogEditor(wxEditor):
         self.status.append(data)
         if data[-1:] == '\n':
             data = data[:-1]
-        wxLogMessage(data)
+        wx.LogMessage(data)
 
     #--------- wxEditor keyboard overrides
 
     def SetControlFuncs(self, action):
-        wxEditor.SetControlFuncs(self, action)
+        Editor.SetControlFuncs(self, action)
         action['-'] = self.PrintSeparator
 
     def SetAltFuncs(self, action):
-        wxEditor.SetAltFuncs(self, action)
+        Editor.SetAltFuncs(self, action)
         action['x'] = self.Exit
 
     #----------- commands -----------

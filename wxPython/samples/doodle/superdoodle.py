@@ -107,12 +107,12 @@ class DoodleFrame(wx.Frame):
         menuBar.Append(menu2, "&Help")
         self.SetMenuBar(menuBar)
 
-        wx.EVT_MENU(self, idOPEN,   self.OnMenuOpen)
-        wx.EVT_MENU(self, idSAVE,   self.OnMenuSave)
-        wx.EVT_MENU(self, idSAVEAS, self.OnMenuSaveAs)
-        wx.EVT_MENU(self, idCLEAR,  self.OnMenuClear)
-        wx.EVT_MENU(self, idEXIT,   self.OnMenuExit)
-        wx.EVT_MENU(self, idABOUT,  self.OnMenuAbout)
+        self.Bind(wx.EVT_MENU,   self.OnMenuOpen, id=idOPEN)
+        self.Bind(wx.EVT_MENU,   self.OnMenuSave, id=idSAVE)
+        self.Bind(wx.EVT_MENU, self.OnMenuSaveAs, id=idSAVEAS)
+        self.Bind(wx.EVT_MENU,  self.OnMenuClear, id=idCLEAR)
+        self.Bind(wx.EVT_MENU,   self.OnMenuExit, id=idEXIT)
+        self.Bind(wx.EVT_MENU,  self.OnMenuAbout, id=idABOUT)
 
 
 
@@ -202,7 +202,7 @@ class ControlPanel(wx.Panel):
             b = buttons.GenBitmapToggleButton(self, k, bmp, size=btnSize )
             b.SetBezelWidth(1)
             b.SetUseFocusIndicator(False)
-            wx.EVT_BUTTON(self, k, self.OnSetColour)
+            self.Bind(wx.EVT_BUTTON, self.OnSetColour, b)
             cGrid.Add(b, 0)
             self.clrBtns[colours[k]] = b
         self.clrBtns[colours[keys[0]]].SetToggle(True)
@@ -217,7 +217,7 @@ class ControlPanel(wx.Panel):
             b = buttons.GenToggleButton(self, x, str(x), size=btnSize)
             b.SetBezelWidth(1)
             b.SetUseFocusIndicator(False)
-            wx.EVT_BUTTON(self, x, self.OnSetThickness)
+            self.Bind(wx.EVT_BUTTON, self.OnSetThickness, b)
             tGrid.Add(b, 0)
             self.thknsBtns[x] = b
         self.thknsBtns[1].SetToggle(True)
@@ -297,7 +297,7 @@ class ColourIndicator(wx.Window):
         self.SetBackgroundColour(wx.WHITE)
         self.SetSize( (-1, 45) )
         self.colour = self.thickness = None
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
 
     def Update(self, colour, thickness):
@@ -321,7 +321,7 @@ class ColourIndicator(wx.Window):
             pen = wx.Pen(self.colour, self.thickness)
             dc.BeginDrawing()
             dc.SetPen(pen)
-            dc.DrawLine(10, sz.height/2, sz.width-10, sz.height/2)
+            dc.DrawLine((10, sz.height/2), (sz.width-10, sz.height/2))
             dc.EndDrawing()
 
 
