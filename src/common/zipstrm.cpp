@@ -470,6 +470,7 @@ class wxZipMemory
 {
 public:
     wxZipMemory() : m_data(NULL), m_size(0), m_capacity(0), m_ref(1) { }
+    ~wxZipMemory() { delete m_data; }
 
     wxZipMemory *AddRef() { m_ref++; return this; }
     void Release() { if (--m_ref == 0) delete this; }
@@ -481,7 +482,6 @@ public:
     wxZipMemory *Unique(size_t size);
 
 private:
-    ~wxZipMemory() { delete m_data; }
 
     char *m_data;
     size_t m_size;
@@ -548,6 +548,7 @@ class wxZipWeakLinks
 {
 public:
     wxZipWeakLinks() : m_ref(1) { }
+    ~wxZipWeakLinks() { wxASSERT(IsEmpty()); }
 
     void Release(const wxZipInputStream* WXUNUSED(x))
         { if (--m_ref == 0) delete this; }
@@ -560,7 +561,6 @@ public:
     bool IsEmpty() const { return m_entries.empty(); }
 
 private:
-    ~wxZipWeakLinks() { wxASSERT(IsEmpty()); }
 
     int m_ref;
     _wxOffsetZipEntryMap m_entries;
@@ -1144,6 +1144,7 @@ class wxZipStreamLink
 {
 public:
     wxZipStreamLink(wxZipOutputStream *stream) : m_ref(1), m_stream(stream) { }
+    ~wxZipStreamLink() { }
 
     wxZipStreamLink *AddRef() { m_ref++; return this; }
     wxZipOutputStream *GetOutputStream() const { return m_stream; }
@@ -1154,7 +1155,6 @@ public:
         { m_stream = NULL; if (--m_ref == 0) delete this; }
 
 private:
-    ~wxZipStreamLink() { }
 
     int m_ref;
     wxZipOutputStream *m_stream;
