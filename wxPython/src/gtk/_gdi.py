@@ -5,7 +5,6 @@ import _gdi_
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 class GDIObject(_core.Object):
@@ -324,6 +323,20 @@ class Pen(GDIObject):
         """GetDashes(self) -> PyObject"""
         return _gdi_.Pen_GetDashes(*args, **kwargs)
 
+    def _SetDashes(*args, **kwargs):
+        """_SetDashes(self, PyObject _self, PyObject pyDashes)"""
+        return _gdi_.Pen__SetDashes(*args, **kwargs)
+
+    def SetDashes(self, dashes):
+        """
+        Associate a list of dash lengths with the Pen.
+        """
+        self._SetDashes(self, dashes)
+
+    def GetDashCount(*args, **kwargs):
+        """GetDashCount(self) -> int"""
+        return _gdi_.Pen_GetDashCount(*args, **kwargs)
+
     def __eq__(*args, **kwargs):
         """__eq__(self, Pen other) -> bool"""
         return _gdi_.Pen___eq__(*args, **kwargs)
@@ -331,10 +344,6 @@ class Pen(GDIObject):
     def __ne__(*args, **kwargs):
         """__ne__(self, Pen other) -> bool"""
         return _gdi_.Pen___ne__(*args, **kwargs)
-
-    def GetDashCount(*args, **kwargs):
-        """GetDashCount(self) -> int"""
-        return _gdi_.Pen_GetDashCount(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
 
@@ -345,40 +354,25 @@ class PenPtr(Pen):
         self.__class__ = Pen
 _gdi_.Pen_swigregister(PenPtr)
 
-class PyPen(Pen):
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxPyPen instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(self, Colour colour, int width=1, int style=SOLID) -> PyPen"""
-        newobj = _gdi_.new_PyPen(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_gdi_.delete_PyPen):
-        """__del__(self)"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def SetDashes(*args, **kwargs):
-        """SetDashes(self, int dashes, wxDash dashes_array)"""
-        return _gdi_.PyPen_SetDashes(*args, **kwargs)
-
-
-class PyPenPtr(PyPen):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = PyPen
-_gdi_.PyPen_swigregister(PyPenPtr)
-
-Pen = PyPen 
 #---------------------------------------------------------------------------
 
 class Brush(GDIObject):
     """
-    A brush is a drawing tool for filling in areas. It is used for painting the
-    background of rectangles, ellipses, etc. It has a colour and a style.
+    A brush is a drawing tool for filling in areas. It is used for
+    painting the background of rectangles, ellipses, etc. when drawing on
+    a `wx.DC`.  It has a colour and a style.
+
+    :warning: Do not create instances of wx.Brush before the `wx.App`
+        object has been created because, depending on the platform,
+        required internal data structures may not have been initialized
+        yet.  Instead create your brushes in the app's OnInit or as they
+        are needed for drawing.
+
+    :note: On monochrome displays all brushes are white, unless the colour
+        really is black.
+
+    :see: `wx.BrushList`, `wx.DC`, `wx.DC.SetBrush`
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -386,7 +380,24 @@ class Brush(GDIObject):
         """
         __init__(self, Colour colour, int style=SOLID) -> Brush
 
-        Constructs a brush from a colour object and style.
+        Constructs a brush from a `wx.Colour` object and a style.  The style
+        parameter may be one of the following:
+
+            ===================   =============================
+            Style                 Meaning
+            ===================   =============================
+            wx.TRANSPARENT        Transparent (no fill).
+            wx.SOLID              Solid.
+            wx.STIPPLE            Uses a bitmap as a stipple.
+            wx.BDIAGONAL_HATCH    Backward diagonal hatch.
+            wx.CROSSDIAG_HATCH    Cross-diagonal hatch.
+            wx.FDIAGONAL_HATCH    Forward diagonal hatch.
+            wx.CROSS_HATCH        Cross hatch.
+            wx.HORIZONTAL_HATCH   Horizontal hatch.
+            wx.VERTICAL_HATCH     Vertical hatch.
+            ===================   =============================
+
+
         """
         newobj = _gdi_.new_Brush(*args, **kwargs)
         self.this = newobj.this
@@ -399,31 +410,62 @@ class Brush(GDIObject):
         except: pass
 
     def SetColour(*args, **kwargs):
-        """SetColour(self, Colour col)"""
+        """
+        SetColour(self, Colour col)
+
+        Set the brush's `wx.Colour`.
+        """
         return _gdi_.Brush_SetColour(*args, **kwargs)
 
     def SetStyle(*args, **kwargs):
-        """SetStyle(self, int style)"""
+        """
+        SetStyle(self, int style)
+
+        Sets the style of the brush. See `__init__` for a listing of styles.
+        """
         return _gdi_.Brush_SetStyle(*args, **kwargs)
 
     def SetStipple(*args, **kwargs):
-        """SetStipple(self, Bitmap stipple)"""
+        """
+        SetStipple(self, Bitmap stipple)
+
+        Sets the stipple `wx.Bitmap`.
+        """
         return _gdi_.Brush_SetStipple(*args, **kwargs)
 
     def GetColour(*args, **kwargs):
-        """GetColour(self) -> Colour"""
+        """
+        GetColour(self) -> Colour
+
+        Returns the `wx.Colour` of the brush.
+        """
         return _gdi_.Brush_GetColour(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle(self) -> int"""
+        """
+        GetStyle(self) -> int
+
+        Returns the style of the brush.  See `__init__` for a listing of
+        styles.
+        """
         return _gdi_.Brush_GetStyle(*args, **kwargs)
 
     def GetStipple(*args, **kwargs):
-        """GetStipple(self) -> Bitmap"""
+        """
+        GetStipple(self) -> Bitmap
+
+        Returns the stiple `wx.Bitmap` of the brush.  If the brush does not
+        have a wx.STIPPLE style, then the return value may be non-None but an
+        uninitialised bitmap (`wx.Bitmap.Ok` returns False).
+        """
         return _gdi_.Brush_GetStipple(*args, **kwargs)
 
     def Ok(*args, **kwargs):
-        """Ok(self) -> bool"""
+        """
+        Ok(self) -> bool
+
+        Returns True if the brush is initialised and valid.
+        """
         return _gdi_.Brush_Ok(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -436,6 +478,27 @@ class BrushPtr(Brush):
 _gdi_.Brush_swigregister(BrushPtr)
 
 class Bitmap(GDIObject):
+    """
+    The wx.Bitmap class encapsulates the concept of a platform-dependent
+    bitmap.  It can be either monochrome or colour, and either loaded from
+    a file or created dynamically.  A bitmap can be selected into a memory
+    device context (instance of `wx.MemoryDC`). This enables the bitmap to
+    be copied to a window or memory device context using `wx.DC.Blit`, or
+    to be used as a drawing surface.
+
+    The BMP and XMP image file formats are supported on all platforms by
+    wx.Bitmap.  Other formats are automatically loaded by `wx.Image` and
+    converted to a wx.Bitmap, so any image file format supported by
+    `wx.Image` can be used.
+
+    :todo: Add wrappers and support for raw bitmap data access.  Can this
+           be be put into Python without losing the speed benefits of the
+           teplates and iterators in rawbmp.h?
+
+    :todo: Find a way to do very efficient PIL Image <--> wx.Bitmap
+           converstions.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -443,6 +506,33 @@ class Bitmap(GDIObject):
         __init__(self, String name, int type=BITMAP_TYPE_ANY) -> Bitmap
 
         Loads a bitmap from a file.
+
+        :param name:  Name of the file to load the bitmap from.
+        :param type: The type of image to expect.  Can be one of the following
+            constants (assuming that the neccessary `wx.Image` handlers are
+            loaded):
+
+                * wx.BITMAP_TYPE_ANY
+                * wx.BITMAP_TYPE_BMP
+                * wx.BITMAP_TYPE_ICO
+                * wx.BITMAP_TYPE_CUR
+                * wx.BITMAP_TYPE_XBM
+                * wx.BITMAP_TYPE_XPM
+                * wx.BITMAP_TYPE_TIF
+                * wx.BITMAP_TYPE_GIF
+                * wx.BITMAP_TYPE_PNG
+                * wx.BITMAP_TYPE_JPEG
+                * wx.BITMAP_TYPE_PNM
+                * wx.BITMAP_TYPE_PCX
+                * wx.BITMAP_TYPE_PICT
+                * wx.BITMAP_TYPE_ICON
+                * wx.BITMAP_TYPE_ANI
+                * wx.BITMAP_TYPE_IFF
+
+        :see: Alternate constructors `wx.EmptyBitmap`, `wx.BitmapFromIcon`,
+              `wx.BitmapFromImage`, `wx.BitmapFromXPMData`,
+              `wx.BitmapFromBits`
+
         """
         newobj = _gdi_.new_Bitmap(*args, **kwargs)
         self.this = newobj.this
@@ -495,9 +585,9 @@ class Bitmap(GDIObject):
         """
         ConvertToImage(self) -> Image
 
-        Creates a platform-independent image from a platform-dependent bitmap. This
-        preserves mask information so that bitmaps and images can be converted back
-        and forth without loss in that respect.
+        Creates a platform-independent image from a platform-dependent
+        bitmap. This preserves mask information so that bitmaps and images can
+        be converted back and forth without loss in that respect.
         """
         return _gdi_.Bitmap_ConvertToImage(*args, **kwargs)
 
@@ -505,8 +595,11 @@ class Bitmap(GDIObject):
         """
         GetMask(self) -> Mask
 
-        Gets the associated mask (if any) which may have been loaded from a file
-        or explpicitly set for the bitmap.
+        Gets the associated mask (if any) which may have been loaded from a
+        file or explpicitly set for the bitmap.
+
+        :see: `SetMask`, `wx.Mask`
+
         """
         return _gdi_.Bitmap_GetMask(*args, **kwargs)
 
@@ -515,6 +608,9 @@ class Bitmap(GDIObject):
         SetMask(self, Mask mask)
 
         Sets the mask for this bitmap.
+
+        :see: `GetMask`, `wx.Mask`
+
         """
         return _gdi_.Bitmap_SetMask(*args, **kwargs)
 
@@ -530,16 +626,18 @@ class Bitmap(GDIObject):
         """
         GetSubBitmap(self, Rect rect) -> Bitmap
 
-        Returns a sub bitmap of the current one as long as the rect belongs entirely
-        to the bitmap. This function preserves bit depth and mask information.
+        Returns a sub-bitmap of the current one as long as the rect belongs
+        entirely to the bitmap. This function preserves bit depth and mask
+        information.
         """
         return _gdi_.Bitmap_GetSubBitmap(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
         """
-        SaveFile(self, String name, int type, Palette palette=(wxPalette *) NULL) -> bool
+        SaveFile(self, String name, int type, Palette palette=None) -> bool
 
-        Saves a bitmap in the named file.
+        Saves a bitmap in the named file.  See `__init__` for a description of
+        the ``type`` parameter.
         """
         return _gdi_.Bitmap_SaveFile(*args, **kwargs)
 
@@ -547,7 +645,8 @@ class Bitmap(GDIObject):
         """
         LoadFile(self, String name, int type) -> bool
 
-        Loads a bitmap from a file
+        Loads a bitmap from a file.  See `__init__` for a description of the
+        ``type`` parameter.
         """
         return _gdi_.Bitmap_LoadFile(*args, **kwargs)
 
@@ -559,7 +658,7 @@ class Bitmap(GDIObject):
         """
         SetHeight(self, int height)
 
-        Set the height property (does not affect the bitmap data).
+        Set the height property (does not affect the existing bitmap data).
         """
         return _gdi_.Bitmap_SetHeight(*args, **kwargs)
 
@@ -567,7 +666,7 @@ class Bitmap(GDIObject):
         """
         SetWidth(self, int width)
 
-        Set the width property (does not affect the bitmap data).
+        Set the width property (does not affect the existing bitmap data).
         """
         return _gdi_.Bitmap_SetWidth(*args, **kwargs)
 
@@ -575,7 +674,7 @@ class Bitmap(GDIObject):
         """
         SetDepth(self, int depth)
 
-        Set the depth property (does not affect the bitmap data).
+        Set the depth property (does not affect the existing bitmap data).
         """
         return _gdi_.Bitmap_SetDepth(*args, **kwargs)
 
@@ -583,7 +682,7 @@ class Bitmap(GDIObject):
         """
         SetSize(self, Size size)
 
-        Set the bitmap size
+        Set the bitmap size (does not affect the existing bitmap data).
         """
         return _gdi_.Bitmap_SetSize(*args, **kwargs)
 
@@ -604,11 +703,23 @@ class BitmapPtr(Bitmap):
         self.__class__ = Bitmap
 _gdi_.Bitmap_swigregister(BitmapPtr)
 
+def EmptyBitmap(*args, **kwargs):
+    """
+    EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
+
+    Creates a new bitmap of the given size.  A depth of -1 indicates the
+    depth of the current screen or visual. Some platforms only support 1
+    for monochrome and -1 for the current colour setting.
+    """
+    val = _gdi_.new_EmptyBitmap(*args, **kwargs)
+    val.thisown = 1
+    return val
+
 def BitmapFromIcon(*args, **kwargs):
     """
     BitmapFromIcon(Icon icon) -> Bitmap
 
-    Create a new bitmap from an Icon object.
+    Create a new bitmap from a `wx.Icon` object.
     """
     val = _gdi_.new_BitmapFromIcon(*args, **kwargs)
     val.thisown = 1
@@ -618,10 +729,11 @@ def BitmapFromImage(*args, **kwargs):
     """
     BitmapFromImage(Image image, int depth=-1) -> Bitmap
 
-    Creates bitmap object from the image. This has to be done to actually display
-    an image as you cannot draw an image directly on a window. The resulting
-    bitmap will use the provided colour depth (or that of the current system if
-    depth is -1) which entails that a colour reduction has to take place.
+    Creates bitmap object from a `wx.Image`. This has to be done to
+    actually display a `wx.Image` as you cannot draw an image directly on
+    a window. The resulting bitmap will use the provided colour depth (or
+    that of the current screen colour depth if depth is -1) which entails
+    that a colour reduction may have to take place.
     """
     val = _gdi_.new_BitmapFromImage(*args, **kwargs)
     val.thisown = 1
@@ -641,34 +753,27 @@ def BitmapFromBits(*args, **kwargs):
     """
     BitmapFromBits(PyObject bits, int width, int height, int depth=1) -> Bitmap
 
-    Creates a bitmap from an array of bits.  You should only use this function for
-    monochrome bitmaps (depth 1) in portable programs: in this case the bits
-    parameter should contain an XBM image.  For other bit depths, the behaviour is
-    platform dependent.
+    Creates a bitmap from an array of bits.  You should only use this
+    function for monochrome bitmaps (depth 1) in portable programs: in
+    this case the bits parameter should contain an XBM image.  For other
+    bit depths, the behaviour is platform dependent.
     """
     val = _gdi_.new_BitmapFromBits(*args, **kwargs)
     val.thisown = 1
     return val
 
-def EmptyBitmap(*args):
-    """
-    EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
-    EmptyBitmap(Size size, int depth=-1) -> Bitmap
-
-    Creates a new bitmap of the given size.  A depth of -1 indicates
-    the depth of the current screen or visual. Some platforms only
-    support 1 for monochrome and -1 for the current colour setting.
-    """
-    val = _gdi_.new_EmptyBitmap(*args)
-    val.thisown = 1
-    return val
-
 class Mask(_core.Object):
     """
-    This class encapsulates a monochrome mask bitmap, where the masked area is
-    black and the unmasked area is white. When associated with a bitmap and drawn
-    in a device context, the unmasked area of the bitmap will be drawn, and the
-    masked area will not be drawn.
+    This class encapsulates a monochrome mask bitmap, where the masked
+    area is black and the unmasked area is white. When associated with a
+    bitmap and drawn in a device context, the unmasked area of the bitmap
+    will be drawn, and the masked area will not be drawn.
+
+    A mask may be associated with a `wx.Bitmap`. It is used in
+    `wx.DC.DrawBitmap` or `wx.DC.Blit` when the source device context is a
+    `wx.MemoryDC` with a `wx.Bitmap` selected into it that contains a
+    mask.
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -676,8 +781,13 @@ class Mask(_core.Object):
         """
         __init__(self, Bitmap bitmap, Colour colour=NullColour) -> Mask
 
-        Constructs a mask from a bitmap and a colour in that bitmap that indicates
-        the transparent portions of the mask, by default BLACK is used.
+        Constructs a mask from a `wx.Bitmap` and a `wx.Colour` in that bitmap
+        that indicates the transparent portions of the mask.  In other words,
+        the pixels in ``bitmap`` that match ``colour`` will be the transparent
+        portions of the mask.  If no ``colour`` or an invalid ``colour`` is
+        passed then BLACK is used.
+
+        :see: `wx.Bitmap`, `wx.Colour`
         """
         newobj = _gdi_.new_Mask(*args, **kwargs)
         self.this = newobj.this
@@ -691,7 +801,7 @@ class MaskPtr(Mask):
         self.__class__ = Mask
 _gdi_.Mask_swigregister(MaskPtr)
 
-MaskColour = Mask 
+MaskColour = wx._deprecated(Mask, "wx.MaskColour is deprecated, use `wx.Mask` instead.") 
 class Icon(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1435,12 +1545,12 @@ class FontMapper(object):
         except: pass
 
     def Get(*args, **kwargs):
-        """FontMapper.Get() -> FontMapper"""
+        """Get() -> FontMapper"""
         return _gdi_.FontMapper_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Set(*args, **kwargs):
-        """FontMapper.Set(FontMapper mapper) -> FontMapper"""
+        """Set(FontMapper mapper) -> FontMapper"""
         return _gdi_.FontMapper_Set(*args, **kwargs)
 
     Set = staticmethod(Set)
@@ -1449,27 +1559,27 @@ class FontMapper(object):
         return _gdi_.FontMapper_CharsetToEncoding(*args, **kwargs)
 
     def GetSupportedEncodingsCount(*args, **kwargs):
-        """FontMapper.GetSupportedEncodingsCount() -> size_t"""
+        """GetSupportedEncodingsCount() -> size_t"""
         return _gdi_.FontMapper_GetSupportedEncodingsCount(*args, **kwargs)
 
     GetSupportedEncodingsCount = staticmethod(GetSupportedEncodingsCount)
     def GetEncoding(*args, **kwargs):
-        """FontMapper.GetEncoding(size_t n) -> int"""
+        """GetEncoding(size_t n) -> int"""
         return _gdi_.FontMapper_GetEncoding(*args, **kwargs)
 
     GetEncoding = staticmethod(GetEncoding)
     def GetEncodingName(*args, **kwargs):
-        """FontMapper.GetEncodingName(int encoding) -> String"""
+        """GetEncodingName(int encoding) -> String"""
         return _gdi_.FontMapper_GetEncodingName(*args, **kwargs)
 
     GetEncodingName = staticmethod(GetEncodingName)
     def GetEncodingDescription(*args, **kwargs):
-        """FontMapper.GetEncodingDescription(int encoding) -> String"""
+        """GetEncodingDescription(int encoding) -> String"""
         return _gdi_.FontMapper_GetEncodingDescription(*args, **kwargs)
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
     def GetEncodingFromName(*args, **kwargs):
-        """FontMapper.GetEncodingFromName(String name) -> int"""
+        """GetEncodingFromName(String name) -> int"""
         return _gdi_.FontMapper_GetEncodingFromName(*args, **kwargs)
 
     GetEncodingFromName = staticmethod(GetEncodingFromName)
@@ -1482,7 +1592,7 @@ class FontMapper(object):
         return _gdi_.FontMapper_SetConfigPath(*args, **kwargs)
 
     def GetDefaultConfigPath(*args, **kwargs):
-        """FontMapper.GetDefaultConfigPath() -> String"""
+        """GetDefaultConfigPath() -> String"""
         return _gdi_.FontMapper_GetDefaultConfigPath(*args, **kwargs)
 
     GetDefaultConfigPath = staticmethod(GetDefaultConfigPath)
@@ -1681,12 +1791,12 @@ class Font(GDIObject):
         return _gdi_.Font_GetNoAntiAliasing(*args, **kwargs)
 
     def GetDefaultEncoding(*args, **kwargs):
-        """Font.GetDefaultEncoding() -> int"""
+        """GetDefaultEncoding() -> int"""
         return _gdi_.Font_GetDefaultEncoding(*args, **kwargs)
 
     GetDefaultEncoding = staticmethod(GetDefaultEncoding)
     def SetDefaultEncoding(*args, **kwargs):
-        """Font.SetDefaultEncoding(int encoding)"""
+        """SetDefaultEncoding(int encoding)"""
         return _gdi_.Font_SetDefaultEncoding(*args, **kwargs)
 
     SetDefaultEncoding = staticmethod(SetDefaultEncoding)
@@ -2065,17 +2175,17 @@ class Locale(object):
         return val
 
     def GetSystemLanguage(*args, **kwargs):
-        """Locale.GetSystemLanguage() -> int"""
+        """GetSystemLanguage() -> int"""
         return _gdi_.Locale_GetSystemLanguage(*args, **kwargs)
 
     GetSystemLanguage = staticmethod(GetSystemLanguage)
     def GetSystemEncoding(*args, **kwargs):
-        """Locale.GetSystemEncoding() -> int"""
+        """GetSystemEncoding() -> int"""
         return _gdi_.Locale_GetSystemEncoding(*args, **kwargs)
 
     GetSystemEncoding = staticmethod(GetSystemEncoding)
     def GetSystemEncodingName(*args, **kwargs):
-        """Locale.GetSystemEncodingName() -> String"""
+        """GetSystemEncodingName() -> String"""
         return _gdi_.Locale_GetSystemEncodingName(*args, **kwargs)
 
     GetSystemEncodingName = staticmethod(GetSystemEncodingName)
@@ -2101,7 +2211,7 @@ class Locale(object):
         return _gdi_.Locale_GetCanonicalName(*args, **kwargs)
 
     def AddCatalogLookupPathPrefix(*args, **kwargs):
-        """Locale.AddCatalogLookupPathPrefix(String prefix)"""
+        """AddCatalogLookupPathPrefix(String prefix)"""
         return _gdi_.Locale_AddCatalogLookupPathPrefix(*args, **kwargs)
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
@@ -2114,22 +2224,22 @@ class Locale(object):
         return _gdi_.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
-        """Locale.GetLanguageInfo(int lang) -> LanguageInfo"""
+        """GetLanguageInfo(int lang) -> LanguageInfo"""
         return _gdi_.Locale_GetLanguageInfo(*args, **kwargs)
 
     GetLanguageInfo = staticmethod(GetLanguageInfo)
     def GetLanguageName(*args, **kwargs):
-        """Locale.GetLanguageName(int lang) -> String"""
+        """GetLanguageName(int lang) -> String"""
         return _gdi_.Locale_GetLanguageName(*args, **kwargs)
 
     GetLanguageName = staticmethod(GetLanguageName)
     def FindLanguageInfo(*args, **kwargs):
-        """Locale.FindLanguageInfo(String locale) -> LanguageInfo"""
+        """FindLanguageInfo(String locale) -> LanguageInfo"""
         return _gdi_.Locale_FindLanguageInfo(*args, **kwargs)
 
     FindLanguageInfo = staticmethod(FindLanguageInfo)
     def AddLanguage(*args, **kwargs):
-        """Locale.AddLanguage(LanguageInfo info)"""
+        """AddLanguage(LanguageInfo info)"""
         return _gdi_.Locale_AddLanguage(*args, **kwargs)
 
     AddLanguage = staticmethod(AddLanguage)
@@ -2218,17 +2328,17 @@ class EncodingConverter(_core.Object):
         return _gdi_.EncodingConverter_Convert(*args, **kwargs)
 
     def GetPlatformEquivalents(*args, **kwargs):
-        """EncodingConverter.GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
+        """GetPlatformEquivalents(int enc, int platform=PLATFORM_CURRENT) -> wxFontEncodingArray"""
         return _gdi_.EncodingConverter_GetPlatformEquivalents(*args, **kwargs)
 
     GetPlatformEquivalents = staticmethod(GetPlatformEquivalents)
     def GetAllEquivalents(*args, **kwargs):
-        """EncodingConverter.GetAllEquivalents(int enc) -> wxFontEncodingArray"""
+        """GetAllEquivalents(int enc) -> wxFontEncodingArray"""
         return _gdi_.EncodingConverter_GetAllEquivalents(*args, **kwargs)
 
     GetAllEquivalents = staticmethod(GetAllEquivalents)
     def CanConvert(*args, **kwargs):
-        """EncodingConverter.CanConvert(int encIn, int encOut) -> bool"""
+        """CanConvert(int encIn, int encOut) -> bool"""
         return _gdi_.EncodingConverter_CanConvert(*args, **kwargs)
 
     CanConvert = staticmethod(CanConvert)
@@ -3155,12 +3265,12 @@ class PostScriptDC(DC):
         return _gdi_.PostScriptDC_SetPrintData(*args, **kwargs)
 
     def SetResolution(*args, **kwargs):
-        """PostScriptDC.SetResolution(int ppi)"""
+        """SetResolution(int ppi)"""
         return _gdi_.PostScriptDC_SetResolution(*args, **kwargs)
 
     SetResolution = staticmethod(SetResolution)
     def GetResolution(*args, **kwargs):
-        """PostScriptDC.GetResolution() -> int"""
+        """GetResolution() -> int"""
         return _gdi_.PostScriptDC_GetResolution(*args, **kwargs)
 
     GetResolution = staticmethod(GetResolution)

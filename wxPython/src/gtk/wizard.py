@@ -6,6 +6,7 @@ import _wizard
 import _windows
 import _core
 wx = _core 
+__docfilter__ = wx.__DocFilter(globals()) 
 WIZARD_EX_HELPBUTTON = _wizard.WIZARD_EX_HELPBUTTON
 wxEVT_WIZARD_PAGE_CHANGED = _wizard.wxEVT_WIZARD_PAGE_CHANGED
 wxEVT_WIZARD_PAGE_CHANGING = _wizard.wxEVT_WIZARD_PAGE_CHANGING
@@ -209,7 +210,7 @@ class WizardPageSimple(WizardPage):
         return _wizard.WizardPageSimple_SetNext(*args, **kwargs)
 
     def Chain(*args, **kwargs):
-        """WizardPageSimple.Chain(WizardPageSimple first, WizardPageSimple second)"""
+        """Chain(WizardPageSimple first, WizardPageSimple second)"""
         return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
     Chain = staticmethod(Chain)

@@ -5,7 +5,6 @@ import _windows_
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 class Panel(_core.Window):
@@ -1937,7 +1936,11 @@ EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
 #---------------------------------------------------------------------------
 
 class ColourData(_core.Object):
-    """This class holds a variety of information related to colour dialogs."""
+    """
+    This class holds a variety of information related to the colour
+    chooser dialog.  This class is used to transfer settings and results
+    to and from the `wx.ColourDialog`.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColourData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1960,9 +1963,9 @@ class ColourData(_core.Object):
         """
         GetChooseFull(self) -> bool
 
-        Under Windows, determines whether the Windows colour dialog will display
-        the full dialog with custom colour selection controls. Has no meaning
-        under other platforms.  The default value is true.
+        Under Windows, determines whether the Windows colour dialog will
+        display the full dialog with custom colour selection controls. Has no
+        meaning under other platforms.  The default value is true.
         """
         return _windows_.ColourData_GetChooseFull(*args, **kwargs)
 
@@ -1978,8 +1981,9 @@ class ColourData(_core.Object):
         """
         GetCustomColour(self, int i) -> Colour
 
-        Gets the i'th custom colour associated with the colour dialog. i should
-        be an integer between 0 and 15. The default custom colours are all white.
+        Gets the i'th custom colour associated with the colour dialog. i
+        should be an integer between 0 and 15. The default custom colours are
+        all white.
         """
         return _windows_.ColourData_GetCustomColour(*args, **kwargs)
 
@@ -1987,9 +1991,9 @@ class ColourData(_core.Object):
         """
         SetChooseFull(self, int flag)
 
-        Under Windows, tells the Windows colour dialog to display the full dialog
-        with custom colour selection controls. Under other platforms, has no effect.
-        The default value is true.
+        Under Windows, tells the Windows colour dialog to display the full
+        dialog with custom colour selection controls. Under other platforms,
+        has no effect.  The default value is true.
         """
         return _windows_.ColourData_SetChooseFull(*args, **kwargs)
 
@@ -1997,7 +2001,8 @@ class ColourData(_core.Object):
         """
         SetColour(self, Colour colour)
 
-        Sets the default colour for the colour dialog.  The default colour is black.
+        Sets the default colour for the colour dialog.  The default colour is
+        black.
         """
         return _windows_.ColourData_SetColour(*args, **kwargs)
 
@@ -2005,8 +2010,8 @@ class ColourData(_core.Object):
         """
         SetCustomColour(self, int i, Colour colour)
 
-        Sets the i'th custom colour for the colour dialog. i should be an integer
-        between 0 and 15. The default custom colours are all white.
+        Sets the i'th custom colour for the colour dialog. i should be an
+        integer between 0 and 15. The default custom colours are all white.
         """
         return _windows_.ColourData_SetCustomColour(*args, **kwargs)
 
@@ -2032,8 +2037,9 @@ class ColourDialog(Dialog):
         """
         __init__(self, Window parent, ColourData data=None) -> ColourDialog
 
-        Constructor. Pass a parent window, and optionally a ColourData, which
-        will be copied to the colour dialog's internal ColourData instance.
+        Constructor. Pass a parent window, and optionally a `wx.ColourData`,
+        which will be copied to the colour dialog's internal ColourData
+        instance.
         """
         newobj = _windows_.new_ColourDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2045,7 +2051,7 @@ class ColourDialog(Dialog):
         """
         GetColourData(self) -> ColourData
 
-        Returns a reference to the ColourData used by the dialog.
+        Returns a reference to the `wx.ColourData` used by the dialog.
         """
         return _windows_.ColourDialog_GetColourData(*args, **kwargs)
 
@@ -2058,7 +2064,21 @@ class ColourDialogPtr(ColourDialog):
 _windows_.ColourDialog_swigregister(ColourDialogPtr)
 
 class DirDialog(Dialog):
-    """This class represents the directory chooser dialog."""
+    """
+    wx.DirDialog allows the user to select a directory by browising the
+    file system.
+
+
+    Window  Styles
+    --------------
+        ====================  ==========================================
+        wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
+                              directory names to be editable. On Windows
+                              the new directory button is only available
+                              with recent versions of the common dialogs.
+        ====================  ==========================================
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2125,7 +2145,49 @@ class DirDialogPtr(DirDialog):
 _windows_.DirDialog_swigregister(DirDialogPtr)
 
 class FileDialog(Dialog):
-    """This class represents the file chooser dialog."""
+    """
+    wx.FileDialog allows the user to select one or more files from the
+    filesystem.
+
+    In Windows, this is the common file selector dialog. On X based
+    platforms a generic alternative is used.  The path and filename are
+    distinct elements of a full file pathname. If path is "", the
+    current directory will be used. If filename is "", no default
+    filename will be supplied. The wildcard determines what files are
+    displayed in the file selector, and file extension supplies a type
+    extension for the required filename.
+
+    Both the X and Windows versions implement a wildcard filter. Typing a
+    filename containing wildcards (*, ?) in the filename text item, and
+    clicking on Ok, will result in only those files matching the pattern
+    being displayed. The wildcard may be a specification for multiple
+    types of file with a description for each, such as::
+
+       "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+
+
+    Window  Styles
+    --------------
+        ==================   ==========================================
+        wx.OPEN              This is an open dialog.
+
+        wx.SAVE              This is a save dialog.
+
+        wx.HIDE_READONLY     For open dialog only: hide the checkbox
+                             allowing to open the file in read-only mode.
+
+        wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation
+                             if a file will be overwritten.
+
+        wx.MULTIPLE          For open dialog only: allows selecting multiple
+                             files.
+
+        wx.CHANGE_DIR        Change the current working directory to the
+                             directory  where the file(s) chosen by the user
+                             are.
+        ==================   ==========================================
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2155,8 +2217,8 @@ class FileDialog(Dialog):
         """
         SetPath(self, String path)
 
-        Sets the path (the combined directory and filename that will
-        be returned when the dialog is dismissed).
+        Sets the path (the combined directory and filename that will be
+        returned when the dialog is dismissed).
         """
         return _windows_.FileDialog_SetPath(*args, **kwargs)
 
@@ -2180,8 +2242,11 @@ class FileDialog(Dialog):
         """
         SetWildcard(self, String wildCard)
 
-        Sets the wildcard, which can contain multiple file types, for example:
+        Sets the wildcard, which can contain multiple file types, for
+        example::
+
             "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
+
         """
         return _windows_.FileDialog_SetWildcard(*args, **kwargs)
 
@@ -2255,8 +2320,8 @@ class FileDialog(Dialog):
 
         Returns the index into the list of filters supplied, optionally, in
         the wildcard parameter. Before the dialog is shown, this is the index
-        which will be used when the dialog is first displayed. After the dialog
-        is shown, this is the index selected by the user.
+        which will be used when the dialog is first displayed. After the
+        dialog is shown, this is the index selected by the user.
         """
         return _windows_.FileDialog_GetFilterIndex(*args, **kwargs)
 
@@ -2264,8 +2329,8 @@ class FileDialog(Dialog):
         """
         GetFilenames(self) -> PyObject
 
-        Returns a list of filenames chosen in the dialog.  This function should
-        only be used with the dialogs which have wx.MULTIPLE style, use
+        Returns a list of filenames chosen in the dialog.  This function
+        should only be used with the dialogs which have wx.MULTIPLE style, use
         GetFilename for the others.
         """
         return _windows_.FileDialog_GetFilenames(*args, **kwargs)
@@ -2275,8 +2340,8 @@ class FileDialog(Dialog):
         GetPaths(self) -> PyObject
 
         Fills the array paths with the full paths of the files chosen. This
-        function should only be used with the dialogs which have wx.MULTIPLE style,
-        use GetPath for the others.
+        function should only be used with the dialogs which have wx.MULTIPLE
+        style, use GetPath for the others.
         """
         return _windows_.FileDialog_GetPaths(*args, **kwargs)
 
@@ -2311,7 +2376,8 @@ class MultiChoiceDialog(Dialog):
         """
         SetSelections(List selections)
 
-        Specify the items in the list that shoudl be selected, using a list of integers.
+        Specify the items in the list that should be selected, using a list of
+        integers.
         """
         return _windows_.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
@@ -2425,14 +2491,18 @@ class TextEntryDialogPtr(TextEntryDialog):
 _windows_.TextEntryDialog_swigregister(TextEntryDialogPtr)
 
 class FontData(_core.Object):
-    """This class holds a variety of information related to font dialogs."""
+    """
+    This class holds a variety of information related to font dialogs and
+    is used to transfer settings to and results from a `wx.FontDialog`.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(self) -> FontData
 
-        This class holds a variety of information related to font dialogs.
+        This class holds a variety of information related to font dialogs and
+        is used to transfer settings to and results from a `wx.FontDialog`.
         """
         newobj = _windows_.new_FontData(*args, **kwargs)
         self.this = newobj.this
@@ -2448,8 +2518,8 @@ class FontData(_core.Object):
         """
         EnableEffects(self, bool enable)
 
-        Enables or disables 'effects' under MS Windows only. This refers
-        to the controls for manipulating colour, strikeout and underline
+        Enables or disables 'effects' under MS Windows only. This refers to
+        the controls for manipulating colour, strikeout and underline
         properties.  The default value is true.
         """
         return _windows_.FontData_EnableEffects(*args, **kwargs)
@@ -2458,8 +2528,9 @@ class FontData(_core.Object):
         """
         GetAllowSymbols(self) -> bool
 
-        Under MS Windows, returns a flag determining whether symbol fonts can be
-        selected. Has no effect on other platforms. The default value is true.
+        Under MS Windows, returns a flag determining whether symbol fonts can
+        be selected. Has no effect on other platforms. The default value is
+        true.
         """
         return _windows_.FontData_GetAllowSymbols(*args, **kwargs)
 
@@ -2467,7 +2538,8 @@ class FontData(_core.Object):
         """
         GetColour(self) -> Colour
 
-        Gets the colour associated with the font dialog. The default value is black.
+        Gets the colour associated with the font dialog. The default value is
+        black.
         """
         return _windows_.FontData_GetColour(*args, **kwargs)
 
@@ -2491,8 +2563,8 @@ class FontData(_core.Object):
         """
         GetInitialFont(self) -> Font
 
-        Gets the font that will be initially used by the font dialog. This should have
-        previously been set by the application.
+        Gets the font that will be initially used by the font dialog. This
+        should have previously been set by the application.
         """
         return _windows_.FontData_GetInitialFont(*args, **kwargs)
 
@@ -2500,8 +2572,8 @@ class FontData(_core.Object):
         """
         GetShowHelp(self) -> bool
 
-        Returns true if the Help button will be shown (Windows only).  The default
-        value is false.
+        Returns true if the Help button will be shown (Windows only).  The
+        default value is false.
         """
         return _windows_.FontData_GetShowHelp(*args, **kwargs)
 
@@ -2509,8 +2581,8 @@ class FontData(_core.Object):
         """
         SetAllowSymbols(self, bool allowSymbols)
 
-        Under MS Windows, determines whether symbol fonts can be selected. Has no
-        effect on other platforms.  The default value is true.
+        Under MS Windows, determines whether symbol fonts can be selected. Has
+        no effect on other platforms.  The default value is true.
         """
         return _windows_.FontData_SetAllowSymbols(*args, **kwargs)
 
@@ -2518,7 +2590,8 @@ class FontData(_core.Object):
         """
         SetChosenFont(self, Font font)
 
-        Sets the font that will be returned to the user (for internal use only).
+        Sets the font that will be returned to the user (normally for internal
+        use only).
         """
         return _windows_.FontData_SetChosenFont(*args, **kwargs)
 
@@ -2526,8 +2599,8 @@ class FontData(_core.Object):
         """
         SetColour(self, Colour colour)
 
-        Sets the colour that will be used for the font foreground colour.  The default
-        colour is black.
+        Sets the colour that will be used for the font foreground colour.  The
+        default colour is black.
         """
         return _windows_.FontData_SetColour(*args, **kwargs)
 
@@ -2543,8 +2616,8 @@ class FontData(_core.Object):
         """
         SetRange(self, int min, int max)
 
-        Sets the valid range for the font point size (Windows only).  The default is
-        0, 0 (unrestricted range).
+        Sets the valid range for the font point size (Windows only).  The
+        default is 0, 0 (unrestricted range).
         """
         return _windows_.FontData_SetRange(*args, **kwargs)
 
@@ -2552,8 +2625,8 @@ class FontData(_core.Object):
         """
         SetShowHelp(self, bool showHelp)
 
-        Determines whether the Help button will be displayed in the font dialog
-        (Windows only).  The default value is false.
+        Determines whether the Help button will be displayed in the font
+        dialog (Windows only).  The default value is false.
         """
         return _windows_.FontData_SetShowHelp(*args, **kwargs)
 
@@ -2566,15 +2639,22 @@ class FontDataPtr(FontData):
 _windows_.FontData_swigregister(FontDataPtr)
 
 class FontDialog(Dialog):
-    """This class represents the font chooser dialog."""
+    """
+    wx.FontDialog allows the user to select a system font and its attributes.
+
+    :see: `wx.FontData`
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(self, Window parent, FontData data) -> FontDialog
 
-        Constructor. Pass a parent window and the FontData object to be
-        used to initialize the dialog controls.
+        Constructor. Pass a parent window and the `wx.FontData` object to be
+        used to initialize the dialog controls.  Call `ShowModal` to display
+        the dialog.  If ShowModal returns ``wx.ID_OK`` then you can fetch the
+        results with via the `wx.FontData` returned by `GetFontData`.
         """
         newobj = _windows_.new_FontDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2586,7 +2666,8 @@ class FontDialog(Dialog):
         """
         GetFontData(self) -> FontData
 
-        Returns a reference to the internal FontData used by the FontDialog.
+        Returns a reference to the internal `wx.FontData` used by the
+        wx.FontDialog.
         """
         return _windows_.FontDialog_GetFontData(*args, **kwargs)
 
@@ -2600,8 +2681,29 @@ _windows_.FontDialog_swigregister(FontDialogPtr)
 
 class MessageDialog(Dialog):
     """
-    This class provides a dialog that shows a single or multi-line message, with
-    a choice of OK, Yes, No and Cancel buttons.
+    This class provides a simple dialog that shows a single or multi-line
+    message, with a choice of OK, Yes, No and/or Cancel buttons.
+
+
+    Window Styles
+    --------------
+        =================    =============================================
+        wx.OK                Show an OK button.
+        wx.CANCEL            Show a Cancel button.
+        wx.YES_NO            Show Yes and No buttons.
+        wx.YES_DEFAULT       Used with wxYES_NO, makes Yes button the
+                             default - which is the default behaviour.
+        wx.NO_DEFAULT        Used with wxYES_NO, makes No button the default.
+        wx.ICON_EXCLAMATION  Shows an exclamation mark icon.
+        wx.ICON_HAND         Shows an error icon.
+        wx.ICON_ERROR        Shows an error icon - the same as wxICON_HAND.
+        wx.ICON_QUESTION     Shows a question mark icon.
+        wx.ICON_INFORMATION  Shows an information (i) icon.
+        wx.STAY_ON_TOP       The message box stays on top of all other
+                             window, even those of the other applications
+                             (Windows only).
+        =================    =============================================
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMessageDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2611,8 +2713,7 @@ class MessageDialog(Dialog):
             long style=wxOK|wxCANCEL|wxCENTRE, 
             Point pos=DefaultPosition) -> MessageDialog
 
-        This class provides a dialog that shows a single or multi-line message, with
-        a choice of OK, Yes, No and Cancel buttons.
+        Constructor, use `ShowModal` to display the dialog.
         """
         newobj = _windows_.new_MessageDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2630,8 +2731,36 @@ _windows_.MessageDialog_swigregister(MessageDialogPtr)
 
 class ProgressDialog(Frame):
     """
-    A dialog that shows a short message and a progress bar. Optionally, it can
-    display an ABORT button.
+    A dialog that shows a short message and a progress bar. Optionally, it
+    can display an ABORT button.
+
+    Window Styles
+    --------------
+        =================     =============================================
+        wx.PD_APP_MODAL       Make the progress dialog modal. If this flag is
+                              not given, it is only "locally" modal -
+                              that is the input to the parent window is
+                              disabled, but not to the other ones.
+
+        wx.PD_AUTO_HIDE       Causes the progress dialog to disappear from
+                              screen as soon as the maximum value of the
+                              progress meter has been reached.
+
+        wx.PD_CAN_ABORT       This flag tells the dialog that it should have
+                              a "Cancel" button which the user may press. If
+                              this happens, the next call to Update() will
+                              return false.
+
+        wx.PD_ELAPSED_TIME    This flag tells the dialog that it should show
+                              elapsed time (since creating the dialog).
+
+        wx.PD_ESTIMATED_TIME  This flag tells the dialog that it should show
+                              estimated time.
+
+        wx.PD_REMAINING_TIME  This flag tells the dialog that it should show
+                              remaining time.
+        =================     =============================================
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxProgressDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2640,8 +2769,9 @@ class ProgressDialog(Frame):
         __init__(self, String title, String message, int maximum=100, Window parent=None, 
             int style=wxPD_AUTO_HIDE|wxPD_APP_MODAL) -> ProgressDialog
 
-        Constructor. Creates the dialog, displays it and disables user input for other
-        windows, or, if wxPD_APP_MODAL flag is not given, for its parent window only.
+        Constructor. Creates the dialog, displays it and disables user input
+        for other windows, or, if wx.PD_APP_MODAL flag is not given, for its
+        parent window only.
         """
         newobj = _windows_.new_ProgressDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2653,13 +2783,13 @@ class ProgressDialog(Frame):
         """
         Update(self, int value, String newmsg=EmptyString) -> bool
 
-        Updates the dialog, setting the progress bar to the new value and, if given
-        changes the message above it. Returns true unless the Cancel button has been
-        pressed.
+        Updates the dialog, setting the progress bar to the new value and, if
+        given changes the message above it. Returns true unless the Cancel
+        button has been pressed.
 
-        If false is returned, the application can either immediately destroy the
-        dialog or ask the user for the confirmation and if the abort is not confirmed
-        the dialog may be resumed with Resume function.
+        If false is returned, the application can either immediately destroy
+        the dialog or ask the user for the confirmation and if the abort is
+        not confirmed the dialog may be resumed with Resume function.
         """
         return _windows_.ProgressDialog_Update(*args, **kwargs)
 
@@ -2667,7 +2797,8 @@ class ProgressDialog(Frame):
         """
         Resume(self)
 
-        Can be used to continue with the dialog, after the user had chosen to abort.
+        Can be used to continue with the dialog, after the user had chosen to
+        abort.
         """
         return _windows_.ProgressDialog_Resume(*args, **kwargs)
 
@@ -2739,8 +2870,8 @@ class FindDialogEvent(_core.CommandEvent):
         """
         GetReplaceString(self) -> String
 
-        Return the string to replace the search string with (only
-        for replace and replace all events).
+        Return the string to replace the search string with (only for replace
+        and replace all events).
         """
         return _windows_.FindDialogEvent_GetReplaceString(*args, **kwargs)
 
@@ -2774,22 +2905,26 @@ _windows_.FindDialogEvent_swigregister(FindDialogEventPtr)
 
 class FindReplaceData(_core.Object):
     """
-    FindReplaceData holds the data for FindReplaceDialog. It is used to initialize
-    the dialog with the default values and will keep the last values from the
-    dialog when it is closed. It is also updated each time a wxFindDialogEvent is
-    generated so instead of using the wxFindDialogEvent methods you can also
-    directly query this object.
+    wx.FindReplaceData holds the data for wx.FindReplaceDialog. It is used
+    to initialize the dialog with the default values and will keep the
+    last values from the dialog when it is closed. It is also updated each
+    time a `wx.FindDialogEvent` is generated so instead of using the
+    `wx.FindDialogEvent` methods you can also directly query this object.
 
-    Note that all SetXXX() methods may only be called before showing the dialog
-    and calling them has no effect later.
+    Note that all SetXXX() methods may only be called before showing the
+    dialog and calling them has no effect later.
 
-     Flags
-        wxFR_DOWN:          downward search/replace selected (otherwise, upwards)
+    Flags
+    -----
+        ================   ===============================================  
+        wx.FR_DOWN         Downward search/replace selected (otherwise,
+                           upwards)
 
-        wxFR_WHOLEWORD:     whole word search/replace selected
+        wx.FR_WHOLEWORD    Whole word search/replace selected
 
-        wxFR_MATCHCASE:     case sensitive search/replace selected (otherwise,
-                            case insensitive)
+        wx.FR_MATCHCASE    Case sensitive search/replace selected
+                           (otherwise, case insensitive)
+        ================   ===============================================  
 
     """
     def __repr__(self):
@@ -2868,13 +3003,28 @@ _windows_.FindReplaceData_swigregister(FindReplaceDataPtr)
 
 class FindReplaceDialog(Dialog):
     """
-    FindReplaceDialog is a standard modeless dialog which is used to allow the
-    user to search for some text (and possibly replace it with something
-    else). The actual searching is supposed to be done in the owner window which
-    is the parent of this dialog. Note that it means that unlike for the other
-    standard dialogs this one must have a parent window. Also note that there is
-    no way to use this dialog in a modal way; it is always, by design and
-    implementation, modeless.
+    wx.FindReplaceDialog is a standard modeless dialog which is used to
+    allow the user to search for some text (and possibly replace it with
+    something else). The actual searching is supposed to be done in the
+    owner window which is the parent of this dialog. Note that it means
+    that unlike for the other standard dialogs this one must have a parent
+    window. Also note that there is no way to use this dialog in a modal
+    way; it is always, by design and implementation, modeless.
+
+
+    Window Styles
+    -------------
+
+        =====================  =========================================
+        wx.FR_REPLACEDIALOG    replace dialog (otherwise find dialog)
+
+        wx.FR_NOUPDOWN         don't allow changing the search direction
+
+        wx.FR_NOMATCHCASE      don't allow case sensitive searching
+
+        wx.FR_NOWHOLEWORD      don't allow whole word searching
+        =====================  =========================================
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4031,7 +4181,7 @@ class Printer(_core.Object):
         return _windows_.Printer_GetAbort(*args, **kwargs)
 
     def GetLastError(*args, **kwargs):
-        """Printer.GetLastError() -> int"""
+        """GetLastError() -> int"""
         return _windows_.Printer_GetLastError(*args, **kwargs)
 
     GetLastError = staticmethod(GetLastError)

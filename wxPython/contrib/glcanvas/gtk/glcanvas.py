@@ -5,7 +5,7 @@ import _glcanvas
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 class GLContext(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGLContext instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

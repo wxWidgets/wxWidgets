@@ -5,7 +5,6 @@ import _controls_
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
 #---------------------------------------------------------------------------
 
 BU_LEFT = _controls_.BU_LEFT
@@ -19,6 +18,29 @@ class Button(_core.Control):
     A button is a control that contains a text string, and is one of the most
     common elements of a GUI.  It may be placed on a dialog box or panel, or
     indeed almost any other window.
+
+    Window Styles
+    -------------
+        ==============   ==========================================
+        wx.BU_LEFT       Left-justifies the label. WIN32 only.
+        wx.BU_TOP        Aligns the label to the top of the button.
+                         WIN32 only.
+        wx.BU_RIGHT      Right-justifies the bitmap label. WIN32 only.
+        wx.BU_BOTTOM     Aligns the label to the bottom of the button.
+                         WIN32 only.
+        wx.BU_EXACTFIT   Creates the button as small as possible
+                         instead of making it of the standard size
+                         (which is the default behaviour.)
+        ==============   ==========================================
+
+    Events
+    ------
+        ============     ==========================================
+        EVT_BUTTON       Sent when the button is clicked.
+        ============     ==========================================
+
+    :see: `wx.BitmapButton`
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -55,7 +77,11 @@ class Button(_core.Control):
         return _controls_.Button_SetDefault(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
-        """Button.GetDefaultSize() -> Size"""
+        """
+        GetDefaultSize() -> Size
+
+        Returns the default button size for this platform.
+        """
         return _controls_.Button_GetDefaultSize(*args, **kwargs)
 
     GetDefaultSize = staticmethod(GetDefaultSize)
@@ -80,15 +106,47 @@ def PreButton(*args, **kwargs):
     return val
 
 def Button_GetDefaultSize(*args, **kwargs):
-    """Button_GetDefaultSize() -> Size"""
+    """
+    Button_GetDefaultSize() -> Size
+
+    Returns the default button size for this platform.
+    """
     return _controls_.Button_GetDefaultSize(*args, **kwargs)
 
 class BitmapButton(Button):
     """
     A Button that contains a bitmap.  A bitmap button can be supplied with a
-    single bitmap, and wxWindows will draw all button states using this bitmap. If
+    single bitmap, and wxWidgets will draw all button states using this bitmap. If
     the application needs more control, additional bitmaps for the selected state,
     unpressed focused state, and greyed-out state may be supplied.
+
+    Window Styles
+    -------------
+        ==============  =============================================
+        wx.BU_AUTODRAW  If this is specified, the button will be drawn
+                        automatically using the label bitmap only,
+                        providing a 3D-look border. If this style is
+                        not specified, the button will be drawn
+                        without borders and using all provided
+                        bitmaps. WIN32 only.
+        wx.BU_LEFT      Left-justifies the label. WIN32 only.
+        wx.BU_TOP       Aligns the label to the top of the button. WIN32
+                        only.
+        wx.BU_RIGHT     Right-justifies the bitmap label. WIN32 only.
+        wx.BU_BOTTOM    Aligns the label to the bottom of the
+                        button. WIN32 only.
+        wx.BU_EXACTFIT  Creates the button as small as possible
+                        instead of making it of the standard size
+                        (which is the default behaviour.)
+        ==============  =============================================
+
+    Events
+    ------
+         ===========   ==================================
+         EVT_BUTTON    Sent when the button is clicked.
+         ===========   ==================================
+
+    :see: `wx.Button`, `wx.Bitmap`
 
     """
     def __repr__(self):
@@ -224,10 +282,36 @@ CHK_CHECKED = _controls_.CHK_CHECKED
 CHK_UNDETERMINED = _controls_.CHK_UNDETERMINED
 class CheckBox(_core.Control):
     """
-    A checkbox is a labelled box which by default is either on (checkmark is
-    visible) or off (no checkmark). Optionally (When the wxCHK_3STATE style flag
-    is set) it can have a third state, called the mixed or undetermined
-    state. Often this is used as a "Does Not Apply" state.
+    A checkbox is a labelled box which by default is either on (the
+    checkmark is visible) or off (no checkmark). Optionally (When the
+    wx.CHK_3STATE style flag is set) it can have a third state, called the
+    mixed or undetermined state. Often this is used as a "Does Not
+    Apply" state.
+
+    Window Styles
+    -------------
+        =================================  ===============================
+        wx.CHK_2STATE                      Create a 2-state checkbox. 
+                                           This is the default.
+        wx.CHK_3STATE                      Create a 3-state checkbox.
+        wx.CHK_ALLOW_3RD_STATE_FOR_USER    By default a user can't set a
+                                           3-state checkbox to the
+                                           third state. It can only be
+                                           done from code. Using this
+                                           flags allows the user to set
+                                           the checkbox to the third
+                                           state by clicking.
+                                           wx.ALIGN_RIGHT Makes the
+                                           text appear on the left of
+                                           the checkbox.
+        =================================  ===============================
+
+    Events
+    ------
+        ===============================  ===============================
+        EVT_CHECKBOX                     Sent when checkbox is clicked.
+        ===============================  ===============================
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCheckBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -268,7 +352,8 @@ class CheckBox(_core.Control):
         """
         IsChecked(self) -> bool
 
-        Similar to GetValue, but raises an exception if it is not a 2-state CheckBox.
+        Similar to GetValue, but raises an exception if it is not a 2-state
+        CheckBox.
         """
         return _controls_.CheckBox_IsChecked(*args, **kwargs)
 
@@ -276,8 +361,8 @@ class CheckBox(_core.Control):
         """
         SetValue(self, bool state)
 
-        Set the state of a 2-state CheckBox.  Pass True for checked,
-        False for unchecked.
+        Set the state of a 2-state CheckBox.  Pass True for checked, False for
+        unchecked.
         """
         return _controls_.CheckBox_SetValue(*args, **kwargs)
 
@@ -285,9 +370,10 @@ class CheckBox(_core.Control):
         """
         Get3StateValue(self) -> int
 
-        Returns wx.CHK_UNCHECKED when the CheckBox is unchecked, wx.CHK_CHECKED when
-        it is checked and wx.CHK_UNDETERMINED when it's in the undetermined state.
-        Raises an exceptiion when the function is used with a 2-state CheckBox.
+        Returns wx.CHK_UNCHECKED when the CheckBox is unchecked,
+        wx.CHK_CHECKED when it is checked and wx.CHK_UNDETERMINED when it's in
+        the undetermined state.  Raises an exceptiion when the function is
+        used with a 2-state CheckBox.
         """
         return _controls_.CheckBox_Get3StateValue(*args, **kwargs)
 
@@ -295,11 +381,11 @@ class CheckBox(_core.Control):
         """
         Set3StateValue(self, int state)
 
-        Sets the CheckBox to the given state.  The state parameter can be
-        one of the following: wx.CHK_UNCHECKED (Check is off), wx.CHK_CHECKED
-        (Check is on) or wx.CHK_UNDETERMINED (Check is mixed). Raises an
-        exception  when the CheckBox is a 2-state checkbox and setting the state
-        to wx.CHK_UNDETERMINED.
+        Sets the CheckBox to the given state.  The state parameter can be one
+        of the following: wx.CHK_UNCHECKED (Check is off), wx.CHK_CHECKED (the
+        Check is on) or wx.CHK_UNDETERMINED (Check is mixed). Raises an
+        exception when the CheckBox is a 2-state checkbox and setting the
+        state to wx.CHK_UNDETERMINED.
         """
         return _controls_.CheckBox_Set3StateValue(*args, **kwargs)
 
@@ -315,7 +401,8 @@ class CheckBox(_core.Control):
         """
         Is3rdStateAllowedForUser(self) -> bool
 
-        Returns whether or not the user can set the CheckBox to the third state.
+        Returns whether or not the user can set the CheckBox to the third
+        state.
         """
         return _controls_.CheckBox_Is3rdStateAllowedForUser(*args, **kwargs)
 
@@ -342,8 +429,16 @@ def PreCheckBox(*args, **kwargs):
 
 class Choice(_core.ControlWithItems):
     """
-    A Choice control is used to select one of a list of strings. Unlike a ListBox,
-    only the selection is visible until the user pulls down the menu of choices.
+    A Choice control is used to select one of a list of strings.
+    Unlike a `wx.ListBox`, only the selection is visible until the
+    user pulls down the menu of choices.
+
+    Events
+    ------
+        ================    ==========================================
+        EVT_CHOICE          Sent when an item in the list is selected.
+        ================    ==========================================
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChoice instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -745,7 +840,7 @@ class StaticLine(_core.Control):
         return _controls_.StaticLine_IsVertical(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
-        """StaticLine.GetDefaultSize() -> int"""
+        """GetDefaultSize() -> int"""
         return _controls_.StaticLine_GetDefaultSize(*args, **kwargs)
 
     GetDefaultSize = staticmethod(GetDefaultSize)
@@ -967,7 +1062,7 @@ class ListBox(_core.ControlWithItems):
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
-        ListBox.GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
         Get the default attributes for this class.  This is useful if
         you want to use the same font or colour in your own control as
@@ -1249,7 +1344,7 @@ class TextAttr(object):
         return _controls_.TextAttr_IsDefault(*args, **kwargs)
 
     def Combine(*args, **kwargs):
-        """TextAttr.Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
+        """Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
         return _controls_.TextAttr_Combine(*args, **kwargs)
 
     Combine = staticmethod(Combine)
@@ -3836,7 +3931,7 @@ class ListCtrl(_core.Control):
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
-        ListCtrl.GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
         Get the default attributes for this class.  This is useful if
         you want to use the same font or colour in your own control as
@@ -4518,7 +4613,7 @@ class TreeCtrl(_core.Control):
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """
-        TreeCtrl.GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
         Get the default attributes for this class.  This is useful if
         you want to use the same font or colour in your own control as
@@ -5074,7 +5169,7 @@ class HelpProvider(object):
         return "<%s.%s; proxy of C++ wxHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
         """
-        HelpProvider.Set(HelpProvider helpProvider) -> HelpProvider
+        Set(HelpProvider helpProvider) -> HelpProvider
 
         Sset the current, application-wide help provider. Returns the
         previous one.  Unlike some other classes, the help provider is
@@ -5086,7 +5181,7 @@ class HelpProvider(object):
     Set = staticmethod(Set)
     def Get(*args, **kwargs):
         """
-        HelpProvider.Get() -> HelpProvider
+        Get() -> HelpProvider
 
         Return the current application-wide help provider.
         """

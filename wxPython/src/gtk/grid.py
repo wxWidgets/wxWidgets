@@ -6,7 +6,7 @@ import _grid
 import _windows
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 GRID_VALUE_STRING = _grid.GRID_VALUE_STRING
 GRID_VALUE_BOOL = _grid.GRID_VALUE_BOOL
 GRID_VALUE_NUMBER = _grid.GRID_VALUE_NUMBER

@@ -5,7 +5,7 @@ import _xrc
 
 import _core
 wx = _core 
-__docfilter__ = wx.__docfilter__ 
+__docfilter__ = wx.__DocFilter(globals()) 
 #---------------------------------------------------------------------------
 
 WX_XMLRES_CURRENT_VERSION_MAJOR = _xrc.WX_XMLRES_CURRENT_VERSION_MAJOR
@@ -56,7 +56,7 @@ class XmlResource(_core.Object):
         return _xrc.XmlResource_ClearHandlers(*args, **kwargs)
 
     def AddSubclassFactory(*args, **kwargs):
-        """XmlResource.AddSubclassFactory(XmlSubclassFactory factory)"""
+        """AddSubclassFactory(XmlSubclassFactory factory)"""
         return _xrc.XmlResource_AddSubclassFactory(*args, **kwargs)
 
     AddSubclassFactory = staticmethod(AddSubclassFactory)
@@ -121,7 +121,7 @@ class XmlResource(_core.Object):
         return _xrc.XmlResource_AttachUnknownControl(*args, **kwargs)
 
     def GetXRCID(*args, **kwargs):
-        """XmlResource.GetXRCID(String str_id) -> int"""
+        """GetXRCID(String str_id) -> int"""
         return _xrc.XmlResource_GetXRCID(*args, **kwargs)
 
     GetXRCID = staticmethod(GetXRCID)
@@ -134,12 +134,12 @@ class XmlResource(_core.Object):
         return _xrc.XmlResource_CompareVersion(*args, **kwargs)
 
     def Get(*args, **kwargs):
-        """XmlResource.Get() -> XmlResource"""
+        """Get() -> XmlResource"""
         return _xrc.XmlResource_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
     def Set(*args, **kwargs):
-        """XmlResource.Set(XmlResource res) -> XmlResource"""
+        """Set(XmlResource res) -> XmlResource"""
         return _xrc.XmlResource_Set(*args, **kwargs)
 
     Set = staticmethod(Set)

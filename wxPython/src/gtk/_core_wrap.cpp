@@ -1094,14 +1094,11 @@ SWIG_CheckUnsignedChar(PyObject* obj)
   }
 }
 
-wxImage *new_wxImage__SWIG_0(int width,int height,bool clear){
+wxImage *new_wxImage(int width,int height,bool clear){
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
                 return new wxImage;
-        }
-wxImage *new_wxImage__SWIG_1(wxSize const &size,bool clear){
-            return new wxImage(size.x, size.y, clear);
         }
 wxImage *new_wxImage(wxBitmap const &bitmap){
             return new wxImage(bitmap.ConvertToImage());
@@ -8792,7 +8789,7 @@ static PyObject *_wrap_new_ImageFromStreamMime(PyObject *self, PyObject *args, P
 }
 
 
-static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
+static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
@@ -8801,8 +8798,11 @@ static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "clear", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"|OOO:new_EmptyImage",&obj0,&obj1,&obj2)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_EmptyImage",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if (obj0) {
         arg1 = (int) SWIG_AsInt(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
@@ -8817,7 +8817,7 @@ static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxImage *)new_wxImage__SWIG_0(arg1,arg2,arg3);
+        result = (wxImage *)new_wxImage(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8825,90 +8825,6 @@ static PyObject *_wrap_new_EmptyImage__SWIG_0(PyObject *self, PyObject *args) {
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
     return resultobj;
     fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_EmptyImage__SWIG_1(PyObject *self, PyObject *args) {
-    PyObject *resultobj;
-    wxSize *arg1 = 0 ;
-    bool arg2 = (bool) True ;
-    wxImage *result;
-    wxSize temp1 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O|O:new_EmptyImage",&obj0,&obj1)) goto fail;
-    {
-        arg1 = &temp1;
-        if ( ! wxSize_helper(obj0, &arg1)) SWIG_fail;
-    }
-    if (obj1) {
-        arg2 = (bool) SWIG_AsBool(obj1); 
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxImage *)new_wxImage__SWIG_1((wxSize const &)*arg1,arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxImage, 1);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_new_EmptyImage(PyObject *self, PyObject *args) {
-    int argc;
-    PyObject *argv[4];
-    int ii;
-    
-    argc = PyObject_Length(args);
-    for (ii = 0; (ii < argc) && (ii < 3); ii++) {
-        argv[ii] = PyTuple_GetItem(args,ii);
-    }
-    if ((argc >= 0) && (argc <= 3)) {
-        int _v;
-        if (argc <= 0) {
-            return _wrap_new_EmptyImage__SWIG_0(self,args);
-        }
-        _v = SWIG_CheckInt(argv[0]);
-        if (_v) {
-            if (argc <= 1) {
-                return _wrap_new_EmptyImage__SWIG_0(self,args);
-            }
-            _v = SWIG_CheckInt(argv[1]);
-            if (_v) {
-                if (argc <= 2) {
-                    return _wrap_new_EmptyImage__SWIG_0(self,args);
-                }
-                _v = SWIG_CheckBool(argv[2]);
-                if (_v) {
-                    return _wrap_new_EmptyImage__SWIG_0(self,args);
-                }
-            }
-        }
-    }
-    if ((argc >= 1) && (argc <= 2)) {
-        int _v;
-        {
-            _v = wxPySimple_typecheck(argv[0], wxT("wxSize"), 2);
-        }
-        if (_v) {
-            if (argc <= 1) {
-                return _wrap_new_EmptyImage__SWIG_1(self,args);
-            }
-            _v = SWIG_CheckBool(argv[1]);
-            if (_v) {
-                return _wrap_new_EmptyImage__SWIG_1(self,args);
-            }
-        }
-    }
-    
-    PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'new_EmptyImage'");
     return NULL;
 }
 
@@ -20861,17 +20777,15 @@ static PyObject *_wrap_new_AcceleratorEntry(PyObject *self, PyObject *args, PyOb
     int arg1 = (int) 0 ;
     int arg2 = (int) 0 ;
     int arg3 = (int) 0 ;
-    wxMenuItem *arg4 = (wxMenuItem *) NULL ;
     wxAcceleratorEntry *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "flags",(char *) "keyCode",(char *) "cmd",(char *) "item", NULL 
+        (char *) "flags",(char *) "keyCode",(char *) "cmdID", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_AcceleratorEntry",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOO:new_AcceleratorEntry",kwnames,&obj0,&obj1,&obj2)) goto fail;
     if (obj0) {
         arg1 = (int) SWIG_AsInt(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
@@ -20884,13 +20798,9 @@ static PyObject *_wrap_new_AcceleratorEntry(PyObject *self, PyObject *args, PyOb
         arg3 = (int) SWIG_AsInt(obj2); 
         if (PyErr_Occurred()) SWIG_fail;
     }
-    if (obj3) {
-        if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxMenuItem,
-        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxAcceleratorEntry *)new wxAcceleratorEntry(arg1,arg2,arg3,arg4);
+        result = (wxAcceleratorEntry *)new wxAcceleratorEntry(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -20933,17 +20843,15 @@ static PyObject *_wrap_AcceleratorEntry_Set(PyObject *self, PyObject *args, PyOb
     int arg2 ;
     int arg3 ;
     int arg4 ;
-    wxMenuItem *arg5 = (wxMenuItem *) NULL ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
-    PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "flags",(char *) "keyCode",(char *) "cmd",(char *) "item", NULL 
+        (char *) "self",(char *) "flags",(char *) "keyCode",(char *) "cmd", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|O:AcceleratorEntry_Set",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:AcceleratorEntry_Set",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxAcceleratorEntry,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     arg2 = (int) SWIG_AsInt(obj1); 
@@ -20952,75 +20860,14 @@ static PyObject *_wrap_AcceleratorEntry_Set(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) SWIG_fail;
     arg4 = (int) SWIG_AsInt(obj3); 
     if (PyErr_Occurred()) SWIG_fail;
-    if (obj4) {
-        if ((SWIG_ConvertPtr(obj4,(void **)(&arg5),SWIGTYPE_p_wxMenuItem,
-        SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->Set(arg2,arg3,arg4,arg5);
+        (arg1)->Set(arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_AcceleratorEntry_SetMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
-    wxMenuItem *arg2 = (wxMenuItem *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "item", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AcceleratorEntry_SetMenuItem",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxAcceleratorEntry,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxMenuItem,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetMenuItem(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_AcceleratorEntry_GetMenuItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxAcceleratorEntry *arg1 = (wxAcceleratorEntry *) 0 ;
-    wxMenuItem *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:AcceleratorEntry_GetMenuItem",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxAcceleratorEntry,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxMenuItem *)((wxAcceleratorEntry const *)arg1)->GetMenuItem();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = wxPyMake_wxObject(result); 
-    }
     return resultobj;
     fail:
     return NULL;
@@ -40498,7 +40345,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ImageFromMime", (PyCFunction) _wrap_new_ImageFromMime, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromStream", (PyCFunction) _wrap_new_ImageFromStream, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromStreamMime", (PyCFunction) _wrap_new_ImageFromStreamMime, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_EmptyImage", _wrap_new_EmptyImage, METH_VARARGS },
+	 { (char *)"new_EmptyImage", (PyCFunction) _wrap_new_EmptyImage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromBitmap", (PyCFunction) _wrap_new_ImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_ImageFromData", (PyCFunction) _wrap_new_ImageFromData, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_Create", (PyCFunction) _wrap_Image_Create, METH_VARARGS | METH_KEYWORDS },
@@ -40945,8 +40792,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_AcceleratorEntry", (PyCFunction) _wrap_new_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_AcceleratorEntry", (PyCFunction) _wrap_delete_AcceleratorEntry, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"AcceleratorEntry_Set", (PyCFunction) _wrap_AcceleratorEntry_Set, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"AcceleratorEntry_SetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_SetMenuItem, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"AcceleratorEntry_GetMenuItem", (PyCFunction) _wrap_AcceleratorEntry_GetMenuItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"AcceleratorEntry_GetFlags", (PyCFunction) _wrap_AcceleratorEntry_GetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"AcceleratorEntry_GetKeyCode", (PyCFunction) _wrap_AcceleratorEntry_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"AcceleratorEntry_GetCommand", (PyCFunction) _wrap_AcceleratorEntry_GetCommand, METH_VARARGS | METH_KEYWORDS },
