@@ -330,7 +330,7 @@ void wxMenuItem::Check(bool check)
                              GetRealId(),
                              MF_BYCOMMAND | flags) == (DWORD)-1 )
         {
-            wxLogLastError(wxT("CheckMenuItem"));
+            wxASSERT_MSG( _T("CheckMenuItem() failed, item not in the menu?") );
         }
     }
 
