@@ -1,68 +1,3 @@
-1. HAVE_EXPLICIT fix:
-
-http://sf.net/tracker/index.php?func=detail&aid=651314&group_id=9863&atid=109863
-
-Checking in defs.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/defs.h,v  <--  defs.h
-new revision: 1.324; previous revision: 1.323
-
-
-
-2. wxCheckListBox::Check() event sending fix:
-
-http://sf.net/tracker/index.php?func=detail&aid=651140&group_id=9863&atid=109863
-
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.221; previous revision: 1.220
-cvs diff: [23:41:08] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
-Checking in docs/latex/wx/checklst.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/checklst.tex,v  <--  checklst.tex
-new revision: 1.8; previous revision: 1.7
-Checking in src/msw/checklst.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/checklst.cpp,v  <--  checklst.cpp
-new revision: 1.35; previous revision: 1.34
-
-
-
-3. imagpng.cpp compilation fix for Watcom 11
-
-http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
-
-Checking in src/common/imagpng.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/imagpng.cpp,v  <--  imagpng.cpp
-new revision: 1.29; previous revision: 1.28
-
-
-
-4. wxCaret::SetSize() bug fix
-
-http://sf.net/tracker/index.php?func=detail&aid=659209&group_id=9863&atid=109863
-
-Checking in src/msw/caret.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/caret.cpp,v  <--  caret.cpp
-new revision: 1.15; previous revision: 1.14
-cvs diff: [01:41:47] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/src/msw
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.223; previous revision: 1.222
-
-
-
-5 wxTR_MULTIPLE and wxTR_EDIT_LABELS
-
-http://sf.net/tracker/index.php?func=detail&aid=622089&group_id=9863&atid=109863
-
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.224; previous revision: 1.223
-cvs diff: [21:21:39] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
-Checking in src/msw/treectrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/treectrl.cpp,v  <--  treectrl.cpp
-new revision: 1.136; previous revision: 1.135
-
-
-
 6 Improved X11 ShowFullScreen (later, maybe 2.4.2?)
 
 RCS file: /pack/cvsroots/wxwindows/wxWindows/src/gtk/toplevel.cpp,v
@@ -96,13 +31,6 @@ Log: 1) fixed compilation of wxBitmap, wxIcon toplevel nodes
 http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
 
 
-9 Use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
-  wxTE_RICH2 text control.
-
-Checking in src/msw/textctrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
-new revision: 1.157; previous revision: 1.156
-
 10. Fixes for compilation with OpenWatcom
 
 http://sf.net/tracker/index.php?func=detail&aid=665959&group_id=9863&atid=309863
@@ -120,34 +48,6 @@ Checking in include/wx/msw/setup0.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/setup0.h,v  <--  setup0.h
 new revision: 1.128; previous revision: 1.127
 
-12. wxStopWatch::Start() didn't resume it contrary to the docs
-
-Checking in src/common/timercmn.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/timercmn.cpp,v  <--  timercmn.cpp
-new revision: 1.64; previous revision: 1.63
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.234; previous revision: 1.233
-
-14. wxMSW::wxFrame::Maximize(FALSE) would maximize the window if called before
-    showing it
-
-http://sf.net/tracker/index.php?func=detail&aid=667665&group_id=9863&atid=109863
-
-Checking in src/msw/toplevel.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/toplevel.cpp,v  <--  toplevel.cpp
-new revision: 1.44; previous revision: 1.43
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.236; previous revision: 1.235
-
-15. wxCondition docs updates (just change true/false back to TRUE/FALSE)
-
-Checking in docs/latex/wx/conditn.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/conditn.tex,v  <--  conditn.tex
-new revision: 1.11; previous revision: 1.10
-
-
 15. XRC fixes for <object_ref> and relative file names
 
 Must be modified to be binary compatible before backporting!
@@ -164,15 +64,6 @@ Checking in xmlres.h;
 new revision: 1.22; previous revision: 1.21
 
 
-16. Fixes for wxLocale::Init and Borland C++
-
-(document it in changes.txt)
-
-Checking in intl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
-new revision: 1.87; previous revision: 1.86
-
-
 17. XRC: better wxToolBar handler
 
 Note: This depends on our agreement on what should be backported. Either
@@ -183,42 +74,6 @@ Checking in xh_toolb.cpp;
 /pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xh_toolb.cpp,v  <--  xh_toolb.cpp
 new revision: 1.7; previous revision: 1.6
 
-
-20. Fix for wxProgressDialog::Update() signature:
-
-Checking in docs/latex/wx/progdlg.tex;
-/pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/progdlg.tex,v  <--  progdlg.tex
-new revision: 1.10; previous revision: 1.9
-
-21. [ 668155 ] Refresh problem when msgbox is shown (wxUniversal)
-
-https://sourceforge.net/tracker/index.php?func=detail&aid=668155&group_id=9863&atid=309863
-
-Index: e:/dev/wxWindows/src/univ/winuniv.cpp
-===================================================================
-RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/winuniv.cpp,v
-retrieving revision 1.35
-diff -u -2 -r1.35 winuniv.cpp
---- e:/dev/wxWindows/src/univ/winuniv.cpp	2002/12/09 10:19:08	1.35
-+++ e:/dev/wxWindows/src/univ/winuniv.cpp	2003/01/14 21:24:21
-@@ -392,4 +392,17 @@
- 
-     wxWindowNative::Refresh(eraseBackground, &rectWin);
-+
-+    // Refresh all sub controls if any.
-+    wxWindowList::Node *node = GetChildren().GetFirst();
-+    while ( node )
-+    {
-+        wxWindow *win = node->GetData();
-+        // Only refresh sub controls when it is visible 
-+        // and when it is in the update region.
-+        if(win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
-+            win->Refresh(eraseBackground, &rectWin);
-+            
-+        node = node->GetNext();
-+    }
- }
- 
 
 22. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
 
@@ -237,20 +92,6 @@ compatibility!
 Checking in mimetype.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
 new revision: 1.29; previous revision: 1.28
-
-
-24.  Fix SetScrollbars bug.  You know the one :-)
-
-Checking in src/common/wincmn.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/wincmn.cpp,v  <--  wincmn.cpp
-new revision: 1.129; previous revision: 1.128
-Checking in src/generic/scrlwing.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/generic/scrlwing.cpp,v  <--  scrlwing.cpp
-new revision: 1.35; previous revision: 1.34
-Checking in src/gtk/scrolwin.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/scrolwin.cpp,v  <--  scrolwin.cpp
-new revision: 1.27; previous revision: 1.26
-
 
 26.  Fix Unicode + .wxr
 
@@ -275,76 +116,6 @@ Checking in src/common/wxexpr.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/wxexpr.cpp,v  <--  wxexpr.cpp
 new revision: 1.27; previous revision: 1.26
 
-
-27. Fix assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
-
-Checking in src/common/fileconf.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
-new revision: 1.93; previous revision: 1.92
-
-28. Set orientation for scrolbar events
-
-Checking in src/msw/scrolbar.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/scrolbar.cpp,v  <--  scrolbar.cpp
-new revision: 1.24; previous revision: 1.23
-
-29. Patch 664399: wxButton default size should not be adjusted
-    (wxUniv), cures overlapping buttons on e.g. wxWizard sample.
-
-Index: src/univ/button.cpp
-===================================================================
-RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/button.cpp,v
-retrieving revision 1.15
-diff -r1.15 button.cpp
-116,117c116,117
-<         s_sizeBtn.x = 8*dc.GetCharWidth();
-<         s_sizeBtn.y = (11*dc.GetCharHeight())/10 + 2;
----
->         s_sizeBtn.x = dc.GetCharWidth()*10 + 2;
->         s_sizeBtn.y = dc.GetCharHeight()*11/10 + 2;
-139,149c139,140
-<     // for compatibility with other ports, the buttons default size is never
-<     // less than the standard one, but not when display not PDAs.
-<     if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
-<     {
-<         if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
-<         {
-<             wxSize szDef = GetDefaultSize();
-<             if ( width < szDef.x )
-<                 width = szDef.x;
-<         }
-<     }
----
->     // The default size should not be adjusted, so the code is moved into the 
->     // renderer. This is conceptual wrong but currently the only solution
-
-Index: src/univ/themes/win32.cpp
-===================================================================
-RCS file: /pack/cvsroots/wxwindows/wxWindows/src/univ/themes/win32.cpp,v
-retrieving revision 1.55
-diff -r1.55 win32.cpp
-3989a3990,4001
->         // for compatibility with other ports, the buttons default size is never
->         // less than the standard one, but not when display not PDAs.
->         if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
->         {
->             if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
->             {
->                 wxSize szDef = wxButton::GetDefaultSize();
->                 if ( size->x < szDef.x )
->                     size->x = szDef.x;
->             }
->         }
-> 
-
-
-30. [wxMotif] Coloured stipples, don't use stipples in DoDrawText
-
-Checking in src/motif/dcclient.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/motif/dcclient.cpp,v  <--  dcclient.cpp
-new revision: 1.47; previous revision: 1.46
-
-
 31. [wxHTML] Fix parsing of CDATA tags and ignore <script>
 
 CVS: [VS] wxWindows/src/html htmlpars.cpp,1.29,1.30 htmltag.cpp,1.31,1.32
@@ -360,32 +131,12 @@ CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
 CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
 CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
 
-33. Fix memory leak in wxMimeTypesManager
-
-http://sf.net/tracker/index.php?func=detail&aid=685580&group_id=9863&atid=309863
-
-Checking in src/unix/mimetype.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
-new revision: 1.32; previous revision: 1.31
-
-34. Fix memory leak in generic wxFileDialog
-
-http://sf.net/tracker/index.php?func=detail&aid=696164&group_id=9863&atid=309863
-
-Checking in src/generic/filedlgg.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/generic/filedlgg.cpp,v  <--  filedlgg.cpp
-new revision: 1.84; previous revision: 1.83
-
 33. Add support for GTK2 label mnemonics (patch #689573)
 
 CVS: [VS] wxWindows/src/gtk button.cpp,1.53,1.54 checkbox.cpp,1.52,1.53 control.cpp,1.26,1.27 radiobut.cpp,1.42,1.43
 CVS: [VS] wxWindows/include/wx/gtk control.h,1.16,1.17
 CVS: [VS] wxWindows/docs changes.txt,1.255,1.256
 CVS: [VS] wxWindows/src/gtk control.cpp,1.27,1.28
-
-34. Accept '\r' as delimiter when parsing dates (bug #684617)
-
-CVS: [VZ] wxWindows/src/common datetime.cpp,1.73,1.74
 
 35. Fix wxFontEncoding values:
 
@@ -499,11 +250,3 @@ Checking in src/mac/utilsexc.cpp;
 new revision: 1.11; previous revision: 1.10
 done
 
-44. Fix for deleting entries at root level in wxFileConfig
-
-Checking in src/common/fileconf.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
-new revision: 1.98 ... previous revision: 1.96 (there were 2 fixes)
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.261; previous revision: 1.260
