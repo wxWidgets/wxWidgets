@@ -78,7 +78,7 @@ installing them also on my main Mandrake 9.2 box.
 
 There are some big changes in the OS X disk image.  The actual
 Installer package now *only* installs the wxMac dynlibs, wxPython
-extension modules and Python pacakges, and also the command-line tool
+extension modules and Python packages, and also the command-line tool
 scripts. The remaining items (demo, samples, and application bundles
 for the Demo, PyCrust and XRCed) are now top-level items in the disk
 image (.dmg file) that users can just drag and drop to wherever they

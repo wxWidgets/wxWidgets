@@ -88,7 +88,7 @@ ActiveX control in a very intuitive way.
 the win32all extensions, and is more "wx\'ish", meaning that it uses
 events and etc. as would be expected from any other wx window.
 
-<p> This demo embeds the Shackwave Flash control, and lets you play a game.
+<p> This demo embeds the Shockwave Flash control, and lets you play a game.
 
 </body></html>
 """

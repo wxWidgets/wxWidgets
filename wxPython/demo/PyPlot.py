@@ -60,7 +60,7 @@ come with the class itself.
         
     <li>Print
     
-        <p>Suprise! It prints the current plot to your printer! :-)
+        <p>Surprise! It prints the current plot to your printer! :-)
         
     <li>Save Plot
     

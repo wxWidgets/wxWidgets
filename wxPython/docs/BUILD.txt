@@ -147,7 +147,7 @@ place, then do the same for wxPython.
    these commands, so it won't impact your already installed version
    of the latest release.  You'll be able test with this version when
    you want to, and use the installed release version the rest of the
-   time.  If do want to install the development verison please read
+   time.  If you want to install the development version please read
    INSTALL.txt.
 
    If you have more than one version of Python on your system then be
@@ -190,7 +190,7 @@ place, then do the same for wxPython.
    located in the wx package.
 
 
-4. To run code with the development verison of wxPython, just set the
+4. To run code with the development version of wxPython, just set the
    PYTHONPATH to the wxPython dir located in the source tree.  For
    example::
 
@@ -236,7 +236,7 @@ wxPython extensions that I distribute are built with MSVC 6 with all
 the Service Packs applied.  This policy will change with Python 2.4
 and MSVC 7.1 will be used starting with that version.
 
-If you want to build a debugable version of wxWidgets and wxPython you
+If you want to build a debuggable version of wxWidgets and wxPython you
 will need to have also built a debug version of Python and any other
 extension modules you need to use.  You can tell if you have them
 already if there is a _d in the file names, for example python_d.exe
@@ -326,7 +326,7 @@ below assume that you are using my scripts.
    installed version of the latest release.  You'll be able to test
    with this version when you want to, and use the installed release
    version the rest of the time.  If you ever do want to install the
-   development verison please refer to INSTALL.txt.
+   development version please refer to INSTALL.txt.
 
    Change to the %WXDIR%\\wxPython dir and run the this command,
    makeing sure that you use the version of python that you want to
@@ -358,7 +358,7 @@ below assume that you are using my scripts.
    files) located in the wx package.
 
 
-9. To run code with the development verison of wxPython, just set the
+9. To run code with the development version of wxPython, just set the
    PYTHONPATH to the wxPython dir in the CVS tree.  For example::
 
         set PYTHONPATH=%WXDIR%\wxPython

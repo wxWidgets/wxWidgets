@@ -620,7 +620,7 @@ DocStr(wxActiveXEvent,
 ActiveX events.  Any event parameters from the ActiveX cntrol are
 turned into attributes of the Python proxy for this event object.
 Additionally, there is a property called eventName that will
-return (suprizingly <wink>) the name of the ActiveX event.");
+return (surprisingly <wink>) the name of the ActiveX event.");
 
 class wxActiveXEvent : public wxCommandEvent
 {
