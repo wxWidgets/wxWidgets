@@ -240,11 +240,7 @@ if FINAL:
     HYBRID = 0
 
 if UNICODE and WXPORT not in ['msw', 'gtk2']:
-    raise SystemExit, "UNICODE mode not surrently supported on this WXPORT."
-
-if UNICODE:
-    BUILD_BASE = BUILD_BASE + '.unicode'
-    VERSION = VERSION + 'u'
+    raise SystemExit, "UNICODE mode not surrently supported on this WXPORT: "+WXPORT
 
 
 #----------------------------------------------------------------------
@@ -389,9 +385,12 @@ elif os.name == 'posix':
         WXPLAT = '__WXGTK__'
         GENDIR = 'gtk' # no code differences so use the same generated sources
         portcfg = os.popen('pkg-config gtk+-2.0 --cflags', 'r').read()[:-1]
+        BUILD_BASE = BUILD_BASE + '-' + WXPORT
+        print "got here..."
     elif WXPORT == 'x11':
         WXPLAT = '__WXX11__'
         portcfg = ''
+        BUILD_BASE = BUILD_BASE + '-' + WXPORT
     else:
         raise SystemExit, "Unknown WXPORT value: " + WXPORT
 
@@ -427,6 +426,15 @@ elif os.name == 'posix':
 #----------------------------------------------------------------------
 else:
     raise 'Sorry Charlie...'
+
+
+#----------------------------------------------------------------------
+# post platform setup checks and tweaks
+#----------------------------------------------------------------------
+
+if UNICODE:
+    BUILD_BASE = BUILD_BASE + '.unicode'
+    VERSION = VERSION + 'u'
 
 
 #----------------------------------------------------------------------
