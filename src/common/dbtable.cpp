@@ -442,9 +442,7 @@ void wxDbTable::setCbValueForColumn(int columnIndex)
             if (colDefs[columnIndex].Null)
                 colDefs[columnIndex].CbValue = SQL_NULL_DATA;
             else
-                if (colDefs[columnIndex].SqlCtype == SQL_C_BINARY)
-                    colDefs[columnIndex].CbValue = 0;
-                else if (colDefs[columnIndex].SqlCtype == SQL_C_CHAR)
+                if (colDefs[columnIndex].SqlCtype == SQL_C_CHAR)
                     colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(0);
                 else
                     colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[columnIndex].SzDataObj);
@@ -510,7 +508,7 @@ bool wxDbTable::bindParams(bool forUpdate)
                 break;
             case DB_DATA_TYPE_BLOB:
                 fSqlType = pDb->GetTypeInfBlob().FsqlType;
-                precision = -1;
+                precision = colDefs[i].SzDataObj;
                 scale = 0;
                 break;
         }
@@ -530,7 +528,7 @@ bool wxDbTable::bindParams(bool forUpdate)
         {
             if (SQLBindParameter(hstmtInsert, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
                                  fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj,
-                                 precision+1,&colDefs[i].CbValue) != SQL_SUCCESS)
+                                 precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
             {
                 return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
             }
@@ -692,6 +690,7 @@ bool wxDbTable::execUpdate(const wxString &pSqlStmt)
                     break;
                 }
             }
+            retcode = SQLParamData(hstmtUpdate, &pParmID);
         }
         if (retcode == SQL_SUCCESS ||
             retcode == SQL_NO_DATA_FOUND ||
@@ -867,7 +866,7 @@ bool wxDbTable::Open(bool checkPrivileges, bool checkTableExists)
                 return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
         }
         else
-            insertable= FALSE;
+            insertable = FALSE;
     }
 
     // Completed successfully
@@ -1946,6 +1945,7 @@ int wxDbTable::Insert(void)
                     break;
                 }
             }
+            retcode = SQLParamData(hstmtInsert, &pParmID);
         }
     }
 
