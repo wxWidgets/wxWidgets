@@ -48,9 +48,9 @@ build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
                   build-gtk-static-stamp build-gtk-debug-stamp \
                   build-contrib-shared-stamp build-contrib-static-stamp \
-                  build-gtk-py-stamp
+                  build-gtk-py-stamp build-i18n-stamp
 
-build_indep_stamps=build-examples-stamp build-doc-stamp build-i18n-stamp
+build_indep_stamps=build-examples-stamp build-doc-stamp
 
 build_stamps=$(build_arch_stamps) $(build_indep_stamps)
 
@@ -58,11 +58,15 @@ build_stamps=$(build_arch_stamps) $(build_indep_stamps)
 install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-lib install-gtk-dev install-gtk-dbg \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
-                 install-headers
+                 install-headers install-i18n
 
-install_all_indep=install-i18n install-doc install-examples
+install_all_indep=install-doc install-examples
 
 install_all=$(install_all_arch) $(install_all_indep)
+
+#	note that the i18n package is actually arch indep (once built)
+#	but must be built during the arch any phase as it's pulled out
+#	the wxGtk shared lib package.
 
 
 # The Rules:
