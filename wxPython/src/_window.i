@@ -1201,7 +1201,7 @@ exposed.", "");
 useful if you want to use the same font or colour in your own control
 as in a standard control -- which is a much better idea than hard
 coding specific colours or fonts which might look completely out of
-place on the users system, especially if it uses themes.", "");
+place on the user's system, especially if it uses themes.", "");
     
 
     DocDeclStr(
@@ -1210,12 +1210,13 @@ place on the users system, especially if it uses themes.", "");
         "Get the default attributes for this class.  This is useful if you want
 to use the same font or colour in your own control as in a standard
 control -- which is a much better idea than hard coding specific
-colours or fonts which might look completely out of place on the users
-system, especially if it uses themes.
+colours or fonts which might look completely out of place on the
+user's system, especially if it uses themes.
 
 The variant parameter is only relevant under Mac currently and is
 ignore under other platforms. Under Mac, it will change the size of
-the returned font. See SetWindowVariant for more about this.", "");
+the returned font. See `wx.Window.SetWindowVariant` for more about
+this.", "");
     
     
     DocDeclStr(
@@ -1225,7 +1226,7 @@ was changed.  The background colour is usually painted by the default
 EVT_ERASE_BACKGROUND event handler function under Windows and
 automatically under GTK.
 
-Note that setting the background colour does not cause an immediate
+Note that setting the background colour may not cause an immediate
 refresh, so you may wish to call ClearBackground or Refresh after
 calling this function.
 
