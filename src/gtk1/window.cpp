@@ -1654,7 +1654,7 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-#ifdef USE_XIM
+#ifdef HAVE_XIM
     if (win->m_ic) return FALSE;
     if (!widget) return FALSE;
     if (!gdk_im_ready()) return FALSE;
@@ -1714,7 +1714,7 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
 
 	  break;
 	}
-	
+
       win->m_ic = gdk_ic_new (attr, attrmask);
      
       if (win->m_ic == NULL)
@@ -1728,7 +1728,6 @@ gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
 	  if (GTK_WIDGET_HAS_FOCUS(widget))
 	    gdk_im_begin (win->m_ic, widget->window);
 	}
-    }
 #endif
 
     return FALSE;
