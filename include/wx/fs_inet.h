@@ -6,18 +6,6 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-
-REMARKS :
-
-This FS creates local cache (in /tmp directory). The cache is freed
-on program exit.
-
-Size of cache is limited to cca 1000 items (due to GetTempFileName
-limitation)
-
-
-*/
 #ifndef _WX_FS_INET_H_
 #define _WX_FS_INET_H_
 
@@ -29,25 +17,17 @@ limitation)
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
 
-#ifndef WXPRECOMP
-    #include "wx/hash.h"
-#endif
-
 #include "wx/filesys.h"
 
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxInternetFSHandler
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_NET wxInternetFSHandler : public wxFileSystemHandler
 {
-    private:
-        wxHashTable m_Cache;
-
     public:
         virtual bool CanOpen(const wxString& location);
         virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
-        ~wxInternetFSHandler();
 };
 
 #endif
