@@ -64,6 +64,7 @@ public:
 private:
     bool              m_ok;
     wxDynamicLibrary *m_gnome_print_lib;
+    wxDynamicLibrary *m_gnome_printui_lib;
 
 public:
     wxDL_METHOD_DEFINE( gint, gnome_print_newpath, 
@@ -84,21 +85,107 @@ public:
         (GnomePrintContext *pc, gdouble r, gdouble g, gdouble b), (pc, r, g, b), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_setlinewidth, 
         (GnomePrintContext *pc, gdouble width), (pc, width), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_setdash,
+        (GnomePrintContext *pc, gint n_values, const gdouble *values, gdouble offset), (pc, n_values, values, offset), 0 )
+
+    wxDL_METHOD_DEFINE( gint, gnome_print_rgbimage,
+        (GnomePrintContext *pc, const guchar *data, gint width, gint height, gint rowstride), (pc, data, width, height, rowstride ), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_rgbaimage,
+        (GnomePrintContext *pc, const guchar *data, gint width, gint height, gint rowstride), (pc, data, width, height, rowstride ), 0 )
+ 
+    wxDL_METHOD_DEFINE( gint, gnome_print_concat,
+        (GnomePrintContext *pc, const gdouble *matrix), (pc, matrix), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_scale,
+        (GnomePrintContext *pc, gdouble sx, gdouble sy), (pc, sx, sy), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_rotate,
+        (GnomePrintContext *pc, gdouble theta), (pc, theta), 0 )
+
+    wxDL_METHOD_DEFINE( gint, gnome_print_gsave,
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_grestore,
+        (GnomePrintContext *pc), (pc), 0 )
+        
+    wxDL_METHOD_DEFINE( gint, gnome_print_beginpage,
+        (GnomePrintContext *pc, const guchar* name), (pc, name), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_showpage,
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_end_doc,
+        (GnomePrintContext *pc), (pc), 0 )
+        
+    wxDL_METHOD_DEFINE( PangoLayout*, gnome_print_pango_create_layout,
+        (GnomePrintContext *gpc), (gpc), NULL )
+    wxDL_METHOD_DEFINE( void, gnome_print_pango_layout,
+        (GnomePrintContext *gpc, PangoLayout *layout), (gpc, layout), /**/ )
+        
+    wxDL_METHOD_DEFINE( GnomePrintJob*, gnome_print_job_new,
+        (GnomePrintConfig *config), (config), NULL )
+    wxDL_METHOD_DEFINE( GnomePrintContext*, gnome_print_job_get_context,
+        (GnomePrintJob *job), (job), NULL )
+    wxDL_METHOD_DEFINE( gint, gnome_print_job_close,
+        (GnomePrintJob *job), (job), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_job_print,
+        (GnomePrintJob *job), (job), 0 )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_job_get_page_size,
+        (GnomePrintJob *job, gdouble *width, gdouble *height), (job, width, height), 0 )
+
+    wxDL_METHOD_DEFINE( GnomePrintUnit*, gnome_print_unit_get_by_abbreviation,
+        (const guchar *abbreviation), (abbreviation), NULL )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_convert_distance,
+        (gdouble *distance, const GnomePrintUnit *from, const GnomePrintUnit *to), (distance, from, to), false )
+
+    wxDL_METHOD_DEFINE( GnomePrintConfig*, gnome_print_config_default,
+        (void), (), NULL )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set,
+        (GnomePrintConfig *config, const guchar *key, const guchar *value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_length,
+        (GnomePrintConfig *config, const guchar *key, gdouble *val, const GnomePrintUnit **unit), (config, key, val, unit), false )
+
+    wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_dialog_new, 
+        (GnomePrintJob *gpj, const guchar *title, gint flags), (gpj, title, flags), NULL )
+    wxDL_METHOD_DEFINE( void, gnome_print_dialog_construct_range_page,
+        (GnomePrintDialog *gpd, gint flags, gint start, gint end,
+        const guchar *currentlabel, const guchar *rangelabel),
+        (gpd, flags, start, end, currentlabel, rangelabel), /**/ )
+    wxDL_METHOD_DEFINE( void, gnome_print_dialog_get_copies,
+        (GnomePrintDialog *gpd, gint *copies, gboolean *collate), (gpd, copies, collate), /**/ )
+    wxDL_METHOD_DEFINE( void, gnome_print_dialog_set_copies,
+        (GnomePrintDialog *gpd, gint copies, gint collate), (gpd, copies, collate), /**/ )
+    wxDL_METHOD_DEFINE( GnomePrintRangeType, gnome_print_dialog_get_range,
+        (GnomePrintDialog *gpd), (gpd), GNOME_PRINT_RANGETYPE_NONE )
+    wxDL_METHOD_DEFINE( int, gnome_print_dialog_get_range_page,
+        (GnomePrintDialog *gpd, gint *start, gint *end), (gpd, start, end), 0 )
+        
+    wxDL_METHOD_DEFINE( GtkWidget*, gnome_paper_selector_new_with_flags,
+        (GnomePrintConfig *config, gint flags), (config, flags), NULL )
+
+    wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_job_preview_new,
+        (GnomePrintJob *gpm, const guchar *title), (gpm, title), NULL )
 };
 
 wxGnomePrintLibrary::wxGnomePrintLibrary()
 {
+    m_gnome_print_lib = NULL;
+    m_gnome_printui_lib = NULL;
+
     wxLogNull log;
+    
     m_gnome_print_lib = new wxDynamicLibrary( wxT("libgnomeprint-2-2.so") );
     m_ok = m_gnome_print_lib->IsLoaded();
+    if (!m_ok) return;    
     
-    if (m_ok)
-        InitializeMethods();
+    m_gnome_printui_lib = new wxDynamicLibrary( wxT("libgnomeprintui-2-2.so") );
+    m_ok = m_gnome_printui_lib->IsLoaded();
+    if (!m_ok) return;    
+    
+    InitializeMethods();
 }
 
 wxGnomePrintLibrary::~wxGnomePrintLibrary()
 {
-    delete m_gnome_print_lib;
+    if (m_gnome_print_lib)
+        delete m_gnome_print_lib;
+    if (m_gnome_printui_lib)
+        delete m_gnome_printui_lib;
 }
 
 bool wxGnomePrintLibrary::IsOk()
@@ -120,7 +207,49 @@ void wxGnomePrintLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_fill, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_setrgbcolor, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_setlinewidth, success )
-        
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_setdash, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_rgbimage, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_rgbaimage, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_concat, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_scale, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_rotate, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_gsave, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_grestore, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_beginpage, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_showpage, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_end_doc, success )
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_pango_create_layout, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_pango_layout, success )
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_job_new, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_job_get_context, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_job_close, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_job_print, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_job_get_page_size, success )
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_unit_get_by_abbreviation, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_convert_distance, success )
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_default, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get_length, success )
+
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_new, success )
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_construct_range_page, success )
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_get_copies, success )
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_set_copies, success )
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_get_range, success )
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_get_range_page, success )
+
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_paper_selector_new_with_flags, success )
+
+    wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_job_preview_new, success )
+    
     m_ok = true;
 }
 
@@ -134,8 +263,8 @@ IMPLEMENT_CLASS(wxGnomePrintNativeData, wxPrintNativeDataBase)
 
 wxGnomePrintNativeData::wxGnomePrintNativeData()
 {
-    m_config = gnome_print_config_default();
-    m_job = gnome_print_job_new( m_config );
+    m_config = gs_lgp->gnome_print_config_default();
+    m_job = gs_lgp->gnome_print_job_new( m_config );
 }
 
 wxGnomePrintNativeData::~wxGnomePrintNativeData()
@@ -283,7 +412,7 @@ void wxGnomePrintDialog::Init()
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) data.GetNativeData();
       
-    m_widget = gnome_print_dialog_new( native->GetPrintJob(), 
+    m_widget = gs_lgp->gnome_print_dialog_new( native->GetPrintJob(), 
                                        (guchar*)"Print",  
                                        GNOME_PRINT_DIALOG_RANGE|GNOME_PRINT_DIALOG_COPIES );
 
@@ -293,7 +422,7 @@ void wxGnomePrintDialog::Init()
     if (m_printDialogData.GetEnablePageNumbers())
         flag |= GNOME_PRINT_RANGE_ALL|GNOME_PRINT_RANGE_RANGE;
 
-    gnome_print_dialog_construct_range_page( GNOME_PRINT_DIALOG( m_widget ),
+    gs_lgp->gnome_print_dialog_construct_range_page( (GnomePrintDialog*) m_widget,
                                              flag,
                                              m_printDialogData.GetMinPage(),
                                              m_printDialogData.GetMaxPage(),
@@ -322,11 +451,11 @@ int wxGnomePrintDialog::ShowModal()
 
     gint copies = 1;
     gboolean collate = false;
-    gnome_print_dialog_get_copies( GNOME_PRINT_DIALOG(m_widget), &copies, &collate );
+    gs_lgp->gnome_print_dialog_get_copies( (GnomePrintDialog*) m_widget, &copies, &collate );
     m_printDialogData.SetNoCopies( copies );
     m_printDialogData.SetCollate( collate );
 
-    switch (gnome_print_dialog_get_range( GNOME_PRINT_DIALOG(m_widget) ))
+    switch (gs_lgp->gnome_print_dialog_get_range( (GnomePrintDialog*) m_widget ))
     {
         case GNOME_PRINT_RANGE_SELECTION:
             m_printDialogData.SetSelection( true );
@@ -339,7 +468,7 @@ int wxGnomePrintDialog::ShowModal()
         case GNOME_PRINT_RANGE_RANGE:
         default:
             gint start,end;
-            gnome_print_dialog_get_range_page( GNOME_PRINT_DIALOG(m_widget), &start, &end );
+            gs_lgp->gnome_print_dialog_get_range_page( (GnomePrintDialog*) m_widget, &start, &end );
             m_printDialogData.SetFromPage( start );
             m_printDialogData.SetToPage( end );
             break;
@@ -392,7 +521,7 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
 
     // This is required as the page setup dialog
     // calculates wrong values otherwise.
-    gnome_print_config_set( native->GetPrintConfig(),
+    gs_lgp->gnome_print_config_set( native->GetPrintConfig(),
                             (const guchar*) GNOME_PRINT_KEY_PREFERED_UNIT,
                             (const guchar*) "Pts" );
         
@@ -400,7 +529,7 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
     
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( _("Page setup") ) );
 
-    GtkWidget *main = gnome_paper_selector_new_with_flags( native->GetPrintConfig(), 
+    GtkWidget *main = gs_lgp->gnome_paper_selector_new_with_flags( native->GetPrintConfig(), 
         GNOME_PAPER_SELECTOR_MARGINS|GNOME_PAPER_SELECTOR_FEED_ORIENTATION );
     gtk_container_set_border_width (GTK_CONTAINER (main), 8);
     gtk_widget_show (main);
@@ -445,30 +574,30 @@ int wxGnomePageSetupDialog::ShowModal()
         // I cannot test it as the dialog is currently broken
         // anyways (it only works for points).        
         double ml,mr,mt,mb,pw,ph;
-	    gnome_print_config_get_length (config,
+	    gs_lgp->gnome_print_config_get_length (config,
 				(const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, &ml, NULL);
-	    gnome_print_config_get_length (config,
+	    gs_lgp->gnome_print_config_get_length (config,
 				(const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_RIGHT, &mr, NULL);
-	    gnome_print_config_get_length (config,
+	    gs_lgp->gnome_print_config_get_length (config,
 				(const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_TOP, &mt, NULL);
-	    gnome_print_config_get_length (config,
+	    gs_lgp->gnome_print_config_get_length (config,
 				(const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_BOTTOM, &mb, NULL);
-    	gnome_print_config_get_length (config,
+    	gs_lgp->gnome_print_config_get_length (config,
 			    (const guchar*) GNOME_PRINT_KEY_PAPER_WIDTH, &pw, NULL);
-	    gnome_print_config_get_length (config,
+	    gs_lgp->gnome_print_config_get_length (config,
 			    (const guchar*) GNOME_PRINT_KEY_PAPER_HEIGHT, &ph, NULL);
 
         // This probably assumes that the user entered the 
         // values in Pts. Since that is the only the dialog
         // works right now, we need to fix this later.
-        const GnomePrintUnit *mm_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
-        const GnomePrintUnit *pts_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
-        gnome_print_convert_distance( &ml, pts_unit, mm_unit );
-        gnome_print_convert_distance( &mr, pts_unit, mm_unit );
-        gnome_print_convert_distance( &mt, pts_unit, mm_unit );
-        gnome_print_convert_distance( &mb, pts_unit, mm_unit );
-        gnome_print_convert_distance( &pw, pts_unit, mm_unit );
-        gnome_print_convert_distance( &ph, pts_unit, mm_unit );
+        const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+        const GnomePrintUnit *pts_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
+        gs_lgp->gnome_print_convert_distance( &ml, pts_unit, mm_unit );
+        gs_lgp->gnome_print_convert_distance( &mr, pts_unit, mm_unit );
+        gs_lgp->gnome_print_convert_distance( &mt, pts_unit, mm_unit );
+        gs_lgp->gnome_print_convert_distance( &mb, pts_unit, mm_unit );
+        gs_lgp->gnome_print_convert_distance( &pw, pts_unit, mm_unit );
+        gs_lgp->gnome_print_convert_distance( &ph, pts_unit, mm_unit );
 
         m_pageDialogData.SetMarginTopLeft( wxPoint( (int)(ml+0.5), (int)(mt+0.5)) );
         m_pageDialogData.SetMarginBottomRight( wxPoint( (int)(mr+0.5), (int)(mb+0.5)) );
@@ -539,8 +668,8 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     wxGnomePrintNativeData *native = 
         (wxGnomePrintNativeData*) printdata.GetNativeData();
 
-    GnomePrintJob *job = gnome_print_job_new( native->GetPrintConfig() );
-    m_gpc = gnome_print_job_get_context (job);
+    GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
+    m_gpc = gs_lgp->gnome_print_job_get_context (job);
 
     // The GnomePrintJob is temporarily stored in the 
     // native print data as the native print dialog
@@ -566,7 +695,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     
     if (!dc)
     {
-        gnome_print_job_close( job );
+        gs_lgp->gnome_print_job_close( job );
         g_object_unref (G_OBJECT (job));
         sm_lastError = wxPRINTER_ERROR;
         return false;
@@ -597,7 +726,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     if (maxPage == 0)
     {
-        gnome_print_job_close( job );
+        gs_lgp->gnome_print_job_close( job );
         g_object_unref (G_OBJECT (job));
         sm_lastError = wxPRINTER_ERROR;
         return false;
@@ -640,15 +769,15 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
         printout->OnEndPrinting();
     }
     
-    gnome_print_job_close( job );
+    gs_lgp->gnome_print_job_close( job );
     if (m_native_preview)
     {
         wxString title( _("Print preview") );
-        gtk_widget_show( gnome_print_job_preview_new( job, (const guchar*)(const char*)wxGTK_CONV(title) ));
+        gtk_widget_show( gs_lgp->gnome_print_job_preview_new( job, (const guchar*)(const char*)wxGTK_CONV(title) ));
     }
     else
     {
-        gnome_print_job_print( job );
+        gs_lgp->gnome_print_job_print( job );
     }
     
     g_object_unref (G_OBJECT (job));
@@ -690,7 +819,7 @@ wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
     
     m_gpc = printer->GetPrintContext();
     
-    m_layout = gnome_print_pango_create_layout( m_gpc );
+    m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
     
     m_currentRed = 0;
@@ -901,7 +1030,7 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 	    int height = gdk_pixbuf_get_height( pixbuf );
 	    int width = gdk_pixbuf_get_width( pixbuf );
         
-        gnome_print_gsave( m_gpc );        
+        gs_lgp->gnome_print_gsave( m_gpc );        
         double matrix[6];
     	matrix[0] = XLOG2DEVREL(width);
     	matrix[1] = 0;
@@ -909,13 +1038,13 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     	matrix[3] = YLOG2DEVREL(height);
     	matrix[4] = XLOG2DEV(x);
         matrix[5] = YLOG2DEV(y+height);
-    	gnome_print_concat( m_gpc, matrix );
+    	gs_lgp->gnome_print_concat( m_gpc, matrix );
 	    gs_lgp->gnome_print_moveto(  m_gpc, 0, 0 );
         if (has_alpha)
-            gnome_print_rgbaimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
+            gs_lgp->gnome_print_rgbaimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
         else
-            gnome_print_rgbimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
-        gnome_print_grestore( m_gpc );
+            gs_lgp->gnome_print_rgbimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
+        gs_lgp->gnome_print_grestore( m_gpc );
     }
     else
     {
@@ -923,7 +1052,7 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
         if (!image.Ok()) return;
 
-        gnome_print_gsave( m_gpc );        
+        gs_lgp->gnome_print_gsave( m_gpc );        
         double matrix[6];
     	matrix[0] = XLOG2DEVREL(image.GetWidth());
     	matrix[1] = 0;
@@ -931,10 +1060,10 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     	matrix[3] = YLOG2DEVREL(image.GetHeight());
     	matrix[4] = XLOG2DEV(x);
         matrix[5] = YLOG2DEV(y+image.GetHeight());
-    	gnome_print_concat( m_gpc, matrix );
+    	gs_lgp->gnome_print_concat( m_gpc, matrix );
 	    gs_lgp->gnome_print_moveto(  m_gpc, 0, 0 );
-        gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
-        gnome_print_grestore( m_gpc );
+        gs_lgp->gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
+        gs_lgp->gnome_print_grestore( m_gpc );
     }
 }
 
@@ -1022,14 +1151,14 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
     	gs_lgp->gnome_print_moveto (m_gpc, x, y);
         if (fabs(angle) > 0.00001)
         {        
-            gnome_print_gsave( m_gpc );
-            gnome_print_rotate( m_gpc, angle );
-    	    gnome_print_pango_layout( m_gpc, m_layout );
-            gnome_print_grestore( m_gpc );
+            gs_lgp->gnome_print_gsave( m_gpc );
+            gs_lgp->gnome_print_rotate( m_gpc, angle );
+    	    gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
+            gs_lgp->gnome_print_grestore( m_gpc );
         }
         else
         {
-    	    gnome_print_pango_layout( m_gpc, m_layout );
+    	    gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
         }
          
         // reset unscaled size
@@ -1053,14 +1182,14 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
     	gs_lgp->gnome_print_moveto (m_gpc, x, y);
         if (fabs(angle) > 0.00001)
         {        
-            gnome_print_gsave( m_gpc );
-            gnome_print_rotate( m_gpc, angle );
-    	    gnome_print_pango_layout( m_gpc, m_layout );
-            gnome_print_grestore( m_gpc );
+            gs_lgp->gnome_print_gsave( m_gpc );
+            gs_lgp->gnome_print_rotate( m_gpc, angle );
+    	    gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
+            gs_lgp->gnome_print_grestore( m_gpc );
         }
         else
         {
-    	    gnome_print_pango_layout( m_gpc, m_layout );
+    	    gs_lgp->gnome_print_pango_layout( m_gpc, m_layout );
         }
     }
 
@@ -1096,8 +1225,6 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 {
     if (!pen.Ok()) return;
 
-    // TODO: support for pen styles other than solid (use gnome_print_setdash)
-
     m_pen = pen;
 
     gs_lgp->gnome_print_setlinewidth( m_gpc, XLOG2DEVREL( 1000 * m_pen.GetWidth() ) / 1000.0f );
@@ -1109,13 +1236,13 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 
     switch (m_pen.GetStyle())
     {
-        case wxDOT:           gnome_print_setdash( m_gpc, 2, dotted, 0 ); break;
-        case wxSHORT_DASH:    gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
-        case wxLONG_DASH:     gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
-        case wxDOT_DASH:      gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
+        case wxDOT:           gs_lgp->gnome_print_setdash( m_gpc, 2, dotted, 0 ); break;
+        case wxSHORT_DASH:    gs_lgp->gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
+        case wxLONG_DASH:     gs_lgp->gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
+        case wxDOT_DASH:      gs_lgp->gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
         case wxSOLID:
         case wxTRANSPARENT:
-        default:              gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
+        default:              gs_lgp->gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;
     }
 
     
@@ -1201,17 +1328,17 @@ bool wxGnomePrintDC::StartDoc(const wxString& message)
 
 void wxGnomePrintDC::EndDoc()
 {
-    gnome_print_end_doc( m_gpc );
+    gs_lgp->gnome_print_end_doc( m_gpc );
 }
 
 void wxGnomePrintDC::StartPage()
 {
-	gnome_print_beginpage( m_gpc, (const guchar*) "1" );
+	gs_lgp->gnome_print_beginpage( m_gpc, (const guchar*) "page" );
 }
 
 void wxGnomePrintDC::EndPage()
 {
-	gnome_print_showpage( m_gpc );
+	gs_lgp->gnome_print_showpage( m_gpc );
 }
 
 wxCoord wxGnomePrintDC::GetCharHeight() const
@@ -1309,7 +1436,7 @@ void wxGnomePrintDC::DoGetSize(int* width, int* height) const
     // Query page size. This seems to omit the margins
     // right now, although it shouldn't
     double pw,ph;
-    gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
+    gs_lgp->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
     if (width)
         *width = (int) (pw + 0.5);
@@ -1325,14 +1452,14 @@ void wxGnomePrintDC::DoGetSizeMM(int *width, int *height) const
     // This code assumes values in Pts. 
     
     double pw,ph;
-    gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
+    gs_lgp->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
     // Convert to mm.
     
-    const GnomePrintUnit *mm_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
-    const GnomePrintUnit *pts_unit = gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
-    gnome_print_convert_distance( &pw, pts_unit, mm_unit );
-    gnome_print_convert_distance( &ph, pts_unit, mm_unit );
+    const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+    const GnomePrintUnit *pts_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
+    gs_lgp->gnome_print_convert_distance( &pw, pts_unit, mm_unit );
+    gs_lgp->gnome_print_convert_distance( &ph, pts_unit, mm_unit );
     
     if (width)
         *width = (int) (pw + 0.5);
