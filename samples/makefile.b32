@@ -79,6 +79,8 @@ all:
         cd $(WXDIR)\samples\html
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 !endif
+        cd $(WXDIR)\samples\keyboard
+        make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\image
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
         cd $(WXDIR)\samples\internat
@@ -224,6 +226,8 @@ clean:
         cd $(WXDIR)\samples\image
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\internat
+        make -f makefile.b32 clean
+        cd $(WXDIR)\samples\keyboard
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\joytest
         make -f makefile.b32 clean

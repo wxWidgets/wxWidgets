@@ -84,6 +84,8 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\joytest
         nmake -f makefile.vc $(MAKEFLAGS)
+        cd $(WXDIR)\samples\keyboard
+        nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\layout
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\listctrl
@@ -205,6 +207,8 @@ clean:
         cd $(WXDIR)\samples\internat
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\joytest
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\keyboard
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\layout
         nmake -f makefile.vc clean

@@ -50,6 +50,7 @@ all clean:
 	-$(MAKE) -C internat $(CMDLINE) $@
 	-$(MAKE) -C ipc $(CMDLINE) $@
 	-$(MAKE) -C joytest $(CMDLINE) $@
+	-$(MAKE) -C keyboard $(CMDLINE) $@
 	-$(MAKE) -C layout $(CMDLINE) $@
 	-$(MAKE) -C listbox $(CMDLINE) $@
 	-$(MAKE) -C listctrl $(CMDLINE) $@
