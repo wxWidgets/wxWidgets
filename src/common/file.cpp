@@ -87,6 +87,9 @@
 
   #define   S_IFDIR     _S_IFDIR
   #define   S_IFREG     _S_IFREG
+
+  #define   W_OK        2
+  #define   R_OK        4
 #else
   #define   tell(fd)    lseek(fd, 0, SEEK_CUR)
 #endif  //_MSC_VER
@@ -113,10 +116,30 @@
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
-bool wxFile::Exists(const char *sz)
+bool wxFile::Exists(const char *name)
 {
   struct stat st;
-  return !access(sz, 0) && !stat(sz, &st) && (st.st_mode & S_IFREG);
+  return !access(name, 0) && !stat(name, &st) && (st.st_mode & S_IFREG);
+}
+
+bool wxFile::Access(const char *name, OpenMode mode)
+{
+  int how;
+
+  switch ( mode ) {
+    case read:
+      how = R_OK;
+      break;
+
+    case write:
+      how = W_OK;
+      break;
+
+    default:
+      wxFAIL_MSG("bad wxFile::Access mode parameter.");
+  }
+
+  return access(name, how) == 0;
 }
 
 // ----------------------------------------------------------------------------
