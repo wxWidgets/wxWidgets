@@ -107,31 +107,31 @@ pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long re
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 
 
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
 }
 
-short wxApp::MacHandleAEODoc(const WXEVENTREF event , WXEVENTREF reply)
+short wxApp::MacHandleAEODoc(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
     SysBeep(40) ;
     ProcessSerialNumber PSN ;
@@ -141,17 +141,17 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event , WXEVENTREF reply)
     return noErr ;
 }
 
-short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF reply)
+short wxApp::MacHandleAEPDoc(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
     return noErr ;
 }
 
-short wxApp::MacHandleAEOApp(const WXEVENTREF event , WXEVENTREF reply)
+short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
     return noErr ;
 }
 
-short wxApp::MacHandleAEQuit(const WXEVENTREF event , WXEVENTREF reply)
+short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
     wxWindow* win = GetTopWindow() ;
     if ( win )
@@ -804,7 +804,7 @@ pascal void __wxterminate(void)
 
 #endif /* WXMAKINGDLL && !__DARWIN__ */
 
-int WXDLLEXPORT wxEntryStart( int argc, char *argv[] )
+int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char *WXUNUSED(argv)[] )
 {
     return wxApp::Initialize();
 }
@@ -1296,25 +1296,38 @@ void wxApp::MacSuspend( bool convertClipboard )
 
         node = node->Next();
     }
-
-     s_lastMouseDown = 0 ;
-     if( convertClipboard )
-     {
-         MacConvertPrivateToPublicScrap() ;
-     }
-
-     ::HideFloatingWindows() ;
+    
+    s_lastMouseDown = 0 ;
+    if( convertClipboard )
+    {
+        MacConvertPrivateToPublicScrap() ;
+    }
+    
+    ::HideFloatingWindows() ;
 }
+
+extern wxList wxModalDialogs;
 
 void wxApp::MacResume( bool convertClipboard )
 {
-        s_lastMouseDown = 0 ;
-        if( convertClipboard )
-        {
-            MacConvertPublicToPrivateScrap() ;
-        }
+    s_lastMouseDown = 0 ;
+    if( convertClipboard )
+    {
+        MacConvertPublicToPrivateScrap() ;
+    }
+    
+    ::ShowFloatingWindows() ;
+    
+    // raise modal dialogs in case a non modal window was selected to activate the app
 
-        ::ShowFloatingWindows() ;
+    wxNode* node = wxModalDialogs.First();
+    while (node)
+    {
+        wxDialog* dialog = (wxDialog *) node->Data();
+        dialog->Raise();
+        
+        node = node->Next();
+    }
 }
 
 void wxApp::MacConvertPrivateToPublicScrap()
