@@ -1,0 +1,315 @@
+#
+# File:		makefile.twn
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+#
+# Makefile for libwx.a, tagetting TWIN32
+
+# Replace this with your own path if necessary
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+# IMPORTANT: if you want to link in subsidiary libraries,
+# required for some optional parts of wxWindows, you must
+# set EXTRATARGETS and EXTRAOBJS to match the settings in wx_setup.h.
+# Having done this, you won't have to worry about linking them
+# into each application.
+#
+# Here's the full list.
+#   prologio: Required if using the wxWindows resource facility
+#               USE_WX_RESOURCES should be 1
+#   xmgauge:  Gauge class (required for Motif only)
+#               USE_GAUGE should be 1
+#   xpm:      XPM pixmap support
+#               USE_XPM_IN_X should be 1
+#   wxstring: string class
+#               USE_GNU_WXSTRING should be 1
+#
+# Unfortunately, 'ar' doesn't like combining objects and libraries,
+# so we must identify all the objects from the subordinate libraries. Yuck!
+XPMSRC=../../contrib/wxxpm/objects$(GUISUFFIX)
+XPMOBJS=$(XPMSRC)/crbuffri.$(OBJSUFF) $(XPMSRC)/crbuffrp.$(OBJSUFF) $(XPMSRC)/crdatfri.$(OBJSUFF) $(XPMSRC)/crdatfrp.$(OBJSUFF)\
+  $(XPMSRC)/create.$(OBJSUFF) $(XPMSRC)/crifrbuf.$(OBJSUFF) $(XPMSRC)/crifrdat.$(OBJSUFF) $(XPMSRC)/crpfrbuf.$(OBJSUFF) $(XPMSRC)/crpfrdat.$(OBJSUFF)\
+  $(XPMSRC)/data.$(OBJSUFF) $(XPMSRC)/hashtab.$(OBJSUFF) $(XPMSRC)/misc.$(OBJSUFF) $(XPMSRC)/parse.$(OBJSUFF) $(XPMSRC)/rdftodat.$(OBJSUFF)\
+  $(XPMSRC)/rdftoi.$(OBJSUFF) $(XPMSRC)/rdftop.$(OBJSUFF) $(XPMSRC)/rgb.$(OBJSUFF) $(XPMSRC)/scan.$(OBJSUFF) $(XPMSRC)/simx.$(OBJSUFF)\
+  $(XPMSRC)/wrffrdat.$(OBJSUFF) $(XPMSRC)/wrffri.$(OBJSUFF) $(XPMSRC)/wrffrp.$(OBJSUFF)
+
+# Subordinate library possibilities
+
+EXTRAOBJS=
+
+GENDIR=../generic
+COMMDIR=../common
+XPMDIR=../xpm
+OLEDIR=ole
+MSWDIR=.
+
+GENERICOBJDIR=../generic/$(OBJDIR)
+COMMOBJDIR=../common/$(OBJDIR)
+OLEOBJDIR=ole/$(OBJDIR)
+MSWDIR=$(OBJDIR)
+
+DOCDIR = $(WXDIR)\docs
+
+GENERICOBJS= \
+  $(GENDIR)/choicdgg.$(OBJSUFF) \
+  $(GENDIR)/dirdlgg.$(OBJSUFF) \
+  $(GENDIR)/gridg.$(OBJSUFF) \
+  $(GENDIR)/laywin.$(OBJSUFF) \
+  $(GENDIR)/panelg.$(OBJSUFF) \
+  $(GENDIR)/prop.$(OBJSUFF) \
+  $(GENDIR)/propform.$(OBJSUFF) \
+  $(GENDIR)/proplist.$(OBJSUFF) \
+  $(GENDIR)/sashwin.$(OBJSUFF) \
+  $(GENDIR)/scrolwin.$(OBJSUFF) \
+  $(GENDIR)/splitter.$(OBJSUFF) \
+  $(GENDIR)/statusbr.$(OBJSUFF) \
+  $(GENDIR)/tabg.$(OBJSUFF) \
+  $(GENDIR)/textdlgg.$(OBJSUFF)
+
+#  $(GENDIR)/colrdlgg.$(OBJSUFF) \
+#  $(GENDIR)/fontdlgg.$(OBJSUFF) \
+#  $(GENDIR)/prntdlgg.$(OBJSUFF) \
+#  $(GENDIR)/printps.$(OBJSUFF) \
+#  $(GENDIR)/msgdlgg.$(OBJSUFF) \
+
+COMMONOBJS = \
+  $(COMMDIR)/config.$(OBJSUFF) \
+  $(COMMDIR)/cmndata.$(OBJSUFF) \
+  $(COMMDIR)/docview.$(OBJSUFF) \
+  $(COMMDIR)/docmdi.$(OBJSUFF) \
+  $(COMMDIR)/dynarray.$(OBJSUFF) \
+  $(COMMDIR)/event.$(OBJSUFF) \
+  $(COMMDIR)/file.$(OBJSUFF) \
+  $(COMMDIR)/fileconf.$(OBJSUFF) \
+  $(COMMDIR)/filefn.$(OBJSUFF) \
+  $(COMMDIR)/framecmn.$(OBJSUFF) \
+  $(COMMDIR)/gdicmn.$(OBJSUFF) \
+  $(COMMDIR)/helpbase.$(OBJSUFF) \
+  $(COMMDIR)/image.$(OBJSUFF) \
+  $(COMMDIR)/intl.$(OBJSUFF) \
+  $(COMMDIR)/layout.$(OBJSUFF) \
+  $(COMMDIR)/log.$(OBJSUFF) \
+  $(COMMDIR)/memory.$(OBJSUFF) \
+  $(COMMDIR)/module.$(OBJSUFF) \
+  $(COMMDIR)/mimetype.$(OBJSUFF) \
+  $(COMMDIR)/object.$(OBJSUFF) \
+  $(COMMDIR)/odbc.$(OBJSUFF) \
+  $(COMMDIR)/process.$(OBJSUFF) \
+  $(COMMDIR)/prntbase.$(OBJSUFF) \
+  $(COMMDIR)/resource.$(OBJSUFF) \
+  $(COMMDIR)/tbarbase.$(OBJSUFF) \
+  $(COMMDIR)/tbarsmpl.$(OBJSUFF) \
+  $(COMMDIR)/textfile.$(OBJSUFF) \
+  $(COMMDIR)/timercmn.$(OBJSUFF) \
+  $(COMMDIR)/utilscmn.$(OBJSUFF) \
+  $(COMMDIR)/validate.$(OBJSUFF) \
+  $(COMMDIR)/valtext.$(OBJSUFF) \
+  $(COMMDIR)/date.$(OBJSUFF) \
+  $(COMMDIR)/wxexpr.$(OBJSUFF) \
+  $(COMMDIR)/hash.$(OBJSUFF) \
+  $(COMMDIR)/list.$(OBJSUFF) \
+  $(COMMDIR)/variant.$(OBJSUFF) \
+  $(COMMDIR)/string.$(OBJSUFF) \
+  $(COMMDIR)/time.$(OBJSUFF) \
+  $(COMMDIR)/tokenzr.$(OBJSUFF) \
+  $(COMMDIR)/y_tab.$(OBJSUFF) \
+  $(COMMDIR)/stream.$(OBJSUFF) \
+  $(COMMDIR)/wfstream.$(OBJSUFF) \
+  $(COMMDIR)/mstream.$(OBJSUFF) \
+  $(COMMDIR)/zstream.$(OBJSUFF) \
+  $(COMMDIR)/datstrm.$(OBJSUFF) \
+  $(COMMDIR)/objstrm.$(OBJSUFF) \
+  $(COMMDIR)/extended.$(OBJSUFF) \
+  $(COMMDIR)/wincmn.$(OBJSUFF)
+
+# NOTE: if the socket-related files fail with a syntax error in Sockets.h,
+# remove the files (probably all GnuWin32 releases < b20). Cygwin b20 is OK,
+# Mingw32 may still have problems.
+#  $(COMMDIR)/socket.$(OBJSUFF) \
+#  $(COMMDIR)/sckaddr.$(OBJSUFF) \
+#  $(COMMDIR)/sckfile.$(OBJSUFF) \
+#  $(COMMDIR)/sckipc.$(OBJSUFF) \
+#  $(COMMDIR)/sckstrm.$(OBJSUFF) \
+#  $(COMMDIR)/protocol.$(OBJSUFF) \
+#  $(COMMDIR)/http.$(OBJSUFF) \
+#  $(COMMDIR)/ftp.$(OBJSUFF) \
+#  $(COMMDIR)/url.$(OBJSUFF) \
+
+MSWOBJS = \
+  accel.$(OBJSUFF) \
+  app.$(OBJSUFF) \
+  bitmap.$(OBJSUFF) \
+  bmpbuttn.$(OBJSUFF) \
+  brush.$(OBJSUFF) \
+  button.$(OBJSUFF) \
+  checkbox.$(OBJSUFF) \
+  checklst.$(OBJSUFF) \
+  choice.$(OBJSUFF) \
+  clipbrd.$(OBJSUFF) \
+  colordlg.$(OBJSUFF) \
+  colour.$(OBJSUFF) \
+  combobox.$(OBJSUFF) \
+  control.$(OBJSUFF) \
+  curico.$(OBJSUFF) \
+  cursor.$(OBJSUFF) \
+  data.$(OBJSUFF) \
+  dc.$(OBJSUFF) \
+  dcmemory.$(OBJSUFF) \
+  dcclient.$(OBJSUFF) \
+  dcprint.$(OBJSUFF) \
+  dcscreen.$(OBJSUFF) \
+  dde.$(OBJSUFF) \
+  dialog.$(OBJSUFF) \
+  dib.$(OBJSUFF) \
+  filedlg.$(OBJSUFF) \
+  font.$(OBJSUFF) \
+  fontdlg.$(OBJSUFF) \
+  frame.$(OBJSUFF) \
+  gaugemsw.$(OBJSUFF) \
+  gauge95.$(OBJSUFF) \
+  gdiobj.$(OBJSUFF) \
+  helpwin.$(OBJSUFF) \
+  icon.$(OBJSUFF) \
+  imaglist.$(OBJSUFF) \
+  joystick.$(OBJSUFF) \
+  listbox.$(OBJSUFF) \
+  listctrl.$(OBJSUFF) \
+  main.$(OBJSUFF) \
+  mdi.$(OBJSUFF) \
+  menu.$(OBJSUFF) \
+  menuitem.$(OBJSUFF) \
+  metafile.$(OBJSUFF) \
+  minifram.$(OBJSUFF) \
+  msgdlg.$(OBJSUFF) \
+  nativdlg.$(OBJSUFF) \
+  notebook.$(OBJSUFF) \
+  ownerdrw.$(OBJSUFF) \
+  palette.$(OBJSUFF) \
+  pen.$(OBJSUFF) \
+  penwin.$(OBJSUFF) \
+  printdlg.$(OBJSUFF) \
+  printwin.$(OBJSUFF) \
+  radiobox.$(OBJSUFF) \
+  radiobut.$(OBJSUFF) \
+  region.$(OBJSUFF) \
+  registry.$(OBJSUFF) \
+  regconf.$(OBJSUFF) \
+  scrolbar.$(OBJSUFF) \
+  settings.$(OBJSUFF) \
+  slidrmsw.$(OBJSUFF) \
+  slider95.$(OBJSUFF) \
+  spinbutt.$(OBJSUFF) \
+  statbmp.$(OBJSUFF) \
+  statbox.$(OBJSUFF) \
+  statbr95.$(OBJSUFF) \
+  stattext.$(OBJSUFF) \
+  tabctrl.$(OBJSUFF) \
+  taskbar.$(OBJSUFF) \
+  tbar95.$(OBJSUFF) \
+  tbarmsw.$(OBJSUFF) \
+  textctrl.$(OBJSUFF) \
+  thread.$(OBJSUFF) \
+  timer.$(OBJSUFF) \
+  treectrl.$(OBJSUFF) \
+  utils.$(OBJSUFF) \
+  utilsexc.$(OBJSUFF) \
+  wave.$(OBJSUFF) \
+  window.$(OBJSUFF) \
+  xpmhand.$(OBJSUFF)
+
+# Native wxDirDlg can't be compiled due to GnuWin32/OLE limitations
+#  dirdlg.$(OBJSUFF) \
+
+# OLE not supported yet by GnuWin32
+#  $(OLEDIR)/droptgt.$(OBJSUFF) \
+#  $(OLEDIR)/dropsrc.$(OBJSUFF) \
+#  $(OLEDIR)/dataobj.$(OBJSUFF) \
+#  $(OLEDIR)/oleutils.$(OBJSUFF) \
+#  $(OLEDIR)/uuid.$(OBJSUFF) \
+#  $(OLEDIR)/automtn.$(OBJSUFF)
+
+XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
+		$(XPMDIR)/crdatfri.o\
+		$(XPMDIR)/create.o $(XPMDIR)/crifrbuf.o\
+		$(XPMDIR)/crifrdat.o\
+		$(XPMDIR)/data.o\
+		$(XPMDIR)/hashtab.o $(XPMDIR)/misc.o\
+		$(XPMDIR)/parse.o $(XPMDIR)/rdftodat.o\
+		$(XPMDIR)/rdftoi.o\
+		$(XPMDIR)/rgb.o $(XPMDIR)/scan.o\
+		$(XPMDIR)/simx.o $(XPMDIR)/wrffrdat.o\
+		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
+
+OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) # $(XPMOBJECTS)
+
+all:    $(OBJECTS) $(WXLIB)
+
+base:
+	cd $(WXDIR)/src/common; $(MAKE) -f makefile.g95 GUI=$(GUI) GUISUFFIX=$(GUISUFFIX) CC=$(CC)\
+ OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+
+$(WXLIB): $(OBJECTS) $(EXTRAOBJS)
+	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
+	$(RANLIB) $@
+
+#$(MSWOBJDIR):
+#	mkdir $(OBJDIR)
+
+#$(COMMOBJDIR):
+#	mkdir $(COMMDIR)/$(OBJDIR)
+
+#$(GENERICOBJDIR):
+#	mkdir $(GENDIR)/$(OBJDIR)
+
+$(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
+
+$(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
+	$(CCLEX) -c $(CPPFLAGS) -o $@ $(COMMDIR)/y_tab.c
+
+# Replace lex with flex if you run into compilation
+# problems with lex_yy.c. See also note about LEX_SCANNER
+# above.
+$(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
+	$(LEX) $(COMMDIR)/lexer.l > $(COMMDIR)/lex_yy.c
+
+# The following may be required for some versions of LEX/FLEX
+#	$(LEX) -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
+
+#	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \
+#	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
+#       sed -e "s/YYLMAX 200/YYLMAX 5000/g" > lex_yy.c
+#	rm -f lex.yy.c
+
+# Replace yacc with bison if you run into compilation
+# problems with y_tab.c.
+
+#$(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
+#	$(YACC) -o $(COMMDIR)/y_tab.c $(COMMDIR)/parser.y
+
+# If you use e.g. gcc on Unix, uncomment these lines
+# and comment out the above.
+
+$(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
+	$(YACC) $(COMMDIR)/parser.y
+	mv y.tab.c $(COMMDIR)/y_tab.c
+
+# Extra targets
+rcparser:
+	cd $(WXDIR)/utils/rcparser/src; $(MAKE)  -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_rcp:
+	cd $(WXDIR)/utils/rcparser/src; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+clean:
+	rm -f $(OBJECTS) $(EXTRAOBJS) ../common/y_tab.c ../common/lex_yy.c $(WXDIR)/lib/libwx$(GUISUFFIX).a core
+
+cleanall: clean
+

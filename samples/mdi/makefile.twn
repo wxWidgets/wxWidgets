@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+#
+# Makefile for mdi example (UNIX, TWIN32)
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/mdi.$(OBJSUFF) $(OBJDIR)/mdi_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) mdi$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+mdi$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o mdi$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/mdi.$(OBJSUFF):	mdi.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ mdi.$(SRCSUFF)
+
+mdi_resources.c:  mdi.rc
+	$(RESCOMP) $(RCINPUTSWITCH) mdi.rc $(RCOUTPUTSWITCH) mdi_resources.c $(RESFLAGS)
+
+$(OBJDIR)/mdi_resources.$(OBJSUFF):	mdi_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ mdi_resources.c
+
+clean:
+	rm -f $(OBJECTS) mdi.exe core *.rsc *.res
