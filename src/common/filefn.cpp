@@ -1065,8 +1065,15 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
             return FALSE;
     }
 
+    // we can expect fileIn to be closed successfully, but we should ensure
+    // that fileOut was closed as some write errors (disk full) might not be
+    // detected before doing this
+    if ( !fileIn.Close() || !fileOut.Close() )
+        return FALSE;
+
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
-    // no chmod in VA.  SHould be some permission API for HPFS386 partitions however
+    // no chmod in VA.  Should be some permission API for HPFS386 partitions
+    // however
     if ( chmod(OS_FILENAME(file2), fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
