@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
+<!-- $Id$ -->
 <makefile>
 
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
+        <define>__WXBASE__</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(BASE_SRC) $(CORE_SRC) $(HTML_SRC)</sources>
       
@@ -16,6 +18,7 @@
     
     <lib id="monolib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='1'">
+        <define>__WXBASE__</define> 
         <sources>$(BASE_SRC) $(CORE_SRC) $(HTML_SRC)</sources>
     </lib>
 
