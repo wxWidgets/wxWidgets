@@ -347,8 +347,8 @@ $(GENCODEDIR)/%.cpp : %.i
 	swig $(SWIGFLAGS) -c -o $@ $<
 
 $(GENCODEDIR)/%.py : %.i
-	swig $(SWIGFLAGS) -c -o $@ $<
-
+	swig $(SWIGFLAGS) -c -o $(GENCODEDIR)/tmp_wrap.cpp $<
+	rm $(GENCODEDIR)/tmp_wrap.cpp
 
 # This one must leave out the -c flag so we define the whole rule
 #$(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
