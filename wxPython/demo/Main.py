@@ -1095,6 +1095,8 @@ class wxPythonDemo(wx.Frame):
         wx.Frame.__init__(self, parent, -1, title, size = (950, 720),
                           style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
 
+        self.SetMinSize((640,480))
+
         self.loaded = False
         self.cwd = os.getcwd()
         self.curOverview = ""
@@ -1275,8 +1277,8 @@ class wxPythonDemo(wx.Frame):
         splitter2.SplitHorizontally(self.nb, self.log, -160)
         splitter.SplitVertically(self.tree, splitter2, 200)
 
-        splitter.SetMinimumPaneSize(20)
-        splitter2.SetMinimumPaneSize(20)
+        splitter.SetMinimumPaneSize(120)
+        splitter2.SetMinimumPaneSize(60)
 
         # Make the splitter on the right expand the top window when resized
         def SplitterOnSize(evt):
