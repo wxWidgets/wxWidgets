@@ -48,40 +48,17 @@
     #define USE_WXPM 0
 #endif
 
-#define USE_COLOURDLG_GENERIC                       \
-    (                                               \
-        wxUSE_COLOURDLG &&                          \
-        ( USE_WXMSW || USE_WXMAC ) &&               \
-        !USE_WXUNIVERSAL &&                         \
-        !USE_DLL                                    \
-    )
+#define USE_GENERIC_DIALOGS                                                   \
+    (((USE_WXMSW && wxUSE_GENERIC_DIALOGS_IN_MSW) ||                          \
+      USE_WXMAC) &&                                                           \
+     !USE_WXUNIVERSAL)
 
+#define USE_COLOURDLG_GENERIC (USE_GENERIC_DIALOGS && wxUSE_COLOURDLG)
+#define USE_DIRDLG_GENERIC (USE_GENERIC_DIALOGS && wxUSE_DIRDLG)
+#define USE_FILEDLG_GENERIC (USE_GENERIC_DIALOGS && wxUSE_FILEDLG)
+#define USE_FONTDLG_GENERIC (USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
-#define USE_DIRDLG_GENERIC                          \
-    (                                               \
-        wxUSE_DIRDLG &&                             \
-        ( USE_WXMSW || USE_WXMAC ) &&               \
-        !USE_WXUNIVERSAL &&                         \
-        !USE_DLL                                    \
-    )
-
-#define USE_FILEDLG_GENERIC                         \
-    (                                               \
-        wxUSE_FILEDLG &&                            \
-        ( USE_WXMSW || USE_WXMAC || USE_WXPM ) &&   \
-        !USE_WXUNIVERSAL &&                         \
-        !USE_DLL                                    \
-    )
-
-#define USE_FONTDLG_GENERIC                         \
-    (                                               \
-        wxUSE_FONTDLG &&                            \
-        ( USE_WXMSW || USE_WXPM ) &&                \
-        !USE_WXUNIVERSAL &&                         \
-        !USE_DLL                                    \
-    )
-
-
+// VZ: what is this for?
 #define USE_MODAL_PRESENTATION                      \
     (                                               \
         USE_WXMSW ||                                \
