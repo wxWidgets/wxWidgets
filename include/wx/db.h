@@ -4,7 +4,7 @@
 //              to an ODBC data source.  The wxDB class allows operations on the data
 //              source such as opening and closing the data source.
 // Author:      Doug Card
-// Modified by:
+// Modified by: George Tasker
 // Mods:        Dec, 1998: 
 //                -Added support for SQL statement logging and database cataloging
 //					 April, 1999
@@ -49,11 +49,6 @@
 	#endif
 #endif
 
-#if defined(wx_msw) || defined(__WXMSW__) || defined(WIN32)
-#include <windows.h>
-#endif
-
-#ifdef __UNIX__
 #if wxMAJOR_VERSION == 2
 	extern "C" {
 	#include "../../src/iodbc/isql.h"
@@ -65,38 +60,29 @@
 	#include "isqlext.h"
 	}
 #endif
-	typedef float SFLOAT; 
-	typedef double SDOUBLE; 
-	typedef unsigned int UINT;
-	#define ULONG UDWORD
-#elif defined(__WXMAC__)
-	extern "C" {
-	#include "../../src/iodbc/isql.h"
-	#include "../../src/iodbc/isqlext.h"
-	}
-	typedef float SFLOAT; 
-	typedef double SDOUBLE; 
-	typedef unsigned int UINT;
-	#define ULONG UDWORD
-#else  // msw
-	#define ODBCVER 0x0250
-	#include <sql.h>
-	#include <sqlext.h>
-#endif
 
-#ifdef __UNIX__ 
+	typedef float SFLOAT; 
+	typedef double SDOUBLE; 
+	typedef unsigned int UINT;
+	#define ULONG UDWORD
 /*
+#ifdef __UNIX__ 
 #   ifndef strnicmp 
 #      define strnicmp strncasecmp 
 #   endif 
 #   ifndef stricmp 
 #      define stricmp strcasecmp 
 #   endif 
-*/
 #elif defined(__WXMAC__)
 #else 
 #   include <io.h> 
 #endif
+*/
+
+#ifndef wxODBC_FWD_ONLY_CURSORS
+#define wxODBC_FWD_ONLY_CURSORS 1
+#endif
+
 
 enum		enumDummy		{enumDum1};
 
@@ -271,12 +257,63 @@ typedef struct
 	short MaximumScale;
 } SqlTypeInfo;
 
-class WXDLLEXPORT CcolInf
+class WXDLLEXPORT wxColFor
+{
+ public:
+  wxString       s_Field;             // Formated String for Output
+  wxString       s_Format[7];         // Formated Objekts - TIMESTAMP has the biggest (7)
+  wxString       s_Menge[7];          // Formated Objekts -  amount of things that can be formatted
+  int            i_Menge[7];          // Formated Objekts -  TT MM YYYY HH MM SS m
+  int            i_Nation;            // 0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
+  int            i_dbDataType;        // conversion of the 'sqlDataType' to the generic data type used by these classes
+  SWORD          i_sqlDataType;
+
+  wxColFor();
+  ~wxColFor();
+  int            Format(int Nation, int dbDataType,SWORD sqlDataType,short columnSize,short decimalDigits);
+};
+
+class WXDLLEXPORT wxColInf
 {
 public:
-	char tableName[DB_MAX_TABLE_NAME_LEN+1];
-	char colName[DB_MAX_COLUMN_NAME_LEN+1];
-	int  sqlDataType;
+	char         catalog[128+1];
+	char         schema[128+1];
+	char	     tableName[DB_MAX_TABLE_NAME_LEN+1];
+	char         colName[DB_MAX_COLUMN_NAME_LEN+1];
+	SWORD        sqlDataType;
+	char	     typeName[128+1];
+	SWORD	     columnSize;
+	SWORD	     bufferLength;
+	short	     decimalDigits;
+	short	     numPrecRadix;
+	short	     nullable;
+	char	     remarks[254+1];
+	int		     dbDataType;  // conversion of the 'sqlDataType' to the generic data type used by these classes
+ // mj10777.19991224 : new
+    int          PkCol;       // Primary key column       0=No; 1= First Key, 2 = Second Key etc.
+    char         PkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Tables that use this PKey as a FKey
+    int          FkCol;       // Foreign key column       0=No; 1= First Key, 2 = Second Key etc.
+    char         FkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Foreign key table name
+    wxColFor    *pColFor;                                    // How should this columns be formatted
+};
+
+class WXDLLEXPORT wxTableInf        // Description of a Table
+{   // mj10777 : used in wxDbInf and GetCatalog(..)
+public:
+	char      tableName[DB_MAX_TABLE_NAME_LEN+1];
+	char      tableType[254+1];           // "TABLE" or "SYSTEM TABLE" etc.
+	char      tableRemarks[254+1];
+	int       numCols;                    // How many Columns does this Table have: GetColumnCount(..);
+	wxColInf *pColInf;                    // pColInf = NULL ; User can later call GetColumns(..);
+};
+
+class WXDLLEXPORT wxDbInf     // Description of a Database
+{   // mj10777 : used in GetCatalog(..)
+public:
+   char        catalog[128+1];
+   char        schema[128+1];
+   int         numTables;           // How many tables does this database have
+   wxTableInf *pTableInf;           // pTableInf = new wxTableInf[numTables];
 };
 
 enum sqlLog
@@ -309,6 +346,11 @@ typedef enum dbms DBMS;
 // will overwrite the errors of the previously destroyed wxDB object in 
 // this variable.
 extern char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+
+// Backward compability for Remstar classes.  This
+// will eventually go away, so the wxColXxxx classes
+// should be used
+typedef wxColInf CcolInf;
 
 class WXDLLEXPORT wxDB
 {
@@ -408,10 +450,14 @@ public:
 	bool		 ExecSql(const char *pSqlStmt);
 	bool		 GetNext(void);
 	bool		 GetData(UWORD colNo, SWORD cType, PTR pData, SDWORD maxLen, SDWORD FAR *cbReturned);
-	bool	    Grant(int privileges, const char *tableName, const char *userList = "PUBLIC");
-	int	    TranslateSqlState(const char *SQLState);
-	bool		 Catalog(const char *userID, const char *fileName = "Catalog.txt");
-	CcolInf	*GetColumns(char *tableName[], const char *userID=NULL);
+	bool	     Grant(int privileges, const char *tableName, const char *userList = "PUBLIC");
+	int	         TranslateSqlState(const char *SQLState);
+   wxDbInf      *GetCatalog(char *userID);
+	bool		 Catalog(const char *userID=NULL, const char *fileName = "Catalog.txt");
+    int          GetKeyFields(char *tableName, wxColInf* colInf,int nocols);
+	wxColInf	*GetColumns(char *tableName[], const char *userID=NULL);
+	wxColInf	*GetColumns(char *tableName, int *numCols, const char *userID=NULL);
+	int		     GetColumnCount(char *tableName, const char *userID=NULL);
 	char		*GetDatabaseName(void)	{return dbInf.dbmsName;}
 	char		*GetDataSource(void)		{return dsn;}
 	char		*GetUsername(void)			{return uid;}
@@ -459,7 +505,7 @@ class CstructTablesInUse : public wxObject
 // for other code segments to use, or close all of them when the application has
 // completed.
 
-wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)TRUE);
+wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
 bool  WXDLLEXPORT FreeDbConnection(wxDB *pDb);
 void  WXDLLEXPORT CloseDbConnections(void);
 int   WXDLLEXPORT NumberDbConnectionsInUse(void);
@@ -471,7 +517,7 @@ bool SqlLog(enum sqlLog state, const char *filename = "sqllog.txt");
 // for a list of available datasources.  Call this routine
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
-bool WXDLLEXPORT GetDataSource(HENV henv, const char *Dsn, SWORD DsnMax, const char *DsDesc, SWORD DsDescMax,
+bool WXDLLEXPORT GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
 						 UWORD direction = SQL_FETCH_NEXT);
 
 #endif

@@ -2,7 +2,7 @@
 // Name:        dbtable.h
 // Purpose:     Declaration of the wxTable class.
 // Author:      Doug Card
-// Modified by:
+// Modified by: George Tasker
 // Created:     9.96
 // RCS-ID:      $Id$
 // Copyright:   (c) 1996 Remstar International, Inc.
@@ -56,8 +56,7 @@ const bool  DISABLE_VIEW		= TRUE;
 // wxTable class which allows it to create a table in the data
 // source, exchange data between the data source and the C++
 // object, and so on.
-
-class WXDLLEXPORT CcolDef
+class WXDLLEXPORT wxColDef
 {
 public:
 	char    ColName[DB_MAX_COLUMN_NAME_LEN+1];	// Column Name
@@ -71,7 +70,23 @@ public:
 	bool    DerivedCol;									// Specifies whether this column is a derived value
 	SDWORD  CbValue;										// Internal use only!!!
 	bool	  Null;											// NOT FULLY IMPLEMENTED - Allows NULL values in Inserts and Updates
-};  // CcolDef
+};  // wxColDef
+
+class WXDLLEXPORT wxColDataPtr
+{
+public:
+	void	*PtrDataObj;
+	int	 SzDataObj;
+	int	 SqlCtype;
+};  // wxColDataPtr
+
+
+// Backward compability for Remstar classes.  These
+// will eventually go away, so the wxColXxxx classes
+// should be used
+typedef wxColDef		CcolDef;
+typedef wxColDataPtr CcolDataPtr;
+
 
 // This structure is used when creating secondary indexes.
 class WXDLLEXPORT CidxDef
@@ -124,7 +139,7 @@ public:
 	char tablePath[DB_PATH_MAX];  // needed for dBase tables
 
 	// Column Definitions
-	CcolDef *colDefs;	// Array of CcolDef structures
+	wxColDef *colDefs;	// Array of wxColDef structures
 
 	// Where, Order By and From clauses
 	char *where;			// Standard SQL where clause, minus the word WHERE
@@ -179,6 +194,7 @@ public:
 	void  SetColDefs (int index, const char *fieldName, int dataType, void *pData, int cType,
 							int size, bool keyField = FALSE, bool upd = TRUE,
 							bool insAllow = TRUE, bool derivedCol = FALSE);
+	bool	SetColDefs (wxColInf *colInfs, ULONG numCols, wxColDataPtr *pColDataPtrs);
 	HSTMT *NewCursor(bool setCursor = FALSE, bool bindColumns = TRUE);
 	bool	DeleteCursor(HSTMT *hstmtDel);
 	void	SetCursor(HSTMT *hstmtActivate = (void **) DEFAULT_CURSOR);
