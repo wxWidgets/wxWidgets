@@ -403,18 +403,28 @@ typedef int wxWindowID;
 
 #elif defined(__WXPM__)
 
-#  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT _Export
-#    define WXDLLEXPORT_DATA(type) _Export type
-#    define WXDLLEXPORT_CTORFN
-#  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT _Export
-#    define WXDLLEXPORT_DATA(type) _Export type
-#    define WXDLLEXPORT_CTORFN
+#  if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
+
+#    ifdef WXMAKINGDLL
+#      define WXDLLEXPORT _Export
+#      define WXDLLEXPORT_DATA(type) _Export type
+#      define WXDLLEXPORT_CTORFN
+#    elif defined(WXUSINGDLL)
+#      define WXDLLEXPORT _Export
+#      define WXDLLEXPORT_DATA(type) _Export type
+#      define WXDLLEXPORT_CTORFN
+#    else
+#      define WXDLLEXPORT
+#      define WXDLLEXPORT_DATA(type) type
+#      define WXDLLEXPORT_CTORFN
+#    endif
+
 #  else
+
 #    define WXDLLEXPORT
 #    define WXDLLEXPORT_DATA(type) type
 #    define WXDLLEXPORT_CTORFN
+
 #  endif
 
 #else  // !(MSW or OS2)
