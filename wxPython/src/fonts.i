@@ -854,6 +854,9 @@ public:
     // or output encoding is not supported.)
     bool Init(wxFontEncoding input_enc, wxFontEncoding output_enc, int method = wxCONVERT_STRICT);
 
+
+    // TODO:  Need to do something about unicode mode...
+
     // Convert input string according to settings passed to Init.
     // Note that you must call Init before using Convert!
     wxString Convert(const wxString& input);
@@ -866,6 +869,7 @@ public:
 //              void Convert(const wchar_t* input, wchar_t* output);
 //              void Convert(wchar_t* str) { Convert(str, str); }
 //  #endif
+
 
 
     // Return equivalent(s) for given font that are used

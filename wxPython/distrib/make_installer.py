@@ -122,6 +122,7 @@ Source: "demo\data\*.txt";                  DestDir: "{app}\wxPython\demo\data";
 Source: "demo\data\*.wav";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.wdr";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 Source: "demo\data\*.xrc";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
+Source: "demo\data\*.gif";                  DestDir: "{app}\wxPython\demo\data"; Components: demo
 
 Source: "demo\dllwidget\*.cpp";             DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo
 Source: "demo\dllwidget\*.py";              DestDir: "{app}\wxPython\demo\dllwidget"; Components: demo

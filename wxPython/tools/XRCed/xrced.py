@@ -1058,18 +1058,18 @@ class Frame(wxFrame):
         # Create toolbar
         tb = self.CreateToolBar(wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         tb.SetToolBitmapSize((24, 23))
-        tb.AddSimpleTool(wxID_NEW, '', images.getNewBitmap(), 'New', 'New file')
-        tb.AddSimpleTool(wxID_OPEN, '', images.getOpenBitmap(), 'Open', 'Open file')
-        tb.AddSimpleTool(wxID_SAVE, '', images.getSaveBitmap(), 'Save', 'Save file')
+        tb.AddSimpleTool(wxID_NEW, images.getNewBitmap(), 'New', 'New file')
+        tb.AddSimpleTool(wxID_OPEN, images.getOpenBitmap(), 'Open', 'Open file')
+        tb.AddSimpleTool(wxID_SAVE, images.getSaveBitmap(), 'Save', 'Save file')
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
-        tb.AddSimpleTool(wxID_CUT, '', images.getCutBitmap(), 'Cut', 'Cut')
-        tb.AddSimpleTool(wxID_COPY, '', images.getCopyBitmap(), 'Copy', 'Copy')
-        tb.AddSimpleTool(wxID_PASTE, '', images.getPasteBitmap(), 'Paste', 'Paste')
+        tb.AddSimpleTool(wxID_CUT, images.getCutBitmap(), 'Cut', 'Cut')
+        tb.AddSimpleTool(wxID_COPY, images.getCopyBitmap(), 'Copy', 'Copy')
+        tb.AddSimpleTool(wxID_PASTE, images.getPasteBitmap(), 'Paste', 'Paste')
         tb.AddControl(wxStaticLine(tb, -1, size=(-1,23), style=wxLI_VERTICAL))
-        tb.AddSimpleTool(self.ID_TEST, '', images.getTestBitmap(), 'Test', 'Test window')
-        tb.AddSimpleTool(self.ID_REFRESH, '', images.getRefreshBitmap(),
+        tb.AddSimpleTool(self.ID_TEST, images.getTestBitmap(), 'Test', 'Test window')
+        tb.AddSimpleTool(self.ID_REFRESH, images.getRefreshBitmap(),
                          'Refresh', 'Refresh view')
-        tb.AddSimpleTool(self.ID_AUTO_REFRESH, '', images.getAutoRefreshBitmap(),
+        tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', true)
         if wxGetOsVersion()[0] == wxGTK:
             tb.AddSeparator()   # otherwise auto-refresh sticks in status line
@@ -1910,7 +1910,7 @@ class App(wxApp):
         wc.Flush()
 
 def main():
-    app = App(0)
+    app = App()
     app.MainLoop()
     app.OnExit()
 
