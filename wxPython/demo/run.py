@@ -93,7 +93,7 @@ class RunDemoApp(wx.App):
                 frect = frame.otherWin.GetRect()
                 p = wx.Panel(frame, -1)
                 b = wx.Button(p, -1, " Exit ", (10,10))
-                frame.SetSize((200, 100))
+                wx.CallAfter(frame.SetClientSize, (200, 100))
                 frame.Bind(wx.EVT_BUTTON, self.OnButton, b)
             else:
                 # It was probably a dialog or something that is already
