@@ -76,7 +76,6 @@ void wxStaticText::DrawParagraph(wxDC &dc, wxString paragraph, int &y)
 
   int x = 0 ;
 
-  int i = 0 ;
   bool linedrawn = true;
   while( paragraph.Length() > 0 )
   {
@@ -157,7 +156,7 @@ void wxStaticText::OnDraw( wxDC &dc )
   }
 
   wxString paragraph;
-  int i = 0 ;
+  size_t i = 0 ;
   wxString text = m_label;
   int y = 0 ;
   while (i < text.Length())

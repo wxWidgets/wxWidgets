@@ -202,7 +202,7 @@ bool wxToolBar::Realize()
     while (node)
     {
         wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
+//        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
         
         if(  !tool->IsSeparator()  )
         {
@@ -328,7 +328,7 @@ wxSize wxToolBar::GetToolSize() const
 
 void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart ) 
 {
-    int index = 0 ;
+    size_t index = 0 ;
     for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
     {
         if ( m_macToolHandles[index] == (void*) control )
@@ -394,7 +394,7 @@ void wxToolBar::MacSuperChangedPosition()
         while (node)
         {
             wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-            wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
+ //           wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetNormalBitmap().GetRefData()) ;
             
             if(  !tool->IsSeparator()  )
             {
@@ -479,7 +479,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     MacClientToRootWindow( &x , &y ) ;
     Point pt = { y ,x } ;
 
-    int index = 0 ;
+    size_t index = 0 ;
     for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
     {
         if ( m_macToolHandles[index] )
@@ -566,7 +566,7 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         dc.YLOG2DEVMAC(m_height) , dc.XLOG2DEVMAC(m_width) } ;
     UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
     {
-        int index = 0 ;
+        size_t index = 0 ;
         for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
         {
             if ( m_macToolHandles[index] )
