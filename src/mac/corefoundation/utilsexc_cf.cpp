@@ -71,7 +71,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
         return -1;
     }
     CFMachPortContext termcb_contextinfo;
-    termcb_contextinfo.version = NULL;
+    termcb_contextinfo.version = 0;
     termcb_contextinfo.info = (void*)proc_data;
     termcb_contextinfo.retain = NULL;
     termcb_contextinfo.release = NULL;

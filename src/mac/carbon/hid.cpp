@@ -118,11 +118,11 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 	//Now get the maching services
 	io_iterator_t pIterator;
 	wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
-	wxASSERT(pIterator != NULL);
+	wxASSERT(pIterator != 0);
 
 	//Now we iterate through them
 	io_object_t pObject;
-	while ( (pObject = IOIteratorNext(pIterator)) != NULL)
+	while ( (pObject = IOIteratorNext(pIterator)) != 0)
 	{
 		wxVERIFY(IORegistryEntryCreateCFProperties(pObject, &pDictionary,
 											kCFAllocatorDefault, kNilOptions) == KERN_SUCCESS);
