@@ -35,13 +35,13 @@ void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
   {
     case kCFSocketConnectCallBack:
       assert(!socket->m_server);
-      socket->m_functions->Detected_Write(socket);
+      socket->Detected_Write();
       break;
     case kCFSocketReadCallBack:
-      socket->m_functions->Detected_Read(socket);
+      socket->Detected_Read();
       break;
     case kCFSocketWriteCallBack:
-      socket->m_functions->Detected_Write(socket);
+      socket->Detected_Write();
       break;
     default:
       break;  /* We shouldn't get here. */
@@ -76,16 +76,19 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
   return data;
 }
 
-int _GSocket_GUI_Init(void)
+bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
+{   return true; }
+
+bool GSocketGUIFunctionsTableConcrete::OnInit(void)
 {
-    return 1;
+    return true;
 }
 
-void _GSocket_GUI_Cleanup(void)
+void GSocketGUIFunctionsTableConcrete::OnExit(void)
 {
 }
 
-int _GSocket_GUI_Init_Socket(GSocket *socket)
+bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
 {
     struct MacGSocketData *data = (struct MacGSocketData *)malloc(sizeof(struct MacGSocketData));
     if (data)
@@ -98,7 +101,7 @@ int _GSocket_GUI_Init_Socket(GSocket *socket)
     return 0;
 }
 
-void _GSocket_GUI_Destroy_Socket(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Destroy_Socket(GSocket *socket)
 {
     struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
     if (data)
@@ -108,7 +111,7 @@ void _GSocket_GUI_Destroy_Socket(GSocket *socket)
     }
 }
 
-void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket, GSocketEvent event)
 {
     int c;
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
@@ -134,7 +137,7 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
     CFSocketEnableCallBacks(data->socket, c);
 }
 
-void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
+void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
     int c;
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
@@ -160,7 +163,7 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
     CFSocketDisableCallBacks(data->socket, c);
 }
 
-void _GSocket_Enable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
 {
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
@@ -168,7 +171,7 @@ void _GSocket_Enable_Events(GSocket *socket)
     CFRunLoopAddSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopDefaultMode);
 }
 
-void _GSocket_Disable_Events(GSocket *socket)
+void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
 {
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
