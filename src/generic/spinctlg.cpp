@@ -232,15 +232,18 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
     wxControl::DoMoveWindow(x, y, width, height);
 
+    wxPoint p = GetParent() ? 
+                GetParent()->GetClientAreaOrigin() : wxPoint(0,0);
+
     // position the subcontrols inside the client area
     wxSize sizeBtn = m_btn->GetSize();
 
     wxCoord wText = width - sizeBtn.x;
-    m_text->SetSize(x, y, wText, height);
+    m_text->SetSize(x-p.x, y-p.y, wText, height);
 #ifdef __WXMAC__
-    m_btn->SetSize(x + wText + MARGIN, y, -1, -1);
+    m_btn->SetSize(x-p.x + wText + MARGIN, y-p.y, -1, -1);
 #else
-    m_btn->SetSize(x + wText + MARGIN, y, -1, height);
+    m_btn->SetSize(x-p.x + wText + MARGIN, y-p.y, -1, height);
 #endif
 }
 
