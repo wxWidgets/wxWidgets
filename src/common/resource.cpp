@@ -908,11 +908,11 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
 
       if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
      {
-        // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-       // Do nothing - no label font any more
-      count ++;
-        if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-          controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+       // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+       // Skip past the obsolete label font spec if there are two consecutive specs
+       if (expr->Nth(count+1) && expr->Nth(count+1)->Type() == PrologList)
+         count ++;
+       controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
      }
    }
   }

@@ -48,6 +48,7 @@ samples/font/Makefile.in
 samples/menu/Makefile.in
 samples/console/Makefile.in
 samples/calendar/Makefile.in
+samples/exec/Makefile.in
 demos/bombs/Makefile.in
 demos/forty/Makefile.in
 demos/fractal/Makefile.in

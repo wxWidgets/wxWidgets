@@ -994,6 +994,15 @@ samples/calendar/*.ico
 samples/calendar/*.xpm
 samples/calendar/*.txt
 
+samples/exec/*.cpp
+samples/exec/*.h
+samples/exec/makefile*
+samples/exec/*.rc
+samples/exec/*.def
+samples/exec/*.ico
+samples/exec/*.xpm
+samples/exec/*.txt
+
 demos/bombs/*.cpp
 demos/bombs/*.h
 demos/bombs/*.def

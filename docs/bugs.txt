@@ -348,6 +348,37 @@ lpszPortName
 visitor_email_address: ave@relex.ru
 wxWINDOWS+VERSION: 2.1.11
 
+DATE+FIXED:
+DATE+IDENTIFIED: 14/01/2000
+DETAILS: I run my linux boxes headless and use a Windows box for an XServer... every sample I have tried so far
+hangs in a loop tring to get an acceptable font for something or other... here is the GDB trace
+#1102 0x40203d19 in wxMessageBox ()
+#1103 0x401aee31 in wxFontMapper::GetAltForEncoding ()
+#1104 0x40287c45 in wxLoadQueryNearestFont ()
+#1105 0x4015b3cc in wxFont::GetInternalFont ()
+#1106 0x4017d1db in wxWindow::GetTextExtent ()
+#1107 0x4018f499 in wxDialogBase::CreateTextSizer ()
+#1108 0x40253302 in wxGenericMessageDialog::wxGenericMessageDialog ()
+#1109 0x40203d19 in wxMessageBox ()
+#1110 0x401aee31 in wxFontMapper::GetAltForEncoding ()
+#1111 0x40287c45 in wxLoadQueryNearestFont ()
+#1112 0x4015b3cc in wxFont::GetInternalFont ()
+#1113 0x40154653 in wxWindowDC::DoGetTextExtent ()
+#1114 0x4015e3fd in wxFrame::OnCreateStatusBar ()
+#1115 0x4015e17d in wxFrame::CreateStatusBar ()
+#1116 0x8062edc in ChatFrame::ChatFrame ()
+#1117 0x8062d3d in ChatClient::OnInit ()
+#1118 0x4014587e in wxEntry ()
+#1119 0x401617db in main ()
+FIXED+BY:
+IDENTIFIED+BY: John Barrett
+PLATFORMS: wxGTK
+SHORT+DESCRIPTION: wxWin/GTK and X-Win32 on Windows
+Submit: Submit
+WORKAROUND: 
+visitor_email_address: jbarrett@box100.com
+wxWINDOWS+VERSION: 2.1.11
+
 
 ---------------------------END OF BUGLIST-------------------------
 
