@@ -120,7 +120,6 @@ void wxMessageOutputDebug::Printf(const wxChar* format, ...)
 
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     out.Replace(wxT("\t"), wxT("        "));
-    out += _T("\r\n");
     ::OutputDebugString(out);
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     if ( wxIsDebuggerRunning() )
