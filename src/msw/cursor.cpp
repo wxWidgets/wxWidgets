@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/module.h"
+#include "wx/image.h"
 #include "wx/msw/private.h"
 #ifndef __WXMICROWIN__
 #include "wx/msw/dib.h"
