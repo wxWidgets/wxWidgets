@@ -309,7 +309,6 @@ bool wxDialog::Show(bool show)
     {
       m_hwndOldFocus = (WXHWND)::GetFocus();
 
-      wxList DisabledWindows;
       if (m_modalShowing)
       {
         BringWindowToTop((HWND) GetHWND());
@@ -325,6 +324,13 @@ bool wxDialog::Show(bool show)
           ::EnableWindow((HWND) box->GetHWND(), FALSE);
         node = node->Next();
       }
+
+      // if we don't do it, some window might be deleted while we have pointers
+      // to them in our disabledWindows list and the program will crash when it
+      // will try to reenable them after the modal dialog end
+      wxTheApp->DeletePendingObjects();
+      wxList disabledWindows;
+
       node = wxModelessWindows.First();
       while (node)
       {
@@ -332,7 +338,7 @@ bool wxDialog::Show(bool show)
         if (::IsWindowEnabled((HWND) win->GetHWND()))
         {
           ::EnableWindow((HWND) win->GetHWND(), FALSE);
-          DisabledWindows.Append(win);
+          disabledWindows.Append(win);
         }
         node = node->Next();
       }
@@ -371,7 +377,7 @@ bool wxDialog::Show(bool show)
          }
       }
       // dfgg: now must specifically re-enable all other app windows that we disabled earlier
-      node=DisabledWindows.First();
+      node=disabledWindows.First();
       while(node) {
         wxWindow* win = (wxWindow*) node->Data();
         HWND hWnd = (HWND) win->GetHWND();
