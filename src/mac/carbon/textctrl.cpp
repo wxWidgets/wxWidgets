@@ -1413,7 +1413,9 @@ void wxTextCtrl::WriteText(const wxString& str)
 {
     if ( !wxIsMainThread() )
     {
-        wxMacMPRemoteGUICall( this , &wxTextCtrl::WriteText , str ) ;
+        // unfortunately CW 8 is not able to correctly deduce the template types, so we have 
+        // to instantiate explicitely
+        wxMacMPRemoteGUICall<wxTextCtrl,wxString>( this , &wxTextCtrl::WriteText , str ) ;
         return ;
     }
     else
@@ -1515,6 +1517,13 @@ wxSize wxTextCtrl::DoGetBestSize() const
             hText = 22 ;
             break ; 
     }
+
+#if !wxMAC_USE_MLTE
+    // unicode text control is using client size, ie 3 pixels on every side
+    // TODO make this fit into normal window size concept, probably having 
+    // to reintroduce the margin vars
+    hText -= 6 ;
+#endif
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
