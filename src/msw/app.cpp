@@ -947,6 +947,17 @@ bool wxApp::DoMessage()
     return TRUE;
 }
 
+
+void wxApp::DoMessage(WXMSG *pMsg)
+{
+    if ( !ProcessMessage(pMsg) )
+    {
+        ::TranslateMessage((MSG *)pMsg);
+        ::DispatchMessage((MSG *)pMsg);
+    }
+}
+
+
 /*
  * Keep trying to process messages until WM_QUIT
  * received.

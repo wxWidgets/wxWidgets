@@ -1482,7 +1482,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     wxCurrentPopupMenu = menu;
     ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
     
-    wxYieldForCommands();
+    wxYieldForCommandsOnly();
     
     wxCurrentPopupMenu = NULL;
 
