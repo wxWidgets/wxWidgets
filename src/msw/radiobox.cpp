@@ -294,7 +294,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_radioHeight = new int[n];
 
     WXHFONT hfont = 0;
-    wxFont& font = GetFont();
+    wxFont font = GetFont();
     if ( font.Ok() )
     {
         hfont = font.GetResourceHandle();
