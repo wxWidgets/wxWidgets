@@ -583,12 +583,12 @@ bool wxGridCellEditor::IsAcceptedKey(wxKeyEvent& event)
         keyOk = (key <= 127);
     }
     return keyOk;
-#else
+#else // !wxUSE_UNICODE
     int key = event.GetKeyCode();
     if (key <= 255) 
         return true;
-#endif
     return false;
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 }
 
 void wxGridCellEditor::StartingKey(wxKeyEvent& event)
