@@ -222,7 +222,9 @@ class WXDLLEXPORT wxDC: public wxDCBase
       else
         return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y ;
     }
-#if !wxMAC_USE_CORE_GRAPHICS
+#if wxMAC_USE_CORE_GRAPHICS
+    wxGraphicContext* GetGraphicContext() { return m_graphicContext ; }
+#else
     WXHRGN MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
     static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 #endif

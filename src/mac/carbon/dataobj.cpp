@@ -32,6 +32,7 @@
 #include "wx/dataobj.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/metafile.h"
 #include "wx/mac/private.h"
 #include <Scrap.h>
 
@@ -250,9 +251,8 @@ wxBitmapDataObject::wxBitmapDataObject(
     Init();
     if ( m_bitmap.Ok() )
     {
-    /*
-        m_pictHandle = m_bitmap.GetBitmapData()->GetPict( &m_pictCreated ) ;
-    */
+        m_pictHandle = wxMacCreatePicHandle( rBitmap ) ;
+        m_pictCreated = true ;
     }
 }
 
@@ -269,9 +269,8 @@ void wxBitmapDataObject::SetBitmap(
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
     if ( m_bitmap.Ok() )
     {
-    /*
-        m_pictHandle = m_bitmap.GetBitmapData()->GetPict( &m_pictCreated ) ;
-    */
+        m_pictHandle = wxMacCreatePicHandle( rBitmap ) ;
+        m_pictCreated = true ;
     }
 }
 
@@ -320,10 +319,14 @@ bool wxBitmapDataObject::SetData(
     // ownership is transferred to the bitmap
     m_pictCreated = false ;
     Rect frame = (**picHandle).picFrame ;
-    /*
-    m_bitmap.GetBitmapData()->SetPict( (WXHMETAFILE) picHandle ) ;
-    m_bitmap.SetWidth( frame.right - frame.left ) ;
-    m_bitmap.SetHeight( frame.bottom - frame.top ) ;
-    */
+    
+    wxMetafile mf ;
+    mf.SetHMETAFILE( (WXHMETAFILE) m_pictHandle ) ;
+    wxMemoryDC mdc ;
+    m_bitmap.Create( frame.right - frame.left ,frame.bottom - frame.top ) ;
+    mdc.SelectObject(m_bitmap ) ;
+    mf.Play( &mdc ) ;
+    mdc.SelectObject( wxNullBitmap ) ;
+    
     return m_bitmap.Ok();
 }

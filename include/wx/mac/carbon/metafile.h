@@ -32,17 +32,7 @@
 #define wxMetaFileDC wxMetafileDC
 
 class WXDLLEXPORT wxMetafile;
-
-class WXDLLEXPORT wxMetafileRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxMetafile;
-public:
-    wxMetafileRefData(void);
-    ~wxMetafileRefData(void);
-
-public:
-    WXHMETAFILE m_metafile;
-};
+class wxMetafileRefData ;
 
 #define M_METAFILEDATA ((wxMetafileRefData *)m_refData)
 
@@ -63,14 +53,14 @@ public:
     virtual bool SetClipboard(int width = 0, int height = 0);
 
     virtual bool Play(wxDC *dc);
-    inline bool Ok(void) const { return (M_METAFILEDATA && (M_METAFILEDATA->m_metafile != 0)); };
+    bool Ok() const ;
 
     wxSize GetSize() const;
     int GetWidth() const { return GetSize().x; }
     int GetHeight() const { return GetSize().y; }
 
     // Implementation
-    inline WXHMETAFILE GetHMETAFILE() const { return M_METAFILEDATA->m_metafile; }
+    WXHMETAFILE GetHMETAFILE() const ;
     void SetHMETAFILE(WXHMETAFILE mf) ;
 
     // Operators

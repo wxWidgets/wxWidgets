@@ -354,6 +354,7 @@ CIconHandle     wxMacCreateCIcon(GWorldPtr image , GWorldPtr mask , short dstDep
 void                 wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
 CTabHandle         wxMacCreateColorTable( int numColors ) ;
 */
+PicHandle wxMacCreatePicHandle( const wxBitmap &bmp ) ;
 IconRef wxMacCreateIconRef(const wxBitmap& bmp) ;
 void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bitmap , int forceType = 0 ) ;
 void wxMacReleaseBitmapButton( ControlButtonContentInfo*info ) ;
@@ -597,6 +598,7 @@ private:
 } ;
 
 CGColorSpaceRef wxMacGetGenericRGBColorSpace(void) ;
+void wxMacMemoryBufferReleaseProc(void *info, const void *data, size_t size) ;
 
 #endif // wxMAC_USE_CORE_GRAPHICS
 
@@ -638,10 +640,10 @@ public:
     wxMask *      m_bitmapMask; // Optional mask
 #if wxMAC_USE_CORE_GRAPHICS
     CGImageRef    CGImageCreate() const ;
-#else
+#endif
     GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const ;
     void          UpdateAlphaMask() const ;
-#endif
+
 private :
     bool Create(int width , int height , int depth) ;
     void Init() ;
@@ -656,12 +658,11 @@ private :
     bool          m_ok;
 #if wxMAC_USE_CORE_GRAPHICS
     mutable CGImageRef    m_cgImageRef ;
-#else
+#endif
     GWorldPtr     m_hBitmap;
     GWorldPtr     m_hMaskBitmap ;
     wxMemoryBuffer m_maskMemBuf ;
     int            m_maskBytesPerRow ;
-#endif
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)

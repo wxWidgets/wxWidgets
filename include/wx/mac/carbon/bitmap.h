@@ -68,18 +68,18 @@ public:
     int GetBytesPerRow() const { return m_bytesPerRow ; }
     // renders/updates native representation when necessary 
     void RealizeNative() ;
-#if !wxMAC_USE_CORE_GRAPHICS
+
     WXHBITMAP GetHBITMAP() const ;
-#endif
+
 
 private:
     wxMemoryBuffer m_memBuf ;
     int m_bytesPerRow ;
     int m_width ;
     int m_height ;
-#if !wxMAC_USE_CORE_GRAPHICS
+
     WXHBITMAP m_maskBitmap ;
-#endif
+
 };
 
 class WXDLLEXPORT wxBitmapHandler: public wxBitmapHandlerBase
@@ -193,10 +193,8 @@ public:
     bool HasAlpha() const;
     void UseAlpha();
 
-#if !wxMAC_USE_CORE_GRAPHICS
     // returns the 'native' implementation, a GWorldPtr for the content and one for the mask 
     WXHBITMAP GetHBITMAP( WXHBITMAP * mask = NULL ) const;
-#endif
 
 #if wxMAC_USE_CORE_GRAPHICS
     // returns a CGImageRef which must released after usage with CGImageRelease
