@@ -16,7 +16,8 @@ wx.grid.Grid fix allowing DoGetBestSize to be called before CreateGrid
 wxMac fix for not sending a native click to a control if it is not
 enabled (does an enable itself)
 
-Added wx.lib.ogl.DrawnShape
+Added wx.lib.ogl.DrawnShape, and fixed various little bugs in the new
+OGL. 
 
 Added support to XRC and XRCed for the 3-state checkbox flags and also
 for wx.ToggleButton.  Updated the generic window styles supported by
@@ -57,6 +58,17 @@ the wxPython modules.
 Added wx.Frame.RequestUserAttention which, if the platform suports it,
 will do something (such as flash the task bar item) to suggest to the
 user that they should look at that window.
+
+"Fixed" wx.grid.Grid.SetDefaultEditor and SetDefaultRenderer by making
+them register the editor or renderer for the "string" data type.
+
+Added depth param to wx.Image.ConvertToBitmap.
+
+Extended the wx.calendar.CalendarCtrl class with methods that get/set
+a Python datetime or date object.  (These will only work with Python
+2.3+) The methods are PySetDate, PyGetDate, PySetLowerDateLimit,
+PySetUpperDateLimit, PySetDateRange, PyGetLowerDateLimit, and
+PyGetUpperDateLimit. 
 
 
 
