@@ -53,6 +53,7 @@ char wxMemoryInputStream::Peek()
 
 size_t wxMemoryInputStream::OnSysRead(void *buffer, size_t nbytes)
 {
+  m_lastcount = 0;
   return m_i_streambuf->Read(buffer, nbytes);
 }
 
@@ -86,6 +87,7 @@ wxMemoryOutputStream::~wxMemoryOutputStream()
 
 size_t wxMemoryOutputStream::OnSysWrite(const void *buffer, size_t nbytes)
 {
+  m_lastcount = 0;
   return m_o_streambuf->Write(buffer, nbytes);
 }
 
