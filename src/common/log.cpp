@@ -371,7 +371,7 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 #ifdef __WXDEBUG__
             {
                 wxString msg = level == wxLOG_Trace ? wxT("Trace: ")
-                                                    : wxT("Debug: "),
+                                                    : wxT("Debug: ");
                 msg << szString;
                 DoLogString(msg, t);
             }
