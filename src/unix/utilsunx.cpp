@@ -277,7 +277,7 @@ long wxExecute( wxChar **argv, bool sync, wxProcess *process )
     }
 
     // fork the process
-#ifdef HAVE_VFORK
+#if HAVE_VFORK
     pid_t pid = vfork();
 #else
     pid_t pid = fork();
