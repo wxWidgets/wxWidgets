@@ -318,24 +318,24 @@ LIB32=link.exe -lib
 # Name "wxWindows - Win32 Release"
 # Name "wxWindows - Win32 Debug"
 # Name "wxWindows - Win32 Release With Debug Info"
-@[for group in SOURCES:@
+@[for group in SOURCES]@
 # Begin Group "@group[0]"
 
 # PROP Default_Filter ""
-@[for src in group[1]:@
+@[for src in group[1]]@
 # Begin Source File
 
 SOURCE=.\@src[4:].replace('/','\\')
-@[if src=='src/msw/dummy.cpp':@
+@[if src=='src/msw/dummy.cpp']@
 # ADD CPP /Yc"wx/wxprec.h"
-]@
-@[if src.endswith('.c'):@
+@[end if]@
+@[if src.endswith('.c')]@
 # SUBTRACT CPP /YX /Yc /Yu
-]@
+@[end if]@
 # End Source File
-]@
+@[end for]@
 # End Group
-]@
+@[end for]@
 # Begin Group "Headers"
 
 # PROP Default_Filter ""
@@ -440,18 +440,18 @@ InputPath=..\include\wx\msw\setup.h
 
 # End Source File
 # End Group
-@[for group in HEADERS:@
+@[for group in HEADERS]@
 # Begin Group "@group[0]"
 
 # PROP Default_Filter ""
-@[for hdr in group[1]:@
+@[for hdr in group[1]]@
 # Begin Source File
 
 SOURCE=..\include\@hdr.replace('/','\\')
 # End Source File
-]@
+@[end for]@
 # End Group
-]@
+@[end for]@
 # End Group
 # End Target
 # End Project
