@@ -826,12 +826,18 @@ extern int ZEXPORT unzLocateFile (file, szFileName, iCaseSensitivity)
 {
 	unz_s* s;	
 	int err;
-
-	
+    const char *c;
+    char *c2;
+    char szFileName2[UNZ_MAXFILENAMEINZIP+1];
+    
 	uLong num_fileSaved;
 	uLong pos_in_central_dirSaved;
 
-
+    for (c = szFileName, c2 = szFileName2; *c != '\0'; c++, c2++) 
+        if (*c == '\\') *c2 = '/';
+        else *c2 = *c;
+    *c2 = '\0';
+	
 	if (file==NULL)
 		return UNZ_PARAMERROR;
 
@@ -853,8 +859,9 @@ extern int ZEXPORT unzLocateFile (file, szFileName, iCaseSensitivity)
 		unzGetCurrentFileInfo(file,NULL,
 								szCurrentFileName,sizeof(szCurrentFileName)-1,
 								NULL,0,NULL,0);
+        for (c2 = szCurrentFileName; *c2 != '\0'; c2++) if (*c2 == '\\') *c2 = '/';
 		if (unzStringFileNameCompare(szCurrentFileName,
-										szFileName,iCaseSensitivity)==0)
+										szFileName2,iCaseSensitivity)==0)
 			return UNZ_OK;
 		err = unzGoToNextFile(file);
 	}
