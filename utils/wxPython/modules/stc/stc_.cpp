@@ -4844,17 +4844,18 @@ static PyObject *_wrap_wxStyledTextCtrl_GetFoldLevel(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxStyledTextCtrl_GetLastChild(_swigobj,_swigarg0)  (_swigobj->GetLastChild(_swigarg0))
+#define wxStyledTextCtrl_GetLastChild(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetLastChild(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxStyledTextCtrl_GetLastChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxStyledTextCtrl * _arg0;
     int  _arg1;
+    int  _arg2;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","line", NULL };
+    char *_kwnames[] = { "self","line","level", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxStyledTextCtrl_GetLastChild",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxStyledTextCtrl_GetLastChild",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4865,7 +4866,7 @@ static PyObject *_wrap_wxStyledTextCtrl_GetLastChild(PyObject *self, PyObject *a
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxStyledTextCtrl_GetLastChild(_arg0,_arg1);
+        _result = (int )wxStyledTextCtrl_GetLastChild(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);

@@ -426,7 +426,7 @@ public:
     int      DocLineFromVisible(int displayLine);
     int      SetFoldLevel(int line, int level);
     int      GetFoldLevel(int line);
-    int      GetLastChild(int line);
+    int      GetLastChild(int line, int level);
     int      GetFoldParent(int line);
     void     ShowLines(int lineStart, int lineEnd);
     void     HideLines(int lineStart, int lineEnd);

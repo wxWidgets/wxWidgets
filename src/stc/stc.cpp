@@ -1176,8 +1176,8 @@ int  wxStyledTextCtrl::GetFoldLevel(int line) {
 }
 
 
-int  wxStyledTextCtrl::GetLastChild(int line) {
-    return SendMsg(SCI_GETLASTCHILD,  line);
+int  wxStyledTextCtrl::GetLastChild(int line, int level) {
+    return SendMsg(SCI_GETLASTCHILD,  line, level);
 }
 
 
