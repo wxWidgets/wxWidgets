@@ -17211,7 +17211,7 @@ EOF
 else
   echo "$ac_t""no" 1>&6
 
-                echo "configure: warning: MS HTML Help cannot be used without htmlhelp.h so it won't be compiled without it" 1>&2
+                echo "configure: warning: MS HTML Help cannot be used without htmlhelp.h, disabled" 1>&2
                 wxUSE_MS_HTML_HELP=no
             
 fi
@@ -17267,63 +17267,22 @@ EOF
 fi
 
 
-if test "$wxUSE_IPC" = "yes"; then
-    if test "$wxUSE_SOCKETS" != "yes"; then
-        echo "configure: warning: wxWindows IPC classes require sockets" 1>&2
-    fi
-
-    cat >> confdefs.h <<\EOF
-#define wxUSE_IPC 1
-EOF
-
-fi
-
-if test "$wxUSE_CLIPBOARD" = "yes"; then
-    cat >> confdefs.h <<\EOF
-#define wxUSE_CLIPBOARD 1
-EOF
-
-    cat >> confdefs.h <<\EOF
-#define wxUSE_DATAOBJ 1
-EOF
-
-fi
-
-if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
-    if test "$wxUSE_GTK" = 1; then
-        if test "$WXGTK12" != 1; then
-            echo "configure: warning: Drag and drop is only supported under GTK+ 1.2" 1>&2
-            wxUSE_DRAG_AND_DROP=no
-        fi
-    fi
-
-    if test "$wxUSE_MOTIF" = 1; then
-        echo "configure: warning: Drag and drop is not yet supported under Motif" 1>&2
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
-    if test "$wxUSE_MAC" = 1; then
-        echo "configure: warning: Drag and drop is not yet supported under Mac OS X" 1>&2
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
-    if test "$USE_WIN32" = 1; then
-                
-        for ac_hdr in ole2.h
+if test "$USE_WIN32" = 1; then
+    for ac_hdr in ole2.h
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:17317: checking for $ac_hdr" >&5
+echo "configure:17276: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 17322 "configure"
+#line 17281 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:17327: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:17286: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -17350,32 +17309,78 @@ fi
 done
 
 
-        if test "$ac_cv_header_ole2_h" = "yes" ; then
-            if test "$GCC" = yes ; then
-                ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
-                ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
-                CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
-                LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
-                cat >> confdefs.h <<\EOF
+    if test "$ac_cv_header_ole2_h" = "yes" ; then
+        if test "$GCC" = yes ; then
+            ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
+            ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
+            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
+            LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
+            cat >> confdefs.h <<\EOF
 #define wxUSE_OLE 1
 EOF
 
 
-                                                if test "$wxUSE_METAFILE" = "yes"; then
-                    cat >> confdefs.h <<\EOF
+        fi
+
+                cat >> confdefs.h <<\EOF
+#define wxUSE_DATAOBJ 1
+EOF
+
+    else
+        echo "configure: warning: Some features disabled because OLE headers not found" 1>&2
+
+        wxUSE_CLIPBOARD=no
+        wxUSE_DRAG_AND_DROP=no
+        wxUSE_DATAOBJ=no
+    fi
+
+        if test "$wxUSE_METAFILE" = "yes"; then
+        cat >> confdefs.h <<\EOF
 #define wxUSE_METAFILE 1
 EOF
 
-                                        cat >> confdefs.h <<\EOF
+
+                cat >> confdefs.h <<\EOF
 #define wxUSE_ENH_METAFILE 1
 EOF
 
-                fi
-            fi
-        else
-            echo "configure: warning: Drag and drop disabled because OLE headers not found" 1>&2
+    fi
+fi
+
+if test "$wxUSE_IPC" = "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        echo "configure: warning: wxWindows IPC classes require sockets" 1>&2
+    fi
+
+    cat >> confdefs.h <<\EOF
+#define wxUSE_IPC 1
+EOF
+
+fi
+
+if test "$wxUSE_CLIPBOARD" = "yes"; then
+    cat >> confdefs.h <<\EOF
+#define wxUSE_CLIPBOARD 1
+EOF
+
+fi
+
+if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
+    if test "$wxUSE_GTK" = 1; then
+        if test "$WXGTK12" != 1; then
+            echo "configure: warning: Drag and drop is only supported under GTK+ 1.2" 1>&2
             wxUSE_DRAG_AND_DROP=no
         fi
+    fi
+
+    if test "$wxUSE_MOTIF" = 1; then
+        echo "configure: warning: Drag and drop is not yet supported under Motif" 1>&2
+        wxUSE_DRAG_AND_DROP=no
+    fi
+
+    if test "$wxUSE_MAC" = 1; then
+        echo "configure: warning: Drag and drop is not yet supported under Mac OS X" 1>&2
+        wxUSE_DRAG_AND_DROP=no
     fi
 
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
@@ -18156,7 +18161,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18160: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18165: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

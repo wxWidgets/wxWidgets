@@ -4011,7 +4011,7 @@ if test "$wxUSE_HELP" = "yes"; then
                 AC_DEFINE(wxUSE_MS_HTML_HELP)
             ],
             [
-                AC_MSG_WARN(MS HTML Help cannot be used without htmlhelp.h so it won't be compiled without it)
+                AC_MSG_WARN([MS HTML Help cannot be used without htmlhelp.h, disabled])
                 wxUSE_MS_HTML_HELP=no
             ])
       fi
@@ -4053,6 +4053,40 @@ dnl ---------------------------------------------------------------------------
 dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
+dnl check for ole headers and disable a few features requiring it if not
+dnl present (earlier versions of mingw32 don't have ole2.h)
+if test "$USE_WIN32" = 1; then
+    AC_CHECK_HEADERS(ole2.h)
+
+    if test "$ac_cv_header_ole2_h" = "yes" ; then
+        if test "$GCC" = yes ; then
+            ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
+            ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
+            CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
+            LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
+            AC_DEFINE(wxUSE_OLE)
+
+        fi
+
+        dnl for OLE clipboard and dnd
+        AC_DEFINE(wxUSE_DATAOBJ)
+    else
+        AC_MSG_WARN([Some features disabled because OLE headers not found])
+
+        wxUSE_CLIPBOARD=no
+        wxUSE_DRAG_AND_DROP=no
+        wxUSE_DATAOBJ=no
+    fi
+
+    dnl this is for MSW only, so we test for it inside "if USE_WIN32"
+    if test "$wxUSE_METAFILE" = "yes"; then
+        AC_DEFINE(wxUSE_METAFILE)
+
+        dnl this one should probably be made separately configurable
+        AC_DEFINE(wxUSE_ENH_METAFILE)
+    fi
+fi
+
 if test "$wxUSE_IPC" = "yes"; then
     if test "$wxUSE_SOCKETS" != "yes"; then
         AC_MSG_WARN(wxWindows IPC classes require sockets, disabled)
@@ -4063,7 +4097,6 @@ fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
     AC_DEFINE(wxUSE_CLIPBOARD)
-    AC_DEFINE(wxUSE_DATAOBJ)
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
@@ -4082,34 +4115,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
     if test "$wxUSE_MAC" = 1; then
         AC_MSG_WARN([Drag and drop is not yet supported under Mac OS X])
         wxUSE_DRAG_AND_DROP=no
-    fi
-
-    if test "$USE_WIN32" = 1; then
-        dnl check for ole headers and disable DnD if not present (earlier
-        dnl versions of mingw32 don't have them)
-
-        AC_CHECK_HEADERS(ole2.h)
-
-        if test "$ac_cv_header_ole2_h" = "yes" ; then
-            if test "$GCC" = yes ; then
-                ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
-                ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
-                CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
-                LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
-                AC_DEFINE(wxUSE_OLE)
-
-                dnl metafiles need the ole code, right??  if not this
-                dnl doesn't need to be in here.
-                if test "$wxUSE_METAFILE" = "yes"; then
-                    AC_DEFINE(wxUSE_METAFILE)
-                    dnl this one should probably be made separately configurable
-                    AC_DEFINE(wxUSE_ENH_METAFILE)
-                fi
-            fi
-        else
-            AC_MSG_WARN(Drag and drop disabled because OLE headers not found)
-            wxUSE_DRAG_AND_DROP=no
-        fi
     fi
 
     if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
