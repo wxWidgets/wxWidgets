@@ -993,6 +993,10 @@ class wxFileHistory(wxFileHistoryPtr):
 
 wxFileSelector = misc2c.wxFileSelector
 
+wxLoadFileSelector = misc2c.wxLoadFileSelector
+
+wxSaveFileSelector = misc2c.wxSaveFileSelector
+
 wxGetTextFromUser = misc2c.wxGetTextFromUser
 
 wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser

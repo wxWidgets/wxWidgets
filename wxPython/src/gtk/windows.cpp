@@ -5062,17 +5062,19 @@ static PyObject *_wrap_wxWindow_GetToolTip(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxWindow_SetSizer(_swigobj,_swigarg0)  (_swigobj->SetSizer(_swigarg0))
+#define wxWindow_SetSizer(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSizer(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxWindow_SetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxWindow * _arg0;
     wxSizer * _arg1;
+    bool  _arg2 = (bool ) TRUE;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","sizer", NULL };
+    int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "self","sizer","deleteOld", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetSizer",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxWindow_SetSizer",_kwnames,&_argo0,&_argo1,&tempbool2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5088,9 +5090,10 @@ static PyObject *_wrap_wxWindow_SetSizer(PyObject *self, PyObject *args, PyObjec
         return NULL;
         }
     }
+    _arg2 = (bool ) tempbool2;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWindow_SetSizer(_arg0,_arg1);
+    wxWindow_SetSizer(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5351,6 +5354,36 @@ static PyObject *_wrap_wxWindow_GetBestSize(PyObject *self, PyObject *args, PyOb
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = new wxSize (wxWindow_GetBestSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxWindow_GetMaxSize(_swigobj)  (_swigobj->GetMaxSize())
+static PyObject *_wrap_wxWindow_GetMaxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetMaxSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetMaxSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxWindow_GetMaxSize(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5949,7 +5982,7 @@ static PyObject *_wrap_wxWindow_GetAcceleratorTable(PyObject *self, PyObject *ar
 #define wxWindow_GetDefaultItem(_swigobj)  (_swigobj->GetDefaultItem())
 static PyObject *_wrap_wxWindow_GetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxButton * _result;
+    wxWindow * _result;
     wxWindow * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -5966,7 +5999,7 @@ static PyObject *_wrap_wxWindow_GetDefaultItem(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxButton *)wxWindow_GetDefaultItem(_arg0);
+    _result = (wxWindow *)wxWindow_GetDefaultItem(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5977,8 +6010,9 @@ static PyObject *_wrap_wxWindow_GetDefaultItem(PyObject *self, PyObject *args, P
 #define wxWindow_SetDefaultItem(_swigobj,_swigarg0)  (_swigobj->SetDefaultItem(_swigarg0))
 static PyObject *_wrap_wxWindow_SetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    wxWindow * _result;
     wxWindow * _arg0;
-    wxButton * _arg1;
+    wxWindow * _arg1;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","btn", NULL };
@@ -5995,19 +6029,18 @@ static PyObject *_wrap_wxWindow_SetDefaultItem(PyObject *self, PyObject *args, P
     }
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxButton_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetDefaultItem. Expected _wxButton_p.");
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetDefaultItem. Expected _wxWindow_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxWindow_SetDefaultItem(_arg0,_arg1);
+    _result = (wxWindow *)wxWindow_SetDefaultItem(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 
@@ -7018,6 +7051,34 @@ static PyObject *_wrap_wxScrolledWindow_AdjustScrollbars(PyObject *self, PyObjec
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxScrolledWindow_Layout(_swigobj)  (_swigobj->Layout())
+static PyObject *_wrap_wxScrolledWindow_Layout(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxScrolledWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrolledWindow_Layout",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrolledWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrolledWindow_Layout. Expected _wxScrolledWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxScrolledWindow_Layout(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -9975,6 +10036,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenu_AppendMenu", (PyCFunction) _wrap_wxMenu_AppendMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenu_Append", (PyCFunction) _wrap_wxMenu_Append, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMenu", (PyCFunction) _wrap_new_wxMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrolledWindow_Layout", (PyCFunction) _wrap_wxScrolledWindow_Layout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_AdjustScrollbars", (PyCFunction) _wrap_wxScrolledWindow_AdjustScrollbars, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_GetScaleY", (PyCFunction) _wrap_wxScrolledWindow_GetScaleY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrolledWindow_GetScaleX", (PyCFunction) _wrap_wxScrolledWindow_GetScaleX, METH_VARARGS | METH_KEYWORDS },
@@ -10022,6 +10084,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Freeze", (PyCFunction) _wrap_wxWindow_Freeze, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCaret", (PyCFunction) _wrap_wxWindow_GetCaret, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetCaret", (PyCFunction) _wrap_wxWindow_SetCaret, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetMaxSize", (PyCFunction) _wrap_wxWindow_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBestSize", (PyCFunction) _wrap_wxWindow_GetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetDropTarget", (PyCFunction) _wrap_wxWindow_GetDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetDropTarget", (PyCFunction) _wrap_wxWindow_SetDropTarget, METH_VARARGS | METH_KEYWORDS },

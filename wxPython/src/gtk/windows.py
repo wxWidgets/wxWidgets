@@ -535,6 +535,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBestSize,(self,) + _args, _kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
+    def GetMaxSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetMaxSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def SetCaret(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetCaret,(self,) + _args, _kwargs)
         return val
@@ -702,6 +706,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def AdjustScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_AdjustScrollbars,(self,) + _args, _kwargs)
+        return val
+    def Layout(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_Layout,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)

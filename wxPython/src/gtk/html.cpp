@@ -252,15 +252,13 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
     wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
         PyObject* ro;
-        ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(is)", type, url.c_str()));
+        ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(iO)", type, wx2PyString(url)));
         if (PyString_Check(ro)
 #if PYTHON_API_VERSION >= 1009
             || PyUnicode_Check(ro)
 #endif
             ) {
-            PyObject* str = PyObject_Str(ro);
-            *redirect = PyString_AsString(str);
-            Py_DECREF(str);
+            *redirect = Py2wxString(ro);
             rval = wxHTML_REDIRECT;
         }
         else {

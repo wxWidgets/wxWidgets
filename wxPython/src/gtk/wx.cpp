@@ -647,6 +647,9 @@ static wxPyCoreAPI API = {
     wxPy_ConvertList,
 
     wxString_in_helper,
+    Py2wxString,
+    wx2PyString,
+
     byte_LIST_helper,
     int_LIST_helper,
     long_LIST_helper,
@@ -2059,11 +2062,18 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_YES", PyInt_FromLong((long) wxID_YES));
 	 PyDict_SetItemString(d,"wxID_NO", PyInt_FromLong((long) wxID_NO));
 	 PyDict_SetItemString(d,"wxID_STATIC", PyInt_FromLong((long) wxID_STATIC));
-	 PyDict_SetItemString(d,"wxID_SEPARATOR", PyInt_FromLong((long) wxID_SEPARATOR));
 	 PyDict_SetItemString(d,"wxID_FORWARD", PyInt_FromLong((long) wxID_FORWARD));
 	 PyDict_SetItemString(d,"wxID_BACKWARD", PyInt_FromLong((long) wxID_BACKWARD));
-	 PyDict_SetItemString(d,"wxID_SETUP", PyInt_FromLong((long) wxID_SETUP));
+	 PyDict_SetItemString(d,"wxID_DEFAULT", PyInt_FromLong((long) wxID_DEFAULT));
 	 PyDict_SetItemString(d,"wxID_MORE", PyInt_FromLong((long) wxID_MORE));
+	 PyDict_SetItemString(d,"wxID_SETUP", PyInt_FromLong((long) wxID_SETUP));
+	 PyDict_SetItemString(d,"wxID_RESET", PyInt_FromLong((long) wxID_RESET));
+	 PyDict_SetItemString(d,"wxID_CONTEXT_HELP", PyInt_FromLong((long) wxID_CONTEXT_HELP));
+	 PyDict_SetItemString(d,"wxID_YESTOALL", PyInt_FromLong((long) wxID_YESTOALL));
+	 PyDict_SetItemString(d,"wxID_NOTOALL", PyInt_FromLong((long) wxID_NOTOALL));
+	 PyDict_SetItemString(d,"wxID_ABORT", PyInt_FromLong((long) wxID_ABORT));
+	 PyDict_SetItemString(d,"wxID_RETRY", PyInt_FromLong((long) wxID_RETRY));
+	 PyDict_SetItemString(d,"wxID_IGNORE", PyInt_FromLong((long) wxID_IGNORE));
 	 PyDict_SetItemString(d,"wxOPEN", PyInt_FromLong((long) wxOPEN));
 	 PyDict_SetItemString(d,"wxSAVE", PyInt_FromLong((long) wxSAVE));
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
