@@ -60,7 +60,6 @@ wxXmlResource *wxXmlResource::ms_instance = NULL;
 
 wxXmlResource::wxXmlResource(int flags)
 {
-    m_handlers.DeleteContents(TRUE);
     m_flags = flags;
     m_version = -1;
 }
@@ -69,7 +68,6 @@ wxXmlResource::wxXmlResource(const wxString& filemask, int flags)
 {
     m_flags = flags;
     m_version = -1;
-    m_handlers.DeleteContents(TRUE);
     Load(filemask);
 }
 
@@ -163,7 +161,7 @@ void wxXmlResource::InsertHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    m_handlers.Clear();
+    WX_CLEAR_LIST(wxList, m_handlers);
 }
 
 
@@ -586,7 +584,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
     }
     else if (node->GetName() == wxT("object"))
     {
-        wxNode *ND = m_handlers.GetFirst();
+        wxList::compatibility_iterator ND = m_handlers.GetFirst();
         while (ND)
         {
             handler = (wxXmlResourceHandler*)ND->GetData();
@@ -616,7 +614,6 @@ wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
     if (!ms_subclassFactories)
     {
         ms_subclassFactories = new wxXmlSubclassFactoriesList;
-        ms_subclassFactories->DeleteContents(TRUE);
     }
     ms_subclassFactories->Append(factory);
 }
@@ -662,7 +659,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
         wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
         if (!subclass.empty())
         {
-            for (wxXmlSubclassFactoriesList::Node *i = wxXmlResource::ms_subclassFactories->GetFirst();
+            for (wxXmlSubclassFactoriesList::compatibility_iterator i = wxXmlResource::ms_subclassFactories->GetFirst();
                  i; i = i->GetNext())
             {
                 m_instance = i->GetData()->Create(subclass);
@@ -1286,6 +1283,8 @@ public:
     void OnExit()
     {
         delete wxXmlResource::Set(NULL);
+        if(wxXmlResource::ms_subclassFactories)
+            WX_CLEAR_LIST(wxXmlSubclassFactoriesList, *wxXmlResource::ms_subclassFactories);
         wxDELETE(wxXmlResource::ms_subclassFactories);
         CleanXRCID_Records();
     }
