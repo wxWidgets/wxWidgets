@@ -216,6 +216,7 @@ int wxNotebook::SetSelection(int nPage)
     ChangePage(m_nSelection, nPage);
 	SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
 
+    Refresh();
     return m_nSelection;
 }
 
