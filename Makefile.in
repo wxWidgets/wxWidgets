@@ -1229,10 +1229,9 @@ COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR =  \
 	wx/unix/pipe.h \
 	wx/unix/stdpaths.h
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = $(COND_TOOLKIT_COCOA_BASE_PLATFORM_HDR)
-COND_TOOLKIT_MAC_BASE_PLATFORM_HDR =  \
-	include/wx/mac/corefoundation/cfstring.h \
-	include/wx/mac/corefoundation/stdpaths.h
-@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = $(COND_TOOLKIT_MAC_BASE_PLATFORM_HDR)
+@COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = \
+@COND_TOOLKIT_MAC@	wx/mac/corefoundation/cfstring.h \
+@COND_TOOLKIT_MAC@	wx/mac/corefoundation/stdpaths.h
 @COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_MACOS_1@NET_PLATFORM_HDR = include/wx/mac/carbon/gsockmac.h
 @COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h

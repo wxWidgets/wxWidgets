@@ -146,8 +146,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_MAC_HDR" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
-    include/wx/mac/corefoundation/cfstring.h
-    include/wx/mac/corefoundation/stdpaths.h
+    wx/mac/corefoundation/cfstring.h
+    wx/mac/corefoundation/stdpaths.h
 </set>
 
 <set var="BASE_OS2_SRC" hints="files">
