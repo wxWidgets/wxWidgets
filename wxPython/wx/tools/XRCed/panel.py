@@ -110,7 +110,7 @@ class Panel(wxNotebook):
                 sizer.Add(page, 0, wxEXPAND | wxTOP, 5)
         self.page1.Layout()
         size = self.page1.GetSizer().GetMinSize()
-        self.page1.SetScrollbars(1, 1, size.x, size.y, 0, 0, True)
+        self.page1.SetScrollbars(1, 1, size.width, size.height, 0, 0, True)
 
         # Second page
         # Create if does not exist
@@ -132,7 +132,7 @@ class Panel(wxNotebook):
                 self.AddPage(self.page2, 'Style')
             self.page2.Layout()
             size = self.page2.GetSizer().GetMinSize()
-            self.page2.SetScrollbars(1, 1, size.x, size.y, 0, 0, True)
+            self.page2.SetScrollbars(1, 1, size.width, size.height, 0, 0, True)
         else:
             # Remove page if exists
             if self.GetPageCount() == 2:

@@ -113,7 +113,7 @@ class Tools(wxPanel):
         box = wxStaticBox(self, -1, name, style=wxWANTS_CHARS)
         box.SetFont(smallerFont)
         boxSizer = wxStaticBoxSizer(box, wxVERTICAL)
-        boxSizer.Add(0, 4)
+        boxSizer.Add((0, 4))
         self.curSizer = wxGridSizer(0, 3)
         boxSizer.Add(self.curSizer)
         self.sizer.Add(boxSizer, 0, wxTOP | wxLEFT | wxRIGHT, 4)

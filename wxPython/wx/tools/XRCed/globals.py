@@ -6,6 +6,7 @@
 
 from wxPython.wx import *
 from wxPython.xrc import *
+import sys
 
 # Global constants
 

@@ -294,26 +294,26 @@ def SetMenu2(m, list):
 
 class HighLightBox:
     def __init__(self, pos, size):
-        if size.x == -1: size.x = 0
-        if size.y == -1: size.y = 0
+        if size.width == -1: size.width = 0
+        if size.height == -1: size.height = 0
         w = g.testWin.panel
-        l1 = wxWindow(w, -1, pos, wxSize(size.x, 2))
+        l1 = wxWindow(w, -1, pos, wxSize(size.width, 2))
         l1.SetBackgroundColour(wxRED)
-        l2 = wxWindow(w, -1, pos, wxSize(2, size.y))
+        l2 = wxWindow(w, -1, pos, wxSize(2, size.height))
         l2.SetBackgroundColour(wxRED)
-        l3 = wxWindow(w, -1, wxPoint(pos.x + size.x - 2, pos.y), wxSize(2, size.y))
+        l3 = wxWindow(w, -1, wxPoint(pos.x + size.width - 2, pos.y), wxSize(2, size.height))
         l3.SetBackgroundColour(wxRED)
-        l4 = wxWindow(w, -1, wxPoint(pos.x, pos.y + size.y - 2), wxSize(size.x, 2))
+        l4 = wxWindow(w, -1, wxPoint(pos.x, pos.y + size.height - 2), wxSize(size.width, 2))
         l4.SetBackgroundColour(wxRED)
         self.lines = [l1, l2, l3, l4]
     # Move highlight to a new position
     def Replace(self, pos, size):
-        if size.x == -1: size.x = 0
-        if size.y == -1: size.y = 0
-        self.lines[0].SetDimensions(pos.x, pos.y, size.x, 2)
-        self.lines[1].SetDimensions(pos.x, pos.y, 2, size.y)
-        self.lines[2].SetDimensions(pos.x + size.x - 2, pos.y, 2, size.y)
-        self.lines[3].SetDimensions(pos.x, pos.y + size.y - 2, size.x, 2)
+        if size.width == -1: size.width = 0
+        if size.height == -1: size.height = 0
+        self.lines[0].SetDimensions(pos.x, pos.y, size.width, 2)
+        self.lines[1].SetDimensions(pos.x, pos.y, 2, size.height)
+        self.lines[2].SetDimensions(pos.x + size.width - 2, pos.y, 2, size.height)
+        self.lines[3].SetDimensions(pos.x, pos.y + size.height - 2, size.width, 2)
     # Remove it
     def Remove(self):
         map(wxWindow.Destroy, self.lines)
@@ -343,23 +343,23 @@ class XML_Tree(wxTreeCtrl):
         self.dom = None
         # Create image list
         il = wxImageList(16, 16, True)
-        self.rootImage = il.AddIcon(images.getTreeRootIcon())
-        xxxObject.image = il.AddIcon(images.getTreeDefaultIcon())
-        xxxPanel.image = il.AddIcon(images.getTreePanelIcon())
-        xxxDialog.image = il.AddIcon(images.getTreeDialogIcon())
-        xxxFrame.image = il.AddIcon(images.getTreeFrameIcon())
-        xxxMenuBar.image = il.AddIcon(images.getTreeMenuBarIcon())
-        xxxMenu.image = il.AddIcon(images.getTreeMenuIcon())
-        xxxMenuItem.image = il.AddIcon(images.getTreeMenuItemIcon())
-        xxxToolBar.image = il.AddIcon(images.getTreeToolBarIcon())
-        xxxTool.image = il.AddIcon(images.getTreeToolIcon())
-        xxxSeparator.image = il.AddIcon(images.getTreeSeparatorIcon())
-        xxxSizer.imageH = il.AddIcon(images.getTreeSizerHIcon())
-        xxxSizer.imageV = il.AddIcon(images.getTreeSizerVIcon())
-        xxxStaticBoxSizer.imageH = il.AddIcon(images.getTreeStaticBoxSizerHIcon())
-        xxxStaticBoxSizer.imageV = il.AddIcon(images.getTreeStaticBoxSizerVIcon())
-        xxxGridSizer.image = il.AddIcon(images.getTreeSizerGridIcon())
-        xxxFlexGridSizer.image = il.AddIcon(images.getTreeSizerFlexGridIcon())
+        self.rootImage = il.Add(images.getTreeRootImage().Scale(16,16).ConvertToBitmap())
+        xxxObject.image = il.Add(images.getTreeDefaultImage().Scale(16,16).ConvertToBitmap())
+        xxxPanel.image = il.Add(images.getTreePanelImage().Scale(16,16).ConvertToBitmap())
+        xxxDialog.image = il.Add(images.getTreeDialogImage().Scale(16,16).ConvertToBitmap())
+        xxxFrame.image = il.Add(images.getTreeFrameImage().Scale(16,16).ConvertToBitmap())
+        xxxMenuBar.image = il.Add(images.getTreeMenuBarImage().Scale(16,16).ConvertToBitmap())
+        xxxMenu.image = il.Add(images.getTreeMenuImage().Scale(16,16).ConvertToBitmap())
+        xxxMenuItem.image = il.Add(images.getTreeMenuItemImage().Scale(16,16).ConvertToBitmap())
+        xxxToolBar.image = il.Add(images.getTreeToolBarImage().Scale(16,16).ConvertToBitmap())
+        xxxTool.image = il.Add(images.getTreeToolImage().Scale(16,16).ConvertToBitmap())
+        xxxSeparator.image = il.Add(images.getTreeSeparatorImage().Scale(16,16).ConvertToBitmap())
+        xxxSizer.imageH = il.Add(images.getTreeSizerHImage().Scale(16,16).ConvertToBitmap())
+        xxxSizer.imageV = il.Add(images.getTreeSizerVImage().Scale(16,16).ConvertToBitmap())
+        xxxStaticBoxSizer.imageH = il.Add(images.getTreeStaticBoxSizerHImage().Scale(16,16).ConvertToBitmap())
+        xxxStaticBoxSizer.imageV = il.Add(images.getTreeStaticBoxSizerVImage().Scale(16,16).ConvertToBitmap())
+        xxxGridSizer.image = il.Add(images.getTreeSizerGridImage().Scale(16,16).ConvertToBitmap())
+        xxxFlexGridSizer.image = il.Add(images.getTreeSizerFlexGridImage().Scale(16,16).ConvertToBitmap())
         self.il = il
         self.SetImageList(il)
 
@@ -527,7 +527,7 @@ class XML_Tree(wxTreeCtrl):
         xxx = self.GetPyData(item).treeObject()
         parentWin = self.FindNodeObject(itemParent)
         # Top-level sizer? return window's sizer
-        if xxx.isSizer and isinstance(parentWin, wxWindowPtr):
+        if xxx.isSizer and isinstance(parentWin, wxWindow):
             return parentWin.GetSizer()
         # Otherwise get parent's object and it's child
         child = parentWin.GetChildren()[self.ItemIndex(item)]
@@ -537,7 +537,7 @@ class XML_Tree(wxTreeCtrl):
             elif child.IsSizer():
                 child = child.GetSizer()
                 # Test for notebook sizers
-                if isinstance(child, wxNotebookSizerPtr):
+                if isinstance(child, wxNotebookSizer):
                     child = child.GetNotebook()
         return child
 

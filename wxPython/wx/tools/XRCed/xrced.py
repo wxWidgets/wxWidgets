@@ -497,7 +497,7 @@ class Frame(wxFrame):
             self.miniFrame.GetSizer().RemoveWindow(panel)
             wxYield()
             # Widen
-            self.SetDimensions(pos.x, pos.y, size.x + sizePanel.x, size.y)
+            self.SetDimensions(pos.x, pos.y, size.width + sizePanel.width, size.height)
             self.splitter.SplitVertically(tree, panel, conf.sashPos)
             self.miniFrame.Show(False)
         else:
@@ -516,7 +516,7 @@ class Frame(wxFrame):
             wxYield()
             # Reduce width
             self.SetDimensions(pos.x, pos.y,
-                               max(size.x - sizePanel.x, self.minWidth), size.y)
+                               max(size.width - sizePanel.width, self.minWidth), size.height)
 
     def OnShowTools(self, evt):
         conf.showTools = evt.IsChecked()

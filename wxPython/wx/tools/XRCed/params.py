@@ -166,7 +166,7 @@ class ParamColour(PPanel):
         if self.IsEnabled(): dc.SetPen(wxBLACK_PEN)
         else: dc.SetPen(wxGREY_PEN)
         size = self.button.GetSize()
-        dc.DrawRectangle(0, 0, size.x, size.y)
+        dc.DrawRectangle(0, 0, size.width, size.height)
     def OnLeftDown(self, evt):
         data = wxColourData()
         data.SetColour(self.GetValue())
