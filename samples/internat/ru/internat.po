@@ -14,68 +14,68 @@ msgstr ""
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:128
 msgid "International wxWindows App"
-msgstr "│И│н│т│е│р│н│а│ц│и│о│н│а│л│ь│н│о│е │п│р│и│л│о│ж│е│н│и│е wxWindows"
+msgstr "��΁ԁŁҁ΁��ÁɁρ΁��́؁΁ρ� �ЁҁɁ́ρցŁ΁Ɂ� wxWindows"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:136
 msgid "&About..."
-msgstr "&│О │п│р│о│г│р│а│м│м│е..."
+msgstr "&�� �Ёҁρǁҁ��́́�..."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:138
 msgid "E&xit"
-msgstr "&│В│ы│й│т│и"
+msgstr "&���فʁԁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:141
 msgid "&Open bogus file"
-msgstr "&│О│т│к│р│ы│т│ь │ф│а│й│л"
+msgstr "&��ԁˁҁفԁ� �Ɓ��ʁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:142
 msgid "&Play a game"
-msgstr "&│П│о│и│г│р│а│т│ь │в │и│г│р│у"
+msgstr "&���ρɁǁҁ��ԁ� �� �Ɂǁҁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:145
 msgid "&File"
-msgstr "&│Ф│а│й│л"
+msgstr "&����ʁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:146
 msgid "&Test"
-msgstr "&│Т│е│с│т"
+msgstr "&��ŁӁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:169
 msgid ""
 "I18n sample\n"
-"▐║│╘ 1998, 1999 Vadim Zeitlin and Julian Smart"
+"���� 1998, 1999 Vadim Zeitlin and Julian Smart"
 msgstr ""
-"│П│р│и│м│е│р i18n\n"
-"▐║│╘ 1998, 1999 │В│а│д│и│м │З│е│й│т│л│и│н │и │Д│ж│у│л│и│а│н │С│м│а│р│т"
+"���ҁɁ́Ł� i18n\n"
+"���� 1998, 1999 �����āɁ� ���Łʁԁ́Ɂ� �� ��ցՁ́Ɂ��� ��́��ҁ�"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:171
 msgid "About Internat"
-msgstr "│П│р│о Internat"
+msgstr "���ҁ� Internat"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:176
 msgid "Enter your number:"
-msgstr "│В│в│е│д│и │с│в│о│е │ч│и│с│л│о:"
+msgstr "���ׁŁā� �Ӂׁρ� �ށɁӁ́�:"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:177
 msgid "Try to guess my number!"
-msgstr "│П│о│п│р│о│б│у│й │у│г│а│д│а│т│ь │м│о│е │ч│и│с│л│о!"
+msgstr "���ρЁҁρՁ� �Ձǁ��ā��ԁ� �́ρ� �ށɁӁ́�!"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:185
 msgid "You've probably entered an invalid number."
-msgstr "│Н│а│в│е│р│н│о │т│ы │в│в│е│л │н│е│д│о│п│у│с│т│и│м│о│е │ч│и│с│л│о."
+msgstr "����ׁŁҁ΁� �ԁ� �ׁׁŁ� �΁ŁāρЁՁӁԁɁ́ρ� �ށɁӁ́�."
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:193
 msgid "Congratulations! you've won. Here is the magic phrase:"
-msgstr "│П│о│з│д│р│а│в│л│я│ю! │В│ы │в│ы│и│г│р│а│л│и. │А │в│о│т │м│а│г│и│ч│е│с│к│а│я │ф│р│а│з│а: "
+msgstr "���ρځāҁ��ׁ́с�! ���� �ׁفɁǁҁ��́�. �� �ׁρ� �́��ǁɁށŁӁˁ��� �Ɓҁ��ځ�: "
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:194
 #, c-format
 msgid "cannot create fifo `%s'"
-msgstr "│н│е │м│о│г│у │с│о│з│д│а│т│ь fifo `%s'"
+msgstr "�΁� �́ρǁ� �Ӂρځā��ԁ� fifo `%s'"
 
 #: /home/harms.user1/rolinsky/wxGTK-2.2.0/samples/internat/internat.cpp:197
 msgid "Result"
-msgstr "│Р│е│з│у│л│ь│т│а│т"
+msgstr "��ŁځՁ́؁ԁ���"
 
 #~ msgid "Bad luck! try again..."
-#~ msgstr "│Н│е │в│е│з│е│т! │П│о│п│р│о│б│у│й │с│н│о│в│а..."
+#~ msgstr "��� �ׁŁځŁ�! ���ρЁҁρՁ� �Ӂ΁ρׁ�..."
