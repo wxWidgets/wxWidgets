@@ -757,7 +757,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
-  DEFAULT_wxUSE_WXTREE=no
+  DEFAULT_wxUSE_TREELAYOUT=no
   DEFAULT_wxUSE_METAFILE=no
 
   DEFAULT_wxUSE_COMMONDLGS=no
@@ -878,7 +878,7 @@ else
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
-  DEFAULT_wxUSE_WXTREE=yes
+  DEFAULT_wxUSE_TREELAYOUT=yes
   DEFAULT_wxUSE_METAFILE=yes
 
   DEFAULT_wxUSE_COMMONDLGS=yes
@@ -1100,8 +1100,7 @@ WX_ARG_ENABLE(clipboard,   [  --enable-clipboard      use wxClipboard classes], 
 WX_ARG_ENABLE(dnd,         [  --enable-dnd            use Drag'n'Drop classes], wxUSE_DRAG_AND_DROP)
 WX_ARG_ENABLE(metafile,    [  --enable-metafile       use win32 metafiles], wxUSE_METAFILE)
 
-dnl TODO: doesn't work yet
-WX_ARG_ENABLE(wxtree,      [  --enable-wxtree         make wxTree library], wxUSE_WXTREE)
+WX_ARG_ENABLE(treelayout,  [  --enable-treelayout     use wxTreeLayout class], wxUSE_TREELAYOUT)
 
 dnl ---------------------------------------------------------------------------
 dnl optional GUI controls (in alphabetical order except the first one)
@@ -3615,10 +3614,10 @@ dnl ---------------------------------------------------------------------------
 dnl misc options
 dnl ---------------------------------------------------------------------------
 
-dnl TODO this is unused for now...
-dnl if test "$wxUSE_WXTREE" = "yes"; then
-dnl   AC_DEFINE(wxUSE_WXTREE)
-dnl fi
+if test "$wxUSE_TREELAYOUT" = "yes"; then
+    AC_DEFINE(wxUSE_TREELAYOUT)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treelay"
+fi
 
 if test "$wxUSE_DIRDLG" = "yes"; then
     if test "$wxUSE_CONSTRAINTS" != "yes"; then
