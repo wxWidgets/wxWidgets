@@ -1369,6 +1369,8 @@ void wxShape::OnBeginDragLeft(double x, double y, int keys, int attachment)
 
 void wxShape::OnEndDragLeft(double x, double y, int keys, int attachment)
 {
+  if (!m_draggable)
+    return;
   m_canvas->ReleaseMouse();
   if ((m_sensitivity & OP_DRAG_LEFT) != OP_DRAG_LEFT)
   {
