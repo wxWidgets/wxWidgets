@@ -276,11 +276,17 @@ void wxObject::AllocExclusive()
 
 wxObjectRefData *wxObject::CreateRefData() const
 {
+    // if you use AllocExclusive() you must override this method
+    wxFAIL_MSG( _T("CreateRefData() must be overridden if called!") );
+
     return NULL;
 }
 
 wxObjectRefData *wxObject::CloneRefData(wxObjectRefData * WXUNUSED(data)) const
 {
+    // if you use AllocExclusive() you must override this method
+    wxFAIL_MSG( _T("CloneRefData() must be overridden if called!") );
+
     return NULL;
 }
 
