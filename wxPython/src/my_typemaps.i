@@ -241,6 +241,10 @@
 }
 
 
+//---------------------------------------------------------------------------
+
+%typemap(out) bool "$result = $1 ? Py_True : Py_False; Py_INCREF($result);"
+
 
 //---------------------------------------------------------------------------
 // Typemaps to convert return values that are base class pointers
