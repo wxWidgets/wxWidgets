@@ -993,6 +993,7 @@ GUI_LOWLEVEL_OBJS = \
 		pen.o \
 		region.o \
 		settings.o \
+        timer.o \
 		utilsgtk.o \
 		win_gtk.o \
 		window.o
@@ -1018,6 +1019,7 @@ GUI_LOWLEVEL_DEPS = \
 		pen.d \
 		region.d \
 		settings.d \
+        timer.d \
 		utilsgtk.d \
 		win_gtk.d \
 		window.d

@@ -29,13 +29,72 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/timer.h"
+
+    #include "wx/button.h"
+    #include "wx/scrolbar.h"
+    #include "wx/univ/renderer.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/inphand.h"
 
+// ----------------------------------------------------------------------------
+// wxScrollBarTimer: this class is used to repeatedly scroll the scrollbar
+// when the mouse is help pressed on the arrow or on the bar. It generates the
+// given scroll action command periodically.
+// ----------------------------------------------------------------------------
+
+class wxScrollBarTimer : public wxTimer
+{
+public:
+    wxScrollBarTimer(const wxControlAction& action,
+                     const wxMouseEvent& event,
+                     wxControl *control);
+
+    virtual void Notify();
+
+private:
+    wxControlAction m_action;
+    wxMouseEvent    m_event;
+    wxControl      *m_control;
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxScrollBarTimer
+// ----------------------------------------------------------------------------
+
+wxScrollBarTimer::wxScrollBarTimer(const wxControlAction& action,
+                                   const wxMouseEvent& event,
+                                   wxControl *control)
+                : m_event(event)
+{
+    m_action = action;
+    m_control = control;
+
+    // start scrolling immediately
+    Notify();
+
+    // and continue it later
+    Start(100); // FIXME make this delay configurable
+}
+
+void wxScrollBarTimer::Notify()
+{
+    if ( m_control->PerformAction(m_action, m_event) )
+    {
+        // keep scrolling
+        m_control->Refresh();
+    }
+    else
+    {
+        // we scrolled till the end
+        Stop();
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxInputHandler
@@ -163,6 +222,14 @@ wxStdScrollBarInputHandler::wxStdScrollBarInputHandler(wxRenderer *renderer,
     m_renderer = renderer;
     m_winCapture = NULL;
     m_htLast = wxHT_NOWHERE;
+    m_timerScroll = NULL;
+}
+
+wxStdScrollBarInputHandler::~wxStdScrollBarInputHandler()
+{
+    // normally, it's NULL by now but just in case the user somehow managed to
+    // keep the mouse captured until now...
+    delete m_timerScroll;
 }
 
 void wxStdScrollBarInputHandler::SetElementState(wxScrollBar *control,
@@ -266,21 +333,35 @@ wxControlActions wxStdScrollBarInputHandler::Map(wxControl *control,
                         action = wxACTION_SCROLL_PAGE_DOWN;
                         break;
 
+                    case wxHT_SCROLLBAR_THUMB:
+                        control->PerformAction(wxACTION_SCROLL_THUMB_DRAG, event);
+                        // fall through: there is no immediate action
+
                     default:
                         hasAction = FALSE;
                 }
 
-                if ( hasAction )
-                {
-                    control->PerformAction(action, event);
-                }
-
-                // remove highlighting and press the arrow instead
+                // remove highlighting
                 Highlight(scrollbar, FALSE);
                 m_htLast = ht;
-                Press(scrollbar, TRUE);
 
-                control->Refresh();
+                // and press the arrow or highlight thumb now instead
+                if ( m_htLast == wxHT_SCROLLBAR_THUMB )
+                    Highlight(scrollbar, TRUE);
+                else
+                    Press(scrollbar, TRUE);
+
+                // start dragging
+                if ( hasAction )
+                {
+                    m_timerScroll = new wxScrollBarTimer(action, event, control);
+                }
+                else // no (immediate) action
+                {
+                    // highlighting still might have changed
+                    control->Refresh();
+                }
+
             }
             //else: mouse already captured, nothing to do
         }
@@ -289,9 +370,22 @@ wxControlActions wxStdScrollBarInputHandler::Map(wxControl *control,
         {
             if ( m_winCapture )
             {
+                // return everything to the normal state
                 m_winCapture->ReleaseMouse();
                 m_winCapture = NULL;
                 m_btnCapture = -1;
+
+                if ( m_timerScroll )
+                {
+                    delete m_timerScroll;
+                    m_timerScroll = NULL;
+                }
+
+                // if we were dragging the thumb, send the last event
+                if ( m_htLast == wxHT_SCROLLBAR_THUMB )
+                {
+                    control->PerformAction(wxACTION_SCROLL_THUMB_RELEASE, event);
+                }
 
                 // unpress the arrow and highlight the current element
                 Press(scrollbar, FALSE);
@@ -318,8 +412,14 @@ bool wxStdScrollBarInputHandler::OnMouseMove(wxControl *control,
 {
     if ( m_winCapture )
     {
-        // everything is locked while the mouse is captured, so don't do
-        // anything
+        if ( (m_htLast == wxHT_SCROLLBAR_THUMB) && event.Moving() )
+        {
+            // drag the thumb so that it follows the mouse
+            if ( control->PerformAction(wxACTION_SCROLL_THUMB_MOVE, event) )
+                return TRUE;
+        }
+
+        // no other changes are possible while the mouse is captured
         return FALSE;
     }
 

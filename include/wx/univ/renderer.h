@@ -134,8 +134,14 @@ public:
     // ---------------------
 
     // returns one of wxHT_SCROLLBAR_XXX constants
-    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const = 0;
+
+    // translate the scrollbar position (in logical units) into physical
+    // coordinate (in pixels) and the other way round
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar) = 0;
+    virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
+                                 wxCoord coord) = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -144,9 +150,16 @@ protected:
     // standard scrollbar hit testing: this assumes that it only has 2 arrows
     // and a thumb, so the themes which have more complicated scrollbars (e.g.
     // BeOS) can't use this method
-    static wxHitTest StandardHitTestScrollbar(wxScrollBar *scrollbar,
+    static wxHitTest StandardHitTestScrollbar(const wxScrollBar *scrollbar,
                                               const wxPoint& pt,
                                               const wxSize& sizeArrow);
+    static wxCoord StandardScrollbarToPixel(const wxScrollBar *scrollbar,
+                                            const wxSize& sizeArrow);
+    static int StandardPixelToScrollbar(const wxScrollBar *scrollbar,
+                                        wxCoord coord,
+                                        const wxSize& sizeArrow);
+    static wxCoord StandardScrollBarSize(const wxScrollBar *scrollbar,
+                                         const wxSize& sizeArrow);
 };
 
 // ----------------------------------------------------------------------------
@@ -207,9 +220,14 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
 
-    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const
         { return m_renderer->HitTestScrollbar(scrollbar, pt); }
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar)
+        { return m_renderer->ScrollbarToPixel(scrollbar); }
+    virtual int PixelToScrollbar(const wxScrollBar *scrollbar,
+                                 wxCoord coord)
+        { return m_renderer->PixelToScrollbar(scrollbar, coord); }
 
 protected:
     wxRenderer *m_renderer;
@@ -232,7 +250,7 @@ public:
     void DrawButtonBorder();
     void DrawFrame();
     void DrawBackgroundBitmap();
-    void DrawScrollbar(wxScrollBar *scrollbar);
+    void DrawScrollbar(const wxScrollBar *scrollbar);
 
     // accessors
     wxRenderer *GetRenderer() const { return m_renderer; }

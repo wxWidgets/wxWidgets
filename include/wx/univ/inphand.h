@@ -19,6 +19,9 @@
 
 #include "wx/control.h" // for wxControlAction(s)
 
+class WXDLLEXPORT wxRenderer;
+class WXDLLEXPORT wxScrollBar;
+
 // ----------------------------------------------------------------------------
 // wxInputHandler: maps the events to the actions
 // ----------------------------------------------------------------------------
@@ -124,6 +127,8 @@ public:
                                  const wxMouseEvent& event);
     virtual bool OnMouseMove(wxControl *control, const wxMouseEvent& event);
 
+    virtual ~wxStdScrollBarInputHandler();
+
 protected:
     // the methods which must be overridden in the derived class
 
@@ -159,6 +164,10 @@ protected:
 
     // the renderer (we use it only for hit testing)
     wxRenderer *m_renderer;
+
+    // the timer for generating scroll events when the mouse stays pressed on
+    // a scrollbar
+    class wxScrollBarTimer *m_timerScroll;
 };
 
 #endif // _WX_UNIV_INPHAND_H_

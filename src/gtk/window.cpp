@@ -1437,8 +1437,6 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
             // the mouse changed window
             g_captureWindowHasMouse = hasMouse;
 
-            printf("Generating mouse %s event.\n",
-                   g_captureWindowHasMouse ? "enter" : "leave");
             wxMouseEvent event(g_captureWindowHasMouse ? wxEVT_ENTER_WINDOW
                                                        : wxEVT_LEAVE_WINDOW);
             InitMouseEvent(event, gdk_event);

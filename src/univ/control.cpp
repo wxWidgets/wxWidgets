@@ -217,6 +217,11 @@ const wxBitmap& wxControl::GetBackgroundBitmap(int *alignment,
 // painting
 // ----------------------------------------------------------------------------
 
+wxRenderer *wxControl::GetRenderer() const
+{
+    return wxTheme::Get()->GetRenderer();
+}
+
 // the event handler executed when the window background must be painted
 void wxControl::OnErase(wxEraseEvent& event)
 {
@@ -235,7 +240,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 {
     // get the DC to use and create renderer on it
     wxPaintDC dc(this);
-    wxControlRenderer renderer(this, dc, wxTheme::Get()->GetRenderer());
+    wxControlRenderer renderer(this, dc, GetRenderer());
 
     // do draw the control!
     DoDraw(&renderer);

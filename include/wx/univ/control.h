@@ -20,6 +20,7 @@
 
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxInputHandler;
+class WXDLLEXPORT wxRenderer;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -143,6 +144,10 @@ public:
                                const wxEvent& event);
 
 protected:
+    // returns the (low level) renderer to use for drawing the control by
+    // querying the current theme
+    wxRenderer *GetRenderer() const;
+
     // create the event translator object for this control: the base class
     // action creates the default one which doesn't do anything
     virtual wxInputHandler *CreateInputHandler() const;

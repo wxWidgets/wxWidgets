@@ -90,8 +90,10 @@ public:
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
     // hit testing for the input handlers
-    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const;
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar);
+    virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     
 protected:
     // DrawBackground() helpers
@@ -773,9 +775,9 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
                "\tthumb:   0x%04x\n"
                "\tthumb from %d to %d",
                orient == wxVERTICAL ? "vertical" : "horizontal",
-               flags[wxHT_SCROLLBAR_ARROW_LINE_1],
-               flags[wxHT_SCROLLBAR_ARROW_LINE_2],
-               flags[wxHT_SCROLLBAR_THUMB],
+               flags[wxScrollBar::Element_Arrow_Line_1],
+               flags[wxScrollBar::Element_Arrow_Line_2],
+               flags[wxScrollBar::Element_Thumb],
                thumbPosStart, thumbPosEnd);
 #endif // DEBUG_MOUSE
 
@@ -813,7 +815,7 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
     for ( size_t nArrow = 0; nArrow < 2; nArrow++ )
     {
         DrawArrow(dc, arrowDir[nArrow], rectArrow[nArrow],
-                  flags[wxHT_SCROLLBAR_ARROW_LINE_1 + nArrow]);
+                  flags[wxScrollBar::Element_Arrow_Line_1 + nArrow]);
     }
 
     // and, finally, the thumb, if any
@@ -837,17 +839,28 @@ void wxGTKRenderer::DrawScrollbar(wxDC& dc,
 
         // the thumb is never pressed never has focus border under GTK and the
         // scrollbar background never changes at all
-        int flagsThumb = flags[wxHT_SCROLLBAR_THUMB] &
+        int flagsThumb = flags[wxScrollBar::Element_Thumb] &
                             ~(wxCONTROL_PRESSED | wxCONTROL_FOCUSED);
         DrawButtonBorder(dc, rectThumb, flagsThumb, &rectThumb);
         DrawBackground(dc, rectThumb, flagsThumb);
     }
 }
 
-wxHitTest wxGTKRenderer::HitTestScrollbar(wxScrollBar *scrollbar,
+wxHitTest wxGTKRenderer::HitTestScrollbar(const wxScrollBar *scrollbar,
                                           const wxPoint& pt) const
 {
     return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
+}
+
+wxCoord wxGTKRenderer::ScrollbarToPixel(const wxScrollBar *scrollbar)
+{
+    return StandardScrollbarToPixel(scrollbar, m_sizeScrollbarArrow);
+}
+
+int wxGTKRenderer::PixelToScrollbar(const wxScrollBar *scrollbar,
+                                    wxCoord coord)
+{
+    return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
 }
 
 // ----------------------------------------------------------------------------

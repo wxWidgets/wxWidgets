@@ -52,7 +52,7 @@ public:
         Element_Arrow_Line_2,
         Element_Arrow_Page_1,
         Element_Arrow_Page_2,
-        Element_Arrow_Thumb,
+        Element_Thumb,
         Element_Bar_1,
         Element_Bar_2,
         Element_Max
@@ -117,6 +117,10 @@ protected:
     void Init();
 
 private:
+    // get the mouse coordinates in the scrollbar direction from a
+    // wxMouseEvent (the event *must* really be of this type!)
+    wxCoord GetMouseCoord(const wxEvent& event) const;
+
     // total range of the scrollbar in logical units
     int m_range;
 
@@ -131,6 +135,10 @@ private:
 
     // the state of the sub elements
     int m_elementsState[Element_Max];
+
+    // the offset of the top/left of the scrollbar relative to the mouse to
+    // keep during the thumb drag
+    int m_ofsMouse;
 
     DECLARE_DYNAMIC_CLASS(wxScrollBar)
 };

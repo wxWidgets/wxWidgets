@@ -118,7 +118,7 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 450))
+           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(600, 600))
 {
 #ifdef __WXMSW__
     SetBackgroundColour(*wxLIGHT_GREY);
@@ -181,9 +181,9 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     new wxButton(this, Univ_Button2, _T("&And me"), wxPoint(100, 300));
 
     wxScrollBar *sb;
-    sb = new wxScrollBar(this, -1, wxPoint(200, 300), wxSize(100, -1));
+    sb = new wxScrollBar(this, -1, wxPoint(200, 300), wxSize(300, -1));
     sb->SetScrollbar(0, 10, 100, 10);
-    sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 50), wxSB_VERTICAL);
+    sb = new wxScrollBar(this, -1, wxPoint(200, 330), wxSize(-1, 150), wxSB_VERTICAL);
     sb->SetScrollbar(50, 50, 100, 10);
 }
 

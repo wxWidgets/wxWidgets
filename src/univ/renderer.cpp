@@ -44,11 +44,54 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxRenderer
+// wxRenderer: scrollbar geometry
 // ----------------------------------------------------------------------------
 
 /* static */
-wxHitTest wxRenderer::StandardHitTestScrollbar(wxScrollBar *scrollbar,
+wxCoord wxRenderer::StandardScrollBarSize(const wxScrollBar *scrollbar,
+                                          const wxSize& sizeArrowSB)
+{
+    wxCoord sizeArrow, sizeTotal;
+    if ( scrollbar->GetWindowStyle() & wxVERTICAL )
+    {
+        sizeArrow = sizeArrowSB.y;
+        sizeTotal = scrollbar->GetSize().y;
+    }
+    else // horizontal
+    {
+        sizeArrow = sizeArrowSB.x;
+        sizeTotal = scrollbar->GetSize().x;
+    }
+
+    return sizeTotal - 2*sizeArrow;
+}
+
+/* static */
+wxCoord wxRenderer::StandardScrollbarToPixel(const wxScrollBar *scrollbar,
+                                             const wxSize& sizeArrow)
+{
+    int range = scrollbar->GetRange();
+    if ( !range )
+    {
+        // the only valid position anyhow
+        return 0;
+    }
+
+    return ( scrollbar->GetThumbPosition() *
+                StandardScrollBarSize(scrollbar, sizeArrow) ) / range;
+}
+
+/* static */
+int wxRenderer::StandardPixelToScrollbar(const wxScrollBar *scrollbar,
+                                         wxCoord coord,
+                                         const wxSize& sizeArrow)
+{
+    return ( coord * scrollbar->GetRange() )
+                / StandardScrollBarSize(scrollbar, sizeArrow);
+}
+
+/* static */
+wxHitTest wxRenderer::StandardHitTestScrollbar(const wxScrollBar *scrollbar,
                                                const wxPoint& pt,
                                                const wxSize& sizeArrowSB)
 {
@@ -242,7 +285,7 @@ void wxControlRenderer::DrawBackgroundBitmap()
     m_dc.DrawBitmap(bmp, x, y);
 }
 
-void wxControlRenderer::DrawScrollbar(wxScrollBar *scrollbar)
+void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar)
 {
     int thumbStart, thumbEnd;
     int range = scrollbar->GetRange();

@@ -106,8 +106,10 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
 
-    virtual wxHitTest HitTestScrollbar(wxScrollBar *scrollbar,
+    virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const;
+    virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar);
+    virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
 
 protected:
     // DrawButtonBorder() helper
@@ -1049,10 +1051,21 @@ void wxWin32Renderer::DrawScrollbar(wxDC& dc,
     }
 }
 
-wxHitTest wxWin32Renderer::HitTestScrollbar(wxScrollBar *scrollbar,
+wxHitTest wxWin32Renderer::HitTestScrollbar(const wxScrollBar *scrollbar,
                                             const wxPoint& pt) const
 {
     return StandardHitTestScrollbar(scrollbar, pt, m_sizeScrollbarArrow);
+}
+
+wxCoord wxWin32Renderer::ScrollbarToPixel(const wxScrollBar *scrollbar)
+{
+    return StandardScrollbarToPixel(scrollbar, m_sizeScrollbarArrow);
+}
+
+int wxWin32Renderer::PixelToScrollbar(const wxScrollBar *scrollbar,
+                                      wxCoord coord)
+{
+    return StandardPixelToScrollbar(scrollbar, coord, m_sizeScrollbarArrow);
 }
 
 // ----------------------------------------------------------------------------

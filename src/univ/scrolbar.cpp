@@ -180,10 +180,27 @@ void wxScrollBar::DoDraw(wxControlRenderer *renderer)
 // input processing
 // ----------------------------------------------------------------------------
 
+wxCoord wxScrollBar::GetMouseCoord(const wxEvent& eventOrig) const
+{
+    const wxMouseEvent& event = (const wxMouseEvent&)eventOrig;
+    wxPoint pt = event.GetPosition();
+    return GetWindowStyle() & wxVERTICAL ? pt.y : pt.x;
+}
+
 bool wxScrollBar::PerformAction(const wxControlAction& action,
                                 const wxEvent& event)
 {
-    if ( action == wxACTION_SCROLL_START )
+    int thumbOld = m_thumbPos;
+
+    // test for thumb move first as these events happen in quick succession
+    if ( action == wxACTION_SCROLL_THUMB_MOVE )
+    {
+        // make the thumb follow the mouse by keeping the same offset between
+        // the mouse position and the top/left of the thumb
+        int thumbPos = GetMouseCoord(event) - m_ofsMouse;
+        DoSetThumb(GetRenderer()->PixelToScrollbar(this, thumbPos));
+    }
+    else if ( action == wxACTION_SCROLL_START )
         ScrollToStart();
     else if ( action == wxACTION_SCROLL_END )
         ScrollToEnd();
@@ -195,11 +212,18 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
         ScrollPages(-1);
     else if ( action == wxACTION_SCROLL_PAGE_DOWN )
         ScrollPages(1);
+    else if ( action == wxACTION_SCROLL_THUMB_DRAG )
+    {
+        m_ofsMouse = GetMouseCoord(event) -
+                        GetRenderer()->ScrollbarToPixel(this);
+    }
+    else if ( action == wxACTION_SCROLL_THUMB_RELEASE )
+        ; // nothing special to do
     else
         return wxControl::PerformAction(action, event);
 
-    // scrollbar position changed - update
-    return TRUE;
+    // if scrollbar position changed - update
+    return m_thumbPos != thumbOld;
 }
 
 void wxScrollBar::ScrollToStart()
