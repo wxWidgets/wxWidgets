@@ -1821,7 +1821,7 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
 
         // change nIndex so we can use it below to add the extensions
         m_aExtensions.Add(wxEmptyString);
-        nIndex = m_aExtensions.size();
+        nIndex = m_aExtensions.size() - 1;
 
         m_aDescriptions.Add(strDesc);
     }
