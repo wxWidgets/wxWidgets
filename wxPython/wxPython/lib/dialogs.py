@@ -42,7 +42,7 @@ class wxMultipleChoiceDialog(wx.wxDialog):
         dc = wx.wxClientDC(self)
         height = 0
         for line in msg.splitlines():
-            height = height + dc.GetTextExtent(msg)[1] + 4
+            height = height + dc.GetTextExtent(line)[1] + 2
         stat = wx.wxStaticText(self, -1, msg)
         self.lbox = wx.wxListBox(self, 100, wx.wxDefaultPosition,
                                  wx.wxDefaultSize, lst, wx.wxLB_MULTIPLE)
