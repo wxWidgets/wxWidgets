@@ -63,12 +63,19 @@
     #define __WX_BO_WXWIN_COMPAT_2_4
 #endif
 
-        
+// deriving wxWin containers from STL ones changes them completely:
+#if wxUSE_STL
+    #define __WX_BO_STL ",STL containers"
+#else
+    #define __WX_BO_STL ",wx containers"
+#endif
+ 
 // This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
     " (" __WX_BO_DEBUG "," __WX_BO_UNICODE \
      __WX_BO_COMPILER \
+     __WX_BO_STL \
      __WX_BO_WXWIN_COMPAT_2_2 __WX_BO_WXWIN_COMPAT_2_4 \
      ")"
 
