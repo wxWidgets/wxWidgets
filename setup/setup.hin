@@ -383,8 +383,14 @@
 /* Define if you have usleep() */
 #undef HAVE_USLEEP
 
-/* Define if you have nanosleep() */
-#undef HAVE_NANOSLEEP
+/* Define if you have sched_yield */
+#undef HAVE_SCHED_YIELD
+
+/* Define if you have pthread_cancel */
+#undef HAVE_PTHREAD_CANCEL
+
+/* Define if you have all functions to set thread priority */
+#undef HAVE_THREAD_PRIORITY_FUNCTIONS
 
 /* Define if your system has its own `getloadavg' function.  */
 #undef HAVE_GETLOADAVG

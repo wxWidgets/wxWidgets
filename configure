@@ -6346,7 +6346,7 @@ EOF
 fi
 
 if test "$USE_LINUX" = 1; then
-	echo $ac_n "checking for gettext in -lc""... $ac_c" 1>&6
+  echo $ac_n "checking for gettext in -lc""... $ac_c" 1>&6
 echo "configure:6351: checking for gettext in -lc" >&5
 ac_lib_var=`echo c'_'gettext | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
@@ -7264,11 +7264,11 @@ fi
 
 
 
+
 THREADS_LINK=""
 UNIX_THREAD=""
 
 if test "$wxUSE_THREADS" = "1"; then
-
      
      echo $ac_n "checking for pthread_create in -lpthread-0.7""... $ac_c" 1>&6
 echo "configure:7275: checking for pthread_create in -lpthread-0.7" >&5
@@ -7307,7 +7307,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
        UNIX_THREAD="gtk/threadpsx.cpp"
-       THREADS_LINK="-lpthread-0.7"
+       THREADS_LINK="pthread-0.7"
      
 else
   echo "$ac_t""no" 1>&6
@@ -7386,7 +7386,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
        UNIX_THREAD="gtk/threadpsx.cpp"
-       THREADS_LINK="-lpthread"
+       THREADS_LINK="pthread"
      
 else
   echo "$ac_t""no" 1>&6
@@ -7434,7 +7434,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
                         UNIX_THREAD="gtk/threadpsx.cpp"
-                        THREADS_LINK="-lc_r"
+                        THREADS_LINK="c_r"
                     
 else
   echo "$ac_t""no" 1>&6
@@ -7448,29 +7448,39 @@ fi
 EOF
 
     fi
+fi
 
-    
-    echo $ac_n "checking for printf in -lposix4""... $ac_c" 1>&6
-echo "configure:7455: checking for printf in -lposix4" >&5
-ac_lib_var=`echo posix4'_'printf | sed 'y%./+-%__p_%'`
+if test "$wxUSE_MOTIF" = "1"; then
+  UNIX_THREAD="motif/thread.cpp"
+fi
+
+if test -z "$UNIX_THREAD"; then
+  wxUSE_THREADS=0
+fi
+
+if test "$wxUSE_THREADS" = "1"; then
+  THREADS_LINK2=""
+  echo $ac_n "checking for sched_yield in -l$THREADS_LINK""... $ac_c" 1>&6
+echo "configure:7465: checking for sched_yield in -l$THREADS_LINK" >&5
+ac_lib_var=`echo $THREADS_LINK'_'sched_yield | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lposix4  $LIBS"
+LIBS="-l$THREADS_LINK  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 7463 "configure"
+#line 7473 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char printf();
+char sched_yield();
 
 int main() {
-printf()
+sched_yield()
 ; return 0; }
 EOF
-if { (eval echo configure:7474: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:7484: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -7485,24 +7495,198 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  
-      THREADS_LINK="$THREADS_LINK -lposix4"
-    
+  cat >> confdefs.h <<\EOF
+#define HAVE_SCHED_YIELD 1
+EOF
+
 else
   echo "$ac_t""no" 1>&6
+echo $ac_n "checking for sched_yield in -l"posix4"""... $ac_c" 1>&6
+echo "configure:7506: checking for sched_yield in -l"posix4"" >&5
+ac_lib_var=`echo "posix4"'_'sched_yield | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-l"posix4"  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 7514 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char sched_yield();
+
+int main() {
+sched_yield()
+; return 0; }
+EOF
+if { (eval echo configure:7525: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_SCHED_YIELD 1
+EOF
+ THREADS_LINK2="-lposix4"
+else
+  echo "$ac_t""no" 1>&6
+echo "configure: warning: wxThread::Yield() will not work properly" 1>&2
+                
+fi
+
+               
 fi
 
 
+  echo $ac_n "checking for sched_get_priority_min in -l$THREADS_LINK""... $ac_c" 1>&6
+echo "configure:7555: checking for sched_get_priority_min in -l$THREADS_LINK" >&5
+ac_lib_var=`echo $THREADS_LINK'_'sched_get_priority_min | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-l$THREADS_LINK  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 7563 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char sched_get_priority_min();
+
+int main() {
+sched_get_priority_min()
+; return 0; }
+EOF
+if { (eval echo configure:7574: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_THREAD_PRIORITY_FUNCTIONS 1
+EOF
+
+else
+  echo "$ac_t""no" 1>&6
+echo $ac_n "checking for sched_get_priority_min in -l"posix4"""... $ac_c" 1>&6
+echo "configure:7596: checking for sched_get_priority_min in -l"posix4"" >&5
+ac_lib_var=`echo "posix4"'_'sched_get_priority_min | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-l"posix4"  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 7604 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char sched_get_priority_min();
+
+int main() {
+sched_get_priority_min()
+; return 0; }
+EOF
+if { (eval echo configure:7615: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_THREAD_PRIORITY_FUNCTIONS 1
+EOF
+ THREADS_LINK2="-lposix4"
+else
+  echo "$ac_t""no" 1>&6
+echo "configure: warning: Setting thread priority will not work" 1>&2
+                
 fi
 
-if test "$wxUSE_MOTIF" = "1"; then
-  UNIX_THREAD="motif/thread.cpp"
+               
 fi
 
-if test -z "$UNIX_THREAD"; then
-  wxUSE_THREADS=0
+
+  echo $ac_n "checking for pthread_cancel in -l$THREADS_LINK""... $ac_c" 1>&6
+echo "configure:7645: checking for pthread_cancel in -l$THREADS_LINK" >&5
+ac_lib_var=`echo $THREADS_LINK'_'pthread_cancel | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-l$THREADS_LINK  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 7653 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char pthread_cancel();
+
+int main() {
+pthread_cancel()
+; return 0; }
+EOF
+if { (eval echo configure:7664: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  cat >> confdefs.h <<\EOF
+#define HAVE_PTHREAD_CANCEL 1
+EOF
+
+else
+  echo "$ac_t""no" 1>&6
+echo "configure: warning: wxThread::Kill() will not work properly" 1>&2
 fi
 
+
+  THREADS_LINK="-l$THREADS_LINK $THREADS_LINK2"
+fi
 
 
 
@@ -7511,7 +7695,6 @@ fi
 PICFLAGS=
 CREATE_SHARED=
 case "${canonical}" in
-
   *-hp-hpux* )
     if test "$GCC" != "yes" ; then
       CXXFLAGS="${CXXFLAGS} +a1 -z -Aa -D_HPUX_SOURCE"
