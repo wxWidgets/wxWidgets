@@ -7,9 +7,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+/*
+   We don't put pragma implement in this file because it is already present in
+   src/common/image.cpp
+
 #ifdef __GNUG__
 #pragma implementation "image.h"
 #endif
+*/
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
