@@ -43,6 +43,7 @@
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
 #include "wx/module.h"
+#include "wx/dynload.h"
 
 #include <string.h>
 #include <math.h>
@@ -938,6 +939,65 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
 #if wxUSE_PALETTE
     HPALETTE oldPal = 0;
 #endif // wxUSE_PALETTE
+
+    // do we have AlphaBlend() and company in the headers?
+#ifdef AC_SRC_OVER
+    if ( bmp.HasAlpha() )
+    {
+        // yes, now try to see if we have it during run-time
+
+        typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
+                                            HDC,int,int,int,int,
+                                            BLENDFUNCTION);
+
+        // bitmaps can be drawn only from GUI thread so there is no need to
+        // protect this static variable from multiple threads
+        static bool s_triedToLoad = FALSE;
+        static AlphaBlend_t pfnAlphaBlend = NULL;
+        if ( !s_triedToLoad )
+        {
+            s_triedToLoad = TRUE;
+
+            wxDynamicLibrary dll(_T("msimg32.dll"));
+            if ( dll.IsLoaded() )
+            {
+                pfnAlphaBlend = (AlphaBlend_t)dll.GetSymbol(_T("AlphaBlend"));
+                if ( pfnAlphaBlend )
+                {
+                    // we must keep the DLL loaded if we want to be able to
+                    // call AlphaBlend() so just never unload it at all
+                    dll.Detach();
+                }
+            }
+        }
+
+        if ( pfnAlphaBlend )
+        {
+            MemoryHDC hdcMem;
+            SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
+
+#ifndef AC_SRC_ALPHA
+    #define AC_SRC_ALPHA 1
+#endif
+
+            BLENDFUNCTION bf;
+            bf.BlendOp = AC_SRC_OVER;
+            bf.BlendFlags = 0;
+            bf.SourceConstantAlpha = 0xff;
+            bf.AlphaFormat = AC_SRC_ALPHA;
+
+            if ( !pfnAlphaBlend(GetHdc(), x, y, width, height,
+                                hdcMem, 0, 0, width, height,
+                                bf) )
+            {
+                wxLogLastError(_T("AlphaBlend"));
+            }
+
+            return;
+        }
+        //else: AlphaBlend() not available
+    }
+#endif // defined(AC_SRC_OVER)
 
     if ( useMask )
     {

@@ -121,15 +121,13 @@ public:
 #endif // wxUSE_PALETTE
 
     wxMask *GetMask() const;
-    void SetMask(wxMask *mask) ;
+    void SetMask(wxMask *mask);
 
     bool operator==(const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
     bool operator!=(const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
-#if wxUSE_DIB_FOR_BITMAP
-    // returns TRUE if this bitmap is a DIB (otherwise it's a DDB)
-    bool IsDIB() const;
-#endif // wxUSE_DIB_FOR_BITMAP
+    // this function is internal and shouldn't be used, it risks to disappear
+    bool HasAlpha() const;
 
 #if WXWIN_COMPATIBILITY_2_4
     // these functions do nothing and are only there for backwards
@@ -154,8 +152,10 @@ public:
     void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
 
+#ifdef __WXDEBUG__
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
+#endif // __WXDEBUG__
 
     // Creates a bitmap that matches the device context's depth, from an
     // arbitray bitmap. At present, the original bitmap must have an associated
