@@ -1016,6 +1016,12 @@ public:
     // sort array elements using specified comparaison function
   void Sort(CompareFunction compareFunction);
 
+  // comparison
+    // compare two arrays case sensitively
+  bool operator==(const wxArrayString& a) const;
+    // compare two arrays case sensitively
+  bool operator!=(const wxArrayString& a) const { return !(*this == a); }
+
 protected:
   void Copy(const wxArrayString& src);  // copies the contents of another array
 

@@ -2155,3 +2155,17 @@ void wxArrayString::DoSort()
   qsort(m_pItems, m_nCount, sizeof(wxChar *), wxStringCompareFunction);
 }
 
+bool wxArrayString::operator==(const wxArrayString& a) const
+{
+    if ( m_nCount != a.m_nCount )
+        return FALSE;
+
+    for ( size_t n = 0; n < m_nCount; n++ )
+    {
+        if ( Item(n) != a[n] )
+            return FALSE;
+    }
+
+    return TRUE;
+}
+

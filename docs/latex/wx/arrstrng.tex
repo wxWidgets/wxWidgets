@@ -80,6 +80,20 @@ reasons it is not virtual, so this class should not be derived from.
 
 Assignment operator.
 
+\membersection{wxArrayString::operator==}\label{wxarraystringoperatorequal}
+
+\constfunc{bool}{operator $==$}{\param{const wxArrayString\&}{ array}}
+
+Compares 2 arrays respecting the case. Returns TRUE only if the arrays have
+the same number of elements and the same strings in the same order.
+
+\membersection{wxArrayString::operator!=}\label{wxarraystringoperatornotequal}
+
+\constfunc{bool}{operator $!=$}{\param{const wxArrayString\&}{ array}}
+
+Compares 2 arrays respecting the case. Returns TRUE if the arrays have
+different number of elements or if the elements don't match pairwise.
+
 \membersection{wxArrayString::operator[]}\label{wxarraystringoperatorindex}
 
 \func{wxString\&}{operator[]}{\param{size\_t }{nIndex}}
