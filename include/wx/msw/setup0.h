@@ -36,6 +36,22 @@
 // so there is little advantage to setting it to 1.
 #define WXWIN_COMPATIBILITY  0
 
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 0.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2 0
+
+// This setting determines the compatibility with 2.0 API: set it to 1 to
+// enable it
+//
+// Default is 0.
+//
+// Recommended setting: 0 (please update your code instead!)
+#define WXWIN_COMPATIBILITY_2_2 0
+
 // in wxMSW version 2.1.11 and earlier, wxIcon always derives from wxBitmap,
 // but this is very dangerous because you can mistakenly pass an icon instead
 // of a bitmap to a function taking "const wxBitmap&" - which will *not* work
@@ -88,7 +104,7 @@
 // Default is 1.
 //
 // Recommended setting: 1 but see comment above
-#define wxUSE_DEBUG_CONTEXT 0
+#define wxUSE_DEBUG_CONTEXT 1
 
 // If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
 // __WXDEBUG__ is also defined.
@@ -99,7 +115,7 @@
 // Default is 1
 //
 // Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_MEMORY_TRACING 0
+#define wxUSE_MEMORY_TRACING 1
 
 // In debug mode, cause new and delete to be redefined globally.
 // If this causes problems (e.g. link errors), set this to 0.
@@ -108,7 +124,7 @@
 // Default is 1
 //
 // Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
 
 // In debug mode, causes new to be defined to be WXDEBUG_NEW (see object.h). If
 // this causes problems (e.g. link errors), set this to 0. You may need to set
@@ -118,7 +134,7 @@
 // Default is 1
 //
 // Recommended setting: 1 but see comment in the beginning of this section
-#define wxUSE_DEBUG_NEW_ALWAYS 0
+#define wxUSE_DEBUG_NEW_ALWAYS 1
 
 // wxHandleFatalExceptions() may be used to catch the program faults at run
 // time and, instead of terminating the program with a usual GPF message box,
@@ -177,12 +193,20 @@
 // Recommended setting: 1 (always)
 #define wxUSE_LOG 1
 
+// Support for command line parsing using wxCmdLineParser class.
+//
+// Default is 1
+//
+// Recommended setting: 1 (can be set to 0 if you don't use the cmd line)
+#define wxUSE_CMDLINE_PARSER 1
+
+// Recommended setting: 1
 #define wxUSE_LOGWINDOW 1
 
-// Recommended setting: 1 (always)
+// Recommended setting: 1
 #define wxUSE_LOGGUI 1
 
-// Recommended setting: 1 (always)
+// Recommended setting: 1
 #define wxUSE_LOG_DIALOG 1
 
 // Support for multithreaded applications: if 1, compile in thread classes
@@ -240,7 +264,7 @@
 // i18n support: _() macro, wxLocale class. Requires wxTextFile.
 #define wxUSE_INTL          1
 
-// Set wxUSE_TIMEDATE to 1 to compile the wxDateTime and related classes which
+// Set wxUSE_DATETIME to 1 to compile the wxDateTime and related classes which
 // allow to manipulate dates, times and time intervals. wxDateTime replaces the
 // old wxTime and wxDate classes which are still provided for backwards
 // compatibility (and implemented in terms of wxDateTime).
@@ -252,8 +276,19 @@
 //
 // Requires: wxUSE_LONGLONG
 //
+// Default is 1
+//
 // Recommended setting: 1
 #define wxUSE_DATETIME      1
+
+// wxUSE_TIMEDATE enables compilation of the old wxDate and wxTime classes (not
+// the same as wxDateTime!). These classes are obsolete and shouldn't be used
+// in new code
+//
+// Default is 0
+//
+// Recommended setting: 0 unless you have legacy code which uses these classes
+#define wxUSE_TIMEDATE 0
 
 // Set wxUSE_TIMER to 1 to compile wxTimer class
 //
@@ -330,8 +365,6 @@
 // wxUSE_LIBPNG.
 #define wxUSE_ZLIB          1
 
-#define wxUSE_REGEX 1
-
 // If enabled, the code written by Apple will be used to write, in a portable
 // way, float on the disk. See extended.c for the license which is different
 // from wxWindows one.
@@ -349,6 +382,22 @@
 
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
+
+// wxSystemOptions class
+#define wxUSE_SYSTEM_OPTIONS 1
+
+// Support for regular expression matching via wxRegEx class: enable this to
+// use POSIX regular expressions in your code. You need to compile regex
+// library from src/regex to use it under Windows.
+//
+// Default is 0
+//
+// Recommended setting: 1 if your compiler supports it, if it doesn't please
+// contribute us a makefile for src/regex for it
+#define wxUSE_REGEX       0
+
+// wxWave class
+#define wxUSE_WAVE      1
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls
@@ -527,6 +576,9 @@
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
 
+// wxDC cacheing implementation
+#define wxUSE_DC_CACHEING 1
+
 // ----------------------------------------------------------------------------
 // common dialogs
 // ----------------------------------------------------------------------------
@@ -549,6 +601,29 @@
 // Recommended setting: 1 (unless it really doesn't work)
 #define wxUSE_COMMON_DIALOGS 1
 
+// wxBusyInfo displays window with message when app is busy. Works in same way
+// as wxBusyCursor
+#define wxUSE_BUSYINFO      1
+
+// Use single/multiple choice dialogs.
+//
+// Default is 1
+//
+// Recommended setting: 1 (used in the library itself)
+#define wxUSE_CHOICEDLG     1
+
+// Use colour picker dialog
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_COLOURDLG     1
+
+// wxDirDlg class for getting a directory name from user
+#define wxUSE_DIRDLG 1
+
+// TODO: setting to choose the generic or native one
+
 // Use file open/save dialogs.
 //
 // Default is 1
@@ -556,6 +631,11 @@
 // Recommended setting: 1 (used in many places in the library itself)
 #define wxUSE_FILEDLG       1
 
+// Use find/replace dialogs.
+//
+// Default is 1
+//
+// Recommended setting: 1 (but may be safely set to 0)
 #define wxUSE_FINDREPLDLG       1
 
 // Use font picker dialog
@@ -572,38 +652,22 @@
 // Recommended setting: 1 (used in the library itself)
 #define wxUSE_MSGDLG        1
 
-// Use single/multiple choice dialogs.
-//
-// Default is 1
-//
-// Recommended setting: 1 (used in the library itself)
-#define wxUSE_CHOICEDLG     1
-
-// Use colour picker dialog
-//
-// Default is 1
-//
-// Recommended setting: 1
-#define wxUSE_COLOURDLG     1
-
-// text entry dialog and wxGetTextFromUser function
-#define wxUSE_TEXTDLG 1
-
-#define wxUSE_NUMBERDLG 1
-
 // progress dialog class for lengthy operations
 #define wxUSE_PROGRESSDLG 1
-
-// wxBusyInfo displays window with message when app is busy. Works in same way
-// as wxBusyCursor
-#define wxUSE_BUSYINFO      1
-
-// wxDirDlg class for getting a directory name from user
-#define wxUSE_DIRDLG 1
 
 // support for startup tips (wxShowTip &c)
 #define wxUSE_STARTUP_TIPS 1
 
+// text entry dialog and wxGetTextFromUser function
+#define wxUSE_TEXTDLG 1
+
+// number entry dialog
+#define wxUSE_NUMBERDLG 1
+
+// splash screen class
+#define wxUSE_SPLASH 1
+
+// wizards
 #define wxUSE_WIZARDDLG 1
 
 // ----------------------------------------------------------------------------
@@ -704,7 +768,10 @@
                                 // 0 for no help facility
 #define wxUSE_MS_HTML_HELP 0
                                 // 0 for no MS HTML Help
+
+// Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 1
+
 #define wxUSE_RESOURCES   1
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
@@ -823,6 +890,7 @@
 // Set to 1 for XPM format support
 #define wxUSE_XPM           1
 
+// Set to 1 to compile in wxPalette class
 #define wxUSE_PALETTE       1
 
 // ----------------------------------------------------------------------------
@@ -1108,7 +1176,7 @@
 // you need to modify setup.h and rebuild everything
 // ----------------------------------------------------------------------------
 
-#if wxUSE_TIMEDATE && !wxUSE_LONGLONG
+#if wxUSE_DATETIME && !wxUSE_LONGLONG
     #error wxDateTime requires wxLongLong
 #endif
 
