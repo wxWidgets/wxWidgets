@@ -72,6 +72,18 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__LIB_JPEG_p =
+!ifeq USE_GUI 1
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+__LIB_PNG_p =
+!ifeq USE_GUI 1
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+!endif
+__LIB_TIFF_p =
+!ifeq USE_GUI 1
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+!endif
 __OPTIMIZEFLAG_2 =
 !ifeq BUILD debug
 __OPTIMIZEFLAG_2 = -od
@@ -96,15 +108,22 @@ __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
-__WXLIB_CORE_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+__WXLIB_CORE_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
 __WXLIB_HTML_p =
 !ifeq MONOLITHIC 0
-__WXLIB_HTML_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib
+__WXLIB_HTML_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib
 !endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
-__WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+!endif
+__WXLIB_NET_p =
+!ifeq MONOLITHIC 0
+__WXLIB_NET_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -113,8 +132,18 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-OBJS = wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5)  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $(CXXFLAGS) 
+LIBDIRNAME = &
+	.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = &
+	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm &
+	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) &
+	-i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png &
+	-i=.\..\..\..\src\zlib -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib &
+	-i=. $(__DLLFLAG_p) $(CXXFLAGS)
+TEST_OBJECTS =  &
+	$(OBJS)\test_test.obj
 
 
 
@@ -130,7 +159,7 @@ $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_test.res :  .AUTODEPEND .\test.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=.\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\..\src\tiff -i=.\..\..\..\src\jpeg -i=.\..\..\..\src\png -i=.\..\..\..\src\zlib  -i=.\..\..\..\src\regex -i=.\..\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -143,13 +172,13 @@ data :
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm i18n.gif 8859_2.htm cp1250.htm regres.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-$(OBJS)\test.exe :  $(OBJS)\test_test.obj $(OBJS)\test_test.res
+$(OBJS)\test.exe :  $(TEST_OBJECTS) $(OBJS)\test_test.res
 	@%create $(OBJS)\test.lbc
 	@%append $(OBJS)\test.lbc option quiet
 	@%append $(OBJS)\test.lbc name $^@
 	@%append $(OBJS)\test.lbc option incremental
-	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath .\..\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) system nt_win ref '_WinMain@16'
-	@for %i in ( $(OBJS)\test_test.obj) do @%append $(OBJS)\test.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\test.lbc library %i
+	@%append $(OBJS)\test.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
+	@for %i in ( $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc option resource=$(OBJS)\test_test.res
 	wlink @$(OBJS)\test.lbc

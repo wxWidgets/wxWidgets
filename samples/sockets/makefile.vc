@@ -12,9 +12,28 @@
 
 ### Variables: ###
 
-CLIENT_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) /DWIN32 $(__DEBUGFLAG) /Fd$(OBJS)\client.pdb $(____DEBUGFLAG) $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\src\tiff /I.\..\..\src\jpeg /I.\..\..\src\png /I.\..\..\src\zlib  /I.\..\..\src\regex /I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS $(CXXFLAGS)
-OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-SERVER_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) /DWIN32 $(__DEBUGFLAG) /Fd$(OBJS)\server.pdb $(____DEBUGFLAG) $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\src\tiff /I.\..\..\src\jpeg /I.\..\..\src\png /I.\..\..\src\zlib  /I.\..\..\src\regex /I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS $(CXXFLAGS)
+CLIENT_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_2) /DWIN32 \
+	$(__DEBUGFLAG) $(____DEBUGFLAG_0) /Fd$(OBJS)\client.pdb $(__OPTIMIZEFLAG) \
+	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	/I.\..\..\include /I$(LIBDIRNAME) /I.\..\..\src\tiff /I.\..\..\src\jpeg \
+	/I.\..\..\src\png /I.\..\..\src\zlib /I.\..\..\src\regex \
+	/I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS $(CXXFLAGS)
+CLIENT_OBJECTS =  \
+	$(OBJS)\client_client.obj \
+	$(OBJS)\client_client.res
+LIBDIRNAME = \
+	.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+OBJS = \
+	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SERVER_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_2) /DWIN32 \
+	$(__DEBUGFLAG) $(____DEBUGFLAG_0) /Fd$(OBJS)\server.pdb $(__OPTIMIZEFLAG) \
+	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	/I.\..\..\include /I$(LIBDIRNAME) /I.\..\..\src\tiff /I.\..\..\src\jpeg \
+	/I.\..\..\src\png /I.\..\..\src\zlib /I.\..\..\src\regex \
+	/I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS $(CXXFLAGS)
+SERVER_OBJECTS =  \
+	$(OBJS)\server_server.obj \
+	$(OBJS)\server_server.res
 
 ### Conditionally set variables: ###
 
@@ -49,22 +68,31 @@ __DEBUGFLAG_1 = /DEBUG
 __DEBUGFLAG_1 = 
 !endif
 !if "$(BUILD)" == "debug"
-__DEBUGFLAG_3 = d
+__DEBUGFLAG_2 = d
 !endif
 !if "$(BUILD)" == "release"
-__DEBUGFLAG_3 = 
+__DEBUGFLAG_2 = 
 !endif
 !if "$(BUILD)" == "debug"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
 !endif
 !if "$(BUILD)" == "debug"
-__DEBUG_DEFINE_p_0 = /d__WXDEBUG__
+__DEBUG_DEFINE_p_0 = /d __WXDEBUG__
 !endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(SHARED)" == "1"
-__DLLFLAG_p_0 = /dWXUSINGDLL
+__DLLFLAG_p_0 = /d WXUSINGDLL
+!endif
+!if "$(USE_GUI)" == "1"
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+!if "$(USE_GUI)" == "1"
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+!endif
+!if "$(USE_GUI)" == "1"
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = /Od
@@ -82,34 +110,39 @@ __RUNTIME_LIBS = T
 __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_0 = /dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_0 = /d wxUSE_UNICODE=1
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 !if "$(MONOLITHIC)" == "0"
-__WXLIB_CORE_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
+__WXLIB_CORE_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
 !if "$(MONOLITHIC)" == "1"
-__WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+__WXLIB_MONO_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_NET_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.lib
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
 !if "$(WXUNIV)" == "1"
-__WXUNIV_DEFINE_p_0 = /d__WXUNIVERSAL__
+__WXUNIV_DEFINE_p_0 = /d __WXUNIVERSAL__
 !endif
 !if "$(BUILD)" == "debug"
-____DEBUGFLAG = /D_DEBUG
+____DEBUGFLAG = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release"
-____DEBUGFLAG = /DNDEBUG
+____DEBUGFLAG = /d NDEBUG
 !endif
 !if "$(BUILD)" == "debug"
-____DEBUGFLAG_0 = /d_DEBUG
+____DEBUGFLAG_0 = /D_DEBUG
 !endif
 !if "$(BUILD)" == "release"
-____DEBUGFLAG_0 = /dNDEBUG
+____DEBUGFLAG_0 = /DNDEBUG
 !endif
 
 
@@ -125,13 +158,13 @@ $(OBJS)\client_client.obj: .\client.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CLIENT_CXXFLAGS) $**
 
 $(OBJS)\client_client.res: .\client.rc
-	rc /fo$@ /dWIN32 $(____DEBUGFLAG_0) /d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i.\..\..\include /i.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /i.\..\..\src\tiff /i.\..\..\src\jpeg /i.\..\..\src\png /i.\..\..\src\zlib  /i.\..\..\src\regex /i.\..\..\src\expat\lib /i. $(__DLLFLAG_p_0) /d_WINDOWS $**
+	rc /fo$@  /d WIN32 $(____DEBUGFLAG) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i .\..\..\include /i $(LIBDIRNAME) /i .\..\..\src\tiff /i .\..\..\src\jpeg /i .\..\..\src\png /i .\..\..\src\zlib  /i .\..\..\src\regex /i .\..\..\src\expat\lib /i . $(__DLLFLAG_p_0) /d _WINDOWS $**
 
 $(OBJS)\server_server.obj: .\server.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(SERVER_CXXFLAGS) $**
 
 $(OBJS)\server_server.res: .\server.rc
-	rc /fo$@ /dWIN32 $(____DEBUGFLAG_0) /d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i.\..\..\include /i.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /i.\..\..\src\tiff /i.\..\..\src\jpeg /i.\..\..\src\png /i.\..\..\src\zlib  /i.\..\..\src\regex /i.\..\..\src\expat\lib /i. $(__DLLFLAG_p_0) /d_WINDOWS $**
+	rc /fo$@  /d WIN32 $(____DEBUGFLAG) /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) /i .\..\..\include /i $(LIBDIRNAME) /i .\..\..\src\tiff /i .\..\..\src\jpeg /i .\..\..\src\png /i .\..\..\src\zlib  /i .\..\..\src\regex /i .\..\..\src\expat\lib /i . $(__DLLFLAG_p_0) /d _WINDOWS $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -139,12 +172,12 @@ clean:
 	-if exist $(OBJS)\client.exe del $(OBJS)\client.exe
 	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
 
-$(OBJS)\client.exe: $(OBJS)\client_client.obj $(OBJS)\client_client.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /SUBSYSTEM:WINDOWS  @<<
-	$(OBJS)\client_client.obj $(OBJS)\client_client.res  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+$(OBJS)\client.exe: $(CLIENT_OBJECTS) $(OBJS)\client_client.res
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	$(CLIENT_OBJECTS)  $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
-$(OBJS)\server.exe: $(OBJS)\server_server.obj $(OBJS)\server_server.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /SUBSYSTEM:WINDOWS  @<<
-	$(OBJS)\server_server.obj $(OBJS)\server_server.res  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+$(OBJS)\server.exe: $(SERVER_OBJECTS) $(OBJS)\server_server.res
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
+	$(SERVER_OBJECTS)  $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
