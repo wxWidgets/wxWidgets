@@ -1,4 +1,3 @@
-#!/bin/env python
 #----------------------------------------------------------------------------
 # Name:         ListCtrl.py
 # Purpose:      Testing lots of stuff, controls, window types, etc.

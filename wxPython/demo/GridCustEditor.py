@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 from wxPython.wx import *
 from wxPython.grid import *
