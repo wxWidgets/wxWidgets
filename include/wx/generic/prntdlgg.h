@@ -23,6 +23,7 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
+#include "wx/prntbase.h"
 #include "wx/printdlg.h"
 
 #if wxUSE_POSTSCRIPT
@@ -37,6 +38,7 @@ class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxPrintSetupData;
 class WXDLLEXPORT wxPageSetupData;
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -71,12 +73,73 @@ enum
     wxPRINTID_PAPERSIZE
 };
 
+#if wxUSE_POSTSCRIPT
+
+//----------------------------------------------------------------------------
+// wxPostScriptNativeData
+//----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPostScriptPrintNativeData: public wxPrintNativeDataBase
+{
+public:
+    wxPostScriptPrintNativeData();
+    virtual ~wxPostScriptPrintNativeData();
+    
+    virtual bool ConvertTo( wxPrintData &data );
+    virtual bool ConvertFrom( const wxPrintData &data );
+    
+    virtual bool Ok() const { return true; }
+    
+    const wxString& GetPrinterCommand() const { return m_printerCommand; }
+    const wxString& GetPrinterOptions() const { return m_printerOptions; }
+    const wxString& GetPreviewCommand() const { return m_previewCommand; }
+    const wxString& GetFontMetricPath() const { return m_afmPath; }
+    double GetPrinterScaleX() const { return m_printerScaleX; }
+    double GetPrinterScaleY() const { return m_printerScaleY; }
+    long GetPrinterTranslateX() const { return m_printerTranslateX; }
+    long GetPrinterTranslateY() const { return m_printerTranslateY; }
+    wxPrintMode GetPrintMode() const { return m_printMode; }
+
+    void SetPrinterCommand(const wxString& command) { m_printerCommand = command; }
+    void SetPrinterOptions(const wxString& options) { m_printerOptions = options; }
+    void SetPreviewCommand(const wxString& command) { m_previewCommand = command; }
+    void SetFontMetricPath(const wxString& path) { m_afmPath = path; }
+    void SetPrinterScaleX(double x) { m_printerScaleX = x; }
+    void SetPrinterScaleY(double y) { m_printerScaleY = y; }
+    void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; }
+    void SetPrinterTranslateX(long x) { m_printerTranslateX = x; }
+    void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
+    void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
+    void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
+
+#if wxUSE_STREAMS
+    wxOutputStream *GetOutputStream() { return m_outputStream; }
+    void SetOutputStream( wxOutputStream *output ) { m_outputStream = output; }
+#endif
+
+private:
+    wxString        m_printerCommand;
+    wxString        m_previewCommand;
+    wxString        m_printerOptions;
+    wxString        m_afmPath;
+    double          m_printerScaleX;
+    double          m_printerScaleY;
+    long            m_printerTranslateX;
+    long            m_printerTranslateY;
+    wxPrintMode     m_printMode;
+#if wxUSE_STREAMS
+    wxOutputStream *m_outputStream;
+#endif
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPostScriptPrintNativeData)
+};
+    
 // ----------------------------------------------------------------------------
 // Simulated Print and Print Setup dialogs for non-Windows platforms (and
 // Windows using PostScript print/preview)
 // ----------------------------------------------------------------------------
 
-#if wxUSE_POSTSCRIPT
 class WXDLLEXPORT wxGenericPrintDialog : public wxPrintDialogBase
 {
 public:

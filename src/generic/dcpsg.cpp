@@ -36,6 +36,7 @@
 #include "wx/log.h"
 #include "wx/generic/dcpsg.h"
 #include "wx/prntbase.h"
+#include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"
 #include "wx/filefn.h"
 #if WXWIN_COMPATIBILITY_2_2
@@ -1799,8 +1800,11 @@ wxSize wxPostScriptDC::GetPPI(void) const
 bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
+    
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
-    if ( m_printData.GetPrintMode() != wxPRINT_MODE_STREAM )
+    if (data->GetPrintMode() != wxPRINT_MODE_STREAM )
     {
         if (m_printData.GetFilename() == wxEmptyString)
         {
@@ -1963,13 +1967,16 @@ void wxPostScriptDC::EndDoc ()
     PsPrintf( wxT("%% %d %d lineto closepath stroke\n"), llx, ury );
 #endif
 
-#if defined(__X__) || defined(__WXGTK__)
-    if (m_ok && (m_printData.GetPrintMode() == wxPRINT_MODE_PRINTER))
+#ifndef __WXMSW__
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+
+    if (m_ok && (data->GetPrintMode() == wxPRINT_MODE_PRINTER))
     {
         wxString command;
-        command += m_printData.GetPrinterCommand();
+        command += data->GetPrinterCommand();
         command += wxT(" ");
-        command += m_printData.GetPrinterOptions();
+        command += data->GetPrinterOptions();
         command += wxT(" ");
         command += m_printData.GetFilename();
 
@@ -1998,11 +2005,14 @@ void wxPostScriptDC::StartPage()
     wxCoord translate_x, translate_y;
     double scale_x, scale_y;
 
-    translate_x = (wxCoord)m_printData.GetPrinterTranslateX();
-    translate_y = (wxCoord)m_printData.GetPrinterTranslateY();
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
-    scale_x = m_printData.GetPrinterScaleX();
-    scale_y = m_printData.GetPrinterScaleY();
+    translate_x = (wxCoord)data->GetPrinterTranslateX();
+    translate_y = (wxCoord)data->GetPrinterTranslateY();
+
+    scale_x = data->GetPrinterScaleX();
+    scale_y = data->GetPrinterScaleY();
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
@@ -2245,11 +2255,14 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 
         FILE *afmFile = NULL;
 
+        wxPostScriptPrintNativeData *data = 
+            (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+            
         // Get the directory of the AFM files
         wxString afmName;
-        if (!m_printData.GetFontMetricPath().IsEmpty())
+        if (!data->GetFontMetricPath().IsEmpty())
         {
-            afmName = m_printData.GetFontMetricPath();
+            afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;
             afmFile = wxFopen(afmName,wxT("r"));
         }
@@ -2465,13 +2478,16 @@ void wxPostScriptDC::PsPrintf( const wxChar* fmt, ... )
 
 void wxPostScriptDC::PsPrint( const char* psdata )
 {
-    switch( m_printData.GetPrintMode() )
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+
+    switch(data->GetPrintMode())
     {
 #if wxUSE_STREAMS
         // append to output stream
         case wxPRINT_MODE_STREAM:
             {
-                wxOutputStream* outputstream = m_printData.GetOutputStream();
+                wxOutputStream* outputstream = data->GetOutputStream();
                 wxCHECK_RET( outputstream, wxT("invalid outputstream") );
                 outputstream->Write( psdata, strlen( psdata ) );
             }
@@ -2487,13 +2503,16 @@ void wxPostScriptDC::PsPrint( const char* psdata )
 
 void wxPostScriptDC::PsPrint( int ch )
 {
-    switch( m_printData.GetPrintMode() )
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+
+    switch (data->GetPrintMode())
     {
 #if wxUSE_STREAMS
         // append to output stream
         case wxPRINT_MODE_STREAM:
             {
-                wxOutputStream* outputstream = m_printData.GetOutputStream();
+                wxOutputStream* outputstream = data->GetOutputStream();
                 wxCHECK_RET( outputstream, wxT("invalid outputstream") );
                 outputstream->PutC( ch );
             }

@@ -20,10 +20,39 @@
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
+#include "wx/prntbase.h"
 #include "wx/printdlg.h"
 
 class WXDLLEXPORT wxDC;
 
+//----------------------------------------------------------------------------
+// wxWindowsPrintNativeData
+//----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxWindowsPrintNativeData: public wxPrintNativeDataBase
+{
+public:
+    wxWindowsPrintNativeData();
+    virtual ~wxWindowsPrintNativeData();
+    
+    virtual bool ConvertTo( wxPrintData &data );
+    virtual bool ConvertFrom( const wxPrintData &data );
+    
+    virtual bool Ok() const;
+    
+    void* GetNativeData() const { return m_devMode; }
+    void SetNativeData(void* data) { m_devMode = data; }
+    void* GetNativeDataDevNames() const { return m_devNames; }
+    void SetNativeDataDevNames(void* data) { m_devNames = data; }
+    
+private:
+    void*           m_devMode;
+    void*           m_devNames;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxWindowsPrintNativeData)
+};
+    
 // ---------------------------------------------------------------------------
 // wxPrinterDialog: the common dialog for printing.
 // ---------------------------------------------------------------------------

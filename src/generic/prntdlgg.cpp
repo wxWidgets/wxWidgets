@@ -56,6 +56,7 @@
     #include "wx/generic/dcpsg.h"
 #endif
 
+#include "wx/prntbase.h"
 #include "wx/printdlg.h"
 #include "wx/paper.h"
 #include "wx/filename.h"
@@ -67,29 +68,60 @@
 #include <string.h>
 
 // ----------------------------------------------------------------------------
-// wxWin macros
-// ----------------------------------------------------------------------------
-
-
-#if wxUSE_POSTSCRIPT
-
-IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
-
-#endif // wxUSE_POSTSCRIPT
-
-IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
-
-BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
-    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
-END_EVENT_TABLE()
-
-// ----------------------------------------------------------------------------
 // global vars
 // ----------------------------------------------------------------------------
 
 extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
 
 #if wxUSE_POSTSCRIPT
+
+//----------------------------------------------------------------------------
+// wxPostScriptNativeData
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxPostScriptPrintNativeData, wxPrintNativeDataBase)
+
+wxPostScriptPrintNativeData::wxPostScriptPrintNativeData()
+{
+    m_previewCommand = wxT("");
+#ifdef __VMS__
+    m_printerCommand = wxT("print");
+    m_printerOptions = wxT("/nonotify/queue=psqueue");
+    m_afmPath = wxT("sys$ps_font_metrics:");
+#endif
+
+#ifdef __WXMSW__
+    m_printerCommand = wxT("print");
+    m_printerOptions = wxT("");
+    m_afmPath = wxT("c:\\windows\\system\\");
+#endif
+
+#if !defined(__VMS__) && !defined(__WXMSW__)
+    m_printerCommand = wxT("lpr");
+    m_printerOptions = wxT("");
+    m_afmPath = wxT("");
+#endif
+
+    m_printerScaleX = 1.0;
+    m_printerScaleY = 1.0;
+    m_printerTranslateX = 0;
+    m_printerTranslateY = 0;
+    m_printMode = wxPRINT_MODE_FILE;
+}
+
+wxPostScriptPrintNativeData::~wxPostScriptPrintNativeData()
+{
+}
+
+bool wxPostScriptPrintNativeData::ConvertTo( wxPrintData &data )
+{
+    return true;
+}
+
+bool wxPostScriptPrintNativeData::ConvertFrom( const wxPrintData &data )
+{
+    return true;
+}
 
 // ----------------------------------------------------------------------------
 // Generic print dialog for non-Windows printing use.
@@ -256,25 +288,28 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     if (m_printDialogData.GetToPage() < 1)
         m_printDialogData.SetToPage(m_printDialogData.GetFromPage());
 
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printDialogData.GetPrintData().GetNativeData();
+
     // There are some interactions between the global setup data
     // and the standard print dialog. The global printing 'mode'
     // is determined by whether the user checks Print to file
     // or not.
     if (m_printDialogData.GetPrintToFile())
     {
-        m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_FILE);
+        data->SetPrintMode(wxPRINT_MODE_FILE);
 
         wxFileName fname( m_printDialogData.GetPrintData().GetFilename() );
 
         wxFileDialog dialog( this, _("PostScript file"),
             fname.GetPath(), fname.GetFullName(), wxT("*.ps"), wxOPEN | wxOVERWRITE_PROMPT );
         if (dialog.ShowModal() != wxID_OK) return;
-
+        
         m_printDialogData.GetPrintData().SetFilename( dialog.GetPath() );
     }
     else
     {
-        m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_PRINTER);
+        data->SetPrintMode(wxPRINT_MODE_PRINTER);
     }
 
     EndModal(wxID_OK);
@@ -403,6 +438,8 @@ wxDC *wxGenericPrintDialog::GetPrintDC()
 // Generic print setup dialog
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
+
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data):
 wxDialog(parent, wxID_ANY, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
 {
@@ -469,10 +506,13 @@ wxGenericPrintSetupDialog::~wxGenericPrintSetupDialog()
 
 bool wxGenericPrintSetupDialog::TransferDataToWindow()
 {
-    if (m_printerCommandText && m_printData.GetPrinterCommand())
-        m_printerCommandText->SetValue(m_printData.GetPrinterCommand());
-    if (m_printerOptionsText && m_printData.GetPrinterOptions())
-        m_printerOptionsText->SetValue(m_printData.GetPrinterOptions());
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+
+    if (m_printerCommandText && data->GetPrinterCommand())
+        m_printerCommandText->SetValue(data->GetPrinterCommand());
+    if (m_printerOptionsText && data->GetPrinterOptions())
+        m_printerOptionsText->SetValue(data->GetPrinterOptions());
     if (m_colourCheckBox)
         m_colourCheckBox->SetValue(m_printData.GetColour());
 
@@ -488,10 +528,13 @@ bool wxGenericPrintSetupDialog::TransferDataToWindow()
 
 bool wxGenericPrintSetupDialog::TransferDataFromWindow()
 {
+    wxPostScriptPrintNativeData *data = 
+        (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+
     if (m_printerCommandText)
-        m_printData.SetPrinterCommand(m_printerCommandText->GetValue());
+        data->SetPrinterCommand(m_printerCommandText->GetValue());
     if (m_printerOptionsText)
-        m_printData.SetPrinterOptions(m_printerOptionsText->GetValue());
+        data->SetPrinterOptions(m_printerOptionsText->GetValue());
     if (m_colourCheckBox)
         m_printData.SetColour(m_colourCheckBox->GetValue());
     if (m_orientationRadioBox)
@@ -558,6 +601,12 @@ wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 // ----------------------------------------------------------------------------
 // Generic page setup dialog
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
+
+BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
+    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
+END_EVENT_TABLE()
 
 void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 {

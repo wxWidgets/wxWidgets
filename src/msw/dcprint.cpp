@@ -44,6 +44,7 @@
 #endif
 
 #include "wx/dcprint.h"
+#include "wx/printdlg.h"
 #include "math.h"
 
 #if wxUSE_COMMON_DIALOGS
@@ -282,12 +283,14 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
 // Gets an HDC for the specified printer configuration
 WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 {
-    wxPrintData printData = printDataConst;
-    printData.ConvertToNative();
+    wxWindowsPrintNativeData *data =
+        (wxWindowsPrintNativeData *) printDataConst.GetNativeData();
+        
+    data->ConvertFrom( printDataConst );
 
     wxChar* driverName = (wxChar*) NULL;
 
-    wxString devNameStr = printData.GetPrinterName();
+    wxString devNameStr = printDataConst.GetPrinterName();
     wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
 
     const wxChar* deviceName;
@@ -298,7 +301,7 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
 
     LPDEVMODE lpDevMode = (LPDEVMODE) NULL;
 
-    HGLOBAL hDevMode = (HGLOBAL)(DWORD) printData.GetNativeData();
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) data->GetNativeData();
 
     if ( hDevMode )
         lpDevMode = (DEVMODE*) GlobalLock(hDevMode);

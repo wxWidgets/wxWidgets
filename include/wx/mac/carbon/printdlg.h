@@ -21,7 +21,24 @@
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
 #include "wx/printdlg.h"
+#include "wx/prntbase.h"
 
+//----------------------------------------------------------------------------
+// wxMacPrintNativeData
+//----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMacPrintNativeData: public wxPrintNativeDataBase
+{
+public:
+    wxMacPrintNativeData() {};
+    virtual ~wxMacPrintNativeData() {};
+    
+    virtual bool ConvertTo( wxPrintData &data ) { return true; }
+    virtual bool ConvertFrom( const wxPrintData &data ) { return true; }
+    
+    virtual bool Ok() const { return true; }
+};
+    
 /*
  * wxPrinterDialog
  * The common dialog for printing.

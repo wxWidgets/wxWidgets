@@ -26,6 +26,10 @@
 #include "wx/stream.h"
 #endif
 
+
+class WXDLLEXPORT wxPrintNativeDataBase;
+
+
 class WXDLLEXPORT wxColourData: public wxObject
 {
 public:
@@ -206,60 +210,21 @@ public:
     void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
     void SetBin(wxPrintBin bin) { m_bin = bin; }
 
-    // PostScript-specific data
-    const wxString& GetPrinterCommand() const { return m_printerCommand; }
-    const wxString& GetPrinterOptions() const { return m_printerOptions; }
-    const wxString& GetPreviewCommand() const { return m_previewCommand; }
-    const wxString& GetFilename() const { return m_filename; }
-    const wxString& GetFontMetricPath() const { return m_afmPath; }
-    double GetPrinterScaleX() const { return m_printerScaleX; }
-    double GetPrinterScaleY() const { return m_printerScaleY; }
-    long GetPrinterTranslateX() const { return m_printerTranslateX; }
-    long GetPrinterTranslateY() const { return m_printerTranslateY; }
-    wxPrintMode GetPrintMode() const { return m_printMode; }
-
-    void SetPrinterCommand(const wxString& command) { m_printerCommand = command; }
-    void SetPrinterOptions(const wxString& options) { m_printerOptions = options; }
-    void SetPreviewCommand(const wxString& command) { m_previewCommand = command; }
-    void SetFilename(const wxString& filename) { m_filename = filename; }
-    void SetFontMetricPath(const wxString& path) { m_afmPath = path; }
-    void SetPrinterScaleX(double x) { m_printerScaleX = x; }
-    void SetPrinterScaleY(double y) { m_printerScaleY = y; }
-    void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; }
-    void SetPrinterTranslateX(long x) { m_printerTranslateX = x; }
-    void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
-    void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
-    void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
-
-#if wxUSE_STREAMS
-    wxOutputStream* GetOutputStream() { return m_outputstream; }
-    void SetOutputStream(wxOutputStream* outputstream) { m_outputstream = outputstream; }
-#endif
-
+    wxString GetFilename() const { return m_filename; }
+    void SetFilename( const wxString &filename ) { m_filename = filename; }
+    
     void operator=(const wxPrintData& data);
+    
+    wxPrintNativeDataBase *GetNativeData() const { return m_nativeData; }
 
-#if defined(__WXMSW__)
-    // Convert to/from the DEVMODE structure
+#if defined(__WXMAC__)
     void ConvertToNative();
     void ConvertFromNative();
-    void* GetNativeData() const { return m_devMode; }
-    void SetNativeData(void* data) { m_devMode = data; }
-    void* GetNativeDataDevNames() const { return m_devNames; }
-    void SetNativeDataDevNames(void* data) { m_devNames = data; }
-#elif defined(__WXMAC__)
-  void ConvertToNative();
-  void ConvertFromNative();
 #endif
 
 public:
-#if defined(__WXMSW__)
-    void*           m_devMode;
-    void*           m_devNames;
-#elif defined(__WXMAC__)
+#if defined(__WXMAC__)
     wxNativePrintData* m_nativePrintData ;
-#endif
-#if wxUSE_STREAMS
-    wxOutputStream* m_outputstream;
 #endif
 
 private:
@@ -269,25 +234,16 @@ private:
     int             m_printOrientation;
     bool            m_printCollate;
 
-    // New members, 24/3/99
     wxString        m_printerName;
     bool            m_colour;
     wxDuplexMode    m_duplexMode;
     wxPrintQuality  m_printQuality;
     wxPaperSize     m_paperId;
     wxSize          m_paperSize;
-
-    // PostScript-specific data
-    wxString        m_printerCommand;
-    wxString        m_previewCommand;
-    wxString        m_printerOptions;
+    
     wxString        m_filename;
-    wxString        m_afmPath;
-    double          m_printerScaleX;
-    double          m_printerScaleY;
-    long            m_printerTranslateX;
-    long            m_printerTranslateY;
-    wxPrintMode     m_printMode;
+    
+    wxPrintNativeDataBase  *m_nativeData;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPrintData)

@@ -39,6 +39,7 @@ class WXDLLEXPORT wxPreviewCanvas;
 class WXDLLEXPORT wxPreviewControlBar;
 class WXDLLEXPORT wxPreviewFrame;
 class WXDLLEXPORT wxPrintFactory;
+class WXDLLEXPORT wxPrintNativeDataBase;
 
 //----------------------------------------------------------------------------
 // error consts
@@ -77,6 +78,8 @@ public:
                                                   wxPrintDialogData *data = NULL ) = 0;
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data ) = 0;
+                                                  
+    virtual wxPrintNativeDataBase *CreatePrintNativeData() = 0;
     
     static void SetPrintFactory( wxPrintFactory *factory );
     static wxPrintFactory *GetFactory();
@@ -104,6 +107,30 @@ public:
                                                   wxPrintDialogData *data = NULL );
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data );
+                                                  
+    virtual wxPrintNativeDataBase *CreatePrintNativeData();
+};
+
+//----------------------------------------------------------------------------
+// wxPrintNativeDataBase
+//----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPrintNativeDataBase: public wxObject
+{
+public:
+    wxPrintNativeDataBase();
+    virtual ~wxPrintNativeDataBase() {}
+    
+    virtual bool ConvertTo( wxPrintData &data ) = 0;
+    virtual bool ConvertFrom( const wxPrintData &data ) = 0; 
+    
+    virtual bool Ok() const = 0;
+    
+    int  m_ref;
+    
+private:
+    DECLARE_CLASS(wxPrintNativeDataBase)
+    DECLARE_NO_COPY_CLASS(wxPrintNativeDataBase)
 };
 
 //----------------------------------------------------------------------------

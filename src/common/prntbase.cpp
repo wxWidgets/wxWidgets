@@ -146,6 +146,28 @@ wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent,
 #endif
 }
 
+wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
+{
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+    return new wxWindowsPrintNativeData;
+#elif defined(__WXMAC__)
+    return new wxMacPrintNativeData;
+#else
+    return new wxPostScriptPrintNativeData;
+#endif
+}
+
+//----------------------------------------------------------------------------
+// wxPrintNativeDataBase
+//----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxPrintNativeDataBase, wxObject)
+
+wxPrintNativeDataBase::wxPrintNativeDataBase()
+{ 
+    m_ref = 1; 
+}
+
 //----------------------------------------------------------------------------
 // wxPrinterBase
 //----------------------------------------------------------------------------
