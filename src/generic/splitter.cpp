@@ -877,9 +877,9 @@ wxSize wxSplitterWindow::DoGetBestSize() const
     // get best sizes of subwindows
     wxSize size1, size2;
     if ( m_windowOne )
-        size1 = m_windowOne->GetBestSize();
+        size1 = m_windowOne->GetAdjustedBestSize();
     if ( m_windowTwo )
-        size2 = m_windowTwo->GetBestSize();
+        size2 = m_windowTwo->GetAdjustedBestSize();
 
     // sum them
     //
