@@ -1495,8 +1495,7 @@ dnl ---------------------------------------------------------------------------
 
 dnl notice that /usr/include should not be in this list, otherwise it breaks
 dnl compilation on Solaris/gcc because standard headers are included instead
-dnl of the gcc ones (correction: it *is* needed for broken AIX compiler - but
-dnl do put it last!)
+dnl of the gcc ones.
 dnl
 dnl Also try to put all directories which may contain X11R6 before those which
 dnl may contain X11R5/4 - we want to use R6 on machines which have both!
@@ -1563,9 +1562,7 @@ SEARCH_INCLUDE="\
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
                               \
-    /usr/openwin/share/include \
-                               \
-    /usr/include"
+    /usr/openwin/share/include"
 
 SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
 
