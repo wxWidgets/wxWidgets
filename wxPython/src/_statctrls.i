@@ -69,7 +69,7 @@ public:
     bool IsVertical() const;
 
     // get the default size for the "lesser" dimension of the static line
-    static int GetDefaultSize() { return 2; }
+    static int GetDefaultSize();
 
 };
 
