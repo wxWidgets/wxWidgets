@@ -5595,7 +5595,7 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         HideCellEditControl();
         DisableCellEditControl();
 
-        if ( IsVisible( m_currentCellCoords ) )
+        if ( IsVisible( m_currentCellCoords, FALSE ) )  // zzz
         {
             wxRect r;
             r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
