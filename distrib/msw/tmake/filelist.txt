@@ -459,6 +459,7 @@ main.cpp	GTK	LowLevel
 mdi.cpp	GTK
 menu.cpp	GTK
 minifram.cpp	GTK
+msgdlg.cpp	GTK
 notebook.cpp	GTK
 pen.cpp	GTK	LowLevel
 popupwin.cpp	GTK	LowLevel
