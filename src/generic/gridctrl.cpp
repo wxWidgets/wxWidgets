@@ -340,7 +340,7 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
 
     dc.SetFont(attr.GetFont());
     wxStringTokenizer tk(data , _T(" \n\t\r"));
-    wxString thisline("");
+    wxString thisline(wxT(""));
 
     while ( tk.HasMoreTokens() )
     {
@@ -381,7 +381,7 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
     wxRect rect(0,0,width,10);
 
     // M is a nice large character 'y' gives descender!.
-    dc.GetTextExtent("My", &x, &y);
+    dc.GetTextExtent(wxT("My"), &x, &y);
 
     do
     {

@@ -1001,7 +1001,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
             {
                 wxDirItemData* data = (wxDirItemData*) m_treeCtrl->GetItemData(childId);
 
-                if (data && data->m_path != "" && !data->m_isDir)
+                if (data && data->m_path != wxT("") && !data->m_isDir)
                 {
                     m_treeCtrl->SelectItem(childId);
                     m_treeCtrl->EnsureVisible(childId);

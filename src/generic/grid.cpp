@@ -722,7 +722,7 @@ void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
     // wxMotif needs a little extra help...
     size_t pos = (size_t)( Text()->GetInsertionPoint() );
     wxString s( Text()->GetValue() );
-    s = s.Left(pos) + "\n" + s.Mid(pos);
+    s = s.Left(pos) + wxT("\n") + s.Mid(pos);
     Text()->SetValue(s);
     Text()->SetInsertionPoint( pos );
 #else
@@ -1125,7 +1125,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
             default:
                 // additionally accept 'e' as in '1e+6'
                 if ( (keycode < 128) &&
-                     (isdigit(keycode) || tolower(keycode) == 'e') )
+                     (isdigit(keycode) || tolower(keycode) == wxT('e')) )
                     return TRUE;
         }
     }
@@ -1217,7 +1217,7 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     else
     {
         wxString cellval( grid->GetTable()->GetValue(row, col) );
-        m_startValue = !( !cellval || (cellval == "0") );
+        m_startValue = !( !cellval || (cellval == wxT("0")) );
     }
     CBox()->SetValue(m_startValue);
     CBox()->SetFocus();
@@ -1863,7 +1863,7 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     else
     {
         wxString cellval( grid.GetTable()->GetValue(row, col) );
-        value = !( !cellval || (cellval == "0") );
+        value = !( !cellval || (cellval == wxT("0")) );
     }
 
     if ( value )
@@ -3491,7 +3491,7 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
                             wxGridRowLabelWindow *rowLblWin,
                             wxGridColLabelWindow *colLblWin,
                             wxWindowID id, const wxPoint &pos, const wxSize &size )
-        : wxWindow( parent, id, pos, size, wxWANTS_CHARS, "grid window" )
+        : wxWindow( parent, id, pos, size, wxWANTS_CHARS, wxT("grid window") )
 {
     m_owner = parent;
     m_rowLabelWin = rowLblWin;

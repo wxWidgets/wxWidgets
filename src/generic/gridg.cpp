@@ -216,7 +216,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
   m_dragRowOrCol = 0;
   m_dragStartPosition = 0;
   m_dragLastPosition = 0;
-  m_divisionPen = * wxThePenList->FindOrCreatePen("LIGHT GREY", 1, wxSOLID);
+  m_divisionPen = * wxThePenList->FindOrCreatePen(wxT("LIGHT GREY"), 1, wxSOLID);
   m_highlightPen = * wxBLACK_PEN;
   m_doubleBufferingBitmap = (wxBitmap *) NULL;
 
@@ -267,7 +267,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
 
   m_editingPanel = new wxPanel(this);
 
-  m_textItem = new wxTextCtrl(m_editingPanel, wxGRID_TEXT_CTRL, "",
+  m_textItem = new wxTextCtrl(m_editingPanel, wxGRID_TEXT_CTRL, wxT(""),
                               wxPoint(m_editControlPosition.x, m_editControlPosition.y),
                               wxSize(m_editControlPosition.width, -1),
                               wxTE_PROCESS_ENTER);
@@ -287,7 +287,7 @@ bool wxGenericGrid::Create(wxWindow *parent,
 
 //  SetSize(pos.x, pos.y, size.x, size.y);
 
-  m_inPlaceTextItem = new wxTextCtrl( (wxPanel*)this, wxGRID_EDIT_IN_PLACE_TEXT_CTRL, "",
+  m_inPlaceTextItem = new wxTextCtrl( (wxPanel*)this, wxGRID_EDIT_IN_PLACE_TEXT_CTRL, wxT(""),
                                       wxPoint( m_currentRect.x-wxIPE_ADJUST, m_currentRect.y-wxIPE_ADJUST ),
                                       wxSize( m_currentRect.width+wxIPE_ADJUST*2, m_currentRect.height+wxIPE_ADJUST*2 ),
                                       wxNO_BORDER | wxTE_PROCESS_ENTER );
@@ -1477,7 +1477,7 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
   if (cell)
   {
         if ( cell->GetTextValue().IsNull() )
-                m_textItem->SetValue("");
+                m_textItem->SetValue(wxT(""));
         else
             m_textItem->SetValue(cell->GetTextValue());
   }
@@ -1518,7 +1518,7 @@ void wxGenericGrid::OnSelectCellImplementation(wxDC *dc, int row, int col)
           m_inPlaceTextItem->SetForegroundColour(cell->GetTextColour());
 
           if ( cell->GetTextValue().IsNull() ) {
-              m_inPlaceTextItem->SetValue( "" );
+              m_inPlaceTextItem->SetValue( wxT("") );
           }
           else {
               m_inPlaceTextItem->SetValue( cell->GetTextValue() );
@@ -1572,7 +1572,7 @@ void wxGenericGrid::OnChangeLabels()
   int i;
   for (i = 0; i < m_totalRows; i++)
   {
-    sprintf(buf, "%d", i+1);
+    sprintf(buf, wxT("%d"), i+1);
     SetLabelValue(wxVERTICAL, buf, i);
   }
   // A...Z,AA...ZZ,AAA...ZZZ, etc.
@@ -1585,7 +1585,7 @@ void wxGenericGrid::OnChangeLabels()
     for (j = 0; j < noTimes; j++)
     {
       char buf2[20];
-      sprintf(buf2, "%c", (char)ch);
+      sprintf(buf2, wxT("%c"), (char)ch);
       strcat(buf, buf2);
     }
     SetLabelValue(wxHORIZONTAL, buf, i);
@@ -1666,7 +1666,7 @@ void wxGenericGrid::DrawCellText()
   rect.height -= 4;
 
   // FIXME: what's this string of spaces supposed to represent?
-  DrawTextRect(& dc, "                                    ", &rect, wxLEFT);
+  DrawTextRect(& dc, wxT("                                    "), &rect, wxLEFT);
   DrawTextRect(& dc, editValue, &rect, cell->GetAlignment());
 
   dc.DestroyClippingRegion();
@@ -1962,7 +1962,7 @@ void wxGenericGrid::RefreshCell(int row, int col, bool setText)
 
 wxString& wxGenericGrid::GetCellValue(int row, int col) const
 {
-  static wxString emptyString("");
+  static wxString emptyString(wxT(""));
 
   wxGridCell *cell = GetCell(row, col);
   if (cell)
@@ -2044,7 +2044,7 @@ void wxGenericGrid::SetLabelValue(int orientation, const wxString& val, int pos)
 
 wxString& wxGenericGrid::GetLabelValue(int orientation, int pos) const
 {
- static wxString emptyString = "";
+  static wxString emptyString = wxT("");
   wxGridCell *cell = GetLabelCell(orientation, pos);
   if (cell)
     return cell->GetTextValue();
@@ -2161,7 +2161,7 @@ void wxGenericGrid::SetEditInPlace(bool edit)
                   m_inPlaceTextItem->SetForegroundColour(cell->GetTextColour());
 
                   if ( cell->GetTextValue().IsNull() ) {
-                      m_inPlaceTextItem->SetValue( "" );
+                      m_inPlaceTextItem->SetValue( wxT("") );
                   }
                   else {
                       m_inPlaceTextItem->SetValue( cell->GetTextValue() );
