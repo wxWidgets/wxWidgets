@@ -20,7 +20,7 @@ all wxHTML samples. -b and -f can be combined.
 You can customize the process of generating makefiles by adding file
 Bakefiles.local.bkgen (same format as Bakefiles.bkgen) with further settings.
 For example, you may disable output for compilers you don't use:
-   <del-formats>msvc,msvc6prj</del-formats>
+   <disable-formats>msvc,msvc6prj</disable-formats>
 
 Note: bakefile_gen creates file .bakefile_gen.state with dependencies
 information. This file can be safely deleted, but it contains valuable
