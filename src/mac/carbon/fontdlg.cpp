@@ -103,7 +103,7 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
                        &theScriptCode,
                        &theLanguageCode);
     
-    Ptr szBuffer = new wxChar[theActualLength];
+    Ptr szBuffer = NewPtr(theActualLength);
     ATSUGetIndFontName(fontid, 
                        0, //first font in index array
                        theActualLength, 
@@ -115,8 +115,8 @@ pascal OSStatus wxFontDialogEventHandler(	EventHandlerCallRef inHandlerCallRef,
                        &theLanguageCode);
     
     //its unicode - convert it to wx's char value and put it in there
-    theFont.SetFaceName(wxConvLocal.cWC2WX((wchar_t*)szBuffer));
-    delete[] szBuffer;
+    theFont.SetFaceName(wxConvLocal.cMB2WX((char*)szBuffer));
+    DisposePtr(szBuffer);
     
     //TODOTODO: Get font family - mayby by the script code?
     theFont.SetFamily(wxDEFAULT);  
