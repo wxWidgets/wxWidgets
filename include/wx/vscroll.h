@@ -12,6 +12,10 @@
 #ifndef _WX_VSCROLL_H_
 #define _WX_VSCROLL_H_
 
+#if defined(__GNUG__) && !defined(__APPLE__)
+#pragma interface "vscroll.h"
+#endif
+
 #include "wx/panel.h"           // base class
 
 // ----------------------------------------------------------------------------
