@@ -61,8 +61,8 @@ public:
     bool Ungetch(char c)  { if (m_wxis) return m_wxis->Ungetch(c); else return FALSE; }
 
     unsigned long SeekI(unsigned long pos, wxSeekMode mode)
-          { if (m_wxis) return m_wxis->SeekI(pos, mode); else return -1; }
-    unsigned long TellI() { if (m_wxis) return m_wxis->TellI(); else return -1; }
+          { if (m_wxis) return m_wxis->SeekI(pos, mode); else return 0; }
+    unsigned long TellI() { if (m_wxis) return m_wxis->TellI(); else return 0; }
 };
 
 

@@ -3658,6 +3658,10 @@ SWIGEXPORT(void) initfontsc() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP12_MAX", PyInt_FromLong((long) wxFONTENCODING_CP12_MAX));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF7", PyInt_FromLong((long) wxFONTENCODING_UTF7));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF8", PyInt_FromLong((long) wxFONTENCODING_UTF8));
+	 PyDict_SetItemString(d,"wxFONTENCODING_GB2312", PyInt_FromLong((long) wxFONTENCODING_GB2312));
+	 PyDict_SetItemString(d,"wxFONTENCODING_BIG5", PyInt_FromLong((long) wxFONTENCODING_BIG5));
+	 PyDict_SetItemString(d,"wxFONTENCODING_SHIFT_JIS", PyInt_FromLong((long) wxFONTENCODING_SHIFT_JIS));
+	 PyDict_SetItemString(d,"wxFONTENCODING_EUC_JP", PyInt_FromLong((long) wxFONTENCODING_EUC_JP));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UNICODE", PyInt_FromLong((long) wxFONTENCODING_UNICODE));
 	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
 	 PyDict_SetItemString(d,"wxLANGUAGE_DEFAULT", PyInt_FromLong((long) wxLANGUAGE_DEFAULT));
