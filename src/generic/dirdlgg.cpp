@@ -29,6 +29,7 @@
 #include "wx/button.h"
 #include "wx/layout.h"
 #include "wx/msgdlg.h"
+#include "wx/textctrl.h"
 #include "wx/textdlg.h"
 #include "wx/filefn.h"
 #include "wx/cmndata.h"

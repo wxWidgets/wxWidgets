@@ -67,8 +67,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TREE_END_DRAG)
 // Tree event
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
-
 wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {

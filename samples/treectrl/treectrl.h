@@ -23,15 +23,18 @@
 class MyApp : public wxApp
 {
 public:
-    MyApp() { m_showImages = TRUE; }
+    MyApp() { m_showImages = TRUE; m_showButtons = FALSE; }
 
     bool OnInit();
 
     void SetShowImages(bool show) { m_showImages = show; }
     bool ShowImages() const { return m_showImages; }
 
+    void SetShowButtons(bool show) { m_showButtons = show; }
+    bool ShowButtons() const { return m_showButtons; }
+
 private:
-    bool m_showImages;
+    bool m_showImages, m_showButtons;
 };
 
 class MyTreeItemData : public wxTreeItemData
@@ -88,6 +91,7 @@ public:
     void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
 
     void CreateImageList(int size = 16);
+    void CreateButtonsImageList(int size = 11);
 
     void AddTestItemsToTree(size_t numChildren, size_t depth);
 
@@ -98,6 +102,8 @@ public:
     void DoToggleIcon(const wxTreeItemId& item);
 
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
+
+    int ImageSize(void) const { return m_imageSize; }
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
@@ -115,7 +121,7 @@ private:
                              size_t depth,
                              size_t folder);
 
-    wxImageList *m_imageListNormal;
+    int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems
     wxTreeItemId m_lastItem,                // for OnEnsureVisible()
                  m_draggedItem;             // item being dragged right now
@@ -140,6 +146,14 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnTogButtons(wxCommandEvent& event)   { TogStyle(wxTR_HAS_BUTTONS); }
+    void OnTogTwist(wxCommandEvent& event)     { TogStyle(wxTR_TWIST_BUTTONS); }
+    void OnTogLines(wxCommandEvent& event)     { TogStyle(wxTR_NO_LINES); }
+    void OnTogEdit(wxCommandEvent& event)      { TogStyle(wxTR_EDIT_LABELS); }
+    void OnTogHideRoot(wxCommandEvent& event)  { TogStyle(wxTR_HIDE_ROOT); }
+    void OnTogRootLines(wxCommandEvent& event) { TogStyle(wxTR_LINES_AT_ROOT); }
+    void OnTogBorder(wxCommandEvent& event)    { TogStyle(wxTR_ROW_LINES); }
+
     void OnDump(wxCommandEvent& event);
 #ifndef NO_MULTIPLE_SELECTION
     void OnDumpSelected(wxCommandEvent& event);
@@ -152,6 +166,7 @@ public:
     void OnDeleteAll(wxCommandEvent& event);
 
     void OnRecreate(wxCommandEvent& event);
+    void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
@@ -182,6 +197,8 @@ public:
     void OnSize(wxSizeEvent& event);
 
 private:
+    void TogStyle(long flag);
+
     void DoSort(bool reverse = FALSE);
 
     void Resize(const wxSize& size);
@@ -199,20 +216,28 @@ enum
 {
     TreeTest_Quit,
     TreeTest_About,
+    TreeTest_TogButtons,
+    TreeTest_TogTwist,
+    TreeTest_TogLines,
+    TreeTest_TogEdit,
+    TreeTest_TogHideRoot,
+    TreeTest_TogRootLines,
+    TreeTest_TogBorder,
     TreeTest_Dump,
     TreeTest_DumpSelected,
     TreeTest_Count,
     TreeTest_CountRec,
     TreeTest_Sort,
     TreeTest_SortRev,
-    TreeTest_Bold,
-    TreeTest_UnBold,
+    TreeTest_SetBold,
+    TreeTest_ClearBold,
     TreeTest_Rename,
     TreeTest_Delete,
     TreeTest_DeleteChildren,
     TreeTest_DeleteAll,
     TreeTest_Recreate,
     TreeTest_ToggleImages,
+    TreeTest_ToggleButtons,
     TreeTest_SetImageSize,
     TreeTest_ToggleSel,
     TreeTest_CollapseAndReset,

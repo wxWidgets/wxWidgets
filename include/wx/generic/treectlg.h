@@ -18,16 +18,8 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/defs.h"
-#include "wx/string.h"
-#include "wx/object.h"
-#include "wx/event.h"
 #include "wx/scrolwin.h"
-#include "wx/textctrl.h"
 #include "wx/pen.h"
-#include "wx/dynarray.h"
-#include "wx/timer.h"
-#include "wx/treebase.h"
 
 // -----------------------------------------------------------------------------
 // forward declaration
@@ -55,11 +47,7 @@ public:
     wxGenericTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-#ifdef __WXMAC__
-               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES,
-#else
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-#endif
+               long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr)
     {
@@ -72,11 +60,7 @@ public:
     bool Create(wxWindow *parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-#ifdef __WXMAC__
-               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES,
-#else
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-#endif
+                long style = wxTR_DEFAULT_STYLE,
                 const wxValidator &validator = wxDefaultValidator,
                 const wxString& name = wxTreeCtrlNameStr);
 
@@ -110,18 +94,21 @@ public:
         // checked/unchecked) which are taken from the state image list.
     wxImageList *GetImageList() const;
     wxImageList *GetStateImageList() const;
+    wxImageList *GetButtonsImageList() const;
 
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
+    void SetButtonsImageList(wxImageList *imageList);
     void AssignImageList(wxImageList *imageList);
     void AssignStateImageList(wxImageList *imageList);
+    void AssignButtonsImageList(wxImageList *imageList);
 
     // Functions to work with tree ctrl items.
 
     // accessors
     // ---------
 
-        // retrieve items label
+        // retrieve item's label
     wxString GetItemText(const wxTreeItemId& item) const;
         // get one of the images associated with the item (normal by default)
     int GetItemImage(const wxTreeItemId& item,
@@ -132,7 +119,7 @@ public:
     // modifiers
     // ---------
 
-        // set items label
+        // set item's label
     void SetItemText(const wxTreeItemId& item, const wxString& text);
         // get one of the images associated with the item (normal by default)
     void SetItemImage(const wxTreeItemId& item, int image,
@@ -149,17 +136,21 @@ public:
         // the item will be shown in bold
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
 
-        // set the items text colour
+        // set the item's text colour
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
 
-        // set the items background colour
+        // set the item's background colour
     void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
 
-        // set the items font (should be of the same height for all items)
+        // set the item's font (should be of the same height for all items)
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
         // set the window font
     virtual bool SetFont( const wxFont &font );
+
+       // set the styles.  No need to specify a GetWindowStyle here since
+       // the base wxWindow member function will do it for us
+    void SetWindowStyle(const long styles);
 
     // item status inquiries
     // ---------------------
@@ -176,6 +167,7 @@ public:
     bool IsSelected(const wxTreeItemId& item) const;
         // is item text in bold font?
     bool IsBold(const wxTreeItemId& item) const;
+        // does the layout include space for a button?
 
     // number of children
     // ------------------
@@ -296,6 +288,7 @@ public:
     void EnsureVisible(const wxTreeItemId& item);
         // scroll to this item (but don't expand its parent)
     void ScrollTo(const wxTreeItemId& item);
+    void AdjustMyScrollbars();
 
         // The first function is more portable (because easier to implement
         // on other platforms), but the second one returns some extra info.
@@ -360,29 +353,30 @@ protected:
 
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current, *m_key_current, *m_currentEdit;
-    bool                 m_hasFocus;
-    bool                 m_dirty;
-    int                  m_xScroll,m_yScroll;
-    unsigned int         m_indent;
-    unsigned int         m_spacing;
+    unsigned short       m_indent;
+    unsigned short       m_spacing;
     int                  m_lineHeight;
     wxPen                m_dottedPen;
     wxBrush             *m_hilightBrush;
-    wxImageList         *m_imageListNormal,
-                        *m_imageListState;
+    bool                 m_hasFocus;
+    bool                 m_dirty;
     bool                 m_ownsImageListNormal, 
-                         m_ownsImageListState;
+                         m_ownsImageListState,
+                         m_ownsImageListButtons;
+    bool                 m_isDragging; // true between BEGIN/END drag events
+    bool                 m_renameAccept;
+    bool                 m_lastOnSame;  // last click on the same item as prev
+    wxImageList         *m_imageListNormal,
+                        *m_imageListState,
+                        *m_imageListButtons;
 
     int                  m_dragCount;
     wxPoint              m_dragStart;
-    bool                 m_isDragging; // true between BEGIN/END drag events
     wxGenericTreeItem   *m_dropTarget;
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
 
     wxTimer             *m_renameTimer;
-    bool                 m_renameAccept;
-    bool                 m_lastOnSame;  // last click on the same item as prev
     wxString             m_renameRes;
 
     // the common part of all ctors
@@ -394,10 +388,12 @@ protected:
                               const wxString& text,
                               int image, int selectedImage,
                               wxTreeItemData *data);
+    bool HasButtons(void) const
+        { return (m_imageListButtons != NULL)
+              || HasFlag(wxTR_TWIST_BUTTONS|wxTR_HAS_BUTTONS); }
 
-public:
-    void AdjustMyScrollbars();
 protected:
+    void CalculateLineHeight();
     int  GetLineHeight(wxGenericTreeItem *item) const;
     void PaintLevel( wxGenericTreeItem *item, wxDC& dc, int level, int &y );
     void PaintItem( wxGenericTreeItem *item, wxDC& dc);
@@ -433,24 +429,22 @@ private:
 
 class WXDLLEXPORT wxTreeCtrl: public wxGenericTreeCtrl
 {
-public:
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 
+public:
     wxTreeCtrl() {}
 
     wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+               long style = wxTR_DEFAULT_STYLE,
                const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr)
+    : wxGenericTreeCtrl(parent, id, pos, size, style, validator, name)
     {
-        Create(parent, id, pos, size, style, validator, name);
     }
-
 };
-
-#endif
+#endif // !__WXMSW__ || __WIN16__ || __WXUNIVERSAL__
 
 #endif // wxUSE_TREECTRL
 

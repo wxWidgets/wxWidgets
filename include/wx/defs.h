@@ -1171,21 +1171,6 @@ enum wxBorder
 #define wxSB_VERTICAL        wxVERTICAL
 
 /*
- * wxTreeCtrl flags
- */
-#define wxTR_HAS_BUTTONS     0x0004
-#define wxTR_EDIT_LABELS     0x0008
-#define wxTR_LINES_AT_ROOT   0x0010
-
-#define wxTR_SINGLE          0x0000
-#define wxTR_MULTIPLE        0x0020
-#define wxTR_EXTENDED        0x0040
-#define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080
-#define wxTR_NO_LINES        0x0100
-#define wxTR_MAC_BUTTONS     0x0200
-#define wxTR_ROW_LINES       0x0400
-
-/*
  * wxSpinButton flags.
  * Note that a wxSpinCtrl is sometimes defined as
  * a wxTextCtrl, and so the flags must be different

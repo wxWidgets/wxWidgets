@@ -22,7 +22,7 @@
 
 #if wxUSE_TREECTRL
 
-#include "wx/control.h"
+#include "wx/window.h"  // for wxClientData
 #include "wx/event.h"
 
 // ----------------------------------------------------------------------------
@@ -110,6 +110,40 @@ enum wxTreeItemIcon
     wxTreeItemIcon_Max
 };
 
+enum wxButtonImage              // effectively the same as wxTreeItemIcon
+{
+    wxCLOSED_BUTTON = 0,                // closed, not selected
+    wxCLOSED_BUTTON_SELECTED,           // closed,     selected
+    wxOPEN_BUTTON,                      // open,   not selected
+    wxOPEN_BUTTON_SELECTED              // open,       selected
+};
+
+/*
+ * wxTreeCtrl flags
+ */
+// TODO: maybe renumber these?
+#define wxTR_NO_BUTTONS      0x0000     // for convenience
+#define wxTR_HAS_BUTTONS     0x0004     // generates a +/- button
+#define wxTR_TWIST_BUTTONS   0x0008     // twister buttons
+#define wxTR_NO_LINES        0x0100     // don't generate level connectors
+#define wxTR_MAC_BUTTONS     wxTR_TWIST_BUTTONS  // backward compatibility
+
+#define wxTR_SINGLE          0x0000     // for convenience
+#define wxTR_MULTIPLE        0x0020     // can select multiple items
+#define wxTR_EXTENDED        0x0040     // TODO: allow extended selection
+
+#define wxTR_EDIT_LABELS     0x0200     // can edit item labels
+#define wxTR_LINES_AT_ROOT   0x0010     // specific to wxMSW
+#define wxTR_HIDE_ROOT       0x0800     // don't display root node
+#define wxTR_ROW_LINES       0x0400     // put border around items
+#define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080 // what it says
+
+// TODO: different default styles for wxGTK, wxMotif, whatever?
+#ifdef __WXMAC__
+    #define wxTR_DEFAULT_STYLE (wxTR_TWIST_BUTTONS|wxTR_NO_LINES|wxTR_ROW_LINES)
+#else
+    #define wxTR_DEFAULT_STYLE (wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT)
+#endif
 
 // values for the `flags' parameter of wxTreeCtrl::HitTest() which determine
 // where exactly the specified point is situated:
@@ -220,8 +254,6 @@ private:
                   m_itemOld;
     wxPoint       m_pointDrag;
     wxString      m_label;
-
-    DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
@@ -303,6 +335,5 @@ END_DECLARE_EVENT_TYPES()
 
 #endif // wxUSE_TREECTRL
 
-#endif
-    // _WX_TREEBASE_H_
+#endif // _WX_TREEBASE_H_
 

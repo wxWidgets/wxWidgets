@@ -65,37 +65,48 @@
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
 
-    EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
-    EVT_MENU(TreeTest_About, MyFrame::OnAbout)
-    EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
+#define MENU_LINK(name) EVT_MENU(TreeTest_##name, MyFrame::On##name)
+    MENU_LINK(Quit)
+    MENU_LINK(About)
+    MENU_LINK(TogButtons)
+    MENU_LINK(TogTwist)
+    MENU_LINK(TogLines)
+    MENU_LINK(TogEdit)
+    MENU_LINK(TogHideRoot)
+    MENU_LINK(TogRootLines)
+    MENU_LINK(TogBorder)
+    MENU_LINK(Dump)
 #ifndef NO_MULTIPLE_SELECTION
-    EVT_MENU(TreeTest_DumpSelected, MyFrame::OnDumpSelected)
-    EVT_MENU(TreeTest_Select, MyFrame::OnSelect)
-    EVT_MENU(TreeTest_Unselect, MyFrame::OnUnselect)
-    EVT_MENU(TreeTest_ToggleSel, MyFrame::OnToggleSel)
+    MENU_LINK(DumpSelected)
+    MENU_LINK(Select)
+    MENU_LINK(Unselect)
+    MENU_LINK(ToggleSel)
 #endif // NO_MULTIPLE_SELECTION
-    EVT_MENU(TreeTest_Rename, MyFrame::OnRename)
-    EVT_MENU(TreeTest_Count, MyFrame::OnCount)
-    EVT_MENU(TreeTest_CountRec, MyFrame::OnCountRec)
-    EVT_MENU(TreeTest_Sort, MyFrame::OnSort)
-    EVT_MENU(TreeTest_SortRev, MyFrame::OnSortRev)
-    EVT_MENU(TreeTest_Bold, MyFrame::OnSetBold)
-    EVT_MENU(TreeTest_UnBold, MyFrame::OnClearBold)
-    EVT_MENU(TreeTest_Delete, MyFrame::OnDelete)
-    EVT_MENU(TreeTest_DeleteChildren, MyFrame::OnDeleteChildren)
-    EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
-    EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
-    EVT_MENU(TreeTest_ToggleImages, MyFrame::OnToggleImages)
-    EVT_MENU(TreeTest_SetImageSize, MyFrame::OnSetImageSize)
-    EVT_MENU(TreeTest_CollapseAndReset, MyFrame::OnCollapseAndReset)
-    EVT_MENU(TreeTest_EnsureVisible, MyFrame::OnEnsureVisible)
-    EVT_MENU(TreeTest_AddItem, MyFrame::OnAddItem)
-    EVT_MENU(TreeTest_InsertItem, MyFrame::OnInsertItem)
-    EVT_MENU(TreeTest_IncIndent, MyFrame::OnIncIndent)
-    EVT_MENU(TreeTest_DecIndent, MyFrame::OnDecIndent)
-    EVT_MENU(TreeTest_IncSpacing, MyFrame::OnIncSpacing)
-    EVT_MENU(TreeTest_DecSpacing, MyFrame::OnDecSpacing)
-    EVT_MENU(TreeTest_ToggleIcon, MyFrame::OnToggleIcon)
+    MENU_LINK(Rename)
+    MENU_LINK(Count)
+    MENU_LINK(CountRec)
+    MENU_LINK(Sort)
+    MENU_LINK(SortRev)
+    MENU_LINK(SetBold)
+    MENU_LINK(ClearBold)
+    MENU_LINK(Delete)
+    MENU_LINK(DeleteChildren)
+    MENU_LINK(DeleteAll)
+    MENU_LINK(Recreate)
+    MENU_LINK(ToggleImages)
+    MENU_LINK(ToggleButtons)
+    MENU_LINK(SetImageSize)
+    MENU_LINK(CollapseAndReset)
+    MENU_LINK(EnsureVisible)
+    MENU_LINK(AddItem)
+    MENU_LINK(InsertItem)
+    MENU_LINK(IncIndent)
+    MENU_LINK(DecIndent)
+    MENU_LINK(IncSpacing)
+    MENU_LINK(DecSpacing)
+    MENU_LINK(ToggleIcon)
+#undef MENU_LINK
+
 END_EVENT_TABLE()
 
 #if USE_GENERIC_TREECTRL
@@ -158,6 +169,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 #if wxUSE_MENUS
     // Make a menubar
     wxMenu *file_menu = new wxMenu,
+           *style_menu = new wxMenu,
            *tree_menu = new wxMenu,
            *item_menu = new wxMenu;
 
@@ -165,11 +177,21 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, "E&xit\tAlt-X");
 
+    style_menu->Append(TreeTest_TogButtons, "Toggle &normal buttons");
+    style_menu->Append(TreeTest_TogTwist, "Toggle &twister buttons");
+    style_menu->Append(TreeTest_ToggleButtons, "Toggle image &buttons");
+    style_menu->AppendSeparator();
+    style_menu->Append(TreeTest_TogLines, "Toggle &connecting lines");
+    style_menu->Append(TreeTest_TogRootLines, "Toggle &lines at root");
+    style_menu->Append(TreeTest_TogHideRoot, "Toggle &hidden root");
+    style_menu->Append(TreeTest_TogBorder, "Toggle &item border");
+    style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode");
 #ifndef NO_MULTIPLE_SELECTION
-    tree_menu->Append(TreeTest_ToggleSel, "&Toggle selection mode");
+    style_menu->Append(TreeTest_ToggleSel, "Toggle &selection mode");
 #endif // NO_MULTIPLE_SELECTION
-    tree_menu->Append(TreeTest_ToggleImages, "&Show images", "", TRUE);
-    tree_menu->Append(TreeTest_SetImageSize, "Set image si&ze...");
+    style_menu->Append(TreeTest_ToggleImages, "Toggle show ima&ges");
+    style_menu->Append(TreeTest_SetImageSize, "Set image si&ze...");
+
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
     tree_menu->AppendSeparator();
@@ -197,10 +219,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_Rename, "&Rename item...");
 
     item_menu->AppendSeparator();
-    item_menu->Append(TreeTest_Bold, "Make item &bold");
-    item_menu->Append(TreeTest_UnBold, "Make item &not bold");
+    item_menu->Append(TreeTest_SetBold, "Make item &bold");
+    item_menu->Append(TreeTest_ClearBold, "Make item &not bold");
     item_menu->AppendSeparator();
-    item_menu->Append(TreeTest_ToggleIcon, "Toggle the items &icon");
+    item_menu->Append(TreeTest_ToggleIcon, "Toggle the item's &icon");
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
@@ -211,16 +233,17 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(style_menu, "&Style");
     menu_bar->Append(tree_menu, "&Tree");
     menu_bar->Append(item_menu, "&Item");
     SetMenuBar(menu_bar);
 
-    menu_bar->Check(TreeTest_ToggleImages, TRUE);
+    //menu_bar->Check(TreeTest_ToggleImages, TRUE);
 #endif // wxUSE_MENUS
 
     m_treeCtrl = new MyTreeCtrl(this, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxTR_MAC_BUTTONS | wxTR_NO_LINES |
+                                wxTR_TWIST_BUTTONS | wxTR_NO_LINES |
                                 wxTR_EDIT_LABELS |
 #ifndef NO_VARIABLE_HEIGHT
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
@@ -251,6 +274,11 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 MyFrame::~MyFrame()
 {
     delete wxLog::SetActiveTarget(NULL);
+}
+
+void MyFrame::TogStyle(long flag)
+{
+        m_treeCtrl->SetWindowStyle(m_treeCtrl->GetWindowStyle() ^ flag);
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
@@ -347,6 +375,8 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleSel(wxCommandEvent& WXUNUSED(event))
 {
+    TogStyle(wxTR_MULTIPLE);
+#if 0
     long style = m_treeCtrl->GetWindowStyle();
     if ( style & wxTR_MULTIPLE )
         style &= ~wxTR_MULTIPLE;
@@ -359,6 +389,7 @@ void MyFrame::OnToggleSel(wxCommandEvent& WXUNUSED(event))
                                 wxDefaultPosition, wxDefaultSize,
                                 style);
     Resize(GetClientSize());
+#endif
 }
 
 void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
@@ -421,21 +452,20 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnRecreate(wxCommandEvent& event)
 {
     OnDeleteAll(event);
-    m_treeCtrl->AddTestItemsToTree(3, 2);
+    m_treeCtrl->AddTestItemsToTree(5, 2);
 }
 
 void MyFrame::OnSetImageSize(wxCommandEvent& event)
 {
-    long size = wxGetNumberFromUser("Enter the size for the images to use",
+    int size = wxGetNumberFromUser("Enter the size for the images to use",
                                     "Size: ",
                                     "TreeCtrl sample",
-                                    16);
+                                    m_treeCtrl->ImageSize());
     if ( size == -1 )
         return;
 
-    m_treeCtrl->CreateImageList((int)size);
-
-    OnRecreate(event);
+    m_treeCtrl->CreateImageList(size);
+    wxGetApp().SetShowImages(TRUE);
 }
 
 void MyFrame::OnToggleImages(wxCommandEvent& event)
@@ -443,17 +473,27 @@ void MyFrame::OnToggleImages(wxCommandEvent& event)
     if ( wxGetApp().ShowImages() )
     {
         m_treeCtrl->CreateImageList(-1);
-
         wxGetApp().SetShowImages(FALSE);
     }
     else
     {
-        m_treeCtrl->CreateImageList();
-
+        m_treeCtrl->CreateImageList(0);
         wxGetApp().SetShowImages(TRUE);
     }
+}
 
-    OnRecreate(event);
+void MyFrame::OnToggleButtons(wxCommandEvent& event)
+{
+    if ( wxGetApp().ShowButtons() )
+    {
+        m_treeCtrl->CreateButtonsImageList(-1);
+        wxGetApp().SetShowButtons(FALSE);
+    }
+    else
+    {
+        m_treeCtrl->CreateButtonsImageList(15);
+        wxGetApp().SetShowButtons(TRUE);
+    }
 }
 
 void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
@@ -534,64 +574,108 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
           : wxTreeCtrl(parent, id, pos, size, style)
 {
     m_reverseSort = FALSE;
-    m_imageListNormal = NULL;
 
     CreateImageList();
 
     // Add some items to the tree
-    AddTestItemsToTree(3, 2);
+    AddTestItemsToTree(5, 2);
 }
 
 void MyTreeCtrl::CreateImageList(int size)
 {
-    delete m_imageListNormal;
-
     if ( size == -1 )
     {
-        m_imageListNormal = NULL;
+        SetImageList(NULL);
+        return;
     }
+    if ( size == 0 )
+        size = m_imageSize;
     else
-    {
-        // Make an image list containing small icons
-        m_imageListNormal = new wxImageList(size, size, TRUE);
+        m_imageSize = size;
 
-        // should correspond to TreeCtrlIcon_xxx enum
+    // Make an image list containing small icons
+    wxImageList *images = new wxImageList(size, size, TRUE);
+
+    // should correspond to TreeCtrlIcon_xxx enum
 #if defined(__WXMSW__) && defined(__WIN16__)
-        m_imageListNormal->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
-        m_imageListNormal->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
-        m_imageListNormal->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
-        m_imageListNormal->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
-        m_imageListNormal->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
 #else // !MSW
-        wxIcon icons[5];
-        icons[0] = wxICON(icon1);
-        icons[1] = wxICON(icon2);
-        icons[2] = wxICON(icon3);
-        icons[3] = wxICON(icon4);
-        icons[4] = wxICON(icon5);
+    wxBusyCursor wait;
+    wxIcon icons[5];
+    icons[0] = wxICON(icon1);
+    icons[1] = wxICON(icon2);
+    icons[2] = wxICON(icon3);
+    icons[3] = wxICON(icon4);
+    icons[4] = wxICON(icon5);
 
-        int sizeOrig = icons[0].GetWidth();
-        for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    int sizeOrig = icons[0].GetWidth();
+    for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    {
+        if ( size == sizeOrig )
         {
-            if ( size == sizeOrig )
-            {
-                m_imageListNormal->Add(icons[i]);
-            }
-            else
-            {
-                m_imageListNormal->Add(wxImage(icons[i]).Rescale(size, size).
-                                        ConvertToBitmap());
-            }
+            images->Add(icons[i]);
         }
+        else
+        {
+            images->Add(wxImage(icons[i]).Rescale(size, size).
+                                    ConvertToBitmap());
+        }
+    }
 #endif // MSW/!MSW
+
+    AssignImageList(images);
+}
+
+void MyTreeCtrl::CreateButtonsImageList(int size)
+{
+    if ( size == -1 )
+    {
+        SetButtonsImageList(NULL);
+        return;
     }
 
-    SetImageList(m_imageListNormal);
+    // Make an image list containing small icons
+    wxImageList *images = new wxImageList(size, size, TRUE);
+
+    // should correspond to TreeCtrlIcon_xxx enum
+#if defined(__WXMSW__) && defined(__WIN16__)
+    images->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
+    images->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
+#else // !MSW
+    wxBusyCursor wait;
+    wxIcon icons[4];
+    icons[0] = wxICON(icon3);   // closed
+    icons[1] = wxICON(icon3);   // closed, selected
+    icons[2] = wxICON(icon5);   // open
+    icons[3] = wxICON(icon5);   // open, selected
+
+    for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    {
+        int sizeOrig = icons[i].GetWidth();
+        if ( size == sizeOrig )
+        {
+            images->Add(icons[i]);
+        }
+        else
+        {
+            images->Add(wxImage(icons[i]).Rescale(size, size).
+                                    ConvertToBitmap());
+        }
+    }
+#endif // MSW/!MSW
+
+    AssignButtonsImageList(images);
 }
 
 MyTreeCtrl::~MyTreeCtrl()
 {
-    delete m_imageListNormal;
 }
 
 int MyTreeCtrl::OnCompareItems(const wxTreeItemId& item1,
@@ -795,7 +879,7 @@ void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 {
     wxLogMessage("OnBeginLabelEdit");
 
-    // for testing, prevent this items label editing
+    // for testing, prevent this item's label editing
     wxTreeItemId itemId = event.GetItem();
     if ( IsTestItem(itemId) )
     {

@@ -36,7 +36,5 @@
 #endif
 */
 
-#endif
-    // _WX_TREECTRL_H_BASE_
-
+#endif // _WX_TREECTRL_H_BASE_
 
