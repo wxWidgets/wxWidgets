@@ -226,10 +226,12 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
 int wxApp::MainLoop()
 {
+    int rt;
     gs_mainEventLoop = new wxEventLoop;
-    return gs_mainEventLoop->Run();
+    rt = gs_mainEventLoop->Run();
     delete gs_mainEventLoop;
     gs_mainEventLoop = NULL;
+    return rt;
 }
 
 void wxApp::ExitMainLoop()
@@ -239,7 +241,9 @@ void wxApp::ExitMainLoop()
 
 bool wxApp::Initialized()
 {
-    return (GetTopWindow() != NULL);
+    // FIXME_MGL -- only for now because we don't have wxFrame/wxDialog yet
+    return TRUE;
+    //return (wxTopLevelWindows.GetCount() != 0);
 }
 
 bool wxApp::Pending()
@@ -481,8 +485,7 @@ int wxEntry(int argc, char *argv[])
            call OnRun() */
         wxTheApp->DeletePendingObjects();
 
-        if ( wxTheApp->Initialized() &&
-             wxTopLevelWindows.GetCount() != 0 )
+        if ( wxTheApp->Initialized() )
         {
             wxTheApp->OnRun();
 

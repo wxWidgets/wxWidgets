@@ -157,20 +157,18 @@ bool wxEventLoop::Dispatch()
     wxCHECK_MSG( IsRunning(), FALSE, _T("can't call Dispatch() if not running") );
 
     event_t evt;
-    ibool rc = EVT_getNext(&evt, EVT_EVERYEVT);
-
-    if ( !rc )
-    {
-        wxLogError(_T("events queue empty even though Pending() returned true"));
-        return FALSE;
-    }
+    ibool rc;
     
-    // FIXME_MGL -- there must be some way to programatically exit
-    // the loop, like WM_QUIT under Windows -- perhaps we need custom
-    // event to indicate this??
+    rc = EVT_getNext(&evt, EVT_EVERYEVT);
+    while ( !rc )
+    {
+        wxUsleep(1000);
+        if ( !m_impl->GetKeepLooping() )
+            return FALSE;
+        rc = EVT_getNext(&evt, EVT_EVERYEVT);
+    }
 
     m_impl->ProcessEvent(&evt);
 
     return m_impl->GetKeepLooping();
 }
-

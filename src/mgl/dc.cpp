@@ -239,7 +239,7 @@ void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 
     if ( m_globalClippingRegion )
     {
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion() 
+        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion()
                                & *m_globalClippingRegion);
     }
     else
@@ -284,7 +284,7 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 
     if ( m_globalClippingRegion )
     {
-        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion() 
+        m_MGLDC->setClipRegion(m_currentClippingRegion.GetMGLRegion()
                                & *m_globalClippingRegion);
     }
     else
@@ -334,9 +334,7 @@ void wxDC::Clear()
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
-    m_MGLDC->clearDevice();
-    if ( m_backgroundBrush.GetStyle() != wxSOLID && 
-         m_backgroundBrush.GetStyle() != wxTRANSPARENT )
+    if ( m_backgroundBrush.GetStyle() != wxTRANSPARENT )
     {
         int w, h;
         wxBrush oldb = m_brush;
@@ -717,7 +715,6 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-    if ( m_pen.GetStyle() == wxTRANSPARENT ) return;
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
     DrawAnyText(text, x, y);
 
@@ -811,7 +808,6 @@ void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
-    if ( m_pen.GetStyle() == wxTRANSPARENT ) return;
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
     
     if ( angle == 0 )

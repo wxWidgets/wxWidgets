@@ -323,20 +323,17 @@ bool wxMGLFontFamily::HasFace(int type) const
 wxMGLFontLibrary *wxFontsManager::GetFontLibrary(wxFont *font)
 {
     wxMGLFontFamily *family;
-    wxString facename;
     int type;
+    wxString facename = font->GetFaceName();
     
-    if ( facename )
-        family = GetFamily(font->GetFaceName());
+    if ( !facename.IsEmpty() )
+        family = GetFamily(facename);
     else
         family = NULL;
-    if ( family )
-        facename = font->GetFaceName();
-    else
-        facename.Empty();
-    
+
     if ( !family )
     {
+        facename.Empty();
         switch (font->GetFamily())
         {
             case wxSCRIPT:

@@ -98,6 +98,7 @@ enum
 //   b) the app has plenty of time in wxApp::OnInit to feed wxSystemOptions
 //      with desired settings
 
+// FIXME_MGL -- move to app.cpp??
 bool wxCreateMGL_WM()
 {
     int mode;
@@ -262,6 +263,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
     m_wnd = MGL_wmCreateWindow(g_winMng,
                                parent ? parent->GetHandle() : NULL,
                                pos.x, pos.y, size.x, size.y);
+    MGL_wmShowWindow(m_wnd, m_isShown);
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
     MGL_wmSetWindowPainter(m_wnd, wxWindowPainter);
     return TRUE;
@@ -702,7 +704,6 @@ void wxWindowMGL::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 
 void wxWindowMGL::Update()
 {
-    Refresh();
     if ( !m_frozen )
         MGL_wmUpdateDC(g_winMng);
 }
@@ -725,12 +726,13 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     if ( m_frozen )
     {
         // Don't paint anything if the window is frozen. 
+        m_refreshAfterThaw = TRUE;
         return;
     }
 
-    region_t clip;
-    MGL_getClipRegionDC(*dc, &clip);
-    m_updateRegion = wxRegion(MGLRegion(&clip));
+    MGLRegion clip;
+    dc->getClipRegion(clip);
+    m_updateRegion = wxRegion(clip);
     m_paintMGLDC = dc;
 
     {
@@ -749,6 +751,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     GetEventHandler()->ProcessEvent(eventPt);
 
     m_paintMGLDC = NULL;
+    m_updateRegion.Clear();
 }
 
 

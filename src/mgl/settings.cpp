@@ -24,7 +24,7 @@ wxColour wxSystemSettings::GetSystemColour(int WXUNUSED(index))
 wxFont wxSystemSettings::GetSystemFont(int WXUNUSED(index))
 {
     // FIXME_MGL
-    return wxFont(12, wxMODERN, wxNORMAL, wxNORMAL);
+    return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL);
 }
 
 int wxSystemSettings::GetSystemMetric(int WXUNUSED(index))
