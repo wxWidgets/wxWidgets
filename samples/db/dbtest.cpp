@@ -388,7 +388,7 @@ void DatabaseDemoFrame::CreateDataTable(bool recreate)
         wxEndBusyCursor();
 
     delete Contact;
-     Contact = NULL;
+    Contact = NULL;
 
     if (success)
         wxMessageBox("Table and index(es) were successfully created.","Notice...",wxOK | wxICON_INFORMATION);
@@ -405,7 +405,7 @@ void DatabaseDemoFrame::BuildEditorDialog()
         if (!pEditorDlg->initialized)
         {
             pEditorDlg->Close();
-            delete pEditorDlg;
+            pEditorDlg = NULL;
             wxMessageBox("Unable to initialize the editor dialog for some reason","Error...",wxOK | wxICON_EXCLAMATION);
             DemoFrame->Close();
         }
@@ -918,14 +918,14 @@ bool CeditorDlg::Initialize()
     if (!Contact->Open())
     {
         // Table does exist, or there was some problem opening it.  Currently this should
-        // never fail, except in the case of the table not exisiting or the current 
+        // never fail, except in the case of the table not exisiting or the current
         // user has insufficent privileges to access the table
 #if 0
 // This code is experimenting with a new function that will hopefully be available
 // in the 2.4 release.  This check will determine whether the open failing was due
 // to the table not existing, or the users privileges being insufficient to
 // open the table.
-        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,"SELECT",Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
+        if (!Contact->GetDb()->TablePrivileges(CONTACT_TABLE_NAME,"SELECT",Contact->GetDb()->GetUsername(),Contact->GetDb()->GetUsername(),DbConnectInf.defaultDir))
         {
             wxString tStr;
             tStr.Printf("Unable to open the table '%s'.\n\n",CONTACT_TABLE_NAME);
