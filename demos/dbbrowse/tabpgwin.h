@@ -89,7 +89,7 @@ public:
 
  // notifications (can be handled by derivatives)
 
- virtual void OnTabAdded( twTabInfo* pInfo ) {}
+ virtual void OnTabAdded( twTabInfo* WXUNUSED(pInfo) ) {}
 
  virtual void SizeTabs(int x,int y, int width, int height, bool repant);
 

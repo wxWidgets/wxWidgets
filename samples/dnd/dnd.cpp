@@ -82,7 +82,7 @@ class URLDropTarget : public wxDropTarget
 public:
     URLDropTarget() { SetDataObject(new wxURLDataObject); }
 
-    void OnDropURL(wxCoord x, wxCoord y, const wxString& text)
+    void OnDropURL(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxString& text)
     {
         // of course, a real program would do something more useful here...
         wxMessageBox(text, _T("wxDnD sample: got URL"),
@@ -91,7 +91,7 @@ public:
 
     // URLs can't be moved, only copied
     virtual wxDragResult OnDragOver(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                                    wxDragResult def)
+                                    wxDragResult WXUNUSED(def))
         {
             return wxDragLink;  // At least IE 5.x needs wxDragLink, the
                                 // other browsers on MSW seem okay with it too.
@@ -144,7 +144,7 @@ public:
         Refresh();
     }
 
-    void OnPaint(wxPaintEvent& event)
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
 
@@ -613,7 +613,7 @@ public:
     }
 
     virtual bool SetData(const wxDataFormat& format,
-                         size_t len, const void *buf)
+                         size_t WXUNUSED(len), const void *buf)
     {
         wxCHECK_MSG( format == m_formatShape, false,
                      wxT( "unsupported format") );

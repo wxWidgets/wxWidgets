@@ -192,13 +192,13 @@ class PropEditCtrlCoordXY : public PropEditCtrlInt
             return m_c[m_which];
         }
         
-        virtual wxString GetPropName(const PropertyInfo& pinfo)
+        virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             if (m_which == 0) return _T("x"); else return _T("y");
         }
 
         virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& pinfo) { return FALSE; } 
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
 
     
     protected:
@@ -243,13 +243,13 @@ class PropEditCtrlCoordDlg : public PropEditCtrlBool
                 return _("true");
         }
         
-        virtual wxString GetPropName(const PropertyInfo& pinfo)
+        virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             return _T("dlg");
         }
 
         virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& pinfo) { return FALSE; } 
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
 };
 
 
@@ -318,13 +318,13 @@ class PropEditCtrlDimX : public PropEditCtrlInt
             return XmlReadValue(GetNode(), pi->Name).BeforeFirst(_T('d'));
         }
         
-        virtual wxString GetPropName(const PropertyInfo& pinfo)
+        virtual wxString GetPropName(const PropertyInfo& WXUNUSED(pinfo))
         {
             return _T("val");
         }
 
         virtual bool HasClearButton() { return FALSE; }
-        virtual bool IsPresent(const PropertyInfo& pinfo) { return FALSE; } 
+        virtual bool IsPresent(const PropertyInfo& WXUNUSED(pinfo)) { return FALSE; } 
 
     
     protected:

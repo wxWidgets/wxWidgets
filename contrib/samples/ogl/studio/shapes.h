@@ -73,8 +73,8 @@ public:
 
 // Overridables
     // Start/end copying
-    virtual bool OnStartCopy(wxDiagram* diagramTo) { return TRUE; };
-    virtual bool OnEndCopy(wxDiagram* diagramTo) { return TRUE; };
+    virtual bool OnStartCopy(wxDiagram* WXUNUSED(diagramTo)) { return TRUE; };
+    virtual bool OnEndCopy(wxDiagram* WXUNUSED(diagramTo)) { return TRUE; };
 
     // Override this to e.g. have the shape added through a Do/Undo command system.
     // By default, we'll just add it directly to the destination diagram, and
@@ -97,10 +97,10 @@ public:
     ~csDiagramClipboard() {}
 
     // Start/end copying
-    bool OnStartCopy(wxDiagram* diagramTo);
-    bool OnEndCopy(wxDiagram* diagramTo);
+    virtual bool OnStartCopy(wxDiagram* diagramTo);
+    virtual bool OnEndCopy(wxDiagram* diagramTo);
 
-    bool OnAddShape(wxDiagram* diagramTo, wxShape* newShape, wxDC* dc);
+    virtual bool OnAddShape(wxDiagram* diagramTo, wxShape* newShape, wxDC* dc);
 
 protected:
     csDiagramCommand*   m_currentCmd;

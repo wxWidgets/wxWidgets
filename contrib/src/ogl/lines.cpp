@@ -594,7 +594,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
   wxRealPoint *second_last_line_point = (wxRealPoint *)second_last_line_node->GetData();
 
   // Position where we want to start drawing
-  double positionOnLineX, positionOnLineY;
+  double positionOnLineX = 0.0, positionOnLineY = 0.0;
 
   // Position of start point of line, at the end of which we draw the arrow.
   double startPositionX = 0.0 , startPositionY = 0.0;
@@ -1090,8 +1090,8 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
 
   // Do each end - nothing in the middle. User has to move other points
   // manually if necessary.
-  double end_x, end_y;
-  double other_end_x, other_end_y;
+  double end_x = 0.0, end_y = 0.0;
+  double other_end_x = 0.0, other_end_y = 0.0;
 
   wxNode *first = m_lineControlPoints->GetFirst();
   /* wxRealPoint *first_point = */ (wxRealPoint *)first->GetData();

@@ -112,7 +112,7 @@ private:
         }
     }
 
-    virtual void DoLogString(const wxChar *szString, time_t t)
+    virtual void DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     {
         wxString msg;
         TimeStamp(&msg);
@@ -154,7 +154,7 @@ protected:
     void OnKeyUp(wxKeyEvent& event) { LogEvent(_T("Key up"), event); }
     void OnChar(wxKeyEvent& event) { LogEvent(_T("Char"), event); }
 
-    void OnPaint(wxPaintEvent& event)
+    void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         wxPaintDC dc(this);
         dc.SetTextForeground(*wxWHITE);

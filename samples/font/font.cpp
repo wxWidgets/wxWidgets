@@ -86,8 +86,8 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    void OnIncFont(wxCommandEvent& event) { DoResizeFont(+2); }
-    void OnDecFont(wxCommandEvent& event) { DoResizeFont(-2); }
+    void OnIncFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(+2); }
+    void OnDecFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(-2); }
 
     void OnBold(wxCommandEvent& event);
     void OnItalic(wxCommandEvent& event);

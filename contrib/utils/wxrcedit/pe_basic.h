@@ -26,7 +26,7 @@ class PropEditCtrlNull : public PropEditCtrl
         PropEditCtrlNull(PropertiesFrame *propFrame)
            : PropEditCtrl(propFrame) {}
                 
-        virtual void BeginEdit(const wxRect& rect, wxTreeItemId ti) {}
+        virtual void BeginEdit(const wxRect& WXUNUSED(rect), wxTreeItemId WXUNUSED(ti)) {}
         virtual void EndEdit() {}
                 
         virtual wxWindow* CreateEditCtrl() {return NULL;}

@@ -989,7 +989,7 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
     wxString s = GetParamValue(param);
     if (s.IsEmpty()) s = wxT("-1,-1");
     bool is_dlg;
-    long sx, sy;
+    long sx, sy = 0;
 
     is_dlg = s[s.Length()-1] == wxT('d');
     if (is_dlg) s.RemoveLast();

@@ -123,7 +123,7 @@ class NodeHandlerUnknown : public NodeHandler
     public:
         NodeHandlerUnknown() : NodeHandler(new NodeInfo) {}
         
-        virtual bool CanHandle(wxXmlNode *node) { return TRUE; }
+        virtual bool CanHandle(wxXmlNode *WXUNUSED(node)) { return TRUE; }
 };
 
 

@@ -228,7 +228,7 @@ private:
         }
     }
 
-    virtual void DoLogString(const wxChar *szString, time_t t)
+    virtual void DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     {
         wxString msg;
         TimeStamp(&msg);
@@ -526,7 +526,7 @@ void LboxTestFrame::CreateLbox()
             items.Add(m_lbox->GetString(n));
         }
 
-        m_sizerLbox->Remove(m_lbox);
+        m_sizerLbox->Detach(m_lbox);
         delete m_lbox;
     }
 

@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------------------
-// Name:		BrowserDB.h,cpp
-// Purpose: 	a wxDB class
-// Author:		Mark Johnson
+// Name:        BrowserDB.h,cpp
+// Purpose:     a wxDB class
+// Author:      Mark Johnson
 // Modified by:
-// Created: 	19991127.mj10777
-// Copyright:	(c) Mark Johnson
-// Licence: 	wxWindows license
-// RCS-ID:		$Id$
+// Created:     19991127.mj10777
+// Copyright:   (c) Mark Johnson
+// Licence:     wxWindows license
+// RCS-ID:      $Id$
 //----------------------------------------------------------------------------------------
 //-- 1)
 //----------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ wxDbConnectInf DbConnectInf;
 #endif
 
 //----------------------------------------------------------------------------------------
-extern WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList;	/* from db.cpp, used in getting back error results from db connections */
+extern WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList;    /* from db.cpp, used in getting back error results from db connections */
 
 //----------------------------------------------------------------------------------------
 wxChar *GetExtendedDBErrorMsg(wxChar *ErrFile, int ErrLine)
@@ -127,8 +127,8 @@ bool BrowserDB::OnStartDB(int Quiet)
     //---------------------------------------------------------------------------------------
     DlgUser *p_Dlg;
     p_Dlg = new DlgUser(pDoc->p_MainFrame,pDoc,_T(""));
-    p_Dlg->s_DSN	  = ODBCSource;
-    p_Dlg->s_User	  = UserName;
+    p_Dlg->s_DSN      = ODBCSource;
+    p_Dlg->s_User     = UserName;
     p_Dlg->s_Password = Password;
     p_Dlg->OnInit();
     p_Dlg->Fit();
@@ -146,9 +146,9 @@ bool BrowserDB::OnStartDB(int Quiet)
     if (OK)
     {
         //--------------------------------------------------------------------------------------
-        DbConnectInf.SetDsn(ODBCSource); 		  // ODBC data source name (created with ODBC Administrator under Win95/NT)
-        DbConnectInf.SetUserID(UserName);	      // database username - must already exist in the data source
-        DbConnectInf.SetPassword(Password);	  // password database username
+        DbConnectInf.SetDsn(ODBCSource);         // ODBC data source name (created with ODBC Administrator under Win95/NT)
+        DbConnectInf.SetUserID(UserName);        // database username - must already exist in the data source
+        DbConnectInf.SetPassword(Password);      // password database username
         db_BrowserDB = wxDbGetConnection(&DbConnectInf);
         // wxLogMessage(">>>%s<<<>>>%s<<<",UserName.c_str(),Password.c_str());
         if (db_BrowserDB == NULL)
@@ -204,12 +204,11 @@ bool BrowserDB::OnCloseDB(int Quiet)
 bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
 {
     SDWORD cb;
-    int 	 i_dbDataType;
-    int   i=0;
+    int i_dbDataType;
     wxChar s_temp[1024+1];
-    long			 l_temp;
-    double			 f_temp;
-    int 			 AnzError=0;
+    long l_temp;
+    double f_temp;
+    int AnzError=0;
     TIMESTAMP_STRUCT t_temp;
     wxString Temp0;
     //-----------------------------
@@ -225,14 +224,15 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
     }
     else
     {
+        int i;
         for (i=0;i<Cols;i++)
         {
             wxStrcpy((cl_BrowserDB+i)->tableName,_T("-E->"));
             i_dbDataType = (cl_BrowserDB+i)->pColFor->i_dbDataType;
-            if (i_dbDataType == 0)						  // Filter unsupported dbDataTypes
+            if (i_dbDataType == 0)         // Filter unsupported dbDataTypes
             {
                 if (((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_VARCHAR) ||
-						  ((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_LONGVARCHAR))
+                          ((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_LONGVARCHAR))
                     i_dbDataType = DB_DATA_TYPE_VARCHAR;
                 if ((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_C_DATE)
                     i_dbDataType = DB_DATA_TYPE_DATE;
@@ -244,8 +244,8 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                     i_dbDataType = DB_DATA_TYPE_FLOAT;
             }
             if ((i_dbDataType == DB_DATA_TYPE_INTEGER) &&
-					 ((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_C_DOUBLE))
-            {	// DBASE Numeric
+                     ((cl_BrowserDB+i)->pColFor->i_sqlDataType == SQL_C_DOUBLE))
+            {    // DBASE Numeric
                 i_dbDataType = DB_DATA_TYPE_FLOAT;
             }
             switch(i_dbDataType)
@@ -298,8 +298,8 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                 else
                 {
                     // i_Nation =  0 = timestamp , 1=EU, 2=UK, 3=International, 4=US
-                    if (((cl_BrowserDB+i)->pColFor->i_Nation == 0)	||	// TS  YYYY-MM-DD
-                        ((cl_BrowserDB+i)->pColFor->i_Nation == 3)) 	// IT  YYYY-MM-DD
+                    if (((cl_BrowserDB+i)->pColFor->i_Nation == 0)    ||    // TS  YYYY-MM-DD
+                        ((cl_BrowserDB+i)->pColFor->i_Nation == 3))     // IT  YYYY-MM-DD
                     {
                         Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,t_temp.year,t_temp.month,t_temp.day,
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
@@ -312,7 +312,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
                         wxStrcpy((cl_BrowserDB+i)->tableName,Temp0.c_str());
                     }
-                    if ((cl_BrowserDB+i)->pColFor->i_Nation == 3)	   // US  MM/DD/YYYY
+                    if ((cl_BrowserDB+i)->pColFor->i_Nation == 3)    // US  MM/DD/YYYY
                     {
                         Temp0.Printf((cl_BrowserDB+i)->pColFor->s_Field,t_temp.month,t_temp.day,t_temp.year,
                             t_temp.hour, t_temp.minute, t_temp.second, t_temp.fraction);
@@ -452,10 +452,10 @@ void BrowserDB::PointerToNULL(int Art)
             delete db_BrowserDB;
         }
     }
-    cl_BrowserDB	   = NULL;
-    ct_BrowserDB	   = NULL;
-    db_BrowserDB	   = NULL;
-    p_LogWindow 	   = NULL;
+    cl_BrowserDB       = NULL;
+    ct_BrowserDB       = NULL;
+    db_BrowserDB       = NULL;
+    p_LogWindow        = NULL;
 }
 
 //----------------------------------------------------------------------------------------

@@ -96,7 +96,7 @@ public:
     void UpdateClock();
 
     // event handlers
-    void OnTimer(wxTimerEvent& event) { UpdateClock(); }
+    void OnTimer(wxTimerEvent& WXUNUSED(event)) { UpdateClock(); }
     void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
     void OnButton(wxCommandEvent& event);
