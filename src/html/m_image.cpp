@@ -321,6 +321,7 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxStr
 
     m_ImageMap = NULL;
     m_MapName = mapname;
+    SetCanLiveOnPagebreak(FALSE);
 }
 
 

@@ -46,6 +46,25 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
 
 
 
+bool wxHtmlCell::AdjustPagebreak(int *pagebreak)
+{
+
+    if ((!m_CanLiveOnPagebreak) && 
+                m_PosY < *pagebreak && m_PosY + m_Height >= *pagebreak) {
+        *pagebreak = m_PosY;
+        if (m_Next != NULL) m_Next -> AdjustPagebreak(pagebreak);
+        return TRUE;
+    }
+    
+    else {
+        if (m_Next != NULL) return m_Next -> AdjustPagebreak(pagebreak);
+        else return FALSE;
+    }
+}
+
+
+
+
 //-----------------------------------------------------------------------------
 // wxHtmlWordCell
 //-----------------------------------------------------------------------------
@@ -59,6 +78,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     m_Word.Replace("&gt;", ">", TRUE);
     m_Word.Replace("&amp;", "&", TRUE);
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
+    SetCanLiveOnPagebreak(FALSE);
 }
 
 
@@ -125,6 +145,24 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
     else if (ind & HTML_INDENT_BOTTOM) p = m_IndentBottom < 0;
     if (p) return HTML_UNITS_PERCENT;
     else return HTML_UNITS_PIXELS;
+}
+
+
+
+bool wxHtmlContainerCell::AdjustPagebreak(int *pagebreak)
+{
+    if (!m_CanLiveOnPagebreak) 
+        return wxHtmlCell::AdjustPagebreak(pagebreak);
+    else {
+        wxHtmlCell *c = GetFirstCell();
+        bool rt = FALSE;
+
+        while (c) {
+            if (c -> AdjustPagebreak(pagebreak)) rt = TRUE;
+            c = c -> GetNext();
+        }
+        return rt;
+    }
 }
 
 

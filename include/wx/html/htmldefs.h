@@ -77,8 +77,8 @@
 	
 #define HTML_COND_ISIMAGEMAP            2
         // Finds imagemap of 'param' name (pointer to wxString).
-	// (used exclusively by mod_image.cpp)
-
+	// (used exclusively by m_image.cpp)
+	
 #define HTML_COND_USER              10000
         // User-defined conditions should start from this number
 
@@ -94,6 +94,8 @@
     /* size of temporary buffer used during parsing */
 #define HTML_REALLOC_STEP              32
     /* steps of array reallocation */
+#define HTML_PRINT_MAX_PAGES          999
+    /* maximum number of pages printable via html printing */
 
 #endif
 #endif

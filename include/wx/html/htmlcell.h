@@ -38,7 +38,7 @@ class wxHtmlContainerCell;
 class WXDLLEXPORT wxHtmlCell : public wxObject
 {
     public:
-        wxHtmlCell() : wxObject() {m_Next = NULL; m_Parent = NULL; m_Width = m_Height = m_Descent = 0;};
+        wxHtmlCell() : wxObject() {m_Next = NULL; m_Parent = NULL; m_Width = m_Height = m_Descent = 0; m_CanLiveOnPagebreak = TRUE;}
         virtual ~wxHtmlCell() {if (m_Next) delete m_Next;};
 
         void SetParent(wxHtmlContainerCell *p) {m_Parent = p;}
@@ -94,6 +94,20 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // Parent is pointer to wxHtmlWindow that generated the event
                 // HINT: if this handling is not enough for you you should use
                 //       wxHtmlBinderCell
+                
+        virtual bool AdjustPagebreak(int *pagebreak);
+                // This method used to adjust pagebreak position. The parameter is
+                // variable that contains y-coordinate of page break (= horizontal line that
+                // should not be crossed by words, images etc.). If this cell cannot be divided
+                // into two pieces (each one on another page) then it moves the pagebreak
+                // few pixels up.
+                //
+                // Returned value : true if pagebreak was modified, false otherwise
+                // Usage : while (container->AdjustPagebreak(&p)) {}
+                
+        void SetCanLiveOnPagebreak(bool can) {m_CanLiveOnPagebreak = can;}
+                // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
+                // is true - the cell can be split on two pages
 
 
     protected:
@@ -108,6 +122,8 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // position where the fragment is drawn
         wxString m_Link;
                 // destination address if this fragment is hypertext link, "" otherwise
+        bool m_CanLiveOnPagebreak;
+                // true if this cell can be placed on pagebreak, false otherwise
 
 };
 
@@ -175,6 +191,7 @@ class WXDLLEXPORT wxHtmlContainerCell : public wxHtmlCell
         virtual void Layout(int w);
         virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
         virtual void DrawInvisible(wxDC& dc, int x, int y);
+        virtual bool AdjustPagebreak(int *pagebreak);
 
         void InsertCell(wxHtmlCell *cell);
                 // insert cell at the end of m_Cells list
