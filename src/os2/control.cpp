@@ -99,14 +99,13 @@ bool wxControl::OS2CreateControl(
 , WXDWORD                           dwExstyle
 )
 {
-    bool                            bWant3D = FALSE;
-
     //
     // Doesn't do anything at all under OS/2
     //
     if (dwExstyle == (WXDWORD)-1)
     {
-        dwExstyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
+        dwExstyle = 0;
+	(void) OS2GetStyle(GetWindowStyle(), &dwExstyle);
     }
     //
     // All controls should have these styles (wxWindows creates all controls

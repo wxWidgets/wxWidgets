@@ -210,10 +210,6 @@ public:
     static WXDWORD MakeExtendedStyle( long lStyle
                                      ,bool bEliminateBorders = TRUE
                                     );
-    // Determine whether 3D effects are wanted
-    WXDWORD Determine3DEffects( WXDWORD dwDefaultBorderStyle
-                               ,bool*   pbWant3D
-                              ) const;
 
     // PM only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
