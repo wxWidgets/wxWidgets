@@ -25,10 +25,6 @@
 
 #include "wx/os2/private.h"
 
-#define INCL_DOSPROCESS
-#define INCL_DOSERRORS
-#define INCL_DOS
-#include <os2.h>
 #define PURE_32
 #include <upm.h>
 #include <netcons.h>

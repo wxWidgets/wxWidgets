@@ -20,9 +20,6 @@
 #include "wx/os2/wave.h"
 #include "wx/os2/private.h"
 
-#define INCL_DOS
-#define INCL_PM
-#include <os2.h>
 #ifdef RECT
     #undef RECT
 #endif

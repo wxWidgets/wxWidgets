@@ -11,7 +11,7 @@
 
 #include "wx/string.h"
 #define INCL_PM
-#include "os2.h"
+#define INCL_DOS
 #include "wx/os2/private.h"
 
 #define NO_JOYGETPOSEX

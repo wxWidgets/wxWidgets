@@ -738,12 +738,16 @@ void wxDisplaySize(
 {
     HPS                             hpsScreen;
     HDC                             hdcScreen;
+    LONG                            lWidth;
+    LONG                            lHeight;
 
     hpsScreen = ::WinGetScreenPS(HWND_DESKTOP);
     hdcScreen = ::GpiQueryDevice(hpsScreen);
-    ::DevQueryCaps(hdcScreen, CAPS_WIDTH, 1L, (PLONG)pWidth);
-    ::DevQueryCaps(hdcScreen, CAPS_HEIGHT, 1L, (PLONG)pHeight);
+    ::DevQueryCaps(hdcScreen, CAPS_WIDTH, 1L, &lWidth);
+    ::DevQueryCaps(hdcScreen, CAPS_HEIGHT, 1L, &lHeight);
     DevCloseDC(hdcScreen);
+    *pWidth = (int)lWidth;
+    *pHeight = (int)lHeight;
 }
 
 bool wxDirExists(

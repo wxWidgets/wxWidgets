@@ -240,6 +240,28 @@ void wxCondition::Broadcast()
 }
 
 // ----------------------------------------------------------------------------
+// wxCriticalSection implementation
+// ----------------------------------------------------------------------------
+
+wxCriticalSection::wxCriticalSection()
+{
+}
+
+wxCriticalSection::~wxCriticalSection()
+{
+}
+
+void wxCriticalSection::Enter()
+{
+    ::DosEnterCritSec();
+}
+
+void wxCriticalSection::Leave()
+{
+    ::DosExitCritSec();
+}
+
+// ----------------------------------------------------------------------------
 // wxThread implementation
 // ----------------------------------------------------------------------------
 

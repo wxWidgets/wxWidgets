@@ -207,7 +207,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
 
     checkWidth = -1 ;
     checkHeight = -1 ;
-    long msStyle = CHECK_FLAGS;
+//    long msStyle = CHECK_FLAGS;
 
     HWND wx_button = 0; // TODO: Create the bitmap checkbox
 

@@ -22,13 +22,13 @@
 #   include <fstream>
 #endif
 
-#define INCL_DOS
-#define INCL_PM
-#define INCL_GPI
-#include <os2.h>
 #include "wx/palette.h"
 #include "wx/bitmap.h"
 #include "wx/utils.h"
+
+#define INCL_PM
+#include <os2.h>
+
 #include "wx/os2/pngread.h"
 
 extern "C" {

@@ -37,10 +37,6 @@
 
 #include <string.h>
 
-#define INCL_DOS
-#define INCL_PM
-#include <os2.h>
-
 #include "wx/os2/private.h"
 
 // wxDataObject is tied to OLE/drag and drop implementation,
