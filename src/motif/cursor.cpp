@@ -428,7 +428,7 @@ WXCursor wxCursor::MakeCursor(WXDisplay* display, wxStockCursor id)
 }
 
 // Global cursor setting
-void wxSetCursor(const wxCursor& cursor)
+void wxSetCursor(const wxCursor& WXUNUSED(cursor))
 {
   // Nothing to do for Motif (no global cursor)
 }

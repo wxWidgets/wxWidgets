@@ -72,9 +72,7 @@ LIB_CPP_SRC=\
  motif/brush.cpp \
  motif/button.cpp \
  motif/checkbox.cpp \
- motif/chcklst.cpp \
  motif/choice.cpp \
- motif/clipbrd.cpp \
  motif/colordlg.cpp \
  motif/colour.cpp \
  motif/control.cpp \
@@ -85,8 +83,6 @@ LIB_CPP_SRC=\
  motif/dcclient.cpp \
  motif/dcmemory.cpp \
  motif/dcscreen.cpp \
- motif/dnd.cpp \
- motif/dirdlg.cpp \
  motif/dialog.cpp \
  motif/filedlg.cpp \
  motif/font.cpp \

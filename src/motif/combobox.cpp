@@ -131,7 +131,7 @@ void wxComboBox::Paste()
     XmComboBoxPaste((Widget) m_mainWidget);
 }
 
-void wxComboBox::SetEditable(bool editable)
+void wxComboBox::SetEditable(bool WXUNUSED(editable))
 {
     // TODO
 }
@@ -176,7 +176,7 @@ void wxComboBox::SetSelection(long from, long to)
 		      (Time) 0);
 }
 
-void  wxComboBoxCallback (Widget w, XtPointer clientData,
+void  wxComboBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
 		   XmComboBoxSelectionCallbackStruct * cbs)
 {
     wxComboBox *item = (wxComboBox *) clientData;

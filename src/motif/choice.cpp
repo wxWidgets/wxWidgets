@@ -84,7 +84,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     */
     m_menuWidget = (WXWidget) XmCreatePulldownMenu ((Widget) m_formWidget, "choiceMenu", NULL, 0);
 
-    int i;
+//    int i;
     if (n > 0)
     {
         int i;
@@ -207,7 +207,7 @@ void wxChoice::Append(const wxString& item)
   m_noStrings ++;
 }
 
-void wxChoice::Delete(int n)
+void wxChoice::Delete(int WXUNUSED(n))
 {
     wxFAIL_MSG( "Sorry, wxChoice::Delete isn't implemented yet. Maybe you'd like to volunteer? :-)" );
 
@@ -404,8 +404,7 @@ void wxChoice::Command(wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxChoiceCallback (Widget w, XtPointer clientData,
-          XtPointer ptr)
+void wxChoiceCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
 {
     wxChoice *item = (wxChoice *) clientData;
     if (item)

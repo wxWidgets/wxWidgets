@@ -397,7 +397,7 @@ wxMask::~wxMask()
 }
 
 // Create a mask from a mono bitmap (copies the bitmap).
-bool wxMask::Create(const wxBitmap& bitmap)
+bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap))
 {
 // TODO
     return FALSE;
@@ -405,7 +405,7 @@ bool wxMask::Create(const wxBitmap& bitmap)
 
 // Create a mask from a bitmap and a palette index indicating
 // the transparent area
-bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
+bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex))
 {
 // TODO
     return FALSE;
@@ -413,7 +413,7 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 
 // Create a mask from a bitmap and a colour indicating
 // the transparent area
-bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
+bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap), const wxColour& WXUNUSED(colour))
 {
 // TODO
     return FALSE;
@@ -425,18 +425,20 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
-bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
+bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap), void *WXUNUSED(data), long WXUNUSED(type), 
+   int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
 {
     return FALSE;
 }
 
-bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long type,
-        int desiredWidth, int desiredHeight)
+bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), long WXUNUSED(type),
+        int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
 {
     return FALSE;
 }
 
-bool wxBitmapHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), int WXUNUSED(type), 
+   const wxPalette *WXUNUSED(palette))
 {
     return FALSE;
 }
@@ -461,8 +463,8 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxXBMFileHandler, wxBitmapHandler)
 
-bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight)
+bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
+          int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
 {
     M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
@@ -508,7 +510,8 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxXBMDataHandler, wxBitmapHandler)
 
-bool wxXBMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
+bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags), 
+                               int width, int height, int WXUNUSED(depth))
 {
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
@@ -594,8 +597,8 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 
-bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight)
+bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
+                                 int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight) )
 {
     Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
@@ -656,7 +659,8 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     }
 }
 
-bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+bool wxXPMFileHandler::SaveFile( wxBitmap *bitmap, const wxString& name, int WXUNUSED(type), 
+                                 const wxPalette *WXUNUSED(palette))
 {
     if (M_BITMAPHANDLERDATA->m_ok && M_BITMAPHANDLERDATA->m_pixmap)
     {
@@ -689,7 +693,8 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
-bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
+bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags), 
+                               int width, int height, int WXUNUSED(depth))
 {
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;

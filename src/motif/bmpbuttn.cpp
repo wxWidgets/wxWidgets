@@ -56,10 +56,12 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     m_marginX = 0;
     m_marginY = 0;
 
+/*
     int x = pos.x;
     int y = pos.y;
     int width = size.x;
     int height = size.y;
+*/
 
     if (id == -1)
         m_windowId = NewControlId();

@@ -521,7 +521,7 @@ void wxDialog::EndModal(int retCode)
 }
 
 // Standard buttons
-void wxDialog::OnOK(wxCommandEvent& event)
+void wxDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
 	if ( Validate() && TransferDataFromWindow() )
 	{
@@ -535,14 +535,14 @@ void wxDialog::OnOK(wxCommandEvent& event)
 	}
 }
 
-void wxDialog::OnApply(wxCommandEvent& event)
+void wxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 {
 	if (Validate())
 		TransferDataFromWindow();
 	// TODO probably need to disable the Apply button until things change again
 }
 
-void wxDialog::OnCancel(wxCommandEvent& event)
+void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
     if ( IsModal() )
         EndModal(wxID_CANCEL);
@@ -592,7 +592,7 @@ bool wxDialog::Destroy()
   return TRUE;
 }
 
-void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
   Refresh();
@@ -603,7 +603,8 @@ void wxDialog::Fit()
 }
 
 // Handle a close event from the window manager
-static void wxCloseDialogCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs)
+static void wxCloseDialogCallback( Widget WXUNUSED(widget), XtPointer client_data, 
+                                   XmAnyCallbackStruct *WXUNUSED(cbs))
 {
   wxDialog *dialog = (wxDialog *)client_data;
   wxCloseEvent closeEvent(wxEVT_CLOSE_WINDOW, dialog->GetId());
@@ -615,15 +616,17 @@ static void wxCloseDialogCallback(Widget widget, XtPointer client_data, XmAnyCal
 
 // TODO: Preferably, we should have a universal repaint proc.
 // Meanwhile, use a special one for dialogs.
-static void wxDialogBoxRepaintProc(Widget w, XtPointer c_data, XEvent *event, char *)
+static void wxDialogBoxRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *)
    {
      Window window;
-     static XRectangle *xrect;
      Display *display;
+/*
+     static XRectangle *xrect;
      GC gc;
      int llp = 0;
      static int last_count = 0;
      static int draw_count = 0;
+*/
 
      wxWindow* win = (wxWindow *)wxWidgetHashTable->Get((long)w);
      if (!win)
@@ -696,7 +699,7 @@ static void wxDialogBoxRepaintProc(Widget w, XtPointer c_data, XEvent *event, ch
    }
 
 static void wxDialogBoxEventHandler (Widget    wid,
-                              XtPointer client_data,
+                              XtPointer WXUNUSED(client_data),
                               XEvent*   event,
                               Boolean *continueToDispatch)
 {
@@ -738,7 +741,7 @@ static void wxDialogBoxEventHandler (Widget    wid,
   *continueToDispatch = True;
 }
 
-static void wxUnmapBulletinBoard(Widget dialog, wxDialog *client,XtPointer call)
+static void wxUnmapBulletinBoard(Widget WXUNUSED(dialog), wxDialog *WXUNUSED(client), XtPointer WXUNUSED(call) )
 {
   /* This gets called when the dialog is being shown, which
    * defeats modal showing.
@@ -747,7 +750,7 @@ static void wxUnmapBulletinBoard(Widget dialog, wxDialog *client,XtPointer call)
   */
 }
 
-void wxDialog::ChangeFont(bool keepOriginalSize)
+void wxDialog::ChangeFont(bool WXUNUSED(keepOriginalSize))
 {
     // TODO
 }

@@ -124,7 +124,7 @@ void wxButton::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxButtonCallback (Widget w, XtPointer clientData, XtPointer ptr)
+void wxButtonCallback (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
 {
   if (!wxGetWindowFromTable(w))
     // Widget has been deleted!

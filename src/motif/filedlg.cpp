@@ -107,13 +107,14 @@ char *wxFileSelectorEx(const char *title,
 wxString wxFileDialog::m_fileSelectorAnswer = "";
 bool wxFileDialog::m_fileSelectorReturned = FALSE;
 
-void wxFileSelCancel(Widget fs, XtPointer client_data, XmFileSelectionBoxCallbackStruct *cbs)
+void wxFileSelCancel( Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), 
+                      XmFileSelectionBoxCallbackStruct *WXUNUSED(cbs) )
 {
   wxFileDialog::m_fileSelectorAnswer = "";
   wxFileDialog::m_fileSelectorReturned = TRUE;
 }
 
-void wxFileSelOk(Widget fs, XtPointer client_data, XmFileSelectionBoxCallbackStruct *cbs)
+void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSelectionBoxCallbackStruct *cbs)
 {
   char *filename = NULL;
   if (!XmStringGetLtoR(cbs->value, XmSTRING_DEFAULT_CHARSET, &filename)) {
@@ -147,7 +148,7 @@ int wxFileDialog::ShowModal()
 {
   wxBeginBusyCursor();
 
-  static char fileBuf[512];
+//  static char fileBuf[512];
   Widget parentWidget = (Widget) 0;
   if (m_parent)
   {
