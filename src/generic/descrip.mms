@@ -14,9 +14,16 @@ CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
 CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
+.ifdef __WXUNIVERSAL__
+CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm
+.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
+.endif
 .else
 CXX_DEFINE =
 CC_DEFINE =
@@ -61,7 +68,6 @@ OBJECTS = \
 		proplist.obj,\
 		sashwin.obj,\
 		splitter.obj,\
-		statusbr.obj,\
 		tbarsmpl.obj,\
 		tabg.obj,\
 		textdlgg.obj,\
@@ -116,9 +122,13 @@ SOURCES = \
 		wizard.cpp
 
 .ifdef __WXMOTIF__
-OBJECTS0=,statline.obj,notebook.obj,scrlwing.obj,spinctlg.obj
+OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,scrlwing.obj,spinctlg.obj
 .else
+.ifdef __WXUNIVERSAL__
 OBJECTS0=,accel.obj,filedlgg.obj,paletteg.obj
+.else
+OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj
+.endif
 .endif
 
 all : $(SOURCES)
@@ -127,7 +137,11 @@ all : $(SOURCES)
 	library/crea [--.lib]libwx_motif.olb $(OBJECTS)$(OBJECTS0)
 .else
 .ifdef __WXGTK__
+.ifdef __WXUNIVERSAL__
+	library/crea [--.lib]libwx_gtk_univ.olb $(OBJECTS)$(OBJECTS0)
+.else
 	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)$(OBJECTS0)
+.endif
 .endif
 .endif
 

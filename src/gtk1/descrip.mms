@@ -8,9 +8,16 @@
 .first
 	define wx [--.include.wx]
 
+.ifdef __WXUNIVERSAL__
+CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm
+.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
+.endif
 
 .suffixes : .cpp
 
@@ -22,16 +29,9 @@ CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 OBJECTS = \
 	app.obj,\
 	bitmap.obj,\
-        bmpbuttn.obj,\
 	brush.obj,\
-	button.obj,\
-	checkbox.obj,\
-	checklst.obj,\
-	choice.obj,\
 	clipbrd.obj,\
 	colour.obj,\
-        combobox.obj,\
-	control.obj,\
 	cursor.obj,\
 	data.obj,\
 	dataobj.obj,\
@@ -39,30 +39,46 @@ OBJECTS = \
 	dcclient.obj,\
 	dcmemory.obj,\
 	dcscreen.obj,\
-	dialog.obj,\
         dnd.obj,\
 	font.obj,\
-	fontdlg.obj,\
-	frame.obj,\
-	gauge.obj,\
 	gdiobj.obj,\
         glcanvas.obj,\
 	gsockgtk.obj,\
         icon.obj,\
-	listbox.obj,\
 	main.obj,\
-	mdi.obj,\
-	menu.obj,\
 	minifram.obj,\
-	notebook.obj,\
 	pen.obj,\
 	popupwin.obj,\
+	region.obj,\
+	settings.obj,\
+	timer.obj,\
+	tooltip.obj,\
+	toplevel.obj,\
+	utilsgtk.obj,\
+	utilsres.obj,\
+        win_gtk.obj,\
+	window.obj
+
+OBJECTS0= \
+        bmpbuttn.obj,\
+	button.obj,\
+	checkbox.obj,\
+	checklst.obj,\
+	choice.obj,\
+        combobox.obj,\
+	control.obj,\
+	dialog.obj,\
+	fontdlg.obj,\
+	frame.obj,\
+	gauge.obj,\
+	listbox.obj,\
+	mdi.obj,\
+	menu.obj,\
+	notebook.obj,\
 	radiobox.obj,\
 	radiobut.obj,\
-	region.obj,\
 	scrolbar.obj,\
 	scrolwin.obj,\
-	settings.obj,\
 	slider.obj,\
         spinbutt.obj,\
 	spinctrl.obj,\
@@ -72,14 +88,7 @@ OBJECTS = \
 	stattext.obj,\
 	tbargtk.obj,\
 	textctrl.obj,\
-	tglbtn.obj,\
-	timer.obj,\
-	tooltip.obj,\
-	toplevel.obj,\
-	utilsgtk.obj,\
-	utilsres.obj,\
-        win_gtk.obj,\
-	window.obj
+	tglbtn.obj
 
 SOURCES =\
 	app.cpp,\
@@ -145,7 +154,13 @@ SOURCES =\
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
+.ifdef __WXUNIVERSAL__
+	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
+.else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
+	library [--.lib]libwx_gtk.olb $(OBJECTS0)
+.endif
 
 app.obj : app.cpp
 bitmap.obj : bitmap.cpp

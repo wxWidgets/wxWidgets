@@ -15,9 +15,16 @@ CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
 CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
+.ifdef __WXUNIVERSAL__
+CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/ieee=denorm
+.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
+.endif
 .else
 CXX_DEFINE =
 CC_DEFINE =
@@ -139,8 +146,9 @@ OBJECTS1=fs_inet.obj,\
 		treebase.obj,\
 		txtstrm.obj,\
 		unzip.obj,\
-		url.obj,\
-		utilscmn.obj,\
+		url.obj
+
+OBJECTS2=utilscmn.obj,\
 		valgen.obj,\
 		validate.obj,\
 		valtext.obj,\
@@ -148,9 +156,8 @@ OBJECTS1=fs_inet.obj,\
 		wfstream.obj,\
 		wincmn.obj,\
 		wxchar.obj,\
-		wxexpr.obj
-
-OBJECTS2=xpmdecod.obj,\
+		wxexpr.obj,\
+		xpmdecod.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
@@ -279,9 +286,15 @@ all : $(SOURCES)
 	library [--.lib]libwx_motif.olb $(OBJECTS2)
 .else
 .ifdef __WXGTK__
+.ifdef __WXUNIVERSAL__
+	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
+	library [--.lib]libwx_gtk_univ.olb $(OBJECTS1)
+	library [--.lib]libwx_gtk_univ.olb $(OBJECTS2)
+.else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk.olb $(OBJECTS2)
+.endif
 .endif
 .endif
 
