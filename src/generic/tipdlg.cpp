@@ -175,7 +175,11 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next"));
 
     wxStaticText *text = new wxStaticText(this, -1, _("Did you know..."), wxDefaultPosition, wxSize(-1,25) );
+#if defined(__WXMSW__)
+    text->SetFont(wxFont(16, wxSWISS, wxNORMAL, wxBOLD));
+#else
     text->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
+#endif
 //
 //    text->SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNFACE));
 

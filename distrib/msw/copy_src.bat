@@ -97,6 +97,8 @@ del Makefile.in \wxmsw_dist\wxMSW\src\Makefile.in
 
 cd msw
 md \wxmsw_dist\wxMSW\src\msw
+md \wxmsw_dist\wxMSW\src\msw\ole
+copy ole\*.cpp \wxmsw_dist\wxMSW\src\msw\ole
 copy *.cpp \wxmsw_dist\wxMSW\src\msw
 copy *.c \wxmsw_dist\wxMSW\src\msw
 copy *.def \wxmsw_dist\wxMSW\src\msw

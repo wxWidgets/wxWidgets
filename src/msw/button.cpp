@@ -97,6 +97,17 @@ bool wxButton::Create(wxWindow *parent,
 
     SetSize(pos.x, pos.y, size.x, size.y);
 
+    // bad hack added by Robert to make buttons at least
+    // 80 pixels wide. There are probably better ways...
+    // TODO. FIXME.
+    wxSize nsize( GetSize() );
+    if ((nsize.x < 80) || (nsize.y < 23))
+    {
+        if ((size.x == -1) && (nsize.x < 80)) nsize.x = 80;
+	if ((size.y == -1) && (nsize.y < 23)) nsize.y = 23;
+        SetSize( nsize );
+    }
+
     return TRUE;
 }
 

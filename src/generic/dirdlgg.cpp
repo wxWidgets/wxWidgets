@@ -173,10 +173,12 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
  :
   wxTreeCtrl( parent, id, pos, size, style, wxDefaultValidator, name )
 {
-    m_imageListNormal = new wxImageList(16, 16, TRUE);
+ #ifdef __WXMSW__
+   m_imageListNormal = new wxImageList(16, 16, TRUE);
     m_imageListNormal->Add(wxICON(icon1));
     m_imageListNormal->Add(wxICON(icon2));
     SetImageList(m_imageListNormal);
+ #endif
   
     m_showHidden = FALSE;
     m_rootId = AddRoot( _("Sections") );
@@ -194,6 +196,10 @@ void wxDirCtrl::SetupSections()
 
   m_paths.Clear();
   m_names.Clear();
+#ifdef __WXMSW__
+  // better than nothing
+  ADD_SECTION(_T("c:\\"), _("My Harddisk") )
+#else
   ADD_SECTION(_T("/"), _("The Computer") )
   wxGetHomeDir(&home);
   ADD_SECTION(home, _("My Home") )
@@ -203,6 +209,7 @@ void wxDirCtrl::SetupSections()
   ADD_SECTION(_T("/var"), _("Variables") )
   ADD_SECTION(_T("/etc"), _("Etcetera") )
   ADD_SECTION(_T("/tmp"), _("Temporary") )
+#endif
 }
 #undef ADD_SECTION
 
@@ -215,8 +222,12 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
   
     for (unsigned int i=0; i<m_paths.Count(); i++) 
     {
-        dir_item = new wxDirItemData(m_paths[i],m_names[i]);
-        id = AppendItem( parent, m_names[i], 0, 1, dir_item);
+	dir_item = new wxDirItemData(m_paths[i],m_names[i]);
+#ifdef __WXMSW__
+	id = AppendItem( parent, m_names[i], -1, -1, dir_item);
+#else
+	id = AppendItem( parent, m_names[i], 0, 1, dir_item);
+#endif
         if (dir_item->m_hasSubDirs) SetItemHasChildren(id);
     }
 }
