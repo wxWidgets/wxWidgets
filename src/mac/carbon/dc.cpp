@@ -1403,9 +1403,8 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     long xx = XLOG2DEVMAC(x);
     long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
-
     bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || m_font.GetNoAntiAliasing() )
+    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || m_font.GetNoAntiAliasing() )
         useDrawThemeText = false ;
 #endif
     MacInstallFont() ;
@@ -1545,7 +1544,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
     ::GetFontInfo( &fi ) ;
 #if TARGET_CARBON    
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
+    if ( UMAGetSystemVersion() < 0x1000 || IsKindOf(CLASSINFO( wxPrinterDC ) ) || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
 #endif
     if ( height )
@@ -1650,7 +1649,7 @@ wxCoord   wxDC::GetCharWidth(void) const
     int width = 0 ;
 #if TARGET_CARBON
     bool useGetThemeText = ( GetThemeTextDimensions != (void*) kUnresolvedCFragSymbolAddress ) ;
-    if ( ((wxFont*)&m_font)->GetNoAntiAliasing() )
+    if ( UMAGetSystemVersion() < 0x1000 || ((wxFont*)&m_font)->GetNoAntiAliasing() )
         useGetThemeText = false ;
 #endif
     char text[] = "H" ;
