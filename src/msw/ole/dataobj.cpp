@@ -108,7 +108,7 @@ public:
     // normally, wxDataObject controls our lifetime (i.e. we're deleted when it
     // is), but in some cases, the situation is inversed, that is we delete it
     // when this object is deleted - setting this flag enables such logic
-    void SetDeleteFlag() { m_mustDelete = TRUE; }
+    void SetDeleteFlag() { m_mustDelete = true; }
 
     DECLARE_IUNKNOWN_METHODS;
 
@@ -267,7 +267,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDataObject)
 wxIDataObject::wxIDataObject(wxDataObject *pDataObject)
 {
     m_pDataObject = pDataObject;
-    m_mustDelete = FALSE;
+    m_mustDelete = false;
 }
 
 wxIDataObject::~wxIDataObject()
@@ -779,7 +779,8 @@ bool wxBitmapDataObject::GetDataHere(void *buf) const
 
     return wxDIB::ConvertFromBitmap(pbi, GetHbitmapOf(GetBitmap())) != 0;
 #else
-    return FALSE;
+    wxUnusedVar(buf);
+    return false;
 #endif
 }
 
@@ -800,9 +801,10 @@ bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 
     SetBitmap(bitmap);
 
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(buf);
+    return false;
 #endif
 }
 
@@ -825,7 +827,7 @@ bool wxBitmapDataObject2::GetDataHere(void *pBuf) const
     // we put a bitmap handle into pBuf
     *(WXHBITMAP *)pBuf = GetBitmap().GetHBITMAP();
 
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
@@ -844,12 +846,12 @@ bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
     if ( !bitmap.Ok() ) {
         wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
 
-        return FALSE;
+        return false;
     }
 
     SetBitmap(bitmap);
 
-    return TRUE;
+    return true;
 }
 
 #if 0
@@ -914,7 +916,7 @@ bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
         {
             wxLogLastError(wxT("GetDIBits"));
 
-            return FALSE;
+            return false;
         }
     }
     else // CF_BITMAP
@@ -923,7 +925,7 @@ bool wxBitmapDataObject::GetDataHere(const wxDataFormat& format,
         *(HBITMAP *)pBuf = hbmp;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxBitmapDataObject::SetData(const wxDataFormat& format,
@@ -968,7 +970,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
     wxASSERT_MSG( m_bitmap.Ok(), wxT("pasting invalid bitmap") );
 
-    return TRUE;
+    return true;
 }
 
 #endif // 0
@@ -1011,9 +1013,10 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
         }
     }
 
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(pData);
+    return false;
 #endif
 }
 
@@ -1060,7 +1063,7 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 
     // if pData is NULL, or there are no files, return
     if ( !pData || m_filenames.GetCount() == 0 )
-        return FALSE;
+        return false;
 
     // convert data pointer to a DROPFILES struct pointer
     LPDROPFILES pDrop = (LPDROPFILES) pData;
@@ -1090,9 +1093,10 @@ bool wxFileDataObject::GetDataHere(void *pData) const
     // add final null terminator
     *pbuf = wxT('\0');
 
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(pData);
+    return false;
 #endif
 }
 
@@ -1135,7 +1139,7 @@ protected:
         memcpy( buffer, unicode_buffer.c_str(),
                 ( unicode_buffer.length() + 1 ) * sizeof(wxChar) );
 
-        return TRUE;
+        return true;
     }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
                              void *buf) const

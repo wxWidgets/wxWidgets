@@ -189,6 +189,8 @@ public:
         m_modeOld = ::SetStretchBltMode(m_hdc, mode);
         if ( !m_modeOld )
             wxLogLastError(_T("SetStretchBltMode"));
+#else
+        wxUnusedVar(mode);
 #endif
     }
 
@@ -567,6 +569,10 @@ void wxDC::Clear()
 bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
 {
 #ifdef __WXWINCE__
+    wxUnusedVar(x);
+    wxUnusedVar(y);
+    wxUnusedVar(col);
+    wxUnusedVar(style);
     return false;
 #else
 
@@ -778,6 +784,8 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffs
         }
 #ifndef __WXWINCE__
         int prev = SetPolyFillMode(GetHdc(),fillStyle==wxODDEVEN_RULE?ALTERNATE:WINDING);
+#else
+        wxUnusedVar(fillStyle);
 #endif
         (void)Polygon(GetHdc(), cpoints, n);
 #ifndef __WXWINCE__
@@ -1790,6 +1798,9 @@ void wxDC::SetAxisOrientation(bool xLeftRight, bool yBottomUp)
 
         SetMapMode(m_mappingMode);
     }
+#else
+    wxUnusedVar(xLeftRight);
+    wxUnusedVar(yBottomUp);
 #endif
 }
 

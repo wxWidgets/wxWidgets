@@ -665,7 +665,7 @@ HBITMAP wxLoadBMP(const wxString& filename)
           pBmpInfo->bmiHeader.biSizeImage = nBitsSize;
 
           //HBITMAP hBitmap=SetBitmap((LPBITMAPINFO)pBmpInfo, pBits);
-            DWORD dwBitmapInfoSize = sizeof(BITMAPINFO) + nColors*sizeof(RGBQUAD);
+          //DWORD dwBitmapInfoSize = sizeof(BITMAPINFO) + nColors*sizeof(RGBQUAD);
 
             // Create a DC which will be used to get DIB, then create DIBsection
             HDC hDC = ::GetDC(NULL);

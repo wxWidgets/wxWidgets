@@ -123,6 +123,9 @@ wxRegion::wxRegion(const wxRect& rect)
 wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
 {
 #if defined(__WXMICROWIN__) || defined(__WXWINCE__)
+    wxUnusedVar(n);
+    wxUnusedVar(points);
+    wxUnusedVar(fillStyle);
     m_refData = NULL;
     M_REGION = NULL;
 #else
