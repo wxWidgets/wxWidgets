@@ -1735,7 +1735,14 @@ void wxMacControl::GetBestRect( Rect *r )
 
 void wxMacControl::SetTitle( const wxString &title ) 
 {
-    UMASetControlTitle(  m_controlRef , title , m_font.GetEncoding() ) ;
+    wxFontEncoding encoding;
+
+    if ( m_font.Ok() )
+        encoding = m_font.GetEncoding();
+    else
+        encoding = wxFont::GetDefaultEncoding();
+    
+    UMASetControlTitle(  m_controlRef , title , encoding ) ;
 }
 
 void wxMacControl::GetFeatures( UInt32 * features )
