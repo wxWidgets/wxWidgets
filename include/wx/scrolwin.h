@@ -100,6 +100,22 @@ protected:
         return m_rectToScroll.width != 0 ? &m_rectToScroll : NULL;
     }
 
+    // get the size of the target window
+    wxSize GetTargetSize() const
+    {
+        return m_rectToScroll.width != 0 ? m_rectToScroll.GetSize()
+                                         : m_targetWindow->GetClientSize();
+    }
+
+    void GetTargetSize(int *w, int *h)
+    {
+        wxSize size = GetTargetSize();
+        if ( w )
+            *w = size.x;
+        if ( h )
+            *h = size.y;
+    }
+
     wxWindow             *m_win,
                          *m_targetWindow;
 

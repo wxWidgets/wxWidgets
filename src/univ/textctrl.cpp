@@ -1113,6 +1113,7 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     }
 }
 
+// pos may be -1 to show the current position
 void wxTextCtrl::ShowPosition(long pos)
 {
     HideCaret();
@@ -1126,22 +1127,37 @@ void wxTextCtrl::ShowPosition(long pos)
         int xStart, yStart;
         GetViewStart(&xStart, &yStart);
 
+        long row, col;
+        if ( (pos == -1) || (pos == m_curPos) )
+        {
+            row = m_curRow;
+            col = m_curCol;
+        }
+        else
+        {
+            // TODO
+            wxFAIL_MSG(_T("not implemented for multiline"));
+
+            return;
+        }
+
         if ( m_scrollRangeY )
         {
             // scroll the position vertically into view: if it is currently
             // above it, make it the first one, otherwise the last one
-            if ( m_curRow < yStart )
+            if ( row < yStart )
             {
-                Scroll(0, m_curRow);
+                Scroll(0, row);
             }
             else
             {
-                int yEnd = yStart + GetClientSize().y / GetCharHeight() - 1;
-                if ( yEnd < m_curRow )
+                int yEnd = yStart +
+                            GetRealTextArea().height / GetCharHeight() - 1;
+                if ( yEnd < row )
                 {
                     // scroll down: the current item should appear at the
                     // bottom of the view
-                    Scroll(0, m_curRow - (yEnd - yStart) + 1);
+                    Scroll(0, row - (yEnd - yStart));
                 }
             }
         }
@@ -1368,7 +1384,7 @@ void wxTextCtrl::UpdateTextRect()
                                       wxRect(wxPoint(0, 0), GetClientSize()));
 
     // only scroll this rect when the window is scrolled
-    SetTargetRect(m_rectText);
+    SetTargetRect(GetRealTextArea());
 
     UpdateLastVisible();
 }
@@ -1433,6 +1449,16 @@ wxCoord wxTextCtrl::GetTextWidth(const wxString& text) const
     wxCoord w;
     GetTextExtent(GetTextToShow(text), &w, NULL);
     return w;
+}
+
+wxRect wxTextCtrl::GetRealTextArea() const
+{
+    // the real text area always holds an entire number of lines, so the only
+    // difference with the text area is a narrow strip along the bottom border
+    wxRect rectText = m_rectText;
+    int hLine = GetCharHeight();
+    rectText.height = (m_rectText.height / hLine) * hLine;
+    return rectText;
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
@@ -1590,7 +1616,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
 
     // row calculation is simple as we assume that all lines have the same
     // height
-    int row = y / GetCharHeight();
+    int row = (y - 1) / GetCharHeight();
     int rowMax = GetNumberOfLines() - 1;
     if ( row > rowMax )
     {
@@ -1839,7 +1865,7 @@ wxCoord wxTextCtrl::GetMaxWidth() const
 
 void wxTextCtrl::UpdateScrollbars()
 {
-    wxSize size = GetClientSize();
+    wxSize size = GetRealTextArea().GetSize();
 
     // is our height enough to show all items?
     int nLines = GetNumberOfLines();
@@ -1879,6 +1905,9 @@ void wxTextCtrl::UpdateScrollbars()
 
         m_scrollRangeX = scrollRangeX;
         m_scrollRangeY = scrollRangeY;
+
+        // bring the current position in view
+        ShowPosition(-1);
     }
 }
 
@@ -2004,6 +2033,10 @@ void wxTextCtrl::RefreshTextRect(wxRect& rect)
     {
         // account for horz scrolling
         rect.x -= m_ofsHorz;
+    }
+    else // multiline
+    {
+        CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
     }
 
     // account for the text area offset
@@ -2224,23 +2257,24 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // the update region is in window coord and text area is in the client
     // ones, so it must be shifted before computing intesection
     wxRegion rgnUpdate = GetUpdateRegion();
-    wxRect rectTextArea = m_rectText;
+    wxRect rectTextArea = GetRealTextArea();
     wxPoint pt = GetClientAreaOrigin();
-    rectTextArea.x += pt.x;
-    rectTextArea.y += pt.y;
-    rgnUpdate.Intersect(rectTextArea);
+    wxRect rectTextAreaAdjusted = rectTextArea;
+    rectTextAreaAdjusted.x += pt.x;
+    rectTextAreaAdjusted.y += pt.y;
+    rgnUpdate.Intersect(rectTextAreaAdjusted);
 
     // even though the drawing is already clipped to the update region, we must
     // explicitly clip it to the rect we will use as otherwise parts of letters
     // might be drawn outside of it (if even a small part of a charater is
     // inside, HitTest() will return its column and DrawText() can't draw only
     // the part of the character, of course)
-    dc.SetClippingRegion(m_rectText);
+    dc.SetClippingRegion(rectTextArea);
 
     // adjust for scrolling
     DoPrepareDC(dc);
 
-    // and now refresh thei nvalidated parts of the window
+    // and now refresh the invalidated parts of the window
     wxRegionIterator iter(rgnUpdate);
     for ( ; iter.HaveRects(); iter++ )
     {
@@ -2323,10 +2357,10 @@ void wxTextCtrl::ShowCaret(bool show)
     {
         // position it correctly (taking scrolling into account)
         wxCoord xCaret, yCaret;
-        CalcUnscrolledPosition(m_rectText.x + GetCaretPosition() - m_ofsHorz,
-                               m_rectText.y + m_curRow*GetCharHeight(),
-                               &xCaret,
-                               &yCaret);
+        CalcScrolledPosition(m_rectText.x + GetCaretPosition() - m_ofsHorz,
+                             m_rectText.y + m_curRow*GetCharHeight(),
+                             &xCaret,
+                             &yCaret);
         caret->Move(xCaret, yCaret);
 
         // and show it there

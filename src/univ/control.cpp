@@ -53,6 +53,8 @@ BEGIN_EVENT_TABLE(wxControl, wxControlBase)
 
     EVT_SET_FOCUS(wxControl::OnFocus)
     EVT_KILL_FOCUS(wxControl::OnFocus)
+
+    EVT_ACTIVATE(wxControl::OnActivate)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -130,12 +132,22 @@ wxString wxControl::GetLabel() const
 }
 
 // ----------------------------------------------------------------------------
-// focus handling
+// focus/activation handling
 // ----------------------------------------------------------------------------
 
 void wxControl::OnFocus(wxFocusEvent& event)
 {
-    if ( !m_handler || !m_handler->HandleFocus(this, event) )
+    if ( m_handler && m_handler->HandleFocus(this, event) )
+        Refresh();
+    else
+        event.Skip();
+}
+
+void wxControl::OnActivate(wxActivateEvent& event)
+{
+    if ( m_handler && m_handler->HandleActivation(this, event.GetActive()) )
+        Refresh();
+    else
         event.Skip();
 }
 

@@ -98,6 +98,7 @@ protected:
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
     void OnFocus(wxFocusEvent& event);
+    void OnActivate(wxActivateEvent& event);
 
 private:
     // common part of all ctors

@@ -47,7 +47,14 @@ bool wxInputHandler::HandleMouseMove(wxControl * WXUNUSED(control),
     return FALSE;
 }
 
-bool wxInputHandler::HandleFocus(wxControl *control, const wxFocusEvent& event)
+bool wxInputHandler::HandleFocus(wxControl *WXUNUSED(control),
+                                 const wxFocusEvent& WXUNUSED(event))
+{
+    return FALSE;
+}
+
+bool wxInputHandler::HandleActivation(wxControl *WXUNUSED(control),
+                                      bool WXUNUSED(activated))
 {
     return FALSE;
 }

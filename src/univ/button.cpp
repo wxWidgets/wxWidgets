@@ -347,9 +347,16 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
 bool wxStdButtonInputHandler::HandleFocus(wxControl *control,
                                           const wxFocusEvent& event)
 {
-    // buttons change appearance when they get/lose focus
-    control->Refresh();
+    // buttons change appearance when they get/lose focus, so return TRUE to
+    // refresh
+    return TRUE;
+}
 
+bool wxStdButtonInputHandler::HandleActivation(wxControl *control,
+                                               bool activated)
+{
+    // the default button changes appearance when the app is [de]activated, so
+    // return TRUE to refresh
     return TRUE;
 }
 

@@ -12,6 +12,7 @@ wxTextCtrl
 ?   text ctrl display pb when text is truncated
 *   too much is refreshed when double clicking (word select)
 
+!   update rect overlaps with horz scrollbar
 !!  own ScrollWindow() for horz scrolling as we must always scroll by char!
 
 All

@@ -71,6 +71,11 @@ public:
     // return TRUE to refresh the control, FALSE otherwise
     virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
 
+    // react to the app getting/losing activation
+    //
+    // return TRUE to refresh the control, FALSE otherwise
+    virtual bool HandleActivation(wxControl *control, bool activated);
+
     // virtual dtor for any base class
     virtual ~wxInputHandler();
 };
@@ -124,6 +129,7 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
     virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleActivation(wxControl *control, bool activated);
 
 private:
     // the window (button) which has capture or NULL and the flag telling if

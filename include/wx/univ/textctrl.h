@@ -260,6 +260,14 @@ protected:
     // get the logical text width (accounting for scrolling)
     wxCoord GetTotalWidth() const;
 
+    // the text area is the part of the window in which the text can be
+    // displayed, i.e. part of it inside the margins and the real text area is
+    // the area in which the text *is* currently displayed: for example, in the
+    // multiline control case the text area can have extra space at the bottom
+    // which is not tall enough for another line and which is then not included
+    // into the real text area
+    wxRect GetRealTextArea() const;
+
     // refresh the text in the given (in logical coords) rect
     void RefreshTextRect(wxRect& rect);
 
