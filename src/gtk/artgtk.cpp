@@ -102,6 +102,22 @@ static const char *wxArtIDToStock(const wxArtID& id)
     ART(wxART_CDROM,                               GTK_STOCK_CDROM)
     ART(wxART_HARDDISK,                            GTK_STOCK_HARDDISK)
     ART(wxART_REMOVABLE,                           GTK_STOCK_HARDDISK)
+
+    ART(wxART_FILE_SAVE,                           GTK_STOCK_SAVE)
+    ART(wxART_FILE_SAVE_AS,                        GTK_STOCK_SAVE_AS)
+
+    ART(wxART_COPY,                                GTK_STOCK_COPY)
+    ART(wxART_CUT,                                 GTK_STOCK_CUT)
+    ART(wxART_PASTE,                               GTK_STOCK_PASTE)
+    ART(wxART_DELETE,                              GTK_STOCK_DELETE)
+
+    ART(wxART_UNDO,                                GTK_STOCK_UNDO)
+    ART(wxART_REDO,                                GTK_STOCK_REDO)
+
+    ART(wxART_QUIT,                                GTK_STOCK_QUIT)
+
+    ART(wxART_FIND,                                GTK_STOCK_FIND)
+    ART(wxART_FIND_AND_REPLACE,                    GTK_STOCK_FIND_AND_REPLACE)
 #endif
     
     return NULL;

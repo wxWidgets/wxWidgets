@@ -97,6 +97,17 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_TICK_MARK)
     ART_ICON(wxART_CROSS_MARK)
     ART_ICON(wxART_MISSING_IMAGE)
+    ART_ICON(wxART_FILE_SAVE)
+    ART_ICON(wxART_FILE_SAVE_AS)
+    ART_ICON(wxART_COPY)
+    ART_ICON(wxART_CUT)
+    ART_ICON(wxART_PASTE)
+    ART_ICON(wxART_UNDO)
+    ART_ICON(wxART_REDO)
+    ART_ICON(wxART_QUIT)
+    ART_ICON(wxART_FIND)
+    ART_ICON(wxART_FIND_AND_REPLACE)
+
 }
 
 

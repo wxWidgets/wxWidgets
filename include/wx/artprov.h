@@ -69,6 +69,8 @@ typedef wxString wxArtID;
 #define wxART_GO_TO_PARENT         wxART_MAKE_ART_ID(wxART_GO_TO_PARENT)
 #define wxART_GO_HOME              wxART_MAKE_ART_ID(wxART_GO_HOME)
 #define wxART_FILE_OPEN            wxART_MAKE_ART_ID(wxART_FILE_OPEN)
+#define wxART_FILE_SAVE            wxART_MAKE_ART_ID(wxART_FILE_SAVE)
+#define wxART_FILE_SAVE_AS         wxART_MAKE_ART_ID(wxART_FILE_SAVE_AS)
 #define wxART_PRINT                wxART_MAKE_ART_ID(wxART_PRINT)
 #define wxART_HELP                 wxART_MAKE_ART_ID(wxART_HELP)
 #define wxART_TIP                  wxART_MAKE_ART_ID(wxART_TIP)
@@ -91,6 +93,20 @@ typedef wxString wxArtID;
 #define wxART_WARNING              wxART_MAKE_ART_ID(wxART_WARNING)
 #define wxART_INFORMATION          wxART_MAKE_ART_ID(wxART_INFORMATION)
 #define wxART_MISSING_IMAGE        wxART_MAKE_ART_ID(wxART_MISSING_IMAGE)
+
+#define wxART_COPY                 wxART_MAKE_ART_ID(wxART_COPY)
+#define wxART_CUT                  wxART_MAKE_ART_ID(wxART_CUT)
+#define wxART_PASTE                wxART_MAKE_ART_ID(wxART_PASTE)
+#define wxART_DELETE               wxART_MAKE_ART_ID(wxART_DELETE)
+
+#define wxART_UNDO                 wxART_MAKE_ART_ID(wxART_UNDO)
+#define wxART_REDO                 wxART_MAKE_ART_ID(wxART_REDO)
+
+#define wxART_QUIT                 wxART_MAKE_ART_ID(wxART_QUIT)
+
+#define wxART_FIND                 wxART_MAKE_ART_ID(wxART_FIND)
+#define wxART_FIND_AND_REPLACE     wxART_MAKE_ART_ID(wxART_FIND_AND_REPLACE)
+
 
 // ----------------------------------------------------------------------------
 // wxArtProvider class
