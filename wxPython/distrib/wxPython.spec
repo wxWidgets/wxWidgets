@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver 2.2.0
+%define ver 2.2.1
 %define rpmver 0
 
 Summary: Cross platform GUI toolkit for use with the Python language.

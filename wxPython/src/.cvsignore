@@ -14,6 +14,7 @@ glcanvas.h
 glcanvasc.exp
 libwxPyHelpers.2.1.so.16.0.0
 libwxPyHelpers.2.2.so.0.0.0
+libwxPyHelpers.2.2.so.1.0.0
 make.bat
 makefile.test
 sedscript

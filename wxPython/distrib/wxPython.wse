@@ -72,39 +72,32 @@ item: Set Variable
   Value=wxPython
   Flags=10000000
 end
-item: Set Variable
-  Variable=DLLVER
-  Value=wx21_16
-end
 item: Check Configuration
   Flags=10111011
 end
 item: Remark
-  Text=     1.5 and 1.5.1 have a CurrentVersion key
-end
-item: Get Registry Key Value
-  Variable=PYTHONVER
-  Key=SOFTWARE\Python\PythonCore\CurrentVersion
-  Default=None
-  Flags=00000100
-end
-item: If/While Statement
-  Variable=PYTHONVER
-  Value=None
-end
-item: Remark
-  Text=     Just try 1.5 since 1.5.2b2 doesn't set CurrentVersion but uses 1.5
 end
 item: Set Variable
   Variable=PYTHONVER
-  Value=1.5
+  Value=1.6
 end
-item: End Block
+item: Remark
 end
 item: Get Registry Key Value
   Variable=PYTHONDIR
   Key=SOFTWARE\Python\PythonCore\%PYTHONVER%\InstallPath
   Flags=00000100
+end
+remarked item: If/While Statement
+  Variable=PYTHONDIR
+  Value=None
+end
+remarked item: Get Registry Key Value
+  Variable=PYTHONDIR
+  Key=SOFTWARE\Python\PythonCore\%PYTHONVER%\InstallPath
+  Flags=00000010
+end
+remarked item: End Block
 end
 item: If/While Statement
   Variable=PYTHONDIR
@@ -122,6 +115,8 @@ end
 item: Set Variable
   Variable=MAINDIR
   Value=%PYTHONDIR%
+end
+item: Remark
 end
 item: Set Variable
   Variable=EXPLORER
@@ -1214,7 +1209,7 @@ end
 item: Self-Register OCXs/DLLs
   Description=Updating System Configuration, Please Wait...
 end
-item: Edit Registry
+remarked item: Edit Registry
   Total Keys=1
   Key=SOFTWARE\Python\PythonCore\%PYTHONVER%\PythonPath\wxPython
   New Value=%MAINDIR%
