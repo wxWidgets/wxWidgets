@@ -25,10 +25,12 @@
 // ----------------------------------------------------------------------------
 
 // All widgets should have this as their resize proc.
-extern void wxWidgetResizeProc(Widget w, XConfigureEvent *event, String args[], int *num_args);
+extern void wxWidgetResizeProc(Widget w, XConfigureEvent *event, 
+                               String args[], int *num_args);
 
 // For repainting arbitrary windows
-void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event, char *);
+void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), 
+                            XEvent *event, char *);
 
 // ----------------------------------------------------------------------------
 // we maintain a hash table which contains the mapping from Widget to wxWindow
@@ -51,11 +53,17 @@ extern XmString wxFindAcceleratorText (const char *s);
 // ----------------------------------------------------------------------------
 // TranslateXXXEvent() functions - translate Motif event to wxWindow one
 // ----------------------------------------------------------------------------
-extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
-extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 
-extern void wxDoChangeForegroundColour(WXWidget widget, wxColour& foregroundColour);
-extern void wxDoChangeBackgroundColour(WXWidget widget, wxColour& backgroundColour, bool changeArmColour = FALSE);
+extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
+                                  Widget widget, XEvent *xevent);
+extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
+                                Widget widget, XEvent *xevent);
+
+extern void wxDoChangeForegroundColour(WXWidget widget,
+                                       wxColour& foregroundColour);
+extern void wxDoChangeBackgroundColour(WXWidget widget,
+                                       wxColour& backgroundColour,
+                                       bool changeArmColour = FALSE);
 
 #define wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01
@@ -78,6 +86,11 @@ extern XColor itemColors[5] ;
 class wxXmString
 {
 public:
+    wxXmString(const char* str)
+    {
+        m_string = XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);
+    }
+
     wxXmString(const wxString& str)
     {
         m_string = XmStringCreateLtoR((char *)str.c_str(),
@@ -93,6 +106,15 @@ public:
 private:
     XmString m_string;
 };
+
+// ----------------------------------------------------------------------------
+// executes one main loop iteration (implemented in src/motif/evtloop.cpp)
+// ----------------------------------------------------------------------------
+
+class wxEventLoop;
+
+// returns true if the loop should be exited
+bool wxDoEventLoopIteration( wxEventLoop& evtLoop );
 
 // ----------------------------------------------------------------------------
 // macros to avoid casting WXFOO to Foo all the time

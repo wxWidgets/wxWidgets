@@ -24,6 +24,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/settings.h"
+#include "wx/evtloop.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -56,7 +57,7 @@
 // A stack of modal_showing flags, since we can't rely
 // on accessing wxDialog::m_modalShowing within
 // wxDialog::Show in case a callback has deleted the wxDialog.
-static wxList wxModalShowingStack;
+// static wxList wxModalShowingStack;
 
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
@@ -81,6 +82,7 @@ END_EVENT_TABLE()
 wxDialog::wxDialog()
 {
     m_modalShowing = FALSE;
+    m_eventLoop = NULL;
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 }
 
@@ -98,6 +100,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
         return FALSE;
 
     m_modalShowing = FALSE;
+    m_eventLoop = NULL;
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_foregroundColour = *wxBLACK;
@@ -204,6 +207,7 @@ void wxDialog::SetModal(bool flag)
 wxDialog::~wxDialog()
 {
     m_isBeingDeleted = TRUE;
+    delete m_eventLoop;
 
     if (m_mainWidget)
     {
@@ -312,51 +316,23 @@ int wxDialog::ShowModal()
 
     if (m_modalShowing)
         return 0;
-
-    wxModalShowingStack.Insert((wxObject *)TRUE);
+    m_eventLoop = new wxEventLoop;
 
     m_modalShowing = TRUE;
     XtAddGrab((Widget) m_mainWidget, TRUE, FALSE);
 
-    XEvent event;
-
-    // Loop until we signal that the dialog should be closed
-    while ((wxModalShowingStack.Number() > 0) && ((int)(wxModalShowingStack.First()->Data()) != 0))
-    {
-        //        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
-
-        XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
-        wxTheApp->ProcessXEvent((WXEvent*) &event);
-
-        if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
-        {
-            if (!wxTheApp->ProcessIdle())
-            {
-#if wxUSE_THREADS
-                // leave the main loop to give other threads a chance to
-                // perform their GUI work
-                wxMutexGuiLeave();
-                wxUsleep(20);
-                wxMutexGuiEnter();
-#endif
-            }
-        }
-    }
-
-    // Remove modal dialog flag from stack
-    wxNode *node = wxModalShowingStack.First();
-    if (node)
-        delete node;
+    m_eventLoop->Run();
 
     // Now process all events in case they get sent to a destroyed dialog
     XSync(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()), FALSE);
-    while (XtAppPending((XtAppContext) wxTheApp->GetAppContext()))
+    while (m_eventLoop->Pending())
     {
         XFlush(XtDisplay((Widget) wxTheApp->GetTopLevelWidget()));
-        XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
-
-        wxTheApp->ProcessXEvent((WXEvent*) &event);
+        m_eventLoop->Dispatch();
     }
+
+    delete m_eventLoop;
+    m_eventLoop = NULL;
 
     // TODO: is it safe to call this, if the dialog may have been deleted
     // by now? Probably only if we're using delayed deletion of dialogs.
@@ -376,10 +352,7 @@ void wxDialog::EndModal(int retCode)
     Show(FALSE);
 
     m_modalShowing = FALSE;
-
-    wxNode *node = wxModalShowingStack.First();
-    if (node)
-        node->SetData((wxObject *)FALSE);
+    m_eventLoop->Exit();
 }
 
 // Standard buttons

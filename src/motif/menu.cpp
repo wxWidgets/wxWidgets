@@ -440,28 +440,20 @@ bool wxMenuBar::DestroyMenuBar()
     return TRUE;
 }
 
-//// Motif-specific
-static XtWorkProcId WorkProcMenuId;
-
-/* Since PopupMenu under Motif stills grab right mouse button events
-* after it was closed, we need to delete the associated widgets to
-* allow next PopUpMenu to appear...
-*/
-
-int PostDeletionOfMenu( XtPointer* clientData )
+// Since PopupMenu under Motif stills grab right mouse button events
+// after it was closed, we need to delete the associated widgets to
+// allow next PopUpMenu to appear...
+void wxMenu::DestroyWidgetAndDetach()
 {
-    XtRemoveWorkProc(WorkProcMenuId);
-    wxMenu *menu = (wxMenu *)clientData;
-
-    if (menu->GetMainWidget())
+    if (GetMainWidget())
     {
-        wxMenu *menuParent = menu->GetParent();
+        wxMenu *menuParent = GetParent();
         if ( menuParent )
         {
             wxMenuItemList::Node *node = menuParent->GetMenuItems().GetFirst();
             while ( node )
             {
-                if ( node->GetData()->GetSubMenu() == menu )
+                if ( node->GetData()->GetSubMenu() == this )
                 {
                     menuParent->GetMenuItems().DeleteNode(node);
 
@@ -472,33 +464,11 @@ int PostDeletionOfMenu( XtPointer* clientData )
             }
         }
 
-        menu->DestroyMenu(TRUE);
+        DestroyMenu(TRUE);
     }
 
     // Mark as no longer popped up
-    menu->m_menuId = -1;
-
-    return TRUE;
-}
-
-void
-wxMenuPopdownCallback(Widget WXUNUSED(w), XtPointer clientData,
-                      XtPointer WXUNUSED(ptr))
-{
-    wxMenu *menu = (wxMenu *)clientData;
-
-    // Added by JOREL Jean-Charles <jjorel@silr.ireste.fr>
-    /* Since Callbacks of MenuItems are not yet processed, we put a
-    * background job which will be done when system will be idle.
-    * What awful hack!! :(
-    */
-
-    WorkProcMenuId = XtAppAddWorkProc(
-        (XtAppContext) wxTheApp->GetAppContext(),
-        (XtWorkProc) PostDeletionOfMenu,
-        (XtPointer) menu );
-    // Apparently not found in Motif headers
-    //  XtVaSetValues( w, XmNpopupEnabled, XmPOPUP_DISABLED, NULL );
+    m_menuId = -1;
 }
 
 /*
@@ -518,10 +488,12 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
     if (!pullDown)
     {
         menu = XmCreatePopupMenu ((Widget) parent, "popup", args, 2);
+#if 0
         XtAddCallback(menu,
             XmNunmapCallback,
             (XtCallbackProc)wxMenuPopdownCallback,
             (XtPointer)this);
+#endif
     }
     else
     {

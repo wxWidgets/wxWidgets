@@ -93,7 +93,8 @@ public:
     WXWidget GetHandle() const { return m_menuWidget; }
     
     bool IsTearOff() const { return (m_style & wxMENU_TEAROFF) != 0; }
-    
+
+    void DestroyWidgetAndDetach();
 public:
     // Motif-specific data
     int               m_numColumns;

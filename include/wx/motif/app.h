@@ -20,7 +20,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/gdicmn.h"
 #include "wx/event.h"
 
 // ----------------------------------------------------------------------------
@@ -32,6 +31,7 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
+class WXDLLEXPORT wxEventLoop;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for Motif - see wxAppBase for more details
@@ -43,7 +43,7 @@ class WXDLLEXPORT wxApp : public wxAppBase
         
 public:
     wxApp();
-    ~wxApp() {}
+    virtual ~wxApp();
     
     // override base class (pure) virtuals
     // -----------------------------------
@@ -71,20 +71,6 @@ public:
     // Returns TRUE if more idle time is requested.
     bool SendIdleEvents(wxWindow* win);
     
-    // Motif implementation.
-    
-    // Processes an X event.
-    virtual void ProcessXEvent(WXEvent* event);
-    
-    // Returns TRUE if an accelerator has been processed
-    virtual bool CheckForAccelerator(WXEvent* event);
-    
-    // Returns TRUE if a key down event has been processed
-    virtual bool CheckForKeyDown(WXEvent* event);
-    
-    // Returns TRUE if a key up event has been processed
-    virtual bool CheckForKeyUp(WXEvent* event);
-    
 protected:
     bool                  m_showOnInit;
     
@@ -105,12 +91,11 @@ public:
     // This handler is called when a property change event occurs
     virtual void   HandlePropertyChange(WXEvent *event);
     
-public:
+private:
     static long    sm_lastMessageTime;
     int            m_nCmdShow;
-    
-protected:
-    bool                  m_keepGoing;
+
+    wxEventLoop*    m_eventLoop;
     
     // Motif-specific
     WXAppContext          m_appContext;

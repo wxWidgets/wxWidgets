@@ -584,6 +584,7 @@ dcclient.cpp	Motif
 dcmemory.cpp	Motif
 dcscreen.cpp	Motif
 dialog.cpp	Motif
+evtloop.cpp	Motif
 filedlg.cpp	Motif
 font.cpp	Motif
 frame.cpp	Motif

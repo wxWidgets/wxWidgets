@@ -45,6 +45,7 @@
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/evtloop.h"
 
 #if  wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -1151,6 +1152,8 @@ void wxWindow::DoSetToolTip(wxToolTip * WXUNUSED(tooltip))
 // popup menus
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MENUS
+
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     Widget widget = (Widget) GetMainWidget();
@@ -1165,7 +1168,8 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     if (menu->GetParent() && (menu->GetId() != -1))
         return FALSE;
 
-    if (menu->GetMainWidget()) {
+    if (menu->GetMainWidget())
+    {
         menu->DestroyMenu(TRUE);
     }
 
@@ -1214,7 +1218,6 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     XmMenuPosition (menuWidget, &event);
     XtManageChild (menuWidget);
 
-    XEvent x_event;
     // The ID of a pop-up menu is 1 when active, and is set to 0 by the
     // idle-time destroy routine.
     // Waiting until this ID changes causes this function to block until
@@ -1222,28 +1225,18 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     // In other words, once this routine returns, it is safe to delete
     // the menu object.
     // Ian Brown <ian.brown@printsoft.de>
+
+    wxEventLoop evtLoop;
+
     while (menu->GetId() == 1)
     {
-        XtAppNextEvent( (XtAppContext) wxTheApp->GetAppContext(), &x_event);
-
-        wxTheApp->ProcessXEvent((WXEvent*) & x_event);
-
-        if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
-        {
-            if (!wxTheApp->ProcessIdle())
-            {
-#if wxUSE_THREADS
-                // leave the main loop to give other threads a chance to
-                // perform their GUI work
-                wxMutexGuiLeave();
-                wxUsleep(20);
-                wxMutexGuiEnter();
-#endif
-            }
-        }
+        wxDoEventLoopIteration( evtLoop );
     }
+
     return TRUE;
 }
+
+#endif
 
 // ---------------------------------------------------------------------------
 // moving and resizing
@@ -1352,9 +1345,9 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
             y = oldY;
     }
 
-    if ( width == -1 )
+    if ( width <= 0 )
         width = oldW;
-    if ( height == -1 )
+    if ( height <= 0 )
         height = oldH;
 
     bool nothingChanged = (x == oldX) && (y == oldY) &&
@@ -1390,15 +1383,6 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
 
         if (managed)
             XtManageChild(widget);
-
-        // How about this bit. Maybe we don't need to generate size events
-        // all the time -- they'll be generated when the window is sized anyway.
-#if 0
-        wxSizeEvent sizeEvent(wxSize(width, height), GetId());
-        sizeEvent.SetEventObject(this);
-
-        GetEventHandler()->ProcessEvent(sizeEvent);
-#endif // 0
     }
 }
 
@@ -1727,6 +1711,7 @@ void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
 {
+#if wxUSE_ACCEL
     if (!m_acceleratorTable.Ok())
         return FALSE;
 
@@ -1753,6 +1738,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
             wxFrame* frame = wxDynamicCast(parent, wxFrame);
             if ( frame )
             {
+#if wxUSE_MENUS
                 // Try for a menu command
                 if (frame->GetMenuBar())
                 {
@@ -1767,6 +1753,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
                         return frame->GetEventHandler()->ProcessEvent(commandEvent);
                     }
                 }
+#endif
             }
 
             // Find a child matching the command id
@@ -1788,6 +1775,7 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
             return FALSE;
         } // matches event
     }// for
+#endif
 
     // We didn't match the key event against an accelerator.
     return FALSE;

@@ -18,6 +18,8 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
 
+class WXDLLEXPORT wxEventLoop;
+
 // Dialog boxes
 class WXDLLEXPORT wxDialog : public wxDialogBase
 {
@@ -102,6 +104,7 @@ private:
 
     //// Motif-specific
     bool          m_modalShowing;
+    wxEventLoop*  m_eventLoop;
 
 protected:
     virtual void DoSetSize(int x, int y,

@@ -199,6 +199,7 @@ ALL_SOURCES = \
 		motif/dcmemory.cpp \
 		motif/dcscreen.cpp \
 		motif/dialog.cpp \
+		motif/evtloop.cpp \
 		motif/filedlg.cpp \
 		motif/font.cpp \
 		motif/frame.cpp \
@@ -834,6 +835,7 @@ GUIOBJS = \
 		dcmemory.o \
 		dcscreen.o \
 		dialog.o \
+		evtloop.o \
 		filedlg.o \
 		font.o \
 		frame.o \

@@ -354,6 +354,7 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
 
             item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(commandEvent);
         }
+        // this is the child of a popup menu
         else if (item->GetTopMenu())
         {
             wxCommandEvent event (wxEVT_COMMAND_MENU_SELECTED, item->GetId());
@@ -361,6 +362,14 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
             event.SetInt( item->GetId() );
 
             item->GetTopMenu()->ProcessCommand (event);
+
+            // Since PopupMenu under Motif stills grab right mouse
+            // button events after it was closed, we need to delete
+            // the associated widgets to allow next PopUpMenu to
+            // appear; this needs to be done there because doing it in
+            // a WorkProc as before may cause crashes if a menu item causes
+            // the parent window of the menu to be destroyed
+            item->GetTopMenu()->DestroyWidgetAndDetach();
         }
     }
 }
