@@ -78,11 +78,11 @@ Loads a bitmap from a file or resource.
 
 Creates bitmap object from the image. This has to be done
 to actually display an image as you cannot draw an image directly on a window.
-The resulting bitmap will use the provided colour depth (or that of the 
-current system if depth is -1) which entails that a colour reduction has 
+The resulting bitmap will use the provided colour depth (or that of the
+current system if depth is -1) which entails that a colour reduction has
 to take place.
 
-When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube created 
+When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube created
 on program start-up to look up colors. This ensures a very fast conversion, but
 the image quality won't be perfect (and could be better for photo images using more
 sophisticated dithering algorithms).
@@ -122,8 +122,8 @@ If all possible wxWindows settings are used, the Windows platform supports BMP f
 XPM data, and XPM. Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
 Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
 
-In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can, which currently include 
-wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_TIF, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, 
+In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can, which currently include
+wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_TIF, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX,
 and wxBITMAP\_TYPE\_PNM. Of course, you must have wxImage handlers loaded. }
 
 \docparam{img}{Platform-independent wxImage object.}
@@ -173,13 +173,15 @@ Under X, {\it type} defaults to wxBITMAP\_TYPE\_XPM.
 \pythonnote{Constructors supported by wxPython are:\par
 \indented{2cm}{\begin{twocollist}
 \twocolitem{{\bf wxBitmap(name, flag)}}{Loads a bitmap from a file}
-\twocolitem{{\bf wxBitmapFromData(data, type, width, height, depth=1)}}{Creates
-a bitmap from the given data, which can be of arbitrary type.}
-\twocolitem{{\bf wxNoRefBitmap(name, flag)}}{This one won't own the
-reference, so Python won't call the destructor, this is good for toolbars
-and such where the parent will manage the bitmap.}
 \twocolitem{{\bf wxEmptyBitmap(width, height, depth = -1)}}{Creates an
 empty bitmap with the given specifications}
+\twocolitem{{\bf wxBitmapFromXPMData(listOfStrings)}}{Create a bitmap
+from a Python list of strings whose contents are XPM data.}
+\twocolitem{{\bf wxBitmapFromBits(bits, width, height,
+depth=-1)}}{Create a bitmap from an array of bits contained in a
+string.}
+\twocolitem{{\bf wxBitmapFromImage(image, depth=-1)}}{Convert a
+wxImage to a wxBitmap.}
 \end{twocollist}}
 }
 
@@ -358,7 +360,7 @@ Gets the width of the bitmap in pixels.
 
 \constfunc{wxBitmap}{GetSubBitmap}{\param{const wxRect\&}{rect}}
 
-Returns a sub bitmap of the current one as long as the rect belongs entirely to 
+Returns a sub bitmap of the current one as long as the rect belongs entirely to
 the bitmap. This function preserves bit depth and mask information.
 
 \membersection{wxBitmap::InitStandardHandlers}
@@ -411,7 +413,7 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 
 The validity of these flags depends on the platform and wxWindows configuration.
 
-In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can 
+In addition, wxBitmap can read all formats that \helpref{wxImage}{wximage} can
 (wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG, wxBITMAP\_TYPE\_GIF, wxBITMAP\_TYPE\_PCX, wxBITMAP\_TYPE\_PNM).
 (Of course you must have wxImage handlers loaded.) }
 
@@ -474,7 +476,7 @@ Saves a bitmap in the named file.
 
 The validity of these flags depends on the platform and wxWindows configuration.
 
-In addition, wxBitmap can save all formats that \helpref{wxImage}{wximage} can 
+In addition, wxBitmap can save all formats that \helpref{wxImage}{wximage} can
 (wxBITMAP\_TYPE\_JPEG, wxBITMAP\_TYPE\_PNG).
 (Of course you must have wxImage handlers loaded.) }
 
