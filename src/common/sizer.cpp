@@ -1087,13 +1087,13 @@ void wxFlexGridSizer::RecalcSizes()
         size_t idx;
         for (idx = 0; idx < m_growableRows.GetCount(); idx++)
         {
-            // Since the number of rows/columns can change as items are inserted/deleted, we need 
+            // Since the number of rows/columns can change as items are inserted/deleted, we need
             // to verify at runtime that the requested growable rows/columns are still valid.
-            if (m_growableRows[idx] >= nrows) 
+            if (m_growableRows[idx] >= nrows)
                 continue;
             // If all items in a row/column are hidden, that row/column will have a dimension of -1.
             // This causes the row/column to be hidden completely.
-            if (m_rowHeights[ m_growableRows[idx] ] == -1) 
+            if (m_rowHeights[ m_growableRows[idx] ] == -1)
                 continue;
             sum_proportions += m_growableRowsProportions[idx];
             growable_space += m_rowHeights[ m_growableRows[idx] ];
@@ -1104,9 +1104,9 @@ void wxFlexGridSizer::RecalcSizes()
         {
             for (idx = 0; idx < m_growableRows.GetCount(); idx++)
             {
-                if (m_growableRows[idx] >= nrows ) 
+                if (m_growableRows[idx] >= nrows )
                     continue;
-                if (m_rowHeights[ m_growableRows[idx] ] == -1) 
+                if (m_rowHeights[ m_growableRows[idx] ] == -1)
                     m_rowHeights[ m_growableRows[idx] ] = 0;
                 else
                 {
@@ -1136,13 +1136,13 @@ void wxFlexGridSizer::RecalcSizes()
         size_t idx;
         for (idx = 0; idx < m_growableCols.GetCount(); idx++)
         {
-            // Since the number of rows/columns can change as items are inserted/deleted, we need 
+            // Since the number of rows/columns can change as items are inserted/deleted, we need
             // to verify at runtime that the requested growable rows/columns are still valid.
-            if (m_growableCols[idx] >= ncols) 
+            if (m_growableCols[idx] >= ncols)
                 continue;
             // If all items in a row/column are hidden, that row/column will have a dimension of -1.
             // This causes the column to be hidden completely.
-            if (m_colWidths[ m_growableCols[idx] ] == -1) 
+            if (m_colWidths[ m_growableCols[idx] ] == -1)
                 continue;
             sum_proportions += m_growableColsProportions[idx];
             // wtb 5/12/02 bugfix - was m_ColWidths[idx]!!
@@ -1154,9 +1154,9 @@ void wxFlexGridSizer::RecalcSizes()
         {
             for (idx = 0; idx < m_growableCols.GetCount(); idx++)
             {
-                if (m_growableCols[idx] >= ncols ) 
+                if (m_growableCols[idx] >= ncols )
                     continue;
-                if (m_colWidths[ m_growableCols[idx] ] == -1) 
+                if (m_colWidths[ m_growableCols[idx] ] == -1)
                     m_colWidths[ m_growableCols[idx] ] = 0;
                 else
                 {
@@ -1215,9 +1215,9 @@ wxSize wxFlexGridSizer::CalcMin()
     m_rowHeights.SetCount(nrows);
     m_colWidths.SetCount(ncols);
 
-    // We have to recalcuate the sizes in case an item has wxADJUST_MINSIZE, has changed 
+    // We have to recalcuate the sizes in case an item has wxADJUST_MINSIZE, has changed
     // minimum size since the previous layout, or has been hidden using wxSizer::Show().
-    // If all the items in a row/column are hidden, the final dimension of the row/column 
+    // If all the items in a row/column are hidden, the final dimension of the row/column
     // will be -1, indicating that the column itself is hidden.
     for( s = m_rowHeights.GetCount(), i = 0; i < s; ++i )
         m_rowHeights[ i ] = -1;
@@ -1274,7 +1274,7 @@ wxSize wxFlexGridSizer::CalcMin()
     // -1 is used as a magic number meaning empty column.
     int width = 0;
     for (int col = 0; col < ncols; col++)
-        if ( m_colWidths[ col ] != -1 )  
+        if ( m_colWidths[ col ] != -1 )
             width += m_colWidths[ col ] + ( col == ncols-1 ? 0 : m_hgap );
 
     int height = 0;
@@ -1613,5 +1613,14 @@ wxSize wxBookCtrlSizer::CalcMin()
     return wxSize( maxX, maxY ) + sizeBorder;
 }
 
+
+#if wxUSE_NOTEBOOK
+
+wxNotebookSizer::wxNotebookSizer(wxNotebook *nb)
+    : wxBookCtrlSizer(nb)
+{
+}
+
+#endif // wxUSE_NOTEBOOOK
 #endif // wxUSE_BOOKCTRL
 
