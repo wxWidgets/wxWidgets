@@ -167,9 +167,12 @@ bool wxDbConnectInf::Initialize()
     Dsn[0] = 0;
     Uid[0] = 0;
     AuthStr[0] = 0;
+    ConnectionStr[0] = 0;
     Description.Empty();
     FileType.Empty();
     DefaultDir.Empty();
+
+    useConnectionStr = FALSE;
 
     return TRUE;
 }  // wxDbConnectInf::Initialize()
@@ -219,7 +222,7 @@ void wxDbConnectInf::SetDsn(const wxString &dsn)
 void wxDbConnectInf::SetUserID(const wxString &uid)
 {
     wxASSERT(uid.Length() < sizeof(Uid));
-    wxStrcpy(Uid,uid);
+    wxStrcpy(Uid, uid);
 }  // wxDbConnectInf::SetUserID()
 
 
@@ -227,9 +230,17 @@ void wxDbConnectInf::SetPassword(const wxString &password)
 {
     wxASSERT(password.Length() < sizeof(AuthStr));
 
-    wxStrcpy(AuthStr,password);
+    wxStrcpy(AuthStr, password);
 }  // wxDbConnectInf::SetPassword()
 
+void wxDbConnectInf::SetConnectionStr(const wxString &connectStr)
+{
+    wxASSERT(connectStr.Length() < sizeof(ConnectionStr));
+    
+    useConnectionStr = wxStrlen(connectStr) > 0;
+
+    wxStrcpy(ConnectionStr, connectStr);
+}  // wxDbConnectInf::SetConnectionStr()
 
 
 /********** wxDbColFor Constructor **********/
@@ -540,6 +551,7 @@ void wxDb::initialize()
     // Mark database as not open as of yet
     dbIsOpen = FALSE;
     dbIsCached = FALSE;
+    dbOpenedWithConnectionString = FALSE;
 }  // wxDb::initialize()
 
 
@@ -575,41 +587,8 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
 }  // wxDb::convertUserID()
 
 
-/********** wxDb::Open() **********/
-bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported)
+bool wxDb::open(bool failOnDataTypeUnsupported)
 {
-    wxASSERT(Dsn.Length());
-    dsn        = Dsn;
-    uid        = Uid;
-    authStr    = AuthStr;
-
-    RETCODE retcode;
-
-    if (!FwdOnlyCursors())
-    {
-        // Specify that the ODBC cursor library be used, if needed.  This must be
-        // specified before the connection is made.
-        retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
-
-#ifdef DBDEBUG_CONSOLE
-        if (retcode == SQL_SUCCESS)
-            cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
-        else
-            cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
-#else
-        wxUnusedVar( retcode );
-#endif
-    }
-
-    // Connect to the data source
-    retcode = SQLConnect(hdbc, (SQLTCHAR FAR *) dsn.c_str(), SQL_NTS,
-                         (SQLTCHAR FAR *) uid.c_str(), SQL_NTS,
-                         (SQLTCHAR FAR *) authStr.c_str(), SQL_NTS);
-
-    if ((retcode != SQL_SUCCESS) &&
-        (retcode != SQL_SUCCESS_WITH_INFO))
-        return(DispAllErrors(henv, hdbc));
-
 /*
     If using Intersolv branded ODBC drivers, this is the place where you would substitute
     your branded driver license information
@@ -769,22 +748,62 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
 
     // Completed Successfully
     return(TRUE);
+}
 
-} // wxDb::Open()
-
-
-bool wxDb::Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported)
+bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
 {
-    return Open(dbConnectInf->GetDsn(), dbConnectInf->GetUserID(),
-                dbConnectInf->GetPassword(), failOnDataTypeUnsupported);
-}  // wxDb::Open()
+    wxASSERT(inConnectStr.Length());
+    dsn        = "";
+    uid        = "";
+    authStr    = "";
 
+    RETCODE retcode;
 
-bool wxDb::Open(wxDb *copyDb)
+    if (!FwdOnlyCursors())
+    {
+        // Specify that the ODBC cursor library be used, if needed.  This must be
+        // specified before the connection is made.
+        retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
+
+#ifdef DBDEBUG_CONSOLE
+        if (retcode == SQL_SUCCESS)
+            cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
+        else
+            cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
+#endif
+    }
+
+    // Connect to the data source
+    UCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];  // MS recommends at least 1k buffer
+    short outConnectBufferLen;
+
+    inConnectionStr = inConnectStr;
+
+    retcode = SQLDriverConnect(hdbc, NULL, (UCHAR FAR *)inConnectionStr.c_str(),
+                        inConnectionStr.Length(), (UCHAR FAR *)outConnectBuffer,
+                        sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
+
+    if ((retcode != SQL_SUCCESS) &&
+        (retcode != SQL_SUCCESS_WITH_INFO))
+        return(DispAllErrors(henv, hdbc));
+
+    outConnectBuffer[outConnectBufferLen] = 0;
+    outConnectionStr = outConnectBuffer;
+    dbOpenedWithConnectionString = TRUE;
+
+    return open(failOnDataTypeUnsupported);
+}
+
+/********** wxDb::Open() **********/
+bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported)
 {
-    dsn        = copyDb->GetDatasourceName();
-    uid        = copyDb->GetUsername();
-    authStr    = copyDb->GetPassword();
+    wxASSERT(Dsn.Length());
+    dsn        = Dsn;
+    uid        = Uid;
+    authStr    = AuthStr;
+
+    inConnectionStr = "";
+    outConnectionStr = "";
 
     RETCODE retcode;
 
@@ -809,7 +828,84 @@ bool wxDb::Open(wxDb *copyDb)
                          (SQLTCHAR FAR *) uid.c_str(), SQL_NTS,
                          (SQLTCHAR FAR *) authStr.c_str(), SQL_NTS);
 
-    if (retcode == SQL_ERROR)
+    if ((retcode != SQL_SUCCESS) &&
+        (retcode != SQL_SUCCESS_WITH_INFO))
+        return(DispAllErrors(henv, hdbc));
+
+    return open(failOnDataTypeUnsupported);
+
+} // wxDb::Open()
+
+
+bool wxDb::Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported)
+{
+    wxASSERT(dbConnectInf);
+
+    // Use the connection string if one is present
+    if (dbConnectInf->UseConnectionStr())
+        return Open(GetConnectionInStr(), failOnDataTypeUnsupported);
+    else
+        return Open(dbConnectInf->GetDsn(), dbConnectInf->GetUserID(),
+                    dbConnectInf->GetPassword(), failOnDataTypeUnsupported);
+}  // wxDb::Open()
+
+
+bool wxDb::Open(wxDb *copyDb)
+{
+    dsn              = copyDb->GetDatasourceName();
+    uid              = copyDb->GetUsername();
+    authStr          = copyDb->GetPassword();
+    inConnectionStr  = copyDb->GetConnectionInStr();
+    outConnectionStr = copyDb->GetConnectionOutStr();
+
+    RETCODE retcode;
+
+    if (!FwdOnlyCursors())
+    {
+        // Specify that the ODBC cursor library be used, if needed.  This must be
+        // specified before the connection is made.
+        retcode = SQLSetConnectOption(hdbc, SQL_ODBC_CURSORS, SQL_CUR_USE_IF_NEEDED);
+
+#ifdef DBDEBUG_CONSOLE
+        if (retcode == SQL_SUCCESS)
+            cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
+        else
+            cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
+#else
+        wxUnusedVar( retcode );
+#endif
+    }
+
+    if (copyDb->OpenedWithConnectionString())
+    {
+        // Connect to the data source
+        UCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];
+        short outConnectBufferLen;
+
+        inConnectionStr = copyDb->GetConnectionInStr();
+
+        retcode = SQLDriverConnect(hdbc, NULL, (UCHAR FAR *)inConnectionStr.c_str(),
+                            inConnectionStr.Length(), (UCHAR FAR *)outConnectBuffer,
+                            sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
+
+        if ((retcode != SQL_SUCCESS) &&
+            (retcode != SQL_SUCCESS_WITH_INFO))
+            return(DispAllErrors(henv, hdbc));
+
+        outConnectBuffer[outConnectBufferLen] = 0;
+        outConnectionStr = outConnectBuffer;
+        dbOpenedWithConnectionString = TRUE;
+    }
+    else
+    {
+        // Connect to the data source
+        retcode = SQLConnect(hdbc, (SQLTCHAR FAR *) dsn.c_str(), SQL_NTS,
+                             (SQLTCHAR FAR *) uid.c_str(), SQL_NTS,
+                             (SQLTCHAR FAR *) authStr.c_str(), SQL_NTS);
+    }
+
+    if ((retcode != SQL_SUCCESS) &&
+        (retcode != SQL_SUCCESS_WITH_INFO))
         return(DispAllErrors(henv, hdbc));
 
 /*
@@ -1100,10 +1196,6 @@ bool wxDb::getDbInfo(bool failOnDataTypeUnsupported)
     retcode = SQLGetInfo(hdbc, SQL_OUTER_JOINS, (UCHAR*) dbInf.outerJoins, 2, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
 	{
-		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
-		// TODO: dbInf.outerJoins[0]='N';
-		// TODO: dbInf.outerJoins[1]='\x0';
-
 		DispAllErrors(henv, hdbc);
 		if (failOnDataTypeUnsupported)
 			return FALSE;
@@ -1112,10 +1204,6 @@ bool wxDb::getDbInfo(bool failOnDataTypeUnsupported)
     retcode = SQLGetInfo(hdbc, SQL_PROCEDURES, (UCHAR*) dbInf.procedureSupport, 2, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
 	{
-		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
-		// TODO: dbInf.procedureSupport[0]='N';
-		// TODO: dbInf.procedureSupport[1]='\x0';
-
 		DispAllErrors(henv, hdbc);
 		if (failOnDataTypeUnsupported)
 			return FALSE;
@@ -1124,10 +1212,6 @@ bool wxDb::getDbInfo(bool failOnDataTypeUnsupported)
     retcode = SQLGetInfo(hdbc, SQL_ACCESSIBLE_TABLES, (UCHAR*) dbInf.accessibleTables, 2, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
 	{
-		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
-		// TODO: dbInf.accessibleTables[0]='N';
-		// TODO: dbInf.accessibleTables[1]='\x0';
-
 		DispAllErrors(henv, hdbc);
 		if (failOnDataTypeUnsupported)
 			return FALSE;
@@ -1160,10 +1244,6 @@ bool wxDb::getDbInfo(bool failOnDataTypeUnsupported)
     retcode = SQLGetInfo(hdbc, SQL_ODBC_SQL_OPT_IEF, (UCHAR*) dbInf.supportIEF, 2, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
 	{
-		// TODO: BugTracker# 785080 : fails with mysql 4 on linux - edr
-		// TODO: dbInf.supportIEF[0]='N';
-		// TODO: dbInf.supportIEF[1]='\x0';
-
 		DispAllErrors(henv, hdbc);
 		if (failOnDataTypeUnsupported)
 			return FALSE;
@@ -3793,17 +3873,42 @@ wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnly
         // The database connection must be for the same datasource
         // name and must currently not be in use.
         if (pList->Free &&
-            (pList->PtrDb->FwdOnlyCursors() == FwdOnlyCursors) &&
-            (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn)))  // Found a free connection
+            (pList->PtrDb->FwdOnlyCursors() == FwdOnlyCursors))
         {
-            pList->Free = FALSE;
-            return(pList->PtrDb);
+            if (pDbConfig->UseConnectionStr())
+            {
+                if (pList->PtrDb->OpenedWithConnectionString() && 
+                     (!wxStrcmp(pDbConfig->GetConnectionStr(), pList->ConnectionStr)))
+                {
+                    // Found a free connection
+                    pList->Free = FALSE;
+                    return(pList->PtrDb);
+                }
+            }
+            else
+            {
+                if (!pList->PtrDb->OpenedWithConnectionString() &&
+                     (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn)))
+                {
+                    // Found a free connection
+                    pList->Free = FALSE;
+                    return(pList->PtrDb);
+                }
+            }
         }
 
-        if (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn) &&
-            !wxStrcmp(pDbConfig->GetUserID(), pList->Uid) &&
-            !wxStrcmp(pDbConfig->GetPassword(), pList->AuthStr))
-            matchingDbConnection = pList->PtrDb;
+        if (pDbConfig->UseConnectionStr())
+        {
+            if (!wxStrcmp(pDbConfig->GetConnectionStr(), pList->ConnectionStr))
+                matchingDbConnection = pList->PtrDb;
+        }
+        else
+        {
+            if (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn) &&
+                !wxStrcmp(pDbConfig->GetUserID(), pList->Uid) &&
+                !wxStrcmp(pDbConfig->GetPassword(), pList->AuthStr))
+                matchingDbConnection = pList->PtrDb;
+        }
     }
 
     // No available connections.  A new connection must be made and
@@ -3825,18 +3930,28 @@ wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnly
     }
 
     // Initialize new node in the linked list
-    pList->PtrNext  = 0;
-    pList->Free     = FALSE;
-    pList->Dsn      = pDbConfig->GetDsn();
-    pList->Uid      = pDbConfig->GetUserID();
-    pList->AuthStr  = pDbConfig->GetPassword();
+    pList->PtrNext          = 0;
+    pList->Free             = FALSE;
+    pList->Dsn              = pDbConfig->GetDsn();
+    pList->Uid              = pDbConfig->GetUserID();
+    pList->AuthStr          = pDbConfig->GetPassword();
+    pList->ConnectionStr    = pDbConfig->GetConnectionStr();
 
     pList->PtrDb = new wxDb(pDbConfig->GetHenv(), FwdOnlyCursors);
 
     bool opened;
 
     if (!matchingDbConnection)
-        opened = pList->PtrDb->Open(pDbConfig->GetDsn(), pDbConfig->GetUserID(), pDbConfig->GetPassword());
+    {
+        if (pDbConfig->UseConnectionStr())
+        {
+            opened = pList->PtrDb->Open(pDbConfig->GetConnectionStr());
+        }
+        else
+        {
+            opened = pList->PtrDb->Open(pDbConfig->GetDsn(), pDbConfig->GetUserID(), pDbConfig->GetPassword());
+        }
+    }
     else
         opened = pList->PtrDb->Open(matchingDbConnection);
 
@@ -3844,7 +3959,7 @@ wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnly
     if (opened)
     {
         pList->PtrDb->setCached(TRUE);  // Prevent a user from deleting a cached connection
-        pList->PtrDb->SetSqlLogging(SQLLOGstate,SQLLOGfn,TRUE);
+        pList->PtrDb->SetSqlLogging(SQLLOGstate, SQLLOGfn, TRUE);
         return(pList->PtrDb);
     }
     else  // Unable to connect, destroy list item
@@ -3852,11 +3967,12 @@ wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnly
         if (pList->PtrPrev)
             pList->PtrPrev->PtrNext = 0;
         else
-            PtrBegDbList = 0;                // Empty list again
-        pList->PtrDb->CommitTrans();    // Commit any open transactions on wxDb object
-        pList->PtrDb->Close();            // Close the wxDb object
-        delete pList->PtrDb;                // Deletes the wxDb object
-        delete pList;                        // Deletes the linked list object
+            PtrBegDbList = 0;        // Empty list again
+
+        pList->PtrDb->CommitTrans(); // Commit any open transactions on wxDb object
+        pList->PtrDb->Close();       // Close the wxDb object
+        delete pList->PtrDb;         // Deletes the wxDb object
+        delete pList;                // Deletes the linked list object
         return(0);
     }
 

@@ -109,6 +109,7 @@ private:
                        const wxString &qryTblName, bool qryOnly, const wxString &tblPath);
     void        cleanup();
 
+    void        setCbValueForColumn(int columnIndex);
     bool        bindParams(bool forUpdate);  // called by the other 'bind' functions
     bool        bindInsertParams(void);
     bool        bindUpdateParams(void);

@@ -410,7 +410,7 @@ ODBC 3.0 says to use this form
 /***************************** PRIVATE FUNCTIONS *****************************/
 
 
-bool wxDbTable::setCbValueForColumn(int columnIndex)
+void wxDbTable::setCbValueForColumn(int columnIndex)
 {
     switch(colDefs[columnIndex].DbDataType)
     {
@@ -2535,7 +2535,7 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
         if (set)  // Blank out the values in the member variable
            ClearMemberVar(colNo, FALSE);  // Must call with FALSE here, or infinite recursion will happen
 
-        setCbValueForColumn(i);
+        setCbValueForColumn(colNo);
 
         return(TRUE);
     }
@@ -2561,7 +2561,7 @@ bool wxDbTable::SetColNull(const wxString &colName, bool set)
         if (set)  // Blank out the values in the member variable
            ClearMemberVar(colNo,FALSE);  // Must call with FALSE here, or infinite recursion will happen
 
-        setCbValueForColumn(i);
+        setCbValueForColumn(colNo);
 
         return(TRUE);
     }

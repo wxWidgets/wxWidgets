@@ -274,16 +274,25 @@ enum wxODBC_ERRORS
     #define SQL_MAX_AUTHSTR_LEN MAXNAME
 #endif
 
+#ifndef SQL_MAX_CONNECTSTR_LEN
+    // There does not seem to be a standard for this, so I am
+    // defaulting to the value that MS recommends
+    #define SQL_MAX_CONNECTSTR_LEN 1024
+#endif
+
+
 class WXDLLIMPEXP_ODBC wxDbConnectInf
 {
     private:
         bool freeHenvOnDestroy;
+        bool useConnectionStr;
 
     public:
         HENV Henv;
         wxChar Dsn[SQL_MAX_DSN_LENGTH+1];                  // Data Source Name
         wxChar Uid[SQL_MAX_USER_NAME_LEN+1];               // User ID
         wxChar AuthStr[SQL_MAX_AUTHSTR_LEN+1];             // Authorization string (password)
+        wxChar ConnectionStr[SQL_MAX_CONNECTSTR_LEN+1];    // Connection string (password)
 
         wxString Description;                              // Not sure what the max length is
         wxString FileType;                                 // Not sure what the max length is
@@ -316,6 +325,9 @@ class WXDLLIMPEXP_ODBC wxDbConnectInf
         const wxChar    *GetAuthStr()       { return AuthStr; };
         const wxChar    *GetPassword()      { return AuthStr; };
 
+        const wxChar    *GetConnectionStr() { return ConnectionStr; };
+        bool             UseConnectionStr() { return useConnectionStr; };
+
         const wxChar    *GetDescription()   { return Description; };
         const wxChar    *GetFileType()      { return FileType; };
         const wxChar    *GetDefaultDir()    { return DefaultDir; };
@@ -329,6 +341,8 @@ class WXDLLIMPEXP_ODBC wxDbConnectInf
 
         void             SetPassword(const wxString &password);
         void             SetAuthStr(const wxString &authstr)    { SetPassword(authstr); };
+
+        void             SetConnectionStr(const wxString &connectStr);
 
         void             SetDescription(const wxString &desc)   { Description   = desc;     };
         void             SetFileType(const wxString &fileType)  { FileType      = fileType; };
@@ -472,21 +486,25 @@ class WXDLLIMPEXP_ODBC wxDb
 private:
     bool             dbIsOpen;
     bool             dbIsCached;      // Was connection created by caching functions
+    bool             dbOpenedWithConnectionString;  // Was the database connection opened with a connection string
     wxString         dsn;             // Data source name
     wxString         uid;             // User ID
     wxString         authStr;         // Authorization string (password)
+    wxString         inConnectionStr; // Connection string used to connect to the database
+    wxString         outConnectionStr;// Connection string returned by the database when a connection is successfully opened
     FILE            *fpSqlLog;        // Sql Log file pointer
     wxDbSqlLogState  sqlLogState;     // On or Off
     bool             fwdOnlyCursors;
     wxDBMS           dbmsType;        // Type of datasource - i.e. Oracle, dBase, SQLServer, etc
 
     // Private member functions
-    bool             getDbInfo(bool failOnDataTypeUnsupported = TRUE);
+    bool             getDbInfo(bool failOnDataTypeUnsupported=TRUE);
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
     const wxChar    *convertUserID(const wxChar *userID, wxString &UserID);
     void             initialize();
+    bool             open(bool failOnDataTypeUnsupported=TRUE);
 
 #if !wxODBC_BACKWARD_COMPATABILITY
     // ODBC handles
@@ -598,6 +616,7 @@ public:
     ~wxDb();
 
     // Data Source Name, User ID, Password and whether open should fail on data type not supported
+    bool         Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported=TRUE);
     bool         Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthStr, bool failOnDataTypeUnsupported=TRUE);
     bool         Open(wxDbConnectInf *dbConnectInf, bool failOnDataTypeUnsupported=TRUE);
     bool         Open(wxDb *copyDb);  // pointer to a wxDb whose connection info should be copied rather than re-queried
@@ -627,7 +646,10 @@ public:
     const wxString &GetDatasourceName(void){return dsn;}
     const wxString &GetUsername(void)      {return uid;}
     const wxString &GetPassword(void)      {return authStr;}
+    const wxString &GetConnectionInStr(void)  {return inConnectionStr;}
+    const wxString &GetConnectionOutStr(void) {return outConnectionStr;}
     bool            IsOpen(void)           {return dbIsOpen;}
+    bool            OpenedWithConnectionString(void) {return dbOpenedWithConnectionString;}
     HENV            GetHENV(void)          {return henv;}
     HDBC            GetHDBC(void)          {return hdbc;}
     HSTMT           GetHSTMT(void)         {return hstmt;}
@@ -685,6 +707,7 @@ struct wxDbList
     wxString  Dsn;           // Data Source Name
     wxString  Uid;           // User ID
     wxString  AuthStr;       // Authorization string (password)
+    wxString  ConnectionStr; // Connection string used instead of DSN
     wxDb     *PtrDb;         // Pointer to the wxDb object
     bool      Free;          // Is item free or in use?
     wxDbList *PtrNext;       // Pointer to next item in the list
