@@ -42,6 +42,7 @@ while test $# -gt 0; do
       if test @includedir@ != /usr/include ; then
         includes=-I@includedir@
       fi
+      includes="$includes -I@includedir@/@host@/wx"
       echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@
       ;;
     --libs)

@@ -67,9 +67,8 @@ install::
 	  rm -f $(includedir)/wx/gtk/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
 	done ; \
-	$(INSTALL) -d $(libdir) ;\
-	mv $(includedir)/wx/gtk/setup.h $(libdir)/wxsetup.h ;\
-	ln -s $(libdir)/wxsetup.h $(includedir)/wx/gtk/setup.h
+	$(INSTALL) -d $(includedir)/wx/@host@/wx/gtk ;\
+	mv $(includedir)/wx/gtk/setup.h $(includedir)/wx/@host@/wx/gtk/setup.h ;\
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
 	$(INSTALL) -d $(includedir)/wx/generic ; \
@@ -89,6 +88,7 @@ install::
 	  rm -f $(bindir)/wx-config ; \
 	  $(INSTALL_PROGRAM) wx-config $(bindir)/wx-config
 	@echo "  Copying static library"
+	$(INSTALL) -d $(libdir) ;\
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
 	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
 	  $(INSTALL_DATA) $(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
