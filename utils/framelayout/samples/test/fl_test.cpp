@@ -48,7 +48,9 @@
 
 // comment it out if it breaks, (this is my workaround for MSDev 4.0 linker)
 
+#ifndef wxDUMMY_OBJ_INCLUDED
 char  wxDummyChar;
+#endif
 
 
 IMPLEMENT_APP	(MyApp)

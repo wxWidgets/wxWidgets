@@ -1,0 +1,21 @@
+#
+# File:		makefile.vc
+# Author:	J Russell Smyth
+# Created:	1999
+# Updated:	
+# Copyright:	
+#
+# Makefile : Builds frame layout demo
+# Use FINAL=1 argument to nmake to build final version with no debug info.
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+EXTRAINC = -I..\..\src
+EXTRALIBS = $(WXDIR)\lib\fl.lib
+EXTRAFLAGS = /DwxDUMMY_OBJ_INCLUDED
+PROGRAM=fl_demo
+OBJECTS = $(PROGRAM).obj
+
+!include $(WXDIR)\src\makeprog.vc
+

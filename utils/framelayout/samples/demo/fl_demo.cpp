@@ -51,7 +51,9 @@
 #include "wxinfo.h"
 
 // ADDED by alex (linker complaints...):
+#ifndef wxDUMMY_OBJ_INCLUDED
 char wxDummyChar=0;
+#endif
 
 /***** Implementation for class MyApp *****/
 

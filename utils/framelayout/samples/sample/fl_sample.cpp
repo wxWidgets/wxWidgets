@@ -35,7 +35,9 @@
 #include "wx/textctrl.h"
 
 // ADDED by alex (linker complaints...):
+#ifndef wxDUMMY_OBJ_INCLUDED
 char wxDummyChar=0;
+#endif
 
 #define ID_LOAD  102
 #define ID_STORE 103
