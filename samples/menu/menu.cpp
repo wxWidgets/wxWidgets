@@ -234,7 +234,7 @@ MyFrame::MyFrame()
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(Menu_File_Quit, "E&xit\tAlt-X", "Quit toolbar sample" );
     
-    wxMenuItem *bitmap_menu_item = new wxMenuItem( fileMenu, Menu_File_Quit, "Quit with &bitmap" );
+    wxMenuItem *bitmap_menu_item = new wxMenuItem( fileMenu, Menu_File_Quit, "Quit with &bitmap\tAlt-Q" );
     bitmap_menu_item->SetBitmap( wxBitmap( copy_xpm ) );
     fileMenu->Append( bitmap_menu_item ); 
 
