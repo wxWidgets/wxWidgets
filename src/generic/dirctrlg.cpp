@@ -551,8 +551,19 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     ExpandDir(m_rootId); // automatically expand first level
 
     // Expand and select the default path
-    if (!m_defaultPath.IsEmpty())
+    if (!m_defaultPath.empty())
+    {
         ExpandPath(m_defaultPath);
+    }
+#ifdef __UNIX__
+    else
+    {
+        // On Unix, there's only one node under the (hidden) root node. It
+        // represents the / path, so the user would always have to expand it;
+        // let's do it ourselves
+        ExpandPath(wxT("/"));
+    }
+#endif
 
     SetBestSize(size);
     DoResize();
