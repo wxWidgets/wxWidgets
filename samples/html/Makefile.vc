@@ -1,0 +1,55 @@
+#
+# File:		makefile.vc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds samples for Win95, MSVC++ 4.0
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+THISDIR=$(WXDIR)\samples
+
+!include $(WXDIR)\src\makevc.env
+
+DEBUG_FLAGS="/Zi /FR"
+LINK_DEBUG_FLAGS="/RELEASE"
+
+all:
+        cd $(WXDIR)\samples\html\about
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\help
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\printing
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\test
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\virtual
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\widget
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\html\zip
+        nmake -f makefile.vc FINAL=$(FINAL)
+
+clean:
+        cd $(WXDIR)\samples\html\about
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\help
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\printing
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\test
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\virtual
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\widget
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\html\zip
+        nmake -f makefile.vc clean
+
