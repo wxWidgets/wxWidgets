@@ -131,7 +131,7 @@ class wxHtmlHelpHtmlWindow : public wxHtmlWindow
 // wxHtmlHelpFrame::m_mergedIndex
 //---------------------------------------------------------------------------
 
-WX_DEFINE_ARRAY(const wxHtmlHelpDataItem*, wxHtmlHelpDataItemPtrArray);
+WX_DEFINE_ARRAY_PTR(const wxHtmlHelpDataItem*, wxHtmlHelpDataItemPtrArray);
 
 struct wxHtmlHelpMergedIndexItem
 {
