@@ -1,7 +1,7 @@
 
 from wxPython.wx import *
 
-USE_GENERIC = 1
+USE_GENERIC = 0
 
 if USE_GENERIC:
     from wxPython.lib.stattext import wxGenStaticText as wxStaticText
