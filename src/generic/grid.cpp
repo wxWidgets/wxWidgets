@@ -793,9 +793,9 @@ void wxGridCellBoolEditor::SetSize(const wxRect& r)
 
     // the checkbox without label still has some space to the right in wxGTK,
     // so shift it to the right
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined (__WXMOTIF__)
     w -= 8;
-#endif // GTK
+#endif // GTK && Motif
 
     m_control->Move(r.x + r.width/2 - w/2, r.y + r.height/2 - h/2);
 }
@@ -1225,7 +1225,7 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
         checkSize = size.y + wxGRID_CHECKMARK_MARGIN;
 
         // FIXME wxGTK::wxCheckBox::GetBestSize() gives "wrong" result
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
         checkSize -= size.y / 2;
 #endif
 
