@@ -884,6 +884,7 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     // in any case, our size changed - update
     sizer->SetSizeHints(this);
     sizer->Fit(this);
+    Show(TRUE);
 }
 
 wxLogDialog::~wxLogDialog()
