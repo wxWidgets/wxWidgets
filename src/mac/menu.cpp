@@ -740,7 +740,7 @@ int wxMenuBar::FindMenu(const wxString& title)
 
 // This allows Replace to work with menus that have submenus.  Is it needed
 // anywhere else?  (Like in Insert and Append?)
-static wxMenuBarInsertSubmenus(wxMenu* menu)
+static void wxMenuBarInsertSubmenus(wxMenu* menu)
 {
     int pos ;
     wxMenuItemList::Node *node;
