@@ -135,8 +135,8 @@ if [ -z "${skipcopy}" ]; then
     # copy root dir contents
     cp -pf --link ${wxdir}/* ${tarver} > /dev/null 2>&1
 
-    # copy all top dirs except CVS, build, demos, utils, and wxPython
-    for d in art contrib debian distrib docs include lib locale misc samples src; do
+    # copy all top dirs except CVS, build, demos, utils, samples, and wxPython
+    for d in art contrib debian distrib docs include lib locale misc src; do
 	cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
     done
 
@@ -155,13 +155,24 @@ if [ -z "${skipcopy}" ]; then
     rm *.spec
     rm -rf docs/html
     rm -rf docs/latex
+    rm -rf contrib/docs
+    rm -rf contrib/samples
     rm locale/*.mo
-    rm -f wxPython/wxPython/*  > /dev/null 2>&1
     rm `find . -name ".#*"`
     rm `find . -name "*~"`
     rm `find . -name "*.pyc"`
-    rm `find . -name "core*"`
+    rm `find . -name "core"`
+    rm `find . -name "core.[0-9]*"`
+
+    rm -f wxPython/wxPython/*  > /dev/null 2>&1
     rm wxPython/demo/.setup.sh
+    rm -rf wxPython/contrib/art2d
+    rm -rf wxPython/contrib/canvas
+    rm -rf wxPython/contrib/canvas2
+    rm -rf wxPython/contrib/gizmos/contrib
+    rm -rf wxPython/contrib/ogl/contrib
+    rm -rf wxPython/contrib/stc/contrib
+    rm -rf wxPython/contrib/xrc/contrib
 
     popd > /dev/null
     popd > /dev/null
