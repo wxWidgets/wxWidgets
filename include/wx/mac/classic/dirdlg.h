@@ -22,7 +22,7 @@ public:
     wxDirDialog(wxWindow *parent,
                 const wxString& message = wxDirSelectorPromptStr,
                 const wxString& defaultPath = _T(""),
-                long style = 0,
+                long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 const wxString& name = wxDirDialogNameStr);
