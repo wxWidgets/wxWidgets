@@ -906,6 +906,10 @@ public:
         // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const { return m_tooltip; }
     wxString GetToolTipText() const ;
+#else
+        // make it much easier to compile apps in an environment
+        // that doesn't support tooltips, such as PocketPC
+    inline void SetToolTip( const wxString & WXUNUSED(tip) ) {}
 #endif // wxUSE_TOOLTIPS
 
     // drag and drop
