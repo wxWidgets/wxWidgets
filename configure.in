@@ -501,6 +501,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_XPM=no
   DEFAULT_wxUSE_ICO_CUR=no
   DEFAULT_wxUSE_ACCESSIBILITY=no
+  
+  DEFAULT_wxUSE_MONOLITHIC=yes
 else
   DEFAULT_wxUSE_UNIVERSAL=no
 
@@ -673,6 +675,8 @@ else
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
   DEFAULT_wxUSE_ACCESSIBILITY=no
+  
+  DEFAULT_wxUSE_MONOLITHIC=yes
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -703,6 +707,7 @@ dnl     doing
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
+WX_ARG_ENABLE(monolithic,  [  --disable-monolithic    don't build wxWindows as single library], wxUSE_MONOLITHIC)
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -5584,8 +5589,11 @@ AC_SUBST(wxUSE_LIBTIFF)
 
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 
-dnl FIXME -- must use configure option!
-MONOLITHIC=1
+if test $wxUSE_MONOLITHIC = "yes" ; then
+    MONOLITHIC=1
+else
+    MONOLITHIC=0
+fi
 
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
@@ -5807,172 +5815,16 @@ AC_CONFIG_COMMANDS([default],
          )
 
 
-dnl Configure samples if their sources are present:
-if test -d ${srcdir}/samples ; then
-    AC_CONFIG_FILES([
-        samples/Makefile
-        samples/access/Makefile
-        samples/artprov/Makefile
-        samples/caret/Makefile
-        samples/calendar/Makefile
-        samples/checklst/Makefile
-        samples/config/Makefile
-        samples/controls/Makefile
-        samples/console/Makefile
-        samples/db/Makefile
-        samples/dialogs/Makefile
-        samples/dialup/Makefile
-        samples/docview/Makefile
-        samples/docvwmdi/Makefile
-        samples/dnd/Makefile
-        samples/dragimag/Makefile
-        samples/drawing/Makefile
-        samples/dynamic/Makefile
-        samples/erase/Makefile
-        samples/event/Makefile
-        samples/exec/Makefile
-        samples/font/Makefile
-        samples/grid/Makefile
-        samples/help/Makefile
-        samples/image/Makefile
-        samples/internat/Makefile
-        samples/ipc/Makefile
-        samples/joytest/Makefile
-        samples/keyboard/Makefile
-        samples/layout/Makefile
-        samples/listctrl/Makefile
-        samples/mdi/Makefile
-        samples/menu/Makefile
-        samples/memcheck/Makefile
-        samples/minifram/Makefile
-        samples/minimal/Makefile
-        samples/mobile/Makefile
-        samples/mobile/wxedit/Makefile
-        samples/mobile/styles/Makefile
-        samples/multimon/Makefile
-        samples/notebook/Makefile
-        samples/oleauto/Makefile
-        samples/ownerdrw/Makefile
-        samples/png/Makefile
-        samples/printing/Makefile
-        samples/propsize/Makefile
-        samples/regtest/Makefile
-        samples/rotate/Makefile
-        samples/sashtest/Makefile
-        samples/shaped/Makefile
-        samples/scroll/Makefile
-        samples/scrollsub/Makefile
-        samples/sockets/Makefile
-        samples/splitter/Makefile
-        samples/statbar/Makefile
-        samples/taskbar/Makefile
-        samples/text/Makefile
-        samples/thread/Makefile
-        samples/toolbar/Makefile
-        samples/treectrl/Makefile
-        samples/typetest/Makefile
-        samples/validate/Makefile
-        samples/widgets/Makefile
-        samples/wizard/Makefile
-        samples/htlbox/Makefile
-        samples/html/Makefile
-        samples/html/about/Makefile
-        samples/html/help/Makefile
-        samples/html/printing/Makefile
-        samples/html/helpview/Makefile
-        samples/html/test/Makefile
-        samples/html/zip/Makefile
-        samples/html/virtual/Makefile
-        samples/html/widget/Makefile
-        samples/opengl/Makefile
-        samples/opengl/cube/Makefile
-        samples/opengl/penguin/Makefile
-        samples/opengl/isosurf/Makefile
-    ])
-fi
-
-dnl Configure demos if their sources are present:
-if test -d ${srcdir}/demos ; then
-    AC_CONFIG_FILES([
-        demos/Makefile
-        demos/bombs/Makefile
-        demos/dbbrowse/Makefile
-        demos/forty/Makefile
-        demos/fractal/Makefile
-        demos/life/Makefile
-        demos/poem/Makefile
-    ])
-fi
-
-dnl Configure utils if their sources are present:
-if test -d ${srcdir}/utils ; then
-    AC_CONFIG_FILES([
-        utils/Makefile
-        utils/makegen/Makefile
-        utils/HelpGen/Makefile
-        utils/HelpGen/src/Makefile
-        utils/tex2rtf/Makefile
-        utils/tex2rtf/src/Makefile
-        utils/hhp2cached/Makefile
-        utils/dialoged/Makefile
-        utils/dialoged/src/Makefile
-        utils/emulator/Makefile
-        utils/emulator/src/Makefile
-        utils/helpview/Makefile
-        utils/helpview/src/Makefile
-        utils/configtool/Makefile
-        utils/configtool/src/Makefile
-    ])
-fi
-
-dnl Configure contrib libs & samples if their sources are present:
-if test -d ${srcdir}/contrib ; then
-    AC_CONFIG_FILES([
-        contrib/src/Makefile
-        contrib/src/deprecated/Makefile
-        contrib/src/ogl/Makefile
-        contrib/src/mmedia/Makefile
-        contrib/src/stc/Makefile
-        contrib/src/svg/Makefile	    
-        contrib/src/xrc/Makefile
-        contrib/src/gizmos/Makefile
-        contrib/src/plot/Makefile
-        contrib/src/applet/Makefile
-        contrib/src/fl/Makefile
-        contrib/src/net/Makefile
-        contrib/samples/Makefile
-        contrib/samples/deprecated/Makefile
-        contrib/samples/deprecated/proplist/Makefile
-        contrib/samples/deprecated/resource/Makefile
-        contrib/samples/deprecated/treelay/Makefile
-        contrib/samples/mmedia/Makefile
-        contrib/samples/ogl/Makefile
-        contrib/samples/ogl/ogledit/Makefile
-        contrib/samples/ogl/studio/Makefile
-        contrib/samples/stc/Makefile
-        contrib/samples/svg/Makefile
-        contrib/samples/gizmos/Makefile
-        contrib/samples/gizmos/editlbox/Makefile
-        contrib/samples/gizmos/dynsash/Makefile
-        contrib/samples/gizmos/dynsash_switch/Makefile
-        contrib/samples/gizmos/multicell/Makefile
-        contrib/samples/gizmos/splittree/Makefile
-        contrib/samples/gizmos/led/Makefile
-        contrib/samples/xrc/Makefile
-        contrib/samples/plot/Makefile
-        contrib/samples/applet/Makefile
-        contrib/samples/fl/Makefile
-        contrib/samples/fl/fl_demo1/Makefile
-        contrib/samples/fl/fl_demo2/Makefile
-        contrib/samples/fl/fl_sample1/Makefile
-        contrib/samples/fl/fl_sample2/Makefile
-        contrib/samples/fl/fl_sample3/Makefile
-        contrib/utils/Makefile
-        contrib/utils/wxrc/Makefile
-        contrib/utils/wxrcedit/Makefile
-        contrib/utils/convertrc/Makefile
-    ])
-fi
+dnl Configure samples, contrib etc. directories, but only if they are present:
+for subdir in samples demos utils contrib ; do
+    if test -d ${srcdir}/${subdir} ; then
+        makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
+        for mkin in $makefiles ; do
+            mk=`echo $mkin | sed 's/Makefile\.in/Makefile/g'`
+            AC_CONFIG_FILES([$mk])
+        done
+    fi
+done
 
 
 AC_OUTPUT
@@ -5982,6 +5834,7 @@ echo
 echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
 echo ""
 echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
+echo "  Should wxWindows be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"
