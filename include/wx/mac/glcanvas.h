@@ -109,6 +109,7 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    void SwapBuffers();
    void UpdateContext();
    void SetViewport();
+   virtual bool Show(bool show = TRUE) ;
    
    // Unlike some other platforms, this must get called if you override it.
    // It sets the viewport correctly and update the context.
@@ -117,13 +118,15 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    
      virtual void MacSuperChangedPosition() ;
      virtual void MacTopLevelWindowChangedPosition() ;
+     virtual void MacSuperShown( bool show ) ;
+
      void MacUpdateView() ;
 
    inline wxGLContext* GetContext() const { return m_glContext; }
 
 protected:
     wxGLContext*   m_glContext;
-
+	bool m_macCanvasIsShown ;
 DECLARE_EVENT_TABLE()
 };
 

@@ -224,7 +224,7 @@ bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID 
     wxCHECK_MSG( fmt, false, wxT("Couldn't create OpenGl pixel format") );
     
     m_glContext = new wxGLContext(fmt, this, palette, shared);
-    
+    m_macCanvasIsShown = true ;
     aglDestroyPixelFormat(fmt);
     
     return true;
@@ -249,18 +249,29 @@ void wxGLCanvas::SetViewport()
     int x = 0 ;
     int y = 0 ;
     
-    MacClientToRootWindow( &x , &y ) ;
-    int width, height;
-    GetClientSize(& width, & height);
-    Rect bounds ;
-    GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
-    GLint parms[4] ;
-    parms[0] = x ;
-    parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
-    parms[2] = width ;
-    parms[3] = height ;
+    wxWindow* iter = this ;
+    while( iter->GetParent() )
+    {
+    	iter = iter->GetParent() ;
+    }
     
-       aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
+    if ( iter && iter->IsTopLevel() )
+    {
+	    MacClientToRootWindow( &x , &y ) ;
+	    int width, height;
+	    GetClientSize(& width, & height);
+	    Rect bounds ;
+	    GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
+	    GLint parms[4] ;
+	    parms[0] = x ;
+	    parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
+	    parms[2] = width ;
+	    parms[3] = height ;
+	    
+	    if ( !m_macCanvasIsShown )
+	    	parms[0] += 20000 ;
+	    aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
+   	}
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
@@ -304,6 +315,51 @@ void wxGLCanvas::SetColour(const char *colour)
         m_glContext->SetColour(colour);
 }
 
+bool wxGLCanvas::Show(bool show) 
+{
+    if ( !wxWindow::Show( show ) )
+        return FALSE ;
+        
+    if ( !show )
+    {
+        if ( m_macCanvasIsShown )
+        {
+            m_macCanvasIsShown = false ;
+            SetViewport() ;
+        }
+    }
+    else
+    {
+        if ( MacIsReallyShown() && !m_macCanvasIsShown )
+        {
+            m_macCanvasIsShown = true ;
+            SetViewport() ;
+        }
+    }
+    return TRUE ;
+}
+
+void wxGLCanvas::MacSuperShown( bool show ) 
+{
+    if ( !show )
+    {
+        if ( m_macCanvasIsShown )
+        {
+            m_macCanvasIsShown = false ;
+            SetViewport() ;
+        }
+    }
+    else
+    {
+        if ( MacIsReallyShown() && !m_macCanvasIsShown )
+        {
+            m_macCanvasIsShown = true ;
+            SetViewport() ;
+        }
+    }
+        
+    wxWindow::MacSuperShown( show ) ;
+}
 
 //---------------------------------------------------------------------------
 // wxGLApp
