@@ -21,7 +21,7 @@
 #define wxGauge wxGauge95
 #define classwxGauge classwxGauge95
 #else
-#include "wx/msw/gaugemsw.h
+#include "wx/msw/gaugemsw.h"
 #define wxGauge wxGaugeMSW
 #define classwxGauge classwxGaugeMSW
 #endif
