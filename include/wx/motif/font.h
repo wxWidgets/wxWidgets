@@ -21,6 +21,20 @@
 
 class WXDLLEXPORT wxFont;
 
+// For every wxFont, there must be a font for each display and scale requested.
+// So these objects are stored in wxFontRefData::m_fonts
+class WXDLLEXPORT wxXFont: public wxObject
+{
+public:
+    wxXFont();
+    ~wxXFont();
+
+    WXFontStructPtr     m_fontStruct;   // XFontStruct
+    WXFontList          m_fontList;     // Motif XmFontList
+    WXDisplay*          m_display;      // XDisplay
+    int                 m_scale;        // Scale * 100
+};
+
 class WXDLLEXPORT wxFontRefData: public wxGDIRefData
 {
     friend class WXDLLEXPORT wxFont;
@@ -36,8 +50,8 @@ protected:
   bool          m_underlined;
   wxString      m_faceName;
 
-  // A list of XFontStructs indexed by scale (*100)
-  wxList        m_fontsByScale;
+  // A list of wxXFonts
+  wxList        m_fonts;
 };
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)
@@ -87,16 +101,30 @@ public:
   // based on this wxFont and the given scale. Append the
   // font to list in the private data for future reference.
 
-  // TODO This is a very basic implementation, that doesn't
+  // TODO This is a fairly basic implementation, that doesn't
   // allow for different facenames, and also doesn't do a mapping
   // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
   // and the fonts that are available on a particular system.
   // Maybe we need to scan the user's machine to build up a profile
   // of the fonts and a mapping file.
 
-  WXFontStructPtr FindOrCreateFontStruct(double scale = 1.0);
+  // Return font struct, and optionally the Motif font list
+  wxXFont* GetInternalFont(double scale = 1.0, WXDisplay* display = NULL) const;
+
+  // These two are helper functions for convenient access of the above.
+  inline WXFontStructPtr GetFontStruct(double scale = 1.0, WXDisplay* display = NULL) const
+  {
+    wxXFont* f = GetInternalFont(scale, display);
+    return (f ? f->m_fontStruct : (WXFontStructPtr) 0);
+  }
+  WXFontList GetFontList(double scale = 1.0, WXDisplay* display = NULL) const
+  {
+    wxXFont* f = GetInternalFont(scale, display);
+    return (f ? f->m_fontList : (WXFontList) 0);
+  }
+
   WXFontStructPtr LoadQueryFont(int pointSize, int family, int style,
-   int weight, bool underlined);
+   int weight, bool underlined) const;
 protected:
   bool RealizeResource();
   void Unshare();

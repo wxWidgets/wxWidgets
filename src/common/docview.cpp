@@ -1639,7 +1639,16 @@ bool wxCommandProcessor::CanUndo(void) const
 
 bool wxCommandProcessor::CanRedo(void) const
 {
-  return ((m_currentCommand && m_currentCommand->Next()));
+    if ((m_currentCommand != (wxNode*) NULL) && (m_currentCommand->Next() == (wxNode*) NULL))
+        return FALSE;
+
+    if ((m_currentCommand != (wxNode*) NULL) && (m_currentCommand->Next() != (wxNode*) NULL))
+        return TRUE;
+
+    if ((m_currentCommand == (wxNode*) NULL) && (m_commands.Number() > 0))
+        return TRUE;
+
+    return FALSE;
 }
 
 void wxCommandProcessor::Initialize(void)

@@ -18,7 +18,7 @@
 
 typedef   unsigned int  size_t;
 
-#if !USE_OWNER_DRAWN
+#if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."
 #endif
 

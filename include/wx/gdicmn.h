@@ -25,6 +25,7 @@
 
 // Standard cursors
 typedef enum {
+ wxCURSOR_NONE =  0,
  wxCURSOR_ARROW =  1,
  wxCURSOR_BULLSEYE,
  wxCURSOR_CHAR,
@@ -57,7 +58,7 @@ typedef enum {
   wxCURSOR_BASED_ARROW_UP,
   wxCURSOR_BASED_ARROW_DOWN
 #endif
-} _standard_cursors_t;
+} wxStockCursor;
 
 class WXDLLEXPORT wxSize
 {

@@ -48,10 +48,14 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-GENDIR=..\generic
-COMMDIR=..\common
+# These are absolute paths, so that the compiler
+# generates correct __FILE__ symbols for debugging.
+# Otherwise you don't be able to double-click on a memory
+# error to load that file.
+GENDIR=$(WXDIR)\src\generic
+COMMDIR=$(WXDIR)\src\common
 OLEDIR=ole
-MSWDIR=.
+MSWDIR=$(WXDIR)\src\msw
 
 DOCDIR = $(WXDIR)\docs
 

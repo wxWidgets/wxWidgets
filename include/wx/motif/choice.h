@@ -26,7 +26,8 @@ class WXDLLEXPORT wxChoice: public wxControl
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
  public:
-  inline wxChoice() { m_noStrings = 0; }
+  wxChoice();
+  ~wxChoice();
 
   inline wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -61,11 +62,23 @@ class WXDLLEXPORT wxChoice: public wxControl
   virtual inline int Number() const { return m_noStrings; }
   virtual void Command(wxCommandEvent& event);
 
-  virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
-  virtual inline int GetColumns() const { return 1 ; };
+  virtual void SetColumns(int n = 1 );
+  virtual int GetColumns() const ;
+
+  void SetFocus();
+
+  WXWidget GetTopWidget() const { return m_formWidget; }
+  WXWidget GetMainWidget() const { return m_buttonWidget; }
 
 protected:
-  int m_noStrings;
+  int           m_noStrings;
+  WXWidget      m_menuWidget;
+  WXWidget      m_buttonWidget;
+  WXWidget*     m_widgetList ;
+  WXWidget      m_formWidget;
+  wxStringList  m_stringList;
+public:
+  bool          m_inSetValue;
 };
 
 #endif

@@ -138,61 +138,61 @@ wxWindow::wxWindow()
 // Destructor
 wxWindow::~wxWindow()
 {
-  //// Motif-specific
+    //// Motif-specific
 
-  if (m_paintRegion)
-    XDestroyRegion ((Region) m_paintRegion);
-  m_paintRegion = (WXRegion) 0;
+    if (m_paintRegion)
+        XDestroyRegion ((Region) m_paintRegion);
+    m_paintRegion = (WXRegion) 0;
 
-  if (GetMainWidget())
-    DetachWidget(GetMainWidget()); // Removes event handlers
+    if (GetMainWidget())
+        DetachWidget(GetMainWidget()); // Removes event handlers
 
-  // If m_drawingArea, we're a fully-fledged window with drawing area, scrollbars etc. (what wxCanvas used to be)
-  if (m_drawingArea)
-  {
-    // Destroy children before destroying self
-    DestroyChildren();
-
-    if (m_backingPixmap)
-      XFreePixmap (XtDisplay ((Widget) GetMainWidget()), (Pixmap) m_backingPixmap);
-
-    Widget w = (Widget) m_drawingArea;
-    wxDeleteWindowFromTable(w);
-
-    if (w)
-      XtDestroyWidget(w);
-    m_mainWidget = (WXWidget) 0;
-
-    // Only if we're _really_ a canvas (not a dialog box/panel)
-    if (m_scrolledWindow)
+    // If m_drawingArea, we're a fully-fledged window with drawing area, scrollbars etc. (what wxCanvas used to be)
+    if (m_drawingArea)
     {
-      wxDeleteWindowFromTable((Widget) m_scrolledWindow);
+        // Destroy children before destroying self
+        DestroyChildren();
+
+        if (m_backingPixmap)
+        XFreePixmap (XtDisplay ((Widget) GetMainWidget()), (Pixmap) m_backingPixmap);
+
+        Widget w = (Widget) m_drawingArea;
+        wxDeleteWindowFromTable(w);
+
+        if (w)
+            XtDestroyWidget(w);
+        m_mainWidget = (WXWidget) 0;
+
+        // Only if we're _really_ a canvas (not a dialog box/panel)
+        if (m_scrolledWindow)
+        {
+            wxDeleteWindowFromTable((Widget) m_scrolledWindow);
+        }
+
+        if (m_hScrollBar)
+        {
+            XtUnmanageChild ((Widget) m_hScrollBar);
+            XtDestroyWidget ((Widget) m_hScrollBar);
+        }
+        if (m_vScrollBar)
+        {
+            XtUnmanageChild ((Widget) m_vScrollBar);
+            XtDestroyWidget ((Widget) m_vScrollBar);
+        }
+        if (m_scrolledWindow)
+        {
+            XtUnmanageChild ((Widget) m_scrolledWindow);
+            XtDestroyWidget ((Widget) m_scrolledWindow);
+        }
+
+        if (m_borderWidget)
+        {
+            XtDestroyWidget ((Widget) m_borderWidget);
+            m_borderWidget = (WXWidget) 0;
+        }
     }
 
-    if (m_hScrollBar)
-    {
-      XtUnmanageChild ((Widget) m_hScrollBar);
-      XtDestroyWidget ((Widget) m_hScrollBar);
-    }
-    if (m_vScrollBar)
-    {
-      XtUnmanageChild ((Widget) m_vScrollBar);
-      XtDestroyWidget ((Widget) m_vScrollBar);
-    }
-    if (m_scrolledWindow)
-    {
-      XtUnmanageChild ((Widget) m_scrolledWindow);
-      XtDestroyWidget ((Widget) m_scrolledWindow);
-    }
-
-    if (m_borderWidget)
-    {
-      XtDestroyWidget ((Widget) m_borderWidget);
-      m_borderWidget = (WXWidget) 0;
-    }
-  }
-
-  //// Generic stuff
+    //// Generic stuff
 
 	// Have to delete constraints/sizer FIRST otherwise
 	// sizers may try to look at deleted windows as they
@@ -958,9 +958,13 @@ void wxWindow::SetFont(const wxFont& font)
 {
     m_windowFont = font;
 
-    if (!m_windowFont.Ok())
-	    return;
-    // TODO
+    Widget w = (Widget) GetMainWidget();
+    if (w && m_windowFont.Ok())
+    {
+        XtVaSetValues (w,
+		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
+		   NULL);
+    }
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)

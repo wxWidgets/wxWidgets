@@ -79,7 +79,7 @@ public:
                                      double x2, double y2,
                                      double *x3, double *y3,
                                      double xOffset, double yOffset,
-                                     bool attachmentMode)
+                                     int attachmentMode)
   { return FALSE; }
 
 protected:
@@ -191,7 +191,7 @@ public:
                                      double x2, double y2,
                                      double *x3, double *y3,
                                      double xOffset, double yOffset,
-                                     bool attachmentMode);
+                                     int attachmentMode);
 
 public:
   wxRealPoint*  m_points;

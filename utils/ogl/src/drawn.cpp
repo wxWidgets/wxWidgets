@@ -1219,7 +1219,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
                                      double x2, double y2,
                                      double *x3, double *y3,
                                      double xOffset, double yOffset,
-                                     bool attachmentMode)
+                                     int attachmentMode)
 {
   int n = m_noPoints;
 
@@ -1227,7 +1227,7 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
   // and we would want to connect to a point on that vertical --
   // oglFindEndForPolyline can't cope with this (the arrow
   // gets drawn to the wrong place).
-  if ((!attachmentMode) && (x1 == x2))
+  if ((attachmentMode == ATTACHMENT_MODE_NONE) && (x1 == x2))
   {
     // Look for the point we'd be connecting to. This is
     // a heuristic...

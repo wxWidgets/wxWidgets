@@ -1065,7 +1065,7 @@ void wxLineShape::OnMoveLink(wxDC& dc, bool moveControlPoints)
 
 //    if (moveControlPoints && m_lineControlPoints && !(x_offset == 0.0 && y_offset == 0.0))
     // Only move control points if it's a self link. And only works if attachment mode is ON.
-    if ((m_from == m_to) && m_from->GetAttachmentMode() && moveControlPoints && m_lineControlPoints && !(x_offset == 0.0 && y_offset == 0.0))
+    if ((m_from == m_to) && (m_from->GetAttachmentMode() != ATTACHMENT_MODE_NONE) && moveControlPoints && m_lineControlPoints && !(x_offset == 0.0 && y_offset == 0.0))
     {
       wxNode *node = m_lineControlPoints->First();
       while (node)
@@ -1110,7 +1110,7 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
 
   if (m_lineControlPoints->Number() > 2)
   {
-    if (m_from->GetAttachmentMode())
+    if (m_from->GetAttachmentMode() != ATTACHMENT_MODE_NONE)
     {
       int nth, no_arcs;
       FindNth(m_from, &nth, &no_arcs, FALSE); // Not incoming
@@ -1121,7 +1121,7 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
                                    (double)second_point->x, (double)second_point->y,
                                     &end_x, &end_y);
 
-    if (m_to->GetAttachmentMode())
+    if (m_to->GetAttachmentMode() != ATTACHMENT_MODE_NONE)
     {
       int nth, no_arcs;
       FindNth(m_to, &nth, &no_arcs, TRUE); // Incoming
@@ -1139,7 +1139,7 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
     double toX = m_to->GetX();
     double toY = m_to->GetY();
 
-    if (m_from->GetAttachmentMode())
+    if (m_from->GetAttachmentMode() != ATTACHMENT_MODE_NONE)
     {
       int nth, no_arcs;
       FindNth(m_from, &nth, &no_arcs, FALSE);
@@ -1148,7 +1148,7 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
       fromY = end_y;
     }
 
-    if (m_to->GetAttachmentMode())
+    if (m_to->GetAttachmentMode() != ATTACHMENT_MODE_NONE)
     {
       int nth, no_arcs;
       FindNth(m_to, &nth, &no_arcs, TRUE);
@@ -1157,12 +1157,12 @@ void wxLineShape::FindLineEndPoints(double *fromX, double *fromY, double *toX, d
       toY = other_end_y;
     }
 
-    if (!m_from->GetAttachmentMode())
+    if (m_from->GetAttachmentMode() == ATTACHMENT_MODE_NONE)
       (void) m_from->GetPerimeterPoint(m_from->GetX(), m_from->GetY(),
                                   toX, toY,
                                   &end_x, &end_y);
 
-    if (!m_to->GetAttachmentMode())
+    if (m_to->GetAttachmentMode() == ATTACHMENT_MODE_NONE)
       (void) m_to->GetPerimeterPoint(m_to->GetX(), m_to->GetY(),
                                 fromX, fromY,
                                 &other_end_x, &other_end_y);

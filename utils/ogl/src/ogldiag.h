@@ -93,5 +93,32 @@ protected:
   wxList*               m_shapeList;
 };
 
+class wxLineCrossing: public wxObject
+{
+public:
+    wxLineCrossing() { m_lineShape1 = NULL; m_lineShape2 = NULL; }
+    wxRealPoint     m_pt1; // First line
+    wxRealPoint     m_pt2;
+    wxRealPoint     m_pt3; // Second line
+    wxRealPoint     m_pt4;
+    wxRealPoint     m_intersect;
+    wxLineShape*    m_lineShape1;
+    wxLineShape*    m_lineShape2;
+};
+
+class wxLineCrossings: public wxObject
+{
+public:
+    wxLineCrossings();
+    ~wxLineCrossings();
+
+    void FindCrossings(wxDiagram& diagram);
+    void DrawCrossings(wxDiagram& diagram, wxDC& dc);
+    void ClearCrossings();
+
+public:
+    wxList  m_crossings;
+};
+
 #endif
  // _OGL_OGLDIAG_H_

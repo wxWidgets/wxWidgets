@@ -38,7 +38,8 @@ class WXDLLEXPORT wxListBox: public wxControl
            int n = 0, const wxString choices[] = NULL,
            long style = 0,
            const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr)
+           const wxString& name = wxListBoxNameStr):
+              m_clientDataList(wxKEY_INTEGER)
   {
     Create(parent, id, pos, size, n, choices, style, validator, name);
   }
@@ -88,9 +89,15 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   void Command(wxCommandEvent& event);
 
- protected:
+protected:
   int       m_noItems;
   int       m_selected;
+
+  // List mapping positions->client data
+  wxList    m_clientDataList;
+
+public:
+  bool      m_inSetValue;
 };
 
 #endif

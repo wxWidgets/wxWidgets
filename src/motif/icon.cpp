@@ -14,6 +14,12 @@
 #endif
 
 #include "wx/icon.h"
+#include "wx/window.h"
+
+#include <Xm/Xm.h>
+#include <X11/cursorfont.h>
+
+#include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
@@ -23,23 +29,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
  * Icons
  */
 
-
-wxIconRefData::wxIconRefData()
-{
-    // TODO: init icon handle
-}
-
-wxIconRefData::~wxIconRefData()
-{
-    // TODO: destroy icon handle
-}
-
 wxIcon::wxIcon()
 {
 }
 
-wxIcon::wxIcon(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height))
+// Create from XBM data
+wxIcon::wxIcon(const char bits[], int width, int height)
 {
+    (void) Create((void*) bits, wxBITMAP_TYPE_XBM_DATA, width, height, 1);
+}
+
+// Create from XPM data
+wxIcon::wxIcon(const char **data)
+{
+    (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
 wxIcon::wxIcon(const wxString& icon_file, long flags,
@@ -58,7 +61,7 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
 {
   UnRef();
 
-  m_refData = new wxIconRefData;
+  m_refData = new wxBitmapRefData;
 
   wxBitmapHandler *handler = FindHandler(type);
 

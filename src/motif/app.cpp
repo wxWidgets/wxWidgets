@@ -296,6 +296,8 @@ int wxApp::MainLoop()
            report = event;
            while( XCheckTypedWindowEvent (disp, win, ResizeRequest, &report));
         }
+        // TODO: when implementing refresh optimization, we can use
+        // XtAddExposureToRegion to expand the window's paint region.
 
         XtDispatchEvent(&event);
 

@@ -902,6 +902,9 @@ typedef void*           WXFontStructPtr;
 typedef void*           WXGC;
 typedef void*           WXRegion;
 typedef void*           WXFont;
+typedef void*           WXImage;
+typedef void*           WXCursor;
+typedef void*           WXFontList;
 #endif
 
 #endif

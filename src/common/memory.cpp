@@ -324,7 +324,7 @@ void wxMemStruct::PrintNode ()
   {
     wxObject *obj = (wxObject *)m_actualData;
     wxClassInfo *info = obj->GetClassInfo();
-
+/*
     if (info && info->GetClassName())
       wxTrace("%s", info->GetClassName());
     else
@@ -334,12 +334,24 @@ void wxMemStruct::PrintNode ()
       wxTrace(" (%s %d)", m_fileName, (int)m_lineNum);
 
     wxTrace(" at $%lX, size %d\n", (long)GetActualData(), (int)RequestSize());
+*/
+    // Let's put this in standard form so IDEs can load the file at the appropriate
+    // line
+    if (m_fileName)
+      wxTrace("%s(%d): ", m_fileName, (int)m_lineNum);
+
+    if (info && info->GetClassName())
+      wxTrace("%s", info->GetClassName());
+    else
+      wxTrace("object");
+
+    wxTrace(" at $%lX, size %d\n", (long)GetActualData(), (int)RequestSize());
   }
   else
   {
-    wxTrace("Non-object data");
     if (m_fileName)
-      wxTrace(" (%s %d)", m_fileName, (int)m_lineNum);
+      wxTrace("%s(%d): ", m_fileName, (int)m_lineNum);
+    wxTrace("non-object data");
     wxTrace(" at $%lX, size %d\n", (long)GetActualData(), (int)RequestSize());
   }
 }
@@ -351,23 +363,19 @@ void wxMemStruct::Dump ()
   if (m_isObject)
   {
     wxObject *obj = (wxObject *)m_actualData;
-//    wxClassInfo *info = obj->GetClassInfo();
 
     if (m_fileName)
-      wxTrace("Item (%s %d)", m_fileName, (int)m_lineNum);
-    else
-      wxTrace("Item");
+      wxTrace("%s(%d): ", m_fileName, (int)m_lineNum);
 
-    wxTrace(" at $%lX, size %d: ", (long)GetActualData(), (int)RequestSize());
-//    wxTrace(info->GetClassName());
     obj->Dump(wxDebugContext::GetStream());
+    wxTrace(" at $%lX, size %d", (long)GetActualData(), (int)RequestSize());
     wxTrace("\n");
   }
   else
   {
-    wxTrace("Non-object data");
     if (m_fileName)
-      wxTrace(" (%s %d)", m_fileName, (int)m_lineNum);
+      wxTrace("%s(%d): ", m_fileName, (int)m_lineNum);
+    wxTrace("non-object data");
     wxTrace(" at $%lX, size %d\n", (long)GetActualData(), (int)RequestSize());
   }
 }

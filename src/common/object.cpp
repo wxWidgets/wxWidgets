@@ -111,7 +111,7 @@ void wxObject::operator delete (void * buf)
 
 // VC++ 6.0
 #if _MSC_VER >= 1200
-void operator delete(void* pData, char* /* fileName */, int /* lineNum */)
+void operator wxObject::delete(void* pData, char* /* fileName */, int /* lineNum */)
 {
  ::operator delete(pData);
 }

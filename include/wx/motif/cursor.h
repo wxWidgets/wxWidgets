@@ -18,6 +18,18 @@
 
 #include "wx/bitmap.h"
 
+/* Cursor for one display, so we can choose the correct one for
+ * the current display.
+ */
+class wxXCursor : public wxObject
+{
+ DECLARE_DYNAMIC_CLASS(wxXCursor)
+
+ public:
+  WXDisplay*  m_display;
+  WXCursor    m_cursor;
+};
+
 class WXDLLEXPORT wxCursorRefData: public wxBitmapRefData
 {
     friend class WXDLLEXPORT wxBitmap;
@@ -26,10 +38,8 @@ public:
     wxCursorRefData();
     ~wxCursorRefData();
 
-protected:
-/* TODO: implementation
-  WXHCURSOR m_hCursor;
-*/
+    wxList        m_cursors;  // wxXCursor objects, one per display
+    wxStockCursor m_cursorId; // wxWindows standard cursor id
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)
@@ -50,24 +60,23 @@ public:
   wxCursor(const char bits[], int width, int height, int hotSpotX = -1, int hotSpotY = -1,
     const char maskBits[] = NULL);
 
-  /* TODO: make default type suit platform */
-  wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_CUR_RESOURCE,
+  wxCursor(const wxString& name, long flags = wxBITMAP_TYPE_XBM,
    int hotSpotX = 0, int hotSpotY = 0);
 
-  wxCursor(int cursor_type);
+  wxCursor(wxStockCursor id);
   ~wxCursor();
 
-  // TODO: also verify the internal cursor handle
-  virtual bool Ok() const { return (m_refData != NULL) ; }
+  virtual bool Ok() const { return ((m_refData != NULL) && M_CURSORDATA->m_ok); }
 
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }
   inline bool operator != (const wxCursor& cursor) { return m_refData != cursor.m_refData; }
 
-/* TODO: implementation
-  void SetHCURSOR(WXHCURSOR cursor);
-  inline WXHCURSOR GetHCURSOR() const { return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0); }
-*/
+  // Motif-specific.
+  // Create/get a cursor for the current display
+  WXCursor GetXCursor(WXDisplay* display) ;
+  // Make a cursor from standard id
+  WXCursor MakeCursor(WXDisplay* display, wxStockCursor id);
 };
 
 extern WXDLLEXPORT void wxSetCursor(const wxCursor& cursor);

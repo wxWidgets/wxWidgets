@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // File:      region.cpp
 // Purpose:   Region class
-// Author:    Markus Holzem/Julian Smart/Julian Smart
+// Author:    Markus Holzem/Julian Smart
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:	  $Id$
-// Copyright: (c) 1997 Markus Holzem/Julian Smart/Julian Smart
+// Copyright: (c) 1997 Markus Holzem/Julian Smart
 // Licence:   wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -14,6 +14,9 @@
 
 #include "wx/region.h"
 #include "wx/gdicmn.h"
+
+#include <Xm/Xm.h>
+// #include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARY
 	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
@@ -28,19 +31,23 @@ class WXDLLEXPORT wxRegionRefData : public wxGDIRefData {
 public:
 	wxRegionRefData()
 	{
+		m_region = XCreateRegion();
 	}
 
 	wxRegionRefData(const wxRegionRefData& data)
 	{
-        // TODO
+		m_region = XCreateRegion();
+		XUnionRegion(m_region, data.m_region, m_region);
 	}
 
 	~wxRegionRefData()
 	{
-        // TODO
+		XDestroyRegion(m_region);
 	}
+    Region  m_region;
 };
 
+#define M_REGION (((wxRegionRefData*)m_refData)->m_region)
 
 //-----------------------------------------------------------------------------
 // wxRegion
@@ -51,26 +58,42 @@ public:
  */
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData;
-    // TODO create empty region
 }
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+
+	XRectangle rect;
+	rect.x		= x;
+	rect.y		= y;
+	rect.width	= w;
+	rect.height = h;
+	XUnionRectWithRegion(&rect, M_REGION, M_REGION);
 }
 
 wxRegion::wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+
+	XRectangle rect;
+	rect.x		= topLeft.x;
+	rect.y		= topLeft.y;
+	rect.width	= bottomRight.x - topLeft.x;
+	rect.height = bottomRight.y - topLeft.y;
+	XUnionRectWithRegion(&rect, M_REGION, M_REGION);
 }
 
 wxRegion::wxRegion(const wxRect& rect)
 {
     m_refData = new wxRegionRefData;
-    // TODO create rect region
+
+    XRectangle rect1;
+    rect1.x		= rect.x;
+    rect1.y		= rect.y;
+    rect1.width	= rect.width;
+    rect1.height = rect.height;
+    XUnionRectWithRegion(&rect1, M_REGION, M_REGION);
 }
 
 /*!
@@ -104,16 +127,23 @@ bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
 	}
     // If ref count is 1, that means it's 'ours' anyway so no action.
 
-    // TODO create rect region
+    Region rectRegion = XCreateRegion();
+
+	XRectangle rect;
+	rect.x		= x;
+	rect.y		= y;
+	rect.width	= width;
+	rect.height = height;
+	XUnionRectWithRegion(&rect, rectRegion, rectRegion);
 
     int mode = 0; // TODO platform-specific code
     switch (op)
     {
         case wxRGN_AND:
-            // TODO
+	        XIntersectRegion(M_REGION, rectRegion, M_REGION);
             break ;
         case wxRGN_OR:
-            // TODO
+	        XUnionRegion(M_REGION, rectRegion, M_REGION);
             break ;
         case wxRGN_XOR:
             // TODO
@@ -121,13 +151,11 @@ bool wxRegion::Combine(long x, long y, long width, long height, wxRegionOp op)
         case wxRGN_DIFF:
             // TODO
             break ;
-        case wxRGN_COPY:
+        case wxRGN_COPY: // Don't have to do this one
         default:
             // TODO
             break ;
     }
-
-    // TODO do combine region
 
     return FALSE;
 }
@@ -151,10 +179,12 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
     switch (op)
     {
         case wxRGN_AND:
-            // TODO
+	        XIntersectRegion(M_REGION, ((wxRegionRefData*)region.m_refData)->m_region,
+				 M_REGION);
             break ;
         case wxRGN_OR:
-            // TODO
+	        XUnionRegion(M_REGION, ((wxRegionRefData*)region.m_refData)->m_region,
+				 M_REGION);
             break ;
         case wxRGN_XOR:
             // TODO
@@ -162,7 +192,7 @@ bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
         case wxRGN_DIFF:
             // TODO
             break ;
-        case wxRGN_COPY:
+        case wxRGN_COPY: // Don't have to do this one
         default:
             // TODO
             break ;
@@ -186,7 +216,12 @@ bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 void wxRegion::GetBox(long& x, long& y, long&w, long &h) const
 {
 	if (m_refData) {
-        // TODO get box
+		XRectangle rect;
+		XClipBox(M_REGION, &rect);
+		x = rect.x;
+		y = rect.y;
+		w = rect.width;
+		h = rect.height;
 	} else {
 		x = y = w = h = 0;
 	}
@@ -202,8 +237,7 @@ wxRect wxRegion::GetBox() const
 // Is region empty?
 bool wxRegion::Empty() const
 {
-    // TODO
-    return FALSE;
+	return m_refData ? XEmptyRegion(M_REGION) : FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -228,11 +262,7 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 	if (!m_refData)
 		return wxOutRegion;
 
-    // TODO. Return wxInRegion if within region.
-    if (0)
-        return wxInRegion;
-    else
-        return wxOutRegion;
+	return XPointInRegion(M_REGION, pt.x, pt.y) ? wxInRegion : wxOutRegion;
 }
 
 // Does the region contain the rectangle (x, y, w, h)?
@@ -241,11 +271,11 @@ wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
 	if (!m_refData)
 		return wxOutRegion;
 
-    // TODO. Return wxInRegion if within region.
-    if (0)
-        return wxInRegion;
-    else
-        return wxOutRegion;
+	switch (XRectInRegion(M_REGION, x, y, w, h)) {
+	    case RectangleIn:	return wxInRegion;
+	    case RectanglePart: return wxPartRegion;
+	}
+	return wxOutRegion;
 }
 
 // Does the region contain the rectangle rect

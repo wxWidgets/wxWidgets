@@ -55,6 +55,7 @@ public:
   bool Create(const wxBitmap& bitmap);
 
   inline WXPixmap GetPixmap() const { return m_pixmap; }
+  inline void SetPixmap(WXPixmap pixmap) { m_pixmap = pixmap; }
 
 protected:
   WXPixmap      m_pixmap;
@@ -70,20 +71,30 @@ public:
     ~wxBitmapRefData();
 
 public:
-  int           m_width;
-  int           m_height;
-  int           m_depth;
-  bool          m_ok;
-  int           m_numColors;
-  wxPalette     m_bitmapPalette;
-  int           m_quality;
+  int               m_width;
+  int               m_height;
+  int               m_depth;
+  bool              m_ok;
+  int               m_numColors;
+  wxPalette         m_bitmapPalette;
+  int               m_quality;
 
-  wxMask *      m_bitmapMask; // Optional mask
+  wxMask *          m_bitmapMask; // Optional mask
 
   // Motif implementation
 public:
-  WXPixmap      m_pixmap;
-  WXDisplay*    m_display;
+  WXPixmap          m_pixmap;
+  WXDisplay*        m_display;
+  bool              m_freePixmap;
+  unsigned long*    m_freeColors;
+  long              m_freeColorsCount;
+
+  // These 5 variables are for wxControl
+  WXPixmap          m_insensPixmap ;
+  WXPixmap          m_labelPixmap ;
+  WXPixmap          m_armPixmap ;
+  WXImage*          m_image ;
+  WXImage*          m_insensImage ;
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
@@ -127,17 +138,14 @@ public:
   { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
   inline wxBitmap(const wxBitmap* bitmap) { if (bitmap) Ref(*bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
 
-  // Initialize with raw data.
+  // Initialize with raw XBM data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-/* TODO: maybe implement XPM reading
   // Initialize with XPM data
-  wxBitmap(const char **data);
-*/
+  wxBitmap(const char **data, wxControl* control = NULL);
 
   // Load a file or resource
-  // TODO: make default type whatever's appropriate for the platform.
-  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XBM);
 
   // Constructor for generalised creation from data
   wxBitmap(void *data, long type, int width, int height, int depth = 1);
@@ -148,7 +156,7 @@ public:
 
   virtual bool Create(int width, int height, int depth = -1);
   virtual bool Create(void *data, long type, int width, int height, int depth = 1);
-  virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+  virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XBM);
   virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
   inline bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
@@ -188,11 +196,12 @@ public:
 public:
   inline WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
   inline WXDisplay* GetPixmap() const { return M_BITMAPDATA->m_pixmap; }
+  virtual WXPixmap GetLabelPixmap(WXWidget w) ;
+  virtual WXPixmap GetArmPixmap(WXWidget w) ;
+  virtual WXPixmap GetInsensPixmap(WXWidget w) ;
 
 protected:
   static wxList sm_handlers;
-
-
 };
 #endif
   // _WX_BITMAP_H_

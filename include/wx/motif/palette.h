@@ -17,8 +17,24 @@
 #endif
 
 #include "wx/gdiobj.h"
+#include "wx/list.h"
 
 class WXDLLEXPORT wxPalette;
+
+// Palette for one display
+class wxXPalette : public wxObject
+{
+DECLARE_DYNAMIC_CLASS(wxXPalette)
+
+public:
+    wxXPalette();
+
+    WXDisplay*        m_display;
+    int               m_pix_array_n;
+    unsigned long*    m_pix_array;
+    WXColormap        m_cmap;
+    bool              m_destroyable;
+};
 
 class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 {
@@ -28,7 +44,7 @@ public:
     ~wxPaletteRefData();
 
 protected:
-    WXColormap  m_colormap;
+    wxList  m_palettes;
 };
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
@@ -54,7 +70,12 @@ public:
   inline bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
 
-  WXColormap GetXColormap() const { return (M_PALETTEDATA->m_colormap); }
+  // Motif-specific
+  WXColormap GetXColormap(WXDisplay* display = NULL) const;
+  bool TransferBitmap(void *data, int depth, int size);
+  bool TransferBitmap8(unsigned char *data, unsigned long size, void *dest, unsigned int bpp);
+  unsigned long *GetXPixArray(WXDisplay* display, int *pix_array_n);
+  void PutXColormap(WXDisplay* display, WXColormap cmap, bool destroyable);
 };
 
 #endif

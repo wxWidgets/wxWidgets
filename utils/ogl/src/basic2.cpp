@@ -308,7 +308,7 @@ bool wxPolygonShape::HitTest(double x, double y, int *attachment, double *distan
   for (i = 0; i < n; i++)
   {
     double xp, yp;
-    if (GetAttachmentPosition(i, &xp, &yp))
+    if (GetAttachmentPositionEdge(i, &xp, &yp))
     {
       double l = (double)sqrt(((xp - x) * (xp - x)) +
                  ((yp - y) * (yp - y)));
@@ -439,7 +439,7 @@ bool wxPolygonShape::GetPerimeterPoint(double x1, double y1,
   // and we would want to connect to a point on that vertical --
   // oglFindEndForPolyline can't cope with this (the arrow
   // gets drawn to the wrong place).
-  if ((!m_attachmentMode) && (x1 == x2))
+  if ((m_attachmentMode == ATTACHMENT_MODE_NONE) && (x1 == x2))
   {
     // Look for the point we'd be connecting to. This is
     // a heuristic...
@@ -785,7 +785,7 @@ int wxPolygonShape::GetNumberOfAttachments() const
 bool wxPolygonShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
-  if (m_attachmentMode && m_points && attachment < m_points->Number())
+  if ((m_attachmentMode == ATTACHMENT_MODE_EDGE) && m_points && attachment < m_points->Number())
   {
     wxRealPoint *point = (wxRealPoint *)m_points->Nth(attachment)->Data();
     *x = point->x + m_xpos;
@@ -989,61 +989,7 @@ int wxRectangleShape::GetNumberOfAttachments() const
 bool wxRectangleShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
-  if (m_attachmentMode)
-  {
-    double top = (double)(m_ypos + m_height/2.0);
-    double bottom = (double)(m_ypos - m_height/2.0);
-    double left = (double)(m_xpos - m_width/2.0);
-    double right = (double)(m_xpos + m_width/2.0);
-
-    bool isEnd = (line && line->IsEnd(this));
-
-    // Simplified code
-    switch (attachment)
-    {
-      case 0:
-      {
-        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(right, bottom),
-            nth, no_arcs, line);
-
-        *x = pt.x; *y = pt.y;
-        break;
-      }
-      case 1:
-      {
-        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(right, bottom), wxRealPoint(right, top),
-            nth, no_arcs, line);
-
-        *x = pt.x; *y = pt.y;
-        break;
-      }
-      case 2:
-      {
-        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, top), wxRealPoint(right, top),
-            nth, no_arcs, line);
-
-        *x = pt.x; *y = pt.y;
-        break;
-      }
-      case 3:
-      {
-        wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(left, top),
-            nth, no_arcs, line);
-
-        *x = pt.x; *y = pt.y;
-        break;
-      }
-      default:
-      {
-        return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
-        break;
-      }
-    }
-
-    return TRUE;
-  }
-  else
-  { *x = m_xpos; *y = m_ypos; return TRUE; }
+    return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
 }
 
 // Text object (no box)
@@ -1179,13 +1125,19 @@ int wxEllipseShape::GetNumberOfAttachments() const
 bool wxEllipseShape::GetAttachmentPosition(int attachment, double *x, double *y,
                                          int nth, int no_arcs, wxLineShape *line)
 {
-  if (m_attachmentMode)
+  if (m_attachmentMode == ATTACHMENT_MODE_BRANCHING)
+    return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
+
+  if (m_attachmentMode != ATTACHMENT_MODE_NONE)
   {
     double top = (double)(m_ypos + m_height/2.0);
     double bottom = (double)(m_ypos - m_height/2.0);
     double left = (double)(m_xpos - m_width/2.0);
     double right = (double)(m_xpos + m_width/2.0);
-    switch (attachment)
+
+    int physicalAttachment = LogicalToPhysicalAttachment(attachment);
+
+    switch (physicalAttachment)
     {
       case 0:
       {

@@ -46,7 +46,7 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
 
 wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
 {
-    m_refData = new wxIconRefData;
+    m_refData = new wxCursorRefData;
 
     // TODO: create cursor from a file
 }
@@ -54,7 +54,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 // Cursors by stock number
 wxCursor::wxCursor(int cursor_type)
 {
-  m_refData = new wxIconRefData;
+  m_refData = new wxCursorRefData;
 
 /* TODO
   switch (cursor_type)

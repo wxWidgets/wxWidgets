@@ -1750,28 +1750,72 @@ bool wxPropertyStringListEditorDialog::dialogCancelled = FALSE;
 // Edit the string list.
 bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList *stringList, const char *title)
 {
+  int largeButtonWidth = 60;
+  int largeButtonHeight = 25;
+
   wxBeginBusyCursor();
   wxPropertyStringListEditorDialog *dialog = new wxPropertyStringListEditorDialog(parent,
   	title, wxPoint(10, 10), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
   
   dialog->stringList = stringList;
   
-  wxButton *okButton = new wxButton(dialog, wxID_OK, "OK", wxPoint(5, 5));
-  wxButton *cancelButton = new wxButton(dialog, wxID_CANCEL, "Cancel", wxPoint(40, 5));
-
-//  wxButton *helpButton = new wxButton(dialog, (wxFunction)StringListEditorHelpProc, "Help");
-//  helpButton->SetClientData((char *)this);
-
   dialog->listBox = new wxListBox(dialog, wxID_PROP_SL_STRINGS,
-    wxPoint(5, 30), wxSize(300, 200), 0, NULL, wxLB_SINGLE);
+    wxPoint(-1, -1), wxSize(-1, -1), 0, NULL, wxLB_SINGLE);
 
   dialog->stringText = new wxPropertyStringListEditorText(dialog,
   wxID_PROP_SL_TEXT, "", wxPoint(5, 240),
        wxSize(300, -1), wxPROCESS_ENTER);
   dialog->stringText->Enable(FALSE);
 
-  wxButton *addButton = new wxButton(dialog, wxID_PROP_SL_ADD, "Add", wxPoint(5, 280));
-  wxButton *deleteButton = new wxButton(dialog, wxID_PROP_SL_DELETE, "Delete", wxPoint(40, 280));
+  wxButton *addButton = new wxButton(dialog, wxID_PROP_SL_ADD, "Add", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *deleteButton = new wxButton(dialog, wxID_PROP_SL_DELETE, "Delete", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *cancelButton = new wxButton(dialog, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+  wxButton *okButton = new wxButton(dialog, wxID_OK, "OK", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
+
+  okButton->SetDefault();
+
+  wxLayoutConstraints *c = new wxLayoutConstraints;
+
+  c->top.SameAs     (dialog, wxTop, 2);
+  c->left.SameAs    (dialog, wxLeft, 2);
+  c->right.SameAs   (dialog, wxRight, 2);
+  c->bottom.SameAs  (dialog->stringText, wxTop, 2);
+  dialog->listBox->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->left.SameAs    (dialog, wxLeft, 2);
+  c->right.SameAs   (dialog, wxRight, 2);
+  c->bottom.SameAs  (addButton, wxTop, 2);
+  c->height.AsIs();
+  dialog->stringText->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->bottom.SameAs  (dialog, wxBottom, 2);
+  c->left.SameAs    (dialog, wxLeft, 2);
+  c->width.AsIs();
+  c->height.AsIs();
+  addButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->bottom.SameAs  (dialog, wxBottom, 2);
+  c->left.SameAs    (addButton, wxRight, 2);
+  c->width.AsIs();
+  c->height.AsIs();
+  deleteButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->bottom.SameAs  (dialog, wxBottom, 2);
+  c->right.SameAs   (dialog, wxRight, 2);
+  c->width.AsIs();
+  c->height.AsIs();
+  cancelButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->bottom.SameAs  (dialog, wxBottom, 2);
+  c->right.SameAs   (cancelButton, wxLeft, 2);
+  c->width.AsIs();
+  c->height.AsIs();
+  okButton->SetConstraints(c);
 
   wxNode *node = stringList->First();
   while (node)
@@ -1783,6 +1827,7 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
   }
 
   dialog->SetClientSize(310, 305);
+  dialog->Layout();
 
   dialog->Centre(wxBOTH);
   wxEndBusyCursor();

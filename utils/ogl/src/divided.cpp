@@ -186,7 +186,7 @@ bool wxDividedShape::GetAttachmentPosition(int attachment, double *x, double *y,
   wxLineShape *line)
 {
   int totalNumberAttachments = (GetRegions().Number() * 2) + 2;
-  if (!GetAttachmentMode() || (attachment >= totalNumberAttachments))
+  if ((GetAttachmentMode() == ATTACHMENT_MODE_NONE) || (attachment >= totalNumberAttachments))
   {
     return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs);
   }

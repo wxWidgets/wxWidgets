@@ -276,15 +276,11 @@ protected:
   // probably be the same)
   wxList*           m_lineControlPoints;
 
-  double             m_arrowSpacing; // Separation between adjacent arrows
+  double            m_arrowSpacing; // Separation between adjacent arrows
 
   wxShape*          m_to;
   wxShape*          m_from;
 
-/*
-  double             m_actualTextWidth;  // Space the text takes up
-  double             m_actualTextHeight; // (depends on text content unlike nodes)
-*/
   int               m_attachmentTo;   // Attachment point at one end
   int               m_attachmentFrom; // Attachment point at other end
 

@@ -94,6 +94,15 @@
 
 #define OP_ALL (OP_CLICK_LEFT | OP_CLICK_RIGHT | OP_DRAG_LEFT | OP_DRAG_RIGHT)
 
+// Attachment modes
+#define ATTACHMENT_MODE_NONE        0
+#define ATTACHMENT_MODE_EDGE        1
+#define ATTACHMENT_MODE_BRANCHING   2
+
+// Sub-modes for branching attachment mode
+#define BRANCHING_ATTACHMENT_NORMAL 1
+#define BRANCHING_ATTACHMENT_BLOB   2
+
 class wxShapeTextLine;
 class wxShapeCanvas;
 class wxLineShape;
@@ -127,6 +136,7 @@ class wxShapeEvtHandler: public wxObject
   virtual void OnDelete();
   virtual void OnDraw(wxDC& dc);
   virtual void OnDrawContents(wxDC& dc);
+  virtual void OnDrawBranches(wxDC& dc, bool erase = FALSE);
   virtual void OnMoveLinks(wxDC& dc);
   virtual void OnErase(wxDC& dc);
   virtual void OnEraseContents(wxDC& dc);
@@ -274,8 +284,8 @@ class wxShape: public wxShapeEvtHandler
   inline wxList& GetLines() const { return (wxList&) m_lines; }
   inline void SetDisableLabel(bool flag) { m_disableLabel = flag; }
   inline bool GetDisableLabel() const { return m_disableLabel; }
-  inline void SetAttachmentMode(bool flag) { m_attachmentMode = flag; }
-  inline bool GetAttachmentMode() const { return m_attachmentMode; }
+  inline void SetAttachmentMode(int mode) { m_attachmentMode = mode; }
+  inline int GetAttachmentMode() const { return m_attachmentMode; }
   inline void SetId(long i) { m_id = i; }
   inline long GetId() const { return m_id; }
 
@@ -382,6 +392,12 @@ class wxShape: public wxShapeEvtHandler
   virtual int GetNumberOfAttachments() const;
   virtual bool AttachmentIsValid(int attachment) const;
 
+  // Only get the attachment position at the _edge_ of the shape, ignoring
+  // branching mode. This is used e.g. to indicate the edge of interest, not the point
+  // on the attachment branch.
+  virtual bool GetAttachmentPositionEdge(int attachment, double *x, double *y,
+                                     int nth = 0, int no_arcs = 1, wxLineShape *line = NULL);
+
   // Assuming the attachment lies along a vertical or horizontal line,
   // calculate the position on that point.
   virtual wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
@@ -408,6 +424,59 @@ class wxShape: public wxShapeEvtHandler
   // Can override this to prevent or intercept line reordering.
   virtual void OnChangeAttachment(int attachment, wxLineShape* line, wxList& ordering);
 
+  //// New banching attachment code, 24/9/98
+
+  //
+  //             |________|
+  //                 | <- root
+  //                 | <- neck
+  // shoulder1 ->---------<- shoulder2
+  //             | | | | |<- stem
+  //                      <- branching attachment point N-1
+
+  // This function gets the root point at the given attachment.
+  virtual wxRealPoint GetBranchingAttachmentRoot(int attachment);
+
+  // This function gets information about where branching connections go (calls GetBranchingAttachmentRoot)
+  virtual bool GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRealPoint& neck,
+    wxRealPoint& shoulder1, wxRealPoint& shoulder2);
+
+  // n is the number of the adjoining line, from 0 to N-1 where N is the number of lines
+  // at this attachment point.
+  // attachmentPoint is where the arc meets the stem, and stemPoint is where the stem meets the
+  // shoulder.
+  virtual bool GetBranchingAttachmentPoint(int attachment, int n, wxRealPoint& attachmentPoint,
+    wxRealPoint& stemPoint);
+
+  // Get the number of lines at this attachment position.
+  virtual int GetAttachmentLineCount(int attachment) const;
+
+  // Draw the branches (not the actual arcs though)
+  virtual void OnDrawBranches(wxDC& dc, int attachment, bool erase = FALSE);
+  virtual void OnDrawBranches(wxDC& dc, bool erase = FALSE);
+
+  // Branching attachment settings
+  inline void SetBranchNeckLength(int len) { m_branchNeckLength = len; }
+  inline int GetBranchNeckLength() const { return m_branchNeckLength; }
+
+  inline void SetBranchStemLength(int len) { m_branchStemLength = len; }
+  inline int GetBranchStemLength() const { return m_branchStemLength; }
+
+  inline void SetBranchSpacing(int len) { m_branchSpacing = len; }
+  inline int GetBranchSpacing() const { return m_branchSpacing; }
+
+  // Further detail on branching style, e.g. blobs on interconnections
+  inline void SetBranchStyle(long style) { m_branchStyle = style; }
+  inline long GetBranchStyle() const { return m_branchStyle; }
+
+  // Rotate the standard attachment point from physical (0 is always North)
+  // to logical (0 -> 1 if rotated by 90 degrees)
+  virtual int PhysicalToLogicalAttachment(int physicalAttachment) const;
+
+  // Rotate the standard attachment point from logical
+  // to physical (0 is always North)
+  virtual int LogicalToPhysicalAttachment(int logicalAttachment) const;
+
   // This is really to distinguish between lines and other images.
   // For lines, want to pass drag to canvas, since lines tend to prevent
   // dragging on a canvas (they get in the way.)
@@ -426,11 +495,8 @@ class wxShape: public wxShapeEvtHandler
   // handler data if any. Calls the virtual Copy function.
   void CopyWithHandler(wxShape& copy);
 
-  // Rotate about the given axis by the given amount in radians
-  // (does nothing for most objects)
-  // But even non-rotating objects should record their notional
-  // rotation in case it's important (e.g. in dog-leg code).
-  virtual inline void Rotate(double WXUNUSED(x), double WXUNUSED(y), double theta) { m_rotation = theta; }
+  // Rotate about the given axis by the given amount in radians.
+  virtual void Rotate(double x, double y, double theta);
   virtual inline double GetRotation() const { return m_rotation; }
 
   void ClearAttachments();
@@ -468,7 +534,8 @@ class wxShape: public wxShapeEvtHandler
   double                m_rotation;
   int                   m_sensitivity;
   bool                  m_draggable;
-  bool                  m_attachmentMode;   // TRUE if using attachments, FALSE otherwise
+  int                   m_attachmentMode;   // 0 for no attachments, 1 if using normal attachments,
+                                            // 2 for branching attachments
   bool                  m_spaceAttachments; // TRUE if lines at one side should be spaced
   bool                  m_fixedWidth;
   bool                  m_fixedHeight;
@@ -485,6 +552,10 @@ class wxShape: public wxShapeEvtHandler
   int                   m_textMarginY;
   wxString              m_regionName;
   bool                  m_maintainAspectRatio;
+  int                   m_branchNeckLength;
+  int                   m_branchStemLength;
+  int                   m_branchSpacing;
+  long                  m_branchStyle;
 };
 
 class wxPolygonShape: public wxShape

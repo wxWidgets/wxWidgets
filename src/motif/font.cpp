@@ -19,13 +19,33 @@
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
 
-#include <X11/Xlib.h>
+#include <Xm/Xm.h>
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 #endif
 
-wxFontRefData::wxFontRefData(): m_fontsByScale(wxKEY_INTEGER)
+wxXFont::wxXFont()
+{
+    m_fontStruct = (WXFontStructPtr) 0;
+    m_fontList = (WXFontList) 0;
+    m_display = (WXDisplay*) 0;
+    m_scale = 100;
+}
+
+wxXFont::~wxXFont()
+{
+    XFontStruct* fontStruct = (XFontStruct*) m_fontStruct;
+    XmFontList fontList = (XmFontList) m_fontList;
+
+    XmFontListFree (fontList);
+
+	// TODO: why does freeing the font produce a segv???
+    // Note that XFreeFont wasn't called in wxWin 1.68 either.
+	//        XFreeFont((Display*) m_display, fontStruct);
+}
+
+wxFontRefData::wxFontRefData()
 {
     m_style = 0;
     m_pointSize = 0;
@@ -36,7 +56,7 @@ wxFontRefData::wxFontRefData(): m_fontsByScale(wxKEY_INTEGER)
     m_faceName = "";
 }
 
-wxFontRefData::wxFontRefData(const wxFontRefData& data): m_fontsByScale(wxKEY_INTEGER)
+wxFontRefData::wxFontRefData(const wxFontRefData& data)
 {
     m_style = data.m_style;
     m_pointSize = data.m_pointSize;
@@ -52,17 +72,14 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data): m_fontsByScale(wxKEY_IN
 
 wxFontRefData::~wxFontRefData()
 {
-    wxNode* node = m_fontsByScale.First();
+    wxNode* node = m_fonts.First();
     while (node)
     {
-        XFontStruct* fontStruct = (XFontStruct*) node->Data();
-	// TODO: why does freeing the font produce a segv???
-	// Commenting it out will result in memory leaks, and
-	// maybe X resource problems, who knows...
-	//        XFreeFont((Display*) wxGetDisplay, fontStruct);
+        wxXFont* f = (wxXFont*) node->Data();
+        delete f;
         node = node->Next();
     }
-    m_fontsByScale.Clear();
+    m_fonts.Clear();
 }
 
 wxFont::wxFont()
@@ -255,18 +272,21 @@ wxString wxFont::GetWeightString() const
 // Find an existing, or create a new, XFontStruct
 // based on this wxFont and the given scale. Append the
 // font to list in the private data for future reference.
-WXFontStructPtr wxFont::FindOrCreateFontStruct(double scale)
+wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 {
   if (!Ok())
-    return NULL;
+    return (wxXFont*) NULL;
 
-  long intScale = long(scale * 100.0 + 0.5); // key for fontlist
+  long intScale = long(scale * 100.0 + 0.5); // key for wxXFont
   int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
 
-  wxNode* node = M_FONTDATA->m_fontsByScale.Find(intScale);
-  if (node)
+  wxNode* node = M_FONTDATA->m_fonts.First();
+  while (node)
   {
-    return (WXFontStructPtr) node->Data();
+    wxXFont* f = (wxXFont*) node->Data();
+    if ((!display || (f->m_display == display)) && (f->m_scale == intScale))
+        return f;
+    node = node->Next();
   }
 
   WXFontStructPtr font = LoadQueryFont(pointSize, M_FONTDATA->m_family,
@@ -297,14 +317,19 @@ WXFontStructPtr wxFont::FindOrCreateFontStruct(double scale)
   }
   if (font)
   {
-      M_FONTDATA->m_fontsByScale.Append(intScale, (wxObject*) font);
-      return (WXFontStructPtr) font;
+      wxXFont* f = new wxXFont;
+      f->m_fontStruct = font;
+      f->m_display = ( display ? display : wxGetDisplay() );
+      f->m_scale = intScale;
+      f->m_fontList = XmFontListCreate ((XFontStruct*) font, XmSTRING_DEFAULT_CHARSET);
+      M_FONTDATA->m_fonts.Append(f);
+      return f;
   }
-  return font;
+  return (wxXFont*) NULL;
 }
 
 WXFontStructPtr wxFont::LoadQueryFont(int pointSize, int family, int style,
-   int weight, bool underlined)
+   int weight, bool underlined) const
 {
     char *xfamily;
     char *xstyle;

@@ -17,7 +17,7 @@
  */
 
 
-#if USE_SPLINES
+#if wxUSE_SPLINES
 
 ////#define     wx_round(a)    (int)((a)+.5)
 //#define     wx_round(a)    (a)
@@ -37,7 +37,7 @@ class wxSpline: public wxObject
 
 void wx_draw_open_spline(wxDC *dc, wxSpline *spline);
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 void wx_draw_open_spline_ps(wxPostScriptDC *dc, wxSpline *s);
 #endif
 
@@ -122,7 +122,7 @@ void wx_draw_open_spline(wxDC *dc, wxSpline *spline)
 
 }
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 void wx_draw_open_spline_ps(wxPostScriptDC *dc, wxSpline *s)
 {
 	double		a, b, c, d, x1, y1, x2, y2, x3, y3;
@@ -307,7 +307,7 @@ void wxSpline::DeletePoints(void)
   delete points;
 }
 
-#if USE_POSTSCRIPT
+#if wxUSE_POSTSCRIPT
 
 // Make a 3-point spline
 void wxPostScriptDC::DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3)
@@ -349,7 +349,7 @@ void wxPostScriptDC::DrawSpline(int n, wxPoint points[])
 }
 
 
-#endif // USE_POSTSCRIPT
+#endif // wxUSE_POSTSCRIPT
 
-#endif // USE_SPLINES
+#endif // wxUSE_SPLINES
 

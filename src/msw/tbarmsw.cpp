@@ -46,7 +46,7 @@
 
 /////// Non-Windows 95 implementation
 
-#if !USE_IMAGE_LOADING_IN_MSW
+#if !wxUSE_IMAGE_LOADING_IN_MSW
 #error If wxUSE_IMAGE_LOADING_IN_MSW is set to 0, then wxUSE_BUTTONBAR must be set to 0 too.
 #endif
 

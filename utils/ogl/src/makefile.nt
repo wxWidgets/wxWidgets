@@ -25,8 +25,8 @@ LOCALDOCDIR=$(WXDIR)\utils\ogl\docs
 
 PROGRAM=test
  
-OBJECTS = basic.obj basic2.obj canvas.obj ogldiag.obj lines.obj misc.obj divided.obj constrnt.obj\
- composit.obj drawn.obj bmpshape.obj mfutils.obj
+OBJECTS = $(THISDIR)\basic.obj $(THISDIR)\basic2.obj $(THISDIR)\canvas.obj $(THISDIR)\ogldiag.obj $(THISDIR)\lines.obj $(THISDIR)\misc.obj $(THISDIR)\divided.obj $(THISDIR)\constrnt.obj\
+ $(THISDIR)\composit.obj $(THISDIR)\drawn.obj $(THISDIR)\bmpshape.obj $(THISDIR)\mfutils.obj
 
 LIBTARGET=$(WXDIR)\lib\ogl.lib
 
@@ -59,57 +59,57 @@ basic.obj:      basic.$(SRCSUFF) basic.h lines.h misc.h canvas.h
 $(CPPFLAGS) /Od /c /Tp $*.$(SRCSUFF)
 <<
 
-basic2.obj:      basic2.$(SRCSUFF) basic.h lines.h misc.h canvas.h
+$(THISDIR)\basic2.obj:      basic2.$(SRCSUFF) basic.h lines.h misc.h canvas.h
         cl @<<
 $(CPPFLAGS) /Od /c /Tp $*.$(SRCSUFF)
 <<
 
-canvas.obj:      canvas.$(SRCSUFF) basic.h misc.h canvas.h
+$(THISDIR)\canvas.obj:      canvas.$(SRCSUFF) basic.h misc.h canvas.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-ogldiag.obj:      ogldiag.$(SRCSUFF) ogldiag.h canvas.h basic.h
+$(THISDIR)\ogldiag.obj:      ogldiag.$(SRCSUFF) ogldiag.h canvas.h basic.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-lines.obj:      lines.$(SRCSUFF) basic.h misc.h canvas.h lines.h basicp.h linesp.h
+$(THISDIR)\lines.obj:      lines.$(SRCSUFF) basic.h misc.h canvas.h lines.h basicp.h linesp.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-misc.obj:      misc.$(SRCSUFF) basic.h misc.h constrnt.h basicp.h
+$(THISDIR)\misc.obj:      misc.$(SRCSUFF) basic.h misc.h constrnt.h basicp.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-divided.obj:      divided.$(SRCSUFF) basic.h misc.h canvas.h divided.h basicp.h
+$(THISDIR)\divided.obj:      divided.$(SRCSUFF) basic.h misc.h canvas.h divided.h basicp.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-constrnt.obj:     constrnt.$(SRCSUFF) basic.h constrnt.h 
+$(THISDIR)\constrnt.obj:     constrnt.$(SRCSUFF) basic.h constrnt.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-composit.obj:      composit.$(SRCSUFF) basic.h misc.h canvas.h constrnt.h composit.h basicp.h
+$(THISDIR)\composit.obj:      composit.$(SRCSUFF) basic.h misc.h canvas.h constrnt.h composit.h basicp.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-drawn.obj:      drawn.$(SRCSUFF) basic.h misc.h canvas.h drawn.h drawnp.h basicp.h
+$(THISDIR)\drawn.obj:      drawn.$(SRCSUFF) basic.h misc.h canvas.h drawn.h drawnp.h basicp.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-bmpshape.obj:      bmpshape.$(SRCSUFF) basic.h misc.h canvas.h bmpshape.h
+$(THISDIR)\bmpshape.obj:      bmpshape.$(SRCSUFF) basic.h misc.h canvas.h bmpshape.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-mfutils.obj:      mfutils.$(SRCSUFF) mfutils.h
+$(THISDIR)\mfutils.obj:      mfutils.$(SRCSUFF) mfutils.h
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<

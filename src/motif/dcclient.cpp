@@ -1081,7 +1081,7 @@ void wxWindowDC::DrawText( const wxString &text, long x, long y, bool use16 )
 
   if (m_font.Ok())
     {
-      WXFontStructPtr pFontStruct = m_font.FindOrCreateFontStruct(m_userScaleY*m_logicalScaleY);
+      WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
       int direction, descent;
       XCharStruct overall_return;
       if (use16)
@@ -1235,7 +1235,7 @@ void wxWindowDC::GetTextExtent( const wxString &string, long *width, long *heigh
     return;
   }
 
-  WXFontStructPtr pFontStruct = theFont->FindOrCreateFontStruct(m_userScaleY*m_logicalScaleY);
+  WXFontStructPtr pFontStruct = theFont->GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
 
   int direction, ascent, descent2;
   XCharStruct overall;
@@ -1265,7 +1265,7 @@ long wxWindowDC::GetCharWidth(void)
   if (!m_font.Ok())
     return 0;
 
-  WXFontStructPtr pFontStruct = m_font.FindOrCreateFontStruct(m_userScaleY * m_logicalScaleY);
+  WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY * m_logicalScaleY, m_display);
 
   int direction, ascent, descent;
   XCharStruct overall;
@@ -1281,7 +1281,7 @@ long wxWindowDC::GetCharHeight(void)
   if (!m_font.Ok())
     return 0;
 
-  WXFontStructPtr pFontStruct = m_font.FindOrCreateFontStruct(m_userScaleY*m_logicalScaleY);
+  WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
 
   int direction, ascent, descent;
   XCharStruct overall;
@@ -1348,7 +1348,7 @@ void wxWindowDC::SetFont( const wxFont &font )
     return;
   }
 
-  WXFontStructPtr pFontStruct = m_font.FindOrCreateFontStruct(m_userScaleY*m_logicalScaleY);
+  WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
 
   Font fontId = ((XFontStruct*)pFontStruct)->fid;
   XSetFont ((Display*) m_display, (GC) m_gc, fontId);

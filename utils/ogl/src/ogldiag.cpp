@@ -592,3 +592,163 @@ wxShape* wxDiagram::FindShape(long id) const
     return NULL;
 }
 
+
+//// Crossings classes
+
+wxLineCrossings::wxLineCrossings()
+{
+}
+
+wxLineCrossings::~wxLineCrossings()
+{
+    ClearCrossings();
+}
+
+void wxLineCrossings::FindCrossings(wxDiagram& diagram)
+{
+    ClearCrossings();
+    wxNode* node1 = diagram.GetShapeList()->First();
+    while (node1)
+    {
+        wxShape* shape1 = (wxShape*) node1->Data();
+        if (shape1->IsKindOf(CLASSINFO(wxLineShape)))
+        {
+            wxLineShape* lineShape1 = (wxLineShape*) shape1;
+            // Iterate through the segments
+            wxList* pts1 = lineShape1->GetLineControlPoints();
+            int i;
+            for (i = 0; i < (pts1->Number() - 1); i++)
+            {
+                wxRealPoint* pt1_a = (wxRealPoint*) (pts1->Nth(i)->Data());
+                wxRealPoint* pt1_b = (wxRealPoint*) (pts1->Nth(i+1)->Data());
+
+                // Now we iterate through the segments again
+
+                wxNode* node2 = diagram.GetShapeList()->First();
+                while (node2)
+                {
+                    wxShape* shape2 = (wxShape*) node2->Data();
+
+                    // Assume that the same line doesn't cross itself
+                    if (shape2->IsKindOf(CLASSINFO(wxLineShape)) && (shape1 != shape2))
+                    {
+                        wxLineShape* lineShape2 = (wxLineShape*) shape2;
+                        // Iterate through the segments
+                        wxList* pts2 = lineShape2->GetLineControlPoints();
+                        int j;
+                        for (j = 0; j < (pts2->Number() - 1); j++)
+                        {
+                            wxRealPoint* pt2_a = (wxRealPoint*) (pts2->Nth(j)->Data());
+                            wxRealPoint* pt2_b = (wxRealPoint*) (pts2->Nth(j+1)->Data());
+
+                            // Now let's see if these two segments cross.
+                            double ratio1, ratio2;
+                            oglCheckLineIntersection(pt1_a->x, pt1_a->y, pt1_b->x, pt1_b->y,
+                               pt2_a->x, pt2_a->y, pt2_b->x, pt2_b->y,
+                             & ratio1, & ratio2);
+
+                            if ((ratio1 < 1.0) && (ratio1 > -1.0))
+                            {
+                                // Intersection!
+                                wxLineCrossing* crossing = new wxLineCrossing;
+                                crossing->m_intersect.x = (pt1_a->x + (pt1_b->x - pt1_a->x)*ratio1);
+                                crossing->m_intersect.y = (pt1_a->y + (pt1_b->y - pt1_a->y)*ratio1);
+
+                                crossing->m_pt1 = * pt1_a;
+                                crossing->m_pt2 = * pt1_b;
+                                crossing->m_pt3 = * pt2_a;
+                                crossing->m_pt4 = * pt2_b;
+
+                                crossing->m_lineShape1 = lineShape1;
+                                crossing->m_lineShape2 = lineShape2;
+
+                                m_crossings.Append(crossing);
+                            }
+                        }
+                    }
+                    node2 = node2->Next();
+                }
+            }
+        }
+
+        node1 = node1->Next();
+    }
+}
+
+void wxLineCrossings::DrawCrossings(wxDiagram& diagram, wxDC& dc)
+{
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    long arcWidth = 8;
+
+    wxNode* node = m_crossings.First();
+    while (node)
+    {
+        wxLineCrossing* crossing = (wxLineCrossing*) node->Data();
+//        dc.DrawEllipse((long) (crossing->m_intersect.x - (arcWidth/2.0) + 0.5), (long) (crossing->m_intersect.y - (arcWidth/2.0) + 0.5),
+//           arcWidth, arcWidth);
+
+
+        // Let's do some geometry to find the points on either end of the arc.
+/*
+
+(x1, y1)
+    |\
+    | \
+    |  \
+    |   \
+    |    \
+    |    |\ c    c1
+    |  a | \
+         |  \
+    |     -  x <-- centre of arc
+ a1 |     b  |\
+    |        | \ c2
+    |     a2 |  \
+    |         -  \
+    |         b2  \
+    |              \
+    |_______________\ (x2, y2)
+          b1
+
+*/
+
+        double a1 = wxMax(crossing->m_pt1.y, crossing->m_pt2.y) - wxMin(crossing->m_pt1.y, crossing->m_pt2.y) ;
+        double b1 = wxMax(crossing->m_pt1.x, crossing->m_pt2.x) - wxMin(crossing->m_pt1.x, crossing->m_pt2.x) ;
+        double c1 = sqrt( (a1*a1) + (b1*b1) );
+
+        double c = arcWidth / 2.0;
+        double a = c * a1/c1 ;
+        double b = c * b1/c1 ;
+
+        // I'm not sure this is right, since we don't know which direction we should be going in - need
+        // to know which way the line slopes and choose the sign appropriately.
+        double arcX1 = crossing->m_intersect.x - b;
+        double arcY1 = crossing->m_intersect.y - a;
+
+        double arcX2 = crossing->m_intersect.x + b;
+        double arcY2 = crossing->m_intersect.y + a;
+
+        dc.SetPen(*wxBLACK_PEN);
+        dc.DrawArc( (long) arcX1, (long) arcY1, (long) arcX2, (long) arcY2,
+            (long) crossing->m_intersect.x, (long) crossing->m_intersect.y);
+
+        dc.SetPen(*wxWHITE_PEN);
+        dc.DrawLine( (long) arcX1, (long) arcY1, (long) arcX2, (long) arcY2 );
+
+        node = node->Next();
+    }
+}
+
+void wxLineCrossings::ClearCrossings()
+{
+    wxNode* node = m_crossings.First();
+    while (node)
+    {
+        wxLineCrossing* crossing = (wxLineCrossing*) node->Data();
+        delete crossing;
+        node = node->Next();
+    }
+    m_crossings.Clear();
+}
+

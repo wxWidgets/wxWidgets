@@ -127,6 +127,12 @@ void wxShapeEvtHandler::OnDrawContents(wxDC& dc)
     m_previousHandler->OnDrawContents(dc);
 }
 
+void wxShapeEvtHandler::OnDrawBranches(wxDC& dc, bool erase)
+{
+  if (m_previousHandler)
+    m_previousHandler->OnDrawBranches(dc, erase);
+}
+
 void wxShapeEvtHandler::OnSize(double x, double y)
 {
   if (m_previousHandler)
@@ -276,7 +282,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_visible = FALSE;
   m_clientData = NULL;
   m_selected = FALSE;
-  m_attachmentMode = FALSE;
+  m_attachmentMode = ATTACHMENT_MODE_NONE;
   m_spaceAttachments = TRUE;
   m_disableLabel = FALSE;
   m_fixedWidth = FALSE;
@@ -297,6 +303,10 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_maintainAspectRatio = FALSE;
   m_highlighted = FALSE;
   m_rotation = 0.0;
+  m_branchNeckLength = 10;
+  m_branchStemLength = 10;
+  m_branchSpacing = 10;
+  m_branchStyle = BRANCHING_ATTACHMENT_NORMAL;
 
   // Set up a default region. Much of the above will be put into
   // the region eventually (the duplication is for compatibility)
@@ -541,7 +551,6 @@ bool wxShape::HitTest(double x, double y, int *attachment, double *distance)
 
   int nearest_attachment = 0;
 
-
   // If within the bounding box, check the attachment points
   // within the object.
 
@@ -550,10 +559,13 @@ bool wxShape::HitTest(double x, double y, int *attachment, double *distance)
     int n = GetNumberOfAttachments();
     double nearest = 999999.0;
 
+    // GetAttachmentPosition[Edge] takes a logical attachment position,
+    // i.e. if it's rotated through 90%, position 0 is East-facing.
+
     for (int i = 0; i < n; i++)
     {
       double xp, yp;
-      if (GetAttachmentPosition(i, &xp, &yp))
+      if (GetAttachmentPositionEdge(i, &xp, &yp))
       {
         double l = (double)sqrt(((xp - x) * (xp - x)) +
                    ((yp - y) * (yp - y)));
@@ -1038,7 +1050,8 @@ void wxShape::DrawLinks(wxDC& dc, int attachment, bool recurse)
 // This is the default, rectangular implementation.
 bool wxShape::AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, const wxRealPoint& pt2)
 {
-    switch (attachmentPoint)
+    int physicalAttachment = LogicalToPhysicalAttachment(attachmentPoint);
+    switch (physicalAttachment)
     {
         case 0:
         case 2:
@@ -1060,7 +1073,7 @@ bool wxShape::AttachmentSortTest(int attachmentPoint, const wxRealPoint& pt1, co
 bool wxShape::MoveLineToNewAttachment(wxDC& dc, wxLineShape *to_move,
                                        double x, double y)
 {
-  if (!GetAttachmentMode())
+  if (GetAttachmentMode() == ATTACHMENT_MODE_NONE)
       return FALSE;
 
   int newAttachment, oldAttachment;
@@ -1502,6 +1515,7 @@ void wxShape::Draw(wxDC& dc)
     GetEventHandler()->OnDraw(dc);
     GetEventHandler()->OnDrawContents(dc);
     GetEventHandler()->OnDrawControlPoints(dc);
+    GetEventHandler()->OnDrawBranches(dc);
   }
 }
 
@@ -1535,6 +1549,7 @@ void wxShape::Erase(wxDC& dc)
 {
   GetEventHandler()->OnErase(dc);
   GetEventHandler()->OnEraseControlPoints(dc);
+  GetEventHandler()->OnDrawBranches(dc, TRUE);
 }
 
 void wxShape::EraseContents(wxDC& dc)
@@ -1758,6 +1773,14 @@ void wxShape::WriteAttributes(wxExpr *clause)
   if (m_rotation != 0.0)
     clause->AddAttributeValue("rotation", m_rotation);
 
+  if (!this->IsKindOf(CLASSINFO(wxLineShape)))
+  {
+    clause->AddAttributeValue("neck_length", (long) m_branchNeckLength);
+    clause->AddAttributeValue("stem_length", (long) m_branchStemLength);
+    clause->AddAttributeValue("branch_spacing", (long) m_branchSpacing);
+    clause->AddAttributeValue("branch_style", (long) m_branchStyle);
+  }
+
   // Write user-defined attachment points, if any
   if (m_attachmentPoints.Number() > 0)
   {
@@ -1912,7 +1935,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
   int pen_width = 1;
   int pen_style = wxSOLID;
   int brush_style = wxSOLID;
-  m_attachmentMode = FALSE;
+  m_attachmentMode = ATTACHMENT_MODE_NONE;
 
   clause->GetAttributeValue("pen_colour", pen_string);
   clause->GetAttributeValue("text_colour", m_textColourName);
@@ -1928,7 +1951,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
 
   int iVal = (int) m_attachmentMode;
   clause->GetAttributeValue("use_attachments", iVal);
-  m_attachmentMode = (iVal != 0);
+  m_attachmentMode = iVal;
 
   clause->GetAttributeValue("sensitivity", m_sensitivity);
 
@@ -1946,6 +1969,20 @@ void wxShape::ReadAttributes(wxExpr *clause)
 
   clause->GetAttributeValue("format_mode", m_formatMode);
   clause->GetAttributeValue("shadow_mode", m_shadowMode);
+
+  iVal = m_branchNeckLength;
+  clause->GetAttributeValue("neck_length", iVal);
+  m_branchNeckLength = iVal;
+
+  iVal = m_branchStemLength;
+  clause->GetAttributeValue("stem_length", iVal);
+  m_branchStemLength = iVal;
+
+  iVal = m_branchSpacing;
+  clause->GetAttributeValue("branch_spacing", iVal);
+  m_branchSpacing = iVal;
+
+  clause->GetAttributeValue("branch_style", m_branchStyle);
 
   iVal = (int) m_centreResize;
   clause->GetAttributeValue("centre_resize", iVal);
@@ -2250,6 +2287,10 @@ void wxShape::Copy(wxShape& copy)
   copy.m_shadowOffsetX = m_shadowOffsetX;
   copy.m_shadowOffsetY = m_shadowOffsetY;
   copy.m_shadowBrush = m_shadowBrush;
+
+  copy.m_branchNeckLength = m_branchNeckLength;
+  copy.m_branchStemLength = m_branchStemLength;
+  copy.m_branchSpacing = m_branchSpacing;
 
   // Copy text regions
   copy.ClearRegions();
@@ -2631,12 +2672,20 @@ bool wxShape::AttachmentIsValid(int attachment) const
 bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y, 
                                          int nth, int no_arcs, wxLineShape *line)
 {
-    if (!m_attachmentMode)
+    if (m_attachmentMode == ATTACHMENT_MODE_NONE)
     {
         *x = m_xpos; *y = m_ypos;
         return TRUE;
     }
-    else
+    else if (m_attachmentMode == ATTACHMENT_MODE_BRANCHING)
+    {
+        wxRealPoint pt, stemPt;
+        GetBranchingAttachmentPoint(attachment, nth, pt, stemPt);
+        *x = pt.x;
+        *y = pt.y;
+        return TRUE;
+    }
+    else if (m_attachmentMode == ATTACHMENT_MODE_EDGE)
     {
         if (m_attachmentPoints.Number() > 0)
         {
@@ -2667,8 +2716,10 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
 
             bool isEnd = (line && line->IsEnd(this));
 
+            int physicalAttachment = LogicalToPhysicalAttachment(attachment);
+
             // Simplified code
-            switch (attachment)
+            switch (physicalAttachment)
             {
                 case 0:
                 {
@@ -2704,7 +2755,7 @@ bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y,
                 }
                 default:
                 {
-                    return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
+                    return FALSE;
                     break;
                 }
             }
@@ -2853,5 +2904,367 @@ int wxShape::GetLinePosition(wxLineShape* line)
             return i;
 
     return 0;
+}
+
+//
+//             |________|
+//                 | <- root
+//                 | <- neck
+// shoulder1 ->---------<- shoulder2
+//             | | | | |
+//                      <- branching attachment point N-1
+
+// This function gets information about where branching connections go.
+// Returns FALSE if there are no lines at this attachment.
+bool wxShape::GetBranchingAttachmentInfo(int attachment, wxRealPoint& root, wxRealPoint& neck,
+    wxRealPoint& shoulder1, wxRealPoint& shoulder2)
+{
+    int physicalAttachment = LogicalToPhysicalAttachment(attachment);
+
+    // Number of lines at this attachment.
+    int lineCount = GetAttachmentLineCount(attachment);
+
+    if (lineCount == 0)
+        return FALSE;
+
+    int totalBranchLength = m_branchSpacing * (lineCount - 1);
+
+    root = GetBranchingAttachmentRoot(attachment);
+
+    // Assume that we have attachment points 0 to 3: top, right, bottom, left.
+    switch (physicalAttachment)
+    {
+        case 0:
+        {
+            neck.x = GetX();
+            neck.y = root.y - m_branchNeckLength;
+
+            shoulder1.x = root.x - (totalBranchLength/2.0) ;
+            shoulder2.x = root.x + (totalBranchLength/2.0) ;
+
+            shoulder1.y = neck.y;
+            shoulder2.y = neck.y;
+            break;
+        }
+        case 1:
+        {
+            neck.x = root.x + m_branchNeckLength;
+            neck.y = root.y;
+
+            shoulder1.x = neck.x ;
+            shoulder2.x = neck.x ;
+
+            shoulder1.y = neck.y - (totalBranchLength/2.0) ;
+            shoulder2.y = neck.y + (totalBranchLength/2.0) ;
+            break;
+        }
+        case 2:
+        {
+            neck.x = GetX();
+            neck.y = root.y + m_branchNeckLength;
+
+            shoulder1.x = root.x - (totalBranchLength/2.0) ;
+            shoulder2.x = root.x + (totalBranchLength/2.0) ;
+
+            shoulder1.y = neck.y;
+            shoulder2.y = neck.y;
+            break;
+        }
+        case 3:
+        {
+            neck.x = root.x - m_branchNeckLength;
+            neck.y = root.y ;
+
+            shoulder1.x = neck.x ;
+            shoulder2.x = neck.x ;
+
+            shoulder1.y = neck.y - (totalBranchLength/2.0) ;
+            shoulder2.y = neck.y + (totalBranchLength/2.0) ;
+            break;
+        }
+        default:
+        {
+            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentInfo." );
+            break;
+        }
+    }
+    return TRUE;
+}
+
+// n is the number of the adjoining line, from 0 to N-1 where N is the number of lines
+// at this attachment point.
+// Get the attachment point where the arc joins the stem, and also the point where the
+// the stem meets the shoulder.
+bool wxShape::GetBranchingAttachmentPoint(int attachment, int n, wxRealPoint& pt, wxRealPoint& stemPt)
+{
+    int physicalAttachment = LogicalToPhysicalAttachment(attachment);
+
+    wxRealPoint root, neck, shoulder1, shoulder2;
+    GetBranchingAttachmentInfo(attachment, root, neck, shoulder1, shoulder2);
+
+    // Assume that we have attachment points 0 to 3: top, right, bottom, left.
+    switch (physicalAttachment)
+    {
+        case 0:
+        {
+            pt.y = neck.y - m_branchStemLength;
+            pt.x = shoulder1.x + n*m_branchSpacing;
+
+            stemPt.x = pt.x;
+            stemPt.y = neck.y;
+            break;
+        }
+        case 2:
+        {
+            pt.y = neck.y + m_branchStemLength;
+            pt.x = shoulder1.x + n*m_branchSpacing;
+
+            stemPt.x = pt.x;
+            stemPt.y = neck.y;
+            break;
+        }
+        case 1:
+        {
+            pt.x = neck.x + m_branchStemLength;
+            pt.y = shoulder1.y + n*m_branchSpacing;
+
+            stemPt.x = neck.x;
+            stemPt.y = pt.y;
+            break;
+        }
+        case 3:
+        {
+            pt.x = neck.x - m_branchStemLength;
+            pt.y = shoulder1.y + n*m_branchSpacing;
+
+            stemPt.x = neck.x;
+            stemPt.y = pt.y;
+            break;
+        }
+        default:
+        {
+            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentPoint." );
+            break;
+        }
+    }
+
+    return TRUE;
+}
+
+// Get the number of lines at this attachment position.
+int wxShape::GetAttachmentLineCount(int attachment) const
+{
+    int count = 0;
+    wxNode* node = m_lines.First();
+    while (node)
+    {
+        wxLineShape* lineShape = (wxLineShape*) node->Data();
+        if ((lineShape->GetFrom() == this) && (lineShape->GetAttachmentFrom() == attachment))
+            count ++;
+        else if ((lineShape->GetTo() == this) && (lineShape->GetAttachmentTo() == attachment))
+            count ++;
+
+        node = node->Next();
+    }
+    return count;
+}
+
+// This function gets the root point at the given attachment.
+wxRealPoint wxShape::GetBranchingAttachmentRoot(int attachment)
+{
+    int physicalAttachment = LogicalToPhysicalAttachment(attachment);
+
+    wxRealPoint root;
+
+    double width, height;
+    GetBoundingBoxMax(& width, & height);
+
+    // Assume that we have attachment points 0 to 3: top, right, bottom, left.
+    switch (physicalAttachment)
+    {
+        case 0:
+        {
+            root.x = GetX() ;
+            root.y = GetY() - height/2.0;
+            break;
+        }
+        case 1:
+        {
+            root.x = GetX() + width/2.0;
+            root.y = GetY() ;
+            break;
+        }
+        case 2:
+        {
+            root.x = GetX() ;
+            root.y = GetY() + height/2.0;
+            break;
+        }
+        case 3:
+        {
+            root.x = GetX() - width/2.0;
+            root.y = GetY() ;
+            break;
+        }
+        default:
+        {
+            wxFAIL_MSG( "Unrecognised attachment point in GetBranchingAttachmentRoot." );
+            break;
+        }
+    }
+    return root;
+}
+
+// Draw or erase the branches (not the actual arcs though)
+void wxShape::OnDrawBranches(wxDC& dc, int attachment, bool erase)
+{
+    int count = GetAttachmentLineCount(attachment);
+    if (count == 0)
+        return;
+
+    wxRealPoint root, neck, shoulder1, shoulder2;
+    GetBranchingAttachmentInfo(attachment, root, neck, shoulder1, shoulder2);
+
+    if (erase)
+    {
+        dc.SetPen(*wxWHITE_PEN);
+        dc.SetBrush(*wxWHITE_BRUSH);
+    }
+    else
+    {
+        dc.SetPen(*wxBLACK_PEN);
+        dc.SetBrush(*wxBLACK_BRUSH);
+    }
+
+    // Draw neck
+    dc.DrawLine((long) root.x, (long) root.y, (long) neck.x, (long) neck.y);
+
+    if (count > 1)
+    {
+        // Draw shoulder-to-shoulder line
+        dc.DrawLine((long) shoulder1.x, (long) shoulder1.y, (long) shoulder2.x, (long) shoulder2.y);
+    }
+    // Draw all the little branches
+    int i;
+    for (i = 0; i < count; i++)
+    {
+        wxRealPoint pt, stemPt;
+        GetBranchingAttachmentPoint(attachment, i, pt, stemPt);
+        dc.DrawLine((long) stemPt.x, (long) stemPt.y, (long) pt.x, (long) pt.y);
+
+        if (GetBranchStyle() & BRANCHING_ATTACHMENT_BLOB)
+        {
+            long blobSize=6;
+//            dc.DrawEllipse((long) (stemPt.x + 0.5 - (blobSize/2.0)), (long) (stemPt.y + 0.5 - (blobSize/2.0)), blobSize, blobSize);
+            dc.DrawEllipse((long) (stemPt.x - (blobSize/2.0)), (long) (stemPt.y - (blobSize/2.0)), blobSize, blobSize);
+        }
+    }
+}
+
+// Draw or erase the branches (not the actual arcs though)
+void wxShape::OnDrawBranches(wxDC& dc, bool erase)
+{
+    if (m_attachmentMode != ATTACHMENT_MODE_BRANCHING)
+        return;
+
+    int count = GetNumberOfAttachments();
+    int i;
+    for (i = 0; i < count; i++)
+        OnDrawBranches(dc, i, erase);
+}
+
+// Only get the attachment position at the _edge_ of the shape, ignoring
+// branching mode. This is used e.g. to indicate the edge of interest, not the point
+// on the attachment branch.
+bool wxShape::GetAttachmentPositionEdge(int attachment, double *x, double *y,
+                                     int nth, int no_arcs, wxLineShape *line)
+{
+    int oldMode = m_attachmentMode;
+
+    // Calculate as if to edge, not branch
+    if (m_attachmentMode == ATTACHMENT_MODE_BRANCHING)
+        m_attachmentMode = ATTACHMENT_MODE_EDGE;
+    bool success = GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
+    m_attachmentMode = oldMode;
+
+    return success;
+}
+
+// Rotate the standard attachment point from physical (0 is always North)
+// to logical (0 -> 1 if rotated by 90 degrees)
+int wxShape::PhysicalToLogicalAttachment(int physicalAttachment) const
+{
+    const double pi = 3.1415926535897932384626433832795 ;
+    int i;
+    if (oglRoughlyEqual(GetRotation(), 0.0))
+    {
+        i = physicalAttachment;
+    }
+    else if (oglRoughlyEqual(GetRotation(), (pi/2.0)))
+    {
+        i = physicalAttachment - 1;
+    }
+    else if (oglRoughlyEqual(GetRotation(), pi))
+    {
+        i = physicalAttachment - 2;
+    }
+    else if (oglRoughlyEqual(GetRotation(), (3.0*pi/2.0)))
+    {
+        i = physicalAttachment - 3;
+    }
+    else
+        // Can't handle -- assume the same.
+        return physicalAttachment;
+
+    if (i < 0)
+      i += 4;
+
+    return i;
+}
+
+// Rotate the standard attachment point from logical
+// to physical (0 is always North)
+int wxShape::LogicalToPhysicalAttachment(int logicalAttachment) const
+{
+    const double pi = 3.1415926535897932384626433832795 ;
+    int i;
+    if (oglRoughlyEqual(GetRotation(), 0.0))
+    {
+        i = logicalAttachment;
+    }
+    else if (oglRoughlyEqual(GetRotation(), (pi/2.0)))
+    {
+        i = logicalAttachment + 1;
+    }
+    else if (oglRoughlyEqual(GetRotation(), pi))
+    {
+        i = logicalAttachment + 2;
+    }
+    else if (oglRoughlyEqual(GetRotation(), (3.0*pi/2.0)))
+    {
+        i = logicalAttachment + 3;
+    }
+    else
+        // Can't handle -- assume the same.
+        return logicalAttachment;
+
+    if (i > 3)
+      i -= 4;
+
+    return i;
+}
+
+void wxShape::Rotate(double WXUNUSED(x), double WXUNUSED(y), double theta)
+{
+    const double pi = 3.1415926535897932384626433832795 ;
+    m_rotation = theta;
+    if (m_rotation < 0.0)
+    {
+        m_rotation += 2*pi;
+    }
+    else if (m_rotation > 2*pi)
+    {
+        m_rotation -= 2*pi;
+    }
 }
 
