@@ -27,6 +27,7 @@
         #include "wx/textctrl.h"
         #include "wx/filedlg.h"
         #include "wx/msgdlg.h"
+        #include "wx/icon.h"
     #endif
 #endif
 
