@@ -29,6 +29,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+#ifndef __UNIX__
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -260,4 +264,6 @@ bool wxDir::GetNext(wxString *filename) const
 
     return M_DIR->Read(filename);
 }
+
+#endif // !__UNIX__
 

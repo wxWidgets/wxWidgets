@@ -352,7 +352,7 @@ wave.cpp	MSW
 window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix	NotMac
-dir.cpp	Unix	Base,NotMac,NotMGL
+dir.cpp	Unix	Base,NotMac
 fontenum.cpp	Unix	NotMac,NotMGL,NotMicro
 fontutil.cpp	Unix	NotMac,NotMGL,NotMicro
 gsocket.c	Unix	Base,NotMac
@@ -1448,7 +1448,7 @@ fontutil.cpp	MGL	LowLevel
 evtloop.cpp	MGL	LowLevel
 app.cpp	MGL	LowLevel
 bitmap.cpp	MGL	LowLevel
-dir.cpp	MGL	LowLevel
+dirmgl.cpp	MGL	LowLevel
 clipbrd.cpp	MGL	LowLevel
 cursor.cpp	MGL	LowLevel
 dcclient.cpp	MGL	LowLevel
