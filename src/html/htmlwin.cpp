@@ -249,6 +249,7 @@ void wxHtmlWindow::CreateLayout()
     if (!m_Cell) return;
 
     if (m_Style == wxHW_SCROLLBAR_NEVER) {
+        SetScrollbars(1, 1, 0, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
     }

@@ -93,7 +93,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // borders (free space between text and window borders)
                 // defaults to 10 pixels.
 
-        bool m_Style;
+        int m_Style;
 
 
     private:
