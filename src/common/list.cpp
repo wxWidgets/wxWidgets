@@ -756,4 +756,11 @@ wxNode *wxStringList::Prepend(const wxChar *s)
 
 #endif // wxLIST_COMPATIBILITY
 
+#else // wxUSE_STL = 1
+
+    #include <wx/listimpl.cpp>
+    WX_DEFINE_LIST(wxObjectList);
+    WX_DEFINE_LIST(wxStringListBase);
+
 #endif // !wxUSE_STL
+

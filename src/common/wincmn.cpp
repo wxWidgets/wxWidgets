@@ -2288,15 +2288,22 @@ wxAccessible* wxWindowBase::CreateAccessible()
 
 #endif
 
-#if !wxUSE_STL
 // ----------------------------------------------------------------------------
 // list classes implementation
 // ----------------------------------------------------------------------------
+
+#if wxUSE_STL
+
+#include <wx/listimpl.cpp>
+WX_DEFINE_LIST(wxWindowList);
+
+#else
 
 void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
 }
+
 #endif
 
 // ----------------------------------------------------------------------------
