@@ -16,10 +16,6 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -31,18 +27,14 @@
 #include "wx/wx.h"
 #endif
 
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
+
 #include "lw.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
 
 #define MK_ID(a,b,c,d) ((((wxUint32)(a))<<24)| \
             (((wxUint32)(b))<<16)| \
