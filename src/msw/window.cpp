@@ -3938,9 +3938,6 @@ extern wxCOLORMAP *wxGetStdColourMap()
 
 bool wxWindowMSW::HandlePaint()
 {
-//    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
-//        return false;
-
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
         wxLogLastError(wxT("CreateRectRgn"));
@@ -3980,10 +3977,6 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
-    // Prevents flicker when dragging
-    if ( ::IsIconic(GetHwnd()) )
-        return true;
-
     wxDCTemp dc(hdc);
 
     dc.SetHDC(hdc);
@@ -4004,53 +3997,72 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
-    switch ( GetBackgroundStyle() )
+    // standard controls always erase their background themselves (although the
+    // user may try to override it in a derived class)
+    if ( IsOfStandardClass() )
     {
-        default:
-            wxFAIL_MSG( _T("unexpected background style") );
-            // fall through
-
-        case wxBG_STYLE_CUSTOM:
-            // don't skip the event here, custom background means that the app
-            // is drawing it itself in its OnPaint()
-            break;
-
-        case wxBG_STYLE_SYSTEM:
-#if wxUSE_NOTEBOOK && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
-            // automatically apply the tab control theme background to any
-            // child panels to have the same look as the native property sheet
-            // dialogs
-            if ( !IsOfStandardClass() )
-            {
-                for ( wxWindow *win = this; win; win = win->GetParent() )
-                {
-                    wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
-                    if ( nbook )
-                    {
-                        nbook->DoEraseBackground(event);
-                        return;
-                    }
-                }
-            }
-#endif // wxUSE_NOTEBOOK
-            event.Skip();
-            break;
-
-        case wxBG_STYLE_COLOUR:
-            // we have a fixed solid background colour, do use it
-            RECT rect;
-            ::GetClientRect(GetHwnd(), &rect);
-
-            HBRUSH hBrush = ::CreateSolidBrush(
-                                    wxColourToPalRGB(GetBackgroundColour()));
-            if ( !hBrush )
-                wxLogLastError(wxT("CreateSolidBrush"));
-
-            HDC hdc = GetHdcOf((*event.GetDC()));
-
-            ::FillRect(hdc, &rect, hBrush);
-            ::DeleteObject(hBrush);
+        event.Skip();
+        return;
     }
+
+    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    {
+        // don't skip the event here, custom background means that the app
+        // is drawing it itself in its OnPaint(), so don't draw it at all
+        // now to avoid flicker
+        return;
+    }
+
+
+    // do default background painting
+    wxDC& dc = *event.GetDC();
+    HBRUSH hBrush = (HBRUSH)MSWGetBgBrush(dc.GetHDC());
+    if ( hBrush )
+    {
+        RECT rc;
+        ::GetClientRect(GetHwnd(), &rc);
+        ::FillRect(GetHdcOf(dc), &rc, hBrush);
+    }
+    else
+    {
+        // let the system paint the background
+        event.Skip();
+    }
+}
+
+WXHBRUSH wxWindowMSW::MSWGetSolidBgBrushForChild(wxWindow *child)
+{
+    wxColour col = MSWGetBgColourForChild(child);
+    if ( col.Ok() )
+    {
+        // draw children with the same colour as the parent
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(col, wxSOLID);
+
+        return (WXHBRUSH)brush->GetResourceHandle();
+    }
+
+    return 0;
+}
+
+wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow * WXUNUSED(child))
+{
+    return m_hasBgCol ? GetBackgroundColour() : wxNullColour;
+}
+
+WXHBRUSH wxWindow::MSWGetBgBrush(WXHDC hDC)
+{
+    for ( wxWindow *win = this; win; win = win->GetParent() )
+    {
+        // background is not inherited beyond the containing TLW
+        if ( win->IsTopLevel() )
+            break;
+
+        WXHBRUSH hBrush = MSWGetBgBrushForSelf(win, hDC);
+        if ( hBrush )
+            return hBrush;
+    }
+
+    return 0;
 }
 
 // ---------------------------------------------------------------------------

@@ -358,44 +358,9 @@ WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 
     ::SetBkMode((HDC)pDC, TRANSPARENT);
 
-    // check if we should adapt our background to our parent
-    for ( wxWindow *win = this; win; win = win->GetParent() )
-    {
-        if ( win->IsTopLevel() )
-        {
-            // don't go beyond the first top level parent
-            break;
-        }
+    hbr = MSWGetBgBrush(pDC);
 
-        if ( win->GetBackgroundStyle() == wxBG_STYLE_COLOUR )
-        {
-            // parent window has solid colour, so it doesn't look
-            // transparent and hence we shouldn't show notebook background
-            wxBrush *brush = wxTheBrushList->FindOrCreateBrush
-                                             (
-                                                win->GetBackgroundColour(),
-                                                wxSOLID
-                                             );
-
-            return (WXHBRUSH)brush->GetResourceHandle();
-        }
-
-#if wxUSE_UXTHEME && wxUSE_NOTEBOOK
-        // check for the special case of the notebooks which draw themed
-        // background when themes are enabled
-        wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
-        if ( nbook )
-        {
-            // return value may be NULL but it is ok: if the first parent
-            // notebook doesn't use themes, then we don't have to process
-            // this message at all, so let default processing take place
-            return nbook->GetThemeBackgroundBrush(pDC, this);
-        }
-#endif // wxUSE_UXTHEME && wxUSE_NOTEBOOK
-    }
-
-    // let the control deal with background itself
-    return MSWGetDefaultBgBrush();
+    return hbr ? hbr : MSWGetDefaultBgBrush();
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)

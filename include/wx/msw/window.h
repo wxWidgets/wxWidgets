@@ -364,6 +364,45 @@ public:
     // with or 0 for the default brush
     virtual WXHBRUSH MSWControlColor(WXHDC hDC);
 
+    // this function should return the brush to paint the children controls
+    // background or 0 if this window doesn't impose any particular background
+    // on its children
+    //
+    // the base class version uses MSWGetBgColourForChild() and returns a solid
+    // brush if we have a non default background colour or 0 otherwise
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindow *child)
+    {
+        return MSWGetSolidBgBrushForChild(child);
+    }
+
+    // return the background colour of this window under the given child
+    // (possible grand child)
+    //
+    // this is a hack as if the background is themed, there is no single colour
+    // representing it, but sometimes we can't use the pattern brush returned
+    // by MSWGetBgBrushForChild() anyhow and then this function is used as
+    // fallback
+    //
+    // the base class version returns bg colour if it had been explicitely set
+    // or wxNullColour otherwise
+    virtual wxColour MSWGetBgColourForChild(wxWindow *child);
+
+    // convenience function: returns a solid brush of the colour returned by
+    // MSWGetBgColourForChild() or 0
+    WXHBRUSH MSWGetSolidBgBrushForChild(wxWindow *child);
+
+    // normally just calls MSWGetBgBrushForChild() on the parent window but may
+    // be overridden if the default background brush is not suitable for some
+    // reason (e.g. wxStaticBox uses MSWGetSolidBgBrushForChild() instead)
+    virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC)
+    {
+        return parent->MSWGetBgBrushForChild(hDC, this);
+    }
+
+    // return the background brush to use for this window by quering the parent
+    // windows via their MSWGetBgBrushForChild() recursively
+    WXHBRUSH MSWGetBgBrush(WXHDC hDC);
+
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
