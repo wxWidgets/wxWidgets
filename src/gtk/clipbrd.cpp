@@ -91,10 +91,8 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
     {
-/*
-        char *name = gdk_atom_name (atoms[i]);
-        if (name) printf( "Format available: %s.\n", name );
-*/
+/*      char *name = gdk_atom_name (atoms[i]);
+        if (name) printf( "Format available: %s.\n", name ); */
       
         if (atoms[i] == clipboard->m_targetRequested)
         {
@@ -534,12 +532,12 @@ bool wxClipboard::IsSupported( wxDataFormat format )
        sets it to FALSE */
 
     m_waiting = TRUE;
-      
+
     gtk_selection_convert( m_targetsWidget,
 			   g_clipboardAtom, 
 			   g_targetsAtom,
 			   GDK_CURRENT_TIME );
-			   
+
     while (m_waiting) gtk_main_iteration();
     
     if (!m_formatSupported) return FALSE;

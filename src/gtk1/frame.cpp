@@ -233,10 +233,12 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
     long func = (long) GDK_FUNC_ALL;
     if ((m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
+/*
     if ((m_windowStyle & wxMINIMIZE) == 0)
 	func |= GDK_FUNC_MINIMIZE;
     if ((m_windowStyle & wxMAXIMIZE) == 0)
 	func |= GDK_FUNC_MAXIMIZE;
+*/
     if ((m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
     if ((m_windowStyle & wxMINIMIZE_BOX) == 0)

@@ -145,16 +145,18 @@ bool wxDialog::Create( wxWindow *parent,
 
     gtk_widget_realize( m_widget );
 
-    /* comments see wxFrame */
-    
+    /* all this is for Motif Window Manager "hints" and is supposed to be
+       recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_ALL;
     long func = (long) GDK_FUNC_ALL;
     if ((m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
+/*
     if ((m_windowStyle & wxMINIMIZE) == 0)
 	func |= GDK_FUNC_MINIMIZE;
     if ((m_windowStyle & wxMAXIMIZE) == 0)
 	func |= GDK_FUNC_MAXIMIZE;
+*/
     if ((m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
     if ((m_windowStyle & wxMINIMIZE_BOX) == 0)

@@ -440,7 +440,7 @@ wxLayoutWindow::Paste(void)
    if (wxTheClipboard->Open())
    {
       wxTextDataObject data;
-      if (wxTheClipboard->IsSupported(wxDF_TEXT))
+      if (wxTheClipboard->IsSupported( data.GetFormat() ))
       {
          wxTheClipboard->GetData(&data);
          text += data.GetText();
