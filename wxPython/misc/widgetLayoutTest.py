@@ -42,8 +42,7 @@ class LayoutTestFrame(wx.Frame):
         bottomPanel.SetDefaultBackgroundColour("light blue")
 
         self.testPanel = wx.Panel(bottomPanel, name="testPanel")
-        self.testPanel.SetSizeHints((20,20))
-        #self.testPanel.SetDefaultBackgroundColour("dark red")
+        self.testPanel.SetDefaultBackgroundColour((205, 183, 181)) # mistyrose3
         self.testWidget = None
 
 
@@ -263,7 +262,7 @@ class LayoutTestFrame(wx.Frame):
             import traceback
             traceback.print_exc()
             return
-                
+
         # Put the widget in a sizer and the sizer in the testPanel
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(w, 0, wx.ALL, 5)
@@ -274,24 +273,34 @@ class LayoutTestFrame(wx.Frame):
         # make the destroy button be default now
         self.destroyBtn.SetDefault()
 
+
+        if True:
+            print 'w size', w.GetSize()
+            print 'w minsize', w.GetMinSize()
+            print 'w bestsize', w.GetBestSize()
+            print 'w abstsize', w.GetAdjustedBestSize()
+        
+            tp = self.testPanel
+            #print tp.GetSizer()
+            print 'tp size', tp.GetSize()
+            print 'tp minsize', tp.GetMinSize()
+            print 'tp bestsize', tp.GetBestSize()
+            print 'tp abstsize', tp.GetAdjustedBestSize()
+            
         
 
     def OnDestroyWidget(self, evt):
         self.testWidget.Destroy()
         self.testWidget = None
         self.testPanel.SetSizer(None, True)
-        self.bottomSizer.Layout()
 
+        # ensure the panel shrinks again
+        self.testPanel.SetSizeHints((20,20)) 
+        self.bottomSizer.Layout()
+        self.testPanel.SetSizeHints(wx.DefaultSize)
+        
         # make the create button be default now
         self.createBtn.SetDefault()
-
-##         tp = self.testPanel
-##         print tp.GetSizer()
-##         print 'size', tp.GetSize()
-##         print 'minsize', tp.GetMinSize()
-##         print 'bestsize', tp.GetBestSize()
-##         print 'abstsize', tp.GetAdjustedBestSize()
-
 
 
     def OnClear(self, evt):
