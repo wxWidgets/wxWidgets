@@ -426,9 +426,9 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         // the message
         wxString msg;
-        msg.Printf(_("The charset '%s' is unknown. You may select another "
-                     "charset to replace it with or choose [Cancel] if it "
-                     "cannot be replaced"), charset.c_str());
+        msg.Printf(_("The charset '%s' is unknown. You may select\n"
+                     "another charset to replace it with or choose\n"
+                     "[Cancel] if it cannot be replaced"), charset.c_str());
 
         // the list of choices
         size_t count = WXSIZEOF(gs_encodingDescs);
