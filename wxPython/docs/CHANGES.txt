@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.3.0
+2.5.3.1
 -------
 
 wxMac focus and border refreshes corrected.
