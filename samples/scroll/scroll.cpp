@@ -44,6 +44,7 @@ public:
     void OnMoveButton( wxCommandEvent &event );
     void OnScrollWin( wxCommandEvent &event );
     void OnMouseDown( wxMouseEvent &event );
+    void OnScroll( wxScrollWinEvent &event );
 
     wxButton *m_button;
 
@@ -102,6 +103,7 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
   EVT_BUTTON( ID_DELBUTTON,   MyCanvas::OnDeleteButton)
   EVT_BUTTON( ID_MOVEBUTTON,  MyCanvas::OnMoveButton)
   EVT_BUTTON( ID_SCROLLWIN,   MyCanvas::OnScrollWin)
+  EVT_SCROLLWIN(              MyCanvas::OnScroll)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
@@ -248,6 +250,16 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
     int x,y;
     ViewStart( &x, &y );
     Scroll( -1, y+2 );
+}
+
+void MyCanvas::OnScroll( wxScrollWinEvent &event )
+{
+    if (( event.GetEventType() == wxEVT_SCROLLWIN_THUMBTRACK ) &&
+        ( !event.IsScrolling() ))
+    {
+        wxLogMessage( "Thumb released; position: %u", event.GetPosition() );
+    }
+    event.Skip();
 }
 
 // MyFrame
