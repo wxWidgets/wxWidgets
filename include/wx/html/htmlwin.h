@@ -92,7 +92,8 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
         wxString GetOpenedPage() const {return m_OpenedPage;}
                 // Returns full location of opened page
-
+        wxString GetOpenedAnchor() const {return m_OpenedAnchor;}
+                // Returns anchor within opened page
         wxString GetOpenedPageTitle() const {return m_OpenedPageTitle;}
                 // Returns <TITLE> of opened page or empty string otherwise
 

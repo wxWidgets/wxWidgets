@@ -62,6 +62,16 @@ Returns pointer to the top-level container.
 See also: \helpref{Cells Overview}{cells}, 
 \helpref{Printing Overview}{printing}
 
+\membersection{wxHtmlWindow::GetOpenedAnchor}\label{wxhtmlwindowgetopenedanchor}
+
+\func{wxString}{GetOpenedAnchor}{\void}
+
+Returns anchor within currently opened page
+(see \helpref{GetOpenedPage}{wxhtmlwindowgetopenedpage}). 
+If no page is opened or if the displayed page wasn't
+produced by call to LoadPage, empty string is returned.
+
+
 \membersection{wxHtmlWindow::GetOpenedPage}\label{wxhtmlwindowgetopenedpage}
 
 \func{wxString}{GetOpenedPage}{\void}
