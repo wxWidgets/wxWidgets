@@ -82,7 +82,7 @@ struct _GtkPizzaClass
 				     GtkAdjustment  *vadjustment);
 };
 
-guint      gtk_pizza_get_type        (void);
+GtkType    gtk_pizza_get_type        (void);
 GtkWidget* gtk_pizza_new             (void);
 
 void       gtk_pizza_set_shadow_type (GtkPizza          *pizza,

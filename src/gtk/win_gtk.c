@@ -104,10 +104,10 @@ static GtkContainerClass *pizza_parent_class = NULL;
 
 static gboolean gravity_works;
 
-guint
+GtkType
 gtk_pizza_get_type ()
 {
-    static guint pizza_type = 0;
+    static GtkType pizza_type = 0;
 
     if (!pizza_type)
     {

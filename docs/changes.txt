@@ -258,6 +258,7 @@ wxGTK:
 - implemented alpha channel support in wxBitmap
 - added native GTK+2 wxArtProvider implementation with ability to load
   icons from icon theme in addition to recognized stock art
+- fixed crash on 64 bit platforms (Paul Cornett)
 
 wxMotif:
 
