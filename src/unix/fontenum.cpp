@@ -23,8 +23,8 @@
 
 #include "wx/defs.h"
 #include "wx/dynarray.h"
-#include "wx/regex.h"
 #include "wx/string.h"
+#include "wx/regex.h"
 #include "wx/utils.h"
 
 #include "wx/fontmap.h"
