@@ -708,7 +708,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
             parent = win;
 
         gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+            GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
     }
         
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -826,7 +826,7 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
             parent = win;
 
         gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		    GTK_SHADOW_NONE, rect, parent->m_widget, "base", 0, 0, -1, -1);
+            GTK_SHADOW_NONE, rect, parent->m_widget, "base", 0, 0, -1, -1);
     }
         
         
@@ -1605,22 +1605,17 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
         wxActivateEvent event( wxEVT_ACTIVATE, TRUE, win->GetId() );
         event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-            return TRUE;
-        }
+        // ignore return value
+        win->GetEventHandler()->ProcessEvent( event );
     }
-    else
-    {
-        wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-        event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-            return TRUE;
-        }
+    wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
+    event.SetEventObject( win );
+
+    if (win->GetEventHandler()->ProcessEvent( event ))
+    {
+       gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
+       return TRUE;
     }
 
 
@@ -1678,22 +1673,17 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         wxActivateEvent event( wxEVT_ACTIVATE, FALSE, win->GetId() );
         event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-            return TRUE;
-        }
+        // ignore return value
+        win->GetEventHandler()->ProcessEvent( event );
     }
-    else
-    {
-        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-        event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-            return TRUE;
-        }
+    wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
+    event.SetEventObject( win );
+
+    if (win->GetEventHandler()->ProcessEvent( event ))
+    {
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
+        return TRUE;
     }
 
     return FALSE;
@@ -2062,22 +2052,22 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
     GdkIMStyle style;
     GdkIMStyle supported_style = (GdkIMStyle)
                                   (GDK_IM_PREEDIT_NONE |
-				   GDK_IM_PREEDIT_NOTHING |
-			           GDK_IM_PREEDIT_POSITION |
-			           GDK_IM_STATUS_NONE |
-				   GDK_IM_STATUS_NOTHING);
+                   GDK_IM_PREEDIT_NOTHING |
+                       GDK_IM_PREEDIT_POSITION |
+                       GDK_IM_STATUS_NONE |
+                   GDK_IM_STATUS_NOTHING);
 
     if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
+    supported_style = (GdkIMStyle)(supported_style & ~GDK_IM_PREEDIT_POSITION);
 
     attr->style = style = gdk_im_decide_style (supported_style);
     attr->client_window = widget->window;
 
     if ((colormap = gtk_widget_get_colormap (widget)) !=
-	    gtk_widget_get_default_colormap ())
+        gtk_widget_get_default_colormap ())
     {
-	    attrmask |= GDK_IC_PREEDIT_COLORMAP;
-	    attr->preedit_colormap = colormap;
+        attrmask |= GDK_IC_PREEDIT_COLORMAP;
+        attr->preedit_colormap = colormap;
     }
 
     attrmask |= GDK_IC_PREEDIT_FOREGROUND;
@@ -2087,40 +2077,40 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
 
     switch (style & GDK_IM_PREEDIT_MASK)
     {
-	case GDK_IM_PREEDIT_POSITION:
-	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	    {
-	      g_warning ("over-the-spot style requires fontset");
-	      break;
-	    }
+    case GDK_IM_PREEDIT_POSITION:
+      if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
+        {
+          g_warning ("over-the-spot style requires fontset");
+          break;
+        }
 
-	  gdk_window_get_size (widget->window, &width, &height);
+      gdk_window_get_size (widget->window, &width, &height);
 
-	  attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
-	  attr->spot_location.x = 0;
-	  attr->spot_location.y = height;
-	  attr->preedit_area.x = 0;
-	  attr->preedit_area.y = 0;
-	  attr->preedit_area.width = width;
-	  attr->preedit_area.height = height;
-	  attr->preedit_fontset = widget->style->font;
+      attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
+      attr->spot_location.x = 0;
+      attr->spot_location.y = height;
+      attr->preedit_area.x = 0;
+      attr->preedit_area.y = 0;
+      attr->preedit_area.width = width;
+      attr->preedit_area.height = height;
+      attr->preedit_fontset = widget->style->font;
 
-	  break;
+      break;
     }
 
       win->m_ic = gdk_ic_new (attr, (GdkICAttributesType)attrmask);
 
       if (win->m_ic == NULL)
-	g_warning ("Can't create input context.");
+    g_warning ("Can't create input context.");
       else
-	{
-	  mask = gdk_window_get_events (widget->window);
-	  mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
-	  gdk_window_set_events (widget->window, mask);
+    {
+      mask = gdk_window_get_events (widget->window);
+      mask = (GdkEventMask)(mask | gdk_ic_get_events (win->m_ic));
+      gdk_window_set_events (widget->window, mask);
 
-	  if (GTK_WIDGET_HAS_FOCUS(widget))
-	    gdk_im_begin (win->m_ic, widget->window);
-	}
+      if (GTK_WIDGET_HAS_FOCUS(widget))
+        gdk_im_begin (win->m_ic, widget->window);
+    }
 #endif
 
     return FALSE;
@@ -2488,7 +2478,7 @@ void wxWindow::PostCreation()
     else
     {
         // For dialogs and frames, we are interested mainly in
-	// m_widget's focus.
+    // m_widget's focus.
 
         gtk_signal_connect( GTK_OBJECT(m_widget), "focus_in_event",
             GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
@@ -3394,7 +3384,7 @@ void wxWindow::SetWidgetStyle()
             style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
             style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
         }
-	else
+    else
         {
             // Try to restore the gtk default style.  This is still a little
             // oversimplified for what is probably really needed here for controls
@@ -3431,7 +3421,7 @@ void wxWindow::SetWidgetStyle()
             // oversimplified for what is probably really needed here for controls
             // other than buttons, but is better than not being able to (re)set a
             // control's background colour to default grey and means resetting a
-	    // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
+        // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
             // behavior -- RL
             GtkStyle *def = gtk_rc_get_style( m_widget );
 
@@ -3890,8 +3880,8 @@ wxPoint wxGetMousePosition()
     unsigned int maskReturn;
 
     XQueryPointer (display,
-		   rootWindow,
-		   &rootReturn,
+           rootWindow,
+           &rootReturn,
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);
