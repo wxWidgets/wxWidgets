@@ -203,6 +203,7 @@
         <define>WXMAKINGDLL_QA</define>
         <sources>$(QA_SRC)</sources>
         <msvc-headers>$(QA_HDR)</msvc-headers>
+        <library>coredll</library>
         <library>basedll</library>
         <library>xmldll</library>
     </dll>
