@@ -54,7 +54,7 @@
     if ($1) {
         _ptr = new wxPyInputStream($1);
     }
-    $result = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), true);
+    $result = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), $owner);
 }
 
 
