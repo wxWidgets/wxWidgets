@@ -2,6 +2,18 @@
 wxWindows 2.0 for Windows Change Log
 ------------------------------------
 
+Alpha 15, August 31st 1998
+--------------------------
+
+- wxBitmap debugged.
+- wxDC::GetDepth added.
+- Contribution added whereby wxBitmap will be
+  converted to DC depth if they don't match.
+- wxConfig API improved, documentation updated.
+- Printing classes name conventions cleaned up.
+- wxUpdateUIEvent now derives from wxCommandEvent
+  so event can travel up the window hierachy.
+
 Alpha 14, July 31st 1998
 ------------------------
 

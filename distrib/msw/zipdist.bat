@@ -17,6 +17,7 @@ echo Zipping...
 zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
 zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
 zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
+zip32 -@ %dest\wx200stubs.zip < %src\distrib\msw\stubs.rsp
 zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
 
 zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp

@@ -2,10 +2,18 @@ install-sh
 Makefile
 template.mak
 TODO.txt
+configure
+configure.in
+config.guess
+config.sub
+wx-config.in
+mkinstalldirs
 
 docs/gtk/*.html
+docs/gtk/*.txt
 
-src/mkdirs
+include/wx/gtk/*.h
+
 src/Makefile
 src/Makefile.in
 src/*.inc
@@ -14,12 +22,6 @@ src/gtk/*.cpp
 src/gtk/*.c
 src/gtk/*.inc
 src/gtk/*.xbm
-
-src/gtk/setup/*.hin
-src/gtk/setup/*.in
-src/gtk/setup/rules/*
-src/gtk/setup/rules/generic/*
-src/gtk/setup/rules/linux/*
 
 src/gdk_imlib/*.c
 src/gdk_imlib/*.h
@@ -41,11 +43,57 @@ src/iodbc/build
 src/iodbc/Changes.log
 src/iodbc/postgres/*.h
 
-install/gtk/*
+setup/*.in
+setup/*.hin
 
-misc/afm/*
-misc/gs_afm/*
-misc/imlib/*
+setup/general/createall
+setup/general/jointar
+setup/general/makeapp
+setup/general/makedirs
+setup/general/makedoc
+setup/general/mygrep
+setup/general/needed
+
+setup/rules/bin
+setup/rules/bin2
+setup/rules/doc
+setup/rules/gbin
+setup/rules/gbin2
+setup/rules/glib
+setup/rules/glibbin
+setup/rules/glibgbin
+setup/rules/gslib
+setup/rules/lib
+setup/rules/libbin
+setup/rules/libgbin
+
+setup/rules/generic/bin1
+setup/rules/generic/bin1gen
+setup/rules/generic/bin2
+setup/rules/generic/bin2gen
+setup/rules/generic/depend
+setup/rules/generic/globals
+setup/rules/generic/lib
+setup/rules/generic/needed
+setup/rules/generic/obj
+setup/rules/generic/slib
+setup/rules/generic/sobj
+
+setup/shared/sharedAIX
+setup/shared/sharedBsd
+setup/shared/sharedDgux
+setup/shared/sharedHpux
+setup/shared/sharedIrix
+setup/shared/sharedLinux
+setup/shared/sharedOSF
+setup/shared/sharedSolaris2
+setup/shared/sharedSunos4
+setup/shared/sharedSysV
+
+misc/afm/*.afm
+misc/gs_afm/*.afm
+misc/imlib/imrc
+misc/imlib/*.pal
 
 user/Makefile
 
@@ -66,4 +114,11 @@ user/wxTest/Makefile
 user/wxTest/Makefile.in
 user/wxTest/*.xpm
 user/wxTest/*.png
+
+user/wxLayout/*.cpp
+user/wxLayout/*.h
+user/wxLayout/Makefile
+user/wxLayout/Makefile.in
+user/wxLayout/*.xpm
+user/wxLayout/*.png
 

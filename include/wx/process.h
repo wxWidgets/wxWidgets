@@ -52,7 +52,7 @@ class WXDLLEXPORT wxProcessEvent: public wxEvent
 
 typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 
-#define EVT_END_PROCESS(id, func) { wxEVT_END_TERMINATE, id, -1, (wxObjectEvent) (wxEventFunction) (wxProcessEventFunction) & fn, NULL},
+#define EVT_END_PROCESS(id, func) { wxEVT_END_PROCESS, id, -1, (wxObjectEvent) (wxEventFunction) (wxProcessEventFunction) & fn, NULL},
 
 #endif
     // _WX_PROCESSH__

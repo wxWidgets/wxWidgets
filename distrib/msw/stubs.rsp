@@ -1,0 +1,11 @@
+src/stubs/*.cpp
+src/stubs/*.h
+src/stubs/makefile*
+src/stubs/*.inc
+
+include/wx/stubs/*.h
+include/wx/stubs/*.rc
+
+lib/dummy
+
+

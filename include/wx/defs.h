@@ -686,7 +686,7 @@ enum wxDataFormat
 
 // Virtual keycodes
 
-enum _Virtual_keycodes {
+enum wxKeyCode {
  WXK_BACK    =   8,
  WXK_TAB     =   9,
  WXK_RETURN  =	13,

@@ -1,15 +1,5 @@
-Problems with wxGLCanvas, 29/8/98
+wxGLCanvas
+----------
 
-Only the cube example compiles under wxWin 2 so far.
-
-Major problem: OpenGL seems to do something strange to the
-event loop, because wxApp::OnIdle never gets a chance to be
-called, and therefore delayed deletion (and all other
-idle-related processing) doesn't get done. This is why closing
-the app doesn't work.
-
-What does OpenGL do to message processing, and what can be done
-about it? Why did it work OK for wxWin 1.xx? It's as if
-there's _always_ a message in the queue (PeekMessage always
-returns non-zero). Perhaps we need to discover what the message
-is it's always returning.
+No known issues, though probably palettes aren't correctly
+handled under Windows.

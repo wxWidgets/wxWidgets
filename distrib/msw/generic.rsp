@@ -8,6 +8,7 @@ docs/upgrade.txt
 docs/todo.txt
 docs/licence.txt
 docs/symbols.txt
+docs/*.html
 
 src/*.inc
 src/mkdir
@@ -28,7 +29,7 @@ src/generic/*.inc
 
 src/png/*.c
 src/png/*.h
-src/png/makefile.*
+src/png/makefile*
 src/png/INSTALL
 src/png/CHANGES
 src/png/README
@@ -45,7 +46,7 @@ src/zlib/README
 src/zlib/ChangeLog
 src/zlib/configure
 src/zlib/*.txt
-src/zlib/makefile.*
+src/zlib/makefile*
 src/zlib/*.com
 src/zlib/*.3
 src/zlib/*.mms
@@ -73,9 +74,9 @@ bitmaps/ico/32x32/*.*
 afm/*.*
 
 utils/*.txt
-utils/make*.*
+utils/make*
 
-utils/xpmshow/src/makefile.*
+utils/xpmshow/src/makefile*
 utils/xpmshow/src/*.cpp
 utils/xpmshow/src/*.h
 utils/xpmshow/src/*.def
@@ -86,7 +87,7 @@ utils/xpmshow/src/*.ico
 
 utils/wxhelp/src/*.cpp
 utils/wxhelp/src/*.h
-utils/wxhelp/src/makefile.*
+utils/wxhelp/src/makefile*
 utils/wxhelp/src/*.xbm
 utils/wxhelp/src/*.xpm
 utils/wxhelp/src/*.txt
@@ -115,7 +116,7 @@ utils/tex2rtf/tools/tcheck/*.bat
 
 utils/wxtree/src/*.cpp
 utils/wxtree/src/*.h
-utils/wxtree/src/makefile.*
+utils/wxtree/src/makefile*
 utils/wxtree/src/*.xbm
 utils/wxtree/src/*.xpm
 utils/wxtree/lib/dummy
@@ -126,7 +127,7 @@ utils/wxtree/src/*.rc
 utils/wxgraph/src/*.cpp
 utils/wxgraph/src/*.c
 utils/wxgraph/src/*.h
-utils/wxgraph/src/makefile.*
+utils/wxgraph/src/makefile*
 utils/wxgraph/src/*.xbm
 utils/wxgraph/src/*.xpm
 utils/wxgraph/lib/dummy
@@ -138,7 +139,7 @@ utils/mfutils/src/*.cpp
 utils/mfutils/src/*.h
 utils/mfutils/src/*.rc
 utils/mfutils/src/*.def
-utils/mfutils/src/makefile.*
+utils/mfutils/src/makefile*
 utils/mfutils/src/*.txt
 utils/mfutils/lib/dummy
 utils/mfutils/src/*.ico
@@ -149,7 +150,7 @@ utils/mfutils/src/*.ico
 utils/rcparser/src/*.cpp
 utils/rcparser/src/*.c
 utils/rcparser/src/*.h
-utils/rcparser/src/makefile.*
+utils/rcparser/src/makefile*
 utils/rcparser/src/*.xbm
 utils/rcparser/src/*.xpm
 utils/rcparser/lib/dummy
@@ -162,16 +163,26 @@ utils/colours/*.h
 utils/colours/*.cpp
 utils/colours/*.def
 utils/colours/*.rc
-utils/colours/makefile.*
+utils/colours/makefile*
 utils/colours/*.xbm
 utils/colours/*.xpm
 utils/colours/*.txt
 
+utils/serialize/*.h
+utils/serialize/*.cpp
+utils/serialize/*.def
+utils/serialize/*.rc
+utils/serialize/makefile*
+utils/serialize/*.xbm
+utils/serialize/*.xpm
+utils/serialize/*.txt
+
+utils/wxprop/Makefile
 utils/wxprop/src/*.h
 utils/wxprop/src/*.cpp
 utils/wxprop/src/*.def
 utils/wxprop/src/*.rc
-utils/wxprop/src/makefile.*
+utils/wxprop/src/makefile*
 utils/wxprop/src/*.xbm
 utils/wxprop/src/*.xpm
 utils/wxprop/src/*.txt
@@ -179,13 +190,14 @@ utils/wxprop/src/*.ico
 utils/wxprop/src/*.bmp
 utils/wxprop/lib/dummy
 
+utils/dialoged/Makefile
 utils/dialoged/src/bitmaps/*.xbm
 utils/dialoged/src/bitmaps/*.xpm
 utils/dialoged/src/*.h
 utils/dialoged/src/*.cpp
 utils/dialoged/src/*.def
 utils/dialoged/src/*.rc
-utils/dialoged/src/makefile.*
+utils/dialoged/src/makefile*
 utils/dialoged/src/*.xbm
 utils/dialoged/src/*.xpm
 utils/dialoged/src/*.txt
@@ -199,19 +211,66 @@ utils/dialoged/src/bitmaps/*.ico
 utils/dialoged/test/*.cpp
 utils/dialoged/test/*.def
 utils/dialoged/test/*.rc
-utils/dialoged/test/makefile.*
+utils/dialoged/test/makefile*
 utils/dialoged/lib/dummy
 utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
 
+utils/glcanvas/Makefile
+utils/glcanvas/win/*.h
+utils/glcanvas/win/*.cpp
+utils/glcanvas/win/*.def
+utils/glcanvas/win/*.rc
+utils/glcanvas/win/makefile*
+utils/glcanvas/win/*.xbm
+utils/glcanvas/win/*.xpm
+utils/glcanvas/win/*.txt
+utils/glcanvas/win/*.ico
+utils/glcanvas/win/*.bmp
+utils/glcanvas/src/*.h
+utils/glcanvas/src/*.cpp
+utils/glcanvas/src/*.def
+utils/glcanvas/src/*.rc
+utils/glcanvas/src/makefile*
+utils/glcanvas/src/*.xbm
+utils/glcanvas/src/*.xpm
+utils/glcanvas/src/*.txt
+utils/glcanvas/src/*.ico
+utils/glcanvas/src/*.bmp
+utils/glcanvas/samples/cube/*.h
+utils/glcanvas/samples/cube/*.cpp
+utils/glcanvas/samples/cube/*.def
+utils/glcanvas/samples/cube/*.rc
+utils/glcanvas/samples/cube/makefile*
+utils/glcanvas/samples/cube/*.xbm
+utils/glcanvas/samples/cube/*.xpm
+utils/glcanvas/samples/cube/*.txt
+utils/glcanvas/samples/cube/*.ico
+utils/glcanvas/samples/cube/*.bmp
+utils/glcanvas/samples/isosurf/*.h
+utils/glcanvas/samples/isosurf/*.cpp
+utils/glcanvas/samples/isosurf/*.def
+utils/glcanvas/samples/isosurf/*.rc
+utils/glcanvas/samples/isosurf/makefile*
+utils/glcanvas/samples/isosurf/*.xbm
+utils/glcanvas/samples/isosurf/*.xpm
+utils/glcanvas/samples/isosurf/*.txt
+utils/glcanvas/samples/isosurf/*.ico
+utils/glcanvas/samples/isosurf/*.bmp
+utils/glcanvas/samples/isosurf/*.gz
+utils/glcanvas/docs/*.tex
+utils/glcanvas/docs/*.txt
+utils/glcanvas/docs/*.bmp
+utils/glcanvas/docs/*.gif
+
 samples/*.txt
-samples/makefile.*
+samples/makefile*
 
 samples/config/*.cpp
 samples/config/*.h
 samples/config/*.def
-samples/config/makefile*.*
+samples/config/makefile*
 samples/config/*.xbm
 samples/config/*.xpm
 samples/config/*.txt
@@ -223,7 +282,7 @@ samples/config/*.wav
 samples/dynamic/*.cpp
 samples/dynamic/*.h
 samples/dynamic/*.def
-samples/dynamic/makefile*.*
+samples/dynamic/makefile*
 samples/dynamic/*.xbm
 samples/dynamic/*.xpm
 samples/dynamic/*.txt
@@ -235,7 +294,7 @@ samples/dynamic/*.wav
 samples/bombs/*.cpp
 samples/bombs/*.h
 samples/bombs/*.def
-samples/bombs/makefile*.*
+samples/bombs/makefile*
 samples/bombs/*.xbm
 samples/bombs/*.xpm
 samples/bombs/*.txt
@@ -246,7 +305,7 @@ samples/bombs/*.rc
 samples/ipc/*.cpp
 samples/ipc/*.h
 samples/ipc/*.def
-samples/ipc/makefile*.*
+samples/ipc/makefile*
 samples/ipc/*.xbm
 samples/ipc/*.xpm
 samples/ipc/*.ico
@@ -257,7 +316,7 @@ samples/types/*.h
 samples/types/*.def
 samples/types/*.rc
 samples/types/*.txt
-samples/types/makefile*.*
+samples/types/makefile*
 samples/types/*.xbm
 samples/types/*.xpm
 samples/types/*.ico
@@ -268,7 +327,7 @@ samples/resource/*.def
 samples/resource/*.rc
 samples/resource/*.txt
 samples/resource/*.wxr
-samples/resource/makefile*.*
+samples/resource/makefile*
 samples/resource/*.xbm
 samples/resource/*.xpm
 samples/resource/*.ico
@@ -276,7 +335,7 @@ samples/resource/*.ico
 samples/animate/*.cpp
 samples/animate/*.h
 samples/animate/*.def
-samples/animate/makefile*.*
+samples/animate/makefile*
 samples/animate/*.xbm
 samples/animate/*.xpm
 samples/animate/*.ico
@@ -285,18 +344,20 @@ samples/animate/*.rc
 samples/mdi/*.cpp
 samples/mdi/*.h
 samples/mdi/*.def
-samples/mdi/makefile*.*
+samples/mdi/makefile*
 samples/mdi/*.xbm
 samples/mdi/*.xpm
 samples/mdi/*.ico
 samples/mdi/*.rc
 samples/mdi/bitmaps/*.bmp
 samples/mdi/bitmaps/*.ico
+samples/mdi/bitmaps/*.xpm
+samples/mdi/bitmaps/*.xbm
 
 samples/minimal/*.cpp
 samples/minimal/*.h
 samples/minimal/*.def
-samples/minimal/makefile*.*
+samples/minimal/makefile*
 samples/minimal/*.xbm
 samples/minimal/*.xpm
 samples/minimal/*.ico
@@ -305,7 +366,7 @@ samples/minimal/*.rc
 samples/controls/*.cpp
 samples/controls/*.h
 samples/controls/*.def
-samples/controls/makefile*.*
+samples/controls/makefile*
 samples/controls/*.xbm
 samples/controls/*.xpm
 samples/controls/*.ico
@@ -315,7 +376,7 @@ samples/controls/*.rc
 samples/fractal/*.cpp
 samples/fractal/*.h
 samples/fractal/*.def
-samples/fractal/makefile*.*
+samples/fractal/makefile*
 samples/fractal/*.xbm
 samples/fractal/*.xpm
 samples/fractal/*.ico
@@ -324,7 +385,7 @@ samples/fractal/*.rc
 samples/layout/*.cpp
 samples/layout/*.h
 samples/layout/*.def
-samples/layout/makefile*.*
+samples/layout/makefile*
 samples/layout/*.xbm
 samples/layout/*.xpm
 samples/layout/*.ico
@@ -334,7 +395,7 @@ samples/layout/*.bmp
 samples/printing/*.cpp
 samples/printing/*.h
 samples/printing/*.def
-samples/printing/makefile*.*
+samples/printing/makefile*
 samples/printing/*.xbm
 samples/printing/*.xpm
 samples/printing/*.txt
@@ -346,7 +407,7 @@ samples/printing/*.afm
 samples/toolbar/*.cpp
 samples/toolbar/*.h
 samples/toolbar/*.def
-samples/toolbar/makefile*.*
+samples/toolbar/makefile*
 samples/toolbar/*.txt
 samples/toolbar/*.xbm
 samples/toolbar/*.xpm
@@ -361,7 +422,7 @@ samples/docview/*.h
 samples/docview/*.cpp
 samples/docview/*.def
 samples/docview/*.rc
-samples/docview/makefile*.*
+samples/docview/makefile*
 samples/docview/*.xbm
 samples/docview/*.xpm
 samples/docview/*.txt
@@ -372,7 +433,7 @@ samples/memcheck/*.h
 samples/memcheck/*.cpp
 samples/memcheck/*.def
 samples/memcheck/*.rc
-samples/memcheck/makefile*.*
+samples/memcheck/makefile*
 samples/memcheck/*.xbm
 samples/memcheck/*.xpm
 samples/memcheck/*.txt
@@ -383,7 +444,7 @@ samples/odbc/*.h
 samples/odbc/*.cpp
 samples/odbc/*.def
 samples/odbc/*.rc
-samples/odbc/makefile*.*
+samples/odbc/makefile*
 samples/odbc/*.inf
 samples/odbc/*.xbm
 samples/odbc/*.xpm
@@ -396,7 +457,7 @@ samples/dialogs/*.h
 samples/dialogs/*.cpp
 samples/dialogs/*.def
 samples/dialogs/*.rc
-samples/dialogs/makefile*.*
+samples/dialogs/makefile*
 samples/dialogs/*.xbm
 samples/dialogs/*.xpm
 samples/dialogs/*.txt
@@ -409,7 +470,7 @@ samples/wxpoem/*.def
 samples/wxpoem/*.rc
 samples/wxpoem/*.inf
 samples/wxpoem/*.txt
-samples/wxpoem/makefile*.*
+samples/wxpoem/makefile*
 samples/wxpoem/*.xbm
 samples/wxpoem/*.xpm
 samples/wxpoem/*.ico
@@ -423,7 +484,7 @@ samples/pressup/*.def
 samples/pressup/*.rc
 samples/pressup/*.inf
 samples/pressup/*.txt
-samples/pressup/makefile*.*
+samples/pressup/makefile*
 samples/pressup/*.xbm
 samples/pressup/*.xpm
 samples/pressup/*.ico
@@ -435,7 +496,7 @@ samples/validate/*.def
 samples/validate/*.rc
 samples/validate/*.inf
 samples/validate/*.txt
-samples/validate/makefile*.*
+samples/validate/makefile*
 samples/validate/*.xbm
 samples/validate/*.xpm
 samples/validate/*.ico
@@ -447,7 +508,7 @@ samples/events/*.def
 samples/events/*.rc
 samples/events/*.inf
 samples/events/*.txt
-samples/events/makefile*.*
+samples/events/makefile*
 samples/events/*.xbm
 samples/events/*.xpm
 samples/events/*.ico
@@ -458,7 +519,7 @@ samples/treectrl/*.h
 samples/treectrl/*.def
 samples/treectrl/*.rc
 samples/treectrl/*.txt
-samples/treectrl/makefile*.*
+samples/treectrl/makefile*
 samples/treectrl/*.xbm
 samples/treectrl/*.xpm
 samples/treectrl/bitmaps/*.xbm
@@ -473,7 +534,7 @@ samples/listctrl/*.h
 samples/listctrl/*.def
 samples/listctrl/*.rc
 samples/listctrl/*.txt
-samples/listctrl/makefile*.*
+samples/listctrl/makefile*
 samples/listctrl/*.xbm
 samples/listctrl/*.xpm
 samples/listctrl/bitmaps/*.xbm
@@ -488,7 +549,7 @@ samples/splitter/*.h
 samples/splitter/*.def
 samples/splitter/*.rc
 samples/splitter/*.txt
-samples/splitter/makefile*.*
+samples/splitter/makefile*
 samples/splitter/*.xbm
 samples/splitter/*.xpm
 samples/splitter/*.ico
@@ -499,7 +560,7 @@ samples/grid/*.h
 samples/grid/*.def
 samples/grid/*.rc
 samples/grid/*.txt
-samples/grid/makefile*.*
+samples/grid/makefile*
 samples/grid/*.xbm
 samples/grid/*.xpm
 samples/grid/*.ico
@@ -510,7 +571,7 @@ samples/internat/*.h
 samples/internat/*.def
 samples/internat/*.rc
 samples/internat/*.txt
-samples/internat/makefile*.*
+samples/internat/makefile*
 samples/internat/*.xbm
 samples/internat/*.xpm
 samples/internat/*.po
@@ -523,7 +584,7 @@ samples/checklst/*.h
 samples/checklst/*.def
 samples/checklst/*.rc
 samples/checklst/*.txt
-samples/checklst/makefile*.*
+samples/checklst/makefile*
 samples/checklst/*.xbm
 samples/checklst/*.xpm
 samples/checklst/*.ico
@@ -531,7 +592,7 @@ samples/checklst/*.bmp
 
 samples/dnd/*.cpp
 samples/dnd/*.h
-samples/dnd/makefile*.*
+samples/dnd/makefile*
 samples/dnd/*.rc
 samples/dnd/*.def
 samples/dnd/*.bmp
@@ -542,7 +603,7 @@ samples/dnd/*.txt
 
 samples/tab/*.cpp
 samples/tab/*.h
-samples/tab/makefile*.*
+samples/tab/makefile*
 samples/tab/*.rc
 samples/tab/*.def
 samples/tab/*.bmp
@@ -553,7 +614,7 @@ samples/tab/*.txt
 
 samples/png/*.cpp
 samples/png/*.h
-samples/png/makefile*.*
+samples/png/makefile*
 samples/png/*.rc
 samples/png/*.def
 samples/png/*.bmp

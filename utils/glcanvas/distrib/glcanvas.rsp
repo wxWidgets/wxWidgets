@@ -2,6 +2,9 @@ docs/*.*
 win/*.cpp
 win/*.h
 win/make*.*
+src/*.cpp
+src/*.h
+src/make*.*
 samples/cube/*.cpp
 samples/cube/*.h
 samples/cube/*.rc
