@@ -61,7 +61,7 @@ protected:
 #elif defined(__WXMOTIF__)
     #include "wx/generic/spinctlg.h"
 #elif defined(__WXMAC__)
-    #include "wx/generic/spinctlg.h"
+    #include "wx/mac/spinctrl.h"
 #else // Win16 || !Win
     #include "wx/generic/spinctlg.h"
 #endif // platform
