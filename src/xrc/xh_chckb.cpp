@@ -29,6 +29,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBoxXmlHandler, wxXmlResourceHandler)
 wxCheckBoxXmlHandler::wxCheckBoxXmlHandler()
 : wxXmlResourceHandler()
 {
+    XRC_ADD_STYLE(wxCHK_2STATE);
+    XRC_ADD_STYLE(wxCHK_3STATE);
+    XRC_ADD_STYLE(wxCHK_ALLOW_3RD_STATE_FOR_USER);
+    XRC_ADD_STYLE(wxALIGN_RIGHT);
     AddWindowStyles();
 }
 
