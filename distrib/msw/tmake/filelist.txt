@@ -346,6 +346,7 @@ framuniv.cpp	Univ
 gauge.cpp	Univ
 inphand.cpp	Univ
 listbox.cpp	Univ
+menu.cpp	Univ
 notebook.cpp	Univ
 radiobox.cpp	Univ
 radiobut.cpp	Univ
