@@ -8570,8 +8570,8 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 case "${host}" in
 
                 powerpc-*-darwin* )
-        INSTALL_PROGRAM="cp -p"
-        INSTALL_DATA="cp -p"
+        INSTALL_PROGRAM="cp -fp"
+        INSTALL_DATA="cp -fp"
         ;;
     *)
         ;;

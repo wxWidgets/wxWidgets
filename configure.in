@@ -1467,8 +1467,8 @@ case "${host}" in
     dnl to workaround a strange static lib BSDism.
     dnl Mac OS X install seems to ignore -p option...
     powerpc-*-darwin* )
-        INSTALL_PROGRAM="cp -p"
-        INSTALL_DATA="cp -p"
+        INSTALL_PROGRAM="cp -fp"
+        INSTALL_DATA="cp -fp"
         ;;
     *)
         ;;
