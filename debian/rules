@@ -56,15 +56,18 @@ objdir_i18n=locale
 
 objdir_gtk_univ=objs_gtk_univ
 
-objdir_wxbase_msw_dev=objs_wxbase_msw_dev
-objdir_wxbase_msw_dbg=objs_wxbase_msw_dbg
-objdir_msw_dev=objs_msw_dev
-objdir_msw_dbg=objs_msw_dbg
+objdir_wxbase_msw_shared=objs_wxbase_msw_sh
+objdir_wxbase_msw_static=objs_wxbase_msw_st
+objdir_wxbase_msw_dbg=objs_wxbase_msw_d
+objdir_msw_shared=objs_msw_sh
+objdir_msw_static=objs_msw_st
+objdir_msw_dbg=objs_msw_d
 
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) $(objdir_gtk_univ) \
 	$(objdir_doc_cruft) $(objdir_doc) $(objdir_examples) \
-	$(objdir_wxbase_msw_dev) $(objdir_wxbase_msw_dbg) $(objdir_msw_dev) $(objdir_msw_dbg)
+	$(objdir_wxbase_msw_shared) $(objdir_wxbase_msw_static) $(objdir_wxbase_msw_dbg) \
+	$(objdir_msw_shared) $(objdir_msw_static) $(objdir_msw_dbg)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
@@ -80,7 +83,9 @@ build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
 
 build_indep_stamps=build-examples-stamp build-doc-stamp
 
-build_cross_stamps=build-wxbase-msw-dev-stamp build-wxbase-msw-dbg-stamp build-msw-dev-stamp build-msw-dbg-stamp
+build_cross_stamps=build-wxbase-msw-shared-stamp build-wxbase-msw-static-stamp \
+		   build-wxbase-msw-dbg-stamp build-msw-shared-stamp \
+		   build-msw-static-stamp build-msw-dbg-stamp
 
 build_stamps_native=$(build_arch_stamps) $(build_indep_stamps)
 
@@ -389,10 +394,10 @@ build-i18n-stamp: build-gtk-shared-stamp
 		&& $(MAKE) allmo
 	touch $@
 
-build-wxbase-msw-dev-stamp:
+build-wxbase-msw-shared-stamp:
 	dh_testdir
-	mkdir -p $(objdir_wxbase_msw_dev)
-	cd $(objdir_wxbase_msw_dev) \
+	mkdir -p $(objdir_wxbase_msw_shared)
+	cd $(objdir_wxbase_msw_shared) \
 		&& ../configure --prefix=/usr/$(cross_host) \
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
@@ -401,6 +406,20 @@ build-wxbase-msw-dev-stamp:
 		&& $(MAKE)
 	touch $@
 
+build-wxbase-msw-static-stamp:
+	dh_testdir
+	mkdir -p $(objdir_wxbase_msw_static)
+	cd $(objdir_wxbase_msw_static) \
+		&& ../configure --prefix=/usr/$(cross_host) \
+				--cache-file=$(config_cache_cross) \
+				--host=$(cross_host) \
+				--build=$(cross_build) \
+				--disable-gui \
+				--disable-shared \
+		&& $(MAKE)
+	touch $@
+
+# Note this builds dll only, since wxmsw static debug is > 130MB !
 build-wxbase-msw-dbg-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_msw_dbg)
@@ -414,14 +433,26 @@ build-wxbase-msw-dbg-stamp:
 		&& $(MAKE)
 	touch $@
 
-build-msw-dev-stamp:
+build-msw-shared-stamp:
 	dh_testdir
-	mkdir -p $(objdir_msw_dev)
-	cd $(objdir_msw_dev) \
+	mkdir -p $(objdir_msw_shared)
+	cd $(objdir_msw_shared) \
 		&& ../configure --prefix=/usr/$(cross_host) \
 				--cache-file=$(config_cache_cross) \
 				--host=$(cross_host) \
 				--build=$(cross_build) \
+		&& $(MAKE)
+	touch $@
+
+build-msw-static-stamp:
+	dh_testdir
+	mkdir -p $(objdir_msw_static)
+	cd $(objdir_msw_static) \
+		&& ../configure --prefix=/usr/$(cross_host) \
+				--cache-file=$(config_cache_cross) \
+				--host=$(cross_host) \
+				--build=$(cross_build) \
+				--disable-shared \
 		&& $(MAKE)
 	touch $@
 
@@ -442,7 +473,7 @@ clean: debian/control
 	dh_testdir
 	dh_testroot
 
-	rm -rf config_deb.cache control-files-stamp $(build_stamps) $(objdirs)
+	rm -rf config_deb.cache config_deb_cross.cache control-files-stamp $(build_stamps) $(objdirs)
 	rm -f docs/lgpl.txt
 	rm -f docs/latex/wx/manual.bb
 	rm -f $(objdir_i18n)/*.mo
@@ -615,13 +646,14 @@ install-examples: build-examples-stamp
 	dh_installdirs
 
 install-wxbase-msw-dev: DH_OPTIONS=-p$(package_wxbase_msw_dev)
-install-wxbase-msw-dev: build-wxbase-msw-dev-stamp
+install-wxbase-msw-dev: build-wxbase-msw-shared-stamp build-wxbase-msw-static-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_wxbase_msw_dev)/lib/* debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
-	cp $(objdir_wxbase_msw_dev)/wxbase-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dev)/usr/bin/
+	cp -a $(objdir_wxbase_msw_shared)/lib/* debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
+	cp -a $(objdir_wxbase_msw_static)/lib/*.a debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib
+	cp $(objdir_wxbase_msw_shared)/wxbase-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dev)/usr/bin/
 	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dev)/usr/$(cross_host)/lib/*.a
 
 install-wxbase-msw-dbg: DH_OPTIONS=-p$(package_wxbase_msw_dbg)
@@ -632,16 +664,18 @@ install-wxbase-msw-dbg: build-wxbase-msw-dbg-stamp
 	dh_installdirs
 	cp -a $(objdir_wxbase_msw_dbg)/lib/* debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib
 	cp $(objdir_wxbase_msw_dbg)/wxbased-$(release)-$(cross_host)-config debian/$(package_wxbase_msw_dbg)/usr/bin/
-	$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib/*.a
+	# No static lib, they're freakin' huge!
+	#$(cross_host)-strip --strip-debug debian/$(package_wxbase_msw_dbg)/usr/$(cross_host)/lib/*.a
 
 install-msw-dev: DH_OPTIONS=-p$(package_msw_dev)
-install-msw-dev: build-msw-dev-stamp
+install-msw-dev: build-msw-shared-stamp build-msw-static-stamp
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cp -a $(objdir_msw_dev)/lib/* debian/$(package_msw_dev)/usr/$(cross_host)/lib
-	cp $(objdir_msw_dev)/wxmsw-$(release)-$(cross_host)-config debian/$(package_msw_dev)/usr/bin/
+	cp -a $(objdir_msw_shared)/lib/* debian/$(package_msw_dev)/usr/$(cross_host)/lib
+	cp -a $(objdir_msw_static)/lib/*.a debian/$(package_msw_dev)/usr/$(cross_host)/lib
+	cp $(objdir_msw_shared)/wxmsw-$(release)-$(cross_host)-config debian/$(package_msw_dev)/usr/bin/
 	$(cross_host)-strip --strip-debug debian/$(package_msw_dev)/usr/$(cross_host)/lib/*.a
 
 install-msw-dbg: DH_OPTIONS=-p$(package_msw_dbg)
@@ -652,7 +686,8 @@ install-msw-dbg: build-msw-dbg-stamp
 	dh_installdirs
 	cp -a $(objdir_msw_dbg)/lib/* debian/$(package_msw_dbg)/usr/$(cross_host)/lib
 	cp $(objdir_msw_dbg)/wxmswd-$(release)-$(cross_host)-config debian/$(package_msw_dbg)/usr/bin/
-	$(cross_host)-strip --strip-debug debian/$(package_msw_dbg)/usr/$(cross_host)/lib/*.a
+	# No static lib, they're freakin' huge!
+	#$(cross_host)-strip --strip-debug debian/$(package_msw_dbg)/usr/$(cross_host)/lib/*.a
 
 install-headers-msw: DH_OPTIONS=-p$(package_headers_msw)
 install-headers-msw:

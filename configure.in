@@ -370,6 +370,8 @@ WX_RELEASE_NUMBER=2
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
 
+WX_MSW_VERSION=$WX_MAJOR_VERSION_NUMBER$WX_MINOR_VERSION_NUMBER$WX_RELEASE_NUMBER
+
 WX_CURRENT=1
 WX_REVISION=0
 WX_AGE=0
@@ -2366,17 +2368,6 @@ dnl library link name
 WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
 WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
 
-dnl define which libs wx-config should link.
-WXCONFIG_LIBS="-l${WX_LIBRARY}"
-
-if test "$wxUSE_OPENGL" = "yes"; then
-    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} $OPENGL_LIBS"
-fi
-
-dnl the name of the static library
-WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
-WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
-
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
 WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -2390,6 +2381,35 @@ WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.${SO_SUFFIX}"
 dnl the name of the resources file for wxMac
 WX_RESOURCES_MACOSX="lib${WX_LIBRARY}.rsrc"
 WX_RESOURCES_MACOSX_COMPILED="lib${WX_LIBRARY}.r"
+
+case "${host}" in
+    *-*-cygwin* | *-*-mingw32* )
+
+        dnl If we are cross compiling we want to use the 'full' unix type name for the
+        dnl lib, but for a native install use the windows style naming convention.
+
+        dnl FIXME: is this GL stuff actually even used for wxMSW?  should it be??
+
+        if test "$cross_compiling" != "yes"; then
+            WX_LIBRARY="wxmsw${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
+            WX_LIBRARY_GL="wxmsw_gl${WX_MSW_VERSION}${lib_unicode_suffix}${lib_debug_suffix}"
+            WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
+            WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.${SO_SUFFIX}"
+        fi
+
+esac
+
+dnl the name of the static library
+WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
+WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
+
+dnl define which libs wx-config should link.
+WXCONFIG_LIBS="-l${WX_LIBRARY}"
+
+if test "$wxUSE_OPENGL" = "yes"; then
+    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} $OPENGL_LIBS"
+fi
+
 
 dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
 
@@ -2485,26 +2505,13 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
-        dnl If we are cross compiling we want to use the 'full' unix type name for the
-        dnl lib, but for a native install use the windows style naming convention.
-
-        if test "$cross_compiling" != "yes"; then
-            WX_LIBRARY="wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
-            WX_LIBRARY_GL=${WX_LIBRARY} "wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
-            WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.${SO_SUFFIX}"
-            WX_LIBRARY_NAME_SHARED_GL="${WX_LIBRARY_GL}.${SO_SUFFIX}"
-            WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
-            WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
-        fi
 
         WX_LIBRARY_IMPORTLIB="lib${WX_LIBRARY}.lib"
 
         dnl  FIXME: this is a hack..  do we need a --static flag to wx-config?
-        if test "$wxUSE_SHARED" = "yes" ; then
-            WXCONFIG_LIBS="${WX_LIBRARY_IMPORTLIB}"
-        else
-            WXCONFIG_LIBS="-l${WX_LIBRARY}"
-        fi
+        dnl  or is this just plain wrong?
+        dnl  This is NOT compatible with both static and dynamic linking
+        WXCONFIG_LIBS="${WX_LIBRARY_IMPORTLIB}"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
@@ -2513,13 +2520,12 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl install shared libs without symlinks
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
         else
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_STATIC}"
+            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
         fi
         dnl -fPIC is not required for mingw build -- all code is already
-        dnl position independent.  Because of this we can (and do) build
-        dnl a static lib from the same object files as the dll.
+        dnl position independent.
         PIC_FLAG=
       ;;
 
