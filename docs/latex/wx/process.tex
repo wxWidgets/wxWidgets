@@ -66,15 +66,15 @@ notification.
 
 \constfunc{wxInputStream* }{GetInputStream}{\void}
 
-It returns a input stream correspoding to the output stream of the subprocess.
+It returns a output stream corresponding to the input stream of the subprocess. 
 If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
-\membersection{wxProcess::GetInputStream}\label{wxprocessgetinputstream}
+\membersection{wxProcess::GetOutputStream}\label{wxprocessgetoutputstream}
 
-\constfunc{wxInputStream* }{GetInputStream}{\void}
+\constfunc{wxOutputStream* }{GetOutputStream}{\void}
 
-It returns a output stream corresponding to the input stream of the subprocess. 
+It returns an output stream correspoding to the output stream of the subprocess.
 If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
@@ -97,3 +97,4 @@ It turns on the redirection, wxExecute will try to open a couple of pipes
 to catch the subprocess stdio. The caught input stream is returned by
 GetOutputStream() as a non-seekable stream. The caught output stream is returned
 by GetInputStream() as a non-seekable stream.
+

@@ -447,6 +447,10 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
         "", wxPoint(controlX, 1), wxSize(pointSizeW, pointSizeH), maxPointSize, pointSizes);
     delete[] pointSizes;
 
+#ifdef __WXGTK__
+    m_diagramToolBar->AddControl(m_pointSizeComboBox);
+#endif
+
     m_pointSizeComboBox->SetSelection(10 - 1);
 
     // Create a combobox for zooming
@@ -465,6 +469,10 @@ void csApp::CreateDiagramToolBar(wxFrame* parent)
     m_zoomComboBox = new wxComboBox(m_diagramToolBar, ID_WINDOW_ZOOM_COMBOBOX,
         "", wxPoint(controlX, 1), wxSize(zoomW, zoomH), noStrings, zoomStrings);
     delete[] zoomStrings;
+
+#ifdef __WXGTK__
+    m_diagramToolBar->AddControl(m_zoomComboBox);
+#endif
 
     // i = (zoom - minZoom)/increment
     // index = noStrings - i - 1

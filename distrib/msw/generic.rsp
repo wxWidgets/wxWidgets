@@ -59,6 +59,7 @@ docs/html/*.png
 docs/html/icons/*.gif
 docs/html/icons/*.png
 docs/html/icons/*.jpg
+docs/tech/*.txt
 
 src/makeenvs/*.env
 src/make.env

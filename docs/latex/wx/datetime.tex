@@ -20,14 +20,14 @@ to contain the number of years, hours, minutes, seconds and milliseconds.
 
 \wxheading{Constants}
 
-Global constant {\tt wxDefaultDateTime} and synonym for it {\tt
-wxInvalidDateTime} are defined. This constant will be different from any valid
+Global constant {\tt wxDefaultDateTime} and synonym for it {\tt wxInvalidDateTime} are defined. This constant will be different from any valid
 wxDateTime object.
 
 All the following constants are defined inside wxDateTime class (i.e., to refer to
 them you should prepend their names with {\tt wxDateTime::}).
 
-Time zone symbolic names:\label{wxdatetimetimezones}
+Time zone symbolic names:%\label{wxdatetimetimezones} % Sorry, labels not allowed here.
+
 
 \begin{verbatim}
     enum TZ
@@ -107,9 +107,9 @@ No base class
 
 \wxheading{See also}
 
-\helpref{Date classes overview}{wxdatetimeoverview},\rtfsp
-\helpref{wxTimeSpan}{wxtimespan},\rtfsp
-\helpref{wxDateSpan}{wxdatespan},\rtfsp
+%\helpref{Date classes overview}{wxdatetimeoverview},\rtfsp
+wxTimeSpan,\rtfsp
+wxDateSpan,\rtfsp
 \helpref{wxCalendarCtrl}{wxcalendarctrl}
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
@@ -162,9 +162,9 @@ calendar-related actions.
 
 }}
 
-\membersection{wxDateTime::ConvertYearToBC}{wxdatetimeconvertyeartobc}
+\membersection{wxDateTime::ConvertYearToBC}\label{wxdatetimeconvertyeartobc}
 
-\func{static int}{ConvertYearToBC}(int year);
+\func{static int}{ConvertYearToBC}{\param{int }{year}}
 
 Converts the year in absolute notation (i.e. a number which can be negative,
 positive or zero) to the year in BC/AD notation. For the positive years,
@@ -179,71 +179,69 @@ This function should be used like this:
     printf("The year is %d%s", wxDateTime::ConvertYearToBC(y), y > 0 ? "AD" : "BC");
 \end{verbatim}
 
-\membersection{wxDateTime::GetAmPmStrings}{wxdatetimegetampmstrings}
+\membersection{wxDateTime::GetAmPmStrings}\label{wxdatetimegetampmstrings}
 
 \func{static void}{GetAmPmStrings}{\param{wxString *}{am}, \param{wxString *}{pm}}
 
-\membersection{wxDateTime::GetBeginDST}{wxdatetimegetbegindst}
+\membersection{wxDateTime::GetBeginDST}\label{wxdatetimegetbegindst}
 
 \func{static wxDateTime}{GetBeginDST}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
-\membersection{wxDateTime::GetCountry}{wxdatetimegetcountry}
+\membersection{wxDateTime::GetCountry}\label{wxdatetimegetcountry}
 
 \func{static Country}{GetCountry}{\void}
 
-\membersection{wxDateTime::GetCurrentYear}{wxdatetimegetcurrentyear}
+\membersection{wxDateTime::GetCurrentYear}\label{wxdatetimegetcurrentyear}
 
 \func{static int}{GetCurrentYear}{\param{Calendar }{cal = Gregorian}}
 
-\membersection{wxDateTime::GetCurrentMonth}{wxdatetimegetcurrentmonth}
+\membersection{wxDateTime::GetCurrentMonth}\label{wxdatetimegetcurrentmonth}
 
 \func{static Month}{GetCurrentMonth}{\param{Calendar }{cal = Gregorian}}
 
-\membersection{wxDateTime::GetCentury}{wxdatetimegetcentury}
+\membersection{wxDateTime::GetCentury}\label{wxdatetimegetcentury}
 
 \func{static int}{GetCentury}{\param{int }{year = Inv\_Year}}
 
-\membersection{wxDateTime::GetEndDST}{wxdatetimegetenddst}
+\membersection{wxDateTime::GetEndDST}\label{wxdatetimegetenddst}
 
 \func{static wxDateTime}{GetEndDST}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
-\membersection{wxDateTime::GetMonthName}{wxdatetimegetmonthname}
+\membersection{wxDateTime::GetMonthName}\label{wxdatetimegetmonthname}
 
 \func{static wxString}{GetMonthName}{\param{Month }{month}, \param{NameFlags }{flags = Name\_Full}}
 
-\membersection{wxDateTime::GetNumberOfDays}{wxdatetimegetnumberofdays}
+\membersection{wxDateTime::GetNumberOfDays}\label{wxdatetimegetnumberofdays}
 
 \func{static wxDateTime\_t}{GetNumberOfDays}{\param{int }{year}, \param{Calendar }{cal = Gregorian}}
 
-\membersection{wxDateTime::GetNumberOfDays}{wxdatetimegetnumberofdays}
-
 \func{static wxDateTime\_t}{GetNumberOfDays}{\param{Month }{month}, \param{int }{year = Inv\_Year}, \param{Calendar }{cal = Gregorian}}
 
-\membersection{wxDateTime::GetWeekDayName}{wxdatetimegetweekdayname}
+\membersection{wxDateTime::GetWeekDayName}\label{wxdatetimegetweekdayname}
 
 \func{static wxString}{GetWeekDayName}{\param{WeekDay }{weekday}, \param{NameFlags }{flags = Name\_Full}}
 
-\membersection{wxDateTime::IsLeapYear}{wxdatetimeisleapyear}
+\membersection{wxDateTime::IsLeapYear}\label{wxdatetimeisleapyear}
 
 \func{static bool}{IsLeapYear}{\param{int }{year = Inv\_Year}, \param{Calendar }{cal = Gregorian}}
 
-\membersection{wxDateTime::IsWestEuropeanCountry}{wxdatetimeiswesteuropeancountry}
+\membersection{wxDateTime::IsWestEuropeanCountry}\label{wxdatetimeiswesteuropeancountry}
 
 \func{static bool}{IsWestEuropeanCountry}{\param{Country }{country = Country\_Default}}
 
-\membersection{wxDateTime::IsDSTApplicable}{wxdatetimeisdstapplicable}
+\membersection{wxDateTime::IsDSTApplicable}\label{wxdatetimeisdstapplicable}
 
 \func{static bool}{IsDSTApplicable}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
-\membersection{wxDateTime::Now}{wxdatetimenow}
+\membersection{wxDateTime::Now}\label{wxdatetimenow}
 
 \func{static wxDateTime}{Now}{\void}
 
-\membersection{wxDateTime::SetCountry}{wxdatetimesetcountry}
+\membersection{wxDateTime::SetCountry}\label{wxdatetimesetcountry}
 
 \func{static void}{SetCountry}{\param{Country }{country}}
 
-\membersection{wxDateTime::Today}{wxdatetimetoday}
+\membersection{wxDateTime::Today}\label{wxdatetimetoday}
 
 \func{static wxDateTime}{Today}{\void}
 

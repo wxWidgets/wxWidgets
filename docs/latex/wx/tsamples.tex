@@ -297,7 +297,7 @@ up an event handler to be notified of incoming connection requests
 in the socket parlance) for clients. For each incoming client, a new
 \helpref{wxSocketBase}{wxsocketbase} object is created, which represents
 the connection. Connections are independent from the server that created
-them, so they set up their own event handler, and stay awaiting for
+them, so they set up their own event handler, and stay awaiting for 
 {\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST} (connection
 closed at the remote end) events. This event handler is the same for all
 connections, and demonstrates how to determine which socket the event

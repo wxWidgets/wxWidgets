@@ -251,6 +251,7 @@ bool wxToolBar::Realize()
     // Separator spacing
     const int separatorSize = GetToolSeparation(); // 8;
     wxSize margins = GetToolMargins();
+    wxSize packing = GetToolPacking();
     int marginX = margins.x;
     int marginY = margins.y;
 
@@ -273,7 +274,12 @@ bool wxToolBar::Realize()
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
-                wxFAIL_MSG( _T("not implemented") );
+                wxControl* control = tool->GetControl();
+                wxSize sz = control->GetSize();
+                wxSize pos = control->GetPosition();
+                control->Move(currentX, pos.y);
+                currentX += sz.x + packing.x;
+
                 break;
 
             case wxTOOL_STYLE_SEPARATOR:
@@ -441,7 +447,7 @@ bool wxToolBar::Realize()
                                   XmNwidth, &width,
                                   XmNheight, & height,
                                   NULL);
-                    currentX += width + marginX;
+                    currentX += width + packing.x;
                     buttonHeight = wxMax(buttonHeight, height);
                 }
 
