@@ -29,6 +29,7 @@ OBJECTS = \
 		app.obj,\
 		bitmap.obj,\
 		bmpbuttn.obj,\
+		bmpmotif.obj,\
 		button.obj,\
 		checkbox.obj,\
 		checklst.obj,\
@@ -84,6 +85,7 @@ SOURCES = \
 		app.cpp,\
 		bitmap.cpp,\
 		bmpbuttn.cpp,\
+		bmpmotif.cpp,
 		button.cpp,\
 		checkbox.cpp,\
 		checklst.cpp,\
@@ -148,6 +150,7 @@ accel.obj : accel.cpp
 app.obj : app.cpp
 bitmap.obj : bitmap.cpp
 bmpbuttn.obj : bmpbuttn.cpp
+bmpmotif.obj : bmpmotif.cpp
 button.obj : button.cpp
 checkbox.obj : checkbox.cpp
 checklst.obj : checklst.cpp
