@@ -146,7 +146,7 @@ wxObject* wxHtmlWinParser::GetProduct()
 
     CloseContainer();
     OpenContainer();
-    GetContainer() -> SetIndent(m_CharHeight, wxHTML_INDENT_TOP);
+
     top = m_Container;
     while (top -> GetParent()) top = top -> GetParent();
     return top;
