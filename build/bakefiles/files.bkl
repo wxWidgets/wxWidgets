@@ -2343,7 +2343,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="MEDIA_CMN_SRC" hints="files">
-    src/common/emptydmy.cpp
+    src/common/mediactrlcmn.cpp
 </set>
 
 <set var="MEDIA_CMN_HDR" hints="files">
@@ -2354,7 +2354,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/mediactrl.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
-    wx/msw/mediactrl.h
 </set>
 <!-- not built on WindowsCE: -->
 <set var="MEDIA_MSW_ONLY_SRC" hints="files">
@@ -2366,7 +2365,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/mediactrl.cpp
 </set>
 <set var="MEDIA_MAC_HDR" hints="files">
-    wx/mac/carbon/mediactrl.h
 </set>
 
 <set var="MEDIA_COCOA_SRC" hints="files">

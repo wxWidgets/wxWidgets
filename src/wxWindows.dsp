@@ -650,6 +650,10 @@ SOURCE=.\common\matrix.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\mediactrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\memory.cpp
 # End Source File
 # Begin Source File
@@ -3336,10 +3340,6 @@ SOURCE=..\include\wx\msw\listctrl.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\mdi.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\mediactrl.h
 # End Source File
 # Begin Source File
 

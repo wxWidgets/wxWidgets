@@ -239,6 +239,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_regconf.o \
 	$(OBJS)\monodll_registry.o \
 	$(OBJS)\monodll_snglinst.o \
+	$(OBJS)\monodll_stdpaths.o \
 	$(OBJS)\monodll_thread.o \
 	$(OBJS)\monodll_utils.o \
 	$(OBJS)\monodll_utilsexc.o \
@@ -340,6 +341,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_regconf.o \
 	$(OBJS)\monolib_registry.o \
 	$(OBJS)\monolib_snglinst.o \
+	$(OBJS)\monolib_stdpaths.o \
 	$(OBJS)\monolib_thread.o \
 	$(OBJS)\monolib_utils.o \
 	$(OBJS)\monolib_utilsexc.o \
@@ -441,6 +443,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_regconf.o \
 	$(OBJS)\basedll_registry.o \
 	$(OBJS)\basedll_snglinst.o \
+	$(OBJS)\basedll_stdpaths.o \
 	$(OBJS)\basedll_thread.o \
 	$(OBJS)\basedll_utils.o \
 	$(OBJS)\basedll_utilsexc.o \
@@ -527,6 +530,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_regconf.o \
 	$(OBJS)\baselib_registry.o \
 	$(OBJS)\baselib_snglinst.o \
+	$(OBJS)\baselib_stdpaths.o \
 	$(OBJS)\baselib_thread.o \
 	$(OBJS)\baselib_utils.o \
 	$(OBJS)\baselib_utilsexc.o \
@@ -660,6 +664,7 @@ MEDIADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(__EXCEPTIONSFLAG_14) $(CPPFLAGS) $(CXXFLAGS)
 MEDIADLL_OBJECTS =  \
 	$(OBJS)\mediadll_dummy.o \
+	$(OBJS)\mediadll_mediactrlcmn.o \
 	$(OBJS)\mediadll_mediactrl.o
 MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
@@ -669,6 +674,7 @@ MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 MEDIALIB_OBJECTS =  \
 	$(OBJS)\medialib_dummy.o \
+	$(OBJS)\medialib_mediactrlcmn.o \
 	$(OBJS)\medialib_mediactrl.o
 ODBCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) -DHAVE_W32API_H \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
@@ -977,6 +983,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_joystick.o \
+	$(OBJS)\monodll_mediactrlcmn.o \
 	$(OBJS)\monodll_mediactrl.o \
 	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_helpctrl.o \
@@ -1084,7 +1091,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
-	$(OBJS)\monodll_stdpaths.o \
 	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
@@ -1282,7 +1288,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
-	$(OBJS)\monodll_stdpaths.o \
 	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
@@ -1463,6 +1468,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_joystick.o \
+	$(OBJS)\monolib_mediactrlcmn.o \
 	$(OBJS)\monolib_mediactrl.o \
 	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_helpctrl.o \
@@ -1570,7 +1576,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
-	$(OBJS)\monolib_stdpaths.o \
 	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
@@ -1768,7 +1773,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
-	$(OBJS)\monolib_stdpaths.o \
 	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
@@ -1999,7 +2003,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
-	$(OBJS)\coredll_stdpaths.o \
 	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
@@ -2197,7 +2200,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
-	$(OBJS)\coredll_stdpaths.o \
 	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
@@ -2404,7 +2406,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
-	$(OBJS)\corelib_stdpaths.o \
 	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
@@ -2602,7 +2603,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
-	$(OBJS)\corelib_stdpaths.o \
 	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
@@ -3878,6 +3878,9 @@ $(OBJS)\monodll_registry.o: ../../src/msw/registry.cpp
 $(OBJS)\monodll_snglinst.o: ../../src/msw/snglinst.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_stdpaths.o: ../../src/msw/stdpaths.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_thread.o: ../../src/msw/thread.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -4119,6 +4122,9 @@ $(OBJS)\monodll_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrl.o: ../../src/msw/mediactrl.cpp
@@ -4509,11 +4515,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 endif
 
@@ -5594,6 +5595,9 @@ $(OBJS)\monolib_registry.o: ../../src/msw/registry.cpp
 $(OBJS)\monolib_snglinst.o: ../../src/msw/snglinst.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_stdpaths.o: ../../src/msw/stdpaths.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_thread.o: ../../src/msw/thread.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5835,6 +5839,9 @@ $(OBJS)\monolib_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrl.o: ../../src/msw/mediactrl.cpp
@@ -6225,11 +6232,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 endif
 
@@ -7310,6 +7312,9 @@ $(OBJS)\basedll_registry.o: ../../src/msw/registry.cpp
 $(OBJS)\basedll_snglinst.o: ../../src/msw/snglinst.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_stdpaths.o: ../../src/msw/stdpaths.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_thread.o: ../../src/msw/thread.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -7530,6 +7535,9 @@ $(OBJS)\baselib_registry.o: ../../src/msw/registry.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_snglinst.o: ../../src/msw/snglinst.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_thread.o: ../../src/msw/thread.cpp
@@ -7986,11 +7994,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
 endif
 
@@ -9229,11 +9232,6 @@ $(OBJS)\corelib_settings.o: ../../src/msw/settings.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_stdpaths.o: ../../src/msw/stdpaths.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
@@ -10211,10 +10209,16 @@ $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp
 $(OBJS)\mediadll_dummy.o: ../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
 
+$(OBJS)\mediadll_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
+	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
+
 $(OBJS)\mediadll_mediactrl.o: ../../src/msw/mediactrl.cpp
 	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
 
 $(OBJS)\medialib_dummy.o: ../../src/msw/dummy.cpp
+	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $<
+
+$(OBJS)\medialib_mediactrlcmn.o: ../../src/common/mediactrlcmn.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_mediactrl.o: ../../src/msw/mediactrl.cpp

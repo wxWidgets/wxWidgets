@@ -3530,10 +3530,6 @@ SOURCE=..\..\src\msw\stattext.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\stdpaths.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\tabctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
@@ -7444,10 +7440,6 @@ SOURCE=..\..\include\wx\msw\listctrl.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\mdi.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\mediactrl.h
 # End Source File
 # Begin Source File
 

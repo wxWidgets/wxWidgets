@@ -739,6 +739,10 @@ SOURCE=..\..\src\msw\snglinst.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\stdpaths.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\thread.cpp
 # End Source File
 # Begin Source File

@@ -1,17 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mac/carbon/moviectrl.cpp
-// Purpose:     wxMediaCtrl MAC CARBON QT
+// Name:        mac/carbon/mediactrl.cpp
+// Purpose:     Built-in Media Backends for Mac
 // Author:      Ryan Norton <wxprojects@comcast.net>
-// Modified by: 
+// Modified by:
 // Created:     11/07/04
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-//#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-//#pragma implementation "moviectrl.h"
-//#endif
+//===========================================================================
+//  DECLARATIONS
+//===========================================================================
+
+//---------------------------------------------------------------------------
+// Pre-compiled header stuff
+//---------------------------------------------------------------------------
+
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#pragma implementation "mediactrl.h"
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -20,46 +28,113 @@
 #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
+//---------------------------------------------------------------------------
+// Includes
+//---------------------------------------------------------------------------
+#include "wx/mediactrl.h"
 
+//---------------------------------------------------------------------------
+// Compilation guard
+//---------------------------------------------------------------------------
 #if wxUSE_MEDIACTRL
 
-#include "wx/mac/carbon/mediactrl.h"
+//===========================================================================
+//  BACKEND DECLARATIONS
+//===========================================================================
 
-#include "wx/timer.h"
+//---------------------------------------------------------------------------
+//
+//  wxQTMediaBackend
+//
+//---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
-IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent); 
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED); 
-
+//---------------------------------------------------------------------------
+//  QT Includes
+//---------------------------------------------------------------------------
 //uma is for wxMacFSSpec
-#ifdef __WXMAC__
 #include "wx/mac/uma.h"
+#include "wx/timer.h"
 #include <Movies.h>
 #include <Gestalt.h>
-#else
-//quicktime media layer for mac emulation on pc
-#include <qtml.h>
-#endif
+#include <QuickTimeComponents.h>    //Standard QT stuff
 
-#include <QuickTimeComponents.h>
+//Determines whether version 6 of QT is installed
+Boolean _wxIsQuickTime4Installed (void)
+{
+    short error;
+    long result;
 
-#ifdef __WXMAC__
-#define MSWMOVIECHECK
-#else
-#define MSWMOVIECHECK if(!m_bLoaded) return 0;
-#endif
+    error = Gestalt (gestaltQuickTime, &result);
+    return (error == noErr) && (((result >> 16) & 0xffff) >= 0x0400);
+}
+
+class wxQTMediaBackend : public wxMediaBackend
+{
+public:
+
+    wxQTMediaBackend();
+    ~wxQTMediaBackend();
+
+    virtual bool CreateControl(wxControl* ctrl, wxWindow* parent, 
+                                     wxWindowID id,
+                                     const wxPoint& pos, 
+                                     const wxSize& size,
+                                     long style, 
+                                     const wxValidator& validator,
+                                     const wxString& name);
+
+    virtual bool Play();
+    virtual bool Pause();
+    virtual bool Stop();
+
+    virtual bool Load(const wxString& fileName);
+    virtual bool Load(const wxURI& location);
+
+    virtual wxMediaState GetState();
+
+    virtual bool SetPosition(wxLongLong where);
+    virtual wxLongLong GetPosition();
+    virtual wxLongLong GetDuration();
+
+    virtual void Move(int x, int y, int w, int h);
+    wxSize GetVideoSize() const;
+
+    virtual double GetPlaybackRate();
+    virtual bool SetPlaybackRate(double dRate);
+
+    void Cleanup();
+    void FinishLoad();
+
+    wxSize m_bestSize;              //Original movie size
+    struct MovieType** m_movie;     //QT Movie handle/instance
+    wxControl* m_ctrl;              //Parent control
+    bool m_bVideo;                  //Whether or not we have video
+    class _wxQTTimer* m_timer;      //Timer for streaming the movie
+
+    DECLARE_DYNAMIC_CLASS(wxQTMediaBackend);
+};
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+// wxQTMediaBackend
+// 
+// TODO: Use a less cludgy way to pause/get state/set state
+// TODO: Dynamically load from qtml.dll
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+IMPLEMENT_DYNAMIC_CLASS(wxQTMediaBackend, wxMediaBackend);
 
 //Time between timer calls
-#define MOVIE_DELAY 50
+#define MOVIE_DELAY 100
 
-// ------------------------------------------------------------------
+// --------------------------------------------------------------------------
 //          wxQTTimer - Handle Asyncronous Playing
-// ------------------------------------------------------------------
+// --------------------------------------------------------------------------
 class _wxQTTimer : public wxTimer
 {
 public:
-    _wxQTTimer(Movie movie, wxMediaCtrl* parent) :
+    _wxQTTimer(Movie movie, wxQTMediaBackend* parent) :
         m_movie(movie), m_bPaused(false), m_parent(parent)
     {
     }
@@ -71,140 +146,134 @@ public:
     bool GetPaused() {return m_bPaused;}
     void SetPaused(bool bPaused) {m_bPaused = bPaused;}
 
+    //-----------------------------------------------------------------------
+    // _wxQTTimer::Notify
+    //
+    // 1) Checks to see if the movie is done, and if not continues
+    //    streaming the movie
+    // 2) Sends the wxEVT_MEDIA_STOP event if we have reached the end of
+    //    the movie.
+    //-----------------------------------------------------------------------
     void Notify()
     {
         if (!m_bPaused)
         {
             if(!IsMovieDone(m_movie))
-                MoviesTask(m_movie, MOVIE_DELAY); //Give QT time to play movie
+                MoviesTask(m_movie, MOVIE_DELAY); 
             else
             {
-                Stop();
-                m_parent->Stop();
-                wxASSERT(::GetMoviesError() == noErr);
-                wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED, m_parent->GetId());
-                m_parent->GetParent()->ProcessEvent(theEvent);
+                wxMediaEvent theEvent(wxEVT_MEDIA_STOP, 
+                                      m_parent->m_ctrl->GetId());
+                m_parent->m_ctrl->ProcessEvent(theEvent);
+
+                if(theEvent.IsAllowed())
+                {
+                    Stop();
+                    m_parent->Stop();
+                    wxASSERT(::GetMoviesError() == noErr);
+
+                    //send the event to our child
+                    wxMediaEvent theEvent(wxEVT_MEDIA_FINISHED, 
+                                          m_parent->m_ctrl->GetId());
+                    m_parent->m_ctrl->ProcessEvent(theEvent);
+                }
             }
         }
     }
 
 protected:
-    Movie m_movie;
-    bool m_bPaused;
-    wxMediaCtrl* m_parent;
+    Movie m_movie;                  //Our movie instance
+    bool m_bPaused;                 //Whether we are paused or not
+    wxQTMediaBackend* m_parent;     //Backend pointer
 };
 
-//Determines whether version 6 of QT is installed
-Boolean _wxIsQuickTime4Installed (void)
+//---------------------------------------------------------------------------
+// wxQTMediaBackend Destructor
+//
+// Sets m_timer to NULL signifying we havn't loaded anything yet
+//---------------------------------------------------------------------------
+wxQTMediaBackend::wxQTMediaBackend() : m_timer(NULL)
 {
-#ifdef __WXMAC__
-    short error;
-    long result;
-
-    error = Gestalt (gestaltQuickTime, &result);
-    return (error == noErr) && (((result >> 16) & 0xffff) >= 0x0400);
-#else
-    return true;
-#endif
 }
 
-bool wxMediaCtrl::InitQT ()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend Destructor
+//
+// 1) Cleans up the QuickTime movie instance
+// 2) Decrements the QuickTime reference counter - if this reaches
+//    0, QuickTime shuts down
+// 3) Decrements the QuickTime Windows Media Layer reference counter -
+//    if this reaches 0, QuickTime shuts down the Windows Media Layer
+//---------------------------------------------------------------------------
+wxQTMediaBackend::~wxQTMediaBackend()
 {
-    if (_wxIsQuickTime4Installed())
-    {
-        #ifndef __WXMAC__
-        int nError;
-        //-2093 no dll
-            if ((nError = InitializeQTML(0)) != noErr)
-            {
-                wxFAIL_MSG(wxString::Format(wxT("Couldn't Initialize Quicktime-%i"), nError));
-            }
-        #endif
-        EnterMovies();
-        return true;
-    }
-    else
-    {
-        wxFAIL_MSG(wxT("Quicktime is not installed, or Your Version of Quicktime is <= 4."));
-        return false;
-    }
-}
-
-bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileName, 
-                         const wxPoint& pos, const wxSize& size, 
-                         long style, long WXUNUSED(driver), const wxString& name)
-{
-    if(!DoCreate(parent, id, pos, size, style, name))
-        return false;
-
-    if(!fileName.empty())
-    {
-        if (!Load(fileName))
-            return false;
-
-        if(!Play())
-            return false;
-    }
-
-    return true;
-}
-
-bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxURI& location, 
-                         const wxPoint& pos, const wxSize& size, 
-                         long style, long WXUNUSED(driver), const wxString& name)
-{
-    if(!DoCreate(parent, id, pos, size, style, name))
-        return false;
-    
-    if(!location.IsReference())
-    {
-        if (!Load(location))
-            return false;
-
-        if(!Play())
-            return false;
-    }
-
-    return true;
-}
-
-bool wxMediaCtrl::DoCreate(wxWindow* parent, wxWindowID id, 
-                         const wxPoint& pos, const wxSize& size, 
-                         long style, const wxString& name)
-{
-     //do some window stuff
-    if ( !wxControl::Create(parent, id, pos, size, 
-#ifdef __WXMAC__
-                            MacRemoveBordersFromStyle(style), 
-#else
-                            style | wxNO_BORDER, 
-#endif
-                            wxDefaultValidator, name) )
-        return false;
-
-    //Set our background color to black by default
-    SetBackgroundColour(*wxBLACK);
-
-    return true;
-}
-
-bool wxMediaCtrl::Load(const wxString& fileName)
-{
-    if(m_bLoaded)
+    if(m_timer)
         Cleanup();
 
-    if ( !InitQT() )
+    //Note that ExitMovies() is not neccessary...
+    ExitMovies();
+}
+
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::CreateControl
+//
+// 1) Intializes QuickTime
+// 2) Creates the control window
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent, 
+                                     wxWindowID id,
+                                     const wxPoint& pos, 
+                                     const wxSize& size,
+                                     long style, 
+                                     const wxValidator& validator,
+                                     const wxString& name)
+{
+    if (!_wxIsQuickTime4Installed())
         return false;
+
+    EnterMovies();
+
+    //
+    // Create window
+    // By default wxWindow(s) is created with a border -
+    // so we need to get rid of those
+    //
+    // Since we don't have a child window like most other
+    // backends, we don't need wxCLIP_CHILDREN
+    //
+    if ( !ctrl->wxControl::Create(parent, id, pos, size,
+                            m_ctrl->MacRemoveBordersFromStyle(style),
+                            validator, name) )
+        return false;
+
+    //
+    //Set our background color to black by default
+    //
+    ctrl->SetBackgroundColour(*wxBLACK);
+
+    m_ctrl = ctrl;
+    return true;
+}
+
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Load (file version)
+//
+// 1) Get an FSSpec from the Windows path name
+// 2) Open the movie
+// 3) Obtain the movie instance from the movie resource
+// 4) 
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::Load(const wxString& fileName)
+{
+    if(m_timer)
+        Cleanup();
 
     OSErr err = noErr;
     short movieResFile;
     FSSpec sfFile;
-#ifdef __WXMAC__
-    wxMacFilename2FSSpec( fileName , &sfFile ) ;
-#else
-    if (NativePathNameToFSSpec ((char*) fileName.mb_str(), &sfFile, 0) != noErr)
-        return false;
-#endif
+    
+    wxMacFilename2FSSpec( fileName , &sfFile );
+    
     if (OpenMovieFile (&sfFile, &movieResFile, fsRdPerm) != noErr)
         return false;
 
@@ -226,16 +295,18 @@ bool wxMediaCtrl::Load(const wxString& fileName)
 
     FinishLoad();
 
-    return m_bLoaded;
+    return ::GetMoviesError() == noErr;
 }
 
-bool wxMediaCtrl::Load(const wxURI& location)
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::Load(const wxURI& location)
 {
-    if(m_bLoaded)
+    if(m_timer)
         Cleanup();
-
-    if ( !InitQT() )
-        return false;
 
     wxString theURI = location.BuildURI();
 
@@ -268,12 +339,17 @@ bool wxMediaCtrl::Load(const wxURI& location)
 
     FinishLoad();
 
-    return m_bLoaded;
+    return ::GetMoviesError() == noErr;
 }
 
-void wxMediaCtrl::FinishLoad()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+void wxQTMediaBackend::FinishLoad()
 {
-    m_timer = new _wxQTTimer(m_movie, (wxMediaCtrl*) this);
+    m_timer = new _wxQTTimer(m_movie, (wxQTMediaBackend*) this);
     wxASSERT(m_timer);
 
     //get the real size of the movie
@@ -284,60 +360,69 @@ void wxMediaCtrl::FinishLoad()
     m_bestSize.x = outRect.right - outRect.left;
     m_bestSize.y = outRect.bottom - outRect.top;
         
-    //reparent movie
-if(GetMovieIndTrackType(m_movie, 1, VisualMediaCharacteristic/*AudioMediaCharacteristic*/, movieTrackCharacteristic | movieTrackEnabledOnly) != NULL)
-    {
-
-#ifdef __WXMSW__
-    CreatePortAssociation(this->GetHWND(), NULL, 0L);
-#endif
-    SetMovieGWorld(m_movie, (CGrafPtr)
-
-#ifdef __WXMSW__
-    GetNativeWindowPort(this->GetHWND())
-#else
-    GetWindowPort((WindowRef)this->MacGetTopLevelWindowRef())
-#endif
-    , nil);
+    //reparent movie/*AudioMediaCharacteristic*/
+    if(GetMovieIndTrackType(m_movie, 1, 
+                            VisualMediaCharacteristic, 
+                            movieTrackCharacteristic | 
+                                movieTrackEnabledOnly) != NULL)
+    {        
+        SetMovieGWorld(m_movie, 
+                       (CGrafPtr) 
+                       GetWindowPort(
+                       (WindowRef)
+                       m_ctrl->MacGetTopLevelWindowRef()
+                       ), 
+                       nil);
     }
 
-//    wxPrintf(wxT("%u\n"), ::GetMovieTimeScale(m_movie));
     //we want millisecond precision
     ::SetMovieTimeScale(m_movie, 1000);
-    
-    m_bLoaded = (::GetMoviesError() == noErr);
+    wxASSERT(::GetMoviesError() == noErr);
 
-    //work around refresh issues
-    wxSize size = GetParent()->GetSize();
-    GetParent()->SetSize(wxSize(size.x+1, size.y+1));
-    GetParent()->Refresh();
-    GetParent()->Update();
-    GetParent()->SetSize(size);
-    GetParent()->Refresh();
-    GetParent()->Update();
+    //
+    //Here, if the parent of the control has a sizer - we
+    //tell it to recalculate the size of this control since
+    //the user opened a seperate media file
+    //
+    m_ctrl->InvalidateBestSize();
+    m_ctrl->GetParent()->Layout();
+    m_ctrl->GetParent()->Refresh();
+    m_ctrl->GetParent()->Update();
 }
 
-bool wxMediaCtrl::Play()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::Play()
 {
-    MSWMOVIECHECK
     ::StartMovie(m_movie);
     m_timer->SetPaused(false);
     m_timer->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
     return ::GetMoviesError() == noErr;
 }
 
-bool wxMediaCtrl::Pause()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::Pause()
 {
-    MSWMOVIECHECK
     ::StopMovie(m_movie);
     m_timer->SetPaused(true);
     m_timer->Stop();
     return ::GetMoviesError() == noErr;
 }
 
-bool wxMediaCtrl::Stop()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::Stop()
 {
-    MSWMOVIECHECK
     m_timer->SetPaused(false);
     m_timer->Stop();
 
@@ -349,25 +434,37 @@ bool wxMediaCtrl::Stop()
     return ::GetMoviesError() == noErr;
 }
 
-double wxMediaCtrl::GetPlaybackRate()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+double wxQTMediaBackend::GetPlaybackRate()
 {
-    MSWMOVIECHECK
     return ( ((double)::GetMovieRate(m_movie)) / 0x10000);
 }
 
-bool wxMediaCtrl::SetPlaybackRate(double dRate)
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::SetPlaybackRate(double dRate)
 {
-    MSWMOVIECHECK
     ::SetMovieRate(m_movie, (Fixed) (dRate * 0x10000));
     return ::GetMoviesError() == noErr;
 }
 
-bool wxMediaCtrl::SetPosition(long where)
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+bool wxQTMediaBackend::SetPosition(wxLongLong where)
 {
-    MSWMOVIECHECK
     TimeRecord theTimeRecord;
     memset(&theTimeRecord, 0, sizeof(TimeRecord));
-    theTimeRecord.value.lo = where;
+    theTimeRecord.value.lo = where.GetValue();
     theTimeRecord.scale = ::GetMovieTimeScale(m_movie);
     theTimeRecord.base = ::GetMovieTimeBase(m_movie);
     ::SetMovieTime(m_movie, &theTimeRecord);
@@ -378,21 +475,35 @@ bool wxMediaCtrl::SetPosition(long where)
     return true;
 }
 
-long wxMediaCtrl::GetPosition()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+wxLongLong wxQTMediaBackend::GetPosition()
 {
-    MSWMOVIECHECK
     return ::GetMovieTime(m_movie, NULL);
 }
 
-long wxMediaCtrl::GetDuration()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+wxLongLong wxQTMediaBackend::GetDuration()
 {
-    MSWMOVIECHECK
     return ::GetMovieDuration(m_movie);
 }
 
-wxMediaState wxMediaCtrl::GetState()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+wxMediaState wxQTMediaBackend::GetState()
 {
-    if ( !m_bLoaded || (m_timer->IsRunning() == false && m_timer->GetPaused() == false) )
+    if ( !m_timer || (m_timer->IsRunning() == false && 
+                      m_timer->GetPaused() == false) )
         return wxMEDIASTATE_STOPPED;
 
     if( m_timer->IsRunning() == true )
@@ -401,48 +512,54 @@ wxMediaState wxMediaCtrl::GetState()
         return wxMEDIASTATE_PAUSED;
 }
 
-void wxMediaCtrl::Cleanup()
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+void wxQTMediaBackend::Cleanup()
 {
     delete m_timer;
     m_timer = NULL;
 
     StopMovie(m_movie);
     DisposeMovie(m_movie);
-    
-    //Note that ExitMovies() is not neccessary, but
-    //the docs are fuzzy on whether or not TerminateQTML is
-    ExitMovies();
-
-#ifndef __WXMAC__
-    TerminateQTML();
-#endif
 }
 
-wxMediaCtrl::~wxMediaCtrl()
-{
-    if(m_bLoaded)
-        Cleanup();
-}
-
-wxSize wxMediaCtrl::DoGetBestSize() const
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+wxSize wxQTMediaBackend::GetVideoSize() const
 {
     return m_bestSize;
 }
 
-void wxMediaCtrl::DoMoveWindow(int x, int y, int w, int h)
+//---------------------------------------------------------------------------
+// wxQTMediaBackend::Move
+//
+// TODO
+//---------------------------------------------------------------------------
+void wxQTMediaBackend::Move(int x, int y, int w, int h)
 {
-    wxControl::DoMoveWindow(x,y,w,h);
-    
-    if(m_bLoaded)
+    if(m_timer)
     {
-#ifdef __WXMAC__
         Rect theRect = {y, x, y+h, x+w};
-#else
-        Rect theRect = {0, 0, h, w};
-#endif
+
         ::SetMovieBox(m_movie, &theRect);
         wxASSERT(::GetMoviesError() == noErr);
     }
 }
 
-#endif //wxUSE_MOVIECTRL
+
+//in source file that contains stuff you don't directly use
+#include <wx/html/forcelnk.h>
+FORCE_LINK_ME(basewxmediabackends);
+
+#endif //wxUSE_MEDIACTRL
+
+
+
+
+

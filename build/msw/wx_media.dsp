@@ -447,6 +447,14 @@ LIB32=link.exe -lib
 # Name "media - Win32 Unicode Debug"
 # Name "media - Win32 Release"
 # Name "media - Win32 Debug"
+# Begin Group "Common Sources"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\common\mediactrlcmn.cpp
+# End Source File
+# End Group
 # Begin Group "MSW Sources"
 
 # PROP Default_Filter ""
@@ -630,14 +638,6 @@ InputPath=..\include\wx\msw\setup.h
 
 !ENDIF
 
-# End Source File
-# End Group
-# Begin Group "MSW Headers"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\mediactrl.h
 # End Source File
 # End Group
 # Begin Group "Common Headers"
