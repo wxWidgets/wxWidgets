@@ -1152,10 +1152,10 @@ wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 #else
     CFIndex cStrLen ;
     CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
-        '?' , false , NULL , 0 , cStrLen ) ;
+        '?' , false , NULL , 0 , &cStrLen ) ;
     buf = new wxChar[ cStrLen + 1 ] ; 
-    CFStringGetBytes( m_cfs , CFRangeMake(0, len) , wxMacGetSystemEncFromFontEnc( encoding ) ,
-        '?' , false , (void*) buf , cStrLen , &StrLen) ;
+    CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
+        '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
     noChars = cStrLen ;
 #endif
 
