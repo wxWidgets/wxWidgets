@@ -301,9 +301,18 @@ public:
 
         // remove the selection from currently selected item (if any)
     void Unselect();
+        // or from the given one (multiselect mode only)
+    void UnselectItem(const wxTreeItemId& item) { SelectItem(item, false); }
+        // or from all
     void UnselectAll();
         // select this item
-    void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE, bool extended_select=FALSE);
+    void SelectItem(const wxTreeItemId& item, bool select = true);
+        // toggle the item selection
+    void ToggleItemSelection(const wxTreeItemId& item)
+    {
+        SelectItem(item, !IsSelected(item));
+    }
+
         // make sure this item is visible (expanding the parent item and/or
         // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);
@@ -431,6 +440,10 @@ protected:
     void DrawBorder(const wxTreeItemId& item);
     void DrawLine(const wxTreeItemId& item, bool below);
     void DrawDropEffect(wxGenericTreeItem *item);
+
+    void DoSelectItem(const wxTreeItemId& id,
+                      bool unselect_others = TRUE,
+                      bool extended_select = FALSE);
 
     wxTreeItemId DoInsertItem(const wxTreeItemId& parent,
                               size_t previous,

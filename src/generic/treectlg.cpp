@@ -1726,9 +1726,9 @@ void wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeI
     TagNextChildren(first,last,select);
 }
 
-void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
-                                   bool unselect_others,
-                                   bool extended_select)
+void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
+                                     bool unselect_others,
+                                     bool extended_select)
 {
     wxCHECK_RET( itemId.IsOk(), wxT("invalid tree item") );
 
@@ -1809,6 +1809,22 @@ void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 
     event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
     GetEventHandler()->ProcessEvent( event );
+}
+
+void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
+{
+    if ( select )
+    {
+        DoSelectItem(itemId);
+    }
+    else // deselect
+    {
+        wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
+        wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
+
+        item->SetHilight(FALSE);
+        RefreshLine(item);
+    }
 }
 
 void wxGenericTreeCtrl::FillArray(wxGenericTreeItem *item,
@@ -2579,7 +2595,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         if (current == GetFirstChild( prev, cookie ))
                         {
                             // otherwise we return to where we came from
-                            SelectItem( prev, unselect_others, extended_select );
+                            DoSelectItem( prev, unselect_others, extended_select );
                             m_key_current= (wxGenericTreeItem*) prev.m_pItem;
                             break;
                         }
@@ -2596,7 +2612,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         }
                     }
 
-                    SelectItem( prev, unselect_others, extended_select );
+                    DoSelectItem( prev, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) prev.m_pItem;
                 }
             }
@@ -2613,7 +2629,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 }
                 if (prev)
                 {
-                    SelectItem( prev, unselect_others, extended_select );
+                    DoSelectItem( prev, unselect_others, extended_select );
                 }
             }
             break;
@@ -2630,7 +2646,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                 {
                     wxTreeItemIdValue cookie;
                     wxTreeItemId child = GetFirstChild( m_key_current, cookie );
-                    SelectItem( child, unselect_others, extended_select );
+                    DoSelectItem( child, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) child.m_pItem;
                 }
                 else
@@ -2647,7 +2663,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     }
                     if (next)
                     {
-                        SelectItem( next, unselect_others, extended_select );
+                        DoSelectItem( next, unselect_others, extended_select );
                         m_key_current=(wxGenericTreeItem*) next.m_pItem;
                     }
                 }
@@ -2674,7 +2690,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                 if ( last.IsOk() )
                 {
-                    SelectItem( last, unselect_others, extended_select );
+                    DoSelectItem( last, unselect_others, extended_select );
                 }
             }
             break;
@@ -2694,7 +2710,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                         break;
                 }
 
-                SelectItem( prev, unselect_others, extended_select );
+                DoSelectItem( prev, unselect_others, extended_select );
             }
             break;
 
@@ -3019,7 +3035,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                     !event.ControlDown() &&
                     !event.ShiftDown())
                 {
-                    SelectItem(item, true, false);
+                    DoSelectItem(item, true, false);
                 }
             }
 
@@ -3080,7 +3096,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                                     event.ControlDown(),
                                     is_multiple, extended_select, unselect_others);
 
-                SelectItem(item, unselect_others, extended_select);
+                DoSelectItem(item, unselect_others, extended_select);
             }
 
 
