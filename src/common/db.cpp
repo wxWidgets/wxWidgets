@@ -563,7 +563,7 @@ bool wxDb::Open(char *Dsn, char *Uid, char *AuthStr)
 
 bool wxDb::Open(wxDb *copyDb)
 {
-    dsn        = (char *)copyDb->GetDataSourceName();
+    dsn        = (char *)copyDb->GetDatasourceName();
     uid        = (char *)copyDb->GetUsername();
     authStr    = (char *)copyDb->GetPassword();
 
@@ -3032,8 +3032,8 @@ bool wxDb::TableExists(const char *tableName, const char *userID, const char *ta
 
 
 /********** wxDb::TablePrivileges() **********/
-bool wxDb::TablePrivileges(const char *tableName, const char* priv, const char *schema,
-                           const char *userID, const char *tablePath)
+bool wxDb::TablePrivileges(const char *tableName, const char* priv, const char *userID, 
+                            const char *schema, const char *tablePath)
 {
     wxDbTablePrivilegeInfo  result;
     SDWORD  cbRetVal;
@@ -3047,6 +3047,7 @@ bool wxDb::TablePrivileges(const char *tableName, const char* priv, const char *
     wxString UserID;
     wxString TableName;
     
+    assert(userID);
     assert(tableName && wxStrlen(tableName));
     
     if (userID)
@@ -3452,7 +3453,7 @@ void WXDLLEXPORT wxDbCloseConnections(void)
 }  // wxDbCloseConnections()
 
 
-/********** wxDbNumberConnectionsInUse() **********/
+/********** wxDbConnectionsInUse() **********/
 int WXDLLEXPORT wxDbConnectionsInUse(void)
 {
     wxDbList *pList;

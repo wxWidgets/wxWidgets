@@ -124,8 +124,8 @@ extern char const *SQL_CATALOG_FILENAME;
 
 // Database Globals
 const int DB_TYPE_NAME_LEN            = 40;
-const int DB_MAX_STATEMENT_LEN        = 2048;
-const int DB_MAX_WHERE_CLAUSE_LEN     = 1024;
+const int DB_MAX_STATEMENT_LEN        = 4096;
+const int DB_MAX_WHERE_CLAUSE_LEN     = 2048;
 const int DB_MAX_ERROR_MSG_LEN        = 512;
 const int DB_MAX_ERROR_HISTORY        = 5;
 const int DB_MAX_TABLE_NAME_LEN       = 128;
@@ -532,7 +532,7 @@ public:
     int          GetColumnCount(char *tableName, const char *userID=NULL);
     const char  *GetDatabaseName(void)  {return dbInf.dbmsName;}
     const char  *GetDataSource(void)    {return (const char *)dsn;}
-    const char  *GetDataSourceName(void){return (const char *)dsn;}
+    const char  *GetDatasourceName(void){return (const char *)dsn;}
     const char  *GetUsername(void)      {return (const char *)uid;}
     const char  *GetPassword(void)      {return (const char *)authStr;}
     bool         IsOpen(void)           {return dbIsOpen;}
@@ -546,8 +546,8 @@ public:
     wxDbSqlTypeInfo GetTypeInfDate()    {return typeInfDate;}
 
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
-    bool         TablePrivileges(const char *tableName, const char* priv, const char *schema=NULL, const char *userID=NULL, const char *path="");  // Table name can refer to a table, view, alias or synonym
-    void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
+    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID="", const char *schema=NULL, const char *path="");  // Table name can refer to a table, view, alias or synonym
+    void         LogError(const char *errMsg, const char *SQLState = NULL) {logError(errMsg, SQLState);}
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);
     bool         WriteSqlLog(const wxChar *logMsg);
