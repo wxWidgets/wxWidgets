@@ -135,6 +135,14 @@ WXHBRUSH wxStaticText::DoMSWControlColor(WXHDC pDC, wxColour colBg)
     if (!hbr && m_hasFgCol)
     {
         hbr = MSWGetBgBrushForChild(pDC, this);
+        if (!hbr)
+        {
+            HDC hdc = (HDC)pDC;
+            wxColour bg = GetBackgroundColour();
+            ::SetBkColor(hdc, wxColourToRGB(bg));
+            wxBrush *brush = wxTheBrushList->FindOrCreateBrush(bg, wxSOLID);
+            hbr = (WXHBRUSH)brush->GetResourceHandle();
+        }
     }
     return hbr;
 }
