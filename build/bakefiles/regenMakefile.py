@@ -66,7 +66,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
 
     if 'msvc6prj' in args and args['msvc6prj'] != None:
         add(bake, makedirs,
-            os.path.basename(bake.replace('/','\\')).replace('.bkl','.dsw'),
+            (bake[1+bake.rfind('/'):]).replace('.bkl','.dsw'),
             dep, 'msvc6prj', args)
     
     lines[bake] = linesCur
