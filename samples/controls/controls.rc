@@ -1,11 +1,10 @@
 mondrian ICON "mondrian.ico"
 
-/*
-list	ICON "icons/list.ico"
-choice	ICON "icons/choice.ico"
-combo	ICON "icons/combo.ico"
-text	ICON "icons/text.ico"
-radio	ICON "icons/radio.ico"
-*/
+choice	BITMAP "icons/choice.bmp"
+combo	BITMAP "icons/combo.bmp"
+gauge	BITMAP "icons/gauge.bmp"
+list	BITMAP "icons/list.bmp"
+radio	BITMAP "icons/radio.bmp"
+text	BITMAP "icons/text.bmp"
 
 #include "wx/msw/wx.rc"

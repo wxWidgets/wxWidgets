@@ -29,22 +29,18 @@
 #include "wx/spinbutt.h"
 #include "wx/clipbrd.h"
 
-// XPM doesn't seem to work under Windows at present. Or, wxNotebook images
-// aren't working.
-// Uncomment this line and comment out the next to try it.
-//#if defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMSW__) && wxUSE_XPM_IN_MSW)
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
-#define USE_XPM
+    #define USE_XPM
 #endif
 
 #ifdef USE_XPM
-#include "mondrian.xpm"
-#include "icons/choice.xpm"
-#include "icons/combo.xpm"
-#include "icons/list.xpm"
-#include "icons/radio.xpm"
-#include "icons/text.xpm"
-#include "icons/gauge.xpm"
+    #include "mondrian.xpm"
+    #include "icons/choice.xpm"
+    #include "icons/combo.xpm"
+    #include "icons/list.xpm"
+    #include "icons/radio.xpm"
+    #include "icons/text.xpm"
+    #include "icons/gauge.xpm"
 #endif
 
 //----------------------------------------------------------------------
@@ -268,7 +264,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   };
 
 #ifdef USE_XPM
-  // image ids and names
+  // image ids
   enum
   {
     Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
@@ -283,6 +279,30 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   imagelist-> Add( wxBitmap( text_xpm ));
   imagelist-> Add( wxBitmap( radio_xpm ));
   imagelist-> Add( wxBitmap( gauge_xpm ));
+  m_notebook->SetImageList(imagelist);
+#elif defined(__WXMSW__)
+  // load images from resources
+  enum
+  {
+    Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Gauge, Image_Max
+  };
+  wxImageList *imagelist = new wxImageList(32, 32, FALSE, Image_Max);
+
+  static const char *s_iconNames[Image_Max] =
+  {
+      "list", "choice", "combo", "text", "radio", "gauge"
+  };
+
+  for ( size_t n = 0; n < Image_Max; n++ )
+  {
+      wxBitmap bmp(s_iconNames[n]);
+      if ( !bmp.Ok() || (imagelist->Add(bmp) == -1) )
+      {
+          wxLogWarning("Couldn't load the image '%s' for the notebook page %d.",
+                       s_iconNames[n], n);
+      }
+  }
+
   m_notebook->SetImageList(imagelist);
 #else
 
