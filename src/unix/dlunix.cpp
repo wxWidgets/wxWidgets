@@ -191,24 +191,17 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 /* static */
 wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 {
-    wxASSERT_MSG( (flags & wxDL_NOW) == 0,
+    wxASSERT_MSG( !(flags & wxDL_NOW) || !(flags & wxDL_LAZY),
                   _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
 
 #ifdef USE_POSIX_DL_FUNCS
-    int rtldFlags = 0;
+    // we need to use either RTLD_NOW or RTLD_LAZY because if we call dlopen()
+    // with flags == 0 recent versions of glibc just fail the call, so use
+    // RTLD_NOW even if wxDL_NOW was not specified
+    int rtldFlags = flags & wxDL_LAZY ? RTLD_LAZY : RTLD_NOW;
 
-    if ( flags & wxDL_LAZY )
-    {
-        rtldFlags |= RTLD_LAZY;
-    }
-    if ( flags & wxDL_NOW )
-    {
-        rtldFlags |= RTLD_NOW;
-    }
     if ( flags & wxDL_GLOBAL )
-    {
         rtldFlags |= RTLD_GLOBAL;
-    }
 
     return dlopen(libname.fn_str(), rtldFlags);
 #else // !USE_POSIX_DL_FUNCS
