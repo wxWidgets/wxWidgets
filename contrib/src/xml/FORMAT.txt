@@ -1,0 +1,324 @@
+
+                         XML resources file format
+                      ===============================
+                      
+ 1. Basics
+-----------
+
+XML resource is well-formed XML document, i.e. all tags are paired
+and there is only one root node, which is always <resource>.
+
+In the following text, I will use standard XML terminology:
+
+<tag_one prop1="prop" prop2='yes'>
+   <tag_two/>
+</tag_one>
+
+Here, tag_one is a node (the word 'tag' refers to the type of the node),
+prop1 and prop2 are properties and tag_two is a child node of tag_one.
+Property's default value is the value that will be assigned to the property
+if you do not specify it explicitly.
+
+I will use the term "primary node" to refer to nodes than represent controls,
+dialogs etc. "Secondary nodes" are nodes used to store data: 
+
+<dialog name="my_dlg">                primary
+  <title>Demo Dialog...</title>       secondary
+  <size>100,200d</size>               secondary
+  <children>                          secondary
+    <button name="wxID_OK">           primary
+      <label>Ok</label>               secondary
+      <pos>10,10d</pos>               secondary
+    </button>
+  </children>
+</dialog>
+
+In the example above, <label>, <pos>, <size> and <title> are "variables",
+i.e. they contain a value and not a list of children (unlike <children> node).
+
+Any node (but the root one) may have property "platform" with possible 
+values "unix", "win", "mac" or "os2". All nodes with "platform" property
+specified and other than the platform the program is currently being executed
+on will be removed when reading XML resource file.
+
+Root node may have children of these and only these types: <menu>, <menubar>,
+<dialog>, <panel>
+
+
+
+ 2. IDs
+--------
+
+Any primary node may have property "name" used to identify it. Default value
+is "-1", any string is legal name. Names 
+    wxID_OPEN, wxID_CLOSE, wxID_NEW,
+    wxID_SAVE, wxID_SAVEAS, wxID_REVERT, 
+    wxID_EXIT, wxID_UNDO, wxID_REDO,
+    wxID_HELP, wxID_PRINT, wxID_PRINT_SETUP, 
+    wxID_PREVIEW, wxID_ABOUT, wxID_HELP_CONTENTS,
+    wxID_HELP_COMMANDS, wxID_HELP_PROCEDURES,
+    wxID_CUT, wxID_COPY, wxID_PASTE,
+    wxID_CLEAR, wxID_FIND, wxID_DUPLICATE,
+    wxID_SELECTALL, wxID_OK, wxID_CANCEL,
+    wxID_APPLY, wxID_YES, wxID_NO,
+    wxID_STATIC, wxID_FORWARD, wxID_BACKWARD,
+    wxID_DEFAULT, wxID_MORE, wxID_SETUP,
+    wxID_RESET, wxID_HELP_CONTEXT
+are translated into corresponding wxWindows ID constant, XMLID macro is used
+otherwise to generate unique ID. wxWindows control created from named node
+will have name=name and id=XMLID(name) or wxID_XXXX.
+
+
+ 3. Common variables types
+--------------------------- 
+
+Variables are always of a known type:
+
+bool       - boolean value. "1", "true", "t", "on" mean TRUE, anything
+             else (namely "0", "false", "f", "off") means FALSE.
+             FIXME: maybe use only 1/0 ??
+             
+integer    - integer value, i.e. digits 0-9 plus optional minus sign.
+             
+text       - anything. Within text node all occurences of $ are replaced 
+             by & (used for shortcuts, e.g. "E&xit"), $$ by $, \\, \n, \r,
+             \t as usual in C++.
+
+style      - (also called flags) list of flags delimined by any combination 
+             of spaces and | characters. Resources parser accepts only 
+             _registered_ flags -- i.e. flags that are valid for given 
+             node/control. Example:
+                  <flag>wxEXPAND | wxTOP|wxBOTTOM</flag>
+                  
+color      - color in HTML format: #rrggbb where rr,gg,bb are hexadecimal 
+             values (00-FF) for red, green and blue components in 
+             the RGB color model
+             
+coord      - size or position information. Consists of two integers
+             separated by comma ("x,y"). The values are in pixels 
+             unless "d" is attached to the right side of it -- 
+             in which case the values are interpreted as dialog units.
+             Value of -1 means "use default". Examples: 
+                  30,30
+                  -1,-1
+                  50,-1
+                  145,56d
+                  67,-1d
+
+
+
+ 4. Layout
+----------- 
+
+Most common nodes layout is as follows:
+
+<primary_node name="name" platform="platform">
+    <var_1>...</var_1>
+    .
+    .
+    .
+    <var_n>...</var_n>
+    <children>
+        (n primary nodes)
+    </children>
+</primary_node>
+
+where children node is supported only by panels, dialogs etc. -- see 
+nodes description for details.
+
+In the following text, 
+
+   TYPE var_name [ (= default_value) ]
+   
+means that given primary node may have child node with name var_name
+and content type TYPE. If default value is given, the node is optional
+and default_value will be used if not specified. Otherwise, the node
+is mandatory and must always be present. For example, "color fg" means
+than variable tag fg, e.g. <fg>#rr0000</fg> is expected.
+
+
+
+ 5. Common controls variables
+------------------------------
+
+_All_ nodes that represent wxWindows controls (gauge, panel, dialog, 
+textctrl etc.) accept the following properties:
+
+coord   pos       (= -1,-1) position of the control. Default value 
+                  equals to wxDefaultPosition
+coord   size      (= -1,-1) size of the control. Default value equals to 
+                  wxDefaultSize
+text    tooltip   window's tooltip
+color   bg        background color of the control
+color   fg        foreground/text color of the control
+style   style     control style flag. Default value is 
+                  control-dependent (but 0 is common value)
+style   exstyle   control extended style flag
+bool    enabled   (= 1) is the control enabled?
+bool    hidden    (= 0) is the control hidden?
+bool    focused   (= 0) has the control focus?
+
+
+_Usually_ (but not always, only when it makes sense) controls support text
+variable label which contains displayed text and/or value which contains
+editable text. These are always explicitly mentioned in tag description.
+
+
+
+
+ 6. Tags description
+---------------------
+
+If 'Control' is derived from wxControl, it supports all variables from '5.'
+'Styles' section lists all acceptable flags for style and exstyle variables.
+
+
+ <panel>
+--------- 
+      Control:
+         wxPanel
+
+      Variables:
+         only common controls variables
+
+      Styles:
+         wxNO_3D, wxTAB_TRAVERSAL, wxWS_EX_VALIDATE_RECURSIVELY
+
+
+
+ <dialog>
+----------
+      Control:
+         wxDialog
+
+      Variables:
+         style    style     (= wxDEFAULT_DIALOG_style)
+         text     title     dialog's title         
+
+      Styles:
+         wxSTAY_ON_TOP, wxCAPTION, wxDEFAULT_DIALOG_style, wxTHICK_FRAME,
+         wxSYSTEM_MENU, wxRESIZE_BORDER, wxRESIZE_BOX, wxDIALOG_MODAL,
+         wxDIALOG_MODELESS, wxNO_3D, wxTAB_TRAVERSAL, 
+         wxWS_EX_VALIDATE_RECURSIVELY
+
+
+
+ <boxsizer>
+--------------
+      Control:
+         wxBoxSizer (not a control)
+
+      Behaviour:
+         boxsizer's parent must be either <panel>, <dialog> or another
+         sizer, nothing else!
+         
+         If the sizer does not have parent sizer, the sizer will attach itself
+         to the parent panel/dialog using SetAutoLayout(TRUE) and SetSizer().
+         If the parent panel/dialog has default size (i.e. not specified in
+         the resource), the sizer will fit it using wxSizer::Fit(). If the
+         parent panel/dialog is resizable, size hints will be set 
+         automatically.
+
+      Variables:
+         style    orient    (= wxHORIZONTAL) orientation, either 
+                            wxHORIZONTAL or wxVERTICAL
+
+      Styles:
+         wxHORIZONTAL, wxVERTICAL (for orient variable)
+
+         wxLEFT, wxRIGHT, wxTOP, wxBOTTOM, wxNORTH, wxSOUTH, wxEAST, wxWEST,
+         wxALL, wxGROW, wxEXPAND, wxSHAPED, wxSTRETCH_NOT, wxALIGN_CENTER,
+         wxALIGN_CENTRE, wxALIGN_LEFT, wxALIGN_TOP, wxALIGN_RIGHT, 
+         wxALIGN_BOTTOM, wxALIGN_CENTER_HORIZONTAL, wxALIGN_CENTRE_HORIZONTAL,
+         wxALIGN_CENTER_HORIZONTAL, wxALIGN_CENTRE_HORIZONTAL (for flag
+         variable of <item> or <spacer> child nodes)
+
+      Child nodes:
+         Contains child node <children> which has arbitrary number of
+         <sizeritem> and <spacer> child nodes.
+         
+          <sizeritem>
+         -------------
+            Variables:
+               integer  option    (= 0) relative size of the widget
+               style    flag      (= 0) style flag
+               integer  border    (= 0) surrounding border
+               
+            Has exactly one child node <window> that contains the control
+            (or child sizer because sizers may be nested) 
+            to be inserted into the sizer.
+
+          <spacer>
+         ----------
+            Variables:
+               integer  option    (= 0) relative size of the widget
+               style    flag      (= 0) style flag
+               integer  border    (= 0) surrounding border
+
+            Inserts empty space into the sizer
+            
+
+
+ <staticboxsizer>
+------------------
+      Control:
+         wxStaticBoxSizer (not a control)
+
+      Same as <boxsizer> except that it has additional variable:
+      
+               text     label     (= "") label of surrounding static box
+
+      wxStaticBox required by wxStaticBoxSizer is created automatically!
+
+
+
+ <notebooksizer>
+-----------------
+      Control:
+         wxNotebookSizer (not a control)
+
+      Behaviour:
+         notebooksizer's parent must be a sizer (not notebooksizer,
+         see below)!
+
+      Variables:
+         none
+
+      Styles:
+         none
+
+      Child nodes:
+         Has exactly one child node <window> that contains the notebook
+         (nothing else is allowed!) to be inserted into the sizer.
+
+
+
+ <textctrl>
+------------ 
+      Control:
+         wxTextCtrl
+
+      Variables:
+         text     value     (= "")default text of the control
+
+      Styles:
+         wxTE_PROCESS_ENTER, wxTE_PROCESS_TAB, wxTE_MULTILINE, wxTE_PASSWORD,
+         wxTE_READONLY, wxHSCROLL
+
+
+
+ <htmlwindow>
+--------------
+      Control:
+         wxHtmlWindow
+
+      Variables:
+         integer  borders   (= 0) window's borders 
+                            (see wxHtmlWindow::SetBorders)
+         text     url       (= "") if present, given page will be loaded
+         text     htmlcode  (= "") if present, given _text_ will be displayed                            
+                            (you will have to use CDATA section
+                            to embed HTML code into XML document)
+
+      Styles:
+         wxHW_SCROLLBAR_NEVER, wxHW_SCROLLBAR_AUTO
