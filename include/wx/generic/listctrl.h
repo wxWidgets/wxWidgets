@@ -17,7 +17,11 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#ifdef __WXMAC__
+#include "wx/imaglist.h"
+#else
 #include "wx/generic/imaglist.h"
+#endif
 
 #include "wx/control.h"
 #include "wx/timer.h"
