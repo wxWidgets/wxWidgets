@@ -2164,7 +2164,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt)
 
 
 /********** wxDb::ExecSql() with column info **********/ 
-bool wxDb::ExecSqlGetInf(const wxString &pSqlStmt, wxDbColInf** columns, short& numcols)
+bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcols)
 {
     //execute the statement first
     if (! ExecSql(pSqlStmt)) return false;
