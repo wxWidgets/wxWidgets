@@ -38,8 +38,8 @@
     #include "wx/intl.h"
 #endif //WX_PRECOMP
 
-// FreeBSD requires this, it probably doesn't hurt for others
-#ifdef __UNIX__
+// FreeBSD & Watcom require this, it probably doesn't hurt for others
+#if defined(__UNIX__) || defined(__WATCOMC__)
     #include <sys/types.h>
 #endif
 
