@@ -46,6 +46,10 @@
     #endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
 #endif
 
+#if defined(__WXMSW__) && defined(__MINGW32__)
+    #include "wx/msw/winundef.h"
+#endif
+
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTextCtrlBase;
 
