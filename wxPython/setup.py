@@ -1153,6 +1153,7 @@ if __name__ == "__main__":
 
           packages = [PKGDIR,
                       PKGDIR+'.lib',
+                      PKGDIR+'.lib.colourchooser',
                       PKGDIR+'.lib.editor',
                       PKGDIR+'.lib.mixins',
                       PKGDIR+'.lib.PyCrust',
