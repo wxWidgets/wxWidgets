@@ -90,6 +90,8 @@ wxMSW:
 - Added wxSP_NO_XP_THEME style to wxSplitterWindow to switch off
   XP theming (some applications look bad without 3D borders)
 - wxMenuBar::GetLabelTop() doesn't include '&'s in the label any more
+- wxRegConf couldn't read global settings without admin privileges and didn't
+  even try to do it by default -- now it does
 
 
 2.5.1

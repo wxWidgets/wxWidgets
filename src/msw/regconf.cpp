@@ -148,8 +148,8 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   if ( bDoUseGlobal )
   {
     wxLogNull nolog;
-    m_keyGlobalRoot.Open();
-    m_keyGlobal.Open();
+    m_keyGlobalRoot.Open(wxRegKey::Read);
+    m_keyGlobal.Open(wxRegKey::Read);
   }
 }
 
@@ -392,7 +392,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
       m_keyGlobal.SetName(m_keyGlobalRoot, strRegPath);
 
       wxLogNull nolog;
-      m_keyGlobal.Open();
+      m_keyGlobal.Open(wxRegKey::Read);
     }
 }
 
