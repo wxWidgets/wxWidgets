@@ -225,19 +225,13 @@ private:
     wxRasThreadData m_data;
 
     // the handle of rasapi32.dll when it's loaded
-    wxPluginManager m_dllRas;
+    wxDynamicLibrary m_dllRas;
 
     // the hidden window we use for passing messages between threads
     static HWND ms_hwndRas;
 
     // the handle of the connection we initiated or 0 if none
     static HRASCONN ms_hRasConnection;
-
-    // FIXME: There is probably no reason these really need to
-    //        be static anymore since the dll refcounting is
-    //        handled by wxPluginManager now.  Whether or not
-    //        we still _want_ them to be static is another
-    //        issue entirely..
 
     // the pointers to RAS functions
     static RASDIAL ms_pfnRasDial;
@@ -337,8 +331,8 @@ wxDialUpManager *wxDialUpManager::Create()
 #endif // VC++
 
 wxDialUpManagerMSW::wxDialUpManagerMSW()
-                  : m_timerStatusPolling(this)
-                  , m_dllRas(_T("RASAPI32"))
+                  : m_timerStatusPolling(this),
+                    m_dllRas(_T("RASAPI32"))
 {
     // initialize our data
     m_hThread = 0;
@@ -932,7 +926,7 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
     //     but we allow multiple instances of wxDialUpManagerMSW so
     //     we might as well use the ref counted version here too.
 
-    wxPluginManager hDll(_T("WININET"));
+    wxDynamicLibrary hDll(_T("WININET"));
     if ( hDll.IsLoaded() )
     {
         typedef BOOL (WINAPI *INTERNETGETCONNECTEDSTATE)(LPDWORD, DWORD);
