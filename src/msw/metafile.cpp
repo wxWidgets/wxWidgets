@@ -443,6 +443,9 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
     return TRUE;
 }
 
+
+#if wxUSE_DRAG_AND_DROP
+
 // ----------------------------------------------------------------------------
 // wxMetafileDataObject
 // ----------------------------------------------------------------------------
@@ -482,6 +485,8 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
 
     return TRUE;
 }
+
+#endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_METAFILE
 
