@@ -13,6 +13,7 @@
             formatconverter/formatconverter.cpp
             regex/regex.cpp
             regex/wxregex.cpp
+            fileconf/fileconf.cpp
             filename/filename.cpp
             filesys/filesys.cpp
             arrays/arrays.cpp
