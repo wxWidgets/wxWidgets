@@ -176,6 +176,7 @@ bool wxTaskBarIcon::RemoveIcon()
 	//TODO:  Not tested
 	OSStatus err = RestoreApplicationDockTileImage();
 	wxASSERT(err == 0);
+        m_iconAdded = false;
 
 	return true;
 }
