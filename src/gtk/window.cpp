@@ -1900,6 +1900,11 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+#ifdef __WXGTK20__
+    if (win->m_imContext)
+        gtk_im_context_focus_in(win->m_imContext);
+#endif
+
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -1987,6 +1992,11 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk
 
     if (g_isIdle)
         wxapp_install_idle_handler();
+
+#ifdef __WXGTK20__
+    if (win->m_imContext)
+        gtk_im_context_focus_out(win->m_imContext);
+#endif
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
