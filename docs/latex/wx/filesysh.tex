@@ -104,6 +104,31 @@ Returns right location string extracted from {\it location}.
 
 Example : GetRightLocation("file:myzipfile.zip\#zip:index.htm") == "index.htm"
 
+
+
+
+
+\membersection{wxFileSystemHandler::FindFirst}\label{wxfilesystemfindfirst}
+
+\func{virtual wxString}{FindFirst}{\param{const wxString\& }{wildcard}, \param{int }{flags = 0}}
+
+Works like \helpref{wxFindFirstFile}{wxfindfirstfile}. Returns name of the first
+filename (withing filesystem's current path) that matches {\it wildcard}. {\it flags} may be one of
+wxFILE (only files), wxDIR (only directories) or 0 (both).
+
+This method is only called if \helpref{CanOpen}{wxfilesystemhandlercanopen} returns TRUE.
+
+\membersection{wxFileSystemHandler::FindNext}\label{wxfilesystemfindnext}
+
+\func{virtual wxString}{FindNext}{\void}
+
+Returns next filename that matches parameters passed to \helpref{FindFirst}{wxfilesystemfindfirst}.
+
+This method is only called if \helpref{CanRead}{wxfilesystemhandlercanread} returns TRUE and FindFirst
+returned non-empty string.
+
+
+
 \membersection{wxFileSystemHandler::OpenFile}\label{wxfilesystemhandleropenfile}
 
 \func{virtual wxFSFile*}{OpenFile}{\param{wxFileSystem\& }{fs}, \param{const wxString\& }{location}}

@@ -85,6 +85,22 @@ f = fs -> OpenFile("hello.htm"); // opens file 'subdir/folder/hello.htm' !!
 
 Returns actual path (set by \helpref{ChangePathTo}{wxfilesystemchangepathto}).
 
+
+\membersection{wxFileSystem::FindFirst}\label{wxfilesystemfindfirst}
+
+\func{wxString}{FindFirst}{\param{const wxString\& }{wildcard}, \param{int }{flags = 0}}
+
+Works like \helpref{wxFindFirstFile}{wxfindfirstfile}. Returns name of the first
+filename (withing filesystem's current path) that matches {\it wildcard}. {\it flags} may be one of
+wxFILE (only files), wxDIR (only directories) or 0 (both).
+
+\membersection{wxFileSystem::FindNext}\label{wxfilesystemfindnext}
+
+\func{wxString}{FindNext}{\void}
+
+Returns next filename that matches parameters passed to \helpref{FindFirst}{wxfilesystemfindfirst}.
+
+
 \membersection{wxFileSystem::OpenFile}\label{wxfilesystemopenfile}
 
 \func{wxFSFile*}{OpenFile}{\param{const wxString\& }{location}}

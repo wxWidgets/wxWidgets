@@ -33,9 +33,20 @@
 class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
 {
     public:
+        wxZipFSHandler();
         virtual bool CanOpen(const wxString& location);
         virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
+        virtual wxString FindFirst(const wxString& spec, int flags = 0);
+        virtual wxString FindNext();
         ~wxZipFSHandler();
+        
+    private:
+        // these vars are used by FindFirst/Next:
+        void *m_Archive;
+        wxString m_Pattern, m_BaseDir, m_ZipFile;
+        bool m_AllowDirs, m_AllowFiles;
+        
+        wxString DoFind();
 };
 
 

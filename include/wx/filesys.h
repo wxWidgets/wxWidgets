@@ -3,6 +3,7 @@
 // Purpose:     class for opening files - virtual file system
 // Author:      Vaclav Slavik
 // Copyright:   (c) 1999 Vaclav Slavik
+// RCS-ID:      $Id$
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +94,12 @@ class WXDLLEXPORT wxFileSystemHandler : public wxObject
                 // Returns NULL if opening failed.
                 // The location is always absolute path.
 
+        virtual wxString FindFirst(const wxString& spec, int flags = 0);
+        virtual wxString FindNext();
+                // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
+                // the query to directories or wxFILE for files only or 0 for either.
+                // Returns filename or empty string if no more matching file exists
+
     protected:
         wxString GetProtocol(const wxString& location) const;
                 // returns protocol ("file", "http", "tar" etc.) The last (most right)
@@ -141,6 +148,40 @@ class WXDLLEXPORT wxFileSystem : public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxFileSystem)
 
+    public:
+        wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE); m_FindFileHandler = NULL;}
+
+        void ChangePathTo(const wxString& location, bool is_dir = FALSE);
+                // sets the current location. Every call to OpenFile is
+                // relative to this location.
+                // NOTE !!
+                // unless is_dir = TRUE 'location' is *not* the directory but
+                // file contained in this directory
+                // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
+
+	    wxString GetPath() const {return m_Path;}
+
+        wxFSFile* OpenFile(const wxString& location);
+                // opens given file and returns pointer to input stream.
+                // Returns NULL if opening failed.
+                // It first tries to open the file in relative scope
+                // (based on ChangePathTo()'s value) and then as an absolute
+                // path.
+                
+        wxString FindFirst(const wxString& spec, int flags = 0);
+        wxString FindNext();
+                // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
+                // the query to directories or wxFILE for files only or 0 for either.
+                // Returns filename or empty string if no more matching file exists
+         
+
+        static void AddHandler(wxFileSystemHandler *handler);
+                // Adds FS handler.
+                // In fact, this class is only front-end to the FS hanlers :-)
+
+        static void CleanUpHandlers();
+                // remove all items from the m_Handlers list
+
     private:
         wxString m_Path;
                 // the path (location) we are currently in
@@ -151,33 +192,8 @@ class WXDLLEXPORT wxFileSystem : public wxObject
                 // name of last opened file (full path)
         static wxList m_Handlers;
                 // list of FS handlers
-
-    public:
-        wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE);}
-
-        void ChangePathTo(const wxString& location, bool is_dir = FALSE);
-                // sets the current location. Every call to OpenFile is
-                // relative to this location.
-                // NOTE !!
-                // unless is_dir = TRUE 'location' is *not* the directory but
-                // file contained in this directory
-                // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
-
-	wxString GetPath() const {return m_Path;}
-
-        wxFSFile* OpenFile(const wxString& location);
-                // opens given file and returns pointer to input stream.
-                // Returns NULL if opening failed.
-                // It first tries to open the file in relative scope
-                // (based on ChangePathTo()'s value) and then as an absolute
-                // path.
-
-        static void AddHandler(wxFileSystemHandler *handler);
-                // Adds FS handler.
-                // In fact, this class is only front-end to the FS hanlers :-)
-
-        static void CleanUpHandlers();
-                // remove all items from the m_Handlers list
+        wxFileSystemHandler *m_FindFileHandler;
+                // handler that succeed in FindFirst query
 };
 
 
