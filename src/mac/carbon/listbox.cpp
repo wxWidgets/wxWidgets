@@ -308,7 +308,7 @@ int wxListBox::FindString(const wxString& st) const
 	    	if ( EqualString( s1 , s2 , false , false ) )
 	    		return i ;
 	    }
-	    if ( s.Left(1) = "*" && s.Length() > 1 )
+	    if ( s.Left(1) == "*" && s.Length() > 1 )
 	    {
 	    	s.MakeLower() ;
 		    for ( int i = 0 ; i < m_noItems ; ++i )
