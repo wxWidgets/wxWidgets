@@ -41,7 +41,7 @@ public:
     MyFlexSizerFrame(const wxChar *title, int x, int y );
 
 private:
-    void InitFlexSizer(wxFlexGridSizer *sizer);
+    void InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent);
 };
 
 
