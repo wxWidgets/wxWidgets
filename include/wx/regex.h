@@ -26,12 +26,6 @@ class WXDLLEXPORT wxString;
 // constants
 // ----------------------------------------------------------------------------
 
-// max number of subexpression matches, the default should be big enough for
-// all uses but may be a bit wasteful
-#ifndef WX_REGEX_MAXMATCHES
-    #define WX_REGEX_MAXMATCHES 1024
-#endif
-
 // flags for regex compilation: these can be used with Compile()
 enum
 {
@@ -148,6 +142,11 @@ private:
 
     // the real guts of this class
     wxRegExImpl *m_impl;
+
+    // as long as the class wxRegExImpl is not ref-counted,
+    // instances of the handle wxRegEx must not be copied.
+    wxRegEx(const wxRegEx&);
+    wxRegEx &operator=(const wxRegEx&);
 };
 
 #endif // wxUSE_REGEX

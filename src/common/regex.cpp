@@ -107,6 +107,7 @@ wxRegExImpl::wxRegExImpl()
 {
     m_isCompiled = FALSE;
     m_Matches = NULL;
+    m_nMatches = 0;
 }
 
 wxRegExImpl::~wxRegExImpl()
@@ -176,8 +177,29 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         }
         else
         {
-            // will alloc later
-            m_nMatches = WX_REGEX_MAXMATCHES;
+            // we will alloc the array later (only if really needed) but count
+            // the number of sub-expressions in the regex right now
+
+            // there is always one for the whole expression
+            m_nMatches = 1;
+
+            // and some more for bracketed subexperessions
+            const wxChar *cptr = expr.c_str();
+            wxChar prev = _T('\0');
+            while ( *cptr != _T('\0') )
+            {
+                // is this a subexpr start, i.e. "(" for extended regex or
+                // "\(" for a basic one?
+                if ( *cptr == _T('(') &&
+                     (flags & wxRE_BASIC ? prev == _T('\\')
+                                         : prev != _T('\\')) )
+                {
+                    m_nMatches++;
+                }
+
+                prev = *cptr;
+                cptr++;
+            }
         }
 
         m_isCompiled = TRUE;
@@ -235,8 +257,6 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
     wxCHECK_MSG( index < m_nMatches, FALSE, _T("invalid match index") );
 
     const regmatch_t& match = m_Matches[index];
-    if ( match.rm_so == -1 )
-        return FALSE;
 
     if ( start )
         *start = match.rm_so;
@@ -318,17 +338,7 @@ int wxRegExImpl::Replace(wxString *text,
                     size_t start, len;
                     if ( !GetMatch(&start, &len, index) )
                     {
-                        // we can't do it because GetMatch() returns FALSE
-                        // even for a valid back reference index if it didn't
-                        // match for this expression (e.g. it when alternative
-                        // branches were used and the one contained the back
-                        // ref didn't match)
-                        //
-                        // it would be better to distinguish between this case
-                        // and really invalid index, but I don't know how to
-                        // do it
-
-                        //wxFAIL_MSG( _T("invalid back reference") );
+                        wxFAIL_MSG( _T("invalid back reference") );
 
                         // just eat it...
                     }
