@@ -886,6 +886,11 @@ public:
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
 
+#if wxUSE_UNICODE
+    // get the Unicode character corresponding to this key
+    wxChar GetUnicodeKey() const { return m_uniChar; }
+#endif // wxUSE_UNICODE
+
     // get the raw key code (platform-dependent)
     wxUint32 GetRawKeyCode() const { return m_rawCode; }
 
