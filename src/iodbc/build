@@ -1,0 +1,9 @@
+#! /bin/sh
+
+echo autoconfig $1
+
+if sh ./autoconfig $1 
+then 
+echo make
+make 
+fi

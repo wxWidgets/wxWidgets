@@ -289,7 +289,7 @@ void MyDialog::OnHelloButton( wxCommandEvent &WXUNUSED(event) )
 {
   wxMessageDialog *dialog;
   dialog = new wxMessageDialog( this, "Now, I will paint on Screen.", "wxGTK" );
-  dialog->ShowModal();
+      dialog->ShowModal();
   delete dialog;
   
   wxScreenDC dc;
@@ -496,8 +496,9 @@ void MyFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void MyFrame::OnDialog( wxCommandEvent &WXUNUSED(event) )
 {
-  MyDialog dialog( this );
-  dialog.ShowModal();
+  MyDialog *dialog = new MyDialog( this );
+  dialog->ShowModal();
+  dialog->Close( TRUE );
 };
 
 void MyFrame::OnFontDialog( wxCommandEvent &WXUNUSED(event) )

@@ -695,6 +695,7 @@ DEFAULT_USE_MEM_TRACING=0
 DEFAULT_USE_ZLIB=1
 DEFAULT_USE_GDK_IMLIB=1
 DEFAULT_USE_LIBPNG=1
+DEFAULT_USE_ODBC=1
 
 DEFAULT_USE_APPLE_IEEE=1
 DEFAULT_USE_STORABLE_CLASSES=1
@@ -775,6 +776,10 @@ USE_GDK_IMLIB)
 AC_OVERRIDES(libpng,libpng,
 **--with-libpng           use libpng (PNG image format),
 USE_LIBPNG)
+
+AC_OVERRIDES(odbc,odbc,
+**--with-odbc           use iODBC,
+USE_ODBC)
 
 AC_OVERRIDES(opengl,opengl,
 **--with-opengl           use opengl (OpenGL or Mesa),
@@ -919,6 +924,11 @@ fi
 LIBPNG=NONE
 if test "$USE_LIBPNG" = 1 ; then
   LIBPNG="LIBPNG"
+fi
+
+ODBC=NONE
+if test "$USE_ODBC" = 1 ; then
+  ODBC="ODBC"
 fi
 
 APPLE_IEEE=NONE
@@ -1346,11 +1356,15 @@ dnl AC_SUBST(LIBPNG_LIBRARY)
 dnl AC_SUBST(LIBPNG_LINK)
 
 dnl ----------------------------------------------------------------
-dnl search for Python
+dnl search for iODBC
 dnl ----------------------------------------------------------------
+dnl 
+    if test "$USE_ODBC" = 1; then
+      AC_DEFINE_UNQUOTED(USE_ODBC,$USE_ODBC) 
+    fi
 
 dnl ----------------------------------------------------------------
-dnl search for ODBC
+dnl search for Python
 dnl ----------------------------------------------------------------
 
 dnl ----------------------------------------------------------------

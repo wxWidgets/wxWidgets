@@ -16,7 +16,7 @@
 #endif
 
 #include <wx/stream.h>
-#include "zlib.h"
+#include "../../src/zlib/zlib.h"
 
 class wxZlibInputStream: public wxFilterInputStream {
  public:

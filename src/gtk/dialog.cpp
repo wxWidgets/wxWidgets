@@ -120,7 +120,9 @@ void wxDialog::OnApply( wxCommandEvent &WXUNUSED(event) )
 void wxDialog::OnCancel( wxCommandEvent &WXUNUSED(event) )
 {
   if (IsModal())
+  {
     EndModal(wxID_CANCEL);
+  }
   else
   {
     SetReturnCode(wxID_CANCEL);
@@ -133,14 +135,15 @@ void wxDialog::OnOk( wxCommandEvent &WXUNUSED(event) )
   if ( Validate() && TransferDataFromWindow())
   {
     if (IsModal()) 
+    {
       EndModal(wxID_OK);
+    }
     else
     {
       SetReturnCode(wxID_OK);
       this->Show(FALSE);
     };
   };
-  EndModal( wxID_OK );
 };
 
 void wxDialog::OnPaint( wxPaintEvent& WXUNUSED(event) )
@@ -153,7 +156,7 @@ bool wxDialog::OnClose(void)
   static wxList closing;
 
   if (closing.Member(this)) return FALSE;   // no loops
-
+  
   closing.Append(this);
 
   wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);

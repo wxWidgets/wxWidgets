@@ -1055,10 +1055,24 @@ void wxWindow::ImplementSetSize(void)
 
 void wxWindow::ImplementSetPosition(void)
 {
+  if (!m_parent)
+  {
+    if (IsKindOf(CLASSINFO(wxFrame)) ||
+        IsKindOf(CLASSINFO(wxDialog)))
+    {
+      gtk_widget_set_uposition( m_widget, m_x, m_y );
+    }
+    else
+    {
+      printf( "wxWindow::SetSize error.\n" );
+    }
+    return;
+  }
+  
   if ((m_parent) && (m_parent->m_wxwindow))
     gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
-  else
-    gtk_widget_set_uposition( m_widget, m_x, m_y );
+    
+  // Don't do anything for children of wxNotebook and wxMDIChildFrame   
 };
 
 void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )

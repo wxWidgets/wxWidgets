@@ -53,6 +53,10 @@
  */
 #undef USE_LIBPNG
 /*
+ * Use iODBC
+ */
+#undef USE_ODBC
+/*
  * Use Threads
  */
 #undef USE_THREADS

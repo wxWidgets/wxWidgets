@@ -30,3 +30,7 @@ if test ! -d gdk_imlib; then
     mkdir gdk_imlib
 fi
 
+# create "/iodbc" if not present
+if test ! -d iodbc; then
+    mkdir iodbc
+fi
