@@ -56,12 +56,12 @@ protected:
 // ------------------------------------------------------------------------
 public:
     // Pure Virtuals
-    virtual int GetValue() const { return 0; }
-    virtual void SetValue(int value) { }
+    virtual int GetValue() const;
+    virtual void SetValue(int value);
 
     // retrieve/change the range
-    virtual void SetRange(int maxValue) { }
-    int GetRange(void) const { return 0; }
+    virtual void SetRange(int maxValue);
+    int GetRange(void) const;
 };
 
 #endif // __WX_COCOA_GAUGE_H__

@@ -32,6 +32,10 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
         return false;
     SetNSView([[NSProgressIndicator alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+
+    [(NSProgressIndicator*)m_cocoaNSView setMaxValue:range];
+    [(NSProgressIndicator*)m_cocoaNSView setIndeterminate:NO];
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     SetInitialFrameRect(pos,size);
@@ -41,6 +45,27 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID winid, int range,
 
 wxGauge::~wxGauge()
 {
+}
+
+int wxGauge::GetValue() const
+{
+    return [(NSProgressIndicator*)m_cocoaNSView doubleValue];
+}
+
+void wxGauge::SetValue(int value)
+{
+    [(NSProgressIndicator*)m_cocoaNSView setDoubleValue:value];
+}
+
+int wxGauge::GetRange() const
+{
+    return [(NSProgressIndicator*)m_cocoaNSView maxValue];
+}
+
+void wxGauge::SetRange(int maxValue)
+{
+    [(NSProgressIndicator*)m_cocoaNSView setMinValue:0.0];
+    [(NSProgressIndicator*)m_cocoaNSView setMaxValue:maxValue];
 }
 
 #endif // wxUSE_GAUGE
