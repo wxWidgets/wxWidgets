@@ -124,7 +124,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
   m_keyLocal.ReserveMemoryForName(MEMORY_PREALLOC);
 
   m_keyLocalRoot.SetName(wxRegKey::HKCU, SOFTWARE_KEY + str);
-  m_keyLocal.SetName(m_keyLocalRoot, _T(""));
+  m_keyLocal.SetName(m_keyLocalRoot, wxEmptyString);
 
   if ( bDoUseGlobal )
   {
@@ -134,7 +134,7 @@ wxRegConfig::wxRegConfig(const wxString& appName, const wxString& vendorName,
     m_keyGlobal.ReserveMemoryForName(MEMORY_PREALLOC);
 
     m_keyGlobalRoot.SetName(wxRegKey::HKLM, SOFTWARE_KEY + str);
-    m_keyGlobal.SetName(m_keyGlobalRoot, _T(""));
+    m_keyGlobal.SetName(m_keyGlobalRoot, wxEmptyString);
   }
 
   // Create() will Open() if key already exists

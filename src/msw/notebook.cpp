@@ -175,7 +175,7 @@ bool wxNotebook::Create(wxWindow *parent,
                         wxDefaultValidator, name) )
         return FALSE;
 
-    if ( !MSWCreateControl(WC_TABCONTROL, _T(""), pos, size) )
+    if ( !MSWCreateControl(WC_TABCONTROL, wxEmptyString, pos, size) )
         return FALSE;
 
     SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
@@ -265,7 +265,7 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 
 wxString wxNotebook::GetPageText(int nPage) const
 {
-  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxT(""), wxT("notebook page out of range") );
+  wxCHECK_MSG( IS_VALID_PAGE(nPage), wxEmptyString, wxT("notebook page out of range") );
 
   wxChar buf[256];
   TC_ITEM tcItem;

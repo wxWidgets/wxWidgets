@@ -44,7 +44,7 @@
 #if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
-  if (file != wxT(""))
+  if (file != wxEmptyString)
 // Don't know what the correct cast should be, but it doesn't
 // compile in BC++/16-bit without this cast.
 #if !defined(__WIN32__)
@@ -85,7 +85,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, wxChar **valu
     static const wxChar defunkt[] = wxT("$$default");
 
     wxChar buf[1024];
-    if (file != wxT(""))
+    if (file != wxEmptyString)
     {
         int n = GetPrivateProfileString(section, entry, defunkt,
                                         buf, WXSIZEOF(buf), file);

@@ -189,8 +189,8 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
     wxWindow *winActive = new wxFrame
                     (
                         wxTheApp->GetTopWindow(),
-                        -1,
-                        _T(""),
+                        wxID_ANY,
+                        wxEmptyString,
                         wxPoint(32600, 32600),
                         wxSize(1, 1),
                         wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR

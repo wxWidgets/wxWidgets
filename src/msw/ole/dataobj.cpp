@@ -62,7 +62,7 @@
 #ifdef __WXDEBUG__
     static const wxChar *GetTymedName(DWORD tymed);
 #else // !Debug
-    #define GetTymedName(tymed) _T("")
+    #define GetTymedName(tymed) wxEmptyString
 #endif // Debug/!Debug
 
 // ----------------------------------------------------------------------------

@@ -245,7 +245,7 @@ bool wxToolBar::Create(wxWindow *parent,
 
 bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
 {
-    if ( !MSWCreateControl(TOOLBARCLASSNAME, _T(""), pos, size) )
+    if ( !MSWCreateControl(TOOLBARCLASSNAME, wxEmptyString, pos, size) )
         return FALSE;
 
     // toolbar-specific post initialisation

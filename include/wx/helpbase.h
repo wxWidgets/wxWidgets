@@ -45,7 +45,7 @@ public:
     virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
 
     // If file is "", reloads file given  in Initialize
-    virtual bool LoadFile(const wxString& file = wxT("")) = 0;
+    virtual bool LoadFile(const wxString& file = wxEmptyString) = 0;
 
     // Displays the contents
     virtual bool DisplayContents(void) = 0;

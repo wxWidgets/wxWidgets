@@ -51,7 +51,7 @@ class WXDLLEXPORT wxImageHandler: public wxObject
 {
 public:
     wxImageHandler()
-        : m_name(wxT("")), m_extension(wxT("")), m_mime(), m_type(0)
+        : m_name(wxEmptyString), m_extension(wxEmptyString), m_mime(), m_type(0)
         { }
 
 #if wxUSE_STREAMS

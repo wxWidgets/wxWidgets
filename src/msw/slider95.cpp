@@ -155,7 +155,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     HWND scroll_bar = CreateWindowEx
         (
-            exStyle, TRACKBAR_CLASS, wxT(""),
+            exStyle, TRACKBAR_CLASS, wxEmptyString,
             msStyle,
             0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
             wxGetInstance(), NULL
@@ -174,7 +174,7 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
     SubclassWin(GetHWND());
 
-    ::SetWindowText((HWND) m_hWnd, wxT(""));
+    ::SetWindowText((HWND) m_hWnd, wxEmptyString);
 
     SetFont(parent->GetFont());
 

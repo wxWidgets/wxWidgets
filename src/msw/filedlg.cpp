@@ -99,7 +99,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     if ( ( m_dialogStyle & wxMULTIPLE ) && ( m_dialogStyle & wxSAVE ) )
         m_dialogStyle &= ~wxMULTIPLE;
     m_parent = parent;
-    m_path = wxT("");
+    m_path = wxEmptyString;
     m_fileName = defaultFileName;
     m_dir = defaultDir;
     m_wildCard = wildCard;

@@ -64,7 +64,7 @@ bool wxStaticLine::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    return MSWCreateControl(_T("STATIC"), _T(""), pos, size);
+    return MSWCreateControl(_T("STATIC"), wxEmptyString, pos, size);
 }
 
 WXDWORD wxStaticLine::MSWGetStyle(long style, WXDWORD *exstyle) const

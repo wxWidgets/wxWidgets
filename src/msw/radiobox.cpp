@@ -284,7 +284,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     // Create a dummy radio control to end the group.
     (void)::CreateWindow(_T("BUTTON"),
-                         _T(""),
+                         wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, hwndParent,
                          (HMENU)NewControlId(), wxGetInstance(), NULL);

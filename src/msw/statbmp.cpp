@@ -122,7 +122,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
 #else // Win16
                            _T("BUTTON"),
 #endif // Win32/16
-                           _T(""), pos, size) )
+                           wxEmptyString, pos, size) )
     {
         // control creation failed
         return FALSE;

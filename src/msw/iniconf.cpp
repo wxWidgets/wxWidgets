@@ -95,7 +95,7 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
     }
 
     // set root path
-    SetPath(wxT(""));
+    SetPath(wxEmptyString);
 }
 
 wxIniConfig::~wxIniConfig()

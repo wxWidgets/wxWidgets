@@ -150,7 +150,7 @@ public:
                 wxPathFormat format = wxPATH_NATIVE)
     {
         // empty volume
-        Assign(_T(""), path, name, ext, format);
+        Assign(wxEmptyString, path, name, ext, format);
     }
 
     void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE);
@@ -270,7 +270,7 @@ public:
         // returns TRUE if the file name was modified, FALSE if we failed to do
         // anything with it (happens when the file is on a different volume,
         // for example)
-    bool MakeRelativeTo(const wxString& pathBase = _T(""),
+    bool MakeRelativeTo(const wxString& pathBase = wxEmptyString,
                         wxPathFormat format = wxPATH_NATIVE);
 
         // make the path absolute

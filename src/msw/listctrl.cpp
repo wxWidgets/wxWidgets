@@ -313,7 +313,7 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
     // Create the ListView control.
     m_hWnd = (WXHWND)CreateWindowEx(exStyle,
                                     WC_LISTVIEW,
-                                    wxT(""),
+                                    wxEmptyString,
                                     wstyle,
                                     x, y, w, h,
                                     GetWinHwnd(GetParent()),

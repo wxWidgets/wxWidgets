@@ -28,7 +28,7 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxCommand : public wxObject
 {
 public:
-    wxCommand(bool canUndoIt = FALSE, const wxString& name = wxT(""));
+    wxCommand(bool canUndoIt = FALSE, const wxString& name = wxEmptyString);
     ~wxCommand();
 
     // Override this to perform a command

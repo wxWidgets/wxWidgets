@@ -448,7 +448,7 @@ public:
 #define wxSysErrorMsg( X ) (const wxChar*)NULL
 
 // Fake symbolic trace masks... for those that are used frequently
-#define wxTRACE_OleCalls wxT("") // OLE interface calls
+#define wxTRACE_OleCalls wxEmptyString // OLE interface calls
 
 #endif // wxUSE_LOG/!wxUSE_LOG
 

@@ -64,7 +64,7 @@ public:
     wxFontRefData()
     {
         Init(-1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL,
-             FALSE, _T(""), wxFONTENCODING_DEFAULT);
+             FALSE, wxEmptyString, wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(int size,
@@ -891,7 +891,7 @@ bool wxFont::GetUnderlined() const
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->GetFaceName();
 }

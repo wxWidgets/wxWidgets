@@ -116,10 +116,10 @@ public:
   // ctor & dtor
     // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
     // wxCONFIG_USE_GLOBAL_FILE to say which files should be used.
-  wxFileConfig(const wxString& appName = wxT(""),
-               const wxString& vendorName = wxT(""),
-               const wxString& localFilename = wxT(""),
-               const wxString& globalFilename = wxT(""),
+  wxFileConfig(const wxString& appName = wxEmptyString,
+               const wxString& vendorName = wxEmptyString,
+               const wxString& localFilename = wxEmptyString,
+               const wxString& globalFilename = wxEmptyString,
                long style = wxCONFIG_USE_LOCAL_FILE,
                wxMBConv& conv = wxConvUTF8);
 

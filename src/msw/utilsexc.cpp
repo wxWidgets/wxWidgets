@@ -454,7 +454,7 @@ static bool wxExecuteDDE(const wxString& ddeServer,
     bool ok = FALSE;
 
     wxDDEClient client;
-    wxConnectionBase *conn = client.MakeConnection(_T(""),
+    wxConnectionBase *conn = client.MakeConnection(wxEmptyString,
                                                    ddeServer,
                                                    ddeTopic);
     if ( !conn )

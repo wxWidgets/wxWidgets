@@ -749,7 +749,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 
 void wxTextCtrl::Clear()
 {
-    ::SetWindowText(GetHwnd(), wxT(""));
+    ::SetWindowText(GetHwnd(), wxEmptyString);
 
 #if wxUSE_RICHEDIT
     if ( !IsRich() )
@@ -1064,7 +1064,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& value)
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    Replace(from, to, _T(""));
+    Replace(from, to, wxEmptyString);
 }
 
 bool wxTextCtrl::LoadFile(const wxString& file)

@@ -111,7 +111,7 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
         // get it from the registry
         wxFileTypeImpl *self = wxConstCast(this, wxFileTypeImpl);
         wxRegKey rkey(wxRegKey::HKCR, m_ext);
-        if ( !rkey.Exists() || !rkey.QueryValue(_T(""), self->m_strFileType) )
+        if ( !rkey.Exists() || !rkey.QueryValue(wxEmptyString, self->m_strFileType) )
         {
             wxLogDebug(_T("Can't get the filetype for extension '%s'."),
                        m_ext.c_str());
@@ -164,7 +164,7 @@ bool wxFileTypeImpl::EnsureExtKeyExists()
     wxRegKey rkey(wxRegKey::HKCR, m_ext);
     if ( !rkey.Exists() )
     {
-        if ( !rkey.Create() || !rkey.SetValue(_T(""), m_strFileType) )
+        if ( !rkey.Create() || !rkey.SetValue(wxEmptyString, m_strFileType) )
         {
             wxLogError(_("Failed to create registry entry for '%s' files."),
                        m_ext.c_str());
@@ -201,7 +201,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
     wxString command;
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue(wxT(""), command) ) {
+        if ( key.QueryValue(wxEmptyString, command) ) {
             // transform it from '%1' to '%s' style format string (now also
             // test for %L - apparently MS started using it as well for the
             // same purpose)
@@ -230,13 +230,13 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
             wxRegKey keyDDE(wxRegKey::HKCR, strKey);
             if ( keyDDE.Open() ) {
                 wxString ddeCommand, ddeServer, ddeTopic;
-                keyDDE.QueryValue(_T(""), ddeCommand);
+                keyDDE.QueryValue(wxEmptyString, ddeCommand);
                 ddeCommand.Replace(_T("%1"), _T("%s"));
 
                 wxRegKey(wxRegKey::HKCR, strKey + _T("\\Application")).
-                    QueryValue(_T(""), ddeServer);
+                    QueryValue(wxEmptyString, ddeServer);
                 wxRegKey(wxRegKey::HKCR, strKey + _T("\\Topic")).
-                    QueryValue(_T(""), ddeTopic);
+                    QueryValue(wxEmptyString, ddeTopic);
 
                 if (ddeTopic.IsEmpty())
                     ddeTopic = wxT("System");
@@ -347,7 +347,7 @@ bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
     if ( key.Open() ) {
         wxString strIcon;
         // it's the default value of the key
-        if ( key.QueryValue(wxT(""), strIcon) ) {
+        if ( key.QueryValue(wxEmptyString, strIcon) ) {
             // the format is the following: <full path to file>, <icon index>
             // NB: icon index may be negative as well as positive and the full
             //     path may contain the environment variables inside '%'
@@ -384,7 +384,7 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
 
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue(wxT(""), *desc) ) {
+        if ( key.QueryValue(wxEmptyString, *desc) ) {
             return TRUE;
         }
     }
@@ -421,7 +421,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     wxRegKey key(wxRegKey::HKCR, str);
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue(wxT(""), strFileType) ) {
+        if ( key.QueryValue(wxEmptyString, strFileType) ) {
             // create the new wxFileType object
             return CreateFileType(strFileType, ext);
         }
@@ -542,7 +542,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 filetype = filetypeOrig;
             }
 
-            ok = key.SetValue(_T(""), filetype);
+            ok = key.SetValue(wxEmptyString, filetype);
         }
         }
         else
@@ -551,11 +551,11 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
             if (!filetypeOrig.empty())
                 {
                     filetype = filetypeOrig;
-                    ok = key.SetValue(_T(""), filetype);
+                    ok = key.SetValue(wxEmptyString, filetype);
                 }
             else
                 {
-                    ok = key.QueryValue(_T(""), filetype);
+                    ok = key.QueryValue(wxEmptyString, filetype);
                 }
         }
         // now set a mimetypeif we have it, but ignore it if none
@@ -593,7 +593,7 @@ wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
 
             wxRegKey key(wxRegKey::HKCR, extWithDot);
             if ( !key.Exists() ) ok = key.Create();
-            ok = key.SetValue(_T(""), filetype);
+            ok = key.SetValue(wxEmptyString, filetype);
 
         // now set any mimetypes we may have, but ignore it if none
         const wxString& mimetype = ftInfo.GetMimeType();
@@ -657,7 +657,7 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
     {
 #if wxUSE_GUI
         wxString old;
-        rkey.QueryValue(wxT(""), old);
+        rkey.QueryValue(wxEmptyString, old);
         if ( wxMessageBox
              (
                 wxString::Format(
@@ -681,7 +681,7 @@ bool wxFileTypeImpl::SetCommand(const wxString& cmd,
     // TODO:
     // 1. translate '%s' to '%1' instead of always adding it
     // 2. create DDEExec value if needed (undo GetCommand)
-    return rkey.Create() && rkey.SetValue(_T(""), cmd + _T(" \"%1\"") );
+    return rkey.Create() && rkey.SetValue(wxEmptyString, cmd + _T(" \"%1\"") );
 }
 
 /* // no longer used
@@ -724,7 +724,7 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& cmd, int index)
     wxRegKey rkey(wxRegKey::HKCR, m_strFileType + _T("\\DefaultIcon"));
 
     return rkey.Create() &&
-           rkey.SetValue(_T(""),
+           rkey.SetValue(wxEmptyString,
                          wxString::Format(_T("%s,%d"), cmd.c_str(), index));
 }
 
@@ -739,7 +739,7 @@ bool wxFileTypeImpl::SetDescription (const wxString& desc)
     wxRegKey rkey(wxRegKey::HKCR, m_strFileType );
 
     return rkey.Create() &&
-           rkey.SetValue(_T(""), desc);
+           rkey.SetValue(wxEmptyString, desc);
 }
 
 // ----------------------------------------------------------------------------

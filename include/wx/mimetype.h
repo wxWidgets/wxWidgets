@@ -178,7 +178,7 @@ public:
         // ctors
         MessageParameters() { }
         MessageParameters(const wxString& filename,
-                          const wxString& mimetype = _T(""))
+                          const wxString& mimetype = wxEmptyString)
             : m_filename(filename), m_mimetype(mimetype) { }
 
         // accessors (called by GetOpenCommand)

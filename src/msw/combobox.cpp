@@ -410,7 +410,7 @@ void wxComboBox::SetInsertionPoint(long pos)
         // Scroll insertion point into view
         SendMessage(hEditWnd, EM_SCROLLCARET, (WPARAM)0, (LPARAM)0);
         // Why is this necessary? (Copied from wxTextCtrl::SetInsertionPoint)
-        SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM)_T(""));
+        SendMessage(hEditWnd, EM_REPLACESEL, 0, (LPARAM) wxEmptyString);
     }
 #endif // __WIN32__
 }

@@ -108,7 +108,7 @@ bool wxSliderMSW::Create(wxWindow *parent, wxWindowID id,
   else
     msStyle = SBS_HORZ | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;
 
-  HWND scroll_bar = CreateWindowEx(exStyle, wxT("SCROLLBAR"), wxT(""),
+  HWND scroll_bar = CreateWindowEx(exStyle, wxT("SCROLLBAR"), wxEmptyString,
                          msStyle,
                          0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
                          wxGetInstance(), NULL);

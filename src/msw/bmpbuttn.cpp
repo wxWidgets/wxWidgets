@@ -95,7 +95,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
                    (
                     0,
                     wxT("BUTTON"),
-                    wxT(""),
+                    wxEmptyString,
                     msStyle,
                     0, 0, 0, 0,
                     GetWinHwnd(parent),

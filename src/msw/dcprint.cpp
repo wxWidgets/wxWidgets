@@ -276,7 +276,7 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
         GlobalFree(pd.hDevMode);
         pd.hDevMode=NULL;
     }
-    return ( deviceName != wxT("") );
+    return ( deviceName != wxEmptyString );
 }
 
 // Gets an HDC for the specified printer configuration

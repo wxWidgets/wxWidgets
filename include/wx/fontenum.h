@@ -43,7 +43,7 @@ public:
     // enumerate the different encodings either for given font facename or for
     // all facenames - will result in OnFontEncoding() being called for each
     // available (facename, encoding) couple
-    virtual bool EnumerateEncodings(const wxString& facename = wxT(""));
+    virtual bool EnumerateEncodings(const wxString& facename = wxEmptyString);
 
     // callbacks which are called after one of EnumerateXXX() functions from
     // above is invoked - all of them may return FALSE to stop enumeration or

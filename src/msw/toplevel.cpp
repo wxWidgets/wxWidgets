@@ -945,7 +945,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
             }
         }
 
-        ms_hwnd = ::CreateWindow(ms_className, _T(""), 0, 0, 0, 0, 0, NULL,
+        ms_hwnd = ::CreateWindow(ms_className, wxEmptyString, 0, 0, 0, 0, 0, NULL,
                                  (HMENU)NULL, wxGetInstance(), NULL);
         if ( !ms_hwnd )
         {
