@@ -171,7 +171,7 @@ void MyCanvas::OnPaint(wxPaintEvent& event)
     dc.Blit(20 + g_TestBitmap->GetWidth() + 20, 20, g_TestBitmap->GetWidth(), g_TestBitmap->GetHeight(), & memDC,
       0, 0, wxCOPY, TRUE);
 
-    memDC.SelectObject(NULL);
+    memDC.SelectObject(wxNullBitmap);
   }
 }
 
