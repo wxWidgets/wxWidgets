@@ -846,7 +846,6 @@ void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
     FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
 }
 
-/*
 static char sMacFileNameConversion[ 1000 ] ;
 
 wxString wxMac2UnixFilename (const char *str)
@@ -918,17 +917,12 @@ wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
     return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
 }
 
-void wxMacFilename2FSSpec( const char *path , FSSpec *spec )
-{
-    FSpLocationFromFullPath( strlen(path ) , path , spec ) ;
-}
-
 void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
 {
     wxString var = wxUnix2MacFilename( path ) ;
     wxMacFilename2FSSpec( var , spec ) ;
 }
-*/
+
 #endif
 void
 wxDos2UnixFilename (char *s)
