@@ -269,30 +269,36 @@ void wxTextCtrl::SetValue(const wxString& value)
     ClearSelection();
     m_lines.Clear();
     m_longestLine = 0;
-    
-    int pos = 0;
-    for (;;)
+
+    if (value.IsEmpty())
     {
-        // TODO make more efficient
-        wxString tmp = value;
-        tmp.Remove( 0, pos );
-        pos = tmp.Find( '\n' );
-        if (pos == -1)
+        m_lines.Add( new wxSourceLine( wxT("") ) );
+    }
+    else
+    {
+        int begin = 0;
+        int pos = 0;
+        for (;;)
         {
-            if (tmp.Len() > m_longestLine)
-                m_longestLine = tmp.Len();
-                
-            m_lines.Add( new wxSourceLine( tmp ) );
-            break;
+            pos = value.find( wxT('\n'), begin );
+            if (pos < 0)
+            {
+                if (value.Len()-begin > m_longestLine)
+                    m_longestLine = value.Len()-begin;
+
+                m_lines.Add( new wxSourceLine( value.Mid( begin, value.Len()-begin ) ) );
             
-        }
-        else
-        {
-            if (pos > m_longestLine)
-                m_longestLine = pos;
+                break;
+            }
+            else
+            {
+                if (pos-begin > m_longestLine)
+                     m_longestLine = pos-begin;
                 
-            tmp.Remove( pos, tmp.Len()-pos );
-            m_lines.Add( new wxSourceLine( tmp ) );
+                m_lines.Add( new wxSourceLine( value.Mid( begin, pos-begin ) ) );
+            
+                begin = pos+1;
+            }
         }
     }
     
@@ -342,7 +348,10 @@ void wxTextCtrl::Clear()
     m_cursorX = 0;
     m_cursorY = 0;
     ClearSelection();
+    
     m_lines.Clear();
+    m_lines.Add( new wxSourceLine( wxT("") ) );
+    
     SetScrollbars( m_charWidth, m_lineHeight, 0, 0, 0, 0 );
     Refresh();
     m_undos.Clear();
@@ -369,6 +378,8 @@ void wxTextCtrl::SetMaxLength(unsigned long len)
 
 void wxTextCtrl::WriteText(const wxString& text2)
 {
+    if (text2.IsEmpty()) return;
+
     m_modified = TRUE;
     
     wxString text( text2 );
@@ -423,16 +434,47 @@ void wxTextCtrl::WriteText(const wxString& text2)
     }
 }
 
-void wxTextCtrl::AppendText(const wxString& text)
+void wxTextCtrl::AppendText(const wxString& text2)
 {
-    // Leaves cursor garbage
+    if (text2.IsEmpty()) return;
 
-    m_cursorY = m_lines.GetCount()-1;
-    m_cursorX = m_lines[m_cursorY].m_text.Len();
+    m_modified = TRUE;
     
-    WriteText( text );
+    wxString text( text2 );
+    wxArrayString lines;
+    int pos;
+    while ( (pos = text.Find('\n')) != -1 )
+    {
+       lines.Add( text.Left( pos ) );
+       text.Remove( 0, pos+1 );
+    }
+    lines.Add( text );
+    int count = (int)lines.GetCount();
     
-    Refresh();
+    size_t y = m_lines.GetCount()-1;
+
+    wxString tmp( m_lines[y].m_text );
+    tmp.Append( lines[0] );
+    
+    if (count == 1)
+    {
+        m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_LINE, y, y, this ) );
+        
+        m_lines[y].m_text = tmp;
+        RefreshLine( y );
+    }
+    else
+    {
+        m_undos.Append( new wxSourceUndoStep( wxSOURCE_UNDO_PASTE, y, y+count-1, this ) );
+        
+        m_lines[y].m_text = tmp;
+        int i;
+        for (i = 1; i < count; i++)
+            m_lines.Insert( new wxSourceLine( lines[i] ), y+i );
+        
+        MyAdjustScrollbars();
+        RefreshDown( y );
+    }
 }
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
