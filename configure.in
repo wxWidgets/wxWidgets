@@ -1226,7 +1226,7 @@ AC_SUBST(PNG_C_SRC)
 JPEG_LINK=""
 if test "$wxUSE_LIBJPEG" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_LIBJPEG,$wxUSE_LIBJPEG)
-  AC_CHECK_LIB(jpeg)
+  AC_CHECK_LIB(jpeg,main,,AC_MSG_ERROR("libjpeg is not available.")) 
   JPEG_LINK="-ljpeg"
 fi
 AC_SUBST(JPEG_LINK)
