@@ -232,6 +232,59 @@ class MyTP(wx.PyTipProvider):
         return "This is my tip"
 
 #---------------------------------------------------------------------------
+# A class to be used to display source code in the demo.  Try using the
+# wxSTC in the wxStyledTextCtrl_2 sample first, fall back to wxTextCtrl
+# if there is an error, such as the stc module not being present.
+
+try:
+    ##raise ImportError
+    from wx import stc
+    from wxStyledTextCtrl_2 import PythonSTC
+    class DemoCodeViewer(PythonSTC):
+        def __init__(self, parent, ID):
+            PythonSTC.__init__(self, parent, ID)
+            self.SetEdgeMode(stc.STC_EDGE_NONE)
+            self.SetSelBackground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+            self.SetSelForeground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
+
+        # Some methods to make it compatible with how the wxTextCtrl is used
+        def SetValue(self, value):
+            self.SetReadOnly(False)
+            self.SetText(value)
+            self.SetReadOnly(True)
+
+        def Clear(self):
+            self.ClearAll()
+
+        def SetInsertionPoint(self, pos):
+            self.SetCurrentPos(pos)
+
+        def ShowPosition(self, pos):
+            self.GotoPos(pos)
+
+        def GetLastPosition(self):
+            return self.GetLength()
+
+        def GetRange(self, start, end):
+            return self.GetTextRange(start, end)
+
+        def GetSelection(self):
+            return self.GetAnchor(), self.GetCurrentPos()
+
+        def SetSelection(self, start, end):
+            self.SetSelectionStart(start)
+            self.SetSelectionEnd(end)
+
+
+except ImportError:
+    class DemoCodeViewer(wx.TextCtrl):
+        def __init__(self, parent, ID):
+            wx.TextCtrl.__init__(self, parent, ID, style =
+                                 wx.TE_MULTILINE | wx.TE_READONLY |
+                                 wx.HSCROLL | wx.TE_RICH2 | wx.TE_NOHIDESEL)
+
+
+#---------------------------------------------------------------------------
 
 def opj(path):
     """Convert paths to the platform-specific separator"""
@@ -387,11 +440,10 @@ class wxPythonDemo(wx.Frame):
         self.SetOverview(self.overviewText, overview)
 
 
-        # Set up a TextCtrl on the Demo Code Notebook page
-        self.txt = wx.TextCtrl(self.nb, -1,
-                              style = wx.TE_MULTILINE|wx.TE_READONLY|
-                              wx.HSCROLL|wx.TE_RICH2|wx.TE_NOHIDESEL)
+        # Set up a notebook page for viewing the source code of each sample
+        self.txt = DemoCodeViewer(self.nb, -1)
         self.nb.AddPage(self.txt, "Demo Code")
+        self.GetDemoFile('Main.py')
 
 
         # Set up a log on the View Log Notebook page
@@ -532,7 +584,7 @@ class wxPythonDemo(wx.Frame):
         try:
             self.txt.SetValue(open(filename).read())
         except IOError:
-            self.txt.WriteText("Cannot open %s file." % filename)
+            self.txt.SetValue("Cannot open %s file." % filename)
 
         self.txt.SetInsertionPoint(0)
         self.txt.ShowPosition(0)
@@ -588,8 +640,8 @@ class wxPythonDemo(wx.Frame):
                 return
             else:
                 self.finddlg.Destroy()
-        self.txt.SetSelection(loc, loc + len(findstring))
         self.txt.ShowPosition(loc)
+        self.txt.SetSelection(loc, loc + len(findstring))
 
 
 

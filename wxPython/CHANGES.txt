@@ -2,6 +2,15 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.4.1.x
+-------
+
+Use wxSTC in the demo for displaying the soucre code of the samples.
+
+
+
+
+
 2.4.1.2
 -------
 
