@@ -1,4 +1,16 @@
 
+28th August '99: Ninth wxGTK 2.1 snapshot released
+
+As the old makefile system didn't work, I trashed it and wrote
+a new one. It does work on Linux and Solaris but anything else
+is untested.
+
+Addition of new layout classes that work like Java's, GTK's
+or Qt`s - basically, you pack item in a box and let it tell
+you how much space it needs.
+
+A few more minor fixes.
+
 6th August '99: Eight wxGTK 2.1 snapshot released
 
 The new makefile system is not able to produce shared libraries 

@@ -1,0 +1,72 @@
+#
+# Makefile : Builds wxWindows samples for Unix.
+#
+
+all:
+	cp -u -r @top_srcdir@/samples ..
+	cd bombs; make
+	cd checklst; make
+	cd config; make
+	cd controls; make
+	cd dialogs; make
+	cd docview; make
+	cd docvwmdi; make
+	cd dynamic; make
+	cd fractal; make
+	cd grid; make
+	cd help; make
+	cd image; make
+	cd internat; make
+	cd layout; make
+	cd listctrl; make
+	cd memcheck; make
+	cd minifram; make
+	cd minimal; make
+	cd notebook; make
+	cd printing; make
+	cd proplist; make
+	cd resource; make
+	cd sashtest; make
+	cd splitter; make
+	cd text; make
+	cd toolbar; make
+	cd typetest; make
+	cd validate; make
+	cd treectrl; make
+	cd wxpoem; make
+	cd dnd; make
+	cd thread; make
+
+clean:
+	cd bombs; make clean
+	cd checklst; make clean
+	cd config; make clean
+	cd controls; make clean
+	cd dialogs; make clean
+	cd docview; make clean
+	cd docvwmdi; make clean
+	cd dynamic; make clean
+	cd fractal; make clean
+	cd grid; make clean
+	cd help; make clean
+	cd image; make clean
+	cd internat; make clean
+	cd layout; make clean
+	cd listctrl; make clean
+	cd memcheck; make clean
+	cd minifram; make clean
+	cd minimal; make clean
+	cd notebook; make clean
+	cd printing; make clean
+	cd proplist; make clean
+	cd resource; make clean
+	cd sashtest; make clean
+	cd splitter; make clean
+	cd toolbar; make clean
+	cd typetest; make clean
+	cd validate; make clean
+	cd treectrl; make clean
+	cd wxpoem; make clean
+	cd dnd; make clean
+	cd thread; make clean
+

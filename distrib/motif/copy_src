@@ -15,23 +15,12 @@ echo Base dir..
 
 cd ../..
 cp wxMotif.spec ~/wxmotif_dist/wxMotif
-cp Makefile.am ~/wxmotif_dist/wxMotif
-cp acconfig.h ~/wxmotif_dist/wxMotif
-cp acinclude.m4 ~/wxmotif_dist/wxMotif
-cp aclocal.m4 ~/wxmotif_dist/wxMotif
-cp configure.in ~/wxmotif_dist/wxMotif
 cp configure ~/wxmotif_dist/wxMotif
 cp config.sub ~/wxmotif_dist/wxMotif
 cp config.guess ~/wxmotif_dist/wxMotif
 cp install-sh ~/wxmotif_dist/wxMotif
-cp ltconfig ~/wxmotif_dist/wxMotif
-cp ltmain.sh ~/wxmotif_dist/wxMotif
-cp missing ~/wxmotif_dist/wxMotif
 cp mkinstalldirs ~/wxmotif_dist/wxMotif
 cp wx-config.in ~/wxmotif_dist/wxMotif
-cp makefile.unx.in ~/wxmotif_dist/wxMotif
-cp setup.h.in ~/wxmotif_dist/wxMotif
-cp stamp-h.in ~/wxmotif_dist/wxMotif
 cp Makefile.in ~/wxmotif_dist/wxMotif
 
 echo Docs..

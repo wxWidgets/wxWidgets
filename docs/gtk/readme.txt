@@ -1,18 +1,15 @@
 
-  Welcome to wxWindows/Gtk 2.1 snapshot 8,
+  Welcome to wxWindows/Gtk 2.1 snapshot 9,
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
 the wxWindows GUI library. This is a developers release
 and is it not suited for production development. Beware
 that major changes can happen before a final release.
 
-Beginning with snapshot 6, wxWindows uses a completely
-new make file system on Unix that uses GNU automake,
-GNU autoconf and GNU autoheader. You do not need these
-programs in order to use the library, but for taking
-part in its development, they are required. Read the
-INSTALL.txt file for learning what you can do with the
-new configure/automake/libtool system.
+Beginning with snapshot 9, wxWindows uses a completely
+new make file system on Unix which no longer uses the
+various GNU tools and I hope that I'll never again have
+to write any more makefiles.
 
 More information is available from my homepage at:
 

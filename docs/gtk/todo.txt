@@ -5,13 +5,7 @@ Finalise DnD API.
  
 More testing of Unicode support.
 
-New wxSizer class implementation.
-
 Make wxSockets work on all platform.
-
-Do something about reentry problems with GUI threads
-  when doing asynchronous work (clipboard transfer, 
-  DnD, sockets, different threads).
 
 Add ID based i18n system as a replacement for the
   unelegant gettext system.
@@ -21,8 +15,6 @@ Add controls to toolbar.
 Add TIFF handler. Someone? (Hint, hint).
 
 Improve, update translations. Install *.mo files somewehere.
-
-Completely remove internal usage of C++ iostreams.
 
 Sleep, eat, walk, study, shave, read, play piano and wash less.
 

@@ -1,5 +1,5 @@
 #
-# File:		makefile.unx
+# File:		Makefile.in
 # Author:	Julian Smart
 # Created:	1998
 # Updated:	
@@ -8,6 +8,9 @@
 # "%W% %G%"
 #
 # Makefile for caret example (UNIX).
+
+top_srcdir = @top_srcdir@
+top_builddir = ../..
 
 PROGRAM=caret
 

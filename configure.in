@@ -2673,6 +2673,12 @@ AC_OUTPUT([
 	    src/makeprog.env
 	    src/makelib.env
             Makefile
+            samples/Makefile
+            samples/bombs/Makefile
+            samples/caret/Makefile
+            samples/checklst/Makefile
+            samples/config/Makefile
+            samples/controls/Makefile
           ],
           [
             chmod +x wx-config

@@ -16,23 +16,6 @@ install instructions just do (in the base dir):
 > ldconfig
 > exit
 
-On all variants of Unix except Linux (and maybe except *BSD), shared libraries 
-are not supportet out of the box due to the utter stupidity of libtool, so you'll 
-have to do this to get shared library support:
-
-> ./configure --with-gtk --disable-static --enable-shared
-
-Then you'll have to edit the wrongly created libtool script. There are two
-important entries with respect to shared library creation, which are
-
-  archive_cmds="\$LD -shared ....
-  archive_expsym_cmds="\$LD -shared ....
-  
-which should be something like
-
-  archive_cmds="\$CC -shared ....
-  archive_expsym_cmds="\$CC -shared ....
-  
 Afterwards you can continue with
 
 > make

@@ -1,5 +1,5 @@
 #
-# File:		makefile.unx
+# File:		Makefile.in
 # Author:	Julian Smart
 # Created:	1998
 # Updated:	
@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for config example (UNIX).
+# Makefile for checklst example (UNIX).
 
-PROGRAM=conftest
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=checklst
 
 OBJECTS=$(PROGRAM).o
 
