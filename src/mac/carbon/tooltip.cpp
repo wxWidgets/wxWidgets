@@ -227,12 +227,9 @@ void wxMacToolTip::Draw()
         HMHelpContentRec tag ;
         tag.version = kMacHelpVersion;
         SetRect( &tag.absHotRect , m_position.x - 2 , m_position.y - 2 , m_position.x + 2 , m_position.y + 2 ) ;
-        GrafPtr port ;
-        bool swapped = QDSwapPort( GetWindowPort( m_window ) , &port ) ;
-        LocalToGlobal( (Point *) &tag.absHotRect.top );
-        LocalToGlobal( (Point *) &tag.absHotRect.bottom );
-        if ( swapped )
-            SetPort( port );
+
+        QDLocalToGlobalRect( GetWindowPort( m_window ) , &tag.absHotRect ) ;
+
         m_helpTextRef.Assign( m_label  , wxFONTENCODING_DEFAULT ) ;
         tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
         tag.content[kHMMinimumContentIndex].u.tagCFString = m_helpTextRef ;

@@ -1046,11 +1046,7 @@ void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
     if ( tlw )
     {
         Point tlworigin =  { 0 , 0  } ;
-        GrafPtr port ;
-        bool swapped = QDSwapPort( UMAGetWindowPort( (WindowRef) tlw->MacGetWindowRef() ) , &port ) ;
-        ::LocalToGlobal( &tlworigin ) ;
-        if ( swapped )
-            ::SetPort( port ) ;
+        QDLocalToGlobalPoint( UMAGetWindowPort( (WindowRef) tlw->MacGetWindowRef() ) , &tlworigin ) ;
         x = tlworigin.h ;
         y = tlworigin.v ;    
     }
@@ -1145,8 +1141,7 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
         if(x) localwhere.h = * x ;
         if(y) localwhere.v = * y ;
         
-        wxMacPortSaver s((GrafPtr)GetWindowPort( window )) ;
-        ::GlobalToLocal( &localwhere ) ;
+        QDGlobalToLocalPoint( GetWindowPort( window ) , &localwhere ) ;
         if(x)   *x = localwhere.h ;
         if(y)   *y = localwhere.v ;
 
@@ -1173,9 +1168,7 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
         Point localwhere = { 0,0 };
         if(x)   localwhere.h = * x ;
         if(y)   localwhere.v = * y ;
-
-        wxMacPortSaver s((GrafPtr)GetWindowPort( window )) ;
-        ::LocalToGlobal( &localwhere ) ;
+        QDLocalToGlobalPoint( GetWindowPort( window ) , &localwhere ) ;
         if(x)   *x = localwhere.h ;
         if(y)   *y = localwhere.v ;
     }
