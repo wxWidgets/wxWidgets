@@ -605,6 +605,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxSP_NOBORDER       0x0000
 #define wxSP_3D             0x0004
 #define wxSP_BORDER         0x0008
+#define wxSP_PERMIT_UNSPLIT 0x0010
 
 /*
  * wxFrame extra flags

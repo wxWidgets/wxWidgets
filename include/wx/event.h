@@ -220,8 +220,9 @@ const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
 
 /* Splitter events */
 const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxEVT_FIRST + 850;
-const wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxEVT_FIRST + 851;
-const wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT = wxEVT_FIRST + 852;
+const wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxEVT_FIRST + 851;
+const wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxEVT_FIRST + 852;
+const wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT = wxEVT_FIRST + 853;
 
 const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
 
