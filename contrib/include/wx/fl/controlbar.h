@@ -904,6 +904,13 @@ public:
     bool          mHasLeftHandle;
     bool          mHasRightHandle;
 
+    // determines if this bar can float. The layout's setting as priority. For 
+    // example, if the layout's mFloatingOn is false, this setting is irrelevant
+    // since nothing will float at all. If the layout's floating is on, use this
+    // setting to prevent specific bars from floating. In other words, all bars 
+    // float by default and floating can be turned off on individual bars.
+    bool          mFloatingOn;    // default: ON (which is also the layout's mFloatingOn default setting)
+
     cbDimInfo     mDimInfo;       // preferred sizes for each, control bar state
 
     int           mState;         // (see definition of controlbar states)
