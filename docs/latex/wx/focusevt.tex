@@ -34,9 +34,19 @@ function that takes a wxFocusEvent argument.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxFocusEvent::wxFocusEvent}\label{wxfocuseventctor}
 
 \func{}{wxFocusEvent}{\param{WXTYPE }{eventType = 0}, \param{int }{id = 0}}
 
 Constructor.
+
+
+\membersection{wxFocusEvent::GetWindow}\label{wxfocuseventgetwindow}
+
+Returns the window associated with this event, that is the window which had the
+focus before for the \texttt{wxEVT\_SET\_FOCUS} event and the window which is
+going to receive focus for the \texttt{wxEVT\_KILL\_FOCUS} one.
+
+Warning: the window pointer may be \texttt{NULL}!
 
