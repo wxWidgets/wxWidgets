@@ -112,5 +112,20 @@ PURE;
    STDMETHOD(EnumDAdvise)(THIS_ IEnumSTATDATA**);
 
 
+--- i386-mingw32\include\stdio.h  Sun Aug  1 06:18:20 1999
++++ stdio.h     Sun Nov  7 03:41:40 1999
+@@ -203,9 +203,12 @@
+ int    fprintf (FILE* filePrintTo, const char* szFormat, ...);
+ int    printf (const char* szFormat, ...);
+ int    sprintf (char* caBuffer, const char* szFormat, ...);
++int     _snprintf (char* caBuffer, size_t n, const char* szFormat, ...);
+ int    vfprintf (FILE* filePrintTo, const char* szFormat, va_list varg);
+ int    vprintf (const char* szFormat, va_list varg);
+ int    vsprintf (char* caBuffer, const char* szFormat, va_list varg);
++int     _vsnprintf (char* caBuffer, size_t n, const char* szFormat,
++                    va_list varg);
+
+ /* Wide character versions */
+ int    fwprintf (FILE* filePrintTo, const wchar_t* wsFormat, ...);
 
 
