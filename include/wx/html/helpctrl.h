@@ -21,8 +21,9 @@
 #if wxUSE_HTML
 
 #include "wx/html/helpfrm.h"
+#include "wx/helpbase.h"
 
-class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
+class WXDLLEXPORT wxHtmlHelpController : public wxHelpControllerBase // wxEvtHandler
 {
         DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
 
@@ -62,20 +63,40 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
         virtual void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         virtual void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
 
+        //// Backward compatibility with wxHelpController API
+
+        virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize(file); }
+        virtual bool Initialize(const wxString& file);
+        virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
+        virtual bool LoadFile(const wxString& file = "");
+        virtual bool DisplaySection(int sectionNo);
+        virtual bool DisplayBlock(long blockNo) { return DisplaySection(blockNo); }
+        virtual void SetFrameParameters(const wxString& title,
+                                   const wxSize& size,
+                                   const wxPoint& pos = wxDefaultPosition,
+                                   bool newFrameEachTime = FALSE);
+        /// Obtains the latest settings used by the help frame and the help
+        /// frame.
+        virtual wxFrame *GetFrameParameters(wxSize *size = NULL,
+                                   wxPoint *pos = NULL,
+                                   bool *newFrameEachTime = NULL);
+        virtual bool Quit() ;
+        virtual void OnQuit() {};
+
+        void OnCloseFrame(wxCloseEvent& evt);
     protected:
         virtual wxHtmlHelpFrame* CreateHelpFrame(wxHtmlHelpData *data);
     
         virtual void CreateHelpWindow();
         virtual void DestroyHelpWindow();
 
-        void OnCloseFrame(wxCloseEvent& evt);
-        wxHtmlHelpData m_helpData;
-        wxHtmlHelpFrame* m_helpFrame;
-        wxConfigBase *m_Config;
-        wxString m_ConfigRoot;
-        wxString m_titleFormat;
-        int m_FrameStyle;
-        DECLARE_EVENT_TABLE()
+        wxHtmlHelpData      m_helpData;
+        wxHtmlHelpFrame*    m_helpFrame;
+        wxConfigBase *      m_Config;
+        wxString            m_ConfigRoot;
+        wxString            m_titleFormat;
+        int                 m_FrameStyle;
+        // DECLARE_EVENT_TABLE()
 };
 
 #endif

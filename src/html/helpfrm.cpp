@@ -29,6 +29,7 @@
 #endif
 
 #include "wx/html/helpfrm.h"
+#include "wx/html/helpctrl.h"
 #include "wx/notebook.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
@@ -183,6 +184,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 
     m_PagesHash = NULL;
     m_UpdateContents = TRUE;
+    m_helpController = (wxHelpControllerBase*) NULL;
 }
 
 // Create: builds the GUI components.
@@ -456,7 +458,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
 wxHtmlHelpFrame::~wxHtmlHelpFrame()
 {
-    PopEventHandler(); // wxhtmlhelpcontroller
+    // PopEventHandler(); // wxhtmlhelpcontroller (not any more!)
     delete m_ContentsImageList;
     if (m_DataCreated)
         delete m_Data;
@@ -604,7 +606,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
 
     wxProgressDialog progress(_("Searching..."), _("No matching page found yet"),
                               status.GetMaxIndex(), this,
-                              wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxGA_SMOOTH);
+                              wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
 
     while (status.IsActive()) {
         curi = status.GetCurIndex();
@@ -1308,6 +1310,11 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 
     if (m_Config)
         WriteCustomization(m_Config, m_ConfigRoot);
+
+    if (m_helpController && m_helpController->IsKindOf(CLASSINFO(wxHtmlHelpController)))
+    {
+        ((wxHtmlHelpController*) m_helpController)->OnCloseFrame(evt);
+    }
 
     evt.Skip();
 }

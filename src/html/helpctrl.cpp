@@ -28,11 +28,13 @@
 #include "wx/wx.h"
 #include "wx/busyinfo.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
 
+#if 0
 BEGIN_EVENT_TABLE(wxHtmlHelpController, wxEvtHandler)
 EVT_CLOSE(wxHtmlHelpController::OnCloseFrame)
 END_EVENT_TABLE()
+#endif
 
 wxHtmlHelpController::wxHtmlHelpController(int style)
 {
@@ -58,13 +60,15 @@ void wxHtmlHelpController::DestroyHelpWindow()
         m_helpFrame->Destroy();
 }
 
-void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt) 
+void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
 {
-    evt.Skip(); 
+    evt.Skip();
 
-    m_helpFrame = NULL; 
+    OnQuit();
+
+    m_helpFrame->SetController((wxHelpControllerBase*) NULL);
+    m_helpFrame = NULL;
 }
-
 
 void wxHtmlHelpController::SetTitleFormat(const wxString& title)
 {
@@ -116,7 +120,8 @@ void wxHtmlHelpController::CreateHelpWindow()
     }
 
     m_helpFrame = CreateHelpFrame(&m_helpData);
-    m_helpFrame->PushEventHandler(this);
+    m_helpFrame->SetController(this);
+//    m_helpFrame->PushEventHandler(this);
 
     if (m_Config)
         m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
@@ -147,6 +152,74 @@ void wxHtmlHelpController::UseConfig(wxConfigBase *config, const wxString& rootp
     m_ConfigRoot = rootpath;
     if (m_helpFrame) m_helpFrame -> UseConfig(config, rootpath);
     ReadCustomization(config, rootpath);
+}
+
+//// Backward compatibility with wxHelpController API
+
+bool wxHtmlHelpController::Initialize(const wxString& file)
+{
+    wxString dir, filename, ext;
+    wxSplitPath(file, & dir, & filename, & ext);
+
+    if (!dir.IsEmpty())
+        dir = dir + wxString(_("/"));
+
+    // Try to find a suitable file
+    wxString actualFilename = dir + filename + wxString(_(".zip"));
+    if (!wxFileExists(actualFilename))
+    {
+        actualFilename = dir + filename + wxString(_(".htb"));
+        if (!wxFileExists(actualFilename))
+        {
+            actualFilename = dir + filename + wxString(_(".hhp"));
+            if (!wxFileExists(actualFilename))
+                return FALSE;
+        }
+    }
+
+    return AddBook(actualFilename);
+}
+
+bool wxHtmlHelpController::LoadFile(const wxString& WXUNUSED(file))
+{
+    // Don't reload the file or we'll have it appear again, presumably.
+    return TRUE;
+}
+
+bool wxHtmlHelpController::DisplaySection(int sectionNo)
+{
+    return Display(sectionNo);
+}
+
+void wxHtmlHelpController::SetFrameParameters(const wxString& title,
+                                   const wxSize& size,
+                                   const wxPoint& pos,
+                                   bool WXUNUSED(newFrameEachTime))
+{
+    SetTitleFormat(title);
+    if (m_helpFrame)
+    {
+        m_helpFrame->SetSize(pos.x, pos.y, size.x, size.y);
+    }
+}
+
+wxFrame* wxHtmlHelpController::GetFrameParameters(wxSize *size,
+                                   wxPoint *pos,
+                                   bool *newFrameEachTime)
+{
+    if (newFrameEachTime)
+        (* newFrameEachTime) = FALSE;
+    if (size && m_helpFrame)
+        (* size) = m_helpFrame->GetSize();
+    if (pos && m_helpFrame)
+        (* pos) = m_helpFrame->GetPosition();
+    return m_helpFrame;
+}
+
+bool wxHtmlHelpController::Quit()
+{
+    DestroyHelpWindow();
+    return TRUE;
 }
 
 

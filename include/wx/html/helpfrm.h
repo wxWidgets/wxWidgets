@@ -88,6 +88,7 @@ typedef struct
 wxHtmlHelpFrameCfg;
 
 
+class WXDLLEXPORT wxHelpControllerBase;
 
 class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
 {
@@ -103,6 +104,8 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         ~wxHtmlHelpFrame();
 
         wxHtmlHelpData* GetData() { return m_Data; }
+        wxHelpControllerBase* GetController() const { return m_helpController; }
+        void SetController(wxHelpControllerBase* controller) { m_helpController = controller; }
 
         void SetTitleFormat(const wxString& format);
         // Sets format of title of the frame. Must contain exactly one "%s"
@@ -238,6 +241,7 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxHtmlEasyPrinting *m_Printer;
 #endif
         wxHashTable *m_PagesHash;
+        wxHelpControllerBase* m_helpController;
 
         DECLARE_EVENT_TABLE()
 };
