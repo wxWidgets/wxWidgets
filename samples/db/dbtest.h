@@ -20,9 +20,11 @@
 enum    DialogModes {mView,mCreate,mEdit,mSearch};
 
 // ID for the menu quit command
-#define FILE_CREATE            100
-#define FILE_EXIT                199
-#define EDIT_PARAMETERS        200
+#define FILE_CREATE           100
+#define FILE_RECREATE_TABLE   110
+#define FILE_RECREATE_INDEXES 120
+#define FILE_EXIT             199
+#define EDIT_PARAMETERS       200
 #define ABOUT_DEMO            300
 
 // this seems to be missing, Robert Roebling (?)
@@ -129,11 +131,13 @@ class DatabaseDemoFrame: public wxFrame
 
         void    OnCloseWindow(wxCloseEvent& event);
         void    OnCreate(wxCommandEvent& event);
+        void    OnRecreateTable(wxCommandEvent& event);
+        void    OnRecreateIndexes(wxCommandEvent& event);
         void    OnExit(wxCommandEvent& event);
         void    OnEditParameters(wxCommandEvent& event);
         void    OnAbout(wxCommandEvent& event);
 
-        void    CreateDataTable();
+        void    CreateDataTable(bool recreate);
         void    BuildEditorDialog();
         void    BuildParameterDialog(wxWindow *parent);
 
@@ -163,6 +167,7 @@ class CeditorDlg : public wxPanel
         wxStaticText    *pNativeLangMsg;
 
     public:
+		  bool initialized;
         enum DialogModes     mode;
         Ccontact            *Contact;    // this is the table object that will be being manipulated
 
@@ -173,6 +178,7 @@ class CeditorDlg : public wxPanel
         void    OnCommand(wxWindow& win, wxCommandEvent& event);
         void    OnActivate(bool) {};  // necessary for hot keys
 
+		  bool	 Initialize();
         void    FieldsEditable();
         void    SetMode(enum DialogModes m);
         bool    PutData();
