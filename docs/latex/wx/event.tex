@@ -54,9 +54,9 @@ may be temporarily changed by \helpref{StopPropagation}{wxeventstoppropagation}
 and \helpref{ResumePropagation}{wxeventresumepropagation} and tested with 
 \helpref{ShouldPropagate}{wxeventshouldpropagate}.
 
-The initial value is set to either {\tt wxEVENT\_PROPAGATION\_NONE} (by
+The initial value is set to either {\tt wxEVENT\_PROPAGATE\_NONE} (by
 default) meaning that the event shouldn't be propagated at all or to 
-{\tt wxEVENT\_PROPAGATION\_MAX} (for command events) meaning that it should be
+{\tt wxEVENT\_PROPAGATE\_MAX} (for command events) meaning that it should be
 propagated as much as necessary.
 
 Any positive number means that the event should be propagated but no more than
