@@ -128,7 +128,7 @@ bool wxTextCtrl::Create(
     m_windowStyle = lStyle;
     m_bIsMLE = FALSE;
 
-    long                            lSstyle = WS_TABSTOP;
+    long                            lSstyle = WS_VISIBLE | WS_TABSTOP;
 
     //
     // Single and multiline edit fields are two different controls in PM
@@ -1164,11 +1164,17 @@ void wxTextCtrl::AdjustSpaceLimit()
     }
     if (uLen >= uLimit)
     {
-        uLimit = uLen + 0x8000;    // 32Kb
-        if (uLimit > 0xffff)
+        if (m_bIsMLE)
         {
-            uLimit = 0L;
+            uLimit = uLen + 0x8000;    // 32Kb
+            if (uLimit > 0xffff)
+            {
+                uLimit = 0L;
+            }
         }
+        else
+            uLimit = 0x7fff;
+
         if (m_bIsMLE)
             ::WinSendMsg(GetHwnd(), MLM_SETTEXTLIMIT, MPFROMLONG(uLimit), 0);
         else
