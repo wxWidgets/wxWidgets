@@ -4,6 +4,7 @@ import gdic
 from misc import *
 
 from fonts import *
+import wx
 class wxGDIObjectPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -259,9 +260,9 @@ class wxColourPtr(wxObjectPtr):
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
     asTuple = Get
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
-    def __nonzero__(self):      return self.asTuple() != (0,0,0)
+    def __str__(self):      return str(self.asTuple())
+    def __repr__(self):     return str(self.asTuple())
+    def __nonzero__(self):  return self.Ok()
 
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):

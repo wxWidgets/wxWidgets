@@ -34,6 +34,7 @@
 %import misc.i
 %import fonts.i
 
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 %{
@@ -368,9 +369,9 @@ public:
         bool __ne__(const wxColour& o) { return *self != o; }
     }
     %pragma(python) addtoclass = "asTuple = Get
-    def __str__(self): return str(self.asTuple())
-    def __repr__(self): return str(self.asTuple())
-    def __nonzero__(self):      return self.asTuple() != (0,0,0)
+    def __str__(self):      return str(self.asTuple())
+    def __repr__(self):     return str(self.asTuple())
+    def __nonzero__(self):  return self.Ok()
 "
 
 };
