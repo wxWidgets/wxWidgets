@@ -352,6 +352,8 @@ enum {
     wxWEBKIT_STATE_TRANSFERRING = 0,
     wxWEBKIT_STATE_STOP = 0,
     wxWEBKIT_STATE_FAILED = 0,
+
+    wxEVT_WEBKIT_STATE_CHANGED = 0
 };
 
 class wxWebKitStateChangedEvent : public wxCommandEvent
@@ -360,7 +362,7 @@ public:
     wxWebKitStateChangedEvent( wxWindow* win =  NULL )
     { wxPyRaiseNotImplemented(); }
 
-    int GetState() { return 0 }
+    int GetState() { return 0; }
     void SetState(const int state) {}
     wxString GetURL() { return wxEmptyString; }
     void SetURL(const wxString& url) {}
