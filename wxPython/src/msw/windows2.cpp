@@ -224,6 +224,67 @@ IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocus);
 IMP_PYCALLBACK_BOOL_const(wxPyControl, wxControl, AcceptsFocusFromKeyboard);
 IMP_PYCALLBACK_SIZE_const(wxPyControl, wxControl, GetMaxSize);
 
+ // C++ version of Python aware wxPanel
+class wxPyPanel : public wxPanel
+{
+    DECLARE_DYNAMIC_CLASS(wxPyPanel)
+public:
+    wxPyPanel() : wxPanel() {}
+    wxPyPanel(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyPanelNameStr)
+        : wxPanel(parent, id, pos, size, style, name) {}
+
+
+    DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
+    DEC_PYCALLBACK_VOID_INT5(DoSetSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetVirtualSize);
+
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetClientSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetPosition);
+
+    DEC_PYCALLBACK_SIZE_const(DoGetVirtualSize);
+    DEC_PYCALLBACK_SIZE_const(DoGetBestSize);
+
+    DEC_PYCALLBACK__(InitDialog);
+    DEC_PYCALLBACK_BOOL_(TransferDataFromWindow);
+    DEC_PYCALLBACK_BOOL_(TransferDataToWindow);
+    DEC_PYCALLBACK_BOOL_(Validate);
+
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocus);
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
+    DEC_PYCALLBACK_SIZE_const(GetMaxSize);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyPanel, wxPanel);
+
+IMP_PYCALLBACK_VOID_INT4(wxPyPanel, wxPanel, DoMoveWindow);
+IMP_PYCALLBACK_VOID_INT5(wxPyPanel, wxPanel, DoSetSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyPanel, wxPanel, DoSetClientSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyPanel, wxPanel, DoSetVirtualSize);
+
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetClientSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetPosition);
+
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, DoGetVirtualSize);
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, DoGetBestSize);
+
+IMP_PYCALLBACK__(wxPyPanel, wxPanel, InitDialog);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, TransferDataFromWindow);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, TransferDataToWindow);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, Validate);
+
+IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocus);
+IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocusFromKeyboard);
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -3938,7 +3999,689 @@ static PyObject *_wrap_wxPyControl_base_GetMaxSize(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+static void *SwigwxPyPanelTowxPanel(void *ptr) {
+    wxPyPanel *src;
+    wxPanel *dest;
+    src = (wxPyPanel *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPanelTowxWindow(void *ptr) {
+    wxPyPanel *src;
+    wxWindow *dest;
+    src = (wxPyPanel *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPanelTowxEvtHandler(void *ptr) {
+    wxPyPanel *src;
+    wxEvtHandler *dest;
+    src = (wxPyPanel *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyPanelTowxObject(void *ptr) {
+    wxPyPanel *src;
+    wxObject *dest;
+    src = (wxPyPanel *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyPanel(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxPyPanel(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxPyPanel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) 0;
+    wxString * _arg5 = (wxString *) &wxPyPanelNameStr;
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxPyPanel",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPyPanel. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyPanel *)new_wxPyPanel(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyPanel_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj5)
+        delete _arg5;
+}
+    return _resultobj;
+}
+
+#define wxPyPanel__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyPanel__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel__setCallbackInfo. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoMoveWindow(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->base_DoMoveWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxPyPanel_base_DoMoveWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    int  _arg4;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii:wxPyPanel_base_DoMoveWindow",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoMoveWindow. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoMoveWindow(_arg0,_arg1,_arg2,_arg3,_arg4);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoSetSize(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->base_DoSetSize(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxPyPanel_base_DoSetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    int  _arg4;
+    int  _arg5 = (int ) wxSIZE_AUTO;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y","width","height","sizeFlags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|i:wxPyPanel_base_DoSetSize",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoSetSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoSetSize(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoSetClientSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DoSetClientSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel_base_DoSetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","width","height", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyPanel_base_DoSetClientSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoSetClientSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoSetClientSize(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoSetVirtualSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DoSetVirtualSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel_base_DoSetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int  _arg1;
+    int  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","x","y", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyPanel_base_DoSetVirtualSize",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoSetVirtualSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoSetVirtualSize(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoGetSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DoGetSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel_base_DoGetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_DoGetSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoGetSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoGetSize(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoGetClientSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DoGetClientSize(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel_base_DoGetClientSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_DoGetClientSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoGetClientSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoGetClientSize(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoGetPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_DoGetPosition(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyPanel_base_DoGetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    int * _arg1;
+    int  temp;
+    int * _arg2;
+    int  temp0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_DoGetPosition",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoGetPosition. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_DoGetPosition(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoGetVirtualSize(_swigobj)  (_swigobj->base_DoGetVirtualSize())
+static PyObject *_wrap_wxPyPanel_base_DoGetVirtualSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_DoGetVirtualSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoGetVirtualSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxPyPanel_base_DoGetVirtualSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_DoGetBestSize(_swigobj)  (_swigobj->base_DoGetBestSize())
+static PyObject *_wrap_wxPyPanel_base_DoGetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_DoGetBestSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_DoGetBestSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxPyPanel_base_DoGetBestSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_InitDialog(_swigobj)  (_swigobj->base_InitDialog())
+static PyObject *_wrap_wxPyPanel_base_InitDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_InitDialog",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_InitDialog. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyPanel_base_InitDialog(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyPanel_base_TransferDataToWindow(_swigobj)  (_swigobj->base_TransferDataToWindow())
+static PyObject *_wrap_wxPyPanel_base_TransferDataToWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_TransferDataToWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_TransferDataToWindow. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPanel_base_TransferDataToWindow(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_TransferDataFromWindow(_swigobj)  (_swigobj->base_TransferDataFromWindow())
+static PyObject *_wrap_wxPyPanel_base_TransferDataFromWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_TransferDataFromWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_TransferDataFromWindow. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPanel_base_TransferDataFromWindow(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_Validate(_swigobj)  (_swigobj->base_Validate())
+static PyObject *_wrap_wxPyPanel_base_Validate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_Validate",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_Validate. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPanel_base_Validate(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_AcceptsFocus(_swigobj)  (_swigobj->base_AcceptsFocus())
+static PyObject *_wrap_wxPyPanel_base_AcceptsFocus(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_AcceptsFocus",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_AcceptsFocus. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPanel_base_AcceptsFocus(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_AcceptsFocusFromKeyboard(_swigobj)  (_swigobj->base_AcceptsFocusFromKeyboard())
+static PyObject *_wrap_wxPyPanel_base_AcceptsFocusFromKeyboard(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_AcceptsFocusFromKeyboard",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_AcceptsFocusFromKeyboard. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyPanel_base_AcceptsFocusFromKeyboard(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyPanel_base_GetMaxSize(_swigobj)  (_swigobj->base_GetMaxSize())
+static PyObject *_wrap_wxPyPanel_base_GetMaxSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxPyPanel * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyPanel_base_GetMaxSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyPanel_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyPanel_base_GetMaxSize. Expected _wxPyPanel_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxSize (wxPyPanel_base_GetMaxSize(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyMethodDef windows2cMethods[] = {
+	 { "wxPyPanel_base_GetMaxSize", (PyCFunction) _wrap_wxPyPanel_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_wxPyPanel_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_AcceptsFocus", (PyCFunction) _wrap_wxPyPanel_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_Validate", (PyCFunction) _wrap_wxPyPanel_base_Validate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_TransferDataFromWindow", (PyCFunction) _wrap_wxPyPanel_base_TransferDataFromWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_TransferDataToWindow", (PyCFunction) _wrap_wxPyPanel_base_TransferDataToWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_InitDialog", (PyCFunction) _wrap_wxPyPanel_base_InitDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoGetBestSize", (PyCFunction) _wrap_wxPyPanel_base_DoGetBestSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoGetVirtualSize", (PyCFunction) _wrap_wxPyPanel_base_DoGetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoGetPosition", (PyCFunction) _wrap_wxPyPanel_base_DoGetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoGetClientSize", (PyCFunction) _wrap_wxPyPanel_base_DoGetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoGetSize", (PyCFunction) _wrap_wxPyPanel_base_DoGetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoSetVirtualSize", (PyCFunction) _wrap_wxPyPanel_base_DoSetVirtualSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoSetClientSize", (PyCFunction) _wrap_wxPyPanel_base_DoSetClientSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoSetSize", (PyCFunction) _wrap_wxPyPanel_base_DoSetSize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel_base_DoMoveWindow", (PyCFunction) _wrap_wxPyPanel_base_DoMoveWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyPanel__setCallbackInfo", (PyCFunction) _wrap_wxPyPanel__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyPanel", (PyCFunction) _wrap_new_wxPyPanel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_GetMaxSize", (PyCFunction) _wrap_wxPyControl_base_GetMaxSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_AcceptsFocusFromKeyboard", (PyCFunction) _wrap_wxPyControl_base_AcceptsFocusFromKeyboard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyControl_base_AcceptsFocus", (PyCFunction) _wrap_wxPyControl_base_AcceptsFocus, METH_VARARGS | METH_KEYWORDS },
@@ -4074,6 +4817,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxPanel","_wxPyPanel",SwigwxPyPanelTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -4103,6 +4847,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxPyPanel",SwigwxPyPanelTowxObject},
     { "_wxObject","_wxPyControl",SwigwxPyControlTowxObject},
     { "_wxObject","_wxPyWindow",SwigwxPyWindowTowxObject},
     { "_wxObject","_wxTaskBarIcon",SwigwxTaskBarIconTowxObject},
@@ -4159,11 +4904,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxEvtHandler","_wxPyPanel",SwigwxPyPanelTowxEvtHandler},
     { "_wxEvtHandler","_wxPyControl",SwigwxPyControlTowxEvtHandler},
     { "_wxEvtHandler","_wxPyWindow",SwigwxPyWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxTaskBarIcon",SwigwxTaskBarIconTowxEvtHandler},
     { "_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxNotebook",SwigwxNotebookTowxEvtHandler},
+    { "_wxWindow","_wxPyPanel",SwigwxPyPanelTowxWindow},
     { "_wxWindow","_wxPyControl",SwigwxPyControlTowxWindow},
     { "_wxWindow","_wxPyWindow",SwigwxPyWindowTowxWindow},
     { "_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow},

@@ -543,3 +543,108 @@ public:
 }
 
 //---------------------------------------------------------------------------
+// and for wxPanel
+
+%{ // C++ version of Python aware wxPanel
+class wxPyPanel : public wxPanel
+{
+    DECLARE_DYNAMIC_CLASS(wxPyPanel)
+public:
+    wxPyPanel() : wxPanel() {}
+    wxPyPanel(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyPanelNameStr)
+        : wxPanel(parent, id, pos, size, style, name) {}
+
+
+    DEC_PYCALLBACK_VOID_INT4(DoMoveWindow);
+    DEC_PYCALLBACK_VOID_INT5(DoSetSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetClientSize);
+    DEC_PYCALLBACK_VOID_INTINT(DoSetVirtualSize);
+
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetClientSize);
+    DEC_PYCALLBACK_VOID_INTPINTP_const(DoGetPosition);
+
+    DEC_PYCALLBACK_SIZE_const(DoGetVirtualSize);
+    DEC_PYCALLBACK_SIZE_const(DoGetBestSize);
+
+    DEC_PYCALLBACK__(InitDialog);
+    DEC_PYCALLBACK_BOOL_(TransferDataFromWindow);
+    DEC_PYCALLBACK_BOOL_(TransferDataToWindow);
+    DEC_PYCALLBACK_BOOL_(Validate);
+
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocus);
+    DEC_PYCALLBACK_BOOL_const(AcceptsFocusFromKeyboard);
+    DEC_PYCALLBACK_SIZE_const(GetMaxSize);
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyPanel, wxPanel);
+
+IMP_PYCALLBACK_VOID_INT4(wxPyPanel, wxPanel, DoMoveWindow);
+IMP_PYCALLBACK_VOID_INT5(wxPyPanel, wxPanel, DoSetSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyPanel, wxPanel, DoSetClientSize);
+IMP_PYCALLBACK_VOID_INTINT(wxPyPanel, wxPanel, DoSetVirtualSize);
+
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetClientSize);
+IMP_PYCALLBACK_VOID_INTPINTP_const(wxPyPanel, wxPanel, DoGetPosition);
+
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, DoGetVirtualSize);
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, DoGetBestSize);
+
+IMP_PYCALLBACK__(wxPyPanel, wxPanel, InitDialog);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, TransferDataFromWindow);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, TransferDataToWindow);
+IMP_PYCALLBACK_BOOL_(wxPyPanel, wxPanel, Validate);
+
+IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocus);
+IMP_PYCALLBACK_BOOL_const(wxPyPanel, wxPanel, AcceptsFocusFromKeyboard);
+IMP_PYCALLBACK_SIZE_const(wxPyPanel, wxPanel, GetMaxSize);
+
+%}
+
+// And now the one for SWIG to see
+class wxPyPanel : public wxPanel
+{
+public:
+    wxPyPanel(wxWindow* parent, const wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyPanelNameStr);
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyPanel)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+
+    void base_DoMoveWindow(int x, int y, int width, int height);
+    void base_DoSetSize(int x, int y, int width, int height,
+                        int sizeFlags = wxSIZE_AUTO);
+    void base_DoSetClientSize(int width, int height);
+    void base_DoSetVirtualSize( int x, int y );
+
+    void base_DoGetSize( int *OUTPUT, int *OUTPUT ) const;
+    void base_DoGetClientSize( int *OUTPUT, int *OUTPUT ) const;
+    void base_DoGetPosition( int *OUTPUT, int *OUTPUT ) const;
+
+    wxSize base_DoGetVirtualSize() const;
+    wxSize base_DoGetBestSize() const;
+
+    void base_InitDialog();
+    bool base_TransferDataToWindow();
+    bool base_TransferDataFromWindow();
+    bool base_Validate();
+
+    bool base_AcceptsFocus() const;
+    bool base_AcceptsFocusFromKeyboard() const;
+    wxSize base_GetMaxSize() const;
+}
+
+
+//---------------------------------------------------------------------------
