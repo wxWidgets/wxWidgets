@@ -14,6 +14,13 @@
 wxSocketBase is the base class for all socket-related objects, and it
 defines all basic IO functionality.
 
+Note: (Workaround for implementation limitation for wxWidgets up to 2.5.x)
+If you want to use sockets or derived classes such as wxFTP in a secondary thread,
+call wxSocketBase::Initialize() (undocumented) from the main thread before creating 
+any sockets - in wxApp::OnInit for example. 
+See http://wiki.wxwidgets.org/wiki.pl?WxSocket or
+http://www.litwindow.com/knowhow/knowhow.html for more details.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}

@@ -122,6 +122,26 @@ bool wxSocketBase::Initialize()
 {
     if ( !m_countInit++ )
     {
+#ifdef __WXMSW__
+        /*
+            The following asserting might be neccessary for linux as well,
+            but I cannot verify this.
+        */
+        wxASSERT(wxThread::IsMain(), 
+            wxT("To use sockets in a secondary thread, ")
+            wxT("call wxSocketBase::Initialize() from the main thread."));
+        /*
+            Details: Initialize() creates a hidden window as a sink for socket
+            events, such as 'read completed'. wxMSW has only one message loop
+            for the main thread. If Initialize is called in a secondary thread,
+            the socket window will be created for the secondary thread, but
+            since there is no message loop on this thread, it will never
+            receive events and all socket operations will time out.
+            BTW, the main thread must not be stopped using sleep or block
+            on a semaphore (a bad idea in any case) or socket operations 
+            will time out.
+        */
+#endif
         wxAppTraits *traits = wxAppConsole::GetInstance() ?
                               wxAppConsole::GetInstance()->GetTraits() : NULL;
         GSocketGUIFunctionsTable *functions = 
