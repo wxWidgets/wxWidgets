@@ -489,6 +489,8 @@ class Frame(wxFrame):
             if not parent.__class__ in [xxxMenu, xxxToolBar]: error = true
         elif x.__class__ == xxxTool:
             if parent.__class__ != xxxToolBar: error = true
+        elif x.__class__ == xxxMenu:
+            if not parent.__class__ in [xxxMainNode, xxxMenuBar, xxxMenu]: error = true
         elif x.__class__ == xxxMenuItem:
             if not parent.__class__ in [xxxMenuBar, xxxMenu]: error = true
         elif x.isSizer and parent.__class__ == xxxNotebook: error = true
@@ -508,7 +510,7 @@ class Frame(wxFrame):
         isChildContainer = isinstance(xxx, xxxChildContainer)
         if isChildContainer and \
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
-           (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
+            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
            not (parent.isSizer or isinstance(parent, xxxNotebook))):
             elem.removeChild(xxx.child.element) # detach child
             elem.unlink()           # delete child container
