@@ -50,6 +50,9 @@
     #include <sys/stat.h>
 #endif
 
+#ifdef __VISUALC__
+    #include <direct.h>
+#endif
 
 // Undef redirection macros defined in wx/msw/mslu.h:
 #undef DrawStateW
@@ -62,7 +65,7 @@
 
 #if wxUSE_GUI
 
-WXDLLEXPORT bool wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
+WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
                                    WXLPARAM lData, WXWPARAM wData, 
                                    int x, int y, int cx, int cy, 
                                    unsigned int flags)
@@ -109,17 +112,17 @@ static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
 #endif
 }
 
-WXDLLEXPORT bool wxMSLU_GetOpenFileNameW(void *ofn)
+WXDLLEXPORT int wxMSLU_GetOpenFileNameW(void *ofn)
 {
-    bool ret = GetOpenFileName((LPOPENFILENAME)ofn);
+    int ret = GetOpenFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
         wxFixOPENFILENAME((LPOPENFILENAME)ofn);
     return ret;
 }
 
-WXDLLEXPORT bool wxMSLU_GetSaveFileNameW(void *ofn)
+WXDLLEXPORT int wxMSLU_GetSaveFileNameW(void *ofn)
 {
-    bool ret = GetSaveFileName((LPOPENFILENAME)ofn);
+    int ret = GetSaveFileName((LPOPENFILENAME)ofn);
     if ( wxUsingUnicowsDll() && ret != 0 )
         wxFixOPENFILENAME((LPOPENFILENAME)ofn);
     return ret;
