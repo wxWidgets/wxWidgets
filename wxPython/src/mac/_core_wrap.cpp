@@ -42820,6 +42820,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"MOUSE_BTN_RIGHT", SWIG_FromInt((int)wxMOUSE_BTN_RIGHT));
     PyDict_SetItemString(d,"UPDATE_UI_PROCESS_ALL", SWIG_FromInt((int)wxUPDATE_UI_PROCESS_ALL));
     PyDict_SetItemString(d,"UPDATE_UI_PROCESS_SPECIFIED", SWIG_FromInt((int)wxUPDATE_UI_PROCESS_SPECIFIED));
+    PyDict_SetItemString(d,"NavigationKeyEvent_IsBackward", SWIG_FromInt((int)wxNavigationKeyEvent::IsBackward));
     PyDict_SetItemString(d,"NavigationKeyEvent_IsForward", SWIG_FromInt((int)wxNavigationKeyEvent::IsForward));
     PyDict_SetItemString(d,"NavigationKeyEvent_WinChange", SWIG_FromInt((int)wxNavigationKeyEvent::WinChange));
     PyDict_SetItemString(d,"IDLE_PROCESS_ALL", SWIG_FromInt((int)wxIDLE_PROCESS_ALL));
