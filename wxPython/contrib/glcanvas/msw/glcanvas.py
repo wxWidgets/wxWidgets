@@ -15,6 +15,8 @@ from events import *
 
 from streams import *
 
+from utils import *
+
 from mdi import *
 
 from frames import *
@@ -38,8 +40,6 @@ from printfw import *
 from sizers import *
 
 from filesys import *
-
-from utils import *
 import wx
 class wxGLContextPtr(wxObjectPtr):
     def __init__(self,this):
@@ -126,3 +126,19 @@ def wxGLCanvasWithContext(*_args,**_kwargs):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+WX_GL_RGBA = glcanvasc.WX_GL_RGBA
+WX_GL_BUFFER_SIZE = glcanvasc.WX_GL_BUFFER_SIZE
+WX_GL_LEVEL = glcanvasc.WX_GL_LEVEL
+WX_GL_DOUBLEBUFFER = glcanvasc.WX_GL_DOUBLEBUFFER
+WX_GL_STEREO = glcanvasc.WX_GL_STEREO
+WX_GL_AUX_BUFFERS = glcanvasc.WX_GL_AUX_BUFFERS
+WX_GL_MIN_RED = glcanvasc.WX_GL_MIN_RED
+WX_GL_MIN_GREEN = glcanvasc.WX_GL_MIN_GREEN
+WX_GL_MIN_BLUE = glcanvasc.WX_GL_MIN_BLUE
+WX_GL_MIN_ALPHA = glcanvasc.WX_GL_MIN_ALPHA
+WX_GL_DEPTH_SIZE = glcanvasc.WX_GL_DEPTH_SIZE
+WX_GL_STENCIL_SIZE = glcanvasc.WX_GL_STENCIL_SIZE
+WX_GL_MIN_ACCUM_RED = glcanvasc.WX_GL_MIN_ACCUM_RED
+WX_GL_MIN_ACCUM_GREEN = glcanvasc.WX_GL_MIN_ACCUM_GREEN
+WX_GL_MIN_ACCUM_BLUE = glcanvasc.WX_GL_MIN_ACCUM_BLUE
+WX_GL_MIN_ACCUM_ALPHA = glcanvasc.WX_GL_MIN_ACCUM_ALPHA

@@ -889,6 +889,22 @@ SWIGEXPORT(void) initglcanvasc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("glcanvasc", glcanvascMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"WX_GL_RGBA", PyInt_FromLong((long) WX_GL_RGBA));
+	 PyDict_SetItemString(d,"WX_GL_BUFFER_SIZE", PyInt_FromLong((long) WX_GL_BUFFER_SIZE));
+	 PyDict_SetItemString(d,"WX_GL_LEVEL", PyInt_FromLong((long) WX_GL_LEVEL));
+	 PyDict_SetItemString(d,"WX_GL_DOUBLEBUFFER", PyInt_FromLong((long) WX_GL_DOUBLEBUFFER));
+	 PyDict_SetItemString(d,"WX_GL_STEREO", PyInt_FromLong((long) WX_GL_STEREO));
+	 PyDict_SetItemString(d,"WX_GL_AUX_BUFFERS", PyInt_FromLong((long) WX_GL_AUX_BUFFERS));
+	 PyDict_SetItemString(d,"WX_GL_MIN_RED", PyInt_FromLong((long) WX_GL_MIN_RED));
+	 PyDict_SetItemString(d,"WX_GL_MIN_GREEN", PyInt_FromLong((long) WX_GL_MIN_GREEN));
+	 PyDict_SetItemString(d,"WX_GL_MIN_BLUE", PyInt_FromLong((long) WX_GL_MIN_BLUE));
+	 PyDict_SetItemString(d,"WX_GL_MIN_ALPHA", PyInt_FromLong((long) WX_GL_MIN_ALPHA));
+	 PyDict_SetItemString(d,"WX_GL_DEPTH_SIZE", PyInt_FromLong((long) WX_GL_DEPTH_SIZE));
+	 PyDict_SetItemString(d,"WX_GL_STENCIL_SIZE", PyInt_FromLong((long) WX_GL_STENCIL_SIZE));
+	 PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_RED", PyInt_FromLong((long) WX_GL_MIN_ACCUM_RED));
+	 PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_GREEN", PyInt_FromLong((long) WX_GL_MIN_ACCUM_GREEN));
+	 PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_BLUE", PyInt_FromLong((long) WX_GL_MIN_ACCUM_BLUE));
+	 PyDict_SetItemString(d,"WX_GL_MIN_ACCUM_ALPHA", PyInt_FromLong((long) WX_GL_MIN_ACCUM_ALPHA));
 
 
     wxClassInfo::CleanUpClasses();
