@@ -3721,6 +3721,14 @@ void wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
     m_selection->SetSelectionMode( selmode );
 }
 
+wxGrid::wxGridSelectionModes wxGrid::GetSelectionMode() const
+{
+    wxCHECK_MSG( m_created, wxGrid::wxGridSelectCells,
+                 wxT("Called wxGrid::GetSelectionMode() before calling CreateGrid()") );
+
+    return m_selection->GetSelectionMode();
+}
+
 bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
                        wxGrid::wxGridSelectionModes selmode )
 {
@@ -9374,6 +9382,33 @@ bool wxGrid::IsInSelection( int row, int col ) const
                row <= m_selectingBottomRight.GetRow() &&
                col <= m_selectingBottomRight.GetCol() )) );
 }
+
+wxGridCellCoordsArray wxGrid::GetSelectedCells() const
+{
+    if (!m_selection) { wxGridCellCoordsArray a; return a; }
+    return m_selection->m_cellSelection;
+}
+wxGridCellCoordsArray wxGrid::GetSelectionBlockTopLeft() const
+{
+    if (!m_selection) { wxGridCellCoordsArray a; return a; }
+    return m_selection->m_blockSelectionTopLeft;
+}
+wxGridCellCoordsArray wxGrid::GetSelectionBlockBottomRight() const
+{
+    if (!m_selection) { wxGridCellCoordsArray a; return a; }
+    return m_selection->m_blockSelectionTopLeft;
+}
+wxArrayInt wxGrid::GetSelectedRows() const
+{
+    if (!m_selection) { wxArrayInt a; return a; }
+    return m_selection->m_rowSelection;
+}
+wxArrayInt wxGrid::GetSelectedCols() const
+{
+    if (!m_selection) { wxArrayInt a; return a; }
+    return m_selection->m_colSelection;
+}
+
 
 void wxGrid::ClearSelection()
 {

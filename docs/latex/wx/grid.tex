@@ -647,6 +647,44 @@ your own labels.
 
 Returns the height of the specified row.
 
+\membersection{wxGrid::GetSelectionMode}\label{wxgridgetselectionmode}
+
+\constfunc{wxGrid::wxGridSelectionModes}{GetSelectionMode}{\void}
+
+Returns the current selection mode, see \helpref{wxGrid::SetSelectionMode}{wxgridsetselectionmode}.
+
+\membersection{wxGrid::GetSelectedCells}\label{wxgridgetselectedcells}
+
+\constfunc{wxGridCellCoordsArray}{GetSelectedCells}{\void}
+
+Returns an array of singly selected cells.
+
+\membersection{wxGrid::GetSelectedCols}\label{wxgridgetselectedcols}
+
+\constfunc{wxArrayInt}{GetSelectedCols}{\void}
+
+Returns an array of selected cols.
+
+\membersection{wxGrid::GetSelectedRows}\label{wxgridgetselectedrows}
+
+\constfunc{wxArrayInt}{GetSelectedRows}{\void}
+
+Returns an array of selected rows.
+
+\membersection{wxGrid::GetSelectionBlockTopLeft}\label{wxgridgetselectionblocktopleft}
+
+\constfunc{wxGridCellCoordsArray}{GetSelectionBlockTopLeft}{\void}
+
+Returns an array of the top left corners of blocks of selected cells, 
+see \helpref{wxGrid::GetSelectionBlockBottomRight}{wxgridgetselectionblockbottomright}.
+
+\membersection{wxGrid::GetSelectionBlockBottomRight}\label{wxgridgetselectionblockbottomright}
+
+\constfunc{wxGridCellCoordsArray}{GetSelectionBlockBottomRight}{\void}
+
+Returns an array of the bottom right corners of blocks of selected cells,
+see \helpref{wxGrid::GetSelectionBlockTopLeft}{wxgridgetselectionblocktopleft}.
+
 \membersection{wxGrid::GetTable}\label{wxgridgettable}
 
 \constfunc{wxGridTableBase *}{GetTable}{\void}
@@ -713,6 +751,14 @@ Returns TRUE if the current cell has been set to read-only
 Returns FALSE if the whole grid has been set as read-only or TRUE otherwise.
 See \helpref{wxGrid::EnableEditing}{wxgridenableediting} for more information about
 controlling the editing status of grid cells.
+
+\membersection{wxGrid::IsInSelection}\label{wxgridisinselection}
+
+\constfunc{bool}{IsInSelection}{\param{int }{row}, \param{int }{col}}
+
+\constfunc{bool}{IsInSelection}{\param{const wxGridCellCoords\& }{coords}}
+
+Is this cell currently selected.
 
 \membersection{wxGrid::IsReadOnly}\label{wxgridisreadonly}
 
@@ -1249,14 +1295,6 @@ If no row edge is near to this position wxNOT\_FOUND is returned.
 
 Returns the grid row that corresponds to the logical y coordinate. Returns
 wxNOT\_FOUND if there is no row at the y position.
-
-
-
-\membersection{wxGrid::IsInSelection}\label{wxgridisinselection}
-
-\func{bool}{IsInSelection}{\param{int }{row}, \param{int }{col}}
-
-\func{bool}{IsInSelection}{\param{const wxGridCellCoords\& }{coords}}
 
 
 \membersection{wxGrid::BlockToDeviceRect}\label{wxgridblocktodevicerect}

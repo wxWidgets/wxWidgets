@@ -1029,6 +1029,7 @@ public:
                      wxGrid::wxGridSelectCells );
 
     void SetSelectionMode(wxGrid::wxGridSelectionModes selmode);
+    wxGrid::wxGridSelectionModes GetSelectionMode() const;
 
     // ------ grid dimensions
     //
@@ -1355,7 +1356,7 @@ public:
     // make the cell editable/readonly
     void SetReadOnly(int row, int col, bool isReadOnly = TRUE);
 
-    // ------ selections of blocks of cells
+    // ------ select blocks of cells
     //
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
@@ -1374,7 +1375,7 @@ public:
 
     bool IsSelection();
 
-    // ------ deselection
+    // ------ deselect blocks or cells
     //
     void DeselectRow( int row );
     void DeselectCol( int col );
@@ -1387,6 +1388,11 @@ public:
     bool IsInSelection( const wxGridCellCoords& coords ) const
         { return IsInSelection( coords.GetRow(), coords.GetCol() ); }
 
+    wxGridCellCoordsArray GetSelectedCells() const;
+    wxGridCellCoordsArray GetSelectionBlockTopLeft() const;
+    wxGridCellCoordsArray GetSelectionBlockBottomRight() const;
+    wxArrayInt GetSelectedRows() const;
+    wxArrayInt GetSelectedCols() const;
 
     // This function returns the rectangle that encloses the block of cells
     // limited by TopLeft and BottomRight cell in device coords and clipped

@@ -81,6 +81,8 @@ private:
 
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
+
+    friend class wxGrid;
 };
 
 #endif  // #ifdef __WXGRIDSEL_H__
