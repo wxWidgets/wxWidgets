@@ -698,7 +698,7 @@ void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
 
   delete item;
 
-  Refresh();
+  m_dirty = TRUE;
 }
 
 void wxTreeCtrl::DeleteAllItems()
@@ -708,7 +708,7 @@ void wxTreeCtrl::DeleteAllItems()
     delete m_anchor;
     m_anchor = NULL;
 
-    Refresh();
+    m_dirty = TRUE;
   }
 }
 
@@ -716,6 +716,9 @@ void wxTreeCtrl::Expand(const wxTreeItemId& itemId)
 {
   wxGenericTreeItem *item = itemId.m_pItem;
 
+  if ( !item->HasPlus() ) 
+    return;
+  
   if ( item->IsExpanded() )
     return;
 
@@ -1017,6 +1020,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     {
       dc.DrawLine( horizX+20, y, horizX+30, y );
       dc.SetPen( *wxGREY_PEN );
+      dc.SetBrush( *wxWHITE_BRUSH );
       dc.DrawRectangle( horizX+10, y-4, 11, 9 );
       dc.SetPen( *wxBLACK_PEN );
       dc.DrawLine( horizX+13, y, horizX+18, y );
@@ -1118,7 +1122,7 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
   {
     case '+':
     case WXK_ADD:
-      if (HasChildren(m_current) && !IsExpanded(m_current))
+      if (m_current->HasPlus() && !IsExpanded(m_current))
       {
         Expand(m_current);
       }
