@@ -1200,16 +1200,48 @@ void wxDC::DoDrawBitmap(
 , bool                              bUseMask
 )
 {
-    POINTL                          vPoint = {vX, vY};
+    if (!bUseMask && !IsKindOf(CLASSINFO(wxPrinterDC)))
+    {
+        HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
+        wxBitmap                        vNewBitmap( rBmp.GetWidth()
+                                                   ,rBmp.GetHeight()
+                                                   ,rBmp.GetDepth()
+                                                  );
+        HBITMAP                         hBitmapOld = ::GpiSetBitmap((HPS)GetHPS(), vNewBitmap.GetHBITMAP());
+        LONG                            lOldTextground = ::GpiQueryColor((HPS)GetHPS());
+        LONG                            lOldBackground = ::GpiQueryBackColor((HPS)GetHPS());
 
-    ::WinDrawBitmap( GetHPS()
-                    ,(HBITMAP)GetHbitmapOf(rBmp)
-                    ,NULL
-                    ,&vPoint
-                    ,0L
-                    ,0L
-                    ,DBM_NORMAL
-                   );
+        if (m_textForegroundColour.Ok())
+        {
+            ::GpiSetColor( (HPS)GetHPS()
+                           ,m_textForegroundColour.GetPixel()
+                          );
+        }
+        if (m_textBackgroundColour.Ok())
+        {
+            ::GpiSetBackColor( (HPS)GetHPS()
+                              ,m_textBackgroundColour.GetPixel()
+                             );
+        }
+
+        vY = OS2Y(vY,rBmp.GetHeight());
+
+        POINTL                      vPoint[4] = { vX, vY + rBmp.GetHeight()
+                                                 ,vX + rBmp.GetWidth(), vY
+                                                 ,0, 0
+                                                 ,rBmp.GetWidth(), rBmp.GetHeight()
+                                                };
+        ::GpiWCBitBlt( (HPS)GetHPS()
+                      ,hBitmap
+                      ,4
+                      ,vPoint
+                      ,ROP_SRCCOPY
+                      ,BBO_IGNORE
+                     );
+        ::GpiSetBitmap((HPS)GetHPS(), hBitmapOld);
+        ::GpiSetColor((HPS)GetHPS(), lOldTextground);
+        ::GpiSetBackColor((HPS)GetHPS(), lOldBackground);
+    }
 } // end of wxDC::DoDrawBitmap
 
 void wxDC::DoDrawText(

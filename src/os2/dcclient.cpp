@@ -160,6 +160,18 @@ void wxWindowDC::InitDC()
     vColor.Set("WHITE");
     m_brush.SetColour(vColor);
     InitializePalette();
+    wxFont*                         pFont = new wxFont( 12
+                                                       ,wxNORMAL
+                                                       ,wxNORMAL
+                                                       ,wxBOLD
+                                                      );
+    SetFont(*pFont);
+    delete pFont;
+    //
+    // OS/2 default vertical character allignment needs to match the other OS's
+    //
+    ::GpiSetTextAlignment((HPS)GetHPS(), TA_NORMAL_HORIZ, TA_BOTTOM);
+
 } // end of wxWindowDC::InitDC
 
 void wxWindowDC::DoGetSize(

@@ -173,7 +173,7 @@ wxBitmap::wxBitmap(
     pRefData->m_nNumColors    = 0;
     pRefData->m_pSelectedInto = NULL;
 
-    hDc = ::DevOpenDC(vHabmain, OD_MEMORY, (PSZ)"*", 1L, (PDEVOPENDATA)&vDop, 0L);
+    hDc   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     hPs = ::GpiCreatePS(vHabmain, hDc, &vSize, GPIA_ASSOC | PU_PELS);
     if (hPs == 0)
     {
@@ -226,31 +226,20 @@ wxBitmap::wxBitmap(
         pzData = (char *)zBits;    // const_cast is harmless
     }
 
-    memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
-    vHeader.cbFix           = sizeof(vHeader);
+    memset(&vHeader, '\0', 16);
+    vHeader.cbFix           = 16;
     vHeader.cx              = (USHORT)nWidth;
     vHeader.cy              = (USHORT)nHeight;
     vHeader.cPlanes         = 1L;
     vHeader.cBitCount       = nDepth;
     vHeader.usReserved      = 0;
-    vHeader.ulCompression   = BCA_UNCOMP;
-    vHeader.usRecording     = BRA_BOTTOMUP;
-    vHeader.usRendering     = BRH_NOTHALFTONED;
-    vHeader.ulColorEncoding = BCE_RGB;
-    vHeader.ulIdentifier    = 0;
 
-    memset(&vInfo, '\0', sizeof(BITMAPINFO2));
-    vInfo.cbFix           = sizeof(vInfo);
+    memset(&vInfo, '\0', 16);
+    vInfo.cbFix           = 16;
     vInfo.cx              = (USHORT)nWidth;
     vInfo.cy              = (USHORT)nHeight;
     vInfo.cPlanes         = 1L;
     vInfo.cBitCount       = nDepth;
-    vInfo.usReserved      = 0;
-    vInfo.ulCompression   = BCA_UNCOMP;
-    vInfo.usRecording     = BRA_BOTTOMUP;
-    vInfo.usRendering     = BRH_NOTHALFTONED;
-    vInfo.ulColorEncoding = BCE_RGB;
-    vInfo.ulIdentifier    = 0;
 
     HBITMAP                         hBmp = ::GpiCreateBitmap(hPs, &vHeader, CBM_INIT, (PBYTE)pzData, &vInfo);
 
@@ -258,7 +247,8 @@ wxBitmap::wxBitmap(
     {
         wxLogLastError("CreateBitmap");
     }
-    ::WinReleasePS(hPs);
+    ::GpiDestroyPS(hPs);
+    ::DevCloseDC(hDc);
     SetHBITMAP((WXHBITMAP)hBmp);
 } // end of wxBitmap::wxBitmap
 
@@ -329,8 +319,8 @@ bool wxBitmap::Create(
         HDC                         hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
         HPS                         hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
 
-        memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
-        vHeader.cbFix     =  sizeof(BITMAPINFOHEADER2);
+        memset(&vHeader, '\0', 16);
+        vHeader.cbFix     =  16;
         vHeader.cx        = nW;
         vHeader.cy        = nH;
         vHeader.cPlanes   = 1;
@@ -355,8 +345,8 @@ bool wxBitmap::Create(
         hDCScreen = ::GpiQueryDevice(hPSScreen);
         ::DevQueryCaps(hDCScreen, CAPS_COLOR_BITCOUNT, 1L, &lBitCount);
 
-        memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
-        vHeader.cbFix     =  sizeof(BITMAPINFOHEADER2);
+        memset(&vHeader, '\0', 16);
+        vHeader.cbFix     =  16;
         vHeader.cx        = nW;
         vHeader.cy        = nH;
         vHeader.cPlanes   = 1;
@@ -518,6 +508,7 @@ bool wxBitmap::CreateFromImage (
     wxCHECK_MSG(rImage.Ok(), FALSE, wxT("invalid image"));
     m_refData = new wxBitmapRefData();
 
+
     int                             nSizeLimit = 1024 * 768 * 3;
     int                             nWidth = rImage.GetWidth();
     int                             nBmpHeight = rImage.GetHeight();
@@ -556,7 +547,7 @@ bool wxBitmap::CreateFromImage (
     SetWidth(nWidth);
     SetHeight(nBmpHeight);
     if (nDepth == -1)
-        nDepth = wxDisplayDepth();
+        nDepth = 16; // wxDisplayDepth();
     SetDepth(nDepth);
 
 #if wxUSE_PALETTE
@@ -570,41 +561,30 @@ bool wxBitmap::CreateFromImage (
     // Create a DIB header
     //
     BITMAPINFOHEADER2               vHeader;
+    BITMAPINFO2                     vInfo;
 
     //
     // Fill in the DIB header
     //
-    memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
-    vHeader.cbFix           = sizeof(vHeader);
-    vHeader.cx              = (USHORT)nWidth;
-    vHeader.cy              = (USHORT)nHeight;
+    memset(&vHeader, '\0', 16);
+    vHeader.cbFix           = 16;
+    vHeader.cx              = (ULONG)nWidth;
+    vHeader.cy              = (ULONG)nHeight;
     vHeader.cPlanes         = 1L;
     vHeader.cBitCount       = 24;
-    vHeader.ulCompression   = BCA_UNCOMP;
-    vHeader.cbImage         = nBytePerLine * nHeight;
-    vHeader.cclrUsed        = 0;
 
-    //
-    // These seem not really needed for our purpose here.
-    //
-    vHeader.cxResolution    = 0;
-    vHeader.cyResolution    = 0;
-    vHeader.cclrImportant   = 0;
-    vHeader.usUnits         = BRU_METRIC;
-    vHeader.usReserved      = 0;
-    vHeader.cSize1          = 0;
-    vHeader.cSize2          = 0;
-    vHeader.usRecording     = BRA_BOTTOMUP;
-    vHeader.usRendering     = BRH_NOTHALFTONED;
-    vHeader.ulColorEncoding = BCE_RGB;
-    vHeader.ulIdentifier    = 0;
-
+    memset(&vInfo, '\0', 16);
+    vInfo.cbFix           = 16;
+    vInfo.cx              = (ULONG)nWidth;
+    vInfo.cy              = (ULONG)nHeight;
+    vInfo.cPlanes         = 1L;
+    vInfo.cBitCount       = 24;
     //
     // Memory for DIB data
     //
     unsigned char*                  pucBits;
 
-    pucBits = (unsigned char *)malloc(vHeader.cbImage);
+    pucBits = (unsigned char *)malloc(nBytePerLine * nHeight);
     if(!pucBits)
     {
         wxFAIL_MSG(wxT("could not allocate memory for DIB"));
@@ -618,6 +598,9 @@ bool wxBitmap::CreateFromImage (
     SIZEL                           vSize = {0, 0};
     HDC                             hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
+    LONG                            lScans;
+    HDC                             hDCScreen = ::WinOpenWindowDC(HWND_DESKTOP);
+    HPS                             hPSScreen;
     HBITMAP                         hBmp;
     HBITMAP                         hBmpOld;
 
@@ -675,19 +658,34 @@ bool wxBitmap::CreateFromImage (
 
         //
         // Have to do something similar to WIN32's StretchDIBits, use GpiBitBlt
+        // in combination with setting the bits into the selected bitmap
         //
+        lScans = ::GpiSetBitmapBits( hPS
+                                    ,0             // Start at the bottom
+                                    ,(LONG)nHeight // One line per scan
+                                    ,(PBYTE)pucBits
+                                    ,&vInfo
+                                   );
+        hPSScreen = ::GpiCreatePS( vHabmain
+                                  ,hDCScreen
+                                  ,&vSize
+                                  ,PU_PELS | GPIA_ASSOC
+                                 );
+
         POINTL                      vPoint[4] = { 0, nOrigin,
                                                   nWidth, nHeight,
                                                   0, 0, nWidth, nHeight
                                                 };
 
-        ::GpiBitBlt( hPS
+
+        ::GpiBitBlt( hPSScreen
                     ,hPS
                     ,4
                     ,vPoint
                     ,ROP_SRCCOPY
                     ,BBO_IGNORE
                    );
+        ::GpiDestroyPS(hPSScreen);
         nOrigin += nHeight;
     }
     SetHBITMAP((WXHBITMAP)hBmp);
@@ -701,7 +699,15 @@ bool wxBitmap::CreateFromImage (
     //
     if (rImage.HasMask())
     {
+        hBmp = ::GpiCreateBitmap( hPS
+                                 ,&vHeader
+                                 ,0L
+                                 ,NULL
+                                 ,NULL
+                               );
         memset(&vHeader, '\0', sizeof(BITMAPINFOHEADER2));
+        hBmpOld = ::GpiSetBitmap(hPS, hBmp);
+
         vHeader.cbFix     =  sizeof(BITMAPINFOHEADER2);
         vHeader.cx        = nWidth;
         vHeader.cy        = nHeight;
@@ -713,7 +719,6 @@ bool wxBitmap::CreateFromImage (
                                  ,NULL
                                  ,NULL
                                 );
-        hBmpOld = ::GpiSetBitmap(hPS, hBmp);
         if (nNumDIB == 1)
             nHeight = nBmpHeight;
         else
@@ -762,18 +767,29 @@ bool wxBitmap::CreateFromImage (
                 for (i = 0; i < nPadding; i++)
                     *(ptbits++) = cZero;
             }
-            POINTL                  vPoint[4] = { 0, nOrigin,
-                                                  nWidth, nHeight,
-                                                  0, 0, nWidth, nHeight
-                                                };
-
-            ::GpiBitBlt( hPS
+            lScans = ::GpiSetBitmapBits( hPS
+                                        ,0              // Start at the bottom
+                                        ,(LONG)nHeight // One line per scan
+                                        ,(PBYTE)pucBits
+                                        ,&vInfo
+                                       );
+            hPSScreen = ::GpiCreatePS( vHabmain
+                                      ,hDCScreen
+                                      ,&vSize
+                                      ,PU_PELS | GPIA_ASSOC
+                                     );
+            POINTL vPoint2[4] = { 0, nOrigin,
+                                  nWidth, nHeight,
+                                  0, 0, nWidth, nHeight
+                                };
+            ::GpiBitBlt( hPSScreen
                         ,hPS
                         ,4
-                        ,vPoint
+                        ,vPoint2
                         ,ROP_SRCCOPY
                         ,BBO_IGNORE
-                       );
+                   );
+            ::GpiDestroyPS(hPSScreen);
             nOrigin += nHeight;
         }
 
@@ -846,26 +862,21 @@ wxImage wxBitmap::ConvertToImage() const
     //
     // Create and fill a DIB header
     //
-    memset(&vDIBh, '\0', sizeof(BITMAPINFOHEADER2));
-    vDIBh.cbFix     =  sizeof(BITMAPINFOHEADER2);
+    memset(&vDIBh, '\0', 16);
+    vDIBh.cbFix     =  16;
     vDIBh.cx        = nWidth;
     vDIBh.cy        = nHeight;
     vDIBh.cPlanes   = 1;
-    vDIBh.cbImage   = nBytePerLine * nHeight;
     vDIBh.cBitCount = 24;
 
-    memset(&vDIBInfo, '\0', sizeof(BITMAPINFO2));
-    vDIBInfo.cbFix           = sizeof(BITMAPINFO2);
+    memset(&vDIBInfo, '\0', 16);
+    vDIBInfo.cbFix           = 16;
+    vDIBInfo.cx              = nWidth;
+    vDIBInfo.cy              = nHeight;
     vDIBInfo.cPlanes         = 1;
     vDIBInfo.cBitCount       = 24;
-    vDIBInfo.ulCompression   = BCA_UNCOMP;
-    vDIBInfo.usReserved      = 0;
-    vDIBInfo.usRecording     = BRA_BOTTOMUP;
-    vDIBInfo.usRendering     = BRH_NOTHALFTONED;
-    vDIBInfo.ulColorEncoding = BCE_RGB;
-    vDIBInfo.ulIdentifier    = 0;
 
-    lpBits = (unsigned char *)malloc(vDIBh.cbImage);
+    lpBits = (unsigned char *)malloc(nBytePerLine * nHeight);
     if (!lpBits)
     {
         wxFAIL_MSG(wxT("could not allocate data for DIB"));
@@ -1029,9 +1040,9 @@ wxBitmap wxBitmap::GetSubBitmap(
     HDC                             hDCDst = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
     HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
-    POINTL                          vPoint[4] = { rRect.x, rRect.y,
-                                                  rRect.x + rRect.width, rRect.y + rRect.height,
-                                                  0, 0, GetWidth(), GetHeight()
+    POINTL                          vPoint[4] = { 0, 0, rRect.width, rRect.height,
+                                                  rRect.x, rRect.y
+                                                  rRect.x + rRect.width, rRect.y + rRect.height
                                                 };
 
     ::GpiSetBitmap(hPSSrc, (HBITMAP) GetHBITMAP());
