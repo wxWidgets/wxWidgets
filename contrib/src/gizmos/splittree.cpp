@@ -35,6 +35,11 @@
     #include "wx/wx.h"
 #endif
 
+#ifdef __WXMSW__
+#include <windows.h>
+#include "wx/msw/winundef.h"
+#endif
+
 #include "wx/generic/treectlg.h"
 
 #include "wx/gizmos/splittree.h"

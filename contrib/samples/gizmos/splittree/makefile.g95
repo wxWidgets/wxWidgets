@@ -7,10 +7,11 @@
 #
 # Makefile for wxWindows sample (Cygwin/Mingw32).
 
-WXDIR = ../..
+WXDIR = ../../../..
 
-TARGET=minimal
+TARGET=tree
 OBJECTS = $(TARGET).o
+EXTRALIBS=$(WXDIR)/lib/libgizmos.a
 
 include $(WXDIR)/src/makeprog.g95
 

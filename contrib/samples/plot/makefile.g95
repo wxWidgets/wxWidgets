@@ -8,6 +8,7 @@ WXDIR = ../../..
 TARGET = plot
 OBJECTS = $(TARGET).o
 EXTRAINC = -I$(WXDIR)/contrib/include
+RCEXTRAINC = --include-dir $(WXDIR)/contrib/include
 EXTRALIBS = -lplot
 
 include $(WXDIR)/src/makeprog.g95

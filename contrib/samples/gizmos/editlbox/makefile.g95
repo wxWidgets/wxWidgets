@@ -3,7 +3,7 @@
 
 WXDIR = ../../../..
 
-TARGET=mtest
+TARGET=test
 OBJECTS = $(TARGET).o
 EXTRALIBS=$(WXDIR)/lib/libgizmos.a
 
