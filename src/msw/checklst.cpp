@@ -73,7 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 class wxCheckListBoxItem : public wxOwnerDrawn
 {
-friend class wxCheckListBox;
+friend class WXDLLEXPORT wxCheckListBox;
 public:
   // ctor
   wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex);
