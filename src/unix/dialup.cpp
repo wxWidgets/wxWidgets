@@ -104,7 +104,7 @@ public:
    virtual bool IsOnline() const
       {
          if( (! m_timer) // we are not polling, so test now:
-             || m_IsOnline == -1
+             || m_IsOnline < 0
             )
             CheckStatus();
          return m_IsOnline != 0;
@@ -429,30 +429,6 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
          so we could let ifconfig write directly to the tmpfile, but
          this does not work. That should be faster, as it doesn´t call
          the shell first. I have no idea why. :-(  (KB) */
-#if 0
-      // temporarily redirect stdout/stderr:
-      int
-         new_stdout = dup(STDOUT_FILENO),
-         new_stderr = dup(STDERR_FILENO);
-      close(STDOUT_FILENO);
-      close(STDERR_FILENO);
-
-      int
-         // new stdout:
-         output_fd = open(tmpfile, O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR),
-         // new stderr:
-         null_fd = open("/dev/null", O_CREAT, S_IRUSR|S_IWUSR);
-      // verify well behaved unix behaviour:
-      wxASSERT(output_fd == STDOUT_FILENO);
-      wxASSERT(null_fd == STDERR_FILENO);
-      int rc = wxExecute(m_IfconfigPath,TRUE /* sync */,NULL ,wxEXECUTE_DONT_CLOSE_FDS);
-      close(null_fd); close(output_fd);
-      // restore old stdout, stderr:
-      int test;
-      test = dup(new_stdout); close(new_stdout); wxASSERT(test == STDOUT_FILENO);
-      test = dup(new_stderr); close(new_stderr); wxASSERT(test == STDERR_FILENO);
-      if(rc == 0)
-#endif
       if(wxExecute(cmd,TRUE /* sync */) == 0)
       {
          m_CanUseIfconfig = 1;
@@ -483,7 +459,8 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
          return;
    }
 
-   // second method: try to connect to well known host:
+   // this was supposed to work like ping(8), but doesn´t.
+   // second method: try to connect to a well known host:
    // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
@@ -505,6 +482,8 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       return;
    }
    
+#if 0
+   // this "ping" method does not work.
    if(sendto(sockfd, "hello",
              strlen("hello"), /* flags */ 0,
              (struct  sockaddr *) &serv_addr,
@@ -513,15 +492,15 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       close(sockfd);
       return;
    }
-
-#if 0
+#endif
+   
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
    {
       //sys_error("cannot connect to server");
+      close(sockfd);
       return;
    }
    //connected!
-#endif
    close(sockfd);
    m_IsOnline = TRUE;
 }
