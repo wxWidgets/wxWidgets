@@ -1366,17 +1366,6 @@ wxPoint wxWindow::GetClientAreaOrigin() const
     return wxPoint(0, 0);
 }
 
-// Makes an adjustment to the window position (for example, a frame that has
-// a toolbar that it manages itself).
-void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
-{
-    if (((sizeFlags & wxSIZE_NO_ADJUSTMENTS) == 0) && GetParent())
-    {
-        wxPoint pt(GetParent()->GetClientAreaOrigin());
-        x += pt.x; y += pt.y;
-    }
-}
-
 void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, int incH)
 {
     m_minWidth = minW;

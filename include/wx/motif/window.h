@@ -175,10 +175,6 @@ protected:
     // event handlers (not virtual by design)
     void OnIdle(wxIdleEvent& event);
     
-    // Makes an adjustment to the window position (for example, a frame that has
-    // a toolbar that it manages itself).
-    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
-    
     wxWindow *GetChild(int number) const
     { return GetChildren().Item(number)->GetData(); }
     

@@ -153,10 +153,6 @@ public:
     wxWindow *GetFocusWidget();
     
 protected:
-    // Makes an adjustment to the window position (for example, a frame that has
-    // a toolbar that it manages itself).
-    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
-    
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     
