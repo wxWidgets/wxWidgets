@@ -1223,6 +1223,12 @@ wxFileDialog::~wxFileDialog()
         wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                                ms_lastShowHidden);
     }
+
+    const int count = m_choice->GetCount();
+    for ( int i = 0; i < count; i++ )
+    {
+        delete (wxString *)m_choice->GetClientData(i);
+    }
 }
 
 int wxFileDialog::ShowModal()
