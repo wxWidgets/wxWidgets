@@ -4,5 +4,39 @@ Classes: \helpref{wxThread}{wxthread}, \helpref{wxMutex}{wxmutex},
 \helpref{wxCriticalSection}{wxcriticalsection}, 
 \helpref{wxCondition}{wxcondition}
 
-TODO
+wxWindows provides a complete set of classes encapsulating objects necessary in
+multithreaded (MT) programs: the \helpref{thread}{wxthread} class itself and different
+synchronization objects: \helpref{mutexes}{wxmutex} and 
+\helpref{critical sections}{wxcriticalsection} with 
+\helpref{conditions}{wxcondition}.
 
+These classes will hopefully make writing MT programs easier and they also
+provide some extra error checking (compared to the native (be it Win32 or Posix)
+thread API), however it is still an untrivial undertaking especially for large
+projects. Before starting an MT application (or starting to add MT features to
+an existing one) it is worth asking oneself if there is no easier and safer way
+to implement the same functionality. Of course, in some situations threads
+really make sense (classical example is a server application which launches a
+new thread for each new client), but in others it might be a very poor choice
+(example: launching a separate thread when doing a long computation to show a
+progress dialog). Other implementation choices are available: for the progress
+dialog example it is far better to do the calculations in the 
+\helpref{idle handler}{wxidleevent} or call \helpref{wxYield()}{wxyield}
+periodically to update the screen.
+
+If you do decide to use threads in your application, it is strongly recommended
+that no more than one thread calls GUI functions. The thread sample shows that
+it {\it is} possible for many different threads to call GUI functions at once
+(all the threads created in the sample access GUI), but it is a very poor design
+choice for anything except an example. The design which uses one GUI thread and
+several worker threads which communicate with the main one using events is much
+more robust and will undoubtedly save you countless problems (example: under
+Win32 a thread can only access GDI objects such as pens, brushes, \&c created by
+itself and not by the other threads).
+
+Final note: in the current release of wxWindows, there are no specific
+facilities for communicating between the threads. However, the usual 
+\helpref{ProcessEvent()}{wxevthandlerprocessevent} function may be used for
+thread communication too - but you should provide your own synchronisation
+mechanism if you use it (e.g. just use a critical section before sending a
+message) because there is no built-in synchronisation.

@@ -28,7 +28,7 @@ No base class
 \membersection{Static functions}
 
 The functions in this section work with and manipulate the active log target.
-The {\it OnLog()} is called by the {\it wxLogXXX()} functions and invokes the
+The {\it OnLog()} is called by the {\it wxLogXXX()} functions and invokes the 
 {\it DoLog()} of the active log target if any. Get/Set methods are used to
 install/query the current active target and, finally, {\it
 DontCreateOnDemand()} disables the automatic creation of a standard log target
@@ -78,7 +78,7 @@ As for the (real) trace messages, they come in different kinds:
 
 The trace mask is a bit mask which tells which (if any) of these trace
 messages are going to be actually logged. For the trace message to appear
-somewhere, all the bits in the mask used in the call to {\it wxLogTrace()}
+somewhere, all the bits in the mask used in the call to {\it wxLogTrace()} 
 function must be set in the current trace mask. For example,
 \begin{verbatim}
 wxLogTrace(wxTraceRefCount | wxTraceOle, "Active object ref count: %d", nRef);

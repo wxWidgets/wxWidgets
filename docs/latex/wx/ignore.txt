@@ -4,3 +4,4 @@ wxCursorRefData
 wxCursor::SetHCURSOR
 wxCursor::GetHCURSOR
 wxCursor::FreeResource
+wxStringData
