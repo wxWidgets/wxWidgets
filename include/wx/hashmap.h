@@ -525,8 +525,10 @@ CLASSEXP CLASSNAME:public CLASSNAME##_wxImplementation_HashTable \
 public: \
     typedef VALUE_T mapped_type; \
  \
-    CLASSNAME( size_type hint = 100, hasher hf = hasher(), key_equal eq = key_equal() ) \
-        : CLASSNAME##_wxImplementation_HashTable( hint, hf, eq, CLASSNAME##_wxImplementation_KeyEx() ) {} \
+    wxEXPLICIT CLASSNAME( size_type hint = 100, hasher hf = hasher(),        \
+                          key_equal eq = key_equal() )                       \
+        : CLASSNAME##_wxImplementation_HashTable( hint, hf, eq,              \
+                                   CLASSNAME##_wxImplementation_KeyEx() ) {} \
  \
     mapped_type& operator[]( const const_key_type& key ) \
     { \

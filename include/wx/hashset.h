@@ -38,8 +38,8 @@ _WX_DECLARE_HASHTABLE( KEY_T, KEY_T, HASH_T, CLASSNAME##_wxImplementation_KeyEx,
 CLASSEXP CLASSNAME:public CLASSNAME##_wxImplementation_HashTable             \
 {                                                                            \
 public:                                                                      \
-    CLASSNAME( size_type hint = 100, hasher hf = hasher(),                   \
-               key_equal eq = key_equal() )                                  \
+    wxEXPLICIT CLASSNAME( size_type hint = 100, hasher hf = hasher(),        \
+                          key_equal eq = key_equal() )                       \
         : CLASSNAME##_wxImplementation_HashTable( hint, hf, eq,              \
                       CLASSNAME##_wxImplementation_KeyEx() ) {}              \
                                                                              \

@@ -3850,8 +3850,8 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
                                   style | wxWANTS_CHARS , name))
         return FALSE;
 
-    m_colMinWidths =GRID_HASH_SIZE ;
-    m_rowMinHeights = GRID_HASH_SIZE ;
+    m_colMinWidths = wxLongToLongHashMap(GRID_HASH_SIZE) ;
+    m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE) ;
 
     Create() ;
 

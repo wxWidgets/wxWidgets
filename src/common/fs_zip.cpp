@@ -208,7 +208,7 @@ wxString wxZipFSHandler::DoFind()
                 wxLongToLongHashMap::iterator it = m_DirsFound->find(key);
                 if (it == m_DirsFound->end())
                 {
-                    m_DirsFound[key] = 1;
+                    (*m_DirsFound)[key] = 1;
                     filename = dir.AfterLast(wxT('/'));
                     dir = dir.BeforeLast(wxT('/'));
                     if (!filename.IsEmpty() && m_BaseDir == dir &&
