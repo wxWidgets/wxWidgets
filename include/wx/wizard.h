@@ -47,8 +47,6 @@ class WXDLLEXPORT wxWizardPage : public wxPanel
 {
 public:
     wxWizardPage() { Init(); }
-    // common part of ctors:
-    void Init();
 
     // ctor accepts an optional bitmap which will be used for this page instead
     // of the default one for this wizard (should be of the same size). Notice
@@ -74,6 +72,9 @@ public:
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
 protected:
+    // common part of ctors:
+    void Init();
+
     wxBitmap m_bitmap;
 
 private:
@@ -93,11 +94,6 @@ class WXDLLEXPORT wxWizardPageSimple : public wxWizardPage
 {
 public:
     wxWizardPageSimple() { Init(); }
-    // common part of ctors:
-    void Init()
-    {
-        m_prev = m_next = NULL;
-    }
 
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent,
@@ -139,6 +135,12 @@ public:
     virtual wxWizardPage *GetNext() const;
 
 private:
+    // common part of ctors:
+    void Init()
+    {
+        m_prev = m_next = NULL;
+    }
+
     // pointers are private, the derived classes shouldn't mess with them -
     // just derive from wxWizardPage directly to implement different behaviour
     wxWizardPage *m_prev,
@@ -154,13 +156,16 @@ private:
 class WXDLLEXPORT wxWizardBase : public wxDialog
 {
 public:
-    // create the wizard control
-    static wxWizard *Create(wxWindow *parent,
-                            int id = -1,
-                            const wxString& title = wxEmptyString,
-                            const wxBitmap& bitmap = wxNullBitmap,
-                            const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize);
+    /*
+       The derived class (i.e. the real wxWizard) has a ctor and Create()
+       function taking the following arguments:
+
+        wxWizard(wxWindow *parent,
+                 int id = -1,
+                 const wxString& title = wxEmptyString,
+                 const wxBitmap& bitmap = wxNullBitmap,
+                 const wxPoint& pos = wxDefaultPosition);
+    */
 
     // executes the wizard starting from the given page, returns TRUE if it was
     // successfully finished, FALSE if user cancelled it
@@ -186,6 +191,16 @@ public:
     // may be useful if not all pages are accessible from the first one by
     // default)
     virtual void FitToPage(const wxWizardPage *firstPage) = 0;
+
+    // wxWizard should be created using "new wxWizard" now, not with Create()
+#ifdef WXWIN_COMPATIBILITY_2_2
+    wxWizard *Create(wxWindow *parent,
+                     int id = -1,
+                     const wxString& title = wxEmptyString,
+                     const wxBitmap& bitmap = wxNullBitmap,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize)
+#endif // WXWIN_COMPATIBILITY_2_2
 };
 
 // include the real class declaration

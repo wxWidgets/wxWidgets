@@ -21,8 +21,9 @@ simple steps and are mainly useful to the novice users, hence it is important
 to keep them as simple as possible.
 
 To show a wizard dialog, you must first create an object of wxWizard class
-using \helpref{Create}{wxwizardcreate} function. Then you should add all pages
-you want the wizard to show and call \helpref{RunWizard}{wxwizardrunwizard}.
+using either the non default constructor or a default one followed by call to 
+\helpref{Create}{wxwizardcreate} function. Then you should add all pages you
+want the wizard to show and call \helpref{RunWizard}{wxwizardrunwizard}.
 Finally, don't forget to call {\tt wizard->Destroy()}.
 
 \wxheading{Derived from}
@@ -78,14 +79,15 @@ See also \helpref{wxDialog}{wxdialog} for other extended styles.
 
 \func{}{wxWizard}{\void}
 
-Default constructor. Use this if you wish to derive from wxWizard and then call {\bf Create}, for example
-if you wish to set an extra style with \helpref{wxWindow::SetExtraStyle}{wxwindowsetextrastyle}.
+Default constructor. Use this if you wish to derive from wxWizard and then call 
+\helpref{Create}{wxwizardcreate}, for example if you wish to set an extra style
+with \helpref{wxWindow::SetExtraStyle}{wxwindowsetextrastyle} between the two
+calls.
 
 \func{}{wxWizard}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
-Creates the wizard dialog. The wizard should not be deleted
-directly, you should rather call {\tt Destroy()} on it and wxWindows will
-delete it itself.
+Constructor which really creates the wizard -- if you use this constructor, you
+shouldn't call \helpref{Create}{wxwizardcreate}.
 
 Notice that unlike almost all other wxWindows classes, there is no {\it size} 
 parameter in wxWizard constructor because the wizard will have a predefined
@@ -108,20 +110,15 @@ by default.}
 
 \membersection{wxWizard::Create}\label{wxwizardcreate}
 
-\func{static wxWizard*}{Create}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
-Creates the wizard dialog. The returned pointer should not be deleted
-directly, you should rather call {\tt Destroy()} on it and wxWindows will
-delete it itself.
+Creates the wizard dialog. Must be called if the default constructor had been
+used to create the object.
 
 Notice that unlike almost all other wxWindows classes, there is no {\it size} 
 parameter in wxWizard constructor because the wizard will have a predefined
 default size by default. If you want to change this, you should use the 
 \helpref{SetPageSize}{wxwizardsetpagesize} function.
-
-\func{bool}{Create}{\param{wxWindow* }{parent}, \param{int }{id = -1}, \param{const wxString\& }{title = wxEmptyString}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
-
-Alternative, non-static constructor for two-step construction of a class derived from wxWizard.
 
 \wxheading{Parameters}
 

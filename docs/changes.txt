@@ -78,6 +78,10 @@ All (GUI):
         if ( flags & wxYES )
                 ... do something else ...
 
+- static wxWizard::Create() doesn't exist any more, the wizards are created
+  in the same way as all the other wxWindow objects, i.e. by directly using
+  the ctor
+
 - wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
 
 - wxGridCellAttrProvider class API changed, you will need to update your code

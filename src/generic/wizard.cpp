@@ -520,6 +520,8 @@ void wxWizard::OnWizEvent(wxWizardEvent& event)
 // our public interface
 // ----------------------------------------------------------------------------
 
+#ifdef WXWIN_COMPATIBILITY_2_2
+
 /* static */
 wxWizard *wxWizardBase::Create(wxWindow *parent,
                                int id,
@@ -530,6 +532,8 @@ wxWizard *wxWizardBase::Create(wxWindow *parent,
 {
     return new wxWizard(parent, id, title, bitmap, pos);
 }
+
+#endif // WXWIN_COMPATIBILITY_2_2
 
 // ----------------------------------------------------------------------------
 // wxWizardEvent
