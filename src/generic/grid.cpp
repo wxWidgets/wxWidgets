@@ -1238,6 +1238,7 @@ wxSize wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr& attr,
     wxCoord x, y;
     dc.SetFont(attr.GetFont());
     dc.GetTextExtent(text, &x, &y);
+    y *= 1 + text.Freq('\n');       // multiply by the number of lines.
 
     return wxSize(x, y);
 }
@@ -7629,6 +7630,10 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
         {
             // leave some space around text
             extentMax += 10;
+        }
+        else
+        {
+            extentMax += 6;
         }
     }
 
