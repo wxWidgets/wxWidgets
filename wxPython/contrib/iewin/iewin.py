@@ -66,8 +66,8 @@ class wxMSHTMLEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetText(self, *_args, **_kwargs):
-        val = apply(iewinc.wxMSHTMLEvent_GetText,(self,) + _args, _kwargs)
+    def GetText1(self, *_args, **_kwargs):
+        val = apply(iewinc.wxMSHTMLEvent_GetText1,(self,) + _args, _kwargs)
         return val
     def GetLong1(self, *_args, **_kwargs):
         val = apply(iewinc.wxMSHTMLEvent_GetLong1,(self,) + _args, _kwargs)
@@ -130,6 +130,7 @@ class wxIEHtmlWinPtr(wxWindowPtr):
         return val
     def __repr__(self):
         return "<C wxIEHtmlWin instance at %s>" % (self.this,)
+    Navigate = LoadUrl
 class wxIEHtmlWin(wxIEHtmlWinPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(iewinc.new_wxIEHtmlWin,_args,_kwargs)

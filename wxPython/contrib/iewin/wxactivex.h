@@ -6,10 +6,13 @@
 
 #include <wx/setup.h>
 #include <wx/wx.h>
+#include <wx/variant.h>
 #include <oleidl.h>
+#include <exdisp.h>
 #include <docobj.h>
 #include <iostream>
 #include <vector>
+#include <map>
 using namespace std;
 
 //////////////////////////////////////////
@@ -29,12 +32,12 @@ template <class I> class wxAutoOleInterface
 	// Assumed to already have a AddRef() applied
     explicit wxAutoOleInterface(I *pInterface = NULL) : m_interface(pInterface) {}
 
-	// queries for an interface
+	// queries for an interface 
     wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(NULL)
 	{
 		QueryInterface(riid, pUnk);
 	};
-	// queries for an interface
+	// queries for an interface 
     wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(NULL)
 	{
 		QueryInterface(riid, pDispatch);
@@ -84,7 +87,7 @@ template <class I> class wxAutoOleInterface
         m_interface = NULL;
     };
 
-	// queries for an interface
+	// queries for an interface 
     HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)
 	{
 		Free();
@@ -259,31 +262,34 @@ class wxOleInit
 class wxActiveX : public wxWindow {
 public:
     wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id = -1,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = 0,
-              const wxString& name = wxPanelNameStr);
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxPanelNameStr);
     wxActiveX(wxWindow * parent, wxString progId, wxWindowID id = -1,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = 0,
-              const wxString& name = wxPanelNameStr);
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxPanelNameStr);
+	virtual ~wxActiveX();
 
-    virtual ~wxActiveX();
-
-    void CreateActiveX(REFCLSID clsid);
+	void CreateActiveX(REFCLSID clsid);
     void CreateActiveX(LPOLESTR progId);
 
-    HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
+	void GetTypeInfo();
+	void GetTypeInfo(ITypeInfo *ti, bool defEventSink);
 
-    void OnSize(wxSizeEvent&);
-    void OnSetFocus(wxFocusEvent&);
+	HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
+
+	void OnSize(wxSizeEvent&);
+	void OnSetFocus(wxFocusEvent&);
     void OnKillFocus(wxFocusEvent&);
 
-    DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE();
 
 protected:
     friend class FrameSite;
+    friend class wxActiveXEvents;
 
 	typedef wxAutoOleInterface<IConnectionPoint>	wxOleConnectionPoint;
 	typedef pair<wxOleConnectionPoint, DWORD>		wxOleConnection;
@@ -304,6 +310,66 @@ protected:
 
     HRESULT AmbientPropertyChanged(DISPID dispid);
 
+    // type stuff
+	class ParamX // refer to ELEMDESC, IDLDESC in MSDN
+	{
+	public:
+		USHORT	    flags;
+		VARTYPE	    vt;
+        wxString    name;
+
+		inline bool IsIn() const		{return (flags & IDLFLAG_FIN) != 0;}
+		inline bool IsOut() const		{return (flags & IDLFLAG_FOUT) != 0;}
+		inline bool IsRetVal() const	{return (flags & IDLFLAG_FRETVAL) != 0;}
+	};
+
+	typedef vector<ParamX>	ParamXArray;
+
+    class FuncX // refer to FUNCDESC in MSDN
+    {
+    public:
+        wxString    name;
+        MEMBERID    memid;
+		bool		hasOut;
+
+		ParamXArray	params;
+    };
+
+    typedef vector<FuncX> FuncXArray;
+    typedef map<MEMBERID, int>  MemberIdList;
+
+    // events
+    FuncXArray      m_events;
+    MemberIdList    m_eventsIdx;
 };
+
+// events
+class wxActiveXEvent : public wxNotifyEvent
+{
+private:
+    friend class wxActiveXEvents;
+
+    wxVariant m_params;
+
+public:
+
+    virtual wxEvent *Clone() const { return new wxActiveXEvent(*this); }
+
+    int ParamCount() const;
+    wxVariant  operator[] (int idx) const;
+    wxVariant& operator[] (int idx);
+    wxVariant  operator[] (wxString name) const;
+    wxVariant& operator[] (wxString name);
+};
+
+const wxEventType& RegisterActiveXEvent(wxString eventName);
+
+typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
+
+#define EVT_ACTIVEX(id, eventName, fn) DECLARE_EVENT_TABLE_ENTRY(RegisterActiveXEvent(eventName), id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
+
+//util
+bool MSWVariantToVariant(VARIANTARG& va, wxVariant& vx);
+bool VariantToMSWVariant(wxVariant& vx, VARIANTARG& va);
 
 #endif /* _IEHTMLWIN_H_ */

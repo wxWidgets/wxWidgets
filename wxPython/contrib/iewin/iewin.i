@@ -44,7 +44,7 @@ class wxMSHTMLEvent : public wxNotifyEvent
 {
 public:
     wxMSHTMLEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
-    wxString GetText();
+    wxString GetText1();
     long GetLong1();
     long GetLong2();
 };
@@ -102,6 +102,8 @@ public:
     void LoadUrl(const wxString&);
     bool LoadString(wxString html);
     /* bool LoadStream(istream *strm); */
+
+    %pragma(python) addtoclass = "Navigate = LoadUrl"
 
     void SetCharset(wxString charset);
     void SetEditMode(bool seton);

@@ -35,23 +35,23 @@ private:
 
 public:
     FS_DWebBrowserEvents2(wxIEHtmlWin *iewin) : m_iewin(iewin) {}
-	~FS_DWebBrowserEvents2()
+	~FS_DWebBrowserEvents2() 
     {
     }
 
 	//IDispatch
 	STDMETHODIMP GetIDsOfNames(REFIID r, OLECHAR** o, unsigned int i, LCID l, DISPID* d)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfo(unsigned int i, LCID l, ITypeInfo** t)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
 	STDMETHODIMP GetTypeInfoCount(unsigned int* i)
-	{
+	{ 
         return E_NOTIMPL;
     };
 
@@ -114,7 +114,7 @@ public:
 						  WORD wFlags, DISPPARAMS * pDispParams,
 						  VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
 						  unsigned int * puArgErr)
-	{
+	{ 
 	    if (wFlags & DISPATCH_PROPERTYGET)
             return E_NOTIMPL;
 
@@ -123,21 +123,21 @@ public:
 		    case DISPID_BEFORENAVIGATE2:
 				if (Process(wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, STR_ARG(5)))
 					*pDispParams->rgvarg->pboolVal = VARIANT_FALSE;
-				else
+				else 
 					*pDispParams->rgvarg->pboolVal = VARIANT_TRUE;
 				break;
 
 		    case DISPID_NEWWINDOW2:
 				if (Process(wxEVT_COMMAND_MSHTML_NEWWINDOW2))
 					*pDispParams->rgvarg->pboolVal = VARIANT_FALSE;
-				else
+				else 
 					*pDispParams->rgvarg->pboolVal = VARIANT_TRUE;
 				break;
 
             case DISPID_PROGRESSCHANGE:
 				Post(wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, "", LONG_ARG(1), LONG_ARG(0));
 				break;
-
+		    
             case DISPID_DOCUMENTCOMPLETE:
 				Post(wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, STR_ARG(0));
 				break;
@@ -169,23 +169,24 @@ static const CLSID CLSID_MozillaBrowser =
     0x00, 0x00, 0x00, 0x00 } };
 
 
-//#define PROGID L"Shell.Explorer"
+//#define PROGID "Shell.Explorer"
 #define PROGID CLSID_WebBrowser
+//#define PROGID CLSID_MozillaBrowser
 //#define PROGID CLSID_HTMLDocument
-//#define PROGID L"MSCAL.Calendar"
-//#define PROGID L"WordPad.Document.1"
-//#define PROGID L"SoftwareFX.ChartFX.20"
-
+//#define PROGID "MSCAL.Calendar"
+//#define PROGID "WordPad.Document.1"
+//#define PROGID "SoftwareFX.ChartFX.20"
 
 wxIEHtmlWin::wxIEHtmlWin(wxWindow * parent, wxWindowID id,
-              const wxPoint& pos,
-              const wxSize& size,
-              long style,
-              const wxString& name)
-	: wxActiveX(parent, PROGID, id, pos, size, style, name)
+        const wxPoint& pos,
+        const wxSize& size,
+        long style,
+        const wxString& name) : 
+    wxActiveX(parent, PROGID, id, pos, size, style, name)
 {
     SetupBrowser();
 }
+
 
 wxIEHtmlWin::~wxIEHtmlWin()
 {
@@ -241,7 +242,7 @@ void wxIEHtmlWin::SetCharset(wxString charset)
 	{
 		wxAutoOleInterface<IHTMLDocument2> doc(IID_IHTMLDocument2, disp);
 		if (doc.Ok())
-            doc->put_charset((BSTR) (const wchar_t*)charset.wc_str(wxConvUTF8));
+			doc->put_charset((BSTR) wxConvUTF8.cMB2WC(charset).data());
 	};
 };
 
@@ -283,12 +284,12 @@ private:
     istream *m_is;
 
 public:
-
-    IStreamAdaptor(istream *is)	: IStreamAdaptorBase(), m_is(is)
+    
+    IStreamAdaptor(istream *is)	: IStreamAdaptorBase(), m_is(is) 
     {
         wxASSERT(m_is != NULL);
     }
-    ~IStreamAdaptor()
+    ~IStreamAdaptor()	
     {
         delete m_is;
     }
@@ -308,7 +309,7 @@ public:
 void wxIEHtmlWin::LoadUrl(const wxString& url)
 {
 	VARIANTARG navFlag, targetFrame, postData, headers;
-	navFlag.vt = VT_EMPTY;
+	navFlag.vt = VT_EMPTY; 
 	navFlag.vt = VT_I2;
 	navFlag.iVal = navNoReadFromCache;
 	targetFrame.vt = VT_EMPTY;
@@ -316,21 +317,21 @@ void wxIEHtmlWin::LoadUrl(const wxString& url)
 	headers.vt = VT_EMPTY;
 
 	HRESULT hret = 0;
-	hret = m_webBrowser->Navigate((BSTR) (const wchar_t*)url.wc_str(wxConvUTF8),
-		&navFlag, &targetFrame, &postData, &headers);
+	hret = m_webBrowser->Navigate((BSTR) wxConvUTF8.cMB2WC(url).data(), 
+		&navFlag, &targetFrame, &postData, &headers);	
 };
 
 
 bool  wxIEHtmlWin::LoadString(wxString html)
 {
-	string s = html.mb_str(wxConvUTF8);
+	string s = html.c_str();
 	istringstream *is = new istringstream(s);
 	return LoadStream(is);
 };
 
 bool  wxIEHtmlWin::LoadStream(istream *is)
 {
-	// wrap refernce around stream
+	// wrap reference around stream
     IStreamAdaptor *pstrm = new IStreamAdaptor(is);
 	pstrm->AddRef();
 
@@ -353,9 +354,11 @@ bool  wxIEHtmlWin::LoadStream(istream *is)
         HRESULT hr = pPersistStreamInit->InitNew();
         if (SUCCEEDED(hr))
             hr = pPersistStreamInit->Load(strm);
-    };
 
-    return true;
+		return SUCCEEDED(hr);
+    }
+	else
+	    return false;
 };
 
 bool wxIEHtmlWin::GoBack()
@@ -403,6 +406,7 @@ bool wxIEHtmlWin::Stop()
     hret = m_webBrowser->Stop();
     return hret == S_OK;
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -462,7 +466,7 @@ wxString wxIEHtmlWin::GetStringSelection(bool asHTML)
 
     BSTR text = NULL;
     HRESULT hr = E_FAIL;
-
+	
 	if (asHTML)
 		hr = tr->get_htmlText(&text);
 	else
@@ -504,7 +508,7 @@ wxString wxIEHtmlWin::GetText(bool asHTML)
 	// get inner text
     BSTR text = NULL;
     hr = E_FAIL;
-
+	
 	if (asHTML)
 		hr = body->get_innerHTML(&text);
 	else
@@ -515,5 +519,5 @@ wxString wxIEHtmlWin::GetText(bool asHTML)
     wxString s = text;
     SysFreeString(text);
 
-    return s;
+    return s;	
 };

@@ -150,8 +150,8 @@ static PyObject *_wrap_new_wxMSHTMLEvent(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxMSHTMLEvent_GetText(_swigobj)  (_swigobj->GetText())
-static PyObject *_wrap_wxMSHTMLEvent_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxMSHTMLEvent_GetText1(_swigobj)  (_swigobj->GetText1())
+static PyObject *_wrap_wxMSHTMLEvent_GetText1(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
     wxMSHTMLEvent * _arg0;
@@ -159,18 +159,18 @@ static PyObject *_wrap_wxMSHTMLEvent_GetText(PyObject *self, PyObject *args, PyO
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMSHTMLEvent_GetText",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMSHTMLEvent_GetText1",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMSHTMLEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMSHTMLEvent_GetText. Expected _wxMSHTMLEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMSHTMLEvent_GetText1. Expected _wxMSHTMLEvent_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxMSHTMLEvent_GetText(_arg0));
+    _result = new wxString (wxMSHTMLEvent_GetText1(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -776,7 +776,7 @@ static PyMethodDef iewincMethods[] = {
 	 { "new_wxIEHtmlWin", (PyCFunction) _wrap_new_wxIEHtmlWin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMSHTMLEvent_GetLong2", (PyCFunction) _wrap_wxMSHTMLEvent_GetLong2, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMSHTMLEvent_GetLong1", (PyCFunction) _wrap_wxMSHTMLEvent_GetLong1, METH_VARARGS | METH_KEYWORDS },
-	 { "wxMSHTMLEvent_GetText", (PyCFunction) _wrap_wxMSHTMLEvent_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMSHTMLEvent_GetText1", (PyCFunction) _wrap_wxMSHTMLEvent_GetText1, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMSHTMLEvent", (PyCFunction) _wrap_new_wxMSHTMLEvent, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
