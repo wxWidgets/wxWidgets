@@ -93,7 +93,7 @@
 class wxListBoxItem : public wxOwnerDrawn
 {
 public:
-    wxListBoxItem(const wxString& str = "");
+    wxListBoxItem(const wxString& str = wxEmptyString);
 };
 
 wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, FALSE)
@@ -272,7 +272,7 @@ void wxListBox::Delete(int N)
     SendMessage(GetHwnd(), LB_DELETESTRING, N, 0);
     m_noItems--;
 
-    SetHorizontalExtent("");
+    SetHorizontalExtent(wxEmptyString);
 }
 
 int wxListBox::DoAppend(const wxString& item)
@@ -502,7 +502,7 @@ int wxListBox::GetSelection() const
 // Find string for position
 wxString wxListBox::GetString(int N) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_noItems, "",
+    wxCHECK_MSG( N >= 0 && N < m_noItems, wxEmptyString,
                  wxT("invalid index in wxListBox::GetClientData") );
 
     int len = ListBox_GetTextLen(GetHwnd(), N);

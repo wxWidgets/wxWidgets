@@ -925,7 +925,7 @@ wxString wxListCtrl::GetItemText(long item) const
     info.m_itemId = item;
 
     if (!GetItem(info))
-        return wxString("");
+        return wxEmptyString;
     return info.m_text;
 }
 

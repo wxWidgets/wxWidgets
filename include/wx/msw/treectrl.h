@@ -76,7 +76,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "wxTreeCtrl")
+               const wxString& name = wxT("wxTreeCtrl"))
     {
         Create(parent, id, pos, size, style, validator, name);
     }
@@ -88,7 +88,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "wxTreeCtrl");
+                const wxString& name = wxT("wxTreeCtrl"));
 
     // accessors
     // ---------
