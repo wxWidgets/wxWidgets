@@ -1532,24 +1532,28 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
                                         iControlTags, iControlData )) ;
 
     // setting the default font
+    // under 10.2 this causes a visible caret, therefore we avoid it
 
-    Str255 fontName ;
-    SInt16 fontSize ;
-    Style fontStyle ;
-
-    GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
-
-    TXNTypeAttributes typeAttr[] =
+    if ( UMAGetSystemVersion() >= 0x1030 )
     {
-        {   kTXNQDFontNameAttribute , kTXNQDFontNameAttributeSize , { (void*) fontName } } ,
-        {   kTXNQDFontSizeAttribute , kTXNFontSizeAttributeSize , { (void*) (fontSize << 16) } } ,
-        {   kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , {  (void*) normal } } ,
-    } ;
+        Str255 fontName ;
+        SInt16 fontSize ;
+        Style fontStyle ;
 
-    verify_noerr( TXNSetTypeAttributes (m_txn, sizeof( typeAttr ) / sizeof(TXNTypeAttributes) , typeAttr,
-          kTXNStartOffset,
-          kTXNEndOffset) );
+        GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
 
+        TXNTypeAttributes typeAttr[] =
+        {
+            {   kTXNQDFontNameAttribute , kTXNQDFontNameAttributeSize , { (void*) fontName } } ,
+            {   kTXNQDFontSizeAttribute , kTXNFontSizeAttributeSize , { (void*) (fontSize << 16) } } ,
+            {   kTXNQDFontStyleAttribute , kTXNQDFontStyleAttributeSize , {  (void*) normal } } ,
+        } ;
+
+        verify_noerr( TXNSetTypeAttributes (m_txn, sizeof( typeAttr ) / sizeof(TXNTypeAttributes) , typeAttr,
+              kTXNStartOffset,
+              kTXNEndOffset) );
+    }
+    
     if ( m_windowStyle & wxTE_PASSWORD )
     {
         UniChar c = 0xA5 ;
