@@ -33,8 +33,31 @@ elif [ "$1" = "s" ]; then
 
 # "r" --> rpm dist
 elif [ "$1" = "r" ]; then
-    shift
-    CMD="$SETUP $OTHERFLAGS bdist_rpm"
+
+    # save the original
+    cp setup.py setup.py.save
+
+    # fix up setup.py the way we want...
+    sed "s/BUILD_GLCANVAS = /BUILD_GLCANVAS = 0 #/" < setup.py.save > setup.py.temp
+    sed "s/GL_ONLY = /GL_ONLY = 1 #/" < setup.py.temp > setup.py
+
+    # build wxPython-gl RPM
+    $SETUP $OTHERFLAGS bdist_rpm --binary-only --doc-files README.txt
+    rm dist/wxPython-gl*.tar.gz
+
+    # Build wxPython RPM
+    cp setup.py setup.py.temp
+    sed "s/GL_ONLY = /GL_ONLY = 0 #/" < setup.py.temp > setup.py
+    $SETUP $OTHERFLAGS bdist_rpm
+
+    # put the oringal back
+    cp setup.py.save setup.py
+    rm setup.py.*
+
+    # rebuild the source dist without the munched up setup.py
+    $SETUP $OTHERFLAGS sdist
+    exit 0
+
 
 # (no command arg) --> normal build for development
 else

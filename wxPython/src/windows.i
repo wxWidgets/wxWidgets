@@ -709,6 +709,10 @@ public:
     wxAcceleratorEntry *GetAccel();
     void SetAccel(wxAcceleratorEntry *accel);
 
+    static wxString GetLabelFromText(const wxString& text);
+
+    // TODO:  Add wxOwnerDrawn methods, also look at other ownerdrawn classes...
+
 };
 
 //---------------------------------------------------------------------------

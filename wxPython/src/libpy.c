@@ -405,13 +405,32 @@ SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type) {
   if (!PyString_Check(obj)) {
       if (!PyInstance_Check(obj) || !(sobj = PyObject_GetAttrString(obj,"this")))
           return "";
+      // PyObject_GetAttrString increases sobj refcout !
+      Py_DECREF(sobj);
   }
   str = PyString_AsString(sobj);
   return SWIG_GetPtr(str,ptr,type);
 }
 
+
 #ifdef __cplusplus
 }
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

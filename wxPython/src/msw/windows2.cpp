@@ -2185,7 +2185,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
     { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxPaintEvent","_wxPaintEvent",0},
@@ -2403,7 +2402,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxButton","_class_wxButton",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
     { "_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0},
@@ -2489,6 +2487,12 @@ SWIGEXPORT(void) initwindows2c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("windows2c", windows2cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_UNSPLIT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
 	 PyDict_SetItemString(d,"wxSPLIT_HORIZONTAL", PyInt_FromLong((long) wxSPLIT_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSPLIT_VERTICAL", PyInt_FromLong((long) wxSPLIT_VERTICAL));
 	 PyDict_SetItemString(d,"wxSPLIT_DRAG_NONE", PyInt_FromLong((long) wxSPLIT_DRAG_NONE));

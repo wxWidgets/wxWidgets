@@ -91,6 +91,25 @@ class wxPrintData(wxPrintDataPtr):
 
 
 
+class wxPrinterDCPtr(wxDCPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxPrinterDC instance at %s>" % (self.this,)
+class wxPrinterDC(wxPrinterDCPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(printfwc.new_wxPrinterDC,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPrinterDC2(*_args,**_kwargs):
+    val = wxPrinterDCPtr(apply(printfwc.new_wxPrinterDC2,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
 class wxPageSetupDialogDataPtr :
     def __init__(self,this):
         self.this = this

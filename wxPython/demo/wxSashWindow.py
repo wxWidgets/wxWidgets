@@ -15,7 +15,7 @@ class TestSashWindow(wxPanel):
 
         self.log = log
 
-        # will accupy the space not uised by the Layout Algorithm
+        # will occupy the space not used by the Layout Algorithm
         self.remainingSpace = wxPanel(self, -1, style=wxSUNKEN_BORDER)
 
         EVT_SASH_DRAGGED_RANGE(self, self.ID_WINDOW_TOP,

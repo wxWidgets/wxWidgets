@@ -361,6 +361,111 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static PyObject *_wrap_wxGetPasswordFromUser(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "message","caption","default_value","parent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOO:wxGetPasswordFromUser",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    if (_obj1)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGetPasswordFromUser. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetPasswordFromUser(*_arg0,*_arg1,*_arg2,_arg3));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
@@ -6594,6 +6699,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxMessageBox", (PyCFunction) _wrap_wxMessageBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetSingleChoiceIndex", (PyCFunction) _wrap_wxGetSingleChoiceIndex, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetSingleChoice", (PyCFunction) _wrap_wxGetSingleChoice, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetPasswordFromUser", (PyCFunction) _wrap_wxGetPasswordFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetTextFromUser", (PyCFunction) _wrap_wxGetTextFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSelector", (PyCFunction) _wrap_wxFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
@@ -6675,7 +6781,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
     { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_wxLogGui","_class_wxLogGui",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
@@ -6879,7 +6984,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxLogNull","_class_wxLogNull",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
     { "_class_wxLogTextCtrl","_wxLogTextCtrl",0},
     { "_class_wxLogGui","_wxLogGui",0},
@@ -7050,6 +7154,7 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxLOG_Trace", PyInt_FromLong((long) wxLOG_Trace));
 	 PyDict_SetItemString(d,"wxLOG_Progress", PyInt_FromLong((long) wxLOG_Progress));
 	 PyDict_SetItemString(d,"wxLOG_User", PyInt_FromLong((long) wxLOG_User));
+	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

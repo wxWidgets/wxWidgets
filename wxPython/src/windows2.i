@@ -242,6 +242,13 @@ enum {
 
 //---------------------------------------------------------------------------
 
+enum {
+     /* notebook control event types */
+    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+};
+
+
 class wxNotebookEvent : public wxNotifyEvent {
 public:
     int GetSelection();
@@ -304,6 +311,15 @@ public:
 //---------------------------------------------------------------------------
 
 
+enum {
+    /* splitter window events */
+    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,
+    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,
+    wxEVT_COMMAND_SPLITTER_UNSPLIT,
+    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
+};
+
+
 enum
 {
     wxSPLIT_HORIZONTAL,
@@ -311,7 +327,6 @@ enum
     wxSPLIT_DRAG_NONE,
     wxSPLIT_DRAG_DRAGGING,
     wxSPLIT_DRAG_LEFT_DOWN
-
 };
 
 

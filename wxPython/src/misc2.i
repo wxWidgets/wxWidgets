@@ -61,6 +61,11 @@ wxString wxGetTextFromUser(const wxString& message,
                            int x = -1, int y = -1,
                            bool centre = TRUE);
 
+wxString wxGetPasswordFromUser(const wxString& message,
+                               const wxString& caption = wxPyEmptyStr,
+                               const wxString& default_value = wxPyEmptyStr,
+                               wxWindow *parent = NULL);
+
 
 // TODO: Need to custom wrap this one...
 // int wxGetMultipleChoice(char* message, char* caption,
@@ -109,6 +114,7 @@ int wxGetDisplayDepth();
 
 void wxDisplaySize(int* OUTPUT, int* OUTPUT);
 wxSize wxGetDisplaySize();
+
 void wxDisplaySizeMM(int* OUTPUT, int* OUTPUT);
 wxSize wxGetDisplaySizeMM();
 
@@ -624,6 +630,13 @@ void wxLogSysError(const char *szFormat);
 
 
 //----------------------------------------------------------------------
+
+
+enum {
+    /* event type */
+    wxEVT_END_PROCESS
+};
+
 
 class wxProcessEvent : public wxEvent {
 public:

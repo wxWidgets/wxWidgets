@@ -2,7 +2,8 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-2.3b2
+
+2.2.5
 -----
 
 New typemaps for wxString when compiling for Python 2.0 and beyond
@@ -35,14 +36,30 @@ Fixed GOBS of reference leaks.
 
 Massive code changes and cleanup to allow wxPython to be split into
 multiple extension modules again.  A Python CObject is used to allow
-the "export" of SWIG and other common helper functions from the wxc
-module to other modules, even if they are in separate shared
+the "export" of SWIG functions and other common helper functions from
+the wxc module to other modules, even if they are in separate shared
 libraries.  Should also be usable from 3rd party code, just include
 wxPython/src/export.h
 
 Changed the default setup so the following are built as separate
 extension modules:  calendar, glcanvas, grid, html, ogl, stc, and
 utils.  Will probably add more later.
+
+Changed the wxPrinterDC to use the new constructor taking a
+wxPrintData object.  The old ctor is still there using the
+wxPrinterDC2 name.
+
+Added wxPython.lib.anchors.py from Riaan Booysen.  It contains a class
+that implements Delphi's Anchors with wxLayoutConstraints.
+
+Added wxPython.lib.fancytext from Timothy Hochberg.
+
+Changed the GenericButtons to send their event in idle time, so the
+mouse won't be captured when the event handler is called.
+
+Added wxPython.lib.rpcMixin from Greg Landrum, although it's not
+integrated with the demo yet.  It allows a wxPython GUI to be an
+XML-RPC server.
 
 
 

@@ -98,6 +98,20 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
+class  wxPrinterDC : public wxDC {
+public:
+    wxPrinterDC(const wxPrintData& printData);
+    %name(wxPrinterDC2) wxPrinterDC(const wxString& driver,
+                                    const wxString& device,
+                                    const wxString& output,
+                                    bool interactive = TRUE,
+                                    int orientation = wxPORTRAIT);
+};
+#endif
+
+//---------------------------------------------------------------------------
+
 class wxPageSetupDialogData {
 public:
     wxPageSetupDialogData();

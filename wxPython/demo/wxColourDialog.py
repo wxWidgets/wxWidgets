@@ -4,9 +4,8 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    data = wxColourData()
-    data.SetChooseFull(true)
-    dlg = wxColourDialog(frame, data)
+    dlg = wxColourDialog(frame)
+    dlg.GetColourData().SetChooseFull(true)
     if dlg.ShowModal() == wxID_OK:
         data = dlg.GetColourData()
         log.WriteText('You selected: %s\n' % str(data.GetColour().Get()))

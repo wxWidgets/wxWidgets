@@ -479,6 +479,8 @@ wxFileSelector = misc2c.wxFileSelector
 
 wxGetTextFromUser = misc2c.wxGetTextFromUser
 
+wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser
+
 wxGetSingleChoice = misc2c.wxGetSingleChoice
 
 wxGetSingleChoiceIndex = misc2c.wxGetSingleChoiceIndex
@@ -497,13 +499,6 @@ wxDisplaySize = misc2c.wxDisplaySize
 
 def wxGetDisplaySize(*_args, **_kwargs):
     val = apply(misc2c.wxGetDisplaySize,_args,_kwargs)
-    if val: val = wxSizePtr(val); val.thisown = 1
-    return val
-
-wxDisplaySizeMM = misc2c.wxDisplaySizeMM
-
-def wxGetDisplaySizeMM(*_args, **_kwargs):
-    val = apply(misc2c.wxGetDisplaySizeMM,_args,_kwargs)
     if val: val = wxSizePtr(val); val.thisown = 1
     return val
 

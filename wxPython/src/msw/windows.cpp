@@ -9462,7 +9462,54 @@ static PyObject *_wrap_wxMenuItem_SetAccel(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
+static PyObject *_wrap_wxMenuItem_GetLabelFromText(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "text", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMenuItem_GetLabelFromText",_kwnames,&_obj0)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxMenuItem::GetLabelFromText(*_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef windowscMethods[] = {
+	 { "wxMenuItem_GetLabelFromText", (PyCFunction) _wrap_wxMenuItem_GetLabelFromText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_SetAccel", (PyCFunction) _wrap_wxMenuItem_SetAccel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetAccel", (PyCFunction) _wrap_wxMenuItem_GetAccel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMenuItem_GetHelp", (PyCFunction) _wrap_wxMenuItem_GetHelp, METH_VARARGS | METH_KEYWORDS },
@@ -9791,7 +9838,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
     { "_wxPanel","_class_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_wxPanel","_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
@@ -9934,7 +9980,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_size_t",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
     { "_class_wxPyFileDropTarget","_wxPyFileDropTarget",0},

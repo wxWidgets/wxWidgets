@@ -779,20 +779,6 @@ class wxWindowDC(wxWindowDCPtr):
 
 
 
-class wxPrinterDCPtr(wxDCPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxPrinterDC instance at %s>" % (self.this,)
-class wxPrinterDC(wxPrinterDCPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(gdic.new_wxPrinterDC,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxMetaFileDCPtr(wxDCPtr):
     def __init__(self,this):
         self.this = this

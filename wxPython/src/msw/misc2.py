@@ -620,6 +620,8 @@ wxFileSelector = misc2c.wxFileSelector
 
 wxGetTextFromUser = misc2c.wxGetTextFromUser
 
+wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser
+
 wxGetSingleChoice = misc2c.wxGetSingleChoice
 
 wxGetSingleChoiceIndex = misc2c.wxGetSingleChoiceIndex
@@ -905,3 +907,4 @@ wxLOG_Debug = misc2c.wxLOG_Debug
 wxLOG_Trace = misc2c.wxLOG_Trace
 wxLOG_Progress = misc2c.wxLOG_Progress
 wxLOG_User = misc2c.wxLOG_User
+wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS

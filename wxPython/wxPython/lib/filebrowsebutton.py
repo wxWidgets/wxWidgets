@@ -31,7 +31,7 @@ class FileBrowseButton(wxPanel):
         startDirectory -- Default directory for file dialog startup
         fileMask -- File mask (glob pattern, such as *.*) to use in file dialog
         fileMode -- wxOPEN or wxSAVE, indicates type of file dialog to use
-        changeCallback -- callback receives all changes in value of control
+        changeCallback -- callback receives all > > changes in value of control
     )
     GetValue() -- retrieve current value of text control
     SetValue(string) -- set current value of text control

@@ -91,6 +91,28 @@ enum wxListColumnFormat
 };
 
 
+enum {
+    /* List control event types */
+    wxEVT_COMMAND_LIST_BEGIN_DRAG,
+    wxEVT_COMMAND_LIST_BEGIN_RDRAG,
+    wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT,
+    wxEVT_COMMAND_LIST_END_LABEL_EDIT,
+    wxEVT_COMMAND_LIST_DELETE_ITEM,
+    wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS,
+    wxEVT_COMMAND_LIST_GET_INFO,
+    wxEVT_COMMAND_LIST_SET_INFO,
+    wxEVT_COMMAND_LIST_ITEM_SELECTED,
+    wxEVT_COMMAND_LIST_ITEM_DESELECTED,
+    wxEVT_COMMAND_LIST_KEY_DOWN,
+    wxEVT_COMMAND_LIST_INSERT_ITEM,
+    wxEVT_COMMAND_LIST_COL_CLICK,
+    wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+    wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
+    wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
+};
+
+
+
 class wxListItemAttr
 {
 public:
@@ -218,6 +240,7 @@ public:
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
 
     bool Arrange(int flag = wxLIST_ALIGN_DEFAULT);
+    void AssignImageList(wxImageList* imageList, int which);
     bool DeleteItem(long item);
     bool DeleteAllItems();
     bool DeleteColumn(int col);
@@ -367,6 +390,28 @@ enum {
 };
 
 
+enum {
+    /* Tree control event types */
+    wxEVT_COMMAND_TREE_BEGIN_DRAG,
+    wxEVT_COMMAND_TREE_BEGIN_RDRAG,
+    wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT,
+    wxEVT_COMMAND_TREE_END_LABEL_EDIT,
+    wxEVT_COMMAND_TREE_DELETE_ITEM,
+    wxEVT_COMMAND_TREE_GET_INFO,
+    wxEVT_COMMAND_TREE_SET_INFO,
+    wxEVT_COMMAND_TREE_ITEM_EXPANDED,
+    wxEVT_COMMAND_TREE_ITEM_EXPANDING,
+    wxEVT_COMMAND_TREE_ITEM_COLLAPSED,
+    wxEVT_COMMAND_TREE_ITEM_COLLAPSING,
+    wxEVT_COMMAND_TREE_SEL_CHANGED,
+    wxEVT_COMMAND_TREE_SEL_CHANGING,
+    wxEVT_COMMAND_TREE_KEY_DOWN,
+    wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
+    wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
+    wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,
+};
+
+
 class wxTreeItemId {
 public:
     wxTreeItemId();
@@ -491,12 +536,13 @@ public:
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:self._setSelf(self, wxTreeCtrl)"
 
+    void AssignImageList(wxImageList* imageList);
     size_t GetCount();
     unsigned int GetIndent();
     void SetIndent(unsigned int indent);
     wxImageList *GetImageList();
     wxImageList *GetStateImageList();
-    void SetImageList(wxImageList *imageList/*, int which = wxIMAGE_LIST_NORMAL*/);
+    void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
 
     unsigned int GetSpacing();
@@ -700,6 +746,15 @@ public:
 
 #ifdef SKIPTHIS
 #ifdef __WXMSW__
+
+
+enum {
+     /* tab control event types */
+    wxEVT_COMMAND_TAB_SEL_CHANGED,
+    wxEVT_COMMAND_TAB_SEL_CHANGING,
+};
+
+
 class wxTabEvent : public wxCommandEvent {
 public:
 };

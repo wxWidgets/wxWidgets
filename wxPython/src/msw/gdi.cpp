@@ -7520,115 +7520,6 @@ static PyObject *_wrap_new_wxWindowDC(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-static void *SwigwxPrinterDCTowxDC(void *ptr) {
-    wxPrinterDC *src;
-    wxDC *dest;
-    src = (wxPrinterDC *) ptr;
-    dest = (wxDC *) src;
-    return (void *) dest;
-}
-
-#define new_wxPrinterDC(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxPrinterDC(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
-static PyObject *_wrap_new_wxPrinterDC(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrinterDC * _result;
-    wxString * _arg0;
-    wxString * _arg1;
-    wxString * _arg2;
-    bool  _arg3 = (bool ) TRUE;
-    int  _arg4 = (int ) wxPORTRAIT;
-    PyObject * _obj0 = 0;
-    PyObject * _obj1 = 0;
-    PyObject * _obj2 = 0;
-    int tempbool3 = (int) TRUE;
-    char *_kwnames[] = { "driver","device","output","interactive","orientation", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|ii:new_wxPrinterDC",_kwnames,&_obj0,&_obj1,&_obj2,&tempbool3,&_arg4)) 
-        return NULL;
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
-}
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
-}
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
-}
-    _arg3 = (bool ) tempbool3;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPrinterDC *)new_wxPrinterDC(*_arg0,*_arg1,*_arg2,_arg3,_arg4);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrinterDC_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-{
-    if (_obj1)
-        delete _arg1;
-}
-{
-    if (_obj2)
-        delete _arg2;
-}
-    return _resultobj;
-}
-
 static void *SwigwxMetaFileDCTowxDC(void *ptr) {
     wxMetaFileDC *src;
     wxDC *dest;
@@ -8347,7 +8238,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxPalette", (PyCFunction) _wrap_new_wxPalette, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMetaFileDC_Close", (PyCFunction) _wrap_wxMetaFileDC_Close, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMetaFileDC", (PyCFunction) _wrap_new_wxMetaFileDC, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxPrinterDC", (PyCFunction) _wrap_new_wxPrinterDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindowDC", (PyCFunction) _wrap_new_wxWindowDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPaintDC", (PyCFunction) _wrap_new_wxPaintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClientDC", (PyCFunction) _wrap_new_wxClientDC, METH_VARARGS | METH_KEYWORDS },
@@ -8583,8 +8473,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_wxDC","_class_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
     { "_wxDC","_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
-    { "_wxDC","_class_wxPrinterDC",SwigwxPrinterDCTowxDC},
-    { "_wxDC","_wxPrinterDC",SwigwxPrinterDCTowxDC},
     { "_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC},
@@ -8604,7 +8492,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_class_wxMask","_wxMask",0},
     { "_wxColour","_class_wxColour",0},
     { "_wxBrush","_class_wxBrush",0},
@@ -8633,8 +8520,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_class_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
     { "_class_wxDC","_wxMetaFileDC",SwigwxMetaFileDCTowxDC},
-    { "_class_wxDC","_class_wxPrinterDC",SwigwxPrinterDCTowxDC},
-    { "_class_wxDC","_wxPrinterDC",SwigwxPrinterDCTowxDC},
     { "_class_wxDC","_class_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_class_wxDC","_wxWindowDC",SwigwxWindowDCTowxDC},
     { "_class_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC},
@@ -8715,7 +8600,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_time_t","_size_t",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_class_wxIcon","_wxIcon",0},

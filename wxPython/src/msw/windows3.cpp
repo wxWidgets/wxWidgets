@@ -1810,7 +1810,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_uint",0},
     { "_class_wxRealPoint","_wxRealPoint",0},
     { "_wxNavigationKeyEvent","_class_wxNavigationKeyEvent",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxPaintEvent","_wxPaintEvent",0},
@@ -2047,7 +2046,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxButton","_class_wxButton",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_class_wxPyTextDataObject","_wxPyTextDataObject",0},
     { "_class_wxMDIParentFrame","_wxMDIParentFrame",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
@@ -2141,6 +2139,9 @@ SWIGEXPORT(void) initwindows3c() {
 	 PyDict_SetItemString(d,"wxSASH_NONE", PyInt_FromLong((long) wxSASH_NONE));
 	 PyDict_SetItemString(d,"wxEVT_SASH_DRAGGED", PyInt_FromLong((long) wxEVT_SASH_DRAGGED));
 	 PyDict_SetItemString(d,"wxSW_3D", PyInt_FromLong((long) wxSW_3D));
+	 PyDict_SetItemString(d,"wxSW_3DSASH", PyInt_FromLong((long) wxSW_3DSASH));
+	 PyDict_SetItemString(d,"wxSW_3DBORDER", PyInt_FromLong((long) wxSW_3DBORDER));
+	 PyDict_SetItemString(d,"wxSW_BORDER", PyInt_FromLong((long) wxSW_BORDER));
 	 PyDict_SetItemString(d,"wxSASH_STATUS_OK", PyInt_FromLong((long) wxSASH_STATUS_OK));
 	 PyDict_SetItemString(d,"wxSASH_STATUS_OUT_OF_RANGE", PyInt_FromLong((long) wxSASH_STATUS_OUT_OF_RANGE));
 	 PyDict_SetItemString(d,"wxLAYOUT_HORIZONTAL", PyInt_FromLong((long) wxLAYOUT_HORIZONTAL));

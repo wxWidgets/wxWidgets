@@ -2137,6 +2137,9 @@ SWIGEXPORT(void) initwindows3c() {
 	 PyDict_SetItemString(d,"wxSASH_NONE", PyInt_FromLong((long) wxSASH_NONE));
 	 PyDict_SetItemString(d,"wxEVT_SASH_DRAGGED", PyInt_FromLong((long) wxEVT_SASH_DRAGGED));
 	 PyDict_SetItemString(d,"wxSW_3D", PyInt_FromLong((long) wxSW_3D));
+	 PyDict_SetItemString(d,"wxSW_3DSASH", PyInt_FromLong((long) wxSW_3DSASH));
+	 PyDict_SetItemString(d,"wxSW_3DBORDER", PyInt_FromLong((long) wxSW_3DBORDER));
+	 PyDict_SetItemString(d,"wxSW_BORDER", PyInt_FromLong((long) wxSW_BORDER));
 	 PyDict_SetItemString(d,"wxSASH_STATUS_OK", PyInt_FromLong((long) wxSASH_STATUS_OK));
 	 PyDict_SetItemString(d,"wxSASH_STATUS_OUT_OF_RANGE", PyInt_FromLong((long) wxSASH_STATUS_OUT_OF_RANGE));
 	 PyDict_SetItemString(d,"wxLAYOUT_HORIZONTAL", PyInt_FromLong((long) wxLAYOUT_HORIZONTAL));

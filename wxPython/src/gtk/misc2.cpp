@@ -361,6 +361,111 @@ static PyObject *_wrap_wxGetTextFromUser(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+static PyObject *_wrap_wxGetPasswordFromUser(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    wxString * _arg1 = (wxString *) &wxPyEmptyStr;
+    wxString * _arg2 = (wxString *) &wxPyEmptyStr;
+    wxWindow * _arg3 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "message","caption","default_value","parent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OOO:wxGetPasswordFromUser",_kwnames,&_obj0,&_obj1,&_obj2,&_argo3)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    if (_obj1)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    if (_obj2)
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxGetPasswordFromUser. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxGetPasswordFromUser(*_arg0,*_arg1,*_arg2,_arg3));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxGetSingleChoice(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _result;
@@ -858,62 +963,6 @@ static PyObject *_wrap_wxGetDisplaySize(PyObject *self, PyObject *args, PyObject
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = new wxSize (wxGetDisplaySize());
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int * _arg0;
-    int  temp;
-    int * _arg1;
-    int  temp0;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-{
-  _arg0 = &temp;
-}
-{
-  _arg1 = &temp0;
-}
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplaySizeMM",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxDisplaySizeMM(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg0));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxGetDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetDisplaySizeMM",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxGetDisplaySizeMM());
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
@@ -5362,8 +5411,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGetDisplaySizeMM", (PyCFunction) _wrap_wxGetDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDisplaySizeMM", (PyCFunction) _wrap_wxDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplaySize", (PyCFunction) _wrap_wxGetDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetDisplayDepth", (PyCFunction) _wrap_wxGetDisplayDepth, METH_VARARGS | METH_KEYWORDS },
@@ -5373,6 +5420,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxMessageBox", (PyCFunction) _wrap_wxMessageBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetSingleChoiceIndex", (PyCFunction) _wrap_wxGetSingleChoiceIndex, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetSingleChoice", (PyCFunction) _wrap_wxGetSingleChoice, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetPasswordFromUser", (PyCFunction) _wrap_wxGetPasswordFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetTextFromUser", (PyCFunction) _wrap_wxGetTextFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSelector", (PyCFunction) _wrap_wxFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }

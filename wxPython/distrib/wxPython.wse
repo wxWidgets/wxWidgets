@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=6.01
-  Title=wxPython 2.3 Installation
+  Title=wxPython 2.2 Installation
   Flags=10010111
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   Japanese Font Name=MS Gothic
@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.3b1.exe
+  EXE Filename=wxPython-2.2.5-PyXX.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -55,12 +55,12 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxPython 2.3
+  Value=wxPython 2.2
   Flags=10000000
 end
 item: Set Variable
   Variable=GROUP
-  Value=wxPython 2.3
+  Value=wxPython 2.2
   Flags=10000000
 end
 item: Set Variable
@@ -72,16 +72,16 @@ item: Set Variable
   Value=wxPython
   Flags=10000000
 end
-item: Check Configuration
-  Flags=10111011
-end
 item: Remark
 end
 item: Set Variable
   Variable=PYTHONVER
-  Value=2.0
+  Value=1.5
 end
 item: Remark
+end
+item: Check Configuration
+  Flags=10111011
 end
 item: Get Registry Key Value
   Variable=PYTHONDIR
@@ -814,8 +814,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=c:\projects\wx\lib\wx23_0.dll
-  Destination=%MAINDIR%\wxPython\wx23_0.dll
+  Source=c:\projects\wx\lib\wx22_5.dll
+  Destination=%MAINDIR%\wxPython\wx22_5.dll
   Flags=0000000010010010
 end
 item: Install File
@@ -909,7 +909,7 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\Projects\wx\wxPython\demo\data\*.htm
+  Source=c:\Projects\wx\wxPython\demo\data\*.html
   Destination=%MAINDIR%\wxPython\demo\data
   Description=Demos
   Flags=0000000010000010
@@ -965,7 +965,7 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
-  Source=c:\PROJECTS\wx\docs\html\ogl\ogl.chm
+  Source=c:\PROJECTS\wx\docs\htmlhelp\ogl.chm
   Destination=%MAINDIR%\wxPython\docs\ogl.chm
   Description=wxPython documentation
   Flags=0000000010000010

@@ -47,6 +47,9 @@ enum wxSashEdgePosition {
 enum {
     wxEVT_SASH_DRAGGED,
     wxSW_3D,
+    wxSW_3DSASH,
+    wxSW_3DBORDER,
+    wxSW_BORDER
 };
 
 enum wxSashDragStatus

@@ -594,15 +594,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-#ifdef __WXMSW__
-class  wxPrinterDC : public wxDC {
-public:
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output,
-                bool interactive = TRUE, int orientation = wxPORTRAIT);
-};
-#endif
-
-//---------------------------------------------------------------------------
 
 #ifdef __WXMSW__
 class wxMetaFileDC : public wxDC {

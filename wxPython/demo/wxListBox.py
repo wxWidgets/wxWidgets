@@ -66,7 +66,7 @@ class TestListBox(wxPanel):
         EVT_LISTBOX(self, 60, self.EvtListBox)
         EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
         EVT_RIGHT_UP(self.lb1, self.EvtRightButton)
-        self.lb1.SetSelection(0)
+        self.lb1.SetSelection(3)
 
 
         wxStaticText(self, -1, "Select many:", wxPoint(200, 50), wxSize(65, 18))
