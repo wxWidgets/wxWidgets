@@ -929,5 +929,9 @@
 // NOW MANDATORY: don't change.
 #define wxUSE_DYNAMIC_CLASSES     1
 
+// Set to 0 for no libmspack
+#define wxUSE_LIBMSPACK     0
+
+
 #endif
     // _WX_SETUP_H_
