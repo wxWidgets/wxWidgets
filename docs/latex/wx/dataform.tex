@@ -1,0 +1,115 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        dataform.tex
+%% Purpose:     wxDataFormat documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     03.11.99
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Vadim Zeitlin
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDataFormat}}\label{wxdataformat}
+
+A wxDataFormat is an encapsulation of a platform-specific format handle which
+is used by the system for the clipboard and drag and drop operations. The
+applications are usually only interested in, for example, pasting data from the
+clipboard only if the data is in a format the program understands and a data
+format is something which uniquely identifies this format.
+
+On the system level, a data format is usually just a number ({\tt CLIPFORMAT}
+under Windows or {\tt Atom} under X11, for example) and the standard formats
+are, indeed, just numbers which can be implicitly converted to wxDataFormat.
+The standard formats are:
+
+\begin{twocollist}\itemsep=1cm
+\twocolitem{wxDF\_INVALID}{An invalid format - used as default argument for
+functions taking a wxDataFormat argument sometimes}
+\twocolitem{wxDF\_TEXT}{Text format (wxString)}
+\twocolitem{wxDF\_BITMAP}{A bitmap (wxBitmap)}
+\twocolitem{wxDF\_METAFILE}{A metafile (wxMetafile, Windows only)}
+\twocolitem{wxDF\_FILENAME}{A list of filenames}
+\end{twocollist}
+
+As mentioned above, these standard formats may be passed to any function taking
+wxDataFormat argument because wxDataFormat has an implicit conversion from
+them (or, to be precise from the type {\tt wxDataFormat::NativeFormat} which is
+the type used by the underlying platform for data formats).
+
+Aside the standard formats, the application may also use custom formats which
+are identified by their names (strings) and not numeric identifiers. Although
+internally custom format must be created (or {\it registered}) first, you
+shouldn't care about it because it is done automatically the first time the
+wxDataFormat object corresponding to a given format name is created. The only
+implication of this is that you should avoid having global wxDataFormat objects
+with non-default constructor because their constructors are executed before the
+program has time to perform all necessary initialisations and so an attempt to
+do clipboard format registration at this time will usually lead to a crash!
+
+\wxheading{Virtual functions to override}
+
+None, this class doesn't have any.
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{See also}
+
+\helpref{Clipboard and drag and drop overview}{wxdndoverview}, 
+\helpref{DnD sample}{samplednd}, 
+\helpref{wxDataObject}{wxdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDataFormat::wxDataFormat}\label{wxdataformatwxdataformatdef}
+
+\func{}{wxDataFormat}{\param{NativeFormat}{ format = wxDF\_INVALID}}
+
+Constructs a data format object for one of the standard data formats or an
+empty data object (use \helpref{SetType}{wxdataformatsettype} or 
+\helpref{SetId}{wxdataformatsetid} later in this case)
+
+\membersection{wxDataFormat::wxDataFormat}\label{wxdataformatwxdataformat}
+
+\func{}{wxDataFormat}{\param{const wxChar }{*format}}
+
+Constructs a data format object for a custom format identified by its name 
+{\it format}.
+
+\membersection{wxDataFormat::operator $==$}\label{wxdataformatoperatoreq}
+
+\constfunc{bool}{operator $==$}{\param{const wxDataFormat\&}{ format}}
+
+Returns TRUE if the formats are equal.
+
+\membersection{wxDataFormat::operator $!=$}\label{wxdataformatoperatorneq}
+
+\constfunc{bool}{operator $!=$}{\param{const wxDataFormat\&}{ format}}
+
+Returns TRUE if the formats are different.
+
+\membersection{wxDataFormat::GetId}\label{wxdataformatgetid}
+
+\constfunc{wxString}{GetId}{\void}
+
+Returns the name of a custom format (this function will fail for a standard
+format).
+
+\membersection{wxDataFormat::GetType}\label{wxdataformatgettype}
+
+\constfunc{NativeFormat}{GetType}{\void}
+
+Returns the platform-specific number identifying the format.
+
+\membersection{wxDataFormat::SetId}\label{wxdataformatsetid}
+
+\func{void}{SetId}{\param{const wxChar }{*format}}
+
+Sets the format to be the custom format identified by the given name.
+
+\membersection{wxDataFormat::SetType}\label{wxdataformatsettype}
+
+\func{void}{SetType}{\param{NativeFormat}{ format}}
+
+Sets the format to the given value which should be one of wxDF\_XXX constants.

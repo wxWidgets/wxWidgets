@@ -53,18 +53,18 @@ because it achievs this by simply holding several wxDataObjectSimple objects.
 So, you have several solutions when you need a wxDataObject class (and you need
 one as soon as you want to transfer data via the clipboard or drag and drop):
 
-\begin{twocollist}\itemsep=0pt
-\twocolitem{0. Use one of built-in classes}{You may use wxTextDataObject,
+\begin{twocollist}\itemsep=1cm
+\twocolitem{{\bf 0. Use one of built-in classes}}{You may use wxTextDataObject,
 wxBitmapDataObject or wxFileDataObject in the simplest cases when you only need
 to support one format and your data is either text, bitmap or list of files.}
-\twocolitem{1. Derive your class from wxDataObjectSimple}{This is the simplest
+\twocolitem{{\bf 1. Use wxDataObjectSimple}}{Deriving from wxDataObjectSimple is the simplest
 solution for custom data - you will only support one format and so probably
 won't be able to communicate with other programs, but data transfer will work
 in your program (or between different copies of it).}
-\twocolitem{2. Use wxDataObjectComposite}{This is a simple but powerful
+\twocolitem{{\bf 2. Use wxDataObjectComposite}}{This is a simple but powerful
 solution which allows you to support any number of formats (either
 standard or custom if you combine it with the previous solution).}
-\twocolitem{3. Derive from wxDataObject directly}{This is the solution for
+\twocolitem{{\bf 3. Use wxDataObject directly}}{This is the solution for
 maximal flexibility and efficiency, but it also is the most difficult to
 implement.}
 \end{twocollist}
