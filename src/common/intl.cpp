@@ -1078,7 +1078,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
       FIXME: UNICODE SUPPORT: must use CHARSET specifier!
    */
    wxString szName = szName0;
-   if(szName.Find(wxT('.')) != -1) // contains a dot
+   if(szName.Find(wxT('.')) != wxNOT_FOUND) // contains a dot
       szName = szName.Left(szName.Find(wxT('.')));
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
@@ -1108,7 +1108,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
     wxLogVerbose(_("catalog file for domain '%s' not found."), szName.c_str());
-    return FALSE;
+    return false;
   }
 
   // open file
@@ -1117,18 +1117,18 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
 
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
-    return FALSE;
+    return false;
 
   // get the file size
   off_t nSize = fileMsg.Length();
   if ( nSize == wxInvalidOffset )
-    return FALSE;
+    return false;
 
   // read the whole file in memory
   m_pData = new size_t8[nSize];
   if ( fileMsg.Read(m_pData, nSize) != nSize ) {
     wxDELETEA(m_pData);
-    return FALSE;
+    return false;
   }
 
   // examine header
@@ -1148,7 +1148,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
     wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
 
     wxDELETEA(m_pData);
-    return FALSE;
+    return false;
   }
 
   // initialize
@@ -1222,7 +1222,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 {
 #if wxUSE_WCHAR_T
     wxCSConv *csConv = NULL;
-    if ( !!m_charset )
+    if ( !m_charset.IsEmpty() )
         csConv = new wxCSConv(m_charset);
 
     wxMBConv& inputConv = csConv ? *((wxMBConv*)csConv) : *wxConvCurrent;
@@ -1234,15 +1234,15 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #elif wxUSE_FONTMAP
     wxASSERT_MSG( msgIdCharset == NULL,
                   _T("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
-    
+
     wxEncodingConverter converter;
     if ( convertEncoding )
     {
         wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(m_charset, FALSE);
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(m_charset, false);
         if ( enc == wxFONTENCODING_SYSTEM )
         {
-            convertEncoding = FALSE; // unknown encoding
+            convertEncoding = false; // unknown encoding
         }
         else
         {
@@ -1252,10 +1252,10 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                 wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
                 if (a[0] == enc)
                     // no conversion needed, locale uses native encoding
-                    convertEncoding = FALSE;
+                    convertEncoding = false;
                 if (a.GetCount() == 0)
                     // we don't know common equiv. under this platform
-                    convertEncoding = FALSE;
+                    convertEncoding = false;
                 targetEnc = a[0];
             }
         }
@@ -1338,10 +1338,10 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
     if ( file.Load(szDirPrefix, szName, m_pluralFormsCalculator) )
     {
         file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 const wxChar *wxMsgCatalog::GetString(const wxChar *sz, size_t n) const
@@ -1425,7 +1425,7 @@ bool wxLocale::Init(const wxChar *szName,
     // the argument to setlocale()
     szLocale = szShort;
 
-    wxCHECK_MSG( szLocale, FALSE, _T("no locale to set in wxLocale::Init()") );
+    wxCHECK_MSG( szLocale, false, _T("no locale to set in wxLocale::Init()") );
   }
 
 #ifdef __WXWINCE__
@@ -1471,7 +1471,7 @@ bool wxLocale::Init(const wxChar *szName,
 
   // load the default catalog with wxWidgets standard messages
   m_pMsgCat = NULL;
-  bool bOk = TRUE;
+  bool bOk = true;
   if ( bLoadDefault )
     bOk = AddCatalog(wxT("wxstd"));
 
@@ -1485,24 +1485,24 @@ static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
     wxMB2WXbuf l = wxSetlocale(c, lc);
     if ( !l && lc && lc[0] != 0 )
     {
-    	wxString buf(lc);
+        wxString buf(lc);
         wxString buf2;
-    	buf2 = buf + wxT(".UTF-8");
-    	l = wxSetlocale(c, buf2.c_str());
+        buf2 = buf + wxT(".UTF-8");
+        l = wxSetlocale(c, buf2.c_str());
         if ( !l )
         {
             buf2 = buf + wxT(".utf-8");
-    	    l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2.c_str());
         }
         if ( !l )
         {
             buf2 = buf + wxT(".UTF8");
-    	    l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2.c_str());
         }
         if ( !l )
         {
             buf2 = buf + wxT(".utf8");
-    	    l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2.c_str());
         }
     }
     return l;
@@ -1523,7 +1523,7 @@ bool wxLocale::Init(int language, int flags)
     // We failed to detect system language, so we will use English:
     if (lang == wxLANGUAGE_UNKNOWN)
     {
-       return FALSE;
+       return false;
     }
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
@@ -1532,7 +1532,7 @@ bool wxLocale::Init(int language, int flags)
     if (info == NULL)
     {
         wxLogError(wxT("Unknown language %i."), lang);
-        return FALSE;
+        return false;
     }
 
     wxString name = info->Description;
@@ -1580,7 +1580,7 @@ bool wxLocale::Init(int language, int flags)
     if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to '%s'."), locale.c_str());
-        return FALSE;
+        return false;
     }
 #elif defined(__WIN32__)
 
@@ -1637,7 +1637,7 @@ bool wxLocale::Init(int language, int flags)
             {
                 wxLogLastError(wxT("SetThreadLocale"));
                 wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-                return FALSE;
+                return false;
             }
             else
             {
@@ -1679,12 +1679,12 @@ bool wxLocale::Init(int language, int flags)
     if ( !retloc )
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-        return FALSE;
+        return false;
     }
 #elif defined(__WXMAC__) || defined(__WXPM__)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
-    return FALSE;
+    return false;
     #define WX_NO_LOCALE_SUPPORT
 #endif
 
@@ -2285,11 +2285,11 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         return wxFONTENCODING_CP950;
     }
 #elif defined(__WXMAC__)
-	TextEncoding encoding = 0 ;
+    TextEncoding encoding = 0 ;
 #if TARGET_CARBON
-	encoding = CFStringGetSystemEncoding() ;
+    encoding = CFStringGetSystemEncoding() ;
 #else
-	 UpgradeScriptInfoToTextEncoding ( smSystemScript , kTextLanguageDontCare , kTextRegionDontCare , NULL , &encoding ) ;
+    UpgradeScriptInfoToTextEncoding ( smSystemScript , kTextLanguageDontCare , kTextRegionDontCare , NULL , &encoding ) ;
 #endif
     return wxMacGetFontEncFromSystemEnc( encoding ) ;
 #elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
@@ -2297,7 +2297,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     if ( !encname.empty() )
     {
         wxFontEncoding enc = wxFontMapper::Get()->
-            CharsetToEncoding(encname, FALSE /* not interactive */);
+            CharsetToEncoding(encname, false /* not interactive */);
 
         // on some modern Linux systems (RedHat 8) the default system locale
         // is UTF8 -- but it isn't supported by wxGTK in ANSI build at all so
@@ -2538,11 +2538,11 @@ wxString wxLocale::GetHeaderValue( const wxChar* szHeader,
     wxChar const * pszFound = wxStrstr(pszTrans, szHeader);
     if ( pszFound == NULL )
       return wxEmptyString;
-    
+
     pszFound += wxStrlen(szHeader) + 2 /* ': ' */;
 
     // Every header is separated by \n
-    
+
     wxChar const * pszEndLine = wxStrchr(pszFound, wxT('\n'));
     if ( pszEndLine == NULL ) pszEndLine = pszFound + wxStrlen(pszFound);
 
@@ -2736,7 +2736,7 @@ class wxLocaleModule: public wxModule
     DECLARE_DYNAMIC_CLASS(wxLocaleModule)
     public:
         wxLocaleModule() {}
-        bool OnInit() { return TRUE; }
+        bool OnInit() { return true; }
         void OnExit() { wxLocale::DestroyLanguagesDB(); }
 };
 

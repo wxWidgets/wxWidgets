@@ -321,7 +321,7 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
     unsigned char hdr[4];
 
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
+        return false;
 
     return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
 }
@@ -600,7 +600,7 @@ wxPNGHandler::LoadFile(wxImage *image,
         free( lines[i] );
     free( lines );
 
-    return TRUE;
+    return true;
 
 error:
     if (verbose)
@@ -626,7 +626,7 @@ error:
         else
             png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
     }
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -645,7 +645,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     {
         if (verbose)
            wxLogError(_("Couldn't save PNG image."));
-        return FALSE;
+        return false;
     }
 
     png_set_error_fn(png_ptr, (png_voidp)NULL, wx_png_error, wx_png_warning);
@@ -656,7 +656,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
         if (verbose)
            wxLogError(_("Couldn't save PNG image."));
-        return FALSE;
+        return false;
     }
 
     if (setjmp(wxinfo.jmpbuf))
@@ -664,7 +664,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
         if (verbose)
            wxLogError(_("Couldn't save PNG image."));
-        return FALSE;
+        return false;
     }
 
     // NB: please see the comment near wxPNGInfoStruct declaration for
@@ -689,7 +689,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     if (!data)
     {
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
-        return FALSE;
+        return false;
     }
 
     for (int y = 0; y < image->GetHeight(); y++)
@@ -724,7 +724,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     png_write_end( png_ptr, info_ptr );
     png_destroy_write_struct( &png_ptr, (png_infopp)&info_ptr );
 
-    return TRUE;
+    return true;
 }
 
 #ifdef __VISUALC__

@@ -231,7 +231,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
 {
     if( xFactor == 1 && yFactor == 1 )
         return Copy() ;
-        
+
     wxImage image;
 
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
@@ -242,7 +242,7 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
 
     long old_height = M_IMGDATA->m_height,
          old_width  = M_IMGDATA->m_width;
-         
+
     wxCHECK_MSG( (old_height > 0) && (old_width > 0), image,
                  wxT("invalid old image size") );
 
@@ -265,14 +265,14 @@ wxImage wxImage::ShrinkBy( int xFactor , int yFactor ) const
         maskRed = M_IMGDATA->m_maskRed;
         maskGreen = M_IMGDATA->m_maskGreen;
         maskBlue =M_IMGDATA->m_maskBlue ;
-      
+
         image.SetMaskColour( M_IMGDATA->m_maskRed,
                              M_IMGDATA->m_maskGreen,
                              M_IMGDATA->m_maskBlue );
     }
     char unsigned *source_data = M_IMGDATA->m_data;
     char unsigned *target_data = data;
-    
+
     for (long y = 0; y < height; y++)
     {
         for (long x = 0; x < width; x++)
@@ -935,7 +935,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
 
     return true;
 }
-    
+
 bool wxImage::ConvertAlphaToMask(unsigned char threshold)
 {
     if (!HasAlpha())

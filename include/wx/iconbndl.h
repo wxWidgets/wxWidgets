@@ -60,7 +60,7 @@ public:
     // returns the first icon in the bundle
     const wxIcon& GetIcon( const wxSize& size ) const;
     // equivalent to GetIcon( wxSize( size, size ) )
-    const wxIcon& GetIcon( wxCoord size = -1 ) const
+    const wxIcon& GetIcon( wxCoord size = wxDefaultCoord ) const
         { return GetIcon( wxSize( size, size ) ); }
 private:
     // delete all icons

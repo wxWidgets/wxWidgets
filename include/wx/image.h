@@ -52,8 +52,8 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
 
     virtual int GetImageCount( wxInputStream& stream );
 
@@ -138,7 +138,7 @@ class WXDLLEXPORT wxImage: public wxObject
 public:
     wxImage();
     wxImage( int width, int height, bool clear = true );
-    wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
+    wxImage( int width, int height, unsigned char* data, bool static_data = false );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
 
@@ -151,7 +151,7 @@ public:
     wxImage( const wxImage* image );
 
     bool Create( int width, int height, bool clear = true );
-    bool Create( int width, int height, unsigned char* data, bool static_data = FALSE );
+    bool Create( int width, int height, unsigned char* data, bool static_data = false );
     void Destroy();
 
     // creates an identical copy of the image (the = operator
@@ -176,10 +176,10 @@ public:
     // Rotates the image about the given point, 'angle' radians.
     // Returns the rotated image, leaving this image intact.
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const;
+                   bool interpolating = true, wxPoint * offset_after_rotation = (wxPoint*) NULL) const;
 
-    wxImage Rotate90( bool clockwise = TRUE ) const;
-    wxImage Mirror( bool horizontally = TRUE ) const;
+    wxImage Rotate90( bool clockwise = true ) const;
+    wxImage Mirror( bool horizontally = true ) const;
 
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
@@ -251,7 +251,7 @@ public:
     unsigned char GetMaskRed() const;
     unsigned char GetMaskGreen() const;
     unsigned char GetMaskBlue() const;
-    void SetMask( bool mask = TRUE );
+    void SetMask( bool mask = true );
     bool HasMask() const;
 
 #if wxUSE_PALETTE

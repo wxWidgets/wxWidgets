@@ -76,7 +76,7 @@ bool wxBMPHandler::SaveFile(wxImage *image,
                             wxOutputStream& stream,
                             bool verbose)
 {
-    return SaveDib(image, stream, verbose, TRUE/*IsBmp*/, FALSE/*IsMask*/);
+    return SaveDib(image, stream, verbose, true/*IsBmp*/, false/*IsMask*/);
 }
 
 bool wxBMPHandler::SaveDib(wxImage *image,
@@ -86,13 +86,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
                            bool IsMask)
 
 {
-    wxCHECK_MSG( image, FALSE, _T("invalid pointer in wxBMPHandler::SaveFile") );
+    wxCHECK_MSG( image, false, _T("invalid pointer in wxBMPHandler::SaveFile") );
 
     if ( !image->Ok() )
     {
         if ( verbose )
             wxLogError(_("BMP: Couldn't save invalid image."));
-        return FALSE;
+        return false;
     }
 
     // get the format of the BMP file to save, else use 24bpp
@@ -126,7 +126,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         {
             if ( verbose )
                 wxLogError(_("BMP: wxImage doesn't have own wxPalette."));
-            return FALSE;
+            return false;
         }
         bpp = 8;
         palette_size = 256;
@@ -201,7 +201,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         {
             if (verbose)
                 wxLogError(_("BMP: Couldn't write the file (Bitmap) header."));
-            return FALSE;
+            return false;
         }
     }
     if ( !IsMask )
@@ -222,7 +222,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         {
             if (verbose)
                 wxLogError(_("BMP: Couldn't write the file (BitmapInfo) header."));
-            return FALSE;
+            return false;
         }
     }
 
@@ -301,7 +301,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
                 delete palette;
 #endif // wxUSE_PALETTE
                 delete q_image;
-                return FALSE;
+                return false;
             }
             }
         delete []rgbquad;
@@ -433,7 +433,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             delete palette;
 #endif // wxUSE_PALETTE
             delete q_image;
-            return FALSE;
+            return false;
         }
     }
     delete[] buffer;
@@ -442,7 +442,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 #endif // wxUSE_PALETTE
     delete q_image;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -474,7 +474,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         {
             if (verbose)
                 wxLogError(_("BMP: Couldn't allocate memory."));
-            return FALSE;
+            return false;
         }
     }
     else
@@ -492,7 +492,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
             wxLogError( _("BMP: Couldn't allocate memory.") );
         if ( cmap )
             delete[] cmap;
-        return FALSE;
+        return false;
     }
 
     // Reading the palette, if it exists:
@@ -831,7 +831,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
 
     delete[] cmap;
 
-    image->SetMask(FALSE);
+    image->SetMask(false);
 
     const wxStreamError err = stream.GetLastError();
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
@@ -874,13 +874,13 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     {
         if (verbose)
             wxLogError( _("DIB Header: Image width > 32767 pixels for file.") );
-        return FALSE;
+        return false;
     }
     if ( height > 32767 )
     {
         if (verbose)
             wxLogError( _("DIB Header: Image height > 32767 pixels for file.") );
-        return FALSE;
+        return false;
     }
 
     stream.Read(&aWord, 2);
@@ -894,7 +894,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     {
         if (verbose)
             wxLogError( _("DIB Header: Unknown bitdepth in file.") );
-        return FALSE;
+        return false;
     }
 
     stream.Read(dbuf, 4 * 4);
@@ -904,7 +904,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     {
         if (verbose)
             wxLogError( _("DIB Header: Unknown encoding in file.") );
-        return FALSE;
+        return false;
     }
 
     stream.Read(dbuf, 4 * 2);
@@ -918,16 +918,16 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     {
         if (verbose)
             wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
-        return FALSE;
+        return false;
     }
 
     //read DIB; this is the BMP image or the XOR part of an icon image
     if ( !DoLoadDib(image, width, height, bpp, ncolors, comp, offset, stream,
-                    verbose, IsBmp, TRUE) )
+                    verbose, IsBmp, true) )
     {
         if (verbose)
             wxLogError( _("Error in reading image DIB .") );
-        return FALSE;
+        return false;
     }
 
     if ( !IsBmp )
@@ -936,24 +936,24 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         //there is no palette, so we will create one
         wxImage mask;
         if ( !DoLoadDib(&mask, width, height, 1, 2, BI_RGB, offset, stream,
-                        verbose, IsBmp, FALSE) )
+                        verbose, IsBmp, false) )
         {
             if (verbose)
                 wxLogError( _("ICO: Error in reading mask DIB.") );
-            return FALSE;
+            return false;
         }
         image->SetMaskFromImage(mask, 255, 255, 255);
 
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxBMPHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int WXUNUSED(index))
 {
     // Read a single DIB fom the file:
-    return LoadDib(image, stream, verbose, TRUE/*isBmp*/);
+    return LoadDib(image, stream, verbose, true/*isBmp*/);
 }
 
 bool wxBMPHandler::DoCanRead(wxInputStream& stream)
@@ -961,7 +961,7 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
     unsigned char hdr[2];
 
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
+        return false;
 
     // do we have the BMP file signature?
     return hdr[0] == 'B' && hdr[1] == 'M';
@@ -1013,13 +1013,13 @@ bool wxICOHandler::SaveFile(wxImage *image,
     {
         if ( verbose )
             wxLogError(_("ICO: Image too tall for an icon."));
-        return FALSE;
+        return false;
     }
     if ( image->GetWidth () > 255 )
     {
         if ( verbose )
             wxLogError(_("ICO: Image too wide for an icon."));
-        return FALSE;
+        return false;
     }
 
     int images = 1; // only generate one image
@@ -1045,7 +1045,7 @@ bool wxICOHandler::SaveFile(wxImage *image,
     {
         if ( verbose )
             wxLogError(_("ICO: Error writing the image file!"));
-        return FALSE;
+        return false;
     }
 
     // for each iamage write a description ICONDIRENTRY:
@@ -1094,8 +1094,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
 
         // monochome bitmap:
         mask.SetOption(wxIMAGE_OPTION_BMP_FORMAT, wxBMP_1BPP_BW);
-        bool IsBmp = FALSE;
-        bool IsMask = FALSE;
+        bool IsBmp = false;
+        bool IsMask = false;
 
         //calculate size and offset of image and mask
         wxCountingOutputStream cStream;
@@ -1104,27 +1104,27 @@ bool wxICOHandler::SaveFile(wxImage *image,
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
-        IsMask = TRUE;
+        IsMask = true;
 
         bResult = SaveDib(&mask, cStream, verbose, IsBmp, IsMask);
         if ( !bResult )
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
         wxUint32 Size = cStream.GetSize();
 
-        // wxCountingOutputStream::Ok() always returns TRUE for now and this
+        // wxCountingOutputStream::Ok() always returns true for now and this
         // "if" provokes VC++ warnings in optimized build
 #if 0
         if ( !cStream.Ok() )
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
 #endif // 0
 
@@ -1168,31 +1168,31 @@ bool wxICOHandler::SaveFile(wxImage *image,
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
 
         // actually save it:
-        IsMask = FALSE;
+        IsMask = false;
         bResult = SaveDib(image, stream, verbose, IsBmp, IsMask);
         if ( !bResult )
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
-        IsMask = TRUE;
+        IsMask = true;
 
         bResult = SaveDib(&mask, stream, verbose, IsBmp, IsMask);
         if ( !bResult )
         {
             if ( verbose )
                 wxLogError(_("ICO: Error writing the image file!"));
-            return FALSE;
+            return false;
         }
 
     } // end of for loop
 
-    return TRUE;
+    return true;
 }
 
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
@@ -1259,7 +1259,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         // seek to selected icon:
         pCurrentEntry = pIconDirEntry + iSel;
         stream.SeekI(iPos + wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart);
-        bResult = LoadDib(image, stream, TRUE, IsBmp);
+        bResult = LoadDib(image, stream, true, IsBmp);
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
         {
@@ -1288,7 +1288,7 @@ bool wxICOHandler::DoCanRead(wxInputStream& stream)
     stream.SeekI(0);
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
+        return false;
 
     // hdr[2] is one for an icon and two for a cursor
     return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0';
@@ -1310,7 +1310,7 @@ bool wxCURHandler::DoCanRead(wxInputStream& stream)
     stream.SeekI(0);
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
+        return false;
 
     // hdr[2] is one for an icon and two for a cursor
     return hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0';
@@ -1343,7 +1343,7 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
     if ( FCC1 != riff32 )
-        return FALSE;
+        return false;
 
     // we have a riff file:
     while (stream.IsOk())
@@ -1375,35 +1375,35 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
         // try to read next data chunk:
         stream.Read(&FCC1, 4);
     }
-    return FALSE;
+    return false;
 }
 
 bool wxANIHandler::DoCanRead(wxInputStream& stream)
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen ;
-    
+
     wxInt32 riff32;
     memcpy( &riff32, "RIFF", 4 );
     wxInt32 list32;
     memcpy( &list32, "LIST", 4 );
     wxInt32 ico32;
-    memcpy( &ico32, "icon", 4 ); 
+    memcpy( &ico32, "icon", 4 );
     wxInt32 anih32;
     memcpy( &anih32, "anih", 4 );
-    
+
     stream.SeekI(0);
     if ( !stream.Read(&FCC1, 4) )
-        return FALSE;
+        return false;
 
     if ( FCC1 != riff32 )
-        return FALSE;
+        return false;
 
     // we have a riff file:
     while ( stream.IsOk() )
     {
         if ( FCC1 == anih32 )
-            return TRUE;
+            return true;
         // we always have a data size:
         stream.Read(&datalen, 4);
         datalen = wxINT32_SWAP_ON_BE(datalen) ;
@@ -1423,11 +1423,11 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
         if ( !stream.Read(&FCC1, 4) )
         {
             // reading failed -- either EOF or IO error, bail out anyhow
-            return FALSE;
+            return false;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 int wxANIHandler::GetImageCount(wxInputStream& stream)
@@ -1443,7 +1443,7 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
     memcpy( &ico32, "icon", 4 );
     wxInt32 anih32;
     memcpy( &anih32, "anih", 4 );
-    
+
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
     if ( FCC1 != riff32 )

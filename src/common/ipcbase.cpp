@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -31,23 +31,23 @@ IMPLEMENT_CLASS(wxClientBase, wxObject)
 IMPLEMENT_CLASS(wxConnectionBase, wxObject)
 
 wxConnectionBase::wxConnectionBase(wxChar *buffer, int size)
-    : m_connected(TRUE),
+    : m_connected(true),
       m_buffer(buffer),
       m_buffersize(size),
-      m_deletebufferwhendone(FALSE)
+      m_deletebufferwhendone(false)
 {
   if ( buffer == (wxChar *)NULL )
   { // behave like next constructor
     m_buffersize = 0;
-    m_deletebufferwhendone = TRUE;
+    m_deletebufferwhendone = true;
   }
 }
 
 wxConnectionBase::wxConnectionBase()
-    : m_connected(TRUE),
+    : m_connected(true),
       m_buffer(NULL),
       m_buffersize(0),
-      m_deletebufferwhendone(TRUE)
+      m_deletebufferwhendone(true)
 {
 }
 
@@ -55,7 +55,7 @@ wxConnectionBase::wxConnectionBase(wxConnectionBase& copy)
     : m_connected(copy.m_connected),
       m_buffer(copy.m_buffer),
       m_buffersize(copy.m_buffersize),
-      m_deletebufferwhendone(FALSE)
+      m_deletebufferwhendone(false)
 
 {
   // copy constructor would require ref-counted pointer to buffer

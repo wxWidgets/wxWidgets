@@ -28,8 +28,8 @@ public:
     wxTIFFHandler();
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
     virtual bool DoCanRead( wxInputStream& stream );
     virtual int GetImageCount( wxInputStream& stream );
 #endif

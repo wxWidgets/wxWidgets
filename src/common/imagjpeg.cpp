@@ -28,7 +28,7 @@
 #include "wx/log.h"
 #include "wx/app.h"
 
-// NB: Some compilers define boolean type in Windows headers 
+// NB: Some compilers define boolean type in Windows headers
 //     (e.g. Watcom C++, but not Open Watcom).
 //     This causes a conflict with jmorecfg.h header from libjpeg, so we have
 //     to make sure libjpeg won't try to define boolean itself. This is done by
@@ -226,7 +226,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
       (cinfo.src->term_source)(&cinfo);
       jpeg_destroy_decompress(&cinfo);
       if (image->Ok()) image->Destroy();
-      return FALSE;
+      return false;
     }
 
     jpeg_create_decompress( &cinfo );
@@ -239,9 +239,9 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!image->Ok()) {
         jpeg_finish_decompress( &cinfo );
         jpeg_destroy_decompress( &cinfo );
-        return FALSE;
+        return false;
     }
-    image->SetMask( FALSE );
+    image->SetMask( false );
     ptr = image->GetData();
     stride = cinfo.output_width * 3;
     tempbuf = (*cinfo.mem->alloc_sarray)
@@ -254,7 +254,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
     jpeg_finish_decompress( &cinfo );
     jpeg_destroy_decompress( &cinfo );
-    return TRUE;
+    return true;
 }
 
 typedef struct {
@@ -338,7 +338,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
          if (verbose)
             wxLogError(_("JPEG: Couldn't save image."));
          jpeg_destroy_compress(&cinfo);
-         return FALSE;
+         return false;
     }
 
     jpeg_create_compress(&cinfo);
@@ -362,7 +362,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     // sets the resolution fields in the output file
     if (image->HasOption(wxIMAGE_OPTION_RESOLUTION))
     {
-        cinfo.X_density = 
+        cinfo.X_density =
         cinfo.Y_density = image->GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
     }
 
@@ -385,7 +385,7 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
 
-    return TRUE;
+    return true;
 }
 
 #ifdef __VISUALC__
@@ -397,7 +397,7 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
     unsigned char hdr[2];
 
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
-        return FALSE;
+        return false;
 
     return hdr[0] == 0xFF && hdr[1] == 0xD8;
 }

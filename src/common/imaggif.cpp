@@ -43,10 +43,10 @@ bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
 {
     wxGIFDecoder *decod;
     int error;
-    bool ok = TRUE;
+    bool ok = true;
 
 //    image->Destroy();
-    decod = new wxGIFDecoder(&stream, TRUE);
+    decod = new wxGIFDecoder(&stream, true);
     error = decod->ReadGIF();
 
     if ((error != wxGIF_OK) && (error != wxGIF_TRUNCATED))
@@ -67,7 +67,7 @@ bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
             }
         }
         delete decod;
-        return FALSE;
+        return false;
     }
 
     if ((error == wxGIF_TRUNCATED) && verbose)
@@ -83,7 +83,7 @@ bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
         // accept an index of 0. (Instead GoFirstFrame() should be used)
         // Also if the gif image has only one frame, calling GoFrame(0)
         // fails because GoFrame() only works with gif animations.
-        // (It fails if IsAnimation() returns FALSE)
+        // (It fails if IsAnimation() returns false)
         // All valid reasons to NOT call GoFrame when index equals 0.
         if (index != 0)
         {
@@ -111,7 +111,7 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
     if (verbose)
         wxLogDebug(wxT("GIF: the handler is read-only!!"));
 
-    return FALSE;
+    return false;
 }
 
 bool wxGIFHandler::DoCanRead( wxInputStream& stream )

@@ -312,7 +312,7 @@ bool wxEntryStart(int& argc, char **argv)
 // clean up
 // ----------------------------------------------------------------------------
 
-// cleanup done before destroying wxTheApp 
+// cleanup done before destroying wxTheApp
 static void DoCommonPreCleanup()
 {
 #if wxUSE_LOG

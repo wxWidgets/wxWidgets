@@ -77,7 +77,7 @@ public:
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return FALSE; };
+                             { return false; };
 
   virtual wxChar *OnRequest    ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
@@ -90,15 +90,15 @@ public:
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return FALSE; };
+                             { return false; };
 
   virtual bool OnStartAdvise ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item) )
-                             { return FALSE; };
+                             { return false; };
 
   virtual bool OnStopAdvise  ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item) )
-                             { return FALSE; };
+                             { return false; };
 
   // Callbacks to CLIENT - override at will
   virtual bool OnAdvise      ( const wxString& WXUNUSED(topic),
@@ -106,10 +106,10 @@ public:
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return FALSE; };
+                             { return false; };
 
   // Callbacks to BOTH - override at will
-  // Default behaviour is to delete connection and return TRUE
+  // Default behaviour is to delete connection and return true
   virtual bool OnDisconnect(void) = 0;
 
   // return a buffer at least this size, reallocating buffer if needed
@@ -137,7 +137,7 @@ public:
   inline wxServerBase(void) {}
   inline ~wxServerBase(void) {};
 
-  // Returns FALSE on error (e.g. port number is already in use)
+  // Returns false on error (e.g. port number is already in use)
   virtual bool Create(const wxString& serverName) = 0;
 
   // Callbacks to SERVER - override at will

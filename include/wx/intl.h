@@ -32,7 +32,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-// gettext() style macros (notice that xgettext should be invoked with 
+// gettext() style macros (notice that xgettext should be invoked with
 // --keyword="_" --keyword="wxGetTranslation:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO

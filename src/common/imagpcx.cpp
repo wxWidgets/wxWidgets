@@ -108,7 +108,7 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
         // If ((data & 0xC0) != 0xC0), then the value read is a data
         // byte. Else, it is a counter (cont = val & 0x3F) and the
         // next byte is the data byte.
-		  //
+
         if ((data & 0xC0) != 0xC0)
         {
             *(p++) = (unsigned char)data;
@@ -416,7 +416,7 @@ int SavePCX(wxImage *image, wxOutputStream& stream)
         memset(pal, 0, sizeof(pal));
 
         unsigned long index;
-        
+
         for (wxImageHistogram::iterator entry = histogram.begin();
              entry != histogram.end(); entry++ )
         {
@@ -447,7 +447,7 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         if (verbose)
             wxLogError(_("PCX: this is not a PCX file."));
 
-        return FALSE;
+        return false;
     }
 
     image->Destroy();
@@ -465,10 +465,10 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             }
         }
         image->Destroy();
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxPCXHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
@@ -495,7 +495,7 @@ bool wxPCXHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char c = stream.GetC();
     if ( !stream )
-        return FALSE;
+        return false;
 
     // not very safe, but this is all we can get from PCX header :-(
     return c == 10;

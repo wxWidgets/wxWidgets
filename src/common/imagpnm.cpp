@@ -70,15 +70,15 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     {
         case wxT('2'):
             if (verbose) wxLogError(_("Loading Grey Ascii PNM image is not yet implemented."));
-            return FALSE;
+            return false;
         case wxT('5'):
             if (verbose) wxLogError(_("Loading Grey Raw PNM image is not yet implemented."));
-            return FALSE;
-        case wxT('3'): 
-	case wxT('6'): break;
+            return false;
+        case wxT('3'):
+        case wxT('6'): break;
         default:
             if (verbose) wxLogError(_("PNM: File format is not recognized."));
-            return FALSE;
+            return false;
     }
 
     text_stream.ReadLine(); // for the \n
@@ -94,7 +94,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     {
         if (verbose)
            wxLogError( _("PNM: Couldn't allocate memory.") );
-        return FALSE;
+        return false;
     }
 
    if (c=='3') // Ascii RBG
@@ -110,14 +110,14 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             if ( !buf_stream )
               {
                 if (verbose) wxLogError(_("PNM: File seems truncated."));
-                return FALSE;
+                return false;
               }
           }
       }
     if (c=='6') // Raw RGB
       buf_stream.Read( ptr, 3*width*height );
 
-    image->SetMask( FALSE );
+    image->SetMask( false );
 
     const wxStreamError err = buf_stream.GetLastError();
     return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
@@ -146,11 +146,11 @@ bool wxPNMHandler::DoCanRead( wxInputStream& stream )
         {
             case '3':
             case '6':
-                return TRUE;
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
