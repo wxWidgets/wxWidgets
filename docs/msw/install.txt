@@ -43,8 +43,7 @@ The setup program contains the following:
 - JPEG library source;
 - TIFF library source;
 - Object Graphics Library;
-- Tex2RTF source;
-- Dialog Editor binary.
+- Tex2RTF source and binary.
 
 Alternatively, you may unarchive the .zip form by hand:
 wxMSW-x.y.z.zip where x.y.z is the version number.
@@ -248,13 +247,13 @@ Compiling using the makefiles (updated 24 Sept 02):
 2. Change directory to src\msw. Type 'make -f makefile.b32' to
    make the wxWindows core library. Ignore the compiler warnings.
    This produces a library in the wxwindows\lib directory called
-   wx32ds.lib
+   wx32ds_bcc.lib
 3. Change directory to a sample or demo such as samples\minimal, and type
   'make -f makefile.b32'. This produces a windows exe file
 4. For release versions, recompile wxWindows and samples using
    'make -f makefile.b32 clean'
    'make -f makefile.b32 FINAL=1'
-   for the library and samples. This produces a library wx32s.lib eliminating
+   for the library and samples. This produces a library wx32s_bcc.lib eliminating
    all debugging information - if you wish to retain reduced debugging information
    'make -f makefile.b32 clean'
    'make -f makefile.b32 FINAL=hybrid'
@@ -298,7 +297,7 @@ Note (0): This provides the ability to produce separate wxwindows libraries
    for different purposes, and only have to rebuild the applications
 
 
-Note (1): In Borland 4.5 and earleir, using bcc.exe you also need to define BCCDIR
+Note (1): In Borland 4.5 and earlier, using bcc.exe you also need to define BCCDIR
 in the autoexec.bat file; like this:
    set BCCDIR=c:\progra~1\borland\bcc
    so that it points to the root directory of 
@@ -727,40 +726,6 @@ start address').
 Some functionality is missing using this compiler (see makefile).
 Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
 Step (2). 16-bit compilation is left as an exercise for the user!
-
-Salford C++ compilation
------------------------
-
-1. Make sure your WXWIN variable is set, and uses the FAT (short
-   name) form.
-2. Edit SALFORDDIR and RESOURCEDIR in src/makesl.env as per
-   notes.
-3. Change directory to wx\src\msw. Type 'mk32 -f makefile.sl all' to
-   make the wxWindows core library.
-4. Change directory to wx\samples\minimal and type 'mk32 -f makefile.sl'
-   to make this sample.
-
-Unfortunately, Salford C++ seems to have problems with its code generation for
-operations on objects, as seen in wxFrame::OnMenuHighlight
-(minimal sample) or wxWindow::SetValidator (mdi sample). Also the
-the debugging version of the library is 90MB, with samples coming in
-at 40MB :-) However, wxWindows at least makes a good test suite for
-improving the compiler.
-
-TWIN32 and gcc on Linux
------------------------
-
-The wxWindows 2 for Windows port may be compiled using
-the TWIN32 emulator package from www.willows.com. However,
-TWIN32 is by no means finished so this should be taken as
-something to think about for the future, rather than
-a tool for writing products with.
-
-Use makefile.twn in much the same way as makefile.g95, as
-described above. Not all sample makefiles are supplied yet.
-
-For some reason, I found I had to copy TWIN32's Windows resource
-compiler (rc) to the current working directory for it to be found.
 
 General Notes
 -------------
