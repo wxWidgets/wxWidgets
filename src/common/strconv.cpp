@@ -248,14 +248,14 @@ size_t wxMBConvUTF7::MB2WC(wchar_t * WXUNUSED(buf),
                            const char * WXUNUSED(psz),
                            size_t WXUNUSED(n)) const
 {
-  return 0;
+  return (size_t)-1;
 }
 
 size_t wxMBConvUTF7::WC2MB(char * WXUNUSED(buf),
                            const wchar_t * WXUNUSED(psz),
                            size_t WXUNUSED(n)) const
 {
-  return 0;
+  return (size_t)-1;
 }
 
 // ----------------------------------------------------------------------------

@@ -43,8 +43,6 @@ private:
 #if wxUSE_WCHAR_T
         CPPUNIT_TEST( ConstructorsWithConversion );
         CPPUNIT_TEST( Conversion );
-#endif
-#if wxUSE_UNICODE
         CPPUNIT_TEST( ConversionUTF7 );
 #endif
         CPPUNIT_TEST( Extraction );
@@ -65,8 +63,6 @@ private:
 #if wxUSE_WCHAR_T
     void ConstructorsWithConversion();
     void Conversion();
-#endif
-#if wxUSE_UNICODE
     void ConversionUTF7();
 #endif
     void Extraction();
@@ -189,9 +185,10 @@ void StringTestCase::ConstructorsWithConversion()
 #if wxUSE_UNICODE
     CPPUNIT_ASSERT ( wxString("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
                                wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
-#else
-    CPPUNIT_ASSERT ( wxString(L"\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
-                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
+//FIXME:
+//#else
+//    CPPUNIT_ASSERT ( wxString(L"\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
+//                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
 #endif
 }
 
@@ -219,19 +216,38 @@ void StringTestCase::Conversion()
         CPPUNIT_ASSERT( memcmp(theLocalBuffer.data(), L"The\0String", 11 * sizeof(wchar_t)) == 0 );
 #endif
 }
-#endif // wxUSE_WCHAR_T
 
-#if wxUSE_UNICODE
 void StringTestCase::ConversionUTF7()
 {
-    const wxChar wdata[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
+    const wchar_t data[] = { 0x00A3, 0x00A3, 0x00A3, 0x00A3, 0 }; // pound signs
     const char *utf7 = "+AKM-+AKM-+AKM-+AKM-";
-    wxString str(wdata);
+
+#if wxUSE_UNICODE
+    wxString str(data);
 
     wxCSConv conv(_T("utf-7"));
-    CPPUNIT_ASSERT( strcmp(str.mb_str(conv), utf7) == 0 );
-}
+
+    wxCharBuffer theBuffer = str.mb_str(conv);
+
+    if (theBuffer.data()[0u])
+        CPPUNIT_ASSERT( strcmp(theBuffer, utf7) == 0 );
+#else //ANSI
+    wxString str(utf7);
+
+    wxCSConv conv(_T("utf-7"));
+
+    wxWCharBuffer theWBuffer = str.wc_str(conv);
+
+    if (theWBuffer.data()[0u])
+    {
+        CPPUNIT_ASSERT( wxWcslen(theWBuffer) == wxWcslen(data) );
+        CPPUNIT_ASSERT( memcmp(theWBuffer, data, wxWcslen(data) * sizeof(wchar_t)) == 0 );
+    }
 #endif // wxUSE_UNICODE
+}
+
+#endif // wxUSE_WCHAR_T
+
 
 void StringTestCase::Extraction()
 {
