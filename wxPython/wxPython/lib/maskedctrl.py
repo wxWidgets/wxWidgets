@@ -2,9 +2,21 @@
 ## backwards compatibility.  Some names will also have a 'wx' added on if
 ## that is how they used to be named in the old wxPython package.
 
-import wx.lib.maskedctrl
+import wx.lib.masked.ctrl
 
-__doc__ =  wx.lib.maskedctrl.__doc__
+__doc__ =  wx.lib.masked.ctrl.__doc__
 
-controlTypes = wx.lib.maskedctrl.controlTypes
-wxMaskedCtrl = wx.lib.maskedctrl.MaskedCtrl
+MASKEDTEXT  = wx.lib.masked.ctrl.TEXT
+MASKEDCOMBO = wx.lib.masked.ctrl.COMBO
+IPADDR      = wx.lib.masked.ctrl.IPADDR
+TIME        = wx.lib.masked.ctrl.TIME
+NUMBER      = wx.lib.masked.ctrl.NUMBER
+
+class controlTypes:
+    MASKEDTEXT  = wx.lib.masked.ctrl.TEXT
+    MASKEDCOMBO = wx.lib.masked.ctrl.COMBO
+    IPADDR      = wx.lib.masked.ctrl.IPADDR
+    TIME        = wx.lib.masked.ctrl.TIME
+    NUMBER      = wx.lib.masked.ctrl.NUMBER
+
+wxMaskedCtrl = wx.lib.masked.Ctrl

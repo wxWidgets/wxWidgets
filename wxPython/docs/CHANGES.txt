@@ -17,6 +17,9 @@ Added some convenience methods to wx.Bitmap: SetSize, GetSize, and
 wx.EmptyBitmap can be called with a wx.Size (or a 2-element sequence)
 object too.  Similar changes were done for wx.Image as well.
 
+Added new MaskedEditControl code from Will Sadkin.  The modules are
+now locaed in their own sub-package, wx.lib.masked.  Demos updated.
+
 
 
 

@@ -36,11 +36,11 @@
 # o wx.SpinCtl has some issues that cause the control to
 #   lock up. Noted in other places using it too, it's not this module
 #   that's at fault.
-# 
+#
 # 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
-# o wxMaskedTextCtrl -> MaskedTextCtrl
-# o wxTimeCtrl -> TimeCtrl
+# o wxMaskedTextCtrl -> masked.TextCtrl
+# o wxTimeCtrl -> masked.TimeCtrl
 #
 
 """<html><body>
@@ -65,7 +65,7 @@ Here's the API for TimeCtrl:
          <B>style</B> = wxTE_PROCESS_TAB,
          <B>validator</B> = wx.DefaultValidator,
          name = "time",
-         <B>format</B> = 'HHMMSS',         
+         <B>format</B> = 'HHMMSS',
          <B>fmt24hr</B> = False,
          <B>displaySeconds</B> = True,
          <B>spinButton</B> = None,
@@ -95,7 +95,7 @@ Here's the API for TimeCtrl:
     <DD>This parameter can be used instead of the fmt24hr and displaySeconds
     parameters, respectively; it provides a shorthand way to specify the time
     format you want.  Accepted values are 'HHMMSS', 'HHMM', '24HHMMSS', and
-    '24HHMM'.  If the format is specified, the other two  arguments will be ignored.    
+    '24HHMM'.  If the format is specified, the other two  arguments will be ignored.
     <BR>
     <DT><B>fmt24hr</B>
     <DD>If True, control will display time in 24 hour time format; if False, it will
@@ -107,7 +107,7 @@ Here's the API for TimeCtrl:
     <DD>If True, control will include a seconds field; if False, it will
     just show hours and minutes. (This value is ignored if the <i>format</i>
     parameter is specified.)
-    <BR>    
+    <BR>
     <DT><B>spinButton</B>
     <DD>If specified, this button's events will be bound to the behavior of the
     TimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
@@ -272,10 +272,10 @@ import  types
 import  wx
 
 from wx.tools.dbg import Logger
-from wx.lib.maskededit import BaseMaskedTextCtrl, Field
+from wx.lib.masked import Field, BaseMaskedTextCtrl
 
 dbg = Logger()
-dbg(enable=0)
+##dbg(enable=0)
 
 try:
     from mx import DateTime
@@ -322,8 +322,8 @@ class TimeCtrlAccessorsMixin:
 
             exec('def Set%s(self, value): self.SetCtrlParameters(%s=value)' % (propname, param))
             exec('def Get%s(self): return self.GetCtrlParameter("%s")''' % (propname, param))
- 
- 
+
+
 class TimeCtrl(BaseMaskedTextCtrl):
 
     valid_ctrl_params = {
@@ -333,7 +333,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         'max': None,
         'limited': False,           # by default, no limiting even if bounds set
         'useFixedWidthFont': True,  # by default, use a fixed-width font
-        'oob_color': "Yellow"       # by default, the default MaskedTextCtrl "invalid" color
+        'oob_color': "Yellow"       # by default, the default masked.TextCtrl "invalid" color
         }
 
     def __init__ (
@@ -347,7 +347,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
                 **kwargs ):
 
         # set defaults for control:
-        dbg('setting defaults:')
+##        dbg('setting defaults:')
         for key, param_value in TimeCtrl.valid_ctrl_params.items():
             # This is done this way to make setattr behave consistently with
             # "private attribute" name mangling
@@ -456,7 +456,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
 
     def SetParameters(self, **kwargs):
-        dbg('TimeCtrl::SetParameters(%s)' % repr(kwargs), indent=1)
+##        dbg('TimeCtrl::SetParameters(%s)' % repr(kwargs), indent=1)
         maskededit_kwargs = {}
         reset_format = False
 
@@ -553,10 +553,10 @@ class TimeCtrl(BaseMaskedTextCtrl):
                 self.SetValue(value)
             except:
                 self.SetValue('12:00:00 AM')
-            dbg(indent=0)
+##            dbg(indent=0)
             return {}   # no arguments to return
         else:
-            dbg(indent=0)
+##            dbg(indent=0)
             return maskededit_kwargs
 
 
@@ -565,7 +565,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         This function binds an externally created spin button to the control, so that
         up/down events from the button automatically change the control.
         """
-        dbg('TimeCtrl::BindSpinButton')
+##        dbg('TimeCtrl::BindSpinButton')
         self.__spinButton = sb
         if self.__spinButton:
             # bind event handlers to spin ctrl
@@ -584,16 +584,16 @@ class TimeCtrl(BaseMaskedTextCtrl):
         and convert wxDateTime, mxDateTime, or 12/24 format time string
         into the appropriate format string for the control.
         """
-        dbg('TimeCtrl::SetValue(%s)' % repr(value), indent=1)
+##        dbg('TimeCtrl::SetValue(%s)' % repr(value), indent=1)
         try:
             strtime = self._toGUI(self.__validateValue(value))
         except:
-            dbg('validation failed', indent=0)
+##            dbg('validation failed', indent=0)
             raise
 
-        dbg('strtime:', strtime)
+##        dbg('strtime:', strtime)
         self._SetValue(strtime)
-        dbg(indent=0)
+##        dbg(indent=0)
 
     def GetValue(self,
                  as_wxDateTime = False,
@@ -641,12 +641,12 @@ class TimeCtrl(BaseMaskedTextCtrl):
         raised.
         """
         global accept_mx
-        dbg(suspend=1)
-        dbg('TimeCtrl::GetWxDateTime(%s)' % repr(value), indent=1)
+##        dbg(suspend=1)
+##        dbg('TimeCtrl::GetWxDateTime(%s)' % repr(value), indent=1)
         if value is None:
-            dbg('getting control value')
+##            dbg('getting control value')
             value = self.GetValue()
-            dbg('value = "%s"' % value)
+##            dbg('value = "%s"' % value)
 
         if type(value) == types.UnicodeType:
             value = str(value)  # convert to regular string
@@ -656,14 +656,14 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
             # Construct constant wxDateTime, then try to parse the string:
             wxdt = wx.DateTimeFromDMY(1, 0, 1970)
-            dbg('attempting conversion')
+##            dbg('attempting conversion')
             value = value.strip()    # (parser doesn't like leading spaces)
             checkTime    = wxdt.ParseTime(value)
             valid = checkTime == len(value)     # entire string parsed?
-            dbg('checkTime == len(value)?', valid)
+##            dbg('checkTime == len(value)?', valid)
 
             if not valid:
-                dbg(indent=0, suspend=0)
+##                dbg(indent=0, suspend=0)
                 raise ValueError('cannot convert string "%s" to valid time' % value)
 
         else:
@@ -685,7 +685,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
                     error = 'GetWxDateTime requires wxDateTime, mxDateTime or parsable time string, passed %s'% repr(value)
                 else:
                     error = 'GetWxDateTime requires wxDateTime or parsable time string, passed %s'% repr(value)
-                dbg(indent=0, suspend=0)
+##                dbg(indent=0, suspend=0)
                 raise ValueError(error)
 
             wxdt = wx.DateTimeFromDMY(1, 0, 1970)
@@ -693,7 +693,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
             wxdt.SetMinute(minute)
             wxdt.SetSecond(second)
 
-        dbg('wxdt:', wxdt, indent=0, suspend=0)
+##        dbg('wxdt:', wxdt, indent=0, suspend=0)
         return wxdt
 
 
@@ -730,13 +730,13 @@ class TimeCtrl(BaseMaskedTextCtrl):
         adjusted to the new minimum value; if not limited, the value in the
         control will be colored as invalid.
         """
-        dbg('TimeCtrl::SetMin(%s)'% repr(min), indent=1)
+##        dbg('TimeCtrl::SetMin(%s)'% repr(min), indent=1)
         if min is not None:
             try:
                 min = self.GetWxDateTime(min)
                 self.__min = self._toGUI(min)
             except:
-                dbg('exception occurred', indent=0)
+##                dbg('exception occurred', indent=0)
                 return False
         else:
             self.__min = min
@@ -746,7 +746,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         else:
             self._CheckValid()
         ret = True
-        dbg('ret:', ret, indent=0)
+##        dbg('ret:', ret, indent=0)
         return ret
 
 
@@ -757,22 +757,23 @@ class TimeCtrl(BaseMaskedTextCtrl):
         the current minimum bound on the control, as a wxDateTime
         by default, or as a string if as_string argument is True.
         """
-        dbg(suspend=1)
-        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
+##        dbg(suspend=1)
+##        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
         if self.__min is None:
-            dbg('(min == None)')
+##            dbg('(min == None)')
             ret = self.__min
         elif as_string:
             ret = self.__min
-            dbg('ret:', ret)
+##            dbg('ret:', ret)
         else:
             try:
                 ret = self.GetWxDateTime(self.__min)
             except:
-                dbg(suspend=0)
-                dbg('exception occurred', indent=0)
-            dbg('ret:', repr(ret))
-        dbg(indent=0, suspend=0)
+##                dbg(suspend=0)
+##                dbg('exception occurred', indent=0)
+                raise
+##            dbg('ret:', repr(ret))
+##        dbg(indent=0, suspend=0)
         return ret
 
 
@@ -789,23 +790,23 @@ class TimeCtrl(BaseMaskedTextCtrl):
         adjusted to this maximum value; if not limited, the value in the
         control will be colored as invalid.
         """
-        dbg('TimeCtrl::SetMax(%s)' % repr(max), indent=1)
+##        dbg('TimeCtrl::SetMax(%s)' % repr(max), indent=1)
         if max is not None:
             try:
                 max = self.GetWxDateTime(max)
                 self.__max = self._toGUI(max)
             except:
-                dbg('exception occurred', indent=0)
+##                dbg('exception occurred', indent=0)
                 return False
         else:
             self.__max = max
-        dbg('max:', repr(self.__max))
+##        dbg('max:', repr(self.__max))
         if self.IsLimited() and not self.IsInBounds():
             self.SetLimited(self.__limited) # force limited value:
         else:
             self._CheckValid()
         ret = True
-        dbg('ret:', ret, indent=0)
+##        dbg('ret:', ret, indent=0)
         return ret
 
 
@@ -816,23 +817,23 @@ class TimeCtrl(BaseMaskedTextCtrl):
         the current minimum bound on the control, as a wxDateTime
         by default, or as a string if as_string argument is True.
         """
-        dbg(suspend=1)
-        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
+##        dbg(suspend=1)
+##        dbg('TimeCtrl::GetMin, as_string?', as_string, indent=1)
         if self.__max is None:
-            dbg('(max == None)')
+##            dbg('(max == None)')
             ret = self.__max
         elif as_string:
             ret = self.__max
-            dbg('ret:', ret)
+##            dbg('ret:', ret)
         else:
             try:
                 ret = self.GetWxDateTime(self.__max)
             except:
-                dbg(suspend=0)
-                dbg('exception occurred', indent=0)
+##                dbg(suspend=0)
+##                dbg('exception occurred', indent=0)
                 raise
-            dbg('ret:', repr(ret))
-        dbg(indent=0, suspend=0)
+##            dbg('ret:', repr(ret))
+##        dbg(indent=0, suspend=0)
         return ret
 
 
@@ -868,22 +869,22 @@ class TimeCtrl(BaseMaskedTextCtrl):
         limiting, but coloring of out-of-bounds values will still take
         place if bounds have been set for the control.
         """
-        dbg('TimeCtrl::SetLimited(%d)' % limited, indent=1)
+##        dbg('TimeCtrl::SetLimited(%d)' % limited, indent=1)
         self.__limited = limited
 
         if not limited:
             self.SetMaskParameters(validRequired = False)
             self._CheckValid()
-            dbg(indent=0)
+##            dbg(indent=0)
             return
 
-        dbg('requiring valid value')
+##        dbg('requiring valid value')
         self.SetMaskParameters(validRequired = True)
 
         min = self.GetMin()
         max = self.GetMax()
         if min is None or max is None:
-            dbg('both bounds not set; no further action taken')
+##            dbg('both bounds not set; no further action taken')
             return  # can't limit without 2 bounds
 
         elif not self.IsInBounds():
@@ -891,11 +892,11 @@ class TimeCtrl(BaseMaskedTextCtrl):
             try:
                 value = self.GetWxDateTime()
             except:
-                dbg('exception occurred', indent=0)
+##                dbg('exception occurred', indent=0)
                 raise
 
             if min <= max:   # valid range doesn't span midnight
-                dbg('min <= max')
+##                dbg('min <= max')
                 # which makes the "nearest bound" computation trickier...
 
                 # determine how long the "invalid" pie wedge is, and cut
@@ -918,24 +919,24 @@ class TimeCtrl(BaseMaskedTextCtrl):
                     cmp_value = value
 
                 if (cmp_value - max) > half_interval:
-                    dbg('forcing value to min (%s)' % min.FormatTime())
+##                    dbg('forcing value to min (%s)' % min.FormatTime())
                     self.SetValue(min)
                 else:
-                    dbg('forcing value to max (%s)' % max.FormatTime())
+##                    dbg('forcing value to max (%s)' % max.FormatTime())
                     self.SetValue(max)
             else:
-                dbg('max < min')
+##                dbg('max < min')
                 # therefore  max < value < min guaranteed to be true,
                 # so "nearest bound" calculation is much easier:
                 if (value - max) >= (min - value):
                     # current value closer to min; pick that edge of pie wedge
-                    dbg('forcing value to min (%s)' % min.FormatTime())
+##                    dbg('forcing value to min (%s)' % min.FormatTime())
                     self.SetValue(min)
                 else:
-                    dbg('forcing value to max (%s)' % max.FormatTime())
+##                    dbg('forcing value to max (%s)' % max.FormatTime())
                     self.SetValue(max)
 
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
 
@@ -961,21 +962,22 @@ class TimeCtrl(BaseMaskedTextCtrl):
             try:
                 value = self.GetWxDateTime(value)   # try to regularize passed value
             except ValueError:
-                dbg('ValueError getting wxDateTime for %s' % repr(value), indent=0)
+##                dbg('ValueError getting wxDateTime for %s' % repr(value), indent=0)
                 raise
 
-        dbg('TimeCtrl::IsInBounds(%s)' % repr(value), indent=1)
+##        dbg('TimeCtrl::IsInBounds(%s)' % repr(value), indent=1)
         if self.__min is None or self.__max is None:
-            dbg(indent=0)
+##            dbg(indent=0)
             return True
 
         elif value is None:
             try:
                 value = self.GetWxDateTime()
             except:
-                dbg('exception occurred', indent=0)
+##                dbg('exception occurred', indent=0)
+                raise
 
-        dbg('value:', value.FormatTime())
+##        dbg('value:', value.FormatTime())
 
         # Get wxDateTime representations of bounds:
         min = self.GetMin()
@@ -990,7 +992,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
             # either "min" <= value (<= midnight of *next day*)
             # or midnight <= value <= "max"
             ret = min <= value or (midnight <= value <= max)
-        dbg('in bounds?', ret, indent=0)
+##        dbg('in bounds?', ret, indent=0)
         return ret
 
 
@@ -1021,7 +1023,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
 
     def __OnTextChange(self, event=None):
-        dbg('TimeCtrl::OnTextChange', indent=1)
+##        dbg('TimeCtrl::OnTextChange', indent=1)
 
         # Allow Maskedtext base control to color as appropriate,
         # and Skip the EVT_TEXT event (if appropriate.)
@@ -1035,11 +1037,11 @@ class TimeCtrl(BaseMaskedTextCtrl):
         if not BaseMaskedTextCtrl._OnTextChange(self, event):
             return
 
-        dbg('firing TimeUpdatedEvent...')
+##        dbg('firing TimeUpdatedEvent...')
         evt = TimeUpdatedEvent(self.GetId(), self.GetValue())
         evt.SetEventObject(self)
         self.GetEventHandler().ProcessEvent(evt)
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def SetInsertionPoint(self, pos):
@@ -1048,14 +1050,14 @@ class TimeCtrl(BaseMaskedTextCtrl):
         This is necessary to handle the optional spin button, because the insertion
         point is lost when the focus shifts to the spin button.
         """
-        dbg('TimeCtrl::SetInsertionPoint', pos, indent=1)
+##        dbg('TimeCtrl::SetInsertionPoint', pos, indent=1)
         BaseMaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
         self.__posCurrent = self.GetInsertionPoint()
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def SetSelection(self, sel_start, sel_to):
-        dbg('TimeCtrl::SetSelection', sel_start, sel_to, indent=1)
+##        dbg('TimeCtrl::SetSelection', sel_start, sel_to, indent=1)
 
         # Adjust selection range to legal extent if not already
         if sel_start < 0:
@@ -1069,7 +1071,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
 
         self.__bSelection = sel_start != sel_to
         BaseMaskedTextCtrl.SetSelection(self, sel_start, sel_to)
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def __OnSpin(self, key):
@@ -1085,7 +1087,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         start, end = self._FindField(self.__posCurrent)._extent
         self.SetInsertionPoint(start)
         self.SetSelection(start, end)
-        dbg('current position:', self.__posCurrent)
+##        dbg('current position:', self.__posCurrent)
 
 
     def __OnSpinUp(self, event):
@@ -1093,10 +1095,10 @@ class TimeCtrl(BaseMaskedTextCtrl):
         Event handler for any bound spin button on EVT_SPIN_UP;
         causes control to behave as if up arrow was pressed.
         """
-        dbg('TimeCtrl::OnSpinUp', indent=1)
+##        dbg('TimeCtrl::OnSpinUp', indent=1)
         self.__OnSpin(wx.WXK_UP)
         keep_processing = False
-        dbg(indent=0)
+##        dbg(indent=0)
         return keep_processing
 
 
@@ -1105,10 +1107,10 @@ class TimeCtrl(BaseMaskedTextCtrl):
         Event handler for any bound spin button on EVT_SPIN_DOWN;
         causes control to behave as if down arrow was pressed.
         """
-        dbg('TimeCtrl::OnSpinDown', indent=1)
+##        dbg('TimeCtrl::OnSpinDown', indent=1)
         self.__OnSpin(wx.WXK_DOWN)
         keep_processing = False
-        dbg(indent=0)
+##        dbg(indent=0)
         return keep_processing
 
 
@@ -1119,14 +1121,14 @@ class TimeCtrl(BaseMaskedTextCtrl):
         It then calls the base control's _OnChar routine with the modified
         event instance.
         """
-        dbg('TimeCtrl::OnChar', indent=1)
+##        dbg('TimeCtrl::OnChar', indent=1)
         keycode = event.GetKeyCode()
-        dbg('keycode:', keycode)
+##        dbg('keycode:', keycode)
         if keycode == ord(':'):
-            dbg('colon seen! removing shift attribute')
+##            dbg('colon seen! removing shift attribute')
             event.m_shiftDown = False
         BaseMaskedTextCtrl._OnChar(self, event )              ## handle each keypress
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def __OnSetToNow(self, event):
@@ -1144,7 +1146,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         Event handler for motion events; this handler
         changes limits the selection to the new cell boundaries.
         """
-        dbg('TimeCtrl::LimitSelection', indent=1)
+##        dbg('TimeCtrl::LimitSelection', indent=1)
         pos = self.GetInsertionPoint()
         self.__posCurrent = pos
         sel_start, sel_to = self.GetSelection()
@@ -1155,18 +1157,18 @@ class TimeCtrl(BaseMaskedTextCtrl):
             if sel_to < pos:   sel_to = start
             elif sel_to > pos: sel_to = end
 
-        dbg('new pos =', self.__posCurrent, 'select to ', sel_to)
+##        dbg('new pos =', self.__posCurrent, 'select to ', sel_to)
         self.SetInsertionPoint(self.__posCurrent)
         self.SetSelection(self.__posCurrent, sel_to)
         if event: event.Skip()
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def __IncrementValue(self, key, pos):
-        dbg('TimeCtrl::IncrementValue', key, pos, indent=1)
+##        dbg('TimeCtrl::IncrementValue', key, pos, indent=1)
         text = self.GetValue()
         field = self._FindField(pos)
-        dbg('field: ', field._index)
+##        dbg('field: ', field._index)
         start, end = field._extent
         slice = text[start:end]
         if key == wx.WXK_UP: increment = 1
@@ -1182,14 +1184,14 @@ class TimeCtrl(BaseMaskedTextCtrl):
             # am/pm setting.  So, we use wxDateTime to generate a new value for us:
             # (Use a fixed date not subject to DST variations:)
             converter = wx.DateTimeFromDMY(1, 0, 1970)
-            dbg('text: "%s"' % text)
+##            dbg('text: "%s"' % text)
             converter.ParseTime(text.strip())
             currenthour = converter.GetHour()
-            dbg('current hour:', currenthour)
+##            dbg('current hour:', currenthour)
             newhour = (currenthour + increment) % 24
-            dbg('newhour:', newhour)
+##            dbg('newhour:', newhour)
             converter.SetHour(newhour)
-            dbg('converter.GetHour():', converter.GetHour())
+##            dbg('converter.GetHour():', converter.GetHour())
             newvalue = converter     # take advantage of auto-conversion for am/pm in .SetValue()
 
         else:   # minute or second field; handled the same way:
@@ -1202,7 +1204,7 @@ class TimeCtrl(BaseMaskedTextCtrl):
         except ValueError:  # must not be in bounds:
             if not wx.Validator_IsSilent():
                 wx.Bell()
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def _toGUI( self, wxdt ):
@@ -1227,23 +1229,23 @@ class TimeCtrl(BaseMaskedTextCtrl):
         not a valid value for the control as currently specified.
         It is used by both the SetValue() and the IsValid() methods.
         """
-        dbg('TimeCtrl::__validateValue(%s)' % repr(value), indent=1)
+##        dbg('TimeCtrl::__validateValue(%s)' % repr(value), indent=1)
         if not value:
-            dbg(indent=0)
+##            dbg(indent=0)
             raise ValueError('%s not a valid time value' % repr(value))
 
         valid = True    # assume true
         try:
             value = self.GetWxDateTime(value)   # regularize form; can generate ValueError if problem doing so
         except:
-            dbg('exception occurred', indent=0)
+##            dbg('exception occurred', indent=0)
             raise
 
         if self.IsLimited() and not self.IsInBounds(value):
-            dbg(indent=0)
+##            dbg(indent=0)
             raise ValueError (
                 'value %s is not within the bounds of the control' % str(value) )
-        dbg(indent=0)
+##        dbg(indent=0)
         return value
 
 #----------------------------------------------------------------------------
@@ -1278,12 +1280,12 @@ if __name__ == '__main__':
             self.Bind(EVT_TIMEUPDATE, self.OnTimeChange, self.tc)
 
         def OnTimeChange(self, event):
-            dbg('OnTimeChange: value = ', event.GetValue())
+##            dbg('OnTimeChange: value = ', event.GetValue())
             wxdt = self.tc.GetWxDateTime()
-            dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
+##            dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
             if self.test_mx:
                 mxdt = self.tc.GetMxDateTime()
-                dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
+##                dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
 
 
     class MyApp(wx.App):

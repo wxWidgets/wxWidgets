@@ -2,10 +2,10 @@
 ## backwards compatibility.  Some names will also have a 'wx' added on if
 ## that is how they used to be named in the old wxPython package.
 
-import wx.lib.maskednumctrl
+import wx.lib.masked.numctrl
 
-__doc__ =  wx.lib.maskednumctrl.__doc__
+__doc__ =  wx.lib.masked.numctrl.__doc__
 
-EVT_MASKEDNUM = wx.lib.maskednumctrl.EVT_MASKEDNUM
-wxMaskedNumCtrl = wx.lib.maskednumctrl.MaskedNumCtrl
-wxMaskedNumNumberUpdatedEvent = wx.lib.maskednumctrl.MaskedNumNumberUpdatedEvent
+EVT_MASKEDNUM = wx.lib.masked.numctrl.EVT_NUM
+wxMaskedNumCtrl = wx.lib.masked.numctrl.NumCtrl
+wxMaskedNumNumberUpdatedEvent = wx.lib.masked.numctrl.NumberUpdatedEvent

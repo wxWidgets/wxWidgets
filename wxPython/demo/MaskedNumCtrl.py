@@ -4,8 +4,8 @@ import  sys
 import  traceback
 
 import  wx
-import  wx.lib.maskededit       as me
-import  wx.lib.maskednumctrl    as mnum
+from    wx.lib import masked
+
 #----------------------------------------------------------------------
 
 class TestPanel( wx.Panel ):
@@ -16,40 +16,40 @@ class TestPanel( wx.Panel ):
         panel = wx.Panel( self, -1 )
 
         header = wx.StaticText(panel, -1, """\
-This shows the various options for MaskedNumCtrl.
+This shows the various options for masked.NumCtrl.
 The controls at the top reconfigure the resulting control at the bottom.
 """)
         header.SetForegroundColour( "Blue" )
 
         intlabel = wx.StaticText( panel, -1, "Integer width:" )
-        self.integerwidth = mnum.MaskedNumCtrl(
+        self.integerwidth = masked.NumCtrl(
                                 panel, value=10, integerWidth=2, allowNegative=False
                                 )
 
         fraclabel = wx.StaticText( panel, -1, "Fraction width:" )
-        self.fractionwidth = mnum.MaskedNumCtrl(
-                                panel, value=0, integerWidth=2, allowNegative=False 
+        self.fractionwidth = masked.NumCtrl(
+                                panel, value=0, integerWidth=2, allowNegative=False
                                 )
 
         groupcharlabel = wx.StaticText( panel,-1, "Grouping char:" )
-        self.groupchar = me.MaskedTextCtrl( 
+        self.groupchar = masked.TextCtrl(
                                 panel, -1, value=',', mask='&', excludeChars = '-()',
                                 formatcodes='F', emptyInvalid=True, validRequired=True
                                 )
 
         decimalcharlabel = wx.StaticText( panel,-1, "Decimal char:" )
-        self.decimalchar = me.MaskedTextCtrl( 
+        self.decimalchar = masked.TextCtrl(
                                 panel, -1, value='.', mask='&', excludeChars = '-()',
                                 formatcodes='F', emptyInvalid=True, validRequired=True
                                 )
 
         self.set_min = wx.CheckBox( panel, -1, "Set minimum value:" )
-        # Create this MaskedNumCtrl using factory, to show how:
-        self.min = mnum.MaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        # Create this masked.NumCtrl using factory, to show how:
+        self.min = masked.Ctrl( panel, integerWidth=5, fractionWidth=2, controlType=masked.controlTypes.NUMBER )
         self.min.Enable( False )
 
         self.set_max = wx.CheckBox( panel, -1, "Set maximum value:" )
-        self.max = mnum.MaskedNumCtrl( panel, integerWidth=5, fractionWidth=2 )
+        self.max = masked.NumCtrl( panel, integerWidth=5, fractionWidth=2 )
         self.max.Enable( False )
 
 
@@ -68,7 +68,7 @@ The controls at the top reconfigure the resulting control at the bottom.
         font.SetWeight(wx.BOLD)
         label.SetFont(font)
 
-        self.target_ctl = mnum.MaskedNumCtrl( panel, -1, name="target control" )
+        self.target_ctl = masked.NumCtrl( panel, -1, name="target control" )
 
         label_numselect = wx.StaticText( panel, -1, """\
 Programmatically set the above
@@ -141,15 +141,15 @@ value entry ctrl:""")
         panel.Move( (50,10) )
         self.panel = panel
 
-        self.Bind(mnum.EVT_MASKEDNUM, self.OnSetIntWidth, self.integerwidth )
-        self.Bind(mnum.EVT_MASKEDNUM, self.OnSetFractionWidth, self.fractionwidth )
+        self.Bind(masked.EVT_NUM, self.OnSetIntWidth, self.integerwidth )
+        self.Bind(masked.EVT_NUM, self.OnSetFractionWidth, self.fractionwidth )
         self.Bind(wx.EVT_TEXT, self.OnSetGroupChar, self.groupchar )
         self.Bind(wx.EVT_TEXT, self.OnSetDecimalChar, self.decimalchar )
 
         self.Bind(wx.EVT_CHECKBOX, self.OnSetMin, self.set_min )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetMax, self.set_max )
-        self.Bind(mnum.EVT_MASKEDNUM, self.SetTargetMinMax, self.min )
-        self.Bind(mnum.EVT_MASKEDNUM, self.SetTargetMinMax, self.max )
+        self.Bind(masked.EVT_NUM, self.SetTargetMinMax, self.min )
+        self.Bind(masked.EVT_NUM, self.SetTargetMinMax, self.max )
 
         self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_target )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none )
@@ -158,7 +158,7 @@ value entry ctrl:""")
         self.Bind(wx.EVT_CHECKBOX, self.OnSetUseParens, self.use_parens )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetSelectOnEntry, self.select_on_entry )
 
-        self.Bind(mnum.EVT_MASKEDNUM, self.OnTargetChange, self.target_ctl )
+        self.Bind(masked.EVT_NUM, self.OnTargetChange, self.target_ctl )
         self.Bind(wx.EVT_COMBOBOX, self.OnNumberSelect, self.numselect )
 
 
@@ -323,6 +323,7 @@ def runTest( frame, nb, log ):
     return win
 
 #----------------------------------------------------------------------
+import wx.lib.masked.numctrl as mnum
 overview = mnum.__doc__
 
 if __name__ == '__main__':

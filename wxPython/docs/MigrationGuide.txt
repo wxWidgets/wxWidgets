@@ -619,6 +619,14 @@ Similarly, the wxSystemSettings backwards compatibiility aliases for
 GetSystemColour, GetSystemFont and GetSystemMetric have also gone into
 the bit-bucket.  Use GetColour, GetFont and GetMetric instead.
 
+Use the Python True/False constants instead of the true, TRUE, false,
+FALSE that used to be provided with wxPython.
+
+Use None instead of the ancient and should have been removed a long
+time ago wx.NULL alias.
+
+wx.TreeCtrl no longer needs to be passed the cookie variable as the
+2nd parameter.  It still returns it though, for use with GetNextChild.
 
 The wx.NO_FULL_REPAINT_ON_RESIZE style is now the default style for
 all windows.  The name still exists for compatibility, but it is set
@@ -667,3 +675,8 @@ functions in wxPython for parameters that are expecting an integer.
 If the object is not already an integer then it will be asked to
 convert itself to one.  A similar conversion fragment is in place for
 parameters that expect floating point values.
+
+**[Changed in 2.5.1.6]**  The MaskedEditCtrl modules have been moved
+to their own sub-package, wx.lib.masked.  See the docstrings and demo
+for changes in capabilities, usage, etc.
+

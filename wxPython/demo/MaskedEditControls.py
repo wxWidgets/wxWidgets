@@ -4,9 +4,8 @@ import  sys
 import  traceback
 
 import  wx
-import  wx.lib.maskededit       as  med
-import  wx.lib.maskedctrl       as  mctl
-import  wx.lib.scrolledpanel    as  scroll
+import  wx.lib.masked             as  masked
+import  wx.lib.scrolledpanel      as  scroll
 
 
 class demoMixin:
@@ -18,7 +17,7 @@ class demoMixin:
         mask        = wx.StaticText( self, -1, "Mask Value" )
         formatcode  = wx.StaticText( self, -1, "Format" )
         regex       = wx.StaticText( self, -1, "Regexp Validator(opt.)" )
-        ctrl        = wx.StaticText( self, -1, "MaskedTextCtrl" )
+        ctrl        = wx.StaticText( self, -1, "Masked TextCtrl" )
 
         description.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
         mask.SetFont( wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD))
@@ -41,7 +40,7 @@ class demoMixin:
             sizer.Add( wx.StaticText( self, -1, control[4]) )
 
             if control in controls:
-                newControl  = med.MaskedTextCtrl( self, -1, "",
+                newControl  = masked.TextCtrl( self, -1, "",
                                                 mask         = control[1],
                                                 excludeChars = control[2],
                                                 formatcodes  = control[3],
@@ -79,7 +78,7 @@ class demoPage1(scroll.ScrolledPanel, demoMixin):
         self.editList  = []
 
         label = wx.StaticText( self, -1, """\
-Here are some basic MaskedTextCtrls to give you an idea of what you can do
+Here are some basic masked TextCtrls to give you an idea of what you can do
 with this control.  Note that all controls have been auto-sized by including 'F' in
 the format codes.
 
@@ -152,8 +151,8 @@ class demoPage2(scroll.ScrolledPanel, demoMixin):
 
         label = wx.StaticText( self, -1, """\
 All these controls have been created by passing a single parameter, the autoformat code,
-and use the factory class MaskedCtrl with its default controlType.
-The maskededit module contains an internal dictionary of types and formats (autoformats).
+and use the factory class masked.Ctrl with its default controlType.
+The masked package contains an internal dictionary of types and formats (autoformats).
 Many of these already do complicated validation; To see some examples, try
 29 Feb 2002 vs. 2004 for the date formats, or email address validation.
 """)
@@ -163,7 +162,7 @@ Many of these already do complicated validation; To see some examples, try
 
         description = wx.StaticText( self, -1, "Description")
         autofmt     = wx.StaticText( self, -1, "AutoFormat Code")
-        ctrl        = wx.StaticText( self, -1, "MaskedCtrl")
+        ctrl        = wx.StaticText( self, -1, "Masked Ctrl")
 
         description.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
         autofmt.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
@@ -174,10 +173,10 @@ Many of these already do complicated validation; To see some examples, try
         grid.Add( autofmt,     0, wx.ALIGN_LEFT )
         grid.Add( ctrl,        0, wx.ALIGN_LEFT )
 
-        for autoformat, desc in med.autoformats:
+        for autoformat, desc in masked.autoformats:
             grid.Add( wx.StaticText( self, -1, desc), 0, wx.ALIGN_LEFT )
             grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
-            grid.Add( mctl.MaskedCtrl( self, -1, "",
+            grid.Add( masked.Ctrl( self, -1, "",
                                     autoformat       = autoformat,
                                     demo             = True,
                                     name             = autoformat),
@@ -197,7 +196,7 @@ class demoPage3(scroll.ScrolledPanel, demoMixin):
         self.editList  = []
 
         label = wx.StaticText( self, -1, """\
-Here MaskedTextCtrls that have default values.  The states
+Here masked TextCtrls that have default values.  The states
 control has a list of valid values, and the unsigned integer
 has a legal range specified.
 """)
@@ -215,7 +214,7 @@ has a legal range specified.
 
         controls = [
         #description        mask                    excl format     regexp                              range,list,initial
-       ("U.S. State (2 char)",      "AA",            "", 'F!_',       "[A-Z]{2}",                         '',med.states, med.states[0]),
+       ("U.S. State (2 char)",      "AA",            "", 'F!_',       "[A-Z]{2}",                         '', masked.states, masked.states[0]),
        ("Integer (signed)",         "#{6}",          "", 'F-_',       "",                                 '','', ' 0    '),
        ("Integer (unsigned)\n(1-399)","######",      "", 'F_',        "",                                 (1,399),'', '1     '),
        ("Float (signed)",           "#{6}.#{9}",     "", 'F-_R',      "",                                 '','', '000000.000000000'),
@@ -256,7 +255,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         description  = wx.StaticText( self, -1, "Description" )
         autofmt      = wx.StaticText( self, -1, "AutoFormat Code" )
         fields       = wx.StaticText( self, -1, "Field Objects" )
-        ctrl         = wx.StaticText( self, -1, "MaskedTextCtrl" )
+        ctrl         = wx.StaticText( self, -1, "Masked TextCtrl" )
 
         description.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
         autofmt.SetFont( wx.Font( 9, wx.SWISS, wx.NORMAL, wx.BOLD ) )
@@ -270,7 +269,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         grid.Add( ctrl,        0, wx.ALIGN_LEFT )
 
         autoformat = "USPHONEFULLEXT"
-        fieldsDict = {0: med.Field(choices=["617","781","508","978","413"], choiceRequired=True)}
+        fieldsDict = {0: masked.Field(choices=["617","781","508","978","413"], choiceRequired=True)}
         fieldsLabel = """\
 {0: Field(choices=[
             "617","781",
@@ -279,7 +278,7 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         grid.Add( wx.StaticText( self, -1, "Restricted Area Code"), 0, wx.ALIGN_LEFT )
         grid.Add( wx.StaticText( self, -1, autoformat), 0, wx.ALIGN_LEFT )
         grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
-        grid.Add( med.MaskedTextCtrl( self, -1, "",
+        grid.Add( masked.TextCtrl( self, -1, "",
                                     autoformat       = autoformat,
                                     fields           = fieldsDict,
                                     demo             = True,
@@ -287,12 +286,12 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
                   0, wx.ALIGN_LEFT )
 
         autoformat = "EXPDATEMMYY"
-        fieldsDict = {1: med.Field(choices=["03", "04", "05"], choiceRequired=True)}
+        fieldsDict = {1: masked.Field(choices=["03", "04", "05"], choiceRequired=True)}
         fieldsLabel = """\
 {1: Field(choices=[
             "03", "04", "05"],
           choiceRequired=True)}"""
-        exp =  med.MaskedTextCtrl( self, -1, "",
+        exp =  masked.TextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
@@ -303,15 +302,15 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         grid.Add( wx.StaticText( self, -1, fieldsLabel), 0, wx.ALIGN_LEFT )
         grid.Add( exp, 0, wx.ALIGN_LEFT )
 
-        fieldsDict = {0: med.Field(choices=["02134","02155"], choiceRequired=True),
-                      1: med.Field(choices=["1234", "5678"],  choiceRequired=False)}
+        fieldsDict = {0: masked.Field(choices=["02134","02155"], choiceRequired=True),
+                      1: masked.Field(choices=["1234", "5678"],  choiceRequired=False)}
         fieldsLabel = """\
 {0: Field(choices=["02134","02155"],
           choiceRequired=True),
  1: Field(choices=["1234", "5678"],
           choiceRequired=False)}"""
         autoformat = "USZIPPLUS4"
-        zip =  med.MaskedTextCtrl( self, -1, "",
+        zip =  masked.TextCtrl( self, -1, "",
                                  autoformat       = autoformat,
                                  fields           = fieldsDict,
                                  demo             = True,
@@ -336,7 +335,7 @@ class demoPage5(scroll.ScrolledPanel, demoMixin):
 
 
         labelMaskedCombos = wx.StaticText( self, -1, """\
-These are some examples of MaskedComboBox:""")
+These are some examples of masked.ComboBox:""")
         labelMaskedCombos.SetForegroundColour( "Blue" )
 
 
@@ -344,8 +343,8 @@ These are some examples of MaskedComboBox:""")
 A state selector; only
 "legal" values can be
 entered:""")
-        statecode = med.MaskedComboBox( self, -1, med.states[0],
-                                  choices = med.states,
+        statecode = masked.ComboBox( self, -1, masked.states[0],
+                                  choices = masked.states,
                                   autoformat="USSTATE")
 
         label_statename = wx.StaticText( self, -1, """\
@@ -353,9 +352,9 @@ A state name selector,
 with auto-select:""")
 
         # Create this one using factory function:
-        statename = mctl.MaskedCtrl( self, -1, med.state_names[0],
-                                  controlType = mctl.controlTypes.MASKEDCOMBO,
-                                  choices = med.state_names,
+        statename = masked.Ctrl( self, -1, masked.state_names[0],
+                                  controlType = masked.controlTypes.COMBO,
+                                  choices = masked.state_names,
                                   autoformat="USSTATENAME",
                                   autoSelect=True)
         statename.SetCtrlParameters(formatcodes = 'F!V_')
@@ -363,8 +362,8 @@ with auto-select:""")
 
         numerators = [ str(i) for i in range(1, 4) ]
         denominators = [ string.ljust(str(i), 2) for i in [2,3,4,5,8,16,32,64] ]
-        fieldsDict = {0: med.Field(choices=numerators, choiceRequired=False),
-                      1: med.Field(choices=denominators, choiceRequired=True)}
+        fieldsDict = {0: masked.Field(choices=numerators, choiceRequired=False),
+                      1: masked.Field(choices=denominators, choiceRequired=True)}
         choices = []
         for n in numerators:
             for d in denominators:
@@ -377,8 +376,8 @@ A masked ComboBox for fraction selection.
 Choices for each side of the fraction can
 be selected with PageUp/Down:""")
 
-        fraction = mctl.MaskedCtrl( self, -1, "",
-                                 controlType = mctl.MASKEDCOMBO,
+        fraction = masked.Ctrl( self, -1, "",
+                                 controlType = masked.controlTypes.COMBO,
                                  choices = choices,
                                  choiceRequired = True,
                                  mask = "#/##",
@@ -392,7 +391,7 @@ A masked ComboBox to validate
 text from a list of numeric codes:""")
 
         choices = ["91", "136", "305", "4579"]
-        code = med.MaskedComboBox( self, -1, choices[0],
+        code = masked.ComboBox( self, -1, choices[0],
                                  choices = choices,
                                  choiceRequired = True,
                                  formatcodes = "F_r",
@@ -402,8 +401,8 @@ text from a list of numeric codes:""")
 Programmatically set
 choice sets:""")
         self.list_selector = wx.ComboBox(self, -1, '', choices = ['list1', 'list2', 'list3'])
-        self.dynamicbox = mctl.MaskedCtrl( self, -1, '    ',
-                                      controlType = mctl.controlTypes.MASKEDCOMBO,
+        self.dynamicbox = masked.Ctrl( self, -1, '    ',
+                                      controlType = masked.controlTypes.COMBO,
                                       mask =    'XXXX',
                                       formatcodes = 'F_',
                                       # these are to give dropdown some initial height,
@@ -415,23 +414,23 @@ choice sets:""")
 
 
         labelIpAddrs = wx.StaticText( self, -1, """\
-Here are some examples of IpAddrCtrl, a control derived from MaskedTextCtrl:""")
+Here are some examples of IpAddrCtrl, a control derived from masked.TextCtrl:""")
         labelIpAddrs.SetForegroundColour( "Blue" )
 
 
         label_ipaddr1 = wx.StaticText( self, -1, "An empty control:")
-        ipaddr1 = med.IpAddrCtrl( self, -1, style = wx.TE_PROCESS_TAB )
+        ipaddr1 = masked.IpAddrCtrl( self, -1, style = wx.TE_PROCESS_TAB )
 
 
         label_ipaddr2 = wx.StaticText( self, -1, "A restricted mask:")
-        ipaddr2 = med.IpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
+        ipaddr2 = masked.IpAddrCtrl( self, -1, mask=" 10.  1.109.###" )
 
 
         label_ipaddr3 = wx.StaticText( self, -1, """\
 A control with restricted legal values:
 10. (1|2) . (129..255) . (0..255)""")
-        ipaddr3 = mctl.MaskedCtrl( self, -1,
-                                controlType = mctl.controlTypes.IPADDR,
+        ipaddr3 = masked.Ctrl( self, -1,
+                                controlType = masked.controlTypes.IPADDR,
                                 mask=" 10.  #.###.###")
         ipaddr3.SetFieldParameters(0, validRegex="1|2",validRequired=False )   # requires entry to match or not allowed
 
@@ -441,22 +440,22 @@ A control with restricted legal values:
 
 
         labelNumerics = wx.StaticText( self, -1, """\
-Here are some useful configurations of a MaskedTextCtrl for integer and floating point input that still treat
-the control as a text control.  (For a true numeric control, check out the MaskedNumCtrl class!)""")
+Here are some useful configurations of a masked.TextCtrl for integer and floating point input that still treat
+the control as a text control.  (For a true numeric control, check out the masked.NumCtrl class!)""")
         labelNumerics.SetForegroundColour( "Blue" )
 
         label_intctrl1 = wx.StaticText( self, -1, """\
 An integer entry control with
 shifting insert enabled:""")
-        self.intctrl1 = med.MaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
+        self.intctrl1 = masked.TextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,F>')
         label_intctrl2 = wx.StaticText( self, -1, """\
      Right-insert integer entry:""")
-        self.intctrl2 = med.MaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
+        self.intctrl2 = masked.TextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-,Fr')
 
         label_floatctrl = wx.StaticText( self, -1, """\
 A floating point entry control
 with right-insert for ordinal:""")
-        self.floatctrl = med.MaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
+        self.floatctrl = masked.TextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R", useParensForNegatives=False)
         self.floatctrl.SetFieldParameters(0, formatcodes='r<', validRequired=True)  # right-insert, require explicit cursor movement to change fields
         self.floatctrl.SetFieldParameters(1, defaultValue='00')                     # don't allow blank fraction
 
@@ -588,7 +587,7 @@ with right-insert for ordinal:""")
             formatcodes += 'r'
             mask = '###'
         else:
-            choices = med.states
+            choices = masked.states
             mask = 'AA'
             formatcodes += '!'
         self.dynamicbox.SetCtrlParameters( mask = mask,
@@ -628,15 +627,15 @@ def runTest(frame, nb, log):
 
 def RunStandalone():
     app = wx.PySimpleApp()
-    frame = wx.Frame(None, -1, "Test MaskedTextCtrl", size=(640, 480))
+    frame = wx.Frame(None, -1, "Test MaskedEditCtrls", size=(640, 480))
     win = TestMaskedTextCtrls(frame, -1, sys.stdout)
     frame.Show(True)
     app.MainLoop()
 #----------------------------------------------------------------------------
-
+import wx.lib.masked.maskededit as maskededit
 overview = """<html>
 <PRE><FONT SIZE=-1>
-""" + med.__doc__ + """
+""" + maskededit.__doc__ + """
 </FONT></PRE>
 """
 

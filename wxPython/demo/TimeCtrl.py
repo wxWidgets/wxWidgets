@@ -1,12 +1,12 @@
-# 
+#
 # 11/21/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o presense of spin control causing probs (see spin ctrl demo for details)
-# 
+#
 
-import  wx
-import  wx.lib.timectrl         as  timectl
-import  wx.lib.scrolledpanel    as  scrolled
+import wx
+import wx.lib.scrolledpanel    as scrolled
+import wx.lib.masked           as masked
 
 #----------------------------------------------------------------------
 
@@ -18,21 +18,21 @@ class TestPanel( scrolled.ScrolledPanel ):
 
 
         text1 = wx.StaticText( self, -1, "12-hour format:")
-        self.time12 = timectl.TimeCtrl( self, -1, name="12 hour control" )
+        self.time12 = masked.TimeCtrl( self, -1, name="12 hour control" )
         spin1 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
         self.time12.BindSpinButton( spin1 )
 
         text2 = wx.StaticText( self, -1, "24-hour format:")
         spin2 = wx.SpinButton( self, -1, wx.DefaultPosition, (-1,20), 0 )
-        self.time24 = timectl.TimeCtrl(
-                        self, -1, name="24 hour control", fmt24hr=True, 
-                        spinButton = spin2 
+        self.time24 = masked.TimeCtrl(
+                        self, -1, name="24 hour control", fmt24hr=True,
+                        spinButton = spin2
                         )
 
         text3 = wx.StaticText( self, -1, "No seconds\nor spin button:")
-        self.spinless_ctrl = timectl.TimeCtrl(
-                                self, -1, name="spinless control", 
-                                display_seconds = False 
+        self.spinless_ctrl = masked.TimeCtrl(
+                                self, -1, name="spinless control",
+                                display_seconds = False
                                 )
 
         grid = wx.FlexGridSizer( 0, 2, 10, 5 )
@@ -54,8 +54,8 @@ class TestPanel( scrolled.ScrolledPanel ):
 
         buttonChange = wx.Button( self, -1, "Change Controls")
         self.radio12to24 = wx.RadioButton(
-                            self, -1, "Copy 12-hour time to 24-hour control", 
-                            wx.DefaultPosition, wx.DefaultSize, wx.RB_GROUP 
+                            self, -1, "Copy 12-hour time to 24-hour control",
+                            wx.DefaultPosition, wx.DefaultSize, wx.RB_GROUP
                             )
 
         self.radio24to12 = wx.RadioButton(
@@ -86,17 +86,17 @@ class TestPanel( scrolled.ScrolledPanel ):
         self.set_bounds = wx.CheckBox( self, -1, "Set time bounds:" )
 
         minlabel = wx.StaticText( self, -1, "minimum time:" )
-        self.min = timectl.TimeCtrl( self, -1, name="min", display_seconds = False )
+        self.min = masked.TimeCtrl( self, -1, name="min", display_seconds = False )
         self.min.Enable( False )
 
         maxlabel = wx.StaticText( self, -1, "maximum time:" )
-        self.max = timectl.TimeCtrl( self, -1, name="max", display_seconds = False )
+        self.max = masked.TimeCtrl( self, -1, name="max", display_seconds = False )
         self.max.Enable( False )
 
         self.limit_check = wx.CheckBox( self, -1, "Limit control" )
 
         label = wx.StaticText( self, -1, "Resulting time control:" )
-        self.target_ctrl = timectl.TimeCtrl( self, -1, name="new" )
+        self.target_ctrl = masked.TimeCtrl( self, -1, name="new" )
 
         grid2 = wx.FlexGridSizer( 0, 2, 0, 0 )
         grid2.Add( (20, 0), 0, wx.ALIGN_LEFT|wx.ALL, 5 )
@@ -142,14 +142,14 @@ class TestPanel( scrolled.ScrolledPanel ):
         self.SetupScrolling()
 
         self.Bind(wx.EVT_BUTTON, self.OnButtonClick, buttonChange )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.time12 )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.time24 )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.spinless_ctrl )
+        self.Bind(masked.EVT_TIMEUPDATE, self.OnTimeChange, self.time12 )
+        self.Bind(masked.EVT_TIMEUPDATE, self.OnTimeChange, self.time24 )
+        self.Bind(masked.EVT_TIMEUPDATE, self.OnTimeChange, self.spinless_ctrl )
         self.Bind(wx.EVT_CHECKBOX, self.OnBoundsCheck, self.set_bounds )
         self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_check )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.SetTargetMinMax, self.min )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.SetTargetMinMax, self.max )
-        self.Bind(timectl.EVT_TIMEUPDATE, self.OnTimeChange, self.target_ctrl )
+        self.Bind(masked.EVT_TIMEUPDATE, self.SetTargetMinMax, self.min )
+        self.Bind(masked.EVT_TIMEUPDATE, self.SetTargetMinMax, self.max )
+        self.Bind(masked.EVT_TIMEUPDATE, self.OnTimeChange, self.target_ctrl )
 
 
     def OnTimeChange( self, event ):
@@ -204,7 +204,7 @@ class TestPanel( scrolled.ScrolledPanel ):
             min, max = None, None
 
         cur_min, cur_max = self.target_ctrl.GetBounds()
-
+        print cur_min, min
         if min and (min != cur_min): self.target_ctrl.SetMin( min )
         if max and (max != cur_max): self.target_ctrl.SetMax( max )
 
@@ -225,11 +225,11 @@ def runTest( frame, nb, log ):
     return win
 
 #----------------------------------------------------------------------
-
+import wx.lib.masked.timectrl as timectl
 overview = timectl.__doc__
 
 if __name__ == '__main__':
     import sys,os
     import run
-    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
+    run.main(['', os.path.basename(sys.argv[0])])
 

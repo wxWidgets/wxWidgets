@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:         wxPython.lib.maskednumctrl.py
+# Name:         wxPython.lib.masked.numctrl.py
 # Author:       Will Sadkin
 # Created:      09/06/2003
 # Copyright:   (c) 2003 by Will Sadkin
@@ -9,12 +9,12 @@
 # NOTE:
 #   This was written to provide a numeric edit control for wxPython that
 #   does things like right-insert (like a calculator), and does grouping, etc.
-#   (ie. the features of MaskedTextCtrl), but allows Get/Set of numeric
+#   (ie. the features of masked.TextCtrl), but allows Get/Set of numeric
 #   values, rather than text.
 #
-#   MaskedNumCtrl permits integer, and floating point values to be set
+#   Masked.NumCtrl permits integer, and floating point values to be set
 #   retrieved or set via .GetValue() and .SetValue() (type chosen based on
-#   fraction width, and provides an EVT_MASKEDNUM() event function for trapping
+#   fraction width, and provides an masked.EVT_NUM() event function for trapping
 #   changes to the control.
 #
 #   It supports negative numbers as well as the naturals, and has the option
@@ -24,29 +24,29 @@
 #   Similarly, replacing the contents of the control with '-' will result in
 #   a selected (absolute) value of -1.
 #
-#   MaskedNumCtrl also supports range limits, with the option of either
+#   masked.NumCtrl also supports range limits, with the option of either
 #   enforcing them or simply coloring the text of the control if the limits
 #   are exceeded.
 #
-#   MaskedNumCtrl is intended to support fixed-point numeric entry, and
+#   masked.NumCtrl is intended to support fixed-point numeric entry, and
 #   is derived from BaseMaskedTextCtrl.  As such, it supports a limited range
 #   of values to comply with a fixed-width entry mask.
 #----------------------------------------------------------------------------
 # 12/09/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o Updated for wx namespace
-# 
+#
 # 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o wxMaskedEditMixin -> MaskedEditMixin
-# o wxMaskedTextCtrl -> MaskedTextCtrl
-# o wxMaskedNumNumberUpdatedEvent -> MaskedNumNumberUpdatedEvent
-# o wxMaskedNumCtrl -> MaskedNumCtrl
+# o wxMaskedTextCtrl -> masked.TextCtrl
+# o wxMaskedNumNumberUpdatedEvent -> masked.NumberUpdatedEvent
+# o wxMaskedNumCtrl -> masked.NumCtrl
 #
 
 """<html><body>
 <P>
-<B>MaskedNumCtrl:</B>
+<B>masked.NumCtrl:</B>
 <UL>
 <LI>allows you to get and set integer or floating point numbers as value,</LI>
 <LI>provides bounds support and optional value limiting,</LI>
@@ -62,14 +62,14 @@ fractional portion.
 <P>
 Here's the API:
 <DL><PRE>
-    <B>MaskedNumCtrl</B>(
+    <B>masked.NumCtrl</B>(
          parent, id = -1,
          <B>value</B> = 0,
          pos = wx.DefaultPosition,
          size = wx.DefaultSize,
          style = 0,
          validator = wx.DefaultValidator,
-         name = "maskednumber",
+         name = "masked.number",
          <B>integerWidth</B> = 10,
          <B>fractionWidth</B> = 0,
          <B>allowNone</B> = False,
@@ -87,7 +87,7 @@ Here's the API:
          <B>emptyBackgroundColour</B> = "White",
          <B>validBackgroundColour</B> = "White",
          <B>invalidBackgroundColour</B> = "Yellow",
-         <B>autoSize</B> = True         
+         <B>autoSize</B> = True
          )
 </PRE>
 <UL>
@@ -190,7 +190,7 @@ Here's the API:
 </UL>
 <BR>
 <BR>
-<DT><B>EVT_MASKEDNUM(win, id, func)</B>
+<DT><B>masked.EVT_NUM(win, id, func)</B>
 <DD>Respond to a EVT_COMMAND_MASKED_NUMBER_UPDATED event, generated when
 the value changes. Notice that this event will always be sent when the
 control's contents changes - whether this is due to user input or
@@ -384,18 +384,18 @@ MAXINT = maxint     # (constants should be in upper case)
 MININT = -maxint-1
 
 from wx.tools.dbg import Logger
-from wx.lib.maskededit import MaskedEditMixin, BaseMaskedTextCtrl, Field
+from wx.lib.masked import MaskedEditMixin, Field, BaseMaskedTextCtrl
 dbg = Logger()
-dbg(enable=0)
+##dbg(enable=0)
 
 #----------------------------------------------------------------------------
 
 wxEVT_COMMAND_MASKED_NUMBER_UPDATED = wx.NewEventType()
-EVT_MASKEDNUM = wx.PyEventBinder(wxEVT_COMMAND_MASKED_NUMBER_UPDATED, 1)
+EVT_NUM = wx.PyEventBinder(wxEVT_COMMAND_MASKED_NUMBER_UPDATED, 1)
 
 #----------------------------------------------------------------------------
 
-class MaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
+class NumberUpdatedEvent(wx.PyCommandEvent):
     def __init__(self, id, value = 0, object=None):
         wx.PyCommandEvent.__init__(self, wxEVT_COMMAND_MASKED_NUMBER_UPDATED, id)
 
@@ -409,8 +409,8 @@ class MaskedNumNumberUpdatedEvent(wx.PyCommandEvent):
 
 
 #----------------------------------------------------------------------------
-class MaskedNumCtrlAccessorsMixin:
-    # Define wxMaskedNumCtrl's list of attributes having their own
+class NumCtrlAccessorsMixin:
+    # Define masked.NumCtrl's list of attributes having their own
     # Get/Set functions, ignoring those that make no sense for
     # an numeric control.
     exposed_basectrl_params = (
@@ -447,8 +447,8 @@ class MaskedNumCtrlAccessorsMixin:
 
 
 #----------------------------------------------------------------------------
- 
-class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
+
+class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 
 
     valid_ctrl_params = {
@@ -470,7 +470,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         'validBackgroundColour': "White",
         'invalidBackgroundColour': "Yellow",
         'useFixedWidthFont': True,          # by default, use a fixed-width font
-        'autoSize': True,                   # by default, set the width of the control based on the mask        
+        'autoSize': True,                   # by default, set the width of the control based on the mask
         }
 
 
@@ -478,31 +478,32 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 self, parent, id=-1, value = 0,
                 pos = wx.DefaultPosition, size = wx.DefaultSize,
                 style = wx.TE_PROCESS_TAB, validator = wx.DefaultValidator,
-                name = "maskednum",
+                name = "masked.num",
                 **kwargs ):
 
-        dbg('MaskedNumCtrl::__init__', indent=1)
+##        dbg('masked.NumCtrl::__init__', indent=1)
 
         # Set defaults for control:
-        dbg('setting defaults:')
-        for key, param_value in MaskedNumCtrl.valid_ctrl_params.items():
+##        dbg('setting defaults:')
+        for key, param_value in NumCtrl.valid_ctrl_params.items():
             # This is done this way to make setattr behave consistently with
             # "private attribute" name mangling
             setattr(self, '_' + key, copy.copy(param_value))
 
         # Assign defaults for all attributes:
-        init_args = copy.deepcopy(MaskedNumCtrl.valid_ctrl_params)
-        dbg('kwargs:', kwargs)
+        init_args = copy.deepcopy(NumCtrl.valid_ctrl_params)
+##        dbg('kwargs:', kwargs)
         for key, param_value in kwargs.items():
             key = key.replace('Color', 'Colour')
-            if key not in MaskedNumCtrl.valid_ctrl_params.keys():
+            if key not in NumCtrl.valid_ctrl_params.keys():
                 raise AttributeError('invalid keyword argument "%s"' % key)
             else:
                 init_args[key] = param_value
-        dbg('init_args:', indent=1)
+##        dbg('init_args:', indent=1)
         for key, param_value in init_args.items():
-            dbg('%s:' % key, param_value)
-        dbg(indent=0)
+##            dbg('%s:' % key, param_value)
+            pass
+##        dbg(indent=0)
 
         # Process initial fields for the control, as part of construction:
         if type(init_args['integerWidth']) != types.IntType:
@@ -521,7 +522,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         if self._fractionWidth:
             fracmask = '.' + '#{%d}' % self._fractionWidth
-            dbg('fracmask:', fracmask)
+##            dbg('fracmask:', fracmask)
             fields[1] = Field(defaultValue='0'*self._fractionWidth)
         else:
             fracmask = ''
@@ -537,7 +538,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         else:
             emptyInvalid = True
         fields[0] = Field(formatcodes='r<>', emptyInvalid=emptyInvalid)
-        dbg('intmask:', intmask)
+##        dbg('intmask:', intmask)
 
         # don't bother to reprocess these arguments:
         del init_args['integerWidth']
@@ -585,14 +586,14 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         # Ensure proper coloring:
         self.Refresh()
-        dbg('finished MaskedNumCtrl::__init__', indent=0)
+##        dbg('finished NumCtrl::__init__', indent=0)
 
 
     def SetParameters(self, **kwargs):
         """
         This routine is used to initialize and reconfigure the control:
         """
-        dbg('MaskedNumCtrl::SetParameters', indent=1)
+##        dbg('NumCtrl::SetParameters', indent=1)
         maskededit_kwargs = {}
         reset_fraction_width = False
 
@@ -620,14 +621,14 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
             else:
                 emptyInvalid = True
                 fracmask = ''
-            dbg('fracmask:', fracmask)
+##            dbg('fracmask:', fracmask)
 
             if kwargs.has_key('integerWidth'):
                 if type(kwargs['integerWidth']) != types.IntType:
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     raise AttributeError('invalid integerWidth (%s) specified; expected integer' % repr(kwargs['integerWidth']))
                 elif kwargs['integerWidth'] < 0:
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     raise AttributeError('invalid integerWidth (%s) specified; must be > 0' % repr(kwargs['integerWidth']))
                 else:
                     self._integerWidth = kwargs['integerWidth']
@@ -641,7 +642,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 self._groupSpace = 0
 
             intmask = '#{%d}' % (self._integerWidth + self._groupSpace)
-            dbg('intmask:', intmask)
+##            dbg('intmask:', intmask)
             fields[0] = Field(formatcodes='r<>', emptyInvalid=emptyInvalid)
             maskededit_kwargs['fields'] = fields
 
@@ -655,17 +656,17 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         if kwargs.has_key('groupChar'):
             old_groupchar = self._groupChar     # save so we can reformat properly
-            dbg("old_groupchar: '%s'" % old_groupchar)
+##            dbg("old_groupchar: '%s'" % old_groupchar)
             maskededit_kwargs['groupChar'] = kwargs['groupChar']
         if kwargs.has_key('decimalChar'):
             old_decimalchar = self._decimalChar
-            dbg("old_decimalchar: '%s'" % old_decimalchar)
+##            dbg("old_decimalchar: '%s'" % old_decimalchar)
             maskededit_kwargs['decimalChar'] = kwargs['decimalChar']
 
         # for all other parameters, assign keyword args as appropriate:
         for key, param_value in kwargs.items():
             key = key.replace('Color', 'Colour')
-            if key not in MaskedNumCtrl.valid_ctrl_params.keys():
+            if key not in NumCtrl.valid_ctrl_params.keys():
                 raise AttributeError('invalid keyword argument "%s"' % key)
             elif key not in MaskedEditMixin.valid_ctrl_params.keys():
                 setattr(self, '_' + key, param_value)
@@ -673,10 +674,10 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 raise AttributeError('invalid keyword argument "%s"' % key)
             else:
                 maskededit_kwargs[key] = param_value
-        dbg('kwargs:', kwargs)
+##        dbg('kwargs:', kwargs)
 
         # reprocess existing format codes to ensure proper resulting format:
-        formatcodes = self.GetCtrlParameter('formatcodes')        
+        formatcodes = self.GetCtrlParameter('formatcodes')
         if kwargs.has_key('allowNegative'):
             if kwargs['allowNegative'] and '-' not in formatcodes:
                 formatcodes += '-'
@@ -695,7 +696,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         if kwargs.has_key('selectOnEntry'):
             self._selectOnEntry = kwargs['selectOnEntry']
-            dbg("kwargs['selectOnEntry']?", kwargs['selectOnEntry'], "'S' in formatcodes?", 'S' in formatcodes)
+##            dbg("kwargs['selectOnEntry']?", kwargs['selectOnEntry'], "'S' in formatcodes?", 'S' in formatcodes)
             if kwargs['selectOnEntry'] and 'S' not in formatcodes:
                 formatcodes += 'S'
                 maskededit_kwargs['formatcodes'] = formatcodes
@@ -728,7 +729,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 maskededit_kwargs['validRequired'] = False
             self._limited = kwargs['limited']
 
-        dbg('maskededit_kwargs:', maskededit_kwargs)
+##        dbg('maskededit_kwargs:', maskededit_kwargs)
         if maskededit_kwargs.keys():
             self.SetCtrlParameters(**maskededit_kwargs)
 
@@ -756,17 +757,18 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
             if( self._max is None
                 or min is None
                 or (self._max is not None and self._max >= min) ):
-                dbg('examining min')
+##                dbg('examining min')
                 if min is not None:
                     try:
                         textmin = self._toGUI(min, apply_limits = False)
                     except ValueError:
-                        dbg('min will not fit into control; ignoring', indent=0)
+##                        dbg('min will not fit into control; ignoring', indent=0)
                         raise
-                dbg('accepted min')
+##                dbg('accepted min')
                 self._min = min
             else:
-                dbg('ignoring min')
+##                dbg('ignoring min')
+                pass
 
 
         if kwargs.has_key('max'):
@@ -774,24 +776,25 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
             if( self._min is None
                 or max is None
                 or (self._min is not None and self._min <= max) ):
-                dbg('examining max')
+##                dbg('examining max')
                 if max is not None:
                     try:
                         textmax = self._toGUI(max, apply_limits = False)
                     except ValueError:
-                        dbg('max will not fit into control; ignoring', indent=0)
+##                        dbg('max will not fit into control; ignoring', indent=0)
                         raise
-                dbg('accepted max')
+##                dbg('accepted max')
                 self._max = max
             else:
-                dbg('ignoring max')
+##                dbg('ignoring max')
+                pass
 
         if kwargs.has_key('allowNegative'):
             self._allowNegative = kwargs['allowNegative']
 
         # Ensure current value of control obeys any new restrictions imposed:
         text = self._GetValue()
-        dbg('text value: "%s"' % text)
+##        dbg('text value: "%s"' % text)
         if kwargs.has_key('groupChar') and text.find(old_groupchar) != -1:
             text = text.replace(old_groupchar, self._groupChar)
         if kwargs.has_key('decimalChar') and text.find(old_decimalchar) != -1:
@@ -801,10 +804,10 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         value = self.GetValue()
 
-        dbg('self._allowNegative?', self._allowNegative)
+##        dbg('self._allowNegative?', self._allowNegative)
         if not self._allowNegative and self._isNeg:
             value = abs(value)
-            dbg('abs(value):', value)
+##            dbg('abs(value):', value)
             self._isNeg = False
 
         elif not self._allowNone and BaseMaskedTextCtrl.GetValue(self) == '':
@@ -815,19 +818,19 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         sel_start, sel_to = self.GetSelection()
         if self.IsLimited() and self._min is not None and value < self._min:
-            dbg('Set to min value:', self._min)
+##            dbg('Set to min value:', self._min)
             self._SetValue(self._toGUI(self._min))
 
         elif self.IsLimited() and self._max is not None and value > self._max:
-            dbg('Setting to max value:', self._max)
+##            dbg('Setting to max value:', self._max)
             self._SetValue(self._toGUI(self._max))
         else:
             # reformat current value as appropriate to possibly new conditions
-            dbg('Reformatting value:', value)
+##            dbg('Reformatting value:', value)
             sel_start, sel_to = self.GetSelection()
             self._SetValue(self._toGUI(value))
         self.Refresh() # recolor as appropriate
-        dbg('finished MaskedNumCtrl::SetParameters', indent=0)
+##        dbg('finished NumCtrl::SetParameters', indent=0)
 
 
 
@@ -859,21 +862,21 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 return string.atof(fracstring)
 
     def _OnChangeSign(self, event):
-        dbg('MaskedNumCtrl::_OnChangeSign', indent=1)
+##        dbg('NumCtrl::_OnChangeSign', indent=1)
         self._typedSign = True
         MaskedEditMixin._OnChangeSign(self, event)
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def _disallowValue(self):
-        dbg('MaskedNumCtrl::_disallowValue')
+##        dbg('NumCtrl::_disallowValue')
         # limited and -1 is out of bounds
         if self._typedSign:
             self._isNeg = False
         if not wx.Validator_IsSilent():
             wx.Bell()
         sel_start, sel_to = self._GetSelection()
-        dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
+##        dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
         wx.CallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
         wx.CallAfter(self.SetSelection, sel_start, sel_to)
 
@@ -886,19 +889,19 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         by the user.
         """
 
-        dbg('MaskedNumCtrl::_SetValue("%s")' % value, indent=1)
+##        dbg('NumCtrl::_SetValue("%s")' % value, indent=1)
 
         if( (self._fractionWidth and value.find(self._decimalChar) == -1) or
             (self._fractionWidth == 0 and value.find(self._decimalChar) != -1) ) :
             value = self._toGUI(value)
 
         numvalue = self._GetNumValue(value)
-        dbg('cleansed value: "%s"' % numvalue)
+##        dbg('cleansed value: "%s"' % numvalue)
         replacement = None
 
         if numvalue == "":
             if self._allowNone:
-                dbg('calling base BaseMaskedTextCtrl._SetValue(self, "%s")' % value)
+##                dbg('calling base BaseMaskedTextCtrl._SetValue(self, "%s")' % value)
                 BaseMaskedTextCtrl._SetValue(self, value)
                 self.Refresh()
                 return
@@ -906,54 +909,54 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 replacement = self._min
             else:
                 replacement = 0
-            dbg('empty value; setting replacement:', replacement)
+##            dbg('empty value; setting replacement:', replacement)
 
         if replacement is None:
             # Go get the integer portion about to be set and verify its validity
             intstart, intend = self._fields[0]._extent
-            dbg('intstart, intend:', intstart, intend)
-            dbg('raw integer:"%s"' % value[intstart:intend])
+##            dbg('intstart, intend:', intstart, intend)
+##            dbg('raw integer:"%s"' % value[intstart:intend])
             int = self._GetNumValue(value[intstart:intend])
             numval = self._fromGUI(value)
 
-            dbg('integer: "%s"' % int)
+##            dbg('integer: "%s"' % int)
             try:
                 fracval = self.GetFraction(value)
             except ValueError, e:
-                dbg('Exception:', e, 'must be out of bounds; disallow value')
+##                dbg('Exception:', e, 'must be out of bounds; disallow value')
                 self._disallowValue()
-                dbg(indent=0)
+##                dbg(indent=0)
                 return
 
             if fracval == 0.0:
-                dbg('self._isNeg?', self._isNeg)
+##                dbg('self._isNeg?', self._isNeg)
                 if int == '-' and self._oldvalue < 0 and not self._typedSign:
-                    dbg('just a negative sign; old value < 0; setting replacement of 0')
+##                    dbg('just a negative sign; old value < 0; setting replacement of 0')
                     replacement = 0
                     self._isNeg = False
                 elif int[:2] == '-0' and self._fractionWidth == 0:
                     if self._oldvalue < 0:
-                        dbg('-0; setting replacement of 0')
+##                        dbg('-0; setting replacement of 0')
                         replacement = 0
                         self._isNeg = False
                     elif not self._limited or (self._min < -1 and self._max >= -1):
-                        dbg('-0; setting replacement of -1')
+##                        dbg('-0; setting replacement of -1')
                         replacement = -1
                         self._isNeg = True
                     else:
                         # limited and -1 is out of bounds
                         self._disallowValue()
-                        dbg(indent=0)
+##                        dbg(indent=0)
                         return
 
                 elif int == '-' and (self._oldvalue >= 0 or self._typedSign) and self._fractionWidth == 0:
                     if not self._limited or (self._min < -1 and self._max >= -1):
-                        dbg('just a negative sign; setting replacement of -1')
+##                        dbg('just a negative sign; setting replacement of -1')
                         replacement = -1
                     else:
                         # limited and -1 is out of bounds
                         self._disallowValue()
-                        dbg(indent=0)
+##                        dbg(indent=0)
                         return
 
                 elif( self._typedSign
@@ -963,7 +966,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                     # changed sign resulting in value that's now out-of-bounds;
                     # disallow
                     self._disallowValue()
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     return
 
             if replacement is None:
@@ -974,37 +977,37 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                         # integer requested is not legal.  This can happen if the user
                         # is attempting to insert a digit in the middle of the control
                         # resulting in something like "   3   45". Disallow such actions:
-                        dbg('>>>>>>>>>>>>>>>> "%s" does not convert to a long!' % int)
+##                        dbg('>>>>>>>>>>>>>>>> "%s" does not convert to a long!' % int)
                         if not wx.Validator_IsSilent():
                             wx.Bell()
                         sel_start, sel_to = self._GetSelection()
-                        dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
+##                        dbg('queuing reselection of (%d, %d)' % (sel_start, sel_to))
                         wx.CallAfter(self.SetInsertionPoint, sel_start)      # preserve current selection/position
                         wx.CallAfter(self.SetSelection, sel_start, sel_to)
-                        dbg(indent=0)
+##                        dbg(indent=0)
                         return
 
                     if int[0] == '0' and len(int) > 1:
-                        dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
+##                        dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
                         if self._fractionWidth:
                             value = self._toGUI(string.atof(numvalue))
                         else:
                             value = self._toGUI(string.atol(numvalue))
-                        dbg('modified value: "%s"' % value)
+##                        dbg('modified value: "%s"' % value)
 
         self._typedSign = False     # reset state var
 
         if replacement is not None:
             # Value presented wasn't a legal number, but control should do something
             # reasonable instead:
-            dbg('setting replacement value:', replacement)
+##            dbg('setting replacement value:', replacement)
             self._SetValue(self._toGUI(replacement))
-            sel_start = BaseMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it            
+            sel_start = BaseMaskedTextCtrl.GetValue(self).find(str(abs(replacement)))   # find where it put the 1, so we can select it
             sel_to = sel_start + len(str(abs(replacement)))
-            dbg('queuing selection of (%d, %d)' %(sel_start, sel_to))
+##            dbg('queuing selection of (%d, %d)' %(sel_start, sel_to))
             wx.CallAfter(self.SetInsertionPoint, sel_start)
             wx.CallAfter(self.SetSelection, sel_start, sel_to)
-            dbg(indent=0)
+##            dbg(indent=0)
             return
 
         # Otherwise, apply appropriate formatting to value:
@@ -1016,35 +1019,35 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         else:
             self._isNeg = False
 
-        dbg('value:"%s"' % value, 'self._useParens:', self._useParens)
+##        dbg('value:"%s"' % value, 'self._useParens:', self._useParens)
         if self._fractionWidth:
             adjvalue = self._adjustFloat(self._GetNumValue(value).replace('.',self._decimalChar))
         else:
             adjvalue = self._adjustInt(self._GetNumValue(value))
-        dbg('adjusted value: "%s"' % adjvalue)
+##        dbg('adjusted value: "%s"' % adjvalue)
 
 
         sel_start, sel_to = self._GetSelection()     # record current insertion point
-        dbg('calling BaseMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
+##        dbg('calling BaseMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
         BaseMaskedTextCtrl._SetValue(self, adjvalue)
         # After all actions so far scheduled, check that resulting cursor
         # position is appropriate, and move if not:
         wx.CallAfter(self._CheckInsertionPoint)
 
-        dbg('finished MaskedNumCtrl::_SetValue', indent=0)
+##        dbg('finished NumCtrl::_SetValue', indent=0)
 
     def _CheckInsertionPoint(self):
         # If current insertion point is before the end of the integer and
         # its before the 1st digit, place it just after the sign position:
-        dbg('MaskedNumCtrl::CheckInsertionPoint', indent=1)
+##        dbg('NumCtrl::CheckInsertionPoint', indent=1)
         sel_start, sel_to = self._GetSelection()
         text = self._GetValue()
         if sel_to < self._fields[0]._extent[1] and text[sel_to] in (' ', '-', '('):
             text, signpos, right_signpos = self._getSignedValue()
-            dbg('setting selection(%d, %d)' % (signpos+1, signpos+1))
+##            dbg('setting selection(%d, %d)' % (signpos+1, signpos+1))
             self.SetInsertionPoint(signpos+1)
             self.SetSelection(signpos+1, signpos+1)
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def _OnErase( self, event ):
@@ -1053,7 +1056,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         grouping characters auto selects the digit before or after the
         grouping character, so that the erasure does the right thing.
         """
-        dbg('MaskedNumCtrl::_OnErase', indent=1)
+##        dbg('NumCtrl::_OnErase', indent=1)
 
         #if grouping digits, make sure deletes next to group char always
         # delete next digit to appropriate side:
@@ -1086,21 +1089,21 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                     self.SetSelection(sel_start, sel_to+1)
 
         BaseMaskedTextCtrl._OnErase(self, event)
-        dbg(indent=0)
+##        dbg(indent=0)
 
 
     def OnTextChange( self, event ):
         """
         Handles an event indicating that the text control's value
-        has changed, and issue EVT_MaskedNum event.
+        has changed, and issue EVT_NUM event.
         NOTE: using wxTextCtrl.SetValue() to change the control's
         contents from within a EVT_CHAR handler can cause double
         text events.  So we check for actual changes to the text
         before passing the events on.
         """
-        dbg('MaskedNumCtrl::OnTextChange', indent=1)
+##        dbg('NumCtrl::OnTextChange', indent=1)
         if not BaseMaskedTextCtrl._OnTextChange(self, event):
-            dbg(indent=0)
+##            dbg(indent=0)
             return
 
         # else... legal value
@@ -1109,14 +1112,14 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         if value != self._oldvalue:
             try:
                 self.GetEventHandler().ProcessEvent(
-                    MaskedNumNumberUpdatedEvent( self.GetId(), self.GetValue(), self ) )
+                    NumberUpdatedEvent( self.GetId(), self.GetValue(), self ) )
             except ValueError:
-                dbg(indent=0)
+##                dbg(indent=0)
                 return
             # let normal processing of the text continue
             event.Skip()
         self._oldvalue = value # record for next event
-        dbg(indent=0)
+##        dbg(indent=0)
 
     def _GetValue(self):
         """
@@ -1172,7 +1175,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         If min > the max value allowed by the width of the control,
         the function will return False, and the min will not be set.
         """
-        dbg('MaskedNumCtrl::SetMin(%s)' % repr(min), indent=1)
+##        dbg('NumCtrl::SetMin(%s)' % repr(min), indent=1)
         if( self._max is None
             or min is None
             or (self._max is not None and self._max >= min) ):
@@ -1183,7 +1186,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 bRet = False
         else:
             bRet = False
-        dbg(indent=0)
+##        dbg(indent=0)
         return bRet
 
     def GetMin(self):
@@ -1286,14 +1289,14 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         also be called with a value to see if that value would fall within
         the current bounds of the given control.
         """
-        dbg('IsInBounds(%s)' % repr(value), indent=1)
+##        dbg('IsInBounds(%s)' % repr(value), indent=1)
         if value is None:
             value = self.GetValue()
         else:
             try:
                 value = self._GetNumValue(self._toGUI(value))
             except ValueError, e:
-                dbg('error getting NumValue(self._toGUI(value)):', e, indent=0)
+##                dbg('error getting NumValue(self._toGUI(value)):', e, indent=0)
                 return False
             if value.strip() == '':
                 value = None
@@ -1309,10 +1312,10 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
 
         # if bounds set, and value is None, return False
         if value == None and (min is not None or max is not None):
-            dbg('finished IsInBounds', indent=0)
+##            dbg('finished IsInBounds', indent=0)
             return 0
         else:
-            dbg('finished IsInBounds', indent=0)
+##            dbg('finished IsInBounds', indent=0)
             return min <= value <= max
 
 
@@ -1383,21 +1386,21 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         type and bounds checking and raises ValueError if argument is
         not a valid value.
         """
-        dbg('MaskedNumCtrl::_toGUI(%s)' % repr(value), indent=1)
+##        dbg('NumCtrl::_toGUI(%s)' % repr(value), indent=1)
         if value is None and self.IsNoneAllowed():
-            dbg(indent=0)
+##            dbg(indent=0)
             return self._template
 
         elif type(value) in (types.StringType, types.UnicodeType):
             value = self._GetNumValue(value)
-            dbg('cleansed num value: "%s"' % value)
+##            dbg('cleansed num value: "%s"' % value)
             if value == "":
                 if self.IsNoneAllowed():
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     return self._template
                 else:
-                    dbg('exception raised:', e, indent=0)
-                    raise ValueError ('wxMaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+##                    dbg('exception raised:', e, indent=0)
+                    raise ValueError ('NumCtrl requires numeric value, passed %s'% repr(value) )
             # else...
             try:
                 if self._fractionWidth or value.find('.') != -1:
@@ -1405,13 +1408,13 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 else:
                     value = long(value)
             except Exception, e:
-                dbg('exception raised:', e, indent=0)
-                raise ValueError ('MaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+##                dbg('exception raised:', e, indent=0)
+                raise ValueError ('NumCtrl requires numeric value, passed %s'% repr(value) )
 
         elif type(value) not in (types.IntType, types.LongType, types.FloatType):
-            dbg(indent=0)
+##            dbg(indent=0)
             raise ValueError (
-                'MaskedNumCtrl requires numeric value, passed %s'% repr(value) )
+                'NumCtrl requires numeric value, passed %s'% repr(value) )
 
         if not self._allowNegative and value < 0:
             raise ValueError (
@@ -1421,29 +1424,29 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
             min = self.GetMin()
             max = self.GetMax()
             if not min is None and value < min:
-                dbg(indent=0)
+##                dbg(indent=0)
                 raise ValueError (
                     'value %d is below minimum value of control'% value )
             if not max is None and value > max:
-                dbg(indent=0)
+##                dbg(indent=0)
                 raise ValueError (
                     'value %d exceeds value of control'% value )
 
         adjustwidth = len(self._mask) - (1 * self._useParens * self._signOk)
-        dbg('len(%s):' % self._mask, len(self._mask))
-        dbg('adjustwidth - groupSpace:', adjustwidth - self._groupSpace)
-        dbg('adjustwidth:', adjustwidth)
+##        dbg('len(%s):' % self._mask, len(self._mask))
+##        dbg('adjustwidth - groupSpace:', adjustwidth - self._groupSpace)
+##        dbg('adjustwidth:', adjustwidth)
         if self._fractionWidth == 0:
             s = str(long(value)).rjust(self._integerWidth)
         else:
             format = '%' + '%d.%df' % (self._integerWidth+self._fractionWidth+1, self._fractionWidth)
             s = format % float(value)
-        dbg('s:"%s"' % s, 'len(s):', len(s))
+##        dbg('s:"%s"' % s, 'len(s):', len(s))
         if len(s) > (adjustwidth - self._groupSpace):
-            dbg(indent=0)
+##            dbg(indent=0)
             raise ValueError ('value %s exceeds the integer width of the control (%d)' % (s, self._integerWidth))
         elif s[0] not in ('-', ' ') and self._allowNegative and len(s) == (adjustwidth - self._groupSpace):
-            dbg(indent=0)
+##            dbg(indent=0)
             raise ValueError ('value %s exceeds the integer width of the control (%d)' % (s, self._integerWidth))
 
         s = s.rjust(adjustwidth).replace('.', self._decimalChar)
@@ -1452,7 +1455,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
                 s = s.replace('-', '(') + ')'
             else:
                 s += ' '
-        dbg('returned: "%s"' % s, indent=0)
+##        dbg('returned: "%s"' % s, indent=0)
         return s
 
 
@@ -1460,8 +1463,8 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         """
         Conversion function used in getting the value of the control.
         """
-        dbg(suspend=0)
-        dbg('MaskedNumCtrl::_fromGUI(%s)' % value, indent=1)
+##        dbg(suspend=0)
+##        dbg('NumCtrl::_fromGUI(%s)' % value, indent=1)
         # One or more of the underlying text control implementations
         # issue an intermediate EVT_TEXT when replacing the control's
         # value, where the intermediate value is an empty string.
@@ -1470,42 +1473,42 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         #
         if value.strip() == '':
             if not self.IsNoneAllowed():
-                dbg('empty value; not allowed,returning 0', indent = 0)
+##                dbg('empty value; not allowed,returning 0', indent = 0)
                 if self._fractionWidth:
                     return 0.0
                 else:
                     return 0
             else:
-                dbg('empty value; returning None', indent = 0)
+##                dbg('empty value; returning None', indent = 0)
                 return None
         else:
             value = self._GetNumValue(value)
-            dbg('Num value: "%s"' % value)
+##            dbg('Num value: "%s"' % value)
             if self._fractionWidth:
                 try:
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     return float( value )
                 except ValueError:
-                    dbg("couldn't convert to float; returning None")
+##                    dbg("couldn't convert to float; returning None")
                     return None
                 else:
                     raise
             else:
                 try:
-                    dbg(indent=0)
+##                    dbg(indent=0)
                     return int( value )
                 except ValueError:
                     try:
-                       dbg(indent=0)
+##                       dbg(indent=0)
                        return long( value )
                     except ValueError:
-                       dbg("couldn't convert to long; returning None")
+##                       dbg("couldn't convert to long; returning None")
                        return None
 
                     else:
                        raise
                 else:
-                    dbg('exception occurred; returning None')
+##                    dbg('exception occurred; returning None')
                     return None
 
 
@@ -1514,7 +1517,7 @@ class MaskedNumCtrl(BaseMaskedTextCtrl, MaskedNumCtrlAccessorsMixin):
         Preprocessor for base control paste; if value needs to be right-justified
         to fit in control, do so prior to paste:
         """
-        dbg('MaskedNumCtrl::_Paste (value = "%s")' % value)
+##        dbg('NumCtrl::_Paste (value = "%s")' % value)
         if value is None:
             paste_text = self._getClipboardContents()
         else:
@@ -1545,7 +1548,7 @@ if __name__ == '__main__':
             style = wx.DEFAULT_DIALOG_STYLE ):
             wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-            self.int_ctrl = MaskedNumCtrl(self, wx.NewId(), size=(55,20))
+            self.int_ctrl = NumCtrl(self, wx.NewId(), size=(55,20))
             self.OK = wx.Button( self, wx.ID_OK, "OK")
             self.Cancel = wx.Button( self, wx.ID_CANCEL, "Cancel")
 
@@ -1560,7 +1563,7 @@ if __name__ == '__main__':
             self.SetSizer( vs )
             vs.Fit( self )
             vs.SetSizeHints( self )
-            self.Bind(EVT_MASKEDNUM, self.OnChange, self.int_ctrl)
+            self.Bind(EVT_NUM, self.OnChange, self.int_ctrl)
 
         def OnChange(self, event):
             print 'value now', event.GetValue()
@@ -1578,7 +1581,7 @@ if __name__ == '__main__':
             return True
 
         def OnClick(self, event):
-            dlg = myDialog(self.panel, -1, "test MaskedNumCtrl")
+            dlg = myDialog(self.panel, -1, "test NumCtrl")
             dlg.int_ctrl.SetValue(501)
             dlg.int_ctrl.SetInsertionPoint(1)
             dlg.int_ctrl.SetSelection(1,2)
