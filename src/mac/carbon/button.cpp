@@ -50,12 +50,11 @@ void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
     wxButton *btnOldDefault = NULL;
-    wxPanel *panel = wxDynamicCast(parent, wxPanel);
-    if ( panel )
+    if ( parent )
     {
-        btnOldDefault = wxDynamicCast(panel->GetDefaultItem(),
+        btnOldDefault = wxDynamicCast(parent->GetDefaultItem(),
            wxButton);
-        panel->SetDefaultItem(this);
+        parent->SetDefaultItem(this);
     }
 
 	Boolean inData;
