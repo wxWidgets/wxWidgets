@@ -749,35 +749,59 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle )
 {
-  wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  wxMacPortSetter helper(this) ;
+  	wxCHECK_RET(Ok(), wxT("Invalid DC"));
+  	wxMacPortSetter helper(this) ;
+  	
+  	wxCoord x1, x2 , y1 , y2 ;
   
-  PolyHandle polygon = OpenPoly() ;
-  wxCoord x1, x2 , y1 , y2 ;
-  x1 = XLOG2DEV(points[0].x + xoffset);
-  y1 = YLOG2DEV(points[0].y + yoffset);   
-  ::MoveTo(x1,y1);
+  	if (m_brush.GetStyle() != wxTRANSPARENT)
+  	{
+  		PolyHandle polygon = OpenPoly();
+  		
+  		x1 = XLOG2DEV(points[0].x + xoffset);
+  		y1 = YLOG2DEV(points[0].y + yoffset);   
+  		::MoveTo(x1,y1);
   
-  for (int i = 0; i < n-1; i++)
-  {
-    x2 = XLOG2DEV(points[i+1].x + xoffset);
-    y2 = YLOG2DEV(points[i+1].y + yoffset);
-    ::LineTo(x2, y2);
-  }
+  		for (int i = 0; i < n-1; i++)
+  		{
+    		x2 = XLOG2DEV(points[i+1].x + xoffset);
+    		y2 = YLOG2DEV(points[i+1].y + yoffset);
+    		::LineTo(x2, y2);
+  		}
 
-  ClosePoly() ;
-	if (m_brush.GetStyle() != wxTRANSPARENT) 
-	{
-		MacInstallBrush() ;
-		::PaintPoly( polygon ) ;
+  		ClosePoly();
+
+		MacInstallBrush();
+		::PaintPoly( polygon );
+		
+		KillPoly( polygon );
 	}
 	
 	if (m_pen.GetStyle() != wxTRANSPARENT) 
 	{
+  		PolyHandle polygon = OpenPoly();
+  		
+  		x1 = XLOG2DEV(points[0].x + xoffset);
+  		y1 = YLOG2DEV(points[0].y + yoffset);   
+  		::MoveTo(x1,y1);
+  
+  		for (int i = 0; i < n-1; i++)
+  		{
+    		x2 = XLOG2DEV(points[i+1].x + xoffset);
+    		y2 = YLOG2DEV(points[i+1].y + yoffset);
+    		::LineTo(x2, y2);
+  		}
+  		
+  		// return to origin to close path
+  		::LineTo(x1,y1);
+
+  		ClosePoly();
+	
 		MacInstallPen() ;
 		::FramePoly( polygon ) ;
+		
+		KillPoly( polygon );
 	}
-  KillPoly( polygon ) ;
 }
 
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
