@@ -312,7 +312,11 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     // above it
     SetBestSize(size);
     SetPosition(pos);
-        
+
+    // Since we don't paint the whole background make sure that the platform
+    // will use the right one.
+    SetBackgroundColour(GetBackgroundColour());
+    
     SetHolidayAttrs();
 
     return true;
