@@ -164,6 +164,8 @@ public:
 
   void MacInstallMenuBar() ;
   static wxMenuBar* MacGetInstalledMenuBar() { return s_macInstalledMenuBar ; }
+  static void MacSetCommonMenuBar(wxMenuBar* menubar) { s_macCommonMenuBar=menubar; }
+  static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
 
 protected:
     // common part of all ctors
@@ -178,6 +180,7 @@ protected:
 
 private:
   static wxMenuBar*            s_macInstalledMenuBar ;
+  static wxMenuBar*            s_macCommonMenuBar ;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };

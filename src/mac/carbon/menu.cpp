@@ -449,6 +449,7 @@ auto-merge for MDI in case this will be necessary
 */
 
 wxMenuBar* wxMenuBar::s_macInstalledMenuBar = NULL ;
+wxMenuBar* wxMenuBar::s_macCommonMenuBar = NULL ;
 
 void wxMenuBar::Init()
 {
@@ -485,6 +486,8 @@ wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
 
 wxMenuBar::~wxMenuBar()
 {
+    if (s_macCommonMenuBar == this)
+        s_macCommonMenuBar = NULL;
     if (s_macInstalledMenuBar == this)
     {
         ::ClearMenuBar();
