@@ -37,7 +37,7 @@
 
 //#define TEST_ARRAYS
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_EXECUTE
@@ -53,9 +53,10 @@
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
-//#define TEST_VCARD
+//#define TEST_VCARD            -- don't enable this (VZ)
 //#define TEST_WCHAR
 //#define TEST_ZIP
+#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -1644,6 +1645,58 @@ static void TestZipStreamRead()
 #endif // TEST_ZIP
 
 // ----------------------------------------------------------------------------
+// ZLIB stream
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_ZLIB
+
+#include <wx/zstream.h>
+#include <wx/wfstream.h>
+
+static const wxChar *FILENAME_GZ = _T("test.gz");
+static const char *TEST_DATA = "hello and hello again";
+
+static void TestZlibStreamWrite()
+{
+    puts("*** Testing Zlib stream reading ***\n");
+
+    wxFileOutputStream fileOutStream(FILENAME_GZ);
+    wxZlibOutputStream ostr(fileOutStream, 0);
+    printf("Compressing the test string... ");
+    ostr.Write(TEST_DATA, sizeof(TEST_DATA));
+    if ( !ostr )
+    {
+        puts("(ERROR: failed)");
+    }
+    else
+    {
+        puts("(ok)");
+    }
+
+    puts("\n----- done ------");
+}
+
+static void TestZlibStreamRead()
+{
+    puts("*** Testing Zlib stream reading ***\n");
+
+    wxFileInputStream fileInStream(FILENAME_GZ);
+    wxZlibInputStream istr(fileInStream);
+    printf("Archive size: %u\n", istr.GetSize());
+
+    puts("Dumping the file:");
+    while ( !istr.Eof() )
+    {
+        putchar(istr.GetC());
+        fflush(stdout);
+    }
+
+    puts("\n----- done ------");
+}
+
+#endif // TEST_ZLIB
+
+// ----------------------------------------------------------------------------
 // date time
 // ----------------------------------------------------------------------------
 
@@ -2484,7 +2537,25 @@ static void TestTimeMS()
 
     printf("Now = %s\n", dt1.Format("%H:%M:%S:%l").c_str());
     printf("UNow = %s\n", dt2.Format("%H:%M:%S:%l").c_str());
-    printf("Difference is %s\n", (dt2 - dt1).Format("%l").c_str());
+    printf("Dummy loop: ");
+    for ( int i = 0; i < 6000; i++ )
+    {
+        //for ( int j = 0; j < 10; j++ )
+        {
+            wxString s;
+            s.Printf("%g", sqrt(i));
+        }
+
+        if ( !(i % 100) )
+            putchar('.');
+    }
+    puts(", done");
+
+    dt1 = dt2;
+    dt2 = wxDateTime::UNow();
+    printf("UNow = %s\n", dt2.Format("%H:%M:%S:%l").c_str());
+
+    printf("Loop executed in %s ms\n", (dt2 - dt1).Format("%l").c_str());
 
     puts("\n*** done ***");
 }
@@ -3524,10 +3595,10 @@ int main(int argc, char **argv)
         TestTimeArithmetics();
         TestTimeHolidays();
         TestTimeFormat();
+        TestTimeMS();
 
         TestTimeZoneBug();
     }
-    TestTimeMS();
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
@@ -3545,6 +3616,12 @@ int main(int argc, char **argv)
 #ifdef TEST_ZIP
     TestZipStreamRead();
 #endif // TEST_ZIP
+
+#ifdef TEST_ZLIB
+    if ( 0 )
+    TestZlibStreamWrite();
+    TestZlibStreamRead();
+#endif // TEST_ZLIB
 
     wxUninitialize();
 
