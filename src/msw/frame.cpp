@@ -418,12 +418,20 @@ void wxFrame::PositionStatusBar()
 }
 #endif // wxUSE_STATUSBAR
 
+void wxFrame::DetachMenuBar()
+{
+    if (m_frameMenuBar)
+    {
+        m_frameMenuBar->Detach();
+        m_frameMenuBar = NULL;
+    }
+}
+
 void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
     if (!menu_bar)
     {
-        delete m_frameMenuBar;
-        m_frameMenuBar = NULL;
+        DetachMenuBar();
         return;
     }
 

@@ -68,6 +68,7 @@ public:
 
     bool Show(bool show);
 
+    void DetachMenuBar();
     // Set menu bar
     void SetMenuBar(wxMenuBar *menu_bar);
     virtual wxMenuBar *GetMenuBar() const;
