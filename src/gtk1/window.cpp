@@ -2030,10 +2030,14 @@ void wxWindow::OnInternalIdle()
     GdkWindow *window = GetConnectWidget()->window;
     if (window)
     {
-        if (g_globalCursor.Ok())
-	    gdk_window_set_cursor( window, g_globalCursor.GetCursor() );
-        else
-	    gdk_window_set_cursor( window, m_cursor.GetCursor() );
+        wxCursor cursor = m_cursor;
+        if (g_globalCursor.Ok()) cursor = g_globalCursor;
+	
+	if (m_currentGdkCursor != cursor)
+	{
+	    gdk_window_set_cursor( window, cursor.GetCursor() );
+	    m_currentGdkCursor = cursor;
+	}
     }
 
     UpdateWindowUI();

@@ -749,6 +749,10 @@ void wxFrame::OnInternalIdle()
         GtkOnSize( m_x, m_y, m_width, m_height );
 
     DoMenuUpdates();
+    
+    if (m_frameMenuBar) m_frameMenuBar->OnInternalIdle();
+    if (m_frameToolBar) m_frameToolBar->OnInternalIdle();
+    if (m_frameStatusBar) m_frameStatusBar->OnInternalIdle();
 }
 
 void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )
