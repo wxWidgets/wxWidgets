@@ -174,9 +174,9 @@ void wxHtmlWindow::Init()
     m_makingSelection = false;
 #if wxUSE_CLIPBOARD
     m_timerAutoScroll = NULL;
+    m_lastDoubleClick = 0;
 #endif
     m_backBuffer = NULL;
-    m_lastDoubleClick = 0;
 }
 
 bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
