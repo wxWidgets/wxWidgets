@@ -34,7 +34,7 @@ class wxNotebookPage;
 class wxNotebookEvent : public wxCommandEvent
 {
 public:
-  wxNotebookEvent(WXTYPE commandType = 0, int id = 0,
+  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 
