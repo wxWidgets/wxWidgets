@@ -239,21 +239,7 @@ void wxFileDialog::SetPath(const wxString& path)
     m_path = fn.GetFullPath();
     m_dir = fn.GetPath();
     m_fileName = fn.GetFullName();
-    
-    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            wxGTK_CONV(m_dir));
-                                            
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
-                                      wxGTK_CONV(m_path));
-                                      
-    // pre-fill the filename when saving, too (there's no text entry
-    // control when opening a file, so it doesn't make sense to
-    // do this in when opening files):
-    if (GetWindowStyle() & wxSAVE)
-    {
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-                                              wxGTK_CONV(m_fileName));
-    }
+    UpdateDialog();
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
@@ -261,29 +247,56 @@ void wxFileDialog::SetDirectory(const wxString& dir)
     if (wxDirExists(dir))
     {
         m_dir = dir;
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                            wxGTK_CONV(m_dir));
-        wxFileName fn(m_dir,m_fileName);
-        m_path = fn.GetFullPath();
+        m_path = wxFileName(m_dir, m_fileName).GetFullPath();
+        UpdateDialog();
     }
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
     m_fileName = name;
-    wxFileName fn(m_dir,m_fileName);
-    m_path = fn.GetFullPath();
-    
-    gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
-                                      wxGTK_CONV(m_path));
+    m_path = wxFileName(m_dir, m_fileName).GetFullPath();
+    UpdateDialog();
+}
 
-    // pre-fill the filename when saving, too (there's no text entry
-    // control when opening a file, so it doesn't make sense to
-    // do this in when opening files):
-    if (GetWindowStyle() & wxSAVE)
+void wxFileDialog::UpdateDialog()
+{
+    // set currently selected directory to match the path:
+    if (!m_dir.empty() && wxDirExists(m_dir))
     {
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+        // NB: This is important -- if we set directory only and not the path,
+        //     then dialog will still remember old path set using previous
+        //     call to gtk_chooser_set_filename. If the previous directory
+        //     was a subdirectory of the directory we want to select now,
+        //     the dialog would still contain directory selector controls
+        //     for the subdirectory (with the parent directory selected),
+        //     instead of showing only the parent directory as expected.
+        //     This way, we force GtkFileChooser to really change the
+        //     directory. Finally, it doesn't have to be done if filename
+        //     is not empty because of the code that sets the filename below.
+        if (m_fileName.empty())
+            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                          wxGTK_CONV(m_dir));
+        
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            wxGTK_CONV(m_dir));
+    }
+    
+    // if the user set only the directory (e.g. by calling SetDirectory)
+    // and not the default filename, then we don't want to set the filename:
+    if (!m_fileName.empty())
+    {
+        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                      wxGTK_CONV(m_path));
+                                          
+        // pre-fill the filename when saving, too (there's no text entry
+        // control when opening a file, so it doesn't make sense to
+        // do this when opening files):
+        if (GetWindowStyle() & wxSAVE)
+        {
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
                                               wxGTK_CONV(m_fileName));
+        }
     }
 }
 

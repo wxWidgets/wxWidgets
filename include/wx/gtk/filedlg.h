@@ -43,8 +43,11 @@ public:
     virtual void SetFilename(const wxString& name);
     virtual void SetWildcard(const wxString& wildCard);
     virtual void SetFilterIndex(int filterIndex);
-            void UpdateFromDialog();
+
+    void UpdateFromDialog();
 private:
+    void UpdateDialog();
+    
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
 };
 
