@@ -306,9 +306,13 @@ LifeFrame::LifeFrame() : wxFrame( (wxFrame *) NULL, wxID_ANY,
     wxBoxSizer *sizer2 = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizer3 = new wxBoxSizer(wxVERTICAL);
 
+#if wxUSE_STATLINE
     sizer1->Add( new wxStaticLine(panel1, wxID_ANY), 0, wxGROW );
+#endif // wxUSE_STATLINE
     sizer1->Add( m_canvas, 1, wxGROW | wxALL, 2 );
+#if wxUSE_STATLINE
     sizer1->Add( new wxStaticLine(panel1, wxID_ANY), 0, wxGROW );
+#endif // wxUSE_STATLINE
     panel1->SetSizer( sizer1 );
     sizer1->Fit( panel1 );
 

@@ -115,9 +115,13 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 
     wxBoxSizer *sizer3 = new wxBoxSizer( wxVERTICAL );
     sizer3->Add( CreateTextSizer(_("Select one configuration")), 0, wxALL, 10 );
+#if wxUSE_STATLINE
     sizer3->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+#endif // wxUSE_STATLINE
     sizer3->Add( sizer2, 1, wxGROW | wxALL, 5 );
+#if wxUSE_STATLINE
     sizer3->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+#endif // wxUSE_STATLINE
     sizer3->Add( CreateButtonSizer(wxOK | wxCANCEL), 0, wxCENTRE | wxALL, 10 );
 
     // activate
@@ -173,14 +177,18 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     // layout components
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
+#if wxUSE_STATLINE
     sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
+#endif // wxUSE_STATLINE
     sizer->Add( CreateTextSizer(_("Life! version 2.2 for wxWidgets\n\n\
 (c) 2000 Guillermo Rodriguez Garcia\n\n\
 <guille@iies.es>\n\n\
 Portions of the code are based in XLife;\n\
 XLife is (c) 1989 by Jon Bennett et al.")),
                                   0, wxCENTRE | wxALL, 20 );
+#if wxUSE_STATLINE
     sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
+#endif // wxUSE_STATLINE
     sizer->Add( CreateButtonSizer(wxOK), 0, wxCENTRE | wxALL, 10 );
 
     // activate
