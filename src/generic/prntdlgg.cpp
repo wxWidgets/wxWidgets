@@ -113,6 +113,11 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintData* data)
+                    : wxDialog(parent, -1, _("Print"),
+                               wxPoint(0, 0), wxSize(600, 600),
+                               wxDEFAULT_DIALOG_STYLE |
+                               wxDIALOG_MODAL |
+                               wxTAB_TRAVERSAL)
 {
     if ( data )
         m_printDialogData = *data;
@@ -122,8 +127,8 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 void wxGenericPrintDialog::Init(wxWindow *parent)
 {
-    wxDialog::Create(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600),
-                     wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL | wxTAB_TRAVERSAL);
+  //    wxDialog::Create(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600),
+  //                     wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL | wxTAB_TRAVERSAL);
 
     (void)new wxStaticBox( this, -1, _( "Printer options" ), wxPoint( 5, 5), wxSize( 300, 60 ) );
 
