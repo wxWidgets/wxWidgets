@@ -41,7 +41,15 @@
     typedef long off_t;
 #endif
 
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+//
+// VisualAge C++ V4.0 cannot have any const decs 
+// in headers included by more than one primary source
+//
+extern const off_t wxInvalidOffset;
+#else 
 const off_t wxInvalidOffset = (off_t)-1;
+#endif
 
 enum wxSeekMode
 {
