@@ -22,7 +22,7 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLEXPORT wxDataInputStream
+class WXDLLEXPORT_BASE wxDataInputStream
 {
 public:
 #if wxUSE_UNICODE
@@ -64,7 +64,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxDataInputStream)
 };
 
-class WXDLLEXPORT wxDataOutputStream
+class WXDLLEXPORT_BASE wxDataOutputStream
 {
 public:
 #if wxUSE_UNICODE

@@ -25,13 +25,13 @@
 #endif // wxUSE_GUI
 
 #if wxUSE_CONFIG
-    class WXDLLEXPORT wxConfigBase;
+    class WXDLLEXPORT_BASE wxConfigBase;
 #endif // wxUSE_CONFIG
 
-class WXDLLEXPORT wxFontMapper;
+class WXDLLEXPORT_BASE wxFontMapper;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT wxWindow;
+    class WXDLLEXPORT_CORE wxWindow;
 #endif // wxUSE_GUI
 
 // ============================================================================
@@ -47,7 +47,7 @@ class WXDLLEXPORT wxFontMapper;
 //                   in knowledge of the encodings equivalence
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontMapperBase
+class WXDLLEXPORT_BASE wxFontMapperBase
 {
 public:
     // constructtor and such
@@ -167,7 +167,7 @@ private:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT wxFontMapper : public wxFontMapperBase
+class WXDLLEXPORT_CORE wxFontMapper : public wxFontMapperBase
 {
 public:
     // default ctor
@@ -240,7 +240,7 @@ private:
 
 #else // !wxUSE_GUI
 
-class WXDLLEXPORT wxFontMapper : public wxFontMapperBase
+class WXDLLEXPORT_BASE wxFontMapper : public wxFontMapperBase
 {
 };
 

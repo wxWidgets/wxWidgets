@@ -34,7 +34,7 @@
 //     dtor which is _not_ virtual, so it shouldn't be used as a base class.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFFile
+class WXDLLEXPORT_BASE wxFFile
 {
 public:
   // ctors

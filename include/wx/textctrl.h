@@ -53,7 +53,6 @@ class WXDLLEXPORT wxTextCtrlBase;
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxTextCtrlNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl style flags

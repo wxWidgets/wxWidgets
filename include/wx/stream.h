@@ -25,14 +25,14 @@
 #include "wx/string.h"
 #include "wx/filefn.h"  // for off_t, wxInvalidOffset and wxSeekMode
 
-class WXDLLEXPORT wxStreamBase;
-class WXDLLEXPORT wxInputStream;
-class WXDLLEXPORT wxOutputStream;
+class WXDLLEXPORT_BASE wxStreamBase;
+class WXDLLEXPORT_BASE wxInputStream;
+class WXDLLEXPORT_BASE wxOutputStream;
 
 typedef wxInputStream& (*__wxInputManip)(wxInputStream&);
 typedef wxOutputStream& (*__wxOutputManip)(wxOutputStream&);
 
-WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
+WXDLLEXPORT_BASE wxOutputStream& wxEndL(wxOutputStream& o_stream);
 
 // ----------------------------------------------------------------------------
 // constants
@@ -67,7 +67,7 @@ enum wxStreamError
 // wxStreamBase: common (but non virtual!) base for all stream classes
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStreamBase
+class WXDLLEXPORT_BASE wxStreamBase
 {
 public:
     wxStreamBase();
@@ -106,7 +106,7 @@ protected:
 // wxInputStream: base class for the input streams
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxInputStream : public wxStreamBase
+class WXDLLEXPORT_BASE wxInputStream : public wxStreamBase
 {
 public:
     // ctor and dtor, nothing exciting
@@ -238,7 +238,7 @@ protected:
 // wxOutputStream: base for the output streams
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxOutputStream : public wxStreamBase
+class WXDLLEXPORT_BASE wxOutputStream : public wxStreamBase
 {
 public:
     wxOutputStream();
@@ -274,7 +274,7 @@ protected:
 // A stream for measuring streamed output
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCountingOutputStream : public wxOutputStream
+class WXDLLEXPORT_BASE wxCountingOutputStream : public wxOutputStream
 {
 public:
     wxCountingOutputStream();
@@ -294,7 +294,7 @@ protected:
 // "Filter" streams
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFilterInputStream : public wxInputStream
+class WXDLLEXPORT_BASE wxFilterInputStream : public wxInputStream
 {
 public:
     wxFilterInputStream();
@@ -313,7 +313,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxFilterInputStream)
 };
 
-class WXDLLEXPORT wxFilterOutputStream : public wxOutputStream
+class WXDLLEXPORT_BASE wxFilterOutputStream : public wxOutputStream
 {
 public:
     wxFilterOutputStream();
@@ -339,7 +339,7 @@ protected:
 // wxBufferedStreams to implement custom buffering
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStreamBuffer
+class WXDLLEXPORT_BASE wxStreamBuffer
 {
 public:
     enum BufMode
@@ -457,7 +457,7 @@ private:
 // wxBufferedInputStream
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBufferedInputStream : public wxFilterInputStream
+class WXDLLEXPORT_BASE wxBufferedInputStream : public wxFilterInputStream
 {
 public:
     // if a non NULL buffer is given to the stream, it will be deleted by it
@@ -493,7 +493,7 @@ protected:
 // wxBufferedOutputStream
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBufferedOutputStream : public wxFilterOutputStream
+class WXDLLEXPORT_BASE wxBufferedOutputStream : public wxFilterOutputStream
 {
 public:
     // if a non NULL buffer is given to the stream, it will be deleted by it

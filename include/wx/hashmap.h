@@ -21,7 +21,7 @@
 #include <stddef.h>             // for ptrdiff_t
 
 // private
-struct WXDLLEXPORT _wxHashTable_NodeBase
+struct WXDLLEXPORT_BASE _wxHashTable_NodeBase
 {
     _wxHashTable_NodeBase() : m_nxt(0) {}
 
@@ -33,7 +33,7 @@ struct WXDLLEXPORT _wxHashTable_NodeBase
 };
 
 // private
-class WXDLLEXPORT _wxHashTableBase2
+class WXDLLEXPORT_BASE _wxHashTableBase2
 {
 public:
     typedef void (*NodeDtor)(_wxHashTable_NodeBase*);
@@ -407,7 +407,7 @@ inline bool grow_lf70( size_t buckets, size_t items )
 //     in the hash table class assignment operator (where they're assigned)
 
 // integer types
-class WXDLLEXPORT wxIntegerHash
+class WXDLLEXPORT_BASE wxIntegerHash
 {
 public:
     wxIntegerHash() { }
@@ -421,7 +421,7 @@ public:
     wxIntegerHash& operator=(const wxIntegerHash&) { return *this; }
 };
 
-class WXDLLEXPORT wxIntegerEqual
+class WXDLLEXPORT_BASE wxIntegerEqual
 {
 public:
     wxIntegerEqual() { }
@@ -436,7 +436,7 @@ public:
 };
 
 // pointers
-class WXDLLEXPORT wxPointerHash
+class WXDLLEXPORT_BASE wxPointerHash
 {
 public:
     wxPointerHash() { }
@@ -448,7 +448,7 @@ public:
     wxPointerHash& operator=(const wxPointerHash&) { return *this; }
 };
 
-class WXDLLEXPORT wxPointerEqual
+class WXDLLEXPORT_BASE wxPointerEqual
 {
 public:
     wxPointerEqual() { }
@@ -458,7 +458,7 @@ public:
 };
 
 // wxString, char*, wxChar*
-class WXDLLEXPORT wxStringHash
+class WXDLLEXPORT_BASE wxStringHash
 {
 public:
     wxStringHash() {}
@@ -476,7 +476,7 @@ public:
     wxStringHash& operator=(const wxStringHash&) { return *this; }
 };
 
-class WXDLLEXPORT wxStringEqual
+class WXDLLEXPORT_BASE wxStringEqual
 {
 public:
     wxStringEqual() {}

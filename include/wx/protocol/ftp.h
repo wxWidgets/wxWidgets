@@ -25,7 +25,7 @@
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
 
-class WXDLLEXPORT wxFTP : public wxProtocol
+class WXDLLEXPORT_BASE wxFTP : public wxProtocol
 {
 public:
     enum TransferMode

@@ -20,7 +20,6 @@
 #include "wx/choice.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 // Combobox item
 class WXDLLEXPORT wxComboBox: public wxComboBoxBase , public wxControl

@@ -92,12 +92,12 @@
   (it's on by default, the current status can be retrieved with
    IsExpandingEnvVars function).
 */
-class WXDLLEXPORT wxFileConfigGroup;
-class WXDLLEXPORT wxFileConfigEntry;
-class WXDLLEXPORT wxFileConfigLineList;
-class WXDLLEXPORT wxInputStream;
+class WXDLLEXPORT_BASE wxFileConfigGroup;
+class WXDLLEXPORT_BASE wxFileConfigEntry;
+class WXDLLEXPORT_BASE wxFileConfigLineList;
+class WXDLLEXPORT_BASE wxInputStream;
 
-class WXDLLEXPORT wxFileConfig : public wxConfigBase
+class WXDLLEXPORT_BASE wxFileConfig : public wxConfigBase
 {
 public:
   // construct the "standard" full name for global (system-wide) and

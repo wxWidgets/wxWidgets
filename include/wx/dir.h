@@ -49,7 +49,7 @@ enum wxDirTraverseResult
 // wxDirTraverser: helper class for wxDir::Traverse()
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirTraverser
+class WXDLLEXPORT_BASE wxDirTraverser
 {
 public:
     // called for each file found by wxDir::Traverse()
@@ -79,9 +79,9 @@ public:
 // wxDir: portable equivalent of {open/read/close}dir functions
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDirData;
+class WXDLLEXPORT_BASE wxDirData;
 
-class WXDLLEXPORT wxDir
+class WXDLLEXPORT_BASE wxDir
 {
 public:
     // test for existence of a directory with the given name
@@ -141,7 +141,7 @@ public:
                               int flags = wxDIR_DEFAULT);
 
 private:
-    friend class WXDLLEXPORT wxDirData;
+    friend class wxDirData;
 
     wxDirData *m_data;
 
@@ -149,3 +149,4 @@ private:
 };
 
 #endif // _WX_DIR_H_
+

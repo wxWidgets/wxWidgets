@@ -24,7 +24,7 @@
 #include "wx/gsocket.h"
 
 
-class WXDLLEXPORT wxSockAddress : public wxObject {
+class WXDLLEXPORT_BASE wxSockAddress : public wxObject {
   DECLARE_ABSTRACT_CLASS(wxSockAddress)
 public:
   typedef enum { IPV4=1, IPV6=2, UNIX=3 } Addr;
@@ -52,7 +52,7 @@ private:
   void Init();
 };
 
-class WXDLLEXPORT wxIPV4address : public wxSockAddress {
+class WXDLLEXPORT_BASE wxIPV4address : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxIPV4address)
 public:
   wxIPV4address();
@@ -78,7 +78,7 @@ private:
 };
 
 #ifdef ENABLE_IPV6
-class WXDLLEXPORT wxIPV6address : public wxSockAddress {
+class WXDLLEXPORT_BASE wxIPV6address : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxIPV6address)
 private:
   struct sockaddr_in6 *m_addr;
@@ -107,7 +107,7 @@ public:
 # include <sys/un.h>
 #endif
 
-class WXDLLEXPORT wxUNIXaddress : public wxSockAddress {
+class WXDLLEXPORT_BASE wxUNIXaddress : public wxSockAddress {
   DECLARE_DYNAMIC_CLASS(wxUNIXaddress)
 private:
   struct sockaddr_un *m_addr;

@@ -42,10 +42,10 @@ enum wxIPCFormat
   wxIPC_PRIVATE =          20
 };
 
-class WXDLLEXPORT wxServerBase;
-class WXDLLEXPORT wxClientBase;
+class WXDLLEXPORT_BASE wxServerBase;
+class WXDLLEXPORT_BASE wxClientBase;
 
-class WXDLLEXPORT wxConnectionBase: public wxObject
+class WXDLLEXPORT_BASE wxConnectionBase: public wxObject
 {
   DECLARE_CLASS(wxConnectionBase)
 
@@ -129,7 +129,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxServerBase: public wxObject
+class WXDLLEXPORT_BASE wxServerBase: public wxObject
 {
   DECLARE_CLASS(wxServerBase)
 
@@ -144,7 +144,7 @@ public:
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic) = 0;
 };
 
-class WXDLLEXPORT wxClientBase: public wxObject
+class WXDLLEXPORT_BASE wxClientBase: public wxObject
 {
   DECLARE_CLASS(wxClientBase)
 

@@ -111,8 +111,8 @@
         #define wxUSE_LONGLONG_NATIVE 0
     #endif
 
-    class WXDLLEXPORT wxLongLongWx;
-    class WXDLLEXPORT wxULongLongWx;
+    class WXDLLEXPORT_BASE wxLongLongWx;
+    class WXDLLEXPORT_BASE wxULongLongWx;
 #if defined(__VISUALC__) && !defined(__WIN32__)
     #define wxLongLong wxLongLongWx
     #define wxULongLong wxULongLongWx
@@ -130,8 +130,8 @@
 
 #ifndef wxUSE_LONGLONG_WX
     #define wxUSE_LONGLONG_WX 0
-    class WXDLLEXPORT wxLongLongNative;
-    class WXDLLEXPORT wxULongLongNative;
+    class WXDLLEXPORT_BASE wxLongLongNative;
+    class WXDLLEXPORT_BASE wxULongLongNative;
     typedef wxLongLongNative wxLongLong;
     typedef wxULongLongNative wxULongLong;
 #endif
@@ -148,7 +148,7 @@
 
 #if wxUSE_LONGLONG_NATIVE
 
-class WXDLLEXPORT wxLongLongNative
+class WXDLLEXPORT_BASE wxLongLongNative
 {
 public:
     // ctors
@@ -350,7 +350,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxULongLongNative
+class WXDLLEXPORT_BASE wxULongLongNative
 {
 public:
     // ctors
@@ -536,7 +536,7 @@ private:
 
 #if wxUSE_LONGLONG_WX
 
-class WXDLLEXPORT wxLongLongWx
+class WXDLLEXPORT_BASE wxLongLongWx
 {
 public:
     // ctors
@@ -733,7 +733,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxULongLongWx
+class WXDLLEXPORT_BASE wxULongLongWx
 {
 public:
     // ctors

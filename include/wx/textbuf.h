@@ -46,7 +46,7 @@ WX_DEFINE_EXPORTED_ARRAY_INT(wxTextFileType, ArrayFileType);
 
 #endif // wxUSE_TEXTBUFFER
 
-class WXDLLEXPORT wxTextBuffer
+class WXDLLEXPORT_BASE wxTextBuffer
 {
 public:
     // constants and static functions

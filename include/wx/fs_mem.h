@@ -23,14 +23,16 @@
 
 #include "wx/filesys.h"
 
-class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxImage;
+#if wxUSE_GUI
+    class WXDLLEXPORT_CORE wxBitmap;
+    class WXDLLEXPORT_CORE wxImage;
+#endif // wxUSE_GUI
 
 //--------------------------------------------------------------------------------
 // wxMemoryFSHandler
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryFSHandlerBase : public wxFileSystemHandler
+class WXDLLEXPORT_BASE wxMemoryFSHandlerBase : public wxFileSystemHandler
 {
 public:
     wxMemoryFSHandlerBase();

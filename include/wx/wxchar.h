@@ -679,7 +679,7 @@ inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
     #define wxStrdup wxStrdupA
 #endif
 
-WXDLLEXPORT bool wxOKlibc(); // for internal use
+WXDLLEXPORT_BASE bool wxOKlibc(); // for internal use
 
 // ----------------------------------------------------------------------------
 // printf() family saga
@@ -728,11 +728,11 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 
 #ifndef wxSnprintf_
     // no [v]snprintf(), cook our own
-    WXDLLEXPORT int wxSnprintf_(wxChar *buf, size_t len, const wxChar *format,
+    WXDLLEXPORT_BASE int wxSnprintf_(wxChar *buf, size_t len, const wxChar *format,
                                 ...) ATTRIBUTE_PRINTF_3;
 #endif
 #ifndef wxVsnprintf_
-    WXDLLEXPORT int wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format,
+    WXDLLEXPORT_BASE int wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format,
                                  va_list argptr);
 #endif
 
@@ -801,19 +801,19 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 //
 // VZ: note that this is never defined currently
 #ifdef wxNEED_WX_CTYPE_H
-    WXDLLEXPORT int wxIsalnum(wxChar ch);
-    WXDLLEXPORT int wxIsalpha(wxChar ch);
-    WXDLLEXPORT int wxIsctrl(wxChar ch);
-    WXDLLEXPORT int wxIsdigit(wxChar ch);
-    WXDLLEXPORT int wxIsgraph(wxChar ch);
-    WXDLLEXPORT int wxIslower(wxChar ch);
-    WXDLLEXPORT int wxIsprint(wxChar ch);
-    WXDLLEXPORT int wxIspunct(wxChar ch);
-    WXDLLEXPORT int wxIsspace(wxChar ch);
-    WXDLLEXPORT int wxIsupper(wxChar ch);
-    WXDLLEXPORT int wxIsxdigit(wxChar ch);
-    WXDLLEXPORT int wxTolower(wxChar ch);
-    WXDLLEXPORT int wxToupper(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsalnum(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsalpha(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsctrl(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsdigit(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsgraph(wxChar ch);
+    WXDLLEXPORT_BASE int wxIslower(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsprint(wxChar ch);
+    WXDLLEXPORT_BASE int wxIspunct(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsspace(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsupper(wxChar ch);
+    WXDLLEXPORT_BASE int wxIsxdigit(wxChar ch);
+    WXDLLEXPORT_BASE int wxTolower(wxChar ch);
+    WXDLLEXPORT_BASE int wxToupper(wxChar ch);
 #endif // wxNEED_WX_CTYPE_H
 
 // under VC++ 6.0 isspace() returns 1 for 8 bit chars which completely breaks
@@ -828,66 +828,66 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
 //
 // VZ: this is never defined neither currently
 #ifdef wxNEED_WX_STRING_H
-    WXDLLEXPORT wxChar * wxStrcat(wxChar *dest, const wxChar *src);
-    WXDLLEXPORT const wxChar * wxStrchr(const wxChar *s, wxChar c);
-    WXDLLEXPORT wxChar * wxStrchr(wxChar *s, wxChar c)
+    WXDLLEXPORT_BASE wxChar * wxStrcat(wxChar *dest, const wxChar *src);
+    WXDLLEXPORT_BASE const wxChar * wxStrchr(const wxChar *s, wxChar c);
+    WXDLLEXPORT_BASE wxChar * wxStrchr(wxChar *s, wxChar c)
         { return (wxChar *)wxStrchr((const wxChar *)s, c); }
-    WXDLLEXPORT int      wxStrcmp(const wxChar *s1, const wxChar *s2);
-    WXDLLEXPORT int      wxStrcoll(const wxChar *s1, const wxChar *s2);
-    WXDLLEXPORT wxChar * wxStrcpy(wxChar *dest, const wxChar *src);
-    WXDLLEXPORT size_t   wxStrcspn(const wxChar *s, const wxChar *reject);
-    WXDLLEXPORT size_t   wxStrlen(const wxChar *s);
-    WXDLLEXPORT wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n);
-    WXDLLEXPORT int      wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
-    WXDLLEXPORT wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
-    WXDLLEXPORT const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
-    WXDLLEXPORT wxChar * wxStrpbrk(wxChar *s, const wxChar *accept)
+    WXDLLEXPORT_BASE int      wxStrcmp(const wxChar *s1, const wxChar *s2);
+    WXDLLEXPORT_BASE int      wxStrcoll(const wxChar *s1, const wxChar *s2);
+    WXDLLEXPORT_BASE wxChar * wxStrcpy(wxChar *dest, const wxChar *src);
+    WXDLLEXPORT_BASE size_t   wxStrcspn(const wxChar *s, const wxChar *reject);
+    WXDLLEXPORT_BASE size_t   wxStrlen(const wxChar *s);
+    WXDLLEXPORT_BASE wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n);
+    WXDLLEXPORT_BASE int      wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
+    WXDLLEXPORT_BASE wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
+    WXDLLEXPORT_BASE const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
+    WXDLLEXPORT_BASE wxChar * wxStrpbrk(wxChar *s, const wxChar *accept)
         { return (wxChar *)wxStrpbrk((const wxChar *)s, accept); }
-    WXDLLEXPORT const wxChar * wxStrrchr(const wxChar *s, wxChar c);
-    WXDLLEXPORT wxChar * wxStrrchr(wxChar *s, wxChar c)
+    WXDLLEXPORT_BASE const wxChar * wxStrrchr(const wxChar *s, wxChar c);
+    WXDLLEXPORT_BASE wxChar * wxStrrchr(wxChar *s, wxChar c)
         { return (wxChar *)wxStrrchr((const wxChar *)s, c); }
-    WXDLLEXPORT size_t   wxStrspn(const wxChar *s, const wxChar *accept);
-    WXDLLEXPORT const wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
-    WXDLLEXPORT wxChar *wxStrstr(wxChar *haystack, const wxChar *needle)
+    WXDLLEXPORT_BASE size_t   wxStrspn(const wxChar *s, const wxChar *accept);
+    WXDLLEXPORT_BASE const wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
+    WXDLLEXPORT_BASE wxChar *wxStrstr(wxChar *haystack, const wxChar *needle)
         { return (wxChar *)wxStrstr((const wxChar *)haystack, needle); }
-    WXDLLEXPORT double   wxStrtod(const wxChar *nptr, wxChar **endptr);
-    WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
-    WXDLLEXPORT unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
-    WXDLLEXPORT size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
+    WXDLLEXPORT_BASE double   wxStrtod(const wxChar *nptr, wxChar **endptr);
+    WXDLLEXPORT_BASE long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
+    WXDLLEXPORT_BASE unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
+    WXDLLEXPORT_BASE size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
 #endif // wxNEED_WX_STRING_H
 
 #ifndef wxStrdupA
-WXDLLEXPORT char *wxStrdupA(const char *psz);
+WXDLLEXPORT_BASE char *wxStrdupA(const char *psz);
 #endif
 
 #ifndef wxStrdupW
-WXDLLEXPORT wchar_t *wxStrdupW(const wchar_t *pwz);
+WXDLLEXPORT_BASE wchar_t *wxStrdupW(const wchar_t *pwz);
 #endif
 
 #ifndef wxStricmp
-WXDLLEXPORT int wxStricmp(const wxChar *psz1, const wxChar *psz2);
+WXDLLEXPORT_BASE int wxStricmp(const wxChar *psz1, const wxChar *psz2);
 #endif
 
 #ifndef wxStrnicmp
-WXDLLEXPORT int wxStrnicmp(const wxChar *psz1, const wxChar *psz2, size_t len);
+WXDLLEXPORT_BASE int wxStrnicmp(const wxChar *psz1, const wxChar *psz2, size_t len);
 #endif
 
 #ifndef wxStrtok
-WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
+WXDLLEXPORT_BASE wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_ptr);
 #endif
 
 #ifndef wxSetlocale
-class WXDLLEXPORT wxWCharBuffer;
-WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
+class WXDLLEXPORT_BASE wxWCharBuffer;
+WXDLLEXPORT_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 #endif
 
 // stdio.h functions
 #ifdef wxNEED_WX_STDIO_H
     #include <stdio.h>
-    WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
-    WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
-    WXDLLEXPORT int      wxRemove(const wxChar *path);
-    WXDLLEXPORT int      wxRename(const wxChar *oldpath, const wxChar *newpath);
+    WXDLLEXPORT_BASE FILE *   wxFopen(const wxChar *path, const wxChar *mode);
+    WXDLLEXPORT_BASE FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
+    WXDLLEXPORT_BASE int      wxRemove(const wxChar *path);
+    WXDLLEXPORT_BASE int      wxRename(const wxChar *oldpath, const wxChar *newpath);
 
     // *printf() family is handled separately
 #endif // wxNEED_WX_STDIO_H
@@ -895,14 +895,14 @@ WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 
 // stdlib.h functions
 #ifndef wxAtof
-WXDLLEXPORT double   wxAtof(const wxChar *psz);
+WXDLLEXPORT_BASE double   wxAtof(const wxChar *psz);
 #endif
 
 #ifdef wxNEED_WX_STDLIB_H
-WXDLLEXPORT int      wxAtoi(const wxChar *psz);
-WXDLLEXPORT long     wxAtol(const wxChar *psz);
-WXDLLEXPORT wxChar * wxGetenv(const wxChar *name);
-WXDLLEXPORT int      wxSystem(const wxChar *psz);
+WXDLLEXPORT_BASE int      wxAtoi(const wxChar *psz);
+WXDLLEXPORT_BASE long     wxAtol(const wxChar *psz);
+WXDLLEXPORT_BASE wxChar * wxGetenv(const wxChar *name);
+WXDLLEXPORT_BASE int      wxSystem(const wxChar *psz);
 #endif
 
 
@@ -911,7 +911,7 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 #if defined(__MWERKS__) && defined(macintosh)
     #include <time.h> 
 #endif
-    WXDLLEXPORT size_t wxStrftime(wxChar *s, size_t max,
+    WXDLLEXPORT_BASE size_t wxStrftime(wxChar *s, size_t max,
                                   const wxChar *fmt, const struct tm *tm);
 #endif // wxNEED_WX_TIME_H
 
@@ -921,8 +921,8 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 
 #if wxUSE_WCHAR_T
     // multibyte<->widechar conversion
-    WXDLLEXPORT size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
-    WXDLLEXPORT size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
+    WXDLLEXPORT_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
+    WXDLLEXPORT_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 
     #if wxUSE_UNICODE
         #define wxMB2WX wxMB2WC

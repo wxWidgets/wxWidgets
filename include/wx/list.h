@@ -39,9 +39,9 @@
 
 // due to circular header dependencies this function has to be declared here
 // (normally it's found in utils.h which includes itself list.h...)
-extern WXDLLEXPORT wxChar* copystring(const wxChar *s);
+extern WXDLLEXPORT_BASE wxChar* copystring(const wxChar *s);
 
-class WXDLLEXPORT wxObjectListNode;
+class WXDLLEXPORT_BASE wxObjectListNode;
 typedef wxObjectListNode wxNode;
 
 // undef it to get rid of old, deprecated functions
@@ -88,7 +88,7 @@ union wxListKeyValue
 // for any keyed operation instead of 2 almost equivalent. OTOH, it's needed to
 // resolve ambiguity which we would otherwise have with wxStringList::Find() and
 // wxList::Find(const char *).
-class WXDLLEXPORT wxListKey
+class WXDLLEXPORT_BASE wxListKey
 {
 public:
     // implicit ctors
@@ -129,11 +129,11 @@ private:
 // wxNodeBase class is a (base for) node in a double linked list
 // -----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern wxListKey) wxDefaultListKey;
+WXDLLEXPORT_DATA_BASE(extern wxListKey) wxDefaultListKey;
 
-class WXDLLEXPORT wxListBase;
+class WXDLLEXPORT_BASE wxListBase;
 
-class WXDLLEXPORT wxNodeBase
+class WXDLLEXPORT_BASE wxNodeBase
 {
 friend class wxListBase;
 public:
@@ -193,9 +193,9 @@ private:
 
 class wxList;
 
-class WXDLLEXPORT wxListBase : public wxObject
+class WXDLLEXPORT_BASE wxListBase : public wxObject
 {
-friend class WXDLLEXPORT wxNodeBase; // should be able to call DetachNode()
+friend class WXDLLEXPORT_BASE wxNodeBase; // should be able to call DetachNode()
 friend class wxHashTableBase;   // should be able to call untyped Find()
 private:
         // common part of all ctors
@@ -515,9 +515,9 @@ private:
 // wxList compatibility class: in fact, it's a list of wxObjects
 // -----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode, class WXDLLEXPORT);
+WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode, class WXDLLEXPORT_BASE);
 
-class WXDLLEXPORT wxList : public wxObjectList
+class WXDLLEXPORT_BASE wxList : public wxObjectList
 {
 public:
 #ifdef wxWARN_COMPAT_LIST_USE
@@ -545,9 +545,9 @@ private:
 // wxStringList class for compatibility with the old code
 // -----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_2(wxChar, wxStringListBase, wxStringListNode, class WXDLLEXPORT);
+WX_DECLARE_LIST_2(wxChar, wxStringListBase, wxStringListNode, class WXDLLEXPORT_BASE);
 
-class WXDLLEXPORT wxStringList : public wxStringListBase
+class WXDLLEXPORT_BASE wxStringList : public wxStringListBase
 {
 public:
     // ctors and such

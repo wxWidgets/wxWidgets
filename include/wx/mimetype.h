@@ -30,14 +30,9 @@
 #include "wx/dynarray.h"
 
 // fwd decls
-#if defined(__WXMSW__)
-class WXDLLEXPORT wxIconLocation;
-#else
-class WXDLLEXPORT wxIconLocationBase;
-typedef wxIconLocationBase wxIconLocation;
-#endif //defined(__WXMSW__)
-class WXDLLEXPORT wxFileTypeImpl;
-class WXDLLEXPORT wxMimeTypesManagerImpl;
+class WXDLLEXPORT_BASE wxIconLocation;
+class WXDLLEXPORT_BASE wxFileTypeImpl;
+class WXDLLEXPORT_BASE wxMimeTypesManagerImpl;
 
 // these constants define the MIME informations source under UNIX and are used
 // by wxMimeTypesManager::Initialize()
@@ -54,7 +49,7 @@ enum wxMailcapStyle
 /*
     TODO: would it be more convenient to have this class?
 
-class WXDLLEXPORT wxMimeType : public wxString
+class WXDLLEXPORT_BASE wxMimeType : public wxString
 {
 public:
     // all string ctors here
@@ -81,7 +76,7 @@ public:
 // This class is used with wxMimeTypesManager::AddFallbacks() and Associate()
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileTypeInfo
+class WXDLLEXPORT_BASE wxFileTypeInfo
 {
 public:
     // ctors
@@ -167,9 +162,9 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
 // the accessors *must* be checked!
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileType
+class WXDLLEXPORT_BASE wxFileType
 {
-friend class WXDLLEXPORT wxMimeTypesManagerImpl;  // it has access to m_impl
+friend class WXDLLEXPORT_BASE wxMimeTypesManagerImpl;  // it has access to m_impl
 
 public:
     // An object of this class must be passed to Get{Open|Print}Command. The
@@ -283,7 +278,7 @@ private:
 // given type) about them.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMimeTypesManager
+class WXDLLEXPORT_BASE wxMimeTypesManager
 {
 public:
     // static helper functions
@@ -390,7 +385,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // the default mime manager for wxWindows programs
-WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
+WXDLLEXPORT_DATA_BASE(extern wxMimeTypesManager *) wxTheMimeTypesManager;
 
 #endif // wxUSE_MIMETYPE
 

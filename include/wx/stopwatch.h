@@ -17,7 +17,7 @@
 
 #if wxUSE_STOPWATCH
 
-class WXDLLEXPORT wxStopWatch
+class WXDLLEXPORT_BASE wxStopWatch
 {
 public:
     // ctor starts the stop watch
@@ -67,11 +67,11 @@ private:
 
 // Starts a global timer
 // -- DEPRECATED: use wxStopWatch instead
-void WXDLLEXPORT wxStartTimer();
+void WXDLLEXPORT_BASE wxStartTimer();
 
 // Gets elapsed milliseconds since last wxStartTimer or wxGetElapsedTime
 // -- DEPRECATED: use wxStopWatch instead
-long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
+long WXDLLEXPORT_BASE wxGetElapsedTime(bool resetTimer = TRUE);
 
 #endif // wxUSE_LONGLONG
 
@@ -80,14 +80,14 @@ long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
 // ----------------------------------------------------------------------------
 
 // Get number of seconds since local time 00:00:00 Jan 1st 1970.
-extern long WXDLLEXPORT wxGetLocalTime();
+extern long WXDLLEXPORT_BASE wxGetLocalTime();
 
 // Get number of seconds since GMT 00:00:00, Jan 1st 1970.
-extern long WXDLLEXPORT wxGetUTCTime();
+extern long WXDLLEXPORT_BASE wxGetUTCTime();
 
 #if wxUSE_LONGLONG
 // Get number of milliseconds since local time 00:00:00 Jan 1st 1970
-extern wxLongLong WXDLLEXPORT wxGetLocalTimeMillis();
+extern wxLongLong WXDLLEXPORT_BASE wxGetLocalTimeMillis();
 #endif // wxUSE_LONGLONG
 
 #define wxGetCurrentTime() wxGetLocalTime()

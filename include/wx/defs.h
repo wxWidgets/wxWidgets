@@ -24,16 +24,25 @@
 
 // Make sure the environment is set correctly
 #if defined(__WXMSW__) && defined(__X__)
-#error "Target can't be both X and Windows"
+    #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__WXCOCOA__) && \
       !defined(__X__) && !defined(__WXMGL__) && !defined(__WXX11__) && \
       wxUSE_GUI
-#ifdef __UNIX__
-#error "No Target! You should use wx-config program for compilation flags!"
-#else // !Unix
-#error "No Target! You should use supplied makefiles for compilation!"
-#endif // Unix/!Unix
+    #ifdef __UNIX__
+        #error "No Target! You should use wx-config program for compilation flags!"
+    #else // !Unix
+    #error "No Target! You should use supplied makefiles for compilation!"
+    #endif // Unix/!Unix
+#endif
+
+#ifndef __WXWINDOWS__
+    #define __WXWINDOWS__ 1
+#endif
+
+#ifndef wxUSE_BASE
+    // by default consider that this is a monolithic build
+    #define wxUSE_BASE 1
 #endif
 
 #if !wxUSE_GUI && !defined(__WXBASE__)
@@ -349,25 +358,59 @@ typedef int wxWindowID;
     #define WXIMPORT
 #endif
 
-// WXDLLEXPORT maps to export declaration when building the DLL, to import
-// declaration if using it or to nothing at all if we don't use wxWin DLL
+/*
+   We support building wxWindows as a set of several libraries but we don't
+   support arbitrary combinations of libs/DLLs: either we build all of them as
+   DLLs (in which case WXMAKINGDLL is defined) or none (it isn't).
+
+   However we have a problem because we need separate WXDLLEXPORT versions for
+   different libraries as, for example, wxString class should be dllexported
+   when compiled in wxBase and dllimported otherwise, so we do define separate
+   WXMAKING/USINGDLL_XYZ constants for each component XYZ.
+ */
 #ifdef WXMAKINGDLL
-    #define WXDLLEXPORT WXEXPORT
-    #define WXDLLEXPORT_DATA(type) WXEXPORT type
-    #define WXDLLEXPORT_CTORFN
-#elif defined(WXUSINGDLL)
-    #define WXDLLEXPORT WXIMPORT
-    #define WXDLLEXPORT_DATA(type) WXIMPORT type
-    #define WXDLLEXPORT_CTORFN
+    #if wxUSE_BASE
+        #define WXMAKINGDLL_BASE
+    #else
+        #define WXUSINGDLL_BASE
+    #endif
+
+    #define WXMAKINGDLL_CORE
+#endif // WXMAKINGDLL
+
+#ifdef WXUSINGDLL
+    #define WXUSINGDLL_BASE
+    #define WXUSINGDLL_CORE
+#endif // WXUSINGDLL
+
+
+// WXDLLEXPORT maps to export declaration when building the DLL, to import
+// declaration if using it or to nothing at all if we don't use wxWin as DLL
+#ifdef WXMAKINGDLL_BASE
+    #define WXDLLEXPORT_BASE WXEXPORT
+    #define WXDLLEXPORT_DATA_BASE(type) WXEXPORT type
+#elif defined(WXUSINGDLL_BASE)
+    #define WXDLLEXPORT_BASE WXIMPORT
+    #define WXDLLEXPORT_DATA_BASE(type) WXIMPORT type
 #else // not making nor using DLL
-    #define WXDLLEXPORT
-    #define WXDLLEXPORT_DATA(type) type
-    #define WXDLLEXPORT_CTORFN
+    #define WXDLLEXPORT_BASE
+    #define WXDLLEXPORT_DATA_BASE(type) type
 #endif
 
-// symbolic constant used by all Find()-like functions returning positive
-// integer on success as failure indicator
-#define wxNOT_FOUND       (-1)
+#ifdef WXMAKINGDLL_CORE
+    #define WXDLLEXPORT_CORE WXEXPORT
+    #define WXDLLEXPORT_DATA_CORE(type) WXEXPORT type
+#elif defined(WXUSINGDLL_CORE)
+    #define WXDLLEXPORT_CORE WXIMPORT
+    #define WXDLLEXPORT_DATA_CORE(type) WXIMPORT type
+#else // not making nor using DLL
+    #define WXDLLEXPORT_CORE
+    #define WXDLLEXPORT_DATA_CORE(type) type
+#endif
+
+// for backwards compatibility, define suffix-less versions too
+#define WXDLLEXPORT WXDLLEXPORT_CORE
+#define WXDLLEXPORT_DATA WXDLLEXPORT_DATA_CORE
 
 // ----------------------------------------------------------------------------
 // Very common macros
@@ -439,6 +482,10 @@ typedef int wxWindowID;
 
 // size of statically declared array
 #define WXSIZEOF(array)   (sizeof(array)/sizeof(array[0]))
+
+// symbolic constant used by all Find()-like functions returning positive
+// integer on success as failure indicator
+#define wxNOT_FOUND       (-1)
 
 // ----------------------------------------------------------------------------
 // compiler specific settings

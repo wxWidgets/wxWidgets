@@ -76,7 +76,7 @@
     DLLs and the resolving of symbols in them. There are no instances of this
     class, it simply serves as a namespace for its static member functions.
 */
-class WXDLLEXPORT wxDllLoader
+class WXDLLEXPORT_BASE wxDllLoader
 {
 public:
     /*
@@ -130,7 +130,7 @@ private:
 // wxDynamicLibrary - friendly interface to wxDllLoader
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDynamicLibrary
+class WXDLLEXPORT_BASE wxDynamicLibrary
 {
 public:
     // ctors
@@ -185,7 +185,7 @@ private:
 // wxLibrary
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxLibrary : public wxObject
+class WXDLLEXPORT_BASE wxLibrary : public wxObject
 {
 public:
     wxLibrary(wxDllType handle);
@@ -210,7 +210,7 @@ public:
 // wxLibraries
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxLibraries
+class WXDLLEXPORT_BASE wxLibraries
 {
 public:
     wxLibraries();
@@ -229,7 +229,7 @@ protected:
 // Global variables
 // ----------------------------------------------------------------------------
 
-extern WXDLLEXPORT_DATA(wxLibraries) wxTheLibraries;
+extern WXDLLEXPORT_DATA_BASE(wxLibraries) wxTheLibraries;
 
 // ----------------------------------------------------------------------------
 // Interesting defines

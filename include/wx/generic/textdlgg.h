@@ -28,7 +28,6 @@
 class WXDLLEXPORT wxTextCtrl;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 #define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
 

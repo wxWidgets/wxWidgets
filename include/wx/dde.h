@@ -7,21 +7,20 @@ class wxDDEClient;
 class wxDDEServer;
 class wxDDEConnection;
 
-WX_DECLARE_EXPORTED_LIST(wxDDEClient, wxDDEClientList);
-WX_DECLARE_EXPORTED_LIST(wxDDEServer, wxDDEServerList);
-WX_DECLARE_EXPORTED_LIST(wxDDEConnection, wxDDEConnectionList);
-
+WX_DECLARE_USER_EXPORTED_LIST(wxDDEClient, wxDDEClientList, WXDLLEXPORT_BASE);
+WX_DECLARE_USER_EXPORTED_LIST(wxDDEServer, wxDDEServerList, WXDLLEXPORT_BASE);
+WX_DECLARE_USER_EXPORTED_LIST(wxDDEConnection, wxDDEConnectionList, WXDLLEXPORT_BASE);
 
 #if defined(__WXMSW__)
-#include "wx/msw/dde.h"
+    #include "wx/msw/dde.h"
 #elif defined(__WXMOTIF__)
-#include "wx/motif/dde.h"
+    #include "wx/motif/dde.h"
 #elif defined(__WXGTK__)
-#include "wx/gtk/dde.h"
+    #include "wx/gtk/dde.h"
 #elif defined(__WXMAC__)
-#include "wx/mac/dde.h"
+    #include "wx/mac/dde.h"
 #elif defined(__WXPM__)
-#include "wx/os2/dde.h"
+    #include "wx/os2/dde.h"
 #endif
 
 #endif

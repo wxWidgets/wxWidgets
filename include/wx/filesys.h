@@ -42,7 +42,7 @@ class wxFileSystem;
 //                  (in 'index.htm#chapter2', 'chapter2' is anchor)
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFSFile : public wxObject
+class WXDLLEXPORT_BASE wxFSFile : public wxObject
 {
 public:
     wxFSFile(wxInputStream *stream, const wxString& loc,
@@ -103,7 +103,7 @@ private:
 //                  kinds of files (HTPP, FTP, local, tar.gz etc..)
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileSystemHandler : public wxObject
+class WXDLLEXPORT_BASE wxFileSystemHandler : public wxObject
 {
 public:
     wxFileSystemHandler() : wxObject() {}
@@ -157,7 +157,7 @@ protected:
 //                  kinds of files (HTPP, FTP, local, tar.gz etc..)
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileSystem : public wxObject
+class WXDLLEXPORT_BASE wxFileSystem : public wxObject
 {
 public:
     wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE); m_FindFileHandler = NULL;}
@@ -241,7 +241,7 @@ special characters :
 */
 
 
-class WXDLLEXPORT wxLocalFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT_BASE wxLocalFSHandler : public wxFileSystemHandler
 {
 public:
     virtual bool CanOpen(const wxString& location);

@@ -53,10 +53,10 @@
  *
  */
 
-class WXDLLEXPORT wxTCPServer;
-class WXDLLEXPORT wxTCPClient;
+class WXDLLEXPORT_BASE wxTCPServer;
+class WXDLLEXPORT_BASE wxTCPClient;
 
-class WXDLLEXPORT wxTCPConnection: public wxConnectionBase
+class WXDLLEXPORT_BASE wxTCPConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
 

@@ -20,16 +20,16 @@
 
 #if wxUSE_STREAMS
 
-class WXDLLEXPORT wxTextInputStream;
-class WXDLLEXPORT wxTextOutputStream;
+class WXDLLEXPORT_BASE wxTextInputStream;
+class WXDLLEXPORT_BASE wxTextOutputStream;
 
 typedef wxTextInputStream& (*__wxTextInputManip)(wxTextInputStream&);
 typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
 
-WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
+WXDLLEXPORT_BASE wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 
-class WXDLLEXPORT wxTextInputStream
+class WXDLLEXPORT_BASE wxTextInputStream
 {
 public:
 #if wxUSE_UNICODE
@@ -83,7 +83,7 @@ typedef enum
   wxEOL_DOS
 } wxEOL;
 
-class WXDLLEXPORT wxTextOutputStream
+class WXDLLEXPORT_BASE wxTextOutputStream
 {
 public:
 #if wxUSE_UNICODE

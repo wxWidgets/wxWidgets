@@ -38,7 +38,7 @@
 #include "wx/msw/private.h"
 #endif
 
-class WXDLLEXPORT wxPluginLibrary;
+class WXDLLEXPORT_BASE wxPluginLibrary;
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxPluginLibrary *, wxDLManifest);
 typedef wxDLManifest wxDLImports;
@@ -98,7 +98,7 @@ enum wxDLFlags
 };
 
 
-class WXDLLEXPORT wxDynamicLibrary
+class WXDLLEXPORT_BASE wxDynamicLibrary
 {
 public:
 
@@ -188,7 +188,7 @@ protected:
 //       instantiate this class directly anyway, use wxPluginManager
 //       instead.
 
-class WXDLLEXPORT wxPluginLibrary : public wxDynamicLibrary
+class WXDLLEXPORT_BASE wxPluginLibrary : public wxDynamicLibrary
 {
 public:
 
@@ -242,7 +242,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxPluginManager
+class WXDLLEXPORT_BASE wxPluginManager
 {
 public:
 
@@ -308,7 +308,7 @@ private:
     //  serves as a namespace for its static member functions.
 
 #if WXWIN_COMPATIBILITY_2_2
-class WXDLLEXPORT wxDllLoader
+class WXDLLEXPORT_BASE wxDllLoader
 {
 public:
 

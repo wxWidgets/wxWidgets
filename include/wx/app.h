@@ -26,11 +26,11 @@
 #include "wx/build.h"
 #include "wx/init.h"        // we must declare wxEntry()
 
-class WXDLLEXPORT wxApp;
-class WXDLLEXPORT wxAppTraits;
-class WXDLLEXPORT wxCmdLineParser;
-class WXDLLEXPORT wxLog;
-class WXDLLEXPORT wxMessageOutput;
+class WXDLLEXPORT_CORE wxApp;
+class WXDLLEXPORT_BASE wxAppTraits;
+class WXDLLEXPORT_BASE wxCmdLineParser;
+class WXDLLEXPORT_BASE wxLog;
+class WXDLLEXPORT_BASE wxMessageOutput;
 
 // ----------------------------------------------------------------------------
 // typedefs
@@ -57,7 +57,7 @@ enum
 // VS: Fullscreen/framebuffer application needs to choose display mode prior
 //     to wxWindows initialization. This class holds information about display
 //     mode. It is used by  wxApp::Set/GetDisplayMode.
-class WXDLLEXPORT wxDisplayModeInfo
+class WXDLLEXPORT_CORE wxDisplayModeInfo
 {
 public:
     wxDisplayModeInfo() : m_ok(FALSE) {}
@@ -79,7 +79,7 @@ private:
 // wxAppConsole: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxAppConsole : public wxEvtHandler
+class WXDLLEXPORT_BASE wxAppConsole : public wxEvtHandler
 {
 public:
     // ctor and dtor
@@ -302,7 +302,7 @@ protected:
 
 #if wxUSE_GUI
 
-class WXDLLEXPORT wxAppBase : public wxAppConsole
+class WXDLLEXPORT_CORE wxAppBase : public wxAppConsole
 {
 public:
     wxAppBase();
@@ -503,7 +503,7 @@ protected:
     #endif
 #else // !GUI
     // can't use typedef because wxApp forward declared as a class
-    class WXDLLEXPORT wxApp : public wxAppConsole
+    class WXDLLEXPORT_BASE wxApp : public wxAppConsole
     {
     };
 #endif // GUI/!GUI
@@ -516,7 +516,7 @@ protected:
 // is discouraged, consider using DECLARE_APP() after which you may call
 // wxGetApp() which will return the object of the correct type (i.e. MyApp and
 // not wxApp)
-WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
+WXDLLEXPORT_DATA_BASE(extern wxApp*) wxTheApp;
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -526,13 +526,13 @@ WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
 // ------------------------------------------------------
 
 // Force an exit from main loop
-extern void WXDLLEXPORT wxExit();
+extern void WXDLLEXPORT_BASE wxExit();
 
 // Yield to other apps/messages
-extern bool WXDLLEXPORT wxYield();
+extern bool WXDLLEXPORT_BASE wxYield();
 
 // Yield to other apps/messages
-extern void WXDLLEXPORT wxWakeUpIdle();
+extern void WXDLLEXPORT_BASE wxWakeUpIdle();
 
 // ----------------------------------------------------------------------------
 // macros for dynamic creation of the application object
@@ -542,7 +542,7 @@ extern void WXDLLEXPORT wxWakeUpIdle();
 // creator function. wxApp can then call this function to create a new app
 // object. Convoluted, but necessary.
 
-class WXDLLEXPORT wxAppInitializer
+class WXDLLEXPORT_BASE wxAppInitializer
 {
 public:
     wxAppInitializer(wxAppInitializerFunction fn)

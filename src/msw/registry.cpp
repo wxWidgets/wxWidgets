@@ -682,7 +682,10 @@ bool wxRegKey::DeleteValue(const wxChar *szValue)
 
 #if defined(__WIN32__)
     m_dwLastError = RegDeleteValue((HKEY) m_hKey, WXSTRINGCAST szValue);
-    if ( m_dwLastError != ERROR_SUCCESS ) {
+
+    // deleting a value which doesn't exist is not considered an error
+    if ( (m_dwLastError != ERROR_SUCCESS) &&
+         (m_dwLastError != ERROR_FILE_NOT_FOUND) ) {
       wxLogSysError(m_dwLastError, _("Can't delete value '%s' from key '%s'"),
                     szValue, GetName().c_str());
       return FALSE;

@@ -73,7 +73,8 @@ enum
 // Keys are pairs "key_name = value" where value may be of string or integer
 // (long) type (TODO doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxConfigBase
+
+class WXDLLEXPORT_BASE wxConfigBase
 {
 public:
   // constants
@@ -292,7 +293,7 @@ private:
 // you work in the entry directory and the path is automatically restored
 // when the function returns
 // Taken out of wxConfig since not all compilers can cope with nested classes.
-class wxConfigPathChanger
+class WXDLLEXPORT_BASE wxConfigPathChanger
 {
 public:
   // ctor/dtor do path changing/restorin
@@ -308,7 +309,7 @@ private:
                 m_strOldPath;   // saved path
   bool          m_bChanged;     // was the path changed?
 
-    DECLARE_NO_COPY_CLASS(wxConfigPathChanger)
+  DECLARE_NO_COPY_CLASS(wxConfigPathChanger)
 };
 
 
@@ -338,12 +339,12 @@ private:
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
 */
 
-WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
+WXDLLEXPORT_BASE wxString wxExpandEnvVars(const wxString &sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-WXDLLEXPORT void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+WXDLLEXPORT_BASE void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 
 #endif

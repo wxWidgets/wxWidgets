@@ -30,7 +30,7 @@
 // wxTextFile
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextFile : public wxTextBuffer
+class WXDLLEXPORT_BASE wxTextFile : public wxTextBuffer
 {
 public:
     // constructors

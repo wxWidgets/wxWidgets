@@ -24,13 +24,13 @@
 
 #include "wx/filesys.h"
 
-class WXDLLEXPORT wxHashTableLong;
+class WXDLLEXPORT_BASE wxHashTableLong;
 
 //--------------------------------------------------------------------------------
 // wxZipFSHandler
 //--------------------------------------------------------------------------------
 
-class WXDLLEXPORT wxZipFSHandler : public wxFileSystemHandler
+class WXDLLEXPORT_BASE wxZipFSHandler : public wxFileSystemHandler
 {
     public:
         wxZipFSHandler();

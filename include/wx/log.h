@@ -9,23 +9,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _WX_LOG_H_
-#define   _WX_LOG_H_
+#ifndef _WX_LOG_H_
+#define _WX_LOG_H_
 
 #if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "log.h"
 #endif
 
-#include "wx/setup.h"
 #include "wx/string.h"
+
+#if wxUSE_LOG
 
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTextCtrl;
-class WXDLLEXPORT wxLogFrame;
-class WXDLLEXPORT wxFrame;
+#if wxUSE_GUI
+    class WXDLLEXPORT_CORE wxTextCtrl;
+    class WXDLLEXPORT_CORE wxLogFrame;
+    class WXDLLEXPORT_CORE wxFrame;
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // types
@@ -37,8 +40,6 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#if wxUSE_LOG
 
 #ifndef __WXWINCE__
 #include <time.h>   // for time_t
@@ -108,7 +109,7 @@ enum
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxLog
+class WXDLLEXPORT_BASE wxLog
 {
 public:
     // ctor
@@ -260,7 +261,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // log everything to a "FILE *", stderr by default
-class WXDLLEXPORT wxLogStderr : public wxLog
+class WXDLLEXPORT_BASE wxLogStderr : public wxLog
 {
     DECLARE_NO_COPY_CLASS(wxLogStderr)
 
@@ -278,7 +279,7 @@ protected:
 #if wxUSE_STD_IOSTREAM
 
 // log everything to an "ostream", cerr by default
-class WXDLLEXPORT wxLogStream : public wxLog
+class WXDLLEXPORT_BASE wxLogStream : public wxLog
 {
 public:
     // redirect log output to an ostream
@@ -314,7 +315,7 @@ protected:
         // ~wxLogNull called, old log sink restored
     }
  */
-class WXDLLEXPORT wxLogNull
+class WXDLLEXPORT_BASE wxLogNull
 {
 public:
     wxLogNull() : m_flagOld(wxLog::EnableLogging(FALSE)) { }
@@ -333,7 +334,7 @@ private:
 // does it itself in its ctor
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxLogChain : public wxLog
+class WXDLLEXPORT_BASE wxLogChain : public wxLog
 {
 public:
     wxLogChain(wxLog *logger);
@@ -373,7 +374,7 @@ private:
 };
 
 // a chain log target which uses itself as the new logger
-class WXDLLEXPORT wxLogPassThrough : public wxLogChain
+class WXDLLEXPORT_BASE wxLogPassThrough : public wxLogChain
 {
 public:
     wxLogPassThrough();
@@ -398,43 +399,45 @@ public:
 // ----------------------------------------------------------------------------
 
 // return the last system error code
-WXDLLEXPORT unsigned long wxSysErrorCode();
+WXDLLEXPORT_BASE unsigned long wxSysErrorCode();
 
 // return the error message for given (or last if 0) error code
-WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
+WXDLLEXPORT_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 // ----------------------------------------------------------------------------
 // define wxLog<level>
 // ----------------------------------------------------------------------------
 
-#define DECLARE_LOG_FUNCTION(level)                                 \
-extern void WXDLLEXPORT wxVLog##level(const wxChar *szFormat,       \
-                                      va_list argptr);              \
-extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat,        \
+#define DECLARE_LOG_FUNCTION(level)                                         \
+extern void WXDLLEXPORT_BASE wxVLog##level(const wxChar *szFormat,          \
+                                      va_list argptr);                      \
+extern void WXDLLEXPORT_BASE wxLog##level(const wxChar *szFormat,           \
                                      ...) ATTRIBUTE_PRINTF_1
-#define DECLARE_LOG_FUNCTION2(level, arg1)                          \
-extern void WXDLLEXPORT wxVLog##level(arg1, const wxChar *szFormat, \
-                                      va_list argptr);              \
-extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat,  \
+#define DECLARE_LOG_FUNCTION2_EXP(level, arg, expdecl)                      \
+extern void expdecl wxVLog##level(arg, const wxChar *szFormat,              \
+                                      va_list argptr);                      \
+extern void expdecl wxLog##level(arg, const wxChar *szFormat,               \
                                      ...) ATTRIBUTE_PRINTF_2
+#define DECLARE_LOG_FUNCTION2(level, arg)                                   \
+    DECLARE_LOG_FUNCTION2_EXP(level, arg, WXDLLEXPORT_BASE)
 
 #else // !wxUSE_LOG
 
 // log functions do nothing at all
-#define DECLARE_LOG_FUNCTION(level)                                 \
-inline void WXDLLEXPORT wxVLog##level(const wxChar *szFormat,       \
-                                     va_list argptr) {}             \
-inline void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...) {}
-#define DECLARE_LOG_FUNCTION2(level, arg1)                          \
-inline void WXDLLEXPORT wxVLog##level(arg1, const wxChar *szFormat, \
-                                     va_list argptr) {}             \
-inline void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...) {}
+#define DECLARE_LOG_FUNCTION(level)                                         \
+inline void wxVLog##level(const wxChar *szFormat,                           \
+                                     va_list argptr) { }                    \
+inline void wxLog##level(const wxChar *szFormat, ...) { }
+#define DECLARE_LOG_FUNCTION2(level, arg)                                   \
+inline void wxVLog##level(arg, const wxChar *szFormat,                      \
+                                     va_list argptr) {}                     \
+inline void wxLog##level(arg, const wxChar *szFormat, ...) { }
 
 // Empty Class to fake wxLogNull
-class WXDLLEXPORT wxLogNull
+class WXDLLEXPORT_BASE wxLogNull
 {
 public:
-    wxLogNull() {}
+    wxLogNull() { }
 };
 
 // Dummy macros to replace some functions.
@@ -461,9 +464,11 @@ DECLARE_LOG_FUNCTION(Verbose);
 // application frame, if any
 DECLARE_LOG_FUNCTION(Status);
 
-// this one is the same as previous except that it allows to explicitly
-// specify the frame to which the output should go
-DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
+#if wxUSE_GUI
+    // this one is the same as previous except that it allows to explicitly
+    // specify the frame to which the output should go
+    DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *pFrame, WXDLLEXPORT_CORE);
+#endif // wxUSE_GUI
 
 // additional one: as wxLogError, but also logs last system call error code
 // and the corresponding error message if available
@@ -502,7 +507,8 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
-void WXDLLEXPORT wxSafeShowMessage(const wxString& title, const wxString& text);
+void WXDLLEXPORT_BASE
+wxSafeShowMessage(const wxString& title, const wxString& text);
 
 // ----------------------------------------------------------------------------
 // debug only logging functions: use them with API name and error code

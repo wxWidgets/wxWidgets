@@ -34,7 +34,7 @@
 // pointers to objects
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHashTableBase : public wxObject
+class WXDLLEXPORT_BASE wxHashTableBase : public wxObject
 {
 public:
     wxHashTableBase();
@@ -76,7 +76,7 @@ private:
 // a hash table which stores longs
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHashTableLong : public wxObject
+class WXDLLEXPORT_BASE wxHashTableLong : public wxObject
 {
 public:
     wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT)
@@ -114,7 +114,7 @@ private:
 // wxStringHashTable: a hash table which indexes strings with longs
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxStringHashTable : public wxObject
+class WXDLLEXPORT_BASE wxStringHashTable : public wxObject
 {
 public:
     wxStringHashTable(size_t sizeTable = wxHASH_SIZE_DEFAULT);
@@ -147,7 +147,7 @@ private:
 // for compatibility only
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxHashTable : public wxObject
+class WXDLLEXPORT_BASE wxHashTable : public wxObject
 {
 public:
     int n;

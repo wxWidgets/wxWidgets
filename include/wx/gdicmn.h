@@ -401,8 +401,6 @@ public:
     wxBrush *FindOrCreateBrush(const wxColour& colour, int style);
 };
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
-
 class WXDLLEXPORT wxFontList : public wxList
 {
     DECLARE_DYNAMIC_CLASS(wxFontList)

@@ -22,7 +22,7 @@
 
 #if wxUSE_CMDLINE_PARSER
 
-class WXDLLEXPORT wxDateTime;
+class WXDLLEXPORT_BASE wxDateTime;
 
 // ----------------------------------------------------------------------------
 // constants
@@ -91,7 +91,7 @@ struct wxCmdLineEntryDesc
 // 4. use GetXXX() to retrieve the parsed info
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCmdLineParser
+class WXDLLEXPORT_BASE wxCmdLineParser
 {
 public:
     // ctors and initializers
@@ -219,7 +219,7 @@ private:
 
 // this function is always available (even if !wxUSE_CMDLINE_PARSER) because it
 // is used by wxWin itself under Windows
-class WXDLLEXPORT wxCmdLineParser
+class WXDLLEXPORT_BASE wxCmdLineParser
 {
 public:
     static wxArrayString ConvertStringToArgs(const wxChar *cmdline);

@@ -42,10 +42,10 @@
  *
  */
 
-class WXDLLEXPORT wxDDEServer;
-class WXDLLEXPORT wxDDEClient;
+class WXDLLEXPORT_BASE wxDDEServer;
+class WXDLLEXPORT_BASE wxDDEClient;
 
-class WXDLLEXPORT wxDDEConnection: public wxConnectionBase
+class WXDLLEXPORT_BASE wxDDEConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxDDEConnection)
 public:
@@ -82,7 +82,7 @@ public:
     DECLARE_NO_COPY_CLASS(wxDDEConnection)
 };
 
-class WXDLLEXPORT wxDDEServer: public wxServerBase
+class WXDLLEXPORT_BASE wxDDEServer: public wxServerBase
 {
   DECLARE_DYNAMIC_CLASS(wxDDEServer)
  public:
@@ -111,7 +111,7 @@ protected:
     wxDDEConnectionList m_connections;
 };
 
-class WXDLLEXPORT wxDDEClient: public wxClientBase
+class WXDLLEXPORT_BASE wxDDEClient: public wxClientBase
 {
   DECLARE_DYNAMIC_CLASS(wxDDEClient)
  public:
@@ -140,8 +140,8 @@ protected:
     wxDDEConnectionList m_connections;
 };
 
-void WXDLLEXPORT wxDDEInitialize();
-void WXDLLEXPORT wxDDECleanUp();
+void WXDLLEXPORT_BASE wxDDEInitialize();
+void WXDLLEXPORT_BASE wxDDECleanUp();
 
 #endif
     // _WX_DDE_H_

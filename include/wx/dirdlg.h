@@ -12,7 +12,6 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxDirDialogDefaultFolderStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxDirSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 #define wxDD_DEFAULT_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)

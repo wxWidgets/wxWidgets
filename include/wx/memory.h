@@ -30,8 +30,8 @@
 
 #ifdef __WXDEBUG__
 
-WXDLLEXPORT void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
-WXDLLEXPORT void wxDebugFree(void * buf, bool isVect = FALSE);
+WXDLLEXPORT_BASE void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
+WXDLLEXPORT_BASE void wxDebugFree(void * buf, bool isVect = FALSE);
 
 //**********************************************************************************
 /*
@@ -124,9 +124,9 @@ typedef unsigned int wxMarkerType;
   allocated memory.
 */
 
-class WXDLLEXPORT wxMemStruct {
+class WXDLLEXPORT_BASE wxMemStruct {
 
-friend class WXDLLEXPORT wxDebugContext; // access to the m_next pointer for list traversal.
+friend class WXDLLEXPORT_BASE wxDebugContext; // access to the m_next pointer for list traversal.
 
 public:
 public:
@@ -202,7 +202,7 @@ typedef void (wxMemStruct::*PmSFV) ();
   globals which have to do with the wxMemStruct class.
 */
 
-class WXDLLEXPORT wxDebugContext {
+class WXDLLEXPORT_BASE wxDebugContext {
 
 protected:
     // Used to set alignment for markers.
@@ -300,8 +300,8 @@ private:
 };
 
 // Output a debug message, in a system dependent fashion.
-void WXDLLEXPORT wxTrace(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
-void WXDLLEXPORT wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_PRINTF_2;
+void WXDLLEXPORT_BASE wxTrace(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
+void WXDLLEXPORT_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_PRINTF_2;
 
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
