@@ -1133,10 +1133,14 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         size_t nActualLength = wxWcstr(buffer, psz, nLen, conv);
         
         if ( !Alloc(nActualLength + 1) )
+        {
             wxFAIL_MSG(wxT("Out of memory in wxString"));
-
-        //Copy the data
-        assign(buffer.data(), nActualLength);
+        }
+        else
+        {
+            //Copy the data
+            assign(buffer.data(), nActualLength);
+        }
     }
 }        
 
@@ -1198,10 +1202,14 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
         size_t nActualLength = wxMbstr(buffer, pwz, nLen, conv);
         
         if ( !Alloc(nActualLength + 1) )
+        {
             wxFAIL_MSG(wxT("Out of memory in wxString"));
-
-        //copy the data
-        assign(buffer.data(), nActualLength);
+        }
+        else
+        {
+            //copy the data
+            assign(buffer.data(), nActualLength);
+        }
     }
 }
 
