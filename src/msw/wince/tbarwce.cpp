@@ -75,18 +75,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-// wxWindows previously always considered that toolbar buttons have light grey
-// (0xc0c0c0) background and so ignored any bitmap masks - however, this
-// doesn't work with XPMs which then appear to have black background. To make
-// this work, we must respect the bitmap masks - which we do now. This should
-// be ok in any case, but to restore 100% compatible with the old version
-// behaviour, you can set this to 0.
-#define USE_BITMAP_MASKS 1
-
-// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -557,20 +545,6 @@ static wxToolBarIdMapping sm_ToolBarIdMappingArray[] =
     { wxID_VIEW_SORTTYPE, VIEW_SORTTYPE },
     { 0, 0},
 };
-
-static int wxFindIdForWinceId(int id)
-{
-    int i = 0;
-    while (TRUE)
-    {
-        if (sm_ToolBarIdMappingArray[i].m_winceId == 0)
-            return -1;
-        else if (sm_ToolBarIdMappingArray[i].m_winceId == id)
-            return sm_ToolBarIdMappingArray[i].m_wxwinId;
-        i ++;
-    }
-    return -1;
-}
 
 static int wxFindIdForwxWinId(int id)
 {
@@ -1193,116 +1167,6 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
     }
 #endif
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
-}
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
-{
-    MemoryHDC hdcMem;
-
-    if ( !hdcMem )
-    {
-        wxLogLastError(_T("CreateCompatibleDC"));
-
-        return bitmap;
-    }
-
-    SelectInHDC bmpInHDC(hdcMem, (HBITMAP)bitmap);
-
-    if ( !bmpInHDC )
-    {
-        wxLogLastError(_T("SelectObject"));
-
-        return bitmap;
-    }
-
-    wxCOLORMAP *cmap = wxGetStdColourMap();
-
-    for ( int i = 0; i < width; i++ )
-    {
-        for ( int j = 0; j < height; j++ )
-        {
-            COLORREF pixel = ::GetPixel(hdcMem, i, j);
-
-            for ( size_t k = 0; k < wxSTD_COL_MAX; k++ )
-            {
-                COLORREF col = cmap[k].from;
-                if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
-                     abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
-                     abs(GetBValue(pixel) - GetBValue(col)) < 10 )
-                {
-                    ::SetPixel(hdcMem, i, j, cmap[k].to);
-                    break;
-                }
-            }
-        }
-    }
-
-    return bitmap;
-
-    // VZ: I leave here my attempts to map the bitmap to the system colours
-    //     faster by using BitBlt() even though it's broken currently - but
-    //     maybe someone else can finish it? It should be faster than iterating
-    //     over all pixels...
-#if 0
-    MemoryHDC hdcMask, hdcDst;
-    if ( !hdcMask || !hdcDst )
-    {
-        wxLogLastError(_T("CreateCompatibleDC"));
-
-        return bitmap;
-    }
-
-    // create the target bitmap
-    HBITMAP hbmpDst = ::CreateCompatibleBitmap(hdcDst, width, height);
-    if ( !hbmpDst )
-    {
-        wxLogLastError(_T("CreateCompatibleBitmap"));
-
-        return bitmap;
-    }
-
-    // create the monochrome mask bitmap
-    HBITMAP hbmpMask = ::CreateBitmap(width, height, 1, 1, 0);
-    if ( !hbmpMask )
-    {
-        wxLogLastError(_T("CreateBitmap(mono)"));
-
-        ::DeleteObject(hbmpDst);
-
-        return bitmap;
-    }
-
-    SelectInHDC bmpInDst(hdcDst, hbmpDst),
-                bmpInMask(hdcMask, hbmpMask);
-
-    // for each colour:
-    for ( n = 0; n < NUM_OF_MAPPED_COLOURS; n++ )
-    {
-        // create the mask for this colour
-        ::SetBkColor(hdcMem, ColorMap[n].from);
-        ::BitBlt(hdcMask, 0, 0, width, height, hdcMem, 0, 0, SRCCOPY);
-
-        // replace this colour with the target one in the dst bitmap
-        HBRUSH hbr = ::CreateSolidBrush(ColorMap[n].to);
-        HGDIOBJ hbrOld = ::SelectObject(hdcDst, hbr);
-
-        ::MaskBlt(hdcDst, 0, 0, width, height,
-                  hdcMem, 0, 0,
-                  hbmpMask, 0, 0,
-                  MAKEROP4(PATCOPY, SRCCOPY));
-
-        (void)::SelectObject(hdcDst, hbrOld);
-        ::DeleteObject(hbr);
-    }
-
-    ::DeleteObject((HBITMAP)bitmap);
-
-    return (WXHBITMAP)hbmpDst;
-#endif // 0
 }
 
 #endif // wxUSE_TOOLBAR && Win95
