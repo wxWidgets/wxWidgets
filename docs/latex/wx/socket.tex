@@ -721,7 +721,7 @@ void SocketCallback(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
 
 The first parameter is a reference to the socket object in which the event
 occured. The second parameter tells you which event occured. (See \helpref{wxSocket events}{wxsocketbase}).
-The third parameter is the user data you specified using \helpref{CallbackData}{wxsocketcallbackdata}.
+The third parameter is the user data you specified using \helpref{CallbackData}{wxsocketbasecallbackdata}.
 
 \wxheading{Return value}
 
@@ -948,7 +948,7 @@ Destroys a wxSocketServer object (it doesn't close the accepted connections).
 %
 % Accept
 %
-\membersection{wxSocketServer::Accept}
+\membersection{wxSocketServer::Accept}\label{wxsocketserveraccept}
 
 \func{wxSocketBase *}{Accept}{\param{bool}{ wait = TRUE}}
 
@@ -973,7 +973,7 @@ connections.
 
 \wxheading{See also}
 
-\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}, 
+\helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept}, 
 \helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
 \helpref{wxSocketServer::AcceptWith}{wxsocketserveracceptwith}
@@ -998,7 +998,7 @@ Returns TRUE on success, or FALSE if an error occured or if the
 {\it wait} parameter was FALSE and there were no pending
 connections.
 
-\helpref{wxSocketServer::WaitForAccept}{wxsocketbasewaitforaccept}, 
+\helpref{wxSocketServer::WaitForAccept}{wxsocketserverwaitforaccept}, 
 \helpref{wxSocketBase::SetNotify}{wxsocketbasesetnotify}, 
 \helpref{wxSocketBase::Notify}{wxsocketbasenotify}, 
 \helpref{wxSocketServer::Accept}{wxsocketserveraccept}

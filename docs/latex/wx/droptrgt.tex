@@ -43,11 +43,15 @@ Override this to indicate how many formats you support.
 
 Override this to indicate what kind of data you support.
 
-\membersection{wxDropTarget::OnEnter}\label{wxdroptargetonenter}
+\membersection{wxDropTarget::OnData}\label{wxdroptargetondata}
 
-\func{virtual void}{OnEnter}{\void}
+\func{virtual wxDragResult}{OnData}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxDragResult}{ def}}
 
-Called when the mouse enters the drop target.
+Called after OnDrop() returns TRUE: you will usually just call
+GetData() from here and, probably, also refresh something to update the
+new data and, finally, return the code indicating how did the operation
+complete (returning default value in case of success and wxDragError on
+failure is usually ok).
 
 \membersection{wxDropTarget::OnDrop}\label{wxdroptargetondrop}
 
@@ -68,6 +72,12 @@ Called when the user drops a data object on the target. Return FALSE to veto the
 \wxheading{Return value}
 
 Return TRUE to accept the data, FALSE to veto the operation.
+
+\membersection{wxDropTarget::OnEnter}\label{wxdroptargetonenter}
+
+\func{virtual void}{OnEnter}{\void}
+
+Called when the mouse enters the drop target.
 
 \membersection{wxDropTarget::OnLeave}\label{wxdroptargetonleave}
 
