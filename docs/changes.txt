@@ -64,6 +64,10 @@ Unix ports:
   and the compiler flags for C++ files only, CFLAGS should still be used
   to compile pure C files.
 
+
+OTHER CHANGES
+=============
+
 2.3.3
 -----
 
@@ -74,6 +78,11 @@ wxBase:
   (if possible) and, especially, not to leak the file descriptors under Unix
 - memory leak in wxHTTP fixed (Dimitri)
 - fixes to AM_PATH_WXCONFIG autoconf macro
+
+Unix (Base/GUI):
+
+- wxWindows may be built using BSD and Solaris (and possibly other) make
+  programs and not only GNU make
 
 All (GUI):
 
