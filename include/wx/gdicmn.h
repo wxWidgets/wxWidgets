@@ -324,6 +324,8 @@ public:
 // Management of pens, brushes and fonts
 // ---------------------------------------------------------------------------
 
+typedef wxInt8 wxDash;
+
 class WXDLLEXPORT wxPenList : public wxList
 {
     DECLARE_DYNAMIC_CLASS(wxPenList)

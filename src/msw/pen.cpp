@@ -41,7 +41,7 @@ wxPenRefData::wxPenRefData()
   m_join = wxJOIN_ROUND ;
   m_cap = wxCAP_ROUND ;
   m_nbDash = 0 ;
-  m_dash = 0 ;
+  m_dash = (wxMSWDash*)NULL;
   m_hPen = 0;
 }
 
@@ -89,7 +89,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
   M_PENDATA->m_join = wxJOIN_ROUND ;
   M_PENDATA->m_cap = wxCAP_ROUND ;
   M_PENDATA->m_nbDash = 0 ;
-  M_PENDATA->m_dash = 0 ;
+  M_PENDATA->m_dash = (wxMSWDash*)NULL;
   M_PENDATA->m_hPen = 0 ;
 
 #ifndef __WIN32__
@@ -132,7 +132,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_dash = (wxMSWDash*)NULL;
     M_PENDATA->m_hPen = 0 ;
 
     RealizeResource();
@@ -236,17 +236,17 @@ bool wxPen::RealizeResource()
 
 	   logb.lbColor = ms_colour;
 
-	   wxDash *real_dash;
+	   wxMSWDash *real_dash;
            if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
 	   {
-	       real_dash = new wxDash[M_PENDATA->m_nbDash];
+	       real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
                int i;
                for (i=0; i<M_PENDATA->m_nbDash; i++)
-               real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
+                   real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
            }
 	   else
            {
-	       real_dash = 0;
+	       real_dash = (wxMSWDash*)NULL;
            }
 
            // Win32s doesn't have ExtCreatePen function...
@@ -259,7 +259,7 @@ bool wxPen::RealizeResource()
 					M_PENDATA->m_style==wxUSER_DASH
 					  ? M_PENDATA->m_nbDash
 					  : 0,
-					(const DWORD*)real_dash );
+					real_dash );
 	   }
 	   else
            {
@@ -377,7 +377,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = (wxMSWDash *)Dash;
   
     RealizeResource();
 }

@@ -471,7 +471,7 @@
                                 // Define 1 for font size to be backward compatible
                                 // to 1.63 and earlier. 1.64 and later define point
                                 // sizes to be compatible with Windows.
-#define wxUSE_GENERIC_DIALOGS_IN_MSW 1
+#define wxUSE_GENERIC_DIALOGS_IN_MSW 0
                                 // Define 1 to use generic dialogs in Windows, even though
                                 // they duplicate native common dialog (e.g. wxColourDialog)
 #define wxUSE_PENWINDOWS 0

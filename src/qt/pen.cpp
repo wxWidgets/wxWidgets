@@ -26,7 +26,7 @@ wxPenRefData::wxPenRefData()
     m_join = wxJOIN_ROUND ;
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
-    m_dash = 0 ;
+    m_dash = (wxQTDash*)NULL;
 /* TODO: null data
     m_hPen = 0;
 */
@@ -76,7 +76,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_dash = (wxQTDash*)NULL;
 
     RealizeResource();
 
@@ -94,7 +94,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_dash = (wxQTDash*)NULL;
 
     RealizeResource();
 
@@ -112,7 +112,7 @@ wxPen::wxPen(const wxString& col, int Width, int Style)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = 0 ;
+    M_PENDATA->m_dash = (wxQTDash*)NULL;
 
     RealizeResource();
 
@@ -195,7 +195,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
+    M_PENDATA->m_dash = (wxQTDash *)Dash;
   
     RealizeResource();
 }

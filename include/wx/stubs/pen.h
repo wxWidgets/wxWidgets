@@ -20,7 +20,17 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-typedef    long wxDash ;
+// PORTERS, NB: this typedef is the platform specific type for dashes..
+// change all occurences of XSTUBX in pen.h and pen.cpp to something
+// meaningful for your port (eg. wxMSWDash, wxGTKDash) and change the
+// type from long to whatever your platform requires.
+
+typedef long wxXSTUBXDash;
+
+// wxDash is typedef'd in gdicmn.h and is the type that should be used
+// for all public interfaces.  Convert parameters to the wxXSTUBXDash
+// type for use inside the platform specific methods, and cast them
+// back to wxDash again before passing back to the user.  -- RL
 
 class WXDLLEXPORT wxPen;
 
@@ -35,11 +45,11 @@ public:
 protected:
   int           m_width;
   int           m_style;
-  int           m_join ;
-  int           m_cap ;
-  wxBitmap      m_stipple ;
-  int           m_nbDash ;
-  wxDash *      m_dash ;
+  int           m_join;
+  int           m_cap;
+  wxBitmap      m_stipple;
+  int           m_nbDash;
+  wxXSTUBXDash *m_dash;
   wxColour      m_colour;
 /* TODO: implementation
   WXHPEN        m_hPen;
@@ -81,8 +91,10 @@ public:
   inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
   inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
   inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
-  inline int GetDashes(wxDash **ptr) const {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+  inline int GetDashes(wxDash **ptr) const
+  {
+      *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL);
+      return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };

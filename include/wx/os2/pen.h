@@ -15,7 +15,7 @@
 #include "wx/gdiobj.h"
 #include "wx/bitmap.h"
 
-typedef    long wxDash ;
+typedef long wxPMDash;
 
 class WXDLLEXPORT wxPen;
 
@@ -34,7 +34,7 @@ protected:
   int           m_cap ;
   wxBitmap      m_stipple ;
   int           m_nbDash ;
-  wxDash *      m_dash ;
+  wxPMDash *    m_dash ;
   wxColour      m_colour;
   WXHPEN        m_hPen;
 };
@@ -74,8 +74,10 @@ public:
   inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
   inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
   inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
-  inline int GetDashes(wxDash **ptr) const {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+  inline int GetDashes(wxDash **ptr) const
+  {
+    *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
+    return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };

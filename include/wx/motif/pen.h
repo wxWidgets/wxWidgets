@@ -20,7 +20,7 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-typedef    char wxDash ;
+typedef char wxMOTIFDash;
 
 class WXDLLEXPORT wxPen;
 
@@ -39,7 +39,7 @@ protected:
   int           m_cap ;
   wxBitmap      m_stipple ;
   int           m_nbDash ;
-  wxDash *      m_dash ;
+  wxMOTIFDash  *m_dash ;
   wxColour      m_colour;
 };
 
@@ -78,11 +78,13 @@ public:
   inline int GetStyle() const { return (M_PENDATA ? M_PENDATA->m_style : 0); };
   inline int GetJoin() const { return (M_PENDATA ? M_PENDATA->m_join : 0); };
   inline int GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
-  inline int GetDashes(wxDash **ptr) const {
-     *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
+  inline int GetDashes(wxDash **ptr) const
+  {
+    *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
+    return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
   inline int GetDashCount() const { return (M_PENDATA->m_nbDash); }
-  inline wxDash* GetDash() const { return (M_PENDATA->m_dash); }
+  inline wxDash* GetDash() const { return (wxDash*)M_PENDATA->m_dash; }
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
 

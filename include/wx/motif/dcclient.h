@@ -149,7 +149,7 @@ protected:
     int          m_currentPenJoin ;
     int          m_currentPenCap ;
     int          m_currentPenDashCount ;
-    char*        m_currentPenDash ;
+    wxMOTIFDash* m_currentPenDash ;
     wxBitmap     m_currentStipple ;
     int          m_currentStyle ;
     int          m_currentFill ;
