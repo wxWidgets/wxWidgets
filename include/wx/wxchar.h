@@ -479,7 +479,7 @@
             
             /*  stdio.h functions */
             
-             #define wxNEED_WX_STDIO_H
+            #define wxNEED_WX_STDIO_H
 
             /*  stdlib.h functions */
             #define  wxAtof      watof
@@ -504,10 +504,7 @@
             #define wxPuts(ws) wxFputs(ws, stdout)
             #define wxPutchar(wch) wxPutc(wch, stdout)
 
-            // we need %s to %ls conversion for printf and scanf etc */
             #define wxNEED_PRINTF_CONVERSION
-            /*  glibc doesn't have wide char equivalents of the other stuff so */
-            /*  use our own versions */
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             */
