@@ -1842,8 +1842,8 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // also, it may return an errno may be something like EILSEQ,
         // in which case we need to break out
         if ( (len >= 0 && len <= size)
-        // No EOVERFLOW on Windows nor Palm 6.0
-#if !defined(__WXMSW__) && !defined(__WXPALMOS__)
+        // No EOVERFLOW on Windows nor Palm 6.0 nor OpenVMS
+#if !defined(__WXMSW__) && !defined(__WXPALMOS__) && !defined( __VMS )
             || errno != EOVERFLOW
 #endif
             )

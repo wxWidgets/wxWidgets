@@ -176,7 +176,7 @@ OBJECTS2=utilscmn.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
-OBJECTS_MOTIF=gaugecmn.obj
+OBJECTS_MOTIF=gaugecmn.obj,radiocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,gaugecmn.obj,\

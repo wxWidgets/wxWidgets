@@ -170,12 +170,7 @@
 
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 
-#if defined(_MSC_VER) || \
-    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif
+#define wxUSE_ON_FATAL_EXCEPTION 0
 
 #define wxUSE_STACKWALKER 0
 
@@ -337,11 +332,7 @@
 
 #define wxUSE_STATUSBAR    1
 
-#if defined(__WXMSW__) || defined(__WXMAC__)
 #define wxUSE_NATIVE_STATUSBAR        0
-#else
-#define wxUSE_NATIVE_STATUSBAR        0
-#endif
 
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 1
@@ -482,9 +473,6 @@
 #define wxUSE_POSTSCRIPT  1
 
 #define wxUSE_AFM_FOR_POSTSCRIPT 1
-
-#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
-
 
 #define wxUSE_ODBC          1
 
@@ -1019,6 +1007,8 @@
 /* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibil
       with wx/msw/setup.h */
 #define wxUSE_XPM_IN_MSW wxUSE_XPM
+
+#define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
 #endif /* __WIN32__ */
 
