@@ -71,7 +71,7 @@ public:
 		const wxVariant& arg3 = wxNullVariant, const wxVariant& arg4 = wxNullVariant,
 		const wxVariant& arg5 = wxNullVariant, const wxVariant& arg6 = wxNullVariant);
 
-	 bool wxAutomationObject::PutPropertyArray(const wxString& property, int noArgs, const wxVariant **args);
+    bool PutPropertyArray(const wxString& property, int noArgs, const wxVariant **args);
     bool PutProperty(const wxString& property, int noArgs, wxVariant args[]) ;
 	bool PutProperty(const wxString& property,
 		const wxVariant& arg1, const wxVariant& arg2 = wxNullVariant,
