@@ -1124,7 +1124,8 @@ wxMenu::~wxMenu()
 {
    m_items.Clear();
 
-   gtk_widget_destroy( m_menu );
+   if ( GTK_IS_WIDGET( m_menu ))
+       gtk_widget_destroy( m_menu );
 
    gtk_object_unref( GTK_OBJECT(m_factory) );
 }
