@@ -117,11 +117,23 @@ static const int MM_METRIC = 10;
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
+// call AlphaBlend() to blit contents of hdcSrc to hdcDst using alpha
+//
+// NB: bmpSrc is the bitmap selected in hdcSrc, it is not really needed
+//     to pass it to this function but as we already have it at the point
+//     of call anyhow we do
+//
+// return true if we could draw the bitmap in one way or the other, false
+// otherwise
+static bool AlphaBlt(HDC hdcDst,
+                     int x, int y, int w, int h,
+                     HDC hdcSrc,
+                     const wxBitmap& bmpSrc);
 
 #ifdef wxHAVE_RAW_BITMAP
 // our (limited) AlphaBlend() replacement
 static void
-wxAlphaBlend(wxDC& dc, int x, int y, int w, int h, const wxBitmap& bmp);
+wxAlphaBlend(HDC hdcDst, int x, int y, int w, int h, const wxBitmap& bmp);
 #endif
 
 // ----------------------------------------------------------------------------
@@ -957,72 +969,14 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
     HPALETTE oldPal = 0;
 #endif // wxUSE_PALETTE
 
-    // do we have AlphaBlend() and company in the headers?
-#ifdef AC_SRC_OVER
     if ( bmp.HasAlpha() )
     {
-        // yes, now try to see if we have it during run-time
+        MemoryHDC hdcMem;
+        SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
 
-        typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
-                                            HDC,int,int,int,int,
-                                            BLENDFUNCTION);
-
-        // bitmaps can be drawn only from GUI thread so there is no need to
-        // protect this static variable from multiple threads
-        static bool s_triedToLoad = FALSE;
-        static AlphaBlend_t pfnAlphaBlend = NULL;
-        if ( !s_triedToLoad )
-        {
-            s_triedToLoad = TRUE;
-
-            // don't give errors about the DLL being unavailable, we're
-            // prepared to handle this
-            wxLogNull nolog;
-
-            wxDynamicLibrary dll(_T("msimg32.dll"));
-            if ( dll.IsLoaded() )
-            {
-                pfnAlphaBlend = (AlphaBlend_t)dll.GetSymbol(_T("AlphaBlend"));
-                if ( pfnAlphaBlend )
-                {
-                    // we must keep the DLL loaded if we want to be able to
-                    // call AlphaBlend() so just never unload it at all, not a
-                    // big deal
-                    dll.Detach();
-                }
-            }
-        }
-
-        if ( pfnAlphaBlend )
-        {
-            MemoryHDC hdcMem;
-            SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
-
-            BLENDFUNCTION bf;
-            bf.BlendOp = AC_SRC_OVER;
-            bf.BlendFlags = 0;
-            bf.SourceConstantAlpha = 0xff;
-            bf.AlphaFormat = AC_SRC_ALPHA;
-
-            if ( pfnAlphaBlend(GetHdc(), x, y, width, height,
-                               hdcMem, 0, 0, width, height,
-                               bf) )
-            {
-                // skip wxAlphaBlend() call below
-                return;
-            }
-
-            wxLogLastError(_T("AlphaBlend"));
-        }
-
-        // use our own (probably much slower) implementation
-#ifdef wxHAVE_RAW_BITMAP
-        wxAlphaBlend(*this, x, y, width, height, bmp);
-#endif // wxHAVE_RAW_BITMAP
-
-        return;
+        if ( AlphaBlt(GetHdc(), x, y, width, height, hdcMem, bmp) )
+            return;
     }
-#endif // defined(AC_SRC_OVER)
 
     if ( useMask )
     {
@@ -1842,11 +1796,19 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                   int rop, bool useMask,
                   wxCoord xsrcMask, wxCoord ysrcMask)
 {
+    wxCHECK_MSG( source, FALSE, _T("wxDC::Blit(): NULL wxDC pointer") );
+
 #ifdef __WXMICROWIN__
     if (!GetHDC()) return FALSE;
 #endif
 
     const wxBitmap& bmpSrc = source->m_selectedBitmap;
+    if ( bmpSrc.Ok() && bmpSrc.HasAlpha() )
+    {
+        if ( AlphaBlt(GetHdc(), xdest, ydest, width, height,
+                      GetHdcOf(*source), bmpSrc) )
+            return TRUE;
+    }
 
     wxMask *mask = NULL;
     if ( useMask )
@@ -2306,19 +2268,96 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 #endif // wxUSE_DC_CACHEING
 
 // ----------------------------------------------------------------------------
-// wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
+// alpha channel support
 // ----------------------------------------------------------------------------
 
+static bool AlphaBlt(HDC hdcDst,
+                     int x, int y, int width, int height,
+                     HDC hdcSrc,
+                     const wxBitmap& bmp)
+{
+    wxASSERT_MSG( bmp.Ok() && bmp.HasAlpha(), _T("AlphaBlt(): invalid bitmap") );
+    wxASSERT_MSG( hdcDst && hdcSrc, _T("AlphaBlt(): invalid HDC") );
+
+    // do we have AlphaBlend() and company in the headers?
+#ifdef AC_SRC_OVER
+    // yes, now try to see if we have it during run-time
+    typedef BOOL (WINAPI *AlphaBlend_t)(HDC,int,int,int,int,
+                                        HDC,int,int,int,int,
+                                        BLENDFUNCTION);
+
+    // bitmaps can be drawn only from GUI thread so there is no need to
+    // protect this static variable from multiple threads
+    static bool s_triedToLoad = FALSE;
+    static AlphaBlend_t pfnAlphaBlend = NULL;
+    if ( !s_triedToLoad )
+    {
+        s_triedToLoad = TRUE;
+
+        // don't give errors about the DLL being unavailable, we're
+        // prepared to handle this
+        wxLogNull nolog;
+
+        wxDynamicLibrary dll(_T("msimg32.dll"));
+        if ( dll.IsLoaded() )
+        {
+            pfnAlphaBlend = (AlphaBlend_t)dll.GetSymbol(_T("AlphaBlend"));
+            if ( pfnAlphaBlend )
+            {
+                // we must keep the DLL loaded if we want to be able to
+                // call AlphaBlend() so just never unload it at all, not a
+                // big deal
+                dll.Detach();
+            }
+        }
+    }
+
+    if ( pfnAlphaBlend )
+    {
+        BLENDFUNCTION bf;
+        bf.BlendOp = AC_SRC_OVER;
+        bf.BlendFlags = 0;
+        bf.SourceConstantAlpha = 0xff;
+        bf.AlphaFormat = AC_SRC_ALPHA;
+
+        if ( pfnAlphaBlend(hdcDst, x, y, width, height,
+                           hdcSrc, 0, 0, width, height,
+                           bf) )
+        {
+            // skip wxAlphaBlend() call below
+            return TRUE;
+        }
+
+        wxLogLastError(_T("AlphaBlend"));
+    }
+#endif // defined(AC_SRC_OVER)
+
+    // AlphaBlend() unavailable of failed: use our own (probably much slower)
+    // implementation
 #ifdef wxHAVE_RAW_BITMAP
+    wxAlphaBlend(hdcDst, x, y, width, height, bmp);
+
+    return TRUE;
+#else // !wxHAVE_RAW_BITMAP
+    // no wxAlphaBlend() neither, fall back to using simple BitBlt() (we lose
+    // alpha but at least something will be shown like this)
+    return FALSE;
+#endif // wxHAVE_RAW_BITMAP
+}
+
+
+// wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
+#ifdef wxHAVE_RAW_BITMAP
+
 static void
-wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
+wxAlphaBlend(HDC hdcDst, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
 {
     // get the destination DC pixels
     wxBitmap bmpDst(w, h, 32 /* force creating RGBA DIB */);
     MemoryHDC hdcMem;
     SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
 
-    if ( !::BitBlt(hdcMem, 0, 0, w, h, GetHdcOf(dc), 0, 0, SRCCOPY) )
+    if ( !::BitBlt(hdcMem, 0, 0, w, h, hdcDst, 0, 0, SRCCOPY) )
     {
         wxLogLastError(_T("BitBlt"));
     }
@@ -2359,7 +2398,7 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
     }
 
     // and finally blit them back to the destination DC
-    if ( !::BitBlt(GetHdcOf(dc), xDst, yDst, w, h, hdcMem, 0, 0, SRCCOPY) )
+    if ( !::BitBlt(hdcDst, xDst, yDst, w, h, hdcMem, 0, 0, SRCCOPY) )
     {
         wxLogLastError(_T("BitBlt"));
     }
