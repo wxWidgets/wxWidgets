@@ -33,6 +33,10 @@
 #   include "wx/image.h"
 #   include "wx/help.h"
 
+#if wxUSE_TOOLTIPS
+#   include "wx/tooltip.h"
+#endif
+
 // define this to 1 to use HTML help even under Windows (by default, Windows
 // version will use WinHelp).
 // Please also see samples/html/helpview.
@@ -405,6 +409,8 @@ void MyFrame::OnContextHelp(wxHelpEvent& event)
     wxString msg;
     msg.Printf(wxT("We should now display help for window %d"), event.GetId());
     wxMessageBox(msg);
+    //wxToolTip::Enable(TRUE);
+    //SetToolTip(msg);
 }
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)

@@ -2384,6 +2384,12 @@ bool wxWindow::MSWCreate(int id,
 
             return FALSE;
         }
+        if (extendedStyle != 0)
+        {
+            ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, extendedStyle);
+            ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+                SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+        }
 
         // ::SetWindowLong(GWL_EXSTYLE) doesn't work for the dialogs, so try
         // to take care of (at least some) extended style flags ourselves
