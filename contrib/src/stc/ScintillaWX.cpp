@@ -160,7 +160,11 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif
-    vs.extraFontFlag = true;
+#ifdef __WXMAC__
+    vs.extraFontFlag = false;  // UseAntiAliasing
+#else
+    vs.extraFontFlag = true;   // UseAntiAliasing
+#endif
 }
 
 
