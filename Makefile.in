@@ -524,6 +524,7 @@ uninstall:
 ALL_DIST: distclean
 	mkdir _dist_dir
 	mkdir $(DISTDIR)
+	cp $(WXDIR)/aclocal.m4 $(DISTDIR)
 	cp $(WXDIR)/configure.in $(DISTDIR)
 	cp $(WXDIR)/configure $(DISTDIR)
 	cp $(WXDIR)/config.sub $(DISTDIR)
