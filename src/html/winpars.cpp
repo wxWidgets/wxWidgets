@@ -63,7 +63,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
 
     // fill in wxHtmlParser's tables:
     wxNode *node = m_Modules.GetFirst();
-    while (node){
+    while (node) {
         wxHtmlTagsModule *mod = (wxHtmlTagsModule*) node -> GetData();
         mod -> FillHandlersTable(this);
         node = node -> GetNext();
@@ -81,11 +81,24 @@ void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 
 void wxHtmlWinParser::SetFonts(wxString normal_face, int normal_italic_mode, wxString fixed_face, int fixed_italic_mode, const int *sizes)
 {
-    for (int i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
+    int i, j, k, l, m;
+
+    for (i = 0; i < 7; i++) m_FontsSizes[i] = sizes[i];
     m_FontFaceFixed = fixed_face;
     m_FontFaceNormal = normal_face;
     m_ItalicModeFixed = fixed_italic_mode;
     m_ItalicModeNormal = normal_italic_mode;
+
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 2; j++)
+            for (k = 0; k < 2; k++)
+                for (l = 0; l < 2; l++)
+                    for (m = 0; m < 7; m++) {
+                        if (m_FontsTable[i][j][k][l][m] != NULL) {
+                            delete m_FontsTable[i][j][k][l][m];
+                            m_FontsTable[i][j][k][l][m] = NULL;
+                        }
+                    }
 }
 
 
@@ -242,13 +255,12 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
 
     if (m_FontsTable[fb][fi][fu][ff][fs] == NULL) {
         m_FontsTable[fb][fi][fu][ff][fs] =
-            //wxTheFontList -> FindOrCreateFont(
             new wxFont(
             m_FontsSizes[fs],
             ff ? wxMODERN : wxSWISS,
-                fi ? (ff ? m_ItalicModeFixed : m_ItalicModeNormal) : wxNORMAL,
-                fb ? wxBOLD : wxNORMAL,
-                fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
+            fi ? (ff ? m_ItalicModeFixed : m_ItalicModeNormal) : wxNORMAL,
+            fb ? wxBOLD : wxNORMAL,
+            fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
     }
     m_DC -> SetFont(*(m_FontsTable[fb][fi][fu][ff][fs]));
     return (m_FontsTable[fb][fi][fu][ff][fs]);
