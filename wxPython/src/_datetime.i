@@ -809,9 +809,15 @@ public:
 
     %pythoncode {
     def __repr__(self):
-        return '<wxDateTime: \"%s\" at %s>' % ( self.Format(), self.this)
+        if self.IsValid():
+            return '<wx.DateTime: \"%s\" at %s>' % ( self.Format(), self.this)
+        else:
+            return '<wx.DateTime: \"INVALID\" at %s>' % self.this
     def __str__(self):
-        return self.Format()
+        if self.IsValid():
+            return self.Format()
+        else:
+            return "INVALID DateTime"
     }
 };
 
@@ -955,7 +961,7 @@ public:
 
     %pythoncode {
      def __repr__(self):
-         return '<wxTimeSpan: \"%s\" at %s>' % ( self.Format(), self.this)
+         return '<wx.TimeSpan: \"%s\" at %s>' % ( self.Format(), self.this)
      def __str__(self):
          return self.Format()
      }
