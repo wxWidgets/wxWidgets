@@ -30,6 +30,10 @@
         <!-- bundle directory: -->
         <set var="BUNDLE">$(id).app/Contents</set>
         <set var="BUNDLE_TGT">$(BUNDLE)/PkgInfo</set>
+        <set var="BUNDLE_TGT_REF">
+            <if cond="TOOLKIT=='MAC'">$(BUNDLE)/PkgInfo</if>
+            <if cond="TOOLKIT=='COCOA'">$(BUNDLE)/PkgInfo</if>
+        </set>
         
         <add-target target="$(BUNDLE_TGT)" type="action"/>
         <modify-target target="$(BUNDLE_TGT)">
@@ -68,7 +72,7 @@
                     cond="PLATFORM_MACOSX=='1'"/>
         <modify-target target="$(id)_bundle">
             <dependency-of>all</dependency-of>
-            <depends>$(BUNDLE_TGT)</depends>
+            <depends>$(BUNDLE_TGT_REF)</depends>
         </modify-target>
 
         <!-- "make clean" should delete the bundle: -->
