@@ -55,6 +55,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/dynarray.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/file.h"
@@ -2178,6 +2179,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.25  2003/09/03 17:39:27  MBN
+     Compilation fixes.
+
    Revision 1.24  2003/08/13 22:59:37  VZ
    compilation fix
 
