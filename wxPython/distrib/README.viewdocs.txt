@@ -1,5 +1,5 @@
-wxPythonDocs
-------------
+wxPython-docs
+-------------
 
 The wxWidgets docs can now be viewed on non-Win32 platforms with a
 nice viewer modeled after the MS HTMLHelp viewer.  Simply execute the
