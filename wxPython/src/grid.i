@@ -938,7 +938,7 @@ class wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
     %pythonAppend wxGridCellFloatEditor  "self._setOORInfo(self)"
-    wxGridCellFloatEditor();
+    wxGridCellFloatEditor(int width = -1, int precision = -1);
     virtual wxString GetValue();
 };
 
