@@ -986,6 +986,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntbase.o \
 	$(OBJS)\monolib_quantize.o \
 	$(OBJS)\monolib_radiocmn.o \
+	$(OBJS)\monolib_rendcmn.o \
 	$(OBJS)\monolib_rgncmn.o \
 	$(OBJS)\monolib_settcmn.o \
 	$(OBJS)\monolib_sizer.o \
@@ -1190,6 +1191,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntbase.o \
 	$(OBJS)\monolib_quantize.o \
 	$(OBJS)\monolib_radiocmn.o \
+	$(OBJS)\monolib_rendcmn.o \
 	$(OBJS)\monolib_rgncmn.o \
 	$(OBJS)\monolib_settcmn.o \
 	$(OBJS)\monolib_sizer.o \
@@ -1396,6 +1398,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntbase.o \
 	$(OBJS)\coredll_quantize.o \
 	$(OBJS)\coredll_radiocmn.o \
+	$(OBJS)\coredll_rendcmn.o \
 	$(OBJS)\coredll_rgncmn.o \
 	$(OBJS)\coredll_settcmn.o \
 	$(OBJS)\coredll_sizer.o \
@@ -1600,6 +1603,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntbase.o \
 	$(OBJS)\coredll_quantize.o \
 	$(OBJS)\coredll_radiocmn.o \
+	$(OBJS)\coredll_rendcmn.o \
 	$(OBJS)\coredll_rgncmn.o \
 	$(OBJS)\coredll_settcmn.o \
 	$(OBJS)\coredll_sizer.o \
@@ -1806,6 +1810,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntbase.o \
 	$(OBJS)\corelib_quantize.o \
 	$(OBJS)\corelib_radiocmn.o \
+	$(OBJS)\corelib_rendcmn.o \
 	$(OBJS)\corelib_rgncmn.o \
 	$(OBJS)\corelib_settcmn.o \
 	$(OBJS)\corelib_sizer.o \
@@ -2010,6 +2015,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntbase.o \
 	$(OBJS)\corelib_quantize.o \
 	$(OBJS)\corelib_radiocmn.o \
+	$(OBJS)\corelib_rendcmn.o \
 	$(OBJS)\corelib_rgncmn.o \
 	$(OBJS)\corelib_settcmn.o \
 	$(OBJS)\corelib_sizer.o \
@@ -2216,6 +2222,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntbase.o \
 	$(OBJS)\monodll_quantize.o \
 	$(OBJS)\monodll_radiocmn.o \
+	$(OBJS)\monodll_rendcmn.o \
 	$(OBJS)\monodll_rgncmn.o \
 	$(OBJS)\monodll_settcmn.o \
 	$(OBJS)\monodll_sizer.o \
@@ -2420,6 +2427,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntbase.o \
 	$(OBJS)\monodll_quantize.o \
 	$(OBJS)\monodll_radiocmn.o \
+	$(OBJS)\monodll_rendcmn.o \
 	$(OBJS)\monodll_rgncmn.o \
 	$(OBJS)\monodll_settcmn.o \
 	$(OBJS)\monodll_sizer.o \
@@ -3932,6 +3940,11 @@ $(OBJS)\coredll_region.o: ..\src\msw\region.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_rendcmn.o: ..\src\common\rendcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\coredll_renderer.o: ..\src\univ\renderer.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -5210,6 +5223,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_region.o: ..\src\msw\region.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_rendcmn.o: ..\src\common\rendcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $<
 endif
 
@@ -6859,6 +6877,11 @@ $(OBJS)\monodll_registry.o: ..\src\msw\registry.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_rendcmn.o: ..\src\common\rendcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
 $(OBJS)\monodll_renderer.o: ..\src\univ\renderer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -8433,6 +8456,11 @@ endif
 
 $(OBJS)\monolib_registry.o: ..\src\msw\registry.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_rendcmn.o: ..\src\common\rendcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+endif
 
 ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),1)
