@@ -287,14 +287,20 @@ private:
   void CopyBeforeWrite();
   void AllocBeforeWrite(size_t);
 
-  // this method is not implemented - there is _no_ conversion from int to
+  // if we hadn't made these operators private, it would be possible to
+  // compile "wxString s; s = 17;" without any warnings as 17 is implicitly
+  // converted to char in C and we do have operator=(char)
+  //
+  // NB: we don't need other versions (short/long and unsigned) as attempt
+  //     to assign another numeric type to wxString will now result in
+  //     ambiguity between operator=(char) and operator=(int)
+  wxString& operator=(int);
+
+  // these methods are not implemented - there is _no_ conversion from int to
   // string, you're doing something wrong if the compiler wants to call it!
   //
   // try `s << i' or `s.Printf("%d", i)' instead
   wxString(int);
-  wxString(unsigned int);
-  wxString(long);
-  wxString(unsigned long);
 
 public:
   // constructors and destructor
