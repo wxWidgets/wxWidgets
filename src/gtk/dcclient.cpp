@@ -122,7 +122,11 @@ enum wxPoolGCType
    wxTEXT_COLOUR,
    wxBG_COLOUR,
    wxPEN_COLOUR,
-   wxBRUSH_COLOUR
+   wxBRUSH_COLOUR,
+   wxTEXT_SCREEN,
+   wxBG_SCREEN,
+   wxPEN_SCREEN,
+   wxBRUSH_SCREEN
 };
 
 struct wxGC
@@ -267,6 +271,14 @@ void wxWindowDC::SetUpDC()
 
     wxASSERT_MSG( !m_penGC, wxT("GCs already created") );
 
+    if (m_isScreenDC)
+    {
+        m_penGC = wxGetPoolGC( m_window, wxPEN_SCREEN );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_SCREEN );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_SCREEN );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_SCREEN );
+    }
+    else
     if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
     {
         m_penGC = wxGetPoolGC( m_window, wxPEN_MONO );
