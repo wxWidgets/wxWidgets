@@ -285,6 +285,14 @@ wxFileExists (const wxString& filename)
 bool
 wxIsAbsolutePath (const wxString& filename)
 {
+#ifdef __WXMAC__
+  if (filename != wxT(""))
+  {
+    if( filename.Find(':') != wxNOT_FOUND && filename[0] != ':' )
+      return TRUE ;
+  }
+  return FALSE ;
+#else
   if (filename != wxT(""))
     {
       if (filename[0] == wxT('/')
@@ -299,6 +307,7 @@ wxIsAbsolutePath (const wxString& filename)
         return TRUE;
     }
   return FALSE;
+#endif
 }
 
 /*
