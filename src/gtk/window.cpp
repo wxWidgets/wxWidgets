@@ -851,6 +851,7 @@ static long wxTranslateKeySymToWXKey(KeySym keysym, bool isChar)
             break;
 
         case GDK_KP_Left:
+            // wxPrintf( wxT("Left\n") );
             key_code = isChar ? WXK_LEFT : WXK_NUMPAD_LEFT;
             break;
 
@@ -1995,7 +1996,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
-
+    
     // Event was emitted after an ungrab
     if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
 
@@ -2210,10 +2211,10 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (win->m_delayedBackgroundColour)
+    if (win->m_delayedBackgroundColour && !win->GetThemeEnabled())
         win->GtkSetBackgroundColour( win->GetBackgroundColour() );
 
-    if (win->m_delayedForegroundColour)
+    if (win->m_delayedForegroundColour && !win->GetThemeEnabled())
         win->GtkSetForegroundColour( win->GetForegroundColour() );
 
 #ifdef __WXGTK20__
