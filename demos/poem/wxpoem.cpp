@@ -33,7 +33,7 @@
 
 #include "wxpoem.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "corner1.xpm"
 #include "corner2.xpm"
 #include "corner3.xpm"
@@ -236,7 +236,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     while (ch != 0 && !page_break)
     {
         j = 0;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
         while (((ch = poem_buffer[i]) != 13) && (ch != 0))
 #else
         while (((ch = poem_buffer[i]) != 10) && (ch != 0))
@@ -247,7 +247,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
             i ++;
         }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
         if (ch == 13)
 #else
         if (ch == 10)
@@ -650,7 +650,7 @@ bool MyApp::OnInit()
   Corner3 = new wxIcon("icon_3");
   Corner4 = new wxIcon("icon_4");
 #endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
   Corner1 = new wxIcon( corner1_xpm );
   Corner2 = new wxIcon( corner2_xpm );
   Corner3 = new wxIcon( corner3_xpm );
