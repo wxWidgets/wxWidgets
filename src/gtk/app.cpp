@@ -80,6 +80,12 @@
 
 #include <gtk/gtk.h>
 
+#if wxUSE_LIBGNOMEPRINT
+
+#include "wx/html/forcelnk.h"
+FORCE_LINK(gnome_print)
+
+#endif
 
 //-----------------------------------------------------------------------------
 // global data

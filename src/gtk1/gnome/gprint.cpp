@@ -38,6 +38,10 @@
 #include <libgnomeprintui/gnome-print-job-preview.h>
 #include <libgnomeprintui/gnome-print-paper-selector.h>
 
+
+#include "wx/html/forcelnk.h"
+FORCE_LINK_ME(gnome_print)
+
 //----------------------------------------------------------------------------
 // wxGnomePrintLibrary
 //----------------------------------------------------------------------------
