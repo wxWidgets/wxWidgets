@@ -226,7 +226,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
             event1.SetPosition( (int)floor(x/m_owner->GetZoom()) );
             m_owner->GetEventHandler()->ProcessEvent( event1 );
             
-            if (curve != m_owner->GetCurrent());
+            if (curve != m_owner->GetCurrent())
             {
                 wxPlotEvent event2( wxEVT_PLOT_SEL_CHANGING, m_owner->GetId() );
                 event2.SetEventObject( m_owner );
