@@ -45,7 +45,8 @@
 #endif
 
 #ifndef LVSICF_NOSCROLL
-    #define LVSICF_NOSCROLL 0x0002
+    #define LVSICF_NOINVALIDATEALL  0x0001
+    #define LVSICF_NOSCROLL         0x0002
 #endif
 
 // mingw32/cygwin don't have declarations for comctl32.dll 4.70+ stuff
