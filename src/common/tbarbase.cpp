@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -50,9 +50,9 @@ static wxList gs_ToolBars;
 
 #ifdef __WXGTK__
 wxToolBarTool::wxToolBarTool(wxToolBar *owner, int theIndex,
-                    const wxBitmap& theBitmap1, const  wxBitmap& theBitmap2, 
-		    bool toggle, wxObject *clientData, 
-     		    const wxString& helpS1, const wxString& helpS2,
+                    const wxBitmap& theBitmap1, const  wxBitmap& theBitmap2,
+            bool toggle, wxObject *clientData,
+                 const wxString& helpS1, const wxString& helpS2,
                     GtkWidget *item  )
 #else
 wxToolBarTool::wxToolBarTool(int theIndex,
@@ -89,7 +89,7 @@ wxToolBarTool::wxToolBarTool(int theIndex,
   m_longHelpString = helpS2;
 }
 
-wxToolBarTool::~wxToolBarTool(void)
+wxToolBarTool::~wxToolBarTool()
 {
 /*
   if (m_deleteSecondBitmap && m_bitmap2)
@@ -153,7 +153,9 @@ bool wxToolBarBase::OnLeftClick(int toolIndex, bool toggleDown)
 }
 
 // Call when right button down.
-void wxToolBarBase::OnRightClick(int toolIndex, long x, long y)
+void wxToolBarBase::OnRightClick(int toolIndex,
+                                 long WXUNUSED(x),
+                                 long WXUNUSED(y))
 {
     wxCommandEvent event(wxEVT_COMMAND_TOOL_RCLICKED, toolIndex);
     event.SetEventObject(this);
@@ -184,7 +186,7 @@ wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const w
              const wxString& helpString1, const wxString& helpString2)
 {
 #ifdef __WXGTK__
-  wxToolBarTool *tool = new wxToolBarTool( (wxToolBar*)this, index, bitmap, pushedBitmap, toggle, 
+  wxToolBarTool *tool = new wxToolBarTool( (wxToolBar*)this, index, bitmap, pushedBitmap, toggle,
                                            (wxObject*) NULL, helpString1, helpString2);
 #else
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, pushedBitmap, toggle, xPos, yPos, helpString1, helpString2);
@@ -200,7 +202,7 @@ wxToolBarTool *wxToolBarBase::AddTool(int index, const wxBitmap& bitmap, const w
     tool->m_y = yPos;
   else
     tool->m_y = m_yMargin;
-  
+
   // Calculate reasonable max size in case Layout() not called
   if ((tool->m_x + bitmap.GetWidth() + m_xMargin) > m_maxWidth)
     m_maxWidth = (tool->m_x + bitmap.GetWidth() + m_xMargin);
@@ -219,7 +221,7 @@ void wxToolBarBase::AddSeparator ()
   m_tools.Append(-1, tool);
 }
 
-void wxToolBarBase::ClearTools(void)
+void wxToolBarBase::ClearTools()
 {
   m_pressedTool = m_currentTool = -1;
   wxNode *node = m_tools.First();
@@ -244,7 +246,8 @@ void wxToolBarBase::EnableTool(int index, bool enable)
   }
 }
 
-void wxToolBarBase::ToggleTool(int index, bool toggle)
+void wxToolBarBase::ToggleTool(int WXUNUSED(index),
+                               bool WXUNUSED(toggle))
 {
 }
 
@@ -387,11 +390,11 @@ void wxToolBarBase::SetToolSeparation(int separation)
   m_toolSeparation = separation;
 }
 
-void wxToolBarBase::Command(wxCommandEvent& event)
+void wxToolBarBase::Command(wxCommandEvent& WXUNUSED(event))
 {
 }
 
-void wxToolBarBase::Layout(void)
+void wxToolBarBase::Layout()
 {
 }
 
@@ -403,8 +406,8 @@ void wxToolBarBase::Layout(void)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
  */
 void wxToolBarBase::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
-	       int noUnitsX, int noUnitsY,
-	       int xPos, int yPos)
+           int noUnitsX, int noUnitsY,
+           int xPos, int yPos)
 {
       m_xScrollPixelsPerLine = pixelsPerUnitX;
       m_yScrollPixelsPerLine = pixelsPerUnitY;
@@ -416,27 +419,27 @@ void wxToolBarBase::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
 
       // Recalculate scroll bar range and position
     if (m_xScrollLines > 0)
-	{
-	  m_xScrollPosition = xPos;
-	  SetScrollPos (wxHORIZONTAL, m_xScrollPosition, TRUE);
-	}
+    {
+      m_xScrollPosition = xPos;
+      SetScrollPos (wxHORIZONTAL, m_xScrollPosition, TRUE);
+    }
     else
     {
-	  SetScrollbar(wxHORIZONTAL, 0, 0, 0, FALSE);
+      SetScrollbar(wxHORIZONTAL, 0, 0, 0, FALSE);
       m_xScrollPosition = 0;
     }
 
     if (m_yScrollLines > 0)
-	{
-	  m_yScrollPosition = yPos;
-	  SetScrollPos (wxVERTICAL, m_yScrollPosition, TRUE);
-	}
+    {
+      m_yScrollPosition = yPos;
+      SetScrollPos (wxVERTICAL, m_yScrollPosition, TRUE);
+    }
     else
     {
-	  SetScrollbar(wxVERTICAL, 0, 0, 0, FALSE);
+      SetScrollbar(wxVERTICAL, 0, 0, 0, FALSE);
       m_yScrollPosition = 0;
     }
-	AdjustScrollbars();
+    AdjustScrollbars();
     Refresh();
 #ifdef __WXMSW__
     ::UpdateWindow ((HWND) GetHWND());
@@ -555,41 +558,41 @@ int wxToolBarBase::CalcScrollInc(wxScrollEvent& event)
   if (orient == wxHORIZONTAL)
   {
         int w, h;
-		GetClientSize(&w, &h);
+        GetClientSize(&w, &h);
 
-    	int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
-    	int noPositions = (int) ( ((nMaxWidth - w)/(float)m_xScrollPixelsPerLine) + 0.5 );
-    	if (noPositions < 0)
-      		noPositions = 0;
+        int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
+        int noPositions = (int) ( ((nMaxWidth - w)/(float)m_xScrollPixelsPerLine) + 0.5 );
+        if (noPositions < 0)
+              noPositions = 0;
 
-		if ( (m_xScrollPosition + nScrollInc) < 0 )
-			nScrollInc = -m_xScrollPosition; // As -ve as we can go
-		else if ( (m_xScrollPosition + nScrollInc) > noPositions )
-			nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+        if ( (m_xScrollPosition + nScrollInc) < 0 )
+            nScrollInc = -m_xScrollPosition; // As -ve as we can go
+        else if ( (m_xScrollPosition + nScrollInc) > noPositions )
+            nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
 
         return nScrollInc;
   }
   else
   {
         int w, h;
-		GetClientSize(&w, &h);
+        GetClientSize(&w, &h);
 
-    	int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
-    	int noPositions = (int) ( ((nMaxHeight - h)/(float)m_yScrollPixelsPerLine) + 0.5 );
-    	if (noPositions < 0)
-      		noPositions = 0;
+        int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
+        int noPositions = (int) ( ((nMaxHeight - h)/(float)m_yScrollPixelsPerLine) + 0.5 );
+        if (noPositions < 0)
+              noPositions = 0;
 
-		if ( (m_yScrollPosition + nScrollInc) < 0 )
-			nScrollInc = -m_yScrollPosition; // As -ve as we can go
-		else if ( (m_yScrollPosition + nScrollInc) > noPositions )
-			nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+        if ( (m_yScrollPosition + nScrollInc) < 0 )
+            nScrollInc = -m_yScrollPosition; // As -ve as we can go
+        else if ( (m_yScrollPosition + nScrollInc) > noPositions )
+            nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
 
         return nScrollInc;
   }
 }
 
 // Adjust the scrollbars - new version.
-void wxToolBarBase::AdjustScrollbars(void)
+void wxToolBarBase::AdjustScrollbars()
 {
   int w, h;
   GetClientSize(&w, &h);
@@ -604,8 +607,8 @@ void wxToolBarBase::AdjustScrollbars(void)
 
     m_xScrollPosition = wxMin(newRange, m_xScrollPosition);
 
-	// Calculate page size i.e. number of scroll units you get on the
-	// current client window
+    // Calculate page size i.e. number of scroll units you get on the
+    // current client window
     int noPagePositions = (int) ( (w/(float)m_xScrollPixelsPerLine) + 0.5 );
     if (noPagePositions < 1)
       noPagePositions = 1;
@@ -622,8 +625,8 @@ void wxToolBarBase::AdjustScrollbars(void)
 
     m_yScrollPosition = wxMin(newRange, m_yScrollPosition);
 
-	// Calculate page size i.e. number of scroll units you get on the
-	// current client window
+    // Calculate page size i.e. number of scroll units you get on the
+    // current client window
     int noPagePositions = (int) ( (h/(float)m_yScrollPixelsPerLine) + 0.5 );
     if (noPagePositions < 1)
       noPagePositions = 1;
@@ -634,7 +637,7 @@ void wxToolBarBase::AdjustScrollbars(void)
 }
 
 // Default OnSize resets scrollbars, if any
-void wxToolBarBase::OnSize(wxSizeEvent& event)
+void wxToolBarBase::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 #if wxUSE_CONSTRAINTS
   if (GetAutoLayout())
@@ -647,7 +650,7 @@ void wxToolBarBase::OnSize(wxSizeEvent& event)
 // Prepare the DC by translating it according to the current scroll position
 void wxToolBarBase::PrepareDC(wxDC& dc)
 {
-	dc.SetDeviceOrigin(- m_xScrollPosition * m_xScrollPixelsPerLine, - m_yScrollPosition * m_yScrollPixelsPerLine);
+    dc.SetDeviceOrigin(- m_xScrollPosition * m_xScrollPixelsPerLine, - m_yScrollPosition * m_yScrollPixelsPerLine);
 }
 
 void wxToolBarBase::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const
@@ -717,40 +720,40 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
   *y = m_yScrollPosition;
 }
 
-void wxToolBarBase::OnIdle(wxIdleEvent& event)
+void wxToolBarBase::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
 #ifndef __WXGTK__
     wxWindow::OnIdle(event);
 #endif
 
-	DoToolbarUpdates();
+    DoToolbarUpdates();
 }
 
 // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
-void wxToolBarBase::DoToolbarUpdates(void)
+void wxToolBarBase::DoToolbarUpdates()
 {
-	wxNode* node = GetTools().First();
-	while (node)
-	{
-		wxToolBarTool* tool = (wxToolBarTool* ) node->Data();
+    wxNode* node = GetTools().First();
+    while (node)
+    {
+        wxToolBarTool* tool = (wxToolBarTool* ) node->Data();
 
-		wxUpdateUIEvent event(tool->m_index);
-		event.SetEventObject(this);
+        wxUpdateUIEvent event(tool->m_index);
+        event.SetEventObject(this);
 
-		if (GetEventHandler()->ProcessEvent(event))
-		{
-			if (event.GetSetEnabled())
-				EnableTool(tool->m_index, event.GetEnabled());
-			if (event.GetSetChecked())
-				ToggleTool(tool->m_index, event.GetChecked());
+        if (GetEventHandler()->ProcessEvent(event))
+        {
+            if (event.GetSetEnabled())
+                EnableTool(tool->m_index, event.GetEnabled());
+            if (event.GetSetChecked())
+                ToggleTool(tool->m_index, event.GetChecked());
 /*
-			if (event.GetSetText())
-				// Set tooltip?
+            if (event.GetSetText())
+                // Set tooltip?
 */
-		}
+        }
 
-		node = node->Next();
-	}
+        node = node->Next();
+    }
 }
 
 #ifdef __WXMSW__

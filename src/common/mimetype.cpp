@@ -285,7 +285,7 @@ public:
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const
         { *mimeType = m_manager->m_aTypes[m_index]; return TRUE; }
-    bool GetIcon(wxIcon *icon) const
+    bool GetIcon(wxIcon * WXUNUSED(icon)) const
         { return FALSE; }   // @@ maybe with Gnome/KDE integration...
     bool GetDescription(wxString *desc) const
         { *desc = m_manager->m_aDescriptions[m_index]; return TRUE; }
