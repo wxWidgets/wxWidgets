@@ -1,5 +1,0 @@
-wxGLCanvas
-----------
-
-No known issues, though probably palettes aren't correctly
-handled under Windows. They are ignored under GTK.
