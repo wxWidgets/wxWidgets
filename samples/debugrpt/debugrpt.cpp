@@ -69,6 +69,32 @@ protected:
     }
 };
 
+// another possibility would be to build email library from contrib and use
+// this class, after uncommenting it:
+#if 0
+
+#include "wx/net/email.h"
+
+class MyDebugReport : public wxDebugReportCompress
+{
+public:
+    virtual bool DoProcess()
+    {
+        if ( !wxDebugReportCompress::DoProcess() )
+            return false;
+        wxMailMessage msg(GetReportName() + _T(" crash report"),
+                          _T("vadim@wxwindows.org"),
+                          wxEmptyString, // mail body
+                          wxEmptyString, // from address
+                          GetCompressedFileName(),
+                          _T("crashreport.zip"));
+
+        return wxEmail::Send(msg);
+    }
+};
+
+#endif // 0
+
 // ----------------------------------------------------------------------------
 // helper functions
 // ----------------------------------------------------------------------------
