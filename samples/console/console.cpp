@@ -52,7 +52,7 @@
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-#define TEST_PATHLIST
+//#define TEST_PATHLIST
 //#define TEST_REGISTRY
 //#define TEST_SOCKETS
 //#define TEST_STREAMS
@@ -61,7 +61,7 @@
 //#define TEST_TIMER
 //#define TEST_VCARD            -- don't enable this (VZ)
 //#define TEST_WCHAR
-//#define TEST_ZIP
+#define TEST_ZIP
 //#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
@@ -2279,16 +2279,21 @@ static void TestUtf8()
 
 #ifdef TEST_ZIP
 
+#include "wx/filesys.h"
+#include "wx/fs_zip.h"
 #include "wx/zipstrm.h"
+
+static const wxChar *TESTFILE_ZIP = _T("testdata.zip");
 
 static void TestZipStreamRead()
 {
     puts("*** Testing ZIP reading ***\n");
 
-    wxZipInputStream istr(_T("idx.zip"), _T("IDX.txt"));
+    static const wxChar *filename = _T("foo");
+    wxZipInputStream istr(TESTFILE_ZIP, filename);
     printf("Archive size: %u\n", istr.GetSize());
 
-    puts("Dumping the file:");
+    printf("Dumping the file '%s':\n", filename);
     while ( !istr.Eof() )
     {
         putchar(istr.GetC());
@@ -2296,6 +2301,59 @@ static void TestZipStreamRead()
     }
 
     puts("\n----- done ------");
+}
+
+static void DumpZipDirectory(wxFileSystem& fs,
+                             const wxString& dir,
+                             const wxString& indent)
+{
+    wxString prefix = wxString::Format(_T("%s#zip:%s"),
+                                         TESTFILE_ZIP, dir.c_str());
+    wxString wildcard = prefix + _T("/*");
+
+    wxString dirname = fs.FindFirst(wildcard, wxDIR);
+    while ( !dirname.empty() )
+    {
+        if ( !dirname.StartsWith(prefix + _T('/'), &dirname) )
+        {
+            wxPrintf(_T("ERROR: unexpected wxFileSystem::FindNext result\n"));
+
+            break;
+        }
+
+        wxPrintf(_T("%s%s\n"), indent.c_str(), dirname.c_str());
+
+        DumpZipDirectory(fs, dirname,
+                         indent + wxString(_T(' '), 4));
+
+        dirname = fs.FindNext();
+    }
+
+    wxString filename = fs.FindFirst(wildcard, wxFILE);
+    while ( !filename.empty() )
+    {
+        if ( !filename.StartsWith(prefix, &filename) )
+        {
+            wxPrintf(_T("ERROR: unexpected wxFileSystem::FindNext result\n"));
+
+            break;
+        }
+
+        wxPrintf(_T("%s%s\n"), indent.c_str(), filename.c_str());
+
+        filename = fs.FindNext();
+    }
+}
+
+static void TestZipFileSystem()
+{
+    puts("*** Testing ZIP file system ***\n");
+
+    wxFileSystem::AddHandler(new wxZipFSHandler);
+    wxFileSystem fs;
+    wxPrintf(_T("Dumping all files in the archive %s:\n"), TESTFILE_ZIP);
+
+    DumpZipDirectory(fs, _T(""), wxString(_T(' '), 4));
 }
 
 #endif // TEST_ZIP
@@ -4378,7 +4436,9 @@ int main(int argc, char **argv)
 #endif // TEST_WCHAR
 
 #ifdef TEST_ZIP
-    TestZipStreamRead();
+    if ( 0 )
+        TestZipStreamRead();
+    TestZipFileSystem();
 #endif // TEST_ZIP
 
 #ifdef TEST_ZLIB
