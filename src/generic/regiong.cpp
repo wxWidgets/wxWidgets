@@ -443,7 +443,7 @@ wxRegionIteratorGeneric wxRegionIteratorGeneric::operator++(int)
 
 wxRect wxRegionIteratorGeneric::GetRect() const
 {
-    wxASSERT(m_refData);
+    wxASSERT(m_region.m_refData);
     const Box *box = M_REGIONDATA_OF(m_region)->GetBox(m_current);
     wxASSERT(box);
     return wxRect
@@ -456,7 +456,7 @@ wxRect wxRegionIteratorGeneric::GetRect() const
 
 long wxRegionIteratorGeneric::GetX() const
 {
-    wxASSERT(m_refData);
+    wxASSERT(m_region.m_refData);
     const Box *box = M_REGIONDATA_OF(m_region)->GetBox(m_current);
     wxASSERT(box);
     return box->x1;
@@ -464,7 +464,7 @@ long wxRegionIteratorGeneric::GetX() const
 
 long wxRegionIteratorGeneric::GetY() const
 {
-    wxASSERT(m_refData);
+    wxASSERT(m_region.m_refData);
     const Box *box = M_REGIONDATA_OF(m_region)->GetBox(m_current);
     wxASSERT(box);
     return box->y1;
@@ -472,7 +472,7 @@ long wxRegionIteratorGeneric::GetY() const
 
 long wxRegionIteratorGeneric::GetW() const
 {
-    wxASSERT(m_refData);
+    wxASSERT(m_region.m_refData);
     const Box *box = M_REGIONDATA_OF(m_region)->GetBox(m_current);
     wxASSERT(box);
     return box->x2 - box->x1;
@@ -480,7 +480,7 @@ long wxRegionIteratorGeneric::GetW() const
 
 long wxRegionIteratorGeneric::GetH() const
 {
-    wxASSERT(m_refData);
+    wxASSERT(m_region.m_refData);
     const Box *box = M_REGIONDATA_OF(m_region)->GetBox(m_current);
     wxASSERT(box);
     return box->y2 - box->y1;
