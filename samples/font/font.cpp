@@ -293,9 +293,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     splitter->SplitHorizontally(m_textctrl, m_canvas, 100);
 
+#if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
     SetStatusText(wxT("Welcome to wxWidgets font demo!"));
+#endif // wxUSE_STATUSBAR
 }
 
 // --------------------------------------------------------

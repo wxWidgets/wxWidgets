@@ -58,8 +58,10 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
 {
     // Create menu and status bar.
     CreateMyMenuBar();
+#if wxUSE_STATUSBAR
     CreateStatusBar(1);
     SetStatusText( _T("Welcome to wxEdit!") );
+#endif // wxUSE_STATUSBAR
     
     // Create edit control. Since it is the only
     // control in the frame, it will be resized
@@ -179,12 +181,14 @@ void MyFrame::OnLastFiles( wxCommandEvent &event )
     
     if( index < m_history.GetCount() )
     {
-    m_filename = m_history[index];
+        m_filename = m_history[index];
     
-    m_text->Clear();
-    m_text->LoadFile( m_filename );
+        m_text->Clear();
+        m_text->LoadFile( m_filename );
     
-    SetStatusText( m_filename );
+#if wxUSE_STATUSBAR
+        SetStatusText( m_filename );
+#endif // wxUSE_STATUSBAR
     }
     else
     {
@@ -208,7 +212,9 @@ void MyFrame::OnNew( wxCommandEvent& WXUNUSED(event) )
         
     m_filename = wxEmptyString;
     
+#if wxUSE_STATUSBAR
     SetStatusText( _T("") );
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
@@ -252,7 +258,9 @@ void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
         m_filename = dialog.GetPath();
         m_text->LoadFile( m_filename );
     
+#if wxUSE_STATUSBAR
         SetStatusText( m_filename );
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -271,7 +279,9 @@ void MyFrame::OnSaveAs( wxCommandEvent& WXUNUSED(event) )
         m_filename = dialog.GetPath();
         m_text->SaveFile( m_filename );
     
+#if wxUSE_STATUSBAR
         SetStatusText( m_filename );
+#endif // wxUSE_STATUSBAR
     }
 }
 

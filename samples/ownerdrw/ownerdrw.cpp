@@ -212,11 +212,13 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
     // create the menu
     InitMenu();
 
+#if wxUSE_STATUSBAR
     // create the status line
     const int widths[] = { -1, 60 };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
     SetStatusText(_T("no selection"), 0);
+#endif // wxUSE_STATUSBAR
 
     // make a panel with some controls
     wxPanel *pPanel = new wxPanel(this);
@@ -332,11 +334,15 @@ void OwnerDrawnFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void OwnerDrawnFrame::OnListboxSelect(wxCommandEvent& event)
 {
+#if wxUSE_STATUSBAR
     wxString strSelection;
     unsigned int nSel = event.GetSelection();
     strSelection.Printf(wxT("item %d selected (%schecked)"), nSel,
                         m_pListBox->IsChecked(nSel) ? wxT("") : wxT("not "));
     SetStatusText(strSelection);
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_STATUSBAR
 }
 
 void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
@@ -350,9 +356,13 @@ void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 
 void OwnerDrawnFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
+#if wxUSE_STATUSBAR
     wxString strSelection;
     unsigned int nItem = event.GetInt();
     strSelection.Printf(wxT("item %d was %schecked"), nItem,
                         m_pListBox->IsChecked(nItem) ? wxT("") : wxT("un"));
     SetStatusText(strSelection);
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_STATUSBAR
 }

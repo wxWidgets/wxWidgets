@@ -323,15 +323,19 @@ void MyFrame::OnConnect(wxCommandEvent& event)
                 (wxEventFunction)
                 (wxCommandEventFunction)&MyFrame::OnDynamic);
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("You can now use \"Dynamic\" item in the menu"));
         SetStatusText(_T("Dynamic: on"), Status_Dynamic);
+#endif // wxUSE_STATUSBAR
     }
     else // connect
     {
         Disconnect(Event_Dynamic, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED);
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("You can no more use \"Dynamic\" item in the menu"));
         SetStatusText(_T("Dynamic: off"), Status_Dynamic);
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -343,7 +347,9 @@ void MyFrame::OnPushEventHandler(wxCommandEvent& WXUNUSED(event))
 {
     PushEventHandler(new MyEvtHandler(++m_nPush));
 
+#if wxUSE_STATUSBAR
     SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
@@ -353,7 +359,9 @@ void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
     PopEventHandler(true /* delete handler */);
     m_nPush--;
 
+#if wxUSE_STATUSBAR
     SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))

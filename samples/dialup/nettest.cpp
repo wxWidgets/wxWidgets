@@ -178,7 +178,9 @@ bool MyApp::OnInit()
         return false;
     }
 
+#if wxUSE_STATUSBAR
     frame->SetStatusText(GetDialer()->IsAlwaysOnline() ? _T("LAN") : _T("No LAN"), 2);
+#endif // wxUSE_STATUSBAR
 
     return true;
 }
@@ -238,10 +240,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+#if wxUSE_STATUSBAR
     // create status bar and fill the LAN field
     CreateStatusBar(3);
     static const int widths[3] = { -1, 100, 60 };
     SetStatusWidths(3, widths);
+#endif // wxUSE_STATUSBAR
 }
 
 
@@ -335,6 +339,8 @@ void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
     {
         s_isOnline = isOnline;
 
+#if wxUSE_STATUSBAR
         SetStatusText(isOnline ? _T("Online") : _T("Offline"), 1);
+#endif // wxUSE_STATUSBAR
     }
 }

@@ -361,9 +361,11 @@ RegFrame::RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h)
     m_treeCtrl = new RegTreeCtrl(this, Ctrl_RegTree);
 #endif
 
+#if wxUSE_STATUSBAR
     // create the status line
     // ----------------------
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 }
 
 RegFrame::~RegFrame()
@@ -697,8 +699,12 @@ void RegTreeCtrl::OnChar(wxKeyEvent& event)
 
 void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 {
+#if wxUSE_STATUSBAR
     wxFrame *pFrame = (wxFrame *) wxWindow::GetParent();
     pFrame->SetStatusText(GetNode(event)->FullName(), 1);
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_STATUSBAR
 }
 
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)

@@ -391,9 +391,11 @@ MyFrame::MyFrame()
 
     SetMenuBar( menu_bar );
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
     int widths[] = { -1, 100 };
     SetStatusWidths( 2, widths );
+#endif // wxUSE_STATUSBAR
 
     m_scrolled = new MyScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize(100,100) );
     m_scrolled->SetScrollbars( 10, 10, 50, 50 );

@@ -82,8 +82,10 @@ bool MyApp::OnInit(void)
     // Create the main frame window
     frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
 
+#if wxUSE_STATUSBAR
     // Give it a status line
     frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     // Load icon and bitmap
     frame->SetIcon( wxICON( mondrian) );
@@ -135,7 +137,9 @@ bool MyApp::OnInit(void)
     frame->Centre(wxBOTH);
     frame->Show();
 
+#if wxUSE_STATUSBAR
     frame->SetStatusText(_T("Printing demo"));
+#endif // wxUSE_STATUSBAR
 
     SetTopWindow(frame);
 

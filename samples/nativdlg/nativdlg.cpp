@@ -44,8 +44,10 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   MyFrame   *frame = new MyFrame(NULL, wxID_ANY, _T("wxWidgets Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
 
+#if wxUSE_STATUSBAR
   // Give it a status line
   frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

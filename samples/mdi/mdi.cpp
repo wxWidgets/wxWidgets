@@ -145,7 +145,9 @@ bool MyApp::OnInit()
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     frame->Show(true);
 
@@ -260,8 +262,10 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
     subframe->CreateStatusBar();
     subframe->SetStatusText(title);
+#endif // wxUSE_STATUSBAR
 
     int width, height;
     subframe->GetClientSize(&width, &height);

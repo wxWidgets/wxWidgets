@@ -24,10 +24,6 @@
 #   error You must set wxUSE_JOYSTICK to 1 in setup.h
 #endif
 
-#if !wxUSE_STATUSBAR
-#   error You must set wxUSE_STATUSBAR to 1 in setup.h
-#endif
-
 #include "wx/sound.h"
 #include "wx/joystick.h"
 
@@ -87,7 +83,9 @@ bool MyApp::OnInit()
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     frame->CenterOnScreen();
     frame->Show(true);
@@ -151,6 +149,7 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
     xpos = pt.x;
     ypos = pt.y;
 
+#if wxUSE_STATUSBAR
     wxString buf;
     if (event.ButtonDown())
         buf.Printf(_T("Joystick (%d, %d) Fire!"), pt.x, pt.y);
@@ -158,6 +157,7 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
         buf.Printf(_T("Joystick (%d, %d)"), pt.x, pt.y);
 
     frame->SetStatusText(buf);
+#endif // wxUSE_STATUSBAR
 
 #if wxUSE_SOUND
     if (event.ButtonDown() && wxGetApp().m_fire.IsOk())

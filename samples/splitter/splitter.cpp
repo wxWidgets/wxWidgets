@@ -176,7 +176,9 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     // Make a menubar
     wxMenu *splitMenu = new wxMenu;
@@ -235,7 +237,9 @@ MyFrame::MyFrame()
     m_splitter->SplitVertically(m_left, m_right, 100);
 #endif
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("Min pane size = 0"), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 MyFrame::~MyFrame()
@@ -257,7 +261,9 @@ void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_right->Show(true);
     m_splitter->SplitHorizontally( m_left, m_right );
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split horizontally"), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
@@ -268,14 +274,18 @@ void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_right->Show(true);
     m_splitter->SplitVertically( m_left, m_right );
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split vertically"), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_splitter->IsSplit() )
         m_splitter->Unsplit();
+#if wxUSE_STATUSBAR
     SetStatusText(_T("No splitter"));
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::ToggleLive(wxCommandEvent& event )
@@ -319,8 +329,10 @@ void MyFrame::SetMinSize(wxCommandEvent& WXUNUSED(event) )
 
     int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
     m_splitter->SetMinimumPaneSize(minsize);
+#if wxUSE_STATUSBAR
     str.Printf( wxT("Min pane size = %d"), minsize);
     SetStatusText(str, 1);
+#endif // wxUSE_STATUSBAR
 }
 
 // Update UI handlers
@@ -380,14 +392,18 @@ void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 
 void MySplitterWindow::OnDClick(wxSplitterEvent& event)
 {
+#if wxUSE_STATUSBAR
     m_frame->SetStatusText(_T("Splitter double clicked"), 1);
+#endif // wxUSE_STATUSBAR
 
     event.Skip();
 }
 
 void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 {
+#if wxUSE_STATUSBAR
     m_frame->SetStatusText(_T("Splitter unsplit"), 1);
+#endif // wxUSE_STATUSBAR
 
     event.Skip();
 }

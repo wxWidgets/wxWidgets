@@ -423,7 +423,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
 
     m_dlgProgress = (wxProgressDialog *)NULL;
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     m_txtctrl = new wxTextCtrl(this, wxID_ANY, _T(""), wxPoint(0, 0), wxSize(0, 0),
                                wxTE_MULTILINE | wxTE_READONLY);
@@ -525,9 +527,11 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
         threads.Add(thr);
     }
 
+#if wxUSE_STATUSBAR
     wxString msg;
     msg.Printf(wxT("%d new threads created."), count);
     SetStatusText(msg, 1);
+#endif // wxUSE_STATUSBAR
 
     // ...and then start them
     for ( n = 0; n < count; n++ )
@@ -545,7 +549,9 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
         wxLogError(wxT("Can't start thread!"));
     }
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("New thread started."), 1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
@@ -570,7 +576,9 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 
         thread->Delete();
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Thread stopped."), 1);
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -591,7 +599,9 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
     {
         wxGetApp().m_threads[n]->Resume();
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Thread resumed."), 1);
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -612,7 +622,9 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
     {
         wxGetApp().m_threads[n]->Pause();
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Thread paused."), 1);
+#endif // wxUSE_STATUSBAR
     }
 }
 

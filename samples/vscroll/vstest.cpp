@@ -100,6 +100,7 @@ public:
 
     void OnIdle(wxIdleEvent&)
     {
+#if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxString::Format
                                (
                                     _T("Page size = %d, pos = %d, max = %d"),
@@ -107,6 +108,7 @@ public:
                                     GetScrollPos(wxVERTICAL),
                                     GetScrollRange(wxVERTICAL)
                                ));
+#endif // wxUSE_STATUSBAR
         m_changed = false;
     }
 

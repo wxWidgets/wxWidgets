@@ -184,13 +184,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetAcceleratorTable(accel);
 #endif // wxUSE_ACCEL
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(1);
+#endif // wxUSE_STATUSBAR
 
     m_Processor = new BoldProcessor;
     m_Processor->Enable(false);
     m_Html = new wxHtmlWindow(this);
     m_Html->SetRelatedFrame(this, _("HTML : %s"));
+#if wxUSE_STATUSBAR
     m_Html->SetRelatedStatusBar(0);
+#endif // wxUSE_STATUSBAR
     m_Html->ReadCustomization(wxConfig::Get());
     m_Html->LoadFile(wxFileName(wxT("test.htm")));
     m_Html->AddProcessor(m_Processor);

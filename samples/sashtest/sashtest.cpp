@@ -70,7 +70,9 @@ bool MyApp::OnInit(void)
   // Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
   frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
   frame->Show(true);
 
@@ -228,8 +230,10 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
       subframe->SetIcon(wxIcon(_T("sashtest_icn")));
 #endif
 
+#if wxUSE_STATUSBAR
       // Give it a status line
       subframe->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
       // Make a menubar
       wxMenu *file_menu = new wxMenu;

@@ -238,7 +238,9 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(3);
+#endif // wxUSE_STATUSBAR
 }
 
 MyFrame::~MyFrame()

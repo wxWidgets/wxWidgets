@@ -138,11 +138,13 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
                                      int x, int y, int w, int h)
                  : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
+#if wxUSE_STATUSBAR
     // create the status line
     const int widths[] = { -1, 60 };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
     wxLogStatus(this, _T("no selection"));
+#endif // wxUSE_STATUSBAR
 
     // Make a menubar
     // --------------

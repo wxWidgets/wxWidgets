@@ -742,9 +742,18 @@ public:
 
     // override base class (pure) virtuals
     virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
-        { m_frame->SetStatusText(_T("Mouse entered the frame")); return OnDragOver(x, y, def); }
+    { 
+#if wxUSE_STATUSBAR
+        m_frame->SetStatusText(_T("Mouse entered the frame")); 
+#endif // wxUSE_STATUSBAR
+        return OnDragOver(x, y, def); 
+    }
     virtual void OnLeave()
-        { m_frame->SetStatusText(_T("Mouse left the frame")); }
+    { 
+#if wxUSE_STATUSBAR
+        m_frame->SetStatusText(_T("Mouse left the frame")); 
+#endif // wxUSE_STATUSBAR
+    }
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
     {
         if ( !GetData() )
@@ -919,7 +928,9 @@ DnDFrame::DnDFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h)
     // frame icon and status bar
     SetIcon(wxICON(mondrian));
 
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     // construct menu
     wxMenu *file_menu = new wxMenu;
@@ -1155,8 +1166,11 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         else if ( m_moveAllow )
             flags |= wxDrag_AllowMove;
 
+        wxDragResult result = source.DoDragDrop(flags);
+
+#if wxUSE_STATUSBAR
         const wxChar *pc;
-        switch ( source.DoDragDrop(flags) )
+        switch ( result )
         {
             case wxDragError:   pc = _T("Error!");    break;
             case wxDragNone:    pc = _T("Nothing");   break;
@@ -1167,6 +1181,9 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
         }
 
         SetStatusText(wxString(_T("Drag result: ")) + pc);
+#else
+        wxUnusedVar(result);
+#endif // wxUSE_STATUSBAR
     }
 #endif // wxUSE_DRAG_AND_DROP
 }
@@ -1625,7 +1642,9 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
              : wxFrame(parent, wxID_ANY, _T("Shape Frame"),
                        wxDefaultPosition, wxSize(250, 150))
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     wxMenu *menuShape = new wxMenu;
     menuShape->Append(Menu_Shape_New, _T("&New default shape\tCtrl-S"));
@@ -1643,7 +1662,9 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
 
     SetMenuBar(menubar);
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("Press Ctrl-S to create a new shape"));
+#endif // wxUSE_STATUSBAR
 
     SetDropTarget(new DnDShapeDropTarget(this));
 
@@ -1689,7 +1710,9 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
 
         case wxDragNone:
+#if wxUSE_STATUSBAR
             SetStatusText(_T("Nothing happened"));
+#endif // wxUSE_STATUSBAR
             break;
 
         case wxDragCopy:
@@ -1706,13 +1729,17 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
 
         case wxDragCancel:
+#if wxUSE_STATUSBAR
             SetStatusText(_T("Drag and drop operation cancelled"));
+#endif // wxUSE_STATUSBAR
             break;
     }
 
     if ( pc )
     {
+#if wxUSE_STATUSBAR
         SetStatusText(wxString(_T("Shape successfully ")) + pc);
+#endif // wxUSE_STATUSBAR
     }
     //else: status text already set
 }
@@ -1723,9 +1750,11 @@ void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
 
     wxPoint pt(x, y);
 
+#if wxUSE_STATUSBAR
     wxString s;
     s.Printf(wxT("Shape dropped at (%d, %d)"), pt.x, pt.y);
     SetStatusText(s);
+#endif // wxUSE_STATUSBAR
 
     shape->Move(pt);
     SetShape(shape);
@@ -1738,10 +1767,12 @@ void DnDShapeFrame::OnEditShape(wxCommandEvent& WXUNUSED(event))
     {
         SetShape(dlg.GetShape());
 
+#if wxUSE_STATUSBAR
         if ( m_shape )
         {
             SetStatusText(_T("You can now drag the shape to another frame"));
         }
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -1749,7 +1780,9 @@ void DnDShapeFrame::OnNewShape(wxCommandEvent& WXUNUSED(event))
 {
     SetShape(new DnDEllipticShape(wxPoint(10, 10), wxSize(80, 60), *wxRED));
 
+#if wxUSE_STATUSBAR
     SetStatusText(_T("You can now drag the shape to another frame"));
+#endif // wxUSE_STATUSBAR
 }
 
 void DnDShapeFrame::OnClearShape(wxCommandEvent& WXUNUSED(event))
@@ -1902,13 +1935,17 @@ void DnDShapeDataObject::CreateBitmap() const
 static void ShowBitmap(const wxBitmap& bitmap)
 {
     wxFrame *frame = new wxFrame(NULL, wxID_ANY, _T("Bitmap view"));
+#if wxUSE_STATUSBAR
     frame->CreateStatusBar();
+#endif // wxUSE_STATUSBAR
     DnDCanvasBitmap *canvas = new DnDCanvasBitmap(frame);
     canvas->SetBitmap(bitmap);
 
     int w = bitmap.GetWidth(),
         h = bitmap.GetHeight();
+#if wxUSE_STATUSBAR
     frame->SetStatusText(wxString::Format(_T("%dx%d"), w, h));
+#endif // wxUSE_STATUSBAR
 
     frame->SetClientSize(w > 100 ? 100 : w, h > 100 ? 100 : h);
     frame->Show(true);

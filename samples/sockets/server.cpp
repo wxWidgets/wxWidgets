@@ -163,8 +163,10 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuBar->Append(m_menuFile, _("&File"));
   SetMenuBar(m_menuBar);
 
+#if wxUSE_STATUSBAR
   // Status bar
   CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
   // Make a textctrl for logging
   m_text  = new wxTextCtrl(this, wxID_ANY,
@@ -412,7 +414,9 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
 
 void MyFrame::UpdateStatusBar()
 {
+#if wxUSE_STATUSBAR
   wxString s;
   s.Printf(_("%d clients connected"), m_numClients);
   SetStatusText(s, 1);
+#endif // wxUSE_STATUSBAR
 }

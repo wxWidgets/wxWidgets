@@ -880,9 +880,11 @@ MyFrame::MyFrame()
 
   SetMenuBar( menu_bar );
 
+#if wxUSE_STATUSBAR
   CreateStatusBar(2);
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
+#endif // wxUSE_STATUSBAR
 
   m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 

@@ -220,8 +220,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
+#if wxUSE_STATUSBAR
     // create status bar
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     // create child controls
 
@@ -336,7 +338,9 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnFromPoint(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_STATUSBAR
     SetStatusText(_T("Press the mouse anywhere..."));
+#endif // wxUSE_STATUSBAR
 
     CaptureMouse();
 }

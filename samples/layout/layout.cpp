@@ -91,9 +91,10 @@ MyFrame::MyFrame()
   // Associate the menu bar with the frame
   SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
   CreateStatusBar(2);
   SetStatusText(_T("wxWidgets layout demo"));
-
+#endif // wxUSE_STATUSBAR
 
   // we want to get a dialog that is stretchable because it
   // has a text ctrl in the middle. at the bottom, we have

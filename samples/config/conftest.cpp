@@ -159,7 +159,9 @@ MyFrame::MyFrame()
   menu_bar->Append(file_menu, _T("&File"));
   SetMenuBar(menu_bar);
 
+#if wxUSE_STATUSBAR
   CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
   // child controls
   wxPanel *panel = new wxPanel(this);

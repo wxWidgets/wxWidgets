@@ -1135,7 +1135,9 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h) )
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
 }
@@ -1280,7 +1282,9 @@ void MyFrame::OnIdle( wxIdleEvent& event )
 #endif
                   );
 
+#if wxUSE_STATUSBAR
         SetStatusText(msg);
+#endif // wxUSE_STATUSBAR
     }
     event.Skip();
 }
@@ -1357,7 +1361,9 @@ RichTextFrame::RichTextFrame(wxWindow* parent, const wxString& title):
     menuBar->Append(editMenu, _("Edit"));
 
     SetMenuBar(menuBar);
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 }
 
 // Event handlers
@@ -1548,6 +1554,7 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
     long insertionPoint = m_textCtrl->GetInsertionPoint();
     if (insertionPoint != m_currentPosition)
     {
+#if wxUSE_STATUSBAR
         wxTextAttr attr;
         if (m_textCtrl->GetStyle(insertionPoint, attr))
         {
@@ -1572,6 +1579,7 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
                 (const wxChar*) alignment);
             SetStatusText(msg);
         }
+#endif // wxUSE_STATUSBAR
         m_currentPosition = insertionPoint;
     }
 }

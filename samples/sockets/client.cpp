@@ -205,8 +205,10 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuBar->Append(m_menuProtocols, _("&Protocols"));
   SetMenuBar(m_menuBar);
 
+#if wxUSE_STATUSBAR
   // Status bar
   CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
   // Make a textctrl for logging
   m_text  = new wxTextCtrl(this, wxID_ANY,
@@ -622,7 +624,9 @@ void MyFrame::UpdateStatusBar()
     s.Printf(_("%s : %d"), (addr.Hostname()).c_str(), addr.Service());
   }
 
+#if wxUSE_STATUSBAR
   SetStatusText(s, 1);
+#endif // wxUSE_STATUSBAR
 
   m_menuSocket->Enable(CLIENT_OPEN, !m_sock->IsConnected() && !m_busy);
   m_menuSocket->Enable(CLIENT_TEST1, m_sock->IsConnected() && !m_busy);

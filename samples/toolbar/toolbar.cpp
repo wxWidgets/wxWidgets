@@ -265,7 +265,7 @@ bool MyApp::OnInit()
 
     frame->Show(true);
 
-#ifndef __SMARTPHONE__
+#if wxUSE_STATUSBAR
     frame->SetStatusText(_T("Hello, wxWidgets"));
 #endif
 
@@ -389,7 +389,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_rows = 1;
     m_nPrint = 1;
 
-#ifndef __SMARTPHONE__
+#if wxUSE_STATUSBAR
     // Give it a status line
     CreateStatusBar();
 #endif
@@ -711,7 +711,7 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToolEnter(wxCommandEvent& event)
 {
-#ifndef __SMARTPHONE__
+#if wxUSE_STATUSBAR
     if (event.GetSelection() > -1)
     {
         wxString str;
@@ -720,7 +720,9 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
     }
     else
         SetStatusText(_T(""));
-#endif
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)

@@ -100,7 +100,9 @@ int MyApp::OnExit()
 MyFrame::MyFrame(wxFrame *frame, const wxString& title)
        : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(350, 250))
 {
+#if wxUSE_STATUSBAR
     CreateStatusBar();
+#endif // wxUSE_STATUSBAR
 
     // Give it an icon
     SetIcon(wxICON(mondrian));

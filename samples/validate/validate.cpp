@@ -120,7 +120,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
     wxValidator::SetBellOnError(m_silent);
     file_menu->Check(VALIDATE_TOGGLE_BELL, !wxValidator::IsSilent());
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(1);
+#endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

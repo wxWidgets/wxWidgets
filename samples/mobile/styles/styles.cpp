@@ -37,8 +37,10 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
 {
     // Create menu and status bar.
     CreateMyMenuBar();
+#if wxUSE_STATUSBAR
     CreateStatusBar(1);
     SetStatusText( _T("Welcome to Styles!") );
+#endif // wxUSE_STATUSBAR
     
     wxImage image;
     image.LoadFile( _T("marble.jpg"), wxBITMAP_TYPE_JPEG );

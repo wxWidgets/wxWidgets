@@ -335,7 +335,9 @@ void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
         m_hlbox->SetBackgroundColour(col);
         m_hlbox->Refresh();
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Background colour changed."));
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -347,7 +349,9 @@ void MyFrame::OnSetSelBgCol(wxCommandEvent& WXUNUSED(event))
         m_hlbox->SetSelectionBackground(col);
         m_hlbox->Refresh();
 
+#if wxUSE_STATUSBAR
         SetStatusText(_T("Selection background colour changed."));
+#endif // wxUSE_STATUSBAR
     }
 }
 
@@ -387,10 +391,12 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
             wxLogMessage(_T("Selected items: %s"), s.c_str());
     }
 
+#if wxUSE_STATUSBAR
     SetStatusText(wxString::Format(
                     _T("# items selected = %lu"),
                     (unsigned long)m_hlbox->GetSelectedCount()
                   ));
+#endif // wxUSE_STATUSBAR
 }
 
 // ============================================================================

@@ -225,9 +225,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     
     m_canvas = new MyCanvas(this);
 
+#if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWidgets!"));
+#endif // wxUSE_STATUSBAR
 }
 
 
@@ -385,15 +387,16 @@ void MyCanvas::ChangeSize()
     free(m_text);
     m_text = (wxChar *)calloc(m_xChars * m_yChars, sizeof(wxChar));
 
+#if wxUSE_STATUSBAR
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
 
     if ( frame && frame->GetStatusBar() )
     {
         wxString msg;
         msg.Printf(_T("Panel size is (%d, %d)"), m_xChars, m_yChars);
-
         frame->SetStatusText(msg, 1);
     }
+#endif // wxUSE_STATUSBAR
 }
 
 // NB: this method is horrible inefficient especially because the caret

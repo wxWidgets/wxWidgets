@@ -40,8 +40,10 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   frame = new MyFrame((wxFrame *) NULL, _T("wxPNGBitmap Demo"), wxPoint(0, 0), wxSize(300, 300));
 
+#if wxUSE_STATUSBAR
   // Give it a status line
   frame->CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -68,7 +70,9 @@ bool MyApp::OnInit(void)
 
   frame->Show(true);
 
+#if wxUSE_STATUSBAR
   frame->SetStatusText(_T("Hello, wxWidgets"));
+#endif // wxUSE_STATUSBAR
 
   return true;
 }

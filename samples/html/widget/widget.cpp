@@ -193,11 +193,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+#if wxUSE_STATUSBAR
     CreateStatusBar(2);
+#endif // wxUSE_STATUSBAR
 
     html = new wxHtmlWindow(this);
     html -> SetRelatedFrame(this, _("VFS Demo: '%s'"));
+#if wxUSE_STATUSBAR
     html -> SetRelatedStatusBar(1);
+#endif // wxUSE_STATUSBAR
     html -> LoadPage(wxT("start.htm"));
 }
 
