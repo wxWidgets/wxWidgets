@@ -66,104 +66,192 @@ int wxMessageDialog::ShowModal()
 	int resultbutton = wxID_CANCEL ;
 
 	short result ;
-	Str255 pascalTitle ;
-	Str255 pascalText ;
-	char   cText[2048] ;
-
-	Str255 yesPString ;
-	Str255 noPString ;
-	
-	wxMacStringToPascal( m_caption , pascalTitle ) ;
-	wxMacStringToPascal( _("Yes") , yesPString ) ;
-	wxMacStringToPascal(  _("No") , noPString ) ;
-	
-	if (wxApp::s_macDefaultEncodingIsPC)
-	{
-		strcpy(cText , wxMacMakeMacStringFromPC( m_message) ) ;
-	}
-	else
-	{
-		strcpy( cText , m_message ) ;
-	}
-
-	wxMacConvertNewlines( cText , cText ) ;
-	CopyCStringToPascal( cText , pascalText ) ;
 
 	wxASSERT_MSG( ( m_dialogStyle & 0x3F ) != wxYES , "this style is not supported on mac" ) ;
 
+	AlertType alertType = kAlertPlainAlert ;
+	if (m_dialogStyle & wxICON_EXCLAMATION)
+		alertType = kAlertNoteAlert ;
+	else if (m_dialogStyle & wxICON_HAND)
+		alertType = kAlertStopAlert ;
+	else if (m_dialogStyle & wxICON_INFORMATION)
+		alertType = kAlertNoteAlert ;
+	else if (m_dialogStyle & wxICON_QUESTION)
+		alertType = kAlertCautionAlert ;
 
-	AlertStdAlertParamRec	param;
-
-	param.movable 		= true;
-	param.filterProc 	= NULL ;
-	
-  if (m_dialogStyle & wxYES_NO)
-  {
-    if (m_dialogStyle & wxCANCEL)
-    {
-			param.defaultText 	= yesPString ;
-			param.cancelText 	= (StringPtr) kAlertDefaultCancelText;
-			param.otherText 	= noPString ;
-			param.helpButton 	= false ;
-			param.defaultButton = kAlertStdAlertOKButton;
-			param.cancelButton 	= kAlertStdAlertCancelButton;
-    }
-    else
-    {
-			param.defaultText 	= yesPString ;
-			param.cancelText 	= NULL;
-			param.otherText 	= noPString ;
-			param.helpButton 	= false ;
-			param.defaultButton = kAlertStdAlertOKButton;
-			param.cancelButton 	= 0;
-    }
-  }
-  else if (m_dialogStyle & wxOK)
-  {
-    if (m_dialogStyle & wxCANCEL)
-    {
-    	// thats a cancel missing
-			param.defaultText 	= (StringPtr) kAlertDefaultOKText ;
-			param.cancelText 	= NULL;
-			param.otherText 	= NULL;
-			param.helpButton 	= false ;
-			param.defaultButton = kAlertStdAlertOKButton;
-			param.cancelButton 	= 0;
-    }
-    else
-    {
-			param.defaultText 	= (StringPtr) kAlertDefaultOKText ;
-			param.cancelText 	= NULL;
-			param.otherText 	= NULL;
-			param.helpButton 	= false ;
-			param.defaultButton = kAlertStdAlertOKButton;
-			param.cancelButton 	= 0;
-    }
-  }
-	else
+#if TARGET_CARBON
+	if ( UMAGetSystemVersion() >= 0x1000 )
 	{
-		return resultbutton ;
+		AlertStdCFStringAlertParamRec param ;
+		CFStringRef cfNoString = NULL ;
+		CFStringRef cfYesString = NULL ;
+
+		CFStringRef cfTitle = NULL;
+		CFStringRef cfText = NULL;
+		
+		cfTitle = wxMacCreateCFString( m_caption ) ;
+		cfText = wxMacCreateCFString( m_message ) ;
+		cfNoString = wxMacCreateCFString( _("Yes") ) ;
+		cfYesString = wxMacCreateCFString( _("No") ) ;
+		
+	 	param.movable = true;
+	 	param.flags = 0 ;
+	 	
+	 	bool skipDialog = false ;
+	 	
+		if (m_dialogStyle & wxYES_NO)
+	  	{
+		    if (m_dialogStyle & wxCANCEL)
+		    {
+				param.defaultText 	= cfYesString ;
+				param.cancelText 	= (CFStringRef) kAlertDefaultCancelText;
+				param.otherText 	= cfNoString ;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= kAlertStdAlertCancelButton;
+		    }
+		    else
+		    {
+				param.defaultText 	= cfYesString ;
+				param.cancelText 	= NULL;
+				param.otherText 	= cfNoString ;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+		    }
+		}
+		else if (m_dialogStyle & wxOK)
+		{
+		    if (m_dialogStyle & wxCANCEL)
+		    {
+	    	// thats a cancel missing
+				param.defaultText 	= (CFStringRef) kAlertDefaultOKText ;
+				param.cancelText 	= NULL;
+				param.otherText 	= NULL;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+		    }
+		    else
+		    {
+				param.defaultText 	= (CFStringRef) kAlertDefaultOKText ;
+				param.cancelText 	= NULL;
+				param.otherText 	= NULL;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+			}
+		}
+		else
+		{
+			skipDialog = true ;
+		}
+		
+		param.position = kWindowDefaultPosition;
+		if ( !skipDialog )
+		{
+			DialogRef alertRef ;
+			CreateStandardAlert( alertType , cfTitle , cfText , &param , &alertRef ) ;
+			RunStandardAlert( alertRef , NULL , &result ) ;
+		}
+  		if(cfTitle != NULL)
+    		CFRelease(cfTitle);   
+  		if(cfText != NULL)
+    		CFRelease(cfText);   
+  		if(cfNoString != NULL)
+    		CFRelease(cfNoString);   
+  		if(cfYesString != NULL)
+    		CFRelease(cfYesString);   
+    	if ( skipDialog )
+    		return wxID_CANCEL ;
+  }
+  else
+#endif
+  {
+  	 	AlertStdAlertParamRec	param;
+		char   cText[2048] ;
+		
+		if (wxApp::s_macDefaultEncodingIsPC)
+		{
+			strcpy(cText , wxMacMakeMacStringFromPC( m_message) ) ;
+		}
+		else
+		{
+			strcpy( cText , m_message ) ;
+		}
+		wxMacConvertNewlines( cText , cText ) ;
+	
+		Str255 yesPString ;
+		Str255 noPString ;
+
+		Str255 pascalTitle ;
+		Str255 pascalText ;
+		wxMacStringToPascal( m_caption , pascalTitle ) ;
+		wxMacStringToPascal( _("Yes") , yesPString ) ;
+		wxMacStringToPascal(  _("No") , noPString ) ;
+		CopyCStringToPascal( cText , pascalText ) ;
+		
+	  	param.movable 		= true;
+      	param.filterProc 	= NULL ;
+		if (m_dialogStyle & wxYES_NO)
+	  	{
+		    if (m_dialogStyle & wxCANCEL)
+		    {
+				param.defaultText 	= yesPString ;
+				param.cancelText 	= (StringPtr) kAlertDefaultCancelText;
+				param.otherText 	= noPString ;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= kAlertStdAlertCancelButton;
+		    }
+		    else
+		    {
+				param.defaultText 	= yesPString ;
+				param.cancelText 	= NULL;
+				param.otherText 	= noPString ;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+		    }
+		}
+		else if (m_dialogStyle & wxOK)
+		{
+		    if (m_dialogStyle & wxCANCEL)
+		    {
+	    	// thats a cancel missing
+				param.defaultText 	= (StringPtr) kAlertDefaultOKText ;
+				param.cancelText 	= NULL;
+				param.otherText 	= NULL;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+		    }
+		    else
+		    {
+				param.defaultText 	= (StringPtr) kAlertDefaultOKText ;
+				param.cancelText 	= NULL;
+				param.otherText 	= NULL;
+				param.helpButton 	= false ;
+				param.defaultButton = kAlertStdAlertOKButton;
+				param.cancelButton 	= 0;
+			}
+		}
+		else
+		{
+			return resultbutton ;
+		}
+
+		param.position 		= 0;
+
+		StandardAlert( alertType, pascalTitle, pascalText, &param, &result );
 	}
 
-	param.position 		= 0;
-
-  if (m_dialogStyle & wxICON_EXCLAMATION)
-			StandardAlert( kAlertNoteAlert, pascalTitle, pascalText, &param, &result );
-  else if (m_dialogStyle & wxICON_HAND)
-			StandardAlert( kAlertStopAlert, pascalTitle, pascalText, &param, &result );
-  else if (m_dialogStyle & wxICON_INFORMATION)
-		StandardAlert( kAlertNoteAlert, pascalTitle, pascalText, &param, &result );
-  else if (m_dialogStyle & wxICON_QUESTION)
-			StandardAlert( kAlertCautionAlert, pascalTitle, pascalText, &param, &result );
-	else
-			StandardAlert( kAlertPlainAlert, pascalTitle, pascalText, &param, &result );
-
 	if (m_dialogStyle & wxOK)
-  {
-    if (m_dialogStyle & wxCANCEL)				
-    {
-    	//TODO add Cancelbutton
-    	switch( result )
+	{
+		if (m_dialogStyle & wxCANCEL)				
+		{
+			//TODO add Cancelbutton
+			switch( result )
 			{
 				case 1 :
 					resultbutton = wxID_OK ;
@@ -176,7 +264,7 @@ int wxMessageDialog::ShowModal()
 		}
 		else
 		{
-    	switch( result )
+			switch( result )
 			{
 				case 1 :
 					resultbutton = wxID_OK ;
@@ -188,10 +276,10 @@ int wxMessageDialog::ShowModal()
 			}
 		}
 	}
-  else if (m_dialogStyle & wxYES_NO)
-  {
-    if (m_dialogStyle & wxCANCEL)
-    {
+	else if (m_dialogStyle & wxYES_NO)
+	{
+		if (m_dialogStyle & wxCANCEL)
+		{
 			switch( result )
 			{
 				case 1 :
@@ -204,9 +292,9 @@ int wxMessageDialog::ShowModal()
 					resultbutton = wxID_NO ;
 					break ;
 			}
-    }
-    else
-    {
+		}
+		else
+		{
 			switch( result )
 			{
 				case 1 :
