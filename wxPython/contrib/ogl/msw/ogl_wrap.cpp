@@ -969,7 +969,7 @@ static PyObject *_wrap_ShapeRegion_SetText(PyObject *, PyObject *args, PyObject 
     PyObject *resultobj;
     wxShapeRegion *arg1 = (wxShapeRegion *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -982,7 +982,7 @@ static PyObject *_wrap_ShapeRegion_SetText(PyObject *, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1220,7 +1220,7 @@ static PyObject *_wrap_ShapeRegion_SetName(PyObject *, PyObject *args, PyObject 
     PyObject *resultobj;
     wxShapeRegion *arg1 = (wxShapeRegion *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1233,7 +1233,7 @@ static PyObject *_wrap_ShapeRegion_SetName(PyObject *, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1261,7 +1261,7 @@ static PyObject *_wrap_ShapeRegion_SetColour(PyObject *, PyObject *args, PyObjec
     PyObject *resultobj;
     wxShapeRegion *arg1 = (wxShapeRegion *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1274,7 +1274,7 @@ static PyObject *_wrap_ShapeRegion_SetColour(PyObject *, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1744,7 +1744,7 @@ static PyObject *_wrap_ShapeRegion_SetPenColour(PyObject *, PyObject *args, PyOb
     PyObject *resultobj;
     wxShapeRegion *arg1 = (wxShapeRegion *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1757,7 +1757,7 @@ static PyObject *_wrap_ShapeRegion_SetPenColour(PyObject *, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2405,7 +2405,7 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnDrawBranches(PyObject *, PyObjec
     PyObject *resultobj;
     wxPyShapeEvtHandler *arg1 = (wxPyShapeEvtHandler *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2753,7 +2753,7 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnMovePre(PyObject *, PyObject *ar
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -2812,7 +2812,7 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnMovePost(PyObject *, PyObject *a
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3260,7 +3260,7 @@ static PyObject *_wrap_PyShapeEvtHandler_base_OnMoveLink(PyObject *, PyObject *a
     PyObject *resultobj;
     wxPyShapeEvtHandler *arg1 = (wxPyShapeEvtHandler *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4406,7 +4406,7 @@ static PyObject *_wrap_PyShape_CalculateSize(PyObject *, PyObject *args, PyObjec
 static PyObject *_wrap_PyShape_Select(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
-    bool arg2 = (bool) True ;
+    bool arg2 = (bool) true ;
     wxDC *arg3 = (wxDC *) NULL ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -4443,8 +4443,8 @@ static PyObject *_wrap_PyShape_Select(PyObject *, PyObject *args, PyObject *kwar
 static PyObject *_wrap_PyShape_SetHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
-    bool arg2 = (bool) True ;
-    bool arg3 = (bool) False ;
+    bool arg2 = (bool) true ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4565,7 +4565,7 @@ static PyObject *_wrap_PyShape_SetSensitivityFilter(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     int arg2 = (int) OP_ALL ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4628,7 +4628,7 @@ static PyObject *_wrap_PyShape_SetDraggable(PyObject *, PyObject *args, PyObject
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     bool arg2 ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4846,7 +4846,7 @@ static PyObject *_wrap_PyShape_SetShadowMode(PyObject *, PyObject *args, PyObjec
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     int arg2 ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5409,7 +5409,7 @@ static PyObject *_wrap_PyShape_Move(PyObject *, PyObject *args, PyObject *kwargs
     wxDC *arg2 = 0 ;
     double arg3 ;
     double arg4 ;
-    bool arg5 = (bool) True ;
+    bool arg5 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5651,7 +5651,7 @@ static PyObject *_wrap_PyShape_SetSize(PyObject *, PyObject *args, PyObject *kwa
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     double arg2 ;
     double arg3 ;
-    bool arg4 = (bool) True ;
+    bool arg4 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5891,7 +5891,7 @@ static PyObject *_wrap_PyShape_AddText(PyObject *, PyObject *args, PyObject *kwa
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -5904,7 +5904,7 @@ static PyObject *_wrap_PyShape_AddText(PyObject *, PyObject *args, PyObject *kwa
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6011,7 +6011,7 @@ static PyObject *_wrap_PyShape_FormatText(PyObject *, PyObject *args, PyObject *
     wxDC *arg2 = 0 ;
     wxString *arg3 = 0 ;
     int arg4 = (int) 0 ;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6033,7 +6033,7 @@ static PyObject *_wrap_PyShape_FormatText(PyObject *, PyObject *args, PyObject *
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     if (obj3) {
         arg4 = (int)SWIG_As_int(obj3); 
@@ -6220,7 +6220,7 @@ static PyObject *_wrap_PyShape_SetTextColour(PyObject *, PyObject *args, PyObjec
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6234,7 +6234,7 @@ static PyObject *_wrap_PyShape_SetTextColour(PyObject *, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         arg3 = (int)SWIG_As_int(obj2); 
@@ -6331,7 +6331,7 @@ static PyObject *_wrap_PyShape_SetRegionName(PyObject *, PyObject *args, PyObjec
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxString *arg2 = 0 ;
     int arg3 = (int) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -6345,7 +6345,7 @@ static PyObject *_wrap_PyShape_SetRegionName(PyObject *, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         arg3 = (int)SWIG_As_int(obj2); 
@@ -6414,7 +6414,7 @@ static PyObject *_wrap_PyShape_GetRegionId(PyObject *, PyObject *args, PyObject 
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxString *arg2 = 0 ;
     int result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6427,7 +6427,7 @@ static PyObject *_wrap_PyShape_GetRegionId(PyObject *, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -6456,7 +6456,7 @@ static PyObject *_wrap_PyShape_NameRegions(PyObject *, PyObject *args, PyObject 
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxString const &arg2_defvalue = wxPyEmptyString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -6470,7 +6470,7 @@ static PyObject *_wrap_PyShape_NameRegions(PyObject *, PyObject *args, PyObject 
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = True;
+            temp2 = true;
         }
     }
     {
@@ -6606,7 +6606,7 @@ static PyObject *_wrap_PyShape_FindRegion(PyObject *, PyObject *args, PyObject *
     wxString *arg2 = 0 ;
     int *arg3 = (int *) 0 ;
     wxPyShape *result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     int temp3 ;
     int res3 = 0 ;
     PyObject * obj0 = 0 ;
@@ -6622,7 +6622,7 @@ static PyObject *_wrap_PyShape_FindRegion(PyObject *, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7059,7 +7059,7 @@ static PyObject *_wrap_PyShape_EraseLinks(PyObject *, PyObject *args, PyObject *
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxDC *arg2 = 0 ;
     int arg3 = (int) -1 ;
-    bool arg4 = (bool) False ;
+    bool arg4 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7105,7 +7105,7 @@ static PyObject *_wrap_PyShape_DrawLinks(PyObject *, PyObject *args, PyObject *k
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxDC *arg2 = 0 ;
     int arg3 = (int) -1 ;
-    bool arg4 = (bool) False ;
+    bool arg4 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7740,8 +7740,8 @@ static PyObject *_wrap_PyShape_HasDescendant(PyObject *, PyObject *args, PyObjec
 static PyObject *_wrap_PyShape_CreateNewCopy(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
-    bool arg2 = (bool) True ;
-    bool arg3 = (bool) True ;
+    bool arg2 = (bool) true ;
+    bool arg3 = (bool) true ;
     wxPyShape *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -8187,7 +8187,7 @@ static PyObject *_wrap_PyShape_base_OnDrawBranches(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8535,7 +8535,7 @@ static PyObject *_wrap_PyShape_base_OnMovePre(PyObject *, PyObject *args, PyObje
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -8594,7 +8594,7 @@ static PyObject *_wrap_PyShape_base_OnMovePost(PyObject *, PyObject *args, PyObj
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9042,7 +9042,7 @@ static PyObject *_wrap_PyShape_base_OnMoveLink(PyObject *, PyObject *args, PyObj
     PyObject *resultobj;
     wxPyShape *arg1 = (wxPyShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9595,7 +9595,7 @@ static PyObject *_wrap_PseudoMetaFile_LoadFromMetaFile(PyObject *, PyObject *arg
     double *arg3 = (double *) 0 ;
     double *arg4 = (double *) 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9610,7 +9610,7 @@ static PyObject *_wrap_PseudoMetaFile_LoadFromMetaFile(PyObject *, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_double,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
@@ -10285,7 +10285,7 @@ static PyObject *_wrap_PseudoMetaFile_DrawText(PyObject *, PyObject *args, PyObj
     wxPseudoMetaFile *arg1 = (wxPseudoMetaFile *) 0 ;
     wxString *arg2 = 0 ;
     wxPoint *arg3 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10300,7 +10300,7 @@ static PyObject *_wrap_PseudoMetaFile_DrawText(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -11319,7 +11319,7 @@ static PyObject *_wrap_PyRectangleShape_base_OnMovePre(PyObject *, PyObject *arg
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -11378,7 +11378,7 @@ static PyObject *_wrap_PyRectangleShape_base_OnMovePost(PyObject *, PyObject *ar
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11826,7 +11826,7 @@ static PyObject *_wrap_PyRectangleShape_base_OnMoveLink(PyObject *, PyObject *ar
     PyObject *resultobj;
     wxPyRectangleShape *arg1 = (wxPyRectangleShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12649,7 +12649,7 @@ static PyObject *_wrap_PyControlPoint_base_OnMovePre(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -12708,7 +12708,7 @@ static PyObject *_wrap_PyControlPoint_base_OnMovePost(PyObject *, PyObject *args
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -13156,7 +13156,7 @@ static PyObject *_wrap_PyControlPoint_base_OnMoveLink(PyObject *, PyObject *args
     PyObject *resultobj;
     wxPyControlPoint *arg1 = (wxPyControlPoint *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -13571,7 +13571,7 @@ static PyObject *_wrap_PyBitmapShape_SetFilename(PyObject *, PyObject *args, PyO
     PyObject *resultobj;
     wxPyBitmapShape *arg1 = (wxPyBitmapShape *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13584,7 +13584,7 @@ static PyObject *_wrap_PyBitmapShape_SetFilename(PyObject *, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14053,7 +14053,7 @@ static PyObject *_wrap_PyBitmapShape_base_OnMovePre(PyObject *, PyObject *args, 
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -14112,7 +14112,7 @@ static PyObject *_wrap_PyBitmapShape_base_OnMovePost(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -14560,7 +14560,7 @@ static PyObject *_wrap_PyBitmapShape_base_OnMoveLink(PyObject *, PyObject *args,
     PyObject *resultobj;
     wxPyBitmapShape *arg1 = (wxPyBitmapShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -15302,7 +15302,7 @@ static PyObject *_wrap_PyDrawnShape_DrawText(PyObject *, PyObject *args, PyObjec
     wxPyDrawnShape *arg1 = (wxPyDrawnShape *) 0 ;
     wxString *arg2 = 0 ;
     wxPoint *arg3 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -15317,7 +15317,7 @@ static PyObject *_wrap_PyDrawnShape_DrawText(PyObject *, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -15431,7 +15431,7 @@ static PyObject *_wrap_PyDrawnShape_LoadFromMetaFile(PyObject *, PyObject *args,
     wxPyDrawnShape *arg1 = (wxPyDrawnShape *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -15444,7 +15444,7 @@ static PyObject *_wrap_PyDrawnShape_LoadFromMetaFile(PyObject *, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -16321,7 +16321,7 @@ static PyObject *_wrap_PyDrawnShape_base_OnMovePre(PyObject *, PyObject *args, P
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -16380,7 +16380,7 @@ static PyObject *_wrap_PyDrawnShape_base_OnMovePost(PyObject *, PyObject *args, 
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -16828,7 +16828,7 @@ static PyObject *_wrap_PyDrawnShape_base_OnMoveLink(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxPyDrawnShape *arg1 = (wxPyDrawnShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -18148,7 +18148,7 @@ static PyObject *_wrap_PyCompositeShape_base_OnMovePre(PyObject *, PyObject *arg
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -18207,7 +18207,7 @@ static PyObject *_wrap_PyCompositeShape_base_OnMovePost(PyObject *, PyObject *ar
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -18655,7 +18655,7 @@ static PyObject *_wrap_PyCompositeShape_base_OnMoveLink(PyObject *, PyObject *ar
     PyObject *resultobj;
     wxPyCompositeShape *arg1 = (wxPyCompositeShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -19475,7 +19475,7 @@ static PyObject *_wrap_PyDividedShape_base_OnMovePre(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -19534,7 +19534,7 @@ static PyObject *_wrap_PyDividedShape_base_OnMovePost(PyObject *, PyObject *args
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -19982,7 +19982,7 @@ static PyObject *_wrap_PyDividedShape_base_OnMoveLink(PyObject *, PyObject *args
     PyObject *resultobj;
     wxPyDividedShape *arg1 = (wxPyDividedShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -20868,7 +20868,7 @@ static PyObject *_wrap_PyDivisionShape_SetLeftSideColour(PyObject *, PyObject *a
     PyObject *resultobj;
     wxPyDivisionShape *arg1 = (wxPyDivisionShape *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -20881,7 +20881,7 @@ static PyObject *_wrap_PyDivisionShape_SetLeftSideColour(PyObject *, PyObject *a
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -21012,7 +21012,7 @@ static PyObject *_wrap_PyDivisionShape_SetTopSideColour(PyObject *, PyObject *ar
     PyObject *resultobj;
     wxPyDivisionShape *arg1 = (wxPyDivisionShape *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -21025,7 +21025,7 @@ static PyObject *_wrap_PyDivisionShape_SetTopSideColour(PyObject *, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -21539,7 +21539,7 @@ static PyObject *_wrap_PyDivisionShape_base_OnMovePre(PyObject *, PyObject *args
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -21598,7 +21598,7 @@ static PyObject *_wrap_PyDivisionShape_base_OnMovePost(PyObject *, PyObject *arg
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22046,7 +22046,7 @@ static PyObject *_wrap_PyDivisionShape_base_OnMoveLink(PyObject *, PyObject *arg
     PyObject *resultobj;
     wxPyDivisionShape *arg1 = (wxPyDivisionShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -22791,7 +22791,7 @@ static PyObject *_wrap_PyEllipseShape_base_OnMovePre(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -22850,7 +22850,7 @@ static PyObject *_wrap_PyEllipseShape_base_OnMovePost(PyObject *, PyObject *args
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -23298,7 +23298,7 @@ static PyObject *_wrap_PyEllipseShape_base_OnMoveLink(PyObject *, PyObject *args
     PyObject *resultobj;
     wxPyEllipseShape *arg1 = (wxPyEllipseShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -24037,7 +24037,7 @@ static PyObject *_wrap_PyCircleShape_base_OnMovePre(PyObject *, PyObject *args, 
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -24096,7 +24096,7 @@ static PyObject *_wrap_PyCircleShape_base_OnMovePost(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -24544,7 +24544,7 @@ static PyObject *_wrap_PyCircleShape_base_OnMoveLink(PyObject *, PyObject *args,
     PyObject *resultobj;
     wxPyCircleShape *arg1 = (wxPyCircleShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -24815,7 +24815,7 @@ static PyObject *_wrap_new_ArrowHead(PyObject *, PyObject *args, PyObject *kwarg
     wxPseudoMetaFile *arg6 = (wxPseudoMetaFile *) NULL ;
     long arg7 = (long) -1 ;
     wxArrowHead *result;
-    bool temp5 = False ;
+    bool temp5 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -24848,7 +24848,7 @@ static PyObject *_wrap_new_ArrowHead(PyObject *, PyObject *args, PyObject *kwarg
         {
             arg5 = wxString_in_helper(obj4);
             if (arg5 == NULL) SWIG_fail;
-            temp5 = True;
+            temp5 = true;
         }
     }
     if (obj5) {
@@ -25418,7 +25418,7 @@ static PyObject *_wrap_PyLineShape_AddArrow(PyObject *, PyObject *args, PyObject
     wxString *arg6 = (wxString *) &arg6_defvalue ;
     wxPseudoMetaFile *arg7 = (wxPseudoMetaFile *) NULL ;
     long arg8 = (long) -1 ;
-    bool temp6 = False ;
+    bool temp6 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -25452,7 +25452,7 @@ static PyObject *_wrap_PyLineShape_AddArrow(PyObject *, PyObject *args, PyObject
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     if (obj6) {
@@ -25526,7 +25526,7 @@ static PyObject *_wrap_PyLineShape_ClearArrow(PyObject *, PyObject *args, PyObje
     wxPyLineShape *arg1 = (wxPyLineShape *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -25539,7 +25539,7 @@ static PyObject *_wrap_PyLineShape_ClearArrow(PyObject *, PyObject *args, PyObje
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25680,7 +25680,7 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHead(PyObject *, PyObject *args, P
     int arg2 ;
     wxString *arg3 = 0 ;
     bool result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -25696,7 +25696,7 @@ static PyObject *_wrap_PyLineShape_DeleteArrowHead(PyObject *, PyObject *args, P
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -25914,7 +25914,7 @@ static PyObject *_wrap_PyLineShape_FindArrowHead(PyObject *, PyObject *args, PyO
     int arg2 ;
     wxString *arg3 = 0 ;
     wxArrowHead *result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -25930,7 +25930,7 @@ static PyObject *_wrap_PyLineShape_FindArrowHead(PyObject *, PyObject *args, PyO
     {
         arg3 = wxString_in_helper(obj2);
         if (arg3 == NULL) SWIG_fail;
-        temp3 = True;
+        temp3 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -27439,7 +27439,7 @@ static PyObject *_wrap_PyLineShape_base_OnMovePre(PyObject *, PyObject *args, Py
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -27498,7 +27498,7 @@ static PyObject *_wrap_PyLineShape_base_OnMovePost(PyObject *, PyObject *args, P
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -27946,7 +27946,7 @@ static PyObject *_wrap_PyLineShape_base_OnMoveLink(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxPyLineShape *arg1 = (wxPyLineShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -28982,7 +28982,7 @@ static PyObject *_wrap_PyPolygonShape_base_OnMovePre(PyObject *, PyObject *args,
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -29041,7 +29041,7 @@ static PyObject *_wrap_PyPolygonShape_base_OnMovePost(PyObject *, PyObject *args
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -29489,7 +29489,7 @@ static PyObject *_wrap_PyPolygonShape_base_OnMoveLink(PyObject *, PyObject *args
     PyObject *resultobj;
     wxPyPolygonShape *arg1 = (wxPyPolygonShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -30259,7 +30259,7 @@ static PyObject *_wrap_PyTextShape_base_OnMovePre(PyObject *, PyObject *args, Py
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -30318,7 +30318,7 @@ static PyObject *_wrap_PyTextShape_base_OnMovePost(PyObject *, PyObject *args, P
     double arg4 ;
     double arg5 ;
     double arg6 ;
-    bool arg7 = (bool) True ;
+    bool arg7 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -30766,7 +30766,7 @@ static PyObject *_wrap_PyTextShape_base_OnMoveLink(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxPyTextShape *arg1 = (wxPyTextShape *) 0 ;
     wxDC *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -31813,7 +31813,7 @@ static PyObject *_wrap_new_PyShapeCanvas(PyObject *, PyObject *args, PyObject *k
     wxPyShapeCanvas *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = False ;
+    bool temp6 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -31853,7 +31853,7 @@ static PyObject *_wrap_new_PyShapeCanvas(PyObject *, PyObject *args, PyObject *k
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     {

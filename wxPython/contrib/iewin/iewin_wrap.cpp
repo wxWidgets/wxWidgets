@@ -607,7 +607,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *, PyObject *args, PyObject *kwarg
     wxIEHtmlWin *result;
     wxPoint temp3 ;
     wxSize temp4 ;
-    bool temp6 = False ;
+    bool temp6 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -645,7 +645,7 @@ static PyObject *_wrap_new_IEHtmlWin(PyObject *, PyObject *args, PyObject *kwarg
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     {
@@ -675,7 +675,7 @@ static PyObject *_wrap_IEHtmlWin_LoadUrl(PyObject *, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -688,7 +688,7 @@ static PyObject *_wrap_IEHtmlWin_LoadUrl(PyObject *, PyObject *args, PyObject *k
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -767,15 +767,15 @@ static PyObject *_wrap_IEHtmlWin_LoadStream(PyObject *, PyObject *args, PyObject
     {
         if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyInputStream"))) {
             arg2 = temp2->m_wxis;
-            created2 = False;
+            created2 = false;
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg2 = wxPyCBInputStream_create(obj1, False);
+            arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
                 PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created2 = True;
+            created2 = true;
         }
     }
     {
@@ -895,7 +895,7 @@ static PyObject *_wrap_IEHtmlWin_GetEditMode(PyObject *, PyObject *args, PyObjec
 static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
-    bool arg2 = (bool) False ;
+    bool arg2 = (bool) false ;
     wxString result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -933,7 +933,7 @@ static PyObject *_wrap_IEHtmlWin_GetStringSelection(PyObject *, PyObject *args, 
 static PyObject *_wrap_IEHtmlWin_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxIEHtmlWin *arg1 = (wxIEHtmlWin *) 0 ;
-    bool arg2 = (bool) False ;
+    bool arg2 = (bool) false ;
     wxString result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;

@@ -671,8 +671,8 @@ void wxPen__SetDashes(wxPen *self,PyObject *_self,PyObject *pyDashes){
             Py_DECREF(strDashes);
             wxPyEndBlockThreads(blocked);
         }
-bool wxPen___eq__(wxPen *self,wxPen const *other){ return other ? (*self == *other) : False; }
-bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*self != *other) : True;  }
+bool wxPen___eq__(wxPen *self,wxPen const *other){ return other ? (*self == *other) : false; }
+bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*self != *other) : true;  }
 
 #include <wx/image.h>
     
@@ -748,8 +748,8 @@ void wxBitmap_SetSize(wxBitmap *self,wxSize const &size){
             self->SetWidth(size.x);
             self->SetHeight(size.y);
         }
-bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : False; }
-bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : True;  }
+bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : false; }
+bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : true;  }
 wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour){
             if ( !colour.Ok() )
                 return new wxMask(bitmap, *wxBLACK);
@@ -799,7 +799,7 @@ int wxIconLocation_GetIndex(wxIconLocation *self){
         }
 wxCursor *new_wxCursor(wxString const *cursorName,long type,int hotSpotX,int hotSpotY){
 #ifdef __WXGTK__
-            wxCHECK_MSG(False, NULL,
+            wxCHECK_MSG(false, NULL,
                         wxT("wx.Cursor constructor not implemented for wxGTK, use wx.StockCursor, wx.CursorFromImage, or wx.CursorFromBits instead."));
 #else
             return new wxCursor(*cursorName, type, hotSpotX, hotSpotY);
@@ -827,7 +827,7 @@ wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
         { wxPyRaiseNotImplemented(); return NULL; }
     
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
-        { wxPyRaiseNotImplemented(); return False; }
+        { wxPyRaiseNotImplemented(); return false; }
 
 PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncoding encoding,wxString const &facename,bool interactive){
             wxFontEncoding alt_enc;
@@ -846,8 +846,8 @@ wxFont *new_wxFont(wxString const &info){
 wxFont *new_wxFont(int pointSize,wxFontFamily family,int flags,wxString const &face,wxFontEncoding encoding){
             return wxFont::New(pointSize, family, flags, face, encoding);
         }
-bool wxFont___eq__(wxFont *self,wxFont const *other){ return other ? (*self == *other) : False; }
-bool wxFont___ne__(wxFont *self,wxFont const *other){ return other ? (*self != *other) : True;  }
+bool wxFont___eq__(wxFont *self,wxFont const *other){ return other ? (*self == *other) : false; }
+bool wxFont___ne__(wxFont *self,wxFont const *other){ return other ? (*self != *other) : true;  }
 
 class wxPyFontEnumerator : public wxFontEnumerator {
 public:
@@ -1196,7 +1196,7 @@ static PyObject *_wrap_new_NamedColour(PyObject *, PyObject *args, PyObject *kwa
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxColour *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "colorName", NULL 
@@ -1206,7 +1206,7 @@ static PyObject *_wrap_new_NamedColour(PyObject *, PyObject *args, PyObject *kwa
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
@@ -1458,7 +1458,7 @@ static PyObject *_wrap_Colour_SetFromName(PyObject *, PyObject *args, PyObject *
     PyObject *resultobj;
     wxColour *arg1 = (wxColour *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1471,7 +1471,7 @@ static PyObject *_wrap_Colour_SetFromName(PyObject *, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2745,7 +2745,7 @@ static PyObject *_wrap_new_Bitmap(PyObject *, PyObject *args, PyObject *kwargs) 
     wxString *arg1 = 0 ;
     int arg2 = (int) wxBITMAP_TYPE_ANY ;
     wxBitmap *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2756,7 +2756,7 @@ static PyObject *_wrap_new_Bitmap(PyObject *, PyObject *args, PyObject *kwargs) 
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     if (obj1) {
         arg2 = (int)SWIG_As_int(obj1); 
@@ -3369,7 +3369,7 @@ static PyObject *_wrap_Bitmap_SaveFile(PyObject *, PyObject *args, PyObject *kwa
     int arg3 ;
     wxPalette *arg4 = (wxPalette *) NULL ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3384,7 +3384,7 @@ static PyObject *_wrap_Bitmap_SaveFile(PyObject *, PyObject *args, PyObject *kwa
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -3422,7 +3422,7 @@ static PyObject *_wrap_Bitmap_LoadFile(PyObject *, PyObject *args, PyObject *kwa
     wxString *arg2 = 0 ;
     int arg3 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3436,7 +3436,7 @@ static PyObject *_wrap_Bitmap_LoadFile(PyObject *, PyObject *args, PyObject *kwa
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -3839,7 +3839,7 @@ static PyObject *_wrap_new_Icon(PyObject *, PyObject *args, PyObject *kwargs) {
     int arg3 = (int) -1 ;
     int arg4 = (int) -1 ;
     wxIcon *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3852,7 +3852,7 @@ static PyObject *_wrap_new_Icon(PyObject *, PyObject *args, PyObject *kwargs) {
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     arg2 = (int)SWIG_As_int(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -4031,7 +4031,7 @@ static PyObject *_wrap_Icon_LoadFile(PyObject *, PyObject *args, PyObject *kwarg
     wxString *arg2 = 0 ;
     int arg3 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4045,7 +4045,7 @@ static PyObject *_wrap_Icon_LoadFile(PyObject *, PyObject *args, PyObject *kwarg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -4399,7 +4399,7 @@ static PyObject *_wrap_new_IconLocation(PyObject *, PyObject *args, PyObject *kw
     wxString *arg1 = (wxString *) &wxPyEmptyString ;
     int arg2 = (int) 0 ;
     wxIconLocation *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4411,7 +4411,7 @@ static PyObject *_wrap_new_IconLocation(PyObject *, PyObject *args, PyObject *kw
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = True;
+            temp1 = true;
         }
     }
     if (obj1) {
@@ -4497,7 +4497,7 @@ static PyObject *_wrap_IconLocation_SetFileName(PyObject *, PyObject *args, PyOb
     PyObject *resultobj;
     wxIconLocation *arg1 = (wxIconLocation *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4510,7 +4510,7 @@ static PyObject *_wrap_IconLocation_SetFileName(PyObject *, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -4658,7 +4658,7 @@ static PyObject *_wrap_new_IconBundleFromFile(PyObject *, PyObject *args, PyObje
     wxString *arg1 = 0 ;
     long arg2 ;
     wxIconBundle *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -4669,7 +4669,7 @@ static PyObject *_wrap_new_IconBundleFromFile(PyObject *, PyObject *args, PyObje
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     arg2 = (long)SWIG_As_long(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -4790,7 +4790,7 @@ static PyObject *_wrap_IconBundle_AddIconFromFile(PyObject *, PyObject *args, Py
     wxIconBundle *arg1 = (wxIconBundle *) 0 ;
     wxString *arg2 = 0 ;
     long arg3 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4804,7 +4804,7 @@ static PyObject *_wrap_IconBundle_AddIconFromFile(PyObject *, PyObject *args, Py
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (long)SWIG_As_long(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -4883,7 +4883,7 @@ static PyObject *_wrap_new_Cursor(PyObject *, PyObject *args, PyObject *kwargs) 
     int arg3 = (int) 0 ;
     int arg4 = (int) 0 ;
     wxCursor *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -4896,7 +4896,7 @@ static PyObject *_wrap_new_Cursor(PyObject *, PyObject *args, PyObject *kwargs) 
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     arg2 = (long)SWIG_As_long(obj1); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -7206,7 +7206,7 @@ static PyObject *_wrap_NativeFontInfo_FromString(PyObject *, PyObject *args, PyO
     wxNativeFontInfo *arg1 = (wxNativeFontInfo *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7219,7 +7219,7 @@ static PyObject *_wrap_NativeFontInfo_FromString(PyObject *, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7314,7 +7314,7 @@ static PyObject *_wrap_NativeFontInfo_FromUserString(PyObject *, PyObject *args,
     wxNativeFontInfo *arg1 = (wxNativeFontInfo *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7327,7 +7327,7 @@ static PyObject *_wrap_NativeFontInfo_FromUserString(PyObject *, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7396,7 +7396,7 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *, PyObject *arg
     PyObject *resultobj;
     wxNativeEncodingInfo *arg1 = (wxNativeEncodingInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7409,7 +7409,7 @@ static PyObject *_wrap_NativeEncodingInfo_facename_set(PyObject *, PyObject *arg
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (arg1) (arg1)->facename = *arg2;
     
@@ -7552,7 +7552,7 @@ static PyObject *_wrap_NativeEncodingInfo_FromString(PyObject *, PyObject *args,
     wxNativeEncodingInfo *arg1 = (wxNativeEncodingInfo *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -7565,7 +7565,7 @@ static PyObject *_wrap_NativeEncodingInfo_FromString(PyObject *, PyObject *args,
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -7788,9 +7788,9 @@ static PyObject *_wrap_FontMapper_CharsetToEncoding(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxFontMapper *arg1 = (wxFontMapper *) 0 ;
     wxString *arg2 = 0 ;
-    bool arg3 = (bool) True ;
+    bool arg3 = (bool) true ;
     int result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -7804,7 +7804,7 @@ static PyObject *_wrap_FontMapper_CharsetToEncoding(PyObject *, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         arg3 = (bool)SWIG_As_bool(obj2); 
@@ -7948,7 +7948,7 @@ static PyObject *_wrap_FontMapper_GetEncodingFromName(PyObject *, PyObject *args
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     int result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "name", NULL 
@@ -7958,7 +7958,7 @@ static PyObject *_wrap_FontMapper_GetEncodingFromName(PyObject *, PyObject *args
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8015,7 +8015,7 @@ static PyObject *_wrap_FontMapper_SetConfigPath(PyObject *, PyObject *args, PyOb
     PyObject *resultobj;
     wxFontMapper *arg1 = (wxFontMapper *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8028,7 +8028,7 @@ static PyObject *_wrap_FontMapper_SetConfigPath(PyObject *, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8086,9 +8086,9 @@ static PyObject *_wrap_FontMapper_GetAltForEncoding(PyObject *, PyObject *args, 
     int arg2 ;
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
-    bool arg4 = (bool) True ;
+    bool arg4 = (bool) true ;
     PyObject *result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8106,7 +8106,7 @@ static PyObject *_wrap_FontMapper_GetAltForEncoding(PyObject *, PyObject *args, 
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = True;
+            temp3 = true;
         }
     }
     if (obj3) {
@@ -8142,7 +8142,7 @@ static PyObject *_wrap_FontMapper_IsEncodingAvailable(PyObject *, PyObject *args
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     bool result;
-    bool temp3 = False ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8159,7 +8159,7 @@ static PyObject *_wrap_FontMapper_IsEncodingAvailable(PyObject *, PyObject *args
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = True;
+            temp3 = true;
         }
     }
     {
@@ -8219,7 +8219,7 @@ static PyObject *_wrap_FontMapper_SetDialogTitle(PyObject *, PyObject *args, PyO
     PyObject *resultobj;
     wxFontMapper *arg1 = (wxFontMapper *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -8232,7 +8232,7 @@ static PyObject *_wrap_FontMapper_SetDialogTitle(PyObject *, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -8269,12 +8269,12 @@ static PyObject *_wrap_new_Font(PyObject *, PyObject *args, PyObject *kwargs) {
     int arg2 ;
     int arg3 ;
     int arg4 ;
-    bool arg5 = (bool) False ;
+    bool arg5 = (bool) false ;
     wxString const &arg6_defvalue = wxPyEmptyString ;
     wxString *arg6 = (wxString *) &arg6_defvalue ;
     int arg7 = (int) wxFONTENCODING_DEFAULT ;
     wxFont *result;
-    bool temp6 = False ;
+    bool temp6 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8303,7 +8303,7 @@ static PyObject *_wrap_new_Font(PyObject *, PyObject *args, PyObject *kwargs) {
         {
             arg6 = wxString_in_helper(obj5);
             if (arg6 == NULL) SWIG_fail;
-            temp6 = True;
+            temp6 = true;
         }
     }
     if (obj6) {
@@ -8394,7 +8394,7 @@ static PyObject *_wrap_new_FontFromNativeInfoString(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxFont *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "info", NULL 
@@ -8404,7 +8404,7 @@ static PyObject *_wrap_new_FontFromNativeInfoString(PyObject *, PyObject *args, 
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         if (!wxPyCheckForApp()) SWIG_fail;
@@ -8438,7 +8438,7 @@ static PyObject *_wrap_new_Font2(PyObject *, PyObject *args, PyObject *kwargs) {
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     int arg5 = (int) wxFONTENCODING_DEFAULT ;
     wxFont *result;
-    bool temp4 = False ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -8461,7 +8461,7 @@ static PyObject *_wrap_new_Font2(PyObject *, PyObject *args, PyObject *kwargs) {
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = True;
+            temp4 = true;
         }
     }
     if (obj4) {
@@ -9011,7 +9011,7 @@ static PyObject *_wrap_Font_SetFaceName(PyObject *, PyObject *args, PyObject *kw
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9024,7 +9024,7 @@ static PyObject *_wrap_Font_SetFaceName(PyObject *, PyObject *args, PyObject *kw
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9144,7 +9144,7 @@ static PyObject *_wrap_Font_SetNativeFontInfoFromString(PyObject *, PyObject *ar
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9157,7 +9157,7 @@ static PyObject *_wrap_Font_SetNativeFontInfoFromString(PyObject *, PyObject *ar
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9185,7 +9185,7 @@ static PyObject *_wrap_Font_SetNativeFontInfoUserDesc(PyObject *, PyObject *args
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9198,7 +9198,7 @@ static PyObject *_wrap_Font_SetNativeFontInfoUserDesc(PyObject *, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -9321,7 +9321,7 @@ static PyObject *_wrap_Font_GetWeightString(PyObject *, PyObject *args, PyObject
 static PyObject *_wrap_Font_SetNoAntiAliasing(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxFont *arg1 = (wxFont *) 0 ;
-    bool arg2 = (bool) True ;
+    bool arg2 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9520,7 +9520,7 @@ static PyObject *_wrap_FontEnumerator_EnumerateFacenames(PyObject *, PyObject *a
     PyObject *resultobj;
     wxPyFontEnumerator *arg1 = (wxPyFontEnumerator *) 0 ;
     int arg2 = (int) wxFONTENCODING_SYSTEM ;
-    bool arg3 = (bool) False ;
+    bool arg3 = (bool) false ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -9562,7 +9562,7 @@ static PyObject *_wrap_FontEnumerator_EnumerateEncodings(PyObject *, PyObject *a
     wxString const &arg2_defvalue = wxPyEmptyString ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9576,7 +9576,7 @@ static PyObject *_wrap_FontEnumerator_EnumerateEncodings(PyObject *, PyObject *a
         {
             arg2 = wxString_in_helper(obj1);
             if (arg2 == NULL) SWIG_fail;
-            temp2 = True;
+            temp2 = true;
         }
     }
     {
@@ -9711,7 +9711,7 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *, PyObject *args
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9724,7 +9724,7 @@ static PyObject *_wrap_LanguageInfo_CanonicalName_set(PyObject *, PyObject *args
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (arg1) (arg1)->CanonicalName = *arg2;
     
@@ -9774,7 +9774,7 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *, PyObject *args, 
     PyObject *resultobj;
     wxLanguageInfo *arg1 = (wxLanguageInfo *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -9787,7 +9787,7 @@ static PyObject *_wrap_LanguageInfo_Description_set(PyObject *, PyObject *args, 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (arg1) (arg1)->Description = *arg2;
     
@@ -9907,12 +9907,12 @@ static PyObject *_wrap_Locale_Init1(PyObject *, PyObject *args, PyObject *kwargs
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
-    bool arg5 = (bool) True ;
-    bool arg6 = (bool) False ;
+    bool arg5 = (bool) true ;
+    bool arg6 = (bool) false ;
     bool result;
-    bool temp2 = False ;
-    bool temp3 = False ;
-    bool temp4 = False ;
+    bool temp2 = false ;
+    bool temp3 = false ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -9929,20 +9929,20 @@ static PyObject *_wrap_Locale_Init1(PyObject *, PyObject *args, PyObject *kwargs
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = True;
+            temp3 = true;
         }
     }
     if (obj3) {
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = True;
+            temp4 = true;
         }
     }
     if (obj4) {
@@ -10258,7 +10258,7 @@ static PyObject *_wrap_Locale_GetCanonicalName(PyObject *, PyObject *args, PyObj
 static PyObject *_wrap_Locale_AddCatalogLookupPathPrefix(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "prefix", NULL 
@@ -10268,7 +10268,7 @@ static PyObject *_wrap_Locale_AddCatalogLookupPathPrefix(PyObject *, PyObject *a
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10297,7 +10297,7 @@ static PyObject *_wrap_Locale_AddCatalog(PyObject *, PyObject *args, PyObject *k
     wxLocale *arg1 = (wxLocale *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10310,7 +10310,7 @@ static PyObject *_wrap_Locale_AddCatalog(PyObject *, PyObject *args, PyObject *k
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10341,7 +10341,7 @@ static PyObject *_wrap_Locale_IsLoaded(PyObject *, PyObject *args, PyObject *kwa
     wxLocale *arg1 = (wxLocale *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10354,7 +10354,7 @@ static PyObject *_wrap_Locale_IsLoaded(PyObject *, PyObject *args, PyObject *kwa
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10442,7 +10442,7 @@ static PyObject *_wrap_Locale_FindLanguageInfo(PyObject *, PyObject *args, PyObj
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxLanguageInfo *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "locale", NULL 
@@ -10452,7 +10452,7 @@ static PyObject *_wrap_Locale_FindLanguageInfo(PyObject *, PyObject *args, PyObj
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10513,8 +10513,8 @@ static PyObject *_wrap_Locale_GetString(PyObject *, PyObject *args, PyObject *kw
     wxString const &arg3_defvalue = wxPyEmptyString ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString result;
-    bool temp2 = False ;
-    bool temp3 = False ;
+    bool temp2 = false ;
+    bool temp3 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -10528,13 +10528,13 @@ static PyObject *_wrap_Locale_GetString(PyObject *, PyObject *args, PyObject *kw
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         {
             arg3 = wxString_in_helper(obj2);
             if (arg3 == NULL) SWIG_fail;
-            temp3 = True;
+            temp3 = true;
         }
     }
     {
@@ -10641,14 +10641,14 @@ static PyObject *_wrap_GetTranslation__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     
     if(!PyArg_ParseTuple(args,(char *)"O:GetTranslation",&obj0)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -10684,8 +10684,8 @@ static PyObject *_wrap_GetTranslation__SWIG_1(PyObject *, PyObject *args) {
     wxString *arg2 = 0 ;
     size_t arg3 ;
     wxString result;
-    bool temp1 = False ;
-    bool temp2 = False ;
+    bool temp1 = false ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -10694,12 +10694,12 @@ static PyObject *_wrap_GetTranslation__SWIG_1(PyObject *, PyObject *args) {
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (size_t)SWIG_As_unsigned_SS_long(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -10874,7 +10874,7 @@ static PyObject *_wrap_EncodingConverter_Convert(PyObject *, PyObject *args, PyO
     wxEncodingConverter *arg1 = (wxEncodingConverter *) 0 ;
     wxString *arg2 = 0 ;
     wxString result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -10887,7 +10887,7 @@ static PyObject *_wrap_EncodingConverter_Convert(PyObject *, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -12259,7 +12259,7 @@ static PyObject *_wrap_DC_DrawBitmap(PyObject *, PyObject *args, PyObject *kwarg
     wxBitmap *arg2 = 0 ;
     int arg3 ;
     int arg4 ;
-    bool arg5 = (bool) False ;
+    bool arg5 = (bool) false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12306,7 +12306,7 @@ static PyObject *_wrap_DC_DrawBitmapPoint(PyObject *, PyObject *args, PyObject *
     wxDC *arg1 = (wxDC *) 0 ;
     wxBitmap *arg2 = 0 ;
     wxPoint *arg3 = 0 ;
-    bool arg4 = (bool) False ;
+    bool arg4 = (bool) false ;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -12354,7 +12354,7 @@ static PyObject *_wrap_DC_DrawText(PyObject *, PyObject *args, PyObject *kwargs)
     wxString *arg2 = 0 ;
     int arg3 ;
     int arg4 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12369,7 +12369,7 @@ static PyObject *_wrap_DC_DrawText(PyObject *, PyObject *args, PyObject *kwargs)
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -12402,7 +12402,7 @@ static PyObject *_wrap_DC_DrawTextPoint(PyObject *, PyObject *args, PyObject *kw
     wxDC *arg1 = (wxDC *) 0 ;
     wxString *arg2 = 0 ;
     wxPoint *arg3 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -12417,7 +12417,7 @@ static PyObject *_wrap_DC_DrawTextPoint(PyObject *, PyObject *args, PyObject *kw
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -12452,7 +12452,7 @@ static PyObject *_wrap_DC_DrawRotatedText(PyObject *, PyObject *args, PyObject *
     int arg3 ;
     int arg4 ;
     double arg5 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -12468,7 +12468,7 @@ static PyObject *_wrap_DC_DrawRotatedText(PyObject *, PyObject *args, PyObject *
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -12504,7 +12504,7 @@ static PyObject *_wrap_DC_DrawRotatedTextPoint(PyObject *, PyObject *args, PyObj
     wxString *arg2 = 0 ;
     wxPoint *arg3 = 0 ;
     double arg4 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxPoint temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -12520,7 +12520,7 @@ static PyObject *_wrap_DC_DrawRotatedTextPoint(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -12561,7 +12561,7 @@ static PyObject *_wrap_DC_Blit(PyObject *, PyObject *args, PyObject *kwargs) {
     int arg7 ;
     int arg8 ;
     int arg9 = (int) wxCOPY ;
-    bool arg10 = (bool) False ;
+    bool arg10 = (bool) false ;
     int arg11 = (int) -1 ;
     int arg12 = (int) -1 ;
     bool result;
@@ -12638,7 +12638,7 @@ static PyObject *_wrap_DC_BlitPointSize(PyObject *, PyObject *args, PyObject *kw
     wxDC *arg4 = (wxDC *) 0 ;
     wxPoint *arg5 = 0 ;
     int arg6 = (int) wxCOPY ;
-    bool arg7 = (bool) False ;
+    bool arg7 = (bool) false ;
     wxPoint const &arg8_defvalue = wxDefaultPosition ;
     wxPoint *arg8 = (wxPoint *) &arg8_defvalue ;
     bool result;
@@ -12964,7 +12964,7 @@ static PyObject *_wrap_DC_DrawLabel(PyObject *, PyObject *args, PyObject *kwargs
     wxRect *arg3 = 0 ;
     int arg4 = (int) wxALIGN_LEFT|wxALIGN_TOP ;
     int arg5 = (int) -1 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxRect temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -12981,7 +12981,7 @@ static PyObject *_wrap_DC_DrawLabel(PyObject *, PyObject *args, PyObject *kwargs
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -13026,7 +13026,7 @@ static PyObject *_wrap_DC_DrawImageLabel(PyObject *, PyObject *args, PyObject *k
     int arg5 = (int) wxALIGN_LEFT|wxALIGN_TOP ;
     int arg6 = (int) -1 ;
     wxRect result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxRect temp4 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -13044,7 +13044,7 @@ static PyObject *_wrap_DC_DrawImageLabel(PyObject *, PyObject *args, PyObject *k
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxBitmap,
     SWIG_POINTER_EXCEPTION | 0)) == -1)
@@ -13159,7 +13159,7 @@ static PyObject *_wrap_DC_StartDoc(PyObject *, PyObject *args, PyObject *kwargs)
     wxDC *arg1 = (wxDC *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13172,7 +13172,7 @@ static PyObject *_wrap_DC_StartDoc(PyObject *, PyObject *args, PyObject *kwargs)
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13634,7 +13634,7 @@ static PyObject *_wrap_DC_GetTextExtent(PyObject *, PyObject *args, PyObject *kw
     wxString *arg2 = 0 ;
     int *arg3 = (int *) 0 ;
     int *arg4 = (int *) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     int temp3 ;
     int res3 = 0 ;
     int temp4 ;
@@ -13653,7 +13653,7 @@ static PyObject *_wrap_DC_GetTextExtent(PyObject *, PyObject *args, PyObject *kw
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13690,7 +13690,7 @@ static PyObject *_wrap_DC_GetFullTextExtent(PyObject *, PyObject *args, PyObject
     int *arg5 = (int *) 0 ;
     int *arg6 = (int *) 0 ;
     wxFont *arg7 = (wxFont *) NULL ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     int temp3 ;
     int res3 = 0 ;
     int temp4 ;
@@ -13716,7 +13716,7 @@ static PyObject *_wrap_DC_GetFullTextExtent(PyObject *, PyObject *args, PyObject
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         if ((SWIG_ConvertPtr(obj2,(void **)(&arg7),SWIGTYPE_p_wxFont,
@@ -13760,7 +13760,7 @@ static PyObject *_wrap_DC_GetMultiLineTextExtent(PyObject *, PyObject *args, PyO
     int *arg4 = (int *) 0 ;
     int *arg5 = (int *) 0 ;
     wxFont *arg6 = (wxFont *) NULL ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     int temp3 ;
     int res3 = 0 ;
     int temp4 ;
@@ -13783,7 +13783,7 @@ static PyObject *_wrap_DC_GetMultiLineTextExtent(PyObject *, PyObject *args, PyO
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     if (obj2) {
         if ((SWIG_ConvertPtr(obj2,(void **)(&arg6),SWIGTYPE_p_wxFont,
@@ -13822,7 +13822,7 @@ static PyObject *_wrap_DC_GetPartialTextExtents(PyObject *, PyObject *args, PyOb
     wxDC *arg1 = (wxDC *) 0 ;
     wxString *arg2 = 0 ;
     wxArrayInt result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13835,7 +13835,7 @@ static PyObject *_wrap_DC_GetPartialTextExtents(PyObject *, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -16492,7 +16492,7 @@ static PyObject *_wrap_new_MetaFile(PyObject *, PyObject *args, PyObject *kwargs
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
     wxMetaFile *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "filename", NULL 
@@ -16503,7 +16503,7 @@ static PyObject *_wrap_new_MetaFile(PyObject *, PyObject *args, PyObject *kwargs
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = True;
+            temp1 = true;
         }
     }
     {
@@ -16755,8 +16755,8 @@ static PyObject *_wrap_new_MetaFileDC(PyObject *, PyObject *args, PyObject *kwar
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxMetaFileDC *result;
-    bool temp1 = False ;
-    bool temp4 = False ;
+    bool temp1 = false ;
+    bool temp4 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -16770,7 +16770,7 @@ static PyObject *_wrap_new_MetaFileDC(PyObject *, PyObject *args, PyObject *kwar
         {
             arg1 = wxString_in_helper(obj0);
             if (arg1 == NULL) SWIG_fail;
-            temp1 = True;
+            temp1 = true;
         }
     }
     if (obj1) {
@@ -16785,7 +16785,7 @@ static PyObject *_wrap_new_MetaFileDC(PyObject *, PyObject *args, PyObject *kwar
         {
             arg4 = wxString_in_helper(obj3);
             if (arg4 == NULL) SWIG_fail;
-            temp4 = True;
+            temp4 = true;
         }
     }
     {
@@ -16895,7 +16895,7 @@ static PyObject *_wrap_new_ImageList(PyObject *, PyObject *args, PyObject *kwarg
     PyObject *resultobj;
     int arg1 ;
     int arg2 ;
-    int arg3 = (int) True ;
+    int arg3 = (int) true ;
     int arg4 = (int) 1 ;
     wxImageList *result;
     PyObject * obj0 = 0 ;
@@ -17146,7 +17146,7 @@ static PyObject *_wrap_ImageList_Draw(PyObject *, PyObject *args, PyObject *kwar
     int arg4 ;
     int arg5 ;
     int arg6 = (int) wxIMAGELIST_DRAW_NORMAL ;
-    bool arg7 = (bool) (bool)False ;
+    bool arg7 = (bool) (bool)false ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -18234,7 +18234,7 @@ static PyObject *_wrap_ColourDatabase_Find(PyObject *, PyObject *args, PyObject 
     wxColourDatabase *arg1 = (wxColourDatabase *) 0 ;
     wxString *arg2 = 0 ;
     wxColour result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -18247,7 +18247,7 @@ static PyObject *_wrap_ColourDatabase_Find(PyObject *, PyObject *args, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -18319,7 +18319,7 @@ static PyObject *_wrap_ColourDatabase_AddColour(PyObject *, PyObject *args, PyOb
     wxColourDatabase *arg1 = (wxColourDatabase *) 0 ;
     wxString *arg2 = 0 ;
     wxColour *arg3 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     wxColour temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -18334,7 +18334,7 @@ static PyObject *_wrap_ColourDatabase_AddColour(PyObject *, PyObject *args, PyOb
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         arg3 = &temp3;
@@ -18369,7 +18369,7 @@ static PyObject *_wrap_ColourDatabase_Append(PyObject *, PyObject *args, PyObjec
     int arg3 ;
     int arg4 ;
     int arg5 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -18385,7 +18385,7 @@ static PyObject *_wrap_ColourDatabase_Append(PyObject *, PyObject *args, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = (int)SWIG_As_int(obj2); 
     if (PyErr_Occurred()) SWIG_fail;
@@ -18458,12 +18458,12 @@ static PyObject *_wrap_FontList_FindOrCreateFont(PyObject *, PyObject *args, PyO
     int arg3 ;
     int arg4 ;
     int arg5 ;
-    bool arg6 = (bool) False ;
+    bool arg6 = (bool) false ;
     wxString const &arg7_defvalue = wxPyEmptyString ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     int arg8 = (int) wxFONTENCODING_DEFAULT ;
     wxFont *result;
-    bool temp7 = False ;
+    bool temp7 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -18495,7 +18495,7 @@ static PyObject *_wrap_FontList_FindOrCreateFont(PyObject *, PyObject *args, PyO
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     if (obj7) {

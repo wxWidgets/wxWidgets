@@ -7601,7 +7601,7 @@ class Window(EvtHandler):
         layout sizer object is already owned by the window, it will be deleted
         if the deleteOld parameter is true. Note that this function will also
         call SetAutoLayout implicitly with a True parameter if the sizer is
-        non-NoneL and False otherwise.
+        non-None, and False otherwise.
         """
         return _core_.Window_SetSizer(*args, **kwargs)
 
@@ -9400,7 +9400,7 @@ class Sizer(Object):
 
     def Show(*args, **kwargs):
         """
-        Show(self, item, bool show=True, bool recursive=False) -> bool
+        Show(self, item, bool show=True, bool recursive=false) -> bool
 
         Shows or hides an item managed by the sizer.  To make a sizer item
         disappear or reappear, use Show followed by `Layout`.  The *item*
@@ -9425,7 +9425,7 @@ class Sizer(Object):
         """
         A convenience method for Show(item, False, recursive).
         """
-        return self.Show(item, False, recursive)
+        return self.Show(item, false, recursive)
 
     def ShowItems(*args, **kwargs):
         """

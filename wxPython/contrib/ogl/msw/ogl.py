@@ -1223,11 +1223,11 @@ class PseudoMetaFile(_core.Object):
         return _ogl.PseudoMetaFile_DestroyClippingRect(*args, **kwargs)
 
     def SetPen(*args, **kwargs):
-        """SetPen(self, wxPen pen, bool isOutline=FALSE)"""
+        """SetPen(self, wxPen pen, bool isOutline=False)"""
         return _ogl.PseudoMetaFile_SetPen(*args, **kwargs)
 
     def SetBrush(*args, **kwargs):
-        """SetBrush(self, wxBrush brush, bool isFill=FALSE)"""
+        """SetBrush(self, wxBrush brush, bool isFill=False)"""
         return _ogl.PseudoMetaFile_SetBrush(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
@@ -1290,7 +1290,7 @@ class PyRectangleShape(PyShape):
         return _ogl.PyRectangleShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyRectangleShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -1452,7 +1452,7 @@ class PyControlPoint(PyRectangleShape):
         return _ogl.PyControlPoint_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyControlPoint_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -1622,7 +1622,7 @@ class PyBitmapShape(PyRectangleShape):
         return _ogl.PyBitmapShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyBitmapShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -1848,7 +1848,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_SetDrawnBackgroundMode(*args, **kwargs)
 
     def SetDrawnBrush(*args, **kwargs):
-        """SetDrawnBrush(self, wxBrush pen, bool isOutline=FALSE)"""
+        """SetDrawnBrush(self, wxBrush pen, bool isOutline=False)"""
         return _ogl.PyDrawnShape_SetDrawnBrush(*args, **kwargs)
 
     def SetDrawnFont(*args, **kwargs):
@@ -1856,7 +1856,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_SetDrawnFont(*args, **kwargs)
 
     def SetDrawnPen(*args, **kwargs):
-        """SetDrawnPen(self, wxPen pen, bool isOutline=FALSE)"""
+        """SetDrawnPen(self, wxPen pen, bool isOutline=False)"""
         return _ogl.PyDrawnShape_SetDrawnPen(*args, **kwargs)
 
     def SetDrawnTextColour(*args, **kwargs):
@@ -1888,7 +1888,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyDrawnShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -2127,7 +2127,7 @@ class PyCompositeShape(PyRectangleShape):
         return _ogl.PyCompositeShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyCompositeShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -2289,7 +2289,7 @@ class PyDividedShape(PyRectangleShape):
         return _ogl.PyDividedShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyDividedShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -2543,7 +2543,7 @@ class PyDivisionShape(PyCompositeShape):
         return _ogl.PyDivisionShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyDivisionShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -2693,7 +2693,7 @@ class PyEllipseShape(PyShape):
         return _ogl.PyEllipseShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyEllipseShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -2843,7 +2843,7 @@ class PyCircleShape(PyEllipseShape):
         return _ogl.PyCircleShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyCircleShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -3276,7 +3276,7 @@ class PyLineShape(PyShape):
         return _ogl.PyLineShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyLineShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -3470,7 +3470,7 @@ class PyPolygonShape(PyShape):
         return _ogl.PyPolygonShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyPolygonShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):
@@ -3624,7 +3624,7 @@ class PyTextShape(PyRectangleShape):
         return _ogl.PyTextShape_base_OnDrawContents(*args, **kwargs)
 
     def base_OnDrawBranches(*args, **kwargs):
-        """base_OnDrawBranches(self, DC dc, bool erase=FALSE)"""
+        """base_OnDrawBranches(self, DC dc, bool erase=False)"""
         return _ogl.PyTextShape_base_OnDrawBranches(*args, **kwargs)
 
     def base_OnMoveLinks(*args, **kwargs):

@@ -325,15 +325,15 @@ class LEDNumberCtrl(_core.Control):
         return _gizmos.LEDNumberCtrl_GetValue(*args, **kwargs)
 
     def SetAlignment(*args, **kwargs):
-        """SetAlignment(self, int Alignment, bool Redraw=true)"""
+        """SetAlignment(self, int Alignment, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetAlignment(*args, **kwargs)
 
     def SetDrawFaded(*args, **kwargs):
-        """SetDrawFaded(self, bool DrawFaded, bool Redraw=true)"""
+        """SetDrawFaded(self, bool DrawFaded, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetDrawFaded(*args, **kwargs)
 
     def SetValue(*args, **kwargs):
-        """SetValue(self, String Value, bool Redraw=true)"""
+        """SetValue(self, String Value, bool Redraw=True)"""
         return _gizmos.LEDNumberCtrl_SetValue(*args, **kwargs)
 
 

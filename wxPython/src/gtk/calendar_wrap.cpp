@@ -1291,7 +1291,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *, PyObject *args, PyObject *kw
     wxCalendarCtrl *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = False ;
+    bool temp7 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1339,7 +1339,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *, PyObject *args, PyObject *kw
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     {
@@ -1405,7 +1405,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *, PyObject *args, PyObject 
     bool result;
     wxPoint temp5 ;
     wxSize temp6 ;
-    bool temp8 = False ;
+    bool temp8 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -1454,7 +1454,7 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *, PyObject *args, PyObject 
         {
             arg8 = wxString_in_helper(obj7);
             if (arg8 == NULL) SWIG_fail;
-            temp8 = True;
+            temp8 = true;
         }
     }
     {
@@ -1737,7 +1737,7 @@ static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *, PyObject *args, PyO
 static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) True ;
+    bool arg2 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1768,7 +1768,7 @@ static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *, PyObject *args,
 static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) True ;
+    bool arg2 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -1799,7 +1799,7 @@ static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *, PyObject *args
 static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
-    bool arg2 = (bool) True ;
+    bool arg2 = (bool) true ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {

@@ -319,7 +319,7 @@ static swig_type_info *swig_types[18];
 // Some conversion helpers
 static wxVariant _PyObj2Variant(PyObject* value);
 static bool  _PyObj2Variant(PyObject* value, wxVariant& wv);
-static PyObject* _Variant2PyObj(wxVariant& value, bool useNone=False);
+static PyObject* _Variant2PyObj(wxVariant& value, bool useNone=false);
 static wxString  _VARTYPEname(VARTYPE vt);
 
 // Check if an exception has been raised  (blocking threads)
@@ -740,7 +740,7 @@ public:
             // conversion errors for now
             wxVariant wv;
             MSWVariantToVariant(rv, wv);
-            rval = _Variant2PyObj(wv, True);
+            rval = _Variant2PyObj(wv, true);
             VariantClear(&rv);
 
             if (func.hasOut) {
@@ -757,7 +757,7 @@ public:
                     const wxParamX &px = func.params[i];
                     if (px.IsOut()) {
                         MSWVariantToVariant(va, wv);
-                        PyObject* obj = _Variant2PyObj(wv, True);
+                        PyObject* obj = _Variant2PyObj(wv, true);
                         PyList_Append(lst, obj);
                     }
                 }
@@ -808,7 +808,7 @@ void wxActiveXEvent__preCallInit(wxActiveXEvent *self,PyObject *pyself){
             Py_DECREF(pList);
             for (int i=0; i<self->ParamCount(); i+=1) {
                 PyObject* name = PyString_FromString((char*)(const char*)self->ParamName(i).mb_str());
-                PyObject* val = _Variant2PyObj((*self)[i], True);
+                PyObject* val = _Variant2PyObj((*self)[i], true);
                 PyObject_SetAttr(pyself, name, val);
                 PyList_Append(pList, name);
                 Py_DECREF(val);
@@ -1247,7 +1247,7 @@ static PyObject *_wrap_new_CLSID(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     CLSID *result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "id", NULL 
@@ -1257,7 +1257,7 @@ static PyObject *_wrap_new_CLSID(PyObject *, PyObject *args, PyObject *kwargs) {
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2231,7 +2231,7 @@ static PyObject *_wrap_new_ActiveXWindow(PyObject *, PyObject *args, PyObject *k
     wxActiveXWindow *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = False ;
+    bool temp7 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2277,7 +2277,7 @@ static PyObject *_wrap_new_ActiveXWindow(PyObject *, PyObject *args, PyObject *k
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     {
@@ -2452,7 +2452,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXPropDesc__SWIG_1(PyObject *, PyObject 
     wxActiveXWindow *arg1 = (wxActiveXWindow *) 0 ;
     wxString *arg2 = 0 ;
     wxPropX *result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     
@@ -2462,7 +2462,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXPropDesc__SWIG_1(PyObject *, PyObject 
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2603,7 +2603,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXMethodDesc__SWIG_1(PyObject *, PyObjec
     wxActiveXWindow *arg1 = (wxActiveXWindow *) 0 ;
     wxString *arg2 = 0 ;
     wxFuncX *result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     
@@ -2613,7 +2613,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXMethodDesc__SWIG_1(PyObject *, PyObjec
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2785,7 +2785,7 @@ static PyObject *_wrap_ActiveXWindow_SetAXProp(PyObject *, PyObject *args, PyObj
     wxActiveXWindow *arg1 = (wxActiveXWindow *) 0 ;
     wxString *arg2 = 0 ;
     PyObject *arg3 = (PyObject *) 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2799,7 +2799,7 @@ static PyObject *_wrap_ActiveXWindow_SetAXProp(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = obj2;
     {
@@ -2829,7 +2829,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXProp(PyObject *, PyObject *args, PyObj
     wxActiveXWindow *arg1 = (wxActiveXWindow *) 0 ;
     wxString *arg2 = 0 ;
     PyObject *result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -2842,7 +2842,7 @@ static PyObject *_wrap_ActiveXWindow_GetAXProp(PyObject *, PyObject *args, PyObj
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -2872,7 +2872,7 @@ static PyObject *_wrap_ActiveXWindow__CallAXMethod(PyObject *, PyObject *args) {
     wxString *arg2 = 0 ;
     PyObject *arg3 = (PyObject *) 0 ;
     PyObject *result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -2883,7 +2883,7 @@ static PyObject *_wrap_ActiveXWindow__CallAXMethod(PyObject *, PyObject *args) {
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     arg3 = obj2;
     {
@@ -2919,7 +2919,7 @@ static PyObject *_wrap_RegisterActiveXEvent(PyObject *, PyObject *args, PyObject
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxEventType result;
-    bool temp1 = False ;
+    bool temp1 = false ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "eventName", NULL 
@@ -2929,7 +2929,7 @@ static PyObject *_wrap_RegisterActiveXEvent(PyObject *, PyObject *args, PyObject
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
-        temp1 = True;
+        temp1 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3063,7 +3063,7 @@ static PyObject *_wrap_new_IEHtmlWindowBase(PyObject *, PyObject *args, PyObject
     wxIEHtmlWindowBase *result;
     wxPoint temp4 ;
     wxSize temp5 ;
-    bool temp7 = False ;
+    bool temp7 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -3109,7 +3109,7 @@ static PyObject *_wrap_new_IEHtmlWindowBase(PyObject *, PyObject *args, PyObject
         {
             arg7 = wxString_in_helper(obj6);
             if (arg7 == NULL) SWIG_fail;
-            temp7 = True;
+            temp7 = true;
         }
     }
     {
@@ -3139,7 +3139,7 @@ static PyObject *_wrap_IEHtmlWindowBase_SetCharset(PyObject *, PyObject *args, P
     PyObject *resultobj;
     wxIEHtmlWindowBase *arg1 = (wxIEHtmlWindowBase *) 0 ;
     wxString *arg2 = 0 ;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3152,7 +3152,7 @@ static PyObject *_wrap_IEHtmlWindowBase_SetCharset(PyObject *, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3181,7 +3181,7 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadString(PyObject *, PyObject *args, P
     wxIEHtmlWindowBase *arg1 = (wxIEHtmlWindowBase *) 0 ;
     wxString *arg2 = 0 ;
     bool result;
-    bool temp2 = False ;
+    bool temp2 = false ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -3194,7 +3194,7 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadString(PyObject *, PyObject *args, P
     {
         arg2 = wxString_in_helper(obj1);
         if (arg2 == NULL) SWIG_fail;
-        temp2 = True;
+        temp2 = true;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -3239,15 +3239,15 @@ static PyObject *_wrap_IEHtmlWindowBase_LoadStream(PyObject *, PyObject *args, P
     {
         if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyInputStream"))) {
             arg2 = temp2->m_wxis;
-            created2 = False;
+            created2 = false;
         } else {
             PyErr_Clear();  // clear the failure of the wxPyConvert above
-            arg2 = wxPyCBInputStream_create(obj1, False);
+            arg2 = wxPyCBInputStream_create(obj1, false);
             if (arg2 == NULL) {
                 PyErr_SetString(PyExc_TypeError, "Expected wxInputStream or Python file-like object.");
                 SWIG_fail;
             }
-            created2 = True;
+            created2 = true;
         }
     }
     {

@@ -276,28 +276,28 @@ static swig_type_info *swig_types[23];
 #endif /* __cplusplus */
 
 
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_signed_SS_char PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_unsigned_SS_char PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_short PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_unsigned_SS_short PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_int PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_long PyInt_FromLong
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_float PyFloat_FromDouble
 /*@@*/
-/*@/opt/swig/share/swig/1.3.22/python/pymacros.swg,63,SWIG_define@*/
+/*@c:\\PROJECTS\\SWIG-cvs\\Lib\\python\\pymacros.swg,63,SWIG_define@*/
 #define SWIG_From_double PyFloat_FromDouble
 /*@@*/
 
