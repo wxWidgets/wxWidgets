@@ -54,14 +54,11 @@ get the next matching file.
 
 {\it flags} is reserved for future use.
 
-The returned filename is a pointer to static memory so should
-not be freed.
-
 For example:
 
 \begin{verbatim}
   wxString f = wxFindFirstFile("/home/project/*.*");
-  while (f != "")
+  while ( !f.IsEmpty() )
   {
     ...
     f = wxFindNextFile();
@@ -356,9 +353,6 @@ if (s)
   ...
 }
 \end{verbatim}
-
-Remember that the returned pointer is temporary and should be copied
-if other wxWindows calls will be made before the value is to be used.
 
 \wxheading{Include files}
 
