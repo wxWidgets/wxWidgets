@@ -1633,6 +1633,8 @@ wxString wxGetOSDirectory()
     wxChar buf[256];
     GetWindowsDirectory(buf, 256);
     return wxString(buf);
+#elif defined(__WXMAC__)
+    return wxMacFindFolder(kOnSystemDisk, 'macs', false);
 #else
     return wxEmptyString;
 #endif
