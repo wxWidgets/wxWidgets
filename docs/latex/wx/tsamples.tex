@@ -132,68 +132,6 @@ Using the menu entries, you may also dial or hang up the line if you have a
 modem attached and (this only makes sense for Windows) list the available
 connections.
 
-\subsection{Dynamic sample}\label{sampledynamic}
-
-This sample is a very small sample that demonstrates the use of the
-\helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
-should be used whenever it is not known at compile time, which control
-will receive which event or which controls are actually going to be in
-a dialog or frame. This is most typically the case for any scripting
-language that would work as a wrapper for wxWindows or programs where
-forms or similar datagrams can be created by the uses.
-
-See also the \helpref{event sample}{sampleevent}
-
-\subsection{Event sample}\label{sampleevent}
-
-The event sample demonstrates various features of the wxWindows events. It
-shows using dynamic events and connecting/disconnecting the event handlers
-during the run time and also using 
-\helpref{PushEventHandler()}{wxwindowpusheventhandler} and
-\helpref{PopEventHandler()}{wxwindowpopeventhandler}.
-
-It replaces the old dynamic sample.
-
-\subsection{Exec sample}\label{sampleexec}
-
-The exec sample demonstrates the \helpref{wxExecute}{wxexecute} and 
-\helpref{wxShell}{wxshell} functions. Both of them are used to execute the
-external programs and the sample shows how to do this synchronously (waiting
-until the program terminates) or asynchronously (notification will come later).
-
-It also shows how to capture the output of the child process in both
-synchronous and asynchronous cases and how to kill the processes with 
-\helpref{wxProcess::Kill}{wxprocesskill} and test for their existence with 
-\helpref{wxProcess::Exists}{wxprocessexists}.
-
-\subsection{Scroll subwindow sample}\label{samplescrollsub}
-
-This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
-class including placing subwindows into it and drawing simple graphics. It uses the 
-\helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
-of scrolling does not show in the scrolled window itself, but in one of its subwindows.
-
-Additionally, this samples demonstrates how to optimize drawing operations in wxWindows,
-in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method with 
-the aim to prevent unnecessary drawing in the window and thus reducing or removing 
-flicker on screen.
-
-\subsection{Rotate sample}\label{samplerotate}
-
-This is a simple example which demonstrates how to rotate an image with
-the \helpref{wxImage::Rotate}{wximagerotate} method. The rotation can
-be done without interpolation (left mouse button) which will be faster,
-or with interpolation (right mouse button) which is slower but gives
-better results.
-
-\subsection{Font sample}\label{samplefont}
-
-The font sample demonstrates \helpref{wxFont}{wxfont}, 
-\helpref{wxFontEnumerator}{wxfontenumerator} and 
-\helpref{wxFontMapper}{wxfontmapper} classes. It allows you to see the fonts
-available (to wxWindows) on the computer and shows all characters of the
-chosen font as well.
-
 \subsection{DnD sample}\label{samplednd}
 
 This sample shows both clipboard and drag and drop in action. It is quite non
@@ -231,6 +169,48 @@ programs as well - try Write/Wordpad, for example).
 
 Take a look at DnDShapeDataObject class to see how you may use 
 \helpref{wxDataObject}{wxdataobject} to achieve this.
+
+\subsection{Dynamic sample}\label{sampledynamic}
+
+This sample is a very small sample that demonstrates the use of the
+\helpref{wxEvtHandler::Connect}{wxevthandlerconnect} method. This method
+should be used whenever it is not known at compile time, which control
+will receive which event or which controls are actually going to be in
+a dialog or frame. This is most typically the case for any scripting
+language that would work as a wrapper for wxWindows or programs where
+forms or similar datagrams can be created by the uses.
+
+See also the \helpref{event sample}{sampleevent}
+
+\subsection{Event sample}\label{sampleevent}
+
+The event sample demonstrates various features of the wxWindows events. It
+shows using dynamic events and connecting/disconnecting the event handlers
+during the run time and also using 
+\helpref{PushEventHandler()}{wxwindowpusheventhandler} and
+\helpref{PopEventHandler()}{wxwindowpopeventhandler}.
+
+It replaces the old dynamic sample.
+
+\subsection{Exec sample}\label{sampleexec}
+
+The exec sample demonstrates the \helpref{wxExecute}{wxexecute} and 
+\helpref{wxShell}{wxshell} functions. Both of them are used to execute the
+external programs and the sample shows how to do this synchronously (waiting
+until the program terminates) or asynchronously (notification will come later).
+
+It also shows how to capture the output of the child process in both
+synchronous and asynchronous cases and how to kill the processes with 
+\helpref{wxProcess::Kill}{wxprocesskill} and test for their existence with 
+\helpref{wxProcess::Exists}{wxprocessexists}.
+
+\subsection{Font sample}\label{samplefont}
+
+The font sample demonstrates \helpref{wxFont}{wxfont}, 
+\helpref{wxFontEnumerator}{wxfontenumerator} and 
+\helpref{wxFontMapper}{wxfontmapper} classes. It allows you to see the fonts
+available (to wxWindows) on the computer and shows all characters of the
+chosen font as well.
 
 \subsection{Grid sample}\label{samplegrid}
 
@@ -311,6 +291,26 @@ the menu.
 The sample also provides some timings for adding/deleting/sorting a lot of
 (several thousands) controls into the control.
 
+\subsection{Rotate sample}\label{samplerotate}
+
+This is a simple example which demonstrates how to rotate an image with
+the \helpref{wxImage::Rotate}{wximagerotate} method. The rotation can
+be done without interpolation (left mouse button) which will be faster,
+or with interpolation (right mouse button) which is slower but gives
+better results.
+
+\subsection{Scroll subwindow sample}\label{samplescrollsub}
+
+This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
+class including placing subwindows into it and drawing simple graphics. It uses the 
+\helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
+of scrolling does not show in the scrolled window itself, but in one of its subwindows.
+
+Additionally, this samples demonstrates how to optimize drawing operations in wxWindows,
+in particular using the \helpref{wxWindow::IsExposed}{wxwindowisexposed} method with 
+the aim to prevent unnecessary drawing in the window and thus reducing or removing 
+flicker on screen.
+
 \subsection{Sockets sample}\label{samplesockets}
 
 The sockets sample demonstrates how to use the communication facilities
@@ -389,7 +389,7 @@ text ctrls, which is useful for testing if these stastitics actually are correct
 Thirdly, on platforms which support it, the sample will offer to copy text to the 
 \helpref{wxClipboard}{wxclipboard} and to paste text from it. The GTK version will
 use the so called PRIMARY SELECTION, which is the pseudo clipboard under X and
-best known from pasting text to the XTerm program. 
+best known from pasting text to the XTerm program.
 
 Last not least: some of the text controls have tooltips and the sample also shows
 how tooltips can be centrally disabled and their latency controlled.
