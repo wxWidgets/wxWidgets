@@ -2922,6 +2922,9 @@ if test "$TOOLKIT" != "MSW" ; then
     fi
     if test "$wxUSE_ODBC" != "no" ; then
         AC_DEFINE(wxUSE_ODBC)
+        if test "$wxUSE_ODBC" = "builtin" ; then
+            AC_DEFINE(wxUSE_BUILTIN_IODBC)
+        fi
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
     
         dnl is this still necessary in 2.5?

@@ -198,6 +198,7 @@
  * Use iODBC
  */
 #define wxUSE_ODBC 0
+#define wxUSE_BUILTIN_IODBC 0
 #define wxODBC_FWD_ONLY_CURSORS 1
 #define wxODBC_BACKWARD_COMPATABILITY 0
 /*

@@ -81,10 +81,15 @@
         #include <windows.h>
         #include "wx/msw/winundef.h"
     #endif
-    // Use the ones from the library
     extern "C" {
+    #if defined(wxUSE_BUILTIN_IODBC) && wxUSE_BUILTIN_IODBC
+        // Use the ones from the library
+        #include "wx/isql.h"
+        #include "wx/isqlext.h"
+    #else
         #include <sql.h>
         #include <sqlext.h>
+    #endif
     }
 #endif
 
