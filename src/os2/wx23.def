@@ -12858,8 +12858,6 @@ EXPORTS
       Create__12wxStaticTextFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
       ;wxStaticText::sm_classwxStaticText
       sm_classwxStaticText__12wxStaticText
-      ;wxStaticText::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
-      OnCtlColor__12wxStaticTextFUlT1UiT3PvT5
       ;wxConstructorForwxStaticText()
       wxConstructorForwxStaticText__Fv
       __vft12wxStaticText8wxObject
