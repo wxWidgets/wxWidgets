@@ -9,18 +9,18 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "controls.h"
+    #pragma implementation "controls.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
 #include "wx/spinbutt.h"
@@ -28,10 +28,7 @@
 #include "wx/imaglist.h"
 #include "wx/spinbutt.h"
 #include "wx/clipbrd.h"
-
-#ifdef __WXGTK__
 #include "wx/tooltip.h"
-#endif
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #define USE_XPM
@@ -127,7 +124,7 @@ class MyFrame: public wxFrame
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    bool OnClose(void) { return TRUE; }
+    void OnIdle( wxIdleEvent& event );
 
   DECLARE_EVENT_TABLE()
 };
@@ -400,9 +397,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
-#ifdef __WXGTK__
   m_listbox->SetToolTip( "This is a list box" );
-#endif
+
 //  m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -410,16 +406,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
-#ifdef __WXGTK__
   button->SetToolTip( "Press here to set italic font" );
-#endif
 
 //  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
-#ifdef __WXGTK__
   m_checkbox->SetToolTip( "Click here to disable the listbox" );
-#endif
   m_notebook->AddPage(panel, "wxList", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
@@ -453,22 +445,29 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
-  m_textentry = new MyTextCtrl( panel, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(320,28));
+  m_textentry = new MyTextCtrl( panel, -1, "Write text here.",
+                                wxPoint(10,10), wxSize(320,28),
+                                wxTE_PROCESS_ENTER);
   (*m_textentry) << " More text.";
 //  m_textentry->SetBackgroundColour("wheat");
-  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
+  m_multitext = new MyTextCtrl( panel, ID_TEXT, "And here.",
+                                wxPoint(10,50), wxSize(320,80),
+                                wxTE_MULTILINE );
   (*m_multitext) << " More text."
                  << "\nPress Fn keys to test different wxTextCtrl functions";
 //  m_multitext->SetBackgroundColour("wheat");
-  (void)new wxStaticBox( panel, -1, "Move cursor to the end of:",
+  (void)new MyTextCtrl( panel, -1, "This one is with wxTE_PROCESS_TAB style.",
+                        wxPoint(10,140), wxSize(320,80), wxTE_MULTILINE | wxTE_PROCESS_TAB);
+
+  (void)new wxStaticBox( panel, -1, "&Move cursor to the end of:",
                          wxPoint(345, 0), wxSize(160, 100) );
-  (void)new wxButton(panel, ID_MOVE_END_ENTRY, "Text entry",
+  (void)new wxButton(panel, ID_MOVE_END_ENTRY, "Text &entry",
                      wxPoint(370, 20), wxSize(110, 30));
-  (void)new wxButton(panel, ID_MOVE_END_ZONE, "Text zone",
+  (void)new wxButton(panel, ID_MOVE_END_ZONE, "Text &zone",
                      wxPoint(370, 60), wxSize(110, 30));
-  (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,120), wxSize(160,100) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,140), wxSize(110,30) );
-  (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,180), wxSize(110,30) );
+  (void)new wxStaticBox( panel, -1, "wx&Clipboard", wxPoint(345,120), wxSize(160,100) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "C&opy line 1", wxPoint(370,140), wxSize(110,30) );
+  (void)new wxButton( panel, ID_PASTE_TEXT, "&Paste text", wxPoint(370,180), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
 
   wxString choices2[] =
@@ -480,8 +479,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   panel = new wxPanel(m_notebook);
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
-  m_radio = new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
-//  m_radio->SetBackgroundColour("wheat");
+  (void)new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), 2, choices2, 1, wxRA_SPECIFY_ROWS );
   m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), 5, choices, 2, wxRA_SPECIFY_COLS );
 //  m_radio->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
@@ -862,12 +860,15 @@ MyPanel::~MyPanel()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
     EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
+       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {
-  (void)new MyPanel( this, 10, 10, 300, 100 );
+    CreateStatusBar();
+
+    (void)new MyPanel( this, 10, 10, 300, 100 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
@@ -879,4 +880,28 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "This is a control sample", "About Controls", wxOK );
   dialog.ShowModal();
+}
+
+void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
+{
+    // track the window which has the focus in the status bar
+    static wxWindow *s_windowFocus = (wxWindow *)NULL;
+    wxWindow *focus = wxWindow::FindFocus();
+    if ( focus && (focus != s_windowFocus) )
+    {
+        s_windowFocus = focus;
+
+        wxString msg;
+        msg.Printf("Focus: wxWindow = %p"
+#ifdef __WXMSW__
+                   ", HWND = %08x"
+#endif // wxMSW
+                   , s_windowFocus
+#ifdef __WXMSW__
+                   , s_windowFocus->GetHWND()
+#endif // wxMSW
+                  );
+
+        SetStatusText(msg);
+    }
 }

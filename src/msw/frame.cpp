@@ -17,19 +17,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/frame.h"
-#include "wx/menu.h"
-#include "wx/app.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/settings.h"
-#include "wx/dcclient.h"
-#endif
+    #include "wx/setup.h"
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/app.h"
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
+#endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
 #include "wx/statusbr.h"
@@ -41,7 +41,7 @@
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR
-#include <wx/msw/statbr95.h>
+    #include <wx/msw/statbr95.h>
 #endif
 
 extern wxList wxModelessWindows;
@@ -63,9 +63,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 #endif
 
 #if wxUSE_NATIVE_STATUSBAR
-bool wxFrame::m_useNativeStatusBar = TRUE;
+    bool wxFrame::m_useNativeStatusBar = TRUE;
 #else
-bool wxFrame::m_useNativeStatusBar = FALSE;
+    bool wxFrame::m_useNativeStatusBar = FALSE;
 #endif
 
 wxFrame::wxFrame(void)
@@ -86,6 +86,10 @@ bool wxFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
+#if wxUSE_TOOLTIPS
+    m_hwndToolTip = 0;
+#endif
+
   if (!parent)
     wxTopLevelWindows.Append(this);
 

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_WINDOW_H_
@@ -66,6 +66,7 @@ class WXDLLEXPORT wxPen;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxValidator;
+class WXDLLEXPORT wxToolTip;
 
 #if wxUSE_DRAG_AND_DROP
 class WXDLLEXPORT wxDropTarget;
@@ -103,7 +104,7 @@ public:
     wxStringClientData( wxString &data ) { m_data = data; }
     void SetData( wxString &data ) { m_data = data; }
     wxString GetData() const { return m_data; }
-    
+
 private:
     wxString  m_data;
 };
@@ -261,6 +262,14 @@ public:
   wxDropTarget *GetDropTarget() const { return m_pDropTarget; }
 #endif
 
+  // tooltips
+    // create a tooltip with this text
+  void SetToolTip(const wxString &tip);
+    // pointer may be NULL to remove the tooltip
+  void SetToolTip(wxToolTip *tooltip);
+    // get the current tooltip (may return NULL if none)
+  wxToolTip* GetToolTip() const { return m_tooltip; }
+
   // Accept files for dragging
   virtual void DragAcceptFiles(bool accept);
 
@@ -371,7 +380,7 @@ public:
   // be searched)
   void PushEventHandler(wxEvtHandler *handler) ;
   wxEvtHandler *PopEventHandler(bool deleteHandler = FALSE) ;
-  
+
   // Close the window by calling OnClose, posting a deletion
   virtual bool Close(bool force = FALSE);
 
@@ -454,9 +463,6 @@ public:
 
   void OnEraseBackground(wxEraseEvent& event);
   void OnChar(wxKeyEvent& event);
-  void OnKeyDown(wxKeyEvent& event);
-  void OnKeyUp(wxKeyEvent& event);
-  void OnPaint(wxPaintEvent& event);
   void OnIdle(wxIdleEvent& event);
 
   // Does this window want to accept keyboard focus?
@@ -466,7 +472,7 @@ public:
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
-  
+
   // For implementation purposes - sometimes decorations make the client area
   // smaller
   virtual wxPoint GetClientAreaOrigin() const;
@@ -641,13 +647,13 @@ public:
 
   // Detach "Window" menu from menu bar so it doesn't get deleted
   void MSWDetachWindowMenu();
-  
+
   inline WXFARPROC MSWGetOldWndProc() const;
   inline void MSWSetOldWndProc(WXFARPROC proc);
 
   // Define for each class of dialog and control
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+                        WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   inline void SetShowing(bool show);
   inline bool IsUserEnabled() const;
@@ -669,8 +675,8 @@ public:
 protected:
   wxAcceleratorTable    m_acceleratorTable;
   int                   m_windowId;
-  long                  m_windowStyle; 			// Store the window's style
-  wxEvtHandler *        m_windowEventHandler; 	// Usually is 'this'
+  long                  m_windowStyle;                         // Store the window's style
+  wxEvtHandler *        m_windowEventHandler;         // Usually is 'this'
   wxLayoutConstraints * m_constraints;           // Constraints for this window
   wxList *              m_constraintsInvolvedIn; // List of constraints we're involved in
   wxSizer *             m_windowSizer;                       // Window's top-level sizer (if any)
@@ -682,7 +688,7 @@ protected:
   WXFARPROC             m_oldWndProc;
   bool                  m_useCtl3D;             // Using CTL3D for this control
 
-  bool                  m_inOnSize; 			// Protection against OnSize reentry
+  bool                  m_inOnSize;                         // Protection against OnSize reentry
 #ifndef _WX_WIN32__
   // Pointer to global memory, for EDIT controls that need
   // special treatment to reduce USER area consumption.
@@ -730,7 +736,7 @@ protected:
 #endif  //USE_DRAG_AND_DROP
 
 public:
-  WXHWND                m_hWnd; 			// MS Windows window handle
+  WXHWND                m_hWnd;                         // MS Windows window handle
   WXUINT                m_lastMsg;
   WXWPARAM              m_lastWParam;
   WXLPARAM              m_lastLParam;
@@ -753,6 +759,9 @@ public:
 private:
     // common part of all ctors
     void Init();
+
+    // the associated tooltip (may be NULL if none)
+    wxToolTip *m_tooltip;
 
     DECLARE_EVENT_TABLE()
 };
