@@ -54,16 +54,16 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /Fd..\..\lib\vc_dll\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivu" /Fd..\..\lib\vc_dll\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregex.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregex.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexu.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexu.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 DLL Universal Unicode Debug"
 
@@ -77,16 +77,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexd.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexud.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexud.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 DLL Universal Release"
 
@@ -146,16 +146,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /Fd..\..\lib\vc_dll\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /Fd..\..\lib\vc_dll\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswu" /Fd..\..\lib\vc_dll\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregex.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregex.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexu.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexu.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 DLL Unicode Debug"
 
@@ -169,16 +169,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_dll\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_dll\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexd.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexud.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_dll\wxregexud.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 DLL Release"
 
@@ -238,16 +238,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /Fd..\..\lib\vc_lib\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivu" /Fd..\..\lib\vc_lib\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregex.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregex.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexu.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexu.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 Universal Unicode Debug"
 
@@ -261,16 +261,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexd.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexud.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexud.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 Universal Release"
 
@@ -330,16 +330,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /Fd..\..\lib\vc_lib\wxregex.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /Fd..\..\lib\vc_lib\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MD /W1 /O1 /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswu" /Fd..\..\lib\vc_lib\wxregexu.pdb /D "WIN32" /D "_LIB" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregex.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregex.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexu.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexu.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 Unicode Debug"
 
@@ -353,16 +353,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\wxregex"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexd.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /GR /GX /MDd /W1 /Od /GR /GX /I "..\..\include" /I "..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\lib\vc_lib\wxregexud.pdb /D "WIN32" /D "_LIB" /D "_DEBUG" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexd.lib"
-# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexd.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexud.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\vc_lib\wxregexud.lib"
 
 !ELSEIF  "$(CFG)" == "wxregex - Win32 Release"
 

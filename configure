@@ -19502,8 +19502,8 @@ _ACEOF
 
 
     if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
-        { echo "$as_me:$LINENO: WARNING: Unicode build requires built-in regex library, will use it instead" >&5
-echo "$as_me: WARNING: Unicode build requires built-in regex library, will use it instead" >&2;}
+        { echo "$as_me:$LINENO: WARNING: Defaulting to the the builtin regex library for Unicode build." >&5
+echo "$as_me: WARNING: Defaulting to the the builtin regex library for Unicode build." >&2;}
         wxUSE_REGEX=builtin
     fi
 
@@ -19764,6 +19764,10 @@ echo "$as_me: WARNING: system regex library not found, will use built-in instead
             fi
         else
                         wxUSE_REGEX=sys
+                        cat >>confdefs.h <<\_ACEOF
+#define WX_NO_REGEX_ADVANCED 1
+_ACEOF
+
         fi
     fi
 fi
@@ -37725,7 +37729,7 @@ fi
 WXCONFIG_EXTRALIBS="$LIBS"
 
 if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty regex"
+    wxconfig_3rdparty="$wxconfig_3rdparty regex${lib_unicode_suffix}"
 fi
 if test "$wxUSE_EXPAT" = "builtin" ; then
     wxconfig_3rdparty="$wxconfig_3rdparty expat"

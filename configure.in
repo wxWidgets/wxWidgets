@@ -1938,7 +1938,7 @@ if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
             
     if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_REGEX" = "yes"; then
-        AC_MSG_WARN([Unicode build requires built-in regex library, will use it instead])
+        AC_MSG_WARN([Defaulting to the the builtin regex library for Unicode build.])
         wxUSE_REGEX=builtin
     fi
 
@@ -1957,6 +1957,8 @@ if test "$wxUSE_REGEX" != "no"; then
         else
             dnl we are using the system library
             wxUSE_REGEX=sys
+            dnl only the built-in supports advanced REs
+            AC_DEFINE(WX_NO_REGEX_ADVANCED)
         fi
     fi
 fi
@@ -5807,7 +5809,7 @@ WXCONFIG_EXTRALIBS="$LIBS"
 
 dnl wx-config must output builtin 3rd party libs in --libs in static build:
 if test "$wxUSE_REGEX" = "builtin" ; then
-    wxconfig_3rdparty="$wxconfig_3rdparty regex"
+    wxconfig_3rdparty="$wxconfig_3rdparty regex${lib_unicode_suffix}"
 fi
 if test "$wxUSE_EXPAT" = "builtin" ; then
     wxconfig_3rdparty="$wxconfig_3rdparty expat"
