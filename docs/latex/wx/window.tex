@@ -173,6 +173,13 @@ called by the user code.
 \docparam{child}{Child window to add.}
 
 
+\membersection{wxWindow::CacheBestSize}\label{wxwindowcachebestsize}
+
+\constfunc{void}{CacheBestSize}{\param{const wxSize\& }{size}}
+
+Sets the cached best size value.
+
+
 \membersection{wxWindow::CaptureMouse}\label{wxwindowcapturemouse}
 
 \func{virtual void}{CaptureMouse}{\void}
@@ -468,6 +475,15 @@ Disables the window, same as \helpref{Enable({\tt false})}{wxwindowenable}.
 
 Returns {\tt true} if the window has been disabled, {\tt false} if it had been
 already disabled before the call to this function.
+
+
+\membersection{wxWindow::DoGetBestSize}\label{wxwindowdogetbestsize}
+
+\constfunc{virtual wxSize}{DoGetBestSize}{\void}
+
+Gets the size which best suits the window: for a control, it would be
+the minimal size which doesn't truncate the control, for a panel - the
+same size as it would have after a call to \helpref{Fit()}{wxwindowfit}.
 
 
 \membersection{wxWindow::DoUpdateWindowUI}\label{wxwindowdoupdatewindowui}
@@ -2591,6 +2607,13 @@ You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a
 the constraints automatically in OnSize; otherwise, you must override OnSize and call Layout()
 explicitly. When setting both a wxLayoutConstraints and a \helpref{wxSizer}{wxsizer}, only the
 sizer will have effect.
+
+\membersection{wxWindow::SetInitialBestSize}\label{wxwindowsetinitialbestsize}
+
+\func{virtual void}{SetInitialBestSize}{\param{const wxSize\& }{size}}
+
+Sets the initial window size if none is given (i.e. at least one of the
+components of the size passed to ctor/Create() is wxDefaultCoord).
 
 \membersection{wxWindow::SetMaxSize}\label{wxwindowsetmaxsize}
 

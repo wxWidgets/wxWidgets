@@ -66,7 +66,7 @@ wxWindow::m\_font and m\_backgroundColour/m\_foregroundColour are no longer alwa
       size of the control to the blending of the minsize and bestsize.
       \helpref{wxWindow::SetBestFittingSize}{wxwindowsetbestfittingsize} was added to help with this,
       although most controls don't need to call it directly because it
-      is called indirectly via the SetInitialSize called in the base
+      is called indirectly via the \helpref{SetInitialBestSize}{wxwindowsetinitialbestsize} called in the base
       classes.
 \end{itemize}
 
@@ -92,20 +92,20 @@ sizer->Add(win);
   non-control custom windows.)
 
 \begin{itemize}\itemsep=0pt
-\item Either override or inherit a meaningful DoGetBestSize method
+\item Either override or inherit a meaningful \helpref{DoGetBestSize}{wxwindowdogetbestsize} method
       that calculates whatever size is "best" for the control.  Once
       that size is calculated then there should normally be a call to
-      CacheBestSize to save it for later use, unless for some reason
+      \helpref{CacheBestSize}{wxwindowcachebestsize} to save it for later use, unless for some reason
       you want the best size to be recalculated on every layout.
 
 \item Any method that changes the attributes of the control such that
-      the best size will change should call InvalidateBestSize so it
+      the best size will change should call \helpref{InvalidateBestSize}{wxwindowinvalidatebestsize} so it
       will be recalculated the next time it is needed.
 
 \item The control's constructor and/or Create method should ensure
       that the minsize is set to the size passed in, and that the
       control is sized to a blending of the min size and best size.
-      This can be done by calling SetBestFittingSize.
+      This can be done by calling \helpref{SetBestFittingSize}{wxwindowsetbestfittingsize}.
 \end{itemize}
 
 
