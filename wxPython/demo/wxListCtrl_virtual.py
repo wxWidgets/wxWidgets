@@ -26,6 +26,7 @@ class TestVirtualList(wxListCtrl):
 
         EVT_LIST_ITEM_SELECTED(self, self.GetId(), self.OnItemSelected)
         EVT_LIST_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
+        EVT_LIST_ITEM_DESELECTED(self, self.GetId(), self.OnItemDeselected)
 
 
     def OnItemSelected(self, event):
@@ -43,6 +44,10 @@ class TestVirtualList(wxListCtrl):
     def getColumnText(self, index, col):
         item = self.GetItem(index, col)
         return item.GetText()
+
+    def OnItemDeselected(self, evt):
+        print evt.m_itemIndex
+
 
     #---------------------------------------------------
     # These methods are callbacks for implementing the
