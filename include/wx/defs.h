@@ -61,6 +61,9 @@
 
 #include "wx/setup.h"
 
+// check the consistency of the settings in setup.h
+#include "wx/chkconf.h"
+
 // old C++ headers (like <iostream.h>) declare classes in the global namespace
 // while the new, standard ones (like <iostream>) do it in std:: namespace
 //
