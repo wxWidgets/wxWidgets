@@ -31,6 +31,7 @@
     #include "wx/dcclient.h"
     #include "wx/settings.h"
     #include "wx/log.h"
+    #include "wx/sizer.h"
     #include "wx/layout.h"
 #endif
 
@@ -950,29 +951,29 @@ void wxGrid::Create()
     m_numCols = 0;
     m_currentCellCoords = wxGridNoCellCoords;
     
-    int colLblH = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
-    int rowLblW = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
+    m_rowLabelWidth = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
+    m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
 
     m_cornerLabelWin = new wxGridCornerLabelWindow( this,
                                                     -1,
-                                                    wxPoint(0, 0),
-                                                    wxSize(rowLblW, colLblH) );
+                                                    wxDefaultPosition,
+                                                    wxDefaultSize );
 
     m_rowLabelWin = new wxGridRowLabelWindow( this,
                                               -1,
-                                              wxPoint(0, colLblH),
-                                              wxSize(rowLblW, -1) );
+                                              wxDefaultPosition,
+                                              wxDefaultSize );
 
     m_colLabelWin = new wxGridColLabelWindow( this,
                                               -1,
-                                              wxPoint(rowLblW, 0),
-                                              wxSize(-1, colLblH ) );
+                                              wxDefaultPosition,
+                                              wxDefaultSize );
 
     m_gridWin = new wxGridWindow( this,
                                   m_rowLabelWin,
                                   m_colLabelWin,
                                   -1,
-                                  wxPoint(rowLblW, colLblH),
+                                  wxDefaultPosition,
                                   wxDefaultSize );
 
     SetTargetWindow( m_gridWin );
@@ -2398,6 +2399,10 @@ void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 }
 
 
+// This is just here to make sure that CalcDimensions gets called when
+// the grid view is resized... then the size event is skipped to allow
+// the box sizers to handle everything
+//
 void wxGrid::OnSize( wxSizeEvent& event )
 {
     CalcWindowSizes();
