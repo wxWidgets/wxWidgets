@@ -124,7 +124,9 @@ bool wxPanel::Create(wxWindow *parent, wxWindowID id,
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
+#ifndef __WXMAC__
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+#endif
 
     return true;
 }
