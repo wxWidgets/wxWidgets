@@ -156,30 +156,83 @@ int _System soclose(int);
 #  define GSocket_Debug(args)
 #endif /* __GSOCKET_DEBUG__ */
 
+///////////////////////////////////////////////////////////////////////////
+// GSocketBSDGUIShim
+class GSocketBSDGUIShim:public GSocketBSD
+{
+    friend void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc);
+public:
+    static inline bool GUI_Init();
+    static inline void GUI_Cleanup();
+    static inline bool UseGUI();
+    GSocketBSDGUIShim();
+    virtual ~GSocketBSDGUIShim();
+protected:
+    virtual void EventLoop_Enable_Events();
+    virtual void EventLoop_Disable_Events();
+    virtual void EventLoop_Install_Callback(GSocketEvent event);
+    virtual void EventLoop_Uninstall_Callback(GSocketEvent event);
+private:
 /* Table of GUI-related functions. We must call them indirectly because
  * of wxBase and GUI separation: */
 
-static struct GSocketGUIFunctionsTable *gs_gui_functions;
+    static struct GSocketGUIFunctionsTable *ms_gui_functions;
+};
 
-#define USE_GUI() (gs_gui_functions != NULL)
+struct GSocketGUIFunctionsTable *GSocketBSDGUIShim::ms_gui_functions = NULL;
 
-/* Define macros to simplify indirection: */
-#define _GSocket_GUI_Init() \
-    if (gs_gui_functions) gs_gui_functions->GUI_Init()
-#define _GSocket_GUI_Cleanup() \
-    if (gs_gui_functions) gs_gui_functions->GUI_Cleanup()
-#define _GSocket_GUI_Init_Socket(socket) \
-    (gs_gui_functions ? gs_gui_functions->GUI_Init_Socket(socket) : 1)
-#define _GSocket_GUI_Destroy_Socket(socket) \
-    if (gs_gui_functions) gs_gui_functions->GUI_Destroy_Socket(socket)
-#define _GSocket_Enable_Events(socket) \
-    if (gs_gui_functions) gs_gui_functions->Enable_Events(socket)
-#define _GSocket_Disable_Events(socket) \
-    if (gs_gui_functions) gs_gui_functions->Disable_Events(socket)
-#define _GSocket_Install_Callback(socket, event) \
-    if (gs_gui_functions) gs_gui_functions->Install_Callback(socket, event)
-#define _GSocket_Uninstall_Callback(socket, event) \
-    if (gs_gui_functions) gs_gui_functions->Uninstall_Callback(socket, event)
+void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
+{
+  GSocketBSDGUIShim::ms_gui_functions = guifunc;
+}
+         
+inline bool GSocketBSDGUIShim::UseGUI()
+{
+    return ms_gui_functions;
+}
+
+inline bool GSocketBSDGUIShim::GUI_Init()
+{
+    return (ms_gui_functions)?ms_gui_functions->GUI_Init():true;
+}
+
+inline void GSocketBSDGUIShim::GUI_Cleanup()
+{
+    if (ms_gui_functions) ms_gui_functions->GUI_Cleanup();
+}
+
+GSocketBSDGUIShim::GSocketBSDGUIShim()
+{
+    m_ok = (ms_gui_functions ? ms_gui_functions->GUI_Init_Socket(this) : true);
+}
+
+GSocketBSDGUIShim::~GSocketBSDGUIShim()
+{
+    if (ms_gui_functions) ms_gui_functions->GUI_Destroy_Socket(this);
+}
+
+void GSocketBSDGUIShim::EventLoop_Enable_Events()
+{
+    if (ms_gui_functions) ms_gui_functions->Enable_Events(this);
+}
+
+void GSocketBSDGUIShim::EventLoop_Disable_Events()
+{
+    if (ms_gui_functions) ms_gui_functions->Disable_Events(this);
+}
+
+void GSocketBSDGUIShim::EventLoop_Install_Callback(GSocketEvent event)
+{
+    if (ms_gui_functions) ms_gui_functions->Install_Callback(this, event);
+}
+
+void GSocketBSDGUIShim::EventLoop_Uninstall_Callback(GSocketEvent event)
+{
+    if (ms_gui_functions) ms_gui_functions->Uninstall_Callback(this, event);
+}
+
+///////////////////////////////////////////////////////////////////////////
+// GSocketBSD
 
 static struct GSocketBaseFunctionsTable gs_base_functions =
 {
@@ -189,27 +242,14 @@ static struct GSocketBaseFunctionsTable gs_base_functions =
 
 /* Global initialisers */
 
-void GSocket_SetGUIFunctions(struct GSocketGUIFunctionsTable *guifunc)
-{
-  gs_gui_functions = guifunc;
-}
-         
 int GSocket_Init(void)
 {
-  if (gs_gui_functions)
-  {
-      if ( !gs_gui_functions->GUI_Init() )
-        return 0;
-  }
-  return 1;
+    return GSocketBSDGUIShim::GUI_Init();
 }
 
 void GSocket_Cleanup(void)
 {
-  if (gs_gui_functions)
-  {
-      gs_gui_functions->GUI_Cleanup();
-  }
+    GSocketBSDGUIShim::GUI_Cleanup();
 }
 
 GSocketBSD::GSocketBSD()
@@ -235,13 +275,12 @@ GSocketBSD::GSocketBSD()
 
   m_functions           = &gs_base_functions;
 
-  /* Per-socket GUI-specific initialization */
-  m_ok = _GSocket_GUI_Init_Socket(this);
+  m_ok = true;
 }
 
 void GSocketBSD::Close()
 {
-    _GSocket_Disable_Events(this);
+    EventLoop_Disable_Events();
 // gsockosx.c calls CFSocketInvalidate which closes the socket for us
 #if !(defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__)))
     close(m_fd);
@@ -251,15 +290,6 @@ void GSocketBSD::Close()
 
 GSocketBSD::~GSocketBSD()
 {
-  assert(this);
-
-  /* Check that the socket is really shutdowned */
-  if (m_fd != INVALID_SOCKET)
-    Shutdown();
-
-  /* Per-socket GUI-specific cleanup */
-  _GSocket_GUI_Destroy_Socket(this);
-
   /* Destroy private addresses */
   if (m_local)
     GAddress_destroy(m_local);
@@ -459,7 +489,7 @@ GSocketError GSocketBSD::SetServer()
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  _GSocket_Enable_Events(this);
+  EventLoop_Enable_Events();
 
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
      state after being previously closed.
@@ -517,9 +547,9 @@ GSocket *GSocketBSD::WaitConnection()
   }
 
   /* Create a GSocket object for the new connection */
-  connection = new GSocketBSD();
+  connection = GSocket_new();
 
-  if (!connection->IsOk())
+  if (!connection)
   {
     delete connection;
     m_error = GSOCK_MEMERR;
@@ -573,7 +603,7 @@ GSocket *GSocketBSD::WaitConnection()
 #else
   ioctl(connection->m_fd, FIONBIO, &arg);
 #endif
-  _GSocket_Enable_Events(connection);
+  connection->EventLoop_Enable_Events();
 
   return connection;
 }
@@ -645,7 +675,7 @@ GSocketError GSocketBSD::Connect(GSocketStream stream)
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  _GSocket_Enable_Events(this);
+  EventLoop_Enable_Events();
 
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
@@ -752,7 +782,7 @@ GSocketError GSocketBSD::SetNonOriented()
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  _GSocket_Enable_Events(this);
+  EventLoop_Enable_Events();
 
   /* Bind to the local address,
    * and retrieve the actual address bound.
@@ -883,7 +913,7 @@ int GSocketBSD::Write(const char *buffer, int size)
  */
 GSocketEventFlags GSocketBSD::Select(GSocketEventFlags flags)
 {
-  if (!USE_GUI())
+  if (!GSocketBSDGUIShim::UseGUI())
   {
 
     GSocketEventFlags result = 0;
@@ -1122,13 +1152,13 @@ void GSocketBSD::UnsetCallback(GSocketEventFlags flags)
 void GSocketBSD::Enable(GSocketEvent event)
 {
   m_detected &= ~(1 << event);
-  _GSocket_Install_Callback(this, event);
+  EventLoop_Install_Callback(event);
 }
 
 void GSocketBSD::Disable(GSocketEvent event)
 {
   m_detected |= (1 << event);
-  _GSocket_Uninstall_Callback(this, event);
+  EventLoop_Uninstall_Callback(event);
 }
 
 /* _GSocket_Input_Timeout:
@@ -1392,7 +1422,7 @@ void GSocketBSD::Detected_Write()
 /* Compatibility functions for GSocket */
 GSocket *GSocket_new(void)
 {
-    GSocket *newsocket = new GSocketBSD();
+    GSocket *newsocket = new GSocketBSDGUIShim();
     if(newsocket->IsOk())
         return newsocket;
     delete newsocket;
@@ -1401,6 +1431,12 @@ GSocket *GSocket_new(void)
 
 void GSocket_destroy(GSocket *socket)
 {
+    assert(socket);
+
+    /* Check that the socket is really shutdowned */
+    if (socket->m_fd != INVALID_SOCKET)
+      socket->Shutdown();
+
     delete socket;
 }
 

@@ -34,7 +34,7 @@ class GSocketBSD
 {
 public:
     GSocketBSD();
-    ~GSocketBSD();
+    virtual ~GSocketBSD();
     bool IsOk() { return m_ok; }
     void Close();
     void Shutdown();
@@ -70,6 +70,10 @@ protected:
     void Detected_Read();
     void Detected_Write();
     bool m_ok;
+    virtual void EventLoop_Enable_Events() = 0;
+    virtual void EventLoop_Disable_Events() = 0;
+    virtual void EventLoop_Install_Callback(GSocketEvent event) = 0;
+    virtual void EventLoop_Uninstall_Callback(GSocketEvent event) = 0;
 public:
 //DFE: We can't protect these data member until the GUI code is updated
 //protected:
