@@ -161,7 +161,7 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxSize& size,
                        int n, const wxString choices[],
                        long style,
-                       const wxValidator& wxVALIDATOR_PARAM(validator),
+                       const wxValidator& validator,
                        const wxString& name)
 {
     m_noItems = 0;
