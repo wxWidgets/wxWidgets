@@ -49,6 +49,9 @@ protected:
     #include "wx/motif/dialog.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dialog.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/dialog.h"
+// FIXME_MGL -- belongs to wxUniv
 #elif defined(__WXQT__)
     #include "wx/qt/dialog.h"
 #elif defined(__WXMAC__)

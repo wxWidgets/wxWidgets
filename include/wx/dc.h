@@ -735,6 +735,8 @@ private:
     #include "wx/motif/dc.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dc.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/dc.h"
 #elif defined(__WXQT__)
     #include "wx/qt/dc.h"
 #elif defined(__WXMAC__)

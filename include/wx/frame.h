@@ -230,6 +230,8 @@ protected:
     #include "wx/motif/frame.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/frame.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/frame.h"
 #elif defined(__WXQT__)
     #include "wx/qt/frame.h"
 #elif defined(__WXMAC__)

@@ -144,6 +144,8 @@ private:
     #include "wx/motif/font.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/font.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/font.h"
 #elif defined(__WXQT__)
     #include "wx/qt/font.h"
 #elif defined(__WXMAC__)

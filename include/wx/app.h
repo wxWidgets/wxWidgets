@@ -290,6 +290,8 @@ protected:
         #include "wx/msw/app.h"
     #elif defined(__WXMOTIF__)
         #include "wx/motif/app.h"
+    #elif defined(__WXMGL__)
+        #include "wx/mgl/app.h"
     #elif defined(__WXQT__)
         #include "wx/qt/app.h"
     #elif defined(__WXGTK__)

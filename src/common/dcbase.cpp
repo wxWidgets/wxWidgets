@@ -28,14 +28,6 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-   #include "wx/window.h"
-#endif
-
-#ifdef __WXMSW__
-   #include "wx/msw/private.h"
-#endif
-
 #include "wx/dc.h"
 
 // ============================================================================

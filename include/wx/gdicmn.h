@@ -48,7 +48,7 @@ class WXDLLEXPORT wxString;
 // ---------------------------------------------------------------------------
 
 // Bitmap flags
-enum
+enum wxBitmapType
 {
     wxBITMAP_TYPE_INVALID,          // should be == 0 for compatibility!
     wxBITMAP_TYPE_BMP,
@@ -150,6 +150,9 @@ enum wxStockCursor
 #elif defined(__WXPM__)
     // Load from a resource
     #define wxICON(X) wxIcon("" #X "")
+#elif defined(__WXMGL__)
+    // Load from a resource
+    #define wxICON(X) wxIcon("" #X "")
 #elif defined(__WXGTK__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
@@ -165,7 +168,7 @@ enum wxStockCursor
    under Unix bitmaps live in XPMs and under Windows they're in ressources.
  */
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMGL__)
     #define wxBITMAP(name) wxBitmap(#name, wxBITMAP_TYPE_RESOURCE)
 #elif defined(__WXGTK__) || defined(__WXMOTIF__)
     // Initialize from an included XPM

@@ -211,8 +211,8 @@
     #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXQT__) && !defined(__WXSTUBS__) && wxUSE_GUI
-    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__]"
+      !defined(__WXMGL__) && !defined(__WXQT__) && !defined(__WXSTUBS__) && wxUSE_GUI
+    #error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXPM__|__WXSTUBS__|__WXMGL__]"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -2027,6 +2027,10 @@ typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
 #endif
 #endif // GTK
+
+#ifdef __WXMGL__
+typedef void *WXWidget; // FIXME_MGL - type-safe
+#endif // MGL
 
 // This is required because of clashing macros in windows.h, which may be
 // included before or after wxWindows classes, and therefore must be

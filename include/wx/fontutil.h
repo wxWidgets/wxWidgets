@@ -61,6 +61,8 @@ struct WXDLLEXPORT wxNativeEncodingInfo
 #elif defined(_WX_X_FONTLIKE)
     wxString xregistry,
              xencoding;
+#elif defined(__WXMGL__)
+    // FIXME_MGL -- do we need something more?
 #else
     #error "Unsupported toolkit"
 #endif
