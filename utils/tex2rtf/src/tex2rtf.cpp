@@ -154,7 +154,7 @@ bool MyApp::OnInit()
   WinHelpContentsFileName = new wxChar[300];
   RefFileName = new wxChar[300];
 
-  ColourTable.DeleteContents(true);
+  WX_CLEAR_LIST(wxList,ColourTable);
 
   int n = 1;
 
