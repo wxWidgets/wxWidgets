@@ -202,6 +202,9 @@ public:
   // show/hide the log window
   void Show(bool bShow = TRUE);
 
+  // accessors
+  wxLog *GetOldLog() const { return m_pOldLog; }
+
 protected:
   virtual void DoLog(wxLogLevel level, const char *szString);
   virtual void DoLogString(const char *szString);
