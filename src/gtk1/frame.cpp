@@ -531,9 +531,9 @@ void wxFrame::DetachMenuBar()
                 GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
         }
 
-        gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
         gtk_widget_ref( m_frameMenuBar->m_widget );
-        gtk_widget_unparent( m_frameMenuBar->m_widget );
+
+        gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
     }
 
     wxFrameBase::DetachMenuBar();
@@ -567,7 +567,7 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
         m_frameMenuBar->Show( TRUE );
     }
 
-    /* resize window in OnInternalIdle */
+    // resize window in OnInternalIdle
     m_sizeSet = FALSE;
 }
 
@@ -596,7 +596,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 
     if (m_frameToolBar)
     {
-        /* insert into toolbar area if not already there */
+        // insert into toolbar area if not already there
         if ((m_frameToolBar->m_widget->parent) &&
             (m_frameToolBar->m_widget->parent != m_mainWidget))
         {
