@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LAYOUTH__
@@ -164,7 +164,7 @@ Algorithm:
  Each sizer has a Layout function.
 
  wxExpandSizer::Layout                  ; E.g. for resizeable windows
- 
+
    - parent size must be known (i.e. called
       from OnSize or explicitly)
    - call Layout on each child to give it a chance to resize
@@ -174,7 +174,7 @@ Algorithm:
 
  wxShrinkSizer::Layout                  ; E.g. fit-to-contents windows
                                         ; Perhaps 2 rowcols, one above other.
- 
+
    - call Layout on each child to give it a chance to resize
      (e.g. child shrinks around its own children):
      stop when each returns TRUE, or no change
@@ -193,125 +193,125 @@ Algorithm:
 
 How to relayout if a child sizer/window changes? Need to go all the way
 to the top of the hierarchy and call Layout() again.
-     
+
  wxRowColSizer::Layout
 
    - Similar to wxShrinkSizer only instead of shrinking to fit
      contents, more sophisticated layout of contents, and THEN
      shrinking (possibly).
    - Do the same parent window check/setsize as for wxShrinkSizer.
- 
+
 */
 
-typedef enum {
+enum wxSizerBehaviour
+{
     wxSizerShrink,
     wxSizerExpand,
     wxSizerNone
-} wxSizerBehaviour;
+};
 
 #define wxTYPE_SIZER        90
 
-class WXDLLEXPORT wxSizer: public wxWindow
+class WXDLLEXPORT wxSizer : public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxSizer)
+DECLARE_DYNAMIC_CLASS(wxSizer)
 
- private:
- protected:
-  wxSizerBehaviour sizerBehaviour;
-  int borderX;
-  int borderY;
-  int sizerWidth;
-  int sizerHeight;
-  int sizerX;
-  int sizerY;
- public:
-  wxSizer();
-  wxSizer(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
-  ~wxSizer();
+protected:
+    wxSizerBehaviour sizerBehaviour;
+    int borderX;
+    int borderY;
+    int sizerWidth;
+    int sizerHeight;
+    int sizerX;
+    int sizerY;
 
-  bool Create(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
+public:
+    wxSizer();
+    wxSizer(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
+    ~wxSizer();
 
-  virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
-  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    bool Create(wxWindow *parent, wxSizerBehaviour behav = wxSizerNone);
 
-  virtual void GetSize(int *w, int *h) const;
-  wxSize GetSize() const { return wxWindow::GetSize(); }
+    virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
+    virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
+        { wxWindow::SetSize(rect.x, rect.y, rect.width, rect.height, sizeFlags); }
+    virtual void SetSize(const wxSize& size)
+        { wxWindow::SetSize(size.x, size.y); }
+    virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
-  virtual void GetClientSize(int *w, int *h) const { GetSize(w, h); }
-  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+    virtual void GetSize(int *w, int *h) const;
+    wxSize GetSize() const { return wxWindow::GetSize(); }
 
-  virtual void GetPosition(int *x, int *y) const;
-  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+    virtual void GetClientSize(int *w, int *h) const { GetSize(w, h); }
+    wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
 
-  inline void SizerSetSize(int x, int y, int w, int h)
-    { SetSize(x, y, w, h); }
-  inline void SizerMove(int x, int y)
-    { Move(x, y); }
+    virtual void GetPosition(int *x, int *y) const;
+    wxPoint GetPosition() const { return wxWindow::GetPosition(); }
 
-  virtual void SetBorder(int w, int h);
-  inline int GetBorderX() { return borderX ; }
-  inline int GetBorderY() { return borderY ; }
+    void SizerSetSize(int x, int y, int w, int h) { SetSize(x, y, w, h); }
+    void SizerMove(int x, int y) { Move(x, y); }
 
-  virtual void AddSizerChild(wxWindow *child);
-  virtual void RemoveSizerChild(wxWindow *child);
+    virtual void SetBorder(int w, int h);
+    int GetBorderX() { return borderX ; }
+    int GetBorderY() { return borderY ; }
 
-  inline virtual void SetBehaviour(wxSizerBehaviour b) { sizerBehaviour = b; }
-  inline virtual wxSizerBehaviour GetBehaviour() { return sizerBehaviour; }
+    virtual void AddSizerChild(wxWindow *child);
+    virtual void RemoveSizerChild(wxWindow *child);
 
-  virtual bool LayoutPhase1(int *);
-  virtual bool LayoutPhase2(int *);
+    virtual void SetBehaviour(wxSizerBehaviour b) { sizerBehaviour = b; }
+    virtual wxSizerBehaviour GetBehaviour() { return sizerBehaviour; }
+
+    virtual bool LayoutPhase1(int *);
+    virtual bool LayoutPhase2(int *);
 };
 
 #define wxSIZER_ROWS  TRUE
 #define wxSIZER_COLS  FALSE
 
-class WXDLLEXPORT wxRowColSizer: public wxSizer
+class WXDLLEXPORT wxRowColSizer : public wxSizer
 {
-  DECLARE_DYNAMIC_CLASS(wxRowColSizer)
+DECLARE_DYNAMIC_CLASS(wxRowColSizer)
 
- private:
- protected:
-  bool rowOrCol;
-  int rowOrColSize;
-  int xSpacing;
-  int ySpacing;
- public:
-  // rowOrCol = TRUE to be laid out in rows, otherwise in columns.
-  wxRowColSizer();
-  wxRowColSizer(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS, int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
-  ~wxRowColSizer();
+protected:
+    bool rowOrCol;
+    int rowOrColSize;
+    int xSpacing;
+    int ySpacing;
 
-  bool Create(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS, int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
-  virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
+public:
+    // rowOrCol = TRUE to be laid out in rows, otherwise in columns.
+    wxRowColSizer();
+    wxRowColSizer(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS,
+                  int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
+    ~wxRowColSizer();
 
-  inline virtual void SetRowOrCol(bool rc) { rowOrCol = rc; }
-  inline virtual bool GetRowOrCol() { return rowOrCol; }
-  inline virtual void SetRowOrColSize(int n) { rowOrColSize = n; }
-  inline virtual int GetRowOrColSize() { return rowOrColSize; }
-  inline virtual void SetSpacing(int x, int y) { xSpacing = x; ySpacing = y; }
-  inline virtual void GetSpacing(int *x, int *y) { *x = xSpacing; *y = ySpacing; }
+    bool Create(wxWindow *parent, bool rowOrCol = wxSIZER_ROWS,
+                int rowsOrColSize = 20, wxSizerBehaviour = wxSizerShrink);
+    virtual void SetSize(int x, int y, int w, int h, int flags = wxSIZE_AUTO);
 
-  bool LayoutPhase1(int *);
-  bool LayoutPhase2(int *);
+    virtual void SetRowOrCol(bool rc) { rowOrCol = rc; }
+    virtual bool GetRowOrCol() { return rowOrCol; }
+    virtual void SetRowOrColSize(int n) { rowOrColSize = n; }
+    virtual int GetRowOrColSize() { return rowOrColSize; }
+    virtual void SetSpacing(int x, int y) { xSpacing = x; ySpacing = y; }
+    virtual void GetSpacing(int *x, int *y) { *x = xSpacing; *y = ySpacing; }
+
+    bool LayoutPhase1(int *);
+    bool LayoutPhase2(int *);
 };
 
-class WXDLLEXPORT wxSpacingSizer: public wxSizer
+class WXDLLEXPORT wxSpacingSizer : public wxSizer
 {
-  DECLARE_DYNAMIC_CLASS(wxSpacingSizer)
+DECLARE_DYNAMIC_CLASS(wxSpacingSizer)
 
- private:
- protected:
- public:
-  wxSpacingSizer();
-  wxSpacingSizer(wxWindow *parent, wxRelationship rel, wxWindow *other, int spacing);
-  wxSpacingSizer(wxWindow *parent);
-  ~wxSpacingSizer();
+public:
+    wxSpacingSizer();
+    wxSpacingSizer(wxWindow *parent, wxRelationship rel, wxWindow *other, int spacing);
+    wxSpacingSizer(wxWindow *parent);
+    ~wxSpacingSizer();
 
-  bool Create(wxWindow *parent, wxRelationship rel, wxWindow *other, int sp);
-  bool Create(wxWindow *parent);
+    bool Create(wxWindow *parent, wxRelationship rel, wxWindow *other, int sp);
+    bool Create(wxWindow *parent);
 };
 
 #endif
