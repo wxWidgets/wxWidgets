@@ -27,7 +27,7 @@ typedef unsigned short* WXBSTR;
  * Wraps up an IDispatch pointer and invocation; does variant conversion.
  */
 
-class wxAutomationObject: public wxObject
+class WXDLLEXPORT wxAutomationObject: public wxObject
 {
 public:
     wxAutomationObject(WXIDISPATCH* dispatchPtr = NULL);
@@ -91,7 +91,7 @@ public:
 
 // wrapper around BSTR type (by Vadim Zeitlin)
 
-class BasicString
+class WXDLLEXPORT BasicString
 {
 public:
   // ctors & dtor

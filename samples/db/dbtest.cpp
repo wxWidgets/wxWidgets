@@ -46,7 +46,7 @@
 #include	<wx/db.h>					// Required in the file which will get the data source connection
 #include    <wx/dbtable.h>				// Has the wxTable object from which all data objects will inherit their data table functionality
 
-extern DbList *PtrBegDbList;		// from db.cpp, used in getting back error results from db connections
+extern DbList* WXDLLEXPORT PtrBegDbList;		// from db.cpp, used in getting back error results from db connections
 
 #include "dbtest.h"				// Header file for this demonstration program
 #include "listdb.h"					// Code to support the "Lookup" button on the editor dialog

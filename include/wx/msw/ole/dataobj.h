@@ -25,7 +25,7 @@ struct IDataObject;
 //     do if we really want them)
 // ----------------------------------------------------------------------------
 
-class wxDataObject
+class WXDLLEXPORT wxDataObject
 {
 public:
   // all data formats (values are the same as in windows.h, do not change!)
@@ -80,7 +80,7 @@ private:
 // ----------------------------------------------------------------------------
 // wxTextDataObject is a specialization of wxDataObject for text data
 // ----------------------------------------------------------------------------
-class wxTextDataObject : public wxDataObject
+class WXDLLEXPORT wxTextDataObject : public wxDataObject
 {
 public:
   // ctors

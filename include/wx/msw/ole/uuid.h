@@ -49,7 +49,7 @@ typedef unsigned char uchar;
 // ------------------------------------------------------------------
 
 // uses RPC functions to create/convert Universally Unique Identifiers
-class Uuid
+class WXDLLEXPORT Uuid
 {
 private:
   UUID  m_uuid;

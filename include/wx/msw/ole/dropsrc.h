@@ -39,7 +39,7 @@ enum wxDragResult
 // wxDropSource is used to start the drag-&-drop operation on associated
 // wxDataObject object. It's responsible for giving UI feedback while dragging.
 // ----------------------------------------------------------------------------
-class wxDropSource
+class WXDLLEXPORT wxDropSource
 {
 public:
   // ctors: if you use default ctor you must call SetData() later!
