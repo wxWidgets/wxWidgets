@@ -78,7 +78,7 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
     if ( ref )
     {
         wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
-        size_t i = itemID - 1 ;
+        int i = itemID - 1 ;
         if (i >= 0 && i < list->GetCount() )
         {
             bool trigger = false ;
@@ -136,7 +136,7 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
-                    size_t i = itemID - 1 ;
+                    int i = itemID - 1 ;
                     if (i >= 0 && i < list->GetCount() )
 		            {
 		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
@@ -694,7 +694,7 @@ bool wxListBox::MacIsSelected( int n ) const
 
 int wxListBox::MacGetSelection() const
 {
-    for ( size_t i = 0 ; i < GetCount() ; ++i )
+    for ( int i = 0 ; i < GetCount() ; ++i )
     {
         if ( m_peer->IsItemSelected( i + 1 ) )
         {
@@ -709,7 +709,7 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     int no_sel = 0 ;
     
     aSelections.Empty();
-    for ( size_t i = 0 ; i < GetCount() ; ++i )
+    for ( int i = 0 ; i < GetCount() ; ++i )
     {
         if ( m_peer->IsItemSelected( i + 1 ) )
         {

@@ -73,8 +73,8 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
     if ( ref )
     {
         wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-        size_t i = itemID - 1 ;
-        if (i >= 0 && i < (size_t) list->GetCount() )
+        int i = itemID - 1 ;
+        if (i >= 0 && i < list->GetCount() )
         {
             bool trigger = false ;
             wxCommandEvent event(
@@ -132,8 +132,8 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-                    size_t i = itemID - 1 ;
-                    if (i >= 0 && i < (size_t) list->GetCount() )
+                    int i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
 		            {
 		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
 		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
@@ -148,8 +148,8 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-                    size_t i = itemID - 1 ;
-                    if (i >= 0 && i < (size_t) list->GetCount() )
+                    int i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
 		            {
 		                verify_noerr( ::SetDataBrowserItemDataButtonValue( itemData , list->IsChecked( i ) ? kThemeButtonOn : kThemeButtonOff ) ) ;
 		                err = noErr ;
@@ -177,8 +177,8 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxCheckListBox* list = wxDynamicCast( (wxObject*) ref , wxCheckListBox ) ;
-                    size_t i = itemID - 1 ;
-                    if (i >= 0 && i < (size_t) list->GetCount() )
+                    int i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
 		            {
 		                // we have to change this behind the back, since Check() would be triggering another update round
                         bool newVal = !list->IsChecked( i ) ;
