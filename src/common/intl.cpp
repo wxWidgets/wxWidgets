@@ -1402,6 +1402,7 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 void wxLocale::DoCommonInit()
 {
   m_pszOldLocale = NULL;
+  m_pOldLocale = NULL;
   m_pMsgCat = NULL;
   m_language = wxLANGUAGE_UNKNOWN;
   m_initialized = false;
@@ -2448,8 +2449,10 @@ wxLocale::~wxLocale()
         delete pTmpCat;
     }
 
-    // restore old locale
-    wxSetLocale(m_pOldLocale);
+    // restore old locale if we had changed it
+    if ( m_pOldLocale )
+        wxSetLocale(m_pOldLocale);
+
     // FIXME
 #ifndef __WXWINCE__
     wxSetlocale(LC_ALL, m_pszOldLocale);
