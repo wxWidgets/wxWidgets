@@ -430,7 +430,7 @@ wxPreviewFrame::~wxPreviewFrame()
 {
 }
 
-void wxPreviewFrame::OnCloseWindow(wxCloseEvent& event)
+void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     MakeModal(FALSE);
 

@@ -6,7 +6,7 @@
 // Created:     Jan 22 1999
 // RCS-ID:
 // Copyright:   (c) 1999 Kevin Smith
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VALGENH__
@@ -33,18 +33,18 @@ public:
   // if you're passing a reference to a validator.
   // Another possibility is to always pass a pointer to a new validator
   // (so the calling code can use a copy constructor of the relevant class).
-  virtual wxObject *Clone(void) const { return new wxGenericValidator(*this); }
+  virtual wxObject *Clone() const { return new wxGenericValidator(*this); }
   bool Copy(const wxGenericValidator& val);
 
   // Called when the value in the window must be validated.
   // This function can pop up an error message.
-  virtual bool Validate(wxWindow *parent)	{return TRUE;}
+  virtual bool Validate(wxWindow * WXUNUSED(parent)) { return TRUE; }
 
   // Called to transfer data to the window
-  virtual bool TransferToWindow(void);
+  virtual bool TransferToWindow();
 
   // Called to transfer data to the window
-  virtual bool TransferFromWindow(void);
+  virtual bool TransferFromWindow();
 
 protected:
   void Initialize();
@@ -55,4 +55,4 @@ protected:
   wxArrayInt* m_pArrayInt;
 };
 
-#endif	// _WX_VALGENH__
+#endif    // _WX_VALGENH__

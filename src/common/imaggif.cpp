@@ -413,7 +413,8 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
     return TRUE;
 }
 
-bool wxGIFHandler::SaveFile( wxImage *image, wxOutputStream& stream )
+bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
+                             wxOutputStream& WXUNUSED(stream) )
 {
     wxLogDebug(_T("wxGIFHandler is read-only!!"));
     return FALSE;

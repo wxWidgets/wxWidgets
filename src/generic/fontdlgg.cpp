@@ -133,7 +133,7 @@ wxGenericFontDialog::~wxGenericFontDialog(void)
 {
 }
 
-void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& event)
+void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   EndModal(wxID_CANCEL);
 }

@@ -76,11 +76,11 @@ typedef struct {
 
 typedef my_source_mgr * my_src_ptr;
 
-METHODDEF(void) my_init_source ( j_decompress_ptr cinfo )
+METHODDEF(void) my_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
+METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr WXUNUSED(cinfo) )
 {
     return TRUE;
 }

@@ -528,7 +528,7 @@ void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
     wxFAIL_MSG( _T("wxNotebook::SetPadding not implemented") );
 }
 
-void wxNotebook::SetTabSize(const wxSize& sz)
+void wxNotebook::SetTabSize(const wxSize& WXUNUSED(sz))
 {
     wxFAIL_MSG( _T("wxNotebook::SetTabSize not implemented") );
 }

@@ -724,7 +724,13 @@ void wxToolBarBase::ViewStart (int *x, int *y) const
   *y = m_yScrollPosition;
 }
 
-void wxToolBarBase::OnIdle(wxIdleEvent& event)
+void wxToolBarBase::OnIdle(wxIdleEvent&
+#ifdef __WXGTK__
+                            WXUNUSED(event)
+#else
+                            event
+#endif
+                          )
 {
 #ifndef __WXGTK__
     wxWindow::OnIdle(event);

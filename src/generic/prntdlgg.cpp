@@ -125,7 +125,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
     Init(parent);
 }
 
-void wxGenericPrintDialog::Init(wxWindow *parent)
+void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 {
   //    wxDialog::Create(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600),
   //                     wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL | wxTAB_TRAVERSAL);

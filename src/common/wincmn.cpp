@@ -138,8 +138,8 @@ void wxWindowBase::InitBase()
 // common part of window creation process
 bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               wxWindowID id,
-                              const wxPoint& pos,
-                              const wxSize& size,
+                              const wxPoint& WXUNUSED(pos),
+                              const wxSize& WXUNUSED(size),
                               long style,
                               const wxString& name)
 {
@@ -562,7 +562,7 @@ wxWindow *wxWindowBase::FindWindow( const wxString& name )
 // dialog oriented functions
 // ----------------------------------------------------------------------------
 
-void wxWindowBase::MakeModal(bool modal)
+void wxWindowBase::MakeModal(bool WXUNUSED(modal))
 {
     wxFAIL_MSG("TODO");
 }

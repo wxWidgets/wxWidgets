@@ -349,7 +349,7 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     }
 }
 
-void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t t)
+void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
 {
     wxFAIL_MSG(_T("DoLogString must be overriden if it's called."));
 }
@@ -371,7 +371,7 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-void wxLogStderr::DoLogString(const wxChar *szString, time_t t)
+void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     wxString str(szString);
     str << _T('\n');
@@ -399,7 +399,7 @@ wxLogStream::wxLogStream(ostream *ostr)
         m_ostr = ostr;
 }
 
-void wxLogStream::DoLogString(const wxChar *szString, time_t t)
+void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     (*m_ostr) << wxConv_libc.cWX2MB(szString) << endl << flush;
 }
@@ -805,7 +805,7 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     m_bHasMessages = TRUE;
 }
 
-void wxLogWindow::DoLogString(const wxChar *szString, time_t t)
+void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
     // put the text into our window
     wxTextCtrl *pText = m_pLogFrame->TextCtrl();

@@ -1896,12 +1896,16 @@ static char utf7_setB[]="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #endif
 
 // TODO: write actual implementations of UTF-7 here
-size_t wxMBConvUTF7::MB2WC(wchar_t *buf, const char *psz, size_t n) const
+size_t wxMBConvUTF7::MB2WC(wchar_t * WXUNUSED(buf),
+                           const char * WXUNUSED(psz),
+                           size_t WXUNUSED(n)) const
 {
   return 0;
 }
 
-size_t wxMBConvUTF7::WC2MB(char *buf, const wchar_t *psz, size_t n) const
+size_t wxMBConvUTF7::WC2MB(char * WXUNUSED(buf),
+                           const wchar_t * WXUNUSED(psz),
+                           size_t WXUNUSED(n)) const
 {
   return 0;
 }
