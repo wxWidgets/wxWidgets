@@ -113,6 +113,7 @@ protected:
     // (see wxWindow::Refresh)
     bool                  m_frozen;
     bool                  m_refreshAfterThaw;
+    int                   m_eraseBackground;
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;

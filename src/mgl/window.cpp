@@ -63,10 +63,7 @@
 winmng_t *g_winMng = NULL;
 MGLDevCtx *g_displayDC = NULL;
 
-extern wxList WXDLLEXPORT wxPendingDelete;
- // FIXME_MGL -- ???
-
-// the window that has keyboard+joystick focus: 
+// the window that has keyboard focus: 
 static wxWindowMGL *g_focusedWindow = NULL;
 // the window that is currently under mouse cursor:
 static wxWindowMGL *g_windowUnderMouse = NULL;
@@ -260,16 +257,196 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
     }
 }
 
-static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
+static long wxScanToKeyCode(event_t *event)
 {
-    // FIXME_MGL
-    return FALSE;
+    #define KEY(mgl,wx) case mgl: key = wx; break;
+
+    long key = 0;
+    switch ( EVT_scanCode(event->message) )
+    {
+        KEY (KB_padEnter,       WXK_NUMPAD_ENTER)
+        KEY (KB_padMinus,       WXK_NUMPAD_SUBTRACT)
+        KEY (KB_padPlus,        WXK_NUMPAD_ADD)
+        KEY (KB_padTimes,       WXK_NUMPAD_MULTIPLY)
+        KEY (KB_padDivide,      WXK_NUMPAD_DIVIDE)
+        KEY (KB_padLeft,        WXK_NUMPAD_LEFT)
+        KEY (KB_padRight,       WXK_NUMPAD_RIGHT)
+        KEY (KB_padUp,          WXK_NUMPAD_UP)
+        KEY (KB_padDown,        WXK_NUMPAD_DOWN)
+        KEY (KB_padInsert,      WXK_NUMPAD_INSERT)
+        KEY (KB_padDelete,      WXK_NUMPAD_DELETE)
+        KEY (KB_padHome,        WXK_NUMPAD_HOME)
+        KEY (KB_padEnd,         WXK_NUMPAD_END)
+        KEY (KB_padPageUp,      WXK_NUMPAD_PAGEUP)
+      //KEY (KB_padPageUp,      WXK_NUMPAD_PRIOR)
+        KEY (KB_padPageDown,    WXK_NUMPAD_PAGEDOWN)
+      //KEY (KB_padPageDown,    WXK_NUMPAD_NEXT)
+        KEY (KB_padCenter,      WXK_NUMPAD_SEPARATOR) // ?
+        KEY (KB_F1,             WXK_F1)
+        KEY (KB_F2,             WXK_F2)
+        KEY (KB_F3,             WXK_F3)
+        KEY (KB_F4,             WXK_F4)
+        KEY (KB_F5,             WXK_F5)
+        KEY (KB_F6,             WXK_F6)
+        KEY (KB_F7,             WXK_F7)
+        KEY (KB_F8,             WXK_F8)
+        KEY (KB_F9,             WXK_F9)
+        KEY (KB_F10,            WXK_F10)
+        KEY (KB_F11,            WXK_F11)
+        KEY (KB_F12,            WXK_F12)
+        KEY (KB_left,           WXK_LEFT)
+        KEY (KB_right,          WXK_RIGHT)
+        KEY (KB_up,             WXK_UP)
+        KEY (KB_down,           WXK_DOWN)
+        KEY (KB_insert,         WXK_INSERT)
+        KEY (KB_delete,         WXK_DELETE)
+        KEY (KB_home,           WXK_HOME)
+        KEY (KB_end,            WXK_END)
+        KEY (KB_pageUp,         WXK_PAGEUP)
+        KEY (KB_pageDown,       WXK_PAGEDOWN)
+        KEY (KB_capsLock,       WXK_CAPITAL)
+        KEY (KB_numLock,        WXK_NUMLOCK)
+        KEY (KB_scrollLock,     WXK_SCROLL)
+        KEY (KB_leftShift,      WXK_SHIFT)
+        KEY (KB_rightShift,     WXK_SHIFT)
+        KEY (KB_leftCtrl,       WXK_CONTROL)
+        KEY (KB_rightCtrl,      WXK_CONTROL)
+        KEY (KB_leftAlt,        WXK_ALT)
+        KEY (KB_rightAlt,       WXK_ALT)
+        KEY (KB_leftWindows,    WXK_START)
+        KEY (KB_rightWindows,   WXK_START)
+        KEY (KB_menu,           WXK_MENU)
+        KEY (KB_sysReq,         WXK_SNAPSHOT)
+        KEY (KB_esc,            WXK_ESCAPE)
+        KEY (KB_1,              '1')
+        KEY (KB_2,              '2')
+        KEY (KB_3,              '3')
+        KEY (KB_4,              '4')
+        KEY (KB_5,              '5')
+        KEY (KB_6,              '6')
+        KEY (KB_7,              '7')
+        KEY (KB_8,              '8')
+        KEY (KB_9,              '9')
+        KEY (KB_0,              '0')
+        KEY (KB_minus,          WXK_SUBTRACT)
+        KEY (KB_equals,         WXK_ADD)
+        KEY (KB_backSlash,      '\\')
+        KEY (KB_backspace,      WXK_BACK)
+        KEY (KB_tab,            WXK_TAB)
+        KEY (KB_Q,              'Q')
+        KEY (KB_W,              'W')
+        KEY (KB_E,              'E')
+        KEY (KB_R,              'R')
+        KEY (KB_T,              'T')
+        KEY (KB_Y,              'Y')
+        KEY (KB_U,              'U')
+        KEY (KB_I,              'I')
+        KEY (KB_O,              'O')
+        KEY (KB_P,              'P')
+        KEY (KB_leftSquareBrace,'[')
+        KEY (KB_rightSquareBrace,']')
+        KEY (KB_enter,          WXK_RETURN) 
+        KEY (KB_A,              'A')
+        KEY (KB_S,              'S')
+        KEY (KB_D,              'D')
+        KEY (KB_F,              'F')
+        KEY (KB_G,              'G')
+        KEY (KB_H,              'H')
+        KEY (KB_J,              'J')
+        KEY (KB_K,              'K')
+        KEY (KB_L,              'L')
+        KEY (KB_semicolon,      ';')
+        KEY (KB_apostrophe,     '\'')
+        KEY (KB_Z,              'Z')
+        KEY (KB_X,              'X')
+        KEY (KB_C,              'C')
+        KEY (KB_V,              'V')
+        KEY (KB_B,              'B')
+        KEY (KB_N,              'N')
+        KEY (KB_M,              'M')
+        KEY (KB_comma,          ',')
+        KEY (KB_period,         '.')
+        KEY (KB_divide,         WXK_DIVIDE)
+        KEY (KB_space,          WXK_SPACE)
+        KEY (KB_tilde,          '~')
+
+        default:                  
+            key = EVT_asciiCode(event->message); 
+            break;
+    }
+
+    return key;
 }
 
-static ibool wxWindowJoyHandler(window_t *wnd, event_t *e)
+static long wxAsciiToKeyCode(event_t *event)
 {
-    // FIXME_MGL
-    return FALSE;
+    return (long)EVT_asciiCode(event->message);
+}
+
+static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
+{
+    wxEventType type = wxEVT_NULL;
+    wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
+    wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
+    
+    wxKeyEvent event;
+    event.SetEventObject(win);
+    event.SetTimestamp(e->when);
+    event.m_keyCode = wxScanToKeyCode(e);
+    event.m_scanCode = 0; // not used by wx at all
+    event.m_x = where.x;
+    event.m_y = where.y;
+    wxLogDebug("key pressed, x=%i y=%i", event.m_x, event.m_y); // FIXME_MGL -remove
+    event.m_shiftDown = e->modifiers & EVT_SHIFTKEY;
+    event.m_controlDown = e->modifiers & EVT_CTRLSTATE;
+    event.m_altDown = e->modifiers & EVT_LEFTALT;
+    event.m_metaDown = e->modifiers & EVT_RIGHTALT;
+
+    if ( e->what == EVT_KEYUP )
+    {
+        event.SetEventType(wxEVT_KEY_UP);
+        return win->GetEventHandler()->ProcessEvent(event);
+    }
+    else
+    {
+        bool ret;
+        wxKeyEvent event2;
+
+        event.SetEventType(wxEVT_KEY_DOWN);
+        event2 = event;
+    
+        ret = win->GetEventHandler()->ProcessEvent(event);
+
+#if wxUSE_ACCEL
+        if ( !ret )
+        {
+            for (wxWindowMGL *w = win; w; w = w->GetParent())
+            {
+                int command = w->GetAcceleratorTable()->GetCommand(event);
+                if ( command != -1 )
+                {
+                    wxCommandEvent eventc(wxEVT_COMMAND_MENU_SELECTED, command);
+                    ret = w->GetEventHandler()->ProcessEvent(eventc);
+                    break;
+                }
+                if ( w->IsTopLevel() )
+                    break;
+            }
+        }
+#endif // wxUSE_ACCEL
+
+        /* wxMSW doesn't send char events with Alt pressed */
+        /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
+           will only be sent if it is not in an accelerator table. */
+        event2.m_keyCode = wxAsciiToKeyCode(e);
+        if ( !ret && event2.m_keyCode != 0 )
+        {
+            event2.SetEventType(wxEVT_CHAR);
+            ret = win->GetEventHandler()->ProcessEvent(event2);
+        }
+        
+        return ret;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -302,6 +479,7 @@ void wxWindowMGL::Init()
     m_isEnabled = TRUE;
     m_frozen = FALSE;
     m_paintMGLDC = NULL;
+    m_eraseBackground = -1;
 }
 
 // Destructor
@@ -371,7 +549,6 @@ bool wxWindowMGL::Create(wxWindow *parent,
 
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowMouseHandler, EVT_MOUSEEVT, 0);
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowKeybHandler, EVT_KEYEVT, 0);
-    MGL_wmPushWindowEventHandler(m_wnd, wxWindowJoyHandler, EVT_JOYEVT, 0);
 
     return TRUE;
 }
@@ -387,7 +564,7 @@ void wxWindowMGL::SetFocus()
     
     g_focusedWindow = this;
     
-    MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT|EVT_JOYEVT, wxMGL_CAPTURE_KEYB);
+    MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT, wxMGL_CAPTURE_KEYB);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
@@ -800,8 +977,13 @@ void wxWindowMGL::Clear()
     dc.Clear();
 }
 
-void wxWindowMGL::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
+void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
 {
+    if ( m_eraseBackground == -1 )
+        m_eraseBackground = eraseBack;
+    else
+        m_eraseBackground |= eraseBack;
+        
     if ( rect )
     {
         rect_t r;
@@ -846,12 +1028,14 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     m_updateRegion = wxRegion(clip);
     m_paintMGLDC = dc;
 
+    if ( m_eraseBackground != 0 )
     {
-    wxWindowDC dc((wxWindow*)this);
-    wxEraseEvent eventEr(m_windowId, &dc);
-    eventEr.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(eventEr);
+        wxWindowDC dc((wxWindow*)this);
+        wxEraseEvent eventEr(m_windowId, &dc);
+        eventEr.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(eventEr);
     }
+    m_eraseBackground = -1;
 
     wxNcPaintEvent eventNc(GetId());
     eventNc.SetEventObject(this);
