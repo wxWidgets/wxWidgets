@@ -37,7 +37,7 @@ below.)
    You can use whatever flags you want, but these work for me.
 
    For Win32 systems I use Visual C++ 6.0, but 5.0 should work.  The
-   build utility currently does not support any other win32
+   wxPython build utility currently does not support any other win32
    compilers.  Be sure to copy include/wx/msw/setup0.h to
    include/wx/msw/setup.h and edit it for the options you want.
 
@@ -46,13 +46,14 @@ below.)
    variable named WXWIN to be the path to the top of the wxWindows
    tree.
 
+
 3. If you are working from a copy of the code retrieved from CVS, then
    you will find wxPython in $WXWIN/utils/wxPython.  If you are
    working from the tar.gz or .zip files then you will probably want
    to unpack wxPython in the $WXWIN/utils directory and rename the new
    directory to wxPython (or use a symlink.)  If you want to keep it
    in a separate directory then you can change where the build.py tool
-   expects to find it by creating a file named build.local (see step 6
+   expects to find it by creating a file named build.local (see step 7
    for more examples about build.local,) containing something like
    this:
 
@@ -60,7 +61,7 @@ below.)
 
 
 4. At this point you may want to make an alias or symlink, script,
-   batch file, whatever on the PATH that invokes
+   batch file, or whatever on the PATH that invokes
    $WXWIN/utils/wxPython/distrib/build.py to help simplify matters
    somewhat.  For example, on my win32 system I have a file named
    build.bat in a directory on the PATH that contains:
@@ -71,16 +72,25 @@ below.)
 5. Change into the $(WXWIN)/utils/wxPython/src directory.
 
 
-6. Type "build -b" to build wxPython and "build -i" to install it.
+6. If you don't use SWIG, or have a new enough version installed, you
+   may have to update the timestamps of the files it generates so the
+   make utility won't think they are out of date and try to run SWIG
+   to update them.  The standard touch utility can do this for you:
+
+   touch gtk/*.cpp gtk/*.py
+
+
+7. Type "build -b" to build wxPython and "build -i" to install it.
 
    The build.py script actually generates a Makefile based on what it
    finds on your system and information found in the build.cfg file.
    If you have troubles building or you want it built or installed in
    a different way, take a look at the docstring in build.py.  You may
    be able to override configuration options in a file named
-   build.local.  For example, you can set a new TARGETDIR just by
-   creating a file named build.local in your wxPython source directory
-   and assign a value to it, like this:
+   build.local.  For example, you can set a new TARGETDIR (the
+   installation directory) just by creating a file named build.local
+   in your wxPython source directory and assign a value to it, like
+   this:
 
    TARGETDIR = "/usr/local/lib/python1.5/site-packages/wxPython"
 
@@ -88,20 +98,23 @@ below.)
    creative things there if you need to.
 
 
-7. To build and install the add-on modules, change to the appropriate
+8. To build and install the add-on modules, change to the appropriate
    directory under $WXWIN/utils/wxPython/modules and run the build
    utility again.
 
 
-8. Change to the $WXWIN/utils/wxPython/demo directory.
+9. Change to the $WXWIN/utils/wxPython/demo directory.
 
 
-9. Try executing the demo program.  For example:
+10. Try executing the demo program.  For example:
 
     python demo.py
 
-To run it without requiring a console on win32, you can use the
-pythonw.exe version of Python either from the command line or from a
-shortcut.
+    To run it without requiring a console on win32, you can use the
+    pythonw.exe version of Python either from the command line or from
+    a shortcut.
+
+
+
 
 

@@ -233,6 +233,9 @@ public:
     bool Hide();
     void InitDialog();
     bool IsEnabled();
+    bool IsExposed( int x, int y, int w=0, int h=0 );
+    %name(IsExposedPoint) bool IsExposed( const wxPoint& pt );
+    %name(IsExposedRect)  bool IsExposed( const wxRect& rect );
     bool IsRetained();
     bool IsShown();
     bool IsTopLevel();

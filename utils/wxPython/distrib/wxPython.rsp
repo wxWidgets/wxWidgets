@@ -18,6 +18,8 @@ wxPython/lib/*.py
 wxPython/lib/*.txt
 wxPython/lib/sizers/*.py
 wxPython/lib/sizers/*.txt
+wxPython/lib/editor/*.py
+wxPython/lib/editor/*.txt
 
 
 wxPython/src/build.cfg

@@ -72,6 +72,9 @@ http://starship.python.net:9673/crew/da/Code/PyOpenGL.
 
 Added some missing EVT_ functions.
 
+Added Dirk Holtwic's editor classes to the wxPython.lib.editor
+package.
+
 
 
 

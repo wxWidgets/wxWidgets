@@ -23,7 +23,7 @@ _useNestedSplitter = true
 _treeList = [
     ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow',
                                 'FileBrowseButton', 'GenericButtons',
-                                'wxMask']),
+                                'wxMask', 'wxEditor']),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
@@ -53,7 +53,7 @@ _treeList = [
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
-                          'FileBrowseButton', 'GenericButtons']),
+                          'FileBrowseButton', 'GenericButtons', 'wxEditor']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 

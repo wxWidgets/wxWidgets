@@ -17,24 +17,24 @@ class TestFloatBar(wxFrame):
         tb.SetFloatable(1)
         tb.SetTitle("Floating!")
         self.CreateStatusBar()
-        tb.AddTool(10, wxBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "New", "Long help for 'New'")
+        tb.AddSimpleTool(10, wxBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
+                         "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Open")
+        tb.AddSimpleTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
+                         "Open")
         EVT_TOOL(self, 20, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Copy")
+        tb.AddSimpleTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
+                         "Copy")
         EVT_TOOL(self, 30, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Paste")
+        tb.AddSimpleTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
+                         "Paste")
         EVT_TOOL(self, 40, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
@@ -42,8 +42,8 @@ class TestFloatBar(wxFrame):
 
 
         tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                        wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
-                        true, -1, -1, "Toggle with 2 bitmaps")
+                   wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
+                   shortHelpString="Toggle with 2 bitmaps", toggle=true)
         EVT_TOOL(self, 60, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
         tb.Realize()

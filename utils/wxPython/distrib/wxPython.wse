@@ -850,6 +850,12 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
+  Source=e:\Projects\wx\utils\wxPython\lib\editor\*.py
+  Destination=%MAINDIR%\wxPython\lib\editor
+  Description=wxPython Standard Library
+  Flags=0000000010000010
+end
+item: Install File
   Source=e:\Projects\wx\utils\wxPython\demo\*.py
   Destination=%MAINDIR%\wxPython\demo
   Description=Demos
@@ -1129,6 +1135,20 @@ end
 item: Create Shortcut
   Source=%MAINDIR%\wxPython\docs\licence.txt
   Destination=%CGROUPDIR%\%CGROUP_SAVE%\License.lnk
+  Icon Number=0
+  Key Type=1536
+  Flags=00000001
+end
+item: Create Shortcut
+  Source=%MAINDIR%\wxPython\README.txt
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\ReadMe.lnk
+  Icon Number=0
+  Key Type=1536
+  Flags=00000001
+end
+item: Create Shortcut
+  Source=%MAINDIR%\wxPython\CHANGES.txt
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\Changes.lnk
   Icon Number=0
   Key Type=1536
   Flags=00000001
