@@ -67,11 +67,11 @@ copy_files ()
 {
 ##delete old files and then copy new ones, add a symlink
 ## CVS
-find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\*.tar.bz2 -mtime +6 | xargs rm -rf
+find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\* -mtime +6 | xargs rm -rf
 cp  ${WORKDIR}/archives/wx-cvs-* ${FTPDIR}/CVS_HEAD/files
 
 rm ${FTPDIR}/CVS_HEAD/wx*
-for f in `find ${FTPDIR}/CVS_Makefiles/files -type f -name wx-cvs\* -mmin -601` ; do
+for f in `find ${FTPDIR}/CVS_HEAD/files -type f -name wx-cvs\* -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
 ## make sure updated at is really last
