@@ -360,7 +360,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
 
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
-    wxLogWarning(_("catalog file for domain '%s' not found."), szName.c_str());
+    wxLogVerbose(_("catalog file for domain '%s' not found."), szName.c_str());
     return FALSE;
   }
 
@@ -665,14 +665,35 @@ bool wxLocale::Init(int language, int flags)
     {
         wxUint32 lcid = MAKELCID(MAKELANGID(info->WinLang, info->WinSublang), 
                                  SORT_DEFAULT);
-        if (!SetThreadLocale(lcid))
+        if (SetThreadLocale(lcid))
+            retloc = wxSetlocale(LC_ALL, wxEmptyString);
+        else
         {
-            wxLogLastError(wxT("SetThreadLocale"));
-            wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
-            return FALSE;
+            // Windows9X doesn't support SetThreadLocale, so we must
+            // translate LCID to CRT's setlocale string ourselves
+            locale.Empty();
+            if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED)
+            {
+                wxChar buffer[256];
+                buffer[0] = wxT('\0');
+                GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, 256);
+                locale << buffer;
+                buffer[0] = wxT('\0');
+                GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY, buffer, 256);
+            }
+            if (locale.IsEmpty())
+            {
+                wxLogLastError(wxT("SetThreadLocale"));
+                wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
+                return FALSE;
+            }
+            else
+                retloc = wxSetlocale(LC_ALL, locale);
         }
     }
-    retloc = wxSetlocale(LC_ALL, wxEmptyString);
+    else
+        retloc = wxSetlocale(LC_ALL, wxEmptyString);
+
     if (retloc == NULL)
     {
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
@@ -1107,6 +1128,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_KASHMIRI,                   "ks"   , LANG_KASHMIRI  , SUBLANG_DEFAULT                   , "Kashmiri")
    LNG(wxLANGUAGE_KASHMIRI_INDIA,             "ks_IN", LANG_KASHMIRI  , SUBLANG_KASHMIRI_INDIA            , "Kashmiri (India)")
    LNG(wxLANGUAGE_KAZAKH,                     "kk"   , LANG_KAZAK     , SUBLANG_DEFAULT                   , "Kazakh")
+   LNG(wxLANGUAGE_KERNEWEK,                   "kw_GB", 0              , 0                                 , "Kernewek")
    LNG(wxLANGUAGE_KINYARWANDA,                "rw"   , 0              , 0                                 , "Kinyarwanda")
    LNG(wxLANGUAGE_KIRGHIZ,                    "ky"   , 0              , 0                                 , "Kirghiz")
    LNG(wxLANGUAGE_KIRUNDI,                    "rn"   , 0              , 0                                 , "Kirundi")
@@ -1133,9 +1155,8 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_NAURU,                      "na"   , 0              , 0                                 , "Nauru")
    LNG(wxLANGUAGE_NEPALI,                     "ne"   , LANG_NEPALI    , SUBLANG_DEFAULT                   , "Nepali")
    LNG(wxLANGUAGE_NEPALI_INDIA,               "ne_IN", LANG_NEPALI    , SUBLANG_NEPALI_INDIA              , "Nepali (India)")
-   LNG(wxLANGUAGE_NORWEGIAN,                  "no_NO", LANG_NORWEGIAN , SUBLANG_DEFAULT                   , "Norwegian")
    LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "no_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , "Norwegian (Bokmal)")
-   LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "no_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , "Norwegian (Nynorsk)")
+   LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "nn_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , "Norwegian (Nynorsk)")
    LNG(wxLANGUAGE_OCCITAN,                    "oc"   , 0              , 0                                 , "Occitan")
    LNG(wxLANGUAGE_ORIYA,                      "or"   , LANG_ORIYA     , SUBLANG_DEFAULT                   , "Oriya")
    LNG(wxLANGUAGE_OROMO,                      "om"   , 0              , 0                                 , "(Afan) Oromo")
@@ -1224,7 +1245,6 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
 };
 #undef LNG
-
 
 
 
