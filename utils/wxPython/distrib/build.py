@@ -257,6 +257,9 @@ class BuildConfig:
             self.RESFILE = ''
             self.RESRULE = ''
             self.OVERRIDEFLAGS = '/GX-'
+            self.RMCMD  = '-erase '
+            self.WXPSRCDIR = os.path.normpath(self.WXPSRCDIR)
+
 
         else:
             self.MAKE      = 'make'
@@ -273,6 +276,7 @@ class BuildConfig:
                           '-I$(WXPSRCDIR)'
             self.LFLAGS = '-L$(WXPSRCDIR) `wx-config --libs`'
             self.LIBS   = '-l$(HELPERLIB)'
+            self.RMCMD  = '-rm -f '
 
             # **** What to do when I start supporting Motif, etc.???
             self.GENCODEDIR = 'gtk'
@@ -366,6 +370,14 @@ class BuildConfig:
         self.PYMODULES = splitlines(swapslash(pymodules))
 
 
+        # now make a list of the python files that would need uninstalled
+        pycleanup = ""
+        for name in self.SWIGFILES:
+            pycleanup = pycleanup + self.makeCleanupList(name)
+        for name in self.PYFILES:
+            pycleanup = pycleanup + self.makeCleanupList(name)
+        self.PYCLEANUP = swapslash(pycleanup)
+
 
         # finally, build the makefile
         if sys.platform == 'win32':
@@ -381,6 +393,16 @@ class BuildConfig:
         f.close()
 
         print "Makefile created: ", self.MAKEFILE
+
+
+
+    #------------------------------------------------------------
+    def makeCleanupList(self, name):
+        st = ""
+        st = st + '\t%s$(TARGETDIR)\\%s.py\n' % (self.RMCMD, os.path.splitext(name)[0])
+        st = st + '\t%s$(TARGETDIR)\\%s.pyc\n' % (self.RMCMD, os.path.splitext(name)[0])
+        st = st + '\t%s$(TARGETDIR)\\%s.pyo\n' % (self.RMCMD, os.path.splitext(name)[0])
+        return st
 
 
     #------------------------------------------------------------
@@ -433,6 +455,7 @@ class BuildConfig:
 
 
 
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
@@ -516,7 +539,8 @@ clean:
 
 uninstall:
 	-erase $(TARGETDIR)\\$(TARGET)
-	-erase $(PYMODULES)
+%(PYCLEANUP)s
+
 
 #----------------------------------------------------------------------
 # implicit rule for compiling .cpp and .c files
@@ -652,12 +676,12 @@ endif
 install: $(TARGETDIR) $(TARGETDIR)/$(TARGET) pycfiles %(OTHERINSTALLTARGETS)s
 
 clean:
-	-rm -f *.o *.so *~
+	-rm -f *.o *$(SO) *~
 	-rm -f $(TARGET)
 
 uninstall:
 	-rm -f $(TARGETDIR)/$(TARGET)
-	-rm -f $(PYMODULES)
+%(PYCLEANUP)s
 
 
 #----------------------------------------------------------------------
