@@ -2228,9 +2228,10 @@ if test "$wxUSE_SHARED" = "yes"; then
     fi
 
     dnl the extra compiler flags needed for compilation of shared library
-    dnl sources, the default is understood by many compilers but not all - for
-    dnl them we set it specially below
-    PIC_FLAG="-fPIC"
+    if test "$GCC" = "yes"; then
+        dnl the switch for gcc is the same under all platforms
+        PIC_FLAG="-fPIC"
+    fi
 
     dnl the command to use for creating the shared library
     SHARED_LD="${CXX} -shared -o"
@@ -2255,7 +2256,7 @@ if test "$wxUSE_SHARED" = "yes"; then
                 AC_TRY_COMPILE([],
                     [
                         #ifndef __INTEL_COMPILER
-                            #error Not icc
+                        #error Not icc
                         #endif
                     ],
                     wx_cv_prog_icc=yes,
