@@ -68,8 +68,8 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
-2.5.1/2.5.2
------------
+2.5.1
+-----
 
 All:
 
