@@ -28,6 +28,11 @@
 #include "wx/dynlib.h"
 #include "wx/ffile.h"
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
 #if defined(HAVE_DLOPEN) || defined(__DARWIN__)
     #define USE_POSIX_DL_FUNCS
 #elif !defined(HAVE_SHL_LOAD)
