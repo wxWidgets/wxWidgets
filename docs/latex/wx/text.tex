@@ -114,6 +114,9 @@ under Win32 only and requires wxTE\_RICH.}
 doesn't show the selection when it doesn't have focus - use this style to force
 it to always show it. It doesn't do anything under other platforms.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created. No effect under GTK+.}
+\twocolitem{\windowstyle{wxTE\_DONTWRAP}}{Same as {\tt wxHSCROLL} style.}
+\twocolitem{\windowstyle{wxTE\_LINEWRAP}}{Wrap the lines too long to be shown entirely at any position (wxUniv only currently)}
+\twocolitem{\windowstyle{wxTE\_WORDWRAP}}{Wrap the lines too long to be shown entirely at word boundaries only (wxUniv only currently)}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles} and
@@ -282,7 +285,8 @@ Constructor, creating and showing a text control.
 
 \wxheading{Remarks}
 
-The horizontal scrollbar ({\bf wxTE\_HSCROLL} style flag) will only be created for multi-line text controls.
+The horizontal scrollbar ({\bf wxHSCROLL} style flag) will only be created
+for multi-line text controls.
 Without a horizontal scrollbar, text lines that don't fit in the control's
 size will be wrapped (but no newline character is inserted). Single line
 controls don't have a horizontal scrollbar, the text is automatically scrolled
