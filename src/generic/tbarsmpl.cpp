@@ -516,10 +516,12 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
 
     if ( bitmap.Ok() )
     {
+#if wxUSE_PALETTE
 #ifndef __WXGTK__
         if (bitmap.GetPalette())
             memDC.SetPalette(*bitmap.GetPalette());
 #endif
+#endif // wxUSE_PALETTE
 
         int ax = (int)tool->m_x,
         ay = (int)tool->m_y,
@@ -552,9 +554,12 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
                     &memDC, 0, 0);
         }
         memDC.SelectObject(wxNullBitmap);
+
+#if wxUSE_PALETTE
 #ifndef __WXGTK__
         memDC.SetPalette(wxNullPalette);
 #endif
+#endif // wxUSE_PALETTE
     }
     // No second bitmap, so draw a thick line around bitmap, or invert if mono
     else if ( tool->IsToggled() )
