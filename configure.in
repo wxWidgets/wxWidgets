@@ -2054,9 +2054,24 @@ if test "$wxUSE_EXPAT" != "no"; then
     AC_DEFINE(wxUSE_XML)
     
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then           
-        AC_CHECK_HEADER(expat.h)
-        if test "$ac_cv_header_expat_h" = "yes"; then
-            AC_CHECK_LIB(expat, XML_ParserCreate, EXPAT_LINK=" -lexpat")
+        AC_CHECK_HEADER([expat.h], [found_expat_h=1])
+        if test "x$found_expat_h" = "x1"; then
+            dnl Expat 1.95.6 comes with broken expat.h:
+            AC_CACHE_CHECK([if expat.h is valid C++ header],
+                wx_cv_expat_is_not_broken,
+                [
+                AC_LANG_SAVE
+                AC_LANG_CPLUSPLUS
+                AC_TRY_COMPILE([#include <expat.h>],[],
+                    wx_cv_expat_is_not_broken=yes,
+                    wx_cv_expat_is_not_broken=no
+                )
+                AC_LANG_RESTORE
+                ]
+            )
+            if test "$wx_cv_expat_is_not_broken" = "yes" ; then
+                AC_CHECK_LIB(expat, XML_ParserCreate, EXPAT_LINK=" -lexpat")
+            fi
         fi
         if test "x$EXPAT_LINK" = "x" ; then
             if test "$wxUSE_EXPAT" = "sys" ; then

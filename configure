@@ -19208,10 +19208,76 @@ echo "$as_me:$LINENO: result: $ac_cv_header_expat_h" >&5
 echo "${ECHO_T}$ac_cv_header_expat_h" >&6
 
 fi
+if test $ac_cv_header_expat_h = yes; then
+  found_expat_h=1
+fi
 
 
-        if test "$ac_cv_header_expat_h" = "yes"; then
-            echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+        if test "x$found_expat_h" = "x1"; then
+                        echo "$as_me:$LINENO: checking if expat.h is valid C++ header" >&5
+echo $ECHO_N "checking if expat.h is valid C++ header... $ECHO_C" >&6
+if test "${wx_cv_expat_is_not_broken+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+
+
+                ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+                cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <expat.h>
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_expat_is_not_broken=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+wx_cv_expat_is_not_broken=no
+
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+                ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+echo "$as_me:$LINENO: result: $wx_cv_expat_is_not_broken" >&5
+echo "${ECHO_T}$wx_cv_expat_is_not_broken" >&6
+            if test "$wx_cv_expat_is_not_broken" = "yes" ; then
+                echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6
 if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -19269,6 +19335,7 @@ if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
   EXPAT_LINK=" -lexpat"
 fi
 
+            fi
         fi
         if test "x$EXPAT_LINK" = "x" ; then
             if test "$wxUSE_EXPAT" = "sys" ; then
@@ -36521,6 +36588,7 @@ echo "                                       regex              ${wxUSE_REGEX}"
 echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       odbc               ${wxUSE_ODBC}"
+echo "                                       expat              ${wxUSE_EXPAT}"
 
 echo ""
 
