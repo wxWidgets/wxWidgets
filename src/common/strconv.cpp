@@ -627,14 +627,18 @@ public:
     {
         size_t len =
             MultiByteToWideChar(CodePage, 0, psz, -1, buf, buf ? n : 0);
-        return len ? len : (size_t)-1;
+        //VS: returns # of written chars for buf!=NULL and *size* 
+        //    needed buffer for buf==NULL
+        return len ? (buf ? len : len-1) : (size_t)-1;
     }
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
     {
         size_t len = WideCharToMultiByte(CodePage, 0, psz, -1, buf,
                                          buf ? n : 0, NULL, NULL);
-        return len ? len : (size_t)-1;
+        //VS: returns # of written chars for buf!=NULL and *size* 
+        //    needed buffer for buf==NULL
+        return len ? (buf ? len : len-1) : (size_t)-1;
     }
 
     bool usable()
