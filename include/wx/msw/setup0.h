@@ -120,12 +120,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#if defined(_MSC_VER) || \
-    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
-    #define wxUSE_ON_FATAL_EXCEPTION 1
-#else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif
+#define wxUSE_ON_FATAL_EXCEPTION 1
 
 // Set this to 1 to be able to generate a human-readable (unlike
 // machine-readable minidumop created by wxCrashReport::Generate()) stack back
@@ -488,6 +483,13 @@
 //
 // Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
 #define wxUSE_DIRECTSHOW    0
+
+// Use GStreamer for Unix (req a lot of dependancies)
+//
+// Default is 0
+//
+// Recommended setting: 1 (wxMediaCtrl won't work by default without it)
+#define wxUSE_GSTREAMER    0
 
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
