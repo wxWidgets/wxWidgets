@@ -55,6 +55,44 @@ static const int                    idMenuTitle = -2;
     IMPLEMENT_DYNAMIC_CLASS(wxMenu, wxEvtHandler)
     IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 
+// ----------------------------------------------------------------------------
+// static function for translating menu labels
+// ----------------------------------------------------------------------------
+
+static wxString TextToLabel(const wxString& rTitle)
+{
+    wxString Title;
+    const wxChar *pc;
+    for (pc = rTitle; *pc != wxT('\0'); pc++ )
+    {
+        if (*pc == wxT('&') )
+        {
+            if (*(pc+1) == wxT('&'))
+            {
+                pc++;
+                Title << wxT('&');
+            }
+            else 
+                Title << wxT('~');
+        }
+//         else if (*pc == wxT('/'))
+//         {
+//             Title << wxT('\\');
+//         }
+        else
+        {
+            if ( *pc == wxT('~') )
+            {
+                // tildes must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by PM ???
+                Title << *pc;
+            }
+            Title << *pc;
+        }
+    }
+    return Title;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -793,9 +831,10 @@ wxMenu* wxMenuBar::Replace(
 )
 {
     SHORT                            nId;
+    wxString                         Title = TextToLabel(rTitle);
     wxMenu*                          pMenuOld = wxMenuBarBase::Replace( nPos
                                                                        ,pMenu
-                                                                       ,rTitle
+                                                                       ,Title
                                                                       );
 
 
@@ -807,11 +846,11 @@ wxMenu* wxMenuBar::Replace(
     }
     if (!pMenuOld)
         return FALSE;
-    m_titles[nPos] = rTitle;
+    m_titles[nPos] = Title;
     if (IsAttached())
     {
         ::WinSendMsg((HWND)m_hMenu, MM_DELETEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
-        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)rTitle.c_str());
+        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
 
 #if wxUSE_ACCEL
         if (pMenuOld->HasAccels() || pMenu->HasAccels())
@@ -833,13 +872,14 @@ bool wxMenuBar::Insert(
 , const wxString&                   rTitle
 )
 {
+    wxString Title = TextToLabel(rTitle);
     if (!wxMenuBarBase::Insert( nPos
                                ,pMenu
-                               ,rTitle
+                               ,Title
                               ))
         return FALSE;
 
-    m_titles.Insert( rTitle
+    m_titles.Insert( Title
                     ,nPos
                    );
 
@@ -847,7 +887,7 @@ bool wxMenuBar::Insert(
 
     if (IsAttached())
     {
-        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)rTitle.c_str());
+        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
 #if wxUSE_ACCEL
         if (pMenu->HasAccels())
         {
@@ -869,16 +909,17 @@ bool wxMenuBar::Append(
 
     wxCHECK_MSG(hSubmenu, FALSE, wxT("can't append invalid menu to menubar"));
 
-    if (!wxMenuBarBase::Append(pMenu, rTitle))
+    wxString Title = TextToLabel(rTitle);
+    if (!wxMenuBarBase::Append(pMenu, Title))
         return FALSE;
 
     pMenu->Attach(this);
-    m_titles.Add(rTitle);
+    m_titles.Add(Title);
 
     if ( IsAttached() )
     {
         pMenu->m_vMenuData.iPosition = MIT_END;
-        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)rTitle.c_str());
+        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)Title.c_str());
 #if wxUSE_ACCEL
         if (pMenu->HasAccels())
         {

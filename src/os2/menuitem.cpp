@@ -54,6 +54,44 @@
     #define OWNER_DRAWN_ONLY( code )
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 
+// ----------------------------------------------------------------------------
+// static function for translating menu labels
+// ----------------------------------------------------------------------------
+
+static wxString TextToLabel(const wxString& rTitle)
+{
+    wxString Title;
+    const wxChar *pc;
+    for (pc = rTitle; *pc != wxT('\0'); pc++ )
+    {
+        if (*pc == wxT('&') )
+        {
+            if (*(pc+1) == wxT('&'))
+            {
+                pc++;
+                Title << wxT('&');
+            }
+            else 
+                Title << wxT('~');
+        }
+//         else if (*pc == wxT('/'))
+//         {
+//             Title << wxT('\\');
+//         }
+        else
+        {
+            if ( *pc == wxT('~') )
+            {
+                // tildes must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by PM ???
+                Title << *pc;
+            }
+            Title << *pc;
+        }
+    }
+    return Title;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -84,7 +122,7 @@ wxMenuItem::wxMenuItem(
 , wxMenu*                           pSubMenu
 )
 #if wxUSE_OWNER_DRAWN
-:  wxOwnerDrawn( rText
+:  wxOwnerDrawn( TextToLabel(rText)
                 ,bCheckable
                )
 #endif // owner drawn
@@ -114,7 +152,7 @@ wxMenuItem::wxMenuItem(
     m_isEnabled   = TRUE;
     m_isChecked   = FALSE;
     m_id          = nId;
-    m_text        = rText;
+    m_text        = TextToLabel(rText);
     m_isCheckable = bCheckable;
     m_help        = rStrHelp;
 } // end of wxMenuItem::wxMenuItem
@@ -153,7 +191,19 @@ wxString wxMenuItemBase::GetLabelFromText(
   const wxString&                   rText
 )
 {
-    return wxStripMenuCodes(rText);
+    wxString label;
+    for ( const wxChar *pc = rText.c_str(); *pc; pc++ )
+    {
+        if ( *pc == wxT('~') || *pc == wxT('&') )
+        {
+            // '~' is the escape character for GTK+ and '&' is the one for
+            // wxWindows - skip both of them
+            continue;
+        }
+
+        label += *pc;
+    }
+    return label;
 }
 
 // accelerators
@@ -233,11 +283,13 @@ void wxMenuItem::SetText(
     //
     // Don't do anything if label didn't change
     //
-    if (m_text == rText)
+
+    wxString Text = TextToLabel(rText);
+    if (m_text == Text)
         return;
 
-    wxMenuItemBase::SetText(rText);
-    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(rText));
+    wxMenuItemBase::SetText(Text);
+    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(Text));
 
     HWND                            hMenu = GetHMenuOf(m_parentMenu);
 
@@ -279,7 +331,7 @@ void wxMenuItem::SetText(
 #endif  //owner drawn
         {
             uFlagsOld |= MIS_TEXT;
-            pData = (BYTE*)rText.c_str();
+            pData = (BYTE*)Text.c_str();
         }
 
         //
