@@ -80,6 +80,11 @@ WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
 // Sound the bell
 WXDLLIMPEXP_BASE void wxBell();
 
+#if defined(__WXGTK__) || defined(__WXMSW__) || defined(__WXMAC__) || defined(__X__) 
+	// Get the state of a key (true if pressed, false if not)
+	WXDLLIMPEXP_BASE bool wxGetKeyState(wxKeyCode key);
+#endif
+
 // Get OS description as a user-readable string
 WXDLLIMPEXP_BASE wxString wxGetOsDescription();
 

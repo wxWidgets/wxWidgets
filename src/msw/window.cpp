@@ -5057,6 +5057,18 @@ int wxCharCodeWXToMSW(int id, bool *isVirtual)
     return keySym;
 }
 
+bool wxGetKeyState(wxKeyCode key)
+{
+    bool bVirtual;
+    int vkey = wxCharCodeWXToMSW(key, &bVirtual);
+    
+    //there aren't WXK_ macros for non-virtual key codes
+    if (bVirtual == false)
+        return false;
+
+    return GetKeyState(vkey) < 0;
+}
+
 wxWindow *wxGetActiveWindow()
 {
     HWND hWnd = GetActiveWindow();

@@ -1757,6 +1757,42 @@ long wxMacTranslateKey(unsigned char key, unsigned char code)
     return retval;
 }
 
+int wxKeyCodeToMacModifier(wxKeyCode key)
+{
+    switch (key)
+    {
+    case WXK_START:
+        return cmdKey;
+
+    case WXK_SHIFT:
+        return shiftKey;
+
+    case WXK_CAPITAL:
+        return alphaLock;
+
+    case WXK_OPTION:
+        return optionKey;
+
+    case WXK_CONTROL:
+        return controlKey;
+
+    default:
+        return 0;
+    }
+}
+
+bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
+{
+//if OS X > 10.2 (i.e. 10.2.x)
+//a known apple bug prevents the system from determining led
+//states with GetKeys... can only determine caps lock led
+   return !!(GetCurrentKeyModifiers() & wxKeyCodeToMacModifier(key)); 
+//else
+//  KeyMapByteArray keymap; 
+//  GetKeys((BigEndianLong*)keymap);
+//  return !!(BitTst(keymap, (sizeof(KeyMapByteArray)*8) - iKey));
+}
+
 #if !TARGET_CARBON
 void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 {
