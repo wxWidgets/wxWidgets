@@ -49,9 +49,6 @@
 #if defined(__WXPM__)
   #define INCL_DOS
   #include <os2.h>
-  #define LINKAGEMODE _Optlink
-#else
-  #define LINKAGEMODE
 #endif
 
 #include  <stdlib.h>
