@@ -1,9 +1,9 @@
 Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper (>=2.0), flex, bison, gettext, libgtk1.2-dev, python (>=2.1), python (<<2.2), python2.1-dev, zlib1g-dev, libjpeg62-dev, libpng-dev, libtiff3g-dev, libgl-dev, libesd0-dev
+Build-Depends: debhelper (>=2.0), flex, bison, gettext, libgtk1.2-dev, python (>=2.2), python (<<2.3), python2.2-dev, zlib1g-dev, libjpeg62-dev, libpng3-dev, libtiff3g-dev, libgl-dev, libesd0-dev
 Maintainer: Ron Lee <ron@debian.org>
-Standards-Version: 3.5.6.0
+Standards-Version: 3.5.7.0
 
 Package: libwxbase=V
 Architecture: any
