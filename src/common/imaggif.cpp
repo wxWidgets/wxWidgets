@@ -3,6 +3,7 @@
 // Purpose:     wxGIFHandler
 // Author:      Vaclav Slavik & Guillermo Rodriguez Garcia
 // RCS-ID:      $Id$
+// Copyright:   (c) 1999 Vaclav Slavik & Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,12 +23,11 @@
 #  include "wx/defs.h"
 #endif
 
-#if 1 // change this to #if wxUSE_GIF
+#if 1   // change this to #if wxUSE_GIF
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/wfstream.h"
-#include "wx/module.h"
 #include "wx/log.h"
 
 #if !USE_SHARED_LIBRARIES
@@ -43,15 +43,22 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
 {
     wxGIFDecoder *decod;
+    int error;
     bool ok;
 
     decod = new wxGIFDecoder(&stream, TRUE);
-    
-    if (decod->ReadGIF() != E_OK)
-    {
-        if (verbose)
-            wxLogDebug(_T("Error reading GIF"));
 
+    if ((error = decod->ReadGIF()) != E_OK)
+    {   
+        if (verbose)
+        {
+            switch (error)
+            {
+                case E_FORMATO: wxLogError(_T("wxGIFHandler: error in image format")); break;
+                case E_MEMORIA: wxLogError(_T("wxGIFHandler: couldn't allocate memory")); break;
+                default:        wxLogError(_T("wxGIFHandler: unknown error !!!"));
+            }
+        }
         delete decod;
         return FALSE;
     }
