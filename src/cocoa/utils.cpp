@@ -49,6 +49,15 @@ void wxClientDisplayRect(int *x,int *y,int *width,int *height)
         *height=768;
 }
 
+wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
+{
+    static wxToolkitInfo info;
+    info.shortName = _T("cocoa");
+    info.name = _T("wxCocoa");
+    // TODO: Finish this
+    return info;
+}
+
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
