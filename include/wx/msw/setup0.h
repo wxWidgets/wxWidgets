@@ -175,10 +175,11 @@
 // setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
 // http://www.microsoft.com/globaldev/Articles/mslu_announce.asp). Note that you
 // will have to modify the makefiles to include unicows.lib import library as the first
-// library.
+// library (if you use MSVC, you can run the makefile with "nmake MSLU=1 UNICODE=1"
+// command).
 //
 // If your compiler doesn't have unicows.lib, you can get a version of it at
-// http://www.volny.cz/v.slavik/libunicows/
+// http://libunicows.sourceforge.net
 //
 // Default is 0
 //
