@@ -116,7 +116,7 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
     int maxPos = GetControl32BitMaximum( (ControlHandle) m_macControl) ;
     
     wxEventType scrollEvent = wxEVT_NULL;
-    int nScrollInc;
+    int nScrollInc = 0;
     
     // all events have already been reported during mouse down, except for THUMBRELEASE
     if ( !mouseStillDown && controlpart !=kControlIndicatorPart )

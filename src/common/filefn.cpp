@@ -913,7 +913,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     int         i;
     int         j;
     OSErr       theErr;
-    OSStatus    theStatus;
+    OSStatus    theStatus = noErr;
     Boolean     isDirectory = FALSE;
     Str255    theParentPath = "\p";
     FSSpec      theParentSpec;
