@@ -33,29 +33,29 @@ class wxHelpEventPtr(wxCommandEventPtr):
         self.this = this
         self.thisown = 0
     def GetPosition(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_GetPosition,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_GetPosition(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) 
         return val
     def SetPosition(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_SetPosition,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_SetPosition(self, *_args, **_kwargs)
         return val
     def GetLink(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_GetLink,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_GetLink(self, *_args, **_kwargs)
         return val
     def SetLink(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_SetLink,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_SetLink(self, *_args, **_kwargs)
         return val
     def GetTarget(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_GetTarget,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_GetTarget(self, *_args, **_kwargs)
         return val
     def SetTarget(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpEvent_SetTarget,(self,) + _args, _kwargs)
+        val = helpc.wxHelpEvent_SetTarget(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxHelpEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxHelpEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxHelpEvent(wxHelpEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(helpc.new_wxHelpEvent,_args,_kwargs)
+        self.this = helpc.new_wxHelpEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -72,16 +72,16 @@ class wxContextHelpPtr(wxObjectPtr):
             except:
                 pass
     def BeginContextHelp(self, *_args, **_kwargs):
-        val = apply(helpc.wxContextHelp_BeginContextHelp,(self,) + _args, _kwargs)
+        val = helpc.wxContextHelp_BeginContextHelp(self, *_args, **_kwargs)
         return val
     def EndContextHelp(self, *_args, **_kwargs):
-        val = apply(helpc.wxContextHelp_EndContextHelp,(self,) + _args, _kwargs)
+        val = helpc.wxContextHelp_EndContextHelp(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxContextHelp instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxContextHelp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxContextHelp(wxContextHelpPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(helpc.new_wxContextHelp,_args,_kwargs)
+        self.this = helpc.new_wxContextHelp(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -92,10 +92,10 @@ class wxContextHelpButtonPtr(wxBitmapButtonPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxContextHelpButton instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxContextHelpButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxContextHelpButton(wxContextHelpButtonPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(helpc.new_wxContextHelpButton,_args,_kwargs)
+        self.this = helpc.new_wxContextHelpButton(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -107,22 +107,22 @@ class wxHelpProviderPtr :
         self.this = this
         self.thisown = 0
     def GetHelp(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpProvider_GetHelp,(self,) + _args, _kwargs)
+        val = helpc.wxHelpProvider_GetHelp(self, *_args, **_kwargs)
         return val
     def ShowHelp(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpProvider_ShowHelp,(self,) + _args, _kwargs)
+        val = helpc.wxHelpProvider_ShowHelp(self, *_args, **_kwargs)
         return val
     def AddHelp(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpProvider_AddHelp,(self,) + _args, _kwargs)
+        val = helpc.wxHelpProvider_AddHelp(self, *_args, **_kwargs)
         return val
     def AddHelpById(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpProvider_AddHelpById,(self,) + _args, _kwargs)
+        val = helpc.wxHelpProvider_AddHelpById(self, *_args, **_kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
-        val = apply(helpc.wxHelpProvider_Destroy,(self,) + _args, _kwargs)
+        val = helpc.wxHelpProvider_Destroy(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxHelpProvider instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxHelpProvider(wxHelpProviderPtr):
     def __init__(self,this):
         self.this = this
@@ -135,10 +135,10 @@ class wxSimpleHelpProviderPtr(wxHelpProviderPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxSimpleHelpProvider instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSimpleHelpProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSimpleHelpProvider(wxSimpleHelpProviderPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(helpc.new_wxSimpleHelpProvider,_args,_kwargs)
+        self.this = helpc.new_wxSimpleHelpProvider(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -149,12 +149,12 @@ class wxSimpleHelpProvider(wxSimpleHelpProviderPtr):
 #-------------- FUNCTION WRAPPERS ------------------
 
 def wxHelpProvider_Set(*_args, **_kwargs):
-    val = apply(helpc.wxHelpProvider_Set,_args,_kwargs)
+    val = helpc.wxHelpProvider_Set(*_args,**_kwargs)
     if val: val = wxHelpProviderPtr(val)
     return val
 
 def wxHelpProvider_Get(*_args, **_kwargs):
-    val = apply(helpc.wxHelpProvider_Get,_args,_kwargs)
+    val = helpc.wxHelpProvider_Get(*_args,**_kwargs)
     if val: val = wxHelpProviderPtr(val)
     return val
 

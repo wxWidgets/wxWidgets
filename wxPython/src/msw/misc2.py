@@ -63,7 +63,7 @@ class wxSystemSettingsPtr :
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxSystemSettings instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSystemSettings instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSystemSettings(wxSystemSettingsPtr):
     def __init__(self,this):
         self.this = this
@@ -76,19 +76,19 @@ class wxToolTipPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def SetTip(self, *_args, **_kwargs):
-        val = apply(misc2c.wxToolTip_SetTip,(self,) + _args, _kwargs)
+        val = misc2c.wxToolTip_SetTip(self, *_args, **_kwargs)
         return val
     def GetTip(self, *_args, **_kwargs):
-        val = apply(misc2c.wxToolTip_GetTip,(self,) + _args, _kwargs)
+        val = misc2c.wxToolTip_GetTip(self, *_args, **_kwargs)
         return val
     def GetWindow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxToolTip_GetWindow,(self,) + _args, _kwargs)
+        val = misc2c.wxToolTip_GetWindow(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxToolTip instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxToolTip instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxToolTip(wxToolTipPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxToolTip,_args,_kwargs)
+        self.this = misc2c.new_wxToolTip(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -105,51 +105,51 @@ class wxCaretPtr :
             except:
                 pass
     def IsOk(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_IsOk,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_IsOk(self, *_args, **_kwargs)
         return val
     def IsVisible(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_IsVisible,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_IsVisible(self, *_args, **_kwargs)
         return val
     def GetPositionTuple(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_GetPositionTuple,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_GetPositionTuple(self, *_args, **_kwargs)
         return val
     def GetPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_GetPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_GetPosition(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
     def GetSizeTuple(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_GetSizeTuple,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_GetSizeTuple(self, *_args, **_kwargs)
         return val
     def GetSize(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_GetSize,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_GetSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def GetWindow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_GetWindow,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_GetWindow(self, *_args, **_kwargs)
         return val
     def MoveXY(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_MoveXY,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_MoveXY(self, *_args, **_kwargs)
         return val
     def Move(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_Move,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_Move(self, *_args, **_kwargs)
         return val
     def SetSizeWH(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_SetSizeWH,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_SetSizeWH(self, *_args, **_kwargs)
         return val
     def SetSize(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_SetSize,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_SetSize(self, *_args, **_kwargs)
         return val
     def Show(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_Show,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_Show(self, *_args, **_kwargs)
         return val
     def Hide(self, *_args, **_kwargs):
-        val = apply(misc2c.wxCaret_Hide,(self,) + _args, _kwargs)
+        val = misc2c.wxCaret_Hide(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxCaret instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxCaret instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxCaret(wxCaretPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxCaret,_args,_kwargs)
+        self.this = misc2c.new_wxCaret(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -166,10 +166,10 @@ class wxBusyCursorPtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxBusyCursor instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxBusyCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxBusyCursor(wxBusyCursorPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxBusyCursor,_args,_kwargs)
+        self.this = misc2c.new_wxBusyCursor(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -186,10 +186,10 @@ class wxWindowDisablerPtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxWindowDisabler instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxWindowDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxWindowDisabler(wxWindowDisablerPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxWindowDisabler,_args,_kwargs)
+        self.this = misc2c.new_wxWindowDisabler(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -206,10 +206,10 @@ class wxMutexGuiLockerPtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxMutexGuiLocker instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxMutexGuiLocker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxMutexGuiLocker(wxMutexGuiLockerPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxMutexGuiLocker,_args,_kwargs)
+        self.this = misc2c.new_wxMutexGuiLocker(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -226,16 +226,16 @@ class wxTipProviderPtr :
             except:
                 pass
     def GetTip(self, *_args, **_kwargs):
-        val = apply(misc2c.wxTipProvider_GetTip,(self,) + _args, _kwargs)
+        val = misc2c.wxTipProvider_GetTip(self, *_args, **_kwargs)
         return val
     def GetCurrentTip(self, *_args, **_kwargs):
-        val = apply(misc2c.wxTipProvider_GetCurrentTip,(self,) + _args, _kwargs)
+        val = misc2c.wxTipProvider_GetCurrentTip(self, *_args, **_kwargs)
         return val
     def PreprocessTip(self, *_args, **_kwargs):
-        val = apply(misc2c.wxTipProvider_PreprocessTip,(self,) + _args, _kwargs)
+        val = misc2c.wxTipProvider_PreprocessTip(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxTipProvider instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxTipProvider(wxTipProviderPtr):
     def __init__(self,this):
         self.this = this
@@ -248,13 +248,13 @@ class wxPyTipProviderPtr(wxTipProviderPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTipProvider__setCallbackInfo,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTipProvider__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyTipProvider instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyTipProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyTipProvider(wxPyTipProviderPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxPyTipProvider,_args,_kwargs)
+        self.this = misc2c.new_wxPyTipProvider(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyTipProvider)
 
@@ -272,60 +272,60 @@ class wxDragImagePtr(wxObjectPtr):
             except:
                 pass
     def SetBackingBitmap(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_SetBackingBitmap,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_SetBackingBitmap(self, *_args, **_kwargs)
         return val
     def BeginDrag(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_BeginDrag,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_BeginDrag(self, *_args, **_kwargs)
         return val
     def BeginDragBounded(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_BeginDragBounded,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_BeginDragBounded(self, *_args, **_kwargs)
         return val
     def EndDrag(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_EndDrag,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_EndDrag(self, *_args, **_kwargs)
         return val
     def Move(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_Move,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_Move(self, *_args, **_kwargs)
         return val
     def Show(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_Show,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_Show(self, *_args, **_kwargs)
         return val
     def Hide(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_Hide,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_Hide(self, *_args, **_kwargs)
         return val
     def GetImageRect(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_GetImageRect,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_GetImageRect(self, *_args, **_kwargs)
         if val: val = wxRectPtr(val) ; val.thisown = 1
         return val
     def RedrawImage(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_RedrawImage,(self,) + _args, _kwargs)
+        val = misc2c.wxDragImage_RedrawImage(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDragImage instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDragImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     BeginDrag2 = BeginDragBounded
 class wxDragImage(wxDragImagePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxDragImage,_args,_kwargs)
+        self.this = misc2c.new_wxDragImage(*_args,**_kwargs)
         self.thisown = 1
 
 
 
 def wxDragIcon(*_args,**_kwargs):
-    val = wxDragImagePtr(apply(misc2c.new_wxDragIcon,_args,_kwargs))
+    val = wxDragImagePtr(misc2c.new_wxDragIcon(*_args,**_kwargs))
     val.thisown = 1
     return val
 
 def wxDragString(*_args,**_kwargs):
-    val = wxDragImagePtr(apply(misc2c.new_wxDragString,_args,_kwargs))
+    val = wxDragImagePtr(misc2c.new_wxDragString(*_args,**_kwargs))
     val.thisown = 1
     return val
 
 def wxDragTreeItem(*_args,**_kwargs):
-    val = wxDragImagePtr(apply(misc2c.new_wxDragTreeItem,_args,_kwargs))
+    val = wxDragImagePtr(misc2c.new_wxDragTreeItem(*_args,**_kwargs))
     val.thisown = 1
     return val
 
 def wxDragListItem(*_args,**_kwargs):
-    val = wxDragImagePtr(apply(misc2c.new_wxDragListItem,_args,_kwargs))
+    val = wxDragImagePtr(misc2c.new_wxDragListItem(*_args,**_kwargs))
     val.thisown = 1
     return val
 
@@ -341,28 +341,28 @@ class wxPyTimerPtr(wxObjectPtr):
             except:
                 pass
     def GetInterval(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_GetInterval,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_GetInterval(self, *_args, **_kwargs)
         return val
     def IsOneShot(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_IsOneShot,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_IsOneShot(self, *_args, **_kwargs)
         return val
     def IsRunning(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_IsRunning,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_IsRunning(self, *_args, **_kwargs)
         return val
     def SetOwner(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_SetOwner,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_SetOwner(self, *_args, **_kwargs)
         return val
     def Start(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_Start,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_Start(self, *_args, **_kwargs)
         return val
     def Stop(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyTimer_Stop,(self,) + _args, _kwargs)
+        val = misc2c.wxPyTimer_Stop(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyTimer instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyTimer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyTimer(wxPyTimerPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxPyTimer,_args,_kwargs)
+        self.this = misc2c.new_wxPyTimer(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -379,22 +379,22 @@ class wxStopWatchPtr :
             except:
                 pass
     def Start(self, *_args, **_kwargs):
-        val = apply(misc2c.wxStopWatch_Start,(self,) + _args, _kwargs)
+        val = misc2c.wxStopWatch_Start(self, *_args, **_kwargs)
         return val
     def Pause(self, *_args, **_kwargs):
-        val = apply(misc2c.wxStopWatch_Pause,(self,) + _args, _kwargs)
+        val = misc2c.wxStopWatch_Pause(self, *_args, **_kwargs)
         return val
     def Resume(self, *_args, **_kwargs):
-        val = apply(misc2c.wxStopWatch_Resume,(self,) + _args, _kwargs)
+        val = misc2c.wxStopWatch_Resume(self, *_args, **_kwargs)
         return val
     def Time(self, *_args, **_kwargs):
-        val = apply(misc2c.wxStopWatch_Time,(self,) + _args, _kwargs)
+        val = misc2c.wxStopWatch_Time(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxStopWatch instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxStopWatch instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxStopWatch(wxStopWatchPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxStopWatch,_args,_kwargs)
+        self.this = misc2c.new_wxStopWatch(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -405,22 +405,22 @@ class wxLogPtr :
         self.this = this
         self.thisown = 0
     def Flush(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_Flush,(self,) + _args, _kwargs)
+        val = misc2c.wxLog_Flush(self, *_args, **_kwargs)
         return val
     def HasPendingMessages(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_HasPendingMessages,(self,) + _args, _kwargs)
+        val = misc2c.wxLog_HasPendingMessages(self, *_args, **_kwargs)
         return val
     def GetVerbose(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_GetVerbose,(self,) + _args, _kwargs)
+        val = misc2c.wxLog_GetVerbose(self, *_args, **_kwargs)
         return val
     def TimeStamp(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLog_TimeStamp,(self,) + _args, _kwargs)
+        val = misc2c.wxLog_TimeStamp(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxLog instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLog(wxLogPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLog,_args,_kwargs)
+        self.this = misc2c.new_wxLog(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -431,10 +431,10 @@ class wxLogStderrPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxLogStderr instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogStderr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogStderr(wxLogStderrPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogStderr,_args,_kwargs)
+        self.this = misc2c.new_wxLogStderr(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -445,10 +445,10 @@ class wxLogTextCtrlPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxLogTextCtrl instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogTextCtrl(wxLogTextCtrlPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogTextCtrl,_args,_kwargs)
+        self.this = misc2c.new_wxLogTextCtrl(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -459,10 +459,10 @@ class wxLogGuiPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxLogGui instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogGui instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogGui(wxLogGuiPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogGui,_args,_kwargs)
+        self.this = misc2c.new_wxLogGui(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -473,26 +473,26 @@ class wxLogWindowPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def Show(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogWindow_Show,(self,) + _args, _kwargs)
+        val = misc2c.wxLogWindow_Show(self, *_args, **_kwargs)
         return val
     def GetFrame(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogWindow_GetFrame,(self,) + _args, _kwargs)
+        val = misc2c.wxLogWindow_GetFrame(self, *_args, **_kwargs)
         return val
     def GetOldLog(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogWindow_GetOldLog,(self,) + _args, _kwargs)
+        val = misc2c.wxLogWindow_GetOldLog(self, *_args, **_kwargs)
         if val: val = wxLogPtr(val) 
         return val
     def IsPassingMessages(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogWindow_IsPassingMessages,(self,) + _args, _kwargs)
+        val = misc2c.wxLogWindow_IsPassingMessages(self, *_args, **_kwargs)
         return val
     def PassMessages(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogWindow_PassMessages,(self,) + _args, _kwargs)
+        val = misc2c.wxLogWindow_PassMessages(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxLogWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogWindow(wxLogWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogWindow,_args,_kwargs)
+        self.this = misc2c.new_wxLogWindow(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -503,23 +503,23 @@ class wxLogChainPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def SetLog(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogChain_SetLog,(self,) + _args, _kwargs)
+        val = misc2c.wxLogChain_SetLog(self, *_args, **_kwargs)
         return val
     def PassMessages(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogChain_PassMessages,(self,) + _args, _kwargs)
+        val = misc2c.wxLogChain_PassMessages(self, *_args, **_kwargs)
         return val
     def IsPassingMessages(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogChain_IsPassingMessages,(self,) + _args, _kwargs)
+        val = misc2c.wxLogChain_IsPassingMessages(self, *_args, **_kwargs)
         return val
     def GetOldLog(self, *_args, **_kwargs):
-        val = apply(misc2c.wxLogChain_GetOldLog,(self,) + _args, _kwargs)
+        val = misc2c.wxLogChain_GetOldLog(self, *_args, **_kwargs)
         if val: val = wxLogPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxLogChain instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogChain instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogChain(wxLogChainPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogChain,_args,_kwargs)
+        self.this = misc2c.new_wxLogChain(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -536,10 +536,10 @@ class wxLogNullPtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxLogNull instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLogNull instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLogNull(wxLogNullPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogNull,_args,_kwargs)
+        self.this = misc2c.new_wxLogNull(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -550,16 +550,16 @@ class wxPyLogPtr(wxLogPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyLog__setCallbackInfo,(self,) + _args, _kwargs)
+        val = misc2c.wxPyLog__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def Destroy(self, *_args, **_kwargs):
-        val = apply(misc2c.wxPyLog_Destroy,(self,) + _args, _kwargs)
+        val = misc2c.wxPyLog_Destroy(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyLog instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyLog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyLog(wxPyLogPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxPyLog,_args,_kwargs)
+        self.this = misc2c.new_wxPyLog(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyLog)
 
@@ -571,10 +571,10 @@ class wxProcessEventPtr(wxEventPtr):
         self.this = this
         self.thisown = 0
     def GetPid(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcessEvent_GetPid,(self,) + _args, _kwargs)
+        val = misc2c.wxProcessEvent_GetPid(self, *_args, **_kwargs)
         return val
     def GetExitCode(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcessEvent_GetExitCode,(self,) + _args, _kwargs)
+        val = misc2c.wxProcessEvent_GetExitCode(self, *_args, **_kwargs)
         return val
     def __setattr__(self,name,value):
         if name == "m_pid" :
@@ -591,10 +591,10 @@ class wxProcessEventPtr(wxEventPtr):
             return misc2c.wxProcessEvent_m_exitcode_get(self)
         raise AttributeError,name
     def __repr__(self):
-        return "<C wxProcessEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxProcessEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxProcessEvent(wxProcessEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxProcessEvent,_args,_kwargs)
+        self.this = misc2c.new_wxProcessEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -605,50 +605,50 @@ class wxProcessPtr(wxEvtHandlerPtr):
         self.this = this
         self.thisown = 0
     def Destroy(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_Destroy,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_Destroy(self, *_args, **_kwargs)
         return val
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess__setCallbackInfo,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_OnTerminate(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_base_OnTerminate,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_base_OnTerminate(self, *_args, **_kwargs)
         return val
     def Redirect(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_Redirect,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_Redirect(self, *_args, **_kwargs)
         return val
     def IsRedirected(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_IsRedirected,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_IsRedirected(self, *_args, **_kwargs)
         return val
     def Detach(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_Detach,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_Detach(self, *_args, **_kwargs)
         return val
     def GetInputStream(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_GetInputStream,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_GetInputStream(self, *_args, **_kwargs)
         return val
     def GetErrorStream(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_GetErrorStream,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_GetErrorStream(self, *_args, **_kwargs)
         return val
     def GetOutputStream(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_GetOutputStream,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_GetOutputStream(self, *_args, **_kwargs)
         if val: val = wxOutputStreamPtr(val) 
         return val
     def CloseOutput(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_CloseOutput,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_CloseOutput(self, *_args, **_kwargs)
         return val
     def IsInputOpened(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_IsInputOpened,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_IsInputOpened(self, *_args, **_kwargs)
         return val
     def IsInputAvailable(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_IsInputAvailable,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_IsInputAvailable(self, *_args, **_kwargs)
         return val
     def IsErrorAvailable(self, *_args, **_kwargs):
-        val = apply(misc2c.wxProcess_IsErrorAvailable,(self,) + _args, _kwargs)
+        val = misc2c.wxProcess_IsErrorAvailable(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxProcess instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxProcess instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxProcess(wxProcessPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxProcess,_args,_kwargs)
+        self.this = misc2c.new_wxProcess(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxProcess)
 
@@ -666,137 +666,137 @@ class wxJoystickPtr(wxObjectPtr):
             except:
                 pass
     def GetPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetPosition(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
     def GetZPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetZPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetZPosition(self, *_args, **_kwargs)
         return val
     def GetButtonState(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetButtonState,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetButtonState(self, *_args, **_kwargs)
         return val
     def GetPOVPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetPOVPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetPOVPosition(self, *_args, **_kwargs)
         return val
     def GetPOVCTSPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetPOVCTSPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetPOVCTSPosition(self, *_args, **_kwargs)
         return val
     def GetRudderPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetRudderPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetRudderPosition(self, *_args, **_kwargs)
         return val
     def GetUPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetUPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetUPosition(self, *_args, **_kwargs)
         return val
     def GetVPosition(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetVPosition,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetVPosition(self, *_args, **_kwargs)
         return val
     def GetMovementThreshold(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetMovementThreshold,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetMovementThreshold(self, *_args, **_kwargs)
         return val
     def SetMovementThreshold(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_SetMovementThreshold,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_SetMovementThreshold(self, *_args, **_kwargs)
         return val
     def IsOk(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_IsOk,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_IsOk(self, *_args, **_kwargs)
         return val
     def GetNumberJoysticks(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetNumberJoysticks,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetNumberJoysticks(self, *_args, **_kwargs)
         return val
     def GetManufacturerId(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetManufacturerId,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetManufacturerId(self, *_args, **_kwargs)
         return val
     def GetProductId(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetProductId,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetProductId(self, *_args, **_kwargs)
         return val
     def GetProductName(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetProductName,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetProductName(self, *_args, **_kwargs)
         return val
     def GetXMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetXMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetXMin(self, *_args, **_kwargs)
         return val
     def GetYMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetYMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetYMin(self, *_args, **_kwargs)
         return val
     def GetZMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetZMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetZMin(self, *_args, **_kwargs)
         return val
     def GetXMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetXMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetXMax(self, *_args, **_kwargs)
         return val
     def GetYMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetYMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetYMax(self, *_args, **_kwargs)
         return val
     def GetZMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetZMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetZMax(self, *_args, **_kwargs)
         return val
     def GetNumberButtons(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetNumberButtons,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetNumberButtons(self, *_args, **_kwargs)
         return val
     def GetNumberAxes(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetNumberAxes,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetNumberAxes(self, *_args, **_kwargs)
         return val
     def GetMaxButtons(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetMaxButtons,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetMaxButtons(self, *_args, **_kwargs)
         return val
     def GetMaxAxes(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetMaxAxes,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetMaxAxes(self, *_args, **_kwargs)
         return val
     def GetPollingMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetPollingMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetPollingMin(self, *_args, **_kwargs)
         return val
     def GetPollingMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetPollingMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetPollingMax(self, *_args, **_kwargs)
         return val
     def GetRudderMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetRudderMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetRudderMin(self, *_args, **_kwargs)
         return val
     def GetRudderMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetRudderMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetRudderMax(self, *_args, **_kwargs)
         return val
     def GetUMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetUMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetUMin(self, *_args, **_kwargs)
         return val
     def GetUMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetUMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetUMax(self, *_args, **_kwargs)
         return val
     def GetVMin(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetVMin,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetVMin(self, *_args, **_kwargs)
         return val
     def GetVMax(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_GetVMax,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_GetVMax(self, *_args, **_kwargs)
         return val
     def HasRudder(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasRudder,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasRudder(self, *_args, **_kwargs)
         return val
     def HasZ(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasZ,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasZ(self, *_args, **_kwargs)
         return val
     def HasU(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasU,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasU(self, *_args, **_kwargs)
         return val
     def HasV(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasV,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasV(self, *_args, **_kwargs)
         return val
     def HasPOV(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasPOV,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasPOV(self, *_args, **_kwargs)
         return val
     def HasPOV4Dir(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasPOV4Dir,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasPOV4Dir(self, *_args, **_kwargs)
         return val
     def HasPOVCTS(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_HasPOVCTS,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_HasPOVCTS(self, *_args, **_kwargs)
         return val
     def SetCapture(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_SetCapture,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_SetCapture(self, *_args, **_kwargs)
         return val
     def ReleaseCapture(self, *_args, **_kwargs):
-        val = apply(misc2c.wxJoystick_ReleaseCapture,(self,) + _args, _kwargs)
+        val = misc2c.wxJoystick_ReleaseCapture(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxJoystick instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxJoystick instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxJoystick(wxJoystickPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxJoystick,_args,_kwargs)
+        self.this = misc2c.new_wxJoystick(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -813,16 +813,16 @@ class wxWavePtr(wxObjectPtr):
             except:
                 pass
     def IsOk(self, *_args, **_kwargs):
-        val = apply(misc2c.wxWave_IsOk,(self,) + _args, _kwargs)
+        val = misc2c.wxWave_IsOk(self, *_args, **_kwargs)
         return val
     def Play(self, *_args, **_kwargs):
-        val = apply(misc2c.wxWave_Play,(self,) + _args, _kwargs)
+        val = misc2c.wxWave_Play(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxWave instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxWave instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxWave(wxWavePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxWave,_args,_kwargs)
+        self.this = misc2c.new_wxWave(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -833,57 +833,57 @@ class wxFileTypeInfoPtr :
         self.this = this
         self.thisown = 0
     def IsValid(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_IsValid,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_IsValid(self, *_args, **_kwargs)
         return val
     def SetIcon(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_SetIcon,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_SetIcon(self, *_args, **_kwargs)
         return val
     def SetShortDesc(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_SetShortDesc,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_SetShortDesc(self, *_args, **_kwargs)
         return val
     def GetMimeType(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetMimeType,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetMimeType(self, *_args, **_kwargs)
         return val
     def GetOpenCommand(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetOpenCommand,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetOpenCommand(self, *_args, **_kwargs)
         return val
     def GetPrintCommand(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetPrintCommand,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetPrintCommand(self, *_args, **_kwargs)
         return val
     def GetShortDesc(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetShortDesc,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetShortDesc(self, *_args, **_kwargs)
         return val
     def GetDescription(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetDescription,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetDescription(self, *_args, **_kwargs)
         return val
     def GetExtensions(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetExtensions,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetExtensions(self, *_args, **_kwargs)
         return val
     def GetExtensionsCount(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetExtensionsCount,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetExtensionsCount(self, *_args, **_kwargs)
         return val
     def GetIconFile(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetIconFile,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetIconFile(self, *_args, **_kwargs)
         return val
     def GetIconIndex(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileTypeInfo_GetIconIndex,(self,) + _args, _kwargs)
+        val = misc2c.wxFileTypeInfo_GetIconIndex(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFileTypeInfo instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFileTypeInfo instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFileTypeInfo(wxFileTypeInfoPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxFileTypeInfo,_args,_kwargs)
+        self.this = misc2c.new_wxFileTypeInfo(*_args,**_kwargs)
         self.thisown = 1
 
 
 
 def wxFileTypeInfoSequence(*_args,**_kwargs):
-    val = wxFileTypeInfoPtr(apply(misc2c.new_wxFileTypeInfoSequence,_args,_kwargs))
+    val = wxFileTypeInfoPtr(misc2c.new_wxFileTypeInfoSequence(*_args,**_kwargs))
     val.thisown = 1
     return val
 
 def wxNullFileTypeInfo(*_args,**_kwargs):
-    val = wxFileTypeInfoPtr(apply(misc2c.new_wxNullFileTypeInfo,_args,_kwargs))
+    val = wxFileTypeInfoPtr(misc2c.new_wxNullFileTypeInfo(*_args,**_kwargs))
     val.thisown = 1
     return val
 
@@ -893,41 +893,41 @@ class wxFileTypePtr :
         self.this = this
         self.thisown = 0
     def GetMimeType(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetMimeType,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetMimeType(self, *_args, **_kwargs)
         return val
     def GetMimeTypes(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetMimeTypes,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetMimeTypes(self, *_args, **_kwargs)
         return val
     def GetExtensions(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetExtensions,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetExtensions(self, *_args, **_kwargs)
         return val
     def GetIcon(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetIcon,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetIcon(self, *_args, **_kwargs)
         if val: val = wxIconPtr(val) ; val.thisown = 1
         return val
     def GetIconInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetIconInfo,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetIconInfo(self, *_args, **_kwargs)
         return val
     def GetDescription(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetDescription,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetDescription(self, *_args, **_kwargs)
         return val
     def GetOpenCommand(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetOpenCommand,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetOpenCommand(self, *_args, **_kwargs)
         return val
     def GetPrintCommand(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetPrintCommand,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetPrintCommand(self, *_args, **_kwargs)
         return val
     def GetAllCommands(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_GetAllCommands,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_GetAllCommands(self, *_args, **_kwargs)
         return val
     def SetCommand(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_SetCommand,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_SetCommand(self, *_args, **_kwargs)
         return val
     def SetDefaultIcon(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_SetDefaultIcon,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_SetDefaultIcon(self, *_args, **_kwargs)
         return val
     def Unassociate(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileType_Unassociate,(self,) + _args, _kwargs)
+        val = misc2c.wxFileType_Unassociate(self, *_args, **_kwargs)
         return val
     def __del__(self, delfunc=misc2c.delete_wxFileType):
         if self.thisown == 1:
@@ -936,10 +936,10 @@ class wxFileTypePtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxFileType instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFileType instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFileType(wxFileTypePtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxFileType,_args,_kwargs)
+        self.this = misc2c.new_wxFileType(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -950,37 +950,37 @@ class wxMimeTypesManagerPtr :
         self.this = this
         self.thisown = 0
     def Initialize(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_Initialize,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_Initialize(self, *_args, **_kwargs)
         return val
     def ClearData(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_ClearData,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_ClearData(self, *_args, **_kwargs)
         return val
     def GetFileTypeFromExtension(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_GetFileTypeFromExtension,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_GetFileTypeFromExtension(self, *_args, **_kwargs)
         if val: val = wxFileTypePtr(val) ; val.thisown = 1
         return val
     def GetFileTypeFromMimeType(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_GetFileTypeFromMimeType,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_GetFileTypeFromMimeType(self, *_args, **_kwargs)
         if val: val = wxFileTypePtr(val) ; val.thisown = 1
         return val
     def ReadMailcap(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_ReadMailcap,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_ReadMailcap(self, *_args, **_kwargs)
         return val
     def ReadMimeTypes(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_ReadMimeTypes,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_ReadMimeTypes(self, *_args, **_kwargs)
         return val
     def EnumAllFileTypes(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_EnumAllFileTypes,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_EnumAllFileTypes(self, *_args, **_kwargs)
         return val
     def AddFallback(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_AddFallback,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_AddFallback(self, *_args, **_kwargs)
         return val
     def Associate(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_Associate,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_Associate(self, *_args, **_kwargs)
         if val: val = wxFileTypePtr(val) ; val.thisown = 1
         return val
     def Unassociate(self, *_args, **_kwargs):
-        val = apply(misc2c.wxMimeTypesManager_Unassociate,(self,) + _args, _kwargs)
+        val = misc2c.wxMimeTypesManager_Unassociate(self, *_args, **_kwargs)
         return val
     def __del__(self, delfunc=misc2c.delete_wxMimeTypesManager):
         if self.thisown == 1:
@@ -989,10 +989,10 @@ class wxMimeTypesManagerPtr :
             except:
                 pass
     def __repr__(self):
-        return "<C wxMimeTypesManager instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxMimeTypesManager instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxMimeTypesManager(wxMimeTypesManagerPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxMimeTypesManager,_args,_kwargs)
+        self.this = misc2c.new_wxMimeTypesManager(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -1003,13 +1003,13 @@ class wxArtProviderPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(misc2c.wxArtProvider__setCallbackInfo,(self,) + _args, _kwargs)
+        val = misc2c.wxArtProvider__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxArtProvider instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxArtProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxArtProvider(wxArtProviderPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxArtProvider,_args,_kwargs)
+        self.this = misc2c.new_wxArtProvider(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxArtProvider)
 
@@ -1027,46 +1027,46 @@ class wxFileHistoryPtr(wxObjectPtr):
             except:
                 pass
     def AddFileToHistory(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_AddFileToHistory,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_AddFileToHistory(self, *_args, **_kwargs)
         return val
     def RemoveFileFromHistory(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_RemoveFileFromHistory,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_RemoveFileFromHistory(self, *_args, **_kwargs)
         return val
     def GetMaxFiles(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_GetMaxFiles,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_GetMaxFiles(self, *_args, **_kwargs)
         return val
     def UseMenu(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_UseMenu,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_UseMenu(self, *_args, **_kwargs)
         return val
     def RemoveMenu(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_RemoveMenu,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_RemoveMenu(self, *_args, **_kwargs)
         return val
     def Load(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_Load,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_Load(self, *_args, **_kwargs)
         return val
     def Save(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_Save,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_Save(self, *_args, **_kwargs)
         return val
     def AddFilesToMenu(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_AddFilesToMenu,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_AddFilesToMenu(self, *_args, **_kwargs)
         return val
     def AddFilesToThisMenu(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_AddFilesToThisMenu,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_AddFilesToThisMenu(self, *_args, **_kwargs)
         return val
     def GetHistoryFile(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_GetHistoryFile,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_GetHistoryFile(self, *_args, **_kwargs)
         return val
     def GetCount(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_GetCount,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_GetCount(self, *_args, **_kwargs)
         return val
     def GetNoHistoryFiles(self, *_args, **_kwargs):
-        val = apply(misc2c.wxFileHistory_GetNoHistoryFiles,(self,) + _args, _kwargs)
+        val = misc2c.wxFileHistory_GetNoHistoryFiles(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxFileHistory instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxFileHistory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxFileHistory(wxFileHistoryPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxFileHistory,_args,_kwargs)
+        self.this = misc2c.new_wxFileHistory(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -1077,54 +1077,54 @@ class wxEffectsPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def GetHighlightColour(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_GetHighlightColour,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_GetHighlightColour(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetLightShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_GetLightShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_GetLightShadow(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetFaceColour(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_GetFaceColour,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_GetFaceColour(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetMediumShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_GetMediumShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_GetMediumShadow(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetDarkShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_GetDarkShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_GetDarkShadow(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetHighlightColour(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_SetHighlightColour,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_SetHighlightColour(self, *_args, **_kwargs)
         return val
     def SetLightShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_SetLightShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_SetLightShadow(self, *_args, **_kwargs)
         return val
     def SetFaceColour(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_SetFaceColour,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_SetFaceColour(self, *_args, **_kwargs)
         return val
     def SetMediumShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_SetMediumShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_SetMediumShadow(self, *_args, **_kwargs)
         return val
     def SetDarkShadow(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_SetDarkShadow,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_SetDarkShadow(self, *_args, **_kwargs)
         return val
     def Set(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_Set,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_Set(self, *_args, **_kwargs)
         return val
     def DrawSunkenEdge(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_DrawSunkenEdge,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_DrawSunkenEdge(self, *_args, **_kwargs)
         return val
     def TileBitmap(self, *_args, **_kwargs):
-        val = apply(misc2c.wxEffects_TileBitmap,(self,) + _args, _kwargs)
+        val = misc2c.wxEffects_TileBitmap(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxEffects instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxEffects instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxEffects(wxEffectsPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxEffects,_args,_kwargs)
+        self.this = misc2c.new_wxEffects(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -1141,22 +1141,22 @@ class wxSingleInstanceCheckerPtr :
             except:
                 pass
     def Create(self, *_args, **_kwargs):
-        val = apply(misc2c.wxSingleInstanceChecker_Create,(self,) + _args, _kwargs)
+        val = misc2c.wxSingleInstanceChecker_Create(self, *_args, **_kwargs)
         return val
     def IsAnotherRunning(self, *_args, **_kwargs):
-        val = apply(misc2c.wxSingleInstanceChecker_IsAnotherRunning,(self,) + _args, _kwargs)
+        val = misc2c.wxSingleInstanceChecker_IsAnotherRunning(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxSingleInstanceChecker instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSingleInstanceChecker instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSingleInstanceChecker(wxSingleInstanceCheckerPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxSingleInstanceChecker,_args,_kwargs)
+        self.this = misc2c.new_wxSingleInstanceChecker(*_args,**_kwargs)
         self.thisown = 1
 
 
 
 def wxPreSingleInstanceChecker(*_args,**_kwargs):
-    val = wxSingleInstanceCheckerPtr(apply(misc2c.new_wxPreSingleInstanceChecker,_args,_kwargs))
+    val = wxSingleInstanceCheckerPtr(misc2c.new_wxPreSingleInstanceChecker(*_args,**_kwargs))
     val.thisown = 1
     return val
 
@@ -1194,21 +1194,21 @@ wxGetDisplayDepth = misc2c.wxGetDisplayDepth
 wxDisplaySize = misc2c.wxDisplaySize
 
 def wxGetDisplaySize(*_args, **_kwargs):
-    val = apply(misc2c.wxGetDisplaySize,_args,_kwargs)
+    val = misc2c.wxGetDisplaySize(*_args,**_kwargs)
     if val: val = wxSizePtr(val); val.thisown = 1
     return val
 
 wxDisplaySizeMM = misc2c.wxDisplaySizeMM
 
 def wxGetDisplaySizeMM(*_args, **_kwargs):
-    val = apply(misc2c.wxGetDisplaySizeMM,_args,_kwargs)
+    val = misc2c.wxGetDisplaySizeMM(*_args,**_kwargs)
     if val: val = wxSizePtr(val); val.thisown = 1
     return val
 
 wxClientDisplayRect = misc2c.wxClientDisplayRect
 
 def wxGetClientDisplayRect(*_args, **_kwargs):
-    val = apply(misc2c.wxGetClientDisplayRect,_args,_kwargs)
+    val = misc2c.wxGetClientDisplayRect(*_args,**_kwargs)
     if val: val = wxRectPtr(val); val.thisown = 1
     return val
 
@@ -1217,15 +1217,15 @@ wxSetCursor = misc2c.wxSetCursor
 wxBeginBusyCursor = misc2c.wxBeginBusyCursor
 
 def wxGetActiveWindow(*_args, **_kwargs):
-    val = apply(misc2c.wxGetActiveWindow,_args,_kwargs)
+    val = misc2c.wxGetActiveWindow(*_args,**_kwargs)
     return val
 
 def wxGenericFindWindowAtPoint(*_args, **_kwargs):
-    val = apply(misc2c.wxGenericFindWindowAtPoint,_args,_kwargs)
+    val = misc2c.wxGenericFindWindowAtPoint(*_args,**_kwargs)
     return val
 
 def wxFindWindowAtPoint(*_args, **_kwargs):
-    val = apply(misc2c.wxFindWindowAtPoint,_args,_kwargs)
+    val = misc2c.wxFindWindowAtPoint(*_args,**_kwargs)
     return val
 
 wxCheckForInterrupt = misc2c.wxCheckForInterrupt
@@ -1233,7 +1233,7 @@ wxCheckForInterrupt = misc2c.wxCheckForInterrupt
 wxFlushEvents = misc2c.wxFlushEvents
 
 def wxGetTopLevelParent(*_args, **_kwargs):
-    val = apply(misc2c.wxGetTopLevelParent,_args,_kwargs)
+    val = misc2c.wxGetTopLevelParent(*_args,**_kwargs)
     return val
 
 wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
@@ -1257,7 +1257,7 @@ wxThread_IsMain = misc2c.wxThread_IsMain
 wxShowTip = misc2c.wxShowTip
 
 def wxCreateFileTipProvider(*_args, **_kwargs):
-    val = apply(misc2c.wxCreateFileTipProvider,_args,_kwargs)
+    val = misc2c.wxCreateFileTipProvider(*_args,**_kwargs)
     if val: val = wxTipProviderPtr(val); val.thisown = 1
     return val
 
@@ -1296,17 +1296,17 @@ wxSafeShowMessage = misc2c.wxSafeShowMessage
 wxExecute = misc2c.wxExecute
 
 def wxWaveData(*_args, **_kwargs):
-    val = apply(misc2c.wxWaveData,_args,_kwargs)
+    val = misc2c.wxWaveData(*_args,**_kwargs)
     if val: val = wxWavePtr(val); val.thisown = 1
     return val
 
 def wxSystemSettings_GetColour(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetColour,_args,_kwargs)
+    val = misc2c.wxSystemSettings_GetColour(*_args,**_kwargs)
     if val: val = wxColourPtr(val); val.thisown = 1
     return val
 
 def wxSystemSettings_GetFont(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetFont,_args,_kwargs)
+    val = misc2c.wxSystemSettings_GetFont(*_args,**_kwargs)
     if val: val = wxFontPtr(val); val.thisown = 1
     return val
 
@@ -1331,12 +1331,12 @@ wxLog_OnLog = misc2c.wxLog_OnLog
 wxLog_FlushActive = misc2c.wxLog_FlushActive
 
 def wxLog_GetActiveTarget(*_args, **_kwargs):
-    val = apply(misc2c.wxLog_GetActiveTarget,_args,_kwargs)
+    val = misc2c.wxLog_GetActiveTarget(*_args,**_kwargs)
     if val: val = wxLogPtr(val)
     return val
 
 def wxLog_SetActiveTarget(*_args, **_kwargs):
-    val = apply(misc2c.wxLog_SetActiveTarget,_args,_kwargs)
+    val = misc2c.wxLog_SetActiveTarget(*_args,**_kwargs)
     if val: val = wxLogPtr(val)
     return val
 
@@ -1375,7 +1375,7 @@ wxProcess_Kill = misc2c.wxProcess_Kill
 wxProcess_Exists = misc2c.wxProcess_Exists
 
 def wxProcess_Open(*_args, **_kwargs):
-    val = apply(misc2c.wxProcess_Open,_args,_kwargs)
+    val = misc2c.wxProcess_Open(*_args,**_kwargs)
     if val: val = wxProcessPtr(val)
     return val
 
@@ -1390,12 +1390,12 @@ wxArtProvider_PopProvider = misc2c.wxArtProvider_PopProvider
 wxArtProvider_RemoveProvider = misc2c.wxArtProvider_RemoveProvider
 
 def wxArtProvider_GetBitmap(*_args, **_kwargs):
-    val = apply(misc2c.wxArtProvider_GetBitmap,_args,_kwargs)
+    val = misc2c.wxArtProvider_GetBitmap(*_args,**_kwargs)
     if val: val = wxBitmapPtr(val); val.thisown = 1
     return val
 
 def wxArtProvider_GetIcon(*_args, **_kwargs):
-    val = apply(misc2c.wxArtProvider_GetIcon,_args,_kwargs)
+    val = misc2c.wxArtProvider_GetIcon(*_args,**_kwargs)
     if val: val = wxIconPtr(val); val.thisown = 1
     return val
 

@@ -67,19 +67,19 @@ class wxMSHTMLEventPtr(wxNotifyEventPtr):
         self.this = this
         self.thisown = 0
     def GetText1(self, *_args, **_kwargs):
-        val = apply(iewinc.wxMSHTMLEvent_GetText1,(self,) + _args, _kwargs)
+        val = iewinc.wxMSHTMLEvent_GetText1(self, *_args, **_kwargs)
         return val
     def GetLong1(self, *_args, **_kwargs):
-        val = apply(iewinc.wxMSHTMLEvent_GetLong1,(self,) + _args, _kwargs)
+        val = iewinc.wxMSHTMLEvent_GetLong1(self, *_args, **_kwargs)
         return val
     def GetLong2(self, *_args, **_kwargs):
-        val = apply(iewinc.wxMSHTMLEvent_GetLong2,(self,) + _args, _kwargs)
+        val = iewinc.wxMSHTMLEvent_GetLong2(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxMSHTMLEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxMSHTMLEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxMSHTMLEvent(wxMSHTMLEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(iewinc.new_wxMSHTMLEvent,_args,_kwargs)
+        self.this = iewinc.new_wxMSHTMLEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -90,53 +90,53 @@ class wxIEHtmlWinPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def LoadUrl(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_LoadUrl,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_LoadUrl(self, *_args, **_kwargs)
         return val
     def LoadString(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_LoadString,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_LoadString(self, *_args, **_kwargs)
         return val
     def LoadStream(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_LoadStream,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_LoadStream(self, *_args, **_kwargs)
         return val
     def SetCharset(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_SetCharset,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_SetCharset(self, *_args, **_kwargs)
         return val
     def SetEditMode(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_SetEditMode,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_SetEditMode(self, *_args, **_kwargs)
         return val
     def GetEditMode(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GetEditMode,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GetEditMode(self, *_args, **_kwargs)
         return val
     def GetStringSelection(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GetStringSelection,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GetStringSelection(self, *_args, **_kwargs)
         return val
     def GetText(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GetText,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GetText(self, *_args, **_kwargs)
         return val
     def GoBack(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GoBack,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GoBack(self, *_args, **_kwargs)
         return val
     def GoForward(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GoForward,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GoForward(self, *_args, **_kwargs)
         return val
     def GoHome(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GoHome,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GoHome(self, *_args, **_kwargs)
         return val
     def GoSearch(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_GoSearch,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_GoSearch(self, *_args, **_kwargs)
         return val
     def RefreshPage(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_RefreshPage,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_RefreshPage(self, *_args, **_kwargs)
         return val
     def Stop(self, *_args, **_kwargs):
-        val = apply(iewinc.wxIEHtmlWin_Stop,(self,) + _args, _kwargs)
+        val = iewinc.wxIEHtmlWin_Stop(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxIEHtmlWin instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxIEHtmlWin instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     Navigate = LoadUrl
 class wxIEHtmlWin(wxIEHtmlWinPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(iewinc.new_wxIEHtmlWin,_args,_kwargs)
+        self.this = iewinc.new_wxIEHtmlWin(*_args,**_kwargs)
         self.thisown = 1
 
 

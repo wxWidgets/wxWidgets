@@ -685,6 +685,42 @@ static PyObject *_wrap_wxTopLevelWindow_GetTitle(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxTopLevelWindow_SetShape(_swigobj,_swigarg0)  (_swigobj->SetShape(_swigarg0))
+static PyObject *_wrap_wxTopLevelWindow_SetShape(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTopLevelWindow * _arg0;
+    wxRegion * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","region", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTopLevelWindow_SetShape",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTopLevelWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTopLevelWindow_SetShape. Expected _wxTopLevelWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTopLevelWindow_SetShape. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTopLevelWindow_SetShape(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxFrameTowxTopLevelWindow(void *ptr) {
     wxFrame *src;
     wxTopLevelWindow *dest;
@@ -2634,6 +2670,7 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_Create", (PyCFunction) _wrap_wxFrame_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreFrame", (PyCFunction) _wrap_new_wxPreFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFrame", (PyCFunction) _wrap_new_wxFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTopLevelWindow_SetShape", (PyCFunction) _wrap_wxTopLevelWindow_SetShape, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_GetTitle", (PyCFunction) _wrap_wxTopLevelWindow_GetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_SetTitle", (PyCFunction) _wrap_wxTopLevelWindow_SetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTopLevelWindow_IsFullScreen", (PyCFunction) _wrap_wxTopLevelWindow_IsFullScreen, METH_VARARGS | METH_KEYWORDS },

@@ -53,88 +53,88 @@ class wxPyAppPtr(wxEvtHandlerPtr):
             except:
                 pass
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp__setCallbackInfo,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def GetAppName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetAppName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetAppName(self, *_args, **_kwargs)
         return val
     def GetAuto3D(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetAuto3D,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetAuto3D(self, *_args, **_kwargs)
         return val
     def GetClassName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetClassName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetClassName(self, *_args, **_kwargs)
         return val
     def GetExitOnFrameDelete(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetExitOnFrameDelete,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetExitOnFrameDelete(self, *_args, **_kwargs)
         return val
     def GetPrintMode(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetPrintMode,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetPrintMode(self, *_args, **_kwargs)
         return val
     def GetTopWindow(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetTopWindow,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetTopWindow(self, *_args, **_kwargs)
         return val
     def GetVendorName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetVendorName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetVendorName(self, *_args, **_kwargs)
         return val
     def GetUseBestVisual(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetUseBestVisual,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetUseBestVisual(self, *_args, **_kwargs)
         return val
     def Dispatch(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_Dispatch,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_Dispatch(self, *_args, **_kwargs)
         return val
     def ExitMainLoop(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_ExitMainLoop,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_ExitMainLoop(self, *_args, **_kwargs)
         return val
     def Initialized(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_Initialized,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_Initialized(self, *_args, **_kwargs)
         return val
     def MainLoop(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_MainLoop,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_MainLoop(self, *_args, **_kwargs)
         return val
     def Pending(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_Pending,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_Pending(self, *_args, **_kwargs)
         return val
     def ProcessIdle(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_ProcessIdle,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_ProcessIdle(self, *_args, **_kwargs)
         return val
     def Yield(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_Yield,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_Yield(self, *_args, **_kwargs)
         return val
     def SetAppName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetAppName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetAppName(self, *_args, **_kwargs)
         return val
     def SetAuto3D(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetAuto3D,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetAuto3D(self, *_args, **_kwargs)
         return val
     def SetClassName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetClassName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetClassName(self, *_args, **_kwargs)
         return val
     def SetExitOnFrameDelete(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetExitOnFrameDelete,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetExitOnFrameDelete(self, *_args, **_kwargs)
         return val
     def SetPrintMode(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetPrintMode,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetPrintMode(self, *_args, **_kwargs)
         return val
     def SetTopWindow(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetTopWindow,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetTopWindow(self, *_args, **_kwargs)
         return val
     def SetVendorName(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetVendorName,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetVendorName(self, *_args, **_kwargs)
         return val
     def SetUseBestVisual(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetUseBestVisual,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetUseBestVisual(self, *_args, **_kwargs)
         return val
     def GetAssertMode(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_GetAssertMode,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_GetAssertMode(self, *_args, **_kwargs)
         return val
     def SetAssertMode(self, *_args, **_kwargs):
-        val = apply(wxc.wxPyApp_SetAssertMode,(self,) + _args, _kwargs)
+        val = wxc.wxPyApp_SetAssertMode(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyApp instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyApp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyApp(wxPyAppPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(wxc.new_wxPyApp,_args,_kwargs)
+        self.this = wxc.new_wxPyApp(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyApp)
         self._setOORInfo(self)
@@ -165,7 +165,7 @@ _wxStart = wxc._wxStart
 _wxSetDictionary = wxc._wxSetDictionary
 
 def wxGetApp(*_args, **_kwargs):
-    val = apply(wxc.wxGetApp,_args,_kwargs)
+    val = wxc.wxGetApp(*_args,**_kwargs)
     return val
 
 wxApp_CleanUp = wxc.wxApp_CleanUp
@@ -1487,10 +1487,10 @@ def EVT_SASH_DRAGGED_RANGE(win, id1, id2, func):
     win.Connect(id1, id2, wxEVT_SASH_DRAGGED, func)
 
 def EVT_QUERY_LAYOUT_INFO(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_QUERY_LAYOUT_INFO, func)
+    win.Connect(-1, -1, wxEVT_QUERY_LAYOUT_INFO, func)
 
 def EVT_CALCULATE_LAYOUT(win, func):
-    win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
+    win.Connect(-1, -1, wxEVT_CALCULATE_LAYOUT, func)
 
 
 #wxSplitterWindow
@@ -1700,9 +1700,9 @@ def wxCallAfter(callable, *args, **kw):
 
     global _wxCallAfterId
     if _wxCallAfterId is None:
-        _wxCallAfterId = wxNewId()
+        _wxCallAfterId = wxNewEventType()
         app.Connect(-1, -1, _wxCallAfterId,
-              lambda event: apply(event.callable, event.args, event.kw) )
+              lambda event: event.callable(*event.args, **event.kw) )
     evt = wxPyEvent()
     evt.SetEventType(_wxCallAfterId)
     evt.callable = callable
@@ -1874,7 +1874,7 @@ class wxPyWidgetTester(wxApp):
         return True
 
     def SetWidget(self, widgetClass, *args):
-        w = apply(widgetClass, (self.frame,) + args)
+        w = widgetClass(self.frame, *args)
         self.frame.Show(True)
 
 #----------------------------------------------------------------------------

@@ -20,22 +20,22 @@ class wxNotebookEventPtr(wxNotifyEventPtr):
         self.this = this
         self.thisown = 0
     def GetSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebookEvent_GetSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebookEvent_GetSelection(self, *_args, **_kwargs)
         return val
     def GetOldSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebookEvent_GetOldSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebookEvent_GetOldSelection(self, *_args, **_kwargs)
         return val
     def SetOldSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebookEvent_SetOldSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebookEvent_SetOldSelection(self, *_args, **_kwargs)
         return val
     def SetSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebookEvent_SetSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebookEvent_SetSelection(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxNotebookEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxNotebookEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxNotebookEvent(wxNotebookEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxNotebookEvent,_args,_kwargs)
+        self.this = windows2c.new_wxNotebookEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -46,84 +46,84 @@ class wxNotebookPtr(wxControlPtr):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_Create,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_Create(self, *_args, **_kwargs)
         return val
     def GetPageCount(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetPageCount,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetPageCount(self, *_args, **_kwargs)
         return val
     def SetSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetSelection(self, *_args, **_kwargs)
         return val
     def AdvanceSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_AdvanceSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_AdvanceSelection(self, *_args, **_kwargs)
         return val
     def GetSelection(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetSelection,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetSelection(self, *_args, **_kwargs)
         return val
     def SetPageText(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetPageText,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetPageText(self, *_args, **_kwargs)
         return val
     def GetPageText(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetPageText,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetPageText(self, *_args, **_kwargs)
         return val
     def SetImageList(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetImageList,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetImageList(self, *_args, **_kwargs)
         return val
     def AssignImageList(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_AssignImageList,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_AssignImageList(self, *_args, **_kwargs)
         _args[0].thisown = 0
         return val
     def GetImageList(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetImageList,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetImageList(self, *_args, **_kwargs)
         return val
     def GetPageImage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetPageImage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetPageImage(self, *_args, **_kwargs)
         return val
     def SetPageImage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetPageImage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetPageImage(self, *_args, **_kwargs)
         return val
     def GetRowCount(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetRowCount,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetRowCount(self, *_args, **_kwargs)
         return val
     def SetPageSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetPageSize,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetPageSize(self, *_args, **_kwargs)
         return val
     def SetPadding(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_SetPadding,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_SetPadding(self, *_args, **_kwargs)
         return val
     def DeletePage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_DeletePage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_DeletePage(self, *_args, **_kwargs)
         return val
     def RemovePage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_RemovePage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_RemovePage(self, *_args, **_kwargs)
         return val
     def DeleteAllPages(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_DeleteAllPages,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_DeleteAllPages(self, *_args, **_kwargs)
         return val
     def AddPage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_AddPage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_AddPage(self, *_args, **_kwargs)
         return val
     def InsertPage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_InsertPage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_InsertPage(self, *_args, **_kwargs)
         return val
     def GetPage(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_GetPage,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_GetPage(self, *_args, **_kwargs)
         return val
     def ResizeChildren(self, *_args, **_kwargs):
-        val = apply(windows2c.wxNotebook_ResizeChildren,(self,) + _args, _kwargs)
+        val = windows2c.wxNotebook_ResizeChildren(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxNotebook instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxNotebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxNotebook(wxNotebookPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxNotebook,_args,_kwargs)
+        self.this = windows2c.new_wxNotebook(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
 
 
 def wxPreNotebook(*_args,**_kwargs):
-    val = wxNotebookPtr(apply(windows2c.new_wxPreNotebook,_args,_kwargs))
+    val = wxNotebookPtr(windows2c.new_wxPreNotebook(*_args,**_kwargs))
     val.thisown = 1
     val._setOORInfo(val)
     return val
@@ -134,25 +134,25 @@ class wxSplitterEventPtr(wxNotifyEventPtr):
         self.this = this
         self.thisown = 0
     def GetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterEvent_GetSashPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterEvent_GetSashPosition(self, *_args, **_kwargs)
         return val
     def GetX(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterEvent_GetX,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterEvent_GetX(self, *_args, **_kwargs)
         return val
     def GetY(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterEvent_GetY,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterEvent_GetY(self, *_args, **_kwargs)
         return val
     def GetWindowBeingRemoved(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterEvent_GetWindowBeingRemoved,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterEvent_GetWindowBeingRemoved(self, *_args, **_kwargs)
         return val
     def SetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterEvent_SetSashPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterEvent_SetSashPosition(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxSplitterEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSplitterEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSplitterEvent(wxSplitterEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxSplitterEvent,_args,_kwargs)
+        self.this = windows2c.new_wxSplitterEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -163,83 +163,83 @@ class wxSplitterWindowPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_Create,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_Create(self, *_args, **_kwargs)
         return val
     def GetWindow1(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetWindow1,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetWindow1(self, *_args, **_kwargs)
         return val
     def GetWindow2(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetWindow2,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetWindow2(self, *_args, **_kwargs)
         return val
     def SetSplitMode(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetSplitMode,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetSplitMode(self, *_args, **_kwargs)
         return val
     def GetSplitMode(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSplitMode,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetSplitMode(self, *_args, **_kwargs)
         return val
     def Initialize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_Initialize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_Initialize(self, *_args, **_kwargs)
         return val
     def SplitVertically(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SplitVertically,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SplitVertically(self, *_args, **_kwargs)
         return val
     def SplitHorizontally(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SplitHorizontally,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SplitHorizontally(self, *_args, **_kwargs)
         return val
     def Unsplit(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_Unsplit,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_Unsplit(self, *_args, **_kwargs)
         return val
     def ReplaceWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_ReplaceWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_ReplaceWindow(self, *_args, **_kwargs)
         return val
     def IsSplit(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_IsSplit,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_IsSplit(self, *_args, **_kwargs)
         return val
     def SetSashSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetSashSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetSashSize(self, *_args, **_kwargs)
         return val
     def SetBorderSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetBorderSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetBorderSize(self, *_args, **_kwargs)
         return val
     def GetSashSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSashSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetSashSize(self, *_args, **_kwargs)
         return val
     def GetBorderSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetBorderSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetBorderSize(self, *_args, **_kwargs)
         return val
     def SetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetSashPosition(self, *_args, **_kwargs)
         return val
     def GetSashPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetSashPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetSashPosition(self, *_args, **_kwargs)
         return val
     def SetMinimumPaneSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetMinimumPaneSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetMinimumPaneSize(self, *_args, **_kwargs)
         return val
     def GetMinimumPaneSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetMinimumPaneSize,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetMinimumPaneSize(self, *_args, **_kwargs)
         return val
     def SizeWindows(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SizeWindows,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SizeWindows(self, *_args, **_kwargs)
         return val
     def SetNeedUpdating(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_SetNeedUpdating,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_SetNeedUpdating(self, *_args, **_kwargs)
         return val
     def GetNeedUpdating(self, *_args, **_kwargs):
-        val = apply(windows2c.wxSplitterWindow_GetNeedUpdating,(self,) + _args, _kwargs)
+        val = windows2c.wxSplitterWindow_GetNeedUpdating(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxSplitterWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSplitterWindow(wxSplitterWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxSplitterWindow,_args,_kwargs)
+        self.this = windows2c.new_wxSplitterWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
 
 
 def wxPreSplitterWindow(*_args,**_kwargs):
-    val = wxSplitterWindowPtr(apply(windows2c.new_wxPreSplitterWindow,_args,_kwargs))
+    val = wxSplitterWindowPtr(windows2c.new_wxPreSplitterWindow(*_args,**_kwargs))
     val.thisown = 1
     val._setOORInfo(val)
     return val
@@ -256,25 +256,25 @@ class wxTaskBarIconPtr(wxEvtHandlerPtr):
             except:
                 pass
     def SetIcon(self, *_args, **_kwargs):
-        val = apply(windows2c.wxTaskBarIcon_SetIcon,(self,) + _args, _kwargs)
+        val = windows2c.wxTaskBarIcon_SetIcon(self, *_args, **_kwargs)
         return val
     def RemoveIcon(self, *_args, **_kwargs):
-        val = apply(windows2c.wxTaskBarIcon_RemoveIcon,(self,) + _args, _kwargs)
+        val = windows2c.wxTaskBarIcon_RemoveIcon(self, *_args, **_kwargs)
         return val
     def PopupMenu(self, *_args, **_kwargs):
-        val = apply(windows2c.wxTaskBarIcon_PopupMenu,(self,) + _args, _kwargs)
+        val = windows2c.wxTaskBarIcon_PopupMenu(self, *_args, **_kwargs)
         return val
     def IsIconInstalled(self, *_args, **_kwargs):
-        val = apply(windows2c.wxTaskBarIcon_IsIconInstalled,(self,) + _args, _kwargs)
+        val = windows2c.wxTaskBarIcon_IsIconInstalled(self, *_args, **_kwargs)
         return val
     def IsOK(self, *_args, **_kwargs):
-        val = apply(windows2c.wxTaskBarIcon_IsOK,(self,) + _args, _kwargs)
+        val = windows2c.wxTaskBarIcon_IsOK(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxTaskBarIcon instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxTaskBarIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxTaskBarIcon(wxTaskBarIconPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxTaskBarIcon,_args,_kwargs)
+        self.this = windows2c.new_wxTaskBarIcon(*_args,**_kwargs)
         self.thisown = 1
         wx._checkForCallback(self, 'OnMouseMove',    wxEVT_TASKBAR_MOVE)
         wx._checkForCallback(self, 'OnLButtonDown',  wxEVT_TASKBAR_LEFT_DOWN)
@@ -292,70 +292,70 @@ class wxPyWindowPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow__setCallbackInfo,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_DoMoveWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoMoveWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoMoveWindow(self, *_args, **_kwargs)
         return val
     def base_DoSetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoSetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoSetSize(self, *_args, **_kwargs)
         return val
     def base_DoSetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoSetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoSetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoSetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoSetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoSetVirtualSize(self, *_args, **_kwargs)
         return val
     def base_DoGetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoGetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoGetSize(self, *_args, **_kwargs)
         return val
     def base_DoGetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoGetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoGetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoGetPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoGetPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoGetPosition(self, *_args, **_kwargs)
         return val
     def base_DoGetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoGetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoGetVirtualSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_DoGetBestSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_DoGetBestSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_DoGetBestSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_InitDialog(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_InitDialog,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_InitDialog(self, *_args, **_kwargs)
         return val
     def base_TransferDataToWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_TransferDataToWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_TransferDataToWindow(self, *_args, **_kwargs)
         return val
     def base_TransferDataFromWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_TransferDataFromWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_TransferDataFromWindow(self, *_args, **_kwargs)
         return val
     def base_Validate(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_Validate,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_Validate(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocus(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_AcceptsFocus,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_AcceptsFocus(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_AcceptsFocusFromKeyboard,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs)
         return val
     def base_GetMaxSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_GetMaxSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_GetMaxSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_AddChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_AddChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_AddChild(self, *_args, **_kwargs)
         return val
     def base_RemoveChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyWindow_base_RemoveChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyWindow_base_RemoveChild(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyWindow(wxPyWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxPyWindow,_args,_kwargs)
+        self.this = windows2c.new_wxPyWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyWindow)
         self._setOORInfo(self)
@@ -368,70 +368,70 @@ class wxPyControlPtr(wxControlPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl__setCallbackInfo,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_DoMoveWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoMoveWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoMoveWindow(self, *_args, **_kwargs)
         return val
     def base_DoSetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoSetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoSetSize(self, *_args, **_kwargs)
         return val
     def base_DoSetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoSetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoSetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoSetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoSetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoSetVirtualSize(self, *_args, **_kwargs)
         return val
     def base_DoGetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoGetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoGetSize(self, *_args, **_kwargs)
         return val
     def base_DoGetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoGetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoGetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoGetPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoGetPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoGetPosition(self, *_args, **_kwargs)
         return val
     def base_DoGetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoGetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoGetVirtualSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_DoGetBestSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_DoGetBestSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_DoGetBestSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_InitDialog(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_InitDialog,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_InitDialog(self, *_args, **_kwargs)
         return val
     def base_TransferDataToWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_TransferDataToWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_TransferDataToWindow(self, *_args, **_kwargs)
         return val
     def base_TransferDataFromWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_TransferDataFromWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_TransferDataFromWindow(self, *_args, **_kwargs)
         return val
     def base_Validate(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_Validate,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_Validate(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocus(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_AcceptsFocus,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_AcceptsFocus(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_AcceptsFocusFromKeyboard,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs)
         return val
     def base_GetMaxSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_GetMaxSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_GetMaxSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_AddChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_AddChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_AddChild(self, *_args, **_kwargs)
         return val
     def base_RemoveChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyControl_base_RemoveChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyControl_base_RemoveChild(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyControl instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyControl(wxPyControlPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxPyControl,_args,_kwargs)
+        self.this = windows2c.new_wxPyControl(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyControl)
         self._setOORInfo(self)
@@ -444,70 +444,70 @@ class wxPyPanelPtr(wxPanelPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel__setCallbackInfo,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def base_DoMoveWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoMoveWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoMoveWindow(self, *_args, **_kwargs)
         return val
     def base_DoSetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoSetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoSetSize(self, *_args, **_kwargs)
         return val
     def base_DoSetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoSetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoSetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoSetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoSetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoSetVirtualSize(self, *_args, **_kwargs)
         return val
     def base_DoGetSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoGetSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoGetSize(self, *_args, **_kwargs)
         return val
     def base_DoGetClientSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoGetClientSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoGetClientSize(self, *_args, **_kwargs)
         return val
     def base_DoGetPosition(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoGetPosition,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoGetPosition(self, *_args, **_kwargs)
         return val
     def base_DoGetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoGetVirtualSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoGetVirtualSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_DoGetBestSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_DoGetBestSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_DoGetBestSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_InitDialog(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_InitDialog,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_InitDialog(self, *_args, **_kwargs)
         return val
     def base_TransferDataToWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_TransferDataToWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_TransferDataToWindow(self, *_args, **_kwargs)
         return val
     def base_TransferDataFromWindow(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_TransferDataFromWindow,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_TransferDataFromWindow(self, *_args, **_kwargs)
         return val
     def base_Validate(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_Validate,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_Validate(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocus(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_AcceptsFocus,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_AcceptsFocus(self, *_args, **_kwargs)
         return val
     def base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_AcceptsFocusFromKeyboard,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_AcceptsFocusFromKeyboard(self, *_args, **_kwargs)
         return val
     def base_GetMaxSize(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_GetMaxSize,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_GetMaxSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def base_AddChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_AddChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_AddChild(self, *_args, **_kwargs)
         return val
     def base_RemoveChild(self, *_args, **_kwargs):
-        val = apply(windows2c.wxPyPanel_base_RemoveChild,(self,) + _args, _kwargs)
+        val = windows2c.wxPyPanel_base_RemoveChild(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyPanel instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyPanel instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxPyPanel(wxPyPanelPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(windows2c.new_wxPyPanel,_args,_kwargs)
+        self.this = windows2c.new_wxPyPanel(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyPanel)
         self._setOORInfo(self)
