@@ -290,6 +290,10 @@ case "${host}" in
     AC_DEFINE(__EMX__)
     PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
+    dnl "c++" wrapper is not always available, so always use plain gcc.
+    CXX=gcc
+    dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
+    LIBS="$LIBS -lstdcpp"
   ;;
 
   powerpc-*-darwin* )
@@ -1436,8 +1440,6 @@ dnl ---------------------------------------------------------------------------
 dnl (OS/2-only piece)
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
-      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
-      LIBS="$LIBS -lstdcpp"
       if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
           dnl More complete Unix emulation for unix-like ports
           dnl by linking in POSIX/2's cExt (if available).
@@ -1513,7 +1515,13 @@ esac
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes"; then
         dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/XKBlib.h)
+        AC_CHECK_HEADERS(X11/Xlib.h)
+        AC_CHECK_HEADERS([X11/XKBlib.h], [], [], 
+                         [
+                          #if HAVE_X11_XLIB_H
+                            #include <X11/Xlib.h>
+                          #endif
+                         ])
     fi
 fi
 
