@@ -411,6 +411,14 @@
 #   endif
 #endif /* !defined(wxUSE_HTML) */
 
+#ifndef wxUSE_XRC
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XRC must be defined."
+#   else
+#       define wxUSE_XRC 0
+#   endif
+#endif /* !defined(wxUSE_XRC) */
+
 #ifndef wxUSE_LIBMSPACK
 #   ifndef __UNIX__
         /* set to 0 on platforms that don't have libmspack */
@@ -1573,6 +1581,15 @@
 #       define wxUSE_PROLOGIO 1
 #   endif
 #endif /* wxUSE_WX_RESOURCES */
+
+#if wxUSE_XRC && !wxUSE_XML
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XRC requires wxUSE_XML"
+#   else
+#       undef wxUSE_XRC
+#       define wxUSE_XRC 0
+#   endif
+#endif /* wxUSE_UNICODE_XRC */
 
 #endif /* wxUSE_GUI */
 

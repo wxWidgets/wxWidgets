@@ -5514,9 +5514,14 @@ fi
 
 USE_XRC=0
 if test "$wxUSE_XRC" = "yes"; then
-    AC_DEFINE(wxUSE_XRC)
-    USE_XRC=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xrc"
+    if test "$wxUSE_XML" != "yes"; then
+        AC_MSG_WARN([XML library not built, XRC resources disabled])
+        wxUSE_XRC=no
+    else
+        AC_DEFINE(wxUSE_XRC)
+        USE_XRC=1
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xrc"
+    fi
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
