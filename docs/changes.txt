@@ -99,6 +99,12 @@ OTHER CHANGES
 2.5.3
 -----
 
+All (GUI):
+
+- added wxTaskBarIcon::CreatePopupMenu which is now recommended way
+  of showing popup menu; calling wxTaskBarIcon::PopupMenu directly
+  is discouraged
+
 Unix:
 
 - wxTaskBarIcon now supports freedesktop.org System Tray protocol
@@ -107,7 +113,7 @@ Unix:
 wxGTK:
 
 - fixed wrong colour of tooltips under some themes
-
+- implemented wxColourDialog as native dialog
 
 
 2.5.2

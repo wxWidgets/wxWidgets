@@ -14,11 +14,12 @@ class MyTaskBarIcon: public wxTaskBarIcon
 public:
     MyTaskBarIcon() {};
 
-    void OnRButtonDown(wxEvent&);
     void OnLButtonDClick(wxEvent&);
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
     void OnMenuSetNewIcon(wxCommandEvent&);
+
+    virtual wxMenu *CreatePopupMenu();
 
 DECLARE_EVENT_TABLE()
 };

@@ -35,4 +35,19 @@ DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK )
 DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK )
 
-#endif //def wxHAS_TASK_BAR_ICON
+
+BEGIN_EVENT_TABLE(wxTaskBarIconBase, wxEvtHandler)
+    EVT_TASKBAR_RIGHT_DOWN(wxTaskBarIconBase::OnRightButtonDown)
+END_EVENT_TABLE()
+
+void wxTaskBarIconBase::OnRightButtonDown(wxEvent& WXUNUSED(event))
+{
+    wxMenu *menu = CreatePopupMenu();
+    if (menu)
+    {
+        PopupMenu(menu);
+        delete menu;
+    }
+}
+    
+#endif // defined(wxHAS_TASK_BAR_ICON)

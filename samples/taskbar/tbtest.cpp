@@ -110,7 +110,6 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
-    EVT_TASKBAR_RIGHT_DOWN   (MyTaskBarIcon::OnRButtonDown)
     EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLButtonDClick)
 END_EVENT_TABLE()
 
@@ -138,15 +137,15 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
 }
 
 // Overridables
-void MyTaskBarIcon::OnRButtonDown(wxEvent&)
+wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
-    wxMenu      menu;
+    wxMenu *menu = new wxMenu;
+    
+    menu->Append(PU_RESTORE, _T("&Restore TBTest"));
+    menu->Append(PU_NEW_ICON,_T("&Set New Icon"));
+    menu->Append(PU_EXIT,    _T("E&xit"));
 
-    menu.Append(PU_RESTORE, _T("&Restore TBTest"));
-    menu.Append(PU_NEW_ICON,_T("&Set New Icon"));
-    menu.Append(PU_EXIT,    _T("E&xit"));
-
-    PopupMenu(&menu);
+    return menu;
 }
 
 void MyTaskBarIcon::OnLButtonDClick(wxEvent&)

@@ -7,6 +7,8 @@
 
 #include "wx/event.h"
 
+class WXDLLIMPEXP_ADV wxTaskBarIconEvent;
+
 // ----------------------------------------------------------------------------
 // wxTaskBarIconBase: define wxTaskBarIcon interface
 // ----------------------------------------------------------------------------
@@ -15,8 +17,22 @@ class WXDLLIMPEXP_ADV wxTaskBarIconBase : public wxEvtHandler
 {
 public:
     wxTaskBarIconBase() { }
+    
+    // Operations:
+    virtual bool SetIcon(const wxIcon& icon,
+                         const wxString& tooltip = wxEmptyString) = 0;
+    virtual bool RemoveIcon() = 0;
+    virtual bool PopupMenu(wxMenu *menu) = 0;
 
+protected:
+    // creates menu to be displayed when user clicks on the icon
+    virtual wxMenu *CreatePopupMenu() { return NULL; }
+    
 private:
+    // default events handling, calls CreatePopupMenu:
+    void OnRightButtonDown(wxEvent& event);
+    
+    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxTaskBarIconBase)
 };
 
