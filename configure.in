@@ -1672,13 +1672,6 @@ if test "$wxUSE_MOTIF" = 1; then
     GUIDIST=MOTIF_DIST
 fi
 
-dnl someone explicitly added -ldl to the list of libraries for these targets -
-dnl I don't know why has this been done, but let's respect this - with the
-dnl exception of the systems which don't have libdl at all (VZ)
-if test "$wxUSE_GTK" = 1 || test "$wxUSE_MOTIF" = 1 || test "$wxUSE_WINE" = 1; then
-    AC_CHECK_LIB(dl, main, GUI_TK_LIBRARY="$GUI_TK_LIBRARY -ldl")
-fi
-
 dnl the name of the directory where the files for this toolkit live
 TOOLKIT_DIR=`echo ${TOOLKIT} | tr "A-Z" "a-z"`
 
@@ -2406,21 +2399,38 @@ HAVE_DL_FUNCS=0
 HAVE_SHL_FUNCS=0
 if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
     dnl the test is a bit complicated because we check for dlopen() both with
-    dnl and without -ldl
+    dnl and without -ldl and we also try to find shl_load() if there is no
+    dnl dlopen() on this system
     AC_CHECK_FUNCS(dlopen,
-        [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1],
-        [AC_CHECK_LIB(dl, dlopen,
-            [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1])])
-    AC_CHECK_FUNCS( shl_load,
-                    [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1 HAVE_SHL_FUNCS=1])
+        [
+            AC_DEFINE(HAVE_DLOPEN)
+            HAVE_DL_FUNCS=1
+        ],
+        [
+            AC_CHECK_LIB(dl, dlopen,
+                        [
+                            AC_DEFINE(HAVE_DLOPEN)
+                            HAVE_DL_FUNCS=1
+                            LIBS="$LIBS -ldl"
+                        ],
+                        [
+                            AC_CHECK_FUNCS(shl_load,
+                                          [
+                                            AC_DEFINE(HAVE_SHL_LOAD)
+                                            HAVE_SHL_FUNCS=1
+                                          ])
+                        ])
+        ])
 
     if test "$HAVE_DL_FUNCS" = 0; then
-        if test "$USE_UNIX" = 1; then
-            AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
-            wxUSE_ODBC=no
-            wxUSE_DYNLIB_CLASS=no
-        else
-            AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
+        if test "$HAVE_SHL_FUNCS" = 0; then
+          if test "$USE_UNIX" = 1; then
+              AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
+              wxUSE_ODBC=no
+              wxUSE_DYNLIB_CLASS=no
+          else
+              AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
+          fi
         fi
     fi
 fi
@@ -2787,7 +2797,7 @@ dnl ---------------------------------------------------------------------------
 GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $LIBPNG_LINK $ZLIB_LINK $TOOLKIT_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
-EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK"
+EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRA_LIBS="$EXTRA_LIBS $GUILIBS"
 fi

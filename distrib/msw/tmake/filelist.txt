@@ -29,6 +29,7 @@
 #
 # Known flags:
 #  B	makes part of the base library too
+#  BO	only for the base library
 #  16	a generic file implementing Win32 control for Win16
 #  32	only can be compiled under Win32
 #  PS	PostScript related file, normally not compiled under Windows
@@ -40,9 +41,9 @@
 #  X	Not required for the Motif port
 #
 #  WX	Base header
-#  GTK  GTK header
+#  GTK	GTK header
 #  MSW	MSW header
-#  MAC  Mac header
+#  MAC	Mac header
 #  MOT	Motif header
 #  PM	OS/2 header
 #  GEN	Generic header
@@ -104,7 +105,7 @@ docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
 dynlib.cpp	C	B
-event.cpp	C
+event.cpp	C	B
 extended.c	C	B
 ffile.cpp	C	B
 file.cpp	C	B
@@ -129,6 +130,7 @@ imagjpeg.cpp	C	32
 imagpcx.cpp	C	32
 imagpng.cpp	C	32
 imagpnm.cpp	C	32
+init.cpp	C	B,BO
 intl.cpp	C	B
 ipcbase.cpp	C
 layout.cpp	C
@@ -153,7 +155,7 @@ sckstrm.cpp	C	S
 serbase.cpp	C
 sizer.cpp	C
 socket.cpp	C	S
-stream.cpp	C
+stream.cpp	C	B
 strconv.cpp	C	B
 string.cpp	C	B
 tbarbase.cpp	C
@@ -163,7 +165,7 @@ textfile.cpp	C	B
 time.cpp	C	B
 timercmn.cpp	C	B
 tokenzr.cpp	C	B
-txtstrm.cpp	C
+txtstrm.cpp	C	B
 unzip.c	C
 url.cpp	C	S
 utilscmn.cpp	C	B
@@ -276,7 +278,7 @@ gsocket.c	M	S
 
 dialup.cpp	U
 threadpsx.cpp	U
-utilsunx.cpp	U
+utilsunx.cpp	U	B
 gsocket.c	U
 
 gsockgtk.c	R
@@ -413,7 +415,7 @@ search.cpp	H
 arrimpl.cpp	W
 listimpl.cpp	W
 accel.h	W
-app.h	W
+app.h	W	B
 bitmap.h	W
 bmpbuttn.h	W
 brush.h	W
@@ -435,7 +437,7 @@ config.h	W
 control.h	W
 cursor.h	W
 dataobj.h	W
-date.h	W
+date.h	W	B
 datstrm.h	W
 db.h	W
 dbtable.h	W
@@ -446,21 +448,21 @@ dcprint.h	W
 dcps.h	W
 dcscreen.h	W
 dde.h	W
-debug.h	W
-defs.h	W
+debug.h	W	B
+defs.h	W	B
 dialog.h	W
 dirdlg.h	W
 dnd.h	W
 docmdi.h	W
 docview.h	W
 dragimag.h	W
-dynarray.h	W
-dynlib.h	W
-event.h	W
+dynarray.h	W	B
+dynlib.h	W	B
+event.h	W	B
 expr.h	W
-ffile.h	W
-file.h	W
-fileconf.h	W
+ffile.h	W	B
+file.h	W	B
+fileconf.h	W	B
 filedlg.h	W
 filefn.h	W
 filesys.h	W
@@ -475,7 +477,7 @@ gdiobj.h	W
 gifdecod.h	W
 grid.h	W
 gsocket.h	W
-hash.h	W
+hash.h	W	B
 help.h	W
 helpbase.h	W
 helphtml.h	W
@@ -484,30 +486,30 @@ helpxlp.h	W
 icon.h	W
 image.h	W
 imaglist.h	W
-intl.h	W
+intl.h	W	B
 ioswrap.h	W
 ipcbase.h	W
 joystick.h	W
 layout.h	W
 laywin.h	W
-list.h	W
+list.h	W	B
 listbox.h	W
 listctrl.h	W
-log.h	W
-longlong.h	W
+log.h	W	B
+longlong.h	W	B
 matrix.h	W
 mdi.h	W
 memory.h	W
 menu.h	W
 menuitem.h	W
 metafile.h	W
-mimetype.h	W
+mimetype.h	W	B
 minifram.h	W
-module.h	W
+module.h	W	B
 msgdlg.h	W
 mstream.h	W
 notebook.h	W
-object.h	W
+object.h	W	B
 objstrm.h	W
 odbc.h	W
 ownerdrw.h	W
@@ -519,7 +521,7 @@ pnghand.h	W
 print.h	W
 printdlg.h	W
 prntbase.h	W
-process.h	W
+process.h	W	B
 progdlg.h	W
 prop.h	W
 propform.h	W
@@ -536,7 +538,7 @@ scrolbar.h	W
 scrolwin.h	W
 serbase.h	W
 settings.h	W
-setup.h	W
+setup.h	W	B
 sizer.h	W
 slider.h	W
 socket.h	W
@@ -547,9 +549,9 @@ statbox.h	W
 statline.h	W
 stattext.h	W
 statusbr.h	W
-strconv.h	W
-stream.h	W
-string.h	W
+strconv.h	W	B
+stream.h	W	B
+string.h	W	B
 tab.h	W
 tabctrl.h	W
 taskbar.h	W
@@ -559,35 +561,35 @@ tbarmsw.h	W
 tbarsmpl.h	W
 textctrl.h	W
 textdlg.h	W
-textfile.h	W
-txtstrm.h	W
-thread.h	W
-time.h	W
-timer.h	W
+textfile.h	W	B
+txtstrm.h	W	B
+thread.h	W	B
+time.h	W	B
+timer.h	W	B
 tipdlg.h	W
-tokenzr.h	W
+tokenzr.h	W	B
 toolbar.h	W
 tooltip.h	W
 treectrl.h	W
 types.h	W
 url.h	W
-utils.h	W
+utils.h	W	B
 valgen.h	W
 validate.h	W
 valtext.h	W
-variant.h	W
-version.h	W
+variant.h	W	B
+version.h	W	B
 wave.h	W
 wfstream.h	W
 window.h	W
-wx.h	W
+wx.h	W	B
 wx_cw.h	W
 wx_cw_cm.h	W
 wx_cw_d.h	W
-wxchar.h	W
+wxchar.h	W	B
 wxexpr.h	W
 wxhtml.h	W
-wxprec.h	W
+wxprec.h	W	B
 xpmhand.h	W
 zipstrm.h	W
 zstream.h	W

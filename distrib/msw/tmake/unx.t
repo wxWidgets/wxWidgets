@@ -51,36 +51,32 @@
     #! Common
     
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bR\b/;
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+        ($filedep = $file) =~ s/cp?p?$/\d/;
 
-        $file2 = $file;
-        $file =~ s/cp?p?$/\o/;
-        $file2 =~ s/cp?p?$/\d/;
-        $project{"WXGTK_COMMONOBJS"} .= $file . " ";
-        $project{"WXGTK_COMMONDEPS"} .= $file2 . " "
-    }
+        #! 'B' flag means that the file makes part of wxBase too
+        if ( $wxCommon{$file} =~ /\bB\b/ ) {
+            $project{"BASE_OBJS"} .= $fileobj . " ";
+            $project{"BASE_DEPS"} .= $filedep . " ";
+        }
 
-    foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bX\b/;
+        #! if it's the wxBase-only file, nothing more to do with it
+        next if $wxCommon{$file} =~ /\bBO\b/;
 
-        $file2 = $file;
-        $file =~ s/cp?p?$/\o/;
-        $file2 =~ s/cp?p?$/\d/;
-        $project{"WXMOTIF_COMMONOBJS"} .= $file . " ";
-        $project{"WXMOTIF_COMMONDEPS"} .= $file2 . " "
-    }
+        if ( $wxCommon{$file} !~ /\bR\b/ ) {    #! unless not for GTK
+            $project{"WXGTK_COMMONOBJS"} .= $fileobj . " ";
+            $project{"WXGTK_COMMONDEPS"} .= $filedep . " "
+        }
+        if ( $wxCommon{$file} !~ /\bX\b/ ) {    #! unless not for Motif
+            $project{"WXMOTIF_COMMONOBJS"} .= $fileobj . " ";
+            $project{"WXMOTIF_COMMONDEPS"} .= $filedep . " "
+        }
 
-    foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\b(16)\b/;
-
-        #! needs extra files (sql*.h) so not compiled by default.
-        next if $file =~ /^odbc\./;
-
-        $file2 = $file;
-        $file =~ s/cp?p?$/\o/;
-        $file2 =~ s/cp?p?$/\d/;
-        $project{"WXMSW_COMMONOBJS"} .= $file . " ";
-        $project{"WXMSW_COMMONDEPS"} .= $file2 . " "
+        #! ODBC needs extra files (sql*.h) so not compiled by default.
+        if ( (file !~ /^odbc\./) && ($wxCommon{$file} !~ /\b(16)\b/) ) {
+            $project{"WXMSW_COMMONOBJS"} .= $fileobj . " ";
+            $project{"WXMSW_COMMONDEPS"} .= $filedep . " "
+        }
     }
 
     #! GUI
@@ -127,17 +123,24 @@
     }
 
     foreach $file (sort keys %wxUNIX) {
-        $file2 = $file;
-        $file =~ s/cp?p?$/\o/;
-        $file2 =~ s/cp?p?$/\d/;
-        $project{"WXUNIXOBJS"} .= $file . " ";
-        $project{"WXUNIXDEPS"} .= $file2 . " "
+        ($fileobj = $file) =~ s/cp?p?$/\o/;
+        ($filedep = $file) =~ s/cp?p?$/\d/;
+
+        #! 'B' flag means that the file makes part of wxBase too
+        if ( $wxUNIX{$file} =~ /\bB\b/ ) {
+            $project{"BASE_OBJS"} .= $fileobj . " ";
+            $project{"BASE_DEPS"} .= $filedep . " "
+        }
+
+        $project{"WXUNIX_OBJS"} .= $fileobj . " ";
+        $project{"WXUNIX_DEPS"} .= $filedep . " "
     }
     
     #! headers
     
     foreach $file (sort keys %wxWXINCLUDE) {
-        $project{"WX_HEADERS"} .= $file . " "
+        $project{"WX_HEADERS"} .= $file . " ";
+        $project{"BASE_HEADERS"} .= $file . " " if $wxWXINCLUDE{$file} =~ /\bB\b/;
     }
     
     foreach $file (sort keys %wxGENERICINCLUDE) {
@@ -295,6 +298,9 @@ DISTDIR = ./_dist_dir/wx$(TOOLKIT)
 
 ############################## Files ##################################
 
+BASE_HEADERS = \
+		#$ ExpandList("BASE_HEADERS");
+
 WX_HEADERS = \
 		#$ ExpandList("WX_HEADERS");
 
@@ -381,17 +387,23 @@ MSW_GUIOBJS = \
 MSW_GUIDEPS = \
 		#$ ExpandList("WXMSW_GUIDEPS");
 
+BASE_OBJS = \
+		#$ ExpandList("BASE_OBJS");
+
+BASE_DEPS = \
+		#$ ExpandList("BASE_DEPS");
+
 HTMLOBJS = \
 		#$ ExpandList("WXHTMLOBJS");
 
 HTMLDEPS = \
 		#$ ExpandList("WXHTMLDEPS");
 
-UNIXOBJS = \
-		#$ ExpandList("WXUNIXOBJS");
+UNIX_OBJS = \
+		#$ ExpandList("WXUNIX_OBJS");
 
-UNIXDEPS = \
-		#$ ExpandList("WXUNIXDEPS");
+UNIX_DEPS = \
+		#$ ExpandList("WXUNIX_DEPS");
 
 ZLIBOBJS    = \
 		adler32.o \
@@ -475,16 +487,23 @@ JPEGOBJS    = \
 		jquant2.o \
 		jdmerge.o
 
+GUIOBJS = @GUIOBJS@
+GUIDEPS = @GUIDEPS@
+GUIHEADERS = @GUIHEADERS@
+COMMONOBJS = @COMMONOBJS@
+COMMONDEPS = @COMMONDEPS@
+GENERICOBJS = @GENERICOBJS@
+GENERICDEPS = @GENERICDEPS@
+UNIXOBJS = @UNIXOBJS@
+UNIXDEPS = @UNIXDEPS@
 
-OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(@UNIXOBJS@) $(HTMLOBJS) \
-	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS)
+OBJECTS = @ALL_OBJECTS@
 
-DEPFILES = $(@GUIDEPS@) $(@COMMONDEPS@) $(@GENERICDEPS@) $(UNIXDEPS) $(HTMLDEPS)
+DEPFILES = @ALL_DEPFILES@
 
-HEADERS = $(@GUIHEADERS@) $(HTML_HEADERS) $(UNIX_HEADERS) $(PROTOCOL_HEADERS) \
-	  $(GENERIC_HEADERS) $(WX_HEADERS)
+HEADERS = @ALL_HEADERS@
 
-all: $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
+all: @WX_CREATE_LINKS@
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
 	@$(INSTALL) -d ./lib
@@ -495,7 +514,7 @@ all: $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
 	@$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
 	
-CREATE_LINKS@: @WX_TARGET_LIBRARY@
+CREATE_LINKS: @WX_TARGET_LIBRARY@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
 	@$(RM) ./lib/@WX_LIBRARY_LINK2@
 	@$(RM) ./lib/@WX_LIBRARY_LINK3@
