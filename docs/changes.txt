@@ -152,6 +152,7 @@ wxMSW:
 - wxFileDialog now returns correct filter index for multiple-file dialogs
 - added wxTextCtrl::HitTest()
 - experimental wxURL implementation using WinInet functions (Hajo Kirchhoff)
+- fixed several bugs in wxNotebook with wxNB_MULTILINE style
 
 wxGTK:
 

@@ -619,10 +619,11 @@ bool wxNotebook::InsertPage(size_t nPage,
     // succeeded: save the pointer to the page
     m_pages.Insert(pPage, nPage);
 
-    // for the first page (only) we need to adjust the size again because the
-    // notebook size changed: the tabs which hadn't been there before are now
-    // shown
-    if ( m_pages.GetCount() == 1 )
+    // we may need to adjust the size again if the notebook size changed:
+    // normally this only happens for the first page we add (the tabs which
+    // hadn't been there before are now shown) but for a multiline notebook it
+    // can happen for any page at all as a new row could have been started
+    if ( m_pages.GetCount() == 1 || HasFlag(wxNB_MULTILINE) )
     {
         AdjustPageSize(pPage);
     }
@@ -697,6 +698,29 @@ void wxNotebook::OnSize(wxSizeEvent& event)
   RECT rc;
   rc.left = rc.top = 0;
   GetSize((int *)&rc.right, (int *)&rc.bottom);
+
+  // there seems to be a bug in the implementation of TabCtrl_AdjustRect(): it
+  // returns completely false values for multiline tab controls after the tabs
+  // are added but before getting the first WM_SIZE (off by ~50 pixels, see
+  //
+  // http://sf.net/tracker/index.php?func=detail&aid=645323&group_id=9863&atid=109863
+  //
+  // and the only work around I could find was this ugly hack... without it
+  // simply toggling the "multiline" checkbox in the notebook sample resulted
+  // in a noticeable page displacement
+  if ( HasFlag(wxNB_MULTILINE) )
+  {
+      // avoid an infinite recursion: we get another notification too!
+      static bool s_isInOnSize = false;
+
+      if ( !s_isInOnSize )
+      {
+          s_isInOnSize = true;
+          SendMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
+                      MAKELPARAM(rc.right, rc.bottom));
+          s_isInOnSize = false;
+      }
+  }
 
   TabCtrl_AdjustRect(m_hwnd, false, &rc);
 
