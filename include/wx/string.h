@@ -304,13 +304,13 @@ public:
       { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
 
     /// operator version of GetChar
+#if 0
     char  operator[](size_t n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
-#ifdef __WXMSW__
+#endif
     /// operator version of GetChar
     char  operator[](int n) const
       { ASSERT_VALID_INDEX( n ); return m_pchData[n]; }
-#endif
     /// operator version of GetWritableChar
     char& operator[](size_t n)
       { ASSERT_VALID_INDEX( n ); CopyBeforeWrite(); return m_pchData[n]; }
