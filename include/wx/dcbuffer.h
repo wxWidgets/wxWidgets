@@ -37,7 +37,9 @@ public:
     }
 
     // Construct a wxBufferedDC using a user supplied buffer.
-    wxBufferedDC(wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA)
+    wxBufferedDC(wxDC *dc,
+                 const wxBitmap &buffer = wxNullBitmap,
+                 int style = wxBUFFER_CLIENT_AREA)
         : m_dc( dc ),
           m_buffer( buffer ),
           m_style(style)
@@ -67,7 +69,9 @@ public:
 
     // These reimplement the actions of the ctors for two stage creation, but
     // are not used by the ctors themselves to save a few cpu cycles.
-    void Init(wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA)
+    void Init(wxDC *dc,
+              const wxBitmap &buffer=wxNullBitmap,
+              int style = wxBUFFER_CLIENT_AREA)
     {
         wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
                       _T("wxBufferedDC already initialised") );
@@ -112,7 +116,12 @@ private:
     // check that the bitmap is valid and use it
     void UseBuffer()
     {
-        wxASSERT_MSG( m_buffer.Ok(), _T("invalid bitmap in wxBufferedDC") );
+        if (!m_buffer.Ok())
+        {
+            wxCoord w, h;
+            m_dc->GetSize(&w, &h);
+            m_buffer = wxBitmap(w, h);
+        }
 
         SelectObject(m_buffer);
     }
