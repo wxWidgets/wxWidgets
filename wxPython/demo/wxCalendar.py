@@ -498,8 +498,7 @@ class PrintCalend:
 
         year, month = self.year, self.month
 
-        x = 1.0
-
+        x = 0.5
         for i in range(2):
             y = 0.5
 
