@@ -398,13 +398,15 @@ static pascal OSStatus ApplicationEventHandler( EventHandlerCallRef handler , Ev
     {
         case kEventAppActivated :
             {
-                wxTheApp->MacResume( true ) ;
+                if ( wxTheApp )
+                    wxTheApp->MacResume( true ) ;
                 result = noErr ;
             }
             break ;
         case kEventAppDeactivated :
             {
-                wxTheApp->MacSuspend( true ) ;
+                if ( wxTheApp )
+                    wxTheApp->MacSuspend( true ) ;
                 result = noErr ;
             }
             break ;
@@ -1482,6 +1484,7 @@ void wxApp::MacDoOneEvent()
     {
         MacHandleOneEvent( theEvent ) ;
         ReleaseEvent(theEvent);
+        sleepTime = kEventDurationNoWait ;
     }
 #else
       EventRecord event ;
