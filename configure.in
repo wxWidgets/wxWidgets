@@ -1177,8 +1177,6 @@ dnl   defines GCC empty if not using gcc
 dnl   defines CFLAGS
 AC_PROG_CC
 
-CFLAGS=`echo "$CFLAGS" | sed 's/-g//g'`
-
 dnl is -traditional needed for correct compilations
 dnl   adds -traditional for gcc if needed
 AC_PROG_GCC_TRADITIONAL
@@ -1192,8 +1190,6 @@ dnl   defines GXX with yes if using gxx
 dnl   defines GXX empty if not using gxx
 dnl   defines CXXFLAGS
 AC_PROG_CXX
-
-CXXFLAGS=`echo "$CXXFLAGS" | sed 's/-g//g'`
 
 AC_LANG_RESTORE
 
