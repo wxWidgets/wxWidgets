@@ -481,7 +481,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if wxUSE_DRAG_AND_DROP
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-//    wxDataFormat format = data->GetFormat();
+//    wxDataFormat format = data->GetPreferredFormat();
 // TODO:
 /*
     switch ( format )
@@ -499,7 +499,7 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetFormat(), &bitmap);
+            return wxSetClipboardData(data->GetPreferredFormat(), &bitmap);
         }
 
 #if wxUSE_METAFILE
@@ -540,7 +540,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
 #if wxUSE_DRAG_AND_DROP
-//    wxDataFormat format = data.GetFormat();
+//    wxDataFormat format = data.GetPreferredFormat();
     // TODO:
 /*
     switch ( format )
@@ -564,7 +564,7 @@ bool wxClipboard::GetData( wxDataObject& data )
         case wxDF_DIB:
         {
             wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
-            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetFormat());
+            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data->GetPreferredFormat());
             if (bitmap)
             {
                 bitmapDataObject.SetBitmap(* bitmap);

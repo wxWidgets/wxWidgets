@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1229,12 +1229,16 @@ EXPORTS
       OnFileSave__12wxDocManagerFR14wxCommandEvent
       ;wxDocManager::OnFileNew(wxCommandEvent&)
       OnFileNew__12wxDocManagerFR14wxCommandEvent
+      ;wxDocManager::OnFileCloseAll(wxCommandEvent&)
+      OnFileCloseAll__12wxDocManagerFR14wxCommandEvent
       ;wxDocTemplate::CreateView(wxDocument*,long)
       CreateView__13wxDocTemplateFP10wxDocumentl
       ;wxDocManager::CreateView(wxDocument*,long)
       CreateView__12wxDocManagerFP10wxDocumentl
       ;wxDocTemplate::CreateDocument(const wxString&,long)
       CreateDocument__13wxDocTemplateFRC8wxStringl
+      ;wxDocManager::CloseDocuments(unsigned long)
+      CloseDocuments__12wxDocManagerFUl
       ;wxDocManager::AssociateTemplate(wxDocTemplate*)
       AssociateTemplate__12wxDocManagerFP13wxDocTemplate
       ;wxTransferFileToStream(const wxString&,ostream&)
@@ -1754,7 +1758,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2777,6 +2781,8 @@ EXPORTS
       __ct__6wxHTTPFv
       ;wxHTTP::SendHeaders()
       SendHeaders__6wxHTTPFv
+      ;wxHTTP::ClearHeaders()
+      ClearHeaders__6wxHTTPFv
       ;wxHTTP::GetHeader(const wxString&)
       GetHeader__6wxHTTPFRC8wxString
       ;wxHTTP::Connect(const wxString&)
@@ -2817,13 +2823,20 @@ EXPORTS
       DoLoadDib__12wxBMPHandlerFP7wxImageiN42lR13wxInputStreamUlN29
       ;wxBMPHandler::sm_classwxBMPHandler
       sm_classwxBMPHandler__12wxBMPHandler
+      ;wxICOHandler::sm_classwxICOHandler
+      sm_classwxICOHandler__12wxICOHandler
+      ;wxCURHandler::sm_classwxCURHandler
+      sm_classwxCURHandler__12wxCURHandler
       __vft12wxICOHandler8wxObject
+      __vft12wxCURHandler8wxObject
       ;wxBMPHandler::LoadDib(wxImage*,wxInputStream&,unsigned long,unsigned long)
       LoadDib__12wxBMPHandlerFP7wxImageR13wxInputStreamUlT3
       ;wxBMPHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__12wxBMPHandlerFP7wxImageR14wxOutputStreamUl
       ;wxConstructorForwxBMPHandler()
       wxConstructorForwxBMPHandler__Fv
+      ;wxConstructorForwxCURHandler()
+      wxConstructorForwxCURHandler__Fv
       ;wxICOHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__12wxICOHandlerFP7wxImageR14wxOutputStreamUl
       ;wxBMPHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
@@ -2832,11 +2845,17 @@ EXPORTS
       LoadFile__12wxICOHandlerFP7wxImageR13wxInputStreamUli
       ;wxICOHandler::DoCanRead(wxInputStream&)
       DoCanRead__12wxICOHandlerFR13wxInputStream
+      ;wxCURHandler::DoCanRead(wxInputStream&)
+      DoCanRead__12wxCURHandlerFR13wxInputStream
       ;wxBMPHandler::DoCanRead(wxInputStream&)
       DoCanRead__12wxBMPHandlerFR13wxInputStream
       ;wxBMPHandler::SaveDib(wxImage*,wxOutputStream&,unsigned long,unsigned long,unsigned long)
       SaveDib__12wxBMPHandlerFP7wxImageR14wxOutputStreamUlN23
       __vft12wxBMPHandler8wxObject
+      ;wxICOHandler::GetImageCount(wxInputStream&)
+      GetImageCount__12wxICOHandlerFR13wxInputStream
+      ;wxConstructorForwxICOHandler()
+      wxConstructorForwxICOHandler__Fv
   ;From object file:  ..\common\image.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxImage::wxImage(int,int,unsigned char*,unsigned long)
@@ -2882,18 +2901,22 @@ EXPORTS
       ;wxImage::Mirror(unsigned long) const
       Mirror__7wxImageCFUl
       __vft14wxImageHandler8wxObject
-      ;wxImage::LoadFile(const wxString&,long)
-      LoadFile__7wxImageFRC8wxStringl
+      ;wxImage::GetImageCount(wxInputStream&,long)
+      GetImageCount__7wxImageFR13wxInputStreaml
       ;wxImage::Scale(int,int) const
       Scale__7wxImageCFiT1
       ;wxImage::sm_handlers
       sm_handlers__7wxImage
       ;wxImage::wxImage(const wxImage&)
       __ct__7wxImageFRC7wxImage
+      ;wxImage::wxImage(wxInputStream&,const wxString&,int)
+      __ct__7wxImageFR13wxInputStreamRC8wxStringi
       ;wxImage::SetPalette(const wxPalette&)
       SetPalette__7wxImageFRC9wxPalette
       ;wxImage::SaveFile(wxOutputStream&,int)
       SaveFile__7wxImageFR14wxOutputStreami
+      ;wxImage::LoadFile(const wxString&,long,int)
+      LoadFile__7wxImageFRC8wxStringli
       ;wxImageHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
       LoadFile__14wxImageHandlerFP7wxImageR13wxInputStreamUli
       ;wxImageRefData::~wxImageRefData()
@@ -2906,22 +2929,20 @@ EXPORTS
       SetRGB__7wxImageFiT1UcN23
       ;wxImage::SaveFile(wxOutputStream&,const wxString&)
       SaveFile__7wxImageFR14wxOutputStreamRC8wxString
-      ;wxImage::LoadFile(wxInputStream&,const wxString&)
-      LoadFile__7wxImageFR13wxInputStreamRC8wxString
       ;wxImage::CanRead(const wxString&)
       CanRead__7wxImageFRC8wxString
+      ;wxImage::GetImageCount(const wxString&,long)
+      GetImageCount__7wxImageFRC8wxStringl
+      __vft7wxImage8wxObject
       ;wxImage::Rotate(double,const wxPoint&,unsigned long,wxPoint*) const
       Rotate__7wxImageCFdRC7wxPointUlP7wxPoint
-      __vft7wxImage8wxObject
-      ;wxImage::wxImage(const wxString&,const wxString&)
-      __ct__7wxImageFRC8wxStringT1
+      ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
+      Replace__7wxImageFUcN51
       wxNullImage
       ;wxImage::SaveFile(const wxString&,int)
       SaveFile__7wxImageFRC8wxStringi
-      ;wxImage::Replace(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)
-      Replace__7wxImageFUcN51
-      ;wxImage::LoadFile(const wxString&,const wxString&)
-      LoadFile__7wxImageFRC8wxStringT1
+      ;wxImage::LoadFile(const wxString&,const wxString&,int)
+      LoadFile__7wxImageFRC8wxStringT1i
       ;wxImageRefData::wxImageRefData()
       __ct__14wxImageRefDataFv
       ;wxConstructorForwxImageModule()
@@ -2944,8 +2965,6 @@ EXPORTS
       FindHandler__7wxImageFRC8wxString
       ;wxImage::Create(int,int,unsigned char*,unsigned long)
       Create__7wxImageFiT1PUcUl
-      ;wxImage::wxImage(wxInputStream&,long)
-      __ct__7wxImageFR13wxInputStreaml
       ;wxImage::SetMask(unsigned long)
       SetMask__7wxImageFUl
       ;wxImage::Rotate90(unsigned long) const
@@ -2955,6 +2974,8 @@ EXPORTS
       ;wxImage::Create(int,int)
       Create__7wxImageFiT1
       __vft14wxImageRefData15wxObjectRefData
+      ;wxImage::wxImage(const wxString&,const wxString&,int)
+      __ct__7wxImageFRC8wxStringT1i
       ;wxImage::wxImage(const wxImage*)
       __ct__7wxImageFPC7wxImage
       ;wxImage::SetOption(const wxString&,const wxString&)
@@ -2977,22 +2998,26 @@ EXPORTS
       CleanUpHandlers__7wxImageFv
       ;wxImageHandler::CanRead(const wxString&)
       CanRead__14wxImageHandlerFRC8wxString
-      ;wxImage::wxImage(const wxString&,long)
-      __ct__7wxImageFRC8wxStringl
-      ;wxImage::wxImage(const wxBitmap&)
-      __ct__7wxImageFRC8wxBitmap
       ;wxImageHandler::SaveFile(wxImage*,wxOutputStream&,unsigned long)
       SaveFile__14wxImageHandlerFP7wxImageR14wxOutputStreamUl
-      ;wxImage::LoadFile(wxInputStream&,long)
-      LoadFile__7wxImageFR13wxInputStreaml
-      ;wxImage::GetBlue(int,int) const
-      GetBlue__7wxImageCFiT1
+      ;wxImage::wxImage(const wxBitmap&)
+      __ct__7wxImageFRC8wxBitmap
+      ;wxImage::wxImage(const wxString&,long,int)
+      __ct__7wxImageFRC8wxStringli
       ;wxImage::sm_classwxImage
       sm_classwxImage__7wxImage
+      ;wxImage::wxImage(wxInputStream&,long,int)
+      __ct__7wxImageFR13wxInputStreamli
       ;wxImage::SetOption(const wxString&,int)
       SetOption__7wxImageFRC8wxStringi
       ;wxImage::SaveFile(const wxString&,const wxString&)
       SaveFile__7wxImageFRC8wxStringT1
+      ;wxImage::LoadFile(wxInputStream&,long,int)
+      LoadFile__7wxImageFR13wxInputStreamli
+      ;wxImage::LoadFile(wxInputStream&,const wxString&,int)
+      LoadFile__7wxImageFR13wxInputStreamRC8wxStringi
+      ;wxImage::GetBlue(int,int) const
+      GetBlue__7wxImageCFiT1
       ;wxImage::ComputeHistogram(wxHashTable&)
       ComputeHistogram__7wxImageFR11wxHashTable
       ;wxImage::CanRead(wxInputStream&)
@@ -3003,8 +3028,6 @@ EXPORTS
       sm_classwxImageHandler__14wxImageHandler
       ;wxImage::AddHandler(wxImageHandler*)
       AddHandler__7wxImageFP14wxImageHandler
-      ;wxImage::wxImage(wxInputStream&,const wxString&)
-      __ct__7wxImageFR13wxInputStreamRC8wxString
       ;wxImage::HasOption(const wxString&) const
       HasOption__7wxImageCFRC8wxString
   ;From object file:  ..\common\imaggif.cpp
@@ -5646,7 +5669,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7202,8 +7225,8 @@ EXPORTS
       ms_PSScaleFactor__14wxPostScriptDC
   ;From object file:  ..\generic\dirctrlg.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxGenericDirDialog::OnOK(wxCommandEvent&)
-      OnOK__18wxGenericDirDialogFR14wxCommandEvent
+      ;wxDirItemData::wxDirItemData(const wxString&,const wxString&,unsigned long)
+      __ct__13wxDirItemDataFRC8wxStringT1Ul
       ;wxGenericDirCtrl::sm_eventTableEntries
       sm_eventTableEntries__16wxGenericDirCtrl
       ;wxGenericDirCtrl::sm_classwxGenericDirCtrl
@@ -7212,8 +7235,6 @@ EXPORTS
       sm_classwxDirFilterListCtrl__19wxDirFilterListCtrl
       __vft19wxDirFilterListCtrl8wxObject
       __vft16wxGenericDirCtrl8wxObject
-      ;wxGenericDirDialog::OnTreeSelected(wxTreeEvent&)
-      OnTreeSelected__18wxGenericDirDialogFR11wxTreeEvent
       ;setdrive(int)
       setdrive__Fi
       ;wxDirFilterListCtrl::Init()
@@ -7222,6 +7243,8 @@ EXPORTS
       wxConstructorForwxGenericDirCtrl__Fv
       ;wxGenericDirCtrl::wxGenericDirCtrl()
       __ct__16wxGenericDirCtrlFv
+      ;wxDirItemData::SetNewDirName(const wxString&)
+      SetNewDirName__13wxDirItemDataFRC8wxString
       ;wxGenericDirCtrl::ExpandPath(const wxString&)
       ExpandPath__16wxGenericDirCtrlFRC8wxString
       ;wxDirFilterListCtrl::Create(wxGenericDirCtrl*,const int,const wxPoint&,const wxSize&,long)
@@ -7232,10 +7255,11 @@ EXPORTS
       OnSize__16wxGenericDirCtrlFR11wxSizeEvent
       ;wxGenericDirCtrl::OnEndEditItem(wxTreeEvent&)
       OnEndEditItem__16wxGenericDirCtrlFR11wxTreeEvent
+      __vft13wxDirItemData12wxClientData
       ;wxGenericDirCtrl::Init()
       Init__16wxGenericDirCtrlFv
-      ;wxDirItemDataEx::~wxDirItemDataEx()
-      __dt__15wxDirItemDataExFv
+      ;wxDirItemData::~wxDirItemData()
+      __dt__13wxDirItemDataFv
       ;wxGenericDirCtrl::ParseFilter(const wxString&,wxArrayString&,wxArrayString&)
       ParseFilter__16wxGenericDirCtrlFRC8wxStringR13wxArrayStringT2
       ;wxDirFilterListCtrl::GetEventTable() const
@@ -7252,36 +7276,16 @@ EXPORTS
       FillFilterList__19wxDirFilterListCtrlFRC8wxStringi
       ;wxGenericDirCtrl::SetupSections()
       SetupSections__16wxGenericDirCtrlFv
-      ;wxGenericDirDialog::GetPath() const
-      GetPath__18wxGenericDirDialogCFv
-      ;wxGenericDirDialog::GetEventTable() const
-      GetEventTable__18wxGenericDirDialogCFv
-      ;wxDirItemDataEx::SetNewDirName(wxString)
-      SetNewDirName__15wxDirItemDataExF8wxString
-      ;wxDirItemDataEx::wxDirItemDataEx(const wxString&,const wxString&,unsigned long)
-      __ct__15wxDirItemDataExFRC8wxStringT1Ul
-      __vft18wxGenericDirDialog8wxObject
-      ;wxGenericDirDialog::OnNew(wxCommandEvent&)
-      OnNew__18wxGenericDirDialogFR14wxCommandEvent
       ;wxGenericDirCtrl::OnCollapseItem(wxTreeEvent&)
       OnCollapseItem__16wxGenericDirCtrlFR11wxTreeEvent
-      __vft15wxDirItemDataEx12wxClientData
+      ;wxDirItemData::HasSubDirs() const
+      HasSubDirs__13wxDirItemDataCFv
       ;wxGenericDirCtrl::GetPath() const
       GetPath__16wxGenericDirCtrlCFv
-      ;wxGenericDirDialog::wxGenericDirDialog(wxWindow*,const wxString&,const wxString&,long,const wxPoint&,const wxSize&,const wxString&)
-      __ct__18wxGenericDirDialogFP8wxWindowRC8wxStringT2lRC7wxPointRC6wxSizeT2
-      ;wxGenericDirDialog::ShowModal()
-      ShowModal__18wxGenericDirDialogFv
       ;wxGenericDirCtrl::GetFilePath() const
       GetFilePath__16wxGenericDirCtrlCFv
       ;wxGenericDirCtrl::Create(wxWindow*,const int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&,int,const wxString&)
       Create__16wxGenericDirCtrlFP8wxWindowCiRC8wxStringRC7wxPointRC6wxSizelT3iT3
-      ;wxGenericDirDialog::sm_eventTable
-      sm_eventTable__18wxGenericDirDialog
-      ;wxGenericDirDialog::sm_eventTableEntries
-      sm_eventTableEntries__18wxGenericDirDialog
-      ;wxGenericDirDialog::SetPath(const wxString&)
-      SetPath__18wxGenericDirDialogFRC8wxString
       ;wxGenericDirCtrl::SetPath(const wxString&)
       SetPath__16wxGenericDirCtrlFRC8wxString
       ;wxGenericDirCtrl::SetFilter(const wxString&)
@@ -7290,12 +7294,8 @@ EXPORTS
       OnBeginEditItem__16wxGenericDirCtrlFR11wxTreeEvent
       ;wxDirFilterListCtrl::sm_eventTable
       sm_eventTable__19wxDirFilterListCtrl
-      ;wxGenericDirDialog::OnTreeKeyDown(wxTreeEvent&)
-      OnTreeKeyDown__18wxGenericDirDialogFR11wxTreeEvent
       ;wxGenericDirCtrl::OnExpandItem(wxTreeEvent&)
       OnExpandItem__16wxGenericDirCtrlFR11wxTreeEvent
-      ;wxGenericDirDialog::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__18wxGenericDirDialogFR12wxCloseEvent
       ;wxGenericDirCtrl::FindChild(wxTreeItemId,const wxString&,unsigned long&)
       FindChild__16wxGenericDirCtrlF12wxTreeItemIdRC8wxStringRUl
       ;wxGenericDirCtrl::AddSection(const wxString&,const wxString&,int)
@@ -7306,6 +7306,8 @@ EXPORTS
       __dt__16wxGenericDirCtrlFv
       ;wxGenericDirCtrl::DoResize()
       DoResize__16wxGenericDirCtrlFv
+      ;wxDirItemData::HasFiles(const wxString&) const
+      HasFiles__13wxDirItemDataCFRC8wxString
       ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
       ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
@@ -7471,8 +7473,8 @@ EXPORTS
       DeselectCol__6wxGridFi
       ;wxGridTableBase::AppendCols(unsigned int)
       AppendCols__15wxGridTableBaseFUi
-      ;wxGridStringArray::DoEmpty()
-      DoEmpty__17wxGridStringArrayFv
+      ;wxGridCellAttr::Init(wxGridCellAttr*)
+      Init__14wxGridCellAttrFP14wxGridCellAttr
       wxEVT_GRID_EDITOR_SHOWN
       ;wxConstructorForwxGridEditorCreatedEvent()
       wxConstructorForwxGridEditorCreatedEvent__Fv
@@ -7511,6 +7513,8 @@ EXPORTS
       GetDefaultCellBackgroundColour__6wxGridFv
       ;wxGrid::DoGetBestSize() const
       DoGetBestSize__6wxGridCFv
+      ;wxGridStringArray::DoEmpty()
+      DoEmpty__17wxGridStringArrayFv
       ;wxGridCellTextEditor::Create(wxWindow*,int,wxEvtHandler*)
       Create__20wxGridCellTextEditorFP8wxWindowiP12wxEvtHandler
       ;wxGridCellEditor::Create(wxWindow*,int,wxEvtHandler*)
@@ -11207,6 +11211,8 @@ EXPORTS
       Create__16wxBitmapCheckBoxFP8wxWindowiPC8wxBitmapRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxCheckBox::SetLabel(const wxString&)
       SetLabel__10wxCheckBoxFRC8wxString
+      ;wxCheckBox::Command(wxCommandEvent&)
+      Command__10wxCheckBoxFR14wxCommandEvent
       ;wxBitmapCheckBox::sm_classwxBitmapCheckBox
       sm_classwxBitmapCheckBox__16wxBitmapCheckBox
   ;From object file:  ..\os2\checklst.cpp
@@ -13382,23 +13388,23 @@ EXPORTS
       sm_classwxSystemSettingsModule__22wxSystemSettingsModule
       ;wxSystemSettingsModule::OnInit()
       OnInit__22wxSystemSettingsModuleFv
+      ;wxSystemSettingsNative::GetFont(wxSystemFont)
+      GetFont__22wxSystemSettingsNativeF12wxSystemFont
       __vft22wxSystemSettingsModule8wxObject
-      ;wxSystemSettings::GetSystemColour(int)
-      GetSystemColour__16wxSystemSettingsFi
-      ;wxSystemSettings::GetSystemMetric(int)
-      GetSystemMetric__16wxSystemSettingsFi
+      ;wxSystemSettingsNative::HasFeature(wxSystemFeature)
+      HasFeature__22wxSystemSettingsNativeF15wxSystemFeature
       ;wxSystemSettingsModule::sm_optionNames
       sm_optionNames__22wxSystemSettingsModule
+      ;wxSystemSettingsNative::GetColour(wxSystemColour)
+      GetColour__22wxSystemSettingsNativeF14wxSystemColour
       ;wxSystemSettingsModule::OnExit()
       OnExit__22wxSystemSettingsModuleFv
-      ;wxSystemSettings::GetCapability(int)
-      GetCapability__16wxSystemSettingsFi
       ;wxSystemSettingsModule::sm_optionValues
       sm_optionValues__22wxSystemSettingsModule
       ;wxConstructorForwxSystemSettingsModule()
       wxConstructorForwxSystemSettingsModule__Fv
-      ;wxSystemSettings::GetSystemFont(int)
-      GetSystemFont__16wxSystemSettingsFi
+      ;wxSystemSettingsNative::GetMetric(wxSystemMetric)
+      GetMetric__22wxSystemSettingsNativeF14wxSystemMetric
   ;From object file:  ..\os2\slider.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSlider::DoSetSize(int,int,int,int,int)
@@ -13889,8 +13895,6 @@ EXPORTS
       GetId__8wxThreadCFv
       ;wxThread::Delete(void**)
       Delete__8wxThreadFPPv
-      ;wxThread::Create()
-      Create__8wxThreadFv
       ;wxThreadInternal::OS2ThreadStart(wxThread*)
       OS2ThreadStart__16wxThreadInternalFP8wxThread
       ;wxMutex::Lock()
@@ -13930,13 +13934,11 @@ EXPORTS
       TryLock__7wxMutexFv
       ;wxThread::This()
       This__8wxThreadFv
-      ;wxThreadInternal::Create(wxThread*)
-      Create__16wxThreadInternalFP8wxThread
+      ;wxThread::Sleep(unsigned long)
+      Sleep__8wxThreadFUl
       __vft8wxThread
       ;wxThread::wxThread(wxThreadKind)
       __ct__8wxThreadF12wxThreadKind
-      ;wxThread::Sleep(unsigned long)
-      Sleep__8wxThreadFUl
       ;wxMutex::Unlock()
       Unlock__7wxMutexFv
       ;wxMutexGuiLeaveOrEnter()
@@ -13956,6 +13958,10 @@ EXPORTS
       SetPriority__16wxThreadInternalFUi
       ;wxThread::SetPriority(unsigned int)
       SetPriority__8wxThreadFUi
+      ;wxThread::Create(unsigned int)
+      Create__8wxThreadFUi
+      ;wxThreadInternal::Create(wxThread*,unsigned int)
+      Create__16wxThreadInternalFP8wxThreadUi
       ;wxMutexGuiLeave()
       wxMutexGuiLeave__Fv
       ;wxThread::~wxThread()
@@ -14103,6 +14109,8 @@ EXPORTS
       Maximize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::EnableCloseButton(unsigned long)
       EnableCloseButton__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::UpdateInternalSize(wxWindow*,int)
+      UpdateInternalSize__19wxTopLevelWindowOS2FP8wxWindowi
       ;wxTopLevelWindowOS2::DoGetClientSize(int*,int*) const
       DoGetClientSize__19wxTopLevelWindowOS2CFPiT1
       ;wxTopLevelWindowOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
