@@ -97,6 +97,13 @@ void wxFrame::CocoaSetWxWindowSize(int width, int height)
     wxTopLevelWindow::CocoaSetWxWindowSize(width,height);
 }
 
+WX_NSView wxFrame::GetNonClientNSView()
+{
+    if(m_frameNSView)
+        return m_frameNSView;
+    return GetNSViewForSuperview();
+}
+
 void wxFrame::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
 {
     // If we have the additional toolbar/statbar view, then the

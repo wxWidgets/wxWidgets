@@ -52,6 +52,8 @@ protected:
 // ------------------------------------------------------------------------
 public:
     virtual wxMenuBar* GetAppMenuBar() { return GetMenuBar(); }
+    // Returns the NSView for non-client drawing
+    virtual WX_NSView GetNonClientNSView();
 protected:
     virtual void CocoaSetWxWindowSize(int width, int height);
 

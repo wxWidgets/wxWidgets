@@ -65,6 +65,9 @@ public:
     WX_NSView GetNSViewForSuperview() const;
     // Returns the NSView that may be hidden/is being hidden
     WX_NSView GetNSViewForHiding() const;
+    // Returns the NSView for non-client drawing
+    virtual WX_NSView GetNonClientNSView() { return GetNSViewForSuperview(); }
+    // Add/remove children
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
 protected:
