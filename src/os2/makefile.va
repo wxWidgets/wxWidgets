@@ -116,6 +116,7 @@ GENERICOBJS= \
   ..\generic\$D\laywin.obj \
   ..\generic\$D\listctrl.obj \
   ..\generic\$D\logg.obj \
+  ..\generic\$D\mdig.obj \
   ..\generic\$D\numdlgg.obj \
   ..\generic\$D\panelg.obj \
   ..\generic\$D\printps.obj \
@@ -162,6 +163,7 @@ GENLIBOBJS= \
   laywin.obj \
   listctrl.obj \
   logg.obj \
+  mdig.obj \
   numdlgg.obj \
   panelg.obj \
   printps.obj \
@@ -509,7 +511,6 @@ OS2OBJS = \
   ..\os2\$D\joystick.obj \
   ..\os2\$D\listbox.obj \
   ..\os2\$D\main.obj \
-  ..\os2\$D\mdi.obj \
   ..\os2\$D\menu.obj \
   ..\os2\$D\menuitem.obj \
   ..\os2\$D\metafile.obj \
@@ -590,13 +591,12 @@ OS2LIBOBJS1 = \
   joystick.obj \
   listbox.obj \
   main.obj \
-  mdi.obj \
   menu.obj \
   menuitem.obj \
-  metafile.obj
+  metafile.obj \
+  mimetype.obj
 
 OS2LIBOBJS2 = \
-  mimetype.obj \
   minifram.obj \
   msgdlg.obj \
   nativdlg.obj \
@@ -949,13 +949,12 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\joystick.obj
   copy ..\os2\$D\listbox.obj
   copy ..\os2\$D\main.obj
-  copy ..\os2\$D\mdi.obj
   copy ..\os2\$D\menu.obj
   copy ..\os2\$D\menuitem.obj
   copy ..\os2\$D\metafile.obj
+  copy ..\os2\$D\mimetype.obj
 
 $(OS2LIBOBJS2):
-  copy ..\os2\$D\mimetype.obj
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
   copy ..\os2\$D\nativdlg.obj

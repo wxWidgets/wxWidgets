@@ -12,7 +12,7 @@
 #elif defined(__WXMAC__)
 #include "wx/mac/mdi.h"
 #elif defined(__WXPM__)
-#include "wx/os2/mdi.h"
+#include "wx/generic/mdig.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/mdi.h"
 #endif
