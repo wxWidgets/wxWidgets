@@ -119,7 +119,7 @@ public:
 
 protected:
     virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(wxObjectRefData *data) const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     friend class WXDLLEXPORT wxRegionIterator;
 

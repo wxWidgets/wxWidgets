@@ -129,7 +129,7 @@ wxObjectRefData *wxRegion::CreateRefData() const
     return new wxRegionRefData;
 }
 
-wxObjectRefData *wxRegion::CloneRefData(wxObjectRefData *data) const
+wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
 {
     return new wxRegionRefData(*(wxRegionRefData *)data);
 }

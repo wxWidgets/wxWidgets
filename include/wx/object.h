@@ -407,7 +407,7 @@ protected:
     virtual wxObjectRefData *CreateRefData() const;
 
     // create a new m_refData initialized with the given one
-    virtual wxObjectRefData *CloneRefData(wxObjectRefData *data) const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     wxObjectRefData *m_refData;
 };
