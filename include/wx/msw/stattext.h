@@ -51,6 +51,7 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
     virtual wxSize DoGetBestSize() const;
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle = NULL) const;
+    virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)
 };

@@ -133,7 +133,7 @@ protected:
     // common part of the 3 functions above: pass wxNullColour to use the
     // appropriate background colour (meaning ours or our parents) or a fixed
     // one
-    WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
+    virtual WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
 
     // another WM_CTLCOLOR-related function: override this to return the brush
     // which should be used to paint the control background by default

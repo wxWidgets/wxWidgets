@@ -126,6 +126,19 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+WXHBRUSH wxStaticText::DoMSWControlColor(WXHDC pDC, wxColour colBg)
+{
+    // If this control has a non-standard fg colour but still has the standard
+    // bg then we need to also give it a non-standard bg otherwise the fg
+    // setting has no effect.
+    WXHBRUSH hbr = wxControl::DoMSWControlColor(pDC, colBg);
+    if (!hbr && m_hasFgCol)
+    {
+        hbr = MSWGetBgBrushForChild(pDC, this);
+    }
+    return hbr;
+}
+
 wxSize wxStaticText::DoGetBestSize() const
 {
     wxClientDC dc(wx_const_cast(wxStaticText *, this));
