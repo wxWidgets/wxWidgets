@@ -22,7 +22,7 @@
 #include <wx/setup.h>
 
 
-
+#undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 1
 #if wxUSE_GLCANVAS
 
