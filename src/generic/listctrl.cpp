@@ -4467,6 +4467,9 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     m_lines.Insert( line, id );
 
     m_dirty = TRUE;
+
+    SendNotify(id, wxEVT_COMMAND_LIST_INSERT_ITEM);
+
     RefreshLines(id, GetItemCount() - 1);
 }
 
