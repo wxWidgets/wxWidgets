@@ -303,8 +303,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-//    style = style | wxSIMPLE_BORDER;
-    style = style | wxCAPTION;
+    style = style | wxCAPTION | wxFRAME_FLOAT_ON_PARENT;
 
     if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
         m_miniTitle = 13;
@@ -317,9 +316,6 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     m_diffY = 0;
     
     wxFrame::Create( parent, id, title, pos, size, style, name );
-
-    if ((m_parent) && (GTK_IS_WINDOW(m_parent->m_widget)))
-        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
 
     if ((style & wxSYSTEM_MENU) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))

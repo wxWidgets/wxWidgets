@@ -253,9 +253,9 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
        position in "realize" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
 
-    if (win->m_miniEdge > 0)
+    if ((win->m_miniEdge > 0) || (win->HasFlag(wxSIMPLE_BORDER)))
     {
-        /* This is a mini-frame. */
+        /* This is a mini-frame or a borderless frame. */
         gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)0 );
         gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)0 );
     }
@@ -440,9 +440,11 @@ bool wxFrame::Create( wxWindow *parent,
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
     GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
-    if (style & wxSIMPLE_BORDER) win_type = GTK_WINDOW_POPUP;
 
     m_widget = gtk_window_new( win_type );
+
+    if ((m_parent) && (HasFlag(wxFRAME_FLOAT_ON_PARENT)) && (GTK_IS_WINDOW(m_parent->m_widget)))
+        gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
 
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), name.mb_str(), name.mb_str() );
