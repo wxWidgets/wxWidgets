@@ -458,6 +458,11 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
                         (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
                       );
 
+    // usually WS_TABSTOP is added by wxControl::MSWGetStyle() but as we're
+    // created hidden (see Create() above), it is not done for us but we still
+    // want to have this style
+    msStyle |= WS_TABSTOP;
+
     // remove the style always added by wxChoice
     msStyle &= ~CBS_DROPDOWNLIST;
 
