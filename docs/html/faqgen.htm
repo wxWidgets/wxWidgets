@@ -140,10 +140,10 @@ platform-independent code, such as the wxTreeCtrl and wxListCtrl classes.<P>
 No. This is a much-discussed topic that has (many times) ended with the conclusion that it is in
 wxWidgets&#39; best interests to avoid use of templates. Not all compilers can handle
 templates adequately so it would dramatically reduce the number of compilers
-and platforms that could be supported. It would also be undersirable to make
+and platforms that could be supported. It would also be undesirable to make
 wxWidgets dependent on another large library that may have to be downloaded and installed.
 In addition, use of templates can lead to executable bloat, which is something
-wxWidgets 2 is strenously trying to avoid.<P>
+wxWidgets 2 is strenuously trying to avoid.<P>
 
 The standard C++ string class is not used, again because it is not available to all compilers,
 and it is not necessarily a very efficient implementation. Also, we retain more flexibility

@@ -200,7 +200,7 @@ This error can sometimes be corrected or avoided by modifying the source code. H
 Because wxWidgets does not have a specific API for the <i>About</i> menu item or the <i>Help</i> menu, the Mac OS port uses some static variables to help the engine make the right decisions:
 <ul>
 <li>It assumes that the <i>About</i> menu item is part of a <i>Help</i> menu.
-<li>The title of the <i>Help</i> menu is stored in <code>wxApp::s_macHelpMenuTitleName</code>, it defaults to "&Help", but you can change it in your constructor to your specific menu title.
+<li>The title of the <i>Help</i> menu is stored in <code>wxApp::s_macHelpMenuTitleName</code>, it defaults to "&amp;Help", but you can change it in your constructor to your specific menu title.
 <li>The item Id of the <i>About</i> menu is stored in <code>wxApp::s_macAboutMenuItemID</code>, it defaults to <code>wxID_ABOUT</code>, but can be changed as well to suit your needs.
 <li>The other items of the wxWidgets help menu are appended to the Mac OS <i>Help</i> menu and the translation of Ids is handled transparently for your application.
 </ul>

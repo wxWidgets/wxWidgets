@@ -1,3 +1,4 @@
+
 <HTML>
 
 <HEAD>
@@ -44,7 +45,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#shortcutproblem">Why are menu hotkeys or shortcuts not working in my application?</a></li>
 <li><a href="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></li>
 <li><a href="#access">Is MS Active Accessibility supported?</a></li>
-<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files??</a></li>
+<li><a href="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></li>
 <li><a href="#crtmismatch">Visual C++ gives errors about multiply defined symbols, what can I do?</a></li>
 <li><a href="#directx">Why do I get compilation erros when using wxWidgets with DirectShow?</a></li>
 <li><a href="#handlewm">How do I handle Windows messages in my wxWidgets program?</a></li>
@@ -322,6 +323,10 @@ Code&#39; (and no others). This will then work.<P>
 
 <H3><a name="makefiles">How are the wxWidgets makefiles edited under Windows?</a></H3>
 
+wxWidgets 2.5.x and above uses Bakefile to generate makefiles, which
+is described in technical note 16 under docs/tech in your distribution.
+For 2.4.x, the following explanation applies.<P>
+
 As of wxWidgets 2.1, there is a new system written by Vadim Zeitlin, that
 generates the makefiles from templates using tmake.<P>
 
@@ -453,7 +458,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy;  
+        wxLogNull dummy; 
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
@@ -499,7 +504,7 @@ for the current status.
 <P>
 
 
-<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files??</a></h3>
+<h3><a name="#dspfmt">Why does Visual C++ complain about corrupted project files{/a></h3>
 
 If you have downloaded the wxWidgets sources from the cvs using a Unix cvs
 client or downloaded a daily snapshot in <tt>.tar.gz</tt> format, it is likely
