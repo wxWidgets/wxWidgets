@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -20,7 +20,10 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit(void);
+    MyApp() { m_textCtrl = NULL; m_mimeDatabase = NULL; }
+
+    bool OnInit();
+    int OnExit() { delete m_mimeDatabase; return wxApp::OnExit(); }
 
     void DoDateDemo(wxCommandEvent& event);
     void DoTimeDemo(wxCommandEvent& event);
@@ -30,14 +33,16 @@ public:
 #if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
 #endif
+    void DoMIMEDemo(wxCommandEvent& event);
 
-    wxTextCtrl*     GetTextCtrl() const { return m_textCtrl; }
+    wxTextCtrl* GetTextCtrl() const { return m_textCtrl; }
 
 private:
-    wxTextCtrl*     m_textCtrl;
+    wxTextCtrl* m_textCtrl;
+    wxMimeTypesManager *m_mimeDatabase;
 
-DECLARE_DYNAMIC_CLASS(MyApp)
-DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(MyApp)
+    DECLARE_EVENT_TABLE()
 };
 
 DECLARE_APP(MyApp)
@@ -48,26 +53,29 @@ class MyFrame: public wxFrame
 public:
     MyFrame(wxFrame *parent, const wxString& title,
             const wxPoint& pos, const wxSize& size);
-    
+
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-   DECLARE_EVENT_TABLE()
-    
+    DECLARE_EVENT_TABLE()
 };
 
 // ID for the menu commands
-#define TYPES_QUIT 	    wxID_EXIT
-#define TYPES_TEXT 	    101
-#define TYPES_ABOUT     102
+enum
+{
+    TYPES_QUIT = wxID_EXIT,
+    TYPES_TEXT = 101,
+    TYPES_ABOUT,
 
-#define TYPES_DATE      103
-#define TYPES_TIME      104
-#define TYPES_VARIANT   105
-#define TYPES_BYTEORDER 106
-#define TYPES_UNICODE   107
-#define TYPES_STREAM    108
+    TYPES_DATE,
+    TYPES_TIME,
+    TYPES_VARIANT,
+    TYPES_BYTEORDER,
+    TYPES_UNICODE,
+    TYPES_STREAM,
+    TYPES_MIME
+};
 
 #endif
     // _WX_TYPETEST_H_

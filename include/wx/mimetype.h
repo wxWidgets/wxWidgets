@@ -120,12 +120,24 @@ public:
                    // the other parameters form a NULL terminated list of
                    // extensions
                    ...);
-                   
+
         // invalid item - use this to terminate the array passed to
         // wxMimeTypesManager::AddFallbacks
     wxFileTypeInfo() { }
 
     bool IsValid() const { return !m_mimeType.IsEmpty(); }
+
+    // accessors
+        // get the MIME type
+    const wxString& GetMimeType() const { return m_mimeType; }
+        // get the open command
+    const wxString& GetOpenCommand() const { return m_openCmd; }
+        // get the print command
+    const wxString& GetPrintCommand() const { return m_printCmd; }
+        // get the description
+    const wxString& GetDescription() const { return m_desc; }
+        // get the array of all extensions
+    const wxArrayString& GetExtensions() const { return m_exts; }
 
 private:
     wxString m_mimeType,    // the MIME type in "type/subtype" form
@@ -187,7 +199,7 @@ public:
     // function.
     //
     // The filetypes array should be terminated by a NULL entry
-    bool AddFallbacks(const wxFileTypeInfo *filetypes);
+    void AddFallbacks(const wxFileTypeInfo *filetypes);
 
     // dtor (not virtual, shouldn't be derived from)
     ~wxMimeTypesManager();

@@ -83,13 +83,20 @@ class wxFileTypeImpl
 {
 public:
     // ctor
-    wxFileTypeImpl() { }
+    wxFileTypeImpl() { m_info = NULL; }
 
-    // initialize us with our file type name
-    void SetFileType(const wxString& strFileType)
-        { m_strFileType = strFileType; }
-    void SetExt(const wxString& ext)
-        { m_ext = ext; }
+    // one of these Init() function must be called (ctor can't take any
+    // arguments because it's common)
+
+        // initialize us with our file type name and extension - in this case
+        // we will read all other data from the registry
+    void Init(const wxString& strFileType, const wxString& ext)
+        { m_strFileType = strFileType; m_ext = ext; }
+
+        // initialize us with a wxFileTypeInfo object - it contains all the
+        // data
+    void Init(const wxFileTypeInfo& info)
+        { m_info = &info; }
 
     // implement accessor functions
     bool GetExtensions(wxArrayString& extensions);
@@ -97,18 +104,24 @@ public:
     bool GetIcon(wxIcon *icon) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
-                        const wxFileType::MessageParameters&) const
-        { return GetCommand(openCmd, _T("open")); }
+                        const wxFileType::MessageParameters& params) const;
     bool GetPrintCommand(wxString *printCmd,
-                         const wxFileType::MessageParameters&) const
-        { return GetCommand(printCmd, _T("print")); }
+                         const wxFileType::MessageParameters& params) const;
 
 private:
-    // helper function
-    bool GetCommand(wxString *command, const wxChar *verb) const;
+    // helper function: reads the command corresponding to the specified verb
+    // from the registry (returns an empty string if not found)
+    wxString GetCommand(const wxChar *verb) const;
 
-    wxString m_strFileType, m_ext;
+    // we use either m_info or read the data from the registry if m_info == NULL
+    const wxFileTypeInfo *m_info;
+    wxString        m_strFileType,
+                    m_ext;
 };
+
+WX_DECLARE_OBJARRAY(wxFileTypeInfo, wxArrayFileTypeInfo);
+#include "wx/arrimpl.cpp"
+WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
 
 class wxMimeTypesManagerImpl
 {
@@ -126,6 +139,11 @@ public:
         { return TRUE; }
     bool ReadMimeTypes(const wxString& filename)
         { return TRUE; }
+
+    void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
+
+private:
+    wxArrayFileTypeInfo m_fallbacks;
 };
 
 #else  // Unix
@@ -278,6 +296,18 @@ public:
     bool ReadMailcap(const wxString& filename, bool fallback = FALSE);
     bool ReadMimeTypes(const wxString& filename);
 
+    void AddFallback(const wxFileTypeInfo& filetype);
+
+    // add information about the given mimetype
+    void AddMimeTypeInfo(const wxString& mimetype,
+                         const wxString& extensions,
+                         const wxString& description);
+    void AddMailcapInfo(const wxString& strType,
+                        const wxString& strOpenCmd,
+                        const wxString& strPrintCmd,
+                        const wxString& strTest,
+                        const wxString& strDesc);
+
     // accessors
         // get the string containing space separated extensions for the given
         // file type
@@ -332,6 +362,42 @@ private:
 };
 
 #endif // OS type
+
+// ============================================================================
+// common classes
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxFileTypeInfo
+// ----------------------------------------------------------------------------
+
+wxFileTypeInfo::wxFileTypeInfo(const char *mimeType,
+                               const char *openCmd,
+                               const char *printCmd,
+                               const char *desc,
+                               ...)
+              : m_mimeType(mimeType),
+                m_openCmd(openCmd),
+                m_printCmd(printCmd),
+                m_desc(desc)
+{
+    va_list argptr;
+    va_start(argptr, desc);
+
+    for ( ;; )
+    {
+        const char *ext = va_arg(argptr, const char *);
+        if ( !ext )
+        {
+            // NULL terminates the list
+            break;
+        }
+
+        m_exts.Add(ext);
+    }
+
+    va_end(argptr);
+}
 
 // ============================================================================
 // implementation of the wrapper classes
@@ -518,13 +584,20 @@ bool wxMimeTypesManager::ReadMimeTypes(const wxString& filename)
     return m_impl->ReadMimeTypes(filename);
 }
 
+void wxMimeTypesManager::AddFallbacks(const wxFileTypeInfo *filetypes)
+{
+    for ( const wxFileTypeInfo *ft = filetypes; ft->IsValid(); ft++ ) {
+        m_impl->AddFallback(*ft);
+    }
+}
+
 // ============================================================================
 // real (OS specific) implementation
 // ============================================================================
 
 #ifdef __WXMSW__
 
-bool wxFileTypeImpl::GetCommand(wxString *command, const wxChar *verb) const
+wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
 {
     // suppress possible error messages
     wxLogNull nolog;
@@ -532,40 +605,84 @@ bool wxFileTypeImpl::GetCommand(wxString *command, const wxChar *verb) const
     strKey << m_strFileType << _T("\\shell\\") << verb << _T("\\command");
     wxRegKey key(wxRegKey::HKCR, strKey);
 
+    wxString command;
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue(_T(""), *command) ) {
+        if ( key.QueryValue(_T(""), command) ) {
             // transform it from '%1' to '%s' style format string
+
             // NB: we don't make any attempt to verify that the string is valid,
             //     i.e. doesn't contain %2, or second %1 or .... But we do make
             //     sure that we return a string with _exactly_ one '%s'!
-            size_t len = command->Len();
-            for ( size_t n = 0; n < len; n++ ) {
-                if ( command->GetChar(n) == _T('%') &&
-                     (n + 1 < len) && command->GetChar(n + 1) == _T('1') ) {
+            bool foundFilename = FALSE;
+            size_t len = command.Len();
+            for ( size_t n = 0; (n < len) && !foundFilename; n++ ) {
+                if ( command[n] == _T('%') &&
+                     (n + 1 < len) && command[n + 1] == _T('1') ) {
                     // replace it with '%s'
-                    command->SetChar(n + 1, _T('s'));
+                    command[n + 1] = _T('s');
 
-                    return TRUE;
+                    foundFilename = TRUE;
                 }
             }
 
-            // we didn't find any '%1'!
-            // HACK: append the filename at the end, hope that it will do
-            *command << _T(" %s");
-
-            return TRUE;
+            if ( !foundFilename ) {
+                // we didn't find any '%1'!
+                // HACK: append the filename at the end, hope that it will do
+                command << _T(" %s");
+            }
         }
     }
 
     // no such file type or no value
-    return FALSE;
+    return command;
+}
+
+bool
+wxFileTypeImpl::GetOpenCommand(wxString *openCmd,
+                               const wxFileType::MessageParameters& params)
+                               const
+{
+    wxString cmd;
+    if ( m_info ) {
+        cmd = m_info->GetOpenCommand();
+    }
+    else {
+        cmd = GetCommand(_T("open"));
+    }
+
+    *openCmd = wxFileType::ExpandCommand(cmd, params);
+
+    return !openCmd->IsEmpty();
+}
+
+bool
+wxFileTypeImpl::GetPrintCommand(wxString *printCmd,
+                                const wxFileType::MessageParameters& params)
+                                const
+{
+    wxString cmd;
+    if ( m_info ) {
+        cmd = m_info->GetPrintCommand();
+    }
+    else {
+        cmd = GetCommand(_T("print"));
+    }
+
+    *printCmd = wxFileType::ExpandCommand(cmd, params);
+
+    return !printCmd->IsEmpty();
 }
 
 // TODO this function is half implemented
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    if ( m_ext.IsEmpty() ) {
+    if ( m_info ) {
+        extensions = m_info->GetExtensions();
+
+        return TRUE;
+    }
+    else if ( m_ext.IsEmpty() ) {
         // the only way to get the list of extensions from the file type is to
         // scan through all extensions in the registry - too slow...
         return FALSE;
@@ -581,6 +698,13 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 
 bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
+    if ( m_info ) {
+        // we already have it
+        *mimeType = m_info->GetMimeType();
+
+        return TRUE;
+    }
+
     // suppress possible error messages
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, /*m_strFileType*/ _T(".") + m_ext);
@@ -594,6 +718,11 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {
+    if ( m_info ) {
+        // we don't have icons in the fallback resources
+        return FALSE;
+    }
+
     wxString strIconKey;
     strIconKey << m_strFileType << _T("\\DefaultIcon");
 
@@ -642,6 +771,13 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 
 bool wxFileTypeImpl::GetDescription(wxString *desc) const
 {
+    if ( m_info ) {
+        // we already have it
+        *desc = m_info->GetDescription();
+
+        return TRUE;
+    }
+
     // suppress possible error messages
     wxLogNull nolog;
     wxRegKey key(wxRegKey::HKCR, m_strFileType);
@@ -677,8 +813,20 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
         if ( key.QueryValue(_T(""), strFileType) ) {
             // create the new wxFileType object
             wxFileType *fileType = new wxFileType;
-            fileType->m_impl->SetFileType(strFileType);
-            fileType->m_impl->SetExt(ext);
+            fileType->m_impl->Init(strFileType, ext);
+
+            return fileType;
+        }
+    }
+
+    // check the fallbacks
+    // TODO linear search is potentially slow, perhaps we should use a sorted
+    //      array?
+    size_t count = m_fallbacks.GetCount();
+    for ( size_t n = 0; n < count; n++ ) {
+        if ( m_fallbacks[n].GetExtensions().Index(ext) != wxNOT_FOUND ) {
+            wxFileType *fileType = new wxFileType;
+            fileType->m_impl->Init(m_fallbacks[n]);
 
             return fileType;
         }
@@ -707,6 +855,20 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     if ( key.Open() ) {
         if ( key.QueryValue(_T("Extension"), ext) ) {
             return GetFileTypeFromExtension(ext);
+        }
+    }
+
+    // check the fallbacks
+    // TODO linear search is potentially slow, perhaps we should use a sorted
+    //      array?
+    size_t count = m_fallbacks.GetCount();
+    for ( size_t n = 0; n < count; n++ ) {
+        if ( wxMimeTypesManager::IsOfType(mimeType,
+                                          m_fallbacks[n].GetMimeType()) ) {
+            wxFileType *fileType = new wxFileType;
+            fileType->m_impl->Init(m_fallbacks[n]);
+
+            return fileType;
         }
     }
 
@@ -903,6 +1065,77 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     }
 }
 
+void wxMimeTypesManagerImpl::AddFallback(const wxFileTypeInfo& filetype)
+{
+    const wxArrayString& exts = filetype.GetExtensions();
+    size_t nExts = exts.GetCount();
+    for ( size_t nExt = 0; nExt < nExts; nExt++ ) {
+        if ( nExt > 0 ) {
+            extensions += _T(' ');
+        }
+        extensions += exts[nExt];
+    }
+
+    AddMimeTypeInfo(filetype.GetMimeType(),
+                    extensions,
+                    filetype.GetDescription());
+
+    AddMailcapInfo(filetype.GetMimeType(),
+                   filetype.GetOpenCommand(),
+                   filetype.GetPrintCommand(),
+                   _T(""),
+                   filetype.GetDescription());
+}
+
+void wxMimeTypesManagerImpl::AddMimeTypeInfo(const wxString& strMimeType,
+                                             const wxString& strExtensions,
+                                             const wxString& strDesc)
+{
+    int index = m_aTypes.Index(strMimeType);
+    if ( index == wxNOT_FOUND ) {
+        // add a new entry
+        m_aTypes.Add(strMimeType);
+        m_aEntries.Add(NULL);
+        m_aExtensions.Add(strExtensions);
+        m_aDescriptions.Add(strDesc);
+    }
+    else {
+        // modify an existing one
+        if ( !strDesc.IsEmpty() ) {
+            m_aDescriptions[index] = strDesc;   // replace old value
+        }
+        m_aExtensions[index] += strExtensions;
+    }
+}
+
+void wxMimeTypesManagerImpl::AddMailcapInfo(const wxString& strType,
+                                            const wxString& strOpenCmd,
+                                            const wxString& strPrintCmd,
+                                            const wxString& strTest,
+                                            const wxString& strDesc)
+{
+    MailCapEntry *entry = new MailCapEntry(strOpenCmd, strPrintCmd, strTest);
+
+    int nIndex = m_aTypes.Index(strType);
+    if ( nIndex == wxNOT_FOUND ) {
+        // new file type
+        m_aTypes.Add(strType);
+
+        m_aEntries.Add(entry);
+        m_aExtensions.Add(_T(""));
+        m_aDescriptions.Add(strDesc);
+    }
+    else {
+        // always append the entry in the tail of the list - info added with
+        // this function can only come from AddFallbacks()
+        MailCapEntry *entryOld = m_aEntries[nIndex];
+        if ( entryOld )
+            entry->Append(entryOld);
+        else
+            m_aEntries[nIndex] = entry;
+    }
+}
+
 bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 {
     wxLogTrace(_T("--- Parsing mime.types file '%s' ---"), strFileName.c_str());
@@ -1042,21 +1275,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             strExtensions.erase(0, 1);
         }
 
-        int index = m_aTypes.Index(strMimeType);
-        if ( index == wxNOT_FOUND ) {
-            // add a new entry
-            m_aTypes.Add(strMimeType);
-            m_aEntries.Add(NULL);
-            m_aExtensions.Add(strExtensions);
-            m_aDescriptions.Add(strDesc);
-        }
-        else {
-            // modify an existing one
-            if ( !strDesc.IsEmpty() ) {
-                m_aDescriptions[index] = strDesc;   // replace old value
-            }
-            m_aExtensions[index] += strExtensions;
-        }
+        AddMimeTypeInfo(strMimeType, strExtensions, strDesc);
 
         // finished with this line
         pc = NULL;
@@ -1269,6 +1488,8 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                                    strPrintCmd,
                                                    strTest);
 
+            // NB: because of complications below (we must get entries priority
+            //     right), we can't use AddMailcapInfo() here, unfortunately.
             strType.MakeLower();
             int nIndex = m_aTypes.Index(strType);
             if ( nIndex == wxNOT_FOUND ) {
@@ -1339,10 +1560,10 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     return TRUE;
 }
 
-#endif 
+#endif
   // OS type
 
-#endif  
+#endif
   // wxUSE_FILE && wxUSE_TEXTFILE
 
 #endif

@@ -70,7 +70,8 @@ default ones which are loaded automatically) containing MIME
 information in either mailcap(5) or mime.types(5) format.
 
 \helpref{ReadMailcap}{wxmimetypesmanagerreadmailcap}\\
-\helpref{ReadMimeTypes}{wxmimetypesmanagerreadmimetypes}
+\helpref{ReadMimeTypes}{wxmimetypesmanagerreadmimetypes}\\
+\helpref{AddFallbacks}{wxmimetypesmanageraddfallbacks}
 
 %%%%% MEMBERS HERE %%%%%
 \helponly{\insertatlevel{2}{
@@ -92,6 +93,17 @@ additional mailcap/mime.types files.
 \func{}{\destruct{wxMimeTypesManager}}{\void}
 
 Destructor is not virtual, so this class should not be derived from.
+
+\membersection{wxMimeTypesManager::AddFallbacks}\label{wxmimetypesmanageraddfallbacks}
+
+\func{void}{AddFallbacks}{\param{const wxFileTypeInfo *}{fallbacks}}
+
+This function may be used to provdie hard-wired fallbacks for the MIME types
+and extensions that might not be present in the system MIME database.
+
+% TODO
+
+Please see the typetest sample for an example of using it.
 
 \membersection{wxMimeTypesManager::GetFileTypeFromExtension}\label{wxmimetypesmanagergetfiletypefromextension}
 

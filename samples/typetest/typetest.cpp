@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:       wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -27,6 +27,7 @@
 #include "wx/time.h"
 #include "wx/date.h"
 #include "wx/variant.h"
+#include "wx/mimetype.h"
 
 #include "typetest.h"
 
@@ -47,68 +48,74 @@
 #include "wx/txtstrm.h"
 
 // Create a new application object
-IMPLEMENT_APP	(MyApp)
+IMPLEMENT_APP    (MyApp)
 
-IMPLEMENT_DYNAMIC_CLASS	(MyApp, wxApp)
+IMPLEMENT_DYNAMIC_CLASS    (MyApp, wxApp)
 
 BEGIN_EVENT_TABLE(MyApp, wxApp)
-	EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
-	EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
-	EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
-	EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
+    EVT_MENU(TYPES_DATE,      MyApp::DoDateDemo)
+    EVT_MENU(TYPES_TIME,      MyApp::DoTimeDemo)
+    EVT_MENU(TYPES_VARIANT,   MyApp::DoVariantDemo)
+    EVT_MENU(TYPES_BYTEORDER, MyApp::DoByteOrderDemo)
 #if wxUSE_UNICODE
-	EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
+    EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
 #endif
-	EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
+    EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
+    EVT_MENU(TYPES_MIME, MyApp::DoMIMEDemo)
 END_EVENT_TABLE()
 
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
-  // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxWindows Types Demo",
-      wxPoint(50, 50), wxSize(450, 340));
+    // Create the main frame window
+    MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxWindows Types Demo",
+                                 wxPoint(50, 50), wxSize(450, 340));
 
-  // Give it an icon
-  frame->SetIcon(wxICON(mondrian));
+    // Give it an icon
+    frame->SetIcon(wxICON(mondrian));
 
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(TYPES_ABOUT, "&About");
-  file_menu->AppendSeparator();
-  file_menu->Append(TYPES_DATE, "&Date test");
-  file_menu->Append(TYPES_TIME, "&Time test");
-  file_menu->Append(TYPES_VARIANT, "&Variant test");
-  file_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
+    file_menu->Append(TYPES_ABOUT, "&About");
+    file_menu->AppendSeparator();
+    file_menu->Append(TYPES_QUIT, "E&xit\tAlt-X");
+
+    wxMenu *test_menu = new wxMenu;
+    test_menu->Append(TYPES_DATE, "&Date test");
+    test_menu->Append(TYPES_TIME, "&Time test");
+    test_menu->Append(TYPES_VARIANT, "&Variant test");
+    test_menu->Append(TYPES_BYTEORDER, "&Byteorder test");
 #if wxUSE_UNICODE
-  file_menu->Append(TYPES_UNICODE, "&Unicode test");
+    test_menu->Append(TYPES_UNICODE, "&Unicode test");
 #endif
-  file_menu->Append(TYPES_STREAM, "&Stream test");
-  file_menu->AppendSeparator();
-  file_menu->Append(TYPES_QUIT, "E&xit");
-  wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
-  frame->SetMenuBar(menu_bar);
+    test_menu->Append(TYPES_STREAM, "&Stream test");
+    test_menu->AppendSeparator();
+    test_menu->Append(TYPES_MIME, "&MIME database test");
 
-  m_textCtrl = new wxTextCtrl(frame, -1, "", wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(test_menu, "&Tests");
+    frame->SetMenuBar(menu_bar);
 
-  // Show the frame
-  frame->Show(TRUE);
-  
-  SetTopWindow(frame);
+    m_textCtrl = new wxTextCtrl(frame, -1, "", wxPoint(0, 0), wxDefaultSize, wxTE_MULTILINE);
 
-  return TRUE;
+    // Show the frame
+    frame->Show(TRUE);
+
+    SetTopWindow(frame);
+
+    return TRUE;
 }
 
 void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
-    
+
     textCtrl.Clear();
     textCtrl << _T("\nTest fstream vs. wxFileStream:\n\n");
 
     textCtrl.WriteText( "Writing to ofstream and wxFileOutputStream:\n" );
-    
+
     ofstream std_file_output( "test_std.dat" );
     wxFileOutputStream file_output( "test_wx.dat" );
     wxBufferedOutputStream buf_output( file_output );
@@ -120,122 +127,122 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
     text_output << si << "\n";
     std_file_output << si << "\n";
-    
+
     unsigned int ui = 0xFFFFFFFF;
     tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
     text_output << ui << "\n";
     std_file_output << ui << "\n";
-    
+
     double d = 2.01234567890123456789;
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     text_output << d << "\n";
     std_file_output << d << "\n";
-    
-    float f = 0.00001;
+
+    float f = (float)0.00001;
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
     text_output << f << "\n";
     std_file_output << f << "\n";
-    
+
     wxString str( _T("Hello!") );
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     text_output << str << "\n";
     std_file_output << str.c_str() << "\n";
-    
+
     textCtrl.WriteText( "\nReading from ifstream:\n" );
-    
+
     ifstream std_file_input( "test_std.dat" );
 
     std_file_input >> si;
     tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
-    
+
     std_file_input >> ui;
     tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
-    
+
     std_file_input >> d;
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
-    
+
     std_file_input >> f;
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
-    
+
     std_file_input >> str;
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
-    
+
     textCtrl.WriteText( "\nReading from wxFileInputStream:\n" );
 
     buf_output.Sync();
-    
+
     wxFileInputStream file_input( "test_wx.dat" );
     wxBufferedInputStream buf_input( file_input );
     wxTextInputStream text_input( buf_input );
-    
+
     text_input >> si;
     tmp.Printf( _T("Signed int: %d\n"), si );
     textCtrl.WriteText( tmp );
-    
+
     text_input >> ui;
     tmp.Printf( _T("Unsigned int: %u\n"), ui );
     textCtrl.WriteText( tmp );
-    
+
     text_input >> d;
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
-    
+
     text_input >> f;
     tmp.Printf( _T("Float: %f\n"), f );
     textCtrl.WriteText( tmp );
-    
+
     text_input >> str;
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
-    
+
 
     textCtrl << "\nTest for wxDataStream:\n\n";
 
     textCtrl.WriteText( "Writing to wxDataOutputStream:\n" );
-    
+
     file_output.SeekO( 0 );
     wxDataOutputStream data_output( buf_output );
 
-    wxInt16 i16 = 0xFFFF;
+    wxInt16 i16 = (short)0xFFFF;
     tmp.Printf( _T("Signed int16: %d\n"), (int)i16 );
     textCtrl.WriteText( tmp );
     data_output.Write16( i16 );
-    
+
     wxUint16 ui16 = 0xFFFF;
     tmp.Printf( _T("Unsigned int16: %u\n"), (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
     data_output.Write16( ui16 );
-    
+
     d = 2.01234567890123456789;
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
     data_output.WriteDouble( d );
-    
+
     str = "Hello!";
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
     data_output.WriteString( str );
-    
+
     buf_output.Sync();
-    
+
     textCtrl.WriteText( "\nReading from wxDataInputStream:\n" );
-    
+
     file_input.SeekI( 0 );
     wxDataInputStream data_input( buf_input );
 
     i16 = data_input.Read16();
     tmp.Printf( _T("Signed int16: %d\n"), (int)i16 );
     textCtrl.WriteText( tmp );
-    
+
     ui16 = data_input.Read16();
     tmp.Printf( _T("Unsigned int16: %u\n"), (unsigned int) ui16 );
     textCtrl.WriteText( tmp );
@@ -243,7 +250,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     d = data_input.ReadDouble();
     tmp.Printf( _T("Double: %f\n"), d );
     textCtrl.WriteText( tmp );
-    
+
     str = data_input.ReadString();
     tmp.Printf( _T("String: %s\n"), str.c_str() );
     textCtrl.WriteText( tmp );
@@ -253,27 +260,95 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
 void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
 {
     wxTextCtrl& textCtrl = * GetTextCtrl();
-    
+
     textCtrl.Clear();
     textCtrl << "\nTest wchar_t to char (Unicode to ANSI/Multibyte) converions:";
 
     wxString str;
     str = _T("Robert Röbling\n");
-    
+
     printf( "\n\nConversion with wxConvLocal:\n" );
     wxConvCurrent = &wxConvLocal;
     printf( (const char*) str.mbc_str() );
-    
+
     printf( "\n\nConversion with wxConvGdk:\n" );
     wxConvCurrent = &wxConvGdk;
     printf( (const char*) str.mbc_str() );
-    
+
     printf( "\n\nConversion with wxConvLibc:\n" );
     wxConvCurrent = &wxConvLibc;
     printf( (const char*) str.mbc_str() );
-    
+
 }
 #endif
+
+void MyApp::DoMIMEDemo(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_defaultExt = "xyz";
+
+    wxString ext = wxGetTextFromUser("Enter a file extension: ",
+                                     "MIME database test",
+                                     s_defaultExt);
+    if ( !!ext )
+    {
+        s_defaultExt = ext;
+
+        // init MIME database if not done yet
+        if ( !m_mimeDatabase )
+        {
+            m_mimeDatabase = new wxMimeTypesManager;
+
+            static const wxFileTypeInfo fallbacks[] =
+            {
+                wxFileTypeInfo("application/xyz",
+                               "XyZ %s",
+                               "XyZ -p %s",
+                               "The one and only XYZ format file",
+                               "xyz", "123", NULL),
+                wxFileTypeInfo("text/html",
+                               "lynx %s",
+                               "lynx -dump %s | lpr",
+                               "HTML document (from fallback)",
+                               "htm", "html", NULL),
+
+                // must terminate the table with this!
+                wxFileTypeInfo()
+            };
+
+            m_mimeDatabase->AddFallbacks(fallbacks);
+        }
+
+        wxTextCtrl& textCtrl = * GetTextCtrl();
+
+        wxFileType *filetype = m_mimeDatabase->GetFileTypeFromExtension(ext);
+        if ( !filetype )
+        {
+            textCtrl << "Unknown extension '" << ext << "'\n";
+        }
+        else
+        {
+            wxString type, desc, open;
+            filetype->GetMimeType(&type);
+            filetype->GetDescription(&desc);
+
+            wxString filename = "filename";
+            filename << "." << ext;
+            wxFileType::MessageParameters params(filename, type);
+            filetype->GetOpenCommand(&open, params);
+
+            textCtrl << "MIME information about extension '" << ext << "'\n"
+                     << "\tMIME type: " << ( !type ? "unknown"
+                                                   : type.c_str() ) << '\n'
+                     << "\tDescription: " << ( !desc ? "" : desc.c_str() )
+                        << '\n'
+                     << "\tCommand to open: " << ( !open ? "no" : open.c_str() )
+                        << '\n';
+
+            delete filetype;
+        }
+    }
+    //else: cancelled by user
+}
 
 void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
 {
@@ -281,27 +356,27 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
 
     textCtrl.Clear();
     textCtrl << "\nTest byte order macros:\n\n";
-    
+
     if (wxBYTE_ORDER == wxLITTLE_ENDIAN)
         textCtrl << "This is a little endian system.\n\n";
-    else    
+    else
         textCtrl << "This is a big endian system.\n\n";
-	
+
     wxString text;
-    
+
     wxInt32 var = 0xF1F2F3F4;
     text = "";
     text.Printf( _T("Value of wxInt32 is now: %#x.\n\n"), var );
     textCtrl.WriteText( text );
-    
+
     text = "";
     text.Printf( _T("Value of swapped wxInt32 is: %#x.\n\n"), wxINT32_SWAP_ALWAYS( var ) );
     textCtrl.WriteText( text );
-    
+
     text = "";
     text.Printf( _T("Value of wxInt32 swapped on little endian is: %#x.\n\n"), wxINT32_SWAP_ON_LE( var ) );
     textCtrl.WriteText( text );
-    
+
     text = "";
     text.Printf( _T("Value of wxInt32 swapped on big endian is: %#x.\n\n"), wxINT32_SWAP_ON_BE( var ) );
     textCtrl.WriteText( text );
@@ -346,7 +421,6 @@ void MyApp::DoDateDemo(wxCommandEvent& WXUNUSED(event))
     a = a - 25;
     textCtrl << a.FormatDate(wxEUROPEAN) << "  (European)\n";
 
-    
     // Using subtraction of two date objects
     wxDate a1 = wxString("7/13/1991");
     wxDate a2 = a1 + 14;
@@ -481,6 +555,12 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     // Implicit conversion
     long l = var1;
 
+    // suppress compile warnings about unused variables
+    if ( l < v )
+    {
+        ;
+    }
+
     wxStringList stringList;
     stringList.Add(_T("one")); stringList.Add(_T("two")); stringList.Add(_T("three"));
     var1 = stringList;
@@ -502,8 +582,8 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-	EVT_MENU(TYPES_QUIT, MyFrame::OnQuit)
-	EVT_MENU(TYPES_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(TYPES_QUIT, MyFrame::OnQuit)
+    EVT_MENU(TYPES_ABOUT, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 // My frame constructor
@@ -520,7 +600,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "Tests various wxWindows types",
-  	"About Types", wxYES_NO|wxCANCEL);
+      "About Types", wxYES_NO|wxCANCEL);
 
   dialog.ShowModal();
 }
