@@ -38,8 +38,8 @@
     #include "wx/event.h"
 #endif
 
-#ifndef wxUSE_DYNLIB_CLASS
-#error You need wxUSE_DYNLIB_CLASS to be 1 to compile dialup.cpp.
+#if !wxUSE_DYNLIB_CLASS
+    #error You need wxUSE_DYNLIB_CLASS to be 1 to compile dialup.cpp.
 #endif
 
 #include "wx/dynlib.h"
