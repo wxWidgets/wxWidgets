@@ -127,6 +127,7 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
     from                = "";                       // From clause
     selectForUpdate     = FALSE;                    // SELECT ... FOR UPDATE; Indicates whether to include the FOR UPDATE phrase
     queryOnly           = qryOnly;
+    insertable          = TRUE;
 
     assert (tblName);
 
