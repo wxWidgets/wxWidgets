@@ -93,15 +93,15 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
 
             // Convert input string according to settings passed to Init.
             // Note that you must call Init before using Convert!
-            void Convert(const char* input, char* output);
-            void Convert(char* str) { Convert(str, str); }
-            wxString Convert(const wxString& input);
+            void Convert(const char* input, char* output) const;
+            void Convert(char* str) const { Convert(str, str); }
+            wxString Convert(const wxString& input) const;
 
 #if wxUSE_WCHAR_T
-            void Convert(const char* input, wchar_t* output);
-            void Convert(const wchar_t* input, char* output);
-            void Convert(const wchar_t* input, wchar_t* output);
-            void Convert(wchar_t* str) { Convert(str, str); }
+            void Convert(const char* input, wchar_t* output) const;
+            void Convert(const wchar_t* input, char* output) const;
+            void Convert(const wchar_t* input, wchar_t* output) const;
+            void Convert(wchar_t* str) const { Convert(str, str); }
 #endif
             // Return equivalent(s) for given font that are used
             // under given platform. wxPLATFORM_CURRENT means the plaform

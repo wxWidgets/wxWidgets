@@ -79,26 +79,26 @@ or output encoding is not supported.)
 
 \membersection{wxEncodingConverter::Convert}\label{wxencodingconverterconvert}
 
-\func{void}{Convert}{\param{const char* }{input}, \param{char* }{output}}
+\constfunc{void}{Convert}{\param{const char* }{input}, \param{char* }{output}}
 
-\func{void}{Convert}{\param{const wchar\_t* }{input}, \param{wchar\_t* }{output}}
+\constfunc{void}{Convert}{\param{const wchar\_t* }{input}, \param{wchar\_t* }{output}}
 
-\func{void}{Convert}{\param{const char* }{input}, \param{wchar\_t* }{output}}
+\constfunc{void}{Convert}{\param{const char* }{input}, \param{wchar\_t* }{output}}
 
-\func{void}{Convert}{\param{const wchar\_t* }{input}, \param{char* }{output}}
+\constfunc{void}{Convert}{\param{const wchar\_t* }{input}, \param{char* }{output}}
 
 Convert input string according to settings passed to
 \helpref{Init}{wxencodingconverterinit} and writes the result to {\it output}.
 
-\func{void}{Convert}{\param{char* }{str}}
+\constfunc{void}{Convert}{\param{char* }{str}}
 
-\func{void}{Convert}{\param{wchar\_t* }{str}}
+\constfunc{void}{Convert}{\param{wchar\_t* }{str}}
 
 Convert input string according to settings passed to
 \helpref{Init}{wxencodingconverterinit} in-place, i.e. write the result to the
 same memory area.
 
-\func{wxString}{Convert}{\param{const wxString\& }{input}}
+\constfunc{wxString}{Convert}{\param{const wxString\& }{input}}
 
 Convert wxString and return new wxString object.
 

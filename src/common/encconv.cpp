@@ -173,7 +173,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
 
 
-void wxEncodingConverter::Convert(const char* input, char* output)
+void wxEncodingConverter::Convert(const char* input, char* output) const
 {
     wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
     wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
@@ -197,7 +197,7 @@ void wxEncodingConverter::Convert(const char* input, char* output)
 
 #if wxUSE_WCHAR_T
 
-void wxEncodingConverter::Convert(const char* input, wchar_t* output)
+void wxEncodingConverter::Convert(const char* input, wchar_t* output) const
 {
     wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
     wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
@@ -222,7 +222,7 @@ void wxEncodingConverter::Convert(const char* input, wchar_t* output)
 
 
 
-void wxEncodingConverter::Convert(const wchar_t* input, char* output)
+void wxEncodingConverter::Convert(const wchar_t* input, char* output) const
 {
     wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
     wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
@@ -247,7 +247,7 @@ void wxEncodingConverter::Convert(const wchar_t* input, char* output)
 
 
 
-void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output)
+void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output) const
 {
     wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
     wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
@@ -274,7 +274,7 @@ void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output)
 #endif // wxUSE_WCHAR_T
 
 
-wxString wxEncodingConverter::Convert(const wxString& input)
+wxString wxEncodingConverter::Convert(const wxString& input) const
 {
     if (m_JustCopy) return input;
 
