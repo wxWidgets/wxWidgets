@@ -355,13 +355,14 @@ void ScintillaWX::Paste() {
 
 
 bool ScintillaWX::CanPaste() {
-    bool canPaste;
+    bool canPaste = FALSE;
 
-    wxTheClipboard->Open();
-    wxTheClipboard->UsePrimarySelection();
-    canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
-    wxTheClipboard->Close();
-
+    if (! wxTheClipboard->IsOpened()) {
+        wxTheClipboard->Open();
+        wxTheClipboard->UsePrimarySelection();
+        canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
+        wxTheClipboard->Close();
+    }
     return canPaste;
 }
 
