@@ -170,7 +170,14 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
 
     tmp = tn.GetNextToken().MakeUpper();
     if (tmp == wxT("BOLD")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == wxT("BLACK")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == wxT("EXTRABOLD")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == wxT("DEMIBOLD")) M_FONTDATA->m_weight = wxBOLD;
+    if (tmp == wxT("ULTRABOLD")) M_FONTDATA->m_weight = wxBOLD;
 
+    if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxLIGHT;
+    if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxLIGHT;
+    
     tmp = tn.GetNextToken().MakeUpper();
     if (tmp == wxT("I")) M_FONTDATA->m_style = wxITALIC;
     if (tmp == wxT("O")) M_FONTDATA->m_style = wxITALIC;

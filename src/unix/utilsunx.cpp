@@ -686,9 +686,96 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     wxString xweight;
     switch (weight)
     {
-        case wxBOLD:       xweight = wxT("bold"); break;
+         case wxBOLD:       
+             {
+                  fontSpec.Printf(wxT("-*-%s-bold-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("bold"); 
+                       break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-heavy-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("heavy"); 
+                       break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-extrabold-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                      xweight = wxT("extrabold");
+                      break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-demibold-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                      xweight = wxT("demibold");
+                      break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-black-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                      xweight = wxT("black");
+                      break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-ultrablack-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                      xweight = wxT("ultrablack");
+                      break;
+                  }
+              }   
+              break;
         case wxLIGHT:
-        case wxNORMAL:     xweight = wxT("medium"); break;
+             {
+                  fontSpec.Printf(wxT("-*-%s-light-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("light");
+                       break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-thin-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("thin"); 
+                       break;
+                  }
+             }
+             break;
+         case wxNORMAL:     
+             {
+                  fontSpec.Printf(wxT("-*-%s-medium-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("medium"); 
+                       break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-normal-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                       xweight = wxT("normal"); 
+                       break;
+                  }
+                  fontSpec.Printf(wxT("-*-%s-regular-*-*-*-*-*-*-*-*-*-*-*"),
+                         xfamily.c_str());
+                  if ( wxTestFontSpec(fontSpec) )
+                  {
+                      xweight = wxT("regular");
+                      break;
+                  }
+                  xweight = wxT("*");
+              }   
+              break;
         default:           xweight = wxT("*"); break;
     }
 
@@ -829,12 +916,19 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
                                     underlined, facename, encoding );
         }
 
-        // Bogus font
+        // Bogus font I
         if ( !font )
         {
             font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
                                    underlined, facename, encoding );
         }
+ 
+        // Bogus font II
+ 	if ( !font )
+ 	{
+ 	    font = wxLoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
+ 				   underlined, wxEmptyString, encoding );
+ 	}
     }
 
     return font;

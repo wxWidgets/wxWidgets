@@ -14,11 +14,19 @@ If you don't wish to calculate your own scrolling, you must call PrepareDC when 
 within OnDraw, to set the device origin for the device context according to the current
 scroll position.
 
+A wxScrolledWindow will normally scroll itself and therefore its child windows as well. It
+might however be desired to scroll a different window than itself: e.g. when designing a
+spreadsheet, you'll normally only have to scroll the (usually white) cell area, whereas the
+(usually grey) label area will scroll very differently. For this special purpose, you can
+call \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} which means that pressing
+the scrollbars will scroll a different window.
+
 Note that the underlying system knows nothing about scrolling coordinates, so that all system
 functions (mouse events, expose events, refresh calls etc) as well as the position of subwindows 
 are relative to the "physical" origin of the scrolled window. If the user insert a child window at
 position (10,10) and scrolls the window down 100 pixels (moving the child window out of the visible
 area), the child window will report a position of (10,-90).
+
 
 \wxheading{Derived from}
 
@@ -322,6 +330,13 @@ Note that for more sophisticated scrolling applications, for example where
 scroll steps may be variable according to the position in the document, it will be
 necessary to derive a new class from wxWindow, overriding {\bf OnSize} and
 adjusting the scrollbars appropriately.
+
+\membersection{wxScrolledWindow::SetTargetWindow}\label{wxscrolledwindowsettargetwindow}
+
+\func{void}{SetTargetWindow}{\param{wxWindow* }{window}}
+
+Call this function to tell wxScrolledWindow to perform the actually scrolling on
+a different window (not on itself).
 
 \membersection{wxScrolledWindow::ViewStart}\label{wxscrolledwindowviewstart}
 

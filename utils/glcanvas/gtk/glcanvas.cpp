@@ -186,6 +186,24 @@ gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxG
                                   rect->width, rect->height );
 }
 
+//-----------------------------------------------------------------------------
+// "size_allocate" of m_wxwindow
+//-----------------------------------------------------------------------------
+
+static void 
+gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxGLCanvas *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    if (!win->m_hasVMT)
+        return;
+
+    wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
+}
+
 //---------------------------------------------------------------------------
 // wxGlCanvas
 //---------------------------------------------------------------------------
@@ -228,6 +246,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     m_exposed = FALSE;
     m_noExpose = TRUE;
+    m_nativeSizeEvent = TRUE;
     
     if (!attribList)
     {
@@ -296,6 +315,9 @@ bool wxGLCanvas::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
         GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
 	
+    gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+        GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
+
     gtk_widget_pop_visual();
     gtk_widget_pop_colormap();
     

@@ -173,17 +173,18 @@ public:
     float                m_oldVerticalPos;
 
     // extra (wxGTK-specific) flags
-    bool                 m_needParent:1;    /* ! wxFrame, wxDialog, wxNotebookPage ?  */
-    bool                 m_noExpose:1;      /* wxGLCanvas has its own redrawing */
+    bool                 m_needParent:1;        /* ! wxFrame, wxDialog, wxNotebookPage ?  */
+    bool                 m_noExpose:1;          /* wxGLCanvas has its own redrawing */
+    bool                 m_nativeSizeEvent:1;   /* wxGLCanvas sends wxSizeEvent upon "alloc_size" */
     bool                 m_hasScrolling:1;
     bool                 m_isScrolling:1;
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
-    bool                 m_isStaticBox:1;   /* faster than IS_KIND_OF */
-    bool                 m_isRadioButton:1; /* faster than IS_KIND_OF */
-    bool                 m_isFrame:1;       /* faster than IS_KIND_OF */
-    bool                 m_acceptsFocus:1;  /* not wxStaticBox, not wxStaticBitmap etc.  */
+    bool                 m_isStaticBox:1;    /* faster than IS_KIND_OF */
+    bool                 m_isRadioButton:1;  /* faster than IS_KIND_OF */
+    bool                 m_isFrame:1;        /* faster than IS_KIND_OF */
+    bool                 m_acceptsFocus:1;   /* not wxStaticBox, not wxStaticBitmap etc.  */
 
     // these are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set

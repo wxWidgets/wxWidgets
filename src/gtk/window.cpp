@@ -57,6 +57,8 @@
    some more information about what the wxWindow, which is the base class
    for all other window classes, does seems required as well.
 
+   I)
+
    What does wxWindow do? It contains the common interface for the following
    jobs of its descendants:
 
@@ -81,6 +83,8 @@
 
    5) A multitude of helper or extra methods for special purposes, such as
    Drag'n'Drop, managing validators etc.
+
+   6) Display a border (sunken, raised, simple or none).
 
    Normally one might expect, that one wxWindows window would always correspond
    to one GTK widget. Under GTK, there is no such allround widget that has all
@@ -120,6 +124,55 @@
    If the m_wxwindow field is set, then all input to this widget is inter-
    cepted and sent to the wxWindows class. If not, all input to the widget
    that gets pointed to by m_widget gets intercepted and sent to the class.
+   
+   II)
+   
+   The design of scrolling in wxWindows is markedly different from that offered
+   by the GTK itself and therefore we cannot simply take it as it is. In GTK,
+   clicking on a scrollbar belonging to scrolled window will inevitably move
+   the window. In wxWindows, the scrollbar will only emit an event, send this
+   to (normally) a wxScrolledWindow and that class will call ScrollWindow()
+   which actually move the window and its subchildren. Note that GtkMyFixed
+   memorizes how much it has been scrolled but that wxWindows forgets this
+   so that the two coordinates systems have to be kept in synch. This is done
+   in various places using the myfixed->xoffset and myfixed->yoffset values.
+   
+   III) 
+   
+   Singularily the most broken code in GTK is the code that is supposes to
+   inform subwindows (child windows) about new positions. Very often, duplicate
+   events are sent without changes in size or position, equally often no
+   events are sent at all (All this is due to a bug in the GtkContainer code
+   which got fixed in GTK 1.2.6). For that reason, wxGTK completely ignores
+   GTK's own system and it simply waits for size events for toplevel windows
+   and then iterates down the respective size events to all window. This has
+   the disadvantage, that windows might get size events before the GTK widget
+   actually has the reported size. This doesn't normally pose any problem, but
+   the OpenGl drawing routines rely in correct behaviour. Therefore, I have
+   added the m_nativeSizeEvents flag, which is true only for the OpenGL canvas,
+   i.e. the wxGLCanvas will emit a size event, when (and not before) the X11
+   window that is used for OpenGl output really has that size (as reported by
+   GTK).
+
+   IV)
+   
+   If someone at some point of time feels the immense desire to have a look at,
+   change or attempt to optimse the Refresh() logic, this person will need an
+   intimate understanding of what a "draw" and what an "expose" events are and
+   what there are used for, in particular when used in connection with GTK's
+   own windowless widgets. Beware.
+   
+   V)
+   
+   Cursors, too, have been a constant source of pleasure. The main difficulty
+   is that a GdkWindow inherits a cursor if the programmer sets a new cursor
+   for the parent. To prevent this from doing too much harm, I use idle time
+   to set the cursor over and over again, starting from the toplevel windows
+   and ending with the youngest generation (speaking of parent and child windows).
+   Also don't forget that cursors (like much else) are connected to GdkWindows,
+   not GtkWidgets and that the "window" field of a GtkWidget might very well
+   point to the GdkWindow of the parent widget (-> "window less widget") and 
+   that the two obviously have very different meanings.
 
 */
 
@@ -1776,7 +1829,8 @@ void wxWindow::Init()
     m_isBeingDeleted = FALSE;
     
     m_noExpose = FALSE;
-
+    m_nativeSizeEvent = FALSE;
+    
     m_hasScrolling = FALSE;
     m_isScrolling = FALSE;
 
@@ -2184,9 +2238,12 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
     wxPrintf( " %d %d %d %d\n", (int)m_x, (int)m_y, (int)m_width, (int)m_height );
 */
 
-    wxSizeEvent event( wxSize(m_width,m_height), GetId() );
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( event );
+    if (!m_nativeSizeEvent)
+    {
+        wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    }
 
     m_resizing = FALSE;
 }
