@@ -237,14 +237,19 @@ void MyFrame::Test1(wxSocketBase *sock)
 
   sock->SetFlags(wxSOCKET_WAITALL);
 
+  // Read the size
   sock->Read(&len, 1);
-
   buf = new char[len];
+
+  // Read the data
   sock->Read(buf, len);
+  m_text->AppendText(_("Got the data, sending it back\n"));
+
+  // Write it back
   sock->Write(buf, len);
   delete[] buf;
 
-  m_text->AppendText(_("Test 1 ends\n"));
+  m_text->AppendText(_("Test 1 ends\n\n"));
 }
 
 void MyFrame::Test2(wxSocketBase *sock)
@@ -260,16 +265,17 @@ void MyFrame::Test2(wxSocketBase *sock)
   // We don't need to set flags because ReadMsg and WriteMsg
   // are not affected by them anyway.
 
+  // Read the message
   len = sock->ReadMsg(buf, MAX_MSG_SIZE).LastCount();
-
   s.Printf(_("Client says: %s\n"), buf);
   m_text->AppendText(s);
   m_text->AppendText(_("Sending the data back\n"));
 
+  // Write it back
   sock->WriteMsg(buf, len);
   delete[] buf;
 
-  m_text->AppendText(_("Test 2 ends\n"));
+  m_text->AppendText(_("Test 2 ends\n\n"));
 
 #undef MAX_MSG_SIZE
 }
@@ -286,14 +292,19 @@ void MyFrame::Test3(wxSocketBase *sock)
 
   sock->SetFlags(wxSOCKET_WAITALL);
 
+  // Read the size
   sock->Read(&len, 1);
-  
   buf = new char[len * 1024];
+
+  // Read the data
   sock->Read(buf, len * 1024);
+  m_text->AppendText(_("Got the data, sending it back\n"));
+
+  // Write it back
   sock->Write(buf, len * 1024);
   delete[] buf;
 
-  m_text->AppendText(_("Test 3 ends\n"));
+  m_text->AppendText(_("Test 3 ends\n\n"));
 }
 
 void MyFrame::OnServerEvent(wxSocketEvent& event)
@@ -301,7 +312,7 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
   wxString s = _("OnServerEvent: ");
   wxSocketBase *sock;
 
-  switch(event.SocketEvent())
+  switch(event.GetSocketEvent())
   {
     case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
     default                  : s.Append(_("Unexpected event !\n")); break;
@@ -318,11 +329,11 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
   if (sock)
   {
-    m_text->AppendText(_("New client connection accepted\n"));
+    m_text->AppendText(_("New client connection accepted\n\n"));
   }
   else
   {
-    m_text->AppendText(_("Error: couldn't accept a new connection"));
+    m_text->AppendText(_("Error: couldn't accept a new connection\n\n"));
     return;
   }
 
@@ -336,11 +347,11 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxSocketBase *sock = event.Socket();
+  wxSocketBase *sock = event.GetSocket();
   wxString s = _("OnSocketEvent: ");
 
   // We first print a msg
-  switch(event.SocketEvent())
+  switch(event.GetSocketEvent())
   {
     case wxSOCKET_INPUT: s.Append(_("wxSOCKET_INPUT\n")); break;
     case wxSOCKET_LOST:  s.Append(_("wxSOCKET_LOST\n")); break;
@@ -350,7 +361,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
   m_text->AppendText(s);
 
   // Now we process the event
-  switch(event.SocketEvent())
+  switch(event.GetSocketEvent())
   {
     case wxSOCKET_INPUT:
     {
@@ -367,7 +378,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
         case 0xBE: Test1(sock); break;
         case 0xCE: Test2(sock); break;
         case 0xDE: Test3(sock); break;
-        default: s.Append(_("Unknown test id received from client\n"));
+        default: s.Append(_("Unknown test id received from client\n\n"));
       }
 
       // Enable input events again.
@@ -385,11 +396,9 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
       // has been deleted. Also, we might be doing some other thing with
       // the socket at the same time; for example, we might be in the
       // middle of a test or something. Destroy() takes care of all
-      // this for us. The only case where delete should be used instead
-      // is when the event handler itself is also being destroyed; for
-      // example, see the frame dtor above.
+      // this for us.
 
-      m_text->AppendText(_("Deleting socket.\n"));
+      m_text->AppendText(_("Deleting socket.\n\n"));
       sock->Destroy();
       break;
     }

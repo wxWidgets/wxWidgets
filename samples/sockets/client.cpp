@@ -596,7 +596,7 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
   wxString s = _("OnSocketEvent: ");
 
-  switch(event.SocketEvent())
+  switch(event.GetSocketEvent())
   {
     case wxSOCKET_INPUT      : s.Append(_("wxSOCKET_INPUT\n")); break;
     case wxSOCKET_LOST       : s.Append(_("wxSOCKET_LOST\n")); break;
