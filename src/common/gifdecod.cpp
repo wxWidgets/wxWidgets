@@ -271,17 +271,19 @@ bool wxGIFDecoder::GoPrevFrame(bool cyclic)
 
 bool wxGIFDecoder::GoFrame(int which)
 {
-    int i;
-
     if (!IsAnimation())
         return false;
 
     if ((which >= 1) && (which <= m_nimages))
     {
+        m_image = 1;
         m_pimage = m_pfirst;
 
-        for (i = 0; i < which; i++)
+        while (m_image < which)
+        {
+            m_image++;
             m_pimage = m_pimage->next;
+        }
 
         return true;
     }
@@ -752,7 +754,7 @@ int wxGIFDecoder::ReadGIF()
                     transparent = buf[4];
 
                 /* read disposal method */
-                disposal = (buf[1] & 0x1C) - 1;
+                disposal = ((buf[1] & 0x1C) >> 2) - 1;
             }
             else
             /* other extension, skip */
