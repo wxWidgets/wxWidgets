@@ -289,10 +289,10 @@ void UMAInsertMenu( MenuRef insertMenu , SInt16 afterId )
 
 int gPrOpenCounter = 0 ;
 
-#if !TARGET_CARBON
-OSStatus UMAPrOpen()
-#else
+#if PM_USE_SESSION_APIS
 OSStatus UMAPrOpen(PMPrintSession *macPrintPort)
+#else
+OSStatus UMAPrOpen()
 #endif
 {
 #if !TARGET_CARBON
@@ -321,10 +321,10 @@ OSStatus UMAPrOpen(PMPrintSession *macPrintPort)
 #endif
 }
 
-#if !TARGET_CARBON
-OSStatus UMAPrClose()
-#else
+#if PM_USE_SESSION_APIS
 OSStatus UMAPrClose(PMPrintSession *macPrintPort)
+#else
+OSStatus UMAPrClose()
 #endif
 {
 #if !TARGET_CARBON

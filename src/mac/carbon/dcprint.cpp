@@ -42,19 +42,19 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
 	m_printData = printdata ;
 	m_printData.ConvertToNative() ;
 
-#if !TARGET_CARBON
-	err = UMAPrOpen() ;
-#else
+#if PM_USE_SESSION_APIS
 	err = UMAPrOpen(&m_macPrintPort) ;
+#else
+	err = UMAPrOpen() ;
 #endif
 	if ( err )
 	{
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-#if !TARGET_CARBON
-		UMAPrClose() ;
-#else
+#if PM_USE_SESSION_APIS
 		UMAPrClose(&m_macPrintPort) ;
+#else
+		UMAPrClose() ;
 #endif
 	}
 	
@@ -99,7 +99,11 @@ wxPrinterDC::wxPrinterDC(const wxPrintData& printdata)
     {
 		message.Printf( "Print Error %d", err ) ;
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
+  #if PM_USE_SESSION_APIS
 		UMAPrClose(&m_macPrintPort) ;
+  #else
+		UMAPrClose() ;
+  #endif
     }
 	// sets current port
 	::GetPort( &m_macPort ) ;
@@ -153,16 +157,16 @@ wxPrinterDC::~wxPrinterDC(void)
      	{
 			message.Printf( "Print Error %d", err ) ;
 			wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
-  #if !TARGET_CARBON
-			UMAPrClose() ;
-  #else
+  #if PM_USE_SESSION_APIS
 			UMAPrClose(&m_macPrintPort) ;
+  #else
+			UMAPrClose() ;
   #endif
      	}
-  #if !TARGET_CARBON
-     	UMAPrClose() ;
+  #if PM_USE_SESSION_APIS
+     	UMAPrClose(&m_macPrintPort) ;
   #else
-	UMAPrClose(&m_macPrintPort) ;
+	    UMAPrClose() ;
   #endif
 	}
 #endif
@@ -235,11 +239,12 @@ void wxPrinterDC::StartPage(void)
   #if PM_USE_SESSION_APIS
    		PMSessionEndPage(m_macPrintPort);
 		PMSessionEndDocument(m_macPrintPort);
+		UMAPrClose(&m_macPrintPort) ;
   #else
    		PMEndPage(m_macPrintPort);
 		PMEndDocument(m_macPrintPort);
+		UMAPrClose() ;
   #endif
-		UMAPrClose(&m_macPrintPort) ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;
 	}
@@ -278,10 +283,11 @@ void wxPrinterDC::EndPage(void)
 		wxMessageDialog dialog( NULL , message , "", wxICON_HAND | wxOK) ;
   #if PM_USE_SESSION_APIS
 		PMSessionEndDocument(m_macPrintPort);
+		UMAPrClose(&m_macPrintPort) ;
   #else
 		PMEndDocument(m_macPrintPort);
+		UMAPrClose() ;
   #endif
-		UMAPrClose(&m_macPrintPort) ;
 	   	::SetPort( macPrintFormerPort ) ;
 	   	m_ok = FALSE ;
 	}
