@@ -166,7 +166,7 @@ enum wxKeyType
             return it;                                                        \
         }                                                                     \
     public:                                                                   \
-        liT() {};                                                             \
+        liT() {}                                                              \
                                                                               \
         citer Append( elT e ) { push_back( e ); return GetLast(); }           \
         void Clear() { clear(); }                                             \
