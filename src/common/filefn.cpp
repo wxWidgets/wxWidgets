@@ -1095,7 +1095,7 @@ wxString wxMacFSSpec2UnixFilename( const FSSpec *spec )
     return wxMac2UnixFilename( wxMacFSSpec2MacFilename( spec) ) ;
 }
 
-void wxUnixFilename2FSSpec( const char *path , FSSpec *spec )
+void wxUnixFilename2FSSpec( const wxChar *path , FSSpec *spec )
 {
     wxString var = wxUnix2MacFilename( path ) ;
     wxMacFilename2FSSpec( var , spec ) ;
