@@ -54,6 +54,7 @@ LIB_CPP_SRC=\
  common/sckstrm.cpp \
  common/validate.cpp \
  common/valtext.cpp \
+ common/variant.cpp \
  common/wxexpr.cpp \
  common/socket.cpp \
  common/sckaddr.cpp \
@@ -117,10 +118,12 @@ LIB_CPP_SRC=\
  generic/gridg.cpp \
  generic/imaglist.cpp \
  generic/listctrl.cpp \
+ generic/laywin.cpp \
  generic/msgdlgg.cpp \
  generic/panelg.cpp \
  generic/printps.cpp \
  generic/prntdlgg.cpp \
+ generic/sashwin.cpp \
  generic/scrolwin.cpp \
  generic/splitter.cpp \
  generic/statusbr.cpp \

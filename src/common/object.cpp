@@ -74,7 +74,7 @@ wxObject::~wxObject(void)
  * two possible base classes.
  */
  
-bool wxObject::IsKindOf(wxClassInfo *info)
+bool wxObject::IsKindOf(wxClassInfo *info) const
 {
   wxClassInfo *thisInfo = GetClassInfo();
   if (thisInfo)
@@ -166,7 +166,7 @@ wxClassInfo *wxClassInfo::FindClass(char *c)
 
 // Climb upwards through inheritance hierarchy.
 // Dual inheritance is catered for.
-bool wxClassInfo::IsKindOf(wxClassInfo *info)
+bool wxClassInfo::IsKindOf(wxClassInfo *info) const
 {
   if (info == NULL)
     return FALSE;
@@ -352,3 +352,7 @@ wxObjectRefData::~wxObjectRefData(void)
 {
 }
 
+// These are here so we can avoid 'always true/false' warnings
+// by referring to these instead of TRUE/FALSE
+const bool wxTrue = TRUE;
+const bool wxFalse = FALSE;

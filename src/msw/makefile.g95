@@ -112,6 +112,7 @@ COMMONOBJS = \
   $(COMMDIR)/wxexpr.$(OBJSUFF) \
   $(COMMDIR)/hash.$(OBJSUFF) \
   $(COMMDIR)/list.$(OBJSUFF) \
+  $(COMMDIR)/variant.$(OBJSUFF) \
   $(COMMDIR)/string.$(OBJSUFF) \
   $(COMMDIR)/time.$(OBJSUFF) \
   $(COMMDIR)/tokenzr.$(OBJSUFF) \

@@ -613,7 +613,7 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
   double actualWidth = (zoomScale*m_pageWidth*m_previewScale);
 //  float actualHeight = (float)(zoomScale*m_pageHeight*m_previewScale);
 
-  int x = ((canvasWidth - actualWidth)/2.0);
+  int x = (int) ((canvasWidth - actualWidth)/2.0);
   if (x < m_leftMargin)
     x = m_leftMargin;
   int y = m_topMargin;

@@ -117,6 +117,7 @@ COMMONOBJS = \
   $(MSWDIR)\utilscmn.obj \
   $(MSWDIR)\validate.obj \
   $(MSWDIR)\valtext.obj \
+  $(MSWDIR)\variant.obj \
   $(MSWDIR)\date.obj \
   $(MSWDIR)\hash.obj \
   $(MSWDIR)\list.obj \
@@ -525,6 +526,8 @@ $(MSWDIR)\hash.obj:     $(COMMDIR)\hash.$(SRCSUFF)
 $(MSWDIR)\list.obj:     $(COMMDIR)\list.$(SRCSUFF)
 
 $(MSWDIR)\string.obj:     $(COMMDIR)\string.$(SRCSUFF)
+
+$(MSWDIR)\variant.obj:     $(COMMDIR)\variant.$(SRCSUFF)
 
 $(MSWDIR)\matrix.obj:     $(COMMDIR)\matrix.$(SRCSUFF)
 

@@ -857,7 +857,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 // End label editing, optionally cancelling the edit
 bool wxListCtrl::EndEditLabel(bool cancel)
 {
-    wxASSERT( FALSE);
+    wxFAIL;
 
 /* I don't know how to implement this: there's no such macro as ListView_EndEditLabelNow.
  * ???

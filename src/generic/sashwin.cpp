@@ -198,6 +198,10 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
                 dragRect = wxRect(xp, yp, newWidth, h);
                 break;
             }
+	    case wxSASH_NONE:
+	    {
+	        break;
+	    }
         }
 
         wxSashEvent event(GetId(), edge);
@@ -271,7 +275,7 @@ void wxSashWindow::OnSize(wxSizeEvent& WXUNUSED(event))
     SizeWindows();
 }
 
-wxSashEdgePosition wxSashWindow::SashHitTest(int x, int y, int tolerance)
+wxSashEdgePosition wxSashWindow::SashHitTest(int x, int y, int WXUNUSED(tolerance))
 {
     int cx, cy;
     GetClientSize(& cx, & cy);
@@ -308,6 +312,10 @@ wxSashEdgePosition wxSashWindow::SashHitTest(int x, int y, int tolerance)
                 {
                     if ((x >= GetEdgeMargin(position)) && (x >= 0))
                         return wxSASH_LEFT;
+                    break;
+                }
+                case wxSASH_NONE:
+                {
                     break;
                 }
             }
@@ -570,7 +578,7 @@ void wxSashWindow::InitColours()
     m_hilightColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT);
 #else
     m_faceColour = *(wxTheColourDatabase->FindColour("LIGHT GREY"));
-    m_mediumShadowColour = *(wxTheColourDatabase->FindColour("GREY", 1, wxSOLID));
+    m_mediumShadowColour = *(wxTheColourDatabase->FindColour("GREY"));
     m_darkShadowColour = *(wxTheColourDatabase->FindColour("BLACK"));
     m_lightShadowColour = *(wxTheColourDatabase->FindColour("LIGHT GREY"));
     m_hilightColour = *(wxTheColourDatabase->FindColour("WHITE"));

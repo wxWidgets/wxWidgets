@@ -52,7 +52,7 @@ wxSashLayoutWindow::wxSashLayoutWindow(wxWindow *parent, wxWindowID id, const wx
 // dimensions.
 void wxSashLayoutWindow::OnQueryLayoutInfo(wxQueryLayoutInfoEvent& event)
 {
-    int flags = event.GetFlags();
+  //    int flags = event.GetFlags();
     int requestedLength = event.GetRequestedLength();
 
     // This code won't be in the final thing, it's just so we don't have to give it
@@ -145,6 +145,11 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
             clientSize.height -= thisRect.height;
             break;
         }
+        case wxLAYOUT_NONE:
+        {
+	    break;
+        }
+
     }
 
     if ((flags & wxLAYOUT_QUERY) == 0)

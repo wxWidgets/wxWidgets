@@ -276,7 +276,7 @@ bool wxFile::Flush()
   if ( IsOpened() ) {
 		// @@@ fsync() is not ANSI (BSDish)
 //    if ( fsync(m_fd) == -1 ) { // TODO
-      if (TRUE) {
+      if (wxTrue) {
       wxLogSysError(_("can't flush file descriptor %d"), m_fd);
       return FALSE;
     }

@@ -466,6 +466,11 @@ wxList ()
 {
 }
 
+wxStringList::wxStringList (const wxStringList& list)
+{
+    (*this) = list;
+}
+
 // Variable argument list, terminated by a zero
 // Makes new storage for the strings
 wxStringList::wxStringList (const char *first...)
@@ -516,7 +521,12 @@ wxStringList::wxStringList (const char *first...)
 
 wxStringList::~wxStringList (void)
 {
-  wxNode *each = first_node;
+    Clear();
+}
+
+void wxStringList::Clear(void)
+{
+  wxNode *each = First();
   while (each)
     {
       char *s = (char *) each->Data ();
@@ -525,6 +535,7 @@ wxStringList::~wxStringList (void)
       delete each;
       each = next;
     }
+  wxList::Clear();
 }
 
 wxNode *wxStringList::Add (const char *s)
@@ -605,3 +616,24 @@ bool wxStringList::Member (const char *s) const
     }
   return FALSE;
 }
+
+void wxStringList::operator= (const wxStringList& list)
+{
+    Clear();
+
+    wxNode *node = list.First();
+    while (node)
+    {
+        char *s = (char *) node->Data ();
+        Add(s);
+        node = node->Next();
+    }
+}
+
+char* wxStringList::operator[] (int i) const
+{
+    wxASSERT_MSG( (i < Number()), "Invalid index for wxStringList" );
+
+    return (char*) (Nth(i)->Data());
+}
+
