@@ -1023,6 +1023,7 @@ enum wxBorder
 #define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
 #define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
 #define wxFRAME_FLOAT_ON_PARENT 0x0008  // Always above its parent
+#define wxFRAME_SHAPED          0x0010  // Create a window that is able to be shaped
 
 // deprecated versions defined for compatibility reasons
 #define wxRESIZE_BOX            wxMAXIMIZE_BOX

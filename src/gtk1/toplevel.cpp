@@ -1002,6 +1002,9 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
 
 bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 {
+    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
+                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+
     GdkWindow *window = NULL;
     if (m_wxwindow)
     {

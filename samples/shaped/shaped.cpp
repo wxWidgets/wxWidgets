@@ -39,6 +39,7 @@
     #include "wx/menu.h"
     #include "wx/layout.h"
     #include "wx/msgdlg.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/dcclient.h"
@@ -134,6 +135,7 @@ bool MyApp::OnInit()
     // Create the main application window
     ShapedFrame *frame = new ShapedFrame();
     frame->Show(TRUE);
+    SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -148,19 +150,28 @@ bool MyApp::OnInit()
 // frame constructor
 ShapedFrame::ShapedFrame()
        : wxFrame((wxFrame *)NULL, -1, wxEmptyString,
-                 wxDefaultPosition, wxDefaultSize,
-                 wxSIMPLE_BORDER | wxFRAME_NO_TASKBAR)
+                  wxDefaultPosition, wxSize(100, 100), //wxDefaultSize,
+                  0
+                  | wxFRAME_SHAPED
+                  | wxSIMPLE_BORDER
+                  | wxFRAME_NO_TASKBAR
+                  | wxSTAY_ON_TOP
+            )
 {
     m_hasShape = FALSE;
     m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-#if wxUSE_TOOLTIP
+#ifndef __WXMAC__
+    // On wxMac the tooltip gets clipped by the window shape, YUCK!!
+#if wxUSE_TOOLTOP
     SetToolTip(wxT("Right-click to exit"));
 #endif
-#ifdef __WXMSW__
+#endif
+#ifndef __WXGTK__
     // On wxGTK we can't do this yet because the window hasn't been created
-    // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW it
-    // has been created so we set the shape now.
+    // yet so we wait until the EVT_WINDOW_CREATE event happens.  On wxMSW and
+    // wxMac the window has been created at this point so we go ahead and set
+    // the shape now.
     SetWindowShape();
 #endif
 }
@@ -186,6 +197,7 @@ void ShapedFrame::OnDoubleClick(wxMouseEvent& evt)
 void ShapedFrame::OnLeftDown(wxMouseEvent& evt)
 {
     CaptureMouse();
+    //printf("Mouse captured\n");
     wxPoint pos = ClientToScreen(evt.GetPosition());
     wxPoint origin = GetPosition();
     int dx =  pos.x - origin.x;
@@ -196,14 +208,19 @@ void ShapedFrame::OnLeftDown(wxMouseEvent& evt)
 void ShapedFrame::OnLeftUp(wxMouseEvent& evt)
 {
     if (HasCapture())
+    {
         ReleaseMouse();
+        //printf("Mouse released\n");
+}
 }
 
 void ShapedFrame::OnMouseMove(wxMouseEvent& evt)
 {
+    wxPoint pt = evt.GetPosition();
+    //printf("x:%d   y:%d\n", pt.x, pt.y);
     if (evt.Dragging() && evt.LeftIsDown())
     {
-        wxPoint pos = ClientToScreen(evt.GetPosition());
+        wxPoint pos = ClientToScreen(pt);
         Move(wxPoint(pos.x - m_delta.x, pos.y - m_delta.y));
     }
 }
