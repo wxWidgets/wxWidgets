@@ -75,26 +75,6 @@ public:
         "Actually create the GUI Choice control for 2-phase creation", "");
     
 
-//     // These are only meaningful on wxMotif...
-//     int GetColumns();
-//     void SetColumns(const int n = 1);
-
-
-    DocDeclStr(
-        void , SetSelection(const int n),
-        "Select the n'th item (zero based) in the list.", "");
-    
-    DocDeclStr(
-        bool , SetStringSelection(const wxString& string),
-        "Select the item with the specifed string", "");
-    
-    DocDeclStr(
-        void , SetString(int n, const wxString& string),
-        "Set the label for the n'th item (zero based) in the list.", "");
-    
-
-    %pythoncode { Select = SetSelection }
-
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };

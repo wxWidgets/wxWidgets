@@ -106,11 +106,13 @@ __init__ as a plain old wx.Control is not very useful.", "");
 %newgroup;
 
 
+
+
 DocStr(wxItemContainer,
-"wx.ItemContainer defines an interface which is implemented by all
-controls which have string subitems, each of which may be selected,
-such as `wx.ListBox`, `wx.CheckListBox`, `wx.Choice` as well as
-`wx.ComboBox` which implements an extended interface deriving from
+"The wx.ItemContainer class defines an interface which is implemented
+by all controls which have string subitems, each of which may be
+selected, such as `wx.ListBox`, `wx.CheckListBox`, `wx.Choice` as well
+as `wx.ComboBox` which implements an extended interface deriving from
 this one.
 
 It defines the methods for accessing the control's items and although
@@ -178,6 +180,31 @@ than the number of items in the control.", "");
     
 
 
+    
+     %extend {
+        DocStr(GetClientData,
+               "Returns the client data associated with the given item, (if any.)", "");
+        PyObject* GetClientData(int n) {
+            wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+
+        DocStr(SetClientData,
+               "Associate the given client data with the item at position n.", "");
+        void SetClientData(int n, PyObject* clientData) {
+            wxPyClientData* data = new wxPyClientData(clientData);
+            self->SetClientObject(n, data);
+        }
+    }
+
+
+    
     DocDeclStr(
         virtual int , GetCount() const,
         "Returns the number of items in the control.", "");
@@ -205,12 +232,9 @@ zero-based position of the item, or ``wx.NOT_FOUND`` if the string was not
 found.", "");
     
 
-    
     DocDeclStr(
-        virtual void , Select(int n),
+        virtual void , SetSelection(int n),
         "Sets the item at index 'n' to be the selected item.", "");
-
-    %pythoncode { SetSelection = Select }
     
     DocDeclStr(
         virtual int , GetSelection() const,
@@ -218,35 +242,21 @@ found.", "");
 is selected.", "");
     
 
+    bool SetStringSelection(const wxString& s);
+
     DocDeclStr(
         wxString , GetStringSelection() const,
         "Returns the label of the selected item or an empty string if no item
 is selected.", "");
     
 
+    DocDeclStr(
+        void , Select(int n),
+        "This is the same as `SetSelection` and exists only because it is
+slightly more natural for controls which support multiple selection.", "");
+    
 
-    %extend {
-        DocStr(GetClientData,
-               "Returns the client data associated with the given item, (if any.)", "");
-        PyObject* GetClientData(int n) {
-            wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-
-        DocStr(SetClientData,
-               "Associate the given client data with the item at position n.", "");
-        void SetClientData(int n, PyObject* clientData) {
-            wxPyClientData* data = new wxPyClientData(clientData);
-            self->SetClientObject(n, data);
-        }
-    }
-      
+    
 };
 
 
