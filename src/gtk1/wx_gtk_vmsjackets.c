@@ -2554,6 +2554,17 @@ GSList* G_SLIST_FIND		(GSList		*list,
 				 data);
 }
 
+void       GTK_WINDOW_SET_GEOMETRY_HINTS       (GtkWindow           *window,
+						GtkWidget           *geometry_widget,
+						GdkGeometry         *geometry,
+						GdkWindowHints       geom_mask)
+{
+   gtk_window_set_geometry_hints       (window,
+					geometry_widget,
+					geometry,
+					geom_mask);
+}
+
 #undef GDK_THREADS_ENTER
 void     GDK_THREADS_ENTER                (void)
 {
