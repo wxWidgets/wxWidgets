@@ -49,6 +49,10 @@ are included in the wxWidgets shared library anyway, this imposes only
 a very small amount of overhead and removes several unneccessary
 problems.
 
+Replaced wx/lib/pubsub.py with a version that uses weak references to
+track the subscribers.  Thanks go to Oliver Schoenborn and Robb
+Shecter.
+
 
 
 
