@@ -81,12 +81,12 @@ Visual C++ compilation
 
 Please note that the VC++ 6.0 project files will work for VC++ .NET also, but
 you must open the .dsp files and not the .dsw files and in this case you will
-need to manually build the other .dsp on which.wxWindows.dsp depends: jpeg,
+need to manually build the other .dsp on which wxWindows.dsp depends: jpeg,
 png, regex, tiff and zlib.
 
-Also note that you might make the project files work with VC++ 5 but you'll
-need to edit them version in the .dsp file by hand before this is possible.
-
+Also note that you can make the project files work with VC++ 5.0 but you'll
+need to edit .dsp file by hand before this is possible (change the version in
+the .dsp file header from 6.0 to 5.0).
 
 Using project files (VC++ 6 and later):
 
