@@ -1471,7 +1471,8 @@ bool TexLoadFile(char *filename)
     if (Inputs[0]) fclose(Inputs[0]);
     return TRUE;
   }
-  else return FALSE;
+
+  return FALSE;
 }
 
 TexMacroDef::TexMacroDef(int the_id, char *the_name, int n, bool ig, bool forbidLevel)

@@ -210,7 +210,7 @@ void OutputSectionKeyword(FILE *fd)
 {
   OutputCurrentSectionToString(wxBuffer);
   
-  int i;
+  unsigned int i;
   for (i = 0; i < strlen(wxBuffer); i++)
     if (wxBuffer[i] == ':')
       wxBuffer[i] = ' ';
@@ -349,7 +349,7 @@ void GenerateKeywordsForTopic(char *topic)
       SplitIndexEntry(s, buf1, buf2);
       
       // Check for ':' which messes up index
-      int i;
+      unsigned int i;
       for (i = 0; i < strlen(buf1) ; i++)
         if (buf1[i] == ':')
           buf1[i] = ' ';
@@ -5219,7 +5219,21 @@ bool RTFGo(void)
       wxConcatFiles("header.rtf", "chapters.rtf", "tmp1.rtf");
       Tex2RTFYield(TRUE);
       if (FileExists(OutputFile)) wxRemoveFile(OutputFile);
-      wxCopyFile("tmp1.rtf", OutputFile);
+      wxString cwdStr, outputDirStr;
+      cwdStr = wxGetWorkingDirectory();
+      outputDirStr = wxPathOnly(OutputFile);
+      // Determine if the temp file and the output file are in the same directory,
+      // and if they are, then just rename the temp file rather than copying
+      // it, as this is much faster when working with large (multi-megabyte files)
+      if ((wxStrcmp(wxPathOnly(OutputFile),"") == 0) ||  // no path specified on output file
+          (wxStrcmp(wxGetWorkingDirectory(),wxPathOnly(OutputFile)) == 0)) // paths do not match
+      {
+        wxRenameFile("tmp1.rtf", OutputFile);
+      }
+      else
+      {
+        wxCopyFile("tmp1.rtf", OutputFile);
+      }
       Tex2RTFYield(TRUE);
       wxRemoveFile("tmp1.rtf");
     }
