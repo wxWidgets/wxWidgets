@@ -98,12 +98,8 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
 wxTopLevelWindowCocoa::~wxTopLevelWindowCocoa()
 {
     wxAutoNSAutoreleasePool pool;
-    // Hand ownership of the content view to wxWindow so it can destroy
-    // itself properly.
-    NSView *view = [m_cocoaNSView retain];
+    DestroyChildren();
     SetNSWindow(NULL);
-    SetNSView(view);
-    [view release];
 }
 
 // ----------------------------------------------------------------------------
