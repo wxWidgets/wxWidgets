@@ -262,6 +262,12 @@ bool wxPrintData::Ok() const
 
 #include "wx/generic/prntdlgg.h"
 
+#if wxUSE_POSTSCRIPT
+    #define WXUNUSED_WITHOUT_PS(name) name
+#else
+    #define WXUNUSED_WITHOUT_PS(name) WXUNUSED(name)
+#endif
+
 wxString wxPrintData::GetPrinterCommand() const
 {
 #if wxUSE_POSTSCRIPT
@@ -334,7 +340,7 @@ long wxPrintData::GetPrinterTranslateY() const
     return 0;
 }
 
-void wxPrintData::SetPrinterCommand(const wxString& command)
+void wxPrintData::SetPrinterCommand(const wxString& WXUNUSED_WITHOUT_PS(command))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -342,7 +348,7 @@ void wxPrintData::SetPrinterCommand(const wxString& command)
 #endif
 }
 
-void wxPrintData::SetPrinterOptions(const wxString& options)
+void wxPrintData::SetPrinterOptions(const wxString& WXUNUSED_WITHOUT_PS(options))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -350,7 +356,7 @@ void wxPrintData::SetPrinterOptions(const wxString& options)
 #endif
 }
 
-void wxPrintData::SetPreviewCommand(const wxString& command)
+void wxPrintData::SetPreviewCommand(const wxString& WXUNUSED_WITHOUT_PS(command))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -358,7 +364,7 @@ void wxPrintData::SetPreviewCommand(const wxString& command)
 #endif
 }
 
-void wxPrintData::SetFontMetricPath(const wxString& path)
+void wxPrintData::SetFontMetricPath(const wxString& WXUNUSED_WITHOUT_PS(path))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -366,7 +372,7 @@ void wxPrintData::SetFontMetricPath(const wxString& path)
 #endif
 }
 
-void wxPrintData::SetPrinterScaleX(double x)
+void wxPrintData::SetPrinterScaleX(double WXUNUSED_WITHOUT_PS(x))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -374,7 +380,7 @@ void wxPrintData::SetPrinterScaleX(double x)
 #endif
 }
 
-void wxPrintData::SetPrinterScaleY(double y)
+void wxPrintData::SetPrinterScaleY(double WXUNUSED_WITHOUT_PS(y))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -382,7 +388,7 @@ void wxPrintData::SetPrinterScaleY(double y)
 #endif
 }
 
-void wxPrintData::SetPrinterScaling(double x, double y)
+void wxPrintData::SetPrinterScaling(double WXUNUSED_WITHOUT_PS(x), double WXUNUSED_WITHOUT_PS(y))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -390,7 +396,7 @@ void wxPrintData::SetPrinterScaling(double x, double y)
 #endif
 }
 
-void wxPrintData::SetPrinterTranslateX(long x)
+void wxPrintData::SetPrinterTranslateX(long WXUNUSED_WITHOUT_PS(x))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -398,7 +404,7 @@ void wxPrintData::SetPrinterTranslateX(long x)
 #endif
 }
 
-void wxPrintData::SetPrinterTranslateY(long y)
+void wxPrintData::SetPrinterTranslateY(long WXUNUSED_WITHOUT_PS(y))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
@@ -406,7 +412,7 @@ void wxPrintData::SetPrinterTranslateY(long y)
 #endif
 }
 
-void wxPrintData::SetPrinterTranslation(long x, long y)
+void wxPrintData::SetPrinterTranslation(long WXUNUSED_WITHOUT_PS(x), long WXUNUSED_WITHOUT_PS(y))
 {
 #if wxUSE_POSTSCRIPT
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
