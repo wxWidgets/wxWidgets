@@ -879,6 +879,9 @@ wxString wxPathOnly (const wxString& path)
             // Unix like or Windows
             if (path[i] == wxT('/') || path[i] == wxT('\\'))
             {
+                // Don't return an empty string
+                if (i == 0)
+                    i ++;
                 buf[i] = 0;
                 return wxString(buf);
             }
