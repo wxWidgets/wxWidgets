@@ -439,7 +439,7 @@ private:
                              class wxTreeItemIndirectData *data);
     bool HasIndirectData(const wxTreeItemId& item) const;
     bool IsDataIndirect(wxTreeItemData *data) const
-        { return data->GetId().m_pItem == 0; }
+        { return data && data->GetId().m_pItem == 0; }
 
     // the hash storing the items attributes (indexed by items ids)
     wxHashTable m_attrs;
