@@ -66,6 +66,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
     EVT_MENU(LIST_SET_BG_COL, MyFrame::OnSetBgColour)
     EVT_MENU(LIST_TOGGLE_MULTI_SEL, MyFrame::OnToggleMultiSel)
+    EVT_MENU(LIST_SHOW_COL_INFO, MyFrame::OnShowColInfo)
+    EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
@@ -172,6 +174,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->Append(LIST_TOGGLE_FIRST, "&Toggle first item\tCtrl-T");
     menuList->Append(LIST_DESELECT_ALL, "&Deselect All\tCtrl-D");
     menuList->Append(LIST_SELECT_ALL, "S&elect All\tCtrl-A");
+    menuList->Append(LIST_SHOW_COL_INFO, "Show &column info\tCtrl-C");
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, "&Sort\tCtrl-S");
     menuList->AppendSeparator();
@@ -318,7 +321,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     wxStopWatch sw;
 
     wxString buf;
-    static const int NUM_ITEMS = 3000;
+    static const int NUM_ITEMS = 30;//00;
     for ( int i = 0; i < NUM_ITEMS; i++ )
     {
         buf.Printf(_T("This is item %d"), i);
@@ -430,6 +433,22 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
     m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+}
+
+void MyFrame::OnShowColInfo(wxCommandEvent& event)
+{
+    int count = m_listCtrl->GetColumnCount();
+    wxLogMessage("%d columns:", count);
+    for ( int c = 0; c < count; c++ )
+    {
+        wxLogMessage("\tcolumn %d has width %d", c,
+                     m_listCtrl->GetColumnWidth(c));
+    }
+}
+
+void MyFrame::OnUpdateShowColInfo(wxUpdateUIEvent& event)
+{
+    event.Enable( (m_listCtrl->GetWindowStyleFlag() & wxLC_REPORT) != 0 );
 }
 
 void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
