@@ -44,7 +44,7 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 \end{verbatim}
 
-Notice this particular line:
+Note this particular line:
 
 \begin{verbatim}
 "Content-Type: text/plain; charset=CHARSET\n"
@@ -80,20 +80,13 @@ wxWindows is able to use this catalog under any supported platform
 Windows).
 
 How is this done? When you tell the wxLocale class to load a message catalog that
-contains correct header, it checks the charset. If the
-charset is "alien" on the platform the program is currently running (e.g.
-any of ISO encodings under Windows or CP12XX under Unix) it uses 
-\helpref{wxEncodingConverter::GetPlatformEquivalents}{wxencodingconvertergetplatformequivalents}
-to obtain an encoding that is more common on this platform and converts
-the message catalog to this encoding. Note that it does {\bf not} check
-for presence of fonts in the "platform" encoding! It only assumes that it is
-always better to have strings in platform native encoding than in an encoding
-that is rarely (if ever) used.
-
-The behaviour described above is disabled by default.
-You must set {\it bConvertEncoding} to TRUE in 
-\helpref{wxLocale constructor}{wxlocaledefctor} in order to enable
-runtime encoding conversion.
+contains correct header, it checks the charset. The catalog is then converted
+to the charset used (see
+\helpref{wxLocale::GetSystemEncoding}{wxlocalegetsystemencoding} and
+\helpref{wxLocale::GetSystemEncodingName}{wxlocalegetsystemencodingname}) by
+user's operating system. This is default behaviour of the
+\helpref{wxLocale}{wxlocale} class; you can disable it by {\bf not} passing
+{\tt wxLOCALE\_CONV\_ENCODING} to \helpref{wxLocale::Init}{wxlocaleinit}.
 
 \wxheading{Font mapping}
 
