@@ -62,6 +62,15 @@ macro in the event table of the parent to handle it) with the given {\it id}.
 
 Destroys the wxProcess object.
 
+\membersection{wxProcess::CloseOutput}\label{wxprocesscloseoutput}
+
+\func{void}{CloseOutput}{\void}
+
+Closes the output stream (the one connected to the stdin of the child
+process). This function can be used to indicate to the child process that
+there is no more data to be read - usually, a filter program will only
+terminate when the input stream is closed.
+
 \membersection{wxProcess::Detach}\label{wxprocessdetach}
 
 \func{void}{Detach}{\void}

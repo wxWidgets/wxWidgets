@@ -81,6 +81,9 @@ public:
     wxInputStream *GetErrorStream() const { return m_errorStream; }
     wxOutputStream *GetOutputStream() const { return m_outputStream; }
 
+    // close the output stream indicating that nothing more will be written
+    void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
+
     // implementation only (for wxExecute)
     void SetPipeStreams(wxInputStream *inStream,
                         wxOutputStream *outStream,

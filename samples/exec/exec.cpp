@@ -86,6 +86,8 @@ public:
     void OnAsyncExec(wxCommandEvent& event);
     void OnShell(wxCommandEvent& event);
     void OnExecWithRedirect(wxCommandEvent& event);
+    void OnExecWithPipe(wxCommandEvent& event);
+
     void OnDDEExec(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
@@ -144,7 +146,23 @@ public:
 
     virtual void OnTerminate(int pid, int status);
 
-    bool HasInput();
+    virtual bool HasInput();
+};
+
+// A version of MyPipedProcess which also sends input to the stdin of the
+// child process
+class MyPipedProcess2 : public MyPipedProcess
+{
+public:
+    MyPipedProcess2(MyFrame *parent, const wxString& cmd, const wxString& input)
+        : MyPipedProcess(parent, cmd), m_input(input)
+        {
+        }
+
+    virtual bool HasInput();
+
+private:
+    wxString m_input;
 };
 
 // ----------------------------------------------------------------------------
@@ -162,6 +180,7 @@ enum
     Exec_Shell,
     Exec_DDEExec,
     Exec_Redirect,
+    Exec_Pipe,
     Exec_About = 300
 };
 
@@ -182,6 +201,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_AsyncExec, MyFrame::OnAsyncExec)
     EVT_MENU(Exec_Shell, MyFrame::OnShell)
     EVT_MENU(Exec_Redirect, MyFrame::OnExecWithRedirect)
+    EVT_MENU(Exec_Pipe, MyFrame::OnExecWithPipe)
+
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
 
     EVT_MENU(Exec_About, MyFrame::OnAbout)
@@ -249,8 +270,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                      _T("Launch a program and return immediately"));
     execMenu->Append(Exec_Shell, _T("Execute &shell command...\tCtrl-S"),
                      _T("Launch a shell and execute a command in it"));
+    execMenu->AppendSeparator();
     execMenu->Append(Exec_Redirect, _T("Capture command &output...\tCtrl-O"),
                      _T("Launch a program and capture its output"));
+    execMenu->Append(Exec_Pipe, _T("&Pipe through command...\tCtrl-P"),
+                     _T("Pipe a string through a filter"));
 
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
@@ -386,7 +410,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
     if ( sync )
     {
         wxArrayString output, errors;
-        int code = wxExecute(cmd, output);
+        int code = wxExecute(cmd, output, errors);
         wxLogStatus(_T("command '%s' terminated with exit code %d."),
                     cmd.c_str(), code);
 
@@ -409,6 +433,42 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         {
             m_running.Add(process);
         }
+    }
+
+    m_cmdLast = cmd;
+}
+
+void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !m_cmdLast )
+        m_cmdLast = _T("tr [a-z] [A-Z]");
+
+    wxString cmd = wxGetTextFromUser(_T("Enter the command: "),
+                                     DIALOG_TITLE,
+                                     m_cmdLast);
+
+    if ( !cmd )
+        return;
+
+    wxString input = wxGetTextFromUser(_T("Enter the string to send to it: "),
+                                       DIALOG_TITLE);
+    if ( !input )
+        return;
+
+    // always execute the filter asynchronously
+    MyPipedProcess2 *process = new MyPipedProcess2(this, cmd, input);
+    int pid = wxExecute(cmd, FALSE /* async */, process);
+    if ( pid )
+    {
+        wxLogStatus(_T("Process %ld (%s) launched."), pid, cmd.c_str());
+
+        m_running.Add(process);
+    }
+    else
+    {
+        wxLogError(_T("Execution of '%s' failed."), cmd.c_str());
+
+        delete process;
     }
 
     m_cmdLast = cmd;
@@ -555,4 +615,25 @@ void MyPipedProcess::OnTerminate(int pid, int status)
     m_parent->OnProcessTerminated(this);
 
     MyProcess::OnTerminate(pid, status);
+}
+
+// ----------------------------------------------------------------------------
+// MyPipedProcess2
+// ----------------------------------------------------------------------------
+
+bool MyPipedProcess2::HasInput()
+{
+    if ( !!m_input )
+    {
+        wxTextOutputStream os(*GetOutputStream());
+        os.WriteString(m_input);
+
+        CloseOutput();
+        m_input.clear();
+
+        // call us once again - may be we'll have output
+        return TRUE;
+    }
+
+    return MyPipedProcess::HasInput();
 }
