@@ -80,6 +80,8 @@
     }
 
     foreach $file (sort keys %wxGENERICINCLUDE) {
+        next if $wxGENERICINCLUDE{$file} =~ /\bNotGTK\b/;
+
         $project{"GTK_HEADERS"} .= "generic/" . $file . " "
     }
 
