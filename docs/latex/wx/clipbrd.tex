@@ -26,11 +26,11 @@ For example:
   // Read some text
   if (wxTheClipboard->Open())
   {
-    wxTextDataObject data;
-    if (wxTheClipboard->IsSupported(data))
+    if (wxTheClipboard->IsSupported( "STRING" ))
     {
-      wxTheClipboard->GetData(data);
-      wxMessageBox(data.GetText());
+      wxTextDataObject data;
+      wxTheClipboard->GetData( &data );
+      wxMessageBox( data.GetText() );
     }  
     wxTheClipboard->Close();
   }
@@ -83,14 +83,14 @@ Call this function to close the clipboard, having opened it with \helpref{wxClip
 
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
-\func{bool}{GetData}{\param{wxDataObject\&}{ data}}
+\func{bool}{GetData}{\param{wxDataObject*}{ data}}
 
 Call this function to fill {\it data} with data on the clipboard, if available in the required
 format. Returns TRUE on success.
 
 \membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
-\func{bool}{IsSupported}{\param{wxDataObject\&}{ data}}
+\func{bool}{IsSupported}{\param{wxDataFormat}{ format}}
 
 Returns TRUE if the format of the given data object is available on the clipboard.
 
@@ -113,4 +113,13 @@ Returns TRUE on success. This should be tested (as in the sample shown above).
 Call this function to set the data object to the clipboard. This function will
 clear all previous contents in the clipboard, so calling it several times
 does not make any sense.
+
+\membersection{wxClipboard::UsePrimarySelection}\label{wxclipboaruseprimary}
+
+\func{void}{UsePrimarySelection}{\param(bool}{ primary = TRUE}
+
+On platforms supporting it (currently only GTK), selects the so called
+PRIMARY SELECTION as the clipboard as opposed to the normal clipboard,
+if primary is TRUE.
+
 

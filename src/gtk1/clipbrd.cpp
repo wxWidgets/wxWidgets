@@ -22,6 +22,15 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// thread system
+//-----------------------------------------------------------------------------
+
+#if wxUSE_THREADS
+extern void wxapp_install_thread_wakeup();
+extern void wxapp_uninstall_thread_wakeup();
+#endif
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -386,9 +395,13 @@ void wxClipboard::Clear()
 {
     if (m_dataBroker)
     { 
+#if wxUSE_THREADS
+        /* disable GUI threads */
+        wxapp_uninstall_thread_wakeup();
+#endif
+    
         /*  As we have data we also own the clipboard. Once we no longer own
             it, clear_selection is called which will set m_data to zero */
-     
         if (gdk_selection_owner_get( g_clipboardAtom ) == m_clipboardWidget->window)
         {
             m_waiting = TRUE;
@@ -412,6 +425,11 @@ void wxClipboard::Clear()
 	    delete m_dataBroker;
 	    m_dataBroker = (wxDataBroker*) NULL;
 	}
+	
+#if wxUSE_THREADS
+        /* re-enable GUI threads */
+        wxapp_install_thread_wakeup();
+#endif
     }
   
     m_targetRequested = 0;
@@ -494,11 +512,20 @@ bool wxClipboard::AddData( wxDataObject *data )
 			       (gpointer) NULL );
 #endif
 
+#if wxUSE_THREADS
+        /* disable GUI threads */
+        wxapp_uninstall_thread_wakeup();
+#endif
+    
     /* Tell the world we offer clipboard data */
     if (!gtk_selection_owner_set( m_clipboardWidget, 
                                   g_clipboardAtom,
 				  GDK_CURRENT_TIME ))
     {
+#if wxUSE_THREADS
+        /* re-enable GUI threads */
+        wxapp_install_thread_wakeup();
+#endif
         return FALSE;
     }
     m_ownsClipboard = TRUE;
@@ -507,9 +534,18 @@ bool wxClipboard::AddData( wxDataObject *data )
                                   GDK_SELECTION_PRIMARY,
 				  GDK_CURRENT_TIME ))
     {  
+#if wxUSE_THREADS
+        /* re-enable GUI threads */
+        wxapp_install_thread_wakeup();
+#endif
         return FALSE;
     }
     m_ownsPrimarySelection = TRUE;
+    
+#if wxUSE_THREADS
+    /* re-enable GUI threads */
+    wxapp_install_thread_wakeup();
+#endif
 	
     return TRUE;
 }

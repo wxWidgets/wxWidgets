@@ -226,12 +226,29 @@ void wxapp_install_idle_handler()
     g_isIdle = FALSE;
 }
 
-/*
 #if wxUSE_THREADS
-static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
+
+/* forward declaration */
+static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) );
+
+void wxapp_install_thread_wakeup()
 {
+    if (wxTheApp->m_wakeUpTimerTag) return;
+    
+    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 100, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+}
+
+void wxapp_uninstall_thread_wakeup()
+{
+    if (!wxTheApp->m_wakeUpTimerTag) return;
+    
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
     wxTheApp->m_wakeUpTimerTag = 0;
+}
+
+static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
+{
+    wxapp_uninstall_thread_wakeup();
 
 #if (GTK_MINOR_VERSION > 0)
     // when getting called from GDK's time-out handler
@@ -254,12 +271,11 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     GDK_THREADS_LEAVE ();
 #endif
 
-    wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 20, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    wxapp_install_thread_wakeup();
 
     return TRUE;
 }
 #endif
-*/
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -280,11 +296,10 @@ wxApp::wxApp()
 
     m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
 
-/*
 #if wxUSE_THREADS
-    m_wakeUpTimerTag = gtk_timeout_add( 20, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+    m_wakeUpTimerTag = 0;
+    wxapp_install_thread_wakeup();
 #endif
-*/
 
     m_colorCube = (unsigned char*) NULL;
 }
@@ -293,11 +308,9 @@ wxApp::~wxApp()
 {
     if (m_idleTag) gtk_idle_remove( m_idleTag );
 
-/*
 #if wxUSE_THREADS
-    if (m_wakeUpTimerTag) gtk_timeout_remove( m_wakeUpTimerTag );
+    wxapp_uninstall_thread_wakeup();
 #endif
-*/
 
     if (m_colorCube) free(m_colorCube);
 }

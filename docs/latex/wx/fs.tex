@@ -1,24 +1,24 @@
 \section{File Systems}\label{fs}
 
-The wxHTML library uses {\bf virtual file systems} mechanism
-similar to the one used in Midnight Commander or Dos Navigator or
+The wxHTML library uses a {\bf virtual file systems} mechanism
+similar to the one used in Midnight Commander, Dos Navigator,
 FAR or almost any modern file manager. (Do you remember? You can
-press enter on ZIP file and it's content is displayed like it's
-a directory...)
+press enter on ZIP file and its contents is displayed as if it
+were a local directory...)
 
 \wxheading{Classes}
 
 Three classes are used in order to provide full VFS:
 
 \begin{itemize}
-\item \helpref{wxFSFile}{wxfsfile} class provides information
+\item The \helpref{wxFSFile}{wxfsfile} class provides information
 on opened file (name, input stream, mime type and anchor).
 
-\item \helpref{wxFileSystem}{wxfilesystem} class is interface.
-It's main methods are ChangePathTo() and OpenFile(). This class
+\item The \helpref{wxFileSystem}{wxfilesystem} class is the interface.
+Its main methods are ChangePathTo() and OpenFile(). This class
 is most often used by the end user.
 
-\item \helpref{wxFileSystemHandler}{wxfilesystemhandler} is the core
+\item The \helpref{wxFileSystemHandler}{wxfilesystemhandler} is the core
 if VFS mechanism. You can derive your own handler and pass it to
 wxFileSystem's AddHandler() method. In the new handler you only need to
 overwrite OpenFile() and CanOpen() methods.
@@ -29,16 +29,16 @@ overwrite OpenFile() and CanOpen() methods.
 Locations (aka filenames aka addresses) are constructed from 4 parts:
 
 \begin{itemize}
-\item {\bf protocol} - handler can regonize if it is able to open some
-file by checking it's protocol. Examples are "http", "file" or "ftp"
+\item {\bf protocol} - handler can recognize if it is able to open a
+file by checking its protocol. Examples are "http", "file" or "ftp".
 
 \item {\bf right location} - is the name of file within the protocol.
-In "http://www.wxwindows.org/index.html" the right location is "//www.wxwindows.org/index.html"
+In "http://www.wxwindows.org/index.html" the right location is "//www.wxwindows.org/index.html".
 
 \item {\bf anchor} - anchor is optional and is usually not present.
-In "index.htm\#chapter2" the anchor is "chapter2"
+In "index.htm\#chapter2" the anchor is "chapter2".
 
-\item {\bf left location} - this is usually empty string. 
+\item {\bf left location} - this is usually an empty string. 
 It is used by 'local' protocols such as ZIP.
 See Combined Protocols paragraph for details.
 \end{itemize}
@@ -56,13 +56,13 @@ In this example, protocol is "zip", left location is
 is "file:archives/cpp_doc.zip". It is used by zip handler
 to determine in what file this particular zip VFS is stored.
 
-In fact there are two protocols used in this example : zip and file.
+In fact there are two protocols used in this example: zip and file.
 You can construct even more complicated addresses like this one:
 
 http://www.archives.org/myarchive.zip\#zip:local/docs/cpp/stdio.zip\#zip:index.htm
 
 In this example you access zip VFS stdio.zip stored in another zip (myarchive.zip)
-which is at WWW. Enjoy it :-)
+which is at WWW.
 
 \wxheading{File Systems Included in wxHTML}
 

@@ -35,6 +35,15 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
+//-----------------------------------------------------------------------------
+// thread system
+//-----------------------------------------------------------------------------
+
+#if wxUSE_THREADS
+extern void wxapp_install_thread_wakeup();
+extern void wxapp_uninstall_thread_wakeup();
+#endif
+
 //----------------------------------------------------------------------------
 // global data
 //----------------------------------------------------------------------------
@@ -363,11 +372,21 @@ bool wxDropTarget::RequestData( wxDataFormat format )
     if (format.GetType() == wxDF_TEXT) wxPrintf( _T("text data.\n") );
 */
 
+#if wxUSE_THREADS
+    /* disable GUI threads */
+    wxapp_uninstall_thread_wakeup();
+#endif
+
     /* this should trigger an "drag_data_received" event */
     gtk_drag_get_data( m_dragWidget,
                        m_dragContext,
                        format.GetAtom(),
                        m_dragTime );
+
+#if wxUSE_THREADS
+    /* re-enable GUI threads */
+    wxapp_install_thread_wakeup();
+#endif
 
     return TRUE;
 }
@@ -617,23 +636,32 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
         wxDataObject *data_object = (wxDataObject*) node->Data();
         if (data_object->GetFormat().GetAtom() == selection_data->target)
         {
-//            printf( "format found.\n" );
+//          printf( "format found.\n" );
 
             size_t data_size = data_object->GetSize();
 
             if (data_size > 0)
             {
-//                printf( "data size: %d.\n", (int)data_size );
+//              printf( "data size: %d.\n", (int)data_size );
 
                 guchar *buffer = new guchar[data_size];
                 data_object->WriteData( buffer );
 
+#if wxUSE_THREADS
+                /* disable GUI threads */
+                wxapp_uninstall_thread_wakeup();
+#endif
+    
                 gtk_selection_data_set( selection_data,
                                         selection_data->target,
                                         8,   // 8-bit
                                         buffer,
                                         data_size );
 
+#if wxUSE_THREADS
+                /* enable GUI threads */
+                wxapp_install_thread_wakeup();
+#endif
                 free( buffer );
 
                 /* so far only copy, no moves. TODO. */
@@ -659,7 +687,7 @@ static void source_drag_data_delete( GtkWidget          *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//    printf( "Delete the data!\n" );
+//  printf( "Delete the data!\n" );
 
     drop_source->m_retValue = wxDragMove;
 }
@@ -674,7 +702,7 @@ static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//    printf( "drag_begin.\n" );
+//  printf( "drag_begin.\n" );
 }
 
 //----------------------------------------------------------------------------
@@ -687,7 +715,7 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-//    printf( "drag_end.\n" );
+//  printf( "drag_end.\n" );
 
     drop_source->m_waiting = FALSE;
 }
@@ -800,7 +828,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     m_waiting = TRUE;
 
     GdkAtom atom = gdk_atom_intern( "STRING", FALSE );
-//    wxPrintf( _T("atom id: %d.\n"), (int)atom );
+//    printf( "atom id: %d.\n", (int)atom );
 
     GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
     gtk_target_list_add( target_list, atom, 0, 0 );
@@ -822,6 +850,11 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
     else if (event.state & GDK_BUTTON2_MASK) button_number = 2;
     else if (event.state & GDK_BUTTON3_MASK) button_number = 3;
 
+#if wxUSE_THREADS
+    /* disable GUI threads */
+    wxapp_uninstall_thread_wakeup();
+#endif
+    
     /* don't start dragging if no button is down */
     if (button_number)
     {
@@ -846,6 +879,11 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
         while (m_waiting) gtk_main_iteration();;
     }
 
+#if wxUSE_THREADS
+    /* re-enable GUI threads */
+    wxapp_install_thread_wakeup();
+#endif
+    
     g_blockEventsOnDrag = FALSE;
 
     UnregisterWindow();

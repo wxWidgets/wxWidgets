@@ -6,10 +6,15 @@
 This class provides functions that read text datas using an input stream.
 So, you can read \it{text} floats, integers.
 
-Operator >> is overloaded and you can use this class a C++ std-iostream.
+Operator >> is overloaded and you can use this class like a standard C++ iostream.
+Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
+and on a typical 32-bit computer, none of these match to the "long" type (wxInt32
+is defined as int on 32-bit architectures) so that you cannot use long. To avoid
+problems (here and elsewhere), make use of the wxInt32, wxUint32, etc types.
 
 For example:
 \begin{verbatim}
+  wxFileInputStream input( "mytext.txt" );
   wxTextInputStream text( input );
   wxUint8 i1;
   float f2;
@@ -45,19 +50,19 @@ Destroys the wxTextInputStream object.
 
 \membersection{wxTextInputStream::Read8}
 
-\func{unsigned char}{Read8}{\void}
+\func{wxUint8}{Read8}{\void}
 
 Reads a single byte from the stream.
 
 \membersection{wxTextInputStream::Read16}
 
-\func{unsigned short}{Read16}{\void}
+\func{wxUint16}{Read16}{\void}
 
 Reads a 16 bit integer from the stream.
 
 \membersection{wxTextInputStream::Read32}
 
-\func{unsigned long}{Read32}{\void}
+\func{wxUint16}{Read32}{\void}
 
 Reads a 32 bit integer from the stream.
 
@@ -85,6 +90,7 @@ So, you can write \it{text} floats, integers.
 
 For example:
 \begin{verbatim}
+  wxFileOutputStream output( "mytext.txt" );
   wxTextOutputStream text( output );
 
   output << "This is a text line\n";
@@ -113,19 +119,19 @@ Destroys the wxTextOutputStream object.
 
 \membersection{wxTextOutputStream::Write8}
 
-\func{void}{wxTextOutputStream::Write8}{{\param unsigned char }{i8}}
+\func{void}{wxTextOutputStream::Write8}{{\param wxUint8 }{i8}}
 
 Writes the single byte {\it i8} to the stream.
 
 \membersection{wxTextOutputStream::Write16}
 
-\func{void}{wxTextOutputStream::Write16}{{\param unsigned short }{i16}}
+\func{void}{wxTextOutputStream::Write16}{{\param wxUint16 }{i16}}
 
 Writes the 16 bit integer {\it i16} to the stream.
 
 \membersection{wxTextOutputStream::Write32}
 
-\func{void}{wxTextOutputStream::Write32}{{\param unsigned long }{i32}}
+\func{void}{wxTextOutputStream::Write32}{{\param wxUint32 }{i32}}
 
 Writes the 32 bit integer {\it i32} to the stream.
 
