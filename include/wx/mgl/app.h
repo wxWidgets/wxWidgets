@@ -24,7 +24,6 @@
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
-class WXDLLEXPORT wxDesktopWindow;
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -64,11 +63,15 @@ public:
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
 
+    virtual wxDisplayModeInfo GetDisplayMode() const { return m_displayMode; }
+    virtual bool SetDisplayMode(const wxDisplayModeInfo& mode);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
     
     wxEventLoop *m_mainLoop;
+    wxDisplayModeInfo m_displayMode;
 };
 
 int WXDLLEXPORT wxEntry(int argc, char *argv[]);

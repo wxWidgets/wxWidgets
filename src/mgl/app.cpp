@@ -155,10 +155,9 @@ static wxRootWindow *gs_rootWindow = NULL;
 // MGL initialization
 //-----------------------------------------------------------------------------
 
-static bool wxCreateMGL_WM()
+static bool wxCreateMGL_WM(const wxDisplayModeInfo& displayMode)
 {
     int mode;
-    int width = 640, height = 480, depth = 16;
     int refresh = MGL_DEFAULT_REFRESH;
     
 #if wxUSE_SYSTEM_OPTIONS
@@ -166,10 +165,15 @@ static bool wxCreateMGL_WM()
         refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
 #endif
         
-    mode = MGL_findMode(width, height, depth);
+    mode = MGL_findMode(displayMode.GetScreenSize().x, 
+                        displayMode.GetScreenSize().y, 
+                        displayMode.GetDepth());
     if ( mode == -1 )
     {
-        wxLogWarning(_("Mode %ix%i-%i not available, falling back to default mode."), width, height, depth);
+        wxLogWarning(_("Mode %ix%i-%i not available, falling back to default mode."), 
+                     displayMode.GetScreenSize().x, 
+                     displayMode.GetScreenSize().y, 
+                     displayMode.GetDepth());
         mode = 0; // always available
     }
     g_displayDC = new MGLDisplayDC(mode, 1, refresh);
@@ -214,15 +218,33 @@ END_EVENT_TABLE()
 
 wxApp::wxApp() : m_mainLoop(NULL)
 {
+    m_displayMode = wxDisplayModeInfo(wxSize(640, 480), 16);
 }
 
 wxApp::~wxApp()
 {
 }
 
+bool wxApp::SetDisplayMode(const wxDisplayModeInfo& mode)
+{
+    if ( !mode.IsOk() )
+    {
+        return FALSE;
+    }
+    if ( g_displayDC != NULL )
+    {
+        // FIXME_MGL -- we currently don't allow to switch video mode
+        // at runtime. This can hopefully be changed...
+        wxFAIL_MSG(wxT("Can't change display mode after intialization!"));
+        return FALSE;
+    }
+    m_displayMode = mode;
+    return TRUE;
+}
+
 bool wxApp::OnInitGui()
 {
-    if ( !wxCreateMGL_WM() )
+    if ( !wxCreateMGL_WM(m_displayMode) )
         return FALSE;
 
     // This has to be done *after* wxCreateMGL_WM() because it initializes 

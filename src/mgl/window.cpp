@@ -127,8 +127,6 @@ static void wxWindowPainter(window_t *wnd, MGLDC *dc)
         MGLDevCtx ctx(dc);
         w->HandlePaint(&ctx);
     }
-    // FIXME_MGL -- root window should be a regular window so that
-    // enter/leave and activate/deactivate events work correctly
 }
 
 static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
