@@ -8,7 +8,6 @@
     <dll id="basedll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL</define>
-        <define>__WXBASE__</define> 
         <define>wxUSE_BASE=1</define>
         <define>wxUSE_GUI=0</define> 
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
@@ -16,7 +15,6 @@
     
     <lib id="baselib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='0'">
-        <define>__WXBASE__</define> 
         <define>wxUSE_BASE=1</define> 
         <define>wxUSE_GUI=0</define> 
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
@@ -29,6 +27,7 @@
     <dll id="coredll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXMAKINGDLL</define>
+        <define>wxUSE_BASE=0</define> 
         <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
         
         <wx-lib>base</wx-lib>
@@ -36,6 +35,7 @@
     
     <lib id="corelib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
+        <define>wxUSE_BASE=0</define> 
         <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
     </lib>
 

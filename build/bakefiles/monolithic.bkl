@@ -13,7 +13,6 @@
 
     <dll id="monodll" template="wx_dll"
          cond="SHARED=='1' and MONOLITHIC=='1'">
-        <define>__WXBASE__</define> 
         <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
@@ -21,7 +20,6 @@
     
     <lib id="monolib" template="wx_lib"
          cond="SHARED=='0' and MONOLITHIC=='1'">
-        <define>__WXBASE__</define> 
         <define>wxUSE_BASE=1</define> 
         <sources>$(MONOLIB_SRC)</sources>
     </lib>
