@@ -14,7 +14,7 @@
 #define _WX_CONTAINR_H_
 
 #ifdef __GNUG__
-    #pragma implementation "containr.h"
+    #pragma interface "containr.h"
 #endif
 
 class WXDLLEXPORT wxFocusEvent;
