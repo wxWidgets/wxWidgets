@@ -544,7 +544,6 @@ void wxMenuBar::MacInstallMenuBar()
 #endif
        for (size_t i = 0; i < m_menus.GetCount(); i++)
       {
-        Str255     label;
         wxMenuItemList::Node *node;
         wxMenuItem *item;
         int pos ;
