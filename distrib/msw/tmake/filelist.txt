@@ -442,7 +442,7 @@ dcprint.cpp	O
 dcscreen.cpp	O
 dialog.cpp	O
 #dialup.cpp	O
-#dir.cpp	O	B
+dir.cpp	O	B
 dirdlg.cpp	O
 dnd.cpp	O
 filedlg.cpp	O
