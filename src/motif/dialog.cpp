@@ -168,7 +168,8 @@ bool wxDialog::DoCreate( wxWindow* parent, wxWindowID id,
     XtSetArg (args[0], XmNdefaultPosition, False);
     XtSetArg (args[1], XmNautoUnmanage, False);
     Widget dialogShell =
-        XmCreateBulletinBoardDialog( parentWidget, (char*)name.c_str(),
+        XmCreateBulletinBoardDialog( parentWidget,
+                                     wxConstCast(name.c_str(), char),
                                      args, 2);
     m_mainWidget = (WXWidget) dialogShell;
 

@@ -126,7 +126,8 @@ void wxComboBox::SetValue(const wxString& value)
 {
     m_inSetValue = TRUE;
     if( !value.empty() )
-        XmComboBoxSetString( (Widget)m_mainWidget, (char*)value.c_str() );
+        XmComboBoxSetString( (Widget)m_mainWidget,
+                             wxConstCast(value.c_str(), char) );
     m_inSetValue = FALSE;
 }
 
@@ -253,8 +254,9 @@ long wxComboBox::GetLastPosition() const
 
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
-    XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-        (char*) (const char*) value);
+    XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from,
+                       (XmTextPosition) to,
+                       wxConstCast(value.c_str(), char));
 }
 
 void wxComboBox::Remove(long from, long to)

@@ -429,7 +429,7 @@ bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
     M_BITMAPDATA->m_display = (WXDisplay*) dpy;
 
     int value = XReadBitmapFile (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-        (char*) (const char*) name, &w, &h, &pixmap, &hotX, &hotY);
+        wxConstCast(name.c_str(), char), &w, &h, &pixmap, &hotX, &hotY);
     M_BITMAPHANDLERDATA->m_width = w;
     M_BITMAPHANDLERDATA->m_height = h;
     M_BITMAPHANDLERDATA->m_depth = 1;
@@ -569,7 +569,8 @@ bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name,
     xpmAttr.valuemask = XpmReturnInfos | XpmCloseness;
     xpmAttr.closeness = 40000;
     int errorStatus = XpmReadFileToPixmap(dpy,
-        RootWindow(dpy, DefaultScreen(dpy)), (char*) (const char*) name,
+        RootWindow(dpy, DefaultScreen(dpy)),
+        wxConstCast(name.c_str(), char),
         &pixmap, &mask, &xpmAttr);
 
     if (errorStatus == XpmSuccess)
@@ -624,7 +625,8 @@ bool wxXPMFileHandler::SaveFile( const wxBitmap *bitmap, const wxString& name,
     if (M_BITMAPHANDLERDATA->m_ok && M_BITMAPHANDLERDATA->m_pixmap)
     {
         Display *dpy =  (Display*) M_BITMAPHANDLERDATA->m_display;
-        int errorStatus = XpmWriteFileFromPixmap(dpy, (char*) (const char*) name,
+        int errorStatus = XpmWriteFileFromPixmap(dpy,
+            wxConstCast(name.c_str(), char),
             (Pixmap) M_BITMAPHANDLERDATA->m_pixmap,
             (M_BITMAPHANDLERDATA->m_bitmapMask ? (Pixmap) M_BITMAPHANDLERDATA->m_bitmapMask->GetPixmap() : (Pixmap) 0),
             (XpmAttributes *) NULL);

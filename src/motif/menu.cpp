@@ -327,12 +327,12 @@ int wxMenuBar::FindMenuItem (const wxString& menuString, const wxString& itemStr
 {
     char buf1[200];
     char buf2[200];
-    wxStripMenuCodes ((char *)(const char *)menuString, buf1);
+    wxStripMenuCodes (wxConstCast(menuString.c_str(), char), buf1);
 
     size_t menuCount = GetMenuCount();
     for (size_t i = 0; i < menuCount; i++)
     {
-        wxStripMenuCodes ((char *)(const char *)m_titles[i], buf2);
+        wxStripMenuCodes (wxConstCast(m_titles[i].c_str(), char), buf2);
         if (strcmp (buf1, buf2) == 0)
             return m_menus[i]->FindItem (itemString);
     }

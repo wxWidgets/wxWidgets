@@ -315,7 +315,8 @@ wxCursor::wxCursor(const wxString& name, long flags, int hotSpotX, int hotSpotY)
     int screen_num =  DefaultScreen (dpy);
 
     int value = XReadBitmapFile (dpy, RootWindow (dpy, DefaultScreen (dpy)),
-                        (char*) (const char*) name, &w, &h, &pixmap, &hotX, &hotY);
+                                 wxConstCast(name.c_str(), char),
+                                 &w, &h, &pixmap, &hotX, &hotY);
 
     M_BITMAPDATA->m_width = w;
     M_BITMAPDATA->m_height = h;

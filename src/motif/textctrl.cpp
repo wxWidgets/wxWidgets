@@ -130,7 +130,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         XtSetArg (args[1], XmNwordWrap, wantWordWrap ? True : False);
 
         m_mainWidget = (WXWidget) XmCreateScrolledText(parentWidget,
-                                                       (char*)name.c_str(),
+                                                       wxConstCast(name.c_str(), char),
                                                        args, 2);
 
         XtVaSetValues ((Widget) m_mainWidget,
@@ -143,7 +143,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     {
         m_mainWidget = (WXWidget)XtVaCreateManagedWidget
                                  (
-                                  (char*)name.c_str(),
+                                  wxConstCast(name.c_str(), char),
                                   xmTextWidgetClass,
                                   parentWidget,
                                   NULL
@@ -175,7 +175,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // do this instead... MB
         //
         XtVaSetValues( (Widget) m_mainWidget,
-                       XmNvalue, (char *)value.c_str(),
+                       XmNvalue, wxConstCast(value.c_str(), char),
                        NULL);
     }
     
@@ -250,7 +250,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     // do this instead... MB
     //
     XtVaSetValues( (Widget) m_mainWidget,
-                   XmNvalue, (char *)value.c_str(),
+                   XmNvalue, wxConstCast(value.c_str(), char),
                    NULL);
 
     m_inSetValue = FALSE;
@@ -362,7 +362,7 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
     XmTextReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
-        (char*) (const char*) value);
+        wxConstCast(value.c_str(), char));
 }
 
 void wxTextCtrl::Remove(long from, long to)
@@ -394,8 +394,8 @@ bool wxTextCtrl::LoadFile(const wxString& file)
     FILE *fp = 0;
 
     struct stat statb;
-    if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
-        !(fp = fopen ((char*) (const char*) file, "r")))
+    if ((stat (wxConstCast(file.c_str(), char), &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
+        !(fp = fopen (wxConstCast(file.c_str(), char), "r")))
     {
         return FALSE;
     }
@@ -436,7 +436,7 @@ bool wxTextCtrl::SaveFile(const wxString& file)
     Widget textWidget = (Widget) m_mainWidget;
     FILE *fp;
 
-    if (!(fp = fopen ((char*) (const char*) theFile, "w")))
+    if (!(fp = fopen (wxConstCast(theFile.c_str(), char), "w")))
     {
         return FALSE;
     }
@@ -463,7 +463,8 @@ bool wxTextCtrl::SaveFile(const wxString& file)
 void wxTextCtrl::WriteText(const wxString& text)
 {
     long textPosition = GetInsertionPoint() + strlen (text);
-    XmTextInsert ((Widget) m_mainWidget, GetInsertionPoint(), (char*) (const char*) text);
+    XmTextInsert ((Widget) m_mainWidget, GetInsertionPoint(),
+                  wxConstCast(text.c_str(), char));
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);
@@ -473,7 +474,8 @@ void wxTextCtrl::WriteText(const wxString& text)
 void wxTextCtrl::AppendText(const wxString& text)
 {
     long textPosition = GetLastPosition() + strlen(text);
-    XmTextInsert ((Widget) m_mainWidget, GetLastPosition(), (char*) (const char*) text);
+    XmTextInsert ((Widget) m_mainWidget, GetLastPosition(),
+                  wxConstCast(text.c_str(), char));
     XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
     SetInsertionPoint(textPosition);
     XmTextShowPosition ((Widget) m_mainWidget, textPosition);

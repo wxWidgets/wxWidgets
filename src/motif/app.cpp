@@ -464,7 +464,7 @@ bool wxApp::OnInitGui()
     XtAppSetFallbackResources((XtAppContext) wxTheApp->m_appContext, fallbackResources);
 
     Display *dpy = XtOpenDisplay((XtAppContext) wxTheApp->m_appContext,(String)NULL,NULL,
-        (const char*) wxTheApp->GetClassName(), NULL, 0,
+        wxTheApp->GetClassName().c_str(), NULL, 0,
 # if XtSpecificationRelease < 5
         (Cardinal*) &argc,
 # else
@@ -477,7 +477,7 @@ bool wxApp::OnInitGui()
         delete wxLog::SetActiveTarget(new wxLogStderr);
         wxString className(wxTheApp->GetClassName());
         wxLogError(_("wxWindows could not open display for '%s': exiting."),
-                   (const char*) className);
+                   className.c_str());
         exit(-1);
     }
     m_initialDisplay = (WXDisplay*) dpy;
@@ -487,9 +487,11 @@ bool wxApp::OnInitGui()
     gs_pfnXErrorHandler = XSetErrorHandler(wxXErrorHandler);
 #endif // __WXDEBUG__
 
-    wxTheApp->m_topLevelWidget = (WXWidget) XtAppCreateShell((String)NULL, (const char*) wxTheApp->GetClassName(),
-        applicationShellWidgetClass,dpy,
-        NULL,0) ;
+    wxTheApp->m_topLevelWidget =
+        (WXWidget) XtAppCreateShell((String)NULL,
+                                    wxTheApp->GetClassName().c_str(),
+                                    applicationShellWidgetClass,dpy,
+                                    NULL,0) ;
 
     // Add general resize proc
     XtActionsRec rec;

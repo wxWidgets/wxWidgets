@@ -118,8 +118,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         ++count;
     }
 
-    Widget listWidget = XmCreateScrolledList(parentWidget,
-                                             (char*)name.c_str(), args, count);
+    Widget listWidget =
+        XmCreateScrolledList(parentWidget,
+                             wxConstCast(name.c_str(), char), args, count);
 
     m_mainWidget = (WXWidget) listWidget;
 
@@ -256,7 +257,7 @@ void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
     XmString *text = new XmString[items.GetCount()];
     size_t i;
     for (i = 0; i < items.GetCount(); ++i)
-        text[i] = XmStringCreateSimple ((char*)items[i].c_str());
+        text[i] = wxStringToXmString (items[i]);
 
     if ( clientData )
         for (i = 0; i < items.GetCount(); ++i)
@@ -486,12 +487,12 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     // Corrected by Sergey Krasnov from Steve Hammes' code
 #if XmVersion > 1001
     for (i = 0; i < items.GetCount(); i++)
-        text[i] = XmStringCreateSimple((char*)items[i].c_str());
+        text[i] = wxStringToXmString(items[i]);
     XmListAddItemsUnselected(listBox, text, items.GetCount(), pos+1);
 #else
     for (i = 0; i < items.GetCount(); i++)
     {
-        text[i] = XmStringCreateSimple((char*)items[i].c_str());
+        text[i] = wxStringToXmString(items[i]);
         // Another Sergey correction
         XmListAddItemUnselected(listBox, text[i], pos+i+1);
     }

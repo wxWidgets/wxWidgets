@@ -146,7 +146,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     {
         wxString str(wxStripMenuCodes(choices[i]));
         m_radioButtonLabels[i] = str;
-        m_radioButtons[i] = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) str,
+        m_radioButtons[i] = (WXWidget) XtVaCreateManagedWidget (wxConstCast(str.c_str(), char),
 #if wxUSE_GADGETS
                             xmToggleButtonGadgetClass, radioBoxWidget,
 #else

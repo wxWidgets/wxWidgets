@@ -1130,7 +1130,9 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             &ascent, &descent, &overall_return);
         else
 #endif // 0
-            (void)XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) text, slen, &direction,
+            (void)XTextExtents((XFontStruct*) pFontStruct,
+                               wxConstCast(text.c_str(), char),
+                               slen, &direction,
                                &ascent, &descent, &overall_return);
 
         cx = overall_return.width;
@@ -1222,7 +1224,8 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         else
 #endif // 0
             XDrawString((Display*) m_display, (Pixmap) m_window->GetBackingPixmap(), (GC) m_gcBacking,
-            XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent, (char*) (const char*) text, slen);
+            XLOG2DEV_2 (x), YLOG2DEV_2 (y) + ascent,
+                        wxConstCast(text.c_str(), char), slen);
     }
 
     // restore fill style
@@ -1291,7 +1294,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y,
         else
 #endif // 0
             (void)XTextExtents((XFontStruct*) pFontStruct,
-                               (char*)text.c_str(), slen, &direction,
+                               wxConstCast(text.c_str(), char),
+                               slen, &direction,
                                &ascent, &descent, &overall_return);
 
         cx = overall_return.width;
@@ -1437,7 +1441,8 @@ void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoor
         &ascent, &descent2, &overall);
     else
 #endif // 0
-        XTextExtents((XFontStruct*) pFontStruct, (char*) (const char*) string, slen, &direction,
+        XTextExtents((XFontStruct*) pFontStruct,
+                     wxConstCast(string.c_str(), char), slen, &direction,
         &ascent, &descent2, &overall);
 
     if (width) *width = XDEV2LOGREL (overall.width);

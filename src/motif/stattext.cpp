@@ -58,10 +58,6 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     m_windowStyle = style;
     m_font = parent->GetFont();
 
-#if 0  // gcc 2.95 doesn't like this apparently    
-    char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
-#endif
-    
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     Widget borderWidget = NULL;
@@ -108,7 +104,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     
     WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
-    m_labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
+    m_labelWidget = XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
                                          xmLabelWidgetClass,
                                          borderWidget ? borderWidget : parentWidget,
                                          wxFont::GetFontTag(), fontType,

@@ -61,6 +61,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         xmToggleButtonWidgetClass, parentWidget,
         wxFont::GetFontTag(), m_font.GetFontType(XtDisplay(parentWidget)),
         XmNlabelString, text(),
+        XmNrecomputeSize, False,
         NULL);
     
     XtAddCallback( (Widget)m_mainWidget,
