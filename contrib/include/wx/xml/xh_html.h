@@ -21,7 +21,7 @@
 
 #if wxUSE_HTML
 
-class wxHtmlWindowXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxHtmlWindowXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxHtmlWindowXmlHandler();

@@ -18,9 +18,9 @@
 
 #if wxUSE_NOTEBOOK
 
-class wxNotebook;
+class WXDLLEXPORT wxNotebook;
 
-class wxNotebookXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxNotebookXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxNotebookXmlHandler();

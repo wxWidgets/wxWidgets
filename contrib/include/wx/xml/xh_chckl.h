@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class wxCheckListXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxCheckListXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxCheckListXmlHandler();

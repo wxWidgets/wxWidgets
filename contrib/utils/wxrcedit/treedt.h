@@ -17,7 +17,7 @@
 
 #include "wx/treectrl.h"
 
-class wxXmlNode;
+class WXDLLEXPORT wxXmlNode;
 
 class XmlTreeData : public wxTreeItemData
 {

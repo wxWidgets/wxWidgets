@@ -18,9 +18,9 @@
 #include "wx/xml/xmlres.h"
 
 
-class wxSizer;
+class WXDLLEXPORT wxSizer;
 
-class wxSizerXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxSizerXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxSizerXmlHandler();

@@ -20,7 +20,7 @@
 
 #if wxUSE_SLIDER
 
-class wxSliderXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxSliderXmlHandler : public wxXmlResourceHandler
 {
     enum 
     {

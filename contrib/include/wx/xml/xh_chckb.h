@@ -20,7 +20,7 @@
 
 #if wxUSE_CHECKBOX
 
-class wxCheckBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxCheckBoxXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxCheckBoxXmlHandler();

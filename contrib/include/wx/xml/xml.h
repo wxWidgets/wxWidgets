@@ -21,12 +21,12 @@
 #include "wx/list.h"
 
 
-class wxXmlNode;
-class wxXmlProperty;
-class wxXmlDocument;
-class wxXmlIOHandler;
-class wxInputStream;
-class wxOutputStream;
+class WXDLLEXPORT wxXmlNode;
+class WXDLLEXPORT wxXmlProperty;
+class WXDLLEXPORT wxXmlDocument;
+class WXDLLEXPORT wxXmlIOHandler;
+class WXDLLEXPORT wxInputStream;
+class WXDLLEXPORT wxOutputStream;
 
 
 // Represents XML node type.
@@ -64,7 +64,7 @@ enum wxXmlIOType
 // Example: in <img src="hello.gif" id="3"/> "src" is property with value
 //          "hello.gif" and "id" is prop. with value "3".
 
-class wxXmlProperty
+class WXDLLEXPORT wxXmlProperty
 {
     public:
         wxXmlProperty() : m_Next(NULL) {}
@@ -94,7 +94,7 @@ class wxXmlProperty
 // element with name="title", irrelevant content and one child (wxXML_TEXT_NODE
 // with content="hi").
 
-class wxXmlNode
+class WXDLLEXPORT wxXmlNode
 {
     public:
         wxXmlNode() : m_Properties(NULL), m_Parent(NULL), 
@@ -165,7 +165,7 @@ class wxXmlNode
 // internal representation is independant on libxml and you can use 
 // it without libxml (see Load/SaveBinary).
 
-class wxXmlDocument : public wxObject
+class WXDLLEXPORT wxXmlDocument : public wxObject
 {
     public:
         wxXmlDocument() : wxObject(), m_Version(_T("1.0")), m_Root(NULL)  {}
@@ -219,7 +219,7 @@ class wxXmlDocument : public wxObject
 // wxXmlIOHandler takes care of loading and/or saving XML data.
 // see xmlio.h for available handlers
 
-class wxXmlIOHandler : public wxObject
+class WXDLLEXPORT wxXmlIOHandler : public wxObject
 {
     public:
         wxXmlIOHandler() {}

@@ -20,20 +20,20 @@
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
 
-class wxXmlNode;
-class wxTreeCtrl;
-class wxScrolledWindow;
-class wxSplitterWindow;
+class WXDLLEXPORT wxXmlNode;
+class WXDLLEXPORT wxTreeCtrl;
+class WXDLLEXPORT wxScrolledWindow;
+class WXDLLEXPORT wxSplitterWindow;
 class NodeHandler;
-class wxXmlNode;
-class wxXmlDocument;
+class WXDLLEXPORT wxXmlNode;
+class WXDLLEXPORT wxXmlDocument;
 class EditorTreeCtrl;
-class wxTreeCtrl;
-class wxListCtrl;
-class wxTreeItemId;
-class wxImageList;
-class wxTreeEvent;
-class wxListEvent;
+class WXDLLEXPORT wxTreeCtrl;
+class WXDLLEXPORT wxListCtrl;
+class WXDLLEXPORT wxTreeItemId;
+class WXDLLEXPORT wxImageList;
+class WXDLLEXPORT wxTreeEvent;
+class WXDLLEXPORT wxListEvent;
 
 enum ChangeType
 {

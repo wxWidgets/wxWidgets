@@ -15,9 +15,9 @@
 #define _NODEHND_H_
 
 
-class wxXmlNode;
-class wxList;
-class wxListCtrl;
+class WXDLLEXPORT wxXmlNode;
+class WXDLLEXPORT wxList;
+class WXDLLEXPORT wxListCtrl;
 
 class EditorFrame;
 

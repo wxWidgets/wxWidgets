@@ -15,11 +15,11 @@
 #define _PROPHND_H_
 
 
-class wxXmlNode;
-class wxList;
-class wxListCtrl;
-class wxPanel;
-class wxWindow;
+class WXDLLEXPORT wxXmlNode;
+class WXDLLEXPORT wxList;
+class WXDLLEXPORT wxListCtrl;
+class WXDLLEXPORT wxPanel;
+class WXDLLEXPORT wxWindow;
 
 #include "wx/xml/xml.h"
 #include "wx/dynarray.h"

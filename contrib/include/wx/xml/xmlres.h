@@ -22,13 +22,13 @@
 #include "wx/list.h"
 #include "wx/gdicmn.h"
 
-class wxMenu;
-class wxMenuBar;
-class wxDialog;
-class wxPanel;
-class wxWindow;
+class WXDLLEXPORT wxMenu;
+class WXDLLEXPORT wxMenuBar;
+class WXDLLEXPORT wxDialog;
+class WXDLLEXPORT wxPanel;
+class WXDLLEXPORT wxWindow;
 
-class wxXmlResourceHandler;
+class WXDLLEXPORT wxXmlResourceHandler;
 
 #include "wx/xml/xml.h"
 
@@ -40,7 +40,7 @@ enum
 
 
 
-class wxXmlResourceDataRecord
+class WXDLLEXPORT wxXmlResourceDataRecord
 {
     public:
         wxXmlResourceDataRecord() : Doc(NULL), Time(wxDateTime::Now()) {}
@@ -51,13 +51,13 @@ class wxXmlResourceDataRecord
         wxDateTime Time;
 };
 
-WX_DECLARE_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
+WX_DECLARE_EXPORTED_OBJARRAY(wxXmlResourceDataRecord, wxXmlResourceDataRecords);
 
 // This class holds XML resources from one or more .xml files 
 // (or derived forms, either binary or zipped -- see manual for
 // details). 
 
-class wxXmlResource : public wxObject
+class WXDLLEXPORT wxXmlResource : public wxObject
 {
     public:
         wxXmlResource();
@@ -152,7 +152,7 @@ extern wxXmlResource *wxTheXmlResource;
 #define XMLID(str_id) wxXmlResource::GetXMLID(str_id)
 
 
-class wxXmlResourceHandler : public wxObject
+class WXDLLEXPORT wxXmlResourceHandler : public wxObject
 {
     public:
         wxXmlResourceHandler();

@@ -19,7 +19,7 @@
 
 #if wxUSE_COMBOBOX
 
-class wxComboBoxXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxComboBoxXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxComboBoxXmlHandler();

@@ -17,7 +17,7 @@
 
 #include "wx/xml/xmlres.h"
 
-class wxMenuXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxMenuXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxMenuXmlHandler();
@@ -28,7 +28,7 @@ class wxMenuXmlHandler : public wxXmlResourceHandler
         bool m_InsideMenu;
 };
 
-class wxMenuBarXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxMenuBarXmlHandler : public wxXmlResourceHandler
 {
     public:
         wxMenuBarXmlHandler();

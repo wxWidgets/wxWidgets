@@ -19,7 +19,7 @@
 #include "wx/defs.h"
 
 #if wxUSE_SPINBTN
-class wxSpinButtonXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxSpinButtonXmlHandler : public wxXmlResourceHandler
 {
     enum 
     {
@@ -36,7 +36,7 @@ class wxSpinButtonXmlHandler : public wxXmlResourceHandler
 #endif
 
 #if wxUSE_SPINCTRL
-class wxSpinCtrlXmlHandler : public wxXmlResourceHandler
+class WXDLLEXPORT wxSpinCtrlXmlHandler : public wxXmlResourceHandler
 {
     enum 
     {
