@@ -32,7 +32,7 @@ from myxml import *
 testWin = None
 testWinPos = wxDefaultPosition
 if __name__ == '__main__':
-    basePath = sys.argv[0]
+    basePath = os.path.dirname(sys.argv[0])
 else:
     basePath = os.path.dirname(__file__)
 
