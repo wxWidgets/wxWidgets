@@ -418,9 +418,14 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 {
-    wxFileDialog dialog(this, "Testing open file dialog",
-                        "", "",
-                        "C++ files (*.h;*.cpp)|*.h;*.cpp");
+    wxFileDialog dialog
+                 (
+                    this,
+                    _T("Testing open file dialog"),
+                    _T(""),
+                    _T(""),
+                    _T("C++ files (*.h;*.cpp)|*.h;*.cpp")
+                 );
 
     if (dialog.ShowModal() == wxID_OK)
     {
@@ -447,7 +452,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
                                     _T(""), _T(""),
                                     s_extDef,
                                     _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (*.*)|*.*"),
-                                    0,
+                                    wxCHANGE_DIR,
                                     this
                                    );
 
