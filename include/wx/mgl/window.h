@@ -95,6 +95,8 @@ public:
 
     // implementation from now on
     // --------------------------
+    
+    void OnInternalIdle();
 
 protected:
     // the window handle
@@ -125,8 +127,6 @@ protected:
     // themselves inside the given rectangle
     virtual void DoMoveWindow(int x, int y, int width, int height);
     
-    void OnInternalIdle();
-
 private:
     // common part of all ctors
     void Init();
