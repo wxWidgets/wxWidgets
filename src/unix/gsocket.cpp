@@ -478,11 +478,7 @@ GSocketError GSocket::SetServer()
     m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
-#if defined(__EMX__) || defined(__VISAGECPP__)
-  ioctl(m_fd, FIONBIO, (char*)&arg, sizeof(arg));
-#else
   ioctl(m_fd, FIONBIO, &arg);
-#endif
   gs_gui_functions->Enable_Events(this);
 
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
