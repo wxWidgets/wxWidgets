@@ -688,12 +688,12 @@ void wxFileCtrl::OnListDeleteAllItems( wxListEvent &WXUNUSED(event) )
     item.m_mask = wxLIST_MASK_DATA;
 
     item.m_itemId = GetNextItem( -1, wxLIST_NEXT_ALL );
-    while ( item.m_itemId != -1 ) 
+    while ( item.m_itemId != -1 )
     {
         GetItem( item );
         wxFileData *fd = (wxFileData*)item.m_data;
         delete fd;
-        item.m_data = (void*) NULL;
+        item.m_data = 0;
         SetItem( item );
         item.m_itemId = GetNextItem( item.m_itemId, wxLIST_NEXT_ALL );
     }
@@ -1171,7 +1171,7 @@ void wxFileDialog::GetPaths( wxArrayString& paths ) const
     item.m_mask = wxLIST_MASK_TEXT;
 
     item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    while ( item.m_itemId != -1 ) 
+    while ( item.m_itemId != -1 )
     {
         m_list->GetItem( item );
         paths.Add( dir + item.m_text );
@@ -1194,7 +1194,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     item.m_mask = wxLIST_MASK_TEXT;
 
     item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    while ( item.m_itemId != -1 ) 
+    while ( item.m_itemId != -1 )
     {
         m_list->GetItem( item );
         files.Add( item.m_text );

@@ -158,8 +158,8 @@ public:
     // ctor starts the stop watch
     wxStopWatch()        { Start(); }
     void Start(long t = 0);
-    inline void Pause()  { m_pause = GetElapsedTime(); }
-    inline void Resume() { Start(m_pause); }
+    void Pause()  { m_pause = GetElapsedTime(); }
+    void Resume() { Start(m_pause); }
 
     // get elapsed time since the last Start() or Pause() in milliseconds
     long Time() const;
