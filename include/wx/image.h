@@ -30,6 +30,7 @@
 // which breaks the compilation below
 #undef index
 
+#define wxIMAGE_OPTION_QUALITY  wxString(_T("quality"))
 #define wxIMAGE_OPTION_FILENAME wxString(_T("FileName"))
 
 #define wxIMAGE_OPTION_RESOLUTION            wxString(_T("Resolution"))
