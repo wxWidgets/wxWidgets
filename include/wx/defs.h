@@ -20,190 +20,20 @@
 // compiler and OS identification
 // ----------------------------------------------------------------------------
 
-// first define Windows symbols if they're not defined on the command line: we
-// can autodetect everything we need if _WIN32 is defined
-#if defined(_WIN32) || defined(WIN32) || defined(__NT__)
-    #ifndef __WXMSW__
-        #define __WXMSW__
-    #endif
+#include "wx/platform.h"
 
-    #ifndef __WIN32__
-        #define __WIN32__
-    #endif
-
-    // Win95 means Win95-style UI, i.e. Win9x/NT 4+
-    #if !defined(__WIN95__) && defined(WINVER) && (WINVER >= 0x0400)
-        #define __WIN95__
-    #endif
-#endif // Win32
-
-#if defined(__WXMSW__) || defined(__WIN32__)
-    #if !defined(__WINDOWS__)
-        #define __WINDOWS__
-    #endif
+// Make sure the environment is set correctly
+#if defined(__WXMSW__) && defined(__X__)
+    #error "Target can't be both X and Windows"
+#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
+      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
+      !defined(__WXMGL__) && wxUSE_GUI
+    #ifdef __UNIX__
+        #error "No Target! You should use wx-config program for compilation flags!"
+    #else // !Unix
+        #error "No Target! You should use supplied makefiles for compilation!"
+    #endif // Unix/!Unix
 #endif
-
-#ifdef __WXWINE__
-    #ifndef __WIN32__
-        #define __WIN32__
-    #endif
-    #ifndef __WIN95__
-        #define __WIN95__
-    #endif
-    #ifndef STRICT
-        #define STRICT
-    #endif
-#endif // WINE
-
-#if defined(TWIN32) && !defined(__TWIN32__)
-    #define __TWIN32__
-#endif // Twin32
-
-#include "wx/setup.h"
-
-// check the consistency of the settings in setup.h
-#include "wx/chkconf.h"
-
-// old C++ headers (like <iostream.h>) declare classes in the global namespace
-// while the new, standard ones (like <iostream>) do it in std:: namespace
-//
-// using this macro allows constuctions like "wxSTD iostream" to work in
-// either case
-#if !wxUSE_IOSTREAMH
-  #define wxSTD std::
-#else
- #define wxSTD
-#endif
-
-// just in case they were defined in setup.h
-#ifdef PACKAGE
-#undef PACKAGE
-#endif
-
-#ifdef VERSION
-#undef VERSION
-#endif
-
-// OS: first test for generic Unix defines, then for particular flavours and
-//     finally for Unix-like systems
-#if defined(__UNIX__) || defined(__unix) || defined(__unix__) || \
-    defined(____SVR4____) || defined(__LINUX__) || defined(__sgi) || \
-    defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
-    defined(__EMX__) || defined(__VMS) || defined(__BEOS__)
-
-    #define __UNIX_LIKE__
-
-    // Helps SGI compilation, apparently
-    #ifdef __SGI__
-        #ifdef __GNUG__
-            #define __need_wchar_t
-        #else // !gcc
-            // Note I use the term __SGI_CC__ for both cc and CC, its not a good
-            // idea to mix gcc and cc/CC, the name mangling is different
-            #define __SGI_CC__
-        #endif // gcc/!gcc
-    #endif  // SGI
-
-    #if defined(sun) || defined(__SUN__)
-        #ifndef __GNUG__
-            #ifndef __SUNCC__
-                #define __SUNCC__
-            #endif // Sun CC
-        #endif
-    #endif // Sun
-
-    #ifdef __EMX__
-        #define OS2EMX_PLAIN_CHAR
-    #endif
-
-    // define __HPUX__ for HP-UX where standard macro is __hpux
-    #if defined(__hpux) && !defined(__HPUX__)
-        #define __HPUX__
-    #endif // HP-UX
-
-    #if defined(__WXMAC__) && defined(__DARWIN__)
-        // Mac OS X
-
-        // Some code has been added to workaround defects(?) in the
-        // bundled gcc compiler. These corrections are identified by:
-        // __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
-
-        #include <Carbon/Carbon.h>
-    #endif // __WXMAC__ && __DARWIN__
-
-    #if defined(__CYGWIN__)
-        #if !defined(wxSIZE_T_IS_UINT)
-            #define wxSIZE_T_IS_UINT
-        #endif
-    #endif
-#elif defined(applec) || \
-      defined(THINK_C) || \
-      (defined(__MWERKS__) && !defined(__INTEL__))
-      // MacOS
-#elif defined(__WXMAC__) && defined(__DARWIN__)
-    // Mac OS X
-    #define __UNIX_LIKE__
-
-    // Some code has been added to workaround defects(?) in the
-    // bundled gcc compiler. These corrections are identified by:
-    // __DARWIN__ for corrections necessary for Darwin (wxMac, wxMotif)
-
-    #include <Carbon/Carbon.h>
-#elif defined(__OS2__)
-    #if defined(__IBMCPP__)
-        #define __VISAGEAVER__ __IBMCPP__
-    #endif
-    #ifndef __WXOS2__
-        #define __WXOS2__
-    #endif
-    #ifndef __WXPM__
-        #define __WXPM__
-    #endif
-
-    // Place other OS/2 compiler environment defines here
-    #if defined(__VISAGECPP__)
-        // VisualAge is the only thing that understands _Optlink
-        #define LINKAGEMODE _Optlink
-    #endif
-    #define wxSIZE_T_IS_UINT
-#else   // Windows
-    #ifndef __WINDOWS__
-        #define __WINDOWS__
-    #endif  // Windows
-
-    // to be changed for Win64!
-    #ifndef __WIN32__
-        #define __WIN16__
-    #endif
-
-    // define another standard symbol for Microsoft Visual C++: the standard one
-    // (_MSC_VER) is also defined by Metrowerks compiler
-    #if defined(_MSC_VER) && !defined(__MWERKS__)
-        #define __VISUALC__ _MSC_VER
-    #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
-        #define __BORLANDC__
-      #elif defined(__WATCOMC__)
-    #elif defined(__SC__)
-        #define __SYMANTECC__
-    #endif  // compiler
-
-    // size_t is the same as unsigned int for all Windows compilers we know,
-    // so define it if it hadn't been done by configure yet
-    #if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
-        #define wxSIZE_T_IS_UINT
-    #endif
-#endif  // OS
-
-// if we're on a Unix system but didn't use configure (so that setup.h didn't
-// define __UNIX__), do define __UNIX__ now
-#if !defined(__UNIX__) && defined(__UNIX_LIKE__)
-    #define __UNIX__
-#endif // Unix
-
-// LINKAGEMODE mode is empty for everyting except OS/2
-#ifndef LINKAGEMODE
-    #define LINKAGEMODE
-#endif // LINKAGEMODE
 
 // suppress some Visual C++ warnings
 #ifdef __VISUALC__
@@ -238,63 +68,11 @@
 #   pragma suppress 571             // Virtual function hiding
 #endif // __SALFORDC__
 
-#if defined(__VISUALC__) && !defined(WIN32)
-    // VC1.5 does not have LPTSTR type
-    #define LPTSTR LPSTR
-    #define LPCTSTR LPCSTR
-#endif // VC++ 1.5
-
-// Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
-// so define it ourselves (newer versions do it for all files, though, and
-// don't allow it to be redefined)
-#ifdef __DECCXX
-    #if !defined(__VMS) && !defined(__cplusplus)
-        #define __cplusplus
-    #endif
-#endif // __DECCXX
-
-// Resolves linking problems under HP-UX
-#if defined(__HPUX__) && defined(__GNUG__)
-    #define va_list __gnuc_va_list
-#endif // HP-UX
-
-// This macro can be used to check that the version of mingw32 compiler is
-// at least maj.min
-#if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || defined( __CYGWIN__ )
-    #include "wx/msw/gccpriv.h"
-#else
-    #undef wxCHECK_W32API_VERSION
-    #define wxCHECK_W32API_VERSION(maj, min) (0)
-#endif
-
-#if defined(__HPUX__) && !defined(__WXGTK__)
-    #ifndef __WXMOTIF__
-        #define __WXMOTIF__
-    #endif // __WXMOTIF__
-#endif
-
-#if defined(__WXMOTIF__)
-    #define __X__
-#endif
-
-// Make sure the environment is set correctly
-#if defined(__WXMSW__) && defined(__X__)
-    #error "Target can't be both X and Windows"
-#elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
-      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXMGL__) && wxUSE_GUI
-    #ifdef __UNIX__
-        #error "No Target! You should use wx-config program for compilation flags!"
-    #else // !Unix
-        #error "No Target! You should use supplied makefiles for compilation!"
-    #endif // Unix/!Unix
-#endif
+// ----------------------------------------------------------------------------
+// wxWindows version and compatibility defines
+// ----------------------------------------------------------------------------
 
 #include "wx/version.h"
-
-// ----------------------------------------------------------------------------
-// compatibility defines
-// ----------------------------------------------------------------------------
 
 // possibility to build non GUI apps is new, so don't burden ourselves with
 // compatibility code
@@ -309,6 +87,32 @@
 // ============================================================================
 // non portable C++ features
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// compiler defects workarounds
+// ----------------------------------------------------------------------------
+
+#if defined(__VISUALC__) && !defined(WIN32)
+    // VC1.5 does not have LPTSTR type
+    #define LPTSTR LPSTR
+    #define LPCTSTR LPCSTR
+#endif // VC++ 1.5
+
+/*
+   Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
+   so define it ourselves (newer versions do it for all files, though, and
+   don't allow it to be redefined)
+ */
+#ifdef __DECCXX
+    #if !defined(__VMS) && !defined(__cplusplus)
+        #define __cplusplus
+    #endif
+#endif /* __DECCXX */
+
+// Resolves linking problems under HP-UX when compiling with gcc/g++
+#if defined(__HPUX__) && defined(__GNUG__)
+    #define va_list __gnuc_va_list
+#endif // HP-UX
 
 // ----------------------------------------------------------------------------
 // check for native bool type and TRUE/FALSE constants
@@ -395,6 +199,11 @@ typedef int wxWindowID;
     // no such stupidness under Unix
     #define wxSTDCALL
 #endif // platform
+
+// LINKAGEMODE mode is empty for everyting except OS/2
+#ifndef LINKAGEMODE
+    #define LINKAGEMODE
+#endif // LINKAGEMODE
 
 // wxCALLBACK should be used for the functions which are called back by
 // Windows (such as compare function for wxListCtrl)

@@ -12,11 +12,7 @@ $Id$
 
 */
 
-#ifndef __VISAGECPP__
-#include "wx/defs.h"
-#endif
-
-#include "wx/setup.h"
+#include "wx/platform.h"
 
 #if wxUSE_ZLIB && wxUSE_ZIPSTREAM
 
