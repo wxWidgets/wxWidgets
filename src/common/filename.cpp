@@ -32,7 +32,9 @@
                 or just
                     filename
                 (although :filename works as well).
-                :::file is not yet supported. TODO.
+                :::filename.ext is not yet supported. TODO.
+                Since the volume is just part of the file path, it is not
+                treated like a separate entity as it is done under DOS.
 
    wxPATH_VMS:  VMS native format, absolute file names have the form
                     <device>:[dir1.dir2.dir3]file.txt
@@ -868,12 +870,12 @@ wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
 {
     wxString sepVol;
 
-    if ( GetFormat(format) != wxPATH_UNIX )
+    if ( (GetFormat(format) == wxPATH_DOS) ||
+         (GetFormat(format) == wxPATH_VMS) )
     {
-        // so far it is the same for all systems which have it
         sepVol = wxFILE_SEP_DSK;
     }
-    //else: leave empty, no volume separators under Unix
+    //else: leave empty
 
     return sepVol;
 }
@@ -997,17 +999,19 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
     // first put the volume
     if ( !m_volume.empty() )
     {
-        // special Windows UNC paths hack, part 2: undo what we did in
-        // SplitPath() and make an UNC path if we have a drive which is not a
-        // single letter (hopefully the network shares can't be one letter only
-        // although I didn't find any authoritative docs on this)
-        if ( format == wxPATH_DOS && m_volume.length() > 1 )
-        {
-            fullpath << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << m_volume;
-        }
-        else // !UNC
-        {
-            fullpath << m_volume << GetVolumeSeparator(format);
+    	{
+        	// Special Windows UNC paths hack, part 2: undo what we did in
+        	// SplitPath() and make an UNC path if we have a drive which is not a
+        	// single letter (hopefully the network shares can't be one letter only
+        	// although I didn't find any authoritative docs on this)
+        	if ( format == wxPATH_DOS && m_volume.length() > 1 )
+        	{
+            	fullpath << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << m_volume;
+        	}
+        	else // !UNC
+        	{
+            	fullpath << m_volume << GetVolumeSeparator(format);
+            }
         }
     }
 
@@ -1017,7 +1021,7 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
     {
         // under Mac, we must have a path separator in the beginning of the
         // relative path - otherwise it would be parsed as an absolute one
-        if ( format == wxPATH_MAC && m_volume.empty() && !m_dirs[0].empty() )
+        if ( format == wxPATH_MAC && m_dirs[0].empty() )
         {
             fullpath += wxFILE_SEP_PATH_MAC;
         }
@@ -1257,10 +1261,11 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
         }
     }
 
-    // do we have the volume name in the beginning?
-    wxString sepVol = GetVolumeSeparator(format);
-    if ( !sepVol.empty() )
+    // We separate the volume here
+    if ( format == wxPATH_DOS || format == wxPATH_VMS )
     {
+        wxString sepVol = GetVolumeSeparator(format);
+        
         size_t posFirstColon = fullpath.find_first_of(sepVol);
         if ( posFirstColon != wxString::npos )
         {
