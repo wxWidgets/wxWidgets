@@ -123,6 +123,18 @@ Do not delete the page, it will be deleted by the notebook.
 
 Cycles through the tabs.
 
+\membersection{wxNotebook::AssignImageList}\label{wxnotebookassignimagelist}
+
+\func{void}{AssignImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the image list for the page control and takes ownership of
+the list.
+
+\wxheading{See also}
+
+\helpref{wxImageList}{wximagelist},
+\helpref{SetImageList}{wxnotebooksetimagelist}
+
 \membersection{wxNotebook::Create}\label{wxnotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
@@ -242,11 +254,13 @@ Deletes the specified page, without deleting the associated window.
 
 \func{void}{SetImageList}{\param{wxImageList*}{ imageList}}
 
-Sets the image list for the page control.
+Sets the image list for the page control. It does not take
+ownership of the image list, you must delete it yourself.
 
 \wxheading{See also}
 
-\helpref{wxImageList}{wximagelist}
+\helpref{wxImageList}{wximagelist},
+\helpref{AssignImageList}{wxnotebookassignimagelist}
 
 \membersection{wxNotebook::SetPadding}\label{wxnotebooksetpadding}
 

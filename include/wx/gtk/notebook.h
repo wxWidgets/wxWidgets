@@ -89,6 +89,7 @@ public:
   // 3) set for each page it's image
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
+  void AssignImageList(wxImageList* imageList);
     // get pointer (may be NULL) to the associated image list
   wxImageList *GetImageList() const { return m_imageList; }
 
@@ -157,6 +158,7 @@ public:
     wxGtkNotebookPage* GetNotebookPage(int page) const;
 
     wxImageList*    m_imageList;
+    bool            m_ownsImageList;
     wxList          m_pages;
     int             m_lastSelection;  /* hack */
 

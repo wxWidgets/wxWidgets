@@ -214,6 +214,7 @@ END_EVENT_TABLE()
 void wxNotebook::Init()
 {
     m_imageList = (wxImageList *) NULL;
+    m_ownsImageList = FALSE;
     m_pages.DeleteContents( TRUE );
     m_lastSelection = -1;
     m_themeEnabled = TRUE;
@@ -239,6 +240,7 @@ wxNotebook::~wxNotebook()
       GTK_SIGNAL_FUNC(gtk_notebook_page_change_callback), (gpointer) this );
 
     DeleteAllPages();
+    if (m_ownsImageList) delete m_imageList;
 }
 
 bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
@@ -388,7 +390,15 @@ void wxNotebook::AdvanceSelection( bool forward )
 
 void wxNotebook::SetImageList( wxImageList* imageList )
 {
+    if (m_ownsImageList) delete m_imageList;
     m_imageList = imageList;
+    m_ownsImageList = FALSE;
+}
+
+void wxNotebook::AssignImageList( wxImageList* imageList )
+{
+    SetImageList(imageList);
+    m_ownsImageList = TRUE;
 }
 
 bool wxNotebook::SetPageText( int page, const wxString &text )

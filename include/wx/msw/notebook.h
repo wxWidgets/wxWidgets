@@ -92,6 +92,7 @@ public:
   // 3) set for each page it's image
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
+  void AssignImageList(wxImageList* imageList);
     // get pointer (may be NULL) to the associated image list
   wxImageList* GetImageList() const { return m_pImageList; }
 
@@ -157,6 +158,7 @@ protected:
   void ChangePage(int nOldSel, int nSel); // change pages
 
   wxImageList  *m_pImageList; // we can have an associated image list
+  bool          m_bOwnsImageList;
   wxArrayPages  m_aPages;     // array of pages
 
   int m_nSelection;           // the current selection (-1 if none)
