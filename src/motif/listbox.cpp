@@ -624,7 +624,8 @@ void wxListBox::ChangeBackgroundColour()
         XmNtroughColor, backgroundColour.AllocColour(XtDisplay(vsb)),
         NULL);
 
-    DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
+    // MBN: why change parent's background? It looks really ugly.
+    // DoChangeBackgroundColour((WXWidget) parent, m_backgroundColour, TRUE);
 }
 
 void wxListBox::ChangeForegroundColour()
