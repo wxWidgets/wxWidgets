@@ -164,14 +164,14 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 // wxStringData core
 // ===========================================================================
 
-#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL) 
-#  pragma message (__FILE__ ": building with Multithreaded non DLL runtime has a performance impact on wxString!") 
-void wxStringData::Free() 
-{ 
-   free(this); 
-} 
-#endif 
-    
+#if defined(__VISUALC__) && defined(_MT) && !defined(_DLL)
+#  pragma message (__FILE__ ": building with Multithreaded non DLL runtime has a performance impact on wxString!")
+void wxStringData::Free()
+{
+   free(this);
+}
+#endif
+
 // ===========================================================================
 // wxString class core
 // ===========================================================================
@@ -267,6 +267,7 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         if ( conv.MB2WC(m_pchData, psz, nLen + 1) != (size_t)-1 )
         {
             // initialized ok
+            m_pchData[nLen] = 0;
             return;
         }
         //else: the conversion failed -- leave the string empty (what else?)
@@ -773,7 +774,7 @@ wxString wxString::FromAscii(const char ascii)
 
     wxString res;
     res += (wchar_t)(unsigned char) ascii;
-    
+
     return res;
 }
 
