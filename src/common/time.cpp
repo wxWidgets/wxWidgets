@@ -44,12 +44,35 @@ seconds since January 1, 1901, GMT.
 #endif
 
 #include <string.h>
+#include <time.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
 
 
-extern bool wxGetLocalTime(long *timeZone, int *dstObserved);
-extern long wxGetCurrentTime(void);
+#ifndef WX_TIMEZONE
+    #define WX_TIMEZONE _timezone
+#endif
+
+extern long wxGetUTCTime(void);
+bool wxGetTZandDST(long *timeZone, int *dstObserved)
+{
+  time_t now;
+  struct tm *tm;
+
+  now = time((time_t *) NULL);
+
+  if (now != (time_t)-1)
+  {
+    tm = localtime(&now);
+
+    if ((tm) && (tm->tm_isdst > 0))
+      *dstObserved = 1;
+  }
+  *timeZone = WX_TIMEZONE;
+
+  return TRUE;
+}
+
 
 static long TIME_ZONE;          /* seconds west of GMT */
 static int DST_OBSERVED;        /* flags U.S. daylight saving time observed */
@@ -57,7 +80,7 @@ static int DST_OBSERVED;        /* flags U.S. daylight saving time observed */
 static bool wxTimeInitialized = FALSE;
 
 wxTime::tFormat    wxTime::Format    = wxTime::wx12h;
-wxTime::tPrecision  wxTime::Precision  = wxTime::wxStdMinSec;
+wxTime::tPrecision wxTime::Precision  = wxTime::wxStdMinSec;
 
 static const unsigned long seconds_in_day = 24*60*60L;
 static const wxDate refDate(1,1,1901);
@@ -71,7 +94,7 @@ wxTime wxTime::GetLocalTime(const wxDate& date, hourTy h, minuteTy m, secondTy s
 {
   if (!wxTimeInitialized)
   {
-   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxGetTZandDST(&TIME_ZONE, &DST_OBSERVED);
    wxTimeInitialized = TRUE;
   }
 /*
@@ -96,10 +119,10 @@ wxTime::wxTime()
 {
   if (!wxTimeInitialized)
   {
-   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxGetTZandDST(&TIME_ZONE, &DST_OBSERVED);
    wxTimeInitialized = TRUE;
   }
-  sec = wxGetCurrentTime();
+  sec = wxGetUTCTime();
 #ifdef __SALFORDC__
   sec += (unsigned long) 2177452800;     /* seconds from 1/1/01 to 1/1/70 */
 #else
@@ -115,7 +138,7 @@ wxTime::wxTime(hourTy h, minuteTy m, secondTy s, bool dst)
 {
   if (!wxTimeInitialized)
   {
-   wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+   wxGetTZandDST(&TIME_ZONE, &DST_OBSERVED);
    wxTimeInitialized = TRUE;
   }
 
@@ -131,7 +154,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
 {
   if (!wxTimeInitialized)
   {
-    wxGetLocalTime(&TIME_ZONE, &DST_OBSERVED);
+    wxGetTZandDST(&TIME_ZONE, &DST_OBSERVED);
    wxTimeInitialized = TRUE;
   }
   sec = GetLocalTime(date,h,m,s).sec-3600;
