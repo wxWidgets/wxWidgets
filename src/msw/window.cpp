@@ -4860,6 +4860,12 @@ int wxCharCodeMSWToWX(int keySym)
         case VK_OEM_6:      id = ']'; break;
         case VK_OEM_7:      id = '\''; break;
 
+#ifdef VK_APPS
+        case VK_LWIN:       id = WXK_WINDOWS_LEFT; break;
+        case VK_RWIN:       id = WXK_WINDOWS_RIGHT; break;
+        case VK_APPS:       id = WXK_WINDOWS_MENU; break;
+#endif // VK_APPS defined
+
         default:
             id = 0;
     }

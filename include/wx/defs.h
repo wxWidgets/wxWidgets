@@ -1651,7 +1651,11 @@ enum wxKeyCode
     WXK_NUMPAD_SEPARATOR,
     WXK_NUMPAD_SUBTRACT,
     WXK_NUMPAD_DECIMAL,
-    WXK_NUMPAD_DIVIDE
+    WXK_NUMPAD_DIVIDE,
+
+    WXK_WINDOWS_LEFT,
+    WXK_WINDOWS_RIGHT,
+    WXK_WINDOWS_MENU
 };
 
 // Mapping modes (same values as used by Windows, don't change)
