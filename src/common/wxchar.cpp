@@ -213,10 +213,16 @@ WXDLLEXPORT wxChar * wxStrcat(wxChar *dest, const wxChar *src)
   return ret;
 }
 
-WXDLLEXPORT wxChar * wxStrchr(const wxChar *s, wxChar c)
+WXDLLEXPORT const wxChar * wxStrchr(const wxChar *s, wxChar c)
 {
-  while (*s && *s != c) s++;
-  return (*s) ? (wxChar *)s : (wxChar *)NULL;
+    // be careful here as the terminating NUL makes part of the string
+    while ( *s != c )
+    {
+        if ( !*s++ )
+            return NULL;
+    }
+
+    return s;
 }
 
 WXDLLEXPORT int wxStrcmp(const wxChar *s1, const wxChar *s2)
@@ -260,20 +266,26 @@ WXDLLEXPORT wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n)
   return ret;
 }
 
-WXDLLEXPORT wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept)
+WXDLLEXPORT const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept)
 {
-  while (*s && !wxStrchr(accept, *s)) s++;
-  return (*s) ? (wxChar *)s : (wxChar *)NULL;
+  while (*s && !wxStrchr(accept, *s))
+      s++;
+
+  return *s ? s : NULL;
 }
 
-WXDLLEXPORT wxChar * wxStrrchr(const wxChar *s, wxChar c)
+WXDLLEXPORT const wxChar * wxStrrchr(const wxChar *s, wxChar c)
 {
-  wxChar *ret = (wxChar *)NULL;
-  while (*s) {
-    if (*s == c) ret = (wxChar *)s;
-    s++;
-  }
-  return ret;
+    const wxChar *ret = NULL;
+    do
+    {
+        if ( *s == c )
+            ret = s;
+        s++;
+    }
+    while ( *s );
+
+    return ret;
 }
 
 WXDLLEXPORT size_t wxStrspn(const wxChar *s, const wxChar *accept)
@@ -283,14 +295,15 @@ WXDLLEXPORT size_t wxStrspn(const wxChar *s, const wxChar *accept)
   return len;
 }
 
-WXDLLEXPORT wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle)
+WXDLLEXPORT const wxChar *wxStrstr(const wxChar *haystack, const wxChar *needle)
 {
     wxCHECK_RET( needle, NULL, _T("NULL argument in wxStrstr") );
 
+    // VZ: this is not exactly the most efficient string search algorithm...
+
     const size_t len = wxStrlen(needle);
 
-    wxChar *fnd;
-    while ( (fnd = wxStrchr(haystack, *needle)) )
+    while ( const wxChar *fnd = wxStrchr(haystack, *needle) )
     {
         if ( !wxStrncmp(fnd, needle, len) )
             return fnd;
@@ -298,7 +311,7 @@ WXDLLEXPORT wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle)
         haystack = fnd + 1;
     }
 
-    return (wxChar *)NULL;
+    return NULL;
 }
 
 WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)

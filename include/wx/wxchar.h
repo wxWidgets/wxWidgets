@@ -606,7 +606,9 @@ WXDLLEXPORT int wxToupper(wxChar ch);
 
 #ifdef wxNEED_WX_STRING_H
 WXDLLEXPORT wxChar * wxStrcat(wxChar *dest, const wxChar *src);
-WXDLLEXPORT wxChar * wxStrchr(const wxChar *s, wxChar c);
+WXDLLEXPORT const wxChar * wxStrchr(const wxChar *s, wxChar c);
+WXDLLEXPORT wxChar * wxStrchr(wxChar *s, wxChar c)
+    { return (wxChar *)wxStrchr((const wxChar *)s, c); }
 WXDLLEXPORT int      wxStrcmp(const wxChar *s1, const wxChar *s2);
 WXDLLEXPORT int      wxStrcoll(const wxChar *s1, const wxChar *s2);
 WXDLLEXPORT wxChar * wxStrcpy(wxChar *dest, const wxChar *src);
@@ -615,10 +617,16 @@ WXDLLEXPORT size_t   wxStrlen(const wxChar *s);
 WXDLLEXPORT wxChar * wxStrncat(wxChar *dest, const wxChar *src, size_t n);
 WXDLLEXPORT int      wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
 WXDLLEXPORT wxChar * wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
-WXDLLEXPORT wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
-WXDLLEXPORT wxChar * wxStrrchr(const wxChar *s, wxChar c);
+WXDLLEXPORT const wxChar * wxStrpbrk(const wxChar *s, const wxChar *accept);
+WXDLLEXPORT wxChar * wxStrpbrk(wxChar *s, const wxChar *accept)
+    { return (wxChar *)wxStrpbrk((const wxChar *)s, accept); }
+WXDLLEXPORT const wxChar * wxStrrchr(const wxChar *s, wxChar c);
+WXDLLEXPORT wxChar * wxStrrchr(wxChar *s, wxChar c)
+    { return (wxChar *)wxStrrchr((const wxChar *)s, c); }
 WXDLLEXPORT size_t   wxStrspn(const wxChar *s, const wxChar *accept);
-WXDLLEXPORT wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
+WXDLLEXPORT const wxChar * wxStrstr(const wxChar *haystack, const wxChar *needle);
+WXDLLEXPORT wxChar *wxStrstr(wxChar *haystack, const wxChar *needle)
+    { return (wxChar *)wxStrstr((const wxChar *)haystack, needle); }
 WXDLLEXPORT double   wxStrtod(const wxChar *nptr, wxChar **endptr);
 WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
 WXDLLEXPORT unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
