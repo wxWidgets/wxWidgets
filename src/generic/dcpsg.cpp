@@ -1886,6 +1886,8 @@ void wxPostScriptDC::EndDoc ()
         wxString command;
         command += m_printData.GetPrinterCommand();
         command += wxT(" ");
+        command += m_printData.GetPrinterOptions();
+        command += wxT(" ");
         command += m_printData.GetFilename();
 
         wxExecute( command, TRUE );
