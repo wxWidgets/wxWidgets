@@ -2,8 +2,10 @@
 /*                                                                         */
 /* Version: $Id$                                                           */
 
-#ifndef __GTKSETUPH__
-#define __GTKSETUPH__
+/* This define (__WX_SETUP_H__) is used both to insure setup.h is included 
+ * only once and to indicate that we are building using configure. */
+#ifndef __WX_SETUP_H__
+#define __WX_SETUP_H__
 
 #ifdef __GNUG__
     #pragma interface
@@ -611,4 +613,4 @@
 
 @BOTTOM@
 
-#endif /* __GTKSETUPH__ */
+#endif /* __WX_SETUP_H__ */
