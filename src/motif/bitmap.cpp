@@ -26,6 +26,7 @@
 #include "wx/control.h"
 #include "wx/dcmemory.h"
 #include "wx/image.h"
+#include "wx/app.h"
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -40,6 +41,8 @@
 #if wxHAVE_LIB_XPM
     #include <X11/xpm.h>
 #endif
+#include <math.h>
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
@@ -1064,4 +1067,511 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
     destDC.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & srcDC, 0, 0, wxCOPY, TRUE);
 
     return newBitmap;
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+// wxImage conversion routines
+//-----------------------------------------------------------------------------
+
+/*
+
+Date: Wed, 05 Jan 2000 11:45:40 +0100
+From: Frits Boel <boel@niob.knaw.nl>
+To: julian.smart@ukonline.co.uk
+Subject: Patch for Motif ConvertToBitmap
+
+Hi Julian,
+
+I've been working on a wxWin application for image processing. From the
+beginning, I was surprised by the (lack of) speed of ConvertToBitmap,
+till I looked in the source code of image.cpp. I saw that converting a
+wxImage to a bitmap with 8-bit pixels is done with comparing every pixel
+to the 256 colors of the palet. A very time-consuming piece of code!
+
+Because I wanted a faster application, I've made a 'patch' for this. In
+short: every pixel of the image is compared to a sorted list with
+colors. If the color is found in the list, the palette entry is
+returned; if the color is not found, the color palette is searched and
+then the palette entry is returned and the color added to the sorted
+list.
+
+Maybe there is another method for this, namely changing the palette
+itself (if the colors are known, as is the case with tiffs with a
+colormap). I did not look at this, maybe someone else did?
+
+The code of the patch is attached, have a look on it, and maybe you will
+ship it with the next release of wxMotif?
+
+Regards,
+
+Frits Boel
+Software engineer at Hubrecht Laboratory, The Netherlands.
+
+*/
+
+class wxSearchColor
+{
+public:
+  wxSearchColor( void );
+  wxSearchColor( int size, XColor *colors );
+  ~wxSearchColor( void );
+
+  int SearchColor( int r, int g, int b );
+private:
+  int AddColor( unsigned int value, int pos );
+
+  int          size;
+  XColor       *colors;
+  unsigned int *color;
+  int          *entry;
+
+  int bottom;
+  int top;
+};
+
+wxSearchColor::wxSearchColor( void )
+{
+  size   = 0;
+  colors = (XColor*) NULL;
+  color  = (unsigned int *) NULL;
+  entry  = (int*) NULL;
+
+  bottom = 0;
+  top    = 0;
+}
+
+wxSearchColor::wxSearchColor( int size_, XColor *colors_ )
+{
+    int i;
+    size   = size_;
+    colors = colors_;
+    color  = new unsigned int[size];
+    entry  = new int         [size];
+
+    for (i = 0; i < size; i++ ) {
+        entry[i] = -1;
+    }
+
+    bottom = top = ( size >> 1 );
+}
+
+wxSearchColor::~wxSearchColor( void )
+{
+  if ( color ) delete color;
+  if ( entry ) delete entry;
+}
+
+int wxSearchColor::SearchColor( int r, int g, int b )
+{
+  unsigned int value = ( ( ( r * 256 ) + g ) * 256 ) + b;
+  int          begin = bottom;
+  int          end   = top;
+  int          middle = 0;
+
+  while ( begin <= end ) {
+
+    middle = ( begin + end ) >> 1;
+
+    if ( value == color[middle] ) {
+      return( entry[middle] );
+    } else if ( value < color[middle] ) {
+      end = middle - 1;
+    } else {
+      begin = middle + 1;
+    }
+
+  }
+
+  return AddColor( value, middle );
+}
+
+int wxSearchColor::AddColor( unsigned int value, int pos )
+{
+  int i;
+  int pixel = -1;
+  int max = 3 * (65536);
+  for ( i = 0; i < 256; i++ ) {
+    int rdiff = ((value >> 8) & 0xFF00 ) - colors[i].red;
+    int gdiff = ((value     ) & 0xFF00 ) - colors[i].green;
+    int bdiff = ((value << 8) & 0xFF00 ) - colors[i].blue;
+    int sum = abs (rdiff) + abs (gdiff) + abs (bdiff);
+    if (sum < max) { pixel = i; max = sum; }
+  }
+
+  if ( entry[pos] < 0 ) {
+    color[pos] = value;
+    entry[pos] = pixel;
+  } else if ( value < color[pos] ) {
+
+    if ( bottom > 0 ) {
+      for ( i = bottom; i < pos; i++ ) {
+        color[i-1] = color[i];
+        entry[i-1] = entry[i];
+      }
+      bottom--;
+      color[pos-1] = value;
+      entry[pos-1] = pixel;
+    } else if ( top < size-1 ) {
+      for ( i = top; i >= pos; i-- ) {
+        color[i+1] = color[i];
+        entry[i+1] = entry[i];
+      }
+      top++;
+      color[pos] = value;
+      entry[pos] = pixel;
+    }
+
+  } else {
+
+    if ( top < size-1 ) {
+      for ( i = top; i > pos; i-- ) {
+        color[i+1] = color[i];
+        entry[i+1] = entry[i];
+      }
+      top++;
+      color[pos+1] = value;
+      entry[pos+1] = pixel;
+    } else if ( bottom > 0 ) {
+      for ( i = bottom; i < pos; i++ ) {
+        color[i-1] = color[i];
+        entry[i-1] = entry[i];
+      }
+      bottom--;
+      color[pos] = value;
+      entry[pos] = pixel;
+    }
+
+  }
+
+  return( pixel );
+}
+
+
+bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
+{
+    wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
+    wxCHECK_MSG( depth == -1, FALSE, wxT("invalid bitmap depth") )
+
+    m_refData = new wxBitmapRefData();
+      
+    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+
+    int width = image.GetWidth();
+    int height = image.GetHeight();
+
+    SetHeight( height );
+    SetWidth( width );
+
+    Display *dpy = (Display*) wxGetDisplay();
+    Visual* vis = DefaultVisual( dpy, DefaultScreen( dpy ) );
+    int bpp = DefaultDepth( dpy, DefaultScreen( dpy ) );
+
+    // Create image
+
+    XImage *data_image = XCreateImage( dpy, vis, bpp, ZPixmap, 0, 0, width, height, 32, 0 );
+    data_image->data = (char*) malloc( data_image->bytes_per_line * data_image->height );
+
+    Create( width, height, bpp );
+
+    // Create mask
+
+    XImage *mask_image = (XImage*) NULL;
+    if (image.HasMask())
+    {
+        mask_image = XCreateImage( dpy, vis, 1, ZPixmap, 0, 0, width, height, 32, 0 );
+        mask_image->data = (char*) malloc( mask_image->bytes_per_line * mask_image->height );
+    }
+
+    // Retrieve depth info
+
+    XVisualInfo vinfo_template;
+    XVisualInfo *vi;
+
+    vinfo_template.visual = vis;
+    vinfo_template.visualid = XVisualIDFromVisual( vis );
+    vinfo_template.depth = bpp;
+    int nitem = 0;
+
+    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
+
+    wxCHECK_MSG( vi, FALSE, wxT("no visual") );
+
+    XFree( vi );
+
+    if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
+    if (bpp < 8) bpp = 8;
+
+    // Render
+
+    enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
+    byte_order b_o = RGB;
+
+    if (bpp >= 24)
+    {
+        if ((vi->red_mask > vi->green_mask) && (vi->green_mask > vi->blue_mask))      b_o = RGB;
+        else if ((vi->red_mask > vi->blue_mask) && (vi->blue_mask > vi->green_mask))  b_o = RGB;
+        else if ((vi->blue_mask > vi->red_mask) && (vi->red_mask > vi->green_mask))   b_o = BRG;
+        else if ((vi->blue_mask > vi->green_mask) && (vi->green_mask > vi->red_mask)) b_o = BGR;
+        else if ((vi->green_mask > vi->red_mask) && (vi->red_mask > vi->blue_mask))   b_o = GRB;
+        else if ((vi->green_mask > vi->blue_mask) && (vi->blue_mask > vi->red_mask))  b_o = GBR;
+    }
+
+    int r_mask = image.GetMaskRed();
+    int g_mask = image.GetMaskGreen();
+    int b_mask = image.GetMaskBlue();
+
+    XColor colors[256];
+    if (bpp == 8)
+    {
+        Colormap cmap = (Colormap) wxTheApp->GetMainColormap( dpy );
+
+        for (int i = 0; i < 256; i++) colors[i].pixel = i;
+        XQueryColors( dpy, cmap, colors, 256 );
+    }
+
+    wxSearchColor scolor( 256, colors );
+    unsigned char* data = image.GetData();
+
+    bool hasMask = image.HasMask();
+
+    int index = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int r = data[index];
+            index++;
+            int g = data[index];
+            index++;
+            int b = data[index];
+            index++;
+
+            if (hasMask)
+            {
+              if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+                XPutPixel( mask_image, x, y, 0 );
+              else
+                XPutPixel( mask_image, x, y, 1 );
+            }
+
+            switch (bpp)
+            {
+            case 8:
+                {
+#if 0 // Old, slower code
+                    int pixel = -1;
+                    /*
+                    if (wxTheApp->m_colorCube)
+                    {
+                    pixel = wxTheApp->m_colorCube
+                    [ ((r & 0xf8) << 7) + ((g & 0xf8) << 2) + ((b & 0xf8) >> 3) ];
+                    }
+                    else
+                    {
+                    */
+                    int max = 3 * (65536);
+                    for (int i = 0; i < 256; i++)
+                    {
+                        int rdiff = (r << 8) - colors[i].red;
+                        int gdiff = (g << 8) - colors[i].green;
+                        int bdiff = (b << 8) - colors[i].blue;
+                        int sum = abs (rdiff) + abs (gdiff) + abs (bdiff);
+                        if (sum < max) { pixel = i; max = sum; }
+                    }
+                    /*
+                    }
+                    */
+#endif
+
+                    // And this is all to get the 'right' color...
+                    int pixel = scolor.SearchColor( r, g, b );
+                    XPutPixel( data_image, x, y, pixel );
+                    break;
+                }
+            case 15:
+                {
+                    int pixel = ((r & 0xf8) << 7) | ((g & 0xf8) << 2) | ((b & 0xf8) >> 3);
+                    XPutPixel( data_image, x, y, pixel );
+                    break;
+                }
+            case 16:
+                {
+                    int pixel = ((r & 0xf8) << 8) | ((g & 0xfc) << 3) | ((b & 0xf8) >> 3);
+                    XPutPixel( data_image, x, y, pixel );
+                    break;
+                }
+            case 32:
+            case 24:
+                {
+                    int pixel = 0;
+                    switch (b_o)
+                    {
+                    case RGB: pixel = (r << 16) | (g << 8) | b; break;
+                    case RBG: pixel = (r << 16) | (b << 8) | g; break;
+                    case BRG: pixel = (b << 16) | (r << 8) | g; break;
+                    case BGR: pixel = (b << 16) | (g << 8) | r; break;
+                    case GRB: pixel = (g << 16) | (r << 8) | b; break;
+                    case GBR: pixel = (g << 16) | (b << 8) | r; break;
+                    }
+                    XPutPixel( data_image, x, y, pixel );
+                }
+            default: break;
+            }
+        } // for
+    }  // for
+
+    // Blit picture
+
+    XGCValues gcvalues;
+    gcvalues.foreground = BlackPixel( dpy, DefaultScreen( dpy ) );
+    GC gc = XCreateGC( dpy, RootWindow ( dpy, DefaultScreen(dpy) ), GCForeground, &gcvalues );
+    XPutImage( dpy, (Drawable)GetPixmap(), gc, data_image, 0, 0, 0, 0, width, height );
+
+    XDestroyImage( data_image );
+    XFreeGC( dpy, gc );
+
+    // Blit mask
+    if (image.HasMask())
+    {
+        wxBitmap maskBitmap(width, height, 1);
+
+        GC gcMask = XCreateGC( dpy, (Pixmap) maskBitmap.GetPixmap(), (XtGCMask) 0, (XGCValues*)NULL );
+        XPutImage( dpy, (Drawable)maskBitmap.GetPixmap(), gcMask, mask_image, 0, 0, 0, 0, width, height );
+
+        XDestroyImage( mask_image );
+        XFreeGC( dpy, gcMask );
+
+        wxMask* mask = new wxMask;
+        mask->SetPixmap(maskBitmap.GetPixmap());
+
+        SetMask(mask);
+
+        maskBitmap.SetPixmapNull();
+    }
+
+
+    return TRUE;
+}
+
+wxImage wxBitmap::ConvertToImage() const
+{
+    wxImage image;
+    
+    wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
+
+    Display *dpy = (Display*) wxGetDisplay();
+    Visual* vis = DefaultVisual( dpy, DefaultScreen( dpy ) );
+    int bpp = DefaultDepth( dpy, DefaultScreen( dpy ) );
+
+    XImage *ximage = XGetImage( dpy,
+        (Drawable)GetPixmap(),
+        0, 0,
+        GetWidth(), GetHeight(),
+        AllPlanes, ZPixmap );
+
+    wxCHECK_MSG( ximage, wxNullImage, wxT("couldn't create image") );
+
+    image.Create( GetWidth(), GetHeight() );
+    char unsigned *data = image.GetData();
+
+    if (!data)
+    {
+        XDestroyImage( ximage );
+        wxFAIL_MSG( wxT("couldn't create image") );
+        return wxNullImage;
+    }
+
+    /*
+    GdkImage *gdk_image_mask = (GdkImage*) NULL;
+    if (GetMask())
+    {
+    gdk_image_mask = gdk_image_get( GetMask()->GetBitmap(),
+    0, 0,
+    GetWidth(), GetHeight() );
+
+      image.SetMaskColour( 16, 16, 16 );  // anything unlikely and dividable
+      }
+    */
+
+    // Retrieve depth info
+
+    XVisualInfo vinfo_template;
+    XVisualInfo *vi;
+
+    vinfo_template.visual = vis;
+    vinfo_template.visualid = XVisualIDFromVisual( vis );
+    vinfo_template.depth = bpp;
+    int nitem = 0;
+
+    vi = XGetVisualInfo( dpy, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
+
+    wxCHECK_MSG( vi, wxNullImage, wxT("no visual") );
+
+    if ((bpp == 16) && (vi->red_mask != 0xf800)) bpp = 15;
+
+    XFree( vi );
+
+    XColor colors[256];
+    if (bpp == 8)
+    {
+        Colormap cmap = (Colormap)wxTheApp->GetMainColormap( dpy );
+
+        for (int i = 0; i < 256; i++) colors[i].pixel = i;
+        XQueryColors( dpy, cmap, colors, 256 );
+    }
+
+    long pos = 0;
+    for (int j = 0; j < GetHeight(); j++)
+    {
+        for (int i = 0; i < GetWidth(); i++)
+        {
+            int pixel = XGetPixel( ximage, i, j );
+            if (bpp <= 8)
+            {
+                data[pos] = colors[pixel].red >> 8;
+                data[pos+1] = colors[pixel].green >> 8;
+                data[pos+2] = colors[pixel].blue >> 8;
+            } else if (bpp == 15)
+            {
+                data[pos] = (pixel >> 7) & 0xf8;
+                data[pos+1] = (pixel >> 2) & 0xf8;
+                data[pos+2] = (pixel << 3) & 0xf8;
+            } else if (bpp == 16)
+            {
+                data[pos] = (pixel >> 8) & 0xf8;
+                data[pos+1] = (pixel >> 3) & 0xfc;
+                data[pos+2] = (pixel << 3) & 0xf8;
+            } else
+            {
+                data[pos] = (pixel >> 16) & 0xff;
+                data[pos+1] = (pixel >> 8) & 0xff;
+                data[pos+2] = pixel & 0xff;
+            }
+
+            /*
+            if (gdk_image_mask)
+            {
+            int mask_pixel = gdk_image_get_pixel( gdk_image_mask, i, j );
+            if (mask_pixel == 0)
+            {
+            data[pos] = 16;
+            data[pos+1] = 16;
+            data[pos+2] = 16;
+            }
+            }
+            */
+
+            pos += 3;
+        }
+    }
+
+    XDestroyImage( ximage );
+    /*
+    if (gdk_image_mask) gdk_image_destroy( gdk_image_mask );
+    */
+
+    return image;
 }

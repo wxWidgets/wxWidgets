@@ -20,6 +20,7 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/log.h"
+#include "wx/image.h"
 
 extern "C" 
 {
@@ -515,6 +516,140 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
 
     return handler->Create(this, data, type, width, height, depth);
 }
+
+wxBitmap::wxBitmap(const wxImage& image, int depth)
+{
+    wxCHECK_RET( image.Ok(), wxT("invalid image") )
+    wxCHECK_RET( depth == -1, wxT("invalid bitmap depth") )
+
+    m_refData = new wxBitmapRefData();
+      
+    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+
+    // width and height of the device-dependent bitmap
+    int width = image.GetWidth();
+    int height = image.GetHeight();
+
+    // Create picture
+
+    Create( width , height , wxDisplayDepth() ) ;
+    wxBitmap maskBitmap( width, height, 1);
+    
+    CGrafPtr origPort ;
+    GDHandle origDevice ;
+
+    LockPixels( GetGWorldPixMap(GetHBITMAP()) );
+    LockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+
+    GetGWorld( &origPort , &origDevice ) ;
+    SetGWorld( GetHBITMAP() , NULL ) ;
+    
+    // Render image
+    wxColour rgb, maskcolor(image.GetMaskRed(), image.GetMaskGreen(), image.GetMaskBlue());
+    RGBColor color;
+    RGBColor white = { 0xffff, 0xffff, 0xffff };
+    RGBColor black = { 0     , 0     , 0      };
+
+    register unsigned char* data = image.GetData();
+
+    int index = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            rgb.Set(data[index++], data[index++], data[index++]);
+            color = rgb.GetPixel();
+            SetCPixel( x , y , &color ) ;
+            if (image.HasMask())
+            {
+                SetGWorld(maskBitmap.GetHBITMAP(), NULL);
+                if (rgb == maskcolor) {
+                    SetCPixel(x,y, &white);
+                }
+                else {
+                    SetCPixel(x,y, &black);
+                }
+                SetGWorld(GetHBITMAP(), NULL);
+            }
+        }
+    }  // for height
+
+    // Create mask
+    if ( image.HasMask() ) {
+        wxMask *mask = new wxMask( maskBitmap );
+    }
+    
+    UnlockPixels( GetGWorldPixMap(GetHBITMAP()) );
+    UnlockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+    SetGWorld( origPort, origDevice );
+}
+
+wxImage wxBitmap::ConvertToImage() const
+{
+    wxImage image;
+    
+    wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
+
+    // create an wxImage object
+    int width = GetWidth();
+    int height = GetHeight();
+    image.Create( width, height );
+
+    unsigned char *data = image.GetData();
+
+    wxCHECK_MSG( data, wxNullImage, wxT("Could not allocate data for image") );
+
+    WXHBITMAP origPort;
+    GDHandle  origDevice;
+    int      index;
+    RGBColor color;
+    // background color set to RGB(16,16,16) in consistent with wxGTK
+    unsigned char mask_r=16, mask_g=16, mask_b=16;
+    SInt16   r,g,b;
+    wxMask  *mask = GetMask();
+
+    GetGWorld( &origPort, &origDevice );
+    LockPixels(GetGWorldPixMap(GetHBITMAP()));
+    SetGWorld( GetHBITMAP(), NULL);
+
+    // Copy data into image
+    index = 0;
+    for (int yy = 0; yy < height; yy++)
+    {
+        for (int xx = 0; xx < width; xx++)
+        {
+            GetCPixel(xx,yy, &color);
+            r = ((color.red ) >> 8);
+            g = ((color.green ) >> 8);
+            b = ((color.blue ) >> 8);
+            data[index    ] = r;
+            data[index + 1] = g;
+            data[index + 2] = b;
+            if (mask)
+            {
+                if (mask->PointMasked(xx,yy))
+                {
+                    data[index    ] = mask_r;
+                    data[index + 1] = mask_g;
+                    data[index + 2] = mask_b;
+                }
+            }
+            index += 3;
+        }
+    }
+    if (mask)
+    {
+        image.SetMaskColour( mask_r, mask_g, mask_b );
+        image.SetMask( true );
+    }
+
+    // Free resources
+    UnlockPixels(GetGWorldPixMap(GetHBITMAP()));
+    SetGWorld(origPort, origDevice);
+
+    return image;
+}
+
 
 bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *palette)
 {
