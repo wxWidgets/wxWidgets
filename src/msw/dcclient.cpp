@@ -120,6 +120,13 @@ void wxWindowDC::InitDC()
 #endif
 }
 
+void wxWindowDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_canvas, _T("wxWindowDC without a window?") );
+
+    m_canvas->GetSize(width, height);
+}
+
 // ----------------------------------------------------------------------------
 // wxClientDC
 // ----------------------------------------------------------------------------
@@ -163,6 +170,13 @@ void wxClientDC::InitDC()
 
 wxClientDC::~wxClientDC()
 {
+}
+
+void wxClientDC::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_canvas, _T("wxClientDC without a window?") );
+
+    m_canvas->GetClientSize(width, height);
 }
 
 // ----------------------------------------------------------------------------

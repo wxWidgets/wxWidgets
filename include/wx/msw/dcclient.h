@@ -49,6 +49,9 @@ protected:
     // intiialize the newly created DC
     void InitDC();
 
+    // override some base class virtuals
+    virtual void DoGetSize(int *width, int *height) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
 };
@@ -66,6 +69,9 @@ public:
 
 protected:
     void InitDC();
+
+    // override some base class virtuals
+    virtual void DoGetSize(int *width, int *height) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)

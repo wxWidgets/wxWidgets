@@ -1923,8 +1923,30 @@ void wxDC::DoGetSizeMM(int *w, int *h) const
     if (!GetHDC()) return;
 #endif
 
-    if ( w ) *w = ::GetDeviceCaps(GetHdc(), HORZSIZE);
-    if ( h ) *h = ::GetDeviceCaps(GetHdc(), VERTSIZE);
+    // if we implement it in terms of DoGetSize() instead of directly using the
+    // results returned by GetDeviceCaps(HORZ/VERTSIZE) as was done before, it
+    // will also work for wxWindowDC and wxClientDC even though their size is
+    // not the same as the total size of the screen
+    int wPixels, hPixels;
+    DoGetSize(&wPixels, &hPixels);
+
+    if ( w )
+    {
+        int wTotal = ::GetDeviceCaps(GetHdc(), HORZRES);
+
+        wxCHECK_RET( wTotal, _T("0 width device?") );
+
+        *w = (wPixels * ::GetDeviceCaps(GetHdc(), HORZSIZE)) / wTotal;
+    }
+
+    if ( h )
+    {
+        int hTotal = ::GetDeviceCaps(GetHdc(), VERTRES);
+
+        wxCHECK_RET( hTotal, _T("0 height device?") );
+
+        *h = (hPixels * ::GetDeviceCaps(GetHdc(), VERTSIZE)) / hTotal;
+    }
 }
 
 wxSize wxDC::GetPPI() const
