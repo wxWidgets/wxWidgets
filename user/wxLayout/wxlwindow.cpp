@@ -169,7 +169,8 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    if(obj && eventId == WXLOWIN_MENU_LCLICK)
    {
       m_llist->MoveCursorTo(cursorPos);
-      m_ScrollToCursor = true; //FIXME: needed? DoPaint(m_llist->GetUpdateRect()); 
+      m_ScrollToCursor = true;
+      Refresh();
    }
    if(!m_doSendEvents) // nothing to do
       return;
