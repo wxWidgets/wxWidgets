@@ -1,0 +1,38 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for treetest example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/treetest.$(OBJSUFF) $(OBJDIR)/treetest_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) treetest$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+treetest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o treetest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/treetest.$(OBJSUFF):	treetest.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ treetest.$(SRCSUFF)
+
+$(OBJDIR)/treetest_resources.o:  treetest.rc
+	$(RESCOMP) -i treetest.rc -o $(OBJDIR)/treetest_resources.o $(RESFLAGS)
+
+
+clean:
+	rm -f $(OBJECTS) treetest$(GUISUFFIX).exe core *.rsc *.res

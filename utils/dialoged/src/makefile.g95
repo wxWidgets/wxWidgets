@@ -1,0 +1,61 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1996
+# Updated:	
+#
+# "%W% %G%"
+#
+# Makefile for Dialog Editor (GNU-WIN32)
+
+WXDIR = ../../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/dialoged.$(OBJSUFF) $(OBJDIR)/editrpal.$(OBJSUFF) $(OBJDIR)/reseditr.$(OBJSUFF)\
+ $(OBJDIR)/dlghndlr.$(OBJSUFF) $(OBJDIR)/reswrite.$(OBJSUFF) $(OBJDIR)/winprop.$(OBJSUFF)\
+ $(OBJDIR)/dialoged_resources.$(OBJSUFF)
+
+EXTRAINC = -I../../wxprop/src
+
+LDFLAGS =  -Wl,--subsystem,windows -mwindows -L$(WXDIR)/lib -L../../wxprop/lib
+LDLIBS=-lwxprop $(LIBS)
+
+CPPFLAGS = $(XINCLUDE) $(INC) $(OPTIONS) $(GUI) $(DEBUGFLAGS) -DDEBUG='$(DEBUG)' $(WARN) $(OPT) $(EXTRAINC)
+
+all:    $(OBJDIR) wxprop dialoged$(GUISUFFIX)$(EXESUFF)
+
+wxprop:
+	cd ../../wxprop/src; $(MAKE) -f makefile.g95
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+dialoged$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dialoged$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/dialoged.$(OBJSUFF):	dialoged.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dialoged.$(SRCSUFF)
+
+$(OBJDIR)/editrpal.$(OBJSUFF):	winprop.h reseditr.h editrpal.h editrpal.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ editrpal.$(SRCSUFF)
+
+$(OBJDIR)/winprop.$(OBJSUFF):	winprop.h reseditr.h editrpal.h winprop.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ winprop.$(SRCSUFF)
+
+$(OBJDIR)/reswrite.$(OBJSUFF):	winprop.h reseditr.h editrpal.h reswrite.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ reswrite.$(SRCSUFF)
+
+$(OBJDIR)/reseditr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h reseditr.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ reseditr.$(SRCSUFF)
+
+$(OBJDIR)/dlghndlr.$(OBJSUFF):	winprop.h reseditr.h editrpal.h dlghndlr.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dlghndlr.$(SRCSUFF)
+
+$(OBJDIR)/dialoged_resources.o:  dialoged.rc
+	$(RESCOMP) -i dialoged.rc -o $(OBJDIR)/dialoged_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) dialoged$(GUISUFFIX).exe core *.rsc *.res

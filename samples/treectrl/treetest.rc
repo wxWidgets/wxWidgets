@@ -1,0 +1,7 @@
+mondrian ICON "mondrian.ico"
+aaaa     ICON "mondrian.ico"
+#include "wx/msw/wx.rc"
+
+icon1   ICON "bitmaps\\folder1.ico"
+icon2   ICON "bitmaps\\file1.ico"
+

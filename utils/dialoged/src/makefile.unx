@@ -1,0 +1,123 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for dialoged example (UNIX).
+
+WXDIR = ../../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/make.env
+
+WXPROPDIR = $(WXDIR)/utils/wxprop
+WXPROPINC = $(WXDIR)/utils/wxprop/src
+WXPROPLIB = $(WXDIR)/utils/wxprop/lib
+
+DIALOGEDDIR = $(WXDIR)/utils/dialoged
+
+OBJECTS = $(OBJDIR)/dialoged.o $(OBJDIR)/wx_repal.o $(OBJDIR)/wx_resed.o $(OBJDIR)/wx_rdlg.o $(OBJDIR)/wx_reswr.o $(OBJDIR)/wx_rprop.o
+
+
+INC = $(COMPPATHS) -I$(WXDIR)/include/x -I$(WXDIR)/include/base -I$(WXPROPINC)
+
+XVIEWLDLIBS = -lwxprop_ol -lwx_ol -lxview -lolgx -lX11 -lm $(COMPLIBS)
+MOTIFLDLIBS = -lwxprop_motif -lwx_motif -lXm -lXt -lX11 -lm $(COMPLIBS)
+HPLDLIBS = -lwxprop_hp -lwx_hp -lXm -lXt -lX11 -lm $(HPCOMPLIBS)
+# Default
+LDLIBS=$(XVIEWLDLIBS)
+
+CPPFLAGS = $(XINCLUDE) $(INC) $(OPTIONS) $(GUI) -DDEBUG='$(DEBUG)' $(DEBUGFLAGS) $(WARN) $(OPT)
+LDFLAGS = $(XLIB) -L$(WXDIR)/lib -L$(WXPROPLIB)
+
+.SUFFIXES:
+
+all:    $(OBJDIR) dialoged$(GUISUFFIX)
+
+wx_ol:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx xview
+
+wx_motif:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx motif
+
+motif:
+	$(MAKE) -f makefile.unx dialoged_motif GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)'\
+ OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
+
+xview:
+	$(MAKE) -f makefile.unx dialoged_ol GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)'\
+ DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+hp:
+	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='-w' \
+         XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' LDLIBS='$(HPLDLIBS)'
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+dialoged$(GUISUFFIX): $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dialoged$(GUISUFFIX) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/dialoged.o:        dialoged.$(SRCSUFF) dialoged.h
+	$(CC) -c $(CPPFLAGS) -o $@ dialoged.$(SRCSUFF)
+
+$(OBJDIR)/wx_rprop.o:        wx_rprop.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ wx_rprop.$(SRCSUFF)
+
+$(OBJDIR)/wx_resed.o:        wx_resed.$(SRCSUFF) wx_resed.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_resed.$(SRCSUFF)
+
+$(OBJDIR)/wx_rdlg.o:        wx_rdlg.$(SRCSUFF) wx_resed.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_rdlg.$(SRCSUFF)
+
+$(OBJDIR)/wx_repal.o:        wx_repal.$(SRCSUFF) wx_repal.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_repal.$(SRCSUFF)
+        
+$(OBJDIR)/wx_reswr.o:        wx_reswr.$(SRCSUFF) wx_resed.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_reswr.$(SRCSUFF)
+        
+wxprop_motif:
+	cd $(WXPROPDIR)/src; $(MAKE) -f makefile.unx motif OPT='$(OPT)'
+
+wxprop_ol:
+	cd $(WXPROPDIR)/src
+	$(MAKE) -f makefile.unx xview OPT='$(OPT)'
+
+clean_motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
+
+clean_ol:
+	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
+
+clean_hp:
+	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
+
+cleanany:
+	rm -f $(OBJECTS) $(TESTOBJECTS) test$(GUISUFFIX) dialoged$(GUISUFFIX) core
+
+HTMLDIR=/home/hardy/html/wx/manuals
+docs:   ps xlp
+ps:     $(DIALOGEDDIR)/docs/dialoged.ps
+xlp:    $(DIALOGEDDIR)/docs/dialoged.xlp
+html:   $(HTMLDIR)/dialoged/dialoged_contents.html
+
+$(DIALOGEDDIR)/docs/dialoged.xlp:     $(DIALOGEDDIR)/docs/dialoged.tex $(DIALOGEDDIR)/docs/classes.tex $(DIALOGEDDIR)/docs/body.tex $(DIALOGEDDIR)/docs/tech.tex
+	cd ../docs; tex2rtf dialoged.tex tmp.xlp -xlp -twice
+	sed -e "s/WXHELPCONTENTS/wxChart Manual/g" < $(DIALOGEDDIR)/docs/tmp.xlp > $(DIALOGEDDIR)/docs/dialoged.xlp
+	/bin/rm -f $(DIALOGEDDIR)/docs/tmp.xlp
+
+$(HTMLDIR)/dialoged/dialoged_contents.html:   $(DIALOGEDDIR)/docs/dialoged.tex $(DIALOGEDDIR)/docs/body.tex $(DIALOGEDDIR)/docs/tech.tex
+	cd ../docs; tex2rtf dialoged.tex $(HTMLDIR)/dialoged/dialoged.html -html -twice
+
+$(DIALOGEDDIR)/docs/dialoged.dvi:     $(DIALOGEDDIR)/docs/dialoged.tex $(DIALOGEDDIR)/docs/classes.tex
+	cd $(DIALOGEDDIR)/docs; latex dialoged; latex dialoged; makeindex dialoged; latex dialoged; latex dialoged
+
+# makeindex dialoged; bibtex dialoged; latex dialoged; latex dialoged
+
+$(DIALOGEDDIR)/docs/dialoged.ps:      $(DIALOGEDDIR)/docs/dialoged.dvi
+	cd $(DIALOGEDDIR)/docs; dvips -f -r < dialoged.dvi > dialoged.ps

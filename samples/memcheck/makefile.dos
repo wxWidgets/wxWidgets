@@ -1,0 +1,87 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds memcheck example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\memcheck
+WXLIB = $(WXDIR)\lib\wx.lib
+LIBS=$(WXLIB) oldnames libw llibcew commdlg shell ddeml
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!ifndef DEBUG
+DEBUG=0
+!endif
+
+INC=/I$(WXDIR)\include\msw /I$(WXDIR)\include\base
+
+# Set this to nothing if using MS C++ 7
+ZOPTION=/Z7
+
+!if "$(FINAL)" == "0"
+CPPFLAGS=/AL /W3 /Zi $(ZOPTION) /DDEBUG=$(DEBUG) /G2sw /Od /YuWX_PREC.H /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch $(INC)
+CPPFLAGS2=/AL /W3 /Zi $(ZOPTION) /DDEBUG /G2sw /Od /Dwx_msw $(INC)
+LINKFLAGS=/NOD /CO /ONERROR:NOEXE /NOE /SEG:512
+!else
+CPPFLAGS=/AL /W3 /G2sw /Ox /YuWX_PREC.H /DDEBUG=$(DEBUG) /Dwx_msw /Fp$(WXDIR)\src\msw\wx.pch $(INC)
+CPPFLAGS2=/AL /W3 /G2sw /Ox /DDEBUG /Dwx_msw $(INC)
+LINKFLAGS=/NOD /ONERROR:NOEXE /NOE /SEG:512
+!endif
+
+HEADERS =
+SOURCES = memcheck.$(SRCSUFF)
+OBJECTS = memcheck.obj
+
+all:    memcheck.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+
+memcheck.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) $(OBJECTS) memcheck.def memcheck.res
+        link $(LINKFLAGS) @<<
+$(OBJECTS) $(WXDIR)\src\msw\dummy.obj,
+memcheck,
+NUL,
+$(LIBS),
+memcheck.def
+;
+<<
+        rc -30 -K memcheck.res
+
+memcheck.obj:      memcheck.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+memcheck.res :      memcheck.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include\wx memcheck
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb

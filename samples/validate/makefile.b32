@@ -1,0 +1,65 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds validate example (DOS).
+
+# WXWIN and BCCDIR are set by parent make
+
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makeb32.env
+
+WXLIBDIR = $(WXDIR)\lib
+WXINC = $(WXDIR)\include\msw
+WXBASESRC = $(WXDIR)\src\base
+WXBASEINC = $(WXDIR)\include\base
+WXLIB = $(WXLIBDIR)\wx32.lib
+LIBS=$(WXLIB) cw32 import32
+
+TARGET=validate
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS =
+!endif
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+
+OBJECTS = validate.obj
+
+$(TARGET).exe:	$(OBJECTS) $(TARGET).def $(TARGET).res
+  tlink32 $(LINKFLAGS) @&&!
+c0w32.obj $(OBJECTS)
+$(TARGET)
+nul
+$(LIBS)
+!
+        brc32 -K $(TARGET).res
+
+.$(SRCSUFF).obj:
+	bcc32 $(CPPFLAGS) -c {$< }
+
+.c.obj:
+	bcc32 $(CPPFLAGS) -P- -c {$< }
+
+validate.obj:      validate.$(SRCSUFF)
+
+$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
+    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws
+

@@ -1,0 +1,155 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxProperty classes library (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+THISDIR = $(WXDIR)\utils\dialoged\src
+PROPDIR = $(WXDIR)\utils\wxprop
+PROPLIB=$(PROPDIR)\lib\wxprop.lib
+EXTRALIBS=$(PROPDIR)\lib\wxprop.lib
+EXTRAINC=/I$(PROPDIR)\src
+DOCDIR=$(WXDIR)\docs
+LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+PROGRAM=dialoged
+ 
+OBJECTS = dialoged.obj editrpal.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj
+
+all:    wxprop dialoged.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROPLIB) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(LIBS)
+<<
+
+dialoged.obj:      winprop.h reseditr.h editrpal.h dialoged.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+winprop.obj:      winprop.h reseditr.h editrpal.h winprop.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+editrpal.obj:      winprop.h reseditr.h editrpal.h editrpal.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+reswrite.obj:      winprop.h reseditr.h editrpal.h reswrite.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+reseditr.obj:      winprop.h reseditr.h editrpal.h reseditr.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+dlghndlr.obj:      winprop.h reseditr.h editrpal.h dlghndlr.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+wxprop:
+    cd $(PROPDIR)\src
+    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(THISDIR)
+
+clean_wxprop:
+    cd $(PROPDIR)\src
+    nmake -f makefile.nt clean
+    cd $(THISDIR)
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+
+cleanutils: clean clean_wxprop
+
+DOCSOURCES=$(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\body.tex\
+ $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
+ $(LOCALDOCDIR)\classes.tex $(LOCALDOCDIR)\tech.tex
+
+html: $(DOCDIR)\html\dialoged\dlged.htm
+hlp: $(DOCDIR)\winhelp\dialoged.hlp
+pdfrtf: $(DOCDIR)\pdf\dialoged.rtf
+ps: $(DOCDIR)\ps\dialoged.ps
+
+$(DOCDIR)\winhelp\dialoged.hlp:         $(LOCALDOCDIR)\dialoged.rtf $(LOCALDOCDIR)\dialoged.hpj
+        cd $(LOCALDOCDIR)
+        -erase dialoged.ph
+        hc dialoged
+        move dialoged.hlp $(DOCDIR)\winhelp\dialoged.hlp
+        move dialoged.cnt $(DOCDIR)\winhelp\dialoged.cnt
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\dialoged.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -start /w tex2rtf $(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\dialoged.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)\pdf\dialoged.rtf: $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(LOCALDOCDIR)\dialoged.tex $(DOCDIR)\pdf\dialoged.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\dialoged\dlged.htm:         $(DOCSOURCES)
+        cd $(LOCALDOCDIR)
+        -mkdir $(DOCDIR)\html\dialoged
+        -start /w tex2rtf $(LOCALDOCDIR)\dialoged.tex $(DOCDIR)\html\dialoged\dlged.htm -twice -html
+        -erase $(DOCDIR)\html\dialoged\*.con
+        -erase $(DOCDIR)\html\dialoged\*.ref
+        cd $(THISDIR)
+
+$(LOCALDOCDIR)\dialoged.dvi:	$(DOCSOURCES)
+	cd $(LOCALDOCDIR)
+        -latex dialoged
+        -latex dialoged
+        -makeindx dialoged
+        -bibtex dialoged
+        -latex dialoged
+        -latex dialoged
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\dialoged.ps:	$(LOCALDOCDIR)\dialoged.dvi
+	cd $(LOCALDOCDIR)
+        -dvips32 -o dialoged.ps dialoged
+        move dialoged.ps $(WXDIR)\docs\ps\dialoged.ps
+        cd $(THISDIR)
+
+

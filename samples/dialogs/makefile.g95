@@ -1,0 +1,35 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for dialogs example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/dialogs.$(OBJSUFF) $(OBJDIR)/dialogs_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) dialogs$(GUISUFFIX)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+dialogs$(GUISUFFIX):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dialogs$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/dialogs.$(OBJSUFF):	dialogs.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dialogs.$(SRCSUFF)
+
+$(OBJDIR)/dialogs_resources.o:  dialogs.rc
+	$(RESCOMP) -i dialogs.rc -o $(OBJDIR)/dialogs_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) dialogs$(GUISUFFIX).exe core *.rsc *.res

@@ -1,0 +1,38 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for minimal example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/memcheck.$(OBJSUFF) $(OBJDIR)/memcheck_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) memcheck$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+memcheck$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o memcheck$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+	$(RSRC) memcheck.$(RESSUFF) memcheck.exe
+
+$(OBJDIR)/memcheck.$(OBJSUFF):	memcheck.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ memcheck.$(SRCSUFF)
+
+$(OBJDIR)/memcheck_resources.o:  memcheck.rc
+	$(RESCOMP) -i memcheck.rc -o $(OBJDIR)/memcheck_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) memcheck$(GUISUFFIX).exe core *.rsc *.res

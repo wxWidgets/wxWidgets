@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for validate example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/validate.$(OBJSUFF) $(OBJDIR)/validate_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) validate$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+validate$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o validate$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/validate.$(OBJSUFF):	validate.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ validate.$(SRCSUFF)
+
+$(OBJDIR)/validate_resources.o:  validate.rc
+	$(RESCOMP) -i validate.rc -o $(OBJDIR)/validate_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) validate$(GUISUFFIX).exe core *.rsc *.res

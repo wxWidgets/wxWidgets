@@ -1,0 +1,63 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds resource example (MS VC++).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+THISDIR = $(WXDIR)\samples\resource
+PROGRAM=resource
+ 
+OBJECTS = $(PROGRAM).obj
+
+$(PROGRAM):    $(PROGRAM).exe
+
+all:    wx $(PROGRAM).exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.nt clean
+        cd $(THISDIR)
+
+$(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
+	$(link) @<<
+-out:$(PROGRAM).exe
+$(LINKFLAGS)
+$(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
+$(LIBS)
+<<
+
+
+$(PROGRAM).obj:      $(PROGRAM).h $(PROGRAM).$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc dialog1.wxr menu1.wxr
+    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+
+
+clean:
+        -erase *.obj
+        -erase *.sbr
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.pdb
+

@@ -1,0 +1,37 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for dnd example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/dnd.$(OBJSUFF) $(OBJDIR)/dnd_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) dnd$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+dnd$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dnd$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/dnd.$(OBJSUFF):	dnd.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dnd.$(SRCSUFF)
+
+$(OBJDIR)/dnd_resources.o:  dnd.rc
+	$(RESCOMP) -i dnd.rc -o $(OBJDIR)/dnd_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) dnd$(GUISUFFIX).exe core *.rsc *.res

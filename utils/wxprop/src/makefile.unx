@@ -1,0 +1,105 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for dialoged example (UNIX).
+
+WXDIR = ../../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/make.env
+
+PROPDIR = $(WXDIR)/utils/wxprop
+PROPLIB = ../lib/libwxprop$(GUISUFFIX).a
+XVIEWLDLIBS = -lwxprop_ol -lwx_ol -lxview -lolgx -lX11 -lm $(COMPLIBS)
+MOTIFLDLIBS = -lwxprop_motif -lwx_motif -lXm -lXt -lX11 -lm $(COMPLIBS)
+HPLDLIBS = -lwxprop_hp -lwx_hp -lXm -lXt -lX11 -lm $(COMPLIBS)
+LDFLAGS = $(XLIB) -L$(WXDIR)/lib -L../lib
+
+OBJECTS = $(OBJDIR)/wx_prop.o $(OBJDIR)/wx_pform.o $(OBJDIR)/wx_plist.o
+TESTOBJECTS = $(OBJDIR)/test.o
+
+.SUFFIXES:
+
+all:    $(OBJDIR) $(PROPLIB)
+
+demo:	test$(GUISUFFIX)
+
+motifdemo:
+	$(MAKE) -f makefile.unx all test_motif GUI=-Dwx_motif DEBUG='$(DEBUG)' GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' XVIEW_LINK=
+
+xviewdemo:
+	$(MAKE) -f makefile.unx all test_ol GUI=-Dwx_xview OPT='$(OPT)' DEBUG='$(DEBUG)'
+
+$(PROPLIB): $(OBJECTS)
+	rm -f $@
+	ar $(AROPTIONS) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)'\
+ OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
+
+xview:
+	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)'\
+ DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+hp:
+	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='-w' \
+         XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' LDLIBS='$(HPLDLIBS)'
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+test$(GUISUFFIX): $(TESTOBJECTS) $(WXLIB) $(PROPLIB)
+	$(CC) $(LDFLAGS) -o test$(GUISUFFIX) $(TESTOBJECTS) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/wx_prop.o:        wx_prop.$(SRCSUFF) wx_prop.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_prop.$(SRCSUFF)
+
+$(OBJDIR)/wx_pform.o:        wx_pform.$(SRCSUFF) wx_prop.h wx_pform.h wx_prop.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_pform.$(SRCSUFF)
+
+$(OBJDIR)/wx_plist.o:        wx_plist.$(SRCSUFF) wx_plist.h wx_prop.h
+	$(CC) -c $(CPPFLAGS) -o $@ wx_plist.$(SRCSUFF)
+
+$(OBJDIR)/test.o:        test.$(SRCSUFF) test.h
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+HTMLDIR=/home/hardy/html/wx/manuals
+docs:	ps xlp
+ps:	$(PROPDIR)/docs/prop.ps
+xlp:	$(PROPDIR)/docs/prop.xlp
+html:	$(HTMLDIR)/wxprop/prop_contents.html
+
+$(PROPDIR)/docs/prop.xlp:	$(PROPDIR)/docs/prop.tex $(PROPDIR)/docs/classes.tex $(PROPDIR)/docs/body.tex
+	cd ../docs; tex2rtf prop.tex tmp.xlp -xlp -twice
+	sed -e "s/WXHELPCONTENTS/Property Classes Manual/g" < $(PROPDIR)/docs/tmp.xlp > $(PROPDIR)/docs/prop.xlp
+	/bin/rm -f $(PROPDIR)/docs/tmp.xlp
+
+$(HTMLDIR)/wxprop/prop_contents.html:	$(PROPDIR)/docs/prop.tex $(PROPDIR)/docs/classes.tex $(PROPDIR)/docs/body.tex
+	cd ../docs; tex2rtf prop.tex $(HTMLDIR)/wxprop/prop.html -html -twice
+
+$(PROPDIR)/docs/prop.dvi:	$(PROPDIR)/docs/prop.tex $(PROPDIR)/docs/classes.tex  $(PROPDIR)/docs/body.tex
+	cd $(PROPDIR)/docs; latex prop; latex prop; makeindex prop; latex prop
+
+$(PROPDIR)/docs/prop.ps:	$(PROPDIR)/docs/prop.dvi
+	cd $(PROPDIR)/docs; dvips -f -r < prop.dvi > prop.ps
+
+clean_motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
+
+clean_ol:
+	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
+
+clean_hp:
+	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
+
+cleanany:
+	rm -f $(OBJECTS) $(TESTOBJECTS) test$(GUISUFFIX) core $(PROPLIB)

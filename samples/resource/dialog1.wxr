@@ -1,0 +1,27 @@
+static char *dialog1 = "dialog(name = 'dialog1',\
+  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',\
+  title = 'Test dialog box',\
+  x = 312, y = 234, width = 400, height = 300,\
+  modal = 0,\
+  label_font = [10, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+  button_font = [10, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxRadioBox, 'Radiobox', 'wxHSCROLL | wxVERTICAL | wxVERTICAL_LABEL', 'radiobox2', 24, 23, 111, 63, ['One', 'Two', 'Three', 'Four'], 2,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxMultiText, 'Multitext', 'wxVERTICAL_LABEL', 'multitext3', 156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxListBox, 'Listbox', 'wxVERTICAL_LABEL', 'listbox4', 156, 26, 200, 80, ['Apples', 'Pears', 'Bananas'], 'wxSINGLE',\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [1, wxButton, 'Press me', '0', 'button7', 33, 130, 84, 34,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [2, wxButton, 'Cancel', '0', 'button8', 34, 181, 84, 34,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxCheckBox, 'Checkbox', '0', 'checkbox9', 154, 220, 68, 14, 0,\
+      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
+  control = [wxMessage, 'My message', '0', 'message10', 257, 218, 76, 13,\
+      [11, 'wxSWISS', 'wxITALIC', 'wxBOLD', 0]]).";
+

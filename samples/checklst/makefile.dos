@@ -1,0 +1,65 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds checklst example (DOS).
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makemsc.env
+
+THISDIR = $(WXDIR)\samples\checklst
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+HEADERS =
+SOURCES = checklst.$(SRCSUFF)
+OBJECTS = checklst.obj
+
+all:    checklst.exe
+
+wx:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos FINAL=$(FINAL)
+        cd $(THISDIR)
+
+wxclean:
+        cd $(WXDIR)\src\msw
+        nmake -f makefile.dos clean
+        cd $(THISDIR)
+
+checklst.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) checklst.obj checklst.def checklst.res
+        link $(LINKFLAGS) @<<
+checklst.obj $(WXDIR)\src\msw\dummy.obj,
+checklst,
+NUL,
+$(LIBS),
+checklst.def
+;
+<<
+        rc -K checklst.res
+
+checklst.obj:      checklst.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+checklst.res :      checklst.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include checklst
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.sbr
+        -erase *.pdb

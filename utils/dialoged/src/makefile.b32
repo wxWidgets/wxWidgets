@@ -1,0 +1,69 @@
+#
+# File:		makefile.b32
+# Author:	Patrick Halke
+# Created:	1995
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds Dialog Editor (32-bit Borland)
+
+# WXWIN and BCCDIR are set by parent make
+
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makeb32.env
+
+WXLIBDIR = $(WXDIR)\lib
+WXINC = $(WXDIR)\include\msw
+WXBASESRC = $(WXDIR)\src\base
+WXBASEINC = $(WXDIR)\include\base
+WXLIB = $(WXLIBDIR)\wx32.lib
+WXPROPDIR = $(WXDIR)\utils\wxprop
+WXPROPINC = $(WXPROPDIR)\src
+WXPROPLIB = $(WXDIR)\lib\wxprop.lib
+LIBS=$(WXLIB) $(WXPROPLIB) cw32 import32
+INCFILE = includes.cfg
+
+TARGET=dialoged
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS =
+!endif
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG) @$(INCFILE)
+
+OBJECTS = wx_resed.obj wx_rdlg.obj wx_reswr.obj wx_repal.obj wx_rprop.obj dialoged.obj
+
+$(TARGET).exe:	wxprop $(INCFILE) $(OBJECTS) $(TARGET).def $(TARGET).res
+  tlink32 $(LINKFLAGS) @&&!
+c0w32.obj $(OBJECTS)
+$(TARGET)
+nul
+$(LIBS)
+$(TARGET).def
+!
+        brc32 -K $(TARGET).res
+
+$(INCFILE):	$(MAKEFILENAME)
+	copy &&!
+-I..\..\wxprop\src
+! $(INCFILE)
+
+$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\msw\wx.rc
+    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa $(TARGET)
+
+wxprop:
+    cd $(WXPROPDIR)\src
+    make -f makefile.b32
+    cd $(WXDIR)\utils\dialoged\src
+    
+clean:
+        -erase *.obj *.exe *.res *.map *.rws
+
+

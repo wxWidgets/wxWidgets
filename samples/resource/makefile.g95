@@ -1,0 +1,36 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for resource example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS=$(OBJDIR)/resource.$(OBJSUFF) $(OBJDIR)/resource_resources.$(OBJSUFF)
+
+all:	$(OBJDIR) resource.exe
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/resource.$(OBJSUFF):        resource.$(SRCSUFF) resource.h
+	$(CC) -c $(CPPFLAGS) -o $@ resource.$(SRCSUFF)
+
+resource.exe: $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o resource$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/resource_resources.o:  resource.rc
+	$(RESCOMP) -i resource.rc -o $(OBJDIR)/resource_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) resource$(GUISUFFIX).exe core *.rsc *.res
+

@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for docview example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS = $(OBJDIR)/docview.$(OBJSUFF) $(OBJDIR)/view.$(OBJSUFF) $(OBJDIR)/doc.$(OBJSUFF)\
+ $(OBJDIR)/docview_resources.$(OBJSUFF)
+
+
+all:    $(OBJDIR) docview$(GUISUFFIX)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+docview$(GUISUFFIX): $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o docview$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/docview.$(OBJSUFF):        docview.$(SRCSUFF) docview.h doc.h view.h
+	$(CC) -c $(CPPFLAGS) -o $@ docview.$(SRCSUFF)
+
+$(OBJDIR)/doc.$(OBJSUFF):        doc.$(SRCSUFF) doc.h
+	$(CC) -c $(CPPFLAGS) -o $@ doc.$(SRCSUFF)
+
+$(OBJDIR)/view.$(OBJSUFF):        view.$(SRCSUFF) view.h
+	$(CC) -c $(CPPFLAGS) -o $@ view.$(SRCSUFF)
+
+$(OBJDIR)/docview_resources.o:  docview.rc
+	$(RESCOMP) -i docview.rc -o $(OBJDIR)/docview_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) docview$(GUISUFFIX).exe core *.rsc *.res
