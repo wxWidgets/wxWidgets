@@ -29,7 +29,7 @@
 #pragma message enable nosimpint
 #endif
 
-#ifdef __WXGTK20__
+#ifdef __WXGTK__
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #endif
