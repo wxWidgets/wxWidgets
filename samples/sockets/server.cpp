@@ -370,8 +370,6 @@ void MyFrame::OnSocketEvent(wxSocketEvent& event)
       // wxSocketEvent again.
       sock->SetNotify(wxSOCKET_LOST_FLAG);
 
-      m_text->AppendText();
-
       // Which test are we going to run?
       unsigned char c;
       sock->Read(&c, 1);
