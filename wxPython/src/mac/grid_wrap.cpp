@@ -1422,7 +1422,7 @@ static swig_type_info *swig_types[63];
 
  static const wxString wxPyEmptyString(wxEmptyString); 
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
- static const wxString wxPyDateTimeFormatStr(wxT("%c")); 
+ static const wxString wxPyDefaultDateTimeFormat(wxDefaultDateTimeFormat); 
 
 
 #define wxPyMake_TEMPLATE(TYPE) \
@@ -2637,26 +2637,6 @@ static wxGridCellCoords wxGrid_XYToCell(wxGrid *self,int x,int y){
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_DateTimeFormatStr_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable DateTimeFormatStr is read-only.");
-    return 1;
-}
-
-
-static PyObject *_wrap_DateTimeFormatStr_get(void) {
-    PyObject *pyobj;
-    
-    {
-#if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyDateTimeFormatStr)->c_str(), (&wxPyDateTimeFormatStr)->Len());
-#else
-        pyobj = PyString_FromStringAndSize((&wxPyDateTimeFormatStr)->c_str(), (&wxPyDateTimeFormatStr)->Len());
-#endif
-    }
-    return pyobj;
-}
-
-
 static int _wrap_GridNoCellCoords_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable GridNoCellCoords is read-only.");
     return 1;
@@ -3344,8 +3324,8 @@ static PyObject * GridCellBoolRenderer_swigregister(PyObject *, PyObject *args) 
 }
 static PyObject *_wrap_new_GridCellDateTimeRenderer(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
-    wxString arg1 = (wxString) wxPyDateTimeFormatStr ;
-    wxString arg2 = (wxString) wxPyDateTimeFormatStr ;
+    wxString arg1 = (wxString) wxPyDefaultDateTimeFormat ;
+    wxString arg2 = (wxString) wxPyDefaultDateTimeFormat ;
     wxGridCellDateTimeRenderer *result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -19901,8 +19881,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
-    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
-    SWIG_addvarlink(SWIG_globals,(char*)"DateTimeFormatStr",_wrap_DateTimeFormatStr_get, _wrap_DateTimeFormatStr_set);
     PyDict_SetItemString(d,"GRID_VALUE_STRING", SWIG_FromCharPtr("string"));
     PyDict_SetItemString(d,"GRID_VALUE_BOOL", SWIG_FromCharPtr("bool"));
     PyDict_SetItemString(d,"GRID_VALUE_NUMBER", SWIG_FromCharPtr("long"));
@@ -19912,6 +19890,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"GRID_VALUE_LONG", SWIG_FromCharPtr("long"));
     PyDict_SetItemString(d,"GRID_VALUE_CHOICEINT", SWIG_FromCharPtr("choiceint"));
     PyDict_SetItemString(d,"GRID_VALUE_DATETIME", SWIG_FromCharPtr("datetime"));
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
     {

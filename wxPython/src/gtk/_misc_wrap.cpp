@@ -3545,20 +3545,38 @@ static PyObject *_wrap_IsStockLabel(PyObject *, PyObject *args, PyObject *kwargs
 static PyObject *_wrap_GetStockLabel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    bool arg2 = (bool) true ;
+    wxString arg3 = (wxString) wxPyEmptyString ;
     wxString result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "id", NULL 
+        (char *) "id",(char *) "withCodes",(char *) "accelerator", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GetStockLabel",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:GetStockLabel",kwnames,&obj0,&obj1,&obj2)) goto fail;
     {
         arg1 = (int)(SWIG_As_int(obj0)); 
         if (SWIG_arg_fail(1)) SWIG_fail;
     }
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = wxGetStockLabel(arg1);
+        result = wxGetStockLabel(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -22722,15 +22740,18 @@ static PyObject *_wrap_DateTime___sub__(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___lt__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___lt__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22751,15 +22772,18 @@ static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___le__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___le__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22780,15 +22804,18 @@ static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___gt__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___gt__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22809,15 +22836,18 @@ static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ge__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___ge__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22838,15 +22868,18 @@ static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___eq__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___eq__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22867,15 +22900,18 @@ static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___ne__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ne__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___ne__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -31436,12 +31472,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime___isub__", _wrap_DateTime___isub__, METH_VARARGS, NULL},
 	 { (char *)"DateTime___add__", _wrap_DateTime___add__, METH_VARARGS, NULL},
 	 { (char *)"DateTime___sub__", _wrap_DateTime___sub__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___lt__", _wrap_DateTime___lt__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___le__", _wrap_DateTime___le__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___gt__", _wrap_DateTime___gt__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___ge__", _wrap_DateTime___ge__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___eq__", _wrap_DateTime___eq__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___ne__", _wrap_DateTime___ne__, METH_VARARGS, NULL},
+	 { (char *)"DateTime___lt__", (PyCFunction) _wrap_DateTime___lt__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___le__", (PyCFunction) _wrap_DateTime___le__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___gt__", (PyCFunction) _wrap_DateTime___gt__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___ge__", (PyCFunction) _wrap_DateTime___ge__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___eq__", (PyCFunction) _wrap_DateTime___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___ne__", (PyCFunction) _wrap_DateTime___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseRfc822Date", (PyCFunction) _wrap_DateTime_ParseRfc822Date, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseFormat", (PyCFunction) _wrap_DateTime_ParseFormat, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseDateTime", (PyCFunction) _wrap_DateTime_ParseDateTime, METH_VARARGS | METH_KEYWORDS, NULL},

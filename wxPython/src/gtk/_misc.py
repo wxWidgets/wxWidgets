@@ -295,7 +295,7 @@ def IsStockLabel(*args, **kwargs):
     return _misc_.IsStockLabel(*args, **kwargs)
 
 def GetStockLabel(*args, **kwargs):
-    """GetStockLabel(int id) -> String"""
+    """GetStockLabel(int id, bool withCodes=True, String accelerator=EmptyString) -> String"""
     return _misc_.GetStockLabel(*args, **kwargs)
 
 def Bell(*args, **kwargs):
@@ -3731,29 +3731,29 @@ class DateTime(object):
         """
         return _misc_.DateTime___sub__(*args)
 
-    def __lt__(*args):
+    def __lt__(*args, **kwargs):
         """__lt__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___lt__(*args)
+        return _misc_.DateTime___lt__(*args, **kwargs)
 
-    def __le__(*args):
+    def __le__(*args, **kwargs):
         """__le__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___le__(*args)
+        return _misc_.DateTime___le__(*args, **kwargs)
 
-    def __gt__(*args):
+    def __gt__(*args, **kwargs):
         """__gt__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___gt__(*args)
+        return _misc_.DateTime___gt__(*args, **kwargs)
 
-    def __ge__(*args):
+    def __ge__(*args, **kwargs):
         """__ge__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___ge__(*args)
+        return _misc_.DateTime___ge__(*args, **kwargs)
 
-    def __eq__(*args):
+    def __eq__(*args, **kwargs):
         """__eq__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___eq__(*args)
+        return _misc_.DateTime___eq__(*args, **kwargs)
 
-    def __ne__(*args):
+    def __ne__(*args, **kwargs):
         """__ne__(self, DateTime other) -> bool"""
-        return _misc_.DateTime___ne__(*args)
+        return _misc_.DateTime___ne__(*args, **kwargs)
 
     def ParseRfc822Date(*args, **kwargs):
         """ParseRfc822Date(self, String date) -> int"""

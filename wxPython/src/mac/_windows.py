@@ -4050,6 +4050,7 @@ class PageSetupDialogData(_core.Object):
         """
         __init__(self) -> PageSetupDialogData
         __init__(self, PageSetupDialogData data) -> PageSetupDialogData
+        __init__(self, PrintData data) -> PageSetupDialogData
         """
         newobj = _windows_.new_PageSetupDialogData(*args)
         self.this = newobj.this
@@ -4177,6 +4178,14 @@ class PageSetupDialogData(_core.Object):
         """SetPrintData(self, PrintData printData)"""
         return _windows_.PageSetupDialogData_SetPrintData(*args, **kwargs)
 
+    def CalculateIdFromPaperSize(*args, **kwargs):
+        """CalculateIdFromPaperSize(self)"""
+        return _windows_.PageSetupDialogData_CalculateIdFromPaperSize(*args, **kwargs)
+
+    def CalculatePaperSizeFromId(*args, **kwargs):
+        """CalculatePaperSizeFromId(self)"""
+        return _windows_.PageSetupDialogData_CalculatePaperSizeFromId(*args, **kwargs)
+
     def __nonzero__(self): return self.Ok() 
 
 class PageSetupDialogDataPtr(PageSetupDialogData):
@@ -4224,6 +4233,7 @@ class PrintDialogData(_core.Object):
         """
         __init__(self) -> PrintDialogData
         __init__(self, PrintData printData) -> PrintDialogData
+        __init__(self, PrintDialogData printData) -> PrintDialogData
         """
         newobj = _windows_.new_PrintDialogData(*args)
         self.this = newobj.this

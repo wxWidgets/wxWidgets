@@ -121,20 +121,12 @@ RA_HORIZONTAL = _core_.RA_HORIZONTAL
 RA_VERTICAL = _core_.RA_VERTICAL
 RA_SPECIFY_ROWS = _core_.RA_SPECIFY_ROWS
 RA_SPECIFY_COLS = _core_.RA_SPECIFY_COLS
+RA_USE_CHECKBOX = _core_.RA_USE_CHECKBOX
 RB_GROUP = _core_.RB_GROUP
 RB_SINGLE = _core_.RB_SINGLE
-SL_HORIZONTAL = _core_.SL_HORIZONTAL
-SL_VERTICAL = _core_.SL_VERTICAL
-SL_AUTOTICKS = _core_.SL_AUTOTICKS
-SL_LABELS = _core_.SL_LABELS
-SL_LEFT = _core_.SL_LEFT
-SL_TOP = _core_.SL_TOP
-SL_RIGHT = _core_.SL_RIGHT
-SL_BOTTOM = _core_.SL_BOTTOM
-SL_BOTH = _core_.SL_BOTH
-SL_SELRANGE = _core_.SL_SELRANGE
 SB_HORIZONTAL = _core_.SB_HORIZONTAL
 SB_VERTICAL = _core_.SB_VERTICAL
+RB_USE_CHECKBOX = _core_.RB_USE_CHECKBOX
 ST_SIZEGRIP = _core_.ST_SIZEGRIP
 ST_NO_AUTORESIZE = _core_.ST_NO_AUTORESIZE
 FLOOD_SURFACE = _core_.FLOOD_SURFACE
@@ -3953,8 +3945,9 @@ class MoveEvent(Event):
         """SetPosition(self, Point pos)"""
         return _core_.MoveEvent_SetPosition(*args, **kwargs)
 
-    m_pos = property(_core_.MoveEvent_m_pos_get, _core_.MoveEvent_m_pos_set)
-    m_rect = property(_core_.MoveEvent_m_rect_get, _core_.MoveEvent_m_rect_set)
+    m_pos =  property(GetPosition, SetPosition)
+    m_rect = property(GetRect, SetRect)
+
 
 class MoveEventPtr(MoveEvent):
     def __init__(self, this):
@@ -7113,7 +7106,7 @@ class Window(EvtHandler):
 
     def RefreshRect(*args, **kwargs):
         """
-        RefreshRect(self, Rect rect)
+        RefreshRect(self, Rect rect, bool eraseBackground=True)
 
         Redraws the contents of the given rectangle: the area inside it will
         be repainted.  This is the same as Refresh but has a nicer syntax.

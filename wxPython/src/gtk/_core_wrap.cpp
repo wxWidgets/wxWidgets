@@ -28412,23 +28412,31 @@ static PyObject *_wrap_Window_RefreshRect(PyObject *, PyObject *args, PyObject *
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxRect *arg2 = 0 ;
+    bool arg3 = (bool) true ;
     wxRect temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "rect", NULL 
+        (char *) "self",(char *) "rect",(char *) "eraseBackground", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_RefreshRect",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Window_RefreshRect",kwnames,&obj0,&obj1,&obj2)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxWindow, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
     }
+    if (obj2) {
+        {
+            arg3 = (bool)(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->RefreshRect((wxRect const &)*arg2);
+        (arg1)->RefreshRect((wxRect const &)*arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -46348,6 +46356,9 @@ SWIGEXPORT(void) SWIG_init(void) {
         PyDict_SetItemString(d,"RA_SPECIFY_COLS", SWIG_From_int((int)(wxRA_SPECIFY_COLS))); 
     }
     {
+        PyDict_SetItemString(d,"RA_USE_CHECKBOX", SWIG_From_int((int)(wxRA_USE_CHECKBOX))); 
+    }
+    {
         PyDict_SetItemString(d,"RB_GROUP", SWIG_From_int((int)(wxRB_GROUP))); 
     }
     {
@@ -46358,6 +46369,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     {
         PyDict_SetItemString(d,"SB_VERTICAL", SWIG_From_int((int)(wxSB_VERTICAL))); 
+    }
+    {
+        PyDict_SetItemString(d,"RB_USE_CHECKBOX", SWIG_From_int((int)(wxRB_USE_CHECKBOX))); 
     }
     {
         PyDict_SetItemString(d,"ST_SIZEGRIP", SWIG_From_int((int)(wxST_SIZEGRIP))); 

@@ -121,10 +121,12 @@ RA_HORIZONTAL = _core_.RA_HORIZONTAL
 RA_VERTICAL = _core_.RA_VERTICAL
 RA_SPECIFY_ROWS = _core_.RA_SPECIFY_ROWS
 RA_SPECIFY_COLS = _core_.RA_SPECIFY_COLS
+RA_USE_CHECKBOX = _core_.RA_USE_CHECKBOX
 RB_GROUP = _core_.RB_GROUP
 RB_SINGLE = _core_.RB_SINGLE
 SB_HORIZONTAL = _core_.SB_HORIZONTAL
 SB_VERTICAL = _core_.SB_VERTICAL
+RB_USE_CHECKBOX = _core_.RB_USE_CHECKBOX
 ST_SIZEGRIP = _core_.ST_SIZEGRIP
 ST_NO_AUTORESIZE = _core_.ST_NO_AUTORESIZE
 FLOOD_SURFACE = _core_.FLOOD_SURFACE
@@ -7104,7 +7106,7 @@ class Window(EvtHandler):
 
     def RefreshRect(*args, **kwargs):
         """
-        RefreshRect(self, Rect rect)
+        RefreshRect(self, Rect rect, bool eraseBackground=True)
 
         Redraws the contents of the given rectangle: the area inside it will
         be repainted.  This is the same as Refresh but has a nicer syntax.

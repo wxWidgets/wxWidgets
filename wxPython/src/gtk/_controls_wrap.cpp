@@ -29046,6 +29046,49 @@ static PyObject *_wrap_TreeCtrl_SetItemBold(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_TreeCtrl_SetItemDropHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+    wxTreeItemId *arg2 = 0 ;
+    bool arg3 = (bool) true ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "highlight", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeCtrl_SetItemDropHighlight",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTreeCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxTreeItemId");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (bool)(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetItemDropHighlight((wxTreeItemId const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_TreeCtrl_SetItemTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
@@ -35133,6 +35176,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_SetItemPyData", (PyCFunction) _wrap_TreeCtrl_SetItemPyData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemHasChildren", (PyCFunction) _wrap_TreeCtrl_SetItemHasChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemBold", (PyCFunction) _wrap_TreeCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_SetItemDropHighlight", (PyCFunction) _wrap_TreeCtrl_SetItemDropHighlight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemTextColour", (PyCFunction) _wrap_TreeCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_TreeCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemFont", (PyCFunction) _wrap_TreeCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},

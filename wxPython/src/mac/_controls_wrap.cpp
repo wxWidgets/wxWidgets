@@ -1823,7 +1823,7 @@ static void wxToolBarBase_SetToolClientData(wxToolBarBase *self,int id,PyObject 
 
 #include <wx/listctrl.h>
 
- static const wxString wxPyListCtrlNameStr(_T("wxListCtrl")); 
+ static const wxString wxPyListCtrlNameStr(wxListCtrlNameStr); 
 static void wxListItemAttr_Destroy(wxListItemAttr *self){ delete self; }
  // Python aware sorting function for wxPyListCtrl
     static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
@@ -29015,6 +29015,49 @@ static PyObject *_wrap_TreeCtrl_SetItemBold(PyObject *, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_TreeCtrl_SetItemDropHighlight(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+    wxTreeItemId *arg2 = 0 ;
+    bool arg3 = (bool) true ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item",(char *) "highlight", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:TreeCtrl_SetItemDropHighlight",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxPyTreeCtrl, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    {
+        SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxTreeItemId, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(2)) SWIG_fail;
+        if (arg2 == NULL) {
+            SWIG_null_ref("wxTreeItemId");
+        }
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    if (obj2) {
+        {
+            arg3 = (bool)(SWIG_As_bool(obj2)); 
+            if (SWIG_arg_fail(3)) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetItemDropHighlight((wxTreeItemId const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_TreeCtrl_SetItemTextColour(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
@@ -35101,6 +35144,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_SetItemPyData", (PyCFunction) _wrap_TreeCtrl_SetItemPyData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemHasChildren", (PyCFunction) _wrap_TreeCtrl_SetItemHasChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemBold", (PyCFunction) _wrap_TreeCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_SetItemDropHighlight", (PyCFunction) _wrap_TreeCtrl_SetItemDropHighlight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemTextColour", (PyCFunction) _wrap_TreeCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_TreeCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_SetItemFont", (PyCFunction) _wrap_TreeCtrl_SetItemFont, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -36985,6 +37029,12 @@ SWIGEXPORT(void) SWIG_init(void) {
     {
         PyDict_SetItemString(d,"TE_HT_BEYOND", SWIG_From_int((int)(wxTE_HT_BEYOND))); 
     }
+    {
+        PyDict_SetItemString(d,"OutOfRangeTextCoord", SWIG_From_int((int)(wxOutOfRangeTextCoord))); 
+    }
+    {
+        PyDict_SetItemString(d,"InvalidTextCoord", SWIG_From_int((int)(wxInvalidTextCoord))); 
+    }
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong(wxEVT_COMMAND_TEXT_UPDATED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong(wxEVT_COMMAND_TEXT_ENTER));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_URL", PyInt_FromLong(wxEVT_COMMAND_TEXT_URL));
@@ -37008,6 +37058,39 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"RadioBoxNameStr",_wrap_RadioBoxNameStr_get, _wrap_RadioBoxNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"RadioButtonNameStr",_wrap_RadioButtonNameStr_get, _wrap_RadioButtonNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"SliderNameStr",_wrap_SliderNameStr_get, _wrap_SliderNameStr_set);
+    {
+        PyDict_SetItemString(d,"SL_HORIZONTAL", SWIG_From_int((int)(wxSL_HORIZONTAL))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_VERTICAL", SWIG_From_int((int)(wxSL_VERTICAL))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_AUTOTICKS", SWIG_From_int((int)(wxSL_AUTOTICKS))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_LABELS", SWIG_From_int((int)(wxSL_LABELS))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_LEFT", SWIG_From_int((int)(wxSL_LEFT))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_TOP", SWIG_From_int((int)(wxSL_TOP))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_RIGHT", SWIG_From_int((int)(wxSL_RIGHT))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_BOTTOM", SWIG_From_int((int)(wxSL_BOTTOM))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_BOTH", SWIG_From_int((int)(wxSL_BOTH))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_SELRANGE", SWIG_From_int((int)(wxSL_SELRANGE))); 
+    }
+    {
+        PyDict_SetItemString(d,"SL_INVERSE", SWIG_From_int((int)(wxSL_INVERSE))); 
+    }
     SWIG_addvarlink(SWIG_globals,(char*)"ToggleButtonNameStr",_wrap_ToggleButtonNameStr_get, _wrap_ToggleButtonNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
     SWIG_addvarlink(SWIG_globals,(char*)"NotebookNameStr",_wrap_NotebookNameStr_get, _wrap_NotebookNameStr_set);
@@ -37336,8 +37419,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_END_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_LIST_END_LABEL_EDIT));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_DELETE_ITEM", PyInt_FromLong(wxEVT_COMMAND_LIST_DELETE_ITEM));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS", PyInt_FromLong(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
-    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_GET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_GET_INFO));
-    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_SET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_SET_INFO));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_SELECTED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_SELECTED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_DESELECTED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_DESELECTED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_KEY_DOWN", PyInt_FromLong(wxEVT_COMMAND_LIST_KEY_DOWN));
@@ -37352,6 +37433,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_DRAGGING", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_DRAGGING));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_COL_END_DRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_COL_END_DRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_ITEM_FOCUSED", PyInt_FromLong(wxEVT_COMMAND_LIST_ITEM_FOCUSED));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_GET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_GET_INFO));
+    PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_SET_INFO", PyInt_FromLong(wxEVT_COMMAND_LIST_SET_INFO));
     
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");

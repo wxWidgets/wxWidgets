@@ -5363,6 +5363,10 @@ class TreeCtrl(_core.Control):
         """SetItemBold(self, TreeItemId item, bool bold=True)"""
         return _controls_.TreeCtrl_SetItemBold(*args, **kwargs)
 
+    def SetItemDropHighlight(*args, **kwargs):
+        """SetItemDropHighlight(self, TreeItemId item, bool highlight=True)"""
+        return _controls_.TreeCtrl_SetItemDropHighlight(*args, **kwargs)
+
     def SetItemTextColour(*args, **kwargs):
         """SetItemTextColour(self, TreeItemId item, Colour col)"""
         return _controls_.TreeCtrl_SetItemTextColour(*args, **kwargs)

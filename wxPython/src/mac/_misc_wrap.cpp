@@ -2130,7 +2130,6 @@ static bool wxSound_CreateFromData(wxSound *self,PyObject *data){
                  return false;
         #endif
         }
-static void Sound_Stop(){ wxPyRaiseNotImplemented(); }
 
 #include <wx/mimetype.h>
 
@@ -2410,9 +2409,8 @@ static bool wxConfigBase_ReadBool(wxConfigBase *self,wxString const &key,bool de
 
 #include <wx/datetime.h>
 
-
- static const wxString wxPyDateFormatStr(wxT("%c")); 
- static const wxString wxPyTimeSpanFormatStr(wxT("%H:%M:%S")); 
+ static const wxString wxPyDefaultDateTimeFormat(wxDefaultDateTimeFormat); 
+ static const wxString wxPyDefaultTimeSpanFormat(wxDefaultTimeSpanFormat); 
 
 #define LOCAL_TZ wxDateTime::Local
 
@@ -2463,7 +2461,7 @@ static int wxDateTime_ParseRfc822Date(wxDateTime *self,wxString const &date){
             if (rv == NULL) return -1;
             return rv - _date;
         }
-static int wxDateTime_ParseFormat(wxDateTime *self,wxString const &date,wxString const &format=wxPyDateFormatStr,wxDateTime const &dateDef=wxDefaultDateTime){
+static int wxDateTime_ParseFormat(wxDateTime *self,wxString const &date,wxString const &format=wxPyDefaultDateTimeFormat,wxDateTime const &dateDef=wxDefaultDateTime){
             const wxChar* rv;
             const wxChar* _date = date;
             rv = self->ParseFormat(_date, format, dateDef);
@@ -2694,6 +2692,9 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyEndBlockThreads(blocked);
 }
 
+static wxCustomDataObject *new_wxCustomDataObject__SWIG_1(wxString const &formatName){
+            return new wxCustomDataObject(wxDataFormat(formatName));
+        }
 static bool wxCustomDataObject_SetData(wxCustomDataObject *self,PyObject *data){
             bool rval;
             bool blocked = wxPyBeginBlockThreads();
@@ -3536,20 +3537,38 @@ static PyObject *_wrap_IsStockLabel(PyObject *, PyObject *args, PyObject *kwargs
 static PyObject *_wrap_GetStockLabel(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
+    bool arg2 = (bool) true ;
+    wxString arg3 = (wxString) wxPyEmptyString ;
     wxString result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "id", NULL 
+        (char *) "id",(char *) "withCodes",(char *) "accelerator", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GetStockLabel",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:GetStockLabel",kwnames,&obj0,&obj1,&obj2)) goto fail;
     {
         arg1 = (int)(SWIG_As_int(obj0)); 
         if (SWIG_arg_fail(1)) SWIG_fail;
     }
+    if (obj1) {
+        {
+            arg2 = (bool)(SWIG_As_bool(obj1)); 
+            if (SWIG_arg_fail(2)) SWIG_fail;
+        }
+    }
+    if (obj2) {
+        {
+            wxString* sptr = wxString_in_helper(obj2);
+            if (sptr == NULL) SWIG_fail;
+            arg3 = *sptr;
+            delete sptr;
+        }
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = wxGetStockLabel(arg1);
+        result = wxGetStockLabel(arg1,arg2,arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12607,247 +12626,6 @@ static PyObject * Joystick_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_JoystickEvent_m_pos_set(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    wxPoint *arg2 = (wxPoint *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "m_pos", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_pos_set",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxPoint, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(2)) SWIG_fail;
-    if (arg1) (arg1)->m_pos = *arg2;
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_pos_get(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    wxPoint *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:JoystickEvent_m_pos_get",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    result = (wxPoint *)& ((arg1)->m_pos);
-    
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPoint, 0);
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_zPosition_set(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "m_zPosition", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_zPosition_set",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    if (arg1) (arg1)->m_zPosition = arg2;
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_zPosition_get(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:JoystickEvent_m_zPosition_get",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    result = (int) ((arg1)->m_zPosition);
-    
-    {
-        resultobj = SWIG_From_int((int)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_buttonChange_set(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "m_buttonChange", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_buttonChange_set",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    if (arg1) (arg1)->m_buttonChange = arg2;
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_buttonChange_get(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:JoystickEvent_m_buttonChange_get",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    result = (int) ((arg1)->m_buttonChange);
-    
-    {
-        resultobj = SWIG_From_int((int)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_buttonState_set(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "m_buttonState", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_buttonState_set",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    if (arg1) (arg1)->m_buttonState = arg2;
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_buttonState_get(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:JoystickEvent_m_buttonState_get",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    result = (int) ((arg1)->m_buttonState);
-    
-    {
-        resultobj = SWIG_From_int((int)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_joyStick_set(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int arg2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "m_joyStick", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:JoystickEvent_m_joyStick_set",kwnames,&obj0,&obj1)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    if (arg1) (arg1)->m_joyStick = arg2;
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_JoystickEvent_m_joyStick_get(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxJoystickEvent *arg1 = (wxJoystickEvent *) 0 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:JoystickEvent_m_joyStick_get",kwnames,&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxJoystickEvent, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    result = (int) ((arg1)->m_joyStick);
-    
-    {
-        resultobj = SWIG_From_int((int)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_new_JoystickEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
@@ -13691,7 +13469,7 @@ static PyObject *_wrap_Sound_Stop(PyObject *, PyObject *args, PyObject *kwargs) 
     {
         if (!wxPyCheckForApp()) SWIG_fail;
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        Sound_Stop();
+        wxSound::Stop();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -18708,40 +18486,40 @@ static PyObject *_wrap_ExpandEnvVars(PyObject *, PyObject *args, PyObject *kwarg
 }
 
 
-static int _wrap_DateFormatStr_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable DateFormatStr is read-only.");
+static int _wrap_DefaultDateTimeFormat_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable DefaultDateTimeFormat is read-only.");
     return 1;
 }
 
 
-static PyObject *_wrap_DateFormatStr_get(void) {
+static PyObject *_wrap_DefaultDateTimeFormat_get(void) {
     PyObject *pyobj;
     
     {
 #if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyDateFormatStr)->c_str(), (&wxPyDateFormatStr)->Len());
+        pyobj = PyUnicode_FromWideChar((&wxPyDefaultDateTimeFormat)->c_str(), (&wxPyDefaultDateTimeFormat)->Len());
 #else
-        pyobj = PyString_FromStringAndSize((&wxPyDateFormatStr)->c_str(), (&wxPyDateFormatStr)->Len());
+        pyobj = PyString_FromStringAndSize((&wxPyDefaultDateTimeFormat)->c_str(), (&wxPyDefaultDateTimeFormat)->Len());
 #endif
     }
     return pyobj;
 }
 
 
-static int _wrap_TimeSpanFormatStr_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable TimeSpanFormatStr is read-only.");
+static int _wrap_DefaultTimeSpanFormat_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable DefaultTimeSpanFormat is read-only.");
     return 1;
 }
 
 
-static PyObject *_wrap_TimeSpanFormatStr_get(void) {
+static PyObject *_wrap_DefaultTimeSpanFormat_get(void) {
     PyObject *pyobj;
     
     {
 #if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyTimeSpanFormatStr)->c_str(), (&wxPyTimeSpanFormatStr)->Len());
+        pyobj = PyUnicode_FromWideChar((&wxPyDefaultTimeSpanFormat)->c_str(), (&wxPyDefaultTimeSpanFormat)->Len());
 #else
-        pyobj = PyString_FromStringAndSize((&wxPyTimeSpanFormatStr)->c_str(), (&wxPyTimeSpanFormatStr)->Len());
+        pyobj = PyString_FromStringAndSize((&wxPyDefaultTimeSpanFormat)->c_str(), (&wxPyDefaultTimeSpanFormat)->Len());
 #endif
     }
     return pyobj;
@@ -22954,15 +22732,18 @@ static PyObject *_wrap_DateTime___sub__(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___lt__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___lt__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -22983,15 +22764,18 @@ static PyObject *_wrap_DateTime___lt__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___le__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___le__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -23012,15 +22796,18 @@ static PyObject *_wrap_DateTime___le__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___gt__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___gt__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -23041,15 +22828,18 @@ static PyObject *_wrap_DateTime___gt__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ge__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___ge__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -23070,15 +22860,18 @@ static PyObject *_wrap_DateTime___ge__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___eq__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___eq__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -23099,15 +22892,18 @@ static PyObject *_wrap_DateTime___eq__(PyObject *, PyObject *args) {
 }
 
 
-static PyObject *_wrap_DateTime___ne__(PyObject *, PyObject *args) {
+static PyObject *_wrap_DateTime___ne__(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxDateTime *arg2 = (wxDateTime *) 0 ;
     bool result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "other", NULL 
+    };
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:DateTime___ne__",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime___ne__",kwnames,&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_wxDateTime, SWIG_POINTER_EXCEPTION | 0);
@@ -23176,7 +22972,7 @@ static PyObject *_wrap_DateTime_ParseFormat(PyObject *, PyObject *args, PyObject
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
     wxString *arg2 = 0 ;
-    wxString const &arg3_defvalue = wxPyDateFormatStr ;
+    wxString const &arg3_defvalue = wxPyDefaultDateTimeFormat ;
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxDateTime const &arg4_defvalue = wxDefaultDateTime ;
     wxDateTime *arg4 = (wxDateTime *) &arg4_defvalue ;
@@ -23383,7 +23179,7 @@ static PyObject *_wrap_DateTime_ParseTime(PyObject *, PyObject *args, PyObject *
 static PyObject *_wrap_DateTime_Format(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxDateTime *arg1 = (wxDateTime *) 0 ;
-    wxString const &arg2_defvalue = wxPyDateFormatStr ;
+    wxString const &arg2_defvalue = wxPyDefaultDateTimeFormat ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxDateTime::TimeZone const &arg3_defvalue = LOCAL_TZ ;
     wxDateTime::TimeZone *arg3 = (wxDateTime::TimeZone *) &arg3_defvalue ;
@@ -24996,7 +24792,7 @@ static PyObject *_wrap_TimeSpan_GetMilliseconds(PyObject *, PyObject *args, PyOb
 static PyObject *_wrap_TimeSpan_Format(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTimeSpan *arg1 = (wxTimeSpan *) 0 ;
-    wxString const &arg2_defvalue = wxPyTimeSpanFormatStr ;
+    wxString const &arg2_defvalue = wxPyDefaultTimeSpanFormat ;
     wxString *arg2 = (wxString *) &arg2_defvalue ;
     wxString result;
     bool temp2 = false ;
@@ -27900,26 +27696,20 @@ static PyObject * FileDataObject_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_CustomDataObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_CustomDataObject__SWIG_0(PyObject *, PyObject *args) {
     PyObject *resultobj;
-    wxDataFormat const &arg1_defvalue = wxFormatInvalid ;
-    wxDataFormat *arg1 = (wxDataFormat *) &arg1_defvalue ;
+    wxDataFormat *arg1 = 0 ;
     wxCustomDataObject *result;
     PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "format", NULL 
-    };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_CustomDataObject",kwnames,&obj0)) goto fail;
-    if (obj0) {
-        {
-            SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDataFormat, SWIG_POINTER_EXCEPTION | 0);
-            if (SWIG_arg_fail(1)) SWIG_fail;
-            if (arg1 == NULL) {
-                SWIG_null_ref("wxDataFormat");
-            }
-            if (SWIG_arg_fail(1)) SWIG_fail;
+    if(!PyArg_ParseTuple(args,(char *)"O:new_CustomDataObject",&obj0)) goto fail;
+    {
+        SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxDataFormat, SWIG_POINTER_EXCEPTION | 0);
+        if (SWIG_arg_fail(1)) SWIG_fail;
+        if (arg1 == NULL) {
+            SWIG_null_ref("wxDataFormat");
         }
+        if (SWIG_arg_fail(1)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -27931,6 +27721,102 @@ static PyObject *_wrap_new_CustomDataObject(PyObject *, PyObject *args, PyObject
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCustomDataObject, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_CustomDataObject__SWIG_1(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxString *arg1 = 0 ;
+    wxCustomDataObject *result;
+    bool temp1 = false ;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:new_CustomDataObject",&obj0)) goto fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxCustomDataObject *)new_wxCustomDataObject__SWIG_1((wxString const &)*arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCustomDataObject, 1);
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_CustomDataObject__SWIG_2(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    wxCustomDataObject *result;
+    
+    if(!PyArg_ParseTuple(args,(char *)":new_CustomDataObject")) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxCustomDataObject *)new wxCustomDataObject();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCustomDataObject, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_new_CustomDataObject(PyObject *self, PyObject *args) {
+    int argc;
+    PyObject *argv[2];
+    int ii;
+    
+    argc = PyObject_Length(args);
+    for (ii = 0; (ii < argc) && (ii < 1); ii++) {
+        argv[ii] = PyTuple_GetItem(args,ii);
+    }
+    if (argc == 0) {
+        return _wrap_new_CustomDataObject__SWIG_2(self,args);
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            _v = PyString_Check(argv[0]) || PyUnicode_Check(argv[0]);
+        }
+        if (_v) {
+            return _wrap_new_CustomDataObject__SWIG_1(self,args);
+        }
+    }
+    if (argc == 1) {
+        int _v;
+        {
+            void *ptr = 0;
+            if (SWIG_ConvertPtr(argv[0], &ptr, SWIGTYPE_p_wxDataFormat, 0) == -1) {
+                _v = 0;
+                PyErr_Clear();
+            } else {
+                _v = (ptr != 0);
+            }
+        }
+        if (_v) {
+            return _wrap_new_CustomDataObject__SWIG_0(self,args);
+        }
+    }
+    
+    PyErr_SetString(PyExc_NotImplementedError,"No matching function for overloaded 'new_CustomDataObject'");
     return NULL;
 }
 
@@ -31411,16 +31297,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Joystick_SetCapture", (PyCFunction) _wrap_Joystick_SetCapture, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Joystick_ReleaseCapture", (PyCFunction) _wrap_Joystick_ReleaseCapture, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Joystick_swigregister", Joystick_swigregister, METH_VARARGS, NULL},
-	 { (char *)"JoystickEvent_m_pos_set", (PyCFunction) _wrap_JoystickEvent_m_pos_set, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_pos_get", (PyCFunction) _wrap_JoystickEvent_m_pos_get, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_zPosition_set", (PyCFunction) _wrap_JoystickEvent_m_zPosition_set, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_zPosition_get", (PyCFunction) _wrap_JoystickEvent_m_zPosition_get, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_buttonChange_set", (PyCFunction) _wrap_JoystickEvent_m_buttonChange_set, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_buttonChange_get", (PyCFunction) _wrap_JoystickEvent_m_buttonChange_get, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_buttonState_set", (PyCFunction) _wrap_JoystickEvent_m_buttonState_set, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_buttonState_get", (PyCFunction) _wrap_JoystickEvent_m_buttonState_get, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_joyStick_set", (PyCFunction) _wrap_JoystickEvent_m_joyStick_set, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"JoystickEvent_m_joyStick_get", (PyCFunction) _wrap_JoystickEvent_m_joyStick_get, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_JoystickEvent", (PyCFunction) _wrap_new_JoystickEvent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"JoystickEvent_GetPosition", (PyCFunction) _wrap_JoystickEvent_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"JoystickEvent_GetZPosition", (PyCFunction) _wrap_JoystickEvent_GetZPosition, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31653,12 +31529,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime___isub__", _wrap_DateTime___isub__, METH_VARARGS, NULL},
 	 { (char *)"DateTime___add__", _wrap_DateTime___add__, METH_VARARGS, NULL},
 	 { (char *)"DateTime___sub__", _wrap_DateTime___sub__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___lt__", _wrap_DateTime___lt__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___le__", _wrap_DateTime___le__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___gt__", _wrap_DateTime___gt__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___ge__", _wrap_DateTime___ge__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___eq__", _wrap_DateTime___eq__, METH_VARARGS, NULL},
-	 { (char *)"DateTime___ne__", _wrap_DateTime___ne__, METH_VARARGS, NULL},
+	 { (char *)"DateTime___lt__", (PyCFunction) _wrap_DateTime___lt__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___le__", (PyCFunction) _wrap_DateTime___le__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___gt__", (PyCFunction) _wrap_DateTime___gt__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___ge__", (PyCFunction) _wrap_DateTime___ge__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___eq__", (PyCFunction) _wrap_DateTime___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"DateTime___ne__", (PyCFunction) _wrap_DateTime___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseRfc822Date", (PyCFunction) _wrap_DateTime_ParseRfc822Date, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseFormat", (PyCFunction) _wrap_DateTime_ParseFormat, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ParseDateTime", (PyCFunction) _wrap_DateTime_ParseDateTime, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -31804,7 +31680,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"FileDataObject_GetFilenames", (PyCFunction) _wrap_FileDataObject_GetFilenames, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDataObject_AddFile", (PyCFunction) _wrap_FileDataObject_AddFile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileDataObject_swigregister", FileDataObject_swigregister, METH_VARARGS, NULL},
-	 { (char *)"new_CustomDataObject", (PyCFunction) _wrap_new_CustomDataObject, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_CustomDataObject", _wrap_new_CustomDataObject, METH_VARARGS, NULL},
 	 { (char *)"CustomDataObject_SetData", (PyCFunction) _wrap_CustomDataObject_SetData, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CustomDataObject_GetSize", (PyCFunction) _wrap_CustomDataObject_GetSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"CustomDataObject_GetData", (PyCFunction) _wrap_CustomDataObject_GetData, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -33542,8 +33418,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     {
         PyDict_SetItemString(d,"ConfigBase_Type_Float", SWIG_From_int((int)(wxConfigBase::Type_Float))); 
     }
-    SWIG_addvarlink(SWIG_globals,(char*)"DateFormatStr",_wrap_DateFormatStr_get, _wrap_DateFormatStr_set);
-    SWIG_addvarlink(SWIG_globals,(char*)"TimeSpanFormatStr",_wrap_TimeSpanFormatStr_get, _wrap_TimeSpanFormatStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DefaultDateTimeFormat",_wrap_DefaultDateTimeFormat_get, _wrap_DefaultDateTimeFormat_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DefaultTimeSpanFormat",_wrap_DefaultTimeSpanFormat_get, _wrap_DefaultTimeSpanFormat_set);
     {
         PyDict_SetItemString(d,"DateTime_Local", SWIG_From_int((int)(wxDateTime::Local))); 
     }
