@@ -17,7 +17,7 @@
 #include "wx/wx.h"
 #endif
 
-#include <wx/html/helpdata.h>
+#include "wx/html/helpdata.h"
 
 
 class MyApp : public wxApp

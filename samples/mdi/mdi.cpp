@@ -29,7 +29,7 @@
     #include "wx/mdi.h"
 #endif
 
-#include <wx/toolbar.h>
+#include "wx/toolbar.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"

@@ -38,8 +38,8 @@
 #define wxTEST_GENERIC_DIALOGS_IN_MSW 0
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
-#include <wx/generic/colrdlgg.h>
-#include <wx/generic/fontdlgg.h>
+#include "wx/generic/colrdlgg.h"
+#include "wx/generic/fontdlgg.h"
 #endif
 
 #define wxUSE_DIRDLGG 1

@@ -53,8 +53,8 @@
 #endif
 
 #if USE_HTML_HELP
-#include <wx/filesys.h>
-#include <wx/fs_zip.h>
+#include "wx/filesys.h"
+#include "wx/fs_zip.h"
 
 #if USE_OLD_HTML_HELP
 #include "wx/generic/helpwxht.h"

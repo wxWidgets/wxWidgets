@@ -9,7 +9,7 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <wx/toolbar.h>
+#include "wx/toolbar.h"
 
 // Define a new application
 class MyApp: public wxApp
