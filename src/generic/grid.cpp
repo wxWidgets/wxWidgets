@@ -3791,7 +3791,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
 }
 
 
-void wxGrid::CalcRowLabelsExposed( wxRegion& reg )
+void wxGrid::CalcRowLabelsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;
@@ -3840,7 +3840,7 @@ void wxGrid::CalcRowLabelsExposed( wxRegion& reg )
 }
 
 
-void wxGrid::CalcColLabelsExposed( wxRegion& reg )
+void wxGrid::CalcColLabelsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;
@@ -3889,7 +3889,7 @@ void wxGrid::CalcColLabelsExposed( wxRegion& reg )
 }
 
 
-void wxGrid::CalcCellsExposed( wxRegion& reg )
+void wxGrid::CalcCellsExposed( const wxRegion& reg )
 {
     wxRegionIterator iter( reg );
     wxRect r;

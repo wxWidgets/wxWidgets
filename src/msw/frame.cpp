@@ -148,8 +148,7 @@ bool wxFrame::Create(wxWindow *parent,
   if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
     parent = NULL;
 
-  if (!parent)
-    wxTopLevelWindows.Append(this);
+  wxTopLevelWindows.Append(this);
 
   MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
             x, y, width, height, style);

@@ -982,10 +982,10 @@ public:
 
     // ------ display update functions
     //
-    void CalcRowLabelsExposed( wxRegion& reg );
+    void CalcRowLabelsExposed( const wxRegion& reg );
 
-    void CalcColLabelsExposed( wxRegion& reg );
-    void CalcCellsExposed( wxRegion& reg );
+    void CalcColLabelsExposed( const wxRegion& reg );
+    void CalcCellsExposed( const wxRegion& reg );
 
 
     // ------ event handlers
