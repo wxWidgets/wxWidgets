@@ -54,6 +54,8 @@
 
 #include "wx/debug.h"
 #include "wx/strconv.h"
+#include "wx/intl.h"
+#include "wx/log.h"
 
 #if defined(WORDS_BIGENDIAN) || defined(__STDC_ISO_10646__)
 #define BSWAP_UCS4(str, len)
@@ -422,48 +424,63 @@ public:
     wxMBConv*work;
 };
 
+
 #ifdef HAVE_ICONV_H
+
+// VS: glibc 2.1.3 is broken in that iconv() conversion to/from UCS4 fails with E2BIG
+//     if output buffer is _exactly_ as big as needed. Such case is (unless there's
+//     yet another bug in glibc) the only case when iconv() returns with (size_t)-1
+//     (which means error) and says there are 0 bytes left in the input buffer --
+//     when _real_ error occurs, bytes-left-in-input buffer is non-zero. Hence,
+//     this alternative test for iconv() failure.
+//     [This bug does not appear in glibc 2.2.]
+#if defined(__GLIBC__) && __GLIBC__ == 2 && __GLIBC_MINOR__ <= 1
+#define ICONV_FAILED(cres, bufLeft) ((cres == (size_t)-1) && \
+                                     (errno != E2BIG || bufLeft != 0))
+#else
+#define ICONV_FAILED(cres, bufLeft)  (cres == (size_t)-1)
+#endif
+
 class IC_CharSet : public wxCharacterSet
 {
 public:
     IC_CharSet(const wxChar*name) 
-        : wxCharacterSet(name), m2w((iconv_t)-1), w2m((iconv_t)-1) {}
+        : wxCharacterSet(name)
+    {
+        m2w = iconv_open(WC_NAME, wxConvLibc.cWX2MB(cname));
+        w2m = iconv_open(wxConvLibc.cWX2MB(cname), WC_NAME);
+    }
+    
     ~IC_CharSet()
     {
-        if (m2w!=(iconv_t)-1) iconv_close(m2w);
-        if (w2m!=(iconv_t)-1) iconv_close(w2m);
+        if ( m2w != (iconv_t)-1 ) 
+            iconv_close(m2w);
+        if ( w2m != (iconv_t)-1 ) 
+            iconv_close(w2m);
     }
     
-    void LoadM2W() 
-    { 
-        if (m2w==(iconv_t)-1)
-            m2w=iconv_open(WC_NAME,wxConvLibc.cWX2MB(cname));
-    }
-    
-    void LoadW2M()
-    { 
-        if (w2m==(iconv_t)-1)
-            w2m=iconv_open(wxConvLibc.cWX2MB(cname),WC_NAME);
-    }
-    
-    size_t MB2WC(wchar_t*buf, const char*psz, size_t n)
+    size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
     {
-        LoadM2W();
         size_t inbuf = strlen(psz);
-        size_t outbuf = n*SIZEOF_WCHAR_T;
+        size_t outbuf = n * SIZEOF_WCHAR_T;
         size_t res, cres;
-        fprintf(stderr,"IC Convert to WC using %s\n",(const char*)wxConvLibc.cWX2MB(cname));
+        // VS: Use these instead of psz, buf because iconv() modifies its arguments:
+        wchar_t *bufPtr = buf;
+        const char *pszPtr = psz;
+
         if (buf)
         {
             // have destination buffer, convert there
 #ifdef WX_ICONV_TAKES_CHAR
-            cres = iconv( m2w, (char**)&psz, &inbuf, (char**)&buf, &outbuf );
+            cres = iconv(m2w, (char**)&pszPtr, &inbuf, (char**)&bufPtr, &outbuf);
 #else
-            cres = iconv( m2w, &psz, &inbuf, (char**)&buf, &outbuf );
+            cres = iconv(m2w, &pszPtr, &inbuf, (char**)&bufPtr, &outbuf);
 #endif
-            res = n-(outbuf/SIZEOF_WCHAR_T);
+            res = n - (outbuf / SIZEOF_WCHAR_T);
             // convert to native endianness
-            WC_BSWAP(buf, res)
+#ifdef WC_NEED_BSWAP
+            WC_BSWAP(buf /* _not_ bufPtr */, res)
+#endif
         }
         else
         {
@@ -472,33 +489,32 @@ public:
             wchar_t tbuf[8];
             res = 0;
             do {
-                buf = tbuf; outbuf = 8*SIZEOF_WCHAR_T;
+                bufPtr = tbuf; outbuf = 8*SIZEOF_WCHAR_T;
 #ifdef WX_ICONV_TAKES_CHAR
-                cres = iconv( m2w, (char**)&psz, &inbuf, (char**)&buf, &outbuf );
+                cres = iconv( m2w, (char**)&pszPtr, &inbuf, (char**)&bufPtr, &outbuf );
 #else
-                cres = iconv( m2w, &psz, &inbuf, (char**)&buf, &outbuf );
+                cres = iconv( m2w, &pszPtr, &inbuf, (char**)&bufPtr, &outbuf );
 #endif
                 res += 8-(outbuf/SIZEOF_WCHAR_T);
             } while ((cres==(size_t)-1) && (errno==E2BIG));
         }
         
-        if (cres==(size_t)-1)
+        if (ICONV_FAILED(cres, inbuf))
             return (size_t)-1;
-            
+
         return res;
     }
     
     size_t WC2MB(char*buf, const wchar_t*psz, size_t n)
     {
-        LoadW2M();
 #if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
-        size_t inbuf = std::wcslen(psz);
+        size_t inbuf = std::wcslen(psz) * SIZEOF_WCHAR_T;
 #else
-        size_t inbuf = ::wcslen(psz);
+        size_t inbuf = ::wcslen(psz) * SIZEOF_WCHAR_T;
 #endif
         size_t outbuf = n;
         size_t res, cres;
-        fprintf(stderr,"IC Convert from WC using %s\n",(const char*)wxConvLibc.cWX2MB(cname));
+
 #ifdef WC_NEED_BSWAP
         // need to copy to temp buffer to switch endianness
         // this absolutely doesn't rock!
@@ -538,14 +554,14 @@ public:
 #ifdef WC_NEED_BSWAP
         free(tmpbuf);
 #endif
-        if (cres==(size_t)-1)
+        if (ICONV_FAILED(cres, inbuf))
             return (size_t)-1;
             
         return res;
     }
     
     bool usable()
-        { return TRUE; }
+        { return (m2w != (iconv_t)-1) && (w2m != (iconv_t)-1); }
   
 public:
     iconv_t m2w, w2m;
@@ -595,7 +611,6 @@ public:
     size_t MB2WC(wchar_t*buf, const char*psz, size_t n)
     {
         size_t inbuf = strlen(psz);
-        fprintf(stderr,"EC Convert to WC using %d\n",enc);
         if (buf) m2w.Convert(psz,buf);
         return inbuf;
     }
@@ -607,7 +622,6 @@ public:
 #else
         size_t inbuf = ::wcslen(psz);
 #endif
-        fprintf(stderr,"EC Convert from WC using %d\n",enc);
         if (buf)
             w2m.Convert(psz,buf);
             
@@ -641,6 +655,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     
     if (cset && cset->usable()) return cset;
     if (cset) delete cset;
+    cset = NULL;
 #ifdef __WIN32__
     cset = new CP_CharSet(name); // may take NULL
     if (cset->usable()) return cset;
@@ -649,6 +664,7 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     cset = new EC_CharSet(name);
     if (cset->usable()) return cset;
     delete cset;
+    wxLogError(_("Unknown encoding '%s'!"), name);
     return NULL;
 }
 
@@ -677,7 +693,6 @@ void wxCSConv::SetName(const wxChar *charset)
 
 void wxCSConv::LoadNow()
 {
-//  wxPrintf(wxT("Conversion request\n"));
     if (m_deferred)
     {
         if (!m_name)
