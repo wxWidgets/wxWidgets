@@ -464,7 +464,7 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
         }
 }
 
-wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char b )
+wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const
 {
     wxImage image;
 
@@ -1084,7 +1084,7 @@ bool wxImageHandler::CanRead( const wxString& name )
 #if wxUSE_GUI
 
 #ifdef __WXGTK__
-wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue )
+wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const
 {
     wxImage mono = this->ConvertToMono( red, green, blue );
     wxBitmap bitmap( mono, 1 );

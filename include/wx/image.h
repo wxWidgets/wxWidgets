@@ -104,7 +104,7 @@ public:
     operator wxBitmap() const { return ConvertToBitmap(); }
     wxBitmap ConvertToBitmap() const;
 #ifdef __WXGTK__
-    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue );
+    wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
 #endif
 #endif
 
@@ -142,7 +142,7 @@ public:
                   unsigned char r2, unsigned char g2, unsigned char b2 );
 		  
     // convert to monochrome image (<r,g,b> will be replaced by white, everything else by black)
-    wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b );
+    wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
