@@ -91,6 +91,10 @@
     } ENLINK;
 #endif // ENLINK
 
+#ifndef SF_UNICODE
+    #define SF_UNICODE 0x0010
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -491,11 +495,8 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
     EDITSTREAM eds;
     wxZeroMemory(eds);
     eds.dwCookie = (DWORD)&wpc;
-    eds.pfnCallback = wxRichEditStreamIn;
-
-#ifndef SF_UNICODE
-#define SF_UNICODE 0x0010
-#endif
+    // the cast below is needed for broken (very) old mingw32 headers
+    eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
     if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
                         SF_TEXT | SF_UNICODE | SFF_SELECTION,
