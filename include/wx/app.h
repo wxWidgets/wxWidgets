@@ -205,7 +205,7 @@ public:
         // object) - this log object is used by default by all wxLogXXX()
         // functions.
     virtual wxLog *CreateLogTarget()
-        #if wxUSE_GUI && wxUSE_LOGGUI
+        #if wxUSE_GUI && wxUSE_LOGGUI && !defined(__WXMICROWIN__)
             { return new wxLogGui; }
         #else // !GUI
             { return new wxLogStderr; }

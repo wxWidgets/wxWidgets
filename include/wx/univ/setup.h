@@ -116,7 +116,8 @@
 #define wxUSE_DIRDLG 0
 #define wxUSE_FONTDLG 0
 #define wxUSE_FILEDLG 0
-#define wxUSE_TEXTDLG 0
+#define wxUSE_FILEDLG 0
+#define wxUSE_COLOURDLG 0
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_NUMBERDLG 0
 #define wxUSE_STARTUP_TIPS 0
@@ -265,6 +266,7 @@
 #define wxUSE_DIRDLG 0
 #define wxUSE_FONTDLG 0
 #define wxUSE_FILEDLG 0
+#define wxUSE_COLOURDLG 0
 #define wxUSE_TEXTDLG 0
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_NUMBERDLG 0

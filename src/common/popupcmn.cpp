@@ -337,7 +337,11 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
     // when we lose focus we always disappear
-    m_popup->DismissAndNotify();
+
+    // But if m_popup was about to get the focus,
+    // don't disappear.
+    if (event.GetWindow() != m_popup)
+        m_popup->DismissAndNotify();
 }
 
 #endif // wxUSE_POPUPWIN

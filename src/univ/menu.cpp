@@ -1963,7 +1963,7 @@ bool wxMenuBar::ProcessMouseEvent(const wxPoint& pt)
 
     // show the menu if we know that we should, even if we hadn't been showing
     // it before (this may happen if the previous menu was disabled)
-    if ( m_shouldShowMenu )
+    if ( m_shouldShowMenu && !m_menuShown)
     {
         // open the new menu if the old one we closed had been opened
         PopupCurrentMenu(FALSE /* don't select first item - as Windows does */);

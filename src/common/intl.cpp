@@ -1916,7 +1916,5 @@ void wxLocale::InitLanguagesDB()
 
 // --- --- --- generated code ends here --- --- ---
 
-
-
 #endif // wxUSE_INTL
 

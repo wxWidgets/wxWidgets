@@ -86,3 +86,6 @@ cleanwx:
 
 wx:
 	@pushd $(WXDIR)/src/msw; make -f makefile.mic all; popd
+
+wxfull:
+	@pushd $(WXDIR)/src/msw; make -f makefile.mic cleanwx all; popd

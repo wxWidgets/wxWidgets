@@ -496,7 +496,19 @@ bool wxWindowMSW::Show(bool show)
 
     if ( show )
     {
+#ifdef __WXMICROWIN__
+	// It seems that MicroWindows brings the _parent_ of the
+	// window to the top, which can be the wrong one.
+	
+	/* activate (set focus to) specified window*/
+	::SetFocus(hWnd);
+
+	/* raise top level parent to top of z order*/
+	::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
+		SWP_NOMOVE|SWP_NOSIZE);
+#else
         BringWindowToTop(hWnd);
+#endif
     }
 
     return TRUE;
@@ -508,7 +520,19 @@ void wxWindowMSW::Raise()
 #ifdef __WIN16__
     ::BringWindowToTop(GetHwnd());
 #else // Win32
+#ifdef __WXMICROWIN__
+	// It seems that MicroWindows brings the _parent_ of the
+	// window to the top, which can be the wrong one.
+	
+	/* activate (set focus to) specified window*/
+	::SetFocus(GetHwnd());
+
+	/* raise top level parent to top of z order*/
+	::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
+		SWP_NOMOVE|SWP_NOSIZE);
+#else
     ::SetForegroundWindow(GetHwnd());
+#endif
 #endif
 }
 
@@ -921,6 +945,9 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
     wxAssociateWinWithHandle(hwnd, this);
 
     m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+
+    wxASSERT( (WXFARPROC) m_oldWndProc != (WXFARPROC) wxWndProc );
+    
     SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
 }
 
@@ -2656,9 +2683,9 @@ bool wxWindowMSW::MSWCreate(int id,
 
     wxWndHook = this;
 
+#ifndef __WXMICROWIN__
     if ( dialog_template )
     {
-#ifndef __WXMICROWIN__
         // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
         // app window as parent - this avoids creating modal dialogs without
         // parent
@@ -2730,11 +2757,11 @@ bool wxWindowMSW::MSWCreate(int id,
         {
             wxLogLastError(wxT("MoveWindow"));
         }
-#endif
-	// __WXMICROWIN__
 
     }
     else // creating a normal window, not a dialog
+#endif
+	// __WXMICROWIN__
     {
         int controlId = 0;
         if ( style & WS_CHILD )

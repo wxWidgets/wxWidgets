@@ -1233,8 +1233,12 @@ int wxDisplayDepth()
 void wxDisplaySize(int *width, int *height)
 {
 #ifdef __WXMICROWIN__
-    // MICROWIN_TODO
-    *width = 0; * height = 0;
+    RECT rect;
+    HWND hWnd = GetDesktopWindow();
+    ::GetWindowRect(hWnd, & rect);
+
+    *width = rect.right - rect.left;
+    *height = rect.bottom - rect.top;
 #else
     ScreenHDC dc;
 

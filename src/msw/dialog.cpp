@@ -170,12 +170,30 @@ bool wxDialog::Create(wxWindow *parent,
         dlg = wxT("wxCaptionDialog");
     else
         dlg = wxT("wxNoCaptionDialog");
+
+#ifdef __WXMICROWIN__
+    extern const wxChar *wxFrameClassName;
+    
+    int msflags = WS_OVERLAPPED;
+    if (style & wxCAPTION)
+        msflags |= WS_CAPTION;
+    if (style & wxCLIP_CHILDREN)
+        msflags |= WS_CLIPCHILDREN;
+    if ((style & wxTHICK_FRAME) == 0)
+      msflags |= WS_BORDER;
+    MSWCreate(m_windowId, parent, wxFrameClassName, this, NULL,
+              x, y, width, height,
+              msflags,
+              NULL,
+              extendedStyle);
+
+#else
     MSWCreate(m_windowId, parent, NULL, this, NULL,
               x, y, width, height,
               0, // style is not used if we have dlg template
               dlg,
               extendedStyle);
-
+#endif
     HWND hwnd = (HWND)GetHWND();
 
     if ( !hwnd )
@@ -185,8 +203,10 @@ bool wxDialog::Create(wxWindow *parent,
         return FALSE;
     }
 
+#ifndef __WXMICROWIN__
     SubclassWin(GetHWND());
-
+#endif
+    
     SetWindowText(hwnd, title);
 
     return TRUE;

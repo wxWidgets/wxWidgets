@@ -2410,7 +2410,6 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
     DrawLine(dc, x2, y1, x2, y2, orient == wxVERTICAL);
 }
 
-#if wxUSE_MENUS
 // ----------------------------------------------------------------------------
 // menu and menubar
 // ----------------------------------------------------------------------------
@@ -2445,7 +2444,7 @@ private:
                 GetMenuGeometry(wxWindow *, const wxMenu&) const;
 };
 
-#endif // wxUSE_WAVE
+#endif // wxUSE_MENUS
 
 // FIXME: all constants are hardcoded but shouldn't be
 static const wxCoord MENU_LEFT_MARGIN = 9;
@@ -2680,9 +2679,6 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
 
     return gi;
 }
-<<<<<<< win32.cpp
-#endif
-=======
 
 #else // !wxUSE_MENUS
 
@@ -2725,7 +2721,6 @@ wxWin32Renderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
 
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
->>>>>>> 1.5
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------
