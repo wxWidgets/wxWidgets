@@ -316,7 +316,6 @@ void wxApp::MacReopenApp()
     }
     else
     {
-        wxTopLevelWindow* win = NULL ;
         wxTopLevelWindow* firstIconized = NULL ;
         while (node)
         {
