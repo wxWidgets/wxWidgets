@@ -36,6 +36,10 @@
 
 #include "wx/motif/private.h"
 
+#define WIDTH_OVERHEAD 48
+#define WIDTH_OVERHEAD_SUBTRACT 40
+#define HEIGHT_OVERHEAD 15
+
 IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 
 void wxChoiceCallback (Widget w, XtPointer clientData,
@@ -75,6 +79,8 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         XmNmarginWidth, 0,
         XmNpacking, XmPACK_TIGHT,
         XmNorientation, XmHORIZONTAL,
+        XmNresizeWidth, False,
+        XmNresizeHeight, False,
         NULL);
 
     XtVaSetValues ((Widget) m_formWidget, XmNspacing, 0, NULL);
@@ -131,11 +137,10 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
     ChangeFont(FALSE);
+    ChangeBackgroundColour();
 
     AttachWidget (parent, m_buttonWidget, m_formWidget,
                   pos.x, pos.y, bestSize.x, bestSize.y);
-
-    ChangeBackgroundColour();
 
     return TRUE;
 }
@@ -181,7 +186,7 @@ int wxChoice::DoAppend(const wxString& item)
 
     m_widgetArray.Add(w);
 
-    char mnem = wxFindMnemonic ((char*) (const char*) item);
+    char mnem = wxFindMnemonic (item);
     if (mnem != 0)
         XtVaSetValues (w, XmNmnemonic, mnem, NULL);
 
@@ -359,7 +364,8 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (managed)
         XtUnmanageChild ((Widget) m_formWidget);
 
-    int actualWidth = width, actualHeight = height;
+    int actualWidth = width - WIDTH_OVERHEAD_SUBTRACT,
+        actualHeight = height - HEIGHT_OVERHEAD;
 
     if (width > -1)
     {
@@ -373,11 +379,13 @@ void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
     if (height > -1)
     {
+#if 0
         size_t i;
         for (i = 0; i < m_noStrings; i++)
             XtVaSetValues ((Widget) m_widgetArray[i],
                            XmNheight, actualHeight,
                            NULL);
+#endif
         XtVaSetValues ((Widget) m_buttonWidget, XmNheight, actualHeight,
             NULL);
     }
@@ -523,6 +531,6 @@ wxSize wxChoice::DoGetBestSize() const
 {
     wxSize items = GetItemsSize();
     // FIXME arbitrary constants
-    return wxSize( ( items.x ? items.x + 50 : 120 ),
-                     items.y + 15 );
+    return wxSize( ( items.x ? items.x + WIDTH_OVERHEAD : 120 ),
+                     items.y + HEIGHT_OVERHEAD );
 }
