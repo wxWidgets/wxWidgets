@@ -144,9 +144,31 @@ bool wxFrame::Create(wxWindow *parent,
 
     wxModelessWindows.Append(this);
 
-    int x = pos.x; int y = pos.y;
-    int width = size.x; int height = size.y;
+    int x = pos.x, y = pos.y;
+    int width = size.x, height = size.y;
+    
+    // Set reasonable values for position and size if defaults have
+    // been requested 
+    // 
+    // MB TODO: something better than these arbitrary values ?
+    //
+    if ( width == -1 ) width = 400;
+    if ( height = -1 ) height = 400;
 
+    int displayW, displayH;
+    wxDisplaySize( &displayW, &displayH );
+
+    if ( x == -1 )
+    {
+        x = (displayW - width) / 2;
+        if (x < 10) x = 10;
+    }
+    if ( y == -1 )
+    {
+        y = (displayH - height) / 2;
+        if (y < 10) y = 10;        
+    }
+        
     if (wxTopLevelUsed)
     {
         // Change suggested by Matthew Flatt
