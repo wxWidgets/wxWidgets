@@ -28,7 +28,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_PRINTING_ARCHITECTURE
+// Don't use the Windows print dialog if we're in wxUniv mode and using
+// the PostScript architecture
+#if wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXUNIVERSAL__) || !wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"

@@ -548,3 +548,316 @@ void wxDCBase::DrawLabel(const wxString& text,
     CalcBoundingBox(x0, y0);
     CalcBoundingBox(x0 + width0, y0 + height);
 }
+
+/*
+Notes for wxWindows DrawEllipticArcRot(...)
+
+wxDCBase::DrawEllipticArcRot(...) draws a rotated elliptic arc or an ellipse.
+It uses wxDCBase::CalculateEllipticPoints(...) and wxDCBase::Rotate(...),
+which are also new.
+
+All methods are generic, so they can be implemented in wxDCBase.
+DoDrawEllipticArcRot(...) is virtual, so it can be called from deeper
+methods like (WinCE) wxDC::DoDrawArc(...).
+
+CalculateEllipticPoints(...) fills a given list of wxPoints with some points
+of an elliptic arc. The algorithm is pixel-based: In every row (in flat 
+parts) or every column (in steep parts) only one pixel is calculated.
+Trigonometric calculation (sin, cos, tan, atan) is only done if the
+starting angle is not equal to the ending angle. The calculation of the 
+pixels is done using simple arithmetic only and should perform not too
+bad even on devices without floating point processor. I didn't test this yet.
+
+Rotate(...) rotates a list of point pixel-based, you will see rounding errors.
+For instance: an ellipse rotated 180 degrees is drawn 
+slightly different from the original.
+
+The points are then moved to an array and used to draw a polyline and/or polygon 
+(with center added, the pie). 
+The result looks quite similar to the native ellipse, only e few pixels differ.
+
+The performance on a desktop system (Athlon 1800, WinXP) is about 7 times
+slower as DrawEllipse(...), which calls the native API.
+An rotated ellipse outside the clipping region takes nearly the same time,
+while an native ellipse outside takes nearly no time to draw.
+
+If you draw an arc with this new method, you will see the starting and ending angles 
+are calculated properly.
+If you use DrawEllipticArc(...), you will see they are only correct for circles
+and not properly calculated for ellipses.
+
+Peter Lenhard
+p.lenhard@t-online.de
+*/
+
+#ifdef __WXWINCE__
+void wxDCBase::DoDrawEllipticArcRot( wxCoord x, wxCoord y, 
+                                     wxCoord w, wxCoord h, 
+                                     double sa, double ea, double angle )
+{
+    wxList list;
+
+    CalculateEllipticPoints( &list, x, y, w, h, sa, ea );
+    Rotate( &list, angle, wxPoint( x+w/2, y+h/2 ) );
+
+    // Add center (for polygon/pie)
+    list.Append( (wxObject*) new wxPoint( x+w/2, y+h/2 ) );
+
+    // copy list into array and delete list elements
+    int n = list.Number();
+    wxPoint *points = new wxPoint[n];
+    int i = 0;
+    wxNode* node = 0;    
+    for ( node = list.First(); node; node = node->Next(), i++ )
+    {
+        wxPoint *point = (wxPoint *)node->Data();
+        points[i].x = point->x;
+        points[i].y = point->y;
+        delete point;
+    }
+
+    // first draw the pie without pen, if necessary
+	if( GetBrush() != *wxTRANSPARENT_BRUSH )
+    {
+        wxPen tempPen( GetPen() );
+        SetPen( *wxTRANSPARENT_PEN );
+        DoDrawPolygon( n, points, 0, 0 );
+        SetPen( tempPen );
+    }
+
+    // then draw the arc without brush, if necessary
+	if( GetPen() != *wxTRANSPARENT_PEN )
+    {
+        // without center
+        DoDrawLines( n-1, points, 0, 0 );
+    }
+
+    delete [] points;
+
+} // DrawEllipticArcRot
+
+void wxDCBase::Rotate( wxList* points, double angle, wxPoint center )
+{
+    if( angle != 0.0 )
+    {
+        double pi(3.1415926536);
+        double dSinA = -sin(angle*2.0*pi/360.0);
+        double dCosA = cos(angle*2.0*pi/360.0);
+        for ( wxNode* node = points->First(); node; node = node->Next() )
+        {
+            wxPoint* point = (wxPoint*)node->Data();
+    
+            // transform coordinates, if necessary
+            if( center.x ) point->x -= center.x;
+            if( center.y ) point->y -= center.y;
+
+            // calculate rotation, rounding simply by implicit cast to integer
+            int xTemp = point->x * dCosA - point->y * dSinA;
+            point->y = point->x * dSinA + point->y * dCosA;
+            point->x = xTemp;
+
+            // back transform coordinates, if necessary
+            if( center.x ) point->x += center.x;
+            if( center.y ) point->y += center.y;
+        }
+    }
+}
+
+void wxDCBase::CalculateEllipticPoints( wxList* points, 
+                                        wxCoord xStart, wxCoord yStart, 
+                                        wxCoord w, wxCoord h, 
+                                        double sa, double ea )
+{
+    double pi = 3.1415926535;
+    double sar = 0;
+    double ear = 0;
+    int xsa = 0;
+    int ysa = 0;
+    int xea = 0;
+    int yea = 0;
+    int sq = 0;
+    int eq = 0;
+    bool bUseAngles = false;
+    if( w<0 ) w = -w;
+    if( h<0 ) h = -h;
+    // half-axes
+    wxCoord a = w/2;
+    wxCoord b = h/2;
+    // decrement 1 pixel if ellipse is smaller than 2*a, 2*b
+    int decrX = 0;
+    if( 2*a == w ) decrX = 1; 
+    int decrY = 0;
+    if( 2*b == h ) decrY = 1; 
+    // center
+    wxCoord xCenter = xStart + a;
+    wxCoord yCenter = yStart + b;
+    // calculate data for start and end, if necessary
+    if( sa != ea )
+    {
+        bUseAngles = true;
+        // normalisation of angles
+        while( sa<0 ) sa += 360;
+        while( ea<0 ) ea += 360;
+        while( sa>=360 ) sa -= 360;
+        while( ea>=360 ) ea -= 360;
+        // calculate quadrant numbers
+        if( sa > 270 ) sq = 3;
+        else if( sa > 180 ) sq = 2;
+        else if( sa > 90 ) sq = 1;
+        if( ea > 270 ) eq = 3;
+        else if( ea > 180 ) eq = 2;
+        else if( ea > 90 ) eq = 1;
+        sar = sa * pi / 180.0;
+        ear = ea * pi / 180.0;
+        // correct angle circle -> ellipse
+        sar = atan( -a/(double)b * tan( sar ) );
+        if ( sq == 1 || sq == 2 ) sar += pi; 
+        ear = atan( -a/(double)b * tan( ear ) );
+        if ( eq == 1 || eq == 2 ) ear += pi;
+        // coordinates of points
+        xsa = xCenter + a * cos( sar );
+        if( sq == 0 || sq == 3 ) xsa -= decrX;
+        ysa = yCenter + b * sin( sar );
+        if( sq == 2 || sq == 3 ) ysa -= decrY;
+        xea = xCenter + a * cos( ear );
+        if( eq == 0 || eq == 3 ) xea -= decrX;
+        yea = yCenter + b * sin( ear );
+        if( eq == 2 || eq == 3 ) yea -= decrY;
+    } // if iUseAngles
+    // calculate c1 = b^2, c2 = b^2/a^2 with a = w/2, b = h/2
+    double c1 = b * b;
+    double c2 = 2.0 / w;
+    c2 *= c2;
+    c2 *= c1;
+    wxCoord x = 0;
+    wxCoord y = b;
+    long x2 = 1;
+    long y2 = y*y;
+    long y2_old = 0;
+    long y_old = 0;
+    // Lists for quadrant 1 to 4
+    wxList pointsarray[4];
+    // Calculate points for first quadrant and set in all quadrants
+    for( x = 0; x <= a; ++x )
+    {
+        x2 = x2+x+x-1;
+        y2_old = y2;
+        y_old = y;
+        bool bNewPoint = false;
+        while( y2 > c1 - c2 * x2 && y > 0 )
+        {
+            bNewPoint = true;
+            y2 = y2-y-y+1;
+            --y;
+        }
+        // old y now to big: set point with old y, old x 
+        if( bNewPoint && x>1)
+        {
+            int x1 = x - 1;
+            // remove points on the same line
+            pointsarray[0].Insert( (wxObject*) new wxPoint( xCenter + x1 - decrX, yCenter - y_old ) );
+            pointsarray[1].Append( (wxObject*) new wxPoint( xCenter - x1, yCenter - y_old ) );
+            pointsarray[2].Insert( (wxObject*) new wxPoint( xCenter - x1, yCenter + y_old - decrY ) );
+            pointsarray[3].Append( (wxObject*) new wxPoint( xCenter + x1 - decrX, yCenter + y_old - decrY ) );
+        } // set point
+    } // calculate point
+    
+    // Starting and/or ending points for the quadrants, first quadrant gets both.
+    pointsarray[0].Insert( (wxObject*) new wxPoint( xCenter + a - decrX, yCenter ) );
+    pointsarray[0].Append( (wxObject*) new wxPoint( xCenter, yCenter - b ) );
+    pointsarray[1].Append( (wxObject*) new wxPoint( xCenter - a, yCenter ) );
+    pointsarray[2].Append( (wxObject*) new wxPoint( xCenter, yCenter + b - decrY ) );
+    pointsarray[3].Append( (wxObject*) new wxPoint( xCenter + a - decrX, yCenter ) );
+
+    // copy quadrants in original list
+    if( bUseAngles )
+    {
+        // Copy the right part of the points in the lists
+        // and delete the wxPoints, because they do not leave this method.
+        points->Append( (wxObject*) new wxPoint( xsa, ysa ) );
+        int q = sq;
+        bool bStarted = false;
+        bool bReady = false;
+        bool bForceTurn = ( sq == eq && sa > ea );
+        while( !bReady )
+        {
+            for( wxNode *node = pointsarray[q].First(); node; node = node->Next() )
+            {
+                // once: go to starting point in start quadrant
+                if( !bStarted &&
+                    ( 
+                      ( (wxPoint*) node->Data() )->x < xsa+1 && q <= 1 
+                      ||  
+                      ( (wxPoint*) node->Data() )->x > xsa-1 && q >= 2
+                    )
+                  ) 
+                {
+                    bStarted = true;
+                }
+
+                // copy point, if not at ending point
+                if( bStarted )
+                {
+                    if( q != eq || bForceTurn
+                        ||
+                        ( (wxPoint*) node->Data() )->x > xea+1 && q <= 1 
+                        ||  
+                        ( (wxPoint*) node->Data() )->x < xea-1 && q >= 2
+                      )
+                    {
+                        // copy point
+                        wxPoint* pPoint = new wxPoint( *((wxPoint*) node->Data() ) );
+                        points->Append( (wxObject*) pPoint );
+                    }
+                    else if( q == eq && !bForceTurn || ( (wxPoint*) node->Data() )->x == xea)
+                    {
+                        bReady = true; 
+                    }
+                }
+            } // for node
+            ++q;
+            if( q > 3 ) q = 0;
+            bForceTurn = false;
+            bStarted = true;
+        } // while not bReady
+        points->Append( (wxObject*) new wxPoint( xea, yea ) );
+
+        // delete points
+        for( q = 0; q < 4; ++q )
+        {
+            for( wxNode *node = pointsarray[q].First(); node; node = node->Next() )
+            {
+                wxPoint *p = (wxPoint *)node->Data();
+                delete p;
+            }
+        }            
+        
+    }
+    else
+    {
+        // copy whole ellipse, wxPoints will be deleted outside
+        for( wxNode *node = pointsarray[0].First(); node; node = node->Next() )
+        {
+            wxObject *p = node->Data();
+            points->Append( p );
+        }
+        for( node = pointsarray[1].First(); node; node = node->Next() )
+        {
+            wxObject *p = node->Data();
+            points->Append( p );
+        }
+        for( node = pointsarray[2].First(); node; node = node->Next() )
+        {
+            wxObject *p = node->Data();
+            points->Append( p );
+        }
+        for( node = pointsarray[3].First(); node; node = node->Next() )
+        {
+            wxObject *p = node->Data();
+            points->Append( p );
+        }
+    } // not iUseAngles
+} // CalculateEllipticPoints
+
+#endif
+

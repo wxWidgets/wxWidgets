@@ -818,8 +818,7 @@
 
 // Set to 0 to disable print/preview architecture code
 //
-// (doesn't compile anyhow right now (Aug 2003))
-#define wxUSE_PRINTING_ARCHITECTURE 0
+#define wxUSE_PRINTING_ARCHITECTURE 1
 
 // wxHTML sublibrary allows to display HTML in wxWindow programs and much,
 // much more.

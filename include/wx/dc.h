@@ -301,6 +301,54 @@ public:
     void DrawSpline(wxList *points) { DoDrawSpline(points); }
 #endif // wxUSE_SPLINES
 
+    // Eventually we will have wxUSE_GENERIC_DRAWELLIPSE
+#ifdef __WXWINCE__
+    //! Generic method to draw ellipses, circles and arcs with current pen and brush.
+    /*! \param x Upper left corner of bounding box.
+     *  \param y Upper left corner of bounding box.
+     *  \param w Width of bounding box.
+     *  \param h Height of bounding box.
+     *  \param sa Starting angle of arc 
+     *            (counterclockwise, start at 3 o'clock, 360 is full circle).
+     *  \param ea Ending angle of arc.
+     *  \param angle Rotation angle, the Arc will be rotated after 
+     *               calculating begin and end.
+     */
+    void DrawEllipticArcRot( wxCoord x, wxCoord y, 
+                             wxCoord width, wxCoord height, 
+                             double sa = 0, double ea = 0, double angle = 0 )
+    { DoDrawEllipticArcRot( x, y, width, height, sa, ea, angle ); }
+    
+    void DrawEllipticArcRot( const wxPoint& pt, 
+                             const wxSize& sz,
+                             double sa = 0, double ea = 0, double angle = 0 )
+    { DoDrawEllipticArcRot( pt.x, pt.y, sz.x, sz.y, sa, ea, angle ); }
+
+    void DrawEllipticArcRot( const wxRect& rect,
+                             double sa = 0, double ea = 0, double angle = 0 )
+    { DoDrawEllipticArcRot( rect.x, rect.y, rect.width, rect.height, sa, ea, angle ); }
+
+    virtual void DoDrawEllipticArcRot( wxCoord x, wxCoord y, 
+                                       wxCoord w, wxCoord h, 
+                                       double sa = 0, double ea = 0, double angle = 0 );
+    
+    //! Rotates points around center.
+    /*! This is a quite straight method, it calculates in pixels
+     *  and so it produces rounding errors.
+     *  \param points The points inside will be rotated.
+     *  \param angle Rotating angle (counterclockwise, start at 3 o'clock, 360 is full circle).
+     *  \param center Center of rotation.
+     */ 
+    void Rotate( wxList* points, double angle, wxPoint center = wxPoint() );
+
+    // used by DrawEllipticArcRot
+    // Careful: wxList gets filled with points you have to delete later.
+    void CalculateEllipticPoints( wxList* points, 
+                                  wxCoord xStart, wxCoord yStart, 
+                                  wxCoord w, wxCoord h, 
+                                  double sa, double ea );
+#endif
+    
     // global DC operations
     // --------------------
 

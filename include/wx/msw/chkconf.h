@@ -16,6 +16,15 @@
  * disable the settings which don't work for some compilers
  */
 
+/*
+ * If using PostScript-in-MSW in Univ, must enable PostScript
+ */
+
+#if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
+#undef wxUSE_POSTSCRIPT
+#define wxUSE_POSTSCRIPT 1
+#endif
+
 #ifndef wxUSE_NORLANDER_HEADERS
 #if (defined(__WATCOMC__) && (__WATCOMC__ >= 1200)) || ((defined(__MINGW32__) || defined(__CYGWIN__)) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95))))
 #   define wxUSE_NORLANDER_HEADERS 1

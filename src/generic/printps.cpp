@@ -30,7 +30,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
