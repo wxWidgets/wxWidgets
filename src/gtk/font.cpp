@@ -86,6 +86,9 @@ public:
 #endif // GTK 2.0/1.x
     }
 
+    // reinitilize the font with the gived XFLD
+    void ReInit(const wxString& fontname);
+
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
     void SetPointSize(int pointSize);
@@ -433,6 +436,13 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
 #else // GTK 1.x
     m_nativeFontInfo.SetXFontName(fontname);
 #endif // GTK 2.0/1.x
+
+    InitFromNative();
+}
+
+void wxFontRefData::ReInit(const wxString& fontname)
+{
+    m_nativeFontInfo.SetXFontName(fontname);
 
     InitFromNative();
 }
@@ -952,7 +962,7 @@ GdkFont *wxFont::GetInternalFont( float scale ) const
                                                &xfontname);
                 if ( font )
                 {
-                    M_FONTDATA->m_nativeFontInfo.SetXFontName(xfontname);
+                    M_FONTDATA->m_nativeFontInfo.ReInit(xfontname);
                 }
             }
         }
