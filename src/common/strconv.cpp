@@ -408,9 +408,54 @@ WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
 // - move wxEncodingConverter meat in here
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
+
+// VZ: the new version of wxCharsetToCodepage() is more politically correct
+//     and should work on other Windows versions as well but the old version is
+//     still needed for !wxUSE_FONTMAP case
+
+extern long wxEncodingToCodepage(wxFontEncoding encoding)
+{
+    // translate encoding into the Windows CHARSET
+    wxNativeEncodingInfo natveEncInfo;
+    if ( !wxGetNativeFontEncoding(encoding, &natveEncInfo) )
+        return -1;
+
+    // translate CHARSET to code page
+    CHARSETINFO csetInfo;
+    if ( !::TranslateCharsetInfo((DWORD *)(DWORD)natveEncInfo.charset,
+                                 &csetInfo,
+                                 TCI_SRCCHARSET) )
+    {
+        wxLogLastError(_T("TranslateCharsetInfo(TCI_SRCCHARSET)"));
+
+        return -1;
+    }
+
+    return csetInfo.ciACP;
+}
+
+#if wxUSE_FONTMAP && wxUSE_GUI
+
+extern long wxCharsetToCodepage(const wxChar *name)
+{
+    // first get the font encoding for this charset
+    if ( !name )
+        return -1;
+
+    wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
+    if ( enc == wxFONTENCODING_SYSTEM )
+        return -1;
+
+    // the use the helper function
+    return wxEncodingToCodepage(enc);
+}
+
+#else // old wxCharsetToCodepage() by OK
+
 #include "wx/msw/registry.h"
-// this should work if M$ Internet Exploiter is installed
-static long CharsetToCodepage(const wxChar *name)
+
+// this should work if Internet Exploiter is installed
+extern long wxCharsetToCodepage(const wxChar *name)
 {
     if (!name)
         return GetACP();
@@ -440,7 +485,10 @@ static long CharsetToCodepage(const wxChar *name)
 
     return CP;
 }
-#endif
+
+#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
+
+#endif // Win32
 
 class wxCharacterSet
 {
@@ -709,13 +757,16 @@ protected:
 class CP_CharSet : public wxCharacterSet
 {
 public:
-    CP_CharSet(const wxChar*name)
-        : wxCharacterSet(name), CodePage(CharsetToCodepage(name)) {}
+    CP_CharSet(const wxChar* name)
+        : wxCharacterSet(name)
+        {
+            m_CodePage = wxCharsetToCodepage(name);
+        }
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
     {
         size_t len =
-            MultiByteToWideChar(CodePage, 0, psz, -1, buf, buf ? n : 0);
+            MultiByteToWideChar(m_CodePage, 0, psz, -1, buf, buf ? n : 0);
         //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
         return len ? (buf ? len : len-1) : (size_t)-1;
@@ -723,7 +774,7 @@ public:
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
     {
-        size_t len = WideCharToMultiByte(CodePage, 0, psz, -1, buf,
+        size_t len = WideCharToMultiByte(m_CodePage, 0, psz, -1, buf,
                                          buf ? n : 0, NULL, NULL);
         //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
@@ -731,10 +782,10 @@ public:
     }
 
     bool usable()
-        { return CodePage != -1; }
+        { return m_CodePage != -1; }
 
 public:
-    long CodePage;
+    long m_CodePage;
 };
 #endif // __WIN32__
 
@@ -745,8 +796,8 @@ class EC_CharSet : public wxCharacterSet
 public:
     // temporarily just use wxEncodingConverter stuff,
     // so that it works while a better implementation is built
-    EC_CharSet(const wxChar*name) : wxCharacterSet(name),
-                                    enc(wxFONTENCODING_SYSTEM)
+    EC_CharSet(const wxChar* name) : wxCharacterSet(name),
+                                     enc(wxFONTENCODING_SYSTEM)
     {
         if (name)
             enc = wxTheFontMapper->CharsetToEncoding(name, FALSE);
