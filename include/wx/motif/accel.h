@@ -26,7 +26,7 @@ class WXDLLEXPORT wxAcceleratorTable: public wxObject
 public:
     wxAcceleratorTable();
     wxAcceleratorTable(const wxString& resource); // Load from .rc resource
-    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
+    wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]); // Load from array
     
     // Copy constructors
     wxAcceleratorTable(const wxAcceleratorTable& accel) { Ref(accel); }

@@ -35,7 +35,7 @@ public:
     wxAcceleratorTable();
     wxAcceleratorTable(const wxString& rsResource); // Load from .rc resource
     wxAcceleratorTable( int                n
-                       ,wxAcceleratorEntry vaEntries[]
+                       ,const wxAcceleratorEntry vaEntries[]
                       ); // Load from array
 
     // Copy constructors

@@ -105,7 +105,7 @@ extern int wxCharCodeWXToOS2(
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(
   int                               n
-, wxAcceleratorEntry                vaEntries[]
+, const wxAcceleratorEntry          vaEntries[]
 )
 {
     int                             nAccelLength = ((sizeof(ACCEL) * n) + sizeof(ACCELTABLE));

@@ -24,7 +24,7 @@ class WXDLLEXPORT wxAcceleratorTable : public wxObject
 {
 public:
     wxAcceleratorTable();
-    wxAcceleratorTable(int n, wxAcceleratorEntry entries[]);
+    wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
     virtual ~wxAcceleratorTable();
 
     wxAcceleratorTable(const wxAcceleratorTable& accel)

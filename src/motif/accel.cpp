@@ -65,7 +65,7 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& WXUNUSED(resource))
 }
 
 // Create from an array
-wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
+wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     wxAcceleratorRefData* data = new wxAcceleratorRefData;
     m_refData = data;
