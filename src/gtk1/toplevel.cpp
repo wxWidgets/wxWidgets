@@ -30,6 +30,7 @@
 
 #include "wx/log.h"
 #include "wx/dialog.h"
+#include "wx/msgdlg.h"
 #include "wx/control.h"
 #include "wx/app.h"
 #include "wx/dcclient.h"
@@ -579,7 +580,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
 
 bool wxTopLevelWindowGTK::Show( bool show )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxCHECK_VALID_WIDGET(FALSE);
 
     if (show && !m_sizeSet)
     {
@@ -601,8 +602,8 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 
 void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
+    wxCHECK_VALID_WIDGET_RET();
+    
     // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
@@ -688,8 +689,8 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
+    wxCHECK_VALID_WIDGET_RET();
+    
     wxWindow::DoGetClientSize( width, height );
     if (height)
     {
@@ -704,7 +705,7 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 
 void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxCHECK_VALID_WIDGET_RET();
 
     DoSetSize(-1, -1,
               width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
@@ -860,8 +861,8 @@ void wxTopLevelWindowGTK::OnInternalIdle()
 
 void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
+    wxCHECK_VALID_WIDGET_RET();
+    
     m_title = title;
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
 }
@@ -888,7 +889,7 @@ void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    wxCHECK_VALID_WIDGET_RET();
     GdkWindow* window = m_widget->window;
 
     wxTopLevelWindowBase::SetIcons( icons );
