@@ -268,6 +268,20 @@ WXDLLEXPORT HINSTANCE wxGetInstance();
 
 WXDLLEXPORT void wxSetInstance(HINSTANCE hInst);
 
+#include "wx/thread.h"
+static inline MRESULT MySendMsg(HWND hwnd, ULONG ulMsgid,
+                                MPARAM mpParam1, MPARAM mpParam2)
+{
+    MRESULT vRes;
+    vRes = ::WinSendMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#if wxUSE_THREADS
+    if (!wxThread::IsMain())
+        ::WinPostMsg(hwnd, ulMsgid, mpParam1, mpParam2);
+#endif
+    return vRes;
+}
+#define WinSendMsg MySendMsg
+
 #if wxUSE_GUI
 
 WXDLLEXPORT void wxDrawBorder( HPS     hPS
