@@ -67,7 +67,7 @@ private:
      DECLARE_DYNAMIC_CLASS(wxBMPHandler)
 };
 
-
+#if wxUSE_ICO_CUR
 // ----------------------------------------------------------------------------
 // wxICOHandler
 // ----------------------------------------------------------------------------
@@ -85,7 +85,8 @@ public:
 
 #if wxUSE_STREAMS
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
+    virtual bool DoLoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index );
     virtual bool DoCanRead( wxInputStream& stream );
     virtual int GetImageCount( wxInputStream& stream );
 #endif // wxUSE_STREAMS
@@ -126,5 +127,32 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxCURHandler)
 };
+// ----------------------------------------------------------------------------
+// wxANIHandler
+// ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxANIHandler : public wxCURHandler
+{
+public:
+    wxANIHandler()
+    {
+        m_name = _T("Windows animated cursor file");
+        m_extension = _T("ani");
+        m_type = wxBITMAP_TYPE_ANI;
+        m_mime = _T("image/x-ani");
+    };
+    
+
+#if wxUSE_STREAMS
+    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE ) {return FALSE ;};
+    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1 );
+    virtual bool DoCanRead( wxInputStream& stream );
+    virtual int GetImageCount( wxInputStream& stream );
+#endif // wxUSE_STREAMS
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxANIHandler)
+};
+
+#endif // wxUSE_ICO_CUR
 #endif // _WX_IMAGBMP_H_

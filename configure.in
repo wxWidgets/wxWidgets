@@ -814,6 +814,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_PCX=no
   DEFAULT_wxUSE_PNM=no
   DEFAULT_wxUSE_XPM=no
+  DEFAULT_wxUSE_ICO_CUR=no
 else
   DEFAULT_wxUSE_UNIVERSAL=no
 
@@ -984,6 +985,7 @@ else
   DEFAULT_wxUSE_PCX=yes
   DEFAULT_wxUSE_PNM=yes
   DEFAULT_wxUSE_XPM=yes
+  DEFAULT_wxUSE_ICO_CUR=yes
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -1358,6 +1360,7 @@ WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file f
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
+WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
 
 fi
 dnl for GUI only
@@ -4715,6 +4718,10 @@ fi
 
 if test "$wxUSE_XPM" = "yes" ; then
   AC_DEFINE(wxUSE_XPM)
+fi
+
+if test "$wxUSE_ICO_CUR" = "yes" ; then
+  AC_DEFINE(wxUSE_ICO_CUR)
 fi
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then

@@ -179,6 +179,9 @@
 #define wxUSE_GIF           0
 #define wxUSE_PNM           0
 #define wxUSE_PCX           0
+
+#define wxUSE_ICO_CUR       1
+
 #define wxUSE_MFC           0
 #define wxUSE_OLE           0
 #define wxUSE_CTL3D                      0
@@ -333,6 +336,9 @@
 #define wxUSE_GIF           0
 #define wxUSE_PNM           0
 #define wxUSE_PCX           0
+
+#define wxUSE_ICO_CUR       1
+
 #define wxUSE_MFC           0
 #define wxUSE_OLE           0
 #define wxUSE_CTL3D         0
@@ -494,6 +500,9 @@
 #define wxUSE_GIF           0
 #define wxUSE_PNM           0
 #define wxUSE_PCX           0
+
+#define wxUSE_ICO_CUR       1
+
 #define wxUSE_MFC           0
 #define wxUSE_OLE           0
 #define wxUSE_CTL3D                      0

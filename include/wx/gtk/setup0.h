@@ -113,6 +113,10 @@
 /*
  * Use iODBC
  */
+
+// Set to 1 for MS Icons and Cursors format support
+#define wxUSE_ICO_CUR       1
+ 
 #define wxUSE_ODBC 0
 #define wxODBC_FWD_ONLY_CURSORS 1
 /*

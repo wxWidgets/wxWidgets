@@ -348,6 +348,14 @@
 #   endif
 #endif /* !defined(wxUSE_HTML) */
 
+#ifndef wxUSE_ICO_CUR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ICO_CUR must be defined."
+#   else
+#       define wxUSE_ICO_CUR 0
+#   endif
+#endif /* !defined(wxUSE_ICO_CUR) */
+
 #ifndef wxUSE_IMAGLIST
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_IMAGLIST must be defined."

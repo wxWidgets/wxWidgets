@@ -882,7 +882,7 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 }
 
 
-
+#if wxUSE_ICO_CUR
 //-----------------------------------------------------------------------------
 // wxICOHandler
 //-----------------------------------------------------------------------------
@@ -1109,11 +1109,19 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream, 
                             bool verbose, int index)
 {
+    stream.SeekI(0);
+    return DoLoadFile(image, stream, verbose, index);
+}
+
+bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream, 
+                            bool verbose, int index)
+{
     bool bResult = FALSE;
     bool IsBmp = FALSE;
 
     ICONDIR IconDir;
-    stream.SeekI(0);
+
+    off_t iPos = stream.TellI();
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
     // nType is 1 for Icons, 2 for Cursors:
@@ -1161,9 +1169,10 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
     {
         // seek to selected icon:
         pCurrentEntry = pIconDirEntry + iSel;
-        stream.SeekI(wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart);
+        stream.SeekI(iPos + wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart);
         bResult = LoadDib(image, stream, TRUE, IsBmp);
-        if ( bResult && this->GetType() == wxBITMAP_TYPE_CUR && nType == 2 )
+        bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
+        if ( bResult && bIsCursorType && nType == 2 )
         {
             // it is a cursor, so let's set the hotspot:
             image->SetOption(wxCUR_HOTSPOT_X, wxUINT16_SWAP_ON_BE(pCurrentEntry->wPlanes));
@@ -1177,19 +1186,21 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
 int wxICOHandler::GetImageCount(wxInputStream& stream)
 {
     ICONDIR IconDir;
+    off_t iPos = stream.TellI();
     stream.SeekI(0);
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
+    stream.SeekI(iPos);
     return (int)nIcons;
 }
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[4];
-
+    off_t iPos = stream.TellI();
     stream.SeekI (0);
     stream.Read(hdr, 4);
-    stream.SeekI(-4, wxFromCurrent);
+    stream.SeekI(iPos);
     //hdr[2] is one for an icon and two for a cursor
     return (hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\1' && hdr[3] == '\0');
 }
@@ -1205,12 +1216,162 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[4];
-
+    off_t iPos = stream.TellI();
     stream.SeekI (0);
     stream.Read(hdr, 4);
-    stream.SeekI(-4, wxFromCurrent);
+    stream.SeekI(iPos);
     //hdr[2] is one for an icon and two for a cursor
     return (hdr[0] == '\0' && hdr[1] == '\0' && hdr[2] == '\2' && hdr[3] == '\0');
 }
+
+//-----------------------------------------------------------------------------
+// wxANIHandler
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxANIHandler, wxCURHandler)
+
+bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream, 
+                            bool verbose, int index)
+{
+    wxInt32 FCC1, FCC2; 
+    wxUint32 datalen;        
+    static const char *rifftxt = "RIFF";
+    static const char *listtxt = "LIST";
+    static const char *icotxt  = "icon";
+
+    wxInt32 *riff32 = (wxInt32 *) rifftxt;
+    wxInt32 *list32 = (wxInt32 *) listtxt;
+    wxInt32 *ico32  = (wxInt32 *) icotxt;
+
+    int iIcon = 0;
+    
+    stream.SeekI(0);
+    stream.Read(&FCC1, 4);
+    if ( FCC1 != *riff32 ) 
+        return FALSE;
+
+    // we have a riff file:
+    while (stream.IsOk())
+    {                    
+        // we always have a data size
+        stream.Read(&datalen, 4);
+
+        //now either data or a FCC
+        if ( (FCC1 == *riff32) || (FCC1 == *list32) )
+        {
+    	    stream.Read(&FCC2, 4);
+        }
+        else 
+        {
+            if (FCC1 == *ico32 && iIcon >= index)
+            {
+                return DoLoadFile(image, stream, verbose, -1);
+            }    
+            else
+            {
+                stream.SeekI(stream.TellI() + datalen);
+                if ( FCC1 == *ico32 )
+                    iIcon ++;
+            }
+        }
+        
+        // try to read next data chunk:
+        stream.Read(&FCC1, 4);
+    }
+    return FALSE;
+}
+
+bool wxANIHandler::DoCanRead(wxInputStream& stream)
+{
+    wxInt32 FCC1, FCC2; 
+    wxUint32 datalen ;        
+    static const char *rifftxt = "RIFF";
+    static const char *listtxt = "LIST";
+    static const char *anihtxt = "anih";
+
+    wxInt32 *riff32 = (wxInt32 *) rifftxt;
+    wxInt32 *list32 = (wxInt32 *) listtxt;
+    wxInt32 *anih32 = (wxInt32 *) anihtxt;
+            
+    stream.SeekI(0);
+    stream.Read(&FCC1, 4);
+    if ( FCC1 != *riff32 ) 
+        return FALSE;
+
+    // we have a riff file:
+    while ( stream.IsOk() )
+    {
+        if ( FCC1 != *anih32 )
+            return TRUE;    
+        // we always have a data size:
+        stream.Read(&datalen, 4);
+ 
+        // now either data or a FCC:
+        if ( (FCC1 == *riff32) || (FCC1 == *list32) ) 
+        {
+       	    stream.Read(&FCC2, 4);
+        }
+        else 
+        {
+            stream.SeekI(stream.TellI() + datalen);
+        }
+        
+        // try to read next data chunk:
+        stream.Read(&FCC1, 4);
+    }
+
+    return FALSE;
+}
+
+int wxANIHandler::GetImageCount(wxInputStream& stream)
+{
+    wxInt32 FCC1, FCC2; 
+    wxUint32 datalen ;        
+    static const char *rifftxt = "RIFF";
+    static const char *listtxt = "LIST";
+    static const char *anihtxt = "anih";
+
+    wxInt32 *riff32 = (wxInt32 *) rifftxt;
+    wxInt32 *list32 = (wxInt32 *) listtxt;
+    wxInt32 *anih32 = (wxInt32 *) anihtxt;
+            
+    stream.SeekI(0);
+    stream.Read(&FCC1, 4);
+    if ( FCC1 != *riff32 )
+        return wxNOT_FOUND;
+
+    // we have a riff file:
+    while ( stream.IsOk() )
+    {
+        // we always have a data size:
+        stream.Read(&datalen, 4);
+ 
+        // now either data or a FCC:
+        if ( (FCC1 == *riff32) || (FCC1 == *list32) ) 
+    	{
+    	    stream.Read(&FCC2, 4);
+        }
+        else
+        {
+            if ( FCC1 == *anih32 )
+            {
+                wxUint32 *pData = new wxUint32[datalen/4];
+                stream.Read(pData, datalen);
+                int nIcons = *(pData + 1);
+                delete[] pData;
+                return nIcons;
+            }
+            else 
+                stream.SeekI(stream.TellI() + datalen);
+        }
+        
+        // try to read next data chunk:
+        stream.Read(&FCC1, 4);
+    }
+
+    return wxNOT_FOUND;
+}
+
+#endif // wxUSE_ICO_CUR
 
 #endif // wxUSE_IMAGE && wxUSE_STREAMS
