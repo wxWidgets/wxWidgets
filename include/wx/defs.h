@@ -186,9 +186,12 @@
         #ifndef WX_TRUE_DEFINED
             #undef TRUE
             #undef FALSE
-            #define TRUE  ((bool)1)
-            #define FALSE ((bool)0)
         #endif
+    #endif
+
+    #ifndef TRUE
+        #define TRUE  ((bool)1)
+        #define FALSE ((bool)0)
     #endif
 #else // !__cplusplus
     // the definitions above don't work for C sources
