@@ -1437,6 +1437,18 @@ if test "$wxUSE_THREADS" = "1"; then
                AC_DEFINE(HAVE_PTHREAD_CANCEL),
                AC_MSG_WARN(wxThread::Kill() will not work properly))
 
+  AC_MSG_CHECKING([for pthread_cleanup_push/pop])
+  AC_TRY_COMPILE([#include <pthread.h>],
+                 [
+                    pthread_cleanup_push(NULL, NULL);
+                    pthread_cleanup_pop(0);
+                 ],
+                   [AC_MSG_RESULT(yes)
+                    AC_DEFINE(HAVE_THREAD_CLEANUP_FUNCTIONS)
+                 ],
+                   [AC_MSG_RESULT(no)]
+                 )
+
   THREADS_LINK="-l$THREADS_LINK"
 fi
 

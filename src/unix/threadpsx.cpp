@@ -231,6 +231,11 @@ public:
     // thread entry function
     static void *PthreadStart(void *ptr);
 
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+    // thread exit function
+    static void PthreadCleanup(void *ptr);
+#endif
+
     // thread actions
         // start the thread
     wxThreadError Run();
@@ -289,6 +294,7 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 {
     wxThread *thread = (wxThread *)ptr;
     wxThreadInternal *pthread = thread->p_internal;
+    void *status;
 
     int rc = pthread_setspecific(gs_keySelf, thread);
     if ( rc != 0 )
@@ -297,6 +303,10 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 
         return (void *)-1;
     }
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+    // Install the cleanup handler.
+    pthread_cleanup_push(wxThreadInternal::PthreadCleanup, ptr);
+#endif
 
     // wait for the condition to be signaled from Run()
     // mutex state: currently locked by the thread which created us
@@ -305,7 +315,11 @@ void *wxThreadInternal::PthreadStart(void *ptr)
     // mutex state: locked again on exit of Wait()
 
     // call the main entry
-    void* status = thread->Entry();
+    status = thread->Entry();
+
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+    pthread_cleanup_pop(FALSE);
+#endif
 
     // terminate the thread
     thread->Exit(status);
@@ -314,6 +328,28 @@ void *wxThreadInternal::PthreadStart(void *ptr)
 
     return NULL;
 }
+
+#if HAVE_THREAD_CLEANUP_FUNCTIONS
+// Only called when the thread is explicitely killed.
+
+void wxThreadInternal::PthreadCleanup(void *ptr)
+{
+    wxThread *thread = (wxThread *) ptr;
+
+    // The thread is already considered as finished.
+    if (thread->p_internal->GetState() == STATE_EXITED)
+      return;
+
+    // first call user-level clean up code
+    thread->OnExit();
+
+    // next wake up the threads waiting for us (OTOH, this function won't retur
+    // until someone waited for us!)
+    thread->p_internal->SetState(STATE_EXITED);
+
+    thread->p_internal->SignalExit();
+}
+#endif
 
 wxThreadInternal::wxThreadInternal()
 {
@@ -367,9 +403,11 @@ void wxThreadInternal::Wait()
     if ( wxThread::IsMain() )
         wxMutexGuiLeave();
 
+    printf("Entering wait ...\n");
     // entering Wait() releases the mutex thus allowing SignalExit() to acquire
     // it and to signal us its termination
     m_cond.Wait(m_mutex);
+    printf("Exiting wait ...\n");
 
     // mutex is still in the locked state - relocked on exit from Wait(), so
     // unlock it - we don't need it any more, the thread has already terminated
@@ -382,18 +420,21 @@ void wxThreadInternal::Wait()
 
 void wxThreadInternal::SignalExit()
 {
+    printf("SignalExit\n");
     // GL: Unlock mutexSuspend here.
     m_mutexSuspend.Unlock();
 
     // as mutex is currently locked, this will block until some other thread
     // (normally the same which created this one) unlocks it by entering Wait()
     m_mutex.Lock();
+    printf("Mutex acquired\n");
 
     // wake up all the threads waiting for our termination
     m_cond.Broadcast();
 
     // after this call mutex will be finally unlocked
     m_mutex.Unlock();
+    printf("Mutex unacquired\n");
 }
 
 void wxThreadInternal::Pause()
@@ -672,16 +713,20 @@ void wxThread::Exit(void *status)
 {
     // first call user-level clean up code
     OnExit();
+    printf(" ... OnExit()\n");
 
     // next wake up the threads waiting for us (OTOH, this function won't return
     // until someone waited for us!)
-    p_internal->SetState(STATE_EXITED);
-
     p_internal->SignalExit();
+    printf(" ... SignalExit()\n");
+
+    p_internal->SetState(STATE_EXITED);
+    printf(" ... SetState()\n");
 
     // delete both C++ thread object and terminate the OS thread object
     // GL: This is very ugly and buggy ...
 //    delete this;
+    printf(" ... Exit\n");
     pthread_exit(status);
 }
 
