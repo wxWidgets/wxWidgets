@@ -45,8 +45,6 @@ const wxTextFile::Type wxTextFile::typeDefault = wxTextFile::
   Type_Unix;
 #elif defined(__WXMAC__)
   Type_Mac;
-  // if you feel brave, remove the next line
-  #error  "wxTextFile: code for Mac files is untested."
 #else
   Type_None;
   #error  "wxTextFile: unsupported platform."
@@ -170,10 +168,6 @@ bool wxTextFile::Read()
       return FALSE;
     }
 
-    #ifdef  __MAC__
-      #pragma message("wxTextFile::Read() hasn't been tested with Mac files.")
-    #endif
-
     for ( n = 0; n < nRead; n++ ) {
       ch = buf[n];
       switch ( ch ) {
@@ -200,6 +194,7 @@ bool wxTextFile::Read()
             // Mac line termination
             m_aLines.Add(str);
             m_aTypes.Add(Type_Mac);
+            chLast = ch;
             str = ch;
           }
           else {
