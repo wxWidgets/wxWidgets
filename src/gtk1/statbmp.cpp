@@ -38,24 +38,14 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
     Create( parent, id, bitmap, pos, size, style, name );
 }
 
-void wxStaticBitmap::CreatePixmapWidget()
-{
-    wxCHECK_RET( m_bitmap.Ok(), wxT("should only be called if we have a bitmap") );
-
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if ( m_bitmap.GetMask() )
-        mask = m_bitmap.GetMask()->GetBitmap();
-    m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
-
-    // insert GTK representation
-    (*m_parent->m_insertCallback)(m_parent, this);
-
-    gtk_widget_show( m_widget );
-
-    m_focusWidget = m_widget;
-
-    PostCreation(wxDefaultSize);
-}
+#ifndef __WXGTK20__
+// empty bitmap, so that we can create GtkPixmap widget:
+static char * bogus_xpm[] = {
+"2 2 1 1",
+" 	c None",
+"  ",
+"  "};
+#endif
 
 bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap,
                              const wxPoint &pos, const wxSize &size,
@@ -66,52 +56,50 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
-        wxFAIL_MSG( wxT("wxXX creation failed") );
-    return FALSE;
+        wxFAIL_MSG( wxT("wxStaticBitmap creation failed") );
+        return false;
     }
 
+    m_bitmap = bitmap;
+
+#ifdef __WXGTK20__
+    m_widget = gtk_image_new();
+#else
+    wxBitmap bmp(bitmap.Ok() ? bitmap : wxBitmap(bogus_xpm));
+    m_widget = gtk_pixmap_new(bmp.GetPixmap(), NULL);
+#endif
+
+    if (bitmap.Ok())
+        SetBitmap(bitmap);
+
+    PostCreation(size);
+    m_parent->DoAddChild( this );
+
+    return true;
+}
+
+void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
+{
     m_bitmap = bitmap;
 
     if (m_bitmap.Ok())
     {
         GdkBitmap *mask = (GdkBitmap *) NULL;
-        if ( m_bitmap.GetMask() )
+        if (m_bitmap.GetMask())
             mask = m_bitmap.GetMask()->GetBitmap();
-        m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
-    }
-    else
-    {
-        m_widget = gtk_label_new( "Bitmap" );
-        m_focusWidget = m_widget;
-    }
-
-    PostCreation(size);
-    m_parent->DoAddChild( this );
-
-    return TRUE;
-}
-
-void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
-{
-    bool hasWidget = m_bitmap.Ok();
-    m_bitmap = bitmap;
-
-    if (m_bitmap.Ok())
-    {
-        if (!hasWidget)
+    
+#ifdef __WXGTK20__
+        if (m_bitmap.HasPixbuf())
         {
-            gtk_widget_destroy( m_widget );
-
-            /* recreate m_widget because we've created a label
-               and not a bitmap above */
-            CreatePixmapWidget();
+            gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
+                                      m_bitmap.GetPixbuf());
         }
         else
-        {
-            GdkBitmap *mask = (GdkBitmap *) NULL;
-            if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
-            gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
-        }
+            gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
+                                      m_bitmap.GetPixmap(), mask);
+#else
+        gtk_pixmap_set(GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask);
+#endif
 
         InvalidateBestSize();
         SetSize(GetBestSize());
