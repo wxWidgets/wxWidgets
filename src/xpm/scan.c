@@ -316,6 +316,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 	    ErrorStatus = AGetImagePixels(image, width, height, &pmap,
 		    		      storePixel);
 # endif /* AMIGA */
+#else
 
 	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 		    			storePixel);
