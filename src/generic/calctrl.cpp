@@ -680,8 +680,11 @@ size_t wxCalendarCtrl::GetWeek(const wxDateTime& date) const
 
 // the constants used for the layout
 #define VERT_MARGIN     5           // distance between combo and calendar
+#ifdef __WXMAC__
+#define HORZ_MARGIN    5           //                            spin
+#else
 #define HORZ_MARGIN    15           //                            spin
-
+#endif
 wxSize wxCalendarCtrl::DoGetBestSize() const
 {
     // calc the size of the calendar
