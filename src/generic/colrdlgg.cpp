@@ -294,11 +294,6 @@ void wxGenericColourDialog::InitializeColours(void)
 
   for (i = 0; i < 16; i++)
     customColours[i] =
-/*
-#ifndef __VMS__
-     (wxColour&)
-#endif
-*/
        colourData.GetCustomColour(i);
 
   singleCustomColour.Set(0, 0, 0);

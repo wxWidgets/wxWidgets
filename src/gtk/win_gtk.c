@@ -9,12 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifdef __VMS
-#define gtk_widget_get_child_requisition gtk_widget_get_child_requisitio
-#define gtk_marshal_NONE__POINTER_POINTER gtk_marshal_NONE__POINTER_POINT
+#ifdef VMS
+#define XCheckIfEvent XCHECKIFEVENT
 #endif
 
-#include "wx/gtk/setup.h"
+#include "wx/setup.h"
 #include "wx/gtk/win_gtk.h"
 #include "gtk/gtksignal.h"
 #include "gtk/gtkprivate.h"

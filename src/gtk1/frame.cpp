@@ -19,6 +19,10 @@
     #pragma implementation "frame.h"
 #endif
 
+#ifdef __VMS
+#define XIconifyWindow XICONIFYWINDOW
+#endif
+
 #include "wx/frame.h"
 #include "wx/dialog.h"
 #include "wx/control.h"

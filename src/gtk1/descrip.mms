@@ -8,7 +8,7 @@
 .first
 	define wx [--.include.wx]
 
-CXX_DEFINE = /define=(__WXGTK__=1)
+CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/iee=denorm
 
 .suffixes : .cpp
 
@@ -74,9 +74,8 @@ OBJECTS = \
 	tooltip.obj,\
 	utilsgtk.obj,\
 	utilsres.obj,\
-	window.obj,\
         win_gtk.obj,\
-	wx_gtk_vmsjackets.obj
+	window.obj
 
 SOURCES =\
 	accel.cpp,\
@@ -135,9 +134,8 @@ SOURCES =\
 	tooltip.cpp,\
 	utilsgtk.cpp,\
 	utilsres.cpp,\
-	window.cpp,\
         win_gtk.c,\
-	wx_gtk_vmsjackets.c
+	window.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -199,7 +197,5 @@ timer.obj : timer.cpp
 tooltip.obj : tooltip.cpp
 utilsgtk.obj : utilsgtk.cpp
 utilsres.obj : utilsres.cpp
-window.obj : window.cpp
 win_gtk.obj : win_gtk.c
-wx_gtk_vmsjackets.obj : wx_gtk_vmsjackets.c
-	cc $(CFLAGS)$(CXX_DEFINE) wx_gtk_vmsjackets.c/name=(as_is,short)
+window.obj : window.cpp

@@ -4,8 +4,8 @@ sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
 sys$library:libtiff.olb/lib
 X11:libxpm.olb/lib
-sys$common:[mozilla]libgtk.so/share
-sys$common:[mozilla]libgdk.so/share
-sys$common:[mozilla]libglib.so/share
-sys$common:[mozilla]vms_jackets.so/share
+sys$share:libgtk.exe/share
+sys$share:libgdk.exe/share
+sys$share:libglib.exe/share
+sys$share:vms_jackets.exe/share
 sys$library:decw$xlibshr.exe/share

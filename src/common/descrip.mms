@@ -13,7 +13,7 @@
 CXX_DEFINE = /define=(__WXMOTIF__=1)
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)
+CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
 .else
 CXX_DEFINE =
 .endif

@@ -26,9 +26,6 @@
 
 #include "wx/frame.h"
 
-#ifdef __VMS__
-#define gtk_pixmap_set_build_insensitive gtk_pixmap_set_build_insensitiv
-#endif
 #include "glib.h"
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
