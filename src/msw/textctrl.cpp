@@ -686,9 +686,6 @@ wxRichEditStreamOut(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 }
 
 
-// from utils.cpp
-extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding);
-
 #if wxUSE_UNICODE_MSLU
     #define UNUSED_IF_MSLU(param)
 #else
@@ -703,37 +700,22 @@ wxTextCtrl::StreamIn(const wxString& value,
 #if wxUSE_UNICODE_MSLU
     const wchar_t *wpc = value.c_str();
 #else // !wxUSE_UNICODE_MSLU
-    // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
-    // text in the non default charset -- otherwise it thinks it knows better
-    // than we do and always shows it in the default one
+    wxCSConv conv(encoding);
 
-    // first get the Windows code page for this encoding
-    long codepage = wxEncodingToCodepage(encoding);
-    if ( codepage == -1 )
-    {
-        // unknown encoding
-        return FALSE;
-    }
-
-    // next translate to Unicode using this code page
-    int len = ::MultiByteToWideChar(codepage, 0, value, -1, NULL, 0);
+    const size_t len = conv.MB2WC(NULL, value, value.length());
 
 #if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf(len);
+    wchar_t *wpc = wchBuf.data();
 #else
     wchar_t *wchBuf = (wchar_t *)malloc((len + 1)*sizeof(wchar_t));
+    wchar_t *wpc = wchBuf;
 #endif
 
-    if ( !::MultiByteToWideChar(codepage, 0, value, -1,
-                                (wchar_t *)(const wchar_t *)wchBuf, len) )
-    {
-        wxLogLastError(_T("MultiByteToWideChar"));
-    }
-
-    // finally, stream it in the control
-    const wchar_t *wpc = wchBuf;
+    conv.MB2WC(wpc, value, value.length());
 #endif // wxUSE_UNICODE_MSLU
 
+    // finally, stream it in the control
     EDITSTREAM eds;
     wxZeroMemory(eds);
     eds.dwCookie = (DWORD)&wpc;
@@ -872,6 +854,10 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
                wxFontEncoding encoding = font.GetEncoding();
                if ( encoding != wxFONTENCODING_SYSTEM )
                {
+                   // we have to use EM_STREAMIN to force richedit control 2.0+
+                   // to show any text in the non default charset -- otherwise
+                   // it thinks it knows better than we do and always shows it
+                   // in the default one
                    done = StreamIn(valueDos, encoding, selectionOnly);
                }
             }
