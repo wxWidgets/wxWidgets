@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/mimetype.h
 // Purpose:     classes and functions to manage MIME types
-// Author:      David Webster   
+// Author:      David Webster
 // Modified by:
 // Created:     01.21.99
 // RCS-ID:      $Id$
@@ -39,6 +39,7 @@ public:
     // implement accessor functions
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
+    bool GetMimeTypes(wxArrayString& mimeTypes) const;
     bool GetIcon(wxIcon *icon) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
