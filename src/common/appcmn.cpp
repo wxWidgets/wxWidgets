@@ -494,6 +494,17 @@ void wxTrap()
 #endif // Win/Unix
 }
 
+
+void wxAssert(int cond,
+                  const wxChar *szFile,
+                  int nLine,
+                  const wxChar *szCond,
+                  const wxChar *szMsg) 
+{
+   if ( !cond )
+          wxOnAssert(szFile, nLine, szCond, szMsg);
+}
+  
 // show the assert modal dialog
 static
 void ShowAssertDialog(const wxChar *szFile,

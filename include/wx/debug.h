@@ -90,15 +90,11 @@
   // note using "int" and not "bool" for cond to avoid VC++ warnings about
   // implicit conversions when doing "wxAssert( pointer )" and also use of
   // "!!cond" below to ensure that everything is converted to int
-  inline void WXDLLEXPORT wxAssert(int cond,
+  extern void WXDLLEXPORT wxAssert(int cond,
                                    const wxChar *szFile,
                                    int nLine,
                                    const wxChar *szCond,
-                                   const wxChar *szMsg = NULL)
-  {
-      if ( !cond )
-          wxOnAssert(szFile, nLine, szCond, szMsg);
-  }
+                                   const wxChar *szMsg = NULL) ;
 
   // generic assert macro
   #define wxASSERT(cond) wxAssert(!!(cond), __TFILE__, __LINE__, _T(#cond))
