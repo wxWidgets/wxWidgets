@@ -59,10 +59,10 @@ public:
 
     wxString GetText();
     wxFont *GetFont();
-    void GetMinSize(double *x, double *y);
-    void GetProportion(double *x, double *y);
-    void GetSize(double *x, double *y);
-    void GetPosition(double *xp, double *yp);
+    void GetMinSize(double *OUTPUT, double *OUTPUT);
+    void GetProportion(double *OUTPUT, double *OUTPUT);
+    void GetSize(double *OUTPUT, double *OUTPUT);
+    void GetPosition(double *OUTPUT, double *OUTPUT);
     int GetFormatMode();
     wxString GetName();
     wxString GetColour();
@@ -302,7 +302,7 @@ public:
     void AddRegion(wxShapeRegion *region);
     void ClearRegions();
     void AssignNewIds();
-    wxPyShape *FindRegion(const wxString& regionName, int *regionId);
+    wxPyShape *FindRegion(const wxString& regionName, int *OUTPUT);
     void FindRegionNames(wxStringList& list);
     void ClearText(int regionId = 0);
     void RemoveLine(wxPyLineShape *line);

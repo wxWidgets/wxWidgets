@@ -130,7 +130,9 @@ enum {
     wxSTC_CMD_LINEDELETE,
     wxSTC_CMD_LINETRANSPOSE,
     wxSTC_CMD_LOWERCASE,
-    wxSTC_CMD_UPPERCASE
+    wxSTC_CMD_UPPERCASE,
+    wxSTC_CMD_LINESCROLLDOWN,
+    wxSTC_CMD_LINESCROLLUP
 };
 
 
@@ -253,7 +255,11 @@ public:
     int      GetLineStartPos(int line);
     int      GetLineLengthAtPos(int pos);
     int      GetLineLength(int line);
-    wxString GetCurrentLineText();
+#ifdef SWIG
+    wxString GetCurrentLineText(int* OUTPUT);
+#else
+    wxString GetCurrentLineText(int* linePos);
+#endif
     int      GetCurrentLine();
     int      PositionFromPoint(wxPoint pt);
     int      LineFromPoint(wxPoint pt);
@@ -274,7 +280,10 @@ public:
     void     EnsureCaretVisible();
     void     SetCaretPolicy(int policy, int slop=0);
     int      GetSelectionType();
-
+    int      GetLinesOnScreen();
+    bool     IsSelectionRectangle();
+    void     SetUseHorizontalScrollBar(bool use);
+    bool     GetUseHorizontalScrollBar();
 
 
     // Searching
@@ -303,6 +312,8 @@ public:
     void     StartStyling(int pos, int mask);
     void     SetStyleFor(int length, int style);
     void     SetStyleBytes(int length, char* styleBytes);
+    void     SetLineState(int line, int value);
+    int      GetLineState(int line);
 
 
     // Style Definition
@@ -348,7 +359,14 @@ public:
     // Other settings
     void     SetBufferedDraw(bool isBuffered);
     void     SetTabWidth(int numChars);
+    void     SetIndent(int numChars);
+    void     SetUseTabs(bool usetabs);
+    void     SetLineIndentation(int line, int indentation);
+    int      GetLineIndentation(int line);
+    int      GetLineIndentationPos(int line);
     void     SetWordChars(const wxString& wordChars);
+
+    void     SetUsePop(bool usepopup);
 
 
     // Brace highlighting
@@ -387,7 +405,9 @@ public:
     int      AutoCompPosAtStart();
     void     AutoCompComplete();
     void     AutoCompStopChars(const wxString& stopChars);
-
+    void     AutoCompSetSeparator(char separator);
+    char     AutoCompGetSeparator();
+    void     AutoCompSelect(const wxString& stringtoselect);
 
     // Call tips
     void     CallTipShow(int pos, const wxString& text);

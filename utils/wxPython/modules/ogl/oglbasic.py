@@ -570,7 +570,6 @@ class wxPyShapePtr(wxPyShapeEvtHandlerPtr):
         return val
     def FindRegion(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_FindRegion,(self,) + _args, _kwargs)
-        if val: val = wxPyShapePtr(val) 
         return val
     def FindRegionNames(self, *_args, **_kwargs):
         val = apply(oglbasicc.wxPyShape_FindRegionNames,(self,) + _args, _kwargs)

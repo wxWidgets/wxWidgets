@@ -2,6 +2,8 @@
 from wxPython.wx import *
 from wxPython.stc import *
 
+import keyword
+
 #----------------------------------------------------------------------
 
 demoText = """\
@@ -39,13 +41,17 @@ class PythonSTC(wxStyledTextCtrl):
         wxStyledTextCtrl.__init__(self, parent, ID)
 
         self.SetLexer(wxSTC_LEX_PYTHON)
-        self.SetKeywords(0,
-                       "and assert break class continue def del elif else except "
-                       "exec finally for from global if import in is lambda None "
-                       "not or pass print raise return try while")
-        self.SetViewWhitespace(false)
+        self.SetKeywords(0, string.join(keyword.kwlist))
+
         self.SetProperty("fold", "1")
-        ##self.SetProperty("tab.timmy.whinge.level", "4")
+        self.SetProperty("tab.timmy.whinge.level", "1")
+        self.SetMargins(0,0)
+
+        self.SetViewWhitespace(false)
+        #self.SetBufferedDraw(false)
+
+        self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
+        self.SetEdgeColumn(78)
 
         # Setup a margin to hold fold markers
         #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
@@ -87,9 +93,9 @@ class PythonSTC(wxStyledTextCtrl):
         # Number
         self.StyleSetSpec(2, "fore:#007F7F")
         # String
-        self.StyleSetSpec(3, "fore:#7F007F,italics,face:%(times)s" % faces)
+        self.StyleSetSpec(3, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Single quoted string
-        self.StyleSetSpec(4, "fore:#7F007F,italics,face:%(times)s" % faces)
+        self.StyleSetSpec(4, "fore:#7F007F,italic,face:%(times)s" % faces)
         # Keyword
         self.StyleSetSpec(5, "fore:#00007F,bold")
         # Triple quotes
@@ -142,6 +148,8 @@ class PythonSTC(wxStyledTextCtrl):
             self.BraceBadlight(braceAtCaret)
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
+            self.SetCurrentPosition(braceOpposite)
+            self.SetCurrentPosition(caretPos)
 
 
     def OnMarginClick(self, evt):

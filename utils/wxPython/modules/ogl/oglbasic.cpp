@@ -507,33 +507,25 @@ static PyObject *_wrap_wxShapeRegion_GetMinSize(PyObject *self, PyObject *args, 
     PyObject * _resultobj;
     wxShapeRegion * _arg0;
     double * _arg1;
+    double  temp;
     double * _arg2;
+    double  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxShapeRegion_GetMinSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxShapeRegion_GetMinSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxShapeRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxShapeRegion_GetMinSize. Expected _wxShapeRegion_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxShapeRegion_GetMinSize. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxShapeRegion_GetMinSize. Expected _double_p.");
         return NULL;
         }
     }
@@ -544,6 +536,16 @@ static PyObject *_wrap_wxShapeRegion_GetMinSize(PyObject *self, PyObject *args, 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -552,33 +554,25 @@ static PyObject *_wrap_wxShapeRegion_GetProportion(PyObject *self, PyObject *arg
     PyObject * _resultobj;
     wxShapeRegion * _arg0;
     double * _arg1;
+    double  temp;
     double * _arg2;
+    double  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxShapeRegion_GetProportion",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxShapeRegion_GetProportion",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxShapeRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxShapeRegion_GetProportion. Expected _wxShapeRegion_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxShapeRegion_GetProportion. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxShapeRegion_GetProportion. Expected _double_p.");
         return NULL;
         }
     }
@@ -589,6 +583,16 @@ static PyObject *_wrap_wxShapeRegion_GetProportion(PyObject *self, PyObject *arg
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -597,33 +601,25 @@ static PyObject *_wrap_wxShapeRegion_GetSize(PyObject *self, PyObject *args, PyO
     PyObject * _resultobj;
     wxShapeRegion * _arg0;
     double * _arg1;
+    double  temp;
     double * _arg2;
+    double  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxShapeRegion_GetSize",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxShapeRegion_GetSize",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxShapeRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxShapeRegion_GetSize. Expected _wxShapeRegion_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxShapeRegion_GetSize. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxShapeRegion_GetSize. Expected _double_p.");
         return NULL;
         }
     }
@@ -634,6 +630,16 @@ static PyObject *_wrap_wxShapeRegion_GetSize(PyObject *self, PyObject *args, PyO
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -642,33 +648,25 @@ static PyObject *_wrap_wxShapeRegion_GetPosition(PyObject *self, PyObject *args,
     PyObject * _resultobj;
     wxShapeRegion * _arg0;
     double * _arg1;
+    double  temp;
     double * _arg2;
+    double  temp0;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","xp","yp", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxShapeRegion_GetPosition",_kwnames,&_argo0,&_argo1,&_argo2)) 
+{
+  _arg1 = &temp;
+}
+{
+  _arg2 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxShapeRegion_GetPosition",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxShapeRegion_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxShapeRegion_GetPosition. Expected _wxShapeRegion_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxShapeRegion_GetPosition. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxShapeRegion_GetPosition. Expected _double_p.");
         return NULL;
         }
     }
@@ -679,6 +677,16 @@ static PyObject *_wrap_wxShapeRegion_GetPosition(PyObject *self, PyObject *args,
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -5621,14 +5629,17 @@ static PyObject *_wrap_wxPyShape_FindRegion(PyObject *self, PyObject *args, PyOb
     wxPyShape * _arg0;
     wxString * _arg1;
     int * _arg2;
+    int  temp;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","regionName","regionId", NULL };
+    char *_kwnames[] = { "self","regionName", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShape_FindRegion",_kwnames,&_argo0,&_obj1,&_argo2)) 
+{
+  _arg2 = &temp;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyShape_FindRegion",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5644,13 +5655,6 @@ static PyObject *_wrap_wxPyShape_FindRegion(PyObject *self, PyObject *args, PyOb
     }
     _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
 }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyShape_FindRegion. Expected _int_p.");
-        return NULL;
-        }
-    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxPyShape *)wxPyShape_FindRegion(_arg0,*_arg1,_arg2);
@@ -5663,6 +5667,11 @@ static PyObject *_wrap_wxPyShape_FindRegion(PyObject *self, PyObject *args, PyOb
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
 {
     if (_obj1)
         delete _arg1;

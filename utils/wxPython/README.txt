@@ -32,6 +32,15 @@ You can also get it independently from here:
 
 http://download.microsoft.com/download/platformsdk/Comctl32/5.80.2614.3600/W9XNT4/EN-US/50comupd.exe
 
+Windows 95 users may also need the WinSock 2.0 and OpenGL libraries.
+These can be found at these sites:
+
+
+http://www.microsoft.com/windows95/downloads/contents/wuadmintools/s_wunetwo
+rkingtools/w95sockets2/default.asp
+
+http://www.opengl.org/Downloads/Downloads.html
+
 
 
 Getting Help

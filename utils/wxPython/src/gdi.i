@@ -88,6 +88,15 @@ public:
     int GetQuality();
     void SetQuality(int q);
 #endif
+
+    %pragma(python) addtoclass = "
+    def __del__(self,gdic=gdic):
+        try:
+            if self.thisown == 1 :
+                gdic.delete_wxBitmap(self)
+        except:
+            pass
+"
 };
 
 
@@ -160,6 +169,15 @@ public:
 #ifdef __WXMSW__
     void SetSize(const wxSize& size);
 #endif
+    %pragma(python) addtoclass = "
+    def __del__(self,gdic=gdic):
+        try:
+            if self.thisown == 1 :
+                gdic.delete_wxIcon(self)
+        except:
+            pass
+"
+
 };
 
 

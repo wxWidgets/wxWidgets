@@ -274,6 +274,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def GetSelectionType(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetSelectionType,(self,) + _args, _kwargs)
         return val
+    def GetLinesOnScreen(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetLinesOnScreen,(self,) + _args, _kwargs)
+        return val
+    def IsSelectionRectangle(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_IsSelectionRectangle,(self,) + _args, _kwargs)
+        return val
+    def SetUseHorizontalScrollBar(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetUseHorizontalScrollBar,(self,) + _args, _kwargs)
+        return val
+    def GetUseHorizontalScrollBar(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetUseHorizontalScrollBar,(self,) + _args, _kwargs)
+        return val
     def FindText(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_FindText,(self,) + _args, _kwargs)
         return val
@@ -318,6 +330,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def SetStyleBytes(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetStyleBytes,(self,) + _args, _kwargs)
+        return val
+    def SetLineState(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetLineState,(self,) + _args, _kwargs)
+        return val
+    def GetLineState(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetLineState,(self,) + _args, _kwargs)
         return val
     def StyleClearAll(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_StyleClearAll,(self,) + _args, _kwargs)
@@ -409,8 +427,26 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def SetTabWidth(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetTabWidth,(self,) + _args, _kwargs)
         return val
+    def SetIndent(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetIndent,(self,) + _args, _kwargs)
+        return val
+    def SetUseTabs(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetUseTabs,(self,) + _args, _kwargs)
+        return val
+    def SetLineIndentation(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetLineIndentation,(self,) + _args, _kwargs)
+        return val
+    def GetLineIndentation(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetLineIndentation,(self,) + _args, _kwargs)
+        return val
+    def GetLineIndentationPos(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_GetLineIndentationPos,(self,) + _args, _kwargs)
+        return val
     def SetWordChars(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetWordChars,(self,) + _args, _kwargs)
+        return val
+    def SetUsePop(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetUsePop,(self,) + _args, _kwargs)
         return val
     def BraceHighlight(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_BraceHighlight,(self,) + _args, _kwargs)
@@ -483,6 +519,15 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def AutoCompStopChars(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_AutoCompStopChars,(self,) + _args, _kwargs)
+        return val
+    def AutoCompSetSeparator(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetSeparator,(self,) + _args, _kwargs)
+        return val
+    def AutoCompGetSeparator(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetSeparator,(self,) + _args, _kwargs)
+        return val
+    def AutoCompSelect(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_AutoCompSelect,(self,) + _args, _kwargs)
         return val
     def CallTipShow(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_CallTipShow,(self,) + _args, _kwargs)
@@ -813,6 +858,8 @@ wxSTC_CMD_LINEDELETE = stc_c.wxSTC_CMD_LINEDELETE
 wxSTC_CMD_LINETRANSPOSE = stc_c.wxSTC_CMD_LINETRANSPOSE
 wxSTC_CMD_LOWERCASE = stc_c.wxSTC_CMD_LOWERCASE
 wxSTC_CMD_UPPERCASE = stc_c.wxSTC_CMD_UPPERCASE
+wxSTC_CMD_LINESCROLLDOWN = stc_c.wxSTC_CMD_LINESCROLLDOWN
+wxSTC_CMD_LINESCROLLUP = stc_c.wxSTC_CMD_LINESCROLLUP
 wxSTC_LEX_CONTAINER = stc_c.wxSTC_LEX_CONTAINER
 wxSTC_LEX_NULL = stc_c.wxSTC_LEX_NULL
 wxSTC_LEX_PYTHON = stc_c.wxSTC_LEX_PYTHON
