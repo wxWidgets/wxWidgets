@@ -1312,8 +1312,7 @@ AC_CACHE_SAVE
 
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
-if eval "test $host != $build"; then
-  if eval "test $host_alias != NONE"; then
+if test "$cross_compiling" = "yes" ; then
     CC=$host_alias-gcc
     CXX=$host_alias-c++
     AR=$host_alias-ar
@@ -1323,7 +1322,6 @@ if eval "test $host != $build"; then
     LD=$host_alias-ld
     NM=$host_alias-nm
     STRIP=$host_alias-strip
-  fi
 fi
 
 dnl C-compiler checks
