@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: wxWindows-2.4\n"
 "POT-Creation-Date: 2002-08-21 16:39+0200\n"
 "PO-Revision-Date: 2000-08-11 11:11+0200\n"
-"Last-Translator: Robert Roebling üöä <robert@roebling.de>\n"
+"Last-Translator: Robert Roebling <robert@roebling.de>\n"
 "Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -1612,7 +1612,7 @@ msgstr "Folio, 8 1/2 x 13 Zoll"
 
 #: ../src/html/helpfrm.cpp:960
 msgid "Font size:"
-msgstr "Font Größe:"üö
+msgstr "Font Größe:"
 
 #: ../src/unix/utilsunx.cpp:572
 msgid "Fork failed"
