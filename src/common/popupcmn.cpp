@@ -34,6 +34,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/combobox.h"        // wxComboControl
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #ifdef __WXUNIVERSAL__
@@ -256,13 +257,13 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     // otherwise everything else breaks down
     m_focus = FindFocus();
     if ( m_focus )
-#endif // __WXMSW__
     {
         delete m_handlerFocus;
         m_handlerFocus = new wxPopupFocusHandler(this);
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
+#endif // __WXMSW__
 }
 
 void wxPopupTransientWindow::Dismiss()
@@ -347,7 +348,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
     {
         return;
     }
-
+    
     wxPoint pos = event.GetPosition();
 
     // scrollbar on which the click occured

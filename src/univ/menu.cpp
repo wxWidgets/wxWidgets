@@ -257,6 +257,8 @@ public:
         }
         else
         {
+            // return FALSE;
+            
             return wxEvtHandler::ProcessEvent(event);
         }
     }
@@ -1251,7 +1253,9 @@ void wxMenu::OnDismiss(bool dismissParent)
             wxCHECK_RET( m_invokingWindow, _T("what kind of menu is this?") );
 
             m_invokingWindow->DismissPopupMenu();
-            SetInvokingWindow(NULL);
+            
+            // Why reset it here? We need it for sending the event to...
+            // SetInvokingWindow(NULL);
         }
     }
 }
@@ -1321,7 +1325,7 @@ bool wxMenu::ClickItem(wxMenuItem *item)
         // not applicabled
         isChecked = -1;
     }
-
+    
     return SendEvent(item->GetId(), isChecked);
 }
 
@@ -2355,6 +2359,9 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 #endif // 0
 
     menu->SetInvokingWindow(this);
+    
+    // wxLogDebug( "Name of invoking window %s", menu->GetInvokingWindow()->GetName().c_str() );
+    
     menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize(0, 0));
 
     // this is not very useful if the menu was popped up because of the mouse
@@ -2390,9 +2397,6 @@ void wxWindow::DismissPopupMenu()
 {
     wxCHECK_RET( ms_evtLoopPopup, _T("no popup menu shown") );
     
-    char *crash = NULL;
-    (*crash) = 0;
-
     ms_evtLoopPopup->Exit();
 }
 

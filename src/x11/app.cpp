@@ -468,7 +468,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
     win = wxGetWindowFromTable(window);
     if (!win)
-	    return FALSE;
+        return FALSE;
 
 #ifdef __WXDEBUG__
     wxString windowClass = win->GetClassInfo()->GetClassName();
@@ -661,7 +661,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     g_nextFocus = win;
                     
                     win->SetFocus();
-                    return TRUE;
+                    // return TRUE;
                 }
             }
             
@@ -881,7 +881,7 @@ bool wxApp::OnInitGui()
     delete wxLog::SetActiveTarget(new wxLogStderr);
     
     if (!wxAppBase::OnInitGui())
-	return FALSE;
+    return FALSE;
     
     GetMainColormap( wxApp::GetDisplay() );
 
@@ -920,13 +920,13 @@ Window wxGetWindowParent(Window window)
 #endif
     Window* children = NULL;
 
-    // #define XQueryTree(d,w,r,p,c,nc)		GrQueryTree(w,p,c,nc)
+    // #define XQueryTree(d,w,r,p,c,nc)     GrQueryTree(w,p,c,nc)
     int res = 1;
 #if !wxUSE_NANOX
     res =
 #endif
         XQueryTree((Display*) wxGetDisplay(), window, & root, & parent,
-			 & children, & noChildren);
+             & children, & noChildren);
     if (children)
         XFree(children);
     if (res)
