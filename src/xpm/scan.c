@@ -261,24 +261,26 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
     /*
      * scan shape mask if any
      */
-    if (shapeimage) {
+    if (shapeimage) 
+    {
 #ifndef FOR_MSW
 # ifndef AMIGA
-	ErrorStatus = GetImagePixels1(shapeimage, width, height, &pmap,
-				      storeMaskPixel);
+	    ErrorStatus = GetImagePixels1(shapeimage, width, height, &pmap,
+		    		      storeMaskPixel);
 # else
-	ErrorStatus = AGetImagePixels(shapeimage, width, height, &pmap,
-				      storeMaskPixel);
-# endif
+	    ErrorStatus = AGetImagePixels(shapeimage, width, height, &pmap,
+		    		      storeMaskPixel);
+# endif /* AMIGA */
 #else
 
 #ifndef __OS2__
-	ErrorStatus = MSWGetImagePixels(display, shapeimage, width, height,
-					&pmap, storeMaskPixel);
+	    ErrorStatus = MSWGetImagePixels(display, shapeimage, width, height,
+		    			&pmap, storeMaskPixel);
 /* calling convention all messed up OS/2 -- figure out later */
 #endif
 
-#endif
+#endif /* ndef for FOR_MSW */
+
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
     }
@@ -291,36 +293,42 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
      *
      */
 
-    if (image) {
+    if (image) 
+    {
 #ifndef FOR_MSW
 # ifndef AMIGA
-	if (((image->bits_per_pixel | image->depth) == 1)  &&
-	    (image->byte_order == image->bitmap_bit_order))
-	    ErrorStatus = GetImagePixels1(image, width, height, &pmap,
-					  storePixel);
-	else if (image->format == ZPixmap) {
-	    if (image->bits_per_pixel == 8)
-		ErrorStatus = GetImagePixels8(image, width, height, &pmap);
-	    else if (image->bits_per_pixel == 16)
-		ErrorStatus = GetImagePixels16(image, width, height, &pmap);
-	    else if (image->bits_per_pixel == 32)
-		ErrorStatus = GetImagePixels32(image, width, height, &pmap);
-	} else
-	    ErrorStatus = GetImagePixels(image, width, height, &pmap);
+	    if (((image->bits_per_pixel | image->depth) == 1)  &&
+	        (image->byte_order == image->bitmap_bit_order))
+    	    ErrorStatus = GetImagePixels1(image, width, height, &pmap,
+	    				  storePixel);
+	    else if (image->format == ZPixmap) 
+    	{
+	        if (image->bits_per_pixel == 8)
+    		    ErrorStatus = GetImagePixels8(image, width, height, &pmap);
+	        else if (image->bits_per_pixel == 16)
+		        ErrorStatus = GetImagePixels16(image, width, height, &pmap);
+    	    else if (image->bits_per_pixel == 32)
+	        	ErrorStatus = GetImagePixels32(image, width, height, &pmap);
+    	} 
+	    else
+	        ErrorStatus = GetImagePixels(image, width, height, &pmap);
 # else
-	ErrorStatus = AGetImagePixels(image, width, height, &pmap,
-				      storePixel);
-# endif
+	    ErrorStatus = AGetImagePixels(image, width, height, &pmap,
+		    		      storePixel);
+# endif /* AMIGA */
+
 #else
 
 #ifndef __OS2__
-	ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
-					storePixel);
+	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
+		    			storePixel);
+/* calling convention all messed up OS/2 -- figure out later */
 #endif
 
 #endif
-	if (ErrorStatus != XpmSuccess)
-	    RETURN(ErrorStatus);
+
+	    if (ErrorStatus != XpmSuccess)
+	        RETURN(ErrorStatus);
     }
 
     /*
@@ -644,22 +652,12 @@ static unsigned long Const low_bits_table[] = {
  *
  */
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int GetImagePixels(
-  XImage*      image
-, unsigned int width
-, unsigned int height
-, PixelsMap*   pmap
-)
-#else
 static int
 GetImagePixels(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
-#endif
 {
     char *src;
     char *dst;
@@ -757,22 +755,12 @@ GetImagePixels(image, width, height, pmap)
 static unsigned long byteorderpixel = MSBFirst << 24;
 #endif
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int GetImagePixels32(
-  XImage*      image
-, unsigned int width
-, unsigned int height
-, PixelsMap*   pmap
-)
-#else
 static int
 GetImagePixels32(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
-#endif
 {
     unsigned char *addr;
     unsigned char *data;
@@ -832,22 +820,12 @@ GetImagePixels32(image, width, height, pmap)
  * scan pixels of a 16-bits Z image data structure
  */
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int GetImagePixels16(
-  XImage*      image
-, unsigned int width
-, unsigned int height
-, PixelsMap*   pmap
-)
-#else
 static int
 GetImagePixels16(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
-#endif
 {
     unsigned char *addr;
     unsigned char *data;
@@ -888,23 +866,12 @@ GetImagePixels16(image, width, height, pmap)
  * scan pixels of a 8-bits Z image data structure
  */
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int
-GetImagePixels8(image, width, height, pmap)
-  XImage*      image
-, unsigned int width
-, unsigned int height
-, PixelsMap*   pmap
-)
-#else
 static int
 GetImagePixels8(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
-#endif
 {
     unsigned int *iptr;
     unsigned char *data;
@@ -932,17 +899,6 @@ GetImagePixels8(image, width, height, pmap)
  * scan pixels of a 1-bit depth Z image data structure
  */
 
-#ifdef __OS2__
-/* Visual Age cannot deal with old, non-ansi, code */
-static int
-GetImagePixels1(
-  XImage*      image
-, unsigned int width
-, unsigned int height
-, PixelsMap*   pmap
-, int          (*storeFunc) ()
-)
-#else
 static int
 GetImagePixels1(image, width, height, pmap, storeFunc)
     XImage *image;
@@ -950,7 +906,6 @@ GetImagePixels1(image, width, height, pmap, storeFunc)
     unsigned int height;
     PixelsMap *pmap;
     int (*storeFunc) ();
-#endif
 {
     unsigned int *iptr;
     int x, y;
@@ -1034,6 +989,7 @@ AGetImagePixels (
 
 # endif/* AMIGA */
 #else  /* ndef FOR_MSW */
+
 #ifdef __OS2__
 /* Visual Age cannot deal with old, non-ansi, code */
 static int
@@ -1085,6 +1041,7 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
 #else
 	    pixel = GetPixel(*display, x, y);
 #endif
+
 #ifndef __OS2__
 /* calling convention all messed up under OS/2 */
 	    if ((*storeFunc) (pixel, pmap, iptr))
