@@ -18,6 +18,9 @@
 #undef PACKAGE
 #undef VERSION
 
+/* needed for older automake? */
+#undef WITH_SYMBOL_UNDERSCORE
+
 /* ------------------------------------------------------------------------ */
 /* define if support for GTK 1.2 features                                   */
 /* ------------------------------------------------------------------------ */
