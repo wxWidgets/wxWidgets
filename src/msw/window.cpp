@@ -297,14 +297,17 @@ wxWindow::~wxWindow()
         {
             if ( frame->GetLastFocus() == this )
                 frame->SetLastFocus((wxWindow*)NULL);
-            //break;
+            break;
         }
     }
 
+    // VS: destroy children first and _then_ detach *this from its parent.
+    //     If we'd do it the other way around, children wouldn't be able
+    //     find their parent frame (see above).
+    DestroyChildren();
+
     if ( m_parent )
         m_parent->RemoveChild(this);
-
-    DestroyChildren();
 
     if ( m_hWnd )
     {
