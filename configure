@@ -19190,34 +19190,47 @@ EOF
 
 fi
 
-if test "$wxUSE_URL" = "yes"; then
-    cat >> confdefs.h <<\EOF
-#define wxUSE_URL 1
-EOF
-
-fi
-
 if test "$wxUSE_PROTOCOL" = "yes"; then
-    cat >> confdefs.h <<\EOF
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        echo "configure: warning: Protocol classes require sockets... disabled" 1>&2
+        wxUSE_PROTOCOL=no
+    fi
+
+    if test "$wxUSE_PROTOCOL" = "yes"; then
+        cat >> confdefs.h <<\EOF
 #define wxUSE_PROTOCOL 1
 EOF
 
 
-    if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
-        cat >> confdefs.h <<\EOF
+        if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
+            cat >> confdefs.h <<\EOF
 #define wxUSE_PROTOCOL_HTTP 1
 EOF
 
-    fi
-    if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
-        cat >> confdefs.h <<\EOF
+        fi
+        if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
+            cat >> confdefs.h <<\EOF
 #define wxUSE_PROTOCOL_FTP 1
 EOF
 
-    fi
-    if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
-        cat >> confdefs.h <<\EOF
+        fi
+        if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
+            cat >> confdefs.h <<\EOF
 #define wxUSE_PROTOCOL_FILE 1
+EOF
+
+        fi
+    fi
+fi
+
+if test "$wxUSE_URL" = "yes"; then
+    if test "$wxUSE_PROTOCOL" != "yes"; then
+        echo "configure: warning: wxURL class requires wxProtocol... disabled" 1>&2
+        wxUSE_URL=no
+    fi
+    if test "$wxUSE_URL" = "yes"; then
+        cat >> confdefs.h <<\EOF
+#define wxUSE_URL 1
 EOF
 
     fi
@@ -19565,7 +19578,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:19569: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:19582: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

@@ -4646,21 +4646,34 @@ if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
 fi
 
-if test "$wxUSE_URL" = "yes"; then
-    AC_DEFINE(wxUSE_URL)
+if test "$wxUSE_PROTOCOL" = "yes"; then
+    if test "$wxUSE_SOCKETS" != "yes"; then
+        AC_MSG_WARN(Protocol classes require sockets... disabled)
+        wxUSE_PROTOCOL=no
+    fi
+
+    if test "$wxUSE_PROTOCOL" = "yes"; then
+        AC_DEFINE(wxUSE_PROTOCOL)
+
+        if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
+            AC_DEFINE(wxUSE_PROTOCOL_HTTP)
+        fi
+        if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
+            AC_DEFINE(wxUSE_PROTOCOL_FTP)
+        fi
+        if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
+            AC_DEFINE(wxUSE_PROTOCOL_FILE)
+        fi
+    fi
 fi
 
-if test "$wxUSE_PROTOCOL" = "yes"; then
-    AC_DEFINE(wxUSE_PROTOCOL)
-
-    if test "$wxUSE_PROTOCOL_HTTP" = "yes"; then
-        AC_DEFINE(wxUSE_PROTOCOL_HTTP)
+if test "$wxUSE_URL" = "yes"; then
+    if test "$wxUSE_PROTOCOL" != "yes"; then
+        AC_MSG_WARN(wxURL class requires wxProtocol... disabled)
+        wxUSE_URL=no
     fi
-    if test "$wxUSE_PROTOCOL_FTP" = "yes"; then
-        AC_DEFINE(wxUSE_PROTOCOL_FTP)
-    fi
-    if test "$wxUSE_PROTOCOL_FILE" = "yes"; then
-        AC_DEFINE(wxUSE_PROTOCOL_FILE)
+    if test "$wxUSE_URL" = "yes"; then
+        AC_DEFINE(wxUSE_URL)
     fi
 fi
 
