@@ -653,9 +653,23 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             
             wxASSERT_MSG( hbitmap, wxT("bitmap is ok but HBITMAP is NULL?") );
             
+            COLORREF old_textground = ::GetTextColor(GetHdc());
+            COLORREF old_background = ::GetBkColor(GetHdc());
+            if (m_textForegroundColour.Ok())
+            {
+                ::SetTextColor(GetHdc(), m_textForegroundColour.GetPixel() );
+            }
+            if (m_textBackgroundColour.Ok())
+            {
+                ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
+            }
+
             ::SelectObject( memdc, hbitmap );
             ::BitBlt( cdc, x, y, bmp.GetWidth(), bmp.GetHeight(), memdc, 0, 0, SRCCOPY);
             ::DeleteDC( memdc );
+
+            ::SetTextColor(GetHdc(), old_textground);
+            ::SetBkColor(GetHdc(), old_background);
         }
     }
     else
@@ -1232,8 +1246,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     wxCoord xsrc1 = xsrc;
     wxCoord ysrc1 = ysrc;
 
-    // Chris Breeze 18/5/98: use text foreground/background colours
-    // when blitting from 1-bit bitmaps
     COLORREF old_textground = ::GetTextColor(GetHdc());
     COLORREF old_background = ::GetBkColor(GetHdc());
     if (m_textForegroundColour.Ok())
