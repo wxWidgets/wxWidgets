@@ -88,6 +88,8 @@ protected:
     // also updates m_widthsAbs if necessary
     wxRect GetTotalFieldRect(wxCoord *borderBetweenFields);
 
+    wxRect DoGetFieldRect(int n) const;
+
     // refresh the given field
     void RefreshField(int i);
 
