@@ -16,6 +16,7 @@
 #ifndef WX_PRECOMP
 #include <wx/stream.h>
 #include <wx/wfstream.h>
+#include <wx/intl.h>
 #endif
 
 #include "wx/mmedia/vidbase.h"
@@ -61,7 +62,7 @@ void wxVideoBaseDriver::DetachOutput()
 
 wxFrame *wxVideoCreateFrame(wxVideoBaseDriver *vid_drv)
 {
-  wxFrame *frame = new wxFrame(NULL, -1, "Video Output", wxDefaultPosition, wxSize(100, 100));
+  wxFrame *frame = new wxFrame(NULL, -1, _("Video Output"), wxDefaultPosition, wxSize(100, 100));
   wxWindow *vid_out = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(300, 300));
 
   frame->Layout();

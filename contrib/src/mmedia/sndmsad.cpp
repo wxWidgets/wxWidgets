@@ -368,8 +368,7 @@ bool wxSoundStreamMSAdpcm::SetSoundFormat(const wxSoundFormatBase& format)
     adpcm->GetCoefs(m_coefs, ncoefs, coefs_len);
 
     if (!ncoefs) {
-        wxLogError(__FILE__ ":%d: Number of ADPCM coefficients"
-                   " must be non null", __LINE__);
+        wxLogError(wxT("Number of ADPCM coefficients must be non null"));
         return FALSE;
     }
     

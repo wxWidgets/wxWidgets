@@ -55,7 +55,7 @@ wxSoundAiff::~wxSoundAiff()
 
 wxString wxSoundAiff::GetCodecName() const
 {
-    return "wxSoundAiff codec";
+    return wxT("wxSoundAiff codec");
 }
 
 bool wxSoundAiff::CanRead()
