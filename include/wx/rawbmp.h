@@ -90,6 +90,9 @@ public:
         m_bmp.UngetRawData(this);
     }
 
+    // call this to indicate that we should use the alpha channel
+    void UseAlpha() { m_bmp.UseAlpha(); }
+
     // accessors
     unsigned char *GetPixels() const { return m_pixels; }
     int GetWidth() const { return m_width; }

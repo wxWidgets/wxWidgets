@@ -1096,6 +1096,12 @@ int wxBitmap::GetQuality() const
 
 #endif // WXWIN_COMPATIBILITY_2_4
 
+void wxBitmap::UseAlpha()
+{
+    if ( GetBitmapData() )
+        GetBitmapData()->m_hasAlpha = true;
+}
+
 bool wxBitmap::HasAlpha() const
 {
     return GetBitmapData() && GetBitmapData()->m_hasAlpha;

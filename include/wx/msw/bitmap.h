@@ -146,8 +146,10 @@ public:
     bool operator==(const wxBitmap& bitmap) const { return m_refData == bitmap.m_refData; }
     bool operator!=(const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
-    // this function is internal and shouldn't be used, it risks to disappear
+    // these functions are internal and shouldn't be used, they risk to
+    // disappear in the future
     bool HasAlpha() const;
+    void UseAlpha();
 
 #if WXWIN_COMPATIBILITY_2_4
     // these functions do nothing and are only there for backwards

@@ -267,6 +267,8 @@ public:
             return;
         }
 
+        data.UseAlpha();
+
         wxRawBitmapIterator p(data);
 
         p.Offset(BORDER, BORDER);
