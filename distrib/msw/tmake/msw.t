@@ -44,6 +44,10 @@
         } else {
             $project{"MSW_SOURCES"} .= "msw/" . $file . " ";
             $project{"GUIOBJS"} .= $fileobj . " ";
+
+            if ( $wxMSW{$file} =~ /\bL\b/ ) {
+                $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
+            }
         }
     }
 
@@ -94,6 +98,9 @@ GENERICOBJS = \
 
 GUIOBJS = \
 		#$ ExpandList("GUIOBJS");
+
+GUI_LOWLEVEL_OBJS = \
+		#$ ExpandList("GUI_LOWLEVEL_OBJS");
 
 HTMLOBJS = \
 		#$ ExpandList("HTMLOBJS");
