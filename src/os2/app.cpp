@@ -63,7 +63,6 @@
 // ---------------------------------------------------------------------------
 
 extern wxChar*                      wxBuffer;
-extern wxChar*                      wxOsVersion;
 extern wxList*                      wxWinHandleList;
 extern wxList WXDLLEXPORT           wxPendingDelete;
 extern wxCursor*                    g_globalCursor;
@@ -135,10 +134,6 @@ bool wxApp::Initialize(
     wxBuffer = new wxChar[1500]; // FIXME; why?
 
     wxClassInfo::InitializeClasses();
-
-#if wxUSE_RESOURCES
-    wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
-#endif
 
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;

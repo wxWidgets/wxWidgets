@@ -122,7 +122,6 @@
 // ---------------------------------------------------------------------------
 
 extern wxChar *wxBuffer;
-extern wxChar *wxOsVersion;
 extern wxList *wxWinHandleList;
 extern wxList WXDLLEXPORT wxPendingDelete;
 extern void wxSetKeyboardHook(bool doIt);
@@ -195,10 +194,6 @@ bool wxApp::Initialize()
     wxBuffer = new wxChar[1500]; // FIXME
 
     wxClassInfo::InitializeClasses();
-
-#if wxUSE_RESOURCES
-    wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
-#endif
 
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
