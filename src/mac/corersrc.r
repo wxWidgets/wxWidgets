@@ -391,7 +391,7 @@ resource 'ldes' ( 128 )
 		0 , 
 		hasVertScroll , 
 		noHorizScroll , 
-		128 , 
+		0 , 
 		noGrowSpace , 
 	}
 } ;

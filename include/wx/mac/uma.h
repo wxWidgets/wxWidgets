@@ -228,12 +228,23 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 #define	GetPortVisibleRegion( p, r ) CopyRgn( p->visRgn , r )
 #define GetQDGlobalsWhite( a ) (&((*a) = qd.white))
 #define GetQDGlobalsBlack( a ) (&((*a) = qd.black))
-#define GetQDGlobalsScreenBits( a ) (*a) = qd.screenBits
+#define GetQDGlobalsScreenBits( a ) ((*a) = qd.screenBits)
 #define GetQDGlobalsArrow( a ) (&((*a) = qd.arrow))
 #define GetControlBounds( c , b ) &((*b) = (**c).contrlRect )
 #define GetPortBitMapForCopyBits( p ) ((BitMap*) &(((CGrafPtr)p)->portPixMap ))
-#define	GetControlOwner( control ) (**control).contrlOwner
+#define	GetControlOwner( control ) ((**control).contrlOwner)
 #define InvalWindowRgn( window , rgn ) InvalRgn( rgn )
+#define GetPortPenMode( p ) (p->pnMode)
+#define SetPortPenMode( p , mode ) (p->pnMode = mode )
+// control manager
+
+#define GetControlReference( control ) ((**control).contrlRfCon)
+
+// list manager
+
+#define SetListSelectionFlags( list , options ) (**list).selFlags = options
+#define GetListRefCon( list ) (**list).refCon
+
 #endif
 #if TARGET_CARBON
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) 

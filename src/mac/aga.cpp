@@ -4,7 +4,7 @@
 
 #if 0 // TO BE REMOVED SOON
 
-#include <extcdef.h>
+//#include <extcdef.h>
 #include <PictUtils.h>
 
 pascal SInt32 AGAProgressBarDefProc (SInt16 procID, ControlHandle theControl, ControlDefProcMessage message, SInt32 param);

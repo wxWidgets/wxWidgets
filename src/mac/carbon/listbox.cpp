@@ -21,7 +21,7 @@
 
 #include "wx/utils.h"
 #ifndef __DARWIN__
-  #include "extldef.h"
+//  #include "extldef.h"
 #endif
 
 #if !USE_SHARED_LIBRARY
@@ -33,6 +33,96 @@ END_EVENT_TABLE()
 #endif
 
 #include "wx/mac/uma.h"
+
+
+typedef struct {
+ unsigned short instruction;
+ void (*function)();
+} ldefRec, *ldefPtr, **ldefHandle;
+
+extern "C"
+{
+static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect *drawRect,
+									 Cell cell, short dataOffset, short dataLength,
+									 ListHandle listHandle ) ;
+}
+
+static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect *drawRect,
+									 Cell cell, short dataOffset, short dataLength,
+									 ListHandle listHandle )
+{
+	FontInfo fontInfo;
+	GrafPtr savePort;
+	GrafPtr grafPtr;
+	RgnHandle savedClipRegion;
+	SInt32 savedPenMode;
+ 	wxListBox*			list;
+  GetPort(&savePort);
+  SetPort((**listHandle).port);
+  grafPtr = (**listHandle).port ;
+ 	// typecast our refCon
+ 	list = (wxListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
+	
+	//	Calculate the cell rect.
+	
+	switch( message ) {
+		case lInitMsg:
+			break;
+
+		case lCloseMsg:
+			break;
+
+		case lDrawMsg:
+		{
+		    const wxString text = list->m_stringArray[cell.v] ;
+
+			//	Save the current clip region, and set the clip region to the area we are about
+			//	to draw.
+			
+			savedClipRegion = NewRgn();
+			GetClip( savedClipRegion );
+			ClipRect( drawRect );
+			EraseRect( drawRect );
+						
+    		
+    	MoveTo(drawRect->left + 4 , drawRect->top + 10 );
+    	::TextFont( kFontIDMonaco ) ;
+    	::TextSize( 9  );
+    	::TextFace( 0 ) ;
+ 
+    	DrawText(text, 0 , text.Length());
+			//	If the cell is hilited, do the hilite now. Paint the cell contents with the
+			//	appropriate QuickDraw transform mode.
+			
+			if( isSelected ) {
+				savedPenMode = GetPortPenMode( grafPtr );
+				SetPortPenMode( grafPtr, hilitetransfermode );
+				PaintRect( drawRect );
+				SetPortPenMode( grafPtr, savedPenMode );
+			}
+			
+			//	Restore the saved clip region.
+			
+			SetClip( savedClipRegion );
+			DisposeRgn( savedClipRegion );
+			}
+			break;
+		case lHiliteMsg:
+			
+			//	Hilite or unhilite the cell. Paint the cell contents with the
+			//	appropriate QuickDraw transform mode.
+			
+			GetPort( &grafPtr );
+			savedPenMode = GetPortPenMode( grafPtr );
+			SetPortPenMode( grafPtr, hilitetransfermode );
+			PaintRect( drawRect );
+			SetPortPenMode( grafPtr, savedPenMode );
+			break;
+		default :
+		  break ;
+	}
+	SetPort(savePort);	
+}
 
 extern "C" void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon) ;
 const short kwxMacListWithVerticalScrollbar = 128 ;
@@ -48,6 +138,8 @@ wxListBox::wxListBox()
   m_selected = 0;
   m_macList = NULL ;
 }
+
+static ListDefUPP macListDefUPP = NULL ;
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxPoint& pos,
@@ -65,12 +157,16 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     
     MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
-#if TARGET_CARBON
     ListDefSpec listDef;
-    OptionBits  options;
+    listDef.defType = kListDefUserProcType;
+    if ( macListDefUPP == NULL )
+    {
+      macListDefUPP = NewListDefUPP( wxMacListDefinition ); 
+    }
+		listDef.u.userProc = macListDefUPP ;
+#if TARGET_CARBON
     Size asize;
 
-    listDef.defType = kListDefStandardTextType;
 
     CreateListBoxControl( parent->GetMacRootWindow(), &bounds, false, 0, 1, false, true,
                           14, 14, false, &listDef, &m_macControl );
@@ -81,7 +177,32 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     SetControlReference(m_macControl, (long) this);
     SetControlVisibility(m_macControl, false, false);
 
-    options = 0;
+#else
+    long	result ;
+
+    m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false ,
+				  kwxMacListWithVerticalScrollbar , 0 , 0, 
+				  kControlListBoxProc , (long) this ) ;
+    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
+		       sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
+
+    HLock( (Handle) m_macList ) ;
+    ldefHandle ldef ;
+    ldef = (ldefHandle) NewHandle( sizeof(ldefRec) ) ;
+    if (  (**m_macList).listDefProc != NULL )
+    {
+      (**ldef).instruction = 0x4EF9;  /* JMP instruction */
+      (**ldef).function = (void(*)()) listDef.u.userProc;
+      (**m_macList).listDefProc = (Handle) ldef ;
+    }
+        
+    Point pt = (**m_macList).cellSize ;
+    pt.v = 14 ;
+    LCellSize( pt , m_macList ) ;
+    
+    LAddColumn( 1 , 0 , m_macList ) ;
+#endif
+    OptionBits  options = 0;
     if ( style & wxLB_MULTIPLE )
     {
         options += lNoExtend ;
@@ -95,52 +216,12 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         options = lOnlyOne ;
     }
     SetListSelectionFlags(m_macList, options);
-
-#else
-    long	result ;
-
-    m_macControl = ::NewControl( parent->GetMacRootWindow() , &bounds , title , false ,
-				  kwxMacListWithVerticalScrollbar , 0 , 0, 
-				  kControlListBoxProc , (long) this ) ;
-    ::GetControlData( m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
-		       sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
-
-    HLock( (Handle) m_macList ) ;
-    NewExtLDEFInfo( m_macList , MacDrawStringCell , (long) this ) ;
-    
-    (**m_macList).selFlags = 0 ;
-    if ( style & wxLB_MULTIPLE )
-    {
-	(**m_macList).selFlags += lNoExtend ;
-    }
-    else if ( style & wxLB_EXTENDED )
-    {
-	(**m_macList).selFlags += lExtendDrag ;
-    }
-    else
-    {
-	(**m_macList).selFlags = lOnlyOne ;
-    }
-    
-    Point pt = (**m_macList).cellSize ;
-    pt.v = 14 ;
-    LCellSize( pt , m_macList ) ;
-    
-    LAddColumn( 1 , 0 , m_macList ) ;
-    
-    ControlFontStyleRec		controlstyle ;
-    controlstyle.flags = kControlUseFontMask + kControlUseSizeMask ;
-    //controlstyle.font = kControlFontSmallSystemFont ;
-    controlstyle.font = kFontIDMonaco ;
-    controlstyle.size = 9 ;
-    //::UMASetControlFontStyle( m_macControl , &controlstyle ) ;
-#endif
     
     MacPostControlCreate() ;
     
     for ( int i = 0 ; i < n ; i++ )
     {
-	Append( choices[i] ) ;
+	    Append( choices[i] ) ;
     }
     
     LSetDrawingMode( true , m_macList ) ;
@@ -154,7 +235,8 @@ wxListBox::~wxListBox()
 	if ( m_macList )
 	{
 #if !TARGET_CARBON
-	    DisposeExtLDEFInfo( m_macList ) ;
+      DisposeHandle( (**m_macList).listDefProc ) ;
+      (**m_macList).listDefProc = NULL ;
 #endif
 	    m_macList = NULL ;
 	}
@@ -559,7 +641,7 @@ void wxListBox::MacInsert( int n , const char * text)
     Cell cell = { 0 , 0 } ;
     cell.v = n ;
     LAddRow( 1 , cell.v , m_macList ) ;
-    LSetCell(text, strlen(text), cell, m_macList);
+//    LSetCell(text, strlen(text), cell, m_macList);
     Refresh();
 }
 
@@ -568,7 +650,7 @@ void wxListBox::MacAppend( const char * text)
     Cell cell = { 0 , 0 } ;
     cell.v = (**m_macList).dataBounds.bottom ;
     LAddRow( 1 , cell.v , m_macList ) ;
-    LSetCell(text, strlen(text), cell, m_macList);
+ //   LSetCell(text, strlen(text), cell, m_macList);
     Refresh();
 }
 
@@ -637,7 +719,7 @@ void wxListBox::MacSet( int n , const char * text )
 	// so we just have to redraw
 	Cell cell = { 0 , 0 } ;
 	cell.v = n ;
-	LSetCell(text, strlen(text), cell, m_macList);
+//	LSetCell(text, strlen(text), cell, m_macList);
 	Refresh();
 }
 
