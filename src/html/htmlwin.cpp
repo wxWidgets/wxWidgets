@@ -259,17 +259,16 @@ void wxHtmlWindow::CreateLayout()
         SetScrollbars(1, 1, 0, ClientHeight * 2); // always on          
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
-        GetClientSize(&ClientWidth, &ClientHeight);
-	if (ClientHeight < m_Cell -> GetHeight()) {
+     	if (ClientHeight < m_Cell -> GetHeight()) {
             SetScrollbars(HTML_SCROLL_STEP, HTML_SCROLL_STEP,
                           m_Cell -> GetWidth() / HTML_SCROLL_STEP,
                           m_Cell -> GetHeight() / HTML_SCROLL_STEP
                           /*cheat: top-level frag is always container*/);
         }
-	else { /* we fit into window, no need for scrollbars */
-	    SetScrollbars(1, 1, 0, 0); // disable...
-	    m_Cell -> Layout(ClientWidth); // ...and relayout
-	}
+	    else { /* we fit into window, no need for scrollbars */
+	        SetScrollbars(1, 1, 0, 0); // disable...
+	        m_Cell -> Layout(ClientWidth); // ...and relayout
+	    }
     }
 }
 
