@@ -585,9 +585,9 @@ public:
         { m_x += pt.m_x - (m_x+m_width/2) , m_y += pt.m_y -(m_y+m_height/2); }
     inline wxOutCode GetOutCode( const wxPoint2DDouble &pt ) const
         { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
-                     ( ( pt.m_x >= m_x + m_width ) ? wxOutRight : 0 ) +
+                     ( ( pt.m_x > m_x + m_width ) ? wxOutRight : 0 ) +
                      ( ( pt.m_y < m_y ) ? wxOutTop : 0 )  +
-                     ( ( pt.m_y >= m_y + m_height ) ? wxOutBottom : 0 )); }
+                     ( ( pt.m_y > m_y + m_height ) ? wxOutBottom : 0 )); }
 	inline wxOutCode GetOutcode(const wxPoint2DDouble &pt) const
 		{ return GetOutCode(pt) ; }
     inline bool Contains( const wxPoint2DDouble &pt ) const
