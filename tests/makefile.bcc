@@ -35,6 +35,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
 	$(OBJS)\test_archivetest.obj \
+	$(OBJS)\test_ziptest.obj \
 	$(OBJS)\test_arrays.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_fileconftest.obj \
@@ -250,6 +251,9 @@ $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_archivetest.obj: .\archive\archivetest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_ziptest.obj: .\archive\ziptest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_arrays.obj: .\arrays\arrays.cpp

@@ -25,6 +25,7 @@
         <sources>
             test.cpp
             archive/archivetest.cpp
+            archive/ziptest.cpp
             arrays/arrays.cpp
             datetime/datetimetest.cpp
             fileconf/fileconftest.cpp

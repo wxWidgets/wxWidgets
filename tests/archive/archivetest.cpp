@@ -17,9 +17,7 @@
 #   include "wx/wx.h"
 #endif
 
-#if wxUSE_STREAMS
-
-#define WX_TEST_ARCHIVE_ITERATOR
+#if wxUSE_STREAMS && wxUSE_ARCSTREAM
 
 // VC++ 6 warns that the list iterator's '->' operator will not work whenever
 // std::list is used with a non-pointer, so switch it off.
@@ -27,9 +25,7 @@
 #pragma warning (disable:4284)
 #endif
 
-#include "wx/zipstrm.h"
-#include "wx/mstream.h"
-#include "wx/wfstream.h"
+#include "archivetest.h"
 #include "wx/dir.h"
 #include <string>
 #include <list>
@@ -67,72 +63,7 @@ using std::auto_ptr;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Bit flags for options for the tests
-
-enum Options
-{
-    PipeIn      = 0x01,     // input streams are non-seekable
-    PipeOut     = 0x02,     // output streams are non-seekable
-    Stub        = 0x04,     // the archive should be appended to a stub
-    AllOptions  = 0x07
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
-// These structs are passed as the template parameter of the test case to
-// specify a set of classes to use in the test. This allows either the generic
-// wxArchiveXXX interface to be exercised or the specific interface for a
-// particular archive format e.g. wxZipXXX.
-
-struct ArchiveClasses
-{
-    typedef wxArchiveEntry EntryT;
-    typedef wxArchiveInputStream InputStreamT;
-    typedef wxArchiveOutputStream OutputStreamT;
-    typedef wxArchiveClassFactory ClassFactoryT;
-    typedef wxArchiveNotifier NotifierT;
-    typedef wxArchiveIter IterT;
-    typedef wxArchivePairIter PairIterT;
-};
-
-struct ZipClasses
-{
-    typedef wxZipEntry EntryT;
-    typedef wxZipInputStream InputStreamT;
-    typedef wxZipOutputStream OutputStreamT;
-    typedef wxZipClassFactory ClassFactoryT;
-    typedef wxZipNotifier NotifierT;
-    typedef wxZipIter IterT;
-    typedef wxZipPairIter PairIterT;
-};
-
-
-///////////////////////////////////////////////////////////////////////////////
 // A class to hold a test entry
-
-class TestEntry
-{
-public:
-    TestEntry(const wxDateTime& dt, int len, const char *data);
-    ~TestEntry() { delete [] m_data; }
-
-    wxDateTime GetDateTime() const  { return m_dt; }
-    wxFileOffset GetLength() const  { return m_len; }
-    size_t GetSize() const          { return m_len; }
-    const char *GetData() const     { return m_data; }
-    wxString GetComment() const     { return m_comment; }
-    bool IsText() const             { return m_isText; }
-
-    void SetComment(const wxString& comment) { m_comment = comment; }
-    void SetDateTime(const wxDateTime& dt)   { m_dt = dt; }
-
-private:
-    wxDateTime m_dt;
-    size_t m_len;
-    char *m_data;
-    wxString m_comment;
-    bool m_isText;
-};
 
 TestEntry::TestEntry(const wxDateTime& dt, int len, const char *data)
   : m_dt(dt),
@@ -151,34 +82,9 @@ TestEntry::TestEntry(const wxDateTime& dt, int len, const char *data)
 // TestOutputStream and TestInputStream are memory streams which can be
 // seekable or non-seekable.
 
-class TestOutputStream : public wxOutputStream
-{
-public:
-    TestOutputStream(int options);
-
-    ~TestOutputStream() { delete [] m_data; }
-
-    int GetOptions() const { return m_options; }
-    wxFileOffset GetLength() const { return m_size; }
-
-    // gives away the data, this stream is then empty, and can be reused
-    void GetData(char*& data, size_t& size);
-
-    enum { STUB_SIZE = 2048, INITIAL_SIZE = 0x18000, SEEK_LIMIT = 0x100000 };
-
-private:
-    void Init();
-
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
-    wxFileOffset OnSysTell() const;
-    size_t OnSysWrite(const void *buffer, size_t size);
-
-    int m_options;
-    size_t m_pos;
-    size_t m_capacity;
-    size_t m_size;
-    char *m_data;
-};
+const size_t STUB_SIZE = 2048;
+const size_t INITIAL_SIZE = 0x18000;
+const wxFileOffset SEEK_LIMIT = 0x100000;
 
 TestOutputStream::TestOutputStream(int options)
   : m_options(options)
@@ -231,7 +137,7 @@ size_t TestOutputStream::OnSysWrite(const void *buffer, size_t size)
     wxCHECK(newsize > m_pos, 0);
 
     if (m_capacity < newsize) {
-        size_t capacity = m_capacity ? m_capacity : (size_t)INITIAL_SIZE;
+        size_t capacity = m_capacity ? m_capacity : INITIAL_SIZE;
 
         while (capacity < newsize) {
             capacity <<= 1;
@@ -281,29 +187,10 @@ void TestOutputStream::GetData(char*& data, size_t& size)
     Reset();
 }
 
-class TestInputStream : public wxInputStream
-{
-public:
-    // ctor takes the data from the output stream, which is then empty
-    TestInputStream(TestOutputStream& out) : m_data(NULL) { SetData(out); }
-    // this ctor 'dups'
-    TestInputStream(const TestInputStream& in);
-    ~TestInputStream() { delete [] m_data; }
 
-    void Rewind();
-    wxFileOffset GetLength() const { return m_size; }
-    void SetData(TestOutputStream& out);
-
-private:
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
-    wxFileOffset OnSysTell() const;
-    size_t OnSysRead(void *buffer, size_t size);
-
-    int m_options;
-    size_t m_pos;
-    size_t m_size;
-    char *m_data;
-};
+///////////////////////////////////////////////////////////////////////////////
+// TestOutputStream and TestInputStream are memory streams which can be
+// seekable or non-seekable.
 
 TestInputStream::TestInputStream(const TestInputStream& in)
   : wxInputStream(),
@@ -318,7 +205,7 @@ TestInputStream::TestInputStream(const TestInputStream& in)
 void TestInputStream::Rewind()
 {
     if ((m_options & Stub) && (m_options & PipeIn))
-        m_pos = TestOutputStream::STUB_SIZE * 2;
+        m_pos = STUB_SIZE * 2;
     else
         m_pos = 0;
 
@@ -347,7 +234,7 @@ wxFileOffset TestInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
             case wxFromCurrent: pos += m_pos; break;
             case wxFromEnd:     pos += m_size; break;
         }
-        if (pos < 0 || pos > TestOutputStream::SEEK_LIMIT)
+        if (pos < 0 || pos > SEEK_LIMIT)
             return wxInvalidOffset;
         m_pos = (size_t)pos;
         return m_pos;
@@ -510,126 +397,43 @@ void TempDir::RemoveDir(wxString& path)
 #   define WXARC_b
 #endif
 
-class PFileInputStream : public wxFFileInputStream
+PFileInputStream::PFileInputStream(const wxString& cmd)
+  : wxFFileInputStream(WXARC_popen(cmd.mb_str(), "r" WXARC_b))
 {
-public:
-    PFileInputStream(const wxString& cmd) :
-        wxFFileInputStream(WXARC_popen(cmd.mb_str(), "r" WXARC_b)) { }
-    ~PFileInputStream()
-        { WXARC_pclose(m_file->fp()); m_file->Detach(); }
-};
+}
 
-class PFileOutputStream : public wxFFileOutputStream
+PFileInputStream::~PFileInputStream()
 {
-public:
-    PFileOutputStream(const wxString& cmd) :
-        wxFFileOutputStream(WXARC_popen(cmd.mb_str(), "w" WXARC_b)) { }
-    ~PFileOutputStream()
-        { WXARC_pclose(m_file->fp()); m_file->Detach(); }
-};
+    WXARC_pclose(m_file->fp()); m_file->Detach();
+}
+
+PFileOutputStream::PFileOutputStream(const wxString& cmd)
+: wxFFileOutputStream(WXARC_popen(cmd.mb_str(), "w" WXARC_b))
+{
+}
+
+PFileOutputStream::~PFileOutputStream()
+{
+    WXARC_pclose(m_file->fp()); m_file->Detach();
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 
-template <class Classes>
-class ArchiveTestCase : public CppUnit::TestCase
-{
-public:
-    ArchiveTestCase(string name,
-                    int id,
-                    wxArchiveClassFactory *factory,
-                    int options,
-                    const wxString& archiver = wxEmptyString,
-                    const wxString& unarchiver = wxEmptyString);
-
-    ~ArchiveTestCase();
-
-protected:
-    // the classes to test
-    typedef typename Classes::EntryT EntryT;
-    typedef typename Classes::InputStreamT InputStreamT;
-    typedef typename Classes::OutputStreamT OutputStreamT;
-    typedef typename Classes::ClassFactoryT ClassFactoryT;
-    typedef typename Classes::NotifierT NotifierT;
-    typedef typename Classes::IterT IterT;
-    typedef typename Classes::PairIterT PairIterT;
-
-    // the entry point for the test
-    void runTest();
-
-    // create the test data
-    void CreateTestData();
-    TestEntry& Add(const char *name, const char *data, int len = -1);
-    TestEntry& Add(const char *name, int len = 0, int value = EOF);
-
-    // 'archive up' the test data
-    void CreateArchive(wxOutputStream& out);
-    void CreateArchive(wxOutputStream& out, const wxString& archiver);
-
-    // perform various modifications on the archive
-    void ModifyArchive(wxInputStream& in, wxOutputStream& out);
-
-    // extract the archive and verify its contents
-    void ExtractArchive(wxInputStream& in);
-    void ExtractArchive(wxInputStream& in, const wxString& unarchiver);
-    void VerifyDir(wxString& path, size_t rootlen = 0);
-
-    // tests for the iterators
-    void TestIterator(wxInputStream& in);
-    void TestPairIterator(wxInputStream& in);
-    void TestSmartIterator(wxInputStream& in);
-    void TestSmartPairIterator(wxInputStream& in);
-
-    // try reading two entries at the same time
-    void ReadSimultaneous(TestInputStream& in);
-
-    // overridables
-    virtual void OnCreateArchive(OutputStreamT& WXUNUSED(arc)) { }
-    virtual void OnSetNotifier(EntryT& entry);
-
-    virtual void OnArchiveExtracted(InputStreamT& WXUNUSED(arc),
-                                    int WXUNUSED(expectedTotal)) { }
-
-    virtual void OnCreateEntry(     OutputStreamT& WXUNUSED(arc),
-                                    TestEntry& WXUNUSED(testEntry),
-                                    EntryT *entry = NULL) { (void)entry; }
-
-    virtual void OnEntryExtracted(  EntryT& WXUNUSED(entry),
-                                    const TestEntry& WXUNUSED(testEntry),
-                                    InputStreamT *arc = NULL) { (void)arc; }
-
-    typedef std::map<wxString, TestEntry*> TestEntries;
-    TestEntries m_testEntries;              // test data
-    auto_ptr<ClassFactoryT> m_factory;      // factory to make classes
-    int m_options;                          // test options
-    wxDateTime m_timeStamp;                 // timestamp to give test entries
-    int m_id;                               // select between the possibilites
-    wxString m_archiver;                    // external archiver
-    wxString m_unarchiver;                  // external unarchiver
-};
-
-// Constructor
-// The only way I could get this to compile on VC++ 5.0 was to pass 'factory'
-// as a wxArchiveFactory* then cast it, even then only with some ifdefing.
-//
-template <class Classes>
-ArchiveTestCase<Classes>::ArchiveTestCase(
+template <class ClassFactoryT>
+ArchiveTestCase<ClassFactoryT>::ArchiveTestCase(
     string name,
     int id,
-    wxArchiveClassFactory *factory,
+    ClassFactoryT *factory,
     int options,
     const wxString& archiver,
     const wxString& unarchiver)
   :
     CppUnit::TestCase(name),
-#if defined _MSC_VER && _MSC_VER < 1300
-    m_factory(dynamic_cast<Classes::ClassFactoryT*>(factory)),
-#else
-    m_factory(dynamic_cast<typename Classes::ClassFactoryT*>(factory)),
-#endif
+    m_factory(factory),
     m_options(options),
-    m_timeStamp(1, wxDateTime::Mar, 2005, 12, 0),
+    m_timeStamp(1, wxDateTime::Mar, 2004, 12, 0),
     m_id(id),
     m_archiver(archiver),
     m_unarchiver(unarchiver)
@@ -637,16 +441,16 @@ ArchiveTestCase<Classes>::ArchiveTestCase(
     wxASSERT(m_factory.get() != NULL);
 }
 
-template <class Classes>
-ArchiveTestCase<Classes>::~ArchiveTestCase()
+template <class ClassFactoryT>
+ArchiveTestCase<ClassFactoryT>::~ArchiveTestCase()
 {
     TestEntries::iterator it;
     for (it = m_testEntries.begin(); it != m_testEntries.end(); ++it)
         delete it->second;
 }
 
-template <class Classes>
-void ArchiveTestCase<Classes>::runTest()
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::runTest()
 {
     TestOutputStream out(m_options);
 
@@ -688,8 +492,8 @@ void ArchiveTestCase<Classes>::runTest()
     CPPUNIT_ASSERT(m_testEntries.empty());
 }
 
-template <class Classes>
-void ArchiveTestCase<Classes>::CreateTestData()
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::CreateTestData()
 {
     Add("text/");
     Add("text/empty", "");
@@ -712,10 +516,10 @@ void ArchiveTestCase<Classes>::CreateTestData()
     Add("empty/");
 }
 
-template <class Classes>
-TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
-                                         const char *data,
-                                         int len /*=-1*/)
+template <class ClassFactoryT>
+TestEntry& ArchiveTestCase<ClassFactoryT>::Add(const char *name,
+                                               const char *data,
+                                               int len /*=-1*/)
 {
     if (len == -1)
         len = strlen(data);
@@ -726,10 +530,10 @@ TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
     return *entry;
 }
 
-template <class Classes>
-TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
-                                         int len /*=0*/,
-                                         int value /*=EOF*/)
+template <class ClassFactoryT>
+TestEntry& ArchiveTestCase<ClassFactoryT>::Add(const char *name,
+                                               int len /*=0*/,
+                                               int value /*=EOF*/)
 {
     wxCharBuffer buf(len);
     for (int i = 0; i < len; i++)
@@ -739,8 +543,8 @@ TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
 
 // Create an archive using the wx archive classes, write it to 'out'
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out)
 {
     auto_ptr<OutputStreamT> arc(m_factory->NewStream(out));
     TestEntries::iterator it;
@@ -792,7 +596,7 @@ void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out)
                                       testEntry.GetLength()));
         }
 
-        if (name.Last() != _T('/')) {
+        if (it->first.Last() != _T('/')) {
             // for non-dirs write the data
             arc->Write(testEntry.GetData(), testEntry.GetSize());
             CPPUNIT_ASSERT_MESSAGE("LastWrite check" + error_context,
@@ -813,9 +617,9 @@ void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out)
 
 // Create an archive using an external archive program
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out,
-                                             const wxString& archiver)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
+                                                   const wxString& archiver)
 {
     // for an external archiver the test data need to be written to
     // temp files
@@ -851,7 +655,7 @@ void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out,
     if ((m_options & PipeOut) == 0) {
         wxFileName fn(tmpdir.GetName());
         fn.SetExt(_T("arc"));
-        wxString tmparc = fn.GetFullPath();
+        wxString tmparc = fn.GetPath(wxPATH_GET_SEPARATOR) + fn.GetFullName();
 
         // call the archiver to create an archive file
         system(wxString::Format(archiver, tmparc.c_str()).mb_str());
@@ -877,9 +681,9 @@ void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out,
 // Do a standard set of modification on an archive, delete an entry,
 // rename an entry and add an entry
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
-                                             wxOutputStream& out)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::ModifyArchive(wxInputStream& in,
+                                                   wxOutputStream& out)
 {
     auto_ptr<InputStreamT> arcIn(m_factory->NewStream(in));
     auto_ptr<OutputStreamT> arcOut(m_factory->NewStream(out));
@@ -955,8 +759,8 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
 
 // Extract an archive using the wx archive classes
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 {
     typedef Ptr<EntryT> EntryPtr;
     typedef std::list<EntryPtr> Entries;
@@ -1050,9 +854,9 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
 
 // Extract an archive using an external unarchive program
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in,
-                                              const wxString& unarchiver)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in,
+                                                    const wxString& unarchiver)
 {
     // for an external unarchiver, unarchive to a tempdir
     TempDir tmpdir;
@@ -1060,10 +864,10 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in,
     if ((m_options & PipeIn) == 0) {
         wxFileName fn(tmpdir.GetName());
         fn.SetExt(_T("arc"));
-        wxString tmparc = fn.GetFullPath();
+        wxString tmparc = fn.GetPath(wxPATH_GET_SEPARATOR) + fn.GetFullName();
 
         if (m_options & Stub)
-            in.SeekI(TestOutputStream::STUB_SIZE * 2);
+            in.SeekI(STUB_SIZE * 2);
 
         // write the archive to a temporary file
         {
@@ -1090,8 +894,9 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in,
 
 // Verifies the files produced by an external unarchiver are as expected
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
+                                               size_t rootlen /*=0*/)
 {
     wxDir dir;
     path += wxFileName::GetPathSeparator();
@@ -1156,8 +961,8 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
 
 // test the simple iterators that give away ownership of an entry
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::TestIterator(wxInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::TestIterator(wxInputStream& in)
 {
     typedef std::list<EntryT*> ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
@@ -1185,8 +990,8 @@ void ArchiveTestCase<Classes>::TestIterator(wxInputStream& in)
 // test the pair iterators that can be used to load a std::map or wxHashMap
 // these also give away ownership of entries
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::TestPairIterator(wxInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::TestPairIterator(wxInputStream& in)
 {
     typedef std::map<wxString, EntryT*> ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
@@ -1213,8 +1018,8 @@ void ArchiveTestCase<Classes>::TestPairIterator(wxInputStream& in)
 
 // simple iterators using smart pointers, no need to worry about ownership
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::TestSmartIterator(wxInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::TestSmartIterator(wxInputStream& in)
 {
     typedef std::list<Ptr<EntryT> > ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
@@ -1238,8 +1043,8 @@ void ArchiveTestCase<Classes>::TestSmartIterator(wxInputStream& in)
 
 // pair iterator using smart pointers
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::TestSmartPairIterator(wxInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::TestSmartPairIterator(wxInputStream& in)
 {
 #if defined _MSC_VER && defined _MSC_VER < 1200
     // With VC++ 5.0 the '=' operator of std::pair breaks when the second
@@ -1270,8 +1075,8 @@ void ArchiveTestCase<Classes>::TestSmartPairIterator(wxInputStream& in)
 
 // try reading two entries at the same time
 //
-template <class Classes>
-void ArchiveTestCase<Classes>::ReadSimultaneous(TestInputStream& in)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::ReadSimultaneous(TestInputStream& in)
 {
     typedef std::map<wxString, Ptr<EntryT> > ArchiveCatalog;
     typedef wxArchiveIterator<InputStreamT,
@@ -1343,8 +1148,8 @@ public:
     void OnEntryUpdated(EntryT& WXUNUSED(entry)) { }
 };
 
-template <class Classes>
-void ArchiveTestCase<Classes>::OnSetNotifier(EntryT& entry)
+template <class ClassFactoryT>
+void ArchiveTestCase<ClassFactoryT>::OnSetNotifier(EntryT& entry)
 {
     static ArchiveNotifier<NotifierT, EntryT> notifier;
     entry.SetNotifier(notifier);
@@ -1352,211 +1157,17 @@ void ArchiveTestCase<Classes>::OnSetNotifier(EntryT& entry)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// ArchiveTestCase<ZipClasses> could be used directly, but instead this
-// derived class is used so that zip specific features can be tested.
+// Suite base
 
-class ZipTestCase : public ArchiveTestCase<ZipClasses>
+ArchiveTestSuite::ArchiveTestSuite(string name)
+  : CppUnit::TestSuite("archive/" + name),
+    m_id(0),
+    m_name(name.c_str(), *wxConvCurrent)
 {
-public:
-    ZipTestCase(string name,
-                int id,
-                int options,
-                const wxString& archiver = wxEmptyString,
-                const wxString& unarchiver = wxEmptyString)
-    :
-        ArchiveTestCase<ZipClasses>(name, id, new wxZipClassFactory,
-                                    options, archiver, unarchiver),
-        m_count(0)
-    { }
-
-protected:
-    void OnCreateArchive(wxZipOutputStream& zip);
-
-    void OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal);
-
-    void OnCreateEntry(wxZipOutputStream& zip,
-                       TestEntry& testEntry,
-                       wxZipEntry *entry);
-
-    void OnEntryExtracted(wxZipEntry& entry,
-                          const TestEntry& testEntry,
-                          wxZipInputStream *arc);
-
-    void OnSetNotifier(EntryT& entry);
-
-    int m_count;
-    wxString m_comment;
-};
-
-void ZipTestCase::OnCreateArchive(wxZipOutputStream& zip)
-{
-    m_comment << _T("Comment for test ") << m_id;
-    zip.SetComment(m_comment);
-}
-
-void ZipTestCase::OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal)
-{
-    CPPUNIT_ASSERT(zip.GetComment() == m_comment);
-    CPPUNIT_ASSERT(zip.GetTotalEntries() == expectedTotal);
-}
-
-void ZipTestCase::OnCreateEntry(wxZipOutputStream& zip,
-                                TestEntry& testEntry,
-                                wxZipEntry *entry)
-{
-    zip.SetLevel((m_id + m_count) % 10);
-
-    if (entry) {
-        switch ((m_id + m_count) % 5) {
-            case 0:
-            {
-                wxString comment = _T("Comment for ") + entry->GetName();
-                entry->SetComment(comment);
-                // lowercase the expected result, and the notifier should do
-                // the same for the zip entries when ModifyArchive() runs
-                testEntry.SetComment(comment.Lower());
-                break;
-            }
-            case 2:
-                entry->SetMethod(wxZIP_METHOD_STORE);
-                break;
-            case 4:
-                entry->SetMethod(wxZIP_METHOD_DEFLATE);
-                break;
-        }
-        entry->SetIsText(testEntry.IsText());
-    }
-
-    m_count++;
-}
-
-void ZipTestCase::OnEntryExtracted(wxZipEntry& entry,
-                                   const TestEntry& testEntry,
-                                   wxZipInputStream *arc)
-{
-    // provide some context for the error message so that we know which
-    // iteration of the loop we were on
-    wxString name = _T(" '") + entry.GetName() + _T("'");
-    string error_entry(name.mb_str());
-    string error_context(" failed for entry" + error_entry);
-
-    CPPUNIT_ASSERT_MESSAGE("GetComment" + error_context,
-        entry.GetComment() == testEntry.GetComment());
-
-    // for seekable streams, GetNextEntry() doesn't read the local header so
-    // call OpenEntry() to do it
-    if (arc && (m_options & PipeIn) == 0 && entry.IsDir())
-        arc->OpenEntry(entry);
-
-    CPPUNIT_ASSERT_MESSAGE("IsText" + error_context,
-                           entry.IsText() == testEntry.IsText());
-
-    CPPUNIT_ASSERT_MESSAGE("Extra/LocalExtra mismatch for entry" + error_entry,
-        (entry.GetExtraLen() != 0 && entry.GetLocalExtraLen() != 0) ||
-        (entry.GetExtraLen() == 0 && entry.GetLocalExtraLen() == 0));
-}
-
-// check the notifier mechanism by using it to fold the entry comments to
-// lowercase
-//
-class ZipNotifier : public wxZipNotifier
-{
-public:
-    void OnEntryUpdated(wxZipEntry& entry);
-};
-
-void ZipNotifier::OnEntryUpdated(wxZipEntry& entry)
-{
-    entry.SetComment(entry.GetComment().Lower());
-}
-
-void ZipTestCase::OnSetNotifier(EntryT& entry)
-{
-    static ZipNotifier notifier;
-    entry.SetNotifier(notifier);
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// 'zip - -' produces local headers without the size field set. This is a
-// case not covered by all the other tests, so this class tests it as a
-// special case
-
-class ZipPipeTestCase : public CppUnit::TestCase
-{
-public:
-    ZipPipeTestCase(string name, int options) :
-        CppUnit::TestCase(name), m_options(options) { }
-
-protected:
-    void runTest();
-    int m_options;
-};
-
-void ZipPipeTestCase::runTest()
-{
-    TestOutputStream out(m_options);
-
-    wxString testdata = _T("test data to pipe through zip");
-    wxString cmd = _T("echo ") + testdata + _T(" | zip -q - -");
-
-    {
-        PFileInputStream in(cmd);
-        if (in.Ok())
-            out.Write(in);
-    }
-
-    TestInputStream in(out);
-    wxZipInputStream zip(in);
-
-    auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
-    CPPUNIT_ASSERT(entry.get() != NULL);
-
-    if ((m_options & PipeIn) == 0)
-        CPPUNIT_ASSERT(entry->GetSize() != wxInvalidOffset);
-
-    char buf[64];
-    size_t len = zip.Read(buf, sizeof(buf) - 1).LastRead();
-
-    while (len > 0 && buf[len - 1] <= 32)
-        --len;
-    buf[len] = 0;
-
-    CPPUNIT_ASSERT(zip.Eof());
-    CPPUNIT_ASSERT(wxString(buf, *wxConvCurrent) == testdata);
-}
-
-
-///////////////////////////////////////////////////////////////////////////////
-// The suite
-
-class ArchiveTestSuite : public CppUnit::TestSuite
-{
-public:
-    ArchiveTestSuite();
-    static CppUnit::Test *suite()
-        { return (new ArchiveTestSuite)->makeSuite(); }
-
-private:
-    int m_id;
-    wxPathList m_path;
-
-    ArchiveTestSuite *makeSuite();
-    void AddCmd(wxArrayString& cmdlist, const wxString& cmd);
-    bool IsInPath(const wxString& cmd);
-
-    string Description(const wxString& type,
-                       int options,
-                       bool genericInterface = false,
-                       const wxString& archiver = wxEmptyString,
-                       const wxString& unarchiver = wxEmptyString);
-};
-
-ArchiveTestSuite::ArchiveTestSuite()
-  : CppUnit::TestSuite("ArchiveTestSuite"),
-    m_id(0)
-{
+    m_name = _T("wx") + m_name.Left(1).Upper() + m_name.Mid(1).Lower();
     m_path.AddEnvList(_T("PATH"));
+    m_archivers.push_back(_T(""));
+    m_unarchivers.push_back(_T(""));
 }
 
 // add the command for an external archiver to the list, testing for it in
@@ -1564,8 +1175,6 @@ ArchiveTestSuite::ArchiveTestSuite()
 //
 void ArchiveTestSuite::AddCmd(wxArrayString& cmdlist, const wxString& cmd)
 {
-    if (cmdlist.empty())
-        cmdlist.push_back(_T(""));
     if (IsInPath(cmd))
         cmdlist.push_back(cmd);
 }
@@ -1584,50 +1193,43 @@ bool ArchiveTestSuite::IsInPath(const wxString& cmd)
 ArchiveTestSuite *ArchiveTestSuite::makeSuite()
 {
     typedef wxArrayString::iterator Iter;
-    wxArrayString zippers;
-    wxArrayString unzippers;
 
-    AddCmd(zippers, _T("zip -qr %s *"));
-    AddCmd(unzippers, _T("unzip -q %s"));
-
-    for (int genInterface = 0; genInterface < 2; genInterface++)
-        for (Iter i = unzippers.begin(); i != unzippers.end(); ++i)
-            for (Iter j = zippers.begin(); j != zippers.end(); ++j)
+    for (int generic = 0; generic < 2; generic++)
+        for (Iter i = m_unarchivers.begin(); i != m_unarchivers.end(); ++i)
+            for (Iter j = m_archivers.begin(); j != m_archivers.end(); ++j)
                 for (int options = 0; options <= AllOptions; options++)
                 {
-                    // unzip doesn't support piping in the zip
+#ifdef WXARC_NO_POPEN
+                    // if no popen then can't pipe in/out of archiver
                     if ((options & PipeIn) && !i->empty())
                         continue;
-#ifdef WXARC_NO_POPEN
-                    // if no popen then can use piped output of zip
                     if ((options & PipeOut) && !j->empty())
                         continue;
 #endif
-                    string name = Description(_T("wxZip"), options,
-                                              genInterface != 0, *j, *i);
+                    string descr = Description(m_name, options,
+                                               generic != 0, *j, *i);
 
-                    if (genInterface)
-                        addTest(new ArchiveTestCase<ArchiveClasses>(
-                                    name, m_id,
-                                    new wxZipClassFactory,
-                                    options, *j, *i));
-                    else
-                        addTest(new ZipTestCase(name, m_id, options, *j, *i));
+                    CppUnit::Test *test = makeTest(descr, m_id, options,
+                                                   generic != 0, *j, *i);
 
-                    m_id++;
+                    if (test) {
+                        addTest(test);
+                        m_id++;
+                    }
                 }
 
-#ifndef WXARC_NO_POPEN
-    // if have popen then can check the piped output of 'zip - -'
-    if (IsInPath(_T("zip")))
-        for (int options = 0; options <= PipeIn; options += PipeIn) {
-            string name = Description(_T("ZipPipeTestCase"), options);
-            addTest(new ZipPipeTestCase(name, options));
-            m_id++;
-        }
-#endif
-
     return this;
+}
+
+CppUnit::Test *ArchiveTestSuite::makeTest(
+    string WXUNUSED(descr),
+    int WXUNUSED(id),
+    int WXUNUSED(options),
+    bool WXUNUSED(genericInterface),
+    const wxString& WXUNUSED(archiver),
+    const wxString& WXUNUSED(unarchiver))
+{
+    return NULL;
 }
 
 // make a display string for the option bits
@@ -1646,10 +1248,14 @@ string ArchiveTestSuite::Description(const wxString& type,
     else
         descr << type;
 
-    if (!archiver.empty())
-        descr << _T(" ") << archiver.BeforeFirst(_T(' '));
-    if (!unarchiver.empty())
-        descr << _T(" ") << unarchiver.BeforeFirst(_T(' '));
+    if (!archiver.empty()) {
+        const wxChar *fn = (options & PipeOut) != 0 ? _T("-") : _T("file");
+        descr << _T(" (") << wxString::Format(archiver, fn) << _T(")");
+    }
+    if (!unarchiver.empty()) {
+        const wxChar *fn = (options & PipeIn) != 0 ? _T("-") : _T("file");
+        descr << _T(" (") << wxString::Format(unarchiver, fn) << _T(")");
+    }
 
     wxString optstr;
 
@@ -1667,10 +1273,15 @@ string ArchiveTestSuite::Description(const wxString& type,
     return (const char*)descr.mb_str();
 }
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION(ArchiveTestSuite);
 
-// also include in it's own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(ArchiveTestSuite, "ArchiveTestSuite");
+///////////////////////////////////////////////////////////////////////////////
+// Instantiations
 
-#endif // wxUSE_STREAMS
+template class ArchiveTestCase<wxArchiveClassFactory>;
+
+#if wxUSE_ZIPSTREAM
+#include "wx/zipstrm.h"
+template class ArchiveTestCase<wxZipClassFactory>;
+#endif
+
+#endif // wxUSE_STREAMS && wxUSE_ARCSTREAM

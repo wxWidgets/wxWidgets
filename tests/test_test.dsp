@@ -553,6 +553,10 @@ SOURCE=.\regex\wxregextest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\archive\ziptest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\zlibstream.cpp
 # End Source File
 # End Group
