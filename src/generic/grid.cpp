@@ -3913,16 +3913,18 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
 {
     if ( m_created )
     {
-        // RD: Actually, this should probably be allowed.  I think it would be
-        //     nice to be able to switch multiple Tables in and out of a single
-        //     View at runtime.  Is there anything in the implementation that
-        //     would prevent this?
-
-        // At least, you now have to cope with m_selection
-        wxFAIL_MSG( wxT("wxGrid::CreateGrid or wxGrid::SetTable called more than once") );
-        return FALSE;
+        if (m_ownTable) 
+            delete m_table; 
+        delete m_selection; 
+ 
+        // stop all processing 
+        m_table=0; 
+        m_selection=0; 
+        m_created = FALSE; 
+        m_numRows=0; 
+        m_numCols=0; 
     }
-    else
+    if (table)
     {
         m_numRows = table->GetNumberRows();
         m_numCols = table->GetNumberCols();
