@@ -36,10 +36,6 @@
     #include "wx/notebook.h"
 #endif
 
-#ifdef __WXMAC__
-#   include "wx/mac/uma.h"
-#endif
-
 //---------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxSizerItem, wxObject)
@@ -1582,43 +1578,7 @@ static void GetStaticBoxBorders( wxStaticBox *box,
 {
     // this has to be done platform by platform as there is no way to
     // guess the thickness of a wxStaticBox border
-#ifdef __WXCOCOA__
-    box->GetBordersForSizer(borderTop,borderOther);
-#elif defined(__WXMAC__)
-
-    static int extraTop = -1; // Uninitted
-    static int other = 5;
-
-    if ( extraTop == -1 )
-    {
-        // The minimal border used for the top. Later on the staticbox'
-        // font height is added to this.
-        extraTop = 0;
-
-        if ( UMAGetSystemVersion() >= 0x1030 /*Panther*/ )
-        {
-            // As indicated by the HIG, Panther needs an extra border of 11
-            // pixels (otherwise overlapping occurs at the top). The "other"
-            // border has to be 11.
-            extraTop = 11;
-            other = 11;
-        }
-
-    }
-
-    *borderTop = extraTop + box->GetCharHeight();
-    *borderOther = other;
-
-#else
-#ifdef __WXGTK__
-    if ( box->GetLabel().empty() )
-        *borderTop = 5;
-    else
-#endif // __WXGTK__
-        *borderTop = box->GetCharHeight();
-
-    *borderOther = 5;
-#endif // __WXCOCOA__
+    box->GetBordersForSizer(borderTop, borderOther);
 }
 
 void wxStaticBoxSizer::RecalcSizes()

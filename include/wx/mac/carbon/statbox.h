@@ -47,8 +47,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
     virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
-
-protected:
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 };
 
 #endif

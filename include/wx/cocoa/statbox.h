@@ -51,7 +51,7 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 protected:
 };
 

@@ -20,6 +20,19 @@ public:
     virtual bool AcceptsFocus() const { return false; }
     virtual bool HasTransparentBackground() { return true; }
 
+    // implementation only: this is used by wxStaticBoxSizer to account for the
+    // need for extra space taken by the static box
+    //
+    // the top border is the margin at the top (where the title is),
+    // borderOther is the margin on all other sides
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const
+    {
+        static const int BORDER = 5; // FIXME: hardcoded value
+
+        *borderTop = GetLabel().empty() ? BORDER : GetCharHeight();
+        *borderOther = BORDER;
+    }
+
 private:
     DECLARE_NO_COPY_CLASS(wxStaticBoxBase)
 };
