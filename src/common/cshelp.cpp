@@ -31,9 +31,9 @@
 #if wxUSE_HELP
 
 #ifndef WX_PRECOMP
-    #include "wx/tipwin.h"
 #endif
 
+#include "wx/tipwin.h"
 #include "wx/app.h"
 
 #include "wx/cshelp.h"
