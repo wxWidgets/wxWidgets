@@ -4,6 +4,7 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
 CC="@CC@"
+GCC="@GCC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
@@ -30,16 +31,32 @@ EOF
 
 cppflags()
 {
+    # we should never specify -I/usr/include on the compiler command line: this
+    # is at best useless and at worst breaks compilation on the systems where
+    # the system headers are non-ANSI because gcc works around this by storing
+    # the ANSI-fied versions of them in its private directory which is searched
+    # after all the directories on the cmd line.
+    #
+    # the situation is a bit more complicated with -I/usr/local/include: again,
+    # it shouldn't be specified with gcc which looks there by default anyhow
+    # and gives warnings (at least 3.1 does) if it is specified explicitly --
+    # but this -I switch *is* needed for the other compilers
+    #
+    # note that we assume that if we use GNU cc we also use GNU c++ and vice
+    # versa, i.e. this won't work (either for --cflags or --cxxflags) if GNU C
+    # compiler and non-GNU C++ compiler are used or vice versa -- we'll fix
+    # this when/if anybody complains about it
     if test "@includedir@" != "/usr/include" \
             -a "@includedir@" != "/usr/include/c++" \
-            -a "@includedir@" != "/usr/local/include" \
+            -a \( "${GCC}" != "yes" \
+                  -o "@includedir@" != "/usr/local/include" \) \
             -a \( "${cross_compiling}" != "yes" \
                   -o "@includedir@" != "/usr/${target}/include" \) ;
     then
-        includes=-I@includedir@
+        includes=" -I@includedir@"
     fi
 
-    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
+    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@$includes"
 
     if test $static_flag = yes ; then
         echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@ @WX_LARGEFILE_FLAGS@
