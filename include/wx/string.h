@@ -86,7 +86,7 @@ extern const unsigned int wxSTRING_MAXLEN;
 
 #else
 // maximum possible length for a string means "take all string" everywhere
-//  (as sizeof(StringData) is unknown here, we substract 100)
+//  (as sizeof(StringData) is unknown here, we subtract 100)
 const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 
 #endif

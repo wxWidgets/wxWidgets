@@ -5622,7 +5622,7 @@ class MaskedEditMixin:
                 and sel_to >= edit_end
                 and not self._GetValue()[edit_start:sel_start].strip() ):
                 # text won't fit within selection, but left of selection is empty;
-                # check to see if we can expand selection to accomodate the value:
+                # check to see if we can expand selection to accommodate the value:
                 empty_space = sel_start - edit_start
                 amount_needed = len(paste_text) - (sel_to - sel_start)
                 if amount_needed <= empty_space:

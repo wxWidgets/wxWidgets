@@ -1585,7 +1585,7 @@ Added new HTML printing classes.
 
 Added wxWindow.GetHandle
 
-Apparently wxMouseEvent.Position has been depreciated in wxWindows as
+Apparently wxMouseEvent.Position has been deprecated in wxWindows as
 it is no longer available by default.  You can use GetPositionTuple
 (returning a tuple with x,y) instead, or GetPosition (returning a
 wxPoint.)
@@ -1667,7 +1667,7 @@ wxGTK.  Added them back in since the methods exist now.
 Wrapped the wxHtmlHelpController and related classes.
 
 Wrapped the C++ versions of wxSizer and friends.  The Python-only
-versions are still in the library, but depreciated.  (You will get a
+versions are still in the library, but deprecated.  (You will get a
 warning message if you try to use them, but the warning can be
 disabled.) The usage of the C++ versions is slightly different, and
 the functionality of wxBorderSizer is now part of wxBoxSizer.  I have
@@ -1827,7 +1827,7 @@ Added wxGrid.GetCells
 Added wxSystemSettings static methods as functions with names like
 wxSystemSettings_GetSystemColour.
 
-Removed wxPyMenu since using menu callbacks have been depreciated in
+Removed wxPyMenu since using menu callbacks have been deprecated in
 wxWindows.  Use wxMenu and events instead.
 
 Added alternate wxBitmap constructor (for MSW only) as

@@ -3868,7 +3868,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         iconSpacing = 0;
 
     // Note that we do not call GetClientSize() here but
-    // GetSize() and substract the border size for sunken
+    // GetSize() and subtract the border size for sunken
     // borders manually. This is technically incorrect,
     // but we need to know the client area's size WITHOUT
     // scrollbars here. Since we don't know if there are

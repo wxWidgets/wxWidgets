@@ -167,7 +167,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   // this will also allow offsetting the accel string from the right edge
   *pwidth += GetDefaultMarginWidth() + 16;
 
-  // increase size to accomodate bigger bitmaps if necessary
+  // increase size to accommodate bigger bitmaps if necessary
   if (m_bmpChecked.Ok())
   {
       // Is BMP height larger then text height?

@@ -1165,7 +1165,7 @@ RETCODE SQL_API SQLBindParameter (HSTMT hstmt, UWORD ipar, SWORD fParamType,
     SDWORD cbValueMax, SDWORD FAR * pcbValue);
 
 /*
- *  Depreciated - use SQLSetStmtOptions
+ *  Deprecated - use SQLSetStmtOptions
  */
 RETCODE SQL_API SQLSetScrollOptions (HSTMT hstmt, UWORD fConcurrency,
     SDWORD crowKeyset, UWORD crowRowset);

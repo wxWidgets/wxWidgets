@@ -220,7 +220,7 @@ extern "C"
   RETCODE SQL_API SQLTransact (HENV henv, HDBC hdbc, UWORD fType);
 
 /*
- *  Depreciated ODBC 1.0 function - Use SQLBindParameter
+ *  Deprecated ODBC 1.0 function - Use SQLBindParameter
  */
   RETCODE SQL_API SQLSetParam (HSTMT hstmt, UWORD ipar, SWORD fCType,
       SWORD fSqlType, UDWORD cbColDef, SWORD ibScale, PTR rgbValue,

@@ -115,7 +115,7 @@ public:
                             wxRect *rectIn = (wxRect *)NULL) = 0;
 
     // draw text control border (I hate to have a separate method for this but
-    // it is needed to accomodate GTK+)
+    // it is needed to accommodate GTK+)
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,

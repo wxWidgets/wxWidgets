@@ -279,7 +279,7 @@ void MyFrame::RecreateToolbar()
 #ifdef __WXWINCE__
     // On Windows CE, we should not delete the
     // previous toolbar in case it contains the menubar.
-    // We'll try to accomodate this usage in due course.
+    // We'll try to accommodate this usage in due course.
     wxToolBar* toolBar = CreateToolBar();
 #else
     // delete and recreate the toolbar

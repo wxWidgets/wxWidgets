@@ -325,7 +325,7 @@ wxLayoutObjectText::GetOffsetScreen(wxDC &dc, CoordType xpos) const
                        &width, &height, &descent);
       offs++;
    }
-   /* We have to substract 1 to compensate for the offs++, and another
+   /* We have to subtract 1 to compensate for the offs++, and another
       one because we don't want to position the cursor behind the
       object what we clicked on, but before - otherwise it looks
       funny. */
@@ -2141,7 +2141,7 @@ wxLayoutList::MoveCursorWord(int n, bool untilNext)
             CoordType moveDelta = p - start - offset;
             if ( (n < 0) && (offset == tobj->GetLength() - 1) )
             {
-               // because we substracted 1 from offset in this case above, now
+               // because we subtracted 1 from offset in this case above, now
                // compensate for it
                moveDelta--;
             }
