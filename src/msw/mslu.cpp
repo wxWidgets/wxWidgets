@@ -34,7 +34,7 @@
 //     by calling the char version. We still want to use wchar_t version on
 //     NT/2000/XP, though, because they allow for Unicode file names.
 //
-//     Moreover, there are bugs in unicows.dll, of course. We have to 
+//     Moreover, there are bugs in unicows.dll, of course. We have to
 //     workaround them, too.
 //
 //------------------------------------------------------------------------
@@ -44,10 +44,10 @@
 
 #include <stdio.h>
 #include <io.h>
+#include <sys/stat.h>
 
 #ifdef __GNUWIN32__
     #include <wchar.h>
-    #include <sys/stat.h>
 #endif
 
 #ifdef __VISUALC__
@@ -65,13 +65,13 @@
 
 #if wxUSE_GUI
 
-WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc, 
-                                   WXLPARAM lData, WXWPARAM wData, 
-                                   int x, int y, int cx, int cy, 
+WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
+                                   WXLPARAM lData, WXWPARAM wData,
+                                   int x, int y, int cx, int cy,
                                    unsigned int flags)
 {
     // VS: There's yet another bug in MSLU: DrawStateW behaves like if it was
-    //     expecting char*, not wchar_t* input. We have to use DrawStateA 
+    //     expecting char*, not wchar_t* input. We have to use DrawStateA
     //     explicitly.
 
     if ( wxUsingUnicowsDll() )
@@ -83,7 +83,7 @@ WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
     }
     else
     {
-        return DrawStateW((HDC)dc, (HBRUSH)br, (DRAWSTATEPROC)outputFunc, 
+        return DrawStateW((HDC)dc, (HBRUSH)br, (DRAWSTATEPROC)outputFunc,
                           lData, wData, x, y, cx, cy, flags);
     }
 }
@@ -91,10 +91,10 @@ WXDLLEXPORT int  wxMSLU_DrawStateW(WXHDC dc, WXHBRUSH br, WXFARPROC outputFunc,
 static void wxFixOPENFILENAME(LPOPENFILENAME ofn)
 {
 #ifdef OFN_EXPLORER
-    // VS: there's a bug in unicows.dll - when multiple files are selected, 
-    //     of.nFileOffset doesn't point to the first filename but rather to 
+    // VS: there's a bug in unicows.dll - when multiple files are selected,
+    //     of.nFileOffset doesn't point to the first filename but rather to
     //     the last component of directory name. This bug is known to MSLU
-    //     developers, but they are not going to fix it: "this is a true 
+    //     developers, but they are not going to fix it: "this is a true
     //     limitation, that we have decided to live with" and "working
     //     harder on this case just did not seem worth the effort"...
     //
