@@ -88,7 +88,7 @@ class RightTextCtrl(wx.TextCtrl):
 
         dc.SetTextForeground(fclr)
 
-        dc.SetClippingRegion(0, 0, dcwidth, dcheight)
+        dc.SetClippingRegion((0, 0), (dcwidth, dcheight))
         dc.DrawText(text, (x, y))
 
         if x < 0:
