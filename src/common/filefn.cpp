@@ -1748,7 +1748,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         wxString res = wxMacFSSpec2MacFilename( &cwdSpec ) ;
 
         strcpy( buf , res ) ;
-        buf[res.length()-1]=0 ;
+        buf[res.length()]=0 ;
     }
     else
         buf[0] = 0 ;
