@@ -1125,9 +1125,9 @@
 #undef wxUSE_TOOLTIPS
 #define wxUSE_TOOLTIPS 0
 
-// Don't use commdlg.h
+// Do use commdlg.h
 #undef wxUSE_COMMON_DIALOGS
-#define wxUSE_COMMON_DIALOGS 0
+#define wxUSE_COMMON_DIALOGS 1
 
 // ----------------------------------------------------------------------------
 // MSW settings not supported by CE
