@@ -23,6 +23,7 @@
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
 
 #include "wx/artprov.h"
+#include "wx/module.h"
 
 #include <gtk/gtk.h>
 
@@ -159,6 +160,9 @@ static GtkIconSize FindClosestIconSize(const wxSize& size)
     return best;
 }
 
+
+static GtkStyle *gs_gtkStyle = NULL;
+
 static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
 {
     // FIXME: This code is not 100% correct, because stock pixmap are
@@ -169,13 +173,21 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
     //        with "stock-id" representation (in addition to pixmap and pixbuf
     //        ones) and would convert it to pixbuf when rendered.
     
-    GtkStyle *style = gtk_widget_get_default_style();
-    GtkIconSet *iconset = gtk_style_lookup_icon_set(style, stockid);
+    if (gs_gtkStyle == NULL)
+    {
+        GtkWidget *widget = gtk_button_new();
+        gs_gtkStyle = gtk_rc_get_style(widget);
+        wxASSERT( gs_gtkStyle != NULL );
+        g_object_ref(G_OBJECT(gs_gtkStyle));
+        gtk_widget_destroy(widget);
+    }
+
+    GtkIconSet *iconset = gtk_style_lookup_icon_set(gs_gtkStyle, stockid);
 
     if (!iconset)
         return NULL;
 
-    return gtk_icon_set_render_icon(iconset, style,
+    return gtk_icon_set_render_icon(iconset, gs_gtkStyle,
                                     gtk_widget_get_default_direction(),
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 }
@@ -241,5 +253,27 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
 
     return bmp;
 }
+
+// ----------------------------------------------------------------------------
+// Cleanup
+// ----------------------------------------------------------------------------
+
+class wxArtGtkModule: public wxModule
+{
+public:
+    bool OnInit() { return true; }
+    void OnExit()
+    {
+        if (gs_gtkStyle)
+        {
+            g_object_unref(G_OBJECT(gs_gtkStyle));
+            gs_gtkStyle = NULL;
+        }
+    }
+
+    DECLARE_DYNAMIC_CLASS(wxArtGtkModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxArtGtkModule, wxModule)
 
 #endif // defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
