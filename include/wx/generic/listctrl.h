@@ -67,19 +67,19 @@ class WXDLLEXPORT wxGenericListCtrl: public wxControl
 public:
     wxGenericListCtrl();
     wxGenericListCtrl( wxWindow *parent,
-                wxWindowID id = -1,
+                wxWindowID winid = -1,
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString &name = wxT("listctrl") )
     {
-        Create(parent, id, pos, size, style, validator, name);
+        Create(parent, winid, pos, size, style, validator, name);
     }
     ~wxGenericListCtrl();
 
     bool Create( wxWindow *parent,
-                 wxWindowID id = -1,
+                 wxWindowID winid = -1,
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLC_ICON,
@@ -253,13 +253,13 @@ class WXDLLEXPORT wxListCtrl: public wxGenericListCtrl
 public:
     wxListCtrl() {}
 
-    wxListCtrl(wxWindow *parent, wxWindowID id = -1,
+    wxListCtrl(wxWindow *parent, wxWindowID winid = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
                const wxValidator &validator = wxDefaultValidator,
                const wxString &name = wxT("listctrl") )
-    : wxGenericListCtrl(parent, id, pos, size, style, validator, name)
+    : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
     {
     }
 };

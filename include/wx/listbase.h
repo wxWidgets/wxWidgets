@@ -342,8 +342,8 @@ private:
 class WXDLLEXPORT wxListEvent : public wxNotifyEvent
 {
 public:
-    wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
-        : wxNotifyEvent(commandType, id)
+    wxListEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
+        : wxNotifyEvent(commandType, winid)
         , m_code(0)
         , m_oldItemIndex(0)
         , m_itemIndex(0)
