@@ -1022,7 +1022,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
 		hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
 		if (SUCCEEDED(hres))
 		{
-			WORD wsz[MAX_PATH];
+			WCHAR wsz[MAX_PATH];
 
 			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, shortcutPath.mb_str(), -1, wsz,
                 MAX_PATH);
