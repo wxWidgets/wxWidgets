@@ -39,7 +39,7 @@ TAG_HANDLER_BEGIN(P, "P")
         if (m_WParser -> GetContainer() -> GetFirstCell() != NULL) {
             m_WParser -> CloseContainer();
             m_WParser -> OpenContainer();
-    }
+        }
         m_WParser -> GetContainer() -> SetIndent(m_WParser -> GetCharHeight(), wxHTML_INDENT_TOP);
         m_WParser -> GetContainer() -> SetAlign(tag);
         return FALSE;
@@ -60,6 +60,7 @@ TAG_HANDLER_BEGIN(BR, "BR")
         c = m_WParser -> OpenContainer();
         c -> SetAlignHor(al);
         c -> SetAlign(tag);
+        c -> SetMinHeight(m_WParser -> GetCharHeight());
         return FALSE;
     }
 
