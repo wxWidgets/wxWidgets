@@ -46,6 +46,12 @@ of MSW, MAC and OS2
     #define USE_WXMAC 0
 #endif
 
+#if defined(__WXMAC_OSX__) && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2)
+    #define USE_WXMACFONTDLG 1
+#else
+    #define USE_WXMACFONTDLG 0
+#endif
+
 #ifdef __WXGTK__
     #define USE_WXGTK 1
 #else
@@ -67,7 +73,7 @@ of MSW, MAC and OS2
 #define USE_FILEDLG_GENERIC \
     ((USE_WXMSW || USE_WXMAC || USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FILEDLG)
 #define USE_FONTDLG_GENERIC \
-    ((USE_WXMSW || USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
+    ((USE_WXMSW || USE_WXMACFONTDLG ||USE_WXPM) && USE_GENERIC_DIALOGS && wxUSE_FONTDLG)
 
 
 // Turn USE_MODAL_PRESENTATION to 0 if there is any reason for not presenting difference
