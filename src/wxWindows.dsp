@@ -891,10 +891,6 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\dcbuffer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\dcpsg.cpp
 # End Source File
 # Begin Source File

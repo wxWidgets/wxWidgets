@@ -93,7 +93,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_calctrl.obj &
-	$(OBJS)\monodll_dcbuffer.obj &
 	$(OBJS)\monodll_grid.obj &
 	$(OBJS)\monodll_gridctrl.obj &
 	$(OBJS)\monodll_gridsel.obj &
@@ -540,7 +539,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_calctrl.obj &
-	$(OBJS)\monolib_dcbuffer.obj &
 	$(OBJS)\monolib_grid.obj &
 	$(OBJS)\monolib_gridctrl.obj &
 	$(OBJS)\monolib_gridsel.obj &
@@ -2647,7 +2645,6 @@ ADVDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 ADVDLL_OBJECTS =  &
 	$(OBJS)\advdll_dummy.obj &
 	$(OBJS)\advdll_calctrl.obj &
-	$(OBJS)\advdll_dcbuffer.obj &
 	$(OBJS)\advdll_grid.obj &
 	$(OBJS)\advdll_gridctrl.obj &
 	$(OBJS)\advdll_gridsel.obj &
@@ -2670,7 +2667,6 @@ ADVLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm $(__RUNTIME_LIBS) &
 ADVLIB_OBJECTS =  &
 	$(OBJS)\advlib_dummy.obj &
 	$(OBJS)\advlib_calctrl.obj &
-	$(OBJS)\advlib_dcbuffer.obj &
 	$(OBJS)\advlib_grid.obj &
 	$(OBJS)\advlib_gridctrl.obj &
 	$(OBJS)\advlib_gridsel.obj &
@@ -3982,9 +3978,6 @@ $(OBJS)\monodll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_dcbuffer.obj :  .AUTODEPEND ..\..\src\generic\dcbuffer.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
@@ -5564,9 +5557,6 @@ $(OBJS)\monolib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_dcbuffer.obj :  .AUTODEPEND ..\..\src\generic\dcbuffer.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
@@ -9736,9 +9726,6 @@ $(OBJS)\advdll_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 $(OBJS)\advdll_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_dcbuffer.obj :  .AUTODEPEND ..\..\src\generic\dcbuffer.cpp
-	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
 $(OBJS)\advdll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
 	$(CXX) -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -9782,9 +9769,6 @@ $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\msw\dummy.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_calctrl.obj :  .AUTODEPEND ..\..\src\generic\calctrl.cpp
-	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_dcbuffer.obj :  .AUTODEPEND ..\..\src\generic\dcbuffer.cpp
 	$(CXX) -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp

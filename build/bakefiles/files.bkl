@@ -1968,7 +1968,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/generic/calctrl.cpp
-    src/generic/dcbuffer.cpp
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp

@@ -486,10 +486,6 @@ SOURCE=..\..\src\generic\calctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\dcbuffer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\grid.cpp
 # End Source File
 # Begin Source File

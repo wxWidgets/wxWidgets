@@ -831,7 +831,6 @@ ADVDLL_CXXFLAGS = $(__advdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXMAKINGDLL_ADV $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
 	advdll_calctrl.o \
-	advdll_dcbuffer.o \
 	advdll_grid.o \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
@@ -849,7 +848,6 @@ ADVLIB_CXXFLAGS = $(__advlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
 	advlib_calctrl.o \
-	advlib_dcbuffer.o \
 	advlib_grid.o \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
@@ -2041,7 +2039,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
 	monodll_calctrl.o \
-	monodll_dcbuffer.o \
 	monodll_grid.o \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
@@ -2828,7 +2825,6 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
 	monolib_calctrl.o \
-	monolib_dcbuffer.o \
 	monolib_grid.o \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
@@ -7471,9 +7467,6 @@ monodll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONODLL_ODEP)
 monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-monodll_dcbuffer.o: $(srcdir)/src/generic/dcbuffer.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 monodll_grid.o: $(srcdir)/src/generic/grid.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -10079,9 +10072,6 @@ monolib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
-monolib_dcbuffer.o: $(srcdir)/src/generic/dcbuffer.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_grid.o: $(srcdir)/src/generic/grid.cpp $(MONOLIB_ODEP)
@@ -17236,9 +17226,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 advdll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-advdll_dcbuffer.o: $(srcdir)/src/generic/dcbuffer.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
-
 advdll_grid.o: $(srcdir)/src/generic/grid.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
@@ -17330,9 +17317,6 @@ advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
 advlib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
-
-advlib_dcbuffer.o: $(srcdir)/src/generic/dcbuffer.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
 advlib_grid.o: $(srcdir)/src/generic/grid.cpp $(ADVLIB_ODEP)
