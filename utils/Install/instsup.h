@@ -1,6 +1,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif	
+void create_wps_objects(void);
 unsigned long color_depth(void);
 void sysreboot(void);
 int mesg(char *format, ...);
