@@ -32,11 +32,26 @@ END_EVENT_TABLE()
 
 #include "wx/mac/uma.h"
 
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(push, 2)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack(2)
+#endif
 
 typedef struct {
  unsigned short instruction;
  void (*function)();
 } ldefRec, *ldefPtr, **ldefHandle;
+
+#if PRAGMA_STRUCT_ALIGN
+    #pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+    #pragma pack(pop)
+#elif PRAGMA_STRUCT_PACK
+    #pragma pack()
+#endif
 
 extern "C"
 {
