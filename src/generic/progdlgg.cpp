@@ -51,7 +51,7 @@
 // ---------------------------------------------------------------------------
 
 /* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on
+   device we display on - take it from something like wxDesktopPolicy in the future
  */
 
 #if defined(__SMARTPHONE__)

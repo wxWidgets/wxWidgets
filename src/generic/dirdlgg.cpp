@@ -58,7 +58,7 @@ static const int ID_GO_HOME = 1006;
 // ---------------------------------------------------------------------------
 
 /* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on
+   device we display on - take it from something like wxDesktopPolicy in the future
  */
 
 #if defined(__SMARTPHONE__)
@@ -100,7 +100,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-    // Smartphone does not have buttons
+    // smart phones does not support or do not waste space for wxButtons
 #if defined(__SMARTPHONE__)
 
     wxMenu *dirMenu = new wxMenu;

@@ -60,7 +60,7 @@ static const int wxID_NEXT_TIP = 32000;  // whatever
 // ---------------------------------------------------------------------------
 
 /* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on
+   device we display on - take it from something like wxDesktopPolicy in the future
  */
 
 #if defined(__SMARTPHONE__)
@@ -224,6 +224,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
 
     // 1) create all controls in tab order
 
+    // smart phones does not support or do not waste space for wxButtons
 #ifndef __SMARTPHONE__
     // FIXME: use stock wxID_CLOSE button here!
     wxButton *btnClose = new wxButton(this, wxID_CANCEL, _("Close"));
@@ -232,6 +233,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     m_checkbox = new wxCheckBox(this, wxID_ANY, _("&Show tips at startup"));
     m_checkbox->SetValue(showAtStartup);
 
+    // smart phones does not support or do not waste space for wxButtons
 #ifndef __SMARTPHONE__
     wxButton *btnNext = new wxButton(this, wxID_NEXT_TIP, _("&Next Tip"));
 #endif
@@ -288,7 +290,11 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     wxBoxSizer *bottom = new wxBoxSizer( wxHORIZONTAL );
     bottom->Add( m_checkbox, 0, wxCENTER );
 
-#ifndef __SMARTPHONE__
+    // smart phones does not support or do not waste space for wxButtons
+#ifdef __SMARTPHONE__
+    SetRightMenu(wxID_NEXT_TIP, _("Next"));
+    SetLeftMenu(wxID_CANCEL, _("Close"));
+#else
     bottom->Add( 10,10,1 );
     bottom->Add( btnNext, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
     bottom->Add( btnClose, 0, wxCENTER | wxLEFT, wxLARGESMALL(10,0) );
@@ -304,12 +310,6 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     topsizer->Fit( this );
 
     Centre(wxBOTH | wxCENTER_FRAME);
-
-#ifdef __SMARTPHONE__
-    SetRightMenu(wxID_NEXT_TIP, _("Next"));
-    SetLeftMenu(wxID_CANCEL, _("Close"));
-#endif
-
 }
 
 // ----------------------------------------------------------------------------

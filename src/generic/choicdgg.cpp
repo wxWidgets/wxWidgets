@@ -59,7 +59,7 @@
 // ---------------------------------------------------------------------------
 
 /* Macro for avoiding #ifdefs when value have to be different depending on size of
-   device we display on
+   device we display on - take it from something like wxDesktopPolicy in the future
  */
 
 #if defined(__SMARTPHONE__)
@@ -278,6 +278,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
     topsizer->Add( m_listbox, 1, wxEXPAND | wxLEFT|wxRIGHT, wxLARGESMALL(15,0) );
 
+    // smart phones does not support or do not waste space for wxButtons
 #ifdef __SMARTPHONE__
 
     SetRightMenu(wxID_CANCEL, _("Cancel"));
