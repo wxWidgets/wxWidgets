@@ -87,9 +87,9 @@ public:
 
 private:
     // the data for the listctrl
-    const wxArrayString& m_messages;
-    const wxArrayInt& m_severity;
-    const wxArrayLong& m_times;
+    wxArrayString m_messages;
+    wxArrayInt m_severity;
+    wxArrayLong m_times;
 
     // the "toggle" button and its state
     wxButton *m_btnDetails;
@@ -212,6 +212,11 @@ void wxLogGui::Flush()
     wxLogDialog dlg(wxTheApp->GetTopWindow(),
                     m_aMessages, m_aSeverity, m_aTimes,
                     title, style);
+
+    // clear the message list before showing the dialog because while it's
+    // shown some new messages may appear
+    Clear();
+
     (void)dlg.ShowModal();
 
 #else // !wxUSE_LOG_DIALOG
@@ -234,10 +239,10 @@ void wxLogGui::Flush()
     }
 
     wxMessageBox(str, title, wxOK | style);
-#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
     // no undisplayed messages whatsoever
     Clear();
+#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
 
     // do it here again
     m_bHasMessages = FALSE;
@@ -704,7 +709,9 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
             // create it now
             m_listctrl = new wxListCtrl(this, -1,
                                         wxDefaultPosition, wxDefaultSize,
-                                        wxLC_REPORT | wxLC_NO_HEADER );
+                                        wxSUNKEN_BORDER |
+                                        wxLC_REPORT |
+                                        wxLC_NO_HEADER );
             m_listctrl->InsertColumn(0, _("Message"));
             m_listctrl->InsertColumn(1, _("Time"));
 
