@@ -42,9 +42,9 @@ your \texttt{OnPaint()} handler, you should look at
 
 \func{}{wxBufferedDC}{\void}
 
-\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
+\func{}{wxBufferedDC}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 If you use the first, default, constructor, you must call one of the 
 \helpref{Init}{wxbuffereddcinit} methods later in order to use the object.
@@ -66,12 +66,16 @@ the most efficient solution as the bitmap doesn't have to be recreated each
 time but it also requires more memory as the bitmap is never freed. The bitmap
 should have appropriate size, anything drawn outside of its bounds is clipped.}
 
+\docparam{style}{wxBUFFER\_CLIENT\_AREA to indicate that just the client area of
+the window is buffered, or wxBUFFER\_VIRTUAL\_AREA to indicate that the buffer bitmap
+covers the virtual area (in which case PrepareDC is automatically called for the actual window
+device context).}
 
 \membersection{wxBufferedDC::Init}\label{wxbuffereddcinit}
 
-\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxSize\& }{area}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
-\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}}
+\func{void}{Init}{\param{wxDC *}{dc}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 These functions initialize the object created using the default constructor.
 Please see \helpref{constructors documentation}{wxbuffereddcctor} for details.
@@ -113,12 +117,18 @@ already does this internally for the real underlying wxPaintDC.
 
 \membersection{wxBufferedPaintDC::wxBufferedPaintDC}\label{wxbufferedpaintdcctor}
 
-\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{const wxBitmap\& }{buffer = wxNullBitmap}}
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{const wxBitmap\& }{buffer}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
+
+\func{}{wxBufferedPaintDC}{\param{wxWindow *}{window}, \param{int }{style = wxBUFFER\_CLIENT\_AREA}}
 
 As with \helpref{wxBufferedDC}{wxbuffereddcctor}, you may either provide the
 bitmap to be used for buffering or let this object create one internally (in
 the latter case, the size of the client part of the window is used).
 
+Pass wxBUFFER\_CLIENT\_AREA for the {\it style} parameter to indicate that just the client area of
+the window is buffered, or wxBUFFER\_VIRTUAL\_AREA to indicate that the buffer bitmap
+covers the virtual area (in which case PrepareDC is automatically called for the actual window
+device context).
 
 \membersection{wxBufferedPaintDC::\destruct{wxBufferedPaintDC}}\label{wxbufferedpaintdcdtor}
 

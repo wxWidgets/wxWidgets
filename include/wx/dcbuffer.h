@@ -20,18 +20,27 @@
 // Double buffering helper.
 // ----------------------------------------------------------------------------
 
+// Assumes the buffer bitmap covers the entire scrolled window,
+// and prepares the window DC accordingly
+#define wxBUFFER_VIRTUAL_AREA       0x01
+
+// Assumes the buffer bitmap only covers the client area;
+// does not prepare the window DC
+#define wxBUFFER_CLIENT_AREA        0x02
+
 class wxBufferedDC : public wxMemoryDC
 {
 public:
     // Default ctor, must subsequently call Init for two stage construction.
-    wxBufferedDC() : m_dc( 0 )
+    wxBufferedDC() : m_dc( 0 ), m_style(0)
     {
     }
 
     // Construct a wxBufferedDC using a user supplied buffer.
-    wxBufferedDC(wxDC *dc, const wxBitmap &buffer)
+    wxBufferedDC(wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA)
         : m_dc( dc ),
-          m_buffer( buffer )
+          m_buffer( buffer ),
+          m_style(style)
     {
         UseBuffer();
     }
@@ -39,9 +48,11 @@ public:
     // Construct a wxBufferedDC with an internal buffer of 'area'
     // (where area is usually something like the size of the window
     // being buffered)
-    wxBufferedDC(wxDC *dc, const wxSize &area)
+    wxBufferedDC(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
         : m_dc( dc ),
-          m_buffer( area.GetWidth(), area.GetHeight() )
+          m_buffer( area.GetWidth(), area.GetHeight() ),
+          m_style(style)
+
     {
         UseBuffer();
     }
@@ -56,18 +67,19 @@ public:
 
     // These reimplement the actions of the ctors for two stage creation, but
     // are not used by the ctors themselves to save a few cpu cycles.
-    void Init(wxDC *dc, const wxBitmap &buffer)
+    void Init(wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA)
     {
         wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
                       _T("wxBufferedDC already initialised") );
         m_dc = dc;
         m_buffer = buffer;
+        m_style = style;
         UseBuffer();
     }
 
-    void Init(wxDC *dc, const wxSize &area)
+    void Init(wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA)
     {
-        Init(dc, wxBitmap(area.GetWidth(), area.GetHeight()));
+        Init(dc, wxBitmap(area.GetWidth(), area.GetHeight()), style);
     }
 
     // Blits the buffer to the dc, and detaches the dc from the buffer (so it
@@ -81,14 +93,20 @@ public:
         wxASSERT_MSG( m_dc != 0,
                       _T("No underlying DC associated with wxBufferedDC (anymore)") );
 
-        wxCoord x, y;
-        GetDeviceOrigin(& x, & y);
+        wxCoord x=0, y=0;
+
+        if (m_style & wxBUFFER_CLIENT_AREA)
+            GetDeviceOrigin(& x, & y);
 
         m_dc->Blit( 0, 0,
                     m_buffer.GetWidth(), m_buffer.GetHeight(), this,
                     -x, -y );
         m_dc = NULL;
     }
+
+    // Set and get the style
+    void SetStyle(int style) { m_style = style; }
+    int GetStyle() const { return m_style; }
 
 private:
     // check that the bitmap is valid and use it
@@ -109,6 +127,9 @@ private:
     // the buffer (selected in this DC)
     wxBitmap m_buffer;
 
+    // the buffering style
+    int m_style;
+
     DECLARE_NO_COPY_CLASS(wxBufferedDC)
 };
 
@@ -122,14 +143,29 @@ private:
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
-    // If no bitmap is supplied by the user, a temporary one wil; be created.
-    wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer = wxNullBitmap)
+    // If no bitmap is supplied by the user, a temporary one will be created.
+    wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer, int style = wxBUFFER_CLIENT_AREA)
         : m_paintdc(window)
     {
+        // If we're buffering the virtual window, scale the paint DC as well
+        if (style & wxBUFFER_VIRTUAL_AREA)
+            window->PrepareDC( m_paintdc );
+
         if( buffer != wxNullBitmap )
-            Init(&m_paintdc, buffer);
+            Init(&m_paintdc, buffer, style);
         else
-            Init(&m_paintdc, window->GetClientSize());
+            Init(&m_paintdc, window->GetClientSize(), style);
+    }
+
+    // If no bitmap is supplied by the user, a temporary one will be created.
+    wxBufferedPaintDC(wxWindow *window, int style = wxBUFFER_CLIENT_AREA)
+        : m_paintdc(window)
+    {
+        // If we're using the virtual window, scale the paint DC as well
+        if (style & wxBUFFER_VIRTUAL_AREA)
+            window->PrepareDC( m_paintdc );
+
+        Init(&m_paintdc, window->GetClientSize(), style);
     }
 
     // default copy ctor ok.
