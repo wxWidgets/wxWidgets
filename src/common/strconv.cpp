@@ -508,16 +508,11 @@ extern long wxCharsetToCodepage(const wxChar *name)
 class wxCharacterSet
 {
 public:
-    wxCharacterSet(const wxChar*name)
-        : cname(name) {}
-    virtual ~wxCharacterSet()
-        {}
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
-        { return (size_t)-1; }
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
-        { return (size_t)-1; }
-    virtual bool usable()
-        { return FALSE; }
+    wxCharacterSet(const wxChar*name) : cname(name) {}
+    virtual ~wxCharacterSet() {}
+    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) = 0;
+    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) = 0;
+    virtual bool usable() const = 0;
 public:
     const wxChar*cname;
 };
@@ -538,7 +533,7 @@ public:
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
         { return work ? work->WC2MB(buf,psz,n) : (size_t)-1; }
 
-    bool usable()
+    bool usable() const
         { return work!=NULL; }
 public:
     wxMBConv*work;
@@ -839,7 +834,7 @@ public:
         return len ? (buf ? len : len-1) : (size_t)-1;
     }
 
-    bool usable()
+    bool usable() const
         { return m_CodePage != -1; }
 
 public:
@@ -889,7 +884,7 @@ public:
         return inbuf;
     }
 
-    bool usable()
+    bool usable() const
         { return (enc!=wxFONTENCODING_SYSTEM) && (enc!=wxFONTENCODING_DEFAULT); }
 
 public:
