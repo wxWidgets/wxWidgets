@@ -522,6 +522,9 @@ bool wxRegKey::HasValue(const char *szValue) const
 // returns TRUE if this key has any subkeys
 bool wxRegKey::HasSubkeys() const
 {
+  // suppress possible messages from GetFirstKey()
+  wxLogNull nolog;
+  
   // just call GetFirstKey with dummy parameters
   wxString str;
   long     l;
@@ -531,6 +534,9 @@ bool wxRegKey::HasSubkeys() const
 // returns TRUE if given subkey exists
 bool wxRegKey::HasSubKey(const char *szKey) const
 {
+  // this function should be silent, so suppress possible messages from Open()
+  wxLogNull nolog;
+  
   if ( CONST_CAST Open() )
     return KeyExists(m_hKey, szKey);
   else
