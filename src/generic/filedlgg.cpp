@@ -37,12 +37,13 @@
     #include "wx/tooltip.h"
 #endif
 
-#include "sys/types.h"
-#include "sys/stat.h"
-#include "dirent.h"
-#include "pwd.h"
-#include "grp.h"
-#include "time.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "wx/generic/home.xpm"
 #include "wx/generic/listview.xpm"
@@ -560,7 +561,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     m_message = message;
     m_dialogStyle = style;
     m_dir = defaultDir;
-    if (m_dir.IsEmpty()) m_dir = wxGetUserHome();
+    if (m_dir.IsEmpty())
+    {
+        char buf[200];
+	m_dir = getcwd( buf, sizeof(buf) );
+    }
     m_path = defaultDir;
     m_path += _T("/");
     m_path += defaultFile;

@@ -1358,16 +1358,23 @@ void wxPostScriptDC::DoGetSize(int* width, int* height) const
 
     if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
 
+    int w = 595;
+    int h = 842;
     if (paper)
     {
-        if (width) *width = paper->GetSizeDeviceUnits().x;
-        if (height) *height = paper->GetSizeDeviceUnits().y;
+        w = paper->GetSizeDeviceUnits().x;
+        h = paper->GetSizeDeviceUnits().y;
     }
-    else
+    
+    if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-        if (width) *width = 595;
-        if (height) *height = 842;
+        int tmp = w;
+	w = h;
+	h = tmp;
     }
+    
+    if (width) *width = w;
+    if (height) *height = h;
 }
 
 void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
@@ -1378,16 +1385,23 @@ void wxPostScriptDC::DoGetSizeMM(int *width, int *height) const
 
     if (!paper) paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
 
+    int w = 210;
+    int h = 297;
     if (paper)
     {
-        if (width) *width = paper->GetWidth() / 10;
-        if (height) *height = paper->GetHeight() / 10;
+        w = paper->GetWidth() / 10;
+        h = paper->GetHeight() / 10;
     }
-    else
+    
+    if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-       if (width) *width = 210;
-       if (height) *height = 297;
+        int tmp = w;
+	w = h;
+	h = tmp;
     }
+    
+    if (width) *width = w;
+    if (height) *height = h;
 }
 
 // Resolution in pixels per logical inch
@@ -1461,7 +1475,7 @@ void wxPostScriptDC::EndDoc ()
 
     fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );                     // PostScript magic strings
     fprintf( m_pstream, "%%%%Title: %s\n", (const char *)m_title.mb_str() );
-    fprintf( m_pstream, "%%%%Creator: %s\n", (const char*)wxConvLibc.cWX2MB(wxTheApp->argv[0]) );
+    fprintf( m_pstream, "%%%%Creator: %s\n", (const char*)wxConvCurrent->cWX2MB(wxTheApp->argv[0]) );
     fprintf( m_pstream, "%%%%CreationDate: %s\n", (const char *)wxNow().mb_str() );
 
     wxChar userID[256];
@@ -1598,6 +1612,7 @@ void wxPostScriptDC::StartPage()
 
     fprintf( m_pstream, "%%%%Page: %d\n", wxPageNumber++ );
 
+    //  What is this one supposed to do? RR.
 //  *m_pstream << "matrix currentmatrix\n";
 
     // Added by Chris Breeze
@@ -1606,11 +1621,6 @@ void wxPostScriptDC::StartPage()
     // transformation and so we need to reset the origin
     // (and rotate the page for landscape printing)
 
-/*
-    m_scaleFactor = 1.0;
-    m_logicalOriginX = 0;
-    m_logicalOriginY = 0;
-*/
     // Output scaling
     long translate_x, translate_y;
     double scale_x, scale_y;
@@ -1623,16 +1633,17 @@ void wxPostScriptDC::StartPage()
 
     if (m_printData.GetOrientation() == wxLANDSCAPE)
     {
-//        translate_y -= m_maxY;
-//        fprintf( m_pstream, "90 rotate\n" );
-
-        printf( "Hi.\n" );
+        int h;
+        GetSize( (int*) NULL, &h );
+        translate_y -= h;
+        fprintf( m_pstream, "90 rotate\n" );
 	
-	fprintf( m_pstream, "90 rotate llx neg ury nef translate\n" );
+        // I copied this one from a PostScript tutorial, but to no avail. RR.
+//	fprintf( m_pstream, "90 rotate llx neg ury nef translate\n" );
     }
 
-//    fprintf( m_pstream, "%.8f %.8f scale\n", scale_x, scale_y );
-//    fprintf( m_pstream, "%ld %ld translate\n", translate_x, translate_y );
+    fprintf( m_pstream, "%.8f %.8f scale\n", scale_x, scale_y );
+    fprintf( m_pstream, "%ld %ld translate\n", translate_x, translate_y );
 }
 
 void wxPostScriptDC::EndPage ()
