@@ -752,7 +752,11 @@ wxFormatConverter::wxFormatConverter(const wxChar *format)
             // precision?
             if ( *format == _T('.') )
             {
-                SkipDigits(&format);
+                CopyFmtChar(*format++);
+                if ( *format == _T('*') )
+                    CopyFmtChar(*format++);
+                else
+                    SkipDigits(&format);
             }
 
             // next we can have a size modifier
@@ -799,23 +803,14 @@ wxFormatConverter::wxFormatConverter(const wxChar *format)
                 case _T('c'):
                 case _T('s'):
                     // %c -> %lc but %hc stays %hc and %lc is still %lc
-                    switch ( size )
-                    {
-                        case Default:
-                            InsertFmtChar(_T('l'));
-                            break;
-
-                        case Short:
-                            CopyFmtChar(_T('h'));
-                            break;
-
-                        case Long:
-                            ;
-                    }
+                    if ( size == Default)
+                        InsertFmtChar(_T('l'));
                     // fall through
 
                 default:
                     // nothing special to do
+                    if ( size != Default )
+                        CopyFmtChar(*(format - 1));
                     CopyFmtChar(*format++);
             }
         }
@@ -826,6 +821,14 @@ wxFormatConverter::wxFormatConverter(const wxChar *format)
     // no conversion necessary
     #define wxFormatConverter(x) (x)
 #endif // wxNEED_PRINTF_CONVERSION/!wxNEED_PRINTF_CONVERSION
+
+#ifdef __WXDEBUG__
+// For testing the format converter
+wxString wxConvertFormat(const wxChar *format)
+{
+    return wxString(wxFormatConverter(format));
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxPrintf(), wxScanf() and relatives
