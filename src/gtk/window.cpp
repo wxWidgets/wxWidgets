@@ -773,7 +773,11 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 
     if (g_isIdle)
         wxapp_install_idle_handler();
-        
+
+    // this is supposed to take care of extra (and unneeded) frame repaints
+    if (win->GetChildren().GetCount() == 0)
+        return; 
+
 /*
     if (win->GetName() == wxT("panel"))
     {
