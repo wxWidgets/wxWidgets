@@ -173,6 +173,10 @@ OTHER CHANGES
 2.4.1
 -----
 
+All:
+
+- fixed wxLANGUAGE_CHINESE_TAIWAN to use zh_TW catalogs
+
 wxBase
 
 - compilation with wxUSE_ODBC=1 fixed (dbkeyg.h file was missing in the archive)
@@ -182,13 +186,13 @@ wxBase
 
 All:
 
-- Added missing wx/quantize.h to install.
+- added missing wx/quantize.h to install
 
 wxGTK:
 
-- Added wxEVT_MENU_OPEN event generation.
-- Fixed bug in generic file selector causing incomplete file extensions to
-  be appended to filenames with no extension.
+- added wxEVT_MENU_OPEN event generation
+- fixed bug in generic file selector causing incomplete file extensions to
+  be appended to filenames with no extension
 
 
 2.4.0
