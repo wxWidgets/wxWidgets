@@ -170,9 +170,7 @@ enum {
 
 class WXDLLEXPORT wxListItem: public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxListItem)
-
-  public:
+public:
     long            m_mask;     // Indicates what fields are valid
     long            m_itemId;   // The zero-based item position
     int             m_col;      // Zero-based column, if in report mode
@@ -188,6 +186,9 @@ class WXDLLEXPORT wxListItem: public wxObject
     int             m_width;    // width of column
 
     wxListItem();
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxListItem)
 };
 
 //-----------------------------------------------------------------------------
@@ -236,9 +237,7 @@ private:
 
 class WXDLLEXPORT wxListHeaderData : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxListHeaderData);
-
-  protected:
+protected:
     long      m_mask;
     int       m_image;
     wxString  m_text;
@@ -247,7 +246,7 @@ class WXDLLEXPORT wxListHeaderData : public wxObject
     int       m_xpos,m_ypos;
     int       m_height;
 
-  public:
+public:
     wxListHeaderData();
     wxListHeaderData( const wxListItem &info );
     void SetItem( const wxListItem &item );
@@ -263,6 +262,9 @@ class WXDLLEXPORT wxListHeaderData : public wxObject
     int GetImage() const;
     int GetWidth() const;
     int GetFormat() const;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxListHeaderData);
 };
 
 //-----------------------------------------------------------------------------
@@ -271,9 +273,7 @@ class WXDLLEXPORT wxListHeaderData : public wxObject
 
 class WXDLLEXPORT wxListLineData : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxListLineData);
-
-  public:
+public:
     wxList              m_items;
     wxRect              m_bound_all;
     wxRect              m_bound_label;
@@ -287,8 +287,8 @@ class WXDLLEXPORT wxListLineData : public wxObject
 
     void DoDraw( wxDC *dc, bool hilight, bool paintBG );
 
-  public:
-    wxListLineData() {};
+public:
+    wxListLineData() {}
     wxListLineData( wxListMainWindow *owner, int mode, wxBrush *hilightBrush );
     void CalculateSize( wxDC *dc, int spacing );
     void SetPosition( wxDC *dc, int x, int y,  int window_width );
@@ -312,6 +312,9 @@ class WXDLLEXPORT wxListLineData : public wxObject
     bool IsHilighted();
     void AssignRect( wxRect &dest, int x, int y, int width, int height );
     void AssignRect( wxRect &dest, const wxRect &source );
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxListLineData);
 };
 
 //-----------------------------------------------------------------------------
@@ -320,9 +323,7 @@ class WXDLLEXPORT wxListLineData : public wxObject
 
 class WXDLLEXPORT wxListHeaderWindow : public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
-
-  protected:
+protected:
     wxListMainWindow  *m_owner;
     wxCursor          *m_currentCursor;
     wxCursor          *m_resizeCursor;
@@ -331,7 +332,7 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
     int                m_minX;
     int                m_currentX;
 
-  public:
+public:
     wxListHeaderWindow();
     ~wxListHeaderWindow();
     wxListHeaderWindow( wxWindow *win, wxWindowID id, wxListMainWindow *owner,
@@ -343,7 +344,9 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
     void OnMouse( wxMouseEvent &event );
     void OnSetFocus( wxFocusEvent &event );
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_DYNAMIC_CLASS(wxListHeaderWindow)
+    DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
@@ -352,12 +355,12 @@ class WXDLLEXPORT wxListHeaderWindow : public wxWindow
 
 class WXDLLEXPORT wxListRenameTimer: public wxTimer
 {
- private:
-   wxListMainWindow   *m_owner;
+private:
+    wxListMainWindow   *m_owner;
 
- public:
-   wxListRenameTimer( wxListMainWindow *owner );
-   void Notify();
+public:
+    wxListRenameTimer( wxListMainWindow *owner );
+    void Notify();
 };
 
 //-----------------------------------------------------------------------------
@@ -366,16 +369,14 @@ class WXDLLEXPORT wxListRenameTimer: public wxTimer
 
 class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 {
-  DECLARE_DYNAMIC_CLASS(wxListTextCtrl);
-
-  private:
+private:
     bool               *m_accept;
     wxString           *m_res;
     wxListMainWindow   *m_owner;
     wxString            m_startValue;
 
-  public:
-    wxListTextCtrl() {};
+public:
+    wxListTextCtrl() {}
     wxListTextCtrl( wxWindow *parent, const wxWindowID id,
                     bool *accept, wxString *res, wxListMainWindow *owner,
                     const wxString &value = "",
@@ -387,7 +388,9 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_DYNAMIC_CLASS(wxListTextCtrl);
+    DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
@@ -396,9 +399,7 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 
 class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxListMainWindow);
-
-  public:
+public:
     long                 m_mode;
     wxList               m_lines;
     wxList               m_columns;
@@ -423,7 +424,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     int                  m_dragCount;
     wxPoint              m_dragStart;
 
-  public:
+public:
     wxListMainWindow();
     wxListMainWindow( wxWindow *parent, wxWindowID id,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -495,7 +496,9 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 //    void AddColumn( wxListItem &item );
     void SortItems( wxListCtrlCompare fn, long data );
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_DYNAMIC_CLASS(wxListMainWindow);
+    DECLARE_EVENT_TABLE()
 };
 
 //-----------------------------------------------------------------------------
@@ -504,9 +507,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
 
 class WXDLLEXPORT wxListCtrl: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxListCtrl);
-
-  public:
+public:
     wxListCtrl();
     wxListCtrl( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
@@ -515,21 +516,23 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 #endif
        const wxString &name = "listctrl" )
     {
-      Create(parent, id, pos, size, style, validator, name);
+        Create(parent, id, pos, size, style, validator, name);
     }
     ~wxListCtrl();
+    
     bool Create( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
 #if wxUSE_VALIDATORS
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
 #endif
-       const wxString &name = "listctrl" );
-    void OnSize( wxSizeEvent &event );
+      const wxString &name = "listctrl" );
+
     bool GetColumn( int col, wxListItem& item ) const;
     bool SetColumn( int col, wxListItem& item );
     int GetColumnWidth( int col ) const;
     bool SetColumnWidth( int col, int width);
     int GetCountPerPage() const; // not the same in wxGLC as in Windows, I think
+
     bool GetItem( wxListItem& info ) const;
     bool SetItem( wxListItem& info ) ;
     long SetItem( long index, int col, const wxString& label, int imageId = -1 );
@@ -551,6 +554,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 //  wxColour GetTextColour() const; // wxGLC has colours for every Item (see wxListItem)
 //  void SetTextColour(const wxColour& col);
     long GetTopItem() const;
+
     void SetSingleStyle( long style, bool add = TRUE ) ;
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
@@ -583,7 +587,9 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
+    
     void OnIdle( wxIdleEvent &event );
+    void OnSize( wxSizeEvent &event );
 
     // We have to hand down a few functions
 
@@ -607,14 +613,15 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     bool DoPopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
     void SetFocus()
-       {
+      {
           /* The test in window.cpp fails as we are a composite
              window, so it checks against "this", but not m_mainWin. */
-          if(FindFocus() != this)
-             m_mainWin->SetFocus();
-       }
+          if (FindFocus() != this)
+              m_mainWin->SetFocus();
+      }
 
-  // implementation
+    // implementation
+    // --------------
 
     wxImageList         *m_imageListNormal;
     wxImageList         *m_imageListSmall;
@@ -622,8 +629,9 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
 
-  DECLARE_EVENT_TABLE()
-
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxListCtrl);
 };
 
 
