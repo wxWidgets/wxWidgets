@@ -3,28 +3,23 @@
 % htmprint.h at 17/Oct/99 12:48:02
 %
 
-
 \section{\class{wxHtmlEasyPrinting}}\label{wxhtmleasyprinting}
 
-
 This class provides very simple interface to printing 
-architecture. It allows you to print HTML documents only
-with very few commands. 
-
+architecture. It allows you to print HTML documents using
+only a few commands. 
 
 \wxheading{Note}
-Do not create this class on stack only. You should create an instance on app 
+
+Do not create this class on the stack only. You should create an instance on app 
 startup and use this instance for all printing operations. The reason is that
 this class stores various settings in it.
-
 
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
 
-
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlEasyPrinting::wxHtmlEasyPrinting}\label{wxhtmleasyprintingwxhtmleasyprinting}
 
@@ -39,13 +34,11 @@ Constructor.
 \docparam{parent\_frame}{pointer to the frame that will own preview frame and setup dialogs. May be NULL.}
 
 
-
 \membersection{wxHtmlEasyPrinting::PreviewFile}\label{wxhtmleasyprintingpreviewfile}
 
 \func{void}{PreviewFile}{\param{const wxString\& }{htmlfile}}
 
 Previews HTML file. 
-
 
 \membersection{wxHtmlEasyPrinting::PreviewText}\label{wxhtmleasyprintingpreviewtext}
 
@@ -60,14 +53,11 @@ Previews HTML text (not file!).
 \docparam{basepath}{base directory (html string would be stored there if it was in
 file). It is used to determine path for loading images, for example.}
 
-
-
 \membersection{wxHtmlEasyPrinting::PrintFile}\label{wxhtmleasyprintingprintfile}
 
 \func{void}{PrintFile}{\param{const wxString\& }{htmlfile}}
 
 Prints HTML file.
-
 
 \membersection{wxHtmlEasyPrinting::PrintText}\label{wxhtmleasyprintingprinttext}
 
@@ -82,20 +72,17 @@ Prints HTML text (not file!).
 \docparam{basepath}{base directory (html string would be stored there if it was in
 file). It is used to determine path for loading images, for example.}
 
-
 \membersection{wxHtmlEasyPrinting::PrinterSetup}\label{wxhtmleasyprintingprintersetup}
 
 \func{void}{PrinterSetup}{\void}
 
 Displays printer setup dialog and allows the user to modify settings. 
 
-
 \membersection{wxHtmlEasyPrinting::PageSetup}\label{wxhtmleasyprintingpagesetup}
 
 \func{void}{PageSetup}{\void}
 
 Displays page setup dialog and allows the user to modify settings. 
-
 
 \membersection{wxHtmlEasyPrinting::SetHeader}\label{wxhtmleasyprintingsetheader}
 
@@ -106,14 +93,14 @@ Sets page header.
 \wxheading{Parameters}
 
 \docparam{header}{HTML text to be used as header. You can use macros in it:
-\begin{itemize}
+
+\begin{itemize}\itemsep=0pt
 \item @PAGENUM@ is replaced by page number
 \item @PAGESCNT@ is replaced by total number of pages
 \end{itemize}
 }
 
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
-
 
 \membersection{wxHtmlEasyPrinting::SetFooter}\label{wxhtmleasyprintingsetfooter}
 
@@ -124,17 +111,14 @@ Sets page footer.
 \wxheading{Parameters}
 
 \docparam{footer}{HTML text to be used as footer. You can use macros in it:
-\begin{itemize}
+
+\begin{itemize}\itemsep=0pt
 \item @PAGENUM@ is replaced by page number
 \item @PAGESCNT@ is replaced by total number of pages
 \end{itemize}
 }
 
-
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
-
-
-
 
 \membersection{wxHtmlEasyPrinting::GetPrintData}\label{wxhtmleasyprintinggetprintdata}
 
@@ -147,5 +131,6 @@ set its parameters (via SetXXXX methods).
 
 \func{wxPageSetupDialogData*}{GetPageSetupData}{\void}
 
-Returns pointer to \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} instance used by 
+Returns a pointer to \helpref{wxPageSetupDialogData}{wxpagesetupdialogdata} instance used by 
 this class. You can set its parameters (via SetXXXX methods).
+

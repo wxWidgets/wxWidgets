@@ -5,7 +5,7 @@
 
 \section{\class{wxHtmlContainerCell}}\label{wxhtmlcontainercell}
 
-wxHtmlContainerCell class an implementation of a cell that may
+The wxHtmlContainerCell class is an implementation of a cell that may
 contain more cells in it. It is heavily used in the wxHTML layout algorithm.
 
 \wxheading{Derived from}
@@ -45,7 +45,7 @@ Returns pointer to the first cell in the list.
 You can then use wxHtmlCell's GetNext method to obtain pointer to the next
 cell in list.
 
-{\bf Note} : This shouldn't be used by the end user. If you need some way of
+{\bf Note:} This shouldn't be used by the end user. If you need some way of
 finding particular cell in the list, try \helpref{Find}{wxhtmlcellfind} method
 instead.
 
@@ -63,9 +63,8 @@ It is NOT always in pixels!
 
 \constfunc{int}{GetIndentUnits}{\param{int }{ind}}
 
-Returns units of intentation value for {\it ind} where {\it ind} is one
+Returns the units of indentation for {\it ind} where {\it ind} is one
 of the {\bf HTML\_INDENT\_*} constants.
-
 
 \membersection{wxHtmlContainerCell::GetMaxLineWidth}\label{wxhtmlcontainercellgetmaxlinewidth}
 
@@ -86,42 +85,40 @@ Inserts new cell into the container.
 
 \func{void}{SetAlign}{\param{const wxHtmlTag\& }{tag}}
 
-Sets container's alignment (both horizontal and vertical) according to
+Sets the container's alignment (both horizontal and vertical) according to
 the values stored in {\it tag}. (Tags {\tt ALIGN} parameter is extracted.) In fact
 it is only a front-end to \helpref{SetAlignHor}{wxhtmlcontainercellsetalignhor}
 and \helpref{SetAlignVer}{wxhtmlcontainercellsetalignver}.
-
 
 \membersection{wxHtmlContainerCell::SetAlignHor}\label{wxhtmlcontainercellsetalignhor}
 
 \func{void}{SetAlignHor}{\param{int }{al}}
 
-Sets container's {\it horizontal alignment}. During \helpref{Layout}{wxhtmlcelllayout}
+Sets the container's {\it horizontal alignment}. During \helpref{Layout}{wxhtmlcelllayout}
 each line is aligned according to {\it al} value.
 
 \wxheading{Parameters}
 
 \docparam{al}{new horizontal alignment. May be one of these values:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf HTML\_ALIGN\_LEFT}}{lines are left-aligned (default)}
 \twocolitem{{\bf HTML\_ALIGN\_CENTER\_H}}{lines are centered}
 \twocolitem{{\bf HTML\_ALIGN\_RIGHT}}{lines are right-aligned}
 \end{twocollist}
 }
 
-
 \membersection{wxHtmlContainerCell::SetAlignVer}\label{wxhtmlcontainercellsetalignver}
 
 \func{void}{SetAlignVer}{\param{int }{al}}
 
-Sets container's {\it vertical alignment}. This is per-line alignment!
+Sets the container's {\it vertical alignment}. This is per-line alignment!
 
 \wxheading{Parameters}
 
 \docparam{al}{new vertical alignment. May be one of these values:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf HTML\_ALIGN\_BOTTOM}}{cells are over the line (default)}
 \twocolitem{{\bf HTML\_ALIGN\_CENTER\_V}}{cells are centered on line}
 \twocolitem{{\bf HTML\_ALIGN\_TOP}}{cells are under the line}
@@ -134,13 +131,13 @@ Sets container's {\it vertical alignment}. This is per-line alignment!
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{clr}}
 
-Sets background color for this container.
+Sets the background color for this container.
 
 \membersection{wxHtmlContainerCell::SetBorder}\label{wxhtmlcontainercellsetborder}
 
 \func{void}{SetBorder}{\param{const wxColour\& }{clr1}, \param{const wxColour\& }{clr2}}
 
-Sets border (frame) colours. Border is rectangle around the container.
+Sets the border (frame) colours. Border is rectangle around the container.
 
 \wxheading{Parameters}
 
@@ -152,16 +149,16 @@ Sets border (frame) colours. Border is rectangle around the container.
 
 \func{void}{SetIndent}{\param{int }{i}, \param{int }{what}, \param{int }{units = HTML\_UNITS\_PIXELS}}
 
-Sets indentation (free space between borders of container and subcells).
+Sets the indentation (free space between borders of container and subcells).
 
 \wxheading{Parameters}
 
 \docparam{i}{Indentation value.}
 
-\docparam{what}{Determines which of the 4 borders we're setting. It is OR
+\docparam{what}{Determines which of the four borders we're setting. It is OR
 combination of following constants:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf HTML\_INDENT\_TOP}}{top border}
 \twocolitem{{\bf HTML\_INDENT\_BOTTOM}}{bottom}
 \twocolitem{{\bf HTML\_INDENT\_LEFT}}{left}
@@ -176,7 +173,7 @@ combination of following constants:
 
 \docparam{units}{Units of {\it i}. This parameter affects interpretation of {\it} value.
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf HTML\_UNITS\_PIXELS}}{{\it i} is number of pixels}
 \twocolitem{{\bf HTML\_UNITS\_PERCENT}}{{\it i} is interpreted as percents of width
 of parent container}
@@ -189,17 +186,17 @@ of parent container}
 
 Sets minimal height of the container. 
 
-(When container's \helpref{Layout}{wxhtmlcelllayout} is called, m_Height
+When container's \helpref{Layout}{wxhtmlcelllayout} is called, m\_Height
 is set depending on layout of subcells to the height of area covered
-by layouted subcells. Call to this method guarantees you that the height
+by layed-out subcells. Calling this method guarantees you that the height
 of container is never smaller than {\it h} - even if the subcells cover
-much smaller area.)
+much smaller area.
 
 \wxheading{Parameters}
 
 \docparam{h}{The minimal height.}
 
-\docparam{align}{If height of the container is lower than min. height, empty space must be inserted
+\docparam{align}{If height of the container is lower than the minimum height, empty space must be inserted
 somewhere in order to ensure minimal height. This parameter is one of {\bf HTML_ALIGN_TOP,
 HTML_ALIGN_BOTTOM, HTML_ALIGN_CENTER} constants. It refers to the {\it contents}, not to the
 empty place!}
@@ -212,7 +209,7 @@ empty place!}
 
 Sets floating width adjustment. 
 
-Normal behaviour of container is that it's width is same as width of 
+The normal behaviour of container is that its width is the same as the width of 
 parent container (and thus you can have only one sub-container per line).
 You can change this by setting FWA.
 
@@ -224,9 +221,9 @@ complement to full width of parent container (e.g.
 of container to parent's width minus 50 pixels. This is useful when
 creating tables - you can call SetWidthFloat(50) and SetWidthFloat(-50))}
 
-\docparam{units}{Units of {\it w} This parameter affects interpretation of {\it} value.
+\docparam{units}{Units of {\it w} This parameter affects the interpretation of {\it} value.
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf HTML\_UNITS\_PIXELS}}{{\it w} is number of pixels}
 \twocolitem{{\bf HTML\_UNITS\_PERCENT}}{{\it w} is interpreted as percents of width
 of parent container}
@@ -235,5 +232,4 @@ of parent container}
 
 \docparam{tag}{In the second version of method, {\it w} and {\it units}
 info is extracted from tag's {\tt WIDTH} parameter.}
-
 

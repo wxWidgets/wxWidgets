@@ -402,7 +402,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
     wxPen lightShadowPen(m_lightShadowColour, 1, wxSOLID);
     wxPen hilightPen(m_hilightColour, 1, wxSOLID);
 
-    if ( GetWindowStyleFlag() & wxSP_3D )
+    if ( GetWindowStyleFlag() & wxSW_3D )
     {
         dc.SetPen(mediumShadowPen);
         dc.DrawLine(0, 0, w-1, 0);
@@ -421,7 +421,7 @@ void wxSashWindow::DrawBorders(wxDC& dc)
         dc.DrawLine(w-2, 1, w-2, h-2); // Right hand side
         dc.DrawLine(1, h-2, w-1, h-2);     // Bottom
     }
-    else if ( GetWindowStyleFlag() & wxSP_BORDER )
+    else if ( GetWindowStyleFlag() & wxSW_BORDER )
     {
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
         dc.SetPen(*wxBLACK_PEN);

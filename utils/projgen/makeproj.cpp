@@ -216,6 +216,7 @@ void MyApp::GenerateSamples(const wxString& dir)
        0));
     GenerateSample("FractalVC", "fractal", dir + wxString("/samples/fractal"), wxStringList("fractal.cpp", 0));
     GenerateSample("GridVC", "test", dir + wxString("/samples/grid"), wxStringList("test.cpp", 0));
+    GenerateSample("NewGridVC", "griddemo", dir + wxString("/samples/newgrid"), wxStringList("griddemo.cpp", 0));
     GenerateSample("HelpVC", "demo", dir + wxString("/samples/help"), wxStringList("demo.cpp", 0));
 
     // wxHTML samples

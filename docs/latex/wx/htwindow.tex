@@ -7,13 +7,13 @@
 
 wxHtmlWindow is probably the only class you will directly use
 unless you want to do something special (like adding new tag
-handlers or MIME filters)
+handlers or MIME filters).
 
-Purpose of this class is to display HTML page (either local
-file or downloaded via HTTP protocol) in a window. Width
-of window is constant - given in constructor - virtual height
-is changed dynamicly depending on page size.
-Once the window is created you can set it's content by calling
+The purpose of this class is to display HTML pages (either local
+file or downloaded via HTTP protocol) in a window. The width
+of the window is constant - given in the constructor - and virtual height
+is changed dynamically depending on page size.
+Once the window is created you can set its content by calling
 \helpref{SetPage(text)}{wxhtmlwindowsetpage} or 
 \helpref{LoadPage(filename)}{wxhtmlwindowloadpage}. 
 
@@ -33,13 +33,12 @@ Default constructor.
 
 \func{}{wxHtmlWindow}{\param{wxWindow }{*parent}, \param{wxWindowID }{id = -1}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxHW_SCROLLBAR_AUTO}, \param{const wxString\& }{name = "htmlWindow"}}
 
-Constructor. The parameters are same as in wxScrollWindow ctor.
-(Too lazy to document it once again... :-)
+Constructor. The parameters are the same as for the \helpref{wxScrolledWindow}{wxscrolledwindow} constructor.
 
 \wxheading{Parameters}
 
 \docparam{style}{wxHW\_SCROLLBAR\_NEVER,  or wxHW\_SCROLLBAR\_AUTO. 
-Affects appearance of vertical scrollbar in the window.}
+Affects the appearance of vertical scrollbar in the window.}
 
 \membersection{wxHtmlWindow::AddFilter}\label{wxhtmlwindowaddfilter}
 
@@ -48,7 +47,7 @@ Affects appearance of vertical scrollbar in the window.}
 Adds \helpref{input filter}{filters} to the static list of available
 filters. These filters are present by default:
 
-\begin{itemize}
+\begin{itemize}\itemsep=0pt
 \item {\tt text/html} MIME type
 \item {\tt image/*} MIME types
 \item Plain Text filter (this filter is used if no other filter matches)
@@ -99,7 +98,7 @@ Moves to next page in history.
 
 \func{bool}{LoadPage}{\param{const wxString\& }{location}}
 
-Unlike SetPage this function first loads HTML page from {\it location}
+Unlike SetPage this function first loads HTML page from {\it location} 
 and then displays it. See example:
 
 \begin{verbatim}
@@ -129,11 +128,11 @@ This reads custom settings from wxConfig. It uses the path 'path'
 if given, otherwise it saves info into currently selected path.
 The values are stored in sub-path {\tt wxHtmlWindow}
 
-Read values : all things set by SetFonts, SetBorders.
+Read values: all things set by SetFonts, SetBorders.
 
 \wxheading{Parameters}
 
-\docparam{cfg}{wxConfig from which you wanna read configuration}
+\docparam{cfg}{wxConfig from which you want to read the configuration.}
 
 \docparam{path}{Optional path in config tree. If not given current path is used.}
 
@@ -157,20 +156,20 @@ This function sets font sizes and faces.
 
 \wxheading{Parameters}
 
-\docparam{normal_face}{This is face name for normal (i.e. non-fixed) font. 
+\docparam{normal\_face}{This is face name for normal (i.e. non-fixed) font. 
 It can be either empty string (then the default face is choosen) or
 platform-specific face name. Examples are "helvetica" under Unix or
 "Times New Roman" under Windows.}
 
-\docparam{normal_italic_mode}{This is either wxSLANT or wxITALIC.
+\docparam{normal\_italic\_mode}{This is either wxSLANT or wxITALIC.
 It determines how
 italic (<I>..</I>) text is handled. See wxFont documentation for
 details. For example you should use wxSLANT in conjuction with
 "helvetica" face or wxITALIC with "times" face.}
 
-\docparam{fixed_face}{The same thing for fixed face ( <TT>..</TT> )}
+\docparam{fixed\_face}{The same thing for fixed face ( <TT>..</TT> )}
 
-\docparam{fixed_italic_mode}{The same thing for fixed face.}
+\docparam{fixed\_italic\_mode}{The same thing for fixed face.}
 
 \docparam{sizes}{This is an array of 7 items of {\it int} type.
 The values represent size of font with HTML size from -2 to +4
@@ -204,7 +203,7 @@ It will display the {\it source}. See example:
 htmlwin -> SetPage("<html><body>Hello, world!</body></html>");
 \end{verbatim}
 
-If you want to load document from some location use
+If you want to load a document from some location use 
 \helpref{LoadPage}{wxhtmlwindowloadpage} instead.
 
 \wxheading{Parameters}
@@ -213,13 +212,13 @@ If you want to load document from some location use
 
 \wxheading{Return value}
 
-FALSE if an error occured, TRUE otherwise
+FALSE if an error occured, TRUE otherwise.
 
 \membersection{wxHtmlWindow::SetRelatedFrame}\label{wxhtmlwindowsetrelatedframe}
 
 \func{void}{SetRelatedFrame}{\param{wxFrame* }{frame}, \param{const wxString\& }{format}}
 
-Sets frame in which page title will be displayed. {\it format} is format of
+Sets the frame in which page title will be displayed. {\it format} is format of
 frame title, e.g. "HtmlHelp : \%s". It must contain exactly one \%s. This
 \%s is substituted with HTML page title.
 
@@ -241,15 +240,14 @@ this sets statusbar slot where messages will be displayed.
 
 Saves custom settings into wxConfig. It uses the path 'path'
 if given, otherwise it saves info into currently selected path.
-Regardless path is given or not the function creates sub-path 
-{\tt wxHtmlWindow}
+Regardless of whether the path is given or not, the function creates sub-path 
+{\tt wxHtmlWindow}.
 
-Saved values : all things set by SetFonts, SetBorders.
+Saved values: all things set by SetFonts, SetBorders.
 
 \wxheading{Parameters}
 
-\docparam{cfg}{wxConfig to which you wanna save configuration}
+\docparam{cfg}{wxConfig to which you want to save the configuration.}
 
-\docparam{path}{Optional path in config tree. If not given current path is used.}
-
+\docparam{path}{Optional path in config tree. If not given, the current path is used.}
 

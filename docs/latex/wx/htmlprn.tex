@@ -3,12 +3,11 @@
 The wxHTML library provides printing facilities with several levels of complexity. 
 
 The easiest way to print an HTML document is to use 
-\helpref{wxHtmlEasyPrinting class}{wxhtmleasyprinting}. It lets you print HTML documents with only one 
-command and you don't have to care about wxPrintouts etc. at all. It is only simple wrapper around 
+\helpref{wxHtmlEasyPrinting class}{wxhtmleasyprinting}. It lets you print HTML documents with only one
+command and you don't have to worry about deriving from the wxPrintout class at all. It is only a simple wrapper around the 
 \helpref{wxHtmlPrintout}{wxhtmlprintout}, normal wxWindows printout class.
 
-
-And finally there is low level class \helpref{wxHtmlDCRenderer}{wxhtmldcrenderer} which you can use to 
-render HTML into rectangular area on any DC. It supports rendering into multiple rectangles with same 
-width. (Most common use is placing one rectangle on each page or printing into two columns.)
+And finally there is the low level class \helpref{wxHtmlDCRenderer}{wxhtmldcrenderer} which you can use to
+render HTML into a rectangular area on any DC. It supports rendering into multiple rectangles with the same
+width. (The most common use of this is placing one rectangle on each page or printing into two columns.)
 

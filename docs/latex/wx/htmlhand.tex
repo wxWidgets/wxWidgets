@@ -1,13 +1,13 @@
 \membersection{Tag Handlers}\label{handlers}
 
-wxHTML library provides architecture of pluginable {\it tag handlers}.
+The wxHTML library provides architecture of pluggable {\it tag handlers}.
 Tag handler is class that understands particular HTML tag (or tags) and is
 able to interpret it.
 
 \helpref{wxHtmlWinParser}{wxhtmlwinparser} has static table of {\bf modules}.
-Each module contains one or more tag handlers. Each time new wxHtmlWinParser
+Each module contains one or more tag handlers. Each time a new wxHtmlWinParser
 object is constructed all modules are scanned and handlers are added
-to wxHtmlParser's list of available handlers (note : wxHtmlParser's list
+to wxHtmlParser's list of available handlers (note: wxHtmlParser's list
 is non-static).
 
 \wxheading{How it works}
@@ -15,7 +15,7 @@ is non-static).
 Common tag handler's \helpref{HandleTag}{wxhtmltaghandlerhandletag} method
 works in four steps:
 
-\begin{enumerate}
+\begin{enumerate}\itemsep=0pt
 \item Save state of parent parser into local variables
 \item Change parser state according to tag's params
 \item Parse text between the tag and paired ending tag (if present)
@@ -47,7 +47,7 @@ You can use set of macros to define the handler (see src/mod\_*.cpp files
 for details). Handler definition must start with {\bf TAG\_HANDLER\_BEGIN} macro
 and end with {\bf TAG\_HANDLER\_END} macro. I strongly recommend to have a look
 at {\it include/wxhtml/mod\_templ.h} file. Otherwise you won't understand
-the structure of macros... See macros reference:
+the structure of macros. See macros reference:
 
 {\bf TAG\_HANDLER\_BEGIN}({\it name}, {\it tags})
 

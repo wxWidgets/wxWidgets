@@ -619,6 +619,17 @@ samples/grid/*.xpm
 samples/grid/*.ico
 samples/grid/*.bmp
 
+samples/newgrid/*.cpp
+samples/newgrid/*.h
+samples/newgrid/*.def
+samples/newgrid/*.rc
+samples/newgrid/*.txt
+samples/newgrid/makefile*
+samples/newgrid/*.xbm
+samples/newgrid/*.xpm
+samples/newgrid/*.ico
+samples/newgrid/*.bmp
+
 samples/internat/*.cpp
 samples/internat/*.h
 samples/internat/*.def

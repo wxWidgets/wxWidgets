@@ -6,7 +6,7 @@
 \section{\class{wxHtmlCell}}\label{wxhtmlcell}
 
 Internal data structure. It represents fragments of parsed HTML
-page, so-called {\bf cell} - a word, picture, table, horizontal line and so on.
+page, the so-called {\bf cell} - a word, picture, table, horizontal line and so on.
 It is used by \helpref{wxHtmlWindow}{wxhtmlwindow} and 
 \helpref{wxHtmlWinParser}{wxhtmlwinparser} to represent HTML page in memory.
 
@@ -31,7 +31,6 @@ wxObject
 
 Constructor.
 
-
 \membersection{wxHtmlCell::AdjustPagebreak}\label{wxhtmlcelladjustpagebreak}
 
 \func{virtual bool}{AdjustPagebreak}{\param{int * }{pagebreak}}
@@ -44,7 +43,7 @@ few pixels up.
 
 Returns TRUE if pagebreak was modified, FALSE otherwise
 
-Usage : 
+Usage: 
 \begin{verbatim}
 while (container->AdjustPagebreak(&p)) {}
 \end{verbatim}
@@ -107,11 +106,11 @@ HTML_COND_ISANCHOR condition)
 
 \wxheading{Defined conditions}
 
-\begin{twocollist}
-\twocolitem{{\bf HTML_COND_ISANCHOR}}{Finds particular anchor.
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf HTML_COND_ISANCHOR}}{Finds particular anchor. 
 {\it param} is pointer to wxString with name of the anchor.}
 \twocolitem{{\bf HTML_COND_USER}}{User-defined conditions start
-from this number}
+from this number.}
 \end{twocollist}
 
 \membersection{wxHtmlCell::GetDescent}\label{wxhtmlcellgetdescent}
@@ -133,7 +132,7 @@ Returns height of the cell (m_Height member).
 \constfunc{virtual wxString}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
 
 Returns hypertext link if associated with this cell or empty string otherwise.
-(Note : this makes sense only for visible tags).
+(Note: this makes sense only for visible tags).
 
 \wxheading{Parameters}
 
@@ -182,7 +181,7 @@ Returns width of the cell (m_Width member).
 
 This method performs 2 actions:
 
-\begin{enumerate}
+\begin{enumerate}\itemsep=0pt
 \item adjusts cell's width according to the fact that maximal possible width is {\it w}.
 (this has sense when working with horizontal lines, tables etc.)
 \item prepares layout (=fill-in m\_PosX, m\_PosY (and sometimes m\_Height) members)
@@ -240,5 +239,5 @@ Sets parent container of this cell. This is called from
 
 \func{void}{SetPos}{\param{int }{x}, \param{int }{y}}
 
-Sets cell's position within parent container.
+Sets the cell's position within parent container.
 

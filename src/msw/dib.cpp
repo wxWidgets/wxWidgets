@@ -11,7 +11,7 @@
  *		  WriteDIB()	      - Writes a global handle in CF_DIB format*
  *					to a file.			       *
  *									       *
- *		  PaletteSize()       - Calculates the palette size in bytes   *
+ *		  wxPaletteSize()       - Calculates the palette size in bytes   *
  *					of given DIB			       *
  *									       *
  *		  DibNumColors()      - Determines the number of colors in DIB *
@@ -87,7 +87,7 @@ static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul);
 static DWORD PASCAL lwrite(int fh, VOID FAR *pv, DWORD ul);
 
 static BOOL	WriteDIB (LPTSTR szFile,HANDLE hdib);
-static WORD	PaletteSize (VOID FAR * pv);
+WORD	wxPaletteSize (VOID FAR * pv); // This is non-static as some apps use it externally
 static WORD	DibNumColors (VOID FAR * pv);
 // HANDLE	DibFromBitmap (HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hpal);
 static BOOL PASCAL MakeBitmapAndPalette(HDC,HANDLE,HPALETTE *,HBITMAP *);
@@ -128,7 +128,7 @@ static BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
 	hdr.bfReserved1 = 0;
 	hdr.bfReserved2 = 0;
 	hdr.bfOffBits = (DWORD) sizeof(BITMAPFILEHEADER) + lpbi->biSize +
-		 PaletteSize(lpbi);
+		 wxPaletteSize(lpbi);
 
     /* Write the file header */
 	_lwrite(fh, (LPSTR) &hdr, sizeof(BITMAPFILEHEADER));
@@ -143,7 +143,7 @@ static BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
 
 /****************************************************************************
  *									    *
- *  FUNCTION   :  PaletteSize(VOID FAR * pv)				    *
+ *  FUNCTION   :  wxPaletteSize(VOID FAR * pv)				    *
  *									    *
  *  PURPOSE    :  Calculates the palette size in bytes. If the info. block  *
  *		  is of the BITMAPCOREHEADER type, the number of colors is  *
@@ -154,7 +154,7 @@ static BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
  *									    *
  ****************************************************************************/
 
-static WORD PaletteSize(VOID FAR * pv)
+WORD wxPaletteSize(VOID FAR * pv)
 {
 	LPBITMAPINFOHEADER lpbi;
 	WORD	       NumColors;
@@ -259,7 +259,7 @@ static HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hp
 	bi.biClrUsed = 0;
 	bi.biClrImportant = 0;
 
-	dwLen = bi.biSize + PaletteSize(&bi);
+	dwLen = bi.biSize + wxPaletteSize(&bi);
 
 	hdc = GetDC((HWND) NULL);
 	hpal = SelectPalette(hdc, hpal, FALSE);
@@ -299,7 +299,7 @@ static HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hp
 		}
 
     /*	realloc the buffer big enough to hold all the bits */
-	dwLen = bi.biSize + PaletteSize(&bi) + bi.biSizeImage;
+	dwLen = bi.biSize + wxPaletteSize(&bi) + bi.biSizeImage;
 	if (h = GlobalReAlloc(hdib, dwLen, 0))
 		hdib = h;
 	else {
@@ -324,7 +324,7 @@ static HANDLE DibFromBitmap(HBITMAP hbm, DWORD biStyle, WORD biBits, HPALETTE hp
 		 hbm,
 		 0,
 		 (WORD) bi.biHeight,
-		 (LPSTR) lpbi + (WORD) lpbi->biSize + PaletteSize(lpbi),
+		 (LPSTR) lpbi + (WORD) lpbi->biSize + wxPaletteSize(lpbi),
 		 (LPBITMAPINFO) lpbi, DIB_RGB_COLORS) == 0) {
 		GlobalUnlock(hdib);
 		hdib = NULL;
@@ -815,7 +815,7 @@ static void InitBitmapInfoHeader (LPBITMAPINFOHEADER lpBmInfoHdr,
 
 LPSTR wxFindDIBBits (LPSTR lpbi)
 {
-   return (lpbi + *(LPDWORD)lpbi + PaletteSize (lpbi));
+   return (lpbi + *(LPDWORD)lpbi + wxPaletteSize (lpbi));
 }
 
 //---------------------------------------------------------------------
@@ -868,7 +868,7 @@ HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
       //  into this memory, and find out where the bitmap bits go.
 
    hDIB = GlobalAlloc (GHND, sizeof (BITMAPINFOHEADER) +
-             PaletteSize ((LPSTR) &bmInfoHdr) + bmInfoHdr.biSizeImage);
+             wxPaletteSize ((LPSTR) &bmInfoHdr) + bmInfoHdr.biSizeImage);
 
    if (!hDIB)
       return NULL;

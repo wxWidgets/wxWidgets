@@ -1,24 +1,10 @@
 wxWindows 2 Change Log
 ----------------------
 
-2.1.0, b?, June 2nd 1999
-------------------------
+NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
+change log.
 
-wxGTK:
-
-
-wxMSW:
-
-
-wxMotif:
-
-
-General:
-
-- Fixed day_of_week bug (Peter Stadel).
-- Added Inside(), SetLeft/Right/Top/Bottom, +, += to wxRect.
-- Added wxHTML, an HTML library and widget.
-- Added ZIP input stream.
+Major improvements are listed in readme.txt.
 
 2.1.0, b4, May 9th 1999
 -----------------------

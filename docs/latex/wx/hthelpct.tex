@@ -8,11 +8,11 @@
 {\bf WARNING! This help controller has an API incompatible with wxWindows
 wxHelpController!}
 
-This help controller provides easy way how to display HTML help in your
-application (see {\it test} sample). Whole help system is based on {\bf books}
-(see \helpref{AddBook}{wxhtmlhelpcontrolleraddbook}). A book is logical
-part of documentation (for example "User's Guide" or "Programmer's Guide" or
-"C++ Reference" or "wxWindows Reference"). Help controller can handle as
+This help controller provides an easy way of displaying HTML help in your
+application (see {\it test} sample). The help system is based on {\bf books} 
+(see \helpref{AddBook}{wxhtmlhelpcontrolleraddbook}). A book is a logical
+section of documentation (for example "User's Guide" or "Programmer's Guide" or
+"C++ Reference" or "wxWindows Reference"). The help controller can handle as
 many books as you want.
 
 wxHTML uses Microsoft's HTML Help Workshop project files (.hhp, .hhk, .hhc) as its
@@ -22,7 +22,7 @@ Have a look at docs/html/ directory where sample project files are stored.
 You can use tex2rtf to generate MHHW projects (see wxHTML homepage for details).
 
 In order to use the controller in your application under Windows you must
-have following line in your .rc file:
+have the following line in your .rc file:
 
 \begin{verbatim}
 #include "wx/html/msw/wxhtml.rc"
@@ -47,7 +47,7 @@ Constructor.
 Adds book (\helpref{.hhp file}{helpformat} - HTML Help Workshop project file) into the list of loaded books.
 This must be called at least once before displaying  any help.
 
-If {\it show_wait_msg} is TRUE then a decorationless window with progress message is displayed.
+If {\it show\_wait\_msg} is TRUE then a decorationless window with progress message is displayed.
 
 \membersection{wxHtmlHelpController::Display}\label{wxhtmlhelpcontrollerdisplay}
 
@@ -58,7 +58,7 @@ the help in application.
 
 You can specify the page in many ways:
 
-\begin{itemize}
+\begin{itemize}\itemsep=0pt
 \item as direct filename of HTML document
 \item as chapter name (from contents) or as a book name
 \item as some word from index
@@ -67,7 +67,7 @@ You can specify the page in many ways:
 
 Looking for the page runs in these steps:
 
-\begin{enumerate}
+\begin{enumerate}\itemsep=0pt
 \item try to locate file named x (if x is for example "doc/howto.htm")
 \item try to open starting page of book named x
 \item try to find x in contents (if x is for example "How To ...")
@@ -98,23 +98,23 @@ Displays help window and focuses index panel.
 Displays help window, focuses search panel and starts searching.
 Returns TRUE if the keyword was found.
 
-IMPORTANT! KeywordSearch searches only pages listed in .htc file(s)!
-(you should have all pages in contents file...)
+{\bf Important:} KeywordSearch searches only pages listed in .htc file(s).
+You should list all pages in the contents file.
 
 \membersection{wxHtmlHelpController::ReadCustomization}\label{wxhtmlhelpcontrollerreadcustomization}
 
 \func{void}{ReadCustomization}{\param{wxConfigBase* }{cfg}, \param{wxString }{path = wxEmptyString}}
 
-Reads controllers setting (position of window etc.)
+Reads the controller's setting (position of window, etc.)
 
 \membersection{wxHtmlHelpController::SetTempDir}\label{wxhtmlhelpcontrollersettempdir}
 
 \func{void}{SetTempDir}{\param{const wxString\& }{path}}
 
-Sets path for storing temporary files (cached binary versions of index and contents files. These binary
-forms are much faster to read.) Default value is empty string (empty string means
-that no cached data are stored). Note that these files are NOT
-deleted when program exits!
+Sets the path for storing temporary files - cached binary versions of index and contents files. These binary
+forms are much faster to read. Default value is empty string (empty string means
+that no cached data are stored). Note that these files are {\it not} 
+deleted when program exits.
 
 \membersection{wxHtmlHelpController::SetTitleFormat}\label{wxhtmlhelpcontrollersettitleformat}
 

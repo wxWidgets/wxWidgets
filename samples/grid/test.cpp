@@ -163,7 +163,7 @@ bool MyApp::OnInit(void)
 MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(frame, -1, title, pos, size)
 {
-  grid = (wxGenericGrid *) NULL;
+  grid = (wxGrid*) NULL;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)

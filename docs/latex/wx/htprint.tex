@@ -3,26 +3,21 @@
 % htmprint.h at 17/Oct/99 12:48:02
 %
 
-
 \section{\class{wxHtmlPrintout}}\label{wxhtmlprintout}
 
-This class serves as printout class for HTML documents.
+This class serves as a printout class for HTML documents.
 
 \wxheading{Derived from}
 
 \helpref{wxPrintout}{wxprintout}
 
-
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxHtmlPrintout::wxHtmlPrintout}\label{wxhtmlprintoutwxhtmlprintout}
 
 \func{}{wxHtmlPrintout}{\param{const wxString\& }{title = "Printout"}}
 
 Constructor. 
-
-
 
 \membersection{wxHtmlPrintout::SetHtmlText}\label{wxhtmlprintoutsethtmltext}
 
@@ -40,16 +35,12 @@ file). It is used to determine path for loading images, for example.}
 \docparam{isdir}{FALSE if basepath is filename, TRUE if it is directory name
 (see \helpref{wxFileSystem}{wxfilesystem} for detailed explanation)}
 
-
-
 \membersection{wxHtmlPrintout::SetHtmlFile}\label{wxhtmlprintoutsethtmlfile}
 
 \func{void}{SetHtmlFile}{\param{const wxString\& }{htmlfile}}
 
 Prepare the class for printing this HTML {\bf file}. The file may be located on 
 any virtual file system or it may be normal file.
-
-
 
 \membersection{wxHtmlPrintout::SetHeader}\label{wxhtmlprintoutsetheader}
 
@@ -60,7 +51,8 @@ Sets page header.
 \wxheading{Parameters}
 
 \docparam{header}{HTML text to be used as header. You can use macros in it:
-\begin{itemize}
+
+\begin{itemize}\itemsep=0pt
 \item @PAGENUM@ is replaced by page number
 \item @PAGESCNT@ is replaced by total number of pages
 \end{itemize}
@@ -78,14 +70,14 @@ Sets page footer.
 \wxheading{Parameters}
 
 \docparam{footer}{HTML text to be used as footer. You can use macros in it:
-\begin{itemize}
+
+\begin{itemize}\itemsep=0pt
 \item @PAGENUM@ is replaced by page number
 \item @PAGESCNT@ is replaced by total number of pages
 \end{itemize}
 }
 
 \docparam{pg}{one of wxPAGE\_ODD, wxPAGE\_EVEN and wxPAGE\_ALL constants.}
-
 
 \membersection{wxHtmlPrintout::SetMargins}\label{wxhtmlprintoutsetmargins}
 
