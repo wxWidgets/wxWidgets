@@ -17,6 +17,8 @@
 #define XtDisplay XTDISPLAY
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/statbox.h"
 #include "wx/utils.h"
 

@@ -13,6 +13,8 @@
 #pragma implementation "scrolbar.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/scrolbar.h"
 
 #ifdef __VMS__

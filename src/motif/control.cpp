@@ -13,6 +13,8 @@
 #pragma implementation "control.h"
 #endif
 
+#include "wx/defs.h"
+
 #include "wx/control.h"
 #include "wx/panel.h"
 #include "wx/utils.h"

@@ -18,7 +18,8 @@
 #define XtParent XTPARENT
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
+#include "wx/defs.h"
+
 #include "wx/choice.h"
 #include "wx/utils.h"
 

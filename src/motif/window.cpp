@@ -1669,8 +1669,8 @@ bool wxWindow::ProcessAccelerator(wxKeyEvent& event)
         wxAcceleratorEntry* entry = & (entries[i]);
         if (entry->MatchesEvent(event))
         {
-            // Bingo, we have a match. Now find a control that matches the entry
-            // command id.
+            // Bingo, we have a match. Now find a control that matches the
+	    // entry command id.
 
             // Need to go up to the top of the window hierarchy, since it might
             // be e.g. a menu item
