@@ -41,7 +41,7 @@ extern const char *wxSliderNameStr;
 class wxSlider: public wxControl
 {
 public:
-    wxSlider() {}
+    wxSlider();
     inline wxSlider( wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
@@ -52,12 +52,13 @@ public:
     {
       Create( parent, id, value, minValue, maxValue, pos, size, style, validator, name );
     }
+    ~wxSlider();
     bool Create(wxWindow *parent, wxWindowID id,
            int value, int minValue, int maxValue,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSL_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator, 
+           const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxSliderNameStr );
     virtual int GetValue() const;
     virtual void SetValue( int );
@@ -79,15 +80,15 @@ public:
     int GetThumbLength() const;
     void SetTick( int tickPos );
 
-    // implementation    
+    // implementation
     // --------------
-    
+
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
-    
+
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxSlider)
 };
