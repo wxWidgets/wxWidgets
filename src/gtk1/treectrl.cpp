@@ -250,8 +250,7 @@ void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data) {
 }
 
 bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const {
-#warning "Need to implement IsVisible"
-  return FALSE;
+  return GTK_WIDGET_VISIBLE(GTK_TREE_ITEM((GtkTreeItem *)item));
 }
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const {
@@ -370,18 +369,77 @@ wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const {
   return GTK_TREE_ITEM(g_list_previous(g_list_find(GTK_TREE(parent)->children, p))->data);
 }
 
+static void gtk_treectrl_first_visible_callback(GtkWidget *widget, gpointer data) {
+  GtkTreeItem *p = (*((GtkTreeItem **)data));
+
+  GtkTree *tree = GTK_TREE(GTK_TREE_ITEM(widget)->subtree);
+
+  if (tree->children != NULL) {
+    guint len = g_list_length(tree->children);
+    for (guint i=0; i<len; i++) {
+      if (GTK_WIDGET_VISIBLE(GTK_WIDGET(GTK_TREE_ITEM((GtkTreeItem *)g_list_nth(tree->children, i)->data)))) {
+        p = GTK_TREE_ITEM((GtkTreeItem *)g_list_nth(tree->children, i)->data);
+        return;
+      }
+    }
+  }
+
+  if (GTK_IS_CONTAINER(widget))
+    gtk_container_foreach(GTK_CONTAINER(widget), gtk_treectrl_first_visible_callback, data);
+}
+
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const {
-#warning "Need to implement GetFirstVisibleItem"
-  return NULL;
+  GtkTreeItem *p = NULL;
+
+  if (m_anchor == NULL)
+    return NULL;
+
+  gtk_treectrl_first_visible_callback(GTK_WIDGET(m_anchor), &p);
+
+  return p;
 }
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const {
-#warning "Need to implement GetNextVisible"
+  GtkTreeItem *p = (GtkTreeItem *)item;
+  GtkTree *parent = GTK_TREE(GTK_WIDGET(p)->parent);
+  GtkTreeItem *q;
+
+  if (!GTK_IS_TREE(parent))
+    return NULL;
+
+  if (parent->children == NULL)
+    return NULL;
+
+  q = GTK_TREE_ITEM(g_list_next(g_list_find(GTK_TREE(parent)->children, p))->data);
+
+  while (q != p) {
+    q = GTK_TREE_ITEM(g_list_next(g_list_find(GTK_TREE(parent)->children, q))->data);
+    if (GTK_WIDGET_VISIBLE(GTK_WIDGET(q)))
+      return q;
+  }
+
   return NULL;
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const {
-#warning "Need to implement GetPrevVisible"
+  GtkTreeItem *p = (GtkTreeItem *)item;
+  GtkTree *parent = GTK_TREE(GTK_WIDGET(p)->parent);
+  GtkTreeItem *q;
+
+  if (!GTK_IS_TREE(parent))
+    return NULL;
+
+  if (parent->children == NULL)
+    return NULL;
+
+  q = GTK_TREE_ITEM(g_list_previous(g_list_find(GTK_TREE(parent)->children, p))->data);
+
+  while (q != p) {
+    q = GTK_TREE_ITEM(g_list_previous(g_list_find(GTK_TREE(parent)->children, q))->data);
+    if (GTK_WIDGET_VISIBLE(GTK_WIDGET(q)))
+      return q;
+  }
+
   return NULL;
 }
 
