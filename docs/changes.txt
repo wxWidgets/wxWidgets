@@ -9,6 +9,7 @@ All:
 
 - Added GetIcon, GetBitmap to wxImageList. wxGenericImageList's original
   GetBitmap is renamed GetBitmapPtr.
+- Added XPM data constructor to wxImage.
 
 wxPalmOS:
 
