@@ -85,12 +85,14 @@
 #endif
 
 #ifdef __UNIX__ 
+/*
 #   ifndef strnicmp 
 #      define strnicmp strncasecmp 
 #   endif 
 #   ifndef stricmp 
 #      define stricmp strcasecmp 
 #   endif 
+*/
 #elif defined(__WXMAC__)
 #else 
 #   include <io.h> 
