@@ -395,7 +395,14 @@ Constructs a string of {\it n} copies of character {\it ch}.
 \func{}{wxString}{\param{const char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Takes first {\it nLength} characters from the C string {\it psz}.
-The default value of wxSTRING\_MAXLEN means take all the string.
+The default value of wxSTRING\_MAXLEN means to take all the string.
+
+Note that this constructor may be used even if {\it psz} points to a buffer
+with binary data (i.e. containing {\tt NUL} characters) as long as you provide
+the correct value for {\it nLength}. However, the default form of it works
+only with strings without intermediate {\tt NUL}s because it uses 
+{\tt strlen()} to calculate the effective length and it would not give correct
+results otherwise.
 
 \func{}{wxString}{\param{const unsigned char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
