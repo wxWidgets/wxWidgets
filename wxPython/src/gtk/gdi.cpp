@@ -7910,6 +7910,34 @@ static PyObject *_wrap_new_wxBufferedDCInternalBuffer(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxBufferedDC_UnMask(_swigobj)  (_swigobj->UnMask())
+static PyObject *_wrap_wxBufferedDC_UnMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBufferedDC * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxBufferedDC_UnMask",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBufferedDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBufferedDC_UnMask. Expected _wxBufferedDC_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxBufferedDC_UnMask(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxBufferedPaintDCTowxBufferedDC(void *ptr) {
     wxBufferedPaintDC *src;
     wxBufferedDC *dest;
@@ -10082,6 +10110,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxScreenDC_StartDrawingOnTopWin", (PyCFunction) _wrap_wxScreenDC_StartDrawingOnTopWin, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScreenDC", (PyCFunction) _wrap_new_wxScreenDC, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBufferedPaintDC", (PyCFunction) _wrap_new_wxBufferedPaintDC, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBufferedDC_UnMask", (PyCFunction) _wrap_wxBufferedDC_UnMask, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBufferedDCInternalBuffer", (PyCFunction) _wrap_new_wxBufferedDCInternalBuffer, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBufferedDC", (PyCFunction) _wrap_new_wxBufferedDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDC_SelectObject", (PyCFunction) _wrap_wxMemoryDC_SelectObject, METH_VARARGS | METH_KEYWORDS },

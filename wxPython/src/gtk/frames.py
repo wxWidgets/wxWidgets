@@ -234,6 +234,7 @@ class wxSplashScreenWindow(wxSplashScreenWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxSplashScreenWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -258,6 +259,7 @@ class wxSplashScreen(wxSplashScreenPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxSplashScreen,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

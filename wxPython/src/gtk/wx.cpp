@@ -677,7 +677,11 @@ static wxPyCoreAPI API = {
     wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
     wxArrayString2PyList_helper,
-    wxArrayInt2PyList_helper
+    wxArrayInt2PyList_helper,
+
+    wxPyClientData_dtor,
+    wxPyUserData_dtor,
+    wxPyOORClientData_dtor
 };
 
 
@@ -2064,6 +2068,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxPD_ELAPSED_TIME", PyInt_FromLong((long) wxPD_ELAPSED_TIME));
 	 PyDict_SetItemString(d,"wxPD_ESTIMATED_TIME", PyInt_FromLong((long) wxPD_ESTIMATED_TIME));
 	 PyDict_SetItemString(d,"wxPD_REMAINING_TIME", PyInt_FromLong((long) wxPD_REMAINING_TIME));
+	 PyDict_SetItemString(d,"wxDD_NEW_DIR_BUTTON", PyInt_FromLong((long) wxDD_NEW_DIR_BUTTON));
 	 PyDict_SetItemString(d,"wxMENU_TEAROFF", PyInt_FromLong((long) wxMENU_TEAROFF));
 	 PyDict_SetItemString(d,"wxMB_DOCKABLE", PyInt_FromLong((long) wxMB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxNO_FULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxNO_FULL_REPAINT_ON_RESIZE));

@@ -1383,9 +1383,11 @@ static PyObject *_wrap_wxSize_SetHeight(PyObject *self, PyObject *args, PyObject
 }
 
 static PyObject * wxSize_asTuple(wxSize *self) {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 static PyObject *_wrap_wxSize_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1653,9 +1655,11 @@ static PyObject *_wrap_wxRealPoint_Set(PyObject *self, PyObject *args, PyObject 
 }
 
 static PyObject * wxRealPoint_asTuple(wxRealPoint *self) {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 static PyObject *_wrap_wxRealPoint_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -2003,9 +2007,11 @@ static PyObject *_wrap_wxPoint_Set(PyObject *self, PyObject *args, PyObject *kwa
 }
 
 static PyObject * wxPoint_asTuple(wxPoint *self) {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 static PyObject *_wrap_wxPoint_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -2989,11 +2995,13 @@ static PyObject *_wrap_wxRect_height_get(PyObject *self, PyObject *args, PyObjec
 }
 
 static PyObject * wxRect_asTuple(wxRect *self) {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(self->width));
             PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
+            wxPyEndBlockThreads();
             return tup;
         }
 static PyObject *_wrap_wxRect_asTuple(PyObject *self, PyObject *args, PyObject *kwargs) {

@@ -409,6 +409,7 @@ wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
 wxPD_ELAPSED_TIME = wxc.wxPD_ELAPSED_TIME
 wxPD_ESTIMATED_TIME = wxc.wxPD_ESTIMATED_TIME
 wxPD_REMAINING_TIME = wxc.wxPD_REMAINING_TIME
+wxDD_NEW_DIR_BUTTON = wxc.wxDD_NEW_DIR_BUTTON
 wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
 wxMB_DOCKABLE = wxc.wxMB_DOCKABLE
 wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
@@ -1548,6 +1549,34 @@ def wxPyTypeCast(obj, typeStr):
     return theObj
 
 
+#----------------------------------------------------------------------------
+
+class wxPyDeadObjectError(AttributeError):
+    pass
+
+class _wxPyDeadObject:
+    """
+    Instances of wx objects that are OOR capable will have their __class__
+    changed to this class when the C++ object is deleted.  This should help
+    prevent crashes due to referencing a bogus C++ pointer.
+    """
+    reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
+    attrStr = "The C++ %s object has been deleted, attribute access no longer allowed."
+
+    def __repr__( self ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        return self.reprStr % self._name
+
+    def __getattr__( self, *args ):
+        if not hasattr(self, "_name"):
+            self._name = "[unknown]"
+        raise wxPyDeadObjectError( self.attrStr % self._name )
+
+    def __nonzero__(self):
+        return 0
+
+
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 
@@ -1664,10 +1693,10 @@ class wxPyWidgetTester(wxApp):
         self.frame.Show(true)
 
 #----------------------------------------------------------------------------
-# DO NOT hold any other references to this object.  This is how we know when
-# to cleanup system resources that wxWin is holding.  When this module is
-# unloaded, the refcount on __cleanMeUp goes to zero and it calls the
-# wxApp_CleanUp function.
+# DO NOT hold any other references to this object.  This is how we
+# know when to cleanup system resources that wxWin is holding.  When
+# the sys module is unloaded, the refcount on sys.__wxPythonCleanup
+# goes to zero and it calls the wxApp_CleanUp function.
 
 class __wxPyCleanup:
     def __init__(self):

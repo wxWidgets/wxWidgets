@@ -103,7 +103,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(FileSelectorPromptStr);
     DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-
+    DECLARE_DEF_STRING(DirSelectorPromptStr);
     static const wxString wxPyEmptyString(wxT(""));
 
     int wxCaret_GetBlinkTime() {
@@ -508,6 +508,76 @@ static PyObject *_wrap_wxSaveFileSelector(PyObject *self, PyObject *args, PyObje
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxDirSelector(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0 = (wxString *) &wxPyDirSelectorPromptStr;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
+    long  _arg2 = (long ) wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxDD_NEW_DIR_BUTTON;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxWindow * _arg4 = (wxWindow *) NULL;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    PyObject * _argo4 = 0;
+    char *_kwnames[] = { "message","defaultPath","style","pos","parent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOlOO:wxDirSelector",_kwnames,&_obj0,&_obj1,&_arg2,&_obj3,&_argo4)) 
+        return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+    if (_obj1)
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_argo4) {
+        if (_argo4 == Py_None) { _arg4 = NULL; }
+        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of wxDirSelector. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxDirSelector(*_arg0,*_arg1,_arg2,*_arg3,_arg4));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
 }
 {
     delete _result;
@@ -9990,6 +10060,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxGetSingleChoice", (PyCFunction) _wrap_wxGetSingleChoice, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetPasswordFromUser", (PyCFunction) _wrap_wxGetPasswordFromUser, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetTextFromUser", (PyCFunction) _wrap_wxGetTextFromUser, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDirSelector", (PyCFunction) _wrap_wxDirSelector, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSaveFileSelector", (PyCFunction) _wrap_wxSaveFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLoadFileSelector", (PyCFunction) _wrap_wxLoadFileSelector, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSelector", (PyCFunction) _wrap_wxFileSelector, METH_VARARGS | METH_KEYWORDS },

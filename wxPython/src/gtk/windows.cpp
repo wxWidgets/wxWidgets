@@ -522,7 +522,7 @@ static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, P
 }
 
 static void  wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject * _self) {
-            self->SetClientObject(new wxPyClientData(_self));
+            self->SetClientObject(new wxPyOORClientData(_self));
         }
 static PyObject *_wrap_wxEvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
