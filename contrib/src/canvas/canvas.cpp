@@ -902,6 +902,8 @@ void wxCanvas::OnPaint(wxPaintEvent &event)
     PrepareDC( dc );
 
     if (!m_buffer.Ok()) return;
+    
+    if (m_frozen) return;
 
     m_needUpdate = TRUE;
 
@@ -1103,27 +1105,30 @@ void wxCanvas::OnMouse(wxMouseEvent &event)
 
 void wxCanvas::OnSize(wxSizeEvent &event)
 {
-    m_requestNewBuffer = TRUE;
-    Freeze();
+    int w,h;
+    GetClientSize( &w, &h );
+    m_buffer = wxImage( w, h );
+        
+    CalcUnscrolledPosition( 0, 0, &m_bufferX, &m_bufferY );
+        
+    wxNode *node = m_updateRects.First();
+    while (node)
+    {
+        wxRect *rect = (wxRect*) node->Data();
+        delete rect;
+        m_updateRects.DeleteNode( node );
+        node = m_updateRects.First();
+    }
+
+    m_frozen = FALSE;
+
+    Update( m_bufferX, m_bufferY, m_buffer.GetWidth(), m_buffer.GetHeight(), FALSE );
 
     event.Skip();
 }
 
 void wxCanvas::OnIdle(wxIdleEvent &event)
 {
-    if (m_requestNewBuffer)
-    {
-        m_requestNewBuffer = FALSE;
-        
-        int w,h;
-        GetClientSize( &w, &h );
-        m_buffer = wxImage( w, h );
-        
-        CalcUnscrolledPosition( 0, 0, &m_bufferX, &m_bufferY );
-        
-        Thaw();
-    }
-    
     UpdateNow();
     event.Skip();
 }
