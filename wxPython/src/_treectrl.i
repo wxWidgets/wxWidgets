@@ -642,12 +642,19 @@ public:
     // remove the selection from currently selected item (if any)
     void Unselect();
 
+    // remove the selection from the given one (multiselect mode only)
+    void UnselectItem(const wxTreeItemId& item);
+    
     // unselect all items (only makes sense for multiple selection control)
     void UnselectAll();
 
     // select this item
-    void SelectItem(const wxTreeItemId& item);
+    void SelectItem(const wxTreeItemId& item, bool select = True);
 
+    // toggle the item selection
+    void ToggleItemSelection(const wxTreeItemId& item);
+
+    
     // make sure this item is visible (expanding the parent item and/or
     // scrolling to this item if necessary)
     void EnsureVisible(const wxTreeItemId& item);

@@ -62,6 +62,8 @@ public:
             return retval;
         }
     }
+    
+    bool operator==(const wxPen& pen) const;
 
 #ifndef __WXMAC__
 //  wxDash* GetDash() const;

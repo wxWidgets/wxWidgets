@@ -168,6 +168,11 @@ public:
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
                      int fillStyle = wxODDEVEN_RULE);
 
+    // TODO:  Figure out what the start parameter means and devise a
+    // good typemap for this    
+    //void DrawPolyPolygon(int n, int start[], wxPoint points[],
+    //                     wxCoord xoffset = 0, wxCoord yoffset = 0,
+    //                     int fillStyle = wxODDEVEN_RULE)
 
     // this version puts both optional bitmap and the text into the given
     // rectangle and aligns is as specified by alignment parameter; it also
@@ -555,27 +560,45 @@ public:
 //---------------------------------------------------------------------------
 %newgroup
 
+enum
+{
+    // this is more efficient and hence default
+    wxBUFFER_DC_OVERWRITE_BG = 0,
+
+    // preserve the old background: more time consuming
+    wxBUFFER_DC_PRESERVE_BG = 1,
+
+    // flags used by default
+    wxBUFFER_DC_DEFAULT = wxBUFFER_DC_OVERWRITE_BG
+};
+
+
 class wxBufferedDC : public wxMemoryDC
 {
 public:
     %pythonAppend wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
         "self._dc = args[0] # save a ref so the other dc will not be deleted before self";
-    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area )
+    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT )
         "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
 
+    %nokwargs wxBufferedDC;
+    
     // Construct a wxBufferedDC using a user supplied buffer.
     wxBufferedDC( wxDC *dc, const wxBitmap &buffer );
 
-        // Construct a wxBufferedDC with an internal buffer of 'area'
-        // (where area is usually something like the size of the window
-        // being buffered)
-    %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area );
+    // Construct a wxBufferedDC with an internal buffer of 'area'
+    // (where area is usually something like the size of the window
+    // being buffered)
+    wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
 
-        // Blits the buffer to the dc, and detaches the dc from
-        // the buffer.  Usually called in the dtor or by the dtor
-        // of derived classes if the BufferedDC must blit before
-        // the derived class (which may own the dc it's blitting
-        // to) is destroyed.
+    // TODO: Keep this one too?
+    %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
+
+    // Blits the buffer to the dc, and detaches the dc from
+    // the buffer.  Usually called in the dtor or by the dtor
+    // of derived classes if the BufferedDC must blit before
+    // the derived class (which may own the dc it's blitting
+    // to) is destroyed.
     void UnMask();
 };
 
@@ -583,7 +606,14 @@ public:
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
-    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer = wxNullBitmap );
+
+    %nokwargs wxBufferedPaintDC;
+    
+    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer );
+
+    // this ctor creates a bitmap of the size of the window for buffering
+    wxBufferedPaintDC(wxWindow *window, int flags = wxBUFFER_DC_DEFAULT);
+
 };
 
 
