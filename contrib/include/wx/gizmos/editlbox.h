@@ -54,7 +54,6 @@ protected:
     wxBitmapButton *m_bDel, *m_bNew, *m_bUp, *m_bDown, *m_bEdit;
     wxListCtrl *m_listCtrl;
     int m_selection;
-    bool m_edittingNew;
     long m_style;
 
     void OnItemSelected(wxListEvent& event);

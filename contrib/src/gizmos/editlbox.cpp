@@ -56,7 +56,11 @@ public:
     void SizeColumns()
     {
          int w = GetSize().x;
+#ifdef __WXMSW__
          w -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X) + 6;
+#else
+         w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+#endif
          SetColumnWidth(0, w);
     }
 
@@ -72,7 +76,6 @@ private:
 BEGIN_EVENT_TABLE(CleverListCtrl, wxListCtrl)
    EVT_SIZE(CleverListCtrl::OnSize)
 END_EVENT_TABLE()
-
 
 #include "eldel.xpm"
 #include "eldown.xpm"
@@ -109,7 +112,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
                           const wxPoint& pos, const wxSize& size,
                           long style,
                           const wxString& name)
-   : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
+   : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name)
 {
     m_style = style;
     m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;    
@@ -218,17 +221,18 @@ void wxEditableListBox::OnNewItem(wxCommandEvent& event)
 {
     m_listCtrl->SetItemState(m_listCtrl->GetItemCount()-1,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
-    m_edittingNew = TRUE;
     m_listCtrl->EditLabel(m_selection);
 }
 
 void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
 {
-    if (m_edittingNew)
+    if ( event.GetIndex() == m_listCtrl->GetItemCount()-1 && 
+         !event.GetText().IsEmpty() )
     {
-        m_edittingNew = FALSE;
-        if (!event.GetText().IsEmpty())
-            m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T(""));
+        // The user edited last (empty) line, i.e. added new entry. We have to
+        // add new empty line here so that adding one more line is still
+        // possible:
+        m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T(""));
     }
 }
 
