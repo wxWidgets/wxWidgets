@@ -13,6 +13,7 @@
 #include "wx/log.h"
 
 #import <Appkit/NSView.h>
+#import <AppKit/NSEvent.h>
 
 // normally the base classes aren't included, but wxWindow is special
 #ifdef __WXUNIVERSAL__
@@ -125,6 +126,99 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
+{
+    NSView *nsview = m_dummyNSView?m_dummyNSView:m_cocoaNSView;
+    wxASSERT_MSG([nsview window]==[cocoaEvent window],"Mouse event for different NSWindow");
+    NSPoint cocoaPoint = [nsview convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
+    NSRect cocoaRect = [nsview frame];
+    const wxPoint &clientorigin = GetClientAreaOrigin();
+    event.m_x = (wxCoord)cocoaPoint.x - clientorigin.x;
+    event.m_y = (wxCoord)(cocoaRect.size.height - cocoaPoint.y) - clientorigin.y;
+
+    event.m_shiftDown = [cocoaEvent modifierFlags] & NSShiftKeyMask;
+    event.m_controlDown = [cocoaEvent modifierFlags] & NSControlKeyMask;
+    event.m_altDown = [cocoaEvent modifierFlags] & NSAlternateKeyMask;
+    event.m_metaDown = [cocoaEvent modifierFlags] & NSCommandKeyMask;
+
+    // TODO: set timestamp?
+    event.SetEventObject(this);
+    event.SetId(GetId());
+}
+
+bool wxWindowCocoa::Cocoa_mouseMoved(WX_NSEvent theEvent)
+{
+    wxMouseEvent event(wxEVT_MOTION);
+    InitMouseEvent(event,theEvent);
+    wxLogDebug("Mouse Drag @%d,%d",event.m_x,event.m_y);
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowCocoa::Cocoa_mouseEntered(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_mouseExited(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_mouseDown(WX_NSEvent theEvent)
+{
+    wxMouseEvent event([theEvent clickCount]<2?wxEVT_LEFT_DOWN:wxEVT_LEFT_DCLICK);
+    InitMouseEvent(event,theEvent);
+    wxLogDebug("Mouse Down @%d,%d num clicks=%d",event.m_x,event.m_y,[theEvent clickCount]);
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowCocoa::Cocoa_mouseDragged(WX_NSEvent theEvent)
+{
+    wxMouseEvent event(wxEVT_MOTION);
+    InitMouseEvent(event,theEvent);
+    event.m_leftDown = true;
+    wxLogDebug("Mouse Drag @%d,%d",event.m_x,event.m_y);
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
+{
+    wxMouseEvent event(wxEVT_LEFT_UP);
+    InitMouseEvent(event,theEvent);
+    wxLogDebug("Mouse Up @%d,%d",event.m_x,event.m_y);
+    return GetEventHandler()->ProcessEvent(event);
+}
+
+bool wxWindowCocoa::Cocoa_rightMouseDown(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_rightMouseDragged(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_rightMouseUp(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_otherMouseDown(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_otherMouseDragged(WX_NSEvent theEvent)
+{
+    return false;
+}
+
+bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
+{
+    return false;
+}
+
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
     wxLogDebug("Cocoa_FrameChanged");
@@ -155,8 +249,10 @@ bool wxWindow::Show(bool show)
         [m_cocoaNSView retain];
         [[m_dummyNSView superview] replaceSubview:m_dummyNSView with:m_cocoaNSView];
         // But since we also retained it ourselves
+        wxASSERT(![m_dummyNSView superview]);
         [m_dummyNSView release];
         m_dummyNSView = nil;
+        wxASSERT([m_cocoaNSView superview]);
     }
     else
     {
@@ -165,6 +261,8 @@ bool wxWindow::Show(bool show)
         // NOTE: replaceSubView will cause m_cocaNSView to be released
         [[m_cocoaNSView superview] replaceSubview:m_cocoaNSView with:m_dummyNSView];
         // m_coocaNSView is now only retained by us
+        wxASSERT([m_dummyNSView superview]);
+        wxASSERT(![m_cocoaNSView superview]);
     }
     m_isShown = show;
     return true;

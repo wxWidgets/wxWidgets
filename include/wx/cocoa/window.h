@@ -54,8 +54,21 @@ public:
     void CocoaAddChild(wxWindowCocoa *child);
     void CocoaRemoveFromParent(void);
 protected:
+    void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
     virtual void Cocoa_FrameChanged(void);
     virtual bool Cocoa_drawRect(const NSRect &rect);
+    virtual bool Cocoa_mouseDown(WX_NSEvent theEvent);
+    virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent);
+    virtual bool Cocoa_mouseUp(WX_NSEvent theEvent);
+    virtual bool Cocoa_mouseMoved(WX_NSEvent theEvent);
+    virtual bool Cocoa_mouseEntered(WX_NSEvent theEvent);
+    virtual bool Cocoa_mouseExited(WX_NSEvent theEvent);
+    virtual bool Cocoa_rightMouseDown(WX_NSEvent theEvent);
+    virtual bool Cocoa_rightMouseDragged(WX_NSEvent theEvent);
+    virtual bool Cocoa_rightMouseUp(WX_NSEvent theEvent);
+    virtual bool Cocoa_otherMouseDown(WX_NSEvent theEvent);
+    virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent);
+    virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent);
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     WX_NSView m_dummyNSView;
