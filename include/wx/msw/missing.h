@@ -520,14 +520,9 @@ typedef struct {
 
 #ifdef __DMC__
 
-  typedef struct tagTRACKMOUSEEVENT {
-      DWORD cbSize;
-      DWORD dwFlags;
-      HWND  hwndTrack;
-      DWORD dwHoverTime;
-  } TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
-
-  WINCOMMCTRLAPI BOOL WINAPI _TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+    #ifndef _TrackMouseEvent
+        #define _TrackMouseEvent TrackMouseEvent
+    #endif
 
 #endif
 

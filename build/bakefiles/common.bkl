@@ -261,6 +261,11 @@
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
     </set>
 
+    <!-- fill for the specific case of the format/compiler -->
+    <set var="WIN32_WINNT">
+        <if cond="FORMAT=='dmars' or FORMAT=='dmars_smake'">_WIN32_WINNT=0x0400</if>
+    </set>
+
     <set var="UNICOWS_LIB">
         <if cond="MSLU=='1'">unicows</if>
     </set>
@@ -277,6 +282,7 @@
             <cppflags>$(EXTRACFLAGS)</cppflags>
         </if>
         <define>$(NO_VC_CRTDBG)</define>
+        <define>$(WIN32_WINNT)</define>
     </template>
 
     <template id="anylib">
