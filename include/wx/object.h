@@ -183,7 +183,7 @@ inline void wxClassInfo::CleanUpClasses() {}
     // Single inheritance with one base class
 
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename)                 \
- wxObject* name::wxCreateObject()                             \
+ wxObject* name::wxCreateObject()                               \
   { return new name; }                                          \
  wxClassInfo name::ms_classInfo(wxT(#name),                     \
             &basename::ms_classInfo, NULL,                      \
@@ -193,12 +193,12 @@ inline void wxClassInfo::CleanUpClasses() {}
     // Multiple inheritance with two base classes
 
 #define IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2)    \
- wxObject* name::wxCreateObject()                             \
+ wxObject* name::wxCreateObject()                               \
   { return new name; }                                          \
  wxClassInfo name::ms_classInfo(wxT(#name),                     \
             &basename1::ms_classInfo,                           \
             &basename2::ms_classInfo,                           \
-            wxT(#basename2), (int) sizeof(name),                \
+            (int) sizeof(name),                                 \
             (wxObjectConstructorFn) name::wxCreateObject);
 
 // -----------------------------------

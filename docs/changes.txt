@@ -154,6 +154,7 @@ All (GUI):
 - added wxTopLevelWindow::IsActive()
 - wxSystemSettings::GetMetric now returns -1 for metrics that are not
   supported, instead of zero.
+- IMPLEMENT_DYNAMIC_CLASS2 macro compilation fixed (Serge Bakkal)
 
 Unix:
 
