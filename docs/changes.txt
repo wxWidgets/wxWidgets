@@ -5,6 +5,8 @@ wxWindows 2.5/2.6 Change Log
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
 
+- wxFileType::GetIcon() returns wxIconLocation, not wxIcon
+
 
 DEPRECATED METHOD SINCE 2.4.x
 =============================
@@ -92,6 +94,7 @@ Unix:
 - fixed compilation on systems with zlib installed but < 1.1.3 version
 - fixed compilation on Solaris 7 with large files support enabled
 - added wxTaskBarIcon implementation for X11
+- added support for GNU/Hurd in configure
 
 wxGTK:
 
@@ -117,7 +120,7 @@ wxMSW:
 - support for accelerator keys in the owner drawn menus (Derry Bryson)
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
 - wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
-- fixed bug with wxTR_EDIT_LABELS not workign with wxTR_MULTIPLE
+- fixed bug with wxTR_EDIT_LABELS not working with wxTR_MULTIPLE
 - fixes for compilation with OpenWatcom compiler
 - fixed wxStaticText best size calculation (was wrong by '&' width)
 - fixed calling wxFrame::Maximize(FALSE) before the window is shown

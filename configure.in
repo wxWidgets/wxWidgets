@@ -73,20 +73,21 @@ USE_MAC=0
 
 dnl Unix kind
 USE_AIX=
-USE_BSD=
-USE_DARWIN=
+USE_BSD=                            dnl any BSD
+USE_DARWIN=                         dnl a.k.a. Mac OS X
 USE_FREEBSD=
+USE_GNU=                            dnl GNU/Hurd
 USE_HPUX=
 USE_LINUX=
 USE_NETBSD=
 USE_OPENBSD=
-USE_OSF=
+USE_OSF=                            dnl OSF/1 (obsolete?)
 USE_SGI=
-USE_SOLARIS=
-USE_SUN=
-USE_SUNOS=
-USE_SVR4=
-USE_SYSV=
+USE_SOLARIS=                        dnl Solaris ("SunOS" >= 5)
+USE_SUN=                            dnl SunOS or Solaris
+USE_SUNOS=                          dnl old/real SunOS (obsolete)
+USE_SVR4=                           dnl SysV R4
+USE_SYSV=                           dnl any System V
 USE_VMS=
 USE_ULTRIX=
 USE_UNIXWARE=
@@ -147,6 +148,16 @@ case "${host}" in
   *-*-linux* )
     USE_LINUX=1
     AC_DEFINE(__LINUX__)
+    TMP=`uname -m`
+    if test "x$TMP" = "xalpha"; then
+      USE_ALPHA=1
+      AC_DEFINE(__ALPHA__)
+    fi
+    DEFAULT_DEFAULT_wxUSE_GTK=1
+  ;;
+  *-*-gnu* )
+    USE_GNU=1
+    AC_DEFINE(__GNU__)
     TMP=`uname -m`
     if test "x$TMP" = "xalpha"; then
       USE_ALPHA=1
@@ -1675,7 +1686,7 @@ dnl check for glibc version
 dnl
 dnl VZ: I have no idea why had this check been there originally, but now
 dnl     we could probably do without it by just always adding _GNU_SOURCE
-if test "$USE_LINUX" = 1; then
+if test "$USE_LINUX" = 1 -o "$USE_GNU" = 1; then
     AC_CACHE_CHECK([for glibc 2.1 or later], wx_cv_lib_glibc21,[
         AC_TRY_COMPILE([#include <features.h>],
             [
@@ -2415,7 +2426,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         if test "$wxUSE_NANOX" = "yes"; then
             TOOLKIT_INCLUDE="-I\$(top_srcdir)/include/wx/x11/nanox -I\$(MICROWIN)/src/include $TOOLKIT_INCLUDE"
-            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DLINUX=1 -DUNIX=1 -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
+            TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__NANOX__ -DMWPIXEL_FORMAT=MWPF_TRUECOLOR0888 -DHAVE_FILEIO -DHAVE_BMP_SUPPORT=1 -DHAVE_GIF_SUPPORT=1 -DHAVE_PNM_SUPPORT=1 -DHAVE_XPM_SUPPORT=1 -DUNIX=1 -DUSE_EXPOSURE -DSCREEN_HEIGHT=480 -DSCREEN_WIDTH=640 -DSCREEN_DEPTH=4 -DX11=1"
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY \$(MICROWIN)/src/lib/libnano-X.a"
         else
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lX11$xpm_link"
@@ -3027,7 +3038,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
 
-      *-*-linux* )
+      *-*-linux* | *-*-gnu* )
         if test "$GCC" != "yes"; then
             AC_CACHE_CHECK([for Intel compiler], wx_cv_prog_icc,
             [
