@@ -606,6 +606,13 @@ long wxExecute(wxChar **argv,
 
         // there is no return after successful exec()
         _exit(-1);
+
+        // some compilers complain about missing return - of course, they
+        // should know that exit() doesn't return but what else can we do if
+        // they don't?
+#if defined(__VMS) || defined(__INTEL_COMPILER)
+        return 0;
+#endif
     }
     else // we're in parent
     {
@@ -681,13 +688,6 @@ long wxExecute(wxChar **argv,
         return exitcode;
 #endif // wxUSE_GUI
     }
-#ifdef __VMS
-   // VMS does not recognise exit as a return and complains about
-   // a missing return
-   // I think VMS is wrong in this
-   //     JJ
-   return 0;
-#endif
 }
 
 #undef ERROR_RETURN_CODE

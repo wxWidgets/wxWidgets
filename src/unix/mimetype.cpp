@@ -119,7 +119,6 @@ public:
 
     wxString GetVerb (size_t i)
     {
-        if (i < 0) return wxEmptyString;
         if (i > GetCount() ) return wxEmptyString;
         wxString sTmp = Item(i).BeforeFirst(wxT('='));
         return sTmp;
@@ -127,7 +126,6 @@ public:
 
     wxString GetCmd (size_t i)
     {
-        if (i < 0) return wxEmptyString;
         if (i > GetCount() ) return wxEmptyString;
         wxString sTmp = Item(i).AfterFirst(wxT('='));
         return sTmp;
@@ -197,7 +195,6 @@ public:
 
     wxString GetVerb (size_t i)
     {
-        if (i < 0) return wxEmptyString;
         if (i > GetLineCount() ) return wxEmptyString;
         wxString sTmp = GetLine(i).BeforeFirst(wxT('='));
         return sTmp;
@@ -205,7 +202,6 @@ public:
 
     wxString GetCmd (size_t i)
     {
-        if (i < 0) return wxEmptyString;
         if (i > GetLineCount() ) return wxEmptyString;
         wxString sTmp = GetLine(i).AfterFirst(wxT('='));
         return sTmp;
