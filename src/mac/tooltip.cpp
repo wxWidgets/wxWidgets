@@ -240,12 +240,15 @@ void wxMacToolTip::Draw()
 		LocalToGlobal( (Point *) &tag.absHotRect.bottom );
 		SetPort( port );
 		if( m_helpTextRef )
-			CFRelease( m_helpTextRef )
+		{
+			CFRelease( m_helpTextRef ) ;
+			m_helpTextRef = NULL ;
+		}
 		m_helpTextRef = wxMacCreateCFString(m_label) ;
 		tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
-		tag.content[kHMMinimumContentIndex].u.tagCFString = text ;
+		tag.content[kHMMinimumContentIndex].u.tagCFString = m_helpTextRef ;
 		tag.content[kHMMaximumContentIndex].contentType = kHMCFStringContent ;
-		tag.content[kHMMaximumContentIndex].u.tagCFString = text ;
+		tag.content[kHMMaximumContentIndex].u.tagCFString = m_helpTextRef ;
 		tag.tagSide = kHMDefaultSide;
 		HMDisplayTag( &tag );
 	  }
@@ -452,7 +455,10 @@ void wxMacToolTip::Clear()
 #if TARGET_CARBON
 	HMHideTag() ;
 	if( m_helpTextRef )
-		CFRelease( m_helpTextRef )
+	{
+		CFRelease( m_helpTextRef ) ;
+		m_helpTextRef = NULL ;
+	}
 #else		 
 	if ( m_window == s_ToolTipWindowRef && m_backpict )
 	{
