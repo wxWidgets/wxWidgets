@@ -365,18 +365,18 @@ wxString wxExpandEnvVars(const wxString& str)
 }
 
 // this function is used to properly interpret '..' in path
-void wxSplitPath(wxArrayString& aParts, const char *sz)
+void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
 {
   aParts.Empty();
 
   wxString strCurrent;
-  const char *pc = sz;
+  const wxChar *pc = sz;
   for ( ;; ) {
-    if ( *pc == '\0' || *pc == wxCONFIG_PATH_SEPARATOR ) {
-      if ( strCurrent == "." ) {
+    if ( *pc == _T('\0') || *pc == wxCONFIG_PATH_SEPARATOR ) {
+      if ( strCurrent == _T(".") ) {
         // ignore
       }
-      else if ( strCurrent == ".." ) {
+      else if ( strCurrent == _T("..") ) {
         // go up one level
         if ( aParts.IsEmpty() )
           wxLogWarning(_("'%s' has extra '..', ignored."), sz);
@@ -392,7 +392,7 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
       //else:
         // could log an error here, but we prefer to ignore extra '/'
 
-      if ( *pc == '\0' )
+      if ( *pc == _T('\0') )
         return;
     }
     else
