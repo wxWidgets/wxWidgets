@@ -179,6 +179,7 @@ All:
 - added missing wx/quantize.h to install
 - improved wxScrolledWindow/sizer interaction
 - fixed assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
+- fix for deleting entries at root level in wxFileConfig
 
 Unix (GUI):
 
