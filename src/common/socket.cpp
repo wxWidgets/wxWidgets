@@ -1,13 +1,16 @@
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:       socket.cpp
 // Purpose:    Socket handler classes
-// Authors:    Guilhem Lavaux
+// Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Created:    April 1997
 // Updated:    July 1999
 // Copyright:  (C) 1999, 1998, 1997, Guilhem Lavaux
 // RCS_ID:     $Id$
 // License:    see wxWindows license
-////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+#include <windows.h>
+
 #ifdef __GNUG__
 #pragma implementation "socket.h"
 #endif
@@ -24,13 +27,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxWindows headers
 /////////////////////////////////////////////////////////////////////////////
-#include <wx/defs.h>
-#include <wx/object.h>
-#include <wx/string.h>
-#include <wx/timer.h>
-#include <wx/utils.h>
-#include <wx/module.h>
-#include <wx/log.h>
+#include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/string.h"
+#include "wx/timer.h"
+#include "wx/utils.h"
+#include "wx/module.h"
+#include "wx/log.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -39,8 +42,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
-#include <wx/sckaddr.h>
-#include <wx/socket.h>
+#include "wx/sckaddr.h"
+#include "wx/socket.h"
 
 // --------------------------------------------------------------
 // ClassInfos
@@ -52,7 +55,8 @@ IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 #endif
 
-class wxSocketState : public wxObject {
+class wxSocketState : public wxObject
+{
 public:
   bool notify_state;
   GSocketEventFlags evt_notify_state;
@@ -65,13 +69,14 @@ public:
 };
 
 // --------------------------------------------------------------
-// --------- wxSocketBase CONSTRUCTOR ---------------------------
+// wxSocketBase ctor and dtor
 // --------------------------------------------------------------
+
 wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
          wxSocketBase::wxSockType _type) :
   wxEvtHandler(),
   m_socket(NULL), m_flags(_flags), m_type(_type),
-  m_neededreq(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG),
+  m_neededreq(0),
   m_lcount(0), m_timeout(600),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL),
@@ -84,8 +89,8 @@ wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
 
 wxSocketBase::wxSocketBase() :
   wxEvtHandler(),
-  m_socket(NULL), m_flags(SPEED | WAITALL), m_type(SOCK_UNINIT),
-  m_neededreq(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG),
+  m_socket(NULL), m_flags(WAITALL | SPEED), m_type(SOCK_UNINIT),
+  m_neededreq(0),
   m_lcount(0), m_timeout(600),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
   m_cbk(NULL), m_cdata(NULL),
@@ -96,18 +101,15 @@ wxSocketBase::wxSocketBase() :
 {
 }
 
-// --------------------------------------------------------------
-// wxSocketBase destructor
-// --------------------------------------------------------------
-
 wxSocketBase::~wxSocketBase()
 {
   if (m_unread)
     free(m_unread);
 
-  // At last, close the file descriptor.
+  // Shutdown and close the socket
   Close();
 
+  // Destroy the GSocket object
   if (m_socket)
     GSocket_destroy(m_socket);
 }
@@ -116,10 +118,11 @@ bool wxSocketBase::Close()
 {
   if (m_socket)
   {
-    if (m_notify_state == TRUE)
-      Notify(FALSE);
+    // Disable callbacks
+    GSocket_UnsetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                    GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG);
 
-    // Shutdown the connection.
+    // Shutdown the connection
     GSocket_Shutdown(m_socket);
     m_connected = FALSE;
     m_establishing = FALSE;
@@ -129,23 +132,31 @@ bool wxSocketBase::Close()
 }
 
 // --------------------------------------------------------------
-// wxSocketBase base IO function
+// wxSocketBase basic IO operations
 // --------------------------------------------------------------
-class _wxSocketInternalTimer: public wxTimer {
- public:
+
+// GRG: I have made some changes to wxSocket internal event
+// system; now, all events (INPUT, OUTPUT, CONNECTION, LOST)
+// are always internally monitored; but users will only be
+// notified of these events they are interested in. So we
+// no longer have to change the event mask with SetNotify()
+// in internal functions like DeferRead, DeferWrite, and
+// the like. This solves a lot of problems.
+
+class _wxSocketInternalTimer: public wxTimer
+{
+public:
   int *m_state;
   unsigned long m_new_val;
 
   void Notify()
-     {
-        *m_state = m_new_val;  // Change the value
-     }
+  {
+    *m_state = m_new_val;  // Change the value
+  }
 };
 
 int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
 {
-  wxSocketEventFlags old_event_flags;
-  bool old_notify_state;
   // Timer for timeout
   _wxSocketInternalTimer timer;
 
@@ -153,14 +164,6 @@ int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
 
   // Set the defering mode to READ.
   m_defering = DEFER_READ;
-
-  // Save the old state.
-  old_event_flags = NeededReq();
-  old_notify_state = m_notify_state;
-
-  // Set the new async flag.
-  SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
-  Notify(TRUE);
 
   // Set the current buffer.
   m_defer_buffer = buffer;
@@ -172,15 +175,15 @@ int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
 
   timer.Start(m_timeout * 1000, FALSE);
 
+  // If the socket is readable, call DoDefer for the first time
+  if (GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
+    DoDefer();
+
   // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
     wxYield();
 
   timer.Stop();
-
-  // Restore the old state.
-  Notify(old_notify_state);
-  SetNotify(old_event_flags);
 
   // Disable defering mode.
   m_defering = NO_DEFER;
@@ -201,31 +204,34 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
   if (!m_connected)
     return *this;
 
-  // If we have got the whole needed buffer or if we don't want to
-  // wait then it returns immediately.
-  if (!nbytes || (m_lcount && !(m_flags & WAITALL)) ) {
+  // If we have got the whole needed buffer, return immediately
+  if (!nbytes)
+  {
     return *this;
   }
 
-  if ((m_flags & SPEED) != 0) {
-
-    if ((m_flags & WAITALL) != 0) {
-      while (ret > 0 && nbytes > 0) {
-        ret = GSocket_Read(m_socket, buffer, nbytes);
-        m_lcount += ret;
-        buffer += ret;
-        nbytes -= ret;
-      }
-    // In case the last call was an error ...
-      if (ret < 0)
-        m_lcount ++;
-    } else {
+  if (m_flags & SPEED & WAITALL)    // SPEED && WAITALL
+  {
+    while (ret > 0 && nbytes > 0)
+    {
       ret = GSocket_Read(m_socket, buffer, nbytes);
-      if (ret > 0)
-        m_lcount += ret;
+      m_lcount += ret;
+      buffer += ret;
+      nbytes -= ret;
     }
+    // In case the last call was an error ...
+    if (ret < 0)
+      m_lcount ++;
+  }
+  else if (m_flags & SPEED)         // SPEED && !WAITALL
+  {
+    ret = GSocket_Read(m_socket, buffer, nbytes);
 
-  } else {
+    if (ret > 0)
+      m_lcount += ret;
+  }
+  else                              // !SPEED
+  {
     ret = DeferRead(buffer, nbytes);
 
     if (ret > 0)
@@ -303,8 +309,6 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
 
 int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
 {
-  wxSocketEventFlags old_event_flags;
-  bool old_notify_state;
   // Timer for timeout
   _wxSocketInternalTimer timer;
 
@@ -312,34 +316,28 @@ int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
 
   m_defering = DEFER_WRITE;
 
-  // Save the old state
-  old_event_flags = NeededReq();
-  old_notify_state = m_notify_state;
-
-  SetNotify(GSOCK_OUTPUT_FLAG | GSOCK_LOST_FLAG);
-  Notify(TRUE);
-
   // Set the current buffer
   m_defer_buffer = (char *)buffer;
   m_defer_nbytes = nbytes;
+  m_defer_timer  = &timer;
 
   // Start timer
   timer.m_state   = (int *)&m_defer_buffer;
   timer.m_new_val = 0;
 
-  m_defer_timer   = &timer;
   timer.Start(m_timeout * 1000, FALSE);
 
+  // If the socket is writable, call DoDefer for the first time
+  if (GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
+    DoDefer();
+
+  // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
     wxYield();
 
   // Stop timer
   m_defer_timer = NULL;
   timer.Stop();
-
-  // Restore the old state
-  Notify(old_notify_state);
-  SetNotify(old_event_flags);
 
   m_defering = NO_DEFER;
 
@@ -348,15 +346,40 @@ int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
 {
-  int ret;
+  int ret = 1;
 
-  if ((m_flags & SPEED) != 0)
+  m_lcount = 0;
+
+  if (!m_connected)
+    return *this;
+
+  if (m_flags & SPEED & WAITALL)    // SPEED && WAITALL
+  {
+    while (ret > 0 && nbytes > 0)
+    {
+      ret = GSocket_Write(m_socket, buffer, nbytes);
+      m_lcount += ret;
+      buffer += ret;
+      nbytes -= ret;
+    }
+    // In case the last call was an error ...
+    if (ret < 0)
+      m_lcount ++;
+  }
+  else if (m_flags & SPEED)         // SPEED && !WAITALL
+  {
     ret = GSocket_Write(m_socket, buffer, nbytes);
-  else
+
+    if (ret > 0)
+      m_lcount += ret;
+  }
+  else                              // !SPEED
+  {
     ret = DeferWrite(buffer, nbytes);
 
-  if (ret != -1)
-    m_lcount += ret;
+    if (ret > 0)
+      m_lcount += ret;
+  }
 
   return *this;
 }
@@ -405,7 +428,8 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
 wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
 {
   m_lcount = 0;
-  if (nbytes != 0) {
+  if (nbytes != 0)
+  {
     CreatePushbackAfter(buffer, nbytes);
     m_lcount = nbytes;
   }
@@ -417,52 +441,53 @@ bool wxSocketBase::IsData() const
   if (!m_socket)
     return FALSE;
 
-  return (GSocket_DataAvailable(m_socket));
+  return (GSocket_Select(m_socket, GSOCK_INPUT_FLAG));
 }
 
-void wxSocketBase::DoDefer(wxSocketNotify req_evt)
+// GRG: DoDefer() no longer needs to know which event occured,
+// because this was only used to catch LOST events and set
+// m_defer_buffer = NULL; this is done in OnRequest() now.
+
+void wxSocketBase::DoDefer()
 {
   int ret;
 
-  if (req_evt == wxSOCKET_LOST) {
-    Close();
-    m_defer_buffer = NULL;
+  if (!m_defer_buffer)
     return;
+
+  switch (m_defering)
+  {
+    case DEFER_READ:
+      ret = GSocket_Read(m_socket, m_defer_buffer, m_defer_nbytes);
+      break;
+    case DEFER_WRITE:
+      ret = GSocket_Write(m_socket, m_defer_buffer, m_defer_nbytes);
+      break;
+    default:
+      ret = -1;
+      break;
   }
-  switch (m_defering) {
-  case DEFER_READ:
-    ret = GSocket_Read(m_socket, m_defer_buffer, m_defer_nbytes);
-    break;
-  case DEFER_WRITE:
-    ret = GSocket_Write(m_socket, m_defer_buffer, m_defer_nbytes);
-    break;
-  default:
-    ret = -1;
-    break;
-  }
 
-  m_defer_nbytes -= ret;
+  if (ret >= 0)
+    m_defer_nbytes -= ret;
 
-  if (ret < 0)
-    m_defer_nbytes++;
-
-  // If we are waiting for all bytes to be acquired, keep the defering modei
-  // enabled.
-  if ((m_flags & WAITALL) == 0 || m_defer_nbytes == 0 || ret < 0) {
+  // If we are waiting for all bytes to be acquired, keep the defering
+  // mode enabled.
+  if ((m_flags & WAITALL) == 0 || m_defer_nbytes == 0 || ret < 0)
+  {
     m_defer_buffer = NULL;
-    Notify(FALSE);
-  } else {
+  }
+  else
+  {
     m_defer_buffer += ret;
     m_defer_timer->Start(m_timeout * 1000, FALSE);
   }
 }
 
-// ---------------------------------------------------------------------
-// --------- wxSocketBase Discard(): deletes all byte in the input queue
-// ---------------------------------------------------------------------
 void wxSocketBase::Discard()
 {
 #define MAX_BUFSIZE (10*1024)
+
   char *my_data = new char[MAX_BUFSIZE];
   wxUint32 recv_size = MAX_BUFSIZE;
 
@@ -481,7 +506,7 @@ void wxSocketBase::Discard()
 }
 
 // --------------------------------------------------------------
-// wxSocketBase socket info functions
+// wxSocketBase get local or peer addresses
 // --------------------------------------------------------------
 
 bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
@@ -513,7 +538,7 @@ bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
 }
 
 // --------------------------------------------------------------
-// wxSocketBase wait functions
+// wxSocketBase save and restore socket state
 // --------------------------------------------------------------
 
 void wxSocketBase::SaveState()
@@ -552,75 +577,52 @@ void wxSocketBase::RestoreState()
   delete state;
 }
 
-// --------------------------------------------------------------
-// --------- wxSocketBase callback functions --------------------
-// --------------------------------------------------------------
-
-wxSocketBase::wxSockCbk wxSocketBase::Callback(wxSockCbk cbk_)
-{
-  wxSockCbk old_cbk = cbk_;
-
-  m_cbk = cbk_;
-  return old_cbk;
-}
-
-char *wxSocketBase::CallbackData(char *data)
-{
-  char *old_data = m_cdata;
-
-  m_cdata = data;
-  return old_data;
-}
 
 // --------------------------------------------------------------
-// --------- wxSocketBase wait functions ------------------------
+// wxSocketBase Wait functions
 // --------------------------------------------------------------
 
-static void wx_socket_wait(GSocket *socket, GSocketEvent event, char *cdata)
-{
-  int *state = (int *)cdata;
+// GRG: I have completely rewritten this family of functions
+// so that they don't depend on event notifications; instead,
+// they poll the socket, using GSocket_Select(), to check for
+// the specified combination of event flags, until an event
+// occurs or until the timeout ellapses. The polling loop
+// calls wxYield(), so this won't block the GUI.
 
-  *state = event;
-}
-
-bool wxSocketBase::_Wait(long seconds, long milliseconds, int type)
+bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
-  bool old_notify_state = m_notify_state;
-  int state = -1;
+  GSocketEventFlags result;
   _wxSocketInternalTimer timer;
+  long timeout;
+  int state = -1;
 
+  // Check for valid socket
   if ((!m_connected && !m_establishing) || !m_socket)
     return FALSE;
 
-  // Set the variable to change
+  // Check for valid timeout value
+  if (seconds != -1)
+    timeout = seconds * 1000 + milliseconds;
+  else
+    timeout = m_timeout * 1000;
+
+  // Activate timer
   timer.m_state = &state;
-  timer.m_new_val = GSOCK_MAX_EVENT;
+  timer.m_new_val = 0;
+  timer.Start(timeout, TRUE);
 
-  // Disable the previous handler
-  Notify(FALSE);
+  // Active polling (without using events)
+  result = GSocket_Select(m_socket, flags);
 
-  // Set the timeout
-  timer.Start(seconds * 1000 + milliseconds, TRUE);
-  GSocket_SetCallback(m_socket, type, wx_socket_wait, (char *)&state);
-
-  while (state == -1)
+  while ((result == 0) && (state == -1))
+  {
     wxYield();
+    result = GSocket_Select(m_socket, flags);
+  }
 
-  GSocket_UnsetCallback(m_socket, type);
   timer.Stop();
 
-  // Notify will restore automatically the old GSocket flags
-  Notify(old_notify_state);
-
-  // GRG: If a LOST event occured, we set m_establishing to
-  // FALSE here (this is a quick hack to make WaitOnConnect
-  // work; it will be removed when this function is modified
-  // so that it tells the caller which event occured).
-  //
-  if (state == GSOCK_LOST)
-    m_establishing = FALSE;
-
-  return (state != GSOCK_MAX_EVENT);
+  return (result != 0);
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
@@ -647,24 +649,8 @@ bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 }
 
 // --------------------------------------------------------------
-// --------- wxSocketBase callback management -------------------
+// wxSocketBase flags
 // --------------------------------------------------------------
-
-wxSocketEventFlags wxSocketBase::EventToNotify(wxSocketNotify evt)
-{
-  switch (evt)
-  {
-    case GSOCK_INPUT:
-      return GSOCK_INPUT_FLAG;
-    case GSOCK_OUTPUT:
-      return GSOCK_OUTPUT_FLAG;
-    case GSOCK_CONNECTION:
-      return GSOCK_CONNECTION_FLAG;
-    case GSOCK_LOST:
-      return GSOCK_LOST_FLAG;
-  }
-  return 0;
-}
 
 void wxSocketBase::SetFlags(wxSockFlags _flags)
 {
@@ -676,23 +662,28 @@ wxSocketBase::wxSockFlags wxSocketBase::GetFlags() const
   return m_flags;
 }
 
-void wxSocketBase::SetNotify(wxSocketEventFlags flags)
-{
-  // GRG: A client can also have connection events!
-/*
-  if (m_type != SOCK_SERVER)
-    flags &= ~GSOCK_CONNECTION_FLAG;
-*/
+// --------------------------------------------------------------
+// wxSocketBase callback management
+// --------------------------------------------------------------
 
-  m_neededreq = flags;
-  if (m_neededreq == 0)
-    Notify(FALSE);
-  else
-    Notify(m_notify_state);
+wxSocketBase::wxSockCbk wxSocketBase::Callback(wxSockCbk cbk_)
+{
+  wxSockCbk old_cbk = cbk_;
+
+  m_cbk = cbk_;
+  return old_cbk;
+}
+
+char *wxSocketBase::CallbackData(char *data)
+{
+  char *old_data = m_cdata;
+
+  m_cdata = data;
+  return old_data;
 }
 
 // --------------------------------------------------------------
-// Automatic notifier
+// wxSocketBase automatic notifier
 // --------------------------------------------------------------
 
 static void wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
@@ -702,24 +693,32 @@ static void wx_socket_callback(GSocket *socket, GSocketEvent event, char *cdata)
   sckobj->OnRequest((wxSocketNotify)event);
 }
 
+wxSocketEventFlags wxSocketBase::EventToNotify(wxSocketNotify evt)
+{
+  switch (evt)
+  {
+    case GSOCK_INPUT:      return GSOCK_INPUT_FLAG;
+    case GSOCK_OUTPUT:     return GSOCK_OUTPUT_FLAG;
+    case GSOCK_CONNECTION: return GSOCK_CONNECTION_FLAG;
+    case GSOCK_LOST:       return GSOCK_LOST_FLAG;
+  }
+  return 0;
+}
+
+void wxSocketBase::SetNotify(wxSocketEventFlags flags)
+{
+  m_neededreq = flags;
+}
+
 void wxSocketBase::Notify(bool notify)
 {
   m_notify_state = notify;
-  if (!m_socket)
-    return;
-
-  GSocket_UnsetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
-                                  GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG);
-  if (!notify)
-    return;
-
-  GSocket_SetCallback(m_socket, m_neededreq, wx_socket_callback, (char *)this);
 }
 
 void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 {
   wxSocketEvent event(m_id);
-  wxSocketEventFlags notify = EventToNotify(req_evt);
+  wxSocketEventFlags flag = EventToNotify(req_evt);
 
   switch(req_evt)
   {
@@ -728,25 +727,33 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
       m_connected = TRUE;
       break;
     case wxSOCKET_LOST:
+      m_defer_buffer = NULL;
       Close();
       break;
     case wxSOCKET_INPUT:
     case wxSOCKET_OUTPUT:
-      if (m_defering != NO_DEFER)
+      if (m_defer_buffer)
       {
-        DoDefer(req_evt);
+        // GRG: DoDefer() no longer needs to know which
+        // event occured, because this was only used to
+        // catch LOST events and set m_defer_buffer to
+        // NULL, and this is done in OnRequest() now.
+        DoDefer();
         // Do not notify to user
         return;
       }
       break;
   }
 
-  if ((m_neededreq & notify) == notify)
+  if (((m_neededreq & flag) == flag) && m_notify_state)
   {
     event.m_socket = this;
     event.m_skevt  = req_evt;
     ProcessEvent(event);
     OldOnNotify(req_evt);
+
+    if (m_cbk)
+      m_cbk(*this, req_evt, m_cdata);
   }
 }
 
@@ -755,7 +762,7 @@ void wxSocketBase::OldOnNotify(wxSocketNotify evt)
 }
 
 // --------------------------------------------------------------
-// --------- wxSocketBase functions [Callback, CallbackData] ----
+// wxSocketBase set event handler
 // --------------------------------------------------------------
 
 void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
@@ -765,7 +772,7 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
 }
 
 // --------------------------------------------------------------
-// --------- wxSocketBase pushback library ----------------------
+// wxSocketBase pushback library
 // --------------------------------------------------------------
 
 void wxSocketBase::CreatePushbackAfter(const char *buffer, wxUint32 size)
@@ -828,23 +835,34 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
 // wxSocketServer
 // --------------------------------------------------------------
 
+// --------------------------------------------------------------
+// wxSocketServer ctor and dtor
+// --------------------------------------------------------------
+
 wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
              wxSockFlags flags) :
   wxSocketBase(flags, SOCK_SERVER)
 {
+  // Create the socket
   m_socket = GSocket_new();
 
   if (!m_socket)
     return;
 
+  // Setup the socket as server
   GSocket_SetLocal(m_socket, addr_man.GetAddress());
-  if (GSocket_SetServer(m_socket) != GSOCK_NOERROR) {
+  if (GSocket_SetServer(m_socket) != GSOCK_NOERROR)
+  {
     GSocket_destroy(m_socket);
     m_socket = NULL;
     return;
   }
 
-  Notify(TRUE);
+  GSocket_SetTimeout(m_socket, m_timeout);
+  GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+                                wx_socket_callback, (char *)this);
+
 }
 
 // --------------------------------------------------------------
@@ -855,12 +873,9 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
   GSocket *child_socket;
 
-  // GRG: If wait == FALSE, then set the socket to
-  // nonblocking. I will set it back to blocking later,
-  // but I am not sure if this is really a good idea.
-  // IMO, all GSockets objects used in wxSocket should
-  // be non-blocking.
-  // --------------------------------
+  // GRG: If wait == FALSE, then the call should be nonblocking.
+  // When we are finished, we put the socket to blocking mode
+  // again.
 
   if (!wait)
     GSocket_SetNonBlocking(m_socket, TRUE);
@@ -877,6 +892,11 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   sock.m_type = SOCK_INTERNAL;
   sock.m_socket = child_socket;
   sock.m_connected = TRUE;
+
+  GSocket_SetTimeout(sock.m_socket, sock.m_timeout);
+  GSocket_SetCallback(sock.m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                     GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+                                     wx_socket_callback, (char *)&sock);
 
   return TRUE;
 }
@@ -895,8 +915,6 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
 
 bool wxSocketServer::WaitOnAccept(long seconds, long milliseconds)
 {
-  // TODO: return immediately if there is already a pending connection.
-
   return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 }
 
@@ -904,23 +922,21 @@ bool wxSocketServer::WaitOnAccept(long seconds, long milliseconds)
 // wxSocketClient
 // --------------------------------------------------------------
 
-// --------- wxSocketClient CONSTRUCTOR -------------------------
 // --------------------------------------------------------------
+// wxSocketClient ctor and dtor
+// --------------------------------------------------------------
+
 wxSocketClient::wxSocketClient(wxSockFlags _flags) :
   wxSocketBase(_flags, SOCK_CLIENT)
 {
-  m_establishing = FALSE;
 }
 
-// --------------------------------------------------------------
-// --------- wxSocketClient DESTRUCTOR --------------------------
-// --------------------------------------------------------------
 wxSocketClient::~wxSocketClient()
 {
 }
 
 // --------------------------------------------------------------
-// --------- wxSocketClient Connect functions -------------------
+// wxSocketClient Connect functions
 // --------------------------------------------------------------
 bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 {
@@ -933,8 +949,7 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (m_socket)
     GSocket_destroy(m_socket);
 
-  // Initializes all socket stuff ...
-  // --------------------------------
+  // Initialize all socket stuff ...
   m_socket = GSocket_new();
   m_connected = FALSE;
   m_establishing = FALSE;
@@ -942,30 +957,31 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (!m_socket)
     return FALSE;
 
-  // Update the flags of m_socket and enable BG events
-  SetFlags(m_flags);
-  Notify(TRUE);
+  GSocket_SetTimeout(m_socket, m_timeout);
 
-  // GRG: If wait == FALSE, then set the socket to
-  // nonblocking. I will set it back to blocking later,
-  // but I am not sure if this is really a good idea.
-  // IMO, all GSockets objects used in wxSocket should
-  // be non-blocking.
-  // --------------------------------
+  // GRG: If wait == FALSE, then the call should be nonblocking.
+  // When we are finished, we put the socket to blocking mode
+  // again.
+
   if (!wait)
     GSocket_SetNonBlocking(m_socket, TRUE);
 
   GSocket_SetPeer(m_socket, addr_man.GetAddress());
   err = GSocket_Connect(m_socket, GSOCK_STREAMED);
+  GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+                                wx_socket_callback, (char *)this);
 
   if (!wait)
     GSocket_SetNonBlocking(m_socket, FALSE);
 
-  if (err == GSOCK_WOULDBLOCK)
-    m_establishing = TRUE;
-
   if (err != GSOCK_NOERROR)
+  {
+    if (err == GSOCK_WOULDBLOCK)
+      m_establishing = TRUE;
+
     return FALSE;
+  }
 
   m_connected = TRUE;
   return TRUE;
@@ -975,41 +991,36 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 {
   bool ret;
 
-  // Already connected
-  if (m_connected)
+  if (m_connected)      // Already connected
     return TRUE;
 
-  // There is no connection in progress
-  if (!m_establishing)
+  if (!m_establishing)  // No connection in progress
     return FALSE;
 
   ret = _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
 
+  // GRG: m_connected and m_establishing will be updated in
+  // OnRequest(), but we do it here anyway because sometimes
+  // the event might be a bit delayed, and if that happens,
+  // when WaitOnConnect() returns, m_connected will still be
+  // FALSE. We have to do it as well in OnRequest because
+  // maybe WaitOnConnect() is not being used...
+
   if (ret)
   {
-    if (m_establishing)     // it wasn't GSOCK_LOST
-      m_connected = TRUE;
-
+    m_connected = GSocket_Select(m_socket, GSOCK_CONNECTION_FLAG);
     m_establishing = FALSE;
   }
 
   return m_connected;
 }
 
-void wxSocketClient::OnRequest(wxSocketNotify evt)
+
+void wxSocketClient::OnRequest(wxSocketNotify req_evt)
 {
-  if ((GSocketEvent)evt == GSOCK_CONNECTION)
-  {
-    if (m_connected)
-    {
-      m_neededreq &= ~GSOCK_CONNECTION_FLAG;
-      return;
-    }
-    m_connected = TRUE;
-    return;
-  }
-  wxSocketBase::OnRequest(evt);
+  wxSocketBase::OnRequest(req_evt);
 }
+
 
 // --------------------------------------------------------------
 // wxSocketEvent
