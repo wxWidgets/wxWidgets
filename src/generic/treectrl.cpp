@@ -1036,6 +1036,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
    for(int i = 0; i < n ; i++)
    {
       m_imageListNormal->GetSize(i, width, height);
+      height += height/5;  //20% extra spacing
       if(height > m_lineHeight) m_lineHeight = height;
    }
 }
@@ -1110,7 +1111,9 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
 
     int total_h = (image_h > text_h) ? image_h : text_h;
-    dc.DrawRectangle( item->GetX()-2, item->GetY()-2, image_w+text_w+4, total_h+4 );
+    if(m_lineHeight > total_h) total_h = m_lineHeight;
+    
+    dc.DrawRectangle( item->GetX()-2, item->GetY(), image_w+text_w+2, total_h );
 
     if ((item->IsExpanded()) && (item->GetSelectedImage() != -1))
     {
@@ -1147,7 +1150,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     int horizX = level*m_indent;
 
     item->SetX( horizX+33 );
-    item->SetY( y-m_lineHeight/3 );
+    item->SetY( y-m_lineHeight/2 );
     item->SetHeight( m_lineHeight );
 
     item->SetCross( horizX+15, y );
@@ -1521,7 +1524,7 @@ void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, i
     int horizX = level*m_indent;
 
     item->SetX( horizX+33 );
-    item->SetY( y-m_lineHeight/3-2 );
+    item->SetY( y-m_lineHeight/2 );
     item->SetHeight( m_lineHeight );
 
     if ( !item->IsExpanded() )
