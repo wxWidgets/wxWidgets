@@ -427,8 +427,11 @@ void wxFrameBase::DoMenuUpdates()
 {
     wxMenuBar* bar = GetMenuBar();
 
+#ifdef __WXMSW__
     wxWindow* focusWin = wxFindFocusDescendant((wxWindow*) this);
-
+#else
+    wxWindow* focusWin = (wxWindow*) NULL;
+#endif
     if ( bar != NULL )
     {
         int nCount = bar->GetMenuCount();

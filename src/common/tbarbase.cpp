@@ -530,7 +530,11 @@ void wxToolBarBase::DoToolbarUpdates()
     while (parent->GetParent())
         parent = parent->GetParent();
 
+#ifdef __WXMSW__
     wxWindow* focusWin = wxFindFocusDescendant(parent);
+#else
+    wxWindow* focusWin = (wxWindow*) NULL;
+#endif
 
     wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler() ;
 
