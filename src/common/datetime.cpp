@@ -194,11 +194,8 @@ static const wxDateTime::wxDateTime_t gs_cumulatedDays[2][MONTHS_IN_YEAR] =
 
 // in the fine tradition of ANSI C we use our equivalent of (time_t)-1 to
 // indicate an invalid wxDateTime object
-#ifdef __WIN16__
+
 static const wxDateTime gs_dtDefault;
-#else
-static const wxDateTime gs_dtDefault = wxLongLong((long)ULONG_MAX, ULONG_MAX);
-#endif
 
 const wxDateTime& wxDefaultDateTime = gs_dtDefault;
 
@@ -1071,8 +1068,6 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 // the values in the tm structure contain the local time
 wxDateTime& wxDateTime::Set(const struct tm& tm)
 {
-    wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
-
     struct tm tm2(tm);
     time_t timet = mktime(&tm2);
 
@@ -1111,8 +1106,6 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
                             wxDateTime_t second,
                             wxDateTime_t millisec)
 {
-    wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
-
     // we allow seconds to be 61 to account for the leap seconds, even if we
     // don't use them really
     wxDATETIME_CHECK( hour < 24 &&
@@ -1145,8 +1138,6 @@ wxDateTime& wxDateTime::Set(wxDateTime_t day,
                             wxDateTime_t second,
                             wxDateTime_t millisec)
 {
-    wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
-
     wxDATETIME_CHECK( hour < 24 &&
                       second < 62 &&
                       minute < 60 &&
@@ -2937,11 +2928,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
         // take this date as default
         tmDef = dateDef.GetTm();
     }
-#ifdef __WIN16__
-    else if ( m_time != 0 )
-#else
-    else if ( m_time != wxLongLong(0) )
-#endif
+    else if ( IsValid() )
     {
         // if this date is valid, don't change it
         tmDef = GetTm();

@@ -539,7 +539,7 @@ public:
     // ------------------------------------------------------------------------
 
         // default ctor does not initialize the object, use Set()!
-    wxDateTime() { }
+    wxDateTime() { m_time = wxLongLong((long)ULONG_MAX, ULONG_MAX); }
 
         // from time_t: seconds since the Epoch 00:00:00 UTC, Jan 1, 1970)
 #if (!(defined(__VISAGECPP__) && __IBMCPP__ >= 400))
@@ -773,8 +773,7 @@ public:
     // result of timezone shift)
     // ------------------------------------------------------------------------
 
-        // is the date valid? Note that this will return TRUE for non
-        // initialized objects but FALSE if *this == wxInvalidDateTime
+        // is the date valid?
     inline bool IsValid() const { return m_time != wxInvalidDateTime.m_time; }
 
         // get the broken down date/time representation in the given timezone
