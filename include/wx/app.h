@@ -21,7 +21,7 @@
 // typedefs
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined (__WXPM__)
     class WXDLLEXPORT wxApp;
     typedef wxApp* (*wxAppInitializerFunction)();
 #else
@@ -218,7 +218,7 @@ public:
         // set use of best visual flag (see below)
     void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }
     bool GetUseBestVisual() const { return m_useBestVisual; }
-    
+
         // set/get printing mode: see wxPRINT_XXX constants.
         //
         // default behaviour is the normal one for Unix: always use PostScript
@@ -258,7 +258,7 @@ protected:
 
     // TRUE if the application wants to get debug output
     bool m_wantDebugOutput;
-    
+
     // TRUE if the apps whats to use the best visual on systems where
     // more than one are available (Sun, SGI, XFree86 4.0 ?)
     bool m_useBestVisual;
