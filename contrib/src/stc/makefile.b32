@@ -63,7 +63,7 @@ OBJECTS = \
 	UniConversion.obj	\
         ViewStyle.obj		\
 	WindowAccessor.obj	\
-	XPM.cxx			\
+	XPM.obj  		\
                             	\
 	PlatWX.obj              \
 	ScintillaWX.obj         \
