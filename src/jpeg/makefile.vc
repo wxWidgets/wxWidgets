@@ -16,7 +16,7 @@ SYSDEPMEM= $D\jmemnobs.obj
 # miscellaneous OS-dependent stuff
 # file deletion command
 !if "$(RM)" == ""
-RM= del
+RM= erase
 !endif
 
 # End of configurable options.

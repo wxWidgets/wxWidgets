@@ -292,8 +292,9 @@ void MyCanvas::OnLeftClick(double x, double y, int keys)
   }
   if (info)
   {
-    view->GetDocument()->GetCommandProcessor()->Submit(new DiagramCommand(info->GetClassName(), OGLEDIT_ADD_SHAPE, (DiagramDocument *)view->GetDocument(), info,
-      x, y));
+    view->GetDocument()->GetCommandProcessor()->Submit(
+      new DiagramCommand((char*) info->GetClassName(), OGLEDIT_ADD_SHAPE, (DiagramDocument *)view->GetDocument(), info,
+         x, y));
   }
 }
 

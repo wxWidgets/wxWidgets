@@ -1101,6 +1101,10 @@ SOURCE=.\msw\textctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\tglbtn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\thread.cpp
 # End Source File
 # Begin Source File

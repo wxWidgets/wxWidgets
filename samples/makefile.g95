@@ -56,7 +56,6 @@ all clean:
 	-$(MAKE) -C notebook -f $(MAKEFILE) $@
 	-$(MAKE) -C oleauto -f $(MAKEFILE) $@
 	-$(MAKE) -C ownerdrw -f $(MAKEFILE) $@
-	-$(MAKE) -C plot -f $(MAKEFILE) $@
 	-$(MAKE) -C png -f $(MAKEFILE) $@
 	-$(MAKE) -C printing -f $(MAKEFILE) $@
 	-$(MAKE) -C proplist -f $(MAKEFILE) $@

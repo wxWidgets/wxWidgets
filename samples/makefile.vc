@@ -114,8 +114,6 @@ all:
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\png
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\plot
-        nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\printing
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
@@ -233,8 +231,6 @@ clean:
         cd $(WXDIR)\samples\ownerdrw
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\png
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\plot
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\printing
         nmake -f makefile.vc clean

@@ -27,7 +27,6 @@
 #include "wx/fs_mem.h"
 #include "wx/mstream.h"
 
-
 class MemFSHashObj : public wxObject
 {
     public:
