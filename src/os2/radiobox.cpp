@@ -107,11 +107,12 @@ void wxRadioBox::AdjustButtons(
     int                             nStartY;
     int                             nMaxWidth;
     int                             nMaxHeight;
+    wxFont                          vFont = GetFont();
 
     wxGetCharSize( m_hWnd
                   ,&nCx1
                   ,&nCy1
-                  ,&GetFont()
+                  ,&vFont
                  );
     vMaxSize   = GetMaxButtonSize();
     nMaxWidth  = vMaxSize.x;
@@ -463,6 +464,7 @@ void wxRadioBox::DoSetSize(
     int                             nTotHeight;
     int                             nStartX;
     int                             nStartY;
+    wxFont                          vFont = GetFont();
 
     m_nSizeFlags = nSizeFlags;
     GetPosition( &nCurrentX
@@ -484,7 +486,7 @@ void wxRadioBox::DoSetSize(
     wxGetCharSize( m_hWnd
                   ,&nCx1
                   ,&nCy1
-                  ,&GetFont()
+                  ,&vFont
                  );
 
     //
@@ -903,11 +905,12 @@ wxSize wxRadioBox::GetTotalButtonSize(
     int                             nHeight;
     int                             nWidth;
     int                             nWidthLabel;
+    wxFont                          vFont = GetFont();
 
     wxGetCharSize( m_hWnd
                   ,&nCx1
                   ,&nCy1
-                  ,(wxFont*)&GetFont()
+                  ,&vFont
                  );
     nExtraHeight = nCy1;
 

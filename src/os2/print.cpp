@@ -24,29 +24,29 @@
 #include "wx/os2/print.h"
 #include "wx/generic/prntdlgg.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)
-IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
+IMPLEMENT_DYNAMIC_CLASS(wxOS2Printer, wxPrinterBase)
+IMPLEMENT_CLASS(wxOS2PrintPreview, wxPrintPreviewBase)
 
 /*
  * Printer
  */
 
-wxPrinter::wxPrinter(wxPrintData *data):
+wxOS2Printer::wxOS2Printer(wxPrintData *data):
   wxPrinterBase((wxPrintDialogData*)data)
 {
 }
 
-wxPrinter::~wxPrinter()
+wxOS2Printer::~wxOS2Printer()
 {
 }
 
-bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
+bool wxOS2Printer::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 {
     // TODO. See wxPostScriptPrinter::Print for hints.
     return FALSE;
 }
 
-wxDC* wxPrinter::PrintDialog(wxWindow *parent)
+wxDC* wxOS2Printer::PrintDialog(wxWindow *parent)
 {
 // TODO:
 /*
@@ -56,7 +56,7 @@ wxDC* wxPrinter::PrintDialog(wxWindow *parent)
     return NULL;
 }
 
-bool wxPrinter::Setup(wxWindow *parent)
+bool wxOS2Printer::Setup(wxWindow *parent)
 {
 // TODO:
 /*
@@ -71,17 +71,17 @@ bool wxPrinter::Setup(wxWindow *parent)
  * Print preview
  */
 
-wxPrintPreview::wxPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data):
+wxOS2PrintPreview::wxOS2PrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data):
   wxPrintPreviewBase(printout, printoutForPrinting, data)
 {
     DetermineScaling();
 }
 
-wxPrintPreview::~wxPrintPreview()
+wxOS2PrintPreview::~wxOS2PrintPreview()
 {
 }
 
-bool wxPrintPreview::Print(bool interactive)
+bool wxOS2PrintPreview::Print(bool interactive)
 {
     if (!m_printPrintout)
         return FALSE;
@@ -90,7 +90,7 @@ bool wxPrintPreview::Print(bool interactive)
     return FALSE;
 }
 
-void wxPrintPreview::DetermineScaling()
+void wxOS2PrintPreview::DetermineScaling()
 {
     // TODO
 }
