@@ -1020,10 +1020,6 @@
     src/mgl/utils.cpp
 </set>
 <set var="MGL_LOWLEVEL_HDR">
-</set>
-<set var="MGL_SRC">
-</set>
-<set var="MGL_HDR">
     include/wx/mgl/app.h
     include/wx/mgl/bitmap.h
     include/wx/mgl/brush.h
@@ -1651,15 +1647,18 @@
         <if cond="TOOLKIT=='GTK'">$(GTK_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='MAC'">$(MSW_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='OS2'">$(OS2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
     </set>
     
     <set var="GUI_SRC">
         <if cond="TOOLKIT=='GTK'">$(GTK_SRC)</if>
         <if cond="TOOLKIT=='MOTIF'">$(MOTIF_SRC)</if>
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC)</if>
-        <if cond="TOOLKIT=='MAC'">$(MSW_SRC)</if>
+        <if cond="TOOLKIT=='MAC'">$(MAC_SRC)</if>
+        <if cond="TOOLKIT=='OS2'">$(OS2_SRC)</if>
     </set>
 
     <set var="PORT_SRC">
