@@ -53,7 +53,7 @@ class TestWindow(stc.StyledTextCtrl):
             TestWindow.doc = self.GetDocPointer()
             
 
-    def SutdownDemo(self):
+    def ShutDownDemo(self):
         # Reset doc reference in case this demo is run again
         TestWindow.doc = None
 
