@@ -12704,128 +12704,75 @@ fi
       else
                     RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
-      echo "$as_me:$LINENO: checking for gcc version" >&5
+                                    echo "$as_me:$LINENO: checking for gcc version" >&5
 echo $ECHO_N "checking for gcc version... $ECHO_C" >&6
 if test "${wx_cv_gccversion+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-          cat >conftest.$ac_ext <<_ACEOF
+          if test "$cross_compiling" = yes; then
+                wx_cv_gccversion="EMX2"
+
+else
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-int
-main ()
-{
+                  #include <stdio.h>
 
+                  int main()
+                  {
+                      FILE *f=fopen("conftestval", "w");
+                      if (!f) exit(1);
+                      fprintf(f,
                   #if (__GNUC__ < 3)
-                      #error old gcc
+                              "EMX2"
+                  #elif (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
+                              "EMX3"
+                  #elif (__GNUC__==3) && (__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__==2)
+                              "Innotek5"
+                  #else
+                              "Innotek6"
                   #endif
+		      );
+                      exit(0);
+                  }
 
-  ;
-  return 0;
-}
 _ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-
-                  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-
-                          #if (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
-                              #error intermediate gcc
-                          #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-
-                         wx_cv_gccversion=Innotek
-
+  wx_cv_gccversion=`cat conftestval`
 else
-  echo "$as_me: failed program was:" >&5
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-                         wx_cv_gccversion=3
-
-
+( exit $ac_status )
+wx_cv_gccversion="EMX2"
 fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                  wx_cv_gccversion=2
-
-
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
 fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 echo "$as_me:$LINENO: result: $wx_cv_gccversion" >&5
 echo "${ECHO_T}$wx_cv_gccversion" >&6
-      if test "$wx_cv_gccversion" = "2"; then
+      if test "$wx_cv_gccversion" = "EMX2"; then
           LIBS="$LIBS -lstdcpp"
           LDFLAGS="$LDFLAGS -Zsysv-signals"
       else
-          if test "$wx_cv_gccversion" = "3"; then
+          if test "$wx_cv_gccversion" = "EMX3"; then
               LIBS="$LIBS -lstdcxx"
               LDFLAGS="$LDFLAGS -Zsysv-signals"
           else
@@ -14400,7 +14347,10 @@ done
 
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
-            if test $ac_cv_header_langinfo_h = "yes"; then
+                  if test $ac_cv_header_langinfo_h = "yes" \
+                -a \(   "$wx_cv_gccversion" = "EMX2" \
+                     -o "$wx_cv_gccversion" = "EMX3" \
+                     -o "$wx_cv_gccversion" = "Innotek5" \); then
           LIBS="$LIBS -lintl"
       fi
   ;;
