@@ -293,12 +293,6 @@ typedef int wxWindowID;
     #define wxConstCast(obj, className) ((className *)(obj))
 #endif
 
-#ifdef HAVE_STATIC_CAST
-    #define wxStaticCast(val, type) static_cast<type>(val)
-#else
-    #define wxStaticCast(val, type) ((type)(val))
-#endif
-
 #ifndef HAVE_STD_WSTRING
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
         /*  VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?) */

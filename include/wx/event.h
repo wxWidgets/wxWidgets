@@ -57,7 +57,11 @@ typedef int wxEventType;
 
 // this is used to make the event table entry type safe, so that for an event
 // handler only a function with proper parameter list can be given.
-#define wxStaticCastEvent(type, val) wxStaticCast(val, type)
+#ifdef HAVE_STATIC_CAST
+    #define wxStaticCastEvent(type, val) static_cast<type>(val)
+#else
+    #define wxStaticCastEvent(type, val) ((type)(val))
+#endif
 
 // in previous versions of wxWindows the event types used to be constants
 // which created difficulties with custom/user event types definition
