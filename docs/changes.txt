@@ -190,6 +190,10 @@ All (GUI):
 - bug in wxWindow::RemoveEventHandler() fixed (Yingjun Zhang)
 - bug in wxColourDatabase::FindColour() which could led to crashes fixed
 
+Unix:
+
+- Unicode compilation fix in wxDateTime
+
 wxMSW:
 
 - strip ampersands from strings returned by wxMenuBar::GetLabelTop()

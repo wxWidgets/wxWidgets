@@ -349,6 +349,41 @@ static wxString CallStrftime(const wxChar *format, const tm* tm)
     return wxString(buf);
 }
 
+#ifdef HAVE_STRPTIME
+
+// glibc2 doesn't define this in the headers unless _XOPEN_SOURCE is defined
+// which, unfortunately, wreaks havoc elsewhere
+#if defined(__GLIBC__) && (__GLIBC__ == 2)
+    extern "C" char *strptime(const char *, const char *, struct tm *);
+#endif
+
+// Unicode-friendly strptime() wrapper
+static const wxChar *
+CallStrptime(const wxChar *input, const char *fmt, tm *tm)
+{
+    // the problem here is that strptime() returns pointer into the string we
+    // passed to it while we're really interested in the pointer into the
+    // original, Unicode, string so we try to transform the pointer back
+#if wxUSE_UNICODE
+    wxCharBuffer inputMB(wxConvertWX2MB(input));
+#else // ASCII
+    const char * const inputMB = input;
+#endif // Unicode/Ascii
+
+    const char *result = strptime(inputMB, fmt, tm);
+    if ( !result )
+        return NULL;
+
+#if wxUSE_UNICODE
+    // FIXME: this is wrong in presence of surrogates &c
+    return input + (result - inputMB.data());
+#else // ASCII
+    return result;
+#endif // Unicode/Ascii
+}
+
+#endif // HAVE_STRPTIME
+
 // if year and/or month have invalid values, replace them with the current ones
 static void ReplaceDefaultYearMonthWithCurrent(int *year,
                                                wxDateTime::Month *month)
@@ -2917,10 +2952,10 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 #ifdef HAVE_STRPTIME
                 // try using strptime() - it may fail even if the input is
                 // correct but the date is out of range, so we will fall back
-                // to our generic code anyhow (FIXME !Unicode friendly)
+                // to our generic code anyhow
                 {
                     struct tm tm;
-                    const wxChar *result = strptime(input, "%x", &tm);
+                    const wxChar *result = CallStrptime(input, "%x", &tm);
                     if ( result )
                     {
                         input = result;
@@ -2983,9 +3018,9 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
             case _T('X'):       // locale default time representation
 #ifdef HAVE_STRPTIME
                 {
-                    // use strptime() to do it for us (FIXME !Unicode friendly)
+                    // use strptime() to do it for us
                     struct tm tm;
-                    input = strptime(input, "%X", &tm);
+                    input = CallStrptime(input, "%X", &tm);
                     if ( !input )
                     {
                         return (wxChar *)NULL;
