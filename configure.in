@@ -513,6 +513,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
   DEFAULT_wxUSE_COMBOBOX=no
+  DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
@@ -704,6 +705,7 @@ else
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
   DEFAULT_wxUSE_COMBOBOX=yes
+  DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
@@ -988,13 +990,14 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_ACCEL=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
   DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_CALCTRL=no
+  DEFAULT_wxUSE_CALCTRL=yes
   DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLISTBOX=yes
   DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_CHOICEBOOK=yes
+  DEFAULT_wxUSE_DATEPICKCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
@@ -1034,6 +1037,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_CHECKLISTBOX=no
   DEFAULT_wxUSE_CHOICE=no
   DEFAULT_wxUSE_CHOICEBOOK=no
+  DEFAULT_wxUSE_DATEPICKCTRL=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
@@ -1074,6 +1078,7 @@ WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbo
 WX_ARG_ENABLE(choice,      [  --enable-choice         use wxChoice class], wxUSE_CHOICE)
 WX_ARG_ENABLE(choicebook,  [  --enable-choicebook     use wxChoicebook class], wxUSE_CHOICEBOOK)
 WX_ARG_ENABLE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
+WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
@@ -5528,6 +5533,11 @@ if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
+fi
+
+if test "$wxUSE_DATEPICKCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_DATEPICKCTRL)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
