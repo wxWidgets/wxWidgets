@@ -3100,6 +3100,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         wxTreeEvent nevent( command, GetId() );
         nevent.m_item = m_current;
         nevent.SetEventObject(this);
+        nevent.SetPoint(pt);
 
         // by default the dragging is not supported, the user code must
         // explicitly allow the event for it to take place
