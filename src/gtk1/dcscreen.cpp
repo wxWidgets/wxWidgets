@@ -14,6 +14,9 @@
 #include "wx/dcscreen.h"
 #include "wx/window.h"
 
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+
 //-----------------------------------------------------------------------------
 // global data initialization
 //-----------------------------------------------------------------------------

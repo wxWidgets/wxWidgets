@@ -28,10 +28,14 @@
 #include "wx/intl.h"
 #include "wx/settings.h"
 #include "wx/log.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkkeysyms.h"
 
 #include <math.h>
+
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+#include "gdk/gdkprivate.h"
+#include "gdk/gdkkeysyms.h"
+#include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // documentation on internals

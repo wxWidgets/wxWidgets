@@ -143,8 +143,8 @@ class wxToolBar: public wxControl
     int           m_separation;
     wxList        m_tools;
     
-    GdkColor      m_fg;
-    GdkColor      m_bg;
+    GdkColor      *m_fg;
+    GdkColor      *m_bg;
     int           m_xMargin;
     int           m_yMargin;
     bool          m_hasToolAlready;

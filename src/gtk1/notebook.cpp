@@ -17,6 +17,10 @@
 #include "wx/imaglist.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+#include "wx/gtk/win_gtk.h"
 #include "gdk/gdkkeysyms.h"
 
 //-----------------------------------------------------------------------------

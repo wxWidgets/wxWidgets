@@ -24,6 +24,9 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+
 enum thread_state 
 {
   STATE_IDLE = 0,

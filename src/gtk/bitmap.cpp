@@ -14,9 +14,11 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/filefn.h"
+#include "wx/image.h"
+
+#include "gdk/gdk.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkx.h"
-#include "wx/image.h"
 
 //-----------------------------------------------------------------------------
 // wxMask

@@ -12,6 +12,8 @@
 #endif
 
 #include "wx/gauge.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
 // wxGauge

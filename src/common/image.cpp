@@ -25,11 +25,6 @@
 #include "../png/png.h"
 #include "wx/filefn.h"
 
-#ifdef __WXGTK__
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkx.h"
-#endif
-
 //-----------------------------------------------------------------------------
 // wxImage
 //-----------------------------------------------------------------------------
@@ -1246,6 +1241,10 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #endif
 
 #ifdef __WXGTK__
+
+#include "gtk/gtk.h"
+#include "gdk/gdk.h"
+#include "gdk/gdkx.h"
 
 wxBitmap wxImage::ConvertToBitmap() const
 {

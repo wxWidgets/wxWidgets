@@ -14,6 +14,7 @@
 
 #include "wx/gdicmn.h"
 
+#include "gdk/gdk.h"
 #include "gdk/gdkprivate.h"
 
 //-----------------------------------------------------------------------------

@@ -16,15 +16,6 @@
 #pragma interface "defs.h"
 #endif
 
-#ifdef __WXGTK__
-
-#include "glib.h"
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "wx/gtk/win_gtk.h"
-
-#endif
-
 #include <stddef.h>
 
 #include "wx/setup.h"
@@ -664,7 +655,8 @@ enum {
 
 
 // Logical ops
-typedef enum {
+typedef enum 
+{
   wxCLEAR,      // 0
   wxXOR,        // src XOR dst
   wxINVERT,     // NOT dst
@@ -736,8 +728,8 @@ typedef enum {
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 
 
-// Data format for drag & drop and clipboard operations
-// numbers as per winuser.h
+/* Data format for drag & drop and clipboard operations
+ * numbers as per winuser.h */
 
 enum wxDataFormat
 {
@@ -750,9 +742,10 @@ enum wxDataFormat
   wxDF_PRIVATE =          20
 };
 
-// Virtual keycodes
+/* Virtual keycodes */
 
-enum wxKeyCode {
+enum wxKeyCode 
+{
  WXK_BACK    =   8,
  WXK_TAB     =   9,
  WXK_RETURN  =	13,
@@ -771,8 +764,8 @@ enum wxKeyCode {
  WXK_MENU,
  WXK_PAUSE,
  WXK_CAPITAL,
- WXK_PRIOR,  // Page up
- WXK_NEXT,   // Page down
+ WXK_PRIOR,  /* Page up */
+ WXK_NEXT,   /* Page down */
  WXK_END,
  WXK_HOME,
  WXK_LEFT,
@@ -831,37 +824,36 @@ enum wxKeyCode {
  WXK_PAGEDOWN
 };
 
-// Colours - see wx_gdi.cc for database
-
-// OS mnemonics -- Identify the running OS (useful for Windows)
-// [Not all platforms are currently available or supported]
-enum {
+/* OS mnemonics -- Identify the running OS (useful for Windows)
+ * [Not all platforms are currently available or supported] */
+enum 
+{
   wxUNKNOWN_PLATFORM,
-  wxCURSES,     // Text-only CURSES
-  wxXVIEW_X,	// Sun's XView OpenLOOK toolkit
-  wxMOTIF_X,	// OSF Motif 1.x.x
-  wxCOSE_X,	    // OSF Common Desktop Environment
-  wxNEXTSTEP,	// NeXTStep
-  wxMACINTOSH,	// Apple System 7
-  wxGTK,	    // GTK
-  wxQT,	        // Qt
-  wxGEOS,	    // GEOS
-  wxOS2_PM,	    // OS/2 Workplace
-  wxWINDOWS,	// Windows or WfW
-  wxPENWINDOWS,	// Windows for Pen Computing
-  wxWINDOWS_NT,	// Windows NT
-  wxWIN32S,	    // Windows 32S API
-  wxWIN95,	    // Windows 95
-  wxWIN386	    // Watcom 32-bit supervisor modus
+  wxCURSES,     /* Text-only CURSES */
+  wxXVIEW_X,	/* Sun's XView OpenLOOK toolkit */
+  wxMOTIF_X,	/* OSF Motif 1.x.x */
+  wxCOSE_X,	/* OSF Common Desktop Environment */
+  wxNEXTSTEP,	/* NeXTStep */
+  wxMACINTOSH,	/* Apple System 7 */
+  wxGTK,	/* GTK */
+  wxQT,	        /* Qt */
+  wxGEOS,	/* GEOS */
+  wxOS2_PM,	/* OS/2 Workplace */
+  wxWINDOWS,	/* Windows or WfW */
+  wxPENWINDOWS,	/* Windows for Pen Computing */
+  wxWINDOWS_NT,	/* Windows NT */
+  wxWIN32S,	/* Windows 32S API */
+  wxWIN95,	/* Windows 95 */
+  wxWIN386	/* Watcom 32-bit supervisor modus */
 };
 
-// Printing
+/* Printing */
 #ifndef wxPORTRAIT
 #define wxPORTRAIT      1
 #define wxLANDSCAPE     2
 #endif
 
-// Standard menu identifiers
+/* Standard menu identifiers */
 #define wxID_OPEN               5000
 #define wxID_CLOSE              5001
 #define wxID_NEW                5002
@@ -908,13 +900,12 @@ enum {
 
 #define wxID_HIGHEST            5999
 
-// Shortcut for easier dialog-unit-to-pixel conversion
+/* Shortcut for easier dialog-unit-to-pixel conversion */
 #define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
 
 #ifdef __WXMSW__
-// Stand-ins for Windows types, to avoid
-// #including all of windows.h
-
+/* Stand-ins for Windows types, to avoid
+ * #including all of windows.h */
 typedef unsigned long   WXHWND;
 typedef unsigned long   WXHANDLE;
 typedef unsigned long   WXHICON;
@@ -956,7 +947,7 @@ typedef int (*WXFARPROC)();
 #endif
 
 #ifdef __WXMOTIF__
-// Stand-ins for X/Xt/Motif types
+/* Stand-ins for X/Xt/Motif types */
 typedef void*           WXWindow;
 typedef void*           WXWidget;
 typedef void*           WXAppContext;
@@ -973,6 +964,37 @@ typedef void*           WXImage;
 typedef void*           WXCursor;
 typedef void*           WXFontList;
 #endif
+
+#ifdef __WXGTK__
+/* Stand-ins for GLIB types */
+typedef int            gint;
+typedef unsigned       guint;
+typedef unsigned long  gulong;
+typedef void*          gpointer;
+
+/* Stand-ins for GDK types */
+typedef gulong                  GdkAtom;
+typedef struct _GdkColor        GdkColor;
+typedef struct _GdkColormap     GdkColormap;
+typedef struct _GdkFont         GdkFont;
+typedef struct _GdkGC           GdkGC;
+typedef struct _GdkWindow       GdkWindow;
+typedef struct _GdkWindow       GdkBitmap;
+typedef struct _GdkWindow       GdkPixmap;
+typedef struct _GdkCursor       GdkCursor;
+typedef struct _GdkRegion       GdkRegion;
+
+/* Stand-ins for GTK types */
+typedef struct _GtkWidget       GtkWidget;
+typedef struct _GtkStyle        GtkStyle;
+typedef struct _GtkAdjustment   GtkAdjustment;
+typedef struct _GtkList         GtkList;
+typedef struct _GtkToolbar      GtkToolbar;
+typedef struct _GtkNotebook     GtkNotebook;
+typedef struct _GtkNotebookPage GtkNotebookPage;
+
+#endif
+
 
 #endif
     // _WX_DEFS_H_

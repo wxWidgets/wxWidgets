@@ -43,11 +43,11 @@ while test $# -gt 0; do
         includes=-I@includedir@
       fi
       includes="$includes -I@libdir@/wx/include"
-      echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@ @WXDEBUG_DEFINE@
+      echo $includes -D@TOOLKIT_DEF@ @WXDEBUG_DEFINE@
 
       ;;
     --libs)
-      echo -L@libdir@ -lwx_gtk2 @DL_LIBRARY@ @GUI_TK_LIBRARY@ @THREADS_LINK@ @EXTRA_LINK@
+      echo -L@libdir@ @THREADS_LINK@ -lwx_gtk2 @DL_LIBRARY@ @GUI_TK_LIBRARY@ @EXTRA_LINK@
       ;;
     *)
       echo "${usage}" 1>&2

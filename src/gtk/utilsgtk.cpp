@@ -34,7 +34,10 @@
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
 
-#include "gdk/gdkx.h"        // GDK_DISPLAY
+#include "glib.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+#include "gdk/gdkx.h"
 
 #ifdef __SVR4__
   #include <sys/systeminfo.h>

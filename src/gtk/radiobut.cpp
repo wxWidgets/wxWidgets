@@ -13,6 +13,8 @@
 #endif
 
 #include "wx/radiobut.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
 // data

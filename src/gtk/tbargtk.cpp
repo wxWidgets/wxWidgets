@@ -13,6 +13,10 @@
 
 #include "wx/toolbar.h"
 
+#include "glib.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+
 //-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
@@ -99,6 +103,8 @@ wxToolBar::wxToolBar( wxWindow *parent, wxWindowID id,
 
 wxToolBar::~wxToolBar()
 {
+    delete m_fg;
+    delete m_bg;
 }
 
 bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
@@ -121,18 +127,20 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
     m_widget = GTK_WIDGET(m_toolbar);					    
 					    
     gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
+
+    m_fg = new GdkColor;
+    m_fg->red = 0;
+    m_fg->green = 0;
+    m_fg->blue = 0;
+    gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ), m_fg );
   
-    m_fg.red = 0;
-    m_fg.green = 0;
-    m_fg.blue = 0;
-    gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ), &m_fg );
+    m_bg = new GdkColor;
+    m_bg->red = 65535;
+    m_bg->green = 65535;
+    m_bg->blue = 50000;
+    gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ), m_bg );
   
-    m_bg.red = 65535;
-    m_bg.green = 65535;
-    m_bg.blue = 50000;
-    gdk_color_alloc( gtk_widget_get_colormap( GTK_WIDGET(m_toolbar) ), &m_bg );
-  
-    gtk_tooltips_set_colors( GTK_TOOLBAR(m_toolbar)->tooltips, &m_bg, &m_fg );
+    gtk_tooltips_set_colors( GTK_TOOLBAR(m_toolbar)->tooltips, m_bg, m_fg );
 
     m_xMargin = 0;
     m_yMargin = 0;

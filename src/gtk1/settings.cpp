@@ -15,6 +15,9 @@
 #include "wx/settings.h"
 #include "wx/debug.h"
 
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+
 /*
 #define wxSYS_COLOUR_SCROLLBAR         0
 #define wxSYS_COLOUR_BACKGROUND        1

@@ -15,6 +15,9 @@
 #include "wx/radiobox.h"
 #include "wx/dialog.h"
 #include "wx/frame.h"
+
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------

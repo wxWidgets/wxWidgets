@@ -18,6 +18,9 @@
 #include "wx/intl.h"
 #include "wx/checklst.h"
 
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
+
 //-------------------------------------------------------------------------
 // conditional compilation
 //-------------------------------------------------------------------------

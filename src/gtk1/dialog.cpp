@@ -14,6 +14,9 @@
 #include "wx/dialog.h"
 #include "wx/frame.h"
 #include "wx/app.h"
+
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------

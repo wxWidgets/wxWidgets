@@ -18,6 +18,8 @@
 #include "wx/intl.h"
 #include "wx/utils.h"
 
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 #include "gdk/gdkprivate.h"
 
 #include <X11/Xlib.h>

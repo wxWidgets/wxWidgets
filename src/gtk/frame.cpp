@@ -19,6 +19,10 @@
 #include "wx/toolbar.h"
 #include "wx/statusbr.h"
 #include "wx/dcclient.h"
+
+#include "glib.h"
+#include "gdk/gdk.h"
+#include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
