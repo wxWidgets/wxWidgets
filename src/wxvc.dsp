@@ -580,10 +580,6 @@ SOURCE=.\generic\panelg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\generic\plot.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\generic\progdlgg.cpp
 # End Source File
 # Begin Source File
