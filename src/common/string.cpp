@@ -345,6 +345,10 @@ void wxString::AllocBeforeWrite(size_t nLen)
     pData->Unlock();
     AllocBuffer(nLen);
   }
+  else {
+    // update the string length
+    pData->nDataLength = nLen;
+  }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
 }
