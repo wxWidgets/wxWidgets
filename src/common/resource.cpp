@@ -3145,27 +3145,31 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
     int height = resource->GetHeight();
     wxString name = resource->GetName();
 
-    if (IsKindOf(CLASSINFO(wxDialog)))
+    // this is used for loading wxWizard pages from WXR
+    if ( parent != this )
     {
-        wxDialog *dialogBox = (wxDialog *)this;
-        long modalStyle = isModal ? wxDIALOG_MODAL : 0;
-        if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
-            return FALSE;
+        if (IsKindOf(CLASSINFO(wxDialog)))
+        {
+            wxDialog *dialogBox = (wxDialog *)this;
+            long modalStyle = isModal ? wxDIALOG_MODAL : 0;
+            if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
+                return FALSE;
 
-        // Only reset the client size if we know we're not going to do it again below.
-        if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) == 0)
-            dialogBox->SetClientSize(width, height);
-    }
-    else if (IsKindOf(CLASSINFO(wxPanel)))
-    {
-        wxPanel* panel = (wxPanel *)this;
-        if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
-            return FALSE;
-    }
-    else
-    {
-        if (!((wxWindow *)this)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
-            return FALSE;
+            // Only reset the client size if we know we're not going to do it again below.
+            if ((resource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) == 0)
+                dialogBox->SetClientSize(width, height);
+        }
+        else if (IsKindOf(CLASSINFO(wxPanel)))
+        {
+            wxPanel* panel = (wxPanel *)this;
+            if (!panel->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle | wxTAB_TRAVERSAL, name))
+                return FALSE;
+        }
+        else
+        {
+            if (!((wxWindow *)this)->Create(parent, -1, wxPoint(x, y), wxSize(width, height), theWindowStyle, name))
+                return FALSE;
+        }
     }
 
     if ((resource->GetResourceStyle() & wxRESOURCE_USE_DEFAULTS) != 0)
