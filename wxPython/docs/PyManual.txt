@@ -1,0 +1,76 @@
+===============
+ The Py Manual
+===============
+
+-------------------------
+ Py - Served Fresh Daily 
+-------------------------
+
+:Author: Patrick K. O'Brien
+:Contact: pobrien@orbtech.com
+:Date: $Date$
+:Revision: $Revision$
+
+.. contents::
+
+
+Introduction
+============
+
+This document will show you how to make use of the Py programs and the
+py package of modules.
+
+
+What is Py?
+===========
+
+Py is really several things.  Py is a set of standalone programs as
+well as a library of modules that you can use in your own programs.
+
+First, Py contains standalone programs that provide code editors and
+graphical, Python shell interfaces.  Second, Py contains a collections
+of modules that you can use in your own wxPython applications to
+provide similar services, either for your own use during development,
+or as an interface for users of your program.  Third, Py containss a
+wrapper utility, providing you with runtime introspection capabilities
+for your wxPython programs without having to include PyCrust or
+PyShell in your program, or alter one line of your code.
+
+
+Py standalone programs
+======================
+
+There are several standalone applications in the Py package:
+
+* PyAlaCarte
+* PyAlaMode
+* PyCrust
+* PyFilling
+* PyShell
+* PyWrap
+
+
+Py modules
+==========
+
+Py was designed to be modular.  That means graphical code is kept
+separate from non-graphical code, and many of the Py modules can be
+used by other programs.  Likewise, other programs can supply some of
+the modules needed by Py.  For example, you could supply a customized
+interpreter module and plug it in to the PyCrust standalone
+application.  As long as it supports the minimum functionality
+required, PyCrust will work just as well with your interpreter as with
+its default interpreter.
+
+
+Py runtime wrapper
+==================
+
+The Py wrapper utility (``PyWrap.py``) lets you run an existing
+wxPython program with a PyCrust frame at the same time.  Inside the
+PyCrust shell, the local variable ``app`` is assigned to your
+application instance.  In this way you can introspect your entire
+application within the PyCrust shell and the PyFilling namespace
+viewer.  And through the use of the Py decorator classes, PyCrust can
+display wxPython function and method signatures as well as docstrings
+for the entire wxPython library.
