@@ -234,8 +234,8 @@ void wxMacCarbonPrintData::TransferTo( wxPageSetupData* data )
 	            (int)(((double) rPage.top - rPaper.top ) * pt2mm) ) ) ;
 	        
 	        data->SetMinMarginBottomRight( wxPoint (
-                ((double) rPaper.right - rPage.right ) * pt2mm ,
-                ((double) rPaper.bottom - rPage.bottom ) * pt2mm ) ) ;
+                (wxCoord)(((double) rPaper.right - rPage.right ) * pt2mm),
+                (wxCoord)(((double) rPaper.bottom - rPage.bottom ) * pt2mm)) ) ;
 	    }
 	}
 }

@@ -325,8 +325,6 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
-    int separatorSize = GetToolSize().x / 4 ;
-
     node = m_tools.GetFirst();
     while (node)
     {

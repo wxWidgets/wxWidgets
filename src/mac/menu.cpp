@@ -363,7 +363,7 @@ void wxMenu::MacEnableMenu( bool bDoEnable )
 void wxMenu::MacBeforeDisplay( bool isSubMenu ) 
 {
     wxMenuItem* previousItem = NULL ;
-    int pos ;
+    size_t pos ;
     wxMenuItemList::Node *node;
     wxMenuItem *item;
     for (pos = 0, node = GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++) 
@@ -382,7 +382,9 @@ void wxMenu::MacBeforeDisplay( bool isSubMenu )
                 if ( item->GetId() == wxApp::s_macPreferencesMenuItemId || item->GetId() == wxApp::s_macExitMenuItemId)
                 {
                     ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ) , pos + 1, kMenuItemAttrHidden, 0 );
-                    if ( GetMenuItems().GetCount() == pos + 1 && previousItem != NULL && previousItem->IsSeparator() )
+                    if ( GetMenuItems().GetCount() == pos + 1 &&
+                            previousItem != NULL &&
+                                previousItem->IsSeparator() )
                     {
                         ChangeMenuItemAttributes( MAC_WXHMENU( GetHMenu() ) , pos , kMenuItemAttrHidden, 0 );
                     }

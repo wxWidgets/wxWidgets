@@ -844,7 +844,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent(
 
     if ( kind == mouseDown )
     {
-        if ( timestamp - gs_lastWhen <= GetDblTime() )
+        if ( timestamp - gs_lastWhen <= (long) GetDblTime() )
         {
             if ( abs( localwhere.h - gs_lastWhere.h ) < 3 && abs( localwhere.v - gs_lastWhere.v ) < 3 )
             {

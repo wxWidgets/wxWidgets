@@ -1321,8 +1321,11 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
 #else
     TECObjectRef ec;
-    status = TECCreateConverter(&ec, 
-    	wxApp::s_macDefaultEncodingIsPC ? kTextEncodingWindowsLatin1 : kTextEncodingMacRoman, kTextEncodingUnicodeDefault);
+    status = TECCreateConverter(&ec,
+                                wxApp::s_macDefaultEncodingIsPC
+                                    ? (int)kTextEncodingWindowsLatin1
+                                    : (int)kTextEncodingMacRoman,
+                                kTextEncodingUnicodeDefault);
     	
     wxASSERT_MSG( status == noErr , wxT("couldn't start converter") ) ;
     ByteCount byteOutLen ;
@@ -1369,8 +1372,8 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     status = ::ATSUMeasureText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         &textBefore , &textAfter, &ascent , &descent );
     
-    drawX += sin(angle/RAD2DEG) * FixedToInt(ascent) ;
-    drawY += cos(angle/RAD2DEG) * FixedToInt(ascent) ;
+    drawX += (int)(sin(angle/RAD2DEG) * FixedToInt(ascent));
+    drawY += (int)(cos(angle/RAD2DEG) * FixedToInt(ascent));
     status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
         IntToFixed(drawX) , IntToFixed(drawY) );
     wxASSERT_MSG( status == noErr , wxT("couldn't draw the rotated text") );
@@ -1808,7 +1811,7 @@ void wxDC::MacInstallFont() const
     } ;
     Boolean kTrue = true ;
     Boolean kFalse = false ;
-    BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
+    //BslnBaselineClass kBaselineDefault = kBSLNHangingBaseline ;
     ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
