@@ -115,12 +115,22 @@ try to make the best guess possible.
 
 Returns the index of the first currently visible line.
 
+This is same as \helpref{GetVisibleBegin}{wxvscrolledwindowgetvisiblebegin} and
+exists only for symmetry with \helpref{GetLastVisibleLine}{wxvscrolledwindowgetlastvisibleline}.
+
 
 \membersection{wxVScrolledWindow::GetLastVisibleLine}\label{wxvscrolledwindowgetlastvisibleline}
 
 \constfunc{size\_t}{GetLastVisibleLine}{\void}
 
-Returns the index of the last currently visible line.
+Returns the index of the last currently visible line. Note that this method
+returns \texttt{(size\_t)-1} (i.e. a huge positive number) if the control is
+empty so if this is possible you should use \helpref{GetVisibleEnd}{wxvscrolledwindowgetvisibleend} 
+instead.
+
+\wxheading{See also}
+
+\helpref{GetFirstVisibleLine}{wxvscrolledwindowgetfirstvisibleline}
 
 
 \membersection{wxVScrolledWindow::GetLineCount}\label{wxvscrolledwindowgetlinecount}
@@ -129,6 +139,31 @@ Returns the index of the last currently visible line.
 
 Get the number of lines this window contains (previously set by 
 \helpref{SetLineCount()}{wxvscrolledwindowsetlinecount})
+
+
+\membersection{wxVScrolledWindow::GetVisibleBegin}\label{wxvscrolledwindowgetvisiblebegin}
+
+\constfunc{size\_t}{GetVisibleBegin}{\void}
+
+Returns the index of the first currently visible line.
+
+\wxheading{See also}
+
+\helpref{GetVisibleEnd}{wxvscrolledwindowgetvisibleend}
+
+
+\membersection{wxVScrolledWindow::GetVisibleEnd}\label{wxvscrolledwindowgetvisibleend}
+
+\constfunc{size\_t}{GetVisibleEnd}{\void}
+
+Returns the index of the first line after the currently visible one. If the
+return value is $0$ it means that no lines are currently shown (which only
+happens if the control is empty). Note that the index returned by this method
+is not always a valid index as it may be equal to \helpref{GetLineCount}{wxvscrolledwindowsetlinecount}.
+
+\wxheading{See also}
+
+\helpref{GetVisibleBegin}{wxvscrolledwindowgetvisiblebegin}
 
 
 \membersection{wxVScrolledWindow::HitTest}\label{wxvscrolledwindowhittest}
