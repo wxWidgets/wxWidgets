@@ -45,7 +45,7 @@ public:
   void Append(int id, const wxString& Label, const wxString& helpString = wxEmptyString,
               bool checkable = FALSE);
       // a submenu
-  void Append(int id, const wxString& Label, wxMenu *SubMenu, 
+  void Append(int id, const wxString& Label, wxMenu *SubMenu,
               const wxString& helpString = wxEmptyString);
       // the most generic form (create wxMenuItem first and use it's functions)
   void Append(wxMenuItem *pItem);
@@ -161,9 +161,6 @@ public:
   // Find wxMenuItem for item ID, and return item's
   // menu too if itemMenu is non-NULL.
   wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const ;
-
-  int     GetMenuCount() const { return m_menuCount; }
-  wxMenu *GetMenu(int n) const { return m_menus[n];  }
 
   inline void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
   inline wxEvtHandler *GetEventHandler() { return m_eventHandler; }
