@@ -14,6 +14,9 @@ Begin Project Dependency
 Project_Dep_Name html
 End Project Dependency
 Begin Project Dependency
+Project_Dep_Name adv
+End Project Dependency
+Begin Project Dependency
 Project_Dep_Name core
 End Project Dependency
 Begin Project Dependency
@@ -24,6 +27,18 @@ End Project Dependency
 ###############################################################################
 
 Project: "html"=..\..\build\msw\wx_html.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "adv"=..\..\build\msw\wx_adv.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

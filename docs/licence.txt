@@ -28,7 +28,7 @@
 
   1. As a special exception, the copyright holders of this library give
   permission for additional uses of the text contained in this release of
-  the library as licenced under the wxWidgets Library Licence, applying
+  the library as licenced under the wxWindows Library Licence, applying
   either version 3 of the Licence, or (at your option) any later version of
   the Licence as published by the copyright holders of version 3 of the
   Licence document.

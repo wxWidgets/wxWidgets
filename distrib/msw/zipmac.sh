@@ -64,6 +64,9 @@ zip -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 expandlines $SRC/distrib/msw/mac.rsp temp.txt
 zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 
+expandlines $SRC/distrib/msw/cocoa.rsp temp.txt
+zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
+
 expandlines $SRC/distrib/msw/cw.rsp temp.txt
 zip -u -@ `$CYGPATHPROGW $DEST/wxMac-$VERSION.zip` < temp.txt
 

@@ -35,7 +35,7 @@ SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 ### Variables: ###
 
 DESTDIR = 
-WX_VERSION = 2.5.1
+WX_VERSION = 2.5.2
 LIBDIRNAME = $(top_builddir)lib
 DOCVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
 	$(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
@@ -58,7 +58,7 @@ DOCVIEW_OBJECTS =  \
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_TOOLKIT_MAC@MACOSX_RESOURCES = Carbon.r \
-@COND_TOOLKIT_MAC@	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.r sample.r
+@COND_TOOLKIT_MAC@	$(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.r sample.r
 @COND_PLATFORM_MAC_1@__docview___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C docview$(EXEEXT)
 COND_PLATFORM_MAC_1___docview___mac_rezcmd = $(RESCOMP) -d __DARWIN__ -t APPL -d \
@@ -78,6 +78,10 @@ COND_PLATFORM_OS2_1___docview___os2_emxbindcmd = $(NM) docview$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__docview_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__docview_bundle___depname = docview_bundle
+@COND_TOOLKIT_COCOA@____docview_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	docview.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@____docview_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	docview.app/Contents/PkgInfo
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -131,7 +135,7 @@ docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 	$(__docview___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p docview.app/Contents
 	mkdir -p docview.app/Contents/MacOS
 	mkdir -p docview.app/Contents/Resources
@@ -149,10 +153,10 @@ docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info
 	ln -f docview$(EXEEXT) docview.app/Contents/MacOS/docview
 	
 	
-	ln -sf $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).1.rsrc docview.app/Contents/Resources/docview.rsrc
-	ln -sf $(top_srcdir)/src/mac/carbon/wxmac.icns docview.app/Contents/Resources/wxmac.icns
+	cp -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).2.rsrc docview.app/Contents/Resources/docview.rsrc
+	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns docview.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@docview_bundle: docview.app/Contents/PkgInfo
+@COND_PLATFORM_MACOSX_1@docview_bundle: $(____docview_BUNDLE_TGT_REF_DEP)
 
 docview_docview.o: $(srcdir)/docview.cpp
 	$(CXXC) -c -o $@ $(DOCVIEW_CXXFLAGS) $<

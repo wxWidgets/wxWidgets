@@ -155,6 +155,7 @@ tools/gettext/*.*
 misc/afm/*.afm
 misc/gs_afm/*.afm
 
+utils/*.bkl
 utils/make*.*
 utils/configure
 utils/configure.in
@@ -175,8 +176,6 @@ samples/samples.bkl
 
 samples/*.txt
 samples/makefile*
-samples/configure
-samples/configure.in
 
 samples/access/*.cpp
 samples/access/*.h
@@ -1129,6 +1128,15 @@ samples/statbar/*.txt
 samples/statbar/*.pro
 samples/statbar/*.bkl
 
+samples/taskbar/*.cpp
+samples/taskbar/*.h
+samples/taskbar/makefile.*
+samples/taskbar/*.rc
+samples/taskbar/*.def
+samples/taskbar/*.bmp
+samples/taskbar/*.ico
+samples/taskbar/*.txt
+
 samples/text/*.cpp
 samples/text/*.h
 samples/text/makefile*
@@ -1265,8 +1273,6 @@ samples/wxtest/*.bkl
 
 demos/demos.bkl
 demos/makefile*
-demos/configure
-demos/configure.in
 
 demos/bombs/*.cpp
 demos/bombs/*.h

@@ -75,8 +75,8 @@ samples/exec/exec.vcw
 samples/font/font.vcp
 samples/font/font.vcw
 
-samples/grid/griddemo.vcp
-samples/grid/griddemo.vcw
+samples/grid/grid.vcp
+samples/grid/grid.vcw
 
 samples/help/help.vcp
 samples/help/help.vcw
@@ -146,10 +146,12 @@ samples/minifram/minifram.vcp
 samples/minifram/minifram.vcw
 
 samples/mobile/styles/styles.vcp
+samples/mobile/styles/styles.vcw
+samples/mobile/wxedit/wxedit.vcp
 samples/mobile/wxedit/wxedit.vcw
 
-samples/multimon/multimon_test.vcp
-samples/multimon/multimon_test.vcw
+samples/multimon/multimon.vcp
+samples/multimon/multimon.vcw
 
 samples/nativdlg/nativdlg.vcp
 samples/nativdlg/nativdlg.vcw
@@ -160,8 +162,8 @@ samples/notebook/notebook.vcw
 samples/oleauto/oleauto.vcp
 samples/oleauto/oleauto.vcw
 
-samples/ownerdrw/ownerDrw.vcp
-samples/ownerdrw/ownerDrw.vcw
+samples/ownerdrw/ownerdrw.vcp
+samples/ownerdrw/ownerdrw.vcw
 
 samples/png/png.vcp
 samples/png/png.vcw
@@ -174,6 +176,9 @@ samples/propsize/propsize.vcw
 
 samples/regtest/regtest.vcp
 samples/regtest/regtest.vcw
+
+samples/render/render.vcp
+samples/render/render.vcw
 
 samples/rotate/rotate.vcp
 samples/rotate/rotate.vcw

@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver 2.5.1
+%define ver 2.5.2
 %define ver2 2.5
 %define rel 1
 
@@ -177,7 +177,6 @@ wx/fontenc.h
 wx/fontmap.h
 wx/fs_mem.h
 wx/fs_zip.h
-wx/gzstream.h
 wx/hash.h
 wx/hashmap.h
 wx/hashset.h

@@ -60,7 +60,7 @@ HOST_SUFFIX = @HOST_SUFFIX@
 ### Variables: ###
 
 DESTDIR = 
-WX_VERSION = 2.5.1
+WX_VERSION = 2.5.2
 LIBDIRNAME = $(top_builddir)lib
 WXREGEX_CFLAGS =       $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
@@ -997,9 +997,9 @@ LOCALE_LINGUAS = ca cs da de el es fi fr hu id it ja nl pl ru sl sv tr uk zh zh_
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx_base$(WXBASEPORT)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wxbase$(WXBASEPORT)251
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wxbase$(WXBASEPORT)252
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
-@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)251
+@COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIXGUI = wx$(PORTNAME)$(WXUNIVNAME)252
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -2.5
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
 COND_WXUSE_REGEX_BUILTIN___wxregex___depname = \
@@ -1038,8 +1038,8 @@ COND_WXUSE_REGEX_BUILTIN___wxregex___depname = \
 @COND_WXUSE_EXPAT_BUILTIN@	$(LIBDIRNAME)/$(LIBPREFIX)wxexpat$(WXDEBUGFLAG)$(HOST_SUFFIX)$(LIBEXT)
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@__install_wxexpat___depname \
 @COND_SHARED_0_WXUSE_EXPAT_BUILTIN@	= install_wxexpat
-@COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = 251
-@COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = 2.5.1
+@COND_PLATFORM_UNIX_0@PLUGIN_VERSION0 = 252
+@COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = 2.5.2
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
 @COND_BUILD_DEBUG_UNICODE_0@PLUGINSUFFIX = _d
@@ -1475,7 +1475,8 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/generic/imaglist.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h
+	wx/generic/tabg.h \
+	wx/html/webkit.h
 @COND_TOOLKIT_MAC@GUI_HDR = $(COND_TOOLKIT_MAC_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/colrdlgg.h \
@@ -2760,7 +2761,8 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_prntdlgg.o \
 	monodll_statusbr.o \
 	monodll_tabg.o \
-	monodll_snglinst.o
+	monodll_snglinst.o \
+	monodll_webkit.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
@@ -3616,7 +3618,8 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_prntdlgg.o \
 	monolib_statusbr.o \
 	monolib_tabg.o \
-	monolib_snglinst.o
+	monolib_snglinst.o \
+	monolib_webkit.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
@@ -4644,7 +4647,8 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_prntdlgg.o \
 	coredll_statusbr.o \
 	coredll_tabg.o \
-	coredll_snglinst.o
+	coredll_snglinst.o \
+	coredll_webkit.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
@@ -5369,7 +5373,8 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_prntdlgg.o \
 	corelib_statusbr.o \
 	corelib_tabg.o \
-	corelib_snglinst.o
+	corelib_snglinst.o \
+	corelib_webkit.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
@@ -6003,9 +6008,9 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_WITH_PLUGIN_SDL_1@__install_sound_sdl___depname = install_sound_sdl
 @COND_USE_GUI_1@__install_afm___depname = install-afm
 @COND_USE_GUI_1@__install_gsafm___depname = install-gsafm
-@COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).1.r
+@COND_TOOLKIT_MAC@__macos_res___depname = lib/libwx_$(TOOLCHAIN_NAME).2.r
 @COND_TOOLKIT_MAC@__macos_res_install___depname = macos-res-install
-@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).1.r
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).2.r
 @COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -6881,13 +6886,13 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	corelib_utilsx.o \
 	corelib_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9)
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).1
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .1.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).2
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .2.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).1.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@	= .$(SO_SUFFIX).2.0.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .1.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .2.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_1@dll___macver = \
 @COND_PLATFORM_MACOSX_1@	-compatibility_version $(WX_VERSION) \
@@ -6937,15 +6942,15 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 	@echo " "
 	@echo " ------------------------------------------------------"
 	@echo " "
-	@echo " The installation of wxWindows is finished.  On certain"
+	@echo " The installation of wxWidgets is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
 	@echo " if you installed a shared library and also modify the"
 	@echo " LD_LIBRARY_PATH (or equivalent) environment variable."
 	@echo " "
-	@echo " wxWindows comes with no guarantees and doesn't claim"
+	@echo " wxWidgets comes with no guarantees and doesn't claim"
 	@echo " to be suitable for any purpose."
 	@echo " "
-	@echo " Read the wxWindows Licence on licencing conditions."
+	@echo " Read the wxWidgets Licence on licencing conditions."
 	@echo " "
 	@echo " ------------------------------------------------------"
 	@echo " "
@@ -7017,8 +7022,8 @@ clean:
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	(cd samples && $(MAKE) clean)
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).1.rsrc lib/libwx_$(TOOLCHAIN_NAME).1.r
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).1.rsrc lib/libwx_$(TOOLCHAIN_NAME).1.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).2.rsrc lib/libwx_$(TOOLCHAIN_NAME).2.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).2.rsrc lib/libwx_$(TOOLCHAIN_NAME).2.r
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -7379,21 +7384,21 @@ locale_install:
 	fi ; \
 	done
 
-@COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).1.r: 
-@COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/carbon/apprsrc.r $(top_srcdir)/src/mac/carbon/carbrsrc.r $(top_srcdir)/src/mac/carbon/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).1.rsrc
-@COND_TOOLKIT_MAC@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc Carbon.r -useDF >lib/libwx_$(TOOLCHAIN_NAME).1.r
+@COND_TOOLKIT_MAC@lib/libwx_$(TOOLCHAIN_NAME).2.r: 
+@COND_TOOLKIT_MAC@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/carbon/apprsrc.r $(top_srcdir)/src/mac/carbon/carbrsrc.r $(top_srcdir)/src/mac/carbon/corersrc.r -o lib/libwx_$(TOOLCHAIN_NAME).2.rsrc
+@COND_TOOLKIT_MAC@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc Carbon.r -useDF >lib/libwx_$(TOOLCHAIN_NAME).2.r
 
 @COND_TOOLKIT_MAC@macos-res-install: $(__macos_res___depname)
-@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.r $(libdir)
-@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc $(libdir)
+@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.r $(libdir)
+@COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc $(libdir)
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).1.r: 
-@COND_TOOLKIT_COCOA@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).1.rsrc
-@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).1.r
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).2.r: 
+@COND_TOOLKIT_COCOA@	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).2.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).2.r
 
 @COND_TOOLKIT_COCOA@cocoa-res-install: $(__macos_res___depname)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.r $(libdir)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).2.rsrc $(libdir)
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $<
@@ -8089,6 +8094,9 @@ monodll_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONODLL_ODEP)
@@ -11017,6 +11025,9 @@ monolib_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONOLIB_ODEP)
@@ -14433,6 +14444,9 @@ coredll_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(COREDLL_ODEP)
 coredll_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
+coredll_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
 coredll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -16852,6 +16866,9 @@ corelib_statlmac.o: $(srcdir)/src/mac/carbon/statlmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+corelib_webkit.o: $(srcdir)/src/html/htmlctrl/webkit/webkit.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(CORELIB_ODEP)
@@ -20612,7 +20629,7 @@ distrib_clean:
 # VZ: the -only targets allow to do "make dist bzip-dist-only" without copying
 #     the files twice
 dist-only:
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | gzip -f9 > ../$(WXARCHIVE);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -20627,7 +20644,7 @@ dist-only:
 	fi
 
 dist: @GUIDIST@
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@# now prune away a lot of the crap included by using cp -R
 	@# in other dist targets.
 	find $(DISTDIR) \( -name "CVS" -o -name ".cvsignore" -o -name "*.dsp" -o -name "*.dsw" -o -name "*.hh*" -o \
@@ -20647,7 +20664,7 @@ dist: @GUIDIST@
 	fi
 
 bzip-dist-only:
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP);
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -20662,7 +20679,7 @@ bzip-dist-only:
 	fi
 
 bzip-dist: @GUIDIST@
-	@echo "*** Creating wxWindows distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets distribution in $(DISTDIR)..."
 	@cd _dist_dir && tar ch $(DISTDIRNAME) | bzip2 -f9 > ../$(WXARCHIVE_BZIP)
 	@if test "$(USE_GUI)" = 1; then \
 	cd $(DISTDIR); \
@@ -20676,7 +20693,7 @@ bzip-dist: @GUIDIST@
 
 # RR: Copy text and binary data separatly
 win-dist: MSW_ZIP_TEXT_DIST
-	@echo "*** Creating wxWindows ZIP distribution in $(DISTDIR)..."
+	@echo "*** Creating wxWidgets ZIP distribution in $(DISTDIR)..."
 	@cd _dist_dir && mv $(DISTDIRNAME) wxMSW
 	@cd _dist_dir && zip -r -l  ../$(WXARCHIVE_ZIP) *
 	cp $(INCDIR)/wx/msw/*.cur _dist_dir/wxMSW/include/wx/msw

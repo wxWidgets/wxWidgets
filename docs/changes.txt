@@ -1,6 +1,6 @@
-----------------------------
-wxWidgets 2.5/2.6 Change Log
-----------------------------
+------------------------
+wxWidgets 2.5 Change Log
+------------------------
 
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
@@ -162,7 +162,7 @@ Unix:
 - added "wx-config --libs=std,<extra>" syntax (i.e. support for "std")
 
 wxODBC:
-- Full unicode support is now available
+- Full Unicode support is now available
 - BLOB support is working
 
 

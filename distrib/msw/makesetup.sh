@@ -22,7 +22,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.5.1
+VERSION=2.5.2
 
 . $SCRIPTDIR/setup.var
 
@@ -158,6 +158,7 @@ dospinmac()
 
     zip $ZIPFLAGS -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/generic.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/mac.rsp
+    zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/cocoa.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/cw_mac.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/tiff.rsp
     zip $ZIPFLAGS -u -@ $DESTDIR/wxMac-$VERSION.zip < $APPDIR/distrib/msw/jpeg.rsp
@@ -558,25 +559,38 @@ makesetup()
     dospinmisc
 
     cp $APPDIR/docs/changes.txt $DESTDIR/changes-$VERSION.txt
+    cp $APPDIR/docs/readme.txt $DESTDIR/readme-$VERSION.txt
+
+    cp $APPDIR/docs/msw/readme.txt $DESTDIR/readme-msw-$VERSION.txt
     cp $APPDIR/docs/msw/install.txt $DESTDIR/install-msw-$VERSION.txt
+
+    cp $APPDIR/docs/mac/readme.txt $DESTDIR/readme-mac-$VERSION.txt
     cp $APPDIR/docs/mac/install.txt $DESTDIR/install-mac-$VERSION.txt
+
+    cp $APPDIR/docs/motif/readme.txt $DESTDIR/readme-motif-$VERSION.txt
     cp $APPDIR/docs/motif/install.txt $DESTDIR/install-motif-$VERSION.txt
+
+    cp $APPDIR/docs/gtk/readme.txt $DESTDIR/readme-gtk-$VERSION.txt
     cp $APPDIR/docs/gtk/install.txt $DESTDIR/install-gtk-$VERSION.txt
+
+    cp $APPDIR/docs/x11/readme.txt $DESTDIR/readme-x11-$VERSION.txt
+#    cp $APPDIR/docs/x11/readme-nanox.txt $DESTDIR/readme-nanox-$VERSION.txt
     cp $APPDIR/docs/x11/install.txt $DESTDIR/install-x11-$VERSION.txt
+
     cp $APPDIR/docs/mgl/readme.txt $DESTDIR/readme-mgl-$VERSION.txt
     cp $APPDIR/docs/mgl/install.txt $DESTDIR/install-mgl-$VERSION.txt
 
-    cp $APPDIR/docs/readme.txt $DESTDIR/readme-$VERSION.txt
-    cp $APPDIR/docs/motif/readme.txt $DESTDIR/readme-motif-$VERSION.txt
-    cp $APPDIR/docs/gtk/readme.txt $DESTDIR/readme-gtk-$VERSION.txt
-    cp $APPDIR/docs/x11/readme.txt $DESTDIR/readme-x11-$VERSION.txt
-    cp $APPDIR/docs/x11/readme-nanox.txt $DESTDIR/readme-nanox-$VERSION.txt
-    cp $APPDIR/docs/msw/readme.txt $DESTDIR/readme-msw-$VERSION.txt
-    cp $APPDIR/docs/mac/readme.txt $DESTDIR/readme-mac-$VERSION.txt
+    cp $APPDIR/docs/cocoa/readme.txt $DESTDIR/readme-cocoa-$VERSION.txt
+    cp $APPDIR/docs/cocoa/install.txt $DESTDIR/install-cocoa-$VERSION.txt
+
     cp $APPDIR/docs/base/readme.txt $DESTDIR/readme-base-$VERSION.txt
+
     cp $APPDIR/docs/os2/install.txt $DESTDIR/install-os2-$VERSION.txt
+
     cp $APPDIR/docs/univ/readme.txt $DESTDIR/readme-univ-$VERSION.txt
+
     cp $APPDIR/docs/readme_vms.txt $DESTDIR/readme-vms-$VERSION.txt
+
     # cp $APPDIR/docs/motif/makewxmotif $DESTDIR/makewxmotif-$VERSION
     # cp $APPDIR/docs/gtk/makewxgtk $DESTDIR/makewxgtk-$VERSION
     

@@ -178,6 +178,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_wxregex.obj &
 	$(OBJS)\test_filesys.obj &
 	$(OBJS)\test_arrays.obj &
+	$(OBJS)\test_hashes.obj &
 	$(OBJS)\test_longlong.obj &
 	$(OBJS)\test_strings.obj &
 	$(OBJS)\test_stdstrings.obj &
@@ -238,6 +239,9 @@ $(OBJS)\test_filesys.obj :  .AUTODEPEND .\filesys\filesys.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlong.obj :  .AUTODEPEND .\longlong\longlong.cpp

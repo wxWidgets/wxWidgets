@@ -3,12 +3,8 @@ build/msw/*.dsw
 
 src/wxWindows.dsp
 src/wxWindows.dsw
-src/wxUniv.dsp
-src/wxUniv.dsw
 src/wxBase.dsp
 src/wxBase.dsw
-src/msw/wince/wxWindowsCE.vcp
-src/msw/wince/wxWindowsCE.vcw
 
 src/jpeg/jpeg.dsp
 src/jpeg/jpeg.dsw
@@ -35,9 +31,6 @@ samples/access/access.dsw
 samples/artprov/artprov.dsp
 samples/artprov/artprov.dsw
 
-samples/calendar/arttest.dsp
-samples/calendar/arttest.dsw
-
 samples/calendar/calendar.dsp
 samples/calendar/calendar.dsw
 
@@ -61,10 +54,6 @@ samples/db/db.dsw
 
 samples/dialogs/dialogs.dsp
 samples/dialogs/dialogs.dsw
-samples/dialogs/dialogsUniv.dsp
-samples/dialogs/dialogsUniv.dsw
-samples/dialogs/dialogsCE.vcp
-samples/dialogs/dialogsCE.vcw
 
 samples/dialup/dialup.dsp
 samples/dialup/dialup.dsw
@@ -75,14 +64,14 @@ samples/display/display.dsw
 samples/dnd/dnd.dsp
 samples/dnd/dnd.dsw
 
-samples/dragimag/dragimag.dsp
-samples/dragimag/dragimag.dsw
-
 samples/docview/docview.dsp
 samples/docview/docview.dsw
 
 samples/docvwmdi/docvwmdi.dsp
 samples/docvwmdi/docvwmdi.dsw
+
+samples/dragimag/dragimag.dsp
+samples/dragimag/dragimag.dsw
 
 samples/drawing/drawing.dsp
 samples/drawing/drawing.dsw
@@ -96,17 +85,17 @@ samples/erase/erase.dsw
 samples/event/event.dsp
 samples/event/event.dsw
 
-samples/exec/exec.dsp
-samples/exec/exec.dsw
-
 samples/except/except.dsp
 samples/except/except.dsw
+
+samples/exec/exec.dsp
+samples/exec/exec.dsw
 
 samples/font/font.dsp
 samples/font/font.dsw
 
-samples/grid/griddemo.dsp
-samples/grid/griddemo.dsw
+samples/grid/grid.dsp
+samples/grid/grid.dsw
 
 samples/help/help.dsp
 samples/help/help.dsw
@@ -137,13 +126,13 @@ samples/image/image.dsw
 samples/internat/internat.dsp
 samples/internat/internat.dsw
 
-samples/keyboard/keyboard.dsp
-samples/keyboard/keyboard.dsw
-
 samples/ipc/client.dsp
 samples/ipc/client.dsw
 samples/ipc/server.dsp
 samples/ipc/server.dsw
+
+samples/keyboard/keyboard.dsp
+samples/keyboard/keyboard.dsw
 
 samples/joytest/joytest.dsp
 samples/joytest/joytest.dsw
@@ -151,8 +140,8 @@ samples/joytest/joytest.dsw
 samples/layout/layout.dsp
 samples/layout/layout.dsw
 
-samples/listbox/lboxtest.dsp
-samples/listbox/lboxtest.dsw
+samples/listbox/listbox.dsp
+samples/listbox/listbox.dsw
 
 samples/listctrl/listctrl.dsp
 samples/listctrl/listctrl.dsw
@@ -171,18 +160,17 @@ samples/mfc/mfc.dsw
 
 samples/minimal/minimal.dsp
 samples/minimal/minimal.dsw
-samples/minimal/minimalUniv.dsp
-samples/minimal/minimalCE.vcp
-samples/minimal/minimalCE.vcw
 
 samples/minifram/minifram.dsp
 samples/minifram/minifram.dsw
 
 samples/mobile/styles/styles.dsp
+samples/mobile/styles/styles.dsw
+samples/mobile/wxedit/wxedit.dsp
 samples/mobile/wxedit/wxedit.dsw
 
-samples/multimon/multimon_test.dsp
-samples/multimon/multimon_test.dsw
+samples/multimon/multimon.dsp
+samples/multimon/multimon.dsw
 
 samples/nativdlg/nativdlg.dsp
 samples/nativdlg/nativdlg.dsw
@@ -272,9 +260,6 @@ samples/wxtest/wxtest.dsw
 
 samples/widgets/widgets.dsp
 samples/widgets/widgets.dsw
-samples/widgets/widgetsUniv.dsp
-samples/widgets/widgetsCE.vcp
-samples/widgets/widgetsCE.vcw
 
 samples/opengl/cube/cube.dsp
 samples/opengl/cube/cube.dsw
@@ -285,8 +270,6 @@ samples/opengl/penguin/penguin.dsw
 
 demos/bombs/bombs.dsp
 demos/bombs/bombs.dsw
-demos/bombs/bombsCE.vcp
-demos/bombs/bombsCE.vcw
 
 demos/dbbrowse/dbbrowse.dsp
 demos/dbbrowse/dbbrowse.dsw
@@ -299,13 +282,9 @@ demos/fractal/fractal.dsw
 
 demos/life/life.dsp
 demos/life/life.dsw
-demos/life/lifeCE.vcp
-demos/life/lifeCE.vcw
 
 demos/poem/poem.dsp
 demos/poem/poem.dsw
-demos/poem/poemCE.vcp
-demos/poem/poemCE.vcw
 
 utils/tex2rtf/src/tex2rtf_tex2rtf.dsp
 utils/tex2rtf/src/tex2rtf_tex2rtf_gui.dsp
@@ -350,8 +329,8 @@ contrib/utils/wxrc/wxrc.dsw
 contrib/utils/convertrc/convertrc.dsp
 contrib/utils/convertrc/convertrc.dsw
 
-contrib/utils/wxrcedit/wxRcEditVC.dsp
-contrib/utils/wxrcedit/wxRcEditVC.dsw
+contrib/utils/wxrcedit/wxrcedit.dsp
+contrib/utils/wxrcedit/wxrcedit.dsw
 
 contrib/build/plot/plot.dsp
 contrib/build/plot/plot.dsw
@@ -375,8 +354,8 @@ contrib/samples/gizmos/led/led.dsw
 
 contrib/build/animate/animate.dsp
 contrib/build/animate/animate.dsw
-contrib/samples/animate/AniTestVC.dsp
-contrib/samples/animate/AniTestVC.dsw
+contrib/samples/animate/anitest.dsp
+contrib/samples/animate/anitest.dsw
 
 contrib/samples/fl/fl.dsp
 contrib/samples/fl/fl.dsw
