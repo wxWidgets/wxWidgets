@@ -46,7 +46,7 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
     int fields = GetLong(wxT("fields"), 1);
     wxString widths = GetParamValue(wxT("widths"));
 
-    if(fields > 1)
+    if (fields > 1 && !widths.IsEmpty())
     {
         int *width = new int[fields];
   
