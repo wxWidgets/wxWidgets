@@ -48,7 +48,9 @@
 
 #if wxUSE_UNICODE
     #undef wxUSE_EXPERIMENTAL_PRINTF
-    #define wxUSE_EXPERIMENTAL_PRINTF 1
+    #ifndef wvsnprintf
+        #define wxUSE_EXPERIMENTAL_PRINTF 1
+    #endif
 #endif
 
 // allocating extra space for each string consumes more memory but speeds up
@@ -184,11 +186,11 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 
 #endif  //std::string compatibility
 
-extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
-                                   const wxChar *format, va_list argptr)
+#ifndef wxVsnprintf
+int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
+                            const wxChar *format, va_list argptr)
 {
 #if wxUSE_UNICODE
-    // FIXME should use wvsnprintf() or whatever if it's available
     wxString s;
     int iLen = s.PrintfV(format, argptr);
     if ( iLen != -1 )
@@ -210,9 +212,20 @@ extern int WXDLLEXPORT wxVsnprintf(wxChar *buf, size_t len,
     return rc;
 #endif // Unicode/ANSI
 }
+#else
+// GNU libc 2.2 only has for wxVsnprintf for Unicode called vswprintf
+// so we imitate wxVsprintf using it.
+int WXDLLEXPORT wxVsprintf(wxChar *buf,
+                           const wxChar *format,
+                           va_list argptr)
+{
+    return vswprintf( buf, 10000, format, argptr );
+}
+#endif
 
-extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
-                                  const wxChar *format, ...)
+#ifndef wxSnprintf   
+int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
+                           const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -223,6 +236,23 @@ extern int WXDLLEXPORT wxSnprintf(wxChar *buf, size_t len,
 
     return iLen;
 }
+#else
+// GNU libc 2.2 only has for wxSnprintf for Unicode called swprintf
+// so we imitate wxSprintf using it.
+int WXDLLEXPORT wxSprintf(wxChar *buf,
+                          const wxChar *format,
+                          ...) ATTRIBUTE_PRINTF_2
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int iLen = swprintf(buf, 10000, format, argptr);
+
+    va_end(argptr);
+
+    return iLen;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes

@@ -372,6 +372,29 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #      define  wxStrtoul   wcstoul
 #      define  wxStrxfrm   wcsxfrm
 
+#      define  wxFgetc     fgetwc
+#      define  wxFgetchar  fgetwchar
+#      define  wxFgets     fgetws
+#      define  wxFputc     fputwc
+#      define  wxFputchar  fputwchar
+#      define  wxFprintf   fwprintf
+#      define  wxFscanf    fwscanf
+#      define  wxGetc      getwc
+#      define  wxGetchar   getwchar
+#      define  wxGets      getws
+#      define  wxPrintf    wprintf
+#      define  wxPutc      wputc
+#      define  wxPutchar   wputchar
+#      define  wxPuts      putws
+#      define  wxScanf     wscanf
+#      define  wxSnprintf  swprintf
+#      define  wxSscanf    swscanf
+#      define  wxUngetc    ungetwc
+#      define  wxVfprint   vfwprintf
+#      define  wxVprintf   vwprintf
+#      define  wxVsscanf   vswscanf
+#      define  wxVsnprintf vswprintf
+
 // glibc doesn't have wc equivalents of the other stuff
 #      define wxNEED_WX_STDIO_H
 #      define wxNEED_WX_STDLIB_H
@@ -482,29 +505,30 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #  endif
 
 #  ifdef wxNEED_WX_STDIO_H
+#    define  wxFopen     fopen
+#    define  wxFreopen   freopen
+#    define  wxPerror    perror
+#    define  wxRemove    remove
+#    define  wxRename    rename
+#    define  wxTmpnam    tmpnam
+
 #    define  wxFgetc     fgetc
 #    define  wxFgetchar  fgetchar
 #    define  wxFgets     fgets
-#    define  wxFopen     fopen
 #    define  wxFputc     fputc
 #    define  wxFputchar  fputchar
 #    define  wxFprintf   fprintf
-#    define  wxFreopen   freopen
 #    define  wxFscanf    fscanf
 #    define  wxGetc      getc
 #    define  wxGetchar   getchar
 #    define  wxGets      gets
-#    define  wxPerror    perror
 #    define  wxPrintf    printf
 #    define  wxPutc      putc
 #    define  wxPutchar   putchar
 #    define  wxPuts      puts
-#    define  wxRemove    remove
-#    define  wxRename    rename
 #    define  wxScanf     scanf
 #    define  wxSprintf   sprintf
 #    define  wxSscanf    sscanf
-#    define  wxTmpnam    tmpnam
 #    define  wxUngetc    ungetc
 #    define  wxVfprint   vfprintf
 #    define  wxVprintf   vprintf
@@ -512,6 +536,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #    define  wxVsprintf  vsprintf
 #    undef wxNEED_WX_STDIO_H
 #  endif
+
 
 #  ifdef wxNEED_WX_STDLIB_H
 #    define  wxAtof      atof
@@ -640,14 +665,6 @@ WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
 WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
 WXDLLEXPORT int      wxRemove(const wxChar *path);
 WXDLLEXPORT int      wxRename(const wxChar *oldpath, const wxChar *newpath);
-WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...) ATTRIBUTE_PRINTF_1;
-WXDLLEXPORT int      wxVprintf(const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
-WXDLLEXPORT int      wxVfprintf(FILE *stream, const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxSprintf(wxChar *buf, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
-WXDLLEXPORT int      wxVsprintf(wxChar *buf, const wxChar *fmt, va_list argptr);
-WXDLLEXPORT int      wxSscanf(const wxChar *buf, const wxChar *fmt, ...) ATTRIBUTE_PRINTF_2;
-WXDLLEXPORT int      wxVsscanf(const wxChar *buf, const wxChar *fmt, va_list argptr);
 #endif
 
 #ifndef wxAtof
