@@ -28,8 +28,9 @@
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "wx/app.h"
-extern "C" { 
-#include "jpeglib.h"
+extern "C"
+{
+    #include "jpeglib.h"
 }
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -65,7 +66,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
 
 typedef struct {
     struct jpeg_source_mgr pub;   /* public fields */
-    
+
     JOCTET* buffer;               /* start of buffer */
 } my_source_mgr;
 
@@ -83,7 +84,7 @@ METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr WXUNUSED(cinfo) )
 METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
 {
     my_src_ptr src = (my_src_ptr) cinfo->src;
-    
+
     src->pub.next_input_byte += (size_t) num_bytes;
     src->pub.bytes_in_buffer -= (size_t) num_bytes;
 }
@@ -91,15 +92,15 @@ METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
 METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
 {
     my_src_ptr src = (my_src_ptr) cinfo->src;
-    
+
     free (src->buffer);
 }
 
 void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
 {
     my_src_ptr src;
-    
-    if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+
+    if (cinfo->src == NULL) {    /* first time for this JPEG object? */
         cinfo->src = (struct jpeg_source_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(my_source_mgr));
@@ -110,7 +111,7 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
     src->buffer = (JOCTET *) malloc (infile.GetSize());
     src->pub.next_input_byte = src->buffer; /* until buffer loaded */
     infile.Read(src->buffer, infile.GetSize());
-    
+
     src->pub.init_source = my_init_source;
     src->pub.fill_input_buffer = my_fill_input_buffer;
     src->pub.skip_input_data = my_skip_input_data;
@@ -122,9 +123,9 @@ void jpeg_wxio_src( j_decompress_ptr cinfo, wxInputStream& infile )
 // JPEG error manager:
 
 struct my_error_mgr {
-  struct jpeg_error_mgr pub;	/* "public" fields */
+  struct jpeg_error_mgr pub;    /* "public" fields */
 
-  jmp_buf setjmp_buffer;	/* for return to caller */
+  jmp_buf setjmp_buffer;    /* for return to caller */
 };
 
 typedef struct my_error_mgr * my_error_ptr;
@@ -156,7 +157,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     JSAMPARRAY tempbuf;
     unsigned char *ptr;
     unsigned stride;
-    
+
     image->Destroy();
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
@@ -179,7 +180,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     jpeg_read_header( &cinfo, TRUE );
     cinfo.out_color_space = JCS_RGB;
     jpeg_start_decompress( &cinfo );
-    
+
     image->Create( cinfo.image_width, cinfo.image_height );
     if (!image->Ok()) {
         jpeg_finish_decompress( &cinfo );
@@ -191,7 +192,7 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     stride = cinfo.output_width * 3;
     tempbuf = (*cinfo.mem->alloc_sarray)
         ((j_common_ptr) &cinfo, JPOOL_IMAGE, stride, 1 );
-    
+
     while ( cinfo.output_scanline < cinfo.output_height ) {
         jpeg_read_scanlines( &cinfo, tempbuf, 1 );
         memcpy( ptr, tempbuf[0], stride );
@@ -208,19 +209,19 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 
 typedef struct {
     struct jpeg_destination_mgr pub;
-    
+
     wxOutputStream *stream;
     JOCTET * buffer;
 } my_destination_mgr;
 
 typedef my_destination_mgr * my_dest_ptr;
 
-#define OUTPUT_BUF_SIZE  4096	/* choose an efficiently fwrite'able size */
+#define OUTPUT_BUF_SIZE  4096    /* choose an efficiently fwrite'able size */
 
 METHODDEF(void) init_destination (j_compress_ptr cinfo)
 {
     my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
-    
+
     /* Allocate the output buffer --- it will be released when done with image */
     dest->buffer = (JOCTET *)
         (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
@@ -232,7 +233,7 @@ METHODDEF(void) init_destination (j_compress_ptr cinfo)
 METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
 {
     my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
-    
+
     dest->stream->Write(dest->buffer, OUTPUT_BUF_SIZE);
     dest->pub.next_output_byte = dest->buffer;
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
@@ -251,13 +252,13 @@ METHODDEF(void) term_destination (j_compress_ptr cinfo)
 GLOBAL(void) jpeg_wxio_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
 {
     my_dest_ptr dest;
-    
-    if (cinfo->dest == NULL) {	/* first time for this JPEG object? */
+
+    if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
         cinfo->dest = (struct jpeg_destination_mgr *)
             (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
             sizeof(my_destination_mgr));
     }
-    
+
     dest = (my_dest_ptr) cinfo->dest;
     dest->pub.init_destination = init_destination;
     dest->pub.empty_output_buffer = empty_output_buffer;
@@ -269,10 +270,10 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 {
     struct jpeg_compress_struct cinfo;
     struct my_error_mgr jerr;
-    JSAMPROW row_pointer[1];	/* pointer to JSAMPLE row[s] */
+    JSAMPROW row_pointer[1];    /* pointer to JSAMPLE row[s] */
     JSAMPLE *image_buffer;
-    int stride;		        /* physical row width in image buffer */
-    
+    int stride;                /* physical row width in image buffer */
+
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = my_error_exit;
 
@@ -290,15 +291,15 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
     jpeg_create_compress(&cinfo);
     jpeg_wxio_dest(&cinfo, stream);
-    
+
     cinfo.image_width = image->GetWidth();
     cinfo.image_height = image->GetHeight();
     cinfo.input_components = 3;
     cinfo.in_color_space = JCS_RGB;
     jpeg_set_defaults(&cinfo);
     jpeg_start_compress(&cinfo, TRUE);
-    
-    stride = cinfo.image_width * 3;	/* JSAMPLEs per row in image_buffer */
+
+    stride = cinfo.image_width * 3;    /* JSAMPLEs per row in image_buffer */
     image_buffer = image->GetData();
     while (cinfo.next_scanline < cinfo.image_height) {
         row_pointer[0] = &image_buffer[cinfo.next_scanline * stride];
@@ -306,15 +307,15 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     }
     jpeg_finish_compress(&cinfo);
     jpeg_destroy_compress(&cinfo);
-    
+
     return TRUE;
 }
 
 
-bool wxJPEGHandler::CanRead( wxInputStream& stream )
+bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
-    
+
     stream.Read(&hdr, 2);
     stream.SeekI(-2, wxFromCurrent);
     return (hdr[0] == 0xFF && hdr[1] == 0xD8);

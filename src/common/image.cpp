@@ -196,7 +196,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     wxCHECK_MSG( Ok(), image, wxT("invalid image") );
 
     wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight())
-		 , image, wxT("invalid subimage size") );
+                 , image, wxT("invalid subimage size") );
 
     int subwidth=rect.GetWidth();
     const int subheight=rect.GetHeight();
@@ -213,14 +213,14 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     const int subleft=3*rect.GetLeft();
     const int width=3*GetWidth();
     subwidth*=3;
-    
+
     data+=rect.GetTop()*width+subleft;
 
     for (long j = 0; j < subheight; ++j)
     {
         memcpy( subdata, data, subwidth);
         subdata+=subwidth;
-	data+=width;
+        data+=width;
     }
 
     return image;
@@ -310,9 +310,9 @@ void wxImage::SetData( char unsigned *data )
     newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
     newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
     newRefData->m_hasMask = M_IMGDATA->m_hasMask;
-    
+
     UnRef();
-    
+
     m_refData = newRefData;
 }
 
@@ -449,18 +449,18 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 
     if (type==wxBITMAP_TYPE_ANY)
     {
-	wxList &list=GetHandlers();
+        wxList &list=GetHandlers();
 
-	for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
-	{  
- 	    handler=(wxImageHandler*)node->GetData();
-        if (handler->CanRead( stream ))
-            return handler->LoadFile( this, stream );
+        for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+        {
+             handler=(wxImageHandler*)node->GetData();
+             if (handler->CanRead( stream ))
+                 return handler->LoadFile( this, stream );
 
-	}
+        }
 
-	wxLogWarning( wxT("No handler found for this image.") );
-	return FALSE;
+        wxLogWarning( wxT("No handler found for this image.") );
+        return FALSE;
     }
 
     handler = FindHandler(type);
@@ -642,11 +642,6 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
     return FALSE;
 }
 
-bool wxImageHandler::CanRead( wxInputStream& WXUNUSED(stream) )
-{
-    return FALSE;
-}
-
 bool wxImageHandler::CanRead( const wxString& name )
 {
 #if wxUSE_STREAMS
@@ -801,7 +796,7 @@ wxBitmap wxImage::ConvertToBitmap() const
         //    HDC memdc = ::CreateCompatibleDC( hdc );
         //    ::SelectObject( memdc, hbitmap);
         //    ::SetDIBitsToDevice( memdc, 0, 0, width, height,
-        //	    0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
+        //            0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
         //    ::SelectObject( memdc, 0 );
         //    ::DeleteDC( memdc );
     }
@@ -1060,25 +1055,25 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
         static bool s_hasInitialized = FALSE;
 
-	if (!s_hasInitialized)
-	{
-	    gdk_rgb_init();
-	    s_hasInitialized = TRUE;
-	}
+        if (!s_hasInitialized)
+        {
+            gdk_rgb_init();
+            s_hasInitialized = TRUE;
+        }
 
         GdkGC *gc = gdk_gc_new( bitmap.GetPixmap() );
 
-	gdk_draw_rgb_image( bitmap.GetPixmap(),
-	                    gc,
-			    0, 0,
-			    width, height,
-			    GDK_RGB_DITHER_NONE,
-			    GetData(),
-			    width*3 );
+        gdk_draw_rgb_image( bitmap.GetPixmap(),
+                            gc,
+                            0, 0,
+                            width, height,
+                            GDK_RGB_DITHER_NONE,
+                            GetData(),
+                            width*3 );
 
         gdk_gc_unref( gc );
 
-	return bitmap;
+        return bitmap;
     }
 
 #endif
@@ -1282,7 +1277,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         for (int i = 0; i < bitmap.GetWidth(); i++)
         {
             wxInt32 pixel = gdk_image_get_pixel( gdk_image, i, j );
-	    pixel = wxINT32_SWAP_ON_BE( pixel );
+            pixel = wxINT32_SWAP_ON_BE( pixel );
             if (bpp <= 8)
             {
                 data[pos] = cmap->colors[pixel].red >> 8;

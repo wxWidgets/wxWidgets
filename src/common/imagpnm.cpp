@@ -44,7 +44,7 @@ void Skip_Comment(wxInputStream &stream)
   wxString line;
   wxTextInputStream text_stream(stream);
 
-  if (stream.Peek()==wxT('#')) 
+  if (stream.Peek()==wxT('#'))
     {
       text_stream >> line;
       Skip_Comment(stream);
@@ -57,7 +57,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     wxUint16  maxval;
     wxString  line;
     char      c(0);
-    
+
     image->Destroy();
 
     /*
@@ -73,21 +73,21 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     switch (c)
       {
       case wxT('2'):
-	wxLogError(wxT("Loading Grey Ascii PNM image is not yet implemented."));
-	return FALSE;
+        wxLogError(wxT("Loading Grey Ascii PNM image is not yet implemented."));
+        return FALSE;
       case wxT('5'):
-	wxLogError(wxT("Loading Grey Raw PNM image is not yet implemented."));
-	return FALSE;
+        wxLogError(wxT("Loading Grey Raw PNM image is not yet implemented."));
+        return FALSE;
       case wxT('3'): case wxT('6'): break;
-	default :
-	wxLogError(wxT("Loading PNM image : file not recognized."));
-	return FALSE;
+        default :
+        wxLogError(wxT("Loading PNM image : file not recognized."));
+        return FALSE;
       }
 
     text_stream >> line; // for the \n
     Skip_Comment(buf_stream);
     text_stream >> width >> height ;
-    Skip_Comment(buf_stream); 
+    Skip_Comment(buf_stream);
     text_stream >> maxval;
 
     //cout << line << " " << width << " " << height << " " << maxval << endl;
@@ -96,25 +96,25 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     if (!ptr)
     {
         wxLogError( wxT("Cannot allocate RAM for RGB data in PNM file.") );
-	return FALSE;
+        return FALSE;
     }
 
    if (c=='3') // Ascii RBG
-      { 
-	wxUint32 value, size=3*width*height;
-	for (wxUint32 i=0; i<size; ++i)
-	  {
-	    //this is very slow !!!
-	    //I wonder how we can make any better ?
-	    value=text_stream.Read32();
-	    *ptr++=(unsigned char)value;
+      {
+        wxUint32 value, size=3*width*height;
+        for (wxUint32 i=0; i<size; ++i)
+          {
+            //this is very slow !!!
+            //I wonder how we can make any better ?
+            value=text_stream.Read32();
+            *ptr++=(unsigned char)value;
 
-	    if (buf_stream.LastError()!=wxSTREAM_NOERROR)
-	      {
-		wxLogError(wxT("Loading PNM image : file seems truncated."));
-		return FALSE;
-	      }
-	  }
+            if (buf_stream.LastError()!=wxSTREAM_NOERROR)
+              {
+                wxLogError(wxT("Loading PNM image : file seems truncated."));
+                return FALSE;
+              }
+          }
       }
     if (c=='6') // Raw RGB
       buf_stream.Read( ptr, 3*width*height );
@@ -127,9 +127,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUSED(verbose) )
 {
     wxTextOutputStream text_stream(stream);
-    
-    //text_stream << "P6" << endl 
-    //<< image->GetWidth() << " " << image->GetHeight() << endl 
+
+    //text_stream << "P6" << endl
+    //<< image->GetWidth() << " " << image->GetHeight() << endl
     //<< "255" << endl;
     text_stream << "P6\n" << image->GetWidth() << " " << image->GetHeight() << "\n255\n";
     stream.Write(image->GetData(),3*image->GetWidth()*image->GetHeight());
@@ -137,19 +137,22 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
     return (stream.LastError()==wxStream_NOERROR);
 }
 
-bool wxPNMHandler::CanRead( wxInputStream& stream )
+bool wxPNMHandler::DoCanRead( wxInputStream& stream )
 {
-    off_t pos=stream.TellI();
+    off_t pos = stream.TellI();
 
     Skip_Comment(stream);
 
-    if (stream.GetC()==wxT('P'))
-      switch (stream.GetC())
-	{
-	case wxT('3'): case wxT('6'):
-	  stream.SeekI(pos);
-	  return TRUE;
-	}
+    if ( stream.GetC() == 'P' )
+    {
+        switch (stream.GetC())
+        {
+            case '3':
+            case '6':
+                stream.SeekI(pos);
+                return TRUE;
+        }
+    }
 
     stream.SeekI(pos);
     return FALSE;

@@ -278,7 +278,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
             return FALSE;
         }
 
-	if (!verbose) png_set_error_fn(png_ptr, (png_voidp)NULL, png_silent_error, png_silent_warning);
+        if (!verbose) png_set_error_fn(png_ptr, (png_voidp)NULL, png_silent_error, png_silent_warning);
 
         png_infop info_ptr = png_create_info_struct(png_ptr);
         if (info_ptr == NULL)
@@ -324,7 +324,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                 data[(x << 2) + 0] = *ptr++;
                 data[(x << 2) + 1] = *ptr++;
                 data[(x << 2) + 2] = *ptr++;
-		 if (( !image->HasMask() ) || \
+                if (( !image->HasMask() ) || \
                     (data[(x << 2) + 0] != image->GetMaskRed()) || \
                     (data[(x << 2) + 1] != image->GetMaskGreen()) || \
                     (data[(x << 2) + 2] != image->GetMaskBlue()))
@@ -347,7 +347,7 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     return TRUE;
 }
 
-bool wxPNGHandler::CanRead( wxInputStream& stream )
+bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
 

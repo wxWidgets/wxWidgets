@@ -49,7 +49,7 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     decod = new wxGIFDecoder(&stream, TRUE);
 
     if ((error = decod->ReadGIF()) != E_OK)
-    {   
+    {
         if (verbose)
         {
             switch (error)
@@ -79,7 +79,7 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
     return FALSE;
 }
 
-bool wxGIFHandler::CanRead( wxInputStream& stream )
+bool wxGIFHandler::DoCanRead( wxInputStream& stream )
 {
     wxGIFDecoder *decod;
     bool ok;

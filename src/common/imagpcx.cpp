@@ -24,7 +24,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_STREAMS && wxUSE_PCX 
+#if wxUSE_STREAMS && wxUSE_PCX
 
 #include "wx/image.h"
 #include "wx/wfstream.h"
@@ -76,12 +76,12 @@ void RLEdecode(unsigned char *p, unsigned int size, wxInputStream& s)
 
 
 /* PCX header */
-#define HDR_VERSION         1        
+#define HDR_VERSION         1
 #define HDR_ENCODING        2
 #define HDR_BITSPERPIXEL    3
 #define HDR_XMIN            4
 #define HDR_YMIN            6
-#define HDR_XMAX            8 
+#define HDR_XMAX            8
 #define HDR_YMAX            10
 #define HDR_NPLANES         65
 #define HDR_BYTESPERLINE    66
@@ -201,7 +201,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
                 {
                     *(dst++) = p[i];
                     *(dst++) = p[i + bytesperline];
-                    *(dst++) = p[i + 2 * bytesperline]; 
+                    *(dst++) = p[i + 2 * bytesperline];
                 }
                 break;
             }
@@ -263,7 +263,7 @@ bool wxPCXHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(
     return FALSE;
 }
 
-bool wxPCXHandler::CanRead( wxInputStream& stream )
+bool wxPCXHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char c;
     off_t pos;

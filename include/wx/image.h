@@ -62,20 +62,22 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 
-  virtual bool CanRead( wxInputStream& stream );
-  virtual bool CanRead( const wxString& name );
+  bool CanRead( wxInputStream& stream ) { return DoCanRead(stream); }
+  bool CanRead( const wxString& name );
 #endif
 
-  inline void SetName(const wxString& name) { m_name = name; }
-  inline void SetExtension(const wxString& ext) { m_extension = ext; }
-  inline void SetType(long type) { m_type = type; }
-  inline void SetMimeType(const wxString& type) { m_mime = type; }
-  inline wxString GetName() const { return m_name; }
-  inline wxString GetExtension() const { return m_extension; }
-  inline long GetType() const { return m_type; }
-  inline wxString GetMimeType() const { return m_mime; }
+  void SetName(const wxString& name) { m_name = name; }
+  void SetExtension(const wxString& ext) { m_extension = ext; }
+  void SetType(long type) { m_type = type; }
+  void SetMimeType(const wxString& type) { m_mime = type; }
+  wxString GetName() const { return m_name; }
+  wxString GetExtension() const { return m_extension; }
+  long GetType() const { return m_type; }
+  wxString GetMimeType() const { return m_mime; }
 
 protected:
+  virtual bool DoCanRead( wxInputStream& stream ) = 0;
+
   wxString  m_name;
   wxString  m_extension;
   wxString  m_mime;
@@ -105,10 +107,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-private:
-   // hiding base class virtuals again!
-  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
+  virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -135,10 +134,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-private:
-   // hiding base class virtuals again!
-  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
+  virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -163,10 +159,7 @@ public:
 
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-private:
-   // hiding base class virtuals again!
-  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
+  virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
 
@@ -193,10 +186,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-private:
-   // hiding base class virtuals again!
-  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
+  virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -223,10 +213,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-private:
-   // hiding base class virtuals again!
-  inline bool CanRead( const wxString& name ) { return(wxImageHandler::CanRead(name)); };
+  virtual bool DoCanRead( wxInputStream& stream );
 #endif
 };
 #endif
@@ -253,8 +240,7 @@ public:
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool CanRead( wxInputStream& stream );
-#endif
+  virtual bool DoCanRead( wxInputStream& stream );
 };
 #endif
 
