@@ -73,8 +73,8 @@ bool wxGenericImageList::Create()
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( bitmap.GetWidth() == m_width &&
-                    bitmap.GetHeight() == m_height,
+    wxASSERT_MSG( (bitmap.GetWidth() == m_width && bitmap.GetHeight() == m_height)
+                  || (m_width == 0 && m_height == 0),
                   _T("invalid bitmap size in wxImageList: this might work ")
                   _T("on this platform but definitely won't under Windows.") );
 
@@ -82,6 +82,13 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         m_images.Append( new wxIcon( (const wxIcon&) bitmap ) );
     else
         m_images.Append( new wxBitmap(bitmap) );
+
+    if (m_width == 0 && m_height == 0)
+    {
+        m_width = bitmap.GetWidth();
+        m_height = bitmap.GetHeight();
+    }
+    
     return m_images.GetCount()-1;
 }
 
