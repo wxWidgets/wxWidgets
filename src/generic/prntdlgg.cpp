@@ -700,16 +700,21 @@ wxGenericPageSetupDialog::~wxGenericPageSetupDialog()
 {
 }
 
+static inline wxString IntToString( long value )
+{
+    return wxString::Format(wxT("%ld"), value);
+}
+
 bool wxGenericPageSetupDialog::TransferDataToWindow()
 {
     if (m_marginLeftText)
-        m_marginLeftText->SetValue(IntToString((int) m_pageData.GetMarginTopLeft().x));
+        m_marginLeftText->SetValue(IntToString(m_pageData.GetMarginTopLeft().x));
     if (m_marginTopText)
-        m_marginTopText->SetValue(IntToString((int) m_pageData.GetMarginTopLeft().y));
+        m_marginTopText->SetValue(IntToString(m_pageData.GetMarginTopLeft().y));
     if (m_marginRightText)
-        m_marginRightText->SetValue(IntToString((int) m_pageData.GetMarginBottomRight().x));
+        m_marginRightText->SetValue(IntToString(m_pageData.GetMarginBottomRight().x));
     if (m_marginBottomText)
-        m_marginBottomText->SetValue(IntToString((int) m_pageData.GetMarginBottomRight().y));
+        m_marginBottomText->SetValue(IntToString(m_pageData.GetMarginBottomRight().y));
 
     if (m_orientationRadioBox)
     {
