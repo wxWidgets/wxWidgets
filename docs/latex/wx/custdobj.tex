@@ -1,0 +1,62 @@
+\section{\class{wxCustomDataObject}}\label{wxcustomdataobject}
+
+wxCustomDataObject is a specialization of 
+\helpref{wxDataObjectSimple}{wxdataobjectsimple} for some
+application-specific data in arbitrary (either custom or one of the standard
+ones). The only restriction is that it is supposed that this data can be
+copied bitwise (i.e. with {\tt memcpy()}), so it would be a bad idea to make
+it contain a C++ object (though C struct is fine).
+
+\wxheading{Derived from}
+
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}
+\helpref{wxDataObject}{wxdataobject}
+
+\wxheading{Include files}
+
+<wx/dataobj.h>
+
+\wxheading{See also}
+
+\helpref{wxDataObject}{wxdataobject}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxCustomDataObject::wxCustomDataObject}\label{wxcustomdataobjectwxcustomdataobject}
+
+\func{}{wxCustomDataObject}{\param{const wxDataFormat\& }{format = wxFormatInvalid}}
+
+The constructor accepts a {\it format} argument which specifies the (single)
+format supported by this object. If it isn't set here, 
+\helpref{SetFormat}{wxdataobjectsimplesetformat} should be used.
+
+\membersection{wxCustomDataObject::\destruct{wxCustomDataObject}}\label{wxcustomdataobjectdtor}
+
+\func{}{\destruct{wxCustomDataObject}}{\void}
+
+The destructor will free the data hold by the object. Notice that although it
+calls a virtual \helpref{Free()}{wxcustomdataobjectfree} function, the base
+class version will always be called (C++ doesn't allow calling virtual
+functions from constructors or destructors), so if you override {\tt Free()}, you
+should override the destructor in your class as well (which would probably
+just call the derived class' version of {\tt Free()}).
+
+
+\membersection{wxCustomDataObject::SetData}\label{wxcustomdataobjectsetdata}
+
+\func{virtual void}{SetData}{\param{const char }{*data}, \param{size\_t }{size}}
+
+Set the data. The data object will make an internal copy.
+
+\membersection{wxCustomDataObject::GetSize}\label{wxcustomdataobjectgetsize}
+
+\constfunc{virtual size\_t}{GetDataSize}{\void}
+
+Returns the data size.
+
+\membersection{wxCustomDataObject::GetData}\label{wxcustomdataobjectgetdata}
+
+\func{virtual char*}{GetData}{\void}
+
+Returns a pointer to the data.
+
