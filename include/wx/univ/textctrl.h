@@ -394,8 +394,11 @@ protected:
         return m_heightLine;
     }
 
-    // recalc the line height (to call when the font changes)
-    void RecalcLineHeight();
+    // get the average char width
+    wxCoord GetAverageWidth() const { return m_widthAvg; }
+
+    // recalc the line height and char width (to call when the font changes)
+    void RecalcFontMetrics();
 
     // event handlers
     void OnIdle(wxIdleEvent& event);
@@ -460,7 +463,10 @@ private:
 
     // the height of one line (cached value of GetCharHeight)
     wxCoord m_heightLine;
-    
+
+    // and the average char width (cached value of GetCharWidth)
+    wxCoord m_widthAvg;
+
     // we have some data which depends on the kind of control (single or multi
     // line)
     union

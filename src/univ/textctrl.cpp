@@ -392,7 +392,8 @@ void wxTextCtrl::Init()
     m_curCol =
     m_curRow = 0;
 
-    m_heightLine = -1;
+    m_heightLine =
+    m_widthAvg = -1;
 
     // init wxScrollHelper
     SetWindow(this);
@@ -463,7 +464,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
                       _T("wxTE_PASSWORD can't be used with multiline ctrls") );
     }
 
-    RecalcLineHeight();
+    RecalcFontMetrics();
     SetValue(value);
     SetBestSize(size);
 
@@ -1520,8 +1521,8 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
             // (i.e. the current character)
 
             // make xStart the first visible pixel (and not position)
-            int wChar = GetCharWidth();
-            xStart *= GetCharWidth();
+            int wChar = GetAverageWidth();
+            xStart *= wChar;
 
             if ( x < xStart )
             {
@@ -1859,7 +1860,7 @@ wxSize wxTextCtrl::DoGetBestClientSize() const
     wxCoord w, h;
     GetTextExtent(GetTextToShow(GetLineText(0)), &w, &h);
 
-    int wChar = GetCharWidth(),
+    int wChar = GetAverageWidth(),
         hChar = GetLineHeight();
 
     int widthMin = wxMax(10*wChar, 100);
@@ -2180,7 +2181,10 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
         // we use the first character of the line instead of (average)
         // GetCharWidth(): it is common to have lines of dashes, for example,
         // and this should give us much better approximation in such case
+        //
+        // OPT: maybe using (cache) m_widthAvg would be still faster? profile!
         dc.GetTextExtent(line[0], &width, NULL);
+
         col = x / width;
         if ( col < 0 )
         {
@@ -2712,9 +2716,10 @@ void wxTextCtrl::UpdateMaxWidth(wxTextCoord line)
     MData().m_updateScrollbarX = MData().m_widthMax != widthMaxOld;
 }
 
-void wxTextCtrl::RecalcLineHeight()
+void wxTextCtrl::RecalcFontMetrics()
 {
     m_heightLine = GetCharHeight();
+    m_widthAvg = GetCharWidth();
 }
 
 void wxTextCtrl::RecalcMaxWidth()
@@ -2770,7 +2775,7 @@ void wxTextCtrl::UpdateScrollbars()
     bool showScrollbarX;
     if ( !WrapLines() )
     {
-        charWidth = GetCharWidth();
+        charWidth = GetAverageWidth();
         maxWidth = GetMaxWidth();
         showScrollbarX = maxWidth > size.x;
     }
@@ -3326,7 +3331,7 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     // update geometry parameters
     UpdateTextRect();
     UpdateScrollbars();
-    RecalcLineHeight();
+    RecalcFontMetrics();
     RecalcMaxWidth();
 
     Refresh();
