@@ -19,7 +19,7 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
 // Some older compilers (such as EMX) cannot handle
-// #pragma interface/implementation correctly, iff 
+// #pragma interface/implementation correctly, iff
 // #pragma implementation is used in _two_ translation
 // units (as created by e.g. event.cpp compiled for
 // libwx_base and event.cpp compiled for libwx_gui_core).
@@ -333,9 +333,9 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
     m_eventObject = (wxObject *) NULL;
     m_timeStamp = 0;
     m_id = theId;
-    m_skipped = FALSE;
+    m_skipped = false;
     m_callbackUserData = (wxObject *) NULL;
-    m_isCommandEvent = FALSE;
+    m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
 }
 
@@ -368,7 +368,7 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_clientObject = (wxClientData *) NULL;
     m_extraLong = 0;
     m_commandInt = 0;
-    m_isCommandEvent = TRUE;
+    m_isCommandEvent = true;
 
     // the command events are propagated upwards by default
     m_propagationLevel = wxEVENT_PROPAGATE_MAX;
@@ -394,27 +394,27 @@ bool wxUpdateUIEvent::CanUpdate(wxWindowBase *win)
     if (win &&
        (GetMode() == wxUPDATE_UI_PROCESS_SPECIFIED &&
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_UI_UPDATES) == 0)))
-        return FALSE;
+        return false;
 
     if (sm_updateInterval == -1)
-        return FALSE;
+        return false;
     else if (sm_updateInterval == 0)
-        return TRUE;
+        return true;
     else
     {
 #if wxUSE_STOPWATCH && wxUSE_LONGLONG
         wxLongLong now = wxGetLocalTimeMillis();
         if (now > (sm_lastUpdate + sm_updateInterval))
         {
-            return TRUE;
+            return true;
         }
 #else
         // If we don't have wxStopWatch or wxLongLong, we
         // should err on the safe side and update now anyway.
-        return TRUE;
+        return true;
 #endif
     }
-    return FALSE;
+    return false;
 }
 
 // Reset the update time to provide a delay until the next
@@ -447,9 +447,9 @@ bool wxIdleEvent::CanSend(wxWindow* win)
     if (win &&
        (GetMode() == wxIDLE_PROCESS_SPECIFIED &&
        ((win->GetExtraStyle() & wxWS_EX_PROCESS_IDLE) == 0)))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -487,13 +487,13 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
 wxMouseEvent::wxMouseEvent(wxEventType commandType)
 {
     m_eventType = commandType;
-    m_metaDown = FALSE;
-    m_altDown = FALSE;
-    m_controlDown = FALSE;
-    m_shiftDown = FALSE;
-    m_leftDown = FALSE;
-    m_rightDown = FALSE;
-    m_middleDown = FALSE;
+    m_metaDown = false;
+    m_altDown = false;
+    m_controlDown = false;
+    m_shiftDown = false;
+    m_leftDown = false;
+    m_rightDown = false;
+    m_middleDown = false;
     m_x = 0;
     m_y = 0;
     m_wheelRotation = 0;
@@ -540,7 +540,7 @@ bool wxMouseEvent::ButtonDClick(int but) const
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDClick"));
     }
 
-    return FALSE;
+    return false;
 }
 
 // True if was a button down event (1 = left, 2 = middle, 3 = right)
@@ -561,7 +561,7 @@ bool wxMouseEvent::ButtonDown(int but) const
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDown"));
     }
 
-    return FALSE;
+    return false;
 }
 
 // True if was a button up event (1 = left, 2 = middle, 3 = right)
@@ -582,7 +582,7 @@ bool wxMouseEvent::ButtonUp(int but) const
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonUp"));
     }
 
-    return FALSE;
+    return false;
 }
 
 // True if the given button is currently changing state
@@ -602,7 +602,7 @@ bool wxMouseEvent::Button(int but) const
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::Button"));
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxMouseEvent::ButtonIsDown(int but) const
@@ -621,7 +621,7 @@ bool wxMouseEvent::ButtonIsDown(int but) const
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonIsDown"));
     }
 
-    return FALSE;
+    return false;
 }
 
 int wxMouseEvent::GetButton() const
@@ -653,10 +653,10 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 wxKeyEvent::wxKeyEvent(wxEventType type)
 {
     m_eventType = type;
-    m_shiftDown = FALSE;
-    m_controlDown = FALSE;
-    m_metaDown = FALSE;
-    m_altDown = FALSE;
+    m_shiftDown = false;
+    m_controlDown = false;
+    m_metaDown = false;
+    m_altDown = false;
     m_keyCode = 0;
     m_scanCode = 0;
 #if wxUSE_UNICODE
@@ -721,7 +721,7 @@ static const int EVENT_TYPE_TABLE_INIT_SIZE = 31; // Not to big not to small...
 
 wxEventHashTable::wxEventHashTable(const wxEventTable &table)
                 : m_table(table),
-                  m_rebuildHash(TRUE)
+                  m_rebuildHash(true)
 {
     AllocEventTypeTable(EVENT_TYPE_TABLE_INIT_SIZE);
 }
@@ -746,7 +746,7 @@ bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
     if (m_rebuildHash)
     {
         InitHashTable();
-        m_rebuildHash = FALSE;
+        m_rebuildHash = false;
     }
 
     // Find all entries for the given event type.
@@ -756,36 +756,21 @@ bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
     {
         // Now start the search for an event handler
         // that can handle an event with the given ID.
-        int eventId = event.GetId();
-        const wxEventTableEntryPointerArray &eventEntryTable = eTTnode->eventEntryTable;
+        const wxEventTableEntryPointerArray&
+            eventEntryTable = eTTnode->eventEntryTable;
 
-        size_t n;
-        size_t count = eventEntryTable.GetCount();
-        for (n = 0; n < count; n++)
+        const size_t count = eventEntryTable.GetCount();
+        for (size_t n = 0; n < count; n++)
         {
-            const wxEventTableEntry* entry = eventEntryTable[n];
-            int tableId1 = entry->m_id,
-                tableId2 = entry->m_lastId;
-
-            if ((tableId1 == -1) ||
-                (tableId2 == -1 && tableId1 == eventId) ||
-                (tableId2 != -1 &&
-                 (eventId >= tableId1 && eventId <= tableId2)))
+            if ( wxEvtHandler::
+                    ProcessEventIfMatches(*eventEntryTable[n], self, event) )
             {
-                event.Skip(FALSE);
-                event.m_callbackUserData = entry->m_callbackUserData;
-
-                (self->*((wxEventFunction) (entry->m_fn)))(event);
-
-                if (!event.GetSkipped())
-                    return TRUE;
+                return true;
             }
         }
-
-        return FALSE;
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxEventHashTable::InitHashTable()
@@ -901,7 +886,7 @@ wxEvtHandler::wxEvtHandler()
 {
     m_nextHandler = (wxEvtHandler *) NULL;
     m_previousHandler = (wxEvtHandler *) NULL;
-    m_enabled = TRUE;
+    m_enabled = true;
     m_dynamicEvents = (wxList *) NULL;
     m_pendingEvents = (wxList *) NULL;
 #if wxUSE_THREADS
@@ -974,8 +959,16 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 
     AddPendingEvent(event);
 
-    return TRUE;
+    return true;
 }
+
+void wxEvtHandler::ClearEventLocker()
+{
+#if !defined(__VISAGECPP__)
+    delete m_eventsLocker;
+    m_eventsLocker = NULL;
+#endif
+};
 
 #endif // wxUSE_THREADS
 
@@ -1065,6 +1058,48 @@ void wxEvtHandler::ProcessPendingEvents()
 /*
  * Event table stuff
  */
+/* static */ bool
+wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
+                                    wxEvtHandler *handler,
+                                    wxEvent& event)
+{
+    int tableId1 = entry.m_id,
+        tableId2 = entry.m_lastId;
+
+    // match only if the event type is the same and the id is either -1 in
+    // the event table (meaning "any") or the event id matches the id
+    // specified in the event table either exactly or by falling into
+    // range between first and last
+    if ((tableId1 == -1) ||
+        (tableId2 == -1 && tableId1 == event.GetId()) ||
+        (tableId2 != -1 &&
+         (event.GetId() >= tableId1 && event.GetId() <= tableId2)))
+    {
+        event.Skip(false);
+        event.m_callbackUserData = entry.m_callbackUserData;
+
+#if wxUSE_EXCEPTIONS
+        if ( wxTheApp )
+        {
+            // call the handler via wxApp method which allows the user to catch
+            // any exceptions which may be thrown by any handler in the program
+            // in one place
+            wxTheApp->HandleEvent(handler, (wxEventFunction)entry.m_fn, event);
+        }
+        else
+#else // !wxUSE_EXCEPTIONS
+        {
+            // no need for an extra virtual function call
+            (handler->*((wxEventFunction) (entry.m_fn)))(event);
+        }
+#endif // wxUSE_EXCEPTIONS
+
+        if (!event.GetSkipped())
+            return true;
+    }
+
+    return false;
+}
 
 bool wxEvtHandler::TryParent(wxEvent& event)
 {
@@ -1076,11 +1111,11 @@ bool wxEvtHandler::TryParent(wxEvent& event)
         if ( event.GetEventType() != wxEVT_IDLE )
         {
             if ( wxTheApp->ProcessEvent(event) )
-                return TRUE;
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
@@ -1105,22 +1140,22 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         // if we have a validator, it has higher priority than our own event
         // table
         if ( TryValidator(event) )
-            return TRUE;
+            return true;
 
         // Handle per-instance dynamic event tables first
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
-            return TRUE;
+            return true;
 
         // Then static per-class event tables
         if ( GetEventHashTable().HandleEvent(event, this) )
-            return TRUE;
+            return true;
     }
 
     // Try going down the event handler chain
     if ( GetNextHandler() )
     {
         if ( GetNextHandler()->ProcessEvent(event) )
-            return TRUE;
+            return true;
     }
 
     // Finally propagate the event upwards the window chain and/or to the
@@ -1131,46 +1166,18 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {
-    wxEventType eventType = event.GetEventType();
-    int eventId = event.GetId();
-
-    // BC++ doesn't like testing for m_fn without != 0
+    const wxEventType eventType = event.GetEventType();
     for ( int i = 0; table.entries[i].m_fn != 0; i++ )
     {
-        // the line using reference exposes a bug in gcc: although it _seems_
-        // to work, it leads to weird crashes later on during program
-        // execution
-#ifdef __GNUG__
-        wxEventTableEntry entry = table.entries[i];
-#else
         const wxEventTableEntry& entry = table.entries[i];
-#endif
-
-        // match only if the event type is the same and the id is either -1 in
-        // the event table (meaning "any") or the event id matches the id
-        // specified in the event table either exactly or by falling into
-        // range between first and last
         if ( eventType == entry.m_eventType )
         {
-            int tableId1 = entry.m_id,
-                tableId2 = entry.m_lastId;
-
-            if ( (tableId1 == -1) ||
-                 (tableId2 == -1 && eventId == tableId1) ||
-                 (tableId2 != -1 &&
-                    (eventId >= tableId1 && eventId <= tableId2)) )
-            {
-                event.Skip(FALSE);
-                event.m_callbackUserData = entry.m_callbackUserData;
-
-                (this->*((wxEventFunction) (entry.m_fn)))(event);
-
-                return !event.GetSkipped();
-            }
+            if ( ProcessEventIfMatches(entry, this, event) )
+                return true;
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void wxEvtHandler::Connect( int id, int lastId,
@@ -1204,7 +1211,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
                   wxEvtHandler* eventSink )
 {
     if (!m_dynamicEvents)
-        return FALSE;
+        return false;
 
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
@@ -1226,55 +1233,46 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
                 delete entry->m_callbackUserData;
             m_dynamicEvents->Erase( node );
             delete entry;
-            return TRUE;
+            return true;
         }
         node = node->GetNext();
     }
-    return FALSE;
+    return false;
 }
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
-    wxCHECK_MSG( m_dynamicEvents, FALSE,
+    wxCHECK_MSG( m_dynamicEvents, false,
                  wxT("caller should check that we have dynamic events") );
-
-    int commandId = event.GetId();
 
     wxList::compatibility_iterator node = m_dynamicEvents->GetFirst();
     while (node)
     {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxEventTableEntry *entry = (wxEventTableEntry*)node->GetData();
+        wxEventTableEntry *entry = (wxEventTableEntry*)node->GetData();
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
+        wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
         if (entry->m_fn)
         {
-            // Match, if event spec says any id will do (id == -1)
-            if ( (event.GetEventType() == entry->m_eventType) &&
-                 (entry->m_id == -1 ||
-                  (entry->m_lastId == -1 && commandId == entry->m_id) ||
-                  (entry->m_lastId != -1 &&
-                  (commandId >= entry->m_id && commandId <= entry->m_lastId))) )
-            {
-                event.Skip(FALSE);
-                event.m_callbackUserData = entry->m_callbackUserData;
-
+            wxEvtHandler *handler =
 #if !WXWIN_COMPATIBILITY_EVENT_TYPES
-                if (entry->m_eventSink)
-                    ((entry->m_eventSink)->*((wxEventFunction) (entry->m_fn)))(event);
-                else
+                                    entry->m_eventSink ? entry->m_eventSink
+                                                       :
 #endif
-                    (this->*((wxEventFunction) (entry->m_fn)))(event);
+                                                         this;
 
-                if ( ! event.GetSkipped() )
-                    return TRUE;
+            if ( ProcessEventIfMatches(*entry, handler, event) )
+            {
+                return true;
             }
         }
+
         node = node->GetNext();
     }
-    return FALSE;
+
+    return false;
 };
 
 void wxEvtHandler::DoSetClientObject( wxClientData *data )

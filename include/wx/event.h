@@ -14,7 +14,7 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
 // Some older compilers (such as EMX) cannot handle
-// #pragma interface/implementation correctly, iff 
+// #pragma interface/implementation correctly, iff
 // #pragma implementation is used in _two_ translation
 // units (as created by e.g. event.cpp compiled for
 // libwx_base and event.cpp compiled for libwx_gui_core).
@@ -396,7 +396,7 @@ protected:
 public:
     bool              m_skipped;
     bool              m_isCommandEvent;
-    
+
 private:
     // it needs to access our m_propagationLevel
     friend class WXDLLIMPEXP_BASE wxPropagateOnce;
@@ -2068,7 +2068,7 @@ struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
     int m_eventType;
 
     // Pointer to object whose function is fn - so we don't assume the
-    // EventFunction is always a member of the EventHandler receiving the 
+    // EventFunction is always a member of the EventHandler receiving the
     // message
     wxEvtHandler* m_eventSink;
 
@@ -2107,14 +2107,14 @@ private:
 
 public:
     // Constructor, needs the event table it needs to hash later on.
-    // Note: hashing of the event table is not done in the constructor as it 
-    //       can be that the event table is not yet full initialize, the hash 
+    // Note: hashing of the event table is not done in the constructor as it
+    //       can be that the event table is not yet full initialize, the hash
     //       will gets initialized when handling the first event look-up request.
     wxEventHashTable(const wxEventTable &table);
     // Destructor.
     ~wxEventHashTable();
 
-    // Handle the given event, in other words search the event table hash 
+    // Handle the given event, in other words search the event table hash
     // and call self->ProcessEvent() if a match was found.
     bool HandleEvent(wxEvent &event, wxEvtHandler *self);
 
@@ -2125,7 +2125,7 @@ protected:
     void AddEntry(const wxEventTableEntry &entry);
     // Allocate and init with null pointers the base hash table.
     void AllocEventTypeTable(size_t size);
-    // Grow the hash table in size and transfer all items currently 
+    // Grow the hash table in size and transfer all items currently
     // in the table to the correct location in the new table.
     void GrowEventTypeTable();
 
@@ -2206,20 +2206,22 @@ public:
     void SetClientData( void *data ) { DoSetClientData(data); }
     void *GetClientData() const { return DoGetClientData(); }
 
+    // check if the given event table entry matches this event and call the
+    // handler if it does
+    //
+    // return true if the event was processed, false otherwise (no match or the
+    // handler decided to skip the event)
+    static bool ProcessEventIfMatches(const wxEventTableEntryBase& tableEntry,
+                                      wxEvtHandler *handler,
+                                      wxEvent& event);
 
     // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );
 
 #if wxUSE_THREADS
-    void ClearEventLocker()
-   {
-#  if !defined(__VISAGECPP__)
-      delete m_eventsLocker;
-      m_eventsLocker = NULL;
-#endif
-   };
-#endif
+    void ClearEventLocker();
+#endif // wxUSE_THREADS
 
 private:
     static const wxEventTableEntry sm_eventTableEntries[];
@@ -2230,7 +2232,7 @@ protected:
 
     // This one is called before trying our own event table to allow plugging
     // in the validators.
-    // 
+    //
     // NB: This method is intentionally *not* inside wxUSE_VALIDATORS!
     //     It is part of wxBase which doesn't use validators and the code
     //     is compiled out when building wxBase w/o GUI classes, which affects
@@ -2245,7 +2247,7 @@ protected:
     virtual bool TryParent(wxEvent& event);
 
 
-    static const wxEventTable sm_eventTable;    
+    static const wxEventTable sm_eventTable;
     virtual const wxEventTable *GetEventTable() const;
 
     static wxEventHashTable   sm_eventHashTable;
