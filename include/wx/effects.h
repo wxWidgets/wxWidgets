@@ -30,13 +30,39 @@ public:
     wxEffects() ;
     // Going from lightest to darkest
     wxEffects(const wxColour& highlightColour, const wxColour& lightShadow,
-                const wxColour& faceColour, const wxColour& mediumShadow, const wxColour& darkShadow) ;
+              const wxColour& faceColour, const wxColour& mediumShadow,
+              const wxColour& darkShadow) ;
+
+    // Accessors
+    wxColour GetHighlightColour() const { return m_highlightColour; }
+    wxColour GetLightShadow() const { return m_lightShadow; }
+    wxColour GetFaceColour() const { return m_faceColour; }
+    wxColour GetMediumShadow() const { return m_mediumShadow; }
+    wxColour GetDarkShadow() const { return m_darkShadow; }
+
+    void SetHighlightColour(const wxColour& c) { m_highlightColour = c; }
+    void SetLightShadow(const wxColour& c) { m_lightShadow = c; }
+    void SetFaceColour(const wxColour& c) { m_faceColour = c; }
+    void SetMediumShadow(const wxColour& c) { m_mediumShadow = c; }
+    void SetDarkShadow(const wxColour& c) { m_darkShadow = c; }
+
+    void Set(const wxColour& highlightColour, const wxColour& lightShadow,
+             const wxColour& faceColour, const wxColour& mediumShadow,
+             const wxColour& darkShadow)
+    {
+        SetHighlightColour(highlightColour);
+        SetLightShadow(lightShadow);
+        SetFaceColour(faceColour);
+        SetMediumShadow(mediumShadow);
+        SetDarkShadow(darkShadow);
+    }
 
     // Draw a sunken edge
     void DrawSunkenEdge(wxDC& dc, const wxRect& rect, int borderSize = 1);
 
     // Tile a bitmap
     bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+
 protected:
     wxColour    m_highlightColour;  // Usually white
     wxColour    m_lightShadow;      // Usually light grey
