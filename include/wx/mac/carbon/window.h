@@ -171,6 +171,9 @@ public:
     // this should not be overriden in classes above wxWindowMac because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
     virtual void        MacPaintBorders( int left , int top ) ;
+    // invalidates the borders and focus area around the control
+    // must not be virtual as it will be called during destruction
+    void                MacInvalidateBorders() ;
     WXWindow            MacGetTopLevelWindowRef() const  ;
     wxTopLevelWindowMac* MacGetTopLevelWindow() const ;
     
@@ -180,7 +183,7 @@ public:
     virtual long        MacGetBottomBorderSize() const ;
     
     static long         MacRemoveBordersFromStyle( long style ) ;
-
+    
     virtual void        MacSuperChangedPosition() ;
     // the absolute coortinates of this window's root have changed
     virtual void        MacTopLevelWindowChangedPosition() ;
@@ -243,6 +246,9 @@ public:
 
     // flash the current invalid area, useful for debugging in OSX double buffered situation
     void                MacFlashInvalidAreas() ;
+
+    // the 'true' OS level control for this wxWindow
+    wxMacControl*       GetPeer() const { return m_peer ; }
 #if wxMAC_USE_CORE_GRAPHICS
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
