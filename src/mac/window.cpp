@@ -352,9 +352,9 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
     
     MacRootWindowToWindow( x , y ) ;
     if ( x )
-			x -= MacGetLeftBorderSize() ;
+            x -= MacGetLeftBorderSize() ;
     if ( y )
-			y -= MacGetTopBorderSize() ;
+            y -= MacGetTopBorderSize() ;
 }
 
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
@@ -362,10 +362,10 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     WindowRef window = (WindowRef) MacGetRootWindow() ;
     
     if ( x )
-			x += MacGetLeftBorderSize() ;
+            x += MacGetLeftBorderSize() ;
     if ( y )
-			y += MacGetTopBorderSize() ;
-			
+            y += MacGetTopBorderSize() ;
+            
     MacWindowToRootWindow( x , y ) ;
     
     Point       localwhere = { 0,0 };
@@ -678,12 +678,12 @@ wxPoint wxWindowMac::GetClientAreaOrigin() const
 
 void wxWindow::SetTitle(const wxString& title)
 {
-	m_label = title ;
+    m_label = title ;
 }
 
 wxString wxWindow::GetTitle() const
 {
-	return m_label ;
+    return m_label ;
 }
 
 bool wxWindowMac::Show(bool show)
@@ -1023,17 +1023,17 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
 #if wxMAC_USE_THEME_BORDER
-		  Rect rect = { top , left , m_height + top , m_width + left } ;
-		  SInt32 border = 0 ;
-		  /*
-		  GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-		  InsetRect( &rect , border , border );
+          Rect rect = { top , left , m_height + top , m_width + left } ;
+          SInt32 border = 0 ;
+          /*
+          GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+          InsetRect( &rect , border , border );
       DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
       */
         
         DrawThemePrimaryGroup(&rect  ,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 #else
-    	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
+        bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
         RGBForeColor( &face );
         MoveTo( left + 0 , top + m_height - 2 );
         LineTo( left + 0 , top + 0 );
@@ -1066,7 +1066,7 @@ void wxWindowMac::MacPaintBorders( int left , int top )
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
-		    Rect rect = { top , left , m_height + top , m_width + left } ;
+            Rect rect = { top , left , m_height + top , m_width + left } ;
         RGBForeColor( &black ) ;
         FrameRect( &rect ) ;
     }
@@ -1350,15 +1350,25 @@ bool wxWindowMac::MacGetWindowFromPointSub( const wxPoint &point , wxWindowMac**
 bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMac** outWin ) 
 {
     WindowRef window ;
+    
     Point pt = { screenpoint.y , screenpoint.x } ;
     if ( ::FindWindow( pt , &window ) == 3 )
     {
-        wxPoint point( screenpoint ) ;
+        
         wxWindowMac* win = wxFindWinFromMacWindow( window ) ;
         if ( win )
         {
-            point = win->ScreenToClient( point ) ;
-            point += win->GetClientAreaOrigin() ;
+            // No, this yields the CLIENT are, we need the whole frame. RR.
+            // point = win->ScreenToClient( point ) ;
+            
+            GrafPtr     port;  
+            ::GetPort( &port ) ;
+            ::SetPort( UMAGetWindowPort( window ) ) ;
+            ::GlobalToLocal( &pt ) ;
+            ::SetPort( port ) ;
+
+            wxPoint point( pt.h, pt.v ) ;
+            
             return win->MacGetWindowFromPointSub( point , outWin ) ;
         }
     }
@@ -1416,7 +1426,9 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
             || event.GetEventType() == wxEVT_LEAVE_WINDOW )
         wxToolTip::RelayEvent( this , event);
 #endif // wxUSE_TOOLTIPS
+
     GetEventHandler()->ProcessEvent( event ) ;
+
     return TRUE;
 }
 
@@ -1435,11 +1447,11 @@ void wxWindowMac::Update()
     if ( win )
     {
       win->MacUpdate( 0 ) ;
-	    if ( QDIsPortBuffered( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) ) )
-	    {
-				QDFlushPortBuffer( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) , NULL ) ;
-	    }
-	  }
+        if ( QDIsPortBuffered( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) ) )
+        {
+                QDFlushPortBuffer( GetWindowPort( (WindowRef) win->MacGetWindowRef() ) , NULL ) ;
+        }
+      }
 }
 
 wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const 
@@ -1769,23 +1781,23 @@ long wxWindowMac::MacGetLeftBorderSize( ) const
 
     if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
     {
-  		SInt32 border = 3 ;
+        SInt32 border = 3 ;
 #if wxMAC_USE_THEME_BORDER
-#if TARGET_CARBON		
-		  GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+#if TARGET_CARBON       
+          GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
 #endif
 #endif
-		  return border ;
+          return border ;
     }
     else if (  m_windowStyle &wxDOUBLE_BORDER)
     {
-		  SInt32 border = 3 ;
+          SInt32 border = 3 ;
 #if wxMAC_USE_THEME_BORDER
-#if TARGET_CARBON		
-		  GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+#if TARGET_CARBON       
+          GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
 #endif
 #endif
-		  return border ;
+          return border ;
     }
     else if (m_windowStyle &wxSIMPLE_BORDER)
     {

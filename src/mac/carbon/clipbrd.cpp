@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -39,12 +39,12 @@ static const wxChar *TRACE_CLIPBOARD = _T("clipboard");
 void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
 #if !TARGET_CARBON
-	OSErr err = noErr ;
+    OSErr err = noErr ;
 #else
-	OSStatus err = noErr ;
+    OSStatus err = noErr ;
 #endif
   void * data = NULL ;
-	
+    
     switch (dataFormat.GetType())
     {
         case wxDF_OEMTEXT:
@@ -61,57 +61,57 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     }
 
 #if TARGET_CARBON
-  	ScrapRef scrapRef;
-  	
-  	err = GetCurrentScrap( &scrapRef );
-  	if ( err != noTypeErr && err != memFullErr )	
-  	{
-  		ScrapFlavorFlags	flavorFlags;
-  		Size				byteCount;
-  		
-  		if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
-  		{
-  			if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
-  			{
-  			  if ( dataFormat.GetType() == wxDF_TEXT )
-  			    byteCount++ ;
-  			    
+    ScrapRef scrapRef;
+    
+    err = GetCurrentScrap( &scrapRef );
+    if ( err != noTypeErr && err != memFullErr )    
+    {
+        ScrapFlavorFlags    flavorFlags;
+        Size                byteCount;
+        
+        if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
+        {
+            if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
+            {
+              if ( dataFormat.GetType() == wxDF_TEXT )
+                byteCount++ ;
+                
           data = new char[ byteCount ] ;
           if (( err = GetScrapFlavorData( scrapRef, dataFormat.GetFormatId(), &byteCount , data )) == noErr )
           {
             *len = byteCount ;
-  			    if ( dataFormat.GetType() == wxDF_TEXT )  
-  		        ((char*)data)[byteCount] = 0 ;
+                if ( dataFormat.GetType() == wxDF_TEXT )  
+                ((char*)data)[byteCount] = 0 ;
           }
           else
           {
             delete[] ((char *)data) ;
             data = NULL ;
           }
-	   		}
-  		}
-  	}
-	
+            }
+        }
+    }
+    
 #else
-  	long offset ;
-  	Handle datahandle = NewHandle(0) ;
-  	HLock( datahandle ) ;
-  	GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
-  	HUnlock( datahandle ) ;
-  	if ( GetHandleSize( datahandle ) > 0 )
-  	{
-  	  long byteCount = GetHandleSize( datahandle ) ;
-  	  if ( dataFormat.GetType() == wxDF_TEXT )  
-  	    data = new char[ byteCount + 1] ;
+    long offset ;
+    Handle datahandle = NewHandle(0) ;
+    HLock( datahandle ) ;
+    GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
+    HUnlock( datahandle ) ;
+    if ( GetHandleSize( datahandle ) > 0 )
+    {
+      long byteCount = GetHandleSize( datahandle ) ;
+      if ( dataFormat.GetType() == wxDF_TEXT )  
+        data = new char[ byteCount + 1] ;
       else
         data = new char[ byteCount ] ;
 
-  	  memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
-  	  if ( dataFormat.GetType() == wxDF_TEXT )  
-  		  ((char*)data)[byteCount] = 0 ;
-  	  * len = byteCount ;
-  	}
-  	DisposeHandle( datahandle ) ;
+      memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
+      if ( dataFormat.GetType() == wxDF_TEXT )  
+          ((char*)data)[byteCount] = 0 ;
+      * len = byteCount ;
+    }
+    DisposeHandle( datahandle ) ;
 #endif
     if ( err )
     {
@@ -156,16 +156,16 @@ void wxClipboard::Clear()
         m_data = (wxDataObject*) NULL;
     }
 #if TARGET_CARBON
-	OSStatus err ;
-	err = ClearCurrentScrap( );
+    OSStatus err ;
+    err = ClearCurrentScrap( );
 #else
-	OSErr err ;
-	err = ZeroScrap( );
+    OSErr err ;
+    err = ZeroScrap( );
 #endif
-	if ( err )
-	{
+    if ( err )
+    {
         wxLogSysError(_("Failed to empty the clipboard."));
-	}
+    }
 }
 
 bool wxClipboard::Flush()
@@ -220,9 +220,9 @@ bool wxClipboard::AddData( wxDataObject *data )
                     array[i].GetId().c_str() );
 
 #if !TARGET_CARBON
-	      OSErr err = noErr ;
+          OSErr err = noErr ;
 #else
-	      OSStatus err = noErr ;
+          OSStatus err = noErr ;
 #endif
 
        switch ( array[i].GetType() )
@@ -232,26 +232,27 @@ bool wxClipboard::AddData( wxDataObject *data )
            {
                wxTextDataObject* textDataObject = (wxTextDataObject*) data;
                wxString str(textDataObject->GetText());
-              	wxString mac ;
-              	if ( wxApp::s_macDefaultEncodingIsPC )
-              	{
-              		mac = wxMacMakeMacStringFromPC(textDataObject->GetText()) ;
-              	}
-              	else
-              	{
-              		mac = textDataObject->GetText() ;
-              	}
+                wxString mac ;
+                if ( wxApp::s_macDefaultEncodingIsPC )
+                {
+                    mac = wxMacMakeMacStringFromPC(textDataObject->GetText()) ;
+                }
+                else
+                {
+                    mac = textDataObject->GetText() ;
+                }
         #if !TARGET_CARBON
-        				err = PutScrap( mac.Length() , 'TEXT' , mac.c_str() ) ;
+                        err = PutScrap( mac.Length() , 'TEXT' , mac.c_str() ) ;
         #else
-        				ScrapRef	scrap;
-        				err = GetCurrentScrap (&scrap); 
-        				if ( !err )
-        				{
-        					err = PutScrapFlavor (scrap, 'TEXT', 0, mac.Length(), mac.c_str());
-        				}
+                        ScrapRef    scrap;
+                        err = GetCurrentScrap (&scrap); 
+                        if ( !err )
+                        {
+                            err = PutScrapFlavor (scrap, 'TEXT', 0, mac.Length(), mac.c_str());
+                        }
         #endif
            }
+           break;
 
 #if wxUSE_DRAG_AND_DROP
         case wxDF_METAFILE:
@@ -259,25 +260,26 @@ bool wxClipboard::AddData( wxDataObject *data )
               wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
               wxMetafile metaFile = metaFileDataObject->GetMetafile();
-      				PicHandle pict = (PicHandle) metaFile.GetHMETAFILE() ;
-      				HLock( (Handle) pict ) ;
+                    PicHandle pict = (PicHandle) metaFile.GetHMETAFILE() ;
+                    HLock( (Handle) pict ) ;
       #if !TARGET_CARBON
-      				err = PutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;
+                    err = PutScrap( GetHandleSize(  (Handle) pict ) , 'PICT' , *pict ) ;
       #else
-      				ScrapRef	scrap;
-      				err = GetCurrentScrap (&scrap); 
-      				if ( !err )
-      				{
-      					err = PutScrapFlavor (scrap, 'PICT', 0, GetHandleSize((Handle) pict), *pict);
-      				}
+                    ScrapRef    scrap;
+                    err = GetCurrentScrap (&scrap); 
+                    if ( !err )
+                    {
+                        err = PutScrapFlavor (scrap, 'PICT', 0, GetHandleSize((Handle) pict), *pict);
+                    }
       #endif
-      				HUnlock(  (Handle) pict ) ;
+                    HUnlock(  (Handle) pict ) ;
            }
+           break;
 #endif
            case wxDF_BITMAP:
            case wxDF_DIB:
            default:
-      			break ;
+                break ;
        }
 
     }
@@ -299,34 +301,34 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
     return m_data->IsSupported( dataFormat ) ;
   }
 #if TARGET_CARBON
-	OSStatus err = noErr;
-	ScrapRef scrapRef;
-	
-	err = GetCurrentScrap( &scrapRef );
-	if ( err != noTypeErr && err != memFullErr )	
-	{
-		ScrapFlavorFlags	flavorFlags;
-		Size				byteCount;
-		
-		if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
-		{
-			if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
-			{
-				return TRUE ;
-			}
-		}
-	}
-	return FALSE;
-	
+    OSStatus err = noErr;
+    ScrapRef scrapRef;
+    
+    err = GetCurrentScrap( &scrapRef );
+    if ( err != noTypeErr && err != memFullErr )    
+    {
+        ScrapFlavorFlags    flavorFlags;
+        Size                byteCount;
+        
+        if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
+        {
+            if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
+            {
+                return TRUE ;
+            }
+        }
+    }
+    return FALSE;
+    
 #else
-	long offset ;
-	Handle datahandle = NewHandle(0) ;
-	HLock( datahandle ) ;
-	GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
-	HUnlock( datahandle ) ;
-	bool hasData = GetHandleSize( datahandle ) > 0 ;
-	DisposeHandle( datahandle ) ;
-	return hasData ;
+    long offset ;
+    Handle datahandle = NewHandle(0) ;
+    HLock( datahandle ) ;
+    GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
+    HUnlock( datahandle ) ;
+    bool hasData = GetHandleSize( datahandle ) > 0 ;
+    DisposeHandle( datahandle ) ;
+    return hasData ;
 #endif
 }
 

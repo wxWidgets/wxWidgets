@@ -1676,7 +1676,6 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 
                 wxWindow::MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) ,
                                                  &currentMouseWindow ) ;
-
                 if ( currentMouseWindow != wxWindow::s_lastMouseWindow )
                 {
                     wxMouseEvent event ;
@@ -1695,17 +1694,21 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                     event.m_y = ev->where.v;
                     event.m_timeStamp = ev->when;
                     event.SetEventObject(this);
-
+                    
                     if ( wxWindow::s_lastMouseWindow )
                     {
-                        wxMouseEvent eventleave(event ) ;
-                        eventleave.SetEventType( wxEVT_LEAVE_WINDOW ) ;
+                        wxMouseEvent eventleave(event);
+                        eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
+                        wxWindow::s_lastMouseWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
+                        
                         wxWindow::s_lastMouseWindow->GetEventHandler()->ProcessEvent(eventleave);
                     }
                     if ( currentMouseWindow )
                     {
-                        wxMouseEvent evententer(event ) ;
-                        evententer.SetEventType( wxEVT_ENTER_WINDOW ) ;
+                        wxMouseEvent evententer(event);
+                        evententer.SetEventType( wxEVT_ENTER_WINDOW );
+                        currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
+                        
                         currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
                     }
                     wxWindow::s_lastMouseWindow = currentMouseWindow ;

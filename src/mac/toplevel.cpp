@@ -179,7 +179,7 @@ void wxTopLevelWindowMac::Iconize(bool iconize)
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
-	// mac dialogs cannot be iconized
+    // mac dialogs cannot be iconized
     return FALSE;
 }
 
@@ -420,13 +420,6 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
     event.m_x += m_x;
     event.m_y += m_y;
 
-/*
-    wxPoint origin = GetClientAreaOrigin() ;
-
-    event.m_x += origin.x ;
-    event.m_y += origin.y ;
-*/
-    
     event.m_timeStamp = ev->when;
     event.SetEventObject(this);
     if ( wxTheApp->s_captureWindow )
@@ -437,6 +430,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         event.m_x = x ;
         event.m_y = y ;
         wxTheApp->s_captureWindow->GetEventHandler()->ProcessEvent( event ) ;
+        
         if ( ev->what == mouseUp )
         {
             wxTheApp->s_captureWindow = NULL ;
