@@ -164,14 +164,13 @@ public:
     wxArrayInt GetSelections() const { return m_selections; }
 
     // implementation from now on
-    void OnOK(wxCommandEvent& event);
+    virtual bool TransferDataFromWindow();
 
 protected:
     wxArrayInt m_selections;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMultiChoiceDialog)
-    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------

@@ -436,10 +436,6 @@ void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 // wxMultiChoiceDialog
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxMultiChoiceDialog, wxDialog)
-    EVT_BUTTON(wxID_OK, wxMultiChoiceDialog::OnOK)
-END_EVENT_TABLE()
-
 IMPLEMENT_DYNAMIC_CLASS(wxMultiChoiceDialog, wxDialog)
 
 bool wxMultiChoiceDialog::Create( wxWindow *parent,
@@ -453,7 +449,7 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
     if ( !wxAnyChoiceDialog::Create(parent, message, caption,
                                     n, choices,
                                     style, pos,
-                                    wxLB_ALWAYS_SB | wxLB_MULTIPLE) )
+                                    wxLB_ALWAYS_SB | wxLB_EXTENDED) )
         return FALSE;
 
     return TRUE;
@@ -468,7 +464,7 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
     }
 }
 
-void wxMultiChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
+bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
     m_selections.Empty();
     size_t count = m_listbox->GetCount();
@@ -478,5 +474,5 @@ void wxMultiChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
             m_selections.Add(n);
     }
 
-    EndModal(wxID_OK);
+    return TRUE;
 }

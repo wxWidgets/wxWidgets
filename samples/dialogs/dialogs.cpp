@@ -365,12 +365,14 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
                                         this);
     if ( count )
     {
-        wxLogMessage("You selected %u items:", count);
+        wxString msg;
+        msg.Printf("You selected %u items:\n", count);
         for ( size_t n = 0; n < count; n++ )
         {
-            wxLogMessage("\t%u: %u (%s)", n, selections[n],
-                         choices[selections[n]].c_str());
+            msg += wxString::Format("\t%u: %u (%s)\n", n, selections[n],
+                                    choices[selections[n]].c_str());
         }
+        wxLogMessage(msg);
     }
     //else: cancelled or nothing selected
 }
