@@ -1417,6 +1417,7 @@ bool wxWindowMac::MacDispatchMouseEvent(wxMouseEvent& event)
 
     event.m_x = x ;
     event.m_y = y ;
+    event.SetEventObject( this ) ;
     
     if ( wxBusyCursorCount == 0 )
     {

@@ -429,6 +429,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         wxTheApp->s_captureWindow->ScreenToClient( &x , &y ) ;
         event.m_x = x ;
         event.m_y = y ;
+        event.SetEventObject( wxTheApp->s_captureWindow ) ;
         wxTheApp->s_captureWindow->GetEventHandler()->ProcessEvent( event ) ;
         
         if ( ev->what == mouseUp )
