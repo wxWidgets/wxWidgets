@@ -785,8 +785,9 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 
     if (!(GTK_EDITABLE(m_text)->has_selection))
     {
-        if (from) *from = 0;
-        if (to)   *to = 0;
+        long i = GetInsertionPoint();
+        if (from) *from = i;
+        if (to)   *to = i;
         return;
     }
 
