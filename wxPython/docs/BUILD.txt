@@ -131,7 +131,7 @@ place, then do the same for wxPython.
    command but there are other libraries besides the main wxWidgets
    libs that also need to be built so again I make a script to do it
    all for me so I don't forget anything.  This time it is called
-   ".make" (I use the leading ".  so when I do ``rm -r *`` in my build
+   ".make" (I use the leading "."  so when I do ``rm -r *`` in my build
    dir I don't lose my scripts too.)  This is what it looks like::
 
         make $* \
