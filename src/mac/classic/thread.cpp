@@ -77,12 +77,18 @@ public :
     wxMacStCritical()
     {
         if ( UMASystemIsInitialized() )
-            ThreadBeginCritical() ;
+        {
+            OSErr err = ThreadBeginCritical() ;
+            wxASSERT( err == noErr ) ;
+        }
     }
     ~wxMacStCritical()
     {
         if ( UMASystemIsInitialized() )
-            ThreadEndCritical() ;
+        {
+            OSErr err = ThreadEndCritical() ;
+            wxASSERT( err == noErr ) ;
+    }
     }
 };
 
@@ -133,6 +139,7 @@ wxMutexError wxMutexInternal::Lock()
             m_waiters.Add(current);
             err = ::SetThreadStateEndCritical(kCurrentThreadID, kStoppedThreadState, m_owner);
             err = ::ThreadBeginCritical();
+            wxASSERT( err == noErr ) ;
         }
         m_owner = current;
     }
@@ -165,6 +172,7 @@ wxMutexError wxMutexInternal::Unlock()
     {
         OSErr err;
         err = ::ThreadBeginCritical();
+        wxASSERT( err == noErr ) ;
 
         if (m_locked > 0)
             m_locked--;
@@ -446,11 +454,13 @@ bool wxThreadInternal::Suspend()
 {
     OSErr err ;
 
-    ::ThreadBeginCritical();
+    err = ::ThreadBeginCritical();
+    wxASSERT( err == noErr ) ;
 
     if ( m_state != STATE_RUNNING )
     {
-        ::ThreadEndCritical() ;
+        err = ::ThreadEndCritical() ;
+        wxASSERT( err == noErr ) ;
         wxLogSysError(_("Can not suspend thread %x"), m_tid);
         return FALSE;
     }
@@ -471,19 +481,22 @@ bool wxThreadInternal::Resume()
     wxASSERT( err == noErr ) ;
     wxASSERT( current != m_tid ) ;
 
-    ::ThreadBeginCritical();
+    err = ::ThreadBeginCritical();
+    wxASSERT( err == noErr ) ;
+
     if ( m_state != STATE_PAUSED && m_state != STATE_NEW )
     {
-        ::ThreadEndCritical() ;
+        err = ::ThreadEndCritical() ;
+        wxASSERT( err == noErr ) ;
         wxLogSysError(_("Can not resume thread %x"), m_tid);
         return FALSE;
 
     }
     err = ::SetThreadStateEndCritical(m_tid, kReadyThreadState, kNoThreadID);
-    wxASSERT( err == noErr ) ;
 
     m_state = STATE_RUNNING;
-    ::ThreadEndCritical() ;
+    err = ::ThreadEndCritical() ;
+    wxASSERT( err == noErr ) ;
     ::YieldToAnyThread() ;
     return TRUE;
 }
