@@ -30,7 +30,7 @@ WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 class WXDLLEXPORT wxTextInputStream {
 public:
-  wxTextInputStream(wxInputStream& s,  const wxChar &sep=wxT(' '));
+  wxTextInputStream(wxInputStream& s,  const wxString &sep=wxT(" \t"));
   ~wxTextInputStream();
 
   wxUint32 Read32();
@@ -41,8 +41,8 @@ public:
   wxString ReadLine();
   wxString ReadWord();
 
-  wxChar GetStringSeparator() const          { return m_string_separator;}
-  void   SetStringSeparator(const wxChar &c) { m_string_separator=c;}
+  wxString GetStringSeparators() const          { return m_separators;}
+  void     SetStringSeparators(const wxString &c) { m_separators=c;}
 
   // Operators
   wxTextInputStream& operator>>(wxString& word);
@@ -57,11 +57,12 @@ public:
   wxTextInputStream& operator>>( __wxTextInputManip func) { return func(*this); }
   
  protected:
-  wxInputStream *m_input;
-  wxChar m_string_separator;
-  
-  wxChar NextNonWhiteSpace();
-  void SkipIfEndOfLine( wxChar c );
+  wxInputStream &m_input;
+  wxString m_separators;
+
+  bool   EatEOL(const wxChar &c);
+  wxChar NextNonSeparators();
+  void   SkipIfEndOfLine( wxChar c );
 };
 
 class WXDLLEXPORT wxTextOutputStream {
@@ -88,7 +89,7 @@ class WXDLLEXPORT wxTextOutputStream {
   wxTextOutputStream& operator<<( __wxTextOutputManip func) { return func(*this); }
   
  protected:
-  wxOutputStream *m_output;
+  wxOutputStream &m_output;
 };
 
 #endif
