@@ -178,10 +178,10 @@ public:
 
     // status inquiries
     bool HasChildren() const { return !m_children.IsEmpty(); }
-    bool IsSelected()  const { return m_hasHilight; }
+    bool IsSelected()  const { return m_hasHilight != 0; }
     bool IsExpanded()  const { return !m_isCollapsed; }
     bool HasPlus()     const { return m_hasPlus || HasChildren(); }
-    bool IsBold()      const { return m_isBold; }
+    bool IsBold()      const { return m_isBold != 0; }
 
     // attributes
         // get them - may be NULL

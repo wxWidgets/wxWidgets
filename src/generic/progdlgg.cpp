@@ -65,8 +65,11 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label);
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
-   EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
-   EVT_CLOSE(wxProgressDialog::OnClose)
+    EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
+
+    EVT_SHOW(wxProgressDialog::OnShow)
+
+    EVT_CLOSE(wxProgressDialog::OnClose)
 END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
@@ -377,15 +380,32 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
     }
 }
 
+void wxProgressDialog::OnShow(wxShowEvent& event)
+{
+    // if the dialog is being hidden, it was closed, so reenable other windows
+    // now
+    if ( event.GetShow() )
+    {
+        ReenableOtherWindows();
+    }
+}
+
 // ----------------------------------------------------------------------------
 // destruction
 // ----------------------------------------------------------------------------
 
 wxProgressDialog::~wxProgressDialog()
 {
+    // normally this should have been already done, but just in case
+    ReenableOtherWindows();
+}
+
+void wxProgressDialog::ReenableOtherWindows()
+{
     if ( GetWindowStyle() & wxPD_APP_MODAL )
     {
         delete m_winDisabler;
+        m_winDisabler = (wxWindowDisabler *)NULL;
     }
     else
     {

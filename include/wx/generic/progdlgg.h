@@ -63,11 +63,19 @@ public:
    */
    void Resume() { m_state = Continue; }
 
-   // implementation from now on
-       // callback for optional abort button
+protected:
+   // callback for optional abort button
    void OnCancel(wxCommandEvent& event);
-       // callback to disable "hard" window closing
+
+   // callback to disable "hard" window closing
    void OnClose(wxCloseEvent& event);
+
+   // callback to detect when the dialog is closed
+   void OnShow(wxShowEvent& event);
+
+   // must be called to reenable the other windows temporarily disabled while
+   // the dialog was shown
+   void ReenableOtherWindows();
 
 private:
    // create the label with given text and another one to show the time nearby
