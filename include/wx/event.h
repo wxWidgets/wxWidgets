@@ -606,9 +606,6 @@ enum
 
 class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
-private:
-    wxMouseEvent& operator=(const wxMouseEvent& event);
-
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
     wxMouseEvent(const wxMouseEvent& event)	: wxEvent(event)
@@ -745,6 +742,8 @@ public:
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
     virtual wxEvent *Clone() const { return new wxMouseEvent(*this); }
+
+    wxMouseEvent& operator=(const wxMouseEvent& event);
 
 public:
     wxCoord m_x, m_y;
