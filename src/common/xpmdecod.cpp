@@ -668,7 +668,6 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     wxChar key[64];
     const char *clr_def;
     bool hasMask;
-    wxXPMColourMapData clr_data;
     wxXPMColourMap clr_tbl;
     wxXPMColourMap::iterator it;
     wxString maskKey;
@@ -702,6 +701,8 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
      */
     for (i = 0; i < colors_cnt; i++)
     {
+        wxXPMColourMapData clr_data = {255,0,255};
+
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
             key[i_key] = (wxChar)xpm_data[1 + i][i_key];
         clr_def = ParseColor(xpm_data[1 + i] + chars_per_pixel);
@@ -710,17 +711,15 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
         {
             wxLogError(_("XPM: malformed colour definition '%s'!"),
                        xpm_data[1+i]);
-            clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
         }
         else
         {
-            bool isNone;
+            bool isNone = false;
             if ( !GetRGBFromName(clr_def, &isNone,
                                  &clr_data.R, &clr_data.G, &clr_data.B) )
             {
                 wxLogError(_("XPM: malformed colour definition '%s'!"),
                            xpm_data[1+i]);
-                clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
             }
             else
             {
@@ -729,7 +728,6 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
                     img.SetMask(true);
                     img.SetMaskColour(255, 0, 255);
                     hasMask = true;
-                    clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
                     maskKey = key;
                 }
             }

@@ -364,7 +364,7 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 static wxString CallStrftime(const wxChar *format, const tm* tm)
 {
     wxChar buf[4096];
-	if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
+    if ( !wxStrftime(buf, WXSIZEOF(buf), format, tm) )
     {
         // buffer is too small?
         wxFAIL_MSG(_T("strftime() failed"));
@@ -829,47 +829,47 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
 
     return CallStrftime(flags == Name_Abbr ? _T("%b") : _T("%B"), &tm);
 #else
-	wxString ret;
-	switch(month)
-	{
-		case Jan: 
-			ret = (flags == Name_Abbr ? wxT("Jan"): wxT("January"));
-			break;
-		case Feb: 
-			ret = (flags == Name_Abbr ? wxT("Feb"): wxT("Febuary"));
-			break;
-		case Mar: 
-			ret = (flags == Name_Abbr ? wxT("Mar"): wxT("March"));
-			break;
-		case Apr: 
-			ret = (flags == Name_Abbr ? wxT("Apr"): wxT("April"));
-			break;
-		case May: 
-			ret = (flags == Name_Abbr ? wxT("May"): wxT("May"));
-			break;
-		case Jun: 
-			ret = (flags == Name_Abbr ? wxT("Jun"): wxT("June"));
-			break;
-		case Jul: 
-			ret = (flags == Name_Abbr ? wxT("Jul"): wxT("July"));
-			break;
-		case Aug: 
-			ret = (flags == Name_Abbr ? wxT("Aug"): wxT("August"));
-			break;
-		case Sep: 
-			ret = (flags == Name_Abbr ? wxT("Sep"): wxT("September"));
-			break;
-		case Oct: 
-			ret = (flags == Name_Abbr ? wxT("Oct"): wxT("October"));
-			break;
-		case Nov: 
-			ret = (flags == Name_Abbr ? wxT("Nov"): wxT("November"));
-			break;
-		case Dec: 
-			ret = (flags == Name_Abbr ? wxT("Dec"): wxT("December"));
-			break;
-	}
-	return ret;
+    wxString ret;
+    switch(month)
+    {
+        case Jan:
+            ret = (flags == Name_Abbr ? wxT("Jan"): wxT("January"));
+            break;
+        case Feb:
+            ret = (flags == Name_Abbr ? wxT("Feb"): wxT("Febuary"));
+            break;
+        case Mar:
+            ret = (flags == Name_Abbr ? wxT("Mar"): wxT("March"));
+            break;
+        case Apr:
+            ret = (flags == Name_Abbr ? wxT("Apr"): wxT("April"));
+            break;
+        case May:
+            ret = (flags == Name_Abbr ? wxT("May"): wxT("May"));
+            break;
+        case Jun:
+            ret = (flags == Name_Abbr ? wxT("Jun"): wxT("June"));
+            break;
+        case Jul:
+            ret = (flags == Name_Abbr ? wxT("Jul"): wxT("July"));
+            break;
+        case Aug:
+            ret = (flags == Name_Abbr ? wxT("Aug"): wxT("August"));
+            break;
+        case Sep:
+            ret = (flags == Name_Abbr ? wxT("Sep"): wxT("September"));
+            break;
+        case Oct:
+            ret = (flags == Name_Abbr ? wxT("Oct"): wxT("October"));
+            break;
+        case Nov:
+            ret = (flags == Name_Abbr ? wxT("Nov"): wxT("November"));
+            break;
+        case Dec:
+            ret = (flags == Name_Abbr ? wxT("Dec"): wxT("December"));
+            break;
+    }
+    return ret;
 #endif
 }
 
@@ -897,32 +897,32 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     // ... and call strftime()
     return CallStrftime(flags == Name_Abbr ? _T("%a") : _T("%A"), &tm);
 #else
-	wxString ret;
-	switch(wday)
-	{
-		case Sun: 
-			ret = (flags == Name_Abbr ? wxT("Sun") : wxT("Sunday"));
-			break;
-		case Mon:
-			ret = (flags == Name_Abbr ? wxT("Mon") : wxT("Monday"));
-			break;
-		case Tue:
-			ret = (flags == Name_Abbr ? wxT("Tue") : wxT("Tuesday"));
-			break;
-		case Wed:
-			ret = (flags == Name_Abbr ? wxT("Wed") : wxT("Wednesday"));
-			break;
-		case Thu:
-			ret = (flags == Name_Abbr ? wxT("Thu") : wxT("Thursday"));
-			break;
-		case Fri:
-			ret = (flags == Name_Abbr ? wxT("Fri") : wxT("Friday"));
-			break;
-		case Sat:
-			ret = (flags == Name_Abbr ? wxT("Sat") : wxT("Saturday"));
-			break;
-	}
-	return ret;
+    wxString ret;
+    switch(wday)
+    {
+        case Sun:
+            ret = (flags == Name_Abbr ? wxT("Sun") : wxT("Sunday"));
+            break;
+        case Mon:
+            ret = (flags == Name_Abbr ? wxT("Mon") : wxT("Monday"));
+            break;
+        case Tue:
+            ret = (flags == Name_Abbr ? wxT("Tue") : wxT("Tuesday"));
+            break;
+        case Wed:
+            ret = (flags == Name_Abbr ? wxT("Wed") : wxT("Wednesday"));
+            break;
+        case Thu:
+            ret = (flags == Name_Abbr ? wxT("Thu") : wxT("Thursday"));
+            break;
+        case Fri:
+            ret = (flags == Name_Abbr ? wxT("Fri") : wxT("Friday"));
+            break;
+        case Sat:
+            ret = (flags == Name_Abbr ? wxT("Sat") : wxT("Saturday"));
+            break;
+    }
+    return ret;
 
 #endif
 }
@@ -2201,7 +2201,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
             }
         }
 #ifndef __WXWINCE__
-	//Windows CE doesn't support strftime or wcsftime, so we use the generic implementation
+    //Windows CE doesn't support strftime or wcsftime, so we use the generic implementation
         if ( tm )
         {
             return CallStrftime(format, tm);
@@ -2416,9 +2416,9 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         res += str;
                     }
 #else
-					//Use "%m/%d/%y %H:%M:%S" format instead
-					res += wxString::Format(wxT("%02d/%02d/%04d %02d:%02d:%02d"),
-							tm.mon+1,tm.mday, tm.year, tm.hour, tm.min, tm.sec);
+                    //Use "%m/%d/%y %H:%M:%S" format instead
+                    res += wxString::Format(wxT("%02d/%02d/%04d %02d:%02d:%02d"),
+                            tm.mon+1,tm.mday, tm.year, tm.hour, tm.min, tm.sec);
 #endif
                     break;
 
@@ -2459,7 +2459,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 #ifndef __WXWINCE__
                     res += CallStrftime(_T("%p"), &tmTimeOnly);
 #else
-					res += (tmTimeOnly.tm_hour > 12) ? wxT("pm") : wxT("am");
+                    res += (tmTimeOnly.tm_hour > 12) ? wxT("pm") : wxT("am");
 #endif
                     break;
 
@@ -2486,7 +2486,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 #ifndef __WXWINCE__
                     res += CallStrftime(_T("%X"), &tmTimeOnly);
 #else
-					res += wxString::Format(wxT("%02d:%02d:%02d"),tm.hour, tm.min, tm.sec);
+                    res += wxString::Format(wxT("%02d:%02d:%02d"),tm.hour, tm.min, tm.sec);
 #endif
                     break;
 
@@ -2739,7 +2739,7 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
     }
 
     // and now the interesting part: the timezone
-    int offset;
+    int offset wxDUMMY_INITIALIZE(0);
     if ( *p == _T('-') || *p == _T('+') )
     {
         // the explicit offset given: it has the form of hhmm

@@ -1796,45 +1796,42 @@ wxString wxString::FormatV(const wxChar *pszFormat, va_list argptr)
 
 int wxString::Printf(const wxChar *pszFormat, ...)
 {
-  va_list argptr;
-  va_start(argptr, pszFormat);
+    va_list argptr;
+    va_start(argptr, pszFormat);
 
-  int iLen = PrintfV(pszFormat, argptr);
+    int iLen = PrintfV(pszFormat, argptr);
 
-  va_end(argptr);
+    va_end(argptr);
 
-  return iLen;
+    return iLen;
 }
 
 int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 {
     int size = 1024;
-    int len;
 
     for ( ;; )
     {
+        wxStringBuffer tmp(*this, size + 1);
+        wxChar* buf = tmp;
+
+        if ( !buf )
         {
-            wxStringBuffer tmp(*this, size + 1);
-            wxChar* buf = tmp;
-
-            if ( !buf )
-            {
-                // out of memory
-                return -1;
-            }
-
-            // wxVsnprintf() may modify the original arg pointer, so pass it
-            // only a copy
-            va_list argptrcopy;
-            wxVaCopy(argptrcopy, argptr);
-            len = wxVsnprintf(buf, size, pszFormat, argptrcopy);
-            va_end(argptrcopy);
-
-            // some implementations of vsnprintf() don't NUL terminate
-            // the string if there is not enough space for it so
-            // always do it manually
-            buf[size] = _T('\0');
+            // out of memory
+            return -1;
         }
+
+        // wxVsnprintf() may modify the original arg pointer, so pass it
+        // only a copy
+        va_list argptrcopy;
+        wxVaCopy(argptrcopy, argptr);
+        int len = wxVsnprintf(buf, size, pszFormat, argptrcopy);
+        va_end(argptrcopy);
+
+        // some implementations of vsnprintf() don't NUL terminate
+        // the string if there is not enough space for it so
+        // always do it manually
+        buf[size] = _T('\0');
 
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
         // total number of characters which would have been written if the

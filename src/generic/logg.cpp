@@ -1157,7 +1157,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
 
     // open file
     // ---------
-    bool bOk;
+    bool bOk wxDUMMY_INITIALIZE(false);
     if ( wxFile::Exists(filename) ) {
         bool bAppend = false;
         wxString strMsg;

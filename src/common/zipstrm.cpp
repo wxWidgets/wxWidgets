@@ -593,7 +593,7 @@ wxZipEntry::wxZipEntry(
     const wxString& name /*=wxEmptyString*/,
     const wxDateTime& dt /*=wxDateTime::Now()*/,
     wxFileOffset size    /*=wxInvalidOffset*/)
-  : 
+  :
     m_SystemMadeBy(wxZIP_SYSTEM_MSDOS),
     m_VersionMadeBy(wxMAJOR_VERSION * 10 + wxMINOR_VERSION),
     m_VersionNeeded(VERSION_NEEDED_TO_EXTRACT),
@@ -907,7 +907,7 @@ size_t wxZipEntry::WriteLocal(wxOutputStream& stream, wxMBConv& conv) const
 
     ds << m_VersionNeeded << m_Flags << m_Method;
     ds.Write32(GetDateTime().GetAsDOS());
-    
+
     ds.Write32(m_Crc);
     ds.Write32(m_CompressedSize != wxInvalidOffset ? (wxUint32)m_CompressedSize : 0);
     ds.Write32(m_Size != wxInvalidOffset ? (wxUint32)m_Size : 0);
@@ -942,7 +942,7 @@ size_t wxZipEntry::ReadCentral(wxInputStream& stream, wxMBConv& conv)
     ds >> nameLen >> extraLen >> commentLen
        >> m_DiskStart >> m_InternalAttributes >> m_ExternalAttributes;
     SetOffset(ds.Read32());
- 
+
     SetName(ReadString(stream, nameLen, conv), wxPATH_UNIX);
 
     if (extraLen || GetExtraLen()) {
@@ -990,7 +990,7 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
 
     ds << commentLen << m_DiskStart << m_InternalAttributes
        << m_ExternalAttributes << (wxUint32)GetOffset();
- 
+
     stream.Write(name, nameLen);
     if (extraLen)
         stream.Write(GetExtra(), extraLen);
@@ -1007,7 +1007,7 @@ size_t wxZipEntry::WriteCentral(wxOutputStream& stream, wxMBConv& conv) const
 size_t wxZipEntry::ReadDescriptor(wxInputStream& stream)
 {
     wxDataInputStream ds(stream);
-    
+
     m_Crc = ds.Read32();
     m_CompressedSize = ds.Read32();
     m_Size = ds.Read32();
@@ -1019,7 +1019,7 @@ size_t wxZipEntry::ReadDescriptor(wxInputStream& stream)
         stream.Read(buf, sizeof(buf));
         wxUint32 u1 = CrackUint32(buf);
         wxUint32 u2 = CrackUint32(buf + 4);
-        
+
         // look for the signature of the following record to decide which
         if ((u1 == LOCAL_MAGIC || u1 == CENTRAL_MAGIC) &&
             (u2 != LOCAL_MAGIC && u2 != CENTRAL_MAGIC))
@@ -1241,7 +1241,7 @@ wxZipInputStream::~wxZipInputStream()
     delete m_ffile;
 
     m_weaklinks->Release(this);
-    
+
     if (m_streamlink)
         m_streamlink->Release(this);
 }
@@ -1325,7 +1325,7 @@ bool wxZipInputStream::LoadEndRecord()
     m_Comment = endrec.GetComment();
 
     // Now find the central-directory. we have the file offset of
-    // the CD, so look there first. 
+    // the CD, so look there first.
     if (m_parent_i_stream->SeekI(endrec.GetOffset()) != wxInvalidOffset &&
             ReadSignature() == CENTRAL_MAGIC) {
         m_signature = CENTRAL_MAGIC;
@@ -1333,7 +1333,7 @@ bool wxZipInputStream::LoadEndRecord()
         m_offsetAdjustment = 0;
         return true;
     }
- 
+
     // If it's not there, then it could be that the zip has been appended
     // to a self extractor, so take the CD size (also in endrec), subtract
     // it from the file offset of the end-central-directory and look there.
@@ -1359,7 +1359,7 @@ bool wxZipInputStream::FindEndRecord()
         return false;
 
     // usually it's 22 bytes in size and the last thing in the file
-    { 
+    {
         wxLogNull nolog;
         if (m_parent_i_stream->SeekI(-END_SIZE, wxFromEnd) == wxInvalidOffset)
             return false;
@@ -1386,7 +1386,7 @@ bool wxZipInputStream::FindEndRecord()
         size_t len = (size_t)(pos - wxMax(pos - (BUFSIZE - 3), minpos));
         memcpy(buf.data() + len, buf, 3);
         pos -= len;
-    
+
         if (m_parent_i_stream->SeekI(pos, wxFromStart) == wxInvalidOffset ||
                 m_parent_i_stream->Read(buf.data(), len).LastRead() != len)
             return false;
@@ -1470,7 +1470,7 @@ wxStreamError wxZipInputStream::ReadLocal(bool readEndRec /*=false*/)
     while (m_signature == CENTRAL_MAGIC) {
         if (m_weaklinks->IsEmpty() && m_streamlink == NULL)
             return wxSTREAM_EOF;
-        
+
         m_position += m_entry.ReadCentral(*m_parent_i_stream, GetConv());
         m_signature = 0;
         if (m_parent_i_stream->GetLastError() == wxSTREAM_READ_ERROR)
@@ -1506,7 +1506,7 @@ wxStreamError wxZipInputStream::ReadLocal(bool readEndRec /*=false*/)
         }
         return wxSTREAM_EOF;
     }
-            
+
     if (m_signature != LOCAL_MAGIC) {
         wxLogError(_("error reading zip local header"));
         return wxSTREAM_READ_ERROR;
@@ -1557,9 +1557,9 @@ bool wxZipInputStream::DoOpen(wxZipEntry *entry, bool raw)
         // can only open the current entry on a non-seekable stream
         wxCHECK(m_parentSeekable, false);
     }
-    
+
     m_lasterror = wxSTREAM_READ_ERROR;
-    
+
     if (entry)
         m_entry = *entry;
 
@@ -1765,7 +1765,7 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
         default : nextpos = pos; break; /* just to fool compiler, never happens */
     }
 
-    size_t toskip;
+    size_t toskip wxDUMMY_INITIALIZE(0);
     if ( nextpos >= pos )
     {
         toskip = (size_t)(nextpos - pos);
@@ -1825,7 +1825,7 @@ wxZipOutputStream::wxZipOutputStream(wxOutputStream& stream,
     m_offsetAdjustment(wxInvalidOffset)
 {
 }
-                                
+
 wxZipOutputStream::~wxZipOutputStream()
 {
     Close();
