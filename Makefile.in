@@ -1330,6 +1330,7 @@ PYTHON_DIST:
 	cp $(WXDIR)/wxPython/contrib/glcanvas/gtk/glcanvas.* $(DISTDIR)/wxPython/contrib/glcanvas/gtk
 	-cp $(WXDIR)/wxPython/contrib/ogl/* $(DISTDIR)/wxPython/contrib/ogl
 	-cp $(WXDIR)/wxPython/contrib/stc/* $(DISTDIR)/wxPython/contrib/stc
+	-cp $(WXDIR)/wxPython/contrib/stc/gtk/* $(DISTDIR)/wxPython/contrib/stc
 	-cp $(WXDIR)/wxPython/contrib/xrc/xrc.* $(DISTDIR)/wxPython/contrib/xrc
 	-cp $(WXDIR)/wxPython/demo/* $(DISTDIR)/wxPython/demo
 	-cp $(WXDIR)/wxPython/demo/bitmaps/* $(DISTDIR)/wxPython/demo/bitmaps
