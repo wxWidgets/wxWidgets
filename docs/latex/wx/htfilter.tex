@@ -30,7 +30,7 @@ Constructor.
 
 \func{bool}{CanRead}{\param{const wxFSFile\& }{file}}
 
-Returns TRUE if this filter is capable of reading file {\it file}. 
+Returns TRUE if this filter is capable of reading file {\it file}.
 
 Example:
 
@@ -43,7 +43,8 @@ bool MyFilter::CanRead(const wxFSFile& file)
 
 \membersection{wxHtmlFilter::ReadFile}\label{wxhtmlfilterreadfile}
 
-\func{wxString}{ReadFile}{\param{const wxFSFile\& }{file}
+\func{wxString}{ReadFile}{\param{const wxFSFile\& }{file}}
+
 
 Reads the file and returns string with HTML document.
 
@@ -52,8 +53,9 @@ Example:
 \begin{verbatim}
 wxString MyImgFilter::ReadFile(const wxFSFile& file)
 {
-    return "<html><body><img src=\"" + 
-           file.GetLocation() + 
+    return "<html><body><img src=\"" +
+           file.GetLocation() +
 	   "\"></body></html>";
 }
 \end{verbatim}
+

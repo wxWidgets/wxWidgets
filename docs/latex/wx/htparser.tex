@@ -13,10 +13,10 @@ consists of begining and ending tag and of text between these
 
 It is independent from wxHtmlWindow and can be used as stand-alone parser
 (Julian Smart's idea of speech-only HTML viewer or wget-like utility -
-see InetGet sample for example). 
+see InetGet sample for example).
 
 It uses system of tag handlers to parse the HTML document. Tag handlers
-are not staticaly shared by all instances but are created for each 
+are not staticaly shared by all instances but are created for each
 wxHtmlParser instance. The reason is that the handler may contain
 document-specific temporary data used during parsing (e.g. complicated
 structures like tables)
@@ -40,7 +40,7 @@ wxObject
 
 \func{}{wxHtmlParser}{\void}
 
-Constructor. 
+Constructor.
 
 
 \membersection{wxHtmlParser::SetFS}\label{wxhtmlparsersetfs}
@@ -111,8 +111,8 @@ Parses the m\_Source from begin\_pos to end\_pos-1.
 
 \func{virtual wxObject*}{GetProduct}{\void}
 
-Returns product of parsing. Returned value is result of parsing 
-of the document. The type of this result depends on internal 
+Returns product of parsing. Returned value is result of parsing
+of the document. The type of this result depends on internal
 representation in derived parser (but it must be derived from wxObject!).
 
 See wxHtmlWinParser for details.
@@ -161,7 +161,7 @@ Why is this neccessary? Imagine wxHtmlWinParser : when handling
 FONT tag it creates some fonts. These fonts are then used by wxHtmlWindow
 to display the text. But wxHtmWinParser object is needed only when parsing
 the document - it may be deleted then. But fonts CAN'T be deleted - they
-must exist as long as the window is displaying text. 
+must exist as long as the window is displaying text.
 
 GetTempData() solves the problem.
 
@@ -172,13 +172,13 @@ GetTempData() solves the problem.
 Must be overwriten in derived class.
 
 This method is called by \helpref{DoParsing}{wxhtmlparserdoparsing}
-each time a part of text is parsed. {\it txt} is NOT only one word, it is 
+each time a part of text is parsed. {\it txt} is NOT only one word, it is
 substring of input. It is not formatted or preprocessed (so white spaces are
 unmodified)
 
 \membersection{wxHtmlParser::AddTag}\label{wxhtmlparseraddtag}
 
-\func{void}{AddTag}{\param{const wxHtmlTag\& }{tag}
+\func{void}{AddTag}{\param{const wxHtmlTag\& }{tag}}
 
 This may (and may not) be overwriten in derived class.
 

@@ -39,7 +39,7 @@ Constructor.
 
 \func{void}{SetParent}{\param{wxHtmlContainerCell }{*p}}
 
-Sets parent container of this cell. This is called from 
+Sets parent container of this cell. This is called from
 \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}.
 
 \membersection{wxHtmlCell::GetParent}\label{wxhtmlcellgetparent}
@@ -53,7 +53,7 @@ Returns pointer to parent container.
 \constfunc{int}{GetPosX}{\void}
 
 Returns X position within parent (the value is relative to parent's
-upper left corner). The returned value is meaningful only if 
+upper left corner). The returned value is meaningful only if
 parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
 
 \membersection{wxHtmlCell::GetPosY}\label{wxhtmlcellgetposy}
@@ -61,7 +61,7 @@ parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
 \constfunc{int}{GetPosY}{\void}
 
 Returns Y position within parent (the value is relative to parent's
-upper left corner). The returned value is meaningful only if 
+upper left corner). The returned value is meaningful only if
 parent's \helpref{Layout}{wxhtmlcelllayout} was called before!
 
 \membersection{wxHtmlCell::GetWidth}\label{wxhtmlcellgetwidth}
@@ -89,7 +89,7 @@ Returns descent value of the cell (m_Descent member). See explanation:
 \constfunc{virtual wxString}{GetLink}{\param{int }{x = 0}, \param{int }{y = 0}}
 
 Returns hypertext link if associated with this cell or empty string otherwise.
-(Note : this makes sense only for visible tags). 
+(Note : this makes sense only for visible tags).
 
 \wxheading{Parameters}
 
@@ -122,7 +122,7 @@ is wxEmptyString (no link))
 
 \func{void}{SetNext}{\param{wxHtmlCell }{*cell}}
 
-Sets the next cell in the list. This shouldn't be called by user - it is 
+Sets the next cell in the list. This shouldn't be called by user - it is
 to be used only by \helpref{wxHtmlContainerCell::InsertCell}{wxhtmlcontainercellinsertcell}
 
 \membersection{wxHtmlCell::Layout}\label{wxhtmlcelllayout}
@@ -138,9 +138,9 @@ This method performs 2 actions:
 based on actual width {\it w}
 \end{enumerate}
 
-It must be called before displaying cells structure because 
-m\_PosX and m\_PosY are undefined (or invalid) 
-before calling Layout. 
+It must be called before displaying cells structure because
+m\_PosX and m\_PosY are undefined (or invalid)
+before calling Layout.
 
 \membersection{wxHtmlCell::Draw}\label{wxhtmlcelldraw}
 
@@ -166,9 +166,9 @@ used to optimize rendering speed}
 
 \func{virtual void}{DrawInvisible}{\param{wxDC\& }{dc}, \param{int }{x}, \param{int }{y}}
 
-This method is called instead of \helpref{Draw{wxhtmlcelldraw} when the
+This method is called instead of \helpref{Draw}{wxhtmlcelldraw} when the
 cell is certainly out of the screen (and thus invisible). This is not
-nonsense - some tags (like \helpref{wxHtmlColourCell}{wxhtmlcolourcell} 
+nonsense - some tags (like \helpref{wxHtmlColourCell}{wxhtmlcolourcell}
 or font setter) must be drawn even if they are invisible!
 
 \wxheading{Parameters}
@@ -177,7 +177,7 @@ or font setter) must be drawn even if they are invisible!
 
 \docparam{x,y}{Coordinates of parent's upper left corner. You must
 add this to m\_PosX,m\_PosY when passing coordinates to dc's methods
-Example : {\tt dc -> DrawText("hello", x + m\_PosX, y + m\_PosY)} }
+Example : {\tt dc -> DrawText("hello", x + m\_PosX, y + m\_PosY)}}
 
 
 \membersection{wxHtmlCell::Find}\label{wxhtmlcellfind}
@@ -186,11 +186,11 @@ Example : {\tt dc -> DrawText("hello", x + m\_PosX, y + m\_PosY)} }
 
 Returns pointer to itself if this cell matches condition (or if any of the cells
 following in the list matches), NULL otherwise.
-(In other words if you call top-level container's Find it will 
+(In other words if you call top-level container's Find it will
 return pointer to the first cell that matches the condition)
 
 It is recommended way how to obtain pointer to particular cell or
-to cell of some type (e.g. wxHtmlAnchorCell reacts on 
+to cell of some type (e.g. wxHtmlAnchorCell reacts on
 HTML_COND_ISANCHOR condition)
 
 \wxheading{Parameters}
@@ -232,8 +232,6 @@ key events or whatsooever) you should use \helpref{wxHtmlBinderCell}{wxhtmlbinde
 
 \docparam{left, middle, right}{boolean flags for mouse buttons. TRUE if the left/middle/right
 button is pressed, FALSE otherwise}
-
-
 
 
 
