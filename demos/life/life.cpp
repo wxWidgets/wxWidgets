@@ -809,7 +809,7 @@ void LifeCanvas::DrawChanged()
 }
 
 // event handlers
-void LifeCanvas::OnPaint(wxPaintEvent& event)
+void LifeCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     wxRect  rect = GetUpdateRegion().GetBox();

@@ -608,7 +608,7 @@ bool MyApp::OnInit()
 //    randomize();
   pages[0] = 0;
 
-  TheMainWindow = new MainWindow(NULL, 500, _T("wxPoem"), wxPoint(XPos, YPos), wxSize(100, 100), wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU);
+  TheMainWindow = new MainWindow(NULL, 500, _T("wxPoem"), wxPoint(XPos, YPos), wxSize(100, 100), wxCAPTION|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxCLOSE_BOX);
 
 #ifdef wx_x
   TheMainWindow->SetIcon(Icon(_T("wxpoem")));
@@ -775,7 +775,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 // Process characters
 void MyCanvas::OnChar(wxKeyEvent& event)
 {
-  switch (event.KeyCode())
+  switch (event.GetKeyCode())
   {
     case 'n':
     case 'N':

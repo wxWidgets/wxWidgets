@@ -148,12 +148,12 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
     }
 }
 
-/*--------  BombCanvasClass::Refresh(xc1, yc1, xc2, yc2)  -------------*/
+/*--------  BombCanvasClass::RefreshField(xc1, yc1, xc2, yc2)  --------*/
 /* Refreshes the field image                                           */
 /* xc1,yc1 etc. are the (inclusive) limits of the area to be drawn,    */
 /* expressed in cells.                                                 */
 /*---------------------------------------------------------------------*/
-void BombsCanvasClass::Refresh(int xc1, int yc1, int xc2, int yc2)
+void BombsCanvasClass::RefreshField(int xc1, int yc1, int xc2, int yc2)
   {
     wxClientDC dc(this);
     DrawField(& dc, xc1, yc1, xc2, yc2);
@@ -169,7 +169,7 @@ void BombsCanvasClass::Refresh(int xc1, int yc1, int xc2, int yc2)
 void BombsCanvasClass::Uncover(int x, int y)
 {
   wxGetApp().Game.Unhide(x,y);
-  Refresh(x, y, x, y);
+  RefreshField(x, y, x, y);
   if (wxGetApp().Game.IsBomb(x,y) || wxGetApp().Game.GetRemainingCells()==0)
     { wxBell();
       if (!wxGetApp().Game.IsBomb(x,y))
@@ -182,7 +182,7 @@ void BombsCanvasClass::Uncover(int x, int y)
       for(x=0; x<field_width; x++)
        for(y=0; y<field_height; y++)
          wxGetApp().Game.Unhide(x,y);
-      Refresh(0, 0, field_width-1, field_height-1);
+      RefreshField(0, 0, field_width-1, field_height-1);
     }
   else if (!wxGetApp().Game.Get(x, y))
     { int left = ( x > 0 ) ? x-1 : 0;
@@ -212,7 +212,7 @@ void BombsCanvasClass::OnEvent(wxMouseEvent& event)
            && (wxGetApp().Game.IsHidden(x,y)
                || wxGetApp().Game.GetRemainingCells()==0))
         { wxGetApp().Game.Mark(x,y);
-          Refresh(x, y, x, y);
+          RefreshField(x, y, x, y);
           return;
         }
       else if (event.LeftDown() && wxGetApp().Game.IsHidden(x,y)

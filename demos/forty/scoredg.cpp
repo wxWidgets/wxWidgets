@@ -174,7 +174,7 @@ void ScoreDialog::Display()
 	Show(TRUE);
 }
 
-void ScoreDialog::OnCloseWindow(wxCloseEvent& event)
+void ScoreDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     EndModal(wxID_OK);
 }

@@ -122,12 +122,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
 }
 
 // Intercept menu commands
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     this->Destroy();
 }
 
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     static bool destroyed = FALSE;
     if (destroyed)
@@ -159,7 +159,7 @@ MyCanvas::MyCanvas(wxFrame *frame):
     WaterBrush = wxBrush(wxCol4, wxSOLID);
 }
 
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 	Draw(dc);

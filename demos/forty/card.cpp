@@ -253,117 +253,117 @@ void Card::Draw(wxDC& dc, int x, int y)
                 }
 
 			// Draw the value
-                dc.Blit(x + m_scale*3, y + m_scale*3, valuewidth, valueheight,
+                dc.Blit((wxCoord)(x + m_scale*3), (wxCoord)(y + m_scale*3), valuewidth, valueheight,
                                 &memoryDC, valuewidth * (m_pipValue - 1), valuepos, wxCOPY);
-                dc.Blit(x + m_width - m_scale*3 - valuewidth, y + m_height - valueheight - m_scale*3,
+                dc.Blit((wxCoord)(x + m_width - m_scale*3 - valuewidth), (wxCoord)(y + m_height - valueheight - m_scale*3),
                         valuewidth, valueheight,
                         &memoryDC, valuewidth * (m_pipValue - 1), valuepos+valueheight, wxCOPY);
 
 			// Draw the pips
-                dc.Blit(x + m_scale*3 + valuewidth+2, y + m_scale*3, pipsize, pipsize,
+                dc.Blit((wxCoord)(x + m_scale*3 + valuewidth+2), (wxCoord)(y + m_scale*3), pipsize, pipsize,
                                 &memoryDC, pipsize * m_suit, pippos, wxCOPY);
-                dc.Blit(x + m_width - m_scale*3-valuewidth-pipsize-2, y + m_height - pipsize - m_scale*3,
+                dc.Blit((wxCoord)(x + m_width - m_scale*3-valuewidth-pipsize-2), (wxCoord)(y + m_height - pipsize - m_scale*3),
                         pipsize, pipsize,
                                 &memoryDC, pipsize * m_suit, pipsize+pippos, wxCOPY);
 
 		switch (m_pipValue)
 		{
 		case 1:
-                        dc.Blit(x - symdist + m_width / 2, y - m_scale*5 + m_height / 2, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2), (wxCoord)(y - m_scale*5 + m_height / 2), symsize, symsize,
                            &memoryDC, symsize * m_suit, sympos, wxCOPY);
 			break;
 
 		case 3:
-                        dc.Blit(x - symdist + m_width / 2, y - symdist + m_height / 2, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2), (wxCoord)(y - symdist + m_height / 2), symsize, symsize,
                            &memoryDC, symsize * m_suit, sympos, wxCOPY);
 		case 2:
-                        dc.Blit(x - symdist + m_width / 2,
-                                y - symdist + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2),
+                                (wxCoord)(y - symdist + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 2,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 			break;
 
 		case 5:
-                        dc.Blit(x - symdist + m_width / 2, y - symdist + m_height / 2, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2), (wxCoord)(y - symdist + m_height / 2), symsize, symsize,
                            &memoryDC, symsize * m_suit, sympos, wxCOPY);
 		case 4:
-                        dc.Blit(x - symdist +  m_width / 4,
-                                y - symdist + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist +  m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 			break;
 
 		case 8:
-                        dc.Blit(x - symdist + 5 * m_width / 10,
-                                y - symdist + 5 * m_height / 8, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 5 * m_width / 10),
+                                (wxCoord)(y - symdist + 5 * m_height / 8), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 		case 7:
-                        dc.Blit(x - symdist + 5 * m_width / 10,
-                                y - symdist + 3 * m_height / 8, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 5 * m_width / 10),
+                                (wxCoord)(y - symdist + 3 * m_height / 8), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
 		case 6:
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + m_height / 2, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 2), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + m_height / 2, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + m_height / 2), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 			break;
 
 		case 10:
-                        dc.Blit(x - symdist + m_width / 2,
-                                y - symdist + 2 * m_height / 3, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2),
+                                (wxCoord)(y - symdist + 2 * m_height / 3), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 		case 9:
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist2 + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist2 + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist2 + 5 * m_height / 12, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist2 + 5 * m_height / 12), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + 7 * m_height / 12, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + 7 * m_height / 12), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist2 + m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist2 + m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist2 + 5 * m_height / 12, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist2 + 5 * m_height / 12), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + 7 * m_height / 12, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + 7 * m_height / 12), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
-                        dc.Blit(x - symdist + 3 * m_width / 4,
-                                y - symdist + 3 * m_height / 4, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + 3 * m_width / 4),
+                                (wxCoord)(y - symdist + 3 * m_height / 4), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
-                        dc.Blit(x - symdist + m_width / 2,
-                                y - symdist + m_height / 3, symsize, symsize,
+                        dc.Blit((wxCoord)(x - symdist + m_width / 2),
+                                (wxCoord)(y - symdist + m_height / 3), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
 			break;
 		case 11:
@@ -371,14 +371,14 @@ void Card::Draw(wxDC& dc, int x, int y)
 		case 13:
                         memoryDC.SelectObject(*m_pictureBmap);
                         int picwidth = 40,picheight = 45;
-                        dc.Blit(x + (m_width-picwidth)/2, y - picheight/2 + m_height/2,
+                        dc.Blit((wxCoord)(x + (m_width-picwidth)/2), (wxCoord)(y - picheight/2 + m_height/2),
                                      picwidth, picheight,
                                 &memoryDC, picwidth * (m_pipValue - 11), 0, wxCOPY);
 
                         memoryDC.SelectObject(*m_symbolBmap);
-                        dc.Blit(x + m_width-(m_width-picwidth)/2-symsize-3,y - picheight/2+m_height/2+1, symsize, symsize,
+                        dc.Blit((wxCoord)(x + m_width-(m_width-picwidth)/2-symsize-3),(wxCoord)(y - picheight/2+m_height/2+1), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos, wxCOPY);
-                        dc.Blit(x + (m_width-picwidth)/2+2,y + picheight/2 + m_height/2-symsize, symsize, symsize,
+                        dc.Blit((wxCoord)(x + (m_width-picwidth)/2+2),(wxCoord)(y + picheight/2 + m_height/2-symsize), symsize, symsize,
                                 &memoryDC, symsize * m_suit, sympos2, wxCOPY);
 			break;
 		}

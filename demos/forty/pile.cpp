@@ -88,7 +88,7 @@ void Pile::Redraw(wxDC& dc )
 	{
 		if (m_dx == 0 && m_dy == 0)
 		{
-                        if ((canvas) && (canvas->IsExposed(m_x,m_y,Card::GetScale()*60,Card::GetScale()*200)))
+      if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
 			  m_cards[m_topCard]->Draw(dc, m_x, m_y);
 		}
 		else
@@ -97,7 +97,7 @@ void Pile::Redraw(wxDC& dc )
 			int y = m_y;
 			for (int i = 0; i <= m_topCard; i++)
 			{
-                              if ((canvas) && (canvas->IsExposed(x,y,Card::GetScale()*60,Card::GetScale()*200)))
+        if ((canvas) && (canvas->IsExposed(x,y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
 			        m_cards[i]->Draw(dc, x, y);
                               x += (int)Card::GetScale()*m_dx;
                               y += (int)Card::GetScale()*m_dy;
@@ -106,7 +106,7 @@ void Pile::Redraw(wxDC& dc )
 	}
 	else
 	{
-            if ((canvas) && (canvas->IsExposed(m_x,m_y,Card::GetScale()*60,Card::GetScale()*200)))
+    if ((canvas) && (canvas->IsExposed(m_x,m_y,(int)(Card::GetScale()*60),(int)(Card::GetScale()*200))))
 		Card::DrawNullCard(dc, m_x, m_y);
 	}
 }

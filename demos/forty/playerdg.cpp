@@ -147,7 +147,7 @@ const wxString& PlayerSelectionDialog::GetPlayersName()
 	return m_player;
 }
 
-void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& event)
+void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
 	m_player = _T("");
     EndModal(wxID_CANCEL);
