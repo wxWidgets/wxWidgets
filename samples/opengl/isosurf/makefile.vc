@@ -15,8 +15,8 @@
 ISOSURF_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\isosurf.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
 ISOSURF_OBJECTS =  \
 	$(OBJS)\isosurf_sample.res \
 	$(OBJS)\isosurf_isosurf.obj
@@ -235,5 +235,5 @@ data:
 
 $(OBJS)\isosurf.exe: $(ISOSURF_OBJECTS) $(OBJS)\isosurf_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(ISOSURF_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(ISOSURF_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<

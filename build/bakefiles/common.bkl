@@ -486,6 +486,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     <!-- Link against one wxWin library. Value must be literal! -->
     <define-tag name="wx-lib" rules="exe,dll,module">
         <sys-lib>$(wxwin.libToLink(value))</sys-lib>
+        <ldlibs>$(wxwin.extraLdflags(value))</ldlibs>
         <if cond="FORMAT=='msvc6prj' and MONOLITHIC=='0'">
             <depends-on-dsp>$(wxwin.makeDspDependency(value))</depends-on-dsp>
         </if>

@@ -37,6 +37,12 @@ MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['xml', 'net', 'odbc']
 LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'dbgrid']
+# Additional libraries that must be linked in:
+EXTRALIBS = {
+    'gl' : '$(EXTRALIBS_OPENGL)',
+    'xml' : '$(EXTRALIBS_XML)',
+    'odbc' : '$(EXTRALIBS_ODBC)',
+}
 
 def mkLibName(wxid):
     """Returns string that can be used as library name, including name
@@ -75,6 +81,11 @@ def libToLink(wxlibname):
     else:
         return mkLibName(wxlibname)
 
+def extraLdflags(wxlibname):
+    if wxlibname in EXTRALIBS:
+        return EXTRALIBS[wxlibname]
+    else:
+        return ''
 
 wxVersion = None
 VERSION_FILE = '../../include/wx/version.h'

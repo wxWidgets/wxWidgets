@@ -199,11 +199,15 @@ it if SHARED=1 unless you know what you are doing.
         <set var="TOOLKIT_LOWERCASE">$(TOOLKIT.lower())</set>
         <set var="TOOLKIT_VERSION"/>
         <set var="HOST_SUFFIX"/>
+        <set var="EXTRACFLAGS"/>
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
         <set var="EXTRALIBS_ODBC"/>
         <set var="EXTRALIBS_GUI"/>
-        <set var="EXTRACFLAGS"/>
+        <set var="EXTRALIBS_OPENGL">
+            <if cond="COMPILER=='wat'">opengl32.lib glu32.lib</if>
+            <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
+        </set>
 
         <set var="SRCDIR">
             <if cond="BUILDING_LIB=='1'">..$(DIRSEP)..</if>

@@ -8,7 +8,6 @@
         <sources>wxrc.cpp</sources>
         <wx-lib>xml</wx-lib>
         <wx-lib>base</wx-lib>
-        <ldlibs>$(EXTRALIBS_XML)</ldlibs>
         <install-to>$(BINDIR)</install-to>
     </exe>
 

@@ -17,13 +17,13 @@ OBJS = \
 PENGUIN_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\penguin.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\samples $(CFLAGS)
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples $(CFLAGS)
 PENGUIN_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\penguin.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
+	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /W4 /I. \
+	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
 PENGUIN_OBJECTS =  \
 	$(OBJS)\penguin_penguin.obj \
 	$(OBJS)\penguin_lw.obj \
@@ -146,10 +146,10 @@ __RUNTIME_LIBS_7 = D
 __RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = /d _UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -239,6 +239,8 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\penguin.exe del $(OBJS)\penguin.exe
+	-if exist $(OBJS)\penguin.ilk del $(OBJS)\penguin.ilk
+	-if exist $(OBJS)\penguin.pdb del $(OBJS)\penguin.pdb
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -246,5 +248,5 @@ data:
 
 $(OBJS)\penguin.exe: $(PENGUIN_OBJECTS) $(OBJS)\penguin_penguin.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(PENGUIN_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(PENGUIN_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<

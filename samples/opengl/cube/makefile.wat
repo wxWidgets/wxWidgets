@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -200,6 +200,6 @@ $(OBJS)\cube.exe :  $(CUBE_OBJECTS) $(OBJS)\cube_cube.res
 	@%append $(OBJS)\cube.lbc option caseexact
 	@%append $(OBJS)\cube.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(CUBE_OBJECTS)) do @%append $(OBJS)\cube.lbc file %i
-	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\cube.lbc library %i
+	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib opengl32.lib glu32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\cube.lbc library %i
 	@%append $(OBJS)\cube.lbc option resource=$(OBJS)\cube_cube.res
 	wlink @$(OBJS)\cube.lbc
