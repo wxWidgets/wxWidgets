@@ -51,8 +51,10 @@ wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
             for (j = 0; j < 2; j++)
                 for (k = 0; k < 2; k++)
                     for (l = 0; l < 2; l++)
-                        for (m = 0; m < 7; m++)
+                        for (m = 0; m < 7; m++) {
                             m_FontsTable[i][j][k][l][m] = NULL;
+                            m_FontsFacesTable[i][j][k][l][m] = wxEmptyString;
+                        }
 #ifdef __WXMSW__
         static int default_sizes[7] = {7, 8, 10, 12, 16, 22, 30};
 #else
@@ -152,28 +154,6 @@ wxObject* wxHtmlWinParser::GetProduct()
 
 
 
-wxList* wxHtmlWinParser::GetTempData()
-{
-    int i, j, k, l, m;
-    wxFont *f;
-    wxList *lst = wxHtmlParser::GetTempData();
-
-    if (lst == NULL) lst = new wxList;
-    lst -> DeleteContents(TRUE);
-
-    for (i = 0; i < 2; i++)
-        for (j = 0; j < 2; j++)
-            for (k = 0; k < 2; k++)
-                for (l = 0; l < 2; l++)
-                    for (m = 0; m < 7; m++) {
-                        f = m_FontsTable[i][j][k][l][m];
-                        if (f) lst -> Append(f);
-                    }
-    return lst;
-}
-
-
-
 void wxHtmlWinParser::AddText(const char* txt)
 {
     wxHtmlCell *c;
@@ -260,17 +240,26 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
         ff = GetFontFixed(),
         fs = GetFontSize() - 1 /*remap from <1;7> to <0;6>*/ ;
 
-    if (m_FontsTable[fb][fi][fu][ff][fs] == NULL) {
-        m_FontsTable[fb][fi][fu][ff][fs] =
-            new wxFont(
-                m_FontsSizes[fs] * m_PixelScale,
-                ff ? wxMODERN : wxSWISS,
-                fi ? wxITALIC : wxNORMAL,
-                fb ? wxBOLD : wxNORMAL,
-                fu ? TRUE : FALSE, ff ? m_FontFaceFixed : m_FontFaceNormal);
+    wxString face = ff ? m_FontFaceFixed : m_FontFaceNormal;
+    wxString *faceptr = &(m_FontsFacesTable[fb][fi][fu][ff][fs]);
+    wxFont **fontptr = &(m_FontsTable[fb][fi][fu][ff][fs]);
+
+    if (*fontptr != NULL && *faceptr != face) {
+        delete *fontptr;
+        *fontptr = NULL;
     }
-    m_DC -> SetFont(*(m_FontsTable[fb][fi][fu][ff][fs]));
-    return (m_FontsTable[fb][fi][fu][ff][fs]);
+
+    if (*fontptr == NULL) {
+        *faceptr = face;
+        *fontptr = new wxFont(
+                       m_FontsSizes[fs] * m_PixelScale,
+                       ff ? wxMODERN : wxSWISS,
+                       fi ? wxITALIC : wxNORMAL,
+                       fb ? wxBOLD : wxNORMAL,
+                       fu ? TRUE : FALSE, face);
+    }
+    m_DC -> SetFont(**fontptr);
+    return (*fontptr);
 }
 
 

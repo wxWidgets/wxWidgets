@@ -26,16 +26,22 @@
 
 #include "wx/html/forcelnk.h"
 #include "wx/html/m_templ.h"
+#include "wx/fontenum.h"
+#include "wx/tokenzr.h"
 
 FORCE_LINK_ME(m_fonts)
 
 
 TAG_HANDLER_BEGIN(FONT, "FONT")
 
+    TAG_HANDLER_VARS
+        wxSortedArrayString m_Faces;
+
     TAG_HANDLER_PROC(tag)
     {
         wxColour oldclr = m_WParser -> GetActualColor();
         int oldsize = m_WParser -> GetFontSize();
+        wxString oldface = m_WParser -> GetFontFace();
 
         if (tag.HasParam(wxT("COLOR"))) {
 	    unsigned long tmp = 0; 
@@ -58,16 +64,37 @@ TAG_HANDLER_BEGIN(FONT, "FONT")
                 m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
 	    }
         }
+        
+        if (tag.HasParam(wxT("FACE"))) {
+            if (m_Faces.GetCount() == 0) {
+                wxFontEnumerator enu;
+                enu.EnumerateFacenames();
+                m_Faces = *enu.GetFacenames();
+            }
+            wxStringTokenizer tk(tag.GetParam(wxT("FACE")), ",");
+            int index;
+            
+            while (tk.HasMoreTokens()) 
+                if ((index = m_Faces.Index(tk.GetNextToken())) != wxNOT_FOUND) {
+                    m_WParser -> SetFontFace(m_Faces[index]);
+                    m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+                    break;
+                }
+        }
 
         ParseInner(tag);
 
-        if (oldclr != m_WParser -> GetActualColor()) {
-            m_WParser -> SetActualColor(oldclr);
-            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(oldclr));
-        }
+        if (oldface != m_WParser -> GetFontFace()) {
+            m_WParser -> SetFontFace(oldface);
+            m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        }        
         if (oldsize != m_WParser -> GetFontSize()) {
             m_WParser -> SetFontSize(oldsize);
             m_WParser -> GetContainer() -> InsertCell(new wxHtmlFontCell(m_WParser -> CreateCurrentFont()));
+        }        
+        if (oldclr != m_WParser -> GetActualColor()) {
+            m_WParser -> SetActualColor(oldclr);
+            m_WParser -> GetContainer() -> InsertCell(new wxHtmlColourCell(oldclr));
         }
         return TRUE;
     }

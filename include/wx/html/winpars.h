@@ -61,8 +61,6 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes);
                 // sets fonts to be used when displaying HTML page.
 
-        virtual wxList* GetTempData();
-
         static void AddModule(wxHtmlTagsModule *module);
                 // Adds tags module. see wxHtmlTagsModule for details.
 
@@ -91,6 +89,8 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
         void SetFontUnderlined(int x) {m_FontUnderlined = x;}
         int GetFontFixed() const {return m_FontFixed;}
         void SetFontFixed(int x) {m_FontFixed = x;}
+        wxString GetFontFace() const {return GetFontFixed() ? m_FontFaceFixed : m_FontFaceNormal;}
+        void SetFontFace(const wxString& face) {if (GetFontFixed()) m_FontFaceFixed = face; else m_FontFaceNormal = face;}
 
         int GetAlign() const {return m_Align;}
         void SetAlign(int a) {m_Align = a;}
@@ -135,8 +135,9 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
                 // average height of normal-sized text
         int m_Align;
                 // actual alignment
-
-        wxFont *m_FontsTable[2][2][2][2][7];
+        
+        wxFont* m_FontsTable[2][2][2][2][7];
+        wxString m_FontsFacesTable[2][2][2][2][7];
                 // table of loaded fonts. 1st four indexes are 0 or 1, depending on on/off
                 // state of these flags (from left to right):
                 // [bold][italic][underlined][fixed_size]
