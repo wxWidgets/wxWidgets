@@ -29,9 +29,9 @@ class wxRegConfig : public wxConfigBase
 public:
   // ctor & dtor
     // will store data in HKLM\appName and HKCU\appName
-  wxRegConfig(const wxString& appName = wxEmptyString, const wxString& vendorName = wxEmptyString,
-    const wxString& localFilename = wxEmptyString, const wxString& globalFilename = wxEmptyString,
-    long style = 0);
+  wxRegConfig(const wxString& appName = "", const wxString& vendorName = "",
+              const wxString& localFilename = "", const wxString& globalFilename = "",
+              long style = 0);
 
     // dtor will save unsaved data
   virtual ~wxRegConfig();
@@ -66,15 +66,15 @@ public:
 
   // The following are necessary to satisfy the compiler
   wxString Read(const wxString& key, const wxString& defVal) const
-  { return wxConfigBase::Read(key, defVal); }
+    { return wxConfigBase::Read(key, defVal); }
   bool Read(const wxString& key, long *pl, long defVal) const
-  { return wxConfigBase::Read(key, pl, defVal); }
+    { return wxConfigBase::Read(key, pl, defVal); }
   long Read(const wxString& key, long defVal) const
-  { return wxConfigBase::Read(key, defVal); }
+    { return wxConfigBase::Read(key, defVal); }
   bool Read(const wxString& key, double* val) const
-  { return wxConfigBase::Read(key, val); }
+    { return wxConfigBase::Read(key, val); }
   bool Read(const wxString& key, double* val, double defVal) const
-  { return wxConfigBase::Read(key, val, defVal); }
+    { return wxConfigBase::Read(key, val, defVal); }
 
   bool Write(const wxString& key, const wxString& szValue);
   bool Write(const wxString& key, long lValue);
