@@ -156,7 +156,7 @@ on BuildProjects(inLogFileRef, inFolder, inTarget, inRebuild)
 		write gSeparator to inLogFileRef
 	end if
 	
-	tell application "Finder" to set theSubFolders to every folder of inFolder
+	tell application "Finder" to set theSubFolders to every folder of inFolder whose name does not end with " Data"
 	repeat with theFolder in theSubFolders
 		BuildProjects(inLogFileRef, theFolder, inTarget, inRebuild)
 	end repeat

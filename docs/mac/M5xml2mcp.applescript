@@ -40,6 +40,8 @@ tell me to display dialog "Imported " & theXmlSuccessCount & " xml files out of 
 on ImportProjects(inFolder)
 	global theXmlCount, theXmlSuccessCount
 	
+	tell application "Finder" to update inFolder
+	
 	try
 		tell application "Finder" to set theXml to ((the first file of inFolder whose name ends with gXmlSuffix) as string)
 	on error
@@ -78,7 +80,7 @@ on ImportProjects(inFolder)
 		end tell
 	end if
 	
-	tell application "Finder" to set theSubFolders to every folder of inFolder
+	tell application "Finder" to set theSubFolders to every folder of inFolder whose name does not end with " Data"
 	repeat with theFolder in theSubFolders
 		ImportProjects(theFolder)
 	end repeat

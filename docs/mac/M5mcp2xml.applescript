@@ -40,6 +40,8 @@ tell me to display dialog "Exported " & theProjectSuccessCount & " projects out 
 on ExportProjects(inFolder)
 	global theProjectCount, theProjectSuccessCount
 	
+	tell application "Finder" to update inFolder
+	
 	try
 		tell application "Finder" to set theProject to ((the first file of inFolder whose name ends with gProjectSuffix) as string)
 	on error
@@ -82,7 +84,7 @@ on ExportProjects(inFolder)
 		end tell
 	end if
 	
-	tell application "Finder" to set theSubFolders to every folder of inFolder
+	tell application "Finder" to set theSubFolders to every folder of inFolder whose name does not end with " Data"
 	repeat with theFolder in theSubFolders
 		ExportProjects(theFolder)
 	end repeat
