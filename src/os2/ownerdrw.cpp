@@ -75,18 +75,6 @@ bool wxOwnerDrawn::OnMeasureItem(
 
     wxString                        sStr = wxStripMenuCodes(m_strName);
 
-#if 0
-    wxString                        sTgt = "\t";
-    size_t                          nIndex;
-
-    nIndex = sStr.Find(sTgt.c_str());
-    if (nIndex != -1)
-        sStr.Remove(nIndex);
-    sTgt = "~";
-    nIndex = sStr.Find(sTgt.c_str());
-    if (nIndex != -1)
-        sStr.Replace(sTgt.c_str(), "", TRUE);
-#endif
     vDC.GetTextExtent( sStr
                       ,(long *)pWidth
                       ,(long *)pHeight
@@ -122,7 +110,6 @@ bool wxOwnerDrawn::OnDrawItem(
     wxColour                        vColText;
     COLORREF                        vRef;
     RECTL                           vRect = {rRect.x + 4, rRect.y + 1, rRect.x + (rRect.width - 2), rRect.y + rRect.height};
-    char                            zMsg[128];
 
     //
     // Use default font if no font set
@@ -315,7 +302,7 @@ bool wxOwnerDrawn::OnDrawItem(
             vRect.xLeft   = rRect.x;
             vRect.xRight  = rRect.x + GetMarginWidth();
             vRect.yBottom = rRect.y;
-            vRect.yTop    = rRect.y + m_nHeight;
+            vRect.yTop    = rRect.y + m_nHeight - 3;
 
             ::WinDrawBitmap( hPS             // PS for this menuitem
                             ,hBmpCheck       // system checkmark
@@ -372,6 +359,8 @@ bool wxOwnerDrawn::OnDrawItem(
                                                 ,rRect.x + GetMarginWidth()
                                                 ,rRect.y + m_nHeight
                                                };
+                POINTL              vPnt1 = {2, 4}; // Leave a little background border
+                POINTL              vPnt2 = {rRect.x + GetMarginWidth(), rRect.y + m_nHeight - 3};
                 LINEBUNDLE          vLine;
 
                 vLine.lColor = vColBack.GetPixel();
@@ -381,9 +370,10 @@ bool wxOwnerDrawn::OnDrawItem(
                               ,0
                               ,&vLine
                              );
+                ::GpiMove(hPS, &vPnt1);
                 ::GpiBox( hPS
                          ,DRO_OUTLINE
-                         ,(PPOINTL)&vRectBmp
+                         ,&vPnt2
                          ,0L
                          ,0L
                         );

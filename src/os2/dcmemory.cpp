@@ -144,6 +144,7 @@ wxMemoryDC::wxMemoryDC(
 
 wxMemoryDC::~wxMemoryDC()
 {
+    m_vSelectedBitmap.SetSelectedInto(NULL);
     if (m_hPS != NULLHANDLE)
         ::GpiDestroyPS(m_hPS);
     if (m_hDC != NULLHANDLE)
