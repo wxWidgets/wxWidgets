@@ -149,7 +149,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu("File",NULL,wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxMENU_TEAROFF);
 
     menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
