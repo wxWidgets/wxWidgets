@@ -11728,7 +11728,7 @@ fi
 echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler_mwerks" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler_mwerks" >&6
 
-MWCC=`test $bakefile_compiler_mwerks = yes && echo yes`
+MWCC=`test $bakefile_cv_c_compiler_mwerks = yes && echo yes`
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -11800,7 +11800,7 @@ fi
 echo "$as_me:$LINENO: result: $wx_cv_c_compiler_xlc" >&5
 echo "${ECHO_T}$wx_cv_c_compiler_xlc" >&6
 
-XLCC=`test $wx_compiler_xlc = yes && echo yes`
+XLCC=`test $wx_cv_c_compiler_xlc = yes && echo yes`
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -12667,7 +12667,7 @@ fi
 echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler_mwerks" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler_mwerks" >&6
 
-MWCXX=`test $bakefile_compiler_mwerks = yes && echo yes`
+MWCXX=`test $bakefile_cv_cxx_compiler_mwerks = yes && echo yes`
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -12739,7 +12739,7 @@ fi
 echo "$as_me:$LINENO: result: $wx_cv_cxx_compiler_xlc" >&5
 echo "${ECHO_T}$wx_cv_cxx_compiler_xlc" >&6
 
-XLCXX=`test $wx_compiler_xlc = yes && echo yes`
+XLCXX=`test $wx_cv_cxx_compiler_xlc = yes && echo yes`
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'

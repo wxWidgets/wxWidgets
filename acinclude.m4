@@ -66,7 +66,7 @@ dnl Loosely based on autoconf AC_PROG_CC
 AC_DEFUN([AC_WX_PROG_XLCC],
 [AC_LANG_PUSH(C)
 _AC_WX_LANG_COMPILER_XLC
-XLCC=`test $wx_compiler_xlc = yes && echo yes`
+XLCC=`test $wx_cv_c_compiler_xlc = yes && echo yes`
 AC_LANG_POP(C)
 ])
 
@@ -74,7 +74,7 @@ dnl Loosely based on autoconf AC_PROG_CXX
 AC_DEFUN([AC_WX_PROG_XLCXX],
 [AC_LANG_PUSH(C++)
 _AC_WX_LANG_COMPILER_XLC
-XLCXX=`test $wx_compiler_xlc = yes && echo yes`
+XLCXX=`test $wx_cv_cxx_compiler_xlc = yes && echo yes`
 AC_LANG_POP(C++)
 ])
 
