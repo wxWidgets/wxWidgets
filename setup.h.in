@@ -649,6 +649,9 @@
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
+/* Define if you have strptime() */
+#undef HAVE_STRPTIME
+
 /* Define if you have all functions to set thread priority */
 #undef HAVE_THREAD_PRIORITY_FUNCTIONS
 

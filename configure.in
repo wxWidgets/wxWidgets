@@ -2437,6 +2437,9 @@ dnl time/date functions
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_TIMEDATE" = "yes"; then
+    dnl check for strptime
+    AC_CHECK_FUNCS(strptime)
+
     dnl check for timezone variable
     AC_CACHE_CHECK(for timezone variable in <time.h>,
                    wx_cv_var_timezone,
