@@ -486,5 +486,11 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 wxString wxGetOsDescription()
 {
-  return "MacOS" ; //TODO:define further
+#ifdef WXWIN_OS_DESCRIPTION
+    // use configure generated description if available
+    return wxString("MacOS (") + WXWIN_OS_DESCRIPTION + wxString(")");
+#else
+    return "MacOS" ; //TODO:define further
+#endif
 }
+

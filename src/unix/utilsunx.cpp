@@ -948,6 +948,7 @@ bool wxGetUserName(wxChar *buf, int sz)
     return FALSE;
 }
 
+#ifndef __WXMAC__
 wxString wxGetOsDescription()
 {
 #ifndef WXWIN_OS_DESCRIPTION
@@ -956,6 +957,7 @@ wxString wxGetOsDescription()
     return WXWIN_OS_DESCRIPTION;
 #endif
 }
+#endif
 
 // this function returns the GUI toolkit version in GUI programs, but OS
 // version in non-GUI ones
