@@ -35,7 +35,7 @@
 
 // we cast the value to long from which we cast it to void * in IndexForInsert:
 // this can't work if the pointers are not big enough
-wxCOMPILE_TIME_ASSERT( sizeof(long) <= sizeof(void *),
+wxCOMPILE_TIME_ASSERT( sizeof(wxUIntPtr) <= sizeof(void *),
                        wxArraySizeOfPtrLessSizeOfLong ); // < 32 symbols
 
 // ============================================================================
@@ -326,8 +326,8 @@ size_t name::IndexForInsert(T lItem, CMPFUNC fnCompare) const               \
   while ( lo < hi ) {                                                       \
     i = (lo + hi)/2;                                                        \
                                                                             \
-    res = (*fnCompare)((const void *)(long)lItem,                           \
-                       (const void *)(long)(m_pItems[i]));                  \
+    res = (*fnCompare)((const void *)(wxUIntPtr)lItem,                      \
+                       (const void *)(wxUIntPtr)(m_pItems[i]));             \
     if ( res < 0 )                                                          \
       hi = i;                                                               \
     else if ( res > 0 )                                                     \
@@ -347,9 +347,10 @@ int name::Index(T lItem, CMPFUNC fnCompare) const                           \
     size_t n = IndexForInsert(lItem, fnCompare);                            \
                                                                             \
     return (n >= m_nCount ||                                                \
-           (*fnCompare)((const void *)(long)lItem,                          \
-                        ((const void *)(long)m_pItems[n]))) ? wxNOT_FOUND   \
-                                                            : (int)n;       \
+           (*fnCompare)((const void *)(wxUIntPtr)lItem,                     \
+                        ((const void *)(wxUIntPtr)m_pItems[n])))            \
+                        ? wxNOT_FOUND                                       \
+                        : (int)n;                                           \
 }                                                                           \
                                                                             \
 /* removes item from array (by index) */                                    \
