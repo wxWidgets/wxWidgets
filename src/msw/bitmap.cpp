@@ -1510,20 +1510,20 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
             p = rowStart;
             p.OffsetY(data, 1);
         }
-
-        // if we're a DDB we need to convert DIB back to DDB now to make the
-        // changes made via raw bitmap access effective
-        if ( !GetBitmapData()->m_isDIB )
-        {
-            wxDIB *dib = GetBitmapData()->m_dib;
-            GetBitmapData()->m_dib = NULL;
-
-            // TODO: convert
-
-            delete dib;
-        }
     }
-#endif
+
+    // if we're a DDB we need to convert DIB back to DDB now to make the
+    // changes made via raw bitmap access effective
+    if ( !GetBitmapData()->m_isDIB )
+    {
+        wxDIB *dib = GetBitmapData()->m_dib;
+        GetBitmapData()->m_dib = NULL;
+
+        // TODO: convert
+
+        delete dib;
+    }
+#endif // wxUSE_WXDIB
 }
 #endif // #ifdef wxHAVE_RAW_BITMAP
 
