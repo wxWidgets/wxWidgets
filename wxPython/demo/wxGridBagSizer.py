@@ -51,6 +51,11 @@ class TestFrame(wx.Frame):
         self.hideBtn = hideBtn
         self.showBtn = showBtn
         self.hideTxt = hideTxt
+
+        self.Bind(wx.EVT_BUTTON, self.OnHideButton, hideBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnShowButton, showBtn)
+        self.Bind(wx.EVT_BUTTON, self.OnMoveButton, moveBtn1)
+        self.Bind(wx.EVT_BUTTON, self.OnMoveButton, moveBtn2)
         
         # Add a spacer at the end to ensure some extra space at the bottom
         gbs.Add((10,10), (14,0))
@@ -60,11 +65,6 @@ class TestFrame(wx.Frame):
 
         p.SetSizerAndFit(gbs)
         self.SetClientSize(p.GetSize())
-
-        self.Bind(wx.EVT_BUTTON, self.OnHideButton, hideBtn)
-        self.Bind(wx.EVT_BUTTON, self.OnShowButton, showBtn)
-        self.Bind(wx.EVT_BUTTON, self.OnMoveButton, moveBtn1)
-        self.Bind(wx.EVT_BUTTON, self.OnMoveButton, moveBtn2)
 
 
     def OnHideButton(self, evt):
