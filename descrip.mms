@@ -81,8 +81,6 @@ motif : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.config]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [-.controls]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.drawing]
