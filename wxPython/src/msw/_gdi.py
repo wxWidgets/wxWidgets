@@ -1180,8 +1180,12 @@ class Region(GDIObject):
         return _gdi_.Region_ConvertToBitmap(*args, **kwargs)
 
     def UnionBitmap(*args, **kwargs):
-        """UnionBitmap(self, Bitmap bmp, Colour transColour=NullColour, int tolerance=0) -> bool"""
+        """UnionBitmap(self, Bitmap bmp) -> bool"""
         return _gdi_.Region_UnionBitmap(*args, **kwargs)
+
+    def UnionBitmapColour(*args, **kwargs):
+        """UnionBitmapColour(self, Bitmap bmp, Colour transColour, int tolerance=0) -> bool"""
+        return _gdi_.Region_UnionBitmapColour(*args, **kwargs)
 
 
 class RegionPtr(Region):
@@ -1192,8 +1196,14 @@ class RegionPtr(Region):
 _gdi_.Region_swigregister(RegionPtr)
 
 def RegionFromBitmap(*args, **kwargs):
-    """RegionFromBitmap(Bitmap bmp, Colour transColour=NullColour, int tolerance=0) -> Region"""
+    """RegionFromBitmap(Bitmap bmp) -> Region"""
     val = _gdi_.new_RegionFromBitmap(*args, **kwargs)
+    val.thisown = 1
+    return val
+
+def RegionFromBitmapColour(*args, **kwargs):
+    """RegionFromBitmapColour(Bitmap bmp, Colour transColour, int tolerance=0) -> Region"""
+    val = _gdi_.new_RegionFromBitmapColour(*args, **kwargs)
     val.thisown = 1
     return val
 
