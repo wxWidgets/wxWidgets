@@ -33,8 +33,8 @@ function that takes a wxEraseEvent argument.
 
 \wxheading{Remarks}
 
-Use the {\bf m\_DC} device context to draw into, don't create wxPaintDC in 
-the event handler.
+Use the device context returned by \helpref{GetDC}{wxeraseeventgetdc} to draw on,
+don't create a wxPaintDC in the event handler.
 
 \wxheading{See also}
 
@@ -49,15 +49,9 @@ the event handler.
 
 Constructor.
 
-\membersection{wxEraseEvent::m\_dc}\label{wxeraseeventmdc}
-
-\member{wxDC*}{m\_dc}
-
-The device context associated with the erase event.
-
 \membersection{wxEraseEvent::GetDC}\label{wxeraseeventgetdc}
 
 \constfunc{wxDC*}{GetDC}{\void}
 
-Returns the device context to draw into.
+Returns the device context associated with the erase event to draw on.
 

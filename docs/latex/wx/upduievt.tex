@@ -81,43 +81,6 @@ to be shown, and not in idle time.
 
 Constructor.
 
-\membersection{wxUpdateUIEvent::m\_checked}\label{wxupdateuieventmchecked}
-
-\member{bool}{m\_checked}
-
-true if the element should be checked, false otherwise.
-
-\membersection{wxUpdateUIEvent::m\_enabled}\label{wxupdateuieventmenabled}
-
-\member{bool}{m\_checked}
-
-true if the element should be enabled, false otherwise.
-
-\membersection{wxUpdateUIEvent::m\_setChecked}\label{wxupdateuieventmsetchecked}
-
-\member{bool}{m\_setChecked}
-
-true if the application has set the {\bf m\_checked} member.
-
-\membersection{wxUpdateUIEvent::m\_setEnabled}\label{wxupdateuieventmsetenabled}
-
-\member{bool}{m\_setEnabled}
-
-true if the application has set the {\bf m\_enabled} member.
-
-\membersection{wxUpdateUIEvent::m\_setText}\label{wxupdateuieventmsettext}
-
-\member{bool}{m\_setText}
-
-true if the application has set the {\bf m\_text} member.
-
-\membersection{wxUpdateUIEvent::m\_text}\label{wxupdateuieventmtext}
-
-\member{wxString}{m\_text}
-
-Holds the text with which the the application wishes to
-update the UI element.
-
 \membersection{wxUpdateUIEvent::CanUpdate}\label{wxupdateuieventcanupdate}
 
 \func{static bool}{CanUpdate}{\param{wxWindow*}{ window}}
@@ -169,19 +132,19 @@ Returns true if the UI element should be enabled.
 
 \constfunc{bool}{GetSetChecked}{\void}
 
-Returns true if the application has called {\bf SetChecked}. For wxWidgets internal use only.
+Returns true if the application has called \helpref{wxUpdateUIEvent::Check}{wxupdateuieventcheck}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetSetEnabled}\label{wxupdateuieventgetsetenabled}
 
 \constfunc{bool}{GetSetEnabled}{\void}
 
-Returns true if the application has called {\bf SetEnabled}. For wxWidgets internal use only.
+Returns true if the application has called \helpref{wxUpdateUIEvent::Enable}{wxupdateuieventenable}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetSetText}\label{wxupdateuieventgetsettext}
 
 \constfunc{bool}{GetSetText}{\void}
 
-Returns true if the application has called {\bf SetText}. For wxWidgets internal use only.
+Returns true if the application has called \helpref{wxUpdateUIEvent::SetText}{wxupdateuieventsettext}. For wxWidgets internal use only.
 
 \membersection{wxUpdateUIEvent::GetText}\label{wxupdateuieventgettext}
 

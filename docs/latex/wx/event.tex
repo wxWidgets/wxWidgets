@@ -6,7 +6,7 @@ event object, and is an abstract base class for other event classes (see below).
 
 For more information about events, see the \helpref{Event handling overview}{eventhandlingoverview}.
 
-\perlnote{In wxPerl custome event classes should be derived from
+\perlnote{In wxPerl custom event classes should be derived from
 \texttt{Wx::PlEvent} and \texttt{Wx::PlCommandEvent}.}
 
 \wxheading{Derived from}
@@ -30,25 +30,6 @@ For more information about events, see the \helpref{Event handling overview}{eve
 
 Constructor. Should not need to be used directly by an application.
 
-\membersection{wxEvent::m\_eventObject}\label{wxeventmeventobject}
-
-\member{wxObject*}{m\_eventObject}
-
-The object (usually a window) that the event was generated from,
-or should be sent to.
-
-\membersection{wxEvent::m\_eventType}\label{wxeventmeventtype}
-
-\member{WXTYPE}{m\_eventType}
-
-The type of the event, such as wxEVENT\_TYPE\_BUTTON\_COMMAND.
-
-\membersection{wxEvent::m\_id}\label{wxeventmid}
-
-\member{int}{m\_id}
-
-Identifier for the window.
-
 \membersection{wxEvent::m\_propagationLevel}\label{wxeventmpropagationlevel}
 
 \member{int}{m\_propagationLevel}
@@ -67,18 +48,6 @@ propagated as much as necessary.
 Any positive number means that the event should be propagated but no more than
 the given number of times. E.g. the propagation level may be set to $1$ to
 propagate the event to its parent only, but not to its grandparent.
-
-\membersection{wxEvent::m\_skipped}\label{wxeventmskipped}
-
-\member{bool}{m\_skipped}
-
-Set to true by {\bf Skip} if this event should be skipped.
-
-\membersection{wxEvent::m\_timeStamp}\label{wxeventmtimestamp}
-
-\member{long}{m\_timeStamp}
-
-Timestamp for this event.
 
 \membersection{wxEvent::Clone}\label{wxeventclone}
 
@@ -105,7 +74,7 @@ a new event (call it MyEvent) and then define the Clone function like this:
 
 \func{wxObject*}{GetEventObject}{\void}
 
-Returns the object associated with the
+Returns the object (usually a window) associated with the
 event, if any.
 
 \membersection{wxEvent::GetEventType}\label{wxeventgeteventtype}
@@ -173,8 +142,6 @@ Sets the identifier associated with this event, such as a button command id.
 \func{void}{SetTimestamp}{\param{long }{timeStamp}}
 
 Sets the timestamp for the event.
-
-Sets the originating object.
 
 \membersection{wxEvent::ShouldPropagate}\label{wxeventshouldpropagate}
 

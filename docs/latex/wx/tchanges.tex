@@ -8,6 +8,13 @@ For other changes (such as additional features, bug fixes, etc.) see the changes
 
 \subsection{Incompatible changes since 2.4.x}\label{incompatiblesince24}
 
+\subsubsection{wxEvent and its derivatives loosing public variable members}\label{wxeventpublictoprotected}
+
+\helpref{wxEvent}{wxevent} and its \helpref{derivatives}{eventhandlingoverview} do not have their public variable members public anymore.
+Use the Get/Set accessors as you always should have.
+
+
+
 \subsubsection{New window repainting behaviour}\label{newwindowrepainting}
 
 Windows are no longer fully repainted when resized, use new style \windowstyle{wxFULL\_REPAINT\_ON\_RESIZE} to force this (\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE} still exists but doesn't do anything any more, this behaviour is default now).
