@@ -57,12 +57,14 @@
     #else
       #include <ansi_prefix.mac.h>
     #endif
-      /*
-      #include <MacTypes.h>
-		#if UNIVERSAL_INTERFACES_VERSION < 0x0340
-		    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
-		#endif
-		*/
+    // for getting the correct expat includes 
+    #define MACOS_CLASSIC
+    /*
+    #include <MacTypes.h>
+	#if UNIVERSAL_INTERFACES_VERSION < 0x0340
+	    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
+	#endif
+	*/
 #endif
 
 #define USE_DEFINE
