@@ -137,6 +137,8 @@ NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 COMMONOBJS = \
 		$(COMMDIR)\$D\y_tab.obj \
 		$(COMMDIR)\$D\appcmn.obj \
+		$(COMMDIR)\$D\artprov.obj \
+		$(COMMDIR)\$D\artstd.obj \
 		$(COMMDIR)\$D\choiccmn.obj \
 		$(COMMDIR)\$D\clipcmn.obj \
 		$(COMMDIR)\$D\clntdata.obj \

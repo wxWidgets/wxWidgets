@@ -60,6 +60,8 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 COMMONOBJS = \
 		$(COMMDIR)\y_tab.obj \
 		$(COMMDIR)\appcmn.obj \
+		$(COMMDIR)\artprov.obj \
+		$(COMMDIR)\artstd.obj \
 		$(COMMDIR)\choiccmn.obj \
 		$(COMMDIR)\clipcmn.obj \
 		$(COMMDIR)\clntdata.obj \

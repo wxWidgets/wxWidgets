@@ -91,6 +91,8 @@ GENERICOBJS= accel.obj &
 COMMONOBJS = &
 	y_tab.obj &
 	appcmn.obj &
+	artprov.obj &
+	artstd.obj &
 	bmpbase.obj &
 	choiccmn.obj &
 	clipcmn.obj &
@@ -526,6 +528,12 @@ win32.obj:     $(UNIVTHEMEDIR)\win32.cpp
 # Common objects (always compiled)
 
 appcmn.obj:     $(COMMDIR)\appcmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+artprov.obj:     $(COMMDIR)\artprov.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+artstd.obj:     $(COMMDIR)\artstd.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 bmpbase.obj:     $(COMMDIR)\bmpbase.cpp

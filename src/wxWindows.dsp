@@ -252,6 +252,14 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\artprov.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\artstd.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File
@@ -1507,6 +1515,10 @@ SOURCE=..\include\wx\accel.h
 # Begin Source File
 
 SOURCE=..\include\wx\app.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\artprov.h
 # End Source File
 # Begin Source File
 

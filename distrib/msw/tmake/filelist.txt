@@ -120,6 +120,8 @@ treelay.cpp	Generic
 wizard.cpp	Generic
 
 appcmn.cpp	Common	Base
+artprov.cpp	Common
+artstd.cpp	Common
 bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotX,NotMicro
 choiccmn.cpp	Common
 clipcmn.cpp	Common
@@ -745,6 +747,7 @@ arrimpl.cpp	WXH	Base
 listimpl.cpp	WXH	Base
 accel.h	WXH
 app.h	WXH	Base
+artprov.h	WXH
 bitmap.h	WXH
 bmpbuttn.h	WXH
 brush.h	WXH

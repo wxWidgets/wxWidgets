@@ -99,6 +99,8 @@ NONESSENTIALOBJS= accel.obj &
 COMMONOBJS = &
 	y_tab.obj &
 	appcmn.obj &
+	artprov.obj &
+	artstd.obj &
 	choiccmn.obj &
 	clipcmn.obj &
 	clntdata.obj &
@@ -735,6 +737,12 @@ window.obj:     $(MSWDIR)\window.cpp
 # Common objects (always compiled)
 
 appcmn.obj:     $(COMMDIR)\appcmn.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+artprov.obj:     $(COMMDIR)\artprov.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+artstd.obj:     $(COMMDIR)\artstd.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 choiccmn.obj:     $(COMMDIR)\choiccmn.cpp

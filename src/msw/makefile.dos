@@ -91,6 +91,8 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 COMMONOBJS1 = \
 		$(COMMDIR)\y_tab.obj \
 		$(COMMDIR)\appcmn.obj \
+		$(COMMDIR)\artprov.obj \
+		$(COMMDIR)\artstd.obj \
 		$(COMMDIR)\bmpbase.obj \
 		$(COMMDIR)\choiccmn.obj \
 		$(COMMDIR)\clipcmn.obj \
@@ -796,6 +798,16 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/appcmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/artprov.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/artstd.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -116,6 +116,8 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 COMMONOBJS = \
 		$(MSWDIR)\y_tab.obj \
 		$(MSWDIR)\appcmn.obj \
+		$(MSWDIR)\artprov.obj \
+		$(MSWDIR)\artstd.obj \
 		$(MSWDIR)\choiccmn.obj \
 		$(MSWDIR)\clipcmn.obj \
 		$(MSWDIR)\clntdata.obj \
@@ -650,6 +652,10 @@ $(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
 # Common objects (always compiled)
 
 $(MSWDIR)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
+
+$(MSWDIR)\artprov.obj: $(COMMDIR)\artprov.$(SRCSUFF)
+
+$(MSWDIR)\artstd.obj: $(COMMDIR)\artstd.$(SRCSUFF)
 
 $(MSWDIR)\choiccmn.obj: $(COMMDIR)\choiccmn.$(SRCSUFF)
 

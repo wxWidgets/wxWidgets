@@ -183,6 +183,8 @@ COMMONOBJS_BASEONLY  = \
 COMMONOBJS  = \
                 $(COMMONOBJS_BASE) \
 		$(COMMDIR)/y_tab.$(OBJSUFF) \
+		$(COMMDIR)/artprov.$(OBJSUFF) \
+		$(COMMDIR)/artstd.$(OBJSUFF) \
 		$(COMMDIR)/choiccmn.$(OBJSUFF) \
 		$(COMMDIR)/clipcmn.$(OBJSUFF) \
 		$(COMMDIR)/cmdproc.$(OBJSUFF) \

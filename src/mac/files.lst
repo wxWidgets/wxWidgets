@@ -47,6 +47,8 @@ ALL_SOURCES = \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
 		common/appcmn.cpp \
+		common/artprov.cpp \
+		common/artstd.cpp \
 		common/bmpbase.cpp \
 		common/choiccmn.cpp \
 		common/clipcmn.cpp \
@@ -276,6 +278,7 @@ ALL_HEADERS = \
 		accel.h \
 		app.h \
 		arrimpl.cpp \
+		artprov.h \
 		bitmap.h \
 		bmpbuttn.h \
 		brush.h \
@@ -651,6 +654,8 @@ ALL_HEADERS = \
 COMMONOBJS = \
 		parser.o \
 		appcmn.o \
+		artprov.o \
+		artstd.o \
 		bmpbase.o \
 		choiccmn.o \
 		clipcmn.o \

@@ -50,32 +50,7 @@
 #include "wx/fontenum.h"
 #include "wx/stream.h"
 #include "wx/filedlg.h"
-
-// Bitmaps:
-
-#ifndef __WXMSW__
-    // XPM hack: make the arrays const
-    #define static static const
-
-    #include "bitmaps/wpanel.xpm"
-    #include "bitmaps/wback.xpm"
-    #include "bitmaps/wforward.xpm"
-    #include "bitmaps/wbook.xpm"
-    #include "bitmaps/woptions.xpm"
-    #include "bitmaps/wfolder.xpm"
-    #include "bitmaps/wpage.xpm"
-    #include "bitmaps/whelp.xpm"
-    #include "bitmaps/whlproot.xpm"
-    #include "bitmaps/wbkadd.xpm"
-    #include "bitmaps/wbkdel.xpm"
-    #include "bitmaps/wup.xpm"
-    #include "bitmaps/wupnode.xpm"
-    #include "bitmaps/wdown.xpm"
-    #include "bitmaps/wopen.xpm"
-    #include "bitmaps/wprint.xpm"
-
-    #undef static
-#endif // __WXMSW__
+#include "wx/artprov.h"
 
 // what is considered "small index"?
 #define INDEX_IS_SMALL 100
@@ -253,10 +228,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     m_hfStyle = style;
 
     wxImageList *ContentsImageList = new wxImageList(16, 16);
-    ContentsImageList->Add(wxICON(wbook));
-    ContentsImageList->Add(wxICON(wfolder));
-    ContentsImageList->Add(wxICON(wpage));
-    ContentsImageList->Add(wxICON(whlproot));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_BOOK, wxART_HELP_BROWSER));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_FOLDER, wxART_HELP_BROWSER));
+    ContentsImageList->Add(wxArtProvider::GetIcon(wxART_HELP_PAGE, wxART_HELP_BROWSER));
 
     // Do the config in two steps. We read the HtmlWindow customization after we
     // create the window.
@@ -269,7 +243,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     GetPosition(&m_Cfg.x, &m_Cfg.y);
 
-    SetIcon(wxICON(whelp));
+    SetIcon(wxArtProvider::GetIcon(wxART_FRAME_ICON, wxART_HELP_BROWSER));
 
     int notebook_page = 0;
 
@@ -340,11 +314,11 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
             wxBitmapButton *bmpbt1, *bmpbt2;
             bmpbt1 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD, 
-                                        wxBITMAP(wbkadd), 
-                                        wxDefaultPosition, wxSize(20,20));
+                                 wxArtProvider::GetBitmap(wxART_ADD_BOOKMARK, 
+                                                          wxART_HELP_BROWSER));
             bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, 
-                                        wxBITMAP(wbkdel), 
-                                        wxDefaultPosition, wxSize(20,20));
+                                 wxArtProvider::GetBitmap(wxART_DEL_BOOKMARK, 
+                                                          wxART_HELP_BROWSER));
 #if wxUSE_TOOLTIPS
             bmpbt1->SetToolTip(_("Add current page to bookmarks"));
             bmpbt2->SetToolTip(_("Remove current page from bookmarks"));
@@ -352,9 +326,9 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
             wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
             
-            sizer->Add(m_Bookmarks, 1, wxRIGHT, 5);
-            sizer->Add(bmpbt1, 0, wxRIGHT, 2);
-            sizer->Add(bmpbt2, 0, 0, 0);
+            sizer->Add(m_Bookmarks, 1, wxALIGN_CENTRE_VERTICAL | wxRIGHT, 5);
+            sizer->Add(bmpbt1, 0, wxALIGN_CENTRE_VERTICAL | wxRIGHT, 2);
+            sizer->Add(bmpbt2, 0, wxALIGN_CENTRE_VERTICAL, 0);
             
             topsizer->Add(sizer, 0, wxEXPAND | wxLEFT | wxBOTTOM | wxRIGHT, 10);
         }
@@ -495,15 +469,24 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
 
 void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 {
-    wxBitmap wpanelBitmap = wxBITMAP(wpanel);
-    wxBitmap wbackBitmap = wxBITMAP(wback);
-    wxBitmap wforwardBitmap = wxBITMAP(wforward);
-    wxBitmap wupnodeBitmap = wxBITMAP(wupnode);
-    wxBitmap wupBitmap = wxBITMAP(wup);
-    wxBitmap wdownBitmap = wxBITMAP(wdown);
-    wxBitmap wopenBitmap = wxBITMAP(wopen);
-    wxBitmap wprintBitmap = wxBITMAP(wprint);
-    wxBitmap woptionsBitmap = wxBITMAP(woptions);
+    wxBitmap wpanelBitmap = 
+        wxArtProvider::GetBitmap(wxART_HELP_SIDE_PANEL, wxART_HELP_BROWSER);
+    wxBitmap wbackBitmap = 
+        wxArtProvider::GetBitmap(wxART_GO_BACK, wxART_HELP_BROWSER);
+    wxBitmap wforwardBitmap = 
+        wxArtProvider::GetBitmap(wxART_GO_FORWARD, wxART_HELP_BROWSER);
+    wxBitmap wupnodeBitmap = 
+        wxArtProvider::GetBitmap(wxART_GO_TO_PARENT, wxART_HELP_BROWSER);
+    wxBitmap wupBitmap = 
+        wxArtProvider::GetBitmap(wxART_GO_UP, wxART_HELP_BROWSER);
+    wxBitmap wdownBitmap = 
+        wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_HELP_BROWSER);
+    wxBitmap wopenBitmap = 
+        wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_HELP_BROWSER);
+    wxBitmap wprintBitmap = 
+        wxArtProvider::GetBitmap(wxART_PRINT, wxART_HELP_BROWSER);
+    wxBitmap woptionsBitmap = 
+        wxArtProvider::GetBitmap(wxART_HELP_SETTINGS, wxART_HELP_BROWSER);
 
     wxASSERT_MSG( (wpanelBitmap.Ok() && wbackBitmap.Ok() &&
                    wforwardBitmap.Ok() && wupnodeBitmap.Ok() &&
@@ -724,8 +707,6 @@ void wxHtmlHelpFrame::CreateContents()
     m_ContentsBox->DeleteAllItems();
     
     roots[0] = m_ContentsBox->AddRoot(_("(Help)"));
-    m_ContentsBox->SetItemImage(roots[0], IMG_RootFolder);
-    m_ContentsBox->SetItemSelectedImage(roots[0], IMG_RootFolder);
     imaged[0] = TRUE;
 
     for (it = m_Data->GetContents(), i = 0; i < cnt; i++, it++)
