@@ -54,11 +54,11 @@ wxIcon::wxIcon(const char **data)
     (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 
-wxIcon::wxIcon(const wxString& icon_file, long flags,
+wxIcon::wxIcon(const wxString& icon_file, wxBitmapType type,
                int desiredWidth, int desiredHeight)
                
 {
-    LoadFile(icon_file, flags, desiredWidth, desiredHeight);
+    LoadFile(icon_file, type, desiredWidth, desiredHeight);
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
@@ -71,7 +71,7 @@ wxIcon::~wxIcon()
 {
 }
 
-bool wxIcon::LoadFile(const wxString& filename, long type,
+bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
                       int desiredWidth, int desiredHeight)
 {
     UnRef();
@@ -81,7 +81,8 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
     wxBitmapHandler *handler = FindHandler(type);
     
     if ( handler )
-        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
+        return handler->LoadFile(this, filename, type,
+                                 desiredWidth, desiredHeight);
     else
         return FALSE;
 }

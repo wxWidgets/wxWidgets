@@ -39,11 +39,11 @@ public:
     wxIcon(const char **data);
     wxIcon(char **data);
     
-    wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_XPM,
+    wxIcon(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM,
         int desiredWidth = -1, int desiredHeight = -1);
     ~wxIcon();
     
-    bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_XPM,
+    bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_TYPE_XPM,
         int desiredWidth = -1, int desiredHeight = -1);
 
     // create from bitmap (which should have a mask unless it's monochrome):

@@ -51,6 +51,7 @@ ALL_SOURCES = \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
+		common/bmpbase.cpp \
 		common/choiccmn.cpp \
 		common/clipcmn.cpp \
 		common/clntdata.cpp \
@@ -631,6 +632,7 @@ COMMONOBJS = \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
+		bmpbase.o \
 		choiccmn.o \
 		clipcmn.o \
 		clntdata.o \

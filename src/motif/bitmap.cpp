@@ -113,8 +113,6 @@ wxBitmapRefData::~wxBitmapRefData()
     m_bitmapMask = NULL;
 }
 
-wxList wxBitmap::sm_handlers;
-
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 wxBitmap::wxBitmap()
@@ -138,14 +136,15 @@ wxBitmap::wxBitmap(int w, int h, int d)
     (void)Create(w, h, d);
 }
 
-wxBitmap::wxBitmap(void *data, long type, int width, int height, int depth)
+wxBitmap::wxBitmap(void *data, wxBitmapType type,
+                   int width, int height, int depth)
 {
     (void) Create(data, type, width, height, depth);
 }
 
-wxBitmap::wxBitmap(const wxString& filename, int type)
+wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
 {
-    LoadFile(filename, (int)type);
+    LoadFile(filename, type);
 }
 
 // Create from XPM data
@@ -198,7 +197,7 @@ bool wxBitmap::Create(int w, int h, int d)
     return M_BITMAPDATA->m_ok;
 }
 
-bool wxBitmap::LoadFile(const wxString& filename, long type)
+bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
 {
     UnRef();
 
@@ -220,7 +219,8 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
     return handler->LoadFile(this, filename, type, -1, -1);
 }
 
-bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
+bool wxBitmap::Create(void *data, wxBitmapType type,
+                      int width, int height, int depth)
 {
     UnRef();
 
@@ -229,7 +229,8 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     wxBitmapHandler *handler = FindHandler(type);
 
     if ( handler == NULL ) {
-        wxLogWarning("no data bitmap handler for type %ld defined.", type);
+        wxLogWarning("no data bitmap handler for type %ld defined.",
+                     (long)type);
 
         return FALSE;
     }
@@ -237,7 +238,8 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     return handler->Create(this, data, type, width, height, depth);
 }
 
-bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *palette)
+bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type,
+                        const wxPalette *palette) const
 {
     wxBitmapHandler *handler = FindHandler(type);
 
@@ -320,68 +322,6 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
    return ret;
 }
 
-void wxBitmap::AddHandler(wxBitmapHandler *handler)
-{
-    sm_handlers.Append(handler);
-}
-
-void wxBitmap::InsertHandler(wxBitmapHandler *handler)
-{
-    sm_handlers.Insert(handler);
-}
-
-bool wxBitmap::RemoveHandler(const wxString& name)
-{
-    wxBitmapHandler *handler = FindHandler(name);
-    if ( handler )
-    {
-        sm_handlers.DeleteObject(handler);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(const wxString& name)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if ( handler->GetName() == name )
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(const wxString& extension, long bitmapType)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if ( handler->GetExtension() == extension &&
-            (bitmapType == -1 || handler->GetType() == bitmapType) )
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
-wxBitmapHandler *wxBitmap::FindHandler(long bitmapType)
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        if (handler->GetType() == bitmapType)
-            return handler;
-        node = node->Next();
-    }
-    return NULL;
-}
-
 /*
 * wxMask
 */
@@ -453,24 +393,6 @@ bool wxMask::Create(const wxBitmap& WXUNUSED(bitmap), const wxColour& WXUNUSED(c
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
-bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap), void *WXUNUSED(data), long WXUNUSED(type),
-                             int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth))
-{
-    return FALSE;
-}
-
-bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), long WXUNUSED(type),
-                               int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
-{
-    return FALSE;
-}
-
-bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap), const wxString& WXUNUSED(name), int WXUNUSED(type),
-                               const wxPalette *WXUNUSED(palette))
-{
-    return FALSE;
-}
-
 /*
 * Standard handlers
 */
@@ -487,12 +409,15 @@ public:
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight);
+                          int desiredWidth, int desiredHeight);
 };
+
 IMPLEMENT_DYNAMIC_CLASS(wxXBMFileHandler, wxBitmapHandler)
 
-bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
-                                int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
+bool wxXBMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
+                                long WXUNUSED(flags),
+                                int WXUNUSED(desiredWidth),
+                                int WXUNUSED(desiredHeight))
 {
     M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
@@ -534,12 +459,14 @@ public:
         m_type = wxBITMAP_TYPE_XBM_DATA;
     };
 
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+                        int width, int height, int depth = 1);
 };
 IMPLEMENT_DYNAMIC_CLASS(wxXBMDataHandler, wxBitmapHandler)
 
-bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags),
-                              int width, int height, int WXUNUSED(depth))
+bool wxXBMDataHandler::Create( wxBitmap *bitmap, void *data,
+                               long WXUNUSED(flags),
+                               int width, int height, int WXUNUSED(depth))
 {
     M_BITMAPHANDLERDATA->m_width = width;
     M_BITMAPHANDLERDATA->m_height = height;
@@ -619,14 +546,17 @@ public:
     };
 
     virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-        int desiredWidth, int desiredHeight);
-    virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+                          int desiredWidth, int desiredHeight);
+    virtual bool SaveFile(const wxBitmap *bitmap, const wxString& name,
+                          wxBitmapType type, const wxPalette *palette = NULL);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 
-bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name, long WXUNUSED(flags),
-                                int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight) )
+bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name,
+                                 long WXUNUSED(flags),
+                                 int WXUNUSED(desiredWidth),
+                                 int WXUNUSED(desiredHeight) )
 {
     Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
@@ -687,8 +617,9 @@ bool wxXPMFileHandler::LoadFile( wxBitmap *bitmap, const wxString& name, long WX
     }
 }
 
-bool wxXPMFileHandler::SaveFile( wxBitmap *bitmap, const wxString& name, int WXUNUSED(type),
-                                const wxPalette *WXUNUSED(palette))
+bool wxXPMFileHandler::SaveFile( const wxBitmap *bitmap, const wxString& name,
+                                 wxBitmapType WXUNUSED(type),
+                                 const wxPalette *WXUNUSED(palette))
 {
     if (M_BITMAPHANDLERDATA->m_ok && M_BITMAPHANDLERDATA->m_pixmap)
     {
@@ -717,11 +648,13 @@ public:
         m_type = wxBITMAP_TYPE_XPM_DATA;
     };
 
-    virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
+    virtual bool Create(wxBitmap *bitmap, void *data, long flags,
+                        int width, int height, int depth = 1);
 };
 IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
-bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags),
+bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data,
+                               long WXUNUSED(flags),
                               int width, int height, int WXUNUSED(depth))
 {
     M_BITMAPHANDLERDATA->m_width = width;
@@ -799,19 +732,6 @@ bool wxXPMDataHandler::Create( wxBitmap *bitmap, void *data, long WXUNUSED(flags
 }
 
 #endif // wxHAVE_LIB_XPM
-
-void wxBitmap::CleanUpHandlers()
-{
-    wxNode *node = sm_handlers.First();
-    while ( node )
-    {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        wxNode *next = node->Next();
-        delete handler;
-        delete node;
-        node = next;
-    }
-}
 
 void wxBitmap::InitStandardHandlers()
 {

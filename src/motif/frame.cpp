@@ -169,8 +169,8 @@ bool wxFrame::Create(wxWindow *parent,
     SetTitle( title );
 
     wxLogTrace(wxTRACE_Messages,
-               "Created frame (0x%08x) with work area 0x%08x and client "
-               "area 0x%08x", m_mainWidget, m_workArea, m_clientArea);
+               "Created frame (0x%p) with work area 0x%p and client "
+               "area 0x%p", m_mainWidget, m_workArea, m_clientArea);
 
     XtAddEventHandler((Widget) m_clientArea, ExposureMask,FALSE,
         wxUniversalRepaintProc, (XtPointer) this);

@@ -123,7 +123,7 @@ wizard.cpp	Generic
 appcmn.cpp	Common	Base
 artprov.cpp	Common
 artstd.cpp	Common
-bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotX,NotMicro
+bmpbase.cpp	Common	NotGTK,NotOS2,NotMSW,NotMicro
 choiccmn.cpp	Common
 clipcmn.cpp	Common
 clntdata.cpp	Common	Base

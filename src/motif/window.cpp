@@ -961,16 +961,16 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         GetClientSize(& w, & h);
     }
 
-    wxNode *cnode = m_children.First();
+    wxWindowList::Node *cnode = m_children.GetFirst();
     while (cnode)
     {
-        wxWindow *child = (wxWindow*) cnode->Data();
+        wxWindow *child = cnode->GetData();
         int sx = 0;
         int sy = 0;
         child->GetSize( &sx, &sy );
         wxPoint pos( child->GetPosition() );
         child->SetSize( pos.x + dx, pos.y + dy, sx, sy, wxSIZE_ALLOW_MINUS_ONE );
-        cnode = cnode->Next();
+        cnode = cnode->GetNext();
     }
 
     int x1 = (dx >= 0) ? x : x - dx;
@@ -1079,10 +1079,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
     // Now send expose events
 
-    wxNode* node = updateRects.First();
+    wxList::Node* node = updateRects.GetFirst();
     while (node)
     {
-        wxRect* rect = (wxRect*) node->Data();
+        wxRect* rect = (wxRect*) node->GetData();
         XExposeEvent event;
 
         event.type = Expose;
@@ -1099,17 +1099,17 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         XSendEvent(display, window, False, ExposureMask, (XEvent *)&event);
 
-        node = node->Next();
+        node = node->GetNext();
 
     }
 
     // Delete the update rects
-    node = updateRects.First();
+    node = updateRects.GetFirst();
     while (node)
     {
-        wxRect* rect = (wxRect*) node->Data();
+        wxRect* rect = (wxRect*) node->GetData();
         delete rect;
-        node = node->Next();
+        node = node->GetNext();
     }
 
     XmUpdateDisplay((Widget) GetMainWidget());
@@ -1813,8 +1813,8 @@ bool wxAddWindowToTable(Widget w, wxWindow *win)
 
     wxWidgetHashTable->Put((long) w, win);
 
-    wxLogTrace("widget", "Widget 0x%08x <-> window %p (%s)",
-               w, win, win->GetClassInfo()->GetClassName());
+    wxLogTrace("widget", "Widget 0x%p <-> window %p (%s)",
+               (WXWidget)w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }

@@ -82,10 +82,10 @@ public:
 void wxRegionRefData::SetRects(const wxRectList& rectList)
 {
     DeleteRects();
-    m_usingRects = (rectList.Number() > 0);
+    m_usingRects = (rectList.GetCount() > 0);
     if (m_usingRects)
     {
-      m_rectCount = rectList.Number();
+      m_rectCount = rectList.GetCount();
       m_rects = new wxRect[m_rectCount];
     }
 

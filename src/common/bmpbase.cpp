@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if defined(__WXMGL__) || defined(__WXMAC__)
+#if defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXMOTIF__)
 
 #include "wx/wx.h"
 #include "wx/setup.h"
@@ -60,51 +60,51 @@ bool wxBitmapBase::RemoveHandler(const wxString& name)
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& name)
 {
-    wxNode *node = sm_handlers.First();
+    wxList::Node *node = sm_handlers.GetFirst();
     while ( node )
     {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+        wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
         if ( handler->GetName() == name )
             return handler;
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 wxBitmapHandler *wxBitmapBase::FindHandler(const wxString& extension, wxBitmapType bitmapType)
 {
-    wxNode *node = sm_handlers.First();
+    wxList::Node *node = sm_handlers.GetFirst();
     while ( node )
     {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+        wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
         if ( handler->GetExtension() == extension &&
                     (bitmapType == -1 || handler->GetType() == bitmapType) )
             return handler;
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 wxBitmapHandler *wxBitmapBase::FindHandler(wxBitmapType bitmapType)
 {
-    wxNode *node = sm_handlers.First();
+    wxList::Node *node = sm_handlers.GetFirst();
     while ( node )
     {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+        wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
         if (handler->GetType() == bitmapType)
             return handler;
-        node = node->Next();
+        node = node->GetNext();
     }
     return NULL;
 }
 
 void wxBitmapBase::CleanUpHandlers()
 {
-    wxNode *node = sm_handlers.First();
+    wxList::Node *node = sm_handlers.GetFirst();
     while ( node )
     {
-        wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-        wxNode *next = node->Next();
+        wxBitmapHandler *handler = (wxBitmapHandler *)node->GetData();
+        wxList::Node *next = node->GetNext();
         delete handler;
         delete node;
         node = next;
@@ -122,5 +122,5 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
 
-#endif // defined(__WXMGL__) || defined(__WXMAC__)
+#endif // defined(__WXMGL__) || defined(__WXMAC__) || defined(__WXMOTIF__)
 

@@ -151,7 +151,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
 
       int topY = m_view->GetViewRect().y - m_view->GetTopMargin();
 
-      int maxPositions = ((wxTabLayer *)m_view->GetLayers().Nth(0)->Data())->Number();
+      int maxPositions = ((wxTabLayer *)m_view->GetLayers().Item(0)->GetData())->GetCount();
 
       // Only down to the bottom of the tab, not to the top of the view
       if ( GetRowPosition() < (maxPositions - 1) )
@@ -335,7 +335,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
         // TAB is not selected - just draw TAB outline and RH edge
         // if the TAB is the last in the row
 
-        int maxPositions = ((wxTabLayer*)m_view->GetLayers().Nth(0)->Data())->Number();
+        int maxPositions = ((wxTabLayer*)m_view->GetLayers().Item(0)->GetData())->GetCount();
         wxTabControl* tabBelow = 0;
         wxTabControl* tabBelowRight = 0;
         if (GetColPosition() > 0)
@@ -545,7 +545,7 @@ wxTabView::~wxTabView()
 wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *existingTab)
 {
   // First, find which layer we should be adding to.
-  wxNode *node = m_layers.Last();
+  wxNode *node = m_layers.GetLast();
   if (!node)
   {
     wxTabLayer *newLayer = new wxTabLayer;
@@ -553,36 +553,36 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
   }
   // Check if adding another tab control would go off the
   // right-hand edge of the layer.
-  wxTabLayer *tabLayer = (wxTabLayer *)node->Data();
-  wxNode *lastTabNode = tabLayer->Last();
+  wxTabLayer *tabLayer = (wxTabLayer *)node->GetData();
+  wxNode *lastTabNode = tabLayer->GetLast();
   if (lastTabNode)
   {
-    wxTabControl *lastTab = (wxTabControl *)lastTabNode->Data();
+    wxTabControl *lastTab = (wxTabControl *)lastTabNode->GetData();
     // Start another layer (row).
     // Tricky choice: can't just check if will be overlapping the edge, because
     // this happens anyway for 2nd and subsequent rows.
     // Should check this for 1st row, and then subsequent rows should not exceed 1st
     // in length.
-    if (((tabLayer == m_layers.First()->Data()) && ((lastTab->GetX() + 2*lastTab->GetWidth() + GetHorizontalTabSpacing())
+    if (((tabLayer == m_layers.GetFirst()->GetData()) && ((lastTab->GetX() + 2*lastTab->GetWidth() + GetHorizontalTabSpacing())
               > GetViewRect().width)) ||
-        ((tabLayer != m_layers.First()->Data()) && (tabLayer->Number() == ((wxTabLayer *)m_layers.First()->Data())->Number())))
+        ((tabLayer != m_layers.GetFirst()->GetData()) && (tabLayer->GetCount() == ((wxTabLayer *)m_layers.GetFirst()->GetData())->GetCount())))
     {
       tabLayer = new wxTabLayer;
       m_layers.Append(tabLayer);
       lastTabNode = (wxNode *) NULL;
     }
   }
-  int layer = m_layers.Number() - 1;
+  int layer = m_layers.GetCount() - 1;
 
   wxTabControl *tabControl = existingTab;
   if (!existingTab)
     tabControl = OnCreateTabControl();
-  tabControl->SetRowPosition(tabLayer->Number());
+  tabControl->SetRowPosition(tabLayer->GetCount());
   tabControl->SetColPosition(layer);
 
   wxTabControl *lastTab = (wxTabControl *) NULL;
   if (lastTabNode)
-    lastTab = (wxTabControl *)lastTabNode->Data();
+    lastTab = (wxTabControl *)lastTabNode->GetData();
 
   // Top of new tab
   int verticalOffset = (- GetTopMargin()) - ((layer+1)*GetTabHeight());
@@ -608,14 +608,14 @@ wxTabControl *wxTabView::AddTab(int id, const wxString& label, wxTabControl *exi
 // Remove the tab without deleting the window
 bool wxTabView::RemoveTab(int id)
 {
-  wxNode *layerNode = m_layers.First();
+  wxNode *layerNode = m_layers.GetFirst();
   while (layerNode)
   {
-    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
-    wxNode *tabNode = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)layerNode->GetData();
+    wxNode *tabNode = layer->GetFirst();
     while (tabNode)
     {
-      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+      wxTabControl *tab = (wxTabControl *)tabNode->GetData();
       if (tab->GetId() == id)
       {
         if (id == m_tabSelection)
@@ -628,9 +628,9 @@ bool wxTabView::RemoveTab(int id)
         LayoutTabs();
         return TRUE;
       }
-      tabNode = tabNode->Next();
+      tabNode = tabNode->GetNext();
     }
-    layerNode = layerNode->Next();
+    layerNode = layerNode->GetNext();
   }
   return FALSE;
 }
@@ -659,21 +659,21 @@ int wxTabView::GetTotalTabHeight()
 {
   int minY = 0;
 
-  wxNode *layerNode = m_layers.First();
+  wxNode *layerNode = m_layers.GetFirst();
   while (layerNode)
   {
-    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
-    wxNode *tabNode = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)layerNode->GetData();
+    wxNode *tabNode = layer->GetFirst();
     while (tabNode)
     {
-      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+      wxTabControl *tab = (wxTabControl *)tabNode->GetData();
 
       if (tab->GetY() < minY)
         minY = tab->GetY();
 
-      tabNode = tabNode->Next();
+      tabNode = tabNode->GetNext();
     }
-    layerNode = layerNode->Next();
+    layerNode = layerNode->GetNext();
   }
 
   return - minY;
@@ -681,21 +681,21 @@ int wxTabView::GetTotalTabHeight()
 
 void wxTabView::ClearTabs(bool deleteTabs)
 {
-  wxNode *layerNode = m_layers.First();
+  wxNode *layerNode = m_layers.GetFirst();
   while (layerNode)
   {
-    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
-    wxNode *tabNode = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)layerNode->GetData();
+    wxNode *tabNode = layer->GetFirst();
     while (tabNode)
     {
-      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+      wxTabControl *tab = (wxTabControl *)tabNode->GetData();
       if (deleteTabs)
         delete tab;
-      wxNode *next = tabNode->Next();
+      wxNode *next = tabNode->GetNext();
       delete tabNode;
       tabNode = next;
     }
-    wxNode *nextLayerNode = layerNode->Next();
+    wxNode *nextLayerNode = layerNode->GetNext();
     delete layer;
     delete layerNode;
     layerNode = nextLayerNode;
@@ -711,20 +711,20 @@ void wxTabView::LayoutTabs(void)
   // Make a list of the tab controls, deleting the wxTabLayers.
   wxList controls;
 
-  wxNode *layerNode = m_layers.First();
+  wxNode *layerNode = m_layers.GetFirst();
   while (layerNode)
   {
-    wxTabLayer *layer = (wxTabLayer *)layerNode->Data();
-    wxNode *tabNode = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)layerNode->GetData();
+    wxNode *tabNode = layer->GetFirst();
     while (tabNode)
     {
-      wxTabControl *tab = (wxTabControl *)tabNode->Data();
+      wxTabControl *tab = (wxTabControl *)tabNode->GetData();
       controls.Append(tab);
-      wxNode *next = tabNode->Next();
+      wxNode *next = tabNode->GetNext();
       delete tabNode;
       tabNode = next;
     }
-    wxNode *nextLayerNode = layerNode->Next();
+    wxNode *nextLayerNode = layerNode->GetNext();
     delete layer;
     delete layerNode;
     layerNode = nextLayerNode;
@@ -735,10 +735,10 @@ void wxTabView::LayoutTabs(void)
   wxTabLayer *currentLayer = new wxTabLayer;
   m_layers.Append(currentLayer);
 
-  wxNode *node = controls.First();
+  wxNode *node = controls.GetFirst();
   while (node)
   {
-    wxTabControl *tabControl = (wxTabControl *)node->Data();
+    wxTabControl *tabControl = (wxTabControl *)node->GetData();
     if (lastTab)
     {
       // Start another layer (row).
@@ -746,9 +746,9 @@ void wxTabView::LayoutTabs(void)
       // this happens anyway for 2nd and subsequent rows.
       // Should check this for 1st row, and then subsequent rows should not exceed 1st
       // in length.
-      if (((currentLayer == m_layers.First()->Data()) && ((lastTab->GetX() + 2*lastTab->GetWidth() + GetHorizontalTabSpacing())
+      if (((currentLayer == m_layers.GetFirst()->GetData()) && ((lastTab->GetX() + 2*lastTab->GetWidth() + GetHorizontalTabSpacing())
                 > GetViewRect().width)) ||
-          ((currentLayer != m_layers.First()->Data()) && (currentLayer->Number() == ((wxTabLayer *)m_layers.First()->Data())->Number())))
+          ((currentLayer != m_layers.GetFirst()->GetData()) && (currentLayer->GetCount() == ((wxTabLayer *)m_layers.GetFirst()->GetData())->GetCount())))
      {
        currentLayer = new wxTabLayer;
        m_layers.Append(currentLayer);
@@ -756,9 +756,9 @@ void wxTabView::LayoutTabs(void)
      }
     }
 
-    int layer = m_layers.Number() - 1;
+    int layer = m_layers.GetCount() - 1;
 
-    tabControl->SetRowPosition(currentLayer->Number());
+    tabControl->SetRowPosition(currentLayer->GetCount());
     tabControl->SetColPosition(layer);
 
     // Top of new tab
@@ -776,7 +776,7 @@ void wxTabView::LayoutTabs(void)
     currentLayer->Append(tabControl);
     lastTab = tabControl;
 
-    node = node->Next();
+    node = node->GetNext();
   }
 
   // Move the selected tab to the bottom
@@ -809,19 +809,19 @@ void wxTabView::Draw(wxDC& dc)
     }
 
     // Draw layers in reverse order
-    wxNode *node = m_layers.Last();
+    wxNode *node = m_layers.GetLast();
     while (node)
     {
-        wxTabLayer *layer = (wxTabLayer *)node->Data();
-        wxNode *node2 = layer->First();
+        wxTabLayer *layer = (wxTabLayer *)node->GetData();
+        wxNode *node2 = layer->GetFirst();
         while (node2)
         {
-            wxTabControl *control = (wxTabControl *)node2->Data();
-            control->OnDraw(dc, (node2->Next() == NULL));
-            node2 = node2->Next();
+            wxTabControl *control = (wxTabControl *)node2->GetData();
+            control->OnDraw(dc, (node2->GetNext() == NULL));
+            node2 = node2->GetNext();
         }
 
-        node = node->Previous();
+        node = node->GetPrevious();
     }
 
 
@@ -883,14 +883,14 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
 
   wxTabControl *hitControl = (wxTabControl *) NULL;
 
-  wxNode *node = m_layers.First();
+  wxNode *node = m_layers.GetFirst();
   while (node)
   {
-    wxTabLayer *layer = (wxTabLayer *)node->Data();
-    wxNode *node2 = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)node->GetData();
+    wxNode *node2 = layer->GetFirst();
     while (node2)
     {
-      wxTabControl *control = (wxTabControl *)node2->Data();
+      wxTabControl *control = (wxTabControl *)node2->GetData();
       if (control->HitTest((int)x, (int)y))
       {
         hitControl = control;
@@ -898,11 +898,11 @@ bool wxTabView::OnEvent(wxMouseEvent& event)
         node2 = (wxNode *) NULL;
       }
       else
-        node2 = node2->Next();
+        node2 = node2->GetNext();
     }
 
     if (node)
-      node = node->Next();
+      node = node->GetNext();
   }
 
   if (!hitControl)
@@ -928,7 +928,7 @@ bool wxTabView::ChangeTab(wxTabControl *control)
   if (control == currentTab)
     return TRUE;
 
-  if (m_layers.Number() == 0)
+  if (m_layers.GetCount() == 0)
     return FALSE;
 
   if (!OnTabPreActivate(control->GetId(), oldTab))
@@ -954,10 +954,10 @@ bool wxTabView::ChangeTab(wxTabControl *control)
 // without calling app activation code
 bool wxTabView::MoveSelectionTab(wxTabControl *control)
 {
-  if (m_layers.Number() == 0)
+  if (m_layers.GetCount() == 0)
     return FALSE;
 
-  wxTabLayer *firstLayer = (wxTabLayer *)m_layers.First()->Data();
+  wxTabLayer *firstLayer = (wxTabLayer *)m_layers.GetFirst()->GetData();
 
   // Find what column this tab is at, so we can swap with the one at the bottom.
   // If we're on the bottom layer, then no need to swap.
@@ -968,7 +968,7 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
     wxNode *thisNode = FindTabNodeAndColumn(control, &col);
     if (!thisNode)
       return FALSE;
-    wxNode *otherNode = firstLayer->Nth(col);
+    wxNode *otherNode = firstLayer->Item(col);
     if (!otherNode)
       return FALSE;
 
@@ -976,7 +976,7 @@ bool wxTabView::MoveSelectionTab(wxTabControl *control)
     if (otherNode == thisNode)
       return TRUE;
 
-    wxTabControl *otherTab = (wxTabControl *)otherNode->Data();
+    wxTabControl *otherTab = (wxTabControl *)otherNode->GetData();
 
     // We now have pointers to the tab to be changed to,
     // and the tab on the first layer. Swap tab structures and
@@ -1060,19 +1060,19 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
 // Find tab control for id
 wxTabControl *wxTabView::FindTabControlForId(int id) const
 {
-  wxNode *node1 = m_layers.First();
+  wxNode *node1 = m_layers.GetFirst();
   while (node1)
   {
-    wxTabLayer *layer = (wxTabLayer *)node1->Data();
-    wxNode *node2 = layer->First();
+    wxTabLayer *layer = (wxTabLayer *)node1->GetData();
+    wxNode *node2 = layer->GetFirst();
     while (node2)
     {
-      wxTabControl *control = (wxTabControl *)node2->Data();
+      wxTabControl *control = (wxTabControl *)node2->GetData();
       if (control->GetId() == id)
         return control;
-      node2 = node2->Next();
+      node2 = node2->GetNext();
     }
-    node1 = node1->Next();
+    node1 = node1->GetNext();
   }
   return (wxTabControl *) NULL;
 }
@@ -1080,37 +1080,37 @@ wxTabControl *wxTabView::FindTabControlForId(int id) const
 // Find tab control for layer, position (starting from zero)
 wxTabControl *wxTabView::FindTabControlForPosition(int layer, int position) const
 {
-  wxNode *node1 = m_layers.Nth(layer);
+  wxNode *node1 = m_layers.Item(layer);
   if (!node1)
     return (wxTabControl *) NULL;
-  wxTabLayer *tabLayer = (wxTabLayer *)node1->Data();
-  wxNode *node2 = tabLayer->Nth(position);
+  wxTabLayer *tabLayer = (wxTabLayer *)node1->GetData();
+  wxNode *node2 = tabLayer->Item(position);
   if (!node2)
     return (wxTabControl *) NULL;
-  return (wxTabControl *)node2->Data();
+  return (wxTabControl *)node2->GetData();
 }
 
 // Find the node and the column at which this control is positioned.
 wxNode *wxTabView::FindTabNodeAndColumn(wxTabControl *control, int *col) const
 {
-  wxNode *node1 = m_layers.First();
+  wxNode *node1 = m_layers.GetFirst();
   while (node1)
   {
-    wxTabLayer *layer = (wxTabLayer *)node1->Data();
+    wxTabLayer *layer = (wxTabLayer *)node1->GetData();
     int c = 0;
-    wxNode *node2 = layer->First();
+    wxNode *node2 = layer->GetFirst();
     while (node2)
     {
-      wxTabControl *cnt = (wxTabControl *)node2->Data();
+      wxTabControl *cnt = (wxTabControl *)node2->GetData();
       if (cnt == control)
       {
         *col = c;
         return node2;
       }
-      node2 = node2->Next();
+      node2 = node2->GetNext();
       c ++;
     }
-    node1 = node1->Next();
+    node1 = node1->GetNext();
   }
   return (wxNode *) NULL;
 }
@@ -1259,7 +1259,7 @@ wxWindow *wxPanelTabView::GetTabWindow(int id) const
   wxNode *node = m_tabWindows.Find((long)id);
   if (!node)
     return (wxWindow *) NULL;
-  return (wxWindow *)node->Data();
+  return (wxWindow *)node->GetData();
 }
 
 void wxPanelTabView::ClearWindows(bool deleteWindows)
