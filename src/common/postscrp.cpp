@@ -2104,7 +2104,7 @@ wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxStri
 
 
    wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
-                                       2,orientation,2,0);
+                                       2,orientation,2,wxRA_SPECIFY_ROWS);
    radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
 
   // @@@ Configuration hook
@@ -2119,7 +2119,7 @@ wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxStri
    wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, _("PostScript:"),
                                        wxPoint(150, yPos),
                                        wxSize(-1,-1), features,
-                                       print_modes, features, 0); 
+                                       print_modes, features, wxRA_SPECIFY_ROWS); 
 
 #ifdef __WXMSW__
    radio1->Enable(0, FALSE);
