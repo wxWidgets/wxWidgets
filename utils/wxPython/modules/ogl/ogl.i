@@ -156,6 +156,7 @@ extern "C" SWIGEXPORT(void) initoglshapes2c();
 extern "C" SWIGEXPORT(void) initoglcanvasc();
 %}
 
+
 %init %{
 
     initoglbasicc();

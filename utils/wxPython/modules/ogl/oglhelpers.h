@@ -100,8 +100,6 @@
 wxList* wxPy_wxListHelper(PyObject* pyList, char* className);
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList);
 
-PyObject* wxPy_ConvertList(wxList* list, char* className);
-
 
 
 //---------------------------------------------------------------------------

@@ -494,9 +494,30 @@ PyObject* wxPyEvent::GetUserData() {
 }
 
 //----------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// Convert a wxList to a Python List
+
+PyObject* wxPy_ConvertList(wxListBase* list, char* className) {
+    PyObject*   pyList;
+    PyObject*   pyObj;
+    wxObject*   wxObj;
+    wxNode*     node = list->First();
+
+    bool doSave = wxPyRestoreThread();
+    pyList = PyList_New(0);
+    while (node) {
+        wxObj = node->Data();
+        pyObj = wxPyConstructObject(wxObj, className);
+        PyList_Append(pyList, pyObj);
+        node = node->Next();
+    }
+    wxPySaveThread(doSave);
+    return pyList;
+}
+
 //----------------------------------------------------------------------
 // Some helper functions for typemaps in my_typemaps.i, so they won't be
-// imcluded in every file...
+// included in every file...
 
 
 HELPEREXPORT byte* byte_LIST_helper(PyObject* source) {
