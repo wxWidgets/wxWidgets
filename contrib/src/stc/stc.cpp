@@ -2720,10 +2720,7 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
 
 
 void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& evt) {
-#ifdef __WXMAC__
-    if (! (IsBeingDeleted() || GetParent()->IsBeingDeleted()))
-#endif
-        m_swx->DoLoseFocus();
+    m_swx->DoLoseFocus();
     evt.Skip();
 }
 
