@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/control.h"
+    #include "wx/checklst.h"
     #include "wx/listbox.h"
     #include "wx/scrolbar.h"
     #include "wx/dc.h"
@@ -592,6 +593,19 @@ void wxControlRenderer::DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 void wxControlRenderer::DrawItems(const wxListBox *lbox,
                                   size_t itemFirst, size_t itemLast)
 {
+    DoDrawItems(lbox, itemFirst, itemLast);
+}
+
+void wxControlRenderer::DrawCheckItems(const wxCheckListBox *lbox,
+                                       size_t itemFirst, size_t itemLast)
+{
+    DoDrawItems(lbox, itemFirst, itemLast, TRUE);
+}
+
+void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
+                                    size_t itemFirst, size_t itemLast,
+                                    bool isCheckLbox)
+{
     // prepare for the drawing: calc the initial position
     wxCoord lineHeight = lbox->GetLineHeight();
 
@@ -630,7 +644,21 @@ void wxControlRenderer::DrawItems(const wxListBox *lbox,
         if ( lbox->IsSelected(n) )
             flags |= wxCONTROL_SELECTED;
 
-        m_renderer->DrawItem(m_dc, lbox->GetString(n), rect, flags);
+        if ( isCheckLbox )
+        {
+            wxCheckListBox *checklstbox = wxStaticCast(lbox, wxCheckListBox);
+            if ( checklstbox->IsChecked(n) )
+                flags |= wxCONTROL_CHECKED;
+
+            m_renderer->DrawCheckButton(m_dc, lbox->GetString(n),
+                                        wxNullBitmap,
+                                        rect,
+                                        flags);
+        }
+        else
+        {
+            m_renderer->DrawItem(m_dc, lbox->GetString(n), rect, flags);
+        }
 
         rect.y += lineHeight;
     }

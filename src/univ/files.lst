@@ -2,6 +2,7 @@ UNIVOBJS = \
            bmpbuttn.o \
            button.o \
            checkbox.o \
+           checklst.o \
            colschem.o \
            control.o \
            inphand.o \
@@ -23,6 +24,7 @@ UNIVDEPS = \
            bmpbuttn.d \
            button.d \
            checkbox.d \
+           checklst.d \
            colschem.d \
            control.d \
            inphand.d \

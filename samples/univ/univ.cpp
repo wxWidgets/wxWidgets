@@ -37,6 +37,7 @@
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/checklst.h"
     #include "wx/listbox.h"
     #include "wx/radiobox.h"
     #include "wx/radiobut.h"
@@ -357,6 +358,12 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                    WXSIZEOF(choices), choices,
                    WXSIZEOF(choices),
                    wxRA_SPECIFY_ROWS);
+
+    wxCheckListBox *checkLbox = new wxCheckListBox(this, -1,
+                                                   wxPoint(500, 550),
+                                                   wxDefaultSize,
+                                                   WXSIZEOF(choices), choices);
+    checkLbox->Check(2);
 }
 
 void MyUnivFrame::OnButton(wxCommandEvent& event)

@@ -520,24 +520,11 @@ wxBorder wxListBox::GetDefaultBorder() const
 
 void wxListBox::DoDraw(wxControlRenderer *renderer)
 {
-#if 0
-    // draw the border first
-    if ( m_showScrollbarY )
-    {
-        // we need to draw a border around the client area
-        renderer->GetRect().width -= GetScrollbar(wxVERTICAL)->GetSize().x;
-    }
-
-    // the base class version does it for us
-    wxControl::DoDraw(renderer);
-#endif
-
     // adjust the DC to account for scrolling
     wxDC& dc = renderer->GetDC();
     PrepareDC(dc);
 
     // get the items which must be redrawn
-#if 1
     wxCoord lineHeight = GetLineHeight();
     wxRegion rgnUpdate = GetUpdateRegion();
     rgnUpdate.Intersect(GetClientRect());
@@ -556,15 +543,17 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
 
     if ( itemLast > itemMax )
         itemLast = itemMax;
-#else
-    size_t itemFirst = 0,
-           itemLast = m_strings.GetCount();
-#endif
 
     // do draw them
     wxLogTrace(_T("listbox"), _T("Repainting items %d..%d"),
                itemFirst, itemLast);
 
+    DoDrawRange(renderer, itemFirst, itemLast);
+}
+
+void wxListBox::DoDrawRange(wxControlRenderer *renderer,
+                            int itemFirst, int itemLast)
+{
     renderer->DrawItems(this, itemFirst, itemLast);
 }
 

@@ -2231,7 +2231,9 @@ wxPaintDC::wxPaintDC( wxWindow *win )
 #endif // USE_PAINT_REGION
 
 #ifdef __WXUNIVERSAL__
-    SetClippingRegion(win->GetClientRect());
+    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    SetClippingRegion(ptOrigin, win->GetClientSize());
 #endif // __WXUNIVERSAL__
 }
 

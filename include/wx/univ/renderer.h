@@ -29,6 +29,7 @@
 #define _WX_UNIV_RENDERER_H_
 
 class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxWindow;
@@ -397,6 +398,8 @@ public:
                    wxCoord marginX = 0, wxCoord marginY = 0);
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);
+    void DrawCheckItems(const wxCheckListBox *listbox,
+                        size_t itemFirst, size_t itemLast);
     void DrawBorder();
     void DrawButtonBorder();
     // the line must be either horizontal or vertical
@@ -420,6 +423,11 @@ public:
     wxRect& GetRect() { return m_rect; }
 
 private:
+    // common part of DrawItems() and DrawCheckItems()
+    void DoDrawItems(const wxListBox *listbox,
+                     size_t itemFirst, size_t itemLast,
+                     bool isCheckLbox = FALSE);
+
     wxWindow *m_window;
     wxRenderer *m_renderer;
     wxDC& m_dc;

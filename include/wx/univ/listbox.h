@@ -115,7 +115,8 @@ public:
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL );
 
-    // the wxUniversal-specific additions
+    // the wxUniversal-specific methods
+    // --------------------------------
 
     // the current item is the same as the selected one for wxLB_SINGLE
     // listboxes but for the other ones it is just the focused item which may
@@ -178,7 +179,7 @@ protected:
     void OnSize(wxSizeEvent& event);
 
     // common part of Clear() and DoSetItems(): clears everything
-    void DoClear();
+    virtual void DoClear();
 
     // refresh the given item(s) or everything
     void RefreshItems(int from, int count);
@@ -194,6 +195,10 @@ protected:
     // can/should we have a horz scrollbar?
     bool HasHorzScrollbar() const
         { return (m_windowStyle & wxLB_HSCROLL) != 0; }
+
+    // redraw the items in the given range only: called from DoDraw()
+    virtual void DoDrawRange(wxControlRenderer *renderer,
+                             int itemFirst, int itemLast);
 
     // the array containing all items (it is sorted if the listbox has
     // wxLB_SORT style)

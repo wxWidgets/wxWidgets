@@ -57,6 +57,17 @@
 #    endif
 #endif /* controls */
 
+#if wxUSE_CHECKLISTBOX
+#   if !wxUSE_LISTBOX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxCheckListBox requires wxListBox"
+#        else
+#            undef wxUSE_LISTBOX
+#            define wxUSE_LISTBOX 1
+#        endif
+#   endif
+#endif /* wxUSE_RADIOBTN */
+
 #if wxUSE_RADIOBTN
 #   if defined(__WXUNIVERSAL__) && !wxUSE_CHECKBOX
 #        ifdef wxABORT_ON_CONFIG_ERROR
