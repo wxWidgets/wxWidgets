@@ -20,7 +20,6 @@
 #include "wx/imaglist.h"
 #include "wx/control.h"
 #include "wx/timer.h"
-#include "wx/textctrl.h"
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/settings.h"

@@ -37,15 +37,22 @@
 
 #if wxUSE_LISTCTRL
 
-#include "wx/dcscreen.h"
-#include "wx/app.h"
-#include "wx/listctrl.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+
+    #include "wx/dynarray.h"
+
+    #include "wx/dcscreen.h"
+
+    #include "wx/textctrl.h"
+#endif
+
 #include "wx/imaglist.h"
-#include "wx/dynarray.h"
+#include "wx/listctrl.h"
 
 #ifdef __WXGTK__
-#include <gtk/gtk.h>
-#include "wx/gtk/win_gtk.h"
+    #include <gtk/gtk.h>
+    #include "wx/gtk/win_gtk.h"
 #endif
 
 // ----------------------------------------------------------------------------
