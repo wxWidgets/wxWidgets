@@ -279,6 +279,22 @@
             </msvc-project-files>
         </if>
     </define-tag>
+    
+    <define-tag name="msvc-copy-setup-h" rules="dll,lib">
+        <if cond="FORMAT=='msvc6prj'">
+            <msvc-headers>wx/msw/setup.h</msvc-headers>
+            <set var="__custom_build_files" append="1">
+                include\wx\msw\setup.h
+            </set>
+            <set var="__custom_build_include_wx_msw_setup_h">
+Creating $(LIBDIRNAME)\wx\setup.h
+InputPath=..\include\wx\msw\setup.h
+
+"$(LIBDIRNAME)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
+$(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
+            </set>
+        </if>
+    </define-tag>
 
     <!-- for GUI libs/samples: -->
     <template id="wx_append_nomono" template="wx_append_base_nomono">

@@ -14,8 +14,9 @@
         <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
-        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+        <msvc-copy-setup-h/>
     </dll>
     
     <lib id="monolib" template="wx_lib"
