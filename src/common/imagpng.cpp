@@ -700,7 +700,11 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
             data[(x << 2) + 0] = *ptr++;
             data[(x << 2) + 1] = *ptr++;
             data[(x << 2) + 2] = *ptr++;
-            if (( !image->HasMask() ) || \
+            if ( image->HasAlpha() )
+            {
+                data[(x << 2) + 3] = image->GetAlpha(x, y);
+            }
+            else if (( !image->HasMask() ) || \
                 (data[(x << 2) + 0] != image->GetMaskRed()) || \
                 (data[(x << 2) + 1] != image->GetMaskGreen()) || \
                 (data[(x << 2) + 2] != image->GetMaskBlue()))
