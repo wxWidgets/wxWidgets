@@ -140,7 +140,6 @@ static guint32 gs_timeLastClick = 0;
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
     if (!win->HasVMT()) return;
-    if (g_blockEventsOnDrag) return;
 
     win->m_updateRegion.Union( gdk_event->area.x,
                                gdk_event->area.y,
@@ -170,7 +169,6 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
 {
     if (!win->HasVMT()) return;
-    if (g_blockEventsOnDrag) return;
 
     win->m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
 
@@ -1446,14 +1444,14 @@ void wxWindow::SetClientSize( int width, int height )
 
     if (!m_hasScrolling)
     {
-/*
-      do we have sunken dialogs ?
-
       GtkStyleClass *window_class = m_wxwindow->style->klass;
 
-      dw += 2 * window_class->xthickness;
-      dh += 2 * window_class->ythickness;
-*/
+      if ((m_windowStyle & wxRAISED_BORDER) ||
+          (m_windowStyle & wxSUNKEN_BORDER))
+      {
+        dw += 2 * window_class->xthickness;
+        dh += 2 * window_class->ythickness;
+      }
     }
     else
     {
@@ -1511,14 +1509,14 @@ void wxWindow::GetClientSize( int *width, int *height ) const
 
     if (!m_hasScrolling)
     {
-/*
-      do we have sunken dialogs ?
-
       GtkStyleClass *window_class = m_wxwindow->style->klass;
 
-      dw += 2 * window_class->xthickness;
-      dh += 2 * window_class->ythickness;
-*/
+      if ((m_windowStyle & wxRAISED_BORDER) ||
+          (m_windowStyle & wxSUNKEN_BORDER))
+      {
+        dw += 2 * window_class->xthickness;
+        dh += 2 * window_class->ythickness;
+      }
     }
     else
     {

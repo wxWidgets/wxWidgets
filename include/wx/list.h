@@ -195,10 +195,24 @@ public:
     size_t GetCount() const { return m_count; }
 
     // operations
+    
         // delete all nodes
     void Clear();
+    
         // instruct it to destroy user data when deleting nodes
     void DeleteContents(bool destroy) { m_destroy = destroy; }
+
+       // query if to delete
+    bool GetDeleteContents() const
+        { return m_destroy; }
+    
+      // get the keytype
+    wxKeyType GetKeyType() const
+        { return m_keyType; }
+
+      // set the keytype (required by the serial code)
+    void SetKeyType(wxKeyType keyType)
+        { wxASSERT( m_count==0 ); m_keyType = keyType; }
 
 protected:
     // all methods here are "overloaded" in derived classes to provide compile
@@ -271,7 +285,7 @@ protected:
     void *FirstThat(wxListIterateFunction func);
     void ForEach(wxListIterateFunction func);
     void *LastThat(wxListIterateFunction func);
-
+    
 private:
     // helpers
         // common part of all ctors

@@ -45,7 +45,7 @@ bool MyApp::OnInit(void)
 {
   // Create the main frame window
   MyFrame* frame = new MyFrame((wxFrame *) NULL, -1, (const wxString) "wxMiniFrame sample",
-     wxPoint(100, 100), wxSize(200, 42));
+     wxPoint(100, 100), wxSize(205, 45));
 
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));

@@ -54,4 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(classname##_Serialize, parent##_Serialize)
 #define IMPLEMENT_ALIAS_SERIAL_CLASS(classname, parent) \
 IMPLEMENT_DYNAMIC_CLASS(classname##_Serialize, parent##_Serialize)
 
+DECLARE_SERIAL_CLASS(wxList, wxObject)
+DECLARE_SERIAL_CLASS(wxHashTable, wxObject)
+
 #endif

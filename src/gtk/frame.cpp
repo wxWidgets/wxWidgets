@@ -25,7 +25,7 @@
 // constants
 //-----------------------------------------------------------------------------
 
-const int wxMENU_HEIGHT    = 30;
+const int wxMENU_HEIGHT    = 27;
 const int wxSTATUS_HEIGHT  = 25;
 
 //-----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     {
         int h = 0;
         m_frameMenuBar->GetSize( (int*)NULL, &h );
-        pt.y += h + 2;
+        pt.y += h;
     }
     if (m_frameToolBar)
     {
@@ -381,10 +381,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
     
     if (m_frameMenuBar)
     {
-        int xx = 1 + m_miniEdge;
-	int yy = 1 + m_miniEdge + m_miniTitle;
-	int ww = m_width - 2  - 2*m_miniEdge;
-	int hh = wxMENU_HEIGHT-2;
+        int xx = m_miniEdge;
+	int yy = m_miniEdge + m_miniTitle;
+	int ww = m_width  - 2*m_miniEdge;
+	int hh = wxMENU_HEIGHT;
         m_frameMenuBar->m_x = xx;
         m_frameMenuBar->m_y = yy;
         m_frameMenuBar->m_width = ww;
@@ -396,10 +396,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
     if (m_frameToolBar)
     {
-        int xx = 1 + m_miniEdge;
+        int xx = m_miniEdge;
 	int yy = m_miniEdge + m_miniTitle;
         if (m_frameMenuBar) yy += wxMENU_HEIGHT;
-	int ww = m_width -2 - 2*m_miniEdge;
+	int ww = m_width - 2*m_miniEdge;
         int hh = m_frameToolBar->m_height;
     
         m_frameToolBar->m_x = xx;  

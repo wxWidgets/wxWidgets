@@ -21,7 +21,7 @@
 // constants
 //-----------------------------------------------------------------------------
 
-const int wxMENU_HEIGHT    = 30;
+const int wxMENU_HEIGHT    = 27;
 
 //-----------------------------------------------------------------------------
 // globals
@@ -120,12 +120,12 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
 
   if (m_mdiMenuBar)
   {
-    m_mdiMenuBar->m_x = 1;  
-    m_mdiMenuBar->m_y = 1;
-    m_mdiMenuBar->m_width = m_width-2;
-    m_mdiMenuBar->m_height = wxMENU_HEIGHT-2;
-    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_mdiMenuBar->m_widget, 1, 1 );
-    gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width-2, wxMENU_HEIGHT-2 );
+    m_mdiMenuBar->m_x = 0;  
+    m_mdiMenuBar->m_y = 0;
+    m_mdiMenuBar->m_width = m_width;
+    m_mdiMenuBar->m_height = wxMENU_HEIGHT;
+    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_mdiMenuBar->m_widget, 0, 0 );
+    gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width, wxMENU_HEIGHT );
   }
 }
 
@@ -135,12 +135,12 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
   m_mdiMenuBar = menu_bar;
   if (m_mdiMenuBar)
   {
-    m_mdiMenuBar->m_x = 1;  
-    m_mdiMenuBar->m_y = 1;
-    m_mdiMenuBar->m_width = m_width-2;
-    m_mdiMenuBar->m_height = wxMENU_HEIGHT-2;
-    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_mdiMenuBar->m_widget, 1, 1 );
-    gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width-2, wxMENU_HEIGHT-2 );
+    m_mdiMenuBar->m_x = 0;  
+    m_mdiMenuBar->m_y = 0;
+    m_mdiMenuBar->m_width = m_width;
+    m_mdiMenuBar->m_height = wxMENU_HEIGHT;
+    gtk_myfixed_move( GTK_MYFIXED(m_wxwindow), m_mdiMenuBar->m_widget, 0, 0 );
+    gtk_widget_set_usize( m_mdiMenuBar->m_widget, m_width, wxMENU_HEIGHT );
     m_mdiMenuBar->Show( TRUE );
   }
 }

@@ -25,6 +25,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifndef __WXMSW__
+#include "mondrian.xpm"
+#endif
+
 #include "wx/listctrl.h"
 #include "listtest.h"
 
@@ -65,15 +69,10 @@ bool MyApp::OnInit(void)
   // This reduces flicker effects - even better would be to define OnEraseBackground
   // to do nothing. When the list control's scrollbars are show or hidden, the
   // frame is sent a background erase event.
-  frame->SetBackgroundColour(wxColour(255, 255, 255));
+  frame->SetBackgroundColour( *wxWHITE );
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#else
-#include "mondrian.xpm"
-  frame->SetIcon(wxIcon(mondrian_xpm));
-#endif
+  frame->SetIcon( wxICON(mondrian) );
 
   // Make an image list containing large icons
   m_imageListNormal = new wxImageList(32, 32, TRUE);

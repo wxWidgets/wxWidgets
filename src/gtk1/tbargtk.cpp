@@ -118,6 +118,8 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 					    
   gtk_toolbar_set_tooltips( GTK_TOOLBAR(m_toolbar), TRUE );
 
+  gtk_toolbar_append_space( m_toolbar );
+  
   m_parent->AddChild( this );
 
   (m_parent->m_insertCallback)( m_parent, this );
@@ -250,7 +252,7 @@ void wxToolBar::Realize()
     node = node->Next();
   }
   
-  m_height += 10;
+  m_height += 12;
 }
 
 void wxToolBar::EnableTool(int toolIndex, bool enable)
@@ -336,7 +338,7 @@ bool wxToolBar::GetToolEnabled(int toolIndex) const
 
 void wxToolBar::SetMargins( int WXUNUSED(x), int WXUNUSED(y) )
 {
-  wxFAIL_MSG( "wxToolBar::SetMargins not implemented" );
+//  wxFAIL_MSG( "wxToolBar::SetMargins not implemented" );
 }
 
 void wxToolBar::SetToolPacking( int WXUNUSED(packing) )

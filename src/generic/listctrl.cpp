@@ -700,15 +700,17 @@ void wxListHeaderWindow::DoDrawRect( wxPaintDC *dc, int x, int y, int w, int h )
   dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
   dc->DrawRectangle( x, y+h, w, 1 );            // bottom (outer)
 
-  dc->SetPen( *wxMEDIUM_GREY_PEN );
+  wxPen pen( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNSHADOW ), 1, wxSOLID );
+  
+  dc->SetPen( pen );
   dc->DrawLine( x+w-m_corner, y, x+w-1, y+h );  // right (inner)
   dc->DrawRectangle( x+1, y+h-1, w-2, 1 );      // bottom (inner)
 
   dc->SetPen( *wxWHITE_PEN );
   dc->DrawRectangle( x, y, w-m_corner+1, 1 );   // top (outer)
-//  dc->DrawRectangle( x, y+1, w-m_corner, 1 );   // top (inner)
   dc->DrawRectangle( x, y, 1, h );              // left (outer)
-//  dc->DrawRectangle( x+1, y, 1, h-1 );          // left (inner)
+  dc->DrawLine( x, y+h-1, x+1, y+h-1 );
+  dc->DrawLine( x+w-1, y, x+w-1, y+1 );
 }
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -2263,6 +2265,8 @@ bool wxListCtrl::Create( wxWindow *parent, wxWindowID id,
   bool ret = wxControl::Create( parent, id, pos, size, s, name );
 
   SetValidator( validator );
+  
+  if (s & wxSUNKEN_BORDER) s -= wxSUNKEN_BORDER;
 
   m_mainWin = new wxListMainWindow( this, -1, wxPoint(0,0), size, s );
 
