@@ -190,7 +190,6 @@ wxDllLoader::GetProgramHandle(void)
    // shl_findsymbol with NULL handle looks up in main program
    return 0; 
 #else
-#warning "Please implement this for your system!"
    wxFAIL_MSG(_("This method is not implemented under Windows or OS/2"));
    return 0;
 #endif
