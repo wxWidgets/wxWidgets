@@ -19,9 +19,16 @@ FINAL=0
 
 !if "$(FINAL)" == "0"
 EXTRALIBS=$(WXDIR)\lib\wxxmld.lib
-!else
+!endif
+
+!if "$(FINAL)" == "1"
 EXTRALIBS=$(WXDIR)\lib\wxxml.lib
 !endif
+
+!if "$(FINAL)" == "hybrid"
+EXTRALIBS=$(WXDIR)\lib\wxxmlh.lib
+!endif
+
 
 OBJECTS = $(PROGRAM).obj
 
