@@ -252,9 +252,9 @@ class wxPythonDemo(wxFrame):
             EVT_MENU(self.tbicon, self.TBMENU_RESTORE, self.OnTaskBarActivate)
             EVT_MENU(self.tbicon, self.TBMENU_CLOSE, self.OnTaskBarClose)
 
+        wxCallAfter(self.ShowTip)
 
         self.otherWin = None
-        self.showTip = true
         EVT_IDLE(self, self.OnIdle)
         EVT_CLOSE(self, self.OnCloseWindow)
         EVT_ICONIZE(self, self.OnIconfiy)
@@ -543,10 +543,6 @@ class wxPythonDemo(wxFrame):
             self.otherWin.Raise()
             self.window = self.otherWin
             self.otherWin = None
-
-        if self.showTip:
-            self.ShowTip()
-            self.showTip = false
 
 
     #---------------------------------------------
