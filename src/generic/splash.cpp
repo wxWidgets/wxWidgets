@@ -111,19 +111,25 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int x, int y)
 
     bool hiColour = (wxDisplayDepth() >= 16) ;
     
+#ifndef __WXGTK__
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());
         dcMem.SetPalette(* bitmap.GetPalette());
     }
+#endif
+
     dcMem.SelectObject(bitmap);
     dc.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & dcMem, 0, 0);
     dcMem.SelectObject(wxNullBitmap);
+
+#ifndef __WXGTK__
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(wxNullPalette);
         dcMem.SetPalette(wxNullPalette);
     }
+#endif
 }
 
 void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
