@@ -309,6 +309,12 @@
             <precomp-headers-header>wx/wxprec.h</precomp-headers-header>
             <precomp-headers>on</precomp-headers>
             <precomp-headers-file>wxprec_$(id)</precomp-headers-file>
+            <precomp-headers-exclude>
+                src/common/unzip.c
+                src/common/extended.c
+                src/msw/gsocket.c
+                src/msw/gsockmsw.c
+            </precomp-headers-exclude>
         </if>
     </template>
 
@@ -334,8 +340,12 @@
     </template>
     <template id="wx_base_dll" template="wx_dll_b"
                                template_append="wx_append_base_nomono">
+        <depends>wxtiff</depends>
+        <depends>wxjpeg</depends>
+        <depends>wxpng</depends>
         <depends>wxexpat</depends>
         <depends>wxzlib</depends>
+        <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>
     </template>
     
