@@ -745,6 +745,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=no
+  DEFAULT_wxUSE_SNGLINST_CHECKER=no
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_TEXTFILE=no
@@ -870,6 +871,7 @@ else
   DEFAULT_wxUSE_OPENGL=no
 
   DEFAULT_wxUSE_ON_FATAL_EXCEPTION=yes
+  DEFAULT_wxUSE_SNGLINST_CHECKER=yes
   DEFAULT_wxUSE_STD_IOSTREAM=no
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_TEXTFILE=yes
@@ -1087,6 +1089,7 @@ WX_ARG_ENABLE(fs_zip,        [  --enable-fs_zip         use virtual ZIP filesyst
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
 
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass them to wxApp::OnFatalException], wxUSE_ON_FATAL_EXCEPTION)
+WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 
 dnl ---------------------------------------------------------------------------
 dnl "big" options (i.e. those which change a lot of things throughout the library)
@@ -2236,8 +2239,6 @@ dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
 AC_CHECK_HEADERS(strings.h)
 dnl defines HAVE_UNISTD_H
 AC_CHECK_HEADERS(unistd.h)
-dnl defines HAVE_FCNTL_H
-AC_CHECK_HEADERS(fcntl.h)
 dnl defines HAVE_WCHAR_H
 AC_CHECK_HEADERS(wchar.h)
 dnl defines HAVE_WCSTR_H
@@ -2559,10 +2560,21 @@ fi
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
+dnl check for fcntl() or at least flock() needed by Unix implementation of
+dnl wxSingleInstanceChecker
+if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+    AC_CHECK_FUNCS(fcntl flock, break)
+
+    if test "$ac_cv_func_fcntl" != "yes" -a "$ac_cv_func_flock" != "yes"; then
+        AC_MSG_WARN(wxSingleInstanceChecker not available)
+        wxUSE_SNGLINST_CHECKER=no
+    fi
+fi
+
 dnl check for timegm() used by datetime.cpp
 AC_CHECK_FUNCS(timegm)
 
-dnl look for a functiopn to modify the environment
+dnl look for a function to modify the environment
 AC_CHECK_FUNCS(putenv setenv, break)
 
 HAVE_SOME_SLEEP_FUNC=0
@@ -2593,9 +2605,9 @@ if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
                 ],
                 [
                     AC_CHECK_FUNCS(usleep,
-        		AC_DEFINE(HAVE_USLEEP),
-		    )
-                    AC_MSG_WARN([wxSleep() function will not work])
+                        AC_DEFINE(HAVE_USLEEP),
+                        AC_MSG_WARN([wxSleep() function will not work])
+                    )
                 ]
             )
         ]
@@ -3165,6 +3177,10 @@ fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then
   AC_DEFINE(wxUSE_ON_FATAL_EXCEPTION)
+fi
+
+if test "$wxUSE_SNGLINST_CHECKER" = "yes"; then
+  AC_DEFINE(wxUSE_SNGLINST_CHECKER)
 fi
 
 if test "$wxUSE_BUSYINFO" = "yes"; then
@@ -4258,3 +4274,4 @@ AC_OUTPUT([
           ]
          )
 
+dnl vi: set et ts=4 sw=4 list:

@@ -180,6 +180,11 @@
 #define wxUSE_ON_FATAL_EXCEPTION 0
 
 /*
+ * Use wxSingleInstanceChecker class
+ */
+#define wxUSE_SNGLINST_CHECKER 0
+
+/*
  * Use constraints mechanism
  */
 #define wxUSE_CONSTRAINTS 0
@@ -757,6 +762,12 @@
 
 /* Define if you have the dlerror function.  */
 #undef HAVE_DLERROR
+
+/* Define if you have Posix fnctl() function. */
+#undef HAVE_FCNTL
+
+/* Define if you have BSD flock() function. */
+#undef HAVE_FLOCK
 
 /* Define if you have the gethostname function.  */
 #undef HAVE_GETHOSTNAME

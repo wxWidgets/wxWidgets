@@ -4562,7 +4562,7 @@ int main(int argc, char **argv)
     }
 
 #ifdef TEST_SNGLINST
-    wxSingleInstanceChecker checker(_T("wxConsoleSample"));
+    wxSingleInstanceChecker checker(_T(".wxconsole.lock"));
     if ( checker.IsAnotherRunning() )
     {
         wxPrintf(_T("Another instance of the program is running, exiting.\n"));
