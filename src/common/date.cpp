@@ -291,7 +291,11 @@ ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt)
 
 void wxDate::julian_to_wday (void)
 {
+    // Correction by Peter Stadel <peters@jetcity.com>
+	day_of_week = ((julian - 2) % 7L);
+/*
     day_of_week = (int) ((julian + 2) % 7 + 1);
+*/
 }
 
 void wxDate::julian_to_mdy ()

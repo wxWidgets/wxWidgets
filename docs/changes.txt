@@ -1,6 +1,23 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.1.0, b?, June 2nd 1999
+------------------------
+
+wxGTK:
+
+
+wxMSW:
+
+
+wxMotif:
+
+
+General:
+
+- Fixed day_of_week bug (Peter Stadel).
+- Added Inside(), SetLeft/Right/Top/Bottom, +, += to wxRect.
+
 2.1.0, b4, May 9th 1999
 -----------------------
 

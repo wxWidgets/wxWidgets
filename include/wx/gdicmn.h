@@ -250,17 +250,21 @@ public:
     long GetHeight() const { return height; }
     void SetHeight(long h) { height = h; }
 
-    wxPoint GetPosition() { return wxPoint(x, y); }
-    wxSize GetSize() { return wxSize(width, height); }
+    wxPoint GetPosition() const { return wxPoint(x, y); }
+    wxSize GetSize() const { return wxSize(width, height); }
 
     long GetLeft()   const { return x; }
     long GetTop()    const { return y; }
     long GetBottom() const { return y + height; }
     long GetRight()  const { return x + width; }
 
+    bool Inside(int, int) const;
+
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
+    wxRect operator + (const wxRect& rect) const;
+    const wxRect& operator += (const wxRect& rect);
 public:
     long x, y, width, height;
 };

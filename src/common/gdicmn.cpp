@@ -88,6 +88,29 @@ bool wxRect::operator==(const wxRect& rect) const
           (height == rect.height));
 }
 
+const wxRect& wxRect::operator += (const wxRect& rect)
+{ 
+	*this = (*this + rect); 
+	return ( *this ) ;
+}
+
+wxRect wxRect::operator + (const wxRect& rect) const
+{ 
+	int x1 = min(this->x, rect.x);
+	int y1 = min(this->y, rect.y);
+	int y2 = max(y+height, rect.height+rect.y);
+	int x2 = max(x+width, rect.width+rect.x);
+	return wxRect(x1, y1, x2-x1, y2-y1);
+}
+
+bool wxRect::Inside(int cx, int cy) const
+{
+	return ( (cx >= x) && (cy >= y)
+		  && ((cy - y) < height)
+		  && ((cx - x) < width)
+		  );
+}
+
 wxColourDatabase::wxColourDatabase (int type) : wxList (type)
 {
 }
