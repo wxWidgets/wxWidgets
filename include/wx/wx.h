@@ -1,3 +1,6 @@
+#ifndef _WX_WXH__
+#define _WX_WXH__
+
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx.h
 // Purpose:     wxWindows main include file
@@ -8,9 +11,6 @@
 // Copyright:   (c)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-#ifndef _WX_WXH__
-#define _WX_WXH__
 
 #include "wx/defs.h"
 #include "wx/object.h"
@@ -59,22 +59,26 @@
 #include "wx/radiobut.h"
 #include "wx/textctrl.h"
 #include "wx/slider.h"
+#if !defined(__VISAGECPP__) // cyclic dependency
 #include "wx/gauge.h"
+#include "wx/scrolwin.h"
+#include "wx/dirdlg.h"
+#include "wx/toolbar.h"
+#endif
 #include "wx/combobox.h"
 #include "wx/layout.h"
 #include "wx/sizer.h"
 #include "wx/memory.h"
 #include "wx/mdi.h"
-#include "wx/scrolwin.h"
 #include "wx/statusbr.h"
 #include "wx/scrolbar.h"
 #include "wx/choicdlg.h"
 #include "wx/textdlg.h"
 #include "wx/filedlg.h"
-#include "wx/dirdlg.h"
-#include "wx/toolbar.h"
 
 #include "wx/validate.h"        // always include, even if !wxUSE_VALIDATORS
+
+#if !defined(__VISAGECPP__) // cyclic dependency
 
 #if wxUSE_VALIDATORS
     #include "wx/valtext.h"
@@ -84,6 +88,8 @@
     #include "wx/objstrm.h"
     #include "wx/serbase.h"
 #endif // wxUSE_SERIAL
+
+#endif // __VISAGECPP__
 
 #endif // wxUSE_GUI
 

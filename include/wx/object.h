@@ -214,7 +214,15 @@ class WXDLLEXPORT wxObject
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
+
+#if defined(__VISAGECPP__)
+  #if __DEBUG_ALLOC__
+     void operator delete (void * buf,const char * _fname, size_t _line);
+  #endif  //__DEBUG_ALLOC__
+#else
   void operator delete (void * buf);
+#endif
+   // defined(__VISAGECPP__)
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
@@ -252,6 +260,14 @@ class WXDLLEXPORT wxObject
 
   inline wxObjectRefData *GetRefData(void) const { return m_refData; }
   inline void SetRefData(wxObjectRefData *data) { m_refData = data; }
+
+//EK
+#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
+public:
+  static int                        N;
+  static int                        Nid;  // total number of objects and serial counter
+         int                        id; // serial number for current object
+#endif // __WXDEBUG__
 
 protected:
   wxObjectRefData*      m_refData;
