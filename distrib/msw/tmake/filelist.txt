@@ -225,4 +225,4 @@ wave.cpp	M
 window.cpp	M
 xpmhand.cpp	M
 
-# vi: set noet ts=16:
+# vi: set noet ts=16 nolist:
