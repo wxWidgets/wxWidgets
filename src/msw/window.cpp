@@ -4016,7 +4016,7 @@ void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
             break;
 
         case wxBG_STYLE_SYSTEM:
-#if wxUSE_NOTEBOOK && wxUSE_UXTHEME
+#if wxUSE_NOTEBOOK && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
             // automatically apply the tab control theme background to any
             // child panels to have the same look as the native property sheet
             // dialogs
