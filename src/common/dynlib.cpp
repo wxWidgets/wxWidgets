@@ -29,10 +29,6 @@
 
 #if wxUSE_DYNLIB_CLASS
 
-#if defined(__WINDOWS__)
-    #include "wx/msw/wrapwin.h"
-#endif
-
 #include "wx/dynlib.h"
 #include "wx/filefn.h"
 #include "wx/intl.h"
@@ -42,10 +38,13 @@
 #include "wx/app.h"
 #include "wx/apptrait.h"
 
+#include "wx/arrimpl.cpp"
+
 #if defined(__WXMAC__)
     #include "wx/mac/private.h"
 #endif
 
+WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
 
 // ============================================================================
 // implementation
@@ -152,9 +151,9 @@ void *dlsym(void *handle, const char *symbol)
 // ---------------------------------------------------------------------------
 
 //FIXME:  This class isn't really common at all, it should be moved into
-//        platform dependent files.
+//        platform dependent files (already done for Windows)
 
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
+#if defined(__WXPM__) || defined(__EMX__)
     const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     const wxChar *wxDynamicLibrary::ms_dllext = _T("");
@@ -180,11 +179,12 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 #endif
 }
 
-bool wxDynamicLibrary::Load(wxString libname, int flags)
+bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 {
     wxASSERT_MSG(m_handle == 0, _T("Library already loaded."));
 
     // add the proper extension for the DLL ourselves unless told not to
+    wxString libname = libnameOrig;
     if ( !(flags & wxDL_VERBATIM) )
     {
         // and also check that the libname doesn't already have it
@@ -279,7 +279,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     m_handle = shl_load(libname.fn_str(), BIND_DEFERRED, 0);
 
 #elif defined(__WINDOWS__)
-    m_handle = ::LoadLibrary(libname.c_str());
+    m_handle = RawLoad(libname);
 #else
     #error  "runtime shared lib support not implemented on this platform"
 #endif
@@ -306,6 +306,8 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     return IsLoaded();
 }
 
+#ifndef __WXMSW__
+
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
@@ -315,14 +317,14 @@ void wxDynamicLibrary::Unload(wxDllType handle)
     dlclose( handle );
 #elif defined(HAVE_SHL_LOAD)
     shl_unload( handle );
-#elif defined(__WINDOWS__)
-    ::FreeLibrary( handle );
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     CloseConnection( (CFragConnectionID*) &handle );
 #else
     #error  "runtime shared lib support not implemented"
 #endif
 }
+
+#endif // !__WXMSW__
 
 void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 {
@@ -359,12 +361,7 @@ void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
         symbol = 0;
 
 #elif defined(__WINDOWS__)
-#ifdef __WXWINCE__
-    symbol = (void*) ::GetProcAddress( m_handle, name );
-#else
-    symbol = (void*) ::GetProcAddress( m_handle, name.mb_str() );
-#endif
-
+    symbol = RawGetSymbol(m_handle, name);
 #else
 #error  "runtime shared lib support not implemented"
 #endif
@@ -401,6 +398,10 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
 
     return symbol;
 }
+
+// ----------------------------------------------------------------------------
+// informational methods
+// ----------------------------------------------------------------------------
 
 /*static*/
 wxString

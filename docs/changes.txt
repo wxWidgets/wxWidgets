@@ -33,6 +33,7 @@ All:
 - Added support to the wxODBC classes for Firebird 1.5 database
 - The samples\db sample program now includes an optional example of using a BLOB
   datatype (if BLOB support is enabled and supported by the database)
+- added wxDynamicLibrary::ListLoaded()
 
 All (GUI):
 

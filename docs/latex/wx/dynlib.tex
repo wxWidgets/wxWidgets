@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Name:        dynlib.tex
-%% Purpose:     wxDynamicLibrary documentation
+%% Purpose:     wxDynamicLibrary and wxDynamicLibraryDetails documentation
 %% Author:      Vadim Zeitlin
 %% Modified by:
 %% Created:     14.01.02 (extracted from dllload.tex)
@@ -22,7 +22,17 @@ done in the objects destructor automatically.
 %
 %\helpref{wxDllLoader}{wxdllloader}
 
+\wxheading{Derived from}
 
+No base class.
+
+\wxheading{Include files}
+
+<wx/dynlib.h>
+
+(only available if \texttt{wxUSE\_DYNLIB\_CLASS} is set to $1$)
+
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxDynamicLibrary::wxDynamicLibrary}\label{wxdynamiclibrarywxdynamiclibrary}
 
@@ -111,6 +121,19 @@ this function doesn't log an error message if the symbol is not found.
 Returns \true if the library was successfully loaded, \false otherwise.
 
 
+\membersection{wxDynamicLibrary::ListLoaded}\label{wxdynamiclibrarylistloaded}
+
+\func{static wxDynamicLibraryDetailsArray}{ListLoaded}{\void}
+
+This static method returns an \helpref{array}{wxarray} containing the details
+of all modules loaded into the address space of the current project, the array
+elements are object of \texttt{wxDynamicLibraryDetails} class. The array will
+be empty if an error occured.
+
+This method is currently only implemented under Win32 and is useful mostly for
+diagnostics purposes.
+
+
 \membersection{wxDynamicLibrary::Load}\label{wxdynamiclibraryload}
 
 \func{bool}{Load}{\param{const wxString\& }{name}, \param{int }{flags = wxDL\_DEFAULT}}
@@ -142,4 +165,71 @@ The second version is only used if you need to keep the library in memory
 during a longer period of time than the scope of the wxDynamicLibrary object.
 In this case you may call \helpref{Detach}{wxdynamiclibrarydetach} and store
 the handle somewhere and call this static method later to unload it.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxDynamicLibraryDetails}}\label{wxdynamiclibrarydetails}
+
+This class is used for the objects returned by 
+\helpref{wxDynamicLibrary::ListLoaded}{wxdynamiclibrarylistloaded} method and
+contains the information about a single module loaded into the address space of
+the current process. A module in this context may be either a dynamic library
+or the main program itself.
+
+\wxheading{Derived from}
+
+No base class.
+
+\wxheading{Include files}
+
+<wx/dynlib.h>
+
+(only available if \texttt{wxUSE\_DYNLIB\_CLASS} is set to $1$)
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxDynamicLibraryDetails::GetName}\label{wxdynamiclibrarygetname}
+
+\constfunc{wxString}{GetName}{\void}
+
+Returns the base name of this module, e.g. \texttt{kernel32.dll} or 
+\texttt{libc-2.3.2.so}.
+
+
+\membersection{wxDynamicLibraryDetails::GetPath}\label{wxdynamiclibrarygetpath}
+
+\constfunc{wxString}{GetPath}{\void}
+
+Returns the full path of this module if available, e.g. 
+\texttt{c:$\backslash$windows$\backslash$system32$\backslash$kernel32.dll} or 
+\texttt{/lib/libc-2.3.2.so}.
+
+
+\membersection{wxDynamicLibraryDetails::GetAddress}\label{wxdynamiclibrarygetaddress}
+
+\constfunc{bool}{GetAddress}{\param{void **}{addr}, \param{size\_t }{*len}}
+
+Retrieves the load address and the size of this module.
+
+\wxheading{Parameters}
+
+\docparam{addr}{the pointer to the location to return load address in, may be
+\texttt{NULL}}
+
+\docparam{len}{pointer to the location to return the size of this module in
+memory in, may be \texttt{NULL}}
+
+\wxheading{Return value}
+
+\true if the load address and module size were retrieved, \false if this
+information is not available.
+
+
+\membersection{wxDynamicLibraryDetails::GetVersion}\label{wxdynamiclibrarygetversion}
+
+\constfunc{wxString}{GetVersion}{\void}
+
+Returns the version of this module, e.g. \texttt{5.2.3790.0} or 
+\texttt{2.3.2}. The returned string is empty if the version information is not
+available.
 
