@@ -1095,17 +1095,12 @@ fi
 
 dnl General settings (needed for GUI and non-GUI compilations alike).
 dnl Path separator; ':' for unix, ';' for OS/2
-dnl Stem for flex output; lexyy for OS/2, lex.yy otherwise
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
     PATH_IFS=';'
-dnl Really ought to text for this as meanwhile there are flex versions using
-dnl lex.yy as well due to FAT support being more and more dropped...
-    LEX_STEM="lexyy"
   ;;
   *)
     PATH_IFS=':'
-    LEX_STEM="lex.yy"
   ;;
 esac
 
@@ -1420,15 +1415,6 @@ you are trying to compile.
 ])
 fi dnl make without VPATH
 fi dnl not GNU make
-
-dnl YACC checks
-dnl   defines YACC with the appropriate command
-AC_PROG_YACC
-
-dnl LEX checks
-dnl   defines LEX with the appropriate command
-dnl   defines LEXLIB with the appropriate library
-AC_PROG_LEX
 
 dnl needed for making link to setup.h
 AC_PROG_LN_S
@@ -5703,7 +5689,6 @@ dnl       only removes the Unix-like part of the introduced line break.
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
 
 dnl makefile variables
-AC_SUBST(LEX_STEM)
 AC_SUBST(PATH_IFS)
 
 dnl global options
