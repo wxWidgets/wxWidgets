@@ -30,7 +30,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -70,6 +70,7 @@ clean:
 	$(MAKE) -C listbox -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C listctrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C menu -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) clean
@@ -218,6 +219,9 @@ listctrl:
 mdi: 
 	$(MAKE) -C mdi -f makefile.gcc $(MAKEARGS) all
 
+mediaplayer: 
+	$(MAKE) -C mediaplayer -f makefile.gcc $(MAKEARGS) all
+
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
 
@@ -335,4 +339,4 @@ widgets:
 wizard: 
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
+.PHONY: all clean access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard

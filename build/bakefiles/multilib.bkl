@@ -107,14 +107,6 @@
         <msvc-headers>$(MEDIA_HDR)</msvc-headers>
         <library>coredll</library>
         <library>basedll</library>
-
-     <!--
-	<if cond="FORMAT!='autoconf'">
-            <if cond="FORMAT!='borland' and FORMAT!='msevc4prj'">
-                <sys-lib>strmiids</sys-lib>
-            </if>
-        </if>
-     -->
     </dll>
     
     <lib id="medialib" template="wx_lib"

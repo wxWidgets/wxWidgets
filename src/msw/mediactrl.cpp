@@ -201,7 +201,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxString& fileNa
                          long style, long WXUNUSED(driver), const wxString& name)
 {
     //base create
-    if ( !wxControl::Create(parent, id, pos, size, (style ^ wxBORDER_MASK) | wxCLIP_CHILDREN, 
+    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN, 
                             wxDefaultValidator, name) )
         return false;
 
@@ -239,7 +239,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id, const wxURI& location,
                          long style, long WXUNUSED(driver), const wxString& name)
 {
     //base create
-    if ( !wxControl::Create(parent, id, pos, size, (style ^ wxBORDER_MASK) | wxCLIP_CHILDREN, 
+    if ( !wxControl::Create(parent, id, pos, size, (style | wxNO_BORDER) | wxCLIP_CHILDREN, 
                             wxDefaultValidator, name) )
         return false;
 

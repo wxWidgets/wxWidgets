@@ -40,7 +40,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi mediaplayer memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets sound splash splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -189,6 +189,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mdi.bat
 	call mdi.bat
 	@del mdi.bat
+	@echo cd mediaplayer >mediaplayer.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mediaplayer.bat
+	call mediaplayer.bat
+	@del mediaplayer.bat
 	@echo cd memcheck >memcheck.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>memcheck.bat
 	call memcheck.bat
@@ -561,6 +565,12 @@ mdi:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>mdi.bat
 	call mdi.bat
 	@del mdi.bat
+
+mediaplayer: 
+	@echo cd mediaplayer >mediaplayer.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>mediaplayer.bat
+	call mediaplayer.bat
+	@del mediaplayer.bat
 
 memcheck: 
 	@echo cd memcheck >memcheck.bat

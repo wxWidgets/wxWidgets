@@ -7447,6 +7447,10 @@ SOURCE=..\..\include\wx\msw\mdi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\mediactrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\menu.h
 # End Source File
 # Begin Source File
@@ -8360,6 +8364,10 @@ SOURCE=..\..\include\wx\matrix.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\mdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mediactrl.h
 # End Source File
 # Begin Source File
 

@@ -309,6 +309,10 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\archive.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\artprov.cpp
 # End Source File
 # Begin Source File
@@ -819,11 +823,6 @@ SOURCE=.\common\treebase.cpp
 # Begin Source File
 
 SOURCE=.\common\txtstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\common\unzip.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -1357,6 +1356,10 @@ SOURCE=.\msw\main.cpp
 # Begin Source File
 
 SOURCE=.\msw\mdi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\mediactrl.cpp
 # End Source File
 # Begin Source File
 
@@ -2460,6 +2463,10 @@ SOURCE=..\include\wx\mdi.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\mediactrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\memconf.h
 # End Source File
 # Begin Source File
@@ -3329,6 +3336,10 @@ SOURCE=..\include\wx\msw\listctrl.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\mdi.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\mediactrl.h
 # End Source File
 # Begin Source File
 

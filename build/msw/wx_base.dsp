@@ -456,6 +456,10 @@ SOURCE=..\..\src\common\appbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\archive.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\clntdata.cpp
 # End Source File
 # Begin Source File
@@ -646,11 +650,6 @@ SOURCE=..\..\src\common\tokenzr.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\txtstrm.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\common\unzip.c
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 

@@ -11,7 +11,12 @@
 
 \section{\class{wxMediaCtrl}}\label{wxmediactrl}
 
-Plays movies - Currently Windows and Mac only.
+wxMediaCtrl is a class that allows a way to convieniently display types of media,
+such as videos, audio files, natively through native codecs.
+
+On Windows wxMediaCtrl uses DirectShow, and on Macintosh wxMediaCtrl uses QuickTime.
+
+wxMediaCtrl is not currently available on unix systems. 
 
 \wxheading{Derived from}
 
@@ -26,12 +31,15 @@ Plays movies - Currently Windows and Mac only.
 
 \membersection{wxMediaCtrl::wxMediaCtrl}\label{wxmediactrlwxmediactrl}
 
-\func{}{wxMediaCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{long }{driver = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
-
-
 \func{}{wxMediaCtrl}{\void}
 
-Contructors
+Default constructor - you \tt{must} call Create before calling any other methods
+of wxMediaCtrl.
+
+\func{}{wxMediaCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{long }{driver = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Constructor that calls Create.  You may prefer to call Create directly to check to see if wxMediaCtrl is available
+on the system.
 
 \docparam{parent}{parent of this control.  Must not be NULL.}
 \docparam{id}{id to use for events}
@@ -47,15 +55,14 @@ Contructors
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{long }{driver = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
 
-Creates this control.  Returns \tt{false} if it can't load the movie located at \tt{fileName}
-
+Creates this control.  Returns \tt{false} if it can't load the movie located at \tt{fileName} or it cannot load
+one of its native backends.
 
 \docparam{parent}{parent of this control.  Must not be NULL.}
 \docparam{id}{id to use for events}
 \docparam{fileName}{If not empty, loads this file and starts playing it immediately.}
 \docparam{pos}{Position to put control at.}
 \docparam{size}{Size to put the control at and to stretch movie to.}
-\docparam{driver}{Reserved for future use.}
 \docparam{style}{Optional styles.}
 \docparam{driver}{Reserved for future use.}
 \docparam{name}{Window name.}
@@ -65,14 +72,14 @@ Creates this control.  Returns \tt{false} if it can't load the movie located at 
 
 \func{long}{GetDuration}{\void}
 
-Obtains the length - the total amount of time the movie has
+Obtains the length - the total amount of time the movie has in milliseconds.
 
 
 \membersection{wxMediaCtrl::GetPosition}\label{wxmediactrlgetposition}
 
 \func{long}{GetPosition}{\void}
 
-Obtains the current position in time within the movie.
+Obtains the current position in time within the movie in milliseconds.
 
 
 \membersection{wxMediaCtrl::GetState}\label{wxmediactrlgetstate}
@@ -93,10 +100,7 @@ Obtains the state the playback of the movie is in -
 
 \func{bool}{Load}{\param{const wxString\& }{fileName}}
 
-Loads the file that \tt{fileName} refers to.
-
-Unlike Create, you must manually call Play() to start playing the file.
-
+Loads the file that \tt{fileName} refers to.  Returns false if loading fails.
 
 \membersection{wxMediaCtrl::Pause}\label{wxmediactrlpause}
 
@@ -123,4 +127,4 @@ Seeks to a position within the movie.
 
 \func{bool}{Stop}{\void}
 
-Stops the movie and rewinds the movie to the start.
+Stops the media.
