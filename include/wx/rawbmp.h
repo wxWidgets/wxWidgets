@@ -289,6 +289,7 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
     template <class dummyPixelFormat>
     class WXDLLEXPORT wxPixelDataIn : public wxPixelDataBase
     {
+    public:
         // the type of the class we're working with
         typedef wxImage ImageType;
 
