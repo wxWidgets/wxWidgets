@@ -114,17 +114,17 @@ private:
     public:
         RegTreeCtrl  *m_pTree;     // must be !NULL
         TreeNode     *m_pParent;    // NULL only for the root node
-        long          m_id;         // the id of the tree control item
+        wxTreeItemId  m_id;         // the id of the tree control item
         wxString      m_strName;    // name of the key/value
         TreeChildren  m_aChildren;  // array of subkeys/values
         bool          m_bKey;       // key or value?
         wxRegKey     *m_pKey;       // only may be !NULL if m_bKey == true
 
         // trivial accessors
-        long      Id()     const { return m_id;              }
-        bool      IsRoot() const { return m_pParent == NULL; }
-        bool      IsKey()  const { return m_bKey;            }
-        TreeNode *Parent() const { return m_pParent;         }
+        wxTreeItemId  Id()     const { return m_id;              }
+        bool          IsRoot() const { return m_pParent == NULL; }
+        bool          IsKey()  const { return m_bKey;            }
+        TreeNode     *Parent() const { return m_pParent;         }
 
         // notifications
         bool OnExpand();
@@ -332,7 +332,7 @@ bool RegApp::OnInit()
 // ----------------------------------------------------------------------------
 
 RegFrame::RegFrame(wxFrame *parent, wxChar *title, int x, int y, int w, int h)
-        : wxFrame(parent, -1, title, wxPoint(x, y), wxSize(w, h))
+        : wxFrame(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // this reduces flicker effects
     SetBackgroundColour(wxColour(255, 255, 255));
@@ -617,7 +617,7 @@ void RegTreeCtrl::OnIdle(wxIdleEvent& WXUNUSED(event))
 void RegTreeCtrl::OnRightClick(wxMouseEvent& event)
 {
     int iFlags;
-    long lId = HitTest(wxPoint(event.GetX(), event.GetY()), iFlags);
+    wxTreeItemId lId = HitTest(wxPoint(event.GetX(), event.GetY()), iFlags);
     if ( iFlags & wxTREE_HITTEST_ONITEMLABEL )
     {
         // select the item first
@@ -636,7 +636,7 @@ void RegTreeCtrl::OnDeleteItem(wxTreeEvent& WXUNUSED(event))
 // test the key creation functions
 void RegTreeCtrl::OnMenuTest()
 {
-    long lId = GetSelection();
+    wxTreeItemId lId = GetSelection();
     TreeNode *pNode = (TreeNode *)GetItemData(lId);
 
     wxCHECK_RET( pNode != NULL, wxT("tree item without data?") );
@@ -1082,11 +1082,8 @@ void RegTreeCtrl::TreeNode::DestroyChildren()
     size_t nCount = m_aChildren.GetCount();
     for ( size_t n = 0; n < nCount; n++ )
     {
-        long lId = m_aChildren[n]->Id();
-        // no, wxTreeCtrl will do it
-        //delete m_aChildren[n];
-        wxTreeItemId theId(lId); // Temp variable seems necessary for BC++
-        m_pTree->Delete(theId);
+        wxTreeItemId lId = m_aChildren[n]->Id();
+        m_pTree->Delete(lId);
     }
 
     m_aChildren.Empty();
@@ -1177,17 +1174,17 @@ void RegTreeCtrl::GoTo(const wxString& location)
 
 void RegTreeCtrl::DeleteSelected()
 {
-    long lCurrent = GetSelection(),
-        lParent  = GetItemParent(lCurrent);
+    wxTreeItemId lCurrent = GetSelection(),
+                 lParent  = GetItemParent(lCurrent);
 
-    if ( lParent == 0 )
+    if ( lParent == GetRootItem() )
     {
         wxLogError(wxT("Can't delete root key."));
         return;
     }
 
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent),
-        *pParent  = (TreeNode *)GetItemData(lParent);
+             *pParent  = (TreeNode *)GetItemData(lParent);
 
     wxCHECK_RET(pCurrent && pParent, wxT("either node or parent without data?"));
 
@@ -1214,7 +1211,7 @@ void RegTreeCtrl::DeleteSelected()
 
 void RegTreeCtrl::CreateNewKey(const wxString& strName)
 {
-    long lCurrent = GetSelection();
+    wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
     wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
@@ -1234,7 +1231,7 @@ void RegTreeCtrl::CreateNewKey(const wxString& strName)
 
 void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
 {
-    long lCurrent = GetSelection();
+    wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
     wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
@@ -1253,7 +1250,7 @@ void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
 
 void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
 {
-    long lCurrent = GetSelection();
+    wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
     wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
@@ -1272,7 +1269,7 @@ void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
 
 void RegTreeCtrl::ShowProperties()
 {
-    long lCurrent = GetSelection();
+    wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
     if ( !pCurrent || pCurrent->IsRoot() )
@@ -1315,7 +1312,7 @@ void RegTreeCtrl::ShowProperties()
 
 bool RegTreeCtrl::IsKeySelected() const
 {
-    long lCurrent = GetSelection();
+    wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *) GetItemData(lCurrent);
 
     wxCHECK( pCurrent != NULL, false );
@@ -1325,7 +1322,7 @@ bool RegTreeCtrl::IsKeySelected() const
 
 void RegTreeCtrl::DoRefresh()
 {
-    long lId = GetSelection();
+    wxTreeItemId lId = GetSelection();
     if ( !lId )
         return;
 
