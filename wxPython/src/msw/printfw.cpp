@@ -3051,29 +3051,307 @@ static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_GetFromPage(_swigobj)  (_swigobj->GetFromPage())
+static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
+    int  _result;
     wxPrintDialogData * _arg0;
-    bool  _arg1;
     PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
+    char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetFromPage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableHelp. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetFromPage. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
-    _arg1 = (bool ) tempbool1;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnableHelp(_arg0,_arg1);
+    _result = (int )wxPrintDialogData_GetFromPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetToPage(_swigobj)  (_swigobj->GetToPage())
+static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetToPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetToPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetToPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
+static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMinPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMinPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetMinPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
+static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMaxPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMaxPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetMaxPage(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
+static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetNoCopies",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetNoCopies. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPrintDialogData_GetNoCopies(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
+static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetAllPages",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetAllPages. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetAllPages(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetSelection(_swigobj)  (_swigobj->GetSelection())
+static PyObject *_wrap_wxPrintDialogData_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetSelection(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
+static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetCollate",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetCollate. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetCollate(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
+static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintToFile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintToFile. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetPrintToFile(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetSetupDialog(_swigobj)  (_swigobj->GetSetupDialog())
+static PyObject *_wrap_wxPrintDialogData_GetSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetSetupDialog",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetSetupDialog. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetSetupDialog(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetFromPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetFromPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetFromPage(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3082,8 +3360,124 @@ static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetToPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetToPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetToPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMinPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMinPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetMinPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMaxPage",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMaxPage. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetMaxPage(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","v", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetNoCopies. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetNoCopies(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetAllPages(_swigobj,_swigarg0)  (_swigobj->SetAllPages(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPrintDialogData * _arg0;
     bool  _arg1;
@@ -3092,19 +3486,143 @@ static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObj
     char *_kwnames[] = { "self","flag", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePageNumbers",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetAllPages",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePageNumbers. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetAllPages. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
     _arg1 = (bool ) tempbool1;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_EnablePageNumbers(_arg0,_arg1);
+    wxPrintDialogData_SetAllPages(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetSelection(_swigobj,_swigarg0)  (_swigobj->SetSelection(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSelection",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSelection. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetSelection(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetCollate(_swigobj,_swigarg0)  (_swigobj->SetCollate(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetCollate",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetCollate. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetCollate(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetPrintToFile(_swigobj,_swigarg0)  (_swigobj->SetPrintToFile(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetPrintToFile",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintToFile. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetPrintToFile(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_SetSetupDialog(_swigobj,_swigarg0)  (_swigobj->SetSetupDialog(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSetupDialog",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSetupDialog. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_SetSetupDialog(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3175,8 +3693,70 @@ static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObjec
     return _resultobj;
 }
 
-#define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
-static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnablePageNumbers",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePageNumbers. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnablePageNumbers(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
+static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrintDialogData * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_EnableHelp",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableHelp. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPrintDialogData_EnableHelp(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnablePrintToFile(_swigobj)  (_swigobj->GetEnablePrintToFile())
+static PyObject *_wrap_wxPrintDialogData_GetEnablePrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
@@ -3184,18 +3764,18 @@ static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *a
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetAllPages",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnablePrintToFile",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetAllPages. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnablePrintToFile. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetAllPages(_arg0);
+    _result = (bool )wxPrintDialogData_GetEnablePrintToFile(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3203,8 +3783,8 @@ static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-#define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
-static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_GetEnableSelection(_swigobj)  (_swigobj->GetEnableSelection())
+static PyObject *_wrap_wxPrintDialogData_GetEnableSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
@@ -3212,18 +3792,18 @@ static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *ar
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetCollate",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnableSelection",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetCollate. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnableSelection. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetCollate(_arg0);
+    _result = (bool )wxPrintDialogData_GetEnableSelection(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3231,120 +3811,8 @@ static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxPrintDialogData_GetFromPage(_swigobj)  (_swigobj->GetFromPage())
-static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetFromPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetFromPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetFromPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMaxPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetMaxPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetMinPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetMinPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
-static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetNoCopies",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetNoCopies(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetSelection(_swigobj)  (_swigobj->GetSelection())
-static PyObject *_wrap_wxPrintDialogData_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPrintDialogData_GetEnablePageNumbers(_swigobj)  (_swigobj->GetEnablePageNumbers())
+static PyObject *_wrap_wxPrintDialogData_GetEnablePageNumbers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxPrintDialogData * _arg0;
@@ -3352,18 +3820,74 @@ static PyObject *_wrap_wxPrintDialogData_GetSelection(PyObject *self, PyObject *
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetSelection",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnablePageNumbers",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetSelection. Expected _wxPrintDialogData_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnablePageNumbers. Expected _wxPrintDialogData_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetSelection(_arg0);
+    _result = (bool )wxPrintDialogData_GetEnablePageNumbers(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_GetEnableHelp(_swigobj)  (_swigobj->GetEnableHelp())
+static PyObject *_wrap_wxPrintDialogData_GetEnableHelp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetEnableHelp",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetEnableHelp. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_GetEnableHelp(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPrintDialogData_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxPrintDialogData_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrintDialogData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_Ok. Expected _wxPrintDialogData_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrintDialogData_Ok(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3408,268 +3932,6 @@ static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *
     return _resultobj;
 }
 
-#define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
-static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetPrintToFile",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_GetPrintToFile(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetToPage(_swigobj)  (_swigobj->GetToPage())
-static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_GetToPage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetToPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxPrintDialogData_GetToPage(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_Ok(_swigobj)  (_swigobj->Ok())
-static PyObject *_wrap_wxPrintDialogData_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrintDialogData_Ok",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_Ok. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPrintDialogData_Ok(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetCollate(_swigobj,_swigarg0)  (_swigobj->SetCollate(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetCollate",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetCollate. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetCollate(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetAllPages(_swigobj,_swigarg0)  (_swigobj->SetAllPages(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetAllPages(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetAllPages",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetAllPages. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetAllPages(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetFromPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetFromPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetFromPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMaxPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetMaxPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetMinPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetMinPage(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","n", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetNoCopies",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetNoCopies(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPrintDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
 static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3698,128 +3960,6 @@ static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxPrintDialogData_SetPrintData(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetPrintToFile(_swigobj,_swigarg0)  (_swigobj->SetPrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetPrintToFile",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetPrintToFile(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetSelection(_swigobj,_swigarg0)  (_swigobj->SetSelection(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSelection",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSelection. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetSelection(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetSetupDialog(_swigobj,_swigarg0)  (_swigobj->SetSetupDialog(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    PyObject * _argo0 = 0;
-    int tempbool1;
-    char *_kwnames[] = { "self","flag", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetSetupDialog",_kwnames,&_argo0,&tempbool1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSetupDialog. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetSetupDialog(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPrintDialogData_SetToPage",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetToPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPrintDialogData_SetToPage(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -7499,32 +7639,37 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPrintDialog_GetPrintDC", (PyCFunction) _wrap_wxPrintDialog_GetPrintDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialog_GetPrintDialogData", (PyCFunction) _wrap_wxPrintDialog_GetPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintDialog", (PyCFunction) _wrap_new_wxPrintDialog, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetToPage", (PyCFunction) _wrap_wxPrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetSelection", (PyCFunction) _wrap_wxPrintDialogData_SetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_SetPrintData", (PyCFunction) _wrap_wxPrintDialogData_SetPrintData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetMinPage", (PyCFunction) _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetFromPage", (PyCFunction) _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetAllPages", (PyCFunction) _wrap_wxPrintDialogData_SetAllPages, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_SetCollate", (PyCFunction) _wrap_wxPrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_Ok", (PyCFunction) _wrap_wxPrintDialogData_Ok, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetToPage", (PyCFunction) _wrap_wxPrintDialogData_GetToPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_GetPrintData", (PyCFunction) _wrap_wxPrintDialogData_GetPrintData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetSelection", (PyCFunction) _wrap_wxPrintDialogData_GetSelection, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetMinPage", (PyCFunction) _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetFromPage", (PyCFunction) _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetCollate", (PyCFunction) _wrap_wxPrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_GetAllPages", (PyCFunction) _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_Ok", (PyCFunction) _wrap_wxPrintDialogData_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnableHelp", (PyCFunction) _wrap_wxPrintDialogData_GetEnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_GetEnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnableSelection", (PyCFunction) _wrap_wxPrintDialogData_GetEnableSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetEnablePrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetEnablePrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnableHelp", (PyCFunction) _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_EnableSelection", (PyCFunction) _wrap_wxPrintDialogData_EnableSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintDialogData_EnablePrintToFile", (PyCFunction) _wrap_wxPrintDialogData_EnablePrintToFile, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_EnablePageNumbers", (PyCFunction) _wrap_wxPrintDialogData_EnablePageNumbers, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPrintDialogData_EnableHelp", (PyCFunction) _wrap_wxPrintDialogData_EnableHelp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_SetSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_SetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetCollate", (PyCFunction) _wrap_wxPrintDialogData_SetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetSelection", (PyCFunction) _wrap_wxPrintDialogData_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetAllPages", (PyCFunction) _wrap_wxPrintDialogData_SetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_SetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_SetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetMinPage", (PyCFunction) _wrap_wxPrintDialogData_SetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetToPage", (PyCFunction) _wrap_wxPrintDialogData_SetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_SetFromPage", (PyCFunction) _wrap_wxPrintDialogData_SetFromPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetSetupDialog", (PyCFunction) _wrap_wxPrintDialogData_GetSetupDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetPrintToFile", (PyCFunction) _wrap_wxPrintDialogData_GetPrintToFile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetCollate", (PyCFunction) _wrap_wxPrintDialogData_GetCollate, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetSelection", (PyCFunction) _wrap_wxPrintDialogData_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetAllPages", (PyCFunction) _wrap_wxPrintDialogData_GetAllPages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetNoCopies", (PyCFunction) _wrap_wxPrintDialogData_GetNoCopies, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMaxPage", (PyCFunction) _wrap_wxPrintDialogData_GetMaxPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetMinPage", (PyCFunction) _wrap_wxPrintDialogData_GetMinPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetToPage", (PyCFunction) _wrap_wxPrintDialogData_GetToPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrintDialogData_GetFromPage", (PyCFunction) _wrap_wxPrintDialogData_GetFromPage, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPrintDialogData", (PyCFunction) _wrap_delete_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintDialogData", (PyCFunction) _wrap_new_wxPrintDialogData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPageSetupDialog_ShowModal", (PyCFunction) _wrap_wxPageSetupDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
