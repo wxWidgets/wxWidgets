@@ -690,18 +690,15 @@ int WXDLLEXPORT wxEntryStart( int argc, char *argv[] )
     return wxApp::Initialize();
 }
 
-
 int WXDLLEXPORT wxEntryInitGui()
 {
     return wxTheApp->OnInitGui();
 }
 
-
 void WXDLLEXPORT wxEntryCleanup()
 {
     wxApp::CleanUp();
 }
-
 
 int wxEntry( int argc, char *argv[] , bool enterLoop )
 {
@@ -734,7 +731,22 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
 
     wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
 
-#ifndef __DARWIN__
+#ifdef __DARWIN__
+    // Mac OS X passes a process serial number command line argument when
+    // the application is launched from the Finder. This argument must be
+    // removed from the command line arguments before being handled by the
+    // application (otherwise applications would need to handle it)
+
+    if (argc > 1) {
+        char buf[6] = "";
+        strncpy(buf, argv[1], 5);
+        
+        if (strcmp(buf, "-psn_") == 0) {
+            // assume the argument is always the only one and remove it
+            --argc;
+        }
+    }    
+#else
     argc = 0 ; // currently we don't support files as parameters
 #endif
     // we could try to get the open apple events here to adjust argc and argv better
@@ -744,7 +756,6 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
 
     // GUI-specific initialization, such as creating an app context.
     wxEntryInitGui();
-
 
     // Here frames insert themselves automatically
     // into wxTopLevelWindows by getting created
