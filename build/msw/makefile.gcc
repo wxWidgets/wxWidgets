@@ -839,6 +839,12 @@ endif
 ifeq ($(BUILD),release)
 __OPTIMIZEFLAG = -O2
 endif
+ifeq ($(WXUNIV),0)
+__SETUP_H_DIR_FILENAMES = msw
+endif
+ifeq ($(WXUNIV),1)
+__SETUP_H_DIR_FILENAMES = univ
+endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 endif
@@ -9301,7 +9307,7 @@ endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a: $(ADVLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.a: $(ADVLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(ADVLIB_OBJECTS)
 	ranlib $@
@@ -9318,7 +9324,7 @@ endif
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
-$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a: $(BASELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a: $(BASELIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(BASELIB_OBJECTS)
 	ranlib $@
@@ -9376,7 +9382,7 @@ endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a: $(CORELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.a: $(CORELIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(CORELIB_OBJECTS)
 	ranlib $@
@@ -9399,7 +9405,7 @@ ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_ODBC),1)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid.a: $(DBGRIDLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid.a: $(DBGRIDLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(DBGRIDLIB_OBJECTS)
 	ranlib $@
@@ -9420,7 +9426,7 @@ endif
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_OPENGL),1)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a: $(GLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.a: $(GLLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(GLLIB_OBJECTS)
 	ranlib $@
@@ -9440,7 +9446,7 @@ endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_HTML),1)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a: $(HTMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.a: $(HTMLLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(HTMLLIB_OBJECTS)
 	ranlib $@
@@ -9454,6 +9460,9 @@ $(LIBDIRNAME):
 $(LIBDIRNAME)\wx: $(LIBDIRNAME)
 	if not exist $(LIBDIRNAME)\wx mkdir $(LIBDIRNAME)\wx
 
+..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h: 
+	if not exist ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h copy ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h
+
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gcc$(VENDORTAG).dll: $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
@@ -9463,15 +9472,12 @@ endif
 
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),0)
-$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a: $(MONOLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).a: $(MONOLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(MONOLIB_OBJECTS)
 	ranlib $@
 endif
 endif
-
-..\..\include\wx\msw\setup.h: 
-	if not exist ..\..\include\wx\msw\setup.h copy ..\..\include\wx\msw\setup0.h ..\..\include\wx\msw\setup.h
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -9482,7 +9488,7 @@ endif
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
-$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.a: $(NETLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.a: $(NETLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(NETLIB_OBJECTS)
 	ranlib $@
@@ -9504,7 +9510,7 @@ ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_ODBC),1)
-$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.a: $(ODBCLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.a: $(ODBCLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(ODBCLIB_OBJECTS)
 	ranlib $@
@@ -9517,9 +9523,9 @@ samples:
 	$(MAKE) -C ..\..\samples -f makefile.gcc $(MAKEARGS) all
 
 $(LIBDIRNAME)\wx\setup.h: 
-	if not exist $(LIBDIRNAME)\wx\setup.h copy ..\..\include\wx\msw\setup.h $(LIBDIRNAME)\wx\setup.h
+	if not exist $(LIBDIRNAME)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h $(LIBDIRNAME)\wx\setup.h
 
-setup_h: $(LIBDIRNAME)\wx ..\..\include\wx\msw\setup.h $(LIBDIRNAME)\wx\setup.h
+setup_h: $(LIBDIRNAME)\wx ..\..\include\wx\$(__SETUP_H_DIR_FILENAMES)\setup.h $(LIBDIRNAME)\wx\setup.h
 
 $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a: $(WXEXPAT_OBJECTS)
 	if exist $@ del $@
@@ -9566,7 +9572,7 @@ endif
 
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),0)
-$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a: $(XMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXDEBUGFLAG).a
+$(LIBDIRNAME)\libwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml.a: $(XMLLIB_OBJECTS)
 	if exist $@ del $@
 	ar rcu $@ $(XMLLIB_OBJECTS)
 	ranlib $@
