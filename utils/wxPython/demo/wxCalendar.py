@@ -1,18 +1,16 @@
-#! /usr/local/bin/python
 #----------------------------------------------------------------------------
-# Name:         CalendPanel.py
-# Purpose:      Calendar control display testing on panel
+# Name:         wxCalendar.py
+# Purpose:      Calendar control display testing on panel for wxPython demo
 #
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
 # Created:
-# Version       0.5 1999/11/03
+# Version       0.7 200/03/30
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
 from wxPython.wx           import *
-from wxPython.lib.calendar import wxCalendar, Month
-
+from wxPython.lib.calendar import wxCalendar, Month, PrtCalDraw
 
 import os
 dir_path = os.getcwd()
@@ -45,10 +43,11 @@ def GetMonthList():
     return monthlist
 
 class TestPanel(wxPanel):
-    def __init__(self, parent, log):
+    def __init__(self, parent, log, frame):
         wxPanel.__init__(self, parent, -1)
 
         self.log = log
+        self.frame = frame
 
         self.calend = wxCalendar(self, -1, wxPoint(100, 50), wxSize(200, 180))
 
@@ -69,7 +68,7 @@ class TestPanel(wxPanel):
 
 # set attributes of calendar
 
-        self.calend.HideTitle()
+        self.calend.hide_title = TRUE
         self.calend.HideGrid()
 
 # display routine
@@ -98,7 +97,7 @@ class TestPanel(wxPanel):
 
 # button for calendar dialog test
 
-        wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50)).SetBackgroundColour(wxNamedColour('Red'))
+        wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
 
         bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, 60, bmp, wxPoint(380, 80))#, wxSize(30, 30))
@@ -106,11 +105,17 @@ class TestPanel(wxPanel):
 
 # button for calendar window test
 
-        wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150)).SetBackgroundColour(wxNamedColour('Blue'))
+        wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
 
         bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
         self.but = wxBitmapButton(self, 160, bmp, wxPoint(380, 180))#, wxSize(30, 30))
         EVT_BUTTON(self, 160, self.TestFrame)
+
+        wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
+
+        bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
+        self.but = wxBitmapButton(self, 170, bmp, wxPoint(380, 280))#, wxSize(30, 30))
+        EVT_BUTTON(self, 170, self.OnPreview)
 
 # calendar dialog
 
@@ -126,6 +131,15 @@ class TestPanel(wxPanel):
         frame = CalendFrame(self, -1, "Test Calendar", self.log)
         frame.Show(true)
         return true
+
+# calendar print preview
+
+    def OnPreview(self, event):
+        month = self.calend.GetMonth()
+        year = self.calend.GetYear()
+
+        prt = PrintCalend(self.frame, month, year)
+        prt.Preview()
 
 # month and year control events
 
@@ -219,7 +233,7 @@ class CalenDlg(wxDialog):
 # alternate spin button to control the month
 
         h = self.date.GetSize().height
-        self.m_spin = wxSpinButton(self, 120, wxPoint(130, 20), wxSize(h*2, h), wxSP_VERTICAL)
+        self.m_spin = wxSpinButton(self, 120, wxPoint(120, 20), wxSize(h*2, h), wxSP_VERTICAL)
         self.m_spin.SetRange(1, 12)
         self.m_spin.SetValue(start_month)
 
@@ -260,9 +274,10 @@ class CalenDlg(wxDialog):
 
     def OnMonthSpin(self, event):
         month = event.GetPosition()
-        self.date.SetValue(Month[month])
-        self.calend.SetMonth(month)
-        self.calend.Refresh()
+        if month >= 0 and month <= 12:
+            self.date.SetValue(Month[month])
+            self.calend.SetMonth(month)
+            self.calend.Refresh()
 
     def OnYrSpin(self, event):
         year = event.GetPosition()
@@ -392,11 +407,257 @@ class CalendFrame(wxFrame):
 
         tb.Realize()
 
+#---------------------------------------------------------------------------
+
+# example class for printing/previewing calendars
+
+class PrintCalend:
+    def __init__(self, parent, month, year):
+        self.frame = parent
+        self.month = month
+        self.year = year
+
+        self.SetParms()
+        self.SetCal()
+        self.printData = wxPrintData()
+
+    def SetCal(self):
+        self.grid_color = 'BLUE'
+        self.back_color = 'WHITE'
+        self.sel_color = 'RED'
+        self.high_color = 'LIGHT BLUE'
+        self.font = wxSWISS
+        self.bold = wxNORMAL
+
+        self.sel_key = None      #  last used by
+        self.sel_lst = []        # highlighted selected days
+
+        self.size = None
+        self.hide_title = FALSE
+        self.hide_grid = FALSE
+        self.set_day = None
+
+    def SetParms(self):
+        self.ymax = 1
+        self.xmax = 1
+        self.page = 1
+        self.total_pg = 1
+
+        self.preview = None
+        self.scale = 1.0
+
+        self.pagew = 8.5
+        self.pageh = 11.0
+
+        self.txt_marg = 0.1
+        self.lf_marg = 0
+        self.top_marg = 0
+
+        self.page = 0
+
+    def SetDates(self, month, year):
+        self.month = month
+        self.year = year
+
+    def SetStyleDef(self, desc):
+        self.style = desc
+
+    def SetCopies(self, copies):        # number of copies of label
+        self.copies = copies
+
+    def SetStart(self, start):          # start position of label
+        self.start = start
+
+    def Preview(self):
+        printout = SetPrintout(self)
+        printout2 = SetPrintout(self)
+        self.preview = wxPrintPreview(printout, printout2, self.printData)
+        if not self.preview.Ok():
+            wxMessageBox("There was a problem printing!", "Printing", wxOK)
+            return
+
+        self.preview.SetZoom(60)        # initial zoom value
+
+        frame = wxPreviewFrame(self.preview, self.frame, "Print preview")
+
+        frame.Initialize()
+        frame.SetPosition(self.frame.GetPosition())
+        frame.SetSize(self.frame.GetSize())
+        frame.Show(true)
+
+    def Print(self):
+        pdd = wxPrintDialogData()
+        pdd.SetPrintData(self.printData)
+        printer = wxPrinter(pdd)
+        printout = SetPrintout(self)
+        frame = wxFrame(NULL, -1, "Test")
+        if not printer.Print(frame, printout):
+            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK)
+        else:
+            self.printData = printer.GetPrintDialogData().GetPrintData()
+        printout.Destroy()
+
+    def DoDrawing(self, DC):
+        size = DC.GetSizeTuple()
+        DC.BeginDrawing()
+
+        cal = PrtCalDraw(self)
+
+        if self.preview is None:
+            cal.SetPSize(size[0]/self.pagew, size[1]/self.pageh)
+            cal.SetPreview(FALSE)
+
+        else:
+            if self.preview == 1:
+                cal.SetPSize(size[0]/self.pagew, size[1]/self.pageh)
+            else:
+                cal.SetPSize(self.pwidth, self.pheight)
+
+            cal.SetPreview(self.preview)
+
+        cal.hide_title = self.hide_title        # set the calendar parameters
+        cal.hide_grid = self.hide_grid
+
+        cal.grid_color = self.grid_color
+        cal.high_color = self.high_color
+        cal.back_color = self.back_color
+        cal.outer_border = FALSE
+        cal.font = self.font
+        cal.bold = self.bold
+
+        cal_size = wxSize(3.0, 2.0)
+        cal.SetSize(cal_size)
+
+        year, month = self.year, self.month
+        x = 1.0
+        for i in range(2):
+            y = 0.5
+            for j in range(3):
+                cal.SetCal(year, month)       # current month
+                cal.SetPos(x, y)
+                cal.DrawCal(DC, self.sel_lst)
+
+                year, month = self.IncMonth(year, month)
+                y = y + 2.5
+            x = x + 4.0     # next colum
+
+        DC.EndDrawing()
+
+        self.ymax = DC.MaxY()
+        self.xmax = DC.MaxX()
+
+    def IncMonth(self, year, month):     # next month
+        month = month + 1
+        if month > 12:
+            month = 1
+            year = year + 1
+
+        return year, month
+
+    def OnCloseWindow(self, event):
+        self.Destroy()
+
+    def GetTotalPages(self):
+        self.pg_cnt = 1
+        return self.pg_cnt
+
+    def SetPage(self, page):
+        self.page = page
+
+    def SetPageSize(self, width, height):
+        self.pwidth, self.pheight = width, height
+
+    def SetTotalSize(self, width, height):
+        self.ptwidth, self.ptheight = width, height
+
+    def SetPreview(self, preview, scale):
+        self.preview = preview
+        self.scale = scale
+
+    def SetTotalSize(self, width, height):
+        self.ptwidth = width
+        self.ptheight = height
+
 def SetToolPath(self, tb, id, bmp, title):
     global dir_path
     tb.AddSimpleTool(id, wxBitmap(os.path.join(dir_path, bmp), wxBITMAP_TYPE_BMP),
                      title, title)
 
+class SetPrintout(wxPrintout):
+    def __init__(self, canvas):
+        wxPrintout.__init__(self)
+        self.canvas = canvas
+        self.end_pg = 1
+
+    def OnBeginDocument(self, start, end):
+        return self.base_OnBeginDocument(start, end)
+
+    def OnEndDocument(self):
+        self.base_OnEndDocument()
+
+    def HasPage(self, page):
+        if page <= self.end_pg:
+            return true
+        else:
+            return false
+
+    def GetPageInfo(self):
+        self.end_pg = self.canvas.GetTotalPages()
+        str_pg = 1
+        try:
+            end_pg = self.end_pg
+        except:
+            end_pg = 1
+        return (str_pg, end_pg, str_pg, end_pg)
+
+    def OnPreparePrinting(self):
+        self.base_OnPreparePrinting()
+
+    def OnBeginPrinting(self):
+        dc = self.GetDC()
+
+        self.preview = self.IsPreview()
+        if (self.preview):
+            self.pixelsPerInch = self.GetPPIScreen()
+        else:
+            self.pixelsPerInch = self.GetPPIPrinter()
+
+        (w, h) = dc.GetSizeTuple()
+        scaleX = float(w) / 1000
+        scaleY = float(h) / 1000
+        self.printUserScale = min(scaleX, scaleY)
+
+        self.base_OnBeginPrinting()
+
+    def GetSize(self):
+        self.psizew, self.psizeh = self.GetPPIPrinter()
+        return self.psizew, self.psizeh
+
+    def GetTotalSize(self):
+        self.ptsizew, self.ptsizeh = self.GetPageSizePixels()
+        return self.ptsizew, self.ptsizeh
+
+    def OnPrintPage(self, page):
+        dc = self.GetDC()
+        (w, h) = dc.GetSizeTuple()
+        scaleX = float(w) / 1000
+        scaleY = float(h) / 1000
+        self.printUserScale = min(scaleX, scaleY)
+        dc.SetUserScale(self.printUserScale, self.printUserScale)
+
+        self.preview = self.IsPreview()
+
+        self.canvas.SetPreview(self.preview, self.printUserScale)
+        self.canvas.SetPage(page)
+
+        self.ptsizew, self.ptsizeh = self.GetPageSizePixels()
+        self.canvas.SetTotalSize(self.ptsizew, self.ptsizeh)
+
+        self.psizew, self.psizeh = self.GetPPIPrinter()
+        self.canvas.SetPageSize(self.psizew, self.psizeh)
+
+        self.canvas.DoDrawing(dc)
+        return true
 
 class MyApp(wxApp):
     def OnInit(self):
@@ -426,14 +687,14 @@ if __name__ == '__main__':
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
+    win = TestPanel(nb, log, frame)
     return win
 
 #---------------------------------------------------------------------------
 
 
 overview = """\
-This control provides a calendar control class for displaying and selecting dates.
+This control provides a calendar control class for displaying and selecting dates.  In addition, the class is extended and can now be used for printing/previewing.
 
 See example for various methods used to set display month, year, and highlighted dates (different colour).
 

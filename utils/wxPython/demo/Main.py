@@ -63,7 +63,8 @@ _treeList = [
 
 class wxPythonDemo(wxFrame):
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent, -1, title, size = (725, 550))
+        wxFrame.__init__(self, parent, -1, title, size = (725, 550),
+                         style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
 
         self.cwd = os.getcwd()
 

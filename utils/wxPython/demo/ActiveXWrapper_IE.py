@@ -1,85 +1,73 @@
 """
-ActiveXControl sample usage.
-
-Based on original code by Willy Heineman, wheineman@uconect.net, 14 February 2000
-
-ActiveXControl provides a simplified wrapper for creating activeX
-controls within wxPython GUIs.
 """
 
 from wxPython.wx import *
-from wxPython.lib.activexwrapper import ActiveXWrapper
+from wxPython.lib.activexwrapper import MakeActiveXClass
 
-import pythoncom
-import pywin.mfc.activex
 import win32com.client.gencache
-import win32con
-import win32ui
 
-browserModule = win32com.client.gencache.EnsureModule("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1)
-if browserModule is None:
-    win32ui.MessageBox("IE4 or greater does not appear to be installed.",
-                       'ActiveX Demo',
-                       win32con.MB_OK | win32con.MB_ICONSTOP)
-    raise ImportError
-
-
-#----------------------------------------------------------------------
-# NOTE:
-# Your ActiveX control _must_ be an instance of pywin.mfc.activex.Control,
-# as we use the CreateControl method to bind the GUI systems.
-
-class WebBrowserControl(pywin.mfc.activex.Control,
-                        browserModule.WebBrowser):
-
-    def __init__(self):
-        pywin.mfc.activex.Control.__init__(self)
-        browserModule.WebBrowser.__init__(self)
-
+try:
+    browserModule = win32com.client.gencache.EnsureModule("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1)
+except:
+    raise ImportError("IE4 or greater does not appear to be installed.")
 
 
 #----------------------------------------------------------------------
 
 class TestPanel(wxPanel):
     def __init__(self, parent, log):
-        wxPanel.__init__(self, parent, -1)
+        wxPanel.__init__(self, parent, -1)#, style=wxCLIP_CHILDREN)
         self.log = log
         self.current = "http://alldunn.com/"
 
         sizer = wxBoxSizer(wxVERTICAL)
         btnSizer = wxBoxSizer(wxHORIZONTAL)
 
-        # Build the wxPython wrapper window and put the Acrobat
-        # control in it
-        self.axw = ActiveXWrapper( self, -1, style=wxSUNKEN_BORDER, eraseBackground=0)
-        self.axw.SetControl( WebBrowserControl() )
-        sizer.Add(self.axw, 1, wxEXPAND)
+        # Make a new class that derives from the WebBrowser class in the
+        # COM module imported above.  This class also drives from wxWindow and
+        # implements the machinery needed to integrate the two things.
+        theClass = MakeActiveXClass(browserModule.WebBrowser,
+                                    eventObj = self)
 
-        self.axw.control.Navigate(self.current)
+        # Create an instance of that class
+        self.ie = theClass(self, -1, style=wxSUNKEN_BORDER)
 
-        btn = wxButton(self, wxNewId(), "Open Location")
+
+        btn = wxButton(self, wxNewId(), " Open ")
         EVT_BUTTON(self, btn.GetId(), self.OnOpenButton)
-        btnSizer.Add(btn, 1, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
 
-        btn = wxButton(self, wxNewId(), "<-- Back Page")
+        btn = wxButton(self, wxNewId(), " <-- ")
         EVT_BUTTON(self, btn.GetId(), self.OnPrevPageButton)
-        btnSizer.Add(btn, 1, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
 
-        btn = wxButton(self, wxNewId(), "Forward Page -->")
+        btn = wxButton(self, wxNewId(), " --> ")
         EVT_BUTTON(self, btn.GetId(), self.OnNextPageButton)
-        btnSizer.Add(btn, 1, wxEXPAND|wxALL, 5)
+        btnSizer.Add(btn, 0, wxEXPAND|wxALL, 5)
 
-        btnSizer.Add(50, -1, 2, wxEXPAND)
+        txt = wxStaticText(self, -1, "Location:")
+        btnSizer.Add(txt, 0, wxCENTER|wxALL, 5)
+
+        self.location = wxComboBox(self, wxNewId(), "", style=wxCB_DROPDOWN)
+        EVT_COMBOBOX(self, self.location.GetId(), self.OnLocationSelect)
+        btnSizer.Add(self.location, 1, wxEXPAND|wxALL, 5)
+
         sizer.Add(btnSizer, 0, wxEXPAND)
+        sizer.Add(self.ie, 1, wxEXPAND)
+
+        self.ie.Navigate(self.current)
+
 
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
 
 
     def __del__(self):
-        self.axw.Cleanup()
-        self.axw = None
+        self.ie.Cleanup()
+        self.ie = None
 
+    def OnLocationSelect(self, evt):
+        pass
 
     def OnOpenButton(self, event):
         dlg = wxTextEntryDialog(self, "Open Location",
@@ -88,16 +76,29 @@ class TestPanel(wxPanel):
         dlg.CentreOnParent()
         if dlg.ShowModal() == wxID_OK:
             self.current = dlg.GetValue()
-            self.axw.control.Navigate(self.current)
+            self.ie.Navigate(self.current)
         dlg.Destroy()
 
 
     def OnPrevPageButton(self, event):
-        self.axw.control.GoBack()
+        self.ie.GoBack()
 
 
     def OnNextPageButton(self, event):
-        self.axw.control.GoForward()
+        self.ie.GoForward()
+
+
+    # The following event handlers are called by the web browser COM
+    # control since  we passed self to MakeActiveXClass.  It will look
+    # here for matching attributes and call them if they exist.  See the
+    # module generated by makepy for details of method names, etc.
+    def OnBeforeNavigate2(self, pDisp, URL, *args):
+        self.log.write('OnBeforeNavigate2: %s\n' % URL)
+
+    def OnNavigateComplete2(self, pDisp, URL):
+        self.log.write('OnNavigateComplete2: %s\n' % URL)
+        self.current = URL
+        self.location.SetValue(URL)
 
 
 #----------------------------------------------------------------------
@@ -116,11 +117,13 @@ overview = __doc__
 if __name__ == '__main__':
     class TestFrame(wxFrame):
         def __init__(self):
-            wxFrame.__init__(self, None, -1, "ActiveX test -- Internet Explorer", size=(640, 480))
+            wxFrame.__init__(self, None, -1, "ActiveX test -- Internet Explorer",
+                             size=(640, 480),
+                             style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.tp = TestPanel(self, sys.stdout)
 
         def OnCloseWindow(self, event):
-            self.tp.axw.Cleanup()
+            self.tp.ie.Cleanup()
             self.Destroy()
 
 
