@@ -43,10 +43,13 @@ bool MyApp::OnInit(void)
     return TRUE;
 }
 
+
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(wxID_OK, MyDialog::OnOK)
     EVT_BUTTON(wxID_EXIT, MyDialog::OnExit)
 END_EVENT_TABLE()
+
+
 
 MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
     const wxPoint& pos, const wxSize& size, const long windowStyle):
@@ -77,7 +80,7 @@ void MyDialog::Init(void)
 
   wxStaticText* stat = new wxStaticText(this, -1, "Press OK to hide me, Exit to quit.",
     wxPoint(10, 20));
-  
+
   wxStaticText* stat2 = new wxStaticText(this, -1, "Double-click on the taskbar icon to show me again.",
     wxPoint(10, 40));
 
@@ -87,34 +90,65 @@ void MyDialog::Init(void)
   this->Centre(wxBOTH);
 }
 
-// Overridables
-void MyTaskBarIcon::OnMouseMove(void)
-{
-}
 
-void MyTaskBarIcon::OnLButtonDown(void)
-{
-}
+enum {
+    PU_RESTORE = 10001,
+    PU_EXIT,
+};
 
-void MyTaskBarIcon::OnLButtonUp(void)
-{
-}
 
-void MyTaskBarIcon::OnRButtonDown(void)
-{
-}
+BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
+    EVT_MENU(PU_RESTORE, MyTaskBarIcon::OnMenuRestore)
+    EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
+END_EVENT_TABLE()
 
-void MyTaskBarIcon::OnRButtonUp(void)
-{
-}
-
-void MyTaskBarIcon::OnLButtonDClick(void)
+void MyTaskBarIcon::OnMenuRestore(wxEvent& )
 {
     dialog->Show(TRUE);
 }
 
-void MyTaskBarIcon::OnRButtonDClick(void)
+void MyTaskBarIcon::OnMenuExit(wxEvent& )
+{
+    dialog->Close(TRUE);
+}
+
+
+// Overridables
+void MyTaskBarIcon::OnMouseMove(wxEvent&)
 {
 }
+
+void MyTaskBarIcon::OnLButtonDown(wxEvent&)
+{
+}
+
+void MyTaskBarIcon::OnLButtonUp(wxEvent&)
+{
+}
+
+void MyTaskBarIcon::OnRButtonDown(wxEvent&)
+{
+}
+
+void MyTaskBarIcon::OnRButtonUp(wxEvent&)
+{
+    wxMenu      menu;
+
+    menu.Append(PU_RESTORE, "&Restore TBTest");
+    menu.Append(PU_EXIT,    "E&xit");
+
+    PopupMenu(&menu);
+}
+
+void MyTaskBarIcon::OnLButtonDClick(wxEvent&)
+{
+    dialog->Show(TRUE);
+}
+
+void MyTaskBarIcon::OnRButtonDClick(wxEvent&)
+{
+}
+
+
 
 

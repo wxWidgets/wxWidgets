@@ -48,13 +48,13 @@ UINT   wxTaskBarIcon::sm_taskbarMsg = 0;
 
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxTaskBarIcon, wxEvtHandler)
-    EVT_TASKBAR_MOVE         (wxTaskBarIcon::OnMouseMove)
-    EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::OnLButtonDown)
-    EVT_TASKBAR_LEFT_UP      (wxTaskBarIcon::OnLButtonUp)
-    EVT_TASKBAR_RIGHT_DOWN   (wxTaskBarIcon::OnRButtonDown)
-    EVT_TASKBAR_RIGHT_UP     (wxTaskBarIcon::OnRButtonUp)
-    EVT_TASKBAR_LEFT_DCLICK  (wxTaskBarIcon::OnLButtonDClick)
-    EVT_TASKBAR_RIGHT_DCLICK (wxTaskBarIcon::OnRButtonDClick)
+    EVT_TASKBAR_MOVE         (wxTaskBarIcon::_OnMouseMove)
+    EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::_OnLButtonDown)
+    EVT_TASKBAR_LEFT_UP      (wxTaskBarIcon::_OnLButtonUp)
+    EVT_TASKBAR_RIGHT_DOWN   (wxTaskBarIcon::_OnRButtonDown)
+    EVT_TASKBAR_RIGHT_UP     (wxTaskBarIcon::_OnRButtonUp)
+    EVT_TASKBAR_LEFT_DCLICK  (wxTaskBarIcon::_OnLButtonDClick)
+    EVT_TASKBAR_RIGHT_DCLICK (wxTaskBarIcon::_OnRButtonDClick)
 END_EVENT_TABLE()
 
 
@@ -144,6 +144,25 @@ bool wxTaskBarIcon::RemoveIcon(void)
     return (Shell_NotifyIcon(NIM_DELETE, & notifyData) != 0);
 }
 
+bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
+{
+    bool        rval = FALSE;
+    wxWindow*   win;
+    int         x, y;
+    wxGetMousePosition(&x, &y);
+
+    // is wxFrame the best window type to use???
+    win = new wxFrame(NULL, -1, "", wxPoint(x,y), wxSize(-1,-1), 0);
+    win->PushEventHandler(this);
+
+    rval = win->PopupMenu(menu, 0, 0);
+
+    win->PopEventHandler(FALSE);
+    delete win;
+    return rval;
+}
+
+
 // Overridables
 void wxTaskBarIcon::OnMouseMove(wxEvent&)
 {
@@ -172,6 +191,15 @@ void wxTaskBarIcon::OnLButtonDClick(wxEvent&)
 void wxTaskBarIcon::OnRButtonDClick(wxEvent&)
 {
 }
+
+void wxTaskBarIcon::_OnMouseMove(wxEvent& e)      { OnMouseMove(e);     }
+void wxTaskBarIcon::_OnLButtonDown(wxEvent& e)    { OnLButtonDown(e);   }
+void wxTaskBarIcon::_OnLButtonUp(wxEvent& e)      { OnLButtonUp(e);     }
+void wxTaskBarIcon::_OnRButtonDown(wxEvent& e)    { OnRButtonDown(e);   }
+void wxTaskBarIcon::_OnRButtonUp(wxEvent& e)      { OnRButtonUp(e);     }
+void wxTaskBarIcon::_OnLButtonDClick(wxEvent& e)  { OnLButtonDClick(e); }
+void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
+
 
 wxTaskBarIcon* wxTaskBarIcon::FindObjectForHWND(WXHWND hWnd)
 {

@@ -14,13 +14,18 @@ class MyTaskBarIcon: public wxTaskBarIcon
 public:
 	MyTaskBarIcon() {};
 
-    virtual void OnMouseMove(void);
-    virtual void OnLButtonDown(void);
-    virtual void OnLButtonUp(void);
-    virtual void OnRButtonDown(void);
-    virtual void OnRButtonUp(void);
-    virtual void OnLButtonDClick(void);
-    virtual void OnRButtonDClick(void);
+    virtual void OnMouseMove(wxEvent&);
+    virtual void OnLButtonDown(wxEvent&);
+    virtual void OnLButtonUp(wxEvent&);
+    virtual void OnRButtonDown(wxEvent&);
+    virtual void OnRButtonUp(wxEvent&);
+    virtual void OnLButtonDClick(wxEvent&);
+    virtual void OnRButtonDClick(wxEvent&);
+
+    void OnMenuRestore(wxEvent&);
+    void OnMenuExit(wxEvent&);
+
+DECLARE_EVENT_TABLE()
 };
 
 

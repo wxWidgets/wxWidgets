@@ -35,6 +35,7 @@ public:
 // Operations
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = "");
     bool RemoveIcon(void);
+    bool PopupMenu(wxMenu *menu); //, int x, int y);
 
 // Overridables
     virtual void OnMouseMove(wxEvent&);
@@ -61,6 +62,16 @@ protected:
     static bool     sm_registeredClass;
     static unsigned int sm_taskbarMsg;
 
+    // non-virtual default event handlers to forward events to the virtuals
+    void _OnMouseMove(wxEvent&);
+    void _OnLButtonDown(wxEvent&);
+    void _OnLButtonUp(wxEvent&);
+    void _OnRButtonDown(wxEvent&);
+    void _OnRButtonUp(wxEvent&);
+    void _OnLButtonDClick(wxEvent&);
+    void _OnRButtonDClick(wxEvent&);
+
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -82,6 +93,7 @@ const wxEventType wxEVT_TASKBAR_RIGHT_DCLICK =          wxEVT_FIRST + 1556;
 #define EVT_TASKBAR_RIGHT_UP(fn)     { wxEVT_TASKBAR_RIGHT_UP, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
 #define EVT_TASKBAR_LEFT_DCLICK(fn)  { wxEVT_TASKBAR_LEFT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
 #define EVT_TASKBAR_RIGHT_DCLICK(fn) { wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL },
+
 
 #endif
     // _TASKBAR_H_
