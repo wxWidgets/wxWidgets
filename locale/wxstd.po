@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-08-10 13:19+0200\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,7 +181,7 @@ msgstr ""
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr ""
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr ""
@@ -252,11 +252,11 @@ msgstr ""
 msgid ": file does not exist!"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:475
 msgid ": unknown charset"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:668
 msgid ": unknown encoding"
 msgstr ""
 
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Can't create thread"
 msgstr ""
 
-#: ../src/msw/window.cpp:2395
+#: ../src/msw/window.cpp:2396
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -580,7 +580,7 @@ msgstr ""
 msgid "Can't find current position in file '%s'"
 msgstr ""
 
-#: ../src/msw/window.cpp:2345
+#: ../src/msw/window.cpp:2346
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -1166,7 +1166,7 @@ msgstr ""
 msgid "Failed to register DDE server '%s'"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:520
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr ""
@@ -2113,7 +2113,7 @@ msgstr ""
 msgid "The Computer"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:479
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2130,7 +2130,7 @@ msgstr ""
 msgid "The directory "
 msgstr ""
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:672
 #, c-format
 msgid ""
 "The encoding '%s' is unknown.\n"
@@ -2578,7 +2578,7 @@ msgstr ""
 msgid "can't get seek position on file descriptor %d"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:614
 msgid "can't load any font, aborting"
 msgstr ""
 
@@ -2635,7 +2635,7 @@ msgstr ""
 msgid "can't write user configuration file."
 msgstr ""
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr ""
@@ -2644,7 +2644,7 @@ msgstr ""
 msgid "ctrl"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:910
+#: ../src/common/cmdline.cpp:912
 msgid "date"
 msgstr ""
 
@@ -2739,12 +2739,12 @@ msgstr ""
 msgid "large"
 msgstr ""
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr ""
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr ""
@@ -2781,7 +2781,7 @@ msgstr ""
 msgid "noon"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:909
+#: ../src/common/cmdline.cpp:911
 msgid "num"
 msgstr ""
 
@@ -2817,7 +2817,7 @@ msgstr ""
 msgid "small"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:910
 msgid "str"
 msgstr ""
 
@@ -2885,7 +2885,7 @@ msgstr ""
 msgid "unnamed%d"
 msgstr ""
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr ""

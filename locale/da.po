@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-08-10 13:19+0200\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: 1999-10-23 12:30+0100\n"
 "Last-Translator: Leif Jensen <leif@danmos.dk>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -185,7 +185,7 @@ msgstr "'%s' er ugyldigt"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr ""
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' er ikke et lovligt meddelelseskatalog"
@@ -261,11 +261,11 @@ msgstr ""
 msgid ": file does not exist!"
 msgstr "Bibliotek eksisterer ikke"
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:475
 msgid ": unknown charset"
 msgstr ""
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:668
 #, fuzzy
 msgid ": unknown encoding"
 msgstr "ukendt søgeorigo"
@@ -561,7 +561,7 @@ msgstr ""
 msgid "Can't create thread"
 msgstr "Kan ikke danne tråd"
 
-#: ../src/msw/window.cpp:2395
+#: ../src/msw/window.cpp:2396
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -605,7 +605,7 @@ msgstr "kan ikke nummerere værdi af nøgle '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "kan ikke åbge brugerkonfigurationsfil '%s'."
 
-#: ../src/msw/window.cpp:2345
+#: ../src/msw/window.cpp:2346
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -1220,7 +1220,7 @@ msgstr ""
 msgid "Failed to register DDE server '%s'"
 msgstr "Kunne ikke oprette tooltip '%s'"
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:520
 #, fuzzy, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Kunne ikke oprette tooltip '%s'"
@@ -2209,7 +2209,7 @@ msgstr ""
 msgid "The Computer"
 msgstr "Datamaskinen"
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:479
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2226,7 +2226,7 @@ msgstr ""
 msgid "The directory "
 msgstr "Biblioteket "
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:672
 #, c-format
 msgid ""
 "The encoding '%s' is unknown.\n"
@@ -2679,7 +2679,7 @@ msgstr "kan ikke skylle fildeskriptor %d ud"
 msgid "can't get seek position on file descriptor %d"
 msgstr "kan ikke få søgeposition på fildescriptor %d"
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:614
 msgid "can't load any font, aborting"
 msgstr ""
 
@@ -2736,7 +2736,7 @@ msgstr "kan ikke skrive til fildeskriptor %d"
 msgid "can't write user configuration file."
 msgstr "kan ikke skrive brugerkonfigurationsfil."
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "katalogfil for domæne '%s' blev ikke fundet."
@@ -2745,7 +2745,7 @@ msgstr "katalogfil for domæne '%s' blev ikke fundet."
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:910
+#: ../src/common/cmdline.cpp:912
 msgid "date"
 msgstr ""
 
@@ -2844,12 +2844,12 @@ msgstr "ugyldig meddelelsesboks returværdi"
 msgid "large"
 msgstr "Sider"
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "locale '%s' kan ikke sættes."
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "søger efter katalog '%s' i sti '%s'."
@@ -2890,7 +2890,7 @@ msgstr "unavngivet"
 msgid "noon"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:909
+#: ../src/common/cmdline.cpp:911
 msgid "num"
 msgstr ""
 
@@ -2927,7 +2927,7 @@ msgstr "skift"
 msgid "small"
 msgstr ""
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:910
 msgid "str"
 msgstr ""
 
@@ -2995,7 +2995,7 @@ msgstr "unavngivet"
 msgid "unnamed%d"
 msgstr "unavngivet%d"
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "bruger katalog '%s' fra '%s'."

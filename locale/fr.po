@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-08-10 13:19+0200\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: 2000-03-22 11:46Romance Standard Time\n"
 "Last-Translator: Gil <gilles.guyot@krypton.be>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -181,7 +181,7 @@ msgstr "'%s' n'est pas valide"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' n'est pas une valeur numérique correcte pour l'option '%s'."
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' n'est pas un catalogue de messages valide."
@@ -255,11 +255,11 @@ msgstr "Enveloppe 6 3/4, 3 5/8 x 6 1/2 in"
 msgid ": file does not exist!"
 msgstr ": le ficheir n'existe pas!"
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:475
 msgid ": unknown charset"
 msgstr " : jeu de caractères inconnu"
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:668
 msgid ": unknown encoding"
 msgstr " : codage inconnu"
 
@@ -387,7 +387,8 @@ msgstr "Enveloppe B6, 176 x 125 mm"
 
 #: ../src/common/imagbmp.cpp:387
 msgid "BMP: Cannot deal with 4bit encoded yet."
-msgstr "BMP : Impossible d'utiliser actuellement les fichiers codés sur 4 bits."
+msgstr ""
+"BMP : Impossible d'utiliser actuellement les fichiers codés sur 4 bits."
 
 #: ../src/common/imagbmp.cpp:266 ../src/common/imagbmp.cpp:278
 msgid "BMP: Couldn't allocate memory."
@@ -521,7 +522,9 @@ msgstr "Impossible d'&Annuler"
 #: ../src/common/image.cpp:926
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "Impossible de vérifier le format du fichier image '%s' : le fichier n'existe pas."
+msgstr ""
+"Impossible de vérifier le format du fichier image '%s' : le fichier n'existe "
+"pas."
 
 #: ../src/msw/registry.cpp:410
 #, c-format
@@ -535,7 +538,8 @@ msgstr "Impossible de copier les valeurs du type non supporté %d."
 
 #: ../src/msw/listctrl.cpp:212
 msgid "Can't create list control window, check that comctl32.dll is installed."
-msgstr "Impossible de créer une fenêtre avec un contrôle liste, vérifier que "
+msgstr ""
+"Impossible de créer une fenêtre avec un contrôle liste, vérifier que "
 "comctl32.dll est installée."
 
 #: ../src/msw/registry.cpp:393
@@ -555,7 +559,7 @@ msgstr "Impossible de créer le tube d'écriture entre processus"
 msgid "Can't create thread"
 msgstr "Impossible de créer le thread"
 
-#: ../src/msw/window.cpp:2395
+#: ../src/msw/window.cpp:2396
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -599,7 +603,7 @@ msgstr "Impossible d'énumérer les valeurs de la clé '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Impossible de trouver la position courante dans le fichier '%s'"
 
-#: ../src/msw/window.cpp:2345
+#: ../src/msw/window.cpp:2346
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -620,7 +624,8 @@ msgstr "Impossible d'obtenir l'information sur la clé de registre '%s'"
 #: ../src/common/image.cpp:626 ../src/common/image.cpp:646
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
-msgstr "Impossible de charger l'image du fichier '%s' : le fichier n'existe pas."
+msgstr ""
+"Impossible de charger l'image du fichier '%s' : le fichier n'existe pas."
 
 #: ../src/common/object.cpp:307
 msgid "Can't load wxSerial dynamic library."
@@ -681,7 +686,8 @@ msgstr "Impossible de trouver l'emplacement du fichier du livre des adresses"
 #: ../src/unix/threadpsx.cpp:954
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
-msgstr "Impossible d'obtenir une gamme de priorité pour le choix de la planification "
+msgstr ""
+"Impossible d'obtenir une gamme de priorité pour le choix de la planification "
 "%d."
 
 #: ../src/unix/utilsunx.cpp:709
@@ -773,7 +779,8 @@ msgstr "Fermer cette fenêtre"
 #: ../src/common/fileconf.cpp:750
 #, c-format
 msgid "Config entry name cannot start with '%c'."
-msgstr "Le nom pour l'entrée de la configuration ne peut pas commencer par '%c'."
+msgstr ""
+"Le nom pour l'entrée de la configuration ne peut pas commencer par '%c'."
 
 #: ../src/generic/filedlgg.cpp:1077 ../src/gtk/filedlg.cpp:75
 msgid "Confirm"
@@ -1110,8 +1117,9 @@ msgstr "Impossible de créer une connexion au serveur '%s' sur le sujet '%s'"
 msgid ""
 "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
 "resources."
-msgstr "La creation de la boite de dialogue a echoué. Peut-être vouz avez "
-"oublié d'inclure wx/msw/wx.rc dans votre fichier de resources?"
+msgstr ""
+"La creation de la boite de dialogue a echoué. Peut-être vouz avez oublié "
+"d'inclure wx/msw/wx.rc dans votre fichier de resources?"
 
 #: ../src/generic/dirdlgg.cpp:549
 msgid "Failed to create directory "
@@ -1215,7 +1223,7 @@ msgstr "Impossible de rediriger les entrées/sorties du processus fils"
 msgid "Failed to register DDE server '%s'"
 msgstr "Impossible d'enregistrer le serveur DDE '%s'"
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:520
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Impossible de se rappeler l'encodage pour le jeu de caractères '%s'."
@@ -1266,7 +1274,8 @@ msgstr "Impossible de terminer le thread."
 
 #: ../src/msw/dde.cpp:624
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr "Impossible de terminer la boucle de conseil (advise loop) avec le server DDE"
+msgstr ""
+"Impossible de terminer la boucle de conseil (advise loop) avec le server DDE"
 
 #: ../src/msw/dialup.cpp:928
 #, c-format
@@ -2179,7 +2188,7 @@ msgstr "Thaï (ISO-8859-11)"
 msgid "The Computer"
 msgstr "L'ordinateur"
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:479
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2199,7 +2208,7 @@ msgstr "Le format de presse-papier '%d' n'existe pas."
 msgid "The directory "
 msgstr "Le répertoire"
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:672
 #, c-format
 msgid ""
 "The encoding '%s' is unknown.\n"
@@ -2686,7 +2695,7 @@ msgid "can't get seek position on file descriptor %d"
 msgstr ""
 "impossible de trouver la position courante sur le descripteur de fichier %d"
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:614
 msgid "can't load any font, aborting"
 msgstr "impossible de charger une police de caractères - j'abandonne"
 
@@ -2743,7 +2752,7 @@ msgstr "impossible d'écrire dans le descripteur de fichier %d"
 msgid "can't write user configuration file."
 msgstr "impossible d'écrire le fichier de configuration utilisateur."
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "fichier catalogue introuvable pour le domaine '%s'."
@@ -2752,7 +2761,7 @@ msgstr "fichier catalogue introuvable pour le domaine '%s'."
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:910
+#: ../src/common/cmdline.cpp:912
 msgid "date"
 msgstr "date"
 
@@ -2850,12 +2859,12 @@ msgstr "la fenêtre de message a renvoyé une valeur non valide"
 msgid "large"
 msgstr "grand"
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "le langage local '%s' ne peut pas être sélectionné."
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "recherche le catalogue '%s' dans '%s'."
@@ -2892,7 +2901,7 @@ msgstr "sansnom"
 msgid "noon"
 msgstr "midi"
 
-#: ../src/common/cmdline.cpp:909
+#: ../src/common/cmdline.cpp:911
 msgid "num"
 msgstr "num"
 
@@ -2928,7 +2937,7 @@ msgstr "sixième"
 msgid "small"
 msgstr "petit"
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:910
 msgid "str"
 msgstr "str"
 
@@ -2996,7 +3005,7 @@ msgstr "sansnom"
 msgid "unnamed%d"
 msgstr "sansnom%d"
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "utilisation du catalogue '%s' de '%s'."
@@ -3034,4 +3043,3 @@ msgstr "wxWindows : impossible de trouver le nom du fichier temporaire.\n"
 #: ../src/common/datetime.cpp:3023
 msgid "yesterday"
 msgstr "hier"
-

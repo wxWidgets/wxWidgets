@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 1999-07-06 13:24+0100\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: 1999-07-08 14:04+0200\n"
 "Last-Translator: Lauri Jutila <ljuti@hangar.keskiespoo.net>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -9,16 +9,13 @@ msgstr ""
 "Content-Type: text/plain; charset=iso8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/generic/dirdlgg.cpp:461 ../src/generic/dirdlgg.cpp:465
-#: ../src/generic/dirdlgg.cpp:489 ../src/generic/dirdlgg.cpp:493
-#: src/generic/dirdlgg.cpp:461 src/generic/dirdlgg.cpp:489
+#: ../src/generic/dirdlgg.cpp:550
 msgid ""
 "\n"
 "(Do you have the required permissions?)"
 msgstr ""
 
-#: ../src/generic/dirdlgg.cpp:449 ../src/generic/dirdlgg.cpp:453
-#: src/generic/dirdlgg.cpp:449
+#: ../src/generic/dirdlgg.cpp:537
 msgid ""
 "\n"
 "does not exist\n"
@@ -28,380 +25,806 @@ msgstr ""
 "ei ole olemassa.\n"
 "Luodaanko?"
 
-#: ../src/common/log.cpp:223 ../src/common/log.cpp:227 src/common/log.cpp:209
+#: ../src/common/log.cpp:238
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (virhe %ld: %s)"
 
-#: ../src/common/date.cpp:385 ../src/common/date.cpp:388
-#: ../src/common/date.cpp:400 ../src/common/date.cpp:403
-#: src/common/date.cpp:384 src/common/date.cpp:399
-msgid " B.C."
-msgstr " B.C."
+#: ../src/common/docview.cpp:1206
+msgid " - "
+msgstr ""
+
+#: ../src/html/htmprint.cpp:490
+#, fuzzy
+msgid " Preview"
+msgstr "Tulostuksen esikatselu"
+
+#: ../src/generic/filedlgg.cpp:328
+msgid " bytes "
+msgstr ""
+
+#: ../src/common/paper.cpp:124
+msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:125
+msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:126
+msgid "#12 Envelope, 4 3/4 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:127
+msgid "#14 Envelope, 5 x 11 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:123
+msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgstr ""
 
 #: ../src/common/resourc2.cpp:265 ../src/common/resourc2.cpp:1334
-#: ../src/common/resource.cpp:1630 ../src/common/resource.cpp:1631
-#: ../src/common/resource.cpp:2704 ../src/common/resource.cpp:2708
-#: src/common/resourc2.cpp:265 src/common/resourc2.cpp:1334
-#: src/common/resource.cpp:1613 src/common/resource.cpp:2682
+#: ../src/common/resource.cpp:1778 ../src/common/resource.cpp:1908
+#: ../src/common/resource.cpp:2988
 #, c-format
 msgid "#define %s must be an integer."
 msgstr "#define %s pitää olla kokonaisluku"
 
-#: src/common/valtext.cpp:143 src/common/valtext.cpp:154
+#: ../src/html/helpfrm.cpp:718 ../src/html/helpfrm.cpp:719
+#: ../src/html/helpfrm.cpp:1277 ../src/html/helpfrm.cpp:1304
 #, c-format
-msgid "%s is invalid."
-msgstr "%s on virheellinen."
+msgid "%i of %i"
+msgstr ""
 
-#: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2075
-#: ../src/common/resource.cpp:2079 src/common/resourc2.cpp:709
-#: src/common/resource.cpp:2057
+#: ../src/common/cmdline.cpp:735
+#, fuzzy, c-format
+msgid "%s (or %s)"
+msgstr " (virhe %ld: %s)"
+
+#: ../src/generic/logg.cpp:239
+#, fuzzy, c-format
+msgid "%s Error"
+msgstr "Virhe"
+
+#: ../src/generic/logg.cpp:247
+#, fuzzy, c-format
+msgid "%s Information"
+msgstr "Informaatio"
+
+#: ../src/generic/logg.cpp:243
+#, fuzzy, c-format
+msgid "%s Warning"
+msgstr "Varoitus"
+
+#: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2359
 #, c-format
 msgid "%s not a bitmap resource specification."
 msgstr "%s "
 
-#: ../src/common/resourc2.cpp:864 ../src/common/resource.cpp:2230
-#: ../src/common/resource.cpp:2234 src/common/resourc2.cpp:864
-#: src/common/resource.cpp:2212
+#: ../src/common/resourc2.cpp:864 ../src/common/resource.cpp:2514
 #, c-format
 msgid "%s not an icon resource specification."
 msgstr ""
 
-#: src/common/valtext.cpp:188
-#, c-format
-msgid "%s should be numeric."
-msgstr "%s pitäisi olla numeerinen."
-
-#: src/common/valtext.cpp:163
-#, c-format
-msgid "%s should only contain ASCII characters."
-msgstr "%s saisi sisältää vain ASCII-merkkejä."
-
-#: src/common/valtext.cpp:171
-#, c-format
-msgid "%s should only contain alphabetic characters."
-msgstr "%s saisi sisältää vain aakkosia."
-
-#: src/common/valtext.cpp:179
-#, c-format
-msgid "%s should only contain alphabetic or numeric characters."
-msgstr "%s saisi sisältää vain aakkosia tai numeerisia merkkejä."
-
 #: ../src/common/resourc2.cpp:357 ../src/common/resourc2.cpp:1430
-#: ../src/common/resource.cpp:1723 ../src/common/resource.cpp:1724
-#: ../src/common/resource.cpp:2801 ../src/common/resource.cpp:2805
-#: src/common/resourc2.cpp:357 src/common/resourc2.cpp:1430
-#: src/common/resource.cpp:1705 src/common/resource.cpp:2778
+#: ../src/common/resource.cpp:1871 ../src/common/resource.cpp:2000
+#: ../src/common/resource.cpp:3085
 #, c-format
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: "
 
-#: ../src/common/log.cpp:638 ../src/common/log.cpp:650
-#: ../src/generic/tipdlg.cpp:171 src/common/log.cpp:633
+#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "&Sulje"
 
-#: ../src/common/log.cpp:639 ../src/common/log.cpp:651 src/common/log.cpp:634
+#: ../src/generic/logg.cpp:685
+msgid "&Details"
+msgstr ""
+
+#: ../src/generic/wizard.cpp:284
+msgid "&Finish"
+msgstr ""
+
+#: ../src/generic/logg.cpp:474
 msgid "&Log"
 msgstr "&Loki"
 
-#: ../src/common/docview.cpp:1725 ../src/common/docview.cpp:1729
-#: ../src/common/docview.cpp:1736 ../src/common/docview.cpp:1740
-#: ../src/common/docview.cpp:1756 ../src/common/docview.cpp:1767
-#: src/common/docview.cpp:1687 src/common/docview.cpp:1698
+#: ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
+#, fuzzy
+msgid "&Next >"
+msgstr "&Seuraava"
+
+#: ../src/generic/tipdlg.cpp:175
+#, fuzzy
+msgid "&Next Tip"
+msgstr "&Seuraava"
+
+#: ../src/common/docview.cpp:1945 ../src/common/docview.cpp:1956
 msgid "&Redo"
 msgstr "&Tee uudelleen"
 
-#: ../src/common/docview.cpp:1719 ../src/common/docview.cpp:1723
-#: ../src/common/docview.cpp:1746 ../src/common/docview.cpp:1750
-#: ../src/common/docview.cpp:1777 src/common/docview.cpp:1681
-#: src/common/docview.cpp:1708
+#: ../src/common/docview.cpp:1939 ../src/common/docview.cpp:1966
 msgid "&Redo "
 msgstr "&Tee uudelleen "
 
-#: ../src/common/log.cpp:635 ../src/common/log.cpp:646 src/common/log.cpp:630
+#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
 msgid "&Save..."
 msgstr "&Tallenna..."
 
-#: ../src/common/docview.cpp:1731 ../src/common/docview.cpp:1735
-#: ../src/common/docview.cpp:1762 src/common/docview.cpp:1693
+#: ../src/generic/tipdlg.cpp:172
+msgid "&Show tips at startup"
+msgstr "&Näytä vinkit käynnistyksessä"
+
+#: ../src/common/docview.cpp:1951
 msgid "&Undo"
 msgstr "&Korjaa"
 
-#: ../src/common/docview.cpp:1706 ../src/common/docview.cpp:1710
-#: ../src/common/docview.cpp:1737 src/common/docview.cpp:1668
+#: ../src/common/docview.cpp:1926
 msgid "&Undo "
 msgstr "&Korjaa "
 
-#: ../src/common/config.cpp:381 ../src/common/config.cpp:382
-#: src/common/config.cpp:393
+#: ../src/msw/mdi.cpp:1280 ../src/msw/mdi.cpp:1287
+#, fuzzy
+msgid "&Window"
+msgstr "&Korjaa"
+
+#: ../src/common/config.cpp:396
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' sisältää ylimääräisen '..', ohitettu."
 
-#: ../src/common/intl.cpp:339 ../src/common/intl.cpp:372
-#: src/common/intl.cpp:338
+#: ../src/common/valtext.cpp:140
+#, c-format
+msgid "'%s' is invalid"
+msgstr "'%s' on virheellinen"
+
+#: ../src/common/cmdline.cpp:657
+#, c-format
+msgid "'%s' is not a correct numeric value for option '%s'."
+msgstr ""
+
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' ei ole kelvollinen viestiluettelo."
 
-#: ../src/common/textfile.cpp:133 ../src/common/textfile.cpp:139
-#: src/common/textfile.cpp:132
+#: ../src/common/textfile.cpp:250
 #, c-format
 msgid "'%s' is probably a binary file."
 msgstr "'%s' on mahdollisesti binäärinen tiedosto."
 
+#: ../src/common/valtext.cpp:178
+#, c-format
+msgid "'%s' should be numeric."
+msgstr "'%s' tulisi olla numeerinen."
+
+#: ../src/common/valtext.cpp:160
+#, c-format
+msgid "'%s' should only contain ASCII characters."
+msgstr "'%s' tulisi sisältää vain ASCII-merkkejä."
+
+#: ../src/common/valtext.cpp:166
+#, c-format
+msgid "'%s' should only contain alphabetic characters."
+msgstr "'%s' tulisi sisältää vain aakkosia."
+
+#: ../src/common/valtext.cpp:172
+#, c-format
+msgid "'%s' should only contain alphabetic or numeric characters."
+msgstr "'%s' tulisi sisältää vain aakkosia tai numeerisia merkkejä."
+
+#: ../src/html/helpfrm.cpp:679
+#, fuzzy
+msgid "(Help)"
+msgstr "Apua"
+
+#: ../src/html/helpfrm.cpp:276 ../src/html/helpfrm.cpp:783
+#: ../src/html/helpfrm.cpp:1330
+msgid "(bookmarks)"
+msgstr ""
+
 #: ../src/common/resourc2.cpp:297 ../src/common/resourc2.cpp:1370
-#: ../src/common/resource.cpp:1662 ../src/common/resource.cpp:1663
-#: ../src/common/resource.cpp:2740 ../src/common/resource.cpp:2744
-#: src/common/resourc2.cpp:297 src/common/resourc2.cpp:1370
-#: src/common/resource.cpp:1645 src/common/resource.cpp:2718
+#: ../src/common/resource.cpp:1810 ../src/common/resource.cpp:1940
+#: ../src/common/resource.cpp:3024
 msgid ""
 ", expected static, #include or #define\n"
 "whilst parsing resource."
 msgstr ""
 
-#: src/generic/dcpsg.cpp:2389
-msgid "A3 297 x 420 mm"
+#: ../src/generic/dirdlgg.cpp:264 ../src/generic/filedlgg.cpp:713
+msgid "."
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
+msgid ".."
+msgstr ""
+
+#: ../src/common/paper.cpp:120
+#, fuzzy
+msgid "10 x 14 in"
+msgstr "Legal 8 1/2 x 14 in"
+
+#: ../src/common/paper.cpp:121
+msgid "11 x 17 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:139
+msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
+msgstr ""
+
+#: ../src/html/htmprint.cpp:272
+#, fuzzy
+msgid ": file does not exist!"
+msgstr "Hakemistoa ei ole"
+
+#: ../src/common/fontmap.cpp:475
+msgid ": unknown charset"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:668
+msgid ": unknown encoding"
+msgstr ""
+
+#: ../src/generic/wizard.cpp:186
+msgid "< &Back"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:356
+msgid "<DIR>"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:323
+msgid "<DIR> "
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:357
+msgid "<LINK>"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:324
+msgid "<LINK> "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:928
+msgid ""
+"<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
+"<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
+"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
+"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
+"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
+"+4</font></tt></body></html>"
+msgstr ""
+
+#: ../src/common/paper.cpp:113
+#, fuzzy
+msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 297 x 420 mm"
 
-#: src/generic/dcpsg.cpp:1210 src/generic/dcpsg.cpp:1214
-#: src/generic/dcpsg.cpp:1800 src/generic/dcpsg.cpp:1804
-#: src/generic/dcpsg.cpp:2313 src/generic/dcpsg.cpp:2388
-#: src/generic/printps.cpp:239 src/generic/printps.cpp:243
-msgid "A4 210 x 297 mm"
-msgstr "A4 210 x 297 mm"
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2533
+msgid "A4 sheet, 210 x 297 mm"
+msgstr "A4 sheet, 210 x 297 mm"
 
-#: ../src/generic/fontdlgg.cpp:327 ../src/generic/fontdlgg.cpp:329
-#: src/generic/fontdlgg.cpp:329
+#: ../src/common/paper.cpp:114
+#, fuzzy
+msgid "A4 small sheet, 210 x 297 mm"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/common/paper.cpp:115
+#, fuzzy
+msgid "A5 sheet, 148 x 210 mm"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/generic/fontdlgg.cpp:325
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/generic/colrdlgg.cpp:236 ../src/generic/colrdlgg.cpp:238
-#: src/generic/colrdlgg.cpp:236
+#: ../src/html/helpfrm.cpp:270
+msgid "Add current page to bookmarks"
+msgstr ""
+
+#: ../src/generic/colrdlgg.cpp:269
 msgid "Add to custom colours"
 msgstr "Lisää muokattuihin väreihin"
 
-#: ../src/generic/prntdlgg.cpp:140 ../src/generic/prntdlgg.cpp:147
-#: src/generic/prntdlgg.cpp:83
+#: ../src/html/helpctrl.cpp:83
+#, c-format
+msgid "Adding book %s"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:163
 msgid "All"
 msgstr "Kaikki"
 
-#: ../src/common/log.cpp:675 ../src/common/log.cpp:690 src/common/log.cpp:670
+#: ../src/generic/filedlgg.cpp:825
+msgid "All files (*)|*"
+msgstr ""
+
+#: ../src/unix/dialup.cpp:359
+msgid "Already dialling ISP."
+msgstr ""
+
+#: ../src/generic/logg.cpp:1017
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Siirrä loki tiedostoon '%s' (valitse [Ei] korvataksesi sen)?"
 
-#: src/gtk/window.cpp:2716
-msgid "Application Error"
-msgstr "Ohjelmavirhe"
+#: ../src/common/fontmap.cpp:102
+msgid "Arabic (ISO-8859-6)"
+msgstr ""
 
-#: ../src/common/resourc2.cpp:844 ../src/common/resource.cpp:2210
-#: ../src/common/resource.cpp:2214 src/common/resourc2.cpp:844
-#: src/common/resource.cpp:2192
+#: ../src/common/paper.cpp:134
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:116
+#, fuzzy
+msgid "B4 sheet, 250 x 354 mm"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/common/paper.cpp:135
+msgid "B5 Envelope, 176 x 250 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:117
+#, fuzzy
+msgid "B5 sheet, 182 x 257 millimeter"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/common/paper.cpp:136
+msgid "B6 Envelope, 176 x 125 mm"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:387
+msgid "BMP: Cannot deal with 4bit encoded yet."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:266 ../src/common/imagbmp.cpp:278
+#, fuzzy
+msgid "BMP: Couldn't allocate memory."
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/imagbmp.cpp:62
+#, fuzzy
+msgid "BMP: Couldn't save invalid image."
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/imagbmp.cpp:154
+#, fuzzy
+msgid "BMP: Couldn't write data."
+msgstr "Säiettä ei voi keskeyttää"
+
+#: ../src/common/imagbmp.cpp:131
+#, fuzzy
+msgid "BMP: Couldn't write the file header."
+msgstr "Säiettä ei voi keskeyttää"
+
+#: ../src/common/imagbmp.cpp:257
+msgid "BMP: Encoding doesn't match bitdepth."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:220
+msgid "BMP: Image height > 32767 pixels for file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:214
+msgid "BMP: Image width > 32767 pixels for file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:234
+msgid "BMP: Unknown bitdepth in file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:243
+msgid "BMP: Unknown encoding in file."
+msgstr ""
+
+#: ../src/generic/helpwxht.cpp:157
+#, fuzzy
+msgid "Back"
+msgstr "Takaisin"
+
+#: ../src/common/dlgcmn.cpp:135
+msgid "Backward"
+msgstr "Takaisin"
+
+#: ../src/common/fontmap.cpp:109
+msgid "Baltic (ISO-8859-13)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:100
+msgid "Baltic (old) (ISO-8859-4)"
+msgstr ""
+
+#: ../src/common/resourc2.cpp:844 ../src/common/resource.cpp:2494
 #, c-format
 msgid "Bitmap resource specification %s not found."
 msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:219 ../src/generic/fontdlgg.cpp:221
-#: src/generic/fontdlgg.cpp:221
+#: ../src/generic/fontdlgg.cpp:217
 msgid "Bold"
 msgstr "Lihavoitu"
 
-#: ../src/generic/prntdlgg.cpp:643 ../src/generic/prntdlgg.cpp:650
-#: src/generic/prntdlgg.cpp:536
+#: ../src/generic/prntdlgg.cpp:662
 msgid "Bottom margin (mm):"
 msgstr "Alamarginaali (mm):"
 
-#: ../src/common/log.cpp:636 ../src/common/log.cpp:648 src/common/log.cpp:631
+#: ../src/common/paper.cpp:105
+#, fuzzy
+msgid "C sheet, 17 x 22 in"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/generic/logg.cpp:471
 msgid "C&lear"
 msgstr "&Tyhjennä"
 
-#: ../src/msw/thread.cpp:183 src/msw/thread.cpp:183
+#: ../src/common/paper.cpp:130
+msgid "C3 Envelope, 324 x 458 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:131
+msgid "C4 Envelope, 229 x 324 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:129
+msgid "C5 Envelope, 162 x 229 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:132
+msgid "C6 Envelope, 114 x 162 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:133
+msgid "C65 Envelope, 114 x 229 mm"
+msgstr ""
+
+#: ../src/msw/thread.cpp:222
 msgid "Can not create event object."
 msgstr "Tapahtumaobjektin luonti epäonnistui."
 
-#: ../src/msw/thread.cpp:99 src/msw/thread.cpp:99
-msgid "Can not create mutex."
+#: ../src/msw/thread.cpp:124
+#, fuzzy
+msgid "Can not create mutex"
 msgstr "Mutexin luonti epäonnistui"
 
-#: ../src/msw/tooltip.cpp:199 src/msw/tooltip.cpp:199
-msgid "Can not create tooltip control"
-msgstr "Työkaluvihjeiden hallinnan luonti epäonnistui"
-
-#: ../src/common/filefn.cpp:1179 src/common/filefn.cpp:1168
-#: src/common/filefn.cpp:1282
+#: ../src/common/filefn.cpp:1287 ../src/msw/dir.cpp:294
+#: ../src/unix/dir.cpp:214
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Hakemiston '%s' tiedostojen luettelu epäonnistui"
 
-#: ../src/msw/clipbrd.cpp:549 src/msw/clipbrd.cpp:549
-#, c-format
-msgid "Can not get data in format '%s' from clipboard."
-msgstr "Datan haku leikepöydältä formaatissa '%s' epäonnistui."
-
-#: src/gtk/threadpsx.cpp:450
-#, c-format
-msgid "Can not get priority range for scheduling policy %d."
-msgstr ""
-
-#: ../src/msw/clipbrd.cpp:474 src/msw/clipbrd.cpp:474
-#, c-format
-msgid "Can not put data in format '%s' on clipboard."
-msgstr "Datan lisäys leikepöydälle formaatissa '%s' epäonnistui."
-
-#: ../src/msw/thread.cpp:410 src/msw/thread.cpp:410
+#: ../src/msw/thread.cpp:527
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Säikeen %x jatko epäonnistui"
 
-#: src/gtk/threadpsx.cpp:442
-msgid "Can not retrieve thread scheduling policy."
-msgstr "Säikeiden ajoittamisen haku epäonnistui."
-
-#: ../src/msw/thread.cpp:330 src/gtk/threadpsx.cpp:270 src/msw/thread.cpp:330
+#: ../src/msw/thread.cpp:408
 msgid "Can not start thread: error writing TLS."
 msgstr "Säikeen käynnistys epäonnistui: virhe TLS-kirjoituksessa."
 
-#: ../src/msw/thread.cpp:395 src/msw/thread.cpp:395
+#: ../src/msw/thread.cpp:512
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Säikeen %x keskeytys epäonnistui"
 
-#: ../src/msw/thread.cpp:547 src/msw/thread.cpp:543
+#: ../src/msw/thread.cpp:846
 msgid "Can not wait for thread termination"
 msgstr "Ei voi odottaa säikeen keskeytystä"
 
-#: ../src/common/docview.cpp:1708 ../src/common/docview.cpp:1712
-#: ../src/common/docview.cpp:1739 src/common/docview.cpp:1670
+#: ../src/common/docview.cpp:1928
 msgid "Can't &Undo "
 msgstr "&Korjaus epäonnistui "
 
-#: ../src/msw/thread.cpp:359 src/msw/thread.cpp:359
+#: ../src/common/image.cpp:926
+#, c-format
+msgid "Can't check image format of file '%s': file does not exist."
+msgstr ""
+
+#: ../src/msw/registry.cpp:410
+#, fuzzy, c-format
+msgid "Can't close registry key '%s'"
+msgstr "rekisteriavainta '%s' ei voida sulkea"
+
+#: ../src/msw/registry.cpp:486
+#, c-format
+msgid "Can't copy values of unsupported type %d."
+msgstr ""
+
+#: ../src/msw/listctrl.cpp:212
+msgid "Can't create list control window, check that comctl32.dll is installed."
+msgstr ""
+
+#: ../src/msw/registry.cpp:393
+#, fuzzy, c-format
+msgid "Can't create registry key '%s'"
+msgstr "rekisteriavaimen '%s' luonti ei onnistu"
+
+#: ../src/msw/utilsexc.cpp:418
+#, fuzzy
+msgid "Can't create the inter-process read pipe"
+msgstr "Säiettä ei voi luoda"
+
+#: ../src/msw/utilsexc.cpp:430
+msgid "Can't create the inter-process write pipe"
+msgstr ""
+
+#: ../src/msw/thread.cpp:494
 msgid "Can't create thread"
 msgstr "Säiettä ei voi luoda"
 
-#: ../src/msw/iniconf.cpp:453 src/msw/iniconf.cpp:464
+#: ../src/msw/window.cpp:2396
+#, c-format
+msgid ""
+"Can't create window of class %s!\n"
+"Possible Windows 3.x compatibility problem?"
+msgstr ""
+"%s luokan ikkunan luonti epäonnistui!\n"
+"Mahdollisesti Windows 3.x yhteensopivuusongelma?"
+
+#: ../src/msw/registry.cpp:653
+#, fuzzy, c-format
+msgid "Can't delete key '%s'"
+msgstr "avainta '%s' ei voi poistaa"
+
+#: ../src/msw/iniconf.cpp:476
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "INI-tiedoston '%s' poisto epäonnistui"
 
-#: ../src/unix/utilsunx.cpp:316 ../src/unix/utilsunx.cpp:327
-#: src/gtk/utilsgtk.cpp:360
-#, c-format
-msgid "Can't execute '%s'\n"
-msgstr "'%s' prosessia ei voi ajaa\n"
+#: ../src/msw/registry.cpp:678
+#, fuzzy, c-format
+msgid "Can't delete value '%s' from key '%s'"
+msgstr "arvon '%s' poisto avaimesta '%s' ei onnistu"
 
-#: ../src/msw/utilsexc.cpp:208 src/msw/utilsexc.cpp:208
-#, c-format
-msgid "Can't execute command '%s'"
-msgstr "'%s' komennon ajo epäonnistui"
+#: ../src/msw/registry.cpp:689
+#, fuzzy, c-format
+msgid "Can't delete value of key '%s'"
+msgstr "avaimen '%s' arvoa ei voi poistaa"
 
-#: ../src/common/object.cpp:302 ../src/common/object.cpp:323
-#: src/common/object.cpp:290 src/common/object.cpp:311
+#: ../src/msw/registry.cpp:991
+#, fuzzy, c-format
+msgid "Can't enumerate subkeys of key '%s'"
+msgstr "avaimen '%s' ala-avaimia ei voi luetella"
+
+#: ../src/msw/registry.cpp:946
+#, fuzzy, c-format
+msgid "Can't enumerate values of key '%s'"
+msgstr "avaimen '%s' arvoja ei voi luetella"
+
+#: ../src/common/ffile.cpp:234
+#, fuzzy, c-format
+msgid "Can't find current position in file '%s'"
+msgstr "käyttäjän asetustiedoston '%s' avaus ei onnistu."
+
+#: ../src/msw/window.cpp:2346
+msgid ""
+"Can't find dummy dialog template!\n"
+"Check resource include path for finding wx.rc."
+msgstr ""
+"Dummy dialog -pohjaa ei löydy!\n"
+"Tarkista resurssisisällön polku, jotta wx.rc löytyisi."
+
+#: ../src/common/object.cpp:314 ../src/common/object.cpp:335
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr ""
 
-#: ../src/common/object.cpp:295 src/common/object.cpp:283
+#: ../src/msw/registry.cpp:342
+#, fuzzy, c-format
+msgid "Can't get info about registry key '%s'"
+msgstr "tiedon saanti rekisteriavaimesta '%s' ei onnistu"
+
+#: ../src/common/image.cpp:626 ../src/common/image.cpp:646
+#, c-format
+msgid "Can't load image from file '%s': file does not exist."
+msgstr ""
+
+#: ../src/common/object.cpp:307
 msgid "Can't load wxSerial dynamic library."
 msgstr "Ei voi ladata wxSerial dynaamista kirjastoa"
 
-#: ../src/common/log.cpp:722 ../src/common/log.cpp:737 src/common/log.cpp:717
+#: ../src/msw/dib.cpp:434
+#, fuzzy, c-format
+msgid "Can't open file '%s'"
+msgstr "tiedostoa '%s' ei voi avata"
+
+#: ../src/msw/registry.cpp:368
+#, fuzzy, c-format
+msgid "Can't open registry key '%s'"
+msgstr "rekisteriavaimen '%s' avaus ei onnistu"
+
+#: ../src/msw/registry.cpp:870
+#, fuzzy, c-format
+msgid "Can't read value of '%s'"
+msgstr "ei voida lukea arvoa '%s'"
+
+#: ../src/msw/registry.cpp:769 ../src/msw/registry.cpp:808
+#, fuzzy, c-format
+msgid "Can't read value of key '%s'"
+msgstr "ei voida lukea arvoa avaimesta '%s'"
+
+#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
 msgid "Can't save log contents to file."
 msgstr "Lokisisällön tallennus tiedostoon epäonnistui."
 
-#: ../src/msw/thread.cpp:384 src/msw/thread.cpp:384
+#: ../src/msw/thread.cpp:460
 msgid "Can't set thread priority"
 msgstr "Säikeen priorisointi epäonnistui."
 
-#: ../src/common/dlgcmn.cpp:121 ../src/common/dlgcmn.cpp:166
-#: ../src/common/prntbase.cpp:109 ../src/common/prntbase.cpp:114
-#: ../src/generic/choicdgg.cpp:306 ../src/generic/colrdlgg.cpp:235
-#: ../src/generic/colrdlgg.cpp:237 ../src/generic/dcpsg.cpp:1917
-#: ../src/generic/dcpsg.cpp:1918 ../src/generic/dcpsg.cpp:2039
-#: ../src/generic/dirdlgg.cpp:341 ../src/generic/dirdlgg.cpp:345
-#: ../src/generic/extdlgg.cpp:142 ../src/generic/fontdlgg.cpp:259
-#: ../src/generic/fontdlgg.cpp:261 ../src/generic/msgdlgg.cpp:123
-#: ../src/generic/msgdlgg.cpp:165 ../src/generic/prntdlgg.cpp:172
-#: ../src/generic/prntdlgg.cpp:179 ../src/generic/prntdlgg.cpp:430
-#: ../src/generic/prntdlgg.cpp:437 ../src/generic/prntdlgg.cpp:580
-#: ../src/generic/prntdlgg.cpp:587 ../src/generic/progdlgg.cpp:94
-#: ../src/generic/progdlgg.cpp:174 ../src/generic/textdlgg.cpp:141
-#: ../src/gtk/choicdlg.cpp:272 ../src/gtk/filedlg.cpp:154
-#: ../src/gtk/msgdlg.cpp:137 ../src/gtk/textdlg.cpp:115
-#: src/common/prntbase.cpp:113 src/generic/choicdgg.cpp:306
-#: src/generic/colrdlgg.cpp:235 src/generic/dcpsg.cpp:1875
-#: src/generic/dirdlgg.cpp:341 src/generic/fontdlgg.cpp:261
-#: src/generic/msgdlgg.cpp:143 src/generic/prntdlgg.cpp:111
-#: src/generic/prntdlgg.cpp:317 src/generic/prntdlgg.cpp:473
-#: src/generic/textdlgg.cpp:141 src/gtk/filedlg.cpp:131
+#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:894
+#, fuzzy, c-format
+msgid "Can't set value of '%s'"
+msgstr "ei voida asettaa arvoa '%s'"
+
+#: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
+#: ../src/generic/dcpsg.cpp:2257 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
+#: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
+#: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
+#: ../src/gtk/filedlg.cpp:164 ../src/gtk/fontdlg.cpp:178
+#: ../src/html/helpfrm.cpp:910 ../src/motif/msgdlg.cpp:178
 msgid "Cancel"
 msgstr "Peruuta"
 
-#: ../src/msw/app.cpp:213 ../src/msw/app.cpp:223 src/msw/app.cpp:192
+#: ../src/msw/dialup.cpp:514
+#, c-format
+msgid "Cannot find active dialup connection: %s"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:827
+msgid "Cannot find the location of address book file"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:954
+#, c-format
+msgid "Cannot get priority range for scheduling policy %d."
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:709
+msgid "Cannot get the hostname"
+msgstr "Host-nimeä ei onnistuttu saamaan"
+
+#: ../src/unix/utilsunx.cpp:745
+msgid "Cannot get the official hostname"
+msgstr "Virallista host-nimeä ei onnistuttu saamaan"
+
+#: ../src/msw/dialup.cpp:920
+msgid "Cannot hang up - no active dialup connection."
+msgstr ""
+
+#: ../src/msw/app.cpp:252
 msgid "Cannot initialize OLE"
 msgstr "OLE initialization epäonnistui"
 
-#: ../src/generic/dcpsg.cpp:1296 src/generic/dcpsg.cpp:1247
-msgid "Cannot open file!"
+#: ../src/html/htmlfilt.cpp:146
+#, fuzzy, c-format
+msgid "Cannot open HTML document: %s"
+msgstr "URL:ää '%s' ei voitu avata"
+
+#: ../src/html/helpdata.cpp:657
+#, fuzzy, c-format
+msgid "Cannot open HTML help book: %s"
+msgstr "URL:ää '%s' ei voitu avata"
+
+#: ../src/generic/helpext.cpp:96
+#, c-format
+msgid "Cannot open URL '%s'"
+msgstr "URL:ää '%s' ei voitu avata"
+
+#: ../src/html/helpdata.cpp:353
+#, fuzzy, c-format
+msgid "Cannot open contents file: %s"
 msgstr "Tiedostoa ei voi avata!"
 
-#: src/common/CVS/Base/fileconf.cpp:614 src/common/fileconf.cpp:614
-#, c-format
-msgid "Character '%c' is invalid in a config entry name."
-msgstr "Merkki '%c' on virheellinen asetuskohdan nimessä."
+#: ../src/generic/dcpsg.cpp:1599
+msgid "Cannot open file for PostScript printing!"
+msgstr "Tiedoston avaus PostScript-tulostukseen epäonnistui!"
 
-#: ../src/common/log.cpp:636 ../src/common/log.cpp:648 src/common/log.cpp:631
+#: ../src/html/helpdata.cpp:368
+#, fuzzy, c-format
+msgid "Cannot open index file: %s"
+msgstr "Tiedostoa ei voi avata!"
+
+#: ../src/html/helpfrm.cpp:1174
+#, fuzzy
+msgid "Cannot print empty page."
+msgstr "Mutexin luonti epäonnistui"
+
+#: ../src/unix/threadpsx.cpp:935
+msgid "Cannot retrieve thread scheduling policy."
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:588
+msgid "Cannot start thread: error writing TLS"
+msgstr "Säikeen käynnistys epäonnistui: virhe TLS:n kirjoituksessa"
+
+#: ../src/html/helpfrm.cpp:398
+msgid "Case sensitive"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:98
+msgid "Central European (ISO-8859-2/Latin 2)"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:762
+msgid "Choose ISP to dial"
+msgstr ""
+
+#: ../src/gtk/fontdlg.cpp:159
+msgid "Choose font"
+msgstr ""
+
+#: ../src/generic/logg.cpp:471
 msgid "Clear the log contents"
 msgstr "Tyhjennä lokisisältö"
 
-#: ../src/common/prntbase.cpp:343 ../src/common/prntbase.cpp:352
-#: ../src/generic/progdlgg.cpp:254 src/common/prntbase.cpp:342
+#: ../src/common/prntbase.cpp:359 ../src/generic/progdlgg.cpp:307
+#: ../src/generic/proplist.cpp:518
 msgid "Close"
 msgstr "Sulje"
 
-#: ../src/common/log.cpp:638 ../src/common/log.cpp:650 src/common/log.cpp:633
+#: ../src/generic/logg.cpp:473
 msgid "Close this window"
 msgstr "Sulje ikkuna"
 
-#: ../src/gtk/filedlg.cpp:71 src/gtk/filedlg.cpp:60
+#: ../src/common/fileconf.cpp:750
+#, c-format
+msgid "Config entry name cannot start with '%c'."
+msgstr "Asetuskohdan nimi ei voi alkaa merkillä '%c'."
+
+#: ../src/generic/filedlgg.cpp:1077 ../src/gtk/filedlg.cpp:75
 msgid "Confirm"
 msgstr "Varmista"
 
-#: ../src/generic/helpxlp.cpp:242 src/generic/helpxlp.cpp:242
+#: ../src/html/htmlwin.cpp:166
+#, fuzzy
+msgid "Connecting..."
+msgstr "Tulostetaan..."
+
+#: ../src/generic/helpxlp.cpp:240
 #, c-format
 msgid "Connection to wxHelp timed out in %d seconds"
 msgstr "Yhteys wxHelpiin katkesi %d sekunnin jälkeen"
 
-#: ../src/generic/prntdlgg.cpp:167 ../src/generic/prntdlgg.cpp:174
-#: src/generic/prntdlgg.cpp:106
+#: ../src/generic/helpwxht.cpp:159 ../src/html/helpfrm.cpp:303
+#: ../src/html/helpfrm.cpp:312
+msgid "Contents"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:196
 msgid "Copies:"
 msgstr "Kopiot:"
 
-#: ../src/common/resourc2.cpp:287 ../src/common/resource.cpp:1652
-#: ../src/common/resource.cpp:1653 src/common/resourc2.cpp:287
-#: src/common/resource.cpp:1635
+#: ../src/common/resourc2.cpp:287 ../src/common/resource.cpp:1800
+#: ../src/common/resource.cpp:1930
 #, c-format
 msgid "Could not find resource include file %s."
 msgstr "Resurssisisältötiedostoa %s ei löydy."
 
-#: ../src/generic/tabg.cpp:1038 src/generic/tabg.cpp:1038
+#: ../src/generic/tabg.cpp:1042
 msgid "Could not find tab for id"
 msgstr ""
 
-#: ../src/common/resource.cpp:753 ../src/common/resource.cpp:754
-#: src/common/resource.cpp:753
+#: ../src/msw/textctrl.cpp:1244
+#, fuzzy, c-format
+msgid "Could not load Rich Edit DLL '%s'"
+msgstr "Rich Edit DLL:n käynnistys ei onnistunut"
+
+#: ../src/common/resource.cpp:796
 #, c-format
 msgid ""
 "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
 " or provide #define (see manual for caveats)"
 msgstr ""
-"Hallintaluokan tai ID:n '%s' selvitys epäonnistui. Käytä (non-zero) kokonais-\n"
+"Hallintaluokan tai ID:n '%s' selvitys epäonnistui. Käytä (non-zero) "
+"kokonais-\n"
 "lukua tai anna #define (katso manuaali)"
 
-#: ../src/common/resource.cpp:1203 ../src/common/resource.cpp:1204
-#: src/common/resource.cpp:1199
+#: ../src/common/resource.cpp:1245
 #, c-format
 msgid ""
 "Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
@@ -410,196 +833,313 @@ msgstr ""
 "Valikon ID:n '%s' selvitys epäonnistui. Käytä (non-zero) kokonais-\n"
 "lukua tai anna #define (katso manuaali)"
 
-#: ../src/common/prntbase.cpp:675 ../src/common/prntbase.cpp:685
-#: src/common/prntbase.cpp:673
+#: ../src/common/prntbase.cpp:711
 msgid "Could not start document preview."
 msgstr "Dokumentin esikatselu epäonnistui."
 
-#: ../src/generic/printps.cpp:189 ../src/generic/printps.cpp:193
-#: ../src/generic/printps.cpp:194 ../src/msw/printwin.cpp:228
-#: ../src/msw/printwin.cpp:232 src/generic/printps.cpp:165
+#: ../src/generic/printps.cpp:209 ../src/msw/printwin.cpp:252
 msgid "Could not start printing."
 msgstr "Tulostus ei käynnisty."
 
-#: ../src/common/wincmn.cpp:598 ../src/common/wincmn.cpp:609
-#: ../src/common/wincmn.cpp:713 src/gtk/window.cpp:2716
-#: src/msw/window.cpp:3756
+#: ../src/common/wincmn.cpp:782
 msgid "Could not transfer data to window"
 msgstr "Tiedonsiirto ikkunaan ei onnistu"
 
-#: ../src/msw/thread.cpp:127 src/msw/thread.cpp:127
+#: ../src/msw/thread.cpp:166
 msgid "Couldn't acquire a mutex lock"
 msgstr "Mutex lockin saanti epäonnistui"
 
-#: ../src/msw/dragimag.cpp:88 ../src/msw/dragimag.cpp:116
-#: ../src/msw/imaglist.cpp:96 ../src/msw/imaglist.cpp:98
-#: src/msw/imaglist.cpp:96
+#: ../src/msw/dragimag.cpp:142 ../src/msw/dragimag.cpp:179
+#: ../src/msw/imaglist.cpp:152 ../src/msw/imaglist.cpp:174
+#: ../src/msw/imaglist.cpp:187
 msgid "Couldn't add an image to the image list."
 msgstr "Kuvan lisäys (kuva)listaan epäonnistui."
 
-#: ../src/msw/thread.cpp:231 src/msw/thread.cpp:231
-msgid "Couldn't change the state of event object."
-msgstr "Tapahtumaobjektin tilaa ei voitu vaihtaa."
-
-#: ../src/msw/timer.cpp:109 ../src/msw/timer.cpp:111 src/msw/timer.cpp:109
+#: ../src/msw/timer.cpp:96
 msgid "Couldn't create a timer"
 msgstr "Ajastimen luonti epäonnistui"
 
-#: ../src/msw/thread.cpp:430 src/msw/thread.cpp:430
+#: ../src/common/dynlib.cpp:305
+#, c-format
+msgid "Couldn't find symbol '%s' in a dynamic library"
+msgstr "Symbolia '%s' ei löydy dynaamisesta kirjastosta"
+
+#: ../src/msw/thread.cpp:553
 msgid "Couldn't get the current thread pointer"
 msgstr "Säikeen osoittimen haku epäonnistui"
 
-#: ../src/common/imagpng.cpp:216 ../src/common/imagpng.cpp:218
-#: src/common/image.cpp:662
-msgid "Couldn't load a PNG image - probably file is corrupted."
+#: ../src/msw/utilsexc.cpp:625
+#, c-format
+msgid "Couldn't launch DDE server '%s'."
+msgstr ""
+
+#: ../src/common/imagpng.cpp:251
+#, fuzzy
+msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr "PNG-kuvan lataus ei onnistu - tiedosto ehkä korruptoitunut."
 
-#: ../src/msw/thread.cpp:159 src/msw/thread.cpp:159
+#: ../src/msw/ole/dataobj.cpp:151
+#, fuzzy, c-format
+msgid "Couldn't register clipboard format '%s'."
+msgstr "Leikepöydän datan formatointi muotoon %s epäonnistui"
+
+#: ../src/msw/thread.cpp:198
 msgid "Couldn't release a mutex"
 msgstr "Mutexin vapautus ei onnistu"
 
-#: ../src/msw/listctrl.cpp:526 ../src/msw/listctrl.cpp:534
-#: src/msw/listctrl.cpp:500
+#: ../src/msw/listctrl.cpp:612
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Tiedonhaku listanhallinnasta %d epäonnistui."
 
-#: ../src/msw/thread.cpp:612 src/msw/thread.cpp:608
+#: ../src/msw/thread.cpp:933
 msgid "Couldn't terminate thread"
 msgstr "Säiettä ei voi keskeyttää"
 
-#: ../src/generic/dirdlgg.cpp:478 ../src/generic/dirdlgg.cpp:482
-#: src/generic/dirdlgg.cpp:478
-msgid "Create New Directory"
+#: ../src/generic/dirdlgg.cpp:571
+#, fuzzy
+msgid "Create directory"
 msgstr "Luo uusi hakemisto"
 
-#: ../src/common/log.cpp:1041 ../src/common/log.cpp:1057
-#: src/common/log.cpp:1022
-msgid "Debug"
-msgstr "Debug"
+#: ../src/generic/filedlgg.cpp:883
+#, fuzzy
+msgid "Create new directory"
+msgstr "Luo uusi hakemisto"
 
-#: ../src/generic/fontdlgg.cpp:209 ../src/generic/fontdlgg.cpp:211
-#: src/generic/fontdlgg.cpp:211
+#: ../src/generic/filedlgg.cpp:890
+#, fuzzy
+msgid "Current directory:"
+msgstr "Hakemisto"
+
+#: ../src/common/fontmap.cpp:101
+msgid "Cyrillic (Latin 5)"
+msgstr ""
+
+#: ../src/common/paper.cpp:106
+#, fuzzy
+msgid "D sheet, 22 x 34 in"
+msgstr "A4 sheet, 210 x 297 mm"
+
+#: ../src/msw/dde.cpp:586
+#, fuzzy
+msgid "DDE poke request failed"
+msgstr "Pipe luonti epäonnistui"
+
+#: ../src/common/paper.cpp:128
+msgid "DL Envelope, 110 x 220 mm"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:535
+msgid "Date"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:207
 msgid "Decorative"
 msgstr "Koristeellinen"
 
-#: ../src/generic/dirdlgg.cpp:450 ../src/generic/dirdlgg.cpp:454
-#: src/generic/dirdlgg.cpp:450
+#: ../src/msw/dialup.cpp:350
+msgid ""
+"Dial up functions are unavailable because the remote access service (RAS) is "
+"not installed on this machine. Please install it."
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:177
+msgid "Did you know..."
+msgstr "Tiesitkö..."
+
+#: ../src/common/filefn.cpp:1086
+#, c-format
+msgid "Directory '%s' couldn't be created"
+msgstr "Hakemistoa '%s' ei onnistuttu luomaan"
+
+#: ../src/generic/dirdlgg.cpp:538
 msgid "Directory does not exist"
 msgstr "Hakemistoa ei ole"
 
-#: ../src/common/docview.cpp:404 ../src/common/docview.cpp:423
-#: src/common/docview.cpp:371
+#: ../src/html/helpfrm.cpp:366
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:535
+msgid "Display options dialog"
+msgstr ""
+
+#: ../src/common/docview.cpp:440
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Haluatko tallentaa muutokset dokumenttiin %s?"
 
-#: src/common/log.cpp:368
-msgid "DoLogString must be overrided if it's called."
-msgstr "DoLogString täytyy korvata jos sitä kutsutaan."
+#: ../src/html/htmlwin.cpp:216
+msgid "Done"
+msgstr ""
 
-#: ../src/generic/dirdlgg.cpp:477 ../src/generic/dirdlgg.cpp:481
-#: src/generic/dirdlgg.cpp:477
-msgid "Enter the name of the directory to create"
-msgstr "Anna nimi uudelle hakemistolle"
+#: ../src/generic/progdlgg.cpp:313
+msgid "Done."
+msgstr ""
 
-#: ../src/generic/helphtml.cpp:260 ../src/generic/helphtml.cpp:277
-#: src/generic/helphtml.cpp:260
+#: ../src/common/paper.cpp:107
+msgid "E sheet, 34 x 44 in"
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:153
+msgid "Elapsed time : "
+msgstr ""
+
+#: ../src/generic/helphtml.cpp:320
 msgid "Entries found"
 msgstr "Löydetty kohdat"
 
-#: src/common/CVS/Base/fileconf.cpp:607 src/common/fileconf.cpp:607
-#, c-format
-msgid "Entry name can't start with '%c'."
-msgstr "Kohdan nimi ei voi alkaa '%c':lla."
-
-#: ../src/common/config.cpp:333 ../src/common/config.cpp:334
-#: src/common/config.cpp:345
+#: ../src/common/config.cpp:349
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %d in '%s'."
 msgstr ""
 
-#: ../src/common/log.cpp:474 ../src/common/log.cpp:478
-#: ../src/generic/dcpsg.cpp:1296 ../src/generic/dcpsg.cpp:1403
-#: ../src/generic/helpxlp.cpp:243 ../src/gtk/filedlg.cpp:79
-#: src/common/log.cpp:474 src/generic/dcpsg.cpp:1247
-#: src/generic/helpxlp.cpp:243
+#: ../src/generic/dirdlgg.cpp:268 ../src/generic/dirdlgg.cpp:286
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:717
+#: ../src/generic/filedlgg.cpp:731 ../src/generic/filedlgg.cpp:744
+#: ../src/generic/filedlgg.cpp:1043 ../src/generic/filedlgg.cpp:1092
+#: ../src/generic/helpxlp.cpp:241 ../src/gtk/filedlg.cpp:83
+#: ../src/gtk/fontdlg.cpp:72
 msgid "Error"
 msgstr "Virhe"
 
-#: ../src/generic/dirdlgg.cpp:462 ../src/generic/dirdlgg.cpp:466
-#: ../src/generic/dirdlgg.cpp:490 ../src/generic/dirdlgg.cpp:494
-#: src/generic/dirdlgg.cpp:462 src/generic/dirdlgg.cpp:490
+#: ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
+msgid "Error "
+msgstr "Virhe "
+
+#: ../src/generic/dirdlgg.cpp:551
 msgid "Error creating directory"
 msgstr "Hakemiston luonnissa virhe"
 
-#: ../src/common/log.cpp:325 ../src/common/log.cpp:329 src/common/log.cpp:332
+#: ../src/common/log.cpp:354
 msgid "Error: "
 msgstr "Virhe: "
 
-#: ../src/generic/dirdlgg.cpp:230 ../src/generic/dirdlgg.cpp:234
-#: src/generic/dirdlgg.cpp:230
+#: ../src/common/fontmap.cpp:99
+msgid "Esperanto (ISO-8859-3)"
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:160
+msgid "Estimated time : "
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:217
 msgid "Etcetera"
 msgstr "Jne"
 
-#: ../src/msw/utilsexc.cpp:237 src/msw/utilsexc.cpp:237
+#: ../src/msw/utilsexc.cpp:521
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Komennon '%s' ajo epäonnistui"
 
+#: ../src/common/paper.cpp:112
+#, fuzzy
+msgid "Executive, 7 1/4 x 10 1/2 in"
+msgstr "Letter 8 1/2 x 11 in"
+
 #: ../src/common/resourc2.cpp:326 ../src/common/resourc2.cpp:1399
-#: ../src/common/resource.cpp:1691 ../src/common/resource.cpp:1692
-#: ../src/common/resource.cpp:2769 ../src/common/resource.cpp:2773
-#: src/common/resourc2.cpp:326 src/common/resourc2.cpp:1399
-#: src/common/resource.cpp:1674 src/common/resource.cpp:2747
+#: ../src/common/resource.cpp:1839 ../src/common/resource.cpp:1969
+#: ../src/common/resource.cpp:3053
 msgid "Expected '*' whilst parsing resource."
 msgstr "Odotettiin '*' resursseja jäsennellessä."
 
 #: ../src/common/resourc2.cpp:342 ../src/common/resourc2.cpp:1415
-#: ../src/common/resource.cpp:1708 ../src/common/resource.cpp:1709
-#: ../src/common/resource.cpp:2786 ../src/common/resource.cpp:2790
-#: src/common/resourc2.cpp:342 src/common/resourc2.cpp:1415
-#: src/common/resource.cpp:1690 src/common/resource.cpp:2763
+#: ../src/common/resource.cpp:1856 ../src/common/resource.cpp:1985
+#: ../src/common/resource.cpp:3070
 msgid "Expected '=' whilst parsing resource."
 msgstr "Odotettiin '=' resusseja jäsennellessä."
 
 #: ../src/common/resourc2.cpp:312 ../src/common/resourc2.cpp:1385
-#: ../src/common/resource.cpp:1677 ../src/common/resource.cpp:1678
-#: ../src/common/resource.cpp:2755 ../src/common/resource.cpp:2759
-#: src/common/resourc2.cpp:312 src/common/resourc2.cpp:1385
-#: src/common/resource.cpp:1660 src/common/resource.cpp:2733
+#: ../src/common/resource.cpp:1825 ../src/common/resource.cpp:1955
+#: ../src/common/resource.cpp:3039
 msgid "Expected 'char' whilst parsing resource."
 msgstr "Odotettiin 'char' resusseja jäsennellessä."
 
-#: ../src/msw/clipbrd.cpp:106 ../src/msw/clipbrd.cpp:112
-#: src/msw/clipbrd.cpp:106
+#: ../src/msw/dialup.cpp:855
+#, c-format
+msgid "Failed to %s dialup connection: %s"
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:122
 msgid "Failed to close the clipboard."
 msgstr "Leikepöydän sulkeminen epäonnistui."
 
-#: ../src/generic/dirdlgg.cpp:460 ../src/generic/dirdlgg.cpp:464
-#: ../src/generic/dirdlgg.cpp:488 ../src/generic/dirdlgg.cpp:492
-#: src/generic/dirdlgg.cpp:460 src/generic/dirdlgg.cpp:488
+#: ../src/msw/dialup.cpp:796
+msgid "Failed to connect: missing username/password."
+msgstr ""
+
+#: ../src/msw/dialup.cpp:742
+#, fuzzy
+msgid "Failed to connect: no ISP to dial."
+msgstr "Dialogin luonti epäonnistui."
+
+#: ../src/msw/registry.cpp:590
+#, fuzzy, c-format
+msgid "Failed to copy registry value '%s'"
+msgstr "rekisteriavaimen '%s' avaus ei onnistu"
+
+#: ../src/msw/registry.cpp:599
+#, c-format
+msgid "Failed to copy the contents of registry key '%s' to '%s'."
+msgstr ""
+
+#: ../src/msw/dde.cpp:923
+#, fuzzy
+msgid "Failed to create DDE string"
+msgstr "Dialogin luonti epäonnistui."
+
+#: ../src/msw/mdi.cpp:421
+msgid "Failed to create MDI parent frame."
+msgstr ""
+
+#: ../src/msw/statbr95.cpp:149
+#, fuzzy
+msgid "Failed to create a status bar."
+msgstr "Dialogin luonti epäonnistui."
+
+#: ../src/msw/dde.cpp:401
+#, fuzzy, c-format
+msgid "Failed to create connection to server '%s' on topic '%s'"
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/msw/dialog.cpp:176
+msgid ""
+"Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
+"resources."
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:549
 msgid "Failed to create directory "
 msgstr "Ei voitu luoda hakemistoa "
 
-#: ../src/msw/tooltip.cpp:260 src/msw/tooltip.cpp:260
+#: ../src/html/winpars.cpp:364
 #, c-format
-msgid "Failed to create the tooltip '%s'"
-msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+msgid "Failed to display HTML document in %s encoding"
+msgstr ""
 
-#: src/msw/dialog.cpp:143
-msgid "Failed to created dialog."
-msgstr "Dialogin luonti ei onnistunut."
-
-#: ../src/msw/clipbrd.cpp:118 ../src/msw/clipbrd.cpp:124
-#: src/msw/clipbrd.cpp:118
+#: ../src/msw/clipbrd.cpp:134
 msgid "Failed to empty the clipboard."
 msgstr "Leikepöydän tyhjennys epäonnistui."
 
-#: ../src/common/resourc2.cpp:808 ../src/common/resource.cpp:2174
-#: ../src/common/resource.cpp:2178 src/common/resourc2.cpp:808
-#: src/common/resource.cpp:2156
+#: ../src/msw/dde.cpp:605
+msgid "Failed to establish an advise loop with DDE server"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:635
+#, c-format
+msgid "Failed to establish dialup connection: %s"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
+#, fuzzy, c-format
+msgid "Failed to execute '%s'\n"
+msgstr "'%s' prosessia ei voi ajaa\n"
+
+#: ../src/common/resourc2.cpp:808 ../src/common/resource.cpp:2458
 #, c-format
 msgid ""
 "Failed to find XBM resource %s.\n"
@@ -608,9 +1148,7 @@ msgstr ""
 "XBM resurssia %s ei löydy.\n"
 "Unohditko käyttää wxResourceLoadBitmapData?"
 
-#: ../src/common/resourc2.cpp:963 ../src/common/resource.cpp:2329
-#: ../src/common/resource.cpp:2333 src/common/resourc2.cpp:963
-#: src/common/resource.cpp:2311
+#: ../src/common/resourc2.cpp:963 ../src/common/resource.cpp:2613
 #, c-format
 msgid ""
 "Failed to find XBM resource %s.\n"
@@ -619,9 +1157,7 @@ msgstr ""
 "XBM resurssia %s ei löydy.\n"
 "Unohditko käyttää wxResourceLoadIconData?"
 
-#: ../src/common/resourc2.cpp:824 ../src/common/resource.cpp:2190
-#: ../src/common/resource.cpp:2194 src/common/resourc2.cpp:824
-#: src/common/resource.cpp:2172
+#: ../src/common/resourc2.cpp:824 ../src/common/resource.cpp:2474
 #, c-format
 msgid ""
 "Failed to find XPM resource %s.\n"
@@ -630,434 +1166,819 @@ msgstr ""
 "XBM resurssia %s ei löydy.\n"
 "Unohditko käyttää wxResourceLoadBitmapData?"
 
-#: ../src/msw/clipbrd.cpp:86 ../src/msw/clipbrd.cpp:92 src/msw/clipbrd.cpp:86
+#: ../src/msw/dialup.cpp:695
+#, c-format
+msgid "Failed to get ISP names: %s"
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:623
+#, fuzzy
+msgid "Failed to get data from the clipboard"
+msgstr "Dataa ei voida hakea leikepöydältä."
+
+#: ../src/common/timercmn.cpp:244
+msgid "Failed to get the UTC system time."
+msgstr ""
+
+#: ../src/common/timercmn.cpp:196
+#, fuzzy
+msgid "Failed to get the local system time"
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/unix/threadpsx.cpp:754
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+
+#: ../src/common/dynlib.cpp:235
+#, c-format
+msgid "Failed to load shared library '%s'"
+msgstr "Jaetun kirjaston '%s' lataus epäonnistui"
+
+#: ../src/msw/clipbrd.cpp:102
 msgid "Failed to open the clipboard."
 msgstr "Leikepöydän avaus ei onnistunut."
 
-#: ../src/msw/clipbrd.cpp:375 ../src/msw/clipbrd.cpp:412
-#: src/msw/clipbrd.cpp:375
+#: ../src/msw/clipbrd.cpp:539
+#, fuzzy
+msgid "Failed to put data on the clipboard"
+msgstr "Dataa ei voida hakea leikepöydältä."
+
+#: ../src/unix/utilsunx.cpp:540
+msgid "Failed to redirect child process input/output"
+msgstr ""
+
+#: ../src/msw/dde.cpp:285
+#, fuzzy, c-format
+msgid "Failed to register DDE server '%s'"
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/common/fontmap.cpp:520
+#, fuzzy, c-format
+msgid "Failed to remember the encoding for the charset '%s'."
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/msw/registry.cpp:436
+#, fuzzy, c-format
+msgid "Failed to rename registry value '%s' to '%s'."
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/msw/registry.cpp:536
+#, fuzzy, c-format
+msgid "Failed to rename the registry key '%s' to '%s'."
+msgstr "rekisteriavaimen '%s' luonti ei onnistu"
+
+#: ../src/msw/clipbrd.cpp:428
 msgid "Failed to retrieve data from the clipboard."
 msgstr "Dataa ei voida hakea leikepöydältä."
 
-#: ../src/msw/clipbrd.cpp:262 ../src/msw/clipbrd.cpp:286
-#: src/msw/clipbrd.cpp:262
+#: ../src/msw/dialup.cpp:459
+#, fuzzy
+msgid "Failed to retrieve text of RAS error message"
+msgstr "Dataa ei voida hakea leikepöydältä."
+
+#: ../src/msw/clipbrd.cpp:652
+#, fuzzy
+msgid "Failed to retrieve the supported clipboard formats"
+msgstr "Dataa ei voida hakea leikepöydältä."
+
+#: ../src/msw/dde.cpp:650
+msgid "Failed to send DDE advise notification"
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:300
 msgid "Failed to set clipboard data."
 msgstr "Leikepöydän datan asetus epäonnistui."
 
-#: ../src/unix/threadpsx.cpp:551 ../src/unix/threadpsx.cpp:592
-#: ../src/unix/threadpsx.cpp:601 src/gtk/threadpsx.cpp:508
+#: ../src/unix/threadpsx.cpp:1071
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Säikeen prioriteetin %d asetus epäonnistui."
 
-#: ../src/unix/threadpsx.cpp:662 ../src/unix/threadpsx.cpp:703
-#: ../src/unix/threadpsx.cpp:713 src/gtk/threadpsx.cpp:611
+#: ../src/common/fs_mem.cpp:167
+#, c-format
+msgid "Failed to store image '%s' to memory VFS!"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1251
 msgid "Failed to terminate a thread."
 msgstr "Säikeen keskeytys ei onnistunut."
 
-#: ../src/common/log.cpp:545 ../src/common/log.cpp:551 src/common/log.cpp:543
+#: ../src/msw/dde.cpp:624
+#, fuzzy
+msgid "Failed to terminate the advise loop with DDE server"
+msgstr "Säikeen keskeytys ei onnistunut."
+
+#: ../src/msw/dialup.cpp:928
+#, fuzzy, c-format
+msgid "Failed to terminate the dialup connection: %s"
+msgstr "Säikeen keskeytys ei onnistunut."
+
+#: ../src/msw/dde.cpp:301
+#, fuzzy, c-format
+msgid "Failed to unregister DDE server '%s'"
+msgstr "Työkaluvihjeen '%s' luonti epäonnistui"
+
+#: ../src/generic/logg.cpp:367
 msgid "Fatal error"
 msgstr "Tuhoisa virhe"
 
-#: ../src/common/log.cpp:318 ../src/common/log.cpp:322 src/common/log.cpp:325
+#: ../src/common/log.cpp:347
 msgid "Fatal error: "
 msgstr "Tuhoisa virhe: "
 
-#: ../src/gtk/filedlg.cpp:68 src/gtk/filedlg.cpp:57
+#: ../src/msw/app.cpp:1257
+msgid "Fatal error: exiting"
+msgstr "Tuhoisa virhe: lopetetaan"
+
+#: ../src/generic/filedlgg.cpp:1074 ../src/gtk/filedlg.cpp:72
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Tiedosto '%s' on olemassa, haluatko korvata sen?"
 
-#: ../src/common/docview.cpp:280 ../src/common/docview.cpp:281
-#: ../src/common/docview.cpp:311 ../src/common/docview.cpp:317
-#: src/common/docview.cpp:247 src/common/docview.cpp:278
+#: ../src/common/textcmn.cpp:94
+#, fuzzy
+msgid "File couldn't be loaded."
+msgstr "Hakemistoa '%s' ei onnistuttu luomaan"
+
+#: ../src/common/docview.cpp:296 ../src/common/docview.cpp:332
+#: ../src/common/docview.cpp:1388
 msgid "File error"
 msgstr "Tiedostovirhe"
 
-#: ../src/msw/filedlg.cpp:259 src/msw/filedlg.cpp:252
+#: ../src/generic/dirdlgg.cpp:286 ../src/generic/filedlgg.cpp:731
+msgid "File name exists already."
+msgstr ""
+
+#: ../src/msw/filedlg.cpp:303
 #, c-format
 msgid "Files (%s)|%s"
 msgstr "Tiedostot (%s)|%s"
 
-#: ../src/generic/fontdlgg.cpp:126 src/generic/fontdlgg.cpp:126
+#: ../src/html/helpfrm.cpp:340
+#, fuzzy
+msgid "Find"
+msgstr "Löydetty "
+
+#: ../src/html/helpfrm.cpp:889
+msgid "Fixed font:"
+msgstr ""
+
+#: ../src/common/paper.cpp:118
+#, fuzzy
+msgid "Folio, 8 1/2 x 13 in"
+msgstr "Legal 8 1/2 x 14 in"
+
+#: ../src/generic/fontdlgg.cpp:124
 msgid "Font"
 msgstr "Kirjasin"
 
-#: ../src/unix/utilsunx.cpp:276 ../src/unix/utilsunx.cpp:287
-#: src/gtk/utilsgtk.cpp:327
+#: ../src/html/helpfrm.cpp:899
+msgid "Font size:"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:497
 msgid "Fork failed"
 msgstr "Haarukointi epäonnistui"
 
+#: ../src/common/dlgcmn.cpp:132 ../src/generic/helpwxht.cpp:158
+msgid "Forward"
+msgstr "Eteenpäin"
+
 #: ../src/common/resourc2.cpp:295 ../src/common/resourc2.cpp:1368
-#: ../src/common/resource.cpp:1660 ../src/common/resource.cpp:1661
-#: ../src/common/resource.cpp:2738 ../src/common/resource.cpp:2742
-#: src/common/resourc2.cpp:295 src/common/resourc2.cpp:1368
-#: src/common/resource.cpp:1643 src/common/resource.cpp:2716
+#: ../src/common/resource.cpp:1808 ../src/common/resource.cpp:1938
+#: ../src/common/resource.cpp:3022
 msgid "Found "
 msgstr "Löydetty "
 
-#: ../src/generic/prntdlgg.cpp:158 ../src/generic/prntdlgg.cpp:165
-#: src/generic/prntdlgg.cpp:97
+#: ../src/html/helpfrm.cpp:637
+#, c-format
+msgid "Found %i matches"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:187
 msgid "From:"
 msgstr "Lähettäjä:"
 
-#: ../src/generic/helphtml.cpp:259 ../src/generic/helphtml.cpp:260
-#: ../src/generic/helphtml.cpp:276 ../src/generic/helphtml.cpp:277
-#: src/generic/helphtml.cpp:259 src/generic/helphtml.cpp:260
+#: ../src/common/imaggif.cpp:74
+msgid "GIF: data stream seems to be truncated."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:58
+msgid "GIF: error in GIF image format."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:61
+msgid "GIF: not enough memory."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:64
+msgid "GIF: unknown error!!!"
+msgstr ""
+
+#: ../src/common/paper.cpp:142
+#, fuzzy
+msgid "German Legal Fanfold, 8 1/2 x 13 in"
+msgstr "Legal 8 1/2 x 14 in"
+
+#: ../src/common/paper.cpp:141
+#, fuzzy
+msgid "German Std Fanfold, 8 1/2 x 12 in"
+msgstr "Legal 8 1/2 x 14 in"
+
+#: ../src/html/helpfrm.cpp:501
+msgid "Go back"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:504
+#, fuzzy
+msgid "Go forward"
+msgstr "Eteenpäin"
+
+#: ../src/html/helpfrm.cpp:509
+msgid "Go one level up in document hierarchy"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:875
+#, fuzzy
+msgid "Go to home directory"
+msgstr "Hakemisto"
+
+#: ../src/generic/filedlgg.cpp:869
+#, fuzzy
+msgid "Go to parent directory"
+msgstr "Ei voitu luoda hakemistoa "
+
+#: ../src/common/fontmap.cpp:103
+msgid "Greek (ISO-8859-7)"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:251
+#, fuzzy, c-format
+msgid "HTML anchor %s does not exist."
+msgstr "Hakemistoa ei ole"
+
+#: ../src/html/helpfrm.cpp:1188
+msgid ""
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books "
+"(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
+"files (*.*)|*"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:104
+msgid "Hebrew (ISO-8859-8)"
+msgstr ""
+
+#: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1276
+msgid "Help"
+msgstr "Apua"
+
+#: ../src/html/helpfrm.cpp:872
+msgid "Help Browser Options"
+msgstr ""
+
+#: ../src/generic/helphtml.cpp:319 ../src/generic/helphtml.cpp:320
 msgid "Help Index"
 msgstr "Help Index"
 
+#: ../src/html/helpfrm.cpp:1172
+#, fuzzy
+msgid "Help Printing"
+msgstr "Tulostaa"
+
+#: ../src/generic/helpwxht.cpp:251 ../src/html/helpctrl.cpp:38
+#, fuzzy, c-format
+msgid "Help: %s"
+msgstr "Apua"
+
+#: ../src/common/fontmap.cpp:108
+msgid "ISO-8859-12"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:110
+msgid "ISO-8859-14"
+msgstr ""
+
 #: ../src/common/resourc2.cpp:997 ../src/common/resourc2.cpp:1008
-#: ../src/common/resource.cpp:2363 ../src/common/resource.cpp:2367
-#: ../src/common/resource.cpp:2374 ../src/common/resource.cpp:2378
-#: src/common/resourc2.cpp:997 src/common/resourc2.cpp:1008
-#: src/common/resource.cpp:2345 src/common/resource.cpp:2356
+#: ../src/common/resource.cpp:2647 ../src/common/resource.cpp:2658
 #, c-format
 msgid "Icon resource specification %s not found."
 msgstr "Kuvakeresurssin määritelmää %s ei löydy."
 
-#: ../src/common/resource.cpp:232 ../src/common/resource.cpp:234
-#: src/common/resource.cpp:234
+#: ../src/common/resource.cpp:251
 msgid "Ill-formed resource file syntax."
 msgstr "Virheellinen resurssitiedoston syntaksi."
 
-#: ../src/common/log.cpp:482 ../src/common/log.cpp:486 src/common/log.cpp:477
-msgid "Information"
-msgstr "Informaatio"
+#: ../src/generic/dirdlgg.cpp:268 ../src/generic/filedlgg.cpp:717
+#, fuzzy
+msgid "Illegal directory name."
+msgstr "Hakemisto"
 
-#: ../src/generic/fontdlgg.cpp:215 ../src/generic/fontdlgg.cpp:217
-#: src/generic/fontdlgg.cpp:217
+#: ../src/generic/filedlgg.cpp:1043
+msgid "Illegal file specification."
+msgstr ""
+
+#: ../src/msw/textctrl.cpp:219
+msgid ""
+"Impossible to create a rich edit control, using simple text control instead. "
+"Please reinstall riched32.dll"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:350
+msgid "Impossible to get child process input"
+msgstr ""
+
+#: ../src/html/helpdata.cpp:403
+msgid "Incorrect version of HTML help book"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:372
+#, fuzzy
+msgid "Index"
+msgstr "Help Index"
+
+#: ../src/common/imagtiff.cpp:171
+msgid "Invalid TIFF image index."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:213
 msgid "Italic"
 msgstr "Italic"
 
-#: ../src/generic/dcpsg.cpp:1908 ../src/generic/dcpsg.cpp:1909
-#: ../src/generic/dcpsg.cpp:2030 ../src/generic/prntdlgg.cpp:403
-#: ../src/generic/prntdlgg.cpp:410 ../src/generic/prntdlgg.cpp:606
-#: ../src/generic/prntdlgg.cpp:613 src/generic/dcpsg.cpp:1866
-#: src/generic/prntdlgg.cpp:289 src/generic/prntdlgg.cpp:499
+#: ../src/common/paper.cpp:137
+msgid "Italy Envelope, 110 x 230 mm"
+msgstr ""
+
+#: ../src/common/imagjpeg.cpp:202
+#, fuzzy
+msgid "JPEG: Couldn't load - file is probably corrupted."
+msgstr "PNG-kuvan lataus ei onnistu - tiedosto ehkä korruptoitunut."
+
+#: ../src/common/imagjpeg.cpp:315
+#, fuzzy
+msgid "JPEG: Couldn't save image."
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/fontmap.cpp:112
+msgid "KOI8-R"
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2248 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Landscape"
 
-#: ../src/generic/prntdlgg.cpp:622 ../src/generic/prntdlgg.cpp:629
-#: src/generic/prntdlgg.cpp:515
+#: ../src/common/paper.cpp:110
+#, fuzzy
+msgid "Ledger, 17 x 11 in"
+msgstr "Letter 8 1/2 x 11 in"
+
+#: ../src/generic/prntdlgg.cpp:649
 msgid "Left margin (mm):"
 msgstr "Vasen marginaali (mm):"
 
-#: src/generic/dcpsg.cpp:2391
-msgid "Legal 8 1/2 x 14 in"
+#: ../src/common/paper.cpp:103
+#, fuzzy
+msgid "Legal, 8 1/2 x 14 in"
 msgstr "Legal 8 1/2 x 14 in"
 
-#: src/generic/dcpsg.cpp:2390
-msgid "Letter 8 1/2 x 11 in"
+#: ../src/common/paper.cpp:108
+#, fuzzy
+msgid "Letter Small, 8 1/2 x 11 in"
 msgstr "Letter 8 1/2 x 11 in"
 
-#: ../src/generic/fontdlgg.cpp:218 ../src/generic/fontdlgg.cpp:220
-#: src/generic/fontdlgg.cpp:220
+#: ../src/common/paper.cpp:102
+#, fuzzy
+msgid "Letter, 8 1/2 x 11 in"
+msgstr "Letter 8 1/2 x 11 in"
+
+#: ../src/generic/fontdlgg.cpp:216
 msgid "Light"
 msgstr "Light"
 
-#: ../src/gtk/filedlg.cpp:212 ../src/gtk/filedlg.cpp:227
-#: ../src/gtk/filedlg.cpp:231 ../src/msw/filedlg.cpp:359
-#: ../src/msw/filedlg.cpp:360 src/gtk/filedlg.cpp:177 src/msw/filedlg.cpp:352
+#: ../src/generic/filedlgg.cpp:1270 ../src/gtk/filedlg.cpp:241
+#: ../src/motif/filedlg.cpp:351 ../src/msw/filedlg.cpp:483
 #, c-format
 msgid "Load %s file"
 msgstr "Lataa %s tiedosto"
 
-#: ../src/common/log.cpp:725 ../src/common/log.cpp:740 src/common/log.cpp:720
+#: ../src/html/htmlwin.cpp:187
+#, fuzzy
+msgid "Loading : "
+msgstr "Varoitus: "
+
+#: ../src/common/imagpnm.cpp:72
+msgid "Loading Grey Ascii PNM image is not yet implemented."
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:75
+msgid "Loading Grey Raw PNM image is not yet implemented."
+msgstr ""
+
+#: ../src/generic/logg.cpp:534
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Loki tallennettu tiedostoon '%s'."
 
-#: ../src/gtk/mdi.cpp:347 ../src/gtk/mdi.cpp:369 src/gtk/mdi.cpp:321
+#: ../src/gtk/mdi.cpp:435
 msgid "MDI child"
 msgstr "MDI child"
 
-#: ../src/common/mimetype.cpp:1263 ../src/common/mimetype.cpp:1265
-#: src/common/mimetype.cpp:1203
+#: ../src/unix/mimetype.cpp:1570
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr ""
 
-#: src/common/mimetype.cpp:968
+#: ../src/common/fs_mem.cpp:144
 #, c-format
-msgid ""
-"Mime.types file %s, line %d: extra characters after the field value ignored."
+msgid "Memory VFS already contains file '%s'!"
 msgstr ""
-"Mime.types tiedosto %s, rivi %d: ylimääräiset merkit kentän arvon jälkeen ohitettu."
 
-#: ../src/common/mimetype.cpp:977 ../src/common/mimetype.cpp:979
-#: src/common/mimetype.cpp:941
+#: ../src/unix/mimetype.cpp:1292
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "Mime.types tiedosto %s, rivi %d: keskeyttämätön quotattu merkkijono."
 
-#: ../src/generic/fontdlgg.cpp:210 ../src/generic/fontdlgg.cpp:212
-#: src/generic/fontdlgg.cpp:212
+#: ../src/generic/fontdlgg.cpp:208
 msgid "Modern"
 msgstr "Moderni"
 
-#: ../src/generic/dirdlgg.cpp:226 ../src/generic/dirdlgg.cpp:230
-#: src/generic/dirdlgg.cpp:226
+#: ../src/common/paper.cpp:138
+msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
+msgstr ""
+
+#: ../src/common/dlgcmn.cpp:141
+msgid "More..."
+msgstr "Lisää..."
+
+#: ../src/generic/dirdlgg.cpp:213
 msgid "Mounted Devices"
 msgstr "Asennetut laitteet"
 
-#: ../src/generic/dirdlgg.cpp:225 ../src/generic/dirdlgg.cpp:229
-#: src/generic/dirdlgg.cpp:225
+#: ../src/generic/dirdlgg.cpp:208
+msgid "My Harddisk"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:212
 msgid "My Home"
 msgstr "Koti"
 
-#: ../src/generic/dirdlgg.cpp:342 ../src/generic/dirdlgg.cpp:346
-#: src/generic/dirdlgg.cpp:342
+#: ../src/generic/filedlgg.cpp:533
+#, fuzzy
+msgid "Name"
+msgstr "am"
+
+#: ../src/generic/dirdlgg.cpp:426
 msgid "New..."
 msgstr "Uusi..."
 
-#: ../src/generic/extdlgg.cpp:103 ../src/generic/extdlgg.cpp:115
-#: ../src/generic/msgdlgg.cpp:111 ../src/generic/msgdlgg.cpp:148
-#: ../src/gtk/msgdlg.cpp:125 src/generic/msgdlgg.cpp:131
+#: ../src/generic/filedlgg.cpp:610
+msgid "NewName"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:515
+msgid "Next page"
+msgstr ""
+
+#: ../src/common/dlgcmn.cpp:111 ../src/common/dlgcmn.cpp:121
+#: ../src/motif/msgdlg.cpp:178
 msgid "No"
 msgstr "Ei"
 
 #: ../src/common/resourc2.cpp:814 ../src/common/resourc2.cpp:969
-#: ../src/common/resource.cpp:2180 ../src/common/resource.cpp:2184
-#: ../src/common/resource.cpp:2335 ../src/common/resource.cpp:2339
-#: src/common/resourc2.cpp:814 src/common/resourc2.cpp:969
-#: src/common/resource.cpp:2162 src/common/resource.cpp:2317
+#: ../src/common/resource.cpp:2464 ../src/common/resource.cpp:2619
 msgid "No XBM facility available!"
 msgstr "XBM laitteistoa ei ole!"
 
-#: ../src/common/resourc2.cpp:830 ../src/common/resource.cpp:2196
-#: ../src/common/resource.cpp:2200 src/common/resourc2.cpp:830
-#: src/common/resource.cpp:2178
+#: ../src/common/resourc2.cpp:830 ../src/common/resource.cpp:2479
 msgid "No XPM facility available!"
 msgstr "XBM laitteistoa ei ole!"
 
-#: ../src/common/resourc2.cpp:991 ../src/common/resource.cpp:2357
-#: ../src/common/resource.cpp:2361 src/common/resourc2.cpp:991
-#: src/common/resource.cpp:2339
+#: ../src/common/resourc2.cpp:991 ../src/common/resource.cpp:2641
 msgid "No XPM icon facility available!"
 msgstr "XBM laitteistoa ei ole!"
 
-#: ../src/generic/helphtml.cpp:254 ../src/generic/helphtml.cpp:271
-#: src/generic/helphtml.cpp:254
+#: ../src/generic/helphtml.cpp:314
 msgid "No entries found."
 msgstr "Kohtia ei löydetty."
 
-#: ../src/generic/fontdlgg.cpp:214 ../src/generic/fontdlgg.cpp:216
-#: ../src/generic/fontdlgg.cpp:217 ../src/generic/fontdlgg.cpp:219
-#: src/generic/fontdlgg.cpp:216 src/generic/fontdlgg.cpp:219
+#: ../src/common/image.cpp:731
+msgid "No handler found for image type."
+msgstr ""
+
+#: ../src/common/image.cpp:739 ../src/common/image.cpp:773
+#, c-format
+msgid "No image handler for type %d defined."
+msgstr ""
+
+#: ../src/common/image.cpp:757 ../src/common/image.cpp:789
+#, c-format
+msgid "No image handler for type %s defined."
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:628
+msgid "No matching page found yet"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:106
+msgid "Nordic (ISO-8859-10)"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:212 ../src/generic/fontdlgg.cpp:215
 msgid "Normal"
 msgstr "Tavallinen"
 
-#: ../src/common/dlgcmn.cpp:116 ../src/common/dlgcmn.cpp:159
-#: ../src/generic/choicdgg.cpp:301 ../src/generic/colrdlgg.cpp:231
-#: ../src/generic/colrdlgg.cpp:233 ../src/generic/dcpsg.cpp:1916
-#: ../src/generic/dcpsg.cpp:1917 ../src/generic/dcpsg.cpp:2038
-#: ../src/generic/dirdlgg.cpp:340 ../src/generic/dirdlgg.cpp:344
-#: ../src/generic/extdlgg.cpp:121 ../src/generic/fontdlgg.cpp:258
-#: ../src/generic/fontdlgg.cpp:260 ../src/generic/msgdlgg.cpp:117
-#: ../src/generic/msgdlgg.cpp:158 ../src/generic/prntdlgg.cpp:171
-#: ../src/generic/prntdlgg.cpp:178 ../src/generic/prntdlgg.cpp:429
-#: ../src/generic/prntdlgg.cpp:436 ../src/generic/prntdlgg.cpp:579
-#: ../src/generic/prntdlgg.cpp:586 ../src/generic/textdlgg.cpp:136
-#: ../src/gtk/choicdlg.cpp:266 ../src/gtk/filedlg.cpp:148
-#: ../src/gtk/msgdlg.cpp:131 ../src/gtk/textdlg.cpp:109
-#: src/generic/choicdgg.cpp:301 src/generic/colrdlgg.cpp:231
-#: src/generic/dcpsg.cpp:1874 src/generic/dirdlgg.cpp:340
-#: src/generic/fontdlgg.cpp:260 src/generic/msgdlgg.cpp:138
-#: src/generic/prntdlgg.cpp:110 src/generic/prntdlgg.cpp:316
-#: src/generic/prntdlgg.cpp:472 src/generic/textdlgg.cpp:136
-#: src/gtk/filedlg.cpp:125
+#: ../src/html/helpfrm.cpp:881
+#, fuzzy
+msgid "Normal font:"
+msgstr "Tavallinen"
+
+#: ../src/common/paper.cpp:122
+#, fuzzy
+msgid "Note, 8 1/2 x 11 in"
+msgstr "Letter 8 1/2 x 11 in"
+
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2256
+#: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
+#: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
+#: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
+#: ../src/html/helpfrm.cpp:909
 msgid "OK"
 msgstr "OK"
 
-#: ../src/generic/prntdlgg.cpp:409 ../src/generic/prntdlgg.cpp:416
-#: src/generic/prntdlgg.cpp:295
+#: ../src/html/helpfrm.cpp:523 ../src/html/helpfrm.cpp:1183
+msgid "Open HTML document"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
+msgid "Operation not permitted."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:590
+#, fuzzy, c-format
+msgid "Option '%s' requires a value, '=' expected."
+msgstr "tiedosto '%s', rivi %d: '=' odotettu."
+
+#: ../src/common/cmdline.cpp:610
+#, c-format
+msgid "Option '%s' requires a value."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:671
+#, c-format
+msgid "Option '%s': '%s' cannot be converted to a date."
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:447
 msgid "Options"
 msgstr "Asetukset"
 
-#: ../src/generic/prntdlgg.cpp:405 ../src/generic/prntdlgg.cpp:412
-#: ../src/generic/prntdlgg.cpp:607 ../src/generic/prntdlgg.cpp:614
-#: src/generic/prntdlgg.cpp:291 src/generic/prntdlgg.cpp:500
+#: ../src/generic/prntdlgg.cpp:443 ../src/generic/prntdlgg.cpp:638
 msgid "Orientation"
 msgstr "Orientaatio"
 
-#: ../src/common/prntbase.cpp:695 ../src/common/prntbase.cpp:705
-#: src/common/prntbase.cpp:693
+#: ../src/common/imagpcx.cpp:448 ../src/common/imagpcx.cpp:471
+#, fuzzy
+msgid "PCX: couldn't allocate memory"
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/imagpcx.cpp:447
+msgid "PCX: image format unsupported"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:470
+#, fuzzy
+msgid "PCX: invalid image"
+msgstr "virheellinen päivämäärä"
+
+#: ../src/common/imagpcx.cpp:434
+msgid "PCX: this is not a PCX file."
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:450 ../src/common/imagpcx.cpp:472
+msgid "PCX: unknown error !!!"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:449
+msgid "PCX: version number too low"
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:96
+#, fuzzy
+msgid "PNM: Couldn't allocate memory."
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/imagpnm.cpp:80
+msgid "PNM: File format is not recognized."
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:112
+msgid "PNM: File seems truncated."
+msgstr ""
+
+#: ../src/common/prntbase.cpp:731
 #, c-format
 msgid "Page %d"
 msgstr "Sivu %d"
 
-#: ../src/common/prntbase.cpp:693 ../src/common/prntbase.cpp:703
-#: src/common/prntbase.cpp:691
+#: ../src/common/prntbase.cpp:729
 #, c-format
 msgid "Page %d of %d"
 msgstr "Sivu %d / %d"
 
-#: ../src/generic/prntdlgg.cpp:564 ../src/generic/prntdlgg.cpp:571
-#: src/generic/prntdlgg.cpp:457
+#: ../src/generic/prntdlgg.cpp:604
 msgid "Page Setup"
 msgstr "Sivun asetukset"
 
-#: ../src/generic/prntdlgg.cpp:141 ../src/generic/prntdlgg.cpp:148
-#: src/generic/prntdlgg.cpp:84
+#: ../src/generic/prntdlgg.cpp:164
 msgid "Pages"
 msgstr "Sivut"
 
-#: ../src/generic/prntdlgg.cpp:395 ../src/generic/prntdlgg.cpp:402
-#: ../src/generic/prntdlgg.cpp:756 ../src/generic/prntdlgg.cpp:763
-#: src/generic/prntdlgg.cpp:281 src/generic/prntdlgg.cpp:629
+#: ../src/generic/prntdlgg.cpp:555 ../src/generic/prntdlgg.cpp:626
+#: ../src/generic/prntdlgg.cpp:808
+#, fuzzy
+msgid "Paper Size"
+msgstr "Paperin koko"
+
+#: ../src/generic/prntdlgg.cpp:433 ../src/generic/prntdlgg.cpp:615
+#: ../src/generic/prntdlgg.cpp:804
 msgid "Paper size"
 msgstr "Paperin koko"
 
-#: ../src/unix/utilsunx.cpp:259 ../src/unix/utilsunx.cpp:270
-#: src/gtk/utilsgtk.cpp:315
+#: ../src/generic/filedlgg.cpp:537
+msgid "Permissions"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
 msgid "Pipe creation failed"
 msgstr "Pipe luonti epäonnistui"
 
-#: ../src/common/prntbase.cpp:107 ../src/common/prntbase.cpp:112
-#: src/common/prntbase.cpp:111
+#: ../src/gtk/fontdlg.cpp:72
+#, fuzzy
+msgid "Please choose a valid font."
+msgstr "Valitse olemassaoleva tiedosto."
+
+#: ../src/generic/filedlgg.cpp:1092 ../src/gtk/filedlg.cpp:83
+msgid "Please choose an existing file."
+msgstr "Valitse olemassaoleva tiedosto."
+
+#: ../src/msw/dialup.cpp:763
+msgid "Please choose which ISP do you want to connect to"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:107
 msgid "Please wait..."
 msgstr "Odota..."
 
-#: ../src/generic/dcpsg.cpp:1907 ../src/generic/dcpsg.cpp:1908
-#: ../src/generic/dcpsg.cpp:2029 ../src/generic/prntdlgg.cpp:402
-#: ../src/generic/prntdlgg.cpp:409 ../src/generic/prntdlgg.cpp:605
-#: ../src/generic/prntdlgg.cpp:612 src/generic/dcpsg.cpp:1865
-#: src/generic/prntdlgg.cpp:288 src/generic/prntdlgg.cpp:498
+#: ../src/generic/dcpsg.cpp:2247 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Portrait"
 
-#: ../src/generic/dcpsg.cpp:366 ../src/generic/dcpsg.cpp:372
-#: src/generic/dcpsg.cpp:338
+#: ../src/generic/dcpsg.cpp:391
 msgid "PostScript"
 msgstr "PostScript"
 
-#: ../src/generic/prntdlgg.cpp:234 ../src/generic/prntdlgg.cpp:241
-#: src/generic/prntdlgg.cpp:159
+#: ../src/generic/prntdlgg.cpp:272
 msgid "PostScript file"
 msgstr "PostScript tiedosto"
 
-#: ../src/generic/dcpsg.cpp:1949 ../src/generic/dcpsg.cpp:1950
-#: ../src/generic/dcpsg.cpp:2071 src/generic/dcpsg.cpp:1907
+#: ../src/generic/dcpsg.cpp:2289
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:1912 ../src/generic/dcpsg.cpp:1913
-#: ../src/generic/dcpsg.cpp:2034 src/generic/dcpsg.cpp:1870
+#: ../src/generic/dcpsg.cpp:2252
 msgid "Preview Only"
 msgstr "Vain esikatselu"
 
-#: ../src/generic/prntdlgg.cpp:102 ../src/generic/prntdlgg.cpp:109
-#: ../src/generic/prntdlgg.cpp:116 ../src/generic/prntdlgg.cpp:123
-#: src/generic/prntdlgg.cpp:71
+#: ../src/html/helpfrm.cpp:903
+#, fuzzy
+msgid "Preview:"
+msgstr "Vain esikatselu"
+
+#: ../src/html/helpfrm.cpp:512
+msgid "Previous page"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:113 ../src/generic/prntdlgg.cpp:127
 msgid "Print"
 msgstr "Tulosta"
 
-#: ../src/generic/printps.cpp:189 ../src/generic/printps.cpp:193
-#: ../src/generic/printps.cpp:194 src/generic/printps.cpp:165
-msgid "Print Error"
-msgstr "Tulostusvirhe"
-
-#: ../src/common/docview.cpp:831 ../src/common/docview.cpp:857
-#: src/common/docview.cpp:785
+#: ../src/common/docview.cpp:897
 msgid "Print Preview"
 msgstr "Tulostuksen esikatselu"
 
-#: ../src/common/prntbase.cpp:636 ../src/common/prntbase.cpp:646
-#: ../src/common/prntbase.cpp:658 ../src/common/prntbase.cpp:668
-#: ../src/common/prntbase.cpp:675 ../src/common/prntbase.cpp:685
-#: src/common/prntbase.cpp:633 src/common/prntbase.cpp:655
-#: src/common/prntbase.cpp:673
+#: ../src/common/prntbase.cpp:687 ../src/common/prntbase.cpp:711
 msgid "Print Preview Failure"
 msgstr "Tulostuksen esikatselu epäonnistui"
 
-#: ../src/generic/prntdlgg.cpp:149 ../src/generic/prntdlgg.cpp:156
-#: src/generic/prntdlgg.cpp:90
+#: ../src/generic/prntdlgg.cpp:172
 msgid "Print Range"
 msgstr "Tulostusalue"
 
-#: ../src/generic/prntdlgg.cpp:370 ../src/generic/prntdlgg.cpp:377
-#: ../src/generic/prntdlgg.cpp:384 src/generic/prntdlgg.cpp:276
+#: ../src/generic/prntdlgg.cpp:408 ../src/generic/prntdlgg.cpp:415
 msgid "Print Setup"
 msgstr "Tulostusasetukset"
 
-#: ../src/generic/prntdlgg.cpp:417 ../src/generic/prntdlgg.cpp:424
-#: src/generic/prntdlgg.cpp:303
+#: ../src/generic/prntdlgg.cpp:455
 msgid "Print in colour"
 msgstr "Tulosta väreissä"
 
-#: ../src/generic/prntdlgg.cpp:419 ../src/generic/prntdlgg.cpp:426
-#: src/generic/prntdlgg.cpp:306
+#: ../src/generic/prntdlgg.cpp:457
 msgid "Print spooling"
 msgstr "Tulostuksen spoolaus"
 
-#: ../src/generic/dcpsg.cpp:1911 ../src/generic/dcpsg.cpp:1912
-#: ../src/generic/dcpsg.cpp:2033 ../src/generic/prntdlgg.cpp:135
-#: ../src/generic/prntdlgg.cpp:142 src/generic/dcpsg.cpp:1869
-#: src/generic/prntdlgg.cpp:78
+#: ../src/html/helpfrm.cpp:529
+#, fuzzy
+msgid "Print this page"
+msgstr "Tulostusalue"
+
+#: ../src/generic/dcpsg.cpp:2251 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Tulosta tiedostoon"
 
-#: ../src/common/prntbase.cpp:350 ../src/common/prntbase.cpp:359
-#: src/common/prntbase.cpp:349
+#: ../src/common/prntbase.cpp:366
 msgid "Print..."
 msgstr "Tulosta..."
 
-#: ../src/generic/dcpsg.cpp:1922 ../src/generic/dcpsg.cpp:1923
-#: ../src/generic/dcpsg.cpp:2044 src/generic/dcpsg.cpp:1880
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Printer Command: "
 msgstr "Tulostinkomento: "
 
-#: ../src/generic/dcpsg.cpp:1927 ../src/generic/dcpsg.cpp:1928
-#: ../src/generic/dcpsg.cpp:2049 src/generic/dcpsg.cpp:1885
+#: ../src/generic/dcpsg.cpp:2267
 msgid "Printer Options: "
 msgstr "Tulostimen asetukset: "
 
-#: ../src/generic/dcpsg.cpp:335 ../src/generic/dcpsg.cpp:341
-#: src/generic/dcpsg.cpp:306
+#: ../src/generic/dcpsg.cpp:360
 msgid "Printer Settings"
 msgstr "Tulostimen asetukset"
 
-#: ../src/generic/prntdlgg.cpp:421 ../src/generic/prntdlgg.cpp:428
-#: src/generic/prntdlgg.cpp:308
+#: ../src/generic/prntdlgg.cpp:459
 msgid "Printer command:"
 msgstr "Tulostinkomento:"
 
-#: ../src/generic/prntdlgg.cpp:133 ../src/generic/prntdlgg.cpp:140
-#: src/generic/prntdlgg.cpp:76
+#: ../src/generic/prntdlgg.cpp:149
 msgid "Printer options"
 msgstr "Tulostimen asetukset"
 
-#: ../src/generic/prntdlgg.cpp:425 ../src/generic/prntdlgg.cpp:432
-#: src/generic/prntdlgg.cpp:312
+#: ../src/generic/prntdlgg.cpp:463
 msgid "Printer options:"
 msgstr "Tulostimen asetukset:"
 
-#: ../src/generic/prntdlgg.cpp:582 ../src/generic/prntdlgg.cpp:589
-#: src/generic/prntdlgg.cpp:475
+#: ../src/generic/prntdlgg.cpp:682
 msgid "Printer..."
 msgstr "Tulostin..."
 
-#: ../src/common/prntbase.cpp:106 ../src/common/prntbase.cpp:111
-#: ../src/common/prntbase.cpp:148 ../src/common/prntbase.cpp:153
-#: src/common/prntbase.cpp:110 src/common/prntbase.cpp:152
+#: ../src/common/prntbase.cpp:106 ../src/common/prntbase.cpp:148
 msgid "Printing"
 msgstr "Tulostaa"
 
-#: ../src/common/prntbase.cpp:120 ../src/common/prntbase.cpp:125
-#: src/common/prntbase.cpp:124
+#: ../src/common/prntbase.cpp:120
 msgid "Printing Error"
 msgstr "Tulostusvirhe"
 
-#: ../src/common/log.cpp:319 ../src/common/log.cpp:323 src/common/log.cpp:326
+#: ../src/generic/printps.cpp:232
+#, c-format
+msgid "Printing page %d..."
+msgstr "Tulostetaan sivua %d..."
+
+#: ../src/generic/printps.cpp:192
+msgid "Printing..."
+msgstr "Tulostetaan..."
+
+#: ../src/common/log.cpp:348
 msgid "Program aborted."
 msgstr "Ohjelma keskeytetty."
 
-#: ../src/common/log.cpp:677 ../src/common/log.cpp:692 src/common/log.cpp:672
+#: ../src/common/paper.cpp:119
+#, fuzzy
+msgid "Quarto, 215 x 275 mm"
+msgstr "A4 210 x 297 mm"
+
+#: ../src/generic/logg.cpp:1019
 msgid "Question"
 msgstr "Kysymys"
 
-#: ../src/msw/registry.cpp:435 src/msw/registry.cpp:435
+#: ../src/common/ffile.cpp:133 ../src/common/ffile.cpp:154
+#, fuzzy, c-format
+msgid "Read error on file '%s'"
+msgstr "Korvaa tiedosto '%s'?"
+
+#: ../src/msw/registry.cpp:528
+#, c-format
+msgid "Registry key '%s' already exists."
+msgstr ""
+
+#: ../src/msw/registry.cpp:497
+#, c-format
+msgid "Registry key '%s' does not exist, cannot rename it."
+msgstr ""
+
+#: ../src/msw/registry.cpp:623
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -1068,169 +1989,337 @@ msgstr ""
 "toimintaan. Poistamalla avaimen saatat järjestelmäsi epä-\n"
 "vakaiseen tilaan: ohjelma keskeytetty."
 
-#: ../src/generic/helphtml.cpp:259 ../src/generic/helphtml.cpp:276
-#: src/generic/helphtml.cpp:259
+#: ../src/msw/registry.cpp:428
+#, c-format
+msgid "Registry value '%s' already exists."
+msgstr ""
+
+#: ../src/generic/helphtml.cpp:319
 msgid "Relevant entries:"
 msgstr "Tähdelliset kohdat:"
 
-#: ../src/msw/filedlg.cpp:336 src/msw/filedlg.cpp:329
+#: ../src/generic/progdlgg.cpp:167
+msgid "Remaining time : "
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:269
+msgid "Remove current page from bookmarks"
+msgstr ""
+
+#: ../src/msw/filedlg.cpp:445
 #, c-format
 msgid "Replace file '%s'?"
 msgstr "Korvaa tiedosto '%s'?"
 
-#: ../src/generic/prntdlgg.cpp:628 ../src/generic/prntdlgg.cpp:635
-#: src/generic/prntdlgg.cpp:521
+#: ../src/generic/prntdlgg.cpp:661
 msgid "Right margin (mm):"
 msgstr "Oikea marginaali (mm):"
 
-#: ../src/generic/fontdlgg.cpp:208 ../src/generic/fontdlgg.cpp:210
-#: src/generic/fontdlgg.cpp:210
+#: ../src/generic/fontdlgg.cpp:206
 msgid "Roman"
 msgstr "Roman"
 
-#: ../src/gtk/filedlg.cpp:228 ../src/gtk/filedlg.cpp:243
-#: ../src/gtk/filedlg.cpp:247 ../src/msw/filedlg.cpp:359
-#: ../src/msw/filedlg.cpp:361 src/gtk/filedlg.cpp:193 src/msw/filedlg.cpp:352
+#: ../src/generic/filedlgg.cpp:1286 ../src/gtk/filedlg.cpp:257
+#: ../src/motif/filedlg.cpp:353 ../src/msw/filedlg.cpp:484
 #, c-format
 msgid "Save %s file"
 msgstr "Tallenna %s tiedosto"
 
-#: ../src/common/docview.cpp:231 ../src/common/docview.cpp:234
-#: src/common/docview.cpp:198
+#: ../src/common/docview.cpp:249
 msgid "Save as"
 msgstr "Tallenna nimellä"
 
-#: ../src/common/log.cpp:635 ../src/common/log.cpp:646 src/common/log.cpp:630
+#: ../src/generic/logg.cpp:469
 msgid "Save log contents to file"
 msgstr "Tallenna lokisisältö tiedostoon"
 
-#: ../src/generic/fontdlgg.cpp:211 ../src/generic/fontdlgg.cpp:213
-#: src/generic/fontdlgg.cpp:213
+#: ../src/generic/fontdlgg.cpp:209
 msgid "Script"
 msgstr "Skripti"
 
-#: ../src/common/docview.cpp:1268 ../src/common/docview.cpp:1272
-#: ../src/common/docview.cpp:1299 src/common/docview.cpp:1243
+#: ../src/generic/helpwxht.cpp:161 ../src/html/helpfrm.cpp:414
+#: ../src/html/helpfrm.cpp:434
+msgid "Search"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:416
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:735
+msgid "Search in all books"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:628
+#, fuzzy
+msgid "Searching..."
+msgstr "Tulostetaan..."
+
+#: ../src/generic/dirdlgg.cpp:191
+#, fuzzy
+msgid "Sections"
+msgstr "Asetukset"
+
+#: ../src/common/ffile.cpp:221
+#, fuzzy, c-format
+msgid "Seek error on file '%s'"
+msgstr "tiedostoa '%s' ei voi avata"
+
+#: ../src/common/docview.cpp:1469
 msgid "Select a document template"
 msgstr "Valitse dokumenttipohja"
 
-#: ../src/common/docview.cpp:1291 ../src/common/docview.cpp:1295
-#: ../src/common/docview.cpp:1322 src/common/docview.cpp:1266
+#: ../src/common/docview.cpp:1494
 msgid "Select a document view"
 msgstr "Valitse dokumentin näkymä"
 
-#: ../src/common/docview.cpp:1185 ../src/common/docview.cpp:1189
-#: ../src/common/docview.cpp:1216 ../src/common/docview.cpp:1223
-#: ../src/common/docview.cpp:1227 ../src/common/docview.cpp:1254
-#: src/common/docview.cpp:1168 src/common/docview.cpp:1198
+#: ../src/common/docview.cpp:1371 ../src/common/docview.cpp:1422
 msgid "Select a file"
 msgstr "Valitse tiedosto"
 
-#: ../src/generic/dcpsg.cpp:1910 ../src/generic/dcpsg.cpp:1911
-#: ../src/generic/dcpsg.cpp:2032 src/generic/dcpsg.cpp:1868
+#: ../src/generic/dcpsg.cpp:2250
 msgid "Send to Printer"
 msgstr "Lähetä tulostimelle"
 
-#: ../src/generic/prntdlgg.cpp:137 ../src/generic/prntdlgg.cpp:144
-#: src/generic/prntdlgg.cpp:80
+#: ../src/common/cmdline.cpp:627
+#, c-format
+msgid "Separator expected after the option '%s'."
+msgstr ""
+
+#: ../src/common/dlgcmn.cpp:138
+msgid "Setup"
+msgstr "Asetukset"
+
+#: ../src/generic/prntdlgg.cpp:155
 msgid "Setup..."
 msgstr "Asetukset..."
 
-#: ../src/common/layout.cpp:1366 ../src/common/layout.cpp:1371
-#: src/common/layout.cpp:1326
-msgid "Sizer error"
-msgstr "Virhe (sizer)"
+#: ../src/msw/dialup.cpp:535
+msgid "Several active dialup connections found, choosing one randomly."
+msgstr ""
 
-#: ../src/generic/fontdlgg.cpp:216 ../src/generic/fontdlgg.cpp:218
-#: src/generic/fontdlgg.cpp:218
+#: ../src/html/helpfrm.cpp:331
+msgid "Show all"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:365
+msgid "Show all items in index"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:913
+msgid "Show hidden files"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:496
+msgid "Show/hide navigation panel"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:534
+msgid "Size"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:214
 msgid "Slant"
 msgstr "Slant"
 
-#: ../src/common/docview.cpp:285 ../src/common/docview.cpp:291
-#: src/common/docview.cpp:252
+#: ../src/common/docview.cpp:306
 msgid "Sorry, could not open this file for saving."
 msgstr "Ei voi avata tiedostoa tallennettavaksi."
 
-#: ../src/common/docview.cpp:316 ../src/common/docview.cpp:322
-#: ../src/common/docview.cpp:327 ../src/common/docview.cpp:333
-#: src/common/docview.cpp:283 src/common/docview.cpp:289
+#: ../src/common/docview.cpp:342 ../src/common/docview.cpp:354
+#: ../src/common/docview.cpp:1390
 msgid "Sorry, could not open this file."
 msgstr "Tiedostoa ei voi avata."
 
-#: ../src/common/docview.cpp:292 ../src/common/docview.cpp:298
-#: src/common/docview.cpp:259
+#: ../src/common/docview.cpp:313
 msgid "Sorry, could not save this file."
 msgstr "Tiedostoa ei voi tallentaa."
 
-#: ../src/common/prntbase.cpp:658 ../src/common/prntbase.cpp:668
-#: src/common/prntbase.cpp:655
+#: ../src/common/prntbase.cpp:687
 msgid "Sorry, not enough memory to create a preview."
 msgstr "Liian vähän muistia esikatseluun."
 
-#: ../src/common/log.cpp:787 ../src/common/log.cpp:803 src/common/log.cpp:781
+#: ../src/common/paper.cpp:111
+#, fuzzy
+msgid "Statement, 5 1/2 x 8 1/2 in"
+msgstr "Letter 8 1/2 x 11 in"
+
+#: ../src/generic/logg.cpp:594
 msgid "Status: "
 msgstr "Tila: "
 
-#: ../src/generic/fontdlgg.cpp:212 ../src/generic/fontdlgg.cpp:214
-#: src/generic/fontdlgg.cpp:214
+#: ../src/generic/fontdlgg.cpp:210
 msgid "Swiss"
 msgstr "Swiss"
 
-#: ../src/generic/fontdlgg.cpp:213 ../src/generic/fontdlgg.cpp:215
-#: src/generic/fontdlgg.cpp:215
+#: ../src/common/imagtiff.cpp:192 ../src/common/imagtiff.cpp:203
+#: ../src/common/imagtiff.cpp:314
+#, fuzzy
+msgid "TIFF: Couldn't allocate memory."
+msgstr "Ajastimen luonti epäonnistui"
+
+#: ../src/common/imagtiff.cpp:163
+msgid "TIFF: Error loading image."
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:214
+#, fuzzy
+msgid "TIFF: Error reading image."
+msgstr "Hakemiston luonnissa virhe"
+
+#: ../src/common/imagtiff.cpp:291
+msgid "TIFF: Error saving image."
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:338
+msgid "TIFF: Error writing image."
+msgstr ""
+
+#: ../src/common/paper.cpp:109
+msgid "Tabloid, 11 x 17 in"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:211
 msgid "Teletype"
 msgstr "Teletype"
 
-#: ../src/common/docview.cpp:1268 ../src/common/docview.cpp:1272
-#: ../src/common/docview.cpp:1299 src/common/docview.cpp:1243
+#: ../src/common/docview.cpp:1469
 msgid "Templates"
 msgstr "Pohjat"
 
-#: ../src/generic/dirdlgg.cpp:231 ../src/generic/dirdlgg.cpp:235
-#: src/generic/dirdlgg.cpp:231
+#: ../src/generic/dirdlgg.cpp:218
 msgid "Temporary"
 msgstr "Väliaikainen"
 
-#: ../src/generic/dirdlgg.cpp:223 ../src/generic/dirdlgg.cpp:227
-#: src/generic/dirdlgg.cpp:223
+#: ../src/common/fontmap.cpp:107
+msgid "Thai (ISO-8859-11)"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:210
 msgid "The Computer"
 msgstr "Tietokone"
 
-#: ../src/generic/dirdlgg.cpp:447 ../src/generic/dirdlgg.cpp:451
-#: src/generic/dirdlgg.cpp:447
+#: ../src/common/fontmap.cpp:479
+#, c-format
+msgid ""
+"The charset '%s' is unknown. You may select\n"
+"another charset to replace it with or choose\n"
+"[Cancel] if it cannot be replaced"
+msgstr ""
+
+#: ../src/msw/ole/dataobj.cpp:169
+#, c-format
+msgid "The clipboard format '%d' doesn't exist."
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:535
 msgid "The directory "
 msgstr "Hakemisto"
 
-#: ../src/msw/thread.cpp:730 src/msw/thread.cpp:719
+#: ../src/common/fontmap.cpp:672
+#, c-format
+msgid ""
+"The encoding '%s' is unknown.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+
+#: ../src/common/docview.cpp:1676
+#, c-format
+msgid ""
+"The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been also removed from the MRU files list."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:761
+#, c-format
+msgid "The required parameter '%s' was not specified."
+msgstr ""
+
+#: ../src/common/textcmn.cpp:121
+msgid "The text couldn't be saved."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:740
+#, c-format
+msgid "The value for the option '%s' must be specified."
+msgstr ""
+
+#: ../src/msw/dialup.cpp:411
+#, c-format
+msgid ""
+"The version of remote access service (RAS) installed on this machine is "
+"tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+
+#: ../src/msw/thread.cpp:1058
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
 msgstr ""
 "Säiemoduulin käynnistys epäonnistui: arvoa ei voi tallentaa säikeen muistiin"
 
-#: src/gtk/threadpsx.cpp:708
-msgid "Thread module initialization failed: failed to create pthread key."
-msgstr "Säiemoduulin käynnistys epäonnistui: pthread-avaimen luonti ei onnistu."
+#: ../src/unix/threadpsx.cpp:1441
+msgid "Thread module initialization failed: failed to create thread key"
+msgstr "Säiemoduulin käynnistys epäonnistui: säieavainta ei voi luoda"
 
-#: ../src/msw/thread.cpp:716 src/msw/thread.cpp:705
+#: ../src/msw/thread.cpp:1046
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
-"Säiemoduulin käynnistys epäonnistui: indexin varaus säikeen muistiin mahdotonta"
+"Säiemoduulin käynnistys epäonnistui: indexin varaus säikeen muistiin "
+"mahdotonta"
 
-#: ../src/generic/prntdlgg.cpp:162 ../src/generic/prntdlgg.cpp:169
-#: src/generic/prntdlgg.cpp:101
+#: ../src/unix/threadpsx.cpp:962
+msgid "Thread priority setting is ignored."
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:536
+msgid "Time"
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:162
+msgid "Tip of the Day"
+msgstr "Päivän vinkki"
+
+#: ../src/generic/tipdlg.cpp:138
+msgid "Tips not available, sorry!"
+msgstr "Valitettavasti vinkkejä ei ole!"
+
+#: ../src/generic/prntdlgg.cpp:191
 msgid "To:"
 msgstr "Vastaanottaja:"
 
-#: ../src/generic/prntdlgg.cpp:637 ../src/generic/prntdlgg.cpp:644
-#: src/generic/prntdlgg.cpp:530
+#: ../src/generic/prntdlgg.cpp:650
 msgid "Top margin (mm):"
 msgstr "Ylämarginaali (mm):"
 
-#: ../src/generic/fontdlgg.cpp:244 ../src/generic/fontdlgg.cpp:246
-#: src/generic/fontdlgg.cpp:246
+#: ../src/common/fs_mem.cpp:202
+#, c-format
+msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
+msgstr ""
+
+#: ../src/common/sckaddr.cpp:107
+msgid "Trying to solve a NULL hostname: giving up"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:105
+msgid "Turkish (ISO-8859-9)"
+msgstr ""
+
+#: ../src/common/paper.cpp:140
+msgid "US Std Fanfold, 14 7/8 x 11 in"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:175
+#, c-format
+msgid "Unable to open requested HTML document: %s"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:242
 msgid "Underline"
 msgstr "Alleviivaus"
 
@@ -1238,723 +2327,825 @@ msgstr "Alleviivaus"
 #: ../src/common/resourc2.cpp:335 ../src/common/resourc2.cpp:349
 #: ../src/common/resourc2.cpp:1378 ../src/common/resourc2.cpp:1392
 #: ../src/common/resourc2.cpp:1408 ../src/common/resourc2.cpp:1422
-#: ../src/common/resource.cpp:1670 ../src/common/resource.cpp:1671
-#: ../src/common/resource.cpp:1684 ../src/common/resource.cpp:1685
-#: ../src/common/resource.cpp:1701 ../src/common/resource.cpp:1702
-#: ../src/common/resource.cpp:1715 ../src/common/resource.cpp:1716
-#: ../src/common/resource.cpp:2748 ../src/common/resource.cpp:2752
-#: ../src/common/resource.cpp:2762 ../src/common/resource.cpp:2766
-#: ../src/common/resource.cpp:2779 ../src/common/resource.cpp:2783
-#: ../src/common/resource.cpp:2793 ../src/common/resource.cpp:2797
-#: src/common/resourc2.cpp:305 src/common/resourc2.cpp:319
-#: src/common/resourc2.cpp:335 src/common/resourc2.cpp:349
-#: src/common/resourc2.cpp:1378 src/common/resourc2.cpp:1392
-#: src/common/resourc2.cpp:1408 src/common/resourc2.cpp:1422
-#: src/common/resource.cpp:1653 src/common/resource.cpp:1667
-#: src/common/resource.cpp:1683 src/common/resource.cpp:1697
-#: src/common/resource.cpp:2726 src/common/resource.cpp:2740
-#: src/common/resource.cpp:2756 src/common/resource.cpp:2770
+#: ../src/common/resource.cpp:1818 ../src/common/resource.cpp:1832
+#: ../src/common/resource.cpp:1849 ../src/common/resource.cpp:1863
+#: ../src/common/resource.cpp:1948 ../src/common/resource.cpp:1962
+#: ../src/common/resource.cpp:1978 ../src/common/resource.cpp:1992
+#: ../src/common/resource.cpp:3032 ../src/common/resource.cpp:3046
+#: ../src/common/resource.cpp:3063 ../src/common/resource.cpp:3077
 msgid "Unexpected end of file whilst parsing resource."
 msgstr "Odottamaton tiedoston loppuminen resursseja jäsennellessä."
 
-#: ../src/common/mimetype.cpp:1019 ../src/common/mimetype.cpp:1021
-#: src/common/mimetype.cpp:985
+#: ../src/common/cmdline.cpp:712
+#, c-format
+msgid "Unexpected parameter '%s'"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1019
+#, c-format
+msgid "Unknown DDE error %08x"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:329
+#, c-format
+msgid "Unknown encoding (%d)"
+msgstr ""
+
+#: ../src/unix/mimetype.cpp:1335
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "Tuntematon kenttä tiedostossa %s, rivillä %d: '%s'."
 
-#: ../src/common/mimetype.cpp:379 ../src/common/mimetype.cpp:381
-#: src/common/mimetype.cpp:363
+#: ../src/common/cmdline.cpp:496
+#, c-format
+msgid "Unknown long option '%s'"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:518
+#, fuzzy, c-format
+msgid "Unknown option '%s'"
+msgstr "URL:ää '%s' ei voitu avata"
+
+#: ../src/common/mimecmn.cpp:161
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Sopimaton '{' mime tyypin %s kohdalla."
 
-#: ../src/common/docview.cpp:1703 ../src/common/docview.cpp:1707
-#: ../src/common/docview.cpp:1718 ../src/common/docview.cpp:1722
-#: ../src/common/docview.cpp:1734 ../src/common/docview.cpp:1745
-#: ../src/common/docview.cpp:1749 ../src/common/docview.cpp:1776
-#: src/common/docview.cpp:1665 src/common/docview.cpp:1680
-#: src/common/docview.cpp:1707
+#: ../src/common/docview.cpp:1923 ../src/common/docview.cpp:1938
+#: ../src/common/docview.cpp:1965
 msgid "Unnamed command"
 msgstr "Nimeämätön komento"
 
-#: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2053
-#: ../src/common/resource.cpp:2057 src/common/resourc2.cpp:687
-#: src/common/resource.cpp:2035
+#: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2336
 #, c-format
 msgid "Unrecognized style %s whilst parsing resource."
 msgstr "Tunnistamaton tyyli %s resursseja jäsennellessä."
 
-#: ../src/msw/clipbrd.cpp:220 ../src/msw/clipbrd.cpp:254
-#: ../src/msw/clipbrd.cpp:330 ../src/msw/clipbrd.cpp:353
-#: src/msw/clipbrd.cpp:220 src/msw/clipbrd.cpp:330
+#: ../src/msw/clipbrd.cpp:268 ../src/msw/clipbrd.cpp:369
 msgid "Unsupported clipboard format."
 msgstr "Leikepöydän formaattia ei ole tuettu."
 
-#: ../src/generic/dirdlgg.cpp:227 ../src/generic/dirdlgg.cpp:231
-#: src/generic/dirdlgg.cpp:227
+#: ../src/common/cmdline.cpp:797
+#, fuzzy, c-format
+msgid "Usage: %s"
+msgstr "Sivu %d"
+
+#: ../src/generic/dirdlgg.cpp:215
 msgid "User"
 msgstr "Käyttäjä"
 
-#: ../src/generic/dirdlgg.cpp:228 ../src/generic/dirdlgg.cpp:232
-#: src/generic/dirdlgg.cpp:228
+#: ../src/generic/dirdlgg.cpp:214
 msgid "User Local"
 msgstr "Paikallinen käyttäjä"
 
-#: ../src/common/valtext.cpp:188 ../src/common/valtext.cpp:194
-#: src/common/valtext.cpp:144 src/common/valtext.cpp:155
-#: src/common/valtext.cpp:164 src/common/valtext.cpp:172
-#: src/common/valtext.cpp:180 src/common/valtext.cpp:189
+#: ../src/common/valtext.cpp:188
 msgid "Validation conflict"
 msgstr "Laillisuuskonflikti"
 
-#: ../src/generic/dirdlgg.cpp:229 ../src/generic/dirdlgg.cpp:233
-#: src/generic/dirdlgg.cpp:229
+#: ../src/generic/dirdlgg.cpp:216
 msgid "Variables"
 msgstr "Muuttujat"
 
-#: ../src/common/docview.cpp:1291 ../src/common/docview.cpp:1295
-#: ../src/common/docview.cpp:1322 src/common/docview.cpp:1266
+#: ../src/generic/filedlgg.cpp:861
+msgid "View files as a detailed view"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:855
+msgid "View files as a list view"
+msgstr ""
+
+#: ../src/common/docview.cpp:1494
 msgid "Views"
 msgstr "Näkymät"
 
-#: ../src/common/docview.cpp:401 ../src/common/docview.cpp:420
-#: ../src/common/log.cpp:478 ../src/common/log.cpp:482
-#: ../src/common/resource.cpp:119 ../src/common/resource.cpp:121
-#: src/common/docview.cpp:368 src/common/resource.cpp:121
+#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
+msgid "Waiting for subprocess termination failed"
+msgstr "Aliprosessin keskeytymisen odotus epäonnistui"
+
+#: ../src/common/docview.cpp:437 ../src/common/resource.cpp:121
 msgid "Warning"
 msgstr "Varoitus"
 
-#: ../src/common/log.cpp:329 ../src/common/log.cpp:333 src/common/log.cpp:336
+#: ../src/common/log.cpp:358
 msgid "Warning: "
 msgstr "Varoitus: "
 
-#: ../src/generic/dcpsg.cpp:1967 ../src/generic/dcpsg.cpp:1968
-#: ../src/generic/dcpsg.cpp:2089 src/generic/dcpsg.cpp:1925
+#: ../src/html/htmlpars.cpp:179
+msgid "Warning: attempt to remove HTML tag handler from empty stack."
+msgstr ""
+
+#: ../src/common/fontmap.cpp:97
+msgid "West European (ISO-8859-1/Latin 1)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:111
+msgid "West European new (ISO-8859-15/Latin 0)"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:406
+msgid "Whole words only"
+msgstr ""
+
+#: ../src/msw/utils.cpp:545
+msgid "Win32s on Windows 3.1"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:1311
+msgid "Window"
+msgstr ""
+
+#: ../src/msw/utils.cpp:577
+msgid "Windows 3.1"
+msgstr ""
+
+#: ../src/msw/utils.cpp:549
+#, c-format
+msgid "Windows 9%c"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:119
+msgid "Windows Arabic (CP 1256)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:120
+msgid "Windows Baltic (CP 1257)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:114
+msgid "Windows Cyrillic (CP 1251)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:116
+msgid "Windows Greek (CP 1253)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:118
+msgid "Windows Hebrew (CP 1255)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:115
+msgid "Windows Latin 1 (CP 1252)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:113
+msgid "Windows Latin 2 (CP 1250)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:117
+msgid "Windows Turkish (CP 1254)"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:121
+msgid "Windows/DOS OEM (CP 437)"
+msgstr ""
+
+#: ../src/common/ffile.cpp:168
+#, fuzzy, c-format
+msgid "Write error on file '%s'"
+msgstr "tiedostoa '%s' ei voi avata"
+
+#: ../src/generic/dcpsg.cpp:2307
 msgid "X Scaling"
 msgstr "X skaalaus"
 
-#: ../src/generic/dcpsg.cpp:1976 ../src/generic/dcpsg.cpp:1977
-#: ../src/generic/dcpsg.cpp:2098 src/generic/dcpsg.cpp:1934
+#: ../src/generic/dcpsg.cpp:2316
 msgid "X Translation"
 msgstr "X käännös"
 
-#: ../src/generic/dcpsg.cpp:1971 ../src/generic/dcpsg.cpp:1972
-#: ../src/generic/dcpsg.cpp:2093 src/generic/dcpsg.cpp:1929
+#: ../src/generic/dcpsg.cpp:2311
 msgid "Y Scaling"
 msgstr "Y skaalaus"
 
-#: ../src/generic/dcpsg.cpp:1980 ../src/generic/dcpsg.cpp:1981
-#: ../src/generic/dcpsg.cpp:2102 src/generic/dcpsg.cpp:1938
+#: ../src/generic/dcpsg.cpp:2320
 msgid "Y Translation"
 msgstr "Y käännös"
 
-#: ../src/generic/extdlgg.cpp:101 ../src/generic/extdlgg.cpp:109
-#: ../src/generic/msgdlgg.cpp:109 ../src/generic/msgdlgg.cpp:147
-#: ../src/gtk/msgdlg.cpp:123 src/generic/msgdlgg.cpp:130
+#: ../src/common/dlgcmn.cpp:109 ../src/common/dlgcmn.cpp:116
+#: ../src/motif/msgdlg.cpp:178
 msgid "Yes"
 msgstr "Kyllä"
 
-#: ../src/common/docview.cpp:1814 ../src/common/docview.cpp:1818
-#: ../src/common/docview.cpp:1845 src/common/docview.cpp:1777
+#: ../src/generic/dirdlgg.cpp:570
+msgid "You cannot add a new directory to this section."
+msgstr ""
+
+#: ../src/common/docview.cpp:2034
 msgid "[EMPTY]"
 msgstr "[TYHJÄ]"
 
-#: ../src/common/time.cpp:358 src/common/time.cpp:358
-msgid "am"
-msgstr "am"
+#: ../src/msw/dde.cpp:986
+msgid "a DDEML application has created a prolonged race condition."
+msgstr ""
 
-#: ../src/common/fileconf.cpp:1265 ../src/common/fileconf.cpp:1266
-#: src/common/CVS/Base/fileconf.cpp:1269 src/common/fileconf.cpp:1269
+#: ../src/msw/dde.cpp:974
+msgid ""
+"a DDEML function was called without first calling the DdeInitialize "
+"function,\n"
+"or an invalid instance identifier\n"
+"was passed to a DDEML function."
+msgstr ""
+
+#: ../src/msw/dde.cpp:992
+msgid "a client's attempt to establish a conversation has failed."
+msgstr ""
+
+#: ../src/msw/dde.cpp:989
+#, fuzzy
+msgid "a memory allocation failed."
+msgstr "Pipe luonti epäonnistui"
+
+#: ../src/msw/dde.cpp:983
+msgid "a parameter failed to be validated by the DDEML."
+msgstr ""
+
+#: ../src/msw/dde.cpp:965
+msgid "a request for a synchronous advise transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:971
+msgid "a request for a synchronous data transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:980
+msgid "a request for a synchronous execute transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:998
+msgid "a request for a synchronous poke transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1013
+msgid "a request to end an advise transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1007
+msgid ""
+"a server-side transaction was attempted on a conversation\n"
+"that was terminated by the client, or the server\n"
+"terminated before completing a transaction."
+msgstr ""
+
+#: ../src/msw/dde.cpp:995
+#, fuzzy
+msgid "a transaction failed."
+msgstr "Pipe luonti epäonnistui"
+
+#: ../src/common/utilscmn.cpp:466
+msgid "alt"
+msgstr "alt"
+
+#: ../src/msw/dde.cpp:977
+msgid ""
+"an application initialized as APPCLASS_MONITOR has\n"
+"attempted to perform a DDE transaction,\n"
+"or an application initialized as APPCMD_CLIENTONLY has \n"
+"attempted to perform server transactions."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1001
+msgid "an internal call to the PostMessage function has failed. "
+msgstr ""
+
+#: ../src/msw/dde.cpp:1010
+msgid "an internal error has occurred in the DDEML."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1016
+msgid ""
+"an invalid transaction identifier was passed to a DDEML function.\n"
+"Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
+"the transaction identifier for that callback is no longer valid."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1440
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "muuttumattoman avaimen '%s' muutosyritys ohitettu."
 
-#: ../src/common/string.cpp:1703 ../src/common/string.cpp:1830
-#: src/common/string.cpp:1430
-msgid "bad index in wxArrayString::Remove"
-msgstr "wxArrayString::Remove - väärä indeksi"
+#: ../src/common/ffile.cpp:101
+#, fuzzy, c-format
+msgid "can't close file '%s'"
+msgstr "tiedostoa '%s' ei voi avata"
 
-#: ../src/common/file.cpp:273 ../src/common/file.cpp:274
-#: src/common/file.cpp:268
+#: ../src/common/file.cpp:257
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "tiedoston kuvausta %d ei voida sulkea"
 
-#: ../src/msw/registry.cpp:403 src/msw/registry.cpp:403
-#, c-format
-msgid "can't close registry key '%s'"
-msgstr "rekisteriavainta '%s' ei voida sulkea"
-
-#: ../src/common/file.cpp:563 ../src/common/file.cpp:564
-#: src/common/file.cpp:520
+#: ../src/common/file.cpp:555 ../src/common/file.cpp:565
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "muutoksia tiedostoon '%s' ei voi tehdä"
 
-#: ../src/common/file.cpp:224 ../src/common/file.cpp:225
-#: src/common/file.cpp:215
+#: ../src/common/file.cpp:200
 #, c-format
 msgid "can't create file '%s'"
 msgstr "tiedoston '%s' luonti ei onnistu"
 
-#: ../src/msw/registry.cpp:386 src/msw/registry.cpp:386
-#, c-format
-msgid "can't create registry key '%s'"
-msgstr "rekisteriavaimen '%s' luonti ei onnistu"
-
-#: ../src/msw/registry.cpp:467 src/msw/registry.cpp:467
-#, c-format
-msgid "can't delete key '%s'"
-msgstr "avainta '%s' ei voi poistaa"
-
-#: ../src/common/fileconf.cpp:735 ../src/common/fileconf.cpp:736
-#: src/common/CVS/Base/fileconf.cpp:742 src/common/fileconf.cpp:742
+#: ../src/common/fileconf.cpp:910
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "käyttäjän asetustiedostoa '%s' ei voi poistaa"
 
-#: ../src/msw/registry.cpp:492 src/msw/registry.cpp:492
-#, c-format
-msgid "can't delete value '%s' from key '%s'"
-msgstr "arvon '%s' poisto avaimesta '%s' ei onnistu"
-
-#: ../src/msw/registry.cpp:503 src/msw/registry.cpp:503
-#, c-format
-msgid "can't delete value of key '%s'"
-msgstr "avaimen '%s' arvoa ei voi poistaa"
-
-#: src/common/file.cpp:447
+#: ../src/common/file.cpp:436
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr ""
 
-#: ../src/msw/registry.cpp:780 ../src/msw/registry.cpp:791
-#: src/msw/registry.cpp:780
-#, c-format
-msgid "can't enumerate subkeys of key '%s'"
-msgstr "avaimen '%s' ala-avaimia ei voi luetella"
-
-#: ../src/msw/registry.cpp:735 ../src/msw/registry.cpp:746
-#: src/msw/registry.cpp:735
-#, c-format
-msgid "can't enumerate values of key '%s'"
-msgstr "avaimen '%s' arvoja ei voi luetella"
-
-#: ../src/common/file.cpp:418 ../src/common/file.cpp:419
-#: src/common/file.cpp:413
+#: ../src/common/file.cpp:402
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "tiedoston kokoa ei löydy tiedoston kuvauksesta %d"
 
-#: ../src/msw/utils.cpp:584 ../src/msw/utils.cpp:622 src/msw/utils.cpp:561
+#: ../src/msw/utils.cpp:376
 msgid "can't find user's HOME, using current directory."
 msgstr "käyttäjän kotihakemistoa ei löydy, käytetään nykyistä hakemistoa."
 
-#: ../src/common/file.cpp:332 ../src/common/file.cpp:333
-#: src/common/file.cpp:327
+#: ../src/common/file.cpp:316
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "tiedoston kuvausta %d ei voida tyhjentää"
 
-#: ../src/msw/registry.cpp:335 src/msw/registry.cpp:335
-#, c-format
-msgid "can't get info about registry key '%s'"
-msgstr "tiedon saanti rekisteriavaimesta '%s' ei onnistu"
-
-#: ../src/common/file.cpp:386 ../src/common/file.cpp:387
-#: src/common/file.cpp:381
+#: ../src/common/file.cpp:370
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "paikanmääritys tiedoston kuvauksessa %d ei onnistu"
 
-#: ../src/common/file.cpp:259 ../src/common/file.cpp:260
-#: src/common/file.cpp:254
+#: ../src/common/fontmap.cpp:614
+msgid "can't load any font, aborting"
+msgstr ""
+
+#: ../src/common/ffile.cpp:85 ../src/common/file.cpp:243
 #, c-format
 msgid "can't open file '%s'"
 msgstr "tiedostoa '%s' ei voi avata"
 
-#: ../src/common/fileconf.cpp:182 ../src/common/fileconf.cpp:183
-#: src/common/CVS/Base/fileconf.cpp:186 src/common/fileconf.cpp:186
+#: ../src/common/fileconf.cpp:316
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "globaalin asetustiedoston '%s' avaus ei onnistu"
 
-#: ../src/msw/registry.cpp:361 src/msw/registry.cpp:361
-#, c-format
-msgid "can't open registry key '%s'"
-msgstr "rekisteriavaimen '%s' avaus ei onnistu"
-
-#: ../src/common/fileconf.cpp:194 ../src/common/fileconf.cpp:195
-#: src/common/CVS/Base/fileconf.cpp:198 src/common/fileconf.cpp:198
+#: ../src/common/fileconf.cpp:328
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "käyttäjän asetustiedoston '%s' avaus ei onnistu."
 
-#: ../src/common/fileconf.cpp:641 ../src/common/fileconf.cpp:642
-#: src/common/CVS/Base/fileconf.cpp:646 src/common/fileconf.cpp:646
+#: ../src/common/fileconf.cpp:790
 msgid "can't open user configuration file."
 msgstr "käyttäjän asetustiedoston avaus ei onnistu."
 
-#: ../src/common/file.cpp:299 ../src/common/file.cpp:300
-#: src/common/file.cpp:294
+#: ../src/common/file.cpp:283
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "tiedoston kuvauksen %d luku epäonnistui"
 
-#: ../src/msw/registry.cpp:658 ../src/msw/registry.cpp:670
-#: src/msw/registry.cpp:658
-#, c-format
-msgid "can't read value of '%s'"
-msgstr "ei voida lukea arvoa '%s'"
-
-#: ../src/msw/registry.cpp:569 ../src/msw/registry.cpp:581
-#: ../src/msw/registry.cpp:608 ../src/msw/registry.cpp:620
-#: src/msw/registry.cpp:569 src/msw/registry.cpp:608
-#, c-format
-msgid "can't read value of key '%s'"
-msgstr "ei voida lukea arvoa avaimesta '%s'"
-
-#: ../src/common/file.cpp:558 ../src/common/file.cpp:559
-#: src/common/file.cpp:515
+#: ../src/common/file.cpp:550 ../src/common/file.cpp:560
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "tiedoston '%s' poisto ei onnistu"
 
-#: ../src/common/file.cpp:574 ../src/common/file.cpp:575
-#: src/common/file.cpp:531
+#: ../src/common/file.cpp:578 ../src/common/file.cpp:581
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "väliaikaistiedoston '%s' poisto ei onnistu"
 
-#: ../src/common/file.cpp:372 ../src/common/file.cpp:373
-#: src/common/file.cpp:367
+#: ../src/common/file.cpp:356
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr ""
 
-#: ../src/msw/registry.cpp:594 ../src/msw/registry.cpp:606
-#: ../src/msw/registry.cpp:682 ../src/msw/registry.cpp:694
-#: src/msw/registry.cpp:594 src/msw/registry.cpp:682
-#, c-format
-msgid "can't set value of '%s'"
-msgstr "ei voida asettaa arvoa '%s'"
-
-#: src/common/CVS/Base/fileconf.cpp:594 src/common/fileconf.cpp:594
-msgid "can't set value of a group!"
-msgstr "ryhmän arvoa ei voi asettaa!"
-
-#: ../src/common/textfile.cpp:237 ../src/common/textfile.cpp:243
-#: src/common/textfile.cpp:229
+#: ../src/common/textfile.cpp:354
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "tiedostoa '%s' ei voida kirjottaa levylle."
 
-#: ../src/common/file.cpp:317 ../src/common/file.cpp:318
-#: src/common/file.cpp:312
+#: ../src/common/file.cpp:301
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "tiedoston kuvaukseen %d kirjoittaminen epäonnistui"
 
-#: ../src/common/fileconf.cpp:648 ../src/common/fileconf.cpp:649
-#: src/common/CVS/Base/fileconf.cpp:653 src/common/fileconf.cpp:653
+#: ../src/common/fileconf.cpp:797
 msgid "can't write user configuration file."
 msgstr "käyttäjän asetustiedoston kirjoitus epäonnistui."
 
-#: ../src/common/intl.cpp:301 ../src/common/intl.cpp:334
-#: src/common/intl.cpp:300
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "luettelotiedostoa domainille '%s' ei löydy."
 
-#: ../src/common/filefn.cpp:1527 src/common/filefn.cpp:1497
-msgid "empty file name in wxFindFileInPath"
-msgstr "tyhjä tiedostonimi paikassa wxFindFileInPath"
+#: ../src/common/utilscmn.cpp:464
+msgid "ctrl"
+msgstr "ctrl"
 
-#: ../src/common/fileconf.cpp:1252 ../src/common/fileconf.cpp:1253
-#: src/common/CVS/Base/fileconf.cpp:1256 src/common/fileconf.cpp:1256
+#: ../src/common/cmdline.cpp:912
+msgid "date"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3182
+msgid "eighteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3172
+#, fuzzy
+msgid "eighth"
+msgstr "Light"
+
+#: ../src/common/datetime.cpp:3175
+msgid "eleventh"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1427
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "kohta '%s' ilmenee useammin kuin kerran ryhmässä '%s'"
 
-#: ../src/common/fileconf.cpp:334 ../src/common/fileconf.cpp:335
-#: src/common/CVS/Base/fileconf.cpp:338 src/common/fileconf.cpp:338
+#: ../src/msw/dialup.cpp:856
+msgid "establish"
+msgstr ""
+
+#: ../src/common/ffile.cpp:182
+#, fuzzy, c-format
+msgid "failed to flush the file '%s'"
+msgstr "Loki tallennettu tiedostoon '%s'."
+
+#: ../src/common/datetime.cpp:3179
+msgid "fifteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3169
+#, fuzzy
+msgid "fifth"
+msgstr "shift"
+
+#: ../src/common/fileconf.cpp:471
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "tiedosto '%s', rivi %d: '%s' ohitettu ryhmäotsikon jälkeen."
 
-#: ../src/common/fileconf.cpp:360 ../src/common/fileconf.cpp:361
-#: src/common/CVS/Base/fileconf.cpp:357 src/common/fileconf.cpp:357
+#: ../src/common/fileconf.cpp:500
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "tiedosto '%s', rivi %d: '=' odotettu."
 
-#: ../src/common/fileconf.cpp:387 ../src/common/fileconf.cpp:388
-#: src/common/CVS/Base/fileconf.cpp:384 src/common/fileconf.cpp:384
+#: ../src/common/fileconf.cpp:526
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "tiedosto '%s', rivi %d: avain '%s' löytyi ensiksi riviltä %d."
 
-#: ../src/common/fileconf.cpp:376 ../src/common/fileconf.cpp:377
-#: src/common/CVS/Base/fileconf.cpp:373 src/common/fileconf.cpp:373
+#: ../src/common/fileconf.cpp:516
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "tiedosto '%s', rivi %d: muuttamattoman avaimen '%s' arvo ohitettu."
 
-#: ../src/common/fileconf.cpp:302 ../src/common/fileconf.cpp:303
-#: src/common/CVS/Base/fileconf.cpp:307 src/common/fileconf.cpp:307
+#: ../src/common/fileconf.cpp:439
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "tiedosto '%s': odottamaton merkki %c rivillä %d."
 
-#: ../src/common/date.cpp:374 ../src/common/date.cpp:377
-#: ../src/common/date.cpp:392 ../src/common/date.cpp:395
-#: ../src/common/date.cpp:406 ../src/common/date.cpp:409
-#: src/common/date.cpp:373 src/common/date.cpp:391 src/common/date.cpp:405
-msgid "invalid date"
+#: ../src/common/datetime.cpp:3165
+msgid "first"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3178
+msgid "fourteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3168
+msgid "fourth"
+msgstr ""
+
+#: ../src/common/timercmn.cpp:240
+msgid "gmtime() failed"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:856
+#, fuzzy
+msgid "initiate"
 msgstr "virheellinen päivämäärä"
 
-#: ../src/common/date.cpp:356 ../src/common/date.cpp:359
-#: src/common/date.cpp:355
-msgid "invalid day"
-msgstr "virheellinen päivä"
-
-#: ../src/common/file.cpp:457 ../src/common/file.cpp:458
-#: src/common/file.cpp:452
+#: ../src/common/file.cpp:440
 msgid "invalid eof() return value."
 msgstr "virheellinen eof() palautusarvo"
 
-#: ../src/common/log.cpp:690 ../src/common/log.cpp:705 src/common/log.cpp:685
+#: ../src/generic/logg.cpp:1033
 msgid "invalid message box return value"
 msgstr "virheellinen viestilaatikon palautusarvo"
 
-#: ../src/common/date.cpp:364 ../src/common/date.cpp:367
-#: src/common/date.cpp:363
-msgid "invalid month"
-msgstr "virheellinen kuukausi"
+#: ../src/html/helpfrm.cpp:874
+#, fuzzy
+msgid "large"
+msgstr "Sivut"
 
-#: ../src/common/intl.cpp:432 ../src/common/intl.cpp:465
-#: src/common/intl.cpp:431
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "localea '%s' ei voida asettaa."
 
-#: ../src/common/intl.cpp:296 ../src/common/intl.cpp:329
-#: src/common/intl.cpp:295
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "etsitään luetteloa '%s' polussa '%s'."
 
-#: ../src/common/time.cpp:360 src/common/time.cpp:360
-msgid "pm"
-msgstr "pm"
+#: ../src/html/helpfrm.cpp:874
+msgid "medium"
+msgstr ""
 
-#: ../src/common/string.cpp:1719 ../src/common/string.cpp:1846
-#: src/common/string.cpp:1446
-msgid "removing inexistent element in wxArrayString::Remove"
-msgstr "poistetaan olematon elementti käskyssä wxArrayString::Remove"
+#: ../src/common/datetime.cpp:3329
+#, fuzzy
+msgid "midnight"
+msgstr "Light"
 
-#: ../src/common/intl.cpp:521 ../src/common/intl.cpp:554
-#: src/common/intl.cpp:519
-#, c-format
-msgid "string '%s' not found in domain '%s' for locale '%s'."
-msgstr "merkkijonoa '%s' ei löydy domainista '%s' localelle '%s'."
+#: ../src/common/timercmn.cpp:236
+#, fuzzy
+msgid "mktime() failed"
+msgstr "Haarukointi epäonnistui"
 
-#: ../src/common/intl.cpp:526 ../src/common/intl.cpp:559
-#: src/common/intl.cpp:524
-#, c-format
-msgid "string '%s' not found in locale '%s'."
-msgstr "merkkijonoa '%s' ei löydy localelle '%s'."
+#: ../src/common/datetime.cpp:3183
+msgid "nineteenth"
+msgstr ""
 
-#: ../src/common/fileconf.cpp:1372 ../src/common/fileconf.cpp:1373
-#: src/common/CVS/Base/fileconf.cpp:1376 src/common/fileconf.cpp:1376
+#: ../src/common/datetime.cpp:3173
+#, fuzzy
+msgid "ninth"
+msgstr "Tulosta"
+
+#: ../src/msw/dde.cpp:961
+msgid "no DDE error."
+msgstr ""
+
+#: ../src/html/helpdata.cpp:644
+#, fuzzy
+msgid "noname"
+msgstr "nimeämätön"
+
+#: ../src/common/datetime.cpp:3328
+msgid "noon"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:911
+msgid "num"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1004
+msgid "reentrancy problem."
+msgstr ""
+
+#: ../src/common/datetime.cpp:3166
+msgid "second"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3181
+msgid "seventeenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3171
+msgid "seventh"
+msgstr ""
+
+#: ../src/common/utilscmn.cpp:468
+msgid "shift"
+msgstr "shift"
+
+#: ../src/common/datetime.cpp:3180
+msgid "sixteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3170
+#, fuzzy
+msgid "sixth"
+msgstr "shift"
+
+#: ../src/html/helpfrm.cpp:874
+msgid "small"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:910
+msgid "str"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3174
+msgid "tenth"
+msgstr ""
+
+#: ../src/msw/dde.cpp:968
+msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
+msgstr ""
+
+#: ../src/common/datetime.cpp:3167
+msgid "third"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3177
+msgid "thirteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3022
+msgid "today"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3024
+msgid "tomorrow"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3176
+msgid "twelfth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3184
+msgid "twentieth"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1547
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "odottamaton \" paikassa %d '%s'."
 
-#: src/common/log.cpp:362
-msgid "unknown log level in wxLog::DoLog"
-msgstr "tuntematon lokitaso käskyssä wxLog::DoLog"
+#: ../src/generic/progdlgg.cpp:241
+msgid "unknown"
+msgstr ""
 
-#: src/common/log.cpp:559
-msgid "unknown log level in wxLogGui::DoLog"
-msgstr "tuntematon lokitaso käskyssä wxLogGui::DoLog"
+#: ../src/msw/dialup.cpp:462
+#, c-format
+msgid "unknown error (error code %08x)."
+msgstr ""
 
-#: ../src/common/file.cpp:367 ../src/common/file.cpp:368
-#: src/common/file.cpp:362
+#: ../src/common/file.cpp:339
 msgid "unknown seek origin"
 msgstr ""
 
-#: ../src/common/docview.cpp:370 ../src/common/docview.cpp:389
-#: src/common/docview.cpp:337
+#: ../src/common/fontmap.cpp:351
+#, c-format
+msgid "unknown-%d"
+msgstr ""
+
+#: ../src/common/docview.cpp:406
 msgid "unnamed"
 msgstr "nimeämätön"
 
-#: ../src/common/docview.cpp:1055 ../src/common/docview.cpp:1082
-#: src/common/docview.cpp:1009
+#: ../src/common/docview.cpp:1188
 #, c-format
 msgid "unnamed%d"
 msgstr "nimeämätön %d"
 
-#: ../src/common/intl.cpp:306 ../src/common/intl.cpp:339
-#: src/common/intl.cpp:305
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "käytössä luettelo '%s' '%s'sta."
 
-#: ../src/common/layout.cpp:1366 ../src/common/layout.cpp:1371
-#: src/common/layout.cpp:1326
-msgid "wxExpandSizer has no parent!"
+#: ../src/html/helpfrm.cpp:874
+msgid "very large"
 msgstr ""
 
-#: ../src/common/prntbase.cpp:635 ../src/common/prntbase.cpp:645
-#: src/common/prntbase.cpp:632
-msgid ""
-"wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to "
-"let me know about the canvas!"
+#: ../src/html/helpfrm.cpp:874
+msgid "very small"
 msgstr ""
 
-#: ../src/common/filefn.cpp:1134 src/common/filefn.cpp:1123
-msgid "wxWindows: error finding temporary file name.\n"
-msgstr "wxWindows: virhe väliaikaistiedoston etsinnässä.\n"
-
-#: ../src/gtk/filedlg.cpp:79
-msgid "Please choose an existing file."
-msgstr "Valitse olemassaoleva tiedosto."
-
-#: ../src/generic/printps.cpp:173 ../src/generic/printps.cpp:177
-#: ../src/generic/printps.cpp:179
-msgid "Printing..."
-msgstr "Tulostetaan..."
-
-#: ../src/generic/printps.cpp:207 ../src/generic/printps.cpp:211
-#: ../src/generic/printps.cpp:212
-#, c-format
-msgid "Printing page %d..."
-msgstr "Tulostetaan sivua %d..."
-
-#: ../src/generic/dcpsg.cpp:2188 ../src/generic/dcpsg.cpp:2189
-#: ../src/generic/dcpsg.cpp:2310
-msgid "A4 sheet, 210 x 297 mm"
-msgstr "A4 sheet, 210 x 297 mm"
-
-#: ../src/common/dynlib.cpp:187 ../src/common/dynlib.cpp:254
-#, c-format
-msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "Symbolia '%s' ei löydy dynaamisesta kirjastosta"
-
-#: ../src/common/dynlib.cpp:215 ../src/common/dynlib.cpp:274
-#, c-format
-msgid "Failed to load shared library '%s'"
-msgstr "Jaetun kirjaston '%s' lataus epäonnistui"
-
-#: ../src/common/file.cpp:452 ../src/common/file.cpp:453
-#, c-format
-msgid ""
-"can't determine if the end of file is reached on          descriptor "
-"%d"
+#: ../src/common/timercmn.cpp:267
+msgid "wxGetTimeOfDay failed."
 msgstr ""
 
-#: ../src/common/fileconf.cpp:610 ../src/common/fileconf.cpp:611
-#, c-format
-msgid "Config entry name cannot start with '%c'."
-msgstr "Asetuskohdan nimi ei voi alkaa merkillä '%c'."
+#: ../src/common/socket.cpp:329 ../src/common/socket.cpp:383
+msgid "wxSocket: invalid signature in ReadMsg."
+msgstr ""
 
-#: ../src/common/filefn.cpp:1003
-#, c-format
-msgid "Directory '%s' couldn't be created"
-msgstr "Hakemistoa '%s' ei onnistuttu luomaan"
+#: ../src/common/socket.cpp:903
+msgid "wxSocket: unknown event!."
+msgstr ""
 
-#: ../src/common/string.cpp:1687 ../src/common/string.cpp:1814
-msgid "bad index in wxArrayString::Insert"
-msgstr "wxArrayString::Insert - väärä/huono indeksi"
-
-#: ../src/common/valtext.cpp:140 ../src/common/valtext.cpp:146
-#, c-format
-msgid "'%s' is invalid"
-msgstr "'%s' on virheellinen"
-
-#: ../src/common/valtext.cpp:160 ../src/common/valtext.cpp:166
-#, c-format
-msgid "'%s' should only contain ASCII characters."
-msgstr "'%s' tulisi sisältää vain ASCII-merkkejä."
-
-#: ../src/common/valtext.cpp:166 ../src/common/valtext.cpp:172
-#, c-format
-msgid "'%s' should only contain alphabetic characters."
-msgstr "'%s' tulisi sisältää vain aakkosia."
-
-#: ../src/common/valtext.cpp:172 ../src/common/valtext.cpp:178
-#, c-format
-msgid "'%s' should only contain alphabetic or numeric characters."
-msgstr "'%s' tulisi sisältää vain aakkosia tai numeerisia merkkejä."
-
-#: ../src/common/valtext.cpp:178 ../src/common/valtext.cpp:184
-#, c-format
-msgid "'%s' should be numeric."
-msgstr "'%s' tulisi olla numeerinen."
-
-#: ../src/common/imagjpeg.cpp:169 ../src/common/imagjpeg.cpp:174
-msgid "Couldn't load a JPEG image - probably file is corrupted."
-msgstr "JPEG-kuvatiedostoa ei voi avata - tiedosto ehkä korruptoitunut."
-
-#: ../src/common/imagjpeg.cpp:282 ../src/common/imagjpeg.cpp:287
-msgid "Couldn't save a JPEG image - probably file is corrupted."
-msgstr "JPEG-kuvatiedostoa ei voi tallentaa - tiedosto ehkä korruptoitunut."
-
-#: ../src/motif/app.cpp:559
+#: ../src/motif/app.cpp:591
 #, c-format
 msgid "wxWindows could not open display for '%s': exiting."
 msgstr "wxWindows ei voi avata ikkunaa prosessille '%s': lopettaa."
 
-#: ../src/msw/app.cpp:198 ../src/msw/app.cpp:200
-msgid "Could not initialise Rich Edit DLL"
-msgstr "Rich Edit DLL:n käynnistys ei onnistunut"
+#: ../src/common/filefn.cpp:1230
+msgid "wxWindows: error finding temporary file name.\n"
+msgstr "wxWindows: virhe väliaikaistiedoston etsinnässä.\n"
 
-#: ../src/msw/app.cpp:653 ../src/msw/app.cpp:698
-msgid "Unrecoverable program error detected:  the application will terminate."
-msgstr "Peruuttamaton ohjelmavirhe havaittu: ohjelma keskeytetään."
-
-#: ../src/msw/app.cpp:655 ../src/msw/app.cpp:700
-msgid "Fatal Error"
-msgstr "Tuhoisa virhe"
-
-#: ../src/msw/app.cpp:1125 ../src/msw/app.cpp:1165
-msgid "Fatal error: exiting"
-msgstr "Tuhoisa virhe: lopetetaan"
-
-#: ../src/msw/dialog.cpp:140 ../src/msw/dialog.cpp:142
-#: ../src/msw/dialog.cpp:145
-msgid "Failed to create dialog."
-msgstr "Dialogin luonti epäonnistui."
-
-#: ../src/unix/threadpsx.cpp:296 ../src/unix/threadpsx.cpp:298
-#: ../src/unix/threadpsx.cpp:302
-msgid "Cannot start thread: error writing TLS"
-msgstr "Säikeen käynnistys epäonnistui: virhe TLS:n kirjoituksessa"
-
-#: ../src/unix/threadpsx.cpp:477 ../src/unix/threadpsx.cpp:518
-#: ../src/unix/threadpsx.cpp:527
-msgid "Cannot retrieve thread scheduling policy."
+#: ../src/common/datetime.cpp:3023
+msgid "yesterday"
 msgstr ""
 
-#: ../src/unix/threadpsx.cpp:485 ../src/unix/threadpsx.cpp:526
-#: ../src/unix/threadpsx.cpp:535
-#, c-format
-msgid "Cannot get priority range for scheduling policy %d."
-msgstr ""
+#~ msgid " B.C."
+#~ msgstr " B.C."
 
-#: ../src/unix/threadpsx.cpp:768 ../src/unix/threadpsx.cpp:813
-#: ../src/unix/threadpsx.cpp:827
-msgid "Thread module initialization failed: failed to create thread key"
-msgstr "Säiemoduulin käynnistys epäonnistui: säieavainta ei voi luoda"
+#~ msgid "%s is invalid."
+#~ msgstr "%s on virheellinen."
 
-#: ../src/unix/utilsunx.cpp:211 ../src/unix/utilsunx.cpp:222
-msgid "Waiting for subprocess termination failed"
-msgstr "Aliprosessin keskeytymisen odotus epäonnistui"
+#~ msgid "%s should be numeric."
+#~ msgstr "%s pitäisi olla numeerinen."
 
-#: ../src/unix/utilsunx.cpp:449 ../src/unix/utilsunx.cpp:460
-msgid "Cannot get the hostname"
-msgstr "Host-nimeä ei onnistuttu saamaan"
+#~ msgid "%s should only contain ASCII characters."
+#~ msgstr "%s saisi sisältää vain ASCII-merkkejä."
 
-#: ../src/unix/utilsunx.cpp:485 ../src/unix/utilsunx.cpp:496
-msgid "Cannot get the official hostname"
-msgstr "Virallista host-nimeä ei onnistuttu saamaan"
+#~ msgid "%s should only contain alphabetic characters."
+#~ msgstr "%s saisi sisältää vain aakkosia."
 
-#: ../src/unix/utilsunx.cpp:547 ../src/unix/utilsunx.cpp:555
-#: ../src/unix/utilsunx.cpp:558 ../src/unix/utilsunx.cpp:566
-msgid "Error "
-msgstr "Virhe "
+#~ msgid "%s should only contain alphabetic or numeric characters."
+#~ msgstr "%s saisi sisältää vain aakkosia tai numeerisia merkkejä."
 
-#: ../src/msw/mdi.cpp:352 ../src/msw/mdi.cpp:355
-msgid "Failed to create MDI parent frame."
-msgstr ""
+#~ msgid "Application Error"
+#~ msgstr "Ohjelmavirhe"
 
-#: ../src/msw/window.cpp:1342 ../src/msw/window.cpp:2225
-msgid ""
-"Can't find dummy dialog template!\n"
-"Check resource include path for finding wx.rc."
-msgstr ""
-"Dummy dialog -pohjaa ei löydy!\n"
-"Tarkista resurssisisällön polku, jotta wx.rc löytyisi."
+#~ msgid "Can not create tooltip control"
+#~ msgstr "Työkaluvihjeiden hallinnan luonti epäonnistui"
 
-#: ../src/msw/window.cpp:1368 ../src/msw/window.cpp:2266
-#, c-format
-msgid ""
-"Can't create window of class %s!\n"
-"Possible Windows 3.x compatibility problem?"
-msgstr ""
-"%s luokan ikkunan luonti epäonnistui!\n"
-"Mahdollisesti Windows 3.x yhteensopivuusongelma?"
+#~ msgid "Can not get data in format '%s' from clipboard."
+#~ msgstr "Datan haku leikepöydältä formaatissa '%s' epäonnistui."
 
-#: ../src/generic/dcpsg.cpp:1403
-msgid "Cannot open file for PostScript printing!"
-msgstr "Tiedoston avaus PostScript-tulostukseen epäonnistui!"
+#~ msgid "Can not put data in format '%s' on clipboard."
+#~ msgstr "Datan lisäys leikepöydälle formaatissa '%s' epäonnistui."
 
-#: ../src/generic/helpext.cpp:90
-#, c-format
-msgid "Cannot open URL '%s'"
-msgstr "URL:ää '%s' ei voitu avata"
+#~ msgid "Can not retrieve thread scheduling policy."
+#~ msgstr "Säikeiden ajoittamisen haku epäonnistui."
 
-#: ../src/generic/extdlgg.cpp:126
-msgid "Forward"
-msgstr "Eteenpäin"
+#~ msgid "Can't execute command '%s'"
+#~ msgstr "'%s' komennon ajo epäonnistui"
 
-#: ../src/generic/extdlgg.cpp:129
-msgid "Backward"
-msgstr "Takaisin"
+#~ msgid "Character '%c' is invalid in a config entry name."
+#~ msgstr "Merkki '%c' on virheellinen asetuskohdan nimessä."
 
-#: ../src/generic/extdlgg.cpp:132
-msgid "Setup"
-msgstr "Asetukset"
+#~ msgid "Couldn't change the state of event object."
+#~ msgstr "Tapahtumaobjektin tilaa ei voitu vaihtaa."
 
-#: ../src/generic/extdlgg.cpp:135
-msgid "More..."
-msgstr "Lisää..."
+#~ msgid "Debug"
+#~ msgstr "Debug"
 
-#: ../src/generic/extdlgg.cpp:138
-msgid "Help"
-msgstr "Apua"
+#~ msgid "DoLogString must be overrided if it's called."
+#~ msgstr "DoLogString täytyy korvata jos sitä kutsutaan."
 
-#: ../src/generic/tipdlg.cpp:137
-msgid "Tips not available, sorry!"
-msgstr "Valitettavasti vinkkejä ei ole!"
+#~ msgid "Enter the name of the directory to create"
+#~ msgstr "Anna nimi uudelle hakemistolle"
 
-#: ../src/generic/tipdlg.cpp:161
-msgid "Tip of the Day"
-msgstr "Päivän vinkki"
+#~ msgid "Entry name can't start with '%c'."
+#~ msgstr "Kohdan nimi ei voi alkaa '%c':lla."
 
-#: ../src/generic/tipdlg.cpp:172
-msgid "&Show tips at startup"
-msgstr "&Näytä vinkit käynnistyksessä"
+#~ msgid "Failed to created dialog."
+#~ msgstr "Dialogin luonti ei onnistunut."
 
-#: ../src/generic/tipdlg.cpp:173
-msgid "&Next"
-msgstr "&Seuraava"
+#~ msgid ""
+#~ "Mime.types file %s, line %d: extra characters after the field value ignored."
+#~ msgstr ""
+#~ "Mime.types tiedosto %s, rivi %d: ylimääräiset merkit kentän arvon jälkeen "
+#~ "ohitettu."
 
-#: ../src/generic/tipdlg.cpp:175
-msgid "Did you know..."
-msgstr "Tiesitkö..."
+#~ msgid "Print Error"
+#~ msgstr "Tulostusvirhe"
 
-#: ../src/msw/clipbrd.cpp:149
-#, c-format
-msgid "Failed to allocate %dKb of memory for clipboard transfer."
-msgstr "%dKb "
+#~ msgid "Sizer error"
+#~ msgstr "Virhe (sizer)"
 
-#: ../src/msw/clipbrd.cpp:164
-#, c-format
-msgid "Failed to set clipboard data in format %s"
-msgstr "Leikepöydän datan formatointi muotoon %s epäonnistui"
+#~ msgid "Thread module initialization failed: failed to create pthread key."
+#~ msgstr ""
+#~ "Säiemoduulin käynnistys epäonnistui: pthread-avaimen luonti ei onnistu."
 
-#: ../src/msw/menu.cpp:156
-msgid "ctrl"
-msgstr "ctrl"
+#~ msgid "bad index in wxArrayString::Remove"
+#~ msgstr "wxArrayString::Remove - väärä indeksi"
 
-#: ../src/msw/menu.cpp:158
-msgid "alt"
-msgstr "alt"
+#~ msgid "can't set value of a group!"
+#~ msgstr "ryhmän arvoa ei voi asettaa!"
 
-#: ../src/msw/menu.cpp:160
-msgid "shift"
-msgstr "shift"
+#~ msgid "empty file name in wxFindFileInPath"
+#~ msgstr "tyhjä tiedostonimi paikassa wxFindFileInPath"
 
+#~ msgid "invalid day"
+#~ msgstr "virheellinen päivä"
+
+#~ msgid "invalid month"
+#~ msgstr "virheellinen kuukausi"
+
+#~ msgid "pm"
+#~ msgstr "pm"
+
+#~ msgid "removing inexistent element in wxArrayString::Remove"
+#~ msgstr "poistetaan olematon elementti käskyssä wxArrayString::Remove"
+
+#~ msgid "string '%s' not found in domain '%s' for locale '%s'."
+#~ msgstr "merkkijonoa '%s' ei löydy domainista '%s' localelle '%s'."
+
+#~ msgid "string '%s' not found in locale '%s'."
+#~ msgstr "merkkijonoa '%s' ei löydy localelle '%s'."
+
+#~ msgid "unknown log level in wxLog::DoLog"
+#~ msgstr "tuntematon lokitaso käskyssä wxLog::DoLog"
+
+#~ msgid "unknown log level in wxLogGui::DoLog"
+#~ msgstr "tuntematon lokitaso käskyssä wxLogGui::DoLog"
+
+#~ msgid "bad index in wxArrayString::Insert"
+#~ msgstr "wxArrayString::Insert - väärä/huono indeksi"
+
+#~ msgid "Couldn't load a JPEG image - probably file is corrupted."
+#~ msgstr "JPEG-kuvatiedostoa ei voi avata - tiedosto ehkä korruptoitunut."
+
+#~ msgid "Couldn't save a JPEG image - probably file is corrupted."
+#~ msgstr "JPEG-kuvatiedostoa ei voi tallentaa - tiedosto ehkä korruptoitunut."
+
+#~ msgid ""
+#~ "Unrecoverable program error detected:  the application will terminate."
+#~ msgstr "Peruuttamaton ohjelmavirhe havaittu: ohjelma keskeytetään."
+
+#~ msgid "Fatal Error"
+#~ msgstr "Tuhoisa virhe"
+
+#~ msgid "Failed to allocate %dKb of memory for clipboard transfer."
+#~ msgstr "%dKb "

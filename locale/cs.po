@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
-"POT-Creation-Date: 2000-08-10 13:19+0200\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: 2000-06-17 19:23+0200\n"
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -181,7 +181,7 @@ msgstr "'%s' je neplatný"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' není správná èíselná hodnota pro volbu '%s'."
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' není katalog pøekladù."
@@ -254,11 +254,11 @@ msgstr "Obálka 6 3/4, 3 5/8 x 6 1/2 palce"
 msgid ": file does not exist!"
 msgstr ": soubor neexistuje!"
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:475
 msgid ": unknown charset"
 msgstr ": neznámá znaková sada"
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:668
 msgid ": unknown encoding"
 msgstr ": neznámé kódování"
 
@@ -555,7 +555,7 @@ msgstr "Nemohu vytvoøit meziprocesovou rouru pro zápis"
 msgid "Can't create thread"
 msgstr "Nemohu vytvoøit vlákno"
 
-#: ../src/msw/window.cpp:2395
+#: ../src/msw/window.cpp:2396
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -599,7 +599,7 @@ msgstr "Nemohu vyjmenovat hodnoty klíèe '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Nemohu zjistit pozici v souboru '%s'"
 
-#: ../src/msw/window.cpp:2345
+#: ../src/msw/window.cpp:2346
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -1209,7 +1209,7 @@ msgstr "Nepodaøilo se pøesmìrovat vstup/výstup synovského procesu"
 msgid "Failed to register DDE server '%s'"
 msgstr "Nelze zaregistrovat DDE server '%s'"
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:520
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Nemohu ulo¾it kódování znakové sady '%s'."
@@ -2167,7 +2167,7 @@ msgstr "Thajské (ISO-8859-11)"
 msgid "The Computer"
 msgstr "Poèítaè"
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:479
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2187,7 +2187,7 @@ msgstr "Formát schránky '%d' neexistuje."
 msgid "The directory "
 msgstr "Adresáø "
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:672
 #, c-format
 msgid ""
 "The encoding '%s' is unknown.\n"
@@ -2659,7 +2659,7 @@ msgstr "nemohu vyprázdnit (flush) deskriptor %d"
 msgid "can't get seek position on file descriptor %d"
 msgstr "nemohu zjistit pozici v deskriptoru %d"
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:614
 msgid "can't load any font, aborting"
 msgstr "nemohu naèíst ¾ádný font, konèím"
 
@@ -2716,7 +2716,7 @@ msgstr "nemohu zapisovat do deskriptoru %d"
 msgid "can't write user configuration file."
 msgstr "nemohu ulo¾it u¾ivatelskou konfiguraci"
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "katalog pro doménu '%s' nenalezen."
@@ -2725,7 +2725,7 @@ msgstr "katalog pro doménu '%s' nenalezen."
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:910
+#: ../src/common/cmdline.cpp:912
 msgid "date"
 msgstr "datum"
 
@@ -2820,12 +2820,12 @@ msgstr "¹patná návratová hodnota message boxu"
 msgid "large"
 msgstr "velké"
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "locale '%s' nemù¾e být nastaveno"
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "hledám katalog '%s' v cestì '%s'."
@@ -2862,7 +2862,7 @@ msgstr "bezejmenná"
 msgid "noon"
 msgstr "poledne"
 
-#: ../src/common/cmdline.cpp:909
+#: ../src/common/cmdline.cpp:911
 msgid "num"
 msgstr "èíslo"
 
@@ -2898,7 +2898,7 @@ msgstr "¹estý"
 msgid "small"
 msgstr "malé"
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:910
 msgid "str"
 msgstr "øetìzec"
 
@@ -2966,7 +2966,7 @@ msgstr "nepojmenovaný"
 msgid "unnamed%d"
 msgstr "nepojmenovaný%d"
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "pou¾ívám katalog '%s' z '%s'."

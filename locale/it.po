@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-08-10 13:19+0200\n"
+"POT-Creation-Date: 2000-08-13 16:29+0200\n"
 "PO-Revision-Date: 2000-03-22 11:46Romance Standard Time\n"
 "Last-Translator: Mattia Barbon <mbarbon@dsi.unive.it>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -181,7 +181,7 @@ msgstr "'%s' non valida"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' non é un valore numerico corretto per l'opzione '%s'."
 
-#: ../src/common/intl.cpp:395
+#: ../src/common/intl.cpp:412
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' non é un catalogo di messaggi valido."
@@ -254,11 +254,11 @@ msgstr "Busta 6 3/4, 3 5/8 x 6 1/2 in"
 msgid ": file does not exist!"
 msgstr ": file non esistente!"
 
-#: ../src/common/fontmap.cpp:471
+#: ../src/common/fontmap.cpp:475
 msgid ": unknown charset"
 msgstr ": set di caratteri sconosciuto"
 
-#: ../src/common/fontmap.cpp:664
+#: ../src/common/fontmap.cpp:668
 msgid ": unknown encoding"
 msgstr ": codifica sconosciuta"
 
@@ -553,7 +553,7 @@ msgstr "Impossibile creare la pipe di scrittura tra processi"
 msgid "Can't create thread"
 msgstr "Impossibile creare il thread"
 
-#: ../src/msw/window.cpp:2395
+#: ../src/msw/window.cpp:2396
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -597,7 +597,7 @@ msgstr "Impossibile enumerare i valori della chiave '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Impossibile determinare la posizione corrente nel file '%s'"
 
-#: ../src/msw/window.cpp:2345
+#: ../src/msw/window.cpp:2346
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -1216,7 +1216,7 @@ msgstr "Impossibile redirigere l'input/output del processo figlio"
 msgid "Failed to register DDE server '%s'"
 msgstr "Impossibile registrare il server DDE '%s'"
 
-#: ../src/common/fontmap.cpp:516
+#: ../src/common/fontmap.cpp:520
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Impossibile ricordare la codifica per il set di caratteri '%s'."
@@ -2179,7 +2179,7 @@ msgstr "Thaï (ISO-8859-11)"
 msgid "The Computer"
 msgstr "Computer"
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:479
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2199,7 +2199,7 @@ msgstr "Il formato '%d' degli appunti non esiste."
 msgid "The directory "
 msgstr "La cartella"
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:672
 #, c-format
 msgid ""
 "The encoding '%s' is unknown.\n"
@@ -2683,7 +2683,7 @@ msgstr "impossibile forzare la scrittura su disco del descrittore %d"
 msgid "can't get seek position on file descriptor %d"
 msgstr "impossibile determinare la posizione corrente del descrittore %d"
 
-#: ../src/common/fontmap.cpp:610
+#: ../src/common/fontmap.cpp:614
 msgid "can't load any font, aborting"
 msgstr "impossibile caricare un qulunque tipo di carattere, abbandono"
 
@@ -2740,7 +2740,7 @@ msgstr "impossibile scrivere sul descrittore %d"
 msgid "can't write user configuration file."
 msgstr "impossibile scrivere il file di configurazione utente."
 
-#: ../src/common/intl.cpp:357
+#: ../src/common/intl.cpp:374
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "file di catalogo non trovato per il dominio '%s'."
@@ -2749,7 +2749,7 @@ msgstr "file di catalogo non trovato per il dominio '%s'."
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../src/common/cmdline.cpp:910
+#: ../src/common/cmdline.cpp:912
 msgid "date"
 msgstr "data"
 
@@ -2845,12 +2845,12 @@ msgstr "il riquadro di dialogo ha ritornato un valore non valido"
 msgid "large"
 msgstr "grande"
 
-#: ../src/common/intl.cpp:549
+#: ../src/common/intl.cpp:569
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "impossibile impostare le impostazioni locali '%s'."
 
-#: ../src/common/intl.cpp:352
+#: ../src/common/intl.cpp:369
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "ricerca del catalogo '%s' nel percorso '%s'."
@@ -2887,7 +2887,7 @@ msgstr "senzanome"
 msgid "noon"
 msgstr "mezzogiorno"
 
-#: ../src/common/cmdline.cpp:909
+#: ../src/common/cmdline.cpp:911
 msgid "num"
 msgstr "num"
 
@@ -2923,7 +2923,7 @@ msgstr "sei"
 msgid "small"
 msgstr "piccolo"
 
-#: ../src/common/cmdline.cpp:908
+#: ../src/common/cmdline.cpp:910
 msgid "str"
 msgstr "str"
 
@@ -2992,7 +2992,7 @@ msgstr "senzanome"
 msgid "unnamed%d"
 msgstr "senzanome%d"
 
-#: ../src/common/intl.cpp:362
+#: ../src/common/intl.cpp:379
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "utilizzato catalogo '%s' in '%s'."
