@@ -308,8 +308,16 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
     return NULL;
 
   // We set m_connected back to FALSE so wxSocketBase will know what to do.
+#ifdef __WXMAC__
+        wxSocketClient::Connect(*m_addr , FALSE );
+        wxSocketClient::WaitOnConnect(10);
+
+    if (!wxSocketClient::IsConnected())
+        return NULL;
+#else
   if (!wxProtocol::Connect(*m_addr))
     return NULL;
+#endif
 
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
