@@ -22,11 +22,8 @@
 #include "wx/module.h"
 #include "wx/dataobj.h"     // for wxDataFormat
 
-#if WXWIN_COMPATIBILITY_2_4
-
 // These functions superceded by wxClipboard, but retained in order to
-// implement wxClipboard (and exported from DLL to preserve compatibility -
-// - otherwise they are only implementation details of src/msw/clipbrd.cpp).
+// implement wxClipboard, and for compatibility.
 
 // open/close the clipboard
 WXDLLEXPORT bool wxOpenClipboard();
@@ -49,8 +46,6 @@ WXDLLEXPORT int  wxRegisterClipboardFormat(wxChar *formatName);
 WXDLLEXPORT bool wxGetClipboardFormatName(wxDataFormat dataFormat,
                                           wxChar *formatName,
                                           int maxCount);
-
-#endif // WXWIN_COMPATIBILITY_2_4
 
 //-----------------------------------------------------------------------------
 // wxClipboard
