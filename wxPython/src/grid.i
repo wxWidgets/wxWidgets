@@ -1269,15 +1269,14 @@ public:
     int      GetNumberCols();
 
 
+
+#ifdef NOTNEEDED // ????
     // ------ display update functions
     //
     void CalcRowLabelsExposed( wxRegion& reg );
-
     void CalcColLabelsExposed( wxRegion& reg );
     void CalcCellsExposed( wxRegion& reg );
 
-
-#ifdef NOTNEEDED // ????
     // ------ event handlers
     //
     void ProcessRowLabelMouseEvent( wxMouseEvent& event );
@@ -1577,10 +1576,6 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight );
 
-    // This function returns the rectangle that encloses the selected cells
-    // in device coords and clipped to the client size of the grid window.
-    //
-    wxRect SelectionToDeviceRect();
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const;

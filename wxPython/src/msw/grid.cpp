@@ -6471,114 +6471,6 @@ static PyObject *_wrap_wxGrid_GetNumberCols(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxGrid_CalcRowLabelsExposed(_swigobj,_swigarg0)  (_swigobj->CalcRowLabelsExposed(_swigarg0))
-static PyObject *_wrap_wxGrid_CalcRowLabelsExposed(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGrid * _arg0;
-    wxRegion * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","reg", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_CalcRowLabelsExposed",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CalcRowLabelsExposed. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_CalcRowLabelsExposed. Expected _wxRegion_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGrid_CalcRowLabelsExposed(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGrid_CalcColLabelsExposed(_swigobj,_swigarg0)  (_swigobj->CalcColLabelsExposed(_swigarg0))
-static PyObject *_wrap_wxGrid_CalcColLabelsExposed(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGrid * _arg0;
-    wxRegion * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","reg", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_CalcColLabelsExposed",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CalcColLabelsExposed. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_CalcColLabelsExposed. Expected _wxRegion_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGrid_CalcColLabelsExposed(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGrid_CalcCellsExposed(_swigobj,_swigarg0)  (_swigobj->CalcCellsExposed(_swigarg0))
-static PyObject *_wrap_wxGrid_CalcCellsExposed(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGrid * _arg0;
-    wxRegion * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","reg", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxGrid_CalcCellsExposed",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_CalcCellsExposed. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxRegion_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGrid_CalcCellsExposed. Expected _wxRegion_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGrid_CalcCellsExposed(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxGrid_ProcessTableMessage(_swigobj,_swigarg0)  (_swigobj->ProcessTableMessage(_swigarg0))
 static PyObject *_wrap_wxGrid_ProcessTableMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11084,35 +10976,6 @@ static PyObject *_wrap_wxGrid_BlockToDeviceRect(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxGrid_SelectionToDeviceRect(_swigobj)  (_swigobj->SelectionToDeviceRect())
-static PyObject *_wrap_wxGrid_SelectionToDeviceRect(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxRect * _result;
-    wxGrid * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGrid_SelectionToDeviceRect",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SelectionToDeviceRect. Expected _wxGrid_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxRect (wxGrid_SelectionToDeviceRect(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRect_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 #define wxGrid_GetSelectionBackground(_swigobj)  (_swigobj->GetSelectionBackground())
 static PyObject *_wrap_wxGrid_GetSelectionBackground(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -12461,7 +12324,6 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_SetSelectionBackground", (PyCFunction) _wrap_wxGrid_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectionForeground", (PyCFunction) _wrap_wxGrid_GetSelectionForeground, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetSelectionBackground", (PyCFunction) _wrap_wxGrid_GetSelectionBackground, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGrid_SelectionToDeviceRect", (PyCFunction) _wrap_wxGrid_SelectionToDeviceRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_BlockToDeviceRect", (PyCFunction) _wrap_wxGrid_BlockToDeviceRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_IsInSelection", (PyCFunction) _wrap_wxGrid_IsInSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_ClearSelection", (PyCFunction) _wrap_wxGrid_ClearSelection, METH_VARARGS | METH_KEYWORDS },
@@ -12603,9 +12465,6 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGrid_SetTable", (PyCFunction) _wrap_wxGrid_SetTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetTable", (PyCFunction) _wrap_wxGrid_GetTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_ProcessTableMessage", (PyCFunction) _wrap_wxGrid_ProcessTableMessage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGrid_CalcCellsExposed", (PyCFunction) _wrap_wxGrid_CalcCellsExposed, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGrid_CalcColLabelsExposed", (PyCFunction) _wrap_wxGrid_CalcColLabelsExposed, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGrid_CalcRowLabelsExposed", (PyCFunction) _wrap_wxGrid_CalcRowLabelsExposed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetNumberCols", (PyCFunction) _wrap_wxGrid_GetNumberCols, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_GetNumberRows", (PyCFunction) _wrap_wxGrid_GetNumberRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGrid_SetSelectionMode", (PyCFunction) _wrap_wxGrid_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
