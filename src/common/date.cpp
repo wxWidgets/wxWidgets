@@ -291,7 +291,7 @@ ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt)
 void wxDate::julian_to_wday (void)
 {
     // Correction by Peter Stadel <peters@jetcity.com>
-	day_of_week = ((julian - 2) % 7L);
+    day_of_week = (int)((julian - 2) % 7L);
 /*
     day_of_week = (int) ((julian + 2) % 7 + 1);
 */
@@ -359,7 +359,7 @@ wxString wxDate::FormatDate (int type) const
                 wxStrcpy(buf, _("invalid day"));
             else
                 wxStrncpy( buf, wxGetTranslation(dayname[day_of_week-1]),
-			   (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
+               (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
             return wxString(buf);
 
         case wxMONTH:
@@ -367,7 +367,7 @@ wxString wxDate::FormatDate (int type) const
                 wxStrcpy(buf, _("invalid month"));
             else
                 wxStrncpy( buf, wxGetTranslation(mname[month-1]),
-			   (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
+               (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
             return wxString(buf);
 
         case wxFULL:
@@ -378,10 +378,10 @@ wxString wxDate::FormatDate (int type) const
                 return wxString(buf);
             }
             wxStrncpy( buf, wxGetTranslation(dayname[day_of_week-1]),
-		       (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
+               (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
             wxStrcat( buf, wxT(", "));
             wxStrncat( buf, wxGetTranslation(mname[month-1]),
-		       (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
+               (DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
             wxStrcat( buf, wxT(" "));
             wxSprintf( buf+wxStrlen(buf), wxT("%d, %d"), day, abs(year) );
             if (year < 0)
@@ -409,9 +409,9 @@ wxString wxDate::FormatDate (int type) const
                 wxStrcpy(buf, _("invalid date"));
             else
                 wxSprintf( buf+wxStrlen(buf), wxT("%1d/%1d/%02d"), month, day,
-			   (DisplayOptions & wxNO_CENTURY) && (abs(year) > 1899)
-			   ? (abs(year) - (abs(year) / 100 * 100))
-			   : (abs(year))  );
+               (DisplayOptions & wxNO_CENTURY) && (abs(year) > 1899)
+               ? (abs(year) - (abs(year) / 100 * 100))
+               : (abs(year))  );
             return wxString(buf);
     }
     return wxString(wxT(""));
