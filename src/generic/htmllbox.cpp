@@ -243,6 +243,9 @@ void wxHtmlListBox::CacheItem(size_t n) const
             self->m_htmlParser = new wxHtmlWinParser;
             m_htmlParser->SetDC(new wxClientDC(self));
             m_htmlParser->SetFS(&self->m_filesystem);
+
+            // use system's default GUI font by default:
+            m_htmlParser->SetStandardFonts();
         }
 
         wxHtmlContainerCell *cell = (wxHtmlContainerCell *)m_htmlParser->
