@@ -40,11 +40,13 @@ highlighted, i.e. the currently selected menu item has changed.}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxMenuEvent::wxMenuEvent}
 
 \func{}{wxMenuEvent}{\param{WXTYPE }{id = 0}, \param{int }{id = 0}, \param{wxDC* }{dc = NULL}}
 
 Constructor.
+
 
 \membersection{wxMenuEvent::m\_menuId}
 
@@ -52,12 +54,22 @@ Constructor.
 
 The relevant menu identifier.
 
+
+\membersection{wxMenuEvent::GetMenu}\label{wxmenueventgetmenu}
+
+\constfunc{wxMenu *}{GetMenu}{\void}
+
+Returns the menu which is being opened or closed. This method should be only
+used with the \texttt{OPEN} and \texttt{CLOSE} events.
+
+
 \membersection{wxMenuEvent::GetMenuId}\label{wxmenueventgetmenuid}
 
 \constfunc{int}{GetMenuId}{\void}
 
 Returns the menu identifier associated with the event. This method should be
 only used with the {\tt HIGHLIGHT} events.
+
 
 \membersection{wxMenuEvent::IsPopup}\label{wxmenueventispopup}
 
