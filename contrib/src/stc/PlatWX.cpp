@@ -695,8 +695,6 @@ void Window::SetTitle(const char *s) {
 //----------------------------------------------------------------------
 // Helper classes for ListBox
 
-const int IconWidth = 16;
-
 
 // This is a simple subclass of wxLIstView that just resets focus to the
 // parent when it gets it.
@@ -744,6 +742,23 @@ public:
         Hide();
     }
 
+    int IconWidth() {
+        wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
+        if (il != NULL) {
+            int w, h;
+            il->GetSize(0, w, h);
+            return w;
+        }
+        return 0;
+    }
+
+
+    void SetDoubleClickAction(CallBackAction action, void *data) {
+        doubleClickAction = action;
+        doubleClickActionData = data;
+    }
+
+
     void OnFocus(wxFocusEvent& event) {
         GetParent()->SetFocus();
         event.Skip();
@@ -753,29 +768,14 @@ public:
         // reset the column widths
         wxSize sz = GetClientSize();
         lv->SetSize(1, 1, sz.x-2, sz.y-2);
-        wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
-        if (il != NULL) {
-            int w, h;
-            il->GetSize(0, w, h);
-            w += 4;
-            lv->SetColumnWidth(0, w);
-        }
-        else {
-            lv->SetColumnWidth(0, 0);
-        }
+        lv->SetColumnWidth(0, IconWidth()+4);
         lv->SetColumnWidth(1, sz.x - lv->GetColumnWidth(0) -
                            wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
         event.Skip();
     }
 
-
     void OnActivate(wxListEvent& event) {
         doubleClickAction(doubleClickActionData);
-    }
-
-    void SetDoubleClickAction(CallBackAction action, void *data) {
-        doubleClickAction = action;
-        doubleClickActionData = data;
     }
 
     wxListView* GetLB() { return lv; }
@@ -793,9 +793,12 @@ END_EVENT_TABLE()
 
 
 
+inline wxSTCListBoxWin* GETLBW(WindowID win) {
+    return ((wxSTCListBoxWin*)win);
+}
 
 inline wxListView* GETLB(WindowID win) {
-    return (((wxSTCListBoxWin*)win)->GetLB());
+    return GETLBW(win)->GetLB();
 }
 
 //----------------------------------------------------------------------
@@ -887,7 +890,8 @@ PRectangle ListBoxImpl::GetDesiredRect() {
 
     // give it a default if there are no lines, and/or add a bit more
     if (maxw == 0) maxw = 100;
-    maxw += aveCharWidth * 3 + IconWidth + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    maxw += aveCharWidth * 3 +
+            GETLBW(id)->IconWidth() + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
     if (maxw > 350)
         maxw = 350;
 
@@ -913,7 +917,7 @@ PRectangle ListBoxImpl::GetDesiredRect() {
 
 
 int ListBoxImpl::CaretFromEdge() {
-    return 0; // 4 + IconWidth();  TODO
+    return 4 + GETLBW(id)->IconWidth();
 }
 
 
@@ -1001,7 +1005,6 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
 }
 
 void ListBoxImpl::ClearRegisteredImages() {
-    printf("LB:ClearRegisteredImages\n");
     if (imgList) {
         delete imgList;
         imgList = NULL;
@@ -1016,7 +1019,7 @@ void ListBoxImpl::ClearRegisteredImages() {
 
 
 void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
-    ((wxSTCListBoxWin*)id)->SetDoubleClickAction(action, data);
+    GETLBW(id)->SetDoubleClickAction(action, data);
 }
 
 
