@@ -488,7 +488,12 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
             gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+            
+            gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
+            gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+        }
     }
 
     CalcBoundingBox (x1, y1);
@@ -511,7 +516,7 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
     if (m_window)
     {
         wxCoord start = wxCoord(sa * 64.0);
-        wxCoord end = wxCoord(ea * 64.0);
+        wxCoord end = wxCoord((ea-sa) * 64.0);
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
