@@ -663,7 +663,7 @@ void wxFrame::IconizeChildFrames(bool bIconize)
         wxFrame *frame = wxDynamicCast(win, wxFrame);
         if ( frame
 #if wxUSE_MDI_ARCHITECTURE
-                && !wxDynamicCast(frame, wxMDIChildFrame)
+                && !IsMDIChild()
 #endif // wxUSE_MDI_ARCHITECTURE
            )
         {
