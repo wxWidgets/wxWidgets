@@ -25,7 +25,7 @@
 #include "wx/generic/imaglist.h"
 
 #ifndef wxUSE_GENERIC_LIST_EXTENSIONS
-#define wxUSE_GENERIC_LIST_EXTENSIONS 0
+#define wxUSE_GENERIC_LIST_EXTENSIONS 1
 #endif
 
 // ============================================================================

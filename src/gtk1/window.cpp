@@ -1726,6 +1726,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
+
     g_blockEventsOnScroll = TRUE;
     win->m_isScrolling = (gdk_event->window == widget->slider);
 
@@ -1751,7 +1752,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 
     if (win->m_isScrolling)
     {
-        wxEventType command = wxEVT_SCROLL_THUMBRELEASE;
+        wxEventType command = wxEVT_SCROLLWIN_THUMBRELEASE;
         int value = -1;
         int dir = -1;
 

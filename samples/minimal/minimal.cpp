@@ -1,9 +1,3 @@
-/*
-    Test for menu swapping bug (?) with GTK 2.1.13
-*/
-
-
-
 /////////////////////////////////////////////////////////////////////////////
 // Name:        minimal.cpp
 // Purpose:     Minimal wxWindows sample
@@ -40,13 +34,6 @@
     #include "wx/wx.h"
 #endif
 
-
-// ----------------------------------------------------------------------------
-// Global variables
-// ----------------------------------------------------------------------------
-static wxMenuBar *bar[2];
-static int current_bar;
-
 // ----------------------------------------------------------------------------
 // ressources
 // ----------------------------------------------------------------------------
@@ -82,9 +69,6 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-    void OnSwapMenus(wxCommandEvent& event);
-    void OnReplaceMenu(wxCommandEvent& event);
-    void OnRemoveInsertMenu(wxCommandEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -100,10 +84,7 @@ enum
 {
     // menu items
     Minimal_Quit = 1,
-    Minimal_About,
-    Minimal_SwapMenus,
-    Minimal_ReplaceMenu,
-    Minimal_RemoveInsertMenu
+    Minimal_About
 };
 
 // ----------------------------------------------------------------------------
@@ -116,9 +97,6 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
-    EVT_MENU(Minimal_SwapMenus, MyFrame::OnSwapMenus)
-    EVT_MENU(Minimal_ReplaceMenu, MyFrame::OnReplaceMenu)
-    EVT_MENU(Minimal_RemoveInsertMenu, MyFrame::OnRemoveInsertMenu)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -131,26 +109,6 @@ IMPLEMENT_APP(MyApp)
 // ============================================================================
 // implementation
 // ============================================================================
-
-wxString IntTowxString(int number)
-{
-  return(wxString(IntToString(number)));
-}
-
-wxMenu *GetFileMenu(int menu_number)
-{
-  wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
-  menuFile->Append(Minimal_Quit, "E&xit" + IntTowxString(menu_number) +
-   "\tAlt-X", "Quit this program");
-  menuFile->Append(Minimal_SwapMenus, "&SwapMenus" + IntTowxString(menu_number)
-   + "\tAlt-S", "Swap Menus");
-  menuFile->Append(Minimal_ReplaceMenu, "&ReplaceMenu" +
-   IntTowxString(menu_number) + "\tAlt-R", "Replace Menu");
-  menuFile->Append(Minimal_RemoveInsertMenu, "&RemoveInsertMenu" +
-   IntTowxString(menu_number) + "\tAlt-I", "Remove Then Insert Menu");
-
-  return(menuFile);
-}
 
 // ----------------------------------------------------------------------------
 // the application class
@@ -190,33 +148,22 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // set the frame icon
     SetIcon(wxICON(mondrian));
 
-    bar[0] = new wxMenuBar();
+    // create a menu bar
+    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
-    wxMenu *menuFile0 = GetFileMenu(0);
+    // the "About" item should be in the help menu
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
 
-    wxMenu *helpMenu0 = new wxMenu;
-    helpMenu0->Append(Minimal_About, "&About0...\tCtrl-A",
-     "Show about dialog");
+    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
-    bar[0]->Append(menuFile0, "&File0");
-    bar[0]->Append(helpMenu0, "&Help0");
-
-
-    bar[1] = new wxMenuBar();
-
-    wxMenu *menuFile1 = GetFileMenu(1);
-
-    wxMenu *helpMenu1 = new wxMenu;
-    helpMenu1->Append(Minimal_About, "&About1...\tCtrl-A",
-     "Show about dialog");
-
-    bar[1]->Append(menuFile1, "&File1");
-    bar[1]->Append(helpMenu1, "&Help1");
-
-    current_bar = 1;
+    // now append the freshly created menu to the menu bar...
+    wxMenuBar *menuBar = new wxMenuBar();
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
-    SetMenuBar(bar[current_bar]);
+    SetMenuBar(menuBar);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
@@ -242,49 +189,3 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
 }
-
-void MyFrame::OnSwapMenus(wxCommandEvent& WXUNUSED(event))
-{
-  // Change the menu set around
-  current_bar = 1 - current_bar;
-  SetMenuBar(bar[current_bar]);
-}
-
-void MyFrame::OnReplaceMenu(wxCommandEvent& WXUNUSED(event))
-{
-  wxMenuBar *curr_bar = bar[current_bar];
-  wxMenu *menu = GetFileMenu(3);
-  wxString title = "&File3";
-
-  // Replace the first menu with the same thing
-  int pos = 1;
-  if (pos != wxNOT_FOUND)
-  {
-      curr_bar->Replace(pos, menu, title);
-//    SetMenuBar(curr_bar);
-  }
-}
-
-
-void MyFrame::OnRemoveInsertMenu(wxCommandEvent& WXUNUSED(event))
-{
-  wxMenuBar *curr_bar = bar[current_bar];
-  wxMenu *menu = GetFileMenu(current_bar);
-  wxString title = "&File3";
-
-  // Remove the first menu then insert it back in
-  int pos = 1; 
-  if (pos != wxNOT_FOUND)
-  {
-    curr_bar->Remove(pos);
-    if (curr_bar->GetMenuCount() != 0)
-      curr_bar->Insert(pos, menu, title);
-    else
-      curr_bar->Append(menu, title);
-
-    SetMenuBar(curr_bar);
-  }
-}
-
-
-
