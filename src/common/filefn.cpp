@@ -1279,9 +1279,6 @@ wxString wxFindFirstFile(const char *spec, int flags)
 
     if ( gs_hFileStruct == INVALID_HANDLE_VALUE )
     {
-        wxLogSysError(_("Can not enumerate files in directory '%s'"),
-                      path.c_str());
-
         result.Empty();
 
         return result;
