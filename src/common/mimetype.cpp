@@ -1766,11 +1766,10 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxFileType **filetypes)
 {
     size_t count = m_aTypes.GetCount();
 
-    *filetypes = new wxFileType *[count];
+    *filetypes = new wxFileType[count];
     for ( size_t n = 0; n < count; n++ )
     {
-        (*filetypes)[n] = new wxFileType;
-        (*filetypes)[n]->m_impl->Init(this, n);
+        (*filetypes)[n].m_impl->Init(this, n);
     }
 
     return count;
