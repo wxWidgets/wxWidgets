@@ -511,7 +511,7 @@ void wxControlRenderer::DrawBitmap(wxDC &dc,
     else if ( stretch & wxEXPAND )
     {
         // stretch bitmap to fill the entire control
-        bmp = wxImage(bmp).Scale(rect.width, rect.height).ConvertToBitmap();
+        bmp = wxImage(bmp.ConvertToImage()).Scale(rect.width, rect.height);
     }
     else // not stretched, not tiled
     {
