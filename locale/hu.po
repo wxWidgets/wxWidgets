@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: wxWindows-2.5.1\n"
+"Project-Id-Version: wxWindows 2.5.2\n"
 "POT-Creation-Date: 2002-12-13 21:43+0100\n"
-"PO-Revision-Date: 2003-03-18 14:03+0100\n"
+"PO-Revision-Date: 2003-10-29 09:56+0100\n"
 "Last-Translator: Vegh Janos <J.Vegh@atomki.hu>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
@@ -353,9 +353,8 @@ msgid "<LINK>"
 msgstr "<LINK>"
 
 #: ../src/html/helpfrm.cpp:994
-#, fuzzy
 msgid "<html><body><table><tr><td>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> <b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font><br><td><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> <b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</font></tt></table></body></html>"
-msgstr "<html><body>Normál<br>(and <u>Aláhúzott</u>. <i>Dõlt.</i> <b>Félkövér.</b> <b><i>Félkövér dõlt.</i></b><br><font size=-2>betû méret-2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font><br><p><tt>Rögzített méretû típus.<br> <b>félkövér</b> <i>dõlt</i> <b><i>félkövér dõlt <u>aláhúzott</u></i></b><br><font size=-2>betû méret -2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font></tt></body></html>"
+msgstr "<html><body><table><tr><td>Normál<br>(és <u>Aláhúzott</u>. <i>Dõlt.</i> <b>Félkövér.</b> <b><i>Félkövér dõlt.</i></b><br><font size=-2>betû méret -2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font><br><td><p><tt>Azonos méretû.<br> <b>félkövér</b> <i>dõlt</i> <b><i>félkövér dõlt <u>aláhúzott</u></i></b><br><font size=-2>betû méret -2</font><br><font size=-1>betû méret -1</font><br><font size=+0>betû méret +0</font><br><font size=+1>betû méret +1</font><br><font size=+2>betû méret +2</font><br><font size=+3>betû méret +3</font><br><font size=+4>betû méret +4</font></tt></table></body></html>"
 
 #: ../src/common/paper.cpp:113
 msgid "A3 sheet, 297 x 420 mm"
