@@ -26,7 +26,7 @@ swig.xmlout.patch	     Fixes a couple problems in the XML output
 			     been run (previously you could only do
 			     the XML output *instead of* a regular
 			     language module.)
-
+			     See SF Patch #864689
 
 
 ------------------------------------------------------------------------
