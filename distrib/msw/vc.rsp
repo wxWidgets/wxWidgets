@@ -192,6 +192,9 @@ samples/ownerdrw/ownerdrw.dsw
 samples/png/png.dsp
 samples/png/png.dsw
 
+samples/popup/popup.dsp
+samples/popup/popup.dsw
+
 samples/printing/printing.dsp
 samples/printing/printing.dsw
 
@@ -394,4 +397,7 @@ utils/configtool/src/configtool.dsw
 
 utils/hhp2cached/hhp2cached.dsp
 utils/hhp2cached/hhp2cached.dsw
+
+tests/*.dsp
+tests/*.dsw
 

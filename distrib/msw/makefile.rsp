@@ -56,6 +56,7 @@ samples/mobile/styles/Makefile.in
 samples/multimon/Makefile.in
 samples/notebook/Makefile.in
 samples/png/Makefile.in
+samples/popup/Makefile.in
 samples/printing/Makefile.in
 samples/propsize/Makefile.in
 samples/render/Makefile.in
@@ -187,6 +188,8 @@ src/x11/descrip.mms
 src/png/scripts/descrip.mms
 src/unix/descrip.mms
 src/zlib/descrip.mms
+src/xml/descrip.mms
+src/xrc/descrip.mms
 src/regex/descrip.mms
 utils/helpview/src/descrip.mms
 utils/tex2rtf/src/descrip.mms

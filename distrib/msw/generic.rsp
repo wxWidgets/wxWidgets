@@ -24,6 +24,13 @@ build/bakefiles/formats/*.bkl
 build/bakefiles/formats/*.empy
 build/bakefiles/formats/README
 build/bakefiles/formats/*.bkmanifest
+build/bakefiles/wxpresets/*.bkl
+build/bakefiles/wxpresets/presets
+build/bakefiles/wxpresets/sample/*.bkl
+build/bakefiles/wxpresets/sample/*.in
+build/bakefiles/wxpresets/sample/*.cpp
+build/bakefiles/wxpresets/*.bkl
+build/update-setup-h
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
@@ -1005,6 +1012,19 @@ samples/png/*.png
 samples/png/*.pro
 samples/png/*.bkl
 
+samples/popup/*.cpp
+samples/popup/*.h
+samples/popup/makefile*
+samples/popup/*.rc
+samples/popup/*.def
+samples/popup/*.bmp
+samples/popup/*.xpm
+samples/popup/*.ico
+samples/popup/*.txt
+samples/popup/*.png
+samples/popup/*.pro
+samples/popup/*.bkl
+
 samples/printing/*.cpp
 samples/printing/*.h
 samples/printing/*.def
@@ -1424,14 +1444,13 @@ demos/dbbrowse/*.bkl
 
 tests/*.bkl
 tests/makefile*.*
-tests/*.dsp
-tests/*.dsw
 tests/*.cpp
 tests/*.fc
 
 tests/archive/*.cpp
 tests/arrays/*.cpp
 tests/datetime/*.cpp
+tests/fileconf/*.cpp
 tests/filename/*.cpp
 tests/filesys/*.cpp
 tests/fontmap/*.cpp

@@ -123,6 +123,8 @@ samples/opengl/*.mcp
 samples/ownerdrw/*M?.xml
 samples/ownerdrw/*.mcp
 samples/png/*M?.xml
+samples/popup/*M?.xml
+samples/popup/*.mcp
 samples/png/*.mcp
 samples/printing/*M?.xml
 samples/printing/*.mcp
