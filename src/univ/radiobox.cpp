@@ -153,6 +153,11 @@ bool wxRadioBox::Create(wxWindow *parent,
         SetClientSize(DoGetBestClientSize());
     }
 
+    // Need to move the radiobox in order to move the radio buttons
+    wxPoint actualPos = GetPosition();
+    wxSize actualSize = GetSize();
+    DoMoveWindow(actualPos.x, actualPos.y, actualSize.x, actualSize.y);
+
     // radiobox should already have selection so select at least one item
     SetSelection(0);
 
