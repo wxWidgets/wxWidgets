@@ -132,21 +132,18 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     bool ok = TRUE;
 
-    // this format string should contian exactly one '%s'
-    const wxChar *errormsg = _("'%s' is invalid");
+    // NB: this format string should contian exactly one '%s'
+    wxString errormsg;
 
-    if ( m_validatorStyle & wxFILTER_INCLUDE_LIST )
+    bool includeList = (m_validatorStyle & wxFILTER_INCLUDE_LIST) != 0;
+    if ( includeList || (m_validatorStyle & wxFILTER_EXCLUDE_LIST) )
     {
-        if ( !m_includeList.Member(val) )
+        // if includeList, it's only ok to have the members of the list,
+        // otherwise it's only ok to have non-members
+        ok = includeList == m_includeList.Member(val);
+        if ( !ok )
         {
-            ok = FALSE;
-        }
-    }
-    else if ( m_validatorStyle & wxFILTER_EXCLUDE_LIST )
-    {
-        if ( m_excludeList.Member(val) )
-        {
-            ok = FALSE;
+            errormsg = _("'%s' is invalid");
         }
     }
     else if ( (m_validatorStyle & wxFILTER_ASCII) && !val.IsAscii() )
@@ -176,6 +173,8 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !ok )
     {
+        wxASSERT_MSG( !errormsg.empty(), _T("you forgot to set errormsg") );
+
         m_validatorWindow->SetFocus();
 
         wxString buf;
