@@ -78,14 +78,18 @@ public:
 
     void OnMouseEvent(wxMouseEvent& event);
 
+    void OnSetFocus(wxFocusEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
+
     static bool ms_logKey;
     static bool ms_logChar;
     static bool ms_logMouse;
     static bool ms_logText;
+    static bool ms_logFocus;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
-    void LogEvent(const wxChar *name, wxKeyEvent& event) const;
+    void LogKeyEvent(const wxChar *name, wxKeyEvent& event) const;
 
     bool m_hasCapture;
 
@@ -212,6 +216,11 @@ public:
         MyTextCtrl::ms_logText = event.IsChecked();
     }
 
+    void OnLogFocus(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logFocus = event.IsChecked();
+    }
+
     void OnSetText(wxCommandEvent& event)
     {
         m_panel->m_text->SetValue(_T("Hello, world (what else did you expect)?"));
@@ -291,6 +300,7 @@ enum
     TEXT_LOG_CHAR,
     TEXT_LOG_MOUSE,
     TEXT_LOG_TEXT,
+    TEXT_LOG_FOCUS,
 
     TEXT_END
 };
@@ -358,12 +368,24 @@ bool MyApp::OnInit()
     menuLog->Append(TEXT_LOG_CHAR, "Log &char events", "", TRUE);
     menuLog->Append(TEXT_LOG_MOUSE, "Log &mouse events", "", TRUE);
     menuLog->Append(TEXT_LOG_TEXT, "Log &text events", "", TRUE);
+    menuLog->Append(TEXT_LOG_FOCUS, "Log &focus events", "", TRUE);
     menuLog->AppendSeparator();
     menuLog->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
                     "Clear the log window contents");
+
+    // select only the interesting events by default
+#if 0
     menuLog->Check(TEXT_LOG_KEY, TRUE);
     menuLog->Check(TEXT_LOG_CHAR, TRUE);
     menuLog->Check(TEXT_LOG_TEXT, TRUE);
+
+    MyTextCtrl::ms_logKey =
+    MyTextCtrl::ms_logChar =
+    MyTextCtrl::ms_logText = TRUE;
+#else
+    menuLog->Check(TEXT_LOG_FOCUS, TRUE);
+    MyTextCtrl::ms_logFocus = TRUE;
+#endif
     menu_bar->Append(menuLog, "&Log");
 
     frame->SetMenuBar(menu_bar);
@@ -390,14 +412,18 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
     EVT_TEXT_MAXLEN(-1, MyTextCtrl::OnTextMaxLen)
 
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
+
+    EVT_SET_FOCUS(MyTextCtrl::OnSetFocus)
+    EVT_KILL_FOCUS(MyTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-bool MyTextCtrl::ms_logKey = TRUE;
-bool MyTextCtrl::ms_logChar = TRUE;
+bool MyTextCtrl::ms_logKey = FALSE;
+bool MyTextCtrl::ms_logChar = FALSE;
 bool MyTextCtrl::ms_logMouse = FALSE;
-bool MyTextCtrl::ms_logText = TRUE;
+bool MyTextCtrl::ms_logText = FALSE;
+bool MyTextCtrl::ms_logFocus = FALSE;
 
-void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
+void MyTextCtrl::LogKeyEvent(const wxChar *name, wxKeyEvent& event) const
 {
     wxString key;
     long keycode = event.KeyCode();
@@ -599,6 +625,22 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
     //else: we're not interested in mouse move events
 }
 
+void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
+{
+    if ( ms_logFocus )
+        wxLogMessage("%p got focus.", this);
+
+    event.Skip();
+}
+
+void MyTextCtrl::OnKillFocus(wxFocusEvent& event)
+{
+    if ( ms_logFocus )
+        wxLogMessage("%p lost focus", this);
+
+    event.Skip();
+}
+
 void MyTextCtrl::OnText(wxCommandEvent& event)
 {
     if ( !ms_logText )
@@ -640,7 +682,7 @@ void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
 void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
     if ( ms_logChar )
-        LogEvent( _T("Char"), event);
+        LogKeyEvent( _T("Char"), event);
 
     event.Skip();
 }
@@ -648,7 +690,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 {
     if ( ms_logKey )
-        LogEvent( _T("Key up"), event);
+        LogKeyEvent( _T("Key up"), event);
 
     event.Skip();
 }
@@ -725,7 +767,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
     }
 
     if ( ms_logKey )
-        LogEvent( wxT("Key down"), event);
+        LogKeyEvent( wxT("Key down"), event);
 
     event.Skip();
 }
@@ -1004,6 +1046,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LOG_CHAR, MyFrame::OnLogChar)
     EVT_MENU(TEXT_LOG_MOUSE,MyFrame::OnLogMouse)
     EVT_MENU(TEXT_LOG_TEXT, MyFrame::OnLogText)
+    EVT_MENU(TEXT_LOG_FOCUS,MyFrame::OnLogFocus)
     EVT_MENU(TEXT_CLEAR,    MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
