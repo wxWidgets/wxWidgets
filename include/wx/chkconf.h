@@ -93,6 +93,14 @@
 #   endif
 #endif /* !defined(wxUSE_CHOICE) */
 
+#ifndef wxUSE_CHOICEDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_CHOICEDLG must be defined."
+#   else
+#       define wxUSE_CHOICEDLG 0
+#   endif
+#endif /* !defined(wxUSE_CHOICEDLG) */
+
 #ifndef wxUSE_CLIPBOARD
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CLIPBOARD must be defined."
@@ -116,6 +124,14 @@
 #       define wxUSE_DATAOBJ 0
 #   endif
 #endif /* !defined(wxUSE_DATAOBJ) */
+
+#ifndef wxUSE_DOC_VIEW_ARCHITECTURE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_DOC_VIEW_ARCHITECTURE must be defined."
+#   else
+#       define wxUSE_DOC_VIEW_ARCHITECTURE 0
+#   endif
+#endif /* !defined(wxUSE_DOC_VIEW_ARCHITECTURE) */
 
 #ifndef wxUSE_FILEDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -157,6 +173,14 @@
 #   endif
 #endif /* !defined(wxUSE_GRID) */
 
+#ifndef wxUSE_HELP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_HELP must be defined."
+#   else
+#       define wxUSE_HELP 0
+#   endif
+#endif /* !defined(wxUSE_HELP) */
+
 #ifndef wxUSE_IMAGLIST
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_IMAGLIST must be defined."
@@ -181,13 +205,29 @@
 #   endif
 #endif /* !defined(wxUSE_LISTCTRL) */
 
-#ifndef wxUSE_MSGDLG
+#ifndef wxUSE_LOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_MSGDLG must be defined."
+#       error "wxUSE_LOG must be defined."
 #   else
-#       define wxUSE_MSGDLG 0
+#       define wxUSE_LOG 0
 #   endif
-#endif /* !defined(wxUSE_MSGDLG) */
+#endif /* !defined(wxUSE_LOG) */
+
+#ifndef wxUSE_LOGGUI
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LOGGUI must be defined."
+#   else
+#       define wxUSE_LOGGUI 0
+#   endif
+#endif /* !defined(wxUSE_LOGGUI) */
+
+#ifndef wxUSE_LOGWINDOW
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LOGWINDOW must be defined."
+#   else
+#       define wxUSE_LOGWINDOW 0
+#   endif
+#endif /* !defined(wxUSE_LOGWINDOW) */
 
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -213,6 +253,14 @@
 #   endif
 #endif /* !defined(wxUSE_MIMETYPE) */
 
+#ifndef wxUSE_MSGDLG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MSGDLG must be defined."
+#   else
+#       define wxUSE_MSGDLG 0
+#   endif
+#endif /* !defined(wxUSE_MSGDLG) */
+
 #ifndef wxUSE_NEW_GRID
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_NEW_GRID must be defined."
@@ -236,6 +284,14 @@
 #       define wxUSE_POPUPWIN 0
 #   endif
 #endif /* !defined(wxUSE_POPUPWIN) */
+
+#ifndef wxUSE_PRINTING_ARCHITECTURE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PRINTING_ARCHITECTURE must be defined."
+#   else
+#       define wxUSE_PRINTING_ARCHITECTURE 0
+#   endif
+#endif /* !defined(wxUSE_PRINTING_ARCHITECTURE) */
 
 #ifndef wxUSE_RADIOBOX
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -325,6 +381,14 @@
 #   endif
 #endif /* !defined(wxUSE_STATLINE) */
 
+#ifndef wxUSE_STATTEXT
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STATTEXT must be defined."
+#   else
+#       define wxUSE_STATTEXT 0
+#   endif
+#endif /* !defined(wxUSE_STATTEXT) */
+
 #ifndef wxUSE_STATUSBAR
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_STATUSBAR must be defined."
@@ -381,6 +445,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_WXHTML_HELP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WXHTML_HELP must be defined."
+#   else
+#       define wxUSE_WXHTML_HELP 0
+#   endif
+#endif /* !defined(wxUSE_WXHTML_HELP) */
+
 /*
    check consistency of the settings
  */
@@ -407,6 +479,7 @@
     wxUSE_STATBMP || \
     wxUSE_STATBOX || \
     wxUSE_STATLINE || \
+    wxUSE_STATTEXT || \
     wxUSE_STATUSBAR || \
     wxUSE_TEXTCTRL || \
     wxUSE_TOOLBAR || \
@@ -421,6 +494,100 @@
 #    endif
 #endif /* controls */
 
+/* wxUniv-specific dependencies */
+#if defined(__WXUNIVERSAL__)
+#   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
+#       else
+#           undef wxUSE_POPUPWIN
+#           define wxUSE_POPUPWIN 1
+#       endif
+#   endif
+
+#   if wxUSE_COMBOBOX
+#      if !wxUSE_LISTBOX
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxComboBox requires wxListBox in wxUniversal"
+#           else
+#               undef wxUSE_LISTBOX
+#               define wxUSE_LISTBOX 1
+#           endif
+#      endif
+#   endif /* wxUSE_COMBOBOX */
+
+#   if wxUSE_RADIOBTN
+#      if !wxUSE_CHECKBOX
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_RADIOBTN requires wxUSE_CHECKBOX in wxUniversal"
+#           else
+#               undef wxUSE_CHECKBOX
+#               define wxUSE_CHECKBOX 1
+#           endif
+#      endif
+#   endif /* wxUSE_RADIOBTN */
+
+#   if wxUSE_TEXTCTRL
+#       if !wxUSE_CARET
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxTextCtrl requires wxCaret in wxUniversal"
+#           else
+#               undef wxUSE_CARET
+#               define wxUSE_CARET 1
+#           endif
+#       endif /* wxUSE_CARET */
+
+#       if !wxUSE_SCROLLBAR
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxTextCtrl requires wxScrollBar in wxUniversal"
+#           else
+#               undef wxUSE_SCROLLBAR
+#               define wxUSE_SCROLLBAR 1
+#           endif
+#       endif /* wxUSE_SCROLLBAR */
+#   endif /* wxUSE_TEXTCTRL */
+#endif /* __WXUNIVERSAL__ */
+
+/* wxGTK-specific dependencies */
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+#   if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "MDI requires wxUSE_MENUS in wxGTK"
+#       else
+#           undef wxUSE_MENUS
+#           define wxUSE_MENUS 1
+#       endif
+#   endif
+#endif /* wxGTK && !wxUniv */
+
+/* generic controls dependencies */
+#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#   if wxUSE_FONTDLG || wxUSE_FILEDLG || wxUSE_CHOICEDLG
+        /* all common controls are needed by these dialogs */
+#       if !defined(wxUSE_CHOICE) || \
+           !defined(wxUSE_TEXTCTRL) || \
+           !defined(wxUSE_BUTTON) || \
+           !defined(wxUSE_CHECKBOX) || \
+           !defined(wxUSE_STATTEXT)
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "These common controls are needed by common dialogs"
+#           else
+#               undef wxUSE_CHOICE
+#               define wxUSE_CHOICE 1
+#               undef wxUSE_TEXTCTRL
+#               define wxUSE_TEXTCTRL 1
+#               undef wxUSE_BUTTON
+#               define wxUSE_BUTTON 1
+#               undef wxUSE_CHECKBOX
+#               define wxUSE_CHECKBOX 1
+#               undef wxUSE_STATTEXT
+#               define wxUSE_STATTEXT 1
+#           endif
+#       endif
+#   endif
+#endif /* !wxMSW || wxUniv */
+
+/* common dependencies */
 #if wxUSE_CALENDARCTRL
 #   if !(wxUSE_SPINBTN && wxUSE_COMBOBOX)
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -445,16 +612,42 @@
 #   endif
 #endif /* wxUSE_RADIOBTN */
 
-#if wxUSE_COMBOBOX
-#   if defined(__WXUNIVERSAL__) && !wxUSE_LISTBOX
+#if wxUSE_WXHTML_HELP
+#   if !wxUSE_HELP || !wxUSE_HTML || !wxUSE_COMBOBOX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Built in help controller can't be compiled"
+#       else
+#           undef wxUSE_HELP
+#           define wxUSE_HELP 1
+#           undef wxUSE_HTML
+#           define wxUSE_HTML 1
+#           undef wxUSE_COMBOBOX
+#           define wxUSE_COMBOBOX 1
+#       endif
+#   endif
+#endif /* wxUSE_WXHTML_HELP */
+
+#if wxUSE_PRINTING_ARCHITECTURE
+#   if !wxUSE_COMBOBOX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "Print dialog requires wxUSE_COMBOBOX"
+#       else
+#           undef wxUSE_COMBOBOX
+#           define wxUSE_COMBOBOX 1
+#       endif
+#   endif
+#endif /* wxUSE_PRINTING_ARCHITECTURE */
+
+#if wxUSE_DOC_VIEW_ARCHITECTURE
+#   if !wxUSE_MENUS
 #        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxComboBox requires wxListBox in wxUniversal"
+#            error "DocView requires wxUSE_MENUS"
 #        else
-#            undef wxUSE_LISTBOX
-#            define wxUSE_LISTBOX 1
+#            undef wxUSE_MENUS
+#            define wxUSE_MENUS 1
 #        endif
 #   endif
-#endif /* wxUSE_COMBOBOX */
+#endif /* wxUSE_DOC_VIEW_ARCHITECTURE */
 
 #if !wxUSE_FILEDLG
 #   if wxUSE_DOC_VIEW_ARCHITECTURE || wxUSE_HTML
@@ -466,17 +659,6 @@
 #       endif
 #   endif
 #endif /* wxUSE_FILEDLG */
-
-#if !wxUSE_FONTDLG
-#   if wxUSE_FONTMAP
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxFontDialog must be compiled as well"
-#       else
-#           undef wxUSE_FONTDLG
-#           define wxUSE_FONTDLG 1
-#       endif
-#   endif
-#endif /* !wxUSE_FONTDLG */
 
 #if !wxUSE_IMAGLIST
 #   if wxUSE_TREECTRL || wxUSE_NOTEBOOK || wxUSE_LISTCTRL
@@ -498,17 +680,6 @@
 #       define wxUSE_MSGDLG 1
 #   endif
 #endif
-
-#if wxUSE_RADIOBTN
-#   if defined(__WXUNIVERSAL__) && !wxUSE_CHECKBOX
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_RADIOBTN requires wxUSE_CHECKBOX in wxUniversal"
-#        else
-#            undef wxUSE_CHECKBOX
-#            define wxUSE_CHECKBOX 1
-#        endif
-#   endif
-#endif /* wxUSE_RADIOBTN */
 
 #if wxUSE_RADIOBOX
 #   if !wxUSE_RADIOBTN || !wxUSE_STATBOX
@@ -534,32 +705,21 @@
 #    endif
 #endif /* wxUSE_STOPWATCH */
 
-#if wxUSE_TEXTCTRL
-#   ifdef __WXUNIVERSAL__
-#       if !wxUSE_CARET
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxTextCtrl requires wxCaret in wxUniversal"
-#           else
-#               undef wxUSE_CARET
-#               define wxUSE_CARET 1
-#           endif
-#       endif /* wxUSE_CARET */
-
-#       if !wxUSE_SCROLLBAR
-#           ifdef wxABORT_ON_CONFIG_ERROR
-#               error "wxTextCtrl requires wxScrollBar in wxUniversal"
-#           else
-#               undef wxUSE_SCROLLBAR
-#               define wxUSE_SCROLLBAR 1
-#           endif
-#       endif /* wxUSE_SCROLLBAR */
-#   endif /* __WXUNIVERSAL__ */
-#endif /* wxUSE_RADIOBTN */
+#if wxUSE_LOGWINDOW
+#    if !wxUSE_TEXTCTRL
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_LOGWINDOW requires wxUSE_TEXTCTRL"
+#        else
+#            undef wxUSE_TEXTCTRL
+#            define wxUSE_TEXTCTRL 1
+#        endif
+#    endif
+#endif /* wxUSE_LOGWINDOW */
 
 /* I wonder if we shouldn't just remove all occurrences of
    wxUSE_DYNAMIC_CLASSES from the sources? */
 #if !defined(wxUSE_DYNAMIC_CLASSES) || !wxUSE_DYNAMIC_CLASSES
-#   if wxABORT_ON_CONFIG_ERROR
+#   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNAMIC_CLASSES must be defined as 1"
 #   else
 #       undef wxUSE_DYNAMIC_CLASSES
@@ -568,7 +728,7 @@
 #endif /* wxUSE_DYNAMIC_CLASSES */
 
 #if wxUSE_MIMETYPE && !wxUSE_TEXTFILE
-#   if wxABORT_ON_CONFIG_ERROR
+#   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MIMETYPE requires wxUSE_TEXTFILE"
 #   else
 #       undef wxUSE_TEXTFILE
@@ -577,7 +737,7 @@
 #endif /* wxUSE_MIMETYPE */
 
 #if wxUSE_TEXTFILE && !wxUSE_FILE
-#   if wxABORT_ON_CONFIG_ERROR
+#   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTFILE requires wxUSE_FILE"
 #   else
 #       undef wxUSE_FILE
@@ -586,37 +746,13 @@
 #endif /* wxUSE_TEXTFILE */
 
 #if wxUSE_CLIPBOARD && !wxUSE_DATAOBJ
-#   if wxABORT_ON_CONFIG_ERROR
+#   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxClipboard requires wxDataObject"
 #   else
 #       undef wxUSE_DATAOBJ
 #       define wxUSE_DATAOBJ 1
 #   endif
 #endif /* wxUSE_CLIPBOARD */
-
-/* wxUniv-specific dependencies */
-#if defined(__WXUNIVERSAL__)
-#   if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
-#       if wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
-#       else
-#           undef wxUSE_POPUPWIN
-#           define wxUSE_POPUPWIN 1
-#       endif
-#   endif
-#endif /* wxUSE_POPUPWIN */
-
-/* wxGTK-specific dependencies */
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
-#   if wxUSE_MDI_ARCHITECTURE && !wxUSE_MENUS
-#       if wxABORT_ON_CONFIG_ERROR
-#           error "MDI requires wxUSE_MENUS in wxGTK"
-#       else
-#           undef wxUSE_MENUS 
-#           define wxUSE_MENUS 1
-#       endif
-#   endif
-#endif /* wxGTK && !wxUniv */
 
 #endif /* wxUSE_GUI */
 

@@ -482,6 +482,15 @@ wxPoint wxWindow::GetClientAreaOrigin() const
 
 void wxWindow::DoGetClientSize(int *width, int *height) const
 {
+    // if it is a native window, we assume it handles the scrollbars itself
+    // too - and if it doesn't, there is not much we can do
+    if ( !m_renderer )
+    {
+        wxWindowNative::DoGetClientSize(width, height);
+
+        return;
+    }
+
     int w, h;
     wxWindowNative::DoGetClientSize(&w, &h);
 

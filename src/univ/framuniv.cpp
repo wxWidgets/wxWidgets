@@ -68,19 +68,22 @@ wxFrame::wxFrame(wxWindow *parent,
 }
 
 // ----------------------------------------------------------------------------
-// geometry
+// menu support
 // ----------------------------------------------------------------------------
 
 void wxFrame::OnSize(wxSizeEvent& event)
 {
+#if wxUSE_MENUS
     PositionMenuBar();
+#endif // wxUSE_WAVE
 
     event.Skip();
 }
 
+#if wxUSE_MENUS
+
 void wxFrame::PositionMenuBar()
 {
-#if wxUSE_MENUS
     if ( m_frameMenuBar )
     {
         // the menubar is positioned above the client size, hence the negative
@@ -88,8 +91,9 @@ void wxFrame::PositionMenuBar()
         m_frameMenuBar->SetSize(0, -m_frameMenuBar->GetSize().y,
                                 GetClientSize().x, -1);
     }
-#endif // wxUSE_MENUS
 }
+
+#endif // wxUSE_MENUS
 
 wxPoint wxFrame::GetClientAreaOrigin() const
 {

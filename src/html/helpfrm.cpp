@@ -21,7 +21,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_HTML && wxUSE_STREAMS
+#if wxUSE_WXHTML_HELP
 
 #ifndef WXPRECOMP
     #include "wx/intl.h"
@@ -238,7 +238,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 // moreover, if no contents, index or searchpage is needed, m_Splitter and
 // m_NavigPan will be NULL too (with m_HtmlWin directly connected to the frame)
 
-bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, 
+bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
                              const wxString& WXUNUSED(title), int style)
 {
     m_hfStyle = style;
@@ -301,7 +301,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
 
         if (style & wxHF_BOOKMARKS)
-	    {
+        {
             wxLayoutConstraints *b1 = new wxLayoutConstraints;
             wxBitmapButton *bmpbt = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxDefaultPosition, wxSize(20,20));
 
@@ -502,18 +502,18 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         if (m_Cfg.navig_on)
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
         else
-	    {
+        {
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
             m_Splitter->Unsplit();
         }
 
-	    if (m_Cfg.navig_on)
-	    {
+        if (m_Cfg.navig_on)
+        {
             m_NavigPan->Show(TRUE);
             m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
         }
         else
-	    {
+        {
             m_NavigPan->Show(FALSE);
             m_Splitter->Initialize(m_HtmlWin);
         }
@@ -713,7 +713,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
         if (curi % 32 == 0 && progress.Update(curi) == FALSE)
             break;
         if (status.Search())
-	    {
+        {
             foundstr.Printf(_("Found %i matches"), ++foundcnt);
             progress.Update(status.GetCurIndex(), foundstr);
             m_SearchList->Append(status.GetName(), status.GetContentsItem());
@@ -760,7 +760,7 @@ void wxHtmlHelpFrame::CreateContents()
     //     We set the icon later: when we find an item with level=n, we know
     //     that the last item with level=n-1 was folder with subitems, so we
     //     set its icon accordingly
-    bool imaged[MAX_ROOTS]; 
+    bool imaged[MAX_ROOTS];
     m_ContentsBox->DeleteAllItems();
 
     // Don't show (Help) root if there's only one boook
@@ -799,7 +799,7 @@ void wxHtmlHelpFrame::CreateContents()
                 else
                 {
                     roots[1] = m_ContentsBox->AppendItem(roots[0],
-                                             it->m_Name, IMG_Book, -1, 
+                                             it->m_Name, IMG_Book, -1,
                                              new wxHtmlHelpTreeItemData(i));
                     m_ContentsBox->SetItemBold(roots[1], TRUE);
                 }
@@ -807,12 +807,12 @@ void wxHtmlHelpFrame::CreateContents()
             }
         }
         // ...and their contents:
-        else 
+        else
         {
             roots[it->m_Level + 1] = m_ContentsBox->AppendItem(
-                                     roots[it->m_Level], it->m_Name, IMG_Page, 
+                                     roots[it->m_Level], it->m_Name, IMG_Page,
                                      -1, new wxHtmlHelpTreeItemData(i));
-	        imaged[it->m_Level + 1] = FALSE;
+            imaged[it->m_Level + 1] = FALSE;
         }
 
         m_PagesHash->Put(it->GetFullPath(),
@@ -821,7 +821,7 @@ void wxHtmlHelpFrame::CreateContents()
         // Set the icon for the node one level up in the hiearachy,
         // unless already done (see comment above imaged[] declaration)
         if (!imaged[it->m_Level])
-	    {
+        {
             int image = IMG_Folder;
             if (m_hfStyle & wxHF_ICONS_BOOK)
                 image = IMG_Book;
@@ -909,17 +909,17 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 
         cnt = cfg->Read(wxT("hcBookmarksCnt"), 0L);
         if (cnt != 0)
-	    {
+        {
             m_BookmarksNames.Clear();
             m_BookmarksPages.Clear();
             if (m_Bookmarks)
-	        {
+            {
                 m_Bookmarks->Clear();
                 m_Bookmarks->Append(_("(bookmarks)"));
             }
 
             for (i = 0; i < cnt; i++)
-	        {
+            {
                 val.Printf(wxT("hcBookmark_%i"), i);
                 s = cfg->Read(val);
                 m_BookmarksNames.Add(s);
@@ -967,7 +967,7 @@ void wxHtmlHelpFrame::WriteCustomization(wxConfigBase *cfg, const wxString& path
 
         cfg->Write(wxT("hcBookmarksCnt"), (long)cnt);
         for (i = 0; i < cnt; i++)
-	    {
+        {
             val.Printf(wxT("hcBookmark_%i"), i);
             cfg->Write(val, m_BookmarksNames[i]);
             val.Printf(wxT("hcBookmark_%i_url"), i);
@@ -1270,13 +1270,13 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 if (! (m_Splitter && m_NavigPan))
                     return ;
                 if (m_Splitter->IsSplit())
-		        {
+                {
                     m_Cfg.sashpos = m_Splitter->GetSashPosition();
                     m_Splitter->Unsplit(m_NavigPan);
                     m_Cfg.navig_on = FALSE;
                 }
-		        else
-		        {
+                else
+                {
                     m_NavigPan->Show(TRUE);
                     m_HtmlWin->Show(TRUE);
                     m_Splitter->SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
@@ -1297,9 +1297,9 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 item = m_HtmlWin->GetOpenedPageTitle();
                 url = m_HtmlWin->GetOpenedPage();
                 if (item == wxEmptyString)
-		            item = url.AfterLast(wxT('/'));
+                    item = url.AfterLast(wxT('/'));
                 if (m_BookmarksPages.Index(url) == wxNOT_FOUND)
-		        {
+                {
                     m_Bookmarks->Append(item);
                     m_BookmarksNames.Add(item);
                     m_BookmarksPages.Add(url);
@@ -1315,7 +1315,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 item = m_Bookmarks->GetStringSelection();
                 pos = m_BookmarksNames.Index(item);
                 if (pos != wxNOT_FOUND)
-		        {
+                {
                     m_BookmarksNames.Remove(pos);
                     m_BookmarksPages.Remove(pos);
                     m_Bookmarks->Delete(m_Bookmarks->GetSelection());
@@ -1410,7 +1410,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
         wxBusyCursor bcur;
         const wxChar *cstr = sr.c_str();
         wxChar mybuff[512];
-		wxChar *ptr;
+        wxChar *ptr;
         bool first = TRUE;
 
         m_IndexList->Clear();
@@ -1426,11 +1426,11 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                 if (*ptr >= _T('A') && *ptr <= _T('Z'))
                     *ptr -= (wxChar)(_T('A') - _T('a'));
             if (wxStrstr(mybuff, cstr) != NULL)
-	        {
+            {
                 m_IndexList->Append(index[i].m_Name, (char*)(index + i));
                 displ++;
                 if (first)
-		        {
+                {
                     if (index[i].m_Page[0] != 0)
                         m_HtmlWin->LoadPage(index[i].GetFullPath());
                     NotifyPageChanged();
@@ -1461,7 +1461,7 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
     {
         m_IndexList->Append(index[i].m_Name, (char*)(index + i));
         if (first)
-	    {
+        {
             if (index[i].m_Page[0] != 0)
                 m_HtmlWin->LoadPage(index[i].GetFullPath());
             NotifyPageChanged();
@@ -1538,4 +1538,5 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-#endif
+#endif // wxUSE_WXHTML_HELP
+

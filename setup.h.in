@@ -649,9 +649,14 @@
 #define wxUSE_WX_RESOURCES wxUSE_RESOURCES
 
 /*
- * Use wxWindows help facility (needs wxUSE_IPC 1)
+ * Use wxWindows help facility
  */
 #define wxUSE_HELP 0
+/*
+ * Use built-in HTML-based help controller
+ */
+#define wxUSE_WXHTML_HELP 0
+
 /*
  * Use iostream.h rather than iostream
  */

@@ -80,7 +80,6 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 // "focus_in_event"
 //-----------------------------------------------------------------------------
 
-wxWindow *FindFocusedChild(wxWindow *win);
 extern wxWindow  *g_focusWindow;
 extern bool       g_blockEventsOnDrag;
 // extern bool g_isIdle;
@@ -152,7 +151,7 @@ static gint gtk_text_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(e
     g_sendActivateEvent = 0;
 #endif
 
-    wxWindow *winFocus = FindFocusedChild(win);
+    wxWindow *winFocus = wxFindFocusedChild(win);
     if ( winFocus )
         win = winFocus;
 

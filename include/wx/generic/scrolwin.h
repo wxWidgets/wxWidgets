@@ -13,7 +13,7 @@
 #define _WX_GENERIC_SCROLLWIN_H_
 
 #ifdef __GNUG__
-    #pragma interface "scrolwin.h"
+    #pragma interface "genscrolwin.h"
 #endif
 
 // ----------------------------------------------------------------------------

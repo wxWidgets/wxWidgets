@@ -156,6 +156,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // set the frame icon
     SetIcon(wxICON(mondrian));
 
+#if wxUSE_MENUS
     // create a menu bar
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
@@ -172,6 +173,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)

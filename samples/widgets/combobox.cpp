@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_COMBOBOX
+
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -491,4 +493,6 @@ void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
 {
     CreateCombo();
 }
+
+#endif //wxUSE_COMBOBOX
 

@@ -96,7 +96,8 @@ prop.cpp	G
 propform.cpp	G
 proplist.cpp	G
 sashwin.cpp	G
-scrolwin.cpp	G	R
+scrlwing.cpp	G
+spinctlg.cpp	G
 splash.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
@@ -152,6 +153,7 @@ fs_inet.cpp	C	B
 fs_zip.cpp	C	B
 fs_mem.cpp	C	B
 ftp.cpp	C	S,B
+gaugecmn.cpp	C
 gdicmn.cpp	C
 geometry.cpp	C
 gifdecod.cpp	C
@@ -349,12 +351,13 @@ bmpbuttn.cpp	V
 button.cpp	V
 checkbox.cpp	V
 checklst.cpp	V
-cmdproc.cpp	V
 colschem.cpp	V
 control.cpp	V
 framuniv.cpp	V
+gauge.cpp	V
 inphand.cpp	V
 listbox.cpp	V
+notebook.cpp	V
 radiobox.cpp	V
 radiobut.cpp	V
 renderer.cpp	V
@@ -373,7 +376,7 @@ gtk.cpp	V
 winuniv.cpp	V
 win32.cpp	V
 
-gsockgtk.c	R
+gsockgtk.c	R	L
 win_gtk.c	R	L
 app.cpp	R	L
 bitmap.cpp	R	L
@@ -382,7 +385,8 @@ brush.cpp	R	L
 button.cpp	R
 checkbox.cpp	R
 checklst.cpp	R
-choice.cpp	R
+# FIXME: remove 'L' flag from choice!
+choice.cpp	R	L
 clipbrd.cpp	R	L
 colour.cpp	R	L
 combobox.cpp	R
@@ -395,7 +399,7 @@ dcclient.cpp	R	L
 dcmemory.cpp	R	L
 dcscreen.cpp	R	L
 dialog.cpp	R	L
-dnd.cpp	R
+dnd.cpp	R	L
 font.cpp	R	L
 fontdlg.cpp	R
 frame.cpp	R	L
@@ -423,11 +427,12 @@ statbmp.cpp	R
 statbox.cpp	R
 statline.cpp	R
 stattext.cpp	R
-tbargtk.cpp	R
+# FIXME: remove 'L' here too!
+tbargtk.cpp	R	L
 textctrl.cpp	R
 tglbtn.cpp	R
 timer.cpp	R	L
-tooltip.cpp	R
+tooltip.cpp	R	L
 utilsgtk.cpp	R	L
 utilsres.cpp	R
 wave.cpp	R

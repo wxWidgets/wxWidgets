@@ -766,10 +766,8 @@ wxCoord wxRegionIterator::GetH() const
 wxRect wxRegionIterator::GetRect() const
 {
     wxRect r;
-    wxNode *node = m_region.GetRectList()->Nth( m_current );
-
-    if (node)
-        r = *((wxRect*)node->Data());
+    if( HaveRects() )
+        r = ((wxRIRefData*)m_refData)->m_rects[m_current];
 
     return r;
 }

@@ -722,6 +722,10 @@
                                 // 0 for no help facility
 #define wxUSE_MS_HTML_HELP 0
                                 // 0 for no MS HTML Help
+
+// Use wxHTML-based help controller?
+#define wxUSE_WXHTML_HELP 1
+
 #define wxUSE_RESOURCES   1
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1

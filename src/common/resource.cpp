@@ -2648,6 +2648,8 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
   }
 }
 
+#if wxUSE_MENUS
+
 wxMenu *wxResourceCreateMenu(wxItemResource *item)
 {
     wxMenu *menu = new wxMenu;
@@ -2707,6 +2709,8 @@ wxMenu *wxResourceCreateMenu(const wxString& resource, wxResourceTable *table)
         return wxResourceCreateMenu(menuResource);
     return (wxMenu *) NULL;
 }
+
+#endif // wxUSE_MENUS
 
 // Global equivalents (so don't have to refer to default table explicitly)
 bool wxResourceParseData(const wxString& resource, wxResourceTable *table)

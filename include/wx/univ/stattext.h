@@ -33,7 +33,7 @@ public:
                  wxWindowID id,
                  const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize, 
+                 const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString &name = wxStaticTextNameStr)
     {
@@ -45,7 +45,7 @@ public:
                 wxWindowID id,
                 const wxString &label,
                 const wxPoint &pos = wxDefaultPosition,
-                const wxSize &size = wxDefaultSize, 
+                const wxSize &size = wxDefaultSize,
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr);
 
@@ -59,6 +59,8 @@ protected:
 
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);
+
+    DECLARE_ABSTRACT_CLASS(wxStaticText)
 };
 
 #endif // _WX_UNIV_STATTEXT_H_

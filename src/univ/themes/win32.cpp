@@ -1801,14 +1801,6 @@ void wxWin32Renderer::DoDrawLabel(wxDC& dc,
     {
         if ( focusOffset.x || focusOffset.y )
         {
-            // before calling Inflate(), ensure that we will have a valid rect
-            // afterwards
-            if ( rectLabel.x < focusOffset.x )
-                rectLabel.x = focusOffset.x;
-
-            if ( rectLabel.y < focusOffset.y )
-                rectLabel.y = focusOffset.y;
-
             rectLabel.Inflate(focusOffset.x, focusOffset.y);
         }
 
@@ -2419,6 +2411,8 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
 // menu and menubar
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MENUS
+
 // wxWin32MenuGeometryInfo: the wxMenuGeometryInfo used by wxWin32Renderer
 class WXDLLEXPORT wxWin32MenuGeometryInfo : public wxMenuGeometryInfo
 {
@@ -2447,6 +2441,8 @@ private:
                 GetMenuGeometry(wxWindow *, const wxMenu&) const;
 };
 
+#endif // wxUSE_WAVE
+
 // FIXME: all constants are hardcoded but shouldn't be
 static const wxCoord MENU_LEFT_MARGIN = 9;
 static const wxCoord MENU_RIGHT_MARGIN = 18;
@@ -2465,6 +2461,10 @@ static const wxCoord MENU_SEPARATOR_HEIGHT = 3;
 
 // the size of the standard checkmark bitmap
 static const wxCoord MENU_CHECK_SIZE = 9;
+
+// we can't implement these methods without wxMenuGeometryInfo implementation
+// which we don't have if !wxUSE_MENUS
+#if wxUSE_MENUS
 
 void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
                                       const wxRect& rectOrig,
@@ -2677,6 +2677,47 @@ wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
     return gi;
 }
 
+#else // !wxUSE_MENUS
+
+void wxWin32Renderer::DrawMenuBarItem(wxDC& WXUNUSED(dc),
+                                      const wxRect& WXUNUSED(rectOrig),
+                                      const wxString& WXUNUSED(label),
+                                      int WXUNUSED(flags),
+                                      int WXUNUSED(indexAccel))
+{
+}
+
+void wxWin32Renderer::DrawMenuItem(wxDC& WXUNUSED(dc),
+                                   wxCoord WXUNUSED(y),
+                                   const wxMenuGeometryInfo& WXUNUSED(gi),
+                                   const wxString& WXUNUSED(label),
+                                   const wxString& WXUNUSED(accel),
+                                   const wxBitmap& WXUNUSED(bitmap),
+                                   int WXUNUSED(flags),
+                                   int WXUNUSED(indexAccel))
+{
+}
+
+void wxWin32Renderer::DrawMenuSeparator(wxDC& WXUNUSED(dc),
+                                        wxCoord WXUNUSED(y),
+                                        const wxMenuGeometryInfo& WXUNUSED(gi))
+{
+}
+
+wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& size) const
+{
+    return size;
+}
+
+wxMenuGeometryInfo *
+wxWin32Renderer::GetMenuGeometry(wxWindow *WXUNUSED(win),
+                                 const wxMenu& WXUNUSED(menu)) const
+{
+    return NULL;
+}
+
+#endif // wxUSE_MENUS/!wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // combobox
 // ----------------------------------------------------------------------------
@@ -2880,11 +2921,6 @@ wxRect wxWin32Renderer::GetTextTotalArea(const wxTextCtrl *text,
     wxRect rectTotal = rect;
 
     wxCoord widthBorder = GetTextBorderWidth();
-    if ( rectTotal.x < widthBorder )
-        rectTotal.x = widthBorder;
-    if ( rectTotal.y < widthBorder )
-        rectTotal.y = widthBorder;
-
     rectTotal.Inflate(widthBorder);
 
     // this is what Windows does
@@ -2904,11 +2940,6 @@ wxRect wxWin32Renderer::GetTextClientArea(const wxTextCtrl *text,
         rectText.height--;
 
     wxCoord widthBorder = GetTextBorderWidth();
-    if ( rectText.width < 2*widthBorder )
-        rectText.width = 2*widthBorder;
-    if ( rectText.height < 2*widthBorder )
-        rectText.height = 2*widthBorder;
-
     rectText.Inflate(-widthBorder);
 
     if ( extraSpaceBeyond )

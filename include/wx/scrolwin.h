@@ -170,7 +170,7 @@ protected:
 // wxScrolledWindow: a wxWindow which knows how to scroll
 // ----------------------------------------------------------------------------
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
 #else // !wxGTK
     #include "wx/generic/scrolwin.h"

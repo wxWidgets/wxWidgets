@@ -333,25 +333,25 @@ extern bool g_isIdle;
 // returns the child of win which currently has focus or NULL if not found
 //
 // Note: can't be static, needed by textctrl.cpp.
-wxWindow *FindFocusedChild(wxWindowGTK *win)
+wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 {
-    wxWindowGTK *winFocus = wxWindowGTK::FindFocus();
+    wxWindow *winFocus = wxWindowGTK::FindFocus();
     if ( !winFocus )
-        return (wxWindowGTK *)NULL;
+        return (wxWindow *)NULL;
 
     if ( winFocus == win )
-        return win;
+        return (wxWindow *)win;
 
     for ( wxWindowList::Node *node = win->GetChildren().GetFirst();
           node;
           node = node->GetNext() )
     {
-        wxWindowGTK *child = FindFocusedChild(node->GetData());
+        wxWindow *child = wxFindFocusedChild(node->GetData());
         if ( child )
             return child;
     }
 
-    return (wxWindowGTK *)NULL;
+    return (wxWindow *)NULL;
 }
 
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
@@ -1749,7 +1749,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     // g_sendActivateEvent to -1
     g_sendActivateEvent = 0;
 
-    wxWindowGTK *winFocus = FindFocusedChild(win);
+    wxWindowGTK *winFocus = wxFindFocusedChild(win);
     if ( winFocus )
         win = winFocus;
 
@@ -3067,7 +3067,7 @@ bool wxWindowGTK::Show( bool show )
     return TRUE;
 }
 
-static void wxWindowNotifyEnable(wxWindow* win, bool enable)
+static void wxWindowNotifyEnable(wxWindowGTK* win, bool enable)
 {
     win->OnParentEnable(enable);
 
@@ -3084,7 +3084,7 @@ static void wxWindowNotifyEnable(wxWindow* win, bool enable)
     }
 }
 
-bool wxWindow::Enable( bool enable )
+bool wxWindowGTK::Enable( bool enable )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, wxT("invalid window") );
 
@@ -3394,7 +3394,7 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
     wxWindowBase::DoSetToolTip(tip);
 
     if (m_tooltip)
-        m_tooltip->Apply( this );
+        m_tooltip->Apply( (wxWindow *)this );
 }
 
 void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )

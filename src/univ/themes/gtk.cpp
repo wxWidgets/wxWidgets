@@ -1454,11 +1454,13 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
 // text control
 // ----------------------------------------------------------------------------
 
+static const int TEXT_BORDER = 2;
+
 wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
                                        const wxRect& rect)
 {
     wxRect rectTotal = rect;
-    rectTotal.Inflate(2);
+    rectTotal.Inflate(TEXT_BORDER);
     return rectTotal;
 }
 
@@ -1467,7 +1469,7 @@ wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
                                         wxCoord *extraSpaceBeyond)
 {
     wxRect rectText = rect;
-    rectText.Inflate(-2);
+    rectText.Inflate(-TEXT_BORDER);
 
     if ( text->WrapLines() )
     {

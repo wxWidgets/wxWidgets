@@ -385,6 +385,7 @@ void wxFrameBase::SetStatusWidths(int n, const int widths_field[] )
 
 bool wxFrameBase::ShowMenuHelp(wxStatusBar *statbar, int menuId)
 {
+#if wxUSE_MENUS
     if ( !statbar )
         return FALSE;
 
@@ -409,6 +410,9 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *statbar, int menuId)
     statbar->SetStatusText(helpString);
 
     return !helpString.IsEmpty();
+#else // !wxUSE_MENUS
+    return FALSE;
+#endif // wxUSE_MENUS/!wxUSE_MENUS
 }
 
 #endif // wxUSE_STATUSBAR

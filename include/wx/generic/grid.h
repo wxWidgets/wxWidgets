@@ -375,6 +375,8 @@ protected:
     friend class wxGridCellEditorDummyFriend;
 };
 
+#if wxUSE_TEXTCTRL
+
 // the editor for string/text data
 class WXDLLEXPORT wxGridCellTextEditor : public wxGridCellEditor
 {
@@ -489,6 +491,10 @@ private:
     double m_valueOld;
 };
 
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_CHECKBOX
+
 // the editor for boolean data
 class WXDLLEXPORT wxGridCellBoolEditor : public wxGridCellEditor
 {
@@ -516,6 +522,10 @@ protected:
 private:
     bool m_startValue;
 };
+
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_COMBOBOX
 
 // the editor for string data allowing to choose from the list of strings
 class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
@@ -550,6 +560,8 @@ private:
     wxArrayString   m_choices;
     bool            m_allowOthers;
 };
+
+#endif // wxUSE_COMBOBOX
 
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in

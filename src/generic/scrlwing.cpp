@@ -57,9 +57,7 @@
 #endif
 #endif
 
-#ifndef __WXGTK__
 IMPLEMENT_CLASS(wxScrolledWindow, wxGenericScrolledWindow)
-#endif
 
 // ----------------------------------------------------------------------------
 // wxScrollHelperEvtHandler: intercept the events from the window and forward

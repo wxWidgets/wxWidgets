@@ -173,7 +173,7 @@ public:
     GdkIC               *m_ic;
     GdkICAttr           *m_icattr;
 #endif
-    
+
     /* scrolling stuff */
     GtkAdjustment       *m_hAdjust,*m_vAdjust;
     float                m_oldHorizontalPos;
@@ -200,7 +200,7 @@ public:
     // before the widget has been "realized"
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
-    
+
     // contains GTK's widgets internal information about non-default widget
     // font and colours. we create one for each widget that gets any
     // non-default attribute set via SetFont() or SetForegroundColour() /
@@ -235,5 +235,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
     DECLARE_NO_COPY_CLASS(wxWindowGTK);
 };
+
+extern wxWindow *wxFindFocusedChild(wxWindowGTK *win);
 
 #endif // __GTKWINDOWH__

@@ -775,3 +775,4 @@ void wxScrolledWindow::OnChar(wxKeyEvent& event)
             event.Skip();
     }
 }
+

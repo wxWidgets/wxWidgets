@@ -738,6 +738,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
 #endif // wxUSE_CONFIG
 
     // ask the user
+#if wxUSE_FONTDLG
     if ( interactive )
     {
         wxString title(m_titleDialog);
@@ -797,6 +798,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         }
     }
     //else: we're in non-interactive mode
+#endif // wxUSE_FONTDLG
 
     // now try the default mappings:
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);

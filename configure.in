@@ -686,6 +686,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
+  DEFAULT_wxUSE_WXHTML_HELP=no
   DEFAULT_wxUSE_WXTREE=no
   DEFAULT_wxUSE_METAFILE=no
   DEFAULT_wxUSE_MIMETYPE=no
@@ -837,6 +838,7 @@ else
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
+  DEFAULT_wxUSE_WXHTML_HELP=yes
   DEFAULT_wxUSE_WXTREE=yes
   DEFAULT_wxUSE_METAFILE=yes
   DEFAULT_wxUSE_MIMETYPE=yes
@@ -1059,7 +1061,9 @@ dnl "big" GUI options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(docview,     [  --enable-docview        use document view architecture], wxUSE_DOC_VIEW_ARCHITECTURE)
-WX_ARG_ENABLE(help,        [  --enable-help           use help (using external browser at present)], wxUSE_HELP)
+WX_ARG_ENABLE(help,        [  --enable-help           use help subsystem], wxUSE_HELP)
+WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
+WX_ARG_ENABLE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
 WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI_ARCHITECTURE)
@@ -1238,7 +1242,6 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
-WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
 WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUSE_TOOLTIPS)
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
@@ -2055,7 +2058,8 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     dnl misc other files depending on the port
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
+        dnl put univ files first!
+        PORT_FILES="\${top_srcdir}/src/univ/files.lst ${PORT_FILES}"
     fi
     RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
     RPM_SPEC="wx\$(TOOLKIT).spec"
@@ -3859,6 +3863,10 @@ fi
 if test "$wxUSE_HELP" = "yes"; then
     AC_DEFINE(wxUSE_HELP)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
+
+    if test "$wxUSE_WXHTML_HELP" = "yes"; then
+        AC_DEFINE(wxUSE_WXHTML_HELP)
+    fi
 fi
 
 if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
@@ -3875,12 +3883,8 @@ if test "$wxUSE_PROLOGIO" = "yes" ; then
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
-    if test "$wxUSE_PROLOGIO" = "yes" ; then
-        AC_DEFINE(wxUSE_RESOURCES)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
-    else
-        AC_MSG_WARN([wxWindows ressource system requires PrologIO and can't be compiled without it.])
-    fi
+    AC_DEFINE(wxUSE_RESOURCES)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
 fi
 
 if test "$wxUSE_X_RESOURCES" = "yes"; then

@@ -26,6 +26,7 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/log.h"
 
     #include "wx/button.h"

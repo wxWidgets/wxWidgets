@@ -28,9 +28,8 @@
     #pragma hdrstop
 #endif
 
-#if !wxUSE_SPINBTN
-    #error "This file can only be compiled if wxSpinButton is available"
-#endif // !wxUSE_SPINBTN
+#if !(defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__)) || \
+    defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -197,8 +196,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     wxControl::DoMoveWindow(x, y, width, height);
 
     // position the subcontrols inside the client area
-    wxSize sizeBtn = m_btn->GetSize(),
-           sizeText = m_text->GetSize();
+    wxSize sizeBtn = m_btn->GetSize();
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);
@@ -225,8 +223,13 @@ bool wxSpinCtrl::Show(bool show)
     if ( !wxControl::Show(show) )
         return FALSE;
 
-    m_btn->Show(show);
-    m_text->Show(show);
+    // under GTK Show() is called the first time before we are fully
+    // constructed
+    if ( m_btn )
+    {
+        m_btn->Show(show);
+        m_text->Show(show);
+    }
 
     return TRUE;
 }
@@ -319,3 +322,4 @@ void wxSpinCtrl::SetRange(int min, int max)
     m_btn->SetRange(min, max);
 }
 
+#endif // !wxPort-with-native-spinctrl

@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_HTML && wxUSE_STREAMS
+#if wxUSE_WXHTML_HELP
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -248,4 +248,5 @@ bool wxHtmlHelpController::Quit()
     return TRUE;
 }
 
-#endif
+#endif // wxUSE_WXHTML_HELP
+

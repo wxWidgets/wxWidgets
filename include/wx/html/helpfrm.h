@@ -18,7 +18,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_HTML
+#if wxUSE_WXHTML_HELP
 
 #include "wx/html/helpdata.h"
 #include "wx/window.h"
@@ -218,12 +218,12 @@ protected:
 #endif
     wxHashTable *m_PagesHash;
     wxHelpControllerBase* m_helpController;
-    
+
     int m_hfStyle;
 
     DECLARE_EVENT_TABLE()
 };
 
-#endif // wxUSE_HTML
+#endif // wxUSE_WXHTML_HELP
 
 #endif

@@ -32,6 +32,7 @@ class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxMenu;
+class WXDLLEXPORT wxMenuGeometryInfo;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxWindow;
@@ -42,10 +43,6 @@ class WXDLLEXPORT wxGauge;
 #include "wx/string.h"
 #include "wx/gdicmn.h"
 #include "wx/scrolbar.h"            // for wxScrollBar::Element
-
-#ifndef WX_PRECOMP
-    #include "wx/menu.h"            // for wxMenuGeometryInfo
-#endif // WX_PRECOMP
 
 // ----------------------------------------------------------------------------
 // wxRenderer: abstract renderers interface
