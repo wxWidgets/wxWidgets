@@ -14,6 +14,30 @@ be drawn in a device context, using \helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}.
 One colour value of the image may be used as a mask colour which will lead to the automatic
 creation of a \helpref{wxMask}{wxmask} object associated to the bitmap object.
 
+\wxheading{Available image handlers}
+
+The following image handlers are available. {\bf wxBMPHandler} is always
+installed by default. To use other image formats, install the appropiate
+handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
+\helpref{wxInitAllImageHandlers}{wxinitallimagehandlers}.
+
+\twocolwidtha{5cm}%
+\begin{twocollist}
+\twocolitem{{\bf \indexit{wxBMPHandler}}}{Only for loading, always installed.}
+\twocolitem{{\bf \indexit{wxPNGHandler}}}{For loading and saving.}
+\twocolitem{{\bf \indexit{wxJPEGHandler}}}{For loading and saving.}
+\twocolitem{{\bf \indexit{wxGIFHandler}}}{Only for loading, due to legal issues.}
+\twocolitem{{\bf \indexit{wxPCXHandler}}}{For loading and saving (see below).}
+\twocolitem{{\bf \indexit{wxPNMHandler}}}{For loading and saving (see below).}
+\end{twocollist}
+
+When saving in PCX format, {\bf wxPCXHandler} will count the number of
+different colours in the image; if there are 256 or less colours, it will
+save as 8 bit, else it will save as 24 bit.
+
+Loading PNMs only works for ASCII or raw RGB images. When saving in
+PNM format, {\bf wxPNMHandler} will always save as raw RGB.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
