@@ -308,7 +308,7 @@ glcanvas.cpp	MSW
 helpchm.cpp	MSW	Win32Only
 helpwin.cpp	MSW
 icon.cpp	MSW	LowLevel
-imaglist.cpp	MSW	Win32Only,LowLevel
+imaglist.cpp	MSW	Win32Only
 iniconf.cpp	MSW
 joystick.cpp	MSW
 listbox.cpp	MSW
