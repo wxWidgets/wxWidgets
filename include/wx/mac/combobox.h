@@ -22,7 +22,7 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxComboBoxNameStr;
 
 // Combobox item
-class WXDLLEXPORT wxComboBox: public wxComboBoxBase , public wxControl
+class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
 {
   DECLARE_DYNAMIC_CLASS(wxComboBox)
 
