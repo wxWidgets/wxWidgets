@@ -32,7 +32,7 @@ IMPLEMENT_CLASS(wxDataFormat, wxObject)
 
 wxDataFormat::wxDataFormat()
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     m_type = wxDF_INVALID;
     m_hasAtom = FALSE;
     m_atom = (GdkAtom) 0;
@@ -40,19 +40,19 @@ wxDataFormat::wxDataFormat()
 
 wxDataFormat::wxDataFormat( wxDataType type )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     SetType( type );
 }
 
 wxDataFormat::wxDataFormat( const wxString &id )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     SetId( id );
 }
 
 wxDataFormat::wxDataFormat( wxDataFormat &format )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     m_type = format.GetType();
     m_id = format.GetId();
     m_hasAtom = TRUE;
@@ -61,7 +61,7 @@ wxDataFormat::wxDataFormat( wxDataFormat &format )
 
 wxDataFormat::wxDataFormat( const GdkAtom atom )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "TEXT", FALSE );
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "text/plain", FALSE );
     m_hasAtom = TRUE;
     
     m_atom = atom;
@@ -91,7 +91,7 @@ void wxDataFormat::SetType( wxDataType type )
     
     if (m_type == wxDF_TEXT)
     {
-        m_id = "TEXT";
+        m_id = "text/plain";
     } 
     else
     if (m_type == wxDF_BITMAP)

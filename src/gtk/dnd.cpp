@@ -27,12 +27,102 @@
 
 #include <X11/Xlib.h>
 
-// ----------------------------------------------------------------------------
-// global
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// global data
+//----------------------------------------------------------------------------
 
 extern bool g_blockEventsOnDrag;
 
+//----------------------------------------------------------------------------
+// standard icons
+//----------------------------------------------------------------------------
+
+/* XPM */
+static char * gv_xpm[] = {
+"40 34 3 1",
+" 	s None c None",
+".	c black",
+"X	c white",
+"                                        ",
+"                                        ",
+"                  ......                ",
+"                ..XXXXXX..              ",
+"               .XXXXXXXXXX.             ",
+"              .XXXXXXXXXXXX.            ",
+"              .XXXXXXXXXXXX.            ",
+"             .XXXXXXXXXXXXXX.           ",
+"             .XXX..XXXX..XXX.           ",
+"          ....XX....XX....XX.           ",
+"         .XXX.XXX..XXXX..XXX....        ",
+"        .XXXXXXXXXXXXXXXXXXX.XXX.       ",
+"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
+"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
+"         ..XXXXXXXXXXXXXXXXXXXXXX.      ",
+"           .XXXXXXXXXXXXXXXXXX...       ",
+"           ..XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXX.          ",
+"            .XXXXXXXXXXXXXXXXX.         ",
+"            .XXXXXXXXXXXXXXXXX.         ",
+"            .XXXXXXXXXXXXXXXXXX.        ",
+"            .XXXXXXXXXXXXXXXXXXX.       ",
+"           .XXXXXXXXXXXXXXXXXXXXX.      ",
+"           .XXXXXXXXXXXXXX.XXXXXXX.     ",
+"          .XXXXXXX.XXXXXXX.XXXXXXX.     ",
+"         .XXXXXXXX.XXXXXXX.XXXXXXX.     ",
+"         .XXXXXXX...XXXXX...XXXXX.      ",
+"         .XXXXXXX.  .....   .....       ",
+"         ..XXXX..                       ",
+"           ....                         ",
+"                                        ",
+"                                        ",
+"                                        "};
+			      
+/* XPM */
+static char * page_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"32 32 5 1",
+/* colors */
+" 	s None	c None",
+".	c black",
+"X	c wheat",
+"o	c tan",
+"O	c #6699FF",
+/* pixels */
+"    ...................         ",
+"    .XXXXXXXXXXXXXXXXX..        ",
+"    .XXXXXXXXXXXXXXXXX.o.       ",
+"    .XXXXXXXXXXXXXXXXX.oo.      ",
+"    .XXXXXXXXXXXXXXXXX.ooo.     ",
+"    .XXXXXXXXXXXXXXXXX.oooo.    ",
+"    .XXXXXXXXXXXXXXXXX.......   ",
+"    .XXXXXOOOOOOOOOOXXXooooo.   ",
+"    .XXXXXXXXXXXXXXXXXXooooo.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXOOOOOOOXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
+"    .........................   "};
+			      
+			      
 #if (GTK_MINOR_VERSION > 0)
 
 #include "gtk/gtkdnd.h"
@@ -147,18 +237,35 @@ void wxDropTarget::OnLeave()
 
 bool wxDropTarget::OnMove( int x, int y )
 {
-    printf( "mouse move %d  %d.\n", x, y );
+    printf( "generic move %d  %d.\n", x, y );
+    
     return TRUE;
 }
 
 bool wxDropTarget::OnDrop( int x, int y )
 {
-    printf( "mouse move %d  %d.\n", x, y );
+    printf( "generic drop %d  %d.\n", x, y );
+    
     return TRUE;
 }
 
 bool wxDropTarget::IsSupported( wxDataFormat format )
-{
+{ 
+    printf( "generic is supported.\n" );
+    
+    if (!m_dragContext) return FALSE;
+    
+    GList *child = m_dragContext->targets;
+    while (child)
+    {
+        GdkAtom formatAtom = (GdkAtom) GPOINTER_TO_INT(child->data);
+        char *name = gdk_atom_name( formatAtom );
+        if (name) printf( "Format available: %s.\n", name );
+
+        child = child->next;
+    }
+    
+ 
     return TRUE;
 }
   
@@ -199,6 +306,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
     format.flags = 0;
     char buf[100];
     strcpy( buf, "text/plain" );
+    format.target = buf;
   
     gtk_drag_dest_set( widget,
 		     GTK_DEST_DEFAULT_ALL,
@@ -225,11 +333,15 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
 bool wxTextDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
+    printf( "text move.\n" );
+
     return IsSupported( wxDF_TEXT );  // same as "TEXT"
 }
 
 bool wxTextDropTarget::OnDrop( int x, int y )
 {
+    printf( "text drop.\n" );
+
     if (!IsSupported( wxDF_TEXT )) return FALSE;
 
     wxTextDataObject data;
@@ -314,7 +426,160 @@ bool wxFileDropTarget::OnDrop( int x, int y )
 // wxDropSource
 //-------------------------------------------------------------------------
 
+
+wxDropSource::wxDropSource( wxWindow *win, const wxIcon &go, const wxIcon &stop )
+{
+    g_blockEventsOnDrag = TRUE;
+  
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
+  
+    m_data = (wxDataBroker*) NULL;
+    m_retValue = wxDragCancel;
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    
+    m_goIcon = go;
+    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
+    m_stopIcon = stop;
+    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
+}
+
+wxDropSource::wxDropSource( wxDataObject *data, wxWindow *win, const wxIcon &go, const wxIcon &stop )
+{
+    g_blockEventsOnDrag = TRUE;
+  
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    m_retValue = wxDragCancel;
+  
+    if (data)
+    {
+        m_data = new wxDataBroker();
+	m_data->Add( data );
+    }
+    else
+    {
+        m_data = (wxDataBroker*) NULL;
+    }
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    
+    m_goIcon = go;
+    if (wxNullIcon == go) m_goIcon = wxIcon( page_xpm );
+    m_stopIcon = stop;
+    if (wxNullIcon == stop) m_stopIcon = wxIcon( gv_xpm );
+}
+
+wxDropSource::wxDropSource( wxDataBroker *data, wxWindow *win )
+{
+    g_blockEventsOnDrag = TRUE;
+  
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    m_retValue = wxDragCancel;
+  
+    m_data = data;
+
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+}
+
+void wxDropSource::SetData( wxDataObject *data )
+{
+    if (m_data) delete m_data;
+    
+    if (data)
+    {
+        m_data = new wxDataBroker();
+	m_data->Add( data );
+    }
+    else
+    {
+        m_data = (wxDataBroker*) NULL;
+    }
+}
+
+void wxDropSource::SetData( wxDataBroker *data )
+{
+    if (m_data) delete m_data;
+    
+    m_data = data;
+}
+
+wxDropSource::~wxDropSource(void)
+{
+    if (m_data) delete m_data;
+
+    g_blockEventsOnDrag = FALSE;
+}
+   
+wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
+{
+    wxASSERT_MSG( m_data, "wxDragSource: no data" );
+  
+    if (!m_data) return (wxDragResult) wxDragNone;
+  
+    static GtkWidget *drag_icon = (GtkWidget*) NULL;
+    static GtkWidget *drop_icon = (GtkWidget*) NULL;
+
+    GdkPoint hotspot_1 = {0,-5 };
+      
+    if (!drag_icon)
+    {
+/*
+	  drag_icon = shape_create_icon ( m_stopIcon,
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drag_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drag_icon);
+
+	  gtk_widget_hide (drag_icon);
+*/
+    }
+      
+    GdkPoint hotspot_2 = {-5,-5};
+	
+    if (!drop_icon)
+    {
+/*
+	  drop_icon = shape_create_icon ( m_goIcon,
+					 440, 140, 0,0, GTK_WINDOW_POPUP);
+	  
+	  gtk_signal_connect (GTK_OBJECT (drop_icon), "destroy",
+			      GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			      &drop_icon);
+
+	  gtk_widget_hide (drop_icon);
+*/
+    }
+	
+
+    return FALSE;
+}
+
+void wxDropSource::RegisterWindow(void)
+{
+    if (!m_data) return;
+}
+
+void wxDropSource::UnregisterWindow(void)
+{
+    if (!m_widget) return;
+}
+
+
 #else  // NEW_CODE
+
+//----------------------------------------------------------------------------
+// forward
+//----------------------------------------------------------------------------
 
 GtkWidget *shape_create_icon ( const wxIcon &shape,
 			      gint      x,
@@ -323,92 +588,6 @@ GtkWidget *shape_create_icon ( const wxIcon &shape,
 			      gint      py,
 			      gint      window_type);
 
-/* XPM */
-static char * gv_xpm[] = {
-"40 34 3 1",
-" 	s None c None",
-".	c black",
-"X	c white",
-"                                        ",
-"                                        ",
-"                  ......                ",
-"                ..XXXXXX..              ",
-"               .XXXXXXXXXX.             ",
-"              .XXXXXXXXXXXX.            ",
-"              .XXXXXXXXXXXX.            ",
-"             .XXXXXXXXXXXXXX.           ",
-"             .XXX..XXXX..XXX.           ",
-"          ....XX....XX....XX.           ",
-"         .XXX.XXX..XXXX..XXX....        ",
-"        .XXXXXXXXXXXXXXXXXXX.XXX.       ",
-"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
-"        .XXXXXXXXXXXXXXXXXXXXXXXX.      ",
-"         ..XXXXXXXXXXXXXXXXXXXXXX.      ",
-"           .XXXXXXXXXXXXXXXXXX...       ",
-"           ..XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXX.          ",
-"            .XXXXXXXXXXXXXXXXX.         ",
-"            .XXXXXXXXXXXXXXXXX.         ",
-"            .XXXXXXXXXXXXXXXXXX.        ",
-"            .XXXXXXXXXXXXXXXXXXX.       ",
-"           .XXXXXXXXXXXXXXXXXXXXX.      ",
-"           .XXXXXXXXXXXXXX.XXXXXXX.     ",
-"          .XXXXXXX.XXXXXXX.XXXXXXX.     ",
-"         .XXXXXXXX.XXXXXXX.XXXXXXX.     ",
-"         .XXXXXXX...XXXXX...XXXXX.      ",
-"         .XXXXXXX.  .....   .....       ",
-"         ..XXXX..                       ",
-"           ....                         ",
-"                                        ",
-"                                        ",
-"                                        "};
-			      
-/* XPM */
-static char * page_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"32 32 5 1",
-/* colors */
-" 	s None	c None",
-".	c black",
-"X	c wheat",
-"o	c tan",
-"O	c #6699FF",
-/* pixels */
-"    ...................         ",
-"    .XXXXXXXXXXXXXXXXX..        ",
-"    .XXXXXXXXXXXXXXXXX.o.       ",
-"    .XXXXXXXXXXXXXXXXX.oo.      ",
-"    .XXXXXXXXXXXXXXXXX.ooo.     ",
-"    .XXXXXXXXXXXXXXXXX.oooo.    ",
-"    .XXXXXXXXXXXXXXXXX.......   ",
-"    .XXXXXOOOOOOOOOOXXXooooo.   ",
-"    .XXXXXXXXXXXXXXXXXXooooo.   ",
-"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXOOOOOOOOOXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXOOOOOOOOOOXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXOOOOOOOOOOXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXOOOOOOOXXXXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .XXXXXXXXXXXXXXXXXXXXXXX.   ",
-"    .........................   "};
-			      
-			      
 //-----------------------------------------------------------------------------
 // globals
 //-----------------------------------------------------------------------------
