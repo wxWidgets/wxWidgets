@@ -265,11 +265,9 @@ public:
 
     bool Create(wxWindowBase *parent, wxSizerBehaviour behav = wxSizerNone);
 
-    virtual void GetSize(int *w, int *h) const;
-
-    virtual void GetClientSize(int *w, int *h) const { GetSize(w, h); }
-
-    virtual void GetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *w, int *h) const;
+    virtual void DoGetClientSize(int *w, int *h) const { GetSize(w, h); }
+    virtual void DoGetPosition(int *x, int *y) const;
 
     void SizerSetSize(int x, int y, int w, int h) { SetSize(x, y, w, h); }
     void SizerMove(int x, int y) { Move(x, y); }

@@ -161,16 +161,19 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
 
 void wxGenericMessageDialog::OnYes(wxCommandEvent& WXUNUSED(event))
 {
+    printf( "yes.\n" );
     EndModal( wxID_YES );
 }
 
 void wxGenericMessageDialog::OnNo(wxCommandEvent& WXUNUSED(event))
 {
+    printf( "no.\n" );
     EndModal( wxID_NO );
 }
 
 void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
+    printf( "cancel message.\n" );
     /* Allow cancellation via ESC/Close button except if
        only YES and NO are specified. */
     if ( (m_dialogStyle & wxYES_NO) != wxYES_NO || (m_dialogStyle & wxCANCEL) )

@@ -1342,13 +1342,13 @@ void wxSizer::DoSetSize(int x, int y, int w, int h, int WXUNUSED(flags))
     }
 }
 
-void wxSizer::GetSize(int *w, int *h) const
+void wxSizer::DoGetSize(int *w, int *h) const
 {
     *w = sizerWidth;
     *h = sizerHeight;
 }
 
-void wxSizer::GetPosition(int *x, int *y) const
+void wxSizer::DoGetPosition(int *x, int *y) const
 {
     *x = sizerX;
     *y = sizerY;
