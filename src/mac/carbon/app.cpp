@@ -651,6 +651,7 @@ void wxApp::CleanUp()
         delete wxWinMacControlList ;
     }
     delete wxPendingEvents;
+    wxPendingEvents = NULL;
 
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
