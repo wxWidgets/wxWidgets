@@ -1,5 +1,9 @@
+*.py
+*.pyc
 *.pyc
 *.pyd
+*.pyd
+*.pyo
 *.pyo
 *.zip
 .cvsignore
@@ -35,6 +39,7 @@ events.pyc
 events.pyc
 events.pyo
 events.pyo
+filelist
 frames.py
 frames.py
 frames.pyc
@@ -108,7 +113,3 @@ wxp.pyo
 wxpc.ilk
 wxpc.pdb
 wxpc.pyd
-*.py
-*.pyc
-*.pyo
-*.pyd
