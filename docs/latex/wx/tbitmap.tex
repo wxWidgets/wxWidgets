@@ -172,21 +172,23 @@ then call the static function \helpref{wxBitmap::AddHandler}{wxbitmapaddhandler}
 
 {\small
 \begin{verbatim}
-  #include <wx/pnghand.h>
   #include <wx/xpmhand.h>
   ...
   // Initialisation
-  wxBitmap::AddHandler(new wxPNGFileHandler);
   wxBitmap::AddHandler(new wxXPMFileHandler);
   wxBitmap::AddHandler(new wxXPMDataHandler);
   ...
 \end{verbatim}
 }
 
-Assuming the handlers have been written correctly, you should now be able to load and save PNG files
-and XPM files using the usual wxBitmap API.
+Assuming the handlers have been written correctly, you should now be able to load and save
+XPM files using the usual wxBitmap API.
 
 {\bf Note:} bitmap handlers are not implemented on all platforms. Currently, the above is only necessary on
 Windows, to save the extra overhead of formats that may not be necessary (if you don't use them, they
-are not linked into the executable). Unix platforms have PNG and XPM capability built-in (where supported).
+are not linked into the executable). Unix platforms have XPM capability built-in (where supported).
+
+Also, just because a handler (such as a PNG handler) is not present does not mean that
+wxBitmap does not support that file format. If wxBitmap fails to find a suitable handler,
+the file-loading capabilities of wxImage are used instead.
 
