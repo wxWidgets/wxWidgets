@@ -3034,17 +3034,25 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 
     if ( win )
-        return win->MSWCommand(cmd, id);
-    else
     {
-        // If no child window, it may be an accelerator, e.g. for
-        // a popup menu command.
+        return win->MSWCommand(cmd, id);
+    }
+
+    // the messages sent from the in-place edit control used by the treectrl
+    // for label editing have id == 0, but they should _not_ be treated as menu
+    // messages (they are EN_XXX ones, in fact) so don't translate anything
+    // coming from a control to wxEVT_COMMAND_MENU_SELECTED
+    if ( !control )
+    {
+        // If no child window, it may be an accelerator, e.g. for a popup menu
+        // command
 
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
         event.SetEventObject(this);
         event.SetId(id);
         event.SetInt(id);
-        return ProcessEvent(event);
+
+        return GetEventHandler()->ProcessEvent(event);
     }
 
     return FALSE;

@@ -255,7 +255,8 @@ public:
 // data structures used for the data type registry
 // ----------------------------------------------------------------------------
 
-struct wxGridDataTypeInfo {
+struct wxGridDataTypeInfo
+{
     wxGridDataTypeInfo(const wxString& typeName,
                        wxGridCellRenderer* renderer,
                        wxGridCellEditor* editor)
@@ -273,9 +274,11 @@ struct wxGridDataTypeInfo {
 WX_DEFINE_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
 
 
-class WXDLLEXPORT wxGridTypeRegistry {
+class WXDLLEXPORT wxGridTypeRegistry
+{
 public:
     ~wxGridTypeRegistry();
+
     void RegisterDataType(const wxString& typeName,
                      wxGridCellRenderer* renderer,
                      wxGridCellEditor* editor);
@@ -286,9 +289,6 @@ public:
 private:
     wxGridDataTypeInfoArray m_typeinfo;
 };
-
-
-
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -367,6 +367,8 @@ void wxGridCellEditor::Destroy()
 {
     if (m_control)
     {
+        m_control->PopEventHandler(TRUE /* delete it*/);
+
         m_control->Destroy();
         m_control = NULL;
     }
@@ -801,17 +803,46 @@ void wxGridCellBoolEditor::Create(wxWindow* parent,
 
 void wxGridCellBoolEditor::SetSize(const wxRect& r)
 {
-    // position it in the centre of the rectangle (TODO: support alignment?)
-    int w, h;
-    m_control->GetSize(&w, &h);
+    bool resize = FALSE;
+    wxSize size = m_control->GetSize();
+    wxCoord minSize = wxMin(r.width, r.height);
 
+    // check if the checkbox is not too big/small for this cell
+    wxSize sizeBest = m_control->GetBestSize();
+    if ( !(size == sizeBest) )
+    {
+        // reset to default size if it had been made smaller
+        size = sizeBest;
+
+        resize = TRUE;
+    }
+
+    if ( size.x >= minSize || size.y >= minSize )
+    {
+        // leave 1 pixel margin
+        size.x = size.y = minSize - 2;
+
+        resize = TRUE;
+    }
+
+    if ( resize )
+    {
+        m_control->SetSize(size);
+    }
+
+    // position it in the centre of the rectangle (TODO: support alignment?)
+
+#if defined(__WXGTK__) || defined (__WXMOTIF__)
     // the checkbox without label still has some space to the right in wxGTK,
     // so shift it to the right
-#if defined(__WXGTK__) || defined (__WXMOTIF__)
-    w -= 8;
-#endif // GTK && Motif
+    size.x -= 8;
+#elif defined(__WXMSW__)
+    // here too...
+    size.x -= 6;
+    size.y -= 2;
+#endif
 
-    m_control->Move(r.x + r.width/2 - w/2, r.y + r.height/2 - h/2);
+    m_control->Move(r.x + r.width/2 - size.x/2, r.y + r.height/2 - size.y/2);
 }
 
 void wxGridCellBoolEditor::Show(bool show, wxGridCellAttr *attr)
@@ -1225,8 +1256,14 @@ wxSize wxGridCellFloatRenderer::GetBestSize(wxGrid& grid,
 
 wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
 
+// FIXME these checkbox size calculations are really ugly...
+
 // between checkmark and box
-static const wxCoord wxGRID_CHECKMARK_MARGIN = 4;
+#ifdef __WXGTK__
+    static const wxCoord wxGRID_CHECKMARK_MARGIN = 4;
+#else
+    static const wxCoord wxGRID_CHECKMARK_MARGIN = 2;
+#endif
 
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& WXUNUSED(attr),
@@ -1267,6 +1304,16 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 
     // draw a check mark in the centre (ignoring alignment - TODO)
     wxSize size = GetBestSize(grid, attr, dc, row, col);
+
+    // don't draw outside the cell
+    wxCoord minSize = wxMin(rect.width, rect.height);
+    if ( size.x >= minSize || size.y >= minSize )
+    {
+        // and even leave (at least) 1 pixel margin
+        size.x = size.y = minSize - 2;
+    }
+
+    // draw a border around checkmark
     wxRect rectMark;
     rectMark.x = rect.x + rect.width/2 - size.x/2;
     rectMark.y = rect.y + rect.height/2 - size.y/2;
@@ -1279,8 +1326,13 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
 
     rectMark.Inflate(-wxGRID_CHECKMARK_MARGIN);
 
+#ifdef __WXMSW__
+    // looks nicer under MSW
+    rectMark.x++;
+#endif // MSW
+
     bool value;
-    if (grid.GetTable()->CanGetValueAs(row, col, wxT("bool")))
+    if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
         value = grid.GetTable()->GetValueAsBool(row, col);
     else
         value = !!grid.GetTable()->GetValue(row, col);
@@ -1702,7 +1754,8 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
 
 wxGridTypeRegistry::~wxGridTypeRegistry()
 {
-    for (size_t i=0; i<m_typeinfo.Count(); i++)
+    size_t count = m_typeinfo.Count();
+    for ( size_t i = 0; i < count; i++ )
         delete m_typeinfo[i];
 }
 
@@ -4064,6 +4117,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW);
             }
 
+            if ( dragCol >= 0 )
+            {
+                m_dragRowOrCol = dragCol;
+
             return;
         }
 
@@ -4675,14 +4732,6 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 MovePageDown();
                 break;
 
-            // We don't want these keys to trigger the edit control, any others?
-            case WXK_SHIFT:
-            case WXK_ALT:
-            case WXK_CONTROL:
-            case WXK_CAPITAL:
-                event.Skip();
-                break;
-
             case WXK_SPACE:
                 if ( !IsEditable() )
                 {
@@ -4692,9 +4741,13 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 // Otherwise fall through to default
 
             default:
-                // now try the cell edit control
-                //
-                if ( !IsCellEditControlEnabled() && CanEnableCellControl() )
+                // alphanumeric keys enable the cell edit control
+                if ( !(event.AltDown() ||
+                       event.MetaDown() ||
+                       event.ControlDown()) &&
+                     isalnum(event.KeyCode()) &&
+                     !IsCellEditControlEnabled() &&
+                     CanEnableCellControl() )
                 {
                     EnableCellEditControl();
                     int row = m_currentCellCoords.GetRow();
@@ -4705,7 +4758,8 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    // let others process char events for readonly cells
+                    // let others process char events with modifiers or all
+                    // char events for readonly cells
                     event.Skip();
                 }
                 break;

@@ -79,9 +79,14 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     m_windowStyle = style;
 
+    // VZ: disabling this ugliness which completely breaks checkboxes in wxGrid
+    //     whoever did it, please tell me where and how does the checkbox fail
+    //     to appear
+#if 0
     wxString Label = label;
     if (Label == wxT(""))
         Label = wxT(" "); // Apparently needed or checkbox won't show
+#endif // 0
 
     if ( id == -1 )
         m_windowId = NewControlId();
@@ -111,7 +116,7 @@ bool wxCheckBox::Create(wxWindow *parent,
        msStyle |= WS_BORDER;
      */
 
-    m_hWnd = (WXHWND)CreateWindowEx(exStyle, wxT("BUTTON"), Label,
+    m_hWnd = (WXHWND)CreateWindowEx(exStyle, wxT("BUTTON"), label,
             msStyle,
             0, 0, 0, 0,
             (HWND)parent->GetHWND(), (HMENU)m_windowId,

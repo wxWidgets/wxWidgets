@@ -65,6 +65,10 @@
     #define TV_FIRST                0x1100
 #endif
 
+#ifndef TVS_CHECKBOXES
+    #define TVS_CHECKBOXES          0x0100
+#endif
+
 // old headers might miss these messages (comctl32.dll 4.71+ only)
 #ifndef TVM_SETBKCOLOR
     #define TVM_SETBKCOLOR          (TV_FIRST + 29)
@@ -345,10 +349,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     !defined( __BORLANDC__ ) && \
     !defined( __WATCOMC__ ) && \
     (!defined(__VISUALC__) || (__VISUALC__ > 1010))
-
-#ifndef TVS_CHECKBOXES
-#define TVS_CHECKBOXES 0x0100
-#endif
 
     // we emulate the multiple selection tree controls by using checkboxes: set
     // up the image list we need for this if we do have multiple selections
@@ -1321,6 +1321,24 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 
 wxTextCtrl* wxTreeCtrl::GetEditControl() const
 {
+    // normally, we could try to do something like this to return something
+    // even when the editing was started by the user and not by calling
+    // EditLabel() - but as nobody has asked for this so far and there might be
+    // problems in the code below, I leave it disabled for now (VZ)
+#if 0
+    if ( !m_textCtrl )
+    {
+        HWND hwndText = TreeView_GetEditControl(GetHwnd());
+        if ( hwndText )
+        {
+            m_textCtrl = new wxTextCtrl(this, -1);
+            m_textCtrl->Hide();
+            m_textCtrl->SetHWND((WXHWND)hwndText);
+        }
+        //else: not editing label right now
+    }
+#endif // 0
+
     return m_textCtrl;
 }
 
@@ -1340,6 +1358,8 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 {
     wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
 
+    DeleteTextCtrl();
+
     HWND hWnd = (HWND) TreeView_EditLabel(GetHwnd(), (HTREEITEM) (WXHTREEITEM) item);
 
     // this is not an error - the TVN_BEGINLABELEDIT handler might have
@@ -1348,8 +1368,6 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
     {
         return NULL;
     }
-
-    DeleteTextCtrl();
 
     m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND((WXHWND)hWnd);
