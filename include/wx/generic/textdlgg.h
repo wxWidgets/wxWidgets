@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        textdlgg.h
-// Purpose:     wxStatusBar class
+// Purpose:     wxTextEntryDialog class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97

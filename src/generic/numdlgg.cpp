@@ -51,42 +51,12 @@
 #endif
 
 // this is where wxGetNumberFromUser() is declared
-#include "wx/textdlg.h"
+#include "wx/numdlg.h"
 
 #if !wxUSE_SPINCTRL
     // wxTextCtrl will do instead of wxSpinCtrl if we don't have it
     #define wxSpinCtrl wxTextCtrl
 #endif
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxNumberEntryDialog : public wxDialog
-{
-public:
-    wxNumberEntryDialog(wxWindow *parent,
-                        const wxString& message,
-                        const wxString& prompt,
-                        const wxString& caption,
-                        long value, long min, long max,
-                        const wxPoint& pos);
-
-    long GetValue() const { return m_value; }
-
-    // implementation only
-    void OnOK(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-
-protected:
-    wxSpinCtrl *m_spinctrl;
-
-    long m_value, m_min, m_max;
-
-private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxNumberEntryDialog)
-};
 
 // ============================================================================
 // implementation
@@ -131,7 +101,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
         inputsizer->Add( new wxStaticText( this, -1, prompt ), 0, wxCENTER | wxLEFT, 10 );
     // spin ctrl
     wxString valStr;
-    valStr.Printf(wxT("%lu"), m_value);
+    valStr.Printf(wxT("%ld"), m_value);
     m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
 #if !defined(__WIN16__) && wxUSE_SPINCTRL
     m_spinctrl->SetRange((int)m_min, (int)m_max);
@@ -167,7 +137,7 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 #if !wxUSE_SPINCTRL
     wxString tmp = m_spinctrl->GetValue();
     if ( wxSscanf(tmp, _T("%ld"), &m_value) != 1 )
-        m_value = -1;
+        EndModal(wxID_CANCEL);
     else
 #else
     m_value = m_spinctrl->GetValue();
@@ -175,7 +145,7 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
     if ( m_value < m_min || m_value > m_max )
     {
         // not a number or out of range
-        m_value = -1;
+        EndModal(wxID_CANCEL);
     }
 
     EndModal(wxID_OK);
@@ -183,8 +153,6 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 
 void wxNumberEntryDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-    m_value = -1;
-
     EndModal(wxID_CANCEL);
 }
 
@@ -205,9 +173,10 @@ long wxGetNumberFromUser(const wxString& msg,
 {
     wxNumberEntryDialog dialog(parent, msg, prompt, title,
                                value, min, max, pos);
-    (void)dialog.ShowModal();
-
+    if (dialog.ShowModal() == wxID_OK)
     return dialog.GetValue();
+    
+    return -1;
 }
 
 #endif // wxUSE_NUMBERDLG
