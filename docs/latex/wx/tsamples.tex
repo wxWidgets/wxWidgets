@@ -9,6 +9,8 @@
 %% Licence:     wxWindows licence
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% NB: please keep the subsections in alphabetic order!
+
 \section{wxWindows samples}\label{samples}
 
 Probably the best way to learn wxWindows is by reading the source of some 50+
@@ -20,7 +22,28 @@ didn't help. They also provide some notes about using the samples and what
 features of wxWindows are they supposed to test.
 
 There are currently more than 50 different samples as part of wxWindows and
-this list is not complete.
+this list is not complete. You should start your tour of wxWindows with the 
+\helpref{minimal sample}{sampleminimal} which is the wxWindows version of
+"Hello, world!". It shows the basic structure of wxWindows program and is the
+most commented sample of all - looking at its source code is recommended.
+
+The next most useful sample is probably the \helpref{controls}{samplecontrols} 
+one which shows many of wxWindows standard controls, such as buttons,
+listboxes, checkboxes, comboboxes e.t.c.
+
+Other, more complicated controls, have their own samples. In this category you
+may find the following samples showing the corresponding controls:
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxCalendarCtrl}{samplecalendar}}{Calendar a.k.a. date picker control}
+\twocolitem{\helpref{wxListCtrl}{samplelistctrl}}{List view control}
+\twocolitem{\helpref{wxTreeCtrl}{sampletreectrl}}{Tree view control}
+\twocolitem{\helpref{wxGrid}{samplegrid}}{Grid control}
+\end{twocollist}
+
+Finally, it might be helpful to do a search in the entire sample directory if
+you can't find the sample you showing the control you are interested in by
+name. Most of wxWindows classes, occur in at least one of the samples.
 
 \subsection{Minimal sample}\label{sampleminimal}
 
@@ -173,6 +196,10 @@ programs as well - try Write/Wordpad, for example).
 Take a look at DnDShapeDataObject class to see how you may use 
 \helpref{wxDataObject}{wxdataobject} to achieve this.
 
+\subsection{Grid sample}\label{samplegrid}
+
+TODO.
+
 \subsection{HTML samples}\label{samplehtml}
 
 Eight HTML samples (you can find them in directory {\tt samples/html})
@@ -204,23 +231,6 @@ documents without much work. In fact, only few function calls are sufficient.
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
 
-\subsection{Layout sample}\label{samplelayout}
-
-The layout sample demonstrates the two different layout systems offered
-by wxWindows. When starting the program, you will see a frame with some
-controls and some graphics. The controls will change their size whenever
-you resize the entire frame and the exact behaviour of the size changes
-is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints}
-class. See also the \helpref{overview}{constraintsoverview} and the
-\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
-class for further information.
-
-The menu in this sample offers two more tests, one showing how to use
-a \helpref{wxBoxSizer}{wxboxsizer} in a simple dialog and the other one
-showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
-class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
-\helpref{wxSizer}{wxsizer}.
-
 \subsection{Image sample}\label{sampleimage}
 
 The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
@@ -238,6 +248,32 @@ specifying the foreground and background colours with
 \helpref{wxDC::SetTextBackground}{wxdcsettextbackground} (on the left). The
 bitmap is then converted to a wxImage and the foreground colour (black) is
 replaced with red using \helpref{wxImage::Replace}{wximagereplace}.
+
+\subsection{Layout sample}\label{samplelayout}
+
+The layout sample demonstrates the two different layout systems offered
+by wxWindows. When starting the program, you will see a frame with some
+controls and some graphics. The controls will change their size whenever
+you resize the entire frame and the exact behaviour of the size changes
+is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints}
+class. See also the \helpref{overview}{constraintsoverview} and the
+\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
+class for further information.
+
+The menu in this sample offers two more tests, one showing how to use
+a \helpref{wxBoxSizer}{wxboxsizer} in a simple dialog and the other one
+showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
+class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
+\helpref{wxSizer}{wxsizer}.
+
+\subsection{Listctrl sample}\label{samplelistctrl}
+
+This sample shows \helpref{wxListCtrl}{wxlistctrl} control. Different modes
+supported by the control (list, icons, small icons, report) may be chosen from
+the menu.
+
+The sample also provides some timings for adding/deleting/sorting a lot of
+(several thousands) controls into the control.
 
 \subsection{Sockets sample}\label{samplesockets}
 
@@ -366,3 +402,14 @@ in MyFrame::OnUpdateCopyAndCut.
 toolbar.
 
 \end{itemize}
+
+\subsection{Treectrl sample}\label{sampletreectrl}
+
+This sample demonstrates using \helpref{wxTreeCtrl}{wxtreectrl} class. Here
+you may see how to process various notification messages sent by this control
+and also when they occur (by looking at the messages in the text control in
+the bottom part of the frame).
+
+Adding, inserting and deleting items and branches from the tree as well as
+sorting (in default alphabetical order as well as in custom one) is
+demonstrated here as well - try the corresponding menu entries.

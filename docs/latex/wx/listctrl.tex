@@ -1,9 +1,13 @@
 \section{\class{wxListCtrl}}\label{wxlistctrl}
 
-A list control presents lists in a number of formats: list view, report view, icon view
-and small icon view. Elements are numbered from zero.
+A list control presents lists in a number of formats: list view, report view,
+icon view and small icon view. In any case, elements are numbered from zero.
 
-To intercept events from a list control, use the event table macros described in \helpref{wxListEvent}{wxlistevent}.
+Using many of wxListCtrl is shown in the 
+\helpref{corresponding sample}{samplelistctrl}.
+
+To intercept events from a list control, use the event table macros described
+in \helpref{wxListEvent}{wxlistevent}.
 
 \wxheading{Derived from}
 
@@ -632,21 +636,30 @@ Sets the whole window style.
 
 \membersection{wxListCtrl::SortItems}\label{wxlistctrlsortitems}
 
-\func{bool}{SortItems}{\param{wxListCtrlCompare }{fn}, \param{long }{data}}
+\func{bool}{SortItems}{\param{wxListCtrlCompare }{fnSortCallBack}, \param{long }{data}}
 
-Sorts the items in the list control.
+Call this function to sorts the items in the list control. Sorting is done
+using the specified {\it fnSortCallBack} function. This function must have the
+following prototype:
 
-fn is a function which takes 3 long arguments: item1, item2, data.
+\begin{verbatim}
+int wxCALLBACK wxListCompareFunction(long item1, long item2, long sortData)
+\end{verbatim}
 
-item1 is the long data associated with a first item (NOT the index).
+It is called each time when the two items must be compared and should return 0
+if the items are equal, negative value if the first item is less than the
+second one and positive value if the first one is greater than the second one
+(the same convention as used by {\tt qsort(3)}).
 
-item2 is the long data associated with a second item (NOT the index).
+\wxheading{Parameters}
 
-data is the same value as passed to SortItems.
+\docparam{item1}{client data associated with the first item ({\bf NOT} the index).
+\docparam{item2}{client data associated with the second item ({\bf NOT} the index).
+\docparam{data}{the value passed to SortItems() itself.}
 
-The return value is a negative number if the first item should precede the second
-item, a positive number of the second item should precede the first,
-or zero if the two items are equivalent.
+Notice that the control may only be sorted on client data associated with the
+items, so you {\bf must} use \helpref{SetItemData}{wxlistctrlsetitemdata} if
+you want to be able to sort the items in the control.
 
-data is arbitrary data to be passed to the sort function.
-
+Please see the \helpref{listctrl sample}{samplelistctrl} for an example of
+using this function.
