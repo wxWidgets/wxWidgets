@@ -95,6 +95,11 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                      GTK_WINDOW(m_parent->m_widget));
 }
  
+wxMessageDialog::~wxMessageDialog()
+{
+    m_widget = NULL;
+}
+
 int wxMessageDialog::ShowModal()
 {
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
