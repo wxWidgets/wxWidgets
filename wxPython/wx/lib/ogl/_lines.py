@@ -220,7 +220,6 @@ class LineShape(Shape):
 
     def __del__(self):
         if self._lineControlPoints:
-            self.ClearPointList(self._lineControlPoints)
             self._lineControlPoints = []
         for i in range(3):
             if self._labelObjects[i]:
@@ -289,8 +288,6 @@ class LineShape(Shape):
 
     def MakeLineControlPoints(self, n):
         """Make a given number of control points (minimum of two)."""
-        if self._lineControlPoints:
-            self.ClearPointList(self._lineControlPoints)
         self._lineControlPoints = []
         
         for _ in range(n):

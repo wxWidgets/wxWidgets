@@ -19,7 +19,6 @@ from _oglmisc import *
 DragOffsetX = 0.0
 DragOffsetY = 0.0
 
-
 def OGLInitialize():
     global WhiteBackgroundPen, WhiteBackgroundBrush, TransparentPen
     global BlackForegroundPen, NormalFont
@@ -82,7 +81,11 @@ class ShapeEvtHandler(object):
 
     def GetPreviousHandler(self):
         return self._previousHandler
-    
+
+    def OnDelete(self):
+        if self!=self.GetShape():
+            del self
+            
     def OnDraw(self, dc):
         if self._previousHandler:
             self._previousHandler.OnDraw(dc)
@@ -283,8 +286,8 @@ class Shape(ShapeEvtHandler):
 
     def GetClassName(self):
         return str(self.__class__).split(".")[-1][:-2]
-    
-    def __del__(self):
+
+    def Delete(self):
         if self._parent:
             i = self._parent.GetChildren().index(self)
             self._parent.GetChildren(i).remove(self)
@@ -293,10 +296,16 @@ class Shape(ShapeEvtHandler):
         self.ClearRegions()
         self.ClearAttachments()
 
+        self._handlerShape = None
+        
         if self._canvas:
-            self._canvas.RemoveShape(self)
+            self.RemoveFromCanvas(self._canvas)
 
         self.GetEventHandler().OnDelete()
+        self._eventHandler = None
+        
+    def __del__(self):
+        ShapeEvtHandler.__del__(self)
 
     def Draggable(self):
         """TRUE if the shape may be dragged by the user."""
@@ -416,6 +425,8 @@ class Shape(ShapeEvtHandler):
         """Remove the shape from the canvas."""
         if self.Selected():
             self.Select(False)
+        
+        self._canvas = None
         theCanvas.RemoveShape(self)
         for object in self._children:
             object.RemoveFromCanvas(theCanvas)
@@ -1372,13 +1383,13 @@ class Shape(ShapeEvtHandler):
 
         Does not redraw the shape.
         """
-        for control in self._controlPoints:
+        for control in self._controlPoints[:]:
             if dc:
                 control.GetEventHandler().OnErase(dc)
-            self._canvas.RemoveShape(control)
-            del control
+            control.Delete()
+            self._controlPoints.remove(control)
         self._controlPoints = []
-
+        
         # Children of divisions are contained objects,
         # so stop here
         if not isinstance(self, DivisionShape):
@@ -1539,11 +1550,6 @@ class Shape(ShapeEvtHandler):
             if child.HasDescendant(image):
                 return True
         return False
-
-    # Clears points from a list of wxRealPoints, and clears list
-    # Useless in python? /pi
-    def ClearPointList(self, list):
-        list = []
 
     # Assuming the attachment lies along a vertical or horizontal line,
     # calculate the position on that point.
