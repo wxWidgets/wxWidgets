@@ -29,7 +29,7 @@
 #ifndef local
 #  define local static
 #endif
-/* compile with -Dlocal if your __WXDEBUG__ger can't find static symbols */
+/* compile with -Dlocal if your debugger can't find static symbols */
 
 typedef unsigned char  uch;
 typedef uch FAR uchf;

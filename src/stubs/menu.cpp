@@ -50,6 +50,7 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
     m_eventHandler = this;
     m_noItems = 0;
     m_menuBar = NULL;
+    m_clientData = (void*) NULL;
     if (m_title != "")
     {
         Append(-2, m_title) ;

@@ -158,14 +158,24 @@ LIB_CPP_SRC=\
 # listctrl.cpp \
 # imaglist.cpp \
 # statusbr.cpp \
+
+ZLIB_SRC=\
+  ../zlib/adler32.c ../zlib/deflate.c ../zlib/infblock.c\
+  ../zlib/inflate.c ../zlib/zutil.c ../zlib/compress.c \
+  ../zlib/infcodes.c ../zlib/inftrees.c ../zlib/trees.c \
+  ../zlib/crc32.c ../zlib/gzio.c ../zlib/inffast.c\
+  ../zlib/infutil.c ../zlib/uncompr.c
  
 LIB_C_SRC=\
 \
  ../common/y_tab.c \
  ../common/extended.c
 
+# Only need to compile zlib files if we don't
+# already have a zlib library installed on our system
+# (or we wish to statically link them for some reason)
 EXTRA_C_SRC=\
-  xmcombo/xmcombo.c
+  xmcombo/xmcombo.c # $(ZLIB_SRC)
 
 EXTRA_CPP_SRC=\
   mdi/lib/XsComponent.C\

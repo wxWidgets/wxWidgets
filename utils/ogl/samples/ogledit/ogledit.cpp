@@ -33,6 +33,10 @@
 #include "doc.h"
 #include "view.h"
 
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#include "ogl.xpm"
+#endif
+
 // A macro needed for some compilers (AIX) that need 'main' to be defined
 // in the application itself.
 IMPLEMENT_APP(MyApp)
@@ -63,12 +67,7 @@ bool MyApp::OnInit(void)
   frame = new MyFrame(myDocManager, NULL, "OGLEdit Demo", wxPoint(0, 0), wxSize(500, 400), wxDEFAULT_FRAME_STYLE);
 
   //// Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("ogl_icn"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("ogl.xbm"));
-#endif
+  frame->SetIcon(wxICON(ogl));
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;

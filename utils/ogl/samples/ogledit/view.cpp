@@ -77,7 +77,7 @@ void DiagramView::OnDraw(wxDC *dc)
   /* You might use THIS code if you were scaling 
    * graphics of known size to fit on the page. 
    */ 
-  float w, h; 
+  int w, h; 
 
   // We need to adjust for the graphic size, a formula will be added 
   float maxX = 900; 

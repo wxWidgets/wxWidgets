@@ -81,6 +81,33 @@ WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
 WXDLLEXPORT_DATA(extern const wxSize) wxDefaultSize;
 WXDLLEXPORT_DATA(extern const wxPoint) wxDefaultPosition;
 
+//-----------------------------------------------------------------------------
+// wxClientData
+//-----------------------------------------------------------------------------
+
+class wxClientData
+{
+public:
+    wxClientData() { }
+    virtual ~wxClientData() { }
+};
+
+//-----------------------------------------------------------------------------
+// wxStringClientData
+//-----------------------------------------------------------------------------
+
+class wxStringClientData: public wxClientData
+{
+public:
+    wxStringClientData() { }
+    wxStringClientData( wxString &data ) { m_data = data; }
+    void SetData( wxString &data ) { m_data = data; }
+    wxString GetData() const { return m_data; }
+    
+private:
+    wxString  m_data;
+};
+
 class WXDLLEXPORT wxWindow: public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxWindow)
@@ -279,6 +306,12 @@ public:
   void SetValidator(const wxValidator& validator);
   inline wxValidator *GetValidator() const;
 
+  virtual void SetClientObject( wxClientData *data );
+  virtual wxClientData *GetClientObject();
+    
+  virtual void SetClientData( void *data );
+  virtual void *GetClientData();
+  
   // Set/get the window's style
   inline void SetWindowStyleFlag(long flag);
   inline long GetWindowStyleFlag() const;
@@ -369,7 +402,7 @@ public:
   // Does this window want to accept keyboard focus?
   virtual bool AcceptsFocus() const;
 
-  virtual void PrepareDC( wxDC &WXUNUSED(dc) ) {};
+  virtual void PrepareDC( wxDC &dc ) {};
 
 
 public:
@@ -538,6 +571,8 @@ protected:
   wxColour              m_backgroundColour ;
   wxColour              m_foregroundColour ;
   wxAcceleratorTable    m_acceleratorTable;
+  wxClientData*         m_clientObject;
+  void*                 m_clientData;
 
 #if wxUSE_DRAG_AND_DROP
   wxDropTarget         *m_pDropTarget;    // the current drop target or NULL

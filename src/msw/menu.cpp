@@ -73,6 +73,8 @@ wxMenu::wxMenu(const wxString& Title, const wxFunction func)
   m_hMenu = (WXHMENU) CreatePopupMenu();
   m_savehMenu = 0 ;
   m_topLevelMenu = this;
+  m_clientData = (void*) NULL;
+
   if (m_title != "")
   {
     Append(idMenuTitle, m_title) ;

@@ -62,6 +62,10 @@ public:
   bool Checked(int id) const;
   inline bool IsChecked(int id) const { return IsChecked(id); };
 
+  // Client data
+  inline void SetClientData(void* clientData) { m_clientData = clientData; }
+  inline void* GetClientData() const { return m_clientData; }
+
   // item properties
     // title
   void SetTitle(const wxString& label);
@@ -120,6 +124,7 @@ public:
   wxList            m_menuItems;
   wxEvtHandler *    m_parent;
   wxEvtHandler *    m_eventHandler;
+  void*             m_clientData;
 
   //// Motif-specific
   int               m_numColumns;

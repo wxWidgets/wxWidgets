@@ -1,125 +1,42 @@
 #
 # File:		makefile.unx
 # Author:	Julian Smart
-# Created:	1996
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1996 Julian Smart
+# Copyright:	(c) 1998
 #
-# "%W% %G%"
 #
-# Makefile for object graphics library (UNIX).
+# Makefile for OGL library, Unix
 
-WXDIR = ../../..
+include ../../../src/make.env
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/make.env
+OGLLIB=$(WXDIR)/lib/libogl$(GUISUFFIX).a
 
-PRODIR = $(WXDIR)/utils/prologio
-PROINC = $(PRODIR)/src
-PROLIB = $(PRODIR)/lib/libproio$(GUISUFFIX).a
+LIB_CPP_SRC=\
+\
+  basic.o\
+  basic2.o\
+  canvas.o\
+  ogldiag.o\
+  lines.o\
+  misc.o\
+  divided.o\
+  constrnt.o\
+  composit.o\
+  drawn.o\
+  bmpshape.o\
+  mfutils.o
 
-MFDIR = $(WXDIR)/utils/mfutils
-MFINC = $(MFDIR)/src
+all:    $(OGLLIB)
 
-OGLDIR = $(WXDIR)/utils/ogl
-OGLLIB = $(OGLDIR)/lib/libogl$(GUISUFFIX).a
+# Define library objects
+OBJECTS=\
+ $(LIB_CPP_SRC:.cpp=.o)
 
-OBJECTS = $(OBJDIR)/basic.o $(OBJDIR)/basic2.o $(OBJDIR)/canvas.o $(OBJDIR)/lines.o $(OBJDIR)/misc.o\
-  $(OBJDIR)/divided.o $(OBJDIR)/constrnt.o $(OBJDIR)/composit.o $(OBJDIR)/drawn.o\
-  $(OBJDIR)/bitmap.o $(OBJDIR)/ogldiag.o
-
-CPPFLAGS =  -I$(PROINC) -I$(MFINC) $(XINCLUDE) $(INC) $(GUI) -DDEBUG='$(DEBUG)' $(DEBUGFLAGS) $(WARN) $(OPTIONS) -DPROLOGIO
-
-all:	$(OBJDIR) $(OGLLIB)
-
-.SUFFIXES:
-
-wx:
-	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx OPT=$(OPT) GUI=$(GUI)
-
-motif:
-	$(MAKE) -f makefile.unx GUI=-Dwx_motif OPT=$(OPT) GUISUFFIX=_motif LDLIBS='$(MOTIFLDLIBS)' XVIEW_LINK=
-
-xview:
-	$(MAKE) -f makefile.unx GUI=-Dwx_xview OPT=$(OPT) GUISUFFIX=_ol
-
-hp:
-	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' DEBUGFLAGS='-g' OPT='' WARN='-w' \
-           XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' \
-           LDLIBS='$(HPLDLIBS)'
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-$(OGLLIB): $(OBJECTS)
-	rm -f $@
+$(OGLLIB) : $(OBJECTS)
 	ar $(AROPTIONS) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(OBJDIR)/basic.o:	basic.$(SRCSUFF) basic.h lines.h misc.h canvas.h
-	$(CC) -c $(CPPFLAGS) -o $@ basic.$(SRCSUFF)
-
-$(OBJDIR)/basic2.o:	basic2.$(SRCSUFF) basic.h lines.h misc.h canvas.h
-	$(CC) -c $(CPPFLAGS) -o $@ basic2.$(SRCSUFF)
-
-$(OBJDIR)/canvas.o:	canvas.$(SRCSUFF) basic.h misc.h canvas.h
-	$(CC) -c $(CPPFLAGS) -o $@ canvas.$(SRCSUFF)
-
-$(OBJDIR)/lines.o:	lines.$(SRCSUFF) basic.h misc.h canvas.h lines.h
-	$(CC) -c $(CPPFLAGS) -o $@ lines.$(SRCSUFF)
-
-$(OBJDIR)/misc.o: 	misc.$(SRCSUFF) basic.h misc.h constrnt.h
-	$(CC) -c $(CPPFLAGS) -o $@ misc.$(SRCSUFF)
-
-$(OBJDIR)/divided.o: 	divided.$(SRCSUFF) basic.h misc.h canvas.h divided.h
-	$(CC) -c $(CPPFLAGS) -o $@ divided.$(SRCSUFF)
-
-$(OBJDIR)/constrnt.o: 	constrnt.$(SRCSUFF) basic.h constrnt.h
-	$(CC) -c $(CPPFLAGS) -o $@ constrnt.$(SRCSUFF)
-
-$(OBJDIR)/composit.o: 	composit.$(SRCSUFF) basic.h misc.h canvas.h constrnt.h composit.h
-	$(CC) -c $(CPPFLAGS) -o $@ composit.$(SRCSUFF)
-
-$(OBJDIR)/drawn.o: 	drawn.$(SRCSUFF) basic.h misc.h canvas.h drawn.h drawnp.h
-	$(CC) -c $(CPPFLAGS) -o $@ drawn.$(SRCSUFF)
-
-$(OBJDIR)/bitmap.o: 	bitmap.$(SRCSUFF) basic.h misc.h canvas.h bitmap.h
-	$(CC) -c $(CPPFLAGS) -o $@ bitmap.$(SRCSUFF)
-
-$(OBJDIR)/ogldiag.o: 	ogldiag.$(SRCSUFF) basic.h misc.h canvas.h bitmap.h ogldiag.h
-	$(CC) -c $(CPPFLAGS) -o $@ ogldiag.$(SRCSUFF)
-
-HTMLDIR=/home/hardy/html/wx/manuals
-
-docs:	ps xlp
-ps:	$(OGLDIR)/docs/ogl.ps
-xlp:	$(OGLDIR)/docs/ogl.xlp
-html:	$(HTMLDIR)/ogl/ogl_contents.html
-
-$(OGLDIR)/docs/ogl.xlp:	$(OGLDIR)/docs/classes.tex $(OGLDIR)/docs/ogl.tex $(OGLDIR)/docs/topics.tex $(OGLDIR)/docs/changes.tex $(OGLDIR)/docs/intro.tex
-	cd ../docs; tex2rtf ogl.tex tmp.xlp -xlp -twice
-	sed -e "s/WXHELPCONTENTS/OGL Manual/g" < $(OGLDIR)/docs/tmp.xlp > $(OGLDIR)/docs/ogl.xlp
-	/bin/rm -f $(OGLDIR)/docs/tmp.xlp
-
-$(HTMLDIR)/ogl/ogl_contents.html:	$(OGLDIR)/docs/classes.tex $(OGLDIR)/docs/ogl.tex $(OGLDIR)/docs/topics.tex $(OGLDIR)/docs/changes.tex $(OGLDIR)/docs/intro.tex
-	cd ../docs; tex2rtf ogl.tex $(HTMLDIR)/ogl/ogl -twice -html
-
-$(OGLDIR)/docs/ogl.dvi:	$(OGLDIR)/docs/ogl.tex $(OGLDIR)/docs/classes.tex $(OGLDIR)/docs/topics.tex $(OGLDIR)/docs/changes.tex $(OGLDIR)/docs/intro.tex
-	cd $(OGLDIR)/docs; latex ogl; latex ogl; makeindex ogl; latex ogl; \
-
-$(OGLDIR)/docs/ogl.ps:	$(OGLDIR)/docs/ogl.dvi
-	cd $(OGLDIR)/docs; dvips -f -r < ogl.dvi > ogl.ps
-
-cleaneach:
-	rm -f $(OBJECTS) $(OGLLIB) core
-
-clean_motif:
-	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleaneach 
-
-clean_ol:
-	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleaneach 
-
-clean_hp:
-	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleaneach 
+clean:
+	rm -f $(OBJECTS) $(OGLLIB)
 

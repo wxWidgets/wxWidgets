@@ -24,9 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
@@ -1827,8 +1825,8 @@ void wxShape::WriteRegions(wxExpr *clause)
     // region1 = (regionName regionText x y width height minWidth minHeight proportionX proportionY
     //            formatMode fontSize fontFamily fontStyle fontWeight textColour)
     wxExpr *regionExpr = new wxExpr(wxExprList);
-    regionExpr->Append(new wxExpr(wxExprString, (region->m_regionName ? region->m_regionName : "")));
-    regionExpr->Append(new wxExpr(wxExprString, (region->m_regionText ? region->m_regionText : "")));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_regionName));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_regionText));
 
     regionExpr->Append(new wxExpr(region->m_x));
     regionExpr->Append(new wxExpr(region->m_y));
@@ -1846,10 +1844,10 @@ void wxShape::WriteRegions(wxExpr *clause)
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetFamily() : wxDEFAULT)));
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetStyle() : wxDEFAULT)));
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetWeight() : wxNORMAL)));
-    regionExpr->Append(new wxExpr(wxExprString, region->m_textColour ? region->m_textColour : "BLACK"));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_textColour));
 
     // New members for pen colour/style
-    regionExpr->Append(new wxExpr(wxExprString, region->m_penColour ? region->m_penColour : "BLACK"));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_penColour));
     regionExpr->Append(new wxExpr((long)region->m_penStyle));
 
     // Formatted text:

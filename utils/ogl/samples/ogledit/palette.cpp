@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <wx/tbar95.h>
+#include <wx/toolbar.h>
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -34,6 +34,15 @@
 #include "view.h"
 #include "ogledit.h"
 #include "palette.h"
+
+// Include pixmaps
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#include "bitmaps/arrow.xpm"
+#include "bitmaps/tool1.xpm"
+#include "bitmaps/tool2.xpm"
+#include "bitmaps/tool3.xpm"
+#include "bitmaps/tool4.xpm"
+#endif
 
 /*
  * Object editor tool palette
@@ -82,13 +91,12 @@ EditorToolPalette *MyApp::CreatePalette(wxFrame *parent)
   wxBitmap PaletteTool3("TOOL3");
   wxBitmap PaletteTool4("TOOL4");
   wxBitmap PaletteArrow("ARROWTOOL");
-#endif
-#ifdef __X__
-  wxBitmap PaletteTool1(tool1_bits, tool1_width, tool1_height);
-  wxBitmap PaletteTool2(tool2_bits, tool2_width, tool2_height);
-  wxBitmap PaletteTool3(tool3_bits, tool3_width, tool3_height);
-  wxBitmap PaletteTool4(tool4_bits, tool4_width, tool4_height);
-  wxBitmap PaletteArrow(arrow_bits, arrow_width, arrow_height);
+#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+  wxBitmap PaletteTool1(tool1_xpm);
+  wxBitmap PaletteTool2(tool2_xpm);
+  wxBitmap PaletteTool3(tool3_xpm);
+  wxBitmap PaletteTool4(tool4_xpm);
+  wxBitmap PaletteArrow(arrow_xpm);
 #endif
 
   EditorToolPalette *palette = new EditorToolPalette(parent, wxPoint(0, 0), wxSize(-1, -1), wxTB_HORIZONTAL);

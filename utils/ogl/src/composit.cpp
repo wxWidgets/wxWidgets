@@ -24,9 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #include "basic.h"
 #include "basicp.h"
@@ -1716,7 +1714,7 @@ void wxDivisionShape::EditEdge(int side)
 // Popup menu
 void wxDivisionShape::PopupMenu(double x, double y)
 {
-  oglPopupDivisionMenu->SetClientData((char *)this);
+  oglPopupDivisionMenu->SetClientData((void *)this);
   if (m_leftSide)
     oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_LEFT_EDGE, TRUE);
   else

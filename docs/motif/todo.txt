@@ -1,7 +1,7 @@
 wxMotif TODO
 ------------
 
-Updated: 20/10/98
+Updated: 8/11/98
 
          -------------------------------o-------------------------
 
@@ -87,7 +87,23 @@ Low Priority
 - Get Dialog Editor working under Motif.
 
 - New wxHelp version: try using the XmHTML widget at
-  http://www.xs4all.nl/~ripley/XmHTML/
+  http://www.xs4all.nl/~ripley/XmHTML/.
+
+  We need to:
+  - make a minimal distribution under wx/src/xmhtml, just enough
+    to compile the source.
+  - add XMHTML_C_SRC to src/motif/makefile.unx with the source files
+    listed.
+  - make sure we can compile the sources, passing the correct
+    flags for zlib/png compilation.
+  - make a wxHTMLWindow class from e.g. examples/example_2.c. Should
+    probably make the cache and history facilities part of the class.
+  - add the driver code to src/motif/helphtml.cpp (a frame, toolbar,
+    history list).
+
+  Note that a quicker route to a help system may be to use the
+  code in the contrib dir of XmHTML to control a Netscape session --
+  but Netscape can be a colour resource hog.
 
 - Optimize screen refresh for non-native widgets, e.g. wxWindow
   created with Create(), using technique in flicker patch for 1.68

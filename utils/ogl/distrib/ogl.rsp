@@ -16,9 +16,9 @@ utils/ogl/samples/ogledit/*.def
 utils/ogl/samples/ogledit/*.xbm
 utils/ogl/samples/ogledit/makefile*
 utils/ogl/samples/ogledit/*.txt
-
 utils/ogl/samples/ogledit/*.ico
 utils/ogl/samples/ogledit/*.bmp
+utils/ogl/samples/ogledit/*.xpm
 utils/ogl/samples/ogledit/bitmaps/*.bmp
 utils/ogl/samples/ogledit/bitmaps/*.gif
 utils/ogl/samples/ogledit/bitmaps/*.xbm

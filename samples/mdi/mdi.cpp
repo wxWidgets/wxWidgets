@@ -57,7 +57,7 @@ bool MyApp::OnInit(void)
   frame = new MyFrame((wxFrame *) NULL, -1, (char *) "MDI Demo", wxPoint(-1, -1), wxSize(500, 400),
    wxDEFAULT_FRAME | wxHSCROLL | wxVSCROLL);
 
-  // Give it an icon (this is ignored in MDI mode: uses resources)
+  // Give it an icon
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mdi_icn"));
 #else

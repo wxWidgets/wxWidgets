@@ -1,4 +1,4 @@
-ogl_icn                 ICON    ogl.ico
+ogl             ICON    ogl.ico
 
 TOOL1           BITMAP "bitmaps/tool1.bmp"
 TOOL2           BITMAP "bitmaps/tool2.bmp"

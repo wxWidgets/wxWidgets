@@ -25,6 +25,8 @@ zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp
 zip32 -@ %dest\wx200htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx200pdf.zip < %src\distrib\msw\wx_pdf.rsp
 
+zip32 -@ %dest\ogl3.zip < %src\utils\ogl\distrib\ogl.rsp
+
 cd %dest
 
 echo wxWindows archived.

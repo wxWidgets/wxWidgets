@@ -54,6 +54,10 @@ public:
     // delete an item
   void Delete(int id); /* If it's a submenu, menu is not destroyed. VZ: why? */
 
+  // Client data
+  inline void SetClientData(void* clientData) { m_clientData = clientData; }
+  inline void* GetClientData() const { return m_clientData; }
+
   // menu item control
   void Enable(int id, bool Flag);
   bool Enabled(int id) const;
@@ -120,6 +124,7 @@ public:
   wxEvtHandler *    m_parent;
   wxEvtHandler *    m_eventHandler;
   wxWindow         *m_pInvokingWindow;
+  void*             m_clientData;
 };
 
 // ----------------------------------------------------------------------------

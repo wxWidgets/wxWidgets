@@ -74,6 +74,7 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
     m_topLevelMenu  = (wxMenu*) NULL;
     m_ownedByMenuBar = FALSE;
     m_menuParent = (wxMenu*) NULL;
+    m_clientData = (void*) NULL;
 
     if (m_title != "")
     {

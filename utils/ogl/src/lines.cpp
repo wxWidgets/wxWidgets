@@ -11,6 +11,7 @@
 
 #ifdef __GNUG__
 #pragma implementation "lines.h"
+#pragma implementation "linesp.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -24,9 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
@@ -1424,7 +1423,7 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
       head_list->Append(new wxExpr((long)head->GetArrowEnd()));
       head_list->Append(new wxExpr(head->GetXOffset()));
       head_list->Append(new wxExpr(head->GetArrowSize()));
-      head_list->Append(new wxExpr(wxExprString, (head->GetName() ? head->GetName() : "")));
+      head_list->Append(new wxExpr(wxExprString, head->GetName()));
       head_list->Append(new wxExpr(head->GetId()));
 
       // New members of wxArrowHead

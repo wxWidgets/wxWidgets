@@ -11,6 +11,7 @@
 
 #ifdef __GNUG__
 #pragma implementation "drawn.h"
+#pragma implementation "drawnp.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -24,9 +25,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #include "basic.h"
 #include "basicp.h"

@@ -108,6 +108,8 @@ wxWindow::wxWindow()
 #if  wxUSE_DRAG_AND_DROP
     m_pDropTarget = NULL;
 #endif
+    m_clientObject = (wxClientData*) NULL;
+    m_clientData = NULL;
 
     /// Motif-specific
     m_mainWidget = (WXWidget) 0;
@@ -239,8 +241,8 @@ wxWindow::~wxWindow()
     // dangling pointers.
     wxPendingDelete.DeleteObject(this);
 
-    if ( m_windowValidator )
-	    delete m_windowValidator;
+    if ( m_windowValidator ) delete m_windowValidator;
+    if (m_clientObject) delete m_clientObject;
 }
 
 // Destroy the window (delayed, if a managed window)
@@ -282,6 +284,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_maxSizeY = -1;
     m_defaultItem = NULL;
     m_windowParent = NULL;
+    m_clientObject = (wxClientData*) NULL;
+    m_clientData = NULL;
 
     // Motif-specific
     m_canAddEventHandler = FALSE;
@@ -1927,6 +1931,27 @@ void wxWindow::SetValidator(const wxValidator& validator)
 
 	if ( m_windowValidator )
 		m_windowValidator->SetWindow(this) ;
+}
+
+void wxWindow::SetClientObject( wxClientData *data )
+{
+  if (m_clientObject) delete m_clientObject;
+  m_clientObject = data;
+}
+
+wxClientData *wxWindow::GetClientObject()
+{
+  return m_clientObject;
+}
+
+void wxWindow::SetClientData( void *data )
+{
+  m_clientData = data;
+}
+
+void *wxWindow::GetClientData()
+{
+  return m_clientData;
 }
 
 // Find a window by id or name

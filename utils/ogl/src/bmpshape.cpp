@@ -24,9 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #include "basic.h"
 #include "basicp.h"

@@ -15,5 +15,10 @@
 #include "wx/generic/colrdlgg.h"
 #endif
 
+#ifndef __WXMSW__
+#define wxColourDialog wxGenericColourDialog
+#define sm_classwxColourDialog sm_classwxColourDialog
+#endif
+
 #endif
     // _WX_COLORDLG_H_BASE_

@@ -10,6 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
+#pragma implementation "basicp.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -23,9 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>

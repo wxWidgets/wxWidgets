@@ -24,9 +24,7 @@
 #include <wx/wx.h>
 #endif
 
-#ifdef PROLOGIO
 #include <wx/wxexpr.h>
-#endif
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
