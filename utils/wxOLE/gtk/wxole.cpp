@@ -20,9 +20,9 @@
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
+#include "wx/stream.h"
 
 #include "wx/gtk/win_gtk.h"
-
 
 extern "C" {
 #include "gtk/gtk.h"
@@ -34,8 +34,10 @@ extern "C" {
 #include <bonobo/gnome-main.h>
 #include <bonobo/gnome-component.h>
 #include <bonobo/gnome-component-factory.h>
-
+#include <bonobo/gnome-persist-stream.h>
+#include <bonobo/gtk-interfaces.h>
 }
+
 
 //-----------------------------------------------------------------------------
 // global data
@@ -56,6 +58,29 @@ public:
 
   CORBA_Environment    m_ev;
   CORBA_ORB            m_orb;
+};
+
+//---------------------------------------------------------------------------
+// wxOleInputStream
+//---------------------------------------------------------------------------
+
+class wxOleInputStream : public wxInputStream
+{
+public:
+
+  wxOleInputStream( GNOME_Stream stream );
+  ~wxOleInputStream();
+
+  bool Ok() const { return m_error; }
+
+protected:
+ 
+  bool            m_error;
+  GNOME_Stream    m_gstream;
+
+  size_t OnSysRead(void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
 };
 
 //---------------------------------------------------------------------------
@@ -102,6 +127,56 @@ wxOleServerEnv::~wxOleServerEnv()
 }
   
 //---------------------------------------------------------------------------
+// wxOleInputStream
+//---------------------------------------------------------------------------
+
+wxOleInputStream::wxOleInputStream( GNOME_Stream stream )
+{
+  m_gstream = stream;
+  m_error = (m_gstream);
+}
+
+wxOleInputStream::~wxOleInputStream()
+{
+    /* we don't create the stream so we
+       don't destroy it either. */
+}
+
+size_t wxOleInputStream::OnSysRead( void *buffer, size_t size )
+{
+    GNOME_Stream_iobuf *gbuffer = GNOME_Stream_iobuf__alloc();
+
+    CORBA_Environment ev;
+    CORBA_exception_init( &ev );
+    
+    GNOME_Stream_read( m_gstream, size, &gbuffer, &ev );
+    
+    CORBA_exception_free( &ev );
+    
+    memcpy( buffer, gbuffer->_buffer, gbuffer->_length );
+
+    m_error = (gbuffer->_length != size);
+    
+    CORBA_free( gbuffer );
+}
+
+off_t wxOleInputStream::OnSysSeek( off_t pos, wxSeekMode mode )
+{
+    CORBA_Environment ev;
+    CORBA_exception_init( &ev );
+    
+    GNOME_Stream_seek( m_gstream, pos /* offset */, 0 /* whence */, &ev );
+    
+    CORBA_exception_free( &ev );
+}
+
+off_t wxOleInputStream::OnSysTell() const
+{
+    return 0;  /* oh well */
+}
+
+
+//---------------------------------------------------------------------------
 // wxOleServerPrivate
 //---------------------------------------------------------------------------
 
@@ -120,7 +195,7 @@ public:
 //---------------------------------------------------------------------------
 
 static GnomeView* 
-gnome_view_factory_callback( GnomeComponent *WXUNUSED(component), wxOleServer *server )
+gnome_view_factory_callback( GnomeComponent *component, wxOleServer *server )
 {
 /*
     printf( "Create OLE control.\n" );
@@ -137,6 +212,14 @@ gnome_view_factory_callback( GnomeComponent *WXUNUSED(component), wxOleServer *s
     return gnome_view_new( ctx->m_widget );
 }
 
+static int
+gnome_load_from_stream_callback( GnomePersistStream *ps, GNOME_Stream stream, GnomeComponent* component )
+{
+    wxOleInputStream wxstream( stream );
+    
+    
+}
+
 static GnomeComponent* 
 gnome_component_factory_callback( GnomeComponentFactory *factory, const char *path, wxOleServer *server )
 {
@@ -145,7 +228,8 @@ gnome_component_factory_callback( GnomeComponentFactory *factory, const char *pa
     if (path) printf( "path is %s.\n", path );
 */
 
-    GnomeComponent *component = gnome_component_new( gnome_view_factory_callback, (void*) server );
+    GnomeComponent *component = 
+        gnome_component_new( gnome_view_factory_callback, (void*) server );
     
 /*
     if (!component)
@@ -153,7 +237,19 @@ gnome_component_factory_callback( GnomeComponentFactory *factory, const char *pa
     else
         printf( "component creation succeded.\n" );
 */
-	
+
+    GnomePersistStream *stream = 
+       gnome_persist_stream_new( gnome_load_from_stream_callback, NULL /*save*/, (void*) component );
+
+/*
+    if (!stream)
+        printf( "stream creation failed.\n" );
+    else
+        printf( "stream creation succeded.\n" );
+*/
+
+    gtk_object_add_interface( GTK_OBJECT(component), GTK_OBJECT(stream) );
+
     return component;
 }
 
@@ -170,7 +266,8 @@ wxOleServer::wxOleServer( const wxString &id )
     printf( "new component factory.\n" );
 */
     
-    m_priv->m_factory = gnome_component_factory_new( m_ID.mb_str(), gnome_component_factory_callback, (void*) this );
+    m_priv->m_factory = 
+       gnome_component_factory_new( m_ID.mb_str(), gnome_component_factory_callback, (void*) this );
 }
 
 wxOleServer::~wxOleServer()
@@ -189,7 +286,7 @@ wxOleControl *wxOleServer::CreateOleControl()
 
 static void gtk_olectx_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxOleControl *win )
 {
-    if (!win->HasVMT()) return;
+    if (!win->m_hasVMT) return;
 
 /*
     printf( "OnFrameResize from " );
@@ -230,7 +327,7 @@ static gint gtk_olectx_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *W
 
 static gint gtk_olectx_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxOleControl *win )
 {
-    if (!win->HasVMT()) return FALSE;
+    if (!win->m_hasVMT) return FALSE;
 
     win->m_x = event->x;
     win->m_y = event->y;

@@ -177,10 +177,12 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
     if (!wxTheApp) return TRUE;
     
+#if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's idle handler we
        are no longer within GDK's grab on the GUI
        thread so we must lock it here ourselves */
     GDK_THREADS_ENTER ();
+#endif
     
     /* sent idle event to all who request them */
     while (wxTheApp->ProcessIdle()) { }
@@ -197,8 +199,10 @@ gint wxapp_idle_callback( gpointer WXUNUSED(data) )
        emptied */
     g_isIdle = TRUE;
     
+#if (GTK_MINOR_VERSION > 0)
     /* release lock again */
     GDK_THREADS_LEAVE ();
+#endif
 
     return TRUE;
 }
@@ -221,10 +225,12 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
     wxTheApp->m_wakeUpTimerTag = 0;
     
+#if (GTK_MINOR_VERSION > 0)
     /* when getting called from GDK's time-out handler 
        we are no longer within GDK's grab on the GUI
        thread so we must lock it here ourselves */
     GDK_THREADS_ENTER ();
+#endif
     
     /* unblock other threads wishing to do some GUI things */
     wxMutexGuiLeave();
@@ -235,8 +241,10 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     /* block other thread again  */
     wxMutexGuiEnter();
     
+#if (GTK_MINOR_VERSION > 0)
     /* release lock again */
     GDK_THREADS_LEAVE ();
+#endif
     
     wxTheApp->m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
     

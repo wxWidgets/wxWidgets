@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/frame.h"
+#include "wx/stream.h"
 
 //-----------------------------------------------------------------------------
 // global data
