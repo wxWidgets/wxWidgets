@@ -192,7 +192,7 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
 {
-#ifndef __WXMOTIF__
+#if !defined(__WXMOTIF__) && !defined(__WXMAC__)
   wxDialog::OnPaint(event);
 #endif
 

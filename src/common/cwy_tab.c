@@ -22,6 +22,10 @@ int yylex(void);
 int yylook(void);
 int yywrap(void);
 int yyback(int *, int);
+#ifdef __WXMAC__
+int read( int , char * , int ) ;
+int fileno( void* ) ;
+#endif
 
 /* You may need to put /DLEX_SCANNER in your makefile
  * if you're using LEX!

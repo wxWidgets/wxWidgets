@@ -333,10 +333,15 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
 //
 int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
 {
+#ifdef __WXMAC__
+    int *ab_prefix = new int[4096];        /* alphabet (prefixes) */
+    int *ab_tail = new int[4096];          /* alphabet (tails) */
+    int *stack = new int[4096];            /* decompression stack */
+#else
     int ab_prefix[4096];        /* alphabet (prefixes) */
     int ab_tail[4096];          /* alphabet (tails) */
     int stack[4096];            /* decompression stack */
-
+#endif
     int ab_clr;                 /* clear code */
     int ab_fin;                 /* end of info code */
     int ab_bits;                /* actual symbol width, in bits */
@@ -460,6 +465,11 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
     }
     while (code != ab_fin);
 
+#ifdef __WXMAC__
+    delete [] ab_prefix ;       
+    delete [] ab_tail ;       
+    delete [] stack ;       
+#endif
     return 0;
 }
 
