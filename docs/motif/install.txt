@@ -1,11 +1,11 @@
 wxWindows 2.0 for Motif installation
 ------------------------------------
 
-IMPORTANT NOTE: If you experience problems installing, please
-re-read this instructions and other related files (todo.txt,
-bugs.txt etc.) carefully before mailing wxwin-users or
-the author. Preferably, try to fix the problem first and
-then send a patch to the author.
+IMPORTANT NOTE: If you experience problems installing, please re-read this
+		instructions and other related files (todo.txt, bugs.txt and
+		osname.txt for your platform if it exists) carefully before
+		mailing wxwin-users or the author. Preferably, try to fix the
+		problem first and then send a patch to the author. 
 
 - Prerequisites: Motif 1.2 or above, or Lesstif
   (not yet tested). Motif 2.0 and above may also be suitable.
@@ -24,12 +24,16 @@ then send a patch to the author.
 
 - It is recommended that you install bison and flex; using yacc
   and lex may require tweaking of the makefiles. You also need
-  Xpm (see comments in the Notes section below).
+  libXpm (see comments in the Notes section below) if you want to have
+  XPM support in wxWindows (recommended).
 
-- You now have the option of using the configure-based system,
-  or the simple makefile system. Configure is more hard to debug
-  if things go wrong, but may be easier to use if they go OK :-)
-  Makefiles are easier to tweak.
+- You now have the option of using the configure-based system, or the simple
+  makefile system.
+
+  Using configure is the recommended way to build the library. If it doesn't
+  work for you for whatever reason, please report it (together with detailed
+  information about your platform and the (relevant part of) contents of
+  config.log file) to wxwin-developers@wx.dent.med.uni-muenchen.de.
 
 COMPILING USING CONFIGURE
 =========================
@@ -48,11 +52,12 @@ COMPILING USING CONFIGURE
   # and makes wxMotif.
   # Call from top-level wxWindows directory.
   # Note that this uses standard (but commonly-used) configure options;
-  # if you're feeling brave, you may wish to compile with threads.
+  # if you're feeling brave, you may wish to compile with threads:
+  # if they're not supported by the target platform, they will be disabled
+  # anyhow
   # -- Julian Smart
   chmod a+x configure config.sub config.guess setup/general/* setup/shared/*
   ./configure --with-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --without-threads
-  make makefiles
   make
   -------:x-----Cut here-----:x-----
 
@@ -70,13 +75,17 @@ COMPILING USING CONFIGURE
   that the makefile refers to wx-config as above. Unless you have used
   "make install" to install wxWindows, wx-config won't be found, so
   either edit the makefile to hard-wire the flags, or place wx-config
-  where it will be found by the makefile.
+  where it will be found by the makefile, or add the directory where you have
+  installed wxWindows to your PATH.
 
 - If switching between wxMotif and wxGTK, you should remove the
   config.cache file manually before running configure again.
 
 COMPILING USING MAKEFILES
 =========================
+
+- Copy the file include/wx/motif/setup0.h to include/wx/motif/setup.h and
+  edit it if you wish to enable/disable some library features
 
 - Choose a .env file from src/makeenvs that matches your
   environment, and copy it to src/make.env. These are the
@@ -118,15 +127,14 @@ Troubleshooting
   lex.
 
 - Solaris compilation with gcc: if the compiler has problems with the variable argument
-  functions, try putting the gcc fixinclude file paths early in the
-  include path.
+  functions, try putting the gcc fixinclude file paths early in the include
+  path.
 
 - If you operator-related compile errors or strange memory problems
   (for example in deletion of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS
   and wxUSE_MEMORY_TRACING to 0 in setup.h, and recompile.
 
-- If you get an internal compiler error in gcc, turn off
-  optimisations.
+- If you get an internal compiler error in gcc, turn off optimisations.
 
 - Problems with XtDestroyWidget crashing in ~wxWindow have been
   reported on SGI IRIX 6.4. This has not yet been resolved, so
@@ -154,7 +162,10 @@ Other Notes
 - Better installation and makefile systems are
   required. A revised configure system is in preparation.
 
-- Debugging mode is switched on by default. To compile in non-debug
+- Debugging mode is switched on by default in the makefiles, but using
+  configure will create a release build of the library by default: it's
+  recommended to use --with-debug_info and --with-debug_flag configure
+  switches while developing your application. To compile in non-debug
   mode, remove the -D__WXDEBUG__ switch in make.env (or if using the
   configure system, change --with-debug_flag to --without_debug_flag
   and --with-debug_info to --without-debug_info in the makewxmotif
@@ -168,8 +179,11 @@ Other Notes
 - Thread support is switched off by default in setup.h (wxUSE_THREADS)
   because standard Unices often do not have the necessary thread library
   installed. Please see ../docs/gtk/install.txt for more details on this.
-  For Linux, the problem is expected to go away with future
-  distributions of the operating system.
+  The systems for which thread support is known to work are Linux with libc6
+  (a.k.a. glibc2), Solaris 2.5 and 2.6 (provided that X libraries are thread
+  safe) and, to some extent, FreeBSD 2.8 and 3.1 (any feedback on thread
+  support under FreeBSD as well as the systems not mentioned here would be
+  appreciated).
 
 - If you run into problems with a missing X11/Xpm.h header, you
   need to install the XPM package. It can be obtained from:
@@ -189,9 +203,9 @@ Bug reports
 -----------
 
 Please send bug reports with a description of your environment,
-compiler and the error message(s) to the wxwin-users mailing list at:
+compiler and the error message(s) to the wxwin-developers mailing list at:
 
-    wxwin-users@wx.dent.med.uni-muenchen.de
+    wxwin-developers@wx.dent.med.uni-muenchen.de
 
 Julian Smart, February 1999.
 julian.smart@ukonline.co.uk
