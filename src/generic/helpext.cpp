@@ -287,7 +287,7 @@ bool wxExtHelpController::LoadFile(const wxString& ifile)
    m_MapList = new wxList;
    m_NumOfEntries = 0;
 
-   FILE *input = wxFopen(mapFile.fn_str(),wxT("rt"));
+   FILE *input = wxFopen(mapFile,wxT("rt"));
    if(! input)
       return false;
    do
