@@ -67,6 +67,8 @@ public:
     virtual ~wxHtmlListBox();
 
     // override some base class virtuals
+    virtual void RefreshLine(size_t line);
+    virtual void RefreshLines(size_t from, size_t to);
     virtual void RefreshAll();
     virtual void SetItemCount(size_t count);
 
