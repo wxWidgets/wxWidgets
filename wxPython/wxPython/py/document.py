@@ -24,7 +24,7 @@ class Document:
         self.filebase = None
         self.fileext = None
         if self.filename:
-            self.filepath = os.path.abspath(self.filename)
+            self.filepath = os.path.realpath(self.filename)
             self.filedir, self.filename = os.path.split(self.filepath)
             self.filebase, self.fileext = os.path.splitext(self.filename)
 
