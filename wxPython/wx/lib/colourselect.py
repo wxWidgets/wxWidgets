@@ -100,6 +100,7 @@ class ColourSelect(wx.BitmapButton):
         bmp = wx.EmptyBitmap(width-bdr, height-bdr)
         dc = wx.MemoryDC()
         dc.SelectObject(bmp)
+        dc.SetFont(self.GetFont())
         label = self.GetLabel()
         # Just make a little colored bitmap
         dc.SetBackground(wx.Brush(self.colour))
