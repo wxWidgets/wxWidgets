@@ -143,7 +143,7 @@ void wxGLContext::SetColour(const char *colour)
 		if(!XAllocColor((Display*) m_window->GetXDisplay(),
                   (Colormap) wxTheApp->GetMainColormap(m_window->GetXDisplay()),
                   &exact_def)) {
-		    wxDebugMsg("wxGLCanvas: cannot allocate color\n");
+		    wxLogError("wxGLCanvas: cannot allocate color\n");
 		    return;
 		}
 		pix = the_colour->m_pixel = exact_def.pixel;
@@ -245,7 +245,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
 
     // Check for the presence of the GLX extension
     if(!glXQueryExtension(display, NULL, NULL)) {
-	wxDebugMsg("wxGLCanvas: GLX extension is missing\n");
+	wxLogError("wxGLCanvas: GLX extension is missing\n");
 	return false;
     }
 
