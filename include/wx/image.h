@@ -136,7 +136,7 @@ public:
 class WXDLLEXPORT wxImage: public wxObject
 {
 public:
-    wxImage();
+    wxImage(){}
     wxImage( int width, int height, bool clear = true );
     wxImage( int width, int height, unsigned char* data, bool static_data = false );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );

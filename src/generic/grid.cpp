@@ -206,7 +206,7 @@ public:
                   wxGridRowLabelWindow *rowLblWin,
                   wxGridColLabelWindow *colLblWin,
                   wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~wxGridWindow();
+    ~wxGridWindow(){}
 
     void ScrollWindow( int dx, int dy, const wxRect *rect );
 
@@ -3697,11 +3697,6 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
     m_colLabelWin = colLblWin;
-}
-
-
-wxGridWindow::~wxGridWindow()
-{
 }
 
 

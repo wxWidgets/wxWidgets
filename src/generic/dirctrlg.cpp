@@ -375,10 +375,6 @@ wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
     m_isDir = isDir;
 }
 
-wxDirItemData::~wxDirItemData()
-{
-}
-
 void wxDirItemData::SetNewDirName(const wxString& path)
 {
     m_path = path;

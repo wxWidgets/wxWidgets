@@ -481,7 +481,7 @@ private:
 class WXDLLEXPORT wxBitmapList : public wxList
 {
 public:
-    wxBitmapList();
+    wxBitmapList(){}
     ~wxBitmapList();
 
     void AddBitmap(wxBitmap *bitmap);

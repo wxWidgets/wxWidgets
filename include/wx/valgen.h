@@ -30,7 +30,7 @@ public:
   wxGenericValidator(wxArrayInt* val);
   wxGenericValidator(const wxGenericValidator& copyFrom);
 
-  ~wxGenericValidator();
+  ~wxGenericValidator(){}
 
   // Make a clone of this validator (or return NULL) - currently necessary
   // if you're passing a reference to a validator.

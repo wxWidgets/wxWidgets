@@ -1839,10 +1839,6 @@ wxDocChildFrame::wxDocChildFrame(wxDocument *doc,
         view->SetFrame(this);
 }
 
-wxDocChildFrame::~wxDocChildFrame()
-{
-}
-
 // Extend event processing to search the view's event table
 bool wxDocChildFrame::ProcessEvent(wxEvent& event)
 {

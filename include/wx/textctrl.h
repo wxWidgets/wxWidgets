@@ -254,8 +254,8 @@ public:
     // creation
     // --------
 
-    wxTextCtrlBase();
-    ~wxTextCtrlBase();
+    wxTextCtrlBase(){}
+    ~wxTextCtrlBase(){}
 
     // accessors
     // ---------

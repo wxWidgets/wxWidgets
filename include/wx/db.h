@@ -362,7 +362,7 @@ public:
     SWORD          i_sqlDataType;
 
     wxDbColFor();
-    ~wxDbColFor();
+    ~wxDbColFor(){}
 
     void           Initialize();
     int            Format(int Nation, int dbDataType, SWORD sqlDataType, short columnSize, short decimalDigits);

@@ -469,7 +469,7 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long type = wxDEFAULT_FRAME_STYLE,
                     const wxString& name = wxT("frame"));
-    ~wxDocChildFrame();
+    ~wxDocChildFrame(){}
 
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);

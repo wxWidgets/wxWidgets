@@ -110,10 +110,6 @@ wxImage wxNullImage;
 
 IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
 
-wxImage::wxImage()
-{
-}
-
 wxImage::wxImage( int width, int height, bool clear )
 {
     Create( width, height, clear );

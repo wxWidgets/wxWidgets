@@ -100,10 +100,6 @@ bool wxGenericValidator::Copy(const wxGenericValidator& val)
     return true;
 }
 
-wxGenericValidator::~wxGenericValidator()
-{
-}
-
 // Called to transfer data to the window
 bool wxGenericValidator::TransferToWindow(void)
 {

@@ -60,10 +60,6 @@ wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
     otherWin = (wxWindowBase *) NULL;
 }
 
-wxIndividualLayoutConstraint::~wxIndividualLayoutConstraint()
-{
-}
-
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
 {
     if (rel == wxSameAs)
@@ -958,10 +954,6 @@ wxLayoutConstraints::wxLayoutConstraints()
     centreY.SetEdge(wxCentreY);
     width.SetEdge(wxWidth);
     height.SetEdge(wxHeight);
-}
-
-wxLayoutConstraints::~wxLayoutConstraints()
-{
 }
 
 bool wxLayoutConstraints::SatisfyConstraints(wxWindowBase *win, int *nChanges)

@@ -665,10 +665,6 @@ void wxDeleteStockLists()
 // wxTheXXXList stuff (semi-obsolete)
 // ============================================================================
 
-wxBitmapList::wxBitmapList()
-{
-}
-
 wxBitmapList::~wxBitmapList ()
 {
     wxList::compatibility_iterator node = GetFirst ();

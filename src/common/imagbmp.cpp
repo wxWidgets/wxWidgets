@@ -453,7 +453,7 @@ typedef struct
 
 bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                              int bpp, int ncolors, int comp,
-                             off_t bmpOffset, wxInputStream& stream,
+                             wxFileOffset bmpOffset, wxInputStream& stream,
                              bool verbose, bool IsBmp, bool hasPalette)
 {
     wxInt32         aDword, rmask = 0, gmask = 0, bmask = 0;
@@ -1210,7 +1210,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
     ICONDIR IconDir;
 
-    off_t iPos = stream.TellI();
+    wxFileOffset iPos = stream.TellI();
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
     // nType is 1 for Icons, 2 for Cursors:
@@ -1275,7 +1275,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 int wxICOHandler::GetImageCount(wxInputStream& stream)
 {
     ICONDIR IconDir;
-    off_t iPos = stream.TellI();
+    wxFileOffset iPos = stream.TellI();
     stream.SeekI(0);
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);

@@ -241,11 +241,6 @@ wxDbColFor::wxDbColFor()
 }  // wxDbColFor::wxDbColFor()
 
 
-wxDbColFor::~wxDbColFor()
-{
-}  // wxDbColFor::~wxDbColFor()
-
-
 /********** wxDbColFor::Initialize() **********/
 void wxDbColFor::Initialize()
 {

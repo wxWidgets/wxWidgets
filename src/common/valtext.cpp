@@ -79,10 +79,6 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
-wxTextValidator::~wxTextValidator()
-{
-}
-
 static bool wxIsAlpha(const wxString& val)
 {
     int i;

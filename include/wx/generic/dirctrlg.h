@@ -64,7 +64,7 @@ class WXDLLEXPORT wxDirItemData : public wxTreeItemData
 {
 public:
     wxDirItemData(const wxString& path, const wxString& name, bool isDir);
-    ~wxDirItemData();
+    ~wxDirItemData(){}
     void SetNewDirName(const wxString& path);
 
     bool HasSubDirs() const;

@@ -54,18 +54,6 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
 
 // ----------------------------------------------------------------------------
-// ctor
-// ----------------------------------------------------------------------------
-
-wxTextCtrlBase::wxTextCtrlBase()
-{
-}
-
-wxTextCtrlBase::~wxTextCtrlBase()
-{
-}
-
-// ----------------------------------------------------------------------------
 // style functions - not implemented here
 // ----------------------------------------------------------------------------
 

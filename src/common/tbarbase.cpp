@@ -114,10 +114,6 @@ bool wxToolBarToolBase::SetLongHelp(const wxString& help)
     return true;
 }
 
-wxToolBarToolBase::~wxToolBarToolBase()
-{
-}
-
 // ----------------------------------------------------------------------------
 // wxToolBarBase adding/deleting items
 // ----------------------------------------------------------------------------
