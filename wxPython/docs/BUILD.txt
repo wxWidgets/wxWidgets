@@ -97,7 +97,7 @@ place, then do the same for wxPython.
 		     --enable-monolithic \
 
    By default GTK2 will be selected if it is on your build system.  To
-   force the use of GTK 1.2.x then add::
+   force the use of GTK 1.2.x add this flag::
 
 		      --disable-gtk2 \
 
