@@ -341,15 +341,15 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 
 #if wxUSE_WCHAR_T
 // from wide string
-wxString::wxString(const wchar_t *pwz)
+wxString::wxString(const wchar_t *pwz, wxMBConv& conv)
 {
   // first get necessary size
-  size_t nLen = pwz ? wxWC2MB((char *) NULL, pwz, 0) : 0;
+  size_t nLen = pwz ? conv.WC2MB((char *) NULL, pwz, 0) : 0;
 
   // empty?
   if ( (nLen != 0) && (nLen != (size_t)-1) ) {
     AllocBuffer(nLen);
-    wxWC2MB(m_pchData, pwz, nLen);
+    conv.WC2MB(m_pchData, pwz, nLen);
   }
   else {
     Init();

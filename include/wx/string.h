@@ -321,6 +321,8 @@ public:
     // (default value of wxSTRING_MAXLEN means take all the string)
   wxString(const wxChar *psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
+  wxString(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
+    { InitWith(psz, 0, nLength); }
 
 #if wxUSE_UNICODE
     // from multibyte string
@@ -334,13 +336,10 @@ public:
     // from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
     { InitWith((const char*)psz, 0, nLength); }
-    // from multibyte string
-  wxString(const char *psz, wxMBConv& WXUNUSED(conv) , size_t nLength = wxSTRING_MAXLEN)
-    { InitWith(psz, 0, nLength); }
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
-  wxString(const wchar_t *pwz);
+  wxString(const wchar_t *pwz, wxMBConv& conv = wxConvLibc);
 #endif // !wxUSE_WCHAR_T
 
     // from wxCharBuffer
