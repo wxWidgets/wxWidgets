@@ -54,7 +54,10 @@ wxMSW:
 - build system changed: setup.h is not a static file in include/wx any more
   but is created as part of the build process under lib/<toolkit>/wx/include
   where <toolkit> is of the form (msw|univ)[dll][u][d]. You'll need to update
-  the include path in your make/project files appropriately.
+  the include path in your make/project files appropriately. Furthermore,
+  xpm.lib is no longer used by wxMSW, it was superseded by the wxXPMDecoder
+  class. You'll need to remove all references to xpm.lib from your 
+  make/project files.
 
 - child frames appear in the taskbar by default now, use wxFRAME_NO_TASKBAR
   style to avoid it, wxFRAME_FLOAT_ON_PARENT style is now obsolete and has no
