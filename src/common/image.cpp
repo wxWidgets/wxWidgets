@@ -1096,215 +1096,333 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
 
 wxBitmap wxImage::ConvertToBitmap() const
 {
+// sizeLimit is the MS upper limit for the DIB size
+    int sizeLimit = 1024*768*3; 
 
-  wxBitmap bitmap;
-  wxCHECK_MSG( Ok(), bitmap, "invalid image" );
-  int width = GetWidth();
-  int height = GetHeight();
-  bitmap.SetWidth( width );
-  bitmap.SetHeight( height );
-  bitmap.SetDepth( wxDisplayDepth() );
+// width and height of the device-dependent bitmap
+    int width = GetWidth();
+    int bmpHeight = GetHeight();
 
-  int headersize = sizeof(BITMAPINFOHEADER);
-  LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
-  wxCHECK_MSG( lpDIBh, bitmap, "could not allocate memory for DIB header" );
+// calc the number of bytes per scanline and padding
+    int bytePerLine = width*3;
+    int sizeDWORD = sizeof( DWORD );
+    div_t lineBoundary = div( bytePerLine, sizeDWORD );
+    int padding = 0;
+    if( lineBoundary.rem > 0 )  
+    {
+        padding = sizeDWORD - lineBoundary.rem;
+        bytePerLine += padding;
+    }
+// calc the number of DIBs and heights of DIBs
+    int numDIB = 1;
+    int hRemain = 0;
+    int height = sizeLimit/bytePerLine;
+    if( height >= bmpHeight )
+        height = bmpHeight; 
+    else
+    {
+        div_t result = div( bmpHeight, height );
+        numDIB = result.quot;
+	hRemain = result.rem;
+	if( hRemain >0 )  numDIB++;
+    }
 
+// set bitmap parameters
+    wxBitmap bitmap;
+    wxCHECK_MSG( Ok(), bitmap, "invalid image" );
+    bitmap.SetWidth( width );
+    bitmap.SetHeight( bmpHeight );
+    bitmap.SetDepth( wxDisplayDepth() );
+
+// create a DIB header
+    int headersize = sizeof(BITMAPINFOHEADER);
+    LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+    wxCHECK_MSG( lpDIBh, bitmap, "could not allocate memory for DIB header" );
 // Fill in the DIB header
-  lpDIBh->bmiHeader.biSize = headersize;
-  lpDIBh->bmiHeader.biWidth = width;
-  lpDIBh->bmiHeader.biHeight = -height;
-  lpDIBh->bmiHeader.biSizeImage = width * height * 3;
+    lpDIBh->bmiHeader.biSize = headersize;
+    lpDIBh->bmiHeader.biWidth = (DWORD)width;
+    lpDIBh->bmiHeader.biHeight = (DWORD)(-height);
+    lpDIBh->bmiHeader.biSizeImage = bytePerLine*height;
+//   the general formula for biSizeImage:
+//      ( ( ( ((DWORD)width*24) +31 ) & ~31 ) >> 3 ) * height;
+    lpDIBh->bmiHeader.biPlanes = 1;
+    lpDIBh->bmiHeader.biBitCount = 24;
+    lpDIBh->bmiHeader.biCompression = BI_RGB;
+    lpDIBh->bmiHeader.biClrUsed = 0;
+// These seem not really needed for our purpose here.
+    lpDIBh->bmiHeader.biClrImportant = 0;
+    lpDIBh->bmiHeader.biXPelsPerMeter = 0;
+    lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+// memory for DIB data
+    unsigned char *lpBits;
+    lpBits = (unsigned char *)malloc( lpDIBh->bmiHeader.biSizeImage );
+    if( !lpBits )
+    {
+        wxFAIL_MSG( "could not allocate memory for DIB" );
+        free( lpDIBh );
+        return bitmap;
+    }
 
-  lpDIBh->bmiHeader.biPlanes = 1;
-  lpDIBh->bmiHeader.biBitCount = 24;
-  lpDIBh->bmiHeader.biCompression = BI_RGB;
-  lpDIBh->bmiHeader.biClrUsed = 0;
+// create and set the device-dependent bitmap
+    HDC hdc = ::GetDC(NULL);
+    HDC memdc = ::CreateCompatibleDC( hdc );
+    HBITMAP hbitmap;
+    hbitmap = ::CreateCompatibleBitmap( hdc, width, bmpHeight );
+    ::SelectObject( memdc, hbitmap); 
 
-// These seem not needed for our purpose here.
-//  lpDIBh->bmiHeader.biClrImportant = 0;
-//  lpDIBh->bmiHeader.biXPelsPerMeter = 0;
-//  lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+// copy image data into DIB data and then into DDB (in a loop)
+    unsigned char *data = GetData();
+    int i, j, n;
+    int origin = 0;
+    unsigned char *ptdata = data;
+    unsigned char *ptbits;
 
-  unsigned char *lpBits = (unsigned char *) malloc( width*height*3 );
-  if( !lpBits )
-  {
-      wxFAIL_MSG( "could not allocate memory for DIB" );
-      free( lpDIBh );
-      return bitmap;
-  }
+    for( n=0; n<numDIB; n++ )
+    {
+	if( numDIB > 1 && n == numDIB-1 && hRemain > 0 )
+	{
+	    // redefine height and size of the (possibly) last smaller DIB
+	    // memory is not reallocated
+	    height = hRemain; 
+            lpDIBh->bmiHeader.biHeight = (DWORD)(-height);
+            lpDIBh->bmiHeader.biSizeImage = bytePerLine*height;
+	}
+        ptbits = lpBits;
 
-  unsigned char *data = GetData();
-
-  unsigned char *ptdata = data, *ptbits = lpBits;
-  for( int i=0; i<width*height; i++ )
-  {
-    *(ptbits++) = *(ptdata+2);
-    *(ptbits++) = *(ptdata+1);
-    *(ptbits++) = *(ptdata  );
-    ptdata += 3;
-  }
-
-  HDC hdc = ::GetDC(NULL);
-
-  HBITMAP hbitmap;
-  hbitmap = CreateDIBitmap( hdc, &(lpDIBh->bmiHeader), CBM_INIT, lpBits, lpDIBh, DIB_RGB_COLORS );
-
+        for( j=0; j<height; j++ )
+        {
+            for( i=0; i<width; i++ )
+            {
+                *(ptbits++) = *(ptdata+2);
+                *(ptbits++) = *(ptdata+1);
+                *(ptbits++) = *(ptdata  );
+                ptdata += 3;
+	    }
+	    for( i=0; i< padding; i++ )   *(ptbits++) = 0;
+        }
+        ::StretchDIBits( memdc, 0, origin, width, height,\
+	    0, 0, width, height, lpBits, lpDIBh, DIB_RGB_COLORS, SRCCOPY);
+	origin += height;
+// if numDIB = 1,  lines below can also be used
+//    hbitmap = CreateDIBitmap( hdc, &(lpDIBh->bmiHeader), CBM_INIT, lpBits, lpDIBh, DIB_RGB_COLORS );
 // The above line is equivalent to the following two lines.
 //    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
 //    ::SetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS);
 // or the following lines
 //    hbitmap = ::CreateCompatibleBitmap( hdc, width, height );
 //    HDC memdc = ::CreateCompatibleDC( hdc );
-//    ::SelectObject( memdc, hbitmap);
+//    ::SelectObject( memdc, hbitmap); 
 //    ::SetDIBitsToDevice( memdc, 0, 0, width, height,
-//          0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
-//    ::SelectObject( memdc, 0 );
-//    ::DeleteDC( memdc );
-
-  bitmap.SetHBITMAP( (WXHBITMAP) hbitmap );
-
-  if( HasMask() )
-  {
-    unsigned char r = GetMaskRed();
-    unsigned char g = GetMaskGreen();
-    unsigned char b = GetMaskBlue();
-    unsigned char zero = 0, one = 255;
-    ptdata = data;
-    ptbits = lpBits;
-    for( int i=0; i<width*height; i++ )
-    {
-      if( (*(ptdata++)!=r) | (*(ptdata++)!=g) | (*(ptdata++)!=b) )
-      {
-        *(ptbits++) = one;
-        *(ptbits++) = one;
-        *(ptbits++) = one;
-      }
-      else
-      {
-        *(ptbits++) = zero;
-        *(ptbits++) = zero;
-        *(ptbits++) = zero;
-      }
+//	    0, 0, 0, height, (void *)lpBits, lpDIBh, DIB_RGB_COLORS);
+//    ::SelectObject( memdc, 0 ); 
+//    ::DeleteDC( memdc ); 
     }
-    hbitmap = ::CreateBitmap( (WORD)width, (WORD)height, 1, 1, NULL );
-    ::SetDIBits( hdc, hbitmap, 0, (WORD)height, lpBits, lpDIBh, DIB_RGB_COLORS);
-    wxMask *mask = new wxMask();
-    mask->SetMaskBitmap( (WXHBITMAP) hbitmap );
-    bitmap.SetMask( mask );
+    bitmap.SetHBITMAP( (WXHBITMAP) hbitmap );
 
+// similarly, created an mono-bitmap for the possible mask
+    if( HasMask() )
+    {
+        hbitmap = ::CreateBitmap( (WORD)width, (WORD)bmpHeight, 1, 1, NULL );
+        ::SelectObject( memdc, hbitmap); 
+        if( numDIB == 1 )   height = bmpHeight; 
+        else                height = sizeLimit/bytePerLine;
+        lpDIBh->bmiHeader.biHeight = (DWORD)(-height);
+        lpDIBh->bmiHeader.biSizeImage = bytePerLine*height;
+        origin = 0;
+        unsigned char r = GetMaskRed();
+        unsigned char g = GetMaskGreen();
+        unsigned char b = GetMaskBlue();
+        unsigned char zero = 0, one = 255;
+        ptdata = data;
+        for( n=0; n<numDIB; n++ )
+        {
+            if( numDIB > 1 && n == numDIB - 1 && hRemain > 0 )
+            {
+	        // redefine height and size of the (possibly) last smaller DIB
+	        // memory is not reallocated
+	        height = hRemain; 
+                lpDIBh->bmiHeader.biHeight = (DWORD)(-height);
+                lpDIBh->bmiHeader.biSizeImage = bytePerLine*height;
+	    }
+            ptbits = lpBits;
+            for( int j=0; j<height; j++ )
+            {
+                for( int i=0; i<width; i++ )
+                {
+                    if( (*(ptdata++)!=r) | (*(ptdata++)!=g) | (*(ptdata++)!=b) )
+                    {
+                        *(ptbits++) = one;
+                        *(ptbits++) = one;
+                        *(ptbits++) = one;
+                    }
+                    else
+                    {
+                        *(ptbits++) = zero;
+                        *(ptbits++) = zero;
+                        *(ptbits++) = zero;
+                    }
+                }
+	        for( i=0; i< padding; i++ )   *(ptbits++) = zero;
+            }
+            ::StretchDIBits( memdc, 0, origin, width, height,\
+	        0, 0, width, height, lpBits, lpDIBh, DIB_RGB_COLORS, SRCCOPY);
+	    origin += height;
+	}
+// create a wxMask object
+        wxMask *mask = new wxMask();
+        mask->SetMaskBitmap( (WXHBITMAP) hbitmap );
+        bitmap.SetMask( mask );
+// It will be deleted when the wxBitmap object is deleted (as of 01/1999)
 /* The following can also be used but is slow to run
-    wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
-    wxMask *mask = new wxMask( bitmap, colour );
-    bitmap.SetMask( mask );
+        wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
+        wxMask *mask = new wxMask( bitmap, colour );
+        bitmap.SetMask( mask );
 */
-  }
+    }
 
-  ::ReleaseDC(NULL, hdc);
-  free(lpDIBh);
-  free(lpBits);
+// free allocated resources  
+    ::SelectObject( memdc, 0 ); 
+    ::DeleteDC( memdc ); 
+    ::ReleaseDC(NULL, hdc);   
+    free(lpDIBh);
+    free(lpBits);
 
-  if( bitmap.GetHBITMAP() )
-    bitmap.SetOk( TRUE );
-  else
-    bitmap.SetOk( FALSE );
-
-  return bitmap;
+// check the wxBitmap object
+    if( bitmap.GetHBITMAP() )
+        bitmap.SetOk( TRUE );
+    else
+        bitmap.SetOk( FALSE );
+   
+    return bitmap;
 }
-
 
 wxImage::wxImage( const wxBitmap &bitmap )
 {
-  if( !bitmap.Ok() )
-  {
-      wxFAIL_MSG( "invalid bitmap" );
-      return;
-  }
-
-  int width = bitmap.GetWidth();
-  int height = bitmap.GetHeight();
-  Create( width, height );
-  unsigned char *data = GetData();
-  if( !data )
-  {
-      wxFAIL_MSG( "could not allocate data for image" );
-      return;
-  }
-
-  int headersize = sizeof(BITMAPINFOHEADER);
-  LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
-  if( !lpDIBh )
-  {
-      wxFAIL_MSG( "could not allocate data for DIB header" );
-      free( data );
-      return;
-  }
-
-// Fill in the DIB header
-  lpDIBh->bmiHeader.biSize = headersize;
-  lpDIBh->bmiHeader.biWidth = width;
-  lpDIBh->bmiHeader.biHeight = -height;
-  lpDIBh->bmiHeader.biSizeImage = width * height * 3;
-
-  lpDIBh->bmiHeader.biPlanes = 1;
-  lpDIBh->bmiHeader.biBitCount = 24;
-  lpDIBh->bmiHeader.biCompression = BI_RGB;
-  lpDIBh->bmiHeader.biClrUsed = 0;
-
-// These seem not needed for our purpose here.
-//    lpDIBh->bmiHeader.biClrImportant = 0;
-//    lpDIBh->bmiHeader.biXPelsPerMeter = 0;
-//    lpDIBh->bmiHeader.biYPelsPerMeter = 0;
-
-  unsigned char *lpBits = (unsigned char *) malloc( width*height*3 );
-  if( !lpBits )
-  {
-      wxFAIL_MSG( "could not allocate data for DIB" );
-      free( data );
-      free( lpDIBh );
-      return;
-  }
-
-  HBITMAP hbitmap;
-  hbitmap = (HBITMAP) bitmap.GetHBITMAP();
-  HDC hdc = ::GetDC(NULL);
-  ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-
-  unsigned char *ptdata = data, *ptbits = lpBits;
-  for( int i=0; i<width*height; i++ )
-  {
-    *(ptdata++) = *(ptbits+2);
-    *(ptdata++) = *(ptbits+1);
-    *(ptdata++) = *(ptbits  );
-    ptbits += 3;
-  }
-
-  if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
-  {
-    hbitmap = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
-    HDC memdc = ::CreateCompatibleDC( hdc );
-    ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
-    ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
-    ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-    ::DeleteDC( memdc );
-    unsigned char r=16, g=16, b=16;  // background set to RGB(16,16,16)
-    ptdata = data;
-    ptbits = lpBits;
-    for( int i=0; i<width*height; i++ )
+// check the bitmap
+    if( !bitmap.Ok() )
     {
-      if( *ptbits != 0 )
-      {
-        *(ptdata++)  = r;
-        *(ptdata++)  = g;
-        *(ptdata++)  = b;
-      }
-      ptbits += 3;
+        wxFAIL_MSG( "invalid bitmap" );
+        return;
     }
-    SetMaskColour( r, g, b );
-  }
 
-  ::ReleaseDC(NULL, hdc);
-  free(lpDIBh);
-  free(lpBits);
+// create an wxImage object
+    int width = bitmap.GetWidth();
+    int height = bitmap.GetHeight();
+    Create( width, height ); 
+    unsigned char *data = GetData();
+    if( !data )
+    {
+        wxFAIL_MSG( "could not allocate data for image" );
+        return;
+    }
+
+// calc the number of bytes per scanline and padding in the DIB
+    int bytePerLine = width*3;
+    int sizeDWORD = sizeof( DWORD );
+    div_t lineBoundary = div( bytePerLine, sizeDWORD );
+    int padding = 0;
+    if( lineBoundary.rem > 0 )  
+    {
+        padding = sizeDWORD - lineBoundary.rem;
+        bytePerLine += padding;
+    }
+
+// create a DIB header
+    int headersize = sizeof(BITMAPINFOHEADER);
+    LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
+    if( !lpDIBh )
+    {
+        wxFAIL_MSG( "could not allocate data for DIB header" );
+        free( data );
+        return;
+    }
+// Fill in the DIB header
+    lpDIBh->bmiHeader.biSize = headersize;
+    lpDIBh->bmiHeader.biWidth = width;
+    lpDIBh->bmiHeader.biHeight = -height;
+    lpDIBh->bmiHeader.biSizeImage = bytePerLine * height;
+    lpDIBh->bmiHeader.biPlanes = 1;
+    lpDIBh->bmiHeader.biBitCount = 24;
+    lpDIBh->bmiHeader.biCompression = BI_RGB;
+    lpDIBh->bmiHeader.biClrUsed = 0;
+// These seem not really needed for our purpose here.
+    lpDIBh->bmiHeader.biClrImportant = 0;
+    lpDIBh->bmiHeader.biXPelsPerMeter = 0;
+    lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+// memory for DIB data
+    unsigned char *lpBits;
+    lpBits = (unsigned char *) malloc( lpDIBh->bmiHeader.biSizeImage );
+    if( !lpBits )
+    {
+        wxFAIL_MSG( "could not allocate data for DIB" );
+        free( data );
+        free( lpDIBh );
+        return;
+    }
+    
+// copy data from the device-dependent bitmap to the DIB
+    HDC hdc = ::GetDC(NULL);
+    HBITMAP hbitmap;
+    hbitmap = (HBITMAP) bitmap.GetHBITMAP();
+    ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+	
+// copy DIB data into the wxImage object
+    int i, j;
+    unsigned char *ptdata = data;
+    unsigned char *ptbits = lpBits;
+    for( i=0; i<height; i++ )
+    {
+        for( j=0; j<width; j++ )
+        {
+            *(ptdata++) = *(ptbits+2);
+            *(ptdata++) = *(ptbits+1);
+            *(ptdata++) = *(ptbits  );
+            ptbits += 3;
+	}
+        ptbits += padding;
+    }	
+      
+// similarly, set data according to the possible mask bitmap
+    if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
+    {
+        hbitmap = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
+	// memory DC created, color set, data copied, and memory DC deleted
+        HDC memdc = ::CreateCompatibleDC( hdc );
+        ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
+        ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
+        ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+        ::DeleteDC( memdc ); 
+// background color set to RGB(16,16,16) in consistent with wxGTK
+        unsigned char r=16, g=16, b=16;  
+        ptdata = data;
+        ptbits = lpBits;
+        for( i=0; i<height; i++ )
+        {
+            for( j=0; j<width; j++ )
+            {
+                if( *ptbits != 0 )
+		    ptdata += 3;
+		else
+                {
+                    *(ptdata++)  = r;
+                    *(ptdata++)  = g;
+                    *(ptdata++)  = b;
+		}
+                ptbits += 3;
+            }
+            ptbits += padding;
+        }       
+        SetMaskColour( r, g, b );
+        SetMask( TRUE );
+    }	
+    else
+    {
+        SetMask( FALSE );
+    }	
+// free allocated resources      
+    ::ReleaseDC(NULL, hdc);   
+    free(lpDIBh);
+    free(lpBits);
 }
 
 #endif
