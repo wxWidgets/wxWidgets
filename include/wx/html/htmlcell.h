@@ -49,8 +49,8 @@ public:
         m_toPos = toPos;
     }
     
-    wxHtmlCell *GetFromCell() const { return m_fromCell; }
-    wxHtmlCell *GetToCell() const { return m_toCell; }
+    const wxHtmlCell *GetFromCell() const { return m_fromCell; }
+    const wxHtmlCell *GetToCell() const { return m_toCell; }
     
     // these values are *relative* to From/To cell's origin:
     const wxPoint& GetFromPos() const { return m_fromPos; }
