@@ -27,6 +27,8 @@
 class WXDLLEXPORT wxFontEnumerator
 {
 public:
+    wxFontEnumerator() : m_Facenames(NULL), m_Encodings(NULL) { }
+
     // start enumerating font facenames (either all of them or those which
     // support the given encoding) - will result in OnFacename() being
     // called for each available facename (until they are exhausted or
@@ -47,16 +49,41 @@ public:
     // TRUE to continue with it
 
     // called by EnumerateFacenames
-    virtual bool OnFacename(const wxString& WXUNUSED(facename))
-        { return FALSE; }
+    virtual bool OnFacename(const wxString& facename)
+        { 
+            if (m_Facenames == NULL) m_Facenames = new wxArrayString;
+            m_Facenames -> Add(facename);
+            return TRUE;
+        }
 
     // called by EnumerateEncodings
     virtual bool OnFontEncoding(const wxString& WXUNUSED(facename),
-                                const wxString& WXUNUSED(encoding))
-        { return FALSE; }
+                                const wxString& encoding)
+        { 
+            if (m_Encodings == NULL) m_Encodings = new wxArrayString;
+            m_Encodings -> Add(encoding);
+            return TRUE;
+        }
+        
+    // convenience function that returns array of facenames. Cannot be called
+    // before EnumerateFacenames.
+    wxArrayString *GetFacenames() 
+        { return m_Facenames; }
 
+    // convenience function that returns array of encodings.
+    // Cannot be called before EnumerateEncodings.
+    wxArrayString *GetEncodings() 
+        { return m_Encodings; }
+        
     // virtual dtor for the base class
-    virtual ~wxFontEnumerator() { }
+    virtual ~wxFontEnumerator() 
+        { 
+            if (m_Facenames) delete m_Facenames;
+            if (m_Encodings) delete m_Encodings;
+        }
+    
+private:
+    wxArrayString *m_Facenames, *m_Encodings;
 };
 
 #endif // _WX_FONTENUM_H_

@@ -72,6 +72,26 @@ Call \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} for each
 encoding supported by the given font - or for each encoding supported by at
 least some font if {\it font} is not specified.
 
+
+\membersection{wxFontEnumerator::GetEncodings}\label{wxfontenumeratorgetencodings}
+
+\func{wxArrayString*}{GetEncodings}{\void}
+
+Return array of strings containing all encodings found by 
+\helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings}. This is convenience function. It is 
+based on default implementation of \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} so don't expect
+it to work if you overwrite that method.
+
+\membersection{wxFontEnumerator::GetFacenames}\label{wxfontenumeratorgetfacenames}
+
+\func{wxArrayString*}{GetFacenames}{\void}
+
+Return array of strings containing all facenames found by 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames}. This is convenience function. It is 
+based on default implementation of \helpref{OnFacename}{wxfontenumeratoronfacename} so don't expect
+it to work if you overwrite that method.
+
+
 \membersection{wxFontEnumerator::OnFacename}\label{wxfontenumeratoronfacename}
 
 \func{virtual bool}{OnFacename}{\param{const wxString\& }{font}}
