@@ -144,7 +144,20 @@
       return GetObjectW(h, i, buffer);
    #else
       return GetObjectA(h, i, buffer);
-   #endif   
+   #endif
+   }
+#endif
+
+
+#ifdef GetMessage
+   #undef GetMessage
+   inline int GetMessage(LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
+   {
+   #ifdef _UNICODE
+      return GetMessageW(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+   #else
+      return GetMessageA(lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax);
+   #endif
    }
 #endif
 
