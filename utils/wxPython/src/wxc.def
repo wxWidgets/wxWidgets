@@ -1,6 +1,0 @@
-EXPORTS
-  initwxc
-  SWIG_GetPtr
-  SWIG_MakePtr
-  SWIG_RegisterMapping
-  SWIG_newvarlink
