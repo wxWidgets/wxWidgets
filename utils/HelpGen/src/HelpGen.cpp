@@ -436,10 +436,10 @@ private:
 static void usage()
 {
     wxString prog = g_argv[0];
-    wxString basename = prog.BeforeLast('/');
+    wxString basename = prog.AfterLast('/');
 #ifdef __WXMSW__
     if ( !basename )
-        basename = prog.BeforeLast('\\');
+        basename = prog.AfterLast('\\');
 #endif
     if ( !basename )
         basename = prog;
@@ -1938,6 +1938,9 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.10.2.1  2000/03/27 15:29:32  VZ
+   a usage msg cosemtic fix
+
    Revision 1.10  2000/03/11 10:05:23  VS
    now compiles with wxBase
 
