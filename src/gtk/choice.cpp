@@ -281,7 +281,7 @@ void wxChoice::Delete( int n )
         if ( hasObjectData )
             SetClientObject(i, (wxClientData *)itemsData[i]);
         else if ( hasClientData )
-            SetClientDate(i, itemsData[i]);
+            SetClientData(i, itemsData[i]);
     }
 }
 
