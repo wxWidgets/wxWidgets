@@ -21,6 +21,12 @@
 
 #include "wx/toplevel.h"
 
+//
+// NB:  This is currently a private undocumented class -
+// it is stable, but the API is not and will change in the
+// near future
+//
+
 #if ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
 
 class WXDLLEXPORT wxDrawerWindow : public wxTopLevelWindow
