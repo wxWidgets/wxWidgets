@@ -630,7 +630,12 @@ void wxDC::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord xc, wxCoord yc)
 {
 #ifdef __WXWINCE__
-    // FIXME: emulate Arc
+    // Slower emulation since WinCE doesn't support Pie and Arc
+    double r = sqrt( (x1-xc)*(x1-xc) + (y1-yc)*(y1-yc) );
+    double sa = acos((x1-xc)/r)/M_PI*180; // between 0 and 180
+    if( y1>yc ) sa = -sa; // below center
+    double ea = atan2(yc-y2, x2-xc)/M_PI*180;
+    DoDrawEllipticArcRot( xc-r, yc-r, 2*r, 2*r, sa, ea );
 #else
 
 #ifdef __WXMICROWIN__
@@ -921,7 +926,7 @@ void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
 #ifdef __WXWINCE__
-    // FIXME
+    DoDrawEllipticArcRot( x, y, w, h, sa, ea );
 #else
 
 #ifdef __WXMICROWIN__
