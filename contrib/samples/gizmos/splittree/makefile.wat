@@ -4,7 +4,6 @@
 WXDIR = $(%WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-THISDIR = $(WXDIR)\contrib\samples\gizmos\splittree
 
 PROGRAM = tree
 EXTRALIBS = $(WXDIR)\lib\gizmos_w.lib

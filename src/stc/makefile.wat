@@ -10,7 +10,7 @@ EXTRACPPFLAGS = -I$(WXDIR)\contrib\include $(STCEXTRACPPFLAGS)
 
 !include $(WXDIR)\src\makewat.env
 
-STCLIB = $(WXDIR)\lib\stc.lib
+STCLIB = $(WXDIR)\lib\stc_w.lib
 THISDIR = $(WXDIR)\contrib\src\stc
 OUTPUTDIR = $(THISDIR)\
 

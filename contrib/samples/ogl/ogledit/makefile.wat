@@ -8,7 +8,6 @@
 WXDIR = $(%WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-THISDIR = $(WXDIR)\contrib\samples\ogl\ogledit
 
 PROGRAM = ogledit
 EXTRALIBS = $(WXDIR)\lib\ogl_w.lib

@@ -7,7 +7,6 @@
 
 WXDIR = $(%WXWIN)
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-THISDIR = $(WXDIR)\contrib\samples\animate
 
 PROGRAM = anitest
 EXTRALIBS = $(WXDIR)\lib\anim_w.lib

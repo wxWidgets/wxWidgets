@@ -11,33 +11,28 @@
 WXDIR = ..\..\..
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 
-!include $(WXDIR)\src\makewat.env
-
-THISDIR = $(WXDIR)\contrib\src\mmedia
-OUTPUTDIR = $(THISDIR)\
-
-NAME = mmedia
-LNK = $(name).lnk
-
 LIBTARGET=$(WXDIR)\lib\mmedia_w.lib
 
-OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj &
-  g723_40.obj g72x.obj sndaiff.obj sndbase.obj sndcodec.obj &
-  sndcpcm.obj sndfile.obj sndg72x.obj sndpcm.obj sndulaw.obj &
-  sndwav.obj sndwin.obj vidbase.obj vidwin.obj
+OBJECTS = &
+    $(OUTPUTDIR)\cdbase.obj &
+    $(OUTPUTDIR)\cdwin.obj &
+    $(OUTPUTDIR)\g711.obj &
+    $(OUTPUTDIR)\g721.obj &
+    $(OUTPUTDIR)\g723_24.obj &
+    $(OUTPUTDIR)\g723_40.obj &
+    $(OUTPUTDIR)\g72x.obj &
+    $(OUTPUTDIR)\sndaiff.obj &
+    $(OUTPUTDIR)\sndbase.obj &
+    $(OUTPUTDIR)\sndcodec.obj &
+    $(OUTPUTDIR)\sndcpcm.obj &
+    $(OUTPUTDIR)\sndfile.obj &
+    $(OUTPUTDIR)\sndg72x.obj &
+    $(OUTPUTDIR)\sndpcm.obj &
+    $(OUTPUTDIR)\sndulaw.obj &
+    $(OUTPUTDIR)\sndwav.obj &
+    $(OUTPUTDIR)\sndwin.obj &
+    $(OUTPUTDIR)\vidbase.obj &
+    $(OUTPUTDIR)\vidwin.obj
 
-all:     $(LIBTARGET) .SYMBOLIC
-    
-
-$(LIBTARGET): $(OBJECTS)
-	*wlib /b /c /n /P=256 $(SVGLIB) $(OBJECTS)
-
-clean:   .SYMBOLIC
-    -erase *.obj 
-    -erase *.bak
-    -erase *.err 
-    -erase *.pch 
-    -erase $(LIBTARGET) 
-    -erase *.lbc
-
+!include $(WXDIR)\src\makelib.wat
 

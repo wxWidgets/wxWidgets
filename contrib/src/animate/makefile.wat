@@ -1,12 +1,12 @@
-# SVG src makefile for Watcom C++
+# ANIM src makefile for Watcom C++
 
 WXDIR = ..\..\..
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 
-LIBTARGET = $(WXDIR)\lib\svg_w.lib
+LIBTARGET = $(WXDIR)\lib\anim_w.lib
 
 OBJECTS =  &
-    $(OUTPUTDIR)\dcsvg.obj &
+    $(OUTPUTDIR)\animate.obj &
 
 !include $(WXDIR)\src\makelib.wat
 

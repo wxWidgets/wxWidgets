@@ -4,9 +4,6 @@
 WXDIR = $(%WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
-THISDIR = $(WXDIR)\contrib\samples\gizmos\multicell
-
-
 PROGRAM = mtest
 EXTRALIBS = $(WXDIR)\lib\gizmos_w.lib
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
