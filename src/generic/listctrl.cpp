@@ -69,14 +69,13 @@
 #endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
 
 #include "wx/selstore.h"
-
 #include "wx/renderer.h"
+#include "wx/math.h"
 
 #ifdef __WXMAC__
     #include "wx/mac/private.h"
 #endif
 
-#include <math.h>
 
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
@@ -519,7 +518,7 @@ public:
                       const wxString &name = _T("listctrlmainwindow") );
 
     virtual ~wxListMainWindow();
-    
+
     wxWindow *GetMainWindowOfCompositeControl() { return GetParent(); }
 
     bool HasFlag(int flag) const { return m_parent->HasFlag(flag); }
@@ -4332,7 +4331,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 
     if (item.m_itemId > count)
         item.m_itemId = count;
-    
+
     size_t id = item.m_itemId;
 
     m_dirty = true;
@@ -4640,7 +4639,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0,0), size, style );
 
-#ifdef  __WXMAC_CARBON__ 
+#ifdef  __WXMAC_CARBON__
     // Human Interface Guidelines ask us for a special font in this case
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {

@@ -23,8 +23,7 @@
 
 #include "wx/datstrm.h"
 #include "wx/wfstream.h"
-
-#include <math.h> //HUGE
+#include "wx/math.h"
 
 // ----------------------------------------------------------------------------
 // test class

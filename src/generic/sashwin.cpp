@@ -30,7 +30,8 @@
     #include "wx/settings.h"
 #endif
 
-#include <math.h>
+#include "wx/math.h"
+
 #include <stdlib.h>
 
 #include "wx/dcscreen.h"

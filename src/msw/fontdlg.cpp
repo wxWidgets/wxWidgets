@@ -45,8 +45,8 @@
 
 #include "wx/cmndata.h"
 #include "wx/log.h"
+#include "wx/math.h"
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -33,10 +33,10 @@
 #include "wx/module.h"
 #include "wx/hash.h"
 #include "wx/utils.h"
+#include "wx/math.h"
 
 // For memcpy
 #include <string.h>
-#include <math.h>
 
 #ifdef __SALFORDC__
     #undef FAR
@@ -831,13 +831,13 @@ unsigned char wxImage::GetAlpha(int x, int y) const
 bool wxImage::ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b )
 {
     SetAlpha( NULL );
-    
+
     int w = M_IMGDATA->m_width,
         h = M_IMGDATA->m_height;
-    
+
     unsigned char *alpha = GetAlpha();
     unsigned char *data = GetData();
-    
+
     int x,y;
     for (y = 0; y < h; y++)
         for (x = 0; x < w; x++)
@@ -1719,7 +1719,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 {
     int i;
     angle = -angle;     // screen coordinates are a mirror image of "real" coordinates
-    
+
     bool has_alpha = HasAlpha();
 
     // Create pointer-based array to accelerate access to wxImage's data
@@ -1728,7 +1728,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     for (i = 1; i < GetHeight(); i++)
         data[i] = data[i - 1] + (3 * GetWidth());
 
-    // Same for alpha channel    
+    // Same for alpha channel
     unsigned char ** alpha = NULL;
     if (has_alpha)
     {
@@ -1775,7 +1775,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     //      array here (and in fact it would be slower).
     //
     unsigned char * dst = rotated.GetData();
-    
+
     unsigned char * alpha_dst = NULL;
     if (has_alpha)
         alpha_dst = rotated.GetAlpha();
@@ -1866,7 +1866,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
                         *(dst++) = *p;
-                        
+
                         if (has_alpha)
                         {
                             unsigned char *p = alpha[y1] + x1;
@@ -1879,7 +1879,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
                         *(dst++) = *p;
-                        
+
                         if (has_alpha)
                         {
                             unsigned char *p = alpha[y1] + x2;
@@ -1892,7 +1892,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
                         *(dst++) = *p;
-                        
+
                         if (has_alpha)
                         {
                             unsigned char *p = alpha[y2] + x2;
@@ -1905,7 +1905,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
                         *(dst++) = *p;
-                        
+
                         if (has_alpha)
                         {
                             unsigned char *p = alpha[y2] + x1;
@@ -1936,7 +1936,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                             ( (w1 * *v1 + w2 * *v2 +
                                w3 * *v3 + w4 * *v4) /
                               (w1 + w2 + w3 + w4) );
-                              
+
                         if (has_alpha)
                         {
                             unsigned char *v1 = alpha[y1] + (x1);
@@ -1956,7 +1956,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = blank_r;
                     *(dst++) = blank_g;
                     *(dst++) = blank_b;
-                   
+
                     if (has_alpha)
                         *(alpha_dst++) = 0;
                 }
@@ -1981,7 +1981,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = *(p++);
                     *(dst++) = *(p++);
                     *(dst++) = *p;
-                    
+
                     if (has_alpha)
                     {
                         unsigned char *p = alpha[ys] + (xs);
@@ -1993,7 +1993,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = blank_r;
                     *(dst++) = blank_g;
                     *(dst++) = blank_b;
-                    
+
                     if (has_alpha)
                         *(alpha_dst++) = 255;
                 }
@@ -2002,7 +2002,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     }
 
     delete [] data;
-    
+
     if (has_alpha)
         delete [] alpha;
 

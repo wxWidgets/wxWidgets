@@ -46,7 +46,7 @@
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
-#include "math.h"
+#include "wx/math.h"
 
 #if wxUSE_COMMON_DIALOGS
     #include <commdlg.h>
@@ -182,7 +182,7 @@ bool wxPrinterDC::StartDoc(const wxString& message)
 
     wxString filename(m_printData.GetFilename());
 
-    if (filename.IsEmpty())
+    if (filename.empty())
         docinfo.lpszOutput = NULL;
     else
         docinfo.lpszOutput = (const wxChar *) filename;

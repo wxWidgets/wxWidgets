@@ -27,14 +27,13 @@
 
 #if wxUSE_LONGLONG
 #include "wx/longlong.h"
+#include "wx/math.h"       // for fabs()
 
 #if defined(__MWERKS__) && defined(__WXMSW__)
 #include <string.h>     // for memset()
 #else
 #include <memory.h>     // for memset()
 #endif
-
-#include <math.h>       // for fabs()
 
 // ============================================================================
 // implementation

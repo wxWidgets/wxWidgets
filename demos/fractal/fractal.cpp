@@ -24,7 +24,7 @@ out and there is not as much snow or high mountains (maybe the
 random number generators fault). The viewing plane is not
 quite right as the original code used SetViewportOrg() which there
 doesn't seem to be an equivalent of under wxWidgets, and my quick
-hack doesn't fix. 
+hack doesn't fix.
 */
 
 #ifdef __GNUG__
@@ -42,8 +42,9 @@ hack doesn't fix.
   #include "wx/wx.h"
 #endif //precompiled headers
 
+#include "wx/math.h"
+
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
 
 #define Random(x) (rand() % x)
@@ -51,7 +52,7 @@ hack doesn't fix.
 
 static int detail = 9; // CHANGE THIS... 7,8,9 etc
 
-static bool running = false;                                
+static bool running = false;
 static wxMenuBar *menuBar = NULL;
 
 // Define a new application type
@@ -175,7 +176,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 void MyCanvas::Draw(wxDC& dc)
 {
     if (running) return;
-        
+
     running = true;
     menuBar->EnableTop(0, false);
 

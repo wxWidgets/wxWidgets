@@ -39,9 +39,9 @@
 #include "wx/textfile.h"
 #include "wx/utils.h"
 #include "wx/utils.h"
+#include "wx/math.h"
 
 #include <stdlib.h>
-#include <math.h>
 #include <ctype.h>
 #include <limits.h>     // for INT_MAX
 
@@ -234,13 +234,13 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
   wxString strPath = strEntry.BeforeLast(wxCONFIG_PATH_SEPARATOR);
 
   // except in the special case of "/keyname" when there is nothing before "/"
-  if ( strPath.IsEmpty() &&
-       ((!strEntry.IsEmpty()) && strEntry[0] == wxCONFIG_PATH_SEPARATOR) )
+  if ( strPath.empty() &&
+       ((!strEntry.empty()) && strEntry[0] == wxCONFIG_PATH_SEPARATOR) )
   {
     strPath = wxCONFIG_PATH_SEPARATOR;
   }
 
-  if ( !strPath.IsEmpty() )
+  if ( !strPath.empty() )
   {
     if ( m_pContainer->GetPath() != strPath )
     {
@@ -433,7 +433,7 @@ void wxSplitPath(wxArrayString& aParts, const wxChar *sz)
 
         strCurrent.Empty();
       }
-      else if ( !strCurrent.IsEmpty() ) {
+      else if ( !strCurrent.empty() ) {
         aParts.push_back(strCurrent);
         strCurrent.Empty();
       }

@@ -47,12 +47,12 @@
 #include "wx/msw/private.h"
 #include "wx/colordlg.h"
 #include "wx/cmndata.h"
+#include "wx/math.h"
 
 #if !defined(__WIN32__) || defined(__WXWINCE__)
     #include <commdlg.h>
 #endif
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 

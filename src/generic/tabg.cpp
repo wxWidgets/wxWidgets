@@ -31,8 +31,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <math.h>
 
+#include "wx/math.h"
 #include "wx/tab.h"
 #include "wx/listimpl.cpp"
 

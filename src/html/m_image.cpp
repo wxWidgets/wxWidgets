@@ -36,8 +36,8 @@
 #include "wx/dynarray.h"
 #include "wx/log.h"
 #include "wx/artprov.h"
+#include "wx/math.h"
 
-#include <math.h>
 #include <float.h>
 
 FORCE_LINK_ME(m_image)
@@ -572,7 +572,7 @@ void wxHtmlImageCell::Draw(wxDC& dc, int x, int y,
 
 wxHtmlLinkInfo *wxHtmlImageCell::GetLink( int x, int y ) const
 {
-    if (m_mapName.IsEmpty())
+    if (m_mapName.empty())
         return wxHtmlCell::GetLink( x, y );
     if (!m_imageMap)
     {

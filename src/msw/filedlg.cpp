@@ -46,12 +46,12 @@
     #include <commdlg.h>
 #endif
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/math.h"
 
 #include "wx/msw/missing.h"
 

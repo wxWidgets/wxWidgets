@@ -32,7 +32,8 @@
 #include "wx/wx.h"
 #endif
 
-#include <math.h>
+#include "wx/math.h"
+
 #include <stdlib.h>
 
 #include "wx/string.h"

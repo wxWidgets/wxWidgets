@@ -31,6 +31,7 @@
 
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
+#include "wx/math.h"
 
 #if defined(__WXMAC__) || defined(__WXCOCOA__)
 #   ifdef __DARWIN__
@@ -54,8 +55,6 @@
 #include "isosurf.h"
 
 // The following part is taken largely unchanged from the original C Version
-
-#include <math.h>
 
 GLboolean speed_test = GL_FALSE;
 GLboolean use_vertex_arrays = GL_FALSE;

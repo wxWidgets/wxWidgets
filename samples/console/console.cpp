@@ -3260,8 +3260,7 @@ static void TestZipFileSystem()
 
 #ifdef TEST_DATETIME
 
-#include <math.h>
-
+#include "wx/math.h"
 #include "wx/datetime.h"
 
 // this test miscellaneous static wxDateTime functions

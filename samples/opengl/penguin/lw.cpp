@@ -34,7 +34,6 @@
 #include "lw.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 
 #if wxUSE_GLCANVAS
 

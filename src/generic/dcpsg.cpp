@@ -39,8 +39,7 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"
 #include "wx/filefn.h"
-
-#include <math.h>
+#include "wx/math.h"
 
 #ifdef __WXMSW__
 

@@ -32,8 +32,7 @@
 #include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
-
-#include "math.h"
+#include "wx/math.h"
 
 #ifdef __WIN32__
     // this is not supported by native control
@@ -411,7 +410,7 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
     static wxString s_text;
     s_text = wxGetTextFromUser(wxT("New name: "), wxT("Tree sample question"),
             s_text, this);
-    if ( !s_text.IsEmpty() )
+    if ( !s_text.empty() )
     {
         m_treeCtrl->SetItemText(item, s_text);
     }
