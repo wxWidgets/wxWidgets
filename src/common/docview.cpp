@@ -103,7 +103,7 @@ static inline wxString FindExtension(const wxChar *path);
 // local constants
 // ----------------------------------------------------------------------------
 
-static const char *s_MRUEntryFormat = wxT("&%d %s");
+static const wxChar *s_MRUEntryFormat = wxT("&%d %s");
 
 // ============================================================================
 // implementation
@@ -1309,7 +1309,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     }
 
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
-            strings, (char **)data);
+            strings, (void **)data);
     delete[] strings;
     delete[] data;
     return theTemplate;
@@ -1332,7 +1332,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         }
     }
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
-            strings, (char **)data);
+            strings, (void **)data);
     delete[] strings;
     delete[] data;
     return theTemplate;

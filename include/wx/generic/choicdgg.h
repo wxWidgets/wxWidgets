@@ -111,15 +111,14 @@ WXDLLEXPORT int wxGetSingleChoiceIndex(const wxString& message, const wxString& 
                            int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 // Return client data instead
-// FIXME: this is horrible, using "char *" instead of "void *" belongs to the 70s!
-WXDLLEXPORT wxChar* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
-                            int n, const wxString *choices, char **client_data,
+WXDLLEXPORT void* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
+                            int n, const wxString *choices, void **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
-WXDLLEXPORT wxChar* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
-                            int n, wxChar *choices[], char **client_data,
+WXDLLEXPORT void* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
+                            int n, wxChar *choices[], void **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);

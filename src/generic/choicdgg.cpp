@@ -96,21 +96,21 @@ int wxGetSingleChoiceIndex( const wxString& message, const wxString& caption, in
     return ans;
 }
 
-wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
-                   const wxString *choices, wxChar **client_data, wxWindow *parent,
+void *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
+                   const wxString *choices, void **client_data, wxWindow *parent,
                    int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre),
                    int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices, (char **)client_data);
     if ( dialog.ShowModal() == wxID_OK )
-        return (wxChar *)dialog.GetSelectionClientData();
+        return dialog.GetSelectionClientData();
     else
         return NULL;
 }
 
 // Overloaded for backward compatibility
-wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
-                   wxChar *choices[], wxChar **client_data, wxWindow *parent,
+void *wxGetSingleChoiceData( const wxString& message, const wxString& caption, int n,
+                   wxChar *choices[], void **client_data, wxWindow *parent,
                    int x, int y, bool centre,
                    int width, int height )
 {
@@ -120,7 +120,7 @@ wxChar *wxGetSingleChoiceData( const wxString& message, const wxString& caption,
     {
         strings[i] = choices[i];
     }
-    wxChar *data = wxGetSingleChoiceData(message, caption, n, (const wxString *)strings, client_data, parent,
+    void *data = wxGetSingleChoiceData(message, caption, n, (const wxString *)strings, client_data, parent,
         x, y, centre, width, height);
     delete[] strings;
     return data;
