@@ -5,4 +5,5 @@ echo "<?xml version=\"1.0\"?><bakefile-gen><enable-formats>msevc4prj</enable-for
 cd build/bakefiles
 echo $PATH
 bakefile_gen -b wx.bkl -f msevc4prj
+bakefile_gen -b ../../samples/minimal/minimal.bkl -f msevc4prj
 
