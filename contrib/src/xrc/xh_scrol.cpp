@@ -33,13 +33,18 @@ wxScrollBarXmlHandler::wxScrollBarXmlHandler()
 
 wxObject *wxScrollBarXmlHandler::DoCreateResource()
 { 
-    wxScrollBar *control = new wxScrollBar(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+    wxScrollBar *control = wxStaticCast(m_instance, wxScrollBar);
+
+    if (!control)
+       control = new wxScrollBar;
+
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
+
     control->SetScrollbar(GetLong( wxT("value"), 0), 
                           GetLong( wxT("thumbsize"),1),
                           GetLong( wxT("range"), 10),

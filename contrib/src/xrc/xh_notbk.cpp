@@ -45,6 +45,9 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
     {
         wxXmlNode *n = GetParamNode(wxT("object"));
 
+       if ( !n )
+           n = GetParamNode(wxT("object_ref"));
+
         if (n)
         {
             bool old_ins = m_isInside;
@@ -68,12 +71,17 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
     }
     
     else {
-        wxNotebook *nb = new wxNotebook(m_parentAsWindow, 
-                                        GetID(),
-                                        GetPosition(), GetSize(),
-                                        GetStyle( wxT("style" )),
-                                        GetName());
-    
+       wxNotebook *nb = wxStaticCast(m_instance, wxNotebook);
+
+       if ( !nb )
+           nb = new wxNotebook;
+
+       nb->Create(m_parentAsWindow, 
+                 GetID(),
+                 GetPosition(), GetSize(),
+                 GetStyle( wxT("style" )),
+                 GetName());
+
         wxNotebook *old_par = m_notebook;
         m_notebook = nb;
         bool old_ins = m_isInside;

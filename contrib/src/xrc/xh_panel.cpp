@@ -38,18 +38,15 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
 { 
     wxPanel *panel = wxDynamicCast(m_instance, wxPanel);
 
-    if (panel == NULL)
-        panel = new wxPanel(m_parentAsWindow,
-                                 GetID(),
-                                 GetPosition(), GetSize(),
-                                 GetStyle(wxT("style"), wxTAB_TRAVERSAL),
-                                 GetName());
-    else
-        panel->Create(m_parentAsWindow,
-                                 GetID(),
-                                 GetPosition(), GetSize(),
-                                 GetStyle(wxT("style"), wxTAB_TRAVERSAL),
-                                 GetName());
+    if (!panel)
+       panel = new wxPanel;
+
+    panel->Create(m_parentAsWindow,
+                  GetID(),
+                  GetPosition(), GetSize(),
+                  GetStyle(wxT("style"), wxTAB_TRAVERSAL),
+                  GetName());
+
     SetupWindow(panel);
     CreateChildren(panel);
     

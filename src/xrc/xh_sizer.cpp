@@ -78,6 +78,9 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
     {
         wxXmlNode *n = GetParamNode(wxT("object"));
 
+       if ( !n )
+           n = GetParamNode(wxT("object_ref"));
+
         if (n)
         {
             bool old_ins = m_isInside;

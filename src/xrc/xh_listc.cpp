@@ -46,12 +46,18 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
 
 wxObject *wxListCtrlXmlHandler::DoCreateResource()
 { 
-    wxListCtrl *list = new wxListCtrl(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName());
+   wxListCtrl *list = wxStaticCast(m_instance, wxListCtrl);
+
+   if (!list)
+       list = new wxListCtrl;
+
+   list->Create(m_parentAsWindow,
+                    GetID(),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
+
     /* TODO: columns definition */
     
     SetupWindow(list);

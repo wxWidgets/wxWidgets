@@ -36,14 +36,18 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
 
 wxObject *wxGaugeXmlHandler::DoCreateResource()
 { 
-    wxGauge *control = new wxGauge(m_parentAsWindow,
-                                    GetID(),
-                                    GetLong( wxT("range"), wxGAUGE_DEFAULT_RANGE), 
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+    wxGauge *control = wxStaticCast(m_instance, wxGauge);
+
+    if (!control)
+       control = new wxGauge;
+
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetLong( wxT("range"), wxGAUGE_DEFAULT_RANGE), 
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
 
     if( HasParam( wxT("value") ))
     {

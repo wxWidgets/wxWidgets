@@ -21,7 +21,7 @@
 
 #include "wx/xrc/xh_toolb.h"
 #include "wx/toolbar.h"
-
+#include "wx/frame.h"
 
 #if wxUSE_TOOLBAR
 
@@ -66,12 +66,18 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 #ifdef __WXMSW__
         if (!(style & wxNO_BORDER)) style |= wxNO_BORDER;
 #endif
-        wxToolBar *toolbar = new wxToolBar(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(),
-                                    GetSize(),
-                                    style,
-                                    GetName());
+
+        wxToolBar *toolbar = wxStaticCast(m_instance, wxToolBar);
+ 
+        if ( !toolbar )
+            toolbar = new wxToolBar;
+ 
+        toolbar->Create(m_parentAsWindow,
+                         GetID(),
+                         GetPosition(),
+                         GetSize(),
+                         style,
+                         GetName());
 
         wxSize bmpsize = GetSize(wxT("bitmapsize"));
         if (!(bmpsize == wxDefaultSize))
@@ -87,6 +93,9 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
             toolbar->SetToolSeparation(separation);
 
         wxXmlNode *children_node = GetParamNode(wxT("object"));
+        if (!children_node)
+           children_node = GetParamNode(wxT("object_ref"));
+
         if (children_node == NULL) return toolbar;
 
         m_isInside = TRUE;
@@ -96,8 +105,8 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
         while (n)
         {
-            if (n->GetType() == wxXML_ELEMENT_NODE && 
-                n->GetName() == wxT("object"))
+            if ((n->GetType() == wxXML_ELEMENT_NODE) && 
+                (n->GetName() == wxT("object") || n->GetName() == wxT("object_ref")))
             {
                 wxObject *created = CreateResFromNode(n, toolbar, NULL);
                 wxControl *control = wxDynamicCast(created, wxControl);
@@ -113,6 +122,15 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         m_toolbar = NULL;
 
         toolbar->Realize();
+
+        // FIXME: how can I create a toolbar without immediately setting it to the frame?
+        if (m_parentAsWindow)
+        {
+            wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);
+            if (parentFrame)
+                parentFrame->SetToolBar(toolbar);
+        }
+
         return toolbar;
     }
 }

@@ -36,12 +36,16 @@ wxSpinButtonXmlHandler::wxSpinButtonXmlHandler()
 
 wxObject *wxSpinButtonXmlHandler::DoCreateResource()
 { 
-    wxSpinButton *control = new wxSpinButton(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    GetStyle( wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS ),
-                                    GetName()
-                                    );
+    wxSpinButton *control = wxStaticCast(m_instance, wxSpinButton);
+
+    if (!control)
+       control = new wxSpinButton;
+
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetPosition(), GetSize(),
+                    GetStyle(wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS),
+                    GetName());
 
     control->SetValue( GetLong( wxT("value"), wxSP_DEFAULT_VALUE) );
     control->SetRange( GetLong( wxT("min"), wxSP_DEFAULT_MIN),

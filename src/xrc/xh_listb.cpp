@@ -54,16 +54,19 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
                 strings[i]=strList[i];
         }
 
+        wxListBox *control = wxStaticCast(m_instance, wxListBox);
 
-        wxListBox *control = new wxListBox(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    strList.GetCount(),
-                                    strings,
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+        if (!control)
+           control = new wxListBox;
+
+        control->Create(m_parentAsWindow,
+                        GetID(),
+                        GetPosition(), GetSize(),
+                        strList.GetCount(),
+                        strings,
+                        GetStyle(),
+                        wxDefaultValidator,
+                        GetName());
 
         if( selection != -1 )
             control->SetSelection( selection );

@@ -42,16 +42,20 @@ wxSliderXmlHandler::wxSliderXmlHandler()
 
 wxObject *wxSliderXmlHandler::DoCreateResource()
 { 
-    wxSlider *control = new wxSlider(m_parentAsWindow,
-                                    GetID(),
-                                    GetLong( wxT("value"), wxSL_DEFAULT_VALUE), 
-                                    GetLong( wxT("min"), wxSL_DEFAULT_MIN),
-                                    GetLong( wxT("max"), wxSL_DEFAULT_MAX),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+    wxSlider *control = wxStaticCast(m_instance, wxSlider);
+
+    if (!control)
+       control = new wxSlider;
+
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetLong(wxT("value"), wxSL_DEFAULT_VALUE), 
+                    GetLong(wxT("min"), wxSL_DEFAULT_MIN),
+                    GetLong(wxT("max"), wxSL_DEFAULT_MAX),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
 
     if( HasParam( wxT("tickfreq") ))
     {

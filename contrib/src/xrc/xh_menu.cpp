@@ -21,6 +21,7 @@
 
 #include "wx/xrc/xh_menu.h"
 #include "wx/menu.h"
+#include "wx/frame.h"
 
 
 wxMenuXmlHandler::wxMenuXmlHandler() : 
@@ -105,13 +106,6 @@ bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
 
 
 
-
-
-
-
-
-
-
 wxMenuBarXmlHandler::wxMenuBarXmlHandler() : wxXmlResourceHandler()
 {
     ADD_STYLE(wxMB_DOCKABLE);
@@ -123,6 +117,14 @@ wxObject *wxMenuBarXmlHandler::DoCreateResource()
 {
     wxMenuBar *menubar = new wxMenuBar(GetStyle());
     CreateChildren(menubar);
+
+    if (m_parentAsWindow)
+    {
+        wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);
+        if (parentFrame)
+            parentFrame->SetMenuBar(menubar);
+    }
+
     return menubar;
 }
 

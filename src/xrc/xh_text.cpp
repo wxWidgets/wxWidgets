@@ -35,14 +35,19 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 { 
-    wxTextCtrl *text = new wxTextCtrl(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("value")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+   wxTextCtrl *text = wxStaticCast(m_instance, wxTextCtrl);
+
+   if ( !text )
+       text = new wxTextCtrl;
+
+   text->Create( m_parentAsWindow,
+                GetID(),
+                GetText(wxT("value")),
+                GetPosition(), GetSize(),
+                GetStyle(),
+                wxDefaultValidator,
+                GetName() );
+
     SetupWindow(text);
     
     return text;

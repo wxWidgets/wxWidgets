@@ -54,16 +54,20 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
         }
 
 
-        wxComboBox *control = new wxComboBox(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("value")),
-                                    GetPosition(), GetSize(),
-                                    strList.GetCount(),
-                                    strings,
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+        wxComboBox *control = wxStaticCast(m_instance, wxComboBox);
+
+        if (!control)
+           control = new wxComboBox;
+            
+       control->Create(m_parentAsWindow,
+                        GetID(),
+                        GetText(wxT("value")),
+                        GetPosition(), GetSize(),
+                        strList.GetCount(),
+                        strings,
+                        GetStyle(),
+                        wxDefaultValidator,
+                        GetName());
 
         if( selection != -1 )
             control->SetSelection( selection );

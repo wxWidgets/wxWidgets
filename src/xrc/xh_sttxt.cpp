@@ -34,13 +34,18 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
 
 wxObject *wxStaticTextXmlHandler::DoCreateResource()
 { 
-    wxStaticText *text = new wxStaticText(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("label")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    GetName()
-                                    );
+    wxStaticText *text = wxStaticCast(m_instance, wxStaticText);
+
+    if (!text)
+       text = new wxStaticText;
+
+    text->Create(m_parentAsWindow,
+                    GetID(),
+                    GetText(wxT("label")),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    GetName());
+
     SetupWindow(text);
     
     return text;

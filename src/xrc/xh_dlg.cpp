@@ -58,8 +58,10 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
                 wxDefaultPosition, wxDefaultSize,
                 GetStyle(wxT("style"), wxDEFAULT_DIALOG_STYLE),
                 GetName());
-    dlg->SetClientSize(GetSize());
-    dlg->Move(GetPosition());
+    if (HasParam(wxT("size")))
+        dlg->SetClientSize(GetSize());
+    if (HasParam(wxT("pos")))
+        dlg->Move(GetPosition());
     SetupWindow(dlg);
 
     CreateChildren(dlg);

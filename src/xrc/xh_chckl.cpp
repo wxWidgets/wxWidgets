@@ -45,16 +45,19 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
                 strings[i]=strList[i];
         }
 
+        wxCheckListBox *control = wxStaticCast(m_instance, wxCheckListBox);
 
-        wxCheckListBox *control = new wxCheckListBox(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    strList.GetCount(),
-                                    strings,
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+        if (!control)
+           control = new wxCheckListBox;
+
+        control->Create(m_parentAsWindow,
+                        GetID(),
+                        GetPosition(), GetSize(),
+                        strList.GetCount(),
+                        strings,
+                        GetStyle(),
+                        wxDefaultValidator,
+                        GetName());
 
         // step through children myself (again.)
         wxXmlNode *n = GetParamNode(wxT("content"));

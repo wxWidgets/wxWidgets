@@ -53,18 +53,21 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
                 strings[i]=strList[i];
         }
 
+        wxRadioBox *control = wxStaticCast(m_instance, wxRadioBox);
 
-        wxRadioBox *control = new wxRadioBox(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("label")),
-                                    GetPosition(), GetSize(),
-                                    strList.GetCount(),
-                                    strings,
-                                    GetLong( wxT("dimension"), 1 ),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+        if (!control)
+           control = new wxRadioBox;
+
+        control->Create(m_parentAsWindow,
+                        GetID(),
+                        GetText(wxT("label")),
+                        GetPosition(), GetSize(),
+                        strList.GetCount(),
+                        strings,
+                        GetLong(wxT("dimension"), 1),
+                        GetStyle(),
+                        wxDefaultValidator,
+                        GetName());
 
         if( selection != -1 )
             control->SetSelection( selection );

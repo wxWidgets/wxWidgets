@@ -30,13 +30,18 @@ wxStaticBoxXmlHandler::wxStaticBoxXmlHandler()
 
 wxObject *wxStaticBoxXmlHandler::DoCreateResource()
 { 
-    wxStaticBox *box = new wxStaticBox(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("label")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    GetName()
-                                    );
+    wxStaticBox *box = wxStaticCast(m_instance, wxStaticBox);
+
+    if (!box)
+       box = new wxStaticBox;
+
+    box->Create(m_parentAsWindow,
+                GetID(),
+                GetText(wxT("label")),
+                GetPosition(), GetSize(),
+                GetStyle(),
+                GetName());
+
     SetupWindow(box);
     
     return box;

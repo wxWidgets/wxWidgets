@@ -40,14 +40,18 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
      * normal radio button.
      */ 
 
-    wxRadioButton *control = new wxRadioButton(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("label")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName()
-                                    );
+    wxRadioButton *control = wxStaticCast(m_instance, wxRadioButton);
+
+    if (!control)
+       control = new wxRadioButton;
+
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetText(wxT("label")),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
 
     control->SetValue( GetBool(wxT("value"), 0));
     SetupWindow(control);

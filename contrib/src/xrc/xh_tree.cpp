@@ -35,13 +35,18 @@ wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
 
 wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 { 
-    wxTreeCtrl *tree = new wxTreeCtrl(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName());
-    
+   wxTreeCtrl *tree = wxStaticCast(m_instance, wxTreeCtrl);
+
+   if (!tree)
+       tree = new wxTreeCtrl;
+
+   tree->Create( m_parentAsWindow,
+                GetID(),
+                GetPosition(), GetSize(),
+                GetStyle(),
+                wxDefaultValidator,
+                GetName());
+
     SetupWindow(tree);
     
     return tree;

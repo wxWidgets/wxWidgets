@@ -36,13 +36,19 @@ wxButtonXmlHandler::wxButtonXmlHandler()
 
 wxObject *wxButtonXmlHandler::DoCreateResource()
 { 
-    wxButton *button = new wxButton(m_parentAsWindow,
-                                    GetID(),
-                                    GetText(wxT("label")),
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    wxDefaultValidator,
-                                    GetName());
+   wxButton *button = wxStaticCast(m_instance, wxButton);
+
+   if (!button)
+       button = new wxButton;
+
+   button->Create(m_parentAsWindow,
+                    GetID(),
+                    GetText(wxT("label")),
+                    GetPosition(), GetSize(),
+                    GetStyle(),
+                    wxDefaultValidator,
+                    GetName());
+
     if (GetBool(wxT("default"), 0) == 1) button->SetDefault();
     SetupWindow(button);
     

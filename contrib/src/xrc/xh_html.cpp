@@ -30,28 +30,29 @@
 wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler() 
 : wxXmlResourceHandler() 
 {
-    ADD_STYLE( wxHW_SCROLLBAR_NEVER );
-    ADD_STYLE( wxHW_SCROLLBAR_AUTO );
+    ADD_STYLE(wxHW_SCROLLBAR_NEVER);
+    ADD_STYLE(wxHW_SCROLLBAR_AUTO);
     AddWindowStyles();
 }
 
 wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
-{ 
-    wxHtmlWindow *control = new wxHtmlWindow(m_parentAsWindow,
-                                    GetID(),
-                                    GetPosition(), GetSize(),
-                                    GetStyle( wxT("style" ), wxHW_SCROLLBAR_AUTO),
-                                    GetName()
-                                    );
+{
+    wxHtmlWindow *control = wxStaticCast(m_instance, wxHtmlWindow);
 
-    if( HasParam( wxT("borders") ))
+    control->Create(m_parentAsWindow,
+                    GetID(),
+                    GetPosition(), GetSize(),
+                    GetStyle(wxT("style"), wxHW_SCROLLBAR_AUTO),
+                    GetName());
+
+    if (HasParam(wxT("borders")))
     {
-        control->SetBorders( GetDimension( wxT("borders" )));
+        control->SetBorders(GetDimension(wxT("borders")));
     }
 
-    if( HasParam( wxT("url") ))
+    if( HasParam(wxT("url")))
     {
-        wxString url = GetParamValue(wxT("url" ));
+        wxString url = GetParamValue(wxT("url"));
         wxFileSystem& fsys = GetCurFileSystem();
         
         wxFSFile *f = fsys.OpenFile(url);
@@ -64,9 +65,9 @@ wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
             control->LoadPage(url);
     }
     
-    else if( HasParam( wxT("htmlcode") ))
+    else if (HasParam(wxT("htmlcode")))
     {
-        control->SetPage( GetText(wxT("htmlcode")) );
+        control->SetPage(GetText(wxT("htmlcode")));
     }
 
     SetupWindow(control);

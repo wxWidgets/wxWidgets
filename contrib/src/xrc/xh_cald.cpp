@@ -38,13 +38,18 @@ wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler()
 
 wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
 { 
-    wxCalendarCtrl *calendar = new wxCalendarCtrl(m_parentAsWindow,
-                                    GetID(),
-                                    wxDefaultDateTime,
-                                    /*TODO: take it from resource*/
-                                    GetPosition(), GetSize(),
-                                    GetStyle(),
-                                    GetName());
+    wxCalendarCtrl *calendar = wxStaticCast(m_instance, wxCalendarCtrl);
+
+    if (!calendar)
+       calendar = new wxCalendarCtrl;
+
+    calendar->Create(m_parentAsWindow,
+                     GetID(),
+                     wxDefaultDateTime,
+                     /*TODO: take it from resource*/
+                     GetPosition(), GetSize(),
+                     GetStyle(),
+                     GetName());
     
     SetupWindow(calendar);
     
