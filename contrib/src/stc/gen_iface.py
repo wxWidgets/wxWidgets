@@ -86,6 +86,11 @@ methodOverrideMap = {
 
                        '''wxString %s(int startPos, int endPos) {
                           wxString text;
+                          if (endPos < startPos) {
+                              int temp = startPos;
+                              startPos = endPos;
+                              endPos = temp;
+                          }
                           int len = endPos - startPos;
                           if (!len) return "";
                           TextRange tr;
@@ -266,6 +271,11 @@ methodOverrideMap = {
                                 wxRect pageRect) {
                             RangeToFormat fr;
 
+                            if (endPos < startPos) {
+                                int temp = startPos;
+                                startPos = endPos;
+                                endPos = temp;
+                            }
                             fr.hdc = draw;
                             fr.hdcTarget = target;
                             fr.rc.top = renderRect.GetTop();
@@ -324,6 +334,11 @@ methodOverrideMap = {
 
                       '''wxString %s(int startPos, int endPos) {
                             wxString text;
+                            if (endPos < startPos) {
+                                int temp = startPos;
+                                startPos = endPos;
+                                endPos = temp;
+                            }
                             int   len  = endPos - startPos;
                             if (!len) return "";
                             char* buff = text.GetWriteBuf(len);

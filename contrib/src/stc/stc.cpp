@@ -276,6 +276,11 @@ void wxStyledTextCtrl::SetSavePoint() {
 // Retrieve a buffer of cells.
 wxString wxStyledTextCtrl::GetStyledText(int startPos, int endPos) {
                           wxString text;
+                          if (endPos < startPos) {
+                              int temp = startPos;
+                              startPos = endPos;
+                              endPos = temp;
+                          }
                           int len = endPos - startPos;
                           if (!len) return "";
                           TextRange tr;
@@ -973,6 +978,11 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                                 wxRect pageRect) {
                             RangeToFormat fr;
 
+                            if (endPos < startPos) {
+                                int temp = startPos;
+                                startPos = endPos;
+                                endPos = temp;
+                            }
                             fr.hdc = draw;
                             fr.hdcTarget = target;
                             fr.rc.top = renderRect.GetTop();
@@ -1061,6 +1071,11 @@ wxString wxStyledTextCtrl::GetSelectedText() {
 // Retrieve a range of text.
 wxString wxStyledTextCtrl::GetTextRange(int startPos, int endPos) {
                             wxString text;
+                            if (endPos < startPos) {
+                                int temp = startPos;
+                                startPos = endPos;
+                                endPos = temp;
+                            }
                             int   len  = endPos - startPos;
                             if (!len) return "";
                             char* buff = text.GetWriteBuf(len);
