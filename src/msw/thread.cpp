@@ -826,7 +826,7 @@ wxThreadInternal::WaitForTerminate(bool shouldCancel,
                     //     in a secondary thread because if it had created some
                     //     window somehow (possible not even using wxWindows)
                     //     the system might dead lock then
-                    if ( IsMain() )
+                    if ( wxThread::IsMain() )
                     {
                         // it looks that sometimes WAIT_OBJECT_0 + 1 is
                         // returned but there are no messages in the thread
