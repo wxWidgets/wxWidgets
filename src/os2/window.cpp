@@ -948,51 +948,15 @@ void wxWindowOS2::ScrollWindow(
         vRect.yBottom = vRect.yTop - pRect->height;
     }
     nDy *= -1; // flip the sign of Dy as OS/2 is opposite Windows.
-    HPS                             hPs;
-    HRGN			    vUpdateRegion;
-    hPs = ::WinGetPS(GetHwnd());
-    vUpdateRegion = ::GpiCreateRegion(hPs, 0, NULL);
     ::WinScrollWindow( GetHwnd()
                       ,(LONG)nDx
                       ,(LONG)nDy
                       ,&vRect
                       ,&vRect
-                      ,vUpdateRegion
                       ,NULL
-                      ,SW_SCROLLCHILDREN //| SW_INVALIDATERGN
+                      ,NULL
+                      ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
                      );
-    RGNRECT                     vRgnData;
-    PRECTL                      pUpdateRects = NULL;
-    vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
-    if (::GpiQueryRegionRects( hPs      // Pres space
-                              ,vUpdateRegion  // Handle of region to query
-                              ,NULL             // Return all RECTs
-                              ,&vRgnData        // Will contain number or RECTs in region
-                              ,NULL             // NULL to return number of RECTs
-                             ))
-    {
-        pUpdateRects = new RECTL[vRgnData.crcReturned];
-        vRgnData.crc = vRgnData.crcReturned;
-        vRgnData.ircStart = 1;
-        if (::GpiQueryRegionRects( hPs     // Pres space of source
-                                  ,vUpdateRegion // Handle of source region
-                                  ,NULL            // Return all RECTs
-                                  ,&vRgnData       // Operations set to return rects
-                                  ,pUpdateRects    // Will contain the actual RECTS
-                                 ))
-        {
-            for(size_t i = 0; i < vRgnData.crc; i++)
-            {
-                wxRect UpdateRect;
-                UpdateRect.x = pUpdateRects[i].xLeft;
-                UpdateRect.y = height - pUpdateRects[i].yTop;
-                UpdateRect.width = pUpdateRects[i].xRight - pUpdateRects[i].xLeft;
-                UpdateRect.height = pUpdateRects[i].yTop - pUpdateRects[i].yBottom;
-                Refresh(FALSE, &UpdateRect);
-            }
-            delete [] pUpdateRects;
-        }
-    }
 } // end of wxWindowOS2::ScrollWindow
 
 // ---------------------------------------------------------------------------
