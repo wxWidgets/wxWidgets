@@ -393,6 +393,9 @@ void wxTextCtrl::Remove(long from, long to)
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
+    if( to == -1 )
+        to = GetLastPosition();
+
     XmTextSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
                       (Time) 0);
 }
@@ -760,7 +763,9 @@ static void MergeChangesIntoString(wxString& value,
         const char * const passwd = value;
         int len = value.length();
 
-        len += strlen(cbs->text->ptr) + 1;     // + new text (if any) + NUL
+        len += ( cbs->text->ptr ?
+                 strlen(cbs->text->ptr) :
+                 0 ) + 1;                      // + new text (if any) + NUL
         len -= cbs->endPos - cbs->startPos;    // - text from affected region.
 
         char * newS = new char [len];
@@ -774,8 +779,9 @@ static void MergeChangesIntoString(wxString& value,
             *dest++ = *p++;
 
         // Copy the text to be inserted).
-        while (*insert)
-            *dest++ = *insert++;
+        if (insert)
+            while (*insert)
+                *dest++ = *insert++;
 
         // Finally, copy into newS any remaining text from passwd[endPos] on.
         for (p = passwd + cbs->endPos; *p; )
