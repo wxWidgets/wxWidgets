@@ -342,13 +342,15 @@ GSocketError GSocket_SetServer(GSocket *sck)
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
-  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   if (sck->m_fd == INVALID_SOCKET)
   {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
+
+  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
+  _GSocket_Configure_Callbacks(sck);
 
   /* Bind the socket to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0)
@@ -424,6 +426,7 @@ GSocket *GSocket_WaitConnection(GSocket *sck)
   connection->m_oriented = TRUE;
 
   ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
+  _GSocket_Configure_Callbacks(connection);
 
   return connection;
 }
@@ -455,13 +458,15 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
-  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   if (sck->m_fd == INVALID_SOCKET)
   {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
+
+  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
+  _GSocket_Configure_Callbacks(sck);
 
   /* Bind it to the LOCAL address */
   if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0)
@@ -497,6 +502,9 @@ GSocketError GSocket_SetBroadcast(GSocket *sck)
  *  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
  *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK,
  *  GSOCK_INVADDR, GSOCK_TIMEDOUT, GSOCK_WOULDBLOCK and GSOCK_IOERR.
+ *  If a socket is nonblocking and Connect() returns GSOCK_WOULDBLOCK,
+ *  the connection request can be completed later. Use GSocket_Select()
+ *  to check or wait for a GSOCK_CONNECTION event.
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
@@ -529,13 +537,15 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_peer->m_realfamily, type, 0);
-  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
 
   if (sck->m_fd == INVALID_SOCKET)
   {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
+
+  ioctlsocket(sck->m_fd, FIONBIO, (u_long FAR *) &arg);
+  _GSocket_Configure_Callbacks(sck);
 
   /* Connect it to the PEER address, with a timeout (see below) */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
@@ -627,34 +637,68 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return _GSocket_Send_Dgram(socket, buffer, size);
 }
 
-bool GSocket_DataAvailable(GSocket *socket)
+/* GSocket_Select:
+ *  Polls the socket to determine its status. This function will
+ *  check for the events specified in the 'flags' parameter, and
+ *  it will return a mask indicating which operations can be
+ *  performed. This function won't block, regardless of the
+ *  mode (blocking|nonblocking) of the socket.
+ */
+GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  fd_set read_set;
+  fd_set readfds, writefds, exceptfds;
   struct timeval tv;
+  GSocketEventFlags mask;
 
   assert(socket != NULL);
 
-  if (socket->m_fd == INVALID_SOCKET || socket->m_server)
+  if (socket->m_fd == INVALID_SOCKET)
   {
     socket->m_error = GSOCK_INVSOCK;
     return FALSE;
   }
 
-  FD_ZERO(&read_set);
-  FD_SET(socket->m_fd, &read_set);
+  FD_ZERO(&readfds);
+  FD_ZERO(&writefds);
+  FD_ZERO(&exceptfds);
+  FD_SET(socket->m_fd, &readfds);
+  FD_SET(socket->m_fd, &writefds);
+  FD_SET(socket->m_fd, &exceptfds);
 
   tv.tv_sec = 0;
   tv.tv_usec = 0;
+  select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv);
 
-  select(socket->m_fd + 1, &read_set, NULL, NULL, &tv);
+  mask = 0;
 
-  return FD_ISSET(socket->m_fd, &read_set);
+  /* If select() says that the socket is readable, then we have
+   * no way to distinguish if that means 'data available' (to
+   * recv) or 'incoming connection' (to accept). The same goes
+   * for writability: we cannot distinguish between 'you can
+   * send data' and 'connection request completed'. So we will
+   * assume the following: if the flag was set upon entry,
+   * that means that the event was possible.
+   */
+  if (FD_ISSET(socket->m_fd, &readfds))
+  {
+    mask |= (flags & GSOCK_CONNECTION_FLAG);
+    mask |= (flags & GSOCK_INPUT_FLAG);
+  }
+  if (FD_ISSET(socket->m_fd, &writefds))
+  {
+    mask |= (flags & GSOCK_CONNECTION_FLAG);
+    mask |= (flags & GSOCK_OUTPUT_FLAG);
+  }
+  if (FD_ISSET(socket->m_fd, &exceptfds))
+    mask |= (flags & GSOCK_LOST_FLAG);
+
+  return mask;
 }
 
 /* Flags */
 
 /* GSocket_SetNonBlocking:
- *  Sets the socket in non-blocking mode. This is useful if
+ *  Sets the socket to non-blocking mode. This is useful if
  *  we don't want to wait.
  */
 void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
@@ -665,6 +709,8 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 }
 
 /* GSocket_SetTimeout:
+ *  Sets the timeout for blocking calls. Time is
+ *  expressed in milliseconds.
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisecs)
 {
@@ -703,14 +749,14 @@ GSocketError GSocket_GetError(GSocket *socket)
  */
 
 /* GSocket_SetCallback:
- *  Enables the callbacks specified by 'event'. Note that 'event'
+ *  Enables the callbacks specified by 'flags'. Note that 'flags'
  *  may be a combination of flags OR'ed toghether, so the same
  *  callback function can be made to accept different events.
  *  The callback function must have the following prototype:
  *
  *  void function(GSocket *socket, GSocketEvent event, char *cdata)
  */
-void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
+void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
                          GSocketCallback callback, char *cdata)
 {
   int count;
@@ -720,7 +766,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
     /* We test each flag and enable the corresponding events */
-    if ((event & (1 << count)) != 0)
+    if ((flags & (1 << count)) != 0)
     {
       socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
@@ -731,10 +777,10 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
 }
 
 /* GSocket_UnsetCallback:
- *  Disables all callbacks specified by 'event', which may be a
+ *  Disables all callbacks specified by 'flags', which may be a
  *  combination of flags OR'ed toghether.
  */
-void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
+void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
 {
   int count = 0;
 
@@ -743,7 +789,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
     /* We test each flag and disable the corresponding events */
-    if ((event & (1 << count)) != 0)
+    if ((flags & (1 << count)) != 0)
     {
       socket->m_cbacks[count] = NULL;
     }
@@ -759,6 +805,9 @@ void _GSocket_Configure_Callbacks(GSocket *socket)
 {
   long mask = 0;
   int count;
+
+  if (socket->m_fd == INVALID_SOCKET)
+    return;
 
   for (count = 0; count < GSOCK_MAX_EVENT; count++)
   {
