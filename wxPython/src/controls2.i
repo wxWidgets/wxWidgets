@@ -1003,7 +1003,11 @@ public:
     wxTreeItemId();
     ~wxTreeItemId();
     bool IsOk();
-    %pragma(python) addtoclass = "Ok = IsOk"
+    %pragma(python) addtoclass = "
+    Ok = IsOk
+    def __nonzero__(self):
+        return self.IsOk()
+"
 
     %addmethods {
         int __cmp__(wxTreeItemId* other) {
