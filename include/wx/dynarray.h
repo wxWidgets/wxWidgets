@@ -385,6 +385,8 @@ private:                                                            \
 // the normal arrays otherwise.
 // ----------------------------------------------------------------------------
 
+#define wxARRAY_EMPTY_CMP
+
 #define WX_DEFINE_SORTED_ARRAY(T, name)                         \
     WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, wxARRAY_DEFAULT_EXPORT)
 
@@ -393,7 +395,7 @@ private:                                                            \
 
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)  \
     typedef T _wxArray##name;                                   \
-    _WX_DEFINE_SORTED_ARRAY(_wxArray##name, name, /* */, class expmode)
+    _WX_DEFINE_SORTED_ARRAY(_wxArray##name, name, wxARRAY_EMPTY_CMP, class expmode)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_ARRAY_CMP: exactly the same as above but the comparison
