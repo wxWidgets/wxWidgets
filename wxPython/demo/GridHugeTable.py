@@ -6,13 +6,6 @@ import  wx.grid as  gridlib
 
 class HugeTable(gridlib.PyGridTableBase):
 
-    """
-    This is all it takes to make a custom data table to plug into a
-    wxGrid.  There are many more methods that can be overridden, but
-    the ones shown below are the required ones.  This table simply
-    provides strings containing the row and column values.
-    """
-
     def __init__(self, log):
         gridlib.PyGridTableBase.__init__(self)
         self.log = log
@@ -27,6 +20,13 @@ class HugeTable(gridlib.PyGridTableBase):
         attr.IncRef()
         return attr
 
+
+    
+    # This is all it takes to make a custom data table to plug into a
+    # wxGrid.  There are many more methods that can be overridden, but
+    # the ones shown below are the required ones.  This table simply
+    # provides strings containing the row and column values.
+    
     def GetNumberRows(self):
         return 10000
 
