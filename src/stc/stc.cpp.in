@@ -330,6 +330,7 @@ void wxStyledTextCtrl::OnSize(wxSizeEvent& evt) {
 }
 
 void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
+    SetFocus();
     wxPoint pt = evt.GetPosition();
     m_swx->DoButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());

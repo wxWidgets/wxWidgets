@@ -637,7 +637,7 @@ void Window::SetCursor(Cursor curs) {
 #else
        wxCursor wc = wxCursor(cursorId) ;
 #endif
-       GETWIN(id)->SetCursor(wc);   
+       GETWIN(id)->SetCursor(wc);
 }
 
 
@@ -650,7 +650,7 @@ void Window::SetTitle(const char *s) {
 // Helper classes for ListBox
 
 
-#if defined(__WXMAC__)
+#if 1 // defined(__WXMAC__)
 class wxSTCListBoxWin : public wxListBox {
 public:
     wxSTCListBoxWin(wxWindow* parent, wxWindowID id)
