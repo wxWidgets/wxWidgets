@@ -277,7 +277,7 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(wxRect& rect)
 	CalcTreeSize(GetRootItem(), rect);
 }
 
-void wxRemotelyScrolledTreeCtrl::CalcTreeSize(wxTreeItemId& id, wxRect& rect)
+void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& rect)
 {
 	// TODO: implement GetFirst/NextVisibleItem
 	// for wxGenericTreeCtrl, plus GetBoundingRect.

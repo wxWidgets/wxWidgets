@@ -84,7 +84,7 @@ public:
 	// Calculate the tree overall size so we can set the scrollbar
 	// correctly
 	void CalcTreeSize(wxRect& rect);
-	void CalcTreeSize(wxTreeItemId& id, wxRect& rect);
+	void CalcTreeSize(const wxTreeItemId& id, wxRect& rect);
 
 	// Adjust the containing wxScrolledWindow's scrollbars appropriately
 	void AdjustRemoteScrollbars();
