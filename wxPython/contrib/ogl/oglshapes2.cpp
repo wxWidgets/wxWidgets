@@ -5635,7 +5635,21 @@ static PyObject *_wrap_wxPyPolygonShape_DeletePolygonPoint(PyObject *self, PyObj
 
 static PyObject * wxPyPolygonShape_GetPoints(wxPyPolygonShape *self) {
             wxList* list = self->GetPoints();
-            return wxPy_ConvertList(list, "wxRealPoint");
+            PyObject*   pyList;
+            PyObject*   pyObj;
+            wxObject*   wxObj;
+            wxNode*     node = list->GetFirst();
+
+            wxPyBeginBlockThreads();
+            pyList = PyList_New(0);
+            while (node) {
+                wxObj = node->GetData();
+                pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
+                PyList_Append(pyList, pyObj);
+                node = node->GetNext();
+            }
+            wxPyEndBlockThreads();
+            return pyList;
         }
 static PyObject *_wrap_wxPyPolygonShape_GetPoints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
