@@ -1434,13 +1434,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         if ( vis )
             SetControlVisibility(  (ControlRef)m_macControl , true , true ) ;
 #else
-// TODO TEST        SetControlBounds( (ControlRef) m_macControl , &r ) ;
         if ( vis )
             SetControlVisibility(  (ControlRef)m_macControl , false , true ) ;
-        if ( doMove )
-            MoveControl( (ControlRef) m_macControl , r.left , r.top ) ;
-        if ( doSize )
-            SizeControl( (ControlRef) m_macControl , r.right-r.left , r.bottom-r.top ) ;
+        SetControlBounds( (ControlRef) m_macControl , &r ) ;
         if ( vis )
             SetControlVisibility(  (ControlRef)m_macControl , true , true ) ;
 #endif
@@ -2320,11 +2316,17 @@ void wxWindowMac::OnInternalIdle()
 // Raise the window to the top of the Z order
 void wxWindowMac::Raise()
 {
+#if TARGET_API_MAC_OSX
+    HIViewSetZOrder((ControlRef)m_macControl,kHIViewZOrderAbove, NULL) ;
+#endif
 }
 
 // Lower the window to the bottom of the Z order
 void wxWindowMac::Lower()
 {
+#if TARGET_API_MAC_OSX
+    HIViewSetZOrder((ControlRef)m_macControl,kHIViewZOrderBelow, NULL) ;
+#endif
 }
 
 
