@@ -29,7 +29,7 @@ With a popup menu, there is a variety of ways to handle a menu selection event
 \item Provide EVT\_MENU handlers in the window which pops up the menu, or in an ancestor of
 this window.
 \item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
-The callback takes a reference to the menu, and a reference to a 
+The callback takes a reference to the menu, and a reference to a
 \helpref{wxCommandEvent}{wxcommandevent}. This method is deprecated and should
 not be used in the new code, it is provided for backwards compatibility only.
 \end{enumerate}
@@ -169,7 +169,7 @@ Checks or unchecks the menu item.
 
 \func{void}{Delete}{\param{wxMenuItem *}{item}}
 
-Deletes the menu item from the menu. If the item is a submenu, it will 
+Deletes the menu item from the menu. If the item is a submenu, it will
 {\bf not} be deleted. Use \helpref{Destroy}{wxmenudestroy} if you want to
 delete a submenu.
 
@@ -191,7 +191,7 @@ delete a submenu.
 
 \func{void}{Destroy}{\param{wxMenuItem *}{item}}
 
-Deletes the menu item from the menu. If the item is a submenu, it will 
+Deletes the menu item from the menu. If the item is a submenu, it will
 be deleted. Use \helpref{Remove}{wxmenuremove} if you want to keep the submenu
 (for example, to reuse it later).
 
@@ -267,6 +267,9 @@ Returns the menu item object, or NULL if it is not found.
 \wxheading{See also}
 
 \helpref{wxMenu::FindItem}{wxmenufinditem}
+
+\pythonnote{The name of this method in wxPython is \tt{FindItemById}
+and it does not support the second parameter.}
 
 \membersection{wxMenu::GetHelpString}\label{wxmenugethelpstring}
 
@@ -706,8 +709,8 @@ Returns the number of menus in this menubar.
 \func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenu *}{menu}, \param{const wxString\& }{title}}
 
 Inserts the menu at the given position into the menu bar. Inserting menu at
-position $0$ will insert it in the very beginning of it, inserting at position 
-\helpref{GetMenuCount()}{wxmenubargetmenucount} is the same as calling 
+position $0$ will insert it in the very beginning of it, inserting at position
+\helpref{GetMenuCount()}{wxmenubargetmenucount} is the same as calling
 \helpref{Append()}{wxmenubarappend}.
 
 \wxheading{Parameters}
@@ -765,7 +768,7 @@ Redraw the menu bar
 \func{wxMenu *}{Remove}{\param{size\_t }{pos}}
 
 Removes the menu from the menu bar and returns the menu object - the caller is
-reposnbile for deleting it. This function may be used together with 
+reposnbile for deleting it. This function may be used together with
 \helpref{wxMenuBar::Insert}{wxmenubarinsert} to change the menubar
 dynamically.
 
