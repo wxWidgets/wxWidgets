@@ -17,7 +17,7 @@ TCP/IP applications, thread handling, and more. Where certain
 features are not available on a platform, such as MDI and tree
 controls on Unix, they are emulated.
 
-A detailed 1400-page reference manual is supplied in HTML, PDF
+A detailed 1700-page reference manual is supplied in HTML, PDF
 and Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm
@@ -33,7 +33,7 @@ Platforms supported
 
 wxWindows 2 currently supports the following platforms:
 
-- Windows 3.1, Windows 95/98, Windows NT, Windows 2000
+- Windows 95/98/ME, Windows NT, Windows 2000, Windows XP
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
 - MacOS

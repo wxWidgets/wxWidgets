@@ -1,7 +1,7 @@
 wxMicroWindows port
 ===================
 
-Julian Smart 2001-07-02
+Julian Smart 2001-12-08
 
 This is a port of wxWindows to MicroWindows, under Linux.
 Widgets are supplied by the wxUniversal project, while the
@@ -26,7 +26,7 @@ Installation
 
 MicroWindows:
 
-- unarchive MicroWindows 0.89pre7
+- unarchive MicroWindows 0.89pre8
 
 - change 'config' to use X11 and any other options you feel fit.
   Suggestions for changes to the defaults:
@@ -39,13 +39,14 @@ MicroWindows:
 
 - apply microwindows.patches (from wxWindows:
   docs/microwin/microwindows.patches) to fix PeekMessage
-  and other issues
+  and other issues. If the patch doesn't apply automatically,
+  you may need to apply it by hand
 
 - compile by typing 'make' from within the MicroWindows src directory
 
 wxMicroWindows:
 
-- Download wxMSW 2.3.3 or greater, or get it from CVS
+- Download wxMSW 2.3.2 or greater, or get it from CVS
 
 - Copy include/wx/msw/setup_microwin.h to include/wx/setup.h if
   include/wx/setup.h doesn't exist
@@ -53,11 +54,11 @@ wxMicroWindows:
 - change the TOP variable at the top of src/msw/makefile.mic
   to reflect where MicroWindows is installed
 
-- type 'make all' from src/msw. To clean, use cleanwx and NOT clean
-  since that will clean MicroWindows itself
+- type 'make -f makefile.mic all' from src/msw. To clean, use
+  cleanwx and NOT clean since that will clean MicroWindows itself
 
 - to make the sample, cd into samples/minimal, edit the TOP variable,
-  and type 'make all'
+  and type 'make -f makefile.mic all'
 
 Running 'minimal' runs the virtual MicroWindows desktop
 and the minimal sample, since in a MicroWindows WIN32 application

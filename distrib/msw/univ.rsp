@@ -8,7 +8,6 @@ src/univ/*.c
 src/univ/*.lst
 src/univ/themes/*.cpp
 
-microwindows.patches
-
 docs/microwin/readme.txt
+docs/microwin/microwindows.patches
 
