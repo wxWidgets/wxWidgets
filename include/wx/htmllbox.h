@@ -62,6 +62,10 @@ public:
     // destructor cleans up whatever resources we use
     virtual ~wxHtmlListBox();
 
+    // refresh everything
+    virtual void RefreshAll();
+
+
 protected:
     // this method must be implemented in the derived class and should return
     // the body (i.e. without <html>) of the HTML for the given item
@@ -77,6 +81,10 @@ protected:
     virtual wxCoord OnMeasureItem(size_t n) const;
 
 
+    // event handlers
+    void OnSize(wxSizeEvent& event);
+
+
     // common part of all ctors
     void Init();
 
@@ -88,6 +96,9 @@ private:
 
     // HTML parser we use
     wxHtmlWinParser *m_htmlParser;
+
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_HTMLLBOX_H_

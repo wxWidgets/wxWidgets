@@ -33,47 +33,97 @@
 #include "wx/html/htmlcell.h"
 #include "wx/html/winpars.h"
 
+// this hack forces the linker to always link in m_* files
+#include "wx/html/forcelnk.h"
+FORCE_WXHTML_MODULES()
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
 // this class is used by wxHtmlListBox to cache the parsed representation of
 // the items to avoid doing it anew each time an item must be drawn
-//
-// TODO: extend the class to cache more than item
 class wxHtmlListBoxCache
 {
 public:
-    wxHtmlListBoxCache() { m_cell = NULL; }
-    ~wxHtmlListBoxCache() { delete m_cell; }
-
-    // returns true if we already have this item cached
-    bool Has(size_t n) const { return m_cell && n == m_item; }
-
-    // ensure that the item is cached
-    void Store(size_t n, wxHtmlCell *cell)
+    wxHtmlListBoxCache()
     {
-        m_item = n;
+        for ( size_t n = 0; n < SIZE; n++ )
+        {
+            m_items[n] = (size_t)-1;
+            m_cells[n] = NULL;
+        }
 
-        delete m_cell;
-        m_cell = cell;
+        m_next = 0;
+    }
+
+    ~wxHtmlListBoxCache()
+    {
+        for ( size_t n = 0; n < SIZE; n++ )
+        {
+            delete m_cells[n];
+        }
+    }
+
+    // completely invalidate the cache
+    void Clear()
+    {
+        for ( size_t n = 0; n < SIZE; n++ )
+        {
+            m_items[n] = (size_t)-1;
+            delete m_cells[n];
+            m_cells[n] = NULL;
+        }
     }
 
     // return the cached cell for this index or NULL if none
-    wxHtmlCell *Get(size_t n) const
+    wxHtmlCell *Get(size_t item) const
     {
-        // we could be reading uninitialized m_item here but the code is still
-        // correct
-        return n == m_item ? m_cell : NULL;
+        for ( size_t n = 0; n < SIZE; n++ )
+        {
+            if ( m_items[n] == item )
+                return m_cells[n];
+        }
+
+        return NULL;
+    }
+
+    // returns true if we already have this item cached
+    bool Has(size_t item) const { return Get(item) != NULL; }
+
+    // ensure that the item is cached
+    void Store(size_t item, wxHtmlCell *cell)
+    {
+        delete m_cells[m_next];
+        m_cells[m_next] = cell;
+        m_items[m_next] = item;
+
+        // advance to the next item wrapping around if there are no more
+        if ( ++m_next == SIZE )
+            m_next = 0;
     }
 
 private:
-    // the parsed representation of the cached item or NULL
-    wxHtmlCell *m_cell;
+    // the max number of the items we cache
+    enum { SIZE = 50 };
 
-    // the index of the currently cached item (only valid if m_cell != NULL)
-    size_t m_item;
+    // the index of the LRU (oldest) cell
+    size_t m_next;
+
+    // the parsed representation of the cached item or NULL
+    wxHtmlCell *m_cells[SIZE];
+
+    // the index of the currently cached item (only valid if m_cells != NULL)
+    size_t m_items[SIZE];
 };
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxHtmlListBox, wxVListBox)
+    EVT_SIZE(wxHtmlListBox::OnSize)
+END_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -122,6 +172,10 @@ wxString wxHtmlListBox::OnGetItemMarkup(size_t n) const
     return OnGetItem(n);
 }
 
+// ----------------------------------------------------------------------------
+// wxHtmlListBox cache handling
+// ----------------------------------------------------------------------------
+
 void wxHtmlListBox::CacheItem(size_t n) const
 {
     if ( !m_cache->Has(n) )
@@ -138,10 +192,25 @@ void wxHtmlListBox::CacheItem(size_t n) const
                 Parse(OnGetItemMarkup(n));
         wxCHECK_RET( cell, _T("wxHtmlParser::Parse() returned NULL?") );
 
-        cell->Layout(GetClientSize().x);
+        cell->Layout(GetClientSize().x - 2*GetMargins().x);
 
         m_cache->Store(n, cell);
     }
+}
+
+void wxHtmlListBox::OnSize(wxSizeEvent& event)
+{
+    // we need to relayout all the cached cells
+    m_cache->Clear();
+
+    event.Skip();
+}
+
+void wxHtmlListBox::RefreshAll()
+{
+    m_cache->Clear();
+
+    wxVListBox::RefreshAll();
 }
 
 // ----------------------------------------------------------------------------
@@ -155,23 +224,21 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     wxHtmlCell *cell = m_cache->Get(n);
     wxCHECK_RET( cell, _T("this cell should be cached!") );
 
+    wxHtmlRenderingState htmlRendState;
+
     // draw the selected cell in selected state
     if ( IsSelected(n) )
     {
         wxHtmlSelection htmlSel;
         htmlSel.Set(wxPoint(0, 0), cell, wxPoint(INT_MAX, INT_MAX), cell);
-        wxHtmlRenderingState htmlRendState(&htmlSel);
+        htmlRendState.SetSelection(&htmlSel);
         htmlRendState.SetSelectionState(wxHTML_SEL_IN);
-        cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendState);
     }
-    else
-    {
-        // note that we can't stop drawing exactly at the window boundary as then
-        // even the visible cells part could be not drawn, so always draw the
-        // entire cell
-        wxHtmlRenderingState htmlRendState(NULL);
-        cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendState);
-    }
+
+    // note that we can't stop drawing exactly at the window boundary as then
+    // even the visible cells part could be not drawn, so always draw the
+    // entire cell
+    cell->Draw(dc, rect.x, rect.y, 0, INT_MAX, htmlRendState);
 }
 
 wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
