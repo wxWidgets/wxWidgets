@@ -380,7 +380,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_SEARCH_PATHS = /usr/lib/gcc/darwin/3.1;
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O0";
@@ -3173,7 +3173,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = DYNAMIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -DWXMAKINGDLL -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
@@ -6043,7 +6043,7 @@
 			);
 			isa = PBXGroup;
 			name = morefilex;
-			path = mac/morefilex;
+			path = mac/carbon/morefilex;
 			refType = 2;
 		};
 		CADEF54303C8C0A800000133 = {
@@ -11839,7 +11839,7 @@
 				F5A85D8D01FA022B0175ACA7,
 			);
 			isa = PBXGroup;
-			path = mac;
+			path = mac/carbon;
 			refType = 4;
 		};
 		F5A85D3C01FA022B0175ACA7 = {
@@ -14790,7 +14790,7 @@
 				F5A8620A01FA022C0175ACA7,
 			);
 			isa = PBXGroup;
-			path = mac;
+			path = mac/carbon;
 			refType = 4;
 		};
 		F5A8619A01FA022C0175ACA7 = {
@@ -15793,7 +15793,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefilex jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXDEBUG__ -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
@@ -16842,7 +16842,7 @@
 				DEBUGGING_SYMBOLS = NO;
 				DYLIB_COMPATIBILITY_VERSION = 2.5;
 				DYLIB_CURRENT_VERSION = 2.5.0;
-				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
+				HEADER_SEARCH_PATHS = "\"${SYMROOT}/include\" ../include mac/carbon/morefile jpeg png regex tiff - \"$(SYSTEM_DEVELOPER_DIR)/Headers/FlatCarbon\" /usr/include";
 				LIBRARY_STYLE = STATIC;
 				OPTIMIZATION_CFLAGS = "-O3";
 				OTHER_CFLAGS = "-DNO_GCC_PRAGMA -D__WXMAC__ -DwxUSE_BASE=1 -fno-rtti -fno-exceptions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES";
