@@ -11,10 +11,13 @@
 
 #ifdef __WINDOWS__
 #define wxHelpController wxWinHelpController
+#define classwxHelpController classwxWinHelpController
 #elif defined(__GTK__)
 #define wxHelpController wxHTMLHelpController
+#define classwxHelpController classwxHTMLHelpController
 #else
 #define wxHelpController wxXLPHelpController
+#define classwxHelpController classwxXLPHelpController
 #endif
 
 #endif
