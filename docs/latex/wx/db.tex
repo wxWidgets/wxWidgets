@@ -268,6 +268,47 @@ both types of cursors.
 The following functions are used in conjunction with the wxDb class.
 
 
+\func{void}{wxDbCloseConnections}{\void}
+
+\wxheading{Remarks}
+
+Closes all cached connections that have been made through use of the 
+\helpref{wxDbGetConnection}{wxdbfunctions} function.  
+
+NOTE: These connections are closed regardless of whether they are in use 
+or not.  This function should only be called after the program has 
+finished using the connections and all wxDbTable instances that use any of 
+the connections have been closed.
+
+This function performs a \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
+on the connection before closing it to commit any changes that are still 
+pending, as well as to avoid any function sequence errors upon closing 
+each connection.
+
+
+\func{int }{wxDbConnectionsInUse}{\void}
+
+\wxheading{Remarks}
+
+Returns a count of how many database connections are currently free ( not 
+being used) that have been cached through use of the \helpref{wxDbGetConnection}{wxdbfunctions} 
+function.
+
+
+\func{bool}{wxDbFreeConnection}{\param{wxDb *}{pDb}}
+
+\wxheading{Remarks}
+
+Searches the list of cached database connections connection for one matching 
+the passed in wxDb instance.  If found, that cached connection is freed.
+
+Freeing a connection means that it is marked as available (free) in the 
+cache of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions} 
+is able to return a pointer to the wxDb instance for use.  Freeing a 
+connection does NOT close the connection, it only makes the connection 
+available again.
+ 
+
 \func{wxDb *}{wxDbGetConnection}{\param{wxDbConnectInf *}{pDbConfig}, 
 \param{bool }{FwdOnlyCursors=(bool)wxODBC\_FWD\_ONLY\_CURSORS}}
 
@@ -310,45 +351,10 @@ When exiting the program, call wxDbCloseConnections() to close all the
 cached connections created by calls to wxDbGetConnection().
 
 
-\func{bool}{wxDbFreeConnection}{\param{wxDb *}{pDb}}
+\func{const wxChar *}{wxDbLogExtendedErrorMsg}{\param{const wxChar *}{userText}, \param{wxDb *}{pDb}, \param{wxChar *}{ErrFile}, \param{int }{ErrLine}}
 
-\wxheading{Remarks}
-
-Searches the list of cached database connections connection for one matching 
-the passed in wxDb instance.  If found, that cached connection is freed.
-
-Freeing a connection means that it is marked as available (free) in the 
-cache of connections, so that a call to \helpref{wxDbGetConnection}{wxdbfunctions} 
-is able to return a pointer to the wxDb instance for use.  Freeing a 
-connection does NOT close the connection, it only makes the connection 
-available again.
- 
-
-\func{void}{wxDbCloseConnections}{\void}
-
-\wxheading{Remarks}
-
-Closes all cached connections that have been made through use of the 
-\helpref{wxDbGetConnection}{wxdbfunctions} function.  
-
-NOTE: These connections are closed regardless of whether they are in use 
-or not.  This function should only be called after the program has 
-finished using the connections and all wxDbTable instances that use any of 
-the connections have been closed.
-
-This function performs a \helpref{wxDb::CommitTrans}{wxdbcommittrans} 
-on the connection before closing it to commit any changes that are still 
-pending, as well as to avoid any function sequence errors upon closing 
-each connection.
-
-
-\func{int }{wxDbConnectionsInUse}{\void}
-
-\wxheading{Remarks}
-
-Returns a count of how many database connections are currently free ( not 
-being used) that have been cached through use of the \helpref{wxDbGetConnection}{wxdbfunctions} 
-function.
+Writes a message to the wxLog window (stdout usually) when an internal 
+error situation occurs.  This function only works in DEBUG builds
 
 
 \func{bool}{wxDbSqlLog}{\param{wxDbSqlLogState }{state}, \param{const wxString &}{filename = SQL\_LOG\_FILENAME}}
