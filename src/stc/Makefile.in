@@ -1,0 +1,36 @@
+###############################################################################
+# Purpose: Makefile.in for STC contrib for Unix with autoconf
+# Created: 14.03.00
+# Author:  VZ
+# Version: $Id$
+###############################################################################
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+
+this_dir = $(top_srcdir)/contrib/src/stc
+scintilla_dir=$(this_dir)/scintilla
+VPATH=$(this_dir)@PATH_IFS@$(scintilla_dir)/src # ':' for autoconf
+
+LIBTARGET=libstc
+
+OBJECTS=PlatWX.o ScintillaWX.o stc.o \
+        Accessor.o	        \
+        AutoComplete.o	    \
+        CallTip.o	        \
+        CellBuffer.o	    \
+        ContractionState.o  \
+        Document.o	        \
+        Editor.o		    \
+        Indicator.o	        \
+        KeyMap.o		    \
+        KeyWords.o	        \
+        LineMarker.o	    \
+        PropSet.o	        \
+        ScintillaBase.o	    \
+        Style.o		        \
+        ViewStyle.o
+        
+APPEXTRADEFS=-D__WX__ -DSCI_LEXER -I$(scintilla_dir)/src -I$(scintilla_dir)/include -I$(top_srcdir)/contrib/include
+
+include $(top_builddir)/src/makelib.env

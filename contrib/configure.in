@@ -39,6 +39,8 @@ AC_OUTPUT([
             src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
+            src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/stc/Makefile
          ])

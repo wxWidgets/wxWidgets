@@ -1,0 +1,20 @@
+###############################################################################
+# Purpose: Makefile.in for STC sample for Unix with autoconf
+# Created: 14.03.00
+# Author:  VZ
+# Version: $Id$
+###############################################################################
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../..
+program_dir = contrib/samples/stc
+
+PROGRAM=stctest
+
+OBJECTS=$(PROGRAM).o
+
+APPEXTRALIBS=$(top_builddir)/contrib/src/stc/libstc.a
+
+DATAFILES=stctest.cpp
+
+include ../../../src/makeprog.env

@@ -814,8 +814,10 @@ trap 'rm -fr `echo "
             src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
+            src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/stc/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -897,8 +899,10 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             src/Makefile
             src/ogl/Makefile
             src/mmedia/Makefile
+            src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/stc/Makefile
          "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
