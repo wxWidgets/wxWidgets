@@ -34,6 +34,7 @@ class WXDLLEXPORT wxObject;
 
 class WXDLLEXPORT wxClassInfo;
 class WXDLLEXPORT wxInputStream;
+class WXDLLEXPORT wxOutputStream;
 class WXDLLEXPORT wxObjectInputStream;
 class WXDLLEXPORT wxObjectOutputStream;
 class WXDLLEXPORT wxHashTable;

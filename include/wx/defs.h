@@ -57,7 +57,7 @@
     // define another standard symbol for Microsoft Visual C++: the standard one
     // (_MSC_VER) is also defined by Metrowerks compiler
     #if defined(_MSC_VER) && !defined(__MWERKS__)
-        #define __VISUALC__
+        #define __VISUALC__ _MSC_VER
     #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
         #define __BORLANDC__
       #elif defined(__WATCOMC__)
