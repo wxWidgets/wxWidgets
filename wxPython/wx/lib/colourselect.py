@@ -133,7 +133,8 @@ class ColourSelect(wx.BitmapButton):
         self.SetBitmapDisabled(bmp)
         self.SetBitmapFocus(bmp)
         self.SetBitmapSelected(bmp)
-
+        self.Refresh()
+        
 
     def OnChange(self):
         wx.PostEvent(self, ColourSelectEvent(self.GetId(), self.GetValue()))
@@ -150,7 +151,6 @@ class ColourSelect(wx.BitmapButton):
         if changed:
             data = dlg.GetColourData()
             self.SetColour(data.GetColour())
-
         dlg.Destroy()
 
         # moved after dlg.Destroy, since who knows what the callback will do...
