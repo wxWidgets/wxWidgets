@@ -50,7 +50,6 @@ typedef unsigned long wxTraceMask;
 typedef unsigned long wxLogLevel;
 
 // ----------------------------------------------------------------------------
->>>>>>> 1.2
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
