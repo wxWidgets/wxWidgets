@@ -2303,7 +2303,7 @@ static void
 wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
 {
     // get the destination DC pixels
-    wxBitmap bmpDst(w, h, 32);
+    wxBitmap bmpDst(w, h, 32 /* force creating RGBA DIB */);
     MemoryHDC hdcMem;
     SelectInHDC select(hdcMem, GetHbitmapOf(bmpDst));
 
@@ -2315,6 +2315,9 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
     // combine them with the source bitmap using alpha
     wxRawBitmapData dataDst(bmpDst),
                     dataSrc(bmpSrc);
+
+    wxCHECK_RET( dataDst && dataSrc,
+                    _T("failed to get raw data in wxAlphaBlend") );
 
     wxRawBitmapIterator pDst(dataDst),
                         pSrc(dataSrc);
