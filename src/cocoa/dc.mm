@@ -194,6 +194,7 @@ void wxDC::CocoaUnapplyTransformations()
     invertTransform = [m_cocoaWxToBoundsTransform copy];
     [invertTransform invert];
     [invertTransform concat];
+    [invertTransform release];
 }
 
 bool wxDC::CocoaGetBounds(void *rectData)
