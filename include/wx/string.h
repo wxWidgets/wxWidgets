@@ -176,17 +176,21 @@ class WXDLLEXPORT wxMBConv
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
   const wxWCharBuffer cMB2WC(const char *psz) const
     {
-      size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
-      wxWCharBuffer buf(nLen);
-      MB2WC(WCSTRINGCAST buf, psz, nLen);
-      return buf;
+      if (psz) {
+        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
+        wxWCharBuffer buf(nLen);
+        MB2WC(WCSTRINGCAST buf, psz, nLen);
+        return buf;
+      } else return wxWCharBuffer((wchar_t *) NULL);
     }
   const wxCharBuffer cWC2MB(const wchar_t *psz) const
     {
-      size_t nLen = WC2MB((char *) NULL, psz, 0);
-      wxCharBuffer buf(nLen);
-      WC2MB(MBSTRINGCAST buf, psz, nLen);
-      return buf;
+      if (psz) {
+        size_t nLen = WC2MB((char *) NULL, psz, 0);
+        wxCharBuffer buf(nLen);
+        WC2MB(MBSTRINGCAST buf, psz, nLen);
+        return buf;
+      } else return wxCharBuffer((char *) NULL);
     }
 #if wxUSE_UNICODE
   const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
