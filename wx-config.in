@@ -31,7 +31,7 @@ use it to enable builds with an uninstalled wxWindows version for
 package building and bleeding edge developers.  To do so, use it like
 this:
 
-${wx_builddir}/wx-config --prefix=${wx_srcdir} --exec-prefix=${wx_builddir}
+\${wx_builddir}/wx-config --prefix=\${wx_srcdir} --exec-prefix=\${wx_builddir}
 
 Note that any other options supplied must come *after* the prefix
 specification for it to take effect.
