@@ -696,7 +696,7 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
         }
         else
         {
-            images->Add(wxBitmap(icons[i].ConvertToImage().Rescale(size, size)));
+            images->Add(wxBitmap(wxBitmap(icons[i]).ConvertToImage().Rescale(size, size)));
         }
     }
 
