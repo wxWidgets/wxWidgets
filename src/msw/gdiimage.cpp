@@ -37,21 +37,12 @@
 
 #include "wx/app.h"
 
-#ifndef __WXMICROWIN__
-#include "wx/msw/dib.h"
-#endif
-
-#include "wx/msw/bitmap.h"
-#include "wx/msw/gdiimage.h"
 #include "wx/bitmap.h"
+#include "wx/msw/gdiimage.h"
+#include "wx/msw/dib.h"
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxGDIImageHandlerList);
-
-
-#ifdef __WIN16__
-#   include "wx/msw/curico.h"
-#endif // __WIN16__
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -354,24 +345,11 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
                                 int WXUNUSED(desiredWidth),
                                 int WXUNUSED(desiredHeight))
 {
-#if wxUSE_IMAGE_LOADING_IN_MSW
-    wxPalette *palette = NULL;
-    bool success = wxLoadIntoBitmap(WXSTRINGCAST name, bitmap, &palette) != 0;
+    wxCHECK_MSG( bitmap, false, _T("NULL bitmap in LoadFile") );
 
-#if wxUSE_PALETTE
-    if ( success && palette )
-    {
-        bitmap->SetPalette(*palette);
-    }
+    wxDIB dib(name);
 
-    // it was copied by the bitmap if it was loaded successfully
-    delete palette;
-#endif // wxUSE_PALETTE
-
-    return success;
-#else
-    return false;
-#endif
+    return dib.IsOk() && bitmap->CopyFromDIB(dib);
 }
 
 bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap,
@@ -404,13 +382,11 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
                                 long WXUNUSED(flags),
                                 int desiredWidth, int desiredHeight)
 {
-#if wxUSE_RESOURCE_LOADING_IN_MSW
     icon->UnRef();
 
     // actual size
     wxSize size;
 
-#ifdef __WIN32__
     HICON hicon = NULL;
 
     // Parse the filename: it may be of the form "filename;n" in order to
@@ -490,21 +466,6 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     }
 
     size = wxGetHiconSize(hicon);
-#else // Win16
-    HICON hicon = ReadIconFile((wxChar *)name.c_str(),
-                               wxGetInstance(),
-                               &size.x, &size.y);
-    HICON   hIcon = 0;
-    HANDLE  hDIB = 0;
-
-    // Read the icon DIB from file
-    if( (hDIB = ReadIcon((wxChar *)name.c_str(), &size.x, &size.y)) == (HANDLE) NULL)
-        return false;
-
-    // Create an icon from DIB
-    hicon = MakeIcon( hDIB, wxGetInstance());
-    GlobalFree( hDIB);
-#endif // Win32/Win16
 
     if ( (desiredWidth != -1 && desiredWidth != size.x) ||
          (desiredHeight != -1 && desiredHeight != size.y) )
@@ -523,9 +484,6 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     icon->SetSize(size.x, size.y);
 
     return icon->Ok();
-#else
-    return false;
-#endif
 }
 
 bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
@@ -547,7 +505,6 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
 
     // note that we can't just always call LoadImage() because it seems to do
     // some icon rescaling internally which results in very ugly 16x16 icons
-#if defined(__WIN32__) && !defined(__SC__)
     if ( hasSize )
     {
         hicon = (HICON)::LoadImage(wxGetInstance(), name, IMAGE_ICON,
@@ -555,7 +512,6 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
                                     LR_DEFAULTCOLOR);
     }
     else
-#endif // Win32/!Win32
     {
         hicon = ::LoadIcon(wxGetInstance(), name);
     }
@@ -600,8 +556,6 @@ wxSize wxGetHiconSize(HICON hicon)
 {
     wxSize size(32, 32);    // default
 
-#ifdef __WIN32__
-    // Win32s doesn't have GetIconInfo function...
     if ( hicon && wxGetOsVersion() != wxWIN32S )
     {
         ICONINFO info;
@@ -626,9 +580,9 @@ wxSize wxGetHiconSize(HICON hicon)
                 ::DeleteObject(info.hbmColor);
         }
     }
-#endif
 
     return size;
 }
-#endif
-    // __WXMICROWIN__
+
+#endif // __WXMICROWIN__
+
