@@ -80,6 +80,7 @@ enum
 
 // you should consider wxMutexLocker whenever possible instead of directly
 // working with wxMutex class - it is safer
+class WXDLLEXPORT wxConditionInternal;
 class WXDLLEXPORT wxMutexInternal;
 class WXDLLEXPORT wxMutex
 {
@@ -105,6 +106,8 @@ protected:
 
     int m_locked;
     wxMutexInternal *m_internal;
+
+    friend class wxConditionInternal;
 };
 
 // a helper class which locks the mutex in the ctor and unlocks it in the dtor:
@@ -211,41 +214,97 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// Condition variable: allows to block the thread execution until something
-// happens (== condition is signaled)
+// wxCondition models a POSIX condition variable which allows one (or more)
+// thread(s) to wait until some condition is fulfilled
 // ----------------------------------------------------------------------------
 
-class wxConditionInternal;
 class WXDLLEXPORT wxCondition
 {
 public:
-    // constructor & destructor
-    wxCondition();
+    // constructor and destructor
+
+    // Each wxCondition object is associated with with a wxMutex object The
+    // mutex object MUST be locked before calling Wait()
+    wxCondition( wxMutex *mutex );
+
+    // dtor is not virtual, don't use this class polymorphically
     ~wxCondition();
 
-    // wait until the condition is signaled
-        // waits indefinitely.
+    // NB: the associated mutex MUST be locked beforehand by the calling thread
+    // 
+    // it atomically releases the lock on the associated mutex
+    // and starts waiting to be woken up by a Signal()/Broadcast()
+    // once its signaled, then it will wait until it can reacquire
+    // the lock on the associated mutex object, before returning.
     void Wait();
-        // waits until a signal is raised or the timeout elapses
-    bool Wait(unsigned long sec, unsigned long nsec);
 
-    // signal the condition
-        // wakes up one (and only one) of the waiting threads
+    // exactly as Wait() except that it may also return if the specified
+    // timeout ellapses even if the condition hasn't been signalled: in this
+    // case, the return value is FALSE, otherwise (i.e. in case of a normal
+    // return) it is TRUE
+    // 
+    // the timeeout parameter specifies a interval that needs to be waited in
+    // milliseconds
+    bool Wait( unsigned long timeout_millis );
+
+    // NB: the associated mutex may or may not be locked by the calling thread
+    //
+    // this method unblocks one thread if any are blocking on the condition.
+    // if no thread is blocking in Wait(), then the signal is NOT remembered
+    // The thread which was blocking on Wait(), will then reacquire the lock
+    // on the associated mutex object before returning
     void Signal();
-        // wakes up all threads waiting on this condition
-    void Broadcast();
 
-#ifdef __WXDEBUG__
-    // for debugging purposes only
-    void *GetId() const { return m_internal; }
-#endif // __WXDEBUG__
+    // NB: the associated mutex may or may not be locked by the calling thread
+    //
+    // this method unblocks all threads if any are blocking on the condition.
+    // if no thread is blocking in Wait(), then the signal is NOT remembered
+    // The threads which were blocking on Wait(), will then reacquire the lock
+    // on the associated mutex object before returning.
+    void Broadcast();
 
 private:
     wxConditionInternal *m_internal;
 };
 
 // ----------------------------------------------------------------------------
-// Thread class
+// wxSemaphore: a counter limiting the number of threads concurrently accessing
+//              a shared resource
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSemaphoreInternal;
+class WXDLLEXPORT wxSemaphore
+{
+public:
+    // specifying a maxcount of 0 actually makes wxSemaphore behave as if there
+    // is no upper limit, if maxcount is 1 the semaphore behaves as a mutex
+    wxSemaphore( int initialcount = 0, int maxcount = 0 );
+
+    // dtor is not virtual, don't use this class polymorphically
+    ~wxSemaphore();
+
+    // wait indefinitely, until the semaphore count goes beyond 0
+    // and then decrement it and return (this method might have been called
+    // Acquire())
+    void Wait();
+
+    // same as Wait(), but does not block, returns TRUE if successful and
+    // FALSE if the count is zero
+    bool TryWait();
+
+    // same as Wait(), but as a timeout limit, returns TRUE if the semaphore
+    // was acquired and FALSE if the timeout has ellapsed
+    bool Wait( unsigned long timeout_millis );
+
+    // increments the semaphore count and signals one of the waiting threads
+    void Post();
+
+private:
+    wxSemaphoreInternal *m_internal;
+};
+
+// ----------------------------------------------------------------------------
+// wxThread: class encpasulating a thread of execution
 // ----------------------------------------------------------------------------
 
 // there are two different kinds of threads: joinable and detached (default)
@@ -540,4 +599,3 @@ public:
 
 #endif // __THREADH__
 
-// vi:sts=4:sw=4:et
