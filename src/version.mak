@@ -10,7 +10,7 @@
 ##############################################################################
 
 wxMAJOR_VERSION=2
-wxMINOR_VERSION=5
+wxMINOR_VERSION=4
 wxRELEASE_NUMBER=0
 
 # release number if used in the DLL file names only for the unstable branch as
@@ -19,6 +19,7 @@ wxRELEASE_NUMBER=0
 # impossible to use them without recompiling the applications (which is the
 # whole goal of keeping them backwards compatible in the first place)
 #
-# as 2.5 is an unstable branch, wxRELEASE_NUMBER_IFUNSTABLE should be set
-# (but when we go to 2.6, it should become empty)
-wxRELEASE_NUMBER_IFUNSTABLE=$(wxRELEASE_NUMBER)
+# As 2.4 is a stable branch, wxRELEASE_NUMBER_IFUNSTABLE should be empty
+# so we end up with DLLs with only "24" in the name.  Unstable branches
+# should set it to $wxRELEASE_NUMBER
+wxRELEASE_NUMBER_IFUNSTABLE=
