@@ -68,7 +68,7 @@ Windows  (build env is on Cyclops)
 
 	distrib\makedocs.bat
 
-* Clean and old wxPython builds:
+* Clean any old wxPython builds:
 
 	del /sx build build.unicode
 

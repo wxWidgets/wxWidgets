@@ -49,9 +49,9 @@ def runTest(frame, nb, log):
 
 
 overview = """<html><body>
-<h2>StaticBitmap</h2>
+<h2>BitmapButton</h2>
 
-<p>A StaticBitmap control displays a bitmap. It can have a separate bitmap for each button state: normal, selected, disabled.</p>
+<p>A BitmapButton control displays a bitmap. It can have a separate bitmap for each button state: normal, selected, disabled.</p>
 
 <p>The bitmaps to be displayed should have a small number of colours, such as 16, 
 to avoid palette problems.</p>
