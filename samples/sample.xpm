@@ -1,5 +1,5 @@
 /* XPM */
-static char *sample.xpm[] = {
+static char *sample_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "32 32 6 1",
 "  c black",
