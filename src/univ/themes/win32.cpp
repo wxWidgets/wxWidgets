@@ -314,6 +314,8 @@ public:
     virtual wxSize GetFrameIconSize() const;
     virtual int HitTestFrame(const wxRect& rect, const wxPoint& pt, int flags) const;
 
+    virtual wxIcon GetStdIcon(int which) const;
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpFocus,
                                  wxBitmap *bmpPressed,
@@ -2546,6 +2548,7 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
             rectInt.SetBottom(y3);
         rectInt.Deflate(2);
 
+#if !defined(__WXMGL__)
         static const char *stipple_xpm[] = {
             /* columns rows colors chars-per-pixel */
             "2 2 2 1",
@@ -2555,6 +2558,24 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
             "w ",
             " w",
         };
+#else
+        // VS: MGL can only do 8x8 stipple brushes
+        static const char *stipple_xpm[] = {
+            /* columns rows colors chars-per-pixel */
+            "8 8 2 1",
+            "  c None",
+            "w c white",
+            /* pixels */
+            "w w w w ",
+            " w w w w",
+            "w w w w ",
+            " w w w w",
+            "w w w w ",
+            " w w w w",
+            "w w w w ",
+            " w w w w",
+        };
+#endif
         dc.SetBrush(wxBrush(stipple_xpm));
 
         dc.SetTextForeground(wxSCHEME_COLOUR(m_scheme, SHADOW_HIGHLIGHT));
@@ -3442,6 +3463,195 @@ wxSize wxWin32Renderer::GetFrameIconSize() const
     return wxSize(16, 16);
 }
 
+
+// ----------------------------------------------------------------------------
+// standard icons
+// ----------------------------------------------------------------------------
+
+static char *error_xpm[]={
+"32 32 5 1",
+". c None",
+"# c #800000",
+"b c #808080",
+"a c #ff0000",
+"c c #ffffff",
+"...........########.............",
+"........###aaaaaaaa###..........",
+".......#aaaaaaaaaaaaaa#.........",
+".....##aaaaaaaaaaaaaaaa##.......",
+"....#aaaaaaaaaaaaaaaaaaaa#......",
+"...#aaaaaaaaaaaaaaaaaaaaaa#.....",
+"...#aaaaaaaaaaaaaaaaaaaaaa#b....",
+"..#aaaaaacaaaaaaaaaacaaaaaa#b...",
+".#aaaaaacccaaaaaaaacccaaaaaa#...",
+".#aaaaacccccaaaaaacccccaaaaa#b..",
+".#aaaaaacccccaaaacccccaaaaaa#bb.",
+"#aaaaaaaacccccaacccccaaaaaaaa#b.",
+"#aaaaaaaaaccccccccccaaaaaaaaa#b.",
+"#aaaaaaaaaaccccccccaaaaaaaaaa#bb",
+"#aaaaaaaaaaaccccccaaaaaaaaaaa#bb",
+"#aaaaaaaaaaaccccccaaaaaaaaaaa#bb",
+"#aaaaaaaaaaccccccccaaaaaaaaaa#bb",
+"#aaaaaaaaaccccccccccaaaaaaaaa#bb",
+"#aaaaaaaacccccaacccccaaaaaaaa#bb",
+".#aaaaaacccccaaaacccccaaaaaa#bbb",
+".#aaaaacccccaaaaaacccccaaaaa#bbb",
+".#aaaaaacccaaaaaaaacccaaaaaa#bb.",
+"..#aaaaaacaaaaaaaaaacaaaaaa#bbb.",
+"...#aaaaaaaaaaaaaaaaaaaaaa#bbbb.",
+"...#aaaaaaaaaaaaaaaaaaaaaa#bbb..",
+"....#aaaaaaaaaaaaaaaaaaaa#bbb...",
+".....##aaaaaaaaaaaaaaaa##bbbb...",
+"......b#aaaaaaaaaaaaaa#bbbbb....",
+".......b###aaaaaaaa###bbbbb.....",
+".........bb########bbbbbb.......",
+"..........bbbbbbbbbbbbbb........",
+".............bbbbbbbb..........."};
+
+static char *info_xpm[]={
+"32 32 6 1",
+". c None",
+"d c #000000",
+"c c #0000ff",
+"# c #808080",
+"a c #c0c0c0",
+"b c #ffffff",
+"...........########.............",
+"........###abbbbbba###..........",
+"......##abbbbbbbbbbbba##........",
+".....#abbbbbbbbbbbbbbbba#.......",
+"....#bbbbbbbaccccabbbbbbbd......",
+"...#bbbbbbbbccccccbbbbbbbbd.....",
+"..#bbbbbbbbbccccccbbbbbbbbbd....",
+".#abbbbbbbbbaccccabbbbbbbbbad...",
+".#bbbbbbbbbbbbbbbbbbbbbbbbbbd#..",
+"#abbbbbbbbbbbbbbbbbbbbbbbbbbad#.",
+"#bbbbbbbbbbcccccccbbbbbbbbbbbd#.",
+"#bbbbbbbbbbbbcccccbbbbbbbbbbbd##",
+"#bbbbbbbbbbbbcccccbbbbbbbbbbbd##",
+"#bbbbbbbbbbbbcccccbbbbbbbbbbbd##",
+"#bbbbbbbbbbbbcccccbbbbbbbbbbbd##",
+"#abbbbbbbbbbbcccccbbbbbbbbbbad##",
+".#bbbbbbbbbbbcccccbbbbbbbbbbd###",
+".#abbbbbbbbbbcccccbbbbbbbbbad###",
+"..#bbbbbbbbcccccccccbbbbbbbd###.",
+"...dbbbbbbbbbbbbbbbbbbbbbbd####.",
+"....dbbbbbbbbbbbbbbbbbbbbd####..",
+".....dabbbbbbbbbbbbbbbbad####...",
+"......ddabbbbbbbbbbbbadd####....",
+".......#dddabbbbbbaddd#####.....",
+"........###dddabbbd#######......",
+"..........####dbbbd#####........",
+".............#dbbbd##...........",
+"...............dbbd##...........",
+"................dbd##...........",
+".................dd##...........",
+"..................###...........",
+"...................##..........."};
+
+static char *question_xpm[]={
+"32 32 6 1",
+". c None",
+"c c #000000",
+"d c #0000ff",
+"# c #808080",
+"a c #c0c0c0",
+"b c #ffffff",
+"...........########.............",
+"........###abbbbbba###..........",
+"......##abbbbbbbbbbbba##........",
+".....#abbbbbbbbbbbbbbbba#.......",
+"....#bbbbbbbbbbbbbbbbbbbbc......",
+"...#bbbbbbbaddddddabbbbbbbc.....",
+"..#bbbbbbbadabbddddabbbbbbbc....",
+".#abbbbbbbddbbbbddddbbbbbbbac...",
+".#bbbbbbbbddddbbddddbbbbbbbbc#..",
+"#abbbbbbbbddddbaddddbbbbbbbbac#.",
+"#bbbbbbbbbaddabddddbbbbbbbbbbc#.",
+"#bbbbbbbbbbbbbadddbbbbbbbbbbbc##",
+"#bbbbbbbbbbbbbdddbbbbbbbbbbbbc##",
+"#bbbbbbbbbbbbbddabbbbbbbbbbbbc##",
+"#bbbbbbbbbbbbbddbbbbbbbbbbbbbc##",
+"#abbbbbbbbbbbbbbbbbbbbbbbbbbac##",
+".#bbbbbbbbbbbaddabbbbbbbbbbbc###",
+".#abbbbbbbbbbddddbbbbbbbbbbac###",
+"..#bbbbbbbbbbddddbbbbbbbbbbc###.",
+"...cbbbbbbbbbaddabbbbbbbbbc####.",
+"....cbbbbbbbbbbbbbbbbbbbbc####..",
+".....cabbbbbbbbbbbbbbbbac####...",
+"......ccabbbbbbbbbbbbacc####....",
+".......#cccabbbbbbaccc#####.....",
+"........###cccabbbc#######......",
+"..........####cbbbc#####........",
+".............#cbbbc##...........",
+"...............cbbc##...........",
+"................cbc##...........",
+".................cc##...........",
+"..................###...........",
+"...................##..........."};
+
+static char *warning_xpm[]={
+"32 32 6 1",
+". c None",
+"c c #000000",
+"# c #808000",
+"d c #808080",
+"b c #c0c0c0",
+"a c #ffff00",
+".............###................",
+"............#aabc...............",
+"...........#aaaabcd.............",
+"...........#aaaaacdd............",
+"..........#aaaaaabcdd...........",
+"..........#aaaaaaacdd...........",
+".........#aaaaaaaabcdd..........",
+".........#aaaaaaaaacdd..........",
+"........#aaaaaaaaaabcdd.........",
+"........#aaabcccbaaacdd.........",
+".......#aaaacccccaaabcdd........",
+".......#aaaacccccaaaacdd........",
+"......#aaaaacccccaaaabcdd.......",
+"......#aaaaacccccaaaaacdd.......",
+".....#aaaaaacccccaaaaabcdd......",
+".....#aaaaaa#ccc#aaaaaacdd......",
+"....#aaaaaaabcccbaaaaaabcdd.....",
+"....#aaaaaaaacccaaaaaaaacdd.....",
+"...#aaaaaaaaa#c#aaaaaaaabcdd....",
+"...#aaaaaaaaabcbaaaaaaaaacdd....",
+"..#aaaaaaaaaaacaaaaaaaaaabcdd...",
+"..#aaaaaaaaaaaaaaaaaaaaaaacdd...",
+".#aaaaaaaaaaabccbaaaaaaaaabcdd..",
+".#aaaaaaaaaaaccccaaaaaaaaaacdd..",
+"#aaaaaaaaaaaaccccaaaaaaaaaabcdd.",
+"#aaaaaaaaaaaabccbaaaaaaaaaaacdd.",
+"#aaaaaaaaaaaaaaaaaaaaaaaaaaacddd",
+"#aaaaaaaaaaaaaaaaaaaaaaaaaabcddd",
+".#aaaaaaaaaaaaaaaaaaaaaaaabcdddd",
+"..#ccccccccccccccccccccccccddddd",
+"....ddddddddddddddddddddddddddd.",
+".....ddddddddddddddddddddddddd.."};
+
+wxIcon wxWin32Renderer::GetStdIcon(int which) const
+{
+    switch(which)
+    {
+        case wxICON_INFORMATION:
+            return wxIcon(info_xpm);
+
+        case wxICON_QUESTION:
+            return wxIcon(question_xpm);
+
+        case wxICON_EXCLAMATION:
+            return wxIcon(warning_xpm);
+
+        default:
+            wxFAIL_MSG(wxT("requested non existent standard icon"));
+            // still fall through
+
+        case wxICON_HAND:
+            return wxIcon(error_xpm);
+    }
+}
 
 
 // ----------------------------------------------------------------------------
