@@ -365,13 +365,20 @@
 #define wxUSE_LONGLONG 0
 
 /*
+ * Use geometry classes
+ */
+#define wxUSE_GEOMETRY 0
+
+/*
  * Use wxFile class
  */
 #define wxUSE_FILE 0
+
 /*
  * Use wxTextFile class
  */
 #define wxUSE_TEXTFILE 0
+
 /*
  * Use log classes and logging functions
  */
