@@ -2114,7 +2114,8 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
         _T("SELECT_COL")
     };
 
-    wxLogDebug(_T("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
+    wxLogTrace(_T("grid"),
+               _T("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
                win == m_colLabelWin ? _T("colLabelWin")
                                     : win ? _T("rowLabelWin")
                                           : _T("gridWin"),
