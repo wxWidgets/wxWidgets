@@ -1,7 +1,7 @@
 wxwindows2.2 (2.2.6.1) unstable; urgency=low
 
   * fix rules so it really doesn't build -indep for ports
-    and fixed ambiguous oveload bug in mmedia contrib.
+    and fixed ambiguous overload bug in mmedia contrib.
     This time it will build on alpha for sure.  Really. :)
     Closes: #92288
   * added extra -dev package deps.  Closes: #91364
