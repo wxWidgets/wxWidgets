@@ -1,7 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        tooltip.h
+// Purpose:     wxToolTip base header
+// Author:      wxWidgets Team
+// Modified by:
+// Created:
+// Copyright:   (c) wxWidgets Team
+// RCS-ID:      $Id$
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_TOOLTIP_H_BASE_
 #define _WX_TOOLTIP_H_BASE_
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_TOOLTIPS
 

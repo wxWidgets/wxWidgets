@@ -40,6 +40,7 @@
 
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
+#include "wx/stopwatch.h"
 
 // DLL options compatibility check:
 #include "wx/build.h"

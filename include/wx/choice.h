@@ -20,6 +20,8 @@
     #pragma interface "choicebase.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_CHOICE
 
 #include "wx/ctrlsub.h"     // the base class

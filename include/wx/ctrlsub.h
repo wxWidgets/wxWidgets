@@ -16,6 +16,8 @@
     #pragma interface "controlwithitems.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_CONTROLS
 
 #include "wx/control.h"      // base class

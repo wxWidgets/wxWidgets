@@ -16,7 +16,7 @@
 #   pragma interface "dynlib.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 #if wxUSE_DYNLIB_CLASS
 

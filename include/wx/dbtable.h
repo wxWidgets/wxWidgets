@@ -19,7 +19,7 @@
 #ifndef DBTABLE_DOT_H
 #define DBTABLE_DOT_H
 
-#include "wx/version.h"
+#include "wx/defs.h"
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
   #pragma interface "dbtable.h"

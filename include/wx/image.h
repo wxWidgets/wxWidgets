@@ -14,7 +14,7 @@
 #pragma interface "image.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/gdicmn.h"
@@ -182,9 +182,9 @@ public:
 
     // Paste the image or part of this image into an image of the given size at the pos
     //  any newly exposed areas will be filled with the rgb colour
-    //  by default if r = g = b = -1 then fill with this image's mask colour or find and 
+    //  by default if r = g = b = -1 then fill with this image's mask colour or find and
     //  set a suitable mask colour
-    wxImage Size( const wxSize& size, const wxPoint& pos, 
+    wxImage Size( const wxSize& size, const wxPoint& pos,
                   int r = -1, int g = -1, int b = -1 ) const;
 
     // pastes image into this instance and takes care of
@@ -200,7 +200,7 @@ public:
     wxImage& Rescale( int width, int height ) { return *this = Scale(width, height); }
 
     // resizes the image in place
-    wxImage& Resize( const wxSize& size, const wxPoint& pos, 
+    wxImage& Resize( const wxSize& size, const wxPoint& pos,
                      int r = -1, int g = -1, int b = -1 ) { return *this = Size(size, pos, r, g, b); }
 
     // Rotates the image about the given point, 'angle' radians.

@@ -26,9 +26,12 @@
 #pragma interface "mediactrl.h"
 #endif
 
+#include "wx/defs.h"
+
 // ----------------------------------------------------------------------------
 // Compilation guard
 // ----------------------------------------------------------------------------
+
 #if wxUSE_MEDIACTRL
 
 // ----------------------------------------------------------------------------
@@ -179,10 +182,10 @@ public:
     wxFileOffset Length(); //FIXME: This should be const
 
     //
-    // Unofficial parts of API 
+    // Unofficial parts of API
     //
     //DirectShow/GStreamer only.  Quicktime too, but somewhat buggy...
-    bool Load(const wxURI& location);  
+    bool Load(const wxURI& location);
 
     double GetPlaybackRate();           //All but MCI & GStreamer
     bool SetPlaybackRate(double dRate); //All but MCI & GStreamer

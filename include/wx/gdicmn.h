@@ -20,7 +20,7 @@
     #pragma interface "gdicmn.h"
 #endif
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/fontenc.h"

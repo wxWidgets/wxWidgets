@@ -20,6 +20,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/defs.h"
+
 #if wxUSE_TREECTRL
 
 #include "wx/window.h"  // for wxClientData

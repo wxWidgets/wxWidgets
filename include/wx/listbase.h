@@ -16,6 +16,8 @@
 //    #pragma interface "listctrlbase.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_LISTCTRL
 
 #include "wx/colour.h"

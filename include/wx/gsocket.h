@@ -12,8 +12,7 @@
 #define __GSOCKET_H
 
 #ifndef __GSOCKET_STANDALONE__
-#include "wx/setup.h"
-#include "wx/platform.h"
+#include "wx/defs.h"
 
 #include "wx/dlimpexp.h" /* for WXDLLIMPEXP_NET */
 

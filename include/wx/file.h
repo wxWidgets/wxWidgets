@@ -17,11 +17,13 @@
 #pragma interface "file.h"
 #endif
 
+#include  "wx/defs.h"
+
+#if wxUSE_FILE
+
 #include  "wx/string.h"
 #include  "wx/filefn.h"
 #include  "wx/strconv.h"
-
-#if wxUSE_FILE
 
 // ----------------------------------------------------------------------------
 // constants

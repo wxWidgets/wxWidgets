@@ -12,6 +12,8 @@
 #ifndef   _OWNERDRW_H
 #define   _OWNERDRW_H
 
+#include "wx/defs.h"
+
 #if wxUSE_OWNER_DRAWN
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
