@@ -1707,17 +1707,15 @@ void CeditorDlg::OnSelectPict()
 
         if (file.IsOpened())
         {
-            off_t iSize = file.Length();
+            wxFileOffset iSize = file.Length();
 
             if ((iSize > 0) && (iSize < MAX_PICTURE_SIZE))
             {
-                off_t iReadSize = 0;
-
-                wxGetApp().Contact->BlobSize = iSize;
+                wxGetApp().Contact->BlobSize = (size_t)iSize;
 
                 memset(wxGetApp().Contact->Picture, 0, MAX_PICTURE_SIZE);
 
-                iReadSize = file.Read(wxGetApp().Contact->Picture, iSize);
+                wxFileOffset iReadSize = file.Read(wxGetApp().Contact->Picture, (size_t)iSize);
 
                 if (iReadSize < iSize)
                     wxMessageBox(wxT("Something bad happened while reading..."), wxT("BLOB Loading Error"), wxOK | wxICON_EXCLAMATION);
