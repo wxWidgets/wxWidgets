@@ -1033,7 +1033,7 @@ public:
     wxColour GetBackgroundColour() const;
     wxFont GetFont() const;
     void GetAlignment(int *OUTPUT, int *OUTPUT) const;
-    void GetSize(int *num_rows, int *num_cols) const;
+    void GetSize(int *OUTPUT, int *OUTPUT) const;
     bool GetOverflow() const;
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
@@ -1715,8 +1715,8 @@ public:
     wxColour GetCellTextColour( int row, int col );
     wxFont   GetDefaultCellFont();
     wxFont   GetCellFont( int row, int col );
-    void     GetDefaultCellAlignment( int *horiz, int *vert );
-    void     GetCellAlignment( int row, int col, int *horiz, int *vert );
+    void     GetDefaultCellAlignment( int *OUTPUT, int *OUTPUT );
+    void     GetCellAlignment( int row, int col, int *OUTPUT, int *OUTPUT );
     bool     GetDefaultCellOverflow();
     bool     GetCellOverflow( int row, int col );
     void     GetCellSize( int row, int col, int *OUTPUT, int *OUTPUT );
