@@ -171,9 +171,7 @@ typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
 #define EVT_END_PROCESS(id, func) \
    DECLARE_EVENT_TABLE_ENTRY( \
            wxEVT_END_PROCESS, id, -1, \
-           (wxObjectEventFunction) \
-           (wxEventFunction) \
-           (wxProcessEventFunction) & func, NULL),
+           (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxProcessEventFunction, & func ), NULL),
 
 #endif
     // _WX_PROCESSH__

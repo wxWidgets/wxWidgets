@@ -371,7 +371,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,                                \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxSplitterEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
@@ -380,7 +380,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,                               \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxSplitterEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
@@ -389,7 +389,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,                                   \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxSplitterEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
@@ -398,7 +398,7 @@ typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
     wxEVT_COMMAND_SPLITTER_UNSPLIT,                                         \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxSplitterEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxSplitterEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 

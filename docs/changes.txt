@@ -78,6 +78,7 @@ OTHER CHANGES
 
 All:
 
+- event table macros now do some minimal type safety checks (Michael Sögtrop)
 - added wxGzipInput/OutputStream, bug fixes in wxZlibStreams (M.J.Wetherell)
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
 - wxHTTP::GetResponse() added (David Nock)

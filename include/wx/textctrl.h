@@ -459,10 +459,10 @@ public:
 
 typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 
-#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxTextUrlEventFunction) & fn, (wxObject *) NULL ),
-#define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxTextUrlEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
 
 #ifndef NO_TEXT_WINDOW_STREAM
 

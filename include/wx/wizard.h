@@ -297,21 +297,21 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 // notifies that the page has just been changed (can't be vetoed)
-#define EVT_WIZARD_PAGE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "<Back" or "Next>" button and the page is going to be
 // changed - unless the event handler vetoes the event
-#define EVT_WIZARD_PAGE_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "Cancel" button and the wizard is going to be dismissed -
 // unless the event handler vetoes the event
-#define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "Finish" button and the wizard is going to be dismissed -
-#define EVT_WIZARD_FINISHED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_FINISHED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_FINISHED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_FINISHED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "Help" button 
-#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxWizardEventFunction) & fn, (wxObject *)NULL),
+#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 #endif // wxUSE_WIZARDDLG
 

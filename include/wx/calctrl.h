@@ -205,12 +205,12 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 
-#define EVT_CALENDAR(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
-#define EVT_CALENDAR_SEL_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
-#define EVT_CALENDAR_DAY(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_DAY_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
-#define EVT_CALENDAR_MONTH(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_MONTH_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
-#define EVT_CALENDAR_YEAR(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_YEAR_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
-#define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_WEEKDAY_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL),
+#define EVT_CALENDAR(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_DOUBLECLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
+#define EVT_CALENDAR_SEL_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
+#define EVT_CALENDAR_DAY(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_DAY_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
+#define EVT_CALENDAR_MONTH(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_MONTH_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
+#define EVT_CALENDAR_YEAR(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_YEAR_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
+#define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_CALENDAR_WEEKDAY_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxCalendarEventFunction, & fn ), (wxObject *) NULL),
 
 #endif // wxUSE_CALENDARCTRL
 

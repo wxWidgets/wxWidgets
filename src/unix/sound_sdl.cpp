@@ -56,8 +56,7 @@ END_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TABLE_ENTRY(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, \
                               -1,                       \
                               -1,                       \
-                              (wxObjectEventFunction)   \
-                              (wxSoundBackendSDLNotificationFunction)& func, \
+                              (wxObjectEventFunction)  wxStaticCastEvent( wxSoundBackendSDLNotificationFunction, & func ), \
                               (wxObject *) NULL ),
 
 IMPLEMENT_DYNAMIC_CLASS(wxSoundBackendSDLNotification, wxEvtHandler)

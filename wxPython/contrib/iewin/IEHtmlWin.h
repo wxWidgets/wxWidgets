@@ -45,12 +45,12 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxMSHTMLEventFunction)(wxMSHTMLEvent&);
 
-#define EVT_MSHTML_BEFORENAVIGATE2(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
-#define EVT_MSHTML_NEWWINDOW2(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_NEWWINDOW2, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
-#define EVT_MSHTML_DOCUMENTCOMPLETE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
-#define EVT_MSHTML_PROGRESSCHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
-#define EVT_MSHTML_STATUSTEXTCHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
-#define EVT_MSHTML_TITLECHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_TITLECHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxMSHTMLEventFunction) & fn, NULL ),
+#define EVT_MSHTML_BEFORENAVIGATE2(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_BEFORENAVIGATE2, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
+#define EVT_MSHTML_NEWWINDOW2(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_NEWWINDOW2, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
+#define EVT_MSHTML_DOCUMENTCOMPLETE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_DOCUMENTCOMPLETE, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
+#define EVT_MSHTML_PROGRESSCHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_PROGRESSCHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
+#define EVT_MSHTML_STATUSTEXTCHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_STATUSTEXTCHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
+#define EVT_MSHTML_TITLECHANGE(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_COMMAND_MSHTML_TITLECHANGE, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxMSHTMLEventFunction, & fn ), NULL ),
 
 
 enum wxIEHtmlRefreshLevel 

@@ -192,9 +192,9 @@ typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) \
-   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
 #define EVT_DIALUP_DISCONNECTED(func) \
-   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL),
+   DECLARE_EVENT_TABLE_ENTRY( wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxDialUpEventFunction, & func ), NULL),
 
 
 #endif // wxUSE_DIALUP_MANAGER

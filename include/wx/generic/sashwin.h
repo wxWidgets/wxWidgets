@@ -239,9 +239,9 @@ private:
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);
 
 #define EVT_SASH_DRAGGED(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSashEventFunction) & fn, NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSashEventFunction, & fn ), NULL ),
 #define EVT_SASH_DRAGGED_RANGE(id1, id2, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id1, id2, (wxObjectEventFunction) (wxEventFunction) (wxSashEventFunction) & fn, NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SASH_DRAGGED, id1, id2, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSashEventFunction, & fn ), NULL ),
 
 #endif // wxUSE_SASH
 

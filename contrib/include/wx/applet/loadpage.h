@@ -82,7 +82,7 @@ public:
 
 // Define the macro to create our event type
 typedef void (wxEvtHandler::*wxLoadPageEventFunction)(wxLoadPageEvent&);
-#define EVT_LOAD_PAGE(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LOAD_PAGE, -1, -1, (wxObjectEventFunction)(wxEventFunction)(wxLoadPageEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_LOAD_PAGE(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_LOAD_PAGE, -1, -1, (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxLoadPageEventFunction, & fn ), (wxObject *) NULL ),
 
 /****************************************************************************
 REMARKS:
@@ -106,7 +106,7 @@ public:
 
 // Define the macro to create our event type
 typedef void (wxEvtHandler::*wxPageLoadedEventFunction)(wxPageLoadedEvent&);
-#define EVT_PAGE_LOADED(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_PAGE_LOADED, -1, -1, (wxObjectEventFunction)(wxEventFunction)(wxPageLoadedEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_PAGE_LOADED(fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_PAGE_LOADED, -1, -1, (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxPageLoadedEventFunction, & fn ), (wxObject *) NULL ),
 
 
 #endif // __WX_LOAD_PAGE_H

@@ -60,7 +60,7 @@ DEFINE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND)
 #define EVT_MY_CUSTOM_COMMAND(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_MY_CUSTOM_COMMAND, id, -1, \
-        (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction)&fn, \
+        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxCommandEventFunction, &fn ), \
         (wxObject *) NULL \
     ),
 

@@ -105,7 +105,7 @@ private:
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
 
 #define EVT_QUERY_LAYOUT_INFO(func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxQueryLayoutInfoEventFunction) & func, NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxQueryLayoutInfoEventFunction, & func ), NULL ),
 
 /*
  * This event is used to take a bite out of the available client area.
@@ -142,7 +142,7 @@ private:
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);
 
 #define EVT_CALCULATE_LAYOUT(func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCalculateLayoutEventFunction) & func, NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, -1, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCalculateLayoutEventFunction, & func ), NULL ),
 
 #if wxUSE_SASH
 

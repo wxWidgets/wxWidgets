@@ -120,7 +120,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                    \
     winid,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxNotebookEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
@@ -129,7 +129,7 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,                                   \
     winid,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxNotebookEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxNotebookEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 

@@ -170,7 +170,7 @@ typedef void (wxEvtHandler::*wxListbookEventFunction)(wxListbookEvent&);
     wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,                                    \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxListbookEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxListbookEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
@@ -179,7 +179,7 @@ typedef void (wxEvtHandler::*wxListbookEventFunction)(wxListbookEvent&);
     wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,                                   \
     id,                                                                     \
     -1,                                                                     \
-    (wxObjectEventFunction)(wxEventFunction)(wxListbookEventFunction) &fn,  \
+    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxListbookEventFunction, &fn ),  \
     NULL                                                                    \
   ),
 
