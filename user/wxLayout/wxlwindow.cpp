@@ -228,135 +228,129 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
             ;
          }
       }
-   
-   if(!IsEditable()) // do nothing
+
+   /* These two nested switches work like this:
+      The first one processes all non-editing keycodes, to move the
+      cursor, etc. It's default will process all keycodes causing
+      modifications to the buffer, but only if editing is allowed.
+   */
+   switch(keyCode)
    {
-      switch(keyCode)
+   case WXK_RIGHT:
+      m_llist->MoveCursorHorizontally(1);
+      break;
+   case WXK_LEFT:
+      m_llist->MoveCursorHorizontally(-1);
+      break;
+   case WXK_UP:
+      m_llist->MoveCursorVertically(-1);
+      break;
+   case WXK_DOWN:
+      m_llist->MoveCursorVertically(1);
+      break;
+   case WXK_PRIOR:
+      m_llist->MoveCursorVertically(-20);
+      break;
+   case WXK_NEXT:
+      m_llist->MoveCursorVertically(20);
+      break;
+   case WXK_HOME:
+      m_llist->MoveCursorToBeginOfLine();
+      break;
+   case WXK_END:
+      m_llist->MoveCursorToEndOfLine();
+      break;
+   case 'c':
+      if(event.ControlDown())
+         Copy();
+      break;
+   default:
+      if( IsEditable() )
       {
-      case WXK_UP:
-         m_llist->MoveCursorVertically(-1);
-         break;
-      case WXK_DOWN:
-         m_llist->MoveCursorVertically(1);
-         break;
-      case WXK_PRIOR:
-         m_llist->MoveCursorVertically(-20);
-         break;
-      case WXK_NEXT:
-         m_llist->MoveCursorVertically(20);
-         break;
-      default:
-         ;
-      }
-      return;
-   }
-   
-   /* First, handle control keys */
-   if(event.ControlDown() && ! event.AltDown())
-   {
-      switch(keyCode)
-      {
-      case WXK_DELETE :
-      case 'd':
-         m_llist->Delete(1);
-         break;
-      case 'y':
-         m_llist->DeleteLines(1);
-         break;
-      case 'h': // like backspace
-         if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
-         break;
-      case 'u':
-         m_llist->DeleteToBeginOfLine();
-         break;
-      case 'k':
-         m_llist->DeleteToEndOfLine();
-         break;
-      case 'v':
-         Paste();
-         break;
-#ifdef WXLAYOUT_DEBUG
-      case WXK_F1:
-         m_llist->SetFont(-1,-1,-1,-1,true);  // underlined
-         break;
-#endif
-      default:
-         ;
-      }
-   }
-   // ALT only:
-   else if( event.AltDown() && ! event.ControlDown() )
-   {
-      switch(keyCode)
-      {
-      case WXK_DELETE:
-      case 'd':
-         m_llist->DeleteWord();
-         break;
-      default:
-         ;
-      }
-   }
-   // no control keys:
-   else if ( ! event.AltDown() && ! event.ControlDown())
-   {
-      switch(keyCode)
-      {
-      case WXK_RIGHT:
-         m_llist->MoveCursorHorizontally(1);
-         break;
-      case WXK_LEFT:
-         m_llist->MoveCursorHorizontally(-1);
-         break;
-      case WXK_UP:
-         m_llist->MoveCursorVertically(-1);
-         break;
-      case WXK_DOWN:
-         m_llist->MoveCursorVertically(1);
-         break;
-      case WXK_PRIOR:
-         m_llist->MoveCursorVertically(-20);
-         break;
-      case WXK_NEXT:
-         m_llist->MoveCursorVertically(20);
-         break;
-      case WXK_HOME:
-         m_llist->MoveCursorToBeginOfLine();
-         break;
-      case WXK_END:
-         m_llist->MoveCursorToEndOfLine();
-         break;
-      case WXK_INSERT:
-         if(event.ShiftDown())
-            Paste();
-         break;
-      case WXK_DELETE :
-         m_llist->Delete(1);
-         break;
-      case WXK_BACK: // backspace
-         if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
-         break;
-      case WXK_RETURN:
-         if(m_WrapMargin > 0)
-            m_llist->WrapLine(m_WrapMargin);
-         m_llist->LineBreak();
-         break;
-      default:
-         if((!(event.ControlDown() || event.AltDown() || event.MetaDown()))
-            && (keyCode < 256 && keyCode >= 32)
-            )
+         /* First, handle control keys */
+         if(event.ControlDown() && ! event.AltDown())
          {
-            wxString tmp;
-            tmp += keyCode;
-            if(m_WrapMargin > 0 && isspace(keyCode))
-                m_llist->WrapLine(m_WrapMargin);
-            m_llist->Insert(tmp);
+            switch(keyCode)
+            {
+            case WXK_DELETE :
+            case 'd':
+               m_llist->Delete(1);
+               break;
+            case 'y':
+               m_llist->DeleteLines(1);
+               break;
+            case 'h': // like backspace
+               if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
+               break;
+            case 'u':
+               m_llist->DeleteToBeginOfLine();
+               break;
+            case 'k':
+               m_llist->DeleteToEndOfLine();
+               break;
+            case 'v':
+               Paste();
+               break;
+#ifdef WXLAYOUT_DEBUG
+            case WXK_F1:
+               m_llist->SetFont(-1,-1,-1,-1,true);  // underlined
+               break;
+#endif
+            default:
+               ;
+            }
          }
-         break;
-      }
-   }
-   SetDirty();
-   SetModified();
+         // ALT only:
+         else if( event.AltDown() && ! event.ControlDown() )
+         {
+            switch(keyCode)
+            {
+            case WXK_DELETE:
+            case 'd':
+               m_llist->DeleteWord();
+               break;
+            default:
+               ;
+            }
+         }
+         // no control keys:
+         else if ( ! event.AltDown() && ! event.ControlDown())
+         {
+            switch(keyCode)
+            {
+            case WXK_INSERT:
+               if(event.ShiftDown())
+                  Paste();
+               break;
+            case WXK_DELETE :
+               m_llist->Delete(1);
+               break;
+            case WXK_BACK: // backspace
+               if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
+               break;
+            case WXK_RETURN:
+               if(m_WrapMargin > 0)
+                  m_llist->WrapLine(m_WrapMargin);
+               m_llist->LineBreak();
+               break;
+            default:
+               if((!(event.ControlDown() || event.AltDown() || event.MetaDown()))
+                  && (keyCode < 256 && keyCode >= 32)
+                  )
+               {
+                  wxString tmp;
+                  tmp += keyCode;
+                  if(m_WrapMargin > 0 && isspace(keyCode))
+                     m_llist->WrapLine(m_WrapMargin);
+                  m_llist->Insert(tmp);
+               }
+               break;
+            }
+         }
+         SetDirty();
+         SetModified();
+      }// if(IsEditable()) 
+   }// first switch()
    ScrollToCursor();
    wxRect r = *m_llist->GetUpdateRect();
    Refresh( FALSE, &r);
@@ -513,8 +507,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // update rectangle (although they are drawn on the memDC, this is
    // needed to erase it):
    m_llist->InvalidateUpdateRect(); 
-   if(IsEditable()) //we draw the cursor
-      m_llist->DrawCursor(*m_memDC,m_HaveFocus,offset);
+   m_llist->DrawCursor(*m_memDC,
+                       m_HaveFocus && IsEditable(), // draw a thick
+                       // cursor for editable windows with focus
+                       offset);
 
 // Now copy everything to the screen:
 #if 0

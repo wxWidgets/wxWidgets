@@ -1591,9 +1591,9 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
    else
    {
       dc.DrawLine(coords.x, coords.y+m_CursorSize.y-1,
-                  coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
+                  coords.x, coords.y);
       SetUpdateRect(coords.x, coords.y+m_CursorSize.y-1);
-      SetUpdateRect(coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
+      SetUpdateRect(coords.x, coords.y);
    }
    dc.SetLogicalFunction(wxCOPY);
    //dc.SetBrush(wxNullBrush);
