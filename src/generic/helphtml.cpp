@@ -38,6 +38,8 @@
     #include   <unistd.h>
 #endif
 
+#define CONTENTS_ID   0
+
 class wxExtHelpMapEntry : public wxObject
 {
 public:
@@ -198,11 +200,26 @@ wxHTMLHelpControllerBase::DisplayContents()
    if(! m_NumOfEntries)
       return FALSE;
 
-   // use ID 0 for contents
-   if(! DisplaySection(0))
-      return KeywordSearch("");
-   else
-      return TRUE;
+   wxString contents;
+   wxNode *node = m_MapList->First();
+   wxExtHelpMapEntry *entry;
+   while(node)
+   {
+      entry = (wxExtHelpMapEntry *)node->Data();
+      if(entry->id == CONTENTS_ID)
+      {
+         contents = entry->url;
+         break;
+      }
+      node = node->Next();
+   }
+
+   bool rc = FALSE;
+   if(contents.Length() && wxFileExists(contents.BeforeLast('#')))
+      rc = DisplaySection(CONTENTS_ID);
+   
+   // if not found, open homemade toc:
+   return rc ? TRUE : KeywordSearch("");
 }
 
 bool
