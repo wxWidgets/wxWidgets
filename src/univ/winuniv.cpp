@@ -659,9 +659,12 @@ void wxWindow::SetScrollbar(int orient,
                             int range,
                             bool refresh)
 {
+    wxASSERT_MSG( pageSize <= range,
+                    _T("page size can't be greater than range") );
+
     bool hasClientSizeChanged = FALSE;
     wxScrollBar *scrollbar = GetScrollbar(orient);
-    if ( range )
+    if ( range && (pageSize < range) )
     {
         if ( !scrollbar )
         {
