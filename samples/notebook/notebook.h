@@ -30,7 +30,17 @@ public:
 
     void CreateInitialPages();
 
+    wxPanel *CreatePage(const wxString& pageName);
+
+    wxPanel *CreateUserCreatedPage();
+
     int GetIconIndex() const;
+
+private:
+    wxPanel *CreateInsertPage();
+    wxPanel *CreateRadioButtonsPage();
+    wxPanel *CreateVetoPage();
+    wxPanel *CreateBigButtonPage();
 };
 
 //
@@ -45,8 +55,6 @@ public:
     // Recreates the notebook with the same pages, but with possibly
     // a different orientation and optionally with images.
     void ReInitNotebook();
-
-    void CreateImageList();
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -122,3 +130,18 @@ enum ORIENT
     ORIENT_RIGHT,
     ORIENT_MAX
 };
+
+/*
+Name of each notebook page.
+Used as a label for a page, and used when cloning the notebook
+to decide what type of page it is.
+*/
+
+#define I_WAS_INSERTED_PAGE_NAME  wxT("Inserted")
+#define RADIOBUTTONS_PAGE_NAME wxT("Radiobuttons")
+#define VETO_PAGE_NAME wxT("Veto")
+#define MAXIMIZED_BUTTON_PAGE_NAME wxT("Maximized button")
+
+// Pages that can be added by the user
+#define INSERTED_PAGE_NAME wxT("Inserted ")
+#define ADDED_PAGE_NAME wxT("Added ")

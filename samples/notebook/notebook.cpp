@@ -24,9 +24,6 @@
 #include "wx/artprov.h"
 #include "notebook.h"
 
-// Name of the Veto page
-#define VETO_PAGE_NAME wxT("Veto")
-
 IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
@@ -54,77 +51,134 @@ MyNotebook::MyNotebook(wxWindow *parent, wxWindowID id,
     // Empty
 }
 
-void MyNotebook::CreateInitialPages()
+wxPanel *MyNotebook::CreatePage(const wxString&pageName)
 {
-    wxPanel *panel = (wxPanel *) NULL;
-    wxBoxSizer *sizerPanel = (wxBoxSizer *) NULL;
+    if
+    (
+        pageName.Contains(INSERTED_PAGE_NAME)
+        || pageName.Contains(ADDED_PAGE_NAME)
+    )
+    {
+        return CreateUserCreatedPage();
+    }
 
-    // Create and add some panels to the notebook
+    if (pageName == I_WAS_INSERTED_PAGE_NAME)
+    {
+        return CreateInsertPage();
+    }
+
+    if (pageName == VETO_PAGE_NAME)
+    {
+        return CreateVetoPage();
+    }
+
+    if (pageName == RADIOBUTTONS_PAGE_NAME)
+    {
+        return CreateRadioButtonsPage();
+    }
 
 
-    // Panel 1
-    panel = new wxPanel(this);
+    if (pageName == MAXIMIZED_BUTTON_PAGE_NAME)
+    {
+        return CreateBigButtonPage();
+    }
 
-    sizerPanel = new wxBoxSizer(wxVERTICAL);
-    sizerPanel->Add( new wxButton( panel, -1, wxT("Button") ) );
-    sizerPanel->Add( new wxTextCtrl(panel, -1, wxT("1234"),
-        wxDefaultPosition, wxSize(120, 150) ) );
-    panel->SetSizer(sizerPanel);
+    wxFAIL;
 
-    AddPage( panel, wxT("Controls without sizer"), TRUE, GetIconIndex() );
+    return (wxPanel *) NULL;
+}
 
+wxPanel *MyNotebook::CreateUserCreatedPage()
+{
+    wxPanel *panel = new wxPanel(this);
 
-    // Panel 2
-    panel = new wxPanel(this);
+    (void) new wxButton( panel, -1, wxT("Button"),
+        wxPoint(10, 10), wxSize(-1, -1) );
+
+    return panel;
+}
+
+wxPanel *MyNotebook::CreateRadioButtonsPage()
+{
+    wxPanel *panel = new wxPanel(this);
 
     wxString animals[] = { wxT("Fox"), wxT("Hare"), wxT("Rabbit"),
         wxT("Sabre-toothed tiger"), wxT("T Rex") };
+
     wxRadioBox *radiobox1 = new wxRadioBox(panel, -1, wxT("Choose one"),
         wxDefaultPosition, wxDefaultSize, 5, animals, 2, wxRA_SPECIFY_ROWS);
 
     wxString computers[] = { wxT("Amiga"), wxT("Commodore 64"), wxT("PET"),
         wxT("Another") };
+
     wxRadioBox *radiobox2 = new wxRadioBox(panel, -1,
         wxT("Choose your favourite"), wxDefaultPosition, wxDefaultSize,
         4, computers, 0, wxRA_SPECIFY_COLS);
 
-    sizerPanel = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
     sizerPanel->Add(radiobox1, 2, wxEXPAND);
     sizerPanel->Add(radiobox2, 1, wxEXPAND);
     panel->SetSizer(sizerPanel);
 
-    AddPage( panel, wxT("Radiobuttons"), FALSE, GetIconIndex() );
+    return panel;
+}
 
+wxPanel *MyNotebook::CreateVetoPage()
+{
+    wxPanel *panel = new wxPanel(this);
 
-    // Panel 3
-    panel = new wxPanel(this);
     (void) new wxStaticText( panel, -1,
         wxT("This page intentionally left blank"), wxPoint(10, 10) );
-    AddPage( panel, VETO_PAGE_NAME, FALSE, GetIconIndex() );
 
+    return panel;
+}
 
-    // Panel 4
-    panel = new wxPanel(this);
-    wxButton *buttonBig = new wxButton( panel, -1, wxT("Big button"),
+wxPanel *MyNotebook::CreateBigButtonPage()
+{
+    wxPanel *panel = new wxPanel(this);
+
+    wxButton *buttonBig = new wxButton( panel, -1, wxT("Maximized button"),
         wxPoint(0, 0), wxSize(480, 360) );
 
-    sizerPanel = new wxBoxSizer(wxVERTICAL);
+    wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
     sizerPanel->Add(buttonBig, 1, wxEXPAND);
     panel->SetSizer(sizerPanel);
 
-    AddPage( panel, wxT("Big button"), FALSE, GetIconIndex() );
+    return panel;
+}
 
 
-    // Panel 5
-    panel = new wxPanel(this);
+wxPanel *MyNotebook::CreateInsertPage()
+{
+    wxPanel *panel = new wxPanel(this);
+
     panel->SetBackgroundColour( wxColour( wxT("MAROON") ) );
     (void) new wxStaticText( panel, -1,
         wxT("This page has been inserted, not added."), wxPoint(10, 10) );
-    InsertPage( 0, panel, wxT("Inserted"), FALSE, GetIconIndex() );
+
+    return panel;
+}
+
+void MyNotebook::CreateInitialPages()
+{
+    wxPanel *panel = (wxPanel *) NULL;
+
+    // Create and add some panels to the notebook
+
+    panel = CreateRadioButtonsPage();
+    AddPage( panel, RADIOBUTTONS_PAGE_NAME, FALSE, GetIconIndex() );
+
+    panel = CreateVetoPage();
+    AddPage( panel, VETO_PAGE_NAME, FALSE, GetIconIndex() );
+
+    panel = CreateBigButtonPage();
+    AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, FALSE, GetIconIndex() );
+
+    panel = CreateInsertPage();
+    InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, FALSE, GetIconIndex() );
 
 
-    SetSelection(2);
-
+    SetSelection(1);
 }
 
 int MyNotebook::GetIconIndex() const
@@ -147,10 +201,35 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 {
     m_panel = (wxPanel *) NULL;
     m_notebook = (MyNotebook *) NULL;
-    m_imageList = (wxImageList *) NULL;
+
+    // create a dummy image list with a few icons
+    wxSize imageSize(32, 32);
+
+    m_imageList
+        = new wxImageList( imageSize.GetWidth(), imageSize.GetHeight() );
+
+    m_imageList->Add
+        (
+            wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, imageSize)
+        );
+
+    m_imageList->Add
+        (
+            wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, imageSize)
+        );
+
+    m_imageList->Add
+        (
+            wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, imageSize)
+        );
+
+    m_imageList->Add
+        (
+            wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize)
+        );
 
     m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
-        wxTAB_TRAVERSAL|wxCLIP_CHILDREN|wxNO_BORDER);
+        wxTAB_TRAVERSAL | wxCLIP_CHILDREN | wxNO_BORDER);
 
     // Create remaining controls
 
@@ -164,7 +243,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     };
 
     wxASSERT_MSG( WXSIZEOF(strOrientations) == ORIENT_MAX,
-                  wxT("forgot to update something") );
+                  wxT("Forgot to update something") );
 
     m_radioOrient = new wxRadioBox
         (
@@ -245,6 +324,13 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 MyFrame::~MyFrame()
 {
     delete wxLog::SetActiveTarget(m_logTargetOld);
+
+    if (m_imageList)
+    {
+        delete m_imageList;
+        m_imageList = (wxImageList *) NULL;
+    }
+
 }
 
 void MyFrame::ReInitNotebook()
@@ -276,27 +362,26 @@ void MyFrame::ReInitNotebook()
 
     MyNotebook *notebook = m_notebook;
 
-
     m_notebook = new MyNotebook(m_panel, ID_NOTEBOOK,
                                 wxDefaultPosition, wxDefaultSize,
                                 flags);
 
-    CreateImageList();
+    if ( m_chkShowImages->IsChecked() )
+    {
+        m_notebook->SetImageList(m_imageList);
+    }
 
-    if ( notebook )
+    if (notebook)
     {
         int sel = notebook->GetSelection();
 
         int count = notebook->GetPageCount();
-        for ( int n = 0; n < count; n++ )
+        for (int n = 0; n < count; n++)
         {
-            wxNotebookPage *page = notebook->GetPage(0);
-            page->Reparent(m_notebook);
+            wxString str = notebook->GetPageText(n);
 
-            m_notebook->AddPage( page, notebook->GetPageText(0), FALSE,
-                m_notebook->GetIconIndex() );
-
-            notebook->RemovePage(0);
+            wxNotebookPage *page = m_notebook->CreatePage(str);
+            m_notebook->AddPage(page, str, FALSE, m_notebook->GetIconIndex() );
         }
 
         if (m_sizerNotebook)
@@ -307,56 +392,18 @@ void MyFrame::ReInitNotebook()
         delete notebook;
 
         // restore selection
-        if ( sel != -1 )
+        if (sel != -1)
         {
             m_notebook->SetSelection(sel);
         }
+
     }
+
 
     m_sizerNotebook = new wxNotebookSizer(m_notebook);
     m_sizerTop->Add(m_sizerNotebook, 1, wxEXPAND | wxALL, 4);
     m_sizerTop->Layout();
 }
-
-void MyFrame::CreateImageList()
-{
-    if (m_imageList)
-    {
-        delete m_imageList;
-        m_imageList = (wxImageList *) NULL;
-    }
-
-    if ( m_chkShowImages->IsChecked() )
-    {
-        // create a dummy image list with a few icons
-        wxSize size(32, 32);
-
-        m_imageList = new wxImageList( size.GetWidth(), size.GetHeight() );
-        
-        m_imageList->Add
-            (
-                wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, size)
-            );
-
-        m_imageList->Add
-            (
-                wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, size)
-            );
-
-        m_imageList->Add
-            (
-                wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, size)
-            );
-
-        m_imageList->Add
-            (
-                wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, size)
-            );
-
-        m_notebook->SetImageList(m_imageList);
-    }
-}
-
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_RADIOBOX(ID_RADIO_ORIENT, MyFrame::OnCheckOrRadioBox)
@@ -387,7 +434,7 @@ void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )
     (void) new wxButton( panel, -1, wxT("Button"),
         wxPoint(10, 10), wxSize(-1, -1) );
 
-    m_notebook->AddPage(panel, wxString::Format(wxT("Added %u"),
+    m_notebook->AddPage(panel, wxString::Format(ADDED_PAGE_NAME wxT("%u"),
         ++s_pageAdded), FALSE, m_notebook->GetIconIndex() );
 }
 
@@ -395,12 +442,10 @@ void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )
 {
     static size_t s_pageIns = 0;
 
-    wxPanel *panel = new wxPanel( m_notebook, -1 );
-    (void) new wxButton( panel, -1, wxT("Button"),
-        wxPoint(10, 10), wxSize(-1, -1) );
+    wxPanel *panel = m_notebook->CreateUserCreatedPage();
 
     m_notebook->InsertPage( 0, panel,
-        wxString::Format(wxT("Inserted %u"), ++s_pageIns), FALSE,
+        wxString::Format(INSERTED_PAGE_NAME wxT("%u"), ++s_pageIns), FALSE,
         m_notebook->GetIconIndex() );
 
     m_notebook->SetSelection(0);
