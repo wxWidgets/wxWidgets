@@ -116,7 +116,8 @@ bool mjDoc::OnInitView()
   p_LogWin = new wxTextCtrl(p_PageArea,-1,wxEmptyString,
 			    wxDefaultPosition, wxDefaultSize,wxTE_MULTILINE );
   //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  //p_LogWin->SetFont(* ft_Temp);
+  wxFont* ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+  p_LogWin->SetFont(* ft_Temp);
   // Don't forget ! This is always : i_TabArt = 0 ; i_ViewNr = 1;
   //------------------------------------------------------------------
   p_LogBook = new wxLogTextCtrl(p_LogWin); // make p_LogWin the LogBook

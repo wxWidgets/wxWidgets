@@ -60,7 +60,8 @@ BEGIN_EVENT_TABLE(DBGrid, wxGrid)
     wxGrid(parent, id, pos, size, style)
 {
   //f_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  //wxPanel::SetFont(* f_Temp);
+  f_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+  wxPanel::SetFont(* f_Temp);
   b_EditModus = TRUE;
   //----------------------------------------------------------------------------------------------------------------------------
   popupMenu1 = new wxMenu("");

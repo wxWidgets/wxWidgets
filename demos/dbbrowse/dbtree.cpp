@@ -61,7 +61,8 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
   : wxTreeCtrl(parent, id, pos, size, style)
 {
   //wxFont* ft_Temp = new wxFont(10,wxSWISS,wxNORMAL,wxBOLD,FALSE,"Comic Sans MS");
-  //SetFont(* ft_Temp);
+  wxFont* ft_Temp = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
+  SetFont(* ft_Temp);
   
   // Make an image list containing small icons
   p_imageListNormal = new wxImageList(16, 16, TRUE);

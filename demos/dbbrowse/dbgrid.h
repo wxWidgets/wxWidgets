@@ -25,7 +25,7 @@ class DBGrid: public wxGrid
   int        i_ViewNr;   // View Nummer in Tab / Page
   int        i_Which;    // Which View, Database is this/using
  //-------------------------------------------
-//  wxFont*    f_Temp;
+  wxFont*    f_Temp;
   mjDoc*     pDoc;
   wxDbInf*   ct_BrowserDB;
   BrowserDB* db_Br;
