@@ -498,13 +498,13 @@ wxString wxFileData::GetFullName() const
 wxString wxFileData::GetHint() const
 {
     wxString s = m_fileName;
-    s += "  ";
-    if (m_isDir) s += _("<DIR> ");
-    else if (m_isLink) s += _("<LINK> ");
+    s += wxT("  ");
+    if (m_isDir) s += wxT("<DIR> ");
+    else if (m_isLink) s += wxT("<LINK> ");
     else
     {
         s += LongToString( m_size );
-        s += _(" bytes ");
+        s += wxT(" bytes ");
     }
     s += IntToString( m_day );
     s += wxT(".");

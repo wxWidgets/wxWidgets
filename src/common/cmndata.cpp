@@ -247,7 +247,7 @@ wxPrintData::wxPrintData()
     m_printCollate = FALSE;
 
     // New, 24/3/99
-    m_printerName = "";
+    m_printerName = wxT("");
     m_colour = TRUE;
     m_duplexMode = wxDUPLEX_SIMPLEX;
     m_printQuality = wxPRINT_QUALITY_HIGH;

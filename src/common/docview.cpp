@@ -262,7 +262,7 @@ bool wxDocument::SaveAs()
 
     if (ext.IsEmpty() || ext == wxT(""))
     {
-        fileName += ".";
+        fileName += wxT(".");
         fileName += docTemplate->GetDefaultExtension();
     }
 
@@ -295,10 +295,10 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ofstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ofstream store(wxString(file.fn_str()).mb_str());   // ?????
     if (store.fail() || store.bad())
 #else
-    wxFileOutputStream store(wxString(file.fn_str()));
+    wxFileOutputStream store( file );
     if (store.LastError() != wxSTREAM_NOERROR)
 #endif
     {
@@ -332,10 +332,10 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ifstream store(wxString(file.fn_str()).mb_str());
+    wxSTD ifstream store(wxString(file.fn_str()).mb_str());  // ????
     if (store.fail() || store.bad())
 #else
-    wxFileInputStream store(wxString(file.fn_str()));
+    wxFileInputStream store( file );
     if (store.LastError() != wxSTREAM_NOERROR)
 #endif
     {
@@ -839,12 +839,12 @@ void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 {
-    CreateDocument(wxString(""), wxDOC_NEW);
+    CreateDocument( wxT(""), wxDOC_NEW );
 }
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument(wxString(""), 0) )
+    if ( !CreateDocument( wxT(""), 0) )
     {
         OnOpenFileFailure();
     }

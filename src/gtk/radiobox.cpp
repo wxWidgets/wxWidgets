@@ -418,7 +418,7 @@ bool wxRadioBox::Show( bool show )
     return TRUE;
 }
 
-int wxRadioBox::FindString( const wxString &s ) const
+int wxRadioBox::FindString( const wxString &find ) const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid radiobox") );
 
@@ -428,7 +428,12 @@ int wxRadioBox::FindString( const wxString &s ) const
     while (node)
     {
         GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
-        if (s == label->label)
+#ifdef __WXGTK20__
+        wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+        wxString str( label->label );
+#endif
+        if (find == str)
             return count;
 
         count++;
@@ -505,7 +510,13 @@ wxString wxRadioBox::GetString( int n ) const
 
     GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
 
-    return wxString( label->label );
+#ifdef __WXGTK20__
+    wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+    wxString str( label->label );
+#endif
+
+    return str;
 }
 
 void wxRadioBox::SetLabel( const wxString& label )
@@ -592,7 +603,12 @@ wxString wxRadioBox::GetStringSelection() const
         {
             GtkLabel *label = GTK_LABEL( BUTTON_CHILD(node->Data()) );
 
-            return label->label;
+#ifdef __WXGTK20__
+            wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+            wxString str( label->label );
+#endif
+            return str;
         }
         node = node->Next();
     }

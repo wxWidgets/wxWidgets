@@ -39,12 +39,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 
 void Skip_Comment(wxInputStream &stream)
 {
-  wxTextInputStream text_stream(stream);
+    wxTextInputStream text_stream(stream);
 
-  if (stream.Peek()==wxT('#'))
+    if (stream.Peek()==wxT('#'))
     {
-      text_stream.ReadLine();
-      Skip_Comment(stream);
+        text_stream.ReadLine();
+        Skip_Comment(stream);
     }
 }
 
@@ -129,7 +129,7 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
     //text_stream << "P6" << endl
     //<< image->GetWidth() << " " << image->GetHeight() << endl
     //<< "255" << endl;
-    text_stream << "P6\n" << image->GetWidth() << " " << image->GetHeight() << "\n255\n";
+    text_stream << wxT("P6\n") << image->GetWidth() << wxT(" ") << image->GetHeight() << wxT("\n255\n");
     stream.Write(image->GetData(),3*image->GetWidth()*image->GetHeight());
 
     return (stream.LastError()==wxStream_NOERROR);

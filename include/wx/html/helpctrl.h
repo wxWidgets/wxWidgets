@@ -57,7 +57,7 @@ public:
     virtual bool Initialize(const wxString& file, int WXUNUSED(server) ) { return Initialize(file); }
     virtual bool Initialize(const wxString& file);
     virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
-    virtual bool LoadFile(const wxString& file = "");
+    virtual bool LoadFile(const wxString& file = wxT(""));
     virtual bool DisplaySection(int sectionNo);
     virtual bool DisplaySection(const wxString& section) { return Display(section); }
     virtual bool DisplayBlock(long blockNo) { return DisplaySection(blockNo); }

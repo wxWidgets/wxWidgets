@@ -506,7 +506,7 @@ wxString wxMsgCatalogFile::GetCharset() const
         return wxEmptyString;
     }
 
-    wxString header(StringAtOfs(m_pTransTable, 0));
+    wxString header = wxString::FromAscii( StringAtOfs(m_pTransTable, 0));
     wxString charset;
     int pos = header.Find(wxT("Content-Type: text/plain; charset="));
     if ( pos == wxNOT_FOUND )

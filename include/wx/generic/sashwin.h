@@ -69,13 +69,7 @@ public:
 
 class WXDLLEXPORT wxSashWindow: public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxSashWindow)
-
 public:
-
-////////////////////////////////////////////////////////////////////////////
-// Public API
-
     // Default constructor
     wxSashWindow()
     {
@@ -84,7 +78,7 @@ public:
 
     // Normal constructor
     wxSashWindow(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow")
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("sashWindow"))
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -93,7 +87,7 @@ public:
     ~wxSashWindow();
 
     bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = "sashWindow");
+        const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("sashWindow"));
 
     // Set whether there's a sash in this position
     void SetSashVisible(wxSashEdgePosition edge, bool sash);
@@ -196,7 +190,9 @@ private:
     bool        m_mouseCaptured;
     wxCursor*   m_currentCursor;
 
-DECLARE_EVENT_TABLE()
+private:
+    DECLARE_DYNAMIC_CLASS(wxSashWindow)
+    DECLARE_EVENT_TABLE()
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
@@ -213,9 +209,7 @@ enum wxSashDragStatus
 
 class WXDLLEXPORT wxSashEvent: public wxCommandEvent
 {
-  DECLARE_DYNAMIC_CLASS(wxSashEvent)
-
- public:
+public:
     inline wxSashEvent(int id = 0, wxSashEdgePosition edge = wxSASH_NONE) {
      m_eventType = (wxEventType) wxEVT_SASH_DRAGGED; m_id = id; m_edge = edge; }
 
@@ -230,10 +224,14 @@ class WXDLLEXPORT wxSashEvent: public wxCommandEvent
     //// dragging the top below the bottom)
     inline void SetDragStatus(wxSashDragStatus status) { m_dragStatus = status; }
     inline wxSashDragStatus GetDragStatus() const { return m_dragStatus; }
- private:
+    
+private:
     wxSashEdgePosition  m_edge;
     wxRect              m_dragRect;
     wxSashDragStatus    m_dragStatus;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSashEvent)
 };
 
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);

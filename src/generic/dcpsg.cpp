@@ -1699,9 +1699,9 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
 {
     wxCHECK_MSG( m_ok, FALSE, wxT("invalid postscript dc") );
 
-    if (m_printData.GetFilename() == "")
+    if (m_printData.GetFilename() == wxT(""))
     {
-        wxString filename = wxGetTempFileName("ps");
+        wxString filename = wxGetTempFileName( wxT("ps") );
         m_printData.SetFilename(filename);
     }
 

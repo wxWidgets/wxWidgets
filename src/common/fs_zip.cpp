@@ -179,8 +179,8 @@ wxString wxZipFSHandler::DoFind()
     while (match == wxEmptyString)
     {
         unzGetCurrentFileInfo((unzFile)m_Archive, NULL, namebuf, 1024, NULL, 0, NULL, 0);
-        for (c = namebuf; *c; c++) if (*c == wxT('\\')) *c = wxT('/');
-        namestr = namebuf;
+        for (c = namebuf; *c; c++) if (*c == '\\') *c = '/';
+        namestr = wxString::FromAscii( namebuf );    // TODO what encoding does ZIP use?
 
         if (m_AllowDirs)
         {

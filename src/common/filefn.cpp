@@ -1070,7 +1070,7 @@ bool
 wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& file3)
 {
   wxString outfile;
-  if ( !wxGetTempFileName("cat", outfile) )
+  if ( !wxGetTempFileName( wxT("cat"), outfile) )
       return FALSE;
 
   FILE *fp1 = (FILE *) NULL;

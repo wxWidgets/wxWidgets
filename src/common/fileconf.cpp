@@ -474,7 +474,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
     m_pCurrentGroup =
-    m_pRootGroup    = new wxFileConfigGroup(NULL, "", this);
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
 
     m_linesHead =
     m_linesTail = NULL;

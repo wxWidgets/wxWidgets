@@ -1795,11 +1795,11 @@ enum wxPrintMode
 
 // macro to specify "All Files" on different platforms
 #if defined(__WXMSW__) || defined(__WXPM__)
-#   define wxALL_FILES_PATTERN   "*.*"
-#   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
+#   define wxALL_FILES_PATTERN   wxT("*.*")
+#   define wxALL_FILES           gettext_noop(wxT("All files (*.*)|*.*"))
 #else
-#   define wxALL_FILES_PATTERN   "*"
-#   define wxALL_FILES           gettext_noop("All files (*)|*")
+#   define wxALL_FILES_PATTERN   wxT("*")
+#   define wxALL_FILES           gettext_noop(wxT("All files (*)|*"))
 #endif
 
 // ---------------------------------------------------------------------------

@@ -375,8 +375,14 @@ int wxComboBox::FindString( const wxString &item )
     {
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
-        if (item == wxString(label->label,*wxConvCurrent))
+#ifdef __WXGTK20__
+        wxString str( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+        wxString str( label->label );
+#endif
+        if (item == str)
             return count;
+            
         count++;
         child = child->next;
     }
@@ -419,7 +425,7 @@ wxString wxComboBox::GetString( int n ) const
         GtkBin *bin = GTK_BIN( child->data );
         GtkLabel *label = GTK_LABEL( bin->child );
 #ifdef __WXGTK20__
-        str = wxGTK_CONV_BACK( gtk_label_get_text( label) );
+        str = wxGTK_CONV_BACK( gtk_label_get_text(label) );
 #else
         str = wxString( label->label );
 #endif
@@ -442,7 +448,12 @@ wxString wxComboBox::GetStringSelection() const
     if (selection)
     {
         GtkBin *bin = GTK_BIN( selection->data );
-        wxString tmp = wxString(GTK_LABEL( bin->child )->label,*wxConvCurrent);
+        GtkLabel *label = GTK_LABEL( bin->child );
+#ifdef __WXGTK20__
+        wxString tmp( wxGTK_CONV_BACK( gtk_label_get_text(label) ) );
+#else
+        wxString tmp( label->label );
+#endif
         return tmp;
     }
 

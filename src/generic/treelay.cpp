@@ -270,7 +270,7 @@ void wxTreeLayoutStored::Initialize(int n)
     int i;
     for (i = 0; i < n; i++)
     {
-        m_nodes[i].m_name = "";
+        m_nodes[i].m_name = wxT("");
         m_nodes[i].m_active = FALSE;
         m_nodes[i].m_parentId = -1;
         m_nodes[i].m_x = 0;
@@ -464,7 +464,7 @@ wxString wxTreeLayoutStored::HitTest(wxMouseEvent& event, wxDC& dc)
         }
     }
 
-    return wxString("");
+    return wxString( wxT("") );
 }
 
 #endif

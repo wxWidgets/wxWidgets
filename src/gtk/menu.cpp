@@ -1142,7 +1142,9 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
                 {
                     // start of a new radio group
                     item_type = "<RadioItem>";
-                    m_pathLastRadio = bufPath + 1;
+                    wxString tmp( wxGTK_CONV_BACK( bufPath ) );
+                    tmp.Remove(0,1);
+                    m_pathLastRadio = tmp;
                 }
                 else // continue the radio group
                 {

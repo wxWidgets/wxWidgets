@@ -26,6 +26,7 @@
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 
 #if wxUSE_WX_RESOURCES
     #include "wx/resource.h"
@@ -827,9 +828,11 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->argv = argv;
 #endif
 
-    wxString name(wxFileNameFromPath(argv[0]));
-    wxStripExtension( name );
-    wxTheApp->SetAppName( name );
+    if (wxTheApp->argc > 0)
+    {
+        wxFileName fname( wxTheApp->argv[0] );
+        wxTheApp->SetAppName( fname.GetName() );
+    }
 
     int retValue;
     retValue = wxEntryInitGui();
