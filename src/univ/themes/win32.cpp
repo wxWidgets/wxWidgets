@@ -204,6 +204,16 @@ public:
                          int flags = 0,
                          int indexAccel = -1);
 
+    virtual void DrawSliderShaft(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0,
+                                 wxRect *rectShaft = NULL);
+    virtual void DrawSliderThumb(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0);
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -241,6 +251,8 @@ public:
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 5); }
 
+    virtual wxSize GetSliderThumbSize() const { return m_sizeSliderThumb; }
+
 protected:
     // common part of DrawLabel() and DrawItem()
     void DrawFocusRect(wxDC& dc, const wxRect& rect);
@@ -274,6 +286,9 @@ protected:
     // draw the normal 3D border
     void DrawRaisedBorder(wxDC& dc, wxRect *rect);
 
+    // draw the sunken 3D border
+    void DrawSunkenBorder(wxDC& dc, wxRect *rect);
+
     // draw the border used for scrollbar arrows
     void DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed = FALSE);
 
@@ -295,6 +310,19 @@ protected:
                                 wxAlignment align,
                                 int indexAccel);
 
+    // draw a normal or transposed line (useful for using the same code fo both
+    // horizontal and vertical widgets)
+    void DrawLine(wxDC& dc,
+                  wxCoord x1, wxCoord y1,
+                  wxCoord x2, wxCoord y2,
+                  bool transpose = FALSE)
+    {
+        if ( transpose )
+            dc.DrawLine(y1, x1, y2, x2);
+        else
+            dc.DrawLine(x1, y1, x2, y2);
+    }
+
     // get the standard check/radio button bitmap
     wxBitmap GetIndicator(IndicatorType indType, int flags);
     wxBitmap GetCheckBitmap(int flags)
@@ -306,7 +334,8 @@ private:
     const wxColourScheme *m_scheme;
 
     // the sizing parameters (TODO make them changeable)
-    wxSize m_sizeScrollbarArrow;
+    wxSize m_sizeScrollbarArrow,
+           m_sizeSliderThumb;
 
     // GDI objects we use for drawing
     wxColour m_colDarkGrey,
@@ -960,6 +989,7 @@ wxWin32Renderer::wxWin32Renderer(const wxColourScheme *scheme)
     // init data
     m_scheme = scheme;
     m_sizeScrollbarArrow = wxSize(16, 16);
+    m_sizeSliderThumb = wxSize(7, 14);
 
     // init colours and pens
     m_penBlack = wxPen(wxSCHEME_COLOUR(scheme, SHADOW_DARK), 0, wxSOLID);
@@ -1235,6 +1265,12 @@ void wxWin32Renderer::DrawRaisedBorder(wxDC& dc, wxRect *rect)
     DrawShadedRect(dc, rect, m_penLightGrey, m_penDarkGrey);
 }
 
+void wxWin32Renderer::DrawSunkenBorder(wxDC& dc, wxRect *rect)
+{
+    DrawShadedRect(dc, rect, m_penDarkGrey, m_penHighlight);
+    DrawShadedRect(dc, rect, m_penBlack, m_penLightGrey);
+}
+
 void wxWin32Renderer::DrawArrowBorder(wxDC& dc, wxRect *rect, bool isPressed)
 {
     if ( isPressed )
@@ -1271,8 +1307,7 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
         case wxBORDER_SUNKEN:
             for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
             {
-                DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
-                DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
+                DrawSunkenBorder(dc, &rect);
             }
             break;
 
@@ -1282,7 +1317,9 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
 
         case wxBORDER_RAISED:
             for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
+            {
                 DrawRaisedBorder(dc, &rect);
+            }
             break;
 
         case wxBORDER_DOUBLE:
@@ -1291,7 +1328,10 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_SIMPLE:
-            DrawRect(dc, &rect, m_penBlack);
+            for ( i = 0; i < BORDER_THICKNESS / 2; i++ )
+            {
+                DrawRect(dc, &rect, m_penBlack);
+            }
             break;
 
         default:
@@ -1892,6 +1932,114 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
         case wxRIGHT:
             wxFAIL_MSG(_T("TODO"));
     }
+}
+
+// ----------------------------------------------------------------------------
+// slider
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
+                                      const wxRect& rectOrig,
+                                      wxOrientation orient,
+                                      int flags,
+                                      wxRect *rectShaft)
+{
+    static const wxCoord SLIDER_MARGIN = 6;
+
+    wxRect rect = rectOrig;
+
+    if ( flags & wxCONTROL_FOCUSED )
+    {
+        DrawFocusRect(dc, rect);
+    }
+
+    if ( orient == wxHORIZONTAL )
+    {
+        // make the rect of minimal width and centre it
+        rect.height = 2*BORDER_THICKNESS;
+        rect.y = rectOrig.y + (rectOrig.height - rect.height) / 2;
+
+        // leave margins on the sides
+        rect.Deflate(SLIDER_MARGIN, 0);
+    }
+    else // vertical
+    {
+        // same as above but in other sense
+        rect.width = 2*BORDER_THICKNESS;
+        rect.x = rectOrig.x + (rectOrig.width - rect.width) / 2;
+
+        rect.Deflate(0, SLIDER_MARGIN);
+    }
+
+    if ( rectShaft )
+        *rectShaft = rect;
+
+    DrawSunkenBorder(dc, &rect);
+}
+
+void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
+                                      const wxRect& rect,
+                                      wxOrientation orient,
+                                      int flags)
+{
+    /*
+       we are drawing a shape of this form
+
+       HHHHHHB <--- y
+       H    DB
+       H    DB
+       H    DB   where H is hightlight colour
+       H    DB         D    dark grey
+       H    DB         B    black
+       H    DB
+       H    DB <--- y3
+        H  DB
+         HDB
+          B    <--- y2
+
+       ^  ^  ^
+       |  |  |
+       x x3  x2
+    */
+
+    DrawBackground(dc, wxNullColour, rect, flags);
+
+    bool transpose = orient == wxVERTICAL;
+
+    wxCoord x, y, x2, y2;
+    if ( transpose )
+    {
+        x = rect.y;
+        y = rect.x;
+        x2 = rect.GetBottom();
+        y2 = rect.GetRight();
+    }
+    else
+    {
+        x = rect.x;
+        y = rect.y;
+        x2 = rect.GetRight();
+        y2 = rect.GetBottom();
+    }
+
+    // the size of the pointed part of the thumb
+    wxCoord sizeArrow = (transpose ? rect.height : rect.width) / 2;
+
+    wxCoord x3 = x + sizeArrow,
+            y3 = y2 - sizeArrow;
+
+    dc.SetPen(m_penHighlight);
+    DrawLine(dc, x, y, x2, y, transpose);
+    DrawLine(dc, x, y + 1, x, y2 - sizeArrow, transpose);
+    DrawLine(dc, x, y3, x3, y2, transpose);
+
+    dc.SetPen(m_penBlack);
+    DrawLine(dc, x3, y2, x2, y3, transpose);
+    DrawLine(dc, x2, y3, x2, y - 1, transpose);
+
+    dc.SetPen(m_penDarkGrey);
+    DrawLine(dc, x3, y2 - 1, x2 - 1, y3, transpose);
+    DrawLine(dc, x2 - 1, y3, x2 - 1, y, transpose);
 }
 
 // ----------------------------------------------------------------------------

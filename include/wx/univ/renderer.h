@@ -192,6 +192,22 @@ public:
                          int flags = 0,
                          int indexAccel = -1) = 0;
 
+    // draw the slider shaft
+    virtual void DrawSliderShaft(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0,
+                                 wxRect *rectShaft = NULL) = 0;
+
+    // draw the slider thumb
+    virtual void DrawSliderThumb(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0) = 0;
+
+    // misc functions
+    // --------------
+
     // return the bitmaps to use for combobox button
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -260,6 +276,10 @@ public:
 
     // get the padding around the text in a tab
     virtual wxSize GetTabPadding() const = 0;
+
+    // get the size of the horizontal slider thumb (vertical slider is supposed
+    // to have the same size with width and height exchanged)
+    virtual wxSize GetSliderThumbSize() const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -441,6 +461,18 @@ public:
                          int accel = -1)
         { m_renderer->DrawTab(dc, rect, dir, label, bitmap, flags, accel); }
 
+    virtual void DrawSliderShaft(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0,
+                                 wxRect *rectShaft = NULL)
+        { m_renderer->DrawSliderShaft(dc, rect, orient, flags, rectShaft); }
+    virtual void DrawSliderThumb(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0)
+        { m_renderer->DrawSliderThumb(dc, rect, orient, flags); }
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled)
@@ -488,6 +520,9 @@ public:
 
     virtual wxSize GetTabIndent() const { return m_renderer->GetTabIndent(); }
     virtual wxSize GetTabPadding() const { return m_renderer->GetTabPadding(); }
+
+    virtual wxSize GetSliderThumbSize() const
+        { return m_renderer->GetSliderThumbSize(); }
 
 protected:
     wxRenderer *m_renderer;

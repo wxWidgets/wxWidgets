@@ -163,6 +163,16 @@ public:
                          int flags = 0,
                          int indexAccel = -1);
 
+    virtual void DrawSliderShaft(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0,
+                                 wxRect *rectShaft = NULL);
+    virtual void DrawSliderThumb(wxDC& dc,
+                                 const wxRect& rect,
+                                 wxOrientation orient,
+                                 int flags = 0);
+
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
                                  wxBitmap *bmpDisabled);
@@ -200,6 +210,8 @@ public:
 
     virtual wxSize GetTabIndent() const { return wxSize(2, 2); }
     virtual wxSize GetTabPadding() const { return wxSize(6, 6); }
+
+    virtual wxSize GetSliderThumbSize() const { return m_sizeScrollbarArrow; }
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -1592,6 +1604,27 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
         case wxRIGHT:
             wxFAIL_MSG(_T("TODO"));
     }
+}
+
+// ----------------------------------------------------------------------------
+// slider
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
+                                    const wxRect& rect,
+                                    wxOrientation orient,
+                                    int flags,
+                                    wxRect *rectShaft)
+{
+    if ( rectShaft )
+        *rectShaft = rect;
+}
+
+void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
+                                    const wxRect& rect,
+                                    wxOrientation orient,
+                                    int flags)
+{
 }
 
 // ----------------------------------------------------------------------------

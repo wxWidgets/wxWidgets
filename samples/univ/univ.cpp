@@ -51,6 +51,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/notebook.h"
+#include "wx/slider.h"
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/statbmp.h"
@@ -64,9 +65,10 @@
 //#define TEST_CHECKLISTBOX
 //#define TEST_COMBO
 //#define TEST_LISTBOX
-#define TEST_NOTEBOOK
+//#define TEST_NOTEBOOK
 //#define TEST_RADIO
 //#define TEST_SCROLL
+#define TEST_SLIDER
 //#define TEST_SPIN
 //#define TEST_STATIC_BMP
 //#define TEST_STATIC_BOX
@@ -380,6 +382,26 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
 #endif
 
 #endif // TEST_SCROLL
+
+#ifdef TEST_SLIDER
+    wxSlider *slider = new wxSlider(this, -1, 83, 0, 100,
+                                    wxPoint(10, 30), wxDefaultSize,
+                                    wxSL_HORIZONTAL | wxSL_BOTTOM | wxSL_LABELS);
+    slider->SetValue(17);
+
+    (void)new wxSlider(this, -1, 50, 0, 100, wxPoint(10, 80), wxDefaultSize,
+                       wxSL_HORIZONTAL);
+
+    (void)new wxSlider(this, -1, 100, 0, 100, wxPoint(10, 130), wxDefaultSize,
+                       wxSL_HORIZONTAL | wxSL_TOP | wxSL_LABELS);
+
+    (void)new wxSlider(this, -1, 0, 0, 100, wxPoint(160, 30), wxDefaultSize,
+                       wxSL_VERTICAL | wxSL_LEFT | wxSL_LABELS);
+    (void)new wxSlider(this, -1, 50, 0, 100, wxPoint(210, 30), wxDefaultSize,
+                       wxSL_VERTICAL);
+    (void)new wxSlider(this, -1, 100, 0, 100, wxPoint(260, 30), wxDefaultSize,
+                       wxSL_VERTICAL | wxSL_RIGHT | wxSL_LABELS);
+#endif // TEST_SLIDER
 
 #ifdef TEST_SPIN
     m_textSpin1 = new wxTextCtrl(this, -1, _T("Vertical spin"),

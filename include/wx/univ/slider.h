@@ -93,6 +93,7 @@ public:
     bool HasLabels() const { return (GetWindowStyle() & wxSL_LABELS) != 0; }
 
 protected:
+    // overridden base class virtuals
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
@@ -100,6 +101,9 @@ protected:
     virtual bool PerformAction(const wxControlAction& action,
                                long numArg = 0,
                                const wxString& strArg = wxEmptyString);
+
+    // event handlers
+    void OnSize(wxSizeEvent& event);
 
     // common part of all ctors
     void Init();
@@ -116,6 +120,12 @@ protected:
     // is the value inside the range?
     bool IsInRange(int value) { return (value >= m_min) && (value <= m_max); }
 
+    // format the value for printing as label
+    virtual wxString FormatValue(int value) const;
+
+    // calculate max label size
+    wxSize CalcLabelSize() const;
+
 private:
     // the slider range and value
     int m_min,
@@ -129,7 +139,13 @@ private:
     // the size of the thumb (in pixels)
     int m_thumbSize;
 
-    DECLARE_DYNAMIC_CLASS(wxSpinButton)
+    // the part of the client area reserved for the label and the part for the
+    // slider itself
+    wxRect m_rectLabel,
+           m_rectSlider;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxSlider)
 };
 
 #endif // _WX_UNIV_SLIDER_H_
