@@ -502,6 +502,15 @@ samples/help/doc/*.tex
 samples/help/doc/*.gif
 samples/help/doc/*.map
 
+samples/htlbox/*.cpp
+samples/htlbox/*.h
+samples/htlbox/*.def
+samples/htlbox/makefile*
+samples/htlbox/*.xpm
+samples/htlbox/*.ico
+samples/htlbox/*.bmp
+samples/htlbox/*.rc
+
 samples/html/makefile*
 samples/html/*.txt
 

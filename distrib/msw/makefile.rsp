@@ -24,6 +24,7 @@ samples/event/Makefile.in
 samples/grid/Makefile.in
 samples/keyboard/Makefile.in
 samples/help/Makefile.in
+samples/htlbox/Makefile.in
 samples/internat/Makefile.in
 samples/ipc/Makefile.in
 samples/png/Makefile.in

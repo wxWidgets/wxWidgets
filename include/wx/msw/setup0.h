@@ -45,14 +45,14 @@
 #define WXWIN_COMPATIBILITY_2 0
 
 // This setting determines the compatibility with 2.2 API: set it to 1 to
-// enable it but please consider to update your code instead of doing it.
+// enable it but please consider updating your code instead.
 //
 // Default is 0
 //
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_2 1
 
-// This setting determines the compatibility with 2.2 API: set it to 0 to
+// This setting determines the compatibility with 2.4 API: set it to 0 to
 // flag all cases of using deprecated functions.
 //
 // Default is 1 but please try building your code with 0 as the default will
@@ -160,7 +160,7 @@
 //
 // Unicode is currently only fully supported under Windows NT/2000/XP
 // (Windows 9x doesn't support it and the programs compiled in Unicode mode
-// will not run under 9x -- but see wxUSE_UNICODE_MSLU bellow).
+// will not run under 9x -- but see wxUSE_UNICODE_MSLU below).
 //
 // Default is 0
 //
