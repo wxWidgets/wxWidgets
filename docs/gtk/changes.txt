@@ -4,6 +4,14 @@ ports.
 
 *** next release ***
 
+Corrceted so-library name.
+
+wxTreeCtrl now shows an item, if it was programmatically selected.
+
+wxTextCtrl no longer sends any text event upon its construction.
+
+wxSpinCtrl misbehaviour fixed.
+
 wxWakeUpIdle() works again
 
 wxGauge now supports wxGA_VERTICAL (Shane Forsythe)

@@ -1362,6 +1362,15 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
 
     if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
       return;
+      
+    wxTreeItemId parent = GetParent( itemId );
+    while (parent.IsOk())
+    {
+        if (!IsExpanded(parent))
+            Expand( parent );
+            
+        parent = GetParent( parent );
+    }
 
     // ctrl press
     if (unselect_others)
