@@ -18,7 +18,7 @@
 //RN (Ryan Norton's) regular expression library
 //#define wxUSE_RNWXRE 
 
-//Greta, Microsoft Research's templated library 
+//GRETA, Microsoft Research's templated regex library 
 //[http://research.microsoft.com/projects/greta/] 
 //Install - Get it from .net powertools, put the directory in this directory
 //#define wxUSE_GRETA 
@@ -390,7 +390,7 @@ public:
             }
         }
         szResult2 = wxString::Format(
-                            _("--wxRe--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
+                            _("--Ryan's wxRe--\nIndex:[%i]-[%i]\nString:%s\nMatch Time:%ums\nStatus:%s"),
                             dwStartIndex2, dwEndIndex2+dwStartIndex2, 
                             szSearch.Mid(dwStartIndex2, dwEndIndex2),
                             dwEndTime2, 
@@ -400,7 +400,7 @@ public:
 
 #ifdef wxUSE_GRETA
         std::string stdszPattern(szPattern);
-        rpattern Greta (stdszPattern,GLOBAL,MODE_MIXED);
+        rpattern Greta (stdszPattern,EXTENDED,MODE_MIXED);
         match_results r;
         std::string stdszSearch(szSearch);
 
@@ -417,7 +417,7 @@ public:
             {
                 for(i = 0; i < n; ++i)
                 {
-                    Greta = rpattern(stdszPattern,GLOBAL,MODE_MIXED);
+                    Greta = rpattern(stdszPattern,EXTENDED,MODE_MIXED);
                     Greta.match(stdszSearch, r);
                 }
             }
