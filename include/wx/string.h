@@ -209,8 +209,8 @@ class WXDLLEXPORT wxCSConv : wxMBConv
   wxChar *data;
  public:
   wxCSConv(const wxChar *charset);
-  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n);
-  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n);
+  virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
+  virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
 
 // filenames are multibyte on Unix and probably widechar on Windows?
