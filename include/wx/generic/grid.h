@@ -1290,12 +1290,27 @@ public:
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
 
-    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+    // MB: This ugly confusion of SelectBlock functions will be absent
+    // in post wx-2.2 releases
+    //
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol,
+                      bool addToSelected );
+
+    void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
+        { SelectBlock( topRow, leftCol, bottomRow, rightCol, FALSE ); }
+
+    void SelectBlock( const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight,
+                      bool addToSelected )
+        { SelectBlock( topLeft.GetRow(), topLeft.GetCol(),
+                       bottomRight.GetRow(), bottomRight.GetCol(),
+                       addToSelected ); }
 
     void SelectBlock( const wxGridCellCoords& topLeft,
                       const wxGridCellCoords& bottomRight )
         { SelectBlock( topLeft.GetRow(), topLeft.GetCol(),
-                       bottomRight.GetRow(), bottomRight.GetCol() ); }
+                       bottomRight.GetRow(), bottomRight.GetCol(),
+                       FALSE ); }
 
     void SelectAll();
 
@@ -1724,6 +1739,12 @@ protected:
     void SetCurrentCell( int row, int col )
         { SetCurrentCell( wxGridCellCoords(row, col) ); }
 
+    void HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol );
+
+    void HighlightBlock( const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight )
+        { HighlightBlock( topLeft.GetRow(), topLeft.GetCol(),
+                       bottomRight.GetRow(), bottomRight.GetCol() ); }
 
     // ------ functions to get/send data (see also public functions)
     //

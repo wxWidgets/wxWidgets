@@ -4675,17 +4675,17 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 {
                     if ( m_selectingKeyboard == wxGridNoCellCoords)
                         m_selectingKeyboard = coords;
-                    SelectBlock ( m_selectingKeyboard, coords );
+                    HighlightBlock ( m_selectingKeyboard, coords );
                 }
                 else
                 {
                     if ( !IsSelection() )
                     {
-                        SelectBlock( coords, coords );
+                        HighlightBlock( coords, coords );
                     }
                     else
                     {
-                        SelectBlock( m_currentCellCoords, coords );
+                        HighlightBlock( m_currentCellCoords, coords );
                     }
                 }
 
@@ -4817,7 +4817,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         SetCurrentCell( coords );
                         if ( m_selection->GetSelectionMode()
                              != wxGrid::wxGridSelectCells)
-                            SelectBlock( coords, coords );
+                            HighlightBlock( coords, coords );
                     }
                     m_waitForSlowClick = TRUE;
                 }
@@ -5623,6 +5623,140 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
     attr->DecRef();
 }
 
+
+void wxGrid::HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol )
+{
+    int temp;
+    wxGridCellCoords updateTopLeft, updateBottomRight;
+
+    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    {
+        leftCol = 0;
+        rightCol = GetNumberCols() - 1;
+    }
+    else if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
+    {
+        topRow = 0;
+        bottomRow = GetNumberRows() - 1;
+    }
+    if ( topRow > bottomRow )
+    {
+        temp = topRow;
+        topRow = bottomRow;
+        bottomRow = temp;
+    }
+
+    if ( leftCol > rightCol )
+    {
+        temp = leftCol;
+        leftCol = rightCol;
+        rightCol = temp;
+    }
+
+    updateTopLeft = wxGridCellCoords( topRow, leftCol );
+    updateBottomRight = wxGridCellCoords( bottomRow, rightCol );
+
+    if ( m_selectingTopLeft != updateTopLeft ||
+         m_selectingBottomRight != updateBottomRight )
+    {
+        // Compute two optimal update rectangles:
+        // Either one rectangle is a real subset of the
+        // other, or they are (almost) disjoint!
+        wxRect  rect[4];
+        bool    need_refresh[4];
+        need_refresh[0] =
+        need_refresh[1] =
+        need_refresh[2] =
+        need_refresh[3] = FALSE;
+        int     i;
+
+        // Store intermediate values
+        wxCoord oldLeft   = m_selectingTopLeft.GetCol();
+        wxCoord oldTop    = m_selectingTopLeft.GetRow();
+        wxCoord oldRight  = m_selectingBottomRight.GetCol();
+        wxCoord oldBottom = m_selectingBottomRight.GetRow();
+
+        // Determine the outer/inner coordinates.
+        if (oldLeft > leftCol)
+        {
+            temp = oldLeft;
+            oldLeft = leftCol;
+            leftCol = temp;
+        }
+        if (oldTop > topRow )
+        {
+            temp = oldTop;
+            oldTop = topRow;
+            topRow = temp;
+        }
+        if (oldRight < rightCol )
+        {
+            temp = oldRight;
+            oldRight = rightCol;
+            rightCol = temp;
+        }
+        if (oldBottom < bottomRow)
+        {
+            temp = oldBottom;
+            oldBottom = bottomRow;
+            bottomRow = temp;
+        }
+
+        // Now, either the stuff marked old is the outer
+        // rectangle or we don't have a situation where one
+        // is contained in the other.
+
+        if ( oldLeft < leftCol )
+        {
+            need_refresh[0] = TRUE;
+            rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            oldLeft ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            leftCol - 1 ) );
+        }
+
+        if ( oldTop  < topRow )
+        {
+            need_refresh[1] = TRUE;
+            rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            leftCol ),
+                                         wxGridCellCoords ( topRow - 1,
+                                                            rightCol ) );
+        }
+
+        if ( oldRight > rightCol )
+        {
+            need_refresh[2] = TRUE;
+            rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
+                                                            rightCol + 1 ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            oldRight ) );
+        }
+
+        if ( oldBottom > bottomRow )
+        {
+            need_refresh[3] = TRUE;
+            rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
+                                                            leftCol ),
+                                         wxGridCellCoords ( oldBottom,
+                                                            rightCol ) );
+        }
+
+
+        // Change Selection
+        m_selectingTopLeft = updateTopLeft;
+        m_selectingBottomRight = updateBottomRight;
+
+        // various Refresh() calls
+        for (i = 0; i < 4; i++ )
+            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
+                m_gridWin->Refresh( FALSE, &(rect[i]) );
+    }
+
+    // never generate an event as it will be generated from
+    // wxGridSelection::SelectBlock!
+    // (old comment from when this was the body of SelectBlock)
+}
 
 //
 // ------ functions to get/send data (see also public functions)
@@ -6610,7 +6744,7 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
                 m_selectingKeyboard.SetRow( m_selectingKeyboard.GetRow() - 1 );
                 MakeCellVisible( m_selectingKeyboard.GetRow(),
                                  m_selectingKeyboard.GetCol() );
-                SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+                HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
         else if ( m_currentCellCoords.GetRow() > 0 )
@@ -6644,7 +6778,7 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
                 m_selectingKeyboard.SetRow( m_selectingKeyboard.GetRow() + 1 );
                 MakeCellVisible( m_selectingKeyboard.GetRow(),
                         m_selectingKeyboard.GetCol() );
-                SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+                HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
         else if ( m_currentCellCoords.GetRow() < m_numRows - 1 )
@@ -6678,7 +6812,7 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
                 m_selectingKeyboard.SetCol( m_selectingKeyboard.GetCol() - 1 );
                 MakeCellVisible( m_selectingKeyboard.GetRow(),
                         m_selectingKeyboard.GetCol() );
-                SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+                HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
         else if ( m_currentCellCoords.GetCol() > 0 )
@@ -6712,7 +6846,7 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
                 m_selectingKeyboard.SetCol( m_selectingKeyboard.GetCol() + 1 );
                 MakeCellVisible( m_selectingKeyboard.GetRow(),
                         m_selectingKeyboard.GetCol() );
-                SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+                HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
             }
         }
         else if ( m_currentCellCoords.GetCol() < m_numCols - 1 )
@@ -6842,7 +6976,7 @@ bool wxGrid::MoveCursorUpBlock( bool expandSelection )
         if ( expandSelection )
         {
             m_selectingKeyboard = wxGridCellCoords( row, col );
-            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+            HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
         {
@@ -6905,7 +7039,7 @@ bool wxGrid::MoveCursorDownBlock( bool expandSelection )
         if ( expandSelection )
         {
             m_selectingKeyboard = wxGridCellCoords( row, col );
-            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+            HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
         {
@@ -6969,7 +7103,7 @@ bool wxGrid::MoveCursorLeftBlock( bool expandSelection )
         if ( expandSelection )
         {
             m_selectingKeyboard = wxGridCellCoords( row, col );
-            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+            HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
         {
@@ -7033,7 +7167,7 @@ bool wxGrid::MoveCursorRightBlock( bool expandSelection )
         if ( expandSelection )
         {
             m_selectingKeyboard = wxGridCellCoords( row, col );
-            SelectBlock( m_currentCellCoords, m_selectingKeyboard );
+            HighlightBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
         {
@@ -8069,138 +8203,16 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 }
 
 
-void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
+void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol, 
+                          bool addToSelected )
 {
-    int temp;
-    wxGridCellCoords updateTopLeft, updateBottomRight;
+    if ( IsSelection() && !addToSelected )
+        ClearSelection();
 
-    if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectRows )
-    {
-        leftCol = 0;
-        rightCol = GetNumberCols() - 1;
-    }
-    else if ( m_selection->GetSelectionMode() == wxGrid::wxGridSelectColumns )
-    {
-        topRow = 0;
-        bottomRow = GetNumberRows() - 1;
-    }
-    if ( topRow > bottomRow )
-    {
-        temp = topRow;
-        topRow = bottomRow;
-        bottomRow = temp;
-    }
-
-    if ( leftCol > rightCol )
-    {
-        temp = leftCol;
-        leftCol = rightCol;
-        rightCol = temp;
-    }
-
-    updateTopLeft = wxGridCellCoords( topRow, leftCol );
-    updateBottomRight = wxGridCellCoords( bottomRow, rightCol );
-
-    if ( m_selectingTopLeft != updateTopLeft ||
-         m_selectingBottomRight != updateBottomRight )
-    {
-        // Compute two optimal update rectangles:
-        // Either one rectangle is a real subset of the
-        // other, or they are (almost) disjoint!
-        wxRect  rect[4];
-        bool    need_refresh[4];
-        need_refresh[0] =
-        need_refresh[1] =
-        need_refresh[2] =
-        need_refresh[3] = FALSE;
-        int     i;
-
-        // Store intermediate values
-        wxCoord oldLeft   = m_selectingTopLeft.GetCol();
-        wxCoord oldTop    = m_selectingTopLeft.GetRow();
-        wxCoord oldRight  = m_selectingBottomRight.GetCol();
-        wxCoord oldBottom = m_selectingBottomRight.GetRow();
-
-        // Determine the outer/inner coordinates.
-        if (oldLeft > leftCol)
-        {
-            temp = oldLeft;
-            oldLeft = leftCol;
-            leftCol = temp;
-        }
-        if (oldTop > topRow )
-        {
-            temp = oldTop;
-            oldTop = topRow;
-            topRow = temp;
-        }
-        if (oldRight < rightCol )
-        {
-            temp = oldRight;
-            oldRight = rightCol;
-            rightCol = temp;
-        }
-        if (oldBottom < bottomRow)
-        {
-            temp = oldBottom;
-            oldBottom = bottomRow;
-            bottomRow = temp;
-        }
-
-        // Now, either the stuff marked old is the outer
-        // rectangle or we don't have a situation where one
-        // is contained in the other.
-
-        if ( oldLeft < leftCol )
-        {
-            need_refresh[0] = TRUE;
-            rect[0] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-                                                            oldLeft ),
-                                         wxGridCellCoords ( oldBottom,
-                                                            leftCol - 1 ) );
-        }
-
-        if ( oldTop  < topRow )
-        {
-            need_refresh[1] = TRUE;
-            rect[1] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-                                                            leftCol ),
-                                         wxGridCellCoords ( topRow - 1,
-                                                            rightCol ) );
-        }
-
-        if ( oldRight > rightCol )
-        {
-            need_refresh[2] = TRUE;
-            rect[2] = BlockToDeviceRect( wxGridCellCoords ( oldTop,
-                                                            rightCol + 1 ),
-                                         wxGridCellCoords ( oldBottom,
-                                                            oldRight ) );
-        }
-
-        if ( oldBottom > bottomRow )
-        {
-            need_refresh[3] = TRUE;
-            rect[3] = BlockToDeviceRect( wxGridCellCoords ( bottomRow + 1,
-                                                            leftCol ),
-                                         wxGridCellCoords ( oldBottom,
-                                                            rightCol ) );
-        }
-
-
-        // Change Selection
-        m_selectingTopLeft = updateTopLeft;
-        m_selectingBottomRight = updateBottomRight;
-
-        // various Refresh() calls
-        for (i = 0; i < 4; i++ )
-            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
-                m_gridWin->Refresh( FALSE, &(rect[i]) );
-    }
-
-    // never generate an event as it will be generated from
-    // wxGridSelection::SelectBlock!
+    m_selection->SelectBlock( topRow, leftCol, bottomRow, rightCol, 
+                              FALSE, addToSelected );    
 }
+
 
 void wxGrid::SelectAll()
 {
