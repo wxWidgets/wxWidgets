@@ -423,7 +423,7 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
       if ( nStr == 0 )
         return NULL;
 
-      if ( wxStrcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 )
+      if ( strcmp(szOrig, StringAtOfs(m_pOrigTable, nStr - 1)) == 0 )
         return StringAtOfs(m_pTransTable, nStr - 1);
 
       if ( nIndex >= m_nHashSize - nIncr)
@@ -438,7 +438,7 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
            current;
     while ( bottom < top ) {
       current = (bottom + top) / 2;
-      int res = wxStrcmp(szOrig, StringAtOfs(m_pOrigTable, current));
+      int res = strcmp(szOrig, StringAtOfs(m_pOrigTable, current));
       if ( res < 0 )
         top = current;
       else if ( res > 0 )
