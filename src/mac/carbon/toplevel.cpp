@@ -157,7 +157,12 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 {
     OSStatus result = eventNotHandledErr ;
 
+    wxTopLevelWindow* tlw = (wxTopLevelWindow*) data ;
+
     wxWindow* focus = wxWindow::FindFocus() ;
+    if ( focus == NULL )
+        return result ;
+        
     char charCode ;
     UInt32 keyCode ;
     UInt32 modifiers ;
@@ -294,7 +299,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     if ( button == kEventMouseButtonSecondary )
     {
         if (cEvent.GetKind() == kEventMouseDown )
-            wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DOWN : wxEVT_RIGHT_DCLICK ) ;
+            wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
         else if ( cEvent.GetKind() == kEventMouseUp )
             wxevent.SetEventType(wxEVT_RIGHT_UP ) ;
     }
