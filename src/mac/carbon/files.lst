@@ -880,8 +880,8 @@ GUIDEPS = \
 #		gsocket.o
 #		mimetype.o
 #		threadpsx.o
+#		dialup.o
 UNIXOBJS = \
-		dialup.o \
 		utilsunx.o \
 		dl_macosx.o
 
