@@ -997,14 +997,14 @@ wxWindow *wxWindowBase::DoFindFocus()
     wxCocoaNSView *win;
 
     NSWindow *keyWindow = [[NSApplication sharedApplication] keyWindow];
-    win = wxCocoaNSView::GetFromCocoa([keyWindow firstResponder]);
+    win = wxCocoaNSView::GetFromCocoa(static_cast<NSView*>([keyWindow firstResponder]));
     if(win)
         return win->GetWxWindow();
 
     NSWindow *mainWindow = [[NSApplication sharedApplication] keyWindow];
     if(mainWindow == keyWindow)
         return NULL;
-    win = wxCocoaNSView::GetFromCocoa([mainWindow firstResponder]);
+    win = wxCocoaNSView::GetFromCocoa(static_cast<NSView*>([mainWindow firstResponder]));
     if(win)
         return win->GetWxWindow();
 
