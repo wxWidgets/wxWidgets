@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        toolbar.h
+// Name:        wx/motif/toolbar.h
 // Purpose:     wxToolBar class
 // Author:      Julian Smart
-// Modified by:
+// Modified by: 13.12.99 by VZ during toolbar classes reorganization
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -13,81 +13,60 @@
 #define _WX_TOOLBAR_H_
 
 #ifdef __GNUG__
-#pragma interface "toolbar.h"
+    #pragma interface "toolbar.h"
 #endif
 
-#include "wx/tbarbase.h"
-
-WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
-
-class WXDLLEXPORT wxToolBar: public wxToolBarBase
+class WXDLLEXPORT wxToolBar : public wxToolBarBase
 {
-  DECLARE_DYNAMIC_CLASS(wxToolBar)
- public:
-  /*
-   * Public interface
-   */
+public:
+    // ctors and dtor
+    wxToolBar() { Init(); }
 
-  wxToolBar();
+    wxToolBar(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                const wxString& name = wxToolBarNameStr)
+    {
+        Init();
 
-  inline wxToolBar(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER|wxTB_HORIZONTAL,
-		   const wxString& name = wxToolBarNameStr):
-  m_widgets(wxKEY_INTEGER)
+        Create(parent, id, pos, size, style, name);
+    }
 
-  {
-    Create(parent, id, pos, size, style, name);
-  }
-  ~wxToolBar();
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxNO_BORDER | wxTB_HORIZONTAL,
+                const wxString& name = wxToolBarNameStr);
 
-  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER|wxTB_HORIZONTAL,
-            const wxString& name = wxToolBarNameStr);
+    virtual ~wxToolBar();
 
-  // If pushedBitmap is NULL, a reversed version of bitmap is
-  // created and used as the pushed/toggled image.
-  // If toggle is TRUE, the button toggles between the two states.
-  wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               bool toggle = FALSE, wxCoord xPos = -1, wxCoord yPos = -1, wxObject *clientData = NULL,
-               const wxString& helpString1 = "", const wxString& helpString2 = "");
+    // override/implement base class virtuals
+    virtual wxToolBarTool *FindToolForPosition(wxCoord x, wxCoord y) const;
 
-  // Set default bitmap size
-  void SetToolBitmapSize(const wxSize& size);
-  void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
-  void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
-  void ClearTools();
+    virtual bool Realize();
 
-  // The button size is bigger than the bitmap size
-  wxSize GetToolSize() const;
+    // implementation from now on
 
-  wxSize GetMaxSize() const;
-
-  // Add all the buttons
-  virtual bool CreateTools();
-  virtual void LayoutTools() {}
-
-  // The post-tool-addition call. TODO: do here whatever's
-  // necessary for completing the toolbar construction.
-  bool Realize() { return CreateTools(); };
-
-// Implementation
-  void DestroyPixmaps();
-  int FindIndexForWidget(WXWidget w);
-  WXWidget FindWidgetForIndex(int index);
-
-  WXWidget GetTopWidget() const;
-  WXWidget GetClientWidget() const;
-  WXWidget GetMainWidget() const;
+    // find tool by widget
+    wxToolBarTool *FindToolByWidget(WXWidget w) const;
 
 protected:
-  // List of widgets in the toolbar, indexed by tool index
-  wxList    m_widgets;
+    // common part of all ctors
+    void Init();
 
-  // List of pixmaps to destroy when tools are recreated or
-  // or toolbar is destroyed.
-  wxList    m_pixmaps;
+    // implement base class pure virtuals
+    virtual bool DoInsertTool(size_t pos, wxToolBarTool *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarTool *tool);
 
-DECLARE_EVENT_TABLE()
+    virtual void DoEnableTool(wxToolBarTool *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarTool *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarTool *tool, bool toggle);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
 #endif

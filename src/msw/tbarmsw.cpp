@@ -1,37 +1,49 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tbarmsw.cpp
-// Purpose:     wxToolBarMSW
+// Purpose:     wxToolBar
 // Author:      Julian Smart
-// Modified by:
+// Modified by: 13.12.99 by VZ during toolbar classes reorganization
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "tbarmsw.h"
+    #pragma implementation "tbarmsw.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
 #endif
 
-#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR
+#if wxUSE_BUTTONBAR && wxUSE_TOOLBAR && !wxUSE_TOOLBAR_SIMPLE
+
+#if !defined(__WIN32__) && !wxUSE_IMAGE_LOADING_IN_MSW
+    #error wxToolBar needs wxUSE_IMAGE_LOADING_IN_MSW under Win16
+#endif
 
 #if !defined(__GNUWIN32__) && !defined(__SALFORDC__)
-#include "malloc.h"
+    #include "malloc.h"
 #endif
 
 #if !defined(__MWERKS__) && !defined(__SALFORDC__)
-#include <memory.h>
+    #include <memory.h>
 #endif
 
 #include <stdlib.h>
@@ -43,482 +55,621 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 #define DEFAULTBITMAPX   16
 #define DEFAULTBITMAPY   15
 #define DEFAULTBUTTONX   24
 #define DEFAULTBUTTONY   22
 #define DEFAULTBARHEIGHT 27
 
-/////// Non-Windows 95 implementation
+//
+// States (not all of them currently used)
+//
+#define wxTBSTATE_CHECKED         0x01    // radio button is checked
+#define wxTBSTATE_PRESSED         0x02    // button is being depressed (any style)
+#define wxTBSTATE_ENABLED         0x04    // button is enabled
+#define wxTBSTATE_HIDDEN          0x08    // button is hidden
+#define wxTBSTATE_INDETERMINATE   0x10    // button is indeterminate
 
-#if !wxUSE_IMAGE_LOADING_IN_MSW
-#error If wxUSE_IMAGE_LOADING_IN_MSW is set to 0, then wxUSE_BUTTONBAR must be set to 0 too.
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxToolBarTool : public wxToolBarToolBase
+{
+public:
+    wxToolBarTool(wxToolBar *tbar,
+                  int id,
+                  const wxBitmap& bitmap1,
+                  const wxBitmap& bitmap2,
+                  bool toggle,
+                  wxObject *clientData,
+                  const wxString& shortHelpString,
+                  const wxString& longHelpString)
+        : wxToolBarToolBase(tbar, id, bitmap1, bitmap2, toggle,
+                            clientData, shortHelpString, longHelpString)
+    {
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control)
+        : wxToolBarToolBase(tbar, control)
+    {
+    }
+
+    void SetSize(const wxSize& size)
+    {
+        m_width = size.x;
+        m_height = size.y;
+    }
+
+    long GetWidth() const { return m_width; }
+    long GetHeight() const { return m_height; }
+
+    wxCoord               m_x;
+    wxCoord               m_y;
+    wxCoord               m_width;
+    wxCoord               m_height;
+};
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
+#if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
+
+BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
+	EVT_PAINT(wxToolBar::OnPaint)
+	EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
+END_EVENT_TABLE()
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxToolBarBase)
+// ============================================================================
+// implementation
+// ============================================================================
 
-BEGIN_EVENT_TABLE(wxToolBarMSW, wxToolBarBase)
-	EVT_SIZE(wxToolBarMSW::OnSize)
-	EVT_PAINT(wxToolBarMSW::OnPaint)
-	EVT_MOUSE_EVENTS(wxToolBarMSW::OnMouseEvent)
-END_EVENT_TABLE()
+// ----------------------------------------------------------------------------
+// wxToolBarTool
+// ----------------------------------------------------------------------------
 
-wxToolBarMSW::wxToolBarMSW(void)
+wxToolBarToolBase *wxToolBar::CreateTool(int id,
+                                         const wxBitmap& bitmap1,
+                                         const wxBitmap& bitmap2,
+                                         bool toggle,
+                                         wxObject *clientData,
+                                         const wxString& shortHelpString,
+                                         const wxString& longHelpString)
 {
-  m_hbrDither = 0;
-  m_rgbFace = 0;
-  m_rgbShadow = 0;
-  m_rgbHilight = 0;
-  m_rgbFrame = 0;
-  m_hdcMono = 0;
-  m_hbmMono = 0;
-  m_hbmDefault = 0;
-  m_defaultWidth = DEFAULTBITMAPX;
-  m_defaultHeight = DEFAULTBITMAPY;
+    return new wxToolBarTool(this, id, bitmap1, bitmap2, toggle,
+                             clientData, shortHelpString, longHelpString);
 }
 
-bool wxToolBarMSW::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name)
+wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-	if ( ! wxWindow::Create(parent, id, pos, size, style, name) )
-		return FALSE;
-
-  if ( style & wxTB_HORIZONTAL )
-    { m_lastX = 3; m_lastY = 7; }
-  else
-    { m_lastX = 7; m_lastY = 3; }
-  m_maxWidth = m_maxHeight = 0;
-  m_pressedTool = m_currentTool = -1;
-  m_xMargin = 0;
-  m_yMargin = 0;
-  m_toolPacking = 1;
-  m_toolSeparation = 5;
-
-  // Set it to grey
-  SetBackgroundColour(wxColour(192, 192, 192));
-
-  m_hbrDither = 0;
-  m_rgbFace = 0;
-  m_rgbShadow = 0;
-  m_rgbHilight = 0;
-  m_rgbFrame = 0;
-  m_hdcMono = 0;
-  m_hbmMono = 0;
-  m_hbmDefault = 0;
-  m_defaultWidth = DEFAULTBITMAPX;
-  m_defaultHeight = DEFAULTBITMAPY;
-
-  InitGlobalObjects();
-
-  return TRUE;
+    return new wxToolBarTool(this, control);
 }
 
-wxToolBarMSW::~wxToolBarMSW(void)
+// ----------------------------------------------------------------------------
+// wxToolBar
+// ----------------------------------------------------------------------------
+
+void wxToolBar::Init()
 {
-  FreeGlobalObjects();
+    m_hbrDither = 0;
+    m_rgbFace = 0;
+    m_rgbShadow = 0;
+    m_rgbHilight = 0;
+    m_rgbFrame = 0;
+    m_hdcMono = 0;
+    m_hbmMono = 0;
+    m_hbmDefault = 0;
+
+    m_defaultWidth = DEFAULTBITMAPX;
+    m_defaultHeight = DEFAULTBITMAPY;
+
+    m_xPos =
+    m_yPos = -1;
+
+    m_maxWidth = m_maxHeight = 0;
+    m_pressedTool = m_currentTool = -1;
+    m_toolPacking = 1;
+    m_toolSeparation = 5;
 }
 
-void wxToolBarMSW::SetToolBitmapSize(const wxSize& size)
+bool wxToolBar::Create(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name)
 {
-  m_defaultWidth = size.x; m_defaultHeight = size.y;
-  FreeGlobalObjects();
-  InitGlobalObjects();
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return FALSE;
+
+    if ( style & wxTB_HORIZONTAL )
+    {
+        m_lastX = 3;
+        m_lastY = 7;
+    }
+    else
+    {
+        m_lastX = 7;
+        m_lastY = 3;
+    }
+
+    // Set it to grey
+    SetBackgroundColour(wxColour(192, 192, 192));
+
+    InitGlobalObjects();
+
+    return TRUE;
+}
+
+wxToolBar::~wxToolBar()
+{
+    FreeGlobalObjects();
+}
+
+void wxToolBar::SetToolBitmapSize(const wxSize& size)
+{
+    m_defaultWidth = size.x;
+    m_defaultHeight = size.y;
+
+    FreeGlobalObjects();
+    InitGlobalObjects();
 }
 
 // The button size is bigger than the bitmap size
-wxSize wxToolBarMSW::GetToolSize(void) const
+wxSize wxToolBar::GetToolSize() const
 {
-  return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
+    return wxSize(m_defaultWidth + 8, m_defaultHeight + 7);
 }
 
-void wxToolBarMSW::OnPaint(wxPaintEvent& event)
+wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
-  wxPaintDC dc(this);
-
-  static int wxOnPaintCount = 0;
-
-  // Prevent reentry of OnPaint which would cause
-  // wxMemoryDC errors.
-  if (wxOnPaintCount > 0)
-    return;
-  wxOnPaintCount ++;
-
-  wxNode *node = m_tools.First();
-  while (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool->m_toolStyle != wxTOOL_STYLE_SEPARATOR)
+    wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    while (node)
     {
-      int state = wxTBSTATE_ENABLED;
-      if (!tool->m_enabled)
-        state = 0;
-      if (tool->m_isToggle && tool->m_toggleState)
-        state |= wxTBSTATE_CHECKED;
-      DrawTool(dc, tool, state);
+        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+        if ((x >= tool->m_x) && (y >= tool->m_y) &&
+            (x <= (tool->m_x + tool->GetWidth())) &&
+            (y <= (tool->m_y + tool->GetHeight())))
+        {
+            return tool;
+        }
+
+        node = node->GetNext();
     }
-    node = node->Next();
-  }
-  wxOnPaintCount --;
+
+    return (wxToolBarToolBase *)NULL;
 }
 
-void wxToolBarMSW::OnSize(wxSizeEvent& event)
+wxToolBarToolBase *wxToolBar::AddTool(int id,
+                                      const wxBitmap& bitmap,
+                                      const wxBitmap& pushedBitmap,
+                                      bool toggle,
+                                      wxCoord xPos,
+                                      wxCoord yPos,
+                                      wxObject *clientData,
+                                      const wxString& helpString1,
+                                      const wxString& helpString2)
 {
-  wxToolBarBase::OnSize(event);
+    // rememeber the position for DoInsertTool()
+    m_xPos = xPos;
+    m_yPos = yPos;
+
+    return wxToolBarBase::AddTool(id, bitmap, pushedBitmap, toggle,
+                                  xPos, yPos, clientData,
+                                  helpString1, helpString2);
+}
+
+void wxToolBar::OnPaint(wxPaintEvent& event)
+{
+    wxPaintDC dc(this);
+
+    static int wxOnPaintCount = 0;
+
+    // Prevent reentry of OnPaint which would cause
+    // wxMemoryDC errors.
+    if (wxOnPaintCount > 0)
+        return;
+    wxOnPaintCount++;
+
+    wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    while (node)
+    {
+        wxToolBarToolBase *tool = node->GetData();
+        if ( tool->GetStyle()!= wxTOOL_STYLE_BUTTON )
+        {
+            int state = tool->IsEnabled() ? wxTBSTATE_ENABLED : 0;
+            if ( tool->IsToggled() )
+                state |= wxTBSTATE_CHECKED;
+
+            DrawTool(dc, tool, state);
+        }
+
+        node = node->GetNext();
+    }
+
+    wxOnPaintCount--;
 }
 
 // If a Button is disabled, then NO function (besides leaving
 // or entering) should be carried out. Therefore the additions
 // of 'enabled' testing (Stefan Hammes).
-void wxToolBarMSW::OnMouseEvent(wxMouseEvent& event)
+void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 {
-  static wxToolBarTool *eventCurrentTool = NULL;
-  wxClientDC dc(this);
+    static wxToolBarToolBase *eventCurrentTool = NULL;
+    wxClientDC dc(this);
 
-  if (event.Leaving())
-  {
-    m_currentTool = -1;
-    if (eventCurrentTool && eventCurrentTool->m_enabled)
+    if (event.Leaving())
     {
-      ::ReleaseCapture();
-      int state = wxTBSTATE_ENABLED;
-      if (eventCurrentTool->m_toggleState)
-        state |= wxTBSTATE_CHECKED;
-      DrawTool(dc, eventCurrentTool, state);
-      eventCurrentTool = NULL;
-    }
-    OnMouseEnter(-1);
-    return;
-  }
-
-  long x, y;
-  event.GetPosition(&x, &y);
-  wxToolBarTool *tool = FindToolForPosition(x, y);
-
-  if (!tool)
-  {
-    if (eventCurrentTool && eventCurrentTool->m_enabled)
-    {
-      ::ReleaseCapture();
-      
-      int state = wxTBSTATE_ENABLED;
-      if (eventCurrentTool->m_toggleState)
-        state |= wxTBSTATE_CHECKED;
-      DrawTool(dc, eventCurrentTool, state);
-      eventCurrentTool = NULL;
-    }
-    if (m_currentTool > -1)
-    {
-      m_currentTool = -1;
-      OnMouseEnter(-1);
-    }
-    return;
-  }
-  
-  if (!event.Dragging() && !event.IsButton())
-  {
-    if (tool->m_index != m_currentTool)
-    {
-      OnMouseEnter(tool->m_index);
-      m_currentTool = tool->m_index;
-      return;
-    }
-  }
-  if (event.Dragging() && tool->m_enabled)
-  {
-    if (eventCurrentTool)
-    {
-      // Might have dragged outside tool
-      if (eventCurrentTool != tool)
-      {
-        int state = wxTBSTATE_ENABLED;
-        if (tool->m_toggleState)
-          state |= wxTBSTATE_CHECKED;
-        DrawTool(dc, tool, state);
-        eventCurrentTool = NULL;
+        m_currentTool = -1;
+        if (eventCurrentTool && eventCurrentTool->IsEnabled())
+        {
+            ::ReleaseCapture();
+            int state = wxTBSTATE_ENABLED;
+            if (eventCurrentTool->IsToggled())
+                state |= wxTBSTATE_CHECKED;
+            DrawTool(dc, eventCurrentTool, state);
+            eventCurrentTool = NULL;
+        }
+        OnMouseEnter(-1);
         return;
-      }
     }
-    else
+
+    wxCoord x, y;
+    event.GetPosition(&x, &y);
+    wxToolBarToolBase *tool = FindToolForPosition(x, y);
+
+    if (!tool)
     {
-      if (tool && event.LeftIsDown() && tool->m_enabled)
-      {
+        if (eventCurrentTool && eventCurrentTool->IsEnabled())
+        {
+            ::ReleaseCapture();
+
+            int state = wxTBSTATE_ENABLED;
+            if (eventCurrentTool->IsToggled())
+                state |= wxTBSTATE_CHECKED;
+            DrawTool(dc, eventCurrentTool, state);
+            eventCurrentTool = NULL;
+        }
+        if (m_currentTool > -1)
+        {
+            m_currentTool = -1;
+            OnMouseEnter(-1);
+        }
+        return;
+    }
+
+    if (!event.Dragging() && !event.IsButton())
+    {
+        if (tool->GetId() != m_currentTool)
+        {
+            OnMouseEnter(m_currentTool = tool->GetId());
+            return;
+        }
+    }
+    if (event.Dragging() && tool->IsEnabled())
+    {
+        if (eventCurrentTool)
+        {
+            // Might have dragged outside tool
+            if (eventCurrentTool != tool)
+            {
+                int state = wxTBSTATE_ENABLED;
+                if (tool->IsToggled())
+                    state |= wxTBSTATE_CHECKED;
+                DrawTool(dc, tool, state);
+                eventCurrentTool = NULL;
+                return;
+            }
+        }
+        else
+        {
+            if (tool && event.LeftIsDown() && tool->IsEnabled())
+            {
+                eventCurrentTool = tool;
+                ::SetCapture((HWND) GetHWND());
+                int state = wxTBSTATE_ENABLED|wxTBSTATE_PRESSED;
+                if (tool->IsToggled())
+                    state |= wxTBSTATE_CHECKED;
+                DrawTool(dc, tool, state);
+            }
+        }
+    }
+    if (event.LeftDown() && tool->IsEnabled())
+    {
         eventCurrentTool = tool;
         ::SetCapture((HWND) GetHWND());
         int state = wxTBSTATE_ENABLED|wxTBSTATE_PRESSED;
-        if (tool->m_toggleState)
-          state |= wxTBSTATE_CHECKED;
+        if (tool->IsToggled())
+            state |= wxTBSTATE_CHECKED;
         DrawTool(dc, tool, state);
-      }
     }
-  }
-  if (event.LeftDown() && tool->m_enabled)
-  {
-    eventCurrentTool = tool;
-    ::SetCapture((HWND) GetHWND());
-    int state = wxTBSTATE_ENABLED|wxTBSTATE_PRESSED;
-    if (tool->m_toggleState)
-      state |= wxTBSTATE_CHECKED;
-    DrawTool(dc, tool, state);
-  }
-  else if (event.LeftUp() && tool->m_enabled)
-  {
-    if (eventCurrentTool)
-      ::ReleaseCapture();
-    if (eventCurrentTool == tool)
+    else if (event.LeftUp() && tool->IsEnabled())
     {
-      if (tool->m_isToggle)
-      {
-        tool->m_toggleState = !tool->m_toggleState;
-        if (!OnLeftClick(tool->m_index, tool->m_toggleState))
+        if (eventCurrentTool)
+            ::ReleaseCapture();
+        if (eventCurrentTool == tool)
         {
-          tool->m_toggleState = !tool->m_toggleState;
+            if (tool->CanBeToggled())
+            {
+                tool->Toggle();
+                if (!OnLeftClick(tool->GetId(), tool->IsToggled()))
+                {
+                    tool->Toggle();
+                }
+                int state = wxTBSTATE_ENABLED;
+                if (tool->IsToggled())
+                    state |= wxTBSTATE_CHECKED;
+                DrawTool(dc, tool, state);
+            }
+            else
+            {
+                int state = wxTBSTATE_ENABLED;
+                if (tool->IsToggled())
+                    state |= wxTBSTATE_CHECKED;
+                DrawTool(dc, tool, state);
+                OnLeftClick(tool->GetId(), tool->IsToggled());
+            }
         }
-        int state = wxTBSTATE_ENABLED;
-        if (tool->m_toggleState)
-          state |= wxTBSTATE_CHECKED;
-        DrawTool(dc, tool, state);
-      }
-      else
-      {
-        int state = wxTBSTATE_ENABLED;
-        if (tool->m_toggleState)
-          state |= wxTBSTATE_CHECKED;
-        DrawTool(dc, tool, state);
-        OnLeftClick(tool->m_index, tool->m_toggleState);
-      }
+        eventCurrentTool = NULL;
     }
-    eventCurrentTool = NULL;
-  }
-  else if (event.RightDown() && tool->m_enabled)
-  {
-    OnRightClick(tool->m_index, x, y);
-  }
+    else if (event.RightDown() && tool->IsEnabled())
+    {
+        OnRightClick(tool->GetId(), x, y);
+    }
 }
 
-// This function enables/disables a toolbar tool and redraws it.
-// If that would not be done, the enabling/disabling wouldn't be
-// visible on the screen.
-void wxToolBarMSW::EnableTool(int toolIndex, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase *tool, bool WXUNUSED(enable))
 {
-  wxNode *node = m_tools.Find((long)toolIndex);
-  if (node)
-  {
-	wxClientDC dc(this);
+    DoRedrawTool(tool);
+}
 
-    // at first do the enabling/disabling in the base class
-    wxToolBarBase::EnableTool(toolIndex,enable);
-    // then calculate the state of the tool and draw it
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+void wxToolBar::DoToggleTool(wxToolBarToolBase *tool, bool WXUNUSED(toggle))
+{
+    DoRedrawTool(tool);
+}
+
+void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
+                            bool WXUNUSED(toggle))
+{
+    // nothing to do
+}
+
+void wxToolBar::DoRedrawTool(wxToolBarToolBase *tool)
+{
+    wxClientDC dc(this);
+
+    DrawTool(dc, tool);
+}
+
+void wxToolBar::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase, int state)
+{
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
+    DrawButton(dc.GetHDC(),
+               tool->m_x, tool->m_y,
+               tool->GetWidth(), tool->GetHeight(),
+               tool, state);
+}
+
+void wxToolBar::DrawTool(wxDC& dc, wxToolBarToolBase *tool)
+{
     int state = 0;
-    if(tool->m_toggleState) state |= wxTBSTATE_CHECKED;
-    if(tool->m_enabled) state |= wxTBSTATE_ENABLED;
+    if (tool->IsEnabled())
+        state |= wxTBSTATE_ENABLED;
+    if (tool->IsToggled())
+        state |= wxTBSTATE_CHECKED;
     // how can i access the PRESSED state???
-    DrawTool(dc, tool,state);
-  }
+
+    DrawTool(dc, tool, state);
 }
 
-void wxToolBarMSW::DrawTool(wxDC& dc, wxToolBarTool *tool, int state)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos),
+                             wxToolBarToolBase *tool)
 {
-  DrawButton(dc.GetHDC(), (int)tool->m_x, (int)tool->m_y, (int)tool->GetWidth(), (int)tool->GetHeight(), tool, state);
+    // VZ: didn't test whether it works, but why not...
+    tool->Detach();
+
+    Refresh();
+
+    return TRUE;
 }
 
-void wxToolBarMSW::DrawTool(wxDC& dc, wxMemoryDC& , wxToolBarTool *tool)
+bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
-  int state = wxTBSTATE_ENABLED;
-  if (!tool->m_enabled)
-    state = 0;
-  if (tool->m_toggleState)
-    state |= wxTBSTATE_CHECKED;
-  DrawTool(dc, tool, state);
-}
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
-// If pushedBitmap is NULL, a reversed version of bitmap is
-// created and used as the pushed/toggled image.
-// If toggle is TRUE, the button toggles between the two states.
-wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
-             bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
-{
-  // Using bitmap2 can cause problems (don't know why!)
+    wxCHECK_MSG( !tool->IsControl(), FALSE,
+                 _T("generic wxToolBar doesn't support controls") );
 
-  // TODO: use the mapping code from wxToolBar95 to get it right in this class
+    // TODO: use the mapping code from wxToolBar95 to get it right in this class
 #if !defined(__WIN32__) && !defined(__WIN386__)
-  wxBitmap bitmap2;
-  if (toggle)
-  {
-    bitmap2.SetHBITMAP( (WXHBITMAP) CreateMappedBitmap((WXHINSTANCE)wxGetInstance(), (WXHBITMAP) ((wxBitmap& )bitmap).GetHBITMAP()));
-  }
+    wxBitmap bitmap2;
+    if (toggle)
+    {
+        HBITMAP hbmp = CreateMappedBitmap((WXHINSTANCE)wxGetInstance(),
+                                          GetHbitmapOf(tool->GetBitmap1()));
 
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, bitmap2, toggle, xPos, yPos, helpString1, helpString2);
-#else
-  wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
+        wxBitmap bmp;
+        bmp.SetHBITMAP((WXHBITMAP)hbmp);
+        tool->SetBitmap2(bmp);
+    }
 #endif
 
-  tool->m_clientData = clientData;
+    tool->m_x = m_xPos;
+    if ( tool->m_x == -1 )
+        tool->m_x = m_xMargin;
 
-  if (xPos > -1)
-    tool->m_x = xPos;
-  else
-    tool->m_x = m_xMargin;
+    tool->m_y = m_yPos;
+    if ( tool->m_y == -1 )
+        tool->m_y = m_yMargin;
 
-  if (yPos > -1)
-    tool->m_y = yPos;
-  else
-    tool->m_y = m_yMargin;
+    tool->SetSize(GetToolSize());
 
-  tool->m_deleteSecondBitmap = TRUE;
-  tool->SetSize(GetToolSize().x, GetToolSize().y);
-  
-  // Calculate reasonable max size in case Layout() not called
-  if ((tool->m_x + bitmap.GetWidth() + m_xMargin) > m_maxWidth)
-    m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
-
-  if ((tool->m_y + bitmap.GetHeight() + m_yMargin) > m_maxHeight)
-    m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
-
-  m_tools.Append((long)index, tool);
-  return tool;
-}
-
-void wxToolBarMSW::LayoutTools()
-{
-  m_currentRowsOrColumns = 0;
-  m_lastX = m_xMargin;
-  m_lastY = m_yMargin;
-  int maxToolWidth = 0;
-  int maxToolHeight = 0;
-  m_maxWidth = 0;
-  m_maxHeight = 0;
-
-  // Find the maximum tool width and height
-  wxNode *node = m_tools.First();
-  while (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool->GetWidth() > maxToolWidth)
-      maxToolWidth = (int)tool->GetWidth();
-    if (tool->GetHeight() > maxToolHeight)
-      maxToolHeight = (int)tool->GetHeight();
-    node = node->Next();
-  }
-
-  int separatorSize = m_toolSeparation;
-
-  node = m_tools.First();
-  while (node)
-  {
-    wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-    if (tool->m_toolStyle == wxTOOL_STYLE_SEPARATOR)
+    if ( tool->IsButton() )
     {
-      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-      {
-        if (m_currentRowsOrColumns >= m_maxCols)
-          m_lastY += separatorSize;
-        else
-          m_lastX += separatorSize;
-      }
-      else
-      {
-        if (m_currentRowsOrColumns >= m_maxRows)
-          m_lastX += separatorSize;
-        else
-          m_lastY += separatorSize;
-      }
+        // Calculate reasonable max size in case Layout() not called
+        if ((tool->m_x + tool->GetBitmap1().GetWidth() + m_xMargin) > m_maxWidth)
+            m_maxWidth = (tool->m_x + tool->GetWidth() + m_xMargin);
+
+        if ((tool->m_y + tool->GetBitmap1().GetHeight() + m_yMargin) > m_maxHeight)
+            m_maxHeight = (tool->m_y + tool->GetHeight() + m_yMargin);
     }
-    else if (tool->m_toolStyle == wxTOOL_STYLE_BUTTON)
-    {
-      if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-      {
-        if (m_currentRowsOrColumns >= m_maxCols)
-        {
-          m_currentRowsOrColumns = 0;
-          m_lastX = m_xMargin;
-          m_lastY += maxToolHeight + m_toolPacking;
-        }
-        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
-  
-        m_lastX += maxToolWidth + m_toolPacking;
-      }
-      else
-      {
-        if (m_currentRowsOrColumns >= m_maxRows)
-        {
-          m_currentRowsOrColumns = 0;
-          m_lastX += (maxToolWidth + m_toolPacking);
-          m_lastY = m_yMargin;
-        }
-        tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
-        tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
-  
-        m_lastY += maxToolHeight + m_toolPacking;
-      }
-      m_currentRowsOrColumns ++;
-    }
-    
-    if (m_lastX > m_maxWidth)
-      m_maxWidth = m_lastX;
-    if (m_lastY > m_maxHeight)
-      m_maxHeight = m_lastY;
 
-    node = node->Next();
-  }
-  if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-  {
-    m_maxWidth += maxToolWidth;
-    m_maxHeight += maxToolHeight;
-  }
-  else
-  {
-    m_maxWidth += maxToolWidth;
-    m_maxHeight += maxToolHeight;
-  }
-
-  m_maxWidth += m_xMargin;
-  m_maxHeight += m_yMargin;
-
-  SetSize(m_maxWidth, m_maxHeight);
+    return TRUE;
 }
 
-
-bool wxToolBarMSW::InitGlobalObjects(void)
+bool wxToolBar::Realize()
 {
-  GetSysColors();      
-  if (!CreateDitherBrush())
-    return FALSE;
+    m_currentRowsOrColumns = 0;
+    m_lastX = m_xMargin;
+    m_lastY = m_yMargin;
+    int maxToolWidth = 0;
+    int maxToolHeight = 0;
+    m_maxWidth = 0;
+    m_maxHeight = 0;
 
-  m_hdcMono = (WXHDC) CreateCompatibleDC(NULL);
-  if (!m_hdcMono)
-      return FALSE;
+    // Find the maximum tool width and height
+    wxToolBarToolsList::Node *node = m_tools.GetFirst();
+    while (node)
+    {
+        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+        if (tool->GetWidth() > maxToolWidth)
+            maxToolWidth = tool->GetWidth();
+        if (tool->GetHeight() > maxToolHeight)
+            maxToolHeight = tool->GetHeight();
+        node = node->GetNext();
+    }
 
-  m_hbmMono = (WXHBITMAP) CreateBitmap((int)GetToolSize().x, (int)GetToolSize().y, 1, 1, NULL);
-  if (!m_hbmMono)
-      return FALSE;
+    int separatorSize = m_toolSeparation;
 
-  m_hbmDefault = (WXHBITMAP) SelectObject((HDC) m_hdcMono, (HBITMAP) m_hbmMono);
-  return TRUE;
+    node = m_tools.GetFirst();
+    while (node)
+    {
+        wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
+        if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
+        {
+            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            {
+                if (m_currentRowsOrColumns >= m_maxCols)
+                    m_lastY += separatorSize;
+                else
+                    m_lastX += separatorSize;
+            }
+            else
+            {
+                if (m_currentRowsOrColumns >= m_maxRows)
+                    m_lastX += separatorSize;
+                else
+                    m_lastY += separatorSize;
+            }
+        }
+        else if (tool->GetStyle() == wxTOOL_STYLE_BUTTON)
+        {
+            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            {
+                if (m_currentRowsOrColumns >= m_maxCols)
+                {
+                    m_currentRowsOrColumns = 0;
+                    m_lastX = m_xMargin;
+                    m_lastY += maxToolHeight + m_toolPacking;
+                }
+                tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+
+                m_lastX += maxToolWidth + m_toolPacking;
+            }
+            else
+            {
+                if (m_currentRowsOrColumns >= m_maxRows)
+                {
+                    m_currentRowsOrColumns = 0;
+                    m_lastX += (maxToolWidth + m_toolPacking);
+                    m_lastY = m_yMargin;
+                }
+                tool->m_x = (long) (m_lastX + (maxToolWidth - tool->GetWidth())/2.0);
+                tool->m_y = (long) (m_lastY + (maxToolHeight - tool->GetHeight())/2.0);
+
+                m_lastY += maxToolHeight + m_toolPacking;
+            }
+            m_currentRowsOrColumns ++;
+        }
+
+        if (m_lastX > m_maxWidth)
+            m_maxWidth = m_lastX;
+        if (m_lastY > m_maxHeight)
+            m_maxHeight = m_lastY;
+
+        node = node->GetNext();
+    }
+
+    if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+    {
+        m_maxWidth += maxToolWidth;
+        m_maxHeight += maxToolHeight;
+    }
+    else
+    {
+        m_maxWidth += maxToolWidth;
+        m_maxHeight += maxToolHeight;
+    }
+
+    m_maxWidth += m_xMargin;
+    m_maxHeight += m_yMargin;
+
+    SetSize(m_maxWidth, m_maxHeight);
+
+    return TRUE;
 }
 
-void wxToolBarMSW::FreeGlobalObjects(void)
+bool wxToolBar::InitGlobalObjects()
+{
+    GetSysColors();      
+    if (!CreateDitherBrush())
+        return FALSE;
+
+    m_hdcMono = (WXHDC) CreateCompatibleDC(NULL);
+    if (!m_hdcMono)
+        return FALSE;
+
+    m_hbmMono = (WXHBITMAP) CreateBitmap((int)GetToolSize().x, (int)GetToolSize().y, 1, 1, NULL);
+    if (!m_hbmMono)
+        return FALSE;
+
+    m_hbmDefault = (WXHBITMAP) SelectObject((HDC) m_hdcMono, (HBITMAP) m_hbmMono);
+    return TRUE;
+}
+
+void wxToolBar::FreeGlobalObjects()
 {
     FreeDitherBrush();
 
     if (m_hdcMono) {
-	if (m_hbmDefault)
-	{
-	    SelectObject((HDC) m_hdcMono, (HBITMAP) m_hbmDefault);
-	    m_hbmDefault = 0;
-	}
-	DeleteDC((HDC) m_hdcMono);		// toast the DCs
+        if (m_hbmDefault)
+        {
+            SelectObject((HDC) m_hdcMono, (HBITMAP) m_hbmDefault);
+            m_hbmDefault = 0;
+        }
+        DeleteDC((HDC) m_hdcMono);		// toast the DCs
     }
     m_hdcMono = 0;
 
     if (m_hbmMono)
-		DeleteObject((HBITMAP) m_hbmMono);
+        DeleteObject((HBITMAP) m_hbmMono);
     m_hbmMono = 0;
 }
 
+// ----------------------------------------------------------------------------
+// drawing routines
+// ----------------------------------------------------------------------------
 
-void wxToolBarMSW::PatB(WXHDC hdc,int x,int y,int dx,int dy, long rgb)
+void wxToolBar::PatB(WXHDC hdc,int x,int y,int dx,int dy, long rgb)
 {
     RECT    rc;
 
@@ -536,7 +687,7 @@ void wxToolBarMSW::PatB(WXHDC hdc,int x,int y,int dx,int dy, long rgb)
 //   1's where color == COLOR_BTNFACE || COLOR_HILIGHT
 //   0's everywhere else
 
-void wxToolBarMSW::CreateMask(WXHDC hdc, int xoffset, int yoffset, int dx, int dy)
+void wxToolBar::CreateMask(WXHDC hdc, int xoffset, int yoffset, int dx, int dy)
 {
     HDC globalDC = ::GetDC(NULL);
     HDC hdcGlyphs = CreateCompatibleDC((HDC) globalDC);
@@ -567,36 +718,36 @@ void wxToolBarMSW::CreateMask(WXHDC hdc, int xoffset, int yoffset, int dx, int d
     DeleteDC(hdcGlyphs);
 }
 
-void wxToolBarMSW::DrawBlankButton(WXHDC hdc, int x, int y, int dx, int dy, int state)
+void wxToolBar::DrawBlankButton(WXHDC hdc, int x, int y, int dx, int dy, int state)
 {
     // face color
     PatB(hdc, x, y, dx, dy, m_rgbFace);
 
     if (state & wxTBSTATE_PRESSED) {
-	PatB(hdc, x + 1, y, dx - 2, 1, m_rgbFrame);
-	PatB(hdc, x + 1, y + dy - 1, dx - 2, 1, m_rgbFrame);
-	PatB(hdc, x, y + 1, 1, dy - 2, m_rgbFrame);
-	PatB(hdc, x + dx - 1, y +1, 1, dy - 2, m_rgbFrame);
-	PatB(hdc, x + 1, y + 1, 1, dy-2, m_rgbShadow);
-	PatB(hdc, x + 1, y + 1, dx-2, 1, m_rgbShadow);
+        PatB(hdc, x + 1, y, dx - 2, 1, m_rgbFrame);
+        PatB(hdc, x + 1, y + dy - 1, dx - 2, 1, m_rgbFrame);
+        PatB(hdc, x, y + 1, 1, dy - 2, m_rgbFrame);
+        PatB(hdc, x + dx - 1, y +1, 1, dy - 2, m_rgbFrame);
+        PatB(hdc, x + 1, y + 1, 1, dy-2, m_rgbShadow);
+        PatB(hdc, x + 1, y + 1, dx-2, 1, m_rgbShadow);
     }
     else {
-	PatB(hdc, x + 1, y, dx - 2, 1, m_rgbFrame);
-	PatB(hdc, x + 1, y + dy - 1, dx - 2, 1, m_rgbFrame);
-	PatB(hdc, x, y + 1, 1, dy - 2, m_rgbFrame);
-	PatB(hdc, x + dx - 1, y + 1, 1, dy - 2, m_rgbFrame);
-	dx -= 2;
-	dy -= 2;
-	PatB(hdc, x + 1, y + 1, 1, dy - 1, m_rgbHilight);
-	PatB(hdc, x + 1, y + 1, dx - 1, 1, m_rgbHilight);
-	PatB(hdc, x + dx, y + 1, 1, dy, m_rgbShadow);
-	PatB(hdc, x + 1, y + dy, dx, 1,   m_rgbShadow);
-	PatB(hdc, x + dx - 1, y + 2, 1, dy - 2, m_rgbShadow);
-	PatB(hdc, x + 2, y + dy - 1, dx - 2, 1,   m_rgbShadow);
+        PatB(hdc, x + 1, y, dx - 2, 1, m_rgbFrame);
+        PatB(hdc, x + 1, y + dy - 1, dx - 2, 1, m_rgbFrame);
+        PatB(hdc, x, y + 1, 1, dy - 2, m_rgbFrame);
+        PatB(hdc, x + dx - 1, y + 1, 1, dy - 2, m_rgbFrame);
+        dx -= 2;
+        dy -= 2;
+        PatB(hdc, x + 1, y + 1, 1, dy - 1, m_rgbHilight);
+        PatB(hdc, x + 1, y + 1, dx - 1, 1, m_rgbHilight);
+        PatB(hdc, x + dx, y + 1, 1, dy, m_rgbShadow);
+        PatB(hdc, x + 1, y + dy, dx, 1,   m_rgbShadow);
+        PatB(hdc, x + dx - 1, y + 2, 1, dy - 2, m_rgbShadow);
+        PatB(hdc, x + 2, y + dy - 1, dx - 2, 1,   m_rgbShadow);
     }
 }
 
-void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBarTool *tool, int state)
+void wxToolBar::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBarTool *tool, int state)
 {
     int yOffset;
     HBRUSH hbrOld, hbr;
@@ -633,13 +784,15 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
     // Using bitmap2 can cause problems (don't know why!)
 #if !defined(__WIN32__) && !defined(__WIN386__)
     HBITMAP bitmapOld;
-    if (tool->m_bitmap2.Ok())
-      bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap2.GetHBITMAP());
+    if (tool->GetBitmap2().Ok())
+      bitmapOld = GetHbitmapOf(tool->GetBitmap2());
     else
-      bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
+      bitmapOld = GetHbitmapOf(tool->GetBitmap1());
 #else
-    HBITMAP bitmapOld = (HBITMAP) SelectObject(hdcGlyphs, (HBITMAP) tool->m_bitmap1.GetHBITMAP());
+    HBITMAP bitmapOld = GetHbitmapOf(tool->GetBitmap1());
 #endif    
+
+    bitmapOld = (HBITMAP)SelectObject(hdcGlyphs, bitmapOld);
 
     // calculate offset of face from (x,y).  y is always from the top,
     // so the offset is easy.  x needs to be centered in face.
@@ -719,7 +872,11 @@ void wxToolBarMSW::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBar
     DeleteDC(hdcGlyphs);
 }
 
-void wxToolBarMSW::GetSysColors(void)
+// ----------------------------------------------------------------------------
+// drawing helpers
+// ----------------------------------------------------------------------------
+
+void wxToolBar::GetSysColors()
 {
 	static COLORREF rgbSaveFace    = 0xffffffffL,
 	                rgbSaveShadow  = 0xffffffffL,
@@ -751,7 +908,7 @@ void wxToolBarMSW::GetSysColors(void)
 	}
 }
 
-WXHBITMAP wxToolBarMSW::CreateDitherBitmap()
+WXHBITMAP wxToolBar::CreateDitherBitmap()
 {
     BITMAPINFO* pbmi;
     HBITMAP hbm;
@@ -804,7 +961,7 @@ WXHBITMAP wxToolBarMSW::CreateDitherBitmap()
     return (WXHBITMAP)hbm;
 }
 
-bool wxToolBarMSW::CreateDitherBrush(void)
+bool wxToolBar::CreateDitherBrush()
 {
 	HBITMAP hbmGray;
 	HBRUSH hbrSave;
@@ -834,7 +991,7 @@ bool wxToolBarMSW::CreateDitherBrush(void)
 	return FALSE;
 }
 
-bool wxToolBarMSW::FreeDitherBrush(void)
+bool wxToolBar::FreeDitherBrush(void)
 {
     if (m_hbrDither)
       DeleteObject((HBRUSH) m_hbrDither);
@@ -856,11 +1013,11 @@ typedef struct tagCOLORMAP2
 #define BGR_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
 #define BGR_BUTTONFACE      (RGB(192,192,192))  // bright grey
 #define BGR_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define BGR_BACKGROUNDSEL   (RGB(000,000,255))  // blue
+#define BGR_BACKGROUNDSEL   (RGB(255,000,000))  // blue
 #define BGR_BACKGROUND      (RGB(255,000,255))  // magenta
 #define FlipColor(rgb)      (RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)))
 
-WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void *info)
+WXHBITMAP wxToolBar::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void *info)
 {
   LPBITMAPINFOHEADER lpBitmapInfo = (LPBITMAPINFOHEADER)info;
   HDC			hdc, hdcMem = NULL;
@@ -940,7 +1097,7 @@ WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE WXUNUSED(hInstance), void
   return (WXHBITMAP) hbm;
 }
 
-WXHBITMAP wxToolBarMSW::CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap)
+WXHBITMAP wxToolBar::CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap)
 {
   HANDLE hDIB = wxBitmapToDIB((HBITMAP) hBitmap, 0);
   if (hDIB)
