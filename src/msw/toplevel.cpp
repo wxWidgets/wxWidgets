@@ -258,7 +258,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
         // and passing CW_USEDEFAULT to MoveWindow() results in resizing the
         // window to (0, 0) size which breaks quite a lot of things, e.g. the
         // sizer calculation in wxSizer::Fit()
-        if ( w == CW_USEDEFAULT )
+        if ( w == (int)CW_USEDEFAULT )
         {
             // the exact number doesn't matter, the dialog will be resized
             // again soon anyhow but it should be big enough to allow
@@ -268,7 +268,7 @@ bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
             h = 100;
         }
 
-        if ( x == CW_USEDEFAULT )
+        if ( x == (int)CW_USEDEFAULT )
         {
             // well, where should we put it? maybe centre it on screen?
             x =

@@ -1296,6 +1296,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/docs/latex
 	mkdir $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.tex $(DISTDIR)/docs/latex/wx
+	cp $(DOCDIR)/latex/wx/*.inc $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.gif $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.ini $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.bib $(DISTDIR)/docs/latex/wx
