@@ -99,8 +99,13 @@ extern void wxSetKeyboardHook(bool doIt);
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
+#ifdef __WXWINCE__
+      wxChar *wxCanvasClassName;
+      wxChar *wxCanvasClassNameNR;
+#else
 const wxChar *wxCanvasClassName        = wxT("wxWindowClass");
 const wxChar *wxCanvasClassNameNR      = wxT("wxWindowClassNR");
+#endif
 const wxChar *wxMDIFrameClassName      = wxT("wxMDIFrameClass");
 const wxChar *wxMDIFrameClassNameNoRedraw = wxT("wxMDIFrameClassNR");
 const wxChar *wxMDIChildFrameClassName = wxT("wxMDIChildFrameClass");
@@ -253,6 +258,20 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // ensure that base cleanup is done if we return too early
     wxCallBaseCleanup callBaseCleanup(this);
+
+#ifdef __WXWINCE__
+    wxString tmp = GetAppName();
+    tmp += wxT("ClassName");
+    wxCanvasClassName = wxStrdup( tmp.c_str() );
+    tmp += wxT("NR");
+    wxCanvasClassNameNR = wxStrdup( tmp.c_str() );
+    HWND hWnd = FindWindow( wxCanvasClassNameNR, NULL );
+    if (hWnd)
+    {
+        SetForegroundWindow( (HWND)(((DWORD)hWnd)|0x01) );
+        return false;
+    }
+#endif
 
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
@@ -514,6 +533,11 @@ void wxApp::CleanUp()
 
     delete wxWinHandleHash;
     wxWinHandleHash = NULL;
+    
+#ifdef __WXWINCE__
+    free( wxCanvasClassName );
+    free( wxCanvasClassNameNR );
+#endif
 }
 
 // ----------------------------------------------------------------------------

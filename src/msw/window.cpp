@@ -128,7 +128,11 @@
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
 
+#ifdef __WXWINCE__
+extern       wxChar *wxCanvasClassName;
+#else
 extern const wxChar *wxCanvasClassName;
+#endif
 
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
@@ -1022,8 +1026,8 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
 	// On WinCE (at least), the wndproc comparison doesn't work,
 	// so have to use something like this.
 #ifdef __WXWINCE__
-	extern const wxChar *wxCanvasClassName;
-	extern const wxChar *wxCanvasClassNameNR;
+	extern       wxChar *wxCanvasClassName;
+	extern       wxChar *wxCanvasClassNameNR;
 	extern const wxChar *wxMDIFrameClassName;
 	extern const wxChar *wxMDIFrameClassNameNoRedraw;
 	extern const wxChar *wxMDIChildFrameClassName;
