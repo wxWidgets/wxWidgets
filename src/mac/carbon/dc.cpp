@@ -17,6 +17,7 @@
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/dcmemory.h"
+#include "wx/dcprint.h"
 #include "wx/region.h"
 #include "wx/image.h"
 #include "wx/log.h"
@@ -25,6 +26,7 @@
 #include "math.h"
 using namespace std ;
 #endif
+
 #include "wx/mac/private.h"
 #include "ATSUnicode.h"
 #include "TextCommon.h"
@@ -88,7 +90,6 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
         SetClip( m_newClip ) ;
         DisposeRgn( insidergn ) ;
 #endif
-        RgnHandle insidergn = NewRgn() ;
         int x = 0 , y = 0;
         win->MacWindowToRootWindow( &x,&y ) ;
         CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
