@@ -1,0 +1,2471 @@
+# Microsoft eMbedded Visual Tools Project File - Name="wxWindowsCE" - Package Owner=<4>
+# Microsoft eMbedded Visual Tools Generated Build File, Format Version 6.02
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (WCE x86) Static Library" 0x8304
+# TARGTYPE "Win32 (WCE MIPS) Static Library" 0x8204
+# TARGTYPE "Win32 (WCE x86em) Static Library" 0x7f04
+# TARGTYPE "Win32 (WCE SH3) Static Library" 0x8104
+# TARGTYPE "Win32 (WCE ARM) Static Library" 0x8504
+
+CFG=wxWindowsCE - Win32 (WCE x86) Debug Unicode
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "wxWindowsCE.vcn".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "wxWindowsCE.vcn" CFG="wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "wxWindowsCE - Win32 (WCE x86) Debug Unicode" (based on "Win32 (WCE x86) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE x86) Release Unicode" (based on "Win32 (WCE x86) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE ARM) Debug Unicode" (based on "Win32 (WCE ARM) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE ARM) Release Unicode" (based on "Win32 (WCE ARM) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE x86em) Debug Unicode" (based on "Win32 (WCE x86em) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE x86em) Release Unicode" (based on "Win32 (WCE x86em) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode" (based on "Win32 (WCE MIPS) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE MIPS) Release Unicode" (based on "Win32 (WCE MIPS) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE SH3) Debug Unicode" (based on "Win32 (WCE SH3) Static Library")
+!MESSAGE "wxWindowsCE - Win32 (WCE SH3) Release Unicode" (based on "Win32 (WCE SH3) Static Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+# PROP ATL_Project 2
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "X86Dbg"
+# PROP BASE Intermediate_Dir "X86Dbg"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../DebugUnicodeX86"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "_LIB" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\..\include" /I "..\..\..\lib\wince_x86ud" /D "DEBUG" /D "_i386_" /D "_X86_" /D "x86" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Gs8192 /GF /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_x86ud.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "X86Rel"
+# PROP BASE Intermediate_Dir "X86Rel"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../ReleaseUnicodeX86"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "_LIB" /YX /Gs8192 /GF /Oxs /c
+# ADD CPP /nologo /W3 /I "..\..\..\include" /I "..\..\..\lib\wince_x86u" /D "NDEBUG" /D "_i386_" /D "_X86_" /D "x86" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Gs8192 /GF /Oxs /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_x86u.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "ARMDbg"
+# PROP BASE Intermediate_Dir "ARMDbg"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../DebugUnicodeARM"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_LIB" /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\..\include" /I "..\..\..\lib\wince_armud" /D "DEBUG" /D "ARM" /D "_ARM_" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_LIB" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_armud.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "ARMRel"
+# PROP BASE Intermediate_Dir "ARMRel"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../ReleaseUnicodeARM"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "NDEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_LIB" /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\..\include" /I "..\..\..\lib\wince_armu" /D "NDEBUG" /D "ARM" /D "_ARM_" /D "__WXWINCE__" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_LIB" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_armu.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "X86EMDbg"
+# PROP BASE Intermediate_Dir "X86EMDbg"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../DebugUnicodeX86EM"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "$(CePlatform)" /D "i486" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "__WXWINCE__" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\..\include" /I "..\..\..\lib\wince_x86emud" /D "DEBUG" /D "i486" /D "_X86_" /D "x86" /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Gz /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_armd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_x86emud.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "X86EMRelease Unicode"
+# PROP BASE Intermediate_Dir "X86EMRelease Unicode"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../ReleaseUnicodeX86EM"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D "$(CePlatform)" /D "i486" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\..\include" /I "..\..\..\lib\wince_x86emu" /D "NDEBUG" /D "i486" /D "_X86_" /D "x86" /D "WIN32" /D "STRICT" /D "_WIN32_WCE_EMULATION" /D "INTERNATIONAL" /D "USA" /D "INTLMSG_CODEPAGE" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_arm.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_x86emu.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "MIPSDebug Unicode"
+# PROP BASE Intermediate_Dir "MIPSDebug Unicode"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../DebugUnicodeMIPS"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=clmips.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\..\include" /I "..\..\..\lib\wince_mipsud" /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_armd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_mipsud.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "MIPSRelease Unicode"
+# PROP BASE Intermediate_Dir "MIPSRelease Unicode"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../ReleaseUnicodeMIPS"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=clmips.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "__WXWINCE__" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\..\include" /I "..\..\..\lib\wince_mipsu" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_arm.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_mipsu.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "SH3Debug Unicode"
+# PROP BASE Intermediate_Dir "SH3Debug Unicode"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../DebugUnicodeSH3"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=shcl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "SHx" /D "SH3" /D "_SH3_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\..\include" /I "..\..\..\lib\wince_sh3ud" /D "DEBUG" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "SHx" /D "SH3" /D "_SH3_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /M$(CECrtMTDebug) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_armd.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_sh3ud.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "SH3Release Unicode"
+# PROP BASE Intermediate_Dir "SH3Release Unicode"
+# PROP BASE CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Sec_AlwaysSign 0
+# PROP BASE Sec_ConfigureDevice 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../../lib"
+# PROP Intermediate_Dir "../../../ReleaseUnicodeSH3"
+# PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Sec_AlwaysSign 0
+# PROP Sec_ConfigureDevice 0
+# PROP Target_Dir ""
+CPP=shcl.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "SHx" /D "SH3" /D "_SH3_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "__WXWINCE__" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\..\include" /I "..\..\..\lib\wince_sh3u" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "SHx" /D "SH3" /D "_SH3_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "__WXWINCE__" /D "_LIB" /Yu"wx/wxprec.h" /Oxs /M$(CECrtMT) /c
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\..\lib\wxmswce_arm.lib"
+# ADD LIB32 /nologo /out:"..\..\..\lib\wxmswce_sh3u.lib"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+
+!ENDIF 
+
+# Begin Target
+
+# Name "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+# Name "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+# Name "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+# Name "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+# Name "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+# Name "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+# Name "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+# Name "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+# Name "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+# Name "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Group "Common Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\common\accesscmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\appbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\appcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\artprov.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\artstd.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\bmpbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\bookctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\choiccmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\clipcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\clntdata.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\cmdline.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\cmdproc.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\cmndata.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\config.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\containr.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\cshelp.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ctrlcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ctrlsub.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\datacmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\datetime.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\datstrm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\db.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dbgrid.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dbtable.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dcbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dircmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dlgcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dndcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dobjcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\docmdi.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\docview.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dpycmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dseldlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dynarray.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dynlib.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\dynload.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\effects.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\encconv.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\event.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\extended.c
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fddlgcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ffile.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\file.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fileconf.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\filefn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\filename.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\filesys.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fldlgcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fmapbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fontcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fontmap.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\framecmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fs_inet.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fs_mem.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\fs_zip.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ftp.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\gaugecmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\gdicmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\geometry.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\gifdecod.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\hash.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\hashmap.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\helpbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\http.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\iconbndl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagall.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagbmp.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\image.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagfill.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imaggif.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagiff.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagjpeg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagpcx.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagpng.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagpnm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagtiff.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\imagxpm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\init.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\intl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\ipcbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\layout.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\lboxcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\list.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\log.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\longlong.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\matrix.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\memory.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\menucmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\mimecmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\module.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\msgout.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\mstream.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\nbkbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\object.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\paper.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\popupcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\prntbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\process.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\protocol.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\quantize.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\radiocmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\regex.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\rgncmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sckaddr.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sckfile.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sckipc.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sckstrm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\settcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sizer.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\socket.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\statbar.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\stopwatch.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\strconv.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\stream.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\string.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\sysopt.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\taskbarcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\tbarbase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\textbuf.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\textcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\textfile.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\timercmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\tokenzr.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\toplvcmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\treebase.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\txtstrm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\unzip.c
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\unzip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\url.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\utilscmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\valgen.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\validate.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\valtext.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\variant.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\wfstream.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\wincmn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\wxchar.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\xpmdecod.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\zipstrm.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\common\zstream.cpp
+
+
+# End Source File
+# End Group
+# Begin Group "Generic Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\generic\busyinfo.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\calctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\choicdgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\dcbuffer.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\dirctrlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\dirdlgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\dragimgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\fdrepdlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\fontdlgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\grid.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\gridctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\gridsel.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\helpext.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\laywin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\logg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\mdig.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\numdlgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\panelg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\progdlgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\sashwin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\scrlwing.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\selstore.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\splash.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\splitter.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\statusbr.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\textdlgg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\tipdlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\tipwin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\vlbox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\vscroll.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\generic\wizard.cpp
+
+
+# End Source File
+# End Group
+# Begin Group "MSW Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\accel.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\app.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\basemsw.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\bitmap.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\bmpbuttn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\brush.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\button.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\caret.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\checkbox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\checklst.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\choice.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\clipbrd.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\colordlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\colour.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\combobox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\control.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\cursor.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\data.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dc.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dcclient.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dcmemory.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dcprint.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dcscreen.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dde.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dialog.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dialup.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dir.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\display.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dragimag.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\dummy.cpp
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# ADD BASE CPP /Yc"wx/wxprec.h"
+# ADD CPP /Yc"wx/wxprec.h"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\evtloop.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\filedlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\font.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\fontenum.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\fontutil.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\frame.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gauge95.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gdiimage.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gdiobj.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\glcanvas.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gsocket.c
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\gsockmsw.c
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\icon.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\imaglist.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\iniconf.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\listbox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\listctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\main.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\menu.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\menuitem.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\metafile.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\mimetype.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\minifram.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\msgdlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\nativdlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\notebook.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\ownerdrw.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\palette.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\pen.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\penwin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\popupwin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\printdlg.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\printwin.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\radiobox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\radiobut.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\regconf.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\region.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\registry.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\scrolbar.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\settings.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\slider95.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\snglinst.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\spinbutt.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\spinctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\statbmp.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\statbox.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\statbr95.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\statline.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\stattext.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\tabctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\taskbar.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\textctrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\tglbtn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\thread.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\timer.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\tooltip.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\toplevel.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\treectrl.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\utils.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\utilsexc.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\utilsgui.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\uxtheme.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\volume.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\wave.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\window.cpp
+
+
+# End Source File
+# End Group
+# Begin Group "OLE Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\ole\automtn.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\ole\dataobj.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\ole\dropsrc.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\ole\droptgt.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\ole\oleutils.cpp
+
+
+# End Source File
+# End Group
+# Begin Group "WinCE Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\filedlgwce.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\helpwce.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\net.cpp
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\tbarwce.cpp
+
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\time.cpp
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# SUBTRACT BASE CPP /YX /Yc /Yu
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ENDIF 
+
+# End Source File
+# End Group
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Group "Setup"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\include\wx\msw\wince\setup.h
+
+!IF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Debug Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_x86ud\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_x86ud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_x86ud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86) Release Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_x86u\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_x86u/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_x86u\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Debug Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_armud\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_armud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_armud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE ARM) Release Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_armu\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_armu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_armu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Debug Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_x86emud\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_x86emud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_x86emud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE x86em) Release Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_x86emu\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_x86emu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_x86emu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Debug Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_mipsud\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_mipsud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_mipsud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE MIPS) Release Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_mipsu\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_mipsu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_mipsu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Debug Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_sh3ud\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_sh3ud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_sh3ud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxWindowsCE - Win32 (WCE SH3) Release Unicode"
+
+# Begin Custom Build - Creating ..\..\..\lib\wince_sh3u\wx\setup.h from $(InputPath)
+InputPath=..\..\..\include\wx\msw\wince\setup.h
+
+"../../../lib/wince_sh3u/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\..\lib\wince_sh3u\wx\setup.h
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
+# End Group
+# End Target
+# End Project
