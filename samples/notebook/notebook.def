@@ -1,4 +1,4 @@
-NAME         Test
+NAME         Notebook
 DESCRIPTION  'Notebook test'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'

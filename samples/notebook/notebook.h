@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        notebook.h
 // Purpose:     wxNotebook demo
 // Author:      Julian Smart
 // Modified by:
@@ -9,7 +9,7 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include <wx/notebook.h>
+#include "wx/notebook.h"
 
 // Define a new application
 class MyApp: public wxApp

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        notebook.cpp
 // Purpose:     wxNotebook demo
 // Author:      Julian Smart
 // Modified by:
@@ -20,7 +20,7 @@
     #include "wx/wx.h"
 #endif
 
-#include "test.h"
+#include "notebook.h"
 
 // If 1, use a dialog. Otherwise use a frame.
 #define USE_TABBED_DIALOG 0
