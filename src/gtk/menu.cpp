@@ -46,6 +46,9 @@
     #define ACCEL_OBJ_CAST(obj) GTK_OBJECT(obj)
 #endif
 
+// we use normal item but with a special id for the menu title
+static const int wxGTK_TITLE_ID = -3;
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -136,9 +139,9 @@ static wxString wxReplaceUnderscore( const wxString& title )
         }
         ++pc;
     }
-    
+
     // wxPrintf( wxT("before %s after %s\n"), title.c_str(), str.c_str() );
-    
+
     return str;
 }
 
@@ -307,7 +310,7 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
-        
+
 #ifndef __WXGTK20__
     // support for native key accelerators indicated by underscroes
     gtk_accel_group_detach( m_accel, ACCEL_OBJ_CAST(top_frame->m_widget) );
@@ -359,14 +362,14 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 #endif
 
     gtk_widget_show( menu->m_owner );
-    
+
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
-    
+
     if (pos == -1)
         gtk_menu_shell_append( GTK_MENU_SHELL(m_menubar), menu->m_owner );
     else
         gtk_menu_shell_insert( GTK_MENU_SHELL(m_menubar), menu->m_owner, pos );
-    
+
     gtk_signal_connect( GTK_OBJECT(menu->m_owner), "activate",
                         GTK_SIGNAL_FUNC(gtk_menu_open_callback),
                         (gpointer)menu );
@@ -398,7 +401,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         return FALSE;
 
     // TODO
-    
+
     if ( !GtkAppend(menu, title, (int)pos) )
         return FALSE;
 
@@ -639,6 +642,12 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     wxMenuItem* item = menu->FindChildItem( id );
     wxCHECK_RET( item, wxT("error in menu item callback") );
 
+    if ( item->GetId() == wxGTK_TITLE_ID )
+    {
+        // ignore events from the menu title
+        return;
+    }
+
     if (item->IsCheckable())
     {
         bool isReallyChecked = item->IsChecked(),
@@ -802,7 +811,7 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     {
         if ( *pc == wxT('\t'))
             break;
-    
+
         if ( *pc == wxT('_') )
         {
             // GTK 1.2 escapes "xxx_xxx" to "xxx__xxx"
@@ -891,7 +900,7 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             m_text << wxT("__");
         }
-        else 
+        else
         {
             m_text << *pc;
         }
@@ -983,19 +992,19 @@ void wxMenu::Init()
     // Tearoffs are entries, just like separators. So if we want this
     // menu to be a tear-off one, we just append a tearoff entry
     // immediately.
-    if(m_style & wxMENU_TEAROFF)
+    if ( m_style & wxMENU_TEAROFF )
     {
-		GtkWidget *tearoff = gtk_tearoff_menu_item_new();
+        GtkWidget *tearoff = gtk_tearoff_menu_item_new();
 
-		gtk_menu_append(GTK_MENU(m_menu), tearoff);
-	}
+        gtk_menu_append(GTK_MENU(m_menu), tearoff);
+    }
 
-	m_prevRadio = NULL;
+    m_prevRadio = NULL;
 
     // append the title as the very first entry if we have it
-    if ( !!m_title )
+    if ( !m_title.empty() )
     {
-        Append(-2, m_title);
+        Append(wxGTK_TITLE_ID, m_title);
         AppendSeparator();
     }
 }
@@ -1055,7 +1064,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             gtk_menu_shell_append(GTK_MENU_SHELL(m_menu), menuItem);
         else
             gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
- 
+
         gtk_widget_show( mitem->GetSubMenu()->m_menu );
 
         // if adding a submenu to a menu already existing in the menu bar, we
@@ -1072,15 +1081,15 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         const wxBitmap *bitmap = &mitem->GetBitmap();
         GdkPixmap *gdk_pixmap = bitmap->GetPixmap();
         GdkBitmap *gdk_bitmap = bitmap->GetMask() ? bitmap->GetMask()->GetBitmap() : (GdkBitmap*) NULL;
-        
+
 #ifdef __WXGTK20__
         menuItem = gtk_image_menu_item_new_with_mnemonic( wxGTK_CONV( text ) );
-        
+
         GtkWidget *image = gtk_image_new_from_pixmap( gdk_pixmap, gdk_bitmap );
         gtk_widget_show(image);
-        
+
         gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(menuItem), image );
-        
+
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
                             (gpointer)this );
@@ -1270,24 +1279,24 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         else
             gtk_menu_shell_insert(GTK_MENU_SHELL(m_menu), menuItem, pos);
     }
-    
+
     guint accel_key;
     GdkModifierType accel_mods;
     wxCharBuffer buf = wxGTK_CONV( GetHotKey(*mitem) );
-    
-    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetHotKey(*mitem).c_str() ); 
-    
+
+    // wxPrintf( wxT("item: %s hotkey %s\n"), mitem->GetText().c_str(), GetHotKey(*mitem).c_str() );
+
     gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
     if (accel_key != 0)
     {
-        gtk_widget_add_accelerator (GTK_WIDGET(menuItem), 
-                                    "activate", 
+        gtk_widget_add_accelerator (GTK_WIDGET(menuItem),
+                                    "activate",
                                     m_accel,
-                                    accel_key, 
+                                    accel_key,
                                     accel_mods,
                                     GTK_ACCEL_VISIBLE);
     }
- 
+
     gtk_widget_show( menuItem );
 
     if ( !mitem->IsSeparator() )
@@ -1318,7 +1327,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *mitem)
 {
     if (!GtkAppend(mitem))
         return NULL;
-        
+
     return wxMenuBase::DoAppend(mitem);
 }
 
