@@ -540,6 +540,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
         default:
             event.Skip();
             current = 0; // just to silent the stupid compiler warnings
+            wxUnusedVar(current);
             return;
     }
 

@@ -148,8 +148,9 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 
                         // found a match
                         if (match_pos == tag_len) {
-                            pos = pos - tag_len - 3;
-                            stpos = pos;
+                            // These 2 lines commented:
+                            //pos = pos - tag_len - 3; pos is not used outside of while loop
+                            //stpos = pos; Value is local to while loop, no need to set it
                             break;
                         }
                         else {
@@ -362,12 +363,12 @@ wxHtmlTag::~wxHtmlTag()
 
 bool wxHtmlTag::HasParam(const wxString& par) const
 {
-    return (m_ParamNames.Index(par, FALSE) != wxNOT_FOUND);
+    return (m_ParamNames.Index(par, false) != wxNOT_FOUND);
 }
 
 wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 {
-    int index = m_ParamNames.Index(par, FALSE);
+    int index = m_ParamNames.Index(par, false);
     if (index == wxNOT_FOUND)
         return wxEmptyString;
     if (with_commas)
@@ -393,23 +394,23 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
     wxString str = GetParam(par);
 
-    if (str.IsEmpty()) return FALSE;
+    if (str.IsEmpty()) return false;
     if (str.GetChar(0) == wxT('#'))
     {
         unsigned long tmp;
         if (ScanParam(par, wxT("#%lX"), &tmp) != 1)
-            return FALSE;
+            return false;
         *clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
-					    (unsigned char)((tmp & 0x00FF00) >> 8),
-					    (unsigned char)(tmp & 0x0000FF));
-        return TRUE;
+                        (unsigned char)((tmp & 0x00FF00) >> 8),
+                        (unsigned char)(tmp & 0x0000FF));
+        return true;
     }
     else
     {
         // Handle colours defined in HTML 4.0:
         #define HTML_COLOUR(name,r,g,b)                 \
-            if (str.IsSameAs(wxT(name), FALSE))         \
-                { *clr = wxColour(r,g,b); return TRUE; }
+            if (str.IsSameAs(wxT(name), false))         \
+                { *clr = wxColour(r,g,b); return true; }
         HTML_COLOUR("black",   0x00,0x00,0x00)
         HTML_COLOUR("silver",  0xC0,0xC0,0xC0)
         HTML_COLOUR("gray",    0x80,0x80,0x80)
@@ -429,12 +430,12 @@ bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
         #undef HTML_COLOUR
     }
 
-    return FALSE;
+    return false;
 }
 
 bool wxHtmlTag::GetParamAsInt(const wxString& par, int *clr) const
 {
-    if (!HasParam(par)) return FALSE;
+    if (!HasParam(par)) return false;
     long i;
     bool succ = GetParam(par).ToLong(&i);
     *clr = (int)i;
