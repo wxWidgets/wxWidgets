@@ -486,7 +486,16 @@ wxTextOutputStream& wxTextOutputStream::operator<<(float f)
 
 wxTextOutputStream &endl( wxTextOutputStream &stream )
 {
+    //RN: Normally a single char on builds without a real
+    //wchar_t will call the wxUint16 version, which
+    //is not what we want (will print a 10 numeric value,
+    //not a newline).  Thus, we need to send it
+    //a string in that case instead.
+#if !wxUSE_UNICODE || wxWCHAR_T_IS_REAL_TYPE
     return stream << wxT('\n');
+#else
+    return stream << wxT("\n");
+#endif
 }
 
 #endif
