@@ -22,6 +22,8 @@
 // define this to 0 when building wxBase library
 #define wxUSE_GUI            1
 
+//define this to 1 when adding support for multiple displays/screens
+#define wxUSE_DISPLAY        0
 // ----------------------------------------------------------------------------
 // General features
 // ----------------------------------------------------------------------------
