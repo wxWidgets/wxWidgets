@@ -311,8 +311,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( !MSWCreateControl(_T("COMBOBOX"), msStyle) )
         return FALSE;
 
-    SetSize(pos.x, pos.y, size.x, size.y);
-
     // A choice/combobox normally has a white background (or other, depending
     // on global settings) rather than inheriting the parent's background colour.
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
@@ -326,6 +324,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     {
         SetValue(value);
     }
+
+    // do this after appending the values to the combobox so that autosizing
+    // works correctly
+    SetSize(pos.x, pos.y, size.x, size.y);
 
     // a (not read only) combobox is, in fact, 2 controls: the combobox itself
     // and an edit control inside it and if we want to catch events from this
