@@ -6,12 +6,13 @@
 // (#include "wx/html/msw/wxhtml.rc")
 //
 
-back     BITMAP "wx/html/msw/back.bmp"
-forward  BITMAP "wx/html/msw/forward.bmp"
-panel    BITMAP "wx/html/msw/panel.bmp"
+wback     BITMAP "wx/html/msw/wback.bmp"
+wforward  BITMAP "wx/html/msw/wforward.bmp"
+wpanel    BITMAP "wx/html/msw/wpanel.bmp"
+woptions  BITMAP "wx/html/msw/woptions.bmp"
 
-book     ICON "wx/html/msw/book.ico"
-folder   ICON "wx/html/msw/folder.ico"
-page     ICON "wx/html/msw/page.ico"
-help     ICON "wx/html/msw/help.ico"
-helproot ICON "wx/html/msw/helproot.ico"
+wbook     ICON "wx/html/msw/wbook.ico"
+wfolder   ICON "wx/html/msw/wfolder.ico"
+wpage     ICON "wx/html/msw/wpage.ico"
+whelp     ICON "wx/html/msw/whelp.ico"
+whlproot  ICON "wx/html/msw/whlproot.ico"
