@@ -144,7 +144,7 @@ int wxDisplay::GetDepth() const
 
 wxString wxDisplay::GetName() const
 {
-  return "";
+  return wxEmptyString;
 }
 
 #endif /* wxUSE_DISPLAY */
