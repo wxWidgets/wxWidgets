@@ -118,6 +118,7 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 	TIFFDirectory* td = &tif->tif_dir;
 	int status = 1;
 	uint32 v32;
+	uint16 v16;
 	int i, v;
 	double d;
 	char* s;
@@ -152,14 +153,14 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		}
 		break;
 	case TIFFTAG_COMPRESSION:
-		v = va_arg(ap, int) & 0xffff;
+		v16 = va_arg(ap, int) & 0xffff;
 		/*
 		 * If we're changing the compression scheme,
 		 * the notify the previous module so that it
 		 * can cleanup any state it's setup.
 		 */
 		if (TIFFFieldSet(tif, FIELD_COMPRESSION)) {
-			if (td->td_compression == v)
+			if (td->td_compression == v16)
 				break;
 			(*tif->tif_cleanup)(tif);
 			tif->tif_flags &= ~TIFF_CODERSETUP;
@@ -167,8 +168,8 @@ _TIFFVSetField(TIFF* tif, ttag_t tag, va_list ap)
 		/*
 		 * Setup new compression routine state.
 		 */
-		if( (status = TIFFSetCompressionScheme(tif, v)) != 0 )
-			td->td_compression = v;
+		if( (status = TIFFSetCompressionScheme(tif, v16)) != 0 )
+			td->td_compression = v16;
 		break;
 	case TIFFTAG_PHOTOMETRIC:
 		td->td_photometric = (uint16) va_arg(ap, int);

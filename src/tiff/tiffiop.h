@@ -213,7 +213,7 @@ extern	void _TIFFSwab64BitData(TIFF*, tidata_t, tsize_t);
 extern	int  TIFFFlushData1(TIFF*);
 extern	void  TIFFFreeDirectory(TIFF*);
 extern	int  TIFFDefaultDirectory(TIFF*);
-extern	int  TIFFSetCompressionScheme(TIFF*, int);
+extern	int  TIFFSetCompressionScheme(TIFF*, uint16);
 extern	int  TIFFSetDefaultCompressionState(TIFF*);
 extern	uint32 _TIFFDefaultStripSize(TIFF*, uint32);
 extern	void _TIFFDefaultTileSize(TIFF*, uint32*, uint32*);

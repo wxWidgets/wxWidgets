@@ -145,7 +145,7 @@ _TIFFSetDefaultCompressionState(TIFF* tif)
 }
 
 int
-TIFFSetCompressionScheme(TIFF* tif, int scheme)
+TIFFSetCompressionScheme(TIFF* tif, uint16 scheme)
 {
 	const TIFFCodec *c = TIFFFindCODEC(scheme);
 
