@@ -928,6 +928,12 @@ void wxTextCtrl::SetSelection( long from, long to )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
+    if (from == -1 && to == -1)
+    {
+        from = 0;
+        to = GetValue().Length();
+    }
+
 #ifndef __WXGTK20__
     if ( (m_windowStyle & wxTE_MULTILINE) &&
          !GTK_TEXT(m_text)->line_start_cache )
