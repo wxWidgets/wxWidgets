@@ -11,6 +11,15 @@ OTHER CHANGES
 2.5.0
 -----
 
+All:
+
+- Implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
+- Improved contrib/utils/convertrc parsing (David J. Cooke)
+- Fixed handling of URLs and filenames in wxFileSystem
+- Implemented alignment for wxGrid bool editor and renderer
+- Support wxListCtrl columns alignment for all platforms and not just MSW
+- Added wxDateSpan::operator==() and !=() (Lukasz Michalski)
+
 Unix:
 
 - fixed compilation on systems with zlib installed but < 1.1.3 version
@@ -27,14 +36,6 @@ wxMSW:
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
 - wxCheckListBox::Check() doesn't send CHECKLISTBOX_TOGGLE event any more
 - fixed bug with wxTR_EDIT_LABELS not workign with wxTR_MULTIPLE
-
-All:
-
-- Implemented GetEditControl for wxGenericTreeCtrl (Peter Stieber)
-- Improved contrib/utils/convertrc parsing (David J. Cooke)
-- Fixed handling of URLs and filenames in wxFileSystem
-- Implemented alignment for wxGrid bool editor and renderer
-- Support wxListCtrl columns alignment for all platforms and not just MSW
 
 OLD CHANGES
 ===========
