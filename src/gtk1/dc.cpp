@@ -69,12 +69,6 @@ void wxDC::DestroyClippingRegion()
 // get DC capabilities
 // ---------------------------------------------------------------------------
 
-void wxDC::DoGetSize( int* width, int* height ) const
-{
-    if (width) *width = m_maxX-m_minX;
-    if (height) *height = m_maxY-m_minY;
-}
-
 void wxDC::DoGetSizeMM( int* width, int* height ) const
 {
     int w = 0;

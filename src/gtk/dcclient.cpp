@@ -393,6 +393,13 @@ void wxWindowDC::SetUpDC()
     }
 }
 
+void wxWindowDC::DoGetSize( int* width, int* height ) const
+{
+    wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
+
+    m_owner->GetSize(width, height);
+}
+
 void wxWindowDC::DoFloodFill( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                            const wxColour &WXUNUSED(col), int WXUNUSED(style) )
 {

@@ -22,22 +22,25 @@ class wxScreenDC;
 // wxScreenDC
 //-----------------------------------------------------------------------------
 
-class wxScreenDC: public wxPaintDC
+class wxScreenDC : public wxPaintDC
 {
 public:
     wxScreenDC();
-    ~wxScreenDC();
+    virtual ~wxScreenDC();
 
     static bool StartDrawingOnTop( wxWindow *window );
     static bool StartDrawingOnTop( wxRect *rect = (wxRect *) NULL );
     static bool EndDrawingOnTop();
 
     // implementation
-    
+
     static GdkWindow  *sm_overlayWindow;
     static int         sm_overlayWindowX;
     static int         sm_overlayWindowY;
-  
+
+protected:
+    virtual void DoGetSize(int *width, int *height) const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxScreenDC)
 };

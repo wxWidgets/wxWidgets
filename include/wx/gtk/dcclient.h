@@ -40,7 +40,8 @@ public:
     virtual bool CanDrawBitmap() const { return TRUE; }
     virtual bool CanGetTextExtent() const { return TRUE; }
 
-//protected:
+protected:
+    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style=wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const;
 
@@ -78,6 +79,8 @@ public:
                                 wxCoord *descent = (wxCoord *) NULL,
                                 wxCoord *externalLeading = (wxCoord *) NULL,
                                 wxFont *theFont = (wxFont *) NULL) const;
+
+public:
     virtual wxCoord GetCharWidth() const;
     virtual wxCoord GetCharHeight() const;
 
@@ -135,31 +138,31 @@ private:
 };
 
 //-----------------------------------------------------------------------------
-// wxPaintDC
-//-----------------------------------------------------------------------------
-
-class wxPaintDC : public wxWindowDC
-{
-public:
-    wxPaintDC();
-    wxPaintDC( wxWindow *win );
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
-};
-
-//-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
 class wxClientDC : public wxWindowDC
 {
 public:
-    wxClientDC();
+    wxClientDC() { }
     wxClientDC( wxWindow *win );
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
+};
+
+//-----------------------------------------------------------------------------
+// wxPaintDC
+//-----------------------------------------------------------------------------
+
+class wxPaintDC : public wxClientDC
+{
+public:
+    wxPaintDC() { }
+    wxPaintDC( wxWindow *win );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxPaintDC)
 };
 
 #endif // __GTKDCCLIENTH__
