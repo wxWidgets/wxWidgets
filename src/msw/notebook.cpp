@@ -134,7 +134,7 @@ bool wxNotebook::Create(wxWindow *parent,
   m_defaultBackgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
 
   // style
-  m_windowStyle = style;
+  m_windowStyle = style | wxTAB_TRAVERSAL;
 
   long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
   if ( m_windowStyle & wxTC_MULTILINE )
