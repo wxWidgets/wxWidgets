@@ -351,12 +351,12 @@ void wxNotebook::MacSetupTabs()
 
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
-            const wxBitmap* bmap = GetImageList()->GetBitmapPtr( GetPageImage(ii ) ) ;
-            if ( bmap )
+            const wxBitmap bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
+            if ( bmap.Ok() )
             {
                 ControlButtonContentInfo info ;
 
-                wxMacCreateBitmapButton( &info , *bmap ) ;
+                wxMacCreateBitmapButton( &info , bmap ) ;
                 OSStatus err = m_peer->SetData<ControlButtonContentInfo>( ii+1,kControlTabImageContentTag, &info );
                 wxASSERT_MSG( err == noErr , wxT("Error when setting icon on tab") ) ;
                 wxMacReleaseBitmapButton( &info ) ;
