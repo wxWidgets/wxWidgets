@@ -68,8 +68,6 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
     encoding = (wxFontEncoding)enc;
 
     facename = tokenizer.GetNextToken();
-    if ( !facename )
-        return FALSE;
 
     wxString tmp = tokenizer.GetNextToken();
     if ( !tmp )
