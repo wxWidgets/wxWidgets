@@ -1,6 +1,7 @@
 #include "wx/defs.h"
 #include "wx/dc.h"
 #include "wx/mac/uma.h"
+#include <MacTextEditor.h>
 
 #ifndef __DARWIN__
   #include <Navigation.h>
@@ -11,6 +12,8 @@
 // the application so all wxWindows code can safely assume that appearance 1.1
 // windows manager, control manager, navigation services etc. are 
 // present
+
+#define wxUSE_MLTE 0
 
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
@@ -34,6 +37,9 @@ void UMACleanupToolbox()
 	{
 		NavUnload() ;
 	}
+#if wxUSE_MLTE
+	TXNTerminateTextension( ) ;
+#endif
 }
 void UMAInitToolbox( UInt16 inMoreMastersCalls )
 {
@@ -89,6 +95,15 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 	{
 		NavLoad() ;
 	}
+
+#if wxUSE_MLTE
+  TXNMacOSPreferredFontDescription defaults;
+  defaults.fontID = kFontIDGeneva ;
+  defaults.pointSize = (10 << 16) ;
+  defaults.fontStyle = kTXNDefaultFontStyle;
+  defaults.encoding = kTXNSystemDefaultEncoding;
+	TXNInitTextension(&defaults,  1, (kTXNAlwaysUseQuickDrawTextMask | kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask));
+#endif
 }
 
 // process manager
@@ -432,7 +447,7 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
     SetControlVisibility( inControl , false , false ) ;
     Rect ctrlBounds ;
     InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
-  }
+  } 
   ::SizeControl( inControl , x , y ) ;
   if ( visible ) {
     SetControlVisibility( inControl , true , false ) ;
@@ -546,3 +561,30 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
   return ::DrawThemePlacard( inRect , inState ) ;
 }
 
+static OSStatus helpMenuStatus = noErr ;
+static MenuRef helpMenuHandle = NULL ;
+static MenuItemIndex firstCustomItemIndex = 0 ;
+
+OSStatus UMAGetHelpMenu(
+  MenuRef *        outHelpMenu,
+  MenuItemIndex *  outFirstCustomItemIndex)
+{
+#if TARGET_CARBON
+  return HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
+#else
+  if ( helpMenuHandle == NULL )
+  {
+    helpMenuStatus = HMGetHelpMenuHandle( &helpMenuHandle ) ;
+    if ( helpMenuStatus == noErr )
+    {
+      firstCustomItemIndex = CountMenuItems( helpMenuHandle ) + 1 ;
+    }
+  }
+  if ( outFirstCustomItemIndex )
+  {
+    *outFirstCustomItemIndex = firstCustomItemIndex ;
+  }
+  *outHelpMenu = helpMenuHandle ;
+  return helpMenuStatus ;
+#endif
+}
