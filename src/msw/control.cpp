@@ -126,11 +126,15 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         style |= WS_VISIBLE;
     }
 
-    // choose the position for the control
+    // choose the position for the control: we have a problem with default size
+    // here as we can't calculate the best size before the control exists
+    // (DoGetBestSize() may need to use m_hWnd), so just choose the minimal
+    // possible but non 0 size because 0 window width/height result in problems
+    // elsewhere
     int x = pos.x == wxDefaultCoord ? 0 : pos.x,
         y = pos.y == wxDefaultCoord ? 0 : pos.y,
-        w = size.x == wxDefaultCoord ? 0 : size.x,
-        h = size.y == wxDefaultCoord ? 0 : size.y;
+        w = size.x == wxDefaultCoord ? 1 : size.x,
+        h = size.y == wxDefaultCoord ? 1 : size.y;
 
     // ... and adjust it to account for a possible parent frames toolbar
     AdjustForParentClientOrigin(x, y);
