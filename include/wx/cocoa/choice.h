@@ -12,12 +12,13 @@
 #ifndef __WX_COCOA_CHOICE_H__
 #define __WX_COCOA_CHOICE_H__
 
-//#include "wx/cocoa/NSTableView.h"
+//#include "wx/cocoa/NSPopUpButton.h"
+#include "wx/cocoa/NSMenu.h"
 
 // ========================================================================
 // wxChoice
 // ========================================================================
-class WXDLLEXPORT wxChoice: public wxChoiceBase //, protected wxCocoaNSTableView
+class WXDLLEXPORT wxChoice: public wxChoiceBase /*, protected wxCocoaNSPopUpButton */, protected wxCocoaNSMenu
 {
     DECLARE_DYNAMIC_CLASS(wxChoice)
     DECLARE_EVENT_TABLE()
@@ -26,7 +27,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase //, protected wxCocoaNSTableView
 // initialization
 // ------------------------------------------------------------------------
 public:
-    wxChoice() { }
+    wxChoice() { Init(); }
     wxChoice(wxWindow *parent, wxWindowID winid,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -35,6 +36,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr)
     {
+        Init();
         Create(parent, winid,  pos, size, n, choices, style, validator, name);
     }
 
@@ -46,11 +48,14 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr);
     virtual ~wxChoice();
+protected:
+    void Init();
 
 // ------------------------------------------------------------------------
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    void CocoaNotification_menuDidSendAction(WX_NSNotification notification);
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
@@ -69,6 +74,9 @@ public:
     virtual void DoSetItemClientObject(int, wxClientData*);
     virtual wxClientData* DoGetItemClientObject(int) const;
     virtual void SetSelection(int);
+protected:
+    wxSortedArrayString *m_sortedStrings;
+    wxArrayPtrVoid m_itemsClientData;
 };
 
 #endif // __WX_COCOA_CHOICE_H__
