@@ -67,6 +67,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxChildFocusEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxCloseEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxShowEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMaximizeEvent, wxEvent)
@@ -150,6 +151,7 @@ DEFINE_EVENT_TYPE(wxEVT_MIDDLE_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_RIGHT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_SET_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_KILL_FOCUS)
+DEFINE_EVENT_TYPE(wxEVT_CHILD_FOCUS)
 DEFINE_EVENT_TYPE(wxEVT_MOUSEWHEEL)
 
 // Non-client mouse events
@@ -731,6 +733,16 @@ void wxIdleEvent::CopyObject(wxObject& obj_d) const
 
     obj->m_requestMore = m_requestMore;
 }
+
+wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
+                 : wxCommandEvent(wxEVT_CHILD_FOCUS)
+{
+    SetEventObject(win);
+}
+
+// ----------------------------------------------------------------------------
+// wxEvtHandler
+// ----------------------------------------------------------------------------
 
 /*
  * Event handler

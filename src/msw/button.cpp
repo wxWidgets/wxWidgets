@@ -128,15 +128,6 @@ bool wxButton::Create(wxWindow *parent,
 
 wxButton::~wxButton()
 {
-    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    if ( panel )
-    {
-        if ( panel->GetDefaultItem() == this )
-        {
-            // don't leave the panel with invalid default item
-            panel->SetDefaultItem(NULL);
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -197,20 +188,20 @@ wxSize wxButtonBase::GetDefaultSize()
 void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
-    wxButton *btnOldDefault = NULL;
-    wxPanel *panel = wxDynamicCast(parent, wxPanel);
-    if ( panel )
-    {
-        btnOldDefault = panel->GetDefaultItem();
-        panel->SetDefaultItem(this);
-    }
-
+    wxButton *btnOldDefault;
     if ( parent )
     {
-        SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
+        wxWindow *winOldDefault = parent->SetDefaultItem(this);
+        btnOldDefault = wxDynamicCast(winOldDefault, wxButton);
+
+        ::SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
+    }
+    else // is a button without parent really normal?
+    {
+        btnOldDefault = NULL;
     }
 
-    if ( btnOldDefault )
+    if ( btnOldDefault && btnOldDefault != this )
     {
         // remove the BS_DEFPUSHBUTTON style from the other button
         long style = GetWindowLong(GetHwndOf(btnOldDefault), GWL_STYLE);

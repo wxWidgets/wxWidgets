@@ -110,6 +110,7 @@ cmdproc.cpp	Common
 cmndata.cpp	Common
 clipcmn.cpp	Common
 config.cpp	Common	Base
+containr.cpp	Common
 cshelp.cpp	Common
 ctrlcmn.cpp	Common
 ctrlsub.cpp	Common
@@ -616,6 +617,7 @@ colour.h	WXH
 combobox.h	WXH
 confbase.h	WXH	Base
 config.h	WXH	Base
+containr.h	WXH
 control.h	WXH
 ctrlsub.h	WXH
 cursor.h	WXH

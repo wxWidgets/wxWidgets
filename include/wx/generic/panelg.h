@@ -21,8 +21,10 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/window.h"
+#include "wx/containr.h"
 
 class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxControlContainer;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
@@ -67,62 +69,34 @@ public:
                 long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                 const wxString& name = wxPanelNameStr);
 
-    // Sends an OnInitDialog event, which in turns transfers data to
-    // to the dialog via validators.
-    virtual void InitDialog();
-
-#if wxUSE_BUTTON
-    // a default button is activated when Enter is pressed
-    wxButton *GetDefaultItem() const { return m_btnDefault; }
-    void SetDefaultItem(wxButton *btn) { m_btnDefault = btn; }
-#endif // wxUSE_BUTTON
+    virtual ~wxPanel();
 
     // implementation from now on
     // --------------------------
 
+    // Sends an OnInitDialog event, which in turns transfers data to
+    // to the dialog via validators.
+    virtual void InitDialog();
+
         // responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-        // process a keyboard navigation message (Tab traversal)
-    void OnNavigationKey(wxNavigationKeyEvent& event);
-
-        // set the focus to the first child if we get it
-    void OnFocus(wxFocusEvent& event);
 
         // calls layout for layout constraints and sizers
     void OnSize(wxSizeEvent& event);
 
-        // overridden to tab move focus into first focusable child
-    virtual void SetFocus();
-
-        // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
-
-    virtual void RemoveChild(wxWindowBase *child);
+    WX_DECLARE_CONTROL_CONTAINER();
 
 protected:
     // common part of all ctors
     void Init();
 
-    // set the focus to the child which had it the last time
-    bool SetFocusToChild();
-
-    // the child which had the focus last time this panel was activated
-    wxWindow *m_winLastFocused;
-
-#if wxUSE_BUTTON
-    // a default button or NULL
-    wxButton *m_btnDefault;
-#endif // wxUSE_BUTTON
+    // the object which implements the TAB traversal logic
+    wxControlContainer *m_container;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)
     DECLARE_EVENT_TABLE()
 };
-
-// this function is for wxWindows use only
-extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 
 #endif
     // _WX_GENERIC_PANEL_H_

@@ -155,7 +155,8 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EVENT_TYPE(wxEVT_RIGHT_DCLICK, 111)
     DECLARE_EVENT_TYPE(wxEVT_SET_FOCUS, 112)
     DECLARE_EVENT_TYPE(wxEVT_KILL_FOCUS, 113)
-    DECLARE_EVENT_TYPE(wxEVT_MOUSEWHEEL, 114)
+    DECLARE_EVENT_TYPE(wxEVT_CHILD_FOCUS, 114)
+    DECLARE_EVENT_TYPE(wxEVT_MOUSEWHEEL, 115)
 
         // Non-client mouse events
     DECLARE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN, 200)
@@ -959,6 +960,18 @@ private:
     DECLARE_DYNAMIC_CLASS(wxFocusEvent)
 };
 
+// wxChildFocusEvent notifies the parent that a child has got the focus: unlike
+// wxFocusEvent it is propgated upwards the window chain
+class WXDLLEXPORT wxChildFocusEvent : public wxCommandEvent
+{
+public:
+    wxChildFocusEvent(wxWindow *win = NULL);
+
+    wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
+
+    DECLARE_DYNAMIC_CLASS(wxChildFocusEvent)
+};
+
 // Activate event class
 /*
  wxEVT_ACTIVATE
@@ -1759,6 +1772,7 @@ typedef void (wxEvtHandler::*wxEraseEventFunction)(wxEraseEvent&);
 typedef void (wxEvtHandler::*wxMouseEventFunction)(wxMouseEvent&);
 typedef void (wxEvtHandler::*wxCharEventFunction)(wxKeyEvent&);
 typedef void (wxEvtHandler::*wxFocusEventFunction)(wxFocusEvent&);
+typedef void (wxEvtHandler::*wxChildFocusEventFunction)(wxChildFocusEvent&);
 typedef void (wxEvtHandler::*wxActivateEventFunction)(wxActivateEvent&);
 typedef void (wxEvtHandler::*wxMenuEventFunction)(wxMenuEvent&);
 typedef void (wxEvtHandler::*wxJoystickEventFunction)(wxJoystickEvent&);
@@ -1826,6 +1840,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #define EVT_MENU_HIGHLIGHT_ALL(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_MENU_HIGHLIGHT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxMenuEventFunction) & func, (wxObject *) NULL ),
 #define EVT_SET_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_SET_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
 #define EVT_KILL_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KILL_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxFocusEventFunction) & func, (wxObject *) NULL ),
+#define EVT_CHILD_FOCUS(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHILD_FOCUS, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxChildFocusEventFunction) & func, (wxObject *) NULL ),
 #define EVT_ACTIVATE(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ACTIVATE, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
 #define EVT_ACTIVATE_APP(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ACTIVATE_APP, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxActivateEventFunction) & func, (wxObject *) NULL ),
 #define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),

@@ -39,7 +39,6 @@
     #include "wx/dcclient.h"
     #include "wx/utils.h"
     #include "wx/app.h"
-    #include "wx/panel.h"
     #include "wx/layout.h"
     #include "wx/dialog.h"
     #include "wx/frame.h"
@@ -177,7 +176,6 @@ BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
     EVT_IDLE(wxWindowMSW::OnIdle)
-    EVT_SET_FOCUS(wxWindowMSW::OnSetFocus)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -1845,18 +1843,13 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                             bProcess = FALSE;
                         }
+                        // FIXME: this should be handled by
+                        //        wxNavigationKeyEvent handler and not here!!
 #if wxUSE_BUTTON
                         else
                         {
-                            wxPanel *panel = wxDynamicCastThis(wxPanel);
-                            wxButton *btn = NULL;
-                            if ( panel )
-                            {
-                                // panel may have a default button which should
-                                // be activated by Enter
-                                btn = panel->GetDefaultItem();
-                            }
-
+                            wxButton *btn = wxDynamicCast(GetDefaultItem(),
+                                                          wxButton);
                             if ( btn && btn->IsEnabled() )
                             {
                                 // if we do have a default button, do press it
@@ -1885,15 +1878,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                 if ( GetEventHandler()->ProcessEvent(event) )
                 {
-#if wxUSE_BUTTON
-                    wxButton *btn = wxDynamicCast(FindFocus(), wxButton);
-                    if ( btn )
-                    {
-                        // the button which has focus should be default
-                        btn->SetDefault();
-                    }
-#endif // wxUSE_BUTTON
-
                     return TRUE;
                 }
             }
@@ -3089,33 +3073,6 @@ bool wxWindowMSW::HandleDestroy()
 // activation/focus
 // ---------------------------------------------------------------------------
 
-void wxWindowMSW::OnSetFocus(wxFocusEvent& event)
-{
-    // panel wants to track the window which was the last to have focus in it,
-    // so we want to set ourselves as the window which last had focus
-    //
-    // notice that it's also important to do it upwards the tree becaus
-    // otherwise when the top level panel gets focus, it won't set it back to
-    // us, but to some other sibling
-    wxWindow *win = (wxWindow *)this;
-    while ( win )
-    {
-        wxWindow *parent = win->GetParent();
-        wxPanel *panel = wxDynamicCast(parent, wxPanel);
-        if ( panel )
-        {
-            panel->SetLastFocus(win);
-        }
-
-        win = parent;
-    }
-
-    wxLogTrace(_T("focus"), _T("%s (0x%08x) gets focus"),
-               GetClassInfo()->GetClassName(), GetHandle());
-
-    event.Skip();
-}
-
 bool wxWindowMSW::HandleActivate(int state,
                               bool WXUNUSED(minimized),
                               WXHWND WXUNUSED(activate))
@@ -3130,6 +3087,11 @@ bool wxWindowMSW::HandleActivate(int state,
 
 bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 {
+    // notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    wxChildFocusEvent eventFocus(this);
+    (void)GetEventHandler()->ProcessEvent(eventFocus);
+
 #if wxUSE_CARET
     // Deal with caret
     if ( m_caret )
@@ -3140,13 +3102,12 @@ bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 
 #if wxUSE_TEXTCTRL
     // If it's a wxTextCtrl don't send the event as it will be done
-    // after the control gets to process it.
-    wxTextCtrl *ctrl = wxDynamicCastThis(wxTextCtrl);
-    if ( ctrl )
+    // after the control gets to process it from EN_FOCUS handler
+    if ( wxDynamicCastThis(wxTextCtrl) )
     {
         return FALSE;
     }
-#endif
+#endif // wxUSE_TEXTCTRL
 
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);

@@ -1692,11 +1692,10 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     printf( ".\n" );
 */
 
-    wxPanel *panel = wxDynamicCast(win->GetParent(), wxPanel);
-    if (panel)
-    {
-        panel->SetLastFocus(win);
-    }
+    // notify the parent keeping track of focus for the kbd navigation
+    // purposes that we got it
+    wxChildFocusEvent eventFocus(this);
+    (void)GetEventHandler()->ProcessEvent(eventFocus);
 
 #ifdef HAVE_XIM
     if (win->m_ic)

@@ -170,6 +170,10 @@ public:
     // window attributes
     // -----------------
 
+        // NB: in future versions of wxWindows Set/GetTitle() will only work
+        //     with the top level windows (such as dialogs and frames) and
+        //     Set/GetLabel() only with the other ones (i.e. all controls).
+
         // the title (or label, see below) of the window: the text which the
         // window shows
     virtual void SetTitle( const wxString& WXUNUSED(title) ) {}
@@ -361,8 +365,8 @@ public:
     virtual void SetThemeEnabled(bool enableTheme) { m_themeEnabled = enableTheme; }
     virtual bool GetThemeEnabled() const { return m_themeEnabled; }
 
-    // focus handling
-    // --------------
+    // focus and keyboard handling
+    // ---------------------------
 
         // set focus to this window
     virtual void SetFocus() = 0;
@@ -377,6 +381,17 @@ public:
         // only way to give it focus (provided it accepts it at all) is to
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+
+        // NB: these methods really don't belong here but with the current
+        //     class hierarchy there is no other place for them :-(
+
+        // get the default child of this parent, i.e. the one which is
+        // activated by pressing <Enter>
+    virtual wxWindow *GetDefaultItem() const { return NULL; }
+
+        // set this child as default, return the old default
+    virtual wxWindow *SetDefaultItem(wxWindow * WXUNUSED(child))
+        { return NULL; }
 
     // parent/children relations
     // -------------------------
@@ -786,7 +801,7 @@ protected:
     // the window id - a number which uniquely identifies a window among
     // its siblings unless it is -1
     wxWindowID           m_windowId;
-    
+
     // the parent window of this window (or NULL) and the list of the children
     // of this window
     wxWindow            *m_parent;
