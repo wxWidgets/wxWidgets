@@ -116,7 +116,7 @@ MyFrame::AddSampleText(wxLayoutList &llist)
    llist.Insert(" and ");
    llist.SetFont(-1,-1,-1,-1,-1,"red","black");
    llist.Insert("red on black");
-   llist.SetFont(-1,-1,-1,-1,-1,"black");
+   llist.SetFont(-1,-1,-1,-1,-1,"black","white");
    llist.Insert(" text.");
    llist.LineBreak();
 

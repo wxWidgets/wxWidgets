@@ -157,8 +157,10 @@ public:
                 bool underline,
                 wxColour const *fg, wxColour const *bg);
    ~wxLayoutObjectCmd();
-   // caller must free pointer:
+   /// caller must free pointer:
    wxLayoutStyleInfo *GetStyle(void) const ;
+   /// return the background colour for setting colour of window
+   wxColour const *GetBGColour(void) const { return m_ColourBG; }
 private:
    /// the font to use
    wxFont *m_font;
