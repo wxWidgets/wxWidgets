@@ -411,7 +411,7 @@ void SurfaceImpl::DrawTextNoClip(PRectangle rc, Font &font, int ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
 }
 
 void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
@@ -424,7 +424,7 @@ void SurfaceImpl::DrawTextClipped(PRectangle rc, Font &font, int ybase,
     hdc->SetClippingRegion(wxRectFromPRectangle(rc));
 
     // see comments above
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
     hdc->DestroyClippingRegion();
 }
 
@@ -439,7 +439,7 @@ void SurfaceImpl::DrawTextTransparent(PRectangle rc, Font &font, int ybase,
 
     // ybase is where the baseline should be, but wxWin uses the upper left
     // corner, so I need to calculate the real position for the text...
-    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent);
+    hdc->DrawText(stc2wx(s, len), rc.left, ybase - font.ascent - 1);
 
     hdc->SetBackgroundMode(wxSOLID);
 }
