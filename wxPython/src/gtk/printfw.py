@@ -363,6 +363,9 @@ class wxPrintDialogDataPtr(wxObjectPtr):
     def GetNoCopies(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_GetNoCopies(self, *_args, **_kwargs)
         return val
+    def GetSelection(self, *_args, **_kwargs):
+        val = printfwc.wxPrintDialogData_GetSelection(self, *_args, **_kwargs)
+        return val
     def GetPrintData(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_GetPrintData(self, *_args, **_kwargs)
         if val: val = wxPrintDataPtr(val) ; val.thisown = 1
@@ -378,6 +381,9 @@ class wxPrintDialogDataPtr(wxObjectPtr):
         return val
     def SetCollate(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_SetCollate(self, *_args, **_kwargs)
+        return val
+    def SetAllPages(self, *_args, **_kwargs):
+        val = printfwc.wxPrintDialogData_SetAllPages(self, *_args, **_kwargs)
         return val
     def SetFromPage(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_SetFromPage(self, *_args, **_kwargs)
@@ -396,6 +402,9 @@ class wxPrintDialogDataPtr(wxObjectPtr):
         return val
     def SetPrintToFile(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_SetPrintToFile(self, *_args, **_kwargs)
+        return val
+    def SetSelection(self, *_args, **_kwargs):
+        val = printfwc.wxPrintDialogData_SetSelection(self, *_args, **_kwargs)
         return val
     def SetSetupDialog(self, *_args, **_kwargs):
         val = printfwc.wxPrintDialogData_SetSetupDialog(self, *_args, **_kwargs)
