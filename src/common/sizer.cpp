@@ -388,7 +388,14 @@ void wxSizerItem::DeleteWindows()
             break;
 
         case Item_Window:
+            //We are deleting the window from this sizer - normally
+            //the window destroys the sizer associated with it,
+            //which might destroy this, which we don't want
+            m_window->SetContainingSizer(NULL);
             m_window->Destroy();
+            //Putting this after the switch will result in a spacer
+            //not being deleted properly on destruction
+            m_kind = Item_None; 
             break;
 
         case Item_Sizer:
@@ -400,7 +407,6 @@ void wxSizerItem::DeleteWindows()
             wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
     }
 
-    m_kind = Item_None;
 }
 
 void wxSizerItem::Show( bool show )
