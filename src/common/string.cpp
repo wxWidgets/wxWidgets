@@ -290,10 +290,12 @@ void wxString::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
 {
   Init();
 
-  if ( nLength == wxSTRING_MAXLEN )
-    nLength = wxStrlen(psz + nPos);
+  // if the length is not given, assume the string to be NUL terminated
+  if ( nLength == wxSTRING_MAXLEN ) {
+    wxASSERT_MSG( nPos <= wxStrlen(psz), _T("index out of bounds") );
 
-  wxASSERT_MSG( nPos + nLength <= wxStrlen(psz), _T("index out of bounds") );
+    nLength = wxStrlen(psz + nPos);
+  }
 
   STATISTICS_ADD(InitialLength, nLength);
 
