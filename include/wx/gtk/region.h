@@ -111,7 +111,6 @@ public:
     wxRegionContain Contains(const wxRect& rect) const;
 
 public:
-    wxList    *GetRectList() const;
     GdkRegion *GetRegion() const;
 
 protected:
@@ -121,9 +120,6 @@ protected:
     
     // common part of ctors for a rectangle region
     void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
-
-    // helper of Intersect()
-    bool IntersectRegionOnly(const wxRegion& reg);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRegion);
