@@ -591,6 +591,7 @@ wxString& wxString::operator=(wxChar ch)
   return *this;
 }
 
+
 // assigns C string
 wxString& wxString::operator=(const wxChar *psz)
 {
