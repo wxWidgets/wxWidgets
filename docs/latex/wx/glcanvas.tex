@@ -93,14 +93,13 @@ generate a default size for the window. If no suitable size can be found, the wi
 This array is zero-terminated: it should be set up with constants described in the table above.
 If a constant should be followed by a value, put it in the next array position.
 For example, the WX\_GL\_DEPTH\_SIZE should be followed by the value that indicates the number of
-bits for the depth buffer, so:
+bits for the depth buffer, so:}
 
 \begin{verbatim}
 attribList[index]= WX_GL_DEPTH_SIZE;
 attribList[index+1]=32;
 and so on.
 \end{verbatim}
-}
 
 \docparam{palette}{If the window has the palette, it should by pass this value.
 Note: palette and WX\_GL\_RGBA are mutually exclusive.}

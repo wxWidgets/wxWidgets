@@ -90,7 +90,7 @@ not be followed by a quantifier. The simple constraints are as follows;
 some more constraints are described later, under \helpref{Escapes}{wxresynescapes}.
 
 \begin{twocollist}\twocolwidtha{4cm}
-\twocolitem{{\bf $^$}}{matches at the beginning of a line}
+\twocolitem{{\bf \caret}}{matches at the beginning of a line}
 \twocolitem{{\bf \$}}{matches at the end of a line}
 \twocolitem{{\bf (?=re)}}{{\it positive lookahead}
 (AREs only), matches at any point where a substring matching {\it re} begins}
@@ -109,7 +109,7 @@ An RE may not end with `{\bf $\backslash$}'.
 
 A {\it bracket expression} is a list
 of characters enclosed in `{\bf $[]$}'. It normally matches any single character from
-the list (but see below). If the list begins with `{\bf $^$}', it matches any single
+the list (but see below). If the list begins with `{\bf \caret}', it matches any single
 character (but see below) {\it not} from the rest of the list. 
 
 If two characters
@@ -122,7 +122,7 @@ programs should avoid relying on them.
 To include a literal {\bf $]$} or {\bf -} in the
 list, the simplest method is to enclose it in {\bf $[.$} and {\bf $.]$} to make it a collating
 element (see below). Alternatively, make it the first character (following
-a possible `{\bf $^$}'), or (AREs only) precede it with `{\bf $\backslash$}'.
+a possible `{\bf \caret}'), or (AREs only) precede it with `{\bf $\backslash$}'.
 Alternatively, for `{\bf -}', make
 it the last character, or the second endpoint of a range. To use a literal
  {\bf -} as the first endpoint of a range, make it a collating element or (AREs
@@ -146,7 +146,7 @@ the name of a character. For example, the following are both identical
 %The sequence is a single element of the bracket
 %expression's list. A bracket expression in a locale that has multi-character
 %collating elements can thus match more than one character. So (insidiously),
-%a bracket expression that starts with {\bf $^$} can match multi-character collating
+%a bracket expression that starts with {\bf \caret} can match multi-character collating
 %elements even if none of them appear in the bracket expression! ({\it Note:}
 %Tcl currently has no multi-character collating elements. This information
 %is only for illustration.) 
@@ -162,8 +162,8 @@ collating elements equivalent to that one, including itself.
 %(If there are
 %no other equivalent collating elements, the treatment is as if the enclosing
 %delimiters were `{\bf $[.$}' and `{\bf $.]$}'.) For example, if {\bf o}
-%and {\bf $^$} are the members of an
-%equivalence class, then `{\bf $[[$=o=$]]$}', `{\bf $[[$=$^$=$]]$}',
+%and {\bf \caret} are the members of an
+%equivalence class, then `{\bf $[[$=o=$]]$}', `{\bf $[[$=\caret=$]]$}',
 %and `{\bf $[o^]$}' are all synonymous.
 An equivalence class may not be an endpoint of a range.
 
@@ -302,7 +302,7 @@ escape:
 \begin{twocollist}\twocolwidtha{4cm}
 \twocolitem{{\bf $\backslash$A}}{matches only at the beginning of the string
 (see \helpref{Matching}{wxresynmatching}, below,
-for how this differs from `{\bf $^$}')}
+for how this differs from `{\bf \caret}')}
 \twocolitem{{\bf $\backslash$m}}{matches only at the beginning of a word}
 \twocolitem{{\bf $\backslash$M}}{matches only at the end of a word}
 \twocolitem{{\bf $\backslash$y}}{matches only at the beginning or end of a word}
@@ -459,19 +459,19 @@ inside a bracket expression, all case counterparts of it are added to the
 bracket expression, so that {\bf $[x]$} becomes {\bf $[xX]$} and {\bf $[^x]$} becomes `{\bf $[^xX]$}'. 
 
 If newline-sensitive
-matching is specified, {\bf .} and bracket expressions using {\bf $^$} will never match
+matching is specified, {\bf .} and bracket expressions using {\bf \caret} will never match
 the newline character (so that matches will never cross newlines unless
-the RE explicitly arranges it) and {\bf $^$} and {\bf \$} will match the empty string after
+the RE explicitly arranges it) and {\bf \caret} and {\bf \$} will match the empty string after
 and before a newline respectively, in addition to matching at beginning
 and end of string respectively. ARE {\bf $\backslash$A} and {\bf $\backslash$Z} continue to match beginning
 or end of string {\it only}. 
 
 If partial newline-sensitive matching is specified,
 this affects {\bf .} and bracket expressions as with newline-sensitive matching,
-but not {\bf $^$} and `{\bf \$}'. 
+but not {\bf \caret} and `{\bf \$}'. 
 
 If inverse partial newline-sensitive matching is specified,
-this affects {\bf $^$} and {\bf \$} as with newline-sensitive matching, but not {\bf .} and bracket
+this affects {\bf \caret} and {\bf \$} as with newline-sensitive matching, but not {\bf .} and bracket
 expressions. This isn't very useful but is provided for symmetry. 
 
 \subsection{Limits And Compatibility}
@@ -544,12 +544,12 @@ for their functionality. The delimiters for bounds
 are {\bf $\backslash$\{} and `{\bf $\backslash$\}}', with {\bf \{} and
  {\bf \}} by themselves ordinary characters. The parentheses for nested subexpressions
 are {\bf $\backslash$(} and `{\bf $\backslash$)}', with {\bf (} and {\bf )} by themselves
-ordinary characters. {\bf $^$} is an ordinary
+ordinary characters. {\bf \caret} is an ordinary
 character except at the beginning of the RE or the beginning of a parenthesized
 subexpression, {\bf \$} is an ordinary character except at the end of the RE or
 the end of a parenthesized subexpression, and {\bf *} is an ordinary character
 if it appears at the beginning of the RE or the beginning of a parenthesized
-subexpression (after a possible leading `{\bf $^$}'). Finally, single-digit back references
+subexpression (after a possible leading `{\bf \caret}'). Finally, single-digit back references
 are available, and {\bf $\backslash<$} and {\bf $\backslash>$} are synonyms
 for {\bf $[[:<:]]$} and {\bf $[[:>:]]$} respectively;
 no other escapes are available.  
@@ -644,8 +644,8 @@ Note that the character names are case sensitive.
 \twocolitem{backslash}{'$\backslash$'}
 \twocolitem{reverse-solidus}{'$\backslash$'}
 \twocolitem{right-square-bracket}{'$]$'}
-\twocolitem{circumflex}{'$^$'}
-\twocolitem{circumflex-accent}{'$^$'}
+\twocolitem{circumflex}{'\caret'}
+\twocolitem{circumflex-accent}{'\caret'}
 \twocolitem{underscore}{'\_'}
 \twocolitem{low-line}{'\_'}
 \twocolitem{grave-accent}{'`'}

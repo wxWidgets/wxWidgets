@@ -720,6 +720,52 @@ true if the handler was found and removed, false otherwise.
 
 \helpref{wxImageHandler}{wximagehandler}
 
+\membersection{wxImage::Mirror}\label{wximagemirror}
+
+\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = true}}
+
+Returns a mirrored copy of the image. The parameter {\it horizontally}
+indicates the orientation.
+
+\membersection{wxImage::Replace}\label{wximagereplace}
+
+\func{void}{Replace}{\param{unsigned char}{ r1}, \param{unsigned char}{ g1}, \param{unsigned char}{ b1},
+\param{unsigned char}{ r2}, \param{unsigned char}{ g2}, \param{unsigned char}{ b2}}
+
+Replaces the colour specified by {\it r1,g1,b1} by the colour {\it r2,g2,b2}.
+
+\membersection{wxImage::Rescale}\label{wximagerescale}
+
+\func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
+
+Changes the size of the image in-place: after a call to this function, the
+image will have the given width and height.
+
+Returns the (modified) image itself.
+
+\wxheading{See also}
+
+\helpref{Scale}{wximagescale}
+
+\membersection{wxImage::Rotate}\label{wximagerotate}
+
+\func{wxImage}{Rotate}{\param{double}{ angle}, \param{const wxPoint\& }{rotationCentre},
+ \param{bool}{ interpolating = true}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
+
+Rotates the image about the given point, by {\it angle} radians. Passing true
+to {\it interpolating} results in better image quality, but is slower. If the
+image has a mask, then the mask colour is used for the uncovered pixels in the
+rotated image background. Else, black (rgb 0, 0, 0) will be used.
+
+Returns the rotated image, leaving this image intact.
+
+\membersection{wxImage::Rotate90}\label{wximagerotate90}
+
+\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = true}}
+
+Returns a copy of the image rotated 90 degrees in the direction
+indicated by {\it clockwise}.
+
 \membersection{wxImage::SaveFile}\label{wximagesavefile}
 
 \constfunc{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}}
@@ -800,52 +846,6 @@ mimetype to the named file}
 \item{bitmap->SaveFile( name, mimetype )}
 \end{itemize}
 }
-
-\membersection{wxImage::Mirror}\label{wximagemirror}
-
-\constfunc{wxImage}{Mirror}{\param{bool}{ horizontally = true}}
-
-Returns a mirrored copy of the image. The parameter {\it horizontally}
-indicates the orientation.
-
-\membersection{wxImage::Replace}\label{wximagereplace}
-
-\func{void}{Replace}{\param{unsigned char}{ r1}, \param{unsigned char}{ g1}, \param{unsigned char}{ b1},
-\param{unsigned char}{ r2}, \param{unsigned char}{ g2}, \param{unsigned char}{ b2}}
-
-Replaces the colour specified by {\it r1,g1,b1} by the colour {\it r2,g2,b2}.
-
-\membersection{wxImage::Rescale}\label{wximagerescale}
-
-\func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
-
-Changes the size of the image in-place: after a call to this function, the
-image will have the given width and height.
-
-Returns the (modified) image itself.
-
-\wxheading{See also}
-
-\helpref{Scale}{wximagescale}
-
-\membersection{wxImage::Rotate}\label{wximagerotate}
-
-\func{wxImage}{Rotate}{\param{double}{ angle}, \param{const wxPoint\& }{rotationCentre},
- \param{bool}{ interpolating = true}, \param{wxPoint*}{ offsetAfterRotation = NULL}}
-
-Rotates the image about the given point, by {\it angle} radians. Passing true
-to {\it interpolating} results in better image quality, but is slower. If the
-image has a mask, then the mask colour is used for the uncovered pixels in the
-rotated image background. Else, black (rgb 0, 0, 0) will be used.
-
-Returns the rotated image, leaving this image intact.
-
-\membersection{wxImage::Rotate90}\label{wximagerotate90}
-
-\constfunc{wxImage}{Rotate90}{\param{bool}{ clockwise = true}}
-
-Returns a copy of the image rotated 90 degrees in the direction
-indicated by {\it clockwise}.
 
 \membersection{wxImage::Scale}\label{wximagescale}
 
