@@ -483,6 +483,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 {
     wxScrolledWindow::OnSize(event);
     CreateLayout();
+    Refresh();
 }
 
 
