@@ -844,7 +844,7 @@ bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
   {
     return FALSE;
   }
-  *pl = str.ToLong(pl) ;
+  str.ToLong(pl) ;
   return TRUE ;
 }
 
