@@ -49,7 +49,7 @@ elseiff "%1" == "i" then
 rem "r" --> make installer
 elseiff "%1" == "r" then
 	shift
-	set CMD=%PYTHON% distrib\make_installer.py %1 %2 %3 %4 %5 %6 %7 %8 %9
+	set CMD=%PYTHON% -u distrib\make_installer.py %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 rem "s" --> source dist
 elseiff "%1" == "s" then
