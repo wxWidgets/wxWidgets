@@ -68,6 +68,7 @@
 #ifdef __UNIX__
     #include <unistd.h>
     #include <dirent.h>
+    #include <fcntl.h>
 #endif
 
 #ifdef __WXPM__
@@ -150,8 +151,6 @@
 #    include "FSpCompat.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
-
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
@@ -177,6 +176,32 @@ const off_t wxInvalidOffset = (off_t)-1;
 // ============================================================================
 // implementation
 // ============================================================================
+
+#ifdef wxNEED_WX_UNISTD_H
+
+WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf )
+{
+    return stat( wxConvFile.cWX2MB( file_name ), buf );
+}
+
+WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode )
+{
+    return access( wxConvFile.cWX2MB( pathname ), mode );
+}
+
+WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
+{
+    return open( wxConvFile.cWX2MB( pathname ), flags, mode );
+}
+
+#endif
+   // wxNEED_WX_UNISTD_H
+
+// ----------------------------------------------------------------------------
+// wxPathList
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
 
 void wxPathList::Add (const wxString& path)
 {
@@ -308,7 +333,7 @@ wxFileExists (const wxString& filename)
     return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else
     wxStructStat stbuf;
-    if ( !filename.empty() && wxStat (OS_FILENAME(filename), &stbuf) == 0 )
+    if ( !filename.empty() && wxStat( filename, &stbuf) == 0 )
         return TRUE;
 
     return FALSE;
@@ -1090,7 +1115,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     wxStructStat fbuf;
 
     // get permissions of file1
-    if ( wxStat(OS_FILENAME(file1), &fbuf) != 0 )
+    if ( wxStat( file1, &fbuf) != 0 )
     {
         // the file probably doesn't exist or we haven't the rights to read
         // from it anyhow
@@ -1279,12 +1304,10 @@ bool wxPathExists(const wxChar *pszPathName)
 
     wxStructStat st;
 #ifndef __VISAGECPP__
-    return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
-        ((st.st_mode & S_IFMT) == S_IFDIR);
+    return wxStat(pszPathName, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
 #else
     // S_IFMT not supported in VA compilers.. st_mode is a 2byte value only
-    return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
-        (st.st_mode == S_IFDIR);
+    return wxStat(pszPathName, &st) == 0 && (st.st_mode == S_IFDIR);
 #endif
 
 #endif // __WIN32__/!__WIN32__
@@ -1620,8 +1643,8 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
 time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
 {
     wxStructStat buf;
-
-    wxStat(filename.fn_str(), &buf);
+    wxStat( filename, &buf);
+    
     return buf.st_mtime;
 }
 

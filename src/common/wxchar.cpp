@@ -40,6 +40,8 @@
   #include "wx/hash.h"
 #endif
 
+#include "wx/msgdlg.h"
+
 #if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
   #include <windef.h>
   #include <winbase.h>
@@ -374,22 +376,22 @@ WXDLLEXPORT long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base)
 #ifdef wxNEED_WX_STDIO_H
 WXDLLEXPORT FILE * wxFopen(const wxChar *path, const wxChar *mode)
 {
-  return fopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode));
+    return fopen( wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode) );
 }
 
 WXDLLEXPORT FILE * wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream)
 {
-  return freopen(wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream);
+    return freopen( wxConvFile.cWX2MB(path), wxConvLibc.cWX2MB(mode), stream );
 }
 
 WXDLLEXPORT int wxRemove(const wxChar *path)
 {
-  return remove(wxConvFile.cWX2MB(path));
+    return remove( wxConvFile.cWX2MB(path) );
 }
 
 WXDLLEXPORT int wxRename(const wxChar *oldpath, const wxChar *newpath)
 {
-  return rename(wxConvFile.cWX2MB(oldpath), wxConvFile.cWX2MB(newpath));
+    return rename( wxConvFile.cWX2MB(oldpath), wxConvFile.cWX2MB(newpath) );
 }
 
 int WXDLLEXPORT wxPrintf(const wxChar *fmt, ...)
@@ -493,14 +495,30 @@ long     WXDLLEXPORT wxAtol(const wxChar *psz)
 wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 {
   static wxHashTable env;
+  
   // check if we already have stored the converted env var
   wxObject *data = env.Get(name);
-  if (!data) {
+  if (!data)
+  {
     // nope, retrieve it,
-    const char *val = getenv(wxConvLibc.cWX2MB(name));
+#if wxUSE_UNICODE
+    wxCharBuffer buffer = wxConvLibc.cWX2MB(name);
+    // printf( "buffer %s\n", (const char*) buffer );
+    const char *val = getenv( (const char *)buffer );
+#else
+    const char *val = getenv( name );
+#endif
+
     if (!val) return (wxChar *)NULL;
+    // printf( "home %s\n", val );
+    
     // convert it,
+#ifdef wxUSE_UNICODE
+    data = (wxObject *)new wxString(val, wxConvLibc);
+#else
     data = (wxObject *)new wxString(val);
+#endif
+
     // and store it
     env.Put(name, data);
   }

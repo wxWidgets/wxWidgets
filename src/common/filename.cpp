@@ -1660,7 +1660,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 {
 #if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
-    if ( wxStat(GetFullPath().fn_str(), &stBuf) == 0 )
+    if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
     {
         if ( dtAccess )
             dtAccess->Set(stBuf.st_atime);

@@ -119,13 +119,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
     #endif // O_RDONLY
 #else
     // functions
-    #define   wxOpen       open
     #define   wxClose      close
     #define   wxRead       read
     #define   wxWrite      write
     #define   wxLseek      lseek
     #define   wxFsync      commit
-    #define   wxAccess     access
     #define   wxEof        eof
 
     #define   wxMkDir      mkdir
@@ -133,10 +131,18 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
     #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
 
-    #define   wxStat       stat
-
-    // types
     #define   wxStructStat struct stat
+    
+#if wxUSE_UNICODE
+#   define wxNEED_WX_UNISTD_H
+WXDLLEXPORT int wxStat( const wxChar *file_name, wxStructStat *buf );
+WXDLLEXPORT int wxAccess( const wxChar *pathname, int mode );
+WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode );
+#else
+    #define   wxOpen       open
+    #define   wxStat       stat
+    #define   wxAccess     access
+#endif
 
 #endif  // VC++
 

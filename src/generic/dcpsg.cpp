@@ -1902,26 +1902,13 @@ void wxPostScriptDC::EndDoc ()
 
     wxChar *header_file = wxGetTempFileName("ps");
 
-    m_pstream = fopen( wxConvFile.cWX2MB(header_file) , "w+" );
+    m_pstream = wxFopen( header_file, wxT("w+") );
 
     fprintf( m_pstream, "%%!PS-Adobe-2.0\n" );                     // PostScript magic strings
     fprintf( m_pstream, "%%%%Title: %s\n", (const char *)m_title.mb_str() );
-    fprintf( m_pstream, "%%%%Creator: %s\n", (const char*)wxConvCurrent->cWX2MB(wxTheApp->argv[0]) );
+    fprintf( m_pstream, "%%%%Creator: wxWindows PostScript renderer\n" );
     fprintf( m_pstream, "%%%%CreationDate: %s\n", (const char *)wxNow().mb_str() );
 
-    wxChar userID[256];
-    if ( wxGetEmailAddress(userID, sizeof(userID)) )
-    {
-        fprintf( m_pstream, "%%%%For: %s ", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userID) );
-        wxChar userName[245];
-        if (wxGetUserName(userName, sizeof(userName)))
-            fprintf( m_pstream, " (%s)", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userName) );
-        fprintf( m_pstream, "\n" );
-    }
-    else if ( wxGetUserName(userID, sizeof(userID)) )
-    {
-        fprintf( m_pstream, "%%%%For: %s\n", wxMBSTRINGCAST wxConvCurrent->cWX2MB(userID) );;
-    }
 
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
 

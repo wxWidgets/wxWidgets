@@ -360,12 +360,23 @@ bool wxGenericPrintDialog::TransferDataToWindow()
 
 bool wxGenericPrintDialog::TransferDataFromWindow()
 {
+    long res = 0;
     if(m_printDialogData.GetFromPage() != -1)
     {
         if (m_printDialogData.GetEnablePageNumbers())
         {
-           if(m_fromText) m_printDialogData.SetFromPage(wxAtoi(m_fromText->GetValue()));
-           if(m_toText)   m_printDialogData.SetToPage(wxAtoi(m_toText->GetValue()));
+            if(m_fromText)
+            {
+                wxString value = m_fromText->GetValue();
+                if (value.ToLong( &res ))
+                    m_printDialogData.SetFromPage( res );
+            }
+            if(m_toText)
+            {   
+                wxString value = m_toText->GetValue();
+                if (value.ToLong( &res ))
+                    m_printDialogData.SetToPage( res );
+            }
         }
         if(m_rangeRadioBox)
         {
@@ -380,7 +391,11 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
         m_printDialogData.SetFromPage(1);
         m_printDialogData.SetToPage(32000);
     }
-    m_printDialogData.SetNoCopies(wxAtoi(m_noCopiesText->GetValue()));
+    
+    wxString value = m_noCopiesText->GetValue();
+    if (value.ToLong( &res ))
+        m_printDialogData.SetNoCopies( res );
+        
     m_printDialogData.SetPrintToFile(m_printToFileCheckBox->GetValue());
 
     return TRUE;

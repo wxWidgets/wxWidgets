@@ -78,6 +78,8 @@ bool MyApp::OnInit(void)
     
     g_printData = new wxPrintData;
     g_pageSetupData = new wxPageSetupDialogData;
+    
+    // wxGetenv( wxT("HOME") );
 
     // Compatibility with old system. In fact, we might keep wxThePrintSetupData
     // just for useful default values which we can optionally assign to our
@@ -307,11 +309,18 @@ void MyFrame::Draw(wxDC& dc)
     dc.SetPen(* wxRED_PEN);
     
     dc.DrawRectangle(0, 30, 200, 100);
-    dc.DrawText("Rectangle 200 by 100", 40, 40);
+    
+    dc.DrawText( wxT("Rectangle 200 by 100"), 40, 40);
     
     dc.DrawEllipse(50, 140, 100, 50);
     
-    dc.DrawText("Test message: this is in 10 point text", 10, 180);
+    dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
+    
+#if wxUSE_UNICODE
+    char *test = "Greek (Ελληνικά) Γειά σας -- Hebrew    שלום -- Japanese (日本語)";
+    wxString tmp = wxConvUTF8.cMB2WC( test );
+    dc.DrawText( tmp, 10, 200 ); 
+#endif
     
     dc.SetPen(* wxBLACK_PEN);
     dc.DrawLine(0, 0, 200, 200);
@@ -365,8 +374,8 @@ bool MyPrintout::OnPrintPage(int page)
         dc->SetDeviceOrigin(0, 0);
         dc->SetUserScale(1.0, 1.0);
         
-        char buf[200];
-        sprintf(buf, "PAGE %d", page);
+        wxChar buf[200];
+        wxSprintf(buf, wxT("PAGE %d"), page);
         dc->DrawText(buf, 10, 10);
         
         return TRUE;
@@ -483,10 +492,11 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
     dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
     
+    return;
+    
     dc->SetFont(* wxGetApp().m_testFont);
     dc->SetBackgroundMode(wxTRANSPARENT);
     
-    dc->DrawText("Some test text", 200, 200 );
     
     { // GetTextExtent demo:
         wxString words[7] = {"This ", "is ", "GetTextExtent ", "testing ", "string. ", "Enjoy ", "it!"};
@@ -504,6 +514,8 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
         dc->SetFont(* wxGetApp().m_testFont);
     }
     
+    dc->DrawText("Some test text", 200, 300 );
+
     // TESTING
     
     int leftMargin = 20;
