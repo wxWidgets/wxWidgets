@@ -25,6 +25,7 @@
 #import <AppKit/NSWindow.h>
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSView.h>
+#import <AppKit/NSMenuItem.h>
 
 // wxFrame
 
@@ -56,6 +57,8 @@ wxFrame::~wxFrame()
     [m_frameNSView release];
 }
 
+// -------------------------------------------------------------------
+// Menubar
 void wxFrame::AttachMenuBar(wxMenuBar *mbar)
 {
     wxFrameBase::AttachMenuBar(mbar);
@@ -88,6 +91,45 @@ wxMenuBar* wxFrame::GetAppMenuBar(wxCocoaNSWindow *win)
     return wxFrameBase::GetAppMenuBar(win);
 }
 
+void wxFrame::CocoaDelegate_wxMenuItemAction(WX_NSMenuItem menuItem)
+{
+    wxLogTrace(wxTRACE_COCOA,wxT("wxFrame::wxMenuItemAction"));
+    wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
+    wxCHECK_RET(item,wxT("wxMenuItemAction received but no wxMenuItem exists!"));
+
+    wxMenu *menu = item->GetMenu();
+    wxCHECK_RET(menu,wxT("wxMenuItemAction received but wxMenuItem is not in a wxMenu!"));
+
+    // Since we're handling the delegate messages there's a very good chance
+    // we'll receive a menu action from an item with a nil target.
+    wxMenuBar *menubar = menu->GetMenuBar();
+    if(menubar)
+    {
+        wxFrame *frame = menubar->GetFrame();
+        wxASSERT_MSG(frame==this, wxT("Received wxMenuItemAction in NSWindow delegate from a menu item attached to a different frame."));
+        frame->ProcessCommand(item->GetId());
+    }
+    else
+        wxLogDebug(wxT("Received wxMenuItemAction in NSWindow delegate from an unknown menu item."));
+}
+
+bool wxFrame::CocoaDelegate_validateMenuItem(WX_NSMenuItem menuItem)
+{
+    SEL itemAction = [menuItem action];
+    if(itemAction == @selector(wxMenuItemAction:))
+    {
+        wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
+        wxCHECK_MSG(item,false,wxT("validateMenuItem received but no wxMenuItem exists!"));
+        // TODO: do more sanity checking
+        return item->IsEnabled();
+    }
+    // TODO: else if cut/copy/paste
+    wxLogDebug(wxT("Asked to validate an unknown menu item"));
+    return false;
+}
+
+// -------------------------------------------------------------------
+// Origin/Size
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
     return wxPoint(0,0);
@@ -104,6 +146,7 @@ void wxFrame::CocoaSetWxWindowSize(int width, int height)
     wxTopLevelWindow::CocoaSetWxWindowSize(width,height);
 }
 
+// -------------------------------------------------------------------
 WX_NSView wxFrame::GetNonClientNSView()
 {
     if(m_frameNSView)

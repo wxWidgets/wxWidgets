@@ -58,6 +58,9 @@ public:
     // Helper function to position status/tool bars
     // Also called by native toolbar to force a size update
     void UpdateFrameNSView();
+
+    virtual void CocoaDelegate_wxMenuItemAction(WX_NSMenuItem menuItem);
+    virtual bool CocoaDelegate_validateMenuItem(WX_NSMenuItem menuItem);
 protected:
     virtual void CocoaSetWxWindowSize(int width, int height);
 
