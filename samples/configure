@@ -699,7 +699,6 @@ trap 'rm -fr `echo "
             printing/Makefile
             proplist/Makefile
             propsize/Makefile
-            richedit/Makefile
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
@@ -708,6 +707,7 @@ trap 'rm -fr `echo "
             sockets/Makefile
             splitter/Makefile
             statbar/Makefile
+	    taskbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile
@@ -853,7 +853,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             printing/Makefile
             proplist/Makefile
             propsize/Makefile
-            richedit/Makefile
             resource/Makefile
             rotate/Makefile
             sashtest/Makefile
@@ -862,6 +861,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             sockets/Makefile
             splitter/Makefile
             statbar/Makefile
+	    taskbar/Makefile
             text/Makefile
             thread/Makefile
             toolbar/Makefile
