@@ -71,7 +71,7 @@ void wxMenu::Init()
     // create the menu
 	Str255 	label;
 	wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_title , false );
-	m_macMenuId = s_macNextMenuId++; 
+	m_macMenuId = s_macNextMenuId++;
 	m_hMenu = ::NewMenu(m_macMenuId, label);
 
     if ( !m_hMenu )
@@ -172,7 +172,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 			MacInsertMenuItem(MAC_WXHMENU(m_hMenu), "\p-" , pos);
 		}
 	}
-	else 
+	else
 	{
 		wxMenu *pSubMenu = pItem->GetSubMenu() ;
 		if ( pSubMenu != NULL )
@@ -181,12 +181,12 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
    			wxASSERT_MSG( pSubMenu->m_hMenu != NULL , "invalid submenu added");
 		    pSubMenu->m_menuParent = this ;
 			wxMenuItem::MacBuildMenuString( label , NULL , NULL , pItem->GetText() ,false);
-		
-			if (wxMenuBar::MacGetInstalledMenuBar() == m_menuBar) 
+
+			if (wxMenuBar::MacGetInstalledMenuBar() == m_menuBar)
 			{
 				::InsertMenu( MAC_WXHMENU( pSubMenu->m_hMenu ) , -1 ) ;
 			}
-			
+
 			if ( pos == (size_t)-1 )
 			{
 				UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), label, pSubMenu->m_macMenuId);
@@ -228,7 +228,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 							SetMenuItemIconHandle( MAC_WXHMENU(m_hMenu) , CountMenuItems(MAC_WXHMENU(m_hMenu) ) ,
 								kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
 				    }
-						
+
 				}
 			}
 			else
@@ -245,10 +245,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 							SetMenuItemIconHandle( MAC_WXHMENU(m_hMenu) , pos ,
 								kMenuColorIconType , (Handle) info.u.cIconHandle ) ;
 				    }
-						
+
 				}
 			}
-  			if ( pItem->GetId() == idMenuTitle ) 
+  			if ( pItem->GetId() == idMenuTitle )
   			{
   				if ( pos == (size_t)-1 )
 				{
@@ -390,10 +390,10 @@ wxWindow *wxMenu::GetWindow() const
     return NULL;
 }
 
-// helper functions returning the mac menu position for a certain item, note that this is 
+// helper functions returning the mac menu position for a certain item, note that this is
 // mac-wise 1 - based, i.e. the first item has index 1 whereas on MSWin it has pos 0
 
-int wxMenu::MacGetIndexFromId( int id ) 
+int wxMenu::MacGetIndexFromId( int id )
 {
     size_t pos;
     wxMenuItemList::Node *node = GetMenuItems().GetFirst();
@@ -404,14 +404,14 @@ int wxMenu::MacGetIndexFromId( int id )
 
         node = node->GetNext();
     }
-	
+
     if (!node)
 		return 0;
-		
+
 	return pos + 1 ;
 }
 
-int wxMenu::MacGetIndexFromItem( wxMenuItem *pItem ) 
+int wxMenu::MacGetIndexFromItem( wxMenuItem *pItem )
 {
     size_t pos;
     wxMenuItemList::Node *node = GetMenuItems().GetFirst();
@@ -425,23 +425,23 @@ int wxMenu::MacGetIndexFromItem( wxMenuItem *pItem )
 
     if (!node)
 		return 0;
-		
+
 	return pos + 1 ;
 }
 
-void wxMenu::MacEnableMenu( bool bDoEnable ) 
+void wxMenu::MacEnableMenu( bool bDoEnable )
 {
 	if ( bDoEnable )
 		UMAEnableMenuItem(MAC_WXHMENU(m_hMenu) , 0 ) ;
 	else
 		UMADisableMenuItem(MAC_WXHMENU(m_hMenu) , 0 ) ;
-		
+
 	::DrawMenuBar() ;
 }
 
 // Menu Bar
 
-/* 
+/*
 
 Mac Implementation note :
 
@@ -449,11 +449,11 @@ The Mac has only one global menubar, so we attempt to install the currently
 active menubar from a frame, we currently don't take into account mdi-frames
 which would ask for menu-merging
 
-Secondly there is no mac api for changing a menubar that is not the current 
+Secondly there is no mac api for changing a menubar that is not the current
 menubar, so we have to wait for preparing the actual menubar until the
 wxMenubar is to be used
 
-We can in subsequent versions use MacInstallMenuBar to provide some sort of 
+We can in subsequent versions use MacInstallMenuBar to provide some sort of
 auto-merge for MDI in case this will be necessary
 
 */
@@ -540,13 +540,13 @@ void wxMenuBar::RebuildAccelTable()
 
 #endif // wxUSE_ACCEL
 
-void wxMenuBar::MacInstallMenuBar() 
+void wxMenuBar::MacInstallMenuBar()
 {
     if ( s_macInstalledMenuBar == this )
         return ;
-		
+
     wxStAppResource resload ;
-		
+
     Handle menubar = ::GetNewMBar( kwxMacMenuBarResource ) ;
     wxString message ;
     wxCHECK_RET( menubar != NULL, "can't read MBAR resource" );
@@ -564,7 +564,7 @@ void wxMenuBar::MacInstallMenuBar()
         ::AppendResMenu(menu, 'DRVR');
     }
 #endif
- 
+
     // clean-up the help menu before adding new items
 	MenuHandle mh = NULL ;
 	if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) == noErr )
@@ -594,16 +594,16 @@ void wxMenuBar::MacInstallMenuBar()
 			{
 			    continue ;
 			}
-				
-		  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+
+		  	for (pos = 0 , node = menu->GetMenuItems().First(); node; node = node->Next(), pos++)
 	  		{
 	 			item = (wxMenuItem *)node->Data();
 	 			subMenu = item->GetSubMenu() ;
-				if (subMenu)	 		
+				if (subMenu)
 				{
 					// we don't support hierarchical menus in the help menu yet
 				}
-				else		
+				else
 				{
 					if ( item->IsSeparator() )
 					{
@@ -623,7 +623,7 @@ void wxMenuBar::MacInstallMenuBar()
 							label[1] = ' ' ;
 						}
 						if ( item->GetId() == wxApp::s_macAboutMenuItemId )
-						{ 
+						{
 								::SetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , label );
 								UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 );
 								SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , item->GetId() ) ;
@@ -645,12 +645,12 @@ void wxMenuBar::MacInstallMenuBar()
 			wxMenuItem::MacBuildMenuString( label, NULL , NULL , m_titles[i] , false );
 			UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
 				wxArrayPtrVoid submenus ;
-				
-	  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++) 
+
+	  		for (pos = 0, node = menu->GetMenuItems().First(); node; node = node->Next(), pos++)
   			{
 	 			item = (wxMenuItem *)node->Data();
 	 			subMenu = item->GetSubMenu() ;
-				if (subMenu)	 		
+				if (subMenu)
 				{
 				  submenus.Add(subMenu) ;
 				}
@@ -662,14 +662,14 @@ void wxMenuBar::MacInstallMenuBar()
     	        wxNode *subnode;
     	        wxMenuItem *subitem;
     	        int subpos ;
-                for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++) 
+                for ( subpos = 0 , subnode = submenu->GetMenuItems().First(); subnode; subnode = subnode->Next(), subpos++)
 		  		{
   		 			subitem = (wxMenuItem *)subnode->Data();
   		 			wxMenu* itsSubMenu = subitem->GetSubMenu() ;
-  					if (itsSubMenu)	 		
+  					if (itsSubMenu)
   					{
   						submenus.Add(itsSubMenu) ;
-  					}  				
+  					}
   				}
 				::InsertMenu( MAC_WXHMENU(submenu->GetHMenu()) , -1 ) ;
 		    }
@@ -722,7 +722,7 @@ int wxMenuBar::FindMenu(const wxString& title)
     {
         wxString title = wxStripMenuCodes(m_titles[i]);
         if ( menuTitle == title )
-            return i; 
+            return i;
     }
 
     return wxNOT_FOUND;
@@ -737,6 +737,25 @@ int wxMenuBar::FindMenu(const wxString& title)
 // ---------------------------------------------------------------------------
 // wxMenuBar construction
 // ---------------------------------------------------------------------------
+
+// This allows Replace to work with menus that have submenus.  Is it needed
+// anywhere else?  (Like in Insert and Append?)
+static wxMenuBarInsertSubmenus(wxMenu* menu)
+{
+    int pos ;
+    wxMenuItemList::Node *node;
+    wxMenuItem *item;
+    for (pos = 0, node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext(), pos++)
+    {
+        item = (wxMenuItem *)node->GetData();
+        wxMenu* subMenu = item->GetSubMenu() ;
+        if (subMenu)
+        {
+            ::InsertMenu(MAC_WXHMENU( subMenu->GetHMenu()), -1);
+            wxMenuBarInsertSubmenus(subMenu);
+        }
+    }
+}
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
@@ -762,6 +781,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 				{
 					::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , m_menus[pos+1]->MacGetMenuId() ) ;
 				}
+                                wxMenuBarInsertSubmenus(menu);
 			}
 		}
 
@@ -856,7 +876,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
         return FALSE;
 
     m_titles.Add(title);
-    
+
     Str255 label ;
 		wxMenuItem::MacBuildMenuString( label, NULL , NULL , title , false );
 		UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , label ) ;
