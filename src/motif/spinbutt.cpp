@@ -308,10 +308,16 @@ void wxSpinButton::DoMoveWindow(int x, int y, int width, int height)
 void wxSpinButton::DoSetSize(int x, int y, int width, int height,
                              int sizeFlags)
 {
+#ifdef __VMS__
+#pragma message disable codcauunr
+#endif
     if( sizeFlags & wxSIZE_USE_EXISTING && width == -1 )
         width = GetSize().x;
     if( sizeFlags & wxSIZE_USE_EXISTING && height == -1 )
         height = GetSize().y;
+#ifdef __VMS__
+#pragma message enable codcauunr
+#endif
 
     wxControl::DoSetSize(x, y, width, height, 0);
 }
