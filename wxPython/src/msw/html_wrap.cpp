@@ -4141,6 +4141,32 @@ static PyObject *_wrap_HtmlCell_GetDescent(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_HtmlCell_GetMaxTotalWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlCell_GetMaxTotalWidth",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxHtmlCell,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxHtmlCell const *)arg1)->GetMaxTotalWidth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_HtmlCell_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
@@ -10588,6 +10614,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlCell_GetWidth", (PyCFunction) _wrap_HtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetHeight", (PyCFunction) _wrap_HtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetDescent", (PyCFunction) _wrap_HtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetMaxTotalWidth", (PyCFunction) _wrap_HtmlCell_GetMaxTotalWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetId", (PyCFunction) _wrap_HtmlCell_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_SetId", (PyCFunction) _wrap_HtmlCell_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetLink", (PyCFunction) _wrap_HtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS },

@@ -73,6 +73,8 @@ public:
     %pythonAppend wxCheckBox         "self._setOORInfo(self)"
     %pythonAppend wxCheckBox()       ""
 
+    RefDoc(wxCheckBox, ""); // turn it off for the ctors
+    
     DocCtorStr(
         wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
                    const wxPoint& pos = wxDefaultPosition,

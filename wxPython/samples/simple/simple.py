@@ -13,7 +13,8 @@ class MyFrame(wx.Frame):
     and has a simple menu.
     """
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, -1, title, size=(350, 200))
+        wx.Frame.__init__(self, parent, -1, title,
+                          pos=(150, 150), size=(350, 200))
 
         # Create the menubar
         menuBar = wx.MenuBar()
@@ -70,8 +71,13 @@ class MyFrame(wx.Frame):
         print "Having fun yet?"
 
 
-app = wx.PySimpleApp()
-frame = MyFrame(None, "Simple wxPython App")
-frame.Show(True)
+class MyApp(wx.App):
+    def OnInit(self):
+        frame = MyFrame(None, "Simple wxPython App")
+        frame.Show(True)
+        self.SetTopWindow(frame)
+        return True
+        
+app = MyApp(True)
 app.MainLoop()
 

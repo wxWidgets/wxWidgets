@@ -23,12 +23,12 @@ Introduction
 
 This is a guide to the wxPython GUI toolkit, written **by** a Python
 programmer **for** his fellow Python programmers.  It began as a
-simple translation of the wxWindows documentation (which is written
+simple translation of the wxWidgets documentation (which is written
 for C++ programmers), and evolved from there.  And while there's
 nothing wrong with C++...
 
 Okay, you got me there.  I hate C++.  That's why I use Python.  If you
-like C++, go read the wxWindows documentation.  If you'd rather read a
+like C++, go read the wxWidgets documentation.  If you'd rather read a
 guide that's written with Python programmers in mind, keep reading
 this one.  If you like it, feel free to send me freshly roasted coffee
 beans, dark chocolate, and large denomination currency.  Better yet,
@@ -43,9 +43,9 @@ wxPython is a GUI toolkit for the Python programming language.  It
 allows Python programmers to create programs with a robust, highly
 functional graphical user interface, simply and easily.  It is
 implemented as a Python extension module (native code) that wraps the
-popular wxWindows cross platform GUI library, which is written in C++.
+popular wxWidgets cross platform GUI library, which is written in C++.
 
-Like Python and wxWindows, wxPython is Open Source, which means that
+Like Python and wxWidgets, wxPython is Open Source, which means that
 it is free for anyone to use and the source code is available for
 anyone to look at and modify.  And anyone can contribute fixes or
 enhnacments to the project.
@@ -86,15 +86,15 @@ Mac OS X
 * At least ?? MB of disk space.
 
 
-What is wxWindows?
+What is wxWidgets?
 ==================
 
-wxWindows is a C++ framework providing GUI (Graphical User Interface)
+wxWidgets is a C++ framework providing GUI (Graphical User Interface)
 and other facilities on more than one platform.  Version 2 currently
 supports all desktop versions of MS Windows, Unix with GTK+, Unix with
 Motif, and MacOS.  An OS/2 port is in progress.
 
-wxWindows was originally developed at the Artificial Intelligence
+wxWidgets was originally developed at the Artificial Intelligence
 Applications Institute, University of Edinburgh, for internal use, and
 was first made publicly available in 1992.  Version 2 is a vastly
 improved version written and maintained by Julian Smart, Robert
@@ -108,7 +108,7 @@ variants, unless otherwise stated.  All trademarks are acknowledged.
 Why another cross-platform development tool?
 ============================================
 
-wxWindows was developed to provide a cheap and flexible way to
+wxWidgets was developed to provide a cheap and flexible way to
 maximize investment in GUI application development.  While a number of
 commercial class libraries already existed for cross-platform
 development, none met all of the following criteria:
@@ -118,14 +118,14 @@ development, none met all of the following criteria:
 * simplicity of programming
 * support for a wide range of compilers
 
-Since wxWindows was started, several other free or almost-free GUI
+Since wxWidgets was started, several other free or almost-free GUI
 frameworks have emerged.  However, none has the range of features,
 flexibility, documentation and the well-established development team
-that wxWindows has.
+that wxWidgets has.
 
-As open source software, wxWindows has benefited from comments, ideas,
+As open source software, wxWidgets has benefited from comments, ideas,
 bug fixes, enhancements and the sheer enthusiasm of users.  This gives
-wxWindows a certain advantage over its commercial competitors (and
+wxWidgets a certain advantage over its commercial competitors (and
 over free libraries without an independent development team), plus a
 robustness against the transience of one individual or company.  This
 openness and availability of source code is especially important when
@@ -141,17 +141,17 @@ The importance of using a platform-independent class library cannot be
 overstated, since GUI application development is very time-consuming,
 and sustained popularity of particular GUIs cannot be guaranteed.
 Code can very quickly become obsolete if it addresses the wrong
-platform or audience.  wxWindows helps to insulate the programmer from
-these winds of change.  Although wxWindows may not be suitable for
+platform or audience.  wxWidgets helps to insulate the programmer from
+these winds of change.  Although wxWidgets may not be suitable for
 every application (such as an OLE-intensive program), it provides
 access to most of the functionality a GUI program normally requires,
 plus many extras such as network programming, PostScript output, and
 HTML rendering; and it can of course be extended as needs dictate.  As
 a bonus, it provides a far cleaner and easier programming interface
 than the native APIs.  Programmers may find it worthwhile to use
-wxWindows even if they are developing on only one platform.
+wxWidgets even if they are developing on only one platform.
 
-It is impossible to sum up the functionality of wxWindows in a few
+It is impossible to sum up the functionality of wxWidgets in a few
 paragraphs, but here are some of the benefits:
 
 * Low cost (free, in fact!) 
@@ -232,10 +232,10 @@ Help.
 GUI applications aren't all graphical wizardry.  You'll also need
 lists and hash tables.  But since you're working with Python, you
 should use the ones Python provides (list, tuple, dict), rather than
-the wxWindows versions.  Same goes for the database related classes.
+the wxWidgets versions.  Same goes for the database related classes.
 The basic rule of thumb is this: If you can do it directly in Python,
 you probably should.  If there is a reason not to use a Python data
-type, wxPython will provide a wrapper for the wxWindows class.
+type, wxPython will provide a wrapper for the wxWidgets class.
 
 You will undoubtedly need some platform-independent file functions,
 and you may find it handy to maintain and search a list of paths using
@@ -248,7 +248,7 @@ See also Classes by Category for a list of classes.
 Utilities and libraries supplied with wxPython
 ==============================================
 
-In addition to the core wxWindows library, a number of further
+In addition to the core wxWidgets library, a number of further
 libraries and utilities are supplied with each distribution.
 
 [Need to list these.]
@@ -265,14 +265,14 @@ Creating and deleting wxPython objects
    so you don't need to delete these descendants explicitly.
 
 .. When deleting a frame or dialog, use Destroy rather than delete so
-   that the wxWindows delayed deletion can take effect. This waits
+   that the wxWidgets delayed deletion can take effect. This waits
    until idle time (when all messages have been processed) to actually
    delete the window, to avoid problems associated with the GUI
    sending events to deleted windows.
 
 .. If you decide to allocate a C++ array of objects (such as wxBitmap)
-   that may be cleaned up by wxWindows, make sure you delete the array
-   explicitly before wxWindows has a chance to do so on exit, since
+   that may be cleaned up by wxWidgets, make sure you delete the array
+   explicitly before wxWidgets has a chance to do so on exit, since
    calling delete on array members will cause memory problems.
 
 .. wxColour can be created statically: it is not automatically cleaned
@@ -1002,7 +1002,7 @@ Submitting changes to the source document
 
 Some items in the source text file look like this::
 
-    .. This is text from the wxWindows documentation that needs to be
+    .. This is text from the wxWidgets documentation that needs to be
        translated into something appropriate for the wxPython version.
        The two dots followed by uniformly indented text turns this
        paragraph into a reStructuredText comment, so it doesn't appear
@@ -1033,7 +1033,7 @@ name):
 License
 =======
 
-This document began as a translation of the wxWindows documentation.
+This document began as a translation of the wxWidgets documentation.
 As such, it adheres to the same license, which is provided here:
 
 .. include:: ../licence/licendoc.txt

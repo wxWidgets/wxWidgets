@@ -66,6 +66,8 @@ class wxCursor : public wxGDIObject
 {
 public:
     
+    RefDoc(wxCursor, ""); // turn it off for the ctors
+    
     %extend {
         DocStr(wxCursor,
                "Construct a Cursor from a file.  Specify the type of file using\n"

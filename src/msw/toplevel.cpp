@@ -139,6 +139,9 @@ void wxTopLevelWindowMSW::Init()
     m_iconized =
     m_maximizeOnShow = FALSE;
 
+    // unlike (almost?) all other windows, frames are created hidden
+    m_isShown = FALSE;
+
     // Data to save/restore when calling ShowFullScreen
     m_fsStyle = 0;
     m_fsOldWindowStyle = 0;
