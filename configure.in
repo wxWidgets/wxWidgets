@@ -1773,6 +1773,8 @@ if test "$wxUSE_MOTIF" = 1; then
                 version = XpmLibraryVersion();
             ],
             [
+	        XPM_LINK="-lXpm "
+        	AC_DEFINE(wxHAVE_LIB_XPM)
                 AC_MSG_RESULT(found in default search path)
                 COMPILED_X_PROGRAM=0
             ],
@@ -2799,6 +2801,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
 
             AC_TRY_COMPILE(
                 [
+                    #include <sys/types.h>
                     #include <sys/socket.h>
                 ],
                 [
@@ -2808,6 +2811,7 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                 wx_cv_type_getsockname3=socklen_t,
                 AC_TRY_COMPILE(
                     [
+                        #include <sys/types.h>
                         #include <sys/socket.h>
                     ],
                     [
@@ -2817,13 +2821,14 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
                     wx_cv_type_getsockname3=size_t,
                     AC_TRY_COMPILE(
                         [
+                            #include <sys/types.h>
                             #include <sys/socket.h>
                         ],
                         [
                             int len;
                             getsockname(0, 0, &len);
                         ],
-                        wx_cv_type_getsockname3=int
+                        wx_cv_type_getsockname3=int,
                         wx_cv_type_getsockname3=unknown
                     )
                 )
