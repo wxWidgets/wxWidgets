@@ -24,10 +24,26 @@
 
 
 // --------------------------------------------------------------------------
-// constants
+// Constants
 // --------------------------------------------------------------------------
 
-// disposal method
+// Error codes:
+//  Note that the error code wxGIF_TRUNCATED means that the image itself
+//  is most probably OK, but the decoder didn't reach the end of the data
+//  stream; this means that if it was not reading directly from file,
+//  the stream will not be correctly positioned. the
+//
+enum
+{
+    wxGIF_OK = 0,                   /* everything was OK */
+    wxGIF_INVFORMAT,                /* error in gif header */
+    wxGIF_MEMERR,                   /* error allocating memory */
+    wxGIF_TRUNCATED                 /* file appears to be truncated */
+};
+
+// Disposal method
+//  Experimental; subject to change.
+//
 enum
 {
     wxGIF_D_UNSPECIFIED = -1,       /* not specified */
@@ -36,13 +52,6 @@ enum
     wxGIF_D_TOPREVIOUS = 2          /* restore to previous image */
 };
 
-// error codes
-enum
-{
-    wxGIF_OK = 0,                   /* everything was OK */
-    wxGIF_INVFORMAT = 1,            /* error in gif header */
-    wxGIF_MEMERR = 2                /* error allocating memory */
-};
 
 #define MAX_BLOCK_SIZE 256          /* max. block size */
 

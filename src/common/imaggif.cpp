@@ -45,20 +45,33 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     bool ok;
 
     decod = new wxGIFDecoder(&stream, TRUE);
+    error = decod->ReadGIF();
 
-    if ((error = decod->ReadGIF()) != wxGIF_OK)
+    if ((error != wxGIF_OK) && (error != wxGIF_TRUNCATED))
     {
         if (verbose)
         {
             switch (error)
             {
-                case wxGIF_INVFORMAT: wxLogError(_("wxGIFHandler: error in GIF image format")); break;
-                case wxGIF_MEMERR:    wxLogError(_("wxGIFHandler: couldn't allocate enough memory")); break;
-                default:              wxLogError(_("wxGIFHandler: unknown error !!!"));
+                case wxGIF_INVFORMAT:
+                    wxLogError(_("wxGIFHandler: error in GIF image format."));
+                    break;
+                case wxGIF_MEMERR:
+                    wxLogError(_("wxGIFHandler: not enough memory."));
+                    break;
+                default:
+                    wxLogError(_("wxGIFHandler: unknown error!!!"));
+                    break;
             }
         }
         delete decod;
         return FALSE;
+    }
+
+    if ((error == wxGIF_TRUNCATED) && verbose)
+    {
+        wxLogWarning(_("wxGIFHandler: data stream seems to be truncated."));
+        /* go on; image data is OK */
     }
 
     image->Destroy();

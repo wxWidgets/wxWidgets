@@ -461,7 +461,7 @@ bool wxGIFDecoder::CanRead()
 //  animated GIF support is enabled. Can read GIFs with any bit
 //  size (color depth), but the output images are always expanded
 //  to 8 bits per pixel. Also, the image palettes always contain
-//  256 colors, although some of them may be unused. Returns GIF_OK
+//  256 colors, although some of them may be unused. Returns wxGIF_OK
 //  (== 0) on success, or an error code if something fails (see
 //  header file for details)
 //
@@ -479,7 +479,7 @@ int wxGIFDecoder::ReadGIF()
     if (!CanRead())
         return wxGIF_INVFORMAT;
 
-    /* check for and animated GIF support (ver. >= 89a) */
+    /* check for animated GIF support (ver. >= 89a) */
     m_f->Read(buf, 6);
 
     if (memcmp(buf + 3, "89a", 3) < 0)
@@ -509,20 +509,18 @@ int wxGIFDecoder::ReadGIF()
     pprev = NULL;
     pimg  = NULL;
 
-#if defined(__VISAGECPP__)
-// VA just can't stand while(1)
-    bool bOs2var = TRUE;
-    while(bOs2var)
-#else
-    while (1)
-#endif
+    bool done = FALSE;
+
+    while(!done)
     {
         type = (unsigned char)m_f->GetC();
 
         /* end of data? */
         if (type == 0x3B)
-            break;
-
+        {
+            done = TRUE;
+        }
+        else
         /* extension block? */
         if (type == 0x21)
         {
@@ -546,18 +544,11 @@ int wxGIFDecoder::ReadGIF()
             {
                 while ((i = (unsigned char)m_f->GetC()) != 0)
                 {
-                    /* This line should not be neccessary!
-                     * Some images are not loaded correctly
-                     * without it. A bug in wxStream?
-                     * Yes. Fixed now.
-                     */
-                    // m_f->SeekI(m_f->TellI(), wxFromStart);
-
                     m_f->SeekI(i, wxFromCurrent);
                 }
             }
         }
-
+        else
         /* image descriptor block? */
         if (type == 0x2C)
         {
@@ -611,21 +602,64 @@ int wxGIFDecoder::ReadGIF()
 
             /* decode image */
             dgif(pimg, interl, bits);
-
             m_nimages++;
-        }
 
-        /* if we have one image and no animated GIF support, exit */
-        if (m_nimages == 1 && !m_anim)
-            break;
+            /* if this is not an animated GIF, exit after first image */
+            if (!m_anim)
+                done = TRUE;
+        }
     }
 
-    /* finish successfully :-) */
+    /* setup image pointers */
     if (m_nimages != 0)
     {
         m_image = 1;
         m_plast = pimg;
         m_pimage = m_pfirst;
+    }
+
+    /* try to read to the end of the stream */
+    while (type != 0x3B)
+    {
+        type = (unsigned char)m_f->GetC();
+
+        if (type == 0x21)
+        {
+            /* extension type */
+            (void) m_f->GetC();
+
+            /* skip all data */
+            while ((i = (unsigned char)m_f->GetC()) != 0)
+            {
+                m_f->SeekI(i, wxFromCurrent);
+            }
+        }
+        else if (type == 0x2C)
+        {
+            /* image descriptor block */
+            m_f->Read(buf, 9);
+
+            /* local color map */
+            if ((buf[8] & 0x80) == 0x80)
+            {
+                ncolors = 2 << (buf[8] & 0x07);
+                m_f->Read(pal, 3 * ncolors);
+            }
+
+            /* initial code size */
+            (void) m_f->GetC();
+
+            /* skip all data */
+            while ((i = (unsigned char)m_f->GetC()) != 0)
+            {
+                m_f->SeekI(i, wxFromCurrent);
+            }
+        }
+        else if (type != 0x3B)
+        {
+            /* images are OK, but couldn't read to the end of the stream */
+            return wxGIF_TRUNCATED;
+        }
     }
 
     return wxGIF_OK;
