@@ -3849,15 +3849,8 @@ wxGrid::wxGrid( wxWindow *parent,
     m_colMinWidths(GRID_HASH_SIZE),
     m_rowMinHeights(GRID_HASH_SIZE)
 {
-    // in order to make sure that a size event is not
-    // trigerred in a unfinished state
-    m_cornerLabelWin = NULL ;
-    m_rowLabelWin = NULL ;
-    m_colLabelWin = NULL ;
-    m_gridWin = NULL ;
-
-    SetBestFittingSize(size);
     Create();
+    SetBestFittingSize(size);
 }
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -3871,8 +3864,8 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     m_colMinWidths = wxLongToLongHashMap(GRID_HASH_SIZE) ;
     m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE) ;
 
-    SetBestFittingSize(size);
     Create() ;
+    SetBestFittingSize(size);
 
     return true;
 }
