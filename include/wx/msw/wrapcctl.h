@@ -50,7 +50,7 @@ inline void wxSetCCUnicodeFormat(HWND hwnd)
     ::SendMessage(hwnd, CCM_SETUNICODEFORMAT, wxUSE_UNICODE, 0);
 #else // !__WXWINCE__
     // here it should be already in Unicode anyhow
-    hwnd;
+    wxUnusedVar(hwnd);
 #endif // __WXWINCE__/!__WXWINCE__
 }
 
