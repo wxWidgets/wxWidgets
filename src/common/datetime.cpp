@@ -247,9 +247,9 @@ static int GetTimeZone()
     {
         // just call localtime() instead of figuring out whether this system
         // supports tzset(), _tzset() or something else
-        time_t t;
-        (void)localtime(&t);
+        time_t                 t = 0;
 
+        (void)localtime(&t);
         s_timezoneSet = TRUE;
     }
 
