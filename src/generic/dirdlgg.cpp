@@ -250,7 +250,7 @@ void wxGenericDirDialog::OnShowHidden( wxCommandEvent& event )
     if (!m_dirCtrl)
         return;
 
-    m_dirCtrl->ShowHidden( event.GetInt() );
+    m_dirCtrl->ShowHidden( event.GetInt() != 0 );
 }
 
 void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )

@@ -48,7 +48,7 @@ dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=3
-WX_RELEASE_NUMBER=3
+WX_RELEASE_NUMBER=4
 
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
@@ -187,15 +187,15 @@ case "${host}" in
   *-*-openbsd*)
     USE_BSD=1
     USE_OPENBSD=1
-    AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__OPENBSD__)
+    AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-netbsd*)
     USE_BSD=1
     USE_NETBSD=1
-    AC_DEFINE(__FREEBSD__)
     AC_DEFINE(__NETBSD__)
+    AC_DEFINE(__BSD__)
     DEFAULT_DEFAULT_wxUSE_GTK=1
   ;;
   *-*-osf* )
@@ -224,8 +224,11 @@ case "${host}" in
     USE_AIX=1
     USE_SYSV=1
     USE_SVR4=1
-    dnl Irvin Probst <irvin.probst@fr.thalesgroup.com> reports that the shared
-    dnl libraries under AIX have the same suffix as the normal ones
+    dnl quoting from http://www-1.ibm.com/servers/esdd/articles/gnu.html:
+    dnl
+    dnl     Both archive libraries and shared libraries on AIX have an .a
+    dnl     extension. This will explain why you can't link with an .so and
+    dnl     why it works with the name changed to .a. 
     SO_SUFFIX=a
     AC_DEFINE(__AIX__)
     AC_DEFINE(__SYSV__)
@@ -552,8 +555,8 @@ else
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
 
-  DEFAULT_wxUSE_PROLOGIO=yes
-  DEFAULT_wxUSE_RESOURCES=yes
+  DEFAULT_wxUSE_PROLOGIO=no
+  DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
@@ -1128,27 +1131,6 @@ else
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl When we are using gcc on OS/2, we want to be either using resources (PM)
-dnl or a more complete POSIX emulation for Motif/GTK+/X11
-dnl ---------------------------------------------------------------------------
-dnl (OS/2-only piece)
-case "${host}" in
-  *-pc-os2_emx | *-pc-os2-emx )
-      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
-      LIBS="$LIBS -lstdcpp"
-      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
-          dnl More complete Unix emulation for unix-like ports
-          dnl by linking in POSIX/2's cExt (if available).
-          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
-      else
-          dnl Include resources for the "native" port (wxPM).
-          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
-      fi
-  ;;
-esac
-dnl (end of OS/2-only piece)
-
-dnl ---------------------------------------------------------------------------
 dnl When we are using Cygwin with Motif/GTK+, we want it to appear like
 dnl 'just' a POSIX platform, so the Win32 API must not be available
 dnl ---------------------------------------------------------------------------
@@ -1223,7 +1205,7 @@ dnl   defines GCC empty if not using gcc
 dnl   defines CFLAGS
 dnl
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
-dnl default CFLAGS (something like "-g -O2") - we don't need this as add
+dnl default CFLAGS (something like "-g -O2") -- we don't need this as we add
 dnl -g and -O flags ourselves below
 CFLAGS=${CFLAGS:=}
 AC_PROG_CC
@@ -1357,6 +1339,27 @@ AC_PROG_LEX
 dnl needed for making link to setup.h
 AC_PROG_LN_S
 
+dnl ---------------------------------------------------------------------------
+dnl When we are using gcc on OS/2, we want to be either using resources (PM)
+dnl or a more complete POSIX emulation for Motif/GTK+/X11
+dnl ---------------------------------------------------------------------------
+dnl (OS/2-only piece)
+case "${host}" in
+  *-pc-os2_emx | *-pc-os2-emx )
+      dnl Explicitly link -lstdcpp, since we are using "gcc" not "g++"/"c++".
+      LIBS="$LIBS -lstdcpp"
+      if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
+          dnl More complete Unix emulation for unix-like ports
+          dnl by linking in POSIX/2's cExt (if available).
+          AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
+      else
+          dnl Include resources for the "native" port (wxPM).
+          RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
+      fi
+  ;;
+esac
+dnl (end of OS/2-only piece)
+
 dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
@@ -1441,6 +1444,10 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
 [
     AC_TRY_RUN(
         [
+            /* DJGPP only has fake wchar_t: */
+            #ifdef __DJGPP__
+            #  error "fake wchar_t"
+            #endif
             #ifdef HAVE_WCHAR_H
             #  ifdef __CYGWIN__
             #    include <stddef.h>
@@ -1461,7 +1468,16 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
         ],
         wx_cv_sizeof_wchar_t=`cat conftestval`,
         wx_cv_sizeof_wchar_t=0,
-        wx_cv_sizeof_wchar_t=4
+        [
+            case "${host}" in
+              *-pc-msdosdjgpp )
+                wx_cv_sizeof_wchar_t=0
+                ;;
+              * )
+                wx_cv_sizeof_wchar_t=4
+                ;;
+            esac
+        ]
     )
 ])
 
@@ -1501,13 +1517,9 @@ dnl Define search path for includes and libraries: all headers and libs will be
 dnl looked for in all directories of this path
 dnl ---------------------------------------------------------------------------
 
-dnl notice that /usr/include should not be in this list, otherwise it breaks
-dnl compilation on Solaris/gcc because standard headers are included instead
-dnl of the gcc ones.  (recorrection.. sadly much depends on this since it was
-dnl first created and then 'corrected'..  removing /usr/include means system
-dnl GL and Xpm libs will dnl not be found on linux and probably other platforms
-dnl now.  We need to correct that first before removing /usr/include again.
-dnl see the various (ab)uses of WX_PATH_FIND_LIBRARIES below )
+dnl Notice that /usr/include should *not* be in this list, otherwise it breaks
+dnl compilation on Solaris/AIX/... with gcc because standard (non ANSI C)
+dnl headers are included instead of the "fixed" (ANSI-fied) gcc ones.
 dnl
 dnl Also try to put all directories which may contain X11R6 before those which
 dnl may contain X11R5/4 - we want to use R6 on machines which have both!
@@ -1574,8 +1586,7 @@ SEARCH_INCLUDE="\
     /usr/local/x11r5/include  \
     /usr/lpp/Xamples/include  \
                               \
-    /usr/openwin/share/include \
-    /usr/include"
+    /usr/openwin/share/include"
 
 SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
 
@@ -1747,7 +1758,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                 fi
             else
                 dnl we are using the system library
-                wxUSE_LIBPNG=yes
+                wxUSE_LIBPNG=sys
             fi
         fi
     fi
@@ -1824,15 +1835,24 @@ dnl ------------------------------------------------------------------------
 
 TIFF_INCLUDE=
 TIFF_LINK=
+TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
     AC_DEFINE(wxUSE_LIBTIFF)
 
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
+        dnl libtiff may depend on libjpeg and libz so use them in the test
+        dnl below or it would fail
+        if test "$wxUSE_LIBJPEG" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+        fi
+        if test "$wxUSE_ZLIB" = "sys"; then
+            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+        fi
         AC_CHECK_HEADER(tiffio.h,
                         AC_CHECK_LIB(tiff, TIFFError,
                                      TIFF_LINK=" -ltiff",
                                      ,
-                                     -lm)
+                                     $TIFF_PREREQ_LINKS)
                        )
 
         if test "x$TIFF_LINK" = "x" ; then
@@ -1858,6 +1878,7 @@ dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
 AFMINSTALL=
+WIN32INSTALL=
 
 TOOLKIT=
 TOOLKIT_INCLUDE=
@@ -1913,6 +1934,9 @@ if test "$USE_WIN32" = 1 ; then
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
+
+    dnl install Win32-specific files in "make install"
+    WIN32INSTALL=win32install
 fi
 
 if test "$USE_DARWIN" = 1; then
@@ -1965,17 +1989,17 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
+                dnl note that if we fail to find GTK2 we abort and don't fall
+                dnl back to GTK1.x
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
-                fi
-
-                if test -z "$wx_cv_lib_gtk"; then
+                else
                     AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
-                fi
 
-                if test -z "$wx_cv_lib_gtk"; then
-                    AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                    if test -z "$wx_cv_lib_gtk"; then
+                        AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                    fi
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
@@ -1998,6 +2022,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         case "$wx_cv_lib_gtk" in
             2.0)    WXGTK20=1
+                    TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
                     WXGTK12=1
@@ -2026,6 +2051,17 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                     ]
                 )
             fi
+        else
+            if test "$wxUSE_UNICODE" = "yes"; then
+                AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
+                wxUSE_UNICODE=no
+            fi
+        fi
+
+        dnl we need poll() in src/gtk/app.cpp (we know that Darwin doesn't
+        dnl have it but we do the check for the others)
+        if test "$USE_DARWIN" != 1; then
+            AC_CHECK_FUNCS(poll)
         fi
 
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
@@ -2052,7 +2088,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         dnl FIXME_MGL - test for MGL variants for freebsd etc.
         case "${host}" in
             *-*-linux* )
-              mgl_os=linux/gcc/glibc
+              mgl_os="linux/gcc/glibc*"
               ;;
             *-pc-msdosdjgpp )
               mgl_os=dos32/dj2
@@ -2171,6 +2207,37 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             )
         fi
 
+        if test "$wxUSE_UNICODE" = "yes"; then
+                PKG_CHECK_MODULES(PANGOX, pangox,
+                    [
+                        CXXFLAGS="$CXXFLAGS $PANGOX_CFLAGS"
+                        LIBS="$LIBS $PANGOX_LIBS"
+                    ],
+                    [
+                        AC_MSG_ERROR([pangox library not found, library cannot be compiled in Unicode mode])
+                    ]
+                )
+                PKG_CHECK_MODULES(PANGOFT2, pangoft2,
+                    [
+                        CXXFLAGS="$CXXFLAGS $PANGOFT2_CFLAGS"
+                        LIBS="$LIBS $PANGOFT2_LIBS"
+                    ],
+                    [
+                        AC_MSG_WARN([pangoft2 library not found, library will be compiled without printing support])
+                        wxUSE_PRINTING_ARCHITECTURE="no"
+                    ]
+                )
+                PKG_CHECK_MODULES(PANGOXFT, pangoxft,
+                    [
+                        CXXFLAGS="$CXXFLAGS $PANGOXFT_CFLAGS"
+                        LIBS="$LIBS $PANGOXFT_LIBS"
+                    ],
+                    [
+                        AC_MSG_WARN([pangoxft library not found, library will be compiled without anti-aliasing support])
+                    ]
+                )
+        fi
+
         wxUSE_UNIVERSAL="yes"
 
         if test "$wxUSE_NANOX" = "yes"; then
@@ -2233,8 +2300,10 @@ equivalent variable and GTK+ is version 1.2.3 or above.
           AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
         fi
 
-        GUI_TK_LIBRARY="$X_LIBS"
-        TOOLKIT_INCLUDE="$X_CFLAGS"
+        dnl for some reason AC_PATH_XTRA seems to add -INONE and -LNONE to
+        dnl X_LIBS and X_CFLAGS respectively -- what for??
+        GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//'`
+        TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
         AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
@@ -2401,6 +2470,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     if test "$wxUSE_PM" = 1; then
         TOOLKIT=PM
         GUIDIST=GTK_DIST
+        AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
+	wxUSE_PROLOGIO="yes"
+	wxUSE_RESOURCES="yes"
+        AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
+	wxUSE_THREADS="no"
     fi
 
     dnl the name of the directory where the files for this toolkit live
@@ -2577,8 +2651,10 @@ if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
 fi
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
-TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
+WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
+TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
 
 if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
@@ -2588,6 +2664,7 @@ fi
 dnl library link name
 WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
 WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
+WX_LIBRARY_BASENAME="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -2674,6 +2751,10 @@ if test "$wxUSE_SHARED" = "yes"; then
         PIC_FLAG="-fPIC"
     fi
 
+
+    dnl use versioned symbols if available on the platform
+    WX_VERSIONED_SYMBOLS([\$(top_builddir)/version-script])
+
     dnl the command to use for creating the shared library
     SHARED_LD="${CXX} -shared -o"
 
@@ -2757,16 +2838,18 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-aix* )
-        dnl the abs path below used to be hardcoded here so I guess it must
-        dnl be some sort of standard location under AIX?
-        AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
-                      makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
+        dnl default settings are ok for gcc
+        if test "$GCC" != "yes"; then
+            dnl the abs path below used to be hardcoded here so I guess it must
+            dnl be some sort of standard location under AIX?
+            AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
+                          makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
 
-        SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+            SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+        fi
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
-
         WX_LIBRARY_IMPORTLIB="${WX_LIBRARY_NAME_SHARED}.a"
 
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_IMPORTLIB} -o"
@@ -2789,9 +2872,15 @@ if test "$wxUSE_SHARED" = "yes"; then
         SHARED_LD="${LD} -shared -o"
       ;;
 
+      *-*-irix* )
+        dnl default settings are ok for gcc
+        if test "$GCC" != "yes"; then
+            PIC_FLAG="-KPIC"
+        fi
+      ;;
+
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
       *-*-sunos4* | \
-      *-*-irix5* | *-*-irix6* | \
       *-*-osf* | \
       *-*-dgux5* | \
       *-*-sysv5* )
@@ -2854,15 +2943,10 @@ if test "$wxUSE_MAC" = 1; then
     AC_CHECK_PROG(RESCOMP, Rez, Rez, /Developer/Tools/Rez)
     AC_CHECK_PROG(DEREZ, DeRez, DeRez, /Developer/Tools/DeRez)
     MACOSX_BUNDLE="bundle"
-    if test "$wxUSE_SHARED" = "yes"; then
-        dnl resources are bundled with shared library, not with applications
-        LIBWXMACRESCOMP="\$(RESCOMP) -t APPL Carbon.r -o \$(BIN_PROGRAM)"
-        LIBWXMACRESWXCONFIG="${RESCOMP} -t APPL Carbon.r -o"
-    else
-        dnl resources are bundled with applications, not with static library
-        LIBWXMACRESCOMP="\$(RESCOMP) -t APPL Carbon.r ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
-        LIBWXMACRESWXCONFIG="${RESCOMP} -t APPL Carbon.r \${prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
-    fi
+    dnl resources are bundled both with shared library and applications
+    dnl since the carb resource *must* be included in the application
+    LIBWXMACRESCOMP="\$(RESCOMP) -t APPL Carbon.r ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
+    LIBWXMACRESWXCONFIG="${RESCOMP} -t APPL Carbon.r \${prefix}/lib/${WX_RESOURCES_MACOSX_ASCII} -o"
 else
     if test "$wxUSE_PM" = 1; then
         LIBWXMACRESCOMP="emxbind -ep \$(BIN_PROGRAM)"
@@ -3364,7 +3448,17 @@ if test "$TOOLKIT" != "MSW"; then
           AC_MSG_CHECKING([if more special flags are required for pthreads])
           flag=no
           case "${host}" in
-            *-aix* | *-freebsd*)
+            *-aix*)
+                dnl again quoting from
+                dnl http://www-1.ibm.com/servers/esdd/articles/gnu.html:
+                dnl
+                dnl     When compiling and linking with -pthread, the library
+                dnl     search path should include -L/usr/lib/threads at the
+                dnl     beginning of the path.
+                LDFLAGS="-L/usr/lib/threads $LDFLAGS"
+                flag="-D_THREAD_SAFE"
+                ;;
+            *-freebsd*)
                 flag="-D_THREAD_SAFE"
                 ;;
             *-hp-hpux* )
@@ -3626,10 +3720,18 @@ if test "$GCC" = "yes" ; then
     dnl for each subroutine by default -- using the switch below only creates
     dnl one entry per file instead at the price of minor performance penalty
     dnl
+    dnl As of wx2.4 a bug in the hppa gcc compiler causes a similar problem
+    dnl without -ffunction-sections.  No idea how long we'll need to maintain
+    dnl this, or even the extent of gcc/wx version combinations affected, but
+    dnl also as above, this 'fix' does not come without side effects.
+    dnl
     dnl TODO: test for the gcc version here (how?)
     case "${host}" in
       powerpc*-*-aix* )
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -mminimal-toc"
+        ;;
+      *-hppa* )
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -ffunction-sections"
         ;;
     esac
 fi
@@ -4290,14 +4392,18 @@ fi
 
 if test "$wxUSE_PROLOGIO" = "yes" ; then
     AC_DEFINE(wxUSE_PROLOGIO)
+    ALL_OBJECTS="$ALL_OBJECTS parser.o"
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
     if test "$wxUSE_NANOX" = "yes"; then
         AC_MSG_WARN([Cannot use resource database functions in NanoX])
-	else
-		AC_DEFINE(wxUSE_RESOURCES)
-		SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    else
+        AC_DEFINE(wxUSE_RESOURCES)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    fi
+    if test "$wxUSE_PROLOGIO" != "yes" ; then
+        ALL_OBJECTS="$ALL_OBJECTS parser.o"
     fi
 fi
 
@@ -4970,7 +5076,48 @@ dnl FIXME: should this be covered by the conditional above
 dnl given the -lm comment there?  Or should that comment (and
 dnl this one) be removed..   [ 7 Nov 2001 ]
 
-LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK -lm $LIBS"
+LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
+
+dnl Only add the -lm library if floating point functions cannot be used
+dnl without it.  This check is important on cygwin because of the bizarre
+dnl way that they have organized functions into libraries.  On cygwin, both
+dnl libc.a and libm.a are symbolic links to a single lib libcygwin.a.  This
+dnl means that
+dnl   1) linking with -lm is not necessary, and
+dnl   2) linking with -lm is dangerous if the order of libraries is wrong
+dnl In particular, if you compile any program with -mno-cygwin and link with
+dnl -lm, it will crash instantly when it is run.  This happens because the
+dnl linker incorrectly links the Cygwin libm.a (==libcygwin.a), which replaces
+dnl the ___main function instead of allowing it to be defined by
+dnl /usr/lib/mingw/libmingw32.a as it should be.
+dnl
+dnl On MacOS X, this test will find that -lm is unnecessary and leave it out.
+dnl
+dnl Just check a few floating point functions. If they are all found without
+dnl -lm, then we must not need -lm.
+have_cos=0
+have_floor=0
+AC_CHECK_FUNCS(cos, have_cos=1)
+AC_CHECK_FUNCS(floor, have_floor=1)
+AC_MSG_CHECKING(if floating point functions link without -lm)
+if test "$have_cos" = 1 -a "$have_floor" = 1; then
+    AC_MSG_RESULT(yes)
+else
+    AC_MSG_RESULT(no)
+    LIBS="$LIBS -lm"
+    # use different functions to avoid configure caching
+    have_sin=0
+    have_ceil=0
+    AC_CHECK_FUNCS(sin, have_sin=1)
+    AC_CHECK_FUNCS(ceil, have_ceil=1)
+    AC_MSG_CHECKING(if floating point functions link with -lm)
+    if test "$have_sin" = 1 -a "$have_ceil" = 1; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+        # not sure we should warn the user, crash, etc.
+    fi
+fi
 
 if test "$wxUSE_GUI" = "yes"; then
 
@@ -5056,6 +5203,7 @@ AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
 AC_SUBST(WX_LIBRARY_NAME_STATIC)
 AC_SUBST(WX_LIBRARY_NAME_SHARED)
+AC_SUBST(WX_LIBRARY_BASENAME)
 AC_SUBST(WX_LIBRARY_IMPORTLIB)
 AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_LIBRARY_LINK1)
@@ -5091,6 +5239,7 @@ AC_SUBST(WXDEBUG_DEFINE)
 dnl toolkit options
 AC_SUBST(USE_GUI)
 AC_SUBST(AFMINSTALL)
+AC_SUBST(WIN32INSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLKIT_VPATH)
@@ -5125,10 +5274,12 @@ AC_SUBST(SAMPLES_SUBDIRS)
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
 AC_SUBST(LDFLAGS_GL)
+AC_SUBST(LDFLAGS_VERSIONING)
 AC_SUBST(LDFLAGS_EXE)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(EXTRADEFS)
+AC_SUBST(WX_VERSION_TAG)
 
 dnl additional resurces settings
 AC_SUBST(RESCOMP)
@@ -5144,7 +5295,8 @@ AC_SUBST(LIBWXMACRES)
 AC_SUBST(LIBWXMACRESCOMP)
 AC_SUBST(LIBWXMACRESWXCONFIG)
 
-dnl These seem to be missing
+dnl other tools
+AC_SUBST(GCC)
 AC_SUBST(DLLTOOL)
 AC_SUBST(AS)
 AC_SUBST(NM)
@@ -5175,9 +5327,16 @@ wx_cv_program_ext=$PROGRAM_EXT
 wx_cv_target_library=$WX_TARGET_LIBRARY
 wx_cv_target_library_gl=$WX_TARGET_LIBRARY_GL
 wx_cv_target_libtype=$WX_TARGET_LIBRARY_TYPE
+wx_cv_library_basename=${WX_LIBRARY_BASENAME}
+wx_cv_release=${WX_RELEASE}
+wx_cv_current=${WX_CURRENT}
+wx_cv_revision=${WX_REVISION}
+wx_cv_age=${WX_AGE}
 export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
        wx_cv_path_ifs wx_cv_program_ext \
-       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype
+       wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
+       wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age
+
 
 AC_CONFIG_SUBDIRS(demos samples utils contrib)
 
@@ -5186,6 +5345,7 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
+            version-script
             src/make.env
             src/makeprog.env
             src/makelib.env
@@ -5230,4 +5390,23 @@ AC_OUTPUT([
           ]
          )
 
-dnl vi: set et sts=4 sw=4:
+dnl report on what we decided to do
+echo
+echo "Configured wxWindows ${WX_VERSION} for \`${host}'"
+echo ""
+echo "  Which GUI toolkit should wxWindows use?                 ${TOOLKIT:-base only}"
+
+echo "  Should wxWindows be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
+echo "  Should wxWindows be linked as a shared library?         ${wxUSE_SHARED:-no}"
+echo "  Should wxWindows be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
+
+echo "  Which libraries should wxWindows use?"
+echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"
+echo "                                       png                ${wxUSE_LIBPNG-none}"
+echo "                                       regex              ${wxUSE_REGEX}"
+echo "                                       tiff               ${wxUSE_LIBTIFF-none}"
+echo "                                       zlib               ${wxUSE_ZLIB}"
+
+echo ""
+
+dnl vi: set et sts=4 sw=4 com=\:dnl:

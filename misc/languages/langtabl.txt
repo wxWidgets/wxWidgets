@@ -45,7 +45,7 @@ wxLANGUAGE_CHINESE_TRADITIONAL         zh_CN  LANG_CHINESE     SUBLANG_CHINESE_T
 wxLANGUAGE_CHINESE_HONGKONG            zh_HK  LANG_CHINESE     SUBLANG_CHINESE_HONGKONG            "Chinese (Hongkong)"
 wxLANGUAGE_CHINESE_MACAU               zh_MO  LANG_CHINESE     SUBLANG_CHINESE_MACAU               "Chinese (Macau)"
 wxLANGUAGE_CHINESE_SINGAPORE           zh_SG  LANG_CHINESE     SUBLANG_CHINESE_SINGAPORE           "Chinese (Singapore)"
-wxLANGUAGE_CHINESE_TAIWAN              zh_TW  -                -                                   "Chinese (Taiwan)"
+wxLANGUAGE_CHINESE_TAIWAN              zh_TW  LANG_CHINESE     SUBLANG_CHINESE_TRADITIONAL         "Chinese (Taiwan)"
 wxLANGUAGE_CORSICAN                    co     -                -                                   "Corsican"
 wxLANGUAGE_CROATIAN                    hr_HR  LANG_CROATIAN    SUBLANG_DEFAULT                     "Croatian"
 wxLANGUAGE_CZECH                       cs_CZ  LANG_CZECH       SUBLANG_DEFAULT                     "Czech"

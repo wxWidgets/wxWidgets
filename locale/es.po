@@ -897,7 +897,7 @@ msgstr "Contenidos"
 
 #: ../src/common/strconv.cpp:596
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr ""
 
 #: ../src/generic/prntdlgg.cpp:193

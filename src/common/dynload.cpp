@@ -33,6 +33,7 @@
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/hash.h"
 #endif
 
 #include "wx/filename.h"        // for SplitPath()
@@ -263,7 +264,10 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     symbol = dlsym( m_handle, name.fn_str() );
 
 #elif defined(HAVE_SHL_LOAD)
-    if( shl_findsym( &m_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
+    // use local variable since shl_findsym modifies the handle argument
+    // to indicate where the symbol was found (GD)
+    wxDllType the_handle = m_handle;
+    if( shl_findsym( &the_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
         symbol = 0;
 
 #elif defined(__WINDOWS__)
@@ -416,9 +420,7 @@ void wxPluginLibrary::UpdateClassInfo()
 
             // Hash all the class names into a local table too so
             // we can quickly find the entry they correspond to.
-
-            if( ms_classes->Get(info->m_className) == 0 )
-                ms_classes->Put(info->m_className, (wxObject *) this);
+            (*ms_classes)[info->m_className] = this;
         }
     }
 
@@ -438,7 +440,7 @@ void wxPluginLibrary::RestoreClassInfo()
     for(info = m_after; info != m_before; info = info->m_next)
     {
         wxClassInfo::sm_classTable->Delete(info->m_className);
-        ms_classes->Delete(info->m_className);
+        ms_classes->erase(ms_classes->find(info->m_className));
     }
 
     if( wxClassInfo::sm_first == m_after )
@@ -549,7 +551,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
     }
     else
     {
-        entry = (wxPluginLibrary*) ms_manifest->Get(realname);
+        entry = FindByName(realname);
     }
 
     if ( entry )
@@ -565,7 +567,7 @@ wxPluginManager::LoadLibrary(const wxString &libname, int flags)
 
         if ( entry->IsLoaded() )
         {
-            ms_manifest->Put(realname, (wxObject*) entry);
+            (*ms_manifest)[realname] = entry;
 
             wxLogTrace(_T("dll"),
                        _T("LoadLibrary(%s): loaded ok."), realname.c_str());
@@ -594,13 +596,13 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
 {
     wxString realname = libname;
 
-    wxPluginLibrary *entry = (wxPluginLibrary*) ms_manifest->Get(realname);
+    wxPluginLibrary *entry = FindByName(realname);
 
     if ( !entry )
     {
         realname += wxDynamicLibrary::GetDllExt();
 
-        entry = (wxPluginLibrary*) ms_manifest->Get(realname);
+        entry = FindByName(realname);
     }
 
     if ( !entry )
@@ -619,7 +621,7 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
         return FALSE;
     }
 
-    ms_manifest->Delete(realname);
+    ms_manifest->erase(ms_manifest->find(realname));
 
     return TRUE;
 }
@@ -627,12 +629,15 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
 #if WXWIN_COMPATIBILITY_2_2
 wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
 {
-    wxNode  *node;
-    ms_manifest->BeginFind();
+    for ( wxDLManifest::iterator i = ms_manifest->begin();
+          i != ms_manifest->end();
+          ++i )
+    {
+        wxPluginLibrary * const lib = i->second;
 
-    for(node = ms_manifest->Next(); node; node = ms_manifest->Next())
-        if( ((wxPluginLibrary*)node->GetData())->GetLibHandle() == handle )
-            return (wxPluginLibrary*)node->GetData();
+        if ( lib->GetLibHandle() == handle )
+            return lib;
+    }
 
     return NULL;
 }
@@ -645,25 +650,28 @@ wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
 bool wxPluginManager::Load(const wxString &libname, int flags)
 {
     m_entry = wxPluginManager::LoadLibrary(libname, flags);
+
     return IsLoaded();
 }
 
 void wxPluginManager::Unload()
 {
-    wxNode  *node;
-    ms_manifest->BeginFind();
+    wxCHECK_RET( m_entry, _T("unloading an invalid wxPluginManager?") );
 
-    // It's either this or store the name of the lib just to do this.
-
-    for(node = ms_manifest->Next(); node; node = ms_manifest->Next())
-        if( (wxPluginLibrary*)node->GetData() == m_entry )
-            break;
-
-    if( m_entry && m_entry->UnrefLib() )
+    for ( wxDLManifest::iterator i = ms_manifest->begin();
+          i != ms_manifest->end();
+          ++i )
     {
-        delete node;
-        m_entry = 0;
+        if ( i->second == m_entry )
+        {
+            ms_manifest->erase(i);
+            return;
+        }
     }
+
+    m_entry->UnrefLib();
+
+    m_entry = NULL;
 }
 
 // ---------------------------------------------------------------------------

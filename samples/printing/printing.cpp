@@ -366,7 +366,7 @@ bool MyPrintout::OnPrintPage(int page)
         
         wxChar buf[200];
         wxSprintf(buf, wxT("PAGE %d"), page);
-        dc->DrawText(buf, 10, 10);
+        // dc->DrawText(buf, 10, 10);
         
         return TRUE;
     }
@@ -432,6 +432,7 @@ void MyPrintout::DrawPageOne(wxDC *dc)
     // Set the scale and origin
     dc->SetUserScale(actualScale, actualScale);
     dc->SetDeviceOrigin( (long)posX, (long)posY );
+    //dc->SetUserScale(1.0, 1.0);
     
     frame->Draw(*dc);
 }

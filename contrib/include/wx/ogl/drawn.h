@@ -32,7 +32,7 @@ class wxPseudoMetaFile: public wxObject
 
   void Draw(wxDC& dc, double xoffset, double yoffset);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   void WriteAttributes(wxExpr *clause, int whichAngle);
   void ReadAttributes(wxExpr *clause, int whichAngle);
 #endif
@@ -139,7 +139,7 @@ class wxDrawnShape: public wxRectangleShape
 
   void OnDraw(wxDC& dc);
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
   // I/O
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);

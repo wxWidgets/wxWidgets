@@ -153,6 +153,8 @@ the corresponding topic.
 \helpref{wxLogTrace}{wxlogtrace}\\
 \helpref{wxLogVerbose}{wxlogverbose}\\
 \helpref{wxLogWarning}{wxlogwarning}\\
+\helpref{wxLL}{wxll}\\
+\helpref{wxLongLongFmtSpec}{wxlonglongfmtspec}\\
 \helpref{wxMakeMetafilePlaceable}{wxmakemetafileplaceable}\\
 \helpref{wxMatchWild}{wxmatchwild}\\
 \helpref{wxMessageBox}{wxmessagebox}\\
@@ -399,8 +401,8 @@ once for each previous successful call to \helpref{wxInitialize}{wxinitialize}.
 
 Calls \helpref{wxApp::Yield}{wxappyield}.
 
-This function is kept only for backwards compatibility, please use 
-\helpref{wxApp::Yield}{wxappyield}method instead in any new code.
+This function is kept only for backwards compatibility. Please use 
+the \helpref{wxApp::Yield}{wxappyield} method instead in any new code.
 
 \wxheading{Include files}
 
@@ -2109,6 +2111,44 @@ the compiler supports it or nothing otherwise. Thus, it can be used even in the
 code which might have to be compiled with an old compiler without support for
 this language feature but still take advantage of it when it is available.
 
+\membersection{wxLL}\label{wxll}
+
+\func{wxLongLong\_t}{wxLL}{\param{}{number}}
+
+This macro is defined for the platforms with a native 64 bit integer type and
+allows to define 64 bit compile time constants:
+
+\begin{verbatim}
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+    #endif
+\end{verbatim}
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
+\membersection{wxLongLongFmtSpec}\label{wxlonglongfmtspec}
+
+This macro is defined to contain the {\tt printf()} format specifier using
+which 64 bit integer numbers (i.e. those of type {\tt wxLongLong\_t}) can be
+printed. Example of using it:
+
+\begin{verbatim}
+    #ifdef wxLongLong_t
+        wxLongLong_t ll = wxLL(0x1234567890abcdef);
+        printf("Long long = %" wxLongLongFmtSpec "x\n", ll);
+    #endif
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxLL}{wxll}
+
+\wxheading{Include files}
+
+<wx/longlong.h>
+
 \membersection{::wxNewId}\label{wxnewid}
 
 \func{long}{wxNewId}{\void}
@@ -2576,7 +2616,7 @@ class wxFrame: public wxWindow
   DECLARE_DYNAMIC_CLASS(wxFrame)
 
  private:
-  const wxString\& frameTitle;
+  const wxString& frameTitle;
  public:
   ...
 };

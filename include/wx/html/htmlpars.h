@@ -72,6 +72,9 @@ public:
     virtual void InitParser(const wxString& source);
     // This must be called after Parse().
     virtual void DoneParser();
+    
+    // May be called during parsing to immediately return from Parse().
+    virtual void StopParsing() { m_stopParsing = TRUE; }
 
     // Parses the m_Source from begin_pos to end_pos-1.
     // (in noparams version it parses whole m_Source)
@@ -117,6 +120,11 @@ public:
     // Restores parser's state from stack or returns FALSE if the stack is
     // empty
     virtual bool RestoreState();
+    
+    // Parses HTML string 'markup' and extracts charset info from <meta> tag
+    // if present. Returns empty string if the tag is missing.
+    // For wxHTML's internal use.
+    static wxString ExtractCharsetInformation(const wxString& markup);
 
 protected:
     // DOM structure
@@ -173,6 +181,9 @@ protected:
     
     // entity parse
     wxHtmlEntitiesParser *m_entitiesParser;
+    
+    // flag indicating that the parser should stop
+    bool m_stopParsing;
 };
 
 
@@ -242,7 +253,11 @@ public:
     wxChar GetEntityChar(const wxString& entity);
 
     // Returns character that represents given Unicode code
+#if wxUSE_UNICODE
+    wxChar GetCharForCode(unsigned code) { return (wxChar)code; }
+#else
     wxChar GetCharForCode(unsigned code);
+#endif
 
 protected:
 #if wxUSE_WCHAR_T && !wxUSE_UNICODE

@@ -704,13 +704,22 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 long line, column, pos = GetInsertionPoint();
                 PositionToXY(pos, &column, &line);
 
-                wxLogMessage( _T("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %ld\nCurrent line length: %ld\nTotal text length: %u (%ld)"),
+                wxLogMessage(_T("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %ld\nCurrent line length: %ld\nTotal text length: %u (%ld)"),
                         pos,
                         line, column,
                         (long) GetNumberOfLines(),
                         (long) GetLineLength(line),
                         GetValue().length(),
                         GetLastPosition());
+
+                long from, to;
+                GetSelection(&from, &to);
+
+                wxString sel = GetStringSelection();
+
+                wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
+                wxLogMessage(_T("Selection = '%s' (len = %u)"),
+                             sel.c_str(), sel.length());
             }
             break;
 
@@ -745,28 +754,30 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_F6:
-            SetValue("F6 was just pressed.");
+            wxLogMessage(_T("IsModified() before SetValue(): %d"),
+                         IsModified());
+            SetValue(_T("SetValue() has been called"));
+            wxLogMessage(_T("IsModified() after SetValue(): %d"),
+                         IsModified());
             break;
 
         case WXK_F7:
+            wxLogMessage(_T("Position 10 should be now visible."));
             ShowPosition(10);
             break;
 
         case WXK_F8:
+            wxLogMessage(_T("Control has been cleared"));
             Clear();
             break;
 
+        case WXK_F9:
+            WriteText("WriteText() has been called");
+            break;
+
         case WXK_F10:
-            {
-                long from, to;
-                GetSelection(&from, &to);
-
-                wxString sel = GetStringSelection();
-
-                wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
-                wxLogMessage(_T("Selection = '%s' (len = %u)"),
-                             sel.c_str(), sel.length());
-            }
+            AppendText("AppendText() has been called");
+            break;
     }
 
     if ( ms_logKey )
@@ -863,7 +874,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_multitext->SetBackgroundColour(*wxLIGHT_GREY);
 
 #if wxUSE_TOOLTIPS
-    m_multitext->SetToolTip("Press F1 here for statitics, F4 for capture and uncapture mouse.");
+    m_multitext->SetToolTip("Press Fn function keys here");
 #endif
 
     m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
@@ -1172,7 +1183,7 @@ void MyFrame::OnFileSave(wxCommandEvent& event)
         wxLogStatus(this,
                     _T("Successfully saved file (text len = %lu, file size = %ld)"),
                     (unsigned long)m_panel->m_textrich->GetValue().length(),
-                    file.Length());
+                    (long) file.Length());
 #endif
     }
     else

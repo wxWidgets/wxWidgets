@@ -66,8 +66,8 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    SetVendorName("wxWindows");
-    SetAppName("wxHTMLHelp"); 
+    SetVendorName(wxT("wxWindows"));
+    SetAppName(wxT("wxHTMLHelp")); 
     wxConfig::Get(); // create an instance
 
     help = new wxHtmlHelpController;

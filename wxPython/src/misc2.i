@@ -183,6 +183,7 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 //---------------------------------------------------------------------------
 // Resource System
 
+#ifdef wxUSE_WX_RESOURCES
 bool wxResourceAddIdentifier(char* name, int value);
 void wxResourceClear(void);
 wxBitmap  wxResourceCreateBitmap(char* resource);
@@ -192,6 +193,7 @@ int wxResourceGetIdentifier(char* name);
 bool wxResourceParseData(char* resource, wxResourceTable *table = NULL);
 bool wxResourceParseFile(char* filename, wxResourceTable *table = NULL);
 bool wxResourceParseString(char* resource, wxResourceTable *table = NULL);
+#endif
 
 //---------------------------------------------------------------------------
 // System Settings
@@ -1108,10 +1110,10 @@ class wxFileTypeInfo
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const char* mimeType,
-                   const char* openCmd,
-                   const char* printCmd,
-                   const char* desc);
+    wxFileTypeInfo(const wxString& mimeType,
+                   const wxString& openCmd,
+                   const wxString& printCmd,
+                   const wxString& desc);
 
 
         // the array elements correspond to the parameters of the ctor above in
@@ -1580,8 +1582,6 @@ public:
                           const wxString& client = wxPyART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
-    // Destroy caches & all providers
-    static void CleanUpProviders();
 };
 
 

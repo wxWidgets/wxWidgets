@@ -39,12 +39,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 
 void Skip_Comment(wxInputStream &stream)
 {
-  wxTextInputStream text_stream(stream);
+    wxTextInputStream text_stream(stream);
 
-  if (stream.Peek()==wxT('#'))
+    if (stream.Peek()==wxT('#'))
     {
-      text_stream.ReadLine();
-      Skip_Comment(stream);
+        text_stream.ReadLine();
+        Skip_Comment(stream);
     }
 }
 
@@ -107,7 +107,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             value=text_stream.Read32();
             *ptr++=(unsigned char)value;
 
-            if (buf_stream.LastError()!=wxSTREAM_NOERROR)
+            if ( !buf_stream )
               {
                 if (verbose) wxLogError(_("PNM: File seems truncated."));
                 return FALSE;
@@ -119,7 +119,8 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
     image->SetMask( FALSE );
 
-    return (buf_stream.LastError()==wxStream_NOERROR || buf_stream.LastError()==wxStream_EOF);
+    const wxStreamError err = buf_stream.GetLastError();
+    return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
 }
 
 bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUSED(verbose) )
@@ -129,10 +130,10 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
     //text_stream << "P6" << endl
     //<< image->GetWidth() << " " << image->GetHeight() << endl
     //<< "255" << endl;
-    text_stream << "P6\n" << image->GetWidth() << " " << image->GetHeight() << "\n255\n";
+    text_stream << wxT("P6\n") << image->GetWidth() << wxT(" ") << image->GetHeight() << wxT("\n255\n");
     stream.Write(image->GetData(),3*image->GetWidth()*image->GetHeight());
 
-    return (stream.LastError()==wxStream_NOERROR);
+    return stream.IsOk();
 }
 
 bool wxPNMHandler::DoCanRead( wxInputStream& stream )

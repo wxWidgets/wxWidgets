@@ -710,7 +710,7 @@ wxChar* wxGetUserHome (
         if ((zHome = wxGetenv(_T("HOME"))) != NULL)
         {
             wxStrcpy(wxBuffer, zHome);
-            Unix2DosFilename(wxBuffer);
+            wxUnix2DosFilename(wxBuffer);
             wxStrcpy(zHome, wxBuffer);
             delete[] wxBuffer;
             return zHome;

@@ -46,9 +46,10 @@ public:
   ~wxPseudoMetaFile();
 
     void Draw(wxDC& dc, double xoffset, double yoffset);
-
+#ifdef wxUSE_PROLOGIO
     void WriteAttributes(wxExpr *clause, int whichAngle);
     void ReadAttributes(wxExpr *clause, int whichAngle);
+#endif
     void Clear();
     void Copy(wxPseudoMetaFile& copy);
     void Scale(double sx, double sy);

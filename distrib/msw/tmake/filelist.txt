@@ -30,6 +30,7 @@
 #  MotifH	/include/wx/motif
 #  MSWH	/include/wx/msw
 #  OS2H	/include/wx/os2
+#  MGLH /include/wx/mgl
 #  X11H	/include/wx/x11
 #  GenericH	/include/wx/generic
 #  HtmlH	/include/wx/html
@@ -90,7 +91,7 @@ imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
-mdig.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMac
+mdig.cpp	Generic	NotWin32,NotGTK,NotMac
 msgdlgg.cpp	Generic	Generic
 notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
@@ -294,7 +295,9 @@ enhmeta.cpp	MSW	Win32Only
 helpbest.cpp	MSW	Win32Only
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
-filedlg.cpp	MSW
+# FIXME: the generic implementation doesn't work under MSW, so we must
+#        the native dialog under MSW
+filedlg.cpp	MSW	LowLevel
 font.cpp	MSW	LowLevel
 fontdlg.cpp	MSW
 fontenum.cpp	MSW	LowLevel
@@ -687,12 +690,10 @@ iniconf.cpp	OS2
 joystick.cpp	OS2
 listbox.cpp	OS2
 main.cpp	OS2
-mdi.cpp	OS2
 menu.cpp	OS2
 menuitem.cpp	OS2
 metafile.cpp	OS2
 mimetype.cpp	OS2
-minifram.cpp	OS2
 msgdlg.cpp	OS2
 nativdlg.cpp	OS2
 notebook.cpp	OS2
@@ -745,7 +746,6 @@ m_list.cpp	HTML
 m_dflist.cpp	HTML
 m_pre.cpp	HTML
 m_tables.cpp	HTML
-m_meta.cpp	HTML
 m_style.cpp	HTML
 htmprint.cpp	HTML
 
@@ -1230,6 +1230,28 @@ textctrl.h	X11H
 toplevel.h	X11H
 window.h	X11H
 
+app.h	MGLH
+bitmap.h	MGLH
+brush.h	MGLH
+clipbrd.h	MGLH
+colour.h	MGLH
+cursor.h	MGLH
+dc.h	MGLH
+dcclient.h	MGLH
+dcmemory.h	MGLH
+dcscreen.h	MGLH
+font.h	MGLH
+fontutil.h	MGLH
+gdiobj.h	MGLH
+icon.h	MGLH
+palette.h	MGLH
+pen.h	MGLH
+popupwin.h	MGLH
+private.h	MGLH
+region.h	MGLH
+toplevel.h	MGLH
+window.h	MGLH
+
 accel.h	MSWH
 app.h	MSWH
 bitmap.h	MSWH
@@ -1267,7 +1289,7 @@ fontdlg.h	MSWH
 frame.h	MSWH
 gauge95.h	MSWH
 gaugemsw.h	MSWH
-gccpriv.h	MSWH
+gccpriv.h	MSWH	Base
 gdiimage.h	MSWH
 gdiobj.h	MSWH
 glcanvas.h	MSWH
@@ -1392,7 +1414,6 @@ dialog.h	OS2H
 radiobox.h	OS2H
 toolbar.h	OS2H
 checkbox.h	OS2H
-mdi.h	OS2H
 radiobut.h	OS2H
 tooltip.h	OS2H
 checklst.h	OS2H
@@ -1479,7 +1500,7 @@ helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
-mdig.h	GenericH	NotWin32,NotGTK,NotOS2,NotMac
+mdig.h	GenericH	NotWin32,NotGTK,NotMac
 msgdlgg.h	GenericH
 notebook.h	GenericH
 paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2

@@ -854,6 +854,11 @@ def wxDateTime_Now(*_args, **_kwargs):
     if val: val = wxDateTimePtr(val); val.thisown = 1
     return val
 
+def wxDateTime_UNow(*_args, **_kwargs):
+    val = apply(utilsc.wxDateTime_UNow,_args,_kwargs)
+    if val: val = wxDateTimePtr(val); val.thisown = 1
+    return val
+
 def wxDateTime_Today(*_args, **_kwargs):
     val = apply(utilsc.wxDateTime_Today,_args,_kwargs)
     if val: val = wxDateTimePtr(val); val.thisown = 1

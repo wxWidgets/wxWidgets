@@ -4,7 +4,47 @@ The wxScrolledWindow class manages scrolling for its client area, transforming
 the coordinates according to the scrollbar positions, and setting the
 scroll positions, thumb sizes and ranges according to the area in view.
 
-As with all windows, an application can draw onto a wxScrolledWindow using a \helpref{device context}{dcoverview}.
+Starting from version 2.4 of wxWindows, there are several ways to use a
+wxScrolledWindow. In particular, there are now three ways to set the
+size of the scrolling area:
+
+One way is to set the scrollbars directly using a call to
+\helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}.
+This is the way it used to be in any previous version of wxWindows
+and it will be kept for backwards compatibility.
+
+An additional method of manual control, which requires a little less
+computation of your own, is to set the total size of the scrolling area by
+calling either \helpref{wxWindow::SetVirtualSize}{wxwindowsetvirtualsize},
+or \helpref{wxWindow::FitInside}{wxwindowfitinside}, and setting the
+scrolling increments for it by calling
+\helpref{wxScrolledWindow::SetScrollRate}{wxscrolledwindowsetscrollrate}.
+Scrolling in some orientation is enabled by setting a non zero increment
+for it.
+
+The most automatic and newest way is to simply let sizers determine the
+scrolling area. This is now the default when you set an interior sizer
+into a wxScrolledWindow with \helpref{wxWindow::SetSizer}{wxwindowsetsizer}.
+The scrolling area will be set to the size requested by the sizer and
+the scrollbars will be assigned for each orientation according to the need
+for them and the scrolling increment set by 
+\helpref{wxScrolledWindow::SetScrollRate}{wxscrolledwindowsetscrollrate}.
+As above, scrolling is only enabled in orientations with a non-zero
+increment.  You can influence the minimum size of the scrolled area
+controlled by a sizer by calling
+\helpref{wxWindow::SetVirtualSizeHints}{wxwindowsetvirtualsizehints}.
+(calling \helpref{wxScrolledWindow::SetScrollbars}{wxscrolledwindowsetscrollbars}
+ has analogous effects in wxWindows 2.4 -- in later versions it may not continue
+ to override the sizer)
+
+Note:  if Maximum size hints are still supported by SetVirtualSizeHints, use
+them at your own dire risk.  They may or may not have been removed for 2.4,
+but it really only makes sense to set minimum size hints here.  We should
+probably replace SetVirtualSizeHints with SetMinVirtualSize or similar
+and remove it entirely in future.
+
+As with all windows, an application can draw onto a wxScrolledWindow using
+a \helpref{device context}{dcoverview}.
 
 You have the option of handling the OnPaint handler
 or overriding the \helpref{OnDraw}{wxscrolledwindowondraw} function, which is passed

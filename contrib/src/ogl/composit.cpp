@@ -33,10 +33,11 @@
 #include <wx/ogl/misc.h>
 #include <wx/ogl/canvas.h>
 
+#if wxUSE_PROLOGIO
 // Sometimes, objects need to access the whole database to
 // construct themselves.
 wxExprDatabase *GlobalwxExprDatabase = NULL;
-
+#endif
 
 /*
  * Division control point
@@ -598,7 +599,7 @@ bool wxCompositeShape::Constrain()
   return changed;
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxCompositeShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
@@ -984,7 +985,7 @@ void wxDivisionShape::Copy(wxShape& copy)
   // Division geometry copying is handled at the wxCompositeShape level.
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxDivisionShape::WriteAttributes(wxExpr *clause)
 {
   wxCompositeShape::WriteAttributes(clause);

@@ -1471,7 +1471,7 @@ void wxWindowMSW::Update()
         wxLogLastError(_T("UpdateWindow"));
     }
 #endif
-    
+
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     // just calling UpdateWindow() is not enough, what we did in our WM_PAINT
     // handler needs to be really drawn right now
@@ -1891,6 +1891,10 @@ static void wxYieldForCommandsOnly()
     {
         wxTheApp->DoMessage((WXMSG *)&msg);
     }
+    
+    // If we retrieved a WM_QUIT, insert back into the message queue.
+    if (msg.message == WM_QUIT)
+        ::PostQuitMessage(0);
 }
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
@@ -1961,6 +1965,14 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             if ( !bCtrlDown )
             {
                 lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
+
+                // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
+                // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
+                // it, of course, implies them
+                if ( lDlgCode & DLGC_WANTALLKEYS )
+                {
+                    lDlgCode |= DLGC_WANTTAB | DLGC_WANTARROWS;
+                }
             }
 
             bool bForward = TRUE,
@@ -2048,6 +2060,12 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                                     // need it for itself and don't let
                                     // ::IsDialogMessage() have it as it can
                                     // eat the Enter events sometimes
+                                    return FALSE;
+                                }
+                                else if (!IsTopLevel())
+                                {
+                                    // if not a top level window, let parent
+                                    // handle it
                                     return FALSE;
                                 }
                                 //else: treat Enter as TAB: pass to the next
@@ -2483,14 +2501,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                     break;
 
 #endif // __WXMICROWIN__
-                // VZ: if you find a situation when this is needed, tell
-                //     me about it, do *not* uncomment this code as it
-                //     causes other strange problems
-#if 0
-                if ( message == WM_LBUTTONDOWN && AcceptsFocus() )
-                    SetFocus();
-#endif // 0
-
                 int x = GET_X_LPARAM(lParam),
                     y = GET_Y_LPARAM(lParam);
 
@@ -2506,6 +2516,20 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 else
                 {
                     win = FindWindowForMouseEvent(this, &x, &y);
+
+                    // this should never happen
+                    wxCHECK_MSG( win, 0,
+                                 _T("FindWindowForMouseEvent() returned NULL") );
+
+                    // for the standard classes their WndProc sets the focus to
+                    // them anyhow and doing it from here results in some weird
+                    // problems, but for our windows we want them to acquire
+                    // focus when clicked
+                    if ( !win->IsOfStandardClass() )
+                    {
+                        if ( message == WM_LBUTTONDOWN && win->AcceptsFocus() )
+                            win->SetFocus();
+                    }
                 }
 
                 processed = win->HandleMouseEvent(message, x, y, wParam);
@@ -2598,71 +2622,73 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             if ( m_lastKeydownProcessed )
             {
                 processed = TRUE;
-                break;
             }
 
-            switch ( wParam )
+            if ( !processed )
             {
-                // we consider these message "not interesting" to OnChar, so
-                // just don't do anything more with them
-                case VK_SHIFT:
-                case VK_CONTROL:
-                case VK_MENU:
-                case VK_CAPITAL:
-                case VK_NUMLOCK:
-                case VK_SCROLL:
-                    processed = TRUE;
-                    break;
+                switch ( wParam )
+                {
+                    // we consider these message "not interesting" to OnChar, so
+                    // just don't do anything more with them
+                    case VK_SHIFT:
+                    case VK_CONTROL:
+                    case VK_MENU:
+                    case VK_CAPITAL:
+                    case VK_NUMLOCK:
+                    case VK_SCROLL:
+                        processed = TRUE;
+                        break;
 
-                // avoid duplicate messages to OnChar for these ASCII keys:
-                // they will be translated by TranslateMessage() and received
-                // in WM_CHAR
-                case VK_ESCAPE:
-                case VK_SPACE:
-                case VK_RETURN:
-                case VK_BACK:
-                case VK_TAB:
-                case VK_ADD:
-                case VK_SUBTRACT:
-                case VK_MULTIPLY:
-                case VK_DIVIDE:
-                case VK_OEM_1:
-                case VK_OEM_2:
-                case VK_OEM_3:
-                case VK_OEM_4:
-                case VK_OEM_5:
-                case VK_OEM_6:
-                case VK_OEM_7:
-                case VK_OEM_PLUS:
-                case VK_OEM_COMMA:
-                case VK_OEM_MINUS:
-                case VK_OEM_PERIOD:
-                    // but set processed to FALSE, not TRUE to still pass them
-                    // to the control's default window proc - otherwise
-                    // built-in keyboard handling won't work
-                    processed = FALSE;
-
-                    break;
+                    // avoid duplicate messages to OnChar for these ASCII keys:
+                    // they will be translated by TranslateMessage() and received
+                    // in WM_CHAR
+                    case VK_ESCAPE:
+                    case VK_SPACE:
+                    case VK_RETURN:
+                    case VK_BACK:
+                    case VK_TAB:
+                    case VK_ADD:
+                    case VK_SUBTRACT:
+                    case VK_MULTIPLY:
+                    case VK_DIVIDE:
+                    case VK_OEM_1:
+                    case VK_OEM_2:
+                    case VK_OEM_3:
+                    case VK_OEM_4:
+                    case VK_OEM_5:
+                    case VK_OEM_6:
+                    case VK_OEM_7:
+                    case VK_OEM_PLUS:
+                    case VK_OEM_COMMA:
+                    case VK_OEM_MINUS:
+                    case VK_OEM_PERIOD:
+                        // but set processed to FALSE, not TRUE to still pass them
+                        // to the control's default window proc - otherwise
+                        // built-in keyboard handling won't work
+                        processed = FALSE;
+                        break;
 
 #ifdef VK_APPS
-                // special case of VK_APPS: treat it the same as right mouse
-                // click because both usually pop up a context menu
-                case VK_APPS:
-                    {
-                        WPARAM flags;
-                        int x, y;
+                    // special case of VK_APPS: treat it the same as right mouse
+                    // click because both usually pop up a context menu
+                    case VK_APPS:
+                        {
+                            WPARAM flags;
+                            int x, y;
 
-                        TranslateKbdEventToMouse(this, &x, &y, &flags);
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
-                    }
-                    break;
+                            TranslateKbdEventToMouse(this, &x, &y, &flags);
+                            processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, flags);
+                        }
+                        break;
 #endif // VK_APPS
 
-                default:
-                    // do generate a CHAR event
-                    processed = HandleChar((WORD)wParam, lParam);
-
+                    default:
+                        // do generate a CHAR event
+                        processed = HandleChar((WORD)wParam, lParam);
+                }
             }
+            if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
+                processed = FALSE;
             break;
 
         case WM_SYSKEYUP:
@@ -3116,16 +3142,22 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
     LPTOOLTIPTEXT ttText = (LPTOOLTIPTEXT)lParam;
 
+#if !wxUSE_UNICODE
     if ( code == (WXUINT) TTN_NEEDTEXTA )
     {
-        ttText->lpszText = (wxChar *)ttip.c_str();
+        // we pass just the pointer as we store the string internally anyhow
+        ttText->lpszText = (char *)ttip.c_str();
     }
-    else
+    else // TTN_NEEDTEXTW
+#endif // !Unicode
     {
 #if wxUSE_UNICODE
+        // in Unicode mode this is just what we need
         ttText->lpszText = (wxChar *)ttip.c_str();
 #else // !Unicode
-        size_t lenAnsi = ttip.length();
+        // in ANSI mode we have to convert the string and put it into the
+        // provided buffer: be careful not to overrun it
+        const size_t lenAnsi = ttip.length();
 
         // some compilers (MetroWerks and Cygwin) don't like calling mbstowcs
         // with NULL argument
@@ -3140,6 +3172,13 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
         wchar_t *dst = (wchar_t *)ttText->szText,
                 *pwz = new wchar_t[lenUnicode + 1];
         mbstowcs(pwz, ttip, lenAnsi + 1);
+
+        // stay inside the buffer (-1 because it must be NUL-terminated)
+        if ( lenUnicode > WXSIZEOF(ttText->szText) - 1 )
+        {
+            lenUnicode = WXSIZEOF(ttText->szText) - 1;
+        }
+
         memcpy(dst, pwz, lenUnicode*sizeof(wchar_t));
 
         // put the terminating wide NUL
@@ -3499,6 +3538,8 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
 
     if ( hcursor )
     {
+//        wxLogDebug("HandleSetCursor: Setting cursor %ld", (long) hcursor);
+
         ::SetCursor(hcursor);
 
         // cursor set, stop here
@@ -4378,9 +4419,18 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     }
 
     wxKeyEvent event(CreateKeyEvent(wxEVT_CHAR, id, lParam, wParam));
-    if ( ctrlDown )
+
+    // the alphanumeric keys produced by pressing AltGr+something on European
+    // keyboards have both Ctrl and Alt modifiers which may confuse the user
+    // code as, normally, keys with Ctrl and/or Alt don't result in anything
+    // alphanumeric, so pretend that there are no modifiers at all (the
+    // KEY_DOWN event would still have the correct modifiers if they're really
+    // needed)
+    if ( event.m_controlDown && event.m_altDown &&
+            (id >= 32 && id < 256) )
     {
-        event.m_controlDown = TRUE;
+        event.m_controlDown =
+        event.m_altDown = FALSE;
     }
 
     return GetEventHandler()->ProcessEvent(event);
@@ -5434,9 +5484,10 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 // Find the wxWindow at the current mouse position, returning the mouse
 // position.
-wxWindow* wxFindWindowAtPointer(wxPoint& WXUNUSED(pt))
+wxWindow* wxFindWindowAtPointer(wxPoint& pt)
 {
-    return wxFindWindowAtPoint(wxGetMousePosition());
+    pt = wxGetMousePosition();
+    return wxFindWindowAtPoint(pt);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

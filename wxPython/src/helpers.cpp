@@ -67,6 +67,11 @@ wxMutex*              wxPyTMutex = NULL;
 #endif
 
 
+static PyObject* wxPython_dict = NULL;
+static PyObject* wxPyPtrTypeMap = NULL;
+static PyObject* wxPyAssertionError = NULL;
+
+
 #ifdef __WXMSW__             // If building for win32...
 //----------------------------------------------------------------------
 // This gets run when the DLL is loaded.  We just need to save a handle.
@@ -90,16 +95,19 @@ BOOL WINAPI DllMain(
 // Classes for implementing the wxp main application shell.
 //----------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyApp, wxApp);
+
 
 wxPyApp::wxPyApp() {
-    SetUseBestVisual(TRUE);
+    m_assertMode = wxPYAPP_ASSERT_EXCEPTION;
 }
+
 
 wxPyApp::~wxPyApp() {
 }
 
 
-// This one isn't acutally called...  See __wxStart()
+// This one isn't acutally called...  We fake it with __wxStart()
 bool wxPyApp::OnInit() {
     return FALSE;
 }
@@ -126,6 +134,92 @@ int  wxPyApp::MainLoop() {
 }
 
 
+bool wxPyApp::OnInitGui() {
+    bool rval=TRUE;
+    wxApp::OnInitGui();  // in this case always call the base class version
+    // wxPyBeginBlockThreads();  *** only called from within __wxStart so we already have the GIL
+    if (wxPyCBH_findCallback(m_myInst, "OnInitGui"))
+        rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
+    // wxPyEndBlockThreads();
+    return rval;
+}
+
+
+int wxPyApp::OnExit() {
+    int rval=0;
+    wxPyBeginBlockThreads();
+    if (wxPyCBH_findCallback(m_myInst, "OnExit"))
+        rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
+    wxPyEndBlockThreads();
+    wxApp::OnExit();  // in this case always call the base class version
+    return rval;
+}
+
+
+#ifdef __WXDEBUG__
+void wxPyApp::OnAssert(const wxChar *file,
+                     int line,
+                     const wxChar *cond,
+                     const wxChar *msg) {
+
+    // If the OnAssert is overloaded in the Python class then call it...
+    bool found;
+    wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnAssert"))) {
+        PyObject* fso = wx2PyString(file);
+        PyObject* cso = wx2PyString(file);
+        PyObject* mso;
+        if (msg != NULL)
+            mso = wx2PyString(file);
+        else {
+            mso = Py_None; Py_INCREF(Py_None);
+        }
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OiOO)", fso, line, cso, mso));
+        Py_DECREF(fso);
+        Py_DECREF(cso);
+        Py_DECREF(mso);
+    }
+    wxPyEndBlockThreads();
+
+    // ...otherwise do our own thing with it
+    if (! found) {
+        // ignore it?
+        if (m_assertMode & wxPYAPP_ASSERT_SUPPRESS)
+            return;
+
+        // turn it into a Python exception?
+        if (m_assertMode & wxPYAPP_ASSERT_EXCEPTION) {
+            wxString buf;
+            buf.Alloc(4096);
+            buf.Printf(wxT("C++ assertion \"%s\" failed in %s(%d)"), cond, file, line);
+            if (msg != NULL) {
+                buf += wxT(": ");
+                buf += msg;
+            }
+
+            // Send it to the normal log destination, but only if
+            // not _DIALOG because it will call this too
+            if ( !(m_assertMode & wxPYAPP_ASSERT_DIALOG))
+                wxLogDebug(buf);
+
+            // set the exception
+            wxPyBeginBlockThreads();
+            PyObject* s = wx2PyString(buf);
+            PyErr_SetObject(wxPyAssertionError, s);
+            Py_DECREF(s);
+            wxPyEndBlockThreads();
+
+            // Now when control returns to whatever API wrapper was called from
+            // Python it should detect that an exception is set and will return
+            // NULL, signalling the exception to Python.
+        }
+
+        // do the normal wx assert dialog?
+        if (m_assertMode & wxPYAPP_ASSERT_DIALOG)
+            wxApp::OnAssert(file, line, cond, msg);
+    }
+}
+#endif
 
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
@@ -170,7 +264,7 @@ static wxChar* wxPyCopyWString(const wxChar *src)
 // This is where we pick up the first part of the wxEntry functionality...
 // The rest is in __wxStart and  __wxCleanup.  This function is called when
 // wxcmodule is imported.  (Before there is a wxApp object.)
-void __wxPreStart()
+void __wxPreStart(PyObject* moduleDict)
 {
 
 #ifdef __WXMSW__
@@ -184,6 +278,11 @@ void __wxPreStart()
 #endif
 
     wxApp::CheckBuildOptions(wxBuildOptions());
+
+    wxPyAssertionError = PyErr_NewException("wxPython.wxc.wxPyAssertionError",
+                                            PyExc_AssertionError, NULL);
+    PyDict_SetItemString(moduleDict, "wxPyAssertionError", wxPyAssertionError);
+
 
     // Bail out if there is already a wxApp created.  This means that the
     // toolkit has already been initialized, as in embedding wxPython in
@@ -292,9 +391,6 @@ void __wxCleanup() {
 }
 
 
-
-static PyObject* wxPython_dict = NULL;
-static PyObject* wxPyPtrTypeMap = NULL;
 
 
 PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
@@ -691,13 +787,15 @@ PyObject* wxPyInputStream::read(int size) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_IOError, "no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     if (size < 0) {
-        // read until EOF
-        while (! m_wxis->Eof()) {
+        // read while bytes are available on the stream
+        while ( m_wxis->CanRead() ) {
             m_wxis->Read(buf.GetAppendBuf(BUFSIZE), BUFSIZE);
             buf.UngetAppendBuf(m_wxis->LastRead());
         }
@@ -708,13 +806,16 @@ PyObject* wxPyInputStream::read(int size) {
     }
 
     // error check
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxPyBeginBlockThreads();
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
     }
     else {
         // We use only strings for the streams, not unicode
         obj = PyString_FromStringAndSize(buf, buf.GetDataLen());
     }
+    wxPyEndBlockThreads();
     return obj;
 }
 
@@ -727,24 +828,29 @@ PyObject* wxPyInputStream::readline(int size) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
+        wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // read until \n or byte limit reached
-    for (i=ch=0; (ch != '\n') && (!m_wxis->Eof()) && ((size < 0) || (i < size)); i++) {
+    for (i=ch=0; (ch != '\n') && (m_wxis->CanRead()) && ((size < 0) || (i < size)); i++) {
         ch = m_wxis->GetC();
         buf.AppendByte(ch);
     }
 
     // errorcheck
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxPyBeginBlockThreads();
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
     }
     else {
         // We use only strings for the streams, not unicode
         obj = PyString_FromStringAndSize((char*)buf.GetData(), buf.GetDataLen());
     }
+    wxPyEndBlockThreads();
     return obj;
 }
 
@@ -754,33 +860,45 @@ PyObject* wxPyInputStream::readlines(int sizehint) {
 
     // check if we have a real wxInputStream to work with
     if (!m_wxis) {
-        PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream below");
+        wxPyBeginBlockThreads();
+        PyErr_SetString(PyExc_IOError,"no valid C-wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // init list
+    wxPyBeginBlockThreads();
     pylist = PyList_New(0);
     if (!pylist) {
+        wxPyBeginBlockThreads();
         PyErr_NoMemory();
+        wxPyEndBlockThreads();
         return NULL;
     }
 
     // read sizehint bytes or until EOF
     int i;
-    for (i=0; (!m_wxis->Eof()) && ((sizehint < 0) || (i < sizehint));) {
+    for (i=0; (m_wxis->CanRead()) && ((sizehint < 0) || (i < sizehint));) {
         PyObject* s = this->readline();
         if (s == NULL) {
+            wxPyBeginBlockThreads();
             Py_DECREF(pylist);
+            wxPyEndBlockThreads();
             return NULL;
         }
+        wxPyBeginBlockThreads();
         PyList_Append(pylist, s);
         i += PyString_Size(s);
+        wxPyEndBlockThreads();
     }
 
     // error check
-    if (m_wxis->LastError() == wxSTREAM_READ_ERROR) {
+    wxStreamError err = m_wxis->GetLastError();
+    if (err != wxSTREAM_NO_ERROR && err != wxSTREAM_EOF) {
+        wxPyBeginBlockThreads();
         Py_DECREF(pylist);
         PyErr_SetString(PyExc_IOError,"IOError in wxInputStream");
+        wxPyEndBlockThreads();
         return NULL;
     }
 
@@ -889,7 +1007,6 @@ size_t wxPyCBInputStream::OnSysRead(void *buffer, size_t bufsize) {
     else
         m_lasterror = wxSTREAM_READ_ERROR;
     wxPyEndBlockThreads();
-    m_lastcount = o;
     return o;
 }
 

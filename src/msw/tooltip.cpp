@@ -77,7 +77,7 @@ static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
 class wxToolInfo : public TOOLINFO
 {
 public:
-    wxToolInfo(HWND hwnd)
+    wxToolInfo(HWND hwndOwner)
     {
         // initialize all members
         ::ZeroMemory(this, sizeof(TOOLINFO));
@@ -95,8 +95,9 @@ public:
         cbSize = sizeof(TOOLINFO);
 #endif // compile-time comctl32.dll version
 
+        hwnd = hwndOwner;
         uFlags = TTF_IDISHWND;
-        uId = (UINT)hwnd;
+        uId = (UINT)hwndOwner;
     }
 };
 
@@ -274,12 +275,14 @@ void wxToolTip::Add(WXHWND hWnd)
 
     wxToolInfo ti(hwnd);
 
-    // as we store our text anyhow, it seems useless to waste system memory
-    // by asking the tooltip ctrl to remember it too - instead it will send
-    // us TTN_NEEDTEXT (via WM_NOTIFY) when it is about to be shown
+    // another possibility would be to specify LPSTR_TEXTCALLBACK here as we
+    // store the tooltip text ourselves anyhow, and provide it in response to
+    // TTN_NEEDTEXT (sent via WM_NOTIFY), but then we would be limited to 79
+    // character tooltips as this is the size of the szText buffer in
+    // NMTTDISPINFO struct -- and setting the tooltip here we can have tooltips
+    // of any length
     ti.hwnd = hwnd;
-    ti.lpszText = LPSTR_TEXTCALLBACK;
-    // instead of: ti.lpszText = (char *)m_text.c_str();
+    ti.lpszText = (wxChar *)m_text.c_str(); // const_cast
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
     {
@@ -309,7 +312,7 @@ void wxToolTip::Add(WXHWND hWnd)
                     }
                 }
 
-                HDC hdc = CreateCompatibleDC(NULL);
+                MemoryHDC hdc;
                 if ( !hdc )
                 {
                     wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
@@ -325,8 +328,6 @@ void wxToolTip::Add(WXHWND hWnd)
                 {
                     wxLogLastError(wxT("GetTextExtentPoint"));
                 }
-
-                DeleteDC(hdc);
 
                 SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
                                    0, (void *)sz.cx);
@@ -400,7 +401,7 @@ void wxToolTip::SetTip(const wxString& tip)
 
     if ( m_window )
     {
-        // update it immediately
+        // update the tip text shown by the control
         wxToolInfo ti(GetHwndOf(m_window));
         ti.lpszText = (wxChar *)m_text.c_str();
 

@@ -1022,6 +1022,44 @@ static PyObject *_wrap_delete_wxPyApp(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
+#define wxPyApp__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyApp__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyApp__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp__setCallbackInfo. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxPyApp_GetAppName(_swigobj)  (_swigobj->GetAppName())
 static PyObject *_wrap_wxPyApp_GetAppName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1689,7 +1727,66 @@ static PyObject *_wrap_wxPyApp_SetUseBestVisual(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
+#define wxPyApp_GetAssertMode(_swigobj)  (_swigobj->GetAssertMode())
+static PyObject *_wrap_wxPyApp_GetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxPyApp * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyApp_GetAssertMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetAssertMode. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (int )wxPyApp_GetAssertMode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyApp_SetAssertMode(_swigobj,_swigarg0)  (_swigobj->SetAssertMode(_swigarg0))
+static PyObject *_wrap_wxPyApp_SetAssertMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","mode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPyApp_SetAssertMode",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_SetAssertMode. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxPyApp_SetAssertMode(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef wxcMethods[] = {
+	 { "wxPyApp_SetAssertMode", (PyCFunction) _wrap_wxPyApp_SetAssertMode, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp_GetAssertMode", (PyCFunction) _wrap_wxPyApp_GetAssertMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetUseBestVisual", (PyCFunction) _wrap_wxPyApp_SetUseBestVisual, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetVendorName", (PyCFunction) _wrap_wxPyApp_SetVendorName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_SetTopWindow", (PyCFunction) _wrap_wxPyApp_SetTopWindow, METH_VARARGS | METH_KEYWORDS },
@@ -1711,6 +1808,7 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_GetExitOnFrameDelete", (PyCFunction) _wrap_wxPyApp_GetExitOnFrameDelete, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetClassName", (PyCFunction) _wrap_wxPyApp_GetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyApp_GetAppName", (PyCFunction) _wrap_wxPyApp_GetAppName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyApp__setCallbackInfo", (PyCFunction) _wrap_wxPyApp__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyApp", (PyCFunction) _wrap_delete_wxPyApp, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyApp", (PyCFunction) _wrap_new_wxPyApp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxApp_CleanUp", (PyCFunction) _wrap_wxApp_CleanUp, METH_VARARGS | METH_KEYWORDS },
@@ -1962,6 +2060,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_ROWS", PyInt_FromLong((long) wxRA_SPECIFY_ROWS));
 	 PyDict_SetItemString(d,"wxRA_SPECIFY_COLS", PyInt_FromLong((long) wxRA_SPECIFY_COLS));
 	 PyDict_SetItemString(d,"wxRB_GROUP", PyInt_FromLong((long) wxRB_GROUP));
+	 PyDict_SetItemString(d,"wxRB_SINGLE", PyInt_FromLong((long) wxRB_SINGLE));
 	 PyDict_SetItemString(d,"wxGA_PROGRESSBAR", PyInt_FromLong((long) wxGA_PROGRESSBAR));
 	 PyDict_SetItemString(d,"wxGA_HORIZONTAL", PyInt_FromLong((long) wxGA_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxGA_VERTICAL", PyInt_FromLong((long) wxGA_VERTICAL));
@@ -2611,6 +2710,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultSize",_wrap_wxDefaultSize_get, _wrap_wxDefaultSize_set);
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_SUPPRESS", PyInt_FromLong((long) wxPYAPP_ASSERT_SUPPRESS));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_EXCEPTION", PyInt_FromLong((long) wxPYAPP_ASSERT_EXCEPTION));
+	 PyDict_SetItemString(d,"wxPYAPP_ASSERT_DIALOG", PyInt_FromLong((long) wxPYAPP_ASSERT_DIALOG));
 
     // Make our API structure a CObject so other modules can import it
     // from this module.
@@ -2619,7 +2721,7 @@ SWIGEXPORT(void) initwxc() {
     Py_XDECREF(v);
 
 
-    __wxPreStart();     // initialize the GUI toolkit, if needed.
+    __wxPreStart(d);     // initialize the GUI toolkit, if needed.
 
 
         // Since these modules are all linked together, initialize them now

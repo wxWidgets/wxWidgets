@@ -18,7 +18,7 @@
 
 #ifndef WX_PRECOMP
   #include "wx/window.h"
-  #include "wx/msw/private.h"
+  #include "wx/os2/private.h"
   #include "wx/font.h"
   #include "wx/bitmap.h"
   #include "wx/dcmemory.h"

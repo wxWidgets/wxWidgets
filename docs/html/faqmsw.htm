@@ -1,3 +1,4 @@
+
 <HTML>
 
 <HEAD>
@@ -201,7 +202,8 @@ Statically-linked wxWindows 2 programs are smaller than wxWindows 1.xx programs,
 wxWindows 2 has been designed to reduce dependencies between classes, and other
 techniques. The linker will not include code from the library that is not (directly or
 indirectly) referenced
-by your application. So for example, the &#39;minimal&#39; sample is less than 300KB using VC++ 6.<P>
+by your application. So for example, the &#39;minimal&#39; sample is less than 500KB using VC++ 6
+(note that this figure may be greater for the latest version of wxWindows).<P>
 
 If you want to distribute really small executables, you can
 use <a href="http://www.un4seen.com/petite/" target=_top>Petite</a>
@@ -209,6 +211,12 @@ by Ian Luck. This nifty utility compresses Windows executables by around 50%, so
 will shrink to a mere 250KB. With this sort of size, there is reduced incentive to
 use DLLs. Another good compression tool is <a href="http://upx.sourceforge.net/" target=_top>UPX</a>.
 <P>
+
+Please do not be surprised if MinGW produces a statically-linked minimal executable of 1 MB. Firstly, gcc
+produces larger executables than some compilers. Secondly, this figure will
+include most of the overhead of wxWindows, so as your application becomes more
+complex, the overhead becomes proportionaly less significant. And thirdly, trading executable compactness
+for the enormous increase in productivity you get with wxWindows is almost always well worth it.
 
 <H3><a name="mfc">Is wxWindows compatible with MFC?</a></H3>
 
@@ -392,7 +400,11 @@ VZ
 
 This can happen if you have a child window intercepting EVT_CHAR events and swallowing
 all keyboard input. You should ensure that event.Skip() is called for all input that
-isn&#39;used by the event handler.
+isn&#39;used by the event handler.<P>
+
+It can also happen if you append the submenu to the parent
+menu {\it before} you have added your menu items. Do the append {\it after} adding
+your items, or accelerators may not be registered properly.<P>
 
 <H3><a name="#regconfig">Why can I not write to the HKLM part of the registry with wxRegConfig?</a></H3>
 
@@ -414,7 +426,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy;  
+        wxLogNull dummy; 
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");

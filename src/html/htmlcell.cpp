@@ -17,7 +17,7 @@
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -255,8 +255,8 @@ void wxHtmlContainerCell::Layout(int w)
        m_Width = 0;
        for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->Layout(0);
-            // this does two things: it recursively calls this code on all child
-            // contrainers and resets children's position to (0,0)
+            // this does two things: it recursively calls this code on all
+            // child contrainers and resets children's position to (0,0)
        return;
     }
 
@@ -462,6 +462,15 @@ void wxHtmlContainerCell::DrawInvisible(wxDC& dc, int x, int y)
         for (wxHtmlCell *cell = m_Cells; cell; cell = cell->GetNext())
             cell->DrawInvisible(dc, x + m_PosX, y + m_PosY);
     }
+}
+
+
+wxColour wxHtmlContainerCell::GetBackgroundColour()
+{
+    if (m_UseBkColour)
+        return m_BkColour;
+    else
+        return wxNullColour;
 }
 
 

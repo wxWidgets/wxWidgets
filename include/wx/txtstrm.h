@@ -28,10 +28,15 @@ typedef wxTextOutputStream& (*__wxTextOutputManip)(wxTextOutputStream&);
 
 WXDLLEXPORT wxTextOutputStream &endl( wxTextOutputStream &stream );
 
+
 class WXDLLEXPORT wxTextInputStream
 {
 public:
+#if wxUSE_UNICODE
+    wxTextInputStream(wxInputStream& s, const wxString &sep=wxT(" \t"), wxMBConv& conv = wxConvUTF8 );
+#else
     wxTextInputStream(wxInputStream& s, const wxString &sep=wxT(" \t") );
+#endif
     ~wxTextInputStream();
 
     wxUint32 Read32();
@@ -60,13 +65,18 @@ public:
 protected:
     wxInputStream &m_input;
     wxString m_separators;
+    
+#if wxUSE_UNICODE
+    wxMBConv &m_conv;
+#endif
 
     bool   EatEOL(const wxChar &c);
     wxChar NextNonSeparators();
     void   SkipIfEndOfLine( wxChar c );
 };
 
-typedef enum {
+typedef enum
+{
   wxEOL_NATIVE,
   wxEOL_UNIX,
   wxEOL_MAC,
@@ -76,7 +86,11 @@ typedef enum {
 class WXDLLEXPORT wxTextOutputStream
 {
 public:
+#if wxUSE_UNICODE
+    wxTextOutputStream( wxOutputStream& s, wxEOL mode = wxEOL_NATIVE, wxMBConv& conv = wxConvUTF8  );
+#else
     wxTextOutputStream( wxOutputStream& s, wxEOL mode = wxEOL_NATIVE );
+#endif
     virtual ~wxTextOutputStream();
 
     void SetMode( wxEOL mode = wxEOL_NATIVE );
@@ -103,6 +117,11 @@ public:
 protected:
     wxOutputStream &m_output;
     wxEOL           m_mode;
+    
+#if wxUSE_UNICODE
+    wxMBConv &m_conv;
+#endif
+
 };
 
 #endif

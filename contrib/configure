@@ -691,6 +691,16 @@ fi
 PATH_IFS=$wx_cv_path_ifs
 WX_TARGET_LIBRARY=$wx_cv_target_library
 WX_TARGET_LIBRARY_TYPE=$wx_cv_target_libtype
+WX_LIBRARY_BASENAME=$wx_cv_library_basename
+WX_RELEASE=$wx_cv_release
+WX_CURRENT=$wx_cv_current
+WX_REVISION=$wx_cv_revision
+WX_AGE=$wx_cv_age
+
+
+
+
+
 
 
 
@@ -830,16 +840,17 @@ trap 'rm -fr `echo "
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
-            samples/svg/Makefile	    
+            samples/svg/Makefile
             samples/canvas/Makefile
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile
             samples/gizmos/Makefile
-            samples/gizmos/multicell/Makefile
-            samples/gizmos/splittree/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
             samples/gizmos/dynsash_switch/Makefile
+            samples/gizmos/multicell/Makefile
+            samples/gizmos/splittree/Makefile
+            samples/gizmos/led/Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
@@ -890,6 +901,11 @@ s%@PATH_IFS@%$PATH_IFS%g
 s%@ESD_LINK@%$ESD_LINK%g
 s%@WX_TARGET_LIBRARY@%$WX_TARGET_LIBRARY%g
 s%@WX_TARGET_LIBRARY_TYPE@%$WX_TARGET_LIBRARY_TYPE%g
+s%@WX_LIBRARY_BASENAME@%$WX_LIBRARY_BASENAME%g
+s%@WX_RELEASE@%$WX_RELEASE%g
+s%@WX_CURRENT@%$WX_CURRENT%g
+s%@WX_REVISION@%$WX_REVISION%g
+s%@WX_AGE@%$WX_AGE%g
 
 CEOF
 EOF
@@ -949,16 +965,17 @@ CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
             samples/ogl/ogledit/Makefile
             samples/ogl/studio/Makefile
             samples/stc/Makefile
-            samples/svg/Makefile	    
+            samples/svg/Makefile
             samples/canvas/Makefile
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile
             samples/gizmos/Makefile
-            samples/gizmos/multicell/Makefile
-            samples/gizmos/splittree/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
             samples/gizmos/dynsash_switch/Makefile
+            samples/gizmos/multicell/Makefile
+            samples/gizmos/splittree/Makefile
+            samples/gizmos/led/Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile

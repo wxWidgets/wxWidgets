@@ -132,8 +132,17 @@ bool wxNotebook::Create(wxWindow *parent,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
 
+	int tabstyle = kControlTabSmallNorthProc ;
+	if ( HasFlag(wxNB_LEFT) )
+		tabstyle = kControlTabSmallWestProc ;
+	else if ( HasFlag( wxNB_RIGHT ) )
+		tabstyle = kControlTabSmallEastProc ;
+	else if ( HasFlag( wxNB_BOTTOM ) )
+		tabstyle = kControlTabSmallSouthProc ;
+
+
 	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
-	  	kControlTabSmallProc , (long) this ) ;
+	  	tabstyle , (long) this ) ;
 	
 	MacPostControlCreate() ;
 	return TRUE ;
@@ -207,6 +216,7 @@ int wxNotebook::SetSelection(int nPage)
     ChangePage(m_nSelection, nPage);
 	SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
 
+    Refresh();
     return m_nSelection;
 }
 
@@ -233,7 +243,7 @@ int wxNotebook::GetPageImage(int nPage) const
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, _T("invalid notebook page") );
 
-    return 0 ;
+    return m_images[nPage];
 }
 
 bool wxNotebook::SetPageImage(int nPage, int nImage)
@@ -243,7 +253,17 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
     wxCHECK_MSG( m_imageList && nImage < m_imageList->GetImageCount(), FALSE,
                  _T("invalid image index in SetPageImage()") );
 
-    return FALSE;
+    if ( nImage != m_images[nPage] )
+    {
+        // if the item didn't have an icon before or, on the contrary, did have
+        // it but has lost it now, its size will change - but if the icon just
+        // changes, it won't
+        m_images[nPage] = nImage;
+
+		MacSetupTabs() ;
+    }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -295,6 +315,8 @@ bool wxNotebook::InsertPage(int nPage,
     // save the pointer to the page
     m_pages.Insert(pPage, nPage);
 
+    m_images.Insert(imageId, nPage);
+
     MacSetupTabs();
 
     if ( bSelect ) {
@@ -332,7 +354,8 @@ void wxNotebook::MacSetupTabs()
 
     wxNotebookPage *page;
     ControlTabInfoRec info;
-    Boolean enabled = true;
+
+    OSStatus err = noErr ;
     for(int ii = 0; ii < GetPageCount(); ii++)
     {
         page = m_pages[ii];
@@ -346,8 +369,35 @@ void wxNotebook::MacSetupTabs()
 #endif
         SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabInfoTag,
                         sizeof( ControlTabInfoRec) , (char*) &info ) ;
-        SetControlData( (ControlHandle) m_macControl, ii+1, kControlTabEnabledFlagTag,
-                        sizeof( Boolean ), (Ptr)&enabled );
+        SetTabEnabled( (ControlHandle) m_macControl , ii+1 , true ) ;
+
+#if TARGET_CARBON
+        if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
+        {
+        	// tab controls only support very specific types of images, therefore we are doing an odyssee
+        	// accross the icon worlds (even Apple DTS did not find a shorter path)
+        	// in order not to pollute the icon registry we put every icon into (OSType) 1 and immediately
+        	// afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we 
+        	// unregister it) in case this will ever lead to having the same icon everywhere add some kind
+        	// of static counter 
+        	ControlButtonContentInfo info ;
+        	wxMacCreateBitmapButton( &info , *GetImageList()->GetBitmap( GetPageImage(ii ) ) , kControlContentPictHandle) ;
+        	IconFamilyHandle iconFamily = (IconFamilyHandle) NewHandle(0) ;
+        	OSErr err = SetIconFamilyData( iconFamily, 'PICT' , (Handle) info.u.picture ) ;
+            wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
+         	IconRef iconRef ;
+         	err = RegisterIconRefFromIconFamily( 'WXNG' , (OSType) 1 , iconFamily, &iconRef ) ;
+            wxASSERT_MSG( err == noErr , "Error when adding bitmap" ) ;
+         	info.contentType = kControlContentIconRef ;
+         	info.u.iconRef = iconRef ;
+        	SetControlData( (ControlHandle) m_macControl, ii+1,kControlTabImageContentTag,
+                        sizeof( info ), (Ptr)&info );
+            wxASSERT_MSG( err == noErr , "Error when setting icon on tab" ) ;
+           	UnregisterIconRef( 'WXNG' , (OSType) 1 ) ;
+            ReleaseIconRef( iconRef ) ;
+            DisposeHandle( (Handle) iconFamily ) ;
+        }
+#endif
     }
     Rect bounds;
     GetControlBounds((ControlHandle)m_macControl, &bounds);

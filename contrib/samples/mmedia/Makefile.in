@@ -9,7 +9,7 @@ PROGRAM=mmboard
 
 OBJECTS=mmboard.o mmbman.o
 
-APPEXTRALIBS=$(top_builddir)/lib/libmmedia.@WX_TARGET_LIBRARY_TYPE@ @ESD_LINK@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_mmedia-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@ @ESD_LINK@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env

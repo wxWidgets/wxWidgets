@@ -111,10 +111,13 @@ public:
 
     wxDataFormat GetPreferredFormat(Direction dir = wxDataObject::Get);
     size_t GetFormatCount(Direction dir = wxDataObject::Get);
+
+    // TODO:  Fix these two to be usable from wxPython.
     void GetAllFormats(wxDataFormat *formats,
                        Direction dir = wxDataObject::Get);
-    size_t GetDataSize(const wxDataFormat& format);
     bool GetDataHere(const wxDataFormat& format, void *buf);
+
+    size_t GetDataSize(const wxDataFormat& format);
     bool SetData(const wxDataFormat& format,
                  size_t len, const void * buf);
     bool IsSupportedFormat(const wxDataFormat& format);

@@ -351,15 +351,27 @@ public:
     %addmethods {
         PyObject* Get() {
             PyObject* rv = PyTuple_New(3);
-            PyTuple_SetItem(rv, 0, PyInt_FromLong(self->Red()));
-            PyTuple_SetItem(rv, 1, PyInt_FromLong(self->Green()));
-            PyTuple_SetItem(rv, 2, PyInt_FromLong(self->Blue()));
+            int red = -1;
+            int green = -1;
+            int blue = -1;
+            if (self->Ok()) {
+                red =   self->Red();
+                green = self->Green();
+                blue =  self->Blue();
+            }
+            PyTuple_SetItem(rv, 0, PyInt_FromLong(red));
+            PyTuple_SetItem(rv, 1, PyInt_FromLong(green));
+            PyTuple_SetItem(rv, 2, PyInt_FromLong(blue));
             return rv;
         }
+        bool __eq__(const wxColour& o) { return *self == o; }
+        bool __ne__(const wxColour& o) { return *self != o; }
     }
-    %pragma(python) addtoclass = "asTuple = Get"
-    %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
-    %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
+    %pragma(python) addtoclass = "asTuple = Get
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
+    def __nonzero__(self):      return self.asTuple() != (0,0,0)
+"
 
 };
 

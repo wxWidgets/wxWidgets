@@ -140,6 +140,7 @@ class wxFileCtrl : public wxListCtrl
 public:
     wxFileCtrl();
     wxFileCtrl( wxWindow *win,
+                wxStaticText *labelDir,
                 wxWindowID id,
                 const wxString &wild,
                 bool showHidden,
@@ -182,6 +183,9 @@ private:
 
     wxWindow     *m_goToParentControl;
     wxWindow     *m_newDirControl;
+
+    // the label showing the current directory
+    wxStaticText *m_labelDir;
 
     DECLARE_DYNAMIC_CLASS(wxFileCtrl);
     DECLARE_EVENT_TABLE()
@@ -494,13 +498,13 @@ wxString wxFileData::GetFullName() const
 wxString wxFileData::GetHint() const
 {
     wxString s = m_fileName;
-    s += "  ";
-    if (m_isDir) s += _("<DIR> ");
-    else if (m_isLink) s += _("<LINK> ");
+    s += wxT("  ");
+    if (m_isDir) s += wxT("<DIR> ");
+    else if (m_isLink) s += wxT("<LINK> ");
     else
     {
         s += LongToString( m_size );
-        s += _(" bytes ");
+        s += wxT(" bytes ");
     }
     s += IntToString( m_day );
     s += wxT(".");
@@ -605,6 +609,7 @@ wxFileCtrl::wxFileCtrl()
 }
 
 wxFileCtrl::wxFileCtrl(wxWindow *win,
+                       wxStaticText *labelDir,
                        wxWindowID id,
                        const wxString& wild,
                        bool showHidden,
@@ -624,6 +629,8 @@ wxFileCtrl::wxFileCtrl(wxWindow *win,
 
     m_goToParentControl =
     m_newDirControl = NULL;
+
+    m_labelDir = labelDir;
 
     m_showHidden = showHidden;
 }
@@ -673,6 +680,10 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 
 void wxFileCtrl::UpdateFiles()
 {
+    // don't do anything before ShowModal() call which sets m_dirName
+    if ( m_dirName.empty() )
+        return;
+
     wxBusyCursor bcur; // this may take a while...
 
     long my_style = GetWindowStyleFlag();
@@ -867,6 +878,8 @@ void wxFileCtrl::GoToParentDir()
             SetItemState( id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
             EnsureVisible( id );
         }
+
+        m_labelDir->SetLabel(dir);
     }
 }
 
@@ -882,6 +895,8 @@ void wxFileCtrl::GoToDir( const wxString &dir )
     UpdateFiles();
     SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
     EnsureVisible( 0 );
+
+    m_labelDir->SetLabel(dir);
 }
 
 void wxFileCtrl::GetDir( wxString &dir )
@@ -988,7 +1003,7 @@ BEGIN_EVENT_TABLE(wxFileDialog,wxDialog)
         EVT_BUTTON(wxID_OK, wxFileDialog::OnListOk)
         EVT_LIST_ITEM_SELECTED(ID_LIST_CTRL, wxFileDialog::OnSelected)
         EVT_LIST_ITEM_ACTIVATED(ID_LIST_CTRL, wxFileDialog::OnActivated)
-        EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoice)
+        EVT_CHOICE(ID_CHOICE,wxFileDialog::OnChoiceFilter)
         EVT_TEXT_ENTER(ID_TEXT,wxFileDialog::OnTextEnter)
         EVT_CHECKBOX(ID_CHECK,wxFileDialog::OnCheck)
 END_EVENT_TABLE()
@@ -1061,9 +1076,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     }
     if ( firstWild.Left( 2 ) == wxT("*.") )
         m_filterExtension = firstWild.Mid( 1 );
-    if ( m_filterExtension == ".*" ) m_filterExtension = wxEmptyString;
+    if ( m_filterExtension == wxT(".*") )
+        m_filterExtension = wxEmptyString;
 
     // layout
+    
+    bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -1114,13 +1132,13 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
 #endif
     buttonsizer->Add( butNewDir, 0, wxALL, 5 );
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
+    if (is_pda)
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 0 );
     else
         mainsizer->Add( buttonsizer, 0, wxALL | wxEXPAND, 5 );
 
     wxBoxSizer *staticsizer = new wxBoxSizer( wxHORIZONTAL );
-    if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+    if (is_pda)
         staticsizer->Add( new wxStaticText( this, -1, _("Current directory:") ), 0, wxRIGHT, 10 );
     m_static = new wxStaticText( this, -1, m_dir );
     staticsizer->Add( m_static, 1 );
@@ -1130,14 +1148,15 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     if ( !(m_dialogStyle & wxMULTIPLE) )
         style2 |= wxLC_SINGLE_SEL;
 
-    m_list = new wxFileCtrl( this, ID_LIST_CTRL, firstWild, ms_lastShowHidden,
+    m_list = new wxFileCtrl( this, m_static, ID_LIST_CTRL,
+                             firstWild, ms_lastShowHidden,
                              wxDefaultPosition, wxSize(540,200),
                              style2);
 
     m_list->SetNewDirControl(butNewDir);
     m_list->SetGoToParentControl(butDirUp);
 
-    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
+    if (is_pda)
     {
         // PDAs have a different screen layout
         mainsizer->Add( m_list, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
@@ -1215,31 +1234,38 @@ wxFileDialog::~wxFileDialog()
 int wxFileDialog::ShowModal()
 {
     m_list->GoToDir(m_dir);
+    m_text->SetValue(m_fileName);
 
     return wxDialog::ShowModal();
+}
+
+void wxFileDialog::DoSetFilterIndex(int filterindex)
+{
+    wxString *str = (wxString*) m_choice->GetClientData( filterindex );
+    m_list->SetWild( *str );
+    m_filterIndex = filterindex;
+    if ( str->Left(2) == wxT("*.") )
+    {
+        m_filterExtension = str->Mid(2);
+        if (m_filterExtension == _T("*"))
+            m_filterExtension.clear();
+    }
+    else
+    {
+        m_filterExtension.clear();
+    }
 }
 
 void wxFileDialog::SetFilterIndex( int filterindex )
 {
     m_choice->SetSelection( filterindex );
-    wxCommandEvent event;
-    event.SetInt( filterindex );
-    OnChoice( event );
+
+    DoSetFilterIndex(filterindex);
 }
 
-void wxFileDialog::OnChoice( wxCommandEvent &event )
+void wxFileDialog::OnChoiceFilter( wxCommandEvent &event )
 {
-    int index = (int)event.GetInt();
-    wxString *str = (wxString*) m_choice->GetClientData( index );
-    m_list->SetWild( *str );
-    m_filterIndex = index;
-    if ( str -> Left( 2 ) == wxT("*.") )
-    {
-        m_filterExtension = str -> Mid( 1 );
-        if (m_filterExtension == ".*") m_filterExtension = wxEmptyString;
-    }
-    else
-        m_filterExtension = wxEmptyString;
+    DoSetFilterIndex((int)event.GetInt());
 }
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )
@@ -1286,8 +1312,6 @@ void wxFileDialog::HandleAction( const wxString &fn )
     {
         m_list->GoToParentDir();
         m_list->SetFocus();
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
@@ -1296,8 +1320,6 @@ void wxFileDialog::HandleAction( const wxString &fn )
     {
         m_list->GoToHomeDir();
         m_list->SetFocus();
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
@@ -1334,42 +1356,43 @@ void wxFileDialog::HandleAction( const wxString &fn )
     if (wxDirExists(filename))
     {
         m_list->GoToDir( filename );
-        m_list->GetDir( dir );
-        m_static->SetLabel( dir );
         return;
     }
 
-
-    if ( (m_dialogStyle & wxSAVE) && (m_dialogStyle & wxOVERWRITE_PROMPT) )
+    // append the default extension to the filename if it doesn't have any
+    //
+    // VZ: the logic of testing for !wxFileExists() only for the open file
+    //     dialog is not entirely clear to me, why don't we allow saving to a
+    //     file without extension as well?
+    if ( !(m_dialogStyle & wxOPEN) || !wxFileExists(filename) )
     {
-        if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
-                filename.AfterLast( wxT('.') ).Find( wxFILE_SEP_PATH ) != wxNOT_FOUND)
-            filename << m_filterExtension;
-        if (wxFileExists( filename ))
+        wxString ext;
+        wxSplitPath(filename, NULL, NULL, &ext);
+        if ( ext.empty() )
         {
-            wxString msg;
-            msg.Printf( _("File '%s' already exists, do you really want to "
-                         "overwrite it?"), filename.c_str() );
-
-            if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
-                return;
+            // append the first extension of the filter string
+            filename += m_filterExtension.BeforeFirst(_T(';'));
         }
     }
-    else if ( m_dialogStyle & wxOPEN )
-    {
-        if ( !wxFileExists( filename ) )
-            if (filename.Find( wxT('.') ) == wxNOT_FOUND ||
-                  filename.AfterLast( wxT('.') ).Find( wxFILE_SEP_PATH ) != wxNOT_FOUND)
-                filename << m_filterExtension;
 
-        if ( m_dialogStyle & wxFILE_MUST_EXIST )
-        {
-            if ( !wxFileExists( filename ) )
-            {
-                wxMessageBox(_("Please choose an existing file."), _("Error"), wxOK | wxICON_ERROR );
-                return;
-            }
-        }
+    // check that the file [doesn't] exist if necessary
+    if ( (m_dialogStyle & wxSAVE) &&
+            (m_dialogStyle & wxOVERWRITE_PROMPT) &&
+                wxFileExists( filename ) )
+    {
+        wxString msg;
+        msg.Printf( _("File '%s' already exists, do you really want to "
+                     "overwrite it?"), filename.c_str() );
+
+        if (wxMessageBox(msg, _("Confirm"), wxYES_NO) != wxYES)
+            return;
+    }
+    else if ( (m_dialogStyle & wxOPEN) &&
+                (m_dialogStyle & wxFILE_MUST_EXIST) &&
+                    !wxFileExists(filename) )
+    {
+        wxMessageBox(_("Please choose an existing file."), _("Error"),
+                     wxOK | wxICON_ERROR );
     }
 
     SetPath( filename );
@@ -1413,20 +1436,12 @@ void wxFileDialog::OnUp( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToParentDir();
     m_list->SetFocus();
-    wxString dir;
-    m_list->GetDir( dir );
-    m_static->SetLabel( dir );
 }
 
 void wxFileDialog::OnHome( wxCommandEvent &WXUNUSED(event) )
 {
     m_list->GoToHomeDir();
     m_list->SetFocus();
-    wxString dir;
-    m_list->GetDir( dir );
-    m_static->SetLabel( dir );
-
-    m_text->SetFocus();
 }
 
 void wxFileDialog::OnNew( wxCommandEvent &WXUNUSED(event) )

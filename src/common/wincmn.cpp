@@ -470,6 +470,15 @@ void wxWindowBase::Fit()
     //else: do nothing if we have no children
 }
 
+// fits virtual size (ie. scrolled area etc.) around children
+void wxWindowBase::FitInside()
+{
+    if ( GetChildren().GetCount() > 0 )
+    {
+        SetVirtualSize( GetBestVirtualSize() );
+    }
+}
+
 // return the size best suited for the current window
 wxSize wxWindowBase::DoGetBestSize() const
 {
@@ -593,8 +602,6 @@ void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
     m_maxVirtualWidth = maxW;
     m_minVirtualHeight = minH;
     m_maxVirtualHeight = maxH;
-
-    SetVirtualSize( GetClientSize() );
 }
 
 void wxWindowBase::DoSetVirtualSize( int x, int y )
@@ -1757,10 +1764,16 @@ void wxWindowBase::UpdateWindowUI()
 #if wxUSE_TEXTCTRL
                 wxTextCtrl *text = wxDynamicCast(control, wxTextCtrl);
                 if ( text )
-                    text->SetValue(event.GetText());
+                {
+                	if ( event.GetText() != text->GetValue() )
+                    	text->SetValue(event.GetText());
+                }
                 else
 #endif // wxUSE_TEXTCTRL
-                    control->SetLabel(event.GetText());
+				{
+					if ( event.GetText() != control->GetLabel() )
+                    	control->SetLabel(event.GetText());
+                }
             }
         }
 

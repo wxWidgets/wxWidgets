@@ -19,7 +19,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_INCLUDES],
 [
 ac_find_includes=
-for ac_dir in $1;
+for ac_dir in $1 /usr/include;
   do
     if test -f "$ac_dir/$2"; then
       ac_find_includes=$ac_dir
@@ -35,7 +35,7 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
 ac_find_libraries=
-for ac_dir in $1;
+for ac_dir in $1 /usr/lib;
   do
     for ac_extension in a so sl dylib; do
       if test -f "$ac_dir/lib$2.$ac_extension"; then
@@ -51,13 +51,17 @@ dnl Path to include, already defined
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 [
-  ac_path_to_include=$1
-  echo "$2" | grep "\-I$1" > /dev/null
-  result=$?
-  if test $result = 0; then
+  dnl never add -I/usr/include to the CPPFLAGS
+  if test "x$1" = "x/usr/include"; then
     ac_path_to_include=""
   else
-    ac_path_to_include=" -I$1"
+    echo "$2" | grep "\-I$1" > /dev/null
+    result=$?
+    if test $result = 0; then
+      ac_path_to_include=""
+    else
+      ac_path_to_include=" -I$1"
+    fi
   fi
 ])
 
@@ -377,6 +381,57 @@ AC_DEFUN([WX_ARG_ENABLE],
           fi
         ])
 
+
+dnl ===========================================================================
+dnl Linker features test
+dnl ===========================================================================
+
+dnl ---------------------------------------------------------------------------
+dnl WX_VERSIONED_SYMBOLS checks whether the linker can create versioned
+dnl symbols. If it can, sets LDFLAGS_VERSIONING to $CXX flags needed to use
+dnl version script file named versionfile
+dnl
+dnl call WX_VERSIONED_SYMBOLS(versionfile)
+dnl ---------------------------------------------------------------------------
+AC_DEFUN([WX_VERSIONED_SYMBOLS],
+[
+  found_versioning=no
+
+  dnl Check for known non-gcc cases:
+  case "${host}" in
+    *-*-solaris2* )
+      if test "x$GCC" != "xyes" ; then
+          LDFLAGS_VERSIONING="-M $1"
+          found_versioning=yes
+      fi
+    ;;
+  esac
+  
+  dnl Generic check for GCC or GCC-like behaviour (Intel C++, GCC):
+  if test $found_versioning = no ; then
+      AC_CACHE_CHECK([if the linker accepts --version-script], wx_cv_version_script,
+      [
+        echo "VER_1 { *; };" >conftest.sym
+        echo "int main() { return 0; }" >conftest.cpp
+  
+        if AC_TRY_COMMAND([
+                $CXX -o conftest.output $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.cpp
+                -Wl,--version-script,conftest.sym >/dev/null 2>conftest.stderr]) ; then
+          if test -s conftest.stderr ; then
+              wx_cv_version_script=no
+          else
+              wx_cv_version_script=yes
+          fi
+        else
+          wx_cv_version_script=no
+        fi
+        rm -f conftest.output conftest.stderr conftest.sym conftest.cpp
+      ])
+      if test $wx_cv_version_script = yes ; then
+        LDFLAGS_VERSIONING="-Wl,--version-script,$1"
+      fi
+  fi
+])
 
 
 dnl ===========================================================================

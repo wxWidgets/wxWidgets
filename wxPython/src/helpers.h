@@ -20,21 +20,7 @@
 
 typedef unsigned char byte;
 
-
-class wxPyApp: public wxApp
-{
-public:
-    wxPyApp();
-    ~wxPyApp();
-    bool OnInit();
-    int  MainLoop();
-};
-
-extern wxPyApp *wxPythonApp;
-
-//----------------------------------------------------------------------
-
-void      __wxPreStart();
+void      __wxPreStart(PyObject*);
 PyObject* __wxStart(PyObject*, PyObject* args);
 void      __wxCleanup();
 
@@ -404,17 +390,60 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 
 //---------------------------------------------------------------------------
+
+// This is used in C++ classes that need to be able to make callback to
+// "overloaded" python methods
+
+#define PYPRIVATE                                                               \
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
+        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
+    }                                                                           \
+    private: wxPyCallbackHelper m_myInst
+
+
+//---------------------------------------------------------------------------
+
+enum {
+    wxPYAPP_ASSERT_SUPPRESS  = 1,
+    wxPYAPP_ASSERT_EXCEPTION = 2,
+    wxPYAPP_ASSERT_DIALOG    = 4
+};
+
+class wxPyApp: public wxApp
+{
+    DECLARE_ABSTRACT_CLASS(wxPyApp);
+
+public:
+    wxPyApp();
+    ~wxPyApp();
+    bool OnInit();
+    int  MainLoop();
+
+    int  GetAssertMode() { return m_assertMode; }
+    void SetAssertMode(int mode) { m_assertMode = mode; }
+
+    virtual bool OnInitGui();
+    virtual int OnExit();
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file,
+                          int line,
+                          const wxChar *cond,
+                          const wxChar *msg);
+#endif
+
+    // virtual int FilterEvent(wxEvent& event); // This one too????
+
+    PYPRIVATE;
+    int m_assertMode;
+};
+
+extern wxPyApp *wxPythonApp;
+
+
+//----------------------------------------------------------------------
 // These macros are used to implement the virtual methods that should
 // redirect to a Python method if one exists.  The names designate the
 // return type, if any, as well as any parameter types.
-//---------------------------------------------------------------------------
-
-#define PYPRIVATE                                                       \
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1) {     \
-        wxPyCBH_setCallbackInfo(m_myInst, self, _class, incref);                \
-    }                                                                   \
-    private: wxPyCallbackHelper m_myInst
-
 //---------------------------------------------------------------------------
 
 #define DEC_PYCALLBACK__(CBNAME)                        \
@@ -425,10 +454,10 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 #define IMP_PYCALLBACK__(CLASS, PCLASS, CBNAME)                         \
     void CLASS::CBNAME() {                                              \
         bool found;                                                     \
-        wxPyBeginBlockThreads();                    \
+        wxPyBeginBlockThreads();                                        \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME)))          \
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));        \
-        wxPyEndBlockThreads();                                     \
+        wxPyEndBlockThreads();                                          \
         if (! found)                                                    \
             PCLASS::CBNAME();                                           \
     }                                                                   \
@@ -1844,6 +1873,29 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
                 SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");                \
                 Py_DECREF(ro);                                                  \
             }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        return rv;                                                              \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_OBJECT_STRING_pure(CBNAME)                               \
+    wxObject* CBNAME(const wxString& a);
+
+#define IMP_PYCALLBACK_OBJECT_STRING_pure(CLASS, PCLASS, CBNAME)                \
+    wxObject* CLASS::CBNAME(const wxString& a) {                                \
+        wxObject* rv = NULL;                                                    \
+        wxPyBeginBlockThreads();                                                \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* so = wx2PyString(a);                                      \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(O)", so));   \
+            if (ro) {                                                           \
+                SWIG_GetPtrObj(ro, (void **)&rv, "_wxObject_p");                \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+            Py_DECREF(so);                                                      \
         }                                                                       \
         wxPyEndBlockThreads();                                                  \
         return rv;                                                              \

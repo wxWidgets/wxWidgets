@@ -24,15 +24,10 @@ class MyWindow;
 class MyFrame: public wxFrame
 {
 public:
-    wxPanel *panel;
-    MyTextWindow *text_window;
-    MyWindow *canvas;
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    void OnSize(wxSizeEvent& event);
-    void Draw(wxDC& dc, bool draw_bitmaps = TRUE);
+    MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
 
-    void LoadFile(wxCommandEvent& event);
-    void Quit(wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
+
     void TestSizers(wxCommandEvent& event);
     void TestNotebookSizers(wxCommandEvent& event);
     void About(wxCommandEvent& event);
@@ -61,7 +56,7 @@ public:
     ~MyWindow();
     void OnPaint(wxPaintEvent& event);
 
-private:    
+private:
     DECLARE_EVENT_TABLE()
 };
 
@@ -75,6 +70,5 @@ public:
 #define LAYOUT_QUIT       100
 #define LAYOUT_TEST       101
 #define LAYOUT_ABOUT      102
-#define LAYOUT_LOAD_FILE  103
 #define LAYOUT_TEST_SIZER 104
 #define LAYOUT_TEST_NB    105

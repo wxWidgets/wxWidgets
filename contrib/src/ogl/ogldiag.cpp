@@ -225,7 +225,7 @@ void wxDiagram::RecentreAll(wxDC& dc)
 }
 
 // Input/output
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 bool wxDiagram::SaveFile(const wxString& filename)
 {
   wxBeginBusyCursor();

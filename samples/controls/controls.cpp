@@ -122,12 +122,15 @@ public:
     void OnTestButton(wxCommandEvent& event);
     void OnBmpButton(wxCommandEvent& event);
 
+    void OnSizerCheck (wxCommandEvent &event);
+
     wxListBox     *m_listbox,
                   *m_listboxSorted;
 #if wxUSE_CHOICE
     wxChoice      *m_choice,
                   *m_choiceSorted;
-#endif
+#endif // wxUSE_CHOICE
+
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
     wxGauge       *m_gauge,
@@ -152,6 +155,14 @@ public:
     wxNotebook    *m_notebook;
 
     wxStaticText  *m_label;
+
+    wxBoxSizer    *m_buttonSizer;
+    wxButton      *m_sizerBtn1;
+    wxButton      *m_sizerBtn2;
+    wxButton      *m_sizerBtn3;
+    wxButton      *m_sizerBtn4;
+    wxBoxSizer    *m_hsizer;
+    wxButton      *m_bigBtn;
 
 private:
     wxLog *m_logTargetOld;
@@ -298,7 +309,10 @@ private:
 //----------------------------------------------------------------------
 
 static void SetListboxClientData(const wxChar *name, wxListBox *control);
+
+#if wxUSE_CHOICE
 static void SetChoiceClientData(const wxChar *name, wxChoice *control);
+#endif // wxUSE_CHOICE
 
 IMPLEMENT_APP(MyApp)
 
@@ -403,6 +417,13 @@ const int  ID_BITMAP_BTN        = 192;
 
 const int  ID_CHANGE_COLOUR     = 200;
 
+const int  ID_SIZER_CHECK1      = 201;
+const int  ID_SIZER_CHECK2      = 202;
+const int  ID_SIZER_CHECK3      = 203;
+const int  ID_SIZER_CHECK4      = 204;
+const int  ID_SIZER_CHECK14     = 205;
+const int  ID_SIZER_CHECKBIG    = 206;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
 EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
@@ -465,6 +486,14 @@ EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
+
+EVT_CHECKBOX  (ID_SIZER_CHECK1,         MyPanel::OnSizerCheck)
+EVT_CHECKBOX  (ID_SIZER_CHECK2,         MyPanel::OnSizerCheck)
+EVT_CHECKBOX  (ID_SIZER_CHECK3,         MyPanel::OnSizerCheck)
+EVT_CHECKBOX  (ID_SIZER_CHECK4,         MyPanel::OnSizerCheck)
+EVT_CHECKBOX  (ID_SIZER_CHECK14,        MyPanel::OnSizerCheck)
+EVT_CHECKBOX  (ID_SIZER_CHECKBIG,       MyPanel::OnSizerCheck)
+
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyButton, wxButton)
@@ -849,11 +878,53 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     panel->SetAutoLayout( TRUE );
 
-    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
 
-    sizer->Add( new wxButton(panel, -1, "Test Button &1" ), 3, wxALL, 10 );
-    sizer->Add( 20,20, 1 );
-    sizer->Add( new wxButton(panel, -1, "Multiline\nbutton" ), 3, wxGROW|wxALL, 10 );
+    wxStaticBoxSizer *csizer =
+      new wxStaticBoxSizer (new wxStaticBox (panel, -1, "Show Buttons"),
+			    wxHORIZONTAL );
+    
+    wxCheckBox *check1, *check2, *check3, *check4, *check14, *checkBig;
+    check1 = new wxCheckBox (panel, ID_SIZER_CHECK1, "1");
+    check1->SetValue (TRUE);
+    csizer->Add (check1);
+    check2 = new wxCheckBox (panel, ID_SIZER_CHECK2, "2");
+    check2->SetValue (TRUE);
+    csizer->Add (check2);
+    check3 = new wxCheckBox (panel, ID_SIZER_CHECK3, "3");
+    check3->SetValue (TRUE);
+    csizer->Add (check3);
+    check4 = new wxCheckBox (panel, ID_SIZER_CHECK4, "4");
+    check4->SetValue (TRUE);
+    csizer->Add (check4);
+    check14 = new wxCheckBox (panel, ID_SIZER_CHECK14, "1-4");
+    check14->SetValue (TRUE);
+    csizer->Add (check14);
+    checkBig = new wxCheckBox (panel, ID_SIZER_CHECKBIG, "Big");
+    checkBig->SetValue (TRUE);
+    csizer->Add (checkBig);
+    
+    sizer->Add (csizer);
+
+    m_hsizer = new wxBoxSizer( wxHORIZONTAL );
+
+    m_buttonSizer = new wxBoxSizer (wxVERTICAL);
+    
+    m_sizerBtn1 = new wxButton(panel, -1, "Test Button &1" );
+    m_buttonSizer->Add( m_sizerBtn1, 0, wxALL, 10 );
+    m_sizerBtn2 = new wxButton(panel, -1, "Test Button &2" );
+    m_buttonSizer->Add( m_sizerBtn2, 0, wxALL, 10 );
+    m_sizerBtn3 = new wxButton(panel, -1, "Test Button &3" );
+    m_buttonSizer->Add( m_sizerBtn3, 0, wxALL, 10 );
+    m_sizerBtn4 = new wxButton(panel, -1, "Test Button &4" );
+    m_buttonSizer->Add( m_sizerBtn4, 0, wxALL, 10 );
+
+    m_hsizer->Add (m_buttonSizer);
+    m_hsizer->Add( 20,20, 1 );
+    m_bigBtn = new wxButton(panel, -1, "Multiline\nbutton" );
+    m_hsizer->Add( m_bigBtn , 3, wxGROW|wxALL, 10 );
+
+    sizer->Add (m_hsizer, 1, wxGROW);
 
     panel->SetSizer( sizer );
 
@@ -1404,6 +1475,37 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 #endif // wxUSE_SPINBTN
 
+void MyPanel::OnSizerCheck( wxCommandEvent &event)
+{
+  switch (event.GetId ()) {
+  case ID_SIZER_CHECK1:
+    m_buttonSizer->Show (m_sizerBtn1, event.IsChecked ());
+    m_buttonSizer->Layout ();
+    break;
+  case ID_SIZER_CHECK2:
+    m_buttonSizer->Show (m_sizerBtn2, event.IsChecked ());
+    m_buttonSizer->Layout ();
+    break;
+  case ID_SIZER_CHECK3:
+    m_buttonSizer->Show (m_sizerBtn3, event.IsChecked ());
+    m_buttonSizer->Layout ();
+    break;
+  case ID_SIZER_CHECK4:
+    m_buttonSizer->Show (m_sizerBtn4, event.IsChecked ());
+    m_buttonSizer->Layout ();
+    break;
+  case ID_SIZER_CHECK14:
+    m_hsizer->Show (m_buttonSizer, event.IsChecked ());
+    m_hsizer->Layout ();
+    break;
+  case ID_SIZER_CHECKBIG:
+    m_hsizer->Show (m_bigBtn, event.IsChecked ());
+    m_hsizer->Layout ();
+    break;
+  }
+
+}
+
 MyPanel::~MyPanel()
 {
     //wxLog::RemoveTraceMask(_T("focus"));
@@ -1617,6 +1719,8 @@ static void SetListboxClientData(const wxChar *name, wxListBox *control)
     }
 }
 
+#if wxUSE_CHOICE
+
 static void SetChoiceClientData(const wxChar *name, wxChoice *control)
 {
     size_t count = control->GetCount();
@@ -1629,3 +1733,5 @@ static void SetChoiceClientData(const wxChar *name, wxChoice *control)
         control->SetClientObject(n, new wxStringClientData(s));
     }
 }
+
+#endif // wxUSE_CHOICE

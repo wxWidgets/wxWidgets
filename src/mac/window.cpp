@@ -353,7 +353,17 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 
     ::InsertMenu( (MenuHandle) menu->GetHMenu() , -1 ) ;
     long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() ,y,x, 0) ;
-    menu->MacMenuSelect( this , TickCount() , HiWord(menuResult) , LoWord(menuResult) ) ;
+    if ( HiWord(menuResult) != 0 )
+    {
+        MenuCommand id ;
+        GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
+
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
+        event.m_timeStamp =  TickCount() ;
+        event.SetEventObject(this->GetEventHandler());
+        event.SetInt( id );
+        GetEventHandler()->ProcessEvent(event);
+    }
     ::DeleteMenu( menu->MacGetMenuId() ) ;
     menu->SetInvokingWindow(NULL);
 
@@ -595,7 +605,35 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     {
         // erase former position
 
-        Refresh() ;
+        bool partialRepaint = false ;
+
+        if ( HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+        {
+            wxPoint oldPos( m_x , m_y ) ; 
+            wxPoint newPos( actualX , actualY ) ;
+            MacWindowToRootWindow( &oldPos.x , &oldPos.y ) ;
+            MacWindowToRootWindow( &newPos.x , &newPos.y ) ;
+            if ( oldPos == newPos )
+            {
+                partialRepaint = true ;
+                RgnHandle oldRgn,newRgn,diffRgn ;
+                oldRgn = NewRgn() ;
+                newRgn = NewRgn() ;
+                diffRgn = NewRgn() ;
+                SetRectRgn(oldRgn , oldPos.x , oldPos.y , oldPos.x + m_width , oldPos.y + m_height ) ;
+                SetRectRgn(newRgn , newPos.x , newPos.y , newPos.x + actualWidth , newPos.y + actualHeight ) ;
+                DiffRgn( newRgn , oldRgn , diffRgn ) ;
+                InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
+                DiffRgn( oldRgn , newRgn , diffRgn ) ;
+                InvalWindowRgn( (WindowRef) MacGetRootWindow() , diffRgn ) ;
+                DisposeRgn(oldRgn) ;
+                DisposeRgn(newRgn) ;
+                DisposeRgn(diffRgn) ;
+            }
+        }
+
+        if ( !partialRepaint )
+            Refresh() ;
 
         m_x = actualX ;
         m_y = actualY ;
@@ -607,7 +645,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 		MacUpdateDimensions() ;
         // erase new position
 
-        Refresh() ;
+        if ( !partialRepaint )
+            Refresh() ;
         if ( doMove )
             wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 

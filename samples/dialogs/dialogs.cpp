@@ -534,16 +534,16 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
     wxFileDialog dialog(this,
                         _T("Testing save file dialog"),
                         _T(""),
-                        _T("myletter.txt"),
+                        _T("myletter.doc"),
                         _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
                         wxSAVE|wxOVERWRITE_PROMPT);
 
+    dialog.SetFilterIndex(1);
+
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxChar buf[400];
-        wxSprintf(buf, _T("%s, filter %d"), (const wxChar*)dialog.GetPath(), dialog.GetFilterIndex());
-        wxMessageDialog dialog2(this, wxString(buf), _T("Selected path"));
-        dialog2.ShowModal();
+        wxLogMessage(_T("%s, filter %d"),
+                     dialog.GetPath().c_str(), dialog.GetFilterIndex());
     }
 }
 
@@ -557,8 +557,7 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxMessageDialog dialog2(this, dialog.GetPath(), _T("Selected path"));
-        dialog2.ShowModal();
+        wxLogMessage(_T("Selected path: %s"), dialog.GetPath().c_str());
     }
 }
 

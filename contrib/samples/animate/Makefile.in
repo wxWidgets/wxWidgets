@@ -17,7 +17,7 @@ PROGRAM=anitest
 
 OBJECTS=$(PROGRAM).o
 
-APPEXTRALIBS=$(top_builddir)/lib/libwx_anim.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_anim-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 include $(top_builddir)/src/makeprog.env

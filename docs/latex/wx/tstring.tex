@@ -9,8 +9,8 @@ wxString is a class which represents a character string of arbitrary length (lim
 arbitrary characters. The ASCII NUL character is allowed, although care should be
 taken when passing strings containing it to other functions.
 
-wxString works with both ASCII (8 bit characters) as well as UNICODE (16 but
-characters) strings.
+wxString works with both ASCII (traditional, 7 or 8 bit, characters) as well as
+Unicode (wide characters) strings.
 
 This class has all the standard operations you can expect to find in a string class:
 dynamic memory management (string extends to accommodate new characters),
@@ -48,9 +48,10 @@ very useful but don't exist in most of other string classes: for example,
 \helpref{BeforeLast}{wxstringbeforelast}, \helpref{operator<<}{wxstringoperatorout} 
 or \helpref{Printf}{wxstringprintf}. Of course, all the standard string
 operations are supported as well.
-\item {\bf UNICODE} In this release, wxString only supports {\it construction} from
-a UNICODE string, but in the next one it will be capable of also storing its
-internal data in either ASCII or UNICODE format.
+\item {\bf Unicode} wxString is Unicode friendly: it allows to easily convert
+to and from ANSI and Unicode strings in any build mode (see the 
+\helpref{Unicode overview}{unicode} for more details) and maps to either
+{\tt string} or {\tt wstring} transparently depending on the current mode.
 \item {\bf Used by wxWindows} And, of course, this class is used everywhere
 inside wxWindows so there is no performance loss which would result from
 conversions of objects of any other string class (including std::string) to

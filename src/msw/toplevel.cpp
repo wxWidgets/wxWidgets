@@ -38,6 +38,8 @@
     #include "wx/containr.h"        // wxSetFocusToChild()
 #endif //WX_PRECOMP
 
+#include "wx/module.h"
+
 #include "wx/msw/private.h"
 
 #include "wx/popupwin.h"
@@ -76,8 +78,32 @@ wxWindowList wxModelessWindows;
 // the name of the default wxWindows class
 extern const wxChar *wxCanvasClassName;
 
-// the hidden parent for wxFRAME_NO_TASKBAR unowned frames
-wxWindow *wxTopLevelWindowMSW::ms_hiddenParent = NULL;
+// ----------------------------------------------------------------------------
+// wxTLWHiddenParentModule: used to manage the hidden parent window (we need a
+// module to ensure that the window is always deleted)
+// ----------------------------------------------------------------------------
+
+class wxTLWHiddenParentModule : public wxModule
+{
+public:
+    // module init/finalize
+    virtual bool OnInit();
+    virtual void OnExit();
+
+    // get the hidden window (creates on demand)
+    static HWND GetHWND();
+
+private:
+    // the HWND of the hidden parent
+    static HWND ms_hwnd;
+
+    // the class used to create it
+    static const wxChar *ms_className;
+
+    DECLARE_DYNAMIC_CLASS(wxTLWHiddenParentModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxTLWHiddenParentModule, wxModule)
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation
@@ -213,38 +239,32 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     // parent HWND or it would be always on top of its parent which is not what
     // we usually want (in fact, we only want it for frames with the
     // wxFRAME_FLOAT_ON_PARENT flag)
-    wxWindow *parent;
+    HWND hwndParent = NULL;
     if ( HasFlag(wxFRAME_FLOAT_ON_PARENT) )
     {
-        parent = GetParent();
+        const wxWindow *parent = GetParent();
 
-        // this flag doesn't make sense then and will be ignored
-        wxASSERT_MSG( parent,
-                      _T("wxFRAME_FLOAT_ON_PARENT but no parent?") );
+        if ( !parent )
+        {
+            // this flag doesn't make sense then and will be ignored
+            wxFAIL_MSG( _T("wxFRAME_FLOAT_ON_PARENT but no parent?") );
+        }
+        else
+        {
+            hwndParent = GetHwndOf(parent);
+        }
     }
-    else // don't float on parent, must not be owned
-    {
-        parent = NULL;
-    }
+    //else: don't float on parent, must not be owned
 
     // now deal with the 2nd taskbar-related problem (see comments above in
     // MSWGetStyle())
-    if ( HasFlag(wxFRAME_NO_TASKBAR) && !parent )
+    if ( HasFlag(wxFRAME_NO_TASKBAR) && !hwndParent )
     {
-        if ( !ms_hiddenParent )
-        {
-            ms_hiddenParent = new wxTopLevelWindowMSW(NULL, -1, _T(""));
-
-            // we shouldn't leave it in wxTopLevelWindows or we wouldn't
-            // terminate the app when the last user-created frame is deleted --
-            // see ~wxTopLevelWindowMSW
-            wxTopLevelWindows.DeleteObject(ms_hiddenParent);
-        }
-
-        parent = ms_hiddenParent;
+        // use hidden parent
+        hwndParent = wxTLWHiddenParentModule::GetHWND();
     }
 
-    return parent ? parent->GetHWND() : WXHWND(NULL);
+    return (WXHWND)hwndParent;
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
@@ -451,15 +471,6 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
-    if ( this == ms_hiddenParent )
-    {
-        // stop [infinite] recursion which would otherwise happen when we do
-        // "delete ms_hiddenParent" below -- and we're not interested in doing
-        // anything of the rest below for that window because the rest of
-        // wxWindows doesn't even know about it
-        return;
-    }
-
     if ( wxModelessWindows.Find(this) )
         wxModelessWindows.DeleteObject(this);
 
@@ -473,17 +484,6 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
         if ( parent )
         {
             ::BringWindowToTop(GetHwndOf(parent));
-        }
-    }
-
-    // if this is the last top-level window, we're going to exit and we should
-    // delete ms_hiddenParent now to avoid leaking it
-    if ( IsLastBeforeExit() )
-    {
-        if ( ms_hiddenParent )
-        {
-            delete ms_hiddenParent;
-            ms_hiddenParent = NULL;
         }
     }
 }
@@ -794,5 +794,81 @@ wxDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             // message
             return FALSE;
     }
+}
+
+// ============================================================================
+// wxTLWHiddenParentModule implementation
+// ============================================================================
+
+HWND wxTLWHiddenParentModule::ms_hwnd = NULL;
+
+const wxChar *wxTLWHiddenParentModule::ms_className = NULL;
+
+bool wxTLWHiddenParentModule::OnInit()
+{
+    ms_hwnd = NULL;
+    ms_className = NULL;
+
+    return TRUE;
+}
+
+void wxTLWHiddenParentModule::OnExit()
+{
+    if ( ms_hwnd )
+    {
+        if ( !::DestroyWindow(ms_hwnd) )
+        {
+            wxLogLastError(_T("DestroyWindow(hidden TLW parent)"));
+        }
+
+        ms_hwnd = NULL;
+    }
+
+    if ( ms_className )
+    {
+        if ( !::UnregisterClass(ms_className, wxGetInstance()) )
+        {
+            wxLogLastError(_T("UnregisterClass(\"wxTLWHiddenParent\")"));
+        }
+
+        ms_className = NULL;
+    }
+}
+
+/* static */
+HWND wxTLWHiddenParentModule::GetHWND()
+{
+    if ( !ms_hwnd )
+    {
+        if ( !ms_className )
+        {
+            static const wxChar *HIDDEN_PARENT_CLASS = _T("wxTLWHiddenParent");
+
+            WNDCLASS wndclass;
+            wxZeroMemory(wndclass);
+
+            wndclass.lpfnWndProc   = DefWindowProc;
+            wndclass.hInstance     = wxGetInstance();
+            wndclass.lpszClassName = HIDDEN_PARENT_CLASS;
+
+            if ( !::RegisterClass(&wndclass) )
+            {
+                wxLogLastError(_T("RegisterClass(\"wxTLWHiddenParent\")"));
+            }
+            else
+            {
+                ms_className = HIDDEN_PARENT_CLASS;
+            }
+        }
+
+        ms_hwnd = ::CreateWindow(ms_className, _T(""), 0, 0, 0, 0, 0, NULL,
+                                 (HMENU)NULL, wxGetInstance(), NULL);
+        if ( !ms_hwnd )
+        {
+            wxLogLastError(_T("CreateWindow(hidden TLW parent)"));
+        }
+    }
+
+    return ms_hwnd;
 }
 
