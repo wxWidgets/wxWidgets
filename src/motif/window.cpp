@@ -408,9 +408,8 @@ wxWindow::~wxWindow()
         if (w)
         {
             XtDestroyWidget(w);
+	    m_drawingArea = (WXWidget) 0;
         }
-
-        m_mainWidget = (WXWidget) 0;
 
         // Only if we're _really_ a canvas (not a dialog box/panel)
         if (m_scrolledWindow)
@@ -451,7 +450,8 @@ wxWindow::~wxWindow()
         //   wxSCROLL[WIN]_THUMBRELEASE events. Also it was reported
         //   that this call crashed wxMotif under OS/2, so it seems
         //   that leaving it out is the right thing to do.
-//        XtDestroyWidget((Widget) GetMainWidget());
+        // SN, Feb/2000: newgrid/griddemo shows why it is needed :-(
+        XtDestroyWidget((Widget) GetMainWidget());
         SetMainWidget((WXWidget) NULL);
     }
 }
