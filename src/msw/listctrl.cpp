@@ -1751,13 +1751,12 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
             if (i != 0) // Don't draw the first one
             {
                 dc.DrawLine(0, cy, clientSize.x, cy);
-
-                // Draw last line
-                if (i == (GetItemCount() - 1))
-                {
-                    cy = itemRect.GetBottom();
-                    dc.DrawLine(0, cy, clientSize.x, cy);
-                }
+            }
+            // Draw last line
+            if (i == (GetItemCount() - 1))
+            {
+                cy = itemRect.GetBottom();
+                dc.DrawLine(0, cy, clientSize.x, cy);
             }
         }
     }
