@@ -173,6 +173,7 @@ TEST_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
 TEST_OBJECTS =  &
 	$(OBJS)\test_test.obj &
 	$(OBJS)\test_main.obj &
+	$(OBJS)\test_formatconverter.obj &
 	$(OBJS)\test_regex.obj
 
 
@@ -206,6 +207,9 @@ $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_main.obj :  .AUTODEPEND .\mbconv\main.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_formatconverter.obj :  .AUTODEPEND .\formatconverter\formatconverter.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_regex.obj :  .AUTODEPEND .\regex\regex.cpp

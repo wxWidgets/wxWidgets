@@ -435,6 +435,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\formatconverter\formatconverter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbconv\main.cpp
 # End Source File
 # Begin Source File

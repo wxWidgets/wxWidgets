@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $id$ -->
+<!-- $Id$ -->
 
 <makefile>
 
@@ -10,6 +10,7 @@
         <sources>
             test.cpp
             mbconv/main.cpp
+            formatconverter/formatconverter.cpp
             regex/regex.cpp
         </sources>
         <wx-lib>base</wx-lib>

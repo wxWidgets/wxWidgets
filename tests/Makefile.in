@@ -38,6 +38,7 @@ TEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir) \
 TEST_OBJECTS =  \
 	test_test.o \
 	test_main.o \
+	test_formatconverter.o \
 	test_regex.o
 
 ### Conditionally set variables: ###
@@ -105,6 +106,9 @@ test_test.o: $(srcdir)/test.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_main.o: $(srcdir)/mbconv/main.cpp
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
+
+test_formatconverter.o: $(srcdir)/formatconverter/formatconverter.cpp
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $<
 
 test_regex.o: $(srcdir)/regex/regex.cpp
