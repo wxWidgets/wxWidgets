@@ -29,6 +29,9 @@
 
 #include "wx/msw/private.h"
 
+// Set this to 1 to be _absolutely_ sure that repainting will work for all comctl32.dll versions
+#define wxUSE_COMCTL32_SAFELY 0
+
 // Mingw32 is a bit mental even though this is done in winundef
 #ifdef GetFirstChild
     #undef GetFirstChild
@@ -545,17 +548,23 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle) )
         return FALSE;
 
-#if 0
+#if wxUSE_COMCTL32_SAFELY
+    wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
+#elif 1
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #else
     // This works around a bug in the Windows tree control whereby for some versions
     // of comctrl32, setting any colour actually draws the background in black.
     // This will initialise the background to the system colour.
+    // THIS FIX NOW REVERTED since it caused problems on _other_ systems.
+    // Assume the user has an updated comctl32.dll.
     ::SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0,-1);
     wxWindow::SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 #endif
 
-    SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());
 
     // VZ: this is some experimental code which may be used to get the
     //     TVS_CHECKBOXES style functionality for comctl32.dll < 4.71.
@@ -716,20 +725,24 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
 
 bool wxTreeCtrl::SetBackgroundColour(const wxColour &colour)
 {
+#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetBackgroundColour(colour) )
         return FALSE;
 
     SendMessage(GetHwnd(), TVM_SETBKCOLOR, 0, colour.GetPixel());
+#endif
 
     return TRUE;
 }
 
 bool wxTreeCtrl::SetForegroundColour(const wxColour &colour)
 {
+#if !wxUSE_COMCTL32_SAFELY
     if ( !wxWindowBase::SetForegroundColour(colour) )
         return FALSE;
 
     SendMessage(GetHwnd(), TVM_SETTEXTCOLOR, 0, colour.GetPixel());
+#endif
 
     return TRUE;
 }
@@ -2088,7 +2101,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 && !wxUSE_COMCTL32_SAFELY
         case NM_CUSTOMDRAW:
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
