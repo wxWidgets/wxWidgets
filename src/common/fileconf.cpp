@@ -983,29 +983,18 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     }
   }
 
-  bool ret = file.Commit();
+  if ( !file.Commit() )
+  {
+      wxLogError(_("Failed to update user configuration file."));
+
+      return false;
+  }
 
 #if defined(__WXMAC__)
-    if ( ret )
-    {
-        FSRef fsRef ;
-        FSCatalogInfo catInfo;
-        FileInfo *finfo ;
-
-        if ( wxMacPathToFSRef( m_strLocalFile , &fsRef ) == noErr )
-        {
-            if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
-            {
-                finfo = (FileInfo*)&catInfo.finderInfo;
-                finfo->fileType = 'TEXT' ;
-                finfo->fileCreator = 'ttxt' ;
-                FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
-            }
-        }
-    }
+  wxFileName(m_strLocalFile).MacSetTypeAndCreator('TEXT', 'ttxt');
 #endif // __WXMAC__
 
-  return ret;
+  return true;
 }
 
 // ----------------------------------------------------------------------------
