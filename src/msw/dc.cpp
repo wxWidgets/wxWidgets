@@ -391,10 +391,11 @@ wxDC::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
     // when we're associated with an existing HDC usign SetHDC(), see there
     if ( m_clipping && !m_clipX1 && !m_clipX2 )
     {
-        UpdateClipBox();
+        wxDC *self = wxConstCast(this, wxDC);
+        self->UpdateClipBox();
 
         if ( !m_clipX1 && !m_clipX2 )
-            m_clipping = false;
+            self->m_clipping = false;
     }
 
     return wxDCBase::DoGetClippingBox(x, y, w, h);
