@@ -339,4 +339,10 @@ static void FoldPascalDoc(unsigned int startPos, int length, int initStyle, Word
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmPascal(SCLEX_PASCAL, ColourisePascalDoc, "pascal", FoldPascalDoc);
+static const char * const pascalWordListDesc[] = {
+	"Keywords",
+	"Classwords",
+	0
+};
+
+LexerModule lmPascal(SCLEX_PASCAL, ColourisePascalDoc, "pascal", FoldPascalDoc, pascalWordListDesc);
