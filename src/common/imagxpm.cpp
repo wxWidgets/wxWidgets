@@ -141,6 +141,7 @@ bool wxXPMHandler::SaveFile(wxImage * image,
 
     // 3. create color symbols table:
     wxHashTable table(wxKEY_INTEGER);
+    table.DeleteContents(TRUE);    
     image->ComputeHistogram(table);
 
     char *symbols_data = new char[cols * (chars_per_pixel+1)];
