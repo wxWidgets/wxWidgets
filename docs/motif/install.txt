@@ -1,0 +1,58 @@
+wxWindows 2.0 for Motif installation
+------------------------------------
+
+- Prerequisites: Motif 1.2 or above, or
+  Lesstif (not yet tested).
+
+- Download the files wx200gen.zip and wx200mot.zip, and
+  documentation in a preferred format, such as wx200htm.zip
+  or wx200pdf.zip.
+
+- Make a directory such as ~/wx and unzip the files into this
+  directory. Use the -a option if available to convert the ASCII
+  files to Unix format. Don't worry about files being
+  overwritten: they should be identical anyway.
+
+- Edit src/make.env to change options according to your local
+  environment. Later, there will be a better makefile system
+  and/or alternate make.env files as per wxWindows 1.68.
+  Please feel free to contribute settings files for your environment.
+
+- Change directory to src/motif and type:
+
+    make -f makefile.unx motif
+
+  This should make the library libwx_motif.a in the lib
+  directory.
+
+- Make a sample, such as the minimal sample:
+
+    cd samples/minimal
+    make -f makefile.unx motif
+
+  and run the resulting minimal_motif binary.
+
+Notes:
+------
+
+- Better installation and makefile systems are
+  required. I didn't use the wxGTK system because I couldn't
+  understand it or make it work with wxMotif. Also I think
+  we should use something that can be made to work easily
+  with applications outside the wxWindows hierarchy.
+
+- Some classes can be switched off in include/wx/motif/setup.h,
+  if you are having trouble with a particular file. However,
+  I'd prefer you to fix the problem and send the fix to me :-) or at
+  least let me know about it.
+
+- Please send bug reports with a description of your environment,
+  compiler and the error message(s) to:
+
+    julian.smart@ukonline.co.uk
+
+  or the wxwin-developers mailing list at:
+
+    wxwin-developers@wx.dent.med.uni-muenchen.de
+
+Julian Smart, November 1998.
