@@ -71,7 +71,7 @@ static wxHashTable *g_fontHash = (wxHashTable*) NULL;
 
 // define the functions to create and destroy native fonts for this toolkit
 #ifdef __X__
-    inline wxNativeFont wxLoadFont(const wxString& fontSpec)
+    wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
         return XLoadQueryFont((Display *)wxGetDisplay(), fontSpec);
     }
@@ -81,7 +81,7 @@ static wxHashTable *g_fontHash = (wxHashTable*) NULL;
         XFreeFont((Display *)wxGetDisplay(), (XFontStruct *)font);
     }
 #elif defined(__WXGTK__)
-    inline wxNativeFont wxLoadFont(const wxString& fontSpec)
+    wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
        return gdk_font_load( wxConvertWX2MB(fontSpec) );
     }
