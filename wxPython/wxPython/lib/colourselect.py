@@ -5,7 +5,7 @@
 #
 # Author:       Lorne White, Lorne.White@telusplanet.net
 #
-# Created:	    Feb 25, 2001
+# Created:      Feb 25, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -21,11 +21,11 @@ class ColourSelect:
         self.win = parent
         if size is None:
             size = wxSize(20, 20)
-        
+
         mID = NewId()
         self.b = b = wxButton(parent, mID, "", position, size)
         EVT_BUTTON(parent, mID, self.OnClick)
-        
+
         self.set_colour_val = set_colour = wxColor(bcolour[0], bcolour[1], bcolour[2])
         b.SetBackgroundColour(set_colour)
         b.SetForegroundColour(wxWHITE)
@@ -33,10 +33,10 @@ class ColourSelect:
 
     def SetColour(self, bcolour):
         self.b.SetBackgroundColour(bcolour)
-        
+
     def GetColour(self):
         return self.set_colour
-    
+
     def OnClick(self, event):
         data = wxColourData()
         data.SetChooseFull(true)
@@ -44,7 +44,12 @@ class ColourSelect:
         dlg = wxColourDialog(self.win, data)
         if dlg.ShowModal() == wxID_OK:
             data = dlg.GetColourData()
-            self.set_colour = set = data.GetColour().Get()            
+            self.set_colour = set = data.GetColour().Get()
             self.set_colour_val = bcolour = wxColour(set[0],set[1],set[2])
             self.b.SetBackgroundColour(bcolour)
         dlg.Destroy()
+
+
+
+
+
