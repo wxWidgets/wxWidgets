@@ -156,7 +156,7 @@ confirmation or give him a possibility to override it.
 Returns {\tt TRUE} if the computer is connected to the network: under Windows,
 this just means that a RAS connection exists, under Unix we check that
 the "well-known host" (as specified by 
-\helpref{SetWellKnownHost}{wxdialupmanagersetwellknownhost}) is reachable
+\helpref{SetWellKnownHost}{wxdialupmanagersetwellknownhost}) is reachable.
 
 \membersection{wxDialUpManager::SetOnlineStatus}\label{wxdialupmanagersetonlinestatus}
 
@@ -203,7 +203,7 @@ is always safe to call. The default value is {\tt www.yahoo.com:80}.
 
 \membersection{wxDialUpManager::SetConnectCommand}\label{wxdialupmanagersetconnectcommand}
 
-\func{}{SetConnectCommand}{\param{const wxString\& }{commandDial = wxT("/usr/bin/pon")}, \param{const wxString\& }{commandHangup = wxT("/usr/bin/poff")}
+\func{}{SetConnectCommand}{\param{const wxString\& }{commandDial = wxT("/usr/bin/pon")}, \param{const wxString\& }{commandHangup = wxT("/usr/bin/poff")}}
 
 This method is for Unix only.
 
@@ -212,3 +212,4 @@ Sets the commands to start up the network and to hang up again.
 \wxheading{See also}
 
 \helpref{Dial}{wxdialupmanagerdial}
+

@@ -11,7 +11,7 @@
 
 \section{Date and time classes overview}\label{wxdatetimeoverview}
 
-Classes: \helpref{wxDateTime}{wxdatetime}, \helpref{wxDateSpan}{wxdatespan}, \helpref{wxTimeSpan}, \helpref{wxtimespan}, \helpref{wxCalendarCtrl}{wxcalendarctrl}
+Classes: \helpref{wxDateTime}{wxdatetime}, \helpref{wxDateSpan}{wxdatespan}, \helpref{wxTimeSpan}{wxtimespan}, \helpref{wxCalendarCtrl}{wxcalendarctrl}
 
 \subsection{Introduction}
 
@@ -20,15 +20,15 @@ of the supported features of \helpref{wxDateTime}{wxdatetime} class are:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\item{Wide range}{The range of supported dates goes from about 4714 B.C. to
+\twocolitem{Wide range}{The range of supported dates goes from about 4714 B.C. to
 some 480 million years in the future.}
-\item{Precision}{Not using floating point calculations anywhere ensures that
+\twocolitem{Precision}{Not using floating point calculations anywhere ensures that
 the date calculations don't suffer from rounding errors.}
-\item{Many features}{Not only all usual calculations with dates are supported,
+\twocolitem{Many features}{Not only all usual calculations with dates are supported,
 but also more exotic week and year day calculations, work day testing, standard
 astronomical functions, conversion to and from strings in either strict or free
 format.}
-\item{Efficiency}{Objects of wxDateTime are small (8 bytes) and working with
+\twocolitem{Efficiency}{Objects of wxDateTime are small (8 bytes) and working with
 them is fast}
 \end{twocollist}
 
@@ -120,7 +120,7 @@ perfectly valid.
 
 Here is what can be done:
 
-\begin{twocollist}
+\begin{twocollist}\itemsep=0pt
 \item{{\bf Addition}}{a wxTimeSpan or wxDateSpan can be added to wxDateTime
 resulting in a new wxDateTime object and also 2 objects of the same span class
 can be added together giving another object of the smae class.}
@@ -175,9 +175,9 @@ simply print time in any time zone.
 To see how to do it, the last issue to address is how to construct a TimeZone
 object which must be passed to all these methods. First of all, you may construct
 it manually by specifying the time zone offset in seconds from GMT, but
-usually you will just use one of the \helpref{symbolic time zone
-names}{wxdatetimetimezones} and let the conversion constructor do the job.
-I.e.. you would just write
+usually you will just use one of the \helpref{symbolic time zone names}{wxdatetimetimezones} and
+let the conversion constructor do the job.
+I.e. you would just write
 
 \begin{verbatim}
 wxDateTime dt(...whatever...);
@@ -215,3 +215,4 @@ The old classes for date/time manipulations ported from wxWindows version 1.xx
 are still included but are reimplemented in terms of wxDateTime. However, using
 them is strongly discouraged because they have a few quirks/bugs and were not
 `Y2K' compatible.
+
