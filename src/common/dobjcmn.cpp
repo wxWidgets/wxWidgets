@@ -282,7 +282,7 @@ void *wxCustomDataObject::Alloc(size_t size)
 
 void wxCustomDataObject::Free()
 {
-    delete [] m_data;
+    delete [] (char *)m_data;
     m_size = 0;
     m_data = (void *)NULL;
 }
