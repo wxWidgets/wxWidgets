@@ -410,6 +410,48 @@ ODBC 3.0 says to use this form
 /***************************** PRIVATE FUNCTIONS *****************************/
 
 
+bool wxDbTable::setCbValueForColumn(int columnIndex)
+{
+    switch(colDefs[columnIndex].DbDataType)
+    {
+        case DB_DATA_TYPE_VARCHAR:
+            if (colDefs[columnIndex].Null)
+                colDefs[columnIndex].CbValue = SQL_NULL_DATA;
+            else
+                colDefs[columnIndex].CbValue = SQL_NTS;
+            break;
+        case DB_DATA_TYPE_INTEGER:
+            if (colDefs[columnIndex].Null)
+                colDefs[columnIndex].CbValue = SQL_NULL_DATA;
+            else
+                colDefs[columnIndex].CbValue = 0;
+            break;
+        case DB_DATA_TYPE_FLOAT:
+            if (colDefs[columnIndex].Null)
+                colDefs[columnIndex].CbValue = SQL_NULL_DATA;
+            else
+                colDefs[columnIndex].CbValue = 0;
+            break;
+        case DB_DATA_TYPE_DATE:
+            if (colDefs[columnIndex].Null)
+                colDefs[columnIndex].CbValue = SQL_NULL_DATA;
+            else
+                colDefs[columnIndex].CbValue = 0;
+            break;
+        case DB_DATA_TYPE_BLOB:
+            if (colDefs[columnIndex].Null)
+                colDefs[columnIndex].CbValue = SQL_NULL_DATA;
+            else
+                if (colDefs[columnIndex].SqlCtype == SQL_C_BINARY)
+                    colDefs[columnIndex].CbValue = 0;
+                else if (colDefs[columnIndex].SqlCtype == SQL_C_CHAR)
+                    colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(0);
+                else
+                    colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[columnIndex].SzDataObj);
+            break;
+    }
+}
+
 /********** wxDbTable::bindParams() **********/
 bool wxDbTable::bindParams(bool forUpdate)
 {
@@ -445,19 +487,11 @@ bool wxDbTable::bindParams(bool forUpdate)
                 fSqlType = pDb->GetTypeInfVarchar().FsqlType;
                 precision = colDefs[i].SzDataObj;
                 scale = 0;
-                if (colDefs[i].Null)
-                    colDefs[i].CbValue = SQL_NULL_DATA;
-                else
-                    colDefs[i].CbValue = SQL_NTS;
                 break;
             case DB_DATA_TYPE_INTEGER:
                 fSqlType = pDb->GetTypeInfInteger().FsqlType;
                 precision = pDb->GetTypeInfInteger().Precision;
                 scale = 0;
-                if (colDefs[i].Null)
-                    colDefs[i].CbValue = SQL_NULL_DATA;
-                else
-                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_FLOAT:
                 fSqlType = pDb->GetTypeInfFloat().FsqlType;
@@ -468,35 +502,21 @@ bool wxDbTable::bindParams(bool forUpdate)
                 // I check for this here and set the scale = precision.
                 //if (scale < 0)
                 // scale = (short) precision;
-                if (colDefs[i].Null)
-                    colDefs[i].CbValue = SQL_NULL_DATA;
-                else
-                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_DATE:
                 fSqlType = pDb->GetTypeInfDate().FsqlType;
                 precision = pDb->GetTypeInfDate().Precision;
                 scale = 0;
-                if (colDefs[i].Null)
-                    colDefs[i].CbValue = SQL_NULL_DATA;
-                else
-                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_BLOB:
                 fSqlType = pDb->GetTypeInfBlob().FsqlType;
                 precision = -1;
                 scale = 0;
-                if (colDefs[i].Null)
-                    colDefs[i].CbValue = SQL_NULL_DATA;
-                else
-                    if (colDefs[i].SqlCtype == SQL_C_BINARY)
-                        colDefs[i].CbValue = 0;
-                    else if (colDefs[i].SqlCtype == SQL_C_CHAR)
-                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(0);
-                    else
-                        colDefs[i].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[i].SzDataObj);
                 break;
         }
+
+        setCbValueForColumn(i);
+
         if (forUpdate)
         {
             if (SQLBindParameter(hstmtUpdate, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
@@ -1282,12 +1302,14 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
                 case SQL_C_CHAR:
                     colValue.Printf(wxT("'%s'"), (UCHAR FAR *) colDefs[colNo].PtrDataObj);
                     break;
+                case SQL_C_SHORT:
                 case SQL_C_SSHORT:
                     colValue.Printf(wxT("%hi"), *((SWORD *) colDefs[colNo].PtrDataObj));
                     break;
                 case SQL_C_USHORT:
                     colValue.Printf(wxT("%hu"), *((UWORD *) colDefs[colNo].PtrDataObj));
                     break;
+                case SQL_C_LONG:
                 case SQL_C_SLONG:
                     colValue.Printf(wxT("%li"), *((SDWORD *) colDefs[colNo].PtrDataObj));
                     break;
@@ -1299,6 +1321,14 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
                     break;
                 case SQL_C_DOUBLE:
                     colValue.Printf(wxT("%.6f"), *((SDOUBLE *) colDefs[colNo].PtrDataObj));
+                    break;
+                default:
+                    {
+                        wxString strMsg;
+                        strMsg.Printf(wxT("wxDbTable::bindParams(): Unknown column type for colDefs %d colName %s"),
+                                    colNo,colDefs[colNo].ColName);
+                        wxFAIL_MSG(wxT(strMsg));
+                    }
                     break;
             }
             pWhereClause += colValue;
@@ -2503,10 +2533,10 @@ bool wxDbTable::SetColNull(UWORD colNo, bool set)
     {
         colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-        {
-           colDefs[colNo].CbValue = SQL_NULL_DATA; // SF PATCH#766404
-           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
-        }
+           ClearMemberVar(colNo, FALSE);  // Must call with FALSE here, or infinite recursion will happen
+
+        setCbValueForColumn(i);
+
         return(TRUE);
     }
     else
@@ -2529,10 +2559,10 @@ bool wxDbTable::SetColNull(const wxString &colName, bool set)
     {
         colDefs[colNo].Null = set;
         if (set)  // Blank out the values in the member variable
-        {
-           colDefs[colNo].CbValue = SQL_NULL_DATA;  // SF PATCH#766404
-           ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
-        }
+           ClearMemberVar(colNo,FALSE);  // Must call with FALSE here, or infinite recursion will happen
+
+        setCbValueForColumn(i);
+
         return(TRUE);
     }
     else
