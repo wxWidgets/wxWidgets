@@ -318,67 +318,45 @@ class wxListCtrl(wxListCtrlPtr):
 
 
 
-class wxTreeItemPtr :
+class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def __del__(self):
         if self.thisown == 1 :
-            controls2c.delete_wxTreeItem(self.this)
-    def __setattr__(self,name,value):
-        if name == "m_mask" :
-            controls2c.wxTreeItem_m_mask_set(self.this,value)
-            return
-        if name == "m_itemId" :
-            controls2c.wxTreeItem_m_itemId_set(self.this,value)
-            return
-        if name == "m_state" :
-            controls2c.wxTreeItem_m_state_set(self.this,value)
-            return
-        if name == "m_stateMask" :
-            controls2c.wxTreeItem_m_stateMask_set(self.this,value)
-            return
-        if name == "m_text" :
-            controls2c.wxTreeItem_m_text_set(self.this,value)
-            return
-        if name == "m_image" :
-            controls2c.wxTreeItem_m_image_set(self.this,value)
-            return
-        if name == "m_selectedImage" :
-            controls2c.wxTreeItem_m_selectedImage_set(self.this,value)
-            return
-        if name == "m_children" :
-            controls2c.wxTreeItem_m_children_set(self.this,value)
-            return
-        if name == "m_data" :
-            controls2c.wxTreeItem_m_data_set(self.this,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "m_mask" : 
-            return controls2c.wxTreeItem_m_mask_get(self.this)
-        if name == "m_itemId" : 
-            return controls2c.wxTreeItem_m_itemId_get(self.this)
-        if name == "m_state" : 
-            return controls2c.wxTreeItem_m_state_get(self.this)
-        if name == "m_stateMask" : 
-            return controls2c.wxTreeItem_m_stateMask_get(self.this)
-        if name == "m_text" : 
-            return controls2c.wxTreeItem_m_text_get(self.this)
-        if name == "m_image" : 
-            return controls2c.wxTreeItem_m_image_get(self.this)
-        if name == "m_selectedImage" : 
-            return controls2c.wxTreeItem_m_selectedImage_get(self.this)
-        if name == "m_children" : 
-            return controls2c.wxTreeItem_m_children_get(self.this)
-        if name == "m_data" : 
-            return controls2c.wxTreeItem_m_data_get(self.this)
-        raise AttributeError,name
+            controls2c.delete_wxTreeItemId(self.this)
+    def IsOk(self):
+        val = controls2c.wxTreeItemId_IsOk(self.this)
+        return val
+    def GetId(self):
+        val = controls2c.wxTreeItemId_GetId(self.this)
+        return val
     def __repr__(self):
-        return "<C wxTreeItem instance>"
-class wxTreeItem(wxTreeItemPtr):
+        return "<C wxTreeItemId instance>"
+class wxTreeItemId(wxTreeItemIdPtr):
     def __init__(self) :
-        self.this = controls2c.new_wxTreeItem()
+        self.this = controls2c.new_wxTreeItemId()
+        self.thisown = 1
+
+
+
+
+class wxTreeItemDataPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            controls2c.delete_wxTreeItemData(self.this)
+    def GetItemId(self):
+        val = controls2c.wxTreeItemData_GetItemId(self.this)
+        val = wxTreeItemIdPtr(val)
+        return val
+    def __repr__(self):
+        return "<C wxTreeItemData instance>"
+class wxTreeItemData(wxTreeItemDataPtr):
+    def __init__(self) :
+        self.this = controls2c.new_wxTreeItemData()
         self.thisown = 1
 
 
@@ -388,30 +366,27 @@ class wxTreeEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __setattr__(self,name,value):
-        if name == "m_code" :
-            controls2c.wxTreeEvent_m_code_set(self.this,value)
-            return
-        if name == "m_item" :
-            controls2c.wxTreeEvent_m_item_set(self.this,value.this)
-            return
-        if name == "m_oldItem" :
-            controls2c.wxTreeEvent_m_oldItem_set(self.this,value)
-            return
-        if name == "m_pointDrag" :
-            controls2c.wxTreeEvent_m_pointDrag_set(self.this,value.this)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "m_code" : 
-            return controls2c.wxTreeEvent_m_code_get(self.this)
-        if name == "m_item" : 
-            return wxTreeItemPtr(controls2c.wxTreeEvent_m_item_get(self.this))
-        if name == "m_oldItem" : 
-            return controls2c.wxTreeEvent_m_oldItem_get(self.this)
-        if name == "m_pointDrag" : 
-            return wxPointPtr(controls2c.wxTreeEvent_m_pointDrag_get(self.this))
-        raise AttributeError,name
+    def GetItem(self):
+        val = controls2c.wxTreeEvent_GetItem(self.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetOldItem(self):
+        val = controls2c.wxTreeEvent_GetOldItem(self.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetPoint(self):
+        val = controls2c.wxTreeEvent_GetPoint(self.this)
+        val = wxPointPtr(val)
+        val.thisown = 1
+        return val
+    def GetCode(self):
+        val = controls2c.wxTreeEvent_GetCode(self.this)
+        return val
+    def Veto(self):
+        val = controls2c.wxTreeEvent_Veto(self.this)
+        return val
     def __repr__(self):
         return "<C wxTreeEvent instance>"
 class wxTreeEvent(wxTreeEventPtr):
@@ -425,116 +400,189 @@ class wxTreeCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetCount(self):
+        val = controls2c.wxTreeCtrl_GetCount(self.this)
+        return val
+    def GetIndent(self):
+        val = controls2c.wxTreeCtrl_GetIndent(self.this)
+        return val
+    def SetIndent(self,arg0):
+        val = controls2c.wxTreeCtrl_SetIndent(self.this,arg0)
+        return val
+    def GetImageList(self):
+        val = controls2c.wxTreeCtrl_GetImageList(self.this)
+        return val
+    def GetStateImageList(self):
+        val = controls2c.wxTreeCtrl_GetStateImageList(self.this)
+        return val
+    def SetImageList(self,arg0):
+        val = controls2c.wxTreeCtrl_SetImageList(self.this,arg0)
+        return val
+    def SetStateImageList(self,arg0):
+        val = controls2c.wxTreeCtrl_SetStateImageList(self.this,arg0)
+        return val
+    def GetItemText(self,arg0):
+        val = controls2c.wxTreeCtrl_GetItemText(self.this,arg0.this)
+        return val
+    def GetItemImage(self,arg0):
+        val = controls2c.wxTreeCtrl_GetItemImage(self.this,arg0.this)
+        return val
+    def GetItemSelectedImage(self,arg0):
+        val = controls2c.wxTreeCtrl_GetItemSelectedImage(self.this,arg0.this)
+        return val
+    def GetItemData(self,arg0):
+        val = controls2c.wxTreeCtrl_GetItemData(self.this,arg0.this)
+        val = wxTreeItemDataPtr(val)
+        return val
+    def SetItemText(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_SetItemText(self.this,arg0.this,arg1)
+        return val
+    def SetItemImage(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_SetItemImage(self.this,arg0.this,arg1)
+        return val
+    def SetItemSelectedImage(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_SetItemSelectedImage(self.this,arg0.this,arg1)
+        return val
+    def SetItemData(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_SetItemData(self.this,arg0.this,arg1.this)
+        return val
+    def IsVisible(self,arg0):
+        val = controls2c.wxTreeCtrl_IsVisible(self.this,arg0.this)
+        return val
+    def ItemHasChildren(self,arg0):
+        val = controls2c.wxTreeCtrl_ItemHasChildren(self.this,arg0.this)
+        return val
+    def IsExpanded(self,arg0):
+        val = controls2c.wxTreeCtrl_IsExpanded(self.this,arg0.this)
+        return val
+    def IsSelected(self,arg0):
+        val = controls2c.wxTreeCtrl_IsSelected(self.this,arg0.this)
+        return val
+    def GetRootItem(self):
+        val = controls2c.wxTreeCtrl_GetRootItem(self.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetSelection(self):
+        val = controls2c.wxTreeCtrl_GetSelection(self.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetParent(self,arg0):
+        val = controls2c.wxTreeCtrl_GetParent(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetFirstChild(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        return val
+    def GetNextChild(self,arg0,arg1):
+        val = controls2c.wxTreeCtrl_GetNextChild(self.this,arg0.this,arg1)
+        return val
+    def GetNextSibling(self,arg0):
+        val = controls2c.wxTreeCtrl_GetNextSibling(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetPrevSibling(self,arg0):
+        val = controls2c.wxTreeCtrl_GetPrevSibling(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetFirstVisibleItem(self):
+        val = controls2c.wxTreeCtrl_GetFirstVisibleItem(self.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetNextVisible(self,arg0):
+        val = controls2c.wxTreeCtrl_GetNextVisible(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def GetPrevVisible(self,arg0):
+        val = controls2c.wxTreeCtrl_GetPrevVisible(self.this,arg0.this)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def AddRoot(self,arg0,*args):
+        argl = map(None,args)
+        try: argl[2] = argl[2].this
+        except: pass
+        args = tuple(argl)
+        val = apply(controls2c.wxTreeCtrl_AddRoot,(self.this,arg0,)+args)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def PrependItem(self,arg0,arg1,*args):
+        argl = map(None,args)
+        try: argl[2] = argl[2].this
+        except: pass
+        args = tuple(argl)
+        val = apply(controls2c.wxTreeCtrl_PrependItem,(self.this,arg0.this,arg1,)+args)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def InsertItem(self,arg0,arg1,arg2,*args):
+        argl = map(None,args)
+        try: argl[2] = argl[2].this
+        except: pass
+        args = tuple(argl)
+        val = apply(controls2c.wxTreeCtrl_InsertItem,(self.this,arg0.this,arg1.this,arg2,)+args)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def AppendItem(self,arg0,arg1,*args):
+        argl = map(None,args)
+        try: argl[2] = argl[2].this
+        except: pass
+        args = tuple(argl)
+        val = apply(controls2c.wxTreeCtrl_AppendItem,(self.this,arg0.this,arg1,)+args)
+        val = wxTreeItemIdPtr(val)
+        val.thisown = 1
+        return val
+    def Delete(self,arg0):
+        val = controls2c.wxTreeCtrl_Delete(self.this,arg0.this)
+        return val
     def DeleteAllItems(self):
         val = controls2c.wxTreeCtrl_DeleteAllItems(self.this)
         return val
-    def DeleteItem(self,arg0):
-        val = controls2c.wxTreeCtrl_DeleteItem(self.this,arg0)
+    def Expand(self,arg0):
+        val = controls2c.wxTreeCtrl_Expand(self.this,arg0.this)
         return val
-    def EditLabel(self,arg0):
-        val = controls2c.wxTreeCtrl_EditLabel(self.this,arg0)
-        val = wxTextCtrlPtr(val)
+    def Collapse(self,arg0):
+        val = controls2c.wxTreeCtrl_Collapse(self.this,arg0.this)
+        return val
+    def CollapseAndReset(self,arg0):
+        val = controls2c.wxTreeCtrl_CollapseAndReset(self.this,arg0.this)
+        return val
+    def Toggle(self,arg0):
+        val = controls2c.wxTreeCtrl_Toggle(self.this,arg0.this)
+        return val
+    def Unselect(self):
+        val = controls2c.wxTreeCtrl_Unselect(self.this)
+        return val
+    def SelectItem(self,arg0):
+        val = controls2c.wxTreeCtrl_SelectItem(self.this,arg0.this)
         return val
     def EnsureVisible(self,arg0):
-        val = controls2c.wxTreeCtrl_EnsureVisible(self.this,arg0)
+        val = controls2c.wxTreeCtrl_EnsureVisible(self.this,arg0.this)
         return val
-    def ExpandItem(self,arg0,arg1):
-        val = controls2c.wxTreeCtrl_ExpandItem(self.this,arg0,arg1)
+    def ScrollTo(self,arg0):
+        val = controls2c.wxTreeCtrl_ScrollTo(self.this,arg0.this)
         return val
-    def GetChild(self,arg0):
-        val = controls2c.wxTreeCtrl_GetChild(self.this,arg0)
-        return val
-    def GetCount(self):
-        val = controls2c.wxTreeCtrl_GetCount(self.this)
+    def EditLabel(self,arg0):
+        val = controls2c.wxTreeCtrl_EditLabel(self.this,arg0.this)
+        val = wxTextCtrlPtr(val)
         return val
     def GetEditControl(self):
         val = controls2c.wxTreeCtrl_GetEditControl(self.this)
         val = wxTextCtrlPtr(val)
         return val
-    def GetFirstVisibleItem(self):
-        val = controls2c.wxTreeCtrl_GetFirstVisibleItem(self.this)
-        return val
-    def GetImageList(self,*args):
-        val = apply(controls2c.wxTreeCtrl_GetImageList,(self.this,)+args)
-        return val
-    def GetIndent(self):
-        val = controls2c.wxTreeCtrl_GetIndent(self.this)
-        return val
-    def GetItemData(self,arg0):
-        val = controls2c.wxTreeCtrl_GetItemData(self.this,arg0)
-        return val
-    def GetItem(self):
-        val = controls2c.wxTreeCtrl_GetItem(self.this)
-        val = wxTreeItemPtr(val)
-        val.thisown = 1
-        return val
-    def GetItemRect(self,arg0,*args):
-        val = apply(controls2c.wxTreeCtrl_GetItemRect,(self.this,arg0,)+args)
-        val = wxRectPtr(val)
-        val.thisown = 1
-        return val
-    def GetItemState(self,arg0,arg1):
-        val = controls2c.wxTreeCtrl_GetItemState(self.this,arg0,arg1)
-        return val
-    def GetItemText(self,arg0):
-        val = controls2c.wxTreeCtrl_GetItemText(self.this,arg0)
-        return val
-    def GetNextItem(self,arg0,arg1):
-        val = controls2c.wxTreeCtrl_GetNextItem(self.this,arg0,arg1)
-        return val
-    def GetNextVisibleItem(self,arg0):
-        val = controls2c.wxTreeCtrl_GetNextVisibleItem(self.this,arg0)
-        return val
-    def GetParent(self,arg0):
-        val = controls2c.wxTreeCtrl_GetParent(self.this,arg0)
-        return val
-    def GetRootItem(self):
-        val = controls2c.wxTreeCtrl_GetRootItem(self.this)
-        return val
-    def GetSelection(self):
-        val = controls2c.wxTreeCtrl_GetSelection(self.this)
-        return val
-    def HitTest(self,arg0):
-        val = controls2c.wxTreeCtrl_HitTest(self.this,arg0.this)
-        return val
-    def InsertItem(self,arg0,arg1,*args):
-        val = apply(controls2c.wxTreeCtrl_InsertItem,(self.this,arg0,arg1.this,)+args)
-        return val
-    def InsertItemString(self,arg0,arg1,*args):
-        val = apply(controls2c.wxTreeCtrl_InsertItemString,(self.this,arg0,arg1,)+args)
-        return val
-    def ItemHasChildren(self,arg0):
-        val = controls2c.wxTreeCtrl_ItemHasChildren(self.this,arg0)
-        return val
-    def ScrollTo(self,arg0):
-        val = controls2c.wxTreeCtrl_ScrollTo(self.this,arg0)
-        return val
-    def SelectItem(self,arg0):
-        val = controls2c.wxTreeCtrl_SelectItem(self.this,arg0)
-        return val
-    def SetIndent(self,arg0):
-        val = controls2c.wxTreeCtrl_SetIndent(self.this,arg0)
-        return val
-    def SetImageList(self,arg0,*args):
-        val = apply(controls2c.wxTreeCtrl_SetImageList,(self.this,arg0,)+args)
-        return val
-    def SetItem(self,arg0):
-        val = controls2c.wxTreeCtrl_SetItem(self.this,arg0.this)
-        return val
-    def SetItemImage(self,arg0,arg1,arg2):
-        val = controls2c.wxTreeCtrl_SetItemImage(self.this,arg0,arg1,arg2)
-        return val
-    def SetItemState(self,arg0,arg1,arg2):
-        val = controls2c.wxTreeCtrl_SetItemState(self.this,arg0,arg1,arg2)
-        return val
-    def SetItemText(self,arg0,arg1):
-        val = controls2c.wxTreeCtrl_SetItemText(self.this,arg0,arg1)
-        return val
-    def SetItemData(self,arg0,arg1):
-        val = controls2c.wxTreeCtrl_SetItemData(self.this,arg0,arg1)
+    def EndEditLabel(self,arg0,*args):
+        val = apply(controls2c.wxTreeCtrl_EndEditLabel,(self.this,arg0.this,)+args)
         return val
     def SortChildren(self,arg0):
-        val = controls2c.wxTreeCtrl_SortChildren(self.this,arg0)
+        val = controls2c.wxTreeCtrl_SortChildren(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxTreeCtrl instance>"
@@ -561,46 +609,3 @@ class wxTreeCtrl(wxTreeCtrlPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
-wxTREE_MASK_HANDLE = controls2c.wxTREE_MASK_HANDLE
-wxTREE_MASK_STATE = controls2c.wxTREE_MASK_STATE
-wxTREE_MASK_TEXT = controls2c.wxTREE_MASK_TEXT
-wxTREE_MASK_IMAGE = controls2c.wxTREE_MASK_IMAGE
-wxTREE_MASK_SELECTED_IMAGE = controls2c.wxTREE_MASK_SELECTED_IMAGE
-wxTREE_MASK_CHILDREN = controls2c.wxTREE_MASK_CHILDREN
-wxTREE_MASK_DATA = controls2c.wxTREE_MASK_DATA
-wxTREE_STATE_BOLD = controls2c.wxTREE_STATE_BOLD
-wxTREE_STATE_DROPHILITED = controls2c.wxTREE_STATE_DROPHILITED
-wxTREE_STATE_EXPANDED = controls2c.wxTREE_STATE_EXPANDED
-wxTREE_STATE_EXPANDEDONCE = controls2c.wxTREE_STATE_EXPANDEDONCE
-wxTREE_STATE_FOCUSED = controls2c.wxTREE_STATE_FOCUSED
-wxTREE_STATE_SELECTED = controls2c.wxTREE_STATE_SELECTED
-wxTREE_STATE_CUT = controls2c.wxTREE_STATE_CUT
-wxTREE_HITTEST_ABOVE = controls2c.wxTREE_HITTEST_ABOVE
-wxTREE_HITTEST_BELOW = controls2c.wxTREE_HITTEST_BELOW
-wxTREE_HITTEST_NOWHERE = controls2c.wxTREE_HITTEST_NOWHERE
-wxTREE_HITTEST_ONITEMBUTTON = controls2c.wxTREE_HITTEST_ONITEMBUTTON
-wxTREE_HITTEST_ONITEMICON = controls2c.wxTREE_HITTEST_ONITEMICON
-wxTREE_HITTEST_ONITEMINDENT = controls2c.wxTREE_HITTEST_ONITEMINDENT
-wxTREE_HITTEST_ONITEMLABEL = controls2c.wxTREE_HITTEST_ONITEMLABEL
-wxTREE_HITTEST_ONITEMRIGHT = controls2c.wxTREE_HITTEST_ONITEMRIGHT
-wxTREE_HITTEST_ONITEMSTATEICON = controls2c.wxTREE_HITTEST_ONITEMSTATEICON
-wxTREE_HITTEST_TOLEFT = controls2c.wxTREE_HITTEST_TOLEFT
-wxTREE_HITTEST_TORIGHT = controls2c.wxTREE_HITTEST_TORIGHT
-wxTREE_HITTEST_ONITEM = controls2c.wxTREE_HITTEST_ONITEM
-wxTREE_NEXT_CARET = controls2c.wxTREE_NEXT_CARET
-wxTREE_NEXT_CHILD = controls2c.wxTREE_NEXT_CHILD
-wxTREE_NEXT_DROPHILITE = controls2c.wxTREE_NEXT_DROPHILITE
-wxTREE_NEXT_FIRSTVISIBLE = controls2c.wxTREE_NEXT_FIRSTVISIBLE
-wxTREE_NEXT_NEXT = controls2c.wxTREE_NEXT_NEXT
-wxTREE_NEXT_NEXTVISIBLE = controls2c.wxTREE_NEXT_NEXTVISIBLE
-wxTREE_NEXT_PARENT = controls2c.wxTREE_NEXT_PARENT
-wxTREE_NEXT_PREVIOUS = controls2c.wxTREE_NEXT_PREVIOUS
-wxTREE_NEXT_PREVIOUSVISIBLE = controls2c.wxTREE_NEXT_PREVIOUSVISIBLE
-wxTREE_NEXT_ROOT = controls2c.wxTREE_NEXT_ROOT
-wxTREE_EXPAND_EXPAND = controls2c.wxTREE_EXPAND_EXPAND
-wxTREE_EXPAND_COLLAPSE = controls2c.wxTREE_EXPAND_COLLAPSE
-wxTREE_EXPAND_COLLAPSE_RESET = controls2c.wxTREE_EXPAND_COLLAPSE_RESET
-wxTREE_EXPAND_TOGGLE = controls2c.wxTREE_EXPAND_TOGGLE
-wxTREE_INSERT_LAST = controls2c.wxTREE_INSERT_LAST
-wxTREE_INSERT_FIRST = controls2c.wxTREE_INSERT_FIRST
-wxTREE_INSERT_SORT = controls2c.wxTREE_INSERT_SORT

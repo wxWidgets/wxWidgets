@@ -3200,7 +3200,6 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
-	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxGrid",SwigwxGridTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxGrid",SwigwxGridTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
@@ -3305,7 +3304,6 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
-	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMetaFileDC","_wxMetaFileDC",0);

@@ -402,10 +402,12 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifndef __WXMSW__
 class wxPostScriptDC : public wxDC {
 public:
       wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow* win = NULL);
 };
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -485,7 +487,13 @@ extern wxColour wxNullColour;
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/20 06:43:57  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.4  1998/10/02 06:40:38  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:16  RD

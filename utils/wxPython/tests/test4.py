@@ -36,12 +36,12 @@ class TestSimpleControlsDlg(wxDialog):
         EVT_TEXT(self, 10, self.EvtText)
         y_pos = y_pos + delta
 
-        wxCheckBox(self, 20, "wxCheckBox", wxPoint(80, y_pos), wxSize(150, 20))
+        wxCheckBox(self, 20, "wxCheckBox", wxPoint(80, y_pos), wxSize(150, 20), wxNO_BORDER)
         EVT_CHECKBOX(self, 20, self.EvtCheckBox)
         y_pos = y_pos + delta
 
         rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(80, y_pos), wxPyDefaultSize,
-                        sampleList, 3, wxRA_HORIZONTAL)
+                        sampleList, 3, wxRA_HORIZONTAL| wxNO_BORDER)
         EVT_RADIOBOX(self, 30, self.EvtRadioBox)
         width, height = rb.GetSize()
         y_pos = y_pos + height + 5
@@ -717,7 +717,13 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.6  1998/10/20 06:45:33  RD
+# New wxTreeCtrl wrappers (untested)
+# some changes in helpers
+# etc.
+#
 # Revision 1.5  1998/10/02 06:42:28  RD
+#
 # Version 0.4 of wxPython for MSW.
 #
 # Revision 1.4  1998/08/27 21:59:51  RD

@@ -890,8 +890,8 @@ static PyObject *_wrap_wxResourceCreateBitmap(PyObject *self, PyObject *args) {
     self = self;
     if(!PyArg_ParseTuple(args,"s:wxResourceCreateBitmap",&_arg0)) 
         return NULL;
-    _result = (wxBitmap *)wxResourceCreateBitmap(_arg0);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _result = new wxBitmap (wxResourceCreateBitmap(_arg0));
+    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -905,8 +905,8 @@ static PyObject *_wrap_wxResourceCreateIcon(PyObject *self, PyObject *args) {
     self = self;
     if(!PyArg_ParseTuple(args,"s:wxResourceCreateIcon",&_arg0)) 
         return NULL;
-    _result = (wxIcon *)wxResourceCreateIcon(_arg0);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
+    _result = new wxIcon (wxResourceCreateIcon(_arg0));
+    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }

@@ -291,7 +291,6 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     tuple = PyTuple_New(1);
     PyTuple_SET_ITEM(tuple, 0, arg);
     result = PyEval_CallObject(func, tuple);
-    Py_DECREF(arg);
     Py_DECREF(tuple);
     if (result) {
         Py_DECREF(result);
@@ -329,12 +328,12 @@ void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
     }
     // Now call the callback...
     PyObject* func = ((wxPyMenu*)&menu)->func;
-    PyObject* args = Py_BuildValue("(OO)", menuobj, evtobj);
+    PyObject* args = PyTuple_New(2);
+    PyTuple_SET_ITEM(args, 0, menuobj);
+    PyTuple_SET_ITEM(args, 1, evtobj);
     PyObject* res  = PyEval_CallObject(func, args);
     Py_DECREF(args);
-    Py_DECREF(res);
-    Py_DECREF(evtobj);
-    Py_DECREF(menuobj);
+    Py_XDECREF(res); /* In case res is a NULL pointer */
 }
 
 
@@ -651,7 +650,13 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.11  1998/10/20 06:43:58  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.10  1998/10/02 06:40:39  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.9  1998/09/25 13:28:52  VZ

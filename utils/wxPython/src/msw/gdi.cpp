@@ -4781,53 +4781,6 @@ static PyObject *_wrap_new_wxPaintDC(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static void *SwigwxPostScriptDCTowxDC(void *ptr) {
-    wxPostScriptDC *src;
-    wxDC *dest;
-    src = (wxPostScriptDC *) ptr;
-    dest = (wxDC *) src;
-    return (void *) dest;
-}
-
-#define new_wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2) (new wxPostScriptDC(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_new_wxPostScriptDC(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPostScriptDC * _result;
-    wxString * _arg0;
-    bool  _arg1 = (1);
-    wxWindow * _arg2 = NULL;
-    PyObject * _obj0 = 0;
-    int tempbool1;
-    char * _argc2 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O|is:new_wxPostScriptDC",&_obj0,&tempbool1,&_argc2)) 
-        return NULL;
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0));
-}
-    _arg1 = (bool ) tempbool1;
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxPostScriptDC. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    _result = (wxPostScriptDC *)new_wxPostScriptDC(*_arg0,_arg1,_arg2);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPostScriptDC_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 static void *SwigwxPrinterDCTowxDC(void *ptr) {
     wxPrinterDC *src;
     wxDC *dest;
@@ -4958,7 +4911,6 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxMetaFileDC_Close", _wrap_wxMetaFileDC_Close, 1 },
 	 { "new_wxMetaFileDC", _wrap_new_wxMetaFileDC, 1 },
 	 { "new_wxPrinterDC", _wrap_new_wxPrinterDC, 1 },
-	 { "new_wxPostScriptDC", _wrap_new_wxPostScriptDC, 1 },
 	 { "new_wxPaintDC", _wrap_new_wxPaintDC, 1 },
 	 { "new_wxClientDC", _wrap_new_wxClientDC, 1 },
 	 { "wxScreenDC_EndDrawingOnTop", _wrap_wxScreenDC_EndDrawingOnTop, 1 },
@@ -5189,8 +5141,6 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxDC","_wxMetaFileDC",SwigwxMetaFileDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxPrinterDC",SwigwxPrinterDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxPrinterDC",SwigwxPrinterDCTowxDC);
-	 SWIG_RegisterMapping("_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
-	 SWIG_RegisterMapping("_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC);
@@ -5202,7 +5152,6 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
-	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
@@ -5229,8 +5178,6 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxDC","_wxMetaFileDC",SwigwxMetaFileDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxPrinterDC",SwigwxPrinterDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_wxPrinterDC",SwigwxPrinterDCTowxDC);
-	 SWIG_RegisterMapping("_class_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
-	 SWIG_RegisterMapping("_class_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_wxPaintDC",SwigwxPaintDCTowxDC);
 	 SWIG_RegisterMapping("_class_wxDC","_class_wxClientDC",SwigwxClientDCTowxDC);
@@ -5264,7 +5211,6 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
-	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMetaFileDC","_wxMetaFileDC",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);

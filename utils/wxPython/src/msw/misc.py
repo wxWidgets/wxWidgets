@@ -487,11 +487,13 @@ wxResourceClear = miscc.wxResourceClear
 def wxResourceCreateBitmap(arg0):
     val = miscc.wxResourceCreateBitmap(arg0)
     val = wxBitmapPtr(val)
+    val.thisown = 1
     return val
 
 def wxResourceCreateIcon(arg0):
     val = miscc.wxResourceCreateIcon(arg0)
     val = wxIconPtr(val)
+    val.thisown = 1
     return val
 
 def wxResourceCreateMenuBar(arg0):

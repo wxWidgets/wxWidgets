@@ -204,6 +204,7 @@ enum {
     wxBU_NOAUTODRAW,
     wxTR_HAS_BUTTONS,
     wxTR_EDIT_LABELS,
+    wxTR_LINES_AT_ROOT,
     wxLC_ICON,
     wxLC_SMALL_ICON,
     wxLC_LIST,
@@ -698,7 +699,13 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/10/20 06:43:53  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.5  1998/10/02 06:40:32  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.4  1998/08/18 19:48:11  RD

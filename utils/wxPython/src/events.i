@@ -53,7 +53,7 @@ public:
 
 class wxCloseEvent : public wxEvent {
 public:
-    bool GetSessionEnding();
+// ??? it's in the docs ???    bool GetSessionEnding();
     bool GetLoggingOff();
     void Veto(bool veto = TRUE);
     bool GetVeto();
@@ -289,6 +289,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/10/20 06:43:56  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.2  1998/08/15 07:36:33  RD
 // - Moved the header in the .i files out of the code that gets put into
 // the .cpp files.  It caused CVS conflicts because of the RCS ID being

@@ -629,24 +629,6 @@ class wxPaintDC(wxPaintDCPtr):
 
 
 
-class wxPostScriptDCPtr(wxDCPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxPostScriptDC instance>"
-class wxPostScriptDC(wxPostScriptDCPtr):
-    def __init__(self,arg0,*args) :
-        argl = map(None,args)
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(gdic.new_wxPostScriptDC,(arg0,)+args)
-        self.thisown = 1
-
-
-
-
 class wxPrinterDCPtr(wxDCPtr):
     def __init__(self,this):
         self.this = this

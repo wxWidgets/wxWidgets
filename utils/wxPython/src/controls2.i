@@ -189,6 +189,9 @@ public:
 //----------------------------------------------------------------------
 
 
+#ifdef SKIPTHIS
+
+
 enum {
     wxTREE_MASK_HANDLE,
     wxTREE_MASK_STATE,
@@ -246,9 +249,6 @@ enum {
     wxTREE_INSERT_FIRST,
     wxTREE_INSERT_SORT,
 };
-
-
-
 
 
 
@@ -370,6 +370,144 @@ public:
 #endif
 };
 
+#endif
+
+
+//----------------------------------------------------------------------
+
+#ifdef __WXMSW__
+class wxTreeItemId {
+public:
+    wxTreeItemId();
+    ~wxTreeItemId();
+    bool IsOk() const { return m_itemId != 0; }
+
+    %addmethods {
+        long GetId() { return (long)(*self); }
+    }
+};
+
+
+
+// ****  This isn't very useful yet.  This needs to be specialized to enable
+// derived Python classes...
+class wxTreeItemData {
+public:
+    wxTreeItemData();
+    ~wxTreeItemData();
+
+    const wxTreeItemId& GetItemId();
+};
+
+
+
+
+class wxTreeEvent : public wxCommandEvent {
+public:
+    wxTreeItemId GetItem();
+    wxTreeItemId GetOldItem();
+    wxPoint GetPoint();
+    int GetCode();
+    void Veto();
+};
+
+
+// These are for the GetFirstChild/GetNextChild methods below
+%typemap(python, in)     long& INOUT = long* INOUT;
+%typemap(python, argout) long& INOUT = long* INOUT;
+
+
+class wxTreeCtrl : public wxControl {
+public:
+    wxTreeCtrl(wxWindow *parent, wxWindowID id = -1,
+               const wxPoint& pos = wxPyDefaultPosition,
+               const wxSize& size = wxPyDefaultSize,
+               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+               const wxValidator& validator = wxPyDefaultValidator,
+               char* name = "wxTreeCtrl");
+
+    %pragma(python) addtomethod = "__init__:wxp._StdWindowCallbacks(self)"
+
+    size_t GetCount();
+    unsigned int GetIndent();
+    void SetIndent(unsigned int indent);
+    wxImageList *GetImageList();
+    wxImageList *GetStateImageList();
+    void SetImageList(wxImageList *imageList);
+    void SetStateImageList(wxImageList *imageList);
+
+    wxString GetItemText(const wxTreeItemId& item);
+    int GetItemImage(const wxTreeItemId& item);
+    int GetItemSelectedImage(const wxTreeItemId& item);
+    wxTreeItemData *GetItemData(const wxTreeItemId& item);
+
+    void SetItemText(const wxTreeItemId& item, const wxString& text);
+    void SetItemImage(const wxTreeItemId& item, int image);
+    void SetItemSelectedImage(const wxTreeItemId& item, int image);
+    void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
+
+    bool IsVisible(const wxTreeItemId& item);
+    bool ItemHasChildren(const wxTreeItemId& item);
+    bool IsExpanded(const wxTreeItemId& item);
+    bool IsSelected(const wxTreeItemId& item);
+
+    wxTreeItemId GetRootItem();
+    wxTreeItemId GetSelection();
+    wxTreeItemId GetParent(const wxTreeItemId& item);
+
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& INOUT);
+    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& INOUT);
+    wxTreeItemId GetNextSibling(const wxTreeItemId& item);
+    wxTreeItemId GetPrevSibling(const wxTreeItemId& item);
+    wxTreeItemId GetFirstVisibleItem();
+    wxTreeItemId GetNextVisible(const wxTreeItemId& item);
+    wxTreeItemId GetPrevVisible(const wxTreeItemId& item);
+
+
+    wxTreeItemId AddRoot(const wxString& text,
+                         int image = -1, int selectedImage = -1,
+                         wxTreeItemData *data = NULL);
+    wxTreeItemId PrependItem(const wxTreeItemId& parent,
+                             const wxString& text,
+                             int image = -1, int selectedImage = -1,
+                             wxTreeItemData *data = NULL);
+    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                            const wxTreeItemId& idPrevious,
+                            const wxString& text,
+                            int image = -1, int selectedImage = -1,
+                            wxTreeItemData *data = NULL);
+    wxTreeItemId AppendItem(const wxTreeItemId& parent,
+                            const wxString& text,
+                            int image = -1, int selectedImage = -1,
+                            wxTreeItemData *data = NULL);
+
+    void Delete(const wxTreeItemId& item);
+    void DeleteAllItems();
+
+    void Expand(const wxTreeItemId& item);
+    void Collapse(const wxTreeItemId& item);
+    void CollapseAndReset(const wxTreeItemId& item);
+    void Toggle(const wxTreeItemId& item);
+
+    void Unselect();
+    void SelectItem(const wxTreeItemId& item);
+    void EnsureVisible(const wxTreeItemId& item);
+    void ScrollTo(const wxTreeItemId& item);
+
+    wxTextCtrl* EditLabel(const wxTreeItemId& item);
+                          // **** figure out how to do this
+                          // wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
+    wxTextCtrl* GetEditControl();
+    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
+
+    void SortChildren(const wxTreeItemId& item);
+                      // **** And this too
+                      // wxTreeItemCmpFunc *cmpFunction = NULL);
+
+};
+
+#endif
+
 //----------------------------------------------------------------------
 
 #ifdef SKIPTHIS
@@ -430,6 +568,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/10/20 06:43:55  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.5  1998/10/07 07:34:33  RD
 // Version 0.4.1 for wxGTK
 //

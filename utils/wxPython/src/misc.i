@@ -208,8 +208,8 @@ bool wxYield();
 
 bool wxResourceAddIdentifier(char *name, int value);
 void wxResourceClear(void);
-wxBitmap * wxResourceCreateBitmap(char *resource);
-wxIcon * wxResourceCreateIcon(char *resource);
+wxBitmap  wxResourceCreateBitmap(char *resource);
+wxIcon  wxResourceCreateIcon(char *resource);
 wxMenuBar * wxResourceCreateMenuBar(char *resource);
 int wxResourceGetIdentifier(char *name);
 bool wxResourceParseData(char *resource, wxResourceTable *table = NULL);
@@ -307,6 +307,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/10/20 06:43:59  RD
+// New wxTreeCtrl wrappers (untested)
+// some changes in helpers
+// etc.
+//
 // Revision 1.4  1998/08/18 19:48:19  RD
 // more wxGTK compatibility things.
 //

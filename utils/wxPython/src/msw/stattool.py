@@ -170,98 +170,85 @@ class wxToolBarTool(wxToolBarToolPtr):
 
 
 
-class wxToolBarBasePtr(wxControlPtr):
+class wxToolBarPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def AddSeparator(self):
-        val = stattoolc.wxToolBarBase_AddSeparator(self.this)
+        val = stattoolc.wxToolBar_AddSeparator(self.this)
         return val
     def AddTool(self,arg0,arg1,*args):
         argl = map(None,args)
         try: argl[0] = argl[0].this
         except: pass
         args = tuple(argl)
-        val = apply(stattoolc.wxToolBarBase_AddTool,(self.this,arg0,arg1.this,)+args)
+        val = apply(stattoolc.wxToolBar_AddTool,(self.this,arg0,arg1.this,)+args)
         val = wxToolBarToolPtr(val)
         return val
     def EnableTool(self,arg0,arg1):
-        val = stattoolc.wxToolBarBase_EnableTool(self.this,arg0,arg1)
+        val = stattoolc.wxToolBar_EnableTool(self.this,arg0,arg1)
         return val
     def FindToolForPosition(self,arg0,arg1):
-        val = stattoolc.wxToolBarBase_FindToolForPosition(self.this,arg0,arg1)
+        val = stattoolc.wxToolBar_FindToolForPosition(self.this,arg0,arg1)
         val = wxToolBarToolPtr(val)
         return val
     def GetToolSize(self):
-        val = stattoolc.wxToolBarBase_GetToolSize(self.this)
+        val = stattoolc.wxToolBar_GetToolSize(self.this)
         val = wxSizePtr(val)
         val.thisown = 1
         return val
     def GetToolBitmapSize(self):
-        val = stattoolc.wxToolBarBase_GetToolBitmapSize(self.this)
+        val = stattoolc.wxToolBar_GetToolBitmapSize(self.this)
         val = wxSizePtr(val)
         val.thisown = 1
         return val
     def GetMaxSize(self):
-        val = stattoolc.wxToolBarBase_GetMaxSize(self.this)
+        val = stattoolc.wxToolBar_GetMaxSize(self.this)
         val = wxSizePtr(val)
         val.thisown = 1
         return val
     def GetToolEnabled(self,arg0):
-        val = stattoolc.wxToolBarBase_GetToolEnabled(self.this,arg0)
+        val = stattoolc.wxToolBar_GetToolEnabled(self.this,arg0)
         return val
     def GetToolLongHelp(self,arg0):
-        val = stattoolc.wxToolBarBase_GetToolLongHelp(self.this,arg0)
+        val = stattoolc.wxToolBar_GetToolLongHelp(self.this,arg0)
         return val
     def GetToolPacking(self):
-        val = stattoolc.wxToolBarBase_GetToolPacking(self.this)
+        val = stattoolc.wxToolBar_GetToolPacking(self.this)
         return val
     def GetToolSeparation(self):
-        val = stattoolc.wxToolBarBase_GetToolSeparation(self.this)
+        val = stattoolc.wxToolBar_GetToolSeparation(self.this)
         return val
     def GetToolShortHelp(self,arg0):
-        val = stattoolc.wxToolBarBase_GetToolShortHelp(self.this,arg0)
+        val = stattoolc.wxToolBar_GetToolShortHelp(self.this,arg0)
         return val
     def GetToolState(self,arg0):
-        val = stattoolc.wxToolBarBase_GetToolState(self.this,arg0)
+        val = stattoolc.wxToolBar_GetToolState(self.this,arg0)
         return val
     def Realize(self):
-        val = stattoolc.wxToolBarBase_Realize(self.this)
+        val = stattoolc.wxToolBar_Realize(self.this)
         return val
     def SetToolBitmapSize(self,arg0):
-        val = stattoolc.wxToolBarBase_SetToolBitmapSize(self.this,arg0.this)
-        return val
-    def SetMargins(self,arg0):
-        val = stattoolc.wxToolBarBase_SetMargins(self.this,arg0.this)
+        val = stattoolc.wxToolBar_SetToolBitmapSize(self.this,arg0.this)
         return val
     def SetToolLongHelp(self,arg0,arg1):
-        val = stattoolc.wxToolBarBase_SetToolLongHelp(self.this,arg0,arg1)
-        return val
-    def SetToolPacking(self,arg0):
-        val = stattoolc.wxToolBarBase_SetToolPacking(self.this,arg0)
+        val = stattoolc.wxToolBar_SetToolLongHelp(self.this,arg0,arg1)
         return val
     def SetToolShortHelp(self,arg0,arg1):
-        val = stattoolc.wxToolBarBase_SetToolShortHelp(self.this,arg0,arg1)
+        val = stattoolc.wxToolBar_SetToolShortHelp(self.this,arg0,arg1)
+        return val
+    def SetMargins(self,arg0):
+        val = stattoolc.wxToolBar_SetMargins(self.this,arg0.this)
+        return val
+    def SetToolPacking(self,arg0):
+        val = stattoolc.wxToolBar_SetToolPacking(self.this,arg0)
         return val
     def SetToolSeparation(self,arg0):
-        val = stattoolc.wxToolBarBase_SetToolSeparation(self.this,arg0)
+        val = stattoolc.wxToolBar_SetToolSeparation(self.this,arg0)
         return val
     def ToggleTool(self,arg0,arg1):
-        val = stattoolc.wxToolBarBase_ToggleTool(self.this,arg0,arg1)
+        val = stattoolc.wxToolBar_ToggleTool(self.this,arg0,arg1)
         return val
-    def __repr__(self):
-        return "<C wxToolBarBase instance>"
-class wxToolBarBase(wxToolBarBasePtr):
-    def __init__(self,this):
-        self.this = this
-
-
-
-
-class wxToolBarPtr(wxToolBarBasePtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
     def __repr__(self):
         return "<C wxToolBar instance>"
 class wxToolBar(wxToolBarPtr):
@@ -273,27 +260,6 @@ class wxToolBar(wxToolBarPtr):
         except: pass
         args = tuple(argl)
         self.this = apply(stattoolc.new_wxToolBar,(arg0.this,arg1,)+args)
-        self.thisown = 1
-        wxp._StdWindowCallbacks(self)
-
-
-
-
-class wxToolBarSimplePtr(wxToolBarBasePtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxToolBarSimple instance>"
-class wxToolBarSimple(wxToolBarSimplePtr):
-    def __init__(self,arg0,arg1,*args) :
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        try: argl[1] = argl[1].this
-        except: pass
-        args = tuple(argl)
-        self.this = apply(stattoolc.new_wxToolBarSimple,(arg0.this,arg1,)+args)
         self.thisown = 1
         wxp._StdWindowCallbacks(self)
 

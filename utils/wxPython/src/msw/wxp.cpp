@@ -33,8 +33,10 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  1998/10/02 06:42:02  RD
- * Version 0.4 of wxPython for MSW.
+ * Revision 1.3  1998/10/20 06:45:09  RD
+ * New wxTreeCtrl wrappers (untested)
+ * some changes in helpers
+ * etc.
  *
  ************************************************************************/
 
@@ -1303,6 +1305,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxBU_NOAUTODRAW", PyInt_FromLong((long) wxBU_NOAUTODRAW));
 	 PyDict_SetItemString(d,"wxTR_HAS_BUTTONS", PyInt_FromLong((long) wxTR_HAS_BUTTONS));
 	 PyDict_SetItemString(d,"wxTR_EDIT_LABELS", PyInt_FromLong((long) wxTR_EDIT_LABELS));
+	 PyDict_SetItemString(d,"wxTR_LINES_AT_ROOT", PyInt_FromLong((long) wxTR_LINES_AT_ROOT));
 	 PyDict_SetItemString(d,"wxLC_ICON", PyInt_FromLong((long) wxLC_ICON));
 	 PyDict_SetItemString(d,"wxLC_SMALL_ICON", PyInt_FromLong((long) wxLC_SMALL_ICON));
 	 PyDict_SetItemString(d,"wxLC_LIST", PyInt_FromLong((long) wxLC_LIST));
@@ -1719,7 +1722,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.3.1"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.4.1"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1761,7 +1764,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
-	 SWIG_RegisterMapping("_class_wxToolBarBase","_wxToolBarBase",0);
 	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
@@ -1791,7 +1793,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxStatusBar","_wxStatusBar",0);
-	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
@@ -1821,6 +1822,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
 	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
+	 SWIG_RegisterMapping("_wxTreeItemData","_class_wxTreeItemData",0);
 	 SWIG_RegisterMapping("_class_wxFontData","_wxFontData",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
@@ -1835,7 +1837,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxTextEntryDialog","_class_wxTextEntryDialog",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
-	 SWIG_RegisterMapping("_wxToolBarSimple","_class_wxToolBarSimple",0);
 	 SWIG_RegisterMapping("_wxMDIChildFrame","_class_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_wxListItem","_class_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
@@ -1876,7 +1877,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxMoveEvent","_wxMoveEvent",0);
 	 SWIG_RegisterMapping("_wxListBox","_class_wxListBox",0);
 	 SWIG_RegisterMapping("_wxScreenDC","_class_wxScreenDC",0);
-	 SWIG_RegisterMapping("_class_wxToolBarSimple","_wxToolBarSimple",0);
 	 SWIG_RegisterMapping("_class_wxMDIChildFrame","_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_WXTYPE","_short",0);
 	 SWIG_RegisterMapping("_WXTYPE","_signed_short",0);
@@ -1891,7 +1891,6 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxStaticText","_wxStaticText",0);
 	 SWIG_RegisterMapping("_class_wxFont","_wxFont",0);
 	 SWIG_RegisterMapping("_class_wxCloseEvent","_wxCloseEvent",0);
-	 SWIG_RegisterMapping("_wxTreeItem","_class_wxTreeItem",0);
 	 SWIG_RegisterMapping("_class_wxMenuEvent","_wxMenuEvent",0);
 	 SWIG_RegisterMapping("_wxClientDC","_class_wxClientDC",0);
 	 SWIG_RegisterMapping("_wxMouseEvent","_class_wxMouseEvent",0);
@@ -1912,8 +1911,8 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
-	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
+	 SWIG_RegisterMapping("_wxTreeItemId","_class_wxTreeItemId",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMetaFileDC","_wxMetaFileDC",0);
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
@@ -1961,7 +1960,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_class_wxComboBox","_wxComboBox",0);
 	 SWIG_RegisterMapping("_class_wxRadioButton","_wxRadioButton",0);
-	 SWIG_RegisterMapping("_wxToolBarBase","_class_wxToolBarBase",0);
+	 SWIG_RegisterMapping("_class_wxTreeItemId","_wxTreeItemId",0);
 	 SWIG_RegisterMapping("_wxTreeCtrl","_class_wxTreeCtrl",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
 	 SWIG_RegisterMapping("_wxIconizeEvent","_class_wxIconizeEvent",0);
@@ -1981,11 +1980,11 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
 	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
-	 SWIG_RegisterMapping("_class_wxTreeItem","_wxTreeItem",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
 	 SWIG_RegisterMapping("_class_wxSizeEvent","_wxSizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxListCtrl","_wxListCtrl",0);
+	 SWIG_RegisterMapping("_class_wxTreeItemData","_wxTreeItemData",0);
 	 SWIG_RegisterMapping("_class_wxGridCell","_wxGridCell",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);

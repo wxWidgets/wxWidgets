@@ -379,27 +379,6 @@ static void *SwigwxCloseEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
-#define wxCloseEvent_GetSessionEnding(_swigobj)  (_swigobj->GetSessionEnding())
-static PyObject *_wrap_wxCloseEvent_GetSessionEnding(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxCloseEvent * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxCloseEvent_GetSessionEnding",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_GetSessionEnding. Expected _wxCloseEvent_p.");
-        return NULL;
-        }
-    }
-    _result = (bool )wxCloseEvent_GetSessionEnding(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 #define wxCloseEvent_GetLoggingOff(_swigobj)  (_swigobj->GetLoggingOff())
 static PyObject *_wrap_wxCloseEvent_GetLoggingOff(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2629,7 +2608,6 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxCloseEvent_GetVeto", _wrap_wxCloseEvent_GetVeto, 1 },
 	 { "wxCloseEvent_Veto", _wrap_wxCloseEvent_Veto, 1 },
 	 { "wxCloseEvent_GetLoggingOff", _wrap_wxCloseEvent_GetLoggingOff, 1 },
-	 { "wxCloseEvent_GetSessionEnding", _wrap_wxCloseEvent_GetSessionEnding, 1 },
 	 { "wxSizeEvent_GetSize", _wrap_wxSizeEvent_GetSize, 1 },
 	 { "wxEvent_Skip", _wrap_wxEvent_Skip, 1 },
 	 { "wxEvent_SetTimestamp", _wrap_wxEvent_SetTimestamp, 1 },
