@@ -93,6 +93,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetBackgroundColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
+    def GetChildren(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetChildren,(self,) + _args, _kwargs)
+        return val
     def GetCharHeight(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetCharHeight,(self,) + _args, _kwargs)
         return val

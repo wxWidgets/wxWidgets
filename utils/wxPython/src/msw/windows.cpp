@@ -826,6 +826,38 @@ static PyObject *_wrap_wxWindow_GetBackgroundColour(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static PyObject * wxWindow_GetChildren(wxWindow *self) {
+            wxWindowList& list = self->GetChildren();
+            return wxPy_ConvertList(&list, "wxWindow");
+        }
+static PyObject *_wrap_wxWindow_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetChildren",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetChildren. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxWindow_GetChildren(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 #define wxWindow_GetCharHeight(_swigobj)  (_swigobj->GetCharHeight())
 static PyObject *_wrap_wxWindow_GetCharHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6984,6 +7016,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_GetClientSizeTuple", (PyCFunction) _wrap_wxWindow_GetClientSizeTuple, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCharWidth", (PyCFunction) _wrap_wxWindow_GetCharWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetCharHeight", (PyCFunction) _wrap_wxWindow_GetCharHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetChildren", (PyCFunction) _wrap_wxWindow_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetBackgroundColour", (PyCFunction) _wrap_wxWindow_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_Fit", (PyCFunction) _wrap_wxWindow_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_FindWindowByName", (PyCFunction) _wrap_wxWindow_FindWindowByName, METH_VARARGS | METH_KEYWORDS },

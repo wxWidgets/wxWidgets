@@ -85,6 +85,16 @@ public:
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
     void Fit();
     wxColour GetBackgroundColour();
+
+    //wxList& GetChildren();
+    %addmethods {
+        PyObject* GetChildren() {
+            wxWindowList& list = self->GetChildren();
+            return wxPy_ConvertList(&list, "wxWindow");
+        }
+    }
+
+
     int  GetCharHeight();
     int  GetCharWidth();
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);

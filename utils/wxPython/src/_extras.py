@@ -277,6 +277,69 @@ def EVT_COMMAND_SCROLL_PAGEDOWN(win, id, func):
 def EVT_COMMAND_SCROLL_THUMBTRACK(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK, func)
 
+#---
+def EVT_SCROLLWIN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_TOP,       func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_BOTTOM,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEUP,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEDOWN,  func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEUP,    func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEDOWN,  func)
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_THUMBTRACK,func)
+
+def EVT_SCROLLWIN_TOP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_TOP, func)
+
+def EVT_SCROLLWIN_BOTTOM(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_BOTTOM, func)
+
+def EVT_SCROLLWIN_LINEUP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEUP, func)
+
+def EVT_SCROLLWIN_LINEDOWN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_LINEDOWN, func)
+
+def EVT_SCROLLWIN_PAGEUP(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEUP, func)
+
+def EVT_SCROLLWIN_PAGEDOWN(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_PAGEDOWN, func)
+
+def EVT_SCROLLWIN_THUMBTRACK(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLLWIN_THUMBTRACK, func)
+
+
+
+# Scrolling, with an id
+def EVT_COMMAND_SCROLLWIN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_TOP,       func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_BOTTOM,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEUP,    func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEDOWN,  func)
+    win.Connect(id, -1, wxEVT_SCROLLWIN_THUMBTRACK,func)
+
+def EVT_COMMAND_SCROLLWIN_TOP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_TOP, func)
+
+def EVT_COMMAND_SCROLLWIN_BOTTOM(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_BOTTOM, func)
+
+def EVT_COMMAND_SCROLLWIN_LINEUP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEUP, func)
+
+def EVT_COMMAND_SCROLLWIN_LINEDOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_LINEDOWN, func)
+
+def EVT_COMMAND_SCROLLWIN_PAGEUP(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEUP, func)
+
+def EVT_COMMAND_SCROLLWIN_PAGEDOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_PAGEDOWN, func)
+
+def EVT_COMMAND_SCROLLWIN_THUMBTRACK(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLLWIN_THUMBTRACK, func)
 
 # Convenience commands
 def EVT_BUTTON(win, id, func):

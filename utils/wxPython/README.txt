@@ -52,6 +52,18 @@ Much more support for event-less callbacks and add-on modules
 
 Created add-on module with wxOGL classes.
 
+Added wxWindow.GetChildren().  Be careful of this.  It returns a copy
+of the list of the window's children.  While you are using the list if
+anything changes in the real list (a child is deleted, etc.) then the
+list you are holding will suddenly have window references to garbage
+memory and your app will likely crash.  But if you are careful it works
+great!
+
+Added a bunch of new and missing methods to wxTreeCrtl.  The
+SortChildren method is now supported, but currently only for the
+default sort order.
+
+
 
 
 What's new in 2.1b3

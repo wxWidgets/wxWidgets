@@ -371,6 +371,23 @@ public:
     wxTreeItemId GetRootItem();
     wxTreeItemId GetSelection();
     wxTreeItemId GetParent(const wxTreeItemId& item);
+    //size_t GetSelections(wxArrayTreeItemIds& selection);
+    %addmethods {
+        PyObject* GetSelections() {
+            PyObject*           rval = PyList_New(0);
+            wxArrayTreeItemIds  array;
+            size_t              num, x;
+            num = self->GetSelections(array);
+            for (x=0; x < num; x++) {
+                PyObject* item = wxPyConstructObject((void*)&array.Item(x),
+                                                     "wxTreeItemId");
+                PyList_Append(rval, item);
+            }
+            return rval;
+        }
+    }
+
+
 
     size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
 
@@ -381,6 +398,8 @@ public:
     wxTreeItemId GetFirstVisibleItem();
     wxTreeItemId GetNextVisible(const wxTreeItemId& item);
     wxTreeItemId GetPrevVisible(const wxTreeItemId& item);
+    wxTreeItemId GetLastChild(const wxTreeItemId& item);
+
 
 
     wxTreeItemId AddRoot(const wxString& text,
@@ -422,13 +441,24 @@ public:
     void EditLabel(const wxTreeItemId& item);
 #endif
 
-//    void SortChildren(const wxTreeItemId& item);
-                      // **** And this too
-                      // wxTreeItemCmpFunc *cmpFunction = NULL);
+    void SortChildren(const wxTreeItemId& item);
 
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
     wxTreeItemId HitTest(const wxPoint& point);
+
+    //bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, int textOnly = FALSE)
+    %addmethods {
+        PyObject* GetBoundingRect(const wxTreeItemId& item, int textOnly = FALSE) {
+            wxRect rect;
+            if (self->GetBoundingRect(item, rect, textOnly))
+                return wxPyConstructObject((void*)&rect, "wxRect");
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+    }
 
 %pragma(python) addtoclass = "
     # Redefine a couple methods that SWIG gets a bit confused on...

@@ -4420,6 +4420,46 @@ static PyObject *_wrap_wxTreeCtrl_GetParent(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static PyObject * wxTreeCtrl_GetSelections(wxTreeCtrl *self) {
+            PyObject*           rval = PyList_New(0);
+            wxArrayTreeItemIds  array;
+            size_t              num, x;
+            num = self->GetSelections(array);
+            for (x=0; x < num; x++) {
+                PyObject* item = wxPyConstructObject((void*)&array.Item(x),
+                                                     "wxTreeItemId");
+                PyList_Append(rval, item);
+            }
+            return rval;
+        }
+static PyObject *_wrap_wxTreeCtrl_GetSelections(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxTreeCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTreeCtrl_GetSelections",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetSelections. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxTreeCtrl_GetSelections(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 #define wxTreeCtrl_GetChildrenCount(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetChildrenCount(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTreeCtrl_GetChildrenCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4733,6 +4773,44 @@ static PyObject *_wrap_wxTreeCtrl_GetPrevVisible(PyObject *self, PyObject *args,
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = new wxTreeItemId (wxTreeCtrl_GetPrevVisible(_arg0,*_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTreeItemId_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTreeCtrl_GetLastChild(_swigobj,_swigarg0)  (_swigobj->GetLastChild(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_GetLastChild(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeItemId * _result;
+    wxTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetLastChild",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetLastChild. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetLastChild. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxTreeItemId (wxTreeCtrl_GetLastChild(_arg0,*_arg1));
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTreeItemId_p");
@@ -5509,6 +5587,42 @@ static PyObject *_wrap_wxTreeCtrl_EndEditLabel(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxTreeCtrl_SortChildren(_swigobj,_swigarg0)  (_swigobj->SortChildren(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_SortChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_SortChildren",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_SortChildren. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_SortChildren. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCtrl_SortChildren(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTreeCtrl_SetItemBold(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemBold(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTreeCtrl_SetItemBold(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5622,10 +5736,59 @@ static PyObject *_wrap_wxTreeCtrl_HitTest(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static PyObject * wxTreeCtrl_GetBoundingRect(wxTreeCtrl *self,const wxTreeItemId & item,int  textOnly) {
+            wxRect rect;
+            if (self->GetBoundingRect(item, rect, textOnly))
+                return wxPyConstructObject((void*)&rect, "wxRect");
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+static PyObject *_wrap_wxTreeCtrl_GetBoundingRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    int  _arg2 = (int ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item","textOnly", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxTreeCtrl_GetBoundingRect",_kwnames,&_argo0,&_argo1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetBoundingRect. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_GetBoundingRect. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxTreeCtrl_GetBoundingRect(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef controls2cMethods[] = {
+	 { "wxTreeCtrl_GetBoundingRect", (PyCFunction) _wrap_wxTreeCtrl_GetBoundingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_HitTest", (PyCFunction) _wrap_wxTreeCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_IsBold", (PyCFunction) _wrap_wxTreeCtrl_IsBold, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SetItemBold", (PyCFunction) _wrap_wxTreeCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_SortChildren", (PyCFunction) _wrap_wxTreeCtrl_SortChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EndEditLabel", (PyCFunction) _wrap_wxTreeCtrl_EndEditLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetEditControl", (PyCFunction) _wrap_wxTreeCtrl_GetEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EditLabel", (PyCFunction) _wrap_wxTreeCtrl_EditLabel, METH_VARARGS | METH_KEYWORDS },
@@ -5645,6 +5808,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_InsertItem", (PyCFunction) _wrap_wxTreeCtrl_InsertItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_PrependItem", (PyCFunction) _wrap_wxTreeCtrl_PrependItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_AddRoot", (PyCFunction) _wrap_wxTreeCtrl_AddRoot, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetLastChild", (PyCFunction) _wrap_wxTreeCtrl_GetLastChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetPrevVisible", (PyCFunction) _wrap_wxTreeCtrl_GetPrevVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetNextVisible", (PyCFunction) _wrap_wxTreeCtrl_GetNextVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetFirstVisibleItem", (PyCFunction) _wrap_wxTreeCtrl_GetFirstVisibleItem, METH_VARARGS | METH_KEYWORDS },
@@ -5653,6 +5817,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_GetNextChild", (PyCFunction) _wrap_wxTreeCtrl_GetNextChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetFirstChild", (PyCFunction) _wrap_wxTreeCtrl_GetFirstChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetChildrenCount", (PyCFunction) _wrap_wxTreeCtrl_GetChildrenCount, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetSelections", (PyCFunction) _wrap_wxTreeCtrl_GetSelections, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetParent", (PyCFunction) _wrap_wxTreeCtrl_GetParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetSelection", (PyCFunction) _wrap_wxTreeCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetRootItem", (PyCFunction) _wrap_wxTreeCtrl_GetRootItem, METH_VARARGS | METH_KEYWORDS },
@@ -5911,6 +6076,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_long","_long",0},
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
+    { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
     { "_class_wxTreeEvent","_wxTreeEvent",0},
     { "_class_wxPyTimer","_wxPyTimer",0},
     { "_wxFocusEvent","_class_wxFocusEvent",0},
@@ -5999,6 +6165,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_int",0},
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
+    { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},

@@ -85,6 +85,14 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxScrollWinEvent: public wxEvent {
+public:
+    int GetOrientation();
+    int GetPosition();
+};
+
+//---------------------------------------------------------------------------
+
 class wxSpinEvent : public wxScrollEvent {
 public:
 

@@ -109,6 +109,7 @@ class wxSashWindow;
 class wxScreenDC;
 class wxScrollBar;
 class wxScrollEvent;
+class wxScrollWinEvent;
 class wxScrolledWindow;
 class wxShowEvent;
 class wxSingleChoiceDialog;
