@@ -982,7 +982,7 @@ WXWINE=
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
   AC_MSG_CHECKING(for Windows headers)
   WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
-
+  INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
   if test "$ac_find_includes" != "" ; then
     AC_MSG_RESULT(found $ac_find_includes)
     TOOLKIT_INCLUDE="$TOOLKIT_INCLUDE -I$ac_find_includes"
@@ -2172,6 +2172,8 @@ dnl             samples/Makefile samples/minimal/Makefile
             include/wx/gtk/Makefile
             include/wx/motif/Makefile
             include/wx/msw/Makefile
+            include/wx/msw/gnuwin32/Makefile
+            include/wx/msw/ctl3d/Makefile
             include/wx/protocol/Makefile
             include/wx/unix/Makefile
             include/wx/html/Makefile
