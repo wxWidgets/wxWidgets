@@ -16,8 +16,8 @@ from __future__ import division
 import sys
 import wx
 
-from basic import ControlPoint, RectangleShape, Shape
-from oglmisc import *
+from _basic import ControlPoint, RectangleShape, Shape
+from _oglmisc import *
 
 
 

@@ -16,8 +16,8 @@ from __future__ import division
 import sys
 import wx
 
-from basic import RectangleShape, Shape, ControlPoint
-from oglmisc import *
+from _basic import RectangleShape, Shape, ControlPoint
+from _oglmisc import *
 
 KEY_SHIFT, KEY_CTRL = 1, 2
 

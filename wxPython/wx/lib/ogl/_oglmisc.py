@@ -12,7 +12,7 @@
 #----------------------------------------------------------------------------
 
 from __future__ import division
-from math import *
+import math
 
 import wx
 
@@ -339,7 +339,7 @@ def GraphicsStraightenLine(point1, point2):
 
 
 def GetPointOnLine(x1, y1, x2, y2, length):
-    l = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+    l = math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
     if l<0.01:
         l = 0.01
 
@@ -351,7 +351,7 @@ def GetPointOnLine(x1, y1, x2, y2, length):
 
 
 def GetArrowPoints(x1, y1, x2, y2, length, width):
-    l = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+    l = math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
 
     if l<0.01:
         l = 0.01
@@ -374,9 +374,9 @@ def DrawArcToEllipse(x1, y1, width1, height1, x2, y2, x3, y3):
     if abs(x2 - x3)<0.05:
         x4 = x2
         if y3>y2:
-            y4 = y1 - sqrt((b1 * b1 - (((x2 - x1) * (x2 - x1)) * (b1 * b1) / (a1 * a1))))
+            y4 = y1 - math.sqrt((b1 * b1 - (((x2 - x1) * (x2 - x1)) * (b1 * b1) / (a1 * a1))))
         else:
-            y4 = y1 + sqrt((b1 * b1 - (((x2 - x1) * (x2 - x1)) * (b1 * b1) / (a1 * a1))))
+            y4 = y1 + math.sqrt((b1 * b1 - (((x2 - x1) * (x2 - x1)) * (b1 * b1) / (a1 * a1))))
         return x4, y4
 
     # Calculate the x and y coordinates of the point where arc intersects ellipse
@@ -393,10 +393,10 @@ def DrawArcToEllipse(x1, y1, width1, height1, x2, y2, x3, y3):
     if K >= 0:
         # In this case the line intersects the ellipse, so calculate intersection
         if x2 >= x1:
-            ellipse1_x = ((F*-1) + sqrt(K)) / (2 * E)
+            ellipse1_x = ((F*-1) + math.sqrt(K)) / (2 * E)
             ellipse1_y = ((H * (ellipse1_x - x2)) + y2)
         else:
-            ellipse1_x = (((F*-1) - sqrt(K)) / (2 * E))
+            ellipse1_x = (((F*-1) - math.sqrt(K)) / (2 * E))
             ellipse1_y = ((H * (ellipse1_x - x2)) + y2)
     else:
         # in this case, arc does not intersect ellipse, so just draw arc
@@ -408,7 +408,7 @@ def DrawArcToEllipse(x1, y1, width1, height1, x2, y2, x3, y3):
 
 
 def FindEndForCircle(radius, x1, y1, x2, y2):
-    H = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+    H = math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
 
     if H == 0:
         return x1, y1

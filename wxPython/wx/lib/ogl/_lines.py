@@ -14,11 +14,10 @@
 from __future__ import division
 
 import sys
+import math
 
-from math import sqrt
-
-from basic import Shape, ShapeRegion, ControlPoint, RectangleShape
-from oglmisc import *
+from _basic import Shape, ShapeRegion, ControlPoint, RectangleShape
+from _oglmisc import *
 
 # Line alignment flags
 # Vertical by default
@@ -555,7 +554,7 @@ class LineShape(Shape):
             dx = point2[0]-point1[0]
             dy = point2[1]-point1[1]
 
-            seg_len = sqrt(dx * dx + dy * dy)
+            seg_len = math.sqrt(dx * dx + dy * dy)
             if dy == 0 or dx == 0:
                 return False
             distance_from_seg = seg_len * ((x-point1[0]) * dy-(y-point1[1]) * dx) / (dy * dy + dx * dx)
@@ -613,7 +612,7 @@ class LineShape(Shape):
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = sqrt((second_line_point[0]-first_line_point[0]) * (second_line_point[0]-first_line_point[0]) + (second_line_point[1]-first_line_point[1]) * (second_line_point[1]-first_line_point[1]))
+                totalLength = math.sqrt((second_line_point[0]-first_line_point[0]) * (second_line_point[0]-first_line_point[0]) + (second_line_point[1]-first_line_point[1]) * (second_line_point[1]-first_line_point[1]))
                 realOffset = XOffset * totalLength
 
             positionOnLineX, positionOnLineY = GetPointOnLine(second_line_point[0], second_line_point[1], first_line_point[0], first_line_point[1], realOffset)
@@ -625,7 +624,7 @@ class LineShape(Shape):
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = sqrt((second_last_line_point[0]-last_line_point[0]) * (second_last_line_point[0]-last_line_point[0]) + (second_last_line_point[1]-last_line_point[1]) * (second_last_line_point[1]-last_line_point[1]));
+                totalLength = math.sqrt((second_last_line_point[0]-last_line_point[0]) * (second_last_line_point[0]-last_line_point[0]) + (second_last_line_point[1]-last_line_point[1]) * (second_last_line_point[1]-last_line_point[1]));
                 realOffset = XOffset * totalLength
             
             positionOnLineX, positionOnLineY = GetPointOnLine(second_last_line_point[0], second_last_line_point[1], last_line_point[0], last_line_point[1], realOffset)
@@ -641,7 +640,7 @@ class LineShape(Shape):
             # will be on the line.
             realOffset = XOffset
             if proportionalOffset:
-                totalLength = sqrt((second_last_line_point[0]-x) * (second_last_line_point[0]-x) + (second_last_line_point[1]-y) * (second_last_line_point[1]-y));
+                totalLength = math.sqrt((second_last_line_point[0]-x) * (second_last_line_point[0]-x) + (second_last_line_point[1]-y) * (second_last_line_point[1]-y));
                 realOffset = XOffset * totalLength
 
             positionOnLineX, positionOnLineY = GetPointOnLine(second_last_line_point[0], second_last_line_point[1], x, y, realOffset)
@@ -658,10 +657,10 @@ class LineShape(Shape):
             #                             |d
             #                             |
             #   (x1, y1)--------------(x3, y3)------------------(x2, y2)
-            #   x4 = x3 - d * sin(theta)
-            #   y4 = y3 + d * cos(theta)
+            #   x4 = x3 - d * math.sin(theta)
+            #   y4 = y3 + d * math.cos(theta)
             #
-            #   Where theta = tan(-1) of (y3-y1) / (x3-x1)
+            #   Where theta = math.tan(-1) of (y3-y1) / (x3-x1)
             x1 = startPositionX
             y1 = startPositionY
             x3 = positionOnLineX
@@ -671,10 +670,10 @@ class LineShape(Shape):
             if x3 == x1:
                 theta = pi / 2
             else:
-                theta = atan((y3-y1) / (x3-x1))
+                theta = math.atan((y3-y1) / (x3-x1))
 
-            x4 = x3-d * sin(theta)
-            y4 = y3 + d * cos(theta)
+            x4 = x3-d * math.sin(theta)
+            y4 = y3 + d * math.cos(theta)
             
             deltaX = x4-positionOnLineX
             deltaY = y4-positionOnLineY
@@ -749,11 +748,11 @@ class LineShape(Shape):
                 elif x1 == x2 and y2>y1:
                     theta = pi / 2
                 elif x2>x1 and y2 >= y1:
-                    theta = atan((y2-y1) / (x2-x1))
+                    theta = math.atan((y2-y1) / (x2-x1))
                 elif x2<x1:
-                    theta = pi + atan((y2-y1) / (x2-x1))
+                    theta = pi + math.atan((y2-y1) / (x2-x1))
                 elif x2>x1 and y2<y1:
-                    theta = 2 * pi + atan((y2-y1) / (x2-x1))
+                    theta = 2 * pi + math.atan((y2-y1) / (x2-x1))
                 else:
                     raise "Unknown arrowhead rotation case"
 
@@ -1439,9 +1438,9 @@ class LineShape(Shape):
         startX, startY, endX, endY = self.GetEnds()
 
         # Find distances from centre, start and end. The smallest wins
-        centreDistance = sqrt((x-self._xpos) * (x-self._xpos) + (y-self._ypos) * (y-self._ypos))
-        startDistance = sqrt((x-startX) * (x-startX) + (y-startY) * (y-startY))
-        endDistance = sqrt((x-endX) * (x-endX) + (y-endY) * (y-endY))
+        centreDistance = math.sqrt((x-self._xpos) * (x-self._xpos) + (y-self._ypos) * (y-self._ypos))
+        startDistance = math.sqrt((x-startX) * (x-startX) + (y-startY) * (y-startY))
+        endDistance = math.sqrt((x-endX) * (x-endX) + (y-endY) * (y-endY))
 
         if centreDistance<startDistance and centreDistance<endDistance:
             return ARROW_POSITION_MIDDLE

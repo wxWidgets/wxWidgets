@@ -14,8 +14,8 @@
 from __future__ import division
 
 import wx
-from lines import LineShape
-from composit import *
+from _lines import LineShape
+from _composit import *
 
 NoDragging, StartDraggingLeft, ContinueDraggingLeft, StartDraggingRight, ContinueDraggingRight = 0, 1, 2, 3, 4
 

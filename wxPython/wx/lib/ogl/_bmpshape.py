@@ -13,7 +13,7 @@
 
 from __future__ import division
 
-from basic import RectangleShape
+from _basic import RectangleShape
 
 
 class BitmapShape(RectangleShape):

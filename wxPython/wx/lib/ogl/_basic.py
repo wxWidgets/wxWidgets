@@ -14,9 +14,9 @@
 from __future__ import division
 
 import wx
-from math import pi, sqrt, atan, sin, cos
+import math
 
-from oglmisc import *
+from _oglmisc import *
 
 DragOffsetX = 0.0
 DragOffsetY = 0.0
@@ -484,7 +484,7 @@ class Shape(ShapeEvtHandler):
                 e = self.GetAttachmentPositionEdge(i)
                 if e:
                     xp, yp = e
-                    l = sqrt(((xp - x) * (xp - x)) + (yp - y) * (yp - y))
+                    l = math.sqrt(((xp - x) * (xp - x)) + (yp - y) * (yp - y))
                     if l<nearest:
                         nearest = l
                         nearest_attachment = i
@@ -1841,11 +1841,11 @@ class Shape(ShapeEvtHandler):
         """
         if RoughlyEqual(self.GetRotation(), 0):
             i = physicalAttachment
-        elif RoughlyEqual(self.GetRotation(), pi / 2):
+        elif RoughlyEqual(self.GetRotation(), math.pi / 2):
             i = physicalAttachment - 1
-        elif RoughlyEqual(self.GetRotation(), pi):
+        elif RoughlyEqual(self.GetRotation(), math.pi):
             i = physicalAttachment - 2
-        elif RoughlyEqual(self.GetRotation(), 3 * pi / 2):
+        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2):
             i = physicalAttachment - 3
         else:
             # Can't handle -- assume the same
@@ -1862,11 +1862,11 @@ class Shape(ShapeEvtHandler):
         """
         if RoughlyEqual(self.GetRotation(), 0):
             i = logicalAttachment
-        elif RoughlyEqual(self.GetRotation(), pi / 2):
+        elif RoughlyEqual(self.GetRotation(), math.pi / 2):
             i = logicalAttachment + 1
-        elif RoughlyEqual(self.GetRotation(), pi):
+        elif RoughlyEqual(self.GetRotation(), math.pi):
             i = logicalAttachment + 2
-        elif RoughlyEqual(self.GetRotation(), 3 * pi / 2):
+        elif RoughlyEqual(self.GetRotation(), 3 * math.pi / 2):
             i = logicalAttachment + 3
         else:
             return logicalAttachment
@@ -1880,9 +1880,9 @@ class Shape(ShapeEvtHandler):
         """Rotate about the given axis by the given amount in radians."""
         self._rotation = theta
         if self._rotation<0:
-            self._rotation += 2 * pi
-        elif self._rotation>2 * pi:
-            self._rotation -= 2 * pi
+            self._rotation += 2 * math.pi
+        elif self._rotation>2 * math.pi:
+            self._rotation -= 2 * math.pi
 
     def GetBackgroundPen(self):
         """Return pen of the right colour for the background."""
@@ -2528,7 +2528,7 @@ class PolygonShape(Shape):
             e = self.GetAttachmentPositionEdge(i)
             if e:
                 xp, yp = e
-                l = sqrt((xp - x) * (xp - x) + (yp - y) * (yp - y))
+                l = math.sqrt((xp - x) * (xp - x) + (yp - y) * (yp - y))
                 if l<nearest:
                     nearest = l
                     nearest_attachment = i
@@ -2700,8 +2700,8 @@ class PolygonShape(Shape):
         actualTheta = theta - self._rotation
 
         # Rotate attachment points
-        sinTheta = sin(actualTheta)
-        cosTheta = cos(actualTheta)
+        sinTheta = math.sin(actualTheta)
+        cosTheta = math.cos(actualTheta)
 
         for point in self._attachmentPoints:
             x1 = point._x
@@ -2758,7 +2758,7 @@ class PolygonShape(Shape):
 
         bound_x, bound_y = self.GetBoundingBoxMin()
 
-        dist = sqrt((x - self.GetX()) * (x - self.GetX()) + (y - self.GetY()) * (y - self.GetY()))
+        dist = math.sqrt((x - self.GetX()) * (x - self.GetX()) + (y - self.GetY()) * (y - self.GetY()))
 
         pt._originalDistance = dist
         pt._originalSize.x = bound_x
@@ -3153,7 +3153,7 @@ class PolygonControlPoint(ControlPoint):
     # Calculate what new size would be, at end of resize
     def CalculateNewSize(self, x, y):
         bound_x, bound_y = self.GetShape().GetBoundingBoxMax()
-        dist = sqrt((x - self._shape.GetX()) * (x - self._shape.GetX()) + (y - self._shape.GetY()) * (y - self._shape.GetY()))
+        dist = math.sqrt((x - self._shape.GetX()) * (x - self._shape.GetX()) + (y - self._shape.GetY()) * (y - self._shape.GetY()))
 
         self._newSize.x = dist / self._originalDistance * self._originalSize.x
         self._newSize.y = dist / self._originalDistance * self._originalSize.y
@@ -3168,6 +3168,6 @@ class PolygonControlPoint(ControlPoint):
     def OnEndDragLeft(self, x, y, keys = 0, attachment = 0):
         self._shape.GetEventHandler().OnSizingEndDragLeft(self, x, y, keys, attachment)
 
-from canvas import *
-from lines import *
-from composit import *
+from _canvas import *
+from _lines import *
+from _composit import *
