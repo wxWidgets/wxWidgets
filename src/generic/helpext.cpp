@@ -115,12 +115,18 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    {
       wxString lockfile;
       wxGetHomeDir(&lockfile);
+#ifdef __VMS__
+      lockfile << WXEXTHELP_SEPARATOR << wxT(".netscape]lock.");
+      struct stat statbuf;
+      if(stat(lockfile.fn_str(), &statbuf) == 0)
+#else
       lockfile << WXEXTHELP_SEPARATOR << wxT(".netscape/lock");
       struct stat statbuf;
       if(lstat(lockfile.fn_str(), &statbuf) == 0)
       // cannot use wxFileExists, because it's a link pointing to a
       // non-existing location      if(wxFileExists(lockfile))
-      {
+#endif
+	{
          long success;
          command << m_BrowserName << wxT(" -remote openURL(")
                  << wxT("file://") << m_MapFile
