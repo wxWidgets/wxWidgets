@@ -76,7 +76,8 @@ def onSample(arg, dirname, names):
     
     for bake in bakes:
         addMakefile('%s/%s' % (dirname, bake), {'all':dirname},
-                    deps=['common.bkl','config.bkl'], args=args)
+                    deps=['common.bkl','common_samples.bkl','config.bkl'],
+                    args=args)
 
 os.path.walk('../../samples', onSample, None)
 
@@ -102,7 +103,9 @@ clean:
 Makefile: regenMakefile.py
 \t./regenMakefile.py
 \t@echo
+\t@echo -------------------------------------------
 \t@echo Please rerun make, Makefile was regenerated
+\t@echo -------------------------------------------
 \t@echo
 \t@exit 1
 """ % (string.join(all, ' '), cleanCmds))

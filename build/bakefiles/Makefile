@@ -4,7 +4,7 @@
 BAKEFILE = bakefile
 BAKEARGS = -v
 
-all: ../../Makefile.in ../../samples/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/minimal/Makefile.in ../../samples/artprov/Makefile.in ../../configure ../../samples/configure
+all: ../../Makefile.in ../../samples/Makefile.in ../../samples/dialogs/Makefile.in ../../samples/image/Makefile.in ../../samples/minimal/Makefile.in ../../samples/artprov/Makefile.in ../../configure ../../samples/configure
 
 clean:
 	rm -f ../../autoconf_inc.m4
@@ -12,6 +12,7 @@ clean:
 	rm -f ../../Makefile.in
 	rm -f ../../samples/Makefile.in
 	rm -f ../../samples/dialogs/Makefile.in
+	rm -f ../../samples/image/Makefile.in
 	rm -f ../../samples/minimal/Makefile.in
 	rm -f ../../samples/artprov/Makefile.in
 
@@ -25,7 +26,9 @@ clean:
 Makefile: regenMakefile.py
 	./regenMakefile.py
 	@echo
+	@echo -------------------------------------------
 	@echo Please rerun make, Makefile was regenerated
+	@echo -------------------------------------------
 	@echo
 	@exit 1
 
@@ -40,16 +43,21 @@ Makefile: regenMakefile.py
 	touch ../../samples/Makefile.in
 
 # from ../../samples/dialogs/dialogs.bkl
-../../samples/dialogs/Makefile.in: common.bkl config.bkl ../../samples/dialogs/dialogs.bkl Makefile
+../../samples/dialogs/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/dialogs/dialogs.bkl Makefile
 	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/dialogs/Makefile.in -DWXTOPDIR=/../.. -DAUTOCONF_MACROS_FILE=../../samples/autoconf_inc.m4 ../../samples/dialogs/dialogs.bkl
 	touch ../../samples/dialogs/Makefile.in
 
+# from ../../samples/image/image.bkl
+../../samples/image/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/image/image.bkl Makefile
+	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/image/Makefile.in -DWXTOPDIR=/../.. -DAUTOCONF_MACROS_FILE=../../samples/autoconf_inc.m4 ../../samples/image/image.bkl
+	touch ../../samples/image/Makefile.in
+
 # from ../../samples/minimal/minimal.bkl
-../../samples/minimal/Makefile.in: common.bkl config.bkl ../../samples/minimal/minimal.bkl Makefile
+../../samples/minimal/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/minimal/minimal.bkl Makefile
 	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/minimal/Makefile.in -DWXTOPDIR=/../.. -DAUTOCONF_MACROS_FILE=../../samples/autoconf_inc.m4 ../../samples/minimal/minimal.bkl
 	touch ../../samples/minimal/Makefile.in
 
 # from ../../samples/artprov/artprov.bkl
-../../samples/artprov/Makefile.in: common.bkl config.bkl ../../samples/artprov/artprov.bkl Makefile
+../../samples/artprov/Makefile.in: common.bkl common_samples.bkl config.bkl ../../samples/artprov/artprov.bkl Makefile
 	$(BAKEFILE) $(BAKEARGS) -fautoconf -o../../samples/artprov/Makefile.in -DWXTOPDIR=/../.. -DAUTOCONF_MACROS_FILE=../../samples/autoconf_inc.m4 ../../samples/artprov/artprov.bkl
 	touch ../../samples/artprov/Makefile.in
