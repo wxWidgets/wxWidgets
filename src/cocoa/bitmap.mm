@@ -355,9 +355,28 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
     return false;
 }
 
-bool wxBitmap::CopyFromIcon(const wxIcon& icno)
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    return false;
+    UnRef();
+    if(!icon.GetNSImage());
+    [icon.GetNSImage() lockFocus];
+    NSRect imageRect;
+    imageRect.origin.x = imageRect.origin.y = 0.0;
+    imageRect.size = [icon.GetNSImage() size];
+    NSBitmapImageRep *newBitmapRep = [[NSBitmapImageRep alloc] initWithFocusedViewRect:imageRect];
+    [icon.GetNSImage() unlockFocus];
+    if(!newBitmapRep)
+        return false;
+    m_refData = new wxBitmapRefData;
+    M_BITMAPDATA->m_cocoaNSBitmapImageRep = newBitmapRep;
+    M_BITMAPDATA->m_width = [newBitmapRep pixelsWide];
+    M_BITMAPDATA->m_height = [newBitmapRep pixelsHigh];
+    M_BITMAPDATA->m_depth = [newBitmapRep bitsPerSample];
+    M_BITMAPDATA->m_ok = true;
+    M_BITMAPDATA->m_numColors = 0;
+    M_BITMAPDATA->m_quality = 0;
+    M_BITMAPDATA->m_bitmapMask = NULL;
+    return true;
 }
 
 wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
