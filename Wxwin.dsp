@@ -39,7 +39,7 @@ CPP=cl.exe
 # PROP Intermediate_Dir ".\Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MD /w /W0 /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
+# ADD CPP /nologo /G5 /MD /w /W0 /GX /O2 /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -60,7 +60,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir ".\Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
-# ADD CPP /nologo /G5 /MDd /w /W0 /GX /Z7 /Od /Gf /Gy /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /D "__WXDEBUG__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WXDEBUG=1 /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
+# ADD CPP /nologo /G5 /MDd /w /W0 /GX /Z7 /Od /Gf /Gy /I ".\include" /I ".\include\wx\msw" /I ".\include\wx\generic" /I ".\include\wx\other" /I ".\src\png" /I ".\src\zlib" /D "__WXDEBUG__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WXDEBUG=1 /D "__WINDOWS__" /YX"wx\wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -1789,9 +1789,11 @@ SOURCE=.\src\common\Y_tab.c
 
 !IF  "$(CFG)" == "wxWin - Win32 Release"
 
-# ADD CPP /D "USE_DEFINE" /D "YY_USE_PROTOS"
+# ADD CPP /D "YY_USE_PROTOS" /D "USE_DEFINE"
 
 !ELSEIF  "$(CFG)" == "wxWin - Win32 Debug"
+
+# ADD CPP /D "USE_DEFINE" /D "YY_USE_PROTOS"
 
 !ENDIF 
 
@@ -1823,6 +1825,130 @@ SOURCE=.\src\msw\ole\oleutils.cpp
 # Begin Source File
 
 SOURCE=.\src\msw\ole\uuid.cpp
+# End Source File
+# End Group
+# Begin Group "png"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\png\png.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngerror.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngget.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngmem.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngpread.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngread.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngrio.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngrtran.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngrutil.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngset.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngtrans.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngwio.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngwrite.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngwtran.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\png\pngwutil.c
+# End Source File
+# End Group
+# Begin Group "zlib"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\zlib\adler32.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\compress.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\crc32.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\deflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\gzio.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\infblock.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\infcodes.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\inffast.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\inflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\inftrees.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\infutil.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\trees.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\uncompr.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\zlib\zutil.c
 # End Source File
 # End Group
 # End Target
