@@ -3,7 +3,7 @@
 // Purpose:     Implements wxTaskBarIcon class for manipulating icons on
 //              the Windows task bar.
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vaclav Slavik
 // Created:     24/3/98
 // RCS-ID:      $Id$
 // Copyright:   (c)
@@ -46,16 +46,6 @@
     #include <shellapi.h>
 #endif
 
-#include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxTaskBarIconList);
-
-LRESULT APIENTRY _EXPORT
-wxTaskBarIconWindowProc( HWND hWnd, unsigned msg, UINT wParam, LONG lParam );
-
-wxChar *wxTaskBarWindowClass = (wxChar*) wxT("wxTaskBarWindowClass");
-
-wxTaskBarIconList wxTaskBarIcon::sm_taskBarIcons;
-
 // initialized on demand
 UINT   gs_msgTaskbar = 0;
 UINT   gs_msgRestartTaskbar = 0;
@@ -79,6 +69,41 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxTaskBarIconWindow: helper window
+// ----------------------------------------------------------------------------
+
+// NB: this class serves two purposes:
+//     1. win32 needs a HWND associated with taskbar icon, this provides it
+//     2. we need wxTopLevelWindow so that the app doesn't exit when
+//        last frame is closed but there still is a taskbar icon
+class wxTaskBarIconWindow : public wxFrame
+{
+public:
+    wxTaskBarIconWindow(wxTaskBarIcon *icon)
+        : wxFrame(NULL, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0),
+          m_icon(icon)
+    {
+    }
+    
+    WXLRESULT MSWWindowProc(WXUINT msg,
+                            WXWPARAM wParam, WXLPARAM lParam)
+    {
+        if (msg == gs_msgRestartTaskbar || msg == gs_msgTaskbar)
+        {
+            return m_icon->WindowProc(GetHWND(), msg, wParam, lParam);
+        }
+        else
+        {
+            return wxFrame::MSWWindowProc(msg, wParam, lParam);
+        }
+    }
+
+private:
+    wxTaskBarIcon *m_icon;
+};
+
+    
 // ----------------------------------------------------------------------------
 // NotifyIconData: wrapper around NOTIFYICONDATA
 // ----------------------------------------------------------------------------
@@ -105,41 +130,35 @@ struct NotifyIconData : public NOTIFYICONDATA
 
 wxTaskBarIcon::wxTaskBarIcon()
 {
-    m_hWnd = 0;
+    m_win = NULL;
     m_iconAdded = false;
-
-    AddObject(this);
-
-    if (RegisterWindowClass())
-        m_hWnd = CreateTaskBarWindow();
+    RegisterWindowMessages();
 }
 
 wxTaskBarIcon::~wxTaskBarIcon()
 {
-    RemoveObject(this);
-
     if (m_iconAdded)
-    {
         RemoveIcon();
-    }
 
-    if (m_hWnd)
-    {
-        ::DestroyWindow((HWND) m_hWnd);
-        m_hWnd = 0;
-    }
+    if (m_win)
+        m_win->Destroy();
 }
 
 // Operations
 bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    if (!IsOk())
-        return false;
+    // NB: we have to create the window lazily because of backward compatiblity,
+    //     old aplications may create wxTaskBarIcon instance before wxApp
+    //     is initialized (as samples/taskbar used to do)
+    if (!m_win)
+    {
+        m_win = new wxTaskBarIconWindow(this);
+    }
 
     m_icon = icon;
     m_strTooltip = tooltip;
 
-    NotifyIconData notifyData(m_hWnd);
+    NotifyIconData notifyData((HWND)m_win->GetHWND());
 
     if (icon.Ok())
     {
@@ -170,13 +189,15 @@ bool wxTaskBarIcon::RemoveIcon()
 
     m_iconAdded = false;
 
-    NotifyIconData notifyData(m_hWnd);
+    NotifyIconData notifyData((HWND)m_win->GetHWND());
 
     return Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
 }
 
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
+    wxASSERT_MSG( m_win != NULL, _T("taskbar icon not initialized") );
+
     static bool s_inPopup = false;
 
     if (s_inPopup)
@@ -184,31 +205,24 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     s_inPopup = true;
 
-    wxWindow*   win;
     int         x, y;
     wxGetMousePosition(&x, &y);
 
-    // is wxFrame the best window type to use???
-    win = new wxFrame(NULL, -1, wxEmptyString, wxPoint(x,y), wxSize(-1,-1), 0);
-    win->PushEventHandler(this);
-
-    // Remove from record of top-level windows, or will confuse wxWindows
-    // if we try to exit right now.
-    wxTopLevelWindows.DeleteObject(win);
+    m_win->Move(x, y);
+    
+    m_win->PushEventHandler(this);
 
     menu->UpdateUI();
 
     // Work around a WIN32 bug
-    ::SetForegroundWindow ((HWND) win->GetHWND ());
+    ::SetForegroundWindow((HWND)m_win->GetHWND());
 
-    bool rval = win->PopupMenu(menu, 0, 0);
+    bool rval = m_win->PopupMenu(menu, 0, 0);
 
     // Work around a WIN32 bug
-    ::PostMessage ((HWND) win->GetHWND(),WM_NULL,0,0L);
+    ::PostMessage((HWND)m_win->GetHWND(), WM_NULL, 0, 0L);
 
-    win->PopEventHandler(false);
-    win->Destroy();
-    delete win;
+    m_win->PopEventHandler(false);
 
     s_inPopup = false;
 
@@ -234,84 +248,20 @@ void wxTaskBarIcon::_OnLButtonDClick(wxEvent& e)  { OnLButtonDClick(e); }
 void wxTaskBarIcon::_OnRButtonDClick(wxEvent& e)  { OnRButtonDClick(e); }
 #endif
 
-wxTaskBarIcon* wxTaskBarIcon::FindObjectForHWND(WXHWND hWnd)
-{
-    wxTaskBarIconList::compatibility_iterator node = sm_taskBarIcons.GetFirst();
-    while (node)
-    {
-        wxTaskBarIcon *obj = node->GetData();
-        if (obj->GetHWND() == hWnd)
-            return obj;
-        node = node->GetNext();
-    }
-    return NULL;
-}
-
-void wxTaskBarIcon::AddObject(wxTaskBarIcon* obj)
-{
-    sm_taskBarIcons.Append(obj);
-}
-
-void wxTaskBarIcon::RemoveObject(wxTaskBarIcon* obj)
-{
-    sm_taskBarIcons.DeleteObject(obj);
-}
-
-bool wxTaskBarIcon::RegisterWindowClass()
+void wxTaskBarIcon::RegisterWindowMessages()
 {
     static bool s_registered = false;
 
-    if ( s_registered )
-        return true;
+    if ( !s_registered )
+    {   
+        // Taskbar restart msg will be sent to us if the icon needs to be redrawn
+        gs_msgRestartTaskbar = RegisterWindowMessage(wxT("TaskbarCreated"));
 
-    // Taskbar restart msg will be sent to us if the icon needs to be redrawn
-    gs_msgRestartTaskbar = RegisterWindowMessage(wxT("TaskbarCreated"));
+        // Also register the taskbar message here
+        gs_msgTaskbar = ::RegisterWindowMessage(wxT("wxTaskBarIconMessage"));
 
-    // Also register the taskbar message here
-    gs_msgTaskbar = ::RegisterWindowMessage(wxT("wxTaskBarIconMessage"));
-
-    // set up and register window class
-    WNDCLASS wc;
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = (WNDPROC) wxTaskBarIconWindowProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = wxGetInstance();
-    wc.hIcon = 0;
-    wc.hCursor = 0;
-    wc.hbrBackground = 0;
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = wxTaskBarWindowClass;
-
-    if ( !::RegisterClass(&wc) )
-    {
-        wxLogLastError(_T("RegisterClass(taskbar icon)"));
-
-        return false;
+        s_registered = true;
     }
-
-    s_registered = true;
-
-    return true;
-}
-
-WXHWND wxTaskBarIcon::CreateTaskBarWindow()
-{
-    HINSTANCE hInstance = wxGetInstance();
-
-    HWND hWnd = CreateWindowEx (0, wxTaskBarWindowClass,
-            wxT("wxTaskBarWindow"),
-            WS_OVERLAPPED,
-            0,
-            0,
-            10,
-            10,
-            NULL,
-            (HMENU) 0,
-            hInstance,
-            NULL);
-
-    return (WXHWND) hWnd;
 }
 
 // ----------------------------------------------------------------------------
@@ -331,8 +281,8 @@ long wxTaskBarIcon::WindowProc(WXHWND hWnd,
         SetIcon(m_icon, m_strTooltip);
     }
 
-    if (msg != gs_msgTaskbar)
-        return DefWindowProc((HWND) hWnd, msg, wParam, lParam);
+    // this function should only be called for gs_msg(Restart)Taskbar messages
+    wxASSERT(msg == gs_msgTaskbar);
 
     switch (lParam)
     {
@@ -378,15 +328,4 @@ long wxTaskBarIcon::WindowProc(WXHWND hWnd,
     return 0;
 }
 
-LRESULT APIENTRY _EXPORT
-wxTaskBarIconWindowProc(HWND hWnd, unsigned msg, UINT wParam, LONG lParam)
-{
-    wxTaskBarIcon *obj = wxTaskBarIcon::FindObjectForHWND((WXHWND) hWnd);
-    if (obj)
-        return obj->WindowProc((WXHWND) hWnd, msg, wParam, lParam);
-    else
-        return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-#endif
-    // __WIN95__
+#endif // __WIN95__

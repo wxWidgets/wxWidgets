@@ -29,8 +29,6 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit(void);
-protected:
-    MyTaskBarIcon   m_taskBarIcon;
 };
 
 class MyDialog: public wxDialog
@@ -38,11 +36,15 @@ class MyDialog: public wxDialog
 public:
     MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
         const wxPoint& pos, const wxSize& size, const long windowStyle = wxDEFAULT_DIALOG_STYLE);
+    ~MyDialog();
 
     void OnOK(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
     void OnCloseWindow(wxCloseEvent& event);
     void Init(void);
+
+protected:
+    MyTaskBarIcon   *m_taskBarIcon;
 
 DECLARE_EVENT_TABLE()
 };

@@ -22,7 +22,7 @@
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #include "wx/taskbar.h"
@@ -35,9 +35,6 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
-    if (!m_taskBarIcon.SetIcon(wxICON(mondrian), wxT("wxTaskBarIcon Sample")))
-        wxMessageBox(wxT("Could not set icon."));
-
     // Create the main frame window
     dialog = new MyDialog(NULL, -1, wxT("wxTaskBarIcon Test Dialog"), wxPoint(-1, -1), wxSize(365, 290), wxDIALOG_MODELESS|wxDEFAULT_DIALOG_STYLE);
 
@@ -60,6 +57,11 @@ MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
   wxDialog(parent, id, title, pos, size, windowStyle)
 {
     Init();
+}
+
+MyDialog::~MyDialog()
+{
+    delete m_taskBarIcon;
 }
 
 void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event))
@@ -88,6 +90,11 @@ void MyDialog::Init(void)
   (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
   (new wxButton(this, wxID_OK, _T("OK"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
   Centre(wxBOTH);
+   
+  
+  m_taskBarIcon = new MyTaskBarIcon();
+  if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
+        wxMessageBox(wxT("Could not set icon."));
 }
 
 

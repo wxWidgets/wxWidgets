@@ -3,7 +3,7 @@
 // Purpose:     Defines wxTaskBarIcon class for manipulating icons on the
 //              Windows task bar.
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vaclav Slavik
 // Created:     24/3/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -17,24 +17,20 @@
 #pragma interface "taskbar.h"
 #endif
 
-#include "wx/list.h"
 #include "wx/icon.h"
 
-class WXDLLIMPEXP_ADV wxTaskBarIcon;
-
-WX_DECLARE_LIST_WITH_DECL(wxTaskBarIcon, wxTaskBarIconList,
-                          class WXDLLIMPEXP_ADV);
+// private helper class:
+class WXDLLIMPEXP_ADV wxTaskBarIconWindow;
 
 class WXDLLIMPEXP_ADV wxTaskBarIcon: public wxTaskBarIconBase
 {
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:
-    wxTaskBarIcon(void);
-    virtual ~wxTaskBarIcon(void);
+    wxTaskBarIcon();
+    virtual ~wxTaskBarIcon();
 
 // Accessors
-    inline WXHWND GetHWND() const { return m_hWnd; }
-    inline bool IsOk() const { return (m_hWnd != 0) ; }
+    inline bool IsOk() const { return true; }
     inline bool IsIconInstalled() const { return m_iconAdded; }
 
 // Operations
@@ -56,21 +52,18 @@ public:
 #endif
 
 // Implementation
-    static wxTaskBarIcon* FindObjectForHWND(WXHWND hWnd);
-    static void AddObject(wxTaskBarIcon* obj);
-    static void RemoveObject(wxTaskBarIcon* obj);
-    static bool RegisterWindowClass();
-    static WXHWND CreateTaskBarWindow();
-    long WindowProc( WXHWND hWnd, unsigned int msg, unsigned int wParam, long lParam );
+protected:
+    friend class wxTaskBarIconWindow;
+    long WindowProc(WXHWND hWnd, unsigned int msg,
+                    unsigned int wParam, long lParam);
+    void RegisterWindowMessages();
 
 // Data members
 protected:
-    WXHWND          m_hWnd;
-    bool            m_iconAdded;
-    wxIcon          m_icon;
-    wxString        m_strTooltip;
-
-    static wxTaskBarIconList sm_taskBarIcons;
+    wxTaskBarIconWindow *m_win;
+    bool                 m_iconAdded;
+    wxIcon               m_icon;
+    wxString             m_strTooltip;
 
 #if WXWIN_COMPATIBILITY_2_4
     // non-virtual default event handlers to forward events to the virtuals
@@ -92,8 +85,3 @@ inline bool wxTaskBarIcon::IsOK() const { return IsOk(); }
 
 #endif
     // _TASKBAR_H_
-
-
-
-
-
