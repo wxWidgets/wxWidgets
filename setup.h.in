@@ -1011,6 +1011,9 @@
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
 
+/* Define if you have the <wctype.h> header file.  */
+#undef HAVE_WCTYPE_H
+
 /* Define if you have the <iconv.h> header file.  */
 #undef HAVE_ICONV_H
 

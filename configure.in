@@ -2655,6 +2655,8 @@ dnl defines HAVE_WCHAR_H
 AC_CHECK_HEADERS(wchar.h)
 dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
+dnl defined HAVE_WCTYPE_H
+AC_CHECK_HEADERS(wctype.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
 dnl defines HAVE_ICONV_H (Unix98 encoding conversion routines)
@@ -2686,11 +2688,15 @@ AC_TYPE_UID_T
 
 dnl   check for wchar_t
 dnl   Mac OS X does not provide wchar.h and wchar_t is defined by stdlib.h (GD)
+dnl   on Cygwin wchar.h needs stddef.h to be #included by hand
 AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
 [
     AC_TRY_COMPILE(
         [
             #ifdef HAVE_WCHAR_H
+            #  ifdef __CYGWIN__
+            #    include <stddef.h>
+            #  endif
             #  include <wchar.h>
             #endif
             #ifdef HAVE_STDLIB_H
@@ -2815,6 +2821,9 @@ AC_CACHE_CHECK([size of wchar_t], wx_cv_sizeof_wchar_t,
     AC_TRY_RUN(
         [
             #ifdef HAVE_WCHAR_H
+            #  ifdef __CYGWIN__
+            #    include <stddef.h>
+            #  endif
             #  include <wchar.h>
             #endif
             #ifdef HAVE_STDLIB_H
