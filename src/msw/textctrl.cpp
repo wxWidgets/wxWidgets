@@ -745,11 +745,15 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 int wxTextCtrl::overflow(int c)
 {
   // Make sure there is a holding area
+  // this is not needed in <iostream> usage as it automagically allocates
+  // it, but does someone want to emulate it for safety's sake?
+#if wxUSE_IOSTREAMH
   if ( allocate()==EOF )
   {
     wxError("Streambuf allocation failed","Internal error");
     return EOF;
   }
+#endif
   
   // Verify that there are no characters in get area
   if ( gptr() && gptr() < egptr() )
@@ -766,7 +770,12 @@ int wxTextCtrl::overflow(int c)
   {
 /* This doesn't seem to be fatal so comment out error message */
 //    wxError("Put area not opened","Internal error");
-    setp( base(), base() );
+
+#if wxUSE_IOSTREAMH
+	  setp( base(), base() );
+#else
+	  setp( pbase(), pbase() );
+#endif
   }
 
   // Determine how many characters have been inserted but no consumed

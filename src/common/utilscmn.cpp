@@ -524,7 +524,11 @@ wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& i
  
 wxDebugStreamBuf::wxDebugStreamBuf(void)
 {
-  if (allocate()) setp(base(),ebuf());
+	// <iostream> usage doesn't need this, and i have no idea how to simulate it.
+#if wxUSE_IOSTREAMH
+	if (allocate())
+	  setp(base(),ebuf());
+#endif
 }
 
 int wxDebugStreamBuf::overflow(int WXUNUSED(i))
