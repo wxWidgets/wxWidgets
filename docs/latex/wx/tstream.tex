@@ -8,17 +8,18 @@ Classes: \helpref{wxStreamBase}{wxstreambase},
 
 \wxheading{Purpose of wxStream}
 
-We went into troubles with C++ std streams on several platforms:
-they react quite well in most cases, but in multi-threaded case, for example,
+We had troubles with standard C++ streams on several platforms:
+they react quite well in most cases, but in the multi-threaded case, for example,
 they have many problems. Some Borland Compilers refuse to work at all
 with them and using iostreams on Linux makes writing programs, that are
 binary compatible across different Linux distributions, impossible.
 
 Therefore, wxStreams have been added to wxWindows because an application should 
-compile and run on all supported platforms and we don't want users depend on release
+compile and run on all supported platforms and we don't want users to depend on release
 X.XX of libg++ or some other compiler to run the program.
 
 wxStreams is divided in two main parts:
+
 \begin{enumerate}\itemsep=0pt
 \item the core: wxStreamBase, wxStreamBuffer, wxInputStream, wxOutputStream,
 wxFilterIn/OutputStream
@@ -50,7 +51,7 @@ wxStreamBuffer. This could also be a simple link to the a true syscall
 
 \wxheading{Generic usage: an example}
 
-About its usage, it's simple. We can take the example of wxFileInputStream and here is a sample
+Usage is simple. We can take the example of wxFileInputStream and here is some sample
 code:
 
 \begin{verbatim}
@@ -84,7 +85,7 @@ code:
  // wxFileInputStream will close the file descriptor on the destruction.
 \end{verbatim}
 
-\wxheading{Compatibility with c++ stream}
+\wxheading{Compatibility with C++ streams}
 
 As I said previously, we could add a filter stream so it takes an istream
 argument and builds a wxInputStream from it: I don't think it should 

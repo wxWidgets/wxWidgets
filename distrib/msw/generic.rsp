@@ -6,6 +6,7 @@ autogen.sh
 config.guess
 config.sub
 configure.in
+setup.h.in
 install-sh
 ltconfig
 ltmain.sh
@@ -40,6 +41,9 @@ docs/html/*.gif
 src/*.inc
 src/mkdir
 src/Makefile
+src/make.env.in
+src/makeprog.env.in
+src/makelib.env.in
 
 src/common/*.cpp
 src/common/dosyacc.c
@@ -204,6 +208,20 @@ utils/dialoged/lib/dummy
 utils/dialoged/test/*.ico
 utils/dialoged/test/*.prj
 utils/dialoged/test/*.bmp
+
+utils/wxMMedia2/makefile*
+utils/wxMMedia2/README
+utils/wxMMedia2/lib/*.h
+utils/wxMMedia2/lib/*.cpp
+utils/wxMMedia2/lib/*.def
+utils/wxMMedia2/lib/*.rc
+utils/wxMMedia2/lib/makefile*
+utils/wxMMedia2/sample/*.h
+utils/wxMMedia2/sample/*.cpp
+utils/wxMMedia2/sample/makefile*
+utils/wxMMedia2/sample/*.xbm
+utils/wxMMedia2/sample/*.xpm
+utils/wxMMedia2/sample/*.txt
 
 samples/*.txt
 samples/makefile*
@@ -876,4 +894,16 @@ samples/text/*.xbm
 samples/text/*.png
 samples/text/*.ico
 samples/text/*.txt
+
+samples/wizard/*.cpp
+samples/wizard/*.h
+samples/wizard/makefile*
+samples/wizard/*.rc
+samples/wizard/*.def
+samples/wizard/*.bmp
+samples/wizard/*.xpm
+samples/wizard/*.xbm
+samples/wizard/*.png
+samples/wizard/*.ico
+samples/wizard/*.txt
 

@@ -34,10 +34,11 @@ can call directly wxStreamBuffer::Read without any problems.
 \wxheading{Warning}
 
 All errors and messages linked to the stream are stored in the stream object.
+
 \begin{verbatim}
-   streambuffer.Read(...);
-   streambuffer2.Read(...); /* This one erases previous error messages set by 
-                               ``streambuffer'' */
+  streambuffer.Read(...);
+  streambuffer2.Read(...); /* This one erases previous error messages set by 
+                              ``streambuffer'' */
 \end{verbatim}
 
 \func{}{wxStreamBuffer}{\param{BufMode}{ mode}}

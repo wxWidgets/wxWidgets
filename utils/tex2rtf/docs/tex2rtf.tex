@@ -111,6 +111,13 @@ a great help in giving advice for improvements to the manual.
 
 \section{Change log}\index{change log}%
 
+Version 1.65, August 24th 1999
+
+\begin{itemize}\itemsep=0pt
+\item Added htmlWorkshopFiles setting, to output .hpp, .hhc
+and .hhk (HTML Workshop) files, for generating MS HTML Help or wxHTML Help.
+\end{itemize}
+
 Version 1.64, October 20th 1998
 
 \begin{itemize}\itemsep=0pt
@@ -669,6 +676,11 @@ and truncates filenames within HTML documents.}
 \twocolitem{\inioption{htmlIndex}}{If true, specifies generation of an {\tt .htx} index file for an HTML document.
 This file can be used in wxHelp version 2 or other programs. The file consists of a number of lines,
 each line with three fields separated by bar characters: the indexed phrase, the file, and a label in the file.}
+
+\twocolitem{\inioption{htmlWorkshopFiles}}{If true, specifies generation of {\tt .hpp, .hhc} and {\tt .hhk} files
+which can be used to create both MS HTML Help and wxHTML Help files. wxHTML Help
+is the HTML help facility that can be used by wxWindows 2 applications (see the wxWindows manual
+and the wxWindows HTML sample).}
 \twocolitem{\inioption{upperCaseNames}}{If true, filenames in links are in upper case. By default
 filenames are in lower case.}
 \twocolitem{\inioption{backgroundColour}}{Specifies the RGB background colour for the document, e.g. {\tt 255;255;255} for white.

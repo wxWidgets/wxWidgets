@@ -18,13 +18,11 @@ progress bar. Optionally, it can display an ABORT button.
 
 \membersection{wxProgressDialog::wxProgressDialog}\label{wxprogressdialogconstr}
 
-\func{}{wxProgressDialog}
-{\param{const wxString\& }{title},
-  \param{const wxString\& }{message},\rtfsp
-  \param{int }{maximum = 100},
-  \param{wxWindow * }{parent = NULL},\rtfsp
-  \param{int }{style = wxPD\_AUTO\_HIDE | wxPD\_APP\_MODAL}
-  }
+\func{}{wxProgressDialog}{\param{const wxString\& }{title},
+ \param{const wxString\& }{message},\rtfsp
+ \param{int }{maximum = 100},
+ \param{wxWindow * }{parent = NULL},\rtfsp
+ \param{int }{style = wxPD\_AUTO\_HIDE | wxPD\_APP\_MODAL}}
 
 Constructor. Creates the dialog, displays it and disables user input
 for other windows, or, if wxPD\_APP\_MODAL flag is not given, for its parent
@@ -43,20 +41,20 @@ window only.
 \docparam{message}{Message to show on the dialog.}
 
 \docparam{style}{The dialog style. This is the combination of the following
-    bitmask constants defined in wx/defs.h:
+bitmask constants defined in wx/defs.h:
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{wxPD\_APP\_MODAL}{Make the progress dialog modal. If this flag is
-    not given, it is only "locally" modal - that is the input to the parent
-    window is disabled, but not to the other ones.}
+not given, it is only "locally" modal - that is the input to the parent
+window is disabled, but not to the other ones.}
 \twocolitem{wxPD\_AUTO\_HIDE}{By default, the progress dialog will disappear
-    from screen as soon as the maximum value of the progress meter has been
-    reached. This flag prevents it from doing it - instead the dialog will wait
-    until the user closes it.}
+from screen as soon as the maximum value of the progress meter has been
+reached. This flag prevents it from doing it - instead the dialog will wait
+until the user closes it.}
 \twocolitem{wxPD\_CAN\_ABORT}{This flag tells the dialog that it should have a
-    "Cancel" button which the user may press. If this happens, the next call to 
-    \helpref{Update()}{wxprogressdialogupdate} will return FALSE.}
+"Cancel" button which the user may press. If this happens, the next call to 
+ \helpref{Update()}{wxprogressdialogupdate} will return FALSE.}
 \twocolitem{wxPD\_ELAPSED\_TIME}{This flag tells the dialog that it should show elapsed time (since creating the dialog).}
 \twocolitem{wxPD\_ESTIMATED\_TIME}{This flag tells the dialog that it should show estimated time.}
 \twocolitem{wxPD\_REMAINING\_TIME}{This flag tells the dialog that it should show remaining time.}
@@ -66,8 +64,8 @@ window only.
 \membersection{wxProgressDialog::\destruct{wxProgressDialog}}
 
 \func{}{\destruct{wxMessageDialog}}{\void}
-Destructor.
-Deletes the dialog and enables all top level windows.
+
+Destructor. Deletes the dialog and enables all top level windows.
 
 \membersection{wxProgressDialog::Update}\label{wxprogressdialogupdate}
 
@@ -84,10 +82,10 @@ or ask the user for the confirmation and if the abort is not confirmed the
 dialog may be resumed with \helpref{Resume}{wxprogressdialogresume} function.
 
 \docparam{value}{The new value of the progress meter. It must be strictly less
-    than the maximum value given to the constructor (i.e., as usual in C, the
-    index runs from $0$ to $maximum-1$).}
+than the maximum value given to the constructor (i.e., as usual in C, the
+index runs from $0$ to $maximum-1$).}
 \docparam{newmsg}{The new messages for the progress dialog text, if none is
-    given the message is not changed.}
+given the message is not changed.}
 
 \membersection{wxProgressDialog::Resume}\label{wxprogressdialogresume}
 
