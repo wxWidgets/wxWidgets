@@ -20,6 +20,10 @@
          and therefore subject to change.
 */
 
+#ifdef FASTCALL
+#undef FASTCALL
+#endif
+
 #if defined(__GNUC__)
 /* Instability reported with egcs on a RedHat Linux 7.3.
    Let's comment it out:
@@ -38,9 +42,6 @@
    Likely reason: __fastcall on Windows is like stdcall, therefore
    the compiler cannot perform stack optimizations for call clusters.
 */
-#ifdef FASTCALL
-#undef FASTCALL
-#endif
 #define FASTCALL
 #define PTRCALL
 #define PTRFASTCALL
