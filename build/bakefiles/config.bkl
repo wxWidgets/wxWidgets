@@ -86,11 +86,15 @@ Acts according to DEBUG_INFO by default.
     <if cond="FORMAT!='msvc'">
         <set var="DEBUG_RUNTIME_LIBS">default</set>
     </if>
-    
+
+    <set var="MONOLITHIC_DEFAULT">
+        <if cond="FORMAT=='watcom'">1</if>
+        <if cond="FORMAT!='watcom'">0</if>
+    </set>
     <option name="MONOLITHIC">
         <values>0,1</values>
         <values-description>Multilib,Monolithic</values-description>
-        <default-value>0</default-value>
+        <default-value>$(MONOLITHIC_DEFAULT)</default-value>
         <description>
             Multiple libraries or single huge monolithic one?
         </description>
