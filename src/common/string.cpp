@@ -61,8 +61,6 @@ static int g_strEmpty[] = { -1,     // ref count (locked)
                              0,     // current length
                              0,     // allocated memory
                              0 };   // string data
-// empty string shares memory with g_strEmpty
-static wxStringData *g_strNul = (wxStringData*)&g_strEmpty;
 // empty C style string: points to 'string data' byte of g_strEmpty
 extern const char *g_szNul = (const char *)(&g_strEmpty[3]);
 
@@ -993,6 +991,7 @@ wxString& wxString::insert(size_t nPos, const wxString& str)
   strncpy(pc, c_str(), nPos);
   strcpy(pc + nPos, str);
   strcpy(pc + nPos + str.Len(), c_str() + nPos);
+  strTmp.UngetWriteBuf();
   *this = strTmp;
     
   return *this; 
