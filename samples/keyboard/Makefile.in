@@ -15,6 +15,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_GUI = @EXTRALIBS_GUI@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
@@ -97,7 +98,7 @@ install: all
 install-strip: install
 
 keyboard$(EXEEXT): keyboard_keyboard.o $(__keyboard___win32rc)
-	$(CXX) -o $@  keyboard_keyboard.o $(__keyboard___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  keyboard_keyboard.o $(__keyboard___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__keyboard___mac_rezcmd)
 	$(__keyboard___mac_setfilecmd)
 

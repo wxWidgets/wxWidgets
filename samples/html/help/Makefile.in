@@ -15,6 +15,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_GUI = @EXTRALIBS_GUI@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
@@ -88,7 +89,6 @@ clean:
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f help$(EXEEXT)
-	rm -f ./Index.hhk ./another.hhc ./another.hhp ./another.htm ./book1.htm ./book2.htm ./contents.hhc ./main.htm ./page2-b.htm ./testing.hhp
 
 data: 
 	@mkdir -p ./helpfiles
@@ -103,7 +103,7 @@ distclean: clean
 	rm -f bk-deps shared-ld-sh
 
 help$(EXEEXT): help_help.o $(__help___win32rc)
-	$(CXX) -o $@  help_help.o $(__help___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  help_help.o $(__help___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__help___mac_rezcmd)
 	$(__help___mac_setfilecmd)
 

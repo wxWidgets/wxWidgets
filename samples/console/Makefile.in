@@ -66,7 +66,6 @@ clean:
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f console$(EXEEXT)
-	rm -f ./testdata.fc
 
 console$(EXEEXT): console_console.o
 	$(CXX) -o $@  console_console.o $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG)   $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)

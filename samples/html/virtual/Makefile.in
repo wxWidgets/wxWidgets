@@ -15,6 +15,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_GUI = @EXTRALIBS_GUI@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
@@ -88,7 +89,6 @@ clean:
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f virtual$(EXEEXT)
-	rm -f ./start.htm
 
 data: 
 	@mkdir -p .
@@ -109,7 +109,7 @@ install-strip: install
 uninstall: 
 
 virtual$(EXEEXT): virtual_virtual.o $(__virtual___win32rc)
-	$(CXX) -o $@  virtual_virtual.o $(__virtual___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  virtual_virtual.o $(__virtual___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__virtual___mac_rezcmd)
 	$(__virtual___mac_setfilecmd)
 

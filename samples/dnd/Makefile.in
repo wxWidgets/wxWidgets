@@ -15,6 +15,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_GUI = @EXTRALIBS_GUI@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
@@ -87,7 +88,6 @@ clean:
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f dnd$(EXEEXT)
-	rm -f ./julian.png ./dnd.wxr
 
 data: 
 	@mkdir -p .
@@ -102,7 +102,7 @@ distclean: clean
 	rm -f bk-deps shared-ld-sh
 
 dnd$(EXEEXT): dnd_dnd.o $(__dnd___win32rc)
-	$(CXX) -o $@  dnd_dnd.o $(__dnd___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  dnd_dnd.o $(__dnd___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__dnd___mac_rezcmd)
 	$(__dnd___mac_setfilecmd)
 

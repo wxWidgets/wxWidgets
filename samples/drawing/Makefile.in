@@ -15,6 +15,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
+EXTRALIBS_GUI = @EXTRALIBS_GUI@
 LDFLAGS = @LDFLAGS@
 LDFLAGS_GUI = @LDFLAGS_GUI@
 RESCOMP = @RESCOMP@
@@ -87,7 +88,6 @@ clean:
 	rm -rf ./.deps
 	rm -f -f ./*.o
 	rm -f drawing$(EXEEXT)
-	rm -f ./pat4.bmp ./pat35.bmp ./pat36.bmp ./image.bmp ./mask.bmp
 
 data: 
 	@mkdir -p .
@@ -102,7 +102,7 @@ distclean: clean
 	rm -f bk-deps shared-ld-sh
 
 drawing$(EXEEXT): drawing_drawing.o $(__drawing___win32rc)
-	$(CXX) -o $@  drawing_drawing.o $(__drawing___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS)
+	$(CXX) -o $@  drawing_drawing.o $(__drawing___win32rc) $(LDFLAGS)   -L$(top_builddir)lib $(SAMPLES_RPATH_FLAG) $(LDFLAGS_GUI)  $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__drawing___mac_rezcmd)
 	$(__drawing___mac_setfilecmd)
 
