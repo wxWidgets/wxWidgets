@@ -19,13 +19,14 @@
 #include "wx/palette.h"
 
 // Bitmap
-class WXDLLEXPORT wxDC;
-class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
-class WXDLLEXPORT wxIcon;
+class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxCursor;
+class WXDLLEXPORT wxDC;
+class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxPixelDataBase;
 
 // A mask is a bitmap used for drawing bitmaps
 // it can be a monochrome bitmap or a multi-bit bitmap which transfers to alpha channels
@@ -197,6 +198,13 @@ public:
   inline bool operator != (const wxBitmap& bitmap) const { return m_refData != bitmap.m_refData; }
 
   static void InitStandardHandlers();
+
+    // raw bitmap access support functions
+    void *GetRawData(wxPixelDataBase& data, int bpp);
+    void UngetRawData(wxPixelDataBase& data);
+
+    void UseAlpha();
+
 public:
   WXHBITMAP GetHBITMAP() const;
   inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
