@@ -14,6 +14,7 @@ class MyApp: public wxApp
 {
   public:
     bool OnInit(void);
+    bool InitToolbar(wxToolBar* toolBar);
 };
 
 // Define a new frame
@@ -25,29 +26,14 @@ public:
         long style = wxDEFAULT_FRAME_STYLE);
 
     void OnCloseWindow(wxCloseEvent& event);
-    void OnMenuHighlight(wxMenuEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnToolLeftClick(wxCommandEvent& event);
+    void OnToolEnter(wxCommandEvent& event);
 
 private:
     wxTextCtrl*         m_textWindow;
 
 DECLARE_EVENT_TABLE()
 };
-
-class TestToolBar: public wxToolBar
-{
-  public:
-  TestToolBar(wxFrame *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxNO_BORDER, int direction = wxVERTICAL, int RowsOrColumns = 2);
-  bool OnLeftClick(int toolIndex, bool toggled);
-  void OnMouseEnter(int toolIndex);
-  void OnPaint(wxPaintEvent& event);
-  
-  DECLARE_EVENT_TABLE()
-};
-
-#define TEST_QUIT                100
-#define TEST_ABOUT               101
 
