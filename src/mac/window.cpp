@@ -75,6 +75,11 @@ END_EVENT_TABLE()
 
 #endif
 
+#define wxMAC_DEBUG_REDRAW 0
+#ifndef wxMAC_DEBUG_REDRAW
+#define wxMAC_DEBUG_REDRAW 0
+#endif
+
 #define wxMAC_USE_THEME_BORDER 0
 
 
@@ -793,6 +798,9 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
  
 void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
 {
+    if ( MacGetTopLevelWindow() == NULL )
+      return ;
+      
     wxPoint client ;
     client = GetClientAreaOrigin( ) ;
     Rect clientrect = { -client.y , -client.x , m_height - client.y , m_width - client.x} ;
@@ -866,77 +874,64 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
     // We really dont move the mouse programmatically under mac
 }
 
+const wxBrush& wxWindowMac::MacGetBackgroundBrush() 
+{
+    if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
+    {
+        m_macBackgroundBrush.SetMacTheme( kThemeBrushDocumentWindowBackground ) ;
+    }
+    else if (  m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) )
+    {
+        // on mac we have the difficult situation, that 3dface gray can be different colours, depending whether
+        // it is on a notebook panel or not, in order to take care of that we walk up the hierarchy until we have
+        // either a non gray background color or a non control window
+        
+            WindowRef window = MacGetRootWindow() ;
+            
+            wxWindowMac* parent = GetParent() ;
+            while( parent )
+            {
+                if ( parent->MacGetRootWindow() != window )
+                {
+                    // we are in a different window on the mac system
+                    parent = NULL ;
+                    break ;
+                }
+
+                {
+                    if ( parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) 
+                      && parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
+                    {
+                        // if we have any other colours in the hierarchy
+                        m_macBackgroundBrush.SetColour( parent->m_backgroundColour ) ;
+                        break ;
+                    }
+                    // if we have the normal colours in the hierarchy but another control etc. -> use it's background
+                    if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
+                    {
+                        m_macBackgroundBrush.SetMacThemeBackground( kThemeBackgroundTabPane ) ; // todo eventually change for inactive
+                        break ;
+                    }
+                }
+                parent = parent->GetParent() ;
+            }
+            if ( !parent )
+            {
+              m_macBackgroundBrush.SetMacTheme( kThemeBrushDialogBackgroundActive ) ; // todo eventually change for inactive
+            }
+    }
+    else
+    {
+        m_macBackgroundBrush.SetColour( m_backgroundColour ) ;
+    }
+
+    return m_macBackgroundBrush ;
+  
+}
+
 void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
-    wxMacDrawingHelper focus( this ) ;
-    if ( focus.Ok() )
-    {
-      WindowRef window = MacGetRootWindow() ;
-      Rect rect = {0, 0 , m_height  , m_width } ;
-      RgnHandle updateRgn = GetUpdateRegion().GetWXHRGN() ;
-      SetClip( event.GetDC()->MacGetCurrentClipRgn() ) ;
-
-      if ( m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
-      {
-          SetThemeWindowBackground( window , kThemeBrushDocumentWindowBackground , false ) ;
-      }
-      else if (  m_backgroundColour == wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) )
-      {
-          // on mac we have the difficult situation, that 3dface gray can be different colours, depending whether
-          // it is on a notebook panel or not, in order to take care of that we walk up the hierarchy until we have
-          // either a non gray background color or a non control window
-          
-              wxWindowMac* parent = GetParent() ;
-              while( parent )
-              {
-                  if ( parent->MacGetRootWindow() != window )
-                  {
-                      // we are in a different window on the mac system
-                      parent = NULL ;
-                      break ;
-                  }
-                 //if( parent->IsKindOf( CLASSINFO( wxControl ) ) && ((wxControl*)parent)->GetMacControl() )
-                  {
-                      if ( parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE ) 
-                        && parent->m_backgroundColour != wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE) )
-                      {
-                          // if we have any other colours in the hierarchy
-                          RGBBackColor( &parent->m_backgroundColour.GetPixel()) ;
-                          break ;
-                      }
-                      // if we have the normal colours in the hierarchy but another control etc. -> use it's background
-                      if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                      {
-                          Rect box ;
-                          GetRegionBounds( updateRgn , &box) ;
-                          ::ApplyThemeBackground(kThemeBackgroundTabPane, &box , kThemeStateActive,8,true);
-                          break ;
-                      }
-                  }
-                  /*
-                 else
-                  {
-                      // we have arrived at a non control item
-                      parent = NULL ;
-                      break ;
-                  }
-                  */
-                  parent = parent->GetParent() ;
-              }
-              if ( !parent )
-              {
-                  // if there is nothing special -> use default
-                  SetThemeWindowBackground( window , kThemeBrushDialogBackgroundActive , false ) ;
-              }
-      }
-      else
-      {
-          RGBBackColor( &m_backgroundColour.GetPixel()) ;
-      }
-      EraseRect( &rect ) ; 
-    }
-  
-//  event.GetDC()->Clear() ;
+    event.GetDC()->Clear() ;
 }
 
 void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
@@ -1433,45 +1428,84 @@ wxTopLevelWindowMac* wxWindowMac::MacGetTopLevelWindow() const
     return win ;
 }
 
+const wxRegion& wxWindowMac::MacGetVisibleRegion()
+{
+  RgnHandle visRgn = NewRgn() ;
+  
+  SetRectRgn( visRgn , 0 , 0 , m_width , m_height ) ;
+
+  if ( GetWindowStyle() & wxCLIP_CHILDREN )
+  {
+    // subtract all children from updatergn
+
+    RgnHandle childarea = NewRgn() ;
+    for (wxNode *node = GetChildren().First(); node; node = node->Next())
+    {
+        wxWindowMac *child = (wxWindowMac*)node->Data();
+
+        if ( !child->IsTopLevel() && child->IsShown() )
+        {
+            SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
+            DiffRgn( visRgn , childarea , visRgn ) ;
+        }
+    }       
+    DisposeRgn( childarea ) ;
+  }
+  
+  if ( (GetWindowStyle() & wxCLIP_SIBLINGS) && GetParent() )
+  {
+    RgnHandle siblingarea = NewRgn() ;
+    bool thisWindowThrough = false ;
+    for (wxNode *node = GetParent()->GetChildren().First(); node; node = node->Next())
+    {
+        wxWindowMac *sibling = (wxWindowMac*)node->Data();
+        if ( sibling == this )
+        {
+          thisWindowThrough = true ;
+          continue ;
+        }
+        if( !thisWindowThrough )
+        {
+          continue ;
+        }
+
+        if ( !sibling->IsTopLevel() && sibling->IsShown() )
+        {
+            SetRectRgn( siblingarea , sibling->m_x - m_x , sibling->m_y - m_y , sibling->m_x + sibling->m_width - m_x ,  sibling->m_y + sibling->m_height - m_y ) ;
+            DiffRgn( visRgn , siblingarea , visRgn ) ;
+        }
+    }  
+    DisposeRgn( siblingarea ) ;     
+  }
+  m_macVisibleRegion = visRgn ;
+  DisposeRgn( visRgn ) ;
+  return m_macVisibleRegion ;
+}
+
 void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
 {
     // updatergn is always already clipped to our boundaries
-    // it is in nc-coordinates
+    // it is in window coordinates, not in client coordinates
     
     WindowRef window = MacGetRootWindow() ;
 
     {
-        // ownUpdateRgn is the area that this window has to invalidate i.e. its own area without its children
+        // ownUpdateRgn is the area that this window has to repaint, it is in window coordinates
         RgnHandle ownUpdateRgn = NewRgn() ;
         CopyRgn( updatergn , ownUpdateRgn ) ;
-        // subtract all children from updatergn, as soon as we start with transparent windows, these should
-        // not be subtracted
-
-        RgnHandle childarea = NewRgn() ;
-        for (wxNode *node = GetChildren().First(); node; node = node->Next())
-        {
-            wxWindowMac *child = (wxWindowMac*)node->Data();
-
-            if ( child->MacGetRootWindow() == window && child->IsShown() )
-            {
-                SetRectRgn( childarea , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
-                DiffRgn( ownUpdateRgn , childarea , ownUpdateRgn ) ;
-            }
-        }       
-        DisposeRgn( childarea ) ;
-
-        // now intersect this with the client area
-        // and shift it to client coordinates
+                
+        SectRgn( ownUpdateRgn , MacGetVisibleRegion().GetWXHRGN() , ownUpdateRgn ) ;
         
+        // newupdate is the update region in client coordinates
         RgnHandle newupdate = NewRgn() ;
         wxSize point = GetClientSize() ;
         wxPoint origin = GetClientAreaOrigin() ;
-
         SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
         SectRgn( newupdate , ownUpdateRgn , newupdate ) ;
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
         m_updateRegion = newupdate ;
         DisposeRgn( newupdate ) ; // it's been cloned to m_updateRegion
+        
         if ( erase && !EmptyRgn(ownUpdateRgn) )
         { 
           wxWindowDC dc(this);
@@ -1499,6 +1533,8 @@ void wxWindowMac::MacRedraw( RgnHandle updatergn , long time, bool erase)
     RgnHandle childupdate = NewRgn() ;            
     for (wxNode *node = GetChildren().First(); node; node = node->Next())
     {
+        // calculate the update region for the child windows by intersecting the window rectangle with our own
+        // passed in update region and then offset it to be client-wise window coordinates again
         wxWindowMac *child = (wxWindowMac*)node->Data();
         SetRectRgn( childupdate , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
         SectRgn( childupdate , updatergn , childupdate ) ;
