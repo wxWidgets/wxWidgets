@@ -2009,6 +2009,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         case "$wx_cv_lib_gtk" in
             2.0)    WXGTK20=1
+                    TOOLKIT_VERSION=2
                     ;;
             1.2.7)  WXGTK127=1
                     WXGTK12=1
@@ -2632,10 +2633,10 @@ if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
 fi
 
-WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
-TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
+TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
 
 if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
@@ -2645,7 +2646,7 @@ fi
 dnl library link name
 WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
 WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
-WX_LIBRARY_BASENAME="wx_${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
+WX_LIBRARY_BASENAME="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
