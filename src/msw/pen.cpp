@@ -240,8 +240,7 @@ bool wxPen::RealizeResource()
            if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
            {
                real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
-               int i, dsh;
-               for (i=0; i<M_PENDATA->m_nbDash; i++)
+               for ( int i = 0; i < M_PENDATA->m_nbDash; i++ )
                    real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
            }
            else

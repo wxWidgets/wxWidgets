@@ -115,7 +115,9 @@ public:
     virtual void SetBrush(const wxBrush& brush);
     virtual void SetBackground(const wxBrush& brush);
     virtual void SetBackgroundMode(int mode);
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette);
+#endif // wxUSE_PALETTE
 
     virtual void DestroyClippingRegion();
 
@@ -255,7 +257,10 @@ protected:
     WXHPEN            m_oldPen;
     WXHBRUSH          m_oldBrush;
     WXHFONT           m_oldFont;
+
+#if wxUSE_PALETTE
     WXHPALETTE        m_oldPalette;
+#endif // wxUSE_PALETTE
 
 #if wxUSE_DC_CACHEING
     static wxList     sm_bitmapCache;

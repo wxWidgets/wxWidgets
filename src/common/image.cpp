@@ -58,7 +58,9 @@ public:
     unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
     bool            m_ok;
     bool            m_static;
+#if wxUSE_PALETTE
     wxPalette       m_palette;
+#endif // wxUSE_PALETTE
     wxArrayString   m_optionNames;
     wxArrayString   m_optionValues;
 };
@@ -718,6 +720,8 @@ int wxImage::GetHeight() const
     return M_IMGDATA->m_height;
 }
 
+#if wxUSE_PALETTE
+
 // Palette functions
 
 bool wxImage::HasPalette() const
@@ -741,6 +745,8 @@ void wxImage::SetPalette(const wxPalette& palette)
 
     M_IMGDATA->m_palette = palette;
 }
+
+#endif // wxUSE_PALETTE
 
 // Option functions (arbitrary name/value mapping)
 void wxImage::SetOption(const wxString& name, const wxString& value)

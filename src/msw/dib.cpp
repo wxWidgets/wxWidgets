@@ -708,12 +708,14 @@ bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
 
   if (hPalette)
   {
+#if wxUSE_PALETTE
     if (pal)
     {
       *pal = new wxPalette;
       (*pal)->SetHPALETTE((WXHPALETTE) hPalette);
     }
     else
+#endif // wxUSE_PALETTE
       DeleteObject(hPalette);
   }
   else if (pal)
@@ -928,8 +930,10 @@ HANDLE wxBitmapToDIB (HBITMAP hBitmap, HPALETTE hPal)
 bool wxSaveBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette *colourmap)
 {
   HPALETTE hPalette = 0;
+#if wxUSE_PALETTE
   if (colourmap)
     hPalette = (HPALETTE) colourmap->GetHPALETTE();
+#endif // wxUSE_PALETTE
 
   HANDLE dibHandle = wxBitmapToDIB((HBITMAP) bitmap->GetHBITMAP(), hPalette);
   if (dibHandle)

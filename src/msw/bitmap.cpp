@@ -467,12 +467,14 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     hbitmap = ::CreateCompatibleBitmap( hdc, width, bmpHeight );
     ::SelectObject( memdc, hbitmap);
 
+#if wxUSE_PALETTE
     HPALETTE hOldPalette = 0;
     if (image.GetPalette().Ok())
     {
         hOldPalette = ::SelectPalette(memdc, (HPALETTE) image.GetPalette().GetHPALETTE(), FALSE);
         ::RealizePalette(memdc);
     }
+#endif // wxUSE_PALETTE
 
     // copy image data into DIB data and then into DDB (in a loop)
     unsigned char *data = image.GetData();
@@ -523,8 +525,10 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     }
     SetHBITMAP( (WXHBITMAP) hbitmap );
 
+#if wxUSE_PALETTE
     if (hOldPalette)
         SelectPalette(memdc, hOldPalette, FALSE);
+#endif // wxUSE_PALETTE
 
     // similarly, created an mono-bitmap for the possible mask
     if( image.HasMask() )
@@ -792,7 +796,9 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     return handler->Create(this, data, type, width, height, depth);
 }
 
-bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *palette)
+bool wxBitmap::SaveFile(const wxString& filename,
+                        int type,
+                        const wxPalette *palette)
 {
     wxBitmapHandler *handler = wxDynamicCast(FindHandler(type), wxBitmapHandler);
 
@@ -882,12 +888,16 @@ void wxBitmap::SetOk(bool isOk)
 }
 #endif // WXWIN_COMPATIBILITY_2
 
+#if wxUSE_PALETTE
+
 void wxBitmap::SetPalette(const wxPalette& palette)
 {
     EnsureHasData();
 
     GetBitmapData()->m_bitmapPalette = palette;
 }
+
+#endif // wxUSE_PALETTE
 
 void wxBitmap::SetMask(wxMask *mask)
 {
@@ -911,6 +921,7 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
     LPBITMAPINFO    lpDib;
     void            *lpBits = (void*) NULL;
 
+#if wxUSE_PALETTE
     if( GetPalette() && GetPalette()->Ok() )
     {
         tmpBitmap.SetPalette(*GetPalette());
@@ -927,6 +938,9 @@ wxBitmap wxBitmap::GetBitmapForDC(wxDC& dc) const
         memDC.SelectObject(tmpBitmap);
         memDC.SetPalette( palette );
     }
+#else // !wxUSE_PALETTE
+    hPal = (HPALETTE) ::GetStockObject(DEFAULT_PALETTE);
+#endif // wxUSE_PALETTE/!wxUSE_PALETTE
 
     // set the height negative because in a DIB the order of the lines is
     // reversed
@@ -1032,6 +1046,8 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
         ::DeleteObject((HBITMAP) m_maskBitmap);
         m_maskBitmap = 0;
     }
+
+#if wxUSE_PALETTE
     if (bitmap.Ok() && bitmap.GetPalette()->Ok())
     {
         unsigned char red, green, blue;
@@ -1041,6 +1057,8 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
             return Create(bitmap, transparentColour);
         }
     }
+#endif // wxUSE_PALETTE
+
     return FALSE;
 }
 

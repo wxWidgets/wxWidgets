@@ -890,6 +890,9 @@
 // Set to 1 for XPM format support
 #define wxUSE_XPM           1
 
+// Set to 1 to compile in wxPalette class
+#define wxUSE_PALETTE       1
+
 // ----------------------------------------------------------------------------
 // Windows-only settings
 // ----------------------------------------------------------------------------

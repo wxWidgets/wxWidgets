@@ -316,7 +316,9 @@ public:
     virtual void SetBrush(const wxBrush& brush) = 0;
     virtual void SetBackground(const wxBrush& brush) = 0;
     virtual void SetBackgroundMode(int mode) = 0;
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette& palette) = 0;
+#endif // wxUSE_PALETTE
 
     // clipping region
     // ---------------
@@ -588,12 +590,17 @@ public:
 #endif // !Win16
 
 #if WXWIN_COMPATIBILITY
+
+#if wxUSE_PALETTE
     virtual void SetColourMap(const wxPalette& palette) { SetPalette(palette); }
+#endif // wxUSE_PALETTE
+
     void GetTextExtent(const wxString& string, float *x, float *y,
             float *descent = NULL, float *externalLeading = NULL,
             wxFont *theFont = NULL, bool use16bit = FALSE) const ;
     void GetSize(float* width, float* height) const { int w, h; GetSize(& w, & h); *width = w; *height = h; }
     void GetSizeMM(float *width, float *height) const { long w, h; GetSizeMM(& w, & h); *width = (float) w; *height = (float) h; }
+
 #endif // WXWIN_COMPATIBILITY
 
 protected:
@@ -731,7 +738,10 @@ protected:
     wxColour          m_textForegroundColour;
     wxColour          m_textBackgroundColour;
     wxFont            m_font;
+
+#if wxUSE_PALETTE
     wxPalette         m_palette;
+#endif // wxUSE_PALETTE
 
 private:
     DECLARE_NO_COPY_CLASS(wxDCBase)

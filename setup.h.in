@@ -763,6 +763,11 @@
 #define wxUSE_ZIPSTREAM 0
 
 /*
+ * wxPalette class
+ */
+#define wxUSE_PALETTE 0
+
+/*
  * wxImage support
  */
 #define wxUSE_IMAGE 0

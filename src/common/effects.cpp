@@ -96,11 +96,14 @@ bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
 
     wxMemoryDC dcMem;
 
+#if wxUSE_PALETTE
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(* bitmap.GetPalette());
         dcMem.SetPalette(* bitmap.GetPalette());
     }
+#endif // wxUSE_PALETTE
+
     dcMem.SelectObject(bitmap);
 
     int i, j;
@@ -111,11 +114,13 @@ bool wxEffects::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
     }
     dcMem.SelectObject(wxNullBitmap);
 
+#if wxUSE_PALETTE
     if (bitmap.GetPalette() && !hiColour)
     {
         dc.SetPalette(wxNullPalette);
         dcMem.SetPalette(wxNullPalette);
     }
+#endif // wxUSE_PALETTE
 
     return TRUE;
 }

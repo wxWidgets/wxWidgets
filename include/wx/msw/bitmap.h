@@ -29,6 +29,7 @@ class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxPalette;
 
 // ----------------------------------------------------------------------------
 // Bitmap data
@@ -47,7 +48,9 @@ public:
 
 public:
     int           m_numColors;
+#if wxUSE_PALETTE
     wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
     int           m_quality;
 
     // MSW-specific
@@ -147,8 +150,10 @@ public:
     int GetQuality() const { return (GetBitmapData() ? GetBitmapData()->m_quality : 0); }
     void SetQuality(int q);
 
+#if wxUSE_PALETTE
     wxPalette* GetPalette() const { return (GetBitmapData() ? (& GetBitmapData()->m_bitmapPalette) : (wxPalette*) NULL); }
     void SetPalette(const wxPalette& palette);
+#endif // wxUSE_PALETTE
 
     wxMask *GetMask() const { return (GetBitmapData() ? GetBitmapData()->m_bitmapMask : (wxMask*) NULL); }
     void SetMask(wxMask *mask) ;
@@ -160,10 +165,12 @@ public:
     void SetOk(bool isOk);
 #endif // WXWIN_COMPATIBILITY_2
 
+#if wxUSE_PALETTE
 #if WXWIN_COMPATIBILITY
     wxPalette *GetColourMap() const { return GetPalette(); }
     void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
 #endif // WXWIN_COMPATIBILITY
+#endif // wxUSE_PALETTE
 
     // Implementation
 public:

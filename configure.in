@@ -774,6 +774,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
+  DEFAULT_wxUSE_PALETTE=no
   DEFAULT_wxUSE_IMAGE=no
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
@@ -933,6 +934,7 @@ else
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
+  DEFAULT_wxUSE_PALETTE=yes
   DEFAULT_wxUSE_IMAGE=yes
   DEFAULT_wxUSE_GIF=yes
   DEFAULT_wxUSE_PCX=yes
@@ -1290,6 +1292,7 @@ dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
 dnl ---------------------------------------------------------------------------
 
+WX_ARG_ENABLE(palette,     [  --enable-palette        use wxPalette class], wxUSE_PALETTE)
 WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
 WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
@@ -4256,6 +4259,10 @@ fi
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_PALETTE" = "yes" ; then
+  AC_DEFINE(wxUSE_PALETTE)
 fi
 
 if test "$wxUSE_IMAGE" = "yes" ; then
