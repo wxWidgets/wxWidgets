@@ -304,13 +304,10 @@ static void wxInsertChildInTopLevelWindow( wxTopLevelWindowGTK* parent, wxWindow
     else
     {
         /* these are inside the client area */
-        int x = child->m_x, y = child->m_y;
-        child->AdjustForParentClientOrigin(x, y, 0);
-
         gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                          GTK_WIDGET(child->m_widget),
-                         x,
-                         y,
+                         child->m_x,
+                         child->m_y,
                          child->m_width,
                          child->m_height );
     }
