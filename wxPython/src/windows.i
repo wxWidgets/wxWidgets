@@ -428,8 +428,8 @@ public:
     void OnPaint(wxPaintEvent& event);
 #endif
 
-    wxButton* GetDefaultItem();
-    void SetDefaultItem(wxButton *btn);
+    wxWindow* GetDefaultItem();
+    wxWindow* SetDefaultItem(wxWindow *btn);
 };
 
 
@@ -539,6 +539,8 @@ public:
     double GetScaleY();
 
     void AdjustScrollbars();
+
+    bool Layout();
 };
 
 //----------------------------------------------------------------------

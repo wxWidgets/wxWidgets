@@ -713,6 +713,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def AdjustScrollbars(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_AdjustScrollbars,(self,) + _args, _kwargs)
         return val
+    def Layout(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_Layout,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)
     ViewStart = GetViewStart

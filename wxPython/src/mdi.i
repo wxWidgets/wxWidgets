@@ -32,6 +32,17 @@
 
 //----------------------------------------------------------------------
 
+const int IDM_WINDOWTILE  = 4001;
+const int IDM_WINDOWTILEHOR  = 4001;
+const int IDM_WINDOWCASCADE = 4002;
+const int IDM_WINDOWICONS = 4003;
+const int IDM_WINDOWNEXT = 4004;
+const int IDM_WINDOWTILEVERT = 4005;
+const int wxFIRST_MDI_CHILD = 4100;
+const int wxLAST_MDI_CHILD = 4600;
+
+
+
 class wxMDIParentFrame : public wxFrame {
 public:
     wxMDIParentFrame(wxWindow *parent,

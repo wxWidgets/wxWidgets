@@ -1178,6 +1178,14 @@ SWIGEXPORT(void) initmdic() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("mdic", mdicMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"IDM_WINDOWTILE", PyInt_FromLong((long) 4001));
+	 PyDict_SetItemString(d,"IDM_WINDOWTILEHOR", PyInt_FromLong((long) 4001));
+	 PyDict_SetItemString(d,"IDM_WINDOWCASCADE", PyInt_FromLong((long) 4002));
+	 PyDict_SetItemString(d,"IDM_WINDOWICONS", PyInt_FromLong((long) 4003));
+	 PyDict_SetItemString(d,"IDM_WINDOWNEXT", PyInt_FromLong((long) 4004));
+	 PyDict_SetItemString(d,"IDM_WINDOWTILEVERT", PyInt_FromLong((long) 4005));
+	 PyDict_SetItemString(d,"wxFIRST_MDI_CHILD", PyInt_FromLong((long) 4100));
+	 PyDict_SetItemString(d,"wxLAST_MDI_CHILD", PyInt_FromLong((long) 4600));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

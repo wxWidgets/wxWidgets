@@ -12,14 +12,11 @@
 
 %module wx
 
+
 %{
 #include "helpers.h"
 %}
 
-//  %pragma(python) code="
-//  # This gives this module's dictionary to the C++ extension code...
-//  wxc._wxSetDictionary(vars())
-//  "
 
 //----------------------------------------------------------------------
 // This is where we include the other wrapper definition files for SWIG
