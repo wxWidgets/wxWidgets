@@ -111,6 +111,10 @@ union wxHashKeyValue
     wxChar *string;
 };
 
+// for some compilers (AIX xlC), defining it as friend inside the class is not
+// enough, so provide a real forward declaration
+class WXDLLIMPEXP_BASE wxHashTableBase;
+
 class WXDLLIMPEXP_BASE wxHashTableBase_Node
 {
     friend class WXDLLIMPEXP_BASE wxHashTableBase;
