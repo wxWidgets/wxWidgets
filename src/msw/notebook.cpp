@@ -342,40 +342,40 @@ bool wxNotebook::InsertPage(int nPage,
   wxASSERT( pPage != NULL );
   wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
 
-  // add the tab to the control
-  TC_ITEM tcItem;
-  tcItem.mask    = 0;
+  // do add the tab to the control
 
-  if (imageId != -1)
+  // init all fields to 0
+  TC_ITEM tcItem;
+  memset(&tcItem, 0, sizeof(tcItem));
+
+  if ( imageId != -1 )
   {
     tcItem.mask |= TCIF_IMAGE;
     tcItem.iImage  = imageId;
   }
-  else
-    tcItem.iImage  = 0;
 
-  if (!strText.IsEmpty())
+  if ( !strText.IsEmpty() )
   {
-    tcItem.mask    |= TCIF_TEXT;
-    tcItem.pszText = (wxChar *)strText.c_str();
+    tcItem.mask |= TCIF_TEXT;
+    tcItem.pszText = (wxChar *)strText.c_str(); // const_cast
   }
-  else
-    tcItem.pszText = (wxChar *) NULL;
 
   if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
     wxLogError(_T("Can't create the notebook page '%s'."), strText.c_str());
+
     return FALSE;
+  }
+
+  // if the inserted page is before the selected one, we must update the
+  // index of the selected page
+  if ( nPage <= m_nSelection )
+  {
+    // one extra page added
+    m_nSelection++;
   }
 
   // save the pointer to the page
   m_aPages.Insert(pPage, nPage);
-
-  // some page must be selected: either this one or the first one if there is
-  // still no selection
-  if ( bSelect )
-    m_nSelection = nPage;
-  else if ( m_nSelection == -1 )
-    m_nSelection = 0;
 
   // don't show pages by default (we'll need to adjust their size first)
   HWND hwnd = GetWinHwnd(pPage);
@@ -384,10 +384,16 @@ bool wxNotebook::InsertPage(int nPage,
   // this updates internal flag too - otherwise it will get out of sync
   pPage->Show(FALSE);
 
-  // FIXME this is ugly, I'm breaking my own rules... but needed to get display
-  //       right (why?)
-  wxSizeEvent event;
-  OnSize(event);
+  // some page should be selected: either this one or the first one if there is
+  // still no selection
+  int selNew = -1;
+  if ( bSelect )
+    selNew = nPage;
+  else if ( m_nSelection == -1 )
+    selNew = 0;
+
+  if ( selNew != -1 )
+    SetSelection(selNew);
 
   return TRUE;
 }
@@ -398,14 +404,6 @@ bool wxNotebook::InsertPage(int nPage,
 
 void wxNotebook::OnSize(wxSizeEvent& event)
 {
-  // make sure the current page is shown and has focus (it's useful because all
-  // pages are created invisible initially)
-  if ( m_nSelection != -1 ) {
-    wxNotebookPage *pPage = m_aPages[m_nSelection];
-    pPage->Show(TRUE);
-    pPage->SetFocus();
-  }
-
   // fit the notebook page to the tab control's display area
   RECT rc;
   rc.left = rc.top = 0;
@@ -428,8 +426,6 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
   // is it our tab control?
   if ( event.GetEventObject() == this )
   {
-      // don't call ChangePage() here because it will generate redundant
-      // notification events
       int sel = event.GetOldSelection();
       if ( sel != -1 )
         m_aPages[sel]->Show(FALSE);
@@ -522,7 +518,8 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
 // wxNotebook helper functions
 // ----------------------------------------------------------------------------
 
-// hide the currently active panel and show the new one
+// generate the page changing and changed events, hide the currently active
+// panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
   // MT-FIXME should use a real semaphore
@@ -551,16 +548,8 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     return;
   }
 
-  if ( nOldSel != -1 )
-    m_aPages[nOldSel]->Show(FALSE);
-
-  wxNotebookPage *pPage = m_aPages[nSel];
-  pPage->Show(TRUE);
-  pPage->SetFocus();
-
   event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
   ProcessEvent(event);
 
-  m_nSelection = nSel;
   s_bInsideChangePage = FALSE;
 }
