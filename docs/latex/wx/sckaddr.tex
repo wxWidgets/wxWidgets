@@ -1,0 +1,155 @@
+% ----------------------------------------------------------------------------
+% CLASS: wxSockAddress
+% ----------------------------------------------------------------------------
+\section{\class{wxSockAddress}}\label{wxsockaddress}
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+{\bf Actually, you don't have to use these functions: only wxSocketBase use it.}
+
+\wxheading{See also}
+
+\helpref{wxSocketBase}{wxsocketbase}\\
+\helpref{wxIPV4address}{wxipv4address}\\
+\helpref{wxIPV6address}{wxipv6address}\\
+\helpref{wxunixaddress}{wxunixaddress}
+
+% ----------------------------------------------------------------------------
+% Members
+% ----------------------------------------------------------------------------
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+%
+% ctor/dtor
+%
+
+\membersection{wxSockAddress::wxSockAddress}
+\func{}{wxSockAddress}{\void}
+
+Default constructor.
+
+\membersection{wxSockAddress::\destruct{wxSockAddress}}
+\func{}{\destruct{wxSockAddress}}{\void}
+
+Default destructor.
+
+%
+% Clear
+%
+\membersection{wxSockAddress::Clear}
+\func{void}{Clear}{\void}
+
+Delete all informations about the address.
+
+%
+% Build
+%
+\membersection{wxSockAddress::Build}
+\func{void}{Build}{\param{struct sockaddr *\&}{ addr}, \param{size\_t\&}{ len}}
+
+Build a coded socket address.
+
+%
+% Disassemble
+%
+\membersection{wxSockAddress::Disassemble}
+\func{void}{Disassemble}{\param{struct sockaddr *}{addr}, \param{size\_t}{ len}}
+
+Decode a socket address. {\bf Actually, you don't have to use this
+function: only wxSocketBase use it.}
+
+%
+% SockAddrLen
+%
+\membersection{wxSockAddress::SockAddrLen}
+\func{int}{SockAddrLen}{\void};
+
+Returns the length of the socket address.
+
+% ----------------------------------------------------------------------------
+% CLASS: wxIPV4address
+% ----------------------------------------------------------------------------
+\section{\class{wxIPV4address}}\label{wxipv4address}
+
+\wxheading{Derived from}
+
+\helpref{wxSockAddress}{wxsockaddress}
+
+% ----------------------------------------------------------------------------
+% MEMBERS
+% ----------------------------------------------------------------------------
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+%
+% Hostname
+%
+
+\membersection{wxIPV4address::Hostname}
+\func{bool}{Hostname}{\param{const wxString\&}{ hostname}}
+
+Use the specified {\it hostname} for the address.
+
+\wxheading{Return value}
+
+Returns FALSE if something bad happens (invalid hostname, invalid IP address). 
+
+%
+% Hostname
+%
+
+\membersection{wxIPV4address::Hostname}
+\func{wxString}{Hostname}{\void}
+
+Returns the hostname which matches the IP address.
+
+%
+% Service
+%
+
+\membersection{wxIPV4address::Service}
+\func{bool}{Service}{\param{const wxString\&}{ service}}
+
+Use the specified {\it service} string for the address.
+
+\wxheading{Return value}
+
+Returns FALSE if something bad happens (invalid service).
+
+%
+% Service
+%
+
+\membersection{wxIPV4address::Service}
+\func{bool}{Service}{\param{unsigned short}{ service}}
+
+Use the specified {\it service} for the address.
+
+\wxheading{Return value}
+
+Returns FALSE if something bad happens (invalid service).
+
+%
+% Service
+%
+
+\membersection{wxIPV4address::Service}
+\func{unsigned short}{Service}{\void}
+
+Returns the current service.
+
+%
+% LocalHost
+%
+
+\membersection{wxIPV4address::LocalHost}
+\func{bool}{LocalHost}{\void}
+
+Initialize peer host to local host.
+
+\wxheading{Return value}
+
+Returns FALSE if something bad happens.

@@ -680,3 +680,32 @@ Returns a new socket client.
 \func{static wxSocketHandler\&}{Master}{\void}
 
 Returns a default socket handler.
+
+%
+% Wait
+%
+\membersection{wxSocketHandler::Wait}
+\func{int}{Wait}{\param{long}{ seconds},\param{long}{ microseconds}}
+
+Wait for an event on all registered sockets.
+
+\wxheading{Parameters}
+
+\docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
+\docparam{microsecond}{Number of microseconds to wait.}
+
+\wxheading{Return value}
+
+Returns 0 if a timeout occured, else the number of events detected.
+
+\wxheading{See also}
+
+\helpref{wxSocketBase::Wait}{wxsockebasewait}
+
+%
+% YieldSock
+%
+\membersection{wxSocketHandler::YieldSock}
+\func{void}{YieldSock}{\void}
+
+Execute pending requests in all registered sockets.
