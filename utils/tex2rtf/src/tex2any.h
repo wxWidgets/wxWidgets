@@ -50,7 +50,7 @@ class TexMacroDef: public wxObject
   int forbidden;
   int macroId;
 
-  TexMacroDef(int the_id, char *the_name, int n, bool ig, bool forbidLevel = FORBID_OK);
+  TexMacroDef(int the_id, const char *the_name, int n, bool ig, bool forbidLevel = FORBID_OK);
   ~TexMacroDef(void);
 };
 
@@ -156,7 +156,7 @@ void SetCurrentOutput(FILE *fd);
 void SetCurrentOutputs(FILE *fd1, FILE *fd2);
 extern FILE *CurrentOutput1;
 extern FILE *CurrentOutput2;
-void AddMacroDef(int the_id, char *name, int n, bool ignore = FALSE, bool forbidden = FALSE);
+void AddMacroDef(int the_id, const char *name, int n, bool ignore = FALSE, bool forbidden = FALSE);
 void TexInitialize(int bufSize);
 void TexCleanUp(void);
 void TexOutput(char *s, bool ordinaryText = FALSE);
@@ -350,10 +350,10 @@ void DefaultOnMacro(int macroId, int no_args, bool start);
 bool DefaultOnArgument(int macroId, int arg_no, bool start);
 
 // Called on error
-void OnError(char *msg);
+void OnError(const char *msg);
 
 // Called for information
-void OnInform(char *msg);
+void OnInform(const char *msg);
 
 // Special yield wrapper
 void Tex2RTFYield(bool force = FALSE);

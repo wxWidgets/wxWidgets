@@ -25,8 +25,8 @@
 #endif
 
 #ifndef NO_GUI
-#include <wx/help.h>
-#include <wx/timer.h>
+#include "wx/help.h"
+#include "wx/timer.h"
 #endif
 
 #if defined(NO_GUI) || defined(__UNIX__)
@@ -1075,7 +1075,7 @@ bool Go(void)
   return FALSE;
 }
 
-void OnError(char *msg)
+void OnError(const char *msg)
 {
   errorCount++;
 
@@ -1100,7 +1100,7 @@ void OnError(char *msg)
 #endif // NO_GUI
 }
 
-void OnInform(char *msg)
+void OnInform(const char *msg)
 {
 #ifdef NO_GUI
   cout << msg << "\n";

@@ -1686,7 +1686,7 @@ bool TexLoadFile(char *filename)
   return FALSE;
 }
 
-TexMacroDef::TexMacroDef(int the_id, char *the_name, int n, bool ig, bool forbidLevel)
+TexMacroDef::TexMacroDef(int the_id, const char *the_name, int n, bool ig, bool forbidLevel)
 {
   name = copystring(the_name);
   no_args = n;
@@ -1961,7 +1961,7 @@ void SetCurrentOutputs(FILE *fd1, FILE *fd2)
   CurrentOutput2 = fd2;
 }
 
-void AddMacroDef(int the_id, char *name, int n, bool ignore, bool forbid)
+void AddMacroDef(int the_id, const char *name, int n, bool ignore, bool forbid)
 {
   MacroDefs.Put(name, new TexMacroDef(the_id, name, n, ignore, forbid));
 }
