@@ -28,6 +28,84 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 #include "wx/dynarray.h"
 
+#define wxMAC_USE_CARBON_TIMER 1
+
+#if wxMAC_USE_CARBON_TIMER
+
+typedef struct MacTimerInfo
+{
+    wxTimer* m_timer ;
+    EventLoopTimerUPP m_proc ;
+    EventLoopTimerRef   m_timerRef ;
+} ;
+
+static pascal void wxProcessTimer( EventLoopTimerRef  theTimer , void *data ) ;
+static pascal void wxProcessTimer( EventLoopTimerRef theTimer , void *data )
+{
+    if ( !data )
+        return ;
+        
+    wxTimer* timer = (wxTimer*) data ;
+    
+    if ( timer->IsOneShot() )
+        timer->Stop() ;
+
+    timer->Notify();
+}
+
+void wxTimer::Init()
+{
+    m_info = new MacTimerInfo() ;
+    m_info->m_timer = this ;
+    m_info->m_proc = NULL ;
+    m_info->m_timerRef = kInvalidID ;
+}
+
+bool wxTimer::IsRunning() const 
+{
+    return ( m_info->m_timerRef != kInvalidID ) ;
+}
+
+wxTimer::~wxTimer()
+{
+    Stop();
+    if (m_info != NULL) {
+        delete m_info ;
+        m_info = NULL ;
+    }
+}
+
+bool wxTimer::Start(int milliseconds,bool mode)
+{
+    (void)wxTimerBase::Start(milliseconds, mode);
+
+    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeout") );
+    wxCHECK_MSG( m_info->m_timerRef == NULL , FALSE, wxT("attempting to restart a timer") );
+
+    m_info->m_timer = this ;
+    m_info->m_proc = NewEventLoopTimerUPP( &wxProcessTimer);
+    verify_noerr( InstallEventLoopTimer (
+        GetMainEventLoop() ,
+        m_milli*kEventDurationMillisecond,
+        IsOneShot() ? 0 : m_milli*kEventDurationMillisecond ,
+        m_info->m_proc,
+        this,
+        &m_info->m_timerRef) ) ;
+    return TRUE;
+}
+
+void wxTimer::Stop()
+{
+    if (m_info->m_timerRef)
+        RemoveEventLoopTimer( m_info->m_timerRef ) ; 
+    if (m_info->m_proc)
+        DisposeEventLoopTimerUPP(m_info->m_proc) ;
+    m_info->m_proc = NULL ;
+    m_info->m_timerRef = kInvalidID ;
+}
+
+#else
+
 typedef struct MacTimerInfo
 {
     TMTask m_task;
@@ -135,5 +213,6 @@ void wxTimer::Stop()
     wxMacRemoveAllNotifiersForData( wxMacGetNotifierTable() , this ) ;
 }
 
+#endif
 
 
