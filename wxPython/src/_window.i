@@ -939,6 +939,37 @@ type.");
         virtual wxValidator *, GetValidator(),
         "Returns a pointer to the current validator for the window, or None if
 there is none.");
+
+
+    DocDeclStr(
+        virtual bool , Validate(),
+        "Validates the current values of the child controls using their
+validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
+extra style flag set, the method will also call Validate() of all
+child windows.  Returns false if any of the validations failed.");
+    
+
+    DocDeclStr(
+        virtual bool , TransferDataToWindow(),
+        "Transfers values to child controls from data areas specified by
+their validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
+extra style flag set, the method will also call
+TransferDataToWindow() of all child windows.");
+    
+    DocDeclStr(
+        virtual bool , TransferDataFromWindow(),
+        "Transfers values from child controls to data areas specified by
+their validators. Returns false if a transfer failed.  If the
+window has wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the
+method will also call TransferDataFromWindow() of all child
+windows.");
+    
+
+    DocDeclStr(
+        virtual void , InitDialog(),
+        "Sends an EVT_INIT_DIALOG event, whose handler usually transfers
+data to the dialog via validators.");
+    
     
 
 
