@@ -80,45 +80,60 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                                             WPARAM wParam,
                                             LPARAM lParam)
 {
-    if (
-          message == WM_CHAR
-#if wxUSE_TOOLTIPS
-          || message == WM_NOTIFY
-#endif // wxUSE_TOOLTIPS
-       )
-    {
-        HWND hwndCombo = ::GetParent(hWnd);
-        wxWindow *win = wxFindWinFromHandle((WXHWND)hwndCombo);
-        wxComboBox *combo = wxDynamicCast(win, wxComboBox);
-        wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
+    HWND hwndCombo = ::GetParent(hWnd);
+    wxWindow *win = wxFindWinFromHandle((WXHWND)hwndCombo);
 
-        switch ( message )
-        {
-            case WM_CHAR:
+    switch ( message )
+    {
+        // forward some messages to the combobox
+        case WM_KEYUP:
+        case WM_KEYDOWN:
+        case WM_CHAR:
+            {
+                wxComboBox *combo = wxDynamicCast(win, wxComboBox);
+                wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
+
                 if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
                     return 0;
-                break;
+            }
+            break;
 
-#if wxUSE_TOOLTIPS
-            case WM_NOTIFY:
+#if 0
+        case WM_GETDLGCODE:
+            {
+                wxCHECK_MSG( win, 0, _T("should have a parent") );
+
+                if ( win->GetWindowStyle() & wxPROCESS_ENTER )
                 {
-                    NMHDR* hdr = (NMHDR *)lParam;
-                    if ( (int)hdr->code == TTN_NEEDTEXT )
-                    {
-                        wxToolTip *tooltip = combo->GetToolTip();
-                        if ( tooltip )
-                        {
-                            TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
-                            ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
-                        }
-
-                        // processed
-                        return 0;
-                    }
+                    // need to return a custom dlg code or we'll never get it
+                    return DLGC_WANTMESSAGE;
                 }
-                break;
+            }
+            break;
+#endif // 0
+
+        // deal with tooltips here
+#if wxUSE_TOOLTIPS
+        case WM_NOTIFY:
+            {
+                wxCHECK_MSG( win, 0, _T("should have a parent") );
+
+                NMHDR* hdr = (NMHDR *)lParam;
+                if ( (int)hdr->code == TTN_NEEDTEXT )
+                {
+                    wxToolTip *tooltip = win->GetToolTip();
+                    if ( tooltip )
+                    {
+                        TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
+                        ttt->lpszText = (wxChar *)tooltip->GetTip().c_str();
+                    }
+
+                    // processed
+                    return 0;
+                }
+            }
+            break;
 #endif // wxUSE_TOOLTIPS
-        }
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
@@ -130,9 +145,16 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 
 bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    if ( msg == WM_CHAR )
+    switch ( msg )
     {
-        return HandleChar(wParam, lParam, TRUE /* isASCII */);
+        case WM_CHAR:
+            return HandleChar(wParam, lParam, TRUE /* isASCII */);
+
+        case WM_KEYDOWN:
+            return HandleKeyDown(wParam, lParam);
+
+        case WM_KEYUP:
+            return HandleKeyUp(wParam, lParam);
     }
 
     return FALSE;
