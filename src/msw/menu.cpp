@@ -178,7 +178,7 @@ void wxMenu::Append(wxMenuItem *pItem)
                 keyCode = wxToupper(current[0U]);
             }
             else {
-                // it should be a function key
+                // is it a function key?
                 if ( current[0U] == 'f' && isdigit(current[1U]) &&
                      (current.Len() == 2 ||
                      (current.Len() == 3 && isdigit(current[2U]))) ) {
@@ -188,8 +188,21 @@ void wxMenu::Append(wxMenuItem *pItem)
                     keyCode = VK_F1 + n - 1;
                 }
                 else {
-                    wxLogDebug(wxT("Unrecognized accel key '%s', accel "
-                                  "string ignored."), current.c_str());
+                    // several special cases
+                    current.MakeUpper();
+                    if ( current == wxT("DEL") ) {
+                        keyCode = VK_DELETE;
+                    }
+                    else if ( current == wxT("PGUP") ) {
+                        keyCode = VK_PRIOR;
+                    }
+                    else if ( current == wxT("PGDN") ) {
+                        keyCode = VK_NEXT;
+                    }
+                    else {
+                        wxLogDebug(wxT("Unrecognized accel key '%s', accel "
+                                       "string ignored."), current.c_str());
+                    }
                 }
             }
         }
