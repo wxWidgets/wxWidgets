@@ -1,7 +1,8 @@
 @echo off
 rem Zip up an external, generic + Windows distribution of wxWindows 2.0
-set src=d:\wx2\wxWindows
-set dest=%src\deliver
+set src=%wxwin
+set dest=d:\wx2\wxWindows\deliver
+rem set dest=%src\deliver
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
 echo About to archive an external wxWindows distribution:

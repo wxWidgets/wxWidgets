@@ -7,6 +7,7 @@ Please see also:
   docs/motif/todo.txt
   docs/msw/todo.txt
 
+
 - Suggestion from Janos Vegh: the memory-checking classes could
   also keep return the size of memory currently allocated, with
   a call to return it e.g. int wxDebugContext::GetMemoryUsed().
@@ -32,6 +33,8 @@ Please see also:
 
 - Implement wxScrolledWindow::OnChar to scroll the window using
   the keyboard.
+
+- Add wxPropertyFormView sample code to samples/proplist
 
 For 2.1: small changes not involving rewriting anything
 -------------------------------------------------------

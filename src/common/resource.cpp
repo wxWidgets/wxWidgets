@@ -27,7 +27,6 @@
 #endif // VC++
 
 #ifndef WX_PRECOMP
-#include "wx/log.h"
 #include "wx/defs.h"
 #include "wx/setup.h"
 #include "wx/list.h"
@@ -53,6 +52,7 @@
     #include "wx/gauge.h"
 #endif
 
+#include "wx/log.h"
 #include "wx/textctrl.h"
 #include "wx/msgdlg.h"
 #include "wx/intl.h"

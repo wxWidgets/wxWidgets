@@ -111,6 +111,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     if (height < 0)
         height = 500;
 
+    // All dialogs should really have this style
+    m_windowStyle |= wxTAB_TRAVERSAL;
+
     WXDWORD extendedStyle = MakeExtendedStyle(m_windowStyle);
     if (m_windowStyle & wxSTAY_ON_TOP)
         extendedStyle |= WS_EX_TOPMOST;
