@@ -98,134 +98,9 @@
     const wxChar *wxFatalErrorStr = wxT("wxWindows Fatal Error");
 #endif // WXWIN_COMPATIBILITY_2_2
 
-// ----------------------------------------------------------------------------
-// function protoypes
-// ----------------------------------------------------------------------------
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// string functions
-// ----------------------------------------------------------------------------
-
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-int strcasecmp(const char *str_1, const char *str_2)
-{
-  register char c1, c2;
-  do {
-    c1 = tolower(*str_1++);
-    c2 = tolower(*str_2++);
-  } while ( c1 && (c1 == c2) );
-
-  return c1 - c2;
-}
-
-int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
-{
-
-  register char c1, c2;
-  while( maxchar--)
-  {
-    c1 = tolower(*str_1++);
-    c2 = tolower(*str_2++);
-
-    if ( !c1 || c1!=c2 )
-                  return c1 - c2;
-
-  } ;
-
-  return 0 ;
-
-}
-#endif // __WXMAC__ && !__DARWIN__
-
-#if defined( __VMS__ ) && ( __VMS_VER < 70000000 )
-// we have no strI functions under VMS, therefore I have implemented
-// an inefficient but portable version: convert copies of strings to lowercase
-// and then use the normal comparison
-static void myLowerString(char *s)
-{
-  while(*s){
-    if(isalpha(*s)) *s = (char)tolower(*s);
-    s++;
-  }
-}
-
-int strcasecmp(const char *str_1, const char *str_2)
-{
-  char *temp1 = new char[strlen(str_1)+1];
-  char *temp2 = new char[strlen(str_2)+1];
-  strcpy(temp1,str_1);
-  strcpy(temp2,str_2);
-  myLowerString(temp1);
-  myLowerString(temp2);
-
-  int result = wxStrcmp(temp1,temp2);
-  delete[] temp1;
-  delete[] temp2;
-
-  return(result);
-}
-
-int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
-{
-  char *temp1 = new char[strlen(str_1)+1];
-  char *temp2 = new char[strlen(str_2)+1];
-  strcpy(temp1,str_1);
-  strcpy(temp2,str_2);
-  myLowerString(temp1);
-  myLowerString(temp2);
-
-  int result = strncmp(temp1,temp2,maxchar);
-  delete[] temp1;
-  delete[] temp2;
-
-  return(result);
-}
-#endif // __VMS__
-
-#if defined(__WINDOWS__) && !defined(__WXMICROWIN__) && !defined(__WXWINE__)
-
-#ifndef __GNUWIN32__
-#ifndef __MWERKS__
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#else
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-#endif
-#endif
-
-#else
-
-#ifdef __EMX__
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
-
-// This declaration is missing in SunOS!
-// (Yes, I know it is NOT ANSI-C but its in BSD libc)
-#if defined(__xlC) || defined(__AIX__) 
-// || defined(__GNUG__)
-extern "C"
-{
-  int strcasecmp (const char *, const char *);
-  int strncasecmp (const char *, const char *, size_t);
-}
-#endif
-#endif  /* __WXMSW__ */
-
-#ifdef __WXPM__
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
-
-#ifdef __WATCOMC__
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#endif
 
 wxChar *
 copystring (const wxChar *s)
@@ -361,9 +236,9 @@ wxString wxDecToHex(int dec)
     return wxString(buf);
 }
 
-// Match a string INDEPENDENT OF CASE
+#if WXWIN_COMPATIBILITY_2
 bool
-StringMatch (const char *str1, const char *str2, bool subString, bool exact)
+StringMatch (const wxChar *str1, const wxChar *str2, bool subString, bool exact)
 {
   if (str1 == NULL || str2 == NULL)
     return FALSE;
@@ -372,34 +247,35 @@ StringMatch (const char *str1, const char *str2, bool subString, bool exact)
 
   if (subString)
     {
-      int len1 = strlen (str1);
-      int len2 = strlen (str2);
+      int len1 = wxStrlen (str1);
+      int len2 = wxStrlen (str2);
       int i;
 
       // Search for str1 in str2
       // Slow .... but acceptable for short strings
       for (i = 0; i <= len2 - len1; i++)
         {
-          if (strncasecmp (str1, str2 + i, len1) == 0)
+          if (wxStrnicmp (str1, str2 + i, len1) == 0)
             return TRUE;
         }
     }
   else if (exact)
     {
-      if (strcasecmp (str1, str2) == 0)
+      if (wxStricmp (str1, str2) == 0)
         return TRUE;
     }
   else
     {
-      int len1 = strlen (str1);
-      int len2 = strlen (str2);
+      int len1 = wxStrlen (str1);
+      int len2 = wxStrlen (str2);
 
-      if (strncasecmp (str1, str2, wxMin (len1, len2)) == 0)
+      if (wxStrnicmp (str1, str2, wxMin (len1, len2)) == 0)
         return TRUE;
     }
 
   return FALSE;
 }
+#endif
 
 // Return the current date/time
 // [volatile]
