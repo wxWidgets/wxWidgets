@@ -30,6 +30,7 @@
 #include "wx/module.h"
 #include "wx/bitmap.h"
 #include "wx/image.h"
+#include "wx/fontmap.h"
 
 #include "wx/xml/xml.h"
 #include "wx/xml/xmlres.h"
@@ -53,6 +54,12 @@ wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale = TRUE)
 
 wxXmlResource::~wxXmlResource()
 {
+    for (size_t i = 0; i < m_Data.GetCount(); i++)
+    {
+        if (!m_Data[i].DocOwned) m_Data[i].Doc = NULL;
+        // we don't want it to be deleted
+    }
+    
     ClearHandlers();
 }
 
@@ -90,6 +97,7 @@ bool wxXmlResource::Load(const wxString& filemask)
                 drec = new wxXmlResourceDataRecord;
                 drec->File = fnd2;
                 m_Data.Add(drec);
+                drec->DocOwned = TRUE;
                 fnd2 = fs2.FindNext();
             }
         }
@@ -98,6 +106,7 @@ bool wxXmlResource::Load(const wxString& filemask)
         {
             drec = new wxXmlResourceDataRecord;
             drec->File = fnd;
+            drec->DocOwned = TRUE;
             m_Data.Add(drec);
         }
 
@@ -259,6 +268,8 @@ void wxXmlResource::UpdateResources()
 
     for (size_t i = 0; i < m_Data.GetCount(); i++)
     {
+        if (!m_Data[i].DocOwned) continue;
+    
         modif = (m_Data[i].Doc == NULL);
 
         if (!modif)
@@ -732,33 +743,44 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxXmlNode *font_node = GetParamNode(param);
     if (font_node == NULL)
     {
-        wxLogError("Cannot find font node '%s'.", param.mb_str());
+        wxLogError(_("Cannot find font node '%s'."), param.mb_str());
         return wxNullFont;
     }
     
     wxXmlNode *oldnode = m_Node;
     m_Node = font_node;
 
-    long size = GetLong(_("size"), 12);
+    long size = GetLong(_T("size"), 12);
 
-    wxString style = GetParamValue(_("style"));
-    wxString weight = GetParamValue(_("weight"));
+    wxString style = GetParamValue(_T("style"));
+    wxString weight = GetParamValue(_T("weight"));
     int istyle = wxNORMAL, iweight = wxNORMAL;  
-    if (style == _("italic")) istyle = wxITALIC;
-    else if (style == _("slant")) istyle = wxSLANT;
-    if (weight == _("bold")) iweight = wxBOLD;
-    else if (weight == _("light")) iweight = wxLIGHT;
+    if (style == _T("italic")) istyle = wxITALIC;
+    else if (style == _T("slant")) istyle = wxSLANT;
+    if (weight == _T("bold")) iweight = wxBOLD;
+    else if (weight == _T("light")) iweight = wxLIGHT;
 
-    bool underlined = GetBool(_("underlined"), FALSE);
+    wxString family = GetParamValue(_T("family"));
+    int ifamily = wxDEFAULT;
+         if (family == _T("decorative")) ifamily = wxDECORATIVE;
+    else if (family == _T("roman")) ifamily = wxROMAN;
+    else if (family == _T("script")) ifamily = wxSCRIPT;
+    else if (family == _T("swiss")) ifamily = wxSWISS;
+    else if (family == _T("modern")) ifamily = wxMODERN;
 
-    wxString encoding = GetParamValue(_("encoding"));
-    // FIXME - handle encoding
+    bool underlined = GetBool(_T("underlined"), FALSE);
 
-    wxString faces = GetParamValue(_("face"));
+    wxString encoding = GetParamValue(_T("encoding"));
+    wxFontMapper mapper;
+    wxFontEncoding enc = wxFONTENCODING_DEFAULT;
+    if (!encoding.IsEmpty()) enc = mapper.CharsetToEncoding(encoding);
+    if (enc == wxFONTENCODING_SYSTEM) enc = wxFONTENCODING_SYSTEM;
+
+    wxString faces = GetParamValue(_T("face"));
     wxString facename = wxEmptyString;
     wxFontEnumerator enu;
     enu.EnumerateFacenames();
-    wxStringTokenizer tk(faces, ",");
+    wxStringTokenizer tk(faces, _T(","));
     while (tk.HasMoreTokens()) 
     {
         int index = enu.GetFacenames()->Index(tk.GetNextToken(), FALSE);
@@ -771,8 +793,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     
     m_Node = oldnode;
     
-    wxFont font(size, wxDEFAULT, istyle, iweight, underlined, 
-                facename, wxFONTENCODING_DEFAULT);
+    wxFont font(size, ifamily, istyle, iweight, underlined, facename, enc);
     return font;
 }
 

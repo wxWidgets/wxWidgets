@@ -45,6 +45,7 @@ class WXDLLEXPORT wxXmlResourceDataRecord
     
         wxString File;
         wxXmlDocument *Doc;
+        bool DocOwned;
         wxDateTime Time;
 };
 
