@@ -156,16 +156,23 @@
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
-bool wxFile::Exists(const char *name)
+bool wxFile::Exists(const wxChar *name)
 {
     struct stat st;
+#if wxUSE_UNICODE && wxMBFILES
+    wxCharBuffer fname = wxConv_file.cWC2MB(name);
 
-    return !access(name, 0) &&
-           !stat((char*) name, &st) &&
+    return !access(fname, 0) &&
+           !stat(MBSTRINGCAST fname, &st) &&
            (st.st_mode & S_IFREG);
+#else
+    return !access(name, 0) &&
+           !stat((wxChar*) name, &st) &&
+           (st.st_mode & S_IFREG);
+#endif
 }
 
-bool wxFile::Access(const char *name, OpenMode mode)
+bool wxFile::Access(const wxChar *name, OpenMode mode)
 {
     int how = 0;
 
@@ -179,10 +186,10 @@ bool wxFile::Access(const char *name, OpenMode mode)
             break;
 
         default:
-            wxFAIL_MSG("bad wxFile::Access mode parameter.");
+            wxFAIL_MSG(_T("bad wxFile::Access mode parameter."));
     }
 
-    return access(name, how) == 0;
+    return access(wxFNCONV(name), how) == 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -190,7 +197,7 @@ bool wxFile::Access(const char *name, OpenMode mode)
 // ----------------------------------------------------------------------------
 
 // ctors
-wxFile::wxFile(const char *szFileName, OpenMode mode)
+wxFile::wxFile(const wxChar *szFileName, OpenMode mode)
 {
     m_fd = fd_invalid;
     m_error = FALSE;
@@ -205,11 +212,11 @@ wxFile::~wxFile()
 }
 
 // create the file, fail if it already exists and bOverwrite
-bool wxFile::Create(const char *szFileName, bool bOverwrite, int accessMode)
+bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
-    int fd = open(szFileName,
+    int fd = open(wxFNCONV(szFileName),
                   O_WRONLY | O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL)
                   ACCESS(accessMode));
 
@@ -224,7 +231,7 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite, int accessMode)
 }
 
 // open the file
-bool wxFile::Open(const char *szFileName, OpenMode mode, int accessMode)
+bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
 {
     int flags = O_BINARY;
 
@@ -246,7 +253,7 @@ bool wxFile::Open(const char *szFileName, OpenMode mode, int accessMode)
             break;
     }
 
-    int fd = open(szFileName, flags ACCESS(accessMode));
+    int fd = open(wxFNCONV(szFileName), flags ACCESS(accessMode));
 
     if ( fd == -1 ) {
         wxLogSysError(_("can't open file '%s'"), szFileName);
@@ -474,21 +481,21 @@ bool wxTempFile::Open(const wxString& strName)
     // different partitions for example). Unfortunately, the only standard
     // (POSIX) temp file creation function tmpnam() can't do it.
 #if defined(__UNIX__) || defined(__WXSTUBS__)|| defined( __WXMAC__ )
-    static const char *szMktempSuffix = "XXXXXX";
+    static const wxChar *szMktempSuffix = _T("XXXXXX");
     m_strTemp << strName << szMktempSuffix;
-    mktemp((char *)m_strTemp.c_str()); // will do because length doesn't change
+    mktemp(MBSTRINGCAST m_strTemp.mb_str()); // will do because length doesn't change
 #else // Windows
     wxString strPath;
     wxSplitPath(strName, &strPath, NULL, NULL);
     if ( strPath.IsEmpty() )
-        strPath = '.';  // GetTempFileName will fail if we give it empty string
+        strPath = _T('.');  // GetTempFileName will fail if we give it empty string
 #ifdef __WIN32__
-    if ( !GetTempFileName(strPath, "wx_",0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+    if ( !GetTempFileName(strPath, _T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #else
         // Not sure why MSVC++ 1.5 header defines first param as BYTE - bug?
-        if ( !GetTempFileName((BYTE) (const char*) strPath, "wx_",0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+        if ( !GetTempFileName((BYTE) (const wxChar*) strPath, _T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #endif
-            wxLogLastError("GetTempFileName");
+            wxLogLastError(_T("GetTempFileName"));
     m_strTemp.UngetWriteBuf();
 #endif  // Windows/Unix
 
@@ -496,7 +503,7 @@ bool wxTempFile::Open(const wxString& strName)
 #ifdef __UNIX__
     // create the file with the same mode as the original one under Unix
     struct stat st;
-    if ( stat(strName, &st) == 0 )
+    if ( stat(strName.fn_str(), &st) == 0 )
     {
         // this assumes that only lower bits of st_mode contain the access
         // rights, but it's true for at least all Unices which have S_IXXXX()
@@ -506,7 +513,7 @@ bool wxTempFile::Open(const wxString& strName)
     }
     else
     {
-        wxLogLastError("stat");
+        wxLogLastError(_T("stat"));
     }
 
     // we want to create the file with exactly the same access rights as the
@@ -538,12 +545,12 @@ bool wxTempFile::Commit()
 {
     m_file.Close();
 
-    if ( wxFile::Exists(m_strName) && remove(m_strName) != 0 ) {
+    if ( wxFile::Exists(m_strName) && remove(m_strName.fn_str()) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
         return FALSE;
     }
 
-    if ( rename(m_strTemp, m_strName) != 0 ) {
+    if ( rename(m_strTemp.fn_str(), m_strName.fn_str()) != 0 ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
         return FALSE;
     }
@@ -554,6 +561,6 @@ bool wxTempFile::Commit()
 void wxTempFile::Discard()
 {
     m_file.Close();
-    if ( remove(m_strTemp) != 0 )
+    if ( remove(m_strTemp.fn_str()) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 }

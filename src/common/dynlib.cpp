@@ -40,17 +40,17 @@
 // ----------------------------------------------------------------------------
 
 #if defined(HAVE_DLOPEN)
-    #define wxDllOpen(lib)                dlopen(lib, RTLD_LAZY)
-    #define wxDllGetSymbol(handle, name)  dlsym(handle, (char *)name)
+    #define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_LAZY)
+    #define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
     #define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
-    #define wxDllOpen(lib)                shl_load(lib, BIND_DEFERRED, 0)
+    #define wxDllOpen(lib)                shl_load(lib.fn_str(), BIND_DEFERRED, 0)
     #define wxDllClose      shl_unload
 
-    static inline void *wxDllGetSymbol(shl_t handle, const char *name)
+    static inline void *wxDllGetSymbol(shl_t handle, const wxString& name)
     {
         void *sym;
-        if ( shl_findsym(&handle, name, TYPE_UNDEFINED, &sym) == 0 )
+        if ( shl_findsym(&handle, name.mb_str(), TYPE_UNDEFINED, &sym) == 0 )
             return sym;
         else
             return (void *)0;
@@ -179,9 +179,7 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
         symbol = (void *)symAddress ; 
     }
 #else
-    // VZ: hmm... why is WXSTRINGCAST needed? if it's really modified, we
-    //     should make a copy of it
-    symbol = wxDllGetSymbol(m_handle, WXSTRINGCAST symbname);
+    symbol = wxDllGetSymbol(m_handle, symbname);
 #endif
 
     if ( !symbol )
@@ -234,7 +232,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
     const char *envLibPath = getenv("LD_LIBRARY_PATH");
     if ( envLibPath )
         libPath << ':' << envLibPath;
-    wxStringTokenizer tokenizer(libPath, ':');
+    wxStringTokenizer tokenizer(libPath, _T(':'));
     while ( tokenizer.HasMoreToken() )
     {
         wxString fullname(tokenizer.NextToken());

@@ -390,7 +390,7 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
     decod = new gifDecoder(&stream);
 
     if (decod -> readgif(&igif) != E_OK) {
-        wxLogDebug("Error reading GIF");
+        wxLogDebug(_T("Error reading GIF"));
         delete decod;
         return FALSE;
     }
@@ -427,7 +427,7 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
 
 bool wxGIFHandler::SaveFile( wxImage *image, wxOutputStream& stream )
 {
-    wxLogDebug("wxGIFHandler is read-only!!");
+    wxLogDebug(_T("wxGIFHandler is read-only!!"));
     return FALSE;
 }
 

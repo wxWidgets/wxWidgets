@@ -39,7 +39,7 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/dc.h"
-    #include "wx/dialog.h"
+#include "wx/dialog.h"
     #include "wx/menu.h"
     #include "wx/list.h"
     #include "wx/filedlg.h"
@@ -92,7 +92,7 @@
 // function prototypes
 // ----------------------------------------------------------------------------
 
-static inline wxString FindExtension(const char *path);
+static inline wxString FindExtension(const wxChar *path);
 
 // ============================================================================
 // implementation
@@ -102,7 +102,7 @@ static inline wxString FindExtension(const char *path);
 // local functions
 // ----------------------------------------------------------------------------
 
-static wxString FindExtension(const char *path)
+static wxString FindExtension(const wxChar *path)
 {
     wxString ext;
     wxSplitPath(path, NULL, NULL, &ext);
@@ -279,7 +279,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     else
         msgTitle = wxString(_("File error"));
 
-    ofstream store(file);
+    ofstream store(file.fn_str());
     if (store.fail() || store.bad())
     {
         (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
@@ -310,7 +310,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
     else
         msgTitle = wxString(_("File error"));
 
-    ifstream store(file);
+    ifstream store(file.fn_str());
     if (store.fail() || store.bad())
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
@@ -402,7 +402,7 @@ bool wxDocument::OnSaveModified()
 
         wxString prompt;
         prompt.Printf(_("Do you want to save changes to document %s?"),
-                (const char *)title);
+                (const wxChar *)title);
         int res = wxMessageBox(prompt, msgTitle,
                 wxYES_NO|wxCANCEL|wxICON_QUESTION,
                 GetDocumentWindow());
@@ -1139,7 +1139,7 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
     for (i = 0; i < m_templates.Number(); i++)
     {
         wxDocTemplate *temp = (wxDocTemplate *)m_templates.Nth(i)->Data();
-        if (strcmp(temp->GetDefaultExtension(), theExt) == 0)
+        if (wxStrcmp(temp->GetDefaultExtension(), theExt) == 0)
         {
             theTemplate = temp;
             break;
@@ -1170,18 +1170,18 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         {
             // add a '|' to separate this filter from the previous one
             if ( !descrBuf.IsEmpty() )
-                descrBuf << '|';
+                descrBuf << _T('|');
 
             descrBuf << templates[i]->GetDescription()
-                << " (" << templates[i]->GetFileFilter() << ") |"
+                << _T(" (") << templates[i]->GetFileFilter() << _T(") |")
                 << templates[i]->GetFileFilter();
         }
     }
 #else
-    wxString descrBuf = "*.*";
+    wxString descrBuf = _T("*.*");
 #endif
 
-    wxString pathTmp = wxFileSelector(_("Select a file"), "", "", "",
+    wxString pathTmp = wxFileSelector(_("Select a file"), _T(""), _T(""), _T(""),
             descrBuf, 0, wxTheApp->GetTopWindow());
 
     if (!pathTmp.IsEmpty())
@@ -1229,8 +1229,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates)
 {
-    char **strings = new char *[noTemplates];
-    char **data = new char *[noTemplates];
+    wxChar **strings = new wxChar *[noTemplates];
+    wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
     for (i = 0; i < noTemplates; i++)
@@ -1238,7 +1238,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
         if (templates[i]->IsVisible())
         {
             strings[n] = WXSTRINGCAST templates[i]->m_description;
-            data[n] = (char *)templates[i];
+            data[n] = (wxChar *)templates[i];
             n ++;
         }
     }
@@ -1266,8 +1266,8 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
 wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         int noTemplates)
 {
-    char **strings = new char *[noTemplates];
-    char **data = new char *[noTemplates];
+    wxChar **strings = new wxChar *[noTemplates];
+    wxChar **data = new wxChar *[noTemplates];
     int i;
     int n = 0;
     for (i = 0; i < noTemplates; i++)
@@ -1275,7 +1275,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
         if (templates[i]->IsVisible() && (templates[i]->GetViewName() != ""))
         {
             strings[n] = WXSTRINGCAST templates[i]->m_viewTypeName;
-            data[n] = (char *)templates[i];
+            data[n] = (wxChar *)templates[i];
             n ++;
         }
     }
@@ -1763,7 +1763,7 @@ wxFileHistory::wxFileHistory(int maxFiles)
 {
     m_fileMaxFiles = maxFiles;
     m_fileHistoryN = 0;
-    m_fileHistory = new char *[m_fileMaxFiles];
+    m_fileHistory = new wxChar *[m_fileMaxFiles];
 }
 
 wxFileHistory::~wxFileHistory()
@@ -1792,7 +1792,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     if (m_fileHistoryN == m_fileMaxFiles)
     {
         delete[] m_fileHistory[m_fileMaxFiles-1];
-        m_fileHistory[m_fileMaxFiles-1] = (char *) NULL;
+        m_fileHistory[m_fileMaxFiles-1] = (wxChar *) NULL;
     }
     if (m_fileHistoryN < m_fileMaxFiles)
     {
@@ -1818,7 +1818,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
         if (m_fileHistory[i])
         {
             wxString buf;
-            buf.Printf("&%d %s", i+1, m_fileHistory[i]);
+            buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
             wxNode* node = m_fileMenus.First();
             while (node)
             {
@@ -1853,13 +1853,13 @@ void wxFileHistory::Load(wxConfigBase& config)
 {
     m_fileHistoryN = 0;
     wxString buf;
-    buf.Printf("file%d", m_fileHistoryN+1);
+    buf.Printf(_T("file%d"), m_fileHistoryN+1);
     wxString historyFile;
     while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != ""))
     {
-        m_fileHistory[m_fileHistoryN] = copystring((const char*) historyFile);
+        m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
-        buf.Printf("file%d", m_fileHistoryN+1);
+        buf.Printf(_T("file%d"), m_fileHistoryN+1);
         historyFile = "";
     }
     AddFilesToMenu();
@@ -1871,7 +1871,7 @@ void wxFileHistory::Save(wxConfigBase& config)
     for (i = 0; i < m_fileHistoryN; i++)
     {
         wxString buf;
-        buf.Printf("file%d", i+1);
+        buf.Printf(_T("file%d"), i+1);
         config.Write(buf, wxString(m_fileHistory[i]));
     }
 }
@@ -1892,7 +1892,7 @@ void wxFileHistory::AddFilesToMenu()
                 if (m_fileHistory[i])
                 {
                     wxString buf;
-                    buf.Printf("&%d %s", i+1, m_fileHistory[i]);
+                    buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
                     menu->Append(wxID_FILE1+i, buf);
                 }
             }
@@ -1912,7 +1912,7 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
             if (m_fileHistory[i])
             {
                 wxString buf;
-                buf.Printf("&%d %s", i+1, m_fileHistory[i]);
+                buf.Printf(_T("&%d %s"), i+1, m_fileHistory[i]);
                 menu->Append(wxID_FILE1+i, buf);
             }
         }
@@ -1929,7 +1929,7 @@ bool wxTransferFileToStream(const wxString& filename, ostream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (WXSTRINGCAST filename, "rb")) == NULL)
+    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -1944,7 +1944,7 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (WXSTRINGCAST filename, "wb")) == NULL)
+    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
     {
         return FALSE;
     }

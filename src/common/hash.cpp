@@ -92,7 +92,7 @@ void wxHashTable::Put (long key, long value, wxObject * object)
   hash_table[position]->Append (value, object);
 }
 
-void wxHashTable::Put (long key, const char *value, wxObject * object)
+void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
 {
   // Should NEVER be
   long k = (long) key;
@@ -120,7 +120,7 @@ void wxHashTable::Put (long key, wxObject * object)
   hash_table[position]->Append (k, object);
 }
 
-void wxHashTable::Put (const char *key, wxObject * object)
+void wxHashTable::Put (const wxChar *key, wxObject * object)
 {
   int position = (int) (MakeKey (key) % n);
 
@@ -150,7 +150,7 @@ wxObject *wxHashTable::Get (long key, long value) const
     }
 }
 
-wxObject *wxHashTable::Get (long key, const char *value) const
+wxObject *wxHashTable::Get (long key, const wxChar *value) const
 {
   // Should NEVER be
   long k = (long) key;
@@ -187,7 +187,7 @@ wxObject *wxHashTable::Get (long key) const
     }
 }
 
-wxObject *wxHashTable::Get (const char *key) const
+wxObject *wxHashTable::Get (const wxChar *key) const
 {
   int position = (int) (MakeKey (key) % n);
 
@@ -224,7 +224,7 @@ wxObject *wxHashTable::Delete (long key)
     }
 }
 
-wxObject *wxHashTable::Delete (const char *key)
+wxObject *wxHashTable::Delete (const wxChar *key)
 {
   int position = (int) (MakeKey (key) % n);
   if (!hash_table[position])
@@ -267,7 +267,7 @@ wxObject *wxHashTable::Delete (long key, int value)
     }
 }
 
-wxObject *wxHashTable::Delete (long key, const char *value)
+wxObject *wxHashTable::Delete (long key, const wxChar *value)
 {
   int position = (int) (key % n);
   if (!hash_table[position])
@@ -286,12 +286,12 @@ wxObject *wxHashTable::Delete (long key, const char *value)
     }
 }
 
-long wxHashTable::MakeKey (const char *string) const
+long wxHashTable::MakeKey (const wxChar *string) const
 {
   long int_key = 0;
 
   while (*string)
-    int_key += (unsigned char) *string++;
+    int_key += (wxUChar) *string++;
 
   return int_key;
 }

@@ -59,12 +59,12 @@ bool wxListKey::operator==(wxListKeyValue value) const
     switch ( m_keyType )
     {
         default:
-            wxFAIL_MSG("bad key type.");
+            wxFAIL_MSG(_T("bad key type."));
             // let compiler optimize the line above away in release build
             // by not putting return here...
 
         case wxKEY_STRING:
-            return strcmp(m_key.string, value.string) == 0;
+            return wxStrcmp(m_key.string, value.string) == 0;
 
         case wxKEY_INTEGER:
             return m_key.integer == value.integer;
@@ -95,11 +95,11 @@ wxNodeBase::wxNodeBase(wxListBase *list,
 
         case wxKEY_STRING:
             // to be free()d later
-            m_key.string = strdup(key.GetString());
+            m_key.string = wxStrdup(key.GetString());
             break;
 
         default:
-            wxFAIL_MSG("invalid key type");
+            wxFAIL_MSG(_T("invalid key type"));
     }
 
     if ( previous )
@@ -127,7 +127,7 @@ wxNodeBase::~wxNodeBase()
 
 int wxNodeBase::IndexOf() const
 {
-    wxCHECK_MSG( m_list, wxNOT_FOUND, "node doesn't belong to a list in IndexOf");
+    wxCHECK_MSG( m_list, wxNOT_FOUND, _T("node doesn't belong to a list in IndexOf"));
 
     // It would be more efficient to implement IndexOf() completely inside
     // wxListBase (only traverse the list once), but this is probably a more
@@ -170,7 +170,7 @@ wxListBase::wxListBase(size_t count, void *elements[])
 void wxListBase::DoCopy(const wxListBase& list)
 {
     wxASSERT_MSG( !list.m_destroy,
-                  "copying list which owns it's elements is a bad idea" );
+                  _T("copying list which owns it's elements is a bad idea") );
 
     m_count = list.m_count;
     m_destroy = list.m_destroy;
@@ -217,7 +217,7 @@ wxNodeBase *wxListBase::Append(void *object)
 {
     // all objects in a keyed list should have a key
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
-                 "need a key for the object to append" );
+                 _T("need a key for the object to append") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object);
 
@@ -229,18 +229,18 @@ wxNodeBase *wxListBase::Append(long key, void *object)
     wxCHECK_MSG( (m_keyType == wxKEY_INTEGER) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
                  (wxNodeBase *)NULL,
-                 "can't append object with numeric key to this list" );
+                 _T("can't append object with numeric key to this list") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
     return AppendCommon(node);
 }
 
-wxNodeBase *wxListBase::Append (const char *key, void *object)
+wxNodeBase *wxListBase::Append (const wxChar *key, void *object)
 {
     wxCHECK_MSG( (m_keyType == wxKEY_STRING) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
                  (wxNodeBase *)NULL,
-                 "can't append object with string key to this list" );
+                 _T("can't append object with string key to this list") );
 
     wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
     return AppendCommon(node);
@@ -250,10 +250,10 @@ wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
 {
     // all objects in a keyed list should have a key
     wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
-                 "need a key for the object to insert" );
+                 _T("need a key for the object to insert") );
 
     wxCHECK_MSG( !position || position->m_list == this, (wxNodeBase *)NULL,
-                 "can't insert before a node from another list" );
+                 _T("can't insert before a node from another list") );
 
     // previous and next node for the node being inserted
     wxNodeBase *prev, *next;
@@ -295,7 +295,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
         }
     }
 
-    wxFAIL_MSG( "invalid index in wxListBase::Item" );
+    wxFAIL_MSG( _T("invalid index in wxListBase::Item") );
 
     return (wxNodeBase *)NULL;
 }
@@ -303,7 +303,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
 wxNodeBase *wxListBase::Find(const wxListKey& key) const
 {
     wxASSERT_MSG( m_keyType == key.GetKeyType(),
-                  "this list is not keyed on the type of this key" );
+                  _T("this list is not keyed on the type of this key") );
 
     for ( wxNodeBase *current = GetFirst(); current; current = current->GetNext() )
     {
@@ -356,9 +356,9 @@ void wxListBase::DoDeleteNode(wxNodeBase *node)
 
 wxNodeBase *wxListBase::DetachNode(wxNodeBase *node)
 {
-    wxCHECK_MSG( node, NULL, "detaching NULL wxNodeBase" );
+    wxCHECK_MSG( node, NULL, _T("detaching NULL wxNodeBase") );
     wxCHECK_MSG( node->m_list == this, NULL,
-                 "detaching node which is not from this list" );
+                 _T("detaching node which is not from this list") );
 
     // update the list
     wxNodeBase **prevNext = node->GetPrevious() ? &node->GetPrevious()->m_next
@@ -524,13 +524,13 @@ void wxStringListNode::DeleteData()
     delete [] (char *)GetData();
 }
 
-bool wxStringList::Delete(const char *s)
+bool wxStringList::Delete(const wxChar *s)
 {
     wxStringListNode *current;
 
     for ( current = GetFirst(); current; current = current->GetNext() )
     {
-        if ( strcmp(current->GetData(), s) == 0 )
+        if ( wxStrcmp(current->GetData(), s) == 0 )
         {
             DeleteNode(current);
             return TRUE;
@@ -554,7 +554,7 @@ void wxStringList::DoCopy(const wxStringList& other)
 
 // Variable argument list, terminated by a zero
 // Makes new storage for the strings
-wxStringList::wxStringList (const char *first, ...)
+wxStringList::wxStringList (const wxChar *first, ...)
 {
   if ( !first )
     return;
@@ -562,12 +562,12 @@ wxStringList::wxStringList (const char *first, ...)
   va_list ap;
   va_start(ap, first);
 
-  const char *s = first;
+  const wxChar *s = first;
   for (;;)
   {
       Add(s);
 
-      s = va_arg(ap, const char *);
+      s = va_arg(ap, const wxChar *);
       //    if (s == NULL)
 #ifdef __WXMSW__
       if ((int) s == 0)
@@ -581,13 +581,13 @@ wxStringList::wxStringList (const char *first, ...)
 }
 
 // Only makes new strings if arg is TRUE
-char **wxStringList::ListToArray(bool new_copies) const
+wxChar **wxStringList::ListToArray(bool new_copies) const
 {
-    char **string_array = new char *[GetCount()];
+    wxChar **string_array = new wxChar *[GetCount()];
     wxStringListNode *node = GetFirst();
     for (size_t i = 0; i < GetCount(); i++)
     {
-        char *s = node->GetData();
+        wxChar *s = node->GetData();
         if ( new_copies )
             string_array[i] = copystring(s);
         else
@@ -599,12 +599,12 @@ char **wxStringList::ListToArray(bool new_copies) const
 }
 
 // Checks whether s is a member of the list
-bool wxStringList::Member(const char *s) const
+bool wxStringList::Member(const wxChar *s) const
 {
     for ( wxStringListNode *node = GetFirst(); node; node = node->GetNext() )
     {
-        const char *s1 = node->GetData();
-        if (s == s1 || strcmp (s, s1) == 0)
+        const wxChar *s1 = node->GetData();
+        if (s == s1 || wxStrcmp (s, s1) == 0)
             return TRUE;
     }
 
@@ -614,17 +614,17 @@ bool wxStringList::Member(const char *s) const
 static int
 wx_comparestrings(const void *arg1, const void *arg2)
 {
-  char **s1 = (char **) arg1;
-  char **s2 = (char **) arg2;
+  wxChar **s1 = (wxChar **) arg1;
+  wxChar **s2 = (wxChar **) arg2;
 
-  return strcmp (*s1, *s2);
+  return wxStrcmp (*s1, *s2);
 }
 
 // Sort a list of strings - deallocates old nodes, allocates new
 void wxStringList::Sort()
 {
     size_t N = GetCount();
-    char **array = new char *[N];
+    wxChar **array = new wxChar *[N];
     wxStringListNode *node;
 
     size_t i = 0;
@@ -633,7 +633,7 @@ void wxStringList::Sort()
         array[i++] = node->GetData();
     }
 
-    qsort (array, N, sizeof (char *), wx_comparestrings);
+    qsort (array, N, sizeof (wxChar *), wx_comparestrings);
 
     i = 0;
     for ( node = GetFirst(); node; node = node->GetNext() )

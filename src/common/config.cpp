@@ -124,7 +124,7 @@ bool wxConfigBase::Read(const wxString& key, double* val) const
     wxString str;
     if (Read(key, & str))
     {
-        *val = atof(str);
+        *val = wxAtof(str);
         return TRUE;
     }
     else
@@ -187,7 +187,7 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 bool wxConfigBase::Write(const wxString& key, double val)
 {
     wxString str;
-    str.Printf("%f", val);
+    str.Printf(_T("%f"), val);
     return Write(key, str);
 }
 
@@ -314,7 +314,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
 
-          const char *pszValue = getenv(strVarName);
+          const wxChar *pszValue = wxGetenv(strVarName);
           if ( pszValue != NULL ) {
             strResult += pszValue;
           }
@@ -332,7 +332,7 @@ wxString wxExpandEnvVars(const wxString& str)
           if ( bracket != Bracket_None ) {
             if ( m == str.Len() || str[m] != (char)bracket ) {
               wxLogWarning(_("Environment variables expansion failed: "
-                             "missing '%c' at position %d in '%s'."),
+			     "missing '%c' at position %d in '%s'."),
                            (char)bracket, m + 1, str.c_str());
             }
             else {

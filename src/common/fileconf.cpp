@@ -90,17 +90,17 @@ wxString wxFileConfig::GetGlobalDir()
   wxString strDir;
 
   #ifdef __UNIX__
-    strDir = "/etc/";
+    strDir = _T("/etc/");
   #elif defined(__WXSTUBS__)
-    wxASSERT_MSG( FALSE, "TODO" ) ;
+    wxASSERT_MSG( FALSE, _T("TODO") ) ;
   #elif defined(__WXMAC__)
-    wxASSERT_MSG( FALSE, "TODO" ) ;
+    wxASSERT_MSG( FALSE, _T("TODO") ) ;
   #else // Windows
-    char szWinDir[MAX_PATH];
+    wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
 
     strDir = szWinDir;
-    strDir << '\\';
+    strDir << _T('\\');
   #endif // Unix/Windows
 
   return strDir;
@@ -113,42 +113,42 @@ wxString wxFileConfig::GetLocalDir()
   wxGetHomeDir(&strDir);
 
 #ifdef  __UNIX__
-  if (strDir.Last() != '/') strDir << '/';
+  if (strDir.Last() != _T('/')) strDir << _T('/');
 #else
-  if (strDir.Last() != '\\') strDir << '\\';
+  if (strDir.Last() != _T('\\')) strDir << _T('\\');
 #endif
 
   return strDir;
 }
 
-wxString wxFileConfig::GetGlobalFileName(const char *szFile)
+wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
 {
   wxString str = GetGlobalDir();
   str << szFile;
 
-  if ( strchr(szFile, '.') == NULL )
+  if ( wxStrchr(szFile, _T('.')) == NULL )
   #ifdef  __UNIX__
-    str << ".conf";
+    str << _T(".conf");
   #else   // Windows
-    str << ".ini";
+    str << _T(".ini");
   #endif  // UNIX/Win
 
   return str;
 }
 
-wxString wxFileConfig::GetLocalFileName(const char *szFile)
+wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 {
   wxString str = GetLocalDir();
 
   #ifdef  __UNIX__
-    str << '.';
+    str << _T('.');
   #endif
 
   str << szFile;
 
   #ifdef __WXMSW__
-    if ( strchr(szFile, '.') == NULL )
-      str << ".ini";
+    if ( wxStrchr(szFile, _T('.')) == NULL )
+      str << _T(".ini");
   #endif
 
   return str;
@@ -265,8 +265,8 @@ wxFileConfig::~wxFileConfig()
 
 void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 {
-  const char *pStart;
-  const char *pEnd;
+  const wxChar *pStart;
+  const wxChar *pEnd;
   wxString strLine;
 
   size_t nLineCount = file.GetLineCount();
@@ -278,22 +278,22 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       LineListAppend(strLine);
 
     // skip leading spaces
-    for ( pStart = strLine; isspace(*pStart); pStart++ )
+    for ( pStart = strLine; wxIsspace(*pStart); pStart++ )
       ;
 
     // skip blank/comment lines
-    if ( *pStart == '\0'|| *pStart == ';' || *pStart == '#' )
+    if ( *pStart == _T('\0')|| *pStart == _T(';') || *pStart == _T('#') )
       continue;
 
-    if ( *pStart == '[' ) {          // a new group
+    if ( *pStart == _T('[') ) {          // a new group
       pEnd = pStart;
 
-      while ( *++pEnd != ']' ) {
-        if ( *pEnd == '\n' || *pEnd == '\0' )
+      while ( *++pEnd != _T(']') ) {
+        if ( *pEnd == _T('\n') || *pEnd == _T('\0') )
             break;
       }
 
-      if ( *pEnd != ']' ) {
+      if ( *pEnd != _T(']') ) {
         wxLogError(_("file '%s': unexpected character %c at line %d."),
                    file.GetName(), *pEnd, n + 1);
         continue; // skip this line
@@ -313,15 +313,15 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 
       // check that there is nothing except comments left on this line
       bool bCont = TRUE;
-      while ( *++pEnd != '\0' && bCont ) {
+      while ( *++pEnd != _T('\0') && bCont ) {
         switch ( *pEnd ) {
-          case '#':
-          case ';':
+          case _T('#'):
+          case _T(';'):
             bCont = FALSE;
             break;
 
-          case ' ':
-          case '\t':
+          case _T(' '):
+          case _T('\t'):
             // ignore whitespace ('\n' impossible here)
             break;
 
@@ -334,9 +334,9 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       }
     }
     else {                        // a key
-      const char *pEnd = pStart;
-      while ( !isspace(*pEnd) ) {
-        if ( *pEnd == '\\' ) {
+      const wxChar *pEnd = pStart;
+      while ( !wxIsspace(*pEnd) ) {
+        if ( *pEnd == _T('\\') ) {
           // next character may be space or not - still take it because it's
           // quoted
           pEnd++;
@@ -351,7 +351,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       while ( isspace(*pEnd) )
         pEnd++;
 
-      if ( *pEnd++ != '=' ) {
+      if ( *pEnd++ != _T('=') ) {
         wxLogError(_("file '%s', line %d: '=' expected."),
                    file.GetName(), n + 1);
       }
@@ -389,7 +389,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         }
 
         // skip whitespace
-        while ( isspace(*pEnd) )
+        while ( wxIsspace(*pEnd) )
           pEnd++;
 
         pEntry->SetValue(FilterInValue(pEnd), FALSE /* read from file */);
@@ -574,7 +574,7 @@ bool wxFileConfig::Read(const wxString& key, long *pl) const
 {
   wxString str;
   if ( Read(key, & str) ) {
-    *pl = atol(str);
+    *pl = wxAtol(str);
     return TRUE;
   }
   else {
@@ -589,7 +589,7 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
   wxString strName = path.Name();
   if ( strName.IsEmpty() ) {
     // setting the value of a group is an error
-    wxASSERT_MSG( IsEmpty(szValue), "can't set value of a group!" );
+    wxASSERT_MSG( wxIsEmpty(szValue), _T("can't set value of a group!") );
 
     // ... except if it's empty in which case it's a way to force it's creation
     m_pCurrentGroup->SetDirty();
@@ -623,7 +623,7 @@ bool wxFileConfig::Write(const wxString& key, long lValue)
 {
   // ltoa() is not ANSI :-(
   wxString buf;
-  buf.Printf("%ld", lValue);
+  buf.Printf(_T("%ld"), lValue);
   return Write(key, buf);
 }
 
@@ -708,7 +708,7 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
   if ( bGroupIfEmptyAlso && m_pCurrentGroup->IsEmpty() ) {
     if ( m_pCurrentGroup != m_pRootGroup ) {
       ConfigGroup *pGroup = m_pCurrentGroup;
-      SetPath("..");  // changes m_pCurrentGroup!
+      SetPath(_T(".."));  // changes m_pCurrentGroup!
       m_pCurrentGroup->DeleteSubgroupByName(pGroup->Name());
     }
     //else: never delete the root group
@@ -728,12 +728,10 @@ bool wxFileConfig::DeleteAll()
 {
   CleanUp();
 
-  const char *szFile = m_strLocalFile;
+  if ( remove(m_strLocalFile.fn_str()) == -1 )
+    wxLogSysError(_("can't delete user configuration file '%s'"), m_strLocalFile.c_str());
 
-  if ( remove(szFile) == -1 )
-    wxLogSysError(_("can't delete user configuration file '%s'"), szFile);
-
-  m_strLocalFile = m_strGlobalFile = "";
+  m_strLocalFile = m_strGlobalFile = _T("");
   Init();
 
   return TRUE;
@@ -905,7 +903,7 @@ LineList *ConfigGroup::GetGroupLine()
     // this group wasn't present in local config file, add it now
     if ( pParent != NULL ) {
       wxString strFullName;
-      strFullName << "[" << (GetFullName().c_str() + 1) << "]"; // +1: no '/'
+      strFullName << _T("[") << (GetFullName().c_str() + 1) << _T("]"); // +1: no '/'
       m_pLine = m_pConfig->LineListInsert(strFullName,
                                           pParent->GetLastGroupLine());
       pParent->SetLastGroup(this);  // we're surely after all the others
@@ -963,7 +961,7 @@ void ConfigGroup::Rename(const wxString& newName)
 
     LineList *line = GetGroupLine();
     wxString strFullName;
-    strFullName << "[" << (GetFullName().c_str() + 1) << "]"; // +1: no '/'
+    strFullName << _T("[") << (GetFullName().c_str() + 1) << _T("]"); // +1: no '/'
     line->SetText(strFullName);
 
     SetDirty();
@@ -974,7 +972,7 @@ wxString ConfigGroup::GetFullName() const
   if ( Parent() )
     return Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
   else
-    return "";
+    return _T("");
 }
 
 // ----------------------------------------------------------------------------
@@ -983,7 +981,7 @@ wxString ConfigGroup::GetFullName() const
 
 // use binary search because the array is sorted
 ConfigEntry *
-ConfigGroup::FindEntry(const char *szName) const
+ConfigGroup::FindEntry(const wxChar *szName) const
 {
   size_t i,
        lo = 0,
@@ -996,9 +994,9 @@ ConfigGroup::FindEntry(const char *szName) const
     pEntry = m_aEntries[i];
 
     #if wxCONFIG_CASE_SENSITIVE
-      res = strcmp(pEntry->Name(), szName);
+      res = wxStrcmp(pEntry->Name(), szName);
     #else
-      res = Stricmp(pEntry->Name(), szName);
+      res = wxStricmp(pEntry->Name(), szName);
     #endif
 
     if ( res > 0 )
@@ -1013,7 +1011,7 @@ ConfigGroup::FindEntry(const char *szName) const
 }
 
 ConfigGroup *
-ConfigGroup::FindSubgroup(const char *szName) const
+ConfigGroup::FindSubgroup(const wxChar *szName) const
 {
   size_t i,
        lo = 0,
@@ -1026,9 +1024,9 @@ ConfigGroup::FindSubgroup(const char *szName) const
     pGroup = m_aSubgroups[i];
 
     #if wxCONFIG_CASE_SENSITIVE
-      res = strcmp(pGroup->Name(), szName);
+      res = wxStrcmp(pGroup->Name(), szName);
     #else
-      res = Stricmp(pGroup->Name(), szName);
+      res = wxStricmp(pGroup->Name(), szName);
     #endif
 
     if ( res > 0 )
@@ -1081,7 +1079,7 @@ ConfigGroup::AddSubgroup(const wxString& strName)
   delete several of them.
  */
 
-bool ConfigGroup::DeleteSubgroupByName(const char *szName)
+bool ConfigGroup::DeleteSubgroupByName(const wxChar *szName)
 {
   return DeleteSubgroup(FindSubgroup(szName));
 }
@@ -1153,7 +1151,7 @@ bool ConfigGroup::DeleteSubgroup(ConfigGroup *pGroup)
   return TRUE;
 }
 
-bool ConfigGroup::DeleteEntry(const char *szName)
+bool ConfigGroup::DeleteEntry(const wxChar *szName)
 {
   ConfigEntry *pEntry = FindEntry(szName);
   wxCHECK( pEntry != NULL, FALSE );  // deleting non existing item?
@@ -1272,7 +1270,7 @@ void ConfigEntry::SetValue(const wxString& strValue, bool bUser)
   if ( bUser ) {
     wxString strVal = FilterOutValue(strValue);
     wxString strLine;
-    strLine << m_strName << " = " << strVal;
+    strLine << m_strName << _T(" = ") << strVal;
 
     if ( m_pLine != NULL ) {
       // entry was read from the local config file, just modify the line
@@ -1309,9 +1307,9 @@ int CompareEntries(ConfigEntry *p1,
                    ConfigEntry *p2)
 {
   #if wxCONFIG_CASE_SENSITIVE
-    return strcmp(p1->Name(), p2->Name());
+    return wxStrcmp(p1->Name(), p2->Name());
   #else
-    return Stricmp(p1->Name(), p2->Name());
+    return wxStricmp(p1->Name(), p2->Name());
   #endif
 }
 
@@ -1319,9 +1317,9 @@ int CompareGroups(ConfigGroup *p1,
                   ConfigGroup *p2)
 {
   #if wxCONFIG_CASE_SENSITIVE
-    return strcmp(p1->Name(), p2->Name());
+    return wxStrcmp(p1->Name(), p2->Name());
   #else
-    return Stricmp(p1->Name(), p2->Name());
+    return wxStricmp(p1->Name(), p2->Name());
   #endif
 }
 
@@ -1338,31 +1336,31 @@ static wxString FilterInValue(const wxString& str)
   bool bQuoted = !str.IsEmpty() && str[0] == '"';
 
   for ( size_t n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
-    if ( str[n] == '\\' ) {
+    if ( str[n] == _T('\\') ) {
       switch ( str[++n] ) {
-        case 'n':
-          strResult += '\n';
+        case _T('n'):
+          strResult += _T('\n');
           break;
 
-        case 'r':
-          strResult += '\r';
+        case _T('r'):
+          strResult += _T('\r');
           break;
 
-        case 't':
-          strResult += '\t';
+        case _T('t'):
+          strResult += _T('\t');
           break;
 
-        case '\\':
-          strResult += '\\';
+        case _T('\\'):
+          strResult += _T('\\');
           break;
 
-        case '"':
-          strResult += '"';
+        case _T('"'):
+          strResult += _T('"');
           break;
       }
     }
     else {
-      if ( str[n] != '"' || !bQuoted )
+      if ( str[n] != _T('"') || !bQuoted )
         strResult += str[n];
       else if ( n != str.Len() - 1 ) {
         wxLogWarning(_("unexpected \" at position %d in '%s'."),
@@ -1385,33 +1383,33 @@ static wxString FilterOutValue(const wxString& str)
   strResult.Alloc(str.Len());
 
   // quoting is necessary to preserve spaces in the beginning of the string
-  bool bQuote = isspace(str[0]) || str[0] == '"';
+  bool bQuote = wxIsspace(str[0]) || str[0] == _T('"');
 
   if ( bQuote )
-    strResult += '"';
+    strResult += _T('"');
 
-  char c;
+  wxChar c;
   for ( size_t n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
-      case '\n':
-        c = 'n';
+      case _T('\n'):
+        c = _T('n');
         break;
 
-      case '\r':
-        c = 'r';
+      case _T('\r'):
+        c = _T('r');
         break;
 
-      case '\t':
-        c = 't';
+      case _T('\t'):
+        c = _T('t');
         break;
 
-      case '\\':
-        c = '\\';
+      case _T('\\'):
+        c = _T('\\');
         break;
 
-      case '"':
+      case _T('"'):
         if ( bQuote ) {
-          c = '"';
+          c = _T('"');
           break;
         }
         //else: fall through
@@ -1422,11 +1420,11 @@ static wxString FilterOutValue(const wxString& str)
     }
 
     // we get here only for special characters
-    strResult << '\\' << c;
+    strResult << _T('\\') << c;
   }
 
   if ( bQuote )
-    strResult += '"';
+    strResult += _T('"');
 
   return strResult;
 }
@@ -1437,8 +1435,8 @@ static wxString FilterInEntryName(const wxString& str)
   wxString strResult;
   strResult.Alloc(str.Len());
 
-  for ( const char *pc = str.c_str(); *pc != '\0'; pc++ ) {
-    if ( *pc == '\\' )
+  for ( const wxChar *pc = str.c_str(); *pc != '\0'; pc++ ) {
+    if ( *pc == _T('\\') )
       pc++;
 
     strResult += *pc;
@@ -1453,15 +1451,15 @@ static wxString FilterOutEntryName(const wxString& str)
   wxString strResult;
   strResult.Alloc(str.Len());
 
-  for ( const char *pc = str.c_str(); *pc != '\0'; pc++ ) {
-    char c = *pc;
+  for ( const wxChar *pc = str.c_str(); *pc != _T('\0'); pc++ ) {
+    wxChar c = *pc;
 
     // we explicitly allow some of "safe" chars and 8bit ASCII characters
     // which will probably never have special meaning
     // NB: note that wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR
     //     should *not* be quoted
-    if ( !isalnum(c) && !strchr("@_/-!.*%", c) && ((c & 0x80) == 0) )
-      strResult += '\\';
+    if ( !wxIsalnum(c) && !wxStrchr(_T("@_/-!.*%"), c) && ((c & 0x80) == 0) )
+      strResult += _T('\\');
 
     strResult += c;
   }

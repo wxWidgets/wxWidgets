@@ -233,7 +233,7 @@ public:
                 break;
         }
 
-        wxASSERT_MSG( n == pos, "invalid position in MailCapEntry::Insert" );
+        wxASSERT_MSG( n == pos, _T("invalid position in MailCapEntry::Insert") );
 
         m_next = cur->m_next;
         cur->m_next = this;
@@ -241,7 +241,7 @@ public:
         // append this element to the list
     void Append(MailCapEntry *next)
     {
-        wxCHECK_RET( next != NULL, "Append()ing to what?" );
+        wxCHECK_RET( next != NULL, _T("Append()ing to what?") );
 
         // FIXME slooow...
         MailCapEntry *cur;
@@ -250,7 +250,7 @@ public:
 
         cur->m_next = this;
 
-        wxASSERT_MSG( !m_next, "Append()ing element already in the list?" );
+        wxASSERT_MSG( !m_next, _T("Append()ing element already in the list?") );
     }
 
 private:
@@ -349,57 +349,57 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     bool hasFilename = FALSE;
 
     wxString str;
-    for ( const char *pc = command.c_str(); *pc != '\0'; pc++ ) {
-        if ( *pc == '%' ) {
+    for ( const wxChar *pc = command.c_str(); *pc != _T('\0'); pc++ ) {
+        if ( *pc == _T('%') ) {
             switch ( *++pc ) {
-                case 's':
+                case _T('s'):
                     // '%s' expands into file name (quoted because it might
                     // contain spaces) - except if there are already quotes
                     // there because otherwise some programs may get confused
                     // by double double quotes
 #if 0
-                    if ( *(pc - 2) == '"' )
+                    if ( *(pc - 2) == _T('"') )
                         str << params.GetFileName();
                     else
-                        str << '"' << params.GetFileName() << '"';
+                        str << _T('"') << params.GetFileName() << _T('"');
 #endif
                     str << params.GetFileName();
                     hasFilename = TRUE;
                     break;
 
-                case 't':
+                case _T('t'):
                     // '%t' expands into MIME type (quote it too just to be
                     // consistent)
-                    str << '\'' << params.GetMimeType() << '\'';
+                    str << _T('\'') << params.GetMimeType() << _T('\'');
                     break;
 
-                case '{':
+                case _T('{'):
                     {
-                        const char *pEnd = strchr(pc, '}');
+                        const wxChar *pEnd = wxStrchr(pc, _T('}'));
                         if ( pEnd == NULL ) {
                             wxString mimetype;
                             wxLogWarning(_("Unmatched '{' in an entry for "
                                            "mime type %s."),
                                          params.GetMimeType().c_str());
-                            str << "%{";
+                            str << _T("%{");
                         }
                         else {
                             wxString param(pc + 1, pEnd - pc - 1);
-                            str << '\'' << params.GetParamValue(param) << '\'';
+                            str << _T('\'') << params.GetParamValue(param) << _T('\'');
                             pc = pEnd;
                         }
                     }
                     break;
 
-                case 'n':
-                case 'F':
+                case _T('n'):
+                case _T('F'):
                     // TODO %n is the number of parts, %F is an array containing
                     //      the names of temp files these parts were written to
                     //      and their mime types.
                     break;
 
                 default:
-                    wxLogDebug("Unknown field %%%c in command '%s'.",
+                    wxLogDebug(_T("Unknown field %%%c in command '%s'."),
                                *pc, command.c_str());
                     str << *pc;
             }
@@ -412,7 +412,7 @@ wxString wxFileType::ExpandCommand(const wxString& command,
     // metamail(1) man page states that if the mailcap entry doesn't have '%s'
     // the program will accept the data on stdin: so give it to it!
     if ( !hasFilename && !str.IsEmpty() ) {
-        str << " < '" << params.GetFileName() << '\'';
+        str << _T(" < '") << params.GetFileName() << _T('\'');
     }
 
     return str;
@@ -469,16 +469,16 @@ wxFileType::GetPrintCommand(wxString *printCmd,
 bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
                                   const wxString& wildcard)
 {
-    wxASSERT_MSG( mimeType.Find('*') == wxNOT_FOUND,
-                  "first MIME type can't contain wildcards" );
+    wxASSERT_MSG( mimeType.Find(_T('*')) == wxNOT_FOUND,
+                  _T("first MIME type can't contain wildcards") );
 
     // all comparaisons are case insensitive (2nd arg of IsSameAs() is FALSE)
-    if ( wildcard.BeforeFirst('/').IsSameAs(mimeType.BeforeFirst('/'), FALSE) )
+    if ( wildcard.BeforeFirst(_T('/')).IsSameAs(mimeType.BeforeFirst(_T('/')), FALSE) )
     {
-        wxString strSubtype = wildcard.AfterFirst('/');
+        wxString strSubtype = wildcard.AfterFirst(_T('/'));
 
-        if ( strSubtype == '*' ||
-             strSubtype.IsSameAs(mimeType.AfterFirst('/'), FALSE) )
+        if ( strSubtype == _T('*') ||
+             strSubtype.IsSameAs(mimeType.AfterFirst(_T('/')), FALSE) )
         {
             // matches (either exactly or it's a wildcard)
             return TRUE;
@@ -526,27 +526,27 @@ bool wxMimeTypesManager::ReadMimeTypes(const wxString& filename)
 
 #ifdef __WXMSW__
 
-bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
+bool wxFileTypeImpl::GetCommand(wxString *command, const wxChar *verb) const
 {
     // suppress possible error messages
     wxLogNull nolog;
     wxString strKey;
-    strKey << m_strFileType << "\\shell\\" << verb << "\\command";
+    strKey << m_strFileType << _T("\\shell\\") << verb << _T("\\command");
     wxRegKey key(wxRegKey::HKCR, strKey);
 
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue("", *command) ) {
+        if ( key.QueryValue(_T(""), *command) ) {
             // transform it from '%1' to '%s' style format string
             // NB: we don't make any attempt to verify that the string is valid,
             //     i.e. doesn't contain %2, or second %1 or .... But we do make
             //     sure that we return a string with _exactly_ one '%s'!
             size_t len = command->Len();
             for ( size_t n = 0; n < len; n++ ) {
-                if ( command->GetChar(n) == '%' &&
-                     (n + 1 < len) && command->GetChar(n + 1) == '1' ) {
+                if ( command->GetChar(n) == _T('%') &&
+                     (n + 1 < len) && command->GetChar(n + 1) == _T('1') ) {
                     // replace it with '%s'
-                    command->SetChar(n + 1, 's');
+                    command->SetChar(n + 1, _T('s'));
 
                     return TRUE;
                 }
@@ -554,7 +554,7 @@ bool wxFileTypeImpl::GetCommand(wxString *command, const char *verb) const
 
             // we didn't find any '%1'!
             // HACK: append the filename at the end, hope that it will do
-            *command << " %s";
+            *command << _T(" %s");
 
             return TRUE;
         }
@@ -585,8 +585,8 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 {
     // suppress possible error messages
     wxLogNull nolog;
-    wxRegKey key(wxRegKey::HKCR, /*m_strFileType*/ "." + m_ext);
-    if ( key.Open() && key.QueryValue("Content Type", *mimeType) ) {
+    wxRegKey key(wxRegKey::HKCR, /*m_strFileType*/ _T(".") + m_ext);
+    if ( key.Open() && key.QueryValue(_T("Content Type"), *mimeType) ) {
         return TRUE;
     }
     else {
@@ -597,7 +597,7 @@ bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const
 bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
 {
     wxString strIconKey;
-    strIconKey << m_strFileType << "\\DefaultIcon";
+    strIconKey << m_strFileType << _T("\\DefaultIcon");
 
     // suppress possible error messages
     wxLogNull nolog;
@@ -606,18 +606,18 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
     if ( key.Open() ) {
         wxString strIcon;
         // it's the default value of the key
-        if ( key.QueryValue("", strIcon) ) {
+        if ( key.QueryValue(_T(""), strIcon) ) {
             // the format is the following: <full path to file>, <icon index>
             // NB: icon index may be negative as well as positive and the full
             //     path may contain the environment variables inside '%'
-            wxString strFullPath = strIcon.BeforeLast(','),
-            strIndex = strIcon.AfterLast(',');
+            wxString strFullPath = strIcon.BeforeLast(_T(',')),
+            strIndex = strIcon.AfterLast(_T(','));
 
             // index may be omitted, in which case BeforeLast(',') is empty and
             // AfterLast(',') is the whole string
             if ( strFullPath.IsEmpty() ) {
                 strFullPath = strIndex;
-                strIndex = "0";
+                strIndex = _T("0");
             }
 
             wxString strExpPath = wxExpandEnvVars(strFullPath);
@@ -627,7 +627,7 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
             switch ( (int)hIcon ) {
                 case 0: // means no icons were found
                 case 1: // means no such file or it wasn't a DLL/EXE/OCX/ICO/...
-                    wxLogDebug("incorrect registry entry '%s': no such icon.",
+                    wxLogDebug(_T("incorrect registry entry '%s': no such icon."),
                                key.GetName().c_str());
                     break;
 
@@ -650,7 +650,7 @@ bool wxFileTypeImpl::GetDescription(wxString *desc) const
 
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue("", *desc) ) {
+        if ( key.QueryValue(_T(""), *desc) ) {
             return TRUE;
         }
     }
@@ -664,8 +664,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
     // add the leading point if necessary
     wxString str;
-    if ( ext[0u] != '.' ) {
-        str = '.';
+    if ( ext[0u] != _T('.') ) {
+        str = _T('.');
     }
     str << ext;
 
@@ -676,7 +676,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     wxRegKey key(wxRegKey::HKCR, str);
     if ( key.Open() ) {
         // it's the default value of the key
-        if ( key.QueryValue("", strFileType) ) {
+        if ( key.QueryValue(_T(""), strFileType) ) {
             // create the new wxFileType object
             wxFileType *fileType = new wxFileType;
             fileType->m_impl->SetFileType(strFileType);
@@ -696,7 +696,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 {
     // HACK I don't know of any official documentation which mentions this
     //      location, but as a matter of fact IE uses it, so why not we?
-    static const char *szMimeDbase = "MIME\\Database\\Content Type\\";
+    static const wxChar *szMimeDbase = _T("MIME\\Database\\Content Type\\");
 
     wxString strKey = szMimeDbase;
     strKey << mimeType;
@@ -707,7 +707,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
     wxString ext;
     wxRegKey key(wxRegKey::HKCR, strKey);
     if ( key.Open() ) {
-        if ( key.QueryValue("Extension", ext) ) {
+        if ( key.QueryValue(_T("Extension"), ext) ) {
             return GetFileTypeFromExtension(ext);
         }
     }
@@ -727,14 +727,14 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
         // notice that an empty command would always succeed (it's ok)
         command = wxFileType::ExpandCommand(entry->GetTestCmd(), params);
 
-        if ( command.IsEmpty() || (system(command) == 0) ) {
+        if ( command.IsEmpty() || (wxSystem(command) == 0) ) {
             // ok, passed
-            wxLogTrace("Test '%s' for mime type '%s' succeeded.",
+            wxLogTrace(_T("Test '%s' for mime type '%s' succeeded."),
                        command.c_str(), params.GetMimeType().c_str());
             break;
         }
         else {
-            wxLogTrace("Test '%s' for mime type '%s' failed.",
+            wxLogTrace(_T("Test '%s' for mime type '%s' failed."),
                        command.c_str(), params.GetMimeType().c_str());
         }
 
@@ -772,8 +772,8 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 
     // one extension in the space or comma delimitid list
     wxString strExt;
-    for ( const char *p = strExtensions; ; p++ ) {
-        if ( *p == ' ' || *p == ',' || *p == '\0' ) {
+    for ( const wxChar *p = strExtensions; ; p++ ) {
+        if ( *p == _T(' ') || *p == _T(',') || *p == _T('\0') ) {
             if ( !strExt.IsEmpty() ) {
                 extensions.Add(strExt);
                 strExt.Empty();
@@ -781,13 +781,13 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
             //else: repeated spaces (shouldn't happen, but it's not that
             //      important if it does happen)
 
-            if ( *p == '\0' )
+            if ( *p == _T('\0') )
                 break;
         }
-        else if ( *p == '.' ) {
+        else if ( *p == _T('.') ) {
             // remove the dot from extension (but only if it's the first char)
             if ( !strExt.IsEmpty() ) {
-                strExt += '.';
+                strExt += _T('.');
             }
             //else: no, don't append it
         }
@@ -804,40 +804,40 @@ wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 {
     // directories where we look for mailcap and mime.types by default
     // (taken from metamail(1) sources)
-    static const char *aStandardLocations[] =
+    static const wxChar *aStandardLocations[] =
     {
-        "/etc",
-        "/usr/etc",
-        "/usr/local/etc",
-        "/etc/mail",
-        "/usr/public/lib"
+        _T("/etc"),
+        _T("/usr/etc"),
+        _T("/usr/local/etc"),
+        _T("/etc/mail"),
+        _T("/usr/public/lib")
     };
 
     // first read the system wide file(s)
     for ( size_t n = 0; n < WXSIZEOF(aStandardLocations); n++ ) {
         wxString dir = aStandardLocations[n];
 
-        wxString file = dir + "/mailcap";
+        wxString file = dir + _T("/mailcap");
         if ( wxFile::Exists(file) ) {
             ReadMailcap(file);
         }
 
-        file = dir + "/mime.types";
+        file = dir + _T("/mime.types");
         if ( wxFile::Exists(file) ) {
             ReadMimeTypes(file);
         }
     }
 
-    wxString strHome = getenv("HOME");
+    wxString strHome = wxGetenv(_T("HOME"));
 
     // and now the users mailcap
-    wxString strUserMailcap = strHome + "/.mailcap";
+    wxString strUserMailcap = strHome + _T("/.mailcap");
     if ( wxFile::Exists(strUserMailcap) ) {
         ReadMailcap(strUserMailcap);
     }
 
     // read the users mime.types
-    wxString strUserMimeTypes = strHome + "/.mime.types";
+    wxString strUserMimeTypes = strHome + _T("/.mime.types");
     if ( wxFile::Exists(strUserMimeTypes) ) {
         ReadMimeTypes(strUserMimeTypes);
     }
@@ -850,8 +850,8 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
     for ( size_t n = 0; n < count; n++ ) {
         wxString extensions = m_aExtensions[n];
         while ( !extensions.IsEmpty() ) {
-            wxString field = extensions.BeforeFirst(' ');
-            extensions = extensions.AfterFirst(' ');
+            wxString field = extensions.BeforeFirst(_T(' '));
+            extensions = extensions.AfterFirst(_T(' '));
 
             // consider extensions as not being case-sensitive
             if ( field.IsSameAs(ext, FALSE /* no case */) ) {
@@ -881,12 +881,12 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
         // then try to find "text/*" as match for "text/plain" (for example)
         // NB: if mimeType doesn't contain '/' at all, BeforeFirst() will return
         //     the whole string - ok.
-        wxString strCategory = mimetype.BeforeFirst('/');
+        wxString strCategory = mimetype.BeforeFirst(_T('/'));
 
         size_t nCount = m_aTypes.Count();
         for ( size_t n = 0; n < nCount; n++ ) {
-            if ( (m_aTypes[n].BeforeFirst('/') == strCategory ) &&
-                 m_aTypes[n].AfterFirst('/') == "*" ) {
+            if ( (m_aTypes[n].BeforeFirst(_T('/')) == strCategory ) &&
+                 m_aTypes[n].AfterFirst(_T('/')) == _T("*") ) {
                     index = n;
                     break;
             }
@@ -907,7 +907,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
 
 bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 {
-    wxLogTrace("--- Parsing mime.types file '%s' ---", strFileName.c_str());
+    wxLogTrace(_T("--- Parsing mime.types file '%s' ---"), strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -917,7 +917,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
     wxString strMimeType, strDesc, strExtensions;
 
     size_t nLineCount = file.GetLineCount();
-    const char *pc = NULL;
+    const wxChar *pc = NULL;
     for ( size_t nLine = 0; nLine < nLineCount; nLine++ ) {
         if ( pc == NULL ) {
             // now we're at the start of the line
@@ -929,29 +929,29 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         }
 
         // skip whitespace
-        while ( isspace(*pc) )
+        while ( wxIsspace(*pc) )
             pc++;
 
         // comment?
-        if ( *pc == '#' ) {
+        if ( *pc == _T('#') ) {
             // skip the whole line
             pc = NULL;
             continue;
         }
 
         // detect file format
-        const char *pEqualSign = strchr(pc, '=');
+        const wxChar *pEqualSign = wxStrchr(pc, _T('='));
         if ( pEqualSign == NULL ) {
             // brief format
             // ------------
 
             // first field is mime type
-            for ( strMimeType.Empty(); !isspace(*pc) && *pc != '\0'; pc++ ) {
+            for ( strMimeType.Empty(); !wxIsspace(*pc) && *pc != _T('\0'); pc++ ) {
                 strMimeType += *pc;
             }
 
             // skip whitespace
-            while ( isspace(*pc) )
+            while ( wxIsspace(*pc) )
                 pc++;
 
             // take all the rest of the string
@@ -968,13 +968,13 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             wxString strLHS(pc, pEqualSign - pc);
 
             // eat whitespace
-            for ( pc = pEqualSign + 1; isspace(*pc); pc++ )
+            for ( pc = pEqualSign + 1; wxIsspace(*pc); pc++ )
                 ;
 
-            const char *pEnd;
-            if ( *pc == '"' ) {
+            const wxChar *pEnd;
+            if ( *pc == _T('"') ) {
                 // the string is quoted and ends at the matching quote
-                pEnd = strchr(++pc, '"');
+                pEnd = wxStrchr(++pc, _T('"'));
                 if ( pEnd == NULL ) {
                     wxLogWarning(_("Mime.types file %s, line %d: unterminated "
                                    "quoted string."),
@@ -983,7 +983,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             }
             else {
                 // unquoted string ends at the first space
-                for ( pEnd = pc; !isspace(*pEnd); pEnd++ )
+                for ( pEnd = pc; !wxIsspace(*pEnd); pEnd++ )
                     ;
             }
 
@@ -991,30 +991,30 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             wxString strRHS(pc, pEnd - pc);
 
             // check what follows this entry
-            if ( *pEnd == '"' ) {
+            if ( *pEnd == _T('"') ) {
                 // skip this quote
                 pEnd++;
             }
 
-            for ( pc = pEnd; isspace(*pc); pc++ )
+            for ( pc = pEnd; wxIsspace(*pc); pc++ )
                 ;
 
             // if there is something left, it may be either a '\\' to continue
             // the line or the next field of the same entry
-            bool entryEnded = *pc == '\0',
+            bool entryEnded = *pc == _T('\0'),
                  nextFieldOnSameLine = FALSE;
             if ( !entryEnded ) {
-                nextFieldOnSameLine = ((*pc != '\\') || (pc[1] != '\0'));
+                nextFieldOnSameLine = ((*pc != _T('\\')) || (pc[1] != _T('\0')));
             }
 
             // now see what we got
-            if ( strLHS == "type" ) {
+            if ( strLHS == _T("type") ) {
                 strMimeType = strRHS;
             }
-            else if ( strLHS == "desc" ) {
+            else if ( strLHS == _T("desc") ) {
                 strDesc = strRHS;
             }
-            else if ( strLHS == "exts" ) {
+            else if ( strLHS == _T("exts") ) {
                 strExtensions = strRHS;
             }
             else {
@@ -1037,10 +1037,10 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
         // although it doesn't seem to be covered by RFCs, some programs
         // (notably Netscape) create their entries with several comma
         // separated extensions (RFC mention the spaces only)
-        strExtensions.Replace(",", " ");
+        strExtensions.Replace(_T(","), _T(" "));
 
         // also deal with the leading dot
-        if ( !strExtensions.IsEmpty() && strExtensions[0] == '.' ) {
+        if ( !strExtensions.IsEmpty() && strExtensions[0] == _T('.') ) {
             strExtensions.erase(0, 1);
         }
 
@@ -1075,7 +1075,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                          bool fallback)
 {
-    wxLogTrace("--- Parsing mailcap file '%s' ---", strFileName.c_str());
+    wxLogTrace(_T("--- Parsing mailcap file '%s' ---"), strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -1092,14 +1092,14 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     size_t nLineCount = file.GetLineCount();
     for ( size_t nLine = 0; nLine < nLineCount; nLine++ ) {
         // now we're at the start of the line
-        const char *pc = file[nLine].c_str();
+        const wxChar *pc = file[nLine].c_str();
 
         // skip whitespace
-        while ( isspace(*pc) )
+        while ( wxIsspace(*pc) )
             pc++;
 
         // comment or empty string?
-        if ( *pc == '#' || *pc == '\0' )
+        if ( *pc == _T('#') || *pc == _T('\0') )
             continue;
 
         // no, do parse
@@ -1125,10 +1125,10 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                  curField; // accumulator
         for ( bool cont = TRUE; cont; pc++ ) {
             switch ( *pc ) {
-                case '\\':
+                case _T('\\'):
                     // interpret the next character literally (notice that
                     // backslash can be used for line continuation)
-                    if ( *++pc == '\0' ) {
+                    if ( *++pc == _T('\0') ) {
                         // fetch the next line.
 
                         // pc currently points to nowhere, but after the next
@@ -1142,12 +1142,12 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                     }
                     break;
 
-                case '\0':
+                case _T('\0'):
                     cont = FALSE;   // end of line reached, exit the loop
 
                     // fall through
 
-                case ';':
+                case _T(';'):
                     // store this field and start looking for the next one
 
                     // trim whitespaces from both sides
@@ -1156,9 +1156,9 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                     switch ( currentToken ) {
                         case Field_Type:
                             strType = curField;
-                            if ( strType.Find('/') == wxNOT_FOUND ) {
+                            if ( strType.Find(_T('/')) == wxNOT_FOUND ) {
                                 // we interpret "type" as "type/*"
-                                strType += "/*";
+                                strType += _T("/*");
                             }
 
                             currentToken = Field_OpenCmd;
@@ -1176,22 +1176,22 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                 bool ok = TRUE;
 
                                 // is this something of the form foo=bar?
-                                const char *pEq = strchr(curField, '=');
+                                const wxChar *pEq = wxStrchr(curField, _T('='));
                                 if ( pEq != NULL ) {
-                                    wxString lhs = curField.BeforeFirst('='),
-                                             rhs = curField.AfterFirst('=');
+                                    wxString lhs = curField.BeforeFirst(_T('=')),
+                                             rhs = curField.AfterFirst(_T('='));
 
                                     lhs.Trim(TRUE);     // from right
                                     rhs.Trim(FALSE);    // from left
 
-                                    if ( lhs == "print" )
+                                    if ( lhs == _T("print") )
                                         strPrintCmd = rhs;
-                                    else if ( lhs == "test" )
+                                    else if ( lhs == _T("test") )
                                         strTest = rhs;
-                                    else if ( lhs == "description" ) {
+                                    else if ( lhs == _T("description") ) {
                                         // it might be quoted
-                                        if ( rhs[0u] == '"' &&
-                                             rhs.Last() == '"' ) {
+                                        if ( rhs[0u] == _T('"') &&
+                                             rhs.Last() == _T('"') ) {
                                             strDesc = wxString(rhs.c_str() + 1,
                                                                rhs.Len() - 2);
                                         }
@@ -1199,10 +1199,10 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                             strDesc = rhs;
                                         }
                                     }
-                                    else if ( lhs == "compose" ||
-                                              lhs == "composetyped" ||
-                                              lhs == "notes" ||
-                                              lhs == "edit" )
+                                    else if ( lhs == _T("compose") ||
+                                              lhs == _T("composetyped") ||
+                                              lhs == _T("notes") ||
+                                              lhs == _T("edit") )
                                         ;   // ignore
                                     else
                                         ok = FALSE;
@@ -1213,11 +1213,11 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                     // TODO support the flags:
                                     //  1. create an xterm for 'needsterminal'
                                     //  2. append "| $PAGER" for 'copiousoutput'
-                                    if ( curField == "needsterminal" )
+                                    if ( curField == _T("needsterminal") )
                                         needsterminal = TRUE;
-                                    else if ( curField == "copiousoutput" )
+                                    else if ( curField == _T("copiousoutput") )
                                         copiousoutput = TRUE;
-                                    else if ( curField == "textualnewlines" )
+                                    else if ( curField == _T("textualnewlines") )
                                         ;   // ignore
                                     else
                                         ok = FALSE;
@@ -1232,9 +1232,9 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                     // programmer
                                     wxLogDebug
                                     (
-                                      "Mailcap file %s, line %d: unknown "
+                                      _T("Mailcap file %s, line %d: unknown "
                                       "field '%s' for the MIME type "
-                                      "'%s' ignored.",
+                                      "'%s' ignored."),
                                       strFileName.c_str(),
                                       nLine + 1,
                                       curField.c_str(),
@@ -1248,7 +1248,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                             break;
 
                         default:
-                            wxFAIL_MSG("unknown field type in mailcap");
+                            wxFAIL_MSG(_T("unknown field type in mailcap"));
                     }
 
                     // next token starts immediately after ';'
@@ -1278,7 +1278,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                 m_aTypes.Add(strType);
 
                 m_aEntries.Add(entry);
-                m_aExtensions.Add("");
+                m_aExtensions.Add(_T(""));
                 m_aDescriptions.Add(strDesc);
             }
             else {
