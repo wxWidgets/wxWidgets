@@ -251,7 +251,10 @@
                                 // 0 for no drag and drop
 
 #define wxUSE_XPM_IN_MSW   1
-                                // Define 1 to support the XPM package in wxBitmap.
+                                // 0 for no XPM support in wxBitmap.
+                                // Default is 1, as XPM is now fully
+                                // supported this makes easier the issue
+                                // of portable icons and bitmaps.
 #define wxUSE_IMAGE_LOADING_IN_MSW        1
                                 // Use dynamic DIB loading/saving code in utils/dib under MSW.
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
@@ -275,31 +278,35 @@
 #define wxUSE_DYNAMIC_CLASSES     1
                                 // If 1, enables provision of run-time type information.
                                 // NOW MANDATORY: don't change.
-#define wxUSE_MEMORY_TRACING      1
-                                // If 1, enables debugging versions of wxObject::new and
-                                // wxObject::delete *IF* __WXDEBUG__ is also defined.
-                                // WARNING: this code may not work with all architectures, especially
-                                // if alignment is an issue.
 #define wxUSE_DEBUG_CONTEXT       1
                                 // If 1, enables wxDebugContext, for
                                 // writing error messages to file, etc.
-                                // If __WXDEBUG__ is not defined, will still use
-                                // normal memory operators.
+                                // If __WXDEBUG__ is not defined, will
+                                // still use normal memory operators.
                                 // It's recommended to set this to 1,
                                 // since you may well need to output
                                 // an error log in a production
                                 // version (or non-debugging beta)
+#define wxUSE_MEMORY_TRACING      1
+                                // If 1, enables debugging versions of wxObject::new and
+                                // wxObject::delete *IF* __WXDEBUG__ is also defined.
+                                // WARNING: this code may not work with all architectures,
+                                // especially if alignment is an issue.
+                                // This switch is currently ignored for
+                                // mingw / cygwin
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 1
                                 // In debug mode, cause new and delete to be redefined globally.
                                 // If this causes problems (e.g. link errors), set this to 0.
-
+                                // This switch is currently ignored for
+                                // mingw / cygwin
 #define wxUSE_DEBUG_NEW_ALWAYS 1
                                 // In debug mode, causes new to be defined to
                                 // be WXDEBUG_NEW (see object.h).
                                 // If this causes problems (e.g. link errors), set this to 0.
                                 // You may need to set this to 0 if using templates (at least
                                 // for VC++).
-
+                                // This switch is currently ignored for
+                                // mingw / cygwin
 #define REMOVE_UNUSED_ARG   1
                                 // Set this to 0 if your compiler can't cope
                                 // with omission of prototype parameters.
@@ -347,7 +354,7 @@
                                 // Use PNG bitmap/image code
 #define wxUSE_LIBJPEG       1
                                 // Use JPEG bitmap/image code
-#define wxUSE_LIBTIFF       0
+#define wxUSE_LIBTIFF       1
                                 // Use TIFF bitmap/image code
 #define wxUSE_GIF           1
                                 // Use GIF bitmap/image code
@@ -454,7 +461,10 @@
                                 // wxPrinterDC.
 #define wxUSE_ITSY_BITSY             1
                                 // Define 1 to use Microsoft's ItsyBitsy
-                                // small title bar library, for wxMiniFrame
+                                // small title bar library, for wxMiniFrame.
+                                // This setting is only used for Win3.1;
+                                // Win9x and NT use native miniframes
+                                // support instead.
 #define wxUSE_BITMAP_MESSAGE         1
                                 // Define 1 to use bitmap messages.
 #define wxUSE_PORTABLE_FONTS_IN_MSW  0
@@ -492,6 +502,18 @@
 #ifndef wxUSE_NORLANDER_HEADERS
 #   define wxUSE_NORLANDER_HEADERS 1
 #endif
+#endif
+
+// These don't work as expected for mingw32 and cygwin32
+#if defined(__GNUWIN32__)
+#undef  wxUSE_MEMORY_TRACING
+#define wxUSE_MEMORY_TRACING            0
+
+#undef  wxUSE_GLOBAL_MEMORY_OPERATORS
+#define wxUSE_GLOBAL_MEMORY_OPERATORS   0
+
+#undef  wxUSE_DEBUG_NEW_ALWAYS
+#define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
