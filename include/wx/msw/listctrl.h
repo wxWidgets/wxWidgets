@@ -379,6 +379,9 @@ protected:
 private:
     bool DoCreateControl(int x, int y, int w, int h);
 
+    // process NM_CUSTOMDRAW notification message
+    WXLPARAM OnCustomDraw(WXLPARAM lParam);
+
     DECLARE_DYNAMIC_CLASS(wxListCtrl)
     DECLARE_EVENT_TABLE()
 };

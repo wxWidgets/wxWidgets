@@ -1592,85 +1592,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #if defined(_WIN32_IE) && _WIN32_IE >= 0x300
         case NM_CUSTOMDRAW:
-            {
-                LPNMLVCUSTOMDRAW lplvcd = (LPNMLVCUSTOMDRAW)lParam;
-                NMCUSTOMDRAW& nmcd = lplvcd->nmcd;
-                switch( nmcd.dwDrawStage )
-                {
-                    case CDDS_PREPAINT:
-                        // if we've got any items with non standard attributes,
-                        // notify us before painting each item
-                        *result = m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
-                                               : CDRF_DODEFAULT;
-                        return TRUE;
+            *result = OnCustomDraw(lParam);
 
-                    case CDDS_ITEMPREPAINT:
-                        {
-                            wxListItemAttr *attr =
-                                (wxListItemAttr *)m_attrs.Get(nmcd.dwItemSpec);
-
-                            if ( !attr )
-                            {
-                                // nothing to do for this item
-                                return CDRF_DODEFAULT;
-                            }
-
-                            HFONT hFont;
-                            wxColour colText, colBack;
-                            if ( attr->HasFont() )
-                            {
-                                wxFont font = attr->GetFont();
-                                hFont = (HFONT)font.GetResourceHandle();
-                            }
-                            else
-                            {
-                                hFont = 0;
-                            }
-
-                            if ( attr->HasTextColour() )
-                            {
-                                colText = attr->GetTextColour();
-                            }
-                            else
-                            {
-                                colText = GetTextColour();
-                            }
-
-                            if ( attr->HasBackgroundColour() )
-                            {
-                                colBack = attr->GetBackgroundColour();
-                            }
-                            else
-                            {
-                                colBack = GetBackgroundColour();
-                            }
-
-                            // note that if we wanted to set colours for
-                            // individual columns (subitems), we would have
-                            // returned CDRF_NOTIFYSUBITEMREDRAW from here
-                            if ( hFont )
-                            {
-                                ::SelectObject(nmcd.hdc, hFont);
-
-                                *result = CDRF_NEWFONT;
-                            }
-                            else
-                            {
-                                *result = CDRF_DODEFAULT;
-                            }
-
-                            lplvcd->clrText = wxColourToRGB(colText);
-                            lplvcd->clrTextBk = wxColourToRGB(colBack);
-
-                            return TRUE;
-                        }
-
-                    default:
-                        *result = CDRF_DODEFAULT;
-                        return TRUE;
-                }
-            }
-//            break; // can never be reached
+            return TRUE;
 #endif // _WIN32_IE >= 0x300
 
         case LVN_GETDISPINFO:
@@ -1738,6 +1662,88 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     return TRUE;
 }
+
+#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
+
+WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
+{
+    LPNMLVCUSTOMDRAW lplvcd = (LPNMLVCUSTOMDRAW)lParam;
+    NMCUSTOMDRAW& nmcd = lplvcd->nmcd;
+    switch ( nmcd.dwDrawStage )
+    {
+        case CDDS_PREPAINT:
+            // if we've got any items with non standard attributes,
+            // notify us before painting each item
+            //
+            // for virtual controls, always suppose that we have attributes as
+            // there is no way to check for this
+            return IsVirtual() || m_hasAnyAttr ? CDRF_NOTIFYITEMDRAW
+                                               : CDRF_DODEFAULT;
+
+        case CDDS_ITEMPREPAINT:
+            {
+                size_t item = (size_t)nmcd.dwItemSpec;
+                wxListItemAttr *attr =
+                    IsVirtual() ? OnGetItemAttr(item)
+                                : (wxListItemAttr *)m_attrs.Get(item);
+
+                if ( !attr )
+                {
+                    // nothing to do for this item
+                    return CDRF_DODEFAULT;
+                }
+
+                HFONT hFont;
+                wxColour colText, colBack;
+                if ( attr->HasFont() )
+                {
+                    wxFont font = attr->GetFont();
+                    hFont = (HFONT)font.GetResourceHandle();
+                }
+                else
+                {
+                    hFont = 0;
+                }
+
+                if ( attr->HasTextColour() )
+                {
+                    colText = attr->GetTextColour();
+                }
+                else
+                {
+                    colText = GetTextColour();
+                }
+
+                if ( attr->HasBackgroundColour() )
+                {
+                    colBack = attr->GetBackgroundColour();
+                }
+                else
+                {
+                    colBack = GetBackgroundColour();
+                }
+
+                lplvcd->clrText = wxColourToRGB(colText);
+                lplvcd->clrTextBk = wxColourToRGB(colBack);
+
+                // note that if we wanted to set colours for
+                // individual columns (subitems), we would have
+                // returned CDRF_NOTIFYSUBITEMREDRAW from here
+                if ( hFont )
+                {
+                    ::SelectObject(nmcd.hdc, hFont);
+
+                    return CDRF_NEWFONT;
+                }
+            }
+            // fall through to return CDRF_DODEFAULT
+
+        default:
+            return CDRF_DODEFAULT;
+    }
+}
+
+#endif // NM_CUSTOMDRAW supported
 
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
@@ -1827,7 +1833,7 @@ int wxListCtrl::OnGetItemImage(long item) const
 
 wxListItemAttr *wxListCtrl::OnGetItemAttr(long item) const
 {
-    wxASSERT_MSG( item >= 0 && (size_t)item < GetItemCount(),
+    wxASSERT_MSG( item >= 0 && item < GetItemCount(),
                   _T("invalid item index in OnGetItemAttr()") );
 
     // no attributes by default
