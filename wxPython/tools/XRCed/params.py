@@ -8,6 +8,7 @@ from wxPython.wx import *
 from wxPython.xrc import *
 import string
 import os.path
+from types import *
 
 # Object which is currently processed
 currentXXX = None
@@ -20,6 +21,8 @@ genericStyles = ['wxSIMPLE_BORDER', 'wxDOUBLE_BORDER',
                  'wxSTATIC_BORDER', 'wxNO_BORDER',
                  'wxTRANSPARENT_WINDOW', 'wxWANTS_CHARS',
                  'wxNO_FULL_REPAINT_ON_RESIZE']
+
+buttonSize = (55,-1)
 
 # Class that can properly disable children
 class PPanel(wxPanel):
@@ -43,8 +46,8 @@ class ParamBinaryOr(PPanel):
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10)
-        self.button = wxButton(self, self.ID_BUTTON_CHOICES, 'Edit...')
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_CHOICES, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -90,7 +93,7 @@ class ParamBinaryOr(PPanel):
         dlg.SetSizer(topSizer)
         topSizer.Fit(dlg)
         dlg.Center()
-        if dlg.ShowModal() == wxID_OK:
+        if dlg.ShowModal() == wxID_OK: 
             value = []
             for i in range(listBox.Number()):
                 if listBox.IsChecked(i):
@@ -141,8 +144,8 @@ class ParamColour(PPanel):
         self.ID_BUTTON = wxNewId()
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(60,-1))
-        sizer.Add(self.text, 0, wxRIGHT, 10)
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=buttonSize)
+        sizer.Add(self.text, 0, wxRIGHT, 5)
         self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(40, -1))
         sizer.Add(self.button, 0, wxGROW)
         self.SetAutoLayout(true)
@@ -207,8 +210,8 @@ class ParamFont(PPanel):
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10)
-        self.button = wxButton(self, self.ID_BUTTON_SELECT, 'Select...')
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -353,21 +356,21 @@ class ParamPosSize(ParamText):
 class ContentDialog(wxDialogPtr):
     def __init__(self, parent, value):
         # Is this normal???
-        w = frame.res.LoadDialog(parent, 'ID_DIALOG_CONTENT')
+        w = frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
-        self.list = self.FindWindowByName('ID_LIST')
+        self.list = self.FindWindowByName('LIST')
         # Set list items
         for v in value:
             self.list.Append(v)
         self.SetAutoLayout(true)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_APPEND = XMLID('ID_BUTTON_APPEND')
-        self.ID_BUTTON_REMOVE = XMLID('ID_BUTTON_REMOVE')
-        self.ID_BUTTON_UP = XMLID('ID_BUTTON_UP')
-        self.ID_BUTTON_DOWN = XMLID('ID_BUTTON_DOWN')
+        self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
+        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
+        self.ID_BUTTON_UP = XMLID('BUTTON_UP')
+        self.ID_BUTTON_DOWN = XMLID('BUTTON_DOWN')
         EVT_BUTTON(self, self.ID_BUTTON_UP, self.OnButtonUp)
         EVT_BUTTON(self, self.ID_BUTTON_DOWN, self.OnButtonDown)
         EVT_BUTTON(self, self.ID_BUTTON_APPEND, self.OnButtonAppend)
@@ -404,11 +407,11 @@ class ContentDialog(wxDialogPtr):
 class ContentCheckListDialog(wxDialogPtr):
     def __init__(self, parent, value):
         # Is this normal???
-        w = frame.res.LoadDialog(parent, 'ID_DIALOG_CONTENT_CHECK_LIST')
+        w = frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
         wxDialogPtr.__init__(self, w.this)
         self.thisown = 1
         self.Center()
-        self.list = self.FindWindowByName('ID_CHECK_LIST')
+        self.list = self.FindWindowByName('CHECK_LIST')
         # Set list items
         i = 0
         for v,ch in value:
@@ -418,10 +421,10 @@ class ContentCheckListDialog(wxDialogPtr):
         self.SetAutoLayout(true)
         self.GetSizer().Fit(self)
         # Callbacks
-        self.ID_BUTTON_APPEND = XMLID('ID_BUTTON_APPEND')
-        self.ID_BUTTON_REMOVE = XMLID('ID_BUTTON_REMOVE')
-        self.ID_BUTTON_UP = XMLID('ID_BUTTON_UP')
-        self.ID_BUTTON_DOWN = XMLID('ID_BUTTON_DOWN')
+        self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
+        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
+        self.ID_BUTTON_UP = XMLID('BUTTON_UP')
+        self.ID_BUTTON_DOWN = XMLID('BUTTON_DOWN')
         EVT_CHECKLISTBOX(self, self.list.GetId(), self.OnCheck)
         EVT_BUTTON(self, self.ID_BUTTON_UP, self.OnButtonUp)
         EVT_BUTTON(self, self.ID_BUTTON_DOWN, self.OnButtonDown)
@@ -469,8 +472,8 @@ class ParamContent(PPanel):
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10)
-        self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...')
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -493,6 +496,7 @@ class ParamContent(PPanel):
         return self.value
     def SetValue(self, value):
         self.freeze = true
+        if not value: value = []
         self.value = value
         self.text.SetValue(str(value))  # update text ctrl
         self.freeze = false
@@ -515,41 +519,9 @@ class ParamContent(PPanel):
         dlg.Destroy()
 
 # CheckList content
-class ParamContentCheckList(PPanel):
+class ParamContentCheckList(ParamContent):
     def __init__(self, parent, name):
-        PPanel.__init__(self, parent, name)
-        self.ID_TEXT_CTRL = wxNewId()
-        self.ID_BUTTON_EDIT = wxNewId()
-        self.SetBackgroundColour(panel.GetBackgroundColour())
-        sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10)
-        self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...')
-        sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-        self.textModified = false
-        EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
-        EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
-    def OnChange(self, evt):
-        if self.freeze: return
-        self.SetModified()
-        self.textModified = true
-        evt.Skip()
-    def GetValue(self):
-        if self.textModified:           # text has newer value
-            try:
-                return eval(self.text.GetValue())
-            except SyntaxError:
-                wxLogError('Syntax error in parameter value: ' + self.GetName())
-                return []
-        return self.value
-    def SetValue(self, value):
-        self.freeze = true
-        self.value = value
-        self.text.SetValue(str(value))  # update text ctrl
-        self.freeze = false
+        ParamContent.__init__(self, parent, name)
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
             try:
@@ -568,7 +540,76 @@ class ParamContentCheckList(PPanel):
             self.textModified = false
         dlg.Destroy()
 
-# Boxless radiobox
+class IntListDialog(wxDialogPtr):
+    def __init__(self, parent, value):
+        # Is this normal???
+        w = frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
+        wxDialogPtr.__init__(self, w.this)
+        self.thisown = 1
+        self.Center()
+        self.list = self.FindWindowByName('LIST')
+        # Set list items
+        value.sort()
+        for v in value:
+            if type(v) != IntType:
+                wxLogError('Invalid item type')
+            else:
+                self.list.Append(str(v))
+        self.SetAutoLayout(true)
+        self.GetSizer().Fit(self)
+        # Callbacks
+        self.ID_BUTTON_ADD = XMLID('BUTTON_ADD')
+        self.ID_BUTTON_REMOVE = XMLID('BUTTON_REMOVE')
+        EVT_BUTTON(self, self.ID_BUTTON_ADD, self.OnButtonAppend)
+        EVT_BUTTON(self, self.ID_BUTTON_REMOVE, self.OnButtonRemove)
+        EVT_UPDATE_UI(self, self.ID_BUTTON_REMOVE, self.OnUpdateUI)
+    def OnButtonAppend(self, evt):
+        s = wxGetTextFromUser('Enter new number:', 'Add', '', self)
+        # Check that it's unique
+        try:
+            v = int(s)
+            s = str(v)                  # to be sure
+            i = self.list.FindString(s)
+            if i == -1:                 # ignore non-unique
+                # Find place to insert
+                found = false
+                for i in range(self.list.Number()):
+                    if int(self.list.GetString(i)) > v:
+                        found = true
+                        break
+                if found: self.list.InsertItems([s], i)
+                else: self.list.Append(s)
+        except ValueError:
+            wxLogError('List item is not an int!')
+    def OnButtonRemove(self, evt):
+        self.list.Delete(self.list.GetSelection())
+    def OnUpdateUI(self, evt):
+        if evt.GetId() == self.ID_BUTTON_REMOVE:
+            evt.Enable(self.list.GetSelection() != -1)
+
+# For growable list
+class ParamIntList(ParamContent):
+    def __init__(self, parent, name):
+        ParamContent.__init__(self, parent, name)
+    def OnButtonEdit(self, evt):
+        if self.textModified:           # text has newer value
+            try:
+                self.value = eval(self.text.GetValue())
+            except SyntaxError:
+                wxLogError('Syntax error in parameter value: ' + self.GetName())
+                self.value = []
+        dlg = IntListDialog(self, self.value)
+        if dlg.ShowModal() == wxID_OK:
+            value = []
+            for i in range(dlg.list.Number()):
+                value.append(int(dlg.list.GetString(i)))
+            # Add ignored flags
+            self.SetValue(value)
+            self.SetModified()
+            self.textModified = false
+        dlg.Destroy()
+
+# Boxless radiobox 
 class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, name='radiobox'):
@@ -620,15 +661,15 @@ class ParamOrient(RadioBox):
         self.SetStringSelection(self.seulav[value])
 
 class ParamFile(PPanel):
-    def __init__(self, parent, name):
+    def __init__(self, parent, name):    
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_BROWSE = wxNewId()
         self.SetBackgroundColour(panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
-        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10)
-        self.button = wxButton(self, self.ID_BUTTON_BROWSE, 'Browse...')
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_BROWSE, 'Browse...',size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -637,7 +678,7 @@ class ParamFile(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return
+        if self.freeze: return        
         self.SetModified()
         self.textModified = true
         evt.Skip()

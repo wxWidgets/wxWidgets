@@ -26,12 +26,26 @@ class xxxParam:
         self.textNode = text
     # Value returns string
     def value(self):
-        return str(self.textNode.data)
+        return self.textNode.data
     def update(self, value):
         self.textNode.data = value
     def remove(self):
         self.node.parentNode.removeChild(self.node)
         self.node.unlink()
+
+# Integer parameter
+class xxxParamInt(xxxParam):
+    # Standard use: for text nodes
+    def __init__(self, node):
+        xxxParam.__init__(self, node)
+    # Value returns string
+    def value(self):
+        try:
+            return int(self.textNode.data)
+        except ValueError:
+            return -1                   # invalid value
+    def update(self, value):
+        self.textNode.data = str(value)
 
 # Content parameter
 class xxxParamContent:
@@ -118,10 +132,10 @@ class xxxParamContentCheckList:
                 self.node.appendChild(itemElem)
                 l.append((itemText, itemElem))
             self.l = l
-#        else:
-#            for i in range(len(value)):
-#                self.l[i][0].data = value[i]
-#                self.l[i][1].setAttributedata = value[i]
+        else:
+            for i in range(len(value)):
+                self.l[i][0].data = value[i][0]
+                self.l[i][1].setAttribute('checked', str(value[i][1]))
         self.data = value
 
 ################################################################################
@@ -176,7 +190,7 @@ class xxxObject:
                     else:
                         self.params[tag] = xxxParamContent(node)
                 elif tag == 'font': # has children
-                    self.params[tag] = xxxParamFont(self, node)
+                    self.params[tag] = xxxParamFont(element, node)
                 else:                   # simple parameter
                     self.params[tag] = xxxParam(node)
             else:
@@ -199,24 +213,26 @@ class xxxObject:
 
 ################################################################################
 
-class xxxParamFont(xxxParam):
+# This is a little special 
+class xxxParamFont(xxxObject):
     allParams = ['size', 'style', 'weight', 'family', 'underlined',
                  'face', 'encoding']
     def __init__(self, parent, element):
         xxxObject.__init__(self, parent, element)
-        self.parentNode = element       # required to behave similar to DOM node
+        self.parentNode = parent       # required to behave similar to DOM node
         v = []
         for p in self.allParams:
             try:
-                v.append(str(self.params[p].data))
+                v.append(str(self.params[p].value()))
             except KeyError:
                 v.append('')
         self.data = v
     def update(self, value):
         # `value' is a list of strings corresponding to all parameters
         elem = self.element
-        for node in elem.childNodes:
-            elem.removeChild(node)
+        # Remove old elements first
+        childNodes = elem.childNodes[:]
+        for node in childNodes: elem.removeChild(node)
         i = 0
         self.params.clear()
         v = []
@@ -230,6 +246,11 @@ class xxxParamFont(xxxParam):
             v.append(value[i])
             i += 1
         self.data = v
+    def value(self):
+        return self.data
+    def remove(self):
+        self.parentNode.removeChild(self.element)
+        self.element.unlink()
 
 ################################################################################
 
@@ -483,20 +504,20 @@ class xxxParamMulti:
 class xxxFlexGridSizer(xxxGridSizer):
     specials = ['growablecols', 'growablerows']
     allParams = ['cols', 'rows', 'vgap', 'hgap'] + specials
-    paramDict = {'growablecols':ParamContent, 'growablerows':ParamContent}
+    paramDict = {'growablecols':ParamIntList, 'growablerows':ParamIntList}
     # Special processing for growable* parameters
     # (they are represented by several nodes)
     def special(self, tag, node):
-        if tag not in self.params.keys():
+        if tag not in self.params:
             self.params[tag] = xxxParamMulti()
-        self.params[tag].append(xxxParam(node))
+        self.params[tag].append(xxxParamInt(node))
     def setSpecial(self, param, value):
         # Straightforward implementation: remove, add again
         self.params[param].remove()
         del self.params[param]
-        for str in value:
+        for i in value:
             node = tree.dom.createElement(param)
-            text = tree.dom.createTextNode(str)
+            text = tree.dom.createTextNode(str(i))
             node.appendChild(text)
             self.element.appendChild(node)
             self.special(param, node)

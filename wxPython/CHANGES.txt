@@ -28,6 +28,8 @@ for each item, as well as optional column or row spanning.  Cells with
 no item assigned to it are just left blank.  Stretchable rows or
 columns are specified and work the same as in wxFlexGridSizer.
 
+Updated XRCed from Roman Rolinsky
+
 
 
 2.3.2.1
