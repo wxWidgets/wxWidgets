@@ -67,7 +67,8 @@ wxZipFSHandler::~wxZipFSHandler()
 bool wxZipFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == wxT("zip"));
+    return (p == wxT("zip")) && 
+           (GetProtocol(GetLeftLocation(location)) == wxT("file"));
 }
 
 
