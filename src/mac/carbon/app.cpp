@@ -31,6 +31,7 @@
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/tooltip.h"
+#include "wx/textctrl.h"
 #include "wx/menu.h"
 #if wxUSE_WX_RESOURCES
 #include "wx/resource.h"
