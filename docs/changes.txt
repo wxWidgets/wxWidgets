@@ -18,6 +18,7 @@ OTHER CHANGES
 
 wxBase:
 
+- fixed problem with wxURL when using static version of the library
 - crash when reading certain malformed mailcap entries under Unix fixed
 - memory/resource leak in wxSocket::Accept() fixed (Kruba Fabien)
 
@@ -36,6 +37,11 @@ wxMSW:
 - controls which don't accept focus don't get it on left mouse click
 - wxDC::DeviceToLogical[XY] fixed (Chuck Messenger)
 
+wxHTML:
+
+- fixed bug in parsing tags with whitespaces around '=' in tags,
+  e.g. <a href = "something.html"> 
+  
 2.2.5
 -----
 
