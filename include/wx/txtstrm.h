@@ -33,10 +33,9 @@ public:
 
   // Operators
   wxTextInputStream& operator>>(wxString& line);
-  wxTextInputStream& operator>>(wxInt8& c);
+  wxTextInputStream& operator>>(wxChar& c);
   wxTextInputStream& operator>>(wxInt16& i);
   wxTextInputStream& operator>>(wxInt32& i);
-  wxTextInputStream& operator>>(wxUint8& c);
   wxTextInputStream& operator>>(wxUint16& i);
   wxTextInputStream& operator>>(wxUint32& i);
   wxTextInputStream& operator>>(double& i);
@@ -59,10 +58,9 @@ class WXDLLEXPORT wxTextOutputStream {
 
   wxTextOutputStream& operator<<(const wxChar *string);
   wxTextOutputStream& operator<<(const wxString& string);
-  wxTextOutputStream& operator<<(wxInt8 c);
+  wxTextOutputStream& operator<<(wxChar c);
   wxTextOutputStream& operator<<(wxInt16 c);
   wxTextOutputStream& operator<<(wxInt32 c);
-  wxTextOutputStream& operator<<(wxUint8 c);
   wxTextOutputStream& operator<<(wxUint16 c);
   wxTextOutputStream& operator<<(wxUint32 c);
   wxTextOutputStream& operator<<(double f);

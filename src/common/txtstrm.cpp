@@ -189,9 +189,12 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& line)
   return *this;
 }
 
-wxTextInputStream& wxTextInputStream::operator>>(char& c)
+wxTextInputStream& wxTextInputStream::operator>>(wxChar& c)
 {
-  m_input->Read(&c, 1);
+  // TODO
+/*
+  m_input->Read(&c, sizeof(wxChar));
+*/
   return *this;
 }
 
@@ -294,9 +297,11 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
   return *this;
 }
 
-wxTextOutputStream& wxTextOutputStream::operator<<(char c)
+wxTextOutputStream& wxTextOutputStream::operator<<(wxChar c)
 {
-  m_output->Write(&c, 1);
+  wxString tmp_str;
+  tmp_str.Printf("%c", c);
+  WriteString(tmp_str);
   return *this;
 }
 
