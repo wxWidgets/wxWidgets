@@ -236,6 +236,7 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 #define InvalWindowRgn( window , rgn ) InvalRgn( rgn )
 #define GetPortPenMode( p ) (p->pnMode)
 #define SetPortPenMode( p , mode ) (p->pnMode = mode )
+#define ClearCurrentScrap() ZeroScrap() ;
 // control manager
 
 #define GetControlReference( control ) ((**control).contrlRfCon)
