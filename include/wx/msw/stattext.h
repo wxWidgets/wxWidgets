@@ -43,16 +43,20 @@ class WXDLLEXPORT wxStaticText: public wxControl
            long style = 0,
            const wxString& name = wxStaticTextNameStr);
 
+  // accessors
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  void SetLabel(const wxString&);
+
+  // operations
   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
   virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+  // overriden base class virtuals
+  virtual bool AcceptsFocus() const { return FALSE; }
 
-  void SetLabel(const wxString&);
-
+  // callbacks
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
+			                        WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 };
 
