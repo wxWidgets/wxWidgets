@@ -285,8 +285,8 @@ void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 
 bool wxControlContainer::DoSetFocus()
 {
-    wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08x."),
-               m_winParent->GetHandle());
+    wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08lx."),
+               (unsigned long)m_winParent->GetHandle());
 
     // If the panel gets the focus *by way of getting it set directly*
     // we move the focus to the first window that can get it.
@@ -337,8 +337,8 @@ bool wxControlContainer::DoSetFocus()
 
 void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
 {
-    wxLogTrace(_T("focus"), _T("OnFocus on wxPanel 0x%08x, name: %s"),
-               m_winParent->GetHandle(),
+    wxLogTrace(_T("focus"), _T("OnFocus on wxPanel 0x%08lx, name: %s"),
+               (unsigned long)m_winParent->GetHandle(),
                m_winParent->GetName().c_str() );
 
     // If we panel got the focus *by way of getting clicked on*
@@ -371,8 +371,8 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         if ( (*childLastFocused)->GetParent() == win )
         {
             wxLogTrace(_T("focus"),
-                       _T("SetFocusToChild() => last child (0x%08x)."),
-                       (*childLastFocused)->GetHandle());
+                       _T("SetFocusToChild() => last child (0x%08lx)."),
+                       (unsigned long)(*childLastFocused)->GetHandle());
 
             // not SetFocusFromKbd(): we're restoring focus back to the old
             // window and not setting it as the result of a kbd action
@@ -395,8 +395,8 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         if ( child->AcceptsFocusFromKeyboard() && !child->IsTopLevel() )
         {
             wxLogTrace(_T("focus"),
-                       _T("SetFocusToChild() => first child (0x%08x)."),
-                       child->GetHandle());
+                       _T("SetFocusToChild() => first child (0x%08lx)."),
+                       (unsigned long)child->GetHandle());
 
             *childLastFocused = child;  // should be redundant, but it is not
             child->SetFocusFromKbd();
