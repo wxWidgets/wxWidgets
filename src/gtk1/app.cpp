@@ -49,6 +49,8 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 extern bool g_isIdle;
 
+bool g_mainThreadLocked = FALSE;
+
 //-----------------------------------------------------------------------------
 // local functions
 //-----------------------------------------------------------------------------
@@ -200,12 +202,16 @@ gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 
     // unblock other threads wishing to do some GUI things
     wxMutexGuiLeave();
+    
+    g_mainThreadLocked = TRUE;
 
     // wake up other threads
     wxUsleep( 1 );
 
     // block other thread again
     wxMutexGuiEnter();
+
+    g_mainThreadLocked = FALSE;
 
     wxapp_install_thread_wakeup();
 

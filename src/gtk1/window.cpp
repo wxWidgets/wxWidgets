@@ -36,15 +36,19 @@
 #include "wx/settings.h"
 #include "wx/log.h"
 
+#ifdef __WXDEBUG__
+    #include "wx/thread.h"
+#endif
+
 #include <math.h>
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkkeysyms.h"
-#include "wx/gtk/win_gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkkeysyms.h>
+#include <wx/gtk/win_gtk.h>
 
-#include "gdk/gdkx.h"
+#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // documentation on internals
@@ -198,11 +202,15 @@ static int        g_sendActivateEvent = -1;
    the last click here */
 static guint32 gs_timeLastClick = 0;
 
+extern bool g_mainThreadLocked;
+
 //-----------------------------------------------------------------------------
 // debug
 //-----------------------------------------------------------------------------
 
 #ifdef __WXDEBUG__
+
+#define DEBUG_MAIN_THREAD if (wxThread::IsMain() && g_mainThreadLocked) printf("gui reentrance");
 
 static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
                                          GdkEvent *WXUNUSED(event),
@@ -590,6 +598,8 @@ static long map_to_wx_keysym( KeySym keysym )
 
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (!win->m_hasVMT)
         return;
 
@@ -629,6 +639,8 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
                                       GdkRectangle *rect, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -665,6 +677,8 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget),
 
 static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -817,6 +831,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
 static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -873,6 +889,8 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1037,6 +1055,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1155,6 +1175,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1275,6 +1297,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
 static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1335,6 +1359,8 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
 
 static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1378,6 +1404,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
 static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1424,6 +1452,8 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1470,6 +1500,8 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1504,6 +1536,8 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 
 static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1537,6 +1571,8 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 
 static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1557,6 +1593,8 @@ static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 
 static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1579,6 +1617,8 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
                                                  wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
@@ -1600,6 +1640,8 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget),
                                                    GdkEventButton *WXUNUSED(gdk_event),
                                                    wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
 
 //  don't test here as we can release the mouse while being over
 //  a different window than the slider
@@ -1631,6 +1673,8 @@ wxWindow *wxWindowBase::FindFocus()
 static gint
 gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 {
+    DEBUG_MAIN_THREAD
+
     if (g_isIdle)
         wxapp_install_idle_handler();
 
