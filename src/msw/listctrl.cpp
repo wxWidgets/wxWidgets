@@ -1810,7 +1810,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #ifdef __WXWINCE__
             case GN_CONTEXTMENU:
-#endif __WXWINCE__
+#endif //__WXWINCE__
             case NM_RCLICK:
                 {
                     eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
@@ -1826,7 +1826,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                   if(nmhdr->code == GN_CONTEXTMENU) {
                       ptClick = ((NMRGINFO*)nmhdr)->ptAction;
                   } else 
-#endif __WXWINCE__
+#endif //__WXWINCE__
                     if ( !::GetCursorPos(&ptClick) )
                     {
                         wxLogLastError(_T("GetCursorPos"));
@@ -2144,7 +2144,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
 #ifdef __WXWINCE__
             case GN_CONTEXTMENU:
-#endif __WXWINCE__
+#endif //__WXWINCE__
             case NM_RCLICK:
                 // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
                 // don't do anything else
@@ -2161,7 +2161,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
               if(nmhdr->code == GN_CONTEXTMENU) {
                   lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
               } else 
-#endif __WXWINCE__
+#endif //__WXWINCE__
                 ::GetCursorPos(&(lvhti.pt));
                 ::ScreenToClient(GetHwnd(),&(lvhti.pt));
                 if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
