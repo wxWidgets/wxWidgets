@@ -4,6 +4,7 @@
 // Author:      Harm van der Heijden and Robert Roebling
 // Modified by:
 // Created:     12/12/98
+// RCS-ID:      $Id$
 // Copyright:   (c) Harm van der Heijden and Robert Roebling
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

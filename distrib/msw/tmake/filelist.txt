@@ -58,6 +58,7 @@ colrdlgg.cpp	G	G
 dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G
+filedlgg.cpp	G	U
 gridg.cpp	G
 helphtml.cpp	G	G
 helpwxht.cpp	G	G
@@ -264,7 +265,6 @@ xpmhand.cpp	M
 threadpsx.cpp	U
 utilsunx.cpp	U
 gsocket.c	U
-gsockunx.h	U
 
 gsockgtk.c	R
 win_gtk.c	R
@@ -290,7 +290,6 @@ dcmemory.cpp	R
 dcscreen.cpp	R
 dialog.cpp	R
 dnd.cpp	R
-filedlg.cpp	R
 font.cpp	R
 frame.cpp	R
 gauge.cpp	R

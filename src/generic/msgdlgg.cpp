@@ -92,10 +92,17 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
 
+    SetAutoLayout( TRUE );
+    SetSizer( topsizer );
+    
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
-    SetSizer( topsizer );
-    SetAutoLayout( TRUE );
+    wxSize size( GetSize() );
+    if (size.x < size.y*2)
+    {
+        size.x = size.y*2;
+	SetSize( size );
+    }
 
     Centre( wxBOTH | wxCENTER_FRAME);
 

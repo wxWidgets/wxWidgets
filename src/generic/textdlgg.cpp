@@ -100,10 +100,11 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
     
+    SetAutoLayout( TRUE );
+    SetSizer( topsizer );
+    
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );
-    SetSizer( topsizer );
-    SetAutoLayout( TRUE );
 
     Centre( wxBOTH );
 

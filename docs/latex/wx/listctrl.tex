@@ -56,6 +56,7 @@ functions that take a \helpref{wxListEvent}{wxlistevent} argument.
 \twocolitem{{\bf EVT\_LIST\_SET\_INFO(id, func)}}{Information is being supplied (not implemented).}
 \twocolitem{{\bf EVT\_LIST\_ITEM\_SELECTED(id, func)}}{The item has been selected.}
 \twocolitem{{\bf EVT\_LIST\_ITEM\_DESELECTED(id, func)}}{The item has been deselected.}
+\twocolitem{{\bf EVT\_LIST\_ITEM\_ACTIVATED(id, func)}}{The item has been activated (ENTER or double click).}
 \twocolitem{{\bf EVT\_LIST\_KEY\_DOWN(id, func)}}{A key has been pressed.}
 \twocolitem{{\bf EVT\_LIST\_INSERT\_ITEM(id, func)}}{An item has been inserted.}
 \twocolitem{{\bf EVT\_LIST\_COL\_CLICK(id, func)}}{A column ({\bf m\_col}) has been left-clicked.}
@@ -129,6 +130,12 @@ Arranges the items in icon or small icon view. This only has effect on Win32. {\
 
 Creates the list control. See \helpref{wxListCtrl::wxListCtrl}{wxlistctrlconstr} for further details.
 
+\membersection{wxListCtrl::ClearAll}\label{wxlistctrlclearall}
+
+\func{void}{ClearAll}{}
+
+Deletes all items and all columns.
+
 \membersection{wxListCtrl::DeleteItem}\label{wxlistctrldeleteitem}
 
 \func{bool}{DeleteItem}{\param{long }{item}}
@@ -137,7 +144,7 @@ Deletes the specified item.
 
 \membersection{wxListCtrl::DeleteAllItems}\label{wxlistctrldeleteallitems}
 
-\func{bool}{DeleteAllItems}{\void}
+\func{bool}{DeleteAllItems}{}
 
 Deletes all the items in the list control.
 

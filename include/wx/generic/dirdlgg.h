@@ -5,6 +5,7 @@
 // Modified by:
 // Created:     12/12/98
 // Copyright:   (c) Harm van der Heijden and Robert Roebling
+// RCS-ID:      $Id$
 // Licence:   	wxWindows licence
 //
 // Notes:       wxDirDialog class written by Harm van der Heijden, 
