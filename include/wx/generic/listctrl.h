@@ -225,7 +225,7 @@ public:
     int GetImage() const;
     void GetItem( wxListItem &info );
     wxColour *GetColour();
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListItemData);
 };
@@ -376,15 +376,21 @@ class WXDLLEXPORT wxListTextCtrl: public wxTextCtrl
 
   public:
     wxListTextCtrl() {};
-    wxListTextCtrl( wxWindow *parent, const wxWindowID id, 
+    wxListTextCtrl( wxWindow *parent, const wxWindowID id,
                     bool *accept, wxString *res, wxListMainWindow *owner,
                     const wxString &value = "",
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                    int style = 0, const wxValidator* validator = wxDefaultValidator,
+#  else
                     int style = 0, const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
                     const wxString &name = "wxListTextCtrlText" );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
-    
+
   DECLARE_EVENT_TABLE()
 };
 
@@ -436,12 +442,12 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void SelectLine( wxListLineData *line );
     void DeselectLine( wxListLineData *line );
     void DeleteLine( wxListLineData *line );
-    
+
     void EditLabel( long item );
     void Edit( long item ) { EditLabel(item); }         // deprecated
     void OnRenameTimer();
     void OnRenameAccept();
-    
+
     void OnMouse( wxMouseEvent &event );
     void MoveToFocus();
     void OnArrowChar( wxListLineData *newCurrent, bool shiftDown );
@@ -450,7 +456,7 @@ class WXDLLEXPORT wxListMainWindow: public wxScrolledWindow
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
-    
+
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height );
     int GetIndexOfLine( const wxListLineData *line );
@@ -507,7 +513,13 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     wxListCtrl();
     wxListCtrl( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+      long style = wxLC_ICON, const wxValidator* validator = wxDefaultValidator,
+#  else
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
        const wxString &name = "listctrl" )
     {
       Create(parent, id, pos, size, style, validator, name);
@@ -515,7 +527,13 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     ~wxListCtrl();
     bool Create( wxWindow *parent, wxWindowID id = -1,
       const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+      long style = wxLC_ICON, const wxValidator* validator = wxDefaultValidator,
+#  else
       long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
        const wxString &name = "listctrl" );
     void OnSize( wxSizeEvent &event );
     bool GetColumn( int col, wxListItem& item ) const;
@@ -551,16 +569,16 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     wxImageList *GetImageList( int which ) const;
     void SetImageList( wxImageList *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
-    
+
     void ClearAll();
     bool DeleteItem( long item );
     bool DeleteAllItems();
     bool DeleteAllColumns();
     bool DeleteColumn( int col );
-    
+
     void EditLabel( long item ) { Edit(item); }
     void Edit( long item );
-    
+
     bool EnsureVisible( long item );
     long FindItem( long start, const wxString& str, bool partial = FALSE );
     long FindItem( long start, long data );
@@ -577,13 +595,13 @@ class WXDLLEXPORT wxListCtrl: public wxControl
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
     void OnIdle( wxIdleEvent &event );
-    
+
     // We have to hand down a few functions
-    
+
     bool SetBackgroundColour( const wxColour &colour );
     bool SetForegroundColour( const wxColour &colour );
     bool SetFont( const wxFont &font );
-    
+
 #if wxUSE_DRAG_AND_DROP
     void SetDropTarget( wxDropTarget *dropTarget )
       { m_mainWin->SetDropTarget( dropTarget ); }
@@ -603,7 +621,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
       { m_mainWin->SetFocus(); }
 
   // implementation
-  
+
     wxImageList         *m_imageListNormal;
     wxImageList         *m_imageListSmall;
     wxImageList         *m_imageListState;  // what's that ?

@@ -27,7 +27,13 @@ class WXDLLEXPORT wxCheckBox: public wxControl
   inline wxCheckBox(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxCheckBoxNameStr)
   {
       Create(parent, id, label, pos, size, style, validator, name);
@@ -36,7 +42,13 @@ class WXDLLEXPORT wxCheckBox: public wxControl
   bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxCheckBoxNameStr);
 
   virtual void SetValue(bool);
@@ -64,7 +76,13 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   inline wxBitmapCheckBox(wxWindow *parent, wxWindowID id, const wxBitmap *label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxCheckBoxNameStr)
   {
       Create(parent, id, label, pos, size, style, validator, name);
@@ -73,7 +91,13 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   bool Create(wxWindow *parent, wxWindowID id, const wxBitmap *bitmap,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxCheckBoxNameStr);
 
   virtual void SetLabel(const wxBitmap& bitmap);

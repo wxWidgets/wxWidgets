@@ -29,7 +29,13 @@ public:
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,
              int majorDim = 0, long style = wxRA_HORIZONTAL,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+             const wxValidator* val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr)
+#  else
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr)
+#  endif
+#endif
   {
     Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
   }
@@ -40,7 +46,13 @@ public:
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = NULL,
              int majorDim = 0, long style = wxRA_HORIZONTAL,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+             const wxValidator* val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
+#  else
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
+#  endif
+#endif
 
   virtual bool OS2Command(WXUINT param, WXWORD id);
   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,

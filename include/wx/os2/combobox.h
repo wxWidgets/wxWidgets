@@ -33,7 +33,13 @@ class WXDLLEXPORT wxComboBox: public wxChoice
            const wxSize& size = wxDefaultSize,
            int n = 0, const wxString choices[] = NULL,
            long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxComboBoxNameStr)
   {
     Create(parent, id, value, pos, size, n, choices, style, validator, name);
@@ -45,7 +51,13 @@ class WXDLLEXPORT wxComboBox: public wxChoice
            const wxSize& size = wxDefaultSize,
            int n = 0, const wxString choices[] = NULL,
            long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxComboBoxNameStr);
 
     // List functions: see wxChoice

@@ -134,10 +134,8 @@ private:
 
 // in order to avoid any overhead under !MSW make all wxCriticalSection class
 // functions inline - but this can't be done under MSW
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXPM__)
     class WXDLLEXPORT wxCriticalSectionInternal;
-    #define WXCRITICAL_INLINE
-#elif defined(__WXPM__)
     #define WXCRITICAL_INLINE
 #else // !MSW && !PM
     #define WXCRITICAL_INLINE   inline
@@ -162,7 +160,7 @@ private:
     wxCriticalSection(const wxCriticalSection&);
     wxCriticalSection& operator=(const wxCriticalSection&);
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) || defined(__WXPM__)
     wxCriticalSectionInternal *m_critsect;
 #else // !MSW
     wxMutex m_mutex;
@@ -409,9 +407,6 @@ public:
 
     // returns TRUE if the main thread has GUI lock
     extern bool WXDLLEXPORT wxGuiOwnedByMainThread();
-
-    inline wxCriticalSection::wxCriticalSection() { }
-    inline wxCriticalSection::~wxCriticalSection() { }
 #else // !MSW && !PM
     // implement wxCriticalSection using mutexes
     inline wxCriticalSection::wxCriticalSection() { }

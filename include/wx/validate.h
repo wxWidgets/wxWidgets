@@ -82,7 +82,11 @@ private:
     DECLARE_DYNAMIC_CLASS(wxValidator)
 };
 
+#if defined(__VISAGECPP__)
+WXDLLEXPORT_DATA(extern const wxValidator*) wxDefaultValidator;
+#else
 WXDLLEXPORT_DATA(extern const wxValidator) wxDefaultValidator;
+#endif
 
 #endif // wxUSE_VALIDATORS
 

@@ -27,7 +27,13 @@ class WXDLLEXPORT wxGauge: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxGaugeNameStr)
   {
     Create(parent, id, range, pos, size, style, validator, name);
@@ -38,7 +44,13 @@ class WXDLLEXPORT wxGauge: public wxControl
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxGA_HORIZONTAL,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxGaugeNameStr);
 
   void SetShadowWidth(int w);

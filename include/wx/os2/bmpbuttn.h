@@ -26,7 +26,13 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxButtonNameStr)
   {
       Create(parent, id, bitmap, pos, size, style, validator, name);
@@ -35,7 +41,13 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   bool Create(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+           const wxValidator* validator = wxDefaultValidator,
+#  else
            const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
            const wxString& name = wxButtonNameStr);
 
   virtual void SetLabel(const wxBitmap& bitmap)

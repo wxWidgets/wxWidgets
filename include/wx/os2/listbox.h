@@ -42,7 +42,13 @@ public:
             const wxSize& size = wxDefaultSize,
             int n = 0, const wxString choices[] = NULL,
             long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+            const wxValidator* validator = wxDefaultValidator,
+#  else
             const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
             const wxString& name = wxListBoxNameStr)
     {
         Create(parent, id, pos, size, n, choices, style, validator, name);
@@ -53,7 +59,13 @@ public:
                 const wxSize& size = wxDefaultSize,
                 int n = 0, const wxString choices[] = NULL,
                 long style = 0,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                const wxValidator* validator = wxDefaultValidator,
+#  else
                 const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
                 const wxString& name = wxListBoxNameStr);
 
     virtual ~wxListBox();

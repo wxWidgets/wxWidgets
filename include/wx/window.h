@@ -122,7 +122,11 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
 #if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                    const wxValidator* validator = wxDefaultValidator,
+#  else
                     const wxValidator& validator = wxDefaultValidator,
+#  endif
 #endif // wxUSE_VALIDATORS
                     const wxString& name = wxPanelNameStr);
 
@@ -281,7 +285,7 @@ public:
     int GetMinHeight() const { return m_minHeight; }
     int GetMaxWidth() const { return m_maxWidth; }
     int GetMaxHeight() const { return m_maxHeight; }
-    
+
     // window state
     // ------------
 
@@ -376,7 +380,11 @@ public:
 #if wxUSE_VALIDATORS
         // a window may have an associated validator which is used to control
         // user input
+#  if defined(__VISAGECPP__)
+    virtual void SetValidator( const wxValidator *validator );
+#  else
     virtual void SetValidator( const wxValidator &validator );
+#  endif
     virtual wxValidator *GetValidator() { return m_windowValidator; }
 #endif // wxUSE_VALIDATORS
 

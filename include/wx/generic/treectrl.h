@@ -181,7 +181,13 @@ class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
                     bool *accept, wxString *res, wxTreeCtrl *owner,
                     const wxString &value = wxEmptyString,
                     const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                    int style = 0, const wxValidator* validator = wxDefaultValidator,
+#  else
                     int style = 0, const wxValidator& validator = wxDefaultValidator,
+#  endif
+#endif
                     const wxString &name = wxTextCtrlNameStr );
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
@@ -204,7 +210,13 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+               const wxValidator *validator = wxDefaultValidator,
+#  else
                const wxValidator &validator = wxDefaultValidator,
+#  endif
+#endif
                const wxString& name = wxTreeCtrlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
@@ -216,7 +228,13 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
+#if wxUSE_VALIDATORS
+#  if defined(__VISAGECPP__)
+                const wxValidator *validator = wxDefaultValidator,
+#  else
                 const wxValidator &validator = wxDefaultValidator,
+#  endif
+#endif
                 const wxString& name = wxTreeCtrlNameStr);
 
     // accessors
