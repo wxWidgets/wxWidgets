@@ -459,8 +459,7 @@ bool wxFile::Eof() const
             return FALSE;
 
         case -1:
-            wxLogSysError(_("can't determine if the end of file is reached on \
-                descriptor %d"), m_fd);
+            wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
                 break;
 
         default:
