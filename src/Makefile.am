@@ -9,12 +9,15 @@ SUFFIXES = .cpp
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}:$(srcdir)/common:$(srcdir)/@TOOLKIT_DIR@:$(srcdir)/generic:$(EXTRA_VPATH)
+VPATH = .:${srcdir}:${srcdir}/common:${srcdir}/@TOOLKIT_DIR@:${srcdir}/generic:${EXTRA_VPATH}
 
-lib_LTLIBRARIES = libwx_@WX_LIBRARY@.la
+EXTRA_DIST = "${srcdir}/common ${srcdir}/generic ${srcdir}/@TOOLKIT_DIR@"
+
+lib_LTLIBRARIES = @WX_LIBRARY_NAME@
+EXTRA_LTLIBRARIES = libwx_gtk2.la libwx_motif2.la
 
 # these are the common files which always make part of the library
-libwx__WX_LIBRARY__la_SOURCES = \
+libwx_gtk2_la_SOURCES = \
  cmndata.cpp \
  dynarray.cpp \
  filefn.cpp \
@@ -60,7 +63,7 @@ lexer.c: $(srcdir)/common/lexer.l
 #
 # NB: the files are listed in directory/alphabetical order: first the files
 #     from common, then from generic, then from unix, then from gtk.
-EXTRA_libwx__WX_LIBRARY__la_SOURCES = \
+EXTRA_libwx_gtk2_la_SOURCES = \
  config.cpp \
  date.cpp \
  datetime.cpp \
@@ -212,6 +215,12 @@ EXTRA_libwx__WX_LIBRARY__la_SOURCES = \
  wave.cpp \
  window.cpp
 
-libwx__WX_LIBRARY__la_LDFLAGS = -release @WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
-libwx__WX_LIBRARY__la_LIBADD = $(LTLIBOBJS)
-libwx__WX_LIBRARY__la_DEPENDENCIES = $(libwx__WX_LIBRARY__la_LIBADD) lexer.l
+libwx_gtk2_la_LDFLAGS = -rpath @libdir@ -release @WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
+libwx_gtk2_la_LIBADD = $(LTLIBOBJS)
+libwx_gtk2_la_DEPENDENCIES = $(libwx_gtk2_la_LIBADD) lexer.l
+
+libwx_motif2_la_SOURCES = ${libwx_gtk2_la_SOURCES}
+EXTRA_libwx_motif2_la_SOURCES = ${EXTRA_libwx_gtk2_la_SOURCES}
+libwx_motif2_la_LDFLAGS = -rpath @libdir@ ${libwx_gtk2_la_LDFLAGS}
+libwx_motif2_la_LIBADD = ${libwx_gtk2_la_LIBADD}
+libwx_motif2_la_DEPENDENCIES = ${libwx_gtk2_la_DEPENDENCIES}

@@ -373,13 +373,13 @@ AC_ARG_WITH(gtk-prefix,        [  --with-gtk-prefix=PFX   prefix where GTK is in
 AC_ARG_WITH(gtk-exec-prefix,    [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 AC_ARG_WITH(gtk,        [  --with-gtk              use GTK+],
-            wxUSE_GTK="$withval",wxUSE_GTK=$DEFAULT_wxUSE_GTK)
+            [wxUSE_GTK="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,        [  --with-motif            use Motif/Lesstif],
-            wxUSE_MOTIF="$withval",wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF)
+            [wxUSE_MOTIF="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows],
-            wxUSE_CYGWIN="$withval",wxUSE_CYGWIN=$DEFAULT_wxUSE_CYGWIN)
+            [wxUSE_CYGWIN="$withval" TOOLKIT_GIVEN=1])
 AC_ARG_WITH(mingw,        [  --with-mingw            use GCC Minimal MS-Windows],
-            wxUSE_MINGW="$withval",wxUSE_MINGW=$DEFAULT_wxUSE_MINGW)
+            [wxUSE_MINGW="$withval" TOOLKIT_GIVEN=1])
 
 AC_ARG_WITH(dmalloc,        [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)],
             wxUSE_DMALLOC="$withval",wxUSE_DMALLOC=$DEFAULT_wxUSE_DMALLOC)
@@ -408,6 +408,17 @@ AC_ARG_ENABLE(optimise,        [  --enable-optimise       create optimised code]
             wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
 AC_ARG_ENABLE(optimize,        [  --enable-optimize       create optimized code],
             wxUSE_OPTIMISE="$enableval",wxUSE_OPTIMISE=$DEFAULT_wxUSE_OPTIMISE)
+AC_ARG_ENABLE(debug, [  --enable-debug          same as debug_flag and debug_info],
+            wxUSE_DEBUG="${enableval}",wxUSE_DEBUG=$DEFAULT_wxUSE_DEBUG)
+
+if test "$wxUSE_DEBUG" = "yes"; then
+  DEFAULT_wxUSE_DEBUG_FLAG=yes
+  DEFAULT_wxUSE_DEBUG_INFO=yes
+elif test "$wxUSE_DEBUG" = "no"; then
+  DEFAULT_wxUSE_DEBUG_FLAG=no
+  DEFAULT_wxUSE_DEBUG_INFO=no
+fi
+
 AC_ARG_ENABLE(debug_flag,    [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)],
             wxUSE_DEBUG_FLAG="$enableval",wxUSE_DEBUG_FLAG=$DEFAULT_wxUSE_DEBUG_FLAG)
 AC_ARG_ENABLE(debug_info,    [  --enable-debug_info     create code with debugging information],
@@ -667,10 +678,17 @@ AC_ARG_ENABLE(validators, [  --enable-validators     use wxValidator and derived
 dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
 
-dnl convert "yes" to 1 and "no" to 0
-wxUSE_GTK=`echo $wxUSE_GTK | sed -e 's/yes/1/' -e 's/no/0/'`
-wxUSE_MOTIF=`echo $wxUSE_MOTIF | sed -e 's/yes/1/' -e 's/no/0/'`
-wxUSE_MSW=`echo $wxUSE_MSW | sed -e 's/yes/1/' -e 's/no/0/'`
+if test "$TOOLKIT_GIVEN" = 1; then
+  dnl convert "yes" to 1 and "no" to 0
+  wxUSE_GTK=`echo $wxUSE_GTK | sed -e 's/yes/1/' -e 's/no/0/'`
+  wxUSE_MOTIF=`echo $wxUSE_MOTIF | sed -e 's/yes/1/' -e 's/no/0/'`
+  wxUSE_MSW=`echo $wxUSE_MSW | sed -e 's/yes/1/' -e 's/no/0/'`
+else
+  dnl try to guess the most apropriate toolkit for this platform
+  wxUSE_GTK=$DEFAULT_wxUSE_GTK
+  wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF
+  wxUSE_MSW=$DEFAULT_wxUSE_MSW
+fi
 
 dnl NB: this supposes that the shell is able to handle arithmetic expansion and
 dnl     the ${VAR:-VALUE} construction. It does simplify our life though...
@@ -970,7 +988,7 @@ if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN(library will be compiled without support for images in XPM format)
     fi
 
-    GUI_TK_LINK="-lXm $(XPM_LINK)-lXmu -lXt -lX11 -lm"
+    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXt -lX11 -lm"
     GUI_TK_LIBRARY="$CHECK_LIB $GUI_TK_LINK"
     TOOLKIT=MOTIF
 fi
@@ -981,8 +999,8 @@ TOOLKIT_DIR=`echo ${TOOLKIT} | tr "A-Z" "a-z"`
 dnl the symbol which allows conditional compilation for the given toolkit
 TOOLKIT_DEF=-D__WX${TOOLKIT}__
 
-dnl the name (without leading 'wx_') of the library
-WX_LIBRARY=${TOOLKIT_DIR}2
+dnl the name of the (libtool) library
+WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}2.la"
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -1865,7 +1883,7 @@ EXTRA_LIBS="$LIBS $POSIX4_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $GUILIBS"
 
 dnl all the libraries needed to link wxWindows programs (when the library is not
 dnl yet installed)
-LIBS="\${top_builddir}/src/libwx_${WX_LIBRARY}.la $EXTRA_LIBS"
+LIBS="\${top_builddir}/src/${WX_LIBRARY_NAME} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
 INCLUDES="$TOOLKIT_INCLUDE $ZLIB_INCLUDE $LIBPNG_INCLUDE -I. -I\${top_builddir}/include -I\${top_srcdir}/include"
@@ -1893,11 +1911,23 @@ if test "$wxUSE_GUI" = "yes"; then
                    forty fractal image wxpoem"
 fi
 
+dnl for convenience, sort the files to build in alphabetical order
+dnl
+dnl another shell command to do it which might be faster but is less clear:
+dnl  LTLIBOBJS="`for obj in $LTLIBOBJS; do echo $obj; done | sort | sed 's@^@ @'`"
+LTLIBOBJS="`echo $LTLIBOBJS | tr -s ' ' | tr ' ' '\n' | sort | tr '\n' ' '`"
+
+dnl for convenience, sort the samples in alphabetical order
+dnl
+dnl FIXME For some mysterious reasons, sometimes the directories are duplicated
+dnl       in this list - hence uniq. But normally, this shouldn't be needed!
+SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '`"
+
 dnl global options
 AC_SUBST(WX_MAJOR_VERSION_NUMBER)
 AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
-AC_SUBST(WX_LIBRARY)
+AC_SUBST(WX_LIBRARY_NAME)
 
 dnl suppress libtool's informational messages - they duplicate its command line
 LIBTOOL="$LIBTOOL --silent"
