@@ -52,7 +52,9 @@ public:
     // implementation only from now on
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void Command(wxCommandEvent& event);
-    virtual bool CanApplyParentThemeBackground() const { return true; }
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
+
 
 protected:
     virtual wxSize DoGetBestSize() const;

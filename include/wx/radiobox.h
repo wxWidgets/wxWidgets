@@ -86,8 +86,6 @@ public:
     // return the item above/below/to the left/right of the given one
     int GetNextItem(int item, wxDirection dir, long style) const;
 
-    virtual bool CanApplyParentThemeBackground() const { return true; }
-    
     // for compatibility only, don't use these methods in new code!
 #if WXWIN_COMPATIBILITY_2_2
     int Number() const { return GetCount(); }

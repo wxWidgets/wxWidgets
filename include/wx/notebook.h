@@ -86,7 +86,6 @@ public:
 
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
-    virtual bool CanApplyParentThemeBackground() const { return true; }
 
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)

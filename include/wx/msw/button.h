@@ -54,6 +54,12 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+    {
+        // avoide switching into owner-drawn mode
+        wxControl::SetBackgroundColour(bg);
+    }
+    
 #ifdef __WIN32__
     // coloured buttons support
     virtual bool SetBackgroundColour(const wxColour &colour);

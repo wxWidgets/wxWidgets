@@ -189,7 +189,9 @@ public:
     void SetSelectionBackground(const wxColour& col);
 
 
-    virtual bool CanApplyParentThemeBackground() const { return false; }
+    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
+        { /* do nothing */ }
+
     
 protected:
     // the derived class must implement this function to actually draw the item

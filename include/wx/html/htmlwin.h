@@ -198,7 +198,8 @@ public:
     void SelectAll();
 #endif
 
-    virtual bool CanApplyParentThemeBackground() const { return false; }
+    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
+        { /* do nothing */ }
     
 protected:
     void Init();

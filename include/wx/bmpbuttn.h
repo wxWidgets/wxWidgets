@@ -61,7 +61,9 @@ public:
     int GetMarginX() const { return m_marginX; }
     int GetMarginY() const { return m_marginY; }
 
-    virtual bool CanApplyParentThemeBackground() const { return true; }
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
+
 
 protected:
     // function called when any of the bitmaps changes

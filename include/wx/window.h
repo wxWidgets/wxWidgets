@@ -399,7 +399,8 @@ public:
         // page is added to a notebook it and it's children may need to have
         // the colours adjusted depending on the current theme settings, but
         // not all windows/controls can do this without looking wrong.
-    virtual bool CanApplyParentThemeBackground() const { return false; }
+    virtual void ApplyParentThemeBackground(const wxColour& WXUNUSED(bg))
+        { /* do nothing */ }
     
         // returns true if this window should inherit its parent colours on
         // creation

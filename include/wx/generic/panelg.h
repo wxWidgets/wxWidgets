@@ -86,7 +86,9 @@ public:
     virtual bool ProvidesBackground() const { return TRUE; }
 #endif
 
-    virtual bool CanApplyParentThemeBackground() const { return true; }
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
+
     
     WX_DECLARE_CONTROL_CONTAINER();
 

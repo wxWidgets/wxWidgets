@@ -18,7 +18,8 @@ public:
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return false; }
-    virtual bool CanApplyParentThemeBackground() const { return true; }
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
 
 private:
     DECLARE_NO_COPY_CLASS(wxStaticBoxBase)

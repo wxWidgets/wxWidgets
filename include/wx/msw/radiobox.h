@@ -124,6 +124,9 @@ public:
     int GetNumVer() const;
     int GetNumHor() const;
 
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
+
 protected:
     // subclass one radio button
     void SubclassRadioButton(WXHWND hWndBtn);

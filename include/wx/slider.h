@@ -81,7 +81,9 @@ public:
     virtual void SetSelection(int WXUNUSED(min), int WXUNUSED(max)) { }
 
 
-    virtual bool CanApplyParentThemeBackground() const { return true; }
+    virtual void ApplyParentThemeBackground(const wxColour& bg)
+        { SetBackgroundColour(bg); }
+
 
 private:
     DECLARE_NO_COPY_CLASS(wxSliderBase)
