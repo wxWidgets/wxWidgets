@@ -662,16 +662,16 @@ END_EVENT_TABLE()
 static void SetTXNData( TXNObject txn , const wxString& st , TXNOffset start , TXNOffset end )
 {
 #if wxUSE_UNICODE
-	size_t len = st.Len() ;
 #if SIZEOF_WCHAR_T == 2
+	size_t len = st.Len() ;
     TXNSetData( txn , kTXNUnicodeTextData,  (void*)st.wc_str(), len * 2,
       start, end);
 #else
-    ByteCount byteBufferLen = len * sizeof( UniChar ) ;
-	UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
 	wxMBConvUTF16BE converter ;
+	ByteCount byteBufferLen = converter.WC2MB( NULL , st.wc_str() , 0 ) ;
+	UniChar *unibuf = (UniChar*) malloc(byteBufferLen) ;
 	converter.WC2MB( (char*) unibuf , st.wc_str() , byteBufferLen ) ;
-    TXNSetData( txn , kTXNUnicodeTextData,  (void*)unibuf, len * 2,
+    TXNSetData( txn , kTXNUnicodeTextData,  (void*)unibuf, byteBufferLen ,
       start, end);
 	free( unibuf ) ;
 #endif
@@ -861,7 +861,7 @@ wxString wxTextCtrl::GetValue() const
 #else
 				wxMBConvUTF16BE converter ;
 				HLock( theText ) ;
-				converter.MB2WC( ptr , (const char*)*theText , actualSize*sizeof(wxChar) ) ;
+				converter.MB2WC( ptr , (const char*)*theText , actualSize ) ;
 				HUnlock( theText ) ;
 #endif
                 ptr[actualSize] = 0 ;

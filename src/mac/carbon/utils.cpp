@@ -547,193 +547,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 // wxMac Specific utility functions
 //---------------------------------------------------------------------------
 
-#if 0
-
-char StringMac[] =  "\x0d\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f"
-                    "\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f"
-                    "\xa0\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xae\xaf"
-                    "\xb1\xb4\xb5\xb6\xbb\xbc\xbe\xbf"
-                    "\xc0\xc1\xc2\xc4\xc7\xc8\xc9\xcb\xcc\xcd\xce\xcf"
-                    "\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd8\xca\xdb" ;
-
-char StringANSI[] = "\x0a\xC4\xC5\xC7\xC9\xD1\xD6\xDC\xE1\xE0\xE2\xE4\xE3\xE5\xE7\xE9\xE8"
-                    "\xEA\xEB\xED\xEC\xEE\xEF\xF1\xF3\xF2\xF4\xF6\xF5\xFA\xF9\xFB\xFC"
-                    "\x86\xBA\xA2\xA3\xA7\x95\xB6\xDF\xAE\xA9\x99\xB4\xA8\xC6\xD8"
-                    "\xB1\xA5\xB5\xF0\xAA\xBA\xE6\xF8"
-                    "\xBF\xA1\xAC\x83\xAB\xBB\x85\xC0\xC3\xD5\x8C\x9C"
-                    "\x96\x97\x93\x94\x91\x92\xF7\xFF\xA0\x80" ;
-
-void wxMacConvertFromPC( const char *from , char *to , int len )
-{
-    char *c ;
-    if ( from == to )
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringMac[ c - StringANSI] ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-    else
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringANSI , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringMac[ c - StringANSI] ;
-            }
-            else
-            {
-                *to = *from ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-}
-
-void wxMacConvertToPC( const char *from , char *to , int len )
-{
-    char *c ;
-    if ( from == to )
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringMac , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringANSI[ c - StringMac] ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-    else
-    {
-        for( int i = 0 ; i < len ; ++ i )
-        {
-            c = strchr( StringMac , *from ) ;
-            if ( c != NULL )
-            {
-                *to = StringANSI[ c - StringMac] ;
-            }
-            else
-            {
-                *to = *from ;
-            }
-            ++to ;
-            ++from ;
-        }
-    }
-}
-
-TECObjectRef s_TECNativeCToUnicode = NULL ;
-TECObjectRef s_TECUnicodeToNativeC = NULL ;
-
-void wxMacSetupConverters()
-{
-    // if we assume errors are happening here we need low level debugging
-    // since the high level assert will use the encoders that are not yet
-    // setup...
-#if TARGET_CARBON
-    const TextEncodingBase kEncoding = CFStringGetSystemEncoding();
-#else
-    const TextEncodingBase kEncoding = kTextEncodingMacRoman;
-#endif
-    OSStatus status = noErr ;
-    status = TECCreateConverter(&s_TECNativeCToUnicode,
-                                kEncoding,
-                                kTextEncodingUnicodeDefault);
-
-    status = TECCreateConverter(&s_TECUnicodeToNativeC,
-                                kTextEncodingUnicodeDefault,
-                                kEncoding);
-
-#if (wxUSE_UNICODE == 1) && (SIZEOF_WCHAR_T == 4)
-	TextEncoding kUnicode32 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
-    
-    status = TECCreateConverter(&s_TECUnicode16To32,
-                                kTextEncodingUnicodeDefault,
-                                kUnicode32);
-    status = TECCreateConverter(&s_TECUnicode32To16,
-                                kUnicode32,
-                                kTextEncodingUnicodeDefault);
-#endif
-}
-
-void wxMacCleanupConverters()
-{
-    OSStatus status = noErr ;
-    status = TECDisposeConverter(s_TECNativeCToUnicode);
-    status = TECDisposeConverter(s_TECUnicodeToNativeC);
-}
-
-wxWCharBuffer wxMacStringToWString( const wxString &from )
-{
-#if wxUSE_UNICODE
-    wxWCharBuffer result( from.wc_str() ) ;
-#else
-    OSStatus status = noErr ;
-    ByteCount byteOutLen ;
-    ByteCount byteInLen = from.Length() ;
-    ByteCount byteBufferLen = byteInLen * SIZEOF_WCHAR_T ;
-    wxWCharBuffer result( from.Length() ) ;
-    status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
-        (TextPtr)result.data(), byteBufferLen, &byteOutLen);
-    result.data()[byteOutLen/SIZEOF_WCHAR_T] = 0 ;
-#endif
-    return result ;
-}
-
-
-wxString wxMacMakeStringFromCString( const char * from , int len )
-{
-    OSStatus status = noErr ;
-    wxString result ;
-    wxChar* buf = result.GetWriteBuf( len ) ;
-#if wxUSE_UNICODE
-    ByteCount byteOutLen ;
-    ByteCount byteInLen = len ;
-    ByteCount byteBufferLen = len * SIZEOF_WCHAR_T;
-
-    status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from , byteInLen, &byteInLen,
-        (TextPtr)buf, byteBufferLen, &byteOutLen);
-#else
-    memcpy( buf , from , len ) ;
-#endif
-    buf[len] = 0 ;
-    result.UngetWriteBuf() ;
-    return result ;
-}
-
-wxString wxMacMakeStringFromCString( const char * from )
-{
-    return wxMacMakeStringFromCString( from , strlen(from) ) ;
-}
-
-wxCharBuffer wxMacStringToCString( const wxString &from )
-{
-#if wxUSE_UNICODE
-    OSStatus status = noErr ;
-    ByteCount byteOutLen ;
-    ByteCount byteInLen = from.Length() * SIZEOF_WCHAR_T ;
-    ByteCount byteBufferLen = from.Length() ;
-    wxCharBuffer result( from.Length() ) ;
-    status = TECConvertText(s_TECUnicodeToNativeC , (ConstTextPtr)from.wc_str() , byteInLen, &byteInLen,
-        (TextPtr)result.data(), byteBufferLen, &byteOutLen);
-    return result ;
-#else
-    return wxCharBuffer( from.c_str() ) ;
-#endif
-}
-#endif
-
 void wxMacStringToPascal( const wxString&from , StringPtr to )
 {
     wxCharBuffer buf = from.mb_str( wxConvLocal ) ;
@@ -1013,7 +826,10 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
             break ;
         case wxFONTENCODING_MACKEYBOARD :
             enc = kTextEncodingMacKeyboardGlyphs ;
-            break ;       
+            break ;    
+		default :
+			// to make gcc happy
+			break ;
 	} ;
 	return enc ;
 }
@@ -1285,36 +1101,26 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 
 #if TARGET_CARBON
 
-#if (wxUSE_UNICODE == 1) && (SIZEOF_WCHAR_T == 4)
-
-wxMBConvUTF16BE gMacUTFConverter ;
-
-#endif
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
 	Release() ;
+
 	wxString str = st ;
     wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
-	size_t len = str.Len() ;
-	UniChar *unibuf ;
 #if SIZEOF_WCHAR_T == 2
-	unibuf = (UniChar*)str.wc_str() ;
-#else
-    ByteCount byteBufferLen = len * sizeof( UniChar ) ;
-	unibuf = (UniChar*) malloc(byteBufferLen) ;
-	wxMBConvUTF16BE converter ;
-	converter.WC2MB( (char*) unibuf , str.wc_str() , byteBufferLen ) ;
-#endif
   	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
-	 unibuf , len );
-#if SIZEOF_WCHAR_T == 2
-	// as long as UniChar is the same as wchar_t nothing to do here
+	 (UniChar*)str.wc_str() , str.Len() );
 #else
-	free( unibuf ) ;
+	wxMBConvUTF16BE converter ;
+    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+    UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
+    converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
+    m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault ,
+        unibuf , unicharlen / sizeof(UniChar) ) ;
+    delete[] unibuf ;
 #endif
-
 #else // not wxUSE_UNICODE
     m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
         wxMacGetSystemEncFromFontEnc( encoding ) ) ;
@@ -1324,30 +1130,39 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 
 wxString wxMacCFStringHolder::AsString(wxFontEncoding encoding)
 {
-    wxString result ;
-    Size len = CFStringGetLength( m_cfs )  ;
-    wxChar* buf = result.GetWriteBuf( len ) ;
+    Size cflen = CFStringGetLength( m_cfs )  ;
+    size_t noChars ;
+    wxChar* buf = NULL ;
+    
 #if wxUSE_UNICODE
-	UniChar *unibuf ;
 #if SIZEOF_WCHAR_T == 2
-	unibuf = (UniChar*) buf ;
+    buf = new wxChar[ cflen + 1 ] ; 
+    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) buf ) ;
+    noChars = cflen ;
 #else
-	unibuf = (UniChar*) malloc( len * sizeof( UniChar ) ) ;
-#endif
-    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , len ) , (UniChar*) unibuf ) ;
-#if SIZEOF_WCHAR_T == 2
-	// as long as UniChar is the same as wchar_t nothing to do here
-#else
+    UniChar* unibuf = new UniChar[ cflen + 1 ] ;
+    CFStringGetCharacters( m_cfs , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
+    unibuf[cflen] = 0 ;
 	wxMBConvUTF16BE converter ;
-	converter.MB2WC( buf , (const char*)unibuf , len * sizeof( UniChar ) ) ;
-	free( unibuf ) ;
-#endif	
-#else
-    CFStringGetCString( m_cfs , buf , len+1 , wxMacGetSystemEncFromFontEnc( encoding ) ) ;
+	noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
+    buf = new wxChar[ noChars + 1 ] ;
+    converter.MB2WC( buf , (const char*)unibuf , noChars ) ;
+    delete[] unibuf ;
 #endif
-    buf[len] = 0 ;
+#else
+    CFIndex cStrLen ;
+    CFStringGetBytes( m_cfs , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
+        '?' , false , NULL , 0 , cStrLen ) ;
+    buf = new wxChar[ cStrLen + 1 ] ; 
+    CFStringGetBytes( m_cfs , CFRangeMake(0, len) , wxMacGetSystemEncFromFontEnc( encoding ) ,
+        '?' , false , (void*) buf , cStrLen , &StrLen) ;
+    noChars = cStrLen ;
+#endif
+
+    buf[noChars] = 0 ;
     wxMacConvertNewlines10To13( buf ) ;
-    result.UngetWriteBuf() ;
+    wxString result(buf) ;
+    delete[] buf ;
     return result ;
 }
 
