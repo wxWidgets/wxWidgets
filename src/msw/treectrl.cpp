@@ -382,12 +382,12 @@ bool wxTreeCtrl::IsSelected(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
-    return wxTreeItemId(TreeView_GetRoot(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetRoot(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetSelection() const
 {
-    return wxTreeItemId(TreeView_GetSelection(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetSelection(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
@@ -407,23 +407,23 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
 wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
                                       long& _cookie) const
 {
-    return wxTreeItemId(TreeView_GetNextSibling(wxhWnd,
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd,
                                                     (HTREEITEM) (WXHTREEITEM)_cookie));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId(TreeView_GetNextSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevSibling(const wxTreeItemId& item) const
 {
-    return wxTreeItemId(TreeView_GetPrevSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevSibling(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 {
-    return wxTreeItemId(TreeView_GetFirstVisible(wxhWnd));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetFirstVisible(wxhWnd));
 }
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
@@ -431,7 +431,7 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), "The item you call GetNextVisible() "
                                    "for must be visible itself!");
 
-    return wxTreeItemId(TreeView_GetNextVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetNextVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
@@ -439,7 +439,7 @@ wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
     wxASSERT_MSG( IsVisible(item), "The item you call GetPrevVisible() "
                                    "for must be visible itself!");
 
-    return wxTreeItemId(TreeView_GetPrevVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
+    return wxTreeItemId((WXHTREEITEM) TreeView_GetPrevVisible(wxhWnd, (HTREEITEM) (WXHTREEITEM) item));
 }
 
 // ----------------------------------------------------------------------------
