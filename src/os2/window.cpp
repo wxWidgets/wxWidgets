@@ -938,28 +938,61 @@ void wxWindowOS2::ScrollWindow(
 {
     RECTL                           vRect;
 
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    int                             height = vRect.yTop;
     if (pRect)
     {
         vRect.xLeft   = pRect->x;
-        vRect.yTop    = pRect->y + pRect->height;
+        vRect.yTop    = height - pRect->y;
         vRect.xRight  = pRect->x + pRect->width;
-        vRect.yBottom = pRect->y;
-    }
-    else
-    {
-        ::WinQueryWindowRect(GetHwnd(), &vRect);
+        vRect.yBottom = vRect.yTop - pRect->height;
     }
     nDy *= -1; // flip the sign of Dy as OS/2 is opposite Windows.
+    HPS                             hPs;
+    HRGN			    vUpdateRegion;
+    hPs = ::WinGetPS(GetHwnd());
+    vUpdateRegion = ::GpiCreateRegion(hPs, 0, NULL);
     ::WinScrollWindow( GetHwnd()
                       ,(LONG)nDx
                       ,(LONG)nDy
                       ,&vRect
                       ,&vRect
-                      ,NULLHANDLE
+                      ,vUpdateRegion
                       ,NULL
-                      ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
+                      ,SW_SCROLLCHILDREN //| SW_INVALIDATERGN
                      );
-    Refresh();
+    RGNRECT                     vRgnData;
+    PRECTL                      pUpdateRects = NULL;
+    vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
+    if (::GpiQueryRegionRects( hPs      // Pres space
+                              ,vUpdateRegion  // Handle of region to query
+                              ,NULL             // Return all RECTs
+                              ,&vRgnData        // Will contain number or RECTs in region
+                              ,NULL             // NULL to return number of RECTs
+                             ))
+    {
+        pUpdateRects = new RECTL[vRgnData.crcReturned];
+        vRgnData.crc = vRgnData.crcReturned;
+        vRgnData.ircStart = 1;
+        if (::GpiQueryRegionRects( hPs     // Pres space of source
+                                  ,vUpdateRegion // Handle of source region
+                                  ,NULL            // Return all RECTs
+                                  ,&vRgnData       // Operations set to return rects
+                                  ,pUpdateRects    // Will contain the actual RECTS
+                                 ))
+        {
+            for(size_t i = 0; i < vRgnData.crc; i++)
+            {
+                wxRect UpdateRect;
+                UpdateRect.x = pUpdateRects[i].xLeft;
+                UpdateRect.y = height - pUpdateRects[i].yTop;
+                UpdateRect.width = pUpdateRects[i].xRight - pUpdateRects[i].xLeft;
+                UpdateRect.height = pUpdateRects[i].yTop - pUpdateRects[i].yBottom;
+                Refresh(FALSE, &UpdateRect);
+            }
+            delete [] pUpdateRects;
+        }
+    }
 } // end of wxWindowOS2::ScrollWindow
 
 // ---------------------------------------------------------------------------
@@ -1220,11 +1253,14 @@ void wxWindowOS2::Refresh(
         if (pRect)
         {
             RECTL                   vOs2Rect;
+            int                     height;
 
+            ::WinQueryWindowRect(GetHwnd(), &vOs2Rect);
+	    height = vOs2Rect.yTop;
             vOs2Rect.xLeft   = pRect->x;
-            vOs2Rect.yBottom = pRect->y;
+            vOs2Rect.yTop    = height - pRect->y;
             vOs2Rect.xRight  = pRect->x + pRect->width;
-            vOs2Rect.yTop    = pRect->y + pRect->height;
+            vOs2Rect.yBottom = vOs2Rect.yTop - pRect->height;
 
             ::WinInvalidateRect(hWnd, &vOs2Rect, bEraseBack);
         }
@@ -1955,7 +1991,7 @@ bool wxWindowOS2::DoPopupMenu(
     pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
     
-    if ( x == -1 && y == -1 )
+    if ( nX == -1 && nY == -1 )
     {
         wxPoint mouse = wxGetMousePosition();
         nX = mouse.x; nY = mouse.y;
@@ -3684,6 +3720,51 @@ bool wxWindowOS2::HandlePaint()
     {
          wxLogLastError("CreateRectRgn");
          return FALSE;
+    }
+
+    // Get all the rectangles from the region, convert the individual
+    // rectangles to "the other" coordinate system and reassemble a
+    // region from the rectangles, to be feed into m_updateRegion.
+    //
+    // FIXME: This is a bad hack since OS/2 API specifies that rectangles
+    //		passed into GpiSetRegion must not have Bottom > Top,
+    //          however, at first sight, it _seems_ to work nonetheless.
+    //
+    RGNRECT                     vRgnData;
+    PRECTL                      pUpdateRects = NULL;
+    vRgnData.ulDirection = RECTDIR_LFRT_TOPBOT;
+    if (::GpiQueryRegionRects( hPS          // Pres space
+                              ,hRgn         // Handle of region to query
+                              ,NULL         // Return all RECTs
+                              ,&vRgnData    // Will contain number or RECTs in region
+                              ,NULL         // NULL to return number of RECTs
+                             ))
+    {
+        pUpdateRects = new RECTL[vRgnData.crcReturned];
+        vRgnData.crc = vRgnData.crcReturned;
+        vRgnData.ircStart = 1;
+        if (::GpiQueryRegionRects( hPS      // Pres space of source
+                                  ,hRgn     // Handle of source region
+                                  ,NULL     // Return all RECTs
+                                  ,&vRgnData // Operations set to return rects
+                                  ,pUpdateRects // Will contain the actual RECTS
+                                 ))
+        {
+            int                     height;
+            RECT                    vRect;
+            ::WinQueryWindowRect(GetHwnd(), &vRect);
+            height = vRect.yTop;
+
+            for(size_t i = 0; i < vRgnData.crc; i++)
+            {
+                int                 rectHeight;
+                rectHeight = pUpdateRects[i].yTop - pUpdateRects[i].yBottom;
+                pUpdateRects[i].yTop = height - pUpdateRects[i].yTop;
+                pUpdateRects[i].yBottom = pUpdateRects[i].yTop + rectHeight;
+            }
+            ::GpiSetRegion(hPS, hRgn, vRgnData.crc, pUpdateRects);
+            delete [] pUpdateRects;
+        }
     }
 
     m_updateRegion = wxRegion(hRgn, hPS);
