@@ -72,7 +72,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -98,7 +99,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXUSINGDLL=1 /YX"wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D WXUSINGDLL=1 /FD /c
+# SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -147,63 +149,11 @@ LINK32=link.exe
 # Name "ConvertVC - Win32 Release DLL"
 # Begin Source File
 
-SOURCE=.\wx\msw\blank.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\bullseye.cur
-# End Source File
-# Begin Source File
-
 SOURCE=.\convert.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\convert.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\error.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\hand.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\info.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\magnif1.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\noentry.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\pbrush.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\pencil.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\pntleft.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\pntright.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\query.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\question.ico
 # End Source File
 # Begin Source File
 
@@ -252,26 +202,6 @@ SOURCE=.\rc2xml.cpp
 # Begin Source File
 
 SOURCE=.\rc2xml.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\roller.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\size.cur
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\tip.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\warning.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\wx\msw\watch1.cur
 # End Source File
 # Begin Source File
 

@@ -293,7 +293,7 @@ bool wxBitmap::CreateFromXpm(const char **data)
     wxImage img = decoder.ReadData(data);
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
     
-    *this = wxBitmap(img);
+    *this = img.ConvertToBitmap();
     return TRUE;
 #else
 	return FALSE;

@@ -82,7 +82,6 @@ USE_CTL3D=1
 
 !if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
 USE_CTL3D=0
-USE_XPM_IN_MSW=0
 !endif
 
 PERIPH_LIBS=
@@ -116,9 +115,6 @@ COMMONOBJS2 = \
 MSWOBJS1 = #$ ExpandList("WXMSWOBJS1");
 
 MSWOBJS2 = #$ ExpandList("WXMSWOBJS2");
-
-# TODO: Implement XPM and PNG targets in this makefile!
-#  $(OLEDIR)\pnghand \
 
 OBJECTS = $(COMMONOBJS1) $(COMMONOBJS2) $(GENERICOBJS) $(MSWOBJS1) $(MSWOBJS2)
 

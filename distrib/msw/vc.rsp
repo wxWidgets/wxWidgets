@@ -20,9 +20,6 @@ src/zlib/ZlibVC.dsw
 src/png/PngVC.dsp
 src/png/PngVC.dsw
 
-src/xpm/XpmVC.dsp
-src/xpm/XpmVC.dsw
-
 samples/SamplesVC.dsw
 
 samples/calendar/CalendarVC.dsp

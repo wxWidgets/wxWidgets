@@ -3,7 +3,7 @@ Installing wxWindows 2.3
 ------------------------
 
 This is wxWindows 2.3 for Microsoft Windows 3.1, 95, 98 and
-Windows NT/Windows 2000. This is an official, stable release.
+Windows NT/Windows 2000. This is an unstable development release.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,

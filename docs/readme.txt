@@ -1,22 +1,27 @@
 wxWindows 2.3.0
 ---------------
 
+*** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
+*** Unless you need the new features and bug fixes, you may wish to
+*** use the official 2.2.x stable series.
+
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
 possible) the native controls.
 
-In addition to common and advanced GUI facilities such as frames, scrolling
-windows, toolbars, tree controls, icons, device contexts, printing,
-splitter windows and so on, there are wrappers for common file operations,
-and facilities for writing TCP/IP applications, thread handling, and more.
-Where certain features are not available on a platform, such as MDI and
-tree controls on Unix, they are emulated.
+In addition to common and advanced GUI facilities such as
+frames, scrolling windows, toolbars, tree controls, icons,
+device contexts, printing, splitter windows and so on, there are
+wrappers for common file operations, and facilities for writing
+TCP/IP applications, thread handling, and more. Where certain
+features are not available on a platform, such as MDI and tree
+controls on Unix, they are emulated.
 
-A detailed 1400-page reference manual is supplied in HTML, PDF and
-Windows Help form: see the docs hierarchy.
+A detailed 1400-page reference manual is supplied in HTML, PDF
+and Windows Help form: see the docs hierarchy.
 
-For a quick start, point your Web browser at docs/html/index.htm for a
-list of important documents and samples.
+For a quick start, point your Web browser at docs/html/index.htm
+for a list of important documents and samples.
 
 Changes in this release
 -----------------------
@@ -28,7 +33,7 @@ Platforms supported
 
 wxWindows 2 currently supports the following platforms:
 
-- Windows 3.1, Windows 95/98, Windows NT
+- Windows 3.1, Windows 95/98, Windows NT, Windows 2000
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
 - MacOS
@@ -212,5 +217,5 @@ web site.
 
 Good luck!
 
-The wxWindows Team, 8th May, 2001
+The wxWindows Team, 12th May, 2001
 

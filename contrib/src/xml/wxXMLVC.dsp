@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "d:\libxml\libxml2-2.1.1" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /GX /Z7 /Od /I "../../../include" /I "../../include" /I "d:\libxml\libxml2-2.1.1" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Z7 /Od /I "../../../include" /I "../../include" /I "expat/xmlparse" /I "expat/xmltok" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809
 # ADD RSC /l 0x809
@@ -82,9 +82,37 @@ LIB32=link.exe -lib
 
 # Name "wxXMLVC - Win32 Release"
 # Name "wxXMLVC - Win32 Debug"
+# Begin Group "Expat"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\expat\xmlparse\xmlparse.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\expat\xmltok\xmlrole.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\expat\xmltok\xmltok.c
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\xh_bmp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_bmpbt.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=.\xh_bttn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_cald.cpp
 # End Source File
 # Begin Source File
 
@@ -108,11 +136,23 @@ SOURCE=.\xh_dlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_frame.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_gauge.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\xh_html.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_listb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_listc.cpp
 # End Source File
 # Begin Source File
 
@@ -136,6 +176,10 @@ SOURCE=.\xh_radbx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_scrol.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_sizer.cpp
 # End Source File
 # Begin Source File
@@ -152,6 +196,14 @@ SOURCE=.\xh_stbmp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_stbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_stlin.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xh_sttxt.cpp
 # End Source File
 # Begin Source File
@@ -160,11 +212,15 @@ SOURCE=.\xh_text.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xh_listb.cpp
+SOURCE=.\xh_toolb.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xh_toolb.cpp
+SOURCE=.\xh_tree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_unkwn.cpp
 # End Source File
 # Begin Source File
 
@@ -180,7 +236,7 @@ SOURCE=.\xmlbinz.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xmlpars.cpp
+SOURCE=.\xmlexpat.cpp
 # End Source File
 # Begin Source File
 
@@ -188,43 +244,11 @@ SOURCE=.\xmlres.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xh_bmpbt.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_cald.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_listc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_scrol.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_stbox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_tree.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_stlin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_bmp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\xh_unkwn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\xmlrsall.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xmlwrite.cpp
 # End Source File
 # End Target
 # End Project
