@@ -1762,12 +1762,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 
             case HDN_GETDISPINFOW:
                 {
-#ifdef __GNUWIN32__
-                    // Can someone test if this is OK on XP? Otherwise
-                    // we will have to define LPNMHDDISPINFOW for MinGW/Cygwin
-                    // and do as below.
-                    return TRUE;
-#else                    
                     LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
                     // This is a fix for a strange bug under XP.
                     // Normally, info->iItem is a valid index, but
@@ -1781,7 +1775,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         return TRUE;
                     else
                         return wxControl::MSWOnNotify(idCtrl, lParam, result);
-#endif
                 }
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
