@@ -34,6 +34,7 @@
 #import <AppKit/NSMenu.h>
 #import <Foundation/NSString.h>
 #import <AppKit/NSCell.h> // NSOnState, NSOffState
+#import <AppKit/NSEvent.h> // modifier key masks
 
 #if wxUSE_MENUS
 
@@ -101,6 +102,44 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     return wxStripMenuCodes(text);
 }
 
+void wxMenuItemCocoa::CocoaSetKeyEquivalent()
+{
+    wxAcceleratorEntry *accel = GetAccel();
+    if(!accel)
+        return;
+
+    int accelFlags = accel->GetFlags();
+    int keyModifierMask = 0;
+    if(accelFlags & wxACCEL_ALT)
+        keyModifierMask |= NSAlternateKeyMask;
+    if(accelFlags & wxACCEL_CTRL)
+        keyModifierMask |= NSCommandKeyMask;
+    int keyCode = accel->GetKeyCode();
+    if(isalpha(keyCode))
+    {   // For alpha characters use upper/lower rather than NSShiftKeyMask
+        char alphaChar;
+        if(accelFlags & wxACCEL_SHIFT)
+            alphaChar = toupper(keyCode);
+        else
+            alphaChar = tolower(keyCode);
+        [m_cocoaNSMenuItem setKeyEquivalent:[NSString stringWithCString:&alphaChar length:1]];
+        [m_cocoaNSMenuItem setKeyEquivalentModifierMask:keyModifierMask];
+    }
+    else
+    {
+        if(accelFlags & wxACCEL_SHIFT)
+            keyModifierMask |= NSShiftKeyMask;
+        if(keyCode < 128) // low ASCII includes backspace/tab/etc.
+        {   char alphaChar = keyCode;
+            [m_cocoaNSMenuItem setKeyEquivalent:[NSString stringWithCString:&alphaChar length:1]];
+        }
+        else
+        {   // TODO
+        }
+        [m_cocoaNSMenuItem setKeyEquivalentModifierMask:keyModifierMask];
+    }
+}
+
 // ----------------------------------------------------------------------------
 // ctor & dtor
 // ----------------------------------------------------------------------------
@@ -134,6 +173,7 @@ wxMenuItemCocoa::wxMenuItemCocoa(wxMenu *pParentMenu,
         else
             [m_cocoaNSMenuItem setTarget: sm_cocoaTarget];
         [menuTitle release];
+        CocoaSetKeyEquivalent();
     }
 }
 
@@ -245,6 +285,7 @@ void wxMenuItem::SetText(const wxString& label)
     wxMenuItemBase::SetText(label);
     wxCHECK_RET(m_kind != wxITEM_SEPARATOR, wxT("Separator items do not have titles."));
     [m_cocoaNSMenuItem setTitle: wxNSStringWithWxString(wxStripMenuCodes(label))];
+    CocoaSetKeyEquivalent();
 }
 
 void wxMenuItem::SetCheckable(bool checkable)
