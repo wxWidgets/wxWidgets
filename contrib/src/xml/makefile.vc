@@ -19,28 +19,17 @@ THISDIR = $(WXDIR)\contrib\src\xml
 DOCDIR=$(WXDIR)\contrib\docs
 LOCALDOCDIR=$(WXDIR)\contrib\docs\latex\xml
 
-# Do not specify the 'libxml' directory on
-# this -I line, as the #includes use
-# <libxml/xxxx.h>.  If your libxml is installed
-# in "d:\libxml\libxml2-2.1.1\libxml" you would use:
-# wxLIBXMLDIR=-Id:\libxml\libxml2-2.1.1
-wxLIBXMLDIR=
+NOPCH=1
 
-!if "$(wxLIBXMLDIR)" == ""
-!message
-!message SETUP REQUIRED
-!message
-!message You must set the wxLIBXMLDIR variable in makefile.vc before compiling
-!message
-!message If you do not have the libxml library, you will need to obtain & install
-!message it before compiling the wxXML code.  You can obtain libxml from:
-!message http://www.xmlsoft.org
-!message
-!error
-!endif
+EXPAT_DIR=$(THISDIR)\expat
+E1=$(EXPAT_DIR)\xmlparse
+E2=$(EXPAT_DIR)\xmltok
+
+EXPAT_INCS=-I$(THISDIR)\expat\xmlparse -I$(THISDIR)\expat\xmltok
+EXPAT_OBJS=$(D)\xmlparse.obj $(D)\xmlrole.obj $(D)\xmltok.obj
 
 # Set this to where your libxml directory is
-EXTRAFLAGS=$(wxLIBXMLDIR)
+EXTRAFLAGS=$(EXPAT_INCS)
 
 # Unfortunately we need this _before_ we include makelib.vc
 !if "$(FINAL)" == "1"
@@ -53,16 +42,31 @@ LIBEXT=d
 LIBTARGET=$(WXDIR)\lib\wxxml$(LIBEXT).lib
 EXTRATARGETS=$(D)
 
-OBJECTS=$(D)\xml.obj $(D)\xmlbin.obj $(D)\xmlbinz.obj $(D)\xmlpars.obj $(D)\xmlres.obj $(D)\xmlrsall.obj \
-        $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_chckl.obj $(D)\xh_choic.obj $(D)\xh_combo.obj $(D)\xh_dlg.obj \
-        $(D)\xh_frame.obj $(D)\xh_gauge.obj $(D)\xh_html.obj $(D)\xh_menu.obj $(D)\xh_notbk.obj $(D)\xh_panel.obj $(D)\xh_radbt.obj \
-        $(D)\xh_radbx.obj $(D)\xh_sizer.obj $(D)\xh_slidr.obj $(D)\xh_spin.obj $(D)\xh_stbmp.obj $(D)\xh_sttxt.obj \
+OBJECTS=$(EXPAT_OBJS) \
+        $(D)\xml.obj $(D)\xmlbin.obj $(D)\xmlbinz.obj $(D)\xmlres.obj \
+        $(D)\xmlrsall.obj $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_chckl.obj \
+		$(D)\xh_choic.obj $(D)\xh_combo.obj $(D)\xh_dlg.obj \
+        $(D)\xh_frame.obj $(D)\xh_gauge.obj $(D)\xh_html.obj $(D)\xh_menu.obj \
+		$(D)\xh_notbk.obj $(D)\xh_panel.obj $(D)\xh_radbt.obj \
+        $(D)\xh_radbx.obj $(D)\xh_sizer.obj $(D)\xh_slidr.obj $(D)\xh_spin.obj \
+		$(D)\xh_stbmp.obj $(D)\xh_sttxt.obj \
         $(D)\xh_text.obj $(D)\xh_listb.obj $(D)\xh_toolb.obj \
         $(D)\xh_bmpbt.obj $(D)\xh_cald.obj $(D)\xh_listc.obj $(D)\xh_scrol.obj \
         $(D)\xh_stbox.obj $(D)\xh_tree.obj $(D)\xh_stlin.obj $(D)\xh_bmp.obj \
-        $(D)\xh_unkwn.obj
+        $(D)\xh_unkwn.obj $(D)\xmlwrite.obj $(D)\xmlexpat.obj
 
 !include $(WXDIR)\src\makelib.vc
+
+{$(E1)}.c{$(D)}.obj:
+	$(cc) @<<
+$(CPPFLAGS) /c /Fo$@ /Tc $<
+<<
+{$(E2)}.c{$(D)}.obj:
+	$(cc) @<<
+$(CPPFLAGS) /c /Fo$@ /Tc $<
+<<
+
+
 
 DOCSOURCES=$(LOCALDOCDIR)\xml.tex \
  $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\
