@@ -241,12 +241,12 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
     if (orient == wxHORIZONTAL)
     {
         int newPos = m_xScrollPosition + nScrollInc;
-        SetScrollPos(wxHORIZONTAL, newPos, TRUE );
+        SetScrollPos(wxHORIZONTAL, newPos, FALSE );
     }
     else
     {
         int newPos = m_yScrollPosition + nScrollInc;
-        SetScrollPos(wxVERTICAL, newPos, TRUE );
+        SetScrollPos(wxVERTICAL, newPos, FALSE );
     }
 
     if (orient == wxHORIZONTAL)
@@ -463,6 +463,15 @@ void wxScrolledWindow::PrepareDC(wxDC& dc)
     dc.SetDeviceOrigin( -m_xScrollPosition * m_xScrollPixelsPerLine,
                         -m_yScrollPosition * m_yScrollPixelsPerLine );
     dc.SetUserScale( m_scaleX, m_scaleY );
+
+    // for wxUniversal we need to set the clipping region to avoid overwriting
+    // the scrollbars with the user drawing
+#ifdef __WXUNIVERSAL__
+    wxSize size = GetClientSize();
+    dc.SetClippingRegion(m_xScrollPosition * m_xScrollPixelsPerLine,
+                         m_yScrollPosition * m_yScrollPixelsPerLine,
+                         size.x, size.y);
+#endif // __WXUNIVERSAL__
 }
 
 #if WXWIN_COMPATIBILITY

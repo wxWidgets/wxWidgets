@@ -32,6 +32,7 @@
     #include "wx/app.h"
     #include "wx/window.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/event.h"
     #include "wx/scrolbar.h"
 #endif // WX_PRECOMP
@@ -326,43 +327,59 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     // calculate the part of the window which we can just redraw in the new
     // location
     wxSize sizeTotal = GetClientSize();
+
+    wxLogTrace(_T("scroll"), _T("window is %dx%d, scroll by %d, %d"),
+               sizeTotal.x, sizeTotal.y, dx, dy);
+
     wxPoint ptSource, ptDest;
     wxSize size;
-    size.x = sizeTotal.x - dx;
-    size.y = sizeTotal.y - dy;
+    size.x = sizeTotal.x - abs(dx);
+    size.y = sizeTotal.y - abs(dy);
     if ( size.x < 0 || size.y < 0 )
     {
         // just redraw everything as nothing of the displayed image will stay
+        wxLogTrace(_T("scroll"), _T("refreshing everything"));
+
         Refresh();
     }
     else // move the part which doesn't change to the new location
     {
-        // positive values mean to scroll to thr right/down
+        // positive values mean to scroll to the left/up
         if ( dx > 0 )
-        {
-            ptSource.x = 0;
-            ptDest.x = dx;
-        }
-        else
         {
             ptSource.x = dx;
             ptDest.x = 0;
         }
+        else
+        {
+            ptSource.x = 0;
+            ptDest.x = -dx;
+        }
 
         if ( dy > 0 )
-        {
-            ptSource.y = 0;
-            ptDest.y = dy;
-        }
-        else
         {
             ptSource.y = dy;
             ptDest.y = 0;
         }
+        else
+        {
+            ptSource.y = 0;
+            ptDest.y = -dy;
+        }
 
         // do move
         wxClientDC dc(this);
-        dc.Blit(ptDest, size, &dc, ptSource);
+        wxBitmap bmp(size.x, size.y);
+        wxMemoryDC dcMem;
+        dcMem.SelectObject(bmp);
+        dcMem.Blit(wxPoint(0, 0), size, &dc, ptSource);
+        dc.Blit(ptDest, size, &dcMem, wxPoint(0, 0));
+
+        wxLogTrace(_T("scroll"),
+                   _T("Blit: (%d, %d) of size %dx%d -> (%d, %d)"),
+                   ptSource.x, ptSource.y,
+                   size.x, size.y,
+                   ptDest.x, ptDest.y);
 
         // and now repaint the uncovered area
 
@@ -375,8 +392,11 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         if ( dx )
         {
-            rect.width = abs(ptDest.x - ptSource.x);
+            rect.width = abs(dx);
             rect.height = sizeTotal.y;
+
+            wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
+                       rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
             Refresh(TRUE /* erase bkgnd */, &rect);
         }
@@ -384,7 +404,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         if ( dy )
         {
             rect.width = sizeTotal.x;
-            rect.height = abs(ptDest.y - ptSource.y);
+            rect.height = abs(dy);
+
+            wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
+                       rect.x, rect.y, rect.GetRight(), rect.GetBottom());
 
             Refresh(TRUE /* erase bkgnd */, &rect);
         }

@@ -184,7 +184,11 @@ void wxControl::PerformActions(const wxControlActions& actions,
     size_t count = actions.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( PerformAction(actions[n], event) )
+        const wxControlAction& action = actions[n];
+        if ( !action )
+            continue;
+
+        if ( PerformAction(action, event) )
             needsRefresh = TRUE;
     }
 

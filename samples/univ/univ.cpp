@@ -184,6 +184,8 @@ bool MyUnivApp::OnInit()
     wxFrame *frame = new MyUnivFrame(_T("wxUniversal demo"));
     frame->Show();
 
+    wxLog::AddTraceMask(_T("scroll"));
+
     return TRUE;
 }
 
@@ -277,7 +279,7 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
                                              wxSize(300, 150),
                                              wxSUNKEN_BORDER);
     win->SetScrollbars(10, 10, 100, 100, 0, 0);
-    win->ScrollWindow(100, 0);
+    //win->Scroll(10, 0);
 #endif
 
     new wxButton(this, -1, wxBITMAP(open), _T("&Open..."), wxPoint(10, 420));
@@ -323,8 +325,19 @@ void MyUnivFrame::OnLeftUp(wxMouseEvent& event)
 void MyUnivCanvas::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this);
-    dc.SetPen(*wxRED_PEN);
+    PrepareDC(dc);
+
+    static bool s_oddRepaint = TRUE;
+    s_oddRepaint = !s_oddRepaint;
+    wxCoord x, y;
+    GetViewStart(&x, &y);
+    wxLogDebug("Repainting with %s pen (at %dx%d)",
+               s_oddRepaint ? "red" : "green",
+               x, y);
+    dc.SetPen(s_oddRepaint ? *wxRED_PEN: *wxGREEN_PEN);
     dc.DrawLine(0, 0, 1000, 1000);
-    dc.DrawText(_T("This is a canvas"), 10, 10);
+    dc.DrawText(_T("This is the top of the canvas"), 10, 10);
+    dc.DrawLabel(_T("This is the bottom of the canvas"),
+                 wxRect(0, 950, 950, 50), wxALIGN_RIGHT | wxBOTTOM);
 }
 

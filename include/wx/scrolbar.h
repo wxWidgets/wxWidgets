@@ -29,7 +29,7 @@ public:
     virtual int GetPageSize() const = 0;
     virtual int GetRange() const = 0;
 
-    bool IsVertical() const { return m_windowStyle & wxVERTICAL != 0; }
+    bool IsVertical() const { return (m_windowStyle & wxVERTICAL) != 0; }
 
     // operations
     virtual void SetThumbPosition(int viewStart) = 0;

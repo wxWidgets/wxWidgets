@@ -186,6 +186,10 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
 {
     int thumbOld = m_thumbPos;
 
+    bool notify = FALSE; // send an event about the change?
+
+    wxEventType scrollType;
+
     // test for thumb move first as these events happen in quick succession
     if ( action == wxACTION_SCROLL_THUMB_MOVE )
     {
@@ -193,31 +197,65 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
         // the mouse position and the top/left of the thumb
         int thumbPos = GetMouseCoord(event) - m_ofsMouse;
         DoSetThumb(GetRenderer()->PixelToScrollbar(this, thumbPos));
+
+        scrollType = wxEVT_SCROLLWIN_THUMBTRACK;
+    }
+    else if ( action == wxACTION_SCROLL_LINE_UP )
+    {
+        scrollType = wxEVT_SCROLLWIN_LINEUP;
+        ScrollLines(-1);
+    }
+    else if ( action == wxACTION_SCROLL_LINE_DOWN )
+    {
+        scrollType = wxEVT_SCROLLWIN_LINEDOWN;
+        ScrollLines(1);
+    }
+    else if ( action == wxACTION_SCROLL_PAGE_UP )
+    {
+        scrollType = wxEVT_SCROLLWIN_PAGEUP;
+        ScrollPages(-1);
+    }
+    else if ( action == wxACTION_SCROLL_PAGE_DOWN )
+    {
+        scrollType = wxEVT_SCROLLWIN_PAGEDOWN;
+        ScrollPages(1);
     }
     else if ( action == wxACTION_SCROLL_START )
+    {
+        scrollType = wxEVT_SCROLLWIN_THUMBRELEASE; // anything better?
         ScrollToStart();
+    }
     else if ( action == wxACTION_SCROLL_END )
+    {
+        scrollType = wxEVT_SCROLLWIN_THUMBRELEASE; // anything better?
         ScrollToEnd();
-    else if ( action == wxACTION_SCROLL_LINE_UP )
-        ScrollLines(-1);
-    else if ( action == wxACTION_SCROLL_LINE_DOWN )
-        ScrollLines(1);
-    else if ( action == wxACTION_SCROLL_PAGE_UP )
-        ScrollPages(-1);
-    else if ( action == wxACTION_SCROLL_PAGE_DOWN )
-        ScrollPages(1);
+    }
     else if ( action == wxACTION_SCROLL_THUMB_DRAG )
     {
         m_ofsMouse = GetMouseCoord(event) -
                         GetRenderer()->ScrollbarToPixel(this);
     }
     else if ( action == wxACTION_SCROLL_THUMB_RELEASE )
-        ; // nothing special to do
+    {
+        // always notify about this
+        notify = TRUE;
+        scrollType = wxEVT_SCROLLWIN_THUMBRELEASE;
+    }
     else
         return wxControl::PerformAction(action, event);
 
-    // if scrollbar position changed - update
-    return m_thumbPos != thumbOld;
+    // has scrollbar position changed?
+    bool changed = m_thumbPos != thumbOld;
+    if ( notify || changed )
+    {
+        wxScrollWinEvent event(scrollType, m_thumbPos,
+                               IsVertical() ? wxVERTICAL : wxHORIZONTAL);
+        event.SetEventObject(this);
+        GetParent()->GetEventHandler()->ProcessEvent(event);
+    }
+
+    // refresh if something changed
+    return changed;
 }
 
 void wxScrollBar::ScrollToStart()
