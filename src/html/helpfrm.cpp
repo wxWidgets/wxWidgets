@@ -721,8 +721,6 @@ void wxHtmlHelpFrame::CreateContents()
     if (! m_ContentsBox)
         return ;
 
-    m_ContentsBox->Clear();
-
     if (m_PagesHash)
     {
         WX_CLEAR_HASH_TABLE(*m_PagesHash);
