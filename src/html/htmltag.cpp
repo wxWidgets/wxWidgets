@@ -206,7 +206,10 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos,
                 else if (state == ST_VALUE && quote == 0)
                 {
                     m_ParamNames.Add(pname);
-                    m_ParamValues.Add(entParser->Parse(pvalue));
+                    if (entParser)
+                        m_ParamValues.Add(entParser->Parse(pvalue));
+                    else
+                        m_ParamValues.Add(pvalue);
                 }
                 break;
             }
@@ -259,7 +262,10 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos,
                             //     but wxHTML code relies on this... :(
                             pvalue.MakeUpper();
                         }
-                        m_ParamValues.Add(entParser->Parse(pvalue));
+                        if (entParser)
+                            m_ParamValues.Add(entParser->Parse(pvalue));
+                        else
+                            m_ParamValues.Add(pvalue);
                         state = ST_BEFORE_NAME;
                     }
                     else

@@ -110,7 +110,7 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
 
         else if (c == '<')  
 	    {
-            wxHtmlTag tag(m_Source, i, end_pos, m_Cache);
+            wxHtmlTag tag(m_Source, i, end_pos, m_Cache, m_entitiesParser);
 
             if (templen) 
 	        {
