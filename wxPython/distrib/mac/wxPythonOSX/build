@@ -12,7 +12,7 @@ fi
 
 if [ "$UID" != "0" ]; then
     echo "-------------------------------------------------------"
-    echo " WARNING:  will be unable to change ownership of files"
+    echo " WARNING: I will be unable to change ownership of files"
     echo " unless this script is run as root or via sudo"
     echo "-------------------------------------------------------"
 fi
@@ -22,7 +22,9 @@ fi
 
 function usage {
     echo ""
-    echo "Usage: $0  [panther|jaguar]  [command flags...]"
+    echo "Usage: $0  PYVER  [jaguar|panther] [command flags...]"
+    echo ""
+    echo "   PYVER          Python version to use to do the build"
     echo ""
     echo "   panther        Build for Apple's python in /usr/bin, such as on Panther"
     echo "   jaguar         Build for a python in /usr/local/bin, such as on Jaguar"
@@ -46,14 +48,23 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
-KIND=$1
+PYVER=$1
+if which python$PYVER && which pythonw$PYVER; then
+    PYTHON=`which python$PYVER`
+    PYTHONW=`which pythonw$PYVER`
+else
+    usage;
+    exit 1
+fi
+
+KIND=$2
 case $KIND in
-    panther)    PYTHON=/usr/bin/python ;;
-    jaguar)     PYTHON=/usr/local/bin/python ;;
+    panther)    TAG=macosx10.3 ;;
+    jaguar)     TAG=macosx10.2 ;;
     *)          usage; exit 1 ;;
 esac
-PYTHONW=${PYTHON}w
-shift
+
+shift;shift
 
 skiptar=no
 skipconfig=no
@@ -83,11 +94,10 @@ done
 
 
 VERSION=`$PYTHON -c "import setup;print setup.VERSION"`
-PYVER=`$PYTHON -c "import sys; print sys.version[:3]"`
+SHORTVER=`echo $VERSION | cut -c 1,2,3`
 PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
 PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
-SHORTVER=`echo $VERSION | cut -c 1,2,3`
 
 if [ $unicode == yes ]; then
     CHARTYPE=unicode
@@ -99,9 +109,15 @@ else
     PYUNICODEOPT=0
 fi
 
-#if [ "$HOSTNAME" = "bigmac.alldunn.com" ]; then
-#    MAKEJOBS="--jobs=2"
-#fi
+
+# Test if the python we are using is the System installed framework 
+# or one that was installed by the user.  This changes where the 
+# site-packages (or its alias) is located in the installer tree.
+APPLE_PYTHON=no
+if [ -e /Library/Python/$PYVER ] && [ `dirname $PYTHON` == "/usr/bin" ]; then
+    APPLE_PYTHON=yes
+fi
+
 
 
 if [ -z "$TARBALLDIR" ]; then
@@ -283,10 +299,11 @@ if [ $skipinstall != yes ]; then
 	--root=$INSTALLROOT
 
 
-    # Apple's Python (on Panther) sym-links the site-packages dir to
+    # Apple's Python Framework (such as what comes with Panther)
+    # sym-links the site-packages dir in the framework to
     # /Library/Python/$PYVER so we need to move the files so they are
     # installed in the physical location, not the virtual one.
-    if [ "$KIND" = "panther" ]; then
+    if [ $APPLE_PYTHON == yes ]; then
 	if [ -e $INSTALLROOT/Library/Python/$PYVER ]; then
 	    rm -r $INSTALLROOT/Library/Python/$PYVER
 	fi	    
@@ -315,7 +332,7 @@ if [ $skipinstall != yes ]; then
     fi
 fi
 
-if [ "$KIND" = "panther" ]; then
+if [ $APPLE_PYTHON == yes ]; then
     SITEPACKAGES=/Library/Python/$PYVER
 fi
 PKGDIR=`cat $INSTALLROOT$SITEPACKAGES/wx.pth`
@@ -443,7 +460,7 @@ EOF
 
     #-----------------------------------------------
     # Make a disk image to hold these files
-    dmgname=wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$KIND-py$PYVER
+    dmgname=wxPython${SHORTVER}-osx-$CHARTYPE-$VERSION-$TAG-py$PYVER
     $PROGDIR/../makedmg $DMGROOT $DMGDIR $dmgname
 
     echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
@@ -599,7 +616,7 @@ EOF
 
 
     # and then finally make a disk image containing everything
-    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$KIND
+    dmgname=wxPython${SHORTVER}-osx-docs-demos-$VERSION-$TAG
     $PROGDIR/../makedmg $DMGAPPS $DMGDIR $dmgname
 
     echo Moving $DMGDIR/$dmgname.dmg to $DESTDIR
