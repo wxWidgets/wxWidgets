@@ -2320,6 +2320,7 @@ if test "$wxUSE_MAC" = 1; then
     AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
     LIBWXMACRES="\$(top_builddir)/lib/lib${WX_LIBRARY}.r"
     LIBWXMACRESCOMP="\$(RESCOMP) Carbon.r -t APPL ${LIBWXMACRES} -o \$(BIN_PROGRAM)"
+    LIBWXMACRESWXCONFIG="${RESCOMP} Carbon.r -t APPL ${LIBWXMACRES} -o"
 fi
 
 dnl ------------------------------------------------------------------------
@@ -4586,6 +4587,7 @@ dnl additional for Mac OS X
 AC_SUBST(DEREZ)
 AC_SUBST(LIBWXMACRES)
 AC_SUBST(LIBWXMACRESCOMP)
+AC_SUBST(LIBWXMACRESWXCONFIG)
 
 dnl These seem to be missing
 AC_SUBST(DLLTOOL)

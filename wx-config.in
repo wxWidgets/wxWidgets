@@ -12,7 +12,7 @@ usage()
 {
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version]
-                 [--libs] [--gl-libs] [--cppflags] [--cflags] [--cxxflags]
+                 [--libs] [--gl-libs] [--cppflags] [--cflags] [--cxxflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
 
 wx-config returns configuration information about the installed
@@ -75,6 +75,9 @@ while test $# -gt 0; do
       ;;
     --cxxflags)
       echo `cppflags` @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@
+      ;;
+    --rezflags)
+      echo @LIBWXMACRESWXCONFIG@
       ;;
     --libs)
       if test "${cross_compiling}" != "yes" \
