@@ -110,8 +110,8 @@ protected:
 
 #if wxUSE_ACCEL
     // add/remove accel for the given menu item
-    void AddAccelFor(const wxMenuItem *item);
-    void RemoveAccelFor(const wxMenuItem *item);
+    void AddAccelFor(wxMenuItem *item);
+    void RemoveAccelFor(wxMenuItem *item);
 #endif // wxUSE_ACCEL
 
 private:

@@ -1216,12 +1216,12 @@ bool wxMenu::ProcessAccelEvent(const wxKeyEvent& event)
     return FALSE;
 }
 
-void wxMenu::AddAccelFor(const wxMenuItem *item)
+void wxMenu::AddAccelFor(wxMenuItem *item)
 {
     wxAcceleratorEntry *accel = item->GetAccel();
     if ( accel )
     {
-        accel->SetMenuItem((wxMenuItem *)item);
+        accel->SetMenuItem(item);
 
         m_accelTable.Add(*accel);
 
@@ -1229,7 +1229,7 @@ void wxMenu::AddAccelFor(const wxMenuItem *item)
     }
 }
 
-void wxMenu::RemoveAccelFor(const wxMenuItem *item)
+void wxMenu::RemoveAccelFor(wxMenuItem *item)
 {
     wxAcceleratorEntry *accel = item->GetAccel();
     if ( accel )
