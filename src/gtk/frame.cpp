@@ -62,21 +62,17 @@ extern void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar 
 
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
 
-/*
-    printf( "OnFrameResize from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
-
-   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
-   {
-       win->InternalSetSize( alloc->width, alloc->height );
-   }
+    if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+    {
+        win->m_width = alloc->width;
+        win->m_height = alloc->height;
+        win->UpdateSize();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -85,14 +81,8 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 
 static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
-/*
-    printf( "OnDelete from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     win->Close();
 
@@ -105,8 +95,6 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 
 static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
     
     win->m_menuBarDetached = FALSE;
@@ -119,8 +107,6 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 
 static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
     
     win->m_menuBarDetached = TRUE;
@@ -133,11 +119,10 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 
 static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
     
     win->m_toolBarDetached = FALSE;
+    
     win->UpdateSize();
 }
 
@@ -161,11 +146,13 @@ static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSE
 
 static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
 
-    win->InternalSetPosition(event->x, event->y);
+    win->m_x = event->x;
+    win->m_y = event->y;
 
     wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );
@@ -184,7 +171,8 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 static gint 
 gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
@@ -668,8 +656,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             int ww = m_width  - 2*m_miniEdge;
             int hh = wxMENU_HEIGHT;
             if (m_menuBarDetached) hh = wxPLACE_HOLDER;
-            m_frameMenuBar->InternalSetPosition(xx, yy);
-            m_frameMenuBar->InternalSetSize(ww, hh);
+            m_frameMenuBar->m_x = xx;
+            m_frameMenuBar->m_y = yy;
+            m_frameMenuBar->m_width = ww;
+            m_frameMenuBar->m_height = hh;
             gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
                                   m_frameMenuBar->m_widget, 
                                   xx, yy, ww, hh );
@@ -689,14 +679,11 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             }
             int ww = m_width - 2*m_miniEdge;
             int hh = m_frameToolBar->m_height;
-            // VZ: according to earlier comments in this file, the tbar height
-            //     shouldn't be changed, so I comment out the next line
-            //     (09.05.99)
-            //if (m_toolBarDetached) hh = wxPLACE_HOLDER; 
-
-            m_frameToolBar->InternalSetPosition(xx, yy);
-            m_frameToolBar->InternalSetSize(ww, hh);
-
+	    if (m_toolBarDetached) hh = wxPLACE_HOLDER; 
+            m_frameToolBar->m_x = xx;
+            m_frameToolBar->m_y = yy;
+            /* m_frameToolBar->m_height = hh;   don't change the toolbar's height */
+            m_frameToolBar->m_width = ww;
             gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
                                   m_frameToolBar->m_widget, 
                                   xx, yy, ww, hh );
@@ -723,8 +710,10 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
         int hh = wxSTATUS_HEIGHT;
-        m_frameStatusBar->InternalSetPosition(xx, yy);
-        m_frameStatusBar->InternalSetSize(ww, hh);
+        m_frameStatusBar->m_x = xx;
+        m_frameStatusBar->m_y = yy;
+        m_frameStatusBar->m_width = ww;
+        m_frameStatusBar->m_height = hh;
         gtk_myfixed_set_size( GTK_MYFIXED(m_wxwindow), 
                               m_frameStatusBar->m_widget, 
                               xx, yy, ww, hh );

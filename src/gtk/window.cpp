@@ -2332,8 +2332,7 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 
-    if (!colour.Ok()) return FALSE;
-    if (m_backgroundColour == colour) return FALSE;
+    if (!wxWindowBase::SetBackgroundColour(colour)) return FALSE;
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return TRUE;
@@ -2349,7 +2348,7 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
 
-    if ( sysbg == m_backgroundColour )
+    if (sysbg == m_backgroundColour)
     {
         m_backgroundColour = wxNullColour;
         ApplyWidgetStyle();
@@ -2367,14 +2366,13 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 
-    if (!colour.Ok()) return FALSE;
-    if (m_backgroundColour == colour) return FALSE;
+    if (!wxWindowBase::SetForegroundColour(colour)) return FALSE;
 
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return TRUE;
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
-    if ( sysbg == m_foregroundColour )
+    if (sysbg == m_foregroundColour)
     {
         m_backgroundColour = wxNullColour;
         ApplyWidgetStyle();
@@ -2516,9 +2514,8 @@ bool wxWindow::SetFont( const wxFont &font )
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T(	"invalid window") );
 
-    if (!font.Ok()) return FALSE;
-    if (m_font == font) return FALSE;
-
+    if (!wxWindowBase::SetFont(font)) return FALSE;
+    
     GtkWidget *connect_widget = GetConnectWidget();
     if (!connect_widget->window) return TRUE;
 

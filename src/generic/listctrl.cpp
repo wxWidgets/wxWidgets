@@ -2372,39 +2372,40 @@ void wxListCtrl::SetSingleStyle( long style, bool add )
 
 void wxListCtrl::SetWindowStyleFlag( long flag )
 {
-    m_mainWin->DeleteEverything();
-
-    int width = 0;
-    int height = 0;
-    GetClientSize( &width, &height );
-
-    m_mainWin->SetMode( flag );
-
-    if (flag & wxLC_REPORT)
+    if (m_mainWin)
     {
-        if (!HasFlag(wxLC_REPORT))
+        m_mainWin->DeleteEverything();
+
+        int width = 0;
+        int height = 0;
+        GetClientSize( &width, &height );
+
+        m_mainWin->SetMode( flag );
+
+        if (flag & wxLC_REPORT)
         {
-//          m_mainWin->SetSize( 0, 24, width, height-24 );
-            if (!m_headerWin)
+            if (!HasFlag(wxLC_REPORT))
             {
-                m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
-            }
-            else
-            {
-//              m_headerWin->SetSize( 0, 0, width, 23 );
-                m_headerWin->Show( TRUE );
+                if (!m_headerWin)
+                {
+                    m_headerWin = new wxListHeaderWindow( this, -1, m_mainWin, 
+		      wxPoint(0,0), wxSize(width,23), wxTAB_TRAVERSAL );
+                }
+                else
+                {  
+                    m_headerWin->Show( TRUE );
+                } 
             }
         }
-    }
-    else
-    {
-        if (HasFlag(wxLC_REPORT))
+        else
         {
-//          m_mainWin->SetSize( 0, 0, width, height );
-            m_headerWin->Show( FALSE );
-        }
+            if (HasFlag(wxLC_REPORT))
+            {
+                m_headerWin->Show( FALSE );
+            }
+	}
     }
-
+    
     wxWindow::SetWindowStyleFlag( flag );
 }
 

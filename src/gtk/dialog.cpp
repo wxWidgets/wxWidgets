@@ -38,14 +38,8 @@ extern wxList wxPendingDelete;
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
-/*
-    printf( "OnDelete from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     win->Close();
 
@@ -58,21 +52,17 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 
 static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxDialog *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
 
-/*
-    printf( "OnDialogResize from " );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        printf( win->GetClassInfo()->GetClassName() );
-    printf( ".\n" );
-*/
-
-   if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
-   {
-       win->InternalSetSize( alloc->width, alloc->height );
-   }
+    if ((win->m_width != alloc->width) || (win->m_height != alloc->height))
+    {
+        win->m_width = alloc->width;
+        win->m_height = alloc->height;
+        win->UpdateSize();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -81,11 +71,13 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 
 static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return FALSE;
 
-    win->InternalSetPosition(event->x, event->y);
+    win->m_x = event->x;
+    win->m_y = event->y;
 
     wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
     mevent.SetEventObject( win );

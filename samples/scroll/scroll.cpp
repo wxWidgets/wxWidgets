@@ -80,6 +80,8 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL )
 {
 
+  SetBackgroundColour( *wxWHITE );
+
   (void) new wxButton( this, -1, "wxButton", wxPoint(10,10) );
   
   (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,50) );

@@ -92,8 +92,10 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
     if (!menu_bar) return;
     if (!menu_bar->m_widget) return;
 
-    menu_bar->InternalSetPosition(0, 0);
-    menu_bar->InternalSetSize(m_width, wxMENU_HEIGHT);
+    menu_bar->m_x = 0;
+    menu_bar->m_y = 0;
+    menu_bar->m_width = m_width;
+    menu_bar->m_height = wxMENU_HEIGHT;
     gtk_myfixed_set_size( GTK_MYFIXED(m_mainWidget), 
                           menu_bar->m_widget, 
                           0, 0, m_width, wxMENU_HEIGHT );

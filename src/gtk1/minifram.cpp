@@ -209,7 +209,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     gdk_window_get_origin( widget->window, &org_x, &org_y );
     x += org_x - win->m_diffX;
     y += org_y - win->m_diffY;
-    win->InternalSetPosition(x, y);
+    win->m_x = x;
+    win->m_y = y;
     gtk_widget_set_uposition( win->m_widget, x, y );
 
     return TRUE;
