@@ -332,6 +332,7 @@ int wxFileDialog::ShowModal()
     if (sDir.IsEmpty())
         sDir = "*.*";
     wxStrcpy(vFileDlg.szFullFile, sDir.c_str());
+    sFilterBuffer = sDir;
 
     hWnd = ::WinFileDlg( HWND_DESKTOP
                         ,GetHwndOf(m_pParent)
@@ -367,8 +368,14 @@ int wxFileDialog::ShowModal()
             wxStrcpy(zFileNameBuffer, vFileDlg.szFullFile);
 
             int                     nIdx = wxStrlen(zFileNameBuffer) - 1;
+            wxString                sExt;
 
-            if (zFileNameBuffer[nIdx] == wxT('.') )
+            wxSplitPath( zFileNameBuffer
+                        ,&m_sPath
+                        ,&m_sFileName
+                        ,&sExt
+                       );
+            if (zFileNameBuffer[nIdx] == wxT('.') || sExt.IsEmpty())
             {
                 zFileNameBuffer[nIdx] = wxT('\0');
 

@@ -18,9 +18,6 @@
  * File selector
  */
 
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorDefaultWildcardStr;
-
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxFileDialog)
@@ -47,7 +44,7 @@ public:
            void     GetPaths(wxArrayString& rasPath) const;
     inline wxString GetDirectory(void) const { return m_sDir; }
     inline wxString GetFilename(void) const { return m_sFileName; }
-    inline void     GetFilenames(wxArrayString& rasFilenames) { rasFilenames.Empty(); rasFilenames.Add( m_sFileName); }
+    inline void     GetFilenames(wxArrayString& rasFilenames) { rasFilenames = m_asFileNames; }
     inline wxString GetWildcard(void) const { return m_sWildCard; }
     inline long     GetStyle(void) const { return m_lDialogStyle; }
     inline int      GetFilterIndex() const { return m_nFilterIndex ; }
