@@ -1116,8 +1116,9 @@ bool wxGenericScrolledWindow::Layout()
         GetSizer()->SetDimension(x, y, w, h);
         return TRUE;
     }
-    else
-        return wxPanel::Layout();  // fall back to default for LayoutConstraints
+
+    // fall back to default for LayoutConstraints
+    return wxPanel::Layout();
 }
 
 void wxGenericScrolledWindow::OnPaint(wxPaintEvent& event)
