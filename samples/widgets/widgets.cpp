@@ -282,10 +282,13 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     sizerTop->Fit(this);
     sizerTop->SetSizeHints(this);
 
+    // wxCocoa's listbox is too flakey to use for logging right now
+    #if !defined(__WXCOCOA__)
     // now that everything is created we can redirect the log messages to the
     // listbox
     m_logTarget = new LboxLogger(m_lboxLog, wxLog::GetActiveTarget());
     wxLog::SetActiveTarget(m_logTarget);
+    #endif
 }
 
 void WidgetsFrame::InitNotebook()
