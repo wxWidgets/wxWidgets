@@ -76,7 +76,7 @@ void WXSERIAL(wxList)::LoadObject(wxObjectInputStream& s)
   wxList *list = (wxList *)Object();
   int number, i;
 
-  list->DeleteContents( data_s.Read8() );
+  list->DeleteContents( data_s.Read8() != 0 );
   list->SetKeyType( (wxKeyType) data_s.Read8() );
   number = data_s.Read32();
 
