@@ -142,8 +142,12 @@ class wxRootWindow : public wxWindow
             m_wnd = NULL; 
         }
 
-        virtual bool AcceptsFocus() { return FALSE; }
+        virtual bool AcceptsFocus() const { return FALSE; }
+        
+        DECLARE_DYNAMIC_CLASS(wxRootWindow)
 };
+
+IMPLEMENT_DYNAMIC_CLASS(wxRootWindow, wxWindow)
 
 static wxRootWindow *gs_rootWindow = NULL;
 
