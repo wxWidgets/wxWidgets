@@ -10,7 +10,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module gizmos
+%define DOCSTRING
+"Various *gizmo* classes: `DynamicSashWindow`, `EditableListBox`,
+`LEDNumberCtrl`, `TreeListCtrl`, etc."
+%enddef
+
+%module(docstring=DOCSTRING) gizmos
 
 
 %{

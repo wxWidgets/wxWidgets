@@ -10,7 +10,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module stc
+%define DOCSTRING
+"The `StyledTextCtrl` provides a text editor that can used as a syntax
+highlighting source code editor, or similar.  Lexers for several programming
+languages are built-in."
+%enddef
+%module(docstring=DOCSTRING) stc
 
 
 %{

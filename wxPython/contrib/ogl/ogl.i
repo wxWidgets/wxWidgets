@@ -10,8 +10,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-
-%module ogl
+%define DOCSTRING
+"The Object Graphics Library provides for simple drawing and manipulation
+of 2D objects."
+%enddef
+%module(docstring=DOCSTRING) ogl
 
 %{
 #include "wx/wxPython/wxPython.h"

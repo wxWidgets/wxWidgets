@@ -4,18 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.40
 diff -u -4 -r1.40 python.cxx
 --- Source/Modules/python.cxx	24 Jan 2004 00:25:31 -0000	1.40
-+++ Source/Modules/python.cxx	28 Apr 2004 22:20:03 -0000
-@@ -8,9 +8,9 @@
-  * Copyright (C) 1999-2000.  The University of Chicago
-  * See the file LICENSE for information on usage and redistribution.
-  * ----------------------------------------------------------------------------- */
- 
--char cvsroot_python_cxx[] = "$Header$";
-+char cvsroot_python_cxx[] = "$Header$";
- 
- #include "swigmod.h"
- 
- #include <ctype.h>
++++ Source/Modules/python.cxx	12 May 2004 19:45:20 -0000
 @@ -50,8 +50,18 @@
  static  int       have_constructor;
  static  int       have_repr;
@@ -35,7 +24,41 @@ diff -u -4 -r1.40 python.cxx
  Python Options (available with -python)\n\
       -ldflags        - Print runtime libraries to link with\n\
       -globals <name> - Set <name> used to access C global variable [default: 'cvar']\n\
-@@ -417,17 +427,25 @@
+@@ -146,8 +156,9 @@
+      *
+      * use %module(directors="1") modulename at the start of the 
+      * interface file to enable director generation.
+      */
++    String* mod_docstring = NULL;
+     {
+       Node *module = Getattr(n, "module");
+       if (module) {
+         Node *options = Getattr(module, "options");
+@@ -157,8 +168,9 @@
+           }
+           if (Getattr(options, "dirprot")) {
+ 	    allow_dirprot();
+           }
++          mod_docstring = Getattr(options, "docstring");
+         }
+       }
+     }
+ 
+@@ -258,8 +270,13 @@
+           Printv(f_shadow,
+                  "# This file is compatible with both classic and new-style classes.\n",
+                  NIL);
+       }
++
++      if (mod_docstring && Len(mod_docstring)) {
++        Printv(f_shadow, "\n\"\"\"\n", mod_docstring, "\n\"\"\"\n", NIL);
++        Delete(mod_docstring); mod_docstring = NULL;
++      }
+       
+       Printf(f_shadow,"\nimport %s\n\n", module);
+ 
+       if (! modern) {
+@@ -417,17 +434,25 @@
     *    functions.
     * ------------------------------------------------------------ */
  
@@ -66,7 +89,7 @@ diff -u -4 -r1.40 python.cxx
    }
  
  
-@@ -441,24 +459,303 @@
+@@ -441,24 +466,303 @@
    }
  
  
@@ -169,10 +192,8 @@ diff -u -4 -r1.40 python.cxx
 +   *    it is "1" (the default) then do.  If it has some other
 +   *    value then assume it is supplied by the extension writer
 +   *    and use it directly.
-    * ------------------------------------------------------------ */
- 
--  bool have_addtofunc(Node *n) {
--    String* str = Getattr(n, "feature:addtofunc");
++   * ------------------------------------------------------------ */
++
 +  String* make_autodoc(Node *n, autodoc_t ad_type) {
 +
 +    if (ad_type == AUTODOC_CLASS)
@@ -356,8 +377,10 @@ diff -u -4 -r1.40 python.cxx
 +  /* ------------------------------------------------------------
 +   * have_pythonappend()
 +   *    Check if there is a %pythonappend directive and it has text
-+   * ------------------------------------------------------------ */
-+
+    * ------------------------------------------------------------ */
+ 
+-  bool have_addtofunc(Node *n) {
+-    String* str = Getattr(n, "feature:addtofunc");
 +  bool have_pythonappend(Node *n) {
 +    String* str = Getattr(n, "feature:pythonappend");
      return (str != NULL && Len(str) > 0);
@@ -378,7 +401,7 @@ diff -u -4 -r1.40 python.cxx
      if (*t == '{') {
        Delitem(str ,0);
        Delitem(str,DOH_END);
-@@ -1731,9 +2028,11 @@
+@@ -1731,9 +2035,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -391,7 +414,7 @@ diff -u -4 -r1.40 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1866,16 +2165,24 @@
+@@ -1866,16 +2172,24 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -423,7 +446,7 @@ diff -u -4 -r1.40 python.cxx
          }
  
        }
-@@ -1890,14 +2197,22 @@
+@@ -1890,14 +2204,22 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -450,7 +473,7 @@ diff -u -4 -r1.40 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1982,8 +2297,12 @@
+@@ -1982,8 +2304,12 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -463,7 +486,7 @@ diff -u -4 -r1.40 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1996,10 +2315,10 @@
+@@ -1996,10 +2322,10 @@
                Printv(f_shadow, tab8, "self.this = newobj.this\n", NIL);
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
@@ -476,7 +499,7 @@ diff -u -4 -r1.40 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -2015,13 +2334,17 @@
+@@ -2015,13 +2341,17 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -496,7 +519,7 @@ diff -u -4 -r1.40 python.cxx
    	  }
  	}
        }
-@@ -2048,13 +2371,18 @@
+@@ -2048,13 +2378,18 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {

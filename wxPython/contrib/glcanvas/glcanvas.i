@@ -11,7 +11,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-%module glcanvas
+%define DOCSTRING
+"`GLCanvas` provides an OpenGL Context on a `wx.Window`."
+%enddef
+%module(docstring=DOCSTRING) glcanvas
 
 %{
 #include "wx/wxPython/wxPython.h"

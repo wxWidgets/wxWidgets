@@ -10,8 +10,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+%define DOCSTRING
+"Classes for a simple HTML rendering window, HTML Help Window, etc."
+%enddef
 
-%module html
+%module(docstring=DOCSTRING) html
 
 %{
 #include "wx/wxPython/wxPython.h"

@@ -10,7 +10,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module xrc
+%define DOCSTRING
+"The `XmlResource` class allows program resources defining menus, layout of
+controls on a panel, etc."
+%enddef
+%module(docstring=DOCSTRING) xrc
 
 
 %{

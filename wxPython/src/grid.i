@@ -10,7 +10,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module grid
+%define DOCSTRING
+"Classes for implementing a spreadsheet-like control."
+%enddef
+%module(docstring=DOCSTRING) grid
+
 
 %{
 #include "wx/wxPython/wxPython.h"
