@@ -1232,7 +1232,7 @@ static PyObject *_wrap_wxListItem_GetText(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1823,7 +1823,7 @@ static PyObject *_wrap_wxListItem_m_text_set(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1861,7 +1861,7 @@ static PyObject *_wrap_wxListItem_m_text_get(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2473,7 +2473,7 @@ static PyObject *_wrap_wxListEvent_GetLabel(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2508,7 +2508,7 @@ static PyObject *_wrap_wxListEvent_GetText(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -3399,7 +3399,7 @@ static PyObject *_wrap_wxListCtrl_GetItemText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6293,7 +6293,7 @@ static PyObject *_wrap_wxTreeEvent_GetLabel(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6957,7 +6957,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemText(PyObject *self, PyObject *args, Py
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -7714,7 +7714,7 @@ static PyObject *_wrap_wxTreeCtrl_GetSelection(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetParent(_swigarg0))
+#define wxTreeCtrl_GetItemParent(_swigobj,_swigarg0)  (_swigobj->GetItemParent(_swigarg0))
 static PyObject *_wrap_wxTreeCtrl_GetItemParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeItemId * _result;
@@ -9400,7 +9400,7 @@ static PyObject *_wrap_wxDirItemData_m_path_set(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9438,7 +9438,7 @@ static PyObject *_wrap_wxDirItemData_m_path_get(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9479,7 +9479,7 @@ static PyObject *_wrap_wxDirItemData_m_name_set(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9517,7 +9517,7 @@ static PyObject *_wrap_wxDirItemData_m_name_get(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10011,7 +10011,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetDefaultPath(PyObject *self, PyObject 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10087,7 +10087,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetPath(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10124,7 +10124,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilePath(PyObject *self, PyObject *ar
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -10259,7 +10259,7 @@ static PyObject *_wrap_wxGenericDirCtrl_GetFilter(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif

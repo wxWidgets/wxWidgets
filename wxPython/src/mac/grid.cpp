@@ -5079,7 +5079,7 @@ static PyObject *_wrap_wxGridTableBase_GetValue(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5159,7 +5159,7 @@ static PyObject *_wrap_wxGridTableBase_GetTypeName(PyObject *self, PyObject *arg
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5670,7 +5670,7 @@ static PyObject *_wrap_wxGridTableBase_GetRowLabelValue(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5708,7 +5708,7 @@ static PyObject *_wrap_wxGridTableBase_GetColLabelValue(PyObject *self, PyObject
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6109,7 +6109,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetTypeName(PyObject *self, PyObje
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6435,7 +6435,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetRowLabelValue(PyObject *self, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6473,7 +6473,7 @@ static PyObject *_wrap_wxPyGridTableBase_base_GetColLabelValue(PyObject *self, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -8087,11 +8087,10 @@ static PyObject *_wrap_wxGrid_GetTextBoxSize(PyObject *self, PyObject *args, PyO
         PyObject* item = PySequence_GetItem(_obj2, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        _arg2->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        _arg2->Add(PyString_AsString(str));
 #endif
+        _arg2->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }
@@ -9554,7 +9553,7 @@ static PyObject *_wrap_wxGrid_GetRowLabelValue(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -9592,7 +9591,7 @@ static PyObject *_wrap_wxGrid_GetColLabelValue(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -12235,7 +12234,7 @@ static PyObject *_wrap_wxGrid_GetCellValue(PyObject *self, PyObject *args, PyObj
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif

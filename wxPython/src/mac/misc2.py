@@ -1223,6 +1223,8 @@ wxLogMessage = misc2c.wxLogMessage
 
 wxLogInfo = misc2c.wxLogInfo
 
+wxLogDebug = misc2c.wxLogDebug
+
 wxLogVerbose = misc2c.wxLogVerbose
 
 wxLogStatus = misc2c.wxLogStatus
@@ -1311,6 +1313,10 @@ wxLog_GetTimestamp = misc2c.wxLog_GetTimestamp
 wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
 
 wxLog_IsAllowedTraceMask = misc2c.wxLog_IsAllowedTraceMask
+
+wxLog_SetLogLevel = misc2c.wxLog_SetLogLevel
+
+wxLog_GetLogLevel = misc2c.wxLog_GetLogLevel
 
 wxProcess_Kill = misc2c.wxProcess_Kill
 

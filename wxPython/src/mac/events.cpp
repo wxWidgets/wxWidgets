@@ -955,7 +955,7 @@ static PyObject *_wrap_wxCommandEvent_GetString(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6013,7 +6013,7 @@ static PyObject * wxDropFilesEvent_GetFiles(wxDropFilesEvent *self) {
 
             for (int i=0; i<count; i++) {
 #if wxUSE_UNICODE
-                PyList_SetItem(list, i, PyUnicode_FromUnicode(files[i], files[i].Len()));
+                PyList_SetItem(list, i, PyUnicode_FromWideChar(files[i], files[i].Len()));
 #else
                 PyList_SetItem(list, i, PyString_FromString((const char*)files[i]));
 #endif
@@ -6275,7 +6275,7 @@ static PyObject *_wrap_wxUpdateUIEvent_GetText(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif

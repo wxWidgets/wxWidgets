@@ -97,7 +97,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         if (ret) {
             PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(flag));
 #if wxUSE_UNICODE
-	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromUnicode(str.c_str(), str.Len()));
+	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromWideChar(str.c_str(), str.Len()));
 #else
             PyTuple_SET_ITEM(ret, 1, PyString_FromStringAndSize(str.c_str(), str.Len()));
 #endif
@@ -531,7 +531,7 @@ static PyObject *_wrap_wxConfigBase_GetAppName(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -778,7 +778,7 @@ static PyObject *_wrap_wxConfigBase_GetPath(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -815,7 +815,7 @@ static PyObject *_wrap_wxConfigBase_GetVendorName(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1001,7 +1001,7 @@ static PyObject *_wrap_wxConfigBase_Read(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -1734,7 +1734,7 @@ static PyObject *_wrap_wxConfigBase_ExpandEnvVars(PyObject *self, PyObject *args
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2182,7 +2182,7 @@ static PyObject *_wrap_wxDateTime_GetMonthName(PyObject *self, PyObject *args, P
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -2211,7 +2211,7 @@ static PyObject *_wrap_wxDateTime_GetWeekDayName(PyObject *self, PyObject *args,
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5415,7 +5415,7 @@ static PyObject *_wrap_wxDateTime_Format(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5459,7 +5459,7 @@ static PyObject *_wrap_wxDateTime_FormatDate(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5496,7 +5496,7 @@ static PyObject *_wrap_wxDateTime_FormatTime(PyObject *self, PyObject *args, PyO
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5533,7 +5533,7 @@ static PyObject *_wrap_wxDateTime_FormatISODate(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -5570,7 +5570,7 @@ static PyObject *_wrap_wxDateTime_FormatISOTime(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
@@ -6661,7 +6661,7 @@ static PyObject *_wrap_wxTimeSpan_Format(PyObject *self, PyObject *args, PyObjec
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
