@@ -27,6 +27,7 @@
 // wxWindows headers
 /////////////////////////////////////////////////////////////////////////////
 
+#include "wx/app.h"
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
@@ -36,10 +37,6 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
@@ -47,8 +44,14 @@
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
+// discard buffer
+#define MAX_DISCARD_SIZE (10 * 1024)
 
+// what to do within waits
 #define PROCESS_EVENTS() wxYield()
+
+// use wxPostEvent or not
+#define EXPERIMENTAL_USE_POST 1
 
 
 // --------------------------------------------------------------
@@ -58,6 +61,7 @@
 IMPLEMENT_CLASS(wxSocketBase, wxObject)
 IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
 IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
+IMPLEMENT_CLASS(wxDatagramSocket, wxSocketBase)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 
 class wxSocketState : public wxObject
@@ -79,7 +83,7 @@ public:
 
 wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
   wxEvtHandler(),
-  m_socket(NULL), m_id(-1),
+  m_socket(NULL), m_evt_handler(NULL), m_id(-1),
   m_flags(_flags), m_type(_type),
   m_neededreq(0), m_notify_state(FALSE),
   m_connected(FALSE), m_establishing(FALSE),
@@ -92,7 +96,7 @@ wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
 
 wxSocketBase::wxSocketBase() :
   wxEvtHandler(),
-  m_socket(NULL), m_id(-1),
+  m_socket(NULL), m_evt_handler(NULL), m_id(-1),
   m_flags(NONE), m_type(SOCK_UNINIT),
   m_neededreq(0), m_notify_state(FALSE),
   m_connected(FALSE), m_establishing(FALSE),
@@ -170,9 +174,8 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
   else
     m_error = (m_lcount == 0);
 
-  // Trigger another read event if there is still data available.
+  // Allow read events from now on
   m_reading = FALSE;
-  // TODO: TriggerRead
 
   return *this;
 }
@@ -189,7 +192,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
 
   // If the socket is not connected, or we have got the whole
   // needed buffer, return immedately
-  if (!m_connected || !m_socket || !nbytes)
+  if (!m_socket || !m_connected || !nbytes)
     return total;
 
   // Possible combinations (they are checked in this order)
@@ -208,7 +211,7 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
     if (ret > 0)
       total += ret;
   }
-  else if (m_flags & wxSOCKET_WAITALL)           // wxSOCKET_WAITALL
+  else if (m_flags & wxSOCKET_WAITALL)
   {
     while (ret > 0 && nbytes > 0)
     {
@@ -241,8 +244,6 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
 {
-#define MAX_DISCARD_SIZE (10 * 1024)
-
   wxUint32 len, len2, sig, total;
   bool error;
   int old_flags;
@@ -341,10 +342,7 @@ exit:
   m_reading = FALSE;
   SetFlags(old_flags);
 
-  // TODO: TriggerRead
   return *this;
-
-#undef MAX_DISCARD_SIZE
 }
 
 wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
@@ -353,7 +351,7 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
   m_reading = TRUE;
 
   m_lcount = _Read(buffer, nbytes);
-  Pushback(buffer, nbytes);
+  Pushback(buffer, m_lcount);
 
   // If in wxSOCKET_WAITALL mode, all bytes should have been read.
   if (m_flags & wxSOCKET_WAITALL)
@@ -361,10 +359,9 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
   else
     m_error = (m_lcount == 0);
 
-  // Trigger another read event if there is still data available.
+  // Allow read events again
   m_reading = FALSE;
 
-  // TODO: TriggerRead
   return *this;
 }
 
@@ -381,10 +378,9 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
   else
     m_error = (m_lcount == 0);
 
-  // Trigger another write event if the socket is still writable
+  // Allow write events again
   m_writing = FALSE;
 
-  // TODO: TriggerWrite
   return *this;
 }
 
@@ -509,7 +505,6 @@ exit:
   m_lcount = total;
   m_writing = FALSE;
 
-  // TODO: TriggerWrite
   return *this;
 
 #ifdef __VISUALC__
@@ -530,11 +525,9 @@ wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::Discard()
 {
-#define MAX_BUFSIZE (10*1024)
-
   int old_flags;
-  char *my_data = new char[MAX_BUFSIZE];
-  wxUint32 recv_size = MAX_BUFSIZE;
+  char *my_data = new char[MAX_DISCARD_SIZE];
+  wxUint32 recv_size = MAX_DISCARD_SIZE;
   wxUint32 total = 0;
 
   // Mask read events
@@ -543,9 +536,9 @@ wxSocketBase& wxSocketBase::Discard()
   old_flags = m_flags;
   SetFlags(wxSOCKET_NOWAIT);
 
-  while (recv_size == MAX_BUFSIZE)
+  while (recv_size == MAX_DISCARD_SIZE)
   {
-    recv_size = _Read(my_data, MAX_BUFSIZE);
+    recv_size = _Read(my_data, MAX_DISCARD_SIZE);
     total += recv_size;
   }
 
@@ -553,13 +546,10 @@ wxSocketBase& wxSocketBase::Discard()
   m_lcount = total;
   m_error = FALSE;
 
-  // Trigger another read event if there is still data available.
+  // Allow read events again
   m_reading = FALSE;
 
-  // TODO: TriggerRead
   return *this;
-
-#undef MAX_BUFSIZE
 }
 
 // --------------------------------------------------------------
@@ -867,7 +857,13 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
     // fprintf(stderr, "%s: Evt %d delivered\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
     event.m_socket = this;
     event.m_skevt  = req_evt;
-    ProcessEvent(event);            // XXX - should be PostEvent
+
+    if (m_evt_handler)
+#if EXPERIMENTAL_USE_POST
+      wxPostEvent(m_evt_handler, event);
+#else
+      ProcessEvent(event);
+#endif
 
     OldOnNotify(req_evt);
     if (m_cbk)
@@ -888,8 +884,10 @@ void wxSocketBase::OldOnNotify(wxSocketNotify WXUNUSED(evt))
 
 void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
 {
-  SetNextHandler(&h_evt);
+  m_evt_handler = &h_evt;
   m_id = id;
+
+  SetNextHandler(&h_evt);
 }
 
 // --------------------------------------------------------------
@@ -898,9 +896,12 @@ void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
 
 void wxSocketBase::Pushback(const char *buffer, wxUint32 size)
 {
+  if (!size) return;
+
   if (m_unread == NULL)
     m_unread = (char *)malloc(size);
-  else {
+  else
+  {
     char *tmp;
 
     tmp = (char *)malloc(m_unrd_size + size);
@@ -925,9 +926,11 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
 
   memcpy(buffer, (m_unread+m_unrd_cur), size);
 
-  if (!peek) {
+  if (!peek)
+  {
     m_unrd_cur += size;
-    if (m_unrd_size == m_unrd_cur) {
+    if (m_unrd_size == m_unrd_cur)
+    {
       free(m_unread);
       m_unread = NULL;
       m_unrd_size = 0;
@@ -1048,6 +1051,7 @@ wxSocketClient::~wxSocketClient()
 // --------------------------------------------------------------
 // wxSocketClient Connect functions
 // --------------------------------------------------------------
+
 bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 {
   GSocketError err;
@@ -1109,6 +1113,58 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 }
 
 // --------------------------------------------------------------
+// wxDatagramSocket
+// --------------------------------------------------------------
+
+/* NOTE: experimental stuff - might change */
+
+wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr, wxSockFlags flags )
+                : wxSocketBase( flags, SOCK_DATAGRAM )
+{
+  // Create the socket
+  m_socket = GSocket_new();
+
+  if(!m_socket)
+    return;
+
+  // Setup the socket as non connection oriented
+  GSocket_SetLocal(m_socket, addr.GetAddress());
+  if( GSocket_SetNonOriented(m_socket) != GSOCK_NOERROR )
+  {
+    GSocket_destroy(m_socket);
+    m_socket = NULL;
+    return;
+  }
+
+  // Initialize all stuff
+  m_connected = FALSE;
+  m_establishing = FALSE;
+  GSocket_SetTimeout( m_socket, m_timeout );
+  GSocket_SetCallback( m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+                                 GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
+                                 wx_socket_callback, (char*)this );
+
+}
+
+wxDatagramSocket& wxDatagramSocket::RecvFrom( wxSockAddress& addr,
+                                              char* buf,
+                                              wxUint32 nBytes )
+{
+    Read(buf, nBytes);
+    GetPeer(addr);
+    return (*this);
+}
+
+wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
+                                            const char* buf,
+                                            wxUint32 nBytes )
+{
+    GSocket_SetPeer(m_socket, addr.GetAddress());
+    Write(buf, nBytes);
+    return (*this);
+}
+
+// --------------------------------------------------------------
 // wxSocketEvent
 // --------------------------------------------------------------
 
@@ -1133,13 +1189,17 @@ void wxSocketEvent::CopyObject(wxObject& obj_d) const
 // --------------------------------------------------------------------------
 // wxSocketModule
 // --------------------------------------------------------------------------
-class WXDLLEXPORT wxSocketModule: public wxModule {
+
+class WXDLLEXPORT wxSocketModule: public wxModule
+{
   DECLARE_DYNAMIC_CLASS(wxSocketModule)
- public:
-  bool OnInit() {
+public:
+  bool OnInit()
+  {
     return GSocket_Init();
   }
-  void OnExit() {
+  void OnExit()
+  {
     GSocket_Cleanup();
   }
 };

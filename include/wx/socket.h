@@ -79,14 +79,14 @@ enum
   wxSOCKET_BLOCK = 4
 };
 
-// Type of request
+// Type of socket
 enum wxSockType
 {
-    SOCK_CLIENT,
-    SOCK_SERVER,
-    /* SOCK_DGRAM, */
-    SOCK_INTERNAL,
-    SOCK_UNINIT
+  SOCK_CLIENT,
+  SOCK_SERVER,
+  SOCK_DATAGRAM,
+  SOCK_INTERNAL,
+  SOCK_UNINIT
 };
 
 typedef int wxSockFlags;
@@ -97,6 +97,7 @@ typedef int wxSockFlags;
 
 class WXDLLEXPORT wxTimer;
 class WXDLLEXPORT wxSocketEvent;
+
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
 {
   DECLARE_CLASS(wxSocketBase)
@@ -114,6 +115,7 @@ public:
 
 protected:
   GSocket      *m_socket;           // GSocket
+  wxEvtHandler *m_evt_handler;      // event handler
   int           m_id;               // Socket id (for event handler)
 
   // Attributes
@@ -271,6 +273,25 @@ public:
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 };
+
+////////////////////////////////////////////////////////////////////////
+
+class wxDatagramSocket : public wxSocketBase
+{
+  DECLARE_CLASS(wxDatagramSocket)
+
+public:
+  wxDatagramSocket( wxSockAddress& addr, wxSockFlags flags = wxSOCKET_NONE );
+
+  wxDatagramSocket& RecvFrom( wxSockAddress& addr,
+                              char* buf,
+                              wxUint32 nBytes );
+  wxDatagramSocket& SendTo( wxSockAddress& addr,
+                            const char* buf,
+                            wxUint32 nBytes );
+};
+
+////////////////////////////////////////////////////////////////////////
 
 class WXDLLEXPORT wxSocketEvent : public wxEvent {
   DECLARE_DYNAMIC_CLASS(wxSocketEvent)
