@@ -32,10 +32,6 @@
     #include "wx/tooltip.h"
 #endif
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    #include "mondrian.xpm"
-#endif
-
 // We test for wxUSE_DRAG_AND_DROP also, because data objects may not be
 // implemented for compilers that can't cope with the OLE parts in
 // wxUSE_DRAG_AND_DROP.
@@ -171,8 +167,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            "Text wxWindows App",
-	    50, 50, 640, 420);
+            "Text wxWindows sample", 50, 50, 640, 420);
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
@@ -454,7 +449,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
-    m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
+    m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                 FALSE, "", wxFONTENCODING_KOI8));
 
     m_multitext = new MyTextCtrl( this, -1, "Multi line.",
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
@@ -668,7 +664,7 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
 
 void MyFrame::OnFileLoad(wxCommandEvent& event)
 {
-    if ( m_panel->m_multitext->LoadFile("text.cpp") )
+    if ( m_panel->m_multitext->LoadFile("text.rc") )
         wxLogStatus(this, _T("Successfully loaded file"));
     else
         wxLogStatus(this, _T("Couldn't load the file"));

@@ -358,6 +358,7 @@ dcscreen.cpp	X
 dialog.cpp	X
 filedlg.cpp	X
 font.cpp	X
+fontenum.cpp	X
 frame.cpp	X
 gauge.cpp	X
 gdiobj.cpp	X

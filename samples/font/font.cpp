@@ -25,6 +25,7 @@
 #endif
 
 #include <wx/fontdlg.h>
+#include <wx/fontenum.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -81,8 +82,14 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
     void OnCreateFont(wxCommandEvent& event);
+    void OnEnumerateFamilies(wxCommandEvent& WXUNUSED(event))
+        { DoEnumerateFamilies(FALSE); }
+    void OnEnumerateFixedFamilies(wxCommandEvent& WXUNUSED(event))
+        { DoEnumerateFamilies(TRUE); }
 
 protected:
+    void DoEnumerateFamilies(bool fixedWidthOnly);
+
     MyCanvas *m_canvas;
 
 private:
@@ -119,7 +126,10 @@ enum
     Font_Quit = 1,
     Font_About,
     Font_Choose = 100,
-    Font_Create
+    Font_Create,
+    Font_EnumFamilies,
+    Font_EnumFixedFamilies,
+    Font_Max
 };
 
 // ----------------------------------------------------------------------------
@@ -134,6 +144,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_About, MyFrame::OnAbout)
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_Create, MyFrame::OnCreateFont)
+    EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
+    EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -155,7 +167,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame("Minimal wxWindows App",
+    MyFrame *frame = new MyFrame("Font wxWindows demo",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it and tell the application that it's our main window
@@ -176,9 +188,6 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
-    // set the frame icon
-    SetIcon(wxICON(mondrian));
-
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
@@ -187,10 +196,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Font_Quit, "E&xit\tAlt-X", "Quit this program");
 
     wxMenu *menuFont = new wxMenu;
-    menuFont->Append(Font_Choose, "&Select font...\tCtrl-F",
+    menuFont->Append(Font_Choose, "&Select font...\tCtrl-S",
                      "Select a standard font");
     menuFont->Append(Font_Create, "&Create font...\tCtrl-C",
                      "Create a custom font");
+    menuFont->AppendSeparator();
+    menuFont->Append(Font_EnumFamilies, "&Enumerate font families\tCtrl-E");
+    menuFont->Append(Font_EnumFixedFamilies,
+                     "&Enumerate fixed font families\tCtrl-F");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
@@ -209,6 +222,30 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 
 // event handlers
+
+void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly)
+{
+    class MyFontEnumerator : public wxFontEnumerator
+    {
+    public:
+        MyFontEnumerator() { m_n = 0; }
+
+    protected:
+        virtual bool OnFontFamily(const wxString& family)
+        {
+            wxLogMessage("Font family %d: %s\n", ++m_n, family.c_str());
+
+            return TRUE;
+        }
+
+    private:
+        size_t m_n;
+    } fontEnumerator;
+
+    wxLogMessage("Enumerating %s font families:",
+                 fixedWidthOnly ? "fixed width" : "all");
+    fontEnumerator.EnumerateFamilies(fixedWidthOnly);
+}
 
 void MyFrame::OnCreateFont(wxCommandEvent& WXUNUSED(event))
 {
