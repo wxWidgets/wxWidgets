@@ -129,53 +129,6 @@ struct _GAddress
 }
 #endif  /* __cplusplus */
 
-/* Compatibility methods to support old C API (from gsocket.h) */
-inline void GSocket_Shutdown(GSocket *socket)
-{   socket->Shutdown(); }
-inline GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
-{   return socket->SetLocal(address); }
-inline GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
-{   return socket->SetPeer(address); }
-inline GAddress *GSocket_GetLocal(GSocket *socket)
-{   return socket->GetLocal(); }
-inline GAddress *GSocket_GetPeer(GSocket *socket)
-{   return socket->GetPeer(); }
-inline GSocketError GSocket_SetServer(GSocket *socket)
-{   return socket->SetServer(); }
-inline GSocket *GSocket_WaitConnection(GSocket *socket)
-{   return socket->WaitConnection(); }
-inline int GSocket_SetReusable(GSocket *socket)
-{   return socket->SetReusable(); }
-inline GSocketError GSocket_Connect(GSocket *socket, GSocketStream stream)
-{   return socket->Connect(stream); }
-inline GSocketError GSocket_SetNonOriented(GSocket *socket)
-{   return socket->SetNonOriented(); }
-inline int GSocket_Read(GSocket *socket, char *buffer, int size)
-{   return socket->Read(buffer,size); }
-inline int GSocket_Write(GSocket *socket, const char *buffer, int size)
-{   return socket->Write(buffer,size); }
-inline GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
-{   return socket->Select(flags); }
-inline void GSocket_SetNonBlocking(GSocket *socket, int non_block)
-{   socket->SetNonBlocking(non_block); }
-inline void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
-{   socket->SetTimeout(millisec); }
-inline GSocketError GSocket_GetError(GSocket *socket)
-{   return socket->GetError(); }
-inline void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
-                         GSocketCallback fallback, char *cdata)
-{   socket->SetCallback(flags,fallback,cdata); }
-inline void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
-{   socket->UnsetCallback(flags); }
-inline GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
-                        void *optval, int *optlen)
-{   return socket->GetSockOpt(level,optname,optval,optlen); }
-inline GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
-                        const void *optval, int optlen)
-{   return socket->SetSockOpt(level,optname,optval,optlen); }
-inline void GSocket_destroy(GSocket *socket)
-{   delete socket; }
-
 
 #ifdef __cplusplus
 extern "C" {
