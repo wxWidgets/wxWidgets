@@ -69,14 +69,20 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
   // Use an ownerdraw button to produce a static bitmap, since there's
   // no ownerdraw static.
   // TODO: perhaps this should be a static item, with style SS_BITMAP.
-  HWND static_item =
-    CreateWindowEx(0, "BUTTON", "", BS_OWNERDRAW | WS_TABSTOP | WS_CHILD,
-                    0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                    wxGetInstance(), NULL);
-  m_hWnd = (WXHWND) static_item;
+  m_hWnd = (WXHWND)CreateWindow
+           (
+            "BUTTON",
+            "",
+            BS_OWNERDRAW | WS_TABSTOP | WS_CHILD | WS_VISIBLE,
+            0, 0, 0, 0,
+            (HWND)parent->GetHWND(),
+            (HMENU)m_windowId,
+            wxGetInstance(),
+            NULL
+           );
 
   // Subclass again for purposes of dialog editing mode
-  SubclassWin((WXHWND) static_item);
+  SubclassWin(m_hWnd);
 
   SetFont(* GetParent()->GetFont());
 
