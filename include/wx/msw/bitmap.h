@@ -116,6 +116,9 @@ public:
 
     virtual ~wxBitmap();
 
+    // GRG, Dic/99
+    wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect ) const;
+ 
     // copies the contents and mask of the given (colour) icon to the bitmap
     bool CopyFromIcon(const wxIcon& icon);
 

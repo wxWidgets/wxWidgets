@@ -249,6 +249,46 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     SetHBITMAP((WXHBITMAP)hbmp);
 }
 
+// GRG, Dic/99
+wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+{
+    wxCHECK_MSG( Ok() &&
+                 (rect.x >= 0) && (rect.y >= 0) && 
+                 (rect.x+rect.width <= GetWidth()) &&
+                 (rect.y+rect.height <= GetHeight()),
+                 wxNullBitmap, wxT("Invalid bitmap or bitmap region") );
+    
+    wxBitmap ret( rect.width, rect.height, GetDepth() );
+    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+    
+    // copy bitmap data
+    HDC dcSrc = ::CreateCompatibleDC(NULL);
+    HDC dcDst = ::CreateCompatibleDC(NULL);
+    SelectObject(dcSrc, (HBITMAP) GetHBITMAP());
+    SelectObject(dcDst, (HBITMAP) ret.GetHBITMAP());
+    BitBlt(dcDst, 0, 0, rect.width, rect.height, dcSrc, rect.x, rect.y, SRCCOPY);
+
+    // copy mask if there is one
+    if (GetMask())
+    {
+        HBITMAP hbmpMask = ::CreateBitmap(rect.width, rect.height, 1, 1, 0);
+
+        SelectObject(dcSrc, (HBITMAP) GetMask()->GetMaskBitmap());
+        SelectObject(dcDst, (HBITMAP) hbmpMask);
+        BitBlt(dcDst, 0, 0, rect.width, rect.height, dcSrc, rect.x, rect.y, SRCCOPY);
+
+        wxMask *mask = new wxMask((WXHBITMAP) hbmpMask);
+        ret.SetMask(mask);
+    }
+
+    SelectObject(dcDst, NULL);
+    SelectObject(dcSrc, NULL);
+    DeleteDC(dcDst);
+    DeleteDC(dcSrc);
+
+    return ret;
+}
+
 // Create from XPM data
 wxBitmap::wxBitmap(char **data, wxControl *WXUNUSED(anItem))
 {
