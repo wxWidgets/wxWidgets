@@ -60,6 +60,8 @@ public:
     #include "wx/generic/dirdlgg.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dirdlg.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/generic/dirdlgg.h"
 #elif defined(__WXPM__)
     #include "wx/generic/dirdlgg.h"
 #endif

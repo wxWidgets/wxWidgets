@@ -17,6 +17,8 @@
 #include "wx/generic/msgdlgg.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/msgdlg.h"
+#elif defined(__WXCOCOA__)
+#include "wx/generic/msgdlgg.h"
 #elif defined(__WXPM__)
 #include "wx/os2/msgdlg.h"
 #endif

@@ -122,6 +122,8 @@ private:
     #include "wx/gtk/accel.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/accel.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/generic/accel.h"
 #elif defined(__WXPM__)
     #include "wx/os2/accel.h"
 #endif
