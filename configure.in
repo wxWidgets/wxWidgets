@@ -1469,11 +1469,12 @@ dnl wx/defs.h which defines these constants leading to inconsistent
 dnl sizeof(off_t) in different source files of the same program and linking
 dnl problems
 if test "x$wx_largefile" = "xyes"; then
-    if test "x$ac_cv_sys_file_offset_bits" = "xyes"; then
-        CPPFLAGS="$CPPFLAGS -D_FILE_OFFSET_BITS=64"
+    if test "x$ac_cv_sys_file_offset_bits" = "x64"; then
+        WX_LARGEFILE_FLAGS="-D_FILE_OFFSET_BITS=64 -D_LARGE_FILES"
     else
-        CPPFLAGS="$CPPFLAGS -D_LARGE_FILES"
+        WX_LARGEFILE_FLAGS="-D_LARGE_FILES"
     fi
+    CPPFLAGS="$CPPFLAGS $WX_LARGEFILE_FLAGS"
 fi
 
 dnl check for bytesex stuff (don't use AC_C_BIGENDIAN to allow cross-compiling)
@@ -2337,7 +2338,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         for libp in "" " -lXp"; do
             if test "$libs_found" = "0"; then
                 for libsm_ice in " -lSM -lICE"; do
-                    if test "$libs_found" = "0"; then                
+                    if test "$libs_found" = "0"; then
                         save_LIBS="$LIBS"
                         LIBS="$GUI_TK_LIBRARY -lXm${xpm_link} ${libp} -lXmu -lXext -lXt${libsm_ice} -lX11"
                         save_CFLAGS=$CFLAGS
@@ -4221,7 +4222,7 @@ fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
 
-dnl     There is now experimental generic MDI support 
+dnl     There is now experimental generic MDI support
 dnl     if test "$wxUSE_UNIVERSAL" = "yes"; then
 dnl         AC_MSG_WARN(MDI not yet supported for wxUniversal... disabled)
 dnl         wxUSE_MDI_ARCHITECTURE=no
@@ -5089,6 +5090,7 @@ AC_SUBST(WXCONFIG_LIBS_STATIC)
 AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
+AC_SUBST(WX_LARGEFILE_FLAGS)
 
 dnl the list of files to compile/install
 AC_SUBST(ALL_OBJECTS)
