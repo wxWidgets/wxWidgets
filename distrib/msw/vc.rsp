@@ -1,3 +1,8 @@
+wxBase.dsp
+wxBase.dsw
+wxBaseDll.dsp
+wxBaseDll.dsw
+
 src/wxvc.dsp
 src/wxvc.dsw
 src/wxvc_dll.dsp

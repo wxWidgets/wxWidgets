@@ -30,7 +30,7 @@ a) under Win32 with Visual C++: open the provided wxBase.dsw workspace. From
        if you managed to do this, please let me know so that your makefiles
        could be included in the next distribution.
 
-b) under Unix/BeOS: use configure with --disab;e-gui argument. Building wxBase
+b) under Unix/BeOS: use configure with --disable-gui argument. Building wxBase
    in a separate directory is recommended, i.e.:
 
         $ gunzip -c wxBase-x.y.z.tar.gz | tar xvf -

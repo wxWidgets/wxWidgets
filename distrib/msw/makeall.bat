@@ -92,7 +92,7 @@ Rem Euch, this is the only way I can think of right now
 Rem to copy them to the same directory. Daft but...
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 cd %WXDIR%\demos
@@ -101,7 +101,7 @@ nmake -f makefile.vc FINAL=1
 Rem Copy all executables to VC6Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 Rem Compile OGL
@@ -206,8 +206,27 @@ make -f makefile.b32
 copy controls.exe %BUILDDEST%\BC55Debug
 make -f makefile.b32 clean
 
+Rem Compile OGL
+cd %WXDIR%\contrib\src\ogl
+make -f makefile.b32 clean
+make -f makefile.b32
+cd %WXDIR%\contrib\samples\ogl\ogledit
+make -f makefile.b32 clean
+make -f makefile.b32
+copy *.exe %BUILDDEST%\BC55Release
+make -f makefile.b32 clean
+cd %WXDIR%\contrib\samples\ogl\studio
+make -f makefile.b32 clean
+make -f makefile.b32
+copy *.exe %BUILDDEST%\BC55Release
+make -f makefile.b32 clean
+cd %WXDIR%\contrib\src\ogl
+make -f makefile.b32 clean
+
 cd %WXDIR%\src\msw
 make -f makefile.b32 cleanall
+
+goto bcdebugdll
 
 echo *** WIN32 BC++ Release ***
 
@@ -223,7 +242,7 @@ make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -232,7 +251,7 @@ make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 Rem Compile OGL
@@ -271,10 +290,12 @@ Rem Clean up
 cd %WXDIR%\src\msw
 make -f makefile.b32 cleanall FINAL=1
 
+:bcdebugdll
+
 echo *** WIN32 BC++ Debug DLL ***
 
-make -f makefile.b32 cleanall WXMAKINGDLL=1
-make -f makefile.b32 DLL=1
+make -f makefile.b32 cleanall
+make -f makefile.b32 dll
 
 if not direxist %BUILDDEST%\BC55DebugDLL mkdir /S %BUILDDEST%\BC55DebugDLL
 erase /F /Y %BUILDDEST%\BC55DebugDLL
@@ -287,26 +308,6 @@ cd %WXDIR%\samples\controls
 make -f makefile.b32 WXUSINGDLL=1
 copy controls.exe %BUILDDEST%\BC55DebugDLL
 make -f makefile.b32 clean
-
-cd %WXDIR%\src\msw
-make -f makefile.b32 cleanall WXMAKINGDLL=1
-
-echo *** WIN32 BC++ Release DLL ***
-
-make -f makefile.b32 cleanall FINAL=1 WXMAKINGDLL=1
-make -f makefile.b32 DLL=1 FINAL=1
-
-if not direxist %BUILDDEST%\BC55ReleaseDLL mkdir /S %BUILDDEST%\BC55ReleaseDLL
-erase /F /Y %BUILDDEST%\BC55ReleaseDLL
-
-copy %WXDIR%\lib\*.dll %BUILDDEST%\BC55ReleaseDLL
-
-Rem Make one sample, for a sanity check
-
-cd %WXDIR%\samples\controls
-make -f makefile.b32 WXUSINGDLL=1 FINAL=1
-copy controls.exe %BUILDDEST%\BC55ReleaseDLL
-make -f makefile.b32 clean FINAL=1
 
 cd %WXDIR%\src\msw
 make -f makefile.b32 cleanall
@@ -341,108 +342,6 @@ make -f makefile.b32 clean
 cd %WXDIR%\src\msw
 make -f makefile.b32 cleanall
 
-echo *** WIN32 BC++ Release ***
-
-make -f makefile.b32 cleanall FINAL=1
-make -f makefile.b32 FINAL=1
-
-if not direxist %BUILDDEST%\BC50Release mkdir /S %BUILDDEST%\BC50Release
-erase /F /Y %BUILDDEST%\BC50Release
-
-cd %WXDIR%\samples
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-Rem Copy all executables to BC50Release
-erase %TEMP%\temp.zip
-zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-
-cd %WXDIR%\demos
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-Rem Copy all executables to BC50Release
-erase %TEMP%\temp.zip
-zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-
-Rem Compile OGL
-cd %WXDIR%\contrib\src\ogl
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-cd %WXDIR%\contrib\samples\ogl\ogledit
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-copy *.exe %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-cd %WXDIR%\contrib\samples\ogl\studio
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-copy *.exe %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-cd %WXDIR%\contrib\src\ogl
-make -f makefile.b32 clean FINAL=1
-
-Rem Compile Dialog Editor
-cd %WXDIR%\utils\dialoged\src
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-copy *.exe %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-
-Rem Compile Tex2RTF
-cd %WXDIR%\utils\tex2rtf\src
-make -f makefile.b32 clean FINAL=1
-make -f makefile.b32 FINAL=1
-copy *.exe %BUILDDEST%\BC50Release
-make -f makefile.b32 clean FINAL=1
-
-Rem Clean up
-
-cd %WXDIR%\src\msw
-make -f makefile.b32 cleanall FINAL=1
-
-echo *** WIN32 BC++ Debug DLL ***
-
-make -f makefile.b32 cleanall WXMAKINGDLL=1
-make -f makefile.b32 DLL=1
-
-if not direxist %BUILDDEST%\BC50DebugDLL mkdir /S %BUILDDEST%\BC50DebugDLL
-erase /F /Y %BUILDDEST%\BC50DebugDLL
-
-copy %WXDIR%\lib\*.dll %BUILDDEST%\BC50DebugDLL
-
-Rem Make one sample, for a sanity check
-
-cd %WXDIR%\samples\controls
-make -f makefile.b32 WXUSINGDLL=1
-copy controls.exe %BUILDDEST%\BC50DebugDLL
-make -f makefile.b32 clean
-
-cd %WXDIR%\src\msw
-make -f makefile.b32 cleanall WXMAKINGDLL=1
-
-echo *** WIN32 BC++ Release DLL ***
-
-make -f makefile.b32 cleanall FINAL=1 WXMAKINGDLL=1
-make -f makefile.b32 DLL=1 FINAL=1
-
-if not direxist %BUILDDEST%\BC50ReleaseDLL mkdir /S %BUILDDEST%\BC50ReleaseDLL
-erase /F /Y %BUILDDEST%\BC50ReleaseDLL
-
-copy %WXDIR%\lib\*.dll %BUILDDEST%\BC50ReleaseDLL
-
-Rem Make one sample, for a sanity check
-
-cd %WXDIR%\samples\controls
-make -f makefile.b32 WXUSINGDLL=1 FINAL=1
-copy controls.exe %BUILDDEST%\BC50ReleaseDLL
-make -f makefile.b32 clean FINAL=1
-
-cd %WXDIR%\src\msw
-make -f makefile.b32 cleanall
-
 if "%CARRYON" == "0" goto end
 
 :docygwin11
@@ -473,7 +372,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -482,7 +381,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL
@@ -553,7 +452,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
@@ -562,7 +461,7 @@ make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
 erase %TEMP%\temp.zip
 zip16 -r %TEMP%\temp.zip *.exe
-unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
+unzip32 -o %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL

@@ -57,8 +57,16 @@ you will need to compile distrib/msw/splitwise.cpp into distrib/msw/splitwise.ex
 <li>Compile utils/projgen if necessary and run, to generate the .dsp/.dsw files for the samples, demos and utils
 using VC++ 5/6. In fact when wxWindows is fairly stable and new samples haven't been added and settings
 changed, this step isn't necessary.<P>
-<li>Alter WXVERSION or other version-related variables in src/makevc.env, src/makeg95.env, src/makeb32.env.<P>
-<li>Alter the DLL version in the VC++ project files using distrib/msw/vcupdate.bat (no arguments).<P>
+<li>Update version numbers:
+<ul>
+<li>Ensure include/wx/version.h specifies the correct wxWindows version.
+<li>Alter WXVERSION or other version-related variables in src/makevc.env, src/makeg95.env, src/makeb32.env.
+<li>Alter the DLL version in the VC++ project files using distrib/msw/vcupdate.bat (no arguments).
+<li>Edit distrib/msw/zipdist.bat and change the <b>version</b> variable to the appropriate version.
+<li>Edit the WISE script (normally distrib/msw/wisetop.txt) to change the version number. See also below for other WISE script changes.
+<li>Update the date and version number in docs/latex/wx/manual.tex.
+</ul>
+<P>
 <li>Check setup.h is correct for the distribution (e.g. wxUSE_ODBC = 1, wxUSE_UNICODE = 0, etc.).<P>
 <li>Regenerate makefiles from the tmake templates, if necessary. Most makefiles have a target to do this using the makefile name,
 or else 'self'. Or you can use the 'makeall.bat' script in distrib\msw\tmake.<P>
@@ -74,17 +82,15 @@ to build wxWindows and samples for a variety of compilers.<P>
 For example, samples or demos may have been added to the hierarchy. The same applies to projgen (see above).<P>
 <li>Likewise, ensure that vc.rsp contains references to all the sample project files (that have been generated
 by projgen).<P>
-<li>Ensure include/wx/version.h specifies the correct wxWindows version.<P>
 <li>Ensure docs/msw/install.txt is up-to-date (detail any gotchas for particular compiler versions, etc.).<P>
 <li>Update docs/readme.txt, docs/changes.txt (summarize from CVS change notifications).<P>
-<li>Update the date in docs/latex/wx/manual.tex, and build the WinHelp, HTML, and PDF documentation
+<li>Build the WinHelp, HTML, and PDF documentation
 via the VC++ makefile, src/msw/makefile.vc. You can use e.g. the targets <b>cleandocs alldocs</b>. Check the
 output of the Windows Help Compiler for missing links, and edit/recompile the docs if necessary. The PDF documentation is produced from the Word RTF
 document, and read into Word. Select all, press F9 to reformat the fields. Check the table of contents for
 overspill from the body of a section into the TOC. If there's a problem, it's due to the lack of a
 blank line at the end of the relevant .tex file. Insert the blank line, regenerate the RTF, and reload into Word.
 Then use Adobe Distiller to generate the PDF.<P>
-<li>Edit distrib/msw/zipdist.bat and change the <b>version</b> variable to the appropriate version.<P>
 <li>You need to edit the WISE script to change the version number, and any other changes you wish to make.
 For simple changes, you can edit distrib/msw/wisetop.txt directly with a text editor. If you
 wish to use WISE Installer directly, you will need to make a full wxwin2.wse file first,

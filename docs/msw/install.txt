@@ -45,6 +45,9 @@ Other add-on packages are available from the wxWindows Web site, such as:
 - tex2rtf3.zip. Tex2RTF: create Windows Help, HTML, and Word RTF files from
   the same document source.
 
+For instructions on compiling wxBase (wxWindows-without-GUI),
+please see docs/base/install.txt.
+
 General installation notes
 --------------------------
 
