@@ -477,7 +477,10 @@ public:
     // Recursively call wxWindow::Show () on all sizer items.
     virtual void ShowItems (bool show);
 
-    void Show(bool show) { m_isShown = show; }
+    void Show(bool show)
+    {   m_isShown = show;
+        ShowItems(show);
+    }
     bool IsShown() const { return m_isShown; }
 
 protected:

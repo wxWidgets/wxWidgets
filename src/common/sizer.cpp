@@ -416,7 +416,7 @@ void wxSizerItem::Show( bool show )
             break;
 
         case Item_Sizer:
-            m_sizer->ShowItems(show);
+            m_sizer->Show(show);
             break;
 
         case Item_Spacer:
