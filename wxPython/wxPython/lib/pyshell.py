@@ -20,6 +20,10 @@ There is still much to be done to improve this class, such as line
 buffering/recall, autoindent, calltips, autocomplete, fixing the colourizer,
 etc...  But it's a good start.
 
+
+8-10-2001         THIS MODULE IS NOW DEPRECATED.  Please see the most excellent
+                  PyCrust package instead.
+
 """
 
 

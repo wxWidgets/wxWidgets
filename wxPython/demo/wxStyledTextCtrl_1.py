@@ -30,7 +30,6 @@ wxStyledTextEditor also supports setting markers in the margin...
 you want in your application.  Cut, Copy, Paste, Drag and Drop of
 text works, as well as virtually unlimited Undo and Redo
 capabilities, (right click to try it out.)
-
 """
 
 if wxPlatform == '__WXMSW__':
@@ -168,6 +167,22 @@ def runTest(frame, nb, log):
     ed.SetStyling(10, wxSTC_INDIC1_MASK)
     ed.SetStyling(10, wxSTC_INDIC2_MASK | wxSTC_INDIC1_MASK)
 
+    # some test stuff...
+    if 1:
+        print "GetTextLength(): ", ed.GetTextLength(), len(ed.GetText())
+        print "GetText(): ", repr(ed.GetText())
+        print
+        print "GetStyledText(98, 104): ", repr(ed.GetStyledText(98, 104)), len(ed.GetStyledText(98, 104))
+        print
+        print "GetCurLine(): ", repr(ed.GetCurLine())
+        print
+        print "GetLine(1): ", repr(ed.GetLine(1))
+        print
+        ed.SetSelection(25, 35)
+        print "GetSelectedText(): ", repr(ed.GetSelectedText())
+        print "GetTextRange(25, 35): ", repr(ed.GetTextRange(25, 35))
+
+        ed.GotoPos(0)
 
     return p
 

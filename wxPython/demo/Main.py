@@ -23,6 +23,8 @@ import images
 
 _treeList = [
     ('New since last release', ['ContextHelp',
+                                'PyCrust',
+                                'VirtualListCtrl'
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -58,10 +60,10 @@ _treeList = [
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
-                          'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
+                          'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
-                          'PyShellWindow', 'ColourSelect', 'ImageBrowser',
-                          'infoframe', 'ColourDB',
+                          'ColourSelect', 'ImageBrowser',
+                          'infoframe', 'ColourDB', 'PyCrust',
                           ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),

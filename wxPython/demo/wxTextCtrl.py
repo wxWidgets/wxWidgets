@@ -33,6 +33,9 @@ class TestPanel(wxPanel):
                        size=(200, 100), style=wxTE_MULTILINE)
         t3.SetInsertionPoint(0)
         EVT_TEXT(self, 30, self.EvtText)
+        b = wxButton(self, -1, "Test Replace")
+        EVT_BUTTON(self, b.GetId(), self.OnTestReplace)
+        self.tc = t3
 
         l4 = wxStaticText(self, -1, "Rich Text")
         t4 = wxTextCtrl(self, 40, "If supported by the native control, this is red, and this is a different font.",
@@ -47,11 +50,11 @@ class TestPanel(wxPanel):
         t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))
 ##         print 'a2', sys.getrefcount(f)
 
-        sizer = wxFlexGridSizer(cols=2, hgap=6, vgap=6)
-        sizer.AddMany([ l1, t1,
-                        l2, t2,
-                        l3, t3,
-                        l4, t4,
+        sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
+        sizer.AddMany([ l1, t1, (0,0),
+                        l2, t2, (0,0),
+                        l3, t3, b,
+                        l4, t4, (0,0),
                         ])
         border = wxBoxSizer(wxVERTICAL)
         border.Add(sizer, 0, wxALL, 25)
@@ -66,6 +69,11 @@ class TestPanel(wxPanel):
     def EvtChar(self, event):
         self.log.WriteText('EvtChar: %d\n' % event.GetKeyCode())
         event.Skip()
+
+
+    def OnTestReplace(self, evt):
+        self.tc.Replace(4, 8, "DOES")
+        #self.tc.Remove(4, 8)
 
 
 #---------------------------------------------------------------------------

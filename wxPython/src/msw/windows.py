@@ -520,6 +520,24 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetHelpText(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetHelpText,(self,) + _args, _kwargs)
         return val
+    def ScrollLines(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_ScrollLines,(self,) + _args, _kwargs)
+        return val
+    def ScrollPages(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_ScrollPages,(self,) + _args, _kwargs)
+        return val
+    def LineUp(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_LineUp,(self,) + _args, _kwargs)
+        return val
+    def LineDown(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_LineDown,(self,) + _args, _kwargs)
+        return val
+    def PageUp(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PageUp,(self,) + _args, _kwargs)
+        return val
+    def PageDown(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_PageDown,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
     # replaces broken shadow method

@@ -1176,19 +1176,19 @@ public:
 
 //---------------------------------------------------------------------------
 
-#define DEC_PYCALLBACK_DATAFMT_SIZET(CBNAME)                  \
-    wxDataFormat  CBNAME();                                        \
-    wxDataFormat  base_##CBNAME();
+#define DEC_PYCALLBACK_DATAFMT_SIZET(CBNAME)                                    \
+    wxDataFormat  CBNAME(size_t a);                                             \
+    wxDataFormat  base_##CBNAME(size_t a);
 
 
 #define IMP_PYCALLBACK_DATAFMT_SIZET(CLASS, PCLASS, CBNAME)                     \
     wxDataFormat CLASS::CBNAME(size_t a) {                                      \
         wxDataFormat rval;                                                      \
         bool doSave = wxPyRestoreThread();                                      \
-        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                                   \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
             PyObject* ro;                                                       \
             wxDataFormat* ptr;                                                  \
-            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(i)", a));             \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(i)", a));    \
             if (ro) {                                                           \
                 if (! SWIG_GetPtrObj(ro, (void **)&ptr, "_wxDataFormat_p"))     \
                     rval = *ptr;                                                \
@@ -1274,6 +1274,94 @@ public:
     }                                                                   \
     bool CLASS::base_##CBNAME(Type& a) {                                \
         return PCLASS::CBNAME(a);                                       \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_STRING_LONGLONG(CBNAME)                                  \
+    wxString CBNAME(long a, long b) const;                                      \
+    wxString base_##CBNAME(long a, long b)const ;
+
+
+#define IMP_PYCALLBACK_STRING_LONGLONG(CLASS, PCLASS, CBNAME)                   \
+    wxString CLASS::CBNAME(long a, long b) const {                              \
+        wxString rval;                                                          \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ll)",a,b));  \
+            if (ro) {                                                           \
+                PyObject* str = PyObject_Str(ro);                               \
+                rval = PyString_AsString(str);                                  \
+                Py_DECREF(ro);   Py_DECREF(str);                                \
+            }                                                                   \
+        }                                                                       \
+        else                                                                    \
+            rval = PCLASS::CBNAME(a,b);                                         \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+    wxString CLASS::base_##CBNAME(long a, long b) const {                       \
+        return PCLASS::CBNAME(a,b);                                             \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_INT_LONG(CBNAME)                                         \
+    int CBNAME(long a) const;                                                   \
+    int base_##CBNAME(long a)const ;
+
+
+#define IMP_PYCALLBACK_INT_LONG(CLASS, PCLASS, CBNAME)                          \
+    int CLASS::CBNAME(long a) const {                                           \
+        int rval=-1;                                                            \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(l)",a));     \
+            if (ro) {                                                           \
+                rval = PyInt_AsLong(ro);                                        \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        else                                                                    \
+            rval = PCLASS::CBNAME(a);                                           \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+    int CLASS::base_##CBNAME(long a) const {                                    \
+        return PCLASS::CBNAME(a);                                               \
+    }
+
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_LISTATTR_LONG(CBNAME)                                    \
+    wxListItemAttr*  CBNAME(long a);                                            \
+    wxListItemAttr*  base_##CBNAME(long a);
+
+
+#define IMP_PYCALLBACK_LISTATTR_LONG(CLASS, PCLASS, CBNAME)                     \
+    wxListItemAttr *CLASS::CBNAME(long a) {                                     \
+        wxListItemAttr *rval = NULL;                                            \
+        bool doSave = wxPyRestoreThread();                                      \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME)) {                          \
+            PyObject* ro;                                                       \
+            wxListItemAttr* ptr;                                                \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(i)", a));    \
+            if (ro) {                                                           \
+                if (! SWIG_GetPtrObj(ro, (void **)&ptr, "_wxListItemAttr_p"))   \
+                    rval = ptr;                                                 \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        else                                                                    \
+            rval = PCLASS::CBNAME(a);                                           \
+        wxPySaveThread(doSave);                                                 \
+        return rval;                                                            \
+    }                                                                           \
+    wxListItemAttr *CLASS::base_##CBNAME(long a) {                              \
+        return PCLASS::CBNAME(a);                                               \
     }
 
 //---------------------------------------------------------------------------

@@ -389,6 +389,14 @@ public:
     wxString GetHelpText();
     void SetHelpText(const wxString& helpText);
 
+    bool ScrollLines(int lines);
+    bool ScrollPages(int pages);
+    bool LineUp();
+    bool LineDown();
+    bool PageUp();
+    bool PageDown();
+
+
 
 //      // Properties list
 //      %pragma(python) addtoclass = "

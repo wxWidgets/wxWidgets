@@ -942,6 +942,29 @@ class wxTimerEvent(wxTimerEventPtr):
 
 
 
+class wxTextUrlEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetMouseEvent(self, *_args, **_kwargs):
+        val = apply(eventsc.wxTextUrlEvent_GetMouseEvent,(self,) + _args, _kwargs)
+        return val
+    def GetURLStart(self, *_args, **_kwargs):
+        val = apply(eventsc.wxTextUrlEvent_GetURLStart,(self,) + _args, _kwargs)
+        return val
+    def GetURLEnd(self, *_args, **_kwargs):
+        val = apply(eventsc.wxTextUrlEvent_GetURLEnd,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxTextUrlEvent instance at %s>" % (self.this,)
+class wxTextUrlEvent(wxTextUrlEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxTextUrlEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxPyEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this

@@ -623,6 +623,10 @@ public:
 
     void CalcBoundingBox(int x, int y);
     void ResetBoundingBox();
+
+#ifdef __WXMSW__
+    long GetHDC();
+#endif
 };
 
 

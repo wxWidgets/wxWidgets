@@ -821,6 +821,9 @@ class wxDCPtr(wxObjectPtr):
     def ResetBoundingBox(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_ResetBoundingBox,(self,) + _args, _kwargs)
         return val
+    def GetHDC(self, *_args, **_kwargs):
+        val = apply(gdic.wxDC_GetHDC,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxDC instance at %s>" % (self.this,)
 class wxDC(wxDCPtr):

@@ -22,39 +22,39 @@ musicdata = {
 4 : ("Gloria Estefan", "Here We Are", "Rock"),
 5 : ("Linda Ronstadt", "Don't Know Much", "Rock"),
 6 : ("Michael Bolton", "How Am I Supposed To Live Without You", "Blues"),
-7 : ("Paul Young", "Oh Girl", "Rock"),
-8 : ("Paula Abdul", "Opposites Attract", "Rock"),
-9 : ("Richard Marx", "Should've Known Better", "Rock"),
-10: ("Rod Stewart", "Forever Young", "Rock"),
-11: ("Roxette", "Dangerous", "Rock"),
-12: ("Sheena Easton", "The Lover In Me", "Rock"),
-13: ("Sinead O'Connor", "Nothing Compares 2 U", "Rock"),
-14: ("Stevie B.", "Because I Love You", "Rock"),
-15: ("Taylor Dayne", "Love Will Lead You Back", "Rock"),
-16: ("The Bangles", "Eternal Flame", "Rock"),
-17: ("Wilson Phillips", "Release Me", "Rock"),
-18: ("Billy Joel", "Blonde Over Blue", "Rock"),
-19: ("Billy Joel", "Famous Last Words", "Rock"),
-20: ("Billy Joel", "Lullabye (Goodnight, My Angel)", "Rock"),
-21: ("Billy Joel", "The River Of Dreams", "Rock"),
-22: ("Billy Joel", "Two Thousand Years", "Rock"),
-23: ("Janet Jackson", "Alright", "Rock"),
-24: ("Janet Jackson", "Black Cat", "Rock"),
-25: ("Janet Jackson", "Come Back To Me", "Rock"),
-26: ("Janet Jackson", "Escapade", "Rock"),
-27: ("Janet Jackson", "Love Will Never Do (Without You)", "Rock"),
-28: ("Janet Jackson", "Miss You Much", "Rock"),
-29: ("Janet Jackson", "Rhythm Nation", "Rock"),
-30: ("Janet Jackson", "State Of The World", "Rock"),
-31: ("Janet Jackson", "The Knowledge", "Rock"),
-32: ("Spyro Gyra", "End of Romanticism", "Jazz"),
-33: ("Spyro Gyra", "Heliopolis", "Jazz"),
-34: ("Spyro Gyra", "Jubilee", "Jazz"),
-35: ("Spyro Gyra", "Little Linda", "Jazz"),
-36: ("Spyro Gyra", "Morning Dance", "Jazz"),
-37: ("Spyro Gyra", "Song for Lorraine", "Jazz"),
-38: ("Yes", "Owner Of A Lonely Heart", "Rock"),
-39: ("Yes", "Rhythm Of Love", "Rock"),
+## 7 : ("Paul Young", "Oh Girl", "Rock"),
+## 8 : ("Paula Abdul", "Opposites Attract", "Rock"),
+## 9 : ("Richard Marx", "Should've Known Better", "Rock"),
+## 10: ("Rod Stewart", "Forever Young", "Rock"),
+## 11: ("Roxette", "Dangerous", "Rock"),
+## 12: ("Sheena Easton", "The Lover In Me", "Rock"),
+## 13: ("Sinead O'Connor", "Nothing Compares 2 U", "Rock"),
+## 14: ("Stevie B.", "Because I Love You", "Rock"),
+## 15: ("Taylor Dayne", "Love Will Lead You Back", "Rock"),
+## 16: ("The Bangles", "Eternal Flame", "Rock"),
+## 17: ("Wilson Phillips", "Release Me", "Rock"),
+## 18: ("Billy Joel", "Blonde Over Blue", "Rock"),
+## 19: ("Billy Joel", "Famous Last Words", "Rock"),
+## 20: ("Billy Joel", "Lullabye (Goodnight, My Angel)", "Rock"),
+## 21: ("Billy Joel", "The River Of Dreams", "Rock"),
+## 22: ("Billy Joel", "Two Thousand Years", "Rock"),
+## 23: ("Janet Jackson", "Alright", "Rock"),
+## 24: ("Janet Jackson", "Black Cat", "Rock"),
+## 25: ("Janet Jackson", "Come Back To Me", "Rock"),
+## 26: ("Janet Jackson", "Escapade", "Rock"),
+## 27: ("Janet Jackson", "Love Will Never Do (Without You)", "Rock"),
+## 28: ("Janet Jackson", "Miss You Much", "Rock"),
+## 29: ("Janet Jackson", "Rhythm Nation", "Rock"),
+## 30: ("Janet Jackson", "State Of The World", "Rock"),
+## 31: ("Janet Jackson", "The Knowledge", "Rock"),
+## 32: ("Spyro Gyra", "End of Romanticism", "Jazz"),
+## 33: ("Spyro Gyra", "Heliopolis", "Jazz"),
+## 34: ("Spyro Gyra", "Jubilee", "Jazz"),
+## 35: ("Spyro Gyra", "Little Linda", "Jazz"),
+## 36: ("Spyro Gyra", "Morning Dance", "Jazz"),
+## 37: ("Spyro Gyra", "Song for Lorraine", "Jazz"),
+## 38: ("Yes", "Owner Of A Lonely Heart", "Rock"),
+## 39: ("Yes", "Rhythm Of Love", "Rock"),
 }
 
 import images
@@ -72,7 +72,7 @@ class TestListCtrlPanel(wxPanel):
         idx1 = self.il.Add(bmp)
 
         self.list = wxListCtrl(self, tID,
-                               style=wxLC_REPORT|wxSUNKEN_BORDER)
+                               style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
         self.list.SetImageList(self.il, wxIMAGE_LIST_SMALL)
 
         #  Why doesn't this show up on MSW???
@@ -101,6 +101,10 @@ class TestListCtrlPanel(wxPanel):
         # show how to change the colour of an item
         item = self.list.GetItem(1)
         item.SetTextColour(wxBLUE)
+        self.list.SetItem(item)
+
+        item = self.list.GetItem(4)
+        item.SetTextColour(wxRED)
         self.list.SetItem(item)
 
         self.currentItem = 0
@@ -159,7 +163,9 @@ class TestListCtrlPanel(wxPanel):
     def ColumnSorter(self, key1, key2):
         item1 = musicdata[key1][self.col]
         item2 = musicdata[key2][self.col]
-        if item1 == item2:  return 0
+
+        # when the items are identical, compare someting else to make the sort key unique...
+        if item1 == item2:  return key1 - key2
         elif item1 < item2: return -1
         else:               return 1
 

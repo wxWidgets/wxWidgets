@@ -446,6 +446,17 @@ public:
     int GetInterval();
 };
 
+//---------------------------------------------------------------------------
+
+class wxTextUrlEvent : public wxCommandEvent
+{
+public:
+    wxTextUrlEvent(int id, const wxMouseEvent& evtMouse,
+                   long start, long end);
+    const wxMouseEvent& GetMouseEvent();
+    long GetURLStart();
+    long GetURLEnd();
+};
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

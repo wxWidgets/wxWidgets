@@ -9,7 +9,9 @@ EVT_DETAILED_HELP_RANGE, EVT_CONTEXT_MENU, wxHelpEvent,
 wxContextMenuEvent, wxContextHelp, wxContextHelpButton, wxTipWindow,
 and a demo to show them in action.
 
+Deprecated PyShell and PyShellWindow, added a snapshot of PyCrust.
 
+Added the new virtual list capabilities to wxListCtrl.
 
 
 

@@ -17,10 +17,13 @@ History:
                   input prompts and output styles added to customized demo
                   some html cleanups
 04-oct-1999 [rpd] Changed to use the new sizers
-05-oct-1990 [als] changes inspired by code.InteractiveInterpreter()
+05-oct-1999 [als] changes inspired by code.InteractiveInterpreter()
                   from Python Library.  if i knew about this class earlier,
                   i would rather inherit from it.
                   renamed to wxPyShell.py since i've renounced the 8.3 scheme
+
+8-10-2001         THIS MODULE IS NOW DEPRECATED.  Please see the most excellent
+                  PyCrust package instead.
 
 """
 __version__ ="$Revision$"

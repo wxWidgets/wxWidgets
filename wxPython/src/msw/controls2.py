@@ -13,6 +13,58 @@ from events import *
 
 from controls import *
 import wx
+
+def EVT_LIST_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_DRAG, func)
+
+def EVT_LIST_BEGIN_RDRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_RDRAG, func)
+
+def EVT_LIST_BEGIN_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, func)
+
+def EVT_LIST_END_LABEL_EDIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_END_LABEL_EDIT, func)
+
+def EVT_LIST_DELETE_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ITEM, func)
+
+def EVT_LIST_DELETE_ALL_ITEMS(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, func)
+
+def EVT_LIST_GET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_GET_INFO, func)
+
+def EVT_LIST_SET_INFO(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_SET_INFO, func)
+
+def EVT_LIST_ITEM_SELECTED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
+
+def EVT_LIST_ITEM_DESELECTED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
+
+def EVT_LIST_KEY_DOWN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_KEY_DOWN, func)
+
+def EVT_LIST_INSERT_ITEM(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_INSERT_ITEM, func)
+
+def EVT_LIST_COL_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
+
+def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, func)
+
+def EVT_LIST_ITEM_MIDDLE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, func)
+
+def EVT_LIST_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
+
+def EVT_LIST_CACHE_HINT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_CACHE_HINT, func)
+
 class wxListItemAttrPtr :
     def __init__(self,this):
         self.this = this
@@ -315,12 +367,126 @@ class wxListCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Arrange(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_Arrange,(self,) + _args, _kwargs)
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl__setSelf,(self,) + _args, _kwargs)
+        return val
+    def SetForegroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetForegroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def GetColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
+        return val
+    def SetColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetColumn,(self,) + _args, _kwargs)
+        return val
+    def GetColumnWidth(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetColumnWidth,(self,) + _args, _kwargs)
+        return val
+    def SetColumnWidth(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetColumnWidth,(self,) + _args, _kwargs)
+        return val
+    def GetCountPerPage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetCountPerPage,(self,) + _args, _kwargs)
+        return val
+    def GetEditControl(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetEditControl,(self,) + _args, _kwargs)
+        return val
+    def GetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
+        return val
+    def SetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItem,(self,) + _args, _kwargs)
+        return val
+    def SetStringItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetStringItem,(self,) + _args, _kwargs)
+        return val
+    def GetItemState(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemState,(self,) + _args, _kwargs)
+        return val
+    def SetItemState(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemState,(self,) + _args, _kwargs)
+        return val
+    def SetItemImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemImage,(self,) + _args, _kwargs)
+        return val
+    def GetItemText(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemText,(self,) + _args, _kwargs)
+        return val
+    def SetItemText(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemText,(self,) + _args, _kwargs)
+        return val
+    def GetItemData(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemData,(self,) + _args, _kwargs)
+        return val
+    def SetItemData(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemData,(self,) + _args, _kwargs)
+        return val
+    def GetItemPosition(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemPosition,(self,) + _args, _kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetItemRect(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemRect,(self,) + _args, _kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def SetItemPosition(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemPosition,(self,) + _args, _kwargs)
+        return val
+    def GetItemCount(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemCount,(self,) + _args, _kwargs)
+        return val
+    def GetColumnCount(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetColumnCount,(self,) + _args, _kwargs)
+        return val
+    def GetItemSpacing(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemSpacing,(self,) + _args, _kwargs)
+        return val
+    def GetSelectedItemCount(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetSelectedItemCount,(self,) + _args, _kwargs)
+        return val
+    def GetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def SetTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetTextColour,(self,) + _args, _kwargs)
+        return val
+    def GetTopItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetTopItem,(self,) + _args, _kwargs)
+        return val
+    def SetSingleStyle(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetSingleStyle,(self,) + _args, _kwargs)
+        return val
+    def SetWindowStyleFlag(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetWindowStyleFlag,(self,) + _args, _kwargs)
+        return val
+    def GetNextItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetNextItem,(self,) + _args, _kwargs)
+        return val
+    def GetImageList(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetImageList,(self,) + _args, _kwargs)
+        return val
+    def SetImageList(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetImageList,(self,) + _args, _kwargs)
         return val
     def AssignImageList(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_AssignImageList,(self,) + _args, _kwargs)
         _args[0].thisown = 0
+        return val
+    def IsVirtual(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_IsVirtual,(self,) + _args, _kwargs)
+        return val
+    def RefreshItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_RefreshItem,(self,) + _args, _kwargs)
+        return val
+    def RefreshItems(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_RefreshItems,(self,) + _args, _kwargs)
+        return val
+    def Arrange(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_Arrange,(self,) + _args, _kwargs)
         return val
     def DeleteItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_DeleteItem,(self,) + _args, _kwargs)
@@ -343,9 +509,6 @@ class wxListCtrlPtr(wxControlPtr):
     def EndEditLabel(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EndEditLabel,(self,) + _args, _kwargs)
         return val
-    def GetEditControl(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetEditControl,(self,) + _args, _kwargs)
-        return val
     def EnsureVisible(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_EnsureVisible,(self,) + _args, _kwargs)
         return val
@@ -358,68 +521,8 @@ class wxListCtrlPtr(wxControlPtr):
     def FindItemAtPos(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_FindItemAtPos,(self,) + _args, _kwargs)
         return val
-    def GetColumn(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
-        return val
-    def GetColumnWidth(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetColumnWidth,(self,) + _args, _kwargs)
-        return val
-    def GetCountPerPage(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetCountPerPage,(self,) + _args, _kwargs)
-        return val
-    def GetImageList(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetImageList,(self,) + _args, _kwargs)
-        return val
-    def GetItemData(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemData,(self,) + _args, _kwargs)
-        return val
-    def GetItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
-        return val
-    def GetItemPosition(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemPosition,(self,) + _args, _kwargs)
-        if val: val = wxPointPtr(val) ; val.thisown = 1
-        return val
-    def GetItemRect(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemRect,(self,) + _args, _kwargs)
-        if val: val = wxRectPtr(val) ; val.thisown = 1
-        return val
-    def GetItemState(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemState,(self,) + _args, _kwargs)
-        return val
-    def GetItemCount(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemCount,(self,) + _args, _kwargs)
-        return val
-    def GetItemSpacing(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemSpacing,(self,) + _args, _kwargs)
-        return val
-    def GetItemText(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItemText,(self,) + _args, _kwargs)
-        return val
-    def GetNextItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetNextItem,(self,) + _args, _kwargs)
-        return val
-    def GetSelectedItemCount(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetSelectedItemCount,(self,) + _args, _kwargs)
-        return val
-    def GetTextColour(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) ; val.thisown = 1
-        return val
-    def SetTextColour(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetTextColour,(self,) + _args, _kwargs)
-        return val
-    def GetTopItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetTopItem,(self,) + _args, _kwargs)
-        return val
     def HitTest(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_HitTest,(self,) + _args, _kwargs)
-        return val
-    def InsertColumnInfo(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_InsertColumnInfo,(self,) + _args, _kwargs)
-        return val
-    def InsertColumn(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_InsertColumn,(self,) + _args, _kwargs)
         return val
     def InsertItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_InsertItem,(self,) + _args, _kwargs)
@@ -433,47 +536,17 @@ class wxListCtrlPtr(wxControlPtr):
     def InsertImageStringItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_InsertImageStringItem,(self,) + _args, _kwargs)
         return val
+    def InsertColumnInfo(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_InsertColumnInfo,(self,) + _args, _kwargs)
+        return val
+    def InsertColumn(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_InsertColumn,(self,) + _args, _kwargs)
+        return val
+    def SetItemCount(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemCount,(self,) + _args, _kwargs)
+        return val
     def ScrollList(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_ScrollList,(self,) + _args, _kwargs)
-        return val
-    def SetBackgroundColour(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetBackgroundColour,(self,) + _args, _kwargs)
-        return val
-    def SetColumn(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetColumn,(self,) + _args, _kwargs)
-        return val
-    def SetColumnWidth(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetColumnWidth,(self,) + _args, _kwargs)
-        return val
-    def SetImageList(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetImageList,(self,) + _args, _kwargs)
-        return val
-    def SetItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItem,(self,) + _args, _kwargs)
-        return val
-    def SetStringItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetStringItem,(self,) + _args, _kwargs)
-        return val
-    def SetItemData(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItemData,(self,) + _args, _kwargs)
-        return val
-    def SetItemImage(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItemImage,(self,) + _args, _kwargs)
-        return val
-    def SetItemPosition(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItemPosition,(self,) + _args, _kwargs)
-        return val
-    def SetItemState(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItemState,(self,) + _args, _kwargs)
-        return val
-    def SetItemText(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetItemText,(self,) + _args, _kwargs)
-        return val
-    def SetSingleStyle(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetSingleStyle,(self,) + _args, _kwargs)
-        return val
-    def SetWindowStyleFlag(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_SetWindowStyleFlag,(self,) + _args, _kwargs)
         return val
     def SortItems(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_SortItems,(self,) + _args, _kwargs)
@@ -491,6 +564,7 @@ class wxListCtrl(wxListCtrlPtr):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)
         self.thisown = 1
         #wx._StdWindowCallbacks(self)
+        self._setSelf(self, wxListCtrl)
 
 
 
@@ -838,12 +912,49 @@ class wxTreeCtrl(wxTreeCtrlPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxEVT_COMMAND_LIST_BEGIN_DRAG = controls2c.wxEVT_COMMAND_LIST_BEGIN_DRAG
+wxEVT_COMMAND_LIST_BEGIN_RDRAG = controls2c.wxEVT_COMMAND_LIST_BEGIN_RDRAG
+wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = controls2c.wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
+wxEVT_COMMAND_LIST_END_LABEL_EDIT = controls2c.wxEVT_COMMAND_LIST_END_LABEL_EDIT
+wxEVT_COMMAND_LIST_DELETE_ITEM = controls2c.wxEVT_COMMAND_LIST_DELETE_ITEM
+wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = controls2c.wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
+wxEVT_COMMAND_LIST_GET_INFO = controls2c.wxEVT_COMMAND_LIST_GET_INFO
+wxEVT_COMMAND_LIST_SET_INFO = controls2c.wxEVT_COMMAND_LIST_SET_INFO
+wxEVT_COMMAND_LIST_ITEM_SELECTED = controls2c.wxEVT_COMMAND_LIST_ITEM_SELECTED
+wxEVT_COMMAND_LIST_ITEM_DESELECTED = controls2c.wxEVT_COMMAND_LIST_ITEM_DESELECTED
+wxEVT_COMMAND_LIST_KEY_DOWN = controls2c.wxEVT_COMMAND_LIST_KEY_DOWN
+wxEVT_COMMAND_LIST_INSERT_ITEM = controls2c.wxEVT_COMMAND_LIST_INSERT_ITEM
+wxEVT_COMMAND_LIST_COL_CLICK = controls2c.wxEVT_COMMAND_LIST_COL_CLICK
+wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
+wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
+wxEVT_COMMAND_LIST_ITEM_ACTIVATED = controls2c.wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+wxEVT_COMMAND_LIST_CACHE_HINT = controls2c.wxEVT_COMMAND_LIST_CACHE_HINT
+wxLC_VRULES = controls2c.wxLC_VRULES
+wxLC_HRULES = controls2c.wxLC_HRULES
+wxLC_ICON = controls2c.wxLC_ICON
+wxLC_SMALL_ICON = controls2c.wxLC_SMALL_ICON
+wxLC_LIST = controls2c.wxLC_LIST
+wxLC_REPORT = controls2c.wxLC_REPORT
+wxLC_ALIGN_TOP = controls2c.wxLC_ALIGN_TOP
+wxLC_ALIGN_LEFT = controls2c.wxLC_ALIGN_LEFT
+wxLC_AUTOARRANGE = controls2c.wxLC_AUTOARRANGE
+wxLC_VIRTUAL = controls2c.wxLC_VIRTUAL
+wxLC_EDIT_LABELS = controls2c.wxLC_EDIT_LABELS
+wxLC_NO_HEADER = controls2c.wxLC_NO_HEADER
+wxLC_NO_SORT_HEADER = controls2c.wxLC_NO_SORT_HEADER
+wxLC_SINGLE_SEL = controls2c.wxLC_SINGLE_SEL
+wxLC_SORT_ASCENDING = controls2c.wxLC_SORT_ASCENDING
+wxLC_SORT_DESCENDING = controls2c.wxLC_SORT_DESCENDING
+wxLC_MASK_TYPE = controls2c.wxLC_MASK_TYPE
+wxLC_MASK_ALIGN = controls2c.wxLC_MASK_ALIGN
+wxLC_MASK_SORT = controls2c.wxLC_MASK_SORT
+wxLIST_MASK_STATE = controls2c.wxLIST_MASK_STATE
 wxLIST_MASK_TEXT = controls2c.wxLIST_MASK_TEXT
 wxLIST_MASK_IMAGE = controls2c.wxLIST_MASK_IMAGE
 wxLIST_MASK_DATA = controls2c.wxLIST_MASK_DATA
+wxLIST_SET_ITEM = controls2c.wxLIST_SET_ITEM
 wxLIST_MASK_WIDTH = controls2c.wxLIST_MASK_WIDTH
 wxLIST_MASK_FORMAT = controls2c.wxLIST_MASK_FORMAT
-wxLIST_MASK_STATE = controls2c.wxLIST_MASK_STATE
 wxLIST_STATE_DONTCARE = controls2c.wxLIST_STATE_DONTCARE
 wxLIST_STATE_DROPHILITED = controls2c.wxLIST_STATE_DROPHILITED
 wxLIST_STATE_FOCUSED = controls2c.wxLIST_STATE_FOCUSED
@@ -881,42 +992,6 @@ wxLIST_FORMAT_LEFT = controls2c.wxLIST_FORMAT_LEFT
 wxLIST_FORMAT_RIGHT = controls2c.wxLIST_FORMAT_RIGHT
 wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
 wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
-wxEVT_COMMAND_LIST_BEGIN_DRAG = controls2c.wxEVT_COMMAND_LIST_BEGIN_DRAG
-wxEVT_COMMAND_LIST_BEGIN_RDRAG = controls2c.wxEVT_COMMAND_LIST_BEGIN_RDRAG
-wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = controls2c.wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT
-wxEVT_COMMAND_LIST_END_LABEL_EDIT = controls2c.wxEVT_COMMAND_LIST_END_LABEL_EDIT
-wxEVT_COMMAND_LIST_DELETE_ITEM = controls2c.wxEVT_COMMAND_LIST_DELETE_ITEM
-wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = controls2c.wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS
-wxEVT_COMMAND_LIST_GET_INFO = controls2c.wxEVT_COMMAND_LIST_GET_INFO
-wxEVT_COMMAND_LIST_SET_INFO = controls2c.wxEVT_COMMAND_LIST_SET_INFO
-wxEVT_COMMAND_LIST_ITEM_SELECTED = controls2c.wxEVT_COMMAND_LIST_ITEM_SELECTED
-wxEVT_COMMAND_LIST_ITEM_DESELECTED = controls2c.wxEVT_COMMAND_LIST_ITEM_DESELECTED
-wxEVT_COMMAND_LIST_KEY_DOWN = controls2c.wxEVT_COMMAND_LIST_KEY_DOWN
-wxEVT_COMMAND_LIST_INSERT_ITEM = controls2c.wxEVT_COMMAND_LIST_INSERT_ITEM
-wxEVT_COMMAND_LIST_COL_CLICK = controls2c.wxEVT_COMMAND_LIST_COL_CLICK
-wxEVT_COMMAND_LIST_ITEM_ACTIVATED = controls2c.wxEVT_COMMAND_LIST_ITEM_ACTIVATED
-wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK
-wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
-wxLC_ICON = controls2c.wxLC_ICON
-wxLC_SMALL_ICON = controls2c.wxLC_SMALL_ICON
-wxLC_LIST = controls2c.wxLC_LIST
-wxLC_REPORT = controls2c.wxLC_REPORT
-wxLC_ALIGN_TOP = controls2c.wxLC_ALIGN_TOP
-wxLC_ALIGN_LEFT = controls2c.wxLC_ALIGN_LEFT
-wxLC_AUTOARRANGE = controls2c.wxLC_AUTOARRANGE
-wxLC_USER_TEXT = controls2c.wxLC_USER_TEXT
-wxLC_EDIT_LABELS = controls2c.wxLC_EDIT_LABELS
-wxLC_NO_HEADER = controls2c.wxLC_NO_HEADER
-wxLC_NO_SORT_HEADER = controls2c.wxLC_NO_SORT_HEADER
-wxLC_SINGLE_SEL = controls2c.wxLC_SINGLE_SEL
-wxLC_SORT_ASCENDING = controls2c.wxLC_SORT_ASCENDING
-wxLC_SORT_DESCENDING = controls2c.wxLC_SORT_DESCENDING
-wxLC_MASK_TYPE = controls2c.wxLC_MASK_TYPE
-wxLC_MASK_ALIGN = controls2c.wxLC_MASK_ALIGN
-wxLC_MASK_SORT = controls2c.wxLC_MASK_SORT
-wxLC_HRULES = controls2c.wxLC_HRULES
-wxLC_VRULES = controls2c.wxLC_VRULES
-wxLC_VIRTUAL = controls2c.wxLC_VIRTUAL
 wxTreeItemIcon_Normal = controls2c.wxTreeItemIcon_Normal
 wxTreeItemIcon_Selected = controls2c.wxTreeItemIcon_Selected
 wxTreeItemIcon_Expanded = controls2c.wxTreeItemIcon_Expanded
