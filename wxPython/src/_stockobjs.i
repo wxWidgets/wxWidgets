@@ -91,7 +91,7 @@ class wxBrushList : public wxObject {
 public:
 
     void AddBrush(wxBrush *brush);
-    wxBrush * FindOrCreateBrush(const wxColour& colour, int style);
+    wxBrush * FindOrCreateBrush(const wxColour& colour, int style=wxSOLID);
     void RemoveBrush(wxBrush *brush);
 
     int GetCount();
