@@ -266,8 +266,8 @@ typedef int wxWindowID;
     #define wxEXPLICIT
 #endif /*  HAVE_EXPLICIT/!HAVE_EXPLICIT */
 
-/*  check for static/const/reinterpret_cast<>() */
-#ifndef HAVE_STATIC_CAST
+/* check for static/const_cast<>() (we don't use the other ones for now) */
+#ifndef HAVE_CXX_CASTS
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
         /*  VC++ 6.0 and 5.0 have C++ casts (what about earlier versions?) */
         #define HAVE_CXX_CASTS
@@ -276,13 +276,28 @@ typedef int wxWindowID;
         /*  GCC 2.95 has C++ casts, what about earlier versions? */
         #define HAVE_CXX_CASTS
     #endif
-#endif /*  HAVE_STATIC_CAST */
+#endif /*  !HAVE_CXX_CASTS */
 
 #ifdef HAVE_CXX_CASTS
     #ifndef HAVE_CONST_CAST
         #define HAVE_CONST_CAST
     #endif
+    #ifndef HAVE_STATIC_CAST
+        #define HAVE_STATIC_CAST
+    #endif
 #endif /*  HAVE_CXX_CASTS */
+
+#ifdef HAVE_CONST_CAST
+    #define wxConstCast(obj, className) const_cast<className *>(obj)
+#else
+    #define wxConstCast(obj, className) ((className *)(obj))
+#endif
+
+#ifdef HAVE_STATIC_CAST
+    #define wxStaticCast(val, type) static_cast<type>(val)
+#else
+    #define wxStaticCast(val, type) ((type)(val))
+#endif
 
 #ifndef HAVE_STD_WSTRING
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
