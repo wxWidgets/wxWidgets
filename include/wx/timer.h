@@ -90,6 +90,10 @@ public:
     // return TRUE if the timer is one shot
     bool IsOneShot() const { return m_oneShot; }
 
+    // return the timer ID
+    int GetId() const { return m_idTimer; }
+    
+
 protected:
     // common part of all ctors
     void Init() { m_oneShot = FALSE; m_milli = 0; }

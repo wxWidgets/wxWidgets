@@ -78,6 +78,10 @@ public:
 
     // return True if the timer is one shot
     bool IsOneShot() const;
+
+    // return the timer ID
+    int GetId() const;
+   
 };
 
 
