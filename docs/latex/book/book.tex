@@ -1,14 +1,5 @@
 \documentstyle[a4,11pt,makeidx,verbatim,texhelp,fancyheadings,palatino]{report}
-% JACS: doesn't make it through Tex2RTF, sorry. I will put it into texhelp.sty
-% since Tex2RTF doesn't parse it.
-% BTW, style MUST be report for it to work for Tex2RTF.
-%KB:
-%\addtolength{\textwidth}{1in}
-%\addtolength{\oddsidemargin}{-0.5in}
-%\addtolength{\topmargin}{-0.5in}
-%\addtolength{\textheight}{1in}
-%\sloppy
-%end of my changes
+%
 \newcommand{\indexit}[1]{#1\index{#1}}%
 \newcommand{\pipe}[0]{$\|$\ }%
 \definecolour{black}{0}{0}{0}%
@@ -25,14 +16,11 @@
 %\special{!/@scaleunit 1 def}
 \parskip=10pt
 \parindent=0pt
+%
 \title{Multiplatform application development with wxWindows}
-\winhelponly{\author{by Julian Smart et al
-%\winhelponly{\\$$\image{1cm;0cm}{wxwin.wmf}$$}
-}}
-\winhelpignore{\author{Julian Smart, Robert Roebling, Vadim Zeitlin,
-Robin Dunn, et al}
+\author{Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al}
 \date{August 13th 2000}
-}
+%
 \makeindex
 \begin{document}
 \maketitle
@@ -43,6 +31,9 @@ Robin Dunn, et al}
 \pagenumbering{roman}
 \tableofcontents
 
+% Acknowledgements
+\input chap\_acknowledge.tex
+%
 % Chapter 01: Introduction, advocacy, etc.
 \input chap\_intro.tex
 %

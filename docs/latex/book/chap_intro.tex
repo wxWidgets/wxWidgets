@@ -3,5 +3,166 @@
 \setheader{{\it CHAPTER \thechapter: INTRODUCING wxWINDOWS}}{}{}{}{}{{\it CHAPTER \thechapter: INTRODUCING wxWINDOWS}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-Introduction, advocacy, etc.
+\section{The need for portability}
+
+Not so long ago, it seemed as though Microsoft was on course to
+take over the desktop for good with the Windows range of
+operating systems. Unix was retreating to server territory and
+had all but given up the fight against NT. Apple was sickening
+and it seemed almost common sense that the quirky Mac had had
+its day.
+
+At the start of the new century, the picture has changed quite
+dramatically. Linux is advancing from its position of strength
+in the server market and is poised to make inroads on the
+desktop, where the high price of Windows gives it an advantage.
+Apple has made an impressive comeback and is revamping its own
+operating system. The embedded market continues to explode and
+has given rise to new niches for specialist operating systems.
+The keyword bow is diversity, when the best guess of a few years
+was that Microsoft would conquer all. More than ever,
+application developers need to keep their options open and
+targeting one platform only can be a recipe for commercial (or
+open source) disaster.
+
+In the light of this change in the computing landscape,
+cross-platform development (or multiplatform development as we
+call it in this book) has become quite a hot and sometimes
+bitterly controversial topic. There are a number of ways to
+achieve the goal of portability, and many tools and languages to choose from.
+However, it is still generally agreed wisdom that C++ is the
+language of choice for desktop applications that depend on
+speed, ease of delivery and compatibility with billions of lines
+of existing code. Plus, there are many hundreds of thousands of
+developers now experienced in C++ programming.
+
+The purpose of this book is to give you (the developer or
+interested manager) a solid grounding in one increasingly
+popular multiplatform solution: wxWindows. wxWindows is an open
+source GUI toolkit that has been on the scene since 1993 and has
+reached a high degree of stability and functionality. It is
+available for Linux (and most other Unix variants), all desktop
+versions of Microsoft Windows, and Mac. Other ports are in
+progress.
+
+\section{Why wxWindows?}
+
+While wxWindows is labelled a GUI development toolkit, it is in
+fact much more than that and has many features that are useful
+for many aspects of application development. This has to
+be the case, since the whole of a wxWindows application needs to
+be portable to different platforms, and not just the GUI
+component. So wxWindows provides classes for working with files
+and streams, multithreading, management of application settings,
+interprocess communication, and much else.
+
+wxWindows is open source, with a vibrant developer and user
+community, and may be used in any proprietary or non-proprietary
+project. wxWindows encompasses the whole spectrum of users from
+one-man software outfits to big-name companies such as Xerox,
+Lockheed-Martin, Pratt and Whitney, and Motorola; from computer
+science departments to medical research groups; from ecological
+research, to the telecommunications industry, and in a myriad of
+open source projects.
+
+When you use wxWindows you tap into an astonishing talent pool,
+with contributors from a wide range of backgrounds. Many aspects
+of application development that you might otherwise have to
+laboriously code yourself have been encapsulated by these
+developers in easy-to-use classes that you can plug into your
+code. Since there are a lot of people subscribed to the mailing
+lists, you'll enjoy discussions not only about wxWindows but
+often other matters close to the hearts of both experienced and
+inexperienced developers. And hopefully, one day you'll join in the
+success of wxWindows and become a contributor yourself!
+
+\section{The history of wxWindows}
+
+wxWindows was started in 1992 at the Artificial Intelligence
+Applications Institute, University of Edinburgh, by Julian
+Smart. Julian was designing a kind of meta-CASE tool called
+Hardy which needed to run on Windows as well as X-based Unix
+workstations. The existing commercial cross-platform tools were
+deemed too expensive for an in-house experimental project, so
+the only alternative was to build one. wxWindows (w for Microsoft
+Windows, x for the X Windowing System) started off with support for XView and MFC 1.0, and
+AIAI allowed it to be released to the Internet. As it became
+clear that XView was doomed, a Motif port was written. Borland
+C++ users began to request a version that was not dependent on
+MFC, so the Windows port was rewritten to use the native Windows
+API. Over time, a small but enthusiastic community of wxWindows
+users was established and a mailing list set up. Contributions
+and fixes were sent in, the largest contributions being the Mac
+and Xt ports. wxWindows gradually picked up more and more users
+from all over the world: commercial, government, and - most
+gratifying of all - company users who found that wxWindows
+offered a better product, and better support, than the
+commercial products they had looked at or used.
+
+During 1995, Markus Holzem released his port of wxWindows to Xt,
+the X toolkit. This meant that software could be written that
+would work on X systems without the need for installing Motif,
+which is a commercial product.
+
+In 1996, Julian left AIAI to pursue freelance consultancy, and
+there were few new releases. The seemingly unstoppable advance
+of Java was throwing some doubt on the future of C++ libraries.
+After many contributions, the wxWindows code was looking rather
+tired and in need of a serious rethink. At the start of 1997 it
+was make or break time - call it a day and move onto other
+things, or commit to re-engineering wxWindows with an API that
+was flexible enough for current and future user interface
+trends, with more 'widgets', and better use of C++. After an
+exchange between Julian Smart and Markus Holzem (the author of
+the Xt port), it was decided that it was worthwhile. Julian
+would do the Windows port, Markus the combined Motif/Xt port,
+with both contributing to the generic parts. wxWindows 2 API
+ideas and code started to take shape.
+
+During 1997 an effort to produce a standard Linux desktop
+environment was underway - GNOME. Its widget set was GTK+, built
+on top of X11 and it looked as though GTK+-based apps were to
+become the standard in the Linux universe. Its one major problem
+- GTK+ was C-based, and only a thin (and unportable) C++ wrapper
+existed for it. In August 1997, Wolfram Gloger made a suggestion
+that wxWindows 2 should be ported to GTK+ - Robert Roebling had
+initial reservations, but in general supported the idea. He
+became the prime mover for wxGTK and alphas were made available
+at the beginning of 1998. In May 1998 the Windows and GTK+ ports
+were merged and put into a CVS repository made available to all
+contributors to wxWindows.
+
+Markus Holzem had to drop out of the wxWindows 2 effort in early
+1998, but Julian Smart started a new wxMotif port. The idea of
+an Xt port was dropped, since there remain two possibilities for
+free Unix programming with wxWindows: wxGTK, and wxMotif with
+the Motif clone Lesstif.
+
+In September 1998, Stefan Csomor started a new version of the
+wxMac 2 port based in part on Greg Whitehead's initial work.
+Several releases have been made and the code will be integrated
+into the main CVS stream in Summer 2000.
+
+David Webster and Stefan Neis are working on an OS/2 port, and
+interest has been expressed in ports to other systems, such as
+BeOS.
+
+wxWindows 2.1.11 saw the bundling of Vaclav Slavik's impressive
+wxHTML classes, with subsequent enhancements including
+print/preview ability, and a helpview application and help
+controller class for cross-platform HTML help. wxHTML gives
+applications easy access to enviable formatted text viewing and
+reporting capabilities.
+
+During 2000 wxWindows will adopt Vaclav's XML resource system
+as a replacement for the WXR system; this will allow much
+greater flexibility and portability with support for
+sizers and many more controls than WXR.
+
+\section{How to use this book}
+
+The chapters in this book are meant to be fairly independent, but
+as usual, the ordering reflects a progression from basic concepts
+to more advanced ones, so the first few chapters at least
+should be read consecutively for best effect.
 
