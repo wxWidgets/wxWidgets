@@ -107,5 +107,7 @@ private:
     AREABUNDLE                     m_vAreaBundle;
 }; // end of CLASS wxPen
 
+extern int wx2os2PenStyle(int nWxStyle);
+
 #endif
     // _WX_PEN_H_
