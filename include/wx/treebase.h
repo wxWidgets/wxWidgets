@@ -244,6 +244,9 @@ class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
 {
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
+    wxTreeEvent(const wxTreeEvent & event);
+
+    virtual wxEvent *Clone() const { return new wxTreeEvent(*this); }
 
     // accessors
         // get the item on which the operation was performed or the newly
@@ -294,7 +297,7 @@ private:
     friend class WXDLLEXPORT wxTreeCtrl;
     friend class WXDLLEXPORT wxGenericTreeCtrl;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTreeEvent)
+    DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
