@@ -313,7 +313,7 @@ bool wxAppBase::Dispatch()
     // see comment in Pending()
     wxEventLoop * const loop = wxEventLoop::GetActive();
 
-    return loop ? loop->Dispatch() : true;
+    return loop && loop->Dispatch();
 #else // wxUSE_EVTLOOP_IN_APP
     return true;
 #endif // wxUSE_EVTLOOP_IN_APP/!wxUSE_EVTLOOP_IN_APP
