@@ -66,6 +66,7 @@ helpxlp.cpp	G	G,R
 imaglist.cpp	G	16
 laywin.cpp	G
 listctrl.cpp	G	16
+logg.cpp	G
 msgdlgg.cpp	G	G
 notebook.cpp	G	16,R
 panelg.cpp	G

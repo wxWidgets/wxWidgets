@@ -241,6 +241,10 @@ protected:
 };
 #endif
 
+// the following log targets are only compiled in if the we're compiling the
+// GUI part (andnot just the base one) of the library, they're implemented in
+// src/generic/logg.cpp *and not src/common/log.cpp unlike all the rest)
+
 #ifndef wxUSE_NOGUI
 
 // log everything to a text window (GUI only of course)
