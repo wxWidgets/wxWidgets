@@ -80,6 +80,19 @@ bool wxTopLevelWindowBase::Destroy()
     if ( !wxPendingDelete.Member(this) )
         wxPendingDelete.Append(this);
 
+    // but hide it immediately
+    Hide();
+
+    // also remove it from the list of parents children so that the loop in
+    // wxWindowBase::DestroyChildren() eventually terminates
+    if ( m_parent )
+    {
+        m_parent->RemoveChild(this);
+
+        // don't do it again in our dtor
+        m_parent = NULL;
+    }
+
     return TRUE;
 }
 
