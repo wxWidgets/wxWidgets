@@ -222,11 +222,6 @@ private:
 
 class WXDLLEXPORT wxTreeEvent : public wxNotifyEvent
 {
-    friend class WXDLLEXPORT wxTreeCtrl;
-    friend class WXDLLEXPORT wxGenericTreeCtrl;
-
-    DECLARE_DYNAMIC_CLASS(wxTreeEvent);
-
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
@@ -243,19 +238,25 @@ public:
         // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only) or click position
     wxPoint GetPoint() const { return m_pointDrag; }
 
-        // keyboard code (for wxEVT_COMMAND_TREE_KEY_DOWN only)
-    int GetCode() const { return m_code; }
+        // keyboard data (for wxEVT_COMMAND_TREE_KEY_DOWN only)
+    const wxKeyEvent& GetKeyEvent() const { return m_evtKey; }
+    int GetCode() const { return m_evtKey.GetKeyCode(); }
 
         // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
     const wxString& GetLabel() const { return m_label; }
 
 private:
-    // we could probably save some space by using union here
-    int           m_code;
+    // not all of the members are used (or initialized) for all events
+    wxKeyEvent    m_evtKey;
     wxTreeItemId  m_item,
                   m_itemOld;
     wxPoint       m_pointDrag;
     wxString      m_label;
+
+    friend class WXDLLEXPORT wxTreeCtrl;
+    friend class WXDLLEXPORT wxGenericTreeCtrl;
+
+    DECLARE_DYNAMIC_CLASS(wxTreeEvent);
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);

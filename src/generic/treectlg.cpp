@@ -360,21 +360,6 @@ void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
         m_owner->OnRenameAccept();
 }
 
-#if 0
-// -----------------------------------------------------------------------------
-// wxTreeEvent
-// -----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
-
-wxTreeEvent::wxTreeEvent( wxEventType commandType, int id )
-           : wxNotifyEvent( commandType, id )
-{
-    m_code = 0;
-    m_itemOld = (wxGenericTreeItem *)NULL;
-}
-#endif
-
 // -----------------------------------------------------------------------------
 // wxGenericTreeItem
 // -----------------------------------------------------------------------------
@@ -2172,7 +2157,7 @@ void wxGenericTreeCtrl::OnKillFocus( wxFocusEvent &event )
 void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 {
     wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
-    te.m_code = (int)event.KeyCode();
+    te.m_evtKey = event;
     te.SetEventObject( this );
     if ( GetEventHandler()->ProcessEvent( te ) )
     {
@@ -2236,7 +2221,6 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             {
                 wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 event.m_item = (long) m_current;
-                event.m_code = 0;
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( event );
             }
@@ -2661,7 +2645,6 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         {
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
             nevent.m_item = (long) item;
-            nevent.m_code = 0;
             CalcScrolledPosition(x, y,
                                  &nevent.m_pointDrag.x,
                                  &nevent.m_pointDrag.y);
@@ -2725,7 +2708,6 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 // send activate event first
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 nevent.m_item = (long) item;
-                nevent.m_code = 0;
                 CalcScrolledPosition(x, y,
                                      &nevent.m_pointDrag.x,
                                      &nevent.m_pointDrag.y);

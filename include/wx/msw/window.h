@@ -435,6 +435,9 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+    // the helper functions used by HandleChar/KeyXXX methods
+    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
+
 private:
     // common part of all ctors
     void Init();
@@ -446,9 +449,6 @@ private:
 #ifdef __WIN95__
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 #endif // __WIN95__
-
-    // the helper functions used by HandleChar/KeyXXX methods
-    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
 
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
     DECLARE_NO_COPY_CLASS(wxWindowMSW)

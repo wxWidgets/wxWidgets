@@ -2070,9 +2070,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
         case TVN_ITEMEXPANDING:
-            event.m_code = FALSE;
-            // fall through
-
         case TVN_ITEMEXPANDED:
             {
                 NM_TREEVIEW* tv = (NM_TREEVIEW*)lParam;
@@ -2104,7 +2101,11 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 eventType = wxEVT_COMMAND_TREE_KEY_DOWN;
                 TV_KEYDOWN *info = (TV_KEYDOWN *)lParam;
 
-                event.m_code = wxCharCodeMSWToWX(info->wVKey);
+                // we pass 0 as last CreateKeyEvent() parameter because we
+                // don't have access to the real key press flags here - but as
+                // it is only used to determin wxKeyEvent::m_altDown flag it's
+                // not too bad
+                event.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN, info->wVKey, 0);
 
                 // a separate event for Space/Return
                 if ( !wxIsCtrlDown() && !wxIsShiftDown() &&

@@ -3810,8 +3810,8 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
 // create the key event of the given type for the given key - used by
 // HandleChar and HandleKeyDown/Up
 wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
-                                    int id,
-                                    WXLPARAM lParam) const
+                                       int id,
+                                       WXLPARAM lParam) const
 {
     wxKeyEvent event(evType);
     event.SetId(GetId());
