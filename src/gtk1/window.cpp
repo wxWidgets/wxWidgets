@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/window.h"
 #include "wx/dc.h"
+#include "wx/dcclient.h"
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/layout.h"
@@ -550,11 +551,11 @@ static long map_to_unmodified_wx_keysym( GdkEventKey *event )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-	    if (event->length == 1)
-	    {
-	        key_code = toupper( (unsigned char)*event->string );
-	    }
-	    else if ((keysym & 0xFF) == keysym)
+        if (event->length == 1)
+        {
+            key_code = toupper( (unsigned char)*event->string );
+        }
+        else if ((keysym & 0xFF) == keysym)
             {
                 guint upper = gdk_keyval_to_upper( (guint)keysym );
                 keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
@@ -654,11 +655,11 @@ static long map_to_wx_keysym( GdkEventKey *event )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-	    if (event->length == 1)
-	    {
-	        key_code = (unsigned char)*event->string;
-	    }
-	    else if ((keysym & 0xFF) == keysym)
+        if (event->length == 1)
+        {
+            key_code = (unsigned char)*event->string;
+        }
+        else if ((keysym & 0xFF) == keysym)
             {
                 key_code = (guint)keysym;
             }
@@ -732,7 +733,23 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     
         wxEraseEvent eevent( win->GetId() );
         eevent.SetEventObject( win );
+#if 1
         win->GetEventHandler()->ProcessEvent(eevent);
+#else
+        if (!win->GetEventHandler()->ProcessEvent(eevent))
+        {
+            wxClientDC dc( win );
+            dc.SetBrush( wxBrush( win->GetBackgroundColour(), wxSOLID ) );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+            
+            wxRegionIterator upd( win->GetUpdateRegion() );
+            while (upd)
+            {
+                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                upd ++;
+            }
+        }
+#endif
 
         wxPaintEvent event( win->GetId() );
         event.SetEventObject( win );
@@ -853,7 +870,27 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     
     wxEraseEvent eevent( win->GetId() );
     eevent.SetEventObject( win );
+    
+#if 1
     win->GetEventHandler()->ProcessEvent(eevent);
+#else
+    if (!win->GetEventHandler()->ProcessEvent(eevent))
+    {
+        if (!win->GetEventHandler()->ProcessEvent(eevent))
+        {
+            wxClientDC dc( win );
+            dc.SetBrush( wxBrush( win->GetBackgroundColour(), wxSOLID ) );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+            
+            wxRegionIterator upd( win->GetUpdateRegion() );
+            while (upd)
+            {
+                dc.DrawRectangle( upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
+                upd ++;
+            }
+        }
+    }
+#endif
 
     wxPaintEvent event( win->GetId() );
     event.SetEventObject( win );
@@ -2577,6 +2614,10 @@ void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
     wxASSERT_MSG( (m_parent != NULL), wxT("wxWindow::SetSize requires parent.\n") );
+
+/*
+    printf( "name %s, x,y,w,h: %d,%d,%d,%d \n", GetName().c_str(), x,y,width,height );
+*/
 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;

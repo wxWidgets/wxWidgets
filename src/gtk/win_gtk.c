@@ -582,6 +582,11 @@ gtk_pizza_realize (GtkWidget *widget)
     widget->style = gtk_style_attach (widget->style, widget->window);
     gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
     gtk_style_set_background (widget->style, pizza->bin_window, GTK_STATE_NORMAL );
+    
+/*
+    gdk_window_set_back_pixmap( widget->window, NULL, FALSE );
+    gdk_window_set_back_pixmap( pizza->bin_window, NULL, FALSE );
+*/
 
     /* add filters for intercepting visibility and expose events */
     gdk_window_add_filter (widget->window, gtk_pizza_main_filter, pizza);

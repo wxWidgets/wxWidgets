@@ -229,12 +229,12 @@ wxImage wxImage::Scale( int width, int height ) const
 
     for (long j = 0; j < height; j++)
     {
-        long y_offset = (j * old_height / height) * old_width;
+        long y_offset = (j * (old_height-1) / (height-1)) * old_width;
 
         for (long i = 0; i < width; i++)
         {
             memcpy( target_data,
-                source_data + 3*(y_offset + ((i * old_width )/ width)),
+                source_data + 3*(y_offset + ((i * (old_width-1) )/ (width-1))),
                 3 );
             target_data += 3;
         }
@@ -1144,7 +1144,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
     wxHashTable h;
     wxObject dummy;
     unsigned char r, g, b;
-	unsigned char *p;
+    unsigned char *p;
     unsigned long size, nentries, key;
 
     p = GetData();
@@ -1179,7 +1179,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
 unsigned long wxImage::ComputeHistogram( wxHashTable &h )
 {
     unsigned char r, g, b;
-	unsigned char *p;
+    unsigned char *p;
     unsigned long size, nentries, key;
     wxHNode *hnode;
 
