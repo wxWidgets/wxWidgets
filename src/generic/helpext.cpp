@@ -122,9 +122,8 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
       wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());
       return false;
    }
-   else
-      return true;
 
+   return true;
 #elif  defined(__WXPM__)
 
    wxString url;
