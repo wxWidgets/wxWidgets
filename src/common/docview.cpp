@@ -1045,7 +1045,10 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
                 delete doc;
         }
         else
+        {
+            delete[] templates;
             return (wxDocument *) NULL;
+        }
     }
 
     // New document: user chooses a template, unless there's only one.
