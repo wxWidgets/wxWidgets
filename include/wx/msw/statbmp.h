@@ -75,6 +75,7 @@ protected:
     bool ImageIsOk() const;
 
     void SetImage(const wxGDIImage* image);
+    void SetImageNoCopy( wxGDIImage* image );
 
     // we can have either an icon or a bitmap
     bool m_isIcon;
