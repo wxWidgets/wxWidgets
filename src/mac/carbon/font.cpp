@@ -46,8 +46,8 @@ public:
         , m_macFontNum(0)
         , m_macFontSize(0)
         , m_macFontStyle(0)
-        , m_macATSUFontID(0)
         , m_macATSUStyle(0)
+        , m_macATSUFontID(0)
     {
         Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
              wxT("Geneva"), wxFONTENCODING_DEFAULT);
@@ -66,8 +66,8 @@ public:
         , m_macFontNum(data.m_macFontNum)
         , m_macFontSize(data.m_macFontSize)
         , m_macFontStyle(data.m_macFontStyle)
-        , m_macATSUFontID(data.m_macATSUFontID)
         , m_macATSUStyle(0)
+        , m_macATSUFontID(data.m_macATSUFontID)
     {
         Init(data.m_pointSize, data.m_family, data.m_style, data.m_weight,
              data.m_underlined, data.m_faceName, data.m_encoding);
@@ -91,8 +91,8 @@ public:
         , m_macFontNum(0)
         , m_macFontSize(0)
         , m_macFontStyle(0)
-        , m_macATSUFontID(0)
         , m_macATSUStyle(0)
+        , m_macATSUFontID(0)
     {
         Init(size, family, style, weight, underlined, faceName, encoding);
     }
@@ -112,14 +112,14 @@ protected:
               wxFontEncoding encoding);
 
     // font characterstics
-    int            m_fontId;
-    int            m_pointSize;
-    int            m_family;
-    int            m_style;
-    int            m_weight;
-    bool           m_underlined;
-    wxString       m_faceName;
-    wxFontEncoding m_encoding;
+    int             m_fontId;
+    int             m_pointSize;
+    int             m_family;
+    int             m_style;
+    int             m_weight;
+    bool            m_underlined;
+    wxString        m_faceName;
+    wxFontEncoding  m_encoding;
     bool            m_noAA;      // No anti-aliasing
     
 public:
