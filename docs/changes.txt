@@ -63,6 +63,10 @@ Unix ports:
 2.3.3
 -----
 
+All:
+
+- fixes to the command line parsing error and usage messages
+
 wxMSW:
 
 - fixed flicker in wxTreeCtrl::SetItemXXX()

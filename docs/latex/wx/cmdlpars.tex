@@ -405,11 +405,19 @@ Add a parameter of the given {\it type} to the command line description.
 
 \membersection{wxCmdLineParser::Parse}\label{wxcmdlineparserparse}
 
-\func{int}{Parse}{\void}
+\func{int}{Parse}{\param{bool }{giveUsage = {\tt TRUE}}}
 
 Parse the command line, return $0$ if ok, $-1$ if {\tt "-h"} or {\tt "--help"} 
 option was encountered and the help message was given or a positive value if a
 syntax error occured.
+
+\wxheading{Parameters}
+
+\docparam{giveUsage}{If {\tt TRUE} (default), the usage message is given if a
+syntax error was encountered while parsing the command line or if help was
+requested. If {\tt FALSE}, only error messages about possible syntax errors
+are given, use \helpref{Usage}{wxcmdlineparserusage} to show the usage message
+from the caller if needed.}
 
 \membersection{wxCmdLineParser::Usage}\label{wxcmdlineparserusage}
 

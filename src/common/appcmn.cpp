@@ -166,7 +166,7 @@ bool wxAppBase::OnInit()
     OnInitCmdLine(parser);
 
     bool cont;
-    switch ( parser.Parse() )
+    switch ( parser.Parse(FALSE /* don't show usage */) )
     {
         case -1:
             cont = OnCmdLineHelp(parser);
@@ -287,7 +287,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
         if ( !SetDisplayMode(wxDisplayModeInfo(w, h, bpp)) )
             return FALSE;
     }
-#endif
+#endif // __WXMGL__
 
     return TRUE;
 }
