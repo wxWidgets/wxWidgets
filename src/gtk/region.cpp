@@ -293,7 +293,7 @@ bool wxRegion::Xor( const wxRect& rect )
 bool wxRegion::Xor( const wxRegion& region )
 {
     if (region.IsNull())
-        return NULL;
+        return FALSE;
 
     if (!m_refData)
     {
@@ -322,7 +322,7 @@ void wxRegion::GetBox( wxCoord &x, wxCoord &y, wxCoord &w, wxCoord &h ) const
     y = 0;
     w = -1;
     h = -1;
-    if (m_refData)
+    if (!m_refData)
         return;
 
     GdkRectangle rect;
