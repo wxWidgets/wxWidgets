@@ -171,7 +171,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 // to be replaced by dynamic_cast<> in the future
 #define wxDynamicCast(obj, className) \
-    (className *) wxCheckDynamicCast((obj), &className::sm_class##className)
+    (className *) wxCheckDynamicCast((wxObject*)(obj), &className::sm_class##className)
 
 // The 'this' pointer is always true, so use this version to cast the this
 // pointer and avoid compiler warnings.
