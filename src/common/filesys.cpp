@@ -186,7 +186,16 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     if (!wxFileExists(fullpath))
         return (wxFSFile*) NULL;
 
-    return new wxFSFile(new wxFFileInputStream(fullpath),
+    // we need to check whether we can really read from this file, otherwise
+    // wxFSFile is not going to work
+    wxFFileInputStream *is = new wxFFileInputStream(fullpath);
+    if ( !is->Ok() )
+    {
+        delete is;
+        return (wxFSFile*) NULL;
+    }
+
+    return new wxFSFile(is,
                         right,
                         GetMimeTypeFromExt(location),
                         GetAnchor(location)
