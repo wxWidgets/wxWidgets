@@ -17,6 +17,7 @@
 #include "wx/defs.h"
 #include "wx/window.h"
 #include "wx/frame.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -81,6 +82,9 @@ class wxApp: public wxEvtHandler
     virtual bool Pending();
     virtual void Dispatch();
 
+    /** Returns the standard icons for the msg dialogs, implemented in 
+        src/generic/msgdlgg.cpp and src/gtk/app.cpp. */
+    virtual wxIcon GetStdIcon(int which) const;
     inline void SetWantDebugOutput( bool flag ) { m_wantDebugOutput = flag; }
     inline bool GetWantDebugOutput() { return m_wantDebugOutput; }
 

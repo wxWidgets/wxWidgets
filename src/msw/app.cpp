@@ -43,7 +43,8 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
-    #include "wx/wxchar.h"
+#   include "wx/wxchar.h"
+#   include "wx/icon.h"
 #endif
 
 #include "wx/log.h"
@@ -1148,6 +1149,30 @@ bool wxYield()
 
     return TRUE;
 }
+wxIcon
+wxApp::GetStdIcon(int which) const
+{
+   switch(which)
+   {
+   case wxICON_INFORMATION:
+      return wxIcon("wxICON_INFO");
+      break;
+   case wxICON_HAND:
+      return wxIcon("wxICON_ERROR");
+      break;
+   case wxICON_QUESTION:
+      return wxIcon("wxICON_QUESTION");
+      break;
+   case wxICON_EXCLAMATION:
+      return wxIcon("wxICON_WARNING");
+      break;
+   default:
+      wxFAIL_MSG("requested non existent standard icon");
+      return wxIcon("wxICON_ERROR");
+      break;
+   }
+}
+
 
 HINSTANCE wxGetInstance()
 {

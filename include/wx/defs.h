@@ -402,7 +402,7 @@ enum
   wxMGL_UNIX,               // MGL with direct hardware access
   wxMGL_X,                  // MGL on X 
   wxMGL_WIN32,              // MGL on Win32
-  wxMGL_OS2,                // MGL on OS/2
+  wxMGL_OS2                 // MGL on OS/2
 };
 
 // ----------------------------------------------------------------------------
@@ -862,6 +862,8 @@ typedef  wxUint16        wxWord;
 
 #define wxICON_EXCLAMATION      0x00000040
 #define wxICON_HAND             0x00000080
+#define wxICON_WARNING          wxICON_EXCLAMATION
+#define wxICON_ERROR            wxICON_HAND
 #define wxICON_QUESTION         0x00000100
 #define wxICON_INFORMATION      0x00000200
 #define wxICON_STOP             wxICON_HAND

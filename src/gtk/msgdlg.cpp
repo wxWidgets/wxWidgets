@@ -30,6 +30,7 @@
 #include "wx/layout.h"
 #include "wx/intl.h"
 #include "wx/bitmap.h"
+#include "wx/app.h"
 #endif
 
 #include <stdio.h>
@@ -37,11 +38,6 @@
 
 #include "wx/gtk/msgdlg.h"
 #include "wx/statline.h"
-
-#include "wx/gtk/info.xpm"
-#include "wx/gtk/error.xpm"
-#include "wx/gtk/question.xpm"
-#include "wx/gtk/warning.xpm"
 
 ///////////////////////////////////////////////////////////////////
 // New dialog box implementations
@@ -107,19 +103,13 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString
     wxSize message_size( wxSplitMessage2( message, this, text_pos_x ) );
 
     if (m_dialogStyle & wxICON_MASK)
-        if (message_size.y < 50) message_size.y = 50;
-    
-    if (m_dialogStyle & wxICON_INFORMATION)
-        (void) new wxStaticBitmap( this, -1, wxBitmap( info_xpm ), wxPoint(15,message_size.y/2-16) );
-    else
-    if (m_dialogStyle & wxICON_HAND)
-        (void) new wxStaticBitmap( this, -1, wxBitmap( error_xpm ), wxPoint(15,message_size.y/2-16) );
-    else
-    if (m_dialogStyle & wxICON_QUESTION)
-        (void) new wxStaticBitmap( this, -1, wxBitmap( question_xpm ), wxPoint(15,message_size.y/2-16) );
-    else
-    if (m_dialogStyle & wxICON_EXCLAMATION)
-        (void) new wxStaticBitmap( this, -1, wxBitmap( warning_xpm ), wxPoint(15,message_size.y/2-16) );
+    {
+       if (message_size.y < 50) message_size.y = 50;
+        (void) new wxStaticBitmap( this, -1,
+                                   wxTheApp->GetStdIcon(m_dialogStyle
+                                                        & wxICON_MASK),
+                                   wxPoint(15,message_size.y/2-16) ); 
+    }
 
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;

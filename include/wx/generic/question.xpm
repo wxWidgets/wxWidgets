@@ -1,5 +1,5 @@
 /* XPM */
-static char * question[] = {
+static char * question_xpm[] = {
 "48 48 165 2",
 "  	c None",
 ". 	c #000000",

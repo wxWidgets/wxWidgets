@@ -120,7 +120,8 @@ void wxButton::SetDefault(void)
     SetSize( m_x, m_y, m_width, m_height );
 }
 
-static wxSize wxButton::GetDefaultSize()
+/* static */
+wxSize wxButton::GetDefaultSize()
 {
     return wxSize(80,26);
 }

@@ -779,3 +779,31 @@ int wxEntry( int argc, char *argv[] )
     return retValue;
 }
 
+#   include "wx/gtk/info.xpm"
+#   include "wx/gtk/error.xpm"
+#   include "wx/gtk/question.xpm"
+#   include "wx/gtk/warning.xpm"
+   
+wxIcon
+wxApp::GetStdIcon(int which) const
+{
+   switch(which)
+   {
+   case wxICON_INFORMATION:
+      return wxIcon(info_xpm);
+      break;
+   case wxICON_HAND:
+      return wxIcon(error_xpm);
+      break;
+   case wxICON_QUESTION:
+      return wxIcon(question_xpm);
+      break;
+   case wxICON_EXCLAMATION:
+      return wxIcon(warning_xpm);
+      break;
+   default:
+      wxFAIL_MSG("requested non existent standard icon");
+      return wxIcon(error_xpm);
+      break;
+   }
+}

@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/event.h"
+#include "wx/icon.h"
 
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;
@@ -67,6 +68,9 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Called to set off the main loop
   virtual int OnRun() { return MainLoop(); };
   virtual int OnExit() { return 0; }
+  /** Returns the standard icons for the msg dialogs, implemented in 
+      src/generic/msgdlgg.cpp and src/gtk/app.cpp. */
+  virtual wxIcon GetStdIcon(int which) const;
 
   // called when a fatal exception occurs, this function should take care not
   // to do anything which might provoke a nested exception!

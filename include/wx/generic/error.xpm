@@ -1,5 +1,5 @@
 /* XPM */
-static char * error[] = {
+static char * error_xpm[] = {
 "48 48 78 1",
 " 	c None",
 ".	c #000000",

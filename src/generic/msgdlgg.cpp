@@ -29,6 +29,7 @@
     #include "wx/layout.h"
     #include "wx/intl.h"
     #include "wx/icon.h"
+#   include "wx/app.h"
 #endif
 
 #include <stdio.h>
@@ -44,13 +45,6 @@
 // icons
 // ----------------------------------------------------------------------------
 
-// MSW icons are in the ressources, for all other platforms - in XPM files
-#ifndef __WXMSW__
-    #include "wx/generic/info.xpm"
-    #include "wx/generic/question.xpm"
-    #include "wx/generic/warning.xpm"
-    #include "wx/generic/error.xpm"
-#endif // __WXMSW__
 
 
 #if !USE_SHARED_LIBRARY
@@ -63,6 +57,46 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
 
+#ifdef _WXGTK__
+#   include "wx/gtk/info.xpm"
+#   include "wx/gtk/error.xpm"
+#   include "wx/gtk/question.xpm"
+#   include "wx/gtk/warning.xpm"
+#else
+   // MSW icons are in the ressources, for all other platforms - in XPM files
+#   ifndef __WXMSW__
+#      include "wx/generic/info.xpm"
+#      include "wx/generic/question.xpm"
+#      include "wx/generic/warning.xpm"
+#      include "wx/generic/error.xpm"
+#   endif // __WXMSW__
+#endif
+   
+wxIcon
+wxApp::GetStdIcon(int which) const
+{
+   switch(which)
+   {
+   case wxICON_INFORMATION:
+      return wxIcon(info_xpm);
+      break;
+   case wxICON_HAND:
+      return wxIcon(error_xpm);
+      break;
+   case wxICON_QUESTION:
+      return wxIcon(question_xpm);
+      break;
+   case wxICON_EXCLAMATION:
+      return wxIcon(warning_xpm);
+      break;
+   default:
+      wxFAIL_MSG("requested non existent standard icon");
+      return wxIcon(error_xpm);
+      break;
+   }
+}
+
+   
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& message,
                                                 const wxString& caption,
@@ -77,43 +111,8 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
     wxLayoutConstraints *c;
     SetAutoLayout(TRUE);
 
-    // create an icon
-    enum
-    {
-        Icon_Information,
-        Icon_Question,
-        Icon_Warning,
-        Icon_Error
-    } which;
-
-#ifdef __WXMSW__
-    static char *icons[] =
-    {
-        "wxICON_INFO",
-        "wxICON_QUESTION",
-        "wxICON_WARNING",
-        "wxICON_ERROR",
-    };
-#else // XPM icons
-    static char **icons[] =
-    {
-        info,
-        question,
-        warning,
-        error,
-    };
-#endif // !XPM/XPM
-
-    if ( style & wxICON_EXCLAMATION )
-        which = Icon_Warning;
-    else if ( style & wxICON_HAND )
-        which = Icon_Error;
-    else if ( style & wxICON_QUESTION )
-        which = Icon_Question;
-    else
-        which = Icon_Information;
-
-    wxStaticBitmap *icon = new wxStaticBitmap(this, -1, wxIcon(icons[which]));
+    wxStaticBitmap *icon = new wxStaticBitmap(this, -1,
+                                              wxTheApp->GetStdIcon(style & wxICON_MASK));
     const int iconSize = icon->GetBitmap().GetWidth();
 
     // split the message in lines

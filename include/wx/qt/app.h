@@ -68,6 +68,9 @@ class WXDLLEXPORT wxApp: public wxEvtHandler
   // Called to set off the main loop
   virtual int OnRun() { return MainLoop(); };
   virtual int OnExit() { return 0; }
+  /** Returns the standard icons for the msg dialogs, implemented in 
+      src/generic/msgdlgg.cpp and src/gtk/app.cpp. */
+  virtual wxIcon GetStdIcon(int which) const;
 
   inline void SetPrintMode(int mode) { m_printMode = mode; }
   inline int GetPrintMode() const { return m_printMode; }

@@ -441,3 +441,15 @@ needs to use the top window.
 
 \helpref{wxApp::GetTopWindow}{wxappgettopwindow}, \helpref{wxApp::OnInit}{wxapponinit}
 
+\membersection{wxApp::GetStdIcon}\label{wxappgetstdicon}
+
+\func{virtual wxIcon}{GetStdIcon}{\param{int }{which}} const
+
+Returns the icons used by wxWindows internally, e.g. the ones used for 
+message boxes.  This function is used internally and 
+can be overridden by the user to change the default icons.
+
+\wxheading{Parameters}
+
+\docparam{which}{One of the wxICON_XXX defines and chooses which icon to return.}
+

@@ -81,8 +81,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
    m_msg = new wxStaticText(this, -1, message);
    c = new wxLayoutConstraints;
-   c->left.SameAs(this, wxLeft, 10);
-   c->top.SameAs(this, wxTop, 10);
+   c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
+   c->top.SameAs(this, wxTop, 2*LAYOUT_Y_MARGIN);
    c->width.AsIs();
    c->height.AsIs();
    m_msg->SetConstraints(c);
@@ -254,12 +254,16 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
            m_btnAbort->SetLabel(_("Close"));
        }
 
-       if ( !newmsg )
+/*I think the default should be the other way round. If the
+  application wants to set a "Done." message at the end, it should
+  supply it. Any serious objections to this change? Makes the
+  application programmers' work a little easier.
+  if ( !newmsg )
        {
            // also provide the finishing message if the application didn't
            m_msg->SetLabel(_("Done."));
        }
-
+*/
        m_state = Finished;
 
        // so that we return TRUE below
