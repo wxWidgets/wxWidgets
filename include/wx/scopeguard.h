@@ -41,7 +41,7 @@ namespace wxPrivate
             {
                 guard.Execute();
             }
-            wxCATCH_ALL() // do nothing, just eat the exception
+            wxCATCH_ALL(;) // do nothing, just eat the exception
         }
     }
 
