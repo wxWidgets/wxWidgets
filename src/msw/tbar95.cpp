@@ -56,18 +56,6 @@
 #include "wx/app.h"         // for GetComCtl32Version
 
 // ----------------------------------------------------------------------------
-// conditional compilation
-// ----------------------------------------------------------------------------
-
-// wxWidgets previously always considered that toolbar buttons have light grey
-// (0xc0c0c0) background and so ignored any bitmap masks - however, this
-// doesn't work with XPMs which then appear to have black background. To make
-// this work, we must respect the bitmap masks - which we do now. This should
-// be ok in any case, but to restore 100% compatible with the old version
-// behaviour, you can set this to 0.
-#define USE_BITMAP_MASKS 1
-
-// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -553,7 +541,6 @@ bool wxToolBar::Realize()
                       totalBitmapHeight = m_defaultHeight;
 
         // Create a bitmap and copy all the tool bitmaps to it
-#if USE_BITMAP_MASKS
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
@@ -565,39 +552,17 @@ bool wxToolBar::Realize()
 
         m_hBitmap = bitmap.GetHBITMAP();
         HBITMAP hBitmap = (HBITMAP)m_hBitmap;
-#else // !USE_BITMAP_MASKS
-        HBITMAP hBitmap = ::CreateCompatibleBitmap(ScreenHDC(),
-                                                   totalBitmapWidth,
-                                                   totalBitmapHeight);
-        if ( !hBitmap )
-        {
-            wxLogLastError(_T("CreateCompatibleBitmap"));
-
-            return false;
-        }
-
-        m_hBitmap = (WXHBITMAP)hBitmap;
-
-        MemoryHDC memoryDC;
-        SelectInHDC hdcSelector(memoryDC, hBitmap);
-
-        MemoryHDC memoryDC2;
-#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
         if (doRemapBg)
         {
-#if USE_BITMAP_MASKS
             dcAllButtons.SelectObject(wxNullBitmap);
-#endif
 
             // Even if we're not remapping the bitmap
             // content, we still have to remap the background.
             hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
                 totalBitmapWidth, totalBitmapHeight);
 
-#if USE_BITMAP_MASKS
             dcAllButtons.SelectObject(bitmap);
-#endif
         }
 
         // the button position
@@ -616,19 +581,8 @@ bool wxToolBar::Realize()
                 {
                     int xOffset = wxMax(0, (m_defaultWidth - bmp.GetWidth())/2);
                     int yOffset = wxMax(0, (m_defaultHeight - bmp.GetHeight())/2);
-#if USE_BITMAP_MASKS
                     // notice the last parameter: do use mask
                     dcAllButtons.DrawBitmap(bmp, x+xOffset, yOffset, true);
-#else // !USE_BITMAP_MASKS
-                    SelectInHDC hdcSelector2(memoryDC2, GetHbitmapOf(bmp));
-                    if ( !BitBlt(memoryDC,
-                                 x+xOffset, yOffset,  m_defaultWidth, m_defaultHeight,
-                                 memoryDC2,
-                                 0, 0, SRCCOPY) )
-                    {
-                        wxLogLastError(wxT("BitBlt"));
-                    }
-#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
                 }
                 else
                 {
@@ -643,12 +597,10 @@ bool wxToolBar::Realize()
             }
         }
 
-#if USE_BITMAP_MASKS
         dcAllButtons.SelectObject(wxNullBitmap);
 
         // don't delete this HBITMAP!
         bitmap.SetHBITMAP(0);
-#endif // USE_BITMAP_MASKS/!USE_BITMAP_MASKS
 
         if (doRemap)
         {
