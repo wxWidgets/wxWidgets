@@ -16,7 +16,7 @@ mkdir i386
 strip /usr/lib/python1.5/site-packages/wxPython/wxcmodule.so
 
 cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
-rpm --rcfile .rpmrc -bb --clean wxPython.spec
+rpm --rcfile .rpmrc -bb wxPython.spec
 
 mv i386/*.rpm .
 rm -rf i386
