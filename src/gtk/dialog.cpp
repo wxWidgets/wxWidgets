@@ -175,19 +175,6 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
 
-    /* set size hints */
-    gint flag = 0; // GDK_HINT_POS;
-    if ((win->GetMinWidth() != -1) || (win->GetMinHeight() != -1)) flag |= GDK_HINT_MIN_SIZE;
-    if ((win->GetMaxWidth() != -1) || (win->GetMaxHeight() != -1)) flag |= GDK_HINT_MAX_SIZE;
-    if (flag)
-    {
-        gdk_window_set_hints( win->m_widget->window,
-                              win->m_x, win->m_y,
-                              win->GetMinWidth(), win->GetMinHeight(),
-                              win->GetMaxWidth(), win->GetMaxHeight(),
-                              flag );
-    }
-
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
     {
@@ -555,6 +542,20 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
     if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
     if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
+
+    /* set size hints */
+    gint flag = 0; // GDK_HINT_POS;
+    if ((m_minWidth != -1) || (m_minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
+    if ((m_maxWidth != -1) || (m_maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
+    GdkGeometry geom;
+    geom.min_width = m_minWidth;
+    geom.min_height = m_minHeight;
+    geom.max_width = m_maxWidth;
+    geom.max_height = m_maxHeight;
+    gtk_window_set_geometry_hints( GTK_WINDOW(m_widget), 
+                                   (GtkWidget*) NULL,
+                                   &geom,
+                                   (GdkWindowHints) flag );
 
     m_sizeSet = TRUE;
 
