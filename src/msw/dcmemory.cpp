@@ -90,17 +90,17 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
   // JACS 11/12/98: disabling this since the Forty Thieves sample
   // shows this not working properly. In fact, if loading from a resource,
   // the depth should become the screen depth, so why was it being called?
-  if (0)
-  {
-      // Make a new bitmap that has the correct depth.
-      wxBitmap newBitmap = bitmap.GetBitmapForDC(* this);
-
-      m_selectedBitmap = newBitmap ;
-  }
-  else
-  {
+//  if (0)
+//  {
+//      // Make a new bitmap that has the correct depth.
+//      wxBitmap newBitmap = bitmap.GetBitmapForDC(* this);
+//
+//      m_selectedBitmap = newBitmap ;
+//  }
+//  else
+//  {
       m_selectedBitmap = bitmap;
-  }
+//  }
 
   if (!m_selectedBitmap.Ok())
     return;

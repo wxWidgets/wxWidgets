@@ -100,8 +100,8 @@ inline bool IsMdiCommandId(int id)
     return (id >= wxFIRST_MDI_CHILD) && (id <= wxLAST_MDI_CHILD);
 }
 
-static UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
-                         WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact);
+static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
+                              WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact);
 
 // ===========================================================================
 // implementation
@@ -1174,8 +1174,8 @@ static void InsertWindowMenu(wxWindow *win, WXHMENU menu, HMENU subMenu)
     MDISetMenu(win, hmenu, subMenu);
 }
 
-static UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
-                         WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact)
+static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
+                              WXWORD *activate, WXHWND *hwndAct, WXHWND *hwndDeact)
 {
 #ifdef __WIN32__
     *activate = TRUE;

@@ -112,9 +112,10 @@ PDIB        DibReadBitmapInfo(HFILE fh);
 #define FixBitmapInfo(lpbi)     if ((lpbi)->biSizeImage == 0)                 \
 												(lpbi)->biSizeImage = DibSizeImage(lpbi); \
                                 if ((lpbi)->biClrUsed == 0)                   \
-                                    (lpbi)->biClrUsed = DibNumColors(lpbi);   \
-                                if ((lpbi)->biCompression == BI_BITFIELDS && (lpbi)->biClrUsed == 0) \
-                                    ; // (lpbi)->biClrUsed = 3;                    
+                                    (lpbi)->biClrUsed = DibNumColors(lpbi);
+
+//                                if ((lpbi)->biCompression == BI_BITFIELDS && (lpbi)->biClrUsed == 0)
+//                                    ; // (lpbi)->biClrUsed = 3;                    
 
 #define DibInfo(pDIB)     ((BITMAPINFO FAR *)(pDIB))
 

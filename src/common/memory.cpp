@@ -664,7 +664,7 @@ bool wxDebugContext::Dump(void)
 //  if (!HasStream())
 //    return FALSE;
 
-  if (TRUE)
+//  if (TRUE)
   {
     wxChar* appName = _T("application");
     wxString appNameStr("");
@@ -721,7 +721,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 //  if (!HasStream())
 //    return FALSE;
 
-  if (TRUE)
+//  if (TRUE)
   {
     wxChar* appName = _T("application");
     wxString appNameStr(_T(""));
@@ -820,7 +820,7 @@ bool wxDebugContext::PrintClasses(void)
 //  if (!HasStream())
 //    return FALSE;
 
-  if (TRUE)
+//  if (TRUE)
   {
     wxChar* appName = _T("application");
     wxString appNameStr(_T(""));
