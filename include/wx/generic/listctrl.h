@@ -201,6 +201,7 @@ public:
                          m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
+    wxCoord              m_headerHeight;
 
 protected:
     // return the text for the given column of the given item
@@ -221,6 +222,9 @@ private:
 
     // create the header window
     void CreateHeaderWindow();
+
+    // calculate and set height of the header
+    void CalculateAndSetHeaderHeight();
 
     // reposition the header and the main window in the report view depending
     // on whether it should be shown or not

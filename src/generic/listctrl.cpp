@@ -103,8 +103,8 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_LIST_CACHE_HINT)
 // constants
 // ----------------------------------------------------------------------------
 
-// the height of the header window (FIXME: should depend on its font!)
-static const int HEADER_HEIGHT = 23;
+// // the height of the header window (FIXME: should depend on its font!)
+// static const int HEADER_HEIGHT = 23;
 
 // the scrollbar units
 static const int SCROLL_UNIT_X = 15;
@@ -4429,6 +4429,7 @@ wxGenericListCtrl::wxGenericListCtrl()
 
     m_mainWin = (wxListMainWindow*) NULL;
     m_headerWin = (wxListHeaderWindow*) NULL;
+    m_headerHeight = 0;
 }
 
 wxGenericListCtrl::~wxGenericListCtrl()
@@ -4441,15 +4442,25 @@ wxGenericListCtrl::~wxGenericListCtrl()
         delete m_imageListState;
 }
 
+void wxGenericListCtrl::CalculateAndSetHeaderHeight()
+{
+    // we use the letter "H" for calculating the needed space, basing on the current font
+    int w, h;
+    m_headerWin->GetTextExtent(wxT("H"), &w, &h);
+    m_headerHeight = h + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
+    m_headerWin->SetSize(m_headerWin->GetSize().x, m_headerHeight);
+}
+
 void wxGenericListCtrl::CreateHeaderWindow()
 {
     m_headerWin = new wxListHeaderWindow
                       (
                         this, -1, m_mainWin,
                         wxPoint(0, 0),
-                        wxSize(GetClientSize().x, HEADER_HEIGHT),
+                        wxSize(GetClientSize().x, m_headerHeight),
                         wxTAB_TRAVERSAL
                       );
+    CalculateAndSetHeaderHeight();
 }
 
 bool wxGenericListCtrl::Create(wxWindow *parent,
@@ -4676,7 +4687,7 @@ bool wxGenericListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code
 {
     m_mainWin->GetItemRect( item, rect );
     if ( m_mainWin->HasHeader() )
-        rect.y += HEADER_HEIGHT + 1;
+        rect.y += m_headerHeight + 1;
     return TRUE;
 }
 
@@ -5008,8 +5019,8 @@ void wxGenericListCtrl::ResizeReportView(bool showHeader)
 
     if ( showHeader )
     {
-        m_headerWin->SetSize( 0, 0, cw, HEADER_HEIGHT );
-        m_mainWin->SetSize( 0, HEADER_HEIGHT + 1, cw, ch - HEADER_HEIGHT - 1 );
+        m_headerWin->SetSize( 0, 0, cw, m_headerHeight );
+        m_mainWin->SetSize( 0, m_headerHeight + 1, cw, ch - m_headerHeight - 1 );
     }
     else // no header window
     {
@@ -5076,7 +5087,10 @@ bool wxGenericListCtrl::SetFont( const wxFont &font )
     if (m_headerWin)
     {
         m_headerWin->SetFont( font );
+        CalculateAndSetHeaderHeight();
     }
+
+    Refresh();
 
     return TRUE;
 }
