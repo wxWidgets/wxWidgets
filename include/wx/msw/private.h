@@ -356,7 +356,7 @@ class MemoryHDC
 {
 public:
     MemoryHDC() { m_hdc = ::CreateCompatibleDC(NULL); }
-   ~MemoryHDC() { ::DeleteObject(m_hdc);              }
+   ~MemoryHDC() { ::DeleteDC(m_hdc);                  }
 
     operator HDC() const { return m_hdc; }
 
