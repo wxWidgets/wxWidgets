@@ -61,7 +61,7 @@ public:
   // Calls that CLIENT can make
   virtual bool Execute(const wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT ) = 0;
   virtual bool Execute(const wxString& str) { return Execute(str, -1, wxIPC_TEXT); }
-  virtual char *Request(const wxString& item, int *size = (int *) NULL, wxIPCFormat format = wxIPC_TEXT) = 0;
+  virtual wxChar *Request(const wxString& item, int *size = (int *) NULL, wxIPCFormat format = wxIPC_TEXT) = 0;
   virtual bool Poke(const wxString& item, wxChar *data, int size = -1, wxIPCFormat format = wxIPC_TEXT) = 0;
   virtual bool StartAdvise(const wxString& item) = 0;
   virtual bool StopAdvise(const wxString& item) = 0;
@@ -74,16 +74,16 @@ public:
 
   // Callbacks to SERVER - override at will
   virtual bool OnExecute     ( const wxString& WXUNUSED(topic),
-                               char *WXUNUSED(data),
+                               wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
                              { return FALSE; };
 
-  virtual char *OnRequest    ( const wxString& WXUNUSED(topic),
+  virtual wxChar *OnRequest    ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
                                int *WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return (char *) NULL; };
+                             { return (wxChar *) NULL; };
 
   virtual bool OnPoke        ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
@@ -103,7 +103,7 @@ public:
   // Callbacks to CLIENT - override at will
   virtual bool OnAdvise      ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
-                               char *WXUNUSED(data),
+                               wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
                              { return FALSE; };

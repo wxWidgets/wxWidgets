@@ -406,7 +406,7 @@ bool wxTCPConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
   return TRUE;
 }
 
-char *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat format)
+wxChar *wxTCPConnection::Request (const wxString& item, int *size, wxIPCFormat format)
 {
   if (!m_sock->IsConnected())
     return NULL;
@@ -556,7 +556,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   {
   case IPC_EXECUTE:
   {
-    char *data;
+    wxChar *data;
     size_t size;
     wxIPCFormat format;
 
@@ -573,7 +573,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
   }
   case IPC_ADVISE:
   {
-    char *data;
+    wxChar *data;
     size_t size;
     wxIPCFormat format;
 
@@ -639,14 +639,14 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
     format = (wxIPCFormat)codeci->Read8();
 
     int user_size = -1;
-    char *user_data = connection->OnRequest (topic_name, item, &user_size, format);
+    wxChar *user_data = connection->OnRequest (topic_name, item, &user_size, format);
 
     if (user_data)
     {
       codeco->Write8(IPC_REQUEST_REPLY);
 
       if (user_size == -1)
-        user_size = strlen(user_data) + 1;      // includes final NUL
+        user_size = wxStrlen(user_data) + 1;      // includes final NUL
 
       codeco->Write32(user_size);
       sockstrm->Write(user_data, user_size);

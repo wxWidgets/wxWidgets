@@ -469,7 +469,7 @@ bool wxDDEClient::DeleteConnection(WXHCONV conv)
 // wxDDEConnection
 // ----------------------------------------------------------------------------
 
-wxDDEConnection::wxDDEConnection(char *buffer, int size)
+wxDDEConnection::wxDDEConnection(wxChar *buffer, int size)
      : wxConnectionBase(buffer, size)
 {
     m_client = NULL;
@@ -540,7 +540,7 @@ bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
     return ok;
 }
 
-char *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat format)
+wxChar *wxDDEConnection::Request(const wxString& item, int *size, wxIPCFormat format)
 {
     DWORD result;
 
@@ -770,7 +770,7 @@ _DDECallback(WORD wType,
                     wxString item_name = DDEStringFromAtom(hsz2);
 
                     int user_size = -1;
-                    char *data = connection->OnRequest(connection->m_topicName,
+                    wxChar *data = connection->OnRequest(connection->m_topicName,
                                                        item_name,
                                                        &user_size,
                                                        (wxIPCFormat) wFmt);
