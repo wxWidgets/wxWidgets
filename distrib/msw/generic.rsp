@@ -36,6 +36,8 @@ src/generic/*.cpp
 src/generic/*.c
 src/generic/*.inc
 
+src/unix/*.cpp
+
 src/png/*.c
 src/png/*.h
 src/png/makefile*
@@ -66,6 +68,7 @@ include/wx/protocol/*.h
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
+include/wx/unix/*.h
 lib/dummy
 
 bin/*.*

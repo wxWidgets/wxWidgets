@@ -36,6 +36,9 @@ extern "C" {
 #include "wx/intl.h"
 #include "wx/module.h"
 
+// For memcpy
+#include <string.h>
+
 #ifdef __SALFORDC__
 #ifdef FAR
 #undef FAR
@@ -256,9 +259,11 @@ char unsigned *wxImage::GetData() const
     return M_IMGDATA->m_data;
 }
 
-void wxImage::SetData( char unsigned *WXUNUSED(data) )
+void wxImage::SetData( char unsigned *data )
 {
     wxCHECK_RET( Ok(), "invalid image" );
+
+    memcpy(M_IMGDATA->m_data, data, M_IMGDATA->m_width * M_IMGDATA->m_height * 3);
 }
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )

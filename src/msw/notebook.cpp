@@ -133,11 +133,13 @@ bool wxNotebook::Create(wxWindow *parent,
   // style
   m_windowStyle = style | wxTAB_TRAVERSAL;
 
-  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
+  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS | WS_CLIPCHILDREN;
   if ( m_windowStyle & wxTC_MULTILINE )
     tabStyle |= TCS_MULTILINE;
   if ( m_windowStyle & wxBORDER )
     tabStyle &= WS_BORDER;
+  if (m_windowStyle & wxNB_FIXEDWIDTH)
+    tabStyle |= TCS_FIXEDWIDTH ;
 
   // create the tab control.
   m_hWnd = (WXHWND)CreateWindowEx
@@ -332,9 +334,23 @@ bool wxNotebook::InsertPage(int nPage,
 
   // add the tab to the control
   TC_ITEM tcItem;
-  tcItem.mask    = TCIF_TEXT | TCIF_IMAGE;
-  tcItem.pszText = (char *)strText.c_str();
-  tcItem.iImage  = imageId;
+  tcItem.mask    = 0;
+
+  if (imageId != -1)
+  {
+    tcItem.mask |= TCIF_IMAGE;
+    tcItem.iImage  = imageId;
+  }
+  else
+    tcItem.iImage  = 0;
+
+  if (!strText.IsEmpty())
+  {
+    tcItem.mask    |= TCIF_TEXT;
+    tcItem.pszText = (char *)strText.c_str();
+  }
+  else
+    tcItem.pszText = (char *) NULL;
 
   if ( TabCtrl_InsertItem(m_hwnd, nPage, &tcItem) == -1 ) {
     wxLogError("Can't create the notebook page '%s'.", strText.c_str());
@@ -523,5 +539,12 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
 void wxNotebook::OnEraseBackground(wxEraseEvent& event)
 {
     Default();
+}
+
+// Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
+// style.
+void wxNotebook::SetTabSize(const wxSize& sz)
+{
+    ::SendMessage((HWND) GetHWND(), TCM_SETITEMSIZE, 0, MAKELPARAM(sz.x, sz.y));
 }
 

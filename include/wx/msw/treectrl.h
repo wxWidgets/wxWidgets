@@ -253,6 +253,9 @@ public:
         // the item will be shown in bold
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
 
+        // the item will be shown with a drop highlight
+    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = TRUE);
+
     // item status inquiries
     // ---------------------
 

@@ -166,6 +166,10 @@ public:
     // get the panel which represents the given page
   wxNotebookPage *GetPage(int nPage) { return m_aPages[nPage]; }
 
+    // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
+    // style.
+  void SetTabSize(const wxSize& sz);
+
   // callbacks
   // ---------
   void OnSize(wxSizeEvent& event);

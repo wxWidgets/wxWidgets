@@ -1,6 +1,23 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.0.2, March ?? 1999
+---------------------
+
+wxGTK:
+
+
+wxMSW:
+
+- wxNotebook changes: can add image only; wxNB_FIXEDWIDTH added;
+  SetTabSize added.
+
+wxMotif:
+
+
+General:
+
+
 2.0.1 (release), March 1st 1999
 -------------------------------
 
