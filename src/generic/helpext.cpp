@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
- * wxexthlp.cpp - an external help controller for wxWindows         *
+ * helpext.cpp - an external help controller for wxWindows          *
  *                                                                  *
- * (C) 1998 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -21,25 +21,13 @@
 #include   <unistd.h>
 
 
-
-class wxExtHelpMapEntry : public wxObject
-{
-public:
-   int      id;
-   wxString url;
-   wxString doc;
-   wxExtHelpMapEntry(int iid, wxString const &iurl, wxString const &idoc)
-      { id = iid; url = iurl; doc = idoc; }
-};
-
-
 struct wxBusyCursor
 {
    wxBusyCursor() { wxBeginBusyCursor(); }
    ~wxBusyCursor() { wxEndBusyCursor(); }
 };
 
-IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
+IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
    
 /**
    This class implements help via an external browser.
@@ -49,10 +37,8 @@ IMPLEMENT_CLASS(wxExtHelpController, wxHelpControllerBase)
 
 wxExtHelpController::wxExtHelpController(void)
 {
-   m_MapList = (wxList*) NULL;
    m_BrowserName = WXEXTHELP_DEFAULTBROWSER;
    m_BrowserIsNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE;
-   m_NumOfEntries = 0;
 
    char *browser = getenv(WXEXTHELP_ENVVAR_BROWSER);
    if(browser)
@@ -63,27 +49,6 @@ wxExtHelpController::wxExtHelpController(void)
    }
 }
 
-void
-wxExtHelpController::DeleteList(void)
-{
-   if(m_MapList)
-   {
-      wxNode *node = m_MapList->First();
-      while (node)
-      {
-         delete (wxExtHelpMapEntry *)node->Data();
-         delete node;
-         node = m_MapList->First();
-      }
-      delete m_MapList;
-      m_MapList = (wxList*) NULL;
-   }
-}
-
-wxExtHelpController::~wxExtHelpController(void)
-{
-   DeleteList();
-}
 
 void
 wxExtHelpController::SetBrowser(wxString const & browsername, bool isNetscape)
@@ -92,90 +57,8 @@ wxExtHelpController::SetBrowser(wxString const & browsername, bool isNetscape)
    m_BrowserIsNetscape = isNetscape;
 }
 
-/** This must be called to tell the controller where to find the
-    documentation.
-    @param file - NOT a filename, but a directory name.
-    @return true on success
-*/
 bool
-wxExtHelpController::Initialize(const wxString& file)
-{
-   return LoadFile(file);
-}
-
-  
-bool
-wxExtHelpController::LoadFile(const wxString& ifile)
-{
-   wxString mapFile, file, url, doc;
-   int id,i,len;
-   char buffer[WXEXTHELP_BUFLEN];
-   
-   wxBusyCursor b; // display a busy cursor
-
-   if(! ifile.IsEmpty())
-   {
-      file = ifile;
-      if(! wxIsAbsolutePath(file))
-      {
-         char* f = wxGetWorkingDirectory();
-         file = f;
-         delete[] f; // wxGetWorkingDirectory returns new memory
-         file << WXEXTHELP_SEPARATOR << ifile;
-      }
-      else
-         file = ifile;
-   
-      if(! wxDirExists(file))
-         return FALSE;
-      
-      mapFile << file << WXEXTHELP_SEPARATOR << WXEXTHELP_MAPFILE;
-   }
-   else // try to reload old file
-      mapFile = m_MapFile;
-
-   if(! wxFileExists(mapFile))
-      return FALSE;
-
-   DeleteList();
-   m_MapList = new wxList;
-   m_NumOfEntries = 0;
-   
-   FILE *input = fopen(mapFile.c_str(),"rt");
-   if(! input)
-      return FALSE;
-   do
-   {
-      if(fgets(buffer,WXEXTHELP_BUFLEN,input) && *buffer != WXEXTHELP_COMMENTCHAR)
-      {
-         len = strlen(buffer);
-         if(buffer[len-1] == '\n')
-            buffer[len-1] = '\0'; // cut of trailing newline
-         if(sscanf(buffer,"%d", &id) != 1)
-            break; // error
-         for(i=0; isdigit(buffer[i])||isspace(buffer[i])||buffer[i]=='-'; i++)
-            ; // find begin of URL
-         url = "";
-         while(buffer[i] && ! isspace(buffer[i]) && buffer[i] !=
-               WXEXTHELP_COMMENTCHAR)
-            url << buffer[i++];
-         while(buffer[i] && buffer[i] != WXEXTHELP_COMMENTCHAR)
-            i++;
-         doc = "";
-         if(buffer[i])
-            doc = (buffer + i + 1); // skip the comment character
-         m_MapList->Append(new wxExtHelpMapEntry(id,url,doc));
-         m_NumOfEntries++;
-      }
-   }while(! feof(input));
-   fclose(input);
-   
-   m_MapFile = file; // now it's valid
-   return TRUE;
-}
-
-bool
-wxExtHelpController::CallBrowser(wxString const &relativeURL)
+wxExtHelpController::DisplayHelp(wxString const &relativeURL)
 {
    wxBusyCursor b; // display a busy cursor
    wxString command;
@@ -205,110 +88,4 @@ wxExtHelpController::CallBrowser(wxString const &relativeURL)
    return wxExecute(command) != 0; 
 }
 
-bool
-wxExtHelpController::DisplayContents(void)
-{
-   if(! m_NumOfEntries)
-      return FALSE;
-   wxBusyCursor b; // display a busy cursor
-   return KeywordSearch("");
-}
-      
-bool
-wxExtHelpController::DisplaySection(int sectionNo)
-{
-   if(! m_NumOfEntries)
-      return FALSE;
-
-   wxBusyCursor b; // display a busy cursor
-   wxNode *node = m_MapList->First();
-   wxExtHelpMapEntry *entry;
-   while(node)
-   {
-      entry = (wxExtHelpMapEntry *)node->Data();
-      if(entry->id == sectionNo)
-         return CallBrowser(entry->url);
-      node = node->Next();
-   }
-   return FALSE;
-}
-
-bool
-wxExtHelpController::DisplayBlock(long blockNo)
-{
-   return DisplaySection((int)blockNo);
-}
-
-bool
-wxExtHelpController::KeywordSearch(const wxString& k)
-{
-   if(! m_NumOfEntries)
-      return FALSE;
-
-   wxBusyCursor b; // display a busy cursor
-   wxString     *choices = new wxString[m_NumOfEntries];
-   wxString     *urls = new wxString[m_NumOfEntries];
-   wxString compA, compB;
-   
-   int          idx = 0, j;
-   bool         rc;
-   bool         showAll = k.IsEmpty();
-   wxNode       *node = m_MapList->First();
-   wxExtHelpMapEntry *entry;
-   
-   compA = k; compA.LowerCase(); // we compare case insensitive
-   while(node)
-   {
-      entry = (wxExtHelpMapEntry *)node->Data();
-      compB = entry->doc; compB.LowerCase();
-      if((showAll || compB.Contains(k)) && ! compB.IsEmpty()) 
-      {
-         urls[idx] = entry->url;
-         // doesn't work:
-         // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
-         //if(choices[idx].IsEmpty()) // didn't contain the ';'
-         //   choices[idx] = (**i).doc;
-         choices[idx] = "";
-         for(j=0;entry->doc.c_str()[j]
-                && entry->doc.c_str()[j] != WXEXTHELP_COMMENTCHAR; j++)
-            choices[idx] << entry->doc.c_str()[j];
-         idx++;
-      }
-      node = node->Next();
-   }
-
-   if(idx == 1)
-      rc = CallBrowser(urls[0]);
-   else if(idx == 0)
-   {
-      wxMessageBox(_("No entries found."));
-      rc = FALSE;
-   }
-   else
-   {
-      idx = wxGetSingleChoiceIndex(showAll ? _("Help Index") : _("Relevant entries:"),
-                                   showAll ? _("Help Index") : _("Entries found"),
-                                   idx,choices);
-      if(idx != -1)
-         rc = CallBrowser(urls[idx]);
-      else
-         rc = FALSE;
-   }
-   delete[] urls;
-   delete[] choices;
-   
-   return rc;
-}
-
-
-bool
-wxExtHelpController::Quit(void)
-{
-   return TRUE;
-}
-
-void
-wxExtHelpController::OnQuit(void)
-{
-}
 

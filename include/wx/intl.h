@@ -110,7 +110,9 @@ public:
   const char *GetString(const char *szOrigString, 
                         const char *szDomain = (const char *) NULL) const;
 
-private:
+  // Returns the current short name for the locale
+  wxString const &GetName() const { return m_strShort; }
+ private:
   // find catalog by name in a linked list, return NULL if !found
   wxMsgCatalog  *FindCatalog(const char *szDomain) const;
 

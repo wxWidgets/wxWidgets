@@ -143,7 +143,8 @@ LIB_CPP_SRC=\
  generic/tabg.cpp \
  generic/textdlgg.cpp \
  generic/treectrl.cpp \
- generic/helpext.cpp
+ generic/helpext.cpp \
+ generic/helphtml.cpp
 
 LIB_C_SRC=\
  common/extended.c \

@@ -14,12 +14,8 @@
 #   pragma interface "wxexthlp.h"
 #endif
 
-#include "wx/helpbase.h"
+#include "wx/generic/helphtml.h"
 
-/// Name for map file.
-#define WXEXTHELP_MAPFILE   "wxhelp.map"
-/// Path separator.
-#define WXEXTHELP_SEPARATOR '/'
 #ifndef WXEXTHELP_DEFAULTBROWSER
 /// Default browser name.
 #   define WXEXTHELP_DEFAULTBROWSER "netscape"
@@ -30,12 +26,6 @@
 #define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
 /// Is browser a netscape browser?
 #define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE "WX_HELPBROWSER_NS"
-/// Maximum line length in map file.
-#define WXEXTHELP_BUFLEN 512
-/// Character introducing comments/documentation field in map file.
-#define WXEXTHELP_COMMENTCHAR   ';'
-
-class wxExtHelpMapList;
 
 
 /**
@@ -57,57 +47,11 @@ class wxExtHelpMapList;
    Lines starting with ';' will be ignored.
 */
 
-class wxExtHelpController : public wxHelpControllerBase
+class wxExtHelpController : public wxHTMLHelpControllerBase
 {      
 DECLARE_CLASS(wxExtHelpController)
    public:
    wxExtHelpController(void);
-   virtual ~wxExtHelpController(void);
-
-   /** This must be called to tell the controller where to find the
-       documentation.
-       @param file - NOT a filename, but a directory name.
-       @return true on success
-   */
-   virtual bool Initialize(const wxString& file, int WXUNUSED(server))
-      { return Initialize(file); }
-      
-   /** This must be called to tell the controller where to find the
-       documentation.
-       @param file - NOT a filename, but a directory name.
-       @return true on success
-   */
-   virtual bool Initialize(const wxString& file);
-  
-   /** If file is "", reloads file given in Initialize.
-       @file Name of help directory.
-       @return true on success
-   */
-   virtual bool LoadFile(const wxString& file = "");
-
-   /** Display list of all help entries.
-       @return true on success
-   */
-   virtual bool DisplayContents(void);
-   /** Display help for id sectionNo.
-       @return true on success
-   */
-   virtual bool DisplaySection(int sectionNo);
-   /** Display help for id sectionNo -- identical with DisplaySection().
-       @return true on success
-   */
-   virtual bool DisplayBlock(long blockNo);
-   /** Search comment/documentation fields in map file and present a
-       list to chose from.
-       @key k string to search for, empty string will list all entries
-       @return true on success
-   */
-   virtual bool KeywordSearch(const wxString& k);
-
-   /// does nothing
-   virtual bool Quit(void);
-   /// does nothing
-   virtual void OnQuit(void);
 
    /** Tell it which browser to use.
        The Netscape support will check whether Netscape is already
@@ -120,20 +64,12 @@ DECLARE_CLASS(wxExtHelpController)
    void SetBrowser(wxString const & browsername = WXEXTHELP_DEFAULTBROWSER,
                    bool isNetscape = WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE);
  private:
-   /// Filename of currently active map file.
-   wxString         m_MapFile;
-   /// How many entries do we have in the map file?
-   int              m_NumOfEntries;
-   /// A list containing all id,url,documentation triples.
-   wxList          *m_MapList;
    /// How to call the html viewer.
    wxString         m_BrowserName;
    /// Is the viewer a variant of netscape?
    bool             m_BrowserIsNetscape;
    /// Call the browser using a relative URL.
-   bool CallBrowser(wxString const &);
-   /// Deletes the list and all objects.
-   void DeleteList(void);
+   bool DisplayHelp(wxString const &);
 };
 
 #endif  
