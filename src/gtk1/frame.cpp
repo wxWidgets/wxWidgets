@@ -968,9 +968,6 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
 
     m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
 
-    if (m_frameToolBar)
-        GetChildren().DeleteObject( m_frameToolBar );
-
     m_insertInClientArea = TRUE;
 
     m_sizeSet = FALSE;
