@@ -527,12 +527,17 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
     return bmp; 
 }
 
-bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
+bool wxBitmap::CreateFromImage( const wxImage& img, int depth )
 {
     UnRef();
 
-    wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid image") )
     wxCHECK_MSG( depth == -1 || depth == 1, FALSE, wxT("invalid bitmap depth") )
+
+    // NB: wxGTK doesn't yet support alpha channel in bitmaps. The best we can
+    //     do is to convert alpha channel to mask, if it is present:
+    wxImage image(img);
+    image.ConvertAlphaToMask();
 
     int width = image.GetWidth();
     int height = image.GetHeight();
