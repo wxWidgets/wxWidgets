@@ -151,6 +151,7 @@ Ctrl+=            Default font size.
             'ask',
             'autoCallTip',
             'autoComplete',
+            'autoCompleteAutoHide',
             'autoCompleteCaseInsensitive',
             'autoCompleteIncludeDouble',
             'autoCompleteIncludeMagic',
@@ -822,6 +823,8 @@ Platform: %s""" % \
 
     def autoCompleteShow(self, command):
         """Display auto-completion popup list."""
+        self.AutoCompSetAutoHide(self.autoCompleteAutoHide)
+        self.AutoCompSetIgnoreCase(self.autoCompleteCaseInsensitive)
         list = self.interp.getAutoCompleteList(command,
                     includeMagic=self.autoCompleteIncludeMagic,
                     includeSingle=self.autoCompleteIncludeSingle,

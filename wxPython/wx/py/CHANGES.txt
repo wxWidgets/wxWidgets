@@ -9,6 +9,8 @@ Removed docs tabs from crust interface:
 
 Fixed Calltip tab refresh problem on Windows.
 
+shell.autoCompleteAutoHide added with default of True.
+
 
 0.9.3 (9/25/2003 to 1/24/2004)
 ------------------------------
