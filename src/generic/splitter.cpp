@@ -111,8 +111,8 @@ void wxSplitterWindow::Init()
     m_borderSize = 2;
     m_sashPosition = m_requestedSashPosition = 0;
     m_minimumPaneSize = 0;
-    m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
-    m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
+    m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
+    m_sashCursorNS = wxCursor(wxCURSOR_SIZENS);
     m_sashTrackerPen = new wxPen(*wxBLACK, 2, wxSOLID);
     m_lightShadowPen = (wxPen *) NULL;
     m_mediumShadowPen = (wxPen *) NULL;
@@ -131,8 +131,6 @@ void wxSplitterWindow::Init()
 
 wxSplitterWindow::~wxSplitterWindow()
 {
-    delete m_sashCursorWE;
-    delete m_sashCursorNS;
     delete m_sashTrackerPen;
     delete m_lightShadowPen;
     delete m_darkShadowPen;
@@ -140,6 +138,12 @@ wxSplitterWindow::~wxSplitterWindow()
     delete m_hilightPen;
     delete m_facePen;
     delete m_faceBrush;
+}
+
+void wxSplitterWindow::SetResizeCursor()
+{
+    SetCursor(m_splitMode == wxSPLIT_VERTICAL ? m_sashCursorWE
+                                              : m_sashCursorNS);
 }
 
 void wxSplitterWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -167,13 +171,18 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     // reset the cursor
 #ifdef __WXMOTIF__
     SetCursor(* wxSTANDARD_CURSOR);
-#endif
-#ifdef __WXMSW__
+#elif defined(__WXMSW__)
     SetCursor(wxCursor());
 #endif
 
     if (GetWindowStyle() & wxSP_NOSASH)
         return;
+
+    // with wxSP_LIVE_UPDATE style the splitter windows are always resized
+    // following the mouse movement while it drags the sash, without it we only
+    // draw the sash at the new position but only resize the windows when the
+    // dragging is finished
+    bool isLive = (GetWindowStyleFlag() & wxSP_LIVE_UPDATE) != 0;
 
     if (event.LeftDown())
     {
@@ -183,22 +192,19 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 
             m_dragMode = wxSPLIT_DRAG_DRAGGING;
 
-            if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+            if ( !isLive )
             {
+                // remember the initial sash position and draw the initial
+                // shadow sash
+                m_sashPositionCurrent = m_sashPosition;
+
                 DrawSashTracker(x, y);
             }
 
             m_oldX = x;
             m_oldY = y;
 
-            if ( m_splitMode == wxSPLIT_VERTICAL )
-            {
-                SetCursor(*m_sashCursorWE);
-            }
-            else
-            {
-                SetCursor(*m_sashCursorNS);
-            }
+            SetResizeCursor();
             return;
         }
     }
@@ -209,7 +215,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         ReleaseMouse();
 
         // Erase old tracker
-        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+        if ( !isLive )
         {
             DrawSashTracker(m_oldX, m_oldY);
         }
@@ -219,7 +225,8 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // mouse has moved
         int diff = m_splitMode == wxSPLIT_VERTICAL ? x - m_oldX : y - m_oldY;
 
-        int posSashNew = OnSashPositionChanging(m_sashPosition + diff);
+        int posSashOld = isLive ? m_sashPosition : m_sashPositionCurrent;
+        int posSashNew = OnSashPositionChanging(posSashOld + diff);
         if ( posSashNew == -1 )
         {
             // change not allowed
@@ -263,14 +270,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
         // Just change the cursor if required
         if ( SashHitTest(x, y) )
         {
-                if ( m_splitMode == wxSPLIT_VERTICAL )
-                {
-                    SetCursor(*m_sashCursorWE);
-                }
-                else
-                {
-                    SetCursor(*m_sashCursorNS);
-                }
+            SetResizeCursor();
         }
 #if defined(__WXGTK__) || defined(__WXMSW__)
         else
@@ -290,19 +290,13 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 #ifdef __WXMSW__
         // Otherwise, the cursor sometimes reverts to the normal cursor
         // during dragging.
-        if ( m_splitMode == wxSPLIT_VERTICAL )
-        {
-            SetCursor(*m_sashCursorWE);
-        }
-        else
-        {
-            SetCursor(*m_sashCursorNS);
-        }
+        SetResizeCursor();
 #endif // __WXMSW__
 
         int diff = m_splitMode == wxSPLIT_VERTICAL ? x - m_oldX : y - m_oldY;
 
-        int posSashNew = OnSashPositionChanging(m_sashPosition + diff);
+        int posSashOld = isLive ? m_sashPosition : m_sashPositionCurrent;
+        int posSashNew = OnSashPositionChanging(posSashOld + diff);
         if ( posSashNew == -1 )
         {
             // change not allowed
@@ -313,7 +307,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
             return;
 
         // Erase old tracker
-        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+        if ( !isLive )
         {
             DrawSashTracker(m_oldX, m_oldY);
         }
@@ -341,8 +335,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
 #endif // __WXMSW__
 
         // Draw new one
-        if ((GetWindowStyleFlag() & wxSP_LIVE_UPDATE) == 0)
+        if ( !isLive )
         {
+            m_sashPositionCurrent = posSashNew;
+
             DrawSashTracker(m_oldX, m_oldY);
         }
         else

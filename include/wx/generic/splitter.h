@@ -246,6 +246,9 @@ protected:
     // set the real sash position, sashPos here must be positive
     void DoSetSashPosition(int sashPos);
 
+    // set the cursor appropriate for the current split mode
+    void SetResizeCursor();
+
     wxSplitMode m_splitMode;
     bool        m_permitUnsplitAlways;
     bool        m_needUpdating; // when in live mode, set this to TRUE to resize children in idle
@@ -258,11 +261,12 @@ protected:
     int         m_sashSize;     // Sash width or height
     int         m_sashPosition; // Number of pixels from left or top
     int         m_requestedSashPosition;
+    int         m_sashPositionCurrent; // while dragging
     int         m_firstX;
     int         m_firstY;
     int         m_minimumPaneSize;
-    wxCursor*   m_sashCursorWE;
-    wxCursor*   m_sashCursorNS;
+    wxCursor    m_sashCursorWE;
+    wxCursor    m_sashCursorNS;
     wxPen*      m_sashTrackerPen;
     wxPen*      m_lightShadowPen;
     wxPen*      m_mediumShadowPen;
