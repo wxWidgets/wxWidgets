@@ -29,12 +29,10 @@
 #include "wx/dcclient.h"
 #endif
 
-#include "wx/generic/statusbr.h"
+#include "wx/statusbr.h"
 
-#ifdef __WXMSW__
-#include <windows.h>
-#include "wx/msw/winundef.h"
-#endif
+// with wxUSE_NATIVE_STATUSBAR it is not included from wx/statusbr.h
+#include "wx/generic/statusbr.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
 
