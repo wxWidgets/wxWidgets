@@ -9,7 +9,9 @@ sizers.  This means that the item's GetAdjustedBestSize will be called
 when calculating layout and the return value from that will be used
 for the minimum size.  Added wx.FIXED_MINSIZE flag for when you would
 like the old behavior but you should only need it when your desired
-size is smaller than the item's GetBestSize()
+size is smaller than the item's GetBestSize.  When a window is added
+to a sizer it's initial size, if any, is set as the window's minimal
+size using SetSizeHints if there isn't already a minimal size.
 
 
 2.5.1.5
