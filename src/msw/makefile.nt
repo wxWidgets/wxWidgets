@@ -219,7 +219,8 @@ MSWOBJS = \
   $(OLEDIR)\dropsrc.obj \
   $(OLEDIR)\dataobj.obj \
   $(OLEDIR)\oleutils.obj \
-  $(OLEDIR)\uuid.obj
+  $(OLEDIR)\uuid.obj \
+  $(OLEDIR)\automtn.obj
 
 XPMOBJECTS = 	$(XPMDIR)\crbuffri.obj\
 		$(XPMDIR)\crdatfri.obj\
@@ -734,6 +735,12 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(OLEDIR)/uuid.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/automtn.obj:     $*.$(SRCSUFF)
         echo $(CPPFLAGS)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@

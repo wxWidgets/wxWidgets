@@ -228,7 +228,8 @@ MSWOBJS = \
 #  $(OLEDIR)/dropsrc.$(OBJSUFF) \
 #  $(OLEDIR)/dataobj.$(OBJSUFF) \
 #  $(OLEDIR)/oleutils.$(OBJSUFF) \
-#  $(OLEDIR)/uuid.$(OBJSUFF)
+#  $(OLEDIR)/uuid.$(OBJSUFF) \
+#  $(OLEDIR)/automtn.$(OBJSUFF)
 
 XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/crdatfri.o\

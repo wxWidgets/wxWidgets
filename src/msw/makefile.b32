@@ -239,6 +239,9 @@ MSWOBJS = \
   $(MSWDIR)\dataobj.obj \
   $(MSWDIR)\uuid.obj
 
+# Unfortunately this causes a crash when the oleauto sample starts.
+#  $(MSWDIR)\automtn.obj
+
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 default:	wx
@@ -455,6 +458,8 @@ $(MSWDIR)\dataobj.obj:     $(OLEDIR)\dataobj.$(SRCSUFF)
 $(MSWDIR)\oleutils.obj:     $(OLEDIR)\oleutils.$(SRCSUFF)
 
 $(MSWDIR)\uuid.obj:     $(OLEDIR)\uuid.$(SRCSUFF)
+
+$(MSWDIR)\automtn.obj:     $(OLEDIR)\automtn.$(SRCSUFF)
 
 ########################################################
 # Common objects (always compiled)

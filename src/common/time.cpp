@@ -271,6 +271,38 @@ secondTy wxTime::GetSecond() const
 		  return (secondTy)(((sec % 86400) % 3600) % 60);
 }
 
+secondTy wxTime::GetSecondGMT() const
+/*
+        Return the minute of this wxTime in GMT.
+*/
+{
+        return (secondTy)(((sec % 86400) % 3600) % 60);
+}
+
+int wxTime::GetDay() const
+{
+    wxDate da((wxDate) *this);
+    return da.GetDay();
+}
+
+int wxTime::GetDayOfWeek() const
+{
+    wxDate da((wxDate) *this);
+    return da.GetDayOfWeek();
+}
+
+int wxTime::GetMonth() const
+{
+    wxDate da((wxDate) *this);
+    return da.GetMonth();
+}
+
+int wxTime::GetYear() const
+{
+    wxDate da((wxDate) *this);
+    return da.GetYear();
+}
+
 wxTime wxTime::Max(const wxTime& t) const
 {
         if (t < *this) return *this;

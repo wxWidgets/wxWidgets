@@ -117,34 +117,34 @@ long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
 {
-  wxBuffer = new char[1500];
+    wxBuffer = new char[1500];
 
-  #ifdef wxUSE_VC_CRTDBG
+#ifdef wxUSE_VC_CRTDBG
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
-  #endif // debug build under MS VC++
+#endif // debug build under MS VC++
 
-  wxClassInfo::InitializeClasses();
+    wxClassInfo::InitializeClasses();
 
-  #if wxUSE_RESOURCES
+#if wxUSE_RESOURCES
     wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
-  #endif
+#endif
 
-  wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
-  wxTheColourDatabase->Initialize();
+    wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
+    wxTheColourDatabase->Initialize();
 
-  wxInitializeStockLists();
-  wxInitializeStockObjects();
+    wxInitializeStockLists();
+    wxInitializeStockObjects();
 
-  #if wxUSE_WX_RESOURCES
+#if wxUSE_WX_RESOURCES
     wxInitializeResourceSystem();
-  #endif
+#endif
 
-  wxBitmap::InitStandardHandlers();
+    wxBitmap::InitStandardHandlers();
 
-  #if defined(__WIN95__)
+#if defined(__WIN95__)
     InitCommonControls();
     gs_hRichEdit = LoadLibrary("RICHED32.DLL");
 
@@ -152,60 +152,75 @@ bool wxApp::Initialize()
     {
       wxMessageBox("Could not initialise Rich Edit DLL");
     }
-  #endif
+#endif
 
-  #if  defined(WX_DRAG_DROP)
+    int iMsg = 96;
+			
+   // for OLE, enlarge message queue to be as large as possible
+   while (!SetMessageQueue(iMsg) && (iMsg -= 8));
+
+/*
+    DWORD dwOleVer;
+    dwOleVer = CoBuildVersion();
+	
+    // check the OLE library version
+    if (rmm != HIWORD(dwOleVer))
+    {
+        wxMessageBox("Incorrect version of OLE libraries.");
+        return FALSE;
+    }
+*/
+	
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
       wxFatalError(_("Cannot initialize OLE"));
-  #endif
 
-  #if CTL3D
+#if CTL3D
     if (!Ctl3dRegister(wxhInstance))
       wxFatalError("Cannot register CTL3D");
 
     Ctl3dAutoSubclass(wxhInstance);
-  #endif
+#endif
 
-  g_globalCursor = new wxCursor;
+    g_globalCursor = new wxCursor;
 
-  wxSTD_FRAME_ICON = LoadIcon(wxhInstance, "wxSTD_FRAME");
-  wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDIPARENTFRAME");
-  wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDICHILDFRAME");
+    wxSTD_FRAME_ICON = LoadIcon(wxhInstance, "wxSTD_FRAME");
+    wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDIPARENTFRAME");
+    wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxSTD_MDICHILDFRAME");
 
-  wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_FRAME");
-  wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDIPARENTFRAME");
-  wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDICHILDFRAME");
+    wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_FRAME");
+    wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDIPARENTFRAME");
+    wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, "wxDEFAULT_MDICHILDFRAME");
 
-  RegisterWindowClasses();
+    RegisterWindowClasses();
 
-  // Create the brush for disabling bitmap buttons
+    // Create the brush for disabling bitmap buttons
 
-  LOGBRUSH lb ;
-  lb.lbStyle = BS_PATTERN;
-  lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" ) ;
-  wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
-  ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
+    LOGBRUSH lb ;
+    lb.lbStyle = BS_PATTERN;
+    lb.lbHatch = (int)LoadBitmap( wxhInstance, "wxDISABLE_BUTTON_BITMAP" ) ;
+    wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
+    ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
 
-  #if wxUSE_PENWINDOWS
+#if wxUSE_PENWINDOWS
     wxRegisterPenWin();
-  #endif
+#endif
 
-  wxWinHandleList = new wxList(wxKEY_INTEGER);
+    wxWinHandleList = new wxList(wxKEY_INTEGER);
 
-  // This is to foil optimizations in Visual C++ that
-  // throw out dummy.obj.
-  #if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
+    // This is to foil optimizations in Visual C++ that
+    // throw out dummy.obj.
+#if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
     extern char wxDummyChar;
     if (wxDummyChar) wxDummyChar++;
-  #endif
+#endif
 
-  wxSetKeyboardHook(TRUE);
+    wxSetKeyboardHook(TRUE);
 
-  wxModule::RegisterModules();
-  if (!wxModule::InitializeModules())
-    return FALSE;
-  return TRUE;
+    wxModule::RegisterModules();
+    if (!wxModule::InitializeModules())
+        return FALSE;
+    return TRUE;
 }
 
 //// RegisterWindowClasses
@@ -471,9 +486,7 @@ void wxApp::CleanUp()
   if ( wxDisableButtonBrush )
     ::DeleteObject( wxDisableButtonBrush ) ;
 
-#if     defined(WX_DRAG_DROP)
   ::OleUninitialize();
-#endif
 
 #if CTL3D
   Ctl3dUnregister(wxhInstance);
