@@ -50,7 +50,6 @@ wxTreeCtrl(parent, id, pos, size, style)
 
 void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& WXUNUSED(event))
 {
-#if 0
     long sel = GetSelection();
     if (sel == -1)
         return;
@@ -58,16 +57,17 @@ void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& WXUNUSED(event))
     if (GetItemData(sel) == 0)
         return;
     
-    wxItemResource* res = (wxResourceTreeData *)GetItemData(sel)->GetResource();
+    wxItemResource* res = ((wxResourceTreeData *)GetItemData(sel))->GetResource();
+
     wxString resType(res->GetType());
-    if (resType != "wxDialog" && resType != "wxDialogBox" && resType != "wxPanel")
-        return;
-    
+
     wxResourceEditorFrame *frame = (wxResourceEditorFrame *)wxWindow::GetParent();
     wxResourceManager *manager = frame->manager;
-    
-    manager->EditSelectedResource();
-#endif
+
+    if (resType != "wxDialog" && resType != "wxDialogBox" && resType != "wxPanel")
+        manager->GetCurrentResourceManager()->EditWindow(manager->FindWindowForResource(res));
+    else
+        manager->EditSelectedResource();
 }
 
 void wxResourceEditorProjectTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
