@@ -769,6 +769,16 @@ enum {
 };
 
 
+enum wxKillError
+{
+    wxKILL_OK,              // no error
+    wxKILL_BAD_SIGNAL,      // no such signal
+    wxKILL_ACCESS_DENIED,   // permission denied
+    wxKILL_NO_PROCESS,      // no such process
+    wxKILL_ERROR            // another, unspecified error
+};
+
+
 class wxProcessEvent : public wxEvent {
 public:
     wxProcessEvent(int id = 0, int pid = 0, int exitcode = 0);
@@ -800,6 +810,23 @@ IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 
 %name(wxProcess)class wxPyProcess : public wxEvtHandler {
 public:
+    // kill the process with the given PID
+    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM);
+
+    // test if the given process exists
+    static bool Exists(int pid);
+
+    // this function replaces the standard popen() one: it launches a process
+    // asynchronously and allows the caller to get the streams connected to its
+    // std{in|out|err}
+    //
+    // on error NULL is returned, in any case the process object will be
+    // deleted automatically when the process terminates and should *not* be
+    // deleted by the caller
+    static wxPyProcess *Open(const wxString& cmd);
+
+
+
     wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
     %addmethods { void Destroy() { delete self; } }
 

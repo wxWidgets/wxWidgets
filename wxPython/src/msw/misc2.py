@@ -1198,6 +1198,15 @@ wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
 
 wxLog_IsAllowedTraceMask = misc2c.wxLog_IsAllowedTraceMask
 
+wxProcess_Kill = misc2c.wxProcess_Kill
+
+wxProcess_Exists = misc2c.wxProcess_Exists
+
+def wxProcess_Open(*_args, **_kwargs):
+    val = apply(misc2c.wxProcess_Open,_args,_kwargs)
+    if val: val = wxProcessPtr(val)
+    return val
+
 wxFileType_ExpandCommand = misc2c.wxFileType_ExpandCommand
 
 wxMimeTypesManager_IsOfType = misc2c.wxMimeTypesManager_IsOfType
@@ -1335,6 +1344,11 @@ wxTraceResAlloc = misc2c.wxTraceResAlloc
 wxTraceRefCount = misc2c.wxTraceRefCount
 wxTraceOleCalls = misc2c.wxTraceOleCalls
 wxEVT_END_PROCESS = misc2c.wxEVT_END_PROCESS
+wxKILL_OK = misc2c.wxKILL_OK
+wxKILL_BAD_SIGNAL = misc2c.wxKILL_BAD_SIGNAL
+wxKILL_ACCESS_DENIED = misc2c.wxKILL_ACCESS_DENIED
+wxKILL_NO_PROCESS = misc2c.wxKILL_NO_PROCESS
+wxKILL_ERROR = misc2c.wxKILL_ERROR
 wxEXEC_ASYNC = misc2c.wxEXEC_ASYNC
 wxEXEC_SYNC = misc2c.wxEXEC_SYNC
 wxEXEC_NOHIDE = misc2c.wxEXEC_NOHIDE
