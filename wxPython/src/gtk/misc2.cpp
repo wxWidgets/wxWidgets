@@ -160,26 +160,6 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 
 
 #include <wx/generic/dragimgg.h>
-
-
-wxGenericDragImage* wxDragIcon(const wxIcon& image,
-                               const wxCursor& cursor) {
-    return new wxGenericDragImage(image, cursor);
-}
-
-wxGenericDragImage* wxDragString(const wxString& str,
-                                 const wxCursor& cursor) {
-    return new wxGenericDragImage(str, cursor);
-}
-
-wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id) {
-    return new wxGenericDragImage(treeCtrl, id);
-}
-
-wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id) {
-    return new wxGenericDragImage(listCtrl, id);
-}
-
  // C++ version of wxProcess derived class
 
 class wxPyProcess : public wxProcess {
@@ -194,6 +174,7 @@ public:
 };
 
 IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
+
 
 #if !wxUSE_JOYSTICK && !defined(__WXMSW__)
 // A C++ stub class for wxJoystick for platforms that don't have it.
@@ -258,14 +239,14 @@ class wxWave : public wxObject
 {
 public:
     wxWave(const wxString& fileName, bool isResource = FALSE) {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
     wxWave(int size, const wxByte* data) {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     }
 
     ~wxWave() {}
@@ -1893,181 +1874,6 @@ static PyObject *_wrap_wxCreateFileTipProvider(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-static PyObject *_wrap_wxDragIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGenericDragImage * _result;
-    wxIcon * _arg0;
-    wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "image","cursor", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxDragIcon",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragIcon. Expected _wxIcon_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDragIcon. Expected _wxCursor_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragIcon(*_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxDragString(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGenericDragImage * _result;
-    wxString * _arg0;
-    wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
-    PyObject * _obj0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "str","cursor", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxDragString",_kwnames,&_obj0,&_argo1)) 
-        return NULL;
-{
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
-}
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDragString. Expected _wxCursor_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragString(*_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxDragTreeItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGenericDragImage * _result;
-    wxTreeCtrl * _arg0;
-    wxTreeItemId * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "treeCtrl","id", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDragTreeItem",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragTreeItem. Expected _wxTreeCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDragTreeItem. Expected _wxTreeItemId_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragTreeItem(*_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxDragListItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGenericDragImage * _result;
-    wxListCtrl * _arg0;
-    long  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "listCtrl","id", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxDragListItem",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragListItem. Expected _wxListCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragListItem(*_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxSysErrorCode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     unsigned long  _result;
@@ -3614,6 +3420,185 @@ static PyObject *_wrap_new_wxDragImage(PyObject *self, PyObject *args, PyObject 
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxGenericDragImage *)new_wxDragImage(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxDragIcon(_swigarg0,_swigarg1) (new wxGenericDragImage(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxDragIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDragImage * _result;
+    wxIcon * _arg0;
+    wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "image","cursor", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragIcon",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragIcon. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGenericDragImage *)new_wxDragIcon(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxDragString(_swigarg0,_swigarg1) (new wxGenericDragImage(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxDragString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDragImage * _result;
+    wxString * _arg0;
+    wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
+    PyObject * _obj0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "str","cursor", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragString",_kwnames,&_obj0,&_argo1)) 
+        return NULL;
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg0 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
+#endif
+}
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxCursor_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragString. Expected _wxCursor_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGenericDragImage *)new_wxDragString(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define new_wxDragTreeItem(_swigarg0,_swigarg1) (new wxGenericDragImage(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxDragTreeItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDragImage * _result;
+    wxTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "treeCtrl","id", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:new_wxDragTreeItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragTreeItem. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxDragTreeItem. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGenericDragImage *)new_wxDragTreeItem(*_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxGenericDragImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxDragListItem(_swigarg0,_swigarg1) (new wxGenericDragImage(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxDragListItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDragImage * _result;
+    wxListCtrl * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "listCtrl","id", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:new_wxDragListItem",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxDragListItem. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxGenericDragImage *)new_wxDragListItem(*_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -7104,6 +7089,10 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxDragImage_BeginDrag", (PyCFunction) _wrap_wxDragImage_BeginDrag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_SetBackingBitmap", (PyCFunction) _wrap_wxDragImage_SetBackingBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxDragImage", (PyCFunction) _wrap_delete_wxDragImage, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDragListItem", (PyCFunction) _wrap_new_wxDragListItem, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDragTreeItem", (PyCFunction) _wrap_new_wxDragTreeItem, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDragString", (PyCFunction) _wrap_new_wxDragString, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDragIcon", (PyCFunction) _wrap_new_wxDragIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDragImage", (PyCFunction) _wrap_new_wxDragImage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyTipProvider", (PyCFunction) _wrap_new_wxPyTipProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTipProvider_GetCurrentTip", (PyCFunction) _wrap_wxTipProvider_GetCurrentTip, METH_VARARGS | METH_KEYWORDS },
@@ -7156,10 +7145,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxLogFatalError", (PyCFunction) _wrap_wxLogFatalError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSysErrorMsg", (PyCFunction) _wrap_wxSysErrorMsg, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSysErrorCode", (PyCFunction) _wrap_wxSysErrorCode, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDragListItem", (PyCFunction) _wrap_wxDragListItem, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDragTreeItem", (PyCFunction) _wrap_wxDragTreeItem, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDragString", (PyCFunction) _wrap_wxDragString, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDragIcon", (PyCFunction) _wrap_wxDragIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCreateFileTipProvider", (PyCFunction) _wrap_wxCreateFileTipProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "wxShowTip", (PyCFunction) _wrap_wxShowTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxThread_IsMain", (PyCFunction) _wrap_wxThread_IsMain, METH_VARARGS | METH_KEYWORDS },
@@ -7271,12 +7256,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_class_wxProcessEvent",SwigwxProcessEventTowxEvent},
     { "_class_wxEvent","_wxProcessEvent",SwigwxProcessEventTowxEvent},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},

@@ -67,6 +67,10 @@ class wxNotebookPtr(wxControlPtr):
     def SetImageList(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_SetImageList,(self,) + _args, _kwargs)
         return val
+    def AssignImageList(self, *_args, **_kwargs):
+        val = apply(windows2c.wxNotebook_AssignImageList,(self,) + _args, _kwargs)
+        _args[0].thisown = 0
+        return val
     def GetImageList(self, *_args, **_kwargs):
         val = apply(windows2c.wxNotebook_GetImageList,(self,) + _args, _kwargs)
         return val

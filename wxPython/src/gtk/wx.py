@@ -200,7 +200,6 @@ wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
 wxFRAME_FLOAT_ON_PARENT = wxc.wxFRAME_FLOAT_ON_PARENT
 wxFRAME_NO_WINDOW_MENU = wxc.wxFRAME_NO_WINDOW_MENU
 wxFRAME_NO_TASKBAR = wxc.wxFRAME_NO_TASKBAR
-wxFRAME_EX_CONTEXTHELP = wxc.wxFRAME_EX_CONTEXTHELP
 wxED_CLIENT_MARGIN = wxc.wxED_CLIENT_MARGIN
 wxED_BUTTONS_BOTTOM = wxc.wxED_BUTTONS_BOTTOM
 wxED_BUTTONS_RIGHT = wxc.wxED_BUTTONS_RIGHT
@@ -247,6 +246,7 @@ wxTE_RICH = wxc.wxTE_RICH
 wxTE_MULTILINE = wxc.wxTE_MULTILINE
 wxTE_AUTO_SCROLL = wxc.wxTE_AUTO_SCROLL
 wxTE_NO_VSCROLL = wxc.wxTE_NO_VSCROLL
+wxTE_AUTO_URL = wxc.wxTE_AUTO_URL
 wxCB_SIMPLE = wxc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxc.wxCB_DROPDOWN
 wxCB_SORT = wxc.wxCB_SORT
@@ -276,12 +276,6 @@ wxST_SIZEGRIP = wxc.wxST_SIZEGRIP
 wxST_NO_AUTORESIZE = wxc.wxST_NO_AUTORESIZE
 wxBU_AUTODRAW = wxc.wxBU_AUTODRAW
 wxBU_NOAUTODRAW = wxc.wxBU_NOAUTODRAW
-wxTR_HAS_BUTTONS = wxc.wxTR_HAS_BUTTONS
-wxTR_EDIT_LABELS = wxc.wxTR_EDIT_LABELS
-wxTR_LINES_AT_ROOT = wxc.wxTR_LINES_AT_ROOT
-wxTR_MULTIPLE = wxc.wxTR_MULTIPLE
-wxTR_SINGLE = wxc.wxTR_SINGLE
-wxTR_HAS_VARIABLE_ROW_HEIGHT = wxc.wxTR_HAS_VARIABLE_ROW_HEIGHT
 wxSP_VERTICAL = wxc.wxSP_VERTICAL
 wxSP_HORIZONTAL = wxc.wxSP_HORIZONTAL
 wxSP_ARROW_KEYS = wxc.wxSP_ARROW_KEYS
@@ -705,6 +699,8 @@ wxEVT_COMMAND_CHECKLISTBOX_TOGGLED = wxc.wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
 wxEVT_COMMAND_SPINCTRL_UPDATED = wxc.wxEVT_COMMAND_SPINCTRL_UPDATED
 wxEVT_COMMAND_TEXT_UPDATED = wxc.wxEVT_COMMAND_TEXT_UPDATED
 wxEVT_COMMAND_TEXT_ENTER = wxc.wxEVT_COMMAND_TEXT_ENTER
+wxEVT_COMMAND_TEXT_URL = wxc.wxEVT_COMMAND_TEXT_URL
+wxEVT_COMMAND_TEXT_MAXLEN = wxc.wxEVT_COMMAND_TEXT_MAXLEN
 wxEVT_COMMAND_MENU_SELECTED = wxc.wxEVT_COMMAND_MENU_SELECTED
 wxEVT_COMMAND_SLIDER_UPDATED = wxc.wxEVT_COMMAND_SLIDER_UPDATED
 wxEVT_COMMAND_RADIOBOX_SELECTED = wxc.wxEVT_COMMAND_RADIOBOX_SELECTED
@@ -784,7 +780,6 @@ wxEVT_MENU_CHAR = wxc.wxEVT_MENU_CHAR
 wxEVT_MENU_INIT = wxc.wxEVT_MENU_INIT
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
 wxEVT_POPUP_MENU_INIT = wxc.wxEVT_POPUP_MENU_INIT
-wxEVT_CONTEXT_MENU = wxc.wxEVT_CONTEXT_MENU
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
 wxEVT_QUERY_NEW_PALETTE = wxc.wxEVT_QUERY_NEW_PALETTE
@@ -798,8 +793,6 @@ wxEVT_DRAW_ITEM = wxc.wxEVT_DRAW_ITEM
 wxEVT_MEASURE_ITEM = wxc.wxEVT_MEASURE_ITEM
 wxEVT_COMPARE_ITEM = wxc.wxEVT_COMPARE_ITEM
 wxEVT_INIT_DIALOG = wxc.wxEVT_INIT_DIALOG
-wxEVT_HELP = wxc.wxEVT_HELP
-wxEVT_DETAILED_HELP = wxc.wxEVT_DETAILED_HELP
 wxEVT_IDLE = wxc.wxEVT_IDLE
 wxEVT_UPDATE_UI = wxc.wxEVT_UPDATE_UI
 wxEVT_COMMAND_LEFT_CLICK = wxc.wxEVT_COMMAND_LEFT_CLICK
@@ -1183,6 +1176,12 @@ def EVT_TEXT(win, id, func):
 def EVT_TEXT_ENTER(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TEXT_ENTER, func)
 
+def EVT_TEXT_URL(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TEXT_URL, func)
+
+def EVT_TEXT_MAXLEN(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TEXT_MAXLEN, func)
+
 def EVT_MENU(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_MENU_SELECTED, func)
 
@@ -1259,62 +1258,6 @@ def EVT_NOTEBOOK_PAGE_CHANGING(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, func)
 
 
-# wxTreeCtrl events
-def EVT_TREE_BEGIN_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_DRAG, func)
-
-def EVT_TREE_BEGIN_RDRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
-
-def EVT_TREE_END_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
-
-def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
-
-def EVT_TREE_END_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_LABEL_EDIT, func)
-
-def EVT_TREE_GET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_GET_INFO, func)
-
-def EVT_TREE_SET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SET_INFO, func)
-
-def EVT_TREE_ITEM_EXPANDED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDED, func)
-
-def EVT_TREE_ITEM_EXPANDING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_EXPANDING, func)
-
-def EVT_TREE_ITEM_COLLAPSED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSED, func)
-
-def EVT_TREE_ITEM_COLLAPSING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_COLLAPSING, func)
-
-def EVT_TREE_SEL_CHANGED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGED, func)
-
-def EVT_TREE_SEL_CHANGING(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_SEL_CHANGING, func)
-
-def EVT_TREE_KEY_DOWN(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_KEY_DOWN, func)
-
-def EVT_TREE_DELETE_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_DELETE_ITEM, func)
-
-def EVT_TREE_ITEM_ACTIVATED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_ACTIVATED, func)
-
-def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, func)
-
-def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
-
-
 # wxSpinButton
 def EVT_SPIN_UP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_LINEUP, func)
@@ -1324,8 +1267,6 @@ def EVT_SPIN_DOWN(win, id, func):
 
 def EVT_SPIN(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
-
-
 
 
 # wxTaskBarIcon
@@ -1363,58 +1304,6 @@ def EVT_QUERY_LAYOUT_INFO(win, func):
 
 def EVT_CALCULATE_LAYOUT(win, func):
     win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
-
-
-# wxListCtrl
-def EVT_LIST_BEGIN_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_DRAG, func)
-
-def EVT_LIST_BEGIN_RDRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_RDRAG, func)
-
-def EVT_LIST_BEGIN_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT, func)
-
-def EVT_LIST_END_LABEL_EDIT(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_END_LABEL_EDIT, func)
-
-def EVT_LIST_DELETE_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ITEM, func)
-
-def EVT_LIST_DELETE_ALL_ITEMS(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS, func)
-
-def EVT_LIST_GET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_GET_INFO, func)
-
-def EVT_LIST_SET_INFO(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_SET_INFO, func)
-
-def EVT_LIST_ITEM_SELECTED(win, id, func):
-    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
-
-def EVT_LIST_ITEM_DESELECTED(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
-
-def EVT_LIST_KEY_DOWN(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_KEY_DOWN, func)
-
-def EVT_LIST_INSERT_ITEM(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_INSERT_ITEM, func)
-
-def EVT_LIST_COL_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
-
-def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, func)
-
-def EVT_LIST_ITEM_MIDDLE_CLICK(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, func)
-
-def EVT_LIST_ITEM_ACTIVATED(win, id, func):
-    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
-
-
 
 
 #wxSplitterWindow
@@ -1464,6 +1353,24 @@ def EVT_TOGGLEBUTTON(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, func)
 
 
+
+# Help events
+def EVT_HELP(win, id, func):
+    win.Connect(id, -1, wxEVT_HELP, func)
+
+def EVT_HELP_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_HELP, func)
+
+def EVT_DETAILED_HELP(win, id, func):
+    win.Connect(id, -1, wxEVT_DETAILED_HELP, func)
+
+def EVT_DETAILED_HELP_RANGE(win, id, id2, func):
+    win.Connect(id, id2, wxEVT_DETAILED_HELP, func)
+
+def EVT_CONTEXT_MENU(win, func):
+    win.Connect(-1, -1, wxEVT_CONTEXT_MENU, func)
+
+
 #----------------------------------------------------------------------
 
 class wxTimer(wxPyTimer):
@@ -1492,6 +1399,30 @@ wxNamedColor = wxNamedColour
 wxNoRefBitmap       = wxBitmap
 wxPyDefaultPosition = wxDefaultPosition
 wxPyDefaultSize     = wxDefaultSize
+
+
+#----------------------------------------------------------------------
+# wxGTK sets the locale when initialized.  Doing this at the Python
+# level should set it up to match what GTK is doing at the C level.
+try:
+    import locale
+    locale.setlocale(locale.LC_ALL, "")
+except:
+    pass
+
+
+
+#----------------------------------------------------------------------
+# wxWindows version numbers.  wxPython version is in __version__.
+
+wxMAJOR_VERSION   = wxc.wxMAJOR_VERSION
+wxMINOR_VERSION   = wxc.wxMINOR_VERSION
+wxRELEASE_NUMBER  = wxc.wxRELEASE_NUMBER
+wxVERSION_STRING  = wxc.wxVERSION_STRING
+wxVERSION_NUMBER  = wxc.wxVERSION_NUMBER
+
+wxVERSION = (wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER)
+
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to

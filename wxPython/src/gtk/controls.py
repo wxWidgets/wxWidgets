@@ -58,12 +58,6 @@ class wxButtonPtr(wxControlPtr):
     def SetForegroundColour(self, *_args, **_kwargs):
         val = apply(controlsc.wxButton_SetForegroundColour,(self,) + _args, _kwargs)
         return val
-    def SetImageLabel(self, *_args, **_kwargs):
-        val = apply(controlsc.wxButton_SetImageLabel,(self,) + _args, _kwargs)
-        return val
-    def SetImageMargins(self, *_args, **_kwargs):
-        val = apply(controlsc.wxButton_SetImageMargins,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxButton instance at %s>" % (self.this,)
 class wxButton(wxButtonPtr):

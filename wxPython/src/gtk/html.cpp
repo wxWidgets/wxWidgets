@@ -148,25 +148,25 @@ public:
     }
 
     void OnExit() {
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         PyObject* arg = Py_BuildValue("()");
         PyObject* obj = PyInstance_New(m_tagHandlerClass, arg, NULL);
         Py_DECREF(arg);
-        wxPySaveThread(doSave);
+        wxPyEndBlockThreads(state);
 
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
@@ -193,6 +193,7 @@ private:
     }
 
 class wxPyHtmlWindow : public wxHtmlWindow {
+    DECLARE_ABSTRACT_CLASS(wxPyHtmlWindow);
 public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
@@ -208,19 +209,20 @@ public:
     PYPRIVATE;
 };
 
-
+IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
-    bool doSave = wxPyRestoreThread();
-    if (wxPyCBH_findCallback(m_myInst, "OnLinkClicked")) {
+    bool found;
+    wxPyTState* state = wxPyBeginBlockThreads();
+    if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked)"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, "wxHtmlLinkInfo", 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
     }
-    else
+    wxPyEndBlockThreads(state);
+    if (! found)
         wxHtmlWindow::OnLinkClicked(link);
-    wxPySaveThread(doSave);
 }
 void wxPyHtmlWindow::base_OnLinkClicked(const wxHtmlLinkInfo& link) {
     wxHtmlWindow::OnLinkClicked(link);
@@ -6316,6 +6318,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxHtmlCell","_class_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlWordCell",SwigwxHtmlWordCellTowxHtmlCell},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_wxPyHtmlTagHandler","_class_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler},
     { "_wxPyHtmlTagHandler","_wxPyHtmlWinTagHandler",SwigwxPyHtmlWinTagHandlerTowxPyHtmlTagHandler},
     { "_EBool","_wxCoord",0},
@@ -6324,6 +6327,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_class_wxPanel","_class_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxPanel},
     { "_class_wxPanel","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxPanel},
     { "_signed_int","_wxCoord",0},

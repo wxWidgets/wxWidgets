@@ -643,8 +643,9 @@ static wxPyCoreAPI API = {
     SWIG_addvarlink,
     SWIG_newvarlink,
 
-    wxPySaveThread,
-    wxPyRestoreThread,
+    wxPyBeginBlockThreads,
+    wxPyEndBlockThreads,
+
     wxPyConstructObject,
     wxPy_ConvertList,
 
@@ -1755,12 +1756,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
@@ -1885,7 +1888,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxFRAME_FLOAT_ON_PARENT", PyInt_FromLong((long) wxFRAME_FLOAT_ON_PARENT));
 	 PyDict_SetItemString(d,"wxFRAME_NO_WINDOW_MENU", PyInt_FromLong((long) wxFRAME_NO_WINDOW_MENU));
 	 PyDict_SetItemString(d,"wxFRAME_NO_TASKBAR", PyInt_FromLong((long) wxFRAME_NO_TASKBAR));
-	 PyDict_SetItemString(d,"wxFRAME_EX_CONTEXTHELP", PyInt_FromLong((long) wxFRAME_EX_CONTEXTHELP));
 	 PyDict_SetItemString(d,"wxED_CLIENT_MARGIN", PyInt_FromLong((long) wxED_CLIENT_MARGIN));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_BOTTOM", PyInt_FromLong((long) wxED_BUTTONS_BOTTOM));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_RIGHT", PyInt_FromLong((long) wxED_BUTTONS_RIGHT));
@@ -1932,6 +1934,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
 	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
 	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
+	 PyDict_SetItemString(d,"wxTE_AUTO_URL", PyInt_FromLong((long) wxTE_AUTO_URL));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
 	 PyDict_SetItemString(d,"wxCB_SORT", PyInt_FromLong((long) wxCB_SORT));
@@ -1961,12 +1964,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxST_NO_AUTORESIZE", PyInt_FromLong((long) wxST_NO_AUTORESIZE));
 	 PyDict_SetItemString(d,"wxBU_AUTODRAW", PyInt_FromLong((long) wxBU_AUTODRAW));
 	 PyDict_SetItemString(d,"wxBU_NOAUTODRAW", PyInt_FromLong((long) wxBU_NOAUTODRAW));
-	 PyDict_SetItemString(d,"wxTR_HAS_BUTTONS", PyInt_FromLong((long) wxTR_HAS_BUTTONS));
-	 PyDict_SetItemString(d,"wxTR_EDIT_LABELS", PyInt_FromLong((long) wxTR_EDIT_LABELS));
-	 PyDict_SetItemString(d,"wxTR_LINES_AT_ROOT", PyInt_FromLong((long) wxTR_LINES_AT_ROOT));
-	 PyDict_SetItemString(d,"wxTR_MULTIPLE", PyInt_FromLong((long) wxTR_MULTIPLE));
-	 PyDict_SetItemString(d,"wxTR_SINGLE", PyInt_FromLong((long) wxTR_SINGLE));
-	 PyDict_SetItemString(d,"wxTR_HAS_VARIABLE_ROW_HEIGHT", PyInt_FromLong((long) wxTR_HAS_VARIABLE_ROW_HEIGHT));
 	 PyDict_SetItemString(d,"wxSP_VERTICAL", PyInt_FromLong((long) wxSP_VERTICAL));
 	 PyDict_SetItemString(d,"wxSP_HORIZONTAL", PyInt_FromLong((long) wxSP_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSP_ARROW_KEYS", PyInt_FromLong((long) wxSP_ARROW_KEYS));
@@ -2390,6 +2387,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPINCTRL_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_SPINCTRL_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_ENTER));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_URL", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_URL));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_TEXT_MAXLEN", PyInt_FromLong((long) wxEVT_COMMAND_TEXT_MAXLEN));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_MENU_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_MENU_SELECTED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SLIDER_UPDATED", PyInt_FromLong((long) wxEVT_COMMAND_SLIDER_UPDATED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_RADIOBOX_SELECTED", PyInt_FromLong((long) wxEVT_COMMAND_RADIOBOX_SELECTED));
@@ -2469,7 +2468,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MENU_INIT", PyInt_FromLong((long) wxEVT_MENU_INIT));
 	 PyDict_SetItemString(d,"wxEVT_MENU_HIGHLIGHT", PyInt_FromLong((long) wxEVT_MENU_HIGHLIGHT));
 	 PyDict_SetItemString(d,"wxEVT_POPUP_MENU_INIT", PyInt_FromLong((long) wxEVT_POPUP_MENU_INIT));
-	 PyDict_SetItemString(d,"wxEVT_CONTEXT_MENU", PyInt_FromLong((long) wxEVT_CONTEXT_MENU));
 	 PyDict_SetItemString(d,"wxEVT_SYS_COLOUR_CHANGED", PyInt_FromLong((long) wxEVT_SYS_COLOUR_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_SETTING_CHANGED", PyInt_FromLong((long) wxEVT_SETTING_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_QUERY_NEW_PALETTE", PyInt_FromLong((long) wxEVT_QUERY_NEW_PALETTE));
@@ -2483,8 +2481,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MEASURE_ITEM", PyInt_FromLong((long) wxEVT_MEASURE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_COMPARE_ITEM", PyInt_FromLong((long) wxEVT_COMPARE_ITEM));
 	 PyDict_SetItemString(d,"wxEVT_INIT_DIALOG", PyInt_FromLong((long) wxEVT_INIT_DIALOG));
-	 PyDict_SetItemString(d,"wxEVT_HELP", PyInt_FromLong((long) wxEVT_HELP));
-	 PyDict_SetItemString(d,"wxEVT_DETAILED_HELP", PyInt_FromLong((long) wxEVT_DETAILED_HELP));
 	 PyDict_SetItemString(d,"wxEVT_IDLE", PyInt_FromLong((long) wxEVT_IDLE));
 	 PyDict_SetItemString(d,"wxEVT_UPDATE_UI", PyInt_FromLong((long) wxEVT_UPDATE_UI));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_LEFT_CLICK", PyInt_FromLong((long) wxEVT_COMMAND_LEFT_CLICK));
@@ -2533,6 +2529,14 @@ SWIGEXPORT(void) initwxc() {
     initclip_dndc();
     initstreamsc();
     initfilesysc();
+
+
+    PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));
+    PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long)wxMINOR_VERSION ));
+    PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long)wxRELEASE_NUMBER ));
+    PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
+
 
 {
    int i;

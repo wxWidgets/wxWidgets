@@ -104,10 +104,10 @@ public:
     void SetDefault();
     void SetBackgroundColour(const wxColour& colour);
     void SetForegroundColour(const wxColour& colour);
-
+#ifdef __WXMSW__
     void SetImageLabel(const wxBitmap& bitmap);
     void SetImageMargins(wxCoord x, wxCoord y);
-
+#endif
     static wxSize GetDefaultSize();
 };
 

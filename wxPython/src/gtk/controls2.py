@@ -53,6 +53,18 @@ def EVT_LIST_INSERT_ITEM(win, id, func):
 def EVT_LIST_COL_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
 
+def EVT_LIST_COL_RIGHT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK, func)
+
+def EVT_LIST_COL_BEGIN_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG, func)
+
+def EVT_LIST_COL_DRAGGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_DRAGGING, func)
+
+def EVT_LIST_COL_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_END_DRAG, func)
+
 def EVT_LIST_ITEM_RIGHT_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, func)
 
@@ -371,6 +383,12 @@ class wxListEventPtr(wxNotifyEventPtr):
     def GetItem(self, *_args, **_kwargs):
         val = apply(controls2c.wxListEvent_GetItem,(self,) + _args, _kwargs)
         return val
+    def GetCacheFrom(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetCacheFrom,(self,) + _args, _kwargs)
+        return val
+    def GetCacheTo(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListEvent_GetCacheTo,(self,) + _args, _kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "m_code" :
             controls2c.wxListEvent_m_code_set(self,value)
@@ -413,8 +431,9 @@ class wxListEventPtr(wxNotifyEventPtr):
     def __repr__(self):
         return "<C wxListEvent instance at %s>" % (self.this,)
 class wxListEvent(wxListEventPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxListEvent,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -609,6 +628,37 @@ class wxListCtrlPtr(wxControlPtr):
         val.thisown = 1
         return val
     
+    
+    # Some helpers...
+
+    def Select(self, idx, on=1):
+        '''[de]select an item'''
+        if on: state = wxLIST_STATE_SELECTED
+        else: state = 0
+        self.SetItemState(idx, state, wxLIST_STATE_SELECTED)
+
+    def Focus(self, idx):
+        '''Focus and show the given item'''
+        self.SetItemState(idx, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.EnsureVisible(idx)
+
+    def GetFocusedItem(self):
+        '''get the currently focused item or -1 if none'''
+        return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
+
+    def IsSelected(self, idx):
+        '''return TRUE if the item is selected'''
+        return self.GetItemState(idx, wxLIST_STATE_SELECTED) != 0
+
+    def SetColumnImage(self, col, image):
+        item = wxListItem()
+        item.SetMask(wxLIST_MASK_IMAGE)
+        item.SetImage(image)
+        self.SetColumn(col, item)
+
+    def ClearColumnImage(self, col):
+        self.SetColumnImage(col, -1)
+    
 class wxListCtrl(wxListCtrlPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controls2c.new_wxListCtrl,_args,_kwargs)
@@ -619,6 +669,52 @@ class wxListCtrl(wxListCtrlPtr):
 
 def wxPreListCtrl(*_args,**_kwargs):
     val = wxListCtrlPtr(apply(controls2c.new_wxPreListCtrl,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
+class wxListViewPtr(wxListCtrlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_Create,(self,) + _args, _kwargs)
+        return val
+    def Select(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_Select,(self,) + _args, _kwargs)
+        return val
+    def Focus(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_Focus,(self,) + _args, _kwargs)
+        return val
+    def GetFocusedItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_GetFocusedItem,(self,) + _args, _kwargs)
+        return val
+    def GetNextSelected(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_GetNextSelected,(self,) + _args, _kwargs)
+        return val
+    def GetFirstSelected(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_GetFirstSelected,(self,) + _args, _kwargs)
+        return val
+    def IsSelected(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_IsSelected,(self,) + _args, _kwargs)
+        return val
+    def SetColumnImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_SetColumnImage,(self,) + _args, _kwargs)
+        return val
+    def ClearColumnImage(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListView_ClearColumnImage,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxListView instance at %s>" % (self.this,)
+class wxListView(wxListViewPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controls2c.new_wxListView,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxPreListView(*_args,**_kwargs):
+    val = wxListViewPtr(apply(controls2c.new_wxPreListView,_args,_kwargs))
     val.thisown = 1
     return val
 
@@ -1027,6 +1123,10 @@ wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_RIGHT_C
 wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = controls2c.wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_LIST_ITEM_ACTIVATED = controls2c.wxEVT_COMMAND_LIST_ITEM_ACTIVATED
 wxEVT_COMMAND_LIST_CACHE_HINT = controls2c.wxEVT_COMMAND_LIST_CACHE_HINT
+wxEVT_COMMAND_LIST_COL_RIGHT_CLICK = controls2c.wxEVT_COMMAND_LIST_COL_RIGHT_CLICK
+wxEVT_COMMAND_LIST_COL_BEGIN_DRAG = controls2c.wxEVT_COMMAND_LIST_COL_BEGIN_DRAG
+wxEVT_COMMAND_LIST_COL_DRAGGING = controls2c.wxEVT_COMMAND_LIST_COL_DRAGGING
+wxEVT_COMMAND_LIST_COL_END_DRAG = controls2c.wxEVT_COMMAND_LIST_COL_END_DRAG
 wxLC_VRULES = controls2c.wxLC_VRULES
 wxLC_HRULES = controls2c.wxLC_HRULES
 wxLC_ICON = controls2c.wxLC_ICON
@@ -1046,6 +1146,7 @@ wxLC_SORT_DESCENDING = controls2c.wxLC_SORT_DESCENDING
 wxLC_MASK_TYPE = controls2c.wxLC_MASK_TYPE
 wxLC_MASK_ALIGN = controls2c.wxLC_MASK_ALIGN
 wxLC_MASK_SORT = controls2c.wxLC_MASK_SORT
+wxLC_USER_TEXT = controls2c.wxLC_USER_TEXT
 wxLIST_MASK_STATE = controls2c.wxLIST_MASK_STATE
 wxLIST_MASK_TEXT = controls2c.wxLIST_MASK_TEXT
 wxLIST_MASK_IMAGE = controls2c.wxLIST_MASK_IMAGE

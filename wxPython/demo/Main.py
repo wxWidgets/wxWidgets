@@ -195,6 +195,7 @@ class wxPythonDemo(wxFrame):
         else:  # hopefully I can remove this hacky code soon, see bug #216861
             panel = wxPanel(self.nb, -1, style=wxCLIP_CHILDREN)
             self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
+            self.ovr.SetFonts("", "", [7, 8, 10, 12, 16, 22, 30])
             self.nb.AddPage(panel, "Overview")
 
             def OnOvrSize(evt, ovr=self.ovr):
@@ -210,7 +211,6 @@ class wxPythonDemo(wxFrame):
         # Set up a TextCtrl on the Demo Code Notebook page
         self.txt = wxTextCtrl(self.nb, -1,
                               style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
-        self.txt.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, false))
         self.nb.AddPage(self.txt, "Demo Code")
 
 

@@ -257,6 +257,26 @@ class wxDragImage(wxDragImagePtr):
 
 
 
+def wxDragIcon(*_args,**_kwargs):
+    val = wxDragImagePtr(apply(misc2c.new_wxDragIcon,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxDragString(*_args,**_kwargs):
+    val = wxDragImagePtr(apply(misc2c.new_wxDragString,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxDragTreeItem(*_args,**_kwargs):
+    val = wxDragImagePtr(apply(misc2c.new_wxDragTreeItem,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+def wxDragListItem(*_args,**_kwargs):
+    val = wxDragImagePtr(apply(misc2c.new_wxDragListItem,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxPyTimerPtr(wxObjectPtr):
     def __init__(self,this):
@@ -783,26 +803,6 @@ wxShowTip = misc2c.wxShowTip
 def wxCreateFileTipProvider(*_args, **_kwargs):
     val = apply(misc2c.wxCreateFileTipProvider,_args,_kwargs)
     if val: val = wxTipProviderPtr(val); val.thisown = 1
-    return val
-
-def wxDragIcon(*_args, **_kwargs):
-    val = apply(misc2c.wxDragIcon,_args,_kwargs)
-    if val: val = wxDragImagePtr(val); val.thisown = 1
-    return val
-
-def wxDragString(*_args, **_kwargs):
-    val = apply(misc2c.wxDragString,_args,_kwargs)
-    if val: val = wxDragImagePtr(val); val.thisown = 1
-    return val
-
-def wxDragTreeItem(*_args, **_kwargs):
-    val = apply(misc2c.wxDragTreeItem,_args,_kwargs)
-    if val: val = wxDragImagePtr(val); val.thisown = 1
-    return val
-
-def wxDragListItem(*_args, **_kwargs):
-    val = apply(misc2c.wxDragListItem,_args,_kwargs)
-    if val: val = wxDragImagePtr(val); val.thisown = 1
     return val
 
 wxSysErrorCode = misc2c.wxSysErrorCode

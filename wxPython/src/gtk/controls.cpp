@@ -766,73 +766,6 @@ static PyObject *_wrap_wxButton_SetForegroundColour(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxButton_SetImageLabel(_swigobj,_swigarg0)  (_swigobj->SetImageLabel(_swigarg0))
-static PyObject *_wrap_wxButton_SetImageLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxButton * _arg0;
-    wxBitmap * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","bitmap", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxButton_SetImageLabel",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxButton_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxButton_SetImageLabel. Expected _wxButton_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxButton_SetImageLabel. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxButton_SetImageLabel(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxButton_SetImageMargins(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetImageMargins(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxButton_SetImageMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxButton * _arg0;
-    wxCoord  _arg1;
-    wxCoord  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","x","y", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxButton_SetImageMargins",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxButton_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxButton_SetImageMargins. Expected _wxButton_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxButton_SetImageMargins(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxButton_GetDefaultSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxSize * _result;
@@ -11512,8 +11445,6 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxPreBitmapButton", (PyCFunction) _wrap_new_wxPreBitmapButton, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBitmapButton", (PyCFunction) _wrap_new_wxBitmapButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxButton_GetDefaultSize", (PyCFunction) _wrap_wxButton_GetDefaultSize, METH_VARARGS | METH_KEYWORDS },
-	 { "wxButton_SetImageMargins", (PyCFunction) _wrap_wxButton_SetImageMargins, METH_VARARGS | METH_KEYWORDS },
-	 { "wxButton_SetImageLabel", (PyCFunction) _wrap_wxButton_SetImageLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxButton_SetForegroundColour", (PyCFunction) _wrap_wxButton_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxButton_SetBackgroundColour", (PyCFunction) _wrap_wxButton_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxButton_SetDefault", (PyCFunction) _wrap_wxButton_SetDefault, METH_VARARGS | METH_KEYWORDS },
@@ -11654,12 +11585,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_char","_wxChar",0},
     { "_wxSpinButton","_class_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
     { "_wxSpinButton","_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_class_wxSpinButton","_class_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
     { "_class_wxSpinButton","_wxSpinCtrl",SwigwxSpinCtrlTowxSpinButton},
     { "_signed_int","_wxCoord",0},

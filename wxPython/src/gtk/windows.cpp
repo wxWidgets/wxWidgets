@@ -103,11 +103,11 @@ public:
     ~wxPyValidator() {
     }
 
-    wxObject* wxPyValidator::Clone() const {
+    wxObject* Clone() const {
         wxPyValidator* ptr = NULL;
         wxPyValidator* self = (wxPyValidator*)this;
 
-        bool doSave = wxPyRestoreThread();
+        wxPyTState* state = wxPyBeginBlockThreads();
         if (self->m_myInst.findCallback("Clone")) {
             PyObject* ro;
             ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
@@ -116,13 +116,13 @@ public:
                 Py_DECREF(ro);
             }
         }
+        wxPyEndBlockThreads(state);
+
         // This is very dangerous!!! But is the only way I could find
         // to squash a memory leak.  Currently it is okay, but if the
         // validator architecture in wxWindows ever changes, problems
         // could arise.
         delete self;
-
-        wxPySaveThread(doSave);
         return ptr;
     }
 
@@ -10911,12 +10911,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_char","_wxChar",0},
     { "_class_wxValidator","_class_wxPyValidator",SwigwxPyValidatorTowxValidator},
     { "_class_wxValidator","_wxPyValidator",SwigwxPyValidatorTowxValidator},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_class_wxPanel","_class_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_class_wxPanel","_wxScrolledWindow",SwigwxScrolledWindowTowxPanel},
     { "_class_wxPanel","_class_wxDialog",SwigwxDialogTowxPanel},

@@ -99,9 +99,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 // Since this one would be tough and ugly to do with the Macros...
 void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
     bool hadErr = FALSE;
+    bool found;
 
-    bool doSave = wxPyRestoreThread();
-    if (m_myInst.findCallback("GetPageInfo")) {
+    wxPyTState* state = wxPyBeginBlockThreads();
+    if ((found = m_myInst.findCallback("GetPageInfo"))) {
         PyObject* result = m_myInst.callCallbackObj(Py_BuildValue("()"));
         if (result && PyTuple_Check(result) && PyTuple_Size(result) == 4) {
             PyObject* val;
@@ -131,10 +132,9 @@ void wxPyPrintout::GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *p
         }
         Py_DECREF(result);
     }
-    else
+    wxPyEndBlockThreads(state);
+    if (! found)
         wxPrintout::GetPageInfo(minPage, maxPage, pageFrom, pageTo);
-
-    wxPySaveThread(doSave);
 }
 
 void wxPyPrintout::base_GetPageInfo(int *minPage, int *maxPage, int *pageFrom, int *pageTo) {
@@ -5349,12 +5349,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
     { "_char","_wxChar",0},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_class_wxPanel","_class_wxPrintDialog",SwigwxPrintDialogTowxPanel},
     { "_class_wxPanel","_wxPrintDialog",SwigwxPrintDialogTowxPanel},
     { "_class_wxPanel","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel},

@@ -689,6 +689,43 @@ static PyObject *_wrap_wxNotebook_SetImageList(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxNotebook_AssignImageList(_swigobj,_swigarg0)  (_swigobj->AssignImageList(_swigarg0))
+static PyObject *_wrap_wxNotebook_AssignImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxNotebook * _arg0;
+    wxImageList * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","imageList", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxNotebook_AssignImageList",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNotebook_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotebook_AssignImageList. Expected _wxNotebook_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxNotebook_AssignImageList. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxNotebook_AssignImageList(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxNotebook_GetImageList(_swigobj)  (_swigobj->GetImageList())
 static PyObject *_wrap_wxNotebook_GetImageList(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2143,6 +2180,7 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxNotebook_SetPageImage", (PyCFunction) _wrap_wxNotebook_SetPageImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebook_GetPageImage", (PyCFunction) _wrap_wxNotebook_GetPageImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebook_GetImageList", (PyCFunction) _wrap_wxNotebook_GetImageList, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNotebook_AssignImageList", (PyCFunction) _wrap_wxNotebook_AssignImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebook_SetImageList", (PyCFunction) _wrap_wxNotebook_SetImageList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebook_GetPageText", (PyCFunction) _wrap_wxNotebook_GetPageText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotebook_SetPageText", (PyCFunction) _wrap_wxNotebook_SetPageText, METH_VARARGS | METH_KEYWORDS },
@@ -2224,12 +2262,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_char","_wxChar",0},
     { "_class_wxNotifyEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
     { "_class_wxNotifyEvent","_wxNotebookEvent",SwigwxNotebookEventTowxNotifyEvent},
+    { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
     { "_EBool","_wxPrintQuality",0},
     { "_EBool","_signed_int",0},
     { "_EBool","_int",0},
     { "_EBool","_wxWindowID",0},
     { "_unsigned_long","_long",0},
+    { "_wxNativeFontInfo","_struct_wxNativeFontInfo",0},
     { "_signed_int","_wxCoord",0},
     { "_signed_int","_wxPrintQuality",0},
     { "_signed_int","_EBool",0},
