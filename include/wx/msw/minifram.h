@@ -18,12 +18,25 @@
 
 #include "wx/frame.h"
 
-#ifdef __WIN32__
-
 class WXDLLEXPORT wxMiniFrame : public wxFrame
 {
 public:
   wxMiniFrame() { }
+
+  bool Create(wxWindow *parent,
+              wxWindowID id,
+              const wxString& title,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
+              long style = wxCAPTION | wxCLIP_CHILDREN | wxRESIZE_BORDER,
+              const wxString& name = wxFrameNameStr)
+  {
+      return Create(parent, id, title, pos, size,
+                    style |
+                    wxFRAME_TOOL_WINDOW |
+                    (parent ? wxFRAME_FLOAT_ON_PARENT : 0), name);
+  }
+
   wxMiniFrame(wxWindow *parent,
               wxWindowID id,
               const wxString& title,
@@ -32,42 +45,12 @@ public:
               long style = wxCAPTION | wxCLIP_CHILDREN | wxRESIZE_BORDER,
               const wxString& name = wxFrameNameStr)
   {
-      Create(parent, id, title, pos, size,
-             style |
-             wxFRAME_TOOL_WINDOW |
-             (parent ? wxFRAME_FLOAT_ON_PARENT : 0), name);
+      Create(parent, id, title, pos, size, style, name);
   }
 
 protected:
   DECLARE_DYNAMIC_CLASS(wxMiniFrame)
 };
-
-
-#else // !Win32
-
-class WXDLLEXPORT wxMiniFrame : public wxFrame
-{
-public:
-  wxMiniFrame() { }
-  wxMiniFrame(wxWindow *parent,
-              wxWindowID id,
-              const wxString& title,
-              const wxPoint& pos = wxDefaultPosition,
-              const wxSize& size = wxDefaultSize,
-              long style = wxDEFAULT_FRAME_STYLE|wxTINY_CAPTION_HORIZ,
-              const wxString& name = wxFrameNameStr)
-  {
-      Create(parent, id, title, pos, size, style, name);
-  }
-
-  virtual ~wxMiniFrame();
-
-  virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-  DECLARE_DYNAMIC_CLASS(wxMiniFrame)
-};
-
-#endif // Win32/!Win32
 
 #endif
     // _WX_MINIFRAM_H_
