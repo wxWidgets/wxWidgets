@@ -2043,12 +2043,16 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
             if ( event.GetText() != control->GetLabel() )
                 control->SetLabel(event.GetText());
         }
+    }
+#endif // wxUSE_CONTROLS
+
+    if ( event.GetSetChecked() )
+    {
 #if wxUSE_CHECKBOX
         wxCheckBox *checkbox = wxDynamicCastThis(wxCheckBox);
         if ( checkbox )
         {
-            if ( event.GetSetChecked() )
-                checkbox->SetValue(event.GetChecked());
+            checkbox->SetValue(event.GetChecked());
         }
 #endif // wxUSE_CHECKBOX
 
@@ -2056,12 +2060,10 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
         wxRadioButton *radiobtn = wxDynamicCastThis(wxRadioButton);
         if ( radiobtn )
         {
-            if ( event.GetSetChecked() )
-                radiobtn->SetValue(event.GetChecked());
+            radiobtn->SetValue(event.GetChecked());
         }
 #endif // wxUSE_RADIOBTN
     }
-#endif
 }
 
 #if 0
