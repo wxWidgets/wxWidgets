@@ -3,7 +3,7 @@ wxPython README
 
 Welcome to the wonderful world of wxPython!
 
-So where do you go from here?  The bes thing to do is to run the demo
+So where do you go from here?  The best thing to do is to run the demo
 and use its source code to help you learn how to use wxPython.  Most
 of the classes available are demonstrated there, and you can view the
 sources directly in the demo so it is designed to help you learn.  If

@@ -53,7 +53,7 @@ class DoodleFrame(wxFrame):
 
         # Tell the frame that it should layout itself in response to
         # size events.
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(box)
 
 
@@ -213,7 +213,7 @@ class ControlPanel(wxPanel):
         box.Add(tGrid, 0, wxALL, spacing)
         box.Add(ci, 0, wxEXPAND|wxALL, spacing)
         self.SetSizer(box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         # Resize this window so it is just large enough for the
         # minimum requirements of the sizer.
@@ -348,7 +348,7 @@ instructions: </p>
         lc.height.AsIs()
         button.SetConstraints(lc)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.Layout()
         self.CentreOnParent(wxBOTH)
 
@@ -358,9 +358,9 @@ instructions: </p>
 class DoodleApp(wxApp):
     def OnInit(self):
         frame = DoodleFrame(None)
-        frame.Show(true)
+        frame.Show(True)
         self.SetTopWindow(frame)
-        return true
+        return True
 
 
 #----------------------------------------------------------------------

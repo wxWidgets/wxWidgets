@@ -105,7 +105,7 @@ class MyPanel(wxPanel):
         EVT_BUTTON(self,
                    ID_BUTTON_wxPyNonFatalErrorDialogWithTraceback,
                    self.DoDialog)
-        EVT_CLOSE(self,self.OnClose)
+
 
     IndexFromID = {
         ID_BUTTON_wxPyFatalErrorDialog: 3,
@@ -138,10 +138,11 @@ class MyPanel(wxPanel):
             print "%s.DoDialog(): testing %s..." % (self,sys.stderr)
             this_will_generate_a_NameError_exception
 
-    def OnClose(self,evt):
+    def ShutdownDemo(self):
         for d in self.dialogs:
-            d.Destroy ()
-        self.Destroy ()
+            d.Destroy()
+
+
 
 class MyFrame(wxFrame):
     def __init__(self,parent=None):

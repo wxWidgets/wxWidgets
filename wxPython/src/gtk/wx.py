@@ -1603,6 +1603,9 @@ class _DeprecatedNonBool:
         import warnings
         warnings.warn("Use Python's %s instead" % self.__txt, DeprecationWarning, 3)
         return self.__val
+    def __nonzero__(self):
+        return self.__int__()
+
 
 TRUE  = true  = _DeprecatedNonBool(True, 'True')
 FALSE = false = _DeprecatedNonBool(False, 'False')

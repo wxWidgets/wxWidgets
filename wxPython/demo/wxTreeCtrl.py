@@ -27,7 +27,7 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_SIZE(self, self.OnSize)
 
         self.log = log
-        tID = NewId()
+        tID = wxNewId()
 
         self.tree = MyTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxTR_HAS_BUTTONS
@@ -67,7 +67,7 @@ class TestTreeCtrlPanel(wxPanel):
                 self.tree.SetPyData(last, None)
                 self.tree.SetItemImage(last, fldridx, wxTreeItemIcon_Normal)
                 self.tree.SetItemImage(last, fldropenidx, wxTreeItemIcon_Expanded)
-                for z in range(5):
+                for z in range(500):
                     item = self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
                     self.tree.SetPyData(item, None)
                     self.tree.SetItemImage(item, fileidx, wxTreeItemIcon_Normal)

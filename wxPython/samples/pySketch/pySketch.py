@@ -354,7 +354,7 @@ class DrawingFrame(wxFrame):
                                           style=wxSUNKEN_BORDER)
         self.drawPanel.SetBackgroundColour(wxWHITE)
 
-        self.drawPanel.EnableScrolling(true, true)
+        self.drawPanel.EnableScrolling(True, True)
         self.drawPanel.SetScrollbars(20, 20, PAGE_WIDTH / 20, PAGE_HEIGHT / 20)
 
         EVT_LEFT_DOWN(self.drawPanel, self.onMouseEvent)
@@ -370,7 +370,7 @@ class DrawingFrame(wxFrame):
         topSizer.Add(self.toolPalette, 0)
         topSizer.Add(self.drawPanel, 1, wxEXPAND)
 
-        self.topPanel.SetAutoLayout(true)
+        self.topPanel.SetAutoLayout(True)
         self.topPanel.SetSizer(topSizer)
 
         self.SetSizeHints(minW=250, minH=200)
@@ -383,7 +383,7 @@ class DrawingFrame(wxFrame):
 
         # Setup our frame to hold the contents of a sketch document.
 
-        self.dirty     = false
+        self.dirty     = False
         self.fileName  = fileName
         self.contents  = []     # front-to-back ordered list of DrawingObjects.
         self.selection = []     # List of selected DrawingObjects.
@@ -492,32 +492,32 @@ class DrawingFrame(wxFrame):
             feedbackType = feedback_RECT
             action       = self.selectByRectangle
             actionParam  = param_RECT
-            selecting    = true
-            dashedLine   = true
+            selecting    = True
+            dashedLine   = True
         elif self.curTool == self.lineIcon:
             feedbackType = feedback_LINE
             action       = self.createLine
             actionParam  = param_LINE
-            selecting    = false
-            dashedLine   = false
+            selecting    = False
+            dashedLine   = False
         elif self.curTool == self.rectIcon:
             feedbackType = feedback_RECT
             action       = self.createRect
             actionParam  = param_RECT
-            selecting    = false
-            dashedLine   = false
+            selecting    = False
+            dashedLine   = False
         elif self.curTool == self.ellipseIcon:
             feedbackType = feedback_ELLIPSE
             action       = self.createEllipse
             actionParam  = param_RECT
-            selecting    = false
-            dashedLine   = false
+            selecting    = False
+            dashedLine   = False
         elif self.curTool == self.textIcon:
             feedbackType = feedback_RECT
             action       = self.createText
             actionParam  = param_RECT
-            selecting    = false
-            dashedLine   = true
+            selecting    = False
+            dashedLine   = True
         else:
             wxBell()
             return
@@ -576,7 +576,7 @@ class DrawingFrame(wxFrame):
                 endPt = wxPoint(self.curPt.x + self.resizeOffsetX,
                                 self.curPt.y + self.resizeOffsetY)
                 self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                         self.resizeFeedback, false)
+                                         self.resizeFeedback, False)
 
             elif selecting and (self._getObjectAt(mousePt) != None):
 
@@ -615,13 +615,13 @@ class DrawingFrame(wxFrame):
                     endPt = wxPoint(self.curPt.x + self.resizeOffsetX,
                                     self.curPt.y + self.resizeOffsetY)
                     self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                             self.resizeFeedback, false)
+                                             self.resizeFeedback, False)
                     self.curPt = mousePt
                     # Draw new visual feedback.
                     endPt = wxPoint(self.curPt.x + self.resizeOffsetX,
                                     self.curPt.y + self.resizeOffsetY)
                     self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                             self.resizeFeedback, false)
+                                             self.resizeFeedback, False)
 
             elif self.dragMode == drag_MOVE:
 
@@ -664,7 +664,7 @@ class DrawingFrame(wxFrame):
                 endPt = wxPoint(self.curPt.x + self.resizeOffsetX,
                                 self.curPt.y + self.resizeOffsetY)
                 self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                         self.resizeFeedback, false)
+                                         self.resizeFeedback, False)
 
                 resizePt = wxPoint(mousePt.x + self.resizeOffsetX,
                                    mousePt.y + self.resizeOffsetY)
@@ -748,7 +748,7 @@ class DrawingFrame(wxFrame):
             editor.dialogToObject(obj)
             editor.Destroy()
 
-            self.dirty = true
+            self.dirty = True
             self.drawPanel.Refresh()
             self._adjustMenus()
         else:
@@ -815,9 +815,9 @@ class DrawingFrame(wxFrame):
         for i in range(len(self.contents)-1, -1, -1):
             obj = self.contents[i]
             if obj in self.selection:
-                obj.draw(dc, true)
+                obj.draw(dc, True)
             else:
-                obj.draw(dc, false)
+                obj.draw(dc, False)
 
         dc.EndDrawing()
 
@@ -830,7 +830,7 @@ class DrawingFrame(wxFrame):
         """
         global _docList
         newFrame = DrawingFrame(None, -1, "Untitled")
-        newFrame.Show(TRUE)
+        newFrame.Show(True)
         _docList.append(newFrame)
 
 
@@ -857,7 +857,7 @@ class DrawingFrame(wxFrame):
             # Open a new frame for this document.
             newFrame = DrawingFrame(None, -1, os.path.basename(fileName),
                                     fileName=fileName)
-            newFrame.Show(true)
+            newFrame.Show(True)
             _docList.append(newFrame)
 
 
@@ -949,7 +949,7 @@ class DrawingFrame(wxFrame):
         for i in undoData["selection"]:
             self.selection.append(self.contents[i])
 
-        self.dirty = true
+        self.dirty = True
         self.drawPanel.Refresh()
         self._adjustMenus()
 
@@ -998,7 +998,7 @@ class DrawingFrame(wxFrame):
         editor.dialogToObject(obj)
         editor.Destroy()
 
-        self.dirty = true
+        self.dirty = True
         self.drawPanel.Refresh()
         self._adjustMenus()
 
@@ -1184,14 +1184,14 @@ class DrawingFrame(wxFrame):
         panelSizer.Add(10, 10) # Spacer.
         panelSizer.Add(btnOK, 0, wxALL | wxALIGN_CENTRE, 5)
 
-        panel.SetAutoLayout(true)
+        panel.SetAutoLayout(True)
         panel.SetSizer(panelSizer)
         panelSizer.Fit(panel)
 
         topSizer = wxBoxSizer(wxHORIZONTAL)
         topSizer.Add(panel, 0, wxALL, 10)
 
-        dialog.SetAutoLayout(true)
+        dialog.SetAutoLayout(True)
         dialog.SetSizer(topSizer)
         topSizer.Fit(dialog)
 
@@ -1223,7 +1223,7 @@ class DrawingFrame(wxFrame):
                             startPt = wxPoint(x1 - topLeftX, y1 - topLeftY),
                             endPt   = wxPoint(x2 - topLeftX, y2 - topLeftY))
         self.contents.insert(0, obj)
-        self.dirty = true
+        self.dirty = True
         self.doChooseSelectTool()
         self.select(obj)
 
@@ -1239,7 +1239,7 @@ class DrawingFrame(wxFrame):
                             fillColour=self.fillColour,
                             lineSize=self.lineSize)
         self.contents.insert(0, obj)
-        self.dirty = true
+        self.dirty = True
         self.doChooseSelectTool()
         self.select(obj)
 
@@ -1255,7 +1255,7 @@ class DrawingFrame(wxFrame):
                             fillColour=self.fillColour,
                             lineSize=self.lineSize)
         self.contents.insert(0, obj)
-        self.dirty = true
+        self.dirty = True
         self.doChooseSelectTool()
         self.select(obj)
 
@@ -1276,7 +1276,7 @@ class DrawingFrame(wxFrame):
         editor.Destroy()
 
         self.contents.insert(0, obj)
-        self.dirty = true
+        self.dirty = True
         self.doChooseSelectTool()
         self.select(obj)
 
@@ -1344,7 +1344,7 @@ class DrawingFrame(wxFrame):
             obj.setData(data)
             self.contents.append(obj)
 
-        self.dirty = false
+        self.dirty = False
         self.selection = []
         self.undoInfo  = None
 
@@ -1363,7 +1363,7 @@ class DrawingFrame(wxFrame):
         cPickle.dump(objData, f)
         f.close()
 
-        self.dirty = false
+        self.dirty = False
 
 
     def askIfUserWantsToSave(self, action):
@@ -1371,9 +1371,9 @@ class DrawingFrame(wxFrame):
 
             'action' is a string describing the action about to be taken.  If
             the user wants to save the document, it is saved immediately.  If
-            the user cancels, we return false.
+            the user cancels, we return False.
         """
-        if not self.dirty: return true # Nothing to do.
+        if not self.dirty: return True # Nothing to do.
 
         response = wxMessageBox("Save changes before " + action + "?",
                                 "Confirm", wxYES_NO | wxCANCEL, self)
@@ -1384,15 +1384,15 @@ class DrawingFrame(wxFrame):
                                           default_extension="psk",
                                           wildcard="*.psk",
                                           flags = wxSAVE | wxOVERWRITE_PROMPT)
-                if fileName == "": return false # User cancelled.
+                if fileName == "": return False # User cancelled.
                 self.fileName = fileName
 
             self.saveContents()
-            return true
+            return True
         elif response == wxNO:
-            return true # User doesn't want changes saved.
+            return True # User doesn't want changes saved.
         elif response == wxCANCEL:
-            return false # User cancelled.
+            return False # User cancelled.
 
     # =====================
     # == Private Methods ==
@@ -1434,8 +1434,8 @@ class DrawingFrame(wxFrame):
 
         # Enable/disable our toolbar icons.
 
-        self.toolbar.EnableTool(wxID_NEW,           true)
-        self.toolbar.EnableTool(wxID_OPEN,          true)
+        self.toolbar.EnableTool(wxID_NEW,           True)
+        self.toolbar.EnableTool(wxID_OPEN,          True)
         self.toolbar.EnableTool(wxID_SAVE,          canSave)
         self.toolbar.EnableTool(menu_UNDO,          canUndo)
         self.toolbar.EnableTool(menu_DUPLICATE,     selection)
@@ -1602,12 +1602,12 @@ class DrawingFrame(wxFrame):
         menu.Append(id_LINESIZE_4, "4-pixel line", kind=wxITEM_CHECK)
         menu.Append(id_LINESIZE_5, "5-pixel line", kind=wxITEM_CHECK)
 
-        if   lineSize == 0: menu.Check(id_LINESIZE_0, true)
-        elif lineSize == 1: menu.Check(id_LINESIZE_1, true)
-        elif lineSize == 2: menu.Check(id_LINESIZE_2, true)
-        elif lineSize == 3: menu.Check(id_LINESIZE_3, true)
-        elif lineSize == 4: menu.Check(id_LINESIZE_4, true)
-        elif lineSize == 5: menu.Check(id_LINESIZE_5, true)
+        if   lineSize == 0: menu.Check(id_LINESIZE_0, True)
+        elif lineSize == 1: menu.Check(id_LINESIZE_1, True)
+        elif lineSize == 2: menu.Check(id_LINESIZE_2, True)
+        elif lineSize == 3: menu.Check(id_LINESIZE_3, True)
+        elif lineSize == 4: menu.Check(id_LINESIZE_4, True)
+        elif lineSize == 5: menu.Check(id_LINESIZE_5, True)
 
         EVT_MENU(self, id_LINESIZE_0, self._lineSizePopupSelected)
         EVT_MENU(self, id_LINESIZE_1, self._lineSizePopupSelected)
@@ -1714,7 +1714,7 @@ class DrawingFrame(wxFrame):
                 feedback_LINE     ->  draw line feedback.
                 feedback_ELLIPSE  ->  draw elliptical feedback.
 
-            if 'dashedLine' is true, the feedback is drawn as a dashed rather
+            if 'dashedLine' is True, the feedback is drawn as a dashed rather
             than a solid line.
 
             Note that the feedback is drawn by *inverting* the window's
@@ -1765,10 +1765,10 @@ class DrawingObject:
             'text'          The object's text (obj_TEXT objects only).
             'textFont'      The text object's font name.
             'textSize'      The text object's point size.
-            'textBoldface'  If true, this text object will be drawn in
+            'textBoldface'  If True, this text object will be drawn in
                             boldface.
-            'textItalic'    If true, this text object will be drawn in italic.
-            'textUnderline' If true, this text object will be drawn underlined.
+            'textItalic'    If True, this text object will be drawn in italic.
+            'textUnderline' If True, this text object will be drawn underlined.
             """
 
     # ==================
@@ -1803,9 +1803,9 @@ class DrawingObject:
         self.textFont          = wxSystemSettings_GetSystemFont(
                                     wxSYS_DEFAULT_GUI_FONT).GetFaceName()
         self.textSize          = 12
-        self.textBoldface      = false
-        self.textItalic        = false
-        self.textUnderline     = false
+        self.textBoldface      = False
+        self.textItalic        = False
+        self.textUnderline     = False
 
     # =============================
     # == Object Property Methods ==
@@ -2033,7 +2033,7 @@ class DrawingObject:
         """ Draw this DrawingObject into our window.
 
             'dc' is the device context to use for drawing.  If 'selected' is
-            true, the object is currently selected and should be drawn as such.
+            True, the object is currently selected and should be drawn as such.
         """
         if self.type != obj_TEXT:
             if self.lineSize == 0:
@@ -2052,21 +2052,21 @@ class DrawingObject:
     # =======================
 
     def objectContainsPoint(self, x, y):
-        """ Returns true iff this object contains the given point.
+        """ Returns True iff this object contains the given point.
 
             This is used to determine if the user clicked on the object.
         """
         # Firstly, ignore any points outside of the object's bounds.
 
-        if x < self.position.x: return false
-        if x > self.position.x + self.size.x: return false
-        if y < self.position.y: return false
-        if y > self.position.y + self.size.y: return false
+        if x < self.position.x: return False
+        if x > self.position.x + self.size.x: return False
+        if y < self.position.y: return False
+        if y > self.position.y + self.size.y: return False
 
         if self.type in [obj_RECT, obj_TEXT]:
             # Rectangles and text are easy -- they're always selected if the
             # point is within their bounds.
-            return true
+            return True
 
         # Now things get tricky.  There's no straightforward way of knowing
         # whether the point is within the object's bounds...to get around this,
@@ -2082,13 +2082,13 @@ class DrawingObject:
         dc.Clear()
         dc.SetPen(wxPen(wxBLACK, self.lineSize + 5, wxSOLID))
         dc.SetBrush(wxBLACK_BRUSH)
-        self._privateDraw(dc, wxPoint(5, 5), true)
+        self._privateDraw(dc, wxPoint(5, 5), True)
         dc.EndDrawing()
         pixel = dc.GetPixel(x - self.position.x + 5, y - self.position.y + 5)
         if (pixel.Red() == 0) and (pixel.Green() == 0) and (pixel.Blue() == 0):
-            return true
+            return True
         else:
-            return false
+            return False
 
 
     def getSelectionHandleContainingPoint(self, x, y):
@@ -2124,13 +2124,13 @@ class DrawingObject:
 
 
     def objectWithinRect(self, x, y, width, height):
-        """ Return true iff this object falls completely within the given rect.
+        """ Return True iff this object falls completely within the given rect.
         """
-        if x          > self.position.x:                    return false
-        if x + width  < self.position.x + self.size.width:  return false
-        if y          > self.position.y:                    return false
-        if y + height < self.position.y + self.size.height: return false
-        return true
+        if x          > self.position.x:                    return False
+        if x + width  < self.position.x + self.size.width:  return False
+        if y          > self.position.y:                    return False
+        if y + height < self.position.y + self.size.height: return False
+        return True
 
     # =====================
     # == Utility Methods ==
@@ -2163,7 +2163,7 @@ class DrawingObject:
         """ Private routine to draw this DrawingObject.
 
             'dc' is the device context to use for drawing, while 'position' is
-            the position in which to draw the object.  If 'selected' is true,
+            the position in which to draw the object.  If 'selected' is True,
             the object is drawn with selection handles.  This private drawing
             routine assumes that the pen and brush have already been set by the
             caller.
@@ -2221,13 +2221,13 @@ class DrawingObject:
 
 
     def _pointInSelRect(self, x, y, rX, rY):
-        """ Return true iff (x, y) is within the selection handle at (rX, ry).
+        """ Return True iff (x, y) is within the selection handle at (rX, ry).
         """
-        if   x < rX - 3: return false
-        elif x > rX + 3: return false
-        elif y < rY - 3: return false
-        elif y > rY + 3: return false
-        else:            return true
+        if   x < rX - 3: return False
+        elif x > rX + 3: return False
+        elif y < rY - 3: return False
+        elif y > rY + 3: return False
+        else:            return True
 
 #----------------------------------------------------------------------------
 
@@ -2256,7 +2256,7 @@ class ToolPaletteIcon(wxStaticBitmap):
 
         self.iconID     = iconID
         self.iconName   = iconName
-        self.isSelected = false
+        self.isSelected = False
 
 
     def select(self):
@@ -2269,7 +2269,7 @@ class ToolPaletteIcon(wxStaticBitmap):
         bmp = wxBitmap("images/" + self.iconName + "IconSel.bmp",
                        wxBITMAP_TYPE_BMP)
         self.SetBitmap(bmp)
-        self.isSelected = true
+        self.isSelected = True
 
 
     def deselect(self):
@@ -2282,7 +2282,7 @@ class ToolPaletteIcon(wxStaticBitmap):
         bmp = wxBitmap("images/" + self.iconName + "Icon.bmp",
                        wxBITMAP_TYPE_BMP)
         self.SetBitmap(bmp)
-        self.isSelected = false
+        self.isSelected = False
 
 #----------------------------------------------------------------------------
 
@@ -2399,7 +2399,7 @@ class EditTextObjectDialog(wxDialog):
 
         self._setFontOptions(self.boldCheckbox,      weight=wxBOLD)
         self._setFontOptions(self.italicCheckbox,    style=wxITALIC)
-        self._setFontOptions(self.underlineCheckbox, underline=true)
+        self._setFontOptions(self.underlineCheckbox, underline=True)
 
         styleSizer = wxBoxSizer(wxHORIZONTAL)
         styleSizer.Add(self.boldCheckbox,      0, gap, 5)
@@ -2421,7 +2421,7 @@ class EditTextObjectDialog(wxDialog):
         sizer.Add(10, 10) # Spacer.
         sizer.Add(btnSizer,      0, gap | wxALIGN_CENTRE, 5)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
@@ -2466,7 +2466,7 @@ class EditTextObjectDialog(wxDialog):
 
     def _setFontOptions(self, ctrl, family=None, pointSize=-1,
                                     style=wxNORMAL, weight=wxNORMAL,
-                                    underline=false):
+                                    underline=False):
         """ Change the font settings for the given control.
 
             The meaning of the 'family', 'pointSize', 'style', 'weight' and
@@ -2486,7 +2486,7 @@ class EditTextObjectDialog(wxDialog):
 
             We simulate clicking on the "OK" button.
         """
-        if self.Validate(): self.Show(false)
+        if self.Validate(): self.Show(False)
 
 #----------------------------------------------------------------------------
 
@@ -2516,27 +2516,27 @@ class TextObjectValidator(wxPyValidator):
 
         if len(text) == 0:
             wxMessageBox("A text object must contain some text!", "Error")
-            return false
+            return False
         else:
-            return true
+            return True
 
 
     def TransferToWindow(self):
         """ Transfer data from validator to window.
 
-            The default implementation returns false, indicating that an error
-            occurred.  We simply return true, as we don't do any data transfer.
+            The default implementation returns False, indicating that an error
+            occurred.  We simply return True, as we don't do any data transfer.
         """
-        return true # Prevent wxDialog from complaining.
+        return True # Prevent wxDialog from complaining.
 
 
     def TransferFromWindow(self):
         """ Transfer data from window to validator.
 
-            The default implementation returns false, indicating that an error
-            occurred.  We simply return true, as we don't do any data transfer.
+            The default implementation returns False, indicating that an error
+            occurred.  We simply return True, as we don't do any data transfer.
         """
-        return true # Prevent wxDialog from complaining.
+        return True # Prevent wxDialog from complaining.
 
 #----------------------------------------------------------------------------
 
@@ -2601,7 +2601,7 @@ class SketchApp(wxApp):
             # blank document.
             frame = DrawingFrame(None, -1, "Untitled")
             frame.Centre()
-            frame.Show(TRUE)
+            frame.Show(True)
             _docList.append(frame)
         else:
             # Load the file(s) specified on the command line.
@@ -2611,10 +2611,10 @@ class SketchApp(wxApp):
                     frame = DrawingFrame(None, -1,
                                          os.path.basename(fileName),
                                          fileName=fileName)
-                    frame.Show(TRUE)
+                    frame.Show(True)
                     _docList.append(frame)
 
-        return TRUE
+        return True
 
 #----------------------------------------------------------------------------
 

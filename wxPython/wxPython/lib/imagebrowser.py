@@ -144,7 +144,7 @@ class ImageDialog(wxDialog):
 
         self.y_pos = self.y_pos + self.delta
 
-        mID = NewId()
+        mID = wxNewId()
         wxButton(self, mID, ' Set Directory ', wxPoint(self.x_pos, self.y_pos), size).SetDefault()
         EVT_BUTTON(self, mID, self.SetDirect)
 
@@ -158,7 +158,7 @@ class ImageDialog(wxDialog):
         self.list_height = 150
 
     # List of Labels
-        mID = NewId()
+        mID = wxNewId()
         self.tb = tb = wxListBox(self, mID, wxPoint(self.x_pos, self.y_pos), wxSize(160, self.list_height), self.fl_list, wxLB_SINGLE)
         EVT_LISTBOX(self, mID, self.OnListClick)
         EVT_LISTBOX_DCLICK(self, mID, self.OnListDClick)
@@ -176,7 +176,7 @@ class ImageDialog(wxDialog):
         self.set_type = self.fl_types[0]    # initial file filter setting
         self.fl_ext = self.fl_ext_types[self.set_type]
 
-        mID = NewId()
+        mID = wxNewId()
         self.sel_type = wxComboBox(self, mID, self.set_type, wxPoint(image_posx , self.type_posy), wxSize(150, -1), self.fl_types, wxCB_DROPDOWN)
         EVT_COMBOBOX(self, mID, self.OnSetType)
 
@@ -184,7 +184,7 @@ class ImageDialog(wxDialog):
 
         self.y_pos = self.y_pos + height + 20
 
-        mID = NewId()
+        mID = wxNewId()
         wxButton(self, mID, ' Select ', wxPoint(100, self.y_pos), size).SetDefault()
         EVT_BUTTON(self, mID, self.OnOk)
 
