@@ -144,7 +144,7 @@ has wx.LB_SORT or wx.CB_SORT style).", "");
     
     DocDeclAStrName(
         void , Append(const wxArrayString& strings),
-        "Append(self, List strings)",
+        "AppendItems(self, List strings)",
         "Apend several items at once to the control.  Notice that calling this
 method may be much faster than appending the items one by one if you
 need to add a lot of items.", "",
