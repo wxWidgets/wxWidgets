@@ -30,14 +30,6 @@ wxChoice::~wxChoice()
 	DisposeMenu( m_macPopUpMenuHandle ) ;
 }
 
-int wxChoice::GetCount() const {
-	return m_strings.Count() ;
-}
-
-void wxChoice::SetString( int n , const wxString& s ) {
-	m_strings[n] = s ;
-}
-
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size,
@@ -52,29 +44,28 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 	
 		MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
-		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
 		m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , 0 , -12345 , 0 , 
 	  	kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ; 
 	
 		m_macPopUpMenuHandle =  NewMenu( 1 , "\pPopUp Menu" ) ;
 		SetControlData( m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-		for ( int i = 0 ; i < n ; i++ )
-		{
- 			Str255 label;
-			wxMenuItem::MacBuildMenuString( label , NULL , NULL , choices[i] ,false);
-			AppendMenu( m_macPopUpMenuHandle , label ) ;
-			m_strings.Add( choices[i] ) ;
-			m_dataArray.Add( NULL );
-		}
-		SetControlMinimum( m_macControl , 0 ) ;
-		SetControlMaximum( m_macControl , Number()) ;
+	 	SetControlMinimum( m_macControl , 0 ) ;
+		SetControlMaximum( m_macControl , 0) ;
 		if ( n > 0 )
 			SetControlValue( m_macControl , 1 ) ;
 
 		MacPostControlCreate() ;
 
+    for ( int i = 0; i < n; i++ )
+    {
+        Append(choices[i]);
+    }
   	return TRUE;
 }
+
+// ----------------------------------------------------------------------------
+// adding/deleting items to/from the list
+// ----------------------------------------------------------------------------
 
 int wxChoice::DoAppend(const wxString& item)
 {
@@ -82,27 +73,127 @@ int wxChoice::DoAppend(const wxString& item)
 	wxMenuItem::MacBuildMenuString( label , NULL , NULL , item ,false);
 	AppendMenu( m_macPopUpMenuHandle , label ) ;
 	m_strings.Add( item ) ;
-	m_dataArray.Add( NULL );
-	return m_strings.Count() ;
+	m_datas.Add( NULL ) ;
+	int index = m_strings.GetCount()  - 1  ;
+	DoSetItemClientData( index , NULL ) ;
+	SetControlMaximum( m_macControl , Number()) ;
+	return index ;
+}
+
+void wxChoice::Delete(int n)
+{
+    wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
+
+    if ( HasClientObjectData() )
+    {
+        delete GetClientObject(n);
+    }
+
+    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
+    m_strings.Remove( n ) ;
+	  SetControlMaximum( m_macControl , Number()) ;
+}
+
+void wxChoice::Clear()
+{
+    Free();
+
+    for ( int i = 0 ; i < GetCount() ; i++ )
+    {
+    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
+	  }
+    m_strings.Empty() ;
+    m_datas.Empty() ;
+	  SetControlMaximum( m_macControl , 0 ) ;
+}
+
+void wxChoice::Free()
+{
+    if ( HasClientObjectData() )
+    {
+        size_t count = GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            delete GetClientObject(n);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// selection
+// ----------------------------------------------------------------------------
+
+int wxChoice::GetSelection() const
+{
+    return GetControlValue( m_macControl ) -1 ;
+}
+
+void wxChoice::SetSelection(int n)
+{
+    SetControlValue( m_macControl , n + 1 ) ;
+}
+
+// ----------------------------------------------------------------------------
+// string list functions
+// ----------------------------------------------------------------------------
+
+int wxChoice::GetCount() const
+{
+    return m_strings.GetCount() ;
+}
+
+int wxChoice::FindString(const wxString& s) const
+{
+    for( int i = 0 ; i < GetCount() ; i++ )
+    {
+    	if ( GetString( i ).IsSameAs(s, FALSE) )
+    		return i ; 
+    }
+    return wxNOT_FOUND ;
+}
+
+void wxChoice::SetString(int n, const wxString& s)
+{
+    wxFAIL_MSG(wxT("not implemented"));
+
+#if 0 // should do this, but no Insert() so far
+    Delete(n);
+    Insert(n + 1, s);
+#endif
+}
+
+
+wxString wxChoice::GetString(int n) const
+{
+	return m_strings[n] ;
+}
+
+// ----------------------------------------------------------------------------
+// client data
+// ----------------------------------------------------------------------------
+
+void wxChoice::DoSetItemClientData( int n, void* clientData )
+{
+    wxCHECK_RET( n >= 0 && n < m_datas.GetCount(),
+                 "invalid index in wxChoice::SetClientData" );
+	wxASSERT_MSG( m_datas.GetCount() >= n , "invalid client_data array" ) ;
+	
+	if ( m_datas.GetCount() > n )
+	{
+    	m_datas[n] = (char*) clientData ;
+    }
+    else
+    {
+    	m_datas.Add( (char*) clientData ) ;
+    }
 }
 
 void *wxChoice::DoGetItemClientData(int N) const
 {
-    return (void *)m_dataArray[N];
-}
+    wxCHECK_MSG( N >= 0 && N < m_datas.GetCount(), NULL,
+                 "invalid index in wxChoice::GetClientData" );
 
-void wxChoice::DoSetItemClientData( int N, void* Client_data ) 
-{
-	wxASSERT_MSG( m_dataArray.GetCount() >= N , "invalid client_data array" ) ;
-	
-	if ( m_dataArray.GetCount() > N )
-	{
-    	m_dataArray[N] = (char*) Client_data ;
-    }
-    else
-    {
-    	m_dataArray.Add( (char*) Client_data ) ;
-    }
+    return (void *)m_datas[N];
 }
 
 void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
@@ -110,67 +201,23 @@ void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
     DoSetItemClientData(n, clientData);
 }
 
-wxClientData* wxChoice::DoGetItemClientObject( int N ) const
+wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
-	return (wxClientData *) DoGetItemClientData( N ) ;
-}
-
-void wxChoice::Delete(int n)
-{
-    ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
-    m_strings.Remove( n ) ;
-	m_dataArray.Remove( n ) ;
-	SetControlMaximum( m_macControl , Number()) ;
-}
-
-void wxChoice::Clear()
-{
-    for ( int i = 0 ; i < Number() ; i++ )
-    {
-    	::DeleteMenuItem( m_macPopUpMenuHandle , 1 ) ;
-	}
-    m_strings.Clear() ;
-  	m_dataArray.Empty() ;
-	SetControlMaximum( m_macControl , Number()) ;
-}
-
-int wxChoice::GetSelection() const
-{
-    return GetControlValue( m_macControl ) -1 ;
+    return (wxClientData *)DoGetItemClientData(n);
 }
 
 void wxChoice::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
-	event.SetInt(GetSelection());
+	  event.SetInt(GetSelection());
     event.SetEventObject(this);
     event.SetString(GetStringSelection());
     ProcessCommand(event);
 }
-
-
-void wxChoice::SetSelection(int n)
+/*
+void wxChoice::Command(wxCommandEvent & event)
 {
-    SetControlValue( m_macControl , n + 1 ) ;
+    SetSelection (event.GetInt());
+    ProcessCommand (event);
 }
-
-int wxChoice::FindString(const wxString& s) const
-{
-    for( int i = 0 ; i < Number() ; i++ )
-    {
-    	if ( GetString( i ) == s )
-    		return i ; 
-    }
-    return -1;
-}
-
-wxString wxChoice::GetString(int n) const
-{
-	return m_strings[n] ;
-}
-
-void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-  wxControl::SetSize( x,y,width,height,sizeFlags ) ;
-}
-
+*/

@@ -2586,7 +2586,7 @@ void AGAPortHelper::Setup( GrafPtr newport )
 	GetPenState( &oldPenState ) ;
 	GetBackColor( &oldBackColor ) ;
 	GetForeColor( &oldForeColor ) ;
-
+	wxASSERT( clip == NULL ) ;
 	clip = NewRgn() ;
 	GetClip( clip );
 	font = GetPortTextFont( newport);
@@ -2608,6 +2608,7 @@ AGAPortHelper::~AGAPortHelper()
 	if ( clip )
 	{
 		SetPort( nport ) ;
+		PenNormal() ;
 		SetClip( clip ) ;
 		DisposeRgn( clip ) ;
 		RGBForeColor(&oldForeColor);

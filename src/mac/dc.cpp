@@ -103,7 +103,7 @@ wxDC::~wxDC(void)
 
 void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
-	help->Setup( m_macPort ) ;
+//	help->Setup( m_macPort ) ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
 	::ClipRect(&m_macClipRect);
 

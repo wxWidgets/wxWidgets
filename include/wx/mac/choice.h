@@ -88,15 +88,11 @@ protected:
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );
     virtual wxClientData* DoGetItemClientObject( int n ) const;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO);
-
     // free all memory we have (used by Clear() and dtor)
     void Free();
 
   wxArrayString m_strings;
-  wxChoiceDataArray m_dataArray ;
+  wxChoiceDataArray m_datas ;
   MenuHandle	m_macPopUpMenuHandle ;
 };
 
