@@ -6192,6 +6192,48 @@ static PyObject *_wrap_wxNotifyEvent_Veto(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static void *SwigwxDisplayChangedEventTowxEvent(void *ptr) {
+    wxDisplayChangedEvent *src;
+    wxEvent *dest;
+    src = (wxDisplayChangedEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxDisplayChangedEventTowxObject(void *ptr) {
+    wxDisplayChangedEvent *src;
+    wxObject *dest;
+    src = (wxDisplayChangedEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxDisplayChangedEvent() (new wxDisplayChangedEvent())
+static PyObject *_wrap_new_wxDisplayChangedEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxDisplayChangedEvent * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxDisplayChangedEvent",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxDisplayChangedEvent *)new_wxDisplayChangedEvent();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxDisplayChangedEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static void *SwigwxPaletteChangedEventTowxEvent(void *ptr) {
     wxPaletteChangedEvent *src;
     wxEvent *dest;
@@ -7097,6 +7139,7 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxPaletteChangedEvent_GetChangedWindow", (PyCFunction) _wrap_wxPaletteChangedEvent_GetChangedWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPaletteChangedEvent_SetChangedWindow", (PyCFunction) _wrap_wxPaletteChangedEvent_SetChangedWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPaletteChangedEvent", (PyCFunction) _wrap_new_wxPaletteChangedEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxDisplayChangedEvent", (PyCFunction) _wrap_new_wxDisplayChangedEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotifyEvent_Veto", (PyCFunction) _wrap_wxNotifyEvent_Veto, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotifyEvent_Allow", (PyCFunction) _wrap_wxNotifyEvent_Allow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNotifyEvent_IsAllowed", (PyCFunction) _wrap_wxNotifyEvent_IsAllowed, METH_VARARGS | METH_KEYWORDS },
@@ -7306,6 +7349,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvent","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxEvent},
     { "_wxEvent","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxEvent},
     { "_wxEvent","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxEvent},
+    { "_wxEvent","_wxDisplayChangedEvent",SwigwxDisplayChangedEventTowxEvent},
     { "_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
     { "_wxEvent","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_wxEvent","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
@@ -7396,6 +7440,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxWindowCreateEvent",SwigwxWindowCreateEventTowxObject},
     { "_wxObject","_wxQueryNewPaletteEvent",SwigwxQueryNewPaletteEventTowxObject},
     { "_wxObject","_wxPaletteChangedEvent",SwigwxPaletteChangedEventTowxObject},
+    { "_wxObject","_wxDisplayChangedEvent",SwigwxDisplayChangedEventTowxObject},
     { "_wxObject","_wxNotifyEvent",SwigwxNotifyEventTowxObject},
     { "_wxObject","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxObject},
     { "_wxObject","_wxUpdateUIEvent",SwigwxUpdateUIEventTowxObject},

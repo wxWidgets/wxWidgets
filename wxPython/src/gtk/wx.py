@@ -853,6 +853,7 @@ wxEVT_MENU_INIT = wxc.wxEVT_MENU_INIT
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
 wxEVT_POPUP_MENU_INIT = wxc.wxEVT_POPUP_MENU_INIT
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
+wxEVT_DISPLAY_CHANGED = wxc.wxEVT_DISPLAY_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
 wxEVT_QUERY_NEW_PALETTE = wxc.wxEVT_QUERY_NEW_PALETTE
 wxEVT_PALETTE_CHANGED = wxc.wxEVT_PALETTE_CHANGED
@@ -983,6 +984,9 @@ def EVT_INIT_DIALOG(win, func):
 
 def EVT_SYS_COLOUR_CHANGED(win, func):
     win.Connect(-1, -1, wxEVT_SYS_COLOUR_CHANGED, func)
+
+def EVT_DISPLAY_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_DISPLAY_CHANGED, func)
 
 def EVT_SHOW(win, func):
     win.Connect(-1, -1, wxEVT_SHOW, func)
@@ -1664,7 +1668,15 @@ class __wxPyCleanup:
     def __del__(self):
         self.cleanup()
 
-__cleanMeUp = __wxPyCleanup()
+sys.__wxPythonCleanup = __wxPyCleanup()
+
+## # another possible solution, but it gets called too early...
+## if sys.version[0] == '2':
+##     import atexit
+##     atexit.register(wxc.wxApp_CleanUp)
+## else:
+##     sys.exitfunc = wxc.wxApp_CleanUp
+
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

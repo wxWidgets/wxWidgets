@@ -783,7 +783,7 @@ class __wxPyCleanup:
 
 sys.__wxPythonCleanup = __wxPyCleanup()
 
-## # another possible solution, but it gets called too eary...
+## # another possible solution, but it gets called too early...
 ## if sys.version[0] == '2':
 ##     import atexit
 ##     atexit.register(wxc.wxApp_CleanUp)

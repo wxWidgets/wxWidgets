@@ -13,7 +13,6 @@
 
 import sys, os, time, string
 from   wxPython.wx import *
-from   wxPython.lib.splashscreen import SplashScreen
 from   wxPython.html import wxHtmlWindow
 
 import images
