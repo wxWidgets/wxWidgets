@@ -289,7 +289,7 @@ void wxGenericColourDialog::CreateWidgets()
 
 void wxGenericColourDialog::InitializeColours(void)
 {
-    int i;
+    size_t i;
 
     for (i = 0; i < WXSIZEOF(wxColourDialogNames); i++)
     {
