@@ -166,6 +166,7 @@ wxFont::wxFont( const wxString& fontname, const wxFontData& fontdata )
 
     wxStringTokenizer tn( fontname, wxT("-") );
 
+    tn.GetNextToken();                           // skip initial empty token
     tn.GetNextToken();                           // foundry
 
     M_FONTDATA->m_faceName = tn.GetNextToken();  // family
