@@ -42,7 +42,9 @@
 #include <os2.h>
 #include<netdb.h>
 #define PURE_32
-#include<upm.h>
+#include <upm.h>
+#include <netcons.h>
+#include <netbios.h>
 
 // In the WIN.INI file
 static const wxChar WX_SECTION[] = _T("wxWindows");
@@ -66,8 +68,8 @@ bool wxGetHostName(wxChar *buf, int maxSize)
   unsigned long                      ulBuffer;
   unsigned long*                     pulTotalAvail;
 
-  NetBios32GetInfo( server
-                   ,computer
+  NetBios32GetInfo( (const unsigned char*)server
+                   ,(const unsigned char*)computer
                    ,ulLevel
                    ,pbBuffer
                    ,ulBuffer

@@ -127,8 +127,8 @@ void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
    // TODO
 }
 
-void wxDC::DoSetClippingRegion( long x, long y
-                               ,long width, long height
+void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y
+                               ,wxCoord width, wxCoord height
                               )
 {
    // TODO
@@ -182,8 +182,8 @@ void wxDC::Clear()
    // TODO
 }
 
-void wxDC::DoFloodFill( long x
-                       ,long y
+void wxDC::DoFloodFill( wxCoord x
+                       ,wxCoord y
                        ,const wxColour& col
                        ,int style
                       )
@@ -191,37 +191,37 @@ void wxDC::DoFloodFill( long x
    // TODO
 }
 
-bool wxDC::DoGetPixel(long x, long y, wxColour *col) const
+bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
    // TODO
    return(TRUE);
 }
 
-void wxDC::DoCrossHair(long x, long y)
+void wxDC::DoCrossHair(wxCoord x, wxCoord y)
 {
    // TODO
 }
 
-void wxDC::DoDrawLine(long x1, long y1, long x2, long y2)
+void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
    // TODO
 }
 
-void wxDC::DoDrawArc( long x1, long y1
-                     ,long x2, long y2
-                     ,long xc, long yc
+void wxDC::DoDrawArc( wxCoord x1, wxCoord y1
+                     ,wxCoord x2, wxCoord y2
+                     ,wxCoord xc, wxCoord yc
                     )
 {
    // TODO
 }
 
-void wxDC::DoDrawPoint(long x, long y)
+void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
    // TODO
 }
 
 void wxDC::DoDrawPolygon(int n, wxPoint points[]
-                         ,long xoffset, long yoffset
+                         ,wxCoord xoffset, wxCoord yoffset
                          ,int fillStyle
                         )
 {
@@ -229,34 +229,34 @@ void wxDC::DoDrawPolygon(int n, wxPoint points[]
 }
 
 void wxDC::DoDrawLines( int n, wxPoint points[]
-                       ,long xoffset, long yoffset
+                       ,wxCoord xoffset, wxCoord yoffset
                       )
 {
    // TODO
 }
 
-void wxDC::DoDrawRectangle(long x, long y, long width, long height)
+void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
    // TODO
 }
 
-void wxDC::DoDrawRoundedRectangle( long x, long y
-                                  ,long width, long height
+void wxDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y
+                                  ,wxCoord width, wxCoord height
                                   ,double radius
                                  )
 {
    // TODO
 }
 
-void wxDC::DoDrawEllipse(long x, long y, long width, long height)
+void wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
    // TODO
 }
 
-void wxDC::DoDrawEllipticArc( long x
-                             ,long y
-                             ,long w
-                             ,long h
+void wxDC::DoDrawEllipticArc( wxCoord x
+                             ,wxCoord y
+                             ,wxCoord w
+                             ,wxCoord h
                              ,double sa
                              ,double ea
                             )
@@ -264,20 +264,20 @@ void wxDC::DoDrawEllipticArc( long x
    // TODO
 }
 
-void wxDC::DoDrawIcon(const wxIcon& icon, long x, long y)
+void wxDC::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
    // TODO
 }
 
 void wxDC::DoDrawBitmap( const wxBitmap &bmp
-                        ,long x, long y
+                        ,wxCoord x, wxCoord y
                         ,bool useMask
                        )
 {
    // TODO
 }
 
-void wxDC::DoDrawText(const wxString& text, long x, long y)
+void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
    // TODO
 }
@@ -374,25 +374,25 @@ void wxDC::EndPage()
 // text metrics
 // ---------------------------------------------------------------------------
 
-long wxDC::GetCharHeight() const
+wxCoord wxDC::GetCharHeight() const
 {
     // TODO
     return(1);
 }
 
-long wxDC::GetCharWidth() const
+wxCoord wxDC::GetCharWidth() const
 {
     // TODO
     return(1);
 }
 
-void wxDC::GetTextExtent( const wxString& string
-                         ,long* x
-                         ,long* y
-                         ,long* decent
-                         ,long* externalLeading
-                         ,wxFont* theFont
-                        ) const
+void wxDC::DoGetTextExtent( const wxString& string
+                           ,wxCoord* x
+                           ,wxCoord* y
+                           ,wxCoord* decent
+                           ,wxCoord* externalLeading
+                           ,wxFont* theFont
+                          ) const
 {
    // TODO:
 }
@@ -426,12 +426,12 @@ void wxDC::SetSystemScale(double x, double y)
     SetMapMode(m_mappingMode);
 }
 
-void wxDC::SetLogicalOrigin( long x, long y )
+void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 {
     // TODO:
 };
 
-void wxDC::SetDeviceOrigin( long x, long y )
+void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
     // TODO:
 };
@@ -440,85 +440,85 @@ void wxDC::SetDeviceOrigin( long x, long y )
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-long wxDCBase::DeviceToLogicalX(long x) const
+wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    long new_x = x - m_deviceOriginX;
+    wxCoord new_x = x - m_deviceOriginX;
     if (new_x > 0)
-        return (long)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
+        return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
     else
-        return (long)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
+        return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
 };
 
-long wxDCBase::DeviceToLogicalXRel(long x) const
+wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
     if (x > 0)
-        return (long)((double)(x) / m_scaleX + 0.5);
+        return (wxCoord)((double)(x) / m_scaleX + 0.5);
     else
-        return (long)((double)(x) / m_scaleX - 0.5);
+        return (wxCoord)((double)(x) / m_scaleX - 0.5);
 };
 
-long wxDCBase::DeviceToLogicalY(long y) const
+wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    long new_y = y - m_deviceOriginY;
+    wxCoord new_y = y - m_deviceOriginY;
     if (new_y > 0)
-        return (long)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
+        return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
     else
-        return (long)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
+        return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
 };
 
-long wxDCBase::DeviceToLogicalYRel(long y) const
+wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
     if (y > 0)
-        return (long)((double)(y) / m_scaleY + 0.5);
+        return (wxCoord)((double)(y) / m_scaleY + 0.5);
     else
-        return (long)((double)(y) / m_scaleY - 0.5);
+        return (wxCoord)((double)(y) / m_scaleY - 0.5);
 };
 
-long wxDCBase::LogicalToDeviceX(long x) const
+wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    long new_x = x - m_logicalOriginX;
+    wxCoord new_x = x - m_logicalOriginX;
     if (new_x > 0)
-        return (long)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+        return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
     else
-    return (long)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
 };
 
-long wxDCBase::LogicalToDeviceXRel(long x) const
+wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
     if (x > 0)
-        return (long)((double)(x) * m_scaleX + 0.5);
+        return (wxCoord)((double)(x) * m_scaleX + 0.5);
     else
-        return (long)((double)(x) * m_scaleX - 0.5);
+        return (wxCoord)((double)(x) * m_scaleX - 0.5);
 };
 
-long wxDCBase::LogicalToDeviceY(long y) const
+wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    long new_y = y - m_logicalOriginY;
+    wxCoord new_y = y - m_logicalOriginY;
     if (new_y > 0)
-        return (long)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+        return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
     else
-        return (long)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+        return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
 };
 
-long wxDCBase::LogicalToDeviceYRel(long y) const
+wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
     if (y > 0)
-        return (long)((double)(y) * m_scaleY + 0.5);
+        return (wxCoord)((double)(y) * m_scaleY + 0.5);
     else
-        return (long)((double)(y) * m_scaleY - 0.5);
+        return (wxCoord)((double)(y) * m_scaleY - 0.5);
 };
 
 // ---------------------------------------------------------------------------
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit( long xdest
-                  ,long ydest
-                  ,long width
-                  ,long height
+bool wxDC::DoBlit( wxCoord xdest
+                  ,wxCoord ydest
+                  ,wxCoord width
+                  ,wxCoord height
                   ,wxDC *source
-                  ,long xsrc
-                  ,long ysrc
+                  ,wxCoord xsrc
+                  ,wxCoord ysrc
                   ,int  rop
                   ,bool useMask
                  )
@@ -555,7 +555,7 @@ void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
                          float *descent, float *externalLeading,
                          wxFont *theFont, bool use16bit) const
 {
-    long x1, y1, descent1, externalLeading1;
+    wxCoord x1, y1, descent1, externalLeading1;
     GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
     *x = x1; *y = y1;
     if (descent)
