@@ -216,6 +216,8 @@ extern bool winHelp;  // Output in Windows Help format if TRUE, linear otherwise
 extern bool isInteractive;
 extern bool runTwice;
 extern int convertMode;
+extern bool checkCurleyBraces;
+extern bool checkSyntax;
 extern bool stopRunning;
 extern int  mirrorMargins;
 extern bool headerRule;

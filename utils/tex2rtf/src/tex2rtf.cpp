@@ -281,6 +281,16 @@ bool MyApp::OnInit()
         }
       }
     }
+    else if (strcmp(argv[i], "-checkcurleybraces") == 0)
+    {
+      i ++;
+      checkCurleyBraces = TRUE;
+    }
+    else if (strcmp(argv[i], "-checksyntax") == 0)
+    {
+      i ++;
+      checkSyntax = TRUE;
+    }
     else
     {
       wxString buf;
@@ -354,6 +364,14 @@ bool MyApp::OnInit()
     mode_menu->Append(TEX_MODE_HTML, "Output &HTML",        "HTML World Wide Web hypertext file");
     mode_menu->Append(TEX_MODE_XLP, "Output &XLP",          "wxHelp hypertext help file");
 
+    wxMenu *options_menu = new wxMenu;
+
+    options_menu->Append(TEX_OPTIONS_CURELY_BRACE, "Curley brace matching",   "Checks for mismatched curley braces",TRUE);
+    options_menu->Append(TEX_OPTIONS_SYNTAX_CHECKING, "Syntax checking", "Syntax checking for common errors",TRUE);
+
+    options_menu->Check(TEX_OPTIONS_CURELY_BRACE, checkCurleyBraces);
+    options_menu->Check(TEX_OPTIONS_SYNTAX_CHECKING, checkSyntax);
+
     wxMenu *help_menu = new wxMenu;
 
     help_menu->Append(TEX_HELP, "&Help", "Tex2RTF Contents Page");
@@ -363,6 +381,7 @@ bool MyApp::OnInit()
     menuBar->Append(file_menu, "&File");
     menuBar->Append(macro_menu, "&Macros");
     menuBar->Append(mode_menu, "&Conversion Mode");
+    menuBar->Append(options_menu, "&Options");
     menuBar->Append(help_menu, "&Help");
 
     frame->SetMenuBar(menuBar);
@@ -557,7 +576,9 @@ int MyApp::OnExit()
   // TODO: this simulates zero-memory leaks!
   // Otherwise there are just too many...
 #ifndef __WXGTK__
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   wxDebugContext::SetCheckpoint();
+#endif
 #endif
 
   return 0;
@@ -599,6 +620,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEX_MODE_WINHELP, MyFrame::OnModeWinHelp)
     EVT_MENU(TEX_MODE_HTML, MyFrame::OnModeHTML)
     EVT_MENU(TEX_MODE_XLP, MyFrame::OnModeXLP)
+    EVT_MENU(TEX_OPTIONS_CURELY_BRACE, MyFrame::OnOptionsCurleyBrace)
+    EVT_MENU(TEX_OPTIONS_SYNTAX_CHECKING, MyFrame::OnOptionsSyntaxChecking)
     EVT_MENU(TEX_HELP, MyFrame::OnHelp)
     EVT_MENU(TEX_ABOUT, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -752,6 +775,34 @@ void MyFrame::OnModeXLP(wxCommandEvent& event)
       OutputFile = NULL;
       SetStatusText("In XLP mode.", 1);
 }
+
+void MyFrame::OnOptionsCurleyBrace(wxCommandEvent& event)
+{
+    checkCurleyBraces = !checkCurleyBraces;
+    if (checkCurleyBraces)
+    {
+        SetStatusText("Checking curley braces: YES", 1);
+    }
+    else
+    {
+        SetStatusText("Checking curley braces: NO", 1);
+    }
+}
+
+
+void MyFrame::OnOptionsSyntaxChecking(wxCommandEvent& event)
+{
+    checkSyntax = !checkSyntax;
+    if (checkSyntax)
+    {
+        SetStatusText("Checking syntax: YES", 1);
+    }
+    else
+    {
+        SetStatusText("Checking syntax: NO", 1);
+    }
+}
+
 
 void MyFrame::OnHelp(wxCommandEvent& event)
 {
@@ -920,7 +971,7 @@ bool Go(void)
     if (isInteractive)
     {
       wxString buf;
-      buf.Printf("Working, pass %d...", passNumber);
+      buf.Printf("Working, pass %d...Click CLOSE to abort", passNumber);
       frame->SetStatusText((char *)buf.c_str());
     }
 #endif
@@ -995,6 +1046,8 @@ bool Go(void)
   TexCleanUp();
   startedSections = FALSE;
 
+  frame->SetStatusText("Aborted by user.");
+
   OnInform("Sorry, unsuccessful.");
   OkToClose = TRUE;
   return FALSE;
@@ -1033,6 +1086,11 @@ void OnInform(char *msg)
 #else
   if (isInteractive && frame)
     (*frame->textWindow) << msg << "\n";
+/* This whole block of code is just wrong I think.  It would behave
+   completely wrong under anything other than MSW due to the ELSE
+	with no statement, and the cout calls would fail under MSW, as
+	the code in this block is compiled if !NO_GUI This code has been 
+	here since v1.1 of this file too. - gt
   else
 #ifdef __WXMSW__
   {
@@ -1043,6 +1101,7 @@ void OnInform(char *msg)
 #ifdef __WXMSW__
     {}
 #endif
+*/
   if (isInteractive)
   {
     Tex2RTFYield(TRUE);

@@ -72,6 +72,26 @@ int             hugeFont1 = 20;
 int             HugeFont2 = 24;
 int             HUGEFont3 = 28;
 
+// All of these tokens MUST be found on a line by themselves (no other
+// text) and must start at the first character of the line, or tex2rtf
+// will fail to process them correctly (a limitation of tex2rtf, not TeX)
+wxString syntaxTokens[] =
+{ "\\begin{verbatim}",
+  "\\begin{toocomplex}",
+  "\\end{verbatim}",
+  "\\end{toocomplex}",
+  "\\verb",
+  "\\begin{comment}",
+  "\\end{comment}",
+  "\\verbatiminput",
+  "\\par",
+  "\\input",
+  "\\helpinput",
+  "\\include",
+  wxEmptyString
+};
+
+
 /*
  * USER-ADJUSTABLE SETTINGS
  *
@@ -88,6 +108,8 @@ bool            winHelp = FALSE;  // Output in Windows Help format if TRUE, line
 bool            isInteractive = FALSE;
 bool            runTwice = FALSE;
 int             convertMode = TEX_RTF;
+bool            checkCurleyBraces = FALSE;
+bool            checkSyntax = FALSE;
 bool            headerRule = FALSE;
 bool            footerRule = FALSE;
 bool            compatibilityMode = FALSE; // If TRUE, maximum Latex compatibility
@@ -395,7 +417,7 @@ bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 
 // Switched this off because e.g. \verb${$ causes it to fail. There is no
 // detection of \verb yet.
-#define CHECK_BRACES 1
+// #define CHECK_BRACES 1
 
 unsigned long leftCurly = 0;
 unsigned long rightCurly = 0;
@@ -408,7 +430,7 @@ bool read_a_line(char *buf)
     buf[0] = 0;
     return FALSE;
   }
-  
+
   int ch = -2;
   int bufIndex = 0;
   buf[0] = 0;
@@ -430,24 +452,25 @@ bool read_a_line(char *buf)
 
     ch = getc(Inputs[CurrentInputIndex]);
 
-#if CHECK_BRACES
-    if (ch == '{' && !readInVerbatim)
-       leftCurly++;
-    if (ch == '}' && !readInVerbatim)
+    if (checkCurleyBraces)
     {
-       rightCurly++;
-       if (rightCurly > leftCurly)
-       {
-           wxString errBuf;
-           errBuf.Printf("An extra right curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
-           OnError((char *)errBuf.c_str());
+        if (ch == '{' && !readInVerbatim)
+           leftCurly++;
+        if (ch == '}' && !readInVerbatim)
+        {
+           rightCurly++;
+           if (rightCurly > leftCurly)
+           {
+               wxString errBuf;
+               errBuf.Printf("An extra right curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+               OnError((char *)errBuf.c_str());
 
-           // Reduce the count of right curly braces, so the mismatched count
-           // isn't reported on every line that has a '}' after the first mismatch
-           rightCurly--;
-       }
+               // Reduce the count of right curly braces, so the mismatched count
+               // isn't reported on every line that has a '}' after the first mismatch
+               rightCurly--;
+           }
+        }
     }
-#endif
 
     if (ch != EOF)
     {
@@ -496,14 +519,14 @@ bool read_a_line(char *buf)
       {
 
         // Convert embedded characters to RTF equivalents
-		switch(ch)
-		{
-		case 0xf6: // ö
-		case 0xe4: // ü
-		case 0xfc: // ü
-		case 0xd6: // Ö
-		case 0xc4: // Ä
-		case 0xdc: // Ü		
+        switch(ch)
+        {
+        case 0xf6: // ö
+        case 0xe4: // ü
+        case 0xfc: // ü
+        case 0xd6: // Ö
+        case 0xc4: // Ä
+        case 0xdc: // Ü     
                 if (bufIndex+5 >= MAX_LINE_BUFFER_SIZE)
                 {
                    wxString errBuf;
@@ -512,21 +535,21 @@ bool read_a_line(char *buf)
                    OnError((char *)errBuf.c_str());
                    return FALSE;
                 }
-				buf[bufIndex++]='\\';
-				buf[bufIndex++]='"';
-				buf[bufIndex++]='{';
-				switch(ch)
-				{
-					case 0xf6:buf[bufIndex++]='o';break; // ö
-					case 0xe4:buf[bufIndex++]='a';break; // ä
-					case 0xfc:buf[bufIndex++]='u';break; // ü
-					case 0xd6:buf[bufIndex++]='O';break; // Ö
-					case 0xc4:buf[bufIndex++]='A';break; // Ä
-					case 0xdc:buf[bufIndex++]='U';break; // Ü					
-				}				
-				buf[bufIndex++]='}';
-				break;
-		case 0xdf: // ß 
+                buf[bufIndex++]='\\';
+                buf[bufIndex++]='"';
+                buf[bufIndex++]='{';
+                switch(ch)
+                {
+                    case 0xf6:buf[bufIndex++]='o';break; // ö
+                    case 0xe4:buf[bufIndex++]='a';break; // ä
+                    case 0xfc:buf[bufIndex++]='u';break; // ü
+                    case 0xd6:buf[bufIndex++]='O';break; // Ö
+                    case 0xc4:buf[bufIndex++]='A';break; // Ä
+                    case 0xdc:buf[bufIndex++]='U';break; // Ü                   
+                }               
+                buf[bufIndex++]='}';
+                break;
+        case 0xdf: // ß 
             if (bufIndex+5 >= MAX_LINE_BUFFER_SIZE)
             {
               wxString errBuf;
@@ -535,13 +558,13 @@ bool read_a_line(char *buf)
               OnError((char *)errBuf.c_str());
               return FALSE;
             }
-			buf[bufIndex++]='\\';
-			buf[bufIndex++]='s';
-			buf[bufIndex++]='s';
+            buf[bufIndex++]='\\';
+            buf[bufIndex++]='s';
+            buf[bufIndex++]='s';
             buf[bufIndex++]='\\';
             buf[bufIndex++]='/';
-			break;	
-		default:
+            break;  
+        default:
             if (bufIndex >= MAX_LINE_BUFFER_SIZE)
             {
               wxString errBuf;
@@ -550,8 +573,42 @@ bool read_a_line(char *buf)
               OnError((char *)errBuf.c_str());
               return FALSE;
             }
-			buf[bufIndex++] = ch;
-			break;
+            // If the current character read in is a '_', we need to check 
+            // whether there should be a '\' before it or not
+            if (ch != '_')
+            {
+                buf[bufIndex++] = ch;
+                break;
+            }
+
+            if (readInVerbatim)
+            {
+                // There should NOT be a '\' before the '_'
+                if ((bufIndex > 0 && (buf[bufIndex-1] == '\\')) && (buf[0] != '%'))
+                {
+                   wxString errBuf;
+                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that should NOT have a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                   OnError((char *)errBuf.c_str());
+                }
+            }
+            else
+            {
+                // There should be a '\' before the '_'
+                if (bufIndex == 0)
+                {
+                   wxString errBuf;
+                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                   OnError((char *)errBuf.c_str());
+                }
+                else if ((buf[bufIndex-1] != '\\') && (buf[0] != '%'))  // If it is a comment line, then no warnings
+                {
+                   wxString errBuf;
+                   errBuf.Printf("An underscore ('_') was detected at line %lu inside file %s that may need a '\\' before it.",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                   OnError((char *)errBuf.c_str());
+                }
+            }
+            buf[bufIndex++] = ch;
+            break;
         }  // switch
       }  // else
     }
@@ -563,16 +620,19 @@ bool read_a_line(char *buf)
       if (CurrentInputIndex > 0) 
          ch = ' '; // No real end of file
       CurrentInputIndex --;
-#if CHECK_BRACES
-      if (leftCurly != rightCurly)
+
+      if (checkCurleyBraces)
       {
-        wxString errBuf;
-        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
-        OnError((char *)errBuf.c_str());
+          if (leftCurly != rightCurly)
+          {
+            wxString errBuf;
+            errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+            OnError((char *)errBuf.c_str());
+          }
+          leftCurly = 0;
+          rightCurly = 0;
       }
-      leftCurly = 0;
-      rightCurly = 0;
-#endif
+
       if (readingVerbatim)
       {
         readingVerbatim = FALSE;
@@ -730,6 +790,37 @@ bool read_a_line(char *buf)
     bool succ = read_a_line(buf);
     return succ;
   }
+
+  if (checkSyntax)
+  {
+      wxString bufStr = buf;
+      int index = 0;
+      size_t pos = 0;
+      for (index=0; syntaxTokens[index] != wxEmptyString; index++)
+      {
+          pos = bufStr.find(syntaxTokens[index]);
+          if (pos != wxString::npos && pos != 0)
+          {
+              size_t commentStart = bufStr.find("%");
+              if (commentStart == wxString::npos || commentStart > pos)
+              {
+                  wxString errBuf;
+                  if (syntaxTokens[index] == "\\verb")
+                  {
+                      errBuf.Printf("'%s$....$' was detected at line %lu inside file %s.  Please replace this form with \\tt{....}",
+                                    syntaxTokens[index], LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                  }
+                  else
+                  {
+                      errBuf.Printf("'%s' was detected at line %lu inside file %s that is not the only text on the line, starting at column one.",
+                                    syntaxTokens[index], LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+                  }
+                  OnError((char *)errBuf.c_str());
+              }
+          }
+      }
+  }  // checkSyntax
+
   if (strncmp(buf, "\\begin{verbatim}", 16) == 0 ||
       strncmp(buf, "\\begin{toocomplex}", 18) == 0)
     readInVerbatim = TRUE;
@@ -737,14 +828,15 @@ bool read_a_line(char *buf)
            strncmp(buf, "\\end{toocomplex}", 16) == 0)
     readInVerbatim = FALSE;
 
-#if CHECK_BRACES
-  if (ch == EOF && leftCurly != rightCurly)
+  if (checkCurleyBraces)
   {
-    wxString errBuf;
-    errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
-    OnError((char *)errBuf.c_str());
+      if (ch == EOF && leftCurly != rightCurly)
+      {
+        wxString errBuf;
+        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
+        OnError((char *)errBuf.c_str());
+      }
   }
-#endif
 
   return (ch == EOF);
 }  // read_a_line
@@ -921,6 +1013,9 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
       pos = 0;
       len = strlen(buffer);
       // Check for verbatim (or toocomplex, which comes to the same thing)
+      wxString bufStr = buffer;
+//      if (bufStr.find("\\begin{verbatim}") != wxString::npos ||
+//          bufStr.find("\\begin{toocomplex}") != wxString::npos)
       if (strncmp(buffer, "\\begin{verbatim}", 16) == 0 ||
           strncmp(buffer, "\\begin{toocomplex}", 18) == 0)
       {
@@ -1007,7 +1102,6 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
         }
         pos ++;
         
-
         // Try matching \end{environment}
         if (environment && FindEndEnvironment(buffer, &pos, environment))
         {
@@ -1139,8 +1233,8 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
 
           children.Append((wxObject *)chunk);
         }
-	else
-	{
+    else
+    {
           char *env = NULL;
           bool tmpParseToBrace = TRUE;
           TexMacroDef *def = MatchMacro(buffer, &pos, &env, &tmpParseToBrace);
@@ -1237,7 +1331,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
               }
             
 //            delete chunk; // Might delete children
-	    }
+        }
           }
           else
           {
@@ -1245,7 +1339,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           }
         }
         else
-	{
+    {
          /*
           * If all else fails, we assume that we have
           * a pair of braces on their own, so return a `dummy' macro
@@ -1278,7 +1372,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
           arg->macroId = chunk->macroId;
 
           pos = ParseArg(arg, arg->children, buffer, pos, NULL, TRUE, customMacroArgs);
-	}
+    }
         break;
       }
       case '$':
