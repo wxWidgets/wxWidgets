@@ -144,6 +144,10 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     refData->m_bitmapMask = new wxMask((WXHBITMAP)
                                         wxInvertMask(iconInfo.hbmMask, w, h));
 
+
+    // delete the old one now as we don't need it any more
+    ::DeleteObject(iconInfo.hbmMask);
+
 #if WXWIN_COMPATIBILITY_2
     refData->m_ok = TRUE;
 #endif // WXWIN_COMPATIBILITY_2
