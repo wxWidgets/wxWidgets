@@ -25,9 +25,9 @@ and user interface element sizes.
 Default constructor. You don't need to create an instance of wxSystemSettings
 since all of its functions are static.
 
-\membersection{wxSystemSettings::GetSystemColour}\label{wxsystemsettingsgetsystemcolour}
+\membersection{wxSystemSettings::GetColour}\label{wxsystemsettingsgetcolour}
 
-\func{static wxColour}{GetSystemColour}{\param{int}{ index}}
+\func{static wxColour}{GetColour}{\param{wxSystemColour}{ index}}
 
 Returns a system colour.
 
@@ -69,11 +69,11 @@ Returns a system colour.
 \end{twocollist}
 
 \pythonnote{This static method is implemented in Python as a
-standalone function named {\tt wxSystemSettings\_GetSystemColour}}
+standalone function named {\tt wxSystemSettings\_GetColour}}
 
-\membersection{wxSystemSettings::GetSystemFont}\label{wxsystemsettingsgetsystemfont}
+\membersection{wxSystemSettings::GetFont}\label{wxsystemsettingsgetfont}
 
-\func{static wxFont}{GetSystemFont}{\param{int}{ index}}
+\func{static wxFont}{GetFont}{\param{wxSystemFont}{ index}}
 
 Returns a system font.
 
@@ -91,11 +91,11 @@ Not available in versions of Windows earlier than Windows 95 or Windows NT 4.0.}
 \end{twocollist}
 
 \pythonnote{This static method is implemented in Python as a
-standalone function named {\tt wxSystemSettings\_GetSystemFont}}
+standalone function named {\tt wxSystemSettings\_GetFont}}
 
-\membersection{wxSystemSettings::GetSystemMetric}\label{wxsystemsettingsgetsystemmetric}
+\membersection{wxSystemSettings::GetMetric}\label{wxsystemsettingsgetmetric}
 
-\func{static int}{GetSystemMetric}{\param{int}{ index}}
+\func{static int}{GetMetric}{\param{wxSystemMetric}{ index}}
 
 Returns a system metric.
 
@@ -150,5 +150,5 @@ where it would otherwise present the information only in audible form; zero othe
 \end{twocollist}
 
 \pythonnote{This static method is implemented in Python as a
-standalone function named {\tt wxSystemSettings\_GetSystemMetric}}
+standalone function named {\tt wxSystemSettings\_GetMetric}}
 
