@@ -111,7 +111,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
                                       "-------", "owner-drawn", "listbox" };
 
   wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
-  uint ui;
+  unsigned int ui;
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui++ )
     astrChoices[ui] = aszChoices[ui];
 
@@ -128,7 +128,7 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame, char *title, int x, int y, 
   delete [] astrChoices;
 
   for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
-    m_pListBox->GetItem(ui)->SetBackColor(wxColor(200, 200, 200));
+    m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
   }
 
   m_pListBox->Check(2);
@@ -161,7 +161,7 @@ void CheckListBoxFrame::OnAbout(wxCommandEvent& event)
 void CheckListBoxFrame::OnListboxSelect(wxCommandEvent& event)
 {
   wxString strSelection;
-  uint nSel = event.GetSelection();
+  unsigned int nSel = event.GetSelection();
   strSelection.sprintf("item %d selected (%schecked)", nSel,
                        m_pListBox->IsChecked(nSel) ? "" : "not ");
   SetStatusText(strSelection);
@@ -178,7 +178,9 @@ void CheckListBoxFrame::OnListboxDblClick(wxCommandEvent& event)
 void CheckListBoxFrame::OnCheckboxToggle(wxCommandEvent& event)
 {
   wxString strSelection;
-  uint nItem = event.GetInt();
+  unsigned int nItem = event.GetInt();
+  if(event.GetInt()==-1)
+	  return;
   strSelection.sprintf("item %d was %schecked", nItem,
                        m_pListBox->IsChecked(nItem) ? "" : "un");
   SetStatusText(strSelection);
