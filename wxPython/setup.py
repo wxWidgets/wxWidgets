@@ -446,7 +446,7 @@ if BUILD_STC:
 ##             os.chdir(cwd)
 
 
-    swig_sources = run_swig(['stc.i'], location, '', PKGDIR,
+    swig_sources = run_swig(['stc.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force,
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [opj(STC_H, 'stc.h')] + swig_deps)
@@ -540,7 +540,7 @@ if BUILD_XRC:
     msg('Preparing XRC...')
     location = 'contrib/xrc'
 
-    swig_sources = run_swig(['xrc.i'], location, '', PKGDIR,
+    swig_sources = run_swig(['xrc.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps +
                             [ '%s/_xrc_rename.i' % location,
                               '%s/_xrc_ex.py' % location,
