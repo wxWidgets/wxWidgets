@@ -606,7 +606,7 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg xpm tiff $(LIBTARGET)
+all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib png jpeg xpm tiff $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 
@@ -960,7 +960,7 @@ $(WXDIR)\lib\wxos22.lib: $(OS2LIBOBJS2)
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
-# del *.obj
+ del *.obj
 
 $(WXDIR)\lib\wx.lib: \
   $D\dummy.obj \
@@ -978,14 +978,14 @@ $(WXDIR)\lib\wx.lib: \
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
-# del $(COMTEMPTGT1)
-# del $(COMTEMPTGT2)
-# del $(COMTEMPTGT3)
-# del $(GENTEMPTGT)
-# del $(HTMLTEMPTGT)
-# del $(NONESTEMPTGT)
-# del $(OS2TEMPTGT1)
-# del $(OS2TEMPTGT2)
+ del $(COMTEMPTGT1)
+ del $(COMTEMPTGT2)
+ del $(COMTEMPTGT3)
+ del $(GENTEMPTGT)
+ del $(HTMLTEMPTGT)
+ del $(NONESTEMPTGT)
+ del $(OS2TEMPTGT1)
+ del $(OS2TEMPTGT2)
 
 !else
 

@@ -8710,10 +8710,6 @@ EXPORTS
       CreateHelpWindow__20wxHtmlHelpControllerFv
       ;wxHtmlHelpController::ReadCustomization(wxConfigBase*,const wxString&)
       ReadCustomization__20wxHtmlHelpControllerFP12wxConfigBaseRC8wxString
-      ;wxHtmlHelpController::sm_classwxHtmlHelpController
-      sm_classwxHtmlHelpController__20wxHtmlHelpController
-      ;wxHtmlHelpController::sm_eventTable
-      sm_eventTable__20wxHtmlHelpController
       ;wxHtmlHelpController::WriteCustomization(wxConfigBase*,const wxString&)
       WriteCustomization__20wxHtmlHelpControllerFP12wxConfigBaseRC8wxString
       ;wxHtmlHelpController::UseConfig(wxConfigBase*,const wxString&)
@@ -8722,14 +8718,10 @@ EXPORTS
       wxConstructorForwxHtmlHelpController__Fv
       ;wxHtmlHelpController::~wxHtmlHelpController()
       __dt__20wxHtmlHelpControllerFv
-      ;wxHtmlHelpController::GetEventTable() const
-      GetEventTable__20wxHtmlHelpControllerCFv
       ;wxHtmlHelpController::OnCloseFrame(wxCloseEvent&)
       OnCloseFrame__20wxHtmlHelpControllerFR12wxCloseEvent
       ;wxHtmlHelpController::wxHtmlHelpController(int)
       __ct__20wxHtmlHelpControllerFi
-      ;wxHtmlHelpController::sm_eventTableEntries
-      sm_eventTableEntries__20wxHtmlHelpController
       ;wxHtmlHelpController::SetTitleFormat(const wxString&)
       SetTitleFormat__20wxHtmlHelpControllerFRC8wxString
   ;From object file:  ..\html\helpdata.cpp

@@ -362,7 +362,7 @@ bool wxFrame::Show(
         wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
         ::WinQueryWindowPos(GetHwnd(), &vSwp);
-        m_bIconized = vSwp & SWP_MINIMIZE;
+        m_bIconized = vSwp.fl & SWP_MINIMIZE;
         ::WinSetWindowPos( (HWND) GetHWND()
                           ,HWND_TOP
                           ,vSwp.x
@@ -384,7 +384,7 @@ bool wxFrame::Show(
             HWND                    hWndParent = GetHwndOf(GetParent());
 
             ::WinQueryWindowPos(hWndParent, &vSwp);
-            m_bIconized = vSwp & SWP_MINIMIZE;
+            m_bIconized = vSwp.fl & SWP_MINIMIZE;
             if (hWndParent)
                 ::WinSetWindowPos( hWndParent
                                   ,HWND_TOP
