@@ -63,7 +63,7 @@
     <template id="wx_sample_console" template="wx_util_console">
         <if cond="FORMAT=='autoconf'">
             <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
-            <__command>$(SAMPLES_RPATH_POSTLINK)</__command>
+            <__command>$(LF)$(SAMPLES_RPATH_POSTLINK)</__command>
         </if>
     </template>
 
