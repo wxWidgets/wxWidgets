@@ -3896,16 +3896,14 @@ void wxWindowMSW::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 
     // update the colours we use if they were not set explicitly by the user:
     // this must be done or OnCtlColor() would continue to use the old colours
-    if ( !m_hasFgCol )
+    if ( !m_hasFgCol || !m_hasBgCol )
     {
-        m_foregroundColour = wxSystemSettings::
-                                GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
-    }
+        wxVisualAttributes attrs = GetDefaultAttributes();
+        if ( !m_hasFgCol )
+            m_foregroundColour = attrs.colFg;
 
-    if ( !m_hasBgCol )
-    {
-        m_backgroundColour = wxSystemSettings::
-                                GetSystemColour(wxSYS_COLOUR_BTNFACE);
+        if ( !m_hasBgCol )
+            m_backgroundColour = attrs.colBg;
     }
 }
 
