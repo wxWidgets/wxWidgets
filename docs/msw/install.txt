@@ -473,6 +473,7 @@ OLD VERSIONS:
 - If using GnuWin32 b18, you will need to copy windres.exe
   from e.g. the MinGW distribution, to a directory in your path.
 
+
 Symantec & DigitalMars C++ compilation
 --------------------------------------
 The DigitalMars compiler is a free succssor to the Symantec compiler
@@ -480,14 +481,23 @@ and can be downloaded from http://www.digitalmars.com/
    
 1. You need to download and unzip in turn (later packages will overwrite
    older files)
-      Digital Mars C/C++ Compiler Version 8.34 or 8.35
+      Digital Mars C/C++ Compiler Version 8.38 or later
       Basic utilities
-   from http://www.digitalmars.com/download/freecompiler.html [26 Aug 03, CE]
+   from http://www.digitalmars.com/download/freecompiler.html
 
-2. Change directory to src\msw. Type 'make -f makefile.sc' to
+2. Change directory to build\msw and type 'make -f makefile.dmc' to
    make the wxWindows core library.
-3. Change directory to samples\minimal and type 'make -f makefile.sc'
+
+3. Change directory to samples\minimal and type 'make -f makefile.dmc'
    to make this sample. Most of the other samples also work.
+
+
+Note that if you don't have the files makefile.dmc you may create them yourself
+using bakefile tool according to the instructions in build\bakefiles\README:
+
+    cd build\bakefiles
+    bakefile_gen -f dmars -b wx.bkl
+    bakefile_gen -f dmars -b ../../samples/minimal/minimal.bkl
 
 
 16-bit compilation is no longer supported.
