@@ -36,7 +36,8 @@ class wxFontNameDirectory;
 // global variables
 //-----------------------------------------------------------------------------
 
-//extern wxFontNameDirectory *wxTheFontNameDirectory;  // defined below
+extern wxFontNameDirectory *wxTheFontNameDirectory;
+extern const char* wxEmptyString;
 
 //-----------------------------------------------------------------------------
 // wxFont
@@ -46,38 +47,44 @@ class wxFont: public wxGDIObject
 {
   DECLARE_DYNAMIC_CLASS(wxFont)
 
-  public:
-    wxFont();
-    wxFont( int PointSize, int FontIdOrFamily, int Style, int Weight,
-            bool underlined = FALSE, const char *Face = ( const char *) NULL );
-    wxFont( int PointSize, const char *Face, int Family,
-            int Style, int Weight, bool underlined = FALSE );
-    wxFont( const wxFont& font );
-    ~wxFont();
-    wxFont& operator = ( const wxFont& font );
-    bool operator == ( const wxFont& font );
-    bool operator != ( const wxFont& font );
-    bool Ok() const;
+public:
+  wxFont();
+  wxFont( int pointSize, int family, int style, int weight, bool underlined = FALSE, 
+          const wxString& face = wxEmptyString );
+  wxFont( const wxFont& font );
+  ~wxFont();
+  wxFont& operator = ( const wxFont& font );
+  bool operator == ( const wxFont& font );
+  bool operator != ( const wxFont& font );
+  bool Ok() const;
 
-    int GetPointSize() const;
-    wxString GetFaceName() const;
-    int GetFamily() const;
-    wxString GetFamilyString() const;
-    int GetFontId() const;
-    wxString GetFaceString() const;
-    int GetStyle() const;
-    wxString GetStyleString() const;
-    int GetWeight() const;
-    wxString GetWeightString() const;
-    bool GetUnderlined() const;
+  int GetPointSize() const;
+  int GetFamily() const;
+  int GetFontId() const;
+  int GetStyle() const;
+  int GetWeight() const;
+  bool GetUnderlined() const;
 
-    wxFont( char *xFontName );
-
+  void SetPointSize( int pointSize );
+  void SetFamily( int family );
+  void SetStyle( int style );
+  void SetWeight( int weight );
+  void SetFaceName( const wxString& faceName );
+  void SetUnderlined( bool underlined );
+    
+  wxString GetFaceName() const;
+  wxString GetFamilyString() const;
+  wxString GetStyleString() const;
+  wxString GetWeightString() const;
+    
   // implementation
+  
+  wxFont( char *xFontName );
+  void Unshare();
 
-    GdkFont* GetInternalFont(float scale = 1.0) const;
+  GdkFont* GetInternalFont(float scale = 1.0) const;
 
-    // no data :-)
+  // no data :-)
 };
 
 //-----------------------------------------------------------------------------
@@ -107,7 +114,5 @@ class wxFontNameDirectory: public wxObject
     class wxHashTable *table;
     int   nextFontId;
 };
-
-extern wxFontNameDirectory *wxTheFontNameDirectory;
 
 #endif // __GTKFONTH__

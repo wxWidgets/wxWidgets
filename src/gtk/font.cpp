@@ -30,17 +30,18 @@ class wxFontRefData: public wxObjectRefData
 public:
 
     wxFontRefData();
+    wxFontRefData( const wxFontRefData& data );
     ~wxFontRefData();
 
-    wxList   m_scaled_xfonts;
-    int      m_pointSize;
-    int      m_family, m_style, m_weight;
-    bool     m_underlined;
-    int      m_fontId;
-    char*    m_faceName;
+    wxList    m_scaled_xfonts;
+    int       m_pointSize;
+    int       m_family, m_style, m_weight;
+    bool      m_underlined;
+    int       m_fontId;
+    wxString  m_faceName;
 
-    bool     m_byXFontName;
-    GdkFont *m_font;
+    bool      m_byXFontName;
+    GdkFont  *m_font;
 
     friend wxFont;
 };
@@ -54,8 +55,21 @@ wxFontRefData::wxFontRefData() : m_scaled_xfonts(wxKEY_INTEGER)
     m_weight = wxNORMAL;
     m_underlined = FALSE;
     m_fontId = 0;
-    m_faceName = (char *) NULL;
     m_font = (GdkFont *) NULL;
+}
+
+wxFontRefData::wxFontRefData( const wxFontRefData& data ) : m_scaled_xfonts(wxKEY_INTEGER)
+{
+    m_byXFontName = FALSE;
+    m_pointSize = data.m_pointSize;
+    m_family = data.m_family;
+    m_style = data.m_style;
+    m_weight = data.m_weight;
+    m_underlined = data.m_underlined;
+    m_fontId = data.m_fontId;
+    m_faceName = data.m_faceName;
+    m_font = (GdkFont *) NULL;
+    if (data.m_font) m_font = gdk_font_ref( data.m_font );
 }
 
 wxFontRefData::~wxFontRefData()
@@ -67,11 +81,6 @@ wxFontRefData::~wxFontRefData()
         wxNode *next = node->Next();
         gdk_font_unref( font );
         node = next;
-    }
-    if (m_faceName)
-    {
-        delete m_faceName;
-        m_faceName = (char *) NULL;
     }
     if (m_font) gdk_font_unref( m_font );
 }
@@ -97,50 +106,36 @@ wxFont::wxFont( char *xFontName )
     M_FONTDATA->m_font = gdk_font_load( xFontName );
 }
 
-wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
-        bool Underlined, const char* Face)
+wxFont::wxFont( int pointSize, int family, int style, int weight, bool underlined = FALSE, 
+                const wxString& face = wxEmptyString )
 {
     m_refData = new wxFontRefData();
 
-    if (FontIdOrFamily == wxDEFAULT) FontIdOrFamily = wxSWISS;
-    M_FONTDATA->m_family = FontIdOrFamily;
-
-    if ((M_FONTDATA->m_faceName = (Face) ? copystring(Face) : (char*)NULL) )
+    if (family == wxDEFAULT) family = wxSWISS;
+    M_FONTDATA->m_family = family;
+    
+    if (!face.IsEmpty())
     {
-        M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( Face, FontIdOrFamily );
-        M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
+        M_FONTDATA->m_faceName = face;
+        M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( face, family );
+        M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( family );
     }
     else
     {
-        M_FONTDATA->m_fontId = FontIdOrFamily;
-        M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
+        M_FONTDATA->m_fontId = family;
+        M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( family );
     }
 
-    if (Style == wxDEFAULT) Style = wxNORMAL;
-    M_FONTDATA->m_style = Style;
-    if (Weight == wxDEFAULT) Weight = wxNORMAL;
-    M_FONTDATA->m_weight = Weight;
-    if (PointSize == wxDEFAULT) PointSize = 12;
-    M_FONTDATA->m_pointSize = PointSize;
-    M_FONTDATA->m_underlined = Underlined;
+    if (style == wxDEFAULT) style = wxNORMAL;
+    M_FONTDATA->m_style = style;
+    if (weight == wxDEFAULT) weight = wxNORMAL;
+    M_FONTDATA->m_weight = weight;
+    if (pointSize == wxDEFAULT) pointSize = 12;
+    M_FONTDATA->m_pointSize = pointSize;
+    M_FONTDATA->m_underlined = underlined;
 
     if (wxTheFontList) wxTheFontList->Append( this );
-}
-
-wxFont::wxFont(int PointSize, const char *Face, int Family, int Style,
-        int Weight, bool Underlined)
-{
-    m_refData = new wxFontRefData();
-
-    M_FONTDATA->m_fontId = wxTheFontNameDirectory->FindOrCreateFontId( Face, Family );
-    M_FONTDATA->m_faceName = (Face) ? copystring(Face) : (char*)NULL;
-    M_FONTDATA->m_family = wxTheFontNameDirectory->GetFamily( M_FONTDATA->m_fontId );
-    M_FONTDATA->m_style = Style;
-    M_FONTDATA->m_weight = Weight;
-    M_FONTDATA->m_pointSize = PointSize;
-    M_FONTDATA->m_underlined = Underlined;
-
-    if (wxTheFontList) wxTheFontList->Append( this );
+  
 }
 
 wxFont::wxFont( const wxFont& font )
@@ -182,14 +177,6 @@ int wxFont::GetPointSize() const
     wxCHECK_MSG( Ok(), 0, "invalid font" );
 
     return M_FONTDATA->m_pointSize;
-}
-
-wxString wxFont::GetFaceString() const
-{
-    wxCHECK_MSG( Ok(), "", "invalid font" );
-
-    wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
-    return s;
 }
 
 wxString wxFont::GetFaceName() const
@@ -281,6 +268,62 @@ bool wxFont::GetUnderlined() const
     wxCHECK_MSG( Ok(), FALSE, "invalid font" );
 
     return M_FONTDATA->m_underlined;
+}
+
+void wxFont::Unshare()
+{
+    if (!m_refData)
+    {
+	m_refData = new wxFontRefData();
+    }
+    else
+    {
+	wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
+	UnRef();
+	m_refData = ref;
+    }
+}
+
+void wxFont::SetPointSize(int pointSize)
+{
+    Unshare();
+
+    M_FONTDATA->m_pointSize = pointSize;
+}
+
+void wxFont::SetFamily(int family)
+{
+    Unshare();
+
+    M_FONTDATA->m_family = family;
+}
+
+void wxFont::SetStyle(int style)
+{
+    Unshare();
+
+    M_FONTDATA->m_style = style;
+}
+
+void wxFont::SetWeight(int weight)
+{
+    Unshare();
+
+    M_FONTDATA->m_weight = weight;
+}
+
+void wxFont::SetFaceName(const wxString& faceName)
+{
+    Unshare();
+
+    M_FONTDATA->m_faceName = faceName;
+}
+
+void wxFont::SetUnderlined(bool underlined)
+{
+    Unshare();
+
+    M_FONTDATA->m_underlined = underlined;
 }
 
 //-----------------------------------------------------------------------------
@@ -699,7 +742,8 @@ found:
 // wxFontNameItem
 //-----------------------------------------------------------------------------
 
-class wxFontNameItem : public wxObject {
+class wxFontNameItem : public wxObject 
+{
     DECLARE_DYNAMIC_CLASS(wxFontNameItem)
 public:
         wxFontNameItem(const char *name, int id, int family);
@@ -767,7 +811,8 @@ wxFontNameDirectory::~wxFontNameDirectory()
     // Cleanup wxFontNameItems allocated
     table->BeginFind();
     wxNode *node = table->Next();
-    while (node) {
+    while (node) 
+    {
         wxFontNameItem *item = (wxFontNameItem*)node->Data();
         delete item;
         node = table->Next();
@@ -797,7 +842,8 @@ void wxFontNameDirectory::Initialize(int fontid, int family, const char *resname
 
     sprintf(resource, "Family%s", resname);
     SearchResource((const char *)resource, (const char **) NULL, 0, (char **)&fam);
-    if (fam) {
+    if (fam) 
+    {
         if      (!strcmp(fam, "Default"))    family = wxDEFAULT;
         else if (!strcmp(fam, "Roman"))        family = wxROMAN;
         else if (!strcmp(fam, "Decorative"))    family = wxDECORATIVE;
@@ -816,6 +862,7 @@ int wxFontNameDirectory::FindOrCreateFontId(const char *name, int family)
 
     // font exists -> return id
     if ( (id = GetFontId(name)) ) return id;
+    
     // create new font
     Initialize(id=GetNewFontId(), family, name);
     return id;
@@ -826,6 +873,7 @@ char *wxFontNameDirectory::GetScreenName(int fontid, int weight, int style)
     wxFontNameItem *item = (wxFontNameItem*)table->Get(fontid); // find font
     if (item)
         return item->GetScreenName(weight, style);
+	
     // font does not exist
     return (char *) NULL;
 }
@@ -835,6 +883,7 @@ char *wxFontNameDirectory::GetPostScriptName(int fontid, int weight, int style)
     wxFontNameItem *item = (wxFontNameItem*)table->Get(fontid); // find font
     if (item)
         return item->GetPostScriptName(weight, style);
+	
     // font does not exist
     return (char *) NULL;
 }
@@ -853,6 +902,7 @@ char *wxFontNameDirectory::GetFontName(int fontid)
     wxFontNameItem *item = (wxFontNameItem *)table->Get(fontid); // find font
     if (item)
         return item->GetName();
+	
     // font does not exist
     return (char *) NULL;
 }
@@ -863,11 +913,13 @@ int wxFontNameDirectory::GetFontId(const char *name)
 
     table->BeginFind();
 
-    while ( (node = table->Next()) ) {
+    while ( (node = table->Next()) ) 
+    {
         wxFontNameItem *item = (wxFontNameItem*)node->Data();
         if (!strcmp(name, item->name))
             return item->id;
     }
+    
     // font does not exist
     return 0;
 }
@@ -878,6 +930,7 @@ int wxFontNameDirectory::GetFamily(int fontid)
 
     if (item)
         return item->family;
+	
     // font does not exist
     return wxDEFAULT;
 }
