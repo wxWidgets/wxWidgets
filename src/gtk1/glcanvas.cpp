@@ -309,7 +309,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     }
     else
     {
-      int data[512], arg=0, p=0;
+      int arg=0, p=0;
        
       while( (attribList[arg]!=0) && (p<510) )
       {
