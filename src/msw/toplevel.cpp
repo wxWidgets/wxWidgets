@@ -181,8 +181,10 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         *exflags |= WS_EX_DLGMODALFRAME;
     else if ( !(style & wxBORDER_NONE) )
         msflags |= WS_BORDER;
+#ifndef __POCKETPC__
     else
         msflags |= WS_POPUP;
+#endif
 #endif
 
     // normally we consider that all windows without a caption must be popups,
@@ -508,9 +510,11 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         // all dialogs are popups
         dlgTemplate->style |= WS_POPUP;
 
+#ifndef __WXWINCE__
         // force 3D-look if necessary, it looks impossibly ugly otherwise
         if ( style & (wxRESIZE_BORDER | wxCAPTION) )
             dlgTemplate->style |= DS_MODALFRAME;
+#endif
 
         ret = CreateDialog(dlgTemplate, title, pos, sizeReal);
         free(dlgTemplate);
