@@ -198,11 +198,6 @@ void wxPyApp::OnAssert(const wxChar *file,
                 buf += msg;
             }
 
-            // Send it to the normal log destination, but only if
-            // not _DIALOG because it will call this too
-            if ( !(m_assertMode & wxPYAPP_ASSERT_DIALOG))
-                wxLogDebug(buf);
-
             // set the exception
             wxPyBeginBlockThreads();
             PyObject* s = wx2PyString(buf);
@@ -213,6 +208,20 @@ void wxPyApp::OnAssert(const wxChar *file,
             // Now when control returns to whatever API wrapper was called from
             // Python it should detect that an exception is set and will return
             // NULL, signalling the exception to Python.
+        }
+
+        // Send it to the normal log destination, but only if
+        // not _DIALOG because it will call this too
+        if ( (m_assertMode & wxPYAPP_ASSERT_LOG) && !(m_assertMode & wxPYAPP_ASSERT_DIALOG)) {
+            wxString buf;
+            buf.Alloc(4096);
+            buf.Printf(wxT("%s(%d): assert \"%s\" failed"),
+                       file, line, cond);
+            if (msg != NULL) {
+                buf += wxT(": ");
+                buf += msg;
+            }
+            wxLogDebug(buf);
         }
 
         // do the normal wx assert dialog?

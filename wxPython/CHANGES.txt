@@ -17,8 +17,15 @@ unicode.
 Fixed problem where the wrong class name could sometimes be used for
 OOR.
 
-Fixed a interpreter lock problem in the __eq__ and __ne__ methods in
+Fixed an interpreter lock problem in the __eq__ and __ne__ methods in
 wxSize and etc.
+
+Updated PyCrust to version 0.9
+
+Instead of always logging C++ assertions, added wxPYAPP_ASSERT_LOG
+flag to turn it on.  In most cases turning it into an exception (the
+default behavior) is enough.  See below in the 2.3.4.1 notes for more
+details.
 
 
 

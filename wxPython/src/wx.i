@@ -68,7 +68,8 @@ wxSize      wxDefaultSize;
 enum {
     wxPYAPP_ASSERT_SUPPRESS  = 1,
     wxPYAPP_ASSERT_EXCEPTION = 2,
-    wxPYAPP_ASSERT_DIALOG    = 4
+    wxPYAPP_ASSERT_DIALOG    = 4,
+    wxPYAPP_ASSERT_LOG       = 8
 };
 
 
