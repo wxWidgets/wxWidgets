@@ -29,7 +29,7 @@ COMPIL=1
 PNGSETUP=
 # Need wxUSE_ODBC; define this to compile db sample
 ODBCSETUP=
-
+WXUSINGDLL=0
 
 #
 # Please keep samples list up-to-date, in alphabetical order
@@ -187,6 +187,8 @@ all:
         make -f makefile.b32 FINAL=$(FINAL) WXUSINGDLL=$(WXUSINGDLL)
 
 clean:
+        cd $(WXDIR)\samples\artprov
+        make -f makefile.b32 clean
         cd $(WXDIR)\samples\calendar
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\caret
@@ -237,10 +239,8 @@ clean:
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\mdi
         make -f makefile.b32 clean
-!if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
         make -f makefile.b32 clean
-!endif
         cd $(WXDIR)\samples\mfc
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\menu
@@ -297,10 +297,8 @@ clean:
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\validate
         make -f makefile.b32 clean
-!if "$(NOMAKE)"==""
         cd $(WXDIR)\samples\wizard
         make -f makefile.b32 clean
-!endif
         cd $(WXDIR)\samples\dragimag
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\erase
@@ -315,7 +313,6 @@ clean:
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\propsize
         make -f makefile.b32 clean
-
         cd $(WXDIR)\samples\sockets
         make -f makefile.b32 clean
         cd $(WXDIR)\samples\treelay

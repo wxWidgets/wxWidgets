@@ -176,8 +176,8 @@ makearchsetuph:
      cd $(WXDIR)\src\msw
 
 $(ARCHINCDIR)\wx:
-    mkdir $(ARCHINCDIR)
-    mkdir $(ARCHINCDIR)\wx
+    -mkdir $(ARCHINCDIR)
+    -mkdir $(ARCHINCDIR)\wx
 
 !if "$(DLL)" == "0"
 

@@ -216,10 +216,8 @@ clean:
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\mdi
         nmake -f makefile.vc clean
-!if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
         nmake -f makefile.vc clean
-!endif
         cd $(WXDIR)\samples\mfc
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\menu
