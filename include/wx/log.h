@@ -488,23 +488,22 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 #if wxUSE_LOG_DEBUG
     DECLARE_LOG_FUNCTION(Debug);
 
-    // first kind of LogTrace is unconditional: it doesn't check the level,
-    DECLARE_LOG_FUNCTION(Trace);
+    // there is no more unconditional LogTrace: it is not different from
+    // LogDebug and it creates overload ambiguities
+    //DECLARE_LOG_FUNCTION(Trace);
 
-    // this second version will only log the message if the mask had been
-    // added to the list of masks with AddTraceMask()
+    // this version only logs the message if the mask had been added to the
+    // list of masks with AddTraceMask()
     DECLARE_LOG_FUNCTION2(Trace, const wxChar *mask);
 
-    // the last one does nothing if all of level bits are not set
-    // in wxLog::GetActive()->GetTraceMask() - it's deprecated in favour of
+    // and this one does nothing if all of level bits are not set in
+    // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
 #else   //!debug
     // these functions do nothing in release builds
     inline void wxVLogDebug(const wxChar *, va_list) { }
     inline void wxLogDebug(const wxChar *, ...) { }
-    inline void wxVLogTrace(const wxChar *, va_list) { }
-    inline void wxLogTrace(const wxChar *, ...) { }
     inline void wxVLogTrace(wxTraceMask, const wxChar *, va_list) { }
     inline void wxLogTrace(wxTraceMask, const wxChar *, ...) { }
     inline void wxVLogTrace(const wxChar *, const wxChar *, va_list) { }
