@@ -633,6 +633,41 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
     return handlerA;
 }
 
+bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
+{
+    wxCHECK_MSG( handler, FALSE, _T("RemoveEventHandler(NULL) called") );
+
+    wxEvtHandler *handlerPrev = NULL,
+                 *handlerCur = GetEventHandler();
+    while ( handlerCur )
+    {
+        wxEvtHandler *handlerNext = handlerCur->GetNextHandler();
+
+        if ( handlerCur == handler )
+        {
+            if ( handlerPrev )
+            {
+                handlerPrev->SetNextHandler(handlerNext);
+            }
+            else
+            {
+                SetEventHandler(handlerNext);
+            }
+
+            handler->SetNextHandler(NULL);
+
+            return TRUE;
+        }
+
+        handlerPrev = handlerCur;
+        handlerCur = handlerNext;
+    }
+
+    wxFAIL_MSG( _T("where has the event handler gone?") );
+
+    return FALSE;
+}
+
 // ----------------------------------------------------------------------------
 // cursors, fonts &c
 // ----------------------------------------------------------------------------

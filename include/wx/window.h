@@ -403,6 +403,13 @@ public:
     void PushEventHandler( wxEvtHandler *handler );
     wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
 
+        // find the given handler in the event handler chain and remove (but
+        // not delete) it from the event handler chain, return TRUE if it was
+        // found and FALSE otherwise (this also results in an assert failure so
+        // this function should only be called when the handler is supposed to
+        // be there)
+    bool RemoveEventHandler(wxEvtHandler *handler);
+
     // validators
     // ----------
 

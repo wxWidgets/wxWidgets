@@ -1776,6 +1776,29 @@ functions so should not be required by the application programmer.
 
 \docparam{child}{Child window to remove.}
 
+\membersection{wxWindow::RemoveEventHandler}{wxwindowremoveeventhandler}
+
+\func{bool}{RemoveEventHandler}{\param{wxEvtHandler *}{handler}}
+
+Find the given {\it handler} in the windows event handler chain and remove (but
+not delete) it from it.
+
+\wxheading{Parameters}
+
+\docparam{handler}{The event handler to remove, must be non {\tt NULL} and
+must be present in this windows event handlers chain}
+
+\wxheading{Return value}
+
+Returns {\tt TRUE} if it was found and {\tt FALSE} otherwise (this also results
+in an assert failure so this function should only be called when the
+handler is supposed to be there).
+
+\wxheading{See also}
+
+\helpref{PushEventHandler}{wxwindowpusheventhandler},\rtfsp
+\helpref{PopEventHandler}{wxwindowpopeventhandler}
+
 \membersection{wxWindow::Reparent}\label{wxwindowreparent}
 
 \func{virtual bool}{Reparent}{\param{wxWindow* }{newParent}}
