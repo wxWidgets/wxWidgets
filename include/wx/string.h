@@ -79,7 +79,7 @@
 
 // implementation only
 #define   wxASSERT_VALID_INDEX(i) \
-    wxASSERT_MSG( (size_t)(i) <= Len(), _T("invaid index in wxString") )
+    wxASSERT_MSG( (size_t)(i) <= Len(), _T("invalid index in wxString") )
 
 // ----------------------------------------------------------------------------
 // constants
@@ -259,20 +259,20 @@ private:
   void Reinit() { GetStringData()->Unlock(); Init(); }
 
   // memory allocation
-    // allocates memory for string of lenght nLen
-  void AllocBuffer(size_t nLen);
+    // allocates memory for string of length nLen
+  bool AllocBuffer(size_t nLen);
     // copies data to another string
-  void AllocCopy(wxString&, int, int) const;
+  bool AllocCopy(wxString&, int, int) const;
     // effectively copies data to string
-  void AssignCopy(size_t, const wxChar *);
+  bool AssignCopy(size_t, const wxChar *);
 
   // append a (sub)string
-  void ConcatSelf(int nLen, const wxChar *src);
+  bool ConcatSelf(int nLen, const wxChar *src);
 
   // functions called before writing to the string: they copy it if there
   // are other references to our data (should be the only owner when writing)
-  void CopyBeforeWrite();
-  void AllocBeforeWrite(size_t);
+  bool CopyBeforeWrite();
+  bool AllocBeforeWrite(size_t);
 
   // if we hadn't made these operators private, it would be possible to
   // compile "wxString s; s = 17;" without any warnings as 17 is implicitly
@@ -292,9 +292,9 @@ private:
 public:
   // constructors and destructor
     // ctor for an empty string
-  wxString() { Init(); }
+  wxString() : m_pchData(NULL) { Init(); }
     // copy ctor
-  wxString(const wxString& stringSrc)
+  wxString(const wxString& stringSrc) : m_pchData(NULL)
   {
     wxASSERT_MSG( stringSrc.GetStringData()->IsValid(),
                   _T("did you forget to call UngetWriteBuf()?") );
@@ -313,9 +313,11 @@ public:
     // ctor takes first nLength characters from C string
     // (default value of wxSTRING_MAXLEN means take all the string)
   wxString(const wxChar *psz, size_t nLength = wxSTRING_MAXLEN)
-    { InitWith(psz, 0, nLength); }
+      : m_pchData(NULL)
+      { InitWith(psz, 0, nLength); }
   wxString(const wxChar *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
-    { InitWith(psz, 0, nLength); }
+      : m_pchData(NULL)
+      { InitWith(psz, 0, nLength); }
 
 #if wxUSE_UNICODE
     // from multibyte string
@@ -328,7 +330,8 @@ public:
 #else // ANSI
     // from C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength = wxSTRING_MAXLEN)
-    { InitWith((const char*)psz, 0, nLength); }
+      : m_pchData(NULL)
+      { InitWith((const char*)psz, 0, nLength); }
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
@@ -337,7 +340,8 @@ public:
 
     // from wxCharBuffer
   wxString(const wxCharBuffer& psz)
-    { InitWith(psz, 0, wxSTRING_MAXLEN); }
+      : m_pchData(NULL)
+      { InitWith(psz, 0, wxSTRING_MAXLEN); }
 #endif // Unicode/ANSI
 
     // dtor is not virtual, this class must not be inherited from!
@@ -508,7 +512,8 @@ public:
   wxString& operator=(const wxChar *psz);
 #if wxUSE_UNICODE
     // from wxWCharBuffer
-  wxString& operator=(const wxWCharBuffer& psz) { return operator=((const wchar_t *)psz); }
+  wxString& operator=(const wxWCharBuffer& psz)
+  { (void) operator=((const wchar_t *)psz); return *this; }
 #else // ANSI
     // from another kind of C string
   wxString& operator=(const unsigned char* psz);
@@ -517,7 +522,8 @@ public:
   wxString& operator=(const wchar_t *pwz);
 #endif
     // from wxCharBuffer
-  wxString& operator=(const wxCharBuffer& psz) { return operator=((const char *)psz); }
+  wxString& operator=(const wxCharBuffer& psz)
+  { (void) operator=((const char *)psz); return *this; }
 #endif // Unicode/ANSI
 
   // string concatenation
@@ -724,10 +730,10 @@ public:
   // raw access to string memory
     // ensure that string has space for at least nLen characters
     // only works if the data of this string is not shared
-  void Alloc(size_t nLen);
+  bool Alloc(size_t nLen);
     // minimize the string's memory
     // only works if the data of this string is not shared
-  void Shrink();
+  bool Shrink();
     // get writable buffer of at least nLen bytes. Unget() *must* be called
     // a.s.a.p. to put string back in a reasonable state!
   wxChar *GetWriteBuf(size_t nLen);
@@ -795,6 +801,7 @@ public:
   // constructors
     // take nLen chars starting at nPos
   wxString(const wxString& str, size_t nPos, size_t nLen)
+      : m_pchData(NULL)
   {
     wxASSERT_MSG( str.GetStringData()->IsValid(),
                   _T("did you forget to call UngetWriteBuf()?") );
@@ -1005,7 +1012,9 @@ public:
 
   // constructors and destructor
     // default ctor
-  wxArrayString() { Init(FALSE); }
+  wxArrayString()
+      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
+      { Init(FALSE); }
     // if autoSort is TRUE, the array is always sorted (in alphabetical order)
     //
     // NB: the reason for using int and not bool is that like this we can avoid
@@ -1014,7 +1023,9 @@ public:
     //
     //     of course, using explicit would be even better - if all compilers
     //     supported it...
-  wxArrayString(int autoSort) { Init(autoSort != 0); }
+  wxArrayString(int autoSort)
+      : m_nSize(0), m_nCount(0), m_pItems(NULL), m_autoSort(FALSE)
+      { Init(autoSort != 0); }
     // copy ctor
   wxArrayString(const wxArrayString& array);
     // assignment operator
@@ -1131,14 +1142,17 @@ public:
 
 class WXDLLEXPORT wxStringBuffer
 {
+    DECLARE_NO_COPY_CLASS(wxStringBuffer)
+    
 public:
     wxStringBuffer(wxString& str, size_t lenWanted = 1024)
-        : m_str(str) { m_buf = m_str.GetWriteBuf(lenWanted); }
-
+        : m_str(str), m_buf(NULL)
+        { m_buf = m_str.GetWriteBuf(lenWanted); }
+    
     ~wxStringBuffer() { m_str.UngetWriteBuf(); }
-
+    
     operator wxChar*() const { return m_buf; }
-
+    
 private:
     wxString& m_str;
     wxChar   *m_buf;

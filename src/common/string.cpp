@@ -267,7 +267,10 @@ wxString::wxString(wxChar ch, size_t nLength)
   Init();
 
   if ( nLength > 0 ) {
-    AllocBuffer(nLength);
+    if ( !AllocBuffer(nLength) ) {
+      wxFAIL_MSG( _T("out of memory in wxString::wxString") );
+      return;
+    }
 
 #if wxUSE_UNICODE
     // memset only works on char
@@ -294,7 +297,10 @@ void wxString::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
 
   if ( nLength > 0 ) {
     // trailing '\0' is written in AllocBuffer()
-    AllocBuffer(nLength);
+    if ( !AllocBuffer(nLength) ) {
+      wxFAIL_MSG( _T("out of memory in wxString::InitWith") );
+      return;
+    }
     memcpy(m_pchData, psz + nPos, nLength*sizeof(wxChar));
   }
 }
@@ -324,7 +330,10 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 
   // empty?
   if ( (nLen != 0) && (nLen != (size_t)-1) ) {
-    AllocBuffer(nLen);
+    if ( !AllocBuffer(nLen) ) {
+      wxFAIL_MSG( _T("out of memory in wxString::wxString") );
+      return;
+    }
     conv.MB2WC(m_pchData, psz, nLen);
   }
   else {
@@ -350,7 +359,10 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 
   // empty?
   if ( (nLen != 0) && (nLen != (size_t)-1) ) {
-    AllocBuffer(nLen);
+    if ( !AllocBuffer(nLen) ) {
+      wxFAIL_MSG( _T("out of memory in wxString::wxString") );
+      return;
+    }
     conv.WC2MB(m_pchData, pwz, nLen);
   }
   else {
@@ -366,7 +378,7 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 // ---------------------------------------------------------------------------
 
 // allocates memory needed to store a C string of length nLen
-void wxString::AllocBuffer(size_t nLen)
+bool wxString::AllocBuffer(size_t nLen)
 {
   // allocating 0 sized buffer doesn't make sense, all empty strings should
   // reuse g_strEmpty
@@ -383,30 +395,42 @@ void wxString::AllocBuffer(size_t nLen)
   // 2) sizeof(wxStringData) for housekeeping info
   wxStringData* pData = (wxStringData*)
     malloc(sizeof(wxStringData) + (nLen + EXTRA_ALLOC + 1)*sizeof(wxChar));
+  
+  if ( pData == NULL ) {
+    // allocation failures are handled by the caller
+    return FALSE;
+  }
+  
   pData->nRefs        = 1;
   pData->nDataLength  = nLen;
   pData->nAllocLength = nLen + EXTRA_ALLOC;
   m_pchData           = pData->data();  // data starts after wxStringData
   m_pchData[nLen]     = wxT('\0');
+  return TRUE;
 }
 
 // must be called before changing this string
-void wxString::CopyBeforeWrite()
+bool wxString::CopyBeforeWrite()
 {
   wxStringData* pData = GetStringData();
 
   if ( pData->IsShared() ) {
     pData->Unlock();                // memory not freed because shared
     size_t nLen = pData->nDataLength;
-    AllocBuffer(nLen);
+    if ( !AllocBuffer(nLen) ) {
+      // allocation failures are handled by the caller
+      return FALSE;
+    }
     memcpy(m_pchData, pData->data(), nLen*sizeof(wxChar));
   }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
+
+  return TRUE;
 }
 
 // must be called before replacing contents of this string
-void wxString::AllocBeforeWrite(size_t nLen)
+bool wxString::AllocBeforeWrite(size_t nLen)
 {
   wxASSERT( nLen != 0 );  // doesn't make any sense
 
@@ -415,7 +439,10 @@ void wxString::AllocBeforeWrite(size_t nLen)
   if ( pData->IsShared() || pData->IsEmpty() ) {
     // can't work with old buffer, get new one
     pData->Unlock();
-    AllocBuffer(nLen);
+    if ( !AllocBuffer(nLen) ) {
+      // allocation failures are handled by the caller
+      return FALSE;
+    }
   }
   else {
     if ( nLen > pData->nAllocLength ) {
@@ -425,15 +452,13 @@ void wxString::AllocBeforeWrite(size_t nLen)
 
       nLen += EXTRA_ALLOC;
 
-      wxStringData *pDataOld = pData;
       pData = (wxStringData*)
           realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
-      if ( !pData ) {
-        // out of memory
-        free(pDataOld);
-
-        // FIXME we're going to crash...
-        return;
+      
+      if ( pData == NULL ) {
+        // allocation failures are handled by the caller
+        // keep previous data since reallocation failed
+        return FALSE;
       }
 
       pData->nAllocLength = nLen;
@@ -445,10 +470,12 @@ void wxString::AllocBeforeWrite(size_t nLen)
   }
 
   wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
+
+  return TRUE;
 }
 
 // allocate enough memory for nLen characters
-void wxString::Alloc(size_t nLen)
+bool wxString::Alloc(size_t nLen)
 {
   wxStringData *pData = GetStringData();
   if ( pData->nAllocLength <= nLen ) {
@@ -456,7 +483,13 @@ void wxString::Alloc(size_t nLen)
       nLen += EXTRA_ALLOC;
 
       wxStringData* pData = (wxStringData*)
-        malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
+          malloc(sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
+
+      if ( pData == NULL ) {
+        // allocation failure handled by caller
+        return FALSE;
+      }
+      
       pData->nRefs = 1;
       pData->nDataLength = 0;
       pData->nAllocLength = nLen;
@@ -466,42 +499,47 @@ void wxString::Alloc(size_t nLen)
     else if ( pData->IsShared() ) {
       pData->Unlock();                // memory not freed because shared
       size_t nOldLen = pData->nDataLength;
-      AllocBuffer(nLen);
+      if ( !AllocBuffer(nLen) ) {
+        // allocation failure handled by caller
+        return FALSE;
+      }
       memcpy(m_pchData, pData->data(), nOldLen*sizeof(wxChar));
     }
     else {
       nLen += EXTRA_ALLOC;
 
-      wxStringData *pDataOld = pData;
-      wxStringData *p = (wxStringData *)
+      pData = (wxStringData *)
         realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
 
-      if ( p == NULL ) {
-        // don't leak memory
-        free(pDataOld);
-
-        // FIXME what to do on memory error?
-        return;
+      if ( pData == NULL ) {
+        // allocation failure handled by caller
+        // keep previous data since reallocation failed
+        return FALSE;
       }
 
       // it's not important if the pointer changed or not (the check for this
       // is not faster than assigning to m_pchData in all cases)
-      p->nAllocLength = nLen;
-      m_pchData = p->data();
+      pData->nAllocLength = nLen;
+      m_pchData = pData->data();
     }
   }
   //else: we've already got enough
+  return TRUE;
 }
 
 // shrink to minimal size (releasing extra memory)
-void wxString::Shrink()
+bool wxString::Shrink()
 {
   wxStringData *pData = GetStringData();
 
   size_t nLen = pData->nDataLength;
   void *p = realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
 
-  wxASSERT_MSG( p != NULL, _T("can't free memory?") );
+  if ( p == NULL) {
+      wxFAIL_MSG( _T("out of memory reallocating wxString data") );
+      // keep previous data since reallocation failed
+      return FALSE;
+  }
 
   if ( p != pData )
   {
@@ -513,12 +551,17 @@ void wxString::Shrink()
   }
 
   pData->nAllocLength = nLen;
+
+  return TRUE;
 }
 
 // get the pointer to writable buffer of (at least) nLen bytes
 wxChar *wxString::GetWriteBuf(size_t nLen)
 {
-  AllocBeforeWrite(nLen);
+  if ( !AllocBeforeWrite(nLen) ) {
+    // allocation failure handled by caller
+    return NULL;
+  }
 
   wxASSERT( GetStringData()->nRefs == 1 );
   GetStringData()->Validate(FALSE);
@@ -550,17 +593,21 @@ void wxString::UngetWriteBuf(size_t nLen)
 // ---------------------------------------------------------------------------
 
 // helper function: does real copy
-void wxString::AssignCopy(size_t nSrcLen, const wxChar *pszSrcData)
+bool wxString::AssignCopy(size_t nSrcLen, const wxChar *pszSrcData)
 {
   if ( nSrcLen == 0 ) {
     Reinit();
   }
   else {
-    AllocBeforeWrite(nSrcLen);
+    if ( !AllocBeforeWrite(nSrcLen) ) {
+      // allocation failure handled by caller
+      return FALSE;
+    }
     memcpy(m_pchData, pszSrcData, nSrcLen*sizeof(wxChar));
     GetStringData()->nDataLength = nSrcLen;
     m_pchData[nSrcLen] = wxT('\0');
   }
+  return TRUE;
 }
 
 // assigns one string to another
@@ -587,7 +634,9 @@ wxString& wxString::operator=(const wxString& stringSrc)
 // assigns a single character
 wxString& wxString::operator=(wxChar ch)
 {
-  AssignCopy(1, &ch);
+  if ( !AssignCopy(1, &ch) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::operator=(wxChar)") );
+  }
   return *this;
 }
 
@@ -595,7 +644,9 @@ wxString& wxString::operator=(wxChar ch)
 // assigns C string
 wxString& wxString::operator=(const wxChar *psz)
 {
-  AssignCopy(wxStrlen(psz), psz);
+  if ( !AssignCopy(wxStrlen(psz), psz) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::operator=(const wxChar *)") );
+  }
   return *this;
 }
 
@@ -624,7 +675,7 @@ wxString& wxString::operator=(const wchar_t *pwz)
 // ---------------------------------------------------------------------------
 
 // add something to this string
-void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
+bool wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
 {
   STATISTICS_ADD(SummandLength, nSrcLen);
 
@@ -640,7 +691,10 @@ void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
 
       // we have to allocate another buffer
       wxStringData* pOldData = GetStringData();
-      AllocBuffer(nNewLen);
+      if ( !AllocBuffer(nNewLen) ) {
+          // allocation failure handled by caller
+          return FALSE;
+      }
       memcpy(m_pchData, pOldData->data(), nLen*sizeof(wxChar));
       pOldData->Unlock();
     }
@@ -648,7 +702,10 @@ void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
       STATISTICS_ADD(ConcatHit, 0);
 
       // we have to grow the buffer
-      Alloc(nNewLen);
+      if ( !Alloc(nNewLen) ) {
+          // allocation failure handled by caller
+          return FALSE;
+      }
     }
     else {
       STATISTICS_ADD(ConcatHit, 1);
@@ -666,6 +723,7 @@ void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
     GetStringData()->nDataLength = nNewLen; // and fix the length
   }
   //else: the string to append was empty
+  return TRUE;
 }
 
 /*
@@ -675,57 +733,61 @@ void wxString::ConcatSelf(int nSrcLen, const wxChar *pszSrcData)
  *  C str  + string      and      string + C str
  */
 
-wxString operator+(const wxString& string1, const wxString& string2)
+wxString operator+(const wxString& str1, const wxString& str2)
 {
-  wxASSERT( string1.GetStringData()->IsValid() );
-  wxASSERT( string2.GetStringData()->IsValid() );
+  wxASSERT( str1.GetStringData()->IsValid() );
+  wxASSERT( str2.GetStringData()->IsValid() );
 
-  wxString s = string1;
-  s += string2;
+  wxString s = str1;
+  s += str2;
 
   return s;
 }
 
-wxString operator+(const wxString& string, wxChar ch)
+wxString operator+(const wxString& str, wxChar ch)
 {
-  wxASSERT( string.GetStringData()->IsValid() );
+  wxASSERT( str.GetStringData()->IsValid() );
 
-  wxString s = string;
+  wxString s = str;
   s += ch;
 
   return s;
 }
 
-wxString operator+(wxChar ch, const wxString& string)
+wxString operator+(wxChar ch, const wxString& str)
 {
-  wxASSERT( string.GetStringData()->IsValid() );
+  wxASSERT( str.GetStringData()->IsValid() );
 
   wxString s = ch;
-  s += string;
+  s += str;
 
   return s;
 }
 
-wxString operator+(const wxString& string, const wxChar *psz)
+wxString operator+(const wxString& str, const wxChar *psz)
 {
-  wxASSERT( string.GetStringData()->IsValid() );
+  wxASSERT( str.GetStringData()->IsValid() );
 
   wxString s;
-  s.Alloc(wxStrlen(psz) + string.Len());
-  s = string;
+  if ( !s.Alloc(wxStrlen(psz) + str.Len()) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::operator+") );
+  }
+  s = str;
   s += psz;
 
   return s;
 }
 
-wxString operator+(const wxChar *psz, const wxString& string)
+wxString operator+(const wxChar *psz, const wxString& str)
 {
-  wxASSERT( string.GetStringData()->IsValid() );
+  wxASSERT( str.GetStringData()->IsValid() );
 
   wxString s;
-  s.Alloc(wxStrlen(psz) + string.Len());
+  if ( !s.Alloc(wxStrlen(psz) + str.Len()) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::operator+") );
+  }
   s = psz;
-  s += string;
+  s += str;
 
   return s;
 }
@@ -739,15 +801,19 @@ wxString operator+(const wxChar *psz, const wxString& string)
 // ---------------------------------------------------------------------------
 
 // helper function: clone the data attached to this string
-void wxString::AllocCopy(wxString& dest, int nCopyLen, int nCopyIndex) const
+bool wxString::AllocCopy(wxString& dest, int nCopyLen, int nCopyIndex) const
 {
   if ( nCopyLen == 0 ) {
     dest.Init();
   }
   else {
-    dest.AllocBuffer(nCopyLen);
+    if ( !dest.AllocBuffer(nCopyLen) ) {
+      // allocation failure handled by caller
+      return FALSE;
+    }
     memcpy(dest.m_pchData, m_pchData + nCopyIndex, nCopyLen*sizeof(wxChar));
   }
+  return TRUE;
 }
 
 // extract string of length nCount starting at nFirst
@@ -775,7 +841,9 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
   }
 
   wxString dest;
-  AllocCopy(dest, nCount, nFirst);
+  if ( !AllocCopy(dest, nCount, nFirst) ) {
+      wxFAIL_MSG( _T("out of memory in wxString::Mid") );
+  }
 
   return dest;
 }
@@ -816,7 +884,9 @@ wxString wxString::Right(size_t nCount) const
     nCount = GetStringData()->nDataLength;
 
   wxString dest;
-  AllocCopy(dest, nCount, GetStringData()->nDataLength - nCount);
+  if ( !AllocCopy(dest, nCount, GetStringData()->nDataLength - nCount) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::Right") );
+  }
   return dest;
 }
 
@@ -841,7 +911,9 @@ wxString wxString::Left(size_t nCount) const
     nCount = GetStringData()->nDataLength;
 
   wxString dest;
-  AllocCopy(dest, nCount, 0);
+  if ( !AllocCopy(dest, nCount, 0) ) {
+    wxFAIL_MSG( _T("out of memory in wxString::Left") );
+  }
   return dest;
 }
 
@@ -902,7 +974,10 @@ size_t wxString::Replace(const wxChar *szOld, const wxChar *szNew, bool bReplace
     }
     else {
       // take chars before match
-      strTemp.ConcatSelf(pSubstr - pCurrent, pCurrent);
+      if ( !strTemp.ConcatSelf(pSubstr - pCurrent, pCurrent) ) {
+        wxFAIL_MSG( _T("out of memory in wxString::Replace") );
+        return 0;
+      }
       strTemp += szNew;
       pCurrent = pSubstr + uiOldLen;  // restart after match
 
@@ -968,8 +1043,11 @@ wxString wxString::Strip(stripType w) const
 
 wxString& wxString::MakeUpper()
 {
-  CopyBeforeWrite();
-
+  if ( !CopyBeforeWrite() ) {
+    wxFAIL_MSG( _T("out of memory in wxString::MakeUpper") );
+    return *this;
+  }
+    
   for ( wxChar *p = m_pchData; *p; p++ )
     *p = (wxChar)wxToupper(*p);
 
@@ -978,7 +1056,10 @@ wxString& wxString::MakeUpper()
 
 wxString& wxString::MakeLower()
 {
-  CopyBeforeWrite();
+  if ( !CopyBeforeWrite() ) {
+    wxFAIL_MSG( _T("out of memory in wxString::MakeLower") );
+    return *this;
+  }
 
   for ( wxChar *p = m_pchData; *p; p++ )
     *p = (wxChar)wxTolower(*p);
@@ -1010,7 +1091,10 @@ wxString& wxString::Trim(bool bFromRight)
      )
   {
     // ok, there is at least one space to trim
-    CopyBeforeWrite();
+    if ( !CopyBeforeWrite() ) {
+      wxFAIL_MSG( _T("out of memory in wxString::Trim") );
+      return *this;
+    }
 
     if ( bFromRight )
     {
@@ -1060,7 +1144,10 @@ wxString& wxString::Pad(size_t nCount, wxChar chPad, bool bFromRight)
 wxString& wxString::Truncate(size_t uiLen)
 {
   if ( uiLen < Len() ) {
-    CopyBeforeWrite();
+    if ( !CopyBeforeWrite() ) {
+      wxFAIL_MSG( _T("out of memory in wxString::Truncate") );
+      return *this;
+    }
 
     *(m_pchData + uiLen) = wxT('\0');
     GetStringData()->nDataLength = uiLen;
