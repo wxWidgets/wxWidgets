@@ -7,6 +7,8 @@ Removed docs tabs from crust interface:
 * wxPython Docs
 * wxSTC Docs
 
+Fixed Calltip tab refresh problem on Windows.
+
 
 0.9.3 (9/25/2003 to 1/24/2004)
 ------------------------------

@@ -124,7 +124,9 @@ class Calltip(wx.TextCtrl):
 
     def display(self, calltip):
         """Receiver for Shell.calltip signal."""
-        self.SetValue(calltip)
+        ## self.SetValue(calltip)  # Caused refresh problem on Windows.
+        self.Clear()
+        self.AppendText(calltip)
 
 
 class SessionListing(wx.TextCtrl):
