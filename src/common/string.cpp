@@ -41,6 +41,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef wxUSE_WCSRTOMBS
+  #include <wchar.h>    // for wcsrtombs(), see comments where it's used
+#endif // GNU
+
 #ifdef  WXSTRING_IS_WXOBJECT
   IMPLEMENT_DYNAMIC_CLASS(wxString, wxObject)
 #endif  //WXSTRING_IS_WXOBJECT
@@ -216,7 +220,17 @@ wxString::wxString(const void *pStart, const void *pEnd)
 wxString::wxString(const wchar_t *pwz)
 {
   // first get necessary size
+
+  // NB: GNU libc5 wcstombs() is completely broken, don't use it (it doesn't
+  //     honor the 3rd parameter, thus it will happily crash here).
+#ifdef wxUSE_WCSRTOMBS
+  // don't know if it's really needed (or if we can pass NULL), but better safe
+  // than quick
+  mbstate_t mbstate;  
+  size_t nLen = wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
+#else  // !GNU libc
   size_t nLen = wcstombs((char *) NULL, pwz, 0);
+#endif // GNU
 
   // empty?
   if ( nLen != 0 ) {

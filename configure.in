@@ -708,6 +708,9 @@ DEFAULT_wxUSE_WXGRAPH=0
 DEFAULT_wxUSE_WXTREE=0
 DEFAULT_wxUSE_HELP=0
 
+DEFAULT_wxUSE_UNICODE=1
+DEFAULT_wxUSE_WCSRTOMBS=0
+
 dnl ----------------------------------------------------------------
 dnl toolkit options
 dnl ----------------------------------------------------------------
@@ -875,6 +878,18 @@ WX_NORMALIZED_PS_FONTS)
 AC_OVERRIDES(postscript, postscript,
 **--with-postscript       use wxPostscriptDC device context,
 wxUSE_POSTSCRIPT)
+
+dnl ----------------------------------------------------------------
+dnl user options for wxString and Unicode
+dnl ----------------------------------------------------------------
+
+AC_OVERRIDES(unicode,unicode,
+**--with-unicode          compile wxString with Unicode support,
+wxUSE_UNICODE)
+
+AC_OVERRIDES(wcsrtombs,wcsrtombs,
+**--with-wcsrtombs        use wcsrtombs instead of (buggy in GNU libc5) wcstombs,
+wxUSE_WCSRTOMBS)
 
 dnl ----------------------------------------------------------------
 dnl user options for Prolog and Resources
@@ -1246,6 +1261,18 @@ fi
 
 if test "$wxUSE_PRINTING_ARCHITECTURE" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_PRINTING_ARCHITECTURE,$wxUSE_PRINTING_ARCHITECTURE)
+fi
+
+dnl ----------------------------------------------------------------
+dnl Register wxString options for makefiles and setup.h
+dnl ----------------------------------------------------------------
+
+if test "$wxUSE_UNICODE" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_UNICODE)
+fi
+
+if test "$wxUSE_WCSRTOMBS" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_WCSRTOMBS)
 fi
 
 dnl ----------------------------------------------------------------

@@ -150,6 +150,24 @@
 #undef wxUSE_POSTSCRIPT
 
 //------------------------------------------------------------------------
+// wxString options
+//------------------------------------------------------------------------
+
+/*
+ * Compile wxString with wide character (Unicode) support?
+ */
+#undef wxUSE_UNICODE
+
+/*
+ * Work around a bug in GNU libc 5.x wcstombs() implementation.
+ *
+ * Note that you must link your programs with libc.a if you enable this and you
+ * have libc 5 (you should enable this for libc6 where wcsrtombs() is
+ * thread-safe version of wcstombs()). 
+ */
+#undef wxUSE_WCSRTOMBS
+
+//------------------------------------------------------------------------
 // misc options
 //------------------------------------------------------------------------
 
