@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        stream.h
+// Name:        wx/stream.h
 // Purpose:     "wxWindows stream" base classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -38,7 +38,7 @@ WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 // wxStream: base classes
 // ---------------------------------------------------------------------------
 
-typedef enum
+enum wxStreamError
 {
   wxSTREAM_NO_ERROR = 0,
   wxSTREAM_NO_ERR = wxSTREAM_NO_ERROR,
@@ -51,8 +51,7 @@ typedef enum
 
   wxSTREAM_READ_ERROR,
   wxSTREAM_READ_ERR = wxSTREAM_READ_ERROR
-
-} wxStreamError;
+};
 
 // compatibility
 #define wxStream_NOERROR    wxSTREAM_NOERROR
@@ -127,7 +126,7 @@ protected:
     size_t m_wbackcur;
 
     char *AllocSpaceWBack(size_t needed_size);
-    size_t GetWBack(char *buf, size_t bsize);
+    size_t GetWBack(void *buf, size_t bsize);
 };
 
 class WXDLLEXPORT wxOutputStream: public wxStreamBase
@@ -213,9 +212,12 @@ protected:
 class WXDLLEXPORT wxStreamBuffer
 {
 public:
-    typedef enum {
-        read = 0, write, read_write
-    } BufMode;
+    enum BufMode
+    {
+        read,
+        write,
+        read_write
+    };
 
     wxStreamBuffer(wxStreamBase& stream, BufMode mode);
     wxStreamBuffer(BufMode mode);
@@ -236,14 +238,18 @@ public:
 
     // Buffer control
     void ResetBuffer();
-    void SetBufferIO(char *buffer_start, char *buffer_end);
+
+    // NB: the buffer must always be allocated with malloc() if takeOwn is
+    //     TRUE as it will be deallocated by free()
+    void SetBufferIO(void *start, void *end, bool takeOwnership = FALSE);
     void SetBufferIO(size_t bufsize);
-    char *GetBufferStart() const { return m_buffer_start; }
-    char *GetBufferEnd() const { return m_buffer_end; }
-    char *GetBufferPos() const { return m_buffer_pos; }
-    off_t GetIntPosition() const { return m_buffer_pos-m_buffer_start; }
-    void SetIntPosition(off_t pos) { m_buffer_pos = m_buffer_start+pos; }
-    size_t GetLastAccess() const { return m_buffer_end-m_buffer_start; }
+    void *GetBufferStart() const { return m_buffer_start; }
+    void *GetBufferEnd() const { return m_buffer_end; }
+    void *GetBufferPos() const { return m_buffer_pos; }
+    size_t GetIntPosition() const { return m_buffer_pos - m_buffer_start; }
+    void SetIntPosition(size_t pos) { m_buffer_pos = m_buffer_start + pos; }
+    size_t GetLastAccess() const { return m_buffer_end - m_buffer_start; }
+    size_t GetBytesLeft() const { return m_buffer_end - m_buffer_pos; }
 
     void Fixed(bool fixed) { m_fixed = fixed; }
     void Flushable(bool f) { m_flushable = f; }
@@ -252,21 +258,53 @@ public:
     bool FillBuffer();
     size_t GetDataLeft();
 
-    // Misc.
+    // misc accessors
+    wxStreamBase *GetStream() const { return m_stream; }
+    bool HasBuffer() const { return m_buffer_size != 0; }
+
+    bool IsFixed() const { return m_fixed; }
+    bool IsFlushable() const { return m_flushable; }
+
+    // deprecated, for compatibility only
     wxStreamBase *Stream() { return m_stream; }
 
 protected:
     void GetFromBuffer(void *buffer, size_t size);
     void PutToBuffer(const void *buffer, size_t size);
 
-    char *m_buffer_start, *m_buffer_end, *m_buffer_pos;
+    // set the last error to the specified value if we didn't have it before
+    void SetError(wxStreamError err);
+
+    // common part of several ctors
+    void Init();
+
+    // init buffer variables to be empty
+    void InitBuffer();
+
+    // free the buffer (always safe to call)
+    void FreeBuffer();
+
+    // the buffer itself: the pointers to its start and end and the current
+    // position in the buffer
+    char *m_buffer_start,
+         *m_buffer_end,
+         *m_buffer_pos;
+
+    // the buffer size
+    // FIXME: isn't it the same as m_buffer_end - m_buffer_start? (VZ)
     size_t m_buffer_size;
 
-    bool m_fixed, m_flushable;
-
+    // the stream we're associated with
     wxStreamBase *m_stream;
+
+    // its mode
     BufMode m_mode;
-    bool m_destroybuf, m_destroystream;
+
+    // flags
+    bool m_destroybuf,      // deallocate buffer?
+         m_destroystream,   // delete associated stream?
+         m_fixed,
+         m_flushable;
 };
 
 // ---------------------------------------------------------------------------
