@@ -28,6 +28,7 @@
 #include "wx/font.h"            // so we can't do without them
 #include "wx/colour.h"
 #include "wx/region.h"
+#include "wx/utils.h"
 
 #if wxUSE_VALIDATORS
     #include "wx/validate.h"    // defines wxDefaultValidator

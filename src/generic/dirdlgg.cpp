@@ -310,7 +310,11 @@ void wxDirCtrl::OnExpandItem(wxTreeEvent &event)
 
     m_paths.Clear();
     m_names.Clear();
+#ifdef __WXMSW__
+    search = data->m_path + "\\*.*";
+#else
     search = data->m_path + "/*";
+#endif
     for (path = wxFindFirstFile( search, wxDIR ); !path.IsNull();
        path=wxFindNextFile() )
     {
