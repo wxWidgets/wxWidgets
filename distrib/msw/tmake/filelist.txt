@@ -90,7 +90,7 @@ imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
-mdig.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMac
+mdig.cpp	Generic	NotWin32,NotGTK,NotMac
 msgdlgg.cpp	Generic	Generic
 notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
@@ -687,7 +687,6 @@ iniconf.cpp	OS2
 joystick.cpp	OS2
 listbox.cpp	OS2
 main.cpp	OS2
-mdi.cpp	OS2
 menu.cpp	OS2
 menuitem.cpp	OS2
 metafile.cpp	OS2
@@ -1392,7 +1391,6 @@ dialog.h	OS2H
 radiobox.h	OS2H
 toolbar.h	OS2H
 checkbox.h	OS2H
-mdi.h	OS2H
 radiobut.h	OS2H
 tooltip.h	OS2H
 checklst.h	OS2H
@@ -1479,7 +1477,7 @@ helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
-mdig.h	GenericH	NotWin32,NotGTK,NotOS2,NotMac
+mdig.h	GenericH	NotWin32,NotGTK,NotMac
 msgdlgg.h	GenericH
 notebook.h	GenericH
 paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2
