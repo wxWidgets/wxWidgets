@@ -73,14 +73,7 @@ wxBaseArray::wxBaseArray(const wxBaseArray& src)
 // assignment operator
 wxBaseArray& wxBaseArray::operator=(const wxBaseArray& src)
 {
-#if 0
   wxDELETEA(m_pItems);
-#else
-	if ( (m_pItems)) { 
-		delete (m_pItems); 
-		(m_pItems) = 0; 
-	}
-#endif
 
   m_nSize  = // not src.m_nSize to save memory
   m_nCount = src.m_nCount;
