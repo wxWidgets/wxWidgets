@@ -31,6 +31,8 @@ package_i18n=wxwin$(release)-i18n
 package_doc=wxwin$(release)-doc
 package_examples=wxwin$(release)-examples
 
+package_gtk_univ=libwxgtk$(release)-univ
+
 package_wxbase_msw_dev=libwxbase-msw$(release)-dev
 package_msw_dev=libwxmsw$(release)-dev
 package_headers_msw=wxwin$(release)-headers-msw
@@ -47,11 +49,13 @@ objdir_doc=docs/wxWindows-manual.html
 objdir_examples=docs/examples
 objdir_i18n=locale
 
+objdir_gtk_univ=objs_gtk_univ
+
 objdir_wxbase_msw_static=objs_wxbase_msw_st
 objdir_msw_static=objs_msw_st
 
 objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
-	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) \
+	$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_gtk_debug) $(objdir_gtk_univ) \
 	$(objdir_doc_cruft) $(objdir_doc) $(objdir_examples) \
         $(objdir_wxbase_msw_static) $(objdir_msw_static)
 
@@ -63,6 +67,7 @@ objdirs=$(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug) \
 build_arch_stamps=build-wxbase-shared-stamp build-wxbase-static-stamp \
                   build-wxbase-debug-stamp build-gtk-shared-stamp \
                   build-gtk-static-stamp build-gtk-debug-stamp \
+                  build-gtk-univ-stamp \
                   build-contrib-shared-stamp build-contrib-static-stamp \
                   build-gtk-py-stamp build-i18n-stamp
 
@@ -77,6 +82,7 @@ build_stamps=$(build_stamps_native) $(build_cross_stamps)
 # Install targets:
 install_all_arch=install-wxbase-lib install-wxbase-dev install-wxbase-dbg \
                  install-gtk-lib install-gtk-dev install-gtk-dbg \
+                 install-gtk-univ \
                  install-gtk-contrib install-gtk-contrib-dev install-gtk-py \
                  install-headers install-i18n
 
@@ -128,6 +134,11 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_gtk_dbg).$$f"; \
 		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f \
 			> debian/$(package_gtk_dbg).$$f; \
+	done;
+	@for f in dirs links postinst prerm; do \
+		echo "generating control file $(package_gtk_univ).$$f"; \
+		sed -e 's/=V/$(release)/g' < debian/libwxgtk-univ.$$f \
+			> debian/$(package_gtk_univ).$$f; \
 	done;
 	@for f in dirs docs files postinst prerm; do \
 		echo "generating control file $(package_gtk_py).$$f"; \
@@ -274,6 +285,23 @@ build-gtk-debug-stamp:
 		&& $(MAKE)
 	touch $@
 
+build-gtk-univ-stamp:
+	dh_testdir
+	mkdir -p $(objdir_gtk_univ)
+	cd $(objdir_gtk_univ) \
+		&& ../configure --prefix=/usr \
+				--cache-file=../config_deb.cache \
+				--with-gtk \
+				--with-opengl \
+				--enable-universal \
+				--enable-soname \
+				--with-zlib=sys \
+				--with-libjpeg=sys \
+				--with-libpng=sys \
+				--with-libtiff=sys \
+		&& $(MAKE)
+	touch $@
+
 build-contrib-shared-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/contrib/src \
@@ -379,6 +407,7 @@ clean: debian/control
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
 	rm -f debian/$(package_gtk_dbg).*
+	rm -f debian/$(package_gtk_univ).*
 	rm -f debian/$(package_gtk_py).*
 	rm -f debian/$(package_gtk_contrib).*
 	rm -f debian/$(package_gtk_contrib_dev).*
@@ -450,6 +479,15 @@ install-gtk-dbg: build-gtk-debug-stamp
 	cp -a $(objdir_gtk_debug)/lib/* debian/$(package_gtk_dbg)/usr/lib
 	cp $(objdir_gtk_debug)/wxgtkd-$(release)-config debian/$(package_gtk_dbg)/usr/bin/
 	cp debian/lintian-override debian/$(package_gtk_dbg)/usr/share/lintian/overrides/$(package_gtk_dbg)
+
+install-gtk-univ: DH_OPTIONS=-p$(package_gtk_univ)
+install-gtk-univ: build-gtk-univ-stamp
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cp -a $(objdir_gtk_univ)/lib/* debian/$(package_gtk_univ)/usr/lib
+	cp $(objdir_gtk_univ)/wxgtkuniv-$(release)-config debian/$(package_gtk_univ)/usr/bin/
 
 install-gtk-contrib: DH_OPTIONS=-p$(package_gtk_contrib)
 install-gtk-contrib: build-contrib-shared-stamp
@@ -637,6 +675,9 @@ binary-wxbase-dev: control-files-stamp install-wxbase-dev install-headers
 
 binary-wxbase-dbg: control-files-stamp install-wxbase-dbg install-headers
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_dbg) -p$(package_headers)" binary-common
+
+binary-univ: control-files-stamp install-gtk-univ
+	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_gtk_univ)" binary-common
 
 # docs package
 binary-doc: control-files-stamp install-doc

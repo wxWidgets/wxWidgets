@@ -691,6 +691,15 @@ MSW_DIST: ALL_GUI_DIST
 	cp $(MSWDIR)/*.def $(DISTDIR)/src/msw
 	cp $(MSWDIR)/ole/*.cpp $(DISTDIR)/src/msw/ole
 
+UNIV_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/include/wx/univ
+	mkdir $(DISTDIR)/src/univ
+	mkdir $(DISTDIR)/src/univ/themes
+	cp $(INCDIR)/wx/univ/*.h $(DISTDIR)/include/wx/univ
+	cp $(SRCDIR)/univ/files.lst $(DISTDIR)/src/univ
+	cp $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
+	cp $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
+
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos
 	cp $(DEMODIR)/Makefile.in $(DISTDIR)/demos
@@ -1363,7 +1372,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	rm -rf $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
-debian-native-dist: @GUIDIST@ MANUAL_DIST PYTHON_DIST
+debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
 
 debian-msw-dirs:
 	mkdir $(DISTDIR)/include/wx/msw
