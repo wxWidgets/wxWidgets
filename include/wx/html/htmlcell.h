@@ -74,10 +74,7 @@ enum wxHtmlSelectionState
 class WXDLLEXPORT wxHtmlRenderingState
 {
 public:
-    wxHtmlRenderingState(wxHtmlSelection *s = NULL)
-        : m_selection(s), m_selState(wxHTML_SEL_OUT) {}
-    void SetSelection(wxHtmlSelection *s) { m_selection = s; }
-    wxHtmlSelection *GetSelection() const { return m_selection; }
+    wxHtmlRenderingState() : m_selState(wxHTML_SEL_OUT) {}
 
     void SetSelectionState(wxHtmlSelectionState s) { m_selState = s; }  
     wxHtmlSelectionState GetSelectionState() const { return m_selState; }
@@ -88,10 +85,50 @@ public:
     const wxColour& GetBgColour() const { return m_bgColour; }
     
 private:
-    wxHtmlSelection      *m_selection;
     wxHtmlSelectionState  m_selState;
     wxColour              m_fgColour, m_bgColour;
 };
+
+
+// HTML rendering customization. This class is used when rendering wxHtmlCells
+// as a callback .
+class WXDLLEXPORT wxHtmlRenderingStyle
+{
+public:
+    virtual wxColour GetSelectedTextColour(const wxColour& clr) = 0;
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr) = 0;
+};
+
+class WXDLLEXPORT wxDefaultHtmlRenderingStyle : public wxHtmlRenderingStyle
+{
+public:
+    virtual wxColour GetSelectedTextColour(const wxColour& clr);
+    virtual wxColour GetSelectedTextBgColour(const wxColour& clr);
+};
+
+
+// Information given to cells when drawing them. Contains rendering state,
+// selection information and rendering style object that can be used to
+// customize the output.
+class WXDLLEXPORT wxHtmlRenderingInfo
+{
+public:
+    wxHtmlRenderingInfo() : m_selection(NULL), m_style(NULL) {}
+
+    void SetSelection(wxHtmlSelection *s) { m_selection = s; }
+    wxHtmlSelection *GetSelection() const { return m_selection; }
+    
+    void SetStyle(wxHtmlRenderingStyle *style) { m_style = style; }
+    wxHtmlRenderingStyle& GetStyle() { return *m_style; }
+
+    wxHtmlRenderingState& GetState() { return m_state; }
+    
+protected:
+    wxHtmlSelection      *m_selection;
+    wxHtmlRenderingStyle *m_style;
+    wxHtmlRenderingState m_state;
+};
+
 
 // Flags for wxHtmlCell::FindCellByPos
 enum
@@ -158,13 +195,13 @@ public:
     virtual void Draw(wxDC& WXUNUSED(dc),
                       int WXUNUSED(x), int WXUNUSED(y),
                       int WXUNUSED(view_y1), int WXUNUSED(view_y2),
-                      wxHtmlRenderingState& WXUNUSED(state)) {}
+                      wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
     // proceed drawing actions in case the cell is not visible (scrolled out of
     // screen).  This is needed to change fonts, colors and so on.
     virtual void DrawInvisible(wxDC& WXUNUSED(dc),
                                int WXUNUSED(x), int WXUNUSED(y),
-                               wxHtmlRenderingState& WXUNUSED(state)) {}
+                               wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
     // This method returns pointer to the FIRST cell for that
     // the condition
@@ -281,7 +318,7 @@ class WXDLLEXPORT wxHtmlWordCell : public wxHtmlCell
 public:
     wxHtmlWordCell(const wxString& word, wxDC& dc);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-              wxHtmlRenderingState& state);
+              wxHtmlRenderingInfo& info);
     wxString ConvertToText(wxHtmlSelection *sel) const;
 
 protected:
@@ -307,9 +344,9 @@ public:
 
     virtual void Layout(int w);
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingState& state);
+                      wxHtmlRenderingInfo& info);
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingState& state);
+                               wxHtmlRenderingInfo& info);
     virtual bool AdjustPagebreak(int *pagebreak, int *known_pagebreaks = NULL, int number_of_pages = 0) const;
 
     // insert cell at the end of m_Cells list
@@ -364,9 +401,9 @@ public:
     virtual wxHtmlCell *GetLastTerminal() const;
 
 protected:
-    void UpdateRenderingStatePre(wxHtmlRenderingState& state,
+    void UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
                                  wxHtmlCell *cell) const;
-    void UpdateRenderingStatePost(wxHtmlRenderingState& state,
+    void UpdateRenderingStatePost(wxHtmlRenderingInfo& info,
                                   wxHtmlCell *cell) const;
     
 protected:
@@ -414,9 +451,9 @@ class WXDLLEXPORT wxHtmlColourCell : public wxHtmlCell
 public:
     wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingState& state);
+                      wxHtmlRenderingInfo& info);
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingState& state);
+                               wxHtmlRenderingInfo& info);
 
 protected:
     wxColour m_Colour;
@@ -436,9 +473,9 @@ class WXDLLEXPORT wxHtmlFontCell : public wxHtmlCell
 public:
     wxHtmlFontCell(wxFont *font) : wxHtmlCell() { m_Font = (*font); }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingState& state);
+                      wxHtmlRenderingInfo& info);
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingState& state);
+                               wxHtmlRenderingInfo& info);
 
 protected:
     wxFont m_Font;
@@ -466,9 +503,9 @@ public:
     wxHtmlWidgetCell(wxWindow *wnd, int w = 0);
     ~wxHtmlWidgetCell() { m_Wnd->Destroy(); }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
-                      wxHtmlRenderingState& state);
+                      wxHtmlRenderingInfo& info);
     virtual void DrawInvisible(wxDC& dc, int x, int y,
-                               wxHtmlRenderingState& state);
+                               wxHtmlRenderingInfo& info);
     virtual void Layout(int w);
 
 protected:
