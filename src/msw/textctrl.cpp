@@ -152,9 +152,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( parent )
         parent->AddChild(this);
 
-    // set colours
-    SetupColours();
-
     // translate wxWin style flags to MSW ones, checking for consistency while
     // doing it
     long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
@@ -316,6 +313,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     }
 #endif
 
+    // set colours
+    SetupColours();
+
     SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
@@ -354,7 +354,14 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 void wxTextCtrl::SetupColours()
 {
     // FIXME why is bg colour not inherited from parent?
-    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+
+    wxColour bkgndColour;
+    if (IsEditable())
+        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW);
+    else
+        bkgndColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    SetBackgroundColour(bkgndColour);
     SetForegroundColour(GetParent()->GetForegroundColour());
 }
 
@@ -516,8 +523,16 @@ bool wxTextCtrl::CanPaste() const
 
 void wxTextCtrl::SetEditable(bool editable)
 {
+    bool isEditable = IsEditable();
+
     HWND hWnd = GetHwnd();
     SendMessage(hWnd, EM_SETREADONLY, (WPARAM)!editable, (LPARAM)0L);
+
+    if (editable != isEditable)
+    {
+       SetupColours();
+       Refresh();
+    }
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)

@@ -203,8 +203,9 @@ void MyApp::GenerateSamples(const wxString& dir)
     // Small bug. Because we don't distinguish between Debug/DebugDLL, Release/ReleaseDLL,
     // we can't yet make a sample that uses other wxWindows static libraries + the wxWindows DLL library.
 
-    GenerateSample("BombsVC", "bombs", dir + wxString("/samples/bombs"),
-        wxStringList("bombs.cpp", "bombs1.cpp", "game.cpp", "bombs.h", "game.h", 0));
+    //// Samples
+
+    GenerateSample("CalendarVC", "calendar", dir + wxString("/samples/calendar"), wxStringList("calendar.cpp", 0));
     GenerateSample("CaretVC", "caret", dir + wxString("/samples/caret"), wxStringList("caret.cpp", 0));
     GenerateSample("CheckLstVC", "checklst", dir + wxString("/samples/checklst"), wxStringList("checklst.cpp", 0));
     GenerateSample("ConfigVC", "conftest", dir + wxString("/samples/config"), wxStringList("conftest.cpp", 0));
@@ -220,11 +221,6 @@ void MyApp::GenerateSamples(const wxString& dir)
         wxStringList("docview.cpp", "doc.cpp", "view.cpp", "docview.h", "doc.h", "view.h", 0));
     GenerateSample("DynamicVC", "dynamic", dir + wxString("/samples/dynamic"), wxStringList("dynamic.cpp", 0));
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
-    GenerateSample("FortyVC", "forty", dir + wxString("/samples/forty"),
-       wxStringList("forty.cpp", "canvas.cpp", "card.cpp", "game.cpp", "pile.cpp", "playerdg.cpp", "scoredg.cpp", "scorefil.cpp",
-       "canvas.h", "forty.h", "card.h", "game.h", "pile.h", "playerdg.h", "scoredg.h", "scorefil.h",
-       0));
-    GenerateSample("FractalVC", "fractal", dir + wxString("/samples/fractal"), wxStringList("fractal.cpp", 0));
     GenerateSample("GridVC", "test", dir + wxString("/samples/grid"), wxStringList("test.cpp", 0));
     GenerateSample("NewGridVC", "griddemo", dir + wxString("/samples/newgrid"), wxStringList("griddemo.cpp", 0));
     GenerateSample("HelpVC", "demo", dir + wxString("/samples/help"), wxStringList("demo.cpp", 0));
@@ -259,7 +255,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("MiniframVC", "test", dir + wxString("/samples/minifram"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("MinimalVC", "minimal", dir + wxString("/samples/minimal"), wxStringList("minimal.cpp", 0));
     GenerateSample("NativdlgVC", "nativdlg", dir + wxString("/samples/nativdlg"), wxStringList("nativdlg.cpp", "nativdlg.h", "resource.h", 0));
-    GenerateSample("NettestVC", "nettest", dir + wxString("/samples/nettest"), wxStringList("nettest.cpp", 0));
+    GenerateSample("DialupVC", "nettest", dir + wxString("/samples/dialup"), wxStringList("nettest.cpp", 0));
     GenerateSample("NotebookVC", "test", dir + wxString("/samples/notebook"), wxStringList("test.cpp", "test.h", 0));
     GenerateSample("OleautoVC", "oleauto", dir + wxString("/samples/oleauto"), wxStringList("oleauto.cpp", 0));
     GenerateSample("OwnerdrwVC", "ownerdrw", dir + wxString("/samples/ownerdrw"), wxStringList("ownerdrw.cpp", 0));
@@ -281,15 +277,31 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("TreectrlVC", "treetest", dir + wxString("/samples/treectrl"), wxStringList("treetest.cpp", "treetest.h", 0));
     GenerateSample("TypetestVC", "typetest", dir + wxString("/samples/typetest"), wxStringList("typetest.cpp", "typetest.h", 0));
     GenerateSample("ValidateVC", "validate", dir + wxString("/samples/validate"), wxStringList("validate.cpp", "validate.h", 0));
-    GenerateSample("ClientVC", "client", dir + wxString("/samples/wxsocket"), wxStringList("client.cpp", 0));
-    GenerateSample("ServerVC", "server", dir + wxString("/samples/wxsocket"), wxStringList("server.cpp", 0));
-    GenerateSample("PoemVC", "wxpoem", dir + wxString("/samples/wxpoem"), wxStringList("wxpoem.cpp", "wxpoem.h", 0));
+    GenerateSample("ClientVC", "client", dir + wxString("/samples/socket"), wxStringList("client.cpp", 0));
+    GenerateSample("ServerVC", "server", dir + wxString("/samples/socket"), wxStringList("server.cpp", 0));
     GenerateSample("ClientVC", "client", dir + wxString("/samples/dde"), wxStringList("client.cpp", "client.h", "ddesetup.h", 0));
     GenerateSample("ServerVC", "server", dir + wxString("/samples/dde"), wxStringList("server.cpp", "server.h", "ddesetup.h", 0));
     GenerateSample("CaretVC", "caret", dir + wxString("/samples/caret"), wxStringList("caret.cpp", 0));
     GenerateSample("DrawingVC", "drawing", dir + wxString("/samples/drawing"), wxStringList("drawing.cpp", 0));
     GenerateSample("ScrollVC", "scroll", dir + wxString("/samples/scroll"), wxStringList("scroll.cpp", 0));
     GenerateSample("WizardVC", "wizard", dir + wxString("/samples/wizard"), wxStringList("wiztest.cpp", 0));
+
+    //// Demos
+
+    GenerateSample("BombsVC", "bombs", dir + wxString("/demos/bombs"),
+        wxStringList("bombs.cpp", "bombs1.cpp", "game.cpp", "bombs.h", "game.h", 0));
+
+    GenerateSample("FortyVC", "forty", dir + wxString("/demos/forty"),
+       wxStringList("forty.cpp", "canvas.cpp", "card.cpp", "game.cpp", "pile.cpp", "playerdg.cpp", "scoredg.cpp", "scorefil.cpp",
+       "canvas.h", "forty.h", "card.h", "game.h", "pile.h", "playerdg.h", "scoredg.h", "scorefil.h",
+       0));
+
+    GenerateSample("FractalVC", "fractal", dir + wxString("/demos/fractal"), wxStringList("fractal.cpp", 0));
+
+    GenerateSample("LifeVC", "life", dir + wxString("/demos/life"),
+        wxStringList("life.cpp", "game.cpp", "dialogs.cpp", "life.h", "game.h", "dialogs.h", 0));
+
+    GenerateSample("PoemVC", "wxpoem", dir + wxString("/demos/poem"), wxStringList("wxpoem.cpp", "wxpoem.h", 0));
 
     //// Utilities
 
