@@ -84,19 +84,24 @@ bool MyApp::OnInit()
 
     // Create a new client
     my_client = new MyClient;
-    the_connection = (MyConnection *)my_client->MakeConnection(hostName, server, "IPC TEST");
 
-    while ( !the_connection )
+    // suppress the log messages from MakeConnection()
     {
-        if ( wxMessageBox("Failed to make connection to server.\nRetry?",
-                          "Client Demo Error",
-                          wxICON_ERROR | wxYES_NO | wxCANCEL ) != wxYES )
-        {
-            // no server
-            return FALSE;
-        }
-
+        wxLogNull nolog;
         the_connection = (MyConnection *)my_client->MakeConnection(hostName, server, "IPC TEST");
+
+        while ( !the_connection )
+        {
+            if ( wxMessageBox("Failed to make connection to server.\nRetry?",
+                              "Client Demo Error",
+                              wxICON_ERROR | wxYES_NO | wxCANCEL ) != wxYES )
+            {
+                // no server
+                return FALSE;
+            }
+
+            the_connection = (MyConnection *)my_client->MakeConnection(hostName, server, "IPC TEST");
+        }
     }
 
     if (!the_connection->StartAdvise("Item"))
