@@ -608,7 +608,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // in UpdateFontIfNeeded() any longer
         if ( !text.empty() )
         {
-            m_updateFont = TRUE;
+            m_updateFont = FALSE;
         }
 
         // Bring editable's cursor back uptodate.
