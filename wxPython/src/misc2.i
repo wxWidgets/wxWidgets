@@ -558,12 +558,24 @@ public:
     static void SetTraceMask(wxTraceMask ulMask);
     static void AddTraceMask(const wxString& str);
     static void RemoveTraceMask(const wxString& str);
+    static void ClearTraceMasks();
+
+    static void SetTimestamp(const wxChar *ts);
+    static const wxChar *GetTimestamp();
 
     bool GetVerbose() const { return m_bVerbose; }
 
     static wxTraceMask GetTraceMask();
     static bool IsAllowedTraceMask(const char *mask);
 
+    // static void TimeStamp(wxString *str);
+    %addmethods {
+        wxString TimeStamp() {
+            wxString msg;
+            wxLog::TimeStamp(&msg);
+            return msg;
+        }
+    }
 };
 
 
@@ -611,6 +623,17 @@ public:
 };
 
 
+class wxLogChain : public wxLog
+{
+public:
+    wxLogChain(wxLog *logger);
+    void SetLog(wxLog *logger);
+    void PassMessages(bool bDoPass);
+    bool IsPassingMessages();
+    wxLog *GetOldLog();
+};
+
+
 unsigned long wxSysErrorCode();
 const char* wxSysErrorMsg(unsigned long nErrCode = 0);
 void wxLogFatalError(const char *szFormat);
@@ -623,6 +646,46 @@ void wxLogStatus(const char *szFormat);
 %name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const char *szFormat);
 void wxLogSysError(const char *szFormat);
 
+
+%{
+// A Log class that can be derived from in wxPython
+class wxPyLog : public wxLog {
+public:
+    wxPyLog() : wxLog() {}
+
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxLog::DoLog(level, szString, t);
+    }
+
+    virtual void DoLogString(const wxChar *szString, time_t t) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxLog::DoLogString(szString, t);
+    }
+
+    PYPRIVATE;
+};
+%}
+
+// Now tell SWIG about it
+class wxPyLog : public wxLog {
+public:
+    wxPyLog();
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyLog)"
+    %addmethods { void Destroy() { delete self; } }
+
+};
 
 
 //----------------------------------------------------------------------

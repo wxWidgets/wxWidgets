@@ -11,7 +11,7 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-import sys, os
+import sys, os, time
 from   wxPython.wx import *
 from   wxPython.lib.splashscreen import SplashScreen
 from   wxPython.html import wxHtmlWindow
@@ -71,6 +71,21 @@ _treeList = [
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
     ]
+
+#---------------------------------------------------------------------------
+
+class MyLog(wxPyLog):
+    def __init__(self, textCtrl, logTime=0):
+        wxPyLog.__init__(self)
+        self.tc = textCtrl
+        self.logTime = logTime
+
+    def DoLogString(self, message, timeStamp):
+        if self.logTime:
+            message = time.strftime("%X", time.localtime(timeStamp)) + \
+                      ": " + message
+        self.tc.AppendText(message + '\n')
+
 
 #---------------------------------------------------------------------------
 
@@ -217,7 +232,8 @@ class wxPythonDemo(wxFrame):
         self.log = wxTextCtrl(splitter2, -1,
                               style = wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
         # Set the wxWindows log target to be this textctrl
-        wxLog_SetActiveTarget(wxLogTextCtrl(self.log))
+        #wxLog_SetActiveTarget(wxLogTextCtrl(self.log))
+        wxLog_SetActiveTarget(MyLog(self.log))
 
 
 

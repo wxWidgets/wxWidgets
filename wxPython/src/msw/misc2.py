@@ -329,6 +329,9 @@ class wxLogPtr :
     def GetVerbose(self, *_args, **_kwargs):
         val = apply(misc2c.wxLog_GetVerbose,(self,) + _args, _kwargs)
         return val
+    def TimeStamp(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLog_TimeStamp,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxLog instance at %s>" % (self.this,)
 class wxLog(wxLogPtr):
@@ -424,6 +427,54 @@ class wxLogNull(wxLogNullPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxLogNull,_args,_kwargs)
         self.thisown = 1
+
+
+
+
+class wxLogChainPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetLog(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogChain_SetLog,(self,) + _args, _kwargs)
+        return val
+    def PassMessages(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogChain_PassMessages,(self,) + _args, _kwargs)
+        return val
+    def IsPassingMessages(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogChain_IsPassingMessages,(self,) + _args, _kwargs)
+        return val
+    def GetOldLog(self, *_args, **_kwargs):
+        val = apply(misc2c.wxLogChain_GetOldLog,(self,) + _args, _kwargs)
+        if val: val = wxLogPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxLogChain instance at %s>" % (self.this,)
+class wxLogChain(wxLogChainPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogChain,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPyLogPtr(wxLogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyLog__setSelf,(self,) + _args, _kwargs)
+        return val
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(misc2c.wxPyLog_Destroy,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyLog instance at %s>" % (self.this,)
+class wxPyLog(wxPyLogPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxPyLog,_args,_kwargs)
+        self.thisown = 1
+        self._setSelf(self, wxPyLog)
 
 
 
@@ -873,6 +924,12 @@ wxLog_SetTraceMask = misc2c.wxLog_SetTraceMask
 wxLog_AddTraceMask = misc2c.wxLog_AddTraceMask
 
 wxLog_RemoveTraceMask = misc2c.wxLog_RemoveTraceMask
+
+wxLog_ClearTraceMasks = misc2c.wxLog_ClearTraceMasks
+
+wxLog_SetTimestamp = misc2c.wxLog_SetTimestamp
+
+wxLog_GetTimestamp = misc2c.wxLog_GetTimestamp
 
 wxLog_GetTraceMask = misc2c.wxLog_GetTraceMask
 

@@ -46,6 +46,11 @@ Significantly changed how the Python interpreter lock and thread state
 are managed, which should fix the problem of running on a
 multi-processor machine.
 
+Added wxPyLog so log targets can be created in Python to handle log
+messages however is wished.  See demo/Main.py for an example.
+
+
+
 
 
 2.3.1

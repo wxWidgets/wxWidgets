@@ -25,7 +25,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
 
-        print bmp.GetWidth(), bmp.GetHeight()
+        ##print bmp.GetWidth(), bmp.GetHeight()
 
         wxBitmapButton(self, 30, bmp, wxPoint(140, 20),
                        wxSize(bmp.GetWidth()+10, bmp.GetHeight()+10))

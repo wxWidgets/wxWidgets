@@ -360,9 +360,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ScrollWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_ScrollWindow,(self,) + _args, _kwargs)
         return val
-    def SetAcceleratorTable(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_SetAcceleratorTable,(self,) + _args, _kwargs)
-        return val
     def SetAutoLayout(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetAutoLayout,(self,) + _args, _kwargs)
         return val
@@ -546,6 +543,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def PageDown(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_PageDown,(self,) + _args, _kwargs)
+        return val
+    def SetAcceleratorTable(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetAcceleratorTable,(self,) + _args, _kwargs)
         return val
     def GetAcceleratorTable(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetAcceleratorTable,(self,) + _args, _kwargs)
