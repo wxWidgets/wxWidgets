@@ -13,6 +13,9 @@
 #pragma implementation "cursor.h"
 #endif
 
+#include "wx/defs.h"
+
+#include "wx/app.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"
 #include "wx/mac/private.h"
