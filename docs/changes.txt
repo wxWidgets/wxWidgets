@@ -49,9 +49,6 @@ wxBase:
   must modify YourApp::OnAssert() signature if you were using it to override
   the default assert handling.
 
-- IPC classes improved and memory leaks fixed (Michael Fielding).
-  Global buffer removed, duplication in docs removed.
-
 All (GUI):
 
 ! the event type constants are not constants any more but are dynamically
@@ -193,6 +190,8 @@ wxBase:
   deprecated)
 - added wxShutdown() function (Marco Cavallini)
 - added wxEXPLICIT macro
+- IPC classes improved and memory leaks fixed (Michael Fielding).
+  Global buffer removed, duplication in docs removed
 
 Unix (Base/GUI):
 
@@ -279,6 +278,8 @@ wxMSW:
 - fixed a condition where a thread can hang during message/event processing
 - increased space between wxRadioBox label and first radio button
 - don't fail to register remaining window classes if one fails to register
+- wxFontDialog effects only turned on if a valid colour was
+  provided in wxFontData
 
 wxGTK:
 

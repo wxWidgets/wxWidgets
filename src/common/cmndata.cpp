@@ -158,7 +158,7 @@ void wxColourData::operator=(const wxColourData& data)
 wxFontData::wxFontData()
 {
     // Intialize colour to black.
-    fontColour.Set(0, 0, 0);
+    fontColour = wxNullColour;
 
     showHelp = FALSE;
     allowSymbols = TRUE;
