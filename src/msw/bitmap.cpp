@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -32,11 +32,13 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/log.h"
+
 #include "assert.h"
 
 #if USE_XPM_IN_MSW
 #define FOR_MSW 1
-#include "..\..\contrib\wxxpm\libxpm.34b\lib\xpm34.h"
+#include "../../contrib/wxxpm/libxpm.34b/lib/xpm34.h"
 #endif
 
 #include "wx/msw/dib.h"
@@ -97,7 +99,7 @@ wxBitmap::~wxBitmap(void)
 bool wxBitmap::FreeResource(bool force)
 {
   if ( !M_BITMAPDATA )
-	return FALSE;
+  return FALSE;
 
   if (M_BITMAPDATA->m_selectedInto)
   {
@@ -172,7 +174,7 @@ wxBitmap::wxBitmap(const wxString& filename, const long type)
 // Create from data
 wxBitmap::wxBitmap(const char **data, wxItem *WXUNUSED(anItem))
 {
-	(void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
+  (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }
 #endif
 
@@ -212,10 +214,13 @@ bool wxBitmap::LoadFile(const wxString& filename, const long type)
 
   wxBitmapHandler *handler = FindHandler(type);
 
-  if ( handler )
-	return handler->LoadFile(this, filename, type, -1, -1);
-  else
-	return FALSE;
+  if ( handler == NULL ) {
+    wxLogWarning("no bitmap handler for type %d defined.", type);
+
+    return FALSE;
+  }
+
+  return handler->LoadFile(this, filename, type, -1, -1);
 }
 
 bool wxBitmap::Create(void *data, const long type, const int width, const int height, const int depth)
@@ -226,26 +231,32 @@ bool wxBitmap::Create(void *data, const long type, const int width, const int he
 
   wxBitmapHandler *handler = FindHandler(type);
 
-  if ( handler )
-	return handler->Create(this, data, type, width, height, depth);
-  else
-	return FALSE;
+  if ( handler == NULL ) {
+    wxLogWarning("no bitmap handler for type %d defined.", type);
+
+    return FALSE;
+  }
+
+  return handler->Create(this, data, type, width, height, depth);
 }
 
 bool wxBitmap::SaveFile(const wxString& filename, const int type, const wxPalette *palette)
 {
   wxBitmapHandler *handler = FindHandler(type);
 
-  if ( handler )
-	return handler->SaveFile(this, filename, type, palette);
-  else
-	return FALSE;
+  if ( handler == NULL ) {
+    wxLogWarning("no bitmap handler for type %d defined.", type);
+
+    return FALSE;
+  }
+
+  return handler->SaveFile(this, filename, type, palette);
 }
 
 void wxBitmap::SetWidth(int w)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+    m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_width = w;
 }
@@ -253,7 +264,7 @@ void wxBitmap::SetWidth(int w)
 void wxBitmap::SetHeight(int h)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_height = h;
 }
@@ -261,7 +272,7 @@ void wxBitmap::SetHeight(int h)
 void wxBitmap::SetDepth(int d)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_depth = d;
 }
@@ -269,7 +280,7 @@ void wxBitmap::SetDepth(int d)
 void wxBitmap::SetQuality(int q)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_quality = q;
 }
@@ -277,7 +288,7 @@ void wxBitmap::SetQuality(int q)
 void wxBitmap::SetOk(bool isOk)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_ok = isOk;
 }
@@ -285,7 +296,7 @@ void wxBitmap::SetOk(bool isOk)
 void wxBitmap::SetPalette(const wxPalette& palette)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_bitmapPalette = palette ;
 }
@@ -293,7 +304,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 void wxBitmap::SetMask(wxMask *mask)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_bitmapMask = mask ;
 }
@@ -301,71 +312,71 @@ void wxBitmap::SetMask(wxMask *mask)
 void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
   if (!M_BITMAPDATA)
-	m_refData = new wxBitmapRefData;
+  m_refData = new wxBitmapRefData;
 
   M_BITMAPDATA->m_hBitmap = bmp;
 }
 
 void wxBitmap::AddHandler(wxBitmapHandler *handler)
 {
-	sm_handlers.Append(handler);
+  sm_handlers.Append(handler);
 }
 
 void wxBitmap::InsertHandler(wxBitmapHandler *handler)
 {
-	sm_handlers.Insert(handler);
+  sm_handlers.Insert(handler);
 }
 
 bool wxBitmap::RemoveHandler(const wxString& name)
 {
-	wxBitmapHandler *handler = FindHandler(name);
-	if ( handler )
-	{
-		sm_handlers.DeleteObject(handler);
-		return TRUE;
-	}
-	else
-		return FALSE;
+  wxBitmapHandler *handler = FindHandler(name);
+  if ( handler )
+  {
+    sm_handlers.DeleteObject(handler);
+    return TRUE;
+  }
+  else
+    return FALSE;
 }
 
 wxBitmapHandler *wxBitmap::FindHandler(const wxString& name)
 {
-	wxNode *node = sm_handlers.First();
-	while ( node )
-	{
-		wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-		if ( handler->GetName() == name )
-			return handler;
-		node = node->Next();
-	}
-	return NULL;
+  wxNode *node = sm_handlers.First();
+  while ( node )
+  {
+    wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+    if ( handler->GetName() == name )
+      return handler;
+    node = node->Next();
+  }
+  return NULL;
 }
 
 wxBitmapHandler *wxBitmap::FindHandler(const wxString& extension, long bitmapType)
 {
-	wxNode *node = sm_handlers.First();
-	while ( node )
-	{
-		wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-		if ( handler->GetExtension() == extension &&
-		      (bitmapType == -1 || handler->GetType() == bitmapType) )
-			return handler;
-		node = node->Next();
-	}
-	return NULL;
+  wxNode *node = sm_handlers.First();
+  while ( node )
+  {
+    wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+    if ( handler->GetExtension() == extension &&
+          (bitmapType == -1 || handler->GetType() == bitmapType) )
+      return handler;
+    node = node->Next();
+  }
+  return NULL;
 }
 
 wxBitmapHandler *wxBitmap::FindHandler(long bitmapType)
 {
-	wxNode *node = sm_handlers.First();
-	while ( node )
-	{
-		wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-		if (handler->GetType() == bitmapType)
-			return handler;
-		node = node->Next();
-	}
-	return NULL;
+  wxNode *node = sm_handlers.First();
+  while ( node )
+  {
+    wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+    if (handler->GetType() == bitmapType)
+      return handler;
+    node = node->Next();
+  }
+  return NULL;
 }
 
 /*
@@ -382,7 +393,7 @@ wxMask::wxMask(void)
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
     m_maskBitmap = 0;
-	Create(bitmap, colour);
+  Create(bitmap, colour);
 }
 
 // Construct a mask from a bitmap and a palette index indicating
@@ -390,14 +401,14 @@ wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 wxMask::wxMask(const wxBitmap& bitmap, const int paletteIndex)
 {
     m_maskBitmap = 0;
-	Create(bitmap, paletteIndex);
+  Create(bitmap, paletteIndex);
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
 {
     m_maskBitmap = 0;
-	Create(bitmap);
+  Create(bitmap);
 }
 
 wxMask::~wxMask(void)
@@ -410,29 +421,29 @@ wxMask::~wxMask(void)
 bool wxMask::Create(const wxBitmap& bitmap)
 {
     if ( m_maskBitmap )
-	{
-		::DeleteObject((HBITMAP) m_maskBitmap);
-		m_maskBitmap = 0;
-	}
-	if (!bitmap.Ok() || bitmap.GetDepth() != 1)
-	{
-		return FALSE;
-	}
-	m_maskBitmap = (WXHBITMAP) CreateBitmap(
-					bitmap.GetWidth(),
-					bitmap.GetHeight(),
-					1, 1, 0
-					);
-	HDC srcDC = CreateCompatibleDC(0);
-	SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
-	HDC destDC = CreateCompatibleDC(0);
-	SelectObject(destDC, (HBITMAP) m_maskBitmap);
-	BitBlt(destDC, 0, 0, bitmap.GetWidth(), bitmap.GetHeight(), srcDC, 0, 0, SRCCOPY);
-	SelectObject(srcDC, 0);
-	DeleteDC(srcDC);
-	SelectObject(destDC, 0);
-	DeleteDC(destDC);
-	return TRUE;
+  {
+    ::DeleteObject((HBITMAP) m_maskBitmap);
+    m_maskBitmap = 0;
+  }
+  if (!bitmap.Ok() || bitmap.GetDepth() != 1)
+  {
+    return FALSE;
+  }
+  m_maskBitmap = (WXHBITMAP) CreateBitmap(
+          bitmap.GetWidth(),
+          bitmap.GetHeight(),
+          1, 1, 0
+          );
+  HDC srcDC = CreateCompatibleDC(0);
+  SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
+  HDC destDC = CreateCompatibleDC(0);
+  SelectObject(destDC, (HBITMAP) m_maskBitmap);
+  BitBlt(destDC, 0, 0, bitmap.GetWidth(), bitmap.GetHeight(), srcDC, 0, 0, SRCCOPY);
+  SelectObject(srcDC, 0);
+  DeleteDC(srcDC);
+  SelectObject(destDC, 0);
+  DeleteDC(destDC);
+  return TRUE;
 }
 
 // Create a mask from a bitmap and a palette index indicating
@@ -440,20 +451,20 @@ bool wxMask::Create(const wxBitmap& bitmap)
 bool wxMask::Create(const wxBitmap& bitmap, const int paletteIndex)
 {
     if ( m_maskBitmap )
-	{
-		::DeleteObject((HBITMAP) m_maskBitmap);
-		m_maskBitmap = 0;
-	}
-	if (bitmap.Ok() && bitmap.GetPalette()->Ok())
-	{
-		unsigned char red, green, blue;
-		if (bitmap.GetPalette()->GetRGB(paletteIndex, &red, &green, &blue))
-		{
-			wxColour transparentColour(red, green, blue);
-			return Create(bitmap, transparentColour);
-		}
-	}
-	return FALSE;
+  {
+    ::DeleteObject((HBITMAP) m_maskBitmap);
+    m_maskBitmap = 0;
+  }
+  if (bitmap.Ok() && bitmap.GetPalette()->Ok())
+  {
+    unsigned char red, green, blue;
+    if (bitmap.GetPalette()->GetRGB(paletteIndex, &red, &green, &blue))
+    {
+      wxColour transparentColour(red, green, blue);
+      return Create(bitmap, transparentColour);
+    }
+  }
+  return FALSE;
 }
 
 // Create a mask from a bitmap and a colour indicating
@@ -461,51 +472,51 @@ bool wxMask::Create(const wxBitmap& bitmap, const int paletteIndex)
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     if ( m_maskBitmap )
-	{
-		::DeleteObject((HBITMAP) m_maskBitmap);
-		m_maskBitmap = 0;
-	}
-	if (!bitmap.Ok())
-	{
-		return FALSE;
-	}
+  {
+    ::DeleteObject((HBITMAP) m_maskBitmap);
+    m_maskBitmap = 0;
+  }
+  if (!bitmap.Ok())
+  {
+    return FALSE;
+  }
 
-	// scan the bitmap for the transparent colour and set
-	// the corresponding pixels in the mask to BLACK and
-	// the rest to WHITE
-	COLORREF maskColour = RGB(colour.Red(), colour.Green(), colour.Blue());
-	m_maskBitmap = (WXHBITMAP) ::CreateBitmap(
-					bitmap.GetWidth(),
-					bitmap.GetHeight(),
-					1, 1, 0
-					);
-	HDC srcDC = ::CreateCompatibleDC(0);
-	::SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
-	HDC destDC = ::CreateCompatibleDC(0);
-	::SelectObject(destDC, (HBITMAP) m_maskBitmap);
+  // scan the bitmap for the transparent colour and set
+  // the corresponding pixels in the mask to BLACK and
+  // the rest to WHITE
+  COLORREF maskColour = RGB(colour.Red(), colour.Green(), colour.Blue());
+  m_maskBitmap = (WXHBITMAP) ::CreateBitmap(
+          bitmap.GetWidth(),
+          bitmap.GetHeight(),
+          1, 1, 0
+          );
+  HDC srcDC = ::CreateCompatibleDC(0);
+  ::SelectObject(srcDC, (HBITMAP) bitmap.GetHBITMAP());
+  HDC destDC = ::CreateCompatibleDC(0);
+  ::SelectObject(destDC, (HBITMAP) m_maskBitmap);
 
-	// this is not very efficient, but I can't think
-	// of a better way of doing it
-	for (int w = 0; w < bitmap.GetWidth(); w++)
-	{
-		for (int h = 0; h < bitmap.GetHeight(); h++)
-		{
-			COLORREF col = GetPixel(srcDC, w, h);
-			if (col == maskColour)
-			{
-				::SetPixel(destDC, w, h, RGB(0, 0, 0));
-			}
-			else
-			{
-				::SetPixel(destDC, w, h, RGB(255, 255, 255));
-			}
-		}
-	}
-	::SelectObject(srcDC, 0);
-	::DeleteDC(srcDC);
-	::SelectObject(destDC, 0);
-	::DeleteDC(destDC);
-	return TRUE;
+  // this is not very efficient, but I can't think
+  // of a better way of doing it
+  for (int w = 0; w < bitmap.GetWidth(); w++)
+  {
+    for (int h = 0; h < bitmap.GetHeight(); h++)
+    {
+      COLORREF col = GetPixel(srcDC, w, h);
+      if (col == maskColour)
+      {
+        ::SetPixel(destDC, w, h, RGB(0, 0, 0));
+      }
+      else
+      {
+        ::SetPixel(destDC, w, h, RGB(255, 255, 255));
+      }
+    }
+  }
+  ::SelectObject(srcDC, 0);
+  ::DeleteDC(srcDC);
+  ::SelectObject(destDC, 0);
+  ::DeleteDC(destDC);
+  return TRUE;
 }
 
 /*
@@ -516,18 +527,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, const long type, const int width, const int height, const int depth)
 {
-	return FALSE;
+  return FALSE;
 }
 
 bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const long type,
     int desiredWidth, int desiredHeight)
 {
-	return FALSE;
+  return FALSE;
 }
 
 bool wxBitmapHandler::SaveFile(wxBitmap *bitmap, const wxString& name, const int type, const wxPalette *palette)
 {
-	return FALSE;
+  return FALSE;
 }
 
 /*
@@ -540,9 +551,9 @@ class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
 public:
   inline wxBMPResourceHandler(void)
   {
-	m_name = "Windows bitmap resource";
-	m_extension = "";
-	m_type = wxBITMAP_TYPE_BMP_RESOURCE;
+  m_name = "Windows bitmap resource";
+  m_extension = "";
+  m_type = wxBITMAP_TYPE_BMP_RESOURCE;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
@@ -565,7 +576,11 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, cons
       M_BITMAPHANDLERDATA->m_depth = bm.bmPlanes;
       return TRUE;
     }
-	return FALSE;
+
+  // it's probably not found
+  wxLogError("Can't load bitmap '%s' from ressources!", name.c_str());
+
+  return FALSE;
 }
 
 class WXDLLEXPORT wxBMPFileHandler: public wxBitmapHandler
@@ -574,9 +589,9 @@ class WXDLLEXPORT wxBMPFileHandler: public wxBitmapHandler
 public:
   inline wxBMPFileHandler(void)
   {
-	m_name = "Windows bitmap file";
-	m_extension = "bmp";
-	m_type = wxBITMAP_TYPE_BMP;
+  m_name = "Windows bitmap file";
+  m_extension = "bmp";
+  m_type = wxBITMAP_TYPE_BMP;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
@@ -606,7 +621,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const lo
       M_BITMAPHANDLERDATA->m_bitmapPalette = *palette;
     return success;
 #else
-	return FALSE;
+  return FALSE;
 #endif
 }
 
@@ -618,7 +633,7 @@ bool wxBMPFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, const in
       actualPalette = & (M_BITMAPHANDLERDATA->m_bitmapPalette);
     return (wxSaveBitmap(WXSTRINGCAST name, bitmap, actualPalette) != 0);
 #else
-	return FALSE;
+  return FALSE;
 #endif
 }
 
@@ -628,9 +643,9 @@ class WXDLLEXPORT wxXPMFileHandler: public wxBitmapHandler
 public:
   inline wxXPMFileHandler(void)
   {
-	m_name = "XPM bitmap file";
-	m_extension = "xpm";
-	m_type = wxBITMAP_TYPE_XPM;
+  m_name = "XPM bitmap file";
+  m_extension = "xpm";
+  m_type = wxBITMAP_TYPE_XPM;
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, const long flags,
@@ -656,20 +671,20 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const lo
       DeleteDC(dc);
       if (errorStatus == XpmSuccess)
       {
-	M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ximage->bitmap;
+        M_BITMAPHANDLERDATA->m_hBitmap = (WXHBITMAP) ximage->bitmap;
 
-	BITMAP  bm;
-	GetObject((HBITMAP) m_hBitmap, sizeof(bm), (LPSTR) & bm);
+        BITMAP  bm;
+        GetObject((HBITMAP)M_BITMAPHANDLERDATA->m_hBitmap, sizeof(bm), (LPSTR) & bm);
 
-	M_BITMAPHANDLERDATA->m_width = (bm.bmWidth);
-	M_BITMAPHANDLERDATA->m_height = (bm.bmHeight);
-	M_BITMAPHANDLERDATA->m_depth = (bm.bmPlanes * bm.bmBitsPixel);
-	M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
+        M_BITMAPHANDLERDATA->m_width = (bm.bmWidth);
+        M_BITMAPHANDLERDATA->m_height = (bm.bmHeight);
+        M_BITMAPHANDLERDATA->m_depth = (bm.bmPlanes * bm.bmBitsPixel);
+        M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
         XpmFreeAttributes(&xpmAttr);
-	XImageFree(ximage);
-	
-	M_BITMAPHANDLERDATA->m_ok = TRUE;
-	return TRUE;
+        XImageFree(ximage);
+
+        M_BITMAPHANDLERDATA->m_ok = TRUE;
+        return TRUE;
       }
       else
       {
@@ -677,9 +692,9 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, const lo
         return FALSE;
       }
     }
-#else
-	return FALSE;
 #endif
+
+    return FALSE;
 }
 
 bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, const int type, const wxPalette *palette)
@@ -696,22 +711,24 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, const in
         if (SelectObject(dc, (HBITMAP) M_BITMAPHANDLERDATA->m_hBitmap))
         { /* for following SetPixel */
           /* fill the XImage struct 'by hand' */
-	  ximage.width = M_BITMAPHANDLERDATA->m_width; ximage.height = M_BITMAPHANDLERDATA->m_height;
-	  ximage.depth = M_BITMAPHANDLERDATA->m_depth; ximage.bitmap = M_BITMAPHANDLERDATA->m_hBitmap;
-	  int errorStatus = XpmWriteFileFromImage(&dc, WXSTRINGCAST name,
-						  &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
+    ximage.width = M_BITMAPHANDLERDATA->m_width; 
+     ximage.height = M_BITMAPHANDLERDATA->m_height;
+    ximage.depth = M_BITMAPHANDLERDATA->m_depth; 
+     ximage.bitmap = (void *)M_BITMAPHANDLERDATA->m_hBitmap;
+    int errorStatus = XpmWriteFileFromImage(&dc, WXSTRINGCAST name,
+              &ximage, (XImage *) NULL, (XpmAttributes *) NULL);
 
           if (dc)
-	    DeleteDC(dc);
+      DeleteDC(dc);
 
-	  if (errorStatus == XpmSuccess)
-	    return TRUE;		/* no error */
-	  else
-	    return FALSE;
+    if (errorStatus == XpmSuccess)
+      return TRUE;    /* no error */
+    else
+      return FALSE;
         } else return FALSE;
       } else return FALSE;
 #else
-	return FALSE;
+  return FALSE;
 #endif
 }
 
@@ -721,9 +738,9 @@ class WXDLLEXPORT wxXPMDataHandler: public wxBitmapHandler
 public:
   inline wxXPMDataHandler(void)
   {
-	m_name = "XPM bitmap data";
-	m_extension = "xpm";
-	m_type = wxBITMAP_TYPE_XPM_DATA;
+  m_name = "XPM bitmap data";
+  m_extension = "xpm";
+  m_type = wxBITMAP_TYPE_XPM_DATA;
   };
 
   virtual bool Create(wxBitmap *bitmap, void *data, const long flags, const int width, const int height, const int depth = 1);
@@ -741,11 +758,11 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, const long flags, co
   M_BITMAPHANDLERDATA->m_ok = FALSE;
   M_BITMAPHANDLERDATA->m_numColors = 0;
 
-  dc = CreateCompatibleDC(NULL);	/* memory DC */
+  dc = CreateCompatibleDC(NULL);  /* memory DC */
 
   if (dc)
   {
-    xpmAttr.valuemask = XpmReturnInfos;	/* get infos back */
+    xpmAttr.valuemask = XpmReturnInfos; /* get infos back */
     ErrorStatus = XpmCreateImageFromData(&dc, (char **)data,
          &ximage, (XImage **) NULL, &xpmAttr);
 
@@ -763,46 +780,45 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, const long flags, co
       M_BITMAPHANDLERDATA->m_numColors = xpmAttr.npixels;
       XpmFreeAttributes(&xpmAttr);
 
-      XImageFree(ximage);	// releases the malloc, but does not detroy
-			// the bitmap
+      XImageFree(ximage); // releases the malloc, but does not detroy
+                          // the bitmap
       M_BITMAPHANDLERDATA->m_ok = TRUE;
       DeleteDC(dc);
 
-    } else
+      return TRUE;
+    } 
+    else
     {
       M_BITMAPHANDLERDATA->m_ok = FALSE;
 //    XpmDebugError(ErrorStatus, NULL);
       DeleteDC(dc);
-	  return FALSE;
+      return FALSE;
     }
   }
-#else
-  return FALSE;
 #endif
+
+  return FALSE;
 }
 
 void wxBitmap::CleanUpHandlers(void)
 {
-	wxNode *node = sm_handlers.First();
-	while ( node )
-	{
-		wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
-		wxNode *next = node->Next();
-		delete handler;
-		delete node;
-		node = next;
-	}
+  wxNode *node = sm_handlers.First();
+  while ( node )
+  {
+    wxBitmapHandler *handler = (wxBitmapHandler *)node->Data();
+    wxNode *next = node->Next();
+    delete handler;
+    delete node;
+    node = next;
+  }
 }
 
 void wxBitmap::InitStandardHandlers(void)
 {
-	AddHandler(new wxBMPResourceHandler);
-	AddHandler(new wxBMPFileHandler);
-	AddHandler(new wxXPMFileHandler);
-	AddHandler(new wxXPMDataHandler);
-	AddHandler(new wxICOResourceHandler);
-	AddHandler(new wxICOFileHandler);
+  AddHandler(new wxBMPResourceHandler);
+  AddHandler(new wxBMPFileHandler);
+  AddHandler(new wxXPMFileHandler);
+  AddHandler(new wxXPMDataHandler);
+  AddHandler(new wxICOResourceHandler);
+  AddHandler(new wxICOFileHandler);
 }
-
-
-
