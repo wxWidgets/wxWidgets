@@ -223,8 +223,12 @@ private:
 #define wxPREVIEW_PREVIOUS     2
 #define wxPREVIEW_NEXT         4
 #define wxPREVIEW_ZOOM         8
+#define wxPREVIEW_FIRST       16
+#define wxPREVIEW_LAST        32
+#define wxPREVIEW_GOTO        64
 
-#define wxPREVIEW_DEFAULT      wxPREVIEW_PREVIOUS|wxPREVIEW_NEXT|wxPREVIEW_ZOOM
+#define wxPREVIEW_DEFAULT  wxPREVIEW_PREVIOUS|wxPREVIEW_NEXT|wxPREVIEW_ZOOM\
+                          |wxPREVIEW_FIRST|wxPREVIEW_GOTO|wxPREVIEW_LAST
 
 // Ids for controls
 #define wxID_PREVIEW_CLOSE      1
@@ -232,6 +236,9 @@ private:
 #define wxID_PREVIEW_PREVIOUS   3
 #define wxID_PREVIEW_PRINT      4
 #define wxID_PREVIEW_ZOOM       5
+#define wxID_PREVIEW_FIRST      6
+#define wxID_PREVIEW_LAST       7
+#define wxID_PREVIEW_GOTO       8
 
 class WXDLLEXPORT wxPreviewControlBar: public wxPanel
 {
@@ -257,8 +264,14 @@ public:
     void OnWindowClose(wxCommandEvent& event);
     void OnNext();
     void OnPrevious();
+    void OnFirst();
+    void OnLast();
+    void OnGoto();
     void OnNextButton(wxCommandEvent & WXUNUSED(event)) { OnNext(); }
     void OnPreviousButton(wxCommandEvent & WXUNUSED(event)) { OnPrevious(); }
+    void OnFirstButton(wxCommandEvent & WXUNUSED(event)) { OnFirst(); }
+    void OnLastButton(wxCommandEvent & WXUNUSED(event)) { OnLast(); }
+    void OnGotoButton(wxCommandEvent & WXUNUSED(event)) { OnGoto(); }
     void OnChar(wxKeyEvent &event);
     void OnZoom(wxCommandEvent& event);
     void OnPaint(wxPaintEvent& event);
@@ -270,6 +283,9 @@ protected:
     wxButton*             m_previousPageButton;
     wxButton*             m_printButton;
     wxChoice*             m_zoomControl;
+    wxButton*             m_firstPageButton;
+    wxButton*             m_lastPageButton;
+    wxButton*             m_gotoPageButton;
     long                  m_buttonFlags;
 
 private:
