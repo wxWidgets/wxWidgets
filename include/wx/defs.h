@@ -26,8 +26,10 @@
 // ----------------------------------------------------------------------------
 
 // OS
-#if defined(__HPUX__) || defined(____SVR4____) || defined(__LINUX__) || defined(__sgi ) || \
-    defined(__unix__) || defined(sun) || defined(__SUN__)
+#if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
+    defined(__LINUX__) || defined(__sgi ) || \
+    defined(__hpux) || defined(sun) || defined(__SUN__)
+
     #ifndef __UNIX__
         #define __UNIX__
     #endif // Unix
@@ -50,8 +52,13 @@
             #endif // Sun CC
         #endif
     #endif // Sun
+
+    #ifdef __hpux
+        #define __HPUX__
+    #endif // HP-UX
+
 #elif defined(applec) || defined(THINK_C) || ( defined( __MWERKS__ ) && !defined(__INTEL__) )
-		// MacOS
+        // MacOS
 #else   // Windows
     #ifndef __WINDOWS__
         #define __WINDOWS__
@@ -92,7 +99,7 @@
 #endif // __DECCXX
 
 // Resolves linking problems under HP-UX
-#if defined(__HPUX__) && !defined(__GNUG__)
+#if defined(__HPUX__) && defined(__GNUG__)
     #define va_list __gnuc_va_list
 #endif // HP-UX
 
