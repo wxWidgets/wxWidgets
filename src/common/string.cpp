@@ -2221,6 +2221,30 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex, size_t nInsert)
   m_nCount += nInsert;
 }
 
+// range insert (STL 23.2.4.3)
+void
+wxArrayString::insert(iterator it, const_iterator first, const_iterator last)
+{
+    const int idx = it - begin();
+
+    // grow it once
+    Grow(last - first);
+
+    // reset "it" since it can change inside Grow()
+    it = begin() + idx;
+
+    while ( first != last )
+    {
+        it = insert(it, *first);
+
+        // insert returns an iterator to the last element inserted but we need
+        // insert the next after this one, that is before the next one
+        ++it;
+
+        ++first;
+    }
+} 
+
 // expand the array
 void wxArrayString::SetCount(size_t count)
 {
