@@ -59,7 +59,7 @@
 #define wxUSE_FFILE               1
 #define wxUSE_TEXTFILE            0
 #define wxUSE_INTL                0
-#define wxUSE_MENUS 0
+#define wxUSE_MENUS 1
 #define wxUSE_TOOLBAR 0
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_TOOLBAR_SIMPLE 0

@@ -183,7 +183,7 @@ public:
     wxMenuItemList& GetMenuItems() { return m_items; }
 
     // search
-    virtual int FindItem(const wxString& itemString) const;
+    virtual int FindItem(const wxString& item) const;
     wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const;
 
     // get/set items attributes
@@ -335,6 +335,9 @@ public:
     // enable or disable a submenu
     virtual void EnableTop(size_t pos, bool enable) = 0;
 
+    // is the menu enabled?
+    virtual bool IsEnabledTop(size_t pos) const { return TRUE; }
+
     // get or change the label of the menu at given position
     virtual void SetLabelTop(size_t pos, const wxString& label) = 0;
     virtual wxString GetLabelTop(size_t pos) const = 0;
@@ -344,13 +347,12 @@ public:
 
     // by menu and item names, returns wxNOT_FOUND if not found or id of the
     // found item
-    virtual int FindMenuItem(const wxString& menuString,
-                             const wxString& itemString) const = 0;
+    virtual int FindMenuItem(const wxString& menu, const wxString& item) const;
 
     // find item by id (in any menu), returns NULL if not found
     //
     // if menu is !NULL, it will be filled with wxMenu this item belongs to
-    virtual wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const = 0;
+    virtual wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const;
 
     // find menu by its caption, return wxNOT_FOUND on failure
     int FindMenu(const wxString& title) const;
@@ -375,6 +377,20 @@ public:
     void SetHelpString(int id, const wxString& helpString);
     wxString GetHelpString(int id) const;
 
+    // implementation helpers
+
+    // get the frame we are attached to (may return NULL)
+    wxFrame *GetFrame() const { return m_menuBarFrame; }
+
+    // returns TRUE if we're attached to a frame
+    bool IsAttached() const { return GetFrame() != NULL; }
+
+    // associate the menubar with the frame
+    virtual void Attach(wxFrame *frame);
+
+    // called before deleting the menubar normally
+    virtual void Detach();
+
     // need to override these ones to avoid virtual function hiding
     virtual bool Enable(bool enable = TRUE) { return wxWindow::Enable(enable); }
     virtual void SetLabel(const wxString& s) { wxWindow::SetLabel(s); }
@@ -395,6 +411,9 @@ public:
 protected:
     // the list of all our menus
     wxMenuList m_menus;
+
+    // the frame we are attached to (may be NULL)
+    wxFrame *m_menuBarFrame;
 };
 
 // ----------------------------------------------------------------------------
@@ -404,7 +423,9 @@ protected:
 #ifdef wxUSE_BASE_CLASSES_ONLY
     #define wxMenuItem wxMenuItemBase
 #else // !wxUSE_BASE_CLASSES_ONLY
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/menu.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/menu.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/menu.h"

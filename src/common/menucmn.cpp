@@ -55,11 +55,105 @@ WX_DEFINE_LIST(wxMenuItemList);
 
 wxMenuItemBase::~wxMenuItemBase()
 {
-    if (m_subMenu)
-        delete m_subMenu;
+    delete m_subMenu;
 }
 
 #if wxUSE_ACCEL
+
+// return wxAcceleratorEntry for the given menu string or NULL if none
+// specified
+wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+{
+    // check for accelerators: they are given after '\t'
+    int posTab = label.Find(wxT('\t'));
+    if ( posTab != wxNOT_FOUND ) {
+        // parse the accelerator string
+        int keyCode = 0;
+        int accelFlags = wxACCEL_NORMAL;
+        wxString current;
+        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
+            if ( (label[n] == '+') || (label[n] == '-') ) {
+                if ( current == _("ctrl") )
+                    accelFlags |= wxACCEL_CTRL;
+                else if ( current == _("alt") )
+                    accelFlags |= wxACCEL_ALT;
+                else if ( current == _("shift") )
+                    accelFlags |= wxACCEL_SHIFT;
+                else {
+                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
+                               current.c_str());
+                }
+
+                current.Empty();
+            }
+            else {
+                current += wxTolower(label[n]);
+            }
+        }
+
+        if ( current.IsEmpty() ) {
+            wxLogDebug(wxT("No accel key found, accel string ignored."));
+        }
+        else {
+            if ( current.Len() == 1 ) {
+                // it's a letter
+                keyCode = wxToupper(current[0U]);
+            }
+            else {
+                // is it a function key?
+                if ( current[0U] == 'f' && isdigit(current[1U]) &&
+                     (current.Len() == 2 ||
+                     (current.Len() == 3 && isdigit(current[2U]))) ) {
+                    int n;
+                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
+
+                    keyCode = WXK_F1 + n - 1;
+                }
+                else {
+                    // several special cases
+                    current.MakeUpper();
+                    if ( current == wxT("DEL") ) {
+                        keyCode = WXK_DELETE;
+                    }
+                    else if ( current == wxT("DELETE") ) {
+                        keyCode = WXK_DELETE;
+                    }
+                    else if ( current == wxT("INS") ) {
+                        keyCode = WXK_INSERT;
+                    }
+                    else if ( current == wxT("INSERT") ) {
+                        keyCode = WXK_INSERT;
+                    }
+#if 0
+                    else if ( current == wxT("PGUP") ) {
+                        keyCode = VK_PRIOR;
+                    }
+                    else if ( current == wxT("PGDN") ) {
+                        keyCode = VK_NEXT;
+                    }
+#endif
+                    else
+                    {
+                        wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
+                                   current.c_str());
+                    }
+                }
+            }
+        }
+
+        if ( keyCode ) {
+            // we do have something
+            return new wxAcceleratorEntry(accelFlags, keyCode);
+        }
+    }
+
+    return (wxAcceleratorEntry *)NULL;
+}
+
+wxAcceleratorEntry *wxMenuItemBase::GetAccel() const
+{
+    return wxGetAccelFromString(GetText());
+}
 
 void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
 {
@@ -468,6 +562,9 @@ wxMenuBarBase::wxMenuBarBase()
 {
     // we own the menus when we get them
     m_menus.DeleteContents(TRUE);
+
+    // not attached yet
+    m_menuBarFrame = NULL;
 }
 
 wxMenuBarBase::~wxMenuBarBase()
@@ -564,6 +661,58 @@ int wxMenuBarBase::FindMenu(const wxString& title) const
 
     return wxNOT_FOUND;
 
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuBar attaching/detaching to/from the frame
+// ----------------------------------------------------------------------------
+
+void wxMenuBarBase::Attach(wxFrame *frame)
+{
+    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
+
+    m_menuBarFrame = frame;
+}
+
+void wxMenuBarBase::Detach()
+{
+    wxASSERT_MSG( IsAttached(), wxT("detaching unattached menubar") );
+
+    m_menuBarFrame = NULL;
+}
+
+// ----------------------------------------------------------------------------
+// wxMenuBar searching for items
+// ----------------------------------------------------------------------------
+
+wxMenuItem *wxMenuBarBase::FindItem(int id, wxMenu **menu) const
+{
+    if ( itemMenu )
+        *itemMenu = NULL;
+
+    wxMenuItem *item = NULL;
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; !item && (i < count); i++ )
+    {
+        item = m_menus[i]->FindItem(id, itemMenu);
+    }
+
+    return item;
+}
+
+int wxMenuBarBp::FindMenuItem(const wxString& menu, const wxString& item) const
+{
+    wxString label = wxMenuItem::GetLabelFromText(menu);
+
+    int i = 0;
+    wxMenuList::Node *node;
+    for ( node = m_menus.GetFirst(); node; node = node->GetNext(), i++ )
+    {
+        if ( label == wxMenuItem::GetLabelFromText(GetLabelTop(i)) )
+            return node->GetData()->FindItem(item);
+    }
+
+    return wxNOT_FOUND;
 }
 
 // ---------------------------------------------------------------------------

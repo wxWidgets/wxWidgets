@@ -514,7 +514,6 @@ wxWindow *wxMenu::GetWindow() const
 void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_menuBarFrame = NULL;
     m_hMenu = 0;
 }
 
@@ -555,7 +554,7 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-    DrawMenuBar(GetHwndOf(m_menuBarFrame));
+    DrawMenuBar(GetHwndOf(GetFrame()));
 }
 
 WXHMENU wxMenuBar::Create()
@@ -822,9 +821,7 @@ void wxMenuBar::RebuildAccelTable()
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
-//    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
-
-    m_menuBarFrame = frame;
+    wxMenuBarBase::Attach(frame);
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
@@ -833,45 +830,9 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::Detach()
 {
-//    ::DestroyMenu((HMENU)m_hMenu);
     m_hMenu = (WXHMENU)NULL;
-    m_menuBarFrame = NULL;
-}
 
-
-// ---------------------------------------------------------------------------
-// wxMenuBar searching for menu items
-// ---------------------------------------------------------------------------
-
-// Find the itemString in menuString, and return the item id or wxNOT_FOUND
-int wxMenuBar::FindMenuItem(const wxString& menuString,
-                            const wxString& itemString) const
-{
-    wxString menuLabel = wxStripMenuCodes(menuString);
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; i < count; i++ )
-    {
-        wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuLabel == title )
-            return m_menus[i]->FindItem(itemString);
-    }
-
-    return wxNOT_FOUND;
-}
-
-wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
-{
-    if ( itemMenu )
-        *itemMenu = NULL;
-
-    wxMenuItem *item = NULL;
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; !item && (i < count); i++ )
-    {
-        item = m_menus[i]->FindItem(id, itemMenu);
-    }
-
-    return item;
+    wxMenuBarBase::Detach();
 }
 
 #endif // wxUSE_MENUS

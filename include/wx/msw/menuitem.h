@@ -51,10 +51,6 @@ public:
     virtual void Check(bool bDoCheck = TRUE);
     virtual bool IsChecked() const;
 
-#if wxUSE_ACCEL
-    virtual wxAcceleratorEntry *GetAccel() const;
-#endif // wxUSE_ACCEL
-
     // unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
     bool IsCheckable() const { return wxMenuItemBase::IsCheckable(); }

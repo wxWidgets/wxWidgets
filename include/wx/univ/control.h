@@ -73,7 +73,8 @@ public:
 
     // return the accel index in the string or -1 if none and puts the modified
     // string intosecond parameter if non NULL
-    static int FindAccelIndex(const wxString& label, wxString *labelOnly);
+    static int FindAccelIndex(const wxString& label,
+                              wxString *labelOnly = NULL);
 
     // return the index of the accel char in the label or -1 if none
     int GetAccelIndex() const { return m_indexAccel; }

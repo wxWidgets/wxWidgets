@@ -2764,7 +2764,7 @@ bool wxWindowMSW::HandleActivate(int state,
     return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxWindowMSW::HandleSetFocus(WXHWND WXUNUSED(hwnd))
+bool wxWindowMSW::HandleSetFocus(WXHWND hwnd)
 {
 #if wxUSE_CARET
     // Deal with caret
@@ -2777,10 +2777,13 @@ bool wxWindowMSW::HandleSetFocus(WXHWND WXUNUSED(hwnd))
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
     event.SetEventObject(this);
 
+    // wxFindWinFromHandle() may return NULL, it is ok
+    event.SetWindow(wxFindWinFromHandle(hwnd));
+
     return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxWindowMSW::HandleKillFocus(WXHWND WXUNUSED(hwnd))
+bool wxWindowMSW::HandleKillFocus(WXHWND hwnd)
 {
 #if wxUSE_CARET
     // Deal with caret
@@ -2792,6 +2795,9 @@ bool wxWindowMSW::HandleKillFocus(WXHWND WXUNUSED(hwnd))
 
     wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
     event.SetEventObject(this);
+
+    // wxFindWinFromHandle() may return NULL, it is ok
+    event.SetWindow(wxFindWinFromHandle(hwnd));
 
     return GetEventHandler()->ProcessEvent(event);
 }

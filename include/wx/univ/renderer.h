@@ -215,6 +215,13 @@ public:
                                  int step = 1,
                                  int flags = 0) = 0;
 
+    // draw a menu bar item
+    virtual void DrawMenuBarItem(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0,
+                                 int indexAccel = -1) = 0;
+
     // misc functions
     // --------------
 
@@ -304,6 +311,9 @@ public:
 
     // get the size of one progress bar step (in horz and vertical directions)
     virtual wxSize GetProgressBarStep() const = 0;
+
+    // get the size of rectangle to use in the menubar for the given text rect
+    virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -506,6 +516,12 @@ public:
                                  int flags = 0)
         { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
                                       start, end, start, flags); }
+    virtual void DrawMenuBarItem(wxDC& dc,
+                                 const wxRect& rect,
+                                 const wxString& label,
+                                 int flags = 0,
+                                 int indexAccel = -1)
+        { m_renderer->DrawMenuBarItem(dc, rect, label, flags, indexAccel); }
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -567,6 +583,8 @@ public:
         { return m_renderer->GetSliderThumbSize(rect, orient); }
     virtual wxSize GetProgressBarStep() const
         { return m_renderer->GetProgressBarStep(); }
+    virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const
+        { return m_renderer->GetMenuBarItemSize(sizeText); }
 
 protected:
     wxRenderer *m_renderer;

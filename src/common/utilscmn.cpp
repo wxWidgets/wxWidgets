@@ -261,7 +261,6 @@ FloatToString (float number, const wxChar *fmt)
 {
   static wxChar buf[256];
 
-//  sprintf (buf, "%.2f", number);
   wxSprintf (buf, fmt, number);
   return buf;
 }
@@ -398,147 +397,34 @@ wxString wxNow()
 
 #if wxUSE_GUI
 
+#if wxUSE_MENUS
+
 // ----------------------------------------------------------------------------
 // Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
-wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
+wxChar *wxStripMenuCodes(wxChar *in, wxChar *out)
 {
-  if (!in)
-    return (wxChar *) NULL;
-
-  if (!out)
-    out = copystring(in);
-
-  wxChar *tmpOut = out;
-
-  while (*in)
+    wxString s = wxMenuItem::GetLabelFromText(in);
+    if ( out )
     {
-      if (*in == wxT('&'))
-        {
-          // Check && -> &, &x -> x
-          if (*++in == wxT('&'))
-            *out++ = *in++;
-        }
-      else if (*in == wxT('\t'))
-        {
-          // Remove all stuff after \t in X mode, and let the stuff as is
-          // in Windows mode.
-          // Accelerators are handled in wx_item.cc for Motif, and are not
-          // YET supported in XView
-          break;
-        }
-      else
-        *out++ = *in++;
-    }                                // while
+        // go smash their buffer if it's not big enough - I love char * params
+        memcpy(out, s.c_str(), s.length() * sizeof(wxChar));
+    }
+    else
+    {
+        out = copystring(s);
+    }
 
-  *out = wxT('\0');
-
-  return tmpOut;
+    return out;
 }
 
 wxString wxStripMenuCodes(const wxString& str)
 {
-    wxChar *buf = new wxChar[str.Length() + 1];
-    wxStripMenuCodes(WXSTRINGCAST str, buf);
-    wxString str1(buf);
-    delete[] buf;
-    return str1;
+    return wxMenuItem::GetLabelFromText(str);
 }
 
-#if wxUSE_ACCEL
-
-// return wxAcceleratorEntry for the given menu string or NULL if none
-// specified
-wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
-{
-    // check for accelerators: they are given after '\t'
-    int posTab = label.Find(wxT('\t'));
-    if ( posTab != wxNOT_FOUND ) {
-        // parse the accelerator string
-        int keyCode = 0;
-        int accelFlags = wxACCEL_NORMAL;
-        wxString current;
-        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
-            if ( (label[n] == '+') || (label[n] == '-') ) {
-                if ( current == _("ctrl") )
-                    accelFlags |= wxACCEL_CTRL;
-                else if ( current == _("alt") )
-                    accelFlags |= wxACCEL_ALT;
-                else if ( current == _("shift") )
-                    accelFlags |= wxACCEL_SHIFT;
-                else {
-                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
-                               current.c_str());
-                }
-
-                current.Empty();
-            }
-            else {
-                current += wxTolower(label[n]);
-            }
-        }
-
-        if ( current.IsEmpty() ) {
-            wxLogDebug(wxT("No accel key found, accel string ignored."));
-        }
-        else {
-            if ( current.Len() == 1 ) {
-                // it's a letter
-                keyCode = wxToupper(current[0U]);
-            }
-            else {
-                // is it a function key?
-                if ( current[0U] == 'f' && isdigit(current[1U]) &&
-                     (current.Len() == 2 ||
-                     (current.Len() == 3 && isdigit(current[2U]))) ) {
-                    int n;
-                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
-
-                    keyCode = WXK_F1 + n - 1;
-                }
-                else {
-                    // several special cases
-                    current.MakeUpper();
-                    if ( current == wxT("DEL") ) {
-                        keyCode = WXK_DELETE;
-                    }
-                    else if ( current == wxT("DELETE") ) {
-                        keyCode = WXK_DELETE;
-                    }
-                    else if ( current == wxT("INS") ) {
-                        keyCode = WXK_INSERT;
-                    }
-                    else if ( current == wxT("INSERT") ) {
-                        keyCode = WXK_INSERT;
-                    }
-#if 0
-                    else if ( current == wxT("PGUP") ) {
-                        keyCode = VK_PRIOR;
-                    }
-                    else if ( current == wxT("PGDN") ) {
-                        keyCode = VK_NEXT;
-                    }
-#endif
-                    else
-                    {
-                        wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
-                                   current.c_str());
-                    }
-                }
-            }
-        }
-
-        if ( keyCode ) {
-            // we do have something
-            return new wxAcceleratorEntry(accelFlags, keyCode);
-        }
-    }
-
-    return (wxAcceleratorEntry *)NULL;
-}
-
-#endif // wxUSE_ACCEL
+#endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // Window search functions

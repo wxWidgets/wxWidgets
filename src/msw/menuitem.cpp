@@ -149,18 +149,6 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     return wxStripMenuCodes(text);
 }
 
-// accelerators
-// ------------
-
-#if wxUSE_ACCEL
-
-wxAcceleratorEntry *wxMenuItem::GetAccel() const
-{
-    return wxGetAccelFromString(GetText());
-}
-
-#endif // wxUSE_ACCEL
-
 // change item state
 // -----------------
 

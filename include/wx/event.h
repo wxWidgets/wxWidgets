@@ -940,11 +940,22 @@ public:
 
 class WXDLLEXPORT wxFocusEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxFocusEvent)
-
 public:
-    wxFocusEvent(wxEventType type = wxEVT_NULL, int Id = 0)
-        { m_eventType = type; m_id = Id; }
+    wxFocusEvent(wxEventType type = wxEVT_NULL, int id = 0)
+        { m_eventType = type; m_id = id; m_win = NULL; }
+
+    // the window associated with this event is the window which had focus
+    // before for SET event and the window which will have focus for the KILL
+    // one
+    //
+    // NB: it may be NULL in both cases!
+    wxWindow *GetWindow() const { return m_win; }
+    void SetWindow(wxWindow *win) { m_win = win; }
+
+private:
+    wxWindow *m_win;
+
+    DECLARE_DYNAMIC_CLASS(wxFocusEvent)
 };
 
 // Activate event class
