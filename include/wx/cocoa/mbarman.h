@@ -43,7 +43,7 @@ public:
     void SetMainMenuBar(wxMenuBar* menubar);
     void CocoaInternalIdle();
     void WindowDidBecomeKey(wxTopLevelWindowNative *win);
-    void WindowDidResignKey(wxTopLevelWindowNative *win);
+    void WindowDidResignKey(wxTopLevelWindowNative *win, bool uninstallMenuBar = true);
     void WindowDidBecomeMain(wxTopLevelWindowNative *win);
     void WindowDidResignMain(wxTopLevelWindowNative *win);
     void UpdateWindowMenuBar(wxTopLevelWindowNative *win);

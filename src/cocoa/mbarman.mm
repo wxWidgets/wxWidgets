@@ -161,21 +161,22 @@ void wxMenuBarManager::InstallMainMenu()
 
 void wxMenuBarManager::WindowDidBecomeKey(wxTopLevelWindowNative *win)
 {
-//    wxASSERT(!m_windowKey);
+    wxASSERT(!m_windowKey);
     m_windowKey = win;
     InstallMenuBarForWindow(win);
 }
 
-void wxMenuBarManager::WindowDidResignKey(wxTopLevelWindowNative *win)
+void wxMenuBarManager::WindowDidResignKey(wxTopLevelWindowNative *win, bool uninstallMenuBar)
 {
     wxASSERT(m_windowKey==win);
     m_windowKey = NULL;
-    SetMenuBar(NULL);
+    if(uninstallMenuBar)
+        SetMenuBar(NULL);
 }
 
 void wxMenuBarManager::WindowDidBecomeMain(wxTopLevelWindowNative *win)
 {
-//    wxASSERT(!m_windowMain);
+    wxASSERT(!m_windowMain);
     m_windowMain = win;
 }
 
