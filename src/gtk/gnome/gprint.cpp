@@ -29,6 +29,7 @@
 #include "wx/gtk/private.h"
 #include "wx/module.h"
 #include "wx/generic/prntdlgg.h"
+#include "wx/dynlib.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
@@ -36,6 +37,94 @@
 #include <libgnomeprintui/gnome-print-dialog.h>
 #include <libgnomeprintui/gnome-print-job-preview.h>
 #include <libgnomeprintui/gnome-print-paper-selector.h>
+
+//----------------------------------------------------------------------------
+// wxGnomePrintLibrary
+//----------------------------------------------------------------------------
+
+#define wxDL_METHOD_DEFINE( rettype, name, args, shortargs, defret ) \
+    typedef rettype (* name ## Type) args ; \
+    name ## Type pfn_ ## name; \
+    rettype name args \
+    { if (m_ok) return pfn_ ## name shortargs ; return defret; }
+    
+#define wxDL_METHOD_LOAD( lib, name, success ) \
+    pfn_ ## name = (name ## Type) lib->GetSymbol( wxT(#name), &success ); \
+    if (!success) return;
+
+class wxGnomePrintLibrary
+{
+public:
+    wxGnomePrintLibrary();
+    ~wxGnomePrintLibrary();
+    
+    bool IsOk();
+    void InitializeMethods();
+    
+private:
+    bool              m_ok;
+    wxDynamicLibrary *m_gnome_print_lib;
+
+public:
+    wxDL_METHOD_DEFINE( gint, gnome_print_newpath, 
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_moveto, 
+        (GnomePrintContext *pc, gdouble x, gdouble y), (pc, x, y), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_lineto, 
+        (GnomePrintContext *pc, gdouble x, gdouble y), (pc, x, y), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_curveto, 
+        (GnomePrintContext *pc, gdouble x1, gdouble y1, gdouble x2, gdouble y2, gdouble x3, gdouble y3), (pc, x1, y1, x2, y2, x3, y3), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_closepath, 
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_stroke, 
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_fill, 
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_setrgbcolor, 
+        (GnomePrintContext *pc, gdouble r, gdouble g, gdouble b), (pc, r, g, b), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_setlinewidth, 
+        (GnomePrintContext *pc, gdouble width), (pc, width), 0 )
+};
+
+wxGnomePrintLibrary::wxGnomePrintLibrary()
+{
+    wxLogNull log;
+    m_gnome_print_lib = new wxDynamicLibrary( wxT("libgnomeprint-2-2.so") );
+    m_ok = m_gnome_print_lib->IsLoaded();
+    
+    if (m_ok)
+        InitializeMethods();
+}
+
+wxGnomePrintLibrary::~wxGnomePrintLibrary()
+{
+    delete m_gnome_print_lib;
+}
+
+bool wxGnomePrintLibrary::IsOk()
+{
+    return m_ok;
+}
+
+void wxGnomePrintLibrary::InitializeMethods()
+{
+    m_ok = false;
+    bool success;
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_newpath, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_moveto, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_lineto, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_curveto, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_closepath, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_stroke, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_fill, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_setrgbcolor, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_setlinewidth, success )
+        
+    m_ok = true;
+}
+
+static wxGnomePrintLibrary* gs_lgp = NULL;
 
 //----------------------------------------------------------------------------
 // wxGnomePrintNativeData
@@ -637,9 +726,9 @@ void wxGnomePrintDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     
     SetPen( m_pen );
 
-    gnome_print_moveto ( m_gpc, XLOG2DEV(x1), YLOG2DEV(y1) );
-    gnome_print_lineto ( m_gpc, XLOG2DEV(x2), YLOG2DEV(y2) );
-    gnome_print_stroke ( m_gpc);
+    gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(x1), YLOG2DEV(y1) );
+    gs_lgp->gnome_print_lineto ( m_gpc, XLOG2DEV(x2), YLOG2DEV(y2) );
+    gs_lgp->gnome_print_stroke ( m_gpc);
 
     CalcBoundingBox( x1, y1 );
     CalcBoundingBox( x2, y2 );
@@ -673,12 +762,12 @@ void wxGnomePrintDC::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, wxCoo
     for ( i =0; i<n ; i++ )
         CalcBoundingBox( XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset));
 
-    gnome_print_moveto ( m_gpc, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
+    gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(points[0].x+xoffset), YLOG2DEV(points[0].y+yoffset) );
     
     for (i = 1; i < n; i++)
-        gnome_print_lineto ( m_gpc, XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
+        gs_lgp->gnome_print_lineto ( m_gpc, XLOG2DEV(points[i].x+xoffset), YLOG2DEV(points[i].y+yoffset) );
 
-    gnome_print_stroke ( m_gpc);
+    gs_lgp->gnome_print_stroke ( m_gpc);
 }
 
 void wxGnomePrintDC::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
@@ -695,13 +784,13 @@ void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoor
     {
         SetBrush( m_brush );
         
-        gnome_print_newpath( m_gpc );
-        gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
-        gnome_print_closepath( m_gpc );
-        gnome_print_fill( m_gpc );
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_fill( m_gpc );
 
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -711,13 +800,13 @@ void wxGnomePrintDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoor
     {
         SetPen (m_pen);
 
-        gnome_print_newpath( m_gpc );
-        gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
-        gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
-        gnome_print_closepath( m_gpc );
-        gnome_print_stroke( m_gpc );
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
+        gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_stroke( m_gpc );
         
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -734,23 +823,23 @@ void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord 
     {
         SetBrush( m_brush );
         
-        gnome_print_newpath( m_gpc );
-        gnome_print_moveto( m_gpc, 
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, 
                             XLOG2DEV(x), YLOG2DEV(y+height/2) );
                            
         // start with top half
-        gnome_print_curveto( m_gpc, 
+        gs_lgp->gnome_print_curveto( m_gpc, 
                             XLOG2DEV(x), YLOG2DEV(y),
                             XLOG2DEV(x+width), YLOG2DEV(y),
                             XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
         // lower half        
-        gnome_print_curveto( m_gpc, 
+        gs_lgp->gnome_print_curveto( m_gpc, 
                             XLOG2DEV(x+width), YLOG2DEV(y+height),
                             XLOG2DEV(x), YLOG2DEV(y+height),
                             XLOG2DEV(x), YLOG2DEV(y+height/2) );
                             
-        gnome_print_closepath( m_gpc );
-        gnome_print_fill( m_gpc );
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_fill( m_gpc );
         
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -760,23 +849,23 @@ void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord 
     {
         SetPen (m_pen);
 
-        gnome_print_newpath( m_gpc );
-        gnome_print_moveto( m_gpc, 
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto( m_gpc, 
                             XLOG2DEV(x), YLOG2DEV(y+height/2) );
                            
         // start with top half
-        gnome_print_curveto( m_gpc, 
+        gs_lgp->gnome_print_curveto( m_gpc, 
                             XLOG2DEV(x), YLOG2DEV(y),
                             XLOG2DEV(x+width), YLOG2DEV(y),
                             XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
         // lower half        
-        gnome_print_curveto( m_gpc, 
+        gs_lgp->gnome_print_curveto( m_gpc, 
                             XLOG2DEV(x+width), YLOG2DEV(y+height),
                             XLOG2DEV(x), YLOG2DEV(y+height),
                             XLOG2DEV(x), YLOG2DEV(y+height/2) );
                             
-        gnome_print_closepath( m_gpc );
-        gnome_print_stroke( m_gpc );
+        gs_lgp->gnome_print_closepath( m_gpc );
+        gs_lgp->gnome_print_stroke( m_gpc );
         
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
@@ -821,7 +910,7 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     	matrix[4] = XLOG2DEV(x);
         matrix[5] = YLOG2DEV(y+height);
     	gnome_print_concat( m_gpc, matrix );
-	    gnome_print_moveto(  m_gpc, 0, 0 );
+	    gs_lgp->gnome_print_moveto(  m_gpc, 0, 0 );
         if (has_alpha)
             gnome_print_rgbaimage( m_gpc, (guchar *)raw_image, width, height, rowstride );
         else
@@ -843,7 +932,7 @@ void wxGnomePrintDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     	matrix[4] = XLOG2DEV(x);
         matrix[5] = YLOG2DEV(y+image.GetHeight());
     	gnome_print_concat( m_gpc, matrix );
-	    gnome_print_moveto(  m_gpc, 0, 0 );
+	    gs_lgp->gnome_print_moveto(  m_gpc, 0, 0 );
         gnome_print_rgbimage( m_gpc, (guchar*) image.GetData(), image.GetWidth(), image.GetHeight(), image.GetWidth()*3 );
         gnome_print_grestore( m_gpc );
     }
@@ -896,7 +985,7 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
             double bluePS = (double)(blue) / 255.0;
             double greenPS = (double)(green) / 255.0;
 
-            gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
+            gs_lgp->gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
             m_currentRed = red;
             m_currentBlue = blue;
@@ -930,7 +1019,7 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
         }
 #endif         
         // Draw layout.
-    	gnome_print_moveto (m_gpc, x, y);
+    	gs_lgp->gnome_print_moveto (m_gpc, x, y);
         if (fabs(angle) > 0.00001)
         {        
             gnome_print_gsave( m_gpc );
@@ -961,7 +1050,7 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
         }
 #endif        
         // Draw layout.
-    	gnome_print_moveto (m_gpc, x, y);
+    	gs_lgp->gnome_print_moveto (m_gpc, x, y);
         if (fabs(angle) > 0.00001)
         {        
             gnome_print_gsave( m_gpc );
@@ -1011,8 +1100,7 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
 
     m_pen = pen;
 
-    gnome_print_setlinewidth( m_gpc, XLOG2DEVREL( 1000 * m_pen.GetWidth() ) / 1000.0f );
-
+    gs_lgp->gnome_print_setlinewidth( m_gpc, XLOG2DEVREL( 1000 * m_pen.GetWidth() ) / 1000.0f );
 
     static const double dotted[] =  {2.0, 5.0};
     static const double short_dashed[] = {4.0, 4.0};
@@ -1041,7 +1129,7 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
+        gs_lgp->gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1080,7 +1168,7 @@ void wxGnomePrintDC::SetBrush( const wxBrush& brush )
         double bluePS = (double)(blue) / 255.0;
         double greenPS = (double)(green) / 255.0;
 
-        gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
+        gs_lgp->gnome_print_setrgbcolor( m_gpc, redPS, greenPS, bluePS );
 
         m_currentRed = red;
         m_currentBlue = blue;
@@ -1288,12 +1376,25 @@ class wxGnomePrintModule: public wxModule
 {
 public:
     wxGnomePrintModule() {}
-    bool OnInit() { wxPrintFactory::SetPrintFactory( new wxGnomePrintFactory ); return true; }
-    void OnExit() { }
+    bool OnInit();
+    void OnExit();
     
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintModule)
 };
+
+bool wxGnomePrintModule::OnInit()
+{
+    gs_lgp = new wxGnomePrintLibrary;
+    if (gs_lgp->IsOk())
+        wxPrintFactory::SetPrintFactory( new wxGnomePrintFactory );
+    return true;
+}
+
+void wxGnomePrintModule::OnExit()
+{
+    delete gs_lgp;
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxGnomePrintModule, wxModule)
   
