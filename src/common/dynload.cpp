@@ -120,7 +120,7 @@ bool wxPluginLibrary::UnrefLib()
     wxASSERT_MSG( m_objcount == 0,
                   _T("Library unloaded before all objects were destroyed") );
 
-    if ( --m_linkcount == 0 )
+    if ( m_linkcount == 0 || --m_linkcount == 0 )
     {
         delete this;
         return TRUE;
@@ -148,6 +148,10 @@ void wxPluginLibrary::UpdateClasses()
 
 void wxPluginLibrary::RestoreClasses()
 {
+    // Check if there is a need to restore classes.
+    if (!ms_classes)
+        return;
+
     for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
     {
         ms_classes->erase(ms_classes->find(info->m_className));
