@@ -24,6 +24,7 @@
 #include "wx/resource.h"
 #include "wx/toolbar.h"
 #include "wx/imaglist.h"
+#include "wx/treectrl.h"
 
 #include "proplist.h"
 #include "symbtabl.h"
@@ -436,6 +437,20 @@ DECLARE_EVENT_TABLE()
 #define TOOLBAR_TO_FRONT                    16
 #define TOOLBAR_TO_BACK                     17
 #define TOOLBAR_COPY_SIZE                   18
+
+/*
+ * this class is used to store data associated with a tree item
+ */
+class wxResourceTreeData : public wxTreeItemData
+{
+public:
+    wxResourceTreeData(wxItemResource *resource) { m_resource = resource; }
+
+    wxItemResource *GetResource() const { return m_resource; }
+
+private:
+    wxItemResource *m_resource;
+};
 
 #endif
 

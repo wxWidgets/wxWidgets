@@ -58,7 +58,7 @@ void wxResourceEditorProjectTree::LeftDClick(wxMouseEvent& WXUNUSED(event))
     if (GetItemData(sel) == 0)
         return;
 
-    wxItemResource* res = (wxItemResource*) GetItemData(sel);
+    wxItemResource* res = (wxResourceTreeData *)GetItemData(sel)->GetResource();
     wxString resType(res->GetType());
     if (resType != "wxDialog" && resType != "wxDialogBox" && resType != "wxPanel")
         return;
@@ -82,7 +82,7 @@ void wxResourceEditorProjectTree::OnSelChanged(wxTreeEvent& WXUNUSED(event))
     if (m_invalid)
         return;
 
-    wxItemResource* res = (wxItemResource*) GetItemData(sel);
+    wxItemResource* res = ((wxResourceTreeData *)GetItemData(sel))->GetResource();
     wxString resType(res->GetType());
     if (resType != "wxDialog" && resType != "wxDialogBox" && resType != "wxPanel")
         return;

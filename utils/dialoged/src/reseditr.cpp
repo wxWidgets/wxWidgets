@@ -847,11 +847,7 @@ void wxResourceManager::UpdateResourceList()
   m_editorResourceTree->SetInvalid(TRUE);
   m_editorResourceTree->DeleteAllItems();
 
-  long id = m_editorResourceTree->InsertItem(0, "Dialogs"
-#ifdef __WXMSW__
-     , 1, 2
-#endif
-   );
+  long id = m_editorResourceTree->AddRoot("Dialogs", 1, 2);
 
   m_resourceTable.BeginFind();
   wxNode *node;
@@ -864,7 +860,7 @@ void wxResourceManager::UpdateResourceList()
       AddItemsRecursively(id, res);
     }
   }
-  m_editorResourceTree->ExpandItem(id, wxTREE_EXPAND_EXPAND);
+  m_editorResourceTree->Expand(id);
   m_editorResourceTree->SetInvalid(FALSE);
 }
 
@@ -886,7 +882,7 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
 #endif
    );
 
-  m_editorResourceTree->SetItemData(id, (long) resource);
+  m_editorResourceTree->SetItemData(id, new wxResourceTreeData(resource));
 
   if (strcmp(resource->GetType(), "wxBitmap") != 0)
   {
@@ -906,7 +902,8 @@ bool wxResourceManager::EditSelectedResource()
   int sel = m_editorResourceTree->GetSelection();
   if (sel != 0)
   {
-    wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
+    wxResourceTreeData *data = (wxResourceTreeData *)m_editorResourceTree->GetItemData(sel);
+    wxItemResource *res = data->GetResource();
     return Edit(res);
   }
   return FALSE;
@@ -1797,7 +1794,8 @@ bool wxResourceManager::DeleteSelection()
   int sel = m_editorResourceTree->GetSelection();
   if (sel != 0)
   {
-    wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
+    wxResourceTreeData *data = (wxResourceTreeData *)m_editorResourceTree->GetItemData(sel);
+    wxItemResource *res = data->GetResource();
     wxWindow *win = FindWindowForResource(res);
     if (win)
     {
