@@ -109,7 +109,7 @@ static BOOL WriteDIB(LPTSTR szFile, HANDLE hdib)
         if (!hdib)
                 return FALSE;
 
-        fh = OpenFile(wxFNCONV(szFile), &of, OF_CREATE | OF_READWRITE);
+        fh = OpenFile(wxConvertWX2MB(szFile), &of, OF_CREATE | OF_READWRITE);
         if (fh == -1)
                 return FALSE;
 
@@ -429,7 +429,7 @@ BOOL wxReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette)
 
     /* Open the file and get a handle to it's BITMAPINFO */
 
-    fh = OpenFile (wxFNCONV(lpFileName), &of, OF_READ);
+    fh = OpenFile (wxConvertWX2MB(lpFileName), &of, OF_READ);
     if (fh == -1) {
         wxLogError(_("Can't open file '%s'"), lpFileName);
         return (0);

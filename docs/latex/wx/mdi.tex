@@ -245,7 +245,7 @@ Child frames may be either \helpref{wxMDIChildFrame}{wxmdichildframe}, or \helpr
 
 An MDI parent frame always has a \helpref{wxMDIClientWindow}{wxmdiclientwindow} associated with it, which
 is the parent for MDI client frames.
-This client window may be resized to accomodate non-MDI windows, as seen in Microsoft Visual C++ (TM) and
+This client window may be resized to accommodate non-MDI windows, as seen in Microsoft Visual C++ (TM) and
 Microsoft Publisher (TM), where a documentation window is placed to one side of the workspace.
 
 MDI remains popular despite dire warnings from Microsoft itself that MDI is an obsolete
@@ -476,7 +476,14 @@ is available under Windows only.
 
 \func{virtual wxMDIClientWindow*}{OnCreateClient}{\void}
 
-Override this to return a different kind of client window.
+Override this to return a different kind of client window. If you override this function,
+you must create your parent frame in two stages, or your function will never be called,
+due to the way C++ treats virtual functions called from constructors. For example:
+
+\begin{verbatim}
+  frame = new MyParentFrame;
+  frame->Create(parent, myParentFrameId, wxT("My Parent Frame"));
+\end{verbatim}
 
 \wxheading{Remarks}
 

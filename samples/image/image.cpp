@@ -6,7 +6,6 @@
  * Copyright: (C) 1998, Robert Roebling
  *
  */
-
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -84,7 +83,7 @@ public:
     MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
         : wxFrame(parent, -1, _T("Frame with image"),
                   wxDefaultPosition, wxDefaultSize,
-                  wxCAPTION),
+                  wxCAPTION | wxSYSTEM_MENU),
           m_bitmap(bitmap)
     {
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
@@ -172,12 +171,12 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_LIBPNG
     if ( !image.SaveFile( dir + wxString("test.png"), wxBITMAP_TYPE_PNG ))
         wxLogError("Can't save file");
-        
+
     image.Destroy();
 
     image.LoadFile( dir + wxString("test.png") );
     my_square = new wxBitmap( image.ConvertToBitmap() );
-    
+
     image.Destroy();
 
     if ( !image.LoadFile( dir + wxString("horse.png")) )
@@ -340,7 +339,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( "BLACK" );
     }
 
-
+    // Doesn't work for wxMotif yet
+#ifndef __WXMOTIF__
     wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
     memdc.SelectObject( mono );
@@ -376,6 +376,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 1900, TRUE );
         dc.SetTextForeground( "BLACK" );
     }
+#endif
 
     dc.DrawText("XPM bitmap", 30, 2000);
     if ( m_bmpSmileXpm.Ok() )
@@ -458,7 +459,7 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
-  file_menu->Append( ID_NEW, "&New frame");
+  file_menu->Append( ID_NEW, "&Show image...");
   file_menu->AppendSeparator();
   file_menu->Append( ID_ABOUT, "&About...");
   file_menu->AppendSeparator();
@@ -493,7 +494,19 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
 {
-    (new MyImageFrame(this, *m_canvas->my_horse_bmp))->Show();
+    wxString filename = wxFileSelector(_T("Select image file"));
+    if ( !filename )
+        return;
+
+    wxImage image;
+    if ( !image.LoadFile(filename) )
+    {
+        wxLogError(_T("Couldn't load image from '%s'."), filename.c_str());
+
+        return;
+    }
+
+    (new MyImageFrame(this, image.ConvertToBitmap()))->Show();
 }
 
 //-----------------------------------------------------------------------------

@@ -996,7 +996,7 @@ MRESULT wxMDIChildFrame::OS2DefWindowProc(WXUINT message, WXWPARAM wParam, WXLPA
 
 bool wxMDIChildFrame::OS2TranslateMessage(WXMSG* msg)
 {
-    return m_acceleratorTable.Translate(GetParent(), msg);
+    return m_acceleratorTable.Translate(GetParent()->GetHWND(), msg);
 }
 
 // ---------------------------------------------------------------------------

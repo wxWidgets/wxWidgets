@@ -13,7 +13,10 @@ This is also recommended for GTK.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxSP\_3D}}{Draws a 3D effect border and sash.}
-\twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window, and a black sash.}
+\twocolitem{\windowstyle{wxSP\_3DSASH}}{Draws a 3D effect sash.}
+\twocolitem{\windowstyle{wxSP\_3DBORDER}}{Draws a 3D effect border.}
+\twocolitem{\windowstyle{wxSP\_FULLSASH}}{Draws the ends of the sash (so the window can be used without a border).}
+\twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window.}
 \twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border, and a black sash.}
 \twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{Always allow to
 unsplit, even with the minimum pane size other than zero.}
@@ -252,7 +255,7 @@ and then resplitting the window back because it will provoke much less flicker
 (if any). It is valid to call this function whether the splitter has two
 windows or only one.
 
-Both parameters should be non NULL and {\it winOld} must specify one of the
+Both parameters should be non-NULL and {\it winOld} must specify one of the
 windows managed by the splitter. If the parameters are incorrect or the window
 couldn't be replaced, FALSE is returned. Otherwise the function will return
 TRUE, but please notice that it will not delete the replaced window and you
@@ -343,7 +346,7 @@ Initializes the top and bottom panes of the splitter window.
 \docparam{window2}{The bottom pane.}
 
 \docparam{sashPosition}{The initial position of the sash. If this value is
-positive, it specifies the size of the upper pane. If it's negative, it's
+positive, it specifies the size of the upper pane. If it is negative, it is
 absolute value gives the size of the lower pane. Finally, specify 0 (default)
 to choose the default position (half of the total window height).}
 
@@ -376,7 +379,7 @@ Initializes the left and right panes of the splitter window.
 \docparam{window2}{The right pane.}
 
 \docparam{sashPosition}{The initial position of the sash. If this value is
-positive, it specifies the size of the left pane. If it's negative, it's
+positive, it specifies the size of the left pane. If it is negative, it is
 absolute value gives the size of the right pane. Finally, specify 0 (default)
 to choose the default position (half of the total window width).}
 

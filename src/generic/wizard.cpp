@@ -32,6 +32,7 @@
     #include "wx/dynarray.h"
     #include "wx/intl.h"
     #include "wx/statbmp.h"
+    #include "wx/button.h"
 #endif //WX_PRECOMP
 
 #include "wx/statline.h"
@@ -94,10 +95,24 @@ wxWizard::wxWizard(wxWindow *parent,
                    int id,
                    const wxString& title,
                    const wxBitmap& bitmap,
-                   const wxPoint& pos,
-                   const wxSize& size)
-        : m_bitmap(bitmap)
+                   const wxPoint& pos)
+        : m_posWizard(pos), m_bitmap(bitmap)
 {
+    // just create the dialog itself here, the controls will be created in
+    // DoCreateControls() called later when we know our final size
+    m_page = (wxWizardPage *)NULL;
+    m_btnPrev = m_btnNext = NULL;
+    m_statbmp = NULL;
+
+    (void)wxDialog::Create(parent, id, title, pos);
+}
+
+void wxWizard::DoCreateControls()
+{
+    // do nothing if the controls were already created
+    if ( WasCreated() )
+        return;
+
     // constants defining the dialog layout
     // ------------------------------------
 
@@ -122,38 +137,41 @@ wxWizard::wxWizard(wxWindow *parent,
     static const int DEFAULT_PAGE_WIDTH = 270;
     static const int DEFAULT_PAGE_HEIGHT = 290;
 
-    // init members
-    // ------------
-
-    m_page = (wxWizardPage *)NULL;
-
     // create controls
     // ---------------
 
     wxSize sizeBtn = wxButton::GetDefaultSize();
-
-    (void)wxDialog::Create(parent, id, title, pos, size);
 
     // the global dialog layout is: a row of buttons at the bottom (aligned to
     // the right), the static line above them, the bitmap (if any) on the left
     // of the upper part of the dialog and the panel in the remaining space
     m_x = X_MARGIN;
     m_y = Y_MARGIN;
-    if ( bitmap.Ok() )
-    {
-        m_statbmp = new wxStaticBitmap(this, -1, bitmap, wxPoint(m_x, m_y));
 
-        m_x += bitmap.GetWidth() + BITMAP_X_MARGIN;
-        m_height = bitmap.GetHeight();
+    int defaultHeight;
+    if ( m_bitmap.Ok() )
+    {
+        m_statbmp = new wxStaticBitmap(this, -1, m_bitmap, wxPoint(m_x, m_y));
+
+        m_x += m_bitmap.GetWidth() + BITMAP_X_MARGIN;
+
+        defaultHeight = m_bitmap.GetHeight();
     }
     else
     {
         m_statbmp = (wxStaticBitmap *)NULL;
 
-        m_height = DEFAULT_PAGE_HEIGHT;
+        defaultHeight = DEFAULT_PAGE_HEIGHT;
     }
 
-    m_width = DEFAULT_PAGE_WIDTH;
+    // use default size if none given and also make sure that the dialog is
+    // not less than the default size
+    m_height = m_sizePage.y == -1 ? defaultHeight : m_sizePage.y;
+    m_width = m_sizePage.x == -1 ? DEFAULT_PAGE_WIDTH : m_sizePage.x;
+    if ( m_height < defaultHeight )
+        m_height = defaultHeight;
+    if ( m_width < DEFAULT_PAGE_WIDTH )
+        m_width = DEFAULT_PAGE_WIDTH;
 
     int x = X_MARGIN;
     int y = m_y + m_height + BITMAP_Y_MARGIN;
@@ -161,14 +179,14 @@ wxWizard::wxWizard(wxWindow *parent,
 #if wxUSE_STATLINE
     (void)new wxStaticLine(this, -1, wxPoint(x, y),
                            wxSize(m_x + m_width - x, 2));
-#endif
+#endif // wxUSE_STATLINE
 
     x = m_x + m_width - 3*sizeBtn.x - BUTTON_MARGIN;
     y += SEPARATOR_LINE_MARGIN;
-    m_btnPrev = new wxButton(this, -1, _("< &Back"), wxPoint(x, y), sizeBtn);
+    m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x;
-    m_btnNext = new wxButton(this, -1, _("&Next >"), wxPoint(x, y), sizeBtn);
+    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"), wxPoint(x, y), sizeBtn);
 
     x += sizeBtn.x + BUTTON_MARGIN;
     (void)new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(x, y), sizeBtn);
@@ -176,17 +194,22 @@ wxWizard::wxWizard(wxWindow *parent,
     // position and size the dialog
     // ----------------------------
 
-    if ( size == wxDefaultSize )
-    {
-        SetClientSize(m_x + m_width + X_MARGIN,
-                      m_y + m_height + BITMAP_Y_MARGIN +
-                        SEPARATOR_LINE_MARGIN + sizeBtn.y + Y_MARGIN);
-    }
+    SetClientSize(m_x + m_width + X_MARGIN,
+                  m_y + m_height + BITMAP_Y_MARGIN +
+                    SEPARATOR_LINE_MARGIN + sizeBtn.y + Y_MARGIN);
 
-    if ( pos == wxDefaultPosition )
+    if ( m_posWizard == wxDefaultPosition )
     {
         CentreOnScreen();
     }
+}
+
+void wxWizard::SetPageSize(const wxSize& size)
+{
+    // otherwise it will have no effect now as it's too late...
+    wxASSERT_MSG( !WasCreated(), _T("should be called before RunWizard()!") );
+
+    m_sizePage = size;
 }
 
 bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
@@ -202,13 +225,6 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
 
     if ( m_page )
     {
-        // ask the current page first
-        if ( !m_page->TransferDataFromWindow() )
-        {
-            // the page data is incorrect
-            return FALSE;
-        }
-
         // send the event to the old page
         wxWizardEvent event(wxEVT_WIZARD_PAGE_CHANGING, GetId(), goingForward);
         if ( m_page->GetEventHandler()->ProcessEvent(event) &&
@@ -278,6 +294,8 @@ bool wxWizard::RunWizard(wxWizardPage *firstPage)
 {
     wxCHECK_MSG( firstPage, FALSE, wxT("can't run empty wizard") );
 
+    DoCreateControls();
+
     // can't return FALSE here because there is no old page
     (void)ShowPage(firstPage, TRUE /* forward */);
 
@@ -291,6 +309,10 @@ wxWizardPage *wxWizard::GetCurrentPage() const
 
 wxSize wxWizard::GetPageSize() const
 {
+    // make sure that the controls are created because otherwise m_width and
+    // m_height would be both still -1
+    wxConstCast(this, wxWizard)->DoCreateControls();
+
     return wxSize(m_width, m_height);
 }
 
@@ -314,6 +336,15 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
     wxASSERT_MSG( (event.GetEventObject() == m_btnNext) ||
                   (event.GetEventObject() == m_btnPrev),
                   wxT("unknown button") );
+
+    // ask the current page first: notice that we do it before calling
+    // GetNext/Prev() because the data transfered from the controls of the page
+    // may change the value returned by these methods
+    if ( m_page && !m_page->TransferDataFromWindow() )
+    {
+        // the page data is incorrect, don't do anything
+        return;
+    }
 
     bool forward = event.GetEventObject() == m_btnNext;
 
@@ -343,9 +374,9 @@ wxWizard *wxWizardBase::Create(wxWindow *parent,
                                const wxString& title,
                                const wxBitmap& bitmap,
                                const wxPoint& pos,
-                               const wxSize& size)
+                               const wxSize& WXUNUSED(size))
 {
-    return new wxWizard(parent, id, title, bitmap, pos, size);
+    return new wxWizard(parent, id, title, bitmap, pos);
 }
 
 // ----------------------------------------------------------------------------

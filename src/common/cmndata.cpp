@@ -475,7 +475,7 @@ void wxPrintData::ConvertToNative()
     }
 
     // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
-    hDevNames = wxCreateDevNames("", m_printerName, "");
+    m_devNames = (void*) (long) wxCreateDevNames("", m_printerName, "");
 }
 
 void wxPrintData::ConvertFromNative()
@@ -548,7 +548,11 @@ void wxPrintData::ConvertFromNative()
 #ifndef __WXWINE__
         //// Paper size
 
-        if (devMode->dmFields & DM_PAPERSIZE)
+        // We don't know size of user defined paper and some buggy drivers
+        // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
+        // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
+        // code wouldn't set m_paperSize correctly.
+        if ((devMode->dmFields & DM_PAPERSIZE) && (devMode->dmPaperSize < DMPAPER_USER))
         {
             if (wxThePrintPaperDatabase)
             {
@@ -668,7 +672,7 @@ void wxPrintData::ConvertFromNative()
             // Not sure if we should check for this mismatch
 //            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
 
-            if (printerName != "")
+            if (printerName != wxT(""))
                 m_printerName = printerName;
 
             GlobalUnlock(hDevNames);
@@ -913,7 +917,7 @@ void wxPrintDialogData::ConvertToNative()
 
     if ( m_printAllPages )
         pd->Flags |= PD_ALLPAGES;
-    if ( m_printAllPages )
+    if ( m_printSelection )
         pd->Flags |= PD_SELECTION;
     if ( m_printCollate )
         pd->Flags |= PD_COLLATE;
@@ -1435,8 +1439,7 @@ void wxPageSetupDialogData::SetPaperSize(wxPaperSize id)
 void wxPageSetupDialogData::CalculateIdFromPaperSize()
 {
     wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
-                  wxT("wxThePrintPaperDatabase should not be NULL. "
-                     "Do not create global print dialog data objects.") );
+                  wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
 
     wxSize sz = GetPaperSize();
 
@@ -1451,8 +1454,7 @@ void wxPageSetupDialogData::CalculateIdFromPaperSize()
 void wxPageSetupDialogData::CalculatePaperSizeFromId()
 {
     wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
-                  wxT("wxThePrintPaperDatabase should not be NULL. "
-                     "Do not create global print dialog data objects.") );
+                  wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());
 

@@ -43,7 +43,7 @@ bool MyApp::OnInit(void)
   // Create the main frame window
 
   frame = new MyFrame(NULL, -1, "Sash Demo", wxPoint(0, 0), wxSize(500, 400),
-   wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+      wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
@@ -266,6 +266,7 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size):
  wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
 {
+    SetBackgroundColour(* wxWHITE);
 }
 
 // Define the repainting behaviour

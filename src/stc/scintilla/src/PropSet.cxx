@@ -24,9 +24,22 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 #endif
 }
 
+SString::size_type SString::npos = -1;
+
+inline unsigned int HashString(const char *s) {
+    unsigned int ret = 0;
+    while (*s) {
+        ret <<= 4;
+        ret ^= *s;
+        s++;
+    }
+    return ret;
+}
+
 // Get a line of input. If end of line escaped with '\\' then continue reading.
 static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 	bool continuation = true;
+	s[0] = '\0';
 	while ((len > 1) && lenData > 0) {
 		char ch = *fpc;
 		fpc++;
@@ -38,7 +51,7 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 					fpc++;
 					lenData--;
 				}
-				*s++ = '\0';
+				*s = '\0';
 				return true;
 			}
 		} else if ((ch == '\\') && (lenData > 0) && ((*fpc == '\r') || (*fpc == '\n'))) {
@@ -46,6 +59,7 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 		} else {
 			continuation = false;
 			*s++ = ch;
+			*s = '\0';
 			len--;
 		}
 	}
@@ -54,47 +68,39 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 
 PropSet::PropSet() {
 	superPS = 0;
-	size = 10;
-	used = 0;
-	vals = new char * [size];
+    for (int root=0; root < hashRoots; root++)
+        props[root] = 0;
 }
 
 PropSet::~PropSet() {
 	superPS = 0;
 	Clear();
-	delete []vals;
-}
-
-void PropSet::EnsureCanAddEntry() {
-	if (used >= size - 2) {
-		int newsize = size + 10;
-		char **newvals = new char * [newsize];
-
-		for (int i = 0; i < used; i++) {
-			newvals[i] = vals[i];
-		}
-		delete []vals;
-		vals = newvals;
-		size = newsize;
-	}
 }
 
 void PropSet::Set(const char *key, const char *val) {
-	EnsureCanAddEntry();
-	for (int i = 0; i < used; i += 2) {
-		if (EqualCaseInsensitive(vals[i], key)) {
+    unsigned int hash = HashString(key);
+	for (Property *p=props[hash % hashRoots]; p; p=p->next) {
+		if ((hash == p->hash) && (0 == strcmp(p->key, key))) {
 			// Replace current value
-			delete [](vals[i + 1]);
-			vals[i + 1] = StringDup(val);
+			delete [](p->val);
+			p->val = StringDup(val);
 			return;
 		}
 	}
 	// Not found
-	vals[used++] = StringDup(key);
-	vals[used++] = StringDup(val);
+    Property *pNew = new Property;
+    if (pNew) {
+        pNew->hash = HashString(key);
+	    pNew->key = StringDup(key);
+	    pNew->val = StringDup(val);
+	    pNew->next = props[hash % hashRoots];
+        props[hash % hashRoots] = pNew;
+    }
 }
 
 void PropSet::Set(char *keyval) {
+    while (isspace(*keyval))
+        keyval++;
 	char *eqat = strchr(keyval, '=');
 	if (eqat) {
 		*eqat = '\0';
@@ -104,11 +110,12 @@ void PropSet::Set(char *keyval) {
 }
 
 SString PropSet::Get(const char *key) {
-	for (int i = 0; i < used; i += 2) {
-		if (EqualCaseInsensitive(vals[i], key)) {
-			return vals[i + 1];
-		}
-	}
+    unsigned int hash = HashString(key);
+	for (Property *p=props[hash % hashRoots]; p; p=p->next) {
+		if ((hash == p->hash) && (0 == strcmp(p->key, key))) {
+            return p->val;
+        }
+    }
 	if (superPS) {
 		// Failed here, so try in base property set
 		return superPS->Get(key);
@@ -117,17 +124,47 @@ SString PropSet::Get(const char *key) {
 	}
 }
 
+SString PropSet::GetExpanded(const char *key) {
+    SString val = Get(key);
+    return Expand(val.c_str());
+}
+
+SString PropSet::Expand(const char *withvars) {
+	char *base = StringDup(withvars);
+	char *cpvar = strstr(base, "$(");
+	while (cpvar) {
+		char *cpendvar = strchr(cpvar, ')');
+		if (cpendvar) {
+			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
+			char *var = StringDup(cpvar+2, lenvar);
+			SString val = GetExpanded(var);
+			int newlenbase = strlen(base) + val.length() - lenvar;
+			char *newbase = new char[newlenbase];
+			strncpy(newbase, base, cpvar - base);
+			strcpy(newbase + (cpvar - base), val.c_str());
+			strcpy(newbase + (cpvar - base) + val.length(), cpendvar + 1);
+			delete []var;
+			delete []base;
+			base = newbase;
+		}
+		cpvar = strstr(base, "$(");
+	}
+	SString sret = base;
+	delete []base;
+	return sret;
+}
+
 int PropSet::GetInt(const char *key, int defaultValue) {
 	SString val = Get(key);
 	if (val.length())
-		return Get(key).value();
+		return val.value();
 	else
 		return defaultValue;
 }
 
-bool isprefix(const char *target, const char *prefix) {
+inline bool isprefix(const char *target, const char *prefix) {
 	while (*target && *prefix) {
-		if (toupper(*target) != toupper(*prefix))
+		if (*target != *prefix)
 			return false;
 		target++;
 		prefix++;
@@ -144,64 +181,63 @@ bool issuffix(const char *target, const char *suffix) {
 	if (lensuffix > lentarget)
 		return false;
 	for (int i = lensuffix - 1; i >= 0; i--) {
-		if (toupper(target[i + lentarget - lensuffix]) != toupper(suffix[i]))
+		if (target[i + lentarget - lensuffix] != suffix[i])
 			return false;
 	}
 	return true;
 }
 
 SString PropSet::GetWild(const char *keybase, const char *filename) {
-	for (int i = 0; i < used; i += 2) {
-		if (isprefix(vals[i], keybase)) {
-			char *orgkeyfile = vals[i] + strlen(keybase);
-			char *keyfile = NULL;
+    for (int root=0; root < hashRoots; root++) {
+	    for (Property *p=props[root]; p; p=p->next) {
+		    if (isprefix(p->key, keybase)) {
+			    char *orgkeyfile = p->key + strlen(keybase);
+			    char *keyfile = NULL;
 
-			if (strstr(orgkeyfile, "$(") == orgkeyfile) {
-				char *cpendvar = strchr(orgkeyfile, ')');
-				if (cpendvar) {
-					int lenvar = cpendvar - orgkeyfile - 2; 	// Subtract the $()
-					char *var = static_cast<char *>(malloc(lenvar + 1));
-					strncpy(var, orgkeyfile + 2, lenvar);
-					var[lenvar] = '\0';
-					SString s = Get(var);
-					free(var);
-					keyfile = strdup(s.c_str());
-				}
-			}
-			char *keyptr = keyfile;
+			    if (strstr(orgkeyfile, "$(") == orgkeyfile) {
+				    char *cpendvar = strchr(orgkeyfile, ')');
+				    if (cpendvar) {
+					    *cpendvar = '\0';
+					    SString s = Get(orgkeyfile + 2);
+					    *cpendvar= ')';
+					    keyfile = strdup(s.c_str());
+				    }
+			    }
+			    char *keyptr = keyfile;
 
-			if (keyfile == NULL)
-				keyfile = orgkeyfile;
+			    if (keyfile == NULL)
+				    keyfile = orgkeyfile;
 
-			for (; ; ) {
-				char *del = strchr(keyfile, ';');
-				if (del == NULL)
-					del = keyfile + strlen(keyfile);
-				char delchr = *del;
-				*del = '\0';
-				if (*keyfile == '*') {
-					if (issuffix(filename, keyfile + 1)) {
-						*del = delchr;
-						free(keyptr);
-						return vals[i + 1];
-					}
-				} else if (EqualCaseInsensitive(keyfile, filename)) {
-					*del = delchr;
-					free(keyptr);
-					return vals[i + 1];
-				}
-				if (delchr == '\0')
-					break;
-				*del = delchr;
-				keyfile = del + 1;
-			}
-			free(keyptr);
+			    for (; ; ) {
+				    char *del = strchr(keyfile, ';');
+				    if (del == NULL)
+					    del = keyfile + strlen(keyfile);
+				    char delchr = *del;
+				    *del = '\0';
+				    if (*keyfile == '*') {
+					    if (issuffix(filename, keyfile + 1)) {
+						    *del = delchr;
+						    free(keyptr);
+						    return p->val;
+					    }
+				    } else if (0 == strcmp(keyfile, filename)) {
+					    *del = delchr;
+					    free(keyptr);
+					    return p->val;
+				    }
+				    if (delchr == '\0')
+					    break;
+				    *del = delchr;
+				    keyfile = del + 1;
+			    }
+			    free(keyptr);
 
-			if (EqualCaseInsensitive(vals[i], keybase)) {
-				return vals[i + 1];
-			}
-		}
-	}
+			    if (0 == strcmp(p->key, keybase)) {
+				    return p->val;
+			    }
+		    }
+	    }
+    }
 	if (superPS) {
 		// Failed here, so try in base property set
 		return superPS->GetWild(keybase, filename);
@@ -217,9 +253,7 @@ SString PropSet::GetNewExpand(const char *keybase, const char *filename) {
 		char *cpendvar = strchr(cpvar, ')');
 		if (cpendvar) {
 			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
-			char *var = new char[lenvar + 1];
-			strncpy(var, cpvar + 2, lenvar);
-			var[lenvar] = '\0';
+			char *var = StringDup(cpvar+2, lenvar);
 			SString val = GetWild(var, filename);
 			int newlenbase = strlen(base) + val.length() - lenvar;
 			char *newbase = new char[newlenbase];
@@ -238,33 +272,54 @@ SString PropSet::GetNewExpand(const char *keybase, const char *filename) {
 }
 
 void PropSet::Clear() {
-	for (int i = 0; i < used; i++) {
-		delete [](vals[i]);
-		vals[i] = 0;
-	}
-	used = 0;
+    for (int root=0; root < hashRoots; root++) {
+        Property *p=props[root];
+	    while (p) {
+            Property *pNext=p->next;
+		    p->hash = 0;
+		    delete p->key;
+		    p->key = 0;
+		    delete p->val;
+		    p->val = 0;
+            delete p;
+            p = pNext;
+        }
+        props[root] = 0;
+    }
 }
 
-void PropSet::ReadFromMemory(const char *data, int len) {
-	if (len > 0) {
-		const char *pd = data;
-		char linebuf[60000];
-		while (GetFullLine(pd, len, linebuf, sizeof(linebuf))) {
-			if (isalpha(linebuf[0]))
-				Set(linebuf);
+void PropSet::ReadFromMemory(const char *data, int len, const char *directoryForImports) {
+	const char *pd = data;
+	char linebuf[60000];
+	bool ifIsTrue = true;
+	while (len > 0) {
+		GetFullLine(pd, len, linebuf, sizeof(linebuf));
+		if (isalpha(linebuf[0]))    // If clause ends with first non-indented line
+			ifIsTrue = true;
+		if (isprefix(linebuf, "if ")) {
+			const char *expr = linebuf + strlen("if") + 1;
+			ifIsTrue = GetInt(expr);
+		} else if (isprefix(linebuf, "import ") && directoryForImports) {
+			char importPath[1024];
+			strcpy(importPath, directoryForImports);
+			strcat(importPath, linebuf + strlen("import") + 1);
+			strcat(importPath, ".properties");
+            		Read(importPath,directoryForImports);
+		} else if (isalpha(linebuf[0])) {
+			Set(linebuf);
+		} else if (isspace(linebuf[0]) && ifIsTrue) {
+			Set(linebuf);
 		}
 	}
 }
 
-void PropSet::Read(const char *filename) {
-	//printf("Opening properties <%s>\n", filename);
-	Clear();
+void PropSet::Read(const char *filename, const char *directoryForImports) {
 	char propsData[60000];
 	FILE *rcfile = fopen(filename, "rb");
 	if (rcfile) {
 		int lenFile = fread(propsData, 1, sizeof(propsData), rcfile);
 		fclose(rcfile);
-		ReadFromMemory(propsData, lenFile);
+		ReadFromMemory(propsData, lenFile, directoryForImports);
 	} else {
 		//printf("Could not open <%s>\n", filename);
 	}
@@ -280,7 +335,8 @@ static bool iswordsep(char ch, bool onlyLineEnds) {
 
 // Creates an array that points into each word in the string and puts \0 terminators
 // after each word.
-static char **ArrayFromWordList(char *wordlist, bool onlyLineEnds = false) {
+static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = false) {
+#if 1
 	char prev = '\n';
 	int words = 0;
 	for (int j = 0; wordlist[j]; j++) {
@@ -292,8 +348,8 @@ static char **ArrayFromWordList(char *wordlist, bool onlyLineEnds = false) {
 	if (keywords) {
 		words = 0;
 		prev = '\0';
-		int len = strlen(wordlist);
-		for (int k = 0; k < len; k++) {
+		int slen = strlen(wordlist);
+		for (int k = 0; k < slen; k++) {
 			if (!iswordsep(wordlist[k], onlyLineEnds)) {
 				if (!prev) {
 					keywords[words] = &wordlist[k];
@@ -304,25 +360,69 @@ static char **ArrayFromWordList(char *wordlist, bool onlyLineEnds = false) {
 			}
 			prev = wordlist[k];
 		}
-		keywords[words] = &wordlist[len];
+		keywords[words] = &wordlist[slen];
+		*len = words;
+	} else {
+		*len = 0;
 	}
+#else
+	int words = 0; // length of the returned buffer of pointers
+	#undef APICHUNK // how many pointers will be pre-allocated (to avoid buffer reallocation on each new pointer)
+	#define APICHUNK 256
+	int size = APICHUNK; // real size of the returned buffer of pointers
+	char **keywords; // buffer for the pointers returned
+	int slen = strlen(wordlist); //length of the buffer with api file
+	keywords = (char**) malloc((size + 1) * sizeof (*keywords));
+	words = 0;
+	for (int k = 0;;) {
+		while (iswordsep(wordlist[k], onlyLineEnds))
+			wordlist[k++] = '\0';
+		if (k >= slen)
+			break;
+		if (words >= size) {
+			do
+				size += APICHUNK;
+			while (size <= words);
+			keywords = (char**) realloc(keywords, (size + 1) * sizeof (*keywords));
+		}
+		keywords[words++] = wordlist + k;
+		do
+			if (k < slen)
+				k++;
+			else
+				goto out;
+		while (!iswordsep(wordlist[k], onlyLineEnds));
+	}
+out:
+	keywords[words] = wordlist + slen;
+	*len = words;
+#endif
 	return keywords;
 }
 
 void WordList::Clear() {
 	if (words) {
-		delete []words;
 		delete []list;
+#if 1
+        delete []words;
+#else
+		free(words);
+#endif
+		free(wordsNoCase);
 	}
 	words = 0;
+	wordsNoCase = 0;
 	list = 0;
 	len = 0;
+	sorted = false;
 }
 
 void WordList::Set(const char *s) {
-	len = 0;
 	list = StringDup(s);
-	words = ArrayFromWordList(list, onlyLineEnds);
+	sorted = false;
+	words = ArrayFromWordList(list, &len, onlyLineEnds);
+	wordsNoCase = (char**) malloc ((len + 1) * sizeof (*wordsNoCase));
+	memcpy(wordsNoCase, words, (len + 1) * sizeof (*words));
 }
 
 char *WordList::Allocate(int size) {
@@ -332,46 +432,36 @@ char *WordList::Allocate(int size) {
 }
 
 void WordList::SetFromAllocated() {
-	len = 0;
-	words = ArrayFromWordList(list, onlyLineEnds);
+	sorted = false;
+	words = ArrayFromWordList(list, &len, onlyLineEnds);
+	wordsNoCase = (char**) malloc ((len + 1) * sizeof (*wordsNoCase));
+	memcpy(wordsNoCase, words, (len + 1) * sizeof (*words));
 }
 
-// Shell sort based upon public domain C implementation by Raymond Gardner 1991
-// Used here because of problems with mingw qsort.
-static void SortWordList(char **words, unsigned int len) {
-	unsigned int gap = len / 2;
-
-	while (gap > 0) {
-		unsigned int i = gap;
-		while (i < len) {
-			unsigned int j = i;
-			char **a = words + j;
-			do {
-				j -= gap;
-				char **b = a;
-				a -= gap;
-				if (strcmp(*a, *b) > 0) {
-					char *tmp = *a;
-					*a = *b;
-					*b = tmp;
-				} else {
-					break;
-				}
-			} while (j >= gap);
-			i++;
-		}
-		gap = gap / 2;
-	}
+int cmpString(const void *a1, const void *a2) {
+    // Can't work out the correct incantation to use modern casts here
+    return strcmp(*(char**)(a1), *(char**)(a2));
 }
 
+int cmpStringNoCase(const void *a1, const void *a2) {
+    // Can't work out the correct incantation to use modern casts here
+    return strcasecmp(*(char**)(a1), *(char**)(a2));
+}
+
+static void SortWordList(char **words, char **wordsNoCase, unsigned int len) {
+	qsort(reinterpret_cast<void*>(words), len, sizeof(*words),
+		cmpString);
+	qsort(reinterpret_cast<void*>(wordsNoCase), len, sizeof(*wordsNoCase),
+		cmpStringNoCase);
+}
+ 
 bool WordList::InList(const char *s) {
 	if (0 == words)
 		return false;
-	if (len == 0) {
-		for (int i = 0; words[i][0]; i++)
-			len++;
-		SortWordList(words, len);
-		for (int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
+	if (!sorted) {
+		sorted = true;
+		SortWordList(words, wordsNoCase, len);
+		for (unsigned int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
 			starts[k] = -1;
 		for (int l = len - 1; l >= 0; l--) {
 			unsigned char indexChar = words[l][0];
@@ -396,4 +486,257 @@ bool WordList::InList(const char *s) {
 		}
 	}
 	return false;
+}
+
+/**
+ * Returns an element (complete) of the wordlist array which has the beginning
+ * the same as the passed string. The length of the word to compare is passed
+ * too. Letter case can be ignored or preserved (default).
+ */
+const char *WordList::GetNearestWord(const char *wordStart, int searchLen /*= -1*/, bool ignoreCase /*= false*/) {
+	int start = 0; // lower bound of the api array block to search
+	int end = len - 1; // upper bound of the api array block to search
+	int pivot; // index of api array element just being compared
+	int cond; // comparison result (in the sense of strcmp() result)
+	const char *word; // api array element just being compared
+
+	if (0 == words)
+		return NULL;
+	if (!sorted) {
+		sorted = true;
+		SortWordList(words, wordsNoCase, len);
+	}
+	if (ignoreCase)
+		while (start <= end) { // binary searching loop
+			pivot = (start + end) >> 1;
+			word = wordsNoCase[pivot];
+			cond = strncasecmp(wordStart, word, searchLen);
+			if (!cond && nonFuncChar(word[searchLen])) // maybe there should be a "non-word character" test here?
+				return word; // result must not be freed with free()
+			else if (cond < 0)
+				end = pivot - 1;
+			else if (cond > 0)
+				start = pivot + 1;
+		}
+	else // preserve the letter case
+		while (start <= end) { // binary searching loop
+			pivot = (start + end) >> 1;
+			word = words[pivot];
+			cond = strncmp(wordStart, word, searchLen);
+			if (!cond && nonFuncChar(word[searchLen])) // maybe there should be a "non-word character" test here?
+				return word; // result must not be freed with free()
+			else if (cond >= 0)
+				start = pivot + 1;
+			else if (cond < 0)
+				end = pivot - 1;
+		}
+	return NULL;
+}
+	
+/**
+ * Returns elements (first words of them) of the wordlist array which have
+ * the beginning the same as the passed string. The length of the word to
+ * compare is passed too. Letter case can be ignored or preserved (default).
+ * If there are more words meeting the condition they are returned all of
+ * them in the ascending order separated with spaces.
+ *
+ * NOTE: returned buffer has to be freed with a free() call.
+ */
+char *WordList::GetNearestWords(const char *wordStart, int searchLen /*= -1*/, bool ignoreCase /*= false*/) {
+	int wordlen; // length of the word part (before the '(' brace) of the api array element
+	int length = 0; // length of the returned buffer of words (string)
+	int newlength; // length of the new buffer before the reallocating itself
+	#undef WORDCHUNK // how many characters will be pre-allocated (to avoid buffer reallocation on each new word)
+	#define WORDCHUNK 100
+	int size = WORDCHUNK; // real size of the returned buffer of words
+	char *buffer; // buffer for the words returned
+	int start = 0; // lower bound of the api array block to search
+	int end = len - 1; // upper bound of the api array block to search
+	int pivot; // index of api array element just being compared
+	int cond; // comparison result (in the sense of strcmp() result)
+	int oldpivot; // pivot storage to be able to browse the api array upwards and then downwards
+	const char *word; // api array element just being compared
+	const char *brace; // position of the opening brace in the api array element just being compared
+
+	if (0 == words)
+		return NULL;
+	if (!sorted) {
+		sorted = true;
+		SortWordList(words, wordsNoCase, len);
+	}
+	buffer = (char*) malloc(size);
+	*buffer = '\0';
+	if (ignoreCase)
+		while (start <= end) { // binary searching loop
+			pivot = (start + end) >> 1;
+			word = wordsNoCase[pivot];
+			cond = strncasecmp(wordStart, word, searchLen);
+			if (!cond) {
+				oldpivot = pivot;
+				do { // browse sequentially the rest after the hit
+					brace = strchr(word, '(');
+					if (brace)
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					else {
+						brace = word + strlen(word);
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					}
+					wordlen = brace - word + 1;
+					newlength = length + wordlen; // stretch the buffer
+					if (length)
+						newlength++;
+					if (newlength >= size) {
+						do
+							size += WORDCHUNK;
+						while (size <= newlength);
+						buffer = (char*) realloc(buffer, size);
+					}
+					if (length) // append a new entry
+						buffer[length++] = ' ';
+					memcpy(buffer + length, word, wordlen);
+					length = newlength;
+					buffer[length] = '\0';
+					if (++pivot > end)
+						break;
+					word = wordsNoCase[pivot];
+				} while (!strncasecmp(wordStart, word, searchLen));
+
+				pivot = oldpivot;
+				for (;;) { // browse sequentially the rest before the hit
+					if (--pivot < start)
+						break;
+					word = wordsNoCase[pivot];
+					if (strncasecmp(wordStart, word, searchLen))
+						break;                 
+					brace = strchr(word, '(');
+					if (brace)
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					else {
+						brace = word + strlen(word);
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					}
+					wordlen = brace - word + 1;
+					newlength = length + wordlen; // stretch the buffer
+					if (length)
+						newlength++;
+					if (newlength >= size)
+					{
+						do
+							size += WORDCHUNK;
+						while (size <= newlength);
+						buffer = (char*) realloc(buffer, size);
+					}
+					if (length) // append a new entry
+						buffer[length++] = ' ';
+					memcpy(buffer + length, word, wordlen);
+					length = newlength;
+					buffer[length] = '\0';
+				}
+				return buffer; // result has to be freed with free()
+			}
+			else if (cond < 0)
+				end = pivot - 1;
+			else if (cond > 0)
+				start = pivot + 1;
+		}
+	else // preserve the letter case
+		while (start <= end) { // binary searching loop
+			pivot = (start + end) >> 1;
+			word = words[pivot];
+			cond = strncmp(wordStart, word, searchLen);
+			if (!cond) {
+				oldpivot = pivot;
+				do { // browse sequentially the rest after the hit
+					brace = strchr(word, '(');
+					if (brace)
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					else {
+						brace = word + strlen(word);
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					}
+					wordlen = brace - word + 1;
+					newlength = length + wordlen; // stretch the buffer
+					if (length)
+						newlength++;
+					if (newlength >= size)
+					{
+						do
+							size += WORDCHUNK;
+						while (size <= newlength);
+						buffer = (char*) realloc(buffer, size);
+					}
+					if (length) // append a new entry
+						buffer[length++] = ' ';
+					memcpy(buffer + length, word, wordlen);
+					length = newlength;
+					buffer[length] = '\0';
+					if (++pivot > end)
+						break;
+					word = words[pivot];
+				} while (!strncmp(wordStart, word, searchLen));
+
+				pivot = oldpivot;
+				for (;;) { // browse sequentially the rest before the hit
+					if (--pivot < start)
+						break;
+					word = words[pivot];
+					if (strncmp(wordStart, word, searchLen))
+						break;
+					brace = strchr(word, '(');
+					if (brace)
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					else {
+						brace = word + strlen(word);
+						do
+							if (--brace < word)
+								break;
+						while (isspace(*brace));
+					}
+					wordlen = brace - word + 1;
+					newlength = length + wordlen; // stretch the buffer
+					if (length)
+						newlength++;
+					if (newlength >= size)
+					{
+						do
+							size += WORDCHUNK;
+						while (size <= newlength);
+						buffer = (char*) realloc(buffer, size);
+					}
+					if (length) // append a new entry
+						buffer[length++] = ' ';
+					memcpy(buffer + length, word, wordlen);
+					length = newlength;
+					buffer[length] = '\0';
+				}
+				return buffer; // result has to be freed with free()
+			}
+			else if (cond < 0)
+				end = pivot - 1;
+			else if (cond > 0)
+				start = pivot + 1;
+		}
+	free(buffer);
+	return NULL;
 }

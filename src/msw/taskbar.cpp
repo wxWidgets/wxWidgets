@@ -182,7 +182,13 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
 
     menu->UpdateUI();
 
+    // Work around a WIN32 bug
+    ::SetForegroundWindow ((HWND) win->GetHWND ());
+
     rval = win->PopupMenu(menu, 0, 0);
+
+    // Work around a WIN32 bug
+    ::PostMessage ((HWND) win->GetHWND(),WM_NULL,0,0L);
 
     win->PopEventHandler(FALSE);
     win->Destroy();

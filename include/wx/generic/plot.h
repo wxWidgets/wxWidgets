@@ -325,9 +325,9 @@ public:
     void ResetScrollbar();
 
 private:
-    friend wxPlotArea;
-    friend wxPlotXAxisArea;
-    friend wxPlotYAxisArea;
+    friend class wxPlotArea;
+    friend class wxPlotXAxisArea;
+    friend class wxPlotYAxisArea;
 
     double             m_xUnitsPerValue;
     double             m_xZoom;

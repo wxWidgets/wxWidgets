@@ -19,7 +19,7 @@ to use whenever possible \helpref{wxDynamicCast()}{wxdynamiccast} macro which,
 for the implementations that support it, is defined just as dynamic\_cast<> and
 uses wxWindows RTTI for all the others. This macro is limited to wxWindows
 classes only and only works with pointers (unlike the real dynamic\_cast<> which
-also accepts referencies).
+also accepts references).
 
 Each class that you wish to be known the type system should have
 a macro such as DECLARE\_DYNAMIC\_CLASS just inside the class declaration.

@@ -15,7 +15,7 @@ program_dir = samples/opengl/cube
 
 PROGRAM=cube
 
-LIBRARIES=-lMesaGL -lMesaGLU ../../../lib/libwx_gtk_gl.so
+LIBRARIES=$(OPENGLLIBS) ../../../lib/libwx_gtk_gl.so
 
 OBJECTS=$(PROGRAM).o
 

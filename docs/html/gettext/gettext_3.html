@@ -1,0 +1,606 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from gettext.texi on 25 January 1999 -->
+
+<TITLE>GNU gettext utilities - Preparing Program Sources</TITLE>
+<link href="gettext_4.html" rel=Next>
+<link href="gettext_2.html" rel=Previous>
+<link href="gettext_toc.html" rel=ToC>
+
+</HEAD>
+<BODY>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_2.html">previous</A>, <A HREF="gettext_4.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC13" HREF="gettext_toc.html#TOC13">Preparing Program Sources</A></H1>
+
+<P>
+For the programmer, changes to the C source code fall into three
+categories.  First, you have to make the localization functions
+known to all modules needing message translation.  Second, you should
+properly trigger the operation of GNU <CODE>gettext</CODE> when the program
+initializes, usually from the <CODE>main</CODE> function.  Last, you should
+identify and especially mark all constant strings in your program
+needing translation.
+
+</P>
+<P>
+Presuming that your set of programs, or package, has been adjusted
+so all needed GNU <CODE>gettext</CODE> files are available, and your
+<TT>`Makefile'</TT> files are adjusted (see section <A HREF="gettext_10.html#SEC67">The Maintainer's View</A>), each C module
+having translated C strings should contain the line:
+
+</P>
+
+<PRE>
+#include &#60;libintl.h&#62;
+</PRE>
+
+<P>
+The remaining changes to your C sources are discussed in the further
+sections of this chapter.
+
+</P>
+
+
+
+<H2><A NAME="SEC14" HREF="gettext_toc.html#TOC14">Triggering <CODE>gettext</CODE> Operations</A></H2>
+
+<P>
+The initialization of locale data should be done with more or less
+the same code in every program, as demonstrated below:
+
+</P>
+
+<PRE>
+int
+main (argc, argv)
+     int argc;
+     char argv;
+{
+  ...
+  setlocale (LC_ALL, "");
+  bindtextdomain (PACKAGE, LOCALEDIR);
+  textdomain (PACKAGE);
+  ...
+}
+</PRE>
+
+<P>
+<VAR>PACKAGE</VAR> and <VAR>LOCALEDIR</VAR> should be provided either by
+<TT>`config.h'</TT> or by the Makefile.  For now consult the <CODE>gettext</CODE>
+sources for more information.
+
+</P>
+<P>
+The use of <CODE>LC_ALL</CODE> might not be appropriate for you.
+<CODE>LC_ALL</CODE> includes all locale categories and especially
+<CODE>LC_CTYPE</CODE>.  This later category is responsible for determining
+character classes with the <CODE>isalnum</CODE> etc. functions from
+<TT>`ctype.h'</TT> which could especially for programs, which process some
+kind of input language, be wrong.  For example this would mean that a
+source code using the @,{c} (c-cedilla character) is runnable in
+France but not in the U.S.
+
+</P>
+<P>
+Some systems also have problems with parsing number using the
+<CODE>scanf</CODE> functions if an other but the <CODE>LC_ALL</CODE> locale is used.
+The standards say that additional formats but the one known in the
+<CODE>"C"</CODE> locale might be recognized.  But some systems seem to reject
+numbers in the <CODE>"C"</CODE> locale format.  In some situation, it might
+also be a problem with the notation itself which makes it impossible to
+recognize whether the number is in the <CODE>"C"</CODE> locale or the local
+format.  This can happen if thousands separator characters are used.
+Some locales define this character accordfing to the national
+conventions to <CODE>'.'</CODE> which is the same character used in the
+<CODE>"C"</CODE> locale to denote the decimal point.
+
+</P>
+<P>
+So it is sometimes necessary to replace the <CODE>LC_ALL</CODE> line in the
+code above by a sequence of <CODE>setlocale</CODE> lines
+
+</P>
+
+<PRE>
+{
+  ...
+  setlocale (LC_TIME, "");
+  setlocale (LC_MESSAGES, "");
+  ...
+}
+</PRE>
+
+<P>
+or to switch for and back to the character class in question.  On all
+POSIX conformant systems the locale categories <CODE>LC_CTYPE</CODE>,
+<CODE>LC_COLLATE</CODE>, <CODE>LC_MONETARY</CODE>, <CODE>LC_NUMERIC</CODE>, and
+<CODE>LC_TIME</CODE> are available.  On some modern systems there is also a
+locale <CODE>LC_MESSAGES</CODE> which is called on some old, XPG2 compliant
+systems <CODE>LC_RESPONSES</CODE>.
+
+</P>
+
+
+<H2><A NAME="SEC15" HREF="gettext_toc.html#TOC15">How Marks Appears in Sources</A></H2>
+
+<P>
+All strings requiring translation should be marked in the C sources.  Marking
+is done in such a way that each translatable string appears to be
+the sole argument of some function or preprocessor macro.  There are
+only a few such possible functions or macros meant for translation,
+and their names are said to be marking keywords.  The marking is
+attached to strings themselves, rather than to what we do with them.
+This approach has more uses.  A blatant example is an error message
+produced by formatting.  The format string needs translation, as
+well as some strings inserted through some <SAMP>`%s'</SAMP> specification
+in the format, while the result from <CODE>sprintf</CODE> may have so many
+different instances that it is impractical to list them all in some
+<SAMP>`error_string_out()'</SAMP> routine, say.
+
+</P>
+<P>
+This marking operation has two goals.  The first goal of marking
+is for triggering the retrieval of the translation, at run time.
+The keyword are possibly resolved into a routine able to dynamically
+return the proper translation, as far as possible or wanted, for the
+argument string.  Most localizable strings are found in executable
+positions, that is, attached to variables or given as parameters to
+functions.  But this is not universal usage, and some translatable
+strings appear in structured initializations.  See section <A HREF="gettext_3.html#SEC18">Special Cases of Translatable Strings</A>.
+
+</P>
+<P>
+The second goal of the marking operation is to help <CODE>xgettext</CODE>
+at properly extracting all translatable strings when it scans a set
+of program sources and produces PO file templates.
+
+</P>
+<P>
+The canonical keyword for marking translatable strings is
+<SAMP>`gettext'</SAMP>, it gave its name to the whole GNU <CODE>gettext</CODE>
+package.  For packages making only light use of the <SAMP>`gettext'</SAMP>
+keyword, macro or function, it is easily used <EM>as is</EM>.  However,
+for packages using the <CODE>gettext</CODE> interface more heavily, it
+is usually more convenient to give the main keyword a shorter, less
+obtrusive name.  Indeed, the keyword might appear on a lot of strings
+all over the package, and programmers usually do not want nor need
+their program sources to remind them forcefully, all the time, that they
+are internationalized.  Further, a long keyword has the disadvantage
+of using more horizontal space, forcing more indentation work on
+sources for those trying to keep them within 79 or 80 columns.
+
+</P>
+<P>
+Many packages use <SAMP>`_'</SAMP> (a simple underline) as a keyword,
+and write <SAMP>`_("Translatable string")'</SAMP> instead of <SAMP>`gettext
+("Translatable string")'</SAMP>.  Further, the coding rule, from GNU standards,
+wanting that there is a space between the keyword and the opening
+parenthesis is relaxed, in practice, for this particular usage.
+So, the textual overhead per translatable string is reduced to
+only three characters: the underline and the two parentheses.
+However, even if GNU <CODE>gettext</CODE> uses this convention internally,
+it does not offer it officially.  The real, genuine keyword is truly
+<SAMP>`gettext'</SAMP> indeed.  It is fairly easy for those wanting to use
+<SAMP>`_'</SAMP> instead of <SAMP>`gettext'</SAMP> to declare:
+
+</P>
+
+<PRE>
+#include &#60;libintl.h&#62;
+#define _(String) gettext (String)
+</PRE>
+
+<P>
+instead of merely using <SAMP>`#include &#60;libintl.h&#62;'</SAMP>.
+
+</P>
+<P>
+Later on, the maintenance is relatively easy.  If, as a programmer,
+you add or modify a string, you will have to ask yourself if the
+new or altered string requires translation, and include it within
+<SAMP>`_()'</SAMP> if you think it should be translated.  <SAMP>`"%s: %d"'</SAMP> is
+an example of string <EM>not</EM> requiring translation!
+
+</P>
+
+
+<H2><A NAME="SEC16" HREF="gettext_toc.html#TOC16">Marking Translatable Strings</A></H2>
+
+<P>
+In PO mode, one set of features is meant more for the programmer than
+for the translator, and allows him to interactively mark which strings,
+in a set of program sources, are translatable, and which are not.
+Even if it is a fairly easy job for a programmer to find and mark
+such strings by other means, using any editor of his choice, PO mode
+makes this work more comfortable.  Further, this gives translators
+who feel a little like programmers, or programmers who feel a little
+like translators, a tool letting them work at marking translatable
+strings in the program sources, while simultaneously producing a set of
+translation in some language, for the package being internationalized.
+
+</P>
+<P>
+The set of program sources, targetted by the PO mode commands describe
+here, should have an Emacs tags table constructed for your project,
+prior to using these PO file commands.  This is easy to do.  In any
+shell window, change the directory to the root of your project, then
+execute a command resembling:
+
+</P>
+
+<PRE>
+etags src/*.[hc] lib/*.[hc]
+</PRE>
+
+<P>
+presuming here you want to process all <TT>`.h'</TT> and <TT>`.c'</TT> files
+from the <TT>`src/'</TT> and <TT>`lib/'</TT> directories.  This command will
+explore all said files and create a <TT>`TAGS'</TT> file in your root
+directory, somewhat summarizing the contents using a special file
+format Emacs can understand.
+
+</P>
+<P>
+For packages following the GNU coding standards, there is
+a make goal <CODE>tags</CODE> or <CODE>TAGS</CODE> which construct the tag files in
+all directories and for all files containing source code.
+
+</P>
+<P>
+Once your <TT>`TAGS'</TT> file is ready, the following commands assist
+the programmer at marking translatable strings in his set of sources.
+But these commands are necessarily driven from within a PO file
+window, and it is likely that you do not even have such a PO file yet.
+This is not a problem at all, as you may safely open a new, empty PO
+file, mainly for using these commands.  This empty PO file will slowly
+fill in while you mark strings as translatable in your program sources.
+
+</P>
+<DL COMPACT>
+
+<DT><KBD>,</KBD>
+<DD>
+Search through program sources for a string which looks like a
+candidate for translation.
+
+<DT><KBD>M-,</KBD>
+<DD>
+Mark the last string found with <SAMP>`_()'</SAMP>.
+
+<DT><KBD>M-.</KBD>
+<DD>
+Mark the last string found with a keyword taken from a set of possible
+keywords.  This command with a prefix allows some management of these
+keywords.
+
+</DL>
+
+<P>
+The <KBD>,</KBD> (<CODE>po-tags-search</CODE>) command search for the next
+occurrence of a string which looks like a possible candidate for
+translation, and displays the program source in another Emacs window,
+positioned in such a way that the string is near the top of this other
+window.  If the string is too big to fit whole in this window, it is
+positioned so only its end is shown.  In any case, the cursor
+is left in the PO file window.  If the shown string would be better
+presented differently in different native languages, you may mark it
+using <KBD>M-,</KBD> or <KBD>M-.</KBD>.  Otherwise, you might rather ignore it
+and skip to the next string by merely repeating the <KBD>,</KBD> command.
+
+</P>
+<P>
+A string is a good candidate for translation if it contains a sequence
+of three or more letters.  A string containing at most two letters in
+a row will be considered as a candidate if it has more letters than
+non-letters.  The command disregards strings containing no letters,
+or isolated letters only.  It also disregards strings within comments,
+or strings already marked with some keyword PO mode knows (see below).
+
+</P>
+<P>
+If you have never told Emacs about some <TT>`TAGS'</TT> file to use, the
+command will request that you specify one from the minibuffer, the
+first time you use the command.  You may later change your <TT>`TAGS'</TT>
+file by using the regular Emacs command <KBD>M-x visit-tags-table</KBD>,
+which will ask you to name the precise <TT>`TAGS'</TT> file you want
+to use.  See section `Tag Tables' in <CITE>The Emacs Editor</CITE>.
+
+</P>
+<P>
+Each time you use the <KBD>,</KBD> command, the search resumes from where it was
+left by the previous search, and goes through all program sources,
+obeying the <TT>`TAGS'</TT> file, until all sources have been processed.
+However, by giving a prefix argument to the command (<KBD>C-u
+,)</KBD>, you may request that the search be restarted all over again
+from the first program source; but in this case, strings that you
+recently marked as translatable will be automatically skipped.
+
+</P>
+<P>
+Using this <KBD>,</KBD> command does not prevent using of other regular
+Emacs tags commands.  For example, regular <CODE>tags-search</CODE> or
+<CODE>tags-query-replace</CODE> commands may be used without disrupting the
+independent <KBD>,</KBD> search sequence.  However, as implemented, the
+<EM>initial</EM> <KBD>,</KBD> command (or the <KBD>,</KBD> command is used with a
+prefix) might also reinitialize the regular Emacs tags searching to the
+first tags file, this reinitialization might be considered spurious.
+
+</P>
+<P>
+The <KBD>M-,</KBD> (<CODE>po-mark-translatable</CODE>) command will mark the
+recently found string with the <SAMP>`_'</SAMP> keyword.  The <KBD>M-.</KBD>
+(<CODE>po-select-mark-and-mark</CODE>) command will request that you type
+one keyword from the minibuffer and use that keyword for marking
+the string.  Both commands will automatically create a new PO file
+untranslated entry for the string being marked, and make it the
+current entry (making it easy for you to immediately proceed to its
+translation, if you feel like doing it right away).  It is possible
+that the modifications made to the program source by <KBD>M-,</KBD> or
+<KBD>M-.</KBD> render some source line longer than 80 columns, forcing you
+to break and re-indent this line differently.  You may use the <KBD>O</KBD>
+command from PO mode, or any other window changing command from
+GNU Emacs, to break out into the program source window, and do any
+needed adjustments.  You will have to use some regular Emacs command
+to return the cursor to the PO file window, if you want command
+<KBD>,</KBD> for the next string, say.
+
+</P>
+<P>
+The <KBD>M-.</KBD> command has a few built-in speedups, so you do not
+have to explicitly type all keywords all the time.  The first such
+speedup is that you are presented with a <EM>preferred</EM> keyword,
+which you may accept by merely typing <KBD><KBD>RET</KBD></KBD> at the prompt.
+The second speedup is that you may type any non-ambiguous prefix of the
+keyword you really mean, and the command will complete it automatically
+for you.  This also means that PO mode has to <EM>know</EM> all
+your possible keywords, and that it will not accept mistyped keywords.
+
+</P>
+<P>
+If you reply <KBD>?</KBD> to the keyword request, the command gives a
+list of all known keywords, from which you may choose.  When the
+command is prefixed by an argument (<KBD>C-u M-.</KBD>), it inhibits
+updating any program source or PO file buffer, and does some simple
+keyword management instead.  In this case, the command asks for a
+keyword, written in full, which becomes a new allowed keyword for
+later <KBD>M-.</KBD> commands.  Moreover, this new keyword automatically
+becomes the <EM>preferred</EM> keyword for later commands.  By typing
+an already known keyword in response to <KBD>C-u M-.</KBD>, one merely
+changes the <EM>preferred</EM> keyword and does nothing more.
+
+</P>
+<P>
+All keywords known for <KBD>M-.</KBD> are recognized by the <KBD>,</KBD> command
+when scanning for strings, and strings already marked by any of those
+known keywords are automatically skipped.  If many PO files are opened
+simultaneously, each one has its own independent set of known keywords.
+There is no provision in PO mode, currently, for deleting a known
+keyword, you have to quit the file (maybe using <KBD>q</KBD>) and reopen
+it afresh.  When a PO file is newly brought up in an Emacs window, only
+<SAMP>`gettext'</SAMP> and <SAMP>`_'</SAMP> are known as keywords, and <SAMP>`gettext'</SAMP>
+is preferred for the <KBD>M-.</KBD> command.  In fact, this is not useful to
+prefer <SAMP>`_'</SAMP>, as this one is already built in the <KBD>M-,</KBD> command.
+
+</P>
+
+
+<H2><A NAME="SEC17" HREF="gettext_toc.html#TOC17">Special Comments preceding Keywords</A></H2>
+
+<P>
+In C programs strings are often used within calls of functions from the
+<CODE>printf</CODE> family.  The special thing about these format strings is
+that they can contain format specifiers introduced with <KBD>%</KBD>.  Assume
+we have the code
+
+</P>
+
+<PRE>
+printf (gettext ("String `%s' has %d characters\n"), s, strlen (s));
+</PRE>
+
+<P>
+A possible German translation for the above string might be:
+
+</P>
+
+<PRE>
+"%d Zeichen lang ist die Zeichenkette `%s'"
+</PRE>
+
+<P>
+A C programmer, even if he cannot speak German, will recognize that
+there is something wrong here.  The order of the two format specifiers
+is changed but of course the arguments in the <CODE>printf</CODE> don't have.
+This will most probably lead to problems because now the length of the
+string is regarded as the address.
+
+</P>
+<P>
+To prevent errors at runtime caused by translations the <CODE>msgfmt</CODE>
+tool can check statically whether the arguments in the original and the
+translation string match in type and number.  If this is not the case a
+warning will be given and the error cannot causes problems at runtime.
+
+</P>
+<P>
+If the word order in the above German translation would be correct one
+would have to write
+
+</P>
+
+<PRE>
+"%2$d Zeichen lang ist die Zeichenkette `%1$s'"
+</PRE>
+
+<P>
+The routines in <CODE>msgfmt</CODE> know about this special notation.
+
+</P>
+<P>
+Because not all strings in a program must be format strings it is not
+useful for <CODE>msgfmt</CODE> to test all the strings in the <TT>`.po'</TT> file.
+This might cause problems because the string might contain what looks
+like a format specifier, but the string is not used in <CODE>printf</CODE>.
+
+</P>
+<P>
+Therefore the <CODE>xgettext</CODE> adds a special tag to those messages it
+thinks might be a format string.  There is no absolute rule for this,
+only a heuristic.  In the <TT>`.po'</TT> file the entry is marked using the
+<CODE>c-format</CODE> flag in the <KBD>#,</KBD> comment line (see section <A HREF="gettext_2.html#SEC9">The Format of PO Files</A>).
+
+</P>
+<P>
+The careful reader now might say that this again can cause problems.
+The heuristic might guess it wrong.  This is true and therefore
+<CODE>xgettext</CODE> knows about special kind of comment which lets
+the programmer take over the decision.  If in the same line or
+the immediately preceding line of the <CODE>gettext</CODE> keyword
+the <CODE>xgettext</CODE> program find a comment containing the words
+<KBD>xgettext:c-format</KBD> it will mark the string in any case with
+the <KBD>c-format</KBD> flag.  This kind of comment should be used when
+<CODE>xgettext</CODE> does not recognize the string as a format string but
+is really is one and it should be tested.  Please note that when the
+comment is in the same line of the <CODE>gettext</CODE> keyword, it must be
+before the string to be translated.
+
+</P>
+<P>
+This situation happens quite often.  The <CODE>printf</CODE> function is often
+called with strings which do not contain a format specifier.  Of course
+one would normally use <CODE>fputs</CODE> but it does happen.  In this case
+<CODE>xgettext</CODE> does not recognize this as a format string but what
+happens if the translation introduces a valid format specifier?  The
+<CODE>printf</CODE> function will try to access one of the parameter but none
+exists because the original code does not refer to any parameter.
+
+</P>
+<P>
+<CODE>xgettext</CODE> of course could make a wrong decision the other way
+round.  A string marked as a format string is not really a format
+string.  In this case the <CODE>msgfmt</CODE> might give too many warnings and
+would prevent translating the <TT>`.po'</TT> file.  The method to prevent
+this wrong decision is similar to the one used above, only the comment
+to use must contain the string <KBD>xgettext:no-c-format</KBD>.
+
+</P>
+<P>
+If a string is marked with <KBD>c-format</KBD> and this is not correct the
+user can find out who is responsible for the decision.  See section <A HREF="gettext_4.html#SEC20">Invoking the <CODE>xgettext</CODE> Program</A> to see how the <KBD>--debug</KBD> option can be used for solving
+this problem.
+
+</P>
+
+
+<H2><A NAME="SEC18" HREF="gettext_toc.html#TOC18">Special Cases of Translatable Strings</A></H2>
+
+<P>
+The attentive reader might now point out that it is not always possible
+to mark translatable string with <CODE>gettext</CODE> or something like this.
+Consider the following case:
+
+</P>
+
+<PRE>
+{
+  static const char *messages[] = {
+    "some very meaningful message",
+    "and another one"
+  };
+  const char *string;
+  ...
+  string
+    = index &#62; 1 ? "a default message" : messages[index];
+
+  fputs (string);
+  ...
+}
+</PRE>
+
+<P>
+While it is no problem to mark the string <CODE>"a default message"</CODE> it
+is not possible to mark the string initializers for <CODE>messages</CODE>.
+What is to be done?  We have to fulfill two tasks.  First we have to mark the
+strings so that the <CODE>xgettext</CODE> program (see section <A HREF="gettext_4.html#SEC20">Invoking the <CODE>xgettext</CODE> Program</A>)
+can find them, and second we have to translate the string at runtime
+before printing them.
+
+</P>
+<P>
+The first task can be fulfilled by creating a new keyword, which names a
+no-op.  For the second we have to mark all access points to a string
+from the array.  So one solution can look like this:
+
+</P>
+
+<PRE>
+#define gettext_noop(String) (String)
+
+{
+  static const char *messages[] = {
+    gettext_noop ("some very meaningful message"),
+    gettext_noop ("and another one")
+  };
+  const char *string;
+  ...
+  string
+    = index &#62; 1 ? gettext ("a default message") : gettext (messages[index]);
+
+  fputs (string);
+  ...
+}
+</PRE>
+
+<P>
+Please convince yourself that the string which is written by
+<CODE>fputs</CODE> is translated in any case.  How to get <CODE>xgettext</CODE> know
+the additional keyword <CODE>gettext_noop</CODE> is explained in section <A HREF="gettext_4.html#SEC20">Invoking the <CODE>xgettext</CODE> Program</A>.
+
+</P>
+<P>
+The above is of course not the only solution.  You could also come along
+with the following one:
+
+</P>
+
+<PRE>
+#define gettext_noop(String) (String)
+
+{
+  static const char *messages[] = {
+    gettext_noop ("some very meaningful message",
+    gettext_noop ("and another one")
+  };
+  const char *string;
+  ...
+  string
+    = index &#62; 1 ? gettext_noop ("a default message") : messages[index];
+
+  fputs (gettext (string));
+  ...
+}
+</PRE>
+
+<P>
+But this has some drawbacks.  First the programmer has to take care that
+he uses <CODE>gettext_noop</CODE> for the string <CODE>"a default message"</CODE>.
+A use of <CODE>gettext</CODE> could have in rare cases unpredictable results.
+The second reason is found in the internals of the GNU <CODE>gettext</CODE>
+Library which will make this solution less efficient.
+
+</P>
+<P>
+One advantage is that you need not make control flow analysis to make
+sure the output is really translated in any case.  But this analysis is
+generally not very difficult.  If it should be in any situation you can
+use this second method in this situation.
+
+</P>
+<P><HR><P>
+<p>Go to the <A HREF="gettext_1.html">first</A>, <A HREF="gettext_2.html">previous</A>, <A HREF="gettext_4.html">next</A>, <A HREF="gettext_12.html">last</A> section, <A HREF="gettext_toc.html">table of contents</A>.
+</BODY>
+</HTML>

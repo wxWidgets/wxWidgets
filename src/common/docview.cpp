@@ -130,6 +130,7 @@ wxDocument::wxDocument(wxDocument *parent)
     m_documentModified = FALSE;
     m_documentParent = parent;
     m_documentTemplate = (wxDocTemplate *) NULL;
+    m_commandProcessor = (wxCommandProcessor*) NULL;
     m_savedYet = FALSE;
 }
 
@@ -145,7 +146,8 @@ wxDocument::~wxDocument()
     if (m_commandProcessor)
         delete m_commandProcessor;
 
-    GetDocumentManager()->RemoveDocument(this);
+    if (GetDocumentManager())
+        GetDocumentManager()->RemoveDocument(this);
 
     // Not safe to do here, since it'll invoke virtual view functions
     // expecting to see valid derived objects: and by the time we get here,
@@ -172,6 +174,8 @@ bool wxDocument::OnCloseDocument()
 // deleted.
 bool wxDocument::DeleteAllViews()
 {
+    wxDocManager* manager = GetDocumentManager();
+
     wxNode *node = m_documentViews.First();
     while (node)
     {
@@ -184,6 +188,11 @@ bool wxDocument::DeleteAllViews()
         delete view; // Deletes node implicitly
         node = next;
     }
+    // If we haven't yet deleted the document (for example
+    // if there were no views) then delete it.
+    if (manager && manager->GetDocuments().Member(this))
+        delete this;
+
     return TRUE;
 }
 
@@ -196,7 +205,7 @@ wxView *wxDocument::GetFirstView() const
 
 wxDocManager *wxDocument::GetDocumentManager() const
 {
-    return m_documentTemplate->GetDocumentManager();
+    return (m_documentTemplate ? m_documentTemplate->GetDocumentManager() : (wxDocManager*) NULL);
 }
 
 bool wxDocument::OnNewDocument()
@@ -239,7 +248,7 @@ bool wxDocument::SaveAs()
 
     wxString tmp = wxFileSelector(_("Save as"),
             docTemplate->GetDirectory(),
-            GetFilename(),
+            wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
             docTemplate->GetFileFilter(),
             wxSAVE | wxOVERWRITE_PROMPT,
@@ -287,7 +296,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ofstream store(wxString(file.fn_str()));
+    ofstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(wxString(file.fn_str()));
@@ -323,7 +332,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ifstream store(wxString(file.fn_str()));
+    ifstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store(wxString(file.fn_str()));
@@ -655,7 +664,8 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
         return doc;
     else
     {
-        delete doc;
+        if (GetDocumentManager()->GetDocuments().Member(doc))
+            doc->DeleteAllViews();
         return (wxDocument *) NULL;
     }
 }
@@ -1096,15 +1106,16 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             newDoc->SetDocumentTemplate(temp);
             if (!newDoc->OnOpenDocument(path2))
             {
-                delete newDoc;
+                newDoc->DeleteAllViews();
+                // delete newDoc; // Implicitly deleted by DeleteAllViews
                 return (wxDocument *) NULL;
             }
             AddFileToHistory(path2);
         }
         return newDoc;
     }
-    else
-        return (wxDocument *) NULL;
+
+    return (wxDocument *) NULL;
 }
 
 wxView *wxDocManager::CreateView(wxDocument *doc, long flags)
@@ -1294,6 +1305,28 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
     return theTemplate;
 }
 
+// Try to get a more suitable parent frame than the top window,
+// for selection dialogs. Otherwise you may get an unexpected
+// window being activated when a dialog is shown.
+static wxWindow* wxFindSuitableParent()
+{
+    wxWindow* parent = wxTheApp->GetTopWindow();
+
+    wxWindow* focusWindow = wxWindow::FindFocus();
+    if (focusWindow)
+    {
+        while (focusWindow &&
+                !focusWindow->IsKindOf(CLASSINFO(wxDialog)) &&
+                !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
+
+            focusWindow = focusWindow->GetParent();
+
+        if (focusWindow)
+            parent = focusWindow;
+    }
+    return parent;
+}
+
 // Prompts user to open a file, using file specs in templates.
 // How to implement in wxWindows? Must extend the file selector
 // dialog or implement own; OR match the extension to the
@@ -1331,36 +1364,53 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     wxString descrBuf = wxT("*.*");
 #endif
 
-    int FilterIndex = 0;
+    int FilterIndex = -1;
+
+    wxWindow* parent = wxFindSuitableParent();
+
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
                                         m_lastDirectory,
                                         wxT(""),
                                         &FilterIndex,
                                         descrBuf,
                                         0,
-                                        wxTheApp->GetTopWindow());
+                                        parent);
 
+    wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
     if (!pathTmp.IsEmpty())
     {
+        if (!wxFileExists(pathTmp))
+        {
+            wxString msgTitle;
+            if (!wxTheApp->GetAppName().IsEmpty())
+                msgTitle = wxTheApp->GetAppName();
+            else
+                msgTitle = wxString(_("File error"));
+            
+            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
+                parent);
+
+            path = wxT("");
+            return (wxDocTemplate *) NULL;
+        }
         m_lastDirectory = wxPathOnly(pathTmp);
 
         path = pathTmp;
 
-        // This is dodgy in that we're selecting the template on the
-        // basis of the file extension, which may not be a standard
-        // one. We really want to know exactly which template was
-        // chosen by using a more advanced file selector.
-        wxDocTemplate *theTemplate = FindTemplateForPath(path);
-        if ( !theTemplate )
+        // first choose the template using the extension, if this fails (i.e.
+        // wxFileSelectorEx() didn't fill it), then use the path
+        if ( FilterIndex != -1 )
             theTemplate = templates[FilterIndex];
-
-        return theTemplate;
+        if ( !theTemplate )
+            theTemplate = FindTemplateForPath(path);
     }
     else
     {
         path = wxT("");
-        return (wxDocTemplate *) NULL;
     }
+
+    return theTemplate;
+
 #if 0
     // In all other windowing systems, until we have more advanced
     // file selectors, we must select the document type (template) first, and
@@ -1414,8 +1464,10 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
         return temp;
     }
 
+    wxWindow* parent = wxFindSuitableParent();
+
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
-            strings, (void **)data);
+            strings, (void **)data, parent);
     delete[] strings;
     delete[] data;
     return theTemplate;
@@ -1437,8 +1489,10 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
             n ++;
         }
     }
+    wxWindow* parent = wxFindSuitableParent();
+
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
-            strings, (void **)data);
+            strings, (void **)data, parent);
     delete[] strings;
     delete[] data;
     return theTemplate;
@@ -1603,7 +1657,7 @@ void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 
 void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
-    int n = event.GetSelection() - wxID_FILE1;  // the index in MRU list
+    int n = event.GetId() - wxID_FILE1;  // the index in MRU list
     wxString filename(m_docManager->GetHistoryFile(n));
     if ( !filename.IsEmpty() )
     {
@@ -1619,8 +1673,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
             // about it
             m_docManager->RemoveFileFromHistory(n);
 
-            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\n"
-                         "It has been also removed from the MRU files list."),
+            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\nIt has been also removed from the MRU files list."),
                        filename.c_str());
         }
     }
@@ -2165,7 +2218,7 @@ bool wxTransferFileToStream(const wxString& filename, ostream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2180,7 +2233,7 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("wb"))) == NULL)
     {
         return FALSE;
     }
@@ -2200,7 +2253,7 @@ bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+    if ((fd1 = wxFopen (filename, wxT("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2215,7 +2268,7 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
     FILE *fd1;
     char ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    if ((fd1 = wxFopen (filename, wxT("wb"))) == NULL)
     {
         return FALSE;
     }

@@ -38,11 +38,13 @@
 #include "wx/string.h"
 #include "wx/variant.h"
 
+#if wxUSE_TIMEDATE
 IMPLEMENT_DYNAMIC_CLASS(wxDate, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxTime, wxObject)
 
 wxTime::tFormat    wxTime::ms_Format    = wxTime::wx12h;
 wxTime::tPrecision wxTime::ms_Precision  = wxTime::wxStdMinSec;
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxVariantData, wxObject)
 
@@ -1350,8 +1352,8 @@ bool wxVariant::operator== (const wxString& value) const
     wxString thisValue;
     if (!Convert(&thisValue))
         return FALSE;
-    else
-        return (value == thisValue);
+
+    return value == thisValue;
 }
 
 bool wxVariant::operator!= (const wxString& value) const
@@ -1448,8 +1450,8 @@ bool wxVariant::operator== (const wxTime& value) const
     wxTime thisValue;
     if (!Convert(&thisValue))
         return FALSE;
-    else
-        return (value == thisValue);
+
+    return value == thisValue;
 }
 
 bool wxVariant::operator!= (const wxTime& value) const
@@ -1476,8 +1478,8 @@ bool wxVariant::operator== (const wxDate& value) const
     wxDate thisValue;
     if (!Convert(&thisValue))
         return FALSE;
-    else
-        return (value == thisValue);
+
+    return (value == thisValue);
 }
 
 bool wxVariant::operator!= (const wxDate& value) const
@@ -1507,7 +1509,7 @@ bool wxVariant::operator== (void* value) const
 
 bool wxVariant::operator!= (void* value) const
 {
-    return (!((*this) == value));
+    return (!((*this) == (void*) value));
 }
 
 void wxVariant::operator= (void* value)
@@ -1666,13 +1668,12 @@ bool wxVariant::GetBool() const
 wxString wxVariant::GetString() const
 {
     wxString value;
-    if (Convert(& value))
-        return value;
-    else
+    if (!Convert(& value))
     {
         wxFAIL_MSG(wxT("Could not convert to a string"));
-        return wxString("");
     }
+
+    return value;
 }
 
 // For some reason, Watcom C++ can't link variant.cpp with time/date classes compiled
@@ -1680,27 +1681,25 @@ wxString wxVariant::GetString() const
 wxTime wxVariant::GetTime() const
 {
     wxTime value;
-    if (Convert(& value))
-        return value;
-    else
+    if (!Convert(& value))
     {
         wxFAIL_MSG(wxT("Could not convert to a time"));
-        return wxTime();
     }
+
+    return value;
 }
 
 wxDate wxVariant::GetDate() const
 {
     wxDate value;
-    if (Convert(& value))
-        return value;
-    else
+    if (!Convert(& value))
     {
         wxFAIL_MSG(wxT("Could not convert to a date"));
-        return wxDate();
     }
+
+    return value;
 }
-#endif
+#endif // wxUSE_TIMEDATE
 
 void* wxVariant::GetVoidPtr() const
 {

@@ -41,9 +41,13 @@ BEGIN_EVENT_TABLE(wxSashLayoutWindow, wxSashWindow)
     EVT_QUERY_LAYOUT_INFO(wxSashLayoutWindow::OnQueryLayoutInfo)
 END_EVENT_TABLE()
 
-wxSashLayoutWindow::wxSashLayoutWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos,
-        const wxSize& size, long style, const wxString& name):
-    wxSashWindow(parent, id, pos, size, style, name)
+bool wxSashLayoutWindow::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
+        const wxSize& size, long style, const wxString& name)
+{
+    return wxSashWindow::Create(parent, id, pos, size, style, name);
+}
+
+void wxSashLayoutWindow::Init()
 {
     m_orientation = wxLAYOUT_HORIZONTAL;
     m_alignment = wxLAYOUT_TOP;
@@ -153,7 +157,15 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
     {
         // If not in query mode, resize the window.
         // TODO: add wxRect& form to wxWindow::SetSize
+        wxSize sz = GetSize();
+        wxPoint pos = GetPosition();
         SetSize(thisRect.x, thisRect.y, thisRect.width, thisRect.height);
+
+        // Make sure the sash is erased when the window is resized
+        if ((pos.x != thisRect.x || pos.y != thisRect.y || sz.x != thisRect.width || sz.y != thisRect.height) &&
+            (GetSashVisible(wxSASH_TOP) || GetSashVisible(wxSASH_RIGHT) || GetSashVisible(wxSASH_BOTTOM) || GetSashVisible(wxSASH_LEFT)))
+            Refresh(TRUE);
+
     }
 
     event.SetRect(clientSize);
@@ -163,6 +175,8 @@ void wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent& event)
 /*
  * wxLayoutAlgorithm
  */
+
+#if wxUSE_MDI_ARCHITECTURE
 
 // Lays out windows for an MDI frame. The MDI client area gets what's left
 // over.
@@ -200,6 +214,8 @@ bool wxLayoutAlgorithm::LayoutMDIFrame(wxMDIParentFrame* frame, wxRect* r)
 
     return TRUE;
 }
+
+#endif // wxUSE_MDI_ARCHITECTURE
 
 // Layout algorithm for any window. mainWindow gets what's left over.
 bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
@@ -242,11 +258,14 @@ bool wxLayoutAlgorithm::LayoutWindow(wxWindow* parent, wxWindow* mainWindow)
     {
         wxWindow* win = (wxWindow*) node->Data();
 
-        event.SetId(win->GetId());
-        event.SetEventObject(win);
-        event.SetFlags(0); // ??
+        if (win != mainWindow)
+        {
+            event.SetId(win->GetId());
+            event.SetEventObject(win);
+            event.SetFlags(0); // ??
 
-        win->GetEventHandler()->ProcessEvent(event);
+            win->GetEventHandler()->ProcessEvent(event);
+        }
 
         node = node->Next();
     }

@@ -1,5 +1,8 @@
-This is the wxWindows for Windows Preview.
+This is wxWindows for Windows (wxMSW)
+-------------------------------------
 
-For more information, please see changes.txt, todo.txt, and the
-manuals.
+For information on installing wxWindows, please see install.txt.
+
+For further information, please see docs/html/index.htm and the
+wxWindows reference manual.
 

@@ -111,7 +111,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_widget = gtk_combo_new();
 
     // make it more useable
-    gtk_combo_set_use_arrows_always(GTK_COMBO(m_widget), TRUE);
+    gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
+    
+    // and case-sensitive
+    gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
+
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -577,6 +581,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
             if ( FindString(value) == wxNOT_FOUND )
             {
                 Append(value);
+                SetStringSelection(value);
 
                 // and generate the selected event for it
                 wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );

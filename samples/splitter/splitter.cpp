@@ -90,7 +90,7 @@ DECLARE_EVENT_TABLE()
 class MyCanvas: public wxScrolledWindow
 {
 public:
-	MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h, const wxString &name);
+	MyCanvas(wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, const wxString& name = "");
 	virtual ~MyCanvas();
 
   virtual void OnDraw(wxDC& dc);
@@ -170,12 +170,12 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
   wxSize sz( m_splitter->GetSize() );
   wxLogMessage( "Initial splitter size: %d %d\n", (int)sz.x, (int)sz.y );
 
-  m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, 0, 0, 400, 400, "Test1" );
+  m_leftCanvas = new MyCanvas(m_splitter, CANVAS1, wxPoint(0, 0), wxSize(400, 400), "Test1" );
   m_leftCanvas->SetBackgroundColour(*wxRED);
   m_leftCanvas->SetScrollbars(20, 20, 50, 50);
   m_leftCanvas->SetCursor(wxCursor(wxCURSOR_MAGNIFIER));
 
-  m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, 0, 0, 400, 400, "Test2" );
+  m_rightCanvas = new MyCanvas(m_splitter, CANVAS2, wxPoint(0, 0), wxSize(400, 400), "Test2" );
   m_rightCanvas->SetBackgroundColour(*wxCYAN);
   m_rightCanvas->SetScrollbars(20, 20, 50, 50);
   m_rightCanvas->Show(FALSE);
@@ -256,8 +256,8 @@ void MyFrame::UpdatePosition()
   SetStatusText(str);
 }
 
-MyCanvas::MyCanvas(wxWindow* parent, wxWindowID id, int x, int y, int w, int h, const wxString &name ) :
-	wxScrolledWindow(parent, id, wxPoint(x, y), wxSize(w, h), 0, name )
+MyCanvas::MyCanvas(wxWindow* parent, wxWindowID id, const wxPoint& point, const wxSize& size, const wxString &name ) :
+	wxScrolledWindow(parent, id, point, size, 0, name )
 {
 }
 

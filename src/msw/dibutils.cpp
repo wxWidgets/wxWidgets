@@ -167,7 +167,7 @@ int wxDibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi)
   bmf.bfReserved1 = 0;
   bmf.bfReserved2 = 0;
   bmf.bfOffBits = sizeof(bmf) + (char FAR*)(wxDibPtr(lpbi)) - (char FAR*)lpbi;
-#if 1 // defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || defined(wxUSE_NORLANDER_HEADERS)
+#if 1 // defined( __WATCOMC__) || defined(__VISUALC__) || defined(__SC__) || defined(__SALFORDC__) || defined(__MWERKS__) || wxUSE_NORLANDER_HEADERS
   #define HWRITE_2ND_ARG_TYPE   LPCSTR
 #else // don't know who needs this...
   #define HWRITE_2ND_ARG_TYPE   LPBYTE

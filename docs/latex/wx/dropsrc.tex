@@ -2,7 +2,7 @@
 
 This class represents a source for a drag and drop operation.
 
-See \helpref{Drag'n'Drop overview}{wxdndoverview} and \helpref{wxDataObject overview}{wxdataobjectoverview} 
+See \helpref{Drag and drop overview}{wxdndoverview} and \helpref{wxDataObject overview}{wxdataobjectoverview} 
 for more information.
 
 \wxheading{Derived from}
@@ -37,12 +37,31 @@ enum wxDragResult
 
 \membersection{wxDropSource::wxDropSource}\label{wxdropsourcewxdropsource}
 
-\func{}{wxDropSource}{\param{wxWindow*}{ win = NULL}}
+\func{}{wxDropSource}{\param{wxWindow*}{ win = NULL},\param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconNone = wxNullIconOrCursor}}
 
-Default/wxGTK-specific constructor. If you use the default constructor you must
-call \helpref{SetData}{wxdropsourcesetdata} later.
+\func{}{wxDropSource}{\param{wxDataObject\&}{ data}, \param{wxWindow*}{ win = NULL},\param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconCopy = wxNullIconOrCursor}, \param{const wxIconOrCursor\& }{iconNone = wxNullIconOrCursor}}
 
-Note that {\it win} is required by the GTK port and therefore should always be set.
+The constructors for wxDataObject.
+
+If you use the constructor without {\it data} parameter you must call 
+\helpref{SetData}{wxdropsourcesetdata} later.
+
+Note that the exact type of {\it iconCopy} and subsequent parameters differs
+between wxMSW and wxGTK: these are cursors under Windows but icons for GTK.
+You should use the macro \helpref{wxDROP\_ICON}{wxdropicon} in portable
+programs instead of directly using either of these types.
+
+\wxheading{Parameters}
+
+\docparam{win}{The window which initiates the drag and drop operation.}
+
+\docparam{iconCopy}{The icon or cursor used for feedback for copy operation.}
+
+\docparam{iconMove}{The icon or cursor used for feedback for move operation.}
+
+\docparam{iconNone}{The icon or cursor used for feedback when operation can't be done.}
+
+{\it win} is the window which initiates the drag and drop operation.
 
 \membersection{wxDropSource::\destruct{wxDropSource}}\label{wxdropsourcedtor}
 

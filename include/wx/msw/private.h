@@ -59,7 +59,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+#if defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS
 #ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
 #endif
@@ -67,44 +67,17 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 
 // this defines a CASTWNDPROC macro which casts a pointer to the type of a
 // window proc
+
 #ifdef __GNUWIN32_OLD__
-#  define CASTWNDPROC (long unsigned)
+    #define CASTWNDPROC (long unsigned)
 #else
-#  ifdef __BORLANDC__
-
-#  ifdef __WIN32__
-#if __BORLANDC__ > 0x530
-       typedef long (__stdcall * WndProcCast)( HWND__*, unsigned int, unsigned int, long) ;
-#else
-       typedef int (pascal * WndProcCast) ();
-#endif
-#      define CASTWNDPROC (WndProcCast)
-#  else
-       typedef int (pascal * WndProcCast) ();
-#      define CASTWNDPROC (WndProcCast)
-#  endif
-
-#  else
-#    if defined (__WIN32__) && defined(STRICT)
-       typedef long (_stdcall * WndProcCast) (HWND, unsigned int, unsigned int, long);
-#      define CASTWNDPROC (WndProcCast)
-#    elif defined(__WIN16__)
-#    ifdef __BORLANDC__
-       typedef int (pascal * WndProcCast) ();
-#      define CASTWNDPROC (WndProcCast)
-#    else
-#      if defined(__VISUALC__) && defined(STRICT)
-#        define CASTWNDPROC (WNDPROC)
-#      else
-         typedef int (PASCAL * WndProcCast) ();
-#        define CASTWNDPROC (WndProcCast)
-#      endif
-#    endif
-#    else
-#      define CASTWNDPROC
-#    endif
-#  endif
-#endif
+    #if defined(STRICT) || defined(__GNUC__)
+        typedef WNDPROC WndProcCast;
+    #else
+        typedef FARPROC WndProcCast;
+    #endif
+    #define CASTWNDPROC (WndProcCast)
+#endif // __GNUWIN32_OLD__
 
 // ---------------------------------------------------------------------------
 // some stuff for old Windows versions (FIXME: what does it do here??)
@@ -182,7 +155,8 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #define DEFAULT_ITEM_HEIGHT 80
 
 // Scale font to get edit control height
-#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
+//#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (3*(cy)/2)
+#define EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)    (cy+8)
 
 // Generic subclass proc, for panel item moving/sizing and intercept
 // EDIT control VK_RETURN messages
@@ -215,6 +189,8 @@ extern LONG APIENTRY _EXPORT
 #else
 #define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
 #endif
+
+#if wxUSE_GUI
 
 #include <wx/gdicmn.h>
 
@@ -314,14 +290,14 @@ private:
 #define GetHcursor()            ((HCURSOR)GetHCURSOR())
 #define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
 
+#define GetHfont()              ((HFONT)GetHFONT())
+#define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
+
+#endif // wxUSE_GUI
+
 // ---------------------------------------------------------------------------
 // global data
 // ---------------------------------------------------------------------------
-
-#if 0 // where is this??
-// The MakeProcInstance version of the function wxSubclassedGenericControlProc
-WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
-#endif // 0
 
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 
@@ -349,6 +325,7 @@ WXDLLEXPORT wxWindow* wxFindWinFromHandle(WXHWND hWnd);
 WXDLLEXPORT void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font);
 WXDLLEXPORT void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
 WXDLLEXPORT wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
+WXDLLEXPORT wxFontEncoding wxGetFontEncFromCharSet(int charset);
 
 WXDLLEXPORT void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLEXPORT void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

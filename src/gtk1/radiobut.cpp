@@ -148,7 +148,7 @@ void wxRadioButton::SetLabel( const wxString& label )
 void wxRadioButton::SetValue( bool val )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid radiobutton") );
-  
+
     if (val == GetValue())
         return;
 
@@ -162,8 +162,10 @@ void wxRadioButton::SetValue( bool val )
     else
     {
         // should give an assert
+        // RL - No it shouldn't.  A wxGenericValidator might try to set it
+        //      as FALSE.  Failing silently is probably TRTTD here.
     }
-	
+
     gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
       GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 }

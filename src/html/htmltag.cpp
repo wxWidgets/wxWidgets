@@ -59,7 +59,9 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
             dummy[0] = 0; i = 0;
-            while ((src[pos] != wxT('>')) && (src[pos] != wxT(' '))) {
+            while (src[pos] != wxT('>') &&
+                   src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
+                   src[pos] != wxT('\n') && src[pos] != wxT('\t')) {
                 dummy[i] = src[pos++];
                 if ((dummy[i] >= wxT('a')) && (dummy[i] <= wxT('z'))) dummy[i] -= (wxT('a') - wxT('A'));
                 i++;
@@ -125,30 +127,54 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     // fill-in name, params and begin pos:
     m_Name = m_Params = wxEmptyString;
     i = pos+1;
-    if (source[i] == '/') {m_Ending = TRUE; i++;}
+    if (source[i] == '/') { m_Ending = TRUE; i++; }
     else m_Ending = FALSE;
 
-    while ((i < end_pos) && ((c = source[i++]) != ' ') && (c != '>')) {
+    // find tag's name and convert it to uppercase:
+    while ((i < end_pos) && 
+               ((c = source[i++]) != ' ' && c != '\r' && c != '\n' && c != '\t' &&
+                c != '>')) 
+	{
         if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
         m_Name += c;
     }
 
+    // if the tag has parameters, read them and "normalize" them,
+    // i.e. convert to uppercase, replace whitespaces by spaces and 
+    // remove whitespaces around '=':
     if (source[i-1] != '>')
-        while ((i < end_pos) && ((c = source[i++]) != '>')) {
+        while ((i < end_pos) && ((c = source[i++]) != '>')) 
+	    {
             if ((c >= 'a') && (c <= 'z')) c -= ('a' - 'A');
+            if (c == '\r' || c == '\n' || c == '\t') c = ' '; // make future parsing a bit simpler
             m_Params += c;
-            if (c == '"') {
+            if (c == '"') 
+	        {
+                // remove spaces around the '=' character:
+                if (m_Params.Length() > 1 && 
+                    m_Params[m_Params.Length()-2] == ' ')
+                {
+                    m_Params.RemoveLast();
+                    while (m_Params.Length() > 0 && m_Params.Last() == ' ') 
+                        m_Params.RemoveLast();
+                    m_Params += '"';
+                }
+                while ((i < end_pos) && (source[i++] == ' ')) {}
+                if (i < end_pos) i--;
+            
+                // ...and copy the value to m_Params:
                 while ((i < end_pos) && ((c = source[i++]) != '"')) m_Params += c;
                 m_Params += c;
             }
-            else if (c == '\'') {
+            else if (c == '\'') 
+	        {
                 while ((i < end_pos) && ((c = source[i++]) != '\'')) m_Params += c;
                 m_Params += c;
             }
         }
    m_Begin = i;
 
-   cache -> QueryTag(pos, &m_End1, &m_End2);
+   cache->QueryTag(pos, &m_End1, &m_End2);
    if (m_End1 > end_pos) m_End1 = end_pos;
    if (m_End2 > end_pos) m_End2 = end_pos;
 }

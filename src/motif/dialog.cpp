@@ -499,6 +499,20 @@ int wxDialog::ShowModal()
 
         XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
         wxTheApp->ProcessXEvent((WXEvent*) &event);
+
+        if (XtAppPending( (XtAppContext) wxTheApp->GetAppContext() ) == 0)
+        {
+            if (!wxTheApp->ProcessIdle())
+            {
+#if wxUSE_THREADS
+                // leave the main loop to give other threads a chance to
+                // perform their GUI work
+                wxMutexGuiLeave();
+                wxUsleep(20);
+                wxMutexGuiEnter();
+#endif
+            }
+        }
     }
 
     // Remove modal dialog flag from stack

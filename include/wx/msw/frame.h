@@ -149,6 +149,9 @@ protected:
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
 
+    // the last focused child: we restore focus to it on activation
+    wxWindow             *m_winLastFocused;
+
     // Data to save/restore when calling ShowFullScreen
     long                  m_fsStyle; // Passed to ShowFullScreen
     wxRect                m_fsOldSize;

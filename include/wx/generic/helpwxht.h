@@ -58,7 +58,7 @@ DECLARE_CLASS(wxHelpControllerHtml)
    
 private:
    /// Call the browser using a relative URL.
-   virtual bool DisplayHelp(wxString const &);
+   virtual bool DisplayHelp(const wxString &);
 protected:
    friend class wxHelpFrame;
    class wxHelpFrame *m_Frame;

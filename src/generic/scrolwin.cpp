@@ -534,10 +534,10 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
-        if (old_x == m_xScrollPosition) return;
-
-        m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
-        m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+        if (old_x != m_xScrollPosition) {
+            m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
+            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+        }
     }
     if ((y_pos != -1) && (m_yScrollPixelsPerLine))
     {
@@ -554,10 +554,10 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
         
-        if (old_y == m_yScrollPosition) return;
-
-        m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
-        m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+        if (old_y != m_yScrollPosition) {
+            m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
+            m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+        }
     }
 
 #ifdef __WXMAC__

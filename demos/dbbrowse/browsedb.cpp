@@ -90,9 +90,9 @@ BrowserDB::~BrowserDB()
  Zeiger_auf_NULL(1);  // Clean up Tables and Databases (Commit, Close und delete)
 }  // BrowserDB destructor
 //----------------------------------------------------------------------------------------
-bool BrowserDB::Initialize(int Quite)
+bool BrowserDB::Initialize(int Quiet)
 {
- if (!OnStartDB(Quite))
+ if (!OnStartDB(Quiet))
  {
   wxLogMessage(_("\n\n-E-> BrowserDB::OnStartDB(%s) : Failed ! "),ODBCSource.c_str());
   return FALSE;
@@ -100,21 +100,21 @@ bool BrowserDB::Initialize(int Quite)
  return TRUE;
 }  // BrowserDB:Initialize
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnStartDB(int Quite)
+bool BrowserDB::OnStartDB(int Quiet)
 {
  wxStopWatch sw;
- if (!Quite)
+ if (!Quiet)
   wxLogMessage(_("\n-I-> BrowserDB::OnStartDB(%s) : Begin "),ODBCSource.c_str());
  if (db_BrowserDB != NULL)
  {
-  if (!Quite)
+  if (!Quiet)
    wxLogMessage(_("\n-I-> BrowserDB::OnStartDB() : DB is allready open."));
   return TRUE;
  }
  // Initialize the ODBC Environment for Database Operations
  if (SQLAllocEnv(&ConnectInf.Henv) != SQL_SUCCESS)
  {
-  if (!Quite)
+  if (!Quiet)
    wxLogMessage(_("\n-E-> BrowserDB::OnStartDB() : DB CONNECTION ERROR : A problem occured while trying to get a connection to the data source"));
   return FALSE;
  }
@@ -152,7 +152,7 @@ bool BrowserDB::OnStartDB(int Quite)
    strcpy(ConnectInf.Dsn, "");
    strcpy(ConnectInf.Uid, "");
    strcpy(ConnectInf.AuthStr, "");
-   if (!Quite)
+   if (!Quiet)
    {
     wxLogMessage(_("\n-E-> BrowserDB::OnConnectDataSource() DB CONNECTION ERROR : Unable to connect to the data source.\n\nCheck the name of your data source to verify it has been correctly entered/spelled.\n\nWith some databases, the user name and password must\nbe created with full rights to the table prior to making a connection\n(using tools provided by the database manufacturer)"));
     wxLogMessage(_("-I-> BrowserDB::OnStartDB(%s) : End - Time needed : %ld ms"),ODBCSource.c_str(),sw.Time());
@@ -160,7 +160,7 @@ bool BrowserDB::OnStartDB(int Quite)
    return FALSE;
   }
   //--------------------------------------------------------------------------------------
-  if (!Quite)
+  if (!Quiet)
   {
    Temp1 = db_BrowserDB->GetDatabaseName();
    Temp2 = db_BrowserDB->GetDataSource();
@@ -171,9 +171,9 @@ bool BrowserDB::OnStartDB(int Quite)
  } else return FALSE;
 }
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnCloseDB(int Quite)
+bool BrowserDB::OnCloseDB(int Quiet)
 {
- if (!Quite)
+ if (!Quiet)
   wxLogMessage(_("-I-> BrowserDB::OnCloseDB() : Begin "));
  if (db_BrowserDB)
  {
@@ -187,12 +187,12 @@ bool BrowserDB::OnCloseDB(int Quite)
   }
   db_BrowserDB = NULL;
  }
- if (!Quite)
+ if (!Quiet)
   wxLogMessage(_("\n-I-> BrowserDB::OnCloseDB() : End "));
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnGetNext(int Cols,int Quite)
+bool BrowserDB::OnGetNext(int Cols,int Quiet)
 {
  SDWORD cb;
  int      i_dbDataType;
@@ -326,7 +326,7 @@ bool BrowserDB::OnGetNext(int Cols,int Quite)
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnSelect(wxString tb_Name, int Quite)
+bool BrowserDB::OnSelect(wxString tb_Name, int Quiet)
 {
  wxStopWatch sw;
  wxString SQLStmt;
@@ -357,34 +357,34 @@ bool BrowserDB::OnSelect(wxString tb_Name, int Quite)
  //---------------------------------------------------------------------------------------
  // SetColDefs ( 0,"NAME",     DB_DATA_TYPE_VARCHAR,  Name,     SQL_C_CHAR,      sizeof(Name),    TRUE, TRUE);  // Primary index
  //---------------------------------------------------------------------------------------
- if (!Quite)
+ if (!Quiet)
  {
   wxLogMessage(_("\n-I-> BrowserDB::OnSelect(%s) Records(%d): End - Time needed : %ld ms"),tb_Name.c_str(),i_Records,sw.Time());
  }
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-bool BrowserDB::OnExecSql(wxString SQLStmt, int Quite)
+bool BrowserDB::OnExecSql(wxString SQLStmt, int Quiet)
 {
  //---------------------------------------------------------------------------------------
  if (!db_BrowserDB->ExecSql((char *)(SQLStmt.GetData())))
  {
   Temp0.Printf(_("\n-E-> BrowserDB::OnExecSQL - ODBC-Error with ExecSql of >%s<.\n-E-> "),SQLStmt.c_str());
   Temp0 += GetExtendedDBErrorMsg(__FILE__,__LINE__);
-  if (!Quite)
+  if (!Quiet)
    wxLogMessage(Temp0);
   else
    wxMessageBox("-E-> BrowserDB::OnExecSql - ExecSql()");
   return FALSE;
  }
- if (!Quite)
+ if (!Quiet)
  {
   // wxLogMessage(_("\n-I-> BrowserDB::OnExecSql(%s) - End - Time needed : %ld ms"),SQLStmt.c_str(),sw.Time());
  }
  return TRUE;
 }
 //----------------------------------------------------------------------------------------
-wxDbInf* BrowserDB::OnGetCatalog(int Quite)
+wxDbInf* BrowserDB::OnGetCatalog(int Quiet)
 {
  char UName[255];
  strcpy(UName,UserName);
@@ -392,13 +392,13 @@ wxDbInf* BrowserDB::OnGetCatalog(int Quite)
  return ct_BrowserDB;
 }
 //----------------------------------------------------------------------------------------
-wxColInf* BrowserDB::OnGetColumns(char *tableName, int numCols,int Quite)
+wxDbColInf* BrowserDB::OnGetColumns(char *tableName, int numCols, int Quiet)
 {
  char UName[255];
  int i;
  strcpy(UName,UserName);
  cl_BrowserDB = db_BrowserDB->GetColumns(tableName,&numCols,UName);
- cl_BrowserDB->pColFor = new wxColFor[numCols];
+ cl_BrowserDB->pColFor = new wxDbColFor[numCols];
  for (i=0;i<numCols;i++)
  {
   (cl_BrowserDB->pColFor+i)->Format(1,(cl_BrowserDB+i)->dbDataType,(cl_BrowserDB+i)->sqlDataType,

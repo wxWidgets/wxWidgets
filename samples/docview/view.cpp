@@ -46,74 +46,74 @@ END_EVENT_TABLE()
 // windows for displaying the view.
 bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
-  if (!singleWindowMode)
-  {
-    // Multiple windows
-    frame = wxGetApp().CreateChildFrame(doc, this, TRUE);
-    frame->SetTitle("DrawingView");
-
-    canvas = GetMainFrame()->CreateCanvas(this, frame);
+    if (!singleWindowMode)
+    {
+        // Multiple windows
+        frame = wxGetApp().CreateChildFrame(doc, this, TRUE);
+        frame->SetTitle("DrawingView");
+        
+        canvas = GetMainFrame()->CreateCanvas(this, frame);
 #ifdef __X__
-    // X seems to require a forced resize
-    int x, y;
-    frame->GetSize(&x, &y);
-    frame->SetSize(-1, -1, x, y);
+        // X seems to require a forced resize
+        int x, y;
+        frame->GetSize(&x, &y);
+        frame->SetSize(-1, -1, x, y);
 #endif
-    frame->Show(TRUE);
-  }
-  else
-  {
-    // Single-window mode
-    frame = GetMainFrame();
-    canvas = GetMainFrame()->canvas;
-    canvas->view = this;
-
-    // Associate the appropriate frame with this view.
-    SetFrame(frame);
-
-    // Make sure the document manager knows that this is the
-    // current view.
-    Activate(TRUE);
-
-    // Initialize the edit menu Undo and Redo items
-    doc->GetCommandProcessor()->SetEditMenu(((MyFrame *)frame)->editMenu);
-    doc->GetCommandProcessor()->Initialize();
-  }
-
-  return TRUE;
+        frame->Show(TRUE);
+    }
+    else
+    {
+        // Single-window mode
+        frame = GetMainFrame();
+        canvas = GetMainFrame()->canvas;
+        canvas->view = this;
+        
+        // Associate the appropriate frame with this view.
+        SetFrame(frame);
+        
+        // Make sure the document manager knows that this is the
+        // current view.
+        Activate(TRUE);
+        
+        // Initialize the edit menu Undo and Redo items
+        doc->GetCommandProcessor()->SetEditMenu(((MyFrame *)frame)->editMenu);
+        doc->GetCommandProcessor()->Initialize();
+    }
+    
+    return TRUE;
 }
 
 // Sneakily gets used for default print/preview
 // as well as drawing on the screen.
 void DrawingView::OnDraw(wxDC *dc)
 {
-  dc->SetFont(*wxNORMAL_FONT);
-  dc->SetPen(*wxBLACK_PEN);
-
-  wxNode *node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().First();
-  while (node)
-  {
-    DoodleSegment *seg = (DoodleSegment *)node->Data();
-    seg->Draw(dc);
-    node = node->Next();
-  }
+    dc->SetFont(*wxNORMAL_FONT);
+    dc->SetPen(*wxBLACK_PEN);
+    
+    wxNode *node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().First();
+    while (node)
+    {
+        DoodleSegment *seg = (DoodleSegment *)node->Data();
+        seg->Draw(dc);
+        node = node->Next();
+    }
 }
 
 void DrawingView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 {
-  if (canvas)
-    canvas->Refresh();
-
+    if (canvas)
+        canvas->Refresh();
+    
 /* Is the following necessary?
 #ifdef __WXMSW__
-  if (canvas)
-    canvas->Refresh();
+    if (canvas)
+        canvas->Refresh();
 #else
-  if (canvas)
+    if (canvas)
     {
-      wxClientDC dc(canvas);
-      dc.Clear();
-      OnDraw(& dc);
+        wxClientDC dc(canvas);
+        dc.Clear();
+        OnDraw(& dc);
     }
 #endif
 */
@@ -122,29 +122,29 @@ void DrawingView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 // Clean up windows used for displaying the view.
 bool DrawingView::OnClose(bool deleteWindow)
 {
-  if (!GetDocument()->Close())
-    return FALSE;
-
-  // Clear the canvas in  case we're in single-window mode,
-  // and the canvas stays.
-  canvas->Clear();
-  canvas->view = (wxView *) NULL;
-  canvas = (MyCanvas *) NULL;
-
-  wxString s(wxTheApp->GetAppName());
-  if (frame)
-    frame->SetTitle(s);
-
-  SetFrame((wxFrame *) NULL);
-
-  Activate(FALSE);
-  
-  if (deleteWindow && !singleWindowMode)
-  {
-    delete frame;
+    if (!GetDocument()->Close())
+        return FALSE;
+    
+    // Clear the canvas in  case we're in single-window mode,
+    // and the canvas stays.
+    canvas->Clear();
+    canvas->view = (wxView *) NULL;
+    canvas = (MyCanvas *) NULL;
+    
+    wxString s(wxTheApp->GetAppName());
+    if (frame)
+        frame->SetTitle(s);
+    
+    SetFrame((wxFrame *) NULL);
+    
+    Activate(FALSE);
+    
+    if (deleteWindow && !singleWindowMode)
+    {
+        delete frame;
+        return TRUE;
+    }
     return TRUE;
-  }
-  return TRUE;
 }
 
 void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
@@ -157,24 +157,24 @@ IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
 bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
-  frame = wxGetApp().CreateChildFrame(doc, this, FALSE);
-
-  int width, height;
-  frame->GetClientSize(&width, &height);
-  textsw = new MyTextWindow(this, frame, wxPoint(0, 0), wxSize(width, height), wxTE_MULTILINE);
-  frame->SetTitle("TextEditView");
-
+    frame = wxGetApp().CreateChildFrame(doc, this, FALSE);
+    
+    int width, height;
+    frame->GetClientSize(&width, &height);
+    textsw = new MyTextWindow(this, frame, wxPoint(0, 0), wxSize(width, height), wxTE_MULTILINE);
+    frame->SetTitle("TextEditView");
+    
 #ifdef __X__
-  // X seems to require a forced resize
-  int x, y;
-  frame->GetSize(&x, &y);
-  frame->SetSize(-1, -1, x, y);
+    // X seems to require a forced resize
+    int x, y;
+    frame->GetSize(&x, &y);
+    frame->SetSize(-1, -1, x, y);
 #endif
-
-  frame->Show(TRUE);
-  Activate(TRUE);
-  
-  return TRUE;
+    
+    frame->Show(TRUE);
+    Activate(TRUE);
+    
+    return TRUE;
 }
 
 // Handled by wxTextWindow
@@ -188,22 +188,22 @@ void TextEditView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint) )
 
 bool TextEditView::OnClose(bool deleteWindow)
 {
-  if (!GetDocument()->Close())
-    return FALSE;
+    if (!GetDocument()->Close())
+        return FALSE;
     
-  Activate(FALSE);
-
-  if (deleteWindow)
-  {
-    delete frame;
+    Activate(FALSE);
+    
+    if (deleteWindow)
+    {
+        delete frame;
+        return TRUE;
+    }
     return TRUE;
-  }
-  return TRUE;
 }
 
 /*
- * Window implementations
- */
+* Window implementations
+*/
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(MyCanvas::OnMouseEvent)
@@ -211,76 +211,76 @@ END_EVENT_TABLE()
 
 // Define a constructor for my canvas
 MyCanvas::MyCanvas(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style):
- wxScrolledWindow(frame, -1, pos, size, style)
+    wxScrolledWindow(frame, -1, pos, size, style)
 {
-  view = v;
+    view = v;
 }
 
 // Define the repainting behaviour
 void MyCanvas::OnDraw(wxDC& dc)
 {
-  if (view)
-    view->OnDraw(& dc);
+    if (view)
+        view->OnDraw(& dc);
 }
 
 // This implements a tiny doodling program. Drag the mouse using
 // the left button.
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
-  if (!view)
-    return;
+    if (!view)
+        return;
     
-  static DoodleSegment *currentSegment = (DoodleSegment *) NULL;
-
-  wxClientDC dc(this);
-  PrepareDC(dc);
-
-  dc.SetPen(*wxBLACK_PEN);
-
-  wxPoint pt(event.GetLogicalPosition(dc));
-
-  if (currentSegment && event.LeftUp())
-  {
-    if (currentSegment->lines.Number() == 0)
-    {
-      delete currentSegment;
-      currentSegment = (DoodleSegment *) NULL;
-    }
-    else
-    {
-      // We've got a valid segment on mouse left up, so store it.
-      DrawingDocument *doc = (DrawingDocument *)view->GetDocument();
-
-      doc->GetCommandProcessor()->Submit(new DrawingCommand("Add Segment", DOODLE_ADD, doc, currentSegment));
-
-      view->GetDocument()->Modify(TRUE);
-      currentSegment = (DoodleSegment *) NULL;
-    }
-  }
-  
-  if (xpos > -1 && ypos > -1 && event.Dragging())
-  {
-    if (!currentSegment)
-      currentSegment = new DoodleSegment;
-
-    DoodleLine *newLine = new DoodleLine;
-    newLine->x1 = (long)xpos; 
-    newLine->y1 = (long)ypos;
-    newLine->x2 = pt.x; 
-    newLine->y2 = pt.y;
-    currentSegment->lines.Append(newLine);
+    static DoodleSegment *currentSegment = (DoodleSegment *) NULL;
     
-    dc.DrawLine( (long)xpos, (long)ypos, pt.x, pt.y);
-  }
-  xpos = pt.x;
-  ypos = pt.y;
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    
+    dc.SetPen(*wxBLACK_PEN);
+    
+    wxPoint pt(event.GetLogicalPosition(dc));
+    
+    if (currentSegment && event.LeftUp())
+    {
+        if (currentSegment->lines.Number() == 0)
+        {
+            delete currentSegment;
+            currentSegment = (DoodleSegment *) NULL;
+        }
+        else
+        {
+            // We've got a valid segment on mouse left up, so store it.
+            DrawingDocument *doc = (DrawingDocument *)view->GetDocument();
+            
+            doc->GetCommandProcessor()->Submit(new DrawingCommand("Add Segment", DOODLE_ADD, doc, currentSegment));
+            
+            view->GetDocument()->Modify(TRUE);
+            currentSegment = (DoodleSegment *) NULL;
+        }
+    }
+    
+    if (xpos > -1 && ypos > -1 && event.Dragging())
+    {
+        if (!currentSegment)
+            currentSegment = new DoodleSegment;
+        
+        DoodleLine *newLine = new DoodleLine;
+        newLine->x1 = (long)xpos; 
+        newLine->y1 = (long)ypos;
+        newLine->x2 = pt.x; 
+        newLine->y2 = pt.y;
+        currentSegment->lines.Append(newLine);
+        
+        dc.DrawLine( (long)xpos, (long)ypos, pt.x, pt.y);
+    }
+    xpos = pt.x;
+    ypos = pt.y;
 }
 
 // Define a constructor for my text subwindow
 MyTextWindow::MyTextWindow(wxView *v, wxFrame *frame, const wxPoint& pos, const wxSize& size, const long style):
- wxTextCtrl(frame, -1, "", pos, size, style)
+    wxTextCtrl(frame, -1, "", pos, size, style)
 {
-  view = v;
+    view = v;
 }
 
 

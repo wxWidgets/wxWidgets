@@ -82,14 +82,14 @@ static RECT        g_paintStruct;
 
 wxWindowDC::wxWindowDC()
 {
-  m_canvas = NULL;
+  m_pCanvas = NULL;
 }
 
 wxWindowDC::wxWindowDC(wxWindow *the_canvas)
 {
-  m_canvas = the_canvas;
+  m_pCanvas = the_canvas;
   m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(the_canvas) );
-  m_hDCCount++;
+  m_nDCCount++;
   //
   // default under PM is that Window and Client DC's are the same
   // so we offer a separate Presentation Space to use for the
@@ -103,12 +103,12 @@ wxWindowDC::wxWindowDC(wxWindow *the_canvas)
                       );
   ::GpiAssociate(m_hPS, NULLHANDLE);
   ::GpiAssociate(m_hPS, m_hDC);
-  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+  SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxWindowDC::~wxWindowDC()
 {
-  if (m_canvas && m_hDC)
+  if (m_pCanvas && m_hDC)
   {
     SelectOldObjects(m_hDC);
 
@@ -123,7 +123,7 @@ wxWindowDC::~wxWindowDC()
     m_hDC = NULLHANDLE;
   }
 
-  m_hDCCount--;
+  m_nDCCount--;
 }
 
 // ----------------------------------------------------------------------------
@@ -132,12 +132,12 @@ wxWindowDC::~wxWindowDC()
 
 wxClientDC::wxClientDC()
 {
-  m_canvas = NULL;
+  m_pCanvas = NULL;
 }
 
 wxClientDC::wxClientDC(wxWindow *the_canvas)
 {
-  m_canvas = the_canvas;
+  m_pCanvas = the_canvas;
 
   //
   // default under PM is that Window and Client DC's are the same
@@ -147,12 +147,12 @@ wxClientDC::wxClientDC(wxWindow *the_canvas)
   //
   // Default mode is BM_LEAVEALONE so we make no call Set the mix
   //
-  SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+  SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxClientDC::~wxClientDC()
 {
-  if ( m_canvas && GetHdc() )
+  if ( m_pCanvas && GetHdc() )
   {
     SelectOldObjects(m_hDC);
 
@@ -187,7 +187,7 @@ wxArrayDCInfo wxPaintDC::ms_cache;
 
 wxPaintDC::wxPaintDC()
 {
-    m_canvas = NULL;
+    m_pCanvas = NULL;
     m_hDC = 0;
 }
 
@@ -204,7 +204,7 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     }
 #endif // __WXDEBUG__
 
-    m_canvas = canvas;
+    m_pCanvas = canvas;
 
     // do we have a DC for this window in the cache?
     wxPaintDCInfo *info = FindInCache();
@@ -215,10 +215,10 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     }
     else // not in cache, create a new one
     {
-        m_hDC = (WXHDC)::WinBeginPaint(GetWinHwnd(m_canvas), NULLHANDLE, &g_paintStruct);
-        ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
+        m_hDC = (WXHDC)::WinBeginPaint(GetWinHwnd(m_pCanvas), NULLHANDLE, &g_paintStruct);
+        ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
-    SetBackground(wxBrush(m_canvas->GetBackgroundColour(), wxSOLID));
+    SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
 }
 
 wxPaintDC::~wxPaintDC()
@@ -252,7 +252,7 @@ wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
     for ( size_t n = 0; n < nCache; n++ )
     {
         info = &ms_cache[n];
-        if ( info->hwnd == m_canvas->GetHWND() )
+        if ( info->hwnd == m_pCanvas->GetHWND() )
         {
             if ( index )
                 *index = n;

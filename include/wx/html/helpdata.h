@@ -85,7 +85,7 @@ class WXDLLEXPORT wxSearchEngine : public wxObject
 {
     public:
         wxSearchEngine() : wxObject() {m_Keyword = NULL; }
-        ~wxSearchEngine() {if (m_Keyword) free(m_Keyword); }
+        ~wxSearchEngine() {if (m_Keyword) delete[] m_Keyword; }
 
         virtual void LookFor(const wxString& keyword, bool case_sensitive, bool whole_words_only);
         // Sets the keyword we will be searching for

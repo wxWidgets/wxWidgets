@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -99,6 +99,13 @@ wxHtmlWinParser::~wxHtmlWinParser()
 void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 {
     m_Modules.Append(module);
+}
+
+
+
+void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
+{
+    m_Modules.DeleteObject(module);
 }
 
 
@@ -355,7 +362,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
                            wxCONVERT_SUBSTITUTE))  
     { // total failture :-(
         wxLogError(_("Failed to display HTML document in %s encoding"), 
-	           wxFontMapper::GetEncodingName(enc).mb_str());
+	           wxFontMapper::GetEncodingName(enc).c_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
         delete m_EncConv;
         m_EncConv = NULL;
@@ -392,6 +399,7 @@ bool wxHtmlTagsModule::OnInit()
 
 void wxHtmlTagsModule::OnExit()
 {
+    wxHtmlWinParser::RemoveModule(this);
 }
 #endif
 

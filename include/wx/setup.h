@@ -16,24 +16,45 @@
 #endif
 
 #ifdef __WXBASE__
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/based/setup.h"
+#else
 #include "wx/base/setup.h"
+#endif
+
 #elif defined(__VMS)
 #include "wx_root:[wxwindows]setup.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/setup.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/setup.h"
+
 #elif defined(__WXQT__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/qtd/setup.h"
+#else
 #include "wx/qt/setup.h"
+#endif
+
 #elif defined(__WXMOTIF__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/motifd/setup.h"
+#else
 #include "wx/motif/setup.h"
+#endif
+
 #elif defined(__WXPM__)
 #include "wx/os2/setup.h"
 #elif defined(__WXSTUBS__)
 #include "wx/stubs/setup.h"
+
 #elif defined(__WXGTK__)
+#if defined(__USE_WXCONFIG__) && defined(__WXDEBUG__)
+#include "wx/gtkd/setup.h"
+#else
 #include "wx/gtk/setup.h"
 #endif
 
+#endif
 #endif
 	/* _WX_SETUP_H_BASE_ */

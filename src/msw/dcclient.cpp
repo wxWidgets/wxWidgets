@@ -110,7 +110,7 @@ wxWindowDC::~wxWindowDC()
 
     if ( !::ReleaseDC(GetWinHwnd(m_canvas), GetHdc()) )
     {
-        wxLogLastError("ReleaseDC");
+        wxLogLastError(wxT("ReleaseDC"));
     }
 
     m_hDC = 0;

@@ -34,7 +34,7 @@ public:
     wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
 
 private:
-    friend wxPaintDC;
+    friend class wxPaintDC;
 
     wxBitmap  m_bitmap;
 };

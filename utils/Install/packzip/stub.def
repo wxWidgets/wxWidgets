@@ -1,0 +1,6 @@
+DESCRIPTION 'The world-famous Info-ZIP unarchiving utilities'
+STACKSIZE 0x50000
+IMPORTS
+     UNZIP32.UzpVersion
+     UNZIP32.UzpMain
+     UNZIP32.UzpVersion2

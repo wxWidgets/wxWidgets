@@ -14,7 +14,10 @@ WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makevc.env
 
-all:    $(LIBTARGET)
+all:    $(EXTRATARGETS) $(LIBTARGET)
+
+$(D) :
+	mkdir $(D)
 
 wx:
         cd $(WXDIR)\src\msw

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaglist.cpp
+// Name:        generic/imaglist.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -28,11 +28,9 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)
 
-wxImageList::wxImageList( int width, int height, bool WXUNUSED(mask), int WXUNUSED(initialCount) )
+wxImageList::wxImageList( int width, int height, bool mask, int initialCount )
 {
-    m_width = width;
-    m_height = height;
-    Create();
+    (void)Create(width, height, mask, initialCount);
 }
 
 wxImageList::~wxImageList()
@@ -42,6 +40,14 @@ wxImageList::~wxImageList()
 int wxImageList::GetImageCount() const
 {
     return m_images.Number();
+}
+
+bool wxImageList::Create( int width, int height, bool WXUNUSED(mask), int WXUNUSED(initialCount) )
+{
+    m_width = width;
+    m_height = height;
+
+    return Create();
 }
 
 bool wxImageList::Create()

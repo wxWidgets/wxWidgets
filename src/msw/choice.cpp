@@ -32,6 +32,7 @@
     #include "wx/choice.h"
     #include "wx/utils.h"
     #include "wx/log.h"
+    #include "wx/brush.h"
     #include "wx/settings.h"
 #endif
 
@@ -59,17 +60,19 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | WS_TABSTOP | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+    long msStyle = WS_CHILD | CBS_DROPDOWNLIST | CBS_NOINTEGRALHEIGHT |
+                   WS_TABSTOP | WS_VISIBLE |
+                   WS_HSCROLL | WS_VSCROLL /* | WS_CLIPSIBLINGS */;
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
-    // the experience shows that wxChoice vs. wxComboBox distinction confuses
+    // Experience shows that wxChoice vs. wxComboBox distinction confuses
     // quite a few people - try to help them
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
                   !(style & wxCB_READONLY) &&
                   !(style & wxCB_SIMPLE),
-                  wxT("this style flag is ignored by wxChoice, you "
-                     "probably want to use a wxComboBox") );
+                  _T("this style flag is ignored by wxChoice, you ")
+                  _T("probably want to use a wxComboBox") );
 
     if ( !MSWCreateControl(wxT("COMBOBOX"), msStyle) )
         return FALSE;
@@ -102,7 +105,7 @@ int wxChoice::DoAppend(const wxString& item)
     int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LONG)item.c_str());
     if ( n == CB_ERR )
     {
-        wxLogLastError("SendMessage(CB_ADDSTRING)");
+        wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
     }
 
     return n;
@@ -201,7 +204,7 @@ wxString wxChoice::GetString(int n) const
     if (len) {
         if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
                            (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
-            wxLogLastError("SendMessage(CB_GETLBTEXT)");
+            wxLogLastError(wxT("SendMessage(CB_GETLBTEXT)"));
         }
         str.UngetWriteBuf();
     }
@@ -253,6 +256,14 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
+    // this should be merged with the same fix in wxComboBox::DoMoveWindow()
+    // but it can't be done in 2.2 so we duplicate the check here (but see
+    // comments there)
+    //
+    // NB: we do allow width == -1 though
+    if ( width < -1 )
+        return;
+
     // Ignore height parameter because height doesn't mean 'initially
     // displayed' height, it refers to the drop-down menu as well. The
     // wxWindows interpretation is different; also, getting the size returns
@@ -286,9 +297,8 @@ wxSize wxChoice::DoGetBestSize() const
 
     wChoice += 5*cx;
 
-    // Choice drop-down list depends on number of items (limited to 10)
-    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
+    // 10 items is arbitrary, of course, but choice will adjust itself
+    int hChoice = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wChoice, hChoice);
 }
@@ -336,4 +346,37 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     return TRUE;
 }
+
+WXHBRUSH wxChoice::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
 

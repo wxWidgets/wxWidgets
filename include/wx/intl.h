@@ -77,6 +77,9 @@ public:
         // restores old locale
     ~wxLocale();
 
+    // return TRUE if the locale was set successfully
+    bool IsOk() const { return m_pszOldLocale != NULL; }
+
     // returns locale name
     const wxChar *GetLocale() const { return m_strLocale; }
 
@@ -110,7 +113,7 @@ public:
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
     const wxMB2WXbuf GetString(const wxChar *szOrigString,
-			       const wxChar *szDomain = (const wxChar *) NULL) const;
+                               const wxChar *szDomain = (const wxChar *) NULL) const;
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
@@ -126,7 +129,7 @@ private:
     wxLocale      *m_pOldLocale;      // previous wxLocale
 
     wxMsgCatalog  *m_pMsgCat;         // pointer to linked list of catalogs
-    
+
     bool           m_bConvertEncoding;
 };
 

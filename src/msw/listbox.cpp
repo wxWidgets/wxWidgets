@@ -156,7 +156,7 @@ bool wxListBox::Create(wxWindow *parent,
     m_windowStyle = style;
 
     DWORD wstyle = WS_VISIBLE | WS_VSCROLL | WS_TABSTOP |
-                   LBS_NOTIFY | LBS_HASSTRINGS;
+                   LBS_NOTIFY | LBS_HASSTRINGS /* | WS_CLIPSIBLINGS */;
     if (m_windowStyle & wxLB_MULTIPLE)
         wstyle |= LBS_MULTIPLESEL;
     else if (m_windowStyle & wxLB_EXTENDED)
@@ -221,8 +221,6 @@ bool wxListBox::Create(wxWindow *parent,
 
     SetSize(x, y, width, height);
 
-    Show(TRUE);
-
     return TRUE;
 }
 
@@ -235,6 +233,11 @@ void wxListBox::SetupColours()
 {
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
     SetForegroundColour(GetParent()->GetForegroundColour());
+}
+
+bool wxListBox::HasMultipleSelection() const
+{
+    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
 }
 
 // ----------------------------------------------------------------------------
@@ -292,7 +295,12 @@ int wxListBox::DoAppend(const wxString& item)
 
 void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 {
-    ShowWindow(GetHwnd(), SW_HIDE);
+    // avoid flicker - but don't need to do this for a hidden listbox
+    bool hideAndShow = IsShown();
+    if ( hideAndShow )
+    {
+        ShowWindow(GetHwnd(), SW_HIDE);
+    }
 
     ListBox_ResetContent(GetHwnd());
 
@@ -304,8 +312,12 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
         if ( clientData )
         {
 #if wxUSE_OWNER_DRAWN
-            wxASSERT_MSG(clientData[i] == NULL,
-                         wxT("Can't use client data with owner-drawn listboxes"));
+            if ( m_windowStyle & wxLB_OWNERDRAW )
+            {
+                wxASSERT_MSG(clientData[i] == NULL,
+                             wxT("Can't use client data with owner-drawn listboxes"));
+            }
+            ListBox_SetItemData(GetHwnd(), i, clientData[i]);
 #else // !wxUSE_OWNER_DRAWN
             ListBox_SetItemData(GetHwnd(), i, clientData[i]);
 #endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
@@ -333,7 +345,11 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
 
     SetHorizontalExtent();
 
-    ShowWindow(GetHwnd(), SW_SHOW);
+    if ( hideAndShow )
+    {
+        // show the listbox back if we hid it
+        ShowWindow(GetHwnd(), SW_SHOW);
+    }
 }
 
 int wxListBox::FindString(const wxString& s) const
@@ -437,11 +453,6 @@ void wxListBox::DoSetItemClientData(int n, void *clientData)
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
 }
 
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
-}
-
 // Return number of selections and an array of selected integers
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
@@ -467,9 +478,10 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     }
     else  // single-selection listbox
     {
-        aSelections.Add(ListBox_GetCurSel(GetHwnd()));
+        if (ListBox_GetCurSel(GetHwnd()) > -1)
+            aSelections.Add(ListBox_GetCurSel(GetHwnd()));
 
-        return 1;
+        return aSelections.Count();
     }
 }
 
@@ -478,8 +490,7 @@ int wxListBox::GetSelection() const
 {
     wxCHECK_MSG( !HasMultipleSelection(),
                  -1,
-                 wxT("GetSelection() can't be used with multiple-selection "
-                    "listboxes, use GetSelections() instead.") );
+                 wxT("GetSelection() can't be used with multiple-selection listboxes, use GetSelections() instead.") );
 
     return ListBox_GetCurSel(GetHwnd());
 }
@@ -742,6 +753,11 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), FALSE );
 
     DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
+    UINT itemID = pStruct->itemID;
+
+    // the item may be -1 for an empty listbox
+    if ( itemID == (UINT)-1 )
+        return FALSE;
 
     long data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
 
@@ -752,7 +768,7 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxDC dc;
     dc.SetHDC((WXHDC)pStruct->hDC, FALSE);
     wxRect rect(wxPoint(pStruct->rcItem.left, pStruct->rcItem.top),
-            wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
+                wxPoint(pStruct->rcItem.right, pStruct->rcItem.bottom));
 
     return pItem->OnDrawItem(dc, rect,
             (wxOwnerDrawn::wxODAction)pStruct->itemAction,

@@ -22,7 +22,7 @@ public:
     wxColour     m_canvasTextColour;
 };
 
-// A modeless dialog
+// A custom modeless dialog
 class MyModelessDialog : public wxDialog
 {
 public:
@@ -31,6 +31,21 @@ public:
     void OnClose(wxCloseEvent& event);
 
 private:
+    DECLARE_EVENT_TABLE()
+};
+
+// A custom modal dialog
+class MyModalDialog : public wxDialog
+{
+public:
+    MyModalDialog(wxWindow *parent);
+
+    void OnButton(wxCommandEvent& event);
+
+private:
+    wxButton *m_btnFocused;
+    wxButton *m_btnDelete;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -54,6 +69,7 @@ public:
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
+    void ModalDlg(wxCommandEvent& event);
     void ModelessDlg(wxCommandEvent& event);
     void ShowProgress(wxCommandEvent& event);
 
@@ -101,6 +117,7 @@ enum
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
+    DIALOGS_MODAL,
     DIALOGS_MODELESS,
     DIALOGS_MODELESS_BTN,
     DIALOGS_PROGRESS

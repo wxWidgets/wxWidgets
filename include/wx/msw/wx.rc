@@ -41,7 +41,7 @@
 //
 
 wxResizeableDialog DIALOG DISCARDABLE  34, 22, 144, 75
-STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+STYLE DS_MODALFRAME | WS_CAPTION | WS_POPUP | WS_SYSMENU | WS_THICKFRAME
 CAPTION ""
 BEGIN
 #ifdef __WATCOMC__
@@ -145,3 +145,7 @@ plot_enl_bmp            BITMAP  "wx/msw/plot_enl.bmp"
 plot_shr_bmp            BITMAP  "wx/msw/plot_shr.bmp"
 plot_zin_bmp            BITMAP  "wx/msw/plot_zin.bmp"
 plot_zot_bmp            BITMAP  "wx/msw/plot_zot.bmp"
+
+// For obtaining the RGB values of standard colours
+wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
+

@@ -93,6 +93,14 @@ Returns TRUE if the Alt key was down at the time of the key event.
 
 Returns TRUE if the control key was down at the time of the key event.
 
+\membersection{wxKeyEvent::GetKeyCode}
+
+\constfunc{int}{GetKeyCode}{\void}
+
+Returns the virtual key code. ASCII events return normal ASCII values,
+while non-ASCII events return values such as {\bf WXK\_LEFT} for the
+left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual key codes.
+
 \membersection{wxKeyEvent::GetX}
 
 \constfunc{long}{GetX}{\void}
@@ -104,14 +112,6 @@ Returns the X position of the event.
 \constfunc{long}{GetY}{\void}
 
 Returns the Y position of the event.
-
-\membersection{wxKeyEvent::KeyCode}
-
-\constfunc{long}{KeyCode}{\void}
-
-Returns the virtual key code. ASCII events return normal ASCII values,
-while non-ASCII events return values such as {\bf WXK\_LEFT} for the
-left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual key codes.
 
 \membersection{wxKeyEvent::MetaDown}
 
@@ -126,6 +126,14 @@ Returns TRUE if the Meta key was down at the time of the key event.
 \constfunc{void}{GetPosition}{\param{long *}{x}, \param{long *}{y}}
 
 Obtains the position at which the key was pressed.
+
+\membersection{wxKeyEvent::HasModifiers}
+
+\constfunc{bool}{HasModifiers}{\void}
+
+Returns TRUE if either of {\sc Ctrl}, {\sc Alt} or {\sc Meta} keys was down
+at the time of the key event. Note that this function does not take into
+account the {\sc Shift} key state.
 
 \membersection{wxKeyEvent::ShiftDown}
 

@@ -6,7 +6,7 @@
 %% Created:     02.11.99
 %% RCS-ID:      $Id$
 %% Copyright:   (c) wxWindows team
-%% Licence:     wxWindows licence
+%% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NB: please keep the subsections in alphabetic order!
 
@@ -61,8 +61,8 @@ menu) and also how to process the notifications from it.
 
 This sample demonstrates the use of the \helpref{wxCheckListBox}{wxchecklistbox}
 class intercepting check, select and double click events. It also tests the
-use of various methods modifiying the control, such as by deleting items
-from it or inserting new once (these fucntions are actually implememted in
+use of various methods modifying the control, such as by deleting items
+from it or inserting new once (these functions are actually implemented in
 the parent class \helpref{wxListBox}{wxlistbox} so the sample tests that class
 as well). The layout of the dialog is created using a \helpref{wxBoxSizer}{wxboxsizer}
 demonstrating a simple dynamic layout.
@@ -70,7 +70,7 @@ demonstrating a simple dynamic layout.
 \subsection{Config sample}\label{sampleconfig}
 
 This sample demonstrates the \helpref{wxConfig}{wxconfigbase} classes in a platform
-indepedent way, i.e. it uses text based files to store a given configuration under
+indenpedent way, i.e. it uses text based files to store a given configuration under
 Unix and uses the Registry under Windows.
 
 See \helpref{wxConfig overview}{wxconfigoverview} for the descriptions of all
@@ -83,9 +83,9 @@ wxWindows. The sample tests their basic functionality, events, placement,
 modification in terms of colour and font as well as the possibility to change
 the controls programmatically, such as adding item to a list box etc. Apart
 from that, the sample uses a \helpref{wxNotebook}{wxnotebook} and tests most
-fetaures of this special control (using bitmap in the tabs, using
+features of this special control (using bitmap in the tabs, using 
 \helpref{wxSizers}{wxsizer} and \helpref{constraints}{wxlayoutconstraints} within
-notebook pages, advanving pages programmatically and vetoing a page change
+notebook pages, advancing pages programmatically and vetoing a page change
 by intercepting the \helpref{wxNotebookEvent}{wxnotebookevent}.
 
 The various controls tested are listed here:
@@ -119,7 +119,20 @@ system.
 \subsection{Dialogs sample}\label{sampledialogs}
 
 This sample shows how to use the common dialogs available from wxWindows. These
-dialogs are desrcibed in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+dialogs are described in details in the \helpref{Common dialogs overview}{commondialogsoverview}.
+
+\subsection{Dialup sample}\label{sampledialup}
+
+This sample shows \helpref{wxDialUpManager}{wxdialupmanager} 
+class. It displays in the status bar the information gathered through itsi
+nterface: in particular, the current connection status (online or offline) and
+whether the connection is permanent (in which case a string `LAN' appears in
+the thrid status bar field - but note that you may have be on a LAN not
+connected to the Internet, in which case you will not see this) or not.
+
+Using the menu entries, you may also dial or hang up the line if you have a
+modem attached and (this only makes sense for Windows) list the available
+connections.
 
 \subsection{Dynamic sample}\label{sampledynamic}
 
@@ -128,7 +141,7 @@ This sample is a very small sample that demonstrates the use of the
 should be used whenever it is not known at compile time, which control
 will receive which event or which controls are actually going to be in
 a dialog or frame. This is most typically the case for any scripting
-languge that would work as a wrapper for wxWindows or programs where
+language that would work as a wrapper for wxWindows or programs where
 forms or similar datagrams can be created by the uses.
 
 \subsection{Exec sample}\label{sampleexec}
@@ -138,10 +151,13 @@ The exec sample demonstrates the \helpref{wxExecute}{wxexecute} and
 external programs and the sample shows how to do this synchronously (waiting
 until the program terminates) or asynchronously (notification will come later).
 
+It also shows how to capture the output of the child process in both
+synchronous and asynchronous cases.
+
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
 This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
-class including placing subwindows into it and drawing simple graphics. It uses the
+class including placing subwindows into it and drawing simple graphics. It uses the 
 \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
 of scrolling does not show in the scrolled window itself, but in one of its subwindows.
 
@@ -226,7 +242,7 @@ the library to work with unsupported tags.
 handler (ships with wxWindows) allows you to access HTML pages stored 
 in compressed archive as if they were ordinary files.
 
-{\bf Virtual} is yet another VFS demo. This one generates pages at run-time.
+{\bf Virtual} is yet another virtual file systems demo. This one generates pages at run-time.
 You may find it useful if you need to display some reports in your application.
 
 {\bf Printing} explains use of \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting} 
@@ -234,7 +250,7 @@ class which serves as as-simple-as-possible interface for printing HTML
 documents without much work. In fact, only few function calls are sufficient.
 
 {\bf Help} and {\bf Helpview} are variations on displaying HTML help 
-(compatible with MS HTML Help Workshop). {\it Help} shows how to embed
+(compatible with MS HTML Help Workshop). {\it Help} shows how to embed 
 \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller} in your application
 while {\it Helpview} is simple tool that only pops up help window and
 displays help books given at command line.
@@ -244,7 +260,7 @@ displays help books given at command line.
 The image sample demonstrates the use of the \helpref{wxImage}{wximage} class
 and shows how to download images in a variety of formats, currently PNG, GIF,
 TIFF, JPEG, BMP, PNM and PCX. The top of the sample shows to rectangles, one
-of which is drawn directly in the window, the other one is drawn into a
+of which is drawn directly in the window, the other one is drawn into a 
 \helpref{wxBitmap}{wxbitmap}, converted to a wxImage, saved as a PNG image
 and then reloaded from the PNG file again so that conversions between wxImage
 and wxBitmap as well as loading and save PNG files are tested.
@@ -301,8 +317,8 @@ they set up their own event handler, and then request to be notified
 of {\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST} 
 (connection closed at the remote end) events. In the sample, the event
 handler is the same for all connections; to find out which socket the
-event is addressed to, the \helpref{GetSocket}{wxsocketeventgetsocket}
-function is used.
+event is addressed to, the \helpref{GetSocket}{wxsocketeventgetsocket} function
+is used.
 
 Although it might take some time to get used to the event-oriented
 system upon which wxSocket is built, the benefits are many. See, for
@@ -323,8 +339,8 @@ both clients and connection objects in the server set up an event handler
 to catch {\bf wxSOCKET\_LOST} events, each one is immediately notified
 if the other end closes the connection.
 
-There is also an URL test which shows how to use the \helpref{wxURL}{wxurl}
-class to fetch data from a given URL.
+There is also an URL test which shows how to use
+the \helpref{wxURL}{wxurl} class to fetch data from a given URL.
 
 The sockets sample is work in progress. Some things to do:
 
@@ -353,10 +369,10 @@ password, ignoring TAB, ignoring ENTER).
 
 Secondly it shows how to intercept a \helpref{wxKeyEvent}{wxkeyevent} in both
 the raw form using the {\tt EVT\_KEY\_UP} and {\tt EVT\_KEY\_DOWN} macros and the
-higherlevel from using the {\tt EVT\_CHAR} macro. All characters will be logged
+higher level from using the {\tt EVT\_CHAR} macro. All characters will be logged
 in a log window at the bottom of the main window. By pressing some of the function
-keys, you can test some actions in the text ctrl as well as get statitics on the
-text ctrls, which is useful for testing if these statitics actually are correct.
+keys, you can test some actions in the text ctrl as well as get statistics on the
+text ctrls, which is useful for testing if these stastitics actually are correct.
 
 Thirdly, on platforms which support it, the sample will offer to copy text to the 
 \helpref{wxClipboard}{wxclipboard} and to paste text from it. The GTK version will
@@ -397,7 +413,7 @@ The following things are demonstrated:
 and \helpref{wxToolBar::AddControl}{wxtoolbaraddcontrol}: see
 MyApp::InitToolbar in the sample.
 \item Using {\tt EVT\_UPDATE\_UI} handler for automatically enabling/disabling
-toolbar buttons without having to explicitly call EnableTool. This is is done
+toolbar buttons without having to explicitly call EnableTool. This is done
 in MyFrame::OnUpdateCopyAndCut.
 \item Using \helpref{wxToolBar::DeleteTool}{wxtoolbardeletetool} and 
 \helpref{wxToolBar::InsertTool}{wxtoolbarinserttool} to dynamically update the
@@ -414,4 +430,28 @@ the bottom part of the frame).
 Adding, inserting and deleting items and branches from the tree as well as
 sorting (in default alphabetical order as well as in custom one) is
 demonstrated here as well - try the corresponding menu entries.
+
+\subsection{Wizard sample}\label{samplewizard}
+
+This sample shows so-called wizard dialog (implemented using 
+\helpref{wxWizard}{wxwizard} and related classes). It shows almost all
+features supported:
+
+\begin{itemize}\itemsep=0pt
+\item Using bitmaps with the wizard and changing them depending on the page
+shown (notice that wxValidationPage in the sample has a different image from
+the other ones)
+\item Using \helpref{TransferDataFromWindow}{wxwindowtransferdatafromwindow} 
+to verify that the data entered is correct before passing to the next page
+(done in wxValidationPage which forces the user to check a checkbox before
+continuing).
+\item Using more elaborated techniques to allow returning to the previous
+page, but not continuing to the next one or vice versa (in wxRadioboxPage)
+\item This (wxRadioboxPage) page also shows how the page may process {\tt
+Cancel} button itself instead of relying on the wizard parent to do it.
+\item Normally, the order of the pages in the wizard is known at compile-time,
+but sometimes it depends on the user choices: wxCheckboxPage shows how to
+dynamically decide which page to display next (see also 
+\helpref{wxWizardPage}{wxwizardpage})
+\end{itemize}
 

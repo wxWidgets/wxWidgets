@@ -5,6 +5,8 @@ Last updated 19/3/2000.
 
 See also: todo.txt.
 
+- Sockets not yet working since idle wake-up not implemented.
+
 - wxTextCtrl doesn't work as a stream buffer in Linux/gcc.
 
 - No wxSpinButton.
@@ -21,14 +23,22 @@ See also: todo.txt.
   e.g. wxScrolledWindows, so maybe have wxSystemSettings value for
   scrollbar colour, and/or ability to set scrollbar colour independently.
 
-- wxFrame can accept events, but apps cannot draw into it for some reason,
-  so the rotate sample won't work. Workaround: use an embedded wxWindow.
+- wxFrame can accept events, but apps cannot draw into it for
+  Workaround: use an embedded wxWindow.
+
+- The background of a window sometimes isn't restored when changing
+  notebook pages (see sashtest, mdi examples). The notebook background
+  colour shows through. A resize, or scroll, restores the correct
+  background colour.
 
 - In Life! sample, text above slider isn't legible.
 
-- samples/html/helpview and samples/help show a problem when showing
-  the advanced HTML help controller: a BadDrawable X error occurs
- (unfortunately hard to tell where). Somewhere in wxHtmlHelpFrame.
+- samples/html/helpview and samples/help demonstrate that sometimes,
+  XPM images can't be loaded, perhaps only in 256-colour mode. This
+  will now cause an assert rather than an X error. But we need to
+  either cure the XPM loading problem, or provide alternative toolbar
+  buttons (for HelpView) and icons (for places where icons are used e.g.
+  in the log dialog).
 
 - Dialog Editor needs a lot of work.
 

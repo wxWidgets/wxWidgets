@@ -86,7 +86,7 @@ void wxBitmapRefData::Free()
     {
         if ( !::DeleteObject((HBITMAP)m_hBitmap) )
         {
-            wxLogLastError("DeleteObject(hbitmap)");
+            wxLogLastError(wxT("DeleteObject(hbitmap)"));
         }
     }
 
@@ -117,7 +117,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     ICONINFO iconInfo;
     if ( !::GetIconInfo(hicon, &iconInfo) )
     {
-        wxLogLastError("GetIconInfo");
+        wxLogLastError(wxT("GetIconInfo"));
 
         return FALSE;
     }
@@ -138,6 +138,10 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
     // wxWin convention
     refData->m_bitmapMask = new wxMask((WXHBITMAP)
                                         wxInvertMask(iconInfo.hbmMask, w, h));
+    if ( !::DeleteObject(iconInfo.hbmMask) )
+    {
+        wxLogLastError(_T("DeleteObject"));
+    }
 
 #if WXWIN_COMPATIBILITY_2
     refData->m_ok = TRUE;
@@ -269,7 +273,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
     HBITMAP hbmp = ::CreateBitmap(width, height, 1, depth, data);
     if ( !hbmp )
     {
-        wxLogLastError("CreateBitmap");
+        wxLogLastError(wxT("CreateBitmap"));
     }
 
     if ( data != bits )
@@ -326,7 +330,7 @@ bool wxBitmap::Create(int w, int h, int d)
         hbmp = ::CreateBitmap(w, h, 1, d, NULL);
         if ( !hbmp )
         {
-            wxLogLastError("CreateBitmap");
+            wxLogLastError(wxT("CreateBitmap"));
         }
     }
     else
@@ -335,7 +339,7 @@ bool wxBitmap::Create(int w, int h, int d)
         hbmp = ::CreateCompatibleBitmap(dc, w, h);
         if ( !hbmp )
         {
-            wxLogLastError("CreateCompatibleBitmap");
+            wxLogLastError(wxT("CreateCompatibleBitmap"));
         }
 
         GetBitmapData()->m_depth = wxDisplayDepth();
@@ -382,8 +386,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
 
     if ( !handler )
     {
-        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for "
-                       "type %d defined."), type);
+        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %d defined."), type);
 
         return FALSE;
     }
@@ -653,7 +656,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     HDC destDC = ::CreateCompatibleDC(NULL);
     if ( !srcDC || !destDC )
     {
-        wxLogLastError("CreateCompatibleDC");
+        wxLogLastError(wxT("CreateCompatibleDC"));
     }
 
     bool ok = TRUE;
@@ -661,7 +664,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     HGDIOBJ hbmpSrcOld = ::SelectObject(srcDC, GetHbitmapOf(bitmap));
     if ( !hbmpSrcOld )
     {
-        wxLogLastError("SelectObject");
+        wxLogLastError(wxT("SelectObject"));
 
         ok = FALSE;
     }
@@ -669,7 +672,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     HGDIOBJ hbmpDstOld = ::SelectObject(destDC, (HBITMAP)m_maskBitmap);
     if ( !hbmpDstOld )
     {
-        wxLogLastError("SelectObject");
+        wxLogLastError(wxT("SelectObject"));
 
         ok = FALSE;
     }
@@ -683,7 +686,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
             COLORREF col = GetPixel(srcDC, w, h);
             if ( col == CLR_INVALID )
             {
-                wxLogLastError("GetPixel");
+                wxLogLastError(wxT("GetPixel"));
 
                 // doesn't make sense to continue
                 ok = FALSE;
@@ -721,7 +724,7 @@ bool wxBitmapHandler::Create(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? Create(bitmap, data, width, height, depth) : FALSE;
+    return bitmap ? Create(bitmap, data, flags, width, height, depth) : FALSE;
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
@@ -843,13 +846,13 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
     HDC hdcDst = ::CreateCompatibleDC(NULL);
     if ( !hdcSrc || !hdcDst )
     {
-        wxLogLastError("CreateCompatibleDC");
+        wxLogLastError(wxT("CreateCompatibleDC"));
     }
 
     HBITMAP hbmpInvMask = ::CreateBitmap(w, h, 1, 1, 0);
     if ( !hbmpInvMask )
     {
-        wxLogLastError("CreateBitmap");
+        wxLogLastError(wxT("CreateBitmap"));
     }
 
     ::SelectObject(hdcSrc, hbmpMask);
@@ -858,7 +861,7 @@ extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
                    hdcSrc, 0, 0,
                    NOTSRCCOPY) )
     {
-        wxLogLastError("BitBlt");
+        wxLogLastError(wxT("BitBlt"));
     }
 
     ::DeleteDC(hdcSrc);

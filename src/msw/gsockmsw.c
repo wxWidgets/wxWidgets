@@ -58,8 +58,14 @@
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
 
+/* VZ: I don't know if _T() macro is always defined here? */
+#ifdef _UNICODE
+#define CLASSNAME  L"_GSocket_Internal_Window_Class"
+#define WINDOWNAME L"_GSocket_Internal_Window_Name"
+#else /* !Unicode */
 #define CLASSNAME  "_GSocket_Internal_Window_Class"
 #define WINDOWNAME "_GSocket_Internal_Window_Name"
+#endif /* Unicode/!Unicode */
 
 /* Maximum number of different GSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater

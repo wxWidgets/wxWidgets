@@ -96,7 +96,15 @@ public: \
   static wxProtoInfo g_proto_##class;
 
 #define IMPLEMENT_PROTOCOL(class, name, serv, host) \
-wxProtoInfo class::g_proto_##class(name, serv, host, CLASSINFO(class));
+wxProtoInfo class::g_proto_##class(name, serv, host, CLASSINFO(class)); \
+bool wxProtocolUse##class = TRUE;
+
+#define USE_PROTOCOL(class) \
+    extern bool wxProtocolUse##class ; \
+    static struct wxProtocolUserFor##class \
+    { \
+        wxProtocolUserFor##class() { wxProtocolUse##class = TRUE; } \
+    } wxProtocolDoUse##class;
 
 class WXDLLEXPORT wxProtoInfo : public wxObject
 {

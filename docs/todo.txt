@@ -14,38 +14,8 @@ Please see also:
   usage, how many classes of each kind are in use, etc.? That
   would be neat.
 
-- Documentation: mention include files with each class.
-
-- Document/update wxTime.
-
-- Document wxSpinCtrl & wxFontMapper.
-
-- Fix TCP/IP mode in dde sample (how to use; why does it crash).
-
 - In doc/view file selector, document type is selected by
   extension, not the type selected in the (Windows) file selector.
 
-- Add all makefiles/documentation for utils/serialize.
-
-- Implement wxScrolledWindow::OnChar to scroll the window using
-  the keyboard.
-
-- Documentation for ODBC classes
-
-For 2.1: small changes not involving rewriting anything
--------------------------------------------------------
-
 - wxArrayDouble class?
-
-- generate CREATE/DESTROY events just after/before a window (any window, not
-  just frame/dialog) is created/deleted
-
-- Dynamic menu handling: wxMenuBar::DeleteMenu(), InsertMenu()
-
-For 2.2: major new additions
--------------------------------------------------------
-
-- Unicode support (Win32 only probably)
-
-- DnD and OLE clipboard, uniform DnD/clipboard handling
 

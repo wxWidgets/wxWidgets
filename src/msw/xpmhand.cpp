@@ -55,7 +55,7 @@ static void XpmToBitmap(wxBitmap *bitmap,
     BITMAP bm;
     if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(bm), (LPSTR) & bm) )
     {
-        wxLogLastError("GetObject(bitmap)");
+        wxLogLastError(wxT("GetObject(bitmap)"));
     }
 
     refData->m_width     = bm.bmWidth;
@@ -67,7 +67,8 @@ static void XpmToBitmap(wxBitmap *bitmap,
     if (xmask)
     {
         wxMask *mask = new wxMask();
-        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap));
+        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap,
+                                                     bm.bmWidth, bm.bmHeight));
         bitmap->SetMask(mask);
     }
 }

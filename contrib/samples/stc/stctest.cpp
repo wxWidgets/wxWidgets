@@ -165,7 +165,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     ed->EmptyUndoBuffer();
 
     ed->SetLexer(wxSTC_LEX_CPP);
-    ed->SetKeywords(0,
+    ed->SetKeyWords(0,
                     "asm auto bool break case catch char class const "
                     "const_cast continue default delete do double "
                     "dynamic_cast else enum explicit export extern "
