@@ -75,13 +75,9 @@ PreviewFrame::PreviewFrame()
     
     SetMenuBar(new wxMenuBar());
     
-    m_RC = new wxXmlResource;
-    // these handlers take precedence over std. ones:
-    m_RC->AddHandler(new MyMenubarHandler(GetMenuBar()));
-    // std handlers:
-    m_RC->InitAllHandlers();
+    m_RC = NULL;
     m_TmpFile = wxGetTempFileName(_T("wxrcedit"));
-    m_RC->Load(m_TmpFile);
+    ResetResource();
 
     wxConfigBase *cfg = wxConfigBase::Get();
     SetSize(wxRect(wxPoint(cfg->Read(_T("previewframe_x"), -1), cfg->Read(_T("previewframe_y"), -1)),
@@ -102,6 +98,18 @@ PreviewFrame::PreviewFrame()
 }
 
 
+
+void PreviewFrame::ResetResource()
+{
+    delete m_RC;
+    m_RC = new wxXmlResource;
+    // these handlers take precedence over std. ones:
+    m_RC->AddHandler(new MyMenubarHandler(GetMenuBar()));
+    // std handlers:
+    m_RC->InitAllHandlers();
+    wxRemoveFile(m_TmpFile);
+    m_RC->Load(m_TmpFile);
+}
 
 PreviewFrame::~PreviewFrame()
 {
@@ -132,13 +140,15 @@ void PreviewFrame::MakeDirty()
 
 
 
-void PreviewFrame::Preview(wxXmlNode *node)
+void PreviewFrame::Preview(wxXmlNode *node,const wxString &version)
 {
    while (node->GetParent()->GetParent() != NULL) node = node->GetParent();
 
    {
        wxXmlDocument doc;
-       doc.SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _T("resource")));
+       wxXmlNode *root = new wxXmlNode(wxXML_ELEMENT_NODE, _T("resource"));
+       root->AddProperty(new wxXmlProperty(wxT("version"),version,NULL));
+       doc.SetRoot(root);
        doc.GetRoot()->AddChild(new wxXmlNode(*node));
 
        if (XmlGetClass(doc.GetRoot()->GetChildren()) == _T("wxDialog")) 
@@ -158,6 +168,7 @@ void PreviewFrame::Preview(wxXmlNode *node)
    }
 
    m_Node = node;
+   m_Version = version;
 
    m_LogCtrl->Clear();
    wxLogTextCtrl mylog(m_LogCtrl);
@@ -220,21 +231,11 @@ void PreviewFrame::PreviewPanel()
 }
 
 
-#ifdef __WXMSW__
-// avoid Problems with setting the focus to a no longer existing child
-void PreviewFrame::OnActivate(wxActivateEvent &event)
-{
-}
-#endif
-
 BEGIN_EVENT_TABLE(PreviewFrame, wxFrame)
     EVT_ENTER_WINDOW(PreviewFrame::OnMouseEnter)
-#ifdef __WXMSW__
-    EVT_ACTIVATE(PreviewFrame::OnActivate)
-#endif
 END_EVENT_TABLE()
 
 void PreviewFrame::OnMouseEnter(wxMouseEvent& event)
 {
-    if (m_Dirty) Preview(m_Node);
+    if (m_Dirty) Preview(m_Node,m_Version);
 }

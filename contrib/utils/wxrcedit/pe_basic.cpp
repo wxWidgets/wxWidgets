@@ -69,7 +69,9 @@ void PropEditCtrlTxt::WriteValue()
 wxWindow *PropEditCtrlInt::CreateEditCtrl()
 {
     PropEditCtrlTxt::CreateEditCtrl();
+#if wxUSE_VALIDATORS
     m_TextCtrl->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+#endif
     return m_TextCtrl;
 }
 

@@ -47,6 +47,18 @@ enum ChangeType
 };
 
 
+class wxXmlRcEditDocument : public wxXmlDocument
+{
+    // Helper functions for Upgrade()
+    void UpgradeNodeValue(wxXmlNode *node);
+    void UpgradeNode(wxXmlNode *node);
+
+ public:
+    // Upgrades older versions
+    void Upgrade();
+
+};
+
 class EditorFrame : public wxFrame
 {
     public:
@@ -80,7 +92,7 @@ class EditorFrame : public wxFrame
         wxXmlNode *m_Clipboard;
 
         wxString m_FileName;
-        wxXmlDocument *m_Resource;
+        wxXmlRcEditDocument *m_Resource;
         
         bool m_Modified;
         

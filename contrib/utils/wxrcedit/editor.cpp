@@ -35,6 +35,66 @@
 #include "propframe.h"
 
 
+void wxXmlRcEditDocument::UpgradeNodeValue(wxXmlNode *node)
+{
+    wxXmlNode *n = node;
+    if (n == NULL) return;
+    n = n->GetChildren();
+
+    while (n)
+    {
+        if (n->GetType() == wxXML_TEXT_NODE ||
+            n->GetType() == wxXML_CDATA_SECTION_NODE)
+        {
+            wxString str1 = n->GetContent();
+            const wxChar *dt;
+
+            for (dt = str1.c_str(); *dt; dt++)
+            {
+                // Remap amp_char to &, map double amp_char to amp_char (for things
+                // like "&File..." -- this is illegal in XML, so we use "_File..."):
+                if (*dt == '$')
+                {
+                    if ( *(++dt) != '$' )
+                        str1[size_t(dt-str1.c_str()-1)] = '_';
+                }
+            }
+            n->SetContent(str1);
+        }
+        n = n->GetNext();
+    }
+}
+
+void wxXmlRcEditDocument::UpgradeNode(wxXmlNode *node)
+{
+    if (node)
+    {
+        UpgradeNodeValue(node);
+        UpgradeNode(node->GetNext());
+        UpgradeNode(node->GetChildren());
+    }
+}
+
+void wxXmlRcEditDocument::Upgrade()
+{
+    int v1,v2,v3,v4;
+    long version;
+    wxXmlNode *node = GetRoot();
+    wxString verstr = wxT("0.0.0.0");
+    node->GetPropVal(wxT("version"),verstr);
+    if (wxSscanf(verstr.c_str(), wxT("%i.%i.%i.%i"),
+        &v1, &v2, &v3, &v4) == 4)
+        version = v1*256*256*256+v2*256*256+v3*256+v4;
+    else
+        version = 0;
+    if (!version)
+    {
+        UpgradeNode(node);
+    }
+    node->DeleteProperty(wxT("version"));
+    node->AddProperty(wxT("version"), wxT(WX_XMLRES_CURRENT_VERSION_STRING));
+}
+
 
 class EditorTreeCtrl : public wxTreeCtrl
 {
@@ -230,8 +290,11 @@ void EditorFrame::LoadFile(const wxString& filename)
 
     delete m_Resource;
     
+     // create new resource in order to handle version differences properly
+    PreviewFrame::Get()->ResetResource();
+    
     m_FileName = "";
-    m_Resource = new wxXmlDocument;
+    m_Resource = new wxXmlRcEditDocument;
     m_Modified = FALSE;
     
     if (!m_Resource->Load(filename))
@@ -244,6 +307,9 @@ void EditorFrame::LoadFile(const wxString& filename)
     else
     {
         m_FileName = filename;
+
+        // Upgrades old versions
+        m_Resource->Upgrade();
         RefreshTree();
     }
     RefreshTitle();
@@ -254,11 +320,6 @@ void EditorFrame::LoadFile(const wxString& filename)
 void EditorFrame::SaveFile(const wxString& filename)
 {
     m_FileName = filename;
-    
-    // change version:
-    wxXmlNode *root = m_Resource->GetRoot();
-    root->DeleteProperty(wxT("version"));
-    root->AddProperty(wxT("version"), wxT(WX_XMLRES_CURRENT_VERSION_STRING));
     
     // save it:
     if (!m_Resource->Save(filename))
@@ -278,7 +339,7 @@ void EditorFrame::NewFile()
     delete m_Resource;
     
     m_FileName = "";
-    m_Resource = new wxXmlDocument;
+    m_Resource = new wxXmlRcEditDocument;
     m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
     
     m_Modified = FALSE;
@@ -433,7 +494,8 @@ void EditorFrame::OnTreeSel(wxTreeEvent& event)
         }
         RecursivelyExpand(m_TreeCtrl, event.GetItem());
 
-        PreviewFrame::Get()->Preview(node);
+        PreviewFrame::Get()->Preview(node,m_Resource->GetRoot()->GetPropVal(
+                                      wxT("version"), wxT("0.0.0.0")));
     }
 }
 
@@ -447,7 +509,8 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
             {
             XmlTreeData* dt = (XmlTreeData*)m_TreeCtrl->GetItemData(m_TreeCtrl->GetSelection());;
             if (dt != NULL && dt->Node != NULL)
-                PreviewFrame::Get()->Preview(dt->Node);
+                PreviewFrame::Get()->Preview(dt->Node,m_Resource->GetRoot()->GetPropVal(
+                                      wxT("version"), wxT("0.0.0.0")));
             break;
             }
 
