@@ -150,7 +150,7 @@ bool wxResourceManager::Initialize()
     windowsDir += "\\dialoged.ini" ;
     
     m_optionsResourceFilename = windowsDir;
-#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+#elif defined(__WXGTK__) || defined(__WXMOTIF__) || (defined(__WXMAC__) && defined(__DARWIN__))
     wxGetHomeDir( &m_optionsResourceFilename );
     m_optionsResourceFilename += "/.dialogedrc";
 #else
