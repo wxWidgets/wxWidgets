@@ -277,6 +277,19 @@ int wxAppConsole::FilterEvent(wxEvent& WXUNUSED(event))
     return -1;
 }
 
+#if wxUSE_EXCEPTIONS
+
+void
+wxAppConsole::HandleEvent(wxEvtHandler *handler,
+                          wxEventFunction func,
+                          wxEvent& event) const
+{
+    // by default, simply call the handler
+    (handler->*func)(event);
+}
+
+#endif // wxUSE_EXCEPTIONS
+
 // ----------------------------------------------------------------------------
 // cmd line parsing
 // ----------------------------------------------------------------------------
