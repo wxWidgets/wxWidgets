@@ -284,7 +284,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 - (void)webView:(WebView *)sender didCommitLoadForFrame:(WebFrame *)frame
 {
     if (frame == [sender mainFrame]){
-        NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
+        NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_TRANSFERRING);
         thisEvent.SetURL( wxStringWithNSString( url ) );
@@ -295,7 +295,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
     if (frame == [sender mainFrame]){
-        NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
+        NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_STOP);
         thisEvent.SetURL( wxStringWithNSString( url ) );
@@ -306,7 +306,7 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
 - (void)webView:(WebView *)sender didFailLoadWithError:(NSError*) error forFrame:(WebFrame *)frame
 {
     if (frame == [sender mainFrame]){
-        NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
+        NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_FAILED);
         thisEvent.SetURL( wxStringWithNSString( url ) );

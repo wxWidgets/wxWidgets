@@ -219,6 +219,7 @@ void MyFrame::OnStateChanged(wxWebKitStateChangedEvent& myEvent){
     if (GetStatusBar() != NULL){
         if (myEvent.GetState() == wxWEBKIT_STATE_NEGOTIATING){
             GetStatusBar()->SetStatusText(_("Contacting ") + myEvent.GetURL());
+            urlText->SetValue(myEvent.GetURL());
         }
         else if (myEvent.GetState() == wxWEBKIT_STATE_TRANSFERRING){
             GetStatusBar()->SetStatusText(_("Loading ") + myEvent.GetURL());
