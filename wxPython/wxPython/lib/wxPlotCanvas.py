@@ -27,15 +27,18 @@ try:
     import Numeric
 except:
     # bummer!
-    d = wx.wxMessageDialog(wx.NULL,
-    """This module requires the Numeric module, which could not be imported.
-It probably is not installed (it's not part of the standard Python
-distribution). See the Python site (http://www.python.org) for
-information on downloading source or binaries.""",
-    "Numeric not found")
-    if d.ShowModal() == wx.wxID_CANCEL:
-        d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)
-        d.ShowModal()
+    msg = """This module requires the Numeric module, which could not be
+imported.  It probably is not installed (it's not part of the standard
+Python distribution). See the Python site (http://www.python.org) for
+information on downloading source or binaries."""
+
+    if wxPlatform == '__WXMSW__':
+        d = wx.wxMessageDialog(wx.NULL, msg, "Numeric not found")
+        if d.ShowModal() == wx.wxID_CANCEL:
+            d = wx.wxMessageDialog(wx.NULL, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.wxOK)
+            d.ShowModal()
+    else:
+        print msg
     raise ImportError
 
 #
