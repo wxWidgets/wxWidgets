@@ -22,7 +22,7 @@ WXDLLIMPEXP_BASE int wxStringSortDescending(wxString*, wxString*);
 
 #include "wx/dynarray.h"
 
-typedef int (*CMPFUNCwxString)(wxString*, wxString*);
+typedef int (wxCMPFUNC_CONV *CMPFUNCwxString)(wxString*, wxString*);
 typedef wxString _wxArraywxBaseArrayStringBase;
 _WX_DECLARE_BASEARRAY_2(_wxArraywxBaseArrayStringBase, wxBaseArrayStringBase,
                         wxArray_SortFunction<wxString>,
@@ -83,11 +83,11 @@ class WXDLLIMPEXP_BASE wxArrayString
 {
 public:
   // type of function used by wxArrayString::Sort()
-  typedef int (*CompareFunction)(const wxString& first,
+  typedef int (wxCMPFUNC_CONV *CompareFunction)(const wxString& first,
                                  const wxString& second);
   // type of function used by wxArrayString::Sort(), for compatibility with
   // wxArray
-  typedef int (*CompareFunction2)(wxString* first,
+  typedef int (wxCMPFUNC_CONV *CompareFunction2)(wxString* first,
                                   wxString* second);
 
   // constructors and destructor
