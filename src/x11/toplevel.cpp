@@ -43,7 +43,9 @@
 
 // Set the window manager decorations according to the
 // given wxWindows style
+#if 0
 static bool SetWMDecorations(Widget w, long style);
+#endif
 static bool MWMIsRunning(Window w);
 
 
@@ -110,7 +112,9 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     Atom wm_delete_window = XInternAtom(wxGlobalDisplay(), "WM_DELETE_WINDOW", False);
 
     XSetWMProtocols(wxGlobalDisplay(), (Window) GetMainWindow(), &wm_delete_window, 1);
+#if 0
     SetWMDecorations((Window) GetMainWindow(), style);
+#endif
 
     SetTitle(title);
 
@@ -237,6 +241,7 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
 
     if (icon.Ok() && GetMainWindow())
     {
+#if 0
         XWMHints *wmHints = XAllocWMHints();
         wmHints.icon_pixmap = (Pixmap) icon.GetPixmap();
 
@@ -251,6 +256,7 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
         XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(),
             wmHints);
         XFree(wmHints);
+#endif
     }
 }
 
@@ -308,6 +314,7 @@ struct MwmHints {
 
 // Set the window manager decorations according to the
 // given wxWindows style
+#if 0
 static bool SetWMDecorations(Widget w, long style)
 {
     if (!MWMIsRunning(w))
@@ -370,21 +377,25 @@ static bool SetWMDecorations(Widget w, long style)
 
     return TRUE;
 }
+#endif
 
 static bool MWMIsRunning(Window w)
 {
+    Display *dpy = (Display*)wxGetDisplay();
     Atom motifWmInfo = XInternAtom(dpy, "_MOTIF_WM_INFO", False);
 
     unsigned long length, bytesafter;
     unsigned char value[20];
-    int ret, type, format;
+    unsigned char *ptr = &value[0];
+    int ret, format;
+    Atom type;
 
     type = format = length = 0;
-    value = 0;
+    value[0] = 0;
 
     ret = XGetWindowProperty(wxGlobalDisplay(), w, motifWmInfo,
 	    0L, 2, False, motifWmInfo, 
-	    &type, &format, &length, &bytesafter, &value);
+	    &type, &format, &length, &bytesafter, &ptr);
 
     return (ret == Success);
 }

@@ -12183,10 +12183,10 @@ rm -f conftest*
         fi
 
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXext -lXt -lX11"
-        TOOLKIT_VPATH="\${top_srcdir}/src/x11"
+        TOOLKIT_VPATH="\${top_srcdir}/src/x11 \${top_srcdir}/src/univ"
         TOOLKIT=X11
         GUIDIST=X11_DIST
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__ -D__WXX11__"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
     fi
 
     if test "$wxUSE_WINE" = 1; then
