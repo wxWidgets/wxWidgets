@@ -1108,14 +1108,18 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             "An informative message",
                             max,    // range
                             this,   // parent
-                            FALSE,  // modal
-                            TRUE);  // has abort button
+                            wxPD_CAN_ABORT | wxPD_APP_MODAL);
+                            
 
     bool cont = TRUE;
     for ( int i = 0; i < max && cont; i++ )
     {
         wxSleep(1);
-        if ( i == max / 2 )
+        if ( i == max - 1 )
+        {
+            cont = dialog.Update(i, "That's all, folks!");
+        }
+        else if ( i == max / 2 )
         {
             cont = dialog.Update(i, "Only a half left!");
         }

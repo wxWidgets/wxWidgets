@@ -62,7 +62,7 @@ wxDataFormat::wxDataFormat( const wxDataFormat &format )
     m_type = format.GetType();
     m_id = format.GetId();
     m_hasAtom = TRUE;
-    m_atom = format.GetAtom();
+    m_atom = ((wxDataFormat &)format).GetAtom();    // const_cast
 }
 
 wxDataFormat::wxDataFormat( const GdkAtom atom )

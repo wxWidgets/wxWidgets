@@ -54,7 +54,7 @@ public:
 
    /** Can be called to continue after the cancel button has been pressed, but
        the program decided to continue the operation (e.g., user didn't
-       configrm it)
+       confirm it)
    */
    void Resume() { m_state = Continue; }
 
@@ -78,8 +78,13 @@ private:
    {
       Uncancelable = -1,   // dialog can't be canceled
       Canceled,            // can be cancelled and, in fact, was
-      Continue             // can be cancelled but wasn't
+      Continue,            // can be cancelled but wasn't
+      Finished             // finished, waiting to be removed from screen
    } m_state;
+   /// the abort button (or NULL if none)
+   wxButton *m_btnAbort;
+   /// the maximum value
+   int m_maximum;
 
    DECLARE_EVENT_TABLE()
 };

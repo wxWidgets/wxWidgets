@@ -57,6 +57,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    m_state = hasAbortButton ? Continue : Uncancelable;
    m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
    m_parent = parent;
+   m_maximum = maximum;
    
    int height = 70;     // FIXME arbitrary numbers
    if ( hasAbortButton )
@@ -87,21 +88,23 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       m_gauge->SetValue(0);
    }
    else
-      m_gauge = NULL;
+      m_gauge = (wxGauge *)NULL;
    
    if ( hasAbortButton )
    {
-      wxControl *ctrl = new wxButton(this, -1, _("Cancel"));
+      m_btnAbort = new wxButton(this, -1, _("Cancel"));
       c = new wxLayoutConstraints;
       c->centreX.SameAs(this, wxCentreX);
       if(m_gauge)
          c->top.Below(m_gauge, 2*LAYOUT_Y_MARGIN);
       else
-         c->top.Below(ctrl, 2*LAYOUT_Y_MARGIN);
+         c->top.Below(m_btnAbort, 2*LAYOUT_Y_MARGIN);
       c->width.AsIs();
       c->height.AsIs();
-      ctrl->SetConstraints(c);
+      m_btnAbort->SetConstraints(c);
    }
+   else
+      m_btnAbort = (wxButton *)NULL; 
 
    SetAutoLayout(TRUE);
    Show(TRUE);
@@ -120,12 +123,35 @@ bool
 wxProgressDialog::Update(int value, const wxString& newmsg)
 {
    wxASSERT_MSG( value == -1 || m_gauge, "can't update non existent dialog" );
+   wxASSERT_MSG( value < m_maximum, "invalid progress value" );
 
    if( m_gauge )
-      m_gauge->SetValue(value);
-   if( !newmsg.IsNull() )
+      m_gauge->SetValue(value + 1);
+   if( !newmsg.IsEmpty() )
       m_msg->SetLabel(newmsg);
    wxYield();
+
+   if ( (value == m_maximum - 1) && !(GetWindowStyleFlag() & wxPD_AUTO_HIDE) )
+   {
+       if ( m_btnAbort )
+       {
+           // tell the user what he should do...
+           m_btnAbort->SetLabel(_("Close"));
+       }
+
+       if ( !newmsg )
+       {
+           // also provide the finishing message if the application didn't
+           m_msg->SetLabel(_("Done."));
+       }
+
+       m_state = Finished;
+       while ( m_state != Canceled ) // set from OnClose()
+           wxYield();
+
+       // so that we return TRUE below
+       m_state = Finished;
+   }
 
    return m_state != Canceled;
 }
