@@ -531,6 +531,12 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxTAB_FIXEDWIDTH    0x0008
 #define wxTAB_OWNERDRAW     0x0010
 
+// Sorry, I changed my mind about these names...
+#define wxTC_MULTILINE     0x0000
+#define wxTC_RIGHTJUSTIFY  0x0004
+#define wxTC_FIXEDWIDTH    0x0008
+#define wxTC_OWNERDRAW     0x0010
+
 /*
  * wxStatusBar95 flags
  */

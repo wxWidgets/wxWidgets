@@ -78,10 +78,6 @@ static const char eHOSTNAME[]  = "HostName";
 static const char eUSERID[]    = "UserId";
 static const char eUSERNAME[]  = "UserName";
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxList)
-#endif
-
 // For the following functions we SHOULD fill in support
 // for Windows-NT (which I don't know) as I assume it begin
 // a POSIX Unix (so claims MS) that it has some special

@@ -62,17 +62,17 @@ class WXDLLEXPORT wxPostScriptDC: public wxDC
   void DrawRoundedRectangle(long x, long y, long width, long height, double radius = 20);
   void DrawEllipse(long x, long y, long width, long height);
 
-/*
+  // RR: I define these in wxDC, after all they all do the same everywhere
+
+#ifdef __WINDOWS__
   // Splines
   // 3-point spline
   void DrawSpline(long x1, long y1, long x2, long y2, long x3, long y3);
   // Any number of control points - a list of pointers to wxPoints
   void DrawSpline(wxList *points);
   void DrawSpline(int n, wxPoint points[]);
-  
-  I define these in wxDC, after all they all do the same everywhere
-  
-*/
+#endif
+
   void DrawOpenSpline(wxList *points);
 
   void DrawIcon(const wxIcon& icon, long x, long y);

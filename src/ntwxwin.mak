@@ -98,7 +98,7 @@ EXTRADLLFLAGS=
 EXTRADLLFLAGS=$(EXTRADLLFLAGS) /DNOMAIN
 !endif
 
-INC=-I$(WXINC) -I$(WXDIR)/src/other/png -I$(WXDIR)/src/other/zlib $(EXTRAINC)
+INC=-I$(WXINC) -I$(WXDIR)/src/png -I$(WXDIR)/src/zlib $(EXTRAINC)
 LIBS = $(EXTRALIBS) $(WXLIB) $(WINLIBS)
 
 !ifndef FINAL

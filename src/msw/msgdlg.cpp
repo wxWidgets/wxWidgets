@@ -103,36 +103,3 @@ int wxMessageDialog::ShowModal(void)
   return ans;
 }
 
-/*
- * Common dialogs
- *
- */
- 
-// Pop up a message box
-int wxMessageBox(const wxString& message, const wxString& caption, const long style,
-                 wxWindow *parent, const int x, const int y)
-{
-	wxMessageDialog dialog(parent, message, caption, style);
-
-	int ans = dialog.ShowModal();
-	switch ( ans )
-	{
-		case wxID_OK:
-			return wxOK;
-			break;
-		case wxID_YES:
-			return wxYES;
-			break;
-		case wxID_NO:
-			return wxNO;
-			break;
-		default:
-		case wxID_CANCEL:
-			return wxCANCEL;
-			break;
-	}
-
-	return ans;
-}
-
-

@@ -1505,12 +1505,18 @@ void wxDC::GetSizeMM(long *width, long *height) const
   *height = h;
 }
 
+/*
 #if USE_SPLINES
 # if USE_XFIG_SPLINE_CODE
 #  include "../common/xfspline.inc"
 # else
 #  include "../common/wxspline.inc"
 # endif
+#endif // USE_SPLINES
+*/
+
+#if USE_SPLINES
+#include "xfspline.inc"
 #endif // USE_SPLINES
 
 void wxDC::DrawPolygon(wxList *list, long xoffset, long yoffset,int fillStyle)
