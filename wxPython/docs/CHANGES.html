@@ -163,6 +163,18 @@ OSX build.  Other platforms will raise an exception if you try to use
 it.</p>
 <p>wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.</p>
+<dl>
+<dt>PyPlot updates from Oliver Schoenborn:</dt>
+<dd><ul class="first last simple">
+<li>Factored out &quot;draw command&quot; so extensions easier to implement: clean 
+separation b/w user's &quot;draw&quot; (Draw) and internal &quot;draw&quot; (_draw)</li>
+<li>Added ability to define your own ticks at PlotCanvas.Draw</li>
+<li>Added better bar charts: PolyBar class and getBarTicksGen()</li>
+<li>Put legend writing for a Poly* into Poly* class where it belongs</li>
+<li>If no legend specified or exists, no gap created</li>
+</ul>
+</dd>
+</dl>
 </div>
 <div class="section" id="id2">
 <h1><a name="id2">2.5.2.8</a></h1>
