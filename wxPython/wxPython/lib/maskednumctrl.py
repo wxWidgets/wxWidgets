@@ -478,9 +478,10 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
 
         mask = intmask+fracmask
 
+        # initial value of state vars
         self._oldvalue = 0
         self._integerEnd = 0
-        self._typedSign = False     # initial value of state var
+        self._typedSign = False
 
         # Construct the base control:
         wxMaskedTextCtrl.__init__(
@@ -843,7 +844,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     dbg('just a negative sign; old value < 0; setting replacement of 0')
                     replacement = 0
                     self._isNeg = False
-                elif int[:2] == '-0':
+                elif int[:2] == '-0' and self._fractionWidth == 0:
                     if self._oldvalue < 0:
                         dbg('-0; setting replacement of 0')
                         replacement = 0
@@ -858,7 +859,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                         dbg(indent=0)
                         return
 
-                elif int == '-' and (self._oldvalue >= 0 or self._typedSign):
+                elif int == '-' and (self._oldvalue >= 0 or self._typedSign) and self._fractionWidth == 0:
                     if not self._limited or (self._min < -1 and self._max >= -1):
                         dbg('just a negative sign; setting replacement of -1')
                         replacement = -1
@@ -878,10 +879,8 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     dbg(indent=0)
                     return
 
-            self._typedSign = False     # reset state var
-
             if replacement is None:
-                if int:
+                if int and int != '-':
                     try:
                         string.atol(int)
                     except ValueError:
@@ -906,6 +905,7 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                             value = self._toGUI(string.atol(numvalue))
                         dbg('modified value: "%s"' % value)
 
+        self._typedSign = False     # reset state var
 
         if replacement is not None:
             # Value presented wasn't a legal number, but control should do something
@@ -940,16 +940,24 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         sel_start, sel_to = self._GetSelection()     # record current insertion point
         dbg('calling base wxMaskedTextCtrl._SetValue(self, "%s")' % adjvalue)
         wxMaskedTextCtrl._SetValue(self, adjvalue)
-
-        # If current insertion point is before the end of the integer and
-        # its before the 1st digit, place it just after the sign position:
-        if sel_to < self._fields[0]._extent[1] and adjvalue[sel_to] in (' ', '-', '('):
-            text, signpos, right_signpos = self._getSignedValue()
-            dbg('queueing self.SetSelection(%d, %d)' % (signpos+1, signpos+1))
-            wxCallAfter(self.SetInsertionPoint, signpos+1)
-            wxCallAfter(self.SetSelection, signpos+1, signpos+1)
+        # After all actions so far scheduled, check that resulting cursor
+        # position is appropriate, and move if not:
+        wxCallAfter(self._CheckInsertionPoint)
 
         dbg('finished wxMaskedNumCtrl::_SetValue', indent=0)
+
+    def _CheckInsertionPoint(self):
+        # If current insertion point is before the end of the integer and
+        # its before the 1st digit, place it just after the sign position:
+        dbg('wxMaskedNumCtrl::CheckInsertionPoint', indent=1)
+        sel_start, sel_to = self._GetSelection()
+        text = self._GetValue()
+        if sel_to < self._fields[0]._extent[1] and text[sel_to] in (' ', '-', '('):
+            text, signpos, right_signpos = self._getSignedValue()
+            dbg('setting selection(%d, %d)' % (signpos+1, signpos+1))
+            self.SetInsertionPoint(signpos+1)
+            self.SetSelection(signpos+1, signpos+1)
+        dbg(indent=0)
 
 
     def _OnErase( self, event ):
@@ -959,27 +967,26 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
         grouping character, so that the erasure does the right thing.
         """
         dbg('wxMaskedNumCtrl::_OnErase', indent=1)
-        key = event.GetKeyCode()
+
+        #if grouping digits, make sure deletes next to group char always
+        # delete next digit to appropriate side:
         if self._groupDigits:
+            key = event.GetKeyCode()
             value = wxMaskedTextCtrl.GetValue(self)
             sel_start, sel_to = self._GetSelection()
-            # if erasing left and selection starts after 2nd char
-            if key == WXK_BACK:
 
+            if key == WXK_BACK:
                 # if 1st selected char is group char, select to previous digit
                 if sel_start > 0 and sel_start < len(self._mask) and value[sel_start:sel_to] == self._groupChar:
                     self.SetInsertionPoint(sel_start-1)
                     self.SetSelection(sel_start-1, sel_to)
+
                 # elif previous char is group char, select to previous digit
                 elif sel_start > 1 and sel_start == sel_to and value[sel_start-1:sel_start] == self._groupChar:
                     self.SetInsertionPoint(sel_start-2)
                     self.SetSelection(sel_start-2, sel_to)
 
-            # elif erasing right and selection doesn't go to end - 2
             elif key == WXK_DELETE:
-##                dbg('sel_to:', sel_to)
-##                dbg("value[sel_to]: '%s'" % value[sel_to])
-##                dbg("value[sel_to:sel_to+1]: '%s'" % value[sel_to:sel_to+1])
                 if( sel_to < len(self._mask) - 2 + (1 *self._useParens)
                     and sel_start == sel_to
                     and value[sel_to] == self._groupChar ):
@@ -987,13 +994,13 @@ class wxMaskedNumCtrl(wxMaskedTextCtrl):
                     self.SetSelection(sel_start, sel_to+2)
 
                 elif( sel_to < len(self._mask) - 2 + (1 *self._useParens)
-##                      and (value[sel_to-1:sel_to] == self._groupChar or
                            and value[sel_start:sel_to] == self._groupChar ):
                     self.SetInsertionPoint(sel_start)
                     self.SetSelection(sel_start, sel_to+1)
 
         wxMaskedTextCtrl._OnErase(self, event)
         dbg(indent=0)
+
 
     def OnTextChange( self, event ):
         """

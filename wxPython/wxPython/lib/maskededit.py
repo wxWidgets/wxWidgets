@@ -1177,7 +1177,7 @@ class Field:
         dbg('parameters:', indent=1)
         for key, value in kwargs.items():
             dbg('%s:' % key, value)
-        dbg(indent=0, suspend=0)
+        dbg(indent=0)
 
         old_fillChar = self._fillChar   # store so we can change choice lists accordingly if it changes
 
@@ -1383,7 +1383,7 @@ class Field:
         valid = True    # assume true to start
 
         if self.IsEmpty(slice):
-            dbg(indent=0)
+            dbg(indent=0, suspend=0)
             if self._emptyInvalid:
                 return False
             else:
@@ -2765,7 +2765,7 @@ class wxMaskedEditMixin:
                     else:
                         newfield = self._FindField(newpos)
                         if newfield != field and newfield._selectOnFieldEntry:
-                            dbg('queuing selection: (%d, %)' % newfield._extent[0], newfield._extent[1])
+                            dbg('queuing selection: (%d, %d)' % newfield._extent[0], newfield._extent[1])
                             wxCallAfter(self._SetSelection, newfield._extent[0], newfield._extent[1])
                     keep_processing = false
 
@@ -2913,7 +2913,9 @@ class wxMaskedEditMixin:
         elif self._FindField(pos)._selectOnFieldEntry:
             if( keycode in (WXK_UP, WXK_LEFT)
                 and sel_start != 0
-                and self._isTemplateChar(sel_start-1)):
+                and self._isTemplateChar(sel_start-1)
+                and sel_start != self._masklength
+                and not self._signOk and not self._useParens):
 
                 # call _OnChangeField to handle "ctrl-shifted event"
                 # (which moves to previous field and selects it.)
@@ -3018,11 +3020,11 @@ class wxMaskedEditMixin:
         # If trying to erase beyond "legal" bounds, disallow operation:
         if( (sel_to == 0 and key == WXK_BACK)
             or (self._signOk and sel_to == 1 and value[0] == ' ' and key == WXK_BACK)
-            or (sel_to == self._masklength and sel_start == sel_to and key == WXK_DELETE)
+            or (sel_to == self._masklength and sel_start == sel_to and key == WXK_DELETE and not field._insertRight)
             or (self._signOk and self._useParens
                 and sel_start == sel_to
                 and sel_to == self._masklength - 1
-                and value[sel_to] == ' ' and key == WXK_DELETE) ):
+                and value[sel_to] == ' ' and key == WXK_DELETE and not field._insertRight) ):
             if not wxValidator_IsSilent():
                 wxBell()
             dbg(indent=0)
@@ -3030,17 +3032,27 @@ class wxMaskedEditMixin:
 
 
         if( field._insertRight                                  # an insert-right field
-            and key == WXK_BACK                                 # and backspacing
+            and value[start:end] != self._template[start:end]   # and field not empty
             and sel_start >= start                              # and selection starts in field
-            and (sel_to == end                                  # and selection ends at right edge
-                 or (sel_to < end and field._allowInsert))      # or allow right insert at any point in field
-            and value[start:end] != self._template[start:end]): # and field not empty
-            dbg('delete left')
-            dbg('sel_start, start:', sel_start, start)
-##            # special case: backspace at the end of a right insert field shifts contents right to cursor
+            and ((sel_to == sel_start                           # and no selection
+                  and sel_to == end                             # and cursor at right edge
+                  and key in (WXK_BACK, WXK_DELETE))            # and either delete or backspace key
+                 or                                             # or
+                 (key == WXK_BACK                               # backspacing
+                    and (sel_to == end                          # and selection ends at right edge
+                         or sel_to < end and field._allowInsert)) ) ):  # or allow right insert at any point in field
 
-##            if sel_start == end:    # select "last char in field"
-##                sel_start -= 1
+            dbg('delete left')
+            # if backspace but left of cursor is empty, adjust cursor right before deleting
+            while( key == WXK_BACK
+                   and sel_start == sel_to
+                   and sel_start < end
+                   and value[start:sel_start] == self._template[start:sel_start]):
+                sel_start += 1
+                sel_to = sel_start
+
+            dbg('sel_start, start:', sel_start, start)
+
             if sel_start == sel_to:
                 keep = sel_start -1
             else:
@@ -3106,6 +3118,9 @@ class wxMaskedEditMixin:
                         elif value[newpos] == ')':
                             # erase right sign, but don't move cursor; (matching left sign handled later)
                             newstr = value[:newpos] + ' '
+                        else:
+                            # no deletion; just move cursor
+                            newstr = value
                     else:
                         # no deletion; just move cursor
                         newstr = value
@@ -3123,7 +3138,7 @@ class wxMaskedEditMixin:
                             pos_adjust = len(right) - len(rstripped)
                         right = rstripped
 
-                    if value[-1] == ')' and end == self._masklength - 1:
+                    if not field._insertRight and value[-1] == ')' and end == self._masklength - 1:
                         # need to shift ) into the field:
                         right = right[:-1] + ')'
                         value = value[:-1] + ' '
@@ -3170,7 +3185,6 @@ class wxMaskedEditMixin:
                 else:
                     # selection made
                     newstr = self._eraseSelection(value, sel_start, sel_to)
-                    newpos = sel_start
 
                 pos = sel_start  # put cursor back at beginning of selection
 
@@ -3219,7 +3233,9 @@ class wxMaskedEditMixin:
         dbg("wxMaskedEditMixin::_OnEnd", indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
         if not event.ControlDown():
-            end = self._masklength   # go to end of control
+            end = self._masklength  # go to end of control
+            if self._signOk and self._useParens:
+                end = end - 1       # account for reserved char at end
         else:
             end_of_input = self._goEnd(getPosOnly=True)
             sel_start, sel_to = self._GetSelection()
@@ -4190,7 +4206,7 @@ class wxMaskedEditMixin:
                 dbg('pos = end - 1 = ', pos, 'right_insert? 1')
                 right_insert = True
             elif( field._allowInsert and sel_start == sel_to
-                  and (sel_to == end or value[sel_start] != field._fillChar)
+                  and (sel_to == end or (sel_to < self._masklength and value[sel_start] != field._fillChar))
                   and input_len < field_len ):
                 pos = sel_to - 1    # where character will go
                 dbg('pos = sel_to - 1 = ', pos, 'right_insert? 1')
@@ -4586,6 +4602,10 @@ class wxMaskedEditMixin:
         start, end = field._extent
         newtext = ""
         newpos = pos
+
+        if pos != sel_start and sel_start == sel_to:
+            # adjustpos must have moved the position; make selection match:
+            sel_start = sel_to = pos
 
         dbg('field._insertRight?', field._insertRight)
         if( field._insertRight                                  # field allows right insert
