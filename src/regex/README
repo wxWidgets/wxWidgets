@@ -7,15 +7,15 @@ taken from the source of TCL (Toolkit Command Language).
 This is version of Henry Spencer's library is
 modified by the wxWindows team.  The modifications
 made by the wxWindows team are as follows:
-regcustom.h (all code)
+regcustom.h (all source code)
 regex.h (function wrappers, other)
 regc_locale.c (A function or two).
 All the rest (Using standard c library routines instead of
               postresql routines, various cleanup/optimizations)
 
-The code that is wxWindows-specific is as follows:
-regcustom.h (all code, see comments on how to replace)
-regex.h (where noted with comments, compiler workarounds)
+The source code that is wxWindows-specific is as follows:
+regcustom.h (all source code, see comments in source on how to replace)
+regex.h (where noted with comments in source, compiler workarounds)
 regcomp.c (a few of the functions prefixed with wx_,
 	   these may be replaced by c library routines)
 
@@ -24,6 +24,11 @@ Henry Spencer's old library did not support unicode and
 had some other bugs that were fixed by this one, and
 the license was incompatible with the wxWindows license
 and the gpl.
+
+Regular Expression syntax documentation is in re_syntax.n.
+Programming information (from older regex, but with
+the function wrappers implemented in the wxWindows
+version, the usage is somewhat the same) is in regex.3.
 
 Modifications made by the wxWindows team are not licensed.
 
