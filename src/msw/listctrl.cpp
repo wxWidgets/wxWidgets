@@ -1743,7 +1743,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxLogLastError(_T("GetCursorPos"));
                     }
 
-                    if ( !::ScreenToClient(hwndHdr, &ptClick) )
+                    if ( !::ScreenToClient(GetHwnd(), &ptClick) )
                     {
                         wxLogLastError(_T("ScreenToClient(listctrl header)"));
                     }

@@ -686,6 +686,11 @@ void MyListCtrl::OnColRightClick(wxListEvent& event)
         SetColumnImage(col, -1);
     }
 
+    // Show popupmenu at position
+    wxMenu menu(wxT("Test"));
+    menu.Append(LIST_ABOUT, _T("&About"));
+    PopupMenu(&menu, event.GetPoint()); 
+
     wxLogMessage( wxT("OnColumnRightClick at %d."), event.GetColumn() );
 }
 
