@@ -47,6 +47,228 @@
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+int wxNewEventType()
+{
+    static int wxCurrentEventType = 10000;
+
+    return wxCurrentEventType++;
+}
+
+const int wxEVT_NULL = 0;
+const int wxEVT_FIRST = 10000;
+
+const int wxEVT_COMMAND_BUTTON_CLICKED = wxNewEventType();
+const int wxEVT_COMMAND_CHECKBOX_CLICKED = wxNewEventType();
+const int wxEVT_COMMAND_CHOICE_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_LISTBOX_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = wxNewEventType();
+const int wxEVT_COMMAND_CHECKLISTBOX_TOGGLED = wxNewEventType();
+const int wxEVT_COMMAND_TEXT_UPDATED = wxNewEventType();
+const int wxEVT_COMMAND_TEXT_ENTER = wxNewEventType();
+const int wxEVT_COMMAND_MENU_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_TOOL_CLICKED = wxNewEventType();
+const int wxEVT_COMMAND_SLIDER_UPDATED = wxNewEventType();
+const int wxEVT_COMMAND_RADIOBOX_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_RADIOBUTTON_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_SCROLLBAR_UPDATED = wxNewEventType();
+const int wxEVT_COMMAND_VLBOX_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_COMBOBOX_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_TOOL_RCLICKED = wxNewEventType();
+const int wxEVT_COMMAND_TOOL_ENTER = wxNewEventType();
+const int wxEVT_COMMAND_SPINCTRL_UPDATED = wxNewEventType();
+
+// Sockets and timers send events, too
+const int wxEVT_SOCKET = wxNewEventType();
+const int wxEVT_TIMER = wxNewEventType();
+
+// Mouse event types
+const int wxEVT_LEFT_DOWN = wxNewEventType();
+const int wxEVT_LEFT_UP = wxNewEventType();
+const int wxEVT_MIDDLE_DOWN = wxNewEventType();
+const int wxEVT_MIDDLE_UP = wxNewEventType();
+const int wxEVT_RIGHT_DOWN = wxNewEventType();
+const int wxEVT_RIGHT_UP = wxNewEventType();
+const int wxEVT_MOTION = wxNewEventType();
+const int wxEVT_ENTER_WINDOW = wxNewEventType();
+const int wxEVT_LEAVE_WINDOW = wxNewEventType();
+const int wxEVT_LEFT_DCLICK = wxNewEventType();
+const int wxEVT_MIDDLE_DCLICK = wxNewEventType();
+const int wxEVT_RIGHT_DCLICK = wxNewEventType();
+const int wxEVT_SET_FOCUS = wxNewEventType();
+const int wxEVT_KILL_FOCUS = wxNewEventType();
+
+// Non-client mouse events
+const int wxEVT_NC_LEFT_DOWN = wxNewEventType();
+const int wxEVT_NC_LEFT_UP = wxNewEventType();
+const int wxEVT_NC_MIDDLE_DOWN = wxNewEventType();
+const int wxEVT_NC_MIDDLE_UP = wxNewEventType();
+const int wxEVT_NC_RIGHT_DOWN = wxNewEventType();
+const int wxEVT_NC_RIGHT_UP = wxNewEventType();
+const int wxEVT_NC_MOTION = wxNewEventType();
+const int wxEVT_NC_ENTER_WINDOW = wxNewEventType();
+const int wxEVT_NC_LEAVE_WINDOW = wxNewEventType();
+const int wxEVT_NC_LEFT_DCLICK = wxNewEventType();
+const int wxEVT_NC_MIDDLE_DCLICK = wxNewEventType();
+const int wxEVT_NC_RIGHT_DCLICK = wxNewEventType();
+
+// Character input event type
+const int wxEVT_CHAR = wxNewEventType();
+const int wxEVT_CHAR_HOOK = wxNewEventType();
+const int wxEVT_NAVIGATION_KEY = wxNewEventType();
+const int wxEVT_KEY_DOWN = wxNewEventType();
+const int wxEVT_KEY_UP = wxNewEventType();
+
+// Set cursor event
+const int wxEVT_SET_CURSOR = wxNewEventType();
+
+// wxScrollbar and wxSlider event identifiers
+const int wxEVT_SCROLL_TOP = wxNewEventType();
+const int wxEVT_SCROLL_BOTTOM = wxNewEventType();
+const int wxEVT_SCROLL_LINEUP = wxNewEventType();
+const int wxEVT_SCROLL_LINEDOWN = wxNewEventType();
+const int wxEVT_SCROLL_PAGEUP = wxNewEventType();
+const int wxEVT_SCROLL_PAGEDOWN = wxNewEventType();
+const int wxEVT_SCROLL_THUMBTRACK = wxNewEventType();
+const int wxEVT_SCROLL_THUMBRELEASE = wxNewEventType();
+
+// Scroll events from wxWindow
+const int wxEVT_SCROLLWIN_TOP = wxNewEventType();
+const int wxEVT_SCROLLWIN_BOTTOM = wxNewEventType();
+const int wxEVT_SCROLLWIN_LINEUP = wxNewEventType();
+const int wxEVT_SCROLLWIN_LINEDOWN = wxNewEventType();
+const int wxEVT_SCROLLWIN_PAGEUP = wxNewEventType();
+const int wxEVT_SCROLLWIN_PAGEDOWN = wxNewEventType();
+const int wxEVT_SCROLLWIN_THUMBTRACK = wxNewEventType();
+const int wxEVT_SCROLLWIN_THUMBRELEASE = wxNewEventType();
+
+// System events
+const int wxEVT_SIZE = wxNewEventType();
+const int wxEVT_MOVE = wxNewEventType();
+const int wxEVT_CLOSE_WINDOW = wxNewEventType();
+const int wxEVT_END_SESSION = wxNewEventType();
+const int wxEVT_QUERY_END_SESSION = wxNewEventType();
+const int wxEVT_ACTIVATE_APP = wxNewEventType();
+const int wxEVT_POWER = wxNewEventType();
+const int wxEVT_ACTIVATE = wxNewEventType();
+const int wxEVT_CREATE = wxNewEventType();
+const int wxEVT_DESTROY = wxNewEventType();
+const int wxEVT_SHOW = wxNewEventType();
+const int wxEVT_ICONIZE = wxNewEventType();
+const int wxEVT_MAXIMIZE = wxNewEventType();
+const int wxEVT_MOUSE_CAPTURE_CHANGED = wxNewEventType();
+const int wxEVT_PAINT = wxNewEventType();
+const int wxEVT_ERASE_BACKGROUND = wxNewEventType();
+const int wxEVT_NC_PAINT = wxNewEventType();
+const int wxEVT_PAINT_ICON = wxNewEventType();
+const int wxEVT_MENU_CHAR = wxNewEventType();
+const int wxEVT_MENU_INIT = wxNewEventType();
+const int wxEVT_MENU_HIGHLIGHT = wxNewEventType();
+const int wxEVT_POPUP_MENU_INIT = wxNewEventType();
+const int wxEVT_CONTEXT_MENU = wxNewEventType();
+const int wxEVT_SYS_COLOUR_CHANGED = wxNewEventType();
+const int wxEVT_SETTING_CHANGED = wxNewEventType();
+const int wxEVT_QUERY_NEW_PALETTE = wxNewEventType();
+const int wxEVT_PALETTE_CHANGED = wxNewEventType();
+const int wxEVT_JOY_BUTTON_DOWN = wxNewEventType();
+const int wxEVT_JOY_BUTTON_UP = wxNewEventType();
+const int wxEVT_JOY_MOVE = wxNewEventType();
+const int wxEVT_JOY_ZMOVE = wxNewEventType();
+const int wxEVT_DROP_FILES = wxNewEventType();
+const int wxEVT_DRAW_ITEM = wxNewEventType();
+const int wxEVT_MEASURE_ITEM = wxNewEventType();
+const int wxEVT_COMPARE_ITEM = wxNewEventType();
+const int wxEVT_INIT_DIALOG = wxNewEventType();
+const int wxEVT_IDLE = wxNewEventType();
+const int wxEVT_UPDATE_UI = wxNewEventType();
+
+// System misc.
+const int wxEVT_END_PROCESS = wxNewEventType();
+
+// Dial up events
+const int wxEVT_DIALUP_CONNECTED = wxNewEventType();
+const int wxEVT_DIALUP_DISCONNECTED = wxNewEventType();
+
+// Generic command events
+// Note: a click is a higher-level event than button down/up
+const int wxEVT_COMMAND_LEFT_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_LEFT_DCLICK = wxNewEventType();
+const int wxEVT_COMMAND_RIGHT_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_RIGHT_DCLICK = wxNewEventType();
+const int wxEVT_COMMAND_SET_FOCUS = wxNewEventType();
+const int wxEVT_COMMAND_KILL_FOCUS = wxNewEventType();
+const int wxEVT_COMMAND_ENTER = wxNewEventType();
+
+// Tree control event types
+const int wxEVT_COMMAND_TREE_BEGIN_DRAG = wxNewEventType();
+const int wxEVT_COMMAND_TREE_BEGIN_RDRAG = wxNewEventType();
+const int wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT = wxNewEventType();
+const int wxEVT_COMMAND_TREE_END_LABEL_EDIT = wxNewEventType();
+const int wxEVT_COMMAND_TREE_DELETE_ITEM = wxNewEventType();
+const int wxEVT_COMMAND_TREE_GET_INFO = wxNewEventType();
+const int wxEVT_COMMAND_TREE_SET_INFO = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_EXPANDED = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_EXPANDING = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_COLLAPSED = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_COLLAPSING = wxNewEventType();
+const int wxEVT_COMMAND_TREE_SEL_CHANGED = wxNewEventType();
+const int wxEVT_COMMAND_TREE_SEL_CHANGING = wxNewEventType();
+const int wxEVT_COMMAND_TREE_KEY_DOWN = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_ACTIVATED = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_TREE_END_DRAG = wxNewEventType();
+
+// List control event types
+const int wxEVT_COMMAND_LIST_BEGIN_DRAG = wxNewEventType();
+const int wxEVT_COMMAND_LIST_BEGIN_RDRAG = wxNewEventType();
+const int wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = wxNewEventType();
+const int wxEVT_COMMAND_LIST_END_LABEL_EDIT = wxNewEventType();
+const int wxEVT_COMMAND_LIST_DELETE_ITEM = wxNewEventType();
+const int wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = wxNewEventType();
+const int wxEVT_COMMAND_LIST_GET_INFO = wxNewEventType();
+const int wxEVT_COMMAND_LIST_SET_INFO = wxNewEventType();
+const int wxEVT_COMMAND_LIST_ITEM_SELECTED = wxNewEventType();
+const int wxEVT_COMMAND_LIST_ITEM_DESELECTED = wxNewEventType();
+const int wxEVT_COMMAND_LIST_KEY_DOWN = wxNewEventType();
+const int wxEVT_COMMAND_LIST_INSERT_ITEM = wxNewEventType();
+const int wxEVT_COMMAND_LIST_COL_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = wxNewEventType();
+const int wxEVT_COMMAND_LIST_ITEM_ACTIVATED = wxNewEventType();
+
+// Tab and notebook control event types
+const int wxEVT_COMMAND_TAB_SEL_CHANGED = wxNewEventType();
+const int wxEVT_COMMAND_TAB_SEL_CHANGING = wxNewEventType();
+const int wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = wxNewEventType();
+const int wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = wxNewEventType();
+
+// Splitter events
+const int wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxNewEventType();
+const int wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxNewEventType();
+const int wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxNewEventType();
+const int wxEVT_COMMAND_SPLITTER_UNSPLIT = wxNewEventType();
+
+// Wizard events
+const int wxEVT_WIZARD_PAGE_CHANGED = wxNewEventType();
+const int wxEVT_WIZARD_PAGE_CHANGING = wxNewEventType();
+const int wxEVT_WIZARD_CANCEL = wxNewEventType();
+
+// Calendar events
+const int wxEVT_CALENDAR_SEL_CHANGED = wxNewEventType();
+const int wxEVT_CALENDAR_DAY_CHANGED = wxNewEventType();
+const int wxEVT_CALENDAR_MONTH_CHANGED = wxNewEventType();
+const int wxEVT_CALENDAR_YEAR_CHANGED = wxNewEventType();
+const int wxEVT_CALENDAR_DOUBLECLICKED = wxNewEventType();
+const int wxEVT_CALENDAR_WEEKDAY_CLICKED = wxNewEventType();
+
+// Help events
+const int wxEVT_HELP = wxNewEventType();
+const int wxEVT_DETAILED_HELP = wxNewEventType();
+
+// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -579,7 +801,7 @@ wxEvtHandler::~wxEvtHandler()
         wxNode *node = m_dynamicEvents->First();
         while (node)
         {
-            wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+            wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->Data();
             if (entry->m_callbackUserData) delete entry->m_callbackUserData;
             delete entry;
             node = node->Next();
@@ -839,11 +1061,11 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 }
 
 void wxEvtHandler::Connect( int id, int lastId,
-                            wxEventType eventType,
+                            int eventType,
                             wxObjectEventFunction func,
                             wxObject *userData )
 {
-    wxEventTableEntry *entry = new wxEventTableEntry;
+    wxDynamicEventTableEntry *entry = new wxDynamicEventTableEntry;
     entry->m_id = id;
     entry->m_lastId = lastId;
     entry->m_eventType = eventType;
@@ -866,7 +1088,7 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
     wxNode *node = m_dynamicEvents->First();
     while (node)
     {
-        wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+        wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->Data();
         if ((entry->m_id == id) &&
             ((entry->m_lastId == lastId) || (lastId == -1)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
@@ -893,7 +1115,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     wxNode *node = m_dynamicEvents->First();
     while (node)
     {
-        wxEventTableEntry *entry = (wxEventTableEntry*)node->Data();
+        wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->Data();
 
         if (entry->m_fn)
         {

@@ -161,35 +161,30 @@ bool wxContextHelp::EventLoop()
 
 bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 {
-    switch (event.GetEventType())
+    if (event.GetEventType() == wxEVT_LEFT_DOWN)
     {
-        case wxEVT_LEFT_DOWN:
-        {
-	  //wxMouseEvent& mouseEvent = (wxMouseEvent&) event;
-            m_contextHelp->SetStatus(TRUE);
-            m_contextHelp->EndContextHelp();
-            return TRUE;
-            break;
-        }
-        case wxEVT_CHAR:
-        case wxEVT_KEY_DOWN:
-        case wxEVT_ACTIVATE:
-        case wxEVT_MOUSE_CAPTURE_CHANGED:
-        {
-            m_contextHelp->SetStatus(FALSE);
-            m_contextHelp->EndContextHelp();
-            return TRUE;
-            break;
-        }
-        case wxEVT_PAINT:
-        case wxEVT_ERASE_BACKGROUND:
-        {
-            event.Skip();
-            return FALSE;
-            break;
-        }
+        m_contextHelp->SetStatus(TRUE);
+        m_contextHelp->EndContextHelp();
+        return TRUE;
     }
-
+    
+    if ((event.GetEventType() == wxEVT_CHAR) ||
+        (event.GetEventType() == wxEVT_KEY_DOWN) ||
+        (event.GetEventType() == wxEVT_ACTIVATE) ||
+        (event.GetEventType() == wxEVT_MOUSE_CAPTURE_CHANGED))
+    {
+        m_contextHelp->SetStatus(FALSE);
+        m_contextHelp->EndContextHelp();
+        return TRUE;
+    }
+    
+    if ((event.GetEventType() == wxEVT_PAINT) ||
+        (event.GetEventType() == wxEVT_ERASE_BACKGROUND))
+    {
+        event.Skip();
+        return FALSE;
+    }
+    
     return TRUE;
 }
 

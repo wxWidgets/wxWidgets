@@ -1876,21 +1876,21 @@ protected:
 };
 
 // TODO move to wx/event.h
-const wxEventType wxEVT_GRID_CELL_LEFT_CLICK    = wxEVT_FIRST + 1580;
-const wxEventType wxEVT_GRID_CELL_RIGHT_CLICK   = wxEVT_FIRST + 1581;
-const wxEventType wxEVT_GRID_CELL_LEFT_DCLICK   = wxEVT_FIRST + 1582;
-const wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK  = wxEVT_FIRST + 1583;
-const wxEventType wxEVT_GRID_LABEL_LEFT_CLICK   = wxEVT_FIRST + 1584;
-const wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK  = wxEVT_FIRST + 1585;
-const wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK  = wxEVT_FIRST + 1586;
-const wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK = wxEVT_FIRST + 1587;
-const wxEventType wxEVT_GRID_ROW_SIZE           = wxEVT_FIRST + 1588;
-const wxEventType wxEVT_GRID_COL_SIZE           = wxEVT_FIRST + 1589;
-const wxEventType wxEVT_GRID_RANGE_SELECT       = wxEVT_FIRST + 1590;
-const wxEventType wxEVT_GRID_CELL_CHANGE        = wxEVT_FIRST + 1591;
-const wxEventType wxEVT_GRID_SELECT_CELL        = wxEVT_FIRST + 1592;
-const wxEventType wxEVT_GRID_EDITOR_SHOWN       = wxEVT_FIRST + 1593;
-const wxEventType wxEVT_GRID_EDITOR_HIDDEN      = wxEVT_FIRST + 1594;
+extern const int wxEVT_GRID_CELL_LEFT_CLICK;
+extern const int wxEVT_GRID_CELL_RIGHT_CLICK;
+extern const int wxEVT_GRID_CELL_LEFT_DCLICK;
+extern const int wxEVT_GRID_CELL_RIGHT_DCLICK;
+extern const int wxEVT_GRID_LABEL_LEFT_CLICK;
+extern const int wxEVT_GRID_LABEL_RIGHT_CLICK;
+extern const int wxEVT_GRID_LABEL_LEFT_DCLICK;
+extern const int wxEVT_GRID_LABEL_RIGHT_DCLICK;
+extern const int wxEVT_GRID_ROW_SIZE;
+extern const int wxEVT_GRID_COL_SIZE;
+extern const int wxEVT_GRID_RANGE_SELECT;
+extern const int wxEVT_GRID_CELL_CHANGE;
+extern const int wxEVT_GRID_SELECT_CELL;
+extern const int wxEVT_GRID_EDITOR_SHOWN;
+extern const int wxEVT_GRID_EDITOR_HIDDEN;
 
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
@@ -1916,9 +1916,9 @@ typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEv
 
 #if 0  // TODO: implement these ?  others ?
 
-const wxEventType wxEVT_GRID_CREATE_CELL      = wxEVT_FIRST + 1576;
-const wxEventType wxEVT_GRID_CHANGE_LABELS    = wxEVT_FIRST + 1577;
-const wxEventType wxEVT_GRID_CHANGE_SEL_LABEL = wxEVT_FIRST + 1578;
+extern const int wxEVT_GRID_CREATE_CELL;
+extern const int wxEVT_GRID_CHANGE_LABELS;
+extern const int wxEVT_GRID_CHANGE_SEL_LABEL;
 
 #define EVT_GRID_CREATE_CELL(fn)      { wxEVT_GRID_CREATE_CELL,      -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 #define EVT_GRID_CHANGE_LABELS(fn)    { wxEVT_GRID_CHANGE_LABELS,    -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },

@@ -918,7 +918,7 @@ msgstr "Neues Verzeichnis anlegen"
 
 #: ../src/generic/filedlgg.cpp:890
 msgid "Current directory:"
-msgstr "Aktuelle Verzeichnis"
+msgstr "Aktuelles Verzeichnis:"
 
 #: ../src/common/fontmap.cpp:101
 msgid "Cyrillic (Latin 5)"
@@ -985,11 +985,11 @@ msgstr "Möchten Sie die Änderungen im Dokument %s sichern?"
 
 #: ../src/html/htmlwin.cpp:230
 msgid "Done"
-msgstr ":-) Ich habe fertig"
+msgstr "Ich habe fertig :-)"
 
 #: ../src/generic/progdlgg.cpp:316
 msgid "Done."
-msgstr "Fertig"
+msgstr "Fertig."
 
 #: ../src/common/paper.cpp:107
 msgid "E sheet, 34 x 44 in"
@@ -3045,7 +3045,7 @@ msgstr "wxWindows konnte 'open display' nicht ausführen für '%s': Abbruch."
 
 #: ../src/common/filefn.cpp:1232
 msgid "wxWindows: error finding temporary file name.\n"
-msgstr "wxWindows: Fehler beim Auffinden des temporären Dateinamen.\n"
+msgstr "wxWindows: Fehler beim Suchen des temporären Dateinamen.\n"
 
 #: ../src/common/datetime.cpp:3023
 msgid "yesterday"
