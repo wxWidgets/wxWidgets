@@ -57,6 +57,7 @@ void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
     {
         wxHtmlLinkInfo lnk2(*lnk);
         lnk2.SetEvent(&event);
+        lnk2.SetHtmlCell(this);
         ((wxHtmlWindow*)parent) -> OnLinkClicked(lnk2);
         // note : this overcasting is legal because parent is *always* wxHtmlWindow
     }

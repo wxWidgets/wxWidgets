@@ -312,23 +312,26 @@ class WXDLLEXPORT wxHtmlLinkInfo : public wxObject
 {
     public:
         wxHtmlLinkInfo() : wxObject()
-                { m_Href = m_Target = wxEmptyString; m_Event = NULL; }
+                { m_Href = m_Target = wxEmptyString; m_Event = NULL, m_Cell = NULL; }
         wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString) : wxObject()
-                { m_Href = href; m_Target = target; m_Event = NULL; }
+                { m_Href = href; m_Target = target; m_Event = NULL, m_Cell = NULL; }
         wxHtmlLinkInfo(const wxHtmlLinkInfo& l)
-                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event; }
+                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event, m_Cell = l.m_Cell; }
         wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l)
-                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event; return *this; }
+                { m_Href = l.m_Href, m_Target = l.m_Target, m_Event = l.m_Event, m_Cell = l.m_Cell; return *this; }
 
         void SetEvent(const wxMouseEvent *e) { m_Event = e; }
+        void SetHtmlCell(const wxHtmlCell *e) { m_Cell = e; }
 
         wxString GetHref() const { return m_Href; }
         wxString GetTarget() const { return m_Target; }
         const wxMouseEvent* GetEvent() const { return m_Event; }
+        const wxHtmlCell* GetHtmlCell() const { return m_Cell; }
 
     private:
         wxString m_Href, m_Target;
         const wxMouseEvent *m_Event;
+        const wxHtmlCell *m_Cell;
 };
 
 

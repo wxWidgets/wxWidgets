@@ -22,17 +22,34 @@ Default ctor.
 Construct hypertext link from HREF (aka URL) and TARGET (name of target
 frame).
 
+\membersection{wxHtmlLinkInfo::GetEvent}\label{wxhtmllinkinfogetevent}
+
+\func{const wxMouseEvent *}{GetEvent}{\void}
+
+Return pointer to event that generated OnLinkClicked event. Valid
+only within \helpref{wxHtmlWindow::OnLinkClicked}{wxhtmlwindowonlinkclicked},
+NULL otherwise.
+
+\membersection{wxHtmlLinkInfo::GetHtmlCell}\label{wxhtmllinkinfogethtmlcell}
+
+\func{const wxHtmlCell *}{GetHtmlCell}{\void}
+
+Return pointer to the cell that was clicked. Valid
+only within \helpref{wxHtmlWindow::OnLinkClicked}{wxhtmlwindowonlinkclicked},
+NULL otherwise.
+
+
 \membersection{wxHtmlLinkInfo::GetHref}\label{wxhtmllinkinfogethref}
 
 \func{wxString}{GetHref}{\void}
 
-Returns {\it HREF} value of the {\tt <A>} tag.
+Return {\it HREF} value of the {\tt <A>} tag.
 
 \membersection{wxHtmlLinkInfo::GetTarget}\label{wxhtmllinkinfogettarget}
 
 \func{wxString}{GetTarget}{\void}
 
-Returns {\it TARGET} value of the {\tt <A>} tag (this value
+Return {\it TARGET} value of the {\tt <A>} tag (this value
 is used to specify in which frame should be the page pointed
 by {\helpref{Href}{wxhtmllinkinfogethref} opened).
 
