@@ -237,6 +237,11 @@
 #define wxUSE_MIMETYPE 0
 
 /*
+ * Use wxSystemOptions
+ */
+#define wxUSE_SYSTEM_OPTIONS 0
+
+/*
  * Use wxMessageDialog (and wxMessageBox)
  */
 #define wxUSE_MSGDLG 0
