@@ -18,8 +18,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma interface "numdlgg.h"
-    #pragma implementation "numdlgg.h"
+    #pragma interface "numdlgg.cpp"
+    #pragma implementation "numdlgg.cpp"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -129,6 +129,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     wxString valStr;
     valStr.Printf(wxT("%lu"), m_value);
     m_spinctrl = new wxSpinCtrl(this, -1, valStr, wxDefaultPosition, wxSize( 140, -1 ) );
+    m_spinctrl -> SetRange(m_min, m_max);
     inputsizer->Add( m_spinctrl, 1, wxCENTER | wxLEFT | wxRIGHT, 10 );
     // add both
     topsizer->Add( inputsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
