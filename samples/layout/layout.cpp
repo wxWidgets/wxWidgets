@@ -267,7 +267,7 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
   // has a text ctrl in the middle. at the bottom, we have
   // two buttons which.
 
-  wxBox *topsizer = new wxBox( wxVERTICAL );
+  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
   
   // 1) top: create wxStaticText with minimum size equal to its default size
   topsizer->Add( 
@@ -296,7 +296,7 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
      
 
   // 4) bottom: create two centred wxButtons  
-  wxBox *button_box = new wxBox( wxHORIZONTAL );
+  wxBoxSizer *button_box = new wxBoxSizer( wxHORIZONTAL );
   button_box->Add(
      new wxButton( this, -1, "Two buttons in a box" ), 
      0,           // make horizontally unstretchable
