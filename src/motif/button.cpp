@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/button.h"
+#include "wx/utils.h"
 
 #include <Xm/PushBG.h>
 #include <Xm/PushB.h>
@@ -45,9 +46,9 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     else
         m_windowId = id;
 
-    char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
+    wxString label1(wxStripMenuCodes(label));
 
-    XmString text = XmStringCreateSimple (label1);
+    XmString text = XmStringCreateSimple ((char*) (const char*) label1);
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     /*

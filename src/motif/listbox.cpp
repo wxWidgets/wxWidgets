@@ -514,6 +514,13 @@ void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
     // Check resulting size is correct
     int tempW, tempH;
     GetSize (&tempW, &tempH);
+
+    /*
+    if (tempW != width || tempH != height)
+    {
+      cout << "wxListBox::SetSize sizes not set correctly.");
+    }
+    */
 }
 
 void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
@@ -726,4 +733,7 @@ void wxListBoxDefaultActionProc (Widget list_w, XtPointer client_data, XmListCal
     lbox->GetEventHandler()->ProcessEvent(event) ;
 }
 
-
+WXWidget wxListBox::GetTopWidget() const
+{
+  return (WXWidget) XtParent( (Widget) m_mainWidget );
+}

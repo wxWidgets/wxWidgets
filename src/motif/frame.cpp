@@ -342,14 +342,12 @@ void wxFrame::GetClientSize(int *x, int *y) const
   Dimension xx, yy;
   XtVaGetValues((Widget) m_workArea, XmNwidth, &xx, XmNheight, &yy, NULL);
 
-  /* TODO
-  if (status_line_exists)
+  if (m_frameStatusBar)
   {
-    Dimension ys;
-    XtVaGetValues(statusLineWidget, XmNheight, &ys, NULL);
-    yy -= ys;
+    int sbw, sbh;
+    m_frameStatusBar->GetSize(& sbw, & sbh);
+    yy -= sbh;
   }
-  */
 
   if (GetMenuBar() != (wxMenuBar*) NULL)
   {
@@ -589,7 +587,7 @@ void wxFrame::PositionStatusBar()
 
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-    m_frameStatusBar->SetSize(0-sh, h, w, sh);
+    m_frameStatusBar->SetSize(0, h, w, sh);
 }
 
 WXWidget wxFrame::GetMenuBarWidget() const

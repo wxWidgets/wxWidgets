@@ -89,6 +89,8 @@ class WXDLLEXPORT wxListBox: public wxControl
 
   void Command(wxCommandEvent& event);
 
+  WXWidget GetTopWidget() const;
+
 protected:
   int       m_noItems;
   int       m_selected;

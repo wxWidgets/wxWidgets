@@ -52,7 +52,9 @@
                             	// 0 for no splines
 
 #define wxUSE_TOOLBAR     1
-                            // Use toolbars
+                                // Use toolbars
+#define wxUSE_COMBOBOX    1
+                                // Use wxComboBox
 #define wxUSE_DRAG_AND_DROP 1
                         	// 0 for no drag and drop
 

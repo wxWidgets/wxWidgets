@@ -88,6 +88,11 @@ printer characteristics) and more reliable printing framework.
 Add GetIcon, GetBitmap to wxImageList. Perhaps store bitmaps
 in image list so we can get them later.
 
+Add centring, right justify styles to wxStaticText.
+
+Synchronize drawing functions on all platforms, using Chris's
+code to test them.
+
 LOW PRIORITY
 ------------
 

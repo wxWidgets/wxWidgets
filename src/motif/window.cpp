@@ -1267,6 +1267,9 @@ void wxWindow::SetFont(const wxFont& font)
 {
     m_windowFont = font;
 
+    // Note that this causes the widget to be resized back
+    // to its original size! How can we stop that?
+    /*
     Widget w = (Widget) GetLabelWidget(); // Usually the main widget
     if (w && m_windowFont.Ok())
     {
@@ -1274,6 +1277,7 @@ void wxWindow::SetFont(const wxFont& font)
 		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
 		   NULL);
     }
+    */
 }
 
 void wxWindow::OnChar(wxKeyEvent& event)
@@ -3049,6 +3053,7 @@ void wxWindow::ChangeColour(WXWidget widget)
 
 void wxWindow::ChangeFont(WXWidget widget)
 {
+  /*
   if (widget && GetFont() && GetFont()->Ok())
   {
     XmFontList fontList = (XmFontList) GetFont()->GetFontList(1.0, GetXDisplay());
@@ -3057,4 +3062,5 @@ void wxWindow::ChangeFont(WXWidget widget)
 		   XmNfontList, fontList,
 		   NULL);
   }
+  */
 }

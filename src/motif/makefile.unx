@@ -164,11 +164,14 @@ LIB_C_SRC=\
  ../common/y_tab.c \
  ../common/extended.c
 
+EXTRA_C_SRC=\
+  combobox/combobox.c
+
 all:    $(WXLIB)
 
 # Define library objects
 OBJECTS=\
- $(LIB_CPP_SRC:.cpp=.o) $(LIB_C_SRC:.c=.o)
+ $(LIB_CPP_SRC:.cpp=.o) $(LIB_C_SRC:.c=.o) $(EXTRA_C_SRC:.c=.o)
 
 $(WXLIB) : $(OBJECTS)
 	ar $(AROPTIONS) $@ $(OBJECTS)
@@ -193,6 +196,8 @@ $(WXLIB) : $(OBJECTS)
 	$(YACC) ../common/parser.y
 	mv y.tab.c ../common/y_tab.c
 
+combobox/combobox.o: combobox/combobox.c
+	$(CCC) -c $(CFLAGS) -o $@ combobox/combobox.c
 
 clean:
 	rm -f $(OBJECTS) $(WXLIB)

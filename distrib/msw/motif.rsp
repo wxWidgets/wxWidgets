@@ -4,6 +4,11 @@ src/motif/*.h
 src/motif/makefile*
 src/motif/*.inc
 src/motif/*.xbm
+src/motif/combobox/*.c
+src/motif/combobox/*.h
+src/motif/combobox/*.doc
+src/motif/combobox/*.man
+src/motif/combobox/*.txt
 
 src/make.env
 src/makeprog.env

@@ -32,6 +32,15 @@ class WXDLLEXPORT wxScreenDC: public wxWindowDC
   static bool StartDrawingOnTop(wxWindow* window);
   static bool StartDrawingOnTop(wxRect* rect = NULL);
   static bool EndDrawingOnTop();
+
+private:
+  static WXWindow sm_overlayWindow;
+
+  // If we have started transparent drawing at a non-(0,0) point
+  // then we will have to adjust the device origin in the
+  // constructor.
+  static int sm_overlayWindowX;
+  static int sm_overlayWindowY;
 };
 
 #endif

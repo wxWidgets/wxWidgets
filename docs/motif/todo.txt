@@ -16,6 +16,9 @@ High Priority
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.
 
+- Also work out why wxWindow::SetFont causes the widget to be shrunk
+  to fit its text.
+
 - Bitmap versions of widgets (wxBitmapButton etc.)
 
 - wxRadioBox
@@ -84,7 +87,8 @@ Low Priority
   http://www.motifzone.com/tmd/articles/DnD/dnd.html
 
 - Optimize colour management so we don't get clashes when e.g.
-  Netscape is running.
+  Netscape is running. See:
+  http://www.motifzone.com/tmd/articles/John_Cwikla/index.html
 
 - wxCheckBoxList
 
