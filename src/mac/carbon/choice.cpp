@@ -176,26 +176,18 @@ wxString wxChoice::GetString(int n) const
 
 void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
-    wxCHECK_RET( n >= 0 && n < m_datas.GetCount(),
+    wxCHECK_RET( n >= 0 && (size_t)n < m_datas.GetCount(),
                  "invalid index in wxChoice::SetClientData" );
-	wxASSERT_MSG( m_datas.GetCount() >= n , "invalid client_data array" ) ;
 	
-	if ( m_datas.GetCount() > n )
-	{
-    	m_datas[n] = (char*) clientData ;
-    }
-    else
-    {
-    	m_datas.Add( (char*) clientData ) ;
-    }
+    m_datas[n] = (char*) clientData ;
 }
 
-void *wxChoice::DoGetItemClientData(int N) const
+void *wxChoice::DoGetItemClientData(int n) const
 {
-    wxCHECK_MSG( N >= 0 && N < m_datas.GetCount(), NULL,
+    wxCHECK_MSG( n >= 0 && (size_t)n < m_datas.GetCount(), NULL,
                  "invalid index in wxChoice::GetClientData" );
 
-    return (void *)m_datas[N];
+    return (void *)m_datas[n];
 }
 
 void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )

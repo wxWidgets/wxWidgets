@@ -1950,7 +1950,7 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
         long keyval = wxMacTranslateKey(keychar, keycode) ;
 
         wxWindow* focus = wxWindow::FindFocus() ;
-        bool handled = MacSendKeyUpEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
+        MacSendKeyUpEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
         // we don't have to do anything under classic here
     }
 }
