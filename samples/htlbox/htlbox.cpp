@@ -24,12 +24,12 @@
     #pragma hdrstop
 #endif
 
-// for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all "standard" wxWindows headers)
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/log.h"
+    #include "wx/textdlg.h"
     #include "wx/sizer.h"
 
     #include "wx/menu.h"
@@ -40,6 +40,13 @@
 #endif
 
 #include "wx/htmllbox.h"
+
+// you can also have a file containing HTML strings for testing, enable this if
+// you want to use it
+//#define USE_HTML_FILE
+#ifdef USE_HTML_FILE
+    #include "wx/textfile.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -54,32 +61,46 @@
 // private classes
 // ----------------------------------------------------------------------------
 
-class MyApp : public wxApp
-{
-public:
-    virtual bool OnInit();
-};
-
 // to use wxHtmlListBox you must derive a new class from it as you must
 // implement pure virtual OnGetItem()
 class MyHtmlListBox : public wxHtmlListBox
 {
 public:
-    MyHtmlListBox(wxWindow *parent, bool multi)
+    MyHtmlListBox(wxWindow *parent, bool multi = false)
         : wxHtmlListBox(parent, -1, wxDefaultPosition, wxDefaultSize,
                         multi ? wxLB_MULTIPLE : 0)
     {
-        SetItemCount(1000);
-        if ( HasMultipleSelection() )
-            Select(10);
-        else
-            SetSelection(10);
         SetMargins(5, 5);
+
+#ifdef USE_HTML_FILE
+        if ( !m_file.Open("results") )
+        {
+            wxLogError("Failed to open results file");
+        }
+        else
+        {
+            SetItemCount(m_file.GetLineCount());
+        }
+#else
+        SetItemCount(10);
+#endif
+
+        if ( HasMultipleSelection() )
+            Select(3);
+        else
+            SetSelection(3);
     }
 
 protected:
     virtual wxString OnGetItem(size_t n) const
     {
+#ifdef USE_HTML_FILE
+        wxString s;
+        if ( m_file.IsOpened() )
+            s = m_file[n];
+
+        return s;
+#else
         int level = n % 6 + 1;
         return wxString::Format(_T("<h%d><font color=#%2x%2x%2x>")
                                 _T("Item</font> <b>%lu</b>")
@@ -89,17 +110,12 @@ protected:
                                 abs(n - 256) % 256,
                                 abs(n - 128) % 256,
                                 (unsigned long)n, level);
+#endif
     }
 
-    virtual void OnDrawSeparator(wxDC& dc,
-                                 wxRect& rect,
-                                 size_t WXUNUSED(n)) const
-    {
-        dc.SetPen(*wxBLACK_DASHED_PEN);
-        dc.DrawLine(rect.x, rect.y, rect.GetRight(), rect.y);
-        dc.DrawLine(rect.x, rect.GetBottom(), rect.GetRight(), rect.GetBottom());
-    }
+    virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
 
+    wxTextFile m_file;
 };
 
 class MyFrame : public wxFrame
@@ -112,38 +128,14 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
-    void OnLboxSelect(wxCommandEvent& event)
-    {
-        wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
+    void OnSetMargins(wxCommandEvent& event);
+    void OnDrawSeparator(wxCommandEvent&) { m_hlbox->RefreshAll(); }
+    void OnToggleMulti(wxCommandEvent& event);
+    void OnSelectAll(wxCommandEvent& event);
 
-        if ( m_hlbox->HasMultipleSelection() )
-        {
-            wxString s;
+    void OnUpdateUISelectAll(wxUpdateUIEvent& event);
 
-            bool first = true;
-            unsigned long cookie;
-            for ( int item = m_hlbox->GetFirstSelected(cookie);
-                  item != wxNOT_FOUND;
-                  item = m_hlbox->GetNextSelected(cookie) )
-            {
-                if ( first )
-                    first = false;
-                else
-                    s << _T(", ");
-
-                s << item;
-            }
-
-            if ( !s.empty() )
-                wxLogMessage(_T("Selected items: %s"), s.c_str());
-        }
-
-        SetStatusText(wxString::Format(
-                        _T("# items selected = %lu"),
-                        (unsigned long)m_hlbox->GetSelectedCount()
-                      ));
-    }
-
+    void OnLboxSelect(wxCommandEvent& event);
     void OnLboxDClick(wxCommandEvent& event)
     {
         wxLogMessage(_T("Listbox item %ld double clicked."), event.GetInt());
@@ -156,6 +148,12 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+class MyApp : public wxApp
+{
+public:
+    virtual bool OnInit() { (new MyFrame())->Show(); return TRUE; }
+};
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -165,6 +163,11 @@ enum
 {
     // menu items
     HtmlLbox_Quit = 1,
+
+    HtmlLbox_SetMargins,
+    HtmlLbox_DrawSeparator,
+    HtmlLbox_ToggleMulti,
+    HtmlLbox_SelectAll,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
@@ -176,42 +179,32 @@ enum
 // event tables and other macros for wxWindows
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWindows events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(HtmlLbox_Quit,  MyFrame::OnQuit)
+
+    EVT_MENU(HtmlLbox_SetMargins, MyFrame::OnSetMargins)
+    EVT_MENU(HtmlLbox_DrawSeparator, MyFrame::OnDrawSeparator)
+    EVT_MENU(HtmlLbox_ToggleMulti, MyFrame::OnToggleMulti)
+    EVT_MENU(HtmlLbox_SelectAll, MyFrame::OnSelectAll)
+
     EVT_MENU(HtmlLbox_About, MyFrame::OnAbout)
+
+
+    EVT_UPDATE_UI(HtmlLbox_SelectAll, MyFrame::OnUpdateUISelectAll)
+
 
     EVT_LISTBOX(wxID_ANY, MyFrame::OnLboxSelect)
     EVT_LISTBOX_DCLICK(wxID_ANY, MyFrame::OnLboxDClick)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWindows to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also declares the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
 IMPLEMENT_APP(MyApp)
 
 // ============================================================================
-// implementation
+// MyFrame
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// the application class
-// ----------------------------------------------------------------------------
-
-// 'Main program' equivalent: the program execution "starts" here
-bool MyApp::OnInit()
-{
-    (new MyFrame())->Show();
-
-    return TRUE;
-}
-
-// ----------------------------------------------------------------------------
-// main frame
+// MyFrame ctor/dtor
 // ----------------------------------------------------------------------------
 
 // frame constructor
@@ -225,17 +218,34 @@ MyFrame::MyFrame()
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
+    menuFile->Append(HtmlLbox_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+
+    // create our specific menu
+    wxMenu *menuHLbox = new wxMenu;
+    menuHLbox->Append(HtmlLbox_SetMargins,
+                      _T("Set &margins...\tCtrl-G"),
+                      _T("Change the margins around the items"));
+    menuHLbox->AppendCheckItem(HtmlLbox_DrawSeparator,
+                               _T("Draw &separators\tCtrl-S"),
+                               _T("Toggle drawing separators between cells"));
+    menuHLbox->AppendSeparator();
+    menuHLbox->AppendCheckItem(HtmlLbox_ToggleMulti,
+                               _T("&Multiple selection\tCtrl-M"),
+                               _T("Toggle multiple selection on/off"));
+    menuHLbox->AppendSeparator();
+    menuHLbox->Append(HtmlLbox_SelectAll, _T("Select &all items\tCtrl-A"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(HtmlLbox_About, _T("&About...\tF1"), _T("Show about dialog"));
 
-    menuFile->Append(HtmlLbox_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
-
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(menuHLbox, _T("&Listbox"));
     menuBar->Append(helpMenu, _T("&Help"));
+
+    menuBar->Check(HtmlLbox_DrawSeparator, true);
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -248,7 +258,7 @@ MyFrame::MyFrame()
 #endif // wxUSE_STATUSBAR
 
     // create the child controls
-    m_hlbox = new MyHtmlListBox(this, true);
+    m_hlbox = new MyHtmlListBox(this);
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T(""),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
@@ -267,7 +277,10 @@ MyFrame::~MyFrame()
     delete wxLog::SetActiveTarget(NULL);
 }
 
-// event handlers
+// ----------------------------------------------------------------------------
+// menu event handlers
+// ----------------------------------------------------------------------------
+
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     // TRUE is to force the frame to close
@@ -282,5 +295,97 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  _T("About HtmlLbox"),
                  wxOK | wxICON_INFORMATION,
                  this);
+}
+
+void MyFrame::OnSetMargins(wxCommandEvent&)
+{
+    long margin = wxGetNumberFromUser
+                  (
+                    _T("Enter the margins to use for the listbox items."),
+                    _T("Margin: "),
+                    _T("HtmlLbox: Set the margins"),
+                    0, 0, 20,
+                    this
+                  );
+
+    if ( margin != -1 )
+    {
+        m_hlbox->SetMargins(margin, margin);
+        m_hlbox->RefreshAll();
+    }
+}
+
+void MyFrame::OnToggleMulti(wxCommandEvent& event)
+{
+    // we need to recreate the listbox
+    wxSizer *sizer = GetSizer();
+    sizer->Detach(m_hlbox);
+    delete m_hlbox;
+
+    m_hlbox = new MyHtmlListBox(this, event.IsChecked());
+    sizer->Prepend(m_hlbox, 1, wxGROW);
+
+    sizer->Layout();
+}
+
+void MyFrame::OnSelectAll(wxCommandEvent& event)
+{
+    m_hlbox->SelectRange(0, m_hlbox->GetItemCount() - 1);
+}
+
+void MyFrame::OnUpdateUISelectAll(wxUpdateUIEvent& event)
+{
+    event.Enable( m_hlbox && m_hlbox->HasMultipleSelection() );
+}
+
+// ----------------------------------------------------------------------------
+// listbox event handlers
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnLboxSelect(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
+
+    if ( m_hlbox->HasMultipleSelection() )
+    {
+        wxString s;
+
+        bool first = true;
+        unsigned long cookie;
+        for ( int item = m_hlbox->GetFirstSelected(cookie);
+              item != wxNOT_FOUND;
+              item = m_hlbox->GetNextSelected(cookie) )
+        {
+            if ( first )
+                first = false;
+            else
+                s << _T(", ");
+
+            s << item;
+        }
+
+        if ( !s.empty() )
+            wxLogMessage(_T("Selected items: %s"), s.c_str());
+    }
+
+    SetStatusText(wxString::Format(
+                    _T("# items selected = %lu"),
+                    (unsigned long)m_hlbox->GetSelectedCount()
+                  ));
+}
+
+// ============================================================================
+// MyHtmlListBox
+// ============================================================================
+
+void MyHtmlListBox::OnDrawSeparator(wxDC& dc, wxRect& rect, size_t) const
+{
+    if ( ((MyFrame *)GetParent())->
+            GetMenuBar()->IsChecked(HtmlLbox_DrawSeparator) )
+    {
+        dc.SetPen(*wxBLACK_DASHED_PEN);
+        dc.DrawLine(rect.x, rect.y, rect.GetRight(), rect.y);
+        dc.DrawLine(rect.x, rect.GetBottom(), rect.GetRight(), rect.GetBottom());
+    }
 }
 
