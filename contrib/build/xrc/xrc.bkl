@@ -14,6 +14,7 @@
         xh_bttn.cpp
         xh_cald.cpp
         xh_chckb.cpp
+        xh_tglbtn.cpp
         xh_chckl.cpp
         xh_choic.cpp
         xh_combo.cpp
@@ -57,6 +58,7 @@
             wx/xrc/xh_bttn.h
             wx/xrc/xh_cald.h
             wx/xrc/xh_chckb.h
+            wx/xrc/xh_tglbtn.h
             wx/xrc/xh_chckl.h
             wx/xrc/xh_choic.h
             wx/xrc/xh_combo.h

@@ -57,6 +57,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_CHECKBOX
     AddHandler(new wxCheckBoxXmlHandler);
 #endif
+#if wxUSE_TOGGLEBTN
+    AddHandler(new wxToggleButtonXmlHandler);
+#endif
 #if wxUSE_HTML
     AddHandler(new wxHtmlWindowXmlHandler);
 #endif
