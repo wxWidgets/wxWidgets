@@ -155,13 +155,13 @@ All (GUI):
 wxMSW:
 
 ! build system changed: setup.h is not a static file in include/wx any more
-  but is created as part of the build process under lib/<toolkit>/wx/include
+  but is created as part of the build process under lib/<toolkit>/wx
   where <toolkit> is of the form (msw|univ)[dll][u][d]. You'll need to update
   the include path in your make/project files appropriately. Furthermore,
   xpm.lib is no longer used by wxMSW, it was superseded by the wxXPMDecoder
   class. You'll need to remove all references to xpm.lib from your
   make/project files. Finally, the library names have changed as well and now
-  use the following consistent naming convention: wxmsw[u][d][ver].(lib|dll)
+  use the following consistent naming convention: wxmsw[ver][u][d].(lib|dll)
   where 'u' appears for Unicode version, 'd' -- for the debug one and version
   is only present for the DLLs builds.
 
