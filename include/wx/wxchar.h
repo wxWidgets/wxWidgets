@@ -440,7 +440,7 @@
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             #define wxNEED_WX_TIME_H
-        #elif defined(__MWERKS__) && ( defined(macintosh) || defined(__MACH__) )
+        #elif defined(__MWERKS__) && ( defined(__MSL__) || defined(__MACH__) )
             /* ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
