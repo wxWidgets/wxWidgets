@@ -648,12 +648,15 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
             }
             else
             {
-// #if !TARGET_CARBON
-                GrafPtr thePort ;
-                GetPort( &thePort ) ;
-                wxSafeYield(win,true);
-                SetPort( thePort ) ;
-// #endif                
+#if TARGET_CARBON
+                if ( UMAGetSystemVersion() >= 0x1000 )
+#endif
+                {
+                    GrafPtr thePort ;
+                    GetPort( &thePort ) ;
+                    wxSafeYield(win,true);
+                    SetPort( thePort ) ;
+                }
                 dc->StartPage();
                 keepGoing = printout->OnPrintPage(pn);
                 dc->EndPage();
