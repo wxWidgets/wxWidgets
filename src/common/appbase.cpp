@@ -357,37 +357,23 @@ bool wxAppConsole::OnCmdLineError(wxCmdLineParser& parser)
 // ----------------------------------------------------------------------------
 
 /* static */
-bool wxAppConsole::CheckBuildOptions(const wxBuildOptions& opts)
+bool wxAppConsole::CheckBuildOptions(const char *optionsSignature,
+                                     const char *componentName)
 {
-#define wxCMP(what)   (what == opts.m_ ## what)
-
-    bool
-#ifdef __WXDEBUG__
-    isDebug = TRUE;
-#else
-    isDebug = FALSE;
+#if 0 // can't use wxLogTrace, not up and running yet
+    printf("checking build options object '%s' (ptr %p) in '%s'\n",
+             optionsSignature, optionsSignature, componentName);
 #endif
 
-    int verMaj = wxMAJOR_VERSION,
-        verMin = wxMINOR_VERSION;
-
-    if ( !(wxCMP(isDebug) && wxCMP(verMaj) && wxCMP(verMin)) )
+    if ( strcmp(optionsSignature, WX_BUILD_OPTIONS_SIGNATURE) != 0 )
     {
+        wxString lib = wxString::FromAscii(WX_BUILD_OPTIONS_SIGNATURE);
+        wxString prog = wxString::FromAscii(optionsSignature);
+        wxString progName = wxString::FromAscii(componentName);
         wxString msg;
-        wxString libDebug, progDebug;
-
-        if (isDebug)
-            libDebug = wxT("debug");
-        else
-            libDebug = wxT("no debug");
-
-        if (opts.m_isDebug)
-            progDebug = wxT("debug");
-        else
-            progDebug = wxT("no debug");
         
-        msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %d.%d (%s), and your program used %d.%d (%s)."),
-                   verMaj, verMin, libDebug.c_str(), opts.m_verMaj, opts.m_verMin, progDebug.c_str());
+        msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %s, and %s used %s."),
+                   lib.c_str(), progName.c_str(), prog.c_str());
         
         wxLogFatalError(msg);
 

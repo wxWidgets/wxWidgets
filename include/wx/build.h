@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/build.h
-// Purpose:     wxBuildOptions class declaration
-// Author:      Vadim Zeitlin
+// Purpose:     Runtime build options checking
+// Author:      Vadim Zeitlin, Vaclav Slavik
 // Modified by:
 // Created:     07.05.02
 // RCS-ID:      $Id$
@@ -14,44 +14,48 @@
 
 #include "wx/version.h"
 
-class WXDLLIMPEXP_BASE wxAppConsole;
-
 // ----------------------------------------------------------------------------
-// wxBuildOptions
+// WX_BUILD_OPTIONS_SIGNATURE
 // ----------------------------------------------------------------------------
 
-class wxBuildOptions
-{
-public:
-    // the ctor must be inline to get the compilation settings of the code
-    // which included this header
-    wxBuildOptions()
-    {
-        // debug/release
-#ifdef __WXDEBUG__
-        m_isDebug = TRUE;
+#define __WX_BO_STRINGIZE(x)  #x
+
+#if (wxMINOR_VERSION % 2) == 0
+    #define __WX_BO_VERSION(x,y,z) \
+        __WX_BO_STRINGIZE(x) "." __WX_BO_STRINGIZE(y)
 #else
-        m_isDebug = FALSE;
+    #define __WX_BO_VERSION(x,y,z) \
+        __WX_BO_STRINGIZE(x) "." __WX_BO_STRINGIZE(y) "." __WX_BO_STRINGIZE(z)
 #endif
 
-        // version: we don't test the micro version as hopefully changes
-        // between 2 micro versions don't result in fatal compatibility
-        // problems
-        m_verMaj = wxMAJOR_VERSION;
-        m_verMin = wxMINOR_VERSION;
-    }
+#ifdef __WXDEBUG__
+    #define __WX_BO_DEBUG "debug"
+#else
+    #define __WX_BO_DEBUG "no debug"
+#endif
 
-private:
-    // the version
-    int m_verMaj,
-        m_verMin;
+#if wxUSE_UNICODE
+    #define __WX_BO_UNICODE "Unicode"
+#else
+    #define __WX_BO_UNICODE "ANSI"
+#endif
+    
+// This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
+#define WX_BUILD_OPTIONS_SIGNATURE \
+    __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
+    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE ")"
 
-    // compiled with __WXDEBUG__?
-    bool m_isDebug;
 
-    // actually only CheckBuildOptions() should be our friend but well...
-    friend class wxAppConsole;
-};
+
+// Use this macro to check build options. Adding it to a file in DLL will
+// ensure that the DLL checks build options in same way IMPLEMENT_APP() does.
+#define WX_CHECK_BUILD_OPTIONS(libName)                                 \
+    static bool wxCheckBuildOptions()                                   \
+    {                                                                   \
+        wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,     \
+                                        libName);                       \
+        return true;                                                    \
+    };                                                                  \
+    static bool gs_buildOptionsCheck = wxCheckBuildOptions();
 
 #endif // _WX_BUILD_H_
-
