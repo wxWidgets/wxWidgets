@@ -1565,6 +1565,35 @@ static PyObject *_wrap_wxXmlResource_GetFlags(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxXmlResource_SetFlags(_swigobj,_swigarg0)  (_swigobj->SetFlags(_swigarg0))
+static PyObject *_wrap_wxXmlResource_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlResource * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxXmlResource_SetFlags",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_SetFlags. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxXmlResource_SetFlags(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxXmlSubclassFactory() (new wxPyXmlSubclassFactory())
 static PyObject *_wrap_new_wxXmlSubclassFactory(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5097,6 +5126,7 @@ static PyMethodDef xrccMethods[] = {
 	 { "new_wxXmlProperty", (PyCFunction) _wrap_new_wxXmlProperty, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlSubclassFactory__setCallbackInfo", (PyCFunction) _wrap_wxXmlSubclassFactory__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxXmlSubclassFactory", (PyCFunction) _wrap_new_wxXmlSubclassFactory, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_SetFlags", (PyCFunction) _wrap_wxXmlResource_SetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_GetFlags", (PyCFunction) _wrap_wxXmlResource_GetFlags, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Set", (PyCFunction) _wrap_wxXmlResource_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_Get", (PyCFunction) _wrap_wxXmlResource_Get, METH_VARARGS | METH_KEYWORDS },

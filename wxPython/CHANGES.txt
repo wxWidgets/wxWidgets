@@ -42,6 +42,14 @@ to wxGrid.
 
 Added Python == and != operators for some basic classes
 
+Fixed the Python wrappers for wxInputStream so they no longer block
+when reading from a wxProcess on wxGTK.  They now work more or less as
+they did before 2.3.3.1 but the dual meaning of eof() has been
+removed.  There is now a CanRead() method that lets you know if there
+is data waiting to be read from the pipe.
+
+Fixed method name clash in wxIEHtmlWin, renamed Refresh to RefreshPage.
+
 
 
 

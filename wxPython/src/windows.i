@@ -410,6 +410,13 @@ public:
     wxSize GetBestSize();
     wxSize GetMaxSize();
 
+    // There are times (and windows) where 'Best' size and 'Min' size
+    // are vastly out of sync.  This should be remedied somehow, but in
+    // the meantime, this method will return the larger of BestSize
+    // (the window's smallest legible size), and any user specified
+    // MinSize hint.
+    wxSize GetAdjustedBestSize();
+
     void SetCaret(wxCaret *caret);
     wxCaret *GetCaret();
     %pragma(python) addtoclass = "# replaces broken shadow method

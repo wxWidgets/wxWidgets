@@ -212,6 +212,9 @@ public:
     // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
     int GetFlags();
 
+    // Set flags after construction.
+    void SetFlags(int flags) { m_flags = flags; }
+
 };
 
 //----------------------------------------------------------------------
