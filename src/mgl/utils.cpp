@@ -74,7 +74,6 @@ bool wxGetEnv(const wxString& var, wxString *value)
 
 bool wxSetEnv(const wxString& variable, const wxChar *value)
 {
-#ifdef __WATCOMC__ // has putenv()
     wxString s = variable;
     if ( value )
         s << _T('=') << value;
@@ -87,10 +86,6 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
     strcpy(buf, p);
 
     return putenv(buf) == 0;
-#else // no way to set an env var
-    #error "Don't know how to implement wxSetEnv on this platform!"
-    return FALSE;
-#endif
 }
 
 const wxChar* wxGetHomeDir(wxString *home)
