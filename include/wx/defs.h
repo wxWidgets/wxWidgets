@@ -840,7 +840,7 @@ enum wxStretch
 #define wxGA_HORIZONTAL      wxHORIZONTAL
 #define wxGA_VERTICAL        wxVERTICAL
 // Windows only
-#define wxGA_SMOOTH          0x0008
+#define wxGA_SMOOTH          0x0010
 
 /*
  * wxSlider flags
