@@ -439,6 +439,7 @@ void wxRemoveMacWindowAssociation(wxTopLevelWindowMac *win)
 // ----------------------------------------------------------------------------
 
 WXHWND wxTopLevelWindowMac::s_macWindowInUpdate = NULL;
+wxTopLevelWindowMac *wxTopLevelWindowMac::s_macDeactivateWindow = NULL;
 
 void wxTopLevelWindowMac::Init()
 {
@@ -916,8 +917,21 @@ void wxTopLevelWindowMac::MacMouseMoved( WXEVENTREF ev , short part)
 
 #endif
 
+void wxTopLevelWindowMac::MacDelayedDeactivation(long timestamp)
+{
+    if(s_macDeactivateWindow)
+    {
+        wxLogDebug("Doing delayed deactivation of %p",s_macDeactivateWindow);
+        s_macDeactivateWindow->MacActivate(timestamp, false);
+    }
+}
+
 void wxTopLevelWindowMac::MacActivate( long timestamp , bool inIsActivating )
 {
+    wxLogDebug("TopLevel=%p::MacActivate",this);
+    if(s_macDeactivateWindow==this)
+        s_macDeactivateWindow=NULL;
+    MacDelayedDeactivation(timestamp);
     wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
     event.m_timeStamp = timestamp ;
     event.SetEventObject(this);

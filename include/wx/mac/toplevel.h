@@ -67,6 +67,7 @@ public:
     // implementation from now on
     // --------------------------
 
+    static void MacDelayedDeactivation(long timestamp);
     virtual void MacCreateRealWindow( const wxString& title,
                                       const wxPoint& pos,
                                       const wxSize& size,
@@ -116,6 +117,7 @@ protected:
     bool m_macNeedsErasing ;
 
     static WXWindow s_macWindowInUpdate ;
+    static wxTopLevelWindowMac *s_macDeactivateWindow;
 private :
 #if TARGET_CARBON
     WXEVENTHANDLERREF    m_macEventHandler ;
