@@ -747,7 +747,7 @@ whereami(name)
 
         t = imagedir;
         if (!absolute_pathname(name)) {
-#if defined(DOS) || defined(__WIN32__)
+#if defined(__DOS__) || defined(__WIN32__)
             int   drive;
             char *newrbuf;
 
