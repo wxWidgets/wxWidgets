@@ -1408,6 +1408,8 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     #ifdef HAVE_WGETCWD
 		#if	wxUSE_UNICODE_MSLU
 			if ( wxGetOsVersion() != wxWIN95 )
+        #else
+            char *cbuf = NULL; // never really used because needsANSI will always be FALSE
 		#endif
 			{
 				ok = _wgetcwd(buf, sz) != NULL;
