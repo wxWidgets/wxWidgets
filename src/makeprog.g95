@@ -7,7 +7,7 @@
 #
 # Include file for Cygwin/Mingw32 samples
 
-WXDIR = $(WXWIN)
+# WXDIR = $(WXWIN)
 
 include $(WXDIR)/src/makeg95.env
 
