@@ -84,7 +84,7 @@ wxDialog::~wxDialog()
     wxLogDebug("Destroying");
     // setReleasedWhenClosed: NO
     [m_cocoaNSWindow close];
-    DisassociateNSPanel(m_cocoaNSWindow);
+    DisassociateNSPanel(GetNSPanel());
 }
 
 void wxDialog::Cocoa_close(void)
