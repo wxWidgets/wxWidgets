@@ -51,9 +51,10 @@ void wxTimerCallback (wxTimer * timer)
   timer->Notify();
 }
 
-wxTimer::wxTimer()
+void wxTimer::Init()
 {
     m_id = 0;
+    m_milli = 1000;
 }
 
 wxTimer::~wxTimer()
