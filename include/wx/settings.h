@@ -149,16 +149,6 @@ public:
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);
-
-
-    // the backwards compatible versions, don't use these methods in the new
-    // code!
-    static wxColour GetSystemColour(int index)
-        { return GetColour((wxSystemColour)index); }
-    static wxFont GetSystemFont(int index)
-        { return GetFont((wxSystemFont)index); }
-    static int GetSystemMetric(int index)
-        { return GetMetric((wxSystemMetric)index); }
 };
 
 // ----------------------------------------------------------------------------
@@ -174,6 +164,16 @@ public:
     // wxSystemSettingsNative
     static wxColour GetColour(wxSystemColour index);
 #endif // __WXUNIVERSAL__
+
+
+    // the backwards compatible versions of wxSystemSettingsNative functions,
+    // don't use these methods in the new code!
+    static wxColour GetSystemColour(int index)
+        { return GetColour((wxSystemColour)index); }
+    static wxFont GetSystemFont(int index)
+        { return GetFont((wxSystemFont)index); }
+    static int GetSystemMetric(int index)
+        { return GetMetric((wxSystemMetric)index); }
 };
 
 #endif
