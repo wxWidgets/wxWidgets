@@ -116,7 +116,8 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
         bool isVirtual;
         WORD key = wxCharCodeWXToMSW(entries[i].m_keyCode, & isVirtual);
-        fVirt |= FVIRTKEY;
+        if (isVirtual)
+            fVirt |= FVIRTKEY;
 
         WORD cmd = entries[i].m_command;
 
