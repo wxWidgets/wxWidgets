@@ -12,9 +12,9 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-//#ifdef __GNUG__
-//#pragma interface "wxchar.h"
-//#endif
+#ifdef __GNUG__
+    #pragma interface "wxchar.h"
+#endif
 
 // only do SBCS or _UNICODE
 #if defined (_MBCS )
@@ -41,9 +41,29 @@
 #  endif
 #endif
 
-// Windows (VC++) has broad TCHAR support
-#if defined(__VISUALC__) && defined(__WIN32__)
+// ----------------------------------------------------------------------------
+// define wxHAVE_TCHAR_FUNCTIONS for the compilers which support the
+// wide-character functions
+// ----------------------------------------------------------------------------
 
+#ifdef __WIN32__
+    // VC++ and BC++ starting with 5.2 have TCHAR support
+    #ifdef __VISUALC__
+        #define wxHAVE_TCHAR_FUNCTIONS
+    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
+        #define wxHAVE_TCHAR_FUNCTIONS
+    #endif
+#elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
+    // VisualAge 4.0+ supports TCHAR
+    #define wxHAVE_TCHAR_FUNCTIONS
+
+    // but not stdio.h nor time nor conversion functions
+    #define wxNO_TCHAR_STDIO
+    #define wxNO_TCHAR_STDLIB
+    #define wxNO_TCHAR_TIME
+#endif
+
+#ifdef wxHAVE_TCHAR_FUNCTIONS
 #  define HAVE_WCSLEN 1
 
 #  include <tchar.h>
@@ -62,6 +82,7 @@ typedef  _TUCHAR     wxUChar;
 #  define wxUSE_WCHAR_T 1
 
    // ctype.h functions
+#ifndef wxNO_TCHAR_CTYPE
 #  define  wxIsalnum   _istalnum
 #  define  wxIsalpha   _istalpha
 #  define  wxIsctrl    _istctrl
@@ -75,11 +96,15 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxIsxdigit  _istxdigit
 #  define  wxTolower   _totlower
 #  define  wxToupper   _totupper
+#endif // wxNO_TCHAR_CTYPE
 
    // locale.h functons
+#ifndef wxNO_TCHAR_LOCALE
 #  define  wxSetlocale _tsetlocale
+#endif // wxNO_TCHAR_LOCALE
 
    // string.h functions
+#ifndef wxNO_TCHAR_STRING
 #  define  wxStrcat    _tcscat
 #  define  wxStrchr    _tcschr
 #  define  wxStrcmp    _tcscmp
@@ -97,12 +122,13 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxStrspn    _tcsspn
 #  define  wxStrstr    _tcsstr
 #  define  wxStrtod    _tcstod
-// is there a _tcstok[_r] ?
 #  define  wxStrtol    _tcstol
 #  define  wxStrtoul   _tcstoul
 #  define  wxStrxfrm   _tcsxfrm
+#endif // wxNO_TCHAR_STRING
 
    // stdio.h functions
+#ifndef wxNO_TCHAR_STDIO
 #  define  wxFgetc     _fgettc
 #  define  wxFgetchar  _fgettchar
 #  define  wxFgets     _fgetts
@@ -131,225 +157,8 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxVprintf   _vtprintf
 #  define  wxVsscanf   _vstscanf
 #  define  wxVsprintf  _vstprintf
-
-   // stdlib.h functions
-#  if !wxUSE_UNICODE
-#    define  wxAtof      atof
-#  endif
-#  define  wxAtoi      _ttoi
-#  define  wxAtol      _ttol
-#  define  wxGetenv    _tgetenv
-#  define  wxSystem    _tsystem
-
-   // time.h functions
-#  define  wxAsctime   _tasctime
-#  define  wxCtime     _tctime
-
-// #elif defined(XXX)
-   // #include XXX-specific files here
-   // typeddef YYY wxChar;
-
-   // translate wxZZZ names
-
-#elif defined(__BORLANDC__) && defined(__WIN32__)
-#if (__BORLANDC__ >= 0x520)
-// BC++ 5.02 and later has broad tchar support
-#  define HAVE_WCSLEN 1
-
-#  include <tchar.h>
-
-#  if wxUSE_UNICODE // temporary - preserve binary compatibility
-typedef  _TCHAR      wxChar;
-typedef  _TSCHAR     wxSChar;
-typedef  _TUCHAR     wxUChar;
-#  else
-#    define wxChar char
-#    define wxSChar signed char
-#    define wxUChar unsigned char
-#  endif
-   // wchar_t is available
-#  undef wxUSE_WCHAR_T
-#  define wxUSE_WCHAR_T 1
-
-   // ctype.h functions
-#  define  wxIsalnum   _istalnum
-#  define  wxIsalpha   _istalpha
-#  define  wxIsctrl    _istcntrl
-#  define  wxIsdigit   _istdigit
-#  define  wxIsgraph   _istgraph
-#  define  wxIslower   _istlower
-#  define  wxIsprint   _istprint
-#  define  wxIspunct   _istpunct
-#  define  wxIsspace   _istspace
-#  define  wxIsupper   _istupper
-#  define  wxIsxdigit  _istxdigit
-#  define  wxTolower   _totlower
-#  define  wxToupper   _totupper
-
-   // locale.h functons
-#  define  wxSetlocale _tsetlocale
-
-   // string.h functions
-#  define  wxStrcat    _tcscat
-#  define  wxStrchr    _tcschr
-#  define  wxStrcmp    _tcscmp
-#  define  wxStrcoll   _tcscoll
-#  define  wxStrcpy    _tcscpy
-#  define  wxStrcspn   _tcscspn
-#  define  wxStrftime  _tcsftime
-#  define  wxStricmp   _tcsicmp
-#  define  wxStrlen_   _tcslen // used in wxStrlen inline function
-#  define  wxStrncat   _tcsncat
-#  define  wxStrncmp   _tcsncmp
-#  define  wxStrncpy   _tcsncpy
-#  define  wxStrpbrk   _tcspbrk
-#  define  wxStrrchr   _tcsrchr
-#  define  wxStrspn    _tcsspn
-#  define  wxStrstr    _tcsstr
-#  define  wxStrtod    _tcstod
-// is there a _tcstok[_r] ?
-#  define  wxStrtol    _tcstol
-#  define  wxStrtoul   _tcstoul
-#  define  wxStrxfrm   _tcsxfrm
-
-   // stdio.h functions
-#  define  wxFgetc     _fgettc
-#  define  wxFgetchar  _fgettchar
-#  define  wxFgets     _fgetts
-#  define  wxFopen     _tfopen
-#  define  wxFputc     _fputtc
-#  define  wxFputchar  _fputtchar
-#  define  wxFprintf   _ftprintf
-#  define  wxFreopen   _tfreopen
-#  define  wxFscanf    _ftscanf
-#  define  wxGetc      _gettc
-#  define  wxGetchar   _gettchar
-#  define  wxGets      _getts
-#  define  wxPerror    _tperror
-#  define  wxPrintf    _tprintf
-#  define  wxPutc      _puttc
-#  define  wxPutchar   _puttchar
-#  define  wxPuts      _putts
-#  define  wxRemove    _tremove
-#  define  wxRename    _trename
-#  define  wxScanf     _tscanf
-#  define  wxSprintf   _stprintf
-#  define  wxSscanf    _stscanf
-#  define  wxTmpnam    _ttmpnam
-#  define  wxUngetc    _ungettc
-#  define  wxVfprint   _vftprintf
-#  define  wxVprintf   _vtprintf
-#  define  wxVsscanf   _vstscanf
-#  define  wxVsprintf  _vstprintf
-
-   // stdlib.h functions
-#  define  wxAtof      _ttof
-#  define  wxAtoi      _ttoi
-#  define  wxAtol      _ttol
-#  define  wxGetenv    _tgetenv
-#  define  wxSystem    _tsystem
-
-   // time.h functions
-#  define  wxAsctime   _tasctime
-#  define  wxCtime     _tctime
-
-// #elif defined(XXX)
-   // #include XXX-specific files here
-   // typeddef YYY wxChar;
-
-   // translate wxZZZ names
-
-#else
-// Borland C++ 4.52 doesn't have much tchar support
-// maybe Borland C++ 5.02 has, can't check right now
-// but I'll use the Win32 API instead here
-
-#  include <tchar.h>
-#  if wxUSE_UNICODE // temporary - preserve binary compatibility
-typedef  _TCHAR      wxChar;
-typedef  _TSCHAR     wxSChar;
-typedef  _TUCHAR     wxUChar;
-#  else
-#    define wxChar char
-#    define wxSChar signed char
-#    define wxUChar unsigned char
-#  endif
-   // wchar_t is available
-#  undef wxUSE_WCHAR_T
-// This test is for C++Builder
-#  define wxUSE_WCHAR_T 1
-#  define wxNEED_WCSLEN
-#  define wxNEED_WX_CTYPE_H
-// #define  wxStrtok    strtok_r // Borland C++ 4.52 doesn't have strtok_r
-#  define wxNEED_WX_STRING_H
-#  define wxNEED_WX_STDIO_H
-#  define wxNEED_WX_STDLIB_H
-#  define wxNEED_WX_TIME_H
-
-#endif  // __BORLANDC__ >= 0x530
-
-// VisualAge C++ V4.0 has broad tchar support
-#elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
-
-#  define HAVE_WCSLEN 1
-#  include <wchar.h>
-#  include <tchar.h>
-
-#  if wxUSE_UNICODE // temporary - preserve binary compatibility
-typedef  _TCHAR      wxChar;
-typedef  _TSCHAR     wxSChar;
-typedef  _TUCHAR     wxUChar;
-#  else
-#    define wxChar char
-#    define wxSChar signed char
-#    define wxUChar unsigned char
-#  endif
-   // wchar_t is available
-#  undef wxUSE_WCHAR_T
-#  define wxUSE_WCHAR_T 1
-
-   // ctype.h functions
-#  define  wxIsalnum   _istalnum
-#  define  wxIsalpha   _istalpha
-#  define  wxIsctrl    _istcntrl
-#  define  wxIsdigit   _istdigit
-#  define  wxIsgraph   _istgraph
-#  define  wxIslower   _istlower
-#  define  wxIsprint   _istprint
-#  define  wxIspunct   _istpunct
-#  define  wxIsspace   _istspace
-#  define  wxIsupper   _istupper
-#  define  wxIsxdigit  _istxdigit
-#  define  wxTolower   _totlower
-#  define  wxToupper   _totupper
-
-   // locale.h functons -- not defined in tchar.h
-#  define  wxSetlocale setlocale
-
-   // string.h functions
-#  define  wxStrcat    _tcscat
-#  define  wxStrchr    _tcschr
-#  define  wxStrcmp    _tcscmp
-#  define  wxStrcoll   _tcscoll
-#  define  wxStrcpy    _tcscpy
-#  define  wxStrcspn   _tcscspn
-#  define  wxStrftime  _tcsftime
-#  define  wxStricmp   _tcsicmp
-#  define  wxStrlen_   _tcslen // used in wxStrlen inline function
-#  define  wxStrncat   _tcsncat
-#  define  wxStrncmp   _tcsncmp
-#  define  wxStrncpy   _tcsncpy
-#  define  wxStrpbrk   _tcspbrk
-#  define  wxStrrchr   _tcsrchr
-#  define  wxStrspn    _tcsspn
-#  define  wxStrstr    _tcsstr
-#  define  wxStrtod    _tcstod
-// is there a _tcstok[_r] ?
-#  define  wxStrtol    _tcstol
-#  define  wxStrtoul   _tcstoul
-#  define  wxStrxfrm   _tcsxfrm
-
-   // stdio.h functions
+#elif defined(__VISAGECPP__)
+    // it has some stdio.h functions, apparently
 #  define  wxFgetc     _fgettc
 #  define  wxFgets     _fgetts
 #  define  wxFputc     _fputtc
@@ -366,40 +175,26 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxVfprint   _vftprintf
 #  define  wxVprintf   _vtprintf
 #  define  wxVsprintf  _vstprintf
-// not defined in tchar.h
-#  define  wxFgetchar  fgetchar
-#  define  wxFopen     fopen
-#  define  wxFputchar  fputchar
-#  define  wxFreopen   freopen
-#  define  wxGets      gets
-#  define  wxPerror    perror
-#  define  wxPuts      puts
-#  define  wxRemove    remove
-#  define  wxRename    rename
-#  define  wxTmpnam    tmpnam
-#  define  wxUngetc    ungetc
-#  define  wxVsscanf   vsscanf
+#endif // wxNO_TCHAR_STDIO
 
-   // stdlib.h functions -- none defined in tchar.h
+   // stdlib.h functions
+#ifndef wxNO_TCHAR_STDLIB
 #  if !wxUSE_UNICODE
-#    define  wxAtof      atof
+#    define  wxAtof    atof
 #  endif
-#  define  wxAtoi      atoi
-#  define  wxAtol      atol
-#  define  wxGetenv    getenv
-#  define  wxSystem    system
+#  define  wxAtoi      _ttoi
+#  define  wxAtol      _ttol
+#  define  wxGetenv    _tgetenv
+#  define  wxSystem    _tsystem
+#endif // wxNO_TCHAR_STDLIB
 
-   // time.h functions  -- none defined in tchar.h
-#  define  wxAsctime   asctime
-#  define  wxCtime     ctime
+   // time.h functions
+#ifndef wxNO_TCHAR_TIME
+#  define  wxAsctime   _tasctime
+#  define  wxCtime     _tctime
+#endif // wxNO_TCHAR_TIME
 
-// #elif defined(XXX)
-   // #include XXX-specific files here
-   // typeddef YYY wxChar;
-
-   // translate wxZZZ names
-
-#else//!TCHAR-aware compilers
+#else // !TCHAR-aware compilers
 
 // check whether we should include wchar.h or equivalent
 #  if wxUSE_UNICODE
@@ -664,11 +459,11 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #  undef wxNEED_WCSLEN
 #endif
 
-/// checks whether the passed in pointer is NULL and if the string is empty
+// checks whether the passed in pointer is NULL and if the string is empty
 WXDLLEXPORT inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
 #ifndef wxNEED_WX_STRING_H
-/// safe version of strlen() (returns 0 if passed NULL pointer)
+// safe version of strlen() (returns 0 if passed NULL pointer)
 WXDLLEXPORT inline size_t wxStrlen(const wxChar *psz)
    { return psz ? wxStrlen_(psz) : 0; }
 #endif
@@ -714,7 +509,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #endif
 
 #ifndef wxSetlocale
-WXDLLEXPORT wxChar * wxSetlocale(int category, const wxChar *locale);
+WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 #endif
 
 #ifdef wxNEED_WCSLEN // for use in buffer.h
