@@ -368,10 +368,10 @@ class AppBuilder(BundleBuilder):
 			open(bootstrappath, "w").write(BOOTSTRAP_SCRIPT % locals())
 			os.chmod(bootstrappath, 0775)
 
-                if self.iconfile is not None:
-                        iconbase = os.path.basename(self.iconfile)
-                        self.plist.CFBundleIconFile = iconbase
-                        self.files.append( (self.iconfile, pathjoin(resdir, iconbase)) )
+		if self.iconfile is not None:
+			iconbase = os.path.basename(self.iconfile)
+			self.plist.CFBundleIconFile = iconbase
+			self.files.append( (self.iconfile, pathjoin(resdir, iconbase)) )
 
 	def postProcess(self):
 		if self.standalone:
@@ -616,7 +616,7 @@ Options:
       --nib=NAME	 main nib name
   -c, --creator=CCCC	 4-char creator code (default: '????')
       --iconfile=FILE	 Filename of the icon to be copied to Resources and
-                         used as the Finder icon
+			 used as the Finder icon
   -l, --link		 symlink files/folder instead of copying them
       --link-exec	 symlink the executable instead of copying it
       --standalone	 build a standalone application, which is fully
