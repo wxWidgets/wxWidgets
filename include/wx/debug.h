@@ -13,8 +13,9 @@
 #define   _WX_DEBUG_H_
 
 #include  <assert.h>
+#include  <limits.h>            // for CHAR_BIT used below
 
-#include  "wx/wxchar.h"
+#include  "wx/wxchar.h"         // for __TFILE__ and wxChar
 
 // ----------------------------------------------------------------------------
 // Defines controlling the debugging macros
@@ -155,6 +156,51 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 //     from the void function (of course, the function shouldn't be void
 //     to begin with...)
 #define wxCHECK_RET(x, msg)       if (!(x)) {wxFAIL_MSG(msg); return; }
+
+// ----------------------------------------------------------------------------
+// Compile time asserts
+//
+// Unlike the normal assert and related macros above which are checked during
+// the program tun-time the macros below will result in a compilation error if
+// the condition they check is false. This is usually used to check the
+// expressions containing sizeof()s which cannot be tested with the
+// preprocessor. If you can use the #if's, do use them as you can give a more
+// detailed error message then.
+// ----------------------------------------------------------------------------
+
+/*
+  How this works (you don't have to understand it to be able to use the
+  macros): we rely on the fact that it is invalid to define a named bit field
+  in a struct of width 0. All the rest are just the hacks to minimize the
+  possibility of the compiler warnings when compiling this macro: in
+  particular, this is why we define a struct and not an object (which would
+  result in a warning about unused variable) and a named struct (otherwise we'd
+  get a warning about an unnamed struct not used to define an object!).
+ */
+
+#define wxMAKE_ASSERT_NAME_HELPER(line) wxAssert_ ## line
+#define wxMAKE_ASSERT_NAME(line)        wxMAKE_ASSERT_NAME_HELPER(line)
+#define wxMAKE_UNIQUE_ASSERT_NAME       wxMAKE_ASSERT_NAME(__LINE__)
+
+/*
+  The second argument of this macro must be a valid C++ identifier and not a
+  string. I.e. you should use it like this:
+
+    wxCOMPILE_TIME_ASSERT( sizeof(int) >= 2, YourIntsAreTooSmall );
+
+ It may be used both within a function and in the global scope.
+*/
+#define wxCOMPILE_TIME_ASSERT(expr, msg) \
+    struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
+
+// helpers for wxCOMPILE_TIME_ASSERT below, for private use only
+#define wxMAKE_BITSIZE_MSG(type, size) type ## SmallerThan ## size ## Bits
+
+// a special case of compile time assert: check that the size of the given type
+// is at least the given number of bits
+#define wxASSERT_MIN_BITSIZE(type, size) \
+    wxCOMPILE_TIME_ASSERT(sizeof(type) * CHAR_BIT >= size, \
+                          wxMAKE_BITSIZE_MSG(type, size))
 
 #endif  // _WX_DEBUG_H_
 

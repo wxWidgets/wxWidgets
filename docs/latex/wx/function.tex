@@ -9,6 +9,7 @@ the corresponding topic.
 \section{Alphabetical functions and macros list}
 
 \helpref{CLASSINFO}{classinfo}\\
+\helpref{copystring}{copystring}\\
 \helpref{DECLARE\_ABSTRACT\_CLASS}{declareabstractclass}\\
 \helpref{DECLARE\_APP}{declareapp}\\
 \helpref{DECLARE\_CLASS}{declareclass}\\
@@ -23,7 +24,7 @@ the corresponding topic.
 \helpref{WXDEBUG\_NEW}{debugnew}\\
 \helpref{WXTRACELEVEL}{tracelevel}\\
 \helpref{WXTRACE}{trace}\\
-\helpref{copystring}{copystring}\\
+\helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}\\
 \helpref{wxASSERT\_MSG}{wxassertmsg}\\
 \helpref{wxASSERT}{wxassert}\\
 \helpref{wxBITMAP}{wxbitmapmacro}\\
@@ -39,6 +40,7 @@ the corresponding topic.
 \helpref{wxClipboardOpen}{wxclipboardopen}\\
 \helpref{wxCloseClipboard}{wxcloseclipboard}\\
 \helpref{wxColourDisplay}{wxcolourdisplay}\\
+\helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}\\
 \helpref{wxConcatFiles}{wxconcatfiles}\\
 \helpref{wxConstCast}{wxconstcast}\\
 \helpref{wxCopyFile}{wxcopyfile}\\
@@ -3320,9 +3322,14 @@ standard usleep() function is not MT safe.
 
 \section{Debugging macros and functions}\label{debugmacros}
 
-Useful macros and functions for error checking and defensive programming. ASSERTs are only
-compiled if \_\_WXDEBUG\_\_ is defined, whereas CHECK macros stay in release
-builds.
+Useful macros and functions for error checking and defensive programming.
+wxWindows defines three families of the assert-like macros:
+the wxASSERT and wxFAIL macros only do anything if \_\_WXDEBUG\_\_ is defined
+(in other words, in the debug build) but disappear completely in the release
+build. On the other hand, the wxCHECK macros stay event in release builds but a
+check failure doesn't generate any user-visible effects then. Finally, the
+compile time assertions don't happen during the run-time but result in the
+compilation error messages if the condition they check fail.
 
 \wxheading{Include files}
 
@@ -3332,10 +3339,15 @@ builds.
 
 \func{void}{wxOnAssert}{\param{const char *}{fileName}, \param{int}{ lineNumber}, \param{const char *}{msg = NULL}}
 
-This function may be redefined to do something non trivial and is called
-whenever one of debugging macros fails (i.e. condition is false in an
-assertion).
-% TODO: this should probably be an overridable in wxApp.
+This function is called whenever one of debugging macros fails (i.e. condition
+is false in an assertion). It is only defined in the debug mode, in release
+builds the \helpref{wxCHECK}{wxcheck} failures don't result in anything.
+
+To override the default behaviour in the debug builds which is to show the user
+a dialog asking whether he wants to abort the program, continue or continue
+ignoring any subsequent assert failures, you may override 
+\helpref{wxApp::OnAssert}{wxapponassert} which is called by this function if
+the global application object exists.
 
 \membersection{wxASSERT}\label{wxassert}
 
@@ -3347,7 +3359,28 @@ debug mode, but nothing will be done in the release build.
 Please note that the condition in wxASSERT() should have no side effects
 because it will not be executed in release mode at all.
 
-See also: \helpref{wxASSERT\_MSG}{wxassertmsg}
+\wxheading{See also}
+
+\helpref{wxASSERT\_MSG}{wxassertmsg},\\
+\helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}
+
+\membersection{wxASSERT\_MIN\_BITSIZE}\label{wxassertminbitsize}
+
+\func{}{wxASSERT\_MIN\_BITSIZE}{\param{}{type}, \param{}{size}}
+
+This macro results in a 
+\helpref{compile time assertion failure}{wxCOMPILE\_TIME\_ASSERT} if the size
+of the given type {\it type} is less than {\it size} bits.
+
+You may use it like this, for example:
+
+\begin{verbatim}
+    // we rely on the int being able to hold values up to 2^32
+    wxASSERT_MIN_BITSIZE(int, 32);
+
+    // can't work with the platforms using UTF-8 for wchar_t
+    wxASSERT_MIN_BITSIZE(wchar_t, 16);
+\end{verbatim}
 
 \membersection{wxASSERT\_MSG}\label{wxassertmsg}
 
@@ -3355,7 +3388,28 @@ See also: \helpref{wxASSERT\_MSG}{wxassertmsg}
 
 Assert macro with message. An error message will be generated if the condition is FALSE.
 
-See also: \helpref{wxASSERT}{wxassert}
+\wxheading{See also}
+
+\helpref{wxASSERT}{wxassert},\\
+\helpref{wxCOMPILE\_TIME\_ASSERT}{wxcompiletimeassert}
+
+\membersection{wxCOMPILE\_TIME\_ASSERT}\label{wxcompiletimeassert}
+
+\func{}{wxCOMPILE\_TIME\_ASSERT}{\param{}{condition}, \param{}{msg}}
+
+Using {\tt wxCOMPILE\_TIME\_ASSERT} results in a compilation error if the
+specified {\it condition| is false. The compiler error message should include
+the {\it msg} identifier - please note that it must be a valid C++ identifier
+and not a string unlike in the other cases.
+
+This macro is mostly useful for testing the expressions involing the 
+{\tt sizeof} operator as they can't be tested by the preprocessor but it is
+sometimes desirable to test them at the compile time.
+
+\wxheading{See also}
+
+\helpref{wxASSERT\_MSG}{wxassertmsg},\\
+\helpref{wxASSERT\_MIN\_BITSIZE}{wxassertminbitsize}
 
 \membersection{wxFAIL}\label{wxfail}
 
@@ -3375,7 +3429,9 @@ This macro is useful for marking unreachable" code areas, for example
 it may be used in the "default:" branch of a switch statement if all possible
 cases are processed above.
 
-See also: \helpref{wxFAIL}{wxfail}
+\wxheading{See also}
+
+\helpref{wxFAIL}{wxfail}
 
 \membersection{wxCHECK}\label{wxcheck}
 
