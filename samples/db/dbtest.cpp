@@ -1707,7 +1707,8 @@ void CeditorDlg::OnSelectPict()
 
         if (file.IsOpened())
         {
-            wxFileOffset iSize = file.Length();
+            // assume not huge file in sample
+            long iSize = (long)file.Length();
 
             if ((iSize > 0) && (iSize < MAX_PICTURE_SIZE))
             {
@@ -1721,7 +1722,7 @@ void CeditorDlg::OnSelectPict()
                     wxMessageBox(wxT("Something bad happened while reading..."), wxT("BLOB Loading Error"), wxOK | wxICON_EXCLAMATION);
 
                 wxString tStr;
-                tStr.Printf(wxT("%lu"),iSize);
+                tStr.Printf(wxT("%ld"),iSize);
                 pPictSizeTxt->SetValue(tStr);
             }
             else

@@ -202,7 +202,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     if (!lookup->Open())
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the table '%s'."), tableName);
+        tStr.Printf(wxT("Unable to open the table '%s'."), tableName.c_str());
         wxMessageBox(tStr, wxT("ODBC Error..."));
         Close();
         return;
@@ -267,7 +267,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
 // in the lookup window.
 //
 ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxString &tableName,
-                       const wxString &dispCol1, const wxString &dispCol2, 
+                       const wxString &dispCol1, const wxString &dispCol2,
                        const wxString &where, const wxString &orderBy,
                        wxDb *pDb, const wxString &defDir, bool distinctValues,
                        const wxString &selectStmt, int maxLenCol1, bool allowOk)
@@ -309,7 +309,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     if (!lookup2->Open())
     {
         wxString tStr;
-        tStr.Printf(wxT("Unable to open the table '%s'."),tableName);
+        tStr.Printf(wxT("Unable to open the table '%s'."),tableName.c_str());
         tStr += GetExtendedDBErrorMsg2(pDb,__TFILE__,__LINE__);
         wxMessageBox(tStr,wxT("ODBC Error..."));
         Close();
