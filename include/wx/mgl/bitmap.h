@@ -38,22 +38,22 @@ class MGLDevCtx;
 
 class WXDLLEXPORT wxMask: public wxObject
 {
-    public:
-        wxMask();
-        wxMask(const wxBitmap& bitmap, const wxColour& colour);
-        wxMask(const wxBitmap& bitmap, int paletteIndex);
-        wxMask(const wxBitmap& bitmap);
-        ~wxMask();
-  
-        bool Create(const wxBitmap& bitmap, const wxColour& colour);
-        bool Create(const wxBitmap& bitmap, int paletteIndex);
-        bool Create(const wxBitmap& bitmap);
+public:
+    wxMask();
+    wxMask(const wxBitmap& bitmap, const wxColour& colour);
+    wxMask(const wxBitmap& bitmap, int paletteIndex);
+    wxMask(const wxBitmap& bitmap);
+    ~wxMask();
 
-        // implementation
-        wxBitmap *m_bitmap;
-    
-        wxBitmap *GetBitmap() const { return m_bitmap; }
-  
+    bool Create(const wxBitmap& bitmap, const wxColour& colour);
+    bool Create(const wxBitmap& bitmap, int paletteIndex);
+    bool Create(const wxBitmap& bitmap);
+
+    // implementation
+    wxBitmap *m_bitmap;
+
+    wxBitmap *GetBitmap() const { return m_bitmap; }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMask)
 };
@@ -62,68 +62,76 @@ private:
 // wxBitmap
 //-----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxBitmapHandler : public wxBitmapHandlerBase
+{
+public:
+    wxBitmapHandler() : wxBitmapHandlerBase() {}
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+};
+
 class WXDLLEXPORT wxBitmap: public wxBitmapBase
 {
-    public:
-        wxBitmap();
-        wxBitmap(int width, int height, int depth = -1);
-        wxBitmap(const char bits[], int width, int height, int depth = 1);
-        wxBitmap(const char **bits) { CreateFromXpm(bits); }
-        wxBitmap(char **bits) { CreateFromXpm((const char **)bits); }
-        wxBitmap(const wxBitmap& bmp);
-        wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
-        wxBitmap(const wxImage& image, int depth = -1);
-        ~wxBitmap();
-        wxBitmap& operator = (const wxBitmap& bmp);
-        bool operator == (const wxBitmap& bmp) const;
-        bool operator != (const wxBitmap& bmp) const;
-        bool Ok() const;
+public:
+    wxBitmap();
+    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(const char bits[], int width, int height, int depth = 1);
+    wxBitmap(const char **bits) { CreateFromXpm(bits); }
+    wxBitmap(char **bits) { CreateFromXpm((const char **)bits); }
+    wxBitmap(const wxBitmap& bmp);
+    wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
+    wxBitmap(const wxImage& image, int depth = -1);
+    ~wxBitmap();
+    wxBitmap& operator = (const wxBitmap& bmp);
+    bool operator == (const wxBitmap& bmp) const;
+    bool operator != (const wxBitmap& bmp) const;
+    bool Ok() const;
 
-        bool Create(int width, int height, int depth = -1);
+    bool Create(int width, int height, int depth = -1);
 
-        virtual int GetHeight() const;
-        virtual int GetWidth() const;
-        virtual int GetDepth() const;
+    virtual int GetHeight() const;
+    virtual int GetWidth() const;
+    virtual int GetDepth() const;
 
-        virtual wxImage ConvertToImage() const;
+    virtual wxImage ConvertToImage() const;
 
-        virtual wxMask *GetMask() const;
-        virtual void SetMask(wxMask *mask);
+    virtual wxMask *GetMask() const;
+    virtual void SetMask(wxMask *mask);
 
-        virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
+    virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
-        virtual bool SaveFile(const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL) const;
-        virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
+    virtual bool SaveFile(const wxString &name, wxBitmapType type, const wxPalette *palette = (wxPalette *) NULL) const;
+    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_TYPE_RESOURCE);
 
-        virtual wxPalette *GetPalette() const;
-        virtual void SetPalette(const wxPalette& palette);
+    virtual wxPalette *GetPalette() const;
+    virtual void SetPalette(const wxPalette& palette);
 
-        // copies the contents and mask of the given (colour) icon to the bitmap
-        virtual bool CopyFromIcon(const wxIcon& icon);
+    // copies the contents and mask of the given (colour) icon to the bitmap
+    virtual bool CopyFromIcon(const wxIcon& icon);
 
-        static void InitStandardHandlers();
-       
-        // implementation:
-        virtual void SetHeight(int height);
-        virtual void SetWidth(int width);
-        virtual void SetDepth(int depth);
+    static void InitStandardHandlers();
 
-        // get underlying native representation:
-        void *GetMGLbitmap_t() const;
+    // implementation:
+    virtual void SetHeight(int height);
+    virtual void SetWidth(int width);
+    virtual void SetDepth(int depth);
 
-    protected:
-        bool CreateFromXpm(const char **bits);
+    // get underlying native representation:
+    void *GetMGLbitmap_t() const;
 
-        // creates temporary DC for access to bitmap's data:
-        MGLDevCtx *CreateTmpDC() const;
-        // sets fg & bg colours for 1bit bitmaps:
-        void SetMonoPalette(const wxColour& fg, const wxColour& bg);
+protected:
+    bool CreateFromXpm(const char **bits);
 
-    private:
-        DECLARE_DYNAMIC_CLASS(wxBitmap)
+    // creates temporary DC for access to bitmap's data:
+    MGLDevCtx *CreateTmpDC() const;
+    // sets fg & bg colours for 1bit bitmaps:
+    void SetMonoPalette(const wxColour& fg, const wxColour& bg);
 
-        friend class wxDC;
-        friend class wxMemoryDC;
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
+
+    friend class wxDC;
+    friend class wxMemoryDC;
 };
 
 #endif // __WX_BITMAP_H__

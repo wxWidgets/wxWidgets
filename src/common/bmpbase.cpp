@@ -23,16 +23,16 @@
 #include "wx/module.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxBitmapBase, wxGDIObject)
-IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandlerBase,wxObject)
 
 wxList wxBitmapBase::sm_handlers;
 
-void wxBitmapBase::AddHandler(wxBitmapHandler *handler)
+void wxBitmapBase::AddHandler(wxBitmapHandlerBase *handler)
 {
     sm_handlers.Append(handler);
 }
 
-void wxBitmapBase::InsertHandler(wxBitmapHandler *handler)
+void wxBitmapBase::InsertHandler(wxBitmapHandlerBase *handler)
 {
     sm_handlers.Insert(handler);
 }
