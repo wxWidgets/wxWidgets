@@ -2293,8 +2293,11 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             // then change the positions of all child windows at once
             if ( m_hDWP )
             {
+                HDWP hDWP = (HDWP)m_hDWP;
+                m_hDWP = NULL;
+
                 // put all child controls in place at once now
-                if ( !::EndDeferWindowPos((HDWP)m_hDWP) )
+                if ( !::EndDeferWindowPos(hDWP) )
                 {
                     wxLogLastError(_T("EndDeferWindowPos"));
                 }
