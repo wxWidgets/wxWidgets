@@ -299,6 +299,27 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 }
 
 //-----------------------------------------------------------------------------
+// "deselect"
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
+{
+    int id = menu->FindMenuIdByMenuItem(widget);
+
+    wxASSERT( id != -1 ); // should find it!
+
+    if (!menu->IsEnabled(id)) return;
+
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
+    event.SetEventObject( menu );
+
+    if (menu->GetEventHandler()->ProcessEvent(event)) return;
+
+    wxWindow *win = menu->GetInvokingWindow();
+    if (win) win->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
@@ -433,6 +454,10 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
                         GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
                         (gpointer*)this );
 
+    gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
+                        GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
+                        (gpointer*)this );
+
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
     m_items.Append( mitem );
@@ -448,6 +473,14 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
     mitem->SetHelp(helpStr);
     mitem->SetMenuItem(menuItem);
     mitem->SetSubMenu(subMenu);
+
+    gtk_signal_connect( GTK_OBJECT(menuItem), "select",
+                        GTK_SIGNAL_FUNC(gtk_menu_hilight_callback),
+                        (gpointer*)this );
+
+    gtk_signal_connect( GTK_OBJECT(menuItem), "deselect",
+                        GTK_SIGNAL_FUNC(gtk_menu_nolight_callback),
+                        (gpointer*)this );
 
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
