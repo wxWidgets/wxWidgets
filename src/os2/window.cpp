@@ -1983,15 +1983,24 @@ MRESULT wxWindow::OS2WindowProc(
         case WM_DRAWITEM:
         case WM_MEASUREITEM:
             {
-                int idCtrl = (UINT)wParam;
+                int                 nIdCtrl = (UINT)wParam;
+                char                zMsg[128];
+
                 if ( uMsg == WM_DRAWITEM )
                 {
-                    bProcessed = OS2OnDrawItem(idCtrl,
+                    // DEBUG
+                    sprintf(zMsg, "In OS2OnDrawItem, id: %d", nIdCtrl);
+                    (void)wxMessageBox( "wxWindows Menu sample"
+                                       ,zMsg
+                                       ,wxICON_INFORMATION
+                                      );
+                    // end DEBUG
+                    bProcessed = OS2OnDrawItem(nIdCtrl,
                                               (WXDRAWITEMSTRUCT *)lParam);
                 }
                 else
                 {
-                    bProcessed = OS2OnMeasureItem(idCtrl,
+                    bProcessed = OS2OnMeasureItem(nIdCtrl,
                                                  (WXMEASUREITEMSTRUCT *)lParam);
                 }
 
@@ -2656,22 +2665,22 @@ bool wxWindow::OS2OnDrawItem(
 {
     wxDC                            vDc;
 
+#if wxUSE_OWNER_DRAWN
     //
     // Is it a menu item?
     //
     if (vId == 0)
     {
-
-#if wxUSE_OWNER_DRAWN
         POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
-        wxMenuItem                  vMenuItem;
+        BYTE*                       pData;
+        wxMenuItem*                 pMenuItem;
         HDC                         hDC = ::GpiQueryDevice(pMeasureStruct->hps);
 
         vDc.SetHDC( hDC
                    ,FALSE
                   );
         vDc.SetHPS(pMeasureStruct->hps);
-
+#if 0
         //
         // We stored the CMenuItem itself into the menuitem text field so now
         // we need to extract it.
@@ -2681,9 +2690,8 @@ bool wxWindow::OS2OnDrawItem(
                      ,MPFROM2SHORT( (USHORT)pMeasureStruct->idItem
                                    ,(SHORT)(sizeof(wxMenuItem))
                                   )
-                     ,(PSZ)&vMenuItem
+                     ,(PSZ)pData
                     );
-
         wxRect                      vRect( pMeasureStruct->rclItem.xLeft
                                           ,pMeasureStruct->rclItem.yTop
                                           ,pMeasureStruct->rclItem.xRight
@@ -2699,12 +2707,13 @@ bool wxWindow::OS2OnDrawItem(
             eAction = wxOwnerDrawn::wxODDrawAll;
         else
             eAction = wxOwnerDrawn::wxODSelectChanged;
-
-        return(vMenuItem.OnDrawItem( vDc
-                                    ,vRect
-                                    ,eAction
-                                    ,(wxOwnerDrawn::wxODStatus)pMeasureStruct->fsAttribute
-                                   ));
+        pMenuItem = (wxMenuItem*)pData;
+        return(pMenuItem->OnDrawItem( vDc
+                                     ,vRect
+                                     ,eAction
+                                     ,(wxOwnerDrawn::wxODStatus)pMeasureStruct->fsAttribute
+                                    ));
+#endif
         //
         // leave the fsAttribute and fsOldAttribute unchanged.  If different,
         // the system will do the highlight or fraeming or disabling for us,
@@ -2730,30 +2739,21 @@ bool wxWindow::OS2OnMeasureItem(
     //
     // Is it a menu item?
     //
-    if (lId == 0)
+    if (lId == 65536) // I really don't like this...has to be a better indicator
     {
         POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
-        wxMenuItem                  vMenuItem;
+        char                        zData[sizeof(wxMenuItem)];
 
-        //
-        // We stored the CMenuItem itself into the menuitem text field so now
-        // we need to extract it.
-        //
-        ::WinSendMsg( pMeasureStruct->hItem
-                     ,MM_QUERYITEMTEXT
-                     ,MPFROM2SHORT( (USHORT)pMeasureStruct->idItem
-                                   ,(SHORT)(sizeof(wxMenuItem))
-                                  )
-                     ,(PSZ)&vMenuItem
-                    );
-        wxCHECK(vMenuItem.IsKindOf(CLASSINFO(wxMenuItem)), FALSE);
+        char                        zMsg[128];
 
-        size_t                      lWidth  = (size_t)(pMeasureStruct->rclItem.xRight - pMeasureStruct->rclItem.xLeft);
-        size_t                      lHeight = (size_t)(pMeasureStruct->rclItem.yTop - pMeasureStruct->rclItem.yBottom);
+        if (IsKindOf(CLASSINFO(wxFrame)))
+        {
+            wxFrame*                pFrame = (wxFrame*)this;
+            wxMenuItem*             pMenuItem = pFrame->GetMenuBar()->FindItem(pMeasureStruct->idItem, pMeasureStruct->hItem);
 
-        return(vMenuItem.OnMeasureItem( &lWidth
-                                       ,&lHeight
-                                      ));
+            wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
+            return(pMenuItem->OnMeasureItem(&pMeasureStruct->rclItem));
+        }
     }
     wxWindow*                      pItem = FindItem(id);
 

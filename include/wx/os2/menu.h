@@ -125,6 +125,15 @@ public:
     //
     int FindAccel(int nId) const;
 #endif // wxUSE_ACCEL
+    //
+    // OS/2 specific Find
+    //
+    wxMenuItem* FindItem(int id, ULONG hItem, wxMenu **menu = NULL) const;
+    //virtual function hiding suppression
+    int FindItem(const wxString& rsString) const
+    { return wxMenuBase::FindItem(rsString); }
+    wxMenuItem* FindItem(int id, wxMenu **menu = NULL) const
+    { return wxMenuBase::FindItem(id, menu); }
 
     //
     // All OS/2PM Menu's have one of these
@@ -219,7 +228,10 @@ public:
     virtual wxMenuItem* FindItem( int      nId
                                  ,wxMenu** ppMenu = NULL
                                 ) const;
-
+    virtual wxMenuItem* FindItem( int      nId
+                                 ,ULONG    hItem
+                                 ,wxMenu** ppMenu = NULL
+                                ) const;
     virtual void        EnableTop( size_t nPos
                                   ,bool   bFlag
                                  );
