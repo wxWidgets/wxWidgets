@@ -339,11 +339,11 @@ rcparser:
 clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
-        -erase ..\..\lib\wx200.dll
-        -erase ..\..\lib\wx200.lib
-        -erase ..\..\lib\wx200.exp
-        -erase ..\..\lib\wx200.pdb
-        -erase ..\..\lib\wx200.ilk
+        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
+        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
+        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
+        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).pdb
+        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).ilk
         -erase *.pdb
         -erase *.sbr
         -erase $(WXLIBNAME).pch
