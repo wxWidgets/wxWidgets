@@ -113,7 +113,7 @@ class MultiSplit(wx.Window):
 
     def SetSaveData(self,data):
         self.direction = data['direction']
-        self.SetDimensions(data['x'],data['y'],data['w'],data['h'])
+        self.SetDimensions(int(data['x']), int(data['y']), int(data['w']), int(data['h']))
         v1Data = data.get('view1',None)
         if v1Data:
             isSplit = data.get('view1IsSplit',None)
@@ -278,8 +278,8 @@ class MultiSplit(wx.Window):
         else:
             v1h = v2h = h
 
-        self.view1.SetDimensions(v1x,v1y,v1w,v1h)
-        self.view2.SetDimensions(v2x,v2y,v2w,v2h)
+        self.view1.SetDimensions(int(v1x), int(v1y), int(v1w), int(v1h))
+        self.view2.SetDimensions(int(v2x), int(v2y), int(v2w), int(v2h))
         self.view1.OnSize(None)
         self.view2.OnSize(None)
 
