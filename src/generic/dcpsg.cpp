@@ -1176,7 +1176,9 @@ void wxPostScriptDC::DoDrawText( const wxString& text, wxCoord x, wxCoord y )
 
     GetTextExtent(text, &text_w, &text_h, &text_descent);
 
-    SetFont( m_font );
+    // VZ: this seems to be unnecessary, so taking it out for now, if it
+    //     doesn't create any problems, remove this comment entirely
+    //SetFont( m_font );
 
     if (m_textForegroundColour.Ok())
     {
