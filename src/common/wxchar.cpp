@@ -163,9 +163,11 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                 buf[lenCur++] = ch
 
 #define APPEND_STR(s) \
-                for ( const wxChar *p = s; *p; p++ ) \
                 { \
-                    APPEND_CH(*p); \
+                    for ( const wxChar *p = s; *p; p++ ) \
+                    { \
+                        APPEND_CH(*p); \
+                    } \
                 }
 
                 switch (format[++n]) {
