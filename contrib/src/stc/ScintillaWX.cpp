@@ -320,6 +320,7 @@ void ScintillaWX::Copy() {
         SelectionText st;
         CopySelectionRange(&st);
         wxTheClipboard->Open();
+        wxTheClipboard->UsePrimarySelection();
         wxString text = stc2wx(st.s, st.len);
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
@@ -335,6 +336,7 @@ void ScintillaWX::Paste() {
     bool gotData;
 
     wxTheClipboard->Open();
+    wxTheClipboard->UsePrimarySelection();
     gotData = wxTheClipboard->GetData(data);
     wxTheClipboard->Close();
     if (gotData) {
@@ -354,6 +356,7 @@ bool ScintillaWX::CanPaste() {
     bool canPaste;
 
     wxTheClipboard->Open();
+    wxTheClipboard->UsePrimarySelection();
     canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
     wxTheClipboard->Close();
 
