@@ -2,7 +2,7 @@
 # File:		makelib.vc
 # Author:	Julian Smart
 # Created:	1999
-# Updated:	
+# Updated:
 # Copyright:	(c) Julian Smart
 #
 # Makefile : Builds a library for a utility
@@ -10,7 +10,7 @@
 # info
 
 # Set WXDIR for your system
-WXDIR = j:\dev\wx2\wxWindows
+WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makevc.env
 
