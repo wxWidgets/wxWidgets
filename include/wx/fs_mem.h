@@ -69,7 +69,9 @@ class WXDLLIMPEXP_CORE wxMemoryFSHandler : public wxMemoryFSHandlerBase
 public:
     // bring the base class versions into the scope, otherwise they would be
     // inaccessible in wxMemoryFSHandler
+#if !defined(__GNUG__) || (__GNUG__ > 2)
     using wxMemoryFSHandlerBase::AddFile;
+#endif
 
 #if wxUSE_IMAGE
     static void AddFile(const wxString& filename, wxImage& image, long type);
