@@ -90,7 +90,10 @@ class FileBrowseButton(wx.Panel):
 
         # try to set the background colour
         try:
-            self.SetBackgroundColour(self._bc)
+            #Question: is this still needed on other platforms?
+            #It should have transparent background on Mac
+            if wx.Platform != "__WXMAC__":
+                self.SetBackgroundColour(self._bc)
         except:
             pass
 
