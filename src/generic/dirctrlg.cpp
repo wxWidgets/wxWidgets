@@ -651,7 +651,7 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
         return;
 
     data->m_isExpanded = FALSE;
-    long cookie;
+    wxTreeItemIdValue cookie;
     /* Workaround because DeleteChildren has disapeared (why?) and
      * CollapseAndReset doesn't work as advertised (deletes parent too) */
     child = m_treeCtrl->GetFirstChild(parentId, cookie);
@@ -828,7 +828,7 @@ wxTreeItemId wxGenericDirCtrl::FindChild(wxTreeItemId parentId, const wxString& 
     path2.MakeLower();
 #endif
 
-    long cookie;
+    wxTreeItemIdValue cookie;
     wxTreeItemId childId = m_treeCtrl->GetFirstChild(parentId, cookie);
     while (childId.IsOk())
     {
@@ -890,7 +890,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
         if ((GetWindowStyle() & wxDIRCTRL_SELECT_FIRST) && data->m_isDir)
         {
             // Find the first file in this directory
-            long cookie;
+            wxTreeItemIdValue cookie;
             wxTreeItemId childId = m_treeCtrl->GetFirstChild(lastId, cookie);
             bool selectedChild = FALSE;
             while (childId.IsOk())

@@ -412,7 +412,7 @@ void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 
     CHECK_ITEM( root );
 
-    m_treeCtrl->GetItemsRecursively(root, -1);
+    m_treeCtrl->GetItemsRecursively(root);
 }
 
 #ifndef NO_MULTIPLE_SELECTION
@@ -791,7 +791,7 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     // set some colours/fonts for testing
     SetItemFont(rootId, *wxITALIC_FONT);
 
-    long cookie;
+    wxTreeItemIdValue cookie;
     wxTreeItemId id = GetFirstChild(rootId, cookie);
     SetItemTextColour(id, *wxBLUE);
 
@@ -801,23 +801,24 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     SetItemBackgroundColour(id, *wxLIGHT_GREY);
 }
 
-void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent, long cookie)
+void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent,
+                                     wxTreeItemIdValue cookie)
 {
     wxTreeItemId id;
 
-    if( cookie == -1 )
+    if ( !cookie )
         id = GetFirstChild(idParent, cookie);
     else
         id = GetNextChild(idParent, cookie);
 
-    if(id <= 0)
+    if ( !id.IsOk() )
         return;
 
     wxString text = GetItemText(id);
     wxLogMessage(text);
 
     if (ItemHasChildren(id))
-        GetItemsRecursively(id,-1);
+        GetItemsRecursively(id);
 
     GetItemsRecursively(idParent, cookie);
 }

@@ -1615,7 +1615,7 @@ void wxGenericTreeCtrl::ExpandAll(const wxTreeItemId& item)
             return;
     }
 
-    long cookie;
+    wxTreeItemIdValue cookie;
     wxTreeItemId child = GetFirstChild(item, cookie);
     while ( child.IsOk() )
     {
@@ -2696,7 +2696,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
                     }
                     if (prev)
                     {
-                        long cookie = 0;
+                        wxTreeItemIdValue cookie;
                         wxTreeItemId current = m_key_current;
                         // TODO: Huh?  If we get here, we'd better be the first child of our parent.  How else could it be?
                         if (current == GetFirstChild( prev, cookie ))
@@ -2751,7 +2751,7 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
             {
                 if (IsExpanded(m_key_current) && HasChildren(m_key_current))
                 {
-                    long cookie = 0;
+                    wxTreeItemIdValue cookie;
                     wxTreeItemId child = GetFirstChild( m_key_current, cookie );
                     SelectItem( child, unselect_others, extended_select );
                     m_key_current=(wxGenericTreeItem*) child.m_pItem;
@@ -2811,8 +2811,8 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
 
                 if ( HasFlag(wxTR_HIDE_ROOT) )
                 {
-                    long dummy;
-                    prev = GetFirstChild(prev, dummy);
+                    wxTreeItemIdValue cookie;
+                    prev = GetFirstChild(prev, cookie);
                     if (!prev)
                         break;
                 }

@@ -88,7 +88,8 @@ public:
     void OnItemActivated(wxTreeEvent& event);
     void OnRMouseDClick(wxMouseEvent& event);
 
-    void GetItemsRecursively(const wxTreeItemId& idParent, long cookie);
+    void GetItemsRecursively(const wxTreeItemId& idParent,
+                             wxTreeItemIdValue cookie = 0);
 
     void CreateImageList(int size = 16);
     void CreateButtonsImageList(int size = 11);
