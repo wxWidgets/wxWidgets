@@ -40,7 +40,7 @@
 
 // due to circular header dependencies this function has to be declared here
 // (normally it's found in utils.h which includes itself list.h...)
-extern char* WXDLLEXPORT copystring(const char *s);
+extern WXDLLEXPORT char* copystring(const char *s);
 
 class WXDLLEXPORT wxObjectListNode;
 typedef wxObjectListNode wxNode;
@@ -338,7 +338,7 @@ private:
         virtual void DeleteData();                                          \
     };                                                                      \
                                                                             \
-    class name : public wxListBase                                          \
+    class WXDLLEXPORT name : public wxListBase                                          \
     {                                                                       \
     public:                                                                 \
         name(wxKeyType keyType = wxKEY_NONE) : wxListBase(keyType)          \
