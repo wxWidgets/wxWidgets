@@ -1,3 +1,4 @@
+# -*- makefile -*-
 ## This file gives the details of what is needed to build this extension
 ## module so the Makefile can be created.
 
@@ -12,6 +13,7 @@ GENCODEDIR=gtk
 srcdir=$(GENCODEDIR)
 WX_CONFIG_CFLAGS=`wx-config --cflags`
 WX_CONFIG_LIBS=`wx-config --libs`
+
 
 
 ## Depending on how your Python was built, you may have to set this
@@ -33,13 +35,40 @@ MY_LINKCC=$(CCC)
 TARGETDIR=$(BINLIBDEST)/site-packages/wxPython
 
 
-wxc	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp misc2.cpp gdi.cpp \
+##----------------------------------------------------------------------
+## To build wxPython as separate extension modules, uncomment and use
+## these variable definitions and Setup rules.
+##
+WXPYLIB = wxPyHelpers
+WXPYLIBDIR = /usr/local/lib
+HELPERLIB = lib$(WXPYLIB)$(SO)
+C_DEFINES = -DSWIG_GLOBAL -DWXP_USE_THREAD -DSEPARATE
+C_FLAGS = -I. $(WX_CONFIG_CFLAGS)
+C_LIBS =  -L. -l$(WXPYLIB) $(WX_CONFIG_LIBS)
+
+wxc 	wx.cpp windows.cpp events.cpp misc.cpp misc2.cpp gdi.cpp \
 	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
 	frames.cpp stattool.cpp windows3.cpp image.cpp printfw.cpp \
-	utils.cpp \
-	## comment out the next line to disable wxGLCanvas
-	_glcanvas.cpp glcanvas.cpp -DWITH_GLCANVAS -lGL -lGLU \
-	-I. $(WX_CONFIG_CFLAGS) -I/usr/local/lib/glib/include \
-	-DSWIG_GLOBAL -DWXP_USE_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
+	$(C_DEFINES) $(C_FLAGS) -Xlinker $(C_LIBS)
 
-##-Xlinker -Bstatic
+utilsc 	utils.cpp \
+	$(C_DEFINES) $(C_FLAGS) -Xlinker $(C_LIBS)
+
+glcanvasc _glcanvas.cpp glcanvas.cpp -DWITH_GLCANVAS -lMesaGL -lMesaGLU \
+	$(C_DEFINES) $(C_FLAGS) -Xlinker $(C_LIBS)
+
+
+##----------------------------------------------------------------------
+## To build wxPython as one big extension module, comment out the above
+## rules and definitions, and then uncomment this single Setup rule.
+##
+#wxc	helpers.cpp libpy.c libptr.c \
+#	wx.cpp windows.cpp events.cpp misc.cpp misc2.cpp gdi.cpp \
+#	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
+#	frames.cpp stattool.cpp windows3.cpp image.cpp printfw.cpp \
+#	utils.cpp \
+#	## comment out the next line to disable wxGLCanvas
+#	_glcanvas.cpp glcanvas.cpp -DWITH_GLCANVAS -lGL -lGLU \
+#	-I. $(WX_CONFIG_CFLAGS) -I/usr/local/lib/glib/include \
+#	-DSWIG_GLOBAL -DWXP_USE_THREAD $(SEPARATE) -Xlinker $(WX_CONFIG_LIBS)
+

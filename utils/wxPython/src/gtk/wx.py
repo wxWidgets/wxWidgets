@@ -92,6 +92,11 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def SetVendorName(self,arg0):
         val = wxc.wxPyApp_SetVendorName(self.this,arg0)
         return val
+    def GetStdIcon(self,arg0):
+        val = wxc.wxPyApp_GetStdIcon(self.this,arg0)
+        val = wxIconPtr(val)
+        val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxPyApp instance>"
 class wxPyApp(wxPyAppPtr):

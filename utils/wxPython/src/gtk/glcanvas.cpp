@@ -116,11 +116,11 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-#ifdef SEPARATE
-    static wxString wxPyEmptyStr("");
-    static wxPoint  wxPyDefaultPosition(-1, -1);
-    static wxSize   wxPyDefaultSize(-1, -1);
-#endif
+//#ifdef SEPARATE
+//    static wxString wxPyEmptyStr("");
+//    static wxPoint  wxPyDefaultPosition(-1, -1);
+//    static wxSize   wxPyDefaultSize(-1, -1);
+//#endif
 static PyObject *_wrap_glArrayElementEXT(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     GLint  _arg0;
@@ -7810,6 +7810,118 @@ static PyObject *_wrap_wxGLContext_SwapBuffers(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxGLContext_SetupPixelFormat(_swigobj)  (_swigobj->SetupPixelFormat())
+static PyObject *_wrap_wxGLContext_SetupPixelFormat(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGLContext * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGLContext_SetupPixelFormat",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGLContext_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGLContext_SetupPixelFormat. Expected _wxGLContext_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGLContext_SetupPixelFormat(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGLContext_SetupPalette(_swigobj,_swigarg0)  (_swigobj->SetupPalette(_swigarg0))
+static PyObject *_wrap_wxGLContext_SetupPalette(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGLContext * _arg0;
+    wxPalette * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxGLContext_SetupPalette",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGLContext_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGLContext_SetupPalette. Expected _wxGLContext_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPalette_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxGLContext_SetupPalette. Expected _wxPalette_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGLContext_SetupPalette(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGLContext_CreateDefaultPalette(_swigobj)  (_swigobj->CreateDefaultPalette())
+static PyObject *_wrap_wxGLContext_CreateDefaultPalette(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPalette * _result;
+    wxGLContext * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGLContext_CreateDefaultPalette",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGLContext_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGLContext_CreateDefaultPalette. Expected _wxGLContext_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxPalette (wxGLContext_CreateDefaultPalette(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPalette_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxGLContext_GetPalette(_swigobj)  (_swigobj->GetPalette())
+static PyObject *_wrap_wxGLContext_GetPalette(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPalette * _result;
+    wxGLContext * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGLContext_GetPalette",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGLContext_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGLContext_GetPalette. Expected _wxGLContext_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPalette *)wxGLContext_GetPalette(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPalette_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxGLContext_GetWindow(_swigobj)  (_swigobj->GetWindow())
 static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -8041,6 +8153,10 @@ static PyMethodDef glcanvascMethods[] = {
 	 { "wxGLCanvas_SetCurrent", _wrap_wxGLCanvas_SetCurrent, 1 },
 	 { "new_wxGLCanvas", _wrap_new_wxGLCanvas, 1 },
 	 { "wxGLContext_GetWindow", _wrap_wxGLContext_GetWindow, 1 },
+	 { "wxGLContext_GetPalette", _wrap_wxGLContext_GetPalette, 1 },
+	 { "wxGLContext_CreateDefaultPalette", _wrap_wxGLContext_CreateDefaultPalette, 1 },
+	 { "wxGLContext_SetupPalette", _wrap_wxGLContext_SetupPalette, 1 },
+	 { "wxGLContext_SetupPixelFormat", _wrap_wxGLContext_SetupPixelFormat, 1 },
 	 { "wxGLContext_SwapBuffers", _wrap_wxGLContext_SwapBuffers, 1 },
 	 { "wxGLContext_SetColour", _wrap_wxGLContext_SetColour, 1 },
 	 { "wxGLContext_SetCurrent", _wrap_wxGLContext_SetCurrent, 1 },

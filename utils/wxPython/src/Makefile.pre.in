@@ -1,3 +1,4 @@
+# -*- makefile -*-
 # Universal Unix Makefile for Python extensions
 # =============================================
 
@@ -190,7 +191,7 @@ endif
 # === Fixed rules ===
 
 # Default target.  This builds shared libraries only
-default:	sharedmods
+default:	$(HELPERLIB) sharedmods
 
 # Build everything
 all:		static sharedmods
@@ -350,11 +351,12 @@ $(GENCODEDIR)/%.py : %.i
 
 
 # This one must leave out the -c flag so we define the whole rule
-$(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
-	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
+#$(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
+#	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
 
 
 # define some dependencies
+$(GENCODEDIR)/wx.cpp        $(GENCODEDIR)/wx.py        : wx.i         my_typemaps.i _defs.i _extras.py
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
@@ -376,12 +378,18 @@ $(GENCODEDIR)/glcanvas.cpp  $(GENCODEDIR)/glcanvas.py  : glcanvas.i   my_typemap
 $(GENCODEDIR)/helpers.cpp:
 	ln -s `pwd`/helpers.cpp $@
 
+$(GENCODEDIR)/libpy.c:
+	ln -s `pwd`/libpy.c $@
+
+$(GENCODEDIR)/libptr.c:
+	ln -s `pwd`/libptr.c $@
+
 $(GENCODEDIR)/_glcanvas.cpp:
 	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.cpp $@
 	-cp $(WXWIN)/utils/glcanvas/$(GENCODEDIR)/glcanvas.h ./glcanvas.h
 
 
-wxInstall :	sharedmods $(PYMODULES)
+wxInstall :	$(HELPERLIB) sharedmods $(PYMODULES)
 	if test ! -d $(TARGETDIR) ; then \
 		mkdir $(TARGETDIR) ; else true ; fi
 	if [ "$(SHAREDMODS)" != "" ]; then \
@@ -410,8 +418,24 @@ wxInstall :	sharedmods $(PYMODULES)
 		python $(LIBDEST)/compileall.py -l $(TARGETDIR);   \
 		python -O $(LIBDEST)/compileall.py -l $(TARGETDIR);\
 	fi
+ifdef HELPERLIB
+	cp lib$(WXPYLIB)$(SO) $(WXPYLIBDIR)
+	@echo ---------------------------------------------------------
+	@echo You may have to run ldconfig, or set an environment
+	@echo variable in order for $(WXPYLIBDIR)/lib$(WXPYLIB)$(SO)
+	@echo to be found at runtime.  See your man pages for ld.so or
+	@echo equivalent.
+	@echo ---------------------------------------------------------
+endif
 
+ifdef HELPERLIB
+helpers.o: $(srcdir)/helpers.cpp; $(CCC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/helpers.cpp
+libpy.o: $(srcdir)/libpy.c; $(CC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/libpy.c
+libptr.o: $(srcdir)/libptr.c; $(CC) $(CCSHARED)  $(C_DEFINES) $(C_FLAGS) $(CFLAGS) -c $(srcdir)/libptr.c
 
+$(HELPERLIB) : helpers.o libpy.o libptr.o
+	$(LDSHARED) helpers.o libpy.o libptr.o  $(C_DEFINES) $(C_FLAGS) -Xlinker $(WX_CONFIG_LIBS) -o $@
+endif
 
 
 lib : libwxPython.a
@@ -426,4 +450,7 @@ tgz:
 
 rpm:
 	cd ../distrib; ./makerpm $(WXP_VERSION)
+
+
+
 

@@ -19,8 +19,13 @@ else:
 
 
     def runTest(frame, nb, log):
-        win = TestGLCanvas(nb)
-        return win
+        #win = TestGLCanvas(nb)
+        #return win
+        win = wxFrame(frame, -1, "GL Cube", wxDefaultPosition, wxSize(400,300))
+        canvas = TestGLCanvas(win)
+        frame.otherWin = win
+        win.Show(true)
+        return None
 
 
 
@@ -140,7 +145,7 @@ overview = """\
 def _test():
     class MyApp(wxApp):
         def OnInit(self):
-            frame = wxFrame(NULL, -1, "HELP ME!!")
+            frame = wxFrame(NULL, -1, "GL Cube", wxDefaultPosition, wxSize(400,300))
             win = TestGLCanvas(frame)
             frame.Show(TRUE)
             self.SetTopWindow(frame)

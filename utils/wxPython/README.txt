@@ -98,6 +98,14 @@ data transfer.
 
 Added access methods to wxGridEvent.
 
+New Makefile/Setup files supporting multiple dynamic extension modules
+for unix systems.
+
+Fixes for the wxGLCanvas demo to work around a strange bug in gtk.
+
+SWIG support routines now compiled separately instead of being bundled
+in wx.cpp.
+
 
 
 
