@@ -117,6 +117,9 @@ BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
     EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, MyTreeCtrl::OnItemExpanding)
     EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsed)
     EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, MyTreeCtrl::OnItemCollapsing)
+    EVT_TREE_ITEM_RIGHT_CLICK(TreeTest_Ctrl, MyTreeCtrl::OnItemRightClick)
+
+    EVT_RIGHT_UP(MyTreeCtrl::OnRMouseUp)
     EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, MyTreeCtrl::OnSelChanged)
     EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, MyTreeCtrl::OnSelChanging)
     EVT_TREE_KEY_DOWN(TreeTest_Ctrl, MyTreeCtrl::OnTreeKeyDown)
@@ -839,6 +842,36 @@ void MyTreeCtrl::OnItemActivated(wxTreeEvent& event)
     }
 
     wxLogMessage("OnItemActivated");
+}
+
+void MyTreeCtrl::OnItemRightClick(wxTreeEvent& event)
+{
+    ShowMenu(event.GetItem(), event.GetPoint());
+}
+
+void MyTreeCtrl::OnRMouseUp(wxMouseEvent& event)
+{
+    wxPoint pt = event.GetPosition();
+    ShowMenu(HitTest(pt), pt);
+}
+
+void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
+{
+    wxString title;
+    if ( id.IsOk() )
+    {
+        title << _T("Menu for ") << GetItemText(id);
+    }
+    else
+    {
+        title = _T("Menu for no particular item");
+    }
+
+    wxMenu menu(title);
+    menu.Append(TreeTest_About, _T("&About..."));
+    menu.Append(TreeTest_Dump, _T("&Dump"));
+
+    PopupMenu(&menu, pt);
 }
 
 void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)

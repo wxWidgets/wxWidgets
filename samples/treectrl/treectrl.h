@@ -70,7 +70,10 @@ public:
     void OnBeginLabelEdit(wxTreeEvent& event);
     void OnEndLabelEdit(wxTreeEvent& event);
     void OnDeleteItem(wxTreeEvent& event);
+    void OnRMouseUp(wxMouseEvent& event);
     void OnGetInfo(wxTreeEvent& event);
+    void OnTreeRMouseClick(wxTreeEvent& event);
+    void OnItemRightClick(wxTreeEvent& event);
     void OnSetInfo(wxTreeEvent& event);
     void OnItemExpanded(wxTreeEvent& event);
     void OnItemExpanding(wxTreeEvent& event);
@@ -93,6 +96,8 @@ public:
     void DoEnsureVisible() { EnsureVisible(m_lastItem); }
 
     void DoToggleIcon(const wxTreeItemId& item);
+
+    void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
