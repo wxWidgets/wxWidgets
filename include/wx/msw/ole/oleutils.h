@@ -132,11 +132,11 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // ----------------------------------------------------------------------------
 
 // tries to translate riid into a symbolic name, if possible
-void wxLogQueryInterface(const char *szInterface, REFIID riid);
+void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
 
 // these functions print out the new value of reference counter
-void wxLogAddRef (const char *szInterface, ULONG cRef);
-void wxLogRelease(const char *szInterface, ULONG cRef);
+void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
+void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
 #else   //!WXDEBUG
   #define   wxLogQueryInterface(szInterface, riid)

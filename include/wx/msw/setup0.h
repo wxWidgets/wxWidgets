@@ -545,8 +545,6 @@
 // Windows-only settings
 // ----------------------------------------------------------------------------
 
-// Most of the settings in this section are obsolete or not used
-
 // Make settings compatible with MFC
 #define wxUSE_MFC           0
 

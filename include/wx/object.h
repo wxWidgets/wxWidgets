@@ -203,7 +203,7 @@ class WXDLLEXPORT wxObject
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-  void operator delete(void *buf, char*, int);
+  void operator delete(void *buf, wxChar*, int);
 #endif
 
     // Causes problems for VC++

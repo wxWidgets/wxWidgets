@@ -500,13 +500,13 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 #ifdef __VISUALC__
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("%s(%d): '%s' failed with error 0x%08lx (%s)."),       \
-                   __TFILE__, __LINE__, _T(api),                              \
+                   __TFILE__, __LINE__, api,                              \
                    rc, wxSysErrorMsg(rc))
 #else // !VC++
     #define wxLogApiError(api, rc)                                            \
         wxLogDebug(wxT("In file %s at line %d: '%s' failed with "             \
                       "error 0x%08lx (%s)."),                                 \
-                   __TFILE__, __LINE__, _T(api),                              \
+                   __TFILE__, __LINE__, api,                              \
                    rc, wxSysErrorMsg(rc))
 #endif // VC++/!VC++
 

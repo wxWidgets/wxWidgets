@@ -415,11 +415,11 @@ public:
     HSTMT hstmt;       // ODBC Statement handle
 
     // ODBC Error Inf.
-    char   sqlState[20];
+    wxChar sqlState[20];
     SDWORD nativeError;
-    char   errorMsg[SQL_MAX_MESSAGE_LENGTH];
+    wxChar errorMsg[SQL_MAX_MESSAGE_LENGTH];
     SWORD  cbErrorMsg;
-    char   errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+    wxChar errorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
     int    DB_STATUS;
 
     //Error reporting mode
