@@ -238,6 +238,8 @@ void wxSoundBackendSDL::CloseAudio()
 
 bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
 {
+    Stop();
+    
     int format;
     if (data->m_bitsPerSample == 8)
         format = AUDIO_U8;
@@ -245,8 +247,6 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
         format = AUDIO_S16LSB;
     else
         return false;
-    
-    SDL_LockAudio();
 
     bool needsOpen = true;
     if (m_audioOpen)
@@ -263,28 +263,24 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
         }
     }
     
-    Stop();
-    
     if (needsOpen)
     {
         m_spec.format = format;
         m_spec.freq = data->m_samplingRate;
         m_spec.channels = data->m_channels;
         if (!OpenAudio())
-        {
-            SDL_UnlockAudio();
             return false;
-        }
     }
-
+    
+    SDL_LockAudio();
     m_playing = true;
     m_pos = 0;
     m_loop = (flags & wxSOUND_LOOP);
     m_data = data;
     data->IncRef();
+    SDL_UnlockAudio();
 
     SDL_PauseAudio(0);
-    SDL_UnlockAudio();
 
     // wait until playback finishes if called in sync mode:
     if (!(flags & wxSOUND_ASYNC))
@@ -314,6 +310,7 @@ void wxSoundBackendSDL::Stop()
 {
     SDL_LockAudio();
     SDL_PauseAudio(1);
+    m_playing = false;
     if (m_data)
     {
         m_data->DecRef();
