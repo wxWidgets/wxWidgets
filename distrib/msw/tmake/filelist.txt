@@ -606,6 +606,7 @@ radiobox.mm	Cocoa
 radiobut.mm	Cocoa
 region.cpp	Cocoa
 settings.cpp	Cocoa
+slider.mm	Cocoa
 statbmp.mm	Cocoa
 statbox.mm	Cocoa
 statline2.mm	Cocoa
@@ -1228,6 +1229,7 @@ pen.h	CocoaH
 radiobox.h	CocoaH
 radiobut.h	CocoaH
 region.h	CocoaH
+slider.h	CocoaH
 statbmp.h	CocoaH
 statbox.h	CocoaH
 statline.h	CocoaH

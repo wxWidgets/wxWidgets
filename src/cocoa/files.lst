@@ -221,6 +221,7 @@ ALL_SOURCES = \
 		cocoa/radiobut.mm \
 		cocoa/region.cpp \
 		cocoa/settings.cpp \
+		cocoa/slider.mm \
 		cocoa/statbmp.mm \
 		cocoa/statbox.mm \
 		cocoa/statline2.mm \
@@ -534,6 +535,7 @@ ALL_HEADERS = \
 		cocoa/radiobox.h \
 		cocoa/radiobut.h \
 		cocoa/region.h \
+		cocoa/slider.h \
 		cocoa/statbmp.h \
 		cocoa/statbox.h \
 		cocoa/statline.h \
@@ -829,6 +831,7 @@ GUIOBJS = \
 		radiobut.o \
 		region.o \
 		settings.o \
+		slider.o \
 		statbmp.o \
 		statbox.o \
 		statline2.o \
