@@ -135,10 +135,10 @@ wxRendererMac::DrawHeaderButton(wxWindow *win,
                                 const wxRect& rect,
                                 int flags)
 {
-    const wxCoord x = rect.x-1,
-                  y = rect.y-1,
-                  w = rect.width,
-                  h = rect.height;
+    const wxCoord x = dc.XLOG2DEV(rect.x-1),
+                  y = dc.YLOG2DEV(rect.y-1),
+                  w = dc.XLOG2DEVREL(rect.width),
+                  h = dc.YLOG2DEVREL(rect.height);
 
     int major,minor;
     wxGetOsVersion( &major, &minor );
@@ -169,6 +169,8 @@ wxRendererMac::DrawHeaderButton(wxWindow *win,
             QDBeginCGContext( (CGrafPtr) dc.m_macPort , &cgContext ) ;
             CGContextTranslateCTM( cgContext , 0 , bounds.bottom - bounds.top ) ;
             CGContextScaleCTM( cgContext , 1 , -1 ) ;
+			HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ) , cgContext ) ;
+			CGContextClip( cgContext ) ; 
             HIViewConvertRect( &headerRect , (HIViewRef) win->GetHandle() , (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() ) ;
 #endif
             {
