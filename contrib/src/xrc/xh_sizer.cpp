@@ -139,7 +139,7 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         wxXmlNode *parentNode = m_node->GetParent();
 
         wxCHECK_MSG(m_parentSizer != NULL ||
-                (parentNode->GetType() == wxXML_ELEMENT_NODE &&
+                (parentNode && parentNode->GetType() == wxXML_ELEMENT_NODE &&
                     m_parentAsWindow != NULL &&
                     (m_parentAsWindow->IsKindOf(CLASSINFO(wxPanel)) ||
                      m_parentAsWindow->IsKindOf(CLASSINFO(wxFrame)) ||
