@@ -14,6 +14,7 @@
 
 #include "wx/gdiobj.h"
 #include "wx/os2/private.h"
+#include "wx/fontutil.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
