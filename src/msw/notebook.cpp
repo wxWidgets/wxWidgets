@@ -145,23 +145,22 @@ bool wxNotebook::Create(wxWindow *parent,
   if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
       return FALSE;
 
-  // colors and font
-  m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
-  m_foregroundColour = *wxBLACK;
+  parent->AddChild(this);
 
   // style
   m_windowStyle = style | wxTAB_TRAVERSAL;
 
-  long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
+  long tabStyle = WS_TABSTOP | TCS_TABS;
 
+  if ( m_windowStyle & wxBORDER )
+    tabStyle |= WS_BORDER;
   if ( m_windowStyle & wxCLIP_SIBLINGS )
     tabStyle |= WS_CLIPSIBLINGS;
   if (m_windowStyle & wxCLIP_CHILDREN)
     tabStyle |= WS_CLIPCHILDREN;
+
   if ( m_windowStyle & wxTC_MULTILINE )
     tabStyle |= TCS_MULTILINE;
-  if ( m_windowStyle & wxBORDER )
-    tabStyle |= WS_BORDER;
   if (m_windowStyle & wxNB_FIXEDWIDTH)
     tabStyle |= TCS_FIXEDWIDTH ;
   if (m_windowStyle & wxNB_BOTTOM)
@@ -178,13 +177,7 @@ bool wxNotebook::Create(wxWindow *parent,
     return FALSE;
   }
 
-  // Not all compilers recognise SetWindowFont
-  ::SendMessage(GetHwnd(), WM_SETFONT,
-                (WPARAM)::GetStockObject(DEFAULT_GUI_FONT), TRUE);
-
-
-  if ( parent != NULL )
-    parent->AddChild(this);
+  SetBackgroundColour(wxColour(::GetSysColor(COLOR_BTNFACE)));
 
   return TRUE;
 }
