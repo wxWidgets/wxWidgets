@@ -366,7 +366,20 @@ wxTempFile::wxTempFile(const wxString& strName)
 bool wxTempFile::Open(const wxString& strName)
 {
   m_strName = strName;
-  m_strTemp = tmpnam(NULL);
+  
+  // we want to create the file in the same directory as strName because
+  // otherwise rename() in Commit() might not work (if the files are on
+  // different partitions for example). Unfortunately, the only standard
+  // (POSIX) temp file creation function tmpnam() can't do it.
+  #ifdef  __UNIX__
+    static const char *szMktempSuffix = "XXXXXX";
+    m_strTemp << strName << szMktempSuffix;
+    mktemp((char *)m_strTemp.c_str()); // @@@ even if the length doesn't change
+    //m_strTemp.UngetWriteBuf();
+  #else // Windows
+    m_strTemp = tmpnam(NULL);
+  #endif  // Windows/Unix
+    
   return m_file.Open(m_strTemp, wxFile::write);
 }
 
