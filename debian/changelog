@@ -1,3 +1,9 @@
+wxwindows2.2 (2.2.9.1) unstable; urgency=high
+
+  * recompile with libpng2..  oops.  Closes: #129762
+
+ -- Ron <ron@debian.org>  Mon, 21 Jan 2002 13:20:00 -0800
+
 wxwindows2.2 (2.2.9) unstable; urgency=high
 
   * fix for arches with unsigned char as default.
