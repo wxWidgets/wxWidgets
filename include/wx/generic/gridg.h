@@ -46,68 +46,6 @@ class WXDLLEXPORT wxGridCell;
 class WXDLLEXPORT wxGenericGrid: public wxPanel
 {
   DECLARE_DYNAMIC_CLASS(wxGenericGrid)
- protected:
-  wxTextCtrl *textItem;
-  wxScrollBar *hScrollBar;
-  wxScrollBar *vScrollBar;
-  int wCursorRow;
-  int wCursorColumn;
-  wxRectangle CurrentRect;
-  bool currentRectVisible;
-  wxGridCell ***gridCells;
-  wxGridCell **rowLabelCells;
-  wxGridCell **colLabelCells;
-  bool bEditCreated;
-  bool editable;
-
-  int totalRows;
-  int totalCols;
-  
-  // Row and column we're currently looking at
-  int scrollPosX;
-  int scrollPosY;
-
-  // Dimensions
-  int leftOfSheet;
-  int topOfSheet;
-  int rightOfSheet;    // Calculated from colWidths
-  int bottomOfSheet;   // Calculated from rowHeights
-  int totalGridWidth; // Total 'virtual' size
-  int totalGridHeight;
-  int cellHeight;      // For now, a default
-  int verticalLabelWidth;
-  int horizontalLabelHeight;
-  int verticalLabelAlignment;
-  int horizontalLabelAlignment;
-  int cellAlignment;
-  short *colWidths;   // Dynamically allocated
-  short *rowHeights;  // Dynamically allocated
-  int scrollWidth;    // Vert. scroll width, horiz. scroll height
-  
-  // Colours
-  wxColour cellTextColour;
-  wxColour cellBackgroundColour;
-  wxFont *cellTextFont;
-  wxColour labelTextColour;
-  wxColour labelBackgroundColour;
-  wxBrush *labelBackgroundBrush;
-  wxFont *labelTextFont;
-  wxPen *divisionPen;
-
-  // Position of Edit control
-  wxRectangle editControlPosition;
-  
-  // Drag status
-  int dragStatus;
-  int dragRowOrCol;
-  int dragStartPosition;
-  int dragLastPosition;
-  static wxCursor *horizontalSashCursor;
-  static wxCursor *verticalSashCursor;
-  
-  // Don't refresh whilst this is > 0
-  int batchCount;
-  
  public:
   wxGenericGrid(void);
 
@@ -115,23 +53,25 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   {
     Create(parent, -1, wxPoint(x, y), wxSize(width, height), style, name);
   }
-  inline wxGenericGrid(wxWindow *parent, const wxWindowID id, const wxPoint& pos, const wxSize& size, const long style = 0, const wxString& name = "grid")
+  inline wxGenericGrid(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style = 0, const wxString& name = "grid")
   {
     Create(parent, id, pos, size, style, name);
   }
   ~wxGenericGrid(void);
 
   void OnPaint(wxPaintEvent& event);
+  void OnEraseBackground(wxEraseEvent& event);
   void OnMouseEvent(wxMouseEvent& event);
   void OnSize(wxSizeEvent& event);
 
-  bool Create(wxWindow *parent, const wxWindowID, const wxPoint& pos, const wxSize& size, const long style = 0, const wxString& name = "grid");
+  bool Create(wxWindow *parent, wxWindowID, const wxPoint& pos, const wxSize& size, long style = 0, const wxString& name = "grid");
 
   bool CreateGrid(int nRows, int nCols, wxString **cellValues = NULL, short *widths = NULL,
      short defaultWidth = wxGRID_DEFAULT_CELL_WIDTH, short defaultHeight = wxGRID_DEFAULT_CELL_HEIGHT);
+  void PaintGrid(wxDC& dc);
   void ClearGrid(void);
   virtual wxGridCell *GetCell(int row, int col);
-  inline wxGridCell ***GetCells(void) { return gridCells; }
+  inline wxGridCell ***GetCells(void) { return m_gridCells; }
   bool InsertCols(int pos = 0, int n = 1, bool updateLabels = TRUE);
   bool InsertRows(int pos = 0, int n = 1, bool updateLabels = TRUE);
   bool AppendCols(int n = 1, bool updateLabels = TRUE);
@@ -149,12 +89,12 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   void SetCellTextColour(const wxColour& val, int row, int col);
   void SetCellTextColour(const wxColour& col);
   wxColour& GetCellTextColour(int row, int col);
-  inline wxColour& GetCellTextColour(void) { return cellTextColour; }
+  inline wxColour& GetCellTextColour(void) { return m_cellTextColour; }
   void SetCellBackgroundColour(const wxColour& col);
   void SetCellBackgroundColour(const wxColour& colour, int row, int col);
-  inline wxColour& GetCellBackgroundColour(void) { return cellBackgroundColour; }
+  inline wxColour& GetCellBackgroundColour(void) { return m_cellBackgroundColour; }
   wxColour& GetCellBackgroundColour(int row, int col);
-  inline wxFont *GetCellTextFont(void) { return cellTextFont; }
+  inline wxFont *GetCellTextFont(void) { return m_cellTextFont; }
   wxFont *GetCellTextFont(int row, int col);
   void SetCellTextFont(wxFont *fnt);
   void SetCellTextFont(wxFont *fnt, int row, int col);
@@ -177,31 +117,31 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   wxString& GetLabelValue(int orientation, int pos);
   void SetLabelTextColour(const wxColour& colour);
   void SetLabelBackgroundColour(const wxColour& colour);
-  inline wxColour& GetLabelTextColour(void) { return labelTextColour; }
-  inline wxColour& GetLabelBackgroundColour(void) { return labelBackgroundColour; }
-  inline wxFont *GetLabelTextFont(void) { return labelTextFont; }
-  inline void SetLabelTextFont(wxFont *fnt) { labelTextFont = fnt; }
+  inline wxColour& GetLabelTextColour(void) { return m_labelTextColour; }
+  inline wxColour& GetLabelBackgroundColour(void) { return m_labelBackgroundColour; }
+  inline wxFont *GetLabelTextFont(void) { return m_labelTextFont; }
+  inline void SetLabelTextFont(wxFont *fnt) { m_labelTextFont = fnt; }
 
   // Miscellaneous accessors
-  inline int GetCursorRow(void) { return wCursorRow; }
-  inline int GetCursorColumn(void) { return wCursorColumn; }
+  inline int GetCursorRow(void) { return m_wCursorRow; }
+  inline int GetCursorColumn(void) { return m_wCursorColumn; }
   void SetGridCursor(int row, int col);
-  inline int GetRows(void) { return totalRows; }
-  inline int GetCols(void) { return totalCols; }
-  inline int GetScrollPosX(void) { return scrollPosX; }
-  inline int GetScrollPosY(void) { return scrollPosY; }
-  inline void SetScrollPosX(int pos) { scrollPosX = pos; }
-  inline void SetScrollPosY(int pos) { scrollPosY = pos; }
-  inline wxTextCtrl *GetTextItem(void) { return textItem; }
-  inline wxScrollBar *GetHorizScrollBar(void) { return hScrollBar; }
-  inline wxScrollBar *GetVertScrollBar(void) { return vScrollBar; }
-  inline bool GetEditable(void) { return editable; }
+  inline int GetRows(void) { return m_totalRows; }
+  inline int GetCols(void) { return m_totalCols; }
+  inline int GetScrollPosX(void) { return m_scrollPosX; }
+  inline int GetScrollPosY(void) { return m_scrollPosY; }
+  inline void SetScrollPosX(int pos) { m_scrollPosX = pos; }
+  inline void SetScrollPosY(int pos) { m_scrollPosY = pos; }
+  inline wxTextCtrl *GetTextItem(void) { return m_textItem; }
+  inline wxScrollBar *GetHorizScrollBar(void) { return m_hScrollBar; }
+  inline wxScrollBar *GetVertScrollBar(void) { return m_vScrollBar; }
+  inline bool GetEditable(void) { return m_editable; }
   void SetEditable(bool edit);
-  inline wxRectangle& GetCurrentRect(void) { return CurrentRect; }
-  inline bool CurrentCellVisible(void) { return currentRectVisible; }
-  inline void SetDividerPen(wxPen *pen) { divisionPen = pen; }
-  inline wxPen *GetDividerPen(void) { return divisionPen; }
-  
+  inline wxRectangle& GetCurrentRect(void) { return m_currentRect; }
+  inline bool CurrentCellVisible(void) { return m_currentRectVisible; }
+  inline void SetDividerPen(wxPen *pen) { m_divisionPen = pen; }
+  inline wxPen *GetDividerPen(void) { return m_divisionPen; }
+
   // High-level event handling
   // Override e.g. to check value of current cell; but call
   // base member for default processing.
@@ -261,12 +201,76 @@ class WXDLLEXPORT wxGenericGrid: public wxPanel
   void RefreshCell(int row, int col, bool setText = FALSE);
 
   // Don't refresh within the outer pair of these.
-  inline void BeginBatch(void) { batchCount ++; }
-  inline void EndBatch(void) { batchCount --; }
-  inline int GetBatchCount(void) { return batchCount; }
+  inline void BeginBatch(void) { m_batchCount ++; }
+  inline void EndBatch(void) { m_batchCount --; }
+  inline int GetBatchCount(void) { return m_batchCount; }
 
   void OnText(wxCommandEvent& ev);
   void OnGridScroll(wxScrollEvent& ev);
+
+ protected:
+  wxPanel*                  m_editingPanel;  // Contains the text control
+  wxTextCtrl*               m_textItem;
+  wxScrollBar*              m_hScrollBar;
+  wxScrollBar*              m_vScrollBar;
+  int                       m_wCursorRow;
+  int                       m_wCursorColumn;
+  wxRectangle               m_currentRect;
+  bool                      m_currentRectVisible;
+  wxGridCell***             m_gridCells;
+  wxGridCell**              m_rowLabelCells;
+  wxGridCell**              m_colLabelCells;
+  bool                      m_editCreated;
+  bool                      m_editable;
+
+  int                       m_totalRows;
+  int                       m_totalCols;
+  
+  // Row and column we're currently looking at
+  int                       m_scrollPosX;
+  int                       m_scrollPosY;
+
+  // Dimensions
+  int                       m_leftOfSheet;
+  int                       m_topOfSheet;
+  int                       m_rightOfSheet;    // Calculated from m_colWidths
+  int                       m_bottomOfSheet;   // Calculated from m_rowHeights
+  int                       m_totalGridWidth; // Total 'virtual' size
+  int                       m_totalGridHeight;
+  int                       m_cellHeight;      // For now, a default
+  int                       m_verticalLabelWidth;
+  int                       m_horizontalLabelHeight;
+  int                       m_verticalLabelAlignment;
+  int                       m_horizontalLabelAlignment;
+  int                       m_cellAlignment;
+  short*                    m_colWidths;   // Dynamically allocated
+  short*                    m_rowHeights;  // Dynamically allocated
+  int                       m_scrollWidth;    // Vert. scroll width, horiz. scroll height
+  
+  // Colours
+  wxColour                  m_cellTextColour;
+  wxColour                  m_cellBackgroundColour;
+  wxFont*                   m_cellTextFont;
+  wxColour                  m_labelTextColour;
+  wxColour                  m_labelBackgroundColour;
+  wxBrush*                  m_labelBackgroundBrush;
+  wxFont*                   m_labelTextFont;
+  wxPen*                    m_divisionPen;
+  wxBitmap*                 m_doubleBufferingBitmap;
+
+  // Position of Edit control
+  wxRectangle               m_editControlPosition;
+  
+  // Drag status
+  int                       m_dragStatus;
+  int                       m_dragRowOrCol;
+  int                       m_dragStartPosition;
+  int                       m_dragLastPosition;
+  wxCursor*                 m_horizontalSashCursor;
+  wxCursor*                 m_verticalSashCursor;
+
+  // To avoid multiple refreshes, use Begin/EndBatch
+  int                       m_batchCount;
 
 DECLARE_EVENT_TABLE()
 };
