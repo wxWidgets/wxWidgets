@@ -1260,7 +1260,6 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
-    FreeAllInternalData();
     return ListView_DeleteAllItems(GetHwnd()) != 0;
 }
 
@@ -2170,6 +2169,10 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // notifications - this makes deleting all items from a list ctrl
             // much faster
             *result = TRUE;
+
+            // also, we may free all user data now (couldn't do it before as
+            // the user should have access to it in OnDeleteAllItems() handler)
+            FreeAllInternalData();
             return true;
 
         case LVN_ENDLABELEDITA:
