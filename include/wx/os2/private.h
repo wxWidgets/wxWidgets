@@ -20,11 +20,25 @@
 #define INCL_WINSYS
 #define INCL_SHLERRORS
 #include <os2.h>
+#if defined (__EMX__) && !defined(USE_OS2_TOOLKIT_HEADERS)
+/* struct missing in "os2emx.h" */
+ typedef struct _SPBCDATA {
+   ULONG     cbSize;       /*  Size of control block. */
+   ULONG     ulTextLimit;  /*  Entryfield text limit. */
+   LONG      lLowerLimit;  /*  Spin lower limit (numeric only). */
+   LONG      lUpperLimit;  /*  Spin upper limit (numeric only). */
+   ULONG     idMasterSpb;  /*  ID of the servant's master spinbutton. */
+   PVOID     pHWXCtlData;  /*  Handwriting control data structure flag. */
+ } SPBCDATA;
+ 
+ typedef SPBCDATA *PSPBCDATA;
+#endif
 
 #include "wx/fontenc.h"
 
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxString;
 
 // ---------------------------------------------------------------------------
 // private constants
