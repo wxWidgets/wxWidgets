@@ -232,7 +232,11 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     SetHeader(wxT("User-Agent"), wxT("wxWidgets 2.x"));
 
   SaveState();
+#if wxUSE_THREADS
   SetFlags( wxThread::IsMain() ? wxSOCKET_NONE : wxSOCKET_BLOCK );
+#else
+  SetFlags( wxSOCKET_NONE );
+#endif
   Notify(FALSE);
 
   wxString buf;
