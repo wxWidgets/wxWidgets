@@ -6007,7 +6007,9 @@ for subdir in `echo $SUBDIRS`; do
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
             else dnl utils
                 makefiles="utils/HelpGen/Makefile.in \
-                           utils/HelpGen/src/Makefile.in"
+                           utils/HelpGen/src/Makefile.in \
+                           utils/tex2rtf/Makefile.in \
+                           utils/tex2rtf/src/Makefile.in"
             fi
         fi
 

@@ -35846,7 +35846,9 @@ for subdir in `echo $SUBDIRS`; do
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
             else                 makefiles="utils/HelpGen/Makefile.in \
-                           utils/HelpGen/src/Makefile.in"
+                           utils/HelpGen/src/Makefile.in \
+                           utils/tex2rtf/Makefile.in \
+                           utils/tex2rtf/src/Makefile.in"
             fi
         fi
 
