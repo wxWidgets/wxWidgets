@@ -55,6 +55,7 @@
 #endif
 
 #include "wx/txtstrm.h"
+#include "wx/numdlg.h"
 
 #include "wx/process.h"
 

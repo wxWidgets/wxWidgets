@@ -47,6 +47,7 @@
 #endif
 
 #include "wx/datetime.h"
+#include "wx/numdlg.h"
 
 // define this for the platforms which don't support wxBitmapButton (such as
 // Motif), else a wxBitmapButton will be used

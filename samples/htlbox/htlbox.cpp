@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/colordlg.h"
+#include "wx/numdlg.h"
 
 #include "wx/htmllbox.h"
 

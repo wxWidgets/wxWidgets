@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/image.h"
+#include "wx/numdlg.h"
 
 /* GRG: This is not ANSI standard, define M_PI explicitly
 #include <math.h>       // M_PI

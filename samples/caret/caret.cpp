@@ -20,11 +20,11 @@
 // need because it includes almost all <standard< wxWindows headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
-
     #include "wx/log.h"
 #endif
 
 #include "wx/caret.h"
+#include "wx/numdlg.h"
 
 // ----------------------------------------------------------------------------
 // ressources

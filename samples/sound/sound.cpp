@@ -22,9 +22,11 @@
     #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/sound.h"
+#include "wx/numdlg.h"
 
 // ----------------------------------------------------------------------------
 // resources

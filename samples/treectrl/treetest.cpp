@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/colordlg.h"
+#include "wx/numdlg.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"

@@ -29,6 +29,7 @@
 #include "wx/msw/wince/time.h"
 #endif
 
+#include "wx/numdlg.h"
 #include "wx/colordlg.h"
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
