@@ -410,7 +410,10 @@ void wxApp::DeletePendingObjects()
 bool wxApp::Initialize()
 {
     if ( MGL_init(".", NULL) == 0 )
+    {
+        wxLogError(_("Cannot initialize SciTech MGL!"));
         return FALSE;
+    }
 
     wxClassInfo::InitializeClasses();
 
