@@ -81,9 +81,17 @@ class TestFloatBar(wx.Frame):
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestFloatBar(frame, log)
-    frame.otherWin = win
-    win.Show(True)
+    if wx.Platform == "__WXMAC__":
+        dlg = wx.MessageDialog(
+                frame, 'FloatBar does not work well on this platform.',
+                'Sorry', wx.OK | wx.ICON_INFORMATION
+                )
+        dlg.ShowModal()
+        dlg.Destroy()
+    else:
+        win = TestFloatBar(frame, log)
+        frame.otherWin = win
+        win.Show(True)
 
 #---------------------------------------------------------------------------
 

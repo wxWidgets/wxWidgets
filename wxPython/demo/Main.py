@@ -930,7 +930,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(0) #wx.Platform == "__WXMAC__")
+    app = MyApp(wx.Platform == "__WXMAC__")
     app.MainLoop()
 
 

@@ -41,18 +41,19 @@ def runTest(frame, nb, log):
 
 
 overview = """\
+<html><body>
 This class represents a dialog that shows a short message and a progress bar. 
 Optionally, it can display an ABORT button
-
+<p>
 This dialog indicates the progress of some event that takes a while to accomplish, 
 usually, such as file copy progress, download progress, and so on. The display
 is <b>completely</b> under control of the program; you must update the dialog from
 within the program creating it. 
-
+<p>
 When the dialog closes, you must check to see if the user aborted the process or
 not, and act accordingly -- that is, if the PD_CAN_ABORT style flag is set. 
 If not then you may progress blissfully onward.
-
+</body></html>
 """
 
 if __name__ == '__main__':

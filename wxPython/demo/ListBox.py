@@ -86,7 +86,7 @@ class TestListBox(wx.Panel):
 
 
         wx.StaticText(self, -1, "Select many:", (200, 50), (65, 18))
-        self.lb2 = wx.ListBox(self, 70, (280, 50), (80, 120), sampleList, wx.LB_EXTENDED)
+        self.lb2 = wx.ListBox(self, 70, (300, 50), (80, 120), sampleList, wx.LB_EXTENDED)
         self.Bind(wx.EVT_LISTBOX, self.EvtMultiListBox, self.lb2)
         self.lb2.Bind(wx.EVT_RIGHT_UP, self.EvtRightButton)
         self.lb2.SetSelection(0)

@@ -38,13 +38,13 @@ class TestPanel(wx.Panel):
             mask = wx.MaskColour(bmp, wx.BLUE)
 
         bmp.SetMask(mask)
-        b = wx.BitmapButton(self, 30, bmp, (160, 20),
+        b = wx.BitmapButton(self, 30, bmp, (260, 20),
                        (bmp.GetWidth()+10, bmp.GetHeight()+10))
         b.SetToolTipString("This is a bitmap button.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
         
 
-        b = wx.Button(self, 40, "Flat Button", (20,150), style=wx.NO_BORDER)
+        b = wx.Button(self, 40, "Flat Button?", (20,150), style=wx.NO_BORDER)
         b.SetToolTipString("This button has a style flag of wx.NO_BORDER")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
 
