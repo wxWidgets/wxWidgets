@@ -1736,10 +1736,10 @@ void wxDC::MacInstallFont() const
     {
             sizeof( Fixed ) ,
     } ;
-    Boolean kTrue = true ;
-    Boolean kFalse = false ;
+//    Boolean kTrue = true ;
+//    Boolean kFalse = false ;
 
-    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
+//    ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
     {
             &atsuSize ,
