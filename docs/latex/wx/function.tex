@@ -50,6 +50,7 @@ the corresponding topic.
 \helpref{wxCreateDynamicObject}{wxcreatedynamicobject}\\
 \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider}\\
 \helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare}\\
+\helpref{wxCRIT\_SECT\_DECLARE\_MEMBER}{wxcritsectdeclaremember}\\
 \helpref{wxCRIT\_SECT\_LOCKER}{wxcritsectlocker}\\
 \helpref{wxCRITICAL\_SECTION}{wxcriticalsectionmacro}\\ % wxcs already taken!
 \helpref{wxDDECleanUp}{wxddecleanup}\\
@@ -703,6 +704,17 @@ to create and use the critical section only when needed.
 
 This macro declares a (static) critical section object named {\it cs} if 
 {\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$.
+
+
+\membersection{wxCRIT\_SECT\_DECLARE\_MEMBER}\label{wxcritsectdeclaremember}
+
+\func{}{wxCRIT\_SECT\_DECLARE}{\param{}{cs}}
+
+This macro declares a critical section object named {\it cs} if 
+{\tt wxUSE\_THREADS} is $1$ and does nothing if it is $0$. As it doesn't
+include the {\tt static} keyword (unlike 
+\helpref{wxCRIT\_SECT\_DECLARE}{wxcritsectdeclare}), it can be used to declare
+a class or struct member which explains its name.
 
 
 \membersection{wxCRIT\_SECT\_LOCKER}\label{wxcritsectlocker}

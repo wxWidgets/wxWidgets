@@ -594,6 +594,7 @@ void WXDLLEXPORT wxMutexGuiLeave();
 #define wxENTER_CRIT_SECT(cs)   (cs).Enter()
 #define wxLEAVE_CRIT_SECT(cs)   (cs).Leave()
 #define wxCRIT_SECT_DECLARE(cs) static wxCriticalSection cs
+#define wxCRIT_SECT_DECLARE_MEMBER(cs) wxCriticalSection cs
 #define wxCRIT_SECT_LOCKER(name, cs)  wxCriticalSectionLocker name(cs)
 
 // function for checking if we're in the main thread which may be used whether
@@ -611,6 +612,7 @@ inline void WXDLLEXPORT wxMutexGuiLeave() { }
 #define wxENTER_CRIT_SECT(cs)
 #define wxLEAVE_CRIT_SECT(cs)
 #define wxCRIT_SECT_DECLARE(cs)
+#define wxCRIT_SECT_DECLARE_MEMBER(cs)
 #define wxCRIT_SECT_LOCKER(name, cs)
 
 // if there is only one thread, it is always the main one
