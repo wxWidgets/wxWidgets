@@ -564,7 +564,7 @@ void wxTopLevelWindowMSW::Maximize(bool maximize)
     {
         // we can't maximize the hidden frame because it shows it as well, so
         // just remember that we should do it later in this case
-        m_maximizeOnShow = TRUE;
+        m_maximizeOnShow = maximize;
     }
 }
 

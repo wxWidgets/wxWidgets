@@ -207,6 +207,8 @@ wxMSW:
 - fix for sending event from wxCheckListBox::Check()
 - wxCaret::SetSize correction for showing caret
 - fix for wxTreeCtrl label editing in wxTR_MULTIPLE mode
+- wxFrame::Maximize(FALSE) would maximize the window if
+  called before showing it
 
 wxMotif:
 
