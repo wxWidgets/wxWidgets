@@ -194,18 +194,13 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     wxCHECK_MSG( sm_providers, wxNullIcon, _T("no wxArtProvider exists") );
 
     wxBitmap bmp = GetBitmap(id, client, size);
-    if ( bmp.Ok() )
-    {
-        wxIcon icon;
-        icon.CopyFromBitmap(bmp);
-        return icon;
-    }
-    else
-    {
+    if ( !bmp.Ok() )
         return wxNullIcon;
-    }
-}
 
+    wxIcon icon;
+    icon.CopyFromBitmap(bmp);
+    return icon;
+}
 
 
 class wxArtProviderModule: public wxModule
