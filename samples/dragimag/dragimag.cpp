@@ -188,15 +188,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 }
                 case SHAPE_DRAG_ICON:
                 {
-                    // Can anyone explain why this test is necessary,
-                    // to prevent a gcc error?
-#if defined(__WXMOTIF__) || defined(__WXX11__)
-                    wxIcon icon(dragicon_xpm);
-#else
-                    wxIcon icon(wxICON(dragicon));
-#endif
-
-                    m_dragImage = new wxDragImage(icon, wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new wxDragImage(wxICON(dragicon), wxCursor(wxCURSOR_HAND));
                     break;
                 }
             }
