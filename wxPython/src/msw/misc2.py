@@ -963,6 +963,8 @@ wxLoadFileSelector = misc2c.wxLoadFileSelector
 
 wxSaveFileSelector = misc2c.wxSaveFileSelector
 
+wxDirSelector = misc2c.wxDirSelector
+
 wxGetTextFromUser = misc2c.wxGetTextFromUser
 
 wxGetPasswordFromUser = misc2c.wxGetPasswordFromUser

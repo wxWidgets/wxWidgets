@@ -55,7 +55,7 @@
     // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(FileSelectorPromptStr);
     DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-
+    DECLARE_DEF_STRING(DirSelectorPromptStr);
     static const wxString wxPyEmptyString(wxT(""));
 %}
 
@@ -82,6 +82,13 @@ wxString wxSaveFileSelector(const wxString& what,
                             const wxString& extension,
                             const wxString& default_name = wxPyEmptyString,
                             wxWindow *parent = NULL);
+
+
+wxString wxDirSelector(const wxString& message = wxPyDirSelectorPromptStr,
+                       const wxString& defaultPath = wxPyEmptyString,
+                       long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON,
+                       const wxPoint& pos = wxDefaultPosition,
+                       wxWindow *parent = NULL);
 
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = wxPyEmptyString,

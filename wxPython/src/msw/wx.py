@@ -415,6 +415,7 @@ wxPD_CAN_ABORT = wxc.wxPD_CAN_ABORT
 wxPD_ELAPSED_TIME = wxc.wxPD_ELAPSED_TIME
 wxPD_ESTIMATED_TIME = wxc.wxPD_ESTIMATED_TIME
 wxPD_REMAINING_TIME = wxc.wxPD_REMAINING_TIME
+wxDD_NEW_DIR_BUTTON = wxc.wxDD_NEW_DIR_BUTTON
 wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
 wxMB_DOCKABLE = wxc.wxMB_DOCKABLE
 wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
@@ -1556,6 +1557,8 @@ def wxPyTypeCast(obj, typeStr):
 
 #----------------------------------------------------------------------------
 
+class wxPyDeadObjectError(AttributeError):
+    pass
 
 class _wxPyDeadObject:
     """
@@ -1563,15 +1566,21 @@ class _wxPyDeadObject:
     changed to this class when the C++ object is deleted.  This should help
     prevent crashes due to referencing a bogus C++ pointer.
     """
+    reprStr = "wxPython wrapper for DELETED %s object! (The C++ object no longer exists.)"
+    attrStr = "The C++ %s object has been deleted, attribute access no longer allowed."
+
     def __repr__( self ):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
-        return 'wxPython wrapper for deleted %s object!!! Programming logic error' % self._name
+        return self.reprStr % self._name
 
     def __getattr__( self, *args ):
         if not hasattr(self, "_name"):
             self._name = "[unknown]"
-        raise ValueError, 'Attempt to access attribute of a deleted %s object' % self._name
+        raise wxPyDeadObjectError( self.attrStr % self._name )
+
+    def __nonzero__(self):
+        return 0
 
 
 #----------------------------------------------------------------------

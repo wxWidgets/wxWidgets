@@ -71,9 +71,11 @@ public:
 
     %addmethods {
         PyObject* asTuple() {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 
@@ -112,9 +114,11 @@ public:
             self->y = y;
         }
         PyObject* asTuple() {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyFloat_FromDouble(self->x));
             PyTuple_SET_ITEM(tup, 1, PyFloat_FromDouble(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 
@@ -160,9 +164,11 @@ public:
             self->y = y;
         }
         PyObject* asTuple() {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
+            wxPyEndBlockThreads();
             return tup;
         }
 
@@ -232,11 +238,13 @@ public:
 
     %addmethods {
         PyObject* asTuple() {
+            wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(self->width));
             PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
+            wxPyEndBlockThreads();
             return tup;
         }
 

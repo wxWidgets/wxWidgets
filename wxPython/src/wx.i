@@ -12,6 +12,7 @@
 
 %module wx
 
+
 %{
 #include "helpers.h"
 %}
