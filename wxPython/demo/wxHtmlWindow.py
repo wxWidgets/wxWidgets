@@ -196,7 +196,7 @@ class TestHtmlPanel(wx.Panel):
 
 
     def OnPrint(self, event):
-        ##self.printer.GetPageSetupData().SetMarginTopLeft((100,100))
+        self.printer.GetPrintData().SetPaperId(wx.PAPER_LETTER)
         self.printer.PrintFile(self.html.GetOpenedPage())
 
 #----------------------------------------------------------------------
