@@ -289,7 +289,7 @@ class Choice(core.ControlWithItems):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ChoiceNameStr) -> Choice
         """
@@ -302,7 +302,7 @@ class Choice(core.ControlWithItems):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ChoiceNameStr) -> bool
         """
@@ -352,7 +352,7 @@ class ComboBox(core.Control,core.ItemContainer):
         """
         __init__(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ComboBoxNameStr) -> ComboBox
         """
@@ -366,7 +366,7 @@ class ComboBox(core.Control,core.ItemContainer):
         """
         Create(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ComboBoxNameStr) -> bool
         """
@@ -715,7 +715,7 @@ class ListBox(core.ControlWithItems):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> ListBox
         """
@@ -728,7 +728,7 @@ class ListBox(core.ControlWithItems):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> bool
         """
@@ -817,7 +817,7 @@ class CheckListBox(ListBox):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> CheckListBox
         """
@@ -830,7 +830,7 @@ class CheckListBox(ListBox):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            int choices=0, String choices_array=None, 
+            wxArrayString choices=wxPyEmptyStringArray, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ListBoxNameStr) -> bool
         """
@@ -904,6 +904,11 @@ TEXT_ATTR_ALIGNMENT = _controls.TEXT_ATTR_ALIGNMENT
 TEXT_ATTR_LEFT_INDENT = _controls.TEXT_ATTR_LEFT_INDENT
 TEXT_ATTR_RIGHT_INDENT = _controls.TEXT_ATTR_RIGHT_INDENT
 TEXT_ATTR_TABS = _controls.TEXT_ATTR_TABS
+TE_HT_UNKNOWN = _controls.TE_HT_UNKNOWN
+TE_HT_BEFORE = _controls.TE_HT_BEFORE
+TE_HT_ON_TEXT = _controls.TE_HT_ON_TEXT
+TE_HT_BELOW = _controls.TE_HT_BELOW
+TE_HT_BEYOND = _controls.TE_HT_BEYOND
 class TextAttr(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTextAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1193,6 +1198,16 @@ class TextCtrl(core.Control):
     def ShowPosition(*args, **kwargs):
         """ShowPosition(long pos)"""
         return _controls.TextCtrl_ShowPosition(*args, **kwargs)
+
+    def HitTest(*args, **kwargs):
+        """
+        HitTest(Point pt) -> (result, row, col)
+
+        Find the character at position given in pixels.
+        NB: pt is in device coords (not adjusted for the client area
+        origin nor scrolling)
+        """
+        return _controls.TextCtrl_HitTest(*args, **kwargs)
 
     def Copy(*args, **kwargs):
         """Copy()"""
@@ -1577,8 +1592,8 @@ class RadioBox(core.Control):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, int choices=0, 
-            String choices_array=None, int majorDimension=0, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
+            int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> RadioBox
         """
@@ -1592,8 +1607,8 @@ class RadioBox(core.Control):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
-            Size size=DefaultSize, int choices=0, 
-            String choices_array=None, int majorDimension=0, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
+            int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
             String name=RadioBoxNameStr) -> bool
         """

@@ -236,10 +236,9 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_char swig_types[3] 
 #define  SWIGTYPE_p_wxPalette swig_types[4] 
 #define  SWIGTYPE_p_wxGLCanvas swig_types[5] 
-#define  SWIGTYPE_p_wxString swig_types[6] 
-#define  SWIGTYPE_p_wxGLContext swig_types[7] 
-#define  SWIGTYPE_p_int swig_types[8] 
-static swig_type_info *swig_types[10];
+#define  SWIGTYPE_p_wxGLContext swig_types[6] 
+#define  SWIGTYPE_p_int swig_types[7] 
+static swig_type_info *swig_types[9];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1177,7 +1176,6 @@ static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtH
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
 static swig_type_info _swigt__p_wxPalette[] = {{"_p_wxPalette", 0, "wxPalette *", 0},{"_p_wxPalette"},{0}};
 static swig_type_info _swigt__p_wxGLCanvas[] = {{"_p_wxGLCanvas", 0, "wxGLCanvas *", 0},{"_p_wxGLCanvas"},{0}};
-static swig_type_info _swigt__p_wxString[] = {{"_p_wxString", 0, "wxString *", 0},{"_p_wxString"},{0}};
 static swig_type_info _swigt__p_wxGLContext[] = {{"_p_wxGLContext", 0, "wxGLContext *", 0},{"_p_wxGLContext"},{0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0},{"_p_int"},{0}};
 
@@ -1188,7 +1186,6 @@ _swigt__p_wxEvtHandler,
 _swigt__p_char, 
 _swigt__p_wxPalette, 
 _swigt__p_wxGLCanvas, 
-_swigt__p_wxString, 
 _swigt__p_wxGLContext, 
 _swigt__p_int, 
 0
