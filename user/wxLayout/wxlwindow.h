@@ -47,7 +47,7 @@ public:
    void SetEventId(int id) { m_EventId = id; }
    wxPoint const &GetClickPosition(void) const { return
                                                     m_ClickPosition; }
-   virtual ~wxLayoutList() {} ;
+   virtual ~wxLayoutWindow() {} ;
 private:
    /// for sending events
    wxWindow *m_Parent;
