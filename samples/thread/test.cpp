@@ -88,18 +88,6 @@ private:
     // removed from the array
     wxArrayThread m_threads;
 
-    // both of these arrays are only valid between 2 iterations of OnIdle(),
-    // they're cleared each time it is excuted.
-
-    // the array of threads which finished (either because they did their work
-    // or because they were explicitly stopped)
-    wxArrayThread m_terminated;
-
-    // the array of threads which were stopped by the user and not terminated
-    // by themselves - these threads shouldn't be Delete()d second time from
-    // OnIdle()
-    wxArrayThread m_stopped;
-    
     // just some place to put our messages in
     wxTextCtrl *m_txtctrl;
 
@@ -331,7 +319,6 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
         m_critsect.Enter();
 
         wxThread *thread = m_threads.Last();
-        m_stopped.Add(thread);
 
         // it's important to leave critical section before calling Delete()
         // because delete will (implicitly) call OnThreadExit() which also tries
@@ -389,24 +376,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 // set the frame title indicating the current number of threads
 void MyFrame::OnIdle(wxIdleEvent &event)
 {
-    // first wait for all the threads which dies since the last call
-    {
-        wxCriticalSectionLocker enter(m_critsect);
-
-        size_t nCount = m_terminated.GetCount();
-        for ( size_t n = 0; n < nCount; n++ )
-        {
-            // don't delete the threads which were stopped - they were already
-            // deleted in OnStopThread()
-            wxThread *thread = m_terminated[n];
-            if ( m_stopped.Index(thread) == wxNOT_FOUND )
-                thread->Delete();
-        }
-
-        m_stopped.Empty();
-        m_terminated.Empty();
-    }
-
+    // update the counts of running/total threads
     size_t nRunning = 0,
            nCount = m_threads.Count();
     for ( size_t n = 0; n < nCount; n++ )
@@ -457,5 +427,4 @@ void MyFrame::OnThreadExit(wxThread *thread)
     wxCriticalSectionLocker enter(m_critsect);
 
     m_threads.Remove(thread);
-    m_terminated.Add(thread);
 }
