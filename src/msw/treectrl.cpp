@@ -1298,11 +1298,21 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
 
 wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 {
-    HTREEITEM hItem = TreeView_GetParent(GetHwnd(), HITEM(item));
-    if ( !hItem && HasFlag(wxTR_HIDE_ROOT) )
+    HTREEITEM hItem;
+
+    if ( IS_VIRTUAL_ROOT(item) )
     {
-        // the top level items should have the virtual root as their parent
-        hItem = TVI_ROOT;
+        // no parent for the virtual root
+        hItem = 0;
+    }
+    else // normal item
+    {
+        hItem = TreeView_GetParent(GetHwnd(), HITEM(item));
+        if ( !hItem && HasFlag(wxTR_HIDE_ROOT) )
+        {
+            // the top level items should have the virtual root as their parent
+            hItem = TVI_ROOT;
+        }
     }
 
     return wxTreeItemId((WXHTREEITEM)hItem);
