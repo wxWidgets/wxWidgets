@@ -350,21 +350,27 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (m_widget == NULL)
     {
         GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
-
         if (style & wxFRAME_TOOL_WINDOW)
             win_type = GTK_WINDOW_POPUP;
 
         if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         {
-            // there is no more GTK_WINDOW_DIALOG in 2.0
 #ifdef __WXGTK20__
-            win_type = GTK_WINDOW_TOPLEVEL;
+            m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+            // Tell WM that this is a dialog window and make it center
+            // on parent by default (this is what GtkDialog ctor does):
+            gtk_window_set_type_hint(GTK_WINDOW(m_widget),
+                                     GDK_WINDOW_TYPE_HINT_DIALOG);
+            gtk_window_set_position(GTK_WINDOW(m_widget),
+                                    GTK_WIN_POS_CENTER_ON_PARENT);
 #else
-            win_type = GTK_WINDOW_DIALOG;
+            m_widget = gtk_window_new(GTK_WINDOW_DIALOG);
 #endif
         }
-
-        m_widget = gtk_window_new( win_type );
+        else
+        {
+            m_widget = gtk_window_new(win_type);
+        }
     }
 
     if (m_parent && (((GTK_IS_WINDOW(m_parent->m_widget)) &&
