@@ -34,10 +34,10 @@
 #endif
 
 #include <signal.h>
-//#include <features.h>
+/* #include <features.h> */
 
-#include <wx/setup.h>
-#include <wx/gsocket.h>
+#include "wx/setup.h"
+#include "wx/gsocket.h"
 #include "gsockunx.h"
 
 #ifndef SOCKLEN_T
@@ -59,10 +59,6 @@ void GSocket_Init()
 }
 
 void GSocket_Cleanup()
-{
-}
-
-void GSocket_Done()
 {
 }
 
@@ -570,7 +566,9 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
 {
   struct sockaddr from;
-  int fromlen, ret;
+  
+  SOCKLEN_T fromlen;
+  int ret;
 
   fromlen = sizeof(from);
 
@@ -740,8 +738,9 @@ void _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len)
     break;
 #endif
   default:
-
+    {
     /* TODO error */
+    }
   }
 
   if (address->m_addr)

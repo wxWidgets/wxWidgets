@@ -916,7 +916,7 @@ class WXDLLEXPORT wxSocketModule: public wxModule {
     return TRUE;
   }
   void OnExit() {
-    GSocket_Done();
+    GSocket_Cleanup();
   }
 };
 
