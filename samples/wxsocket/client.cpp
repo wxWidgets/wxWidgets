@@ -169,8 +169,6 @@ void MyFrame::OnExecOpenConnection(wxCommandEvent& WXUNUSED(evt))
                                   "Connect ...", "localhost");
   addr.Hostname(hname);
   addr.Service(3000);
-  sock->SetNotify(wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
-  sock->SetNotify(TRUE);
   sock->Connect(addr, FALSE);
   sock->WaitOnConnect(10);
   sock->SetFlags(wxSocketBase::NONE);
@@ -285,8 +283,10 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
   sock->SetEventHandler(*this, SKDEMO_SCK);
   sock->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
   sock->Notify(TRUE);
-
   text_win->WriteText("Test 1B: sending bytes to the server\n");
+  if (!sock->IsData())
+    text_win->WriteText("No data to read yet (this is OK)\n");
+
   wxYield();
   sock->Write((char *)buf, wxStrlen(buf)+1);
   text_win->WriteText("Waiting for incoming bytes (timeout = 2 sec) ...");
@@ -303,13 +303,18 @@ void MyFrame::OnExecTest1(wxCommandEvent& WXUNUSED(evt))
    wxYield();
 
   if (!m_good) {
-    text_win->WriteText("Timeout ! Failed.\n");
+    text_win->WriteText("timeout ! Failed.\n");
     sock->Close();
     UpdateStatus();
   } else
-    text_win->WriteText("Success.");
+    text_win->WriteText("event ! (no timeout).\n");
+
+  if (sock->IsData())
+    text_win->WriteText("Data is available, as expected...\n");
 
   sock->Read((char *)buf2, wxStrlen(buf)+1);
+
+  text_win->WriteText("Success!\n");
 
   dlgbox->Layout();
   dlgbox->ShowModal();
