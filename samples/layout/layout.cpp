@@ -285,6 +285,18 @@ NewSizerFrame::NewSizerFrame(wxFrame *frame, char *title, int x, int y ):
     wxALL,        //   and make border all around
     5 );         // set border width to 5
 
+  // 2.5) Gratuitous test of wxStaticBoxSizers
+  wxBoxSizer *statsizer = new wxStaticBoxSizer(
+    new wxStaticBox(this, -1, "A wxStaticBoxSizer"),
+    wxVERTICAL );
+  statsizer->Add(
+    new wxStaticText(this, -1, "And some TEXT inside it"),
+    0,
+    wxCENTER |
+    wxALL,
+    30);
+  topsizer->Add(statsizer, 1, wxEXPAND | wxALL, 10);
+
 
   // 3) middle: create wxStaticLine with minimum size (3x3)
   topsizer->Add( 
