@@ -58,6 +58,7 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
         {
             m_Config = config;
             m_ConfigRoot = rootpath;
+            if (m_helpFrame) m_helpFrame -> UseConfig(config, rootpath);
             ReadCustomization(config, rootpath);
         }
         // Assigns config object to the Ctrl. This config is then
