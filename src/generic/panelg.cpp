@@ -112,9 +112,6 @@ void wxPanel::OnNavigationKey(wxNavigationKeyEvent& event)
 // set focus to the next child which accepts it (or first/last if node == NULL)
 bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
 {
-	// Added by JACS since this seems to cause an infinite loop.
-	return FALSE;
-
   // @@ using typed list would be better...
   #define WIN(node) ((wxWindow *)(node->Data()))
 
@@ -131,15 +128,24 @@ bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
 
     bFound = WIN(node)->AcceptsFocus();
   }
+#if 0 // to restore when it will really work (now it's triggered all the time)
   else {
     // just to be sure it's the right one
     wxASSERT( WIN(node)->AcceptsFocus() );
   }
+#endif // 0
 
   // find the next child which accepts focus
+  bool bParentWantsIt = TRUE;
   while ( !bFound ) {
     node = bForward ? node->Next() : node->Previous();
     if ( node == NULL ) {
+      if ( !bParentWantsIt ) {
+        // we've already been here which means that we've done a whole
+        // cycle without success - get out from the infinite loop
+        return FALSE;
+      }
+
       // ask parent if he doesn't want to advance focus to the next panel
       if ( GetParent() != NULL ) {
         wxNavigationKeyEvent event;
@@ -150,6 +156,9 @@ bool wxPanel::SetFocusToNextChild(wxNode *node, bool bForward)
         if ( GetParent()->ProcessEvent(event) )
           return TRUE;
       }
+
+      // a sentinel to avoid infinite loops
+      bParentWantsIt = FALSE;
 
       // wrap around
       node = bForward ? children->First() : children->Last();
