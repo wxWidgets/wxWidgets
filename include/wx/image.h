@@ -31,6 +31,9 @@ class WXDLLEXPORT wxImageHandler;
 #if wxUSE_LIBPNG
 class WXDLLEXPORT wxPNGHandler;
 #endif
+#if wxUSE_LIBJPEG
+class WXDLLEXPORT wxJPEGHandler;
+#endif
 class WXDLLEXPORT wxBMPHandler;
 class WXDLLEXPORT wxImage;
 
@@ -89,6 +92,29 @@ public:
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
 #endif
 
+};
+#endif
+
+//-----------------------------------------------------------------------------
+// wxJPEGHandler
+//-----------------------------------------------------------------------------
+
+#ifdef wxUSE_LIBJPEG
+class WXDLLEXPORT wxJPEGHandler: public wxImageHandler
+{
+  DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
+
+public:
+
+  inline wxJPEGHandler()
+  {
+      m_name = "JPEG file";
+      m_extension = "jpg";
+      m_type = wxBITMAP_TYPE_JPEG;
+  };
+
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
 };
 #endif
 

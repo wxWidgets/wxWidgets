@@ -179,6 +179,8 @@ class WXDLLEXPORT wxRegion;
 #define wxBITMAP_TYPE_GIF_RESOURCE      14
 #define wxBITMAP_TYPE_PNG               15
 #define wxBITMAP_TYPE_PNG_RESOURCE      16
+#define wxBITMAP_TYPE_JPEG              17
+#define wxBITMAP_TYPE_JPEG_RESOURCE     18
 #define wxBITMAP_TYPE_ANY               50
 
 #define wxBITMAP_TYPE_RESOURCE wxBITMAP_TYPE_BMP_RESOURCE
