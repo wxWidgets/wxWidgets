@@ -498,14 +498,22 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
             return FALSE;
         }
 
+        // ULARGE_INTEGER is a union of a 64 bit value and a struct containing
+        // two 32 bit fields which may be or may be not named - try to make it
+        // compile in all cases
+#if defined(__BORLANDC__) && !defined(_ANONYMOUS_STRUCT)
+        #define UL(ul) ul.u
+#else // anon union
+        #define UL(ul) ul
+#endif
         if ( pTotal )
         {
-            *pTotal = wxLongLong(bytesTotal.HighPart, bytesTotal.LowPart);
+            *pTotal = wxLongLong(UL(bytesTotal).HighPart, UL(bytesTotal).LowPart);
         }
 
         if ( pFree )
         {
-            *pFree = wxLongLong(bytesFree.HighPart, bytesFree.LowPart);
+            *pFree = wxLongLong(UL(bytesFree).HighPart, UL(bytesFree).LowPart);
         }
     }
     else
