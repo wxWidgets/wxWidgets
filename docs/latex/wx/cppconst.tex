@@ -75,17 +75,23 @@ compiler used.
 \subsection{Compilers}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\_\_BORLANDC\_\_}{Borland C++}
+\twocolitem{\_\_BORLANDC\_\_}{Borland C++. The value of the macro corresponds
+to the compiler version: $500$ is $5.0$.}
 \twocolitem{\_\_DJGPP\_\_}{DJGPP}
-\twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform}
-\twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler}
+\twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform, see also 
+\helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}}
+\twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler, see also 
+\helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}}
 \twocolitem{\_\_MWERKS\_\_}{CodeWarrior MetroWerks compiler}
 \twocolitem{\_\_SUNCC\_\_}{Sun CC}
 \twocolitem{\_\_SYMANTECC\_\_}{Symantec C++}
 \twocolitem{\_\_VISAGECPP\_\_}{IBM Visual Age (OS/2)}
-\twocolitem{\_\_VISUALC\_\_}{Microsoft Visual C++}
+\twocolitem{\_\_VISUALC\_\_}{Microsoft Visual C++. The value of this macro
+corresponds to the compiler version: $1020$ for $4.2$ (the first supported
+version), $1100$ for $5.0$, $1200$ for $6.0$ and so on}
 \twocolitem{\_\_XLC\_\_}{AIX compiler}
-\twocolitem{\_\_WATCOMC\_\_}{Watcom C++}
+\twocolitem{\_\_WATCOMC\_\_}{Watcom C++. The value of this macro corresponds to
+the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
 \end{twocollist}
 
 \subsection{Miscellaneous}
