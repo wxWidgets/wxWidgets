@@ -67,6 +67,7 @@ public:
     virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 
 protected:
+    void         MacHandleValueChanged( int inc ) ;
    virtual wxSize DoGetBestSize() const;
    int m_value ;
 
