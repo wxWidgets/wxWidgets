@@ -878,6 +878,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def LineEndDisplayExtend(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_LineEndDisplayExtend(self, *_args, **_kwargs)
         return val
+    def LineCopy(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LineCopy(self, *_args, **_kwargs)
+        return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_MoveCaretInsideView(self, *_args, **_kwargs)
         return val
@@ -1043,6 +1046,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def SetHotspotActiveUnderline(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetHotspotActiveUnderline(self, *_args, **_kwargs)
+        return val
+    def PositionBefore(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_PositionBefore(self, *_args, **_kwargs)
+        return val
+    def PositionAfter(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_PositionAfter(self, *_args, **_kwargs)
+        return val
+    def CopyRange(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CopyRange(self, *_args, **_kwargs)
+        return val
+    def CopyText(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CopyText(self, *_args, **_kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_StartRecord(self, *_args, **_kwargs)
@@ -1497,6 +1512,8 @@ wxSTC_LEX_FORTRAN = stc_c.wxSTC_LEX_FORTRAN
 wxSTC_LEX_F77 = stc_c.wxSTC_LEX_F77
 wxSTC_LEX_CSS = stc_c.wxSTC_LEX_CSS
 wxSTC_LEX_POV = stc_c.wxSTC_LEX_POV
+wxSTC_LEX_LOUT = stc_c.wxSTC_LEX_LOUT
+wxSTC_LEX_ESCRIPT = stc_c.wxSTC_LEX_ESCRIPT
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1531,6 +1548,7 @@ wxSTC_C_COMMENTLINEDOC = stc_c.wxSTC_C_COMMENTLINEDOC
 wxSTC_C_WORD2 = stc_c.wxSTC_C_WORD2
 wxSTC_C_COMMENTDOCKEYWORD = stc_c.wxSTC_C_COMMENTDOCKEYWORD
 wxSTC_C_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_C_COMMENTDOCKEYWORDERROR
+wxSTC_C_GLOBALCLASS = stc_c.wxSTC_C_GLOBALCLASS
 wxSTC_H_DEFAULT = stc_c.wxSTC_H_DEFAULT
 wxSTC_H_TAG = stc_c.wxSTC_H_TAG
 wxSTC_H_TAGUNKNOWN = stc_c.wxSTC_H_TAGUNKNOWN
@@ -1903,6 +1921,29 @@ wxSTC_POV_OPERATOR = stc_c.wxSTC_POV_OPERATOR
 wxSTC_POV_IDENTIFIER = stc_c.wxSTC_POV_IDENTIFIER
 wxSTC_POV_BRACE = stc_c.wxSTC_POV_BRACE
 wxSTC_POV_WORD2 = stc_c.wxSTC_POV_WORD2
+wxSTC_LOUT_DEFAULT = stc_c.wxSTC_LOUT_DEFAULT
+wxSTC_LOUT_COMMENT = stc_c.wxSTC_LOUT_COMMENT
+wxSTC_LOUT_NUMBER = stc_c.wxSTC_LOUT_NUMBER
+wxSTC_LOUT_WORD = stc_c.wxSTC_LOUT_WORD
+wxSTC_LOUT_WORD2 = stc_c.wxSTC_LOUT_WORD2
+wxSTC_LOUT_WORD3 = stc_c.wxSTC_LOUT_WORD3
+wxSTC_LOUT_WORD4 = stc_c.wxSTC_LOUT_WORD4
+wxSTC_LOUT_STRING = stc_c.wxSTC_LOUT_STRING
+wxSTC_LOUT_OPERATOR = stc_c.wxSTC_LOUT_OPERATOR
+wxSTC_LOUT_IDENTIFIER = stc_c.wxSTC_LOUT_IDENTIFIER
+wxSTC_LOUT_STRINGEOL = stc_c.wxSTC_LOUT_STRINGEOL
+wxSTC_ESCRIPT_DEFAULT = stc_c.wxSTC_ESCRIPT_DEFAULT
+wxSTC_ESCRIPT_COMMENT = stc_c.wxSTC_ESCRIPT_COMMENT
+wxSTC_ESCRIPT_COMMENTLINE = stc_c.wxSTC_ESCRIPT_COMMENTLINE
+wxSTC_ESCRIPT_COMMENTDOC = stc_c.wxSTC_ESCRIPT_COMMENTDOC
+wxSTC_ESCRIPT_NUMBER = stc_c.wxSTC_ESCRIPT_NUMBER
+wxSTC_ESCRIPT_WORD = stc_c.wxSTC_ESCRIPT_WORD
+wxSTC_ESCRIPT_STRING = stc_c.wxSTC_ESCRIPT_STRING
+wxSTC_ESCRIPT_OPERATOR = stc_c.wxSTC_ESCRIPT_OPERATOR
+wxSTC_ESCRIPT_IDENTIFIER = stc_c.wxSTC_ESCRIPT_IDENTIFIER
+wxSTC_ESCRIPT_BRACE = stc_c.wxSTC_ESCRIPT_BRACE
+wxSTC_ESCRIPT_WORD2 = stc_c.wxSTC_ESCRIPT_WORD2
+wxSTC_ESCRIPT_WORD3 = stc_c.wxSTC_ESCRIPT_WORD3
 wxSTC_CMD_REDO = stc_c.wxSTC_CMD_REDO
 wxSTC_CMD_SELECTALL = stc_c.wxSTC_CMD_SELECTALL
 wxSTC_CMD_UNDO = stc_c.wxSTC_CMD_UNDO

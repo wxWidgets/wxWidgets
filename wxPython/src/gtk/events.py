@@ -25,9 +25,6 @@ class wxEventPtr(wxObjectPtr):
     def GetId(self, *_args, **_kwargs):
         val = eventsc.wxEvent_GetId(self, *_args, **_kwargs)
         return val
-    def GetSkipped(self, *_args, **_kwargs):
-        val = eventsc.wxEvent_GetSkipped(self, *_args, **_kwargs)
-        return val
     def GetTimestamp(self, *_args, **_kwargs):
         val = eventsc.wxEvent_GetTimestamp(self, *_args, **_kwargs)
         return val
@@ -43,8 +40,23 @@ class wxEventPtr(wxObjectPtr):
     def SetTimestamp(self, *_args, **_kwargs):
         val = eventsc.wxEvent_SetTimestamp(self, *_args, **_kwargs)
         return val
+    def IsCommandEvent(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_IsCommandEvent(self, *_args, **_kwargs)
+        return val
     def Skip(self, *_args, **_kwargs):
         val = eventsc.wxEvent_Skip(self, *_args, **_kwargs)
+        return val
+    def GetSkipped(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_GetSkipped(self, *_args, **_kwargs)
+        return val
+    def ShouldPropagate(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_ShouldPropagate(self, *_args, **_kwargs)
+        return val
+    def StopPropagation(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_StopPropagation(self, *_args, **_kwargs)
+        return val
+    def ResumePropagation(self, *_args, **_kwargs):
+        val = eventsc.wxEvent_ResumePropagation(self, *_args, **_kwargs)
         return val
     def Clone(self, *_args, **_kwargs):
         val = eventsc.wxEvent_Clone(self, *_args, **_kwargs)
@@ -59,6 +71,46 @@ class wxEvent(wxEventPtr):
 
 
 
+class wxPropagationDisablerPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self, delfunc=eventsc.delete_wxPropagationDisabler):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPropagationDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPropagationDisabler(wxPropagationDisablerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = eventsc.new_wxPropagationDisabler(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPropagateOncePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self, delfunc=eventsc.delete_wxPropagateOnce):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxPropagateOnce instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxPropagateOnce(wxPropagateOncePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = eventsc.new_wxPropagateOnce(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxSizeEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
@@ -66,6 +118,13 @@ class wxSizeEventPtr(wxEventPtr):
     def GetSize(self, *_args, **_kwargs):
         val = eventsc.wxSizeEvent_GetSize(self, *_args, **_kwargs)
         if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetRect(self, *_args, **_kwargs):
+        val = eventsc.wxSizeEvent_GetRect(self, *_args, **_kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def SetRect(self, *_args, **_kwargs):
+        val = eventsc.wxSizeEvent_SetRect(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -585,6 +644,13 @@ class wxMoveEventPtr(wxEventPtr):
         val = eventsc.wxMoveEvent_GetPosition(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
+    def GetRect(self, *_args, **_kwargs):
+        val = eventsc.wxMoveEvent_GetRect(self, *_args, **_kwargs)
+        if val: val = wxRectPtr(val) ; val.thisown = 1
+        return val
+    def SetRect(self, *_args, **_kwargs):
+        val = eventsc.wxMoveEvent_SetRect(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxMoveEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxMoveEvent(wxMoveEventPtr):
@@ -697,6 +763,9 @@ class wxMenuEventPtr(wxEventPtr):
         return val
     def IsPopup(self, *_args, **_kwargs):
         val = eventsc.wxMenuEvent_IsPopup(self, *_args, **_kwargs)
+        return val
+    def GetMenu(self, *_args, **_kwargs):
+        val = eventsc.wxMenuEvent_GetMenu(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxMenuEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -1152,7 +1221,31 @@ class wxPyCommandEvent(wxPyCommandEventPtr):
 
 wxNewEventType = eventsc.wxNewEventType
 
+wxIdleEvent_SetMode = eventsc.wxIdleEvent_SetMode
+
+wxIdleEvent_GetMode = eventsc.wxIdleEvent_GetMode
+
+wxIdleEvent_CanSend = eventsc.wxIdleEvent_CanSend
+
+wxUpdateUIEvent_SetUpdateInterval = eventsc.wxUpdateUIEvent_SetUpdateInterval
+
+wxUpdateUIEvent_GetUpdateInterval = eventsc.wxUpdateUIEvent_GetUpdateInterval
+
+wxUpdateUIEvent_CanUpdate = eventsc.wxUpdateUIEvent_CanUpdate
+
+wxUpdateUIEvent_ResetUpdateTime = eventsc.wxUpdateUIEvent_ResetUpdateTime
+
+wxUpdateUIEvent_SetMode = eventsc.wxUpdateUIEvent_SetMode
+
+wxUpdateUIEvent_GetMode = eventsc.wxUpdateUIEvent_GetMode
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxEVENT_PROPAGATE_NONE = eventsc.wxEVENT_PROPAGATE_NONE
+wxEVENT_PROPAGATE_MAX = eventsc.wxEVENT_PROPAGATE_MAX
+wxIDLE_PROCESS_ALL = eventsc.wxIDLE_PROCESS_ALL
+wxIDLE_PROCESS_SPECIFIED = eventsc.wxIDLE_PROCESS_SPECIFIED
+wxUPDATE_UI_PROCESS_ALL = eventsc.wxUPDATE_UI_PROCESS_ALL
+wxUPDATE_UI_PROCESS_SPECIFIED = eventsc.wxUPDATE_UI_PROCESS_SPECIFIED

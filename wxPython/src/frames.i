@@ -183,7 +183,7 @@ public:
 
 
     // create main toolbar
-    virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
+    virtual wxToolBar* CreateToolBar(long style = -1, //wxNO_BORDER|wxTB_HORIZONTAL,
                                      wxWindowID id = -1,
                                      const wxString& name = wxPyToolBarNameStr);
 
@@ -194,6 +194,14 @@ public:
     // sends a size event to the window using its current size -- this has an
     // effect of refreshing the window layout
     virtual void SendSizeEvent();
+
+
+    // send wxUpdateUIEvents for all menu items in the menubar,
+    // or just for menu if non-NULL
+    void DoMenuUpdates(wxMenu* menu = NULL);
+
+    // do the UI update processing for this window
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
 };
 
 //---------------------------------------------------------------------------

@@ -114,21 +114,21 @@ public:
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
-    wxString GetDirectory();
-    wxString GetFilename();
-    int GetFilterIndex();
-    wxString GetMessage();
-    wxString GetPath();
-    long GetStyle();
-    wxString GetWildcard();
-    void SetDirectory(const wxString& directory);
-    void SetFilename(const wxString& setfilename);
-    void SetFilterIndex(int filterIndex);
     void SetMessage(const wxString& message);
     void SetPath(const wxString& path);
-    void SetStyle(long style);
+    void SetDirectory(const wxString& dir);
+    void SetFilename(const wxString& name);
     void SetWildcard(const wxString& wildCard);
-    int ShowModal();
+    void SetStyle(long style);
+    void SetFilterIndex(int filterIndex);
+
+    wxString GetMessage() const;
+    wxString GetPath() const;
+    wxString GetDirectory() const;
+    wxString GetFilename() const;
+    wxString GetWildcard() const;
+    long GetStyle() const;
+    int GetFilterIndex() const;
 
     %addmethods {
         PyObject* GetFilenames() {
@@ -143,6 +143,27 @@ public:
             return wxArrayString2PyList_helper(arr);
         }
     }
+
+// TODO
+//     // Utility functions
+
+//     // Parses the wildCard, returning the number of filters.
+//     // Returns 0 if none or if there's a problem,
+//     // The arrays will contain an equal number of items found before the error.
+//     // wildCard is in the form:
+//     // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
+//     static int ParseWildcard(const wxString& wildCard,
+//                              wxArrayString& descriptions,
+//                              wxArrayString& filters);
+
+//     // Append first extension to filePath from a ';' separated extensionList
+//     // if filePath = "path/foo.bar" just return it as is
+//     // if filePath = "foo[.]" and extensionList = "*.jpg;*.png" return "foo.jpg"
+//     // if the extension is "*.j?g" (has wildcards) or "jpg" then return filePath
+//     static wxString AppendExtension(const wxString &filePath,
+//                                     const wxString &extensionList);
+
+
 };
 
 

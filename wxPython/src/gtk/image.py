@@ -454,6 +454,8 @@ wxImage_InsertHandler = imagec.wxImage_InsertHandler
 
 wxImage_RemoveHandler = imagec.wxImage_RemoveHandler
 
+wxImage_GetImageExtWildcard = imagec.wxImage_GetImageExtWildcard
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------

@@ -69,6 +69,9 @@ public:
     void SetWidth(long w);
     void SetHeight(long h);
 
+    void IncTo(const wxSize& sz);
+    void DecTo(const wxSize& sz);
+
     %addmethods {
         PyObject* asTuple() {
             wxPyBeginBlockThreads();

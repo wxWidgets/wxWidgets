@@ -1023,7 +1023,7 @@ public:
     void SetFont(const wxFont& font);
     void SetAlignment(int hAlign, int vAlign);
     void SetSize(int num_rows, int num_cols);
-    void SetOverflow( bool allow );
+    void SetOverflow( bool allow = TRUE );
     void SetReadOnly(bool isReadOnly = TRUE);
 
     void SetRenderer(wxGridCellRenderer *renderer);
@@ -1037,6 +1037,7 @@ public:
     bool HasRenderer() const;
     bool HasEditor() const;
     bool HasReadWriteMode() const;
+    bool HasOverflowMode() const;
 
     wxColour GetTextColour() const;
     wxColour GetBackgroundColour() const;

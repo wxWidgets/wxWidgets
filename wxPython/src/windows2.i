@@ -53,9 +53,24 @@
 //---------------------------------------------------------------------------
 
 enum {
-     /* notebook control event types */
+    // notebook control event types
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
     wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+
+    // styles
+    wxNB_FIXEDWIDTH,
+    wxNB_TOP,
+    wxNB_LEFT,
+    wxNB_RIGHT,
+    wxNB_BOTTOM,
+    wxNB_MULTILINE,
+
+    // hittest flags
+    wxNB_HITTEST_NOWHERE = 1,   // not on tab
+    wxNB_HITTEST_ONICON  = 2,   // on icon
+    wxNB_HITTEST_ONLABEL = 4,   // on label
+    wxNB_HITTEST_ONITEM  = wxNB_HITTEST_ONICON | wxNB_HITTEST_ONLABEL,
+
 };
 
 
@@ -92,45 +107,87 @@ public:
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(val)"
 
-    int GetPageCount();
-    int SetSelection(int page);
-    void AdvanceSelection(bool forward = TRUE);
-    int GetSelection();
-    bool SetPageText(int page, const wxString& text);
-    wxString GetPageText(int page) const;
 
-    void SetImageList(wxImageList* imageList);
-    void AssignImageList(wxImageList *imageList) ;
+    // get number of pages in the dialog
+    int GetPageCount() const;
+
+    // get the panel which represents the given page
+    wxWindow *GetPage(int page);
+
+    // get the currently selected page
+     int GetSelection() const;
+
+    // set/get the title of a page
+     bool SetPageText(int page, const wxString& text);
+     wxString GetPageText(int page) const;
+
+    // image list stuff: each page may have an image associated with it (all
+    // images belong to the same image list)
+     void SetImageList(wxImageList* imageList);
+
+    // as SetImageList() but the notebook will take ownership of the image list
+    void AssignImageList(wxImageList* imageList);
     %pragma(python) addtomethod = "AssignImageList:_args[0].thisown = 0"
 
-    wxImageList* GetImageList();
-    int  GetPageImage(int page);
-    bool SetPageImage(int page, int image);
-    int GetRowCount();
+    // get pointer (may be NULL) to the associated image list
+    wxImageList* GetImageList() const;
 
-    void SetPageSize(const wxSize& size);
-    void SetPadding(const wxSize& padding);
-    bool DeletePage(int page);
-    bool RemovePage(int page);
-    bool DeleteAllPages();
-    bool AddPage(/*wxNotebookPage*/ wxWindow *page,
-                 const wxString& text,
-                 int select = FALSE,
-                 int imageId = -1);
-    bool InsertPage(int index,
-                    /*wxNotebookPage*/ wxWindow *page,
-                    const wxString& text,
-                    bool select = FALSE,
-                    int imageId = -1);
-    /*wxNotebookPage*/ wxWindow *GetPage(int page);
+    // sets/returns item's image index in the current image list
+     int GetPageImage(int page) const;
+     bool SetPageImage(int page, int nImage);
 
-    %addmethods {
-        void ResizeChildren() {
-            wxSizeEvent evt(self->GetClientSize());
-            self->GetEventHandler()->ProcessEvent(evt);
-        }
-    }
+    // get the number of rows for a control with wxNB_MULTILINE style (not all
+    // versions support it - they will always return 1 then)
+     int GetRowCount() const;
 
+    // set the size (the same for all pages)
+     void SetPageSize(const wxSize& size);
+
+    // set the padding between tabs (in pixels)
+     void SetPadding(const wxSize& padding);
+
+    // set the size of the tabs for wxNB_FIXEDWIDTH controls
+     void SetTabSize(const wxSize& sz);
+
+    // calculate the size of the notebook from the size of its page
+     wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+
+
+    // remove one page from the notebook and delete it
+     bool DeletePage(int page);
+
+    // remove one page from the notebook, without deleting it
+     bool RemovePage(int page);
+
+    // remove all pages and delete them
+     bool DeleteAllPages();
+
+    // adds a new page to the notebook (it will be deleted by the notebook,
+    // don't delete it yourself) and make it the current one if select
+     bool AddPage(wxWindow *page,
+                         const wxString& text,
+                         bool telect = FALSE,
+                  int imageId = -1);
+
+    // the same as AddPage(), but adds the page at the specified position
+     bool InsertPage(int index,
+                            wxWindow *page,
+                            const wxString& text,
+                            bool select = FALSE,
+                            int imageId = -1);
+
+    // set the currently selected page, return the index of the previously
+    // selected one (or -1 on error)
+    //
+    // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
+     int SetSelection(int page);
+
+    // hit test, returns which tab is hit and, optionally, where (icon, label)
+    // (not implemented on all platforms)
+     int HitTest(const wxPoint& pt, long* OUTPUT);
+
+    // cycle thru the tabs
+    void AdvanceSelection(bool forward = TRUE);
 
 };
 
@@ -143,16 +200,25 @@ enum {
     wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,
     wxEVT_COMMAND_SPLITTER_UNSPLIT,
     wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
-};
 
-
-enum
-{
     wxSPLIT_HORIZONTAL,
     wxSPLIT_VERTICAL,
     wxSPLIT_DRAG_NONE,
     wxSPLIT_DRAG_DRAGGING,
-    wxSPLIT_DRAG_LEFT_DOWN
+    wxSPLIT_DRAG_LEFT_DOWN,
+
+    wxSP_VERTICAL,
+    wxSP_HORIZONTAL,
+    wxSP_ARROW_KEYS,
+    wxSP_WRAP,
+    wxSP_NOBORDER,
+    wxSP_3D,
+    wxSP_3DSASH,
+    wxSP_3DBORDER,
+    wxSP_FULLSASH,
+    wxSP_BORDER,
+    wxSP_LIVE_UPDATE,
+    wxSP_PERMIT_UNSPLIT
 };
 
 
@@ -260,6 +326,7 @@ public:
 
 //---------------------------------------------------------------------------
 
+// TODO:  This should be usable on wxGTK now too...
 #ifdef __WXMSW__
 
 enum {
@@ -270,6 +337,13 @@ enum {
     wxEVT_TASKBAR_RIGHT_UP,
     wxEVT_TASKBAR_LEFT_DCLICK,
     wxEVT_TASKBAR_RIGHT_DCLICK
+};
+
+
+class wxTaskBarIconEvent : public wxEvent
+{
+public:
+    wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon);
 };
 
 
@@ -295,6 +369,33 @@ public:
     bool IsIconInstalled();
     bool IsOK();
 };
+
+
+
+%pragma(python) code = "
+def EVT_TASKBAR_MOVE(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_MOVE, func)
+
+def EVT_TASKBAR_LEFT_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DOWN, func)
+
+def EVT_TASKBAR_LEFT_UP(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_UP, func)
+
+def EVT_TASKBAR_RIGHT_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DOWN, func)
+
+def EVT_TASKBAR_RIGHT_UP(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_UP, func)
+
+def EVT_TASKBAR_LEFT_DCLICK(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DCLICK, func)
+
+def EVT_TASKBAR_RIGHT_DCLICK(win, func):
+    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DCLICK, func)
+"
+
+
 #endif
 
 //---------------------------------------------------------------------------

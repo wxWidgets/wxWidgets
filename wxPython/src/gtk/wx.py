@@ -250,15 +250,6 @@ wxCLIP_CHILDREN = wxc.wxCLIP_CHILDREN
 wxCLIP_SIBLINGS = wxc.wxCLIP_SIBLINGS
 wxRETAINED = wxc.wxRETAINED
 wxBACKINGSTORE = wxc.wxBACKINGSTORE
-wxTB_HORIZONTAL = wxc.wxTB_HORIZONTAL
-wxTB_VERTICAL = wxc.wxTB_VERTICAL
-wxTB_3DBUTTONS = wxc.wxTB_3DBUTTONS
-wxTB_FLAT = wxc.wxTB_FLAT
-wxTB_DOCKABLE = wxc.wxTB_DOCKABLE
-wxTB_NOICONS = wxc.wxTB_NOICONS
-wxTB_TEXT = wxc.wxTB_TEXT
-wxTB_NODIVIDER = wxc.wxTB_NODIVIDER
-wxTB_NOALIGN = wxc.wxTB_NOALIGN
 wxCOLOURED = wxc.wxCOLOURED
 wxFIXED_LENGTH = wxc.wxFIXED_LENGTH
 wxALIGN_LEFT = wxc.wxALIGN_LEFT
@@ -283,24 +274,6 @@ wxLB_OWNERDRAW = wxc.wxLB_OWNERDRAW
 wxLB_HSCROLL = wxc.wxLB_HSCROLL
 wxPROCESS_ENTER = wxc.wxPROCESS_ENTER
 wxPASSWORD = wxc.wxPASSWORD
-wxTE_READONLY = wxc.wxTE_READONLY
-wxTE_MULTILINE = wxc.wxTE_MULTILINE
-wxTE_PROCESS_TAB = wxc.wxTE_PROCESS_TAB
-wxTE_RICH = wxc.wxTE_RICH
-wxTE_RICH2 = wxc.wxTE_RICH2
-wxTE_NO_VSCROLL = wxc.wxTE_NO_VSCROLL
-wxTE_AUTO_SCROLL = wxc.wxTE_AUTO_SCROLL
-wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
-wxTE_PASSWORD = wxc.wxTE_PASSWORD
-wxTE_AUTO_URL = wxc.wxTE_AUTO_URL
-wxTE_NOHIDESEL = wxc.wxTE_NOHIDESEL
-wxTE_DONTWRAP = wxc.wxTE_DONTWRAP
-wxTE_LINEWRAP = wxc.wxTE_LINEWRAP
-wxTE_WORDWRAP = wxc.wxTE_WORDWRAP
-wxTE_LEFT = wxc.wxTE_LEFT
-wxTE_RIGHT = wxc.wxTE_RIGHT
-wxTE_CENTER = wxc.wxTE_CENTER
-wxTE_CENTRE = wxc.wxTE_CENTRE
 wxCB_SIMPLE = wxc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxc.wxCB_DROPDOWN
 wxCB_SORT = wxc.wxCB_SORT
@@ -336,18 +309,6 @@ wxBU_TOP = wxc.wxBU_TOP
 wxBU_RIGHT = wxc.wxBU_RIGHT
 wxBU_BOTTOM = wxc.wxBU_BOTTOM
 wxBU_EXACTFIT = wxc.wxBU_EXACTFIT
-wxSP_VERTICAL = wxc.wxSP_VERTICAL
-wxSP_HORIZONTAL = wxc.wxSP_HORIZONTAL
-wxSP_ARROW_KEYS = wxc.wxSP_ARROW_KEYS
-wxSP_WRAP = wxc.wxSP_WRAP
-wxSP_NOBORDER = wxc.wxSP_NOBORDER
-wxSP_3D = wxc.wxSP_3D
-wxSP_3DSASH = wxc.wxSP_3DSASH
-wxSP_3DBORDER = wxc.wxSP_3DBORDER
-wxSP_FULLSASH = wxc.wxSP_FULLSASH
-wxSP_BORDER = wxc.wxSP_BORDER
-wxSP_LIVE_UPDATE = wxc.wxSP_LIVE_UPDATE
-wxSP_PERMIT_UNSPLIT = wxc.wxSP_PERMIT_UNSPLIT
 wxFLOOD_SURFACE = wxc.wxFLOOD_SURFACE
 wxFLOOD_BORDER = wxc.wxFLOOD_BORDER
 wxODDEVEN_RULE = wxc.wxODDEVEN_RULE
@@ -419,6 +380,18 @@ wxID_CLEAR = wxc.wxID_CLEAR
 wxID_FIND = wxc.wxID_FIND
 wxID_DUPLICATE = wxc.wxID_DUPLICATE
 wxID_SELECTALL = wxc.wxID_SELECTALL
+wxID_DELETE = wxc.wxID_DELETE
+wxID_REPLACE = wxc.wxID_REPLACE
+wxID_REPLACE_ALL = wxc.wxID_REPLACE_ALL
+wxID_PROPERTIES = wxc.wxID_PROPERTIES
+wxID_VIEW_DETAILS = wxc.wxID_VIEW_DETAILS
+wxID_VIEW_LARGEICONS = wxc.wxID_VIEW_LARGEICONS
+wxID_VIEW_SMALLICONS = wxc.wxID_VIEW_SMALLICONS
+wxID_VIEW_LIST = wxc.wxID_VIEW_LIST
+wxID_VIEW_SORTDATE = wxc.wxID_VIEW_SORTDATE
+wxID_VIEW_SORTNAME = wxc.wxID_VIEW_SORTNAME
+wxID_VIEW_SORTSIZE = wxc.wxID_VIEW_SORTSIZE
+wxID_VIEW_SORTTYPE = wxc.wxID_VIEW_SORTTYPE
 wxID_FILE1 = wxc.wxID_FILE1
 wxID_FILE2 = wxc.wxID_FILE2
 wxID_FILE3 = wxc.wxID_FILE3
@@ -483,12 +456,6 @@ wxSTRETCH_NOT = wxc.wxSTRETCH_NOT
 wxSHRINK = wxc.wxSHRINK
 wxGROW = wxc.wxGROW
 wxEXPAND = wxc.wxEXPAND
-wxNB_FIXEDWIDTH = wxc.wxNB_FIXEDWIDTH
-wxNB_TOP = wxc.wxNB_TOP
-wxNB_LEFT = wxc.wxNB_LEFT
-wxNB_RIGHT = wxc.wxNB_RIGHT
-wxNB_BOTTOM = wxc.wxNB_BOTTOM
-wxNB_MULTILINE = wxc.wxNB_MULTILINE
 wxLI_HORIZONTAL = wxc.wxLI_HORIZONTAL
 wxLI_VERTICAL = wxc.wxLI_VERTICAL
 wxJOYSTICK1 = wxc.wxJOYSTICK1
@@ -501,6 +468,9 @@ wxJOY_BUTTON_ANY = wxc.wxJOY_BUTTON_ANY
 wxWS_EX_VALIDATE_RECURSIVELY = wxc.wxWS_EX_VALIDATE_RECURSIVELY
 wxWS_EX_BLOCK_EVENTS = wxc.wxWS_EX_BLOCK_EVENTS
 wxWS_EX_TRANSIENT = wxc.wxWS_EX_TRANSIENT
+wxWS_EX_THEMED_BACKGROUND = wxc.wxWS_EX_THEMED_BACKGROUND
+wxWS_EX_PROCESS_IDLE = wxc.wxWS_EX_PROCESS_IDLE
+wxWS_EX_PROCESS_UI_UPDATES = wxc.wxWS_EX_PROCESS_UI_UPDATES
 wxMM_TEXT = wxc.wxMM_TEXT
 wxMM_LOMETRIC = wxc.wxMM_LOMETRIC
 wxMM_HIMETRIC = wxc.wxMM_HIMETRIC
@@ -836,6 +806,14 @@ wxHT_WINDOW_VERT_SCROLLBAR = wxc.wxHT_WINDOW_VERT_SCROLLBAR
 wxHT_WINDOW_HORZ_SCROLLBAR = wxc.wxHT_WINDOW_HORZ_SCROLLBAR
 wxHT_WINDOW_CORNER = wxc.wxHT_WINDOW_CORNER
 wxHT_MAX = wxc.wxHT_MAX
+wxMOD_NONE = wxc.wxMOD_NONE
+wxMOD_ALT = wxc.wxMOD_ALT
+wxMOD_CONTROL = wxc.wxMOD_CONTROL
+wxMOD_SHIFT = wxc.wxMOD_SHIFT
+wxMOD_WIN = wxc.wxMOD_WIN
+wxUPDATE_UI_NONE = wxc.wxUPDATE_UI_NONE
+wxUPDATE_UI_RECURSE = wxc.wxUPDATE_UI_RECURSE
+wxUPDATE_UI_FROMIDLE = wxc.wxUPDATE_UI_FROMIDLE
 wxEVT_NULL = wxc.wxEVT_NULL
 wxEVT_FIRST = wxc.wxEVT_FIRST
 wxEVT_COMMAND_BUTTON_CLICKED = wxc.wxEVT_COMMAND_BUTTON_CLICKED
@@ -893,6 +871,7 @@ wxEVT_CHAR = wxc.wxEVT_CHAR
 wxEVT_KEY_DOWN = wxc.wxEVT_KEY_DOWN
 wxEVT_KEY_UP = wxc.wxEVT_KEY_UP
 wxEVT_CHAR_HOOK = wxc.wxEVT_CHAR_HOOK
+wxEVT_HOTKEY = wxc.wxEVT_HOTKEY
 wxEVT_SCROLL_TOP = wxc.wxEVT_SCROLL_TOP
 wxEVT_SCROLL_BOTTOM = wxc.wxEVT_SCROLL_BOTTOM
 wxEVT_SCROLL_LINEUP = wxc.wxEVT_SCROLL_LINEUP
@@ -912,6 +891,8 @@ wxEVT_SCROLLWIN_THUMBTRACK = wxc.wxEVT_SCROLLWIN_THUMBTRACK
 wxEVT_SCROLLWIN_THUMBRELEASE = wxc.wxEVT_SCROLLWIN_THUMBRELEASE
 wxEVT_SIZE = wxc.wxEVT_SIZE
 wxEVT_MOVE = wxc.wxEVT_MOVE
+wxEVT_SIZING = wxc.wxEVT_SIZING
+wxEVT_MOVING = wxc.wxEVT_MOVING
 wxEVT_CLOSE_WINDOW = wxc.wxEVT_CLOSE_WINDOW
 wxEVT_END_SESSION = wxc.wxEVT_END_SESSION
 wxEVT_QUERY_END_SESSION = wxc.wxEVT_QUERY_END_SESSION
@@ -1010,6 +991,12 @@ def EVT_SIZE(win, func):
 def EVT_MOVE(win, func):
     win.Connect(-1, -1, wxEVT_MOVE, func)
 
+def EVT_SIZING(win, func):
+    win.Connect(-1, -1, wxEVT_SIZING, func)
+
+def EVT_MOVING(win, func):
+    win.Connect(-1, -1, wxEVT_MOVING, func)
+
 def EVT_CLOSE(win, func):
     win.Connect(-1, -1, wxEVT_CLOSE_WINDOW, func)
 
@@ -1030,6 +1017,9 @@ def EVT_KEY_DOWN(win, func):
 
 def EVT_KEY_UP(win, func):
     win.Connect(-1, -1, wxEVT_KEY_UP, func)
+
+def EVT_HOTKEY(win, func):
+    win.Connect(-1, -1, wxEVT_HOTKEY, func)
 
 def EVT_MENU_OPEN(win, func):
     win.Connect(-1, -1, wxEVT_MENU_OPEN, func)
@@ -1453,29 +1443,6 @@ def EVT_SPIN_DOWN(win, id, func):
 
 def EVT_SPIN(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
-
-
-# wxTaskBarIcon
-def EVT_TASKBAR_MOVE(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_MOVE, func)
-
-def EVT_TASKBAR_LEFT_DOWN(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DOWN, func)
-
-def EVT_TASKBAR_LEFT_UP(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_UP, func)
-
-def EVT_TASKBAR_RIGHT_DOWN(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DOWN, func)
-
-def EVT_TASKBAR_RIGHT_UP(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_UP, func)
-
-def EVT_TASKBAR_LEFT_DCLICK(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_LEFT_DCLICK, func)
-
-def EVT_TASKBAR_RIGHT_DCLICK(win, func):
-    win.Connect(-1, -1, wxEVT_TASKBAR_RIGHT_DCLICK, func)
 
 
 # wxSashWindow
@@ -1938,6 +1905,15 @@ of your Mac."""
 
         if redirect:
             self.RedirectStdio(filename)
+
+        # Set the default handler for SIGINT.  This fixes a problem
+        # where if Ctrl-C is pressed in the console that started this
+        # app then it will not appear to do anything, (not even send
+        # KeyboardInterrupt???)  but will later segfault on exit.  By
+        # setting the default handler then the app will exit, as
+        # expected (depending on platform.)
+        import signal
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
 
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)

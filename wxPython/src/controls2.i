@@ -840,30 +840,33 @@ public:
 };
 
 
-//----------------------------------------------------------------------
+//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
 
 // wxTreeCtrl flags
 enum {
     wxTR_NO_BUTTONS,
     wxTR_HAS_BUTTONS,
-    wxTR_TWIST_BUTTONS,
     wxTR_NO_LINES,
-    wxTR_MAC_BUTTONS,
-    wxTR_AQUA_BUTTONS,
+    wxTR_LINES_AT_ROOT,
 
     wxTR_SINGLE,
     wxTR_MULTIPLE,
     wxTR_EXTENDED,
-    wxTR_FULL_ROW_HIGHLIGHT,
-
-    wxTR_EDIT_LABELS,
-    wxTR_LINES_AT_ROOT,
-    wxTR_HIDE_ROOT,
-    wxTR_ROW_LINES,
     wxTR_HAS_VARIABLE_ROW_HEIGHT,
 
+    wxTR_EDIT_LABELS,
+    wxTR_HIDE_ROOT,
+    wxTR_ROW_LINES,
+
+    wxTR_FULL_ROW_HIGHLIGHT,
     wxTR_DEFAULT_STYLE,
+
+    wxTR_TWIST_BUTTONS,
+    wxTR_MAC_BUTTONS,
+    wxTR_AQUA_BUTTONS,
 };
+
 
 enum wxTreeItemIcon
 {
@@ -914,6 +917,7 @@ enum {
     wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
     wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK,
     wxEVT_COMMAND_TREE_END_DRAG,
+    wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK,
 };
 
 
@@ -924,9 +928,6 @@ def EVT_TREE_BEGIN_DRAG(win, id, func):
 
 def EVT_TREE_BEGIN_RDRAG(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
-
-def EVT_TREE_END_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
 
 def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
@@ -972,7 +973,17 @@ def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
 
 def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
+def EVT_TREE_STATE_IMAGE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, func)
+
 "
+
+
+typedef void *wxTreeItemIdValue;
 
 
 class wxTreeItemAttr
@@ -1022,7 +1033,7 @@ public:
 
 
 
-%name(wxTreeItemData) class wxPyTreeItemData : public wxObject {
+%name(wxTreeItemData) class wxPyTreeItemData {
 public:
     wxPyTreeItemData(PyObject* obj = NULL);
 
@@ -1039,20 +1050,34 @@ class wxTreeEvent : public wxNotifyEvent {
 public:
     wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
-    wxTreeItemId GetItem();
-    wxTreeItemId GetOldItem();
-    wxPoint GetPoint();
-    const wxKeyEvent& GetKeyEvent();
-    int GetKeyCode();
-    %pragma(python) addtoclass = "GetCode = GetKeyCode"
-    const wxString& GetLabel();
-    bool IsEditCancelled() const;
+        // get the item on which the operation was performed or the newly
+        // selected item for wxEVT_COMMAND_TREE_SEL_CHANGED/ING events
+    wxTreeItemId GetItem() const;
     void SetItem(const wxTreeItemId& item);
+
+        // for wxEVT_COMMAND_TREE_SEL_CHANGED/ING events, get the previously
+        // selected item
+    wxTreeItemId GetOldItem() const;
     void SetOldItem(const wxTreeItemId& item);
+
+        // the point where the mouse was when the drag operation started (for
+        // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only) or click position
+    wxPoint GetPoint() const;
     void SetPoint(const wxPoint& pt);
+
+        // keyboard data (for wxEVT_COMMAND_TREE_KEY_DOWN only)
+    const wxKeyEvent& GetKeyEvent() const;
+    int GetKeyCode() const;
     void SetKeyEvent(const wxKeyEvent& evt);
+
+        // label (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
+    const wxString& GetLabel() const;
     void SetLabel(const wxString& label);
+
+        // edit cancel flag (for EVT_TREE_{BEGIN|END}_LABEL_EDIT only)
+    bool IsEditCancelled() const;
     void SetEditCanceled(bool editCancelled);
+
 };
 
 
@@ -1470,6 +1495,30 @@ public:
 
 //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);
+};
+
+
+class wxFileIconsTable
+{
+public:
+    wxFileIconsTable();
+    ~wxFileIconsTable();
+
+    enum iconId_Type
+    {
+        folder,
+        folder_open,
+        computer,
+        drive,
+        cdrom,
+        floppy,
+        removeable,
+        file,
+        executable
+    };
+
+    int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
+    wxImageList *GetSmallImageList();
 };
 
 

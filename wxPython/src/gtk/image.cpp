@@ -85,11 +85,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-    wxImage* wxEmptyImage(int width=0, int height=0) {
-        if (width == 0 && height == 0)
-            return new wxImage;
+    wxImage* wxEmptyImage(int width=0, int height=0, bool clear = TRUE) {
+        if (width > 0 && height > 0)
+            return new wxImage(width, height, clear);
         else
-            return new wxImage(width, height);
+            return new wxImage;
     }
 
 
@@ -143,15 +143,18 @@ static PyObject *_wrap_wxEmptyImage(PyObject *self, PyObject *args, PyObject *kw
     wxImage * _result;
     int  _arg0 = (int ) 0;
     int  _arg1 = (int ) 0;
-    char *_kwnames[] = { "width","height", NULL };
+    bool  _arg2 = (bool ) TRUE;
+    int tempbool2 = (int) TRUE;
+    char *_kwnames[] = { "width","height","clear", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:wxEmptyImage",_kwnames,&_arg0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iii:wxEmptyImage",_kwnames,&_arg0,&_arg1,&tempbool2)) 
         return NULL;
+    _arg2 = (bool ) tempbool2;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxImage *)wxEmptyImage(_arg0,_arg1);
+    _result = (wxImage *)wxEmptyImage(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3536,6 +3539,33 @@ static PyObject *_wrap_wxImage_RemoveHandler(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject *_wrap_wxImage_GetImageExtWildcard(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxImage_GetImageExtWildcard",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxImage::GetImageExtWildcard());
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static wxBitmap  wxImage_ConvertToBitmap(wxImage *self) {
             wxBitmap bitmap(*self);
             return bitmap;
@@ -3609,6 +3639,7 @@ static PyObject *_wrap_wxImage_ConvertToMonoBitmap(PyObject *self, PyObject *arg
 static PyMethodDef imagecMethods[] = {
 	 { "wxImage_ConvertToMonoBitmap", (PyCFunction) _wrap_wxImage_ConvertToMonoBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_ConvertToBitmap", (PyCFunction) _wrap_wxImage_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_GetImageExtWildcard", (PyCFunction) _wrap_wxImage_GetImageExtWildcard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_RemoveHandler", (PyCFunction) _wrap_wxImage_RemoveHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_InsertHandler", (PyCFunction) _wrap_wxImage_InsertHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_AddHandler", (PyCFunction) _wrap_wxImage_AddHandler, METH_VARARGS | METH_KEYWORDS },

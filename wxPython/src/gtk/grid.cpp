@@ -3855,13 +3855,13 @@ static PyObject *_wrap_wxGridCellAttr_SetSize(PyObject *self, PyObject *args, Py
 static PyObject *_wrap_wxGridCellAttr_SetOverflow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGridCellAttr * _arg0;
-    bool  _arg1;
+    bool  _arg1 = (bool ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool1;
+    int tempbool1 = (int) TRUE;
     char *_kwnames[] = { "self","allow", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxGridCellAttr_SetOverflow",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxGridCellAttr_SetOverflow",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4205,6 +4205,34 @@ static PyObject *_wrap_wxGridCellAttr_HasReadWriteMode(PyObject *self, PyObject 
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxGridCellAttr_HasReadWriteMode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridCellAttr_HasOverflowMode(_swigobj)  (_swigobj->HasOverflowMode())
+static PyObject *_wrap_wxGridCellAttr_HasOverflowMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridCellAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGridCellAttr_HasOverflowMode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridCellAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridCellAttr_HasOverflowMode. Expected _wxGridCellAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxGridCellAttr_HasOverflowMode(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -15391,6 +15419,7 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGridCellAttr_GetFont", (PyCFunction) _wrap_wxGridCellAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellAttr_GetBackgroundColour", (PyCFunction) _wrap_wxGridCellAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellAttr_GetTextColour", (PyCFunction) _wrap_wxGridCellAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGridCellAttr_HasOverflowMode", (PyCFunction) _wrap_wxGridCellAttr_HasOverflowMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellAttr_HasReadWriteMode", (PyCFunction) _wrap_wxGridCellAttr_HasReadWriteMode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellAttr_HasEditor", (PyCFunction) _wrap_wxGridCellAttr_HasEditor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridCellAttr_HasRenderer", (PyCFunction) _wrap_wxGridCellAttr_HasRenderer, METH_VARARGS | METH_KEYWORDS },

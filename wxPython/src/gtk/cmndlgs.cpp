@@ -972,354 +972,6 @@ static PyObject *_wrap_new_wxFileDialog(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-#define wxFileDialog_GetDirectory(_swigobj)  (_swigobj->GetDirectory())
-static PyObject *_wrap_wxFileDialog_GetDirectory(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetDirectory",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetDirectory. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileDialog_GetDirectory(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_GetFilename(_swigobj)  (_swigobj->GetFilename())
-static PyObject *_wrap_wxFileDialog_GetFilename(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetFilename",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetFilename. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileDialog_GetFilename(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_GetFilterIndex(_swigobj)  (_swigobj->GetFilterIndex())
-static PyObject *_wrap_wxFileDialog_GetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetFilterIndex",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetFilterIndex. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxFileDialog_GetFilterIndex(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxFileDialog_GetMessage(_swigobj)  (_swigobj->GetMessage())
-static PyObject *_wrap_wxFileDialog_GetMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetMessage",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetMessage. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileDialog_GetMessage(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_GetPath(_swigobj)  (_swigobj->GetPath())
-static PyObject *_wrap_wxFileDialog_GetPath(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetPath",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetPath. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileDialog_GetPath(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_GetStyle(_swigobj)  (_swigobj->GetStyle())
-static PyObject *_wrap_wxFileDialog_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetStyle",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetStyle. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (long )wxFileDialog_GetStyle(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxFileDialog_GetWildcard(_swigobj)  (_swigobj->GetWildcard())
-static PyObject *_wrap_wxFileDialog_GetWildcard(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxFileDialog * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetWildcard",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetWildcard. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxFileDialog_GetWildcard(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_SetDirectory(_swigobj,_swigarg0)  (_swigobj->SetDirectory(_swigarg0))
-static PyObject *_wrap_wxFileDialog_SetDirectory(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFileDialog * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","directory", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDialog_SetDirectory",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetDirectory. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFileDialog_SetDirectory(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_SetFilename(_swigobj,_swigarg0)  (_swigobj->SetFilename(_swigarg0))
-static PyObject *_wrap_wxFileDialog_SetFilename(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFileDialog * _arg0;
-    wxString * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","setfilename", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDialog_SetFilename",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetFilename. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    _arg1 = wxString_in_helper(_obj1);
-    if (_arg1 == NULL)
-        return NULL;
-}
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFileDialog_SetFilename(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxFileDialog_SetFilterIndex(_swigobj,_swigarg0)  (_swigobj->SetFilterIndex(_swigarg0))
-static PyObject *_wrap_wxFileDialog_SetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFileDialog * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","filterIndex", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFileDialog_SetFilterIndex",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetFilterIndex. Expected _wxFileDialog_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFileDialog_SetFilterIndex(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxFileDialog_SetMessage(_swigobj,_swigarg0)  (_swigobj->SetMessage(_swigarg0))
 static PyObject *_wrap_wxFileDialog_SetMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1398,32 +1050,81 @@ static PyObject *_wrap_wxFileDialog_SetPath(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxFileDialog_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
-static PyObject *_wrap_wxFileDialog_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFileDialog_SetDirectory(_swigobj,_swigarg0)  (_swigobj->SetDirectory(_swigarg0))
+static PyObject *_wrap_wxFileDialog_SetDirectory(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFileDialog * _arg0;
-    long  _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","style", NULL };
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","dir", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxFileDialog_SetStyle",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDialog_SetDirectory",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetStyle. Expected _wxFileDialog_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetDirectory. Expected _wxFileDialog_p.");
         return NULL;
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxFileDialog_SetStyle(_arg0,_arg1);
+    wxFileDialog_SetDirectory(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_SetFilename(_swigobj,_swigarg0)  (_swigobj->SetFilename(_swigarg0))
+static PyObject *_wrap_wxFileDialog_SetFilename(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileDialog * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDialog_SetFilename",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetFilename. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFileDialog_SetFilename(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -1466,8 +1167,279 @@ static PyObject *_wrap_wxFileDialog_SetWildcard(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxFileDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
-static PyObject *_wrap_wxFileDialog_ShowModal(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFileDialog_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
+static PyObject *_wrap_wxFileDialog_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileDialog * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxFileDialog_SetStyle",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetStyle. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFileDialog_SetStyle(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileDialog_SetFilterIndex(_swigobj,_swigarg0)  (_swigobj->SetFilterIndex(_swigarg0))
+static PyObject *_wrap_wxFileDialog_SetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileDialog * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","filterIndex", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFileDialog_SetFilterIndex",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_SetFilterIndex. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxFileDialog_SetFilterIndex(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFileDialog_GetMessage(_swigobj)  (_swigobj->GetMessage())
+static PyObject *_wrap_wxFileDialog_GetMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetMessage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetMessage. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileDialog_GetMessage(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_GetPath(_swigobj)  (_swigobj->GetPath())
+static PyObject *_wrap_wxFileDialog_GetPath(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetPath",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetPath. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileDialog_GetPath(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_GetDirectory(_swigobj)  (_swigobj->GetDirectory())
+static PyObject *_wrap_wxFileDialog_GetDirectory(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetDirectory",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetDirectory. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileDialog_GetDirectory(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_GetFilename(_swigobj)  (_swigobj->GetFilename())
+static PyObject *_wrap_wxFileDialog_GetFilename(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetFilename",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetFilename. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileDialog_GetFilename(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_GetWildcard(_swigobj)  (_swigobj->GetWildcard())
+static PyObject *_wrap_wxFileDialog_GetWildcard(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetWildcard",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetWildcard. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileDialog_GetWildcard(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFileDialog_GetStyle(_swigobj)  (_swigobj->GetStyle())
+static PyObject *_wrap_wxFileDialog_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxFileDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetStyle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetStyle. Expected _wxFileDialog_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxFileDialog_GetStyle(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxFileDialog_GetFilterIndex(_swigobj)  (_swigobj->GetFilterIndex())
+static PyObject *_wrap_wxFileDialog_GetFilterIndex(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxFileDialog * _arg0;
@@ -1475,18 +1447,18 @@ static PyObject *_wrap_wxFileDialog_ShowModal(PyObject *self, PyObject *args, Py
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_ShowModal",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileDialog_GetFilterIndex",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_ShowModal. Expected _wxFileDialog_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDialog_GetFilterIndex. Expected _wxFileDialog_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxFileDialog_ShowModal(_arg0);
+    _result = (int )wxFileDialog_GetFilterIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4040,21 +4012,20 @@ static PyMethodDef cmndlgscMethods[] = {
 	 { "new_wxMultiChoiceDialog", (PyCFunction) _wrap_new_wxMultiChoiceDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetPaths", (PyCFunction) _wrap_wxFileDialog_GetPaths, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetFilenames", (PyCFunction) _wrap_wxFileDialog_GetFilenames, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_ShowModal", (PyCFunction) _wrap_wxFileDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetWildcard", (PyCFunction) _wrap_wxFileDialog_SetWildcard, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetStyle", (PyCFunction) _wrap_wxFileDialog_SetStyle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetPath", (PyCFunction) _wrap_wxFileDialog_SetPath, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetMessage", (PyCFunction) _wrap_wxFileDialog_SetMessage, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetFilterIndex", (PyCFunction) _wrap_wxFileDialog_SetFilterIndex, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetFilename", (PyCFunction) _wrap_wxFileDialog_SetFilename, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_SetDirectory", (PyCFunction) _wrap_wxFileDialog_SetDirectory, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_GetWildcard", (PyCFunction) _wrap_wxFileDialog_GetWildcard, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_GetStyle", (PyCFunction) _wrap_wxFileDialog_GetStyle, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_GetPath", (PyCFunction) _wrap_wxFileDialog_GetPath, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFileDialog_GetMessage", (PyCFunction) _wrap_wxFileDialog_GetMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetFilterIndex", (PyCFunction) _wrap_wxFileDialog_GetFilterIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetStyle", (PyCFunction) _wrap_wxFileDialog_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetWildcard", (PyCFunction) _wrap_wxFileDialog_GetWildcard, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetFilename", (PyCFunction) _wrap_wxFileDialog_GetFilename, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDialog_GetDirectory", (PyCFunction) _wrap_wxFileDialog_GetDirectory, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetPath", (PyCFunction) _wrap_wxFileDialog_GetPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_GetMessage", (PyCFunction) _wrap_wxFileDialog_GetMessage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetFilterIndex", (PyCFunction) _wrap_wxFileDialog_SetFilterIndex, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetStyle", (PyCFunction) _wrap_wxFileDialog_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetWildcard", (PyCFunction) _wrap_wxFileDialog_SetWildcard, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetFilename", (PyCFunction) _wrap_wxFileDialog_SetFilename, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetDirectory", (PyCFunction) _wrap_wxFileDialog_SetDirectory, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetPath", (PyCFunction) _wrap_wxFileDialog_SetPath, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDialog_SetMessage", (PyCFunction) _wrap_wxFileDialog_SetMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileDialog", (PyCFunction) _wrap_new_wxFileDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDirDialog_ShowModal", (PyCFunction) _wrap_wxDirDialog_ShowModal, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDirDialog_SetPath", (PyCFunction) _wrap_wxDirDialog_SetPath, METH_VARARGS | METH_KEYWORDS },

@@ -720,6 +720,56 @@ public:
 
 //----------------------------------------------------------------------
 
+enum {
+    // Styles
+    wxTE_NO_VSCROLL,
+    wxTE_AUTO_SCROLL,
+    wxTE_READONLY,
+    wxTE_MULTILINE,
+    wxTE_PROCESS_TAB,
+    wxTE_LEFT,
+    wxTE_CENTER,
+    wxTE_RIGHT,
+    wxTE_CENTRE,
+    wxTE_RICH,
+    wxTE_PROCESS_ENTER,
+    wxTE_PASSWORD,
+    wxTE_AUTO_URL,
+    wxTE_NOHIDESEL,
+    wxTE_DONTWRAP,
+    wxTE_LINEWRAP,
+    wxTE_WORDWRAP,
+    wxTE_RICH2,
+
+    // Flags to indicate which attributes are being applied
+    wxTEXT_ATTR_TEXT_COLOUR,
+    wxTEXT_ATTR_BACKGROUND_COLOUR,
+    wxTEXT_ATTR_FONT_FACE,
+    wxTEXT_ATTR_FONT_SIZE,
+    wxTEXT_ATTR_FONT_WEIGHT,
+    wxTEXT_ATTR_FONT_ITALIC,
+    wxTEXT_ATTR_FONT_UNDERLINE,
+    wxTEXT_ATTR_FONT,
+    wxTEXT_ATTR_ALIGNMENT,
+    wxTEXT_ATTR_LEFT_INDENT,
+    wxTEXT_ATTR_RIGHT_INDENT,
+    wxTEXT_ATTR_TABS,
+
+};
+
+
+enum wxTextAttrAlignment
+{
+    wxTEXT_ALIGNMENT_DEFAULT,
+    wxTEXT_ALIGNMENT_LEFT,
+    wxTEXT_ALIGNMENT_CENTRE,
+    wxTEXT_ALIGNMENT_CENTER,
+    wxTEXT_ALIGNMENT_RIGHT,
+    wxTEXT_ALIGNMENT_JUSTIFIED
+};
+
+
+
 
 class wxTextAttr
 {
@@ -727,22 +777,41 @@ public:
     // ctors
     wxTextAttr(const wxColour& colText = wxNullColour,
                const wxColour& colBack = wxNullColour,
-               const wxFont& font = wxNullFont);
+               const wxFont& font = wxNullFont,
+               wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
     ~wxTextAttr();
+
+    void Init();
 
     // setters
     void SetTextColour(const wxColour& colText);
     void SetBackgroundColour(const wxColour& colBack);
     void SetFont(const wxFont& font);
+    void SetAlignment(wxTextAttrAlignment alignment);
+    void SetTabs(const wxArrayInt& tabs);
+    void SetLeftIndent(int indent);
+    void SetRightIndent(int indent);
+    void SetFlags(long flags);
 
     // accessors
     bool HasTextColour() const;
     bool HasBackgroundColour() const;
     bool HasFont() const;
+    bool HasAlignment() const;
+    bool HasTabs() const;
+    bool HasLeftIndent() const;
+    bool HasRightIndent() const;
+    bool HasFlag(long flag) const;
 
     wxColour GetTextColour() const;
     wxColour GetBackgroundColour() const;
     wxFont GetFont() const;
+    wxTextAttrAlignment GetAlignment();
+    const wxArrayInt& GetTabs() const;
+    long GetLeftIndent() const;
+    long GetRightIndent() const;
+    long GetFlags() const;
+
 
     // returns false if we have any attributes set, true otherwise
     bool IsDefault();
@@ -826,6 +895,7 @@ public:
     bool SetStyle(long start, long end, const wxTextAttr& style);
     bool SetDefaultStyle(const wxTextAttr& style);
     const wxTextAttr& GetDefaultStyle() const;
+    bool GetStyle(long position, wxTextAttr& style);
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates

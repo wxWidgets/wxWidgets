@@ -537,6 +537,17 @@ class wxHtmlCellPtr(wxObjectPtr):
         val = htmlc.wxHtmlCell_GetParent(self, *_args, **_kwargs)
         if val: val = wxHtmlContainerCellPtr(val) 
         return val
+    def GetFirstChild(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetFirstChild(self, *_args, **_kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def GetCursor(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetCursor(self, *_args, **_kwargs)
+        if val: val = wxCursorPtr(val) ; val.thisown = 1
+        return val
+    def IsFormattingCell(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_IsFormattingCell(self, *_args, **_kwargs)
+        return val
     def SetLink(self, *_args, **_kwargs):
         val = htmlc.wxHtmlCell_SetLink(self, *_args, **_kwargs)
         return val
@@ -567,6 +578,37 @@ class wxHtmlCellPtr(wxObjectPtr):
         return val
     def SetCanLiveOnPagebreak(self, *_args, **_kwargs):
         val = htmlc.wxHtmlCell_SetCanLiveOnPagebreak(self, *_args, **_kwargs)
+        return val
+    def IsLinebreakAllowed(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_IsLinebreakAllowed(self, *_args, **_kwargs)
+        return val
+    def IsTerminalCell(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_IsTerminalCell(self, *_args, **_kwargs)
+        return val
+    def FindCellByPos(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_FindCellByPos(self, *_args, **_kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def GetAbsPos(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetAbsPos(self, *_args, **_kwargs)
+        if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def GetFirstTerminal(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetFirstTerminal(self, *_args, **_kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def GetLastTerminal(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetLastTerminal(self, *_args, **_kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def GetDepth(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_GetDepth(self, *_args, **_kwargs)
+        return val
+    def IsBefore(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_IsBefore(self, *_args, **_kwargs)
+        return val
+    def ConvertToText(self, *_args, **_kwargs):
+        val = htmlc.wxHtmlCell_ConvertToText(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxHtmlCell instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -964,6 +1006,10 @@ wxHtmlWinParser_AddTagHandler = htmlc.wxHtmlWinParser_AddTagHandler
 
 wxHtmlWindow_AddFilter = htmlc.wxHtmlWindow_AddFilter
 
+wxHtmlPrintout_AddFilter = htmlc.wxHtmlPrintout_AddFilter
+
+wxHtmlPrintout_CleanUpStatics = htmlc.wxHtmlPrintout_CleanUpStatics
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
@@ -989,6 +1035,8 @@ wxHTML_COND_ISIMAGEMAP = htmlc.wxHTML_COND_ISIMAGEMAP
 wxHTML_COND_USER = htmlc.wxHTML_COND_USER
 wxHW_SCROLLBAR_NEVER = htmlc.wxHW_SCROLLBAR_NEVER
 wxHW_SCROLLBAR_AUTO = htmlc.wxHW_SCROLLBAR_AUTO
+wxHW_NO_SELECTION = htmlc.wxHW_NO_SELECTION
+wxHW_DEFAULT_STYLE = htmlc.wxHW_DEFAULT_STYLE
 wxHTML_OPEN = htmlc.wxHTML_OPEN
 wxHTML_BLOCK = htmlc.wxHTML_BLOCK
 wxHTML_REDIRECT = htmlc.wxHTML_REDIRECT
@@ -998,6 +1046,9 @@ wxHTML_URL_OTHER = htmlc.wxHTML_URL_OTHER
 wxHTML_SEL_OUT = htmlc.wxHTML_SEL_OUT
 wxHTML_SEL_IN = htmlc.wxHTML_SEL_IN
 wxHTML_SEL_CHANGING = htmlc.wxHTML_SEL_CHANGING
+wxHTML_FIND_EXACT = htmlc.wxHTML_FIND_EXACT
+wxHTML_FIND_NEAREST_BEFORE = htmlc.wxHTML_FIND_NEAREST_BEFORE
+wxHTML_FIND_NEAREST_AFTER = htmlc.wxHTML_FIND_NEAREST_AFTER
 wxPAGE_ODD = htmlc.wxPAGE_ODD
 wxPAGE_EVEN = htmlc.wxPAGE_EVEN
 wxPAGE_ALL = htmlc.wxPAGE_ALL

@@ -95,6 +95,8 @@ enum {
 enum {
     wxHW_SCROLLBAR_NEVER,
     wxHW_SCROLLBAR_AUTO,
+    wxHW_NO_SELECTION,
+    wxHW_DEFAULT_STYLE,
 };
 
 
@@ -466,6 +468,15 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+enum
+{
+    wxHTML_FIND_EXACT             = 1,
+    wxHTML_FIND_NEAREST_BEFORE    = 2,
+    wxHTML_FIND_NEAREST_AFTER     = 4
+};
+
+
 class wxHtmlCell : public wxObject {
 public:
     wxHtmlCell();
@@ -478,6 +489,16 @@ public:
     wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
     wxHtmlCell* GetNext();
     wxHtmlContainerCell* GetParent();
+    wxHtmlCell* GetFirstChild() const;
+
+    // Returns cursor to be used when mouse is over the cell:
+    wxCursor GetCursor() const;
+
+    // Formatting cells are not visible on the screen, they only alter
+    // renderer's state.
+    bool IsFormattingCell() const;
+
+
     void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell);
     void SetParent(wxHtmlContainerCell *p);
@@ -492,6 +513,41 @@ public:
     bool AdjustPagebreak(int* INOUT);
     void SetCanLiveOnPagebreak(bool can);
 
+    // Can the line be broken before this cell?
+    bool IsLinebreakAllowed() const;
+
+    // Returns true for simple == terminal cells, i.e. not composite ones.
+    // This if for internal usage only and may disappear in future versions!
+    bool IsTerminalCell() const;
+
+    // Find a cell inside this cell positioned at the given coordinates
+    // (relative to this's positions). Returns NULL if no such cell exists.
+    // The flag can be used to specify whether to look for terminal or
+    // nonterminal cells or both. In either case, returned cell is deepest
+    // cell in cells tree that contains [x,y].
+    wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+
+    // Returns absolute position of the cell on HTML canvas
+    wxPoint GetAbsPos() const;
+
+    // Returns first (last) terminal cell inside this cell. It may return NULL,
+    // but it is rare -- only if there are no terminals in the tree.
+    wxHtmlCell *GetFirstTerminal() const ;
+    wxHtmlCell *GetLastTerminal() const ;
+
+    // Returns cell's depth, i.e. how far under the root cell it is
+    // (if it is the root, depth is 0)
+    unsigned GetDepth() const;
+
+    // Returns true if the cell appears before 'cell' in natural order of
+    // cells (= as they are read). If cell A is (grand)parent of cell B,
+    // then both A.IsBefore(B) and B.IsBefore(A) always return true.
+    bool IsBefore(wxHtmlCell *cell) const;
+
+    // Converts the cell into text representation. If sel != NULL then
+    // only part of the cell inside the selection is converted.
+    wxString ConvertToText(wxHtmlSelection *sel) const;
 };
 
 
@@ -626,7 +682,7 @@ public:
     wxPyHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxHW_SCROLLBAR_AUTO,
+                   long style = wxHW_DEFAULT_STYLE,
                    const wxString& name = wxPyHtmlWindowNameStr)
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
     wxPyHtmlWindow() : wxHtmlWindow() {};
@@ -718,7 +774,7 @@ public:
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  wxPoint& pos = wxDefaultPosition,
                  wxSize& size = wxDefaultSize,
-                 int style=wxHW_SCROLLBAR_AUTO,
+                 int style=wxHW_DEFAULT_STYLE,
                  const wxString& name = wxPyHtmlWindowNameStr);
     %name(wxPreHtmlWindow)wxPyHtmlWindow();
 
@@ -854,7 +910,10 @@ public:
                 delete [] temp;
         }
     }
-    int Render(int x, int y, int from = 0, int dont_render = FALSE);
+    int Render(int x, int y, int from = 0, int dont_render = FALSE, int to = INT_MAX,
+               //int *known_pagebreaks = NULL, int number_of_pages = 0
+               int* choices=NULL, int LCOUNT = 0
+               );
     int GetTotalHeight();
                 // returns total height of the html document
                 // (compare Render's return value with this)
@@ -891,6 +950,12 @@ public:
     void SetMargins(float top = 25.2, float bottom = 25.2,
                     float left = 25.2, float right = 25.2,
                     float spaces = 5);
+
+    // Adds input filter
+    static void AddFilter(wxHtmlFilter *filter);
+
+    // Cleanup
+    static void CleanUpStatics();
 };
 
 
@@ -898,7 +963,7 @@ public:
 class wxHtmlEasyPrinting : public wxObject {
 public:
     wxHtmlEasyPrinting(const wxString& name = wxPyHtmlPrintingTitleStr,
-                       wxFrame *parent_frame = NULL);
+                       wxWindow *parentWindow = NULL);
     ~wxHtmlEasyPrinting();
 
     void PreviewFile(const wxString &htmlfile);

@@ -72,6 +72,20 @@ class wxSystemSettings(wxSystemSettingsPtr):
 
 
 
+class wxSystemOptionsPtr(wxObjectPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxSystemOptions instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxSystemOptions(wxSystemOptionsPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = misc2c.new_wxSystemOptions(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxToolTipPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -1310,6 +1324,16 @@ wxSystemSettings_HasFeature = misc2c.wxSystemSettings_HasFeature
 wxSystemSettings_GetScreenType = misc2c.wxSystemSettings_GetScreenType
 
 wxSystemSettings_SetScreenType = misc2c.wxSystemSettings_SetScreenType
+
+wxSystemOptions_SetOption = misc2c.wxSystemOptions_SetOption
+
+wxSystemOptions_SetOptionInt = misc2c.wxSystemOptions_SetOptionInt
+
+wxSystemOptions_GetOption = misc2c.wxSystemOptions_GetOption
+
+wxSystemOptions_GetOptionInt = misc2c.wxSystemOptions_GetOptionInt
+
+wxSystemOptions_HasOption = misc2c.wxSystemOptions_HasOption
 
 wxToolTip_Enable = misc2c.wxToolTip_Enable
 

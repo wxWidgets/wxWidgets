@@ -143,6 +143,12 @@ class wxFramePtr(wxTopLevelWindowPtr):
     def SendSizeEvent(self, *_args, **_kwargs):
         val = framesc.wxFrame_SendSizeEvent(self, *_args, **_kwargs)
         return val
+    def DoMenuUpdates(self, *_args, **_kwargs):
+        val = framesc.wxFrame_DoMenuUpdates(self, *_args, **_kwargs)
+        return val
+    def UpdateWindowUI(self, *_args, **_kwargs):
+        val = framesc.wxFrame_UpdateWindowUI(self, *_args, **_kwargs)
+        return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxFrame instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     Command = ProcessCommand

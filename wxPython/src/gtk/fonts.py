@@ -86,26 +86,26 @@ class wxFontMapperPtr :
                 delfunc(self)
             except:
                 pass
-    def GetAltForEncoding(self, *_args, **_kwargs):
-        val = fontsc.wxFontMapper_GetAltForEncoding(self, *_args, **_kwargs)
-        return val
-    def IsEncodingAvailable(self, *_args, **_kwargs):
-        val = fontsc.wxFontMapper_IsEncodingAvailable(self, *_args, **_kwargs)
-        return val
     def CharsetToEncoding(self, *_args, **_kwargs):
         val = fontsc.wxFontMapper_CharsetToEncoding(self, *_args, **_kwargs)
-        return val
-    def SetDialogParent(self, *_args, **_kwargs):
-        val = fontsc.wxFontMapper_SetDialogParent(self, *_args, **_kwargs)
-        return val
-    def SetDialogTitle(self, *_args, **_kwargs):
-        val = fontsc.wxFontMapper_SetDialogTitle(self, *_args, **_kwargs)
         return val
     def SetConfig(self, *_args, **_kwargs):
         val = fontsc.wxFontMapper_SetConfig(self, *_args, **_kwargs)
         return val
     def SetConfigPath(self, *_args, **_kwargs):
         val = fontsc.wxFontMapper_SetConfigPath(self, *_args, **_kwargs)
+        return val
+    def GetAltForEncoding(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_GetAltForEncoding(self, *_args, **_kwargs)
+        return val
+    def IsEncodingAvailable(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_IsEncodingAvailable(self, *_args, **_kwargs)
+        return val
+    def SetDialogParent(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_SetDialogParent(self, *_args, **_kwargs)
+        return val
+    def SetDialogTitle(self, *_args, **_kwargs):
+        val = fontsc.wxFontMapper_SetDialogTitle(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxFontMapper instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
@@ -429,6 +429,10 @@ def wxFontMapper_Set(*_args, **_kwargs):
     if val: val = wxFontMapperPtr(val)
     return val
 
+wxFontMapper_GetSupportedEncodingsCount = fontsc.wxFontMapper_GetSupportedEncodingsCount
+
+wxFontMapper_GetEncoding = fontsc.wxFontMapper_GetEncoding
+
 wxFontMapper_GetEncodingName = fontsc.wxFontMapper_GetEncodingName
 
 wxFontMapper_GetEncodingDescription = fontsc.wxFontMapper_GetEncodingDescription
@@ -451,6 +455,8 @@ def wxLocale_GetLanguageInfo(*_args, **_kwargs):
     val = fontsc.wxLocale_GetLanguageInfo(*_args,**_kwargs)
     if val: val = wxLanguageInfoPtr(val)
     return val
+
+wxLocale_GetLanguageName = fontsc.wxLocale_GetLanguageName
 
 def wxLocale_FindLanguageInfo(*_args, **_kwargs):
     val = fontsc.wxLocale_FindLanguageInfo(*_args,**_kwargs)

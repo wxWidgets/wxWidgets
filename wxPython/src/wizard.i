@@ -318,7 +318,8 @@ public:
              int id = -1,
              const wxString& title = wxEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
-             const wxPoint& pos = wxDefaultPosition);
+             const wxPoint& pos = wxDefaultPosition,
+             long style = wxDEFAULT_DIALOG_STYLE);
     %name(wxPreWizard)wxWizard();
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
@@ -357,6 +358,13 @@ public:
     // may be useful if not all pages are accessible from the first one by
     // default)
     virtual void FitToPage(const wxWizardPage *firstPage);
+
+    // Adding pages to page area sizer enlarges wizard
+    virtual wxSizer *GetPageAreaSizer() const;
+
+    // Set border around page area. Default is 0 if you add at least one
+    // page to GetPageAreaSizer and 5 if you don't.
+    virtual void SetBorder(int border);
 
     // is the wizard running?
     bool IsRunning() const { return m_page != NULL; }

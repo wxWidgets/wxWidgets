@@ -1563,8 +1563,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyEvent, wxEvent);
 IMPLEMENT_ABSTRACT_CLASS(wxPyCommandEvent, wxCommandEvent);
 
 
-wxPyEvent::wxPyEvent(int id)
-    : wxEvent(id) {
+wxPyEvent::wxPyEvent(int winid, wxEventType commandType)
+    : wxEvent(winid, commandType) {
 }
 
 

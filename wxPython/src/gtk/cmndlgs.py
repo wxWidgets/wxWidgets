@@ -136,26 +136,11 @@ class wxFileDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def GetDirectory(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetDirectory(self, *_args, **_kwargs)
+    def SetMessage(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_SetMessage(self, *_args, **_kwargs)
         return val
-    def GetFilename(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetFilename(self, *_args, **_kwargs)
-        return val
-    def GetFilterIndex(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetFilterIndex(self, *_args, **_kwargs)
-        return val
-    def GetMessage(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetMessage(self, *_args, **_kwargs)
-        return val
-    def GetPath(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetPath(self, *_args, **_kwargs)
-        return val
-    def GetStyle(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetStyle(self, *_args, **_kwargs)
-        return val
-    def GetWildcard(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_GetWildcard(self, *_args, **_kwargs)
+    def SetPath(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_SetPath(self, *_args, **_kwargs)
         return val
     def SetDirectory(self, *_args, **_kwargs):
         val = cmndlgsc.wxFileDialog_SetDirectory(self, *_args, **_kwargs)
@@ -163,23 +148,35 @@ class wxFileDialogPtr(wxDialogPtr):
     def SetFilename(self, *_args, **_kwargs):
         val = cmndlgsc.wxFileDialog_SetFilename(self, *_args, **_kwargs)
         return val
-    def SetFilterIndex(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_SetFilterIndex(self, *_args, **_kwargs)
-        return val
-    def SetMessage(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_SetMessage(self, *_args, **_kwargs)
-        return val
-    def SetPath(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_SetPath(self, *_args, **_kwargs)
+    def SetWildcard(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_SetWildcard(self, *_args, **_kwargs)
         return val
     def SetStyle(self, *_args, **_kwargs):
         val = cmndlgsc.wxFileDialog_SetStyle(self, *_args, **_kwargs)
         return val
-    def SetWildcard(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_SetWildcard(self, *_args, **_kwargs)
+    def SetFilterIndex(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_SetFilterIndex(self, *_args, **_kwargs)
         return val
-    def ShowModal(self, *_args, **_kwargs):
-        val = cmndlgsc.wxFileDialog_ShowModal(self, *_args, **_kwargs)
+    def GetMessage(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetMessage(self, *_args, **_kwargs)
+        return val
+    def GetPath(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetPath(self, *_args, **_kwargs)
+        return val
+    def GetDirectory(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetDirectory(self, *_args, **_kwargs)
+        return val
+    def GetFilename(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetFilename(self, *_args, **_kwargs)
+        return val
+    def GetWildcard(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetWildcard(self, *_args, **_kwargs)
+        return val
+    def GetStyle(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetStyle(self, *_args, **_kwargs)
+        return val
+    def GetFilterIndex(self, *_args, **_kwargs):
+        val = cmndlgsc.wxFileDialog_GetFilterIndex(self, *_args, **_kwargs)
         return val
     def GetFilenames(self, *_args, **_kwargs):
         val = cmndlgsc.wxFileDialog_GetFilenames(self, *_args, **_kwargs)

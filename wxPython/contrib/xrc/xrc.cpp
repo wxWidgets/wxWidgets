@@ -56,7 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "wxPython.h"
 #include "pyistream.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/xrc/xmlres.h"
 #include <wx/filesys.h>
 #include <wx/fs_mem.h>

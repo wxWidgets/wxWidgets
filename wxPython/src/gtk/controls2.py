@@ -90,9 +90,6 @@ def EVT_TREE_BEGIN_DRAG(win, id, func):
 def EVT_TREE_BEGIN_RDRAG(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_RDRAG, func)
 
-def EVT_TREE_END_DRAG(win, id, func):
-    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
-
 def EVT_TREE_BEGIN_LABEL_EDIT(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, func)
 
@@ -137,6 +134,13 @@ def EVT_TREE_ITEM_RIGHT_CLICK(win, id, func):
 
 def EVT_TREE_ITEM_MIDDLE_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, func)
+
+def EVT_TREE_END_DRAG(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_END_DRAG, func)
+
+def EVT_TREE_STATE_IMAGE_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, func)
+
 
 class wxListItemAttrPtr :
     def __init__(self,this):
@@ -844,7 +848,7 @@ class wxTreeItemId(wxTreeItemIdPtr):
 
 
 
-class wxTreeItemDataPtr(wxObjectPtr):
+class wxTreeItemDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -879,13 +883,22 @@ class wxTreeEventPtr(wxNotifyEventPtr):
         val = controls2c.wxTreeEvent_GetItem(self, *_args, **_kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
+    def SetItem(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetItem(self, *_args, **_kwargs)
+        return val
     def GetOldItem(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_GetOldItem(self, *_args, **_kwargs)
         if val: val = wxTreeItemIdPtr(val) ; val.thisown = 1
         return val
+    def SetOldItem(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetOldItem(self, *_args, **_kwargs)
+        return val
     def GetPoint(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_GetPoint(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
+        return val
+    def SetPoint(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_SetPoint(self, *_args, **_kwargs)
         return val
     def GetKeyEvent(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_GetKeyEvent(self, *_args, **_kwargs)
@@ -894,33 +907,23 @@ class wxTreeEventPtr(wxNotifyEventPtr):
     def GetKeyCode(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_GetKeyCode(self, *_args, **_kwargs)
         return val
-    def GetLabel(self, *_args, **_kwargs):
-        val = controls2c.wxTreeEvent_GetLabel(self, *_args, **_kwargs)
-        return val
-    def IsEditCancelled(self, *_args, **_kwargs):
-        val = controls2c.wxTreeEvent_IsEditCancelled(self, *_args, **_kwargs)
-        return val
-    def SetItem(self, *_args, **_kwargs):
-        val = controls2c.wxTreeEvent_SetItem(self, *_args, **_kwargs)
-        return val
-    def SetOldItem(self, *_args, **_kwargs):
-        val = controls2c.wxTreeEvent_SetOldItem(self, *_args, **_kwargs)
-        return val
-    def SetPoint(self, *_args, **_kwargs):
-        val = controls2c.wxTreeEvent_SetPoint(self, *_args, **_kwargs)
-        return val
     def SetKeyEvent(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_SetKeyEvent(self, *_args, **_kwargs)
         return val
+    def GetLabel(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_GetLabel(self, *_args, **_kwargs)
+        return val
     def SetLabel(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_SetLabel(self, *_args, **_kwargs)
+        return val
+    def IsEditCancelled(self, *_args, **_kwargs):
+        val = controls2c.wxTreeEvent_IsEditCancelled(self, *_args, **_kwargs)
         return val
     def SetEditCanceled(self, *_args, **_kwargs):
         val = controls2c.wxTreeEvent_SetEditCanceled(self, *_args, **_kwargs)
         return val
     def __repr__(self):
         return "<%s.%s instance; proxy of C++ wxTreeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-    GetCode = GetKeyCode
 class wxTreeEvent(wxTreeEventPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = controls2c.new_wxTreeEvent(*_args,**_kwargs)
@@ -1349,6 +1352,41 @@ def wxPreDirFilterListCtrl(*_args,**_kwargs):
     return val
 
 
+class wxFileIconsTablePtr :
+    folder = controls2c.wxFileIconsTable_folder
+    folder_open = controls2c.wxFileIconsTable_folder_open
+    computer = controls2c.wxFileIconsTable_computer
+    drive = controls2c.wxFileIconsTable_drive
+    cdrom = controls2c.wxFileIconsTable_cdrom
+    floppy = controls2c.wxFileIconsTable_floppy
+    removeable = controls2c.wxFileIconsTable_removeable
+    file = controls2c.wxFileIconsTable_file
+    executable = controls2c.wxFileIconsTable_executable
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self, delfunc=controls2c.delete_wxFileIconsTable):
+        if self.thisown == 1:
+            try:
+                delfunc(self)
+            except:
+                pass
+    def GetIconID(self, *_args, **_kwargs):
+        val = controls2c.wxFileIconsTable_GetIconID(self, *_args, **_kwargs)
+        return val
+    def GetSmallImageList(self, *_args, **_kwargs):
+        val = controls2c.wxFileIconsTable_GetSmallImageList(self, *_args, **_kwargs)
+        return val
+    def __repr__(self):
+        return "<%s.%s instance; proxy of C++ wxFileIconsTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
+class wxFileIconsTable(wxFileIconsTablePtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = controls2c.new_wxFileIconsTable(*_args,**_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -1445,20 +1483,20 @@ wxLIST_FORMAT_CENTRE = controls2c.wxLIST_FORMAT_CENTRE
 wxLIST_FORMAT_CENTER = controls2c.wxLIST_FORMAT_CENTER
 wxTR_NO_BUTTONS = controls2c.wxTR_NO_BUTTONS
 wxTR_HAS_BUTTONS = controls2c.wxTR_HAS_BUTTONS
-wxTR_TWIST_BUTTONS = controls2c.wxTR_TWIST_BUTTONS
 wxTR_NO_LINES = controls2c.wxTR_NO_LINES
-wxTR_MAC_BUTTONS = controls2c.wxTR_MAC_BUTTONS
-wxTR_AQUA_BUTTONS = controls2c.wxTR_AQUA_BUTTONS
+wxTR_LINES_AT_ROOT = controls2c.wxTR_LINES_AT_ROOT
 wxTR_SINGLE = controls2c.wxTR_SINGLE
 wxTR_MULTIPLE = controls2c.wxTR_MULTIPLE
 wxTR_EXTENDED = controls2c.wxTR_EXTENDED
-wxTR_FULL_ROW_HIGHLIGHT = controls2c.wxTR_FULL_ROW_HIGHLIGHT
+wxTR_HAS_VARIABLE_ROW_HEIGHT = controls2c.wxTR_HAS_VARIABLE_ROW_HEIGHT
 wxTR_EDIT_LABELS = controls2c.wxTR_EDIT_LABELS
-wxTR_LINES_AT_ROOT = controls2c.wxTR_LINES_AT_ROOT
 wxTR_HIDE_ROOT = controls2c.wxTR_HIDE_ROOT
 wxTR_ROW_LINES = controls2c.wxTR_ROW_LINES
-wxTR_HAS_VARIABLE_ROW_HEIGHT = controls2c.wxTR_HAS_VARIABLE_ROW_HEIGHT
+wxTR_FULL_ROW_HIGHLIGHT = controls2c.wxTR_FULL_ROW_HIGHLIGHT
 wxTR_DEFAULT_STYLE = controls2c.wxTR_DEFAULT_STYLE
+wxTR_TWIST_BUTTONS = controls2c.wxTR_TWIST_BUTTONS
+wxTR_MAC_BUTTONS = controls2c.wxTR_MAC_BUTTONS
+wxTR_AQUA_BUTTONS = controls2c.wxTR_AQUA_BUTTONS
 wxTreeItemIcon_Normal = controls2c.wxTreeItemIcon_Normal
 wxTreeItemIcon_Selected = controls2c.wxTreeItemIcon_Selected
 wxTreeItemIcon_Expanded = controls2c.wxTreeItemIcon_Expanded
@@ -1496,6 +1534,7 @@ wxEVT_COMMAND_TREE_ITEM_ACTIVATED = controls2c.wxEVT_COMMAND_TREE_ITEM_ACTIVATED
 wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = controls2c.wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK
 wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = controls2c.wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK
 wxEVT_COMMAND_TREE_END_DRAG = controls2c.wxEVT_COMMAND_TREE_END_DRAG
+wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK = controls2c.wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK
 wxDIRCTRL_DIR_ONLY = controls2c.wxDIRCTRL_DIR_ONLY
 wxDIRCTRL_SELECT_FIRST = controls2c.wxDIRCTRL_SELECT_FIRST
 wxDIRCTRL_SHOW_FILTERS = controls2c.wxDIRCTRL_SHOW_FILTERS

@@ -6014,23 +6014,24 @@ static PyObject *_wrap_wxCheckListBox_HitTestXY(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define new_wxTextAttr(_swigarg0,_swigarg1,_swigarg2) (new wxTextAttr(_swigarg0,_swigarg1,_swigarg2))
+#define new_wxTextAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxTextAttr(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxTextAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTextAttr * _result;
     wxColour * _arg0 = (wxColour *) &wxNullColour;
     wxColour * _arg1 = (wxColour *) &wxNullColour;
     wxFont * _arg2 = (wxFont *) &wxNullFont;
+    wxTextAttrAlignment  _arg3 = (wxTextAttrAlignment ) (wxTEXT_ALIGNMENT_DEFAULT);
     wxColour  temp;
     PyObject * _obj0 = 0;
     wxColour  temp0;
     PyObject * _obj1 = 0;
     PyObject * _argo2 = 0;
-    char *_kwnames[] = { "colText","colBack","font", NULL };
+    char *_kwnames[] = { "colText","colBack","font","alignment", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOO:new_wxTextAttr",_kwnames,&_obj0,&_obj1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOOi:new_wxTextAttr",_kwnames,&_obj0,&_obj1,&_argo2,&_arg3)) 
         return NULL;
     if (_obj0)
 {
@@ -6052,7 +6053,7 @@ static PyObject *_wrap_new_wxTextAttr(PyObject *self, PyObject *args, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxTextAttr *)new_wxTextAttr(*_arg0,*_arg1,*_arg2);
+    _result = (wxTextAttr *)new_wxTextAttr(*_arg0,*_arg1,*_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6086,6 +6087,34 @@ static PyObject *_wrap_delete_wxTextAttr(PyObject *self, PyObject *args, PyObjec
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     delete_wxTextAttr(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextAttr_Init(_swigobj)  (_swigobj->Init())
+static PyObject *_wrap_wxTextAttr_Init(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_Init",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_Init. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_Init(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6202,6 +6231,171 @@ static PyObject *_wrap_wxTextAttr_SetFont(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxTextAttr_SetAlignment(_swigobj,_swigarg0)  (_swigobj->SetAlignment(_swigarg0))
+static PyObject *_wrap_wxTextAttr_SetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    wxTextAttrAlignment  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","alignment", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTextAttr_SetAlignment",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_SetAlignment. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_SetAlignment(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextAttr_SetTabs(_swigobj,_swigarg0)  (_swigobj->SetTabs(_swigarg0))
+static PyObject *_wrap_wxTextAttr_SetTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    wxArrayInt * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","tabs", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextAttr_SetTabs",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_SetTabs. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    if (! PySequence_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
+        return NULL;
+    }
+    _arg1 = new wxArrayInt;
+    int i, len=PySequence_Length(_obj1);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj1, i);
+        PyObject* number  = PyNumber_Int(item);
+        _arg1->Add(PyInt_AS_LONG(number));
+        Py_DECREF(item);
+        Py_DECREF(number);
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_SetTabs(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxTextAttr_SetLeftIndent(_swigobj,_swigarg0)  (_swigobj->SetLeftIndent(_swigarg0))
+static PyObject *_wrap_wxTextAttr_SetLeftIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","indent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTextAttr_SetLeftIndent",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_SetLeftIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_SetLeftIndent(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextAttr_SetRightIndent(_swigobj,_swigarg0)  (_swigobj->SetRightIndent(_swigarg0))
+static PyObject *_wrap_wxTextAttr_SetRightIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","indent", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxTextAttr_SetRightIndent",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_SetRightIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_SetRightIndent(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextAttr_SetFlags(_swigobj,_swigarg0)  (_swigobj->SetFlags(_swigarg0))
+static PyObject *_wrap_wxTextAttr_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextAttr_SetFlags",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_SetFlags. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTextAttr_SetFlags(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTextAttr_HasTextColour(_swigobj)  (_swigobj->HasTextColour())
 static PyObject *_wrap_wxTextAttr_HasTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6279,6 +6473,147 @@ static PyObject *_wrap_wxTextAttr_HasFont(PyObject *self, PyObject *args, PyObje
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (bool )wxTextAttr_HasFont(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_HasAlignment(_swigobj)  (_swigobj->HasAlignment())
+static PyObject *_wrap_wxTextAttr_HasAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_HasAlignment",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_HasAlignment. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextAttr_HasAlignment(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_HasTabs(_swigobj)  (_swigobj->HasTabs())
+static PyObject *_wrap_wxTextAttr_HasTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_HasTabs",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_HasTabs. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextAttr_HasTabs(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_HasLeftIndent(_swigobj)  (_swigobj->HasLeftIndent())
+static PyObject *_wrap_wxTextAttr_HasLeftIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_HasLeftIndent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_HasLeftIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextAttr_HasLeftIndent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_HasRightIndent(_swigobj)  (_swigobj->HasRightIndent())
+static PyObject *_wrap_wxTextAttr_HasRightIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_HasRightIndent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_HasRightIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextAttr_HasRightIndent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_HasFlag(_swigobj,_swigarg0)  (_swigobj->HasFlag(_swigarg0))
+static PyObject *_wrap_wxTextAttr_HasFlag(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextAttr * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flag", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxTextAttr_HasFlag",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_HasFlag. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextAttr_HasFlag(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6373,6 +6708,155 @@ static PyObject *_wrap_wxTextAttr_GetFont(PyObject *self, PyObject *args, PyObje
     if (PyErr_Occurred()) return NULL;
 }    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxTextAttr_GetAlignment(_swigobj)  (_swigobj->GetAlignment())
+static PyObject *_wrap_wxTextAttr_GetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttrAlignment  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_GetAlignment",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_GetAlignment. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxTextAttrAlignment )wxTextAttr_GetAlignment(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_GetTabs(_swigobj)  (_swigobj->GetTabs())
+static PyObject *_wrap_wxTextAttr_GetTabs(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxArrayInt * _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_GetTabs",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_GetTabs. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    const wxArrayInt & _result_ref = wxTextAttr_GetTabs(_arg0);
+    _result = (wxArrayInt *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyList_New(0);
+    size_t idx;
+    for (idx = 0; idx < _result->GetCount(); idx += 1) {
+        PyObject* val = PyInt_FromLong(_result->Item(idx));
+        PyList_Append(_resultobj, val);
+        Py_DECREF(val);
+    }
+}
+    return _resultobj;
+}
+
+#define wxTextAttr_GetLeftIndent(_swigobj)  (_swigobj->GetLeftIndent())
+static PyObject *_wrap_wxTextAttr_GetLeftIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_GetLeftIndent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_GetLeftIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxTextAttr_GetLeftIndent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_GetRightIndent(_swigobj)  (_swigobj->GetRightIndent())
+static PyObject *_wrap_wxTextAttr_GetRightIndent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_GetRightIndent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_GetRightIndent. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxTextAttr_GetRightIndent(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxTextAttr_GetFlags(_swigobj)  (_swigobj->GetFlags())
+static PyObject *_wrap_wxTextAttr_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextAttr * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextAttr_GetFlags",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_GetFlags. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxTextAttr_GetFlags(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -7490,6 +7974,43 @@ static PyObject *_wrap_wxTextCtrl_GetDefaultStyle(PyObject *self, PyObject *args
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetStyle(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetStyle(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    wxTextAttr * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "self","position","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO:wxTextCtrl_GetStyle",_kwnames,&_argo0,&_arg1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetStyle. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTextCtrl_GetStyle. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextCtrl_GetStyle(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -11857,6 +12378,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_ShowPosition", (PyCFunction) _wrap_wxTextCtrl_ShowPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_PositionToXY", (PyCFunction) _wrap_wxTextCtrl_PositionToXY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_XYToPosition", (PyCFunction) _wrap_wxTextCtrl_XYToPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetStyle", (PyCFunction) _wrap_wxTextCtrl_GetStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_GetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_SetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetStyle", (PyCFunction) _wrap_wxTextCtrl_SetStyle, METH_VARARGS | METH_KEYWORDS },
@@ -11885,15 +12407,31 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxTextCtrl", (PyCFunction) _wrap_new_wxTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_Combine", (PyCFunction) _wrap_wxTextAttr_Combine, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_IsDefault", (PyCFunction) _wrap_wxTextAttr_IsDefault, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_GetFlags", (PyCFunction) _wrap_wxTextAttr_GetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_GetRightIndent", (PyCFunction) _wrap_wxTextAttr_GetRightIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_GetLeftIndent", (PyCFunction) _wrap_wxTextAttr_GetLeftIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_GetTabs", (PyCFunction) _wrap_wxTextAttr_GetTabs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_GetAlignment", (PyCFunction) _wrap_wxTextAttr_GetAlignment, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetFont", (PyCFunction) _wrap_wxTextAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetBackgroundColour", (PyCFunction) _wrap_wxTextAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetTextColour", (PyCFunction) _wrap_wxTextAttr_GetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_HasFlag", (PyCFunction) _wrap_wxTextAttr_HasFlag, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_HasRightIndent", (PyCFunction) _wrap_wxTextAttr_HasRightIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_HasLeftIndent", (PyCFunction) _wrap_wxTextAttr_HasLeftIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_HasTabs", (PyCFunction) _wrap_wxTextAttr_HasTabs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_HasAlignment", (PyCFunction) _wrap_wxTextAttr_HasAlignment, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_HasFont", (PyCFunction) _wrap_wxTextAttr_HasFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_HasBackgroundColour", (PyCFunction) _wrap_wxTextAttr_HasBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_HasTextColour", (PyCFunction) _wrap_wxTextAttr_HasTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_SetFlags", (PyCFunction) _wrap_wxTextAttr_SetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_SetRightIndent", (PyCFunction) _wrap_wxTextAttr_SetRightIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_SetLeftIndent", (PyCFunction) _wrap_wxTextAttr_SetLeftIndent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_SetTabs", (PyCFunction) _wrap_wxTextAttr_SetTabs, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_SetAlignment", (PyCFunction) _wrap_wxTextAttr_SetAlignment, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_SetFont", (PyCFunction) _wrap_wxTextAttr_SetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_SetBackgroundColour", (PyCFunction) _wrap_wxTextAttr_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_SetTextColour", (PyCFunction) _wrap_wxTextAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_Init", (PyCFunction) _wrap_wxTextAttr_Init, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxTextAttr", (PyCFunction) _wrap_delete_wxTextAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTextAttr", (PyCFunction) _wrap_new_wxTextAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_HitTestXY", (PyCFunction) _wrap_wxCheckListBox_HitTestXY, METH_VARARGS | METH_KEYWORDS },
@@ -12232,6 +12770,42 @@ SWIGEXPORT(void) initcontrolsc() {
 	 d = PyModule_GetDict(m);
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultValidator",_wrap_wxDefaultValidator_get, _wrap_wxDefaultValidator_set);
+	 PyDict_SetItemString(d,"wxTE_NO_VSCROLL", PyInt_FromLong((long) wxTE_NO_VSCROLL));
+	 PyDict_SetItemString(d,"wxTE_AUTO_SCROLL", PyInt_FromLong((long) wxTE_AUTO_SCROLL));
+	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
+	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
+	 PyDict_SetItemString(d,"wxTE_PROCESS_TAB", PyInt_FromLong((long) wxTE_PROCESS_TAB));
+	 PyDict_SetItemString(d,"wxTE_LEFT", PyInt_FromLong((long) wxTE_LEFT));
+	 PyDict_SetItemString(d,"wxTE_CENTER", PyInt_FromLong((long) wxTE_CENTER));
+	 PyDict_SetItemString(d,"wxTE_RIGHT", PyInt_FromLong((long) wxTE_RIGHT));
+	 PyDict_SetItemString(d,"wxTE_CENTRE", PyInt_FromLong((long) wxTE_CENTRE));
+	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));
+	 PyDict_SetItemString(d,"wxTE_PROCESS_ENTER", PyInt_FromLong((long) wxTE_PROCESS_ENTER));
+	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
+	 PyDict_SetItemString(d,"wxTE_AUTO_URL", PyInt_FromLong((long) wxTE_AUTO_URL));
+	 PyDict_SetItemString(d,"wxTE_NOHIDESEL", PyInt_FromLong((long) wxTE_NOHIDESEL));
+	 PyDict_SetItemString(d,"wxTE_DONTWRAP", PyInt_FromLong((long) wxTE_DONTWRAP));
+	 PyDict_SetItemString(d,"wxTE_LINEWRAP", PyInt_FromLong((long) wxTE_LINEWRAP));
+	 PyDict_SetItemString(d,"wxTE_WORDWRAP", PyInt_FromLong((long) wxTE_WORDWRAP));
+	 PyDict_SetItemString(d,"wxTE_RICH2", PyInt_FromLong((long) wxTE_RICH2));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_TEXT_COLOUR", PyInt_FromLong((long) wxTEXT_ATTR_TEXT_COLOUR));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_BACKGROUND_COLOUR", PyInt_FromLong((long) wxTEXT_ATTR_BACKGROUND_COLOUR));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT_FACE", PyInt_FromLong((long) wxTEXT_ATTR_FONT_FACE));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT_SIZE", PyInt_FromLong((long) wxTEXT_ATTR_FONT_SIZE));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT_WEIGHT", PyInt_FromLong((long) wxTEXT_ATTR_FONT_WEIGHT));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT_ITALIC", PyInt_FromLong((long) wxTEXT_ATTR_FONT_ITALIC));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT_UNDERLINE", PyInt_FromLong((long) wxTEXT_ATTR_FONT_UNDERLINE));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_FONT", PyInt_FromLong((long) wxTEXT_ATTR_FONT));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_ALIGNMENT", PyInt_FromLong((long) wxTEXT_ATTR_ALIGNMENT));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_LEFT_INDENT", PyInt_FromLong((long) wxTEXT_ATTR_LEFT_INDENT));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_RIGHT_INDENT", PyInt_FromLong((long) wxTEXT_ATTR_RIGHT_INDENT));
+	 PyDict_SetItemString(d,"wxTEXT_ATTR_TABS", PyInt_FromLong((long) wxTEXT_ATTR_TABS));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_DEFAULT", PyInt_FromLong((long) wxTEXT_ALIGNMENT_DEFAULT));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_LEFT", PyInt_FromLong((long) wxTEXT_ALIGNMENT_LEFT));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_CENTRE", PyInt_FromLong((long) wxTEXT_ALIGNMENT_CENTRE));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_CENTER", PyInt_FromLong((long) wxTEXT_ALIGNMENT_CENTER));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_RIGHT", PyInt_FromLong((long) wxTEXT_ALIGNMENT_RIGHT));
+	 PyDict_SetItemString(d,"wxTEXT_ALIGNMENT_JUSTIFIED", PyInt_FromLong((long) wxTEXT_ALIGNMENT_JUSTIFIED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong((long) wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
 {
    int i;

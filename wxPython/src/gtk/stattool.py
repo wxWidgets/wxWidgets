@@ -241,6 +241,9 @@ class wxToolBarBasePtr(wxControlPtr):
     def SetToolClientData(self, *_args, **_kwargs):
         val = stattoolc.wxToolBarBase_SetToolClientData(self, *_args, **_kwargs)
         return val
+    def GetToolPos(self, *_args, **_kwargs):
+        val = stattoolc.wxToolBarBase_GetToolPos(self, *_args, **_kwargs)
+        return val
     def GetToolState(self, *_args, **_kwargs):
         val = stattoolc.wxToolBarBase_GetToolState(self, *_args, **_kwargs)
         return val
@@ -512,3 +515,14 @@ def wxPreToolBarSimple(*_args,**_kwargs):
 wxTOOL_STYLE_BUTTON = stattoolc.wxTOOL_STYLE_BUTTON
 wxTOOL_STYLE_SEPARATOR = stattoolc.wxTOOL_STYLE_SEPARATOR
 wxTOOL_STYLE_CONTROL = stattoolc.wxTOOL_STYLE_CONTROL
+wxTB_HORIZONTAL = stattoolc.wxTB_HORIZONTAL
+wxTB_VERTICAL = stattoolc.wxTB_VERTICAL
+wxTB_3DBUTTONS = stattoolc.wxTB_3DBUTTONS
+wxTB_FLAT = stattoolc.wxTB_FLAT
+wxTB_DOCKABLE = stattoolc.wxTB_DOCKABLE
+wxTB_NOICONS = stattoolc.wxTB_NOICONS
+wxTB_TEXT = stattoolc.wxTB_TEXT
+wxTB_NODIVIDER = stattoolc.wxTB_NODIVIDER
+wxTB_NOALIGN = stattoolc.wxTB_NOALIGN
+wxTB_HORZ_LAYOUT = stattoolc.wxTB_HORZ_LAYOUT
+wxTB_HORZ_TEXT = stattoolc.wxTB_HORZ_TEXT

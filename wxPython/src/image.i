@@ -317,6 +317,7 @@ public:
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
+    static wxString GetImageExtWildcard();
 
 
     %addmethods {
@@ -339,7 +340,7 @@ public:
 
 
 // Alternate constructors
-%new wxImage* wxEmptyImage(int width=0, int height=0);
+%new wxImage* wxEmptyImage(int width=0, int height=0, bool clear = TRUE);
 %new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index = -1);
 %new wxImage* wxImageFromBitmap(const wxBitmap &bitmap);
 %new wxImage* wxImageFromData(int width, int height, unsigned char* data);
@@ -347,11 +348,11 @@ public:
 %new wxImage* wxImageFromStreamMime(wxInputStream& stream, const wxString& mimetype, int index = -1 );
 
 %{
-    wxImage* wxEmptyImage(int width=0, int height=0) {
-        if (width == 0 && height == 0)
-            return new wxImage;
+    wxImage* wxEmptyImage(int width=0, int height=0, bool clear = TRUE) {
+        if (width > 0 && height > 0)
+            return new wxImage(width, height, clear);
         else
-            return new wxImage(width, height);
+            return new wxImage;
     }
 
 

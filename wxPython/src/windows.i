@@ -228,7 +228,6 @@ public:
     void FitInside();
 
     wxColour GetBackgroundColour();
-    wxBorder GetBorder() const;
 
     //wxList& GetChildren();
     %addmethods {
@@ -385,7 +384,10 @@ public:
     bool Show(bool show=TRUE);
     bool TransferDataFromWindow();
     bool TransferDataToWindow();
-    void UpdateWindowUI();
+
+    // send wxUpdateUIEvents to this window, and children if recurse is TRUE
+    void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
     bool Validate();
 
     %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
@@ -459,6 +461,25 @@ public:
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
     wxAcceleratorTable *GetAcceleratorTable();
 
+    %addmethods {
+        // hot keys (system wide accelerators)
+        bool RegisterHotKey(int hotkeyId, int modifiers, int keycode) {
+#if wxUSE_HOTKEY
+            return self->RegisterHotKey(hotkeyId, modifiers, keycode);
+#else
+            return FALSE;
+#endif
+        }
+
+        bool UnregisterHotKey(int hotkeyId) {
+#if wxUSE_HOTKEY
+            return self->UnregisterHotKey(hotkeyId);
+#else
+            return FALSE;
+#endif
+        }
+    }
+
 #ifdef __WXMSW__
     // A way to do the native draw first...  Too bad it isn't in wxGTK too.
     void OnPaint(wxPaintEvent& event);
@@ -486,6 +507,15 @@ public:
 
     void SetThemeEnabled(bool enable);
     bool GetThemeEnabled();
+
+    // get the window border style from the given flags: this is different from
+    // simply doing flags & wxBORDER_MASK because it uses GetDefaultBorder() to
+    // translate wxBORDER_DEFAULT to something reasonable
+    %name(GetBorderFlags) wxBorder GetBorder(long flags) const;
+
+    // get border for the flags of this window
+    wxBorder GetBorder() const;
+
 };
 
 
@@ -716,6 +746,7 @@ public:
 
     int FindItem(const wxString& itemString);
     %name(FindItemById)wxMenuItem* FindItem(int id/*, wxMenu **menu = NULL*/);
+    wxMenuItem* FindItemByPosition(size_t position) const;
 
     wxString GetTitle();
     void SetTitle(const wxString& title);

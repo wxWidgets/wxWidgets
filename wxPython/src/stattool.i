@@ -91,6 +91,20 @@ enum wxToolBarToolStyle
     wxTOOL_STYLE_CONTROL
 };
 
+enum {
+    wxTB_HORIZONTAL,
+    wxTB_VERTICAL,
+    wxTB_3DBUTTONS,
+    wxTB_FLAT,
+    wxTB_DOCKABLE,
+    wxTB_NOICONS,
+    wxTB_TEXT,
+    wxTB_NODIVIDER,
+    wxTB_NOALIGN,
+    wxTB_HORZ_LAYOUT,
+    wxTB_HORZ_TEXT,
+};
+
 
 
 class wxToolBarToolBase : public wxObject {
@@ -382,6 +396,8 @@ public:
         }
     }
 
+    // returns tool pos, or wxNOT_FOUND if tool isn't found
+    int GetToolPos(int id) const;
 
     bool GetToolState(int id);
     bool GetToolEnabled(int id);

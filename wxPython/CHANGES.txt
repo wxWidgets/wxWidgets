@@ -2,6 +2,40 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.5.0.x
+-------
+
+Many, many little fixes, changes and additions done as part of the move
+to wxWindows 2.5 that I have forgotten about.
+
+Changed the import-startup-bootstrap process employed by wxPython such
+that wxWindows and the underlying gui toolkit are not initialized
+until the wxApp object is created (but before wxApp.OnInit is called.)
+This was required because of changes made to the C++ wxApp class.
+There are both benefits and potential problems with this change.  The
+benefits are that you can import wxPython without requiring access to
+a GUI (for checking version numbers, etc.) and that in a
+multi-threaded environment the thread that creates the app object will
+now be the GUI thread instead of the one that imports wxPython.  Some
+potential problems are that the C++ side of the "stock-objects"
+(wxBLUE_PEN, wxTheColourDatabase, etc.) are not initialized until the
+wxApp object is created, so you should not use them until then.  Also,
+you will probably not be able to do any kind of GUI operation unless
+you have an app object first, (even on Windows where most anything was
+possible beofre.)
+
+Added wxMirrorDC.
+
+Added wxIconLocation
+
+wxPython's setup.py script now expects to use existing libraries for
+the contribs (gizmos, stc, xrc, etc.) rather than building local
+copies of them.
+
+
+
+
+
 2.4.1.x
 -------
 

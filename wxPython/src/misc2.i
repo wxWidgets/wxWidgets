@@ -33,6 +33,7 @@
 #include <wx/mimetype.h>
 #include <wx/snglinst.h>
 #include <wx/effects.h>
+#include <wx/sysopt.h>
 %}
 
 //----------------------------------------------------------------------
@@ -71,6 +72,9 @@ wxString wxFileSelector(const wxString& message = wxPyFileSelectorPromptStr,
                         int flags = 0,
                         wxWindow *parent = NULL,
                         int x = -1, int y = -1);
+
+// TODO: wxFileSelectorEx
+
 
 // Ask for filename to load
 wxString wxLoadFileSelector(const wxString& what,
@@ -339,6 +343,23 @@ public:
 
 };
 
+
+
+class wxSystemOptions : public wxObject
+{
+public:
+    wxSystemOptions() { }
+
+    // User-customizable hints to wxWindows or associated libraries
+    // These could also be used to influence GetSystem... calls, indeed
+    // to implement SetSystemColour/Font/Metric
+
+    static void SetOption(const wxString& name, const wxString& value);
+    %name(SetOptionInt)static void SetOption(const wxString& name, int value);
+    static wxString GetOption(const wxString& name) ;
+    static int GetOptionInt(const wxString& name) ;
+    static bool HasOption(const wxString& name) ;
+};
 
 
 //---------------------------------------------------------------------------

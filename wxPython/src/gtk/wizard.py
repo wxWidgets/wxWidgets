@@ -223,6 +223,12 @@ class wxWizardPtr(wxDialogPtr):
     def FitToPage(self, *_args, **_kwargs):
         val = wizardc.wxWizard_FitToPage(self, *_args, **_kwargs)
         return val
+    def GetPageAreaSizer(self, *_args, **_kwargs):
+        val = wizardc.wxWizard_GetPageAreaSizer(self, *_args, **_kwargs)
+        return val
+    def SetBorder(self, *_args, **_kwargs):
+        val = wizardc.wxWizard_SetBorder(self, *_args, **_kwargs)
+        return val
     def IsRunning(self, *_args, **_kwargs):
         val = wizardc.wxWizard_IsRunning(self, *_args, **_kwargs)
         return val

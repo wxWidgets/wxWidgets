@@ -566,6 +566,9 @@ class wxGridCellAttrPtr :
     def HasReadWriteMode(self, *_args, **_kwargs):
         val = gridc.wxGridCellAttr_HasReadWriteMode(self, *_args, **_kwargs)
         return val
+    def HasOverflowMode(self, *_args, **_kwargs):
+        val = gridc.wxGridCellAttr_HasOverflowMode(self, *_args, **_kwargs)
+        return val
     def GetTextColour(self, *_args, **_kwargs):
         val = gridc.wxGridCellAttr_GetTextColour(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
