@@ -6,7 +6,7 @@
 // Created:     2004-11-04
 // RCS-ID:      $Id$
 // Copyright:   (c) David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 // Notes:       This code comes from src/mac/carbon/utilsexc.cpp,1.11
 /////////////////////////////////////////////////////////////////////////////
 
@@ -25,20 +25,20 @@ extern "C" {
 
 void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
 {
-	wxEndProcessData *proc_data = (wxEndProcessData*)data;
-	wxLogDebug(wxT("Wow.. this actually worked!"));
-	int status = 0;
-	int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
-	if(!rc)
-	{
-		wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
-		return;
-	}
-	if((rc != -1) && WIFEXITED(status))
-		proc_data->exitcode = WEXITSTATUS(status);
-	else
-		proc_data->exitcode = -1;
-	wxHandleProcessTermination(proc_data);
+    wxEndProcessData *proc_data = (wxEndProcessData*)data;
+    wxLogDebug(wxT("Wow.. this actually worked!"));
+    int status = 0;
+    int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
+    if(!rc)
+    {
+    	wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
+    	return;
+    }
+    if((rc != -1) && WIFEXITED(status))
+    	proc_data->exitcode = WEXITSTATUS(status);
+    else
+    	proc_data->exitcode = -1;
+    wxHandleProcessTermination(proc_data);
 }
 
 int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
