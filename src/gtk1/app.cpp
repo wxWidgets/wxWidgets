@@ -28,6 +28,11 @@
 #include "wx/module.h"
 #include "wx/image.h"
 
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/theme.h"
+    #include "wx/univ/renderer.h"
+#endif
+
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
@@ -859,13 +864,14 @@ int wxEntry( int argc, char *argv[] )
     return retValue;
 }
 
+#ifndef __WXUNIVERSAL__
+
 #include "wx/gtk/info.xpm"
 #include "wx/gtk/error.xpm"
 #include "wx/gtk/question.xpm"
 #include "wx/gtk/warning.xpm"
 
-wxIcon
-wxApp::GetStdIcon(int which) const
+wxIcon wxApp::GetStdIcon(int which) const
 {
     switch(which)
     {
@@ -886,6 +892,13 @@ wxApp::GetStdIcon(int which) const
             return wxIcon(error_xpm);
     }
 }
+#else
+wxIcon wxApp::GetStdIcon(int which) const
+{
+    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
+}
+#endif // !__WXUNIVERSAL__
+
 
 #ifdef __WXDEBUG__
 

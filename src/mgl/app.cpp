@@ -31,6 +31,8 @@
 
 #include "wx/app.h"
 #include "wx/fontutil.h"
+#include "wx/univ/theme.h"
+#include "wx/univ/renderer.h"
 #include "wx/mgl/private.h"
 
 #define MGL_DEBUG
@@ -324,27 +326,9 @@ bool wxApp::Initialize()
     return TRUE;
 }
 
-#include "info.xpm"
-#include "error.xpm"
-#include "question.xpm"
-#include "warning.xpm"
-
 wxIcon wxApp::GetStdIcon(int which) const
 {
-    switch(which)
-    {
-        case wxICON_INFORMATION:
-            return wxIcon(info_xpm);
-        case wxICON_QUESTION:
-            return wxIcon(question_xpm);
-        case wxICON_EXCLAMATION:
-            return wxIcon(warning_xpm);
-        default:
-            wxFAIL_MSG(wxT("requested non existent standard icon"));
-            // still fall through
-        case wxICON_HAND:
-            return wxIcon(error_xpm);
-    }
+    return wxTheme::Get()->GetRenderer()->GetStdIcon(which);
 }
 
 void wxApp::CleanUp()
