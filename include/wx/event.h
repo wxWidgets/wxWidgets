@@ -283,6 +283,10 @@ public:
     void Skip(bool skip = TRUE) { m_skipped = skip; }
     bool GetSkipped() const { return m_skipped; };
 
+    // implementation only: this test is explicitlty anti OO and this functions
+    // exists only for optimization purposes
+    bool IsCommandEvent() const { return m_isCommandEvent; }
+
 public:
     bool              m_skipped;
     wxObject*         m_eventObject;
@@ -291,6 +295,10 @@ public:
     long              m_timeStamp;
     int               m_id;
     wxObject*         m_callbackUserData;
+
+    // optimization: instead of using costly IsKindOf() we keep a flag telling
+    // whether we're a command event (by far the most common case)
+    bool              m_isCommandEvent;
 };
 
 // Item or menu event class
@@ -1182,13 +1190,19 @@ private:
     static const wxEventTableEntry         sm_eventTableEntries[];
 
 protected:
-    static const wxEventTable        sm_eventTable;
-    virtual const wxEventTable*        GetEventTable() const;
+    static const wxEventTable sm_eventTable;
+
+    virtual const wxEventTable *GetEventTable() const;
+
 protected:
     wxEvtHandler*     m_nextHandler;
     wxEvtHandler*     m_previousHandler;
-    bool              m_enabled;                      // Is event handler enabled?
+    bool              m_enabled;           // Is event handler enabled?
     wxList*           m_dynamicEvents;
+
+    // optimization: instead of using costly IsKindOf() to decide whether we're
+    // a window (which is true in 99% of cases), use this flag
+    bool              m_isWindow;
 };
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);

@@ -96,6 +96,7 @@ wxEvent::wxEvent(int theId)
     m_id = theId;
     m_skipped = FALSE;
     m_callbackUserData = (wxObject *) NULL;
+    m_isCommandEvent = FALSE;
 }
 
 /*
@@ -112,6 +113,7 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_commandInt = 0;
     m_id = theId;
     m_commandString = (char *) NULL;
+    m_isCommandEvent = TRUE;
 }
 
 /*
@@ -280,6 +282,7 @@ wxEvtHandler::wxEvtHandler()
     m_previousHandler = (wxEvtHandler *) NULL;
     m_enabled = TRUE;
     m_dynamicEvents = (wxList *) NULL;
+    m_isWindow = FALSE;
 }
 
 wxEvtHandler::~wxEvtHandler()
@@ -311,14 +314,15 @@ wxEvtHandler::~wxEvtHandler()
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
-    bool isWindow = IsKindOf(CLASSINFO(wxWindow));
+    // check that our flag corresponds to reality
+    wxASSERT( m_isWindow == IsKindOf(CLASSINFO(wxWindow)) );
 
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
         // Handle per-instance dynamic event tables first
 
-        if (SearchDynamicEventTable( event ))
+        if ( m_dynamicEvents && SearchDynamicEventTable(event) )
             return TRUE;
 
         // Then static per-class event tables
@@ -333,24 +337,26 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         // THIS CAN BE CURED if PushEventHandler is used instead of
         // SetEventHandler, and then processing will be passed down the
         // chain of event handlers.
-        if ( isWindow )
+        if ( m_isWindow )
         {
             wxWindow *win = (wxWindow *)this;
 
             // Can only use the validator of the window which
             // is receiving the event
-            if ( (win == event.GetEventObject()) &&
-                    win->GetValidator() &&
-                    win->GetValidator()->ProcessEvent(event))
+            if ( win == event.GetEventObject() )
             {
-                return TRUE;
+                wxValidator *validator = win->GetValidator();
+                if ( validator && validator->ProcessEvent(event) )
+                {
+                    return TRUE;
+                }
             }
         }
 
         // Search upwards through the inheritance hierarchy
-        while (table)
+        while ( table )
         {
-            if (SearchEventTable((wxEventTable&)*table, event))
+            if ( SearchEventTable((wxEventTable&)*table, event) )
                 return TRUE;
             table = table->baseTable;
         }
@@ -366,23 +372,25 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // Carry on up the parent-child hierarchy,
     // but only if event is a command event: it wouldn't
     // make sense for a parent to receive a child's size event, for example
-    if ( isWindow && event.IsKindOf(CLASSINFO(wxCommandEvent)) )
+    if ( m_isWindow && event.IsCommandEvent() )
     {
         wxWindow *win = (wxWindow *)this;
         wxWindow *parent = win->GetParent();
         if (parent && !parent->IsBeingDeleted())
-            return win->GetParent()->GetEventHandler()->ProcessEvent(event);
+            return parent->GetEventHandler()->ProcessEvent(event);
     }
 
     // Last try - application object.
-    // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always swallow
-    // it. wxEVT_IDLE is sent explicitly to wxApp so it will be processed
-    // appropriately via SearchEventTable.
-    if ( wxTheApp && (this != wxTheApp) && (event.GetEventType() != wxEVT_IDLE)
-       )
+    if ( wxTheApp && (this != wxTheApp) )
     {
-        if ( wxTheApp->ProcessEvent(event) )
-            return TRUE;
+        // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always
+        // swallow it. wxEVT_IDLE is sent explicitly to wxApp so it will be
+        // processed appropriately via SearchEventTable.
+        if ( event.GetEventType() != wxEVT_IDLE )
+        {
+            if ( wxTheApp->ProcessEvent(event) )
+                return TRUE;
+        }
     }
 
     return FALSE;
@@ -442,7 +450,8 @@ void wxEvtHandler::Connect( int id, int lastId,
 
 bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 {
-    if (!m_dynamicEvents) return FALSE;
+    wxCHECK_MSG( m_dynamicEvents, FALSE,
+                 "caller should check that we have dynamic events" );
 
     int commandId = event.GetId();
 
@@ -484,5 +493,5 @@ bool wxEvtHandler::OnClose()
     else
         return FALSE;
 }
-#endif
+#endif // WXWIN_COMPATIBILITY
 
