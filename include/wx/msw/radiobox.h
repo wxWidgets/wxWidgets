@@ -21,7 +21,7 @@
 WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
 
 // List box item
-class WXDLLEXPORT wxBitmap ;
+class WXDLLEXPORT wxBitmap;
 
 class WXDLLEXPORT wxRadioBox : public wxControl
 {
@@ -35,18 +35,6 @@ public:
             int x = -1, int y = -1, int width = -1, int height = -1,
             int n = 0, char **choices = NULL,
             int majorDim = 0, long style = wxRA_HORIZONTAL, const char *name = wxRadioBoxNameStr);
-
-    /*
-       inline wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
-       int x, int y, int width, int height,
-       int n, wxBitmap **choices,
-       int majorDim = 0, long style = wxRA_HORIZONTAL, const char *name = wxRadioBoxNameStr)
-       {
-       Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), n, (const wxBitmap **)choices, majorDim, style,
-       wxDefaultValidator, name);
-       Callback(func);
-       }
-     */
 #endif // WXWIN_COMPATIBILITY
 
     wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -58,17 +46,6 @@ public:
         Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
     }
 
-    /*
-       wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
-       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-       int n = 0, const wxBitmap *choices[] = NULL,
-       int majorDim = 0, long style = wxRA_HORIZONTAL,
-       const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr)
-       {
-       Create(parent, id, title, pos, size, n, choices, majorDim, style, val, name);
-       }
-     */
-
     ~wxRadioBox();
 
     bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -77,17 +54,9 @@ public:
             int majorDim = 0, long style = wxRA_HORIZONTAL,
             const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
 
-    /*
-       bool Create(wxWindow *parent, wxWindowID id, const wxString& title,
-       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-       int n = 0, const wxBitmap *choices[] = NULL,
-       int majorDim = 0, long style = wxRA_HORIZONTAL,
-       const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
-     */
-
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     int FindString(const wxString& s) const;
     void SetSelection(int N);
@@ -99,20 +68,20 @@ public:
 
     wxString GetLabel() const;
     void SetLabel(const wxString& label);
-    void SetLabel(int item, const wxString& label) ;
-    void SetLabel(int item, wxBitmap *bitmap) ;
+    void SetLabel(int item, const wxString& label);
+    void SetLabel(int item, wxBitmap *bitmap);
     wxString GetLabel(int item) const;
     bool Show(bool show);
     void SetFocus();
     void Enable(bool enable);
     void Enable(int item, bool enable);
-    void Show(int item, bool show) ;
+    void Show(int item, bool show);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
     virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection(const wxString& s);
-    virtual int Number() const { return m_noItems; } ;
+    virtual int Number() const { return m_noItems; };
     void Command(wxCommandEvent& event);
 
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
@@ -120,15 +89,21 @@ public:
 
     // Implementation
     WXHWND *GetRadioButtons() const { return m_radioButtons; }
-    bool ContainsHWND(WXHWND hWnd) const ;
+    bool ContainsHWND(WXHWND hWnd) const;
 
     long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
+    // get the number of buttons per column/row
+    inline int GetNumVer() const;
+    inline int GetNumHor() const;
+
 protected:
+    void SubclassRadioButton(WXHWND hWndBtn);
+
     WXHWND *          m_radioButtons;
-    int               m_majorDim ;
-    int *             m_radioWidth ;  // for bitmaps
-    int *             m_radioHeight ;
+    int               m_majorDim;
+    int *             m_radioWidth;  // for bitmaps
+    int *             m_radioHeight;
 
     int               m_noItems;
     int               m_noRowsOrCols;

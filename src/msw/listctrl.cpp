@@ -1059,22 +1059,37 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
             lvCol.fmt = LVCFMT_CENTER;
     }
 
+    lvCol.mask |= LVCF_WIDTH;
     if ( item.m_mask & wxLIST_MASK_WIDTH )
     {
-        lvCol.mask |= LVCF_WIDTH;
-        lvCol.cx = item.m_width;
-
-        if ( lvCol.cx == wxLIST_AUTOSIZE)
+        if ( item.m_width == wxLIST_AUTOSIZE)
             lvCol.cx = LVSCW_AUTOSIZE;
-        else if ( lvCol.cx == wxLIST_AUTOSIZE_USEHEADER)
+        else if ( item.m_width == wxLIST_AUTOSIZE_USEHEADER)
             lvCol.cx = LVSCW_AUTOSIZE_USEHEADER;
+        else
+            lvCol.cx = item.m_width;
     }
+    else
+    {
+        // always give some width to the new column: this one is compatible
+        // with wxGTK
+        lvCol.cx = 80;
+    }
+
     lvCol.mask |= LVCF_SUBITEM;
     lvCol.iSubItem = col;
 
-    bool success = (ListView_InsertColumn((HWND) GetHWND(), col, & lvCol) != 0);
+    bool success = ListView_InsertColumn((HWND) GetHWND(), col, & lvCol) != -1;
     if ( success )
-        m_colCount ++;
+    {
+        m_colCount++;
+    }
+    else
+    {
+        wxLogDebug("Failed to insert the column '%s' into listview!",
+                   lvCol.pszText);
+    }
+
     return success;
 }
 

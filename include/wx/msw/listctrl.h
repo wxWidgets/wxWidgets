@@ -171,7 +171,7 @@ public:
     int             m_format;   // left, right, centre
     int             m_width;    // width of column
 
-    wxListItem(void);
+    wxListItem();
 };
 
 // type of compare function for wxListCtrl sort operation
@@ -185,7 +185,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
    * Public interface
    */
 
-  wxListCtrl(void);
+  wxListCtrl();
 
   inline wxListCtrl(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator,
@@ -193,7 +193,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   {
     Create(parent, id, pos, size, style, validator, name);
   }
-  ~wxListCtrl(void);
+  ~wxListCtrl();
 
   bool Create(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxLC_ICON, const wxValidator& validator = wxDefaultValidator, const wxString& name = "wxListCtrl");
@@ -222,10 +222,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // visible area of the list control (list or report view)
   // or the total number of items in the list control (icon
   // or small icon view)
-  int GetCountPerPage(void) const;
+  int GetCountPerPage() const;
 
   // Gets the edit control for editing labels.
-  wxTextCtrl* GetEditControl(void) const;
+  wxTextCtrl* GetEditControl() const;
 
   // Gets information about the item
   bool GetItem(wxListItem& info) const ;
@@ -267,10 +267,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool SetItemPosition(long item, const wxPoint& pos) ;
 
   // Gets the number of items in the list control
-  int GetItemCount(void) const;
+  int GetItemCount() const;
 
   // Gets the number of columns in the list control
-  int GetColumnCount(void) const;
+  int GetColumnCount() const { return m_colCount; }
 
   // Retrieves the spacing between icons in pixels.
   // If small is TRUE, gets the spacing for the small icon
@@ -278,17 +278,17 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   int GetItemSpacing(bool isSmall) const;
 
   // Gets the number of selected items in the list control
-  int GetSelectedItemCount(void) const;
+  int GetSelectedItemCount() const;
 
   // Gets the text colour of the listview
-  wxColour GetTextColour(void) const;
+  wxColour GetTextColour() const;
 
   // Sets the text colour of the listview
   void SetTextColour(const wxColour& col);
 
   // Gets the index of the topmost visible item when in
   // list or report view
-  long GetTopItem(void) const ;
+  long GetTopItem() const ;
 
   // Add or remove a single window style
   void SetSingleStyle(long style, bool add = TRUE) ;
@@ -330,16 +330,16 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool DeleteItem(long item);
 
   // Deletes all items
-  bool DeleteAllItems(void) ;
+  bool DeleteAllItems() ;
 
   // Deletes a column
   bool DeleteColumn(int col);
 
   // Deletes all columns
-  bool DeleteAllColumns(void);
+  bool DeleteAllColumns();
 
   // Clears items, and columns if there are any.
-  void ClearAll(void);
+  void ClearAll();
 
   // Edit the label
   wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
@@ -422,7 +422,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam, WXLPARAM *result);
 
   // Recreate window - seems to be necessary when changing a style.
-  void RecreateWindow(void);
+  void RecreateWindow();
 
   // Add to pool: necessary because Windows needs to have a string
   // still exist across 3 callbacks.
