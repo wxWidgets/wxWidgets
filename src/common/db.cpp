@@ -51,6 +51,7 @@
     #include "wx/ioswrap.h"
 #endif
 
+
 #ifdef    __BORLANDC__
     #pragma hdrstop
 #endif  //__BORLANDC__
@@ -830,22 +831,25 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
     if (SQLGetData(hstmt, 1, SQL_C_CHAR, (UCHAR*) structSQLTypeInfo.TypeName, DB_TYPE_NAME_LEN, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
 
+
+    // BJO 20000503: no more needed with new GetColumns...
+#if  OLD_GETCOLUMNS
     // BJO 991209
     if (Dbms() == dbmsMY_SQL)
-    {
+      {
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint unsigned")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint unsigned");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "integer")) wxStrcpy(structSQLTypeInfo.TypeName, "int");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "integer unsigned")) wxStrcpy(structSQLTypeInfo.TypeName, "int unsigned");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "varchar")) wxStrcpy(structSQLTypeInfo.TypeName, "char");
-    }
-
+      }
+    
     // BJO 20000427 : OpenLink driver 
     if (!wxStrncmp(dbInf.driverName, "oplodbc", 7) ||
 	!wxStrncmp(dbInf.driverName, "OLOD", 4))    
       if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision")) wxStrcpy(structSQLTypeInfo.TypeName, "real");
-    
+#endif
 
     if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -1553,6 +1557,7 @@ int wxDb::GetKeyFields(char *tableName, wxDbColInf* colInf, int noCols)
 }  // wxDb::GetKeyFields()
 
 
+#if OLD_GETCOLUMNS
 /********** wxDb::GetColumns() **********/
 wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
 /*
@@ -1734,21 +1739,22 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
 
 
 /********** wxDb::GetColumns() **********/
+
 wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
-/*
- * Same as the above GetColumns() function except this one gets columns
- * only for a single table, and if 'numCols' is not NULL, the number of
- * columns stored in the returned wxDbColInf is set in '*numCols'
- *
- * userID is evaluated in the following manner:
- *        userID == NULL  ... UserID is ignored
- *        userID == ""    ... UserID set equal to 'this->uid'
- *        userID != ""    ... UserID set equal to 'userID'
- *
- * NOTE: ALL column bindings associated with this wxDb instance are unbound
- *       by this function.  This function should use its own wxDb instance
- *       to avoid undesired unbinding of columns.
- */
+//
+// Same as the above GetColumns() function except this one gets columns
+// only for a single table, and if 'numCols' is not NULL, the number of
+// columns stored in the returned wxDbColInf is set in '*numCols'
+//
+// userID is evaluated in the following manner:
+//        userID == NULL  ... UserID is ignored
+//        userID == ""    ... UserID set equal to 'this->uid'
+//        userID != ""    ... UserID set equal to 'userID'
+//
+// NOTE: ALL column bindings associated with this wxDb instance are unbound
+//       by this function.  This function should use its own wxDb instance
+//       to avoid undesired unbinding of columns.
+
 {
     int       noCols = 0;
     int       colNo  = 0;
@@ -1919,6 +1925,180 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
     return colInf;
 
 }  // wxDb::GetColumns()
+
+#else  // New GetColumns
+
+
+
+/*
+
+BJO 20000503
+
+These are tentative new GetColumns members which should be more database independant and 
+which always returns the columns in the order they were created.
+
+*/
+
+typedef struct _TableColumns
+{
+  int noCols;
+  wxDbColInf *colInf;
+};
+
+wxDbColInf *wxDb::GetColumns(char *tableName[], const char* WXUNUSED(userID))
+{
+  // The last array element of the tableName[] argument must be zero (null).
+  // This is how the end of the array is detected.
+
+  int noCols = 0;
+
+  // How many tables ?
+  int tbl;
+  for (tbl = 0 ;  tableName[tbl]; tbl++); 
+
+  // Create a table to maintain the columns for each separate table
+  _TableColumns *TableColumns = new _TableColumns[tbl];
+  
+  // Fill the table
+  for (int i = 0 ; i < tbl ; i++)
+    {
+      TableColumns[i].colInf = GetColumns(tableName[i], &TableColumns[i].noCols);    
+      if (TableColumns[i].colInf == NULL) return NULL;
+      noCols += TableColumns[i].noCols;
+    }
+  
+  // Now merge all the separate table infos
+  wxDbColInf *colInf = new wxDbColInf[noCols+1];
+  
+  // Mark the end of the array
+  wxStrcpy(colInf[noCols].tableName, wxT(""));
+  wxStrcpy(colInf[noCols].colName, wxT(""));
+  colInf[noCols].sqlDataType = 0;
+  
+  // Merge ...
+  int offset = 0;
+  for (int i = 0 ; i < tbl ; i++)
+    {
+      for (int j = 0 ; j < TableColumns[i].noCols ; j++)
+	{
+	  colInf[offset++] = TableColumns[i].colInf[j];	    
+	}
+    }
+  delete [] TableColumns;
+  
+  return colInf;
+}
+
+
+/********** wxDb::GetColumns() **********/
+wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char* WXUNUSED(userID))
+{
+ 
+  wxDbColInf *colInf = 0;
+  short noCols;
+ 
+  // Build a generic SELECT statement which returns 0 rows
+  wxString Stmt;
+
+  Stmt.sprintf("select * from %s where 0=1", tableName);
+
+  // Execute query  
+  if (SQLExecDirect(hstmt, (UCHAR FAR *) Stmt.c_str(), SQL_NTS) != SQL_SUCCESS)
+    {
+      DispAllErrors(henv, hdbc, hstmt);
+      return NULL;
+    } 
+  
+  // Get the number of result columns
+  if (SQLNumResultCols (hstmt, &noCols) != SQL_SUCCESS)
+    {
+      DispAllErrors(henv, hdbc, hstmt);
+      return NULL;
+    }
+ 
+  
+  if (noCols == 0) // Probably a bogus table name
+    return NULL;
+
+  // Allocate noCols wxDbColInf objects to hold the column information
+  colInf = new wxDbColInf[noCols+1];
+  if (!colInf) return NULL;
+
+  // Mark the end of the array
+  wxStrcpy(colInf[noCols].tableName, wxT(""));
+  wxStrcpy(colInf[noCols].colName, wxT(""));
+  colInf[noCols].sqlDataType = 0;
+
+  
+  //  Get the name and other type information
+  for (short colNum = 0; colNum < noCols; colNum++)
+    {    
+      
+      if (SQLDescribeCol (hstmt, 
+			  colNum+1,  
+			  (UCHAR*) colInf[colNum].colName,DB_MAX_COLUMN_NAME_LEN+1,
+			  &colInf[colNum].bufferLength, 
+			  &colInf[colNum].sqlDataType, 
+			  (UDWORD*) &colInf[colNum].columnSize,
+			  &colInf[colNum].decimalDigits, 
+			  &colInf[colNum].nullable) != SQL_SUCCESS)
+	{
+	  DispAllErrors(henv, hdbc, hstmt);
+	  return NULL;
+	}
+      
+      
+      wxStrcpy(colInf[colNum].tableName, tableName);
+         
+      // Get the intern datatype
+      switch (colInf[colNum].sqlDataType)
+	{
+	case SQL_VARCHAR:
+	case SQL_CHAR:
+	  colInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
+	  wxStrcpy(colInf[colNum].typeName, typeInfVarchar.TypeName);
+	  break;
+	  
+	case SQL_TINYINT:
+	case SQL_SMALLINT:
+	case SQL_INTEGER:
+	  colInf[colNum].dbDataType = DB_DATA_TYPE_INTEGER;
+	  wxStrcpy(colInf[colNum].typeName, typeInfInteger.TypeName);
+	  break;
+	case SQL_DOUBLE:
+	case SQL_DECIMAL:
+	case SQL_NUMERIC:
+	case SQL_FLOAT:
+        case SQL_REAL:
+	  colInf[colNum].dbDataType = DB_DATA_TYPE_FLOAT;
+	  wxStrcpy(colInf[colNum].typeName, typeInfFloat.TypeName);
+	  break;
+	case SQL_DATE:
+	  colInf[colNum].dbDataType = DB_DATA_TYPE_DATE;
+	  wxStrcpy(colInf[colNum].typeName, typeInfDate.TypeName);
+	  break;
+	  
+	default:
+	  wxString s;
+	  s.sprintf("SQL Data type %d bot supported by wxWindows", colInf[colNum].sqlDataType);
+	  wxMessageBox(wxT(s));
+	  return NULL;
+	}
+    }
+  
+  
+  SQLFreeStmt(hstmt, SQL_CLOSE);
+  
+  // Store Primary and Foreign Keys
+  GetKeyFields(tableName,colInf,noCols);
+  
+  *numCols = (int) noCols;
+  
+  return colInf;
+
+}  // wxDb::GetColumns()
+
+#endif
 
 
 /********** wxDb::GetColumnCount() **********/

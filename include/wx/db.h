@@ -38,6 +38,12 @@
 #ifndef DB_DOT_H
 #define DB_DOT_H
 
+
+// BJO 20000503: introduce new GetColumns members which are  database independant and 
+//               return columns in the order they were created
+#define OLD_GETCOLUMNS 1
+
+
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
 // Use this line for wxWindows v2.x
@@ -300,6 +306,8 @@ public:
 };
 
 
+
+
 class WXDLLEXPORT wxDbTableInf        // Description of a Table
 {
 public:
@@ -486,8 +494,10 @@ public:
     wxDbInf     *GetCatalog(char *userID);
     bool         Catalog(const char *userID=NULL, const char *fileName = SQL_CATALOG_FILENAME);
     int          GetKeyFields(char *tableName, wxDbColInf* colInf, int nocols);
+
     wxDbColInf  *GetColumns(char *tableName[], const char *userID=NULL);
-    wxDbColInf  *GetColumns(char *tableName, int *numCols, const char *userID=NULL);
+    wxDbColInf  *GetColumns(char *tableName, int *numCols, const char *userID=NULL); 
+
     int          GetColumnCount(char *tableName, const char *userID=NULL);
     char        *GetDatabaseName(void) {return dbInf.dbmsName;}
     char        *GetDataSource(void)   {return dsn;}

@@ -586,7 +586,7 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
     {                                                               // so generate a select statement.
         BuildSelectStmt(sqlStmt, queryType, distinct);
         pDb->WriteSqlLog(sqlStmt);
-    }
+    } else wxStrcpy(sqlStmt, pSqlStmt);
 
     SQLFreeStmt(hstmt, SQL_CLOSE);
     if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) == SQL_SUCCESS)
@@ -1126,13 +1126,11 @@ bool wxDbTable::DropTable()
     {
         // Check for "Base table not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);	
-        if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found" 
+        if (wxStrcmp(pDb->sqlState,"S0002") && wxStrcmp(pDb->sqlState, "S1000"))  // "Base table not found" 
         {	 
             // Check for product specific error codes
             if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
-		  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000"))   ||
-		  (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // BJO20000427 with OpenLinkDriver
-                  (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,"S1000"))   ||   
+		  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000"))   ||	
                   (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,"08S01"))))     
             {
                 pDb->DispNextError();
