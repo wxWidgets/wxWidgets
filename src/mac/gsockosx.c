@@ -65,8 +65,6 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
 
   CFSocketRef cf = CFSocketCreateWithNative(NULL, socket->m_fd,
   			ALL_CALLBACK_TYPES, Mac_Socket_Callback, &cont);
-  /* Disable the callbacks until we are asked by GSocket to enable them. */
-  CFSocketDisableCallBacks(cf, ALL_CALLBACK_TYPES);
   CFRunLoopSourceRef source = CFSocketCreateRunLoopSource(NULL, cf, 0);
   assert(source);
   /* Turn off kCFSocketCloseOnInvalidate  (NOTE: > 10.2 only!) */
@@ -77,7 +75,6 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
      avoid having to set any special flags at all. */
   CFSocketSetSocketFlags(cf, kCFSocketAutomaticallyReenableReadCallBack | kCFSocketAutomaticallyReenableWriteCallBack);
   socket->m_gui_dependent = (char*)data;
-  CFRunLoopAddSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
 
   /* Keep the source and the socket around. */
   data->source = source;
@@ -113,8 +110,6 @@ void _GSocket_GUI_Destroy_Socket(GSocket *socket)
     struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
     if (data)
     {
-        /* CFSocketInvalidate does this anyway, so perhaps get rid of this: */
-        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
         CFSocketInvalidate(data->socket);
         CFRelease(data->socket);
         free(data);
@@ -175,20 +170,18 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 
 void _GSocket_Enable_Events(GSocket *socket)
 {
-    CFOptionFlags callBackTypes = kCFSocketReadCallBack | kCFSocketWriteCallBack;
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
 
-    if(!socket->m_server)
-        callBackTypes |= kCFSocketConnectCallBack;
-    CFSocketEnableCallBacks(data->socket, callBackTypes);
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopDefaultMode);
 }
 
 void _GSocket_Disable_Events(GSocket *socket)
 {
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
-    CFSocketDisableCallBacks(data->socket, ALL_CALLBACK_TYPES);
+
+    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
 }
 
 #endif // wxUSE_SOCKETS
