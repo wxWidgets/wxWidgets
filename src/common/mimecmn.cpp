@@ -207,7 +207,8 @@ wxFileType::wxFileType()
 
 wxFileType::~wxFileType()
 {
-    delete m_impl;
+    if ( m_impl )
+        delete m_impl;
 }
 
 bool wxFileType::GetExtensions(wxArrayString& extensions)
