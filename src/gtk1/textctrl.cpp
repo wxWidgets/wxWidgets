@@ -286,8 +286,12 @@ void wxTextCtrl::WriteText( const wxString &text )
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        //gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        // Find the current insertion point 
+	gint len = GTK_EDITABLE(m_text)->current_pos;
+	// Insert text at this point
         gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+	// Note: the insertion point is now at 'len' (past our insertion).
     }
     else
     {
@@ -426,6 +430,8 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 {
+  /* If you implement this, don't forget to update the documentation!
+   * (file docs/latex/wx/text.tex) */
     wxFAIL_MSG( "wxTextCtrl::OnDropFiles not implemented" );
 }
 
@@ -439,11 +445,8 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
         if( (unsigned long)pos > text.Len()  )
             return FALSE;
 
-        *x=1;   // Col 1
-        *y=1;   // Line 1
-
-        if (pos == 0)
-            return TRUE;
+        *x=0;   // First Col
+        *y=0;   // First Line
 
         const char* stop = text.c_str() + pos;
         for ( const char *p = text.c_str(); p < stop; p++ )
@@ -451,7 +454,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
             if (*p == '\n')
             {
                 (*y)++;
-                *x=1;
+                *x=0;
             }
             else
                 (*x)++;
@@ -461,7 +464,7 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         if ( pos <= GTK_ENTRY(m_text)->text_length )
         {
-            *y = 1;
+            *y = 0;
             *x = pos;
         }
         else
@@ -479,11 +482,9 @@ long wxTextCtrl::XYToPosition(long x, long y ) const
     if (!(m_windowStyle & wxTE_MULTILINE)) return 0;
 
     long pos=0;
-    /* This is a kludge; our XY values are 1-based, but GetLineLength()
-     * and --Text() start counting at 0. (and so say the docs) */
-    for( int i=1; i<y; i++ ) pos += GetLineLength(i-1) + 1; // one for '\n'
+    for( int i=0; i<y; i++ ) pos += GetLineLength(i) + 1; // one for '\n'
 
-    pos += x-1; // Pos start with 0
+    pos += x; 
     return pos;
 }
 
@@ -526,10 +527,20 @@ int wxTextCtrl::GetNumberOfLines() const
 
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
+    int len;
     wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-
-    if (m_windowStyle & wxTE_MULTILINE)
-        gtk_text_set_point( GTK_TEXT(m_text), (int)pos );
+    if (m_windowStyle & wxTE_MULTILINE) {
+        //gtk_text_set_point( GTK_TEXT(m_text), (int)pos );
+        /* HH: The call commented out above doesn't do anything. Don't know
+	 * why. The code below isn't perfect either; it doesn't move the
+	 * actual cursor, but subsequent calls to WriteText will insert
+	 * text at the set position and move the displayed cursor behind it as 
+	 * well. I guess this is good enough for most uses. */
+        len = gtk_text_get_length( GTK_TEXT(m_text) );
+	if ( (pos < 0) || (pos > len) )
+	  pos = len;
+	GTK_EDITABLE(m_text)->current_pos = (int)pos;
+    }
     else
         gtk_entry_set_position( GTK_ENTRY(m_text), (int)pos );
 }
@@ -583,7 +594,7 @@ long wxTextCtrl::GetLastPosition() const
     else
         pos = GTK_ENTRY(m_text)->text_length;
 
-    return (long)pos-1;
+    return (long)pos;
 }
 
 void wxTextCtrl::Remove( long from, long to )
