@@ -30,14 +30,6 @@
 #include "wx/textdlg.h"
 #endif
 
-#include "wx/ioswrap.h"
-
-#if wxUSE_IOSTREAMH
-    #include <fstream.h>
-#else
-    #include <fstream>
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

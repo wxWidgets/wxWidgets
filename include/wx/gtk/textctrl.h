@@ -29,10 +29,6 @@
 #include <iostream>
 #endif
 
-#else
-
-#define NO_TEXT_WINDOW_STREAM
-
 #endif
 
 //-----------------------------------------------------------------------------
@@ -51,7 +47,7 @@ extern const char *wxTextCtrlNameStr;
 //  wxTextCtrl
 //-----------------------------------------------------------------------------
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxUSE_STD_IOSTREAM
 class wxTextCtrl: public wxControl, public streambuf
 #else
 class wxTextCtrl: public wxControl
@@ -130,10 +126,11 @@ class wxTextCtrl: public wxControl
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxUSE_STD_IOSTREAM
     int overflow(int i);
     int sync();
     int underflow();
+#endif
 
     wxTextCtrl& operator<<(const wxString& s);
     wxTextCtrl& operator<<(int i);
@@ -141,7 +138,6 @@ class wxTextCtrl: public wxControl
     wxTextCtrl& operator<<(float f);
     wxTextCtrl& operator<<(double d);
     wxTextCtrl& operator<<(const char c);
-#endif
 
     bool SetFont( const wxFont &font );
     bool SetForegroundColour(const wxColour &colour);

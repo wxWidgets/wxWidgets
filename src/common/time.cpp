@@ -36,7 +36,7 @@ seconds since January 1, 1901, GMT.
 
 #include "wx/ioswrap.h"
 
-#if wxUSE_IOSTREAMH
+#if wxUSE_IOSTREAMH && wxUSE_STD_IOSTREAM
     #include <iomanip.h>
 #else
     #include <iomanip>

@@ -99,7 +99,7 @@ void wxObject::CopyObject(wxObject& object_dest) const
     wxASSERT(object_dest.GetClassInfo()->IsKindOf(GetClassInfo()));
 }
 
-#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
 void wxObject::Dump(ostream& str)
 {
     if (GetClassInfo() && GetClassInfo()->GetClassName())

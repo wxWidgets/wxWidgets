@@ -40,14 +40,8 @@ class WXDLLEXPORT wxObjectOutputStream;
 class WXDLLEXPORT wxHashTable;
 class WXDLLEXPORT wxObject_Serialize;
 
-#if wxUSE_IOSTREAMH
-    // N.B. BC++ doesn't have istream.h, ostream.h
-#   include <iostream.h>
-#else
-#   include <ostream>
-#   if defined(__VISUALC__) || defined(__MWERKS__)
-        using namespace std;
-#   endif
+#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
+  #include "wx/ioswrap.h"
 #endif
 
 /*
@@ -225,7 +219,7 @@ class WXDLLEXPORT wxObject
 
 #endif // Debug & memory tracing
 
-#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_STD_IOSTREAM && (defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT)
   virtual void Dump(ostream& str);
 #endif
 

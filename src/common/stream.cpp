@@ -603,28 +603,29 @@ wxInputStream& wxInputStream::operator>>(char& c)
   return *this;
 }
 
-wxInputStream& wxInputStream::operator>>(short& i)
+wxInputStream& wxInputStream::operator>>(signed short& i)
 {
-  long l;
+  signed long l;
 
   *this >> l;
-  i = (short)l;
+  i = (signed short)l;
   return *this;
 }
 
-wxInputStream& wxInputStream::operator>>(int& i)
+wxInputStream& wxInputStream::operator>>(signed int& i)
 {
-  long l;
+  signed long l;
 
   *this >> l;
-  i = (short)l;
+  i = (signed int)l;
   return *this;
 }
 
-wxInputStream& wxInputStream::operator>>(long& i)
+wxInputStream& wxInputStream::operator>>(signed long& i)
 {
   /* I only implemented a simple integer parser */
-  int c, sign;
+  char c; 
+  int sign;
 
   while (isspace( c = GetC() ) )
      /* Do nothing */ ;
@@ -647,6 +648,46 @@ wxInputStream& wxInputStream::operator>>(long& i)
   }
 
   i *= sign;
+
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(unsigned short& i)
+{
+  unsigned long l;
+
+  *this >> l;
+  i = (unsigned short)l;
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(unsigned int& i)
+{
+  unsigned long l;
+
+  *this >> l;
+  i = (unsigned int)l;
+  return *this;
+}
+
+wxInputStream& wxInputStream::operator>>(unsigned long& i)
+{
+  /* I only implemented a simple integer parser */
+  char c;
+
+  while (isspace( c = GetC() ) )
+     /* Do nothing */ ;
+
+  i = 0;
+  if (!isdigit(c)) {
+    InputStreamBuffer()->WriteBack(c);
+    return *this;
+  }
+
+  while (isdigit(c)) {
+    i = i*10 + c;
+    c = GetC();
+  }
 
   return *this;
 }
@@ -772,27 +813,41 @@ wxOutputStream& wxOutputStream::operator<<(char c)
   return Write(&c, 1);
 }
 
-wxOutputStream& wxOutputStream::operator<<(short i)
+wxOutputStream& wxOutputStream::operator<<(signed short i)
 {
-  wxString strint;
-
-  strint.Printf(_T("%i"), i);
-  return *this << strint;
+  signed long l = (signed long)i;
+  return *this << l;
 }
 
-wxOutputStream& wxOutputStream::operator<<(int i)
+wxOutputStream& wxOutputStream::operator<<(signed int i)
 {
-  wxString strint;
-
-  strint.Printf(_T("%i"), i);
-  return *this << strint;
+  signed long l = (signed long)i;
+  return *this << l;
 }
 
-wxOutputStream& wxOutputStream::operator<<(long i)
+wxOutputStream& wxOutputStream::operator<<(signed long i)
 {
   wxString strlong;
+  strlong.Printf(_T("%ld"), i);
+  return *this << strlong;
+}
 
-  strlong.Printf(_T("%i"), i);
+wxOutputStream& wxOutputStream::operator<<(unsigned short i)
+{
+  unsigned long l = (unsigned long)i;
+  return *this << l;
+}
+
+wxOutputStream& wxOutputStream::operator<<(unsigned int i)
+{
+  unsigned long l = (unsigned long)i;
+  return *this << l;
+}
+
+wxOutputStream& wxOutputStream::operator<<(unsigned long i)
+{
+  wxString strlong;
+  strlong.Printf(_T("%lu"), i);
   return *this << strlong;
 }
 

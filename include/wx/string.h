@@ -1076,7 +1076,7 @@ inline wxString WXDLLEXPORT operator+(const wxCharBuffer& buf, const wxString& s
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------
 
-#ifdef wxSTD_STRING_COMPATIBILITY
+#if defined(wxSTD_STRING_COMPATIBILITY) && wxUSE_STD_IOSTREAM
 
 #include "wx/ioswrap.h"
 

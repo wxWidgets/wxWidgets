@@ -9,6 +9,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
+#if wxUSE_STD_IOSTREAM
+
 #if wxUSE_IOSTREAMH
     // N.B. BC++ doesn't have istream.h, ostream.h
 #   include <iostream.h>
@@ -18,3 +20,6 @@
         using namespace std;
 #   endif
 #endif
+
+#endif
+  // wxUSE_STD_IOSTREAM

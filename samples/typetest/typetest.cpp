@@ -34,6 +34,17 @@
 #include "mondrian.xpm"
 #endif
 
+#include "wx/ioswrap.h"
+
+#if wxUSE_IOSTREAMH
+    #include <fstream.h>
+#else
+    #include <fstream>
+#endif
+
+#include "wx/wfstream.h"
+
+
 // Create a new application object
 IMPLEMENT_APP	(MyApp)
 
@@ -47,6 +58,7 @@ BEGIN_EVENT_TABLE(MyApp, wxApp)
 #if wxUSE_UNICODE
 	EVT_MENU(TYPES_UNICODE,   MyApp::DoUnicodeDemo)
 #endif
+	EVT_MENU(TYPES_STREAM, MyApp::DoStreamDemo)
 END_EVENT_TABLE()
 
 bool MyApp::OnInit(void)
@@ -70,6 +82,7 @@ bool MyApp::OnInit(void)
 #if wxUSE_UNICODE
   file_menu->Append(TYPES_UNICODE, "&Unicode test");
 #endif
+  file_menu->Append(TYPES_STREAM, "&Stream test");
   file_menu->AppendSeparator();
   file_menu->Append(TYPES_QUIT, "E&xit");
   wxMenuBar *menu_bar = new wxMenuBar;
@@ -84,6 +97,45 @@ bool MyApp::OnInit(void)
   SetTopWindow(frame);
 
   return TRUE;
+}
+
+void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextCtrl& textCtrl = * GetTextCtrl();
+    
+    textCtrl.Clear();
+    textCtrl << "\nTest fstream vs. wxFileStream:\n\n";
+
+    ofstream std_file_output( "test_std.dat" );
+    wxFileOutputStream file_output( "test_wx.dat" );
+
+    textCtrl.WriteText( "Writig to fstream:\n" );
+    
+    wxString tmp;
+    signed int si = 0xFFFFFFFF;
+    tmp.Printf( "Signed int: %d\n", si );
+    textCtrl.WriteText( tmp );
+    file_output << si << "\n";
+    std_file_output << si << "\n";
+    
+    unsigned int ui = 0xFFFFFFFF;
+    tmp.Printf( "Unsigned int: %u\n", ui );
+    textCtrl.WriteText( tmp );
+    file_output << ui << "\n";
+    std_file_output << ui << "\n";
+    
+    double d = 2.01234567890123456789;
+    tmp.Printf( "Double: %f\n", d );
+    textCtrl.WriteText( tmp );
+    file_output << d << "\n";
+    std_file_output << d << "\n";
+    
+    wxString str( "Hello!" );
+    tmp.Printf( "String: %s\n", str.c_str() );
+    textCtrl.WriteText( tmp );
+    file_output << str << "\n";
+    std_file_output << str.c_str() << "\n";
+    
 }
 
 #if wxUSE_UNICODE

@@ -26,6 +26,7 @@ public:
     void DoTimeDemo(wxCommandEvent& event);
     void DoVariantDemo(wxCommandEvent& event);
     void DoByteOrderDemo(wxCommandEvent& event);
+    void DoStreamDemo(wxCommandEvent& event);
 #if wxUSE_UNICODE
     void DoUnicodeDemo(wxCommandEvent& event);
 #endif
@@ -66,6 +67,7 @@ public:
 #define TYPES_VARIANT   105
 #define TYPES_BYTEORDER 106
 #define TYPES_UNICODE   107
+#define TYPES_STREAM    108
 
 #endif
     // _WX_TYPETEST_H_

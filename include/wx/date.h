@@ -92,7 +92,9 @@ public:
     friend bool WXDLLEXPORT operator == (const wxDate &dt1, const wxDate &dt2);
     friend bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2);
 
+#if wxUSE_STD_IOSTREAM
     friend ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt);
+#endif
 
     wxString FormatDate      (int type=-1) const;
     void  SetFormat (int format);

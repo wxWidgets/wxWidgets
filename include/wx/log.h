@@ -16,6 +16,8 @@
     #pragma interface "log.h"
 #endif
 
+#include "wx/setup.h"
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -87,15 +89,7 @@ enum
     #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
 
-#if wxUSE_IOSTREAMH
-// N.B. BC++ doesn't have istream.h, ostream.h
-#   include <iostream.h>
-#else
-#   include <ostream>
-#   if defined(__VISUALC__) || defined(__MWERKS__)
-        using namespace std;
-#   endif
-#endif
+#include "wx/ioswrap.h"
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages

@@ -169,19 +169,18 @@ class WXDLLEXPORT wxInputStream: public wxStreamBase {
   wxInputStream& operator>>(wxOutputStream& out) { return Read(out); }
   wxInputStream& operator>>(wxString& line);
   wxInputStream& operator>>(char& c);
-  wxInputStream& operator>>(short& i);
-  wxInputStream& operator>>(int& i);
-  wxInputStream& operator>>(long& i);
+  wxInputStream& operator>>(signed short& i);
+  wxInputStream& operator>>(signed int& i);
+  wxInputStream& operator>>(signed long& i);
+  wxInputStream& operator>>(unsigned char& c);
+  wxInputStream& operator>>(unsigned short& i);
+  wxInputStream& operator>>(unsigned int& i);
+  wxInputStream& operator>>(unsigned long& i);
   wxInputStream& operator>>(double& i);
+  wxInputStream& operator>>(float& f) { double d; operator>>((double&)d); f = (float)d; return *this; }
 #if wxUSE_SERIAL
   wxInputStream& operator>>(wxObject *& obj);
 #endif
-
-  wxInputStream& operator>>(float& f) { double d; operator>>((double&)d); f = (float)d; return *this; }
-  wxInputStream& operator>>(unsigned char& c) { return operator>>((char&)c); }
-  wxInputStream& operator>>(unsigned short& i) { return operator>>((short&)i); }
-  wxInputStream& operator>>(unsigned int& i) { return operator>>((int&)i); }
-  wxInputStream& operator>>(unsigned long& i) { return operator>>((long&)i); }
   wxInputStream& operator>>( __wxInputManip func) { return func(*this); }
 
  protected:
@@ -210,19 +209,18 @@ class WXDLLEXPORT wxOutputStream: public wxStreamBase {
   wxOutputStream& operator<<(const char *string);
   wxOutputStream& operator<<(wxString& string);
   wxOutputStream& operator<<(char c);
-  wxOutputStream& operator<<(short i);
-  wxOutputStream& operator<<(int i);
-  wxOutputStream& operator<<(long i);
+  wxOutputStream& operator<<(signed short i);
+  wxOutputStream& operator<<(signed int i);
+  wxOutputStream& operator<<(signed long i);
+  wxOutputStream& operator<<(unsigned char c);
+  wxOutputStream& operator<<(unsigned short i);
+  wxOutputStream& operator<<(unsigned int i);
+  wxOutputStream& operator<<(unsigned long i);
   wxOutputStream& operator<<(double f);
+  wxOutputStream& operator<<(float f) { return operator<<((double)f); }
 #if wxUSE_SERIAL
   wxOutputStream& operator<<(wxObject& obj);
 #endif
-
-  wxOutputStream& operator<<(float f) { return operator<<((double)f); }
-  wxOutputStream& operator<<(unsigned char c) { return operator<<((char)c); }
-  wxOutputStream& operator<<(unsigned short i) { return operator<<((short)i); }
-  wxOutputStream& operator<<(unsigned int i) { return operator<<((int)i); }
-  wxOutputStream& operator<<(unsigned long i) { return operator<<((long)i); }
   wxOutputStream& operator<<( __wxOutputManip func) { return func(*this); }
 
  protected:

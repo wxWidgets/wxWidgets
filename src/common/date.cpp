@@ -29,17 +29,13 @@
 #if wxUSE_TIMEDATE
 
 #include "wx/date.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
+#include "wx/ioswrap.h"
 
 #include <time.h>
 #include <string.h>
@@ -274,6 +270,9 @@ bool WXDLLEXPORT operator != (const wxDate &dt1, const wxDate &dt2)
     return ( dt1.julian != dt2.julian );
 }
 
+
+#if wxUSE_STD_IOSTREAM
+
 ////////////////////////////////////////////////////////////////
 // Ostream operations
 ////////////////////////////////////////////////////////////////
@@ -282,6 +281,8 @@ ostream WXDLLEXPORT & operator << (ostream &os, const wxDate &dt)
 {
     return os << dt.FormatDate().mb_str();
 }
+
+#endif
 
 //////////////////////////////////////////////////////////////
 // Conversion routines

@@ -94,7 +94,7 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxUSE_STD_IOSTREAM
 wxTextCtrl::wxTextCtrl() : streambuf()
 {
     if (allocate()) setp(base(),ebuf());
@@ -108,7 +108,7 @@ wxTextCtrl::wxTextCtrl()
 }
 #endif
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxUSE_STD_IOSTREAM
 wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxValidator& validator, const wxString &name ) : streambuf()
@@ -913,7 +913,7 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
     key_event.Skip();
 }
 
-#ifndef NO_TEXT_WINDOW_STREAM
+#if wxUSE_STD_IOSTREAM
 int wxTextCtrl::overflow( int WXUNUSED(c) )
 {
     int len = pptr() - pbase();
@@ -942,6 +942,7 @@ int wxTextCtrl::underflow()
 {
     return EOF;
 }
+#endif
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
@@ -990,7 +991,6 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
     AppendText(buf);
     return *this;
 }
-#endif
 
 GtkWidget* wxTextCtrl::GetConnectWidget()
 {

@@ -26,8 +26,6 @@
 #include "wx/window.h"
 #include "wx/filefn.h"
 
-#include "wx/ioswrap.h"
-
 #ifdef __X__
     #include <dirent.h>
     #include <unistd.h>
