@@ -3201,7 +3201,6 @@ dnl ---------------------------------------------------------------------------
 
 dnl under MSW (except mingw32) we always have thread support
 CPP_MT_FLAG=
-COMMON_THREADCPPFLAGS=
 if test "$TOOLKIT" != "MSW"; then
 
     dnl the code below:
@@ -3463,7 +3462,7 @@ else
         *-*-mingw32* )
         CFLAGS="$CFLAGS -mthreads"
         CXXFLAGS="$CXXFLAGS -mthreads"
-        COMMON_THREADCPPFLAGS="-mthreads"
+        TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -mthreads"
         LDFLAGS="$LDFLAGS -mthreads"
         ;;
       esac
@@ -5051,7 +5050,6 @@ AC_SUBST(GUIDIST)
 AC_SUBST(PORT_FILES)
 AC_SUBST(DISTDIR)
 
-AC_SUBST(COMMON_THREADCPPFLAGS)
 dnl additional subdirectories where we will build
 AC_SUBST(SAMPLES_SUBDIRS)
 

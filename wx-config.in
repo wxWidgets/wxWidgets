@@ -42,9 +42,9 @@ cppflags()
     includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
 
     if test $static_flag = yes ; then
-        echo $includes @COMMON_THREADCPPFLAGS@ @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@
+        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@
     else
-        echo $includes @COMMON_THREADCPPFLAGS@ @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @TOOLCHAIN_DLL_DEFS@ @WXCONFIG_INCLUDE@
+        echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @TOOLCHAIN_DLL_DEFS@ @WXCONFIG_INCLUDE@
     fi
 }
 
