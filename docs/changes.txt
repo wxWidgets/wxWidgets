@@ -1,6 +1,13 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.4.0
+-----
+
+wxBase:
+
+- wxMimeTypesManager now can create file associations too
+
 2.3.0
 -----
 

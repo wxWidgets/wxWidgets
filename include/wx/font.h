@@ -72,7 +72,7 @@ enum wxFontWeight
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFontRefData;
-class WXDLLEXPORT wxNativeFontInfo;
+struct WXDLLEXPORT wxNativeFontInfo;
 
 class WXDLLEXPORT wxFontBase : public wxGDIObject
 {

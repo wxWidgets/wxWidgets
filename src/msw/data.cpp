@@ -96,7 +96,6 @@ wxBrush   wxNullBrush;
 wxPalette wxNullPalette;
 wxFont    wxNullFont;
 wxColour  wxNullColour;
-wxNativeFontInfo wxNullNativeFontInfo;
 
 // Default window names
 const wxChar *wxControlNameStr = wxT("control");

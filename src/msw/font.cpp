@@ -29,7 +29,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
     #include "wx/setup.h"
     #include "wx/list.h"
     #include "wx/utils.h"
@@ -37,6 +36,8 @@
     #include "wx/font.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
+
+#include "wx/fontutil.h"
 
 #include "wx/msw/private.h"
 
@@ -164,6 +165,19 @@ void wxFont::Init()
 {
     if ( wxTheFontList )
         wxTheFontList->Append(this);
+}
+
+bool wxFont::Create(const wxNativeFontInfo& info)
+{
+    return Create(info.pointSize, info.family, info.style, info.weight,
+                  info.underlined, info.faceName, info.encoding);
+}
+
+wxFont::wxFont(const wxString& fontdesc)
+{
+    wxNativeFontInfo info;
+    if ( info.FromString(fontdesc) )
+        (void)Create(info);
 }
 
 /* Constructor for a font. Note that the real construction is done

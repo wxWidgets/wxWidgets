@@ -44,9 +44,10 @@ public:
     {
         Init();
 
-        (void)Create(info.pointSize, info.family, info.style, info.weight,
-                     info.underlined, info.faceName, info.encoding);
+        Create(info);
     }
+
+    wxFont(const wxString& fontDesc);
 
     bool Create(int size,
                 int family,
@@ -55,6 +56,8 @@ public:
                 bool underlined = FALSE,
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    bool Create(const wxNativeFontInfo& info);
 
     virtual ~wxFont();
 

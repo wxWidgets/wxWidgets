@@ -32,6 +32,7 @@
   #include "wx/font.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
 

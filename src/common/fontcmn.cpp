@@ -30,8 +30,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
-    #include "wx/fontutil.h"
 #endif // WX_PRECOMP
+
+#include "wx/fontutil.h" // for wxNativeFontInfo
 
 #include "wx/tokenzr.h"
 

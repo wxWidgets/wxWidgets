@@ -32,9 +32,9 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/intl.h"
-    #include "wx/fontutil.h"
 #endif // PCH
 
+#include "wx/fontutil.h"
 #include "wx/fontmap.h"
 
 #if wxUSE_CONFIG
