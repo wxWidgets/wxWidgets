@@ -67,13 +67,6 @@ struct MacGSocketData* _GSocket_Get_Mac_Socket(GSocket *socket)
   			ALL_CALLBACK_TYPES, Mac_Socket_Callback, &cont);
   CFRunLoopSourceRef source = CFSocketCreateRunLoopSource(NULL, cf, 0);
   assert(source);
-  /* Turn off kCFSocketCloseOnInvalidate  (NOTE: > 10.2 only!) */
-  /* Another default flag that we don't turn on here is for DataCallBack and
-     also AcceptCallback (which overlap in bits) which we don't use anyway */
-  /* FIXME: For < 10.2 compatibility fix GSocket to call a platform-dependent
-     function to close the socket so that we can just call invalidate and
-     avoid having to set any special flags at all. */
-  CFSocketSetSocketFlags(cf, kCFSocketAutomaticallyReenableReadCallBack | kCFSocketAutomaticallyReenableWriteCallBack);
   socket->m_gui_dependent = (char*)data;
 
   /* Keep the source and the socket around. */
@@ -110,7 +103,6 @@ void _GSocket_GUI_Destroy_Socket(GSocket *socket)
     struct MacGSocketData *data = (struct MacGSocketData*)(socket->m_gui_dependent);
     if (data)
     {
-        CFSocketInvalidate(data->socket);
         CFRelease(data->socket);
         free(data);
     }
@@ -181,7 +173,9 @@ void _GSocket_Disable_Events(GSocket *socket)
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
 
+    /* CFSocketInvalidate does CFRunLoopRemoveSource anyway */
     CFRunLoopRemoveSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
+    CFSocketInvalidate(data->socket);
 }
 
 #endif // wxUSE_SOCKETS
