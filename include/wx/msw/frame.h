@@ -61,6 +61,8 @@ public:
     // override some more virtuals
     virtual bool Show(bool show = TRUE);
 
+    virtual void RemoveChild( wxWindowBase *child );
+    
     // event handlers
     void OnActivate(wxActivateEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
