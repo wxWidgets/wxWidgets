@@ -688,7 +688,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
 };
 
-#endif // wxUSE_STATBOX
+#endif // wxUSE_BUTTON
 
 #if WXWIN_COMPATIBILITY_2_4
 // NB: wxBookCtrlSizer and wxNotebookSizer are deprecated, they
