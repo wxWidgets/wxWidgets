@@ -84,6 +84,9 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnIncFont(wxCommandEvent& event) { DoResizeFont(+2); }
+    void OnDecFont(wxCommandEvent& event) { DoResizeFont(-2); }
+
     void OnViewMsg(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
     void OnEnumerateFamiliesForEncoding(wxCommandEvent& event);
@@ -100,9 +103,12 @@ protected:
                              wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
                              bool silent = FALSE);
 
+    void DoResizeFont(int diff);
     void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
 
     void Resize(const wxSize& size, const wxFont& font = wxNullFont);
+
+    size_t      m_fontSize; // in points
 
     wxTextCtrl *m_textctrl;
     MyCanvas   *m_canvas;
@@ -123,6 +129,8 @@ enum
     Font_Quit = 1,
     Font_About,
     Font_ViewMsg,
+    Font_IncSize,
+    Font_DecSize,
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
     Font_EnumFamilies,
@@ -141,6 +149,8 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
     EVT_MENU(Font_About, MyFrame::OnAbout)
+    EVT_MENU(Font_IncSize, MyFrame::OnIncFont)
+    EVT_MENU(Font_DecSize, MyFrame::OnDecFont)
     EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
@@ -191,6 +201,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size), m_textctrl(NULL)
 {
+    m_fontSize = 12;
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
@@ -202,12 +214,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Font_Quit, "E&xit\tAlt-X", "Quit this program");
 
     wxMenu *menuFont = new wxMenu;
+    menuFont->Append(Font_IncSize, "&Increase font size by 2 points\tCtrl-I");
+    menuFont->Append(Font_DecSize, "&Decrease font size by 2 points\tCtrl-D");
+    menuFont->AppendSeparator();
     menuFont->Append(Font_Choose, "&Select font...\tCtrl-S",
                      "Select a standard font");
     menuFont->AppendSeparator();
     menuFont->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
     menuFont->Append(Font_EnumFixedFamilies,
-                     "Enumerate f&ixed font families\tCtrl-I");
+                     "Enumerate fi&xed font families\tCtrl-X");
     menuFont->Append(Font_EnumEncodings,
                      "Enumerate &encodings\tCtrl-E");
     menuFont->Append(Font_EnumFamiliesForEncoding,
@@ -389,6 +404,23 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
     {
         DoEnumerateFamilies(FALSE, encodings[n]);
     }
+}
+
+void MyFrame::DoResizeFont(int diff)
+{
+    wxFont fontOld = m_canvas->GetTextFont();
+
+    DoChangeFont(
+        wxFont(
+               fontOld.GetPointSize() + diff,
+               fontOld.GetFamily(),
+               fontOld.GetStyle(),
+               fontOld.GetWeight(),
+               fontOld.GetUnderlined(),
+               fontOld.GetFaceName(),
+               fontOld.GetEncoding()
+              )
+    );
 }
 
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
@@ -610,7 +642,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // output the font name/info
     wxString fontInfo;
-    fontInfo.Printf("Font family is '%s', style '%s', weight '%s'",
+    fontInfo.Printf("Font size is %d points, family is %s, style %s, weight %s",
+                    m_font.GetPointSize(),
                     m_font.GetFamilyString().c_str(),
                     m_font.GetStyleString().c_str(),
                     m_font.GetWeightString().c_str());

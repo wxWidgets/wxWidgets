@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaglist.h
+// Name:        wx/msw/imaglist.h
 // Purpose:     wxImageList class
 // Author:      Julian Smart
 // Modified by:
@@ -49,32 +49,34 @@ enum {
 // now, the app must take care of ownership issues. That is, the
 // image lists must be explicitly deleted after the control(s) that uses them
 // is (are) deleted, or when the app exits.
-class WXDLLEXPORT wxImageList: public wxObject
+class WXDLLEXPORT wxImageList : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS(wxImageList)
- public:
+public:
   /*
    * Public interface
    */
 
-  wxImageList(void);
+  wxImageList();
 
   // Creates an image list.
   // Specify the width and height of the images in the list,
   // whether there are masks associated with them (e.g. if creating images
   // from icons), and the initial size of the list.
-  inline wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1)
+  wxImageList(int width, int height, bool mask = TRUE, int initialCount = 1)
   {
     Create(width, height, mask, initialCount);
   }
-  ~wxImageList(void);
+  ~wxImageList();
 
 
   // Attributes
   ////////////////////////////////////////////////////////////////////////////
 
   // Returns the number of images in the image list.
-  int GetImageCount(void) const;
+  int GetImageCount() const;
+
+  // Returns the size (same for all images) of the images in the list
+  bool GetSize(int index, int &width, int &height) const;
 
   // Operations
   ////////////////////////////////////////////////////////////////////////////
@@ -118,14 +120,15 @@ class WXDLLEXPORT wxImageList: public wxObject
   bool Remove(int index);
 
   // Remove all images
-  bool RemoveAll(void);
+  bool RemoveAll();
 
   // Draws the given image on a dc at the specified position.
   // If 'solidBackground' is TRUE, Draw sets the image list background
   // colour to the background colour of the wxDC, to speed up
   // drawing by eliminating masked drawing where possible.
   bool Draw(int index, wxDC& dc, int x, int y,
-    int flags = wxIMAGELIST_DRAW_NORMAL, bool solidBackground = FALSE);
+            int flags = wxIMAGELIST_DRAW_NORMAL,
+            bool solidBackground = FALSE);
 
   // TODO: miscellaneous functionality
 /*
@@ -155,7 +158,7 @@ class WXDLLEXPORT wxImageList: public wxObject
   bool BeginDrag(int index, const wxPoint& hotSpot);
 
   // Ends a drag operation.
-  bool EndDrag(void);
+  bool EndDrag();
 
   // Call this function to move the image that is being dragged during a drag-and-drop operation.
   // This function is typically called in response to a mouse move message. To begin a drag
@@ -216,10 +219,12 @@ class WXDLLEXPORT wxImageList: public wxObject
   ////////////////////////////////////////////////////////////////////////////
 
   // Returns the native image list handle
-  inline WXHIMAGELIST GetHIMAGELIST(void) const { return m_hImageList; }
+  WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
 
 protected:
   WXHIMAGELIST m_hImageList;
+
+  DECLARE_DYNAMIC_CLASS(wxImageList)
 };
 
 #endif

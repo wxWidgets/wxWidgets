@@ -11,6 +11,7 @@
 #define SCI_CTRL LEFT_CTRL_PRESSED
 #define SCI_ALT LEFT_ALT_PRESSED
 #define SCI_CSHIFT (SCI_CTRL | SCI_SHIFT)
+#define SCI_ASHIFT (SCI_ALT | SCI_SHIFT)
 
 class KeyToCommand {
 public:

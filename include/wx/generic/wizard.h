@@ -24,12 +24,12 @@ public:
              int id = -1,
              const wxString& title = wxEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize);
+             const wxPoint& pos = wxDefaultPosition);
 
     // implement base class pure virtuals
     virtual bool RunWizard(wxWizardPage *firstPage);
     virtual wxWizardPage *GetCurrentPage() const;
+    virtual void SetPageSize(const wxSize& size);
     virtual wxSize GetPageSize() const;
 
     // implementation only from now on
@@ -39,14 +39,26 @@ public:
     bool IsRunning() const { return m_page != NULL; }
 
     // show the prev/next page, but call TransferDataFromWindow on the current
-    // page first and return FALSE without changing the page if it returns
-    // FALSE
+    // page first and return FALSE without changing the page if
+    // TransferDataFromWindow() returns FALSE - otherwise, returns TRUE
     bool ShowPage(wxWizardPage *page, bool goingForward = TRUE);
 
 private:
+    // was the dialog really created?
+    bool WasCreated() const { return m_btnPrev != NULL; }
+
+    // do fill the dialog with controls
+    void DoCreateControls();
+
     // event handlers
     void OnCancel(wxCommandEvent& event);
     void OnBackOrNext(wxCommandEvent& event);
+
+    // the page size requested by user
+    wxSize m_sizePage;
+
+    // the dialog position from the ctor
+    wxPoint m_posWizard;
 
     // wizard dimensions
     int          m_x, m_y;      // the origin for the pages

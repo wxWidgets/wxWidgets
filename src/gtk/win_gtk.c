@@ -81,8 +81,12 @@ static void     gtk_pizza_expose_area        (GtkPizza       *pizza,
                                               gint            y,
                                               gint            width,
                                               gint            height);
+/* unused */
+#if 0
 static void     gtk_pizza_adjustment_changed (GtkAdjustment  *adjustment,
                                               GtkPizza       *pizza);
+#endif
+
 static GdkFilterReturn gtk_pizza_filter      (GdkXEvent      *gdk_xevent,
                                               GdkEvent       *event,
                                               gpointer        data);

@@ -9,8 +9,16 @@
 // Licence:     wxWindows license (part of wxExtra library)
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef    __GNUG__
-#pragma implementation "mimetype.h"
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+#ifdef __GNUG__
+    #pragma implementation "mimetype.h"
 #endif
 
 // for compilers that support precompilation, includes "wx.h".
@@ -24,7 +32,7 @@
   #include "wx/defs.h"
 #endif
 
-#if (wxUSE_FILE && wxUSE_TEXTFILE) || defined(__WXMSW__)
+#if wxUSE_FILE && wxUSE_TEXTFILE
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
@@ -53,6 +61,22 @@
 
 // in case we're compiling in non-GUI mode
 class WXDLLEXPORT wxIcon;
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// MIME code tracing mask
+#define TRACE_MIME _T("mime")
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// there are some fields which we don't understand but for which we don't give
+// warnings as we know that they're not important - this function is used to
+// test for them
+static bool IsKnownUnimportantField(const wxString& field);
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -876,15 +900,21 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
         // notice that an empty command would always succeed (it's ok)
         command = wxFileType::ExpandCommand(entry->GetTestCmd(), params);
 
-        if ( command.IsEmpty() || (wxSystem(command) == 0) ) {
-            // ok, passed
-            wxLogTrace(wxT("Test '%s' for mime type '%s' succeeded."),
-                       command.c_str(), params.GetMimeType().c_str());
-            break;
-        }
-        else {
-            wxLogTrace(wxT("Test '%s' for mime type '%s' failed."),
-                       command.c_str(), params.GetMimeType().c_str());
+        // suppress the command output
+        if ( !command.IsEmpty() )
+        {
+            if ( wxSystem(command) == 0 ) {
+                // ok, passed
+                wxLogTrace(TRACE_MIME,
+                           wxT("Test '%s' for mime type '%s' succeeded."),
+                           command.c_str(), params.GetMimeType().c_str());
+                break;
+            }
+            else {
+                wxLogTrace(TRACE_MIME,
+                           wxT("Test '%s' for mime type '%s' failed."),
+                           command.c_str(), params.GetMimeType().c_str());
+            }
         }
 
         entry = entry->GetNext();
@@ -1189,7 +1219,8 @@ void wxMimeTypesManagerImpl::AddMailcapInfo(const wxString& strType,
 
 bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 {
-    wxLogTrace(wxT("--- Parsing mime.types file '%s' ---"), strFileName.c_str());
+    wxLogTrace(TRACE_MIME, wxT("--- Parsing mime.types file '%s' ---"),
+               strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -1345,7 +1376,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
 bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                          bool fallback)
 {
-    wxLogTrace(wxT("--- Parsing mailcap file '%s' ---"), strFileName.c_str());
+    wxLogTrace(TRACE_MIME, wxT("--- Parsing mailcap file '%s' ---"),
+               strFileName.c_str());
 
     wxTextFile file(strFileName);
     if ( !file.Open() )
@@ -1495,10 +1527,7 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
 
                                 if ( !ok )
                                 {
-                                    // we don't understand this field, but
-                                    // Netscape stores info in it, so don't warn
-                                    // about it
-                                    if ( curField.Left(16u) != "x-mozilla-flags=" )
+                                    if ( !IsKnownUnimportantField(curField) )
                                     {
                                         // don't flood the user with error
                                         // messages if we don't understand
@@ -1636,6 +1665,29 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
     }
 
     return mimetypes.GetCount();
+}
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static bool IsKnownUnimportantField(const wxString& fieldAll)
+{
+    static const wxChar *knownFields[] =
+    {
+        _T("x-mozilla-flags"),
+        _T("nametemplate"),
+        _T("textualnewlines"),
+    };
+
+    wxString field = fieldAll.BeforeFirst(_T('='));
+    for ( size_t n = 0; n < WXSIZEOF(knownFields); n++ )
+    {
+        if ( field.CmpNoCase(knownFields[n]) == 0 )
+            return TRUE;
+    }
+
+    return FALSE;
 }
 
 #endif

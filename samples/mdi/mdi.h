@@ -64,6 +64,7 @@ public:
     void OnActivate(wxActivateEvent& event);
 
     void OnRefresh(wxCommandEvent& event);
+    void OnChangeTitle(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
@@ -76,6 +77,7 @@ enum
     MDI_QUIT = 100,
     MDI_NEW_WINDOW,
     MDI_REFRESH,
+    MDI_CHANGE_TITLE,
     MDI_CHILD_QUIT,
     MDI_ABOUT
 };

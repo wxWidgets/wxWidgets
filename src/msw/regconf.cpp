@@ -27,6 +27,9 @@
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/log.h"
+
+#if wxUSE_CONFIG
+
 #include "wx/config.h"
 
 #ifndef __WIN16__
@@ -577,3 +580,5 @@ bool wxRegConfig::DeleteAll()
 #endif
   // __WIN16__
 
+#endif
+  // wxUSE_CONFIG

@@ -1,12 +1,10 @@
-#
-# Makefile : Builds wxWindows utils for Unix.
-#
+# $Id$
+
+CONTRIB_SAMPLES=mmedia ogl stc
 
 all:
-	cd mmedia; make
-	cd stc; make
+	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
 
 clean:
-	cd mmedia; make clean
-	cd stc; make clean
+	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE) clean); done
 

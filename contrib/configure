@@ -819,6 +819,9 @@ trap 'rm -fr `echo "
             src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/ogl/Makefile
+            samples/ogl/ogledit/Makefile
+            samples/ogl/studio/Makefile
             samples/stc/Makefile
          " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -905,6 +908,9 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             src/stc/Makefile
             samples/Makefile
             samples/mmedia/Makefile
+            samples/ogl/Makefile
+            samples/ogl/ogledit/Makefile
+            samples/ogl/studio/Makefile
             samples/stc/Makefile
          "}
 EOF

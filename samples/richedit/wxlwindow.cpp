@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLwindow.h : a scrolled Window for displaying/entering rich text*
  *                                                                  *
- * (C) 1998, 1999 by Karsten Ballüder (karsten@phy.hw.ac.uk)        *
+ * (C) 1998-2000 by Karsten Ballüder (ballueder@gmx.net)            *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -56,6 +56,7 @@
 
 #include <ctype.h>
 
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -65,6 +66,13 @@
 #else
 #  define WXLO_DEBUG(x)
 #endif
+
+// for profiling in debug mode:
+WXLO_TIMER_DEFINE(UpdateTimer);
+WXLO_TIMER_DEFINE(BlitTimer);
+WXLO_TIMER_DEFINE(LayoutTimer);
+WXLO_TIMER_DEFINE(TmpTimer);
+WXLO_TIMER_DEFINE(DrawTimer);
 
 // ----------------------------------------------------------------------------
 // constants
@@ -160,6 +168,7 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
 #ifndef __WXMSW__
    m_FocusFollowMode = false;
 #endif
+   SetWordWrap(false);
    SetWrapMargin(0);
 
    // no scrollbars initially
@@ -230,10 +239,11 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
    wxClientDC dc( this );
    PrepareDC( dc );
-   if ( eventId != WXLOWIN_MENU_MOUSEMOVE
+   if ( (eventId != WXLOWIN_MENU_MOUSEMOVE
 #ifndef __WXMSW__
         || m_FocusFollowMode
 #endif
+        ) && (wxWindow::FindFocus() != this)
       )
       SetFocus();
 
@@ -479,6 +489,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    bool deletedSelection = false;
    // pressing any non-arrow key optionally replaces the selection:
    if(m_AutoDeleteSelection
+      && IsEditable()
       && !m_Selecting
       && m_llist->HasSelection() 
       && ! IsDirectionKey(keyCode)
@@ -635,9 +646,20 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
             case 'x':
                Cut();
                break;
+            case 'w':
+               if(m_WrapMargin > 0)
+                  m_llist->WrapLine(m_WrapMargin);
+               break;
+            case 'q':
+               if(m_WrapMargin > 0)
+                  m_llist->WrapAll(m_WrapMargin);
+               break;
 #ifdef WXLAYOUT_DEBUG
             case WXK_F1:
                m_llist->SetFont(-1,-1,-1,-1,true);  // underlined
+               break;
+            case 'l':
+               Refresh(TRUE);
                break;
 #endif
             default:
@@ -688,7 +710,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   }
                break;
             case WXK_RETURN:
-               if(m_WrapMargin > 0)
+               if(m_DoWordWrap &&
+                  m_WrapMargin > 0
+                  && m_llist->GetCursorPos().x > m_WrapMargin)
                   m_llist->WrapLine(m_WrapMargin);
                m_llist->LineBreak();
                SetDirty();
@@ -706,23 +730,19 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   SetDirty();
                }
                break;
-
+               
             default:
                if((!(event.ControlDown() || event.AltDown()
                   ))
                   && (keyCode < 256 && keyCode >= 32)
                   )
                {
-                  if(m_WrapMargin > 0 && isspace(keyCode))
-                  {
-                     bool wrapped = m_llist->WrapLine(m_WrapMargin);
-                     // don´t insert space as first thing in line
-                     // after wrapping:
-                     if(! wrapped || m_llist->GetCursorPos().x != 0)
-                        m_llist->Insert((char)keyCode);
-                  }
-                  else
-                     m_llist->Insert((char)keyCode);
+                  if(m_DoWordWrap
+                     && m_WrapMargin > 0
+                     && m_llist->GetCursorPos().x > m_WrapMargin
+                     && isspace(keyCode))
+                     m_llist->WrapLine(m_WrapMargin);
+                  m_llist->Insert((char)keyCode);
                   SetDirty();
                }
                else
@@ -765,7 +785,10 @@ wxLayoutWindow::ScrollToCursor(void)
 {
    //is always needed to make sure we know where the cursor is
    //if(IsDirty())
-   RequestUpdate(m_llist->GetUpdateRect());
+   //RequestUpdate(m_llist->GetUpdateRect());
+
+
+   ResizeScrollbars();
 
    int x0,y0,x1,y1, dx, dy;
 
@@ -802,7 +825,7 @@ wxLayoutWindow::ScrollToCursor(void)
          ny = 0;
    }
 
-   if ( nx != -1 || ny != -1 )
+   if( nx != -1 || ny != -1 )
    {
       // set new view start
       Scroll(nx == -1 ? -1 : (nx+dx-1)/dx, ny == -1 ? -1 : (ny+dy-1)/dy);
@@ -836,6 +859,7 @@ wxLayoutWindow::RequestUpdate(const wxRect *updateRect)
 void
 wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 {
+
    wxPaintDC dc( this );
    PrepareDC( dc );
 
@@ -864,9 +888,9 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
                   updateRect->y+updateRect->height));
    }
 
-   ResizeScrollbars();
+   ResizeScrollbars(true);
 
-   
+   WXLO_TIMER_START(TmpTimer);
    /* Check whether the window has grown, if so, we need to reallocate
       the bitmap to be larger. */
    if(x1 > m_bitmapSize.x || y1 > m_bitmapSize.y)
@@ -887,7 +911,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
                          0,wxTRANSPARENT));
    m_memDC->SetLogicalFunction(wxCOPY);
    m_memDC->Clear();
-
+   WXLO_TIMER_STOP(TmpTimer);
+   
    // fill the background with the background bitmap
    if(m_BGbitmap)
    {
@@ -922,7 +947,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    // update rectangle (although they are drawn on the memDC, this is
    // needed to erase it):
    m_llist->InvalidateUpdateRect();
-   if(m_CursorVisibility != 0)
+   if(m_CursorVisibility == 1)
    {
       // draw a thick cursor for editable windows with focus
       m_llist->DrawCursor(*m_memDC,
@@ -930,6 +955,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
                           offset);
    }
 
+   WXLO_TIMER_START(BlitTimer);
 // Now copy everything to the screen:
 #if 0
    // This somehow doesn't work, but even the following bit with the
@@ -955,6 +981,8 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 //      y1 += WXLO_YOFFSET; //FIXME might not be needed
       dc.Blit(x0,y0,x1,y1,m_memDC,0,0,wxCOPY,FALSE);
    }
+   WXLO_TIMER_STOP(BlitTimer);
+
 
 #ifdef WXLAYOUT_USE_CARET
    // show the caret back after everything is redrawn
@@ -979,6 +1007,10 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
          m_StatusBar->SetStatusText(label, m_StatusFieldCursor);
       }
    }
+
+   WXLO_TIMER_PRINT(LayoutTimer);
+   WXLO_TIMER_PRINT(BlitTimer);
+   WXLO_TIMER_PRINT(TmpTimer);
 }
 
 void
@@ -999,14 +1031,20 @@ as needed.
 void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
-
-   if(! IsDirty())
-      return;
-   
    wxClientDC dc( this );
    PrepareDC( dc );
-//      m_llist->ForceTotalLayout();
-   m_llist->Layout(dc);
+//   m_llist->ForceTotalLayout();
+
+   if(! IsDirty())
+   {
+      // we are laying out just the minimum, but always up to the
+      // cursor line, so the cursor position is updated.
+      m_llist->Layout(dc, 0);
+      return;
+   }
+   WXLO_TIMER_START(LayoutTimer);
+   m_llist->Layout(dc, -1);
+   WXLO_TIMER_STOP(LayoutTimer);
    ResetDirty();
    
    wxPoint max = m_llist->GetSize();
@@ -1025,8 +1063,8 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
    // TODO why do we set both at once? they're independent...
    if( max.x > m_maxx - WXLO_ROFFSET
        || max.y > m_maxy - WXLO_BOFFSET
-       || max.x < m_maxx - X_SCROLL_PAGE
-       || max.y < m_maxy - Y_SCROLL_PAGE
+       || (max.x < m_maxx - X_SCROLL_PAGE)
+       || (max.y < m_maxy - Y_SCROLL_PAGE)
        || exact )
    {
       // text became too large
@@ -1038,31 +1076,36 @@ wxLayoutWindow::ResizeScrollbars(bool exact)
       }
 
       bool done = FALSE;
-      if(max.x < X_SCROLL_PAGE)
+      if(max.x < X_SCROLL_PAGE && m_hasHScrollbar)
       {
          SetScrollbars(0,-1,0,-1,0,-1,true);
          m_hasHScrollbar = FALSE;
          done = TRUE;
       }
-      if(max.y < Y_SCROLL_PAGE)
+      if(max.y < Y_SCROLL_PAGE && m_hasVScrollbar)
       {
          SetScrollbars(-1,0,-1,0,-1,0,true);
          m_hasVScrollbar = FALSE;
          done = TRUE;
       }
-      if(! done)
+      if(! done &&
+//         (max.x > X_SCROLL_PAGE || max.y > Y_SCROLL_PAGE)
+         (max.x > size.x - X_SCROLL_PAGE|| max.y > size.y - Y_SCROLL_PAGE)
+         )
       {
          ViewStart(&m_ViewStartX, &m_ViewStartY);
          SetScrollbars(X_SCROLL_PAGE,
                        Y_SCROLL_PAGE,
-                       max.x / X_SCROLL_PAGE + 1,
-                       max.y / Y_SCROLL_PAGE + 1,
-                       m_ViewStartX, m_ViewStartY,
+                       max.x / X_SCROLL_PAGE + 2,
+                       max.y / Y_SCROLL_PAGE + 2,
+                       m_ViewStartX,
+                       m_ViewStartY,
                        true);
          m_hasHScrollbar =
             m_hasVScrollbar = true;
+//         ScrollToCursor();
       }
-
+      
       m_maxx = max.x + X_SCROLL_PAGE;
       m_maxy = max.y + Y_SCROLL_PAGE;
    }

@@ -25,6 +25,7 @@ distrib/msw/*.bat
 distrib/msw/*.cpp
 distrib/msw/*.txt
 distrib/msw/tardist
+distrib/msw/tarwxmotif
 distrib/msw/tmake/*.t
 distrib/msw/tmake/Makefile
 distrib/msw/tmake/filelist.txt
@@ -38,6 +39,7 @@ locale/*.po
 locale/*.mo
 
 docs/readme.txt
+docs/readme_vms.txt
 docs/install.txt
 docs/release.txt
 docs/changes.txt
@@ -58,6 +60,7 @@ docs/html/icons/*.gif
 docs/html/icons/*.png
 docs/html/icons/*.jpg
 docs/tech/*.txt
+docs/tech/*.htm
 
 src/makeenvs/*.env
 src/make.env
@@ -236,6 +239,8 @@ samples/sockets/client.b32
 samples/sockets/server.b32
 samples/sockets/client.bcc
 samples/sockets/server.bcc
+samples/sockets/client.g95
+samples/sockets/server.g95
 samples/sockets/*.xbm
 samples/sockets/*.xpm
 samples/sockets/*.ico
@@ -255,6 +260,10 @@ samples/help/*.hlp
 samples/help/*.cnt
 samples/help/*.zip
 samples/help/*.htb
+samples/help/*.chm
+samples/help/*.hhp
+samples/help/*.hhk
+samples/help/*.hhc
 samples/help/*.hpj
 samples/help/*.tex
 samples/help/*.ini
@@ -642,6 +651,7 @@ samples/image/*.pnm
 samples/image/*.pcx
 samples/image/*.jpg
 samples/image/*.gif
+samples/image/*.tif
 samples/image/*.ico
 samples/image/*.txt
 
@@ -670,6 +680,8 @@ samples/ipc/client.bcc
 samples/ipc/server.bcc
 samples/ipc/client.dos
 samples/ipc/server.dos
+samples/ipc/client.g95
+samples/ipc/server.g95
 samples/ipc/*.rc
 samples/ipc/*.def
 samples/ipc/*.bmp

@@ -114,14 +114,58 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
     return TRUE;
 }
 
+static gint gtk_radiobutton_focus_in( GtkWidget *widget,
+                                      GdkEvent *WXUNUSED(event),
+                                      wxRadioBox *win )
+{
+    if ( win->m_lostFocus )
+    {
+        // no, we didn't really lose it
+        win->m_lostFocus = FALSE;
+    }
+    else if ( !win->m_hasFocus )
+    {
+        win->m_hasFocus = TRUE;
+
+        wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
+        event.SetEventObject( win );
+
+        // never stop the signal emission, it seems to break the kbd handling
+        // inside the radiobox
+        (void)win->GetEventHandler()->ProcessEvent( event );
+    }
+
+    return FALSE;
+}
+
+static gint gtk_radiobutton_focus_out( GtkWidget *widget,
+                                       GdkEvent *WXUNUSED(event),
+                                       wxRadioBox *win )
+{
+    wxASSERT_MSG( win->m_hasFocus, _T("got focus out without any focus in?") );
+
+    // we might have lost the focus, but may be not - it may have just gone to
+    // another button in the same radiobox, so we'll check for it in the next
+    // idle iteration (leave m_hasFocus == TRUE for now)
+    win->m_lostFocus = TRUE;
+
+    return FALSE;
+}
+
 //-----------------------------------------------------------------------------
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
-wxRadioBox::wxRadioBox()
+void wxRadioBox::Init()
 {
+    m_alreadySent = FALSE;
+    m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
+
+    m_hasFocus =
+    m_lostFocus = FALSE;
 }
 
 bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
@@ -130,10 +174,6 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                          long style, const wxValidator& validator,
                          const wxString &name )
 {
-    m_alreadySent = FALSE;
-    m_needParent = TRUE;
-    m_acceptsFocus = TRUE;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -174,6 +214,12 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
             GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+
+        gtk_signal_connect( GTK_OBJECT(m_radio), "focus_in_event",
+            GTK_SIGNAL_FUNC(gtk_radiobutton_focus_in), (gpointer)this );
+
+        gtk_signal_connect( GTK_OBJECT(m_radio), "focus_out_event",
+            GTK_SIGNAL_FUNC(gtk_radiobutton_focus_out), (gpointer)this );
 
         gtk_pizza_put( GTK_PIZZA(m_parent->m_wxwindow),
                          GTK_WIDGET(m_radio),
@@ -665,4 +711,19 @@ bool wxRadioBox::IsOwnGtkWindow( GdkWindow *window )
     return FALSE;
 }
 
-#endif
+void wxRadioBox::OnInternalIdle()
+{
+    if ( m_lostFocus )
+    {
+        m_hasFocus = FALSE;
+        m_lostFocus = FALSE;
+
+        wxFocusEvent event( wxEVT_KILL_FOCUS, GetId() );
+        event.SetEventObject( this );
+
+        (void)GetEventHandler()->ProcessEvent( event );
+    }
+}
+
+#endif // wxUSE_RADIOBOX
+

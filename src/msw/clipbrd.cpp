@@ -472,7 +472,7 @@ void wxClipboard::Clear()
 #if wxUSE_OLE_CLIPBOARD
     if ( FAILED(OleSetClipboard(NULL)) )
     {
-        wxLogLastError("OleSetClipboard(NULL)");
+        wxLogLastError(wxT("OleSetClipboard(NULL)"));
     }
 #endif
 }
@@ -482,7 +482,7 @@ bool wxClipboard::Flush()
 #if wxUSE_OLE_CLIPBOARD
     if ( FAILED(OleFlushClipboard()) )
     {
-        wxLogLastError("OleFlushClipboard");
+        wxLogLastError(wxT("OleFlushClipboard"));
 
         return FALSE;
     }
@@ -823,6 +823,6 @@ bool wxClipboard::GetData( wxDataObject& data )
 }
 
 #else
-    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
+//    #error "Please turn wxUSE_CLIPBOARD on to compile this file."
 #endif // wxUSE_CLIPBOARD
 

@@ -126,7 +126,7 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
     HICON hicon = ::CreateIconIndirect(&iconInfo);
     if ( !hicon )
     {
-        wxLogLastError("CreateIconIndirect");
+        wxLogLastError(wxT("CreateIconIndirect"));
     }
     else
     {

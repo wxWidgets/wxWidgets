@@ -46,6 +46,9 @@
 // version. Perhaps someone else is a wizard at working out the required settings
 // in the wxWin library and the sample; then debugging the assert problem may be
 // easier.
+//
+// (4) Compiling wxWindows in DLL mode currently includes windows.h, so you must only
+// try linking wxWindows statically.
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -56,8 +59,8 @@
 
 #include "wx/wx.h"
 
-#ifdef _WINDOWS_
-#error Sorry, you need to edit include/wx/wxprec.h, comment out the windows.h inclusion, and recompile.
+#if defined(_WINDOWS_) || !wxUSE_MFC
+#error Sorry, you need to edit include/wx/msw/setup.h, set wxUSE_MFC to 1, and recompile.
 #endif
 
 #ifdef new

@@ -206,7 +206,7 @@ protected:
 };
 
 // a list of toolbar tools
-WX_DECLARE_LIST(wxToolBarToolBase, wxToolBarToolsList);
+WX_DECLARE_EXPORTED_LIST(wxToolBarToolBase, wxToolBarToolsList);
 
 // ----------------------------------------------------------------------------
 // the base class for all toolbars

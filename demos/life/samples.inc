@@ -23,9 +23,10 @@
  * 
  */
 
-const LifeShape g_shapes[] =
+const LifePattern g_patterns[] =
 {
-    LifeShape( _("Glider"),
+    LifePattern(
+               _("Glider"),
                _("The glider is the first of a series of life forms, known "
                  "as spaceships or fishes, which can travel along the game "
                  "field retaining their original shape."),
@@ -33,7 +34,8 @@ const LifeShape g_shapes[] =
                ".*."
                "..*"
                "***"),
-    LifeShape( _("Heavyweight spaceship"),
+    LifePattern(
+               _("Heavyweight spaceship"),
                _("The glider is just the smaller of the spaceships; this "
                  "one, known as the heavyweight spaceship or 'big fish', "
                  "is the largest spaceship which can travel alone without "
@@ -44,7 +46,8 @@ const LifeShape g_shapes[] =
                "......*"
                "*.....*"
                ".******"),
-    LifeShape( _("Eater"),
+    LifePattern(
+               _("Eater"),
                _("An eater is any still life that can repair itself from "
                  "some attacks. This one (bottom right), also known as "
                  "'fishhook', eats gliders and fishes (spaceships) provided "
@@ -60,7 +63,8 @@ const LifeShape g_shapes[] =
                "......*.*."
                "........*."
                "........**" ),
-    LifeShape( _("Dice shaker"),
+    LifePattern(
+               _("Dice shaker"),
                _("Oscillators have been extensively explored in Life!. "
                  "The dice shaker turns around each seven tics; thus, it "
                  "is an oscillator with a period of fourteen."),
@@ -71,7 +75,8 @@ const LifeShape g_shapes[] =
                "*.*.*.*"
                "*.*.*.*"
                "**...**" ),
-    LifeShape( _("Hertz oscillator"),
+    LifePattern(
+               _("Hertz oscillator"),
                _("The Hertz oscillator is a good example of a set of life "
                  "patterns known as 'billiard tables'. A billiard table is "
                  "an oscillator which is built inside a stable border. In "
@@ -88,7 +93,8 @@ const LifeShape g_shapes[] =
                ".............."
                ".......**....."
                ".......**....." ),
-    LifeShape( _("Phoenix"),
+    LifePattern(
+               _("Phoenix"),
                _("A phoenix is a pattern whose cells all die in every "
                  "generation, and yet lives forever. For example, this is "
                  "a phoenix with period two."),
@@ -101,7 +107,8 @@ const LifeShape g_shapes[] =
                ".*......"
                "...*.*.."
                "...*...." ),
-    LifeShape( _("R-pentomino"),
+    LifePattern(
+               _("R-pentomino"),
                _("The R-pentomino is a methuselah - a life form which "
                  "lives for hundreds of generations without stabilizing "
                  "or dying. In particular, the R-Pentomino requires more "
@@ -111,7 +118,8 @@ const LifeShape g_shapes[] =
                ".**"
                "**."
                ".*." ),
-    LifeShape( _("Thunderbird"),
+    LifePattern(
+               _("Thunderbird"),
                _("The thunderbird is another popular methuselah, which "
                  "doesn't stabilize until the 243th generation. Note that "
                  "because the initial configuration is symmetrical with "
@@ -123,14 +131,16 @@ const LifeShape g_shapes[] =
                ".*."
                ".*."
                ".*." ),
-    LifeShape( _("Accorn"),
+    LifePattern(
+               _("Accorn"),
                _("Probably the most popular methuselah, the accorn lives "
                  "for 5206 (!) generations."),
                7, 3,
                ".*....."
                "...*..."
                "**..***" ),
-    LifeShape( _("Galaxy"),
+    LifePattern(
+               _("Galaxy"),
                _("One from my personal collection. It is really beautiful "
                  "to see this configuration expand and shrink periodically "
                  "for hundreds of tics before reaching a stable state."),
@@ -148,7 +158,8 @@ const LifeShape g_shapes[] =
                "......*......"
                "......*......"
                ".......***..." ),
-    LifeShape( _("Glider gun"),
+    LifePattern(
+               _("Glider gun"),
                _("A gun is a stationary pattern that emits spaceships "
                  "forever. The glider gun shown here was the first known "
                  "gun, and indeed the first known finite pattern with "
@@ -164,7 +175,8 @@ const LifeShape g_shapes[] =
                "**.........*...**........*.........."
                "............*.*....................."
                ".............*......................" ),
-    LifeShape( _("Puffer train"),
+    LifePattern(
+               _("Puffer train"),
                _("A puffer is an object that moves like a spaceship, except "
                  "that it leaves a trail of debris behind. The puffer train "
                  "is one of the best-known puffers. Originally found by "
@@ -191,7 +203,8 @@ const LifeShape g_shapes[] =
                "....*"
                "*...*"
                ".****" ),
-    LifeShape( _("Max"),
+    LifePattern(
+               _("Max"),
                _("Max is the fastest-growing known pattern in Conway's Game "
                  "of Life (possibly the fastest possible). It fills space to "
                  "a density of 1/2, conjectured to be the maximum density, "

@@ -192,7 +192,12 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     wxPrinter printer(& printDialogData);
     MyPrintout printout("My printout");
     if (!printer.Print(this, &printout, TRUE))
-        wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+    {
+        if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
+            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+        else
+            wxMessageBox("You canceled printing", "Printing", wxOK);
+    }
     else
     {
         (*g_printData) = printer.GetPrintDialogData().GetPrintData();

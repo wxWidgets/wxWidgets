@@ -24,7 +24,7 @@
 
 class WXDLLEXPORT wxArrayString;
 
-extern const wxChar *wxEmptyString;
+WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
 #define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  wxT("www.yahoo.com")
 

@@ -51,7 +51,7 @@ wxArrayDouble class is scheduled for the next release of wxWindows).
 wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
 function for comparing two elements of the array element type and always stores
-its items in the sorted order (according to this function). Thus, it's 
+its items in the sorted order (according to this function). Thus, it is 
  \helpref{Index()}{wxarrayindex} function execution time is $O(log(N))$ instead of
 $O(N)$ for the usual arrays but the \helpref{Add()}{wxarrayadd} method is
 slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
@@ -75,7 +75,7 @@ example:
 \begin{verbatim}
 #include <wx/dynarray.h>
 
-// we must forward declare the array because it's used inside the class
+// we must forward declare the array because it is used inside the class
 // declaration
 class MyDirectory;
 class MyFile;
@@ -249,7 +249,6 @@ This macro defines a new sorted array class named {\it name} and containing
 the elements of type {\it T}. The second form is used when compiling DLL
 under Windows and array needs to be visible outside the DLL.
 
-
 Example:
 
 \begin{verbatim}
@@ -259,7 +258,7 @@ class MyClass;
 WX_DEFINE_SORTED_ARRAY(MyClass *, wxArrayOfMyClass);
 \end{verbatim}
 
-You will have to initialize the objects of this class by passing a comparaison
+You will have to initialize the objects of this class by passing a comparison
 function to the array object constructor like this:
 
 \begin{verbatim}
@@ -356,7 +355,7 @@ Default constructor initializes an empty array object.
 \func{}{wxSortedArray}{\param{int (*)(T first, T second)}{compareFunction}}
 
 There is no default constructor for wxSortedArray classes - you must initialize it
-with a function to use for item comparaison. It is a function which is passed
+with a function to use for item comparison. It is a function which is passed
 two arguments of type {\it T} where {\it T} is the array element type and which
 should return a negative, zero or positive value according to whether the first
 element passed to it is less than, equal to or greater than the second one.
@@ -530,14 +529,14 @@ the array classes.
 
 \func{\void}{Remove}{\param{T }{item}}
 
-Removes the element from the array either by value: the first item of the
+Removes an element from the array by value: the first item of the
 array equal to {\it item} is removed, an assert failure will result from an
 attempt to remove an item which doesn't exist in the array.
 
 When an element is removed from wxObjArray it is deleted by the array - use 
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
-should delete the it manually if required:
+should delete it manually if required:
 
 \begin{verbatim}
 T *item = array[n];
@@ -552,11 +551,11 @@ elements of a wxArray (supposed to contain pointers).
 
 \func{\void}{RemoveAt}{\param{size\_t }{index}}
 
-Removes the element from the array either by index. When an element
+Removes an element from the array by index. When an element
 is removed from wxObjArray it is deleted by the array - use 
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
-should delete the it manually if required:
+should delete it manually if required:
 
 \begin{verbatim}
 T *item = array[n];

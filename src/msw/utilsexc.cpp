@@ -108,7 +108,7 @@ public:
 #ifndef __WIN16__
         if ( !::CloseHandle(hProcess) )
         {
-            wxLogLastError("CloseHandle(hProcess)");
+            wxLogLastError(wxT("CloseHandle(hProcess)"));
         }
 #endif
     }
@@ -121,16 +121,19 @@ public:
     bool       state;         // set to FALSE when the process finishes
 };
 
+#if defined(__WIN32__) && wxUSE_STREAMS
 
-#ifdef __WIN32__
 // ----------------------------------------------------------------------------
 // wxPipeStreams
 // ----------------------------------------------------------------------------
 
-class wxPipeInputStream: public wxInputStream {
+class wxPipeInputStream: public wxInputStream
+{
 public:
     wxPipeInputStream(HANDLE hInput);
     ~wxPipeInputStream();
+
+    virtual bool Eof() const;
 
 protected:
     size_t OnSysRead(void *buffer, size_t len);
@@ -139,7 +142,8 @@ protected:
     HANDLE m_hInput;
 };
 
-class wxPipeOutputStream: public wxOutputStream {
+class wxPipeOutputStream: public wxOutputStream
+{
 public:
     wxPipeOutputStream(HANDLE hOutput);
     ~wxPipeOutputStream();
@@ -165,17 +169,55 @@ wxPipeInputStream::~wxPipeInputStream()
     ::CloseHandle(m_hInput);
 }
 
+bool wxPipeInputStream::Eof() const
+{
+    DWORD nAvailable;
+
+    // function name is misleading, it works with anon pipes as well
+    DWORD rc = ::PeekNamedPipe
+                    (
+                      m_hInput,     // handle
+                      NULL, 0,      // ptr to buffer and its size
+                      NULL,         // [out] bytes read
+                      &nAvailable,  // [out] bytes available
+                      NULL          // [out] bytes left
+                    );
+
+    if ( !rc )
+    {
+        if ( ::GetLastError() != ERROR_BROKEN_PIPE )
+        {
+            // unexpected error
+            wxLogLastError(_T("PeekNamedPipe"));
+        }
+
+        // don't try to continue reading from a pipe if an error occured or if
+        // it had been closed
+        return TRUE;
+    }
+    else
+    {
+        return nAvailable == 0;
+    }
+}
+
 size_t wxPipeInputStream::OnSysRead(void *buffer, size_t len)
 {
-    DWORD bytesRead;
-
+    // reading from a pipe may block if there is no more data, always check for
+    // EOF first
     m_lasterror = wxSTREAM_NOERROR;
-    if (! ::ReadFile(m_hInput, buffer, len, &bytesRead, NULL) ) {
-        if (GetLastError() == ERROR_BROKEN_PIPE)
+    if ( Eof() )
+        return 0;
+
+    DWORD bytesRead;
+    if ( !::ReadFile(m_hInput, buffer, len, &bytesRead, NULL) )
+    {
+        if ( ::GetLastError() == ERROR_BROKEN_PIPE )
             m_lasterror = wxSTREAM_EOF;
         else
             m_lasterror = wxSTREAM_READ_ERROR;
     }
+
     return bytesRead;
 }
 
@@ -198,12 +240,14 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
     DWORD bytesRead;
 
     m_lasterror = wxSTREAM_NOERROR;
-    if (! ::WriteFile(m_hOutput, buffer, len, &bytesRead, NULL) ) {
-        if (GetLastError() == ERROR_BROKEN_PIPE)
+    if ( !::WriteFile(m_hOutput, buffer, len, &bytesRead, NULL) )
+    {
+        if ( ::GetLastError() == ERROR_BROKEN_PIPE )
             m_lasterror = wxSTREAM_EOF;
         else
             m_lasterror = wxSTREAM_READ_ERROR;
     }
+
     return bytesRead;
 }
 
@@ -214,6 +258,7 @@ size_t wxPipeOutputStream::OnSysWrite(const void *buffer, size_t len)
 // ============================================================================
 
 #ifdef __WIN32__
+
 static DWORD wxExecuteThread(wxExecuteData *data)
 {
     WaitForSingleObject(data->hProcess, INFINITE);
@@ -221,7 +266,7 @@ static DWORD wxExecuteThread(wxExecuteData *data)
     // get the exit code
     if ( !GetExitCodeProcess(data->hProcess, &data->dwExitCode) )
     {
-        wxLogLastError("GetExitCodeProcess");
+        wxLogLastError(wxT("GetExitCodeProcess"));
     }
 
     wxASSERT_MSG( data->dwExitCode != STILL_ACTIVE,
@@ -347,164 +392,148 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     }
 
 #if defined(__WIN32__) && !defined(__TWIN32__)
-    // the old code is disabled because we really need a process handle
-    // if we want to execute it asynchronously or even just get its
-    // return code and for this we must use CreateProcess() and not
-    // ShellExecute()
-#if 0
-    // isolate command and arguments
-    wxString commandName;
-    bool insideQuotes = FALSE;
-    const char *pc;
-    for ( pc = command.c_str(); *pc != '\0'; pc++ )
-    {
-        switch ( *pc )
-        {
-            case ' ':
-            case '\t':
-                if ( !insideQuotes )
-                    break;
-                // fall through
 
-            case '"':
-                insideQuotes = !insideQuotes;
-                // fall through
-
-            default:
-                commandName += *pc;
-                continue;   // skip the next break
-        }
-
-        // only reached for space not inside quotes
-        break;
-    }
-    wxString commandArgs = pc;
-
-    wxWindow *winTop = wxTheApp->GetTopWindow();
-    HWND hwndTop = (HWND)(winTop ? winTop->GetHWND() : 0);
-
-    HANDLE result;
-#ifdef __GNUWIN32__
-    result = ShellExecute(hwndTop,
-                          (const wchar_t)"open",
-                          (const wchar_t)commandName,
-                          (const wchar_t)commandArgs,
-                          (const wchar_t)NULL,
-                          SW_SHOWNORMAL);
-#else // !GNUWIN32
-    result = ShellExecute(hwndTop, "open", commandName,
-                          commandArgs, NULL, SW_SHOWNORMAL);
-#endif // GNUWIN32
-
-    if ( ((long)result) <= 32 )
-        wxLogSysError(_("Can't execute command '%s'"), command.c_str());
-
-    return result;
-#else // 1
-
-    HANDLE hpipeRead[2];
-    HANDLE hpipeWrite[2];
-    HANDLE hStdIn = INVALID_HANDLE_VALUE;
-    HANDLE hStdOut = INVALID_HANDLE_VALUE;
-
-    // we need to inherit handles in the child process if we want to redirect
-    // its IO
-    BOOL inheritHandles = FALSE;
+    // the IO redirection is only supported with wxUSE_STREAMS
+    BOOL redirect = FALSE;
+#if wxUSE_STREAMS
+    // the first elements are reading ends, the second are the writing ones
+    HANDLE hpipeStdin[2],
+           hpipeStdinWrite = INVALID_HANDLE_VALUE,
+           hpipeStdout[2],
+           hpipeStderr[2];
 
     // open the pipes to which child process IO will be redirected if needed
     if ( handler && handler->IsRedirected() )
     {
+        // default secutiry attributes
         SECURITY_ATTRIBUTES security;
 
         security.nLength              = sizeof(security);
         security.lpSecurityDescriptor = NULL;
         security.bInheritHandle       = TRUE;
 
-        if ( !::CreatePipe(&hpipeRead[0], &hpipeRead[1], &security, 0) )
+        // create stdin pipe
+        if ( !::CreatePipe(&hpipeStdin[0], &hpipeStdin[1], &security, 0) )
         {
             wxLogSysError(_("Can't create the inter-process read pipe"));
 
-            return 0;
+            // indicate failure in both cases
+            return sync ? -1 : 0;
         }
 
-        if ( !::CreatePipe(&hpipeWrite[0], &hpipeWrite[1], &security, 0) )
+        // and a stdout one
+        if ( !::CreatePipe(&hpipeStdout[0], &hpipeStdout[1], &security, 0) )
         {
-            ::CloseHandle(hpipeRead[0]);
-            ::CloseHandle(hpipeRead[1]);
+            ::CloseHandle(hpipeStdin[0]);
+            ::CloseHandle(hpipeStdin[1]);
 
             wxLogSysError(_("Can't create the inter-process write pipe"));
 
-            return 0;
+            return sync ? -1 : 0;
         }
 
-        // We need to save the old stdio handles to restore them after the call
-        // to CreateProcess
-        hStdIn  = ::GetStdHandle(STD_INPUT_HANDLE);
-        hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
+        (void)::CreatePipe(&hpipeStderr[0], &hpipeStderr[1], &security, 0);
 
-        if ( !::SetStdHandle(STD_INPUT_HANDLE, hpipeRead[0]) ||
-             !::SetStdHandle(STD_OUTPUT_HANDLE, hpipeWrite[1]) )
-        {
-            wxLogDebug(_T("Failed to change stdin/out handles"));
-        }
-
-        inheritHandles = TRUE;
+        redirect = TRUE;
     }
+#endif // wxUSE_STREAMS
 
     // create the process
     STARTUPINFO si;
     wxZeroMemory(si);
-
     si.cb = sizeof(si);
 
-    PROCESS_INFORMATION pi;
-
-    if ( ::CreateProcess(
-                         NULL,       // application name (use only cmd line)
-                         (wxChar *)command.c_str(),  // full command line
-                         NULL,       // security attributes: defaults for both
-                         NULL,       //   the process and its main thread
-                         inheritHandles,      // inherit handles if we need pipes
-                         CREATE_DEFAULT_ERROR_MODE |
-                         CREATE_SUSPENDED,           // flags
-                         NULL,       // environment (use the same)
-                         NULL,       // current directory (use the same)
-                         &si,        // startup info (unused here)
-                         &pi         // process info
-                        ) == 0 )
+#if wxUSE_STREAMS
+    if ( redirect )
     {
-        if ( inheritHandles )
+        // when the std IO is redirected, we don't show the (console) process
+        // window
+        si.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+
+        si.hStdInput = hpipeStdin[0];
+        si.hStdOutput = hpipeStdout[1];
+        si.hStdError = hpipeStderr[1];
+
+        si.wShowWindow = SW_HIDE;
+
+        // we must duplicate the handle to the write side of stdin pipe to make
+        // it non inheritable: indeed, we must close hpipeStdin[1] before
+        // launching the child process as otherwise this handle will be
+        // inherited by the child which will never close it and so the pipe
+        // will never be closed and the child will be left stuck in ReadFile()
+        if ( !::DuplicateHandle
+                (
+                    GetCurrentProcess(),
+                    hpipeStdin[1],
+                    GetCurrentProcess(),
+                    &hpipeStdinWrite,
+                    0,                      // desired access: unused here
+                    FALSE,                  // not inherited
+                    DUPLICATE_SAME_ACCESS   // same access as for src handle
+                ) )
         {
-            ::CloseHandle(hpipeWrite[0]);
-            ::CloseHandle(hpipeWrite[1]);
-            ::CloseHandle(hpipeRead[0]);
-            ::CloseHandle(hpipeRead[1]);
+            wxLogLastError(_T("DuplicateHandle"));
         }
+
+        ::CloseHandle(hpipeStdin[1]);
+    }
+#endif // wxUSE_STREAMS
+
+    PROCESS_INFORMATION pi;
+    DWORD dwFlags = CREATE_DEFAULT_ERROR_MODE | CREATE_SUSPENDED;
+
+    bool ok = ::CreateProcess
+                (
+                 NULL,              // application name (use only cmd line)
+                 (wxChar *)
+                 command.c_str(),   // full command line
+                 NULL,              // security attributes: defaults for both
+                 NULL,              //   the process and its main thread
+                 redirect,          // inherit handles if we use pipes
+                 dwFlags,           // process creation flags
+                 NULL,              // environment (use the same)
+                 NULL,              // current directory (use the same)
+                 &si,               // startup info (unused here)
+                 &pi                // process info
+                ) != 0;
+
+#if wxUSE_STREAMS
+    // we can close the pipe ends used by child anyhow
+    if ( redirect )
+    {
+        ::CloseHandle(hpipeStdin[0]);
+        ::CloseHandle(hpipeStdout[1]);
+        ::CloseHandle(hpipeStderr[1]);
+    }
+#endif // wxUSE_STREAMS
+
+    if ( !ok )
+    {
+#if wxUSE_STREAMS
+        // close the other handles too
+        if ( redirect )
+        {
+            ::CloseHandle(hpipeStdout[0]);
+            ::CloseHandle(hpipeStderr[0]);
+        }
+#endif // wxUSE_STREAMS
 
         wxLogSysError(_("Execution of command '%s' failed"), command.c_str());
 
-        return 0;
+        return sync ? -1 : 0;
     }
 
-    // Restore the old stdio handles
-    if ( inheritHandles )
+#if wxUSE_STREAMS
+    if ( redirect )
     {
-        if ( !::SetStdHandle(STD_INPUT_HANDLE, hStdIn) ||
-             !::SetStdHandle(STD_OUTPUT_HANDLE, hStdOut) )
-        {
-            wxLogDebug(_T("Failed to restore old stdin/out handles"));
-        }
-
-        // they're still opened in child process
-        ::CloseHandle(hpipeWrite[1]);
-        ::CloseHandle(hpipeRead[0]);
-
         // We can now initialize the wxStreams
-        wxInputStream *inStream = new wxPipeInputStream(hpipeWrite[0]);
-        wxOutputStream *outStream = new wxPipeOutputStream(hpipeRead[1]);
+        wxInputStream *inStream = new wxPipeInputStream(hpipeStdout[0]),
+                      *errStream = new wxPipeInputStream(hpipeStderr[0]);
+        wxOutputStream *outStream = new wxPipeOutputStream(hpipeStdinWrite);
 
-        handler->SetPipeStreams(inStream, outStream);
+        handler->SetPipeStreams(inStream, outStream, errStream);
     }
+#endif // wxUSE_STREAMS
 
     // register the class for the hidden window used for the notifications
     if ( !gs_classForHiddenWindow )
@@ -519,7 +548,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
         if ( !::RegisterClass(&wndclass) )
         {
-            wxLogLastError("RegisterClass(hidden window)");
+            wxLogLastError(wxT("RegisterClass(hidden window)"));
         }
     }
 
@@ -562,16 +591,16 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
     if ( ::ResumeThread(pi.hThread) == (DWORD)-1 )
     {
         // ignore it - what can we do?
-        wxLogLastError("ResumeThread in wxExecute");
+        wxLogLastError(wxT("ResumeThread in wxExecute"));
     }
 
     // close unneeded handle
     if ( !::CloseHandle(pi.hThread) )
-        wxLogLastError("CloseHandle(hThread)");
+        wxLogLastError(wxT("CloseHandle(hThread)"));
 
     if ( !hThread )
     {
-        wxLogLastError("CreateThread in wxExecute");
+        wxLogLastError(wxT("CreateThread in wxExecute"));
 
         DestroyWindow(hwnd);
         delete data;
@@ -579,6 +608,8 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         // the process still started up successfully...
         return pi.dwProcessId;
     }
+
+    ::CloseHandle(hThread);
 
 #if wxUSE_IPC
     // second part of DDE hack: now establish the DDE conversation with the
@@ -624,7 +655,6 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 
     // return the exit code
     return dwExitCode;
-#endif // 0/1
 #else // Win16
     long instanceID = WinExec((LPCSTR) WXSTRINGCAST command, SW_SHOW);
     if (instanceID < 32) return(0);
@@ -654,6 +684,8 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
 
     return wxExecute(command, sync, handler);
 }
+
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Metafile helpers
@@ -688,3 +720,5 @@ extern void HIMETRICToPixel(LONG *x, LONG *y)
     *y *= iHeightPels;
     *y /= (iHeightMM * 100);
 }
+
+#endif // wxUSE_GUI

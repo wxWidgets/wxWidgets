@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLayoutList.h - a formatted text rendering engine for wxWindows *
  *                                                                  *
- * (C) 1999 by Karsten Ballüder (ballueder@gmx.net)                 *
+ * (C) 1999-2000 by Karsten Ballüder (ballueder@gmx.net)            *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -38,16 +38,37 @@
 #   define WXLAYOUT_USE_CARET 1
 #endif // __WXMSW__
 
-// do not enable debug mode within Mahogany
-#if defined(__WXDEBUG__)  && ! defined(M_BASEDIR)
+// do not enable debug mode within Mahogany unless in debug mode
+#if defined(__WXDEBUG__) && (( ! defined(M_BASEDIR) )|| defined(DEBUG))
 #   define   WXLAYOUT_DEBUG
 #endif
 
 #ifdef WXLAYOUT_DEBUG
 #   define WXLO_TRACE(x)   wxLogDebug(x)
+// activate profiling: #   define WXLO_PROFILE
 #else
 #   define WXLO_TRACE(x)
 #endif
+
+/* Some profiling code: */
+#if defined (WXLO_PROFILE)
+#include <sys/time.h>
+#include <unistd.h>
+
+#   define WXLO_TIMER_DEFINE(x)    static struct timeval  x
+#   define WXLO_TIMER_START(x)     gettimeofday(&x,NULL)
+#   define WXLO_TIMER_STOP(x)      { struct timeval y; \
+                                gettimeofday(&y,NULL); \
+                                x.tv_sec -= y.tv_sec; x.tv_usec -= y.tv_usec; }
+#   define   WXLO_TIMER_PRINT(x)   wxLogDebug("Timer " #x " elapsed: %ld", \
+                                         (long)(x.tv_sec * -1000 - x.tv_usec));
+#else
+#   define   WXLO_TIMER_DEFINE(x)
+#   define   WXLO_TIMER_START(x)
+#   define   WXLO_TIMER_STOP(x)
+#   define   WXLO_TIMER_PRINT(x)
+#endif
+
 
 #define WXLO_DEBUG_URECT 0
 
@@ -71,7 +92,9 @@ enum wxLayoutObjectType
    /// command object, containing font or colour changes
    WXLO_TYPE_CMD,
    /// icon object, any kind of image
-   WXLO_TYPE_ICON
+   WXLO_TYPE_ICON,
+   /// a linebreak, does not exist as an object
+   WXLO_TYPE_LINEBREAK
 };
 
 /// Type used for coordinates in drawing. Must be signed.
@@ -171,7 +194,7 @@ public:
    virtual ~wxLayoutObject() { if(m_UserData) m_UserData->DecRef(); }
 
 #ifdef WXLAYOUT_DEBUG
-   virtual void Debug(void);
+   virtual wxString DebugDump(void) const;
 #endif
 
    /** Tells the object about some user data. This data is associated
@@ -266,7 +289,7 @@ public:
    static wxLayoutObjectText *Read(wxString &istr);
 
 #ifdef WXLAYOUT_DEBUG
-   virtual void Debug(void);
+   virtual wxString DebugDump(void) const;
 #endif
 
    virtual CoordType GetLength(void) const { return strlen(m_Text.c_str()); }
@@ -475,11 +498,18 @@ public:
    void Append(wxLayoutObject * obj)
       {
          wxASSERT(obj);
-
          m_ObjectList.push_back(obj);
          m_Length += obj->GetLength();
       }
 
+   /** This function prepends an object to the line. */
+   void Prepend(wxLayoutObject * obj)
+      {
+         wxASSERT(obj);
+         m_ObjectList.push_front(obj);
+         m_Length += obj->GetLength();
+      }
+       
    /** This function appens the next line to this, i.e. joins the two
        lines into one.
    */
@@ -498,6 +528,13 @@ public:
    */
    wxLayoutLine *Break(CoordType xpos, wxLayoutList *llist);
 
+   /** This function wraps the line: breaks it at  a suitable point
+       and merges it with the next.
+       @param wrapmargin
+       @return TRUE if broken
+   */
+   bool Wrap(CoordType wrapmargin, wxLayoutList *llist);
+   
    /** Deletes the next word from this position, including leading
        whitespace.
        This function does not delete over font changes, i.e. a word
@@ -662,7 +699,7 @@ public:
              CoordType to = -1);
 
 #ifdef WXLAYOUT_DEBUG
-   void Debug(void);
+   void Debug(void) const;
 #endif
    wxLayoutStyleInfo const & GetStyleInfo() const { return m_StyleInfo; }
 
@@ -680,6 +717,7 @@ public:
       }
 
       m_Dirty = true;
+      if(m_Next) m_Next->MarkDirty();
    }
    /// Reset the dirty flag
    void MarkClean() { m_Dirty = false; m_updateLeft = -1; }
@@ -815,7 +853,8 @@ public:
    /// Returns current cursor position.
    const wxPoint &GetCursorPos(wxDC &dc) const { return m_CursorPos; }
    const wxPoint &GetCursorPos() const { return m_CursorPos; }
-
+   wxLayoutLine * GetCursorLine(void) { return m_CursorLine; }
+   
    /// move cursor to the end of text
    void MoveCursorToEnd(void)
    {
@@ -845,6 +884,12 @@ public:
        @return true if line got broken
    */
    bool WrapLine(CoordType column);
+
+   /** Wraps the complete buffer.
+       @param column the break position for the line, maximum length
+       @return true if line got broken
+   */
+   bool WrapAll(CoordType column);
    /** This function deletes npos cursor positions.
        @param npos how many positions
        @return true if everything got deleted
@@ -1142,7 +1187,8 @@ public:
    /// get the line by number
    wxLayoutLine *GetLine(CoordType index) const;
 
-   /** Reads objects from a string and inserts them.
+   /** Reads objects from a string and inserts them. Returns NULL if
+       string is empty or a linebreak was  found.
        @param istr stream to read from, will bee changed
    */
    void Read(wxString &istr);

@@ -32,6 +32,7 @@
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/radiobox.h"
+    #include "wx/settings.h"
     #include "wx/log.h"
 #endif
 
@@ -125,6 +126,9 @@ bool wxRadioBox::MSWCommand(WXUINT cmd, WXWORD id)
 {
     if ( cmd == BN_CLICKED )
     {
+        if (id == GetId())
+            return TRUE;
+
         int selectedButton = -1;
 
         for ( int i = 0; i < m_noItems; i++ )
@@ -251,7 +255,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
         if ( !hwndBtn )
         {
-            wxLogLastError("CreateWindow(radio btn)");
+            wxLogLastError(wxT("CreateWindow(radio btn)"));
 
             return FALSE;
         }
@@ -716,11 +720,12 @@ bool wxRadioBox::SetFont(const wxFont& font)
     WXHFONT hfont = wxFont(font).GetResourceHandle();
     for ( int n = 0; n < m_noItems; n++ )
     {
-        ::SendMessage((HWND)m_radioButtons[n], WM_SETFONT, (WPARAM)hfont, 0L);
-    }
+        HWND hwndBtn = (HWND)m_radioButtons[n];
+        ::SendMessage(hwndBtn, WM_SETFONT, (WPARAM)hfont, 0L);
 
-    // this is needed because otherwise the buttons are not redrawn correctly
-    Refresh();
+        // otherwise the buttons are not redrawn correctly
+        ::InvalidateRect(hwndBtn, NULL, FALSE /* don't erase bg */);
+    }
 
     return TRUE;
 }
@@ -768,6 +773,39 @@ long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
+
+WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    wxColour colBack = GetBackgroundColour();
+
+    if (!IsEnabled())
+        colBack = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
+
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
 
 // ---------------------------------------------------------------------------
 // window proc for radio buttons

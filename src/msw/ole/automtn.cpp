@@ -20,17 +20,18 @@
 #pragma hdrstop
 #endif
 
+#include "wx/defs.h"
+
+// Watcom C++ gives a linker error if this is compiled in.
+// With Borland C++, all samples crash if this is compiled in.
+#if !defined(__WATCOMC__) && !(defined(__BORLANDC__) && (__BORLANDC__ < 0x500))
+
 #include "wx/log.h"
+#include "wx/msw/ole/automtn.h"
+#include "wx/msw/private.h"
 
 #include <math.h>
 #include <time.h>
-
-// Watcom C++ gives a linker error if this is compiled in.
-#ifndef __WATCOMC__
-
-#include "wx/msw/ole/automtn.h"
-
-#include "wx/msw/private.h"
 
 #include <wtypes.h>
 #include <unknwn.h>
@@ -650,7 +651,8 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 		}
 	case VT_DATE:
 		{
-			struct tm tmTemp;
+#if wxUSE_TIMEDATE
+            struct tm tmTemp;
 			if (!TmFromOleDate(oleVariant.date, tmTemp))
 				return FALSE;
 
@@ -658,7 +660,9 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 			wxTime time(date, tmTemp.tm_hour, tmTemp.tm_min, tmTemp.tm_sec);
 
 			variant = time;
-			break;
+#endif
+
+            break;
 		}
 	case VT_I4:
 		{
@@ -680,7 +684,11 @@ bool ConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
 			variant = (bool) (oleVariant.bool != 0);
 #endif
 #else
+#ifndef HAVE_BOOL // Can't use bool operator if no native bool type
+			variant = (long) (oleVariant.boolVal != 0);
+#else
 			variant = (bool) (oleVariant.boolVal != 0);
+#endif
 #endif
 			break;
 		}

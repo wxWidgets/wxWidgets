@@ -1,0 +1,143 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.54
+     from gettext.texi on 25 January 1999 -->
+
+<TITLE>GNU gettext utilities - Table of Contents</TITLE>
+
+</HEAD>
+<BODY>
+<H1>GNU gettext tools, version 0.10.35</H1>
+<H2>Native Language Support Library and Tools</H2>
+<H2>Edition 0.10.35, 1 May 1998</H2>
+<ADDRESS>Ulrich Drepper</ADDRESS>
+<ADDRESS>Jim Meyering</ADDRESS>
+<ADDRESS>Fran@,{c}ois Pinard</ADDRESS>
+<P>
+<P><HR><P>
+
+</P>
+
+<UL>
+<LI><A NAME="TOC1" HREF="gettext_1.html#SEC1">Introduction</A>
+<UL>
+<LI><A NAME="TOC2" HREF="gettext_1.html#SEC2">The Purpose of GNU <CODE>gettext</CODE></A>
+<LI><A NAME="TOC3" HREF="gettext_1.html#SEC3">I18n, L10n, and Such</A>
+<LI><A NAME="TOC4" HREF="gettext_1.html#SEC4">Aspects in Native Language Support</A>
+<LI><A NAME="TOC5" HREF="gettext_1.html#SEC5">Files Conveying Translations</A>
+<LI><A NAME="TOC6" HREF="gettext_1.html#SEC6">Overview of GNU <CODE>gettext</CODE></A>
+</UL>
+<LI><A NAME="TOC7" HREF="gettext_2.html#SEC7">PO Files and PO Mode Basics</A>
+<UL>
+<LI><A NAME="TOC8" HREF="gettext_2.html#SEC8">Completing GNU <CODE>gettext</CODE> Installation</A>
+<LI><A NAME="TOC9" HREF="gettext_2.html#SEC9">The Format of PO Files</A>
+<LI><A NAME="TOC10" HREF="gettext_2.html#SEC10">Main PO mode Commands</A>
+<LI><A NAME="TOC11" HREF="gettext_2.html#SEC11">Entry Positioning</A>
+<LI><A NAME="TOC12" HREF="gettext_2.html#SEC12">Normalizing Strings in Entries</A>
+</UL>
+<LI><A NAME="TOC13" HREF="gettext_3.html#SEC13">Preparing Program Sources</A>
+<UL>
+<LI><A NAME="TOC14" HREF="gettext_3.html#SEC14">Triggering <CODE>gettext</CODE> Operations</A>
+<LI><A NAME="TOC15" HREF="gettext_3.html#SEC15">How Marks Appears in Sources</A>
+<LI><A NAME="TOC16" HREF="gettext_3.html#SEC16">Marking Translatable Strings</A>
+<LI><A NAME="TOC17" HREF="gettext_3.html#SEC17">Special Comments preceding Keywords</A>
+<LI><A NAME="TOC18" HREF="gettext_3.html#SEC18">Special Cases of Translatable Strings</A>
+</UL>
+<LI><A NAME="TOC19" HREF="gettext_4.html#SEC19">Making the Initial PO File</A>
+<UL>
+<LI><A NAME="TOC20" HREF="gettext_4.html#SEC20">Invoking the <CODE>xgettext</CODE> Program</A>
+<LI><A NAME="TOC21" HREF="gettext_4.html#SEC21">C Sources Context</A>
+<LI><A NAME="TOC22" HREF="gettext_4.html#SEC22">Using Translation Compendiums</A>
+</UL>
+<LI><A NAME="TOC23" HREF="gettext_5.html#SEC23">Updating Existing PO Files</A>
+<UL>
+<LI><A NAME="TOC24" HREF="gettext_5.html#SEC24">Invoking the <CODE>msgmerge</CODE> Program</A>
+<LI><A NAME="TOC25" HREF="gettext_5.html#SEC25">Translated Entries</A>
+<LI><A NAME="TOC26" HREF="gettext_5.html#SEC26">Fuzzy Entries</A>
+<LI><A NAME="TOC27" HREF="gettext_5.html#SEC27">Untranslated Entries</A>
+<LI><A NAME="TOC28" HREF="gettext_5.html#SEC28">Obsolete Entries</A>
+<LI><A NAME="TOC29" HREF="gettext_5.html#SEC29">Modifying Translations</A>
+<LI><A NAME="TOC30" HREF="gettext_5.html#SEC30">Modifying Comments</A>
+<LI><A NAME="TOC31" HREF="gettext_5.html#SEC31">Consulting Auxiliary PO Files</A>
+</UL>
+<LI><A NAME="TOC32" HREF="gettext_6.html#SEC32">Producing Binary MO Files</A>
+<UL>
+<LI><A NAME="TOC33" HREF="gettext_6.html#SEC33">Invoking the <CODE>msgfmt</CODE> Program</A>
+<LI><A NAME="TOC34" HREF="gettext_6.html#SEC34">The Format of GNU MO Files</A>
+</UL>
+<LI><A NAME="TOC35" HREF="gettext_7.html#SEC35">The User's View</A>
+<UL>
+<LI><A NAME="TOC36" HREF="gettext_7.html#SEC36">The Current <TT>`ABOUT-NLS'</TT> Matrix</A>
+<LI><A NAME="TOC37" HREF="gettext_7.html#SEC37">Magic for Installers</A>
+<LI><A NAME="TOC38" HREF="gettext_7.html#SEC38">Magic for End Users</A>
+</UL>
+<LI><A NAME="TOC39" HREF="gettext_8.html#SEC39">The Programmer's View</A>
+<UL>
+<LI><A NAME="TOC40" HREF="gettext_8.html#SEC40">About <CODE>catgets</CODE></A>
+<UL>
+<LI><A NAME="TOC41" HREF="gettext_8.html#SEC41">The Interface</A>
+<LI><A NAME="TOC42" HREF="gettext_8.html#SEC42">Problems with the <CODE>catgets</CODE> Interface?!</A>
+</UL>
+<LI><A NAME="TOC43" HREF="gettext_8.html#SEC43">About <CODE>gettext</CODE></A>
+<UL>
+<LI><A NAME="TOC44" HREF="gettext_8.html#SEC44">The Interface</A>
+<LI><A NAME="TOC45" HREF="gettext_8.html#SEC45">Solving Ambiguities</A>
+<LI><A NAME="TOC46" HREF="gettext_8.html#SEC46">Locating Message Catalog Files</A>
+<LI><A NAME="TOC47" HREF="gettext_8.html#SEC47">Optimization of the *gettext functions</A>
+</UL>
+<LI><A NAME="TOC48" HREF="gettext_8.html#SEC48">Comparing the Two Interfaces</A>
+<LI><A NAME="TOC49" HREF="gettext_8.html#SEC49">Using libintl.a in own programs</A>
+<LI><A NAME="TOC50" HREF="gettext_8.html#SEC50">Being a <CODE>gettext</CODE> grok</A>
+<LI><A NAME="TOC51" HREF="gettext_8.html#SEC51">Temporary Notes for the Programmers Chapter</A>
+<UL>
+<LI><A NAME="TOC52" HREF="gettext_8.html#SEC52">Temporary - Two Possible Implementations</A>
+<LI><A NAME="TOC53" HREF="gettext_8.html#SEC53">Temporary - About <CODE>catgets</CODE></A>
+<LI><A NAME="TOC54" HREF="gettext_8.html#SEC54">Temporary - Why a single implementation</A>
+<LI><A NAME="TOC55" HREF="gettext_8.html#SEC55">Temporary - Notes</A>
+</UL>
+</UL>
+<LI><A NAME="TOC56" HREF="gettext_9.html#SEC56">The Translator's View</A>
+<UL>
+<LI><A NAME="TOC57" HREF="gettext_9.html#SEC57">Introduction 0</A>
+<LI><A NAME="TOC58" HREF="gettext_9.html#SEC58">Introduction 1</A>
+<LI><A NAME="TOC59" HREF="gettext_9.html#SEC59">Discussions</A>
+<LI><A NAME="TOC60" HREF="gettext_9.html#SEC60">Organization</A>
+<UL>
+<LI><A NAME="TOC61" HREF="gettext_9.html#SEC61">Central Coordination</A>
+<LI><A NAME="TOC62" HREF="gettext_9.html#SEC62">National Teams</A>
+<UL>
+<LI><A NAME="TOC63" HREF="gettext_9.html#SEC63">Sub-Cultures</A>
+<LI><A NAME="TOC64" HREF="gettext_9.html#SEC64">Organizational Ideas</A>
+</UL>
+<LI><A NAME="TOC65" HREF="gettext_9.html#SEC65">Mailing Lists</A>
+</UL>
+<LI><A NAME="TOC66" HREF="gettext_9.html#SEC66">Information Flow</A>
+</UL>
+<LI><A NAME="TOC67" HREF="gettext_10.html#SEC67">The Maintainer's View</A>
+<UL>
+<LI><A NAME="TOC68" HREF="gettext_10.html#SEC68">Flat or Non-Flat Directory Structures</A>
+<LI><A NAME="TOC69" HREF="gettext_10.html#SEC69">Prerequisite Works</A>
+<LI><A NAME="TOC70" HREF="gettext_10.html#SEC70">Invoking the <CODE>gettextize</CODE> Program</A>
+<LI><A NAME="TOC71" HREF="gettext_10.html#SEC71">Files You Must Create or Alter</A>
+<UL>
+<LI><A NAME="TOC72" HREF="gettext_10.html#SEC72"><TT>`POTFILES.in'</TT> in <TT>`po/'</TT></A>
+<LI><A NAME="TOC73" HREF="gettext_10.html#SEC73"><TT>`configure.in'</TT> at top level</A>
+<LI><A NAME="TOC74" HREF="gettext_10.html#SEC74"><TT>`aclocal.m4'</TT> at top level</A>
+<LI><A NAME="TOC75" HREF="gettext_10.html#SEC75"><TT>`acconfig.h'</TT> at top level</A>
+<LI><A NAME="TOC76" HREF="gettext_10.html#SEC76"><TT>`Makefile.in'</TT> at top level</A>
+<LI><A NAME="TOC77" HREF="gettext_10.html#SEC77"><TT>`Makefile.in'</TT> in <TT>`src/'</TT></A>
+</UL>
+</UL>
+<LI><A NAME="TOC78" HREF="gettext_11.html#SEC78">Concluding Remarks</A>
+<UL>
+<LI><A NAME="TOC79" HREF="gettext_11.html#SEC79">History of GNU <CODE>gettext</CODE></A>
+<LI><A NAME="TOC80" HREF="gettext_11.html#SEC80">Related Readings</A>
+</UL>
+<LI><A NAME="TOC81" HREF="gettext_12.html#SEC81">Country Codes</A>
+</UL>
+<P><HR><P>
+This document was generated on 25 January 1999 using the
+<A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
+translator version 1.51a.</P>
+</BODY>
+</HTML>

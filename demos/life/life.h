@@ -137,8 +137,9 @@ private:
     DECLARE_EVENT_TABLE()
 
     // event handlers
-    void OnSamples(wxCommandEvent& event);
     void OnMenu(wxCommandEvent& event);
+    void OnOpen(wxCommandEvent& event);
+    void OnSamples(wxCommandEvent& event);
     void OnNavigate(wxCommandEvent& event);
     void OnZoom(wxCommandEvent& event);
     void OnSlider(wxScrollEvent& event);

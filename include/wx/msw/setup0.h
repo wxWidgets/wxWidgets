@@ -16,8 +16,11 @@
 // global settings
 // ----------------------------------------------------------------------------
 
-// define this to 0 when building wxBase library
-#define wxUSE_GUI            1
+// define this to 0 when building wxBase library - this can also be done from
+// makefile/project file overriding the value here
+#ifndef wxUSE_GUI
+    #define wxUSE_GUI            1
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // compatibility settings
@@ -117,6 +120,33 @@
 #else
     #define wxUSE_ON_FATAL_EXCEPTION 0
 #endif
+
+// ----------------------------------------------------------------------------
+// Unicode support
+// ----------------------------------------------------------------------------
+
+// Set wxUSE_UNICODE to 1 to compile wxWindows in Unicode mode: wxChar will be
+// defined as wchar_t, wxString will use Unicode internally. If you set this
+// to 1, you must use wxT() macro for all literal strings in the program.
+//
+// Unicode is currently only fully supported under Windows NT/2000 (Windows 9x
+// doesn't support it and the programs compiled in Unicode mode will not run
+// under 9x).
+//
+// Default is 0
+//
+// Recommended setting: 0 (unless you only plan to use Windows NT/2000)
+#define wxUSE_UNICODE 0
+
+// Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
+// compiling the program in Unicode mode. More precisely, it will be possible
+// to construct wxString from a wide (Unicode) string and convert any wxString
+// to Unicode.
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_WCHAR_T 1
 
 // ----------------------------------------------------------------------------
 // global features
@@ -442,9 +472,10 @@
 
 #define wxUSE_IPC         1
                                 // 0 for no interprocess comms
-// Note: wxHELP uses IPC under X so these are interdependent!
 #define wxUSE_HELP        1
                                 // 0 for no help facility
+#define wxUSE_MS_HTML_HELP 0
+                                // 0 for no MS HTML Help
 #define wxUSE_RESOURCES   1
                                 // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
@@ -502,6 +533,14 @@
                                 // Support for backward scrolling cursors is dependent on the
                                 // data source as well as the ODBC driver being used.
 
+#define wxODBC_BACKWARD_COMPATABILITY 0
+                                // Default is 0.  Set to 1 to use the deprecated classes, enum
+                                // types, function, member variables.  With a setting of 1, full
+                                // backward compatability with the 2.0.x release is possible.
+                                // It is STRONGLY recommended that this be set to 0, as 
+                                // future development will be done only on the non-deprecated
+                                // functions/classes/member variables/etc.
+
 // ----------------------------------------------------------------------------
 // other compiler (mis)features
 // ----------------------------------------------------------------------------
@@ -545,8 +584,6 @@
 // Windows-only settings
 // ----------------------------------------------------------------------------
 
-// Most of the settings in this section are obsolete or not used
-
 // Make settings compatible with MFC
 #define wxUSE_MFC           0
 
@@ -557,7 +594,6 @@
 #define wxUSE_CTL3D                      0
 #else
 // Define 1 to use Microsoft CTL3D library.
-// See note above about using FAFA and CTL3D.
 #define wxUSE_CTL3D                      1
 #endif
 
@@ -580,6 +616,10 @@
                                 // Define 1 for font size to be backward compatible
                                 // to 1.63 and earlier. 1.64 and later define point
                                 // sizes to be compatible with Windows.
+#define wxDIALOG_UNIT_COMPATIBILITY   0
+                                // Set to 0 for accurate dialog units, else
+                                // 1 to be as per 2.1.16 and before. If migrating
+                                // between versions, your dialogs may seem to shrink.
 #define wxUSE_PENWINDOWS             0
                                 // Set to 1 to use PenWindows
 
@@ -596,8 +636,8 @@
 // disable the settings which don't work for some compilers
 // ----------------------------------------------------------------------------
 
-// These don't work as expected for mingw32 and cygwin32
 #if defined(__GNUWIN32__)
+// These don't work as expected for mingw32 and cygwin32
 #undef  wxUSE_MEMORY_TRACING
 #define wxUSE_MEMORY_TRACING            0
 
@@ -606,7 +646,17 @@
 
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
+
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
+
 #endif // __GNUWIN32__
+
+// Cygwin b20 doesn't have wcslen
+#if defined(__GNUWIN32__) && !defined(__MINGW32__)
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 0
+#endif
 
 // MFC duplicates these operators
 #if wxUSE_MFC
@@ -616,6 +666,12 @@
 #undef  wxUSE_DEBUG_NEW_ALWAYS
 #define wxUSE_DEBUG_NEW_ALWAYS          0
 #endif // wxUSE_MFC
+
+// ODBC classes aren't Unicode-compatible yet
+#if wxUSE_UNICODE
+#undef wxUSE_ODBC
+#define wxUSE_ODBC 0
+#endif
 
 #if (!defined(WIN32) && !defined(__WIN32__)) || (defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS)
 // Can't use OLE drag and drop in Windows 3.1 because we don't know how
@@ -629,6 +685,11 @@
 #if !defined(__WIN32__) && wxUSE_NATIVE_STATUSBAR
 #undef  wxUSE_NATIVE_STATUSBAR
 #define wxUSE_NATIVE_STATUSBAR 0
+#endif
+
+#if !wxUSE_OWNER_DRAWN
+#undef wxUSE_CHECKLISTBOX
+#define wxUSE_CHECKLISTBOX 0
 #endif
 
 // Salford C++ doesn't like some of the memory operator definitions
@@ -647,7 +708,7 @@
 
 #undef wxUSE_OWNER_DRAWN
 #define wxUSE_OWNER_DRAWN 0
-#endif
+#endif // __SALFORDC__
 
 #ifdef __TWIN32__
 
@@ -657,7 +718,7 @@
 #undef wxUSE_ODBC
 #define wxUSE_ODBC 0
 
-#endif
+#endif // __TWIN32__
 
 // BC++/Win16 can't cope with the amount of data in resource.cpp
 #if defined(__WIN16__) && defined(__BORLANDC__)
@@ -677,15 +738,29 @@
 #define wxUSE_LIBJPEG 0
 #endif
 
+#if defined(__BORLANDC__)
+// Need a BC++-specific htmlhelp.lib before we can enable this
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
+#endif
+
+// wxUSE_DBEUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode
+#if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
+#undef wxUSE_DEBUG_NEW_ALWAYS
+#define wxUSE_DEBUG_NEW_ALWAYS 0
+#endif
+
 #if defined(__WXMSW__) && defined(__WATCOMC__)
-#undef wxUSE_LIBJPEG
-#define wxUSE_LIBJPEG 0
-
-#undef wxUSE_LIBTIFF
-#define wxUSE_LIBTIFF 0
-
+/*
 #undef  wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
+*/
+
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
+
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 0
 #endif
 
 #if defined(__WXMSW__) && !defined(__WIN32__)
@@ -726,7 +801,37 @@
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
 
+#undef wxUSE_MS_HTML_HELP
+#define wxUSE_MS_HTML_HELP 0
+
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 0
+
+#endif // Win16
+
+// ----------------------------------------------------------------------------
+// check the settings consistency: do it here to abort compilation immediately
+// and not almost in the very end when the relevant file fails to compile and
+// you need to modify setup.h and rebuild everything
+// ----------------------------------------------------------------------------
+
+#if wxUSE_TIMEDATE && !wxUSE_LONGLONG
+    #error wxDateTime requires wxLongLong
 #endif
+
+#if wxUSE_TEXTFILE && !wxUSE_FILE
+    #error You cannot compile wxTextFile without wxFile
+#endif
+
+#if wxUSE_FILESYSTEM && !wxUSE_STREAMS
+    #error You cannot compile virtual file systems without wxUSE_STREAMS
+#endif
+
+#if wxUSE_HTML && !wxUSE_FILESYSTEM
+    #error You cannot compile wxHTML without virtual file systems
+#endif
+
+// add more tests here...
 
 #endif
     // _WX_SETUP_H_

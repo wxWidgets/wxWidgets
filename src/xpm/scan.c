@@ -506,7 +506,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
 	return (XpmNoMemory);
 
     for (i = 0, i2 = mask, color = colors, xcolor = xcolors;
-	 i < ncolors; i++, i2++, color++, xcolor++, pixels++) {
+	 i < (unsigned)ncolors; i++, i2++, color++, xcolor++, pixels++) {
 
 	if (!(s = color->string = (char *) XpmMalloc(cpp + 1))) {
 	    XpmFree(xcolors);
@@ -549,7 +549,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
     }
 /* end 3.2 bc */
 
-    for (i = 0, color = colors, xcolor = xcolors; i < ncolors;
+    for (i = 0, color = colors, xcolor = xcolors; i < (unsigned)ncolors;
 						  i++, color++, xcolor++) {
 
 	/* look for related info from the attributes if any */

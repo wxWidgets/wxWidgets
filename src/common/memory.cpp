@@ -519,7 +519,7 @@ void wxDebugContext::SetStream(ostream *str, streambuf *buf)
 
 bool wxDebugContext::SetFile(const wxString& file)
 {
-  ofstream *str = new ofstream(file.fn_str());
+  ofstream *str = new ofstream(file.mb_str());
 
   if (str->bad())
   {
@@ -1026,7 +1026,7 @@ void operator delete(void* pData, wxChar* /* fileName */, int /* lineNum */)
   wxDebugFree(pData, FALSE);
 }
 // New operator 21/11/1998
-void operator delete[](void* pData, char* /* fileName */, int /* lineNum */)
+void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNum */)
 {
   wxDebugFree(pData, TRUE);
 }
@@ -1146,7 +1146,10 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 // Trace: send output to the current debugging stream
 void wxTrace(const wxChar *fmt ...)
 {
-  va_list ap;
+#if 1
+    wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));
+#else
+    va_list ap;
   static wxChar buffer[512];
 
   va_start(ap, fmt);
@@ -1174,11 +1177,15 @@ void wxTrace(const wxChar *fmt ...)
 #else
     fprintf(stderr, buffer);
 #endif
+#endif
 }
 
 // Trace with level
 void wxTraceLevel(int level, const wxChar *fmt ...)
 {
+#if 1
+    wxFAIL_MSG(wxT("wxTrace is now obsolete. Please use wxDebugXXX instead."));
+#else
   if (wxDebugContext::GetLevel() < level)
     return;
 
@@ -1188,7 +1195,7 @@ void wxTraceLevel(int level, const wxChar *fmt ...)
   va_start(ap, fmt);
 
 #ifdef __WXMSW__
-  wvsprintf(buffer,fmt,ap) ;
+  wxWvsprintf(buffer,fmt,ap) ;
 #else
   vsprintf(buffer,fmt,ap) ;
 #endif
@@ -1209,6 +1216,7 @@ void wxTraceLevel(int level, const wxChar *fmt ...)
 #endif
 #else
     fprintf(stderr, buffer);
+#endif
 #endif
 }
 

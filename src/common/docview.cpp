@@ -172,6 +172,8 @@ bool wxDocument::OnCloseDocument()
 // deleted.
 bool wxDocument::DeleteAllViews()
 {
+    wxDocManager* manager = GetDocumentManager();
+
     wxNode *node = m_documentViews.First();
     while (node)
     {
@@ -184,6 +186,11 @@ bool wxDocument::DeleteAllViews()
         delete view; // Deletes node implicitly
         node = next;
     }
+    // If we haven't yet deleted the document (for example
+    // if there were no views) then delete it.
+    if (manager->GetDocuments().Member(this))
+        delete this;
+
     return TRUE;
 }
 
@@ -287,7 +294,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ofstream store(wxString(file.fn_str()));
+    ofstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileOutputStream store(wxString(file.fn_str()));
@@ -323,7 +330,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    ifstream store(wxString(file.fn_str()));
+    ifstream store(wxString(file.fn_str()).mb_str());
     if (store.fail() || store.bad())
 #else
     wxFileInputStream store(wxString(file.fn_str()));
@@ -655,7 +662,8 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
         return doc;
     else
     {
-        delete doc;
+        if (GetDocumentManager()->GetDocuments().Member(doc))
+            doc->DeleteAllViews();
         return (wxDocument *) NULL;
     }
 }
@@ -1096,7 +1104,8 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             newDoc->SetDocumentTemplate(temp);
             if (!newDoc->OnOpenDocument(path2))
             {
-                delete newDoc;
+                newDoc->DeleteAllViews();
+                // delete newDoc; // Implicitly deleted by DeleteAllViews
                 return (wxDocument *) NULL;
             }
             AddFileToHistory(path2);
@@ -1342,6 +1351,20 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     if (!pathTmp.IsEmpty())
     {
+        if (!wxFileExists(pathTmp))
+        {
+            wxString msgTitle;
+            if (!wxTheApp->GetAppName().IsEmpty())
+                msgTitle = wxTheApp->GetAppName();
+            else
+                msgTitle = wxString(_("File error"));
+            
+            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
+                wxTheApp->GetTopWindow());
+
+            path = wxT("");
+            return (wxDocTemplate *) NULL;
+        }
         m_lastDirectory = wxPathOnly(pathTmp);
 
         path = pathTmp;
@@ -1619,8 +1642,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
             // about it
             m_docManager->RemoveFileFromHistory(n);
 
-            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\n"
-                         "It has been also removed from the MRU files list."),
+            wxLogError(_("The file '%s' doesn't exist and couldn't be opened.\nIt has been also removed from the MRU files list."),
                        filename.c_str());
         }
     }
@@ -2165,7 +2187,7 @@ bool wxTransferFileToStream(const wxString& filename, ostream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2180,7 +2202,7 @@ bool wxTransferStreamToFile(istream& stream, const wxString& filename)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), _T("wb"))) == NULL)
     {
         return FALSE;
     }
@@ -2200,7 +2222,7 @@ bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
     FILE *fd1;
     int ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "rb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), wxT("rb"))) == NULL)
         return FALSE;
 
     while ((ch = getc (fd1)) != EOF)
@@ -2215,7 +2237,7 @@ bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
     FILE *fd1;
     char ch;
 
-    if ((fd1 = fopen (filename.fn_str(), "wb")) == NULL)
+    if ((fd1 = wxFopen (filename.fn_str(), wxT("wb"))) == NULL)
     {
         return FALSE;
     }

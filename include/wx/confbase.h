@@ -35,13 +35,13 @@
 
 /// separates group and entry names (probably shouldn't be changed)
 #ifndef wxCONFIG_PATH_SEPARATOR
-  #define   wxCONFIG_PATH_SEPARATOR     '/'
+  #define   wxCONFIG_PATH_SEPARATOR     _T('/')
 #endif
 
 /// introduces immutable entries
 // (i.e. the ones which can't be changed from the local config file)
 #ifndef wxCONFIG_IMMUTABLE_PREFIX
-  #define   wxCONFIG_IMMUTABLE_PREFIX   '!'
+  #define   wxCONFIG_IMMUTABLE_PREFIX   _T('!')
 #endif
 
 /// should we use registry instead of configuration files under Windows?
@@ -113,7 +113,7 @@ public:
                long style = 0);
 
     // empty but ensures that dtor of all derived classes is virtual
-  virtual ~wxConfigBase() { }
+  virtual ~wxConfigBase();
 
   // path management
     // set current path: if the first character is '/', it's the absolute path,
@@ -226,6 +226,7 @@ public:
     // misc accessors
   wxString GetAppName() const { return m_appName; }
   wxString GetVendorName() const { return m_vendorName; }
+
   // Used wxIniConfig to set members in constructor
   void SetAppName(const wxString& appName) { m_appName = appName; }
   void SetVendorName(const wxString& vendorName) { m_vendorName = vendorName; }
@@ -307,12 +308,12 @@ private:
   $VARNAME or ${VARNAME} where VARNAME contains alphanumeric characters and
   '_' only. '$' must be escaped ('\$') in order to be taken literally.
  */
-extern wxString wxExpandEnvVars(const wxString &sz);
+extern WXDLLEXPORT wxString wxExpandEnvVars(const wxString &sz);
 
 /*
   Split path into parts removing '..' in progress
  */
-extern void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
+extern WXDLLEXPORT void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
 #endif
   // _WX_CONFIG_H_

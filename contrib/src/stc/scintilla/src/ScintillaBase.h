@@ -7,6 +7,9 @@
 #define SCINTILLABASE_H
 
 class ScintillaBase : public Editor {
+	// Private so ScintillaBase objects can not be copied
+	ScintillaBase(const ScintillaBase &) : Editor() {}
+	ScintillaBase &operator=(const ScintillaBase &) { return *this; }
 protected:
 	// Enumeration of commands and child windows
 	enum {
@@ -42,7 +45,7 @@ protected:
 
 	virtual void RefreshColourPalette(Palette &pal, bool want);
 	
-	virtual void AddChar(char ch);
+	virtual void AddCharUTF(char *s, unsigned int len);
 	void Command(int cmdId);
 	virtual int KeyCommand(UINT iMessage);
 	
@@ -59,7 +62,7 @@ protected:
 	
 	virtual void ButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
 
-	virtual void NotifyStyleNeeded(int endStyleNeeded);
+	virtual void NotifyStyleToNeeded(int endStyleNeeded);
 public:
 	// Public so scintilla_send_message can use it
 	virtual LRESULT WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam);

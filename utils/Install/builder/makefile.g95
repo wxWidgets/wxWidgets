@@ -1,0 +1,10 @@
+# Purpose: makefile for toolbar example (Cygwin/Mingw32)
+# Created: #03.01.00
+
+WXDIR = ../..
+
+TARGET=toolbar
+OBJECTS = $(TARGET).o
+
+include $(WXDIR)\src\makeprog.g95
+

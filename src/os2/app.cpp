@@ -63,7 +63,6 @@
 // ---------------------------------------------------------------------------
 
 extern wxChar*                      wxBuffer;
-extern wxChar*                      wxOsVersion;
 extern wxList*                      wxWinHandleList;
 extern wxList WXDLLEXPORT           wxPendingDelete;
 extern wxCursor*                    g_globalCursor;
@@ -136,10 +135,6 @@ bool wxApp::Initialize(
 
     wxClassInfo::InitializeClasses();
 
-#if wxUSE_RESOURCES
-    wxGetResource(wxT("wxWindows"), wxT("OsVersion"), &wxOsVersion);
-#endif
-
 #if wxUSE_THREADS
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
@@ -189,7 +184,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
                             ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,sizeof(ULONG)
                            ))
     {
@@ -215,7 +210,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxMDIFrameClassName
                             ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT
                             ,0
                            ))
     {
@@ -555,7 +550,7 @@ bool wxApp::DoMessage()
 {
     BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
 
-    wxUsleep(10000);
+//    wxUsleep(1000);
     if (bRc == 0)
     {
         // got WM_QUIT
@@ -658,7 +653,7 @@ int wxApp::MainLoop()
 #endif // wxUSE_THREADS
         while (!Pending() && ProcessIdle())
         {
-	  wxUsleep(10000);
+//            wxUsleep(10000);
         }
         DoMessage();
     }
@@ -703,8 +698,8 @@ bool wxApp::ProcessMessage(
   WXMSG*                            pWxmsg
 )
 {
-    QMSG*                           vMsg = (PQMSG)pWxmsg;
-    HWND                            hWnd = vMsg->hwnd;
+    QMSG*                           pMsg = (PQMSG)pWxmsg;
+    HWND                            hWnd = pMsg->hwnd;
     wxWindow*                       pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
     wxWindow*                       pWnd;
 
@@ -713,7 +708,7 @@ bool wxApp::ProcessMessage(
     // We must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
     // popup the tooltip bubbles
     //
-    if (pWndThis && (vMsg->msg == WM_MOUSEMOVE))
+    if (pWndThis && (pMsg->msg == WM_MOUSEMOVE))
     {
         wxToolTip*                  pToolTip = pWndThis->GetToolTip();
         if (pToolTip)
@@ -734,6 +729,18 @@ bool wxApp::ProcessMessage(
         pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
     }
 
+    //
+    // Try translations first; find the youngest window with
+    // a translation table.
+    //
+#if 0
+    for (pWnd = pWndThis; pWnd; pWnd = pWnd->GetParent() )
+    {
+        if (pMsg->msg == WM_CHAR)
+            if (pWnd->OS2TranslateMessage(pWxmsg))
+                return TRUE;
+    }
+#endif
     //
     // Anyone for a non-translation message? Try youngest descendants first.
     //

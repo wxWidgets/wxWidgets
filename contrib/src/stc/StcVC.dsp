@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="StcVC" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# Microsoft Developer Studio Generated Build File, Format Version 5.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
@@ -22,11 +22,9 @@ CFG=StcVC - Win32 Debug
 !MESSAGE 
 
 # Begin Project
-# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
-RSC=rc.exe
 
 !IF  "$(CFG)" == "StcVC - Win32 Release"
 
@@ -40,11 +38,12 @@ RSC=rc.exe
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x809
+# ADD RSC /l 0x809
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MD /W3 /GX /O1 /Ob2 /I "../../../include" /I "../../include" /I "scintilla/include" /I "scintilla/src" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "__WX__" /D "SCI_LEXER" /FD /c
 # SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -64,11 +63,12 @@ LIB32=link.exe -lib
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x809
+# ADD RSC /l 0x809
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
 # ADD CPP /nologo /MDd /W3 /GX /Z7 /Od /I "../../../include" /I "../../include" /I "scintilla/include" /I "scintilla/src" /D "_DEBUG" /D DEBUG=1 /D "__WXDEBUG__" /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /D "__WX__" /D "SCI_LEXER" /FD /c
 # SUBTRACT CPP /YX
-# ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -176,6 +176,34 @@ SOURCE=.\scintilla\src\KeyMap.h
 # Begin Source File
 
 SOURCE=.\scintilla\src\KeyWords.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexCPP.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexHTML.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexOthers.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPerl.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexPython.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexSQL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=.\scintilla\src\LexVB.cxx
 # End Source File
 # Begin Source File
 
