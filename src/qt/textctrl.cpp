@@ -212,6 +212,11 @@ void wxTextCtrl::WriteText(const wxString& text)
     // TODO write text to control
 }
 
+void wxTextCtrl::AppendText(const wxString& text)
+{
+    // TODO append text to control
+}
+
 void wxTextCtrl::Clear()
 {
     // TODO
@@ -337,7 +342,7 @@ int wxTextCtrl::overflow(int c)
   txt[plen] = (char)c;     // append c
   txt[plen+xtra] = '\0';   // append '\0' or overwrite c
     // If the put area already contained \0, output will be truncated there
-  WriteText(txt);
+  AppendText(txt);
     delete[] txt;
   }
 
@@ -391,7 +396,7 @@ int wxTextCtrl::underflow()
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
-    WriteText(s);
+    AppendText(s);
     return *this;
 }
 
@@ -399,7 +404,7 @@ wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
     wxString str;
     str.Printf("%.2f", f);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -407,7 +412,7 @@ wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
     wxString str;
     str.Printf("%.2f", d);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -415,7 +420,7 @@ wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
     wxString str;
     str.Printf("%d", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -423,7 +428,7 @@ wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
     wxString str;
     str.Printf("%ld", i);
-    WriteText(str);
+    AppendText(str);
     return *this;
 }
 
@@ -433,7 +438,7 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 
     buf[0] = c;
     buf[1] = 0;
-    WriteText(buf);
+    AppendText(buf);
     return *this;
 }
 
