@@ -195,7 +195,7 @@ could break the order of items and, for example, subsequent calls to
 
 \membersection{wxArrayString::IsEmpty}\label{wxarraystringisempty}
 
-\func{}{IsEmpty}{}
+\func{bool}{IsEmpty}{}
 
 Returns true if the array is empty, false otherwise. This function returns the
 same result as {\it GetCount() == 0} but is probably easier to read.
@@ -213,7 +213,7 @@ version.
 
 \membersection{wxArrayString::Last}\label{wxarraystringlast}
 
-\func{}{Last}{}
+\func{wxString&}{Last}{}
 
 Returns the last element of the array. Attempt to access the last element of
 an empty array will result in assert failure in debug build, however no checks
