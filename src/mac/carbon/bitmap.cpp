@@ -1349,14 +1349,11 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 
    GWorldPtr gworld = MAC_WXHBITMAP(M_BITMAPDATA->m_hBitmap);
    PixMapHandle hPixMap = GetGWorldPixMap(gworld);
-   wxCHECK_MSG( hPixMap, NULL, _T("failed to get PixMap from GWorld?") );
+   wxCHECK_MSG( hPixMap && *hPixMap, NULL,
+                    _T("GetRawData(): failed to get PixMap from GWorld?") );
 
-   if ( (*hPixMap)->pixelSize != bpp )
-   {
-       wxFAIL_MSG( _T("bpp mismatch in GetRawData()") );
-
-       return NULL;
-   }
+   wxCHECK_MSG( (*hPixMap)->pixelSize == bpp, NULL,
+                    _T("GetRawData(): pixel format mismatch") );
 
    if ( !LockPixels(hPixMap) )
    {

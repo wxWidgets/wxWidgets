@@ -104,7 +104,7 @@
 template <class Channel,
           size_t Bpp, int R, int G, int B, int A = -1,
           class Pixel = wxUint32>
-          
+
 struct WXDLLEXPORT wxPixelFormat
 {
     // iterator over pixels is usually of type "ChannelType *"
@@ -120,7 +120,7 @@ struct WXDLLEXPORT wxPixelFormat
     enum { BitsPerPixel = Bpp };
 
     // size of one pixel in ChannelType units (usually bytes)
-    enum { SizePixel = BitsPerPixel / (8 * sizeof(ChannelType)) };
+    enum { SizePixel = Bpp / (8 * sizeof(Channel)) };
 
     // the channels indices inside the pixel
     enum
@@ -143,29 +143,27 @@ struct WXDLLEXPORT wxPixelFormat
 typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
 
 // the (most common) native bitmap format without alpha support
-typedef wxPixelFormat<unsigned char, 24,
-                      #if defined(__WXMSW__)
-                                2, 1, 0
-                      #elif defined(__WXMAC__)
-                                1, 2, 3
-                      #else // default for the others (not supported anyhow)
-                                0, 1, 2
-                      #endif // platform
-                     > wxNativePixelFormat;
+#if defined(__WXMSW__)
+    // under MSW the RGB components are inversed, they're in BGR order
+    typedef wxPixelFormat<unsigned char, 24, 2, 1, 0> wxNativePixelFormat;
+
+    #define wxPIXEL_FORMAT_ALPHA 3
+#elif defined(__WXMAC__)
+    // under Mac, first component is unused but still present, hence we use
+    // 32bpp, not 24
+    typedef wxPixelFormat<unsigned char, 32, 1, 2, 3> wxNativePixelFormat;
+
+    #define wxPIXEL_FORMAT_ALPHA 0
+#endif
 
 // the (most common) native format for bitmaps with alpha channel
-typedef wxPixelFormat<unsigned char, 32,
-                      wxNativePixelFormat::RED,
-                      wxNativePixelFormat::GREEN,
-                      wxNativePixelFormat::BLUE,
-                      #if defined(__WXMSW__)
-                          3
-                      #elif defined(__WXMAC__)
-                          0
-                      #else // default for the others (not supported anyhow)
-                          3
-                      #endif // platform
-                     > wxAlphaPixelFormat;
+#ifdef wxPIXEL_FORMAT_ALPHA
+    typedef wxPixelFormat<unsigned char, 32,
+                          wxNativePixelFormat::RED,
+                          wxNativePixelFormat::GREEN,
+                          wxNativePixelFormat::BLUE,
+                          wxPIXEL_FORMAT_ALPHA> wxAlphaPixelFormat;
+#endif // wxPIXEL_FORMAT_ALPHA
 
 // we also define the (default/best) pixel format for the given class: this is
 // used as default value for the pixel format in wxPixelIterator template
