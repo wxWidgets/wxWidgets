@@ -226,6 +226,11 @@ static gboolean target_drag_drop( GtkWidget *widget,
     if (context->suggested_action == GDK_ACTION_COPY) result = wxDragCopy;
 */
 
+    /* reset the block here as someone might very well
+       show a dialog as a reaction to a drop and this
+       wouldn't work without events */
+    g_blockEventsOnDrag = FALSE;
+    
     bool ret = drop_target->OnDrop( x, y );
 
     if (!ret)
@@ -740,8 +745,12 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     if (m_data->GetFormatCount() == 0)
         return (wxDragResult) wxDragNone;
 
+    // still in drag
+    if (g_blockEventsOnDrag)
+        return (wxDragResult) wxDragNone;
+    
     // disabled for now
-    g_blockEventsOnDrag = FALSE;
+    g_blockEventsOnDrag = TRUE;
 
     RegisterWindow();
 

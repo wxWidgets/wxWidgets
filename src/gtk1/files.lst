@@ -102,6 +102,7 @@ ALL_SOURCES = \
 		common/list.cpp \
 		common/log.cpp \
 		common/longlong.cpp \
+		common/matrix.cpp \
 		common/memory.cpp \
 		common/menucmn.cpp \
 		common/mimecmn.cpp \
