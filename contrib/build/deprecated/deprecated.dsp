@@ -453,6 +453,7 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE=../../src/deprecated\dosyacc.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
