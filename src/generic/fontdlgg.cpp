@@ -188,13 +188,13 @@ void wxGenericFontDialog::CreateWidgets(void)
 {
   wxBeginBusyCursor();
 
-  fontRect.x = 5;
+  fontRect.x = 10;
 #ifdef __X__
   fontRect.y = 125;
 #else
   fontRect.y = 115;
 #endif
-  fontRect.width = 350;
+  fontRect.width = 430;
   fontRect.height = 100;
 
   /*
@@ -254,10 +254,10 @@ void wxGenericFontDialog::CreateWidgets(void)
 
   fontRect.y+=y+5; //NL mod
 
-  int by = (fontRect.y + fontRect.height + 5);
+  int by = (fontRect.y + fontRect.height + 10);
 
-  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(5, by));
-  (void) new wxButton(this, wxID_OK, _("Cancel"), wxPoint(50, by));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(220, by), wxSize(100,-1));
+  (void) new wxButton(this, wxID_OK, _("Cancel"), wxPoint(340, by), wxSize(100,-1));
 
   familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));

@@ -20,19 +20,14 @@
 #include "wx/list.h"
 #include "wx/control.h"
 #include "wx/dnd.h"      // for wxDataObject
+#include "wx/module.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
 class wxClipboard;
-
-//-----------------------------------------------------------------------------
-// global functions
-//-----------------------------------------------------------------------------
-
-void wxInitClipboard();
-void wxDoneClipboard();
+class wxClipboardModule;
 
 //-----------------------------------------------------------------------------
 // global data
@@ -44,7 +39,7 @@ extern wxClipboard* wxTheClipboard;
 // wxClipboard
 //-----------------------------------------------------------------------------
 
-class  wxClipboard: public wxObject
+class wxClipboard: public wxObject
 {
   DECLARE_DYNAMIC_CLASS(wxClipboard)
 
@@ -54,18 +49,46 @@ public:
   ~wxClipboard();
 
   virtual void SetData( wxDataObject *data );
-  virtual void *GetData( wxDataFormat format, size_t *length );
-  virtual bool IsAvailable( wxDataFormat format );
+  
+  virtual bool IsSupportedFormat( wxDataFormat format );
+  virtual bool ObtainData( wxDataFormat format );
+  
+  // call these after ObtainData()
+  virtual size_t GetDataSize() const;
+  virtual void GetDataHere( void *data ) const;
+  
+  // clears wxTheClipboard and the system's clipboard if possible
+  virtual void Clear();
 
  // implementation 
   
-  wxDataObject  *m_data;
-  char          *m_sentString, 
-		*m_receivedString;
-  void          *m_receivedTargets;
-  size_t         m_receivedLength;
-  GtkWidget     *m_clipboardWidget;
+  wxDataObject     *m_data;
+  char             *m_sentString, 
+		   *m_receivedString;
+  void             *m_receivedTargets;
+  GtkWidget        *m_clipboardWidget;
+  
+  bool              m_formatSupported;
+  GdkAtom           m_targetRequested;
+
+  size_t            m_receivedSize;
+  char              *m_receivedData;
 };
+
+//-----------------------------------------------------------------------------
+// wxClipboardModule
+//-----------------------------------------------------------------------------
+
+class wxClipboardModule: public wxModule
+{
+  DECLARE_DYNAMIC_CLASS(wxClipboardModule)
+  
+public:
+    wxClipboardModule() {}
+    bool OnInit();
+    void OnExit();
+};
+
 
 #endif
     // __GTKCLIPBOARDH__

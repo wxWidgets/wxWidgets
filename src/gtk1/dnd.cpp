@@ -15,7 +15,8 @@
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
+#include "wx/utils.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -622,6 +623,10 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 // wxDropSource
 //-------------------------------------------------------------------------
 
+static void
+shape_motion (GtkWidget      *widget, 
+	      GdkEventMotion */*event*/);
+	      
 //-----------------------------------------------------------------------------
 // drag request
 
@@ -722,8 +727,9 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 
 	  gtk_widget_hide (drop_icon);
 	}
+	
 
-      gdk_dnd_set_drag_shape(drag_icon->window,
+    gdk_dnd_set_drag_shape( drag_icon->window,
 			     &hotspot_1,
 			     drop_icon->window,
 			     &hotspot_2);
@@ -771,10 +777,15 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   
   int x = 0;
   int y = 0;
-  gdk_window_get_pointer( m_widget->window, &x, &y, (GdkModifierType *) NULL );
+  wxGetMousePosition( &x, &y );  
   
   gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
   
+/*
+    shape_motion( drag_icon, (GdkEventMotion *)NULL );
+    shape_motion( drop_icon, (GdkEventMotion *)NULL );
+*/
+    
   while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
   
   UnregisterWindow();
@@ -838,15 +849,16 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
   if (event->type != GDK_BUTTON_PRESS)
     return;
 
-  p = gtk_object_get_user_data (GTK_OBJECT(widget));
+  p = (CursorOffset *)gtk_object_get_user_data (GTK_OBJECT(widget));
   p->x = (int) event->x;
   p->y = (int) event->y;
 
   gtk_grab_add (widget);
   gdk_pointer_grab (widget->window, TRUE,
-		    GDK_BUTTON_RELEASE_MASK |
-		    GDK_BUTTON_MOTION_MASK |
-		    GDK_POINTER_MOTION_HINT_MASK,
+		    (GdkEventMask)
+		      (GDK_BUTTON_RELEASE_MASK |
+		       GDK_BUTTON_MOTION_MASK |
+		       GDK_POINTER_MOTION_HINT_MASK),
 		    NULL, NULL, 0);
 }
 
@@ -860,13 +872,13 @@ shape_released (GtkWidget *widget)
 
 static void
 shape_motion (GtkWidget      *widget, 
-	      GdkEventMotion *event)
+	      GdkEventMotion */*event*/)
 {
   gint xp, yp;
   CursorOffset * p;
   GdkModifierType mask;
 
-  p = gtk_object_get_user_data (GTK_OBJECT (widget));
+  p = (CursorOffset *)gtk_object_get_user_data (GTK_OBJECT (widget));
 
   /*
    * Can't use event->x / event->y here 
@@ -899,7 +911,7 @@ shape_create_icon (char     **data,
   /*
    * GDK_WINDOW_TOPLEVEL works also, giving you a title border
    */
-  window = gtk_window_new (window_type);
+  window = gtk_window_new ((GtkWindowType)window_type);
   
   fixed = gtk_fixed_new ();
   gtk_widget_set_usize (fixed, 100,100);

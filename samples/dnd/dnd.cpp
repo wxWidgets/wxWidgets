@@ -84,7 +84,7 @@ public:
 
   void OnLeftDown(wxMouseEvent& event);
   void OnRightDown(wxMouseEvent& event);
-
+  
   bool OnClose();
   
   DECLARE_EVENT_TABLE()
@@ -117,8 +117,9 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
   EVT_MENU(Menu_Drag,  DnDFrame::OnDrag)
   EVT_MENU(Menu_Help,  DnDFrame::OnHelp)
   EVT_MENU(Menu_Clear, DnDFrame::OnLogClear)
-  EVT_LEFT_DOWN(OnLeftDown)
-  EVT_RIGHT_DOWN(OnRightDown)
+  EVT_LEFT_DOWN(       DnDFrame::OnLeftDown)
+  EVT_RIGHT_DOWN(      DnDFrame::OnRightDown)
+  EVT_PAINT(           DnDFrame::OnPaint)
 END_EVENT_TABLE()
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -142,12 +143,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
 {
 
-#ifdef __WXMSW__
   // frame icon and status bar
-  SetIcon(wxIcon("mondrian"));
-#else
-  SetIcon(wxIcon(mondrian_xpm));
-#endif  
+  SetIcon(wxICON(mondrian));
   
 //  const int widths[] = { -1 };
   CreateStatusBar();
@@ -226,6 +223,17 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 void DnDFrame::OnQuit(wxCommandEvent& /* event */)
 {
   Close(TRUE);
+}
+
+void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
+{
+  int w = 0;
+  int h = 0;
+  GetClientSize( &w, &h );
+  
+  wxPaintDC dc(this);
+  dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL ) );
+  dc.DrawText( "Drag text from here!", 20, h-20 );
 }
 
 void DnDFrame::OnDrag(wxCommandEvent& /* event */)
