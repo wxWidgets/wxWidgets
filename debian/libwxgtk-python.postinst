@@ -2,7 +2,7 @@
 
 set -e
 
-WXPYTHONDIR="/usr/lib/=PY/site-packages/wxPython"
+WXPYTHONDIR="/usr/lib/=PY/site-packages/wx-=SOV"
 
 if [ "$1" = "configure" ]; then
 	=PY /usr/lib/=PY/compileall.py -q ${WXPYTHONDIR}
