@@ -37,15 +37,17 @@ Returns TRUE if the file exists.
 
 \func{wxString}{wxFileNameFromPath}{\param{const wxString\& }{path}}
 
-Returns a temporary pointer to the filename for a full path.
-Copy this pointer for long-term use.
+\func{char*}{wxFileNameFromPath}{\param{char* }{path}}
+
+Returns the filename for a full path. The second form returns a pointer to
+temporary storage that should not be deallocated.
 
 \membersection{::wxFindFirstFile}\label{wxfindfirstfile}
 
-\func{wxString}{wxFindFirstFile}{\param{const wxString\& }{spec}, \param{int}{ flags = 0}}
+\func{wxString}{wxFindFirstFile}{\param{const char*}{spec}, \param{int}{ flags = 0}}
 
 This function does directory searching; returns the first file
-that matches the path {\it spec}, or NULL. Use \helpref{wxFindNextFile}{wxfindnextfile} to
+that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
 get the next matching file.
 
 {\it spec} may contain wildcards.
@@ -59,7 +61,7 @@ For example:
 
 \begin{verbatim}
   wxString f = wxFindFirstFile("/home/project/*.*");
-  while (f)
+  while (f != "")
   {
     ...
     f = wxFindNextFile();
@@ -89,8 +91,7 @@ or drive name at the beginning.
 
 \func{wxString}{wxPathOnly}{\param{const wxString\& }{path}}
 
-Returns a temporary pointer to the directory part of the filename. Copy this
-pointer for long-term use.
+Returns the directory part of the filename.
 
 \membersection{::wxUnix2DosFilename}
 
@@ -168,7 +169,7 @@ Returns TRUE if successful, FALSE otherwise.
 
 \membersection{::wxGetWorkingDirectory}
 
-\func{wxString}{wxGetWorkingDirectory}{\param{const wxString\& }{buf=NULL}, \param{int }{sz=1000}}
+\func{wxString}{wxGetWorkingDirectory}{\param{char*}{buf=NULL}, \param{int }{sz=1000}}
 
 This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
 
@@ -180,7 +181,7 @@ if the buffer is NULL.
 
 \membersection{::wxGetTempFileName}
 
-\func{wxString}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{const wxString\& }{buf=NULL}}
+\func{char*}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{char* }{buf=NULL}}
 
 Makes a temporary filename based on {\it prefix}, opens and closes the file,
 and places the name in {\it buf}. If {\it buf} is NULL, new store
@@ -371,7 +372,7 @@ if other wxWindows calls will be made before the value is to be used.
 
 Pop up a dialog box with title set to {\it caption}, message {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
-or press Cancel to return NULL.
+or press Cancel to return the empty string.
 
 If {\it centre} is TRUE, the message text (which may include new line characters)
 is centred; if FALSE, the message is left-justified.
@@ -414,7 +415,7 @@ is centred; if FALSE, the message is left-justified.
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a single-selection
 listbox. The user may choose an item and press OK to return a string or
-Cancel to return NULL.
+Cancel to return the empty string.
 
 {\it choices} is an array of {\it n} strings for the listbox.
 

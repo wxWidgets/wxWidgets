@@ -196,6 +196,14 @@ destroy the window using \helpref{wxWindow::Destroy}{wxwindowdestroy}.
 
 Applies to managed windows (wxFrame and wxDialog classes) only.
 
+{\it Note} that calling Close does not guarantee that the window will be destroyed; but it
+provides a way to simulate a manual close of a window, which may or may not be implemented by
+destroying the window. The default implementation of wxDialog::OnCloseWindow does not
+necessarily delete the dialog, since it will simply simulate an wxID\_CANCEL event which
+itself only hides the dialog.
+
+To guarantee that the window will be destroyed, call \helpref{wxWindow::Destroy}{wxwindowdestroy} instead.
+
 \wxheading{See also}
 
 \helpref{Window deletion overview}{windowdeletionoverview},\rtfsp

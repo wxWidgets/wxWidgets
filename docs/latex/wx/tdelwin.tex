@@ -3,7 +3,7 @@
 Classes: \helpref{wxCloseEvent}{wxcloseevent}, \helpref{wxWindow}{wxwindow}
 
 Window deletion can be a confusing subject, so this overview is provided
-to make it clear when and how you delete windows, or respond to user requests
+to help make it clear when and how you delete windows, or respond to user requests
 to close windows.
 
 \wxheading{What is the sequence of events in a window deletion?}
@@ -27,6 +27,10 @@ delete the window, and not use the {\bf delete} operator. This is because
 for some window classes, wxWindows delays actual deletion of the window until all events have been processed,
 since otherwise there is the danger that events will be sent to a non-existent window.
 
+As reinforced in the next section, calling Close does not guarantee that the window
+will be destroyed. Call \helpref{wxWindow::Destroy}{wxwindowdestroy} if you want to be
+certain that the window is destroyed.
+
 \wxheading{How can the application close a window itself?}
 
 Your application can either use \helpref{wxWindow::Close}{wxwindowclose} event just as
@@ -45,7 +49,7 @@ The default close event handler for wxDialog simulates a Cancel command,
 generating a wxID\_CANCEL event. Since the handler for this cancel event might
 itself call {\bf Close}, there is a check for infinite looping. The default handler
 for wxID\_CANCEL hides the dialog (if modeless) or calls EndModal(wxID\_CANCEL) (if modal).
-In other words, by default, the dialog is not destroyed (it might have been created
+In other words, by default, the dialog {\it is not destroyed} (it might have been created
 on the stack, so the assumption of dynamic creation cannot be made).
 
 The default close event handler for wxFrame destroys the frame using Destroy().
