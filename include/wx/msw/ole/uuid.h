@@ -88,4 +88,4 @@ public:
   const char *CForm() const    { return m_pszCForm;          }
 };
 
-#endif    // _OLEUUID_H
+#endif //_OLEUUID_H
