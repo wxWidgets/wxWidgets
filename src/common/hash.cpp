@@ -324,7 +324,7 @@ bool wxStringHashTable::Delete(long key) const
         {
             if ( keys->Item(n) == key )
             {
-                keys.RemoveAt(n);
+                keys->RemoveAt(n);
                 m_values[slot]->RemoveAt(n);
                 return TRUE;
             }
