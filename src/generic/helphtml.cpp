@@ -115,6 +115,15 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
          newfile << WXEXTHELP_SEPARATOR << wxGetLocale()->GetName();
          if(wxDirExists(newfile))
             file = newfile;
+         else
+         {
+            newfile = WXEXTHELP_SEPARATOR;
+            const char *cptr = wxGetLocale()->GetName().c_str();
+            while(*cptr && *cptr != '_')
+               newfile << *(cptr++);
+            if(wxDirExists(newfile))
+               file = newfile;
+         }
       }
       
       if(! wxDirExists(file))
