@@ -276,7 +276,9 @@ protected:
 // include the platform-dependent class definition
 // ----------------------------------------------------------------------------
 
-#if defined(__WXUNIVERSAL__)
+#if defined(__WXX11__)
+    #include "wx/x11/textctrl.h"
+#elif defined(__WXUNIVERSAL__)
     #include "wx/univ/textctrl.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"

@@ -2099,7 +2099,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         ALL_HEADERS="\$(ALL_HEADERS) \${UNIV_HEADERS}"
 
         PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
-        TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
+        if test "$wxUSE_X11" = 1; then
+            TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}${PATH_IFS}\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes"
+        else
+            TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
+        fi
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXUNIVERSAL__"
         WIDGET_SET=univ
     else

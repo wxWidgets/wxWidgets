@@ -59,7 +59,6 @@ GENERICOBJS= accel.obj &
 	gridsel.obj &
 	helpext.obj &
 	helphtml.obj &
-	helpwxht.obj &
 	imaglist.obj &
 	laywin.obj &
 	listctrl.obj &
@@ -147,6 +146,7 @@ COMMONOBJS = &
 	hashmap.obj &
 	helpbase.obj &
 	http.obj &
+	iconbndl.obj &
 	imagall.obj &
 	imagbmp.obj &
 	image.obj &
@@ -698,6 +698,9 @@ helpbase.obj:     $(COMMDIR)\helpbase.cpp
 http.obj:     $(COMMDIR)\http.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+iconbndl.obj:     $(COMMDIR)\iconbndl.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 imagall.obj:     $(COMMDIR)\imagall.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
@@ -980,9 +983,6 @@ helpext.obj:     $(GENDIR)\helpext.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 helphtml.obj:     $(GENDIR)\helphtml.cpp
-  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
-
-helpwxht.obj:     $(GENDIR)\helpwxht.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imaglist.obj:     $(GENDIR)\imaglist.cpp

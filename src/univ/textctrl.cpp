@@ -4117,6 +4117,7 @@ void wxTextCtrl::DoDraw(wxControlRenderer *renderer)
     // the update region is in window coords and text area is in the client
     // ones, so it must be shifted before computing intersection
     wxRegion rgnUpdate = GetUpdateRegion();
+    
     wxRect rectTextArea = GetRealTextArea();
     wxPoint pt = GetClientAreaOrigin();
     wxRect rectTextAreaAdjusted = rectTextArea;

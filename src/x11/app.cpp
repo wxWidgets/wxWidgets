@@ -562,6 +562,8 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #if !wxUSE_NANOX
         case GraphicsExpose:
         {
+            printf( "GraphicExpose event\n" );
+
             // wxLogDebug( "GraphicsExpose from %s", win->GetName().c_str(),
             //                              event->xgraphicsexpose.x, event->xgraphicsexpose.y,
             //                              event->xgraphicsexpose.width, event->xgraphicsexpose.height);

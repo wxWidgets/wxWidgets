@@ -4160,12 +4160,12 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
         wxPoint pos = event.GetPosition();
         if (scrollbar->HasFlag( wxVERTICAL ))
         {
-            if (pos.x > -20 && pos.x < scrollbar->GetSize().x+20)
+            if (pos.x > -40 && pos.x < scrollbar->GetSize().x+40)
                pos.x = 5;
         }
         else
         {
-            if (pos.y > -20 && pos.y < scrollbar->GetSize().y+20)
+            if (pos.y > -40 && pos.y < scrollbar->GetSize().y+40)
                pos.y = 5;
         }
         ht = m_renderer->HitTestScrollbar(scrollbar, pos );

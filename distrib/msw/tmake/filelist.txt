@@ -1217,6 +1217,7 @@ private.h	X11H
 region.h	X11H
 reparent.h	X11H
 settings.h	X11H
+textctrl.h	X11H
 toolbar.h	X11H
 toplevel.h	X11H
 window.h	X11H
@@ -1524,7 +1525,7 @@ statbox.h	UnivH
 statline.h	UnivH
 stattext.h	UnivH
 statusbr.h	UnivH
-textctrl.h	UnivH
+textctrl.h	UnivH	NotX11
 theme.h	UnivH
 toolbar.h	UnivH
 window.h	UnivH
