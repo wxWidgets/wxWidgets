@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/combobox.h
 // Purpose:     wxComboBox class
-// Author:      David Elliott
+// Author:      Ryan Norton
 // Modified by:
-// Created:     2003/07/14
+// Created:     2005/02/16
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
@@ -12,16 +12,36 @@
 #ifndef __WX_COCOA_COMBOBOX_H__
 #define __WX_COCOA_COMBOBOX_H__
 
-//#include "wx/cocoa/NSTableView.h"
+//Begin NSComboBox.h
+
+#include "wx/hashmap.h"
+#include "wx/cocoa/ObjcAssociate.h"
+
+DECLARE_WXCOCOA_OBJC_CLASS(NSComboBox);
+
+WX_DECLARE_OBJC_HASHMAP(NSComboBox);
+class wxCocoaNSComboBox
+{
+    WX_DECLARE_OBJC_INTERFACE_HASHMAP(NSComboBox)
+public:
+    void AssociateNSComboBox(WX_NSComboBox cocoaNSComboBox);
+    void DisassociateNSComboBox(WX_NSComboBox cocoaNSComboBox);
+    
+    virtual void doWxEvent(int nEvent) = 0;
+};
+
+//begin combobox.h
+
+#include "wx/dynarray.h"
 
 // ========================================================================
 // wxComboBox
 // ========================================================================
-class WXDLLEXPORT wxComboBox: public wxTextCtrl, public wxComboBoxBase //, protected wxCocoaNSTableView
+class WXDLLEXPORT wxComboBox : public wxTextCtrl, public wxComboBoxBase, protected wxCocoaNSComboBox
 {
     DECLARE_DYNAMIC_CLASS(wxComboBox)
     DECLARE_EVENT_TABLE()
-//    WX_DECLARE_COCOA_OWNER(NSComboBox,NSTextField,NSView)
+    WX_DECLARE_COCOA_OWNER(NSComboBox,NSTextField,NSView)
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -73,6 +93,9 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    wxArrayPtrVoid m_Datas;
+    virtual void doWxEvent(int nEvent);
+
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
