@@ -589,9 +589,9 @@ PyObject *wxFileDialog_GetPaths(wxFileDialog *self){
 PyObject *wxMultiChoiceDialog_GetSelections(wxMultiChoiceDialog *self){
             return wxArrayInt2PyList_helper(self->GetSelections());
         }
-wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString *message,wxString *caption,int LCOUNT,wxString *choices,long style,wxPoint *pos){
-            return new wxSingleChoiceDialog(parent, *message, *caption,
-                                            LCOUNT, choices, NULL, style, *pos);
+wxSingleChoiceDialog *new_wxSingleChoiceDialog(wxWindow *parent,wxString const &message,wxString const &caption,int choices,wxString *choices_array,long style,wxPoint const &pos){
+            return new wxSingleChoiceDialog(parent, message, caption,
+                                            choices, choices_array, NULL, style, pos);
         }
 
 #include <wx/mdi.h>
@@ -11158,40 +11158,81 @@ static PyObject * MultiChoiceDialog_swigregister(PyObject *self, PyObject *args)
 static PyObject *_wrap_new_SingleChoiceDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
-    wxString *arg2 = (wxString *) 0 ;
-    wxString *arg3 = (wxString *) 0 ;
+    wxString *arg2 = 0 ;
+    wxString *arg3 = 0 ;
     int arg4 ;
     wxString *arg5 = (wxString *) 0 ;
     long arg6 = (long) wxCHOICEDLG_STYLE ;
-    wxPoint *arg7 = (wxPoint *) &wxDefaultPosition ;
+    wxPoint const &arg7_defvalue = wxDefaultPosition ;
+    wxPoint *arg7 = (wxPoint *) &arg7_defvalue ;
     wxSingleChoiceDialog *result;
+    bool temp2 = false ;
+    bool temp3 = false ;
+    wxPoint temp6 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
-    PyObject * obj4 = 0 ;
-    PyObject * obj6 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj5 = 0 ;
     char *kwnames[] = {
-        (char *) "parent",(char *) "message",(char *) "caption",(char *) "LCOUNT",(char *) "choices",(char *) "style",(char *) "pos", NULL 
+        (char *) "parent",(char *) "message",(char *) "caption",(char *) "choices",(char *) "style",(char *) "pos", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOiO|lO:new_SingleChoiceDialog",kwnames,&obj0,&obj1,&obj2,&arg4,&obj4,&arg6,&obj6)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|lO:new_SingleChoiceDialog",kwnames,&obj0,&obj1,&obj2,&obj3,&arg6,&obj5)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (obj6) {
-        if ((SWIG_ConvertPtr(obj6,(void **) &arg7, SWIGTYPE_p_wxPoint,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        arg3 = wxString_in_helper(obj2);
+        if (arg3 == NULL) SWIG_fail;
+        temp3 = true;
+    }
+    {
+        arg4 = PyList_Size(obj3);
+        arg5 = wxString_LIST_helper(obj3);
+        if (arg5 == NULL) SWIG_fail;
+    }
+    if (obj5) {
+        {
+            arg7 = &temp6;
+            if ( ! wxPoint_helper(obj5, &arg7)) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxSingleChoiceDialog *)new_wxSingleChoiceDialog(arg1,arg2,arg3,arg4,arg5,arg6,arg7);
+        result = (wxSingleChoiceDialog *)new_wxSingleChoiceDialog(arg1,(wxString const &)*arg2,(wxString const &)*arg3,arg4,arg5,arg6,(wxPoint const &)*arg7);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxSingleChoiceDialog, 1);
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (arg5) delete [] arg5;
+    }
     return resultobj;
     fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    {
+        if (temp3)
+        delete arg3;
+    }
+    {
+        if (arg5) delete [] arg5;
+    }
     return NULL;
 }
 
