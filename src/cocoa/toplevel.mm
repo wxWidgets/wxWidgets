@@ -232,11 +232,11 @@ bool wxTopLevelWindowCocoa::CocoaDelegate_windowShouldClose()
     return wxWindowBase::Close(false);
 }
 
-void wxTopLevelWindowCocoa::CocoaDelegate_wxMenuItemAction(struct objc_object *sender)
+void wxTopLevelWindowCocoa::CocoaDelegate_wxMenuItemAction(WX_NSMenuItem menuItem)
 {
 }
 
-bool wxTopLevelWindowCocoa::CocoaDelegate_validateMenuItem(struct objc_object *sender)
+bool wxTopLevelWindowCocoa::CocoaDelegate_validateMenuItem(WX_NSMenuItem menuItem)
 {
     return false;
 }

@@ -67,8 +67,8 @@ public:
     virtual void CocoaDelegate_windowDidResignKey(void);
     virtual void CocoaDelegate_windowDidBecomeMain(void);
     virtual void CocoaDelegate_windowDidResignMain(void);
-    virtual void CocoaDelegate_wxMenuItemAction(struct objc_object *sender);
-    virtual bool CocoaDelegate_validateMenuItem(struct objc_object *sender);
+    virtual void CocoaDelegate_wxMenuItemAction(WX_NSMenuItem sender);
+    virtual bool CocoaDelegate_validateMenuItem(WX_NSMenuItem sender);
     virtual wxMenuBar* GetAppMenuBar(wxCocoaNSWindow *win);
     static void DeactivatePendingWindow();
 protected:

@@ -51,8 +51,8 @@
 - (void)windowWillClose: (NSNotification *)notification;
 
 // Menu item handlers
-- (void)wxMenuItemAction: (id)sender;
-- (BOOL)validateMenuItem: (id)menuItem;
+- (void)wxMenuItemAction: (NSMenuItem *)menuItem;
+- (BOOL)validateMenuItem: (NSMenuItem *)menuItem;
 @end //interface wxNSWindowDelegate
 
 @implementation wxNSWindowDelegate : NSObject
@@ -129,13 +129,13 @@
 }
 
 // Menu item handlers
-- (void)wxMenuItemAction: (id)sender
+- (void)wxMenuItemAction: (NSMenuItem *)sender
 {
     wxASSERT(m_wxCocoaInterface);
     m_wxCocoaInterface->CocoaDelegate_wxMenuItemAction(sender);
 }
 
-- (BOOL)validateMenuItem: (id)sender
+- (BOOL)validateMenuItem: (NSMenuItem *)sender
 {
     wxASSERT(m_wxCocoaInterface);
     return m_wxCocoaInterface->CocoaDelegate_validateMenuItem(sender);
