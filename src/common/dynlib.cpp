@@ -449,23 +449,25 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
     if ( !suffix.empty() )
         suffix = wxString(_T("_")) + suffix;
 
+#define WXSTRINGIZE(x)  #x
 #ifdef __UNIX__
     #if (wxMINOR_VERSION % 2) == 0
-        #define wxDLLVER(x,y,z) "-" #x "." #y
+        #define wxDLLVER(x,y,z) "-" WXSTRINGIZE(x) "." WXSTRINGIZE(y)
     #else
-        #define wxDLLVER(x,y,z) "-" #x "." #y "." #z
+        #define wxDLLVER(x,y,z) "-" WXSTRINGIZE(x) "." WXSTRINGIZE(y) "." WXSTRINGIZE(z)
     #endif
 #else
     #if (wxMINOR_VERSION % 2) == 0
-        #define wxDLLVER(x,y,z) #x #y
+        #define wxDLLVER(x,y,z) WXSTRINGIZE(x) WXSTRINGIZE(y)
     #else
-        #define wxDLLVER(x,y,z) #x #y #z
+        #define wxDLLVER(x,y,z) WXSTRINGIZE(x) WXSTRINGIZE(y) WXSTRINGIZE(z)
     #endif
 #endif
 
     suffix << wxString::FromAscii(wxDLLVER(wxMAJOR_VERSION, wxMINOR_VERSION,
                                            wxRELEASE_NUMBER));
 #undef wxDLLVER
+#undef WXSTRINGIZE
 
     return CanonicalizeName(name + suffix, wxDL_MODULE);
 }
