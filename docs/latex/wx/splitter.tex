@@ -7,6 +7,7 @@ split into two programmatically (perhaps from a menu command), and unsplit
 either programmatically or via the wxSplitterWindow user interface.
 
 Appropriate 3D shading for the Windows 95 user interface is an option.
+This is also recommended for GTK.
 
 \wxheading{Window styles}
 
@@ -14,8 +15,9 @@ Appropriate 3D shading for the Windows 95 user interface is an option.
 \twocolitem{\windowstyle{wxSP\_3D}}{Draws a 3D effect border and sash.}
 \twocolitem{\windowstyle{wxSP\_BORDER}}{Draws a thin black border around the window, and a black sash.}
 \twocolitem{\windowstyle{wxSP\_NOBORDER}}{No border, and a black sash.}
-\twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{The can always be
-unsplit, even if the minimum pane size is set to something other than zero.}
+\twocolitem{\windowstyle{wxSP\_PERMIT\_UNSPLIT}}{Always allow to
+unsplit, even with the minimum pane size other than zero.}
+\twocolitem{\windowstyle{wxSP\_LIVE\_UPDATE}}{Don't draw XOR line but resize the child windows immediately.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.

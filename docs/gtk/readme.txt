@@ -1,12 +1,17 @@
 
-  Welcome to wxWindows/Gtk 2.1 snapshot 5,
+  Welcome to wxWindows/Gtk 2.1 snapshot 6,
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
 the wxWindows GUI library. This is a developers release
 and is it not suited for production development. Beware
-that major changes can happen before a final release -
-Particularly the makefile system will change entirly.
- 
+that major changes can happen before a final release.
+
+Beginning from snapshot 6 wxWindows uses a completely
+new make file system on Unix that uses GNU automake,
+GNU autoconf and GNU autoheader. You do not need these
+programs in order to use the library, but for taking
+part in its development, they are required.
+
 More information is available from my homepage at:
 
   http://wesley.informatik.uni-freiburg.de/~wxxt
@@ -28,17 +33,6 @@ make install
 ldconfig
 exit
 
-Type the following to make the samples
-
-make samples
-
-To start the samples, change into the directory that
-corresponds to the sample and your system, e.g on a
-linux-gnu machine the minimal sample would get started
-from the wxWindows base dir with
-
-./samples/minimal/linux-gnu/minimal
-
 When you run into problems, please read the INSTALL.txt and
 follow those instructions. If you still don't have any success,
 please send a bug report to one of our mailing lists (see
@@ -48,7 +42,7 @@ DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know
 this has no effect, but I tried...
 
 The library produced by the install process will be called 
-libwx_gtk2.a (static) and libwx_gtk2.so.1.0 (shared) so that 
+libwx_gtk.a (static) and libwx_gtk-2.1.so.0.0.0 (shared) so that 
 once a binary incompatible version of wxWindows/Gtk comes out 
 we'll augment the library version number to avoid linking problems.
 

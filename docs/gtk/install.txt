@@ -1,3 +1,9 @@
+
+  !!! When sending bug reports tell us what version of
+      wxWindows you are using (including the beta) and
+      what compiler on what system. One example:
+      wxGTK 2.1 beta 6, egcs 1.1.1, Redhat 5.0 !!!
+
 * The most simple case
 -----------------------
 
@@ -11,6 +17,12 @@ make install
 ldconfig
 exit
 
+If you want to remove wxWindows on Unix you can do this:
+
+su <type root password>
+make uninstall
+ldconfif
+exit
 
 * The most simple errors
 ------------------------
@@ -19,13 +31,27 @@ configure reports, that you don't have GTK 1.X installed
 although you are certainly sure you have. Well, you have
 installed it, but you also have another version of the
 GTK installed, which you may need to removed including
-other versions of glib (and its headers).
+other versions of glib (and its headers). Also, look
+for the PATH variable and check if it includes the path
+to the correct gtk-config! The check your LDPATH if 
+it points to the correct library. There is no way to
+compile wxGTK if configure doesn't pass this test as
+all this test does is compile and link a GTK program.
 
-You get errors during compilation. The reason is that you
+You get errors during compilation: The reason is that you
 probably have a broken compiler, which includes almost
-everything that is called gcc. If there is just any way
-for you to use egcs, use egcs. We are sorry, but we cannot
-fix gcc.
+everything that is called gcc. If you use gcc 2.8 you
+have to disable optimsation as the compiler will give
+up with an internal compiler error.
+
+If there is just any way for you to use egcs, use egcs. 
+We are sorry, but we cannot fix gcc.
+
+You get immediate segfault when starting any sample
+or application: This is _always_ due to having compiled
+the library with different flags or options than your
+program. Typically you might have the __WXDEBUG__ option
+set for the library but not for your program.
 
 * The most simple program
 -------------------------
@@ -33,7 +59,7 @@ fix gcc.
 Now create your super-application myfoo.app and compile anywhere 
 with
 
-g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
+g++ myfoo.cpp `wx-config --libs --cflags` -o myfoo
 
 * General
 -----------------------
@@ -58,9 +84,8 @@ this has no effect, but I tried...
 
 wxWindows/GTK requires the GTK+ library to be installed on your system.
 It has to be a stable version, preferebly version 1.2.3. You can use
-GTK 1.0.X in connection with wxWindows, but we don't support Drag'n'Drop
-for GTK 1.0.X so you have to "configure --without-dnd". wxWindows does 
-NOT work with the 1.1.X versions of the GTK+ library.
+GTK 1.0 in connection with wxWindows, but only without Drag'n'Drop.
+wxWindows does work with the 1.1.X versions of the GTK+ library.
 
 You can get the newest version of the GTK+ from the GTK homepage
 at
@@ -85,10 +110,9 @@ distributions have correct glibc 2 support:
  - DLD 6.0
  - SuSE 6.0
  
-You can enable thread support by running 
+You can disable thread support by running 
 
-./configure "--with-threads"
-make clean
+./configure "--disable-threads"
 make
 su <type root password>
 make install
@@ -148,6 +172,8 @@ not been defined. And Make in some circumstances as well...
 * General options
 -------------------
 
+         !!  DON'T USE YET !!
+
 Normally, you won't have to choose a toolkit, because when
 you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a 
@@ -194,6 +220,8 @@ The following options handle the kind of library you want to build.
 
 * Feature Options
 -------------------
+
+         !!  DON'T USE YET !!
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
@@ -242,11 +270,8 @@ make yourself some coffee, as it will take some time. On an old
 386SX possibly week. During compilation, you'll get a few 
 warning messages depending in your compiler.
 
-if you want to be more selective:
-
-	make    	will build only the base libraries
-	make samples	will build the samples
-	make user	will build everything in user
+if you want to be more selective, you can change into a specific
+directiry and type "make" there.
 
 Then you may install the library and it's header files under
 /usr/local/include/wx and /usr/local/lib respectively. You
@@ -254,21 +279,11 @@ have to log in as root (i.e. run "su" and enter the root
 password) and type
 
         make install	
+
+You can remove any traces of wxWindows by typing
+
+        make uninstall
 	
-Depending on the configuration of some files, the libraries
-and binaries will be placed in different directories.
-The "global" binaries and libraries will be placed in:
-
-	bin/$(OSTYPE) and
-	lib/$(OSTYPE) respectively
-
-"local" binaries and libraries will be placed in:
-
-	(basedir of that application)/$(OSTYPE).
-
-This is also the place where all the object-files will go.
-(Currently there arent any global binaries).
-
 If you want to save disk space by removing unnecessary
 object-files:
 
@@ -304,23 +319,20 @@ This is certain to become the standard way unless we decide
 to sitch to tmake.
 
 2) The other way creates a project within the source code 
-directories of wxWindows: In this case I propose to put 
-all contributed programs in the directory "/user", with a 
-directory of its own.
+directories of wxWindows. For this endeavour, you'll need
+the usual number of GNU tools, at least
 
-This directory then should include the following files:
+GNU automake version 1.4
+GNU autoheader version 2.14
+GNU autoconf version 2.14
 
-Makefile        (You can copy this one from any application in samples
-                 probably you will not need to edit this one. There is
-                 only one case where you might be interested in changing
-                 this file, but about that see later.)
-Makefile.in	(This is the base application-Makefile template, from
-                 which the actual Makefile for each system is created.
-                 More about this later)
+and quite possibly 
 
-put ALL your source code along with all the other stuff you need for
-your application in this directory (subdirectories are welcome).
+GNU make
+GNU cc
 
+and if you have all this then you probably know enough to
+go ahead yourself :-)
 
 ** Something about Makefiles
 ------------------------------
