@@ -1393,12 +1393,12 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
     clause->AddAttributeValue("keep_lines_straight", (long)m_maintainStraightLines);
 
   // Make a list of lists for the (sp)line controls
-  wxExpr *list = new wxExpr(PrologList);
+  wxExpr *list = new wxExpr(wxExprList);
   wxNode *node = m_lineControlPoints->First();
   while (node)
   {
     wxRealPoint *point = (wxRealPoint *)node->Data();
-    wxExpr *point_list = new wxExpr(PrologList);
+    wxExpr *point_list = new wxExpr(wxExprList);
     wxExpr *x_expr = new wxExpr((double) point->x);
     wxExpr *y_expr = new wxExpr((double) point->y);
     point_list->Append(x_expr);
@@ -1414,17 +1414,17 @@ void wxLineShape::WriteAttributes(wxExpr *clause)
   // (arrowType arrowEnd xOffset arrowSize)
   if (m_arcArrows.Number() > 0)
   {
-    wxExpr *arrow_list = new wxExpr(PrologList);
+    wxExpr *arrow_list = new wxExpr(wxExprList);
     node = m_arcArrows.First();
     while (node)
     {
       wxArrowHead *head = (wxArrowHead *)node->Data();
-      wxExpr *head_list = new wxExpr(PrologList);
+      wxExpr *head_list = new wxExpr(wxExprList);
       head_list->Append(new wxExpr((long)head->_GetType()));
       head_list->Append(new wxExpr((long)head->GetArrowEnd()));
       head_list->Append(new wxExpr(head->GetXOffset()));
       head_list->Append(new wxExpr(head->GetArrowSize()));
-      head_list->Append(new wxExpr(PrologString, (head->GetName() ? head->GetName() : "")));
+      head_list->Append(new wxExpr(wxExprString, (head->GetName() ? head->GetName() : "")));
       head_list->Append(new wxExpr(head->GetId()));
 
       // New members of wxArrowHead

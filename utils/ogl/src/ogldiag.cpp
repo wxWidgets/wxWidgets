@@ -300,7 +300,7 @@ bool wxDiagram::LoadFile(const wxString& filename)
 {
   wxBeginBusyCursor();
   
-  wxExprDatabase database(PrologInteger, "id");
+  wxExprDatabase database(wxExprInteger, "id");
   if (!database.Read(filename))
   {
     wxEndBusyCursor();
@@ -578,4 +578,17 @@ void wxDiagram::SetCanvas(wxShapeCanvas *can)
   m_diagramCanvas = can;
 }
 
+// Find a shape by its id
+wxShape* wxDiagram::FindShape(long id) const
+{
+    wxNode* node = GetShapeList()->First();
+    while (node)
+    {
+        wxShape* shape = (wxShape*) node->Data();
+        if (shape->GetId() == id)
+            return shape;
+        node = node->Next();
+    }
+    return NULL;
+}
 

@@ -78,14 +78,14 @@ public:
  * Store original top-left, bottom-right coordinates
  * in case we're doing non-vertical resizing.
  */
-  static double controlPointDragStartX;
-  static double controlPointDragStartY;
-  static double controlPointDragStartWidth;
-  static double controlPointDragStartHeight;
-  static double controlPointDragEndWidth;
-  static double controlPointDragEndHeight;
-  static double controlPointDragPosX;
-  static double controlPointDragPosY;
+  static double sm_controlPointDragStartX;
+  static double sm_controlPointDragStartY;
+  static double sm_controlPointDragStartWidth;
+  static double sm_controlPointDragStartHeight;
+  static double sm_controlPointDragEndWidth;
+  static double sm_controlPointDragEndHeight;
+  static double sm_controlPointDragPosX;
+  static double sm_controlPointDragPosY;
 };
 
 class wxPolygonShape;

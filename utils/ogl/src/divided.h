@@ -47,7 +47,6 @@ class wxDividedShape: public wxRectangleShape
   void ResetMandatoryControlPoints();
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

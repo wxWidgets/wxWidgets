@@ -294,6 +294,7 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_textMarginY = 5.0;
   m_regionName = "0";
   m_centreResize = TRUE;
+  m_maintainAspectRatio = FALSE;
   m_highlighted = FALSE;
   m_rotation = 0.0;
 
@@ -1590,6 +1591,43 @@ void wxShape::AddLine(wxLineShape *line, wxShape *other,
                             // The line ordering
                             int positionFrom, int positionTo)
 {
+    if (positionFrom == -1)
+    {
+        if (!m_lines.Member(line))
+            m_lines.Append(line);
+    }
+    else
+    {
+        // Don't preserve old ordering if we have new ordering instructions
+        m_lines.DeleteObject(line);
+        if (positionFrom < m_lines.Number())
+        {
+            wxNode* node = m_lines.Nth(positionFrom);
+            m_lines.Insert(node, line);
+        }
+        else
+            m_lines.Append(line);
+    }
+
+    if (positionTo == -1)
+    {
+        if (!other->m_lines.Member(line))
+            other->m_lines.Append(line);
+    }
+    else
+    {
+        // Don't preserve old ordering if we have new ordering instructions
+        other->m_lines.DeleteObject(line);
+        if (positionTo < other->m_lines.Number())
+        {
+            wxNode* node = other->m_lines.Nth(positionTo);
+            other->m_lines.Insert(node, line);
+        }
+        else
+            other->m_lines.Append(line);
+    }
+#if 0
+    // Wrong: doesn't preserve ordering of shape already linked
     m_lines.DeleteObject(line);
     other->m_lines.DeleteObject(line);
 
@@ -1618,6 +1656,7 @@ void wxShape::AddLine(wxLineShape *line, wxShape *other,
         else
             other->m_lines.Append(line);
     }
+#endif
 
     line->SetFrom(this);
     line->SetTo(other);
@@ -1682,7 +1721,7 @@ void wxShape::WriteAttributes(wxExpr *clause)
   int n_lines = m_lines.Number();
   if (n_lines > 0)
   {
-    wxExpr *list = new wxExpr(PrologList);
+    wxExpr *list = new wxExpr(wxExprList);
     wxNode *node = m_lines.First();
     while (node)
     {
@@ -1709,6 +1748,7 @@ void wxShape::WriteAttributes(wxExpr *clause)
     clause->AddAttributeValue("shadow_mode", (long)m_shadowMode);
   if (m_centreResize != TRUE)
     clause->AddAttributeValue("centre_resize", (long)0);
+  clause->AddAttributeValue("maintain_aspect_ratio", (long) m_maintainAspectRatio);
   if (m_highlighted != FALSE)
     clause->AddAttributeValue("hilite", (long)m_highlighted);
 
@@ -1721,12 +1761,12 @@ void wxShape::WriteAttributes(wxExpr *clause)
   // Write user-defined attachment points, if any
   if (m_attachmentPoints.Number() > 0)
   {
-    wxExpr *attachmentList = new wxExpr(PrologList);
+    wxExpr *attachmentList = new wxExpr(wxExprList);
     wxNode *node = m_attachmentPoints.First();
     while (node)
     {
       wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
-      wxExpr *pointExpr = new wxExpr(PrologList);
+      wxExpr *pointExpr = new wxExpr(wxExprList);
       pointExpr->Append(new wxExpr((long)point->m_id));
       pointExpr->Append(new wxExpr(point->m_x));
       pointExpr->Append(new wxExpr(point->m_y));
@@ -1757,9 +1797,9 @@ void wxShape::WriteRegions(wxExpr *clause)
     // Original text and region attributes:
     // region1 = (regionName regionText x y width height minWidth minHeight proportionX proportionY
     //            formatMode fontSize fontFamily fontStyle fontWeight textColour)
-    wxExpr *regionExpr = new wxExpr(PrologList);
-    regionExpr->Append(new wxExpr(PrologString, (region->m_regionName ? region->m_regionName : "")));
-    regionExpr->Append(new wxExpr(PrologString, (region->m_regionText ? region->m_regionText : "")));
+    wxExpr *regionExpr = new wxExpr(wxExprList);
+    regionExpr->Append(new wxExpr(wxExprString, (region->m_regionName ? region->m_regionName : "")));
+    regionExpr->Append(new wxExpr(wxExprString, (region->m_regionText ? region->m_regionText : "")));
 
     regionExpr->Append(new wxExpr(region->m_x));
     regionExpr->Append(new wxExpr(region->m_y));
@@ -1777,24 +1817,24 @@ void wxShape::WriteRegions(wxExpr *clause)
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetFamily() : wxDEFAULT)));
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetStyle() : wxDEFAULT)));
     regionExpr->Append(new wxExpr((long)(region->m_font ? region->m_font->GetWeight() : wxNORMAL)));
-    regionExpr->Append(new wxExpr(PrologString, region->m_textColour ? region->m_textColour : "BLACK"));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_textColour ? region->m_textColour : "BLACK"));
 
     // New members for pen colour/style
-    regionExpr->Append(new wxExpr(PrologString, region->m_penColour ? region->m_penColour : "BLACK"));
+    regionExpr->Append(new wxExpr(wxExprString, region->m_penColour ? region->m_penColour : "BLACK"));
     regionExpr->Append(new wxExpr((long)region->m_penStyle));
 
     // Formatted text:
     // text1 = ((x y string) (x y string) ...)
-    wxExpr *textExpr = new wxExpr(PrologList);
+    wxExpr *textExpr = new wxExpr(wxExprList);
 
     wxNode *textNode = region->m_formattedText.First();
     while (textNode)
     {
       wxShapeTextLine *line = (wxShapeTextLine *)textNode->Data();
-      wxExpr *list2 = new wxExpr(PrologList);
+      wxExpr *list2 = new wxExpr(wxExprList);
       list2->Append(new wxExpr(line->GetX()));
       list2->Append(new wxExpr(line->GetY()));
-      list2->Append(new wxExpr(PrologString, line->GetText()));
+      list2->Append(new wxExpr(wxExprString, line->GetText()));
       textExpr->Append(list2);
       textNode = textNode->Next();
     }
@@ -1819,7 +1859,7 @@ void wxShape::ReadAttributes(wxExpr *clause)
   // Input text strings (FOR COMPATIBILITY WITH OLD FILES ONLY. SEE REGION CODE BELOW.)
   ClearText();
   wxExpr *strings = clause->AttributeValue("text");
-  if (strings && strings->Type() == PrologList)
+  if (strings && strings->Type() == wxExprList)
   {
     m_formatted = TRUE;  // Assume text is formatted unless we prove otherwise
     wxExpr *node = strings->value.first;
@@ -1832,27 +1872,27 @@ void wxShape::ReadAttributes(wxExpr *clause)
 
       // string_expr can either be a string, or a list of
       // 3 elements: x, y, and string.
-      if (string_expr->Type() == PrologString)
+      if (string_expr->Type() == wxExprString)
       {
         the_string = string_expr->StringValue();
         m_formatted = FALSE;
       }
-      else if (string_expr->Type() == PrologList)
+      else if (string_expr->Type() == wxExprList)
       {
         wxExpr *first = string_expr->value.first;
         wxExpr *second = first ? first->next : NULL;
         wxExpr *third = second ? second->next : NULL;
 
         if (first && second && third &&
-            (first->Type() == PrologReal || first->Type() == PrologInteger) &&
-            (second->Type() == PrologReal || second->Type() == PrologInteger) &&
-            third->Type() == PrologString)
+            (first->Type() == wxExprReal || first->Type() == wxExprInteger) &&
+            (second->Type() == wxExprReal || second->Type() == wxExprInteger) &&
+            third->Type() == wxExprString)
           {
-            if (first->Type() == PrologReal)
+            if (first->Type() == wxExprReal)
               the_x = first->RealValue();
             else the_x = (double)first->IntegerValue();
 
-            if (second->Type() == PrologReal)
+            if (second->Type() == wxExprReal)
               the_y = second->RealValue();
             else the_y = (double)second->IntegerValue();
 
@@ -1910,6 +1950,10 @@ void wxShape::ReadAttributes(wxExpr *clause)
   iVal = (int) m_centreResize;
   clause->GetAttributeValue("centre_resize", iVal);
   m_centreResize = (iVal != 0);
+
+  iVal = (int) m_maintainAspectRatio;
+  clause->GetAttributeValue("maintain_aspect_ratio", iVal);
+  m_maintainAspectRatio = (iVal != 0);
 
   iVal = (int) m_highlighted;
   clause->GetAttributeValue("hilite", iVal);
@@ -2017,7 +2061,7 @@ void wxShape::ReadRegions(wxExpr *clause)
     wxString penColour("");
     int penStyle = wxSOLID;
 
-    if (regionExpr->Type() == PrologList)
+    if (regionExpr->Type() == wxExprList)
     {
       wxExpr *nameExpr = regionExpr->Nth(0);
       wxExpr *textExpr = regionExpr->Nth(1);
@@ -2095,7 +2139,7 @@ void wxShape::ReadRegions(wxExpr *clause)
      *
      */
     textExpr = clause->AttributeValue(textNameBuf);
-    if (textExpr && (textExpr->Type() == PrologList))
+    if (textExpr && (textExpr->Type() == wxExprList))
     {
       wxExpr *node = textExpr->value.first;
       while (node)
@@ -2107,27 +2151,27 @@ void wxShape::ReadRegions(wxExpr *clause)
 
         // string_expr can either be a string, or a list of
         // 3 elements: x, y, and string.
-        if (string_expr->Type() == PrologString)
+        if (string_expr->Type() == wxExprString)
         {
           the_string = string_expr->StringValue();
           m_formatted = FALSE;
         }
-        else if (string_expr->Type() == PrologList)
+        else if (string_expr->Type() == wxExprList)
         {
           wxExpr *first = string_expr->value.first;
           wxExpr *second = first ? first->next : NULL;
           wxExpr *third = second ? second->next : NULL;
 
           if (first && second && third &&
-              (first->Type() == PrologReal || first->Type() == PrologInteger) &&
-              (second->Type() == PrologReal || second->Type() == PrologInteger) &&
-              third->Type() == PrologString)
+              (first->Type() == wxExprReal || first->Type() == wxExprInteger) &&
+              (second->Type() == wxExprReal || second->Type() == wxExprInteger) &&
+              third->Type() == wxExprString)
           {
-            if (first->Type() == PrologReal)
+            if (first->Type() == wxExprReal)
               the_x = first->RealValue();
             else the_x = (double)first->IntegerValue();
 
-            if (second->Type() == PrologReal)
+            if (second->Type() == wxExprReal)
               the_y = second->RealValue();
             else the_y = (double)second->IntegerValue();
 
@@ -2186,6 +2230,7 @@ void wxShape::Copy(wxShape& copy)
   copy.m_brush = m_brush;
   copy.m_textColour = m_textColour;
   copy.m_centreResize = m_centreResize;
+  copy.m_maintainAspectRatio = m_maintainAspectRatio;
   copy.m_attachmentMode = m_attachmentMode;
   copy.m_spaceAttachments = m_spaceAttachments;
   copy.m_highlighted = m_highlighted;
@@ -2567,8 +2612,10 @@ int wxShape::GetNumberOfAttachments() const
 
 bool wxShape::AttachmentIsValid(int attachment) const
 {
-  if ((attachment >= 0) && (attachment < 4))
-    return TRUE;
+  if (m_attachmentPoints.Number() == 0)
+  {
+    return ((attachment >= 0) && (attachment < 4)) ;
+  }
 
   wxNode *node = m_attachmentPoints.First();
   while (node)
@@ -2584,28 +2631,87 @@ bool wxShape::AttachmentIsValid(int attachment) const
 bool wxShape::GetAttachmentPosition(int attachment, double *x, double *y, 
                                          int nth, int no_arcs, wxLineShape *line)
 {
-  if (!m_attachmentMode)
-  {
-    *x = m_xpos; *y = m_ypos;
-    return TRUE;
-  }
-  else
-  {
-    wxNode *node = m_attachmentPoints.First();
-    while (node)
+    if (!m_attachmentMode)
     {
-      wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
-      if (point->m_id == attachment)
-      {
-        *x = (double)(m_xpos + point->m_x);
-        *y = (double)(m_ypos + point->m_y);
+        *x = m_xpos; *y = m_ypos;
         return TRUE;
-      }
-      node = node->Next();
     }
-    *x = m_xpos; *y = m_ypos;
+    else
+    {
+        if (m_attachmentPoints.Number() > 0)
+        {
+            wxNode *node = m_attachmentPoints.First();
+            while (node)
+            {
+                wxAttachmentPoint *point = (wxAttachmentPoint *)node->Data();
+                if (point->m_id == attachment)
+                {
+                    *x = (double)(m_xpos + point->m_x);
+                    *y = (double)(m_ypos + point->m_y);
+                    return TRUE;
+                }
+                node = node->Next();
+            }
+            *x = m_xpos; *y = m_ypos;
+            return FALSE;
+        }
+        else
+        {
+            // Assume is rectangular
+            double w, h;
+            GetBoundingBoxMax(&w, &h);
+            double top = (double)(m_ypos + h/2.0);
+            double bottom = (double)(m_ypos - h/2.0);
+            double left = (double)(m_xpos - w/2.0);
+            double right = (double)(m_xpos + w/2.0);
+
+            bool isEnd = (line && line->IsEnd(this));
+
+            // Simplified code
+            switch (attachment)
+            {
+                case 0:
+                {
+                    wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(right, bottom),
+                            nth, no_arcs, line);
+
+                    *x = pt.x; *y = pt.y;
+                    break;
+                }
+                case 1:
+                {
+                    wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(right, bottom), wxRealPoint(right, top),
+                            nth, no_arcs, line);
+
+                    *x = pt.x; *y = pt.y;
+                    break;
+                }
+                case 2:
+                {
+                    wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, top), wxRealPoint(right, top),
+                            nth, no_arcs, line);
+
+                    *x = pt.x; *y = pt.y;
+                    break;
+                }
+                case 3:
+                {
+                    wxRealPoint pt = CalcSimpleAttachment(wxRealPoint(left, bottom), wxRealPoint(left, top),
+                            nth, no_arcs, line);
+
+                    *x = pt.x; *y = pt.y;
+                    break;
+                }
+                default:
+                {
+                    return wxShape::GetAttachmentPosition(attachment, x, y, nth, no_arcs, line);
+                    break;
+                }
+            }
+            return TRUE;
+        }
+    }
     return FALSE;
-  }
 }
 
 void wxShape::GetBoundingBoxMax(double *w, double *h)

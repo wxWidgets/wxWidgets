@@ -240,6 +240,7 @@ void wxDrawnShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
 
+  clause->AddAttributeValue("current_angle", (long)m_currentAngle);
   clause->AddAttributeValue("save_metafile", (long)m_saveToFile);
   if (m_saveToFile)
   {
@@ -257,7 +258,8 @@ void wxDrawnShape::ReadAttributes(wxExpr *clause)
   wxRectangleShape::ReadAttributes(clause);
 
   int iVal = (int) m_saveToFile;
-  clause->AssignAttributeValue("save_metafile", &iVal);
+  clause->GetAttributeValue("save_metafile", iVal);
+  clause->GetAttributeValue("current_angle", m_currentAngle);
   m_saveToFile = (iVal != 0);
 
   if (m_saveToFile)
@@ -521,7 +523,7 @@ wxDrawOp *wxOpSetGDI::Copy(wxPseudoMetaFile *newImage)
 
 wxExpr *wxOpSetGDI::WriteExpr(wxPseudoMetaFile *image)
 {
-  wxExpr *expr = new wxExpr(PrologList);
+  wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
   switch (m_op)
   {
@@ -635,7 +637,7 @@ void wxOpSetClipping::Translate(double x, double y)
 
 wxExpr *wxOpSetClipping::WriteExpr(wxPseudoMetaFile *image)
 {
-  wxExpr *expr = new wxExpr(PrologList);
+  wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
   switch (m_op)
   {
@@ -879,7 +881,7 @@ void wxOpDraw::Rotate(double x, double y, double theta, double sinTheta, double 
 
 wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
 {
-  wxExpr *expr = new wxExpr(PrologList);
+  wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
   switch (m_op)
   {
@@ -912,7 +914,7 @@ wxExpr *wxOpDraw::WriteExpr(wxPseudoMetaFile *image)
     {
       expr->Append(new wxExpr(m_x1));
       expr->Append(new wxExpr(m_y1));
-      expr->Append(new wxExpr(PrologString, m_textString));
+      expr->Append(new wxExpr(wxExprString, m_textString));
       break;
     }
     case DRAWOP_DRAW_ARC:
@@ -1103,7 +1105,7 @@ void wxOpPolyDraw::Rotate(double x, double y, double theta, double sinTheta, dou
 
 wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
 {
-  wxExpr *expr = new wxExpr(PrologList);
+  wxExpr *expr = new wxExpr(wxExprList);
   expr->Append(new wxExpr((long)m_op));
   expr->Append(new wxExpr((long)m_noPoints));
 
@@ -1140,7 +1142,7 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *image)
       strcat(oglBuffer, buf3);
     }
   }
-  expr->Append(new wxExpr(PrologString, oglBuffer));
+  expr->Append(new wxExpr(wxExprString, oglBuffer));
   return expr;
 }
 
@@ -1480,7 +1482,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
       if (obj->IsKindOf(CLASSINFO(wxPen)))
       {
         wxPen *thePen = (wxPen *)obj;
-        expr = new wxExpr(PrologList);
+        expr = new wxExpr(wxExprList);
         expr->Append(new wxExpr((long)gyTYPE_PEN));
         expr->Append(new wxExpr((long)thePen->GetWidth()));
         expr->Append(new wxExpr((long)thePen->GetStyle()));
@@ -1491,7 +1493,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
       else if (obj->IsKindOf(CLASSINFO(wxBrush)))
       {
         wxBrush *theBrush = (wxBrush *)obj;
-        expr = new wxExpr(PrologList);
+        expr = new wxExpr(wxExprList);
         expr->Append(new wxExpr((long)gyTYPE_BRUSH));
         expr->Append(new wxExpr((long)theBrush->GetStyle()));
         expr->Append(new wxExpr((long)theBrush->GetColour().Red()));
@@ -1501,7 +1503,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
       else if (obj->IsKindOf(CLASSINFO(wxFont)))
       {
         wxFont *theFont = (wxFont *)obj;
-        expr = new wxExpr(PrologList);
+        expr = new wxExpr(wxExprList);
         expr->Append(new wxExpr((long)gyTYPE_FONT));
         expr->Append(new wxExpr((long)theFont->GetPointSize()));
         expr->Append(new wxExpr((long)theFont->GetFamily()));
@@ -1513,7 +1515,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
     else
     {
       // If no recognised GDI object, append a place holder anyway.
-      expr = new wxExpr(PrologList);
+      expr = new wxExpr(wxExprList);
       expr->Append(new wxExpr((long)0));
     }
 
@@ -1544,7 +1546,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
   // Write outline and fill GDI op lists (if any)
   if (m_outlineColours.Number() > 0)
   {
-    wxExpr *outlineExpr = new wxExpr(PrologList);
+    wxExpr *outlineExpr = new wxExpr(wxExprList);
     node = m_outlineColours.First();
     while (node)
     {
@@ -1558,7 +1560,7 @@ void wxPseudoMetaFile::WriteAttributes(wxExpr *clause, int whichAngle)
   }
   if (m_fillColours.Number() > 0)
   {
-    wxExpr *fillExpr = new wxExpr(PrologList);
+    wxExpr *fillExpr = new wxExpr(wxExprList);
     node = m_fillColours.First();
     while (node)
     {

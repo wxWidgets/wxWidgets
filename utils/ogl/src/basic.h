@@ -269,6 +269,8 @@ class wxShape: public wxShapeEvtHandler
   virtual bool HitTest(double x, double y, int *attachment, double *distance);
   inline void SetCentreResize(bool cr) { m_centreResize = cr; }
   inline bool GetCentreResize() const { return m_centreResize; }
+  inline void SetMaintainAspectRatio(bool ar) { m_maintainAspectRatio = ar; }
+  inline bool GetMaintainAspectRatio() const { return m_maintainAspectRatio; }
   inline wxList& GetLines() const { return (wxList&) m_lines; }
   inline void SetDisableLabel(bool flag) { m_disableLabel = flag; }
   inline bool GetDisableLabel() const { return m_disableLabel; }
@@ -482,6 +484,7 @@ class wxShape: public wxShapeEvtHandler
   int                   m_textMarginX;    // Gap between text and border
   int                   m_textMarginY;
   wxString              m_regionName;
+  bool                  m_maintainAspectRatio;
 };
 
 class wxPolygonShape: public wxShape
@@ -532,7 +535,6 @@ class wxPolygonShape: public wxShape
   virtual void CalculatePolygonCentre();
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif
@@ -545,6 +547,9 @@ class wxPolygonShape: public wxShape
   void Copy(wxShape& copy);
 
   inline wxList *GetPoints() { return m_points; }
+
+  // Rotate about the given axis by the given amount in radians
+  virtual void Rotate(double x, double y, double theta);
 
  private:
   wxList*       m_points;
@@ -569,7 +574,6 @@ class wxRectangleShape: public wxShape
   void SetCornerRadius(double rad); // If > 0, rounded corners
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif
@@ -622,7 +626,6 @@ class wxEllipseShape: public wxShape
   void SetSize(double x, double y, bool recursive = TRUE);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

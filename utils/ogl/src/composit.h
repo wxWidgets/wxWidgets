@@ -78,7 +78,6 @@ public:
   void CalculateSize();
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
   // In case the object has constraints it needs to read in in a different pass
@@ -154,7 +153,6 @@ class wxDivisionShape: public wxCompositeShape
   void ResetMandatoryControlPoints();
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   void WriteAttributes(wxExpr *clause);
   void ReadAttributes(wxExpr *clause);
 #endif

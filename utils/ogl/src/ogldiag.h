@@ -56,15 +56,18 @@ public:
   virtual void DeleteAllShapes();
   virtual void ShowAll(bool show);
 
+  // Find a shape by its id
+  wxShape* FindShape(long id) const;
+
   inline void SetMouseTolerance(int tol) { m_mouseTolerance = tol; }
   inline int GetMouseTolerance() const { return m_mouseTolerance; }
   inline wxList *GetShapeList() const { return m_shapeList; }
+  inline int GetCount() const { return m_shapeList->Number(); }
 
   // Make sure all text that should be centred, is centred.
   void RecentreAll(wxDC& dc);
 
 #ifdef PROLOGIO
-  // Prolog database stuff
   virtual bool SaveFile(const wxString& filename);
   virtual bool LoadFile(const wxString& filename);
 

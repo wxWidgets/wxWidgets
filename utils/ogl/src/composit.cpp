@@ -620,15 +620,15 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
 
     // Each constraint is stored in the form
     // (type name id xspacing yspacing m_constrainingObjectId constrainedObjectIdList)
-    wxExpr *constraintExpr = new wxExpr(PrologList);
+    wxExpr *constraintExpr = new wxExpr(wxExprList);
     constraintExpr->Append(new wxExpr((long)constraint->m_constraintType));
-    constraintExpr->Append(new wxExpr(PrologString, constraint->m_constraintName));
+    constraintExpr->Append(new wxExpr(wxExprString, constraint->m_constraintName));
     constraintExpr->Append(new wxExpr(constraint->m_constraintId));
     constraintExpr->Append(new wxExpr(constraint->m_xSpacing));
     constraintExpr->Append(new wxExpr(constraint->m_ySpacing));
     constraintExpr->Append(new wxExpr(constraint->m_constrainingObject->GetId()));
 
-    wxExpr *objectList = new wxExpr(PrologList);
+    wxExpr *objectList = new wxExpr(wxExprList);
     wxNode *node1 = constraint->m_constrainedObjects.First();
     while (node1)
     {
@@ -645,7 +645,7 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
   }
 
   // Write the ids of all the child images
-  wxExpr *childrenExpr = new wxExpr(PrologList);
+  wxExpr *childrenExpr = new wxExpr(wxExprList);
   node = m_children.First();
   while (node)
   {
@@ -658,7 +658,7 @@ void wxCompositeShape::WriteAttributes(wxExpr *clause)
   // Write the ids of all the division images
   if (m_divisions.Number() > 0)
   {
-    wxExpr *divisionsExpr = new wxExpr(PrologList);
+    wxExpr *divisionsExpr = new wxExpr(wxExprList);
     node = m_divisions.First();
     while (node)
     {

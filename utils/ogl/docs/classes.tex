@@ -225,11 +225,23 @@ Removes and deletes all shapes in the diagram.
 
 Draws an outline rectangle on the current device context.
 
+\membersection{wxDiagram::FindShape}\label{wxdiagramfindshape}
+
+\constfunc{wxShape*}{FindShape}{\param{long}{ id}}
+
+Returns the shape for the given identifier.
+
 \membersection{wxDiagram::GetCanvas}
 
 \constfunc{wxShapeCanvas*}{GetCanvas}{\void}
 
 Returns the shape canvas associated with this diagram.
+
+\membersection{wxDiagram::GetCount}\label{wxdiagramgetcount}
+
+\constfunc{int}{GetCount}{\void}
+
+Returns the number of shapes in the diagram.
 
 \membersection{wxDiagram::GetGridSpacing}
 
@@ -1474,7 +1486,7 @@ Destructor.
 
 \membersection{wxShape::AddLine}
 
-\func{void}{AddLine}{\param{wxLineShape *}{line}, \param{wxShape *}{other}, \param{int}{attachFrom = 0}, \param{int}{ attachTo = 0},
+\func{void}{AddLine}{\param{wxLineShape*}{ line}, \param{wxShape*}{ other}, \param{int}{ attachFrom = 0}, \param{int}{ attachTo = 0},
  \param{int}{ positionFrom = -1}, \param{int}{ positionTo = -1}}
 
 Adds a line between the specified canvas shapes, at the specified attachment points.
@@ -1847,6 +1859,13 @@ Gets the zero-based position of {\it line} in the list of lines for this shape.
 
 Returns a reference to the list of lines connected to this shape.
 
+\membersection{wxShape::GetMaintainAspectRatio}\label{wxshapegetmaintainaspectratio}
+
+\constfunc{bool}{GetMaintainAspectRatio}{\void}
+
+If returns TRUE, resizing the shape will not change the aspect ratio
+(width and height will be in the original proportion).
+
 \membersection{wxShape::GetNumberOfAttachments}\label{wxshapegetnumberofattachments}
 
 \constfunc{int}{GetNumberOfAttachments}{\void}
@@ -2196,6 +2215,13 @@ Sets the highlight for a shape. Shape highlighting is unimplemented.
 \func{void}{SetId}{\param{long}{ id}}
 
 Set the integer identifier for this shape.
+
+\membersection{wxShape::SetMaintainAspectRatio}\label{wxshapesetmaintainaspectratio}
+
+\func{void}{SetMaintainAspectRatio}{\param{bool}{ flag}}
+
+If the argument is TRUE, tells the shape that resizes should not change the aspect ratio
+(width and height should be in the original proportion).
 
 \membersection{wxShape::SetPen}
 
@@ -2652,7 +2678,7 @@ image, and again to allow drawing at the new position.
 
 \membersection{wxShapeEvtHandler::OnDraw}
 
-\func{void}{OnDraw}{\void}
+\func{void}{OnDraw}{\param{wxDC\&}{ dc}}
 
 Defined for each class to draw the main graphic, but
 not the contents.
