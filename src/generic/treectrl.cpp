@@ -1556,7 +1556,7 @@ void wxTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     }
 
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText( item->GetText(), image_w + item->GetX(), item->GetY()
+    dc.DrawText( item->GetText(), image_w + item->GetX(), (wxCoord)item->GetY()
                  + ((total_h > text_h) ? (total_h - text_h)/2 : 0));
 
     // restore normal font
@@ -2116,8 +2116,8 @@ void wxTreeCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 
 void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 {
-    long text_w = 0;
-    long text_h = 0;
+    int text_w = 0;
+    int text_h = 0;
 
     if (item->IsBold())
         dc.SetFont(m_boldFont);
@@ -2145,7 +2145,8 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
         total_h += total_h/10;   // otherwise 10% extra spacing
 
     item->SetHeight(total_h);
-    if (total_h>m_lineHeight) m_lineHeight=total_h;
+    if (total_h>m_lineHeight)
+        m_lineHeight=total_h;
 
     item->SetWidth(image_w+text_w+2);
 }

@@ -694,10 +694,10 @@ public:
 #endif // WXWIN_COMPATIBILITY
 
     // Get X position
-    long GetX() const { return m_x; }
+    wxCoord GetX() const { return m_x; }
 
     // Get Y position
-    long GetY() const { return m_y; }
+    wxCoord GetY() const { return m_y; }
 
     void CopyObject(wxObject& obj) const;
 

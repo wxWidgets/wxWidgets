@@ -126,8 +126,8 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     view_x *= wxPLOT_SCROLL_STEP;
     view_y *= wxPLOT_SCROLL_STEP;
     
-    int x = event.GetX();
-    int y = event.GetY();
+    wxCoord x = event.GetX();
+    wxCoord y = event.GetY();
     x += view_x;
     y += view_y;
     
@@ -141,7 +141,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
         double end = curve->GetEndY();
         wxCoord offset_y = curve->GetOffsetY();
             
-        double dy = (end - curve->GetY( x/m_owner->GetZoom() )) / range;
+        double dy = (end - curve->GetY( (wxInt32)(x/m_owner->GetZoom()) )) / range;
         wxCoord curve_y = (wxCoord)(dy * double_client_height) - offset_y - 1;
                 
         if ((y-curve_y < 4) && (y-curve_y > -4))
@@ -214,7 +214,7 @@ void wxPlotArea::DrawCurve( wxDC *dc, wxPlotCurve *curve, int from, int to )
     wxCoord y=0,last_y=0;
     for (int x = start_x; x < end_x; x++)
     {
-        double dy = (end - curve->GetY( x/zoom )) / range;
+        double dy = (end - curve->GetY( (wxInt32)(x/zoom) )) / range;
         y = (wxCoord)(dy * double_client_height) - offset_y - 1;
             
         if (x != start_x)
@@ -310,8 +310,8 @@ void wxPlotXAxisArea::OnMouse( wxMouseEvent &event )
     view_x *= wxPLOT_SCROLL_STEP;
     view_y *= wxPLOT_SCROLL_STEP;
     
-    int x = event.GetX();
-    int y = event.GetY();
+    wxCoord x = event.GetX();
+    wxCoord y = event.GetY();
     x += view_x;
     y += view_y;
     
@@ -760,7 +760,7 @@ void wxPlotWindow::SetZoom( double zoom )
     }
     SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
                    (int)((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1, 0, 
-                   (int)view_x*zoom/old_zoom, 0, 
+                   (int)(view_x*zoom/old_zoom), 0, 
                    TRUE );
 
     RedrawXAxis();
@@ -780,7 +780,7 @@ void wxPlotWindow::ResetScrollbar()
     }
     
     SetScrollbars( wxPLOT_SCROLL_STEP, wxPLOT_SCROLL_STEP, 
-                   ((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1, 0 );
+                   (int)(((max*m_xZoom)/wxPLOT_SCROLL_STEP)+1), 0 );
 }
 
 void wxPlotWindow::RedrawXAxis()
