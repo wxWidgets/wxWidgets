@@ -7,8 +7,9 @@
 // --------------------------------------------------------------------------
 #include <wx/wxprec.h>
 
-#include <wx/msw/private.h>
+#include <wx/app.h>
 #include <wx/module.h>
+#include <wx/msw/private.h>
 #include <string.h>
 #include "sndbase.h"
 #include "sndwin.h"
@@ -93,6 +94,11 @@ LRESULT APIENTRY _EXPORT _wxSoundHandlerWndProc(HWND hWnd, UINT message,
   return (LRESULT)0;
 }
 
+// -----------------------------------------------------------------------
+// CreateSndWindow() creates an hidden window which will receive the sound
+// events
+// -----------------------------------------------------------------------
+
 void wxSoundStreamWin::CreateSndWindow()
 {
   FARPROC proc = MakeProcInstance((FARPROC)_wxSoundHandlerWndProc,
@@ -104,12 +110,17 @@ void wxSoundStreamWin::CreateSndWindow()
                                         wxGetInstance(), NULL);
 
   error = GetLastError();
-  wxPrintf("%d\n", error);
 
   ::SetWindowLong(m_internal->m_sndWin, GWL_WNDPROC, (LONG)proc);
 
+  // Add this window to the sound handle list so we'll be able to redecode
+  // the "magic" number.
   wxSoundHandleList->Append((long)m_internal->m_sndWin, (wxObject *)this);
 }
+
+// -----------------------------------------------------------------------
+// DestroySndWindow() destroys the hidden window
+// -----------------------------------------------------------------------
 
 void wxSoundStreamWin::DestroySndWindow()
 {
@@ -119,6 +130,17 @@ void wxSoundStreamWin::DestroySndWindow()
   }
 }
 
+// -------------------------------------------------------------------------
+// OpenDevice(int mode) initializes the windows driver for a "mode"
+// operation. mode is a bit mask: if the bit "wxSOUND_OUTPUT" is set,
+// the driver is opened for output operation, and if the bit "wxSOUND_INPUT"
+// is set, then the driver is opened for input operation. The two modes
+// aren't exclusive.
+// The initialization parameters (sample rate, ...) are taken from the
+// m_sndformat object.
+// At the end, OpenDevice() calls AllocHeaders() to initialize the Sound IO
+// queue.
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::OpenDevice(int mode)
 {
   wxSoundFormatPcm *pcm;
@@ -139,6 +161,9 @@ bool wxSoundStreamWin::OpenDevice(int mode)
   wformat.wBitsPerSample  = pcm->GetBPS();
   wformat.cbSize          = 0;
 
+  // -----------------------------------
+  // Open the driver for Output operation
+  // -----------------------------------
   if (mode & wxSOUND_OUTPUT) {
     MMRESULT result;
 
@@ -157,6 +182,9 @@ bool wxSoundStreamWin::OpenDevice(int mode)
 
     m_internal->m_output_enabled = TRUE;
   }
+  // -----------------------------------
+  // Open the driver for Input operation
+  // -----------------------------------
   if (mode & wxSOUND_INPUT) {
     MMRESULT result;
 
@@ -183,7 +211,10 @@ bool wxSoundStreamWin::OpenDevice(int mode)
   return TRUE;
 }
 
-
+// -------------------------------------------------------------------------
+// CloseDevice() closes the driver handles and frees memory allocated for
+// IO queues.
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::CloseDevice()
 {
   if (m_internal->m_output_enabled) {
@@ -202,11 +233,24 @@ void wxSoundStreamWin::CloseDevice()
   m_internal->m_input_enabled  = FALSE;
 }
 
+// -------------------------------------------------------------------------
+// AllocHeader(int mode)
+//
+// mode has the same mean as in OpenDevice() except that here the two flags
+// must be exclusive.
+// AllocHeader() initializes an element of an operation (this can be input
+// or output). It means it allocates the sound header's memory block 
+// and "prepares" it (It is needed by Windows). At the same time, it sets
+// private datas so we can the header's owner (See callback).
+//
+// It returns the new allocated block or NULL.
+// -------------------------------------------------------------------------
 wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
 {
   wxSoundInfoHeader *info;
   WAVEHDR *header;
 
+  // Some memory allocation
   info = new wxSoundInfoHeader;
   info->m_h_data   = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, GetBestSize());
   info->m_h_header = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, sizeof(WAVEHDR));
@@ -216,19 +260,25 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
     return NULL;
   }
 
+  // Get the two pointers from the system
   info->m_data      = (char *)GlobalLock(info->m_h_data);
   info->m_header    = (WAVEHDR *)GlobalLock(info->m_h_header);
+  // Set the header's mode
   info->m_mode      = mode;
+  // Set the parent of the header
   info->m_driver    = this;
+  // Clean it up
   ClearHeader(info);
 
   header            = info->m_header;
-
+  // Initialize Windows variables
   header->lpData         = info->m_data;
   header->dwBufferLength = GetBestSize();
   header->dwUser         = (DWORD)info;
   header->dwFlags        = WHDR_DONE;
 
+
+  // "Prepare" the header
   if (mode == wxSOUND_INPUT) {
     MMRESULT result;
 
@@ -236,6 +286,7 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
                                   sizeof(WAVEHDR));
 
     if (result != MMSYSERR_NOERROR) {
+      // If something goes wrong, free everything.
       GlobalUnlock(info->m_data);
       GlobalUnlock(info->m_header);
       GlobalFree(info->m_h_data);
@@ -252,6 +303,7 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
                                    sizeof(WAVEHDR));
 
     if (result != MMSYSERR_NOERROR) {
+      // If something goes wrong, free everything.
       GlobalUnlock(info->m_data);
       GlobalUnlock(info->m_header);
       GlobalFree(info->m_h_data);
@@ -265,6 +317,17 @@ wxSoundInfoHeader *wxSoundStreamWin::AllocHeader(int mode)
   return info;
 }
 
+// -------------------------------------------------------------------------
+// AllocHeaders(int mode)
+//
+// "mode" has the same mean as for OpenDevice() except that the two flags must
+// be exclusive.
+// AllocHeaders() allocates WXSOUND_MAX_QUEUE (= 128) blocks for an operation
+// queue. It uses AllocHeader() for each element.
+//
+// Once it has allocated all blocks, it returns TRUE and if an error occured
+// it returns FALSE.
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::AllocHeaders(int mode)
 {
   int i;
@@ -287,6 +350,13 @@ bool wxSoundStreamWin::AllocHeaders(int mode)
   return TRUE;
 }
 
+// -------------------------------------------------------------------------
+// FreeHeader(int mode)
+//
+// "mode" has the same mean as for OpenDevice() except that the two flags must
+// be exclusive.
+// FreeHeader() frees a memory block and "unprepares" it.
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::FreeHeader(wxSoundInfoHeader *header, int mode)
 {
   if (mode == wxSOUND_OUTPUT)
@@ -301,6 +371,14 @@ void wxSoundStreamWin::FreeHeader(wxSoundInfoHeader *header, int mode)
   delete header;
 }
 
+// -------------------------------------------------------------------------
+// FreeHeaders(int mode)
+//
+// "mode" has the same mean as for OpenDevice() except that the two flags must
+// be exclusive.
+// FreeHeaders() frees all an operation queue once it has checked that
+// all buffers have been terminated.
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::FreeHeaders(int mode)
 {
   int i;
@@ -313,7 +391,9 @@ void wxSoundStreamWin::FreeHeaders(int mode)
 
   for (i=0;i<WXSOUND_MAX_QUEUE;i++) {
     if ((*headers)[i]) {
+      // We wait for the end of the buffer
       WaitFor((*headers)[i]);
+      // Then, we free the header
       FreeHeader((*headers)[i], mode);
     }
   }
@@ -321,25 +401,48 @@ void wxSoundStreamWin::FreeHeaders(int mode)
   (*headers) = NULL;
 }
 
+// -------------------------------------------------------------------------
+// WaitFor(wxSoundInfoHeader *info)
+//
+// "info" is one element of an IO queue
+// WaitFor() checks whether the specified block has been terminated.
+// If it hasn't been terminated, it waits for its termination.
+//
+// NB: if it's a partially filled buffer it adds it to the Windows queue
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::WaitFor(wxSoundInfoHeader *info)
 {
+  // We begun filling it: we must send it to the Windows queue
   if (info->m_position != 0) {
-    memset(info->m_data + info->m_position, 0, info->m_size);
+    memset(info->m_data + info->m_position, 0, info->m_size-info->m_position);
     AddToQueue(info);
   }
 
+  // If the buffer is finished, we return immediately
   if (!info->m_playing && !info->m_recording)
     return;
 
+  // Else, we wait for its termination
   while (info->m_playing || info->m_recording)
     wxYield();
 }
 
+// -------------------------------------------------------------------------
+// AddToQueue(wxSoundInfoHeader *info)
+//
+// For "info", see WaitFor()
+// AddToQueue() sends the IO queue element to the Windows queue.
+//
+// Warning: in the current implementation, it partially assume we send the
+// element in the right order. This is true in that implementation but if
+// you use it elsewhere, be careful: it may shuffle all your sound datas.
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::AddToQueue(wxSoundInfoHeader *info)
 {
   MMRESULT result;
 
   if (info->m_mode == wxSOUND_INPUT) {
+    // Increment the input fragment pointer
     m_current_frag_in = (m_current_frag_in + 1) % WXSOUND_MAX_QUEUE;
     result = waveInAddBuffer(m_internal->m_devin,
                              info->m_header, sizeof(WAVEHDR));
@@ -358,6 +461,12 @@ bool wxSoundStreamWin::AddToQueue(wxSoundInfoHeader *info)
   return TRUE;
 }
 
+// -------------------------------------------------------------------------
+// ClearHeader(wxSoundInfoHeader *info)
+//
+// ClearHeader() reinitializes the parameters of "info" to their default
+// value.
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::ClearHeader(wxSoundInfoHeader *info)
 {
   info->m_playing   = FALSE;
@@ -366,6 +475,13 @@ void wxSoundStreamWin::ClearHeader(wxSoundInfoHeader *info)
   info->m_size      = GetBestSize();
 }
 
+// -------------------------------------------------------------------------
+// wxSoundInfoHeader *NextFragmentOutput()
+//
+// NextFragmentOutput() looks for a free output block. It will always
+// return you a non-NULL pointer but it may waits for an empty buffer a long
+// time.
+// -------------------------------------------------------------------------
 wxSoundInfoHeader *wxSoundStreamWin::NextFragmentOutput()
 {
   if (m_headers_play[m_current_frag_out]->m_playing) {
@@ -379,6 +495,9 @@ wxSoundInfoHeader *wxSoundStreamWin::NextFragmentOutput()
   return m_headers_play[m_current_frag_out];
 }
 
+// -------------------------------------------------------------------------
+// The behaviour of Write is documented in the global documentation.
+// -------------------------------------------------------------------------
 wxSoundStream& wxSoundStreamWin::Write(const void *buffer, wxUint32 len)
 {
   m_lastcount = 0;
@@ -389,6 +508,7 @@ wxSoundStream& wxSoundStreamWin::Write(const void *buffer, wxUint32 len)
     wxSoundInfoHeader *header;
     wxUint32 to_copy;
 
+    // Get a new output fragment
     header              = NextFragmentOutput();
 
     to_copy             = (len > header->m_size) ? header->m_size : len;
@@ -400,6 +520,7 @@ wxSoundStream& wxSoundStreamWin::Write(const void *buffer, wxUint32 len)
     len                -= to_copy;
     m_lastcount        += to_copy;
     
+    // If the fragment is full, we send it to the Windows queue.
     if (header->m_size == 0)
       if (!AddToQueue(header)) {
         m_snderror = wxSOUND_IOERR;
@@ -409,6 +530,9 @@ wxSoundStream& wxSoundStreamWin::Write(const void *buffer, wxUint32 len)
   return *this;
 }
 
+// -------------------------------------------------------------------------
+// NextFragmentInput is not functional.
+// -------------------------------------------------------------------------
 wxSoundInfoHeader *wxSoundStreamWin::NextFragmentInput()
 {
   wxSoundInfoHeader *header;
@@ -423,6 +547,9 @@ wxSoundInfoHeader *wxSoundStreamWin::NextFragmentInput()
   return header;
 }
 
+// -------------------------------------------------------------------------
+// The behaviour of Read is documented in the global documentation.
+// -------------------------------------------------------------------------
 wxSoundStream& wxSoundStreamWin::Read(void *buffer, wxUint32 len)
 {
   wxSoundInfoHeader *header;
@@ -455,6 +582,13 @@ wxSoundStream& wxSoundStreamWin::Read(void *buffer, wxUint32 len)
   return *this;
 }
 
+// -------------------------------------------------------------------------
+// NotifyDoneBuffer(wxUint32 dev_handle)
+//
+// NotifyDoneBuffer() is called by wxSoundHandlerProc each time a sound
+// fragment finished. It reinitializes the parameters of the fragment and
+// sends an event to the clients.
+// -------------------------------------------------------------------------
 void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle)
 {
   wxSoundInfoHeader *info;
@@ -472,11 +606,15 @@ void wxSoundStreamWin::NotifyDoneBuffer(wxUint32 dev_handle)
   }
 }
 
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::SetSoundFormat(wxSoundFormatBase& base)
 {
   return wxSoundStream::SetSoundFormat(base);
 }
 
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::StartProduction(int evt)
 {
   if ((m_internal->m_output_enabled && (evt & wxSOUND_OUTPUT)) ||
@@ -501,6 +639,8 @@ bool wxSoundStreamWin::StartProduction(int evt)
   return TRUE;
 }
 
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::StopProduction()
 {
   m_production_started = FALSE;
@@ -508,6 +648,8 @@ bool wxSoundStreamWin::StopProduction()
   return TRUE;
 }
 
+// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 bool wxSoundStreamWin::QueueFilled() const
 {
   return (!m_production_started || m_queue_filled);
