@@ -309,7 +309,7 @@ wxFileExists (const wxString& filename)
 bool
 wxIsAbsolutePath (const wxString& filename)
 {
-    if (filename != wxT(""))
+    if (!filename.empty())
     {
 #if defined(__WXMAC__) && !defined(__DARWIN__)
         // Classic or Carbon CodeWarrior like
@@ -432,7 +432,7 @@ wxChar *wxRealPath (wxChar *path)
 // Must be destroyed
 wxChar *wxCopyAbsolutePath(const wxString& filename)
 {
-  if (filename == wxT(""))
+  if (filename.empty())
     return (wxChar *) NULL;
 
   if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename))) {
@@ -588,7 +588,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
         if (nm[1] == SEP || nm[1] == 0)
         {        /* ~/filename */
         // FIXME: wxGetUserHome could return temporary storage in Unicode mode
-            if ((s = WXSTRINGCAST wxGetUserHome(wxT(""))) != NULL) {
+            if ((s = WXSTRINGCAST wxGetUserHome(wxEmptyString)) != NULL) {
                 if (*++nm)
                     nm++;
             }
@@ -647,7 +647,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 {
   static wxChar dest[_MAXPATHLEN];
 
-  if (filename == wxT(""))
+  if (filename.empty())
     return (wxChar *) NULL;
 
   wxStrcpy (dest, WXSTRINGCAST filename);
@@ -683,7 +683,7 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
   if (wxStrncmp(dest, val, len) == 0)
   {
     wxStrcpy(wxFileFunctionsBuffer, wxT("~"));
-    if (user != wxT(""))
+    if (!user.empty())
            wxStrcat(wxFileFunctionsBuffer, (const wxChar*) user);
     wxStrcat(wxFileFunctionsBuffer, dest + len);
     wxStrcpy (dest, wxFileFunctionsBuffer);
@@ -775,7 +775,7 @@ wxPathOnly (wxChar *path)
 // Return just the directory, or NULL if no directory
 wxString wxPathOnly (const wxString& path)
 {
-    if (path != wxT(""))
+    if (!path.empty())
     {
         wxChar buf[_MAXPATHLEN];
 
@@ -828,7 +828,7 @@ wxString wxPathOnly (const wxString& path)
         }
 #endif
     }
-    return wxString(wxT(""));
+    return wxEmptyString;
 }
 
 // Utility for converting delimiters in DOS filenames to UNIX style

@@ -105,7 +105,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
                 {
                     wxStaticText *s = new wxStaticText( this, wxID_ANY, line );
                     box->Add( s );
-                    line = wxT("");
+                    line = wxEmptyString;
                 }
                 else
                 {
@@ -148,7 +148,7 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString& message )
 
                         pos = last_space;
                         last_space = 0;
-                        line = wxT("");
+                        line = wxEmptyString;
                     }
                 }
         }

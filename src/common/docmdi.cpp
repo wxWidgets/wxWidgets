@@ -67,8 +67,8 @@ void wxDocMDIParentFrame::Init()
 
 void wxDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
 {
-      wxString f(m_docManager->GetHistoryFile(event.GetId() - wxID_FILE1));
-      if (f != wxT(""))
+    wxString f(m_docManager->GetHistoryFile(event.GetId() - wxID_FILE1));
+    if (!f.empty())
         (void)m_docManager->CreateDocument(f, wxDOC_SILENT);
 }
 

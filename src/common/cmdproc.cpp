@@ -249,7 +249,7 @@ wxString wxCommandProcessor::GetUndoMenuLabel() const
     {
         wxCommand *command = (wxCommand *)m_currentCommand->GetData();
         wxString commandName(command->GetName());
-        if (commandName == wxT("")) commandName = _("Unnamed command");
+        if (commandName.empty()) commandName = _("Unnamed command");
         bool canUndo = command->CanUndo();
         if (canUndo)
             buf = wxString(_("&Undo ")) + commandName + m_undoAccelerator;
@@ -275,7 +275,7 @@ wxString wxCommandProcessor::GetRedoMenuLabel() const
         {
             wxCommand *redoCommand = (wxCommand *)m_currentCommand->GetNext()->GetData();
             wxString redoCommandName(redoCommand->GetName());
-            if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
+            if (redoCommandName.empty()) redoCommandName = _("Unnamed command");
             buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
         }
         else
@@ -295,7 +295,7 @@ wxString wxCommandProcessor::GetRedoMenuLabel() const
             // we've undone to the start of the list, but can redo the first.
             wxCommand *redoCommand = (wxCommand *)m_commands.GetFirst()->GetData();
             wxString redoCommandName(redoCommand->GetName());
-            if (redoCommandName == wxT("")) redoCommandName = _("Unnamed command");
+            if (redoCommandName.empty()) redoCommandName = _("Unnamed command");
             buf = wxString(_("&Redo ")) + redoCommandName + m_redoAccelerator;
         }
     }

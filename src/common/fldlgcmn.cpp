@@ -116,7 +116,7 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     // if ext == "*" or "bar*" or "b?r" or " " then its not valid
     if ((ext.Find(wxT('*')) != wxNOT_FOUND) ||
         (ext.Find(wxT('?')) != wxNOT_FOUND) ||
-        (ext.Strip(wxString::both).IsEmpty()))
+        (ext.Strip(wxString::both).empty()))
         return filePath;
 
     // if fileName doesn't have a '.' then add one
@@ -214,10 +214,10 @@ wxString wxFileSelectorEx(const wxChar *title,
 
 {
     wxFileDialog fileDialog(parent,
-                            title ? title : wxT(""),
-                            defaultDir ? defaultDir : wxT(""),
-                            defaultFileName ? defaultFileName : wxT(""),
-                            filter ? filter : wxT(""),
+                            title ? title : wxEmptyString,
+                            defaultDir ? defaultDir : wxEmptyString,
+                            defaultFileName ? defaultFileName : wxEmptyString,
+                            filter ? filter : wxEmptyString,
                             flags, wxPoint(x, y));
 
     wxString filename;

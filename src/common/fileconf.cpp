@@ -379,7 +379,7 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 void wxFileConfig::Init()
 {
     m_pCurrentGroup =
-    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxEmptyString, this);
 
     m_linesHead =
     m_linesTail = NULL;
@@ -387,7 +387,7 @@ void wxFileConfig::Init()
     // It's not an error if (one of the) file(s) doesn't exist.
 
     // parse the global file
-    if ( !m_strGlobalFile.IsEmpty() && wxFile::Exists(m_strGlobalFile) )
+    if ( !m_strGlobalFile.empty() && wxFile::Exists(m_strGlobalFile) )
     {
         wxTextFile fileGlobal(m_strGlobalFile);
 
@@ -403,7 +403,7 @@ void wxFileConfig::Init()
     }
 
     // parse the local file
-    if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) )
+    if ( !m_strLocalFile.empty() && wxFile::Exists(m_strLocalFile) )
     {
         wxTextFile fileLocal(m_strLocalFile);
         if ( fileLocal.Open(m_conv/*ignored in ANSI build*/) )
@@ -431,32 +431,32 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
               m_conv(conv)
 {
     // Make up names for files if empty
-    if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
+    if ( m_strLocalFile.empty() && (style & wxCONFIG_USE_LOCAL_FILE) )
         m_strLocalFile = GetLocalFileName(GetAppName());
 
-    if ( m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
+    if ( m_strGlobalFile.empty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
         m_strGlobalFile = GetGlobalFileName(GetAppName());
 
     // Check if styles are not supplied, but filenames are, in which case
     // add the correct styles.
-    if ( !m_strLocalFile.IsEmpty() )
+    if ( !m_strLocalFile.empty() )
         SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
-    if ( !m_strGlobalFile.IsEmpty() )
+    if ( !m_strGlobalFile.empty() )
         SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
 
     // if the path is not absolute, prepend the standard directory to it
     // UNLESS wxCONFIG_USE_RELATIVE_PATH style is set
     if ( !(style & wxCONFIG_USE_RELATIVE_PATH) )
     {
-        if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
+        if ( !m_strLocalFile.empty() && !wxIsAbsolutePath(m_strLocalFile) )
         {
             wxString strLocal = m_strLocalFile;
             m_strLocalFile = GetLocalDir();
             m_strLocalFile << strLocal;
         }
 
-        if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
+        if ( !m_strGlobalFile.empty() && !wxIsAbsolutePath(m_strGlobalFile) )
         {
             wxString strGlobal = m_strGlobalFile;
             m_strGlobalFile = GetGlobalDir();
@@ -478,7 +478,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
     m_pCurrentGroup =
-    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxEmptyString, this);
 
     m_linesHead =
     m_linesTail = NULL;
@@ -741,7 +741,7 @@ void wxFileConfig::SetPath(const wxString& strPath)
 {
   wxArrayString aParts;
 
-  if ( strPath.IsEmpty() ) {
+  if ( strPath.empty() ) {
     SetRootPath();
     return;
   }
@@ -903,11 +903,11 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
                 szValue.c_str(),
                 GetPath().c_str() );
 
-    if ( strName.IsEmpty() )
+    if ( strName.empty() )
     {
             // setting the value of a group is an error
 
-        wxASSERT_MSG( wxIsEmpty(szValue), wxT("can't set value of a group!") );
+        wxASSERT_MSG( szValue.empty(), wxT("can't set value of a group!") );
 
             // ... except if it's empty in which case it's a way to force it's creation
 
@@ -1126,7 +1126,7 @@ bool wxFileConfig::DeleteAll()
       }
 
       m_strLocalFile =
-      m_strGlobalFile = wxT("");
+      m_strGlobalFile = wxEmptyString;
   }
 
   Init();
@@ -1767,7 +1767,7 @@ wxFileConfigEntry::wxFileConfigEntry(wxFileConfigGroup *pParent,
                                        int nLine)
                          : m_strName(strName)
 {
-  wxASSERT( !strName.IsEmpty() );
+  wxASSERT( !strName.empty() );
 
   m_pParent = pParent;
   m_nLine   = nLine;
@@ -1893,7 +1893,7 @@ static wxString FilterInValue(const wxString& str)
   wxString strResult;
   strResult.Alloc(str.Len());
 
-  bool bQuoted = !str.IsEmpty() && str[0] == '"';
+  bool bQuoted = !str.empty() && str[0] == '"';
 
   for ( size_t n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
     if ( str[n] == wxT('\\') ) {

@@ -99,7 +99,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
     if ( flags & wxDIR_DIRS )
     {
         wxString dirname;
-        for ( bool cont = GetFirst(&dirname, _T(""), wxDIR_DIRS | (flags & wxDIR_HIDDEN) );
+        for ( bool cont = GetFirst(&dirname, wxEmptyString, wxDIR_DIRS | (flags & wxDIR_HIDDEN) );
               cont;
               cont = cont && GetNext(&dirname) )
         {

@@ -269,7 +269,7 @@ bool wxDocument::SaveAs()
                 t->GetDocClassInfo() == docTemplate->GetDocClassInfo())
             {
                 // add a '|' to separate this filter from the previous one
-                if ( !filter.IsEmpty() )
+                if ( !filter.empty() )
                     filter << wxT('|');
 
                 filter << t->GetDescription() << wxT(" (") << t->GetFileFilter() << wxT(") |")
@@ -290,14 +290,14 @@ bool wxDocument::SaveAs()
             wxSAVE | wxOVERWRITE_PROMPT,
             GetDocumentWindow());
 
-    if (tmp.IsEmpty())
+    if (tmp.empty())
         return false;
 
     wxString fileName(tmp);
     wxString path, name, ext;
     wxSplitPath(fileName, & path, & name, & ext);
 
-    if (ext.IsEmpty() || ext == wxT(""))
+    if (ext.empty())
     {
         fileName += wxT(".");
         fileName += docTemplate->GetDefaultExtension();
@@ -395,12 +395,12 @@ bool wxDocument::Revert()
 // Get title, or filename if no title, else unnamed
 bool wxDocument::GetPrintableName(wxString& buf) const
 {
-    if (m_documentTitle != wxT(""))
+    if (!m_documentTitle.empty())
     {
         buf = m_documentTitle;
         return true;
     }
-    else if (m_documentFile != wxT(""))
+    else if (!m_documentFile.empty())
     {
         buf = wxFileNameFromPath(m_documentFile);
         return true;
@@ -435,7 +435,7 @@ bool wxDocument::OnSaveModified()
         GetPrintableName(title);
 
         wxString msgTitle;
-        if (wxTheApp->GetAppName() != wxT(""))
+        if (!wxTheApp->GetAppName().empty())
             msgTitle = wxTheApp->GetAppName();
         else
             msgTitle = wxString(_("Warning"));
@@ -545,7 +545,7 @@ void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
 bool wxDocument::DoSaveDocument(const wxString& file)
 {
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != wxT(""))
+    if (!wxTheApp->GetAppName().empty())
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -577,7 +577,7 @@ bool wxDocument::DoSaveDocument(const wxString& file)
 bool wxDocument::DoOpenDocument(const wxString& file)
 {
     wxString msgTitle;
-    if (wxTheApp->GetAppName() != wxT(""))
+    if (!wxTheApp->GetAppName().empty())
         msgTitle = wxTheApp->GetAppName();
     else
         msgTitle = wxString(_("File error"));
@@ -950,12 +950,12 @@ void wxDocManager::OnFileCloseAll(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 {
-    CreateDocument( wxT(""), wxDOC_NEW );
+    CreateDocument( wxEmptyString, wxDOC_NEW );
 }
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument( wxT(""), 0) )
+    if ( !CreateDocument( wxEmptyString, 0) )
     {
         OnOpenFileFailure();
     }
@@ -1239,9 +1239,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
     // Existing document
     wxDocTemplate *temp;
 
-    wxString path2(wxT(""));
-    if (path != wxT(""))
-        path2 = path;
+    wxString path2 = path;
 
     if (flags & wxDOC_SILENT)
     {
@@ -1523,7 +1521,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         if (templates[i]->IsVisible())
         {
             // add a '|' to separate this filter from the previous one
-            if ( !descrBuf.IsEmpty() )
+            if ( !descrBuf.empty() )
                 descrBuf << wxT('|');
 
             descrBuf << templates[i]->GetDescription()
@@ -1541,19 +1539,19 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
                                         m_lastDirectory,
-                                        wxT(""),
+                                        wxEmptyString,
                                         &FilterIndex,
                                         descrBuf,
                                         0,
                                         parent);
 
     wxDocTemplate *theTemplate = (wxDocTemplate *)NULL;
-    if (!pathTmp.IsEmpty())
+    if (!pathTmp.empty())
     {
         if (!wxFileExists(pathTmp))
         {
             wxString msgTitle;
-            if (!wxTheApp->GetAppName().IsEmpty())
+            if (!wxTheApp->GetAppName().empty())
                 msgTitle = wxTheApp->GetAppName();
             else
                 msgTitle = wxString(_("File error"));
@@ -1561,7 +1559,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
                 parent);
 
-            path = wxT("");
+            path = wxEmptyString;
             return (wxDocTemplate *) NULL;
         }
         m_lastDirectory = wxPathOnly(pathTmp);
@@ -1585,7 +1583,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     }
     else
     {
-        path = wxT("");
+        path = wxEmptyString;
     }
 
     return theTemplate;
@@ -1898,7 +1896,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
     int n = event.GetId() - wxID_FILE1;  // the index in MRU list
     wxString filename(m_docManager->GetHistoryFile(n));
-    if ( !filename.IsEmpty() )
+    if ( !filename.empty() )
     {
         // verify that the file exists before doing anything else
         if ( wxFile::Exists(filename) )
@@ -2230,12 +2228,12 @@ void wxFileHistory::Load(wxConfigBase& config)
     wxString buf;
     buf.Printf(wxT("file%d"), (int)m_fileHistoryN+1);
     wxString historyFile;
-    while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
+    while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (!historyFile.empty()))
     {
         m_fileHistory[m_fileHistoryN] = MYcopystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
         buf.Printf(wxT("file%d"), (int)m_fileHistoryN+1);
-        historyFile = wxT("");
+        historyFile = wxEmptyString;
     }
     AddFilesToMenu();
 }

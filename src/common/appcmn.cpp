@@ -184,7 +184,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
 #ifdef __WXUNIVERSAL__
         {
             wxCMD_LINE_OPTION,
-            _T(""),
+            wxEmptyString,
             OPTION_THEME,
             gettext_noop("specify the theme to use"),
             wxCMD_LINE_VAL_STRING,
@@ -198,7 +198,7 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         //     and not mgl/app.cpp
         {
             wxCMD_LINE_OPTION,
-            _T(""),
+            wxEmptyString,
             OPTION_MODE,
             gettext_noop("specify display mode to use (e.g. 640x480-16)"),
             wxCMD_LINE_VAL_STRING,
@@ -209,9 +209,9 @@ void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
         // terminator
         {
             wxCMD_LINE_NONE,
-            _T(""),
-            _T(""),
-            _T(""),
+            wxEmptyString,
+            wxEmptyString,
+            wxEmptyString,
             wxCMD_LINE_VAL_NONE,
             0x0
         }

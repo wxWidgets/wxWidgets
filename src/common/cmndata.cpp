@@ -177,7 +177,7 @@ wxPrintData::wxPrintData()
     m_printCollate = false;
 
     // New, 24/3/99
-    m_printerName = wxT("");
+    m_printerName = wxEmptyString;
     m_colour = true;
     m_duplexMode = wxDUPLEX_SIMPLEX;
     m_printQuality = wxPRINT_QUALITY_HIGH;
@@ -280,7 +280,7 @@ wxString wxPrintData::GetPrinterCommand() const
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
         return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterCommand();
 #endif
-    return wxT("");
+    return wxEmptyString;
 }
 
 wxString wxPrintData::GetPrinterOptions() const
@@ -289,7 +289,7 @@ wxString wxPrintData::GetPrinterOptions() const
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
         return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterOptions();
 #endif
-    return wxT("");
+    return wxEmptyString;
 }
 
 wxString wxPrintData::GetPreviewCommand() const
@@ -298,7 +298,7 @@ wxString wxPrintData::GetPreviewCommand() const
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
         return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPreviewCommand();
 #endif
-    return wxT("");
+    return wxEmptyString;
 }
 
 wxString wxPrintData::GetFontMetricPath() const
@@ -307,7 +307,7 @@ wxString wxPrintData::GetFontMetricPath() const
     if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
         return ((wxPostScriptPrintNativeData*)m_nativeData)->GetFontMetricPath();
 #endif
-    return wxT("");
+    return wxEmptyString;
 }
 
 double wxPrintData::GetPrinterScaleX() const
@@ -665,7 +665,7 @@ void wxPageSetupDialogData::SetPaperSize(wxPaperSize id)
 void wxPageSetupDialogData::SetPrintData(const wxPrintData& printData)
 {
     m_printData = printData;
-    CalculatePaperSizeFromId();    
+    CalculatePaperSizeFromId();
 }
 
 // Use paper size defined in this object to set the wxPrintData

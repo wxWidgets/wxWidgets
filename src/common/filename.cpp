@@ -467,7 +467,7 @@ void wxFileName::Assign(const wxString& pathOrig,
 
 void wxFileName::AssignDir(const wxString& dir, wxPathFormat format)
 {
-    Assign(dir, _T(""), format);
+    Assign(dir, wxEmptyString, format);
 }
 
 void wxFileName::Clear()
@@ -1075,7 +1075,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
 
                 psl->GetArguments(buf, 2048);
                 wxString args(buf);
-                if (!args.IsEmpty() && arguments)
+                if (!args.empty() && arguments)
                 {
                     *arguments = args;
                 }
