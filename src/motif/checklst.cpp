@@ -85,11 +85,11 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 }
 
 bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
-                            const wxPoint& pos = wxDefaultPosition,
-                            const wxSize& size = wxDefaultSize,
-                            int n = 0, const wxString choices[] = NULL,
-                            long style = 0,
-                            const wxValidator& validator = wxDefaultValidator,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            int n, const wxString choices[],
+                            long style,
+                            const wxValidator& validator,
                             const wxString& name)
 {
     wxString* chs = CopyStringsAddingPrefix(n, choices);
