@@ -56,6 +56,7 @@ public:
   bool Service(const wxString& name);
   bool Service(unsigned short port);
   bool LocalHost();
+  bool AnyAddress();
 
   wxString Hostname();
   unsigned short Service();
