@@ -585,6 +585,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         else
             m_btnNext->SetLabel(_("&Next >"));
     }
+    m_btnNext->SetDefault();
     // nothing to do: the label was already correct
 
     // send the change event to the new page now
