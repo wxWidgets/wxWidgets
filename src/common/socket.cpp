@@ -26,6 +26,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxWindows headers
 /////////////////////////////////////////////////////////////////////////////
+
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
@@ -42,21 +43,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // wxSocket headers
 /////////////////////////////////////////////////////////////////////////////
+
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-    #define PROCESS_EVENTS() wxYield()
-#elif defined(__WXGTK__)
-    #include <gtk/gtk.h>
-    #define PROCESS_EVENTS() gtk_main_iteration()
-#endif
+#define PROCESS_EVENTS() wxYield()
 
 
 // --------------------------------------------------------------
 // ClassInfos
 // --------------------------------------------------------------
+
 IMPLEMENT_CLASS(wxSocketBase, wxObject)
 IMPLEMENT_CLASS(wxSocketServer, wxSocketBase)
 IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
@@ -65,11 +63,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 class wxSocketState : public wxObject
 {
 public:
-  bool notify_state;
-  GSocketEventFlags evt_notify_state;
-  wxSockFlags socket_flags;
-  wxSocketBase::wxSockCbk c_callback;
-  char *c_callback_data;
+  bool                     m_notify_state;
+  GSocketEventFlags        m_neededreq;
+  wxSockFlags              m_flags;
+  wxSocketBase::wxSockCbk  m_cbk;
+  char                    *m_cdata;
 
 public:
   wxSocketState() : wxObject() {}
@@ -88,7 +86,6 @@ wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
   m_reading(FALSE), m_writing(FALSE),
   m_error(FALSE), m_lcount(0), m_timeout(600), m_states(),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
-  m_defering(NO_DEFER), m_defer_buffer(NULL), m_defer_timer(NULL),
   m_cbk(NULL), m_cdata(NULL)
 {
 }
@@ -102,7 +99,6 @@ wxSocketBase::wxSocketBase() :
   m_reading(FALSE), m_writing(FALSE),
   m_error(FALSE), m_lcount(0), m_timeout(600), m_states(),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
-  m_defering(NO_DEFER), m_defer_buffer(NULL), m_defer_timer(NULL),
   m_cbk(NULL), m_cdata(NULL)
 {
 }
@@ -122,6 +118,9 @@ wxSocketBase::~wxSocketBase()
 
 bool wxSocketBase::Close()
 {
+  // Interrupt pending waits
+  InterruptAllWaits();
+
   if (m_socket)
   {
     // Disable callbacks
@@ -157,49 +156,6 @@ public:
     *m_state = (int)m_new_val;  // Change the value
   }
 };
-
-wxUint32 wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
-{
-  // Timer for timeout
-  _wxSocketInternalTimer timer;
-
-  //wxLogMessage("Entrando a DeferRead, nbytes = %d", nbytes);
-  wxASSERT(m_defering == NO_DEFER);
-
-  // Set the defering mode to READ.
-  m_defering = DEFER_READ;
-
-  // Set the current buffer.
-  m_defer_buffer = buffer;
-  m_defer_nbytes = nbytes;
-  m_defer_timer  = &timer;
-
-  timer.m_state = (int *)&m_defer_buffer;
-  timer.m_new_val = 0;
-
-  timer.Start((int)(m_timeout * 1000), FALSE);
-
-  // If the socket is readable, call DoDefer for the first time
-  if (GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
-  {
-    //wxLogMessage("Llamando al primer DoDefer");
-    DoDefer();
-  }
-
-  // Wait for buffer completion.
-  while (m_defer_buffer != NULL)
-    PROCESS_EVENTS();
-
-  timer.Stop();
-
-  // Disable defering mode.
-  m_defering = NO_DEFER;
-  m_defer_timer = NULL;
-
-  // Return the number of bytes read from the socket.
-  //wxLogMessage("Saliendo de DeferRead: total: %d bytes", nbytes - m_defer_nbytes);
-  return nbytes-m_defer_nbytes;
-}
 
 wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
 {
@@ -237,13 +193,13 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
     return total;
 
   // Possible combinations (they are checked in this order)
-  // NOWAIT
-  // SPEED | WAITALL
-  // SPEED
-  // WAITALL
-  // NONE
+  // wxSOCKET_NOWAIT
+  // wxSOCKET_WAITALL | wxSOCKET_BLOCK
+  // wxSOCKET_WAITALL
+  // wxSOCKET_BLOCK
+  // wxSOCKET_NONE
   //
-  if (m_flags & NOWAIT)                 // NOWAIT
+  if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, TRUE);
     ret = GSocket_Read(m_socket, buffer, nbytes);
@@ -252,32 +208,32 @@ wxUint32 wxSocketBase::_Read(char* buffer, wxUint32 nbytes)
     if (ret > 0)
       total += ret;
   }
-  else if ((m_flags & SPEED) && (m_flags & WAITALL))    // SPEED, WAITALL
+  else if (m_flags & wxSOCKET_WAITALL)           // wxSOCKET_WAITALL
   {
     while (ret > 0 && nbytes > 0)
     {
+      if (!(m_flags & wxSOCKET_BLOCK) && !(WaitForRead()))
+          break;
+
       ret = GSocket_Read(m_socket, buffer, nbytes);
-      total += ret;
-      buffer += ret;
-      nbytes -= ret;
+
+      if (ret > 0)
+      {
+        total  += ret;
+        buffer += ret;
+        nbytes -= ret;
+      }
     }
-    // In case the last call was an error ...
-    if (ret < 0)
-      total++;
   }
-  else if (m_flags & SPEED)             // SPEED, !WAITALL
+  else
   {
-    ret = GSocket_Read(m_socket, buffer, nbytes);
+    if ((m_flags & wxSOCKET_BLOCK) || WaitForRead())
+    {
+      ret = GSocket_Read(m_socket, buffer, nbytes);
 
-    if (ret > 0)
-      total += ret;
-  }
-  else                                  // NONE or WAITALL
-  {
-    ret = DeferRead(buffer, nbytes);
-
-    if (ret > 0)
-      total += ret;
+      if (ret > 0)
+        total += ret;
+    }
   }
 
   return total;
@@ -302,7 +258,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   total = 0;
   error = TRUE;
   old_flags = m_flags;
-  SetFlags((m_flags & SPEED) | WAITALL);
+  SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
   if (_Read((char *)&msg, sizeof(msg)) != sizeof(msg))
     goto exit;
@@ -399,8 +355,8 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
   m_lcount = _Read(buffer, nbytes);
   Pushback(buffer, nbytes);
 
-  // If in WAITALL mode, all bytes should have been read.
-  if (m_flags & WAITALL)
+  // If in wxSOCKET_WAITALL mode, all bytes should have been read.
+  if (m_flags & wxSOCKET_WAITALL)
     m_error = (m_lcount != nbytes);
   else
     m_error = (m_lcount == 0);
@@ -412,51 +368,6 @@ wxSocketBase& wxSocketBase::Peek(char* buffer, wxUint32 nbytes)
   return *this;
 }
 
-wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
-{
-  // Timer for timeout
-  _wxSocketInternalTimer timer;
-
-  wxASSERT(m_defering == NO_DEFER);
-  //wxLogMessage("Entrando a DeferWrite");
-
-  m_defering = DEFER_WRITE;
-
-  // Set the current buffer
-  m_defer_buffer = (char *)buffer;
-  m_defer_nbytes = nbytes;
-  m_defer_timer  = &timer;
-
-  // Start timer
-  timer.m_state   = (int *)&m_defer_buffer;
-  timer.m_new_val = 0;
-
-  timer.Start((int)(m_timeout * 1000), FALSE);
-
-  // If the socket is writable, call DoDefer for the first time
-  if (GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
-  {
-    //wxLogMessage("Llamando al primer DoDefer");
-    DoDefer();
-  }
-
-  // Wait for buffer completion.
-  while (m_defer_buffer != NULL)
-    PROCESS_EVENTS();
-
-  timer.Stop();
-
-  // Disable defering mode
-  m_defer_timer = NULL;
-  m_defering = NO_DEFER;
-
-  //wxString s;
-  //s.Printf(wxT("Saliendo de DeferWrite: total %d bytes"), nbytes-m_defer_nbytes);
-  //wxLogMessage(s);
-
-  return nbytes-m_defer_nbytes;
-}
-
 wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
 {
   // Mask write events
@@ -464,8 +375,8 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
 
   m_lcount = _Write(buffer, nbytes);
 
-  // If in WAITALL mode, all bytes should have been written.
-  if (m_flags & WAITALL)
+  // If in wxSOCKET_WAITALL mode, all bytes should have been written.
+  if (m_flags & wxSOCKET_WAITALL)
     m_error = (m_lcount != nbytes);
   else
     m_error = (m_lcount == 0);
@@ -486,13 +397,13 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
     return 0;
 
   // Possible combinations (they are checked in this order)
-  // NOWAIT
-  // SPEED | WAITALL
-  // SPEED
-  // WAITALL
-  // NONE
+  // wxSOCKET_NOWAIT
+  // wxSOCKET_WAITALL | wxSOCKET_BLOCK
+  // wxSOCKET_WAITALL
+  // wxSOCKET_BLOCK
+  // wxSOCKET_NONE
   //
-  if (m_flags & NOWAIT)                 // NOWAIT
+  if (m_flags & wxSOCKET_NOWAIT)
   {
     GSocket_SetNonBlocking(m_socket, TRUE);
     ret = GSocket_Write(m_socket, buffer, nbytes);
@@ -501,32 +412,32 @@ wxUint32 wxSocketBase::_Write(const char *buffer, wxUint32 nbytes)
     if (ret > 0)
       total = ret;
   }
-  else if ((m_flags & SPEED) && (m_flags & WAITALL))    // SPEED, WAITALL
+  else if (m_flags & wxSOCKET_WAITALL)
   {
     while (ret > 0 && nbytes > 0)
     {
+      if (!(m_flags & wxSOCKET_BLOCK) && !(WaitForWrite()))
+          break;
+
       ret = GSocket_Write(m_socket, buffer, nbytes);
-      total += ret;
-      buffer += ret;
-      nbytes -= ret;
+
+      if (ret > 0)
+      {
+        total  += ret;
+        buffer += ret;
+        nbytes -= ret;
+      }
     }
-    // In case the last call was an error ...
-    if (ret < 0)
-      total ++;
   }
-  else if (m_flags & SPEED)             // SPEED, !WAITALL
+  else
   {
-    ret = GSocket_Write(m_socket, buffer, nbytes);
+    if ((m_flags & wxSOCKET_BLOCK) || WaitForWrite())
+    {
+      ret = GSocket_Write(m_socket, buffer, nbytes);
 
-    if (ret > 0)
-      total = ret;
-  }
-  else                                  // NONE or WAITALL
-  {
-    ret = DeferWrite(buffer, nbytes);
-
-    if (ret > 0)
-      total = ret;
+      if (ret > 0)
+        total = ret;
+    }
   }
 
   return total;
@@ -548,7 +459,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   error = TRUE;
   total = 0;
   old_flags = m_flags;
-  SetFlags((m_flags & SPEED) | WAITALL);
+  SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
   // warning about 'cast truncates constant value'
 #ifdef __VISUALC__
@@ -617,43 +528,6 @@ wxSocketBase& wxSocketBase::Unread(const char *buffer, wxUint32 nbytes)
   return *this;
 }
 
-void wxSocketBase::DoDefer()
-{
-  int ret;
-
-  if (!m_defer_buffer)
-    return;
-
-  switch(m_defering)
-  {
-    case DEFER_READ:
-      ret = GSocket_Read(m_socket, m_defer_buffer, m_defer_nbytes);
-      break;
-    case DEFER_WRITE:
-      ret = GSocket_Write(m_socket, m_defer_buffer, m_defer_nbytes);
-      break;
-    default:
-      ret = -1;
-  }
-
-  if (ret >= 0)
-    m_defer_nbytes -= ret;
-
-  // If we are waiting for all bytes to be acquired, keep the defering
-  // mode enabled.
-  if (!(m_flags & WAITALL) || !m_defer_nbytes || ret < 0)
-  {
-    m_defer_buffer = NULL;
-  }
-  else
-  {
-    m_defer_buffer += ret;
-    m_defer_timer->Start((int)(m_timeout * 1000), FALSE);
-  }
-
-  //wxLogMessage("DoDefer ha transferido %d bytes", ret);
-}
-
 wxSocketBase& wxSocketBase::Discard()
 {
 #define MAX_BUFSIZE (10*1024)
@@ -667,7 +541,7 @@ wxSocketBase& wxSocketBase::Discard()
   m_reading = TRUE;
 
   old_flags = m_flags;
-  SetFlags(NOWAIT);
+  SetFlags(wxSOCKET_NOWAIT);
 
   while (recv_size == MAX_BUFSIZE)
   {
@@ -730,11 +604,11 @@ void wxSocketBase::SaveState()
 
   state = new wxSocketState();
 
-  state->notify_state     = m_notify_state;
-  state->evt_notify_state = m_neededreq;
-  state->socket_flags     = m_flags;
-  state->c_callback       = m_cbk;
-  state->c_callback_data  = m_cdata;
+  state->m_notify_state = m_notify_state;
+  state->m_neededreq    = m_neededreq;
+  state->m_flags        = m_flags;
+  state->m_cbk          = m_cbk;
+  state->m_cdata        = m_cdata;
 
   m_states.Append(state);
 }
@@ -750,11 +624,11 @@ void wxSocketBase::RestoreState()
 
   state = (wxSocketState *)node->Data();
 
-  SetFlags(state->socket_flags);
-  m_neededreq = state->evt_notify_state;
-  m_cbk       = state->c_callback;
-  m_cdata     = state->c_callback_data;
-  Notify(state->notify_state);
+  SetFlags(state->m_flags);
+  m_cbk       = state->m_cbk;
+  m_cdata     = state->m_cdata;
+  m_neededreq = state->m_neededreq;
+  Notify(state->m_notify_state);
 
   delete node;
   delete state;
@@ -778,6 +652,9 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   _wxSocketInternalTimer timer;
   long timeout;
   int state = -1;
+
+  // Set this to TRUE to interrupt ongoing waits
+  m_interrupt = FALSE;
 
   // Check for valid socket
   if (!m_socket)
@@ -811,7 +688,8 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   //
   // Do this at least once (important if timeout == 0, when
   // we are just polling)
-  do
+  //
+  while (state == -1)
   {
     result = GSocket_Select(m_socket, flags | GSOCK_LOST_FLAG);
 
@@ -819,7 +697,6 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
     if (result & GSOCK_LOST_FLAG)
     {
       timer.Stop();
-      m_defer_buffer = NULL;
       Close();
       return TRUE;
     }
@@ -833,24 +710,18 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
       return TRUE;
     }
 
-    // If we are in the middle of a R/W operation, do not propagate
-    // to users.
-    if ( ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
-         && (!m_writing) && (!m_reading) )
+    if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
     {
-/* TODO: remove this
-      if (m_defer_buffer == NULL)
-*/
-      {
-        timer.Stop();
-        return TRUE;
-      }
+      timer.Stop();
+      return TRUE;
     }
 
-    if (timeout != 0)
-      PROCESS_EVENTS();
+    // Wait more?
+    if ((timeout == 0) || (m_interrupt))
+      break;
+
+    PROCESS_EVENTS();
   }
-  while ((state == -1) && timeout);
 
   timer.Stop();
   return FALSE;
@@ -965,41 +836,30 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 
   // fprintf(stderr, "%s: Entering OnRequest (evt %d)\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
 
-  // NOTE: this duplicates some of the code in _Wait (lost
-  // connection and connection establishment handling) but
+  // NOTE: this duplicates some of the code in _Wait, (lost
+  // connections and delayed connection establishment) but
   // this doesn't hurt. It has to be here because maybe the
   // WaitXXX are not being used, and it has to be in _Wait
   // as well because the event might be a bit delayed.
   //
-  switch(req_evt)
+  switch (req_evt)
   {
-    case wxSOCKET_CONNECTION:
+    case wxSOCKET_CONNECTION :
       m_establishing = FALSE;
       m_connected = TRUE;
       break;
     case wxSOCKET_LOST:
-      m_defer_buffer = NULL;
       Close();
       break;
-    case wxSOCKET_INPUT:
-    case wxSOCKET_OUTPUT:
-      if (m_defer_buffer)
-      {
-        // fprintf(stderr, "%s: Habia buffer, evt %d skipped\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
-        DoDefer();
-        // Do not notify to user
-        return;
-      }
-      break;
-  }
 
   // If we are in the middle of a R/W operation, do not
   // propagate events to users.
-  if (((req_evt == wxSOCKET_INPUT) && m_reading) ||
-      ((req_evt == wxSOCKET_OUTPUT) && m_writing))
-  {
-    // fprintf(stderr, "%s: Swallowed evt %d\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
-    return;
+  //
+    case wxSOCKET_INPUT:
+      if (m_reading) return;
+
+    case wxSOCKET_OUTPUT:
+      if (m_writing) return;
   }
 
   if (((m_neededreq & flag) == flag) && m_notify_state)
@@ -1007,11 +867,12 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
     // fprintf(stderr, "%s: Evt %d delivered\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
     event.m_socket = this;
     event.m_skevt  = req_evt;
-    ProcessEvent(event);
-    OldOnNotify(req_evt);
+    ProcessEvent(event);            // XXX - should be PostEvent
 
+    OldOnNotify(req_evt);
     if (m_cbk)
       m_cbk(*this, req_evt, m_cdata);
+
   }
 
   // fprintf(stderr, "%s: Exiting OnRequest (evt %d)\n", (m_type == SOCK_CLIENT)? "client" : "server", req_evt);
