@@ -329,9 +329,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Layout(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Layout,(self,) + _args, _kwargs)
         return val
-    def LoadFromResource(self, *_args, **_kwargs):
-        val = apply(windowsc.wxWindow_LoadFromResource,(self,) + _args, _kwargs)
-        return val
     def Lower(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_Lower,(self,) + _args, _kwargs)
         return val
