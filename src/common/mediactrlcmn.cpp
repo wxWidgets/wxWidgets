@@ -51,8 +51,8 @@
 IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
 IMPLEMENT_CLASS(wxMediaBackend, wxObject);
 IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent);
-DEFINE_LOCAL_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
-DEFINE_LOCAL_EVENT_TYPE(wxEVT_MEDIA_STOP);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //

@@ -79,6 +79,7 @@
 #    define WXMAKINGDLL_HTML
 #    define WXMAKINGDLL_XML
 #    define WXMAKINGDLL_XRC
+#    define WXMAKINGDLL_MEDIA
 #endif /* WXMAKINGDLL */
 
 /*
