@@ -120,6 +120,8 @@ public:
 
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
+    void AssignImageList(wxImageList *imageList);
+    void AssignStateImageList(wxImageList *imageList);
 
     // Functions to work with tree ctrl items. Unfortunately, they can _not_ be
     // member functions of wxTreeItem because they must know the tree the item
@@ -399,6 +401,7 @@ protected:
     wxTextCtrl  *m_textCtrl;        // used while editing the item label
     wxImageList *m_imageListNormal, // images for tree elements
                 *m_imageListState;  // special images for app defined states
+    bool         m_ownsImageListNormal, m_ownsImageListState;
 
 private:
     // the common part of all ctors

@@ -497,6 +497,7 @@ void wxTreeCtrl::Init()
 {
     m_imageListNormal = NULL;
     m_imageListState = NULL;
+    m_ownsImageListNormal = m_ownsImageListState = FALSE;
     m_textCtrl = NULL;
     m_hasAnyAttr = FALSE;
     m_dragImage = NULL;
@@ -641,6 +642,9 @@ wxTreeCtrl::~wxTreeCtrl()
 
     // delete user data to prevent memory leaks
     DeleteAllItems();
+    
+    if (m_ownsImageListNormal) delete m_imageListNormal;
+    if (m_ownsImageListState) delete m_imageListState;
 }
 
 // ----------------------------------------------------------------------------
@@ -704,12 +708,28 @@ void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
 {
+    if (m_ownsImageListNormal) delete m_imageListNormal;
     SetAnyImageList(m_imageListNormal = imageList, TVSIL_NORMAL);
+    m_ownsImageListNormal = FALSE;
 }
 
 void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 {
+    if (m_ownsImageListState) delete m_imageListState;
     SetAnyImageList(m_imageListState = imageList, TVSIL_STATE);
+    m_ownsImageListState = FALSE;
+}
+
+void wxTreeCtrl::AssignImageList(wxImageList *imageList)
+{
+    SetImageList(imageList);
+    m_ownsImageListNormal = TRUE;
+}
+
+void wxTreeCtrl::AssignStateImageList(wxImageList *imageList)
+{
+    SetStateImageList(imageList);
+    m_ownsImageListState = TRUE;
 }
 
 size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item,
