@@ -32,12 +32,12 @@
 #include <wx/log.h>
 
 // define this to 1 to use wxToolBarSimple instead of the native one
-#define USE_GENERIC_TBAR 1
+#define USE_GENERIC_TBAR 0
 
 #if USE_GENERIC_TBAR
     #if !wxUSE_TOOLBAR_SIMPLE
-        #error "wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE "\
-               "to 1 in setup.h and recompile the library."
+        #error wxToolBarSimple is not compiled in, set wxUSE_TOOLBAR_SIMPLE \
+               to 1 in setup.h and recompile the library.
     #else
         #include <wx/tbarsmpl.h>
     #endif
@@ -217,6 +217,13 @@ void MyFrame::RecreateToolbar()
     wxBitmap toolBarBitmaps[8];
 
     toolBarBitmaps[0] = wxBITMAP(new);
+#if 0
+    toolBar->AddTool(wxID_NEW, toolBarBitmaps[0], wxNullBitmap, FALSE, -1, -1,
+                     (wxObject *) NULL, "New file");
+    toolBar->Realize();
+    return;
+#endif
+
     toolBarBitmaps[1] = wxBITMAP(open);
     if ( !m_smallToolbar )
     {
@@ -372,7 +379,7 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
 
     GetToolBar()->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
 
-    //RecreateToolbar();
+    //RecreateToolbar(); -- this is unneeded
 }
 
 void MyFrame::OnToggleToolbarOrient(wxCommandEvent& WXUNUSED(event))
