@@ -119,7 +119,7 @@ private:                                                            \
           m_nCount;                                                 \
                                                                     \
   T      *m_pItems;                                                 \
-};
+}
 
 // ============================================================================
 // The private helper macros containing the core of the array classes
