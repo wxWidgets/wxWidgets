@@ -103,18 +103,89 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
-
 static char* wxStringErrorMsg = "string type is required for parameter";
+
+class wxPyEvent : public wxEvent {
+    DECLARE_DYNAMIC_CLASS(wxPyEvent)
+public:
+    wxPyEvent(int id=0, PyObject* userData = Py_None)
+        : wxEvent(id) {
+        m_userData = userData;
+        Py_INCREF(m_userData);
+    }
+
+    ~wxPyEvent() {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    void SetPyData(PyObject* userData) {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        m_userData = userData;
+        Py_INCREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    PyObject* GetPyData() const {
+        Py_INCREF(m_userData);
+        return m_userData;
+    }
+
+    // This one is so the event object can be Cloned...
+    void CopyObject(wxObject& dest) const {
+        wxEvent::CopyObject(dest);
+        ((wxPyEvent*)&dest)->SetPyData(m_userData);
+    }
+
+private:
+    PyObject* m_userData;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxEvent)
+
+
+class wxPyCommandEvent : public wxCommandEvent {
+    DECLARE_DYNAMIC_CLASS(wxPyCommandEvent)
+public:
+    wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0, PyObject* userData = Py_None)
+        : wxCommandEvent(commandType, id) {
+        m_userData = userData;
+        Py_INCREF(m_userData);
+    }
+
+    ~wxPyCommandEvent() {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    void SetPyData(PyObject* userData) {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        m_userData = userData;
+        Py_INCREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    PyObject* GetPyData() const {
+        Py_INCREF(m_userData);
+        return m_userData;
+    }
+
+    // This one is so the event object can be Cloned...
+    void CopyObject(wxObject& dest) const {
+        wxCommandEvent::CopyObject(dest);
+        ((wxPyCommandEvent*)&dest)->SetPyData(m_userData);
+    }
+
+private:
+    PyObject* m_userData;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyCommandEvent, wxCommandEvent)
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2472,11 +2543,12 @@ static PyObject *_wrap_wxJoystickEvent_SetPosition(PyObject *self, PyObject *arg
     wxJoystickEvent * _arg0;
     wxPoint * _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","pos", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxJoystickEvent_SetPosition",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxJoystickEvent_SetPosition",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2485,13 +2557,11 @@ static PyObject *_wrap_wxJoystickEvent_SetPosition(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxJoystickEvent_SetPosition. Expected _wxPoint_p.");
+{
+    _arg1 = &temp;
+    if (! wxPoint_helper(_obj1, &_arg1))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxJoystickEvent_SetPosition(_arg0,*_arg1);
@@ -3150,142 +3220,6 @@ static void *SwigwxSysColourChangedEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
-static void *SwigwxPyEventTowxCommandEvent(void *ptr) {
-    wxPyEvent *src;
-    wxCommandEvent *dest;
-    src = (wxPyEvent *) ptr;
-    dest = (wxCommandEvent *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPyEventTowxEvent(void *ptr) {
-    wxPyEvent *src;
-    wxEvent *dest;
-    src = (wxPyEvent *) ptr;
-    dest = (wxEvent *) src;
-    return (void *) dest;
-}
-
-#define new_wxPyEvent(_swigarg0,_swigarg1) (new wxPyEvent(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyEvent * _result;
-    wxEventType  _arg0 = (wxEventType ) wxEVT_NULL;
-    PyObject * _arg1 = (PyObject *) Py_None;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "commandType","userData", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iO:new_wxPyEvent",_kwnames,&_arg0,&_obj1)) 
-        return NULL;
-    if (_obj1)
-{
-  _arg1 = _obj1;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPyEvent *)new_wxPyEvent(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyEvent_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define delete_wxPyEvent(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPyEvent",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyEvent. Expected _wxPyEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxPyEvent(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyEvent_SetUserData(_swigobj,_swigarg0)  (_swigobj->SetUserData(_swigarg0))
-static PyObject *_wrap_wxPyEvent_SetUserData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyEvent * _arg0;
-    PyObject * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","userData", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyEvent_SetUserData",_kwnames,&_argo0,&_obj1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyEvent_SetUserData. Expected _wxPyEvent_p.");
-        return NULL;
-        }
-    }
-{
-  _arg1 = _obj1;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyEvent_SetUserData(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyEvent_GetUserData(_swigobj)  (_swigobj->GetUserData())
-static PyObject *_wrap_wxPyEvent_GetUserData(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    wxPyEvent * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyEvent_GetUserData",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyEvent_GetUserData. Expected _wxPyEvent_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (PyObject *)wxPyEvent_GetUserData(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
 static void *SwigwxNotifyEventTowxCommandEvent(void *ptr) {
     wxNotifyEvent *src;
     wxCommandEvent *dest;
@@ -3356,13 +3290,282 @@ static PyObject *_wrap_wxNotifyEvent_Veto(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static void *SwigwxPyEventTowxEvent(void *ptr) {
+    wxPyEvent *src;
+    wxEvent *dest;
+    src = (wxPyEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyEvent(_swigarg0,_swigarg1) (new wxPyEvent(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxPyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyEvent * _result;
+    int  _arg0 = (int ) 0;
+    PyObject * _arg1 = (PyObject *) Py_None;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "id","userData", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iO:new_wxPyEvent",_kwnames,&_arg0,&_obj1)) 
+        return NULL;
+    if (_obj1)
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyEvent *)new_wxPyEvent(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxPyEvent(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxPyEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPyEvent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyEvent. Expected _wxPyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxPyEvent(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyEvent_SetPyData(_swigobj,_swigarg0)  (_swigobj->SetPyData(_swigarg0))
+static PyObject *_wrap_wxPyEvent_SetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyEvent * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","userData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyEvent_SetPyData",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyEvent_SetPyData. Expected _wxPyEvent_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyEvent_SetPyData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyEvent_GetPyData(_swigobj)  (_swigobj->GetPyData())
+static PyObject *_wrap_wxPyEvent_GetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyEvent_GetPyData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyEvent_GetPyData. Expected _wxPyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyEvent_GetPyData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static void *SwigwxPyCommandEventTowxCommandEvent(void *ptr) {
+    wxPyCommandEvent *src;
+    wxCommandEvent *dest;
+    src = (wxPyCommandEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxPyCommandEventTowxEvent(void *ptr) {
+    wxPyCommandEvent *src;
+    wxEvent *dest;
+    src = (wxPyCommandEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyCommandEvent(_swigarg0,_swigarg1,_swigarg2) (new wxPyCommandEvent(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxPyCommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyCommandEvent * _result;
+    wxEventType  _arg0 = (wxEventType ) wxEVT_NULL;
+    int  _arg1 = (int ) 0;
+    PyObject * _arg2 = (PyObject *) Py_None;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "commandType","id","userData", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iiO:new_wxPyCommandEvent",_kwnames,&_arg0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_obj2)
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyCommandEvent *)new_wxPyCommandEvent(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyCommandEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxPyCommandEvent(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxPyCommandEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyCommandEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxPyCommandEvent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyCommandEvent. Expected _wxPyCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxPyCommandEvent(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyCommandEvent_SetPyData(_swigobj,_swigarg0)  (_swigobj->SetPyData(_swigarg0))
+static PyObject *_wrap_wxPyCommandEvent_SetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyCommandEvent * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","userData", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyCommandEvent_SetPyData",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyCommandEvent_SetPyData. Expected _wxPyCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyCommandEvent_SetPyData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxPyCommandEvent_GetPyData(_swigobj)  (_swigobj->GetPyData())
+static PyObject *_wrap_wxPyCommandEvent_GetPyData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyCommandEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyCommandEvent_GetPyData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyCommandEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyCommandEvent_GetPyData. Expected _wxPyCommandEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyCommandEvent_GetPyData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef eventscMethods[] = {
-	 { "wxNotifyEvent_Veto", (PyCFunction) _wrap_wxNotifyEvent_Veto, METH_VARARGS | METH_KEYWORDS },
-	 { "wxNotifyEvent_IsAllowed", (PyCFunction) _wrap_wxNotifyEvent_IsAllowed, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyEvent_GetUserData", (PyCFunction) _wrap_wxPyEvent_GetUserData, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyEvent_SetUserData", (PyCFunction) _wrap_wxPyEvent_SetUserData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyCommandEvent_GetPyData", (PyCFunction) _wrap_wxPyCommandEvent_GetPyData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyCommandEvent_SetPyData", (PyCFunction) _wrap_wxPyCommandEvent_SetPyData, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxPyCommandEvent", (PyCFunction) _wrap_delete_wxPyCommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyCommandEvent", (PyCFunction) _wrap_new_wxPyCommandEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyEvent_GetPyData", (PyCFunction) _wrap_wxPyEvent_GetPyData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyEvent_SetPyData", (PyCFunction) _wrap_wxPyEvent_SetPyData, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyEvent", (PyCFunction) _wrap_delete_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyEvent", (PyCFunction) _wrap_new_wxPyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNotifyEvent_Veto", (PyCFunction) _wrap_wxNotifyEvent_Veto, METH_VARARGS | METH_KEYWORDS },
+	 { "wxNotifyEvent_IsAllowed", (PyCFunction) _wrap_wxNotifyEvent_IsAllowed, METH_VARARGS | METH_KEYWORDS },
 	 { "wxUpdateUIEvent_SetText", (PyCFunction) _wrap_wxUpdateUIEvent_SetText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxUpdateUIEvent_Enable", (PyCFunction) _wrap_wxUpdateUIEvent_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxUpdateUIEvent_Check", (PyCFunction) _wrap_wxUpdateUIEvent_Check, METH_VARARGS | METH_KEYWORDS },
@@ -3472,10 +3675,12 @@ static PyMethodDef eventscMethods[] = {
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxAcceleratorTable","_class_wxAcceleratorTable",0},
-    { "_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
-    { "_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
+    { "_wxEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
+    { "_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
+    { "_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
     { "_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_wxEvent","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_wxEvent","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
@@ -3526,6 +3731,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
+    { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
     { "_wxPrintQuality","_unsigned_int",0},
@@ -3563,10 +3769,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
-    { "_class_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
-    { "_class_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
+    { "_class_wxEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
+    { "_class_wxEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxEvent},
     { "_class_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent},
     { "_class_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent},
+    { "_class_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
+    { "_class_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent},
     { "_class_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_class_wxEvent","_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent},
     { "_class_wxEvent","_class_wxUpdateUIEvent",SwigwxUpdateUIEventTowxEvent},
@@ -3615,10 +3823,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxRect","_class_wxRect",0},
+    { "_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_wxCommandEvent","_class_wxPyEvent",SwigwxPyEventTowxCommandEvent},
-    { "_wxCommandEvent","_wxPyEvent",SwigwxPyEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},
@@ -3698,6 +3906,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
     { "_class_wxMouseEvent","_wxMouseEvent",0},
+    { "_wxPyCommandEvent","_class_wxPyCommandEvent",0},
     { "_class_wxSpinEvent","_wxSpinEvent",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
@@ -3711,10 +3920,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRegion","_class_wxRegion",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
     { "_wxActivateEvent","_class_wxActivateEvent",0},
+    { "_class_wxCommandEvent","_class_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxPyCommandEvent",SwigwxPyCommandEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_class_wxPyEvent",SwigwxPyEventTowxCommandEvent},
-    { "_class_wxCommandEvent","_wxPyEvent",SwigwxPyEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxSpinEvent",SwigwxSpinEventTowxCommandEvent},
     { "_class_wxCommandEvent","_class_wxScrollEvent",SwigwxScrollEventTowxCommandEvent},

@@ -462,6 +462,9 @@ class wxAcceleratorEntryPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,miscc=miscc):
+        if self.thisown == 1 :
+            miscc.delete_wxAcceleratorEntry(self)
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxAcceleratorEntry_Set,(self,) + _args, _kwargs)
         return val
@@ -488,6 +491,9 @@ class wxAcceleratorTablePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,miscc=miscc):
+        if self.thisown == 1 :
+            miscc.delete_wxAcceleratorTable(self)
     def __repr__(self):
         return "<C wxAcceleratorTable instance at %s>" % (self.this,)
 class wxAcceleratorTable(wxAcceleratorTablePtr):

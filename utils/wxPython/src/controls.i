@@ -51,6 +51,10 @@
 wxValidator wxPyDefaultValidator;       // Non-const default because of SWIG
 %}
 
+%readonly
+wxValidator wxDefaultValidator;
+%readwrite
+
 //----------------------------------------------------------------------
 
 class wxControl : public wxWindow {
@@ -286,6 +290,8 @@ public:
           return tup;
       }
     }
+
+    void InsertItems(int LCOUNT, wxString* LIST, int pos);
 
     wxString GetString(int n);
     wxString GetStringSelection();

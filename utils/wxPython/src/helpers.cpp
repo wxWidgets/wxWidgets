@@ -323,8 +323,15 @@ HELPEREXPORT void wxPySaveThread(bool doSave) {
 //---------------------------------------------------------------------------
 
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyCallback, wxObject);
+
 wxPyCallback::wxPyCallback(PyObject* func) {
     m_func = func;
+    Py_INCREF(m_func);
+}
+
+wxPyCallback::wxPyCallback(const wxPyCallback& other) {
+    m_func = other.m_func;
     Py_INCREF(m_func);
 }
 
@@ -377,9 +384,18 @@ wxPyCallbackHelper::~wxPyCallbackHelper() {
     wxPySaveThread(doSave);
 }
 
-void wxPyCallbackHelper::setSelf(PyObject* self) {
+wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
+      m_lastFound = NULL;
+      m_self = other.m_self;
+      if (m_self)
+          Py_INCREF(m_self);
+}
+
+
+void wxPyCallbackHelper::setSelf(PyObject* self, int incref) {
     m_self = self;
-    Py_INCREF(m_self);
+    if (incref)
+        Py_INCREF(m_self);
 }
 
 
@@ -453,47 +469,8 @@ void wxPyTimer::Notify() {
 }
 
 
-//----------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxCommandEvent)
-
-wxPyEvent::wxPyEvent(wxEventType commandType, PyObject* userData)
-    : wxCommandEvent(commandType), m_userData(Py_None)
-{
-    m_userData = userData;
-    if (m_userData != Py_None) {
-        Py_INCREF(m_userData);
-    }
-}
-
-
-wxPyEvent::~wxPyEvent() {
-    bool doSave = wxPyRestoreThread();
-    if (m_userData != Py_None) {
-        Py_DECREF(m_userData);
-        m_userData = Py_None;
-    }
-    wxPySaveThread(doSave);
-}
-
-
-void wxPyEvent::SetUserData(PyObject* userData) {
-    if (m_userData != Py_None) {
-        Py_DECREF(m_userData);
-        m_userData = Py_None;
-    }
-    m_userData = userData;
-    if (m_userData != Py_None) {
-        Py_INCREF(m_userData);
-    }
-}
-
-
-PyObject* wxPyEvent::GetUserData() {
-    return m_userData;
-}
-
-//----------------------------------------------------------------------
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // Convert a wxList to a Python List
 
@@ -520,7 +497,7 @@ PyObject* wxPy_ConvertList(wxListBase* list, char* className) {
 // included in every file...
 
 
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source) {
+byte* byte_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -543,7 +520,7 @@ HELPEREXPORT byte* byte_LIST_helper(PyObject* source) {
 }
 
 
-HELPEREXPORT int* int_LIST_helper(PyObject* source) {
+int* int_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -566,7 +543,7 @@ HELPEREXPORT int* int_LIST_helper(PyObject* source) {
 }
 
 
-HELPEREXPORT long* long_LIST_helper(PyObject* source) {
+long* long_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -589,7 +566,7 @@ HELPEREXPORT long* long_LIST_helper(PyObject* source) {
 }
 
 
-HELPEREXPORT char** string_LIST_helper(PyObject* source) {
+char** string_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -613,7 +590,7 @@ HELPEREXPORT char** string_LIST_helper(PyObject* source) {
 
 
 
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source) {
+wxPoint* wxPoint_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -650,7 +627,7 @@ HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source) {
 }
 
 
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
+wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -681,7 +658,7 @@ HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
 
 
 
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source) {
+wxString* wxString_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -704,7 +681,7 @@ HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source) {
 }
 
 
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
+wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
         return NULL;
@@ -745,6 +722,108 @@ HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source
 
 
 //----------------------------------------------------------------------
+
+bool wxSize_helper(PyObject* source, wxSize** obj) {
+
+    // If source is an object instance then it may already be the right type
+    if (PyInstance_Check(source)) {
+        wxSize* ptr;
+        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxSize_p"))
+            goto error;
+        *obj = ptr;
+        return TRUE;
+    }
+    // otherwise a 2-tuple of integers is expected
+    else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        **obj = wxSize(PyInt_AsLong(o1), PyInt_AsLong(o2));
+        return TRUE;
+    }
+
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxSize object.");
+    return FALSE;
+}
+
+bool wxPoint_helper(PyObject* source, wxPoint** obj) {
+
+    // If source is an object instance then it may already be the right type
+    if (PyInstance_Check(source)) {
+        wxPoint* ptr;
+        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxPoint_p"))
+            goto error;
+        *obj = ptr;
+        return TRUE;
+    }
+    // otherwise a 2-tuple of integers is expected
+    else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
+        return TRUE;
+    }
+
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxPoint object.");
+    return FALSE;
+}
+
+
+
+bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
+
+    // If source is an object instance then it may already be the right type
+    if (PyInstance_Check(source)) {
+        wxRealPoint* ptr;
+        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxRealPoint_p"))
+            goto error;
+        *obj = ptr;
+        return TRUE;
+    }
+    // otherwise a 2-tuple of floats is expected
+    else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        **obj = wxRealPoint(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
+        return TRUE;
+    }
+
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxRealPoint object.");
+    return FALSE;
+}
+
+
+
+
+bool wxRect_helper(PyObject* source, wxRect** obj) {
+
+    // If source is an object instance then it may already be the right type
+    if (PyInstance_Check(source)) {
+        wxRect* ptr;
+        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxRect_p"))
+            goto error;
+        *obj = ptr;
+        return TRUE;
+    }
+    // otherwise a 4-tuple of integers is expected
+    else if (PySequence_Check(source) && PyObject_Length(source) == 4) {
+        PyObject* o1 = PySequence_GetItem(source, 0);
+        PyObject* o2 = PySequence_GetItem(source, 1);
+        PyObject* o3 = PySequence_GetItem(source, 2);
+        PyObject* o4 = PySequence_GetItem(source, 3);
+        **obj = wxRect(PyInt_AsLong(o1), PyInt_AsLong(o2),
+                     PyInt_AsLong(o3), PyInt_AsLong(o4));
+        return TRUE;
+    }
+
+ error:
+    PyErr_SetString(PyExc_TypeError, "Expected a 4-tuple of integers or a wxRect object.");
+    return FALSE;
+}
+
+
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

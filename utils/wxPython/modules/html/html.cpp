@@ -59,7 +59,6 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
-#include "helpsys.h"
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -107,17 +106,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
-
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
@@ -3535,13 +3523,15 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     int  _arg4 = (int ) wxHW_SCROLLBAR_AUTO;
     char * _arg5 = (char *) "htmlWindow";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "parent","id","pos","size","flags","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOis:new_wxHtmlWindow",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOis:new_wxHtmlWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3550,20 +3540,18 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxHtmlWindow. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxHtmlWindow. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxPyHtmlWindow *)new_wxHtmlWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
@@ -4307,6 +4295,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
     { "_class_wxJPEGHandler","_wxJPEGHandler",0},
+    { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
     { "_wxBMPHandler","_class_wxBMPHandler",0},
     { "_wxImage","_class_wxImage",0},
     { "_wxPrintQuality","_int",0},
@@ -4322,11 +4311,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxMenuBar","_wxMenuBar",0},
     { "_class_wxPyTreeItemData","_wxPyTreeItemData",0},
+    { "_class_wxStaticBoxSizer","_wxStaticBoxSizer",0},
     { "_class_wxEvtHandler","_class_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxEvtHandler},
     { "_class_wxEvtHandler","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxEvtHandler},
     { "_class_wxEvtHandler","_wxEvtHandler",0},
     { "_wxPaintEvent","_class_wxPaintEvent",0},
     { "_wxGIFHandler","_class_wxGIFHandler",0},
+    { "_wxPySizer","_class_wxPySizer",0},
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
     { "_wxNotifyEvent","_class_wxNotifyEvent",0},
@@ -4355,11 +4346,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDropFilesEvent","_class_wxDropFilesEvent",0},
     { "_wxBitmapButton","_class_wxBitmapButton",0},
     { "_wxSashWindow","_class_wxSashWindow",0},
+    { "_class_wxSizer","_wxSizer",0},
     { "_class_wxPrintDialogData","_wxPrintDialogData",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_class_wxGauge","_wxGauge",0},
     { "_class_wxSashEvent","_wxSashEvent",0},
     { "_wxDC","_class_wxDC",0},
+    { "_wxSizerItem","_class_wxSizerItem",0},
     { "_wxListEvent","_class_wxListEvent",0},
     { "_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0},
     { "_wxProgressDialog","_class_wxProgressDialog",0},
@@ -4378,6 +4371,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0},
     { "_class_wxStatusBar","_wxStatusBar",0},
     { "_class_wxGIFHandler","_wxGIFHandler",0},
+    { "_class_wxPySizer","_wxPySizer",0},
     { "_class_wxPostScriptDC","_wxPostScriptDC",0},
     { "_wxPanel","_class_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxPanel},
     { "_wxPanel","_wxPyHtmlWindow",SwigwxPyHtmlWindowTowxPanel},
@@ -4424,6 +4418,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxButton","_wxButton",0},
     { "_wxRadioBox","_class_wxRadioBox",0},
     { "_class_wxFontData","_wxFontData",0},
+    { "_wxBoxSizer","_class_wxBoxSizer",0},
     { "_class___wxPyCleanup","___wxPyCleanup",0},
     { "_wxHtmlCell","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
     { "_wxHtmlCell","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
@@ -4535,6 +4530,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRealPoint","_class_wxRealPoint",0},
     { "_class_wxRadioBox","_wxRadioBox",0},
     { "_wxGridCell","_class_wxGridCell",0},
+    { "_class_wxBoxSizer","_wxBoxSizer",0},
     { "_class_wxHtmlWinParser","_wxHtmlWinParser",0},
     { "_class_wxHtmlCell","_class_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
     { "_class_wxHtmlCell","_wxHtmlWidgetCell",SwigwxHtmlWidgetCellTowxHtmlCell},
@@ -4599,6 +4595,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_signed_int",0},
     { "_wxWindowID","_unsigned_int",0},
     { "_class_wxScrollWinEvent","_wxScrollWinEvent",0},
+    { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxPrintQuality",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},
@@ -4607,6 +4604,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
     { "_class_wxMouseEvent","_wxMouseEvent",0},
+    { "_wxPyCommandEvent","_class_wxPyCommandEvent",0},
     { "_class_wxListEvent","_wxListEvent",0},
     { "_class_wxPrintPreview","_wxPrintPreview",0},
     { "_class_wxSpinEvent","_wxSpinEvent",0},
@@ -4617,6 +4615,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRegionIterator","_class_wxRegionIterator",0},
     { "_class_wxMDIParentFrame","_wxMDIParentFrame",0},
     { "_wxPyTreeItemData","_class_wxPyTreeItemData",0},
+    { "_wxStaticBoxSizer","_class_wxStaticBoxSizer",0},
     { "_class_wxPaintDC","_wxPaintDC",0},
     { "_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0},
     { "_class_wxInitDialogEvent","_wxInitDialogEvent",0},
@@ -4641,6 +4640,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxRegion","_class_wxRegion",0},
     { "_class_wxSplitterWindow","_wxSplitterWindow",0},
     { "_wxPreviewFrame","_class_wxPreviewFrame",0},
+    { "_wxSizer","_class_wxSizer",0},
     { "_class_wxShowEvent","_wxShowEvent",0},
     { "_wxActivateEvent","_class_wxActivateEvent",0},
     { "_wxGauge","_class_wxGauge",0},
@@ -4728,7 +4728,7 @@ SWIGEXPORT(void) inithtmlc() {
     mod_dict = d;
 #endif
 
-    //inithtmlhelpc();
+    inithtmlhelpc();
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();

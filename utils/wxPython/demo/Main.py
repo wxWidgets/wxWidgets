@@ -36,12 +36,12 @@ _treeList = [
                   'wxTreeCtrl', 'wxSpinButton', 'wxStaticText', 'wxStaticBitmap',
                   'wxRadioBox', 'wxSlider']),
 
-    ('Window Layout', ['wxLayoutConstraints', 'Sizers']),
+    ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
 
-    ('Miscellaneous', ['wxTimer', 'wxGLCanvas', 'DialogUnits', 'wxImage',
-                      'PrintFramework', 'wxOGL']),
+    ('Miscellaneous', ['wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
+                       'wxImage', 'PrintFramework', 'wxOGL']),
 
-    ('wxPython Library', ['Sizers', 'Layoutf', 'wxScrolledMessageDialog',
+    ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
@@ -52,8 +52,8 @@ _treeList = [
 
 class wxPythonDemo(wxFrame):
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent, -1, title,
-                         wxDefaultPosition, wxSize(700, 550))
+        wxFrame.__init__(self, parent, -1, title, size = (725, 550))
+
         if wxPlatform == '__WXMSW__':
             self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
             self.SetIcon(self.icon)
@@ -72,9 +72,9 @@ class wxPythonDemo(wxFrame):
         # Make a File menu
         self.mainmenu = wxMenuBar()
         menu = wxMenu()
-        mID = wxNewId()
-        menu.Append(mID, 'E&xit', 'Get the heck outta here!')
-        EVT_MENU(self, mID, self.OnFileExit)
+        exitID = wxNewId()
+        menu.Append(exitID, 'E&xit\tCtrl-X', 'Get the heck outta here!')
+        EVT_MENU(self, exitID, self.OnFileExit)
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -90,12 +90,17 @@ class wxPythonDemo(wxFrame):
 
 
         # Make a Help menu
-        mID = wxNewId()
+        helpID = wxNewId()
         menu = wxMenu()
-        menu.Append(mID, '&About', 'wxPython RULES!!!')
-        EVT_MENU(self, mID, self.OnHelpAbout)
+        menu.Append(helpID, '&About\tCtrl-H', 'wxPython RULES!!!')
+        EVT_MENU(self, helpID, self.OnHelpAbout)
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
+
+        # set the menu accellerator table...
+        aTable = wxAcceleratorTable([(wxACCEL_CTRL, ord('X'), exitID),
+                                     (wxACCEL_CTRL, ord('H'), helpID)])
+        self.SetAcceleratorTable(aTable)
 
 
         # Create a TreeCtrl
@@ -113,6 +118,7 @@ class wxPythonDemo(wxFrame):
         EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
         EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
+        ###EVT_TREE_SEL_CHANGING    (self.tree, tID, self.OnSelChanging)
 
         # Create a Notebook
         self.nb = wxNotebook(splitter2, -1)
@@ -190,6 +196,7 @@ class wxPythonDemo(wxFrame):
     def OnSelChanged(self, event):
         if self.dying:
             return
+        ###print 'OnSelChanged entry'
 
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
@@ -227,6 +234,11 @@ class wxPythonDemo(wxFrame):
                 self.ovr.Clear()
                 self.txt.Clear()
                 self.window = None
+
+        ###print 'OnSelChanged exit: ', itemText
+
+    ###def OnSelChanging(self, event):
+    ###    print 'OnSelChanging'
 
 
     #---------------------------------------------
@@ -288,15 +300,15 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     def OnDemoMenu(self, event):
-        print event.GetId(), self.mainmenu.GetLabel(event.GetId())
         try:
             selectedDemo = self.treeMap[self.mainmenu.GetLabel(event.GetId())]
         except:
             selectedDemo = None
         if selectedDemo:
+            ###print "---- start ----"
             self.tree.SelectItem(selectedDemo)
             self.tree.EnsureVisible(selectedDemo)
-
+            ###print "---- end   ----"
 
 
 #---------------------------------------------------------------------------

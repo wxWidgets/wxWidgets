@@ -28,14 +28,25 @@
 %import misc.i
 %import gdi.i
 
-%pragma(python) code = "import wx"
 
+%pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
 
 class wxEvtHandler {
 public:
     bool ProcessEvent(wxEvent& event);
+    //bool SearchEventTable(wxEventTable& table, wxEvent& event);
+
+    bool GetEvtHandlerEnabled();
+    void SetEvtHandlerEnabled(bool enabled);
+
+    wxEvtHandler* GetNextHandler();
+    wxEvtHandler* GetPreviousHandler();
+    void SetNextHandler(wxEvtHandler* handler);
+    void SetPreviousHandler(wxEvtHandler* handler);
+
+
     %addmethods {
         void Connect( int id, int lastId, int eventType, PyObject* func) {
             if (PyCallable_Check(func)) {
@@ -47,6 +58,91 @@ public:
     }
 };
 
+
+//----------------------------------------------------------------------
+
+class wxValidator : public wxEvtHandler {
+public:
+    wxValidator();
+    //~wxValidator();
+
+    wxValidator* Clone();
+    wxWindow* GetWindow();
+    void SetWindow(wxWindow* window);
+};
+
+%inline %{
+    bool wxValidator_IsSilent() {
+        return wxValidator::IsSilent();
+    }
+
+    void wxValidator_SetBellOnError(int doIt = TRUE) {
+        wxValidator::SetBellOnError(doIt);
+    }
+%}
+
+//----------------------------------------------------------------------
+%{
+class wxPyValidator : public wxValidator {
+    DECLARE_DYNAMIC_CLASS(wxPyValidator);
+public:
+    wxPyValidator() {
+    }
+//    wxPyValidator(const wxPyValidator& other);
+
+    ~wxPyValidator() {
+    }
+
+    wxObject* wxPyValidator::Clone() const {
+    wxPyValidator* ptr = NULL;
+    wxPyValidator* self = (wxPyValidator*)this;
+
+    bool doSave = wxPyRestoreThread();
+    if (self->m_myInst.findCallback("Clone")) {
+        PyObject* ro;
+        ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
+        SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+    }
+    // This is very dangerous!!! But is the only way I could find
+    // to squash a memory leak.  Currently it is okay, but if the
+    // validator architecture in wxWindows ever changes, problems
+    // could arise.
+    delete self;
+
+    wxPySaveThread(doSave);
+    return ptr;
+}
+
+
+    DEC_PYCALLBACK_BOOL_WXWIN(Validate);
+    DEC_PYCALLBACK_BOOL_(TransferToWindow);
+    DEC_PYCALLBACK_BOOL_(TransferFromWindow);
+
+    PYPRIVATE;
+//    PyObject*   m_data;
+};
+
+IMP_PYCALLBACK_BOOL_WXWIN(wxPyValidator, wxValidator, Validate);
+IMP_PYCALLBACK_BOOL_(wxPyValidator, wxValidator, TransferToWindow);
+IMP_PYCALLBACK_BOOL_(wxPyValidator, wxValidator, TransferFromWindow);
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
+
+%}
+
+class wxPyValidator : public wxValidator {
+public:
+    wxPyValidator();
+//    ~wxPyValidator();
+
+    %addmethods {
+        void Destroy() { delete self; }
+    }
+
+    void _setSelf(PyObject* self, int incref=TRUE);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, 0)"
+
+};
 
 //----------------------------------------------------------------------
 
@@ -158,7 +254,9 @@ public:
     void SetAutoLayout(bool autoLayout);
     void SetBackgroundColour(const wxColour& colour);
     void SetConstraints(wxLayoutConstraints *constraints);
+    void UnsetConstraints(wxLayoutConstraints *constraints);
     void SetFocus();
+    bool AcceptsFocus();
     void SetFont(const wxFont& font);
     void SetForegroundColour(const wxColour& colour);
     void SetId(int id);
@@ -202,6 +300,11 @@ public:
     %name(SetToolTipString)void SetToolTip(const wxString &tip);
     void SetToolTip(wxToolTip *tooltip);
     wxToolTip* GetToolTip();
+
+    void SetSizer(wxSizer* sizer);
+    wxValidator* GetValidator();
+    void SetValidator(const wxValidator& validator);
+
 };
 
 //%clear int* x, int* y;

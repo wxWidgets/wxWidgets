@@ -14,6 +14,9 @@
 
 %{
 #include "helpers.h"
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
 %}

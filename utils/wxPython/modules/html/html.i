@@ -20,7 +20,6 @@
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
-#include "helpsys.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -47,7 +46,7 @@ wxSize wxPyDefaultSize(wxDefaultSize);
 #endif
 %}
 
-%pragma(python) code = "import wx,htmlhelper"
+%pragma(python) code = "import wx"
 %pragma(python) code = "widget = htmlc"
 
 %{
@@ -489,72 +488,25 @@ public:
 
 
     bool SetPage(const char* source);
-                // Set HTML page and display it. !! source is HTML document itself,
-                // it is NOT address/filename of HTML document. If you want to
-                // specify document location, use LoadPage() istead
-                // Return value : FALSE if an error occured, TRUE otherwise
-
     bool LoadPage(const char* location);
-                // Load HTML page from given location. Location can be either
-                // a) /usr/wxGTK2/docs/html/wx.htm
-                // b) http://www.somewhere.uk/document.htm
-                // c) ftp://ftp.somesite.cz/pub/something.htm
-                // In case there is no prefix (http:,ftp:), the method
-                // will try to find it itself (1. local file, then http or ftp)
-                // After the page is loaded, the method calls SetPage() to display it.
-                // Note : you can also use path relative to previously loaded page
-                // Return value : same as SetPage
-
     wxString GetOpenedPage();
-                // Returns full location of opened page
-
     void SetRelatedFrame(wxFrame* frame, const char* format);
-                // sets frame in which page title will  be displayed. Format is format of
-                // frame title, e.g. "HtmlHelp : %s". It must contain exactly one %s
     wxFrame* GetRelatedFrame();
-
     void SetRelatedStatusBar(int bar);
-                // after(!) calling SetRelatedFrame, this sets statusbar slot where messages
-                // will be displayed. Default is -1 = no messages.
-
     void SetFonts(wxString normal_face, int normal_italic_mode,
                   wxString fixed_face, int fixed_italic_mode, int *LIST);
-                // sets fonts to be used when displaying HTML page.
-                // *_italic_mode can be either wxSLANT or wxITALIC
-
     void SetTitle(const char* title);
-                // Sets the title of the window
-                // (depending on the information passed to SetRelatedFrame() method)
-
     void SetBorders(int b);
-                // Sets space between text and window borders.
-
     void ReadCustomization(wxConfigBase *cfg, char* path = "");
-                // saves custom settings into cfg config. it will use the path 'path'
-                // if given, otherwise it will save info into currently selected path.
-                // saved values : things set by SetFonts, SetBorders.
-
     void WriteCustomization(wxConfigBase *cfg, char* path = "");
-                // ...
-
     bool HistoryBack();
     bool HistoryForward();
-                // Goes to previous/next page (in browsing history)
-                // Returns TRUE if successful, FALSE otherwise
     void HistoryClear();
-                // Resets history
-
     wxHtmlContainerCell* GetInternalRepresentation();
-                // Returns pointer to conteiners/cells structure.
-                // It should be used ONLY when printing
-
     wxHtmlWinParser* GetParser();
 
 
     void base_OnLinkClicked(const char* link);
-                // called when users clicked on hypertext link. Default behavior is to
-                // call LoadPage(loc)
-
 };
 
 // Static methods are mapped to stand-alone functions
@@ -581,7 +533,7 @@ public:
     mod_dict = d;
 #endif
 
-    //inithtmlhelpc();
+    inithtmlhelpc();
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();

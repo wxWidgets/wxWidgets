@@ -16,11 +16,11 @@
 %{
 #include "helpers.h"
 #include <wx/html/htmlwin.h>
+#include <wx/html/helpctrl.h>
 #include <wx/image.h>
 #include <wx/fs_zip.h>
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
-#include "helpsys.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 
 %extern wx.i
 %extern windows.i
+%extern frames.i
 %extern _defs.i
 %extern events.i
 %extern controls.i
@@ -55,75 +56,153 @@ enum {
     wxID_HTML_SEARCHBUTTON
 };
 
+//---------------------------------------------------------------------------
+
+class  wxHtmlHelpFrameCfg
+{
+public:
+    wxHtmlHelpFrameCfg();
+
+    long x, y, w, h;
+    long sashpos;
+    bool navig_on;
+    int style;
+    wxString titleformat;
+};
+
+
+//---------------------------------------------------------------------------
+
+class wxHtmlBookRecord  {
+public:
+    wxHtmlBookRecord(const wxString& basepath, const wxString& title,
+		     const wxString& start);
+
+    wxString GetTitle();
+    wxString GetStart();
+    wxString GetBasePath();
+
+    void SetContentsRange(int start, int end);
+    int GetContentsStart();
+    int GetContentsEnd();
+};
+
+//---------------------------------------------------------------------------
+
+typedef struct
+{
+    short int m_Level;
+    int m_ID;
+    char* m_Name;
+    char* m_Page;
+    wxHtmlBookRecord *m_Book;
+} wxHtmlContentsItem;
+
+//---------------------------------------------------------------------------
+
+class wxHtmlSearchStatus
+{
+public:
+    //wxHtmlSearchStatus(wxHtmlHelpData* base, const wxString& keyword,
+    //                   const wxString& book = wxEmptyString);
+    bool Search();
+    bool IsActive();
+    int GetCurIndex();
+    int GetMaxIndex();
+    const wxString& GetName();
+    wxHtmlContentsItem* GetContentsItem();
+};
+
+//---------------------------------------------------------------------------
+
+class wxHtmlHelpData {
+public:
+    wxHtmlHelpData();
+    ~wxHtmlHelpData();
+
+    void SetTempDir(const wxString& path);
+    bool AddBook(const wxString& book);
+    bool AddBookParam(const wxString& title, const wxString& contfile,
+		      const wxString& indexfile=wxEmptyString,
+		      const wxString& deftopic=wxEmptyString,
+		      const wxString& path=wxEmptyString);
+
+    wxString FindPageByName(const wxString& page);
+    wxString FindPageById(int id);
+
+    // **** this one needs fixed...
+    const wxHtmlBookRecArray& GetBookRecArray();
+
+    wxHtmlContentsItem* GetContents();
+    int GetContentsCnt();
+    wxHtmlContentsItem* GetIndex();
+    int GetIndexCnt();
+};
+
+//---------------------------------------------------------------------------
+
+class wxHtmlHelpFrame : public wxFrame {
+public:
+    wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
+		    const wxString& title = wxEmptyString,
+		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
+
+    wxHtmlHelpData* GetData();
+    void SetTitleFormat(const wxString& format);
+    void Display(const wxString& x);
+    %name(DisplayID) void Display(int id);
+    void DisplayContents();
+    void DisplayIndex();
+    bool KeywordSearch(const wxString& keyword);
+    void RefreshLists(int show_progress = FALSE);
+    void CreateContents(int show_progress = FALSE);
+    void CreateIndex(int show_progress = FALSE);
+    void CreateSearch();
+    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
+    void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+    void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+};
+
+
+//---------------------------------------------------------------------------
+
 class wxHtmlHelpController : public wxEvtHandler {
 public:
     wxHtmlHelpController();
     ~wxHtmlHelpController();
 
-    // Images:
-    enum {
-        IMG_Book = 0,
-        IMG_Folder,
-        IMG_Page
-    };
-
-    void SetTitleFormat(const wxString& format) {m_TitleFormat = format;}
-                // Sets format of title of the frame. Must contain exactly one "%s"
-                // (for title of displayed HTML page)
-
+    void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path);
-                // Sets directory where temporary files are stored.
-                // These temp files are index & contents file in binary (much faster to read)
-                // form. These files are NOT deleted on program's exit.
-
-    bool AddBook(const wxString& book, bool show_wait_msg = FALSE);
-                // Adds new book. 'book' is location of .htb file (stands for "html book").
-                // See documentation for details on its format.
-                // Returns success.
-                // If show_wait_msg == true then message window with "loading book..." is displayed
-
+    bool AddBook(const wxString& book, int show_wait_msg = FALSE);
     void Display(const wxString& x);
-                // Displays page x. If not found it will offect the user a choice of searching
-                // books.
-                // Looking for the page runs in these steps:
-                // 1. try to locate file named x (if x is for example "doc/howto.htm")
-                // 2. try to open starting page of book x
-                // 3. try to find x in contents (if x is for example "How To ...")
-                // 4. try to find x in index (if x is for example "How To ...")
-                // 5. offer searching and if the user agree, run KeywordSearch
-    %name(DisplayID) void Display(const int id);
-	        // Alternative version that works with numeric ID.
-	        // (uses extension to MS format, <param name="ID" value=id>, see docs)
-
+    %name(DisplayID) void Display(int id);
     void DisplayContents();
-                // Displays help window and focuses contents.
-
     void DisplayIndex();
-                // Displays help window and focuses index.
-
     bool KeywordSearch(const wxString& keyword);
-                // Searches for keyword. Returns TRUE and display page if found, return
-                // FALSE otherwise
-                // Syntax of keyword is Altavista-like:
-                // * words are separated by spaces
-                //   (but "\"hello world\"" is only one world "hello world")
-                // * word may be pretended by + or -
-                //   (+ : page must contain the word ; - : page can't contain the word)
-                // * if there is no + or - before the word, + is default
-
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
-                // Assigns config object to the controller. This config is then
-                // used in subsequent calls to Read/WriteCustomization of both help
-                // controller and it's wxHtmlWindow
-
     void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
-                // saves custom settings into cfg config. it will use the path 'path'
-                // if given, otherwise it will save info into currently selected path.
-                // saved values : things set by SetFonts, SetBorders.
     void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
-                // ...
+    wxHtmlHelpFrame* GetFrame();
+    void CreateHelpWindow(int show_progress = FALSE);
 };
 
+//---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifdef DO_WE_NEED_TO_KEEP_THIS
 class wxHtmlHelpSystem : public wxHtmlHelpController {
 public:
     wxHtmlHelpSystem() {};
@@ -197,5 +276,5 @@ class wxSearchEngine
 	}
 };
 #endif
-
+#endif
 //---------------------------------------------------------------------------

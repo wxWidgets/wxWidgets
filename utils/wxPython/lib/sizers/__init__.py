@@ -16,3 +16,22 @@ from box     import *
 from border  import *
 
 #----------------------------------------------------------------------------
+
+import os
+from wxPython.wx import wxMessageDialog, wxOK, wxICON_EXCLAMATION
+
+if not os.environ.has_key('WXP_OLDSIZERS'):
+    dlg = wxMessageDialog(None,
+                          "Since wxWindows now includes sizers the classes in\n"
+                          "wxPython.lib.sizers have been depreciated.  Please\n"
+                          "see the Reference Manual for details of the new classes.\n"
+                          "\n"
+                          "To contiunue using wxPython.lib.sizers without this\n"
+                          "message you can set the WXP_OLDSIZERS envronment \n"
+                          "variable to any value.",
+                          "Depreciated Feature",
+                          wxOK | wxICON_EXCLAMATION)
+    dlg.ShowModal()
+    dlg.Destroy()
+
+#----------------------------------------------------------------------------

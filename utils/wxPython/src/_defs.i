@@ -138,6 +138,9 @@ class wxTreeItemId;
 class wxUpdateUIEvent;
 class wxWindowDC;
 class wxWindow;
+class wxSizer;
+class wxBoxSizer;
+class wxStaticBoxSizer;
 
 class wxPyApp;
 class wxPyMenu;
@@ -229,6 +232,8 @@ enum {
     wxALIGN_CENTER,
     wxALIGN_CENTRE,
     wxALIGN_RIGHT,
+    wxALIGN_BOTTOM,
+    wxALIGN_TOP,
     wxLB_NEEDED_SB,
     wxLB_ALWAYS_SB,
     wxLB_SORT,
@@ -908,6 +913,9 @@ enum wxEventType {
  wxEVT_COMMAND_LIST_INSERT_ITEM,
  wxEVT_COMMAND_LIST_COL_CLICK,
  wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+ wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
+ wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
+
 
  /* Tab and notebook control event types */
  wxEVT_COMMAND_TAB_SEL_CHANGED,
@@ -920,6 +928,8 @@ enum wxEventType {
  wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,
  wxEVT_COMMAND_SPLITTER_UNSPLIT,
  wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
+
+ wxEVT_NAVIGATION_KEY,
 
 };
 

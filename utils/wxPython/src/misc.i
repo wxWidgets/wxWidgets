@@ -393,7 +393,7 @@ public:
 class wxAcceleratorEntry {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0);
-    //~wxAcceleratorEntry();  *** ?
+    ~wxAcceleratorEntry();
 
     void Set(int flags, int keyCode, int Cmd);
     int GetFlags();
@@ -406,7 +406,7 @@ class wxAcceleratorTable {
 public:
     // Can also accept a list of 3-tuples
     wxAcceleratorTable(int LCOUNT, wxAcceleratorEntry* LIST);
-    // ~wxAcceleratorEntry(); *** ?
+    ~wxAcceleratorTable();
 
 };
 

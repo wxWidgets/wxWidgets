@@ -123,10 +123,12 @@ class TestWindow(wxShapeCanvas):
         self.diagram.SetCanvas(self)
         self.shapes = []
 
-        self.MyAddShape(wxCircleShape(80), 100, 100, wxPen(wxBLUE, 3), wxGREEN_BRUSH)
-        self.MyAddShape(wxRectangleShape(85, 50), 305, 60, wxBLACK_PEN, wxLIGHT_GREY_BRUSH)
-        self.MyAddShape(DiamondShape(90, 90), 345, 235, wxPen(wxBLUE, 3, wxDOT), wxRED_BRUSH)
-        self.MyAddShape(RoundedRectangleShape(95,70), 140, 255, wxPen(wxRED, 1), wxBLUE_BRUSH)
+        rRectBrush = wxBrush(wxNamedColour("MEDIUM TURQUOISE"), wxSOLID)
+
+        self.MyAddShape(wxCircleShape(80), 100, 100, wxPen(wxBLUE, 3), wxGREEN_BRUSH, "Circle")
+        self.MyAddShape(wxRectangleShape(85, 50), 305, 60, wxBLACK_PEN, wxLIGHT_GREY_BRUSH, "Rectangle")
+        self.MyAddShape(DiamondShape(90, 90), 345, 235, wxPen(wxBLUE, 3, wxDOT), wxRED_BRUSH, "Polygon")
+        self.MyAddShape(RoundedRectangleShape(95,70), 140, 255, wxPen(wxRED, 1), rRectBrush, "Rounded Rect")
 
         dc = wxClientDC(self)
         self.PrepareDC(dc)
@@ -151,13 +153,14 @@ class TestWindow(wxShapeCanvas):
 
 
 
-    def MyAddShape(self, shape, x, y, pen, brush):
+    def MyAddShape(self, shape, x, y, pen, brush, text):
         shape.SetDraggable(true)
         shape.SetCanvas(self)
         shape.SetX(x)
         shape.SetY(y)
         shape.SetPen(pen)
         shape.SetBrush(brush)
+        shape.AddText(text)
         #shape.SetShadowMode(SHADOW_RIGHT)
         self.diagram.AddShape(shape)
         shape.Show(true)

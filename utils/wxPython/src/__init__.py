@@ -11,9 +11,14 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-# ensure the main extension module is loaded, in case the add-on modules
-# (such as utils,) are used standalone.  This hack should go away soon.
+import __version__
+__version__ = __version__.ver
+
+
+# Ensure the main extension module is loaded, in case the add-on modules
+# (such as utils,) are used standalone.
 import wxc
+wxc.__version__ = __version__
 
 #----------------------------------------------------------------------------
 

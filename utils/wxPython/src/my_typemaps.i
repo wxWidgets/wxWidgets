@@ -21,22 +21,8 @@
 }
 
 //----------------------------------------------------------------------
-// Here are some to map (int LCOUNT, int* LIST), etc. from a python list
-
-%{
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
-%}
-
-//----------------------------------------------------------------------
+// LCOUNT and LIST go together.  They allow a single Python list to be
+// converted to an integer count and an array count items long.
 
 %typemap(python,build) int LCOUNT {
     if (_in_LIST) {
@@ -184,12 +170,39 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 }
 
 
-// --------------------------------------------------------------------
+
+
+
 //---------------------------------------------------------------------------
+// Typemaps to convert Python sequence objects (2-tuples, etc.) to
+// wxSize, wxPoint, wxRealPoint, and wxRect.
+
+%typemap(python,in) wxSize& (wxSize temp) {
+    $target = &temp;
+    if (! wxSize_helper($source, &$target))
+        return NULL;
+}
+
+%typemap(python,in) wxPoint& (wxPoint temp) {
+    $target = &temp;
+    if (! wxPoint_helper($source, &$target))
+        return NULL;
+}
+
+%typemap(python,in) wxRealPoint& (wxRealPoint temp) {
+    $target = &temp;
+    if (! wxRealPoint_helper($source, &$target))
+        return NULL;
+}
+
+%typemap(python,in) wxRect& (wxRect temp) {
+    $target = &temp;
+    if (! wxRect_helper($source, &$target))
+        return NULL;
+}
 
 
-
-// --------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Map T_OUTPUTs for floats to return ints.
 
 
@@ -209,44 +222,5 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 }
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.6  1999/09/10 06:05:32  RD
-// Lots more support for event-less callbacks
-// Exported some symbols for the other modules to use
-// etc.
-//
-// Revision 1.5  1999/04/30 03:29:19  RD
-//
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.4.4.2  1999/03/28 06:35:01  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.4.4.1  1999/03/16 06:04:03  RD
-//
-// wxPython 2.0b7
-//
-// Revision 1.4  1998/11/25 08:45:27  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.3  1998/11/15 23:03:47  RD
-// Removing some ifdef's for wxGTK
-//
-// Revision 1.2  1998/08/14 23:36:39  RD
-// Beginings of wxGTK compatibility
-//
-// Revision 1.1  1998/08/09 08:25:52  RD
-// Initial version
-//
-//
+//---------------------------------------------------------------------------
 

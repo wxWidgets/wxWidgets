@@ -18,37 +18,37 @@ class TestToolBar(wxFrame):
 
         self.CreateStatusBar()
 
-        tb.AddTool(10, wxNoRefBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "New", "Long help for 'New'")
+        tb.AddTool(10, wxBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
+                   wxNullBitmap, false, -1, -1, "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddTool(20, wxNoRefBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Open")
+        tb.AddTool(20, wxBitmap('bitmaps/open.bmp',  wxBITMAP_TYPE_BMP),
+                   wxNullBitmap, false, -1, -1, "Open")
         EVT_TOOL(self, 20, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddTool(30, wxNoRefBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Copy")
+        tb.AddTool(30, wxBitmap('bitmaps/copy.bmp',  wxBITMAP_TYPE_BMP),
+                   wxNullBitmap, false, -1, -1, "Copy")
         EVT_TOOL(self, 30, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddTool(40, wxNoRefBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "Paste")
+        tb.AddTool(40, wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP),
+                   wxNullBitmap, false, -1, -1, "Paste")
         EVT_TOOL(self, 40, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
         tb.AddSeparator()
 
-        tb.AddTool(50, wxNoRefBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, true, -1, -1, "Toggle this")
+        tb.AddTool(50, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
+                   wxNullBitmap, true, -1, -1, "Toggle this")
         EVT_TOOL(self, 50, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
 
-        tb.AddTool(60, wxNoRefBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                        wxNoRefBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
-                        true, -1, -1, "Toggle with 2 bitmaps")
+        tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
+                   wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
+                   true, -1, -1, "Toggle with 2 bitmaps")
         EVT_TOOL(self, 60, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
 

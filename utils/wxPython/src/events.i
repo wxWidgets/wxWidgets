@@ -149,6 +149,21 @@ public:
 
 //---------------------------------------------------------------------------
 
+//  class wxNavigationKeyEvent : public wxCommandEvent {
+//  public:
+//      wxNavigationKeyEvent();
+
+//      bool GetDirection();
+//      void SetDirection(bool bForward);
+//      bool IsWindowChange();
+//      void SetWindowChange(bool bIs);
+//      wxWindow* GetCurrentFocus();
+//      void SetCurrentFocus(wxWindow *win);
+//  };
+
+
+//---------------------------------------------------------------------------
+
 class wxMoveEvent: public wxEvent {
 public:
     wxPoint GetPosition();
@@ -298,24 +313,130 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxPyEvent : public wxCommandEvent {
-public:
-    wxPyEvent(wxEventType commandType = wxEVT_NULL, PyObject* userData = Py_None);
-    ~wxPyEvent();
-
-    void SetUserData(PyObject* userData);
-    PyObject* GetUserData();
-};
-
-
-
-//---------------------------------------------------------------------------
 
 class wxNotifyEvent : public wxCommandEvent {
 public:
     bool IsAllowed();
     void Veto();
 };
+
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// This one can be derived from in Python and passed through the event
+// system without loosing anything so long as the Python data is saved with
+// SetPyData...
+
+%{
+class wxPyEvent : public wxEvent {
+    DECLARE_DYNAMIC_CLASS(wxPyEvent)
+public:
+    wxPyEvent(int id=0, PyObject* userData = Py_None)
+        : wxEvent(id) {
+        m_userData = userData;
+        Py_INCREF(m_userData);
+    }
+
+    ~wxPyEvent() {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    void SetPyData(PyObject* userData) {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        m_userData = userData;
+        Py_INCREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    PyObject* GetPyData() const {
+        Py_INCREF(m_userData);
+        return m_userData;
+    }
+
+    // This one is so the event object can be Cloned...
+    void CopyObject(wxObject& dest) const {
+        wxEvent::CopyObject(dest);
+        ((wxPyEvent*)&dest)->SetPyData(m_userData);
+    }
+
+private:
+    PyObject* m_userData;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxEvent)
+
+%}
+
+
+class wxPyEvent : public wxEvent {
+public:
+    wxPyEvent(int id=0, PyObject* userData = Py_None);
+    ~wxPyEvent();
+
+    void SetPyData(PyObject* userData);
+    PyObject* GetPyData();
+};
+
+//---------------------------------------------------------------------------
+// Same for this one except it is a wxCommandEvent and so will get passed up the
+// containment heirarchy.
+
+%{
+class wxPyCommandEvent : public wxCommandEvent {
+    DECLARE_DYNAMIC_CLASS(wxPyCommandEvent)
+public:
+    wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0, PyObject* userData = Py_None)
+        : wxCommandEvent(commandType, id) {
+        m_userData = userData;
+        Py_INCREF(m_userData);
+    }
+
+    ~wxPyCommandEvent() {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    void SetPyData(PyObject* userData) {
+        bool doSave = wxPyRestoreThread();
+        Py_DECREF(m_userData);
+        m_userData = userData;
+        Py_INCREF(m_userData);
+        wxPySaveThread(doSave);
+    }
+
+    PyObject* GetPyData() const {
+        Py_INCREF(m_userData);
+        return m_userData;
+    }
+
+    // This one is so the event object can be Cloned...
+    void CopyObject(wxObject& dest) const {
+        wxCommandEvent::CopyObject(dest);
+        ((wxPyCommandEvent*)&dest)->SetPyData(m_userData);
+    }
+
+private:
+    PyObject* m_userData;
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyCommandEvent, wxCommandEvent)
+
+%}
+
+
+class wxPyCommandEvent : public wxCommandEvent {
+public:
+    wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0, PyObject* userData = Py_None);
+    ~wxPyCommandEvent();
+
+    void SetPyData(PyObject* userData);
+    PyObject* GetPyData();
+};
+
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

@@ -1,6 +1,5 @@
 
 from wxPython.wx         import *
-from wxPython.lib.sizers import *
 from wxScrolledWindow    import MyCanvas
 
 #----------------------------------------------------------------------
@@ -97,30 +96,28 @@ class TestPrintPanel(wxPanel):
         self.printData = wxPrintData()
         self.printData.SetPaperId(wxPAPER_LETTER)
 
-        self.box = box.wxBoxSizer(wxVERTICAL)
+        self.box = wxBoxSizer(wxVERTICAL)
         self.canvas = MyCanvas(self)
-        self.box.Add(self.canvas, 1)
+        self.box.Add(self.canvas, 1, wxGROW)
 
         subbox = wxBoxSizer(wxHORIZONTAL)
         btn = wxButton(self, 1201, "Print Setup")
         EVT_BUTTON(self, 1201, self.OnPrintSetup)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1202, "Print Preview")
         EVT_BUTTON(self, 1202, self.OnPrintPreview)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1203, "Print")
         EVT_BUTTON(self, 1203, self.OnDoPrint)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        self.box.Add(subbox)
+        self.box.Add(subbox, 0, wxGROW)
 
+        self.SetAutoLayout(true)
+        self.SetSizer(self.box)
 
-
-    def OnSize(self, event):
-        size = self.GetClientSize()
-        self.box.Layout(size)
 
     def OnPrintSetup(self, event):
         printerDialog = wxPrintDialog(self)

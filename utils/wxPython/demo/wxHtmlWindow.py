@@ -3,7 +3,6 @@ import sys, os
 
 from   wxPython.wx         import *
 from   wxPython.html       import *
-from   wxPython.lib.sizers import *
 import wxPython.lib.wxpTag
 
 #----------------------------------------------------------------------
@@ -34,35 +33,37 @@ class TestHtmlPanel(wxPanel):
         self.html.SetRelatedFrame(frame, "wxPython: (A Demonstration) -- %s")
         self.html.SetRelatedStatusBar(0)
 
-        self.box = box.wxBoxSizer(wxVERTICAL)
-        self.box.Add(self.html, 1)
+        self.box = wxBoxSizer(wxVERTICAL)
+        self.box.Add(self.html, 1, wxGROW)
 
         subbox = wxBoxSizer(wxHORIZONTAL)
         btn = wxButton(self, 1201, "Show Default")
         EVT_BUTTON(self, 1201, self.OnShowDefault)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1202, "Load File")
         EVT_BUTTON(self, 1202, self.OnLoadFile)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1203, "With Widgets")
         EVT_BUTTON(self, 1203, self.OnWithWidgets)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1204, "Back")
         EVT_BUTTON(self, 1204, self.OnBack)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1205, "Forward")
         EVT_BUTTON(self, 1205, self.OnForward)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1206, "View Source")
         EVT_BUTTON(self, 1206, self.OnViewSource)
-        subbox.Add(btn, 1)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
-        self.box.Add(subbox)
+        self.box.Add(subbox, 0, wxGROW)
+        self.SetSizer(self.box)
+        self.SetAutoLayout(true)
 
         # A button with this ID is created on the widget test page.
         EVT_BUTTON(self, wxID_OK, self.OnOk)
@@ -70,10 +71,6 @@ class TestHtmlPanel(wxPanel):
         self.OnShowDefault(None)
 
 
-
-    def OnSize(self, event):
-        size = self.GetClientSize()
-        self.box.Layout(size)
 
 
     def OnShowDefault(self, event):

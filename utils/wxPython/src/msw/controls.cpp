@@ -117,23 +117,27 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-
-HELPEREXPORT byte* byte_LIST_helper(PyObject* source);
-HELPEREXPORT int* int_LIST_helper(PyObject* source);
-HELPEREXPORT long* long_LIST_helper(PyObject* source);
-HELPEREXPORT char** string_LIST_helper(PyObject* source);
-HELPEREXPORT wxPoint* wxPoint_LIST_helper(PyObject* source);
-HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source);
-HELPEREXPORT wxString* wxString_LIST_helper(PyObject* source);
-HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-
-
 static char* wxStringErrorMsg = "string type is required for parameter";
 
 wxValidator wxPyDefaultValidator;       // Non-const default because of SWIG
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_wxDefaultValidator_set(PyObject *val) {
+
+    PyErr_SetString(PyExc_TypeError,"Variable wxDefaultValidator is read-only.");
+    return 1;
+}
+
+static PyObject *_wrap_wxDefaultValidator_get() {
+    PyObject * pyobj;
+    char ptemp[128];
+
+    SWIG_MakePtr(ptemp,(char *) &wxDefaultValidator,"_wxValidator_p");
+    pyobj = PyString_FromString(ptemp);
+    return pyobj;
+}
+
 static void *SwigwxControlTowxWindow(void *ptr) {
     wxControl *src;
     wxWindow *dest;
@@ -296,14 +300,16 @@ static PyObject *_wrap_new_wxButton(PyObject *self, PyObject *args, PyObject *kw
     char * _arg7 = (char *) "button";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxButton",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxButton",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -319,20 +325,18 @@ static PyObject *_wrap_new_wxButton(PyObject *self, PyObject *args, PyObject *kw
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxButton. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxButton. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -432,14 +436,16 @@ static PyObject *_wrap_new_wxBitmapButton(PyObject *self, PyObject *args, PyObje
     char * _arg7 = (char *) "button";
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","bitmap","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxBitmapButton",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxBitmapButton",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -455,20 +461,18 @@ static PyObject *_wrap_new_wxBitmapButton(PyObject *self, PyObject *args, PyObje
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxBitmapButton. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxBitmapButton. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -813,14 +817,16 @@ static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args, PyObject *
     char * _arg7 = (char *) "checkBox";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","val","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxCheckBox",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxCheckBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -836,20 +842,18 @@ static PyObject *_wrap_new_wxCheckBox(PyObject *self, PyObject *args, PyObject *
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxCheckBox. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxCheckBox. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -971,15 +975,17 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args, PyObject *kw
     wxValidator * _arg7 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg8 = (char *) "choice";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
     char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxChoice",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_obj5,&_arg6,&_argo7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxChoice",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj5,&_arg6,&_argo7,&_arg8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -988,20 +994,18 @@ static PyObject *_wrap_new_wxChoice(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxChoice. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxChoice. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
     if (_obj5)
 {
     _arg5 = wxString_LIST_helper(_obj5);
@@ -1438,15 +1442,17 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args, PyObject *
     wxValidator * _arg8 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg9 = (char *) "comboBox";
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _obj6 = 0;
     PyObject * _argo8 = 0;
     char *_kwnames[] = { "parent","id","value","pos","size","LIST","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|sOOOlOs:new_wxComboBox",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4,&_obj6,&_arg7,&_argo8,&_arg9)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|sOOOlOs:new_wxComboBox",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4,&_obj6,&_arg7,&_argo8,&_arg9)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1455,20 +1461,18 @@ static PyObject *_wrap_new_wxComboBox(PyObject *self, PyObject *args, PyObject *
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxComboBox. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxComboBox. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_obj6)
 {
     _arg6 = wxString_LIST_helper(_obj6);
@@ -2190,14 +2194,16 @@ static PyObject *_wrap_new_wxGauge(PyObject *self, PyObject *args, PyObject *kwa
     wxValidator * _arg6 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg7 = (char *) "gauge";
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","range","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|OOlOs:new_wxGauge",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|OOlOs:new_wxGauge",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2206,20 +2212,18 @@ static PyObject *_wrap_new_wxGauge(PyObject *self, PyObject *args, PyObject *kwa
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxGauge. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxGauge. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -2499,13 +2503,15 @@ static PyObject *_wrap_new_wxStaticBox(PyObject *self, PyObject *args, PyObject 
     char * _arg6 = (char *) "staticBox";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticBox",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2521,20 +2527,18 @@ static PyObject *_wrap_new_wxStaticBox(PyObject *self, PyObject *args, PyObject 
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxStaticBox. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxStaticBox. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxStaticBox *)new_wxStaticBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
@@ -2589,13 +2593,15 @@ static PyObject *_wrap_new_wxStaticLine(PyObject *self, PyObject *args, PyObject
     long  _arg4 = (long ) wxLI_HORIZONTAL;
     char * _arg5 = (char *) "staticLine";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStaticLine",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxStaticLine",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2604,20 +2610,18 @@ static PyObject *_wrap_new_wxStaticLine(PyObject *self, PyObject *args, PyObject
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxStaticLine. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxStaticLine. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxStaticLine *)new_wxStaticLine(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
@@ -2670,13 +2674,15 @@ static PyObject *_wrap_new_wxStaticText(PyObject *self, PyObject *args, PyObject
     char * _arg6 = (char *) "staticText";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticText",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticText",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2692,20 +2698,18 @@ static PyObject *_wrap_new_wxStaticText(PyObject *self, PyObject *args, PyObject
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxStaticText. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxStaticText. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxStaticText *)new_wxStaticText(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
@@ -2835,15 +2839,17 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args, PyObject *k
     wxValidator * _arg7 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg8 = (char *) "listBox";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
     char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxListBox",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_obj5,&_arg6,&_argo7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj5,&_arg6,&_argo7,&_arg8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2852,20 +2858,18 @@ static PyObject *_wrap_new_wxListBox(PyObject *self, PyObject *args, PyObject *k
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxListBox. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxListBox. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
     if (_obj5)
 {
     _arg5 = wxString_LIST_helper(_obj5);
@@ -3129,6 +3133,54 @@ static PyObject *_wrap_wxListBox_GetSelections(PyObject *self, PyObject *args, P
     wxPy_END_ALLOW_THREADS;
 }{
   _resultobj = _result;
+}
+    return _resultobj;
+}
+
+#define wxListBox_InsertItems(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->InsertItems(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxListBox_InsertItems(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxListBox * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxListBox_InsertItems",_kwnames,&_argo0,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListBox_InsertItems. Expected _wxListBox_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = wxString_LIST_helper(_obj2);
+    if (_arg2 == NULL) {
+        return NULL;
+    }
+}
+{
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListBox_InsertItems(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    delete [] _arg2;
 }
     return _resultobj;
 }
@@ -3530,15 +3582,17 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args, PyObje
     wxValidator * _arg7 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg8 = (char *) "listBox";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     PyObject * _obj5 = 0;
     PyObject * _argo7 = 0;
     char *_kwnames[] = { "parent","id","pos","size","LIST","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxCheckListBox",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_obj5,&_arg6,&_argo7,&_arg8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOOlOs:new_wxCheckListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj5,&_arg6,&_argo7,&_arg8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3547,20 +3601,18 @@ static PyObject *_wrap_new_wxCheckListBox(PyObject *self, PyObject *args, PyObje
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxCheckListBox. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxCheckListBox. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
     if (_obj5)
 {
     _arg5 = wxString_LIST_helper(_obj5);
@@ -3724,14 +3776,16 @@ static PyObject *_wrap_new_wxTextCtrl(PyObject *self, PyObject *args, PyObject *
     wxValidator * _arg6 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg7 = (char *) "text";
     PyObject * _argo0 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","value","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|sOOlOs:new_wxTextCtrl",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|sOOlOs:new_wxTextCtrl",_kwnames,&_argo0,&_arg1,&_arg2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3740,20 +3794,18 @@ static PyObject *_wrap_new_wxTextCtrl(PyObject *self, PyObject *args, PyObject *
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxTextCtrl. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxTextCtrl. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -4847,14 +4899,16 @@ static PyObject *_wrap_new_wxScrollBar(PyObject *self, PyObject *args, PyObject 
     wxValidator * _arg5 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg6 = (char *) "scrollBar";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     PyObject * _argo5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlOs:new_wxScrollBar",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_argo5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlOs:new_wxScrollBar",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_argo5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4863,20 +4917,18 @@ static PyObject *_wrap_new_wxScrollBar(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxScrollBar. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxScrollBar. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
     if (_argo5) {
         if (_argo5 == Py_None) { _arg5 = NULL; }
         else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
@@ -5104,13 +5156,15 @@ static PyObject *_wrap_new_wxSpinButton(PyObject *self, PyObject *args, PyObject
     long  _arg4 = (long ) wxSP_HORIZONTAL;
     char * _arg5 = (char *) "spinButton";
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOls:new_wxSpinButton",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOls:new_wxSpinButton",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5119,20 +5173,18 @@ static PyObject *_wrap_new_wxSpinButton(PyObject *self, PyObject *args, PyObject
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxSpinButton. Expected _wxPoint_p.");
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
         return NULL;
-        }
-    }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxSpinButton. Expected _wxSize_p.");
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxSpinButton *)new_wxSpinButton(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
@@ -5323,13 +5375,15 @@ static PyObject *_wrap_new_wxStaticBitmap(PyObject *self, PyObject *args, PyObje
     char * _arg6 = (char *) "staticBitmap";
     PyObject * _argo0 = 0;
     PyObject * _argo2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     char *_kwnames[] = { "parent","id","bitmap","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticBitmap",_kwnames,&_argo0,&_arg1,&_argo2,&_argo3,&_argo4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxStaticBitmap",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&_obj4,&_arg5,&_arg6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5345,20 +5399,18 @@ static PyObject *_wrap_new_wxStaticBitmap(PyObject *self, PyObject *args, PyObje
         return NULL;
         }
     }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxStaticBitmap. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxStaticBitmap. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxStaticBitmap *)new_wxStaticBitmap(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
@@ -5522,15 +5574,17 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args, PyObject *
     char * _arg10 = (char *) "radioBox";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _obj6 = 0;
     PyObject * _argo9 = 0;
     char *_kwnames[] = { "parent","id","label","point","size","LIST","majorDimension","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOOilOs:new_wxRadioBox",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_obj6,&_arg7,&_arg8,&_argo9,&_arg10)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOOilOs:new_wxRadioBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_obj6,&_arg7,&_arg8,&_argo9,&_arg10)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5546,20 +5600,18 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args, PyObject *
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxRadioBox. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxRadioBox. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_obj6)
 {
     _arg6 = wxString_LIST_helper(_obj6);
@@ -6065,14 +6117,16 @@ static PyObject *_wrap_new_wxRadioButton(PyObject *self, PyObject *args, PyObjec
     char * _arg7 = (char *) "radioButton";
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
-    PyObject * _argo3 = 0;
-    PyObject * _argo4 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxRadioButton",_kwnames,&_argo0,&_arg1,&_obj2,&_argo3,&_argo4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlOs:new_wxRadioButton",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6088,20 +6142,18 @@ static PyObject *_wrap_new_wxRadioButton(PyObject *self, PyObject *args, PyObjec
     }
     _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
 }
-    if (_argo3) {
-        if (_argo3 == Py_None) { _arg3 = NULL; }
-        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxRadioButton. Expected _wxPoint_p.");
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
         return NULL;
-        }
-    }
-    if (_argo4) {
-        if (_argo4 == Py_None) { _arg4 = NULL; }
-        else if (SWIG_GetPtrObj(_argo4,(void **) &_arg4,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxRadioButton. Expected _wxSize_p.");
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
-        }
-    }
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxValidator_p")) {
@@ -6224,14 +6276,16 @@ static PyObject *_wrap_new_wxSlider(PyObject *self, PyObject *args, PyObject *kw
     wxValidator * _arg8 = (wxValidator *) &wxPyDefaultValidator;
     char * _arg9 = (char *) "slider";
     PyObject * _argo0 = 0;
-    PyObject * _argo5 = 0;
-    PyObject * _argo6 = 0;
+    wxPoint  temp;
+    PyObject * _obj5 = 0;
+    wxSize  temp0;
+    PyObject * _obj6 = 0;
     PyObject * _argo8 = 0;
     char *_kwnames[] = { "parent","id","value","minValue","maxValue","point","size","style","validator","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|OOlOs:new_wxSlider",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5,&_argo6,&_arg7,&_argo8,&_arg9)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|OOlOs:new_wxSlider",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5,&_obj6,&_arg7,&_argo8,&_arg9)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6240,20 +6294,18 @@ static PyObject *_wrap_new_wxSlider(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
         }
     }
-    if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxSlider. Expected _wxPoint_p.");
+    if (_obj5)
+{
+    _arg5 = &temp;
+    if (! wxPoint_helper(_obj5, &_arg5))
         return NULL;
-        }
-    }
-    if (_argo6) {
-        if (_argo6 == Py_None) { _arg6 = NULL; }
-        else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of new_wxSlider. Expected _wxSize_p.");
+}
+    if (_obj6)
+{
+    _arg6 = &temp0;
+    if (! wxSize_helper(_obj6, &_arg6))
         return NULL;
-        }
-    }
+}
     if (_argo8) {
         if (_argo8 == Py_None) { _arg8 = NULL; }
         else if (SWIG_GetPtrObj(_argo8,(void **) &_arg8,"_wxValidator_p")) {
@@ -6903,6 +6955,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxListBox_Number", (PyCFunction) _wrap_wxListBox_Number, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListBox_GetStringSelection", (PyCFunction) _wrap_wxListBox_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListBox_GetString", (PyCFunction) _wrap_wxListBox_GetString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListBox_InsertItems", (PyCFunction) _wrap_wxListBox_InsertItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListBox_GetSelections", (PyCFunction) _wrap_wxListBox_GetSelections, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListBox_GetSelection", (PyCFunction) _wrap_wxListBox_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListBox_FindString", (PyCFunction) _wrap_wxListBox_FindString, METH_VARARGS | METH_KEYWORDS },
@@ -6990,6 +7043,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxActivateEvent","_wxActivateEvent",0},
     { "_signed_long","_long",0},
     { "_wxMenuEvent","_class_wxMenuEvent",0},
+    { "_class_wxPyCommandEvent","_wxPyCommandEvent",0},
     { "_wxPrintQuality","_int",0},
     { "_wxPrintQuality","_signed_int",0},
     { "_wxPrintQuality","_unsigned_int",0},
@@ -7090,6 +7144,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
+    { "_wxPyValidator","_class_wxPyValidator",0},
     { "_class_wxEvent","_wxEvent",0},
     { "_wxCheckListBox","_class_wxCheckListBox",0},
     { "_wxRect","_class_wxRect",0},
@@ -7107,6 +7162,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxSpinButton","_class_wxSpinButton",0},
     { "_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0},
     { "_class_wxNotifyEvent","_wxNotifyEvent",0},
+    { "_class_wxValidator","_wxValidator",0},
     { "_class_wxPyEvent","_wxPyEvent",0},
     { "_class_wxIconizeEvent","_wxIconizeEvent",0},
     { "_class_wxStaticBitmap","_wxStaticBitmap",0},
@@ -7195,6 +7251,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxWindow",0},
     { "_class_wxStaticText","_wxStaticText",0},
     { "_class_wxFont","_wxFont",0},
+    { "_class_wxPyValidator","_wxPyValidator",0},
     { "_class_wxCloseEvent","_wxCloseEvent",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxClientDC","_class_wxClientDC",0},
@@ -7291,6 +7348,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
     { "_class_wxMouseEvent","_wxMouseEvent",0},
+    { "_wxPyCommandEvent","_class_wxPyCommandEvent",0},
     { "_class_wxSpinEvent","_wxSpinEvent",0},
     { "_wxButton","_class_wxBitmapButton",SwigwxBitmapButtonTowxButton},
     { "_wxButton","_wxBitmapButton",SwigwxBitmapButtonTowxButton},
@@ -7303,6 +7361,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxInitDialogEvent","_wxInitDialogEvent",0},
     { "_class_wxComboBox","_wxComboBox",0},
     { "_class_wxRadioButton","_wxRadioButton",0},
+    { "_wxValidator","_class_wxValidator",0},
     { "_class_wxLayoutConstraints","_wxLayoutConstraints",0},
     { "_wxIconizeEvent","_class_wxIconizeEvent",0},
     { "_class_wxControl","_class_wxSlider",SwigwxSliderTowxControl},
@@ -7460,6 +7519,8 @@ SWIGEXPORT(void) initcontrolsc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("controlsc", controlscMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"cvar", SWIG_globals);
+	 SWIG_addvarlink(SWIG_globals,"wxDefaultValidator",_wrap_wxDefaultValidator_get, _wrap_wxDefaultValidator_set);
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

@@ -30,7 +30,9 @@ from windows3 import *
 from image import *
 
 from printfw import *
-import wx,htmlhelper
+
+from sizers import *
+import wx
 widget = htmlc
 class wxHtmlTagPtr :
     def __init__(self,this):

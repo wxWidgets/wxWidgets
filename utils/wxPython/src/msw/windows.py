@@ -25,6 +25,26 @@ class wxEvtHandlerPtr :
     def ProcessEvent(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_ProcessEvent,(self,) + _args, _kwargs)
         return val
+    def GetEvtHandlerEnabled(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_GetEvtHandlerEnabled,(self,) + _args, _kwargs)
+        return val
+    def SetEvtHandlerEnabled(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_SetEvtHandlerEnabled,(self,) + _args, _kwargs)
+        return val
+    def GetNextHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_GetNextHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
+        return val
+    def GetPreviousHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_GetPreviousHandler,(self,) + _args, _kwargs)
+        if val: val = wxEvtHandlerPtr(val) 
+        return val
+    def SetNextHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_SetNextHandler,(self,) + _args, _kwargs)
+        return val
+    def SetPreviousHandler(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_SetPreviousHandler,(self,) + _args, _kwargs)
+        return val
     def Connect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Connect,(self,) + _args, _kwargs)
         return val
@@ -33,6 +53,52 @@ class wxEvtHandlerPtr :
 class wxEvtHandler(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
+
+
+
+
+class wxValidatorPtr(wxEvtHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Clone(self, *_args, **_kwargs):
+        val = apply(windowsc.wxValidator_Clone,(self,) + _args, _kwargs)
+        if val: val = wxValidatorPtr(val) 
+        return val
+    def GetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxValidator_GetWindow,(self,) + _args, _kwargs)
+        if val: val = wxWindowPtr(val) 
+        return val
+    def SetWindow(self, *_args, **_kwargs):
+        val = apply(windowsc.wxValidator_SetWindow,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxValidator instance at %s>" % (self.this,)
+class wxValidator(wxValidatorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windowsc.new_wxValidator,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxPyValidatorPtr(wxValidatorPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Destroy(self, *_args, **_kwargs):
+        val = apply(windowsc.wxPyValidator_Destroy,(self,) + _args, _kwargs)
+        return val
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(windowsc.wxPyValidator__setSelf,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyValidator instance at %s>" % (self.this,)
+class wxPyValidator(wxPyValidatorPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windowsc.new_wxPyValidator,_args,_kwargs)
+        self.thisown = 1
+        self._setSelf(self, 0)
 
 
 
@@ -271,8 +337,14 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetConstraints(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetConstraints,(self,) + _args, _kwargs)
         return val
+    def UnsetConstraints(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_UnsetConstraints,(self,) + _args, _kwargs)
+        return val
     def SetFocus(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetFocus,(self,) + _args, _kwargs)
+        return val
+    def AcceptsFocus(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_AcceptsFocus,(self,) + _args, _kwargs)
         return val
     def SetFont(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetFont,(self,) + _args, _kwargs)
@@ -367,6 +439,16 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetToolTip(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetToolTip,(self,) + _args, _kwargs)
         if val: val = wxToolTipPtr(val) 
+        return val
+    def SetSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetSizer,(self,) + _args, _kwargs)
+        return val
+    def GetValidator(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetValidator,(self,) + _args, _kwargs)
+        if val: val = wxValidatorPtr(val) 
+        return val
+    def SetValidator(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetValidator,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
@@ -600,6 +682,9 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxMenuBar_FindItemForId,(self,) + _args, _kwargs)
         if val: val = wxMenuItemPtr(val) 
         return val
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_SetLabel,(self,) + _args, _kwargs)
+        return val
     def EnableTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_EnableTop,(self,) + _args, _kwargs)
         return val
@@ -611,9 +696,6 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
         return val
     def SetHelpString(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_SetHelpString,(self,) + _args, _kwargs)
-        return val
-    def SetLabel(self, *_args, **_kwargs):
-        val = apply(windowsc.wxMenuBar_SetLabel,(self,) + _args, _kwargs)
         return val
     def GetLabelTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_GetLabelTop,(self,) + _args, _kwargs)
@@ -729,6 +811,10 @@ class wxMenuItem(wxMenuItemPtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+wxValidator_IsSilent = windowsc.wxValidator_IsSilent
+
+wxValidator_SetBellOnError = windowsc.wxValidator_SetBellOnError
 
 def wxWindow_FindFocus(*_args, **_kwargs):
     val = apply(windowsc.wxWindow_FindFocus,_args,_kwargs)

@@ -119,7 +119,7 @@ import sys, os, string, getopt
 # This is really the wxPython version number, and will be placed in the
 # Makefiles for use with the distribution related targets.
 
-__version__ = '2.1b3'
+__version__ = '2.1.4'
 
 #----------------------------------------------------------------------------
 
@@ -163,10 +163,10 @@ def main(args):
                          runClean = runClean,
                          runUninstall = runUninstall)
 
+    err = 0
     if config.readConfigFiles(args):
         config.doFixups()
         config.makeMakefile()
-        err = 0
 
         if config.runBuild:
             cmd = "%s -f %s" % (config.MAKE, config.MAKEFILE)
@@ -189,6 +189,7 @@ def main(args):
             print "Running:", cmd
             err = os.system(cmd)
 
+    return err
 
 
 #----------------------------------------------------------------------------

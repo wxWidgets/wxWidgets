@@ -42,6 +42,7 @@
 %import windows3.i
 %import image.i
 %import printfw.i
+%import sizers.i
 
 
 %native(_wxStart)           __wxStart;
@@ -49,7 +50,8 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.1b4"
+
+#define __version__ "0.0.0"   // The real value is in build.py...
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -123,7 +125,6 @@ public:
 };
 
 
-
 //----------------------------------------------------------------------
 // This code gets added to the module initialization function
 //----------------------------------------------------------------------
@@ -144,6 +145,7 @@ extern "C" SWIGEXPORT(void) initframesc();
 extern "C" SWIGEXPORT(void) initwindows3c();
 extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
+extern "C" SWIGEXPORT(void) initsizersc();
 %}
 
 
@@ -171,6 +173,7 @@ extern "C" SWIGEXPORT(void) initprintfwc();
     initwindows3c();
     initimagec();
     initprintfwc();
+    initsizersc();
 %}
 
 //----------------------------------------------------------------------

@@ -45,14 +45,15 @@ Or you can send mail directly to the list using this address:
 
 ----------------------------------------------------------------------
 
-What's new in 2.1b4
+
+What's new in 2.1.4
 --------------------
 
-Much more support for event-less callbacks and add-on modules
+Much more support for event-less callbacks and add-on modules.
 
 Created add-on module with wxOGL classes.
 
-Added wxWindow.GetChildren().  Be careful of this.  It returns a copy
+Added wxWindow.GetChildren().  Be careful of this.  It returns a *copy*
 of the list of the window's children.  While you are using the list if
 anything changes in the real list (a child is deleted, etc.) then the
 list you are holding will suddenly have window references to garbage
@@ -63,6 +64,94 @@ Added a bunch of new and missing methods to wxTreeCrtl.  The
 SortChildren method is now supported, but currently only for the
 default sort order.
 
+Added typemaps for wxSize, wxPoint, wxRealPoint, and wxRect that allow
+either the actual objects or Python sequence values to be used.  For
+example, the following are equivallent:
+
+    win = wxWindow(parent, size = wxSize(100, 100))
+    win = wxWindow(parent, size = (100, 100))
+
+Super-charged the wxHtml module.  You can now create your own tag
+handlers and also have access to the parser and cell classes.  There
+is a tag handler in the library at wxPython.lib.wxpTag that
+understands the WXP tag and is able to place wxPython windows on HTML
+pages.  See the demo for an example.
+
+A bunch of the methods of wxMenuBar were previously ifdef'd out for
+wxGTK.  Added them back in since the methods exist now.
+
+Wrapped the wxHtmlHelpController and related classes.
+
+Wrapped the C++ versions of wxSizer and firends.  The Python-only
+versions are still in the library, but depreciated.  (You will get a
+warning message if you try to use them, but the warning can be
+disabled.) The usage of the C++ versions is slightly different, and
+the functionality of wxBorderSizer is now part of wxBoxSizer.  I have
+added a few methods to wxSizer to try and make the transition as
+smooth as possible, I combined all Add methods into a single method
+that handles all cases, added an AddMany method, etc.  One step I did
+not take was to make the default value of flag in the Add method be
+wxGROW.  This would have made it more backward compatible, but less
+portable to and from wxWin C++ code.  Please see the docs and demo for
+further details.
+
+Added wxPyEvent and wxPyCommandEvent classes, derived from wxEvent and
+wxCommandEvent.  Each of them has SetPyData and GetPyData methods that
+accept or return a single Python object.  You can use these classes
+directly or derive from them to create your own types of event objects
+that can pass through the wxWindows event system without loosing their
+Python parts (as long as they are stored with SetPyData.)  Stay tuned
+for more info and examples in future releases.
+
+Added wxPython.lib.grids as an example of how to derive a new sizer
+from the C++ sizers.  In this module you will find wxGridSizer and
+wxFlexGridSizer.  wxGridSizer arrainges its items in a grid in which
+all the widths and heights are the same.  wxFlexgridSizer allows
+different widths and heights, and you can also specify rows and/or
+columns that are growable.  See the demo for a couple examples for how
+to use them.
+
+Added the wxValidator class, and created a class named wxPyValidator
+that should be used for the base class of any Python validators.  See
+the demo for an example.  Please not that you MUST implement a Clone
+method in your validator classes because of the way some things work
+in the underlying C++ library.  I did not add wxTextValidator because
+of some issues of how it transfers data to and from a wxString, which
+in wxPython is automatically translated to and from Python strings, so
+there would never be a concrete wxString that would hang around long
+enough for the validator to do its job.  On the other hand, it should
+be real easy to duplicate the functionality of wxTextValidator in a
+pure Python class derived from wxPyValidator.
+
+I've finally added a feature that has been on my list for close to two
+years!  Ever wondered what that zero is for when you create your app
+object?  Well now you can leave it out or explicitly set it to a true
+value.  This value now controls what is to be done with sys.stdout and
+sys.stderr.  A false value leaves them alone, and a true value sets
+them to an instance of wxPyOnDemandOutputWindow.  (On windows the
+default is true, on other platforms the default is false.)  This class
+creates a frame containing a wxTextCtrl as soon as anything is written
+to sys.stdout or sys.stderr.  If you close the window it will come
+back again the next time something is written.  (You can call
+app.RestoreStdio to turn this off.)  If you would rather that the stdio be
+redirected to a file, you can provide a second parameter to your app
+object's constructor that is a filename.  If you want to use your own
+class instead of wxPyOnDemandOutputWindow you can either implement
+RedirectStdio() in you app class or change the value of
+wxApp.outputWindowClass like this:
+
+    class MyApp(wxApp):
+        outputWindowClass = MyClass
+
+        def OnInit(self):
+            frame = MyFrame()
+            self.SetTopWindow(frame)
+            return true
+
+Please see the implementation of wxPyOnDemandOutputWindow and wxApp in
+wx.py for more details.  A few words of caution:  if you are running
+your app in a debugger, changing sys.stdout and sys.stderr is likely
+to really screw things up.
 
 
 
@@ -81,7 +170,7 @@ features:
        parameters with defaults to a method just to specify a
        non-default value on the end.  You can now do this instead:
 
-	  win = wxWindow(parent, -1, style = mystyle)
+          win = wxWindow(parent, -1, style = mystyle)
 
     2. There is now an an equivalence between Python's None and C++'s
        NULL.  This means that any methods that might return NULL will

@@ -16,12 +16,15 @@ import sys, os
 sys.path.insert(0, '../distrib')
 import build
 
-MODULELIST = ['html', 'glcanvas', 'utils', 'ogl', 'lseditor']
+MODULELIST = ['html', 'glcanvas', 'utils', 'ogl', ] #'lseditor']
 
 
 
 for module in MODULELIST:
     cwd = os.getcwd()
-    print "**** Building %s" % module
-    build.main([sys.argv[0], '-C', module] + sys.argv[1:])
+    print "**** Building %s ****" % module
+    err = build.main([sys.argv[0], '-C', module] + sys.argv[1:])
     os.chdir(cwd)
+    if err:
+        break
+

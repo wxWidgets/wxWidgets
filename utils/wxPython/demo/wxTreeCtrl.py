@@ -13,7 +13,7 @@ class TestTreeCtrlPanel(wxPanel):
         tID = NewId()
 
         self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
-                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS) #| wxTR_MULTIPLE)
 
         self.root = self.tree.AddRoot("The Root Item")
         for x in range(15):
