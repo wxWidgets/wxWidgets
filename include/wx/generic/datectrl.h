@@ -26,16 +26,16 @@ public:
                    const wxDateTime& date = wxDefaultDateTime,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = 0,
+                   long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
                    const wxString& name = wxDatePickerCtrlNameStr);
 
     bool Create(wxWindow *parent,
-                            wxWindowID id,
-                            const wxDateTime& date,
-                            const wxPoint& pos,
-                            const wxSize& size,
-                            long style,
-                            const wxString& name=wxDatePickerCtrlNameStr);
+                wxWindowID id,
+                const wxDateTime& date = wxDefaultDateTime,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                const wxString& name = wxDatePickerCtrlNameStr);
 
     // wxDatePickerCtrl methods
     void SetValue(const wxDateTime& date);

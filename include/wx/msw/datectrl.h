@@ -27,7 +27,7 @@ public:
                      const wxDateTime& dt = wxDefaultDateTime,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = 0,
+                     long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxDatePickerCtrlNameStr)
     {
@@ -39,7 +39,7 @@ public:
                 const wxDateTime& dt = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxDatePickerCtrlNameStr);
 

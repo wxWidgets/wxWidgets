@@ -27,7 +27,11 @@ enum
     wxDP_SPIN = 1,
 
     // a combobox-like date picker (not supported in mac version)
-    wxDP_DROPDOWN = 2
+    wxDP_DROPDOWN = 2,
+
+    // always show century in the default date display (otherwise it depends on
+    // the system date format which may include the century or not)
+    wxDP_SHOWCENTURY = 4
 };
 
 // ----------------------------------------------------------------------------
@@ -46,7 +50,7 @@ public:
                     const wxDateTime& dt = wxDefaultDateTime,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
-                    long style = wxDP_DEFAULT,
+                    long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxDatePickerCtrlNameStr);
      */

@@ -42,6 +42,9 @@ calendar drop down part from which the user can select a date.}
 \twocolitem{\windowstyle{wxDP\_DEFAULT}}{Creates a control with default style
 which is the best supported for the current platform (currently wxDP\_SPIN
 under Windows and wxDP\_DROPDOWN elsewhere).}
+\twocolitem{\windowstyle{wxDP\_SHOWCENTURY}}{Forces display of the century in
+the default date format. Without this flas the century could be displayed or
+not depending on the default date representation in the system.}
 \end{twocollist}
 
 \wxheading{Event handling}
@@ -67,7 +70,7 @@ changes the current selection in the control.}
 \param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = wxDP\_DEFAULT},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT | wxDP\_SHOWCENTURY},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},
 \param{const wxString\& }{name = ``datectrl"}}
 
@@ -82,7 +85,7 @@ all the parameters.
 \param{const wxDateTime\& }{dt = wxDefaultDateTime},\rtfsp
 \param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
 \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
-\param{long}{ style = wxDP\_DEFAULT},\rtfsp
+\param{long}{ style = wxDP\_DEFAULT | wxDP\_SHOWCENTURY},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},
 \param{const wxString\& }{name = ``datectrl"}}
 
