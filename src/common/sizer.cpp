@@ -163,6 +163,8 @@ wxSize wxSizerItem::CalcMin()
 
 void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
 {
+    m_pos = pos;
+    
     if (m_flag & wxWEST)
     {
         pos.x += m_border;

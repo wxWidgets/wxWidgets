@@ -95,11 +95,14 @@ public:
     { return m_border; }
   wxObject* GetUserData()
     { return m_userData; }
+  wxPoint GetPosition()
+    { return m_pos; }
 
 protected:
   wxWindow    *m_window;
   wxSizer     *m_sizer;
   wxSize       m_size;
+  wxPoint      m_pos;
   wxSize       m_minSize;
   int          m_option;
   int          m_border;

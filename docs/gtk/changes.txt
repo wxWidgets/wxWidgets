@@ -1,4 +1,8 @@
-4th June '2000: wxWindows pre-2.2 release
+20th June 2000: wxWindows 2.2 released
+
+Minor bug-fixes.
+
+4th June 2000: wxWindows pre-2.2 release
 
 Complete freeze now. Only vital bug-fixes allowed.
 
@@ -10,12 +14,12 @@ Reworked wxURL.
 
 MANY bugfixes.
 
-22th March '2000: wxWindows 2.1.15 released
+22th March 2000: wxWindows 2.1.15 released
 
 Build fix. RPMs no loner require GTK's include files.
 
 An extra library for the OpenGl class now gets builts
-19th March '2000: wxWindows 2.1.14 released
+19th March 2000: wxWindows 2.1.14 released
 
 An extra library for the OpenGl class now gets builts
 and installed. There is also an extra RPM for this 

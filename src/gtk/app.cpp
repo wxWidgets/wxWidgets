@@ -179,7 +179,7 @@ void wxapp_install_idle_handler()
        to the main thread (and processing these in
        idle time). Very low priority. */
 
-    wxTheApp->m_idleTag = gtk_idle_add_priority( 0, wxapp_idle_callback, (gpointer) NULL );
+    wxTheApp->m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
     g_isIdle = FALSE;
 }
@@ -250,7 +250,7 @@ wxApp::wxApp()
     m_topWindow = (wxWindow *) NULL;
     m_exitOnFrameDelete = TRUE;
 
-    m_idleTag = gtk_idle_add_priority( 0, wxapp_idle_callback, (gpointer) NULL );
+    m_idleTag = gtk_idle_add_priority( 1000, wxapp_idle_callback, (gpointer) NULL );
 
 #if wxUSE_THREADS
     m_wakeUpTimerTag = 0;
