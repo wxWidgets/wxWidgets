@@ -391,6 +391,15 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     // was created before the 'next' button.
 
     wxBoxSizer *buttonRow = new wxBoxSizer(wxHORIZONTAL);
+#ifdef __WXMAC__
+    if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
+        mainColumn->Add(
+            buttonRow,
+            0, // Vertically unstretchable
+            wxGROW|wxALIGN_CENTRE
+            );
+    else
+#endif
     mainColumn->Add(
         buttonRow,
         0, // Vertically unstretchable
@@ -399,20 +408,33 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
 
     // Desired TAB order is 'next', 'cancel', 'help', 'back'. This makes the 'back' button the last control on the page.
     // Create the buttons in the right order...
-    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
-    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"));
     wxButton *btnHelp=0;
+#ifdef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"));
+#endif
+
+    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
+    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"));
+#ifndef __WXMAC__
+    if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
+        btnHelp=new wxButton(this, wxID_HELP, _("&Help"));
+#endif
     m_btnPrev = new wxButton(this, wxID_BACKWARD, _("< &Back"));
 
     if (btnHelp)
+    {
         buttonRow->Add(
             btnHelp,
             0, // Horizontally unstretchable
             wxALL, // Border all around, top aligned
             5 // Border width
-        );
+            );
+#ifdef __WXMAC__
+        // Put stretchable space between help button and others
+        buttonRow->Add(0, 0, 1, wxALIGN_CENTRE, 0);
+#endif
+    }
 
     AddBackNextPair(buttonRow);
 
