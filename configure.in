@@ -6487,7 +6487,7 @@ echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT}"
+echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
 
 echo ""
 

@@ -32247,8 +32247,6 @@ echo $ECHO_N "checking if more special flags are required for pthreads... $ECHO_
                 flag="-D_REENTRANT"
                 if test "x$GCC" != "xyes"; then
                                         flag="$flag -D_RWSTD_MULTI_THREAD"
-
-                                                            LIBS="$LIBS -lcma"
                 fi
                 ;;
             *solaris* | alpha*-osf*)
@@ -43144,7 +43142,7 @@ echo "                                       odbc               ${wxUSE_ODBC}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"
 echo "                                       sdl                ${wxUSE_LIBSDL}"
-echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT}"
+echo "                                       gnomeprint         ${wxUSE_LIBGNOMEPRINT-none}"
 
 echo ""
 
