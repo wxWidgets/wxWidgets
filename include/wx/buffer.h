@@ -22,7 +22,7 @@
 // ----------------------------------------------------------------------------
 
 #define DEFINE_BUFFER(classname, chartype, strdupfunc)                      \
-class classname                                                             \
+class WXDLLIMPEXP_BASE classname                                            \
 {                                                                           \
 public:                                                                     \
     classname(const chartype *str)                                          \
