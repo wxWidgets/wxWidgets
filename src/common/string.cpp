@@ -776,6 +776,35 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
   return dest;
 }
 
+// check that the tring starts with prefix and return the rest of the string
+// in the provided pointer if it is not NULL, otherwise return FALSE
+bool wxString::StartsWith(const wxChar *prefix, wxString *rest) const
+{
+    wxASSERT_MSG( prefix, _T("invalid parameter in wxString::StartsWith") );
+
+    // first check if the beginning of the string matches the prefix: note
+    // that we don't have to check that we don't run out of this string as
+    // when we reach the terminating NUL, either prefix string ends too (and
+    // then it's ok) or we break out of the loop because there is no match
+    const wxChar *p = c_str();
+    while ( *prefix )
+    {
+        if ( *prefix++ != *p++ )
+        {
+            // no match
+            return FALSE;
+        }
+    }
+
+    if ( rest )
+    {
+        // put the rest of the string into provided pointer
+        *rest = p;
+    }
+
+    return TRUE;
+}
+
 // extract nCount last (rightmost) characters
 wxString wxString::Right(size_t nCount) const
 {

@@ -2408,6 +2408,32 @@ static void TestStringSub()
     printf("substr(3, 5) = '%s'\n", s.substr(3, 5).c_str());
     printf("substr(3) = '%s'\n", s.substr(3).c_str());
 
+    static const wxChar *prefixes[] =
+    {
+        _T("Hello"),
+        _T("Hello, "),
+        _T("Hello, world!"),
+        _T("Hello, world!!!"),
+        _T(""),
+        _T("Goodbye"),
+        _T("Hi"),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(prefixes); n++ )
+    {
+        wxString prefix = prefixes[n], rest;
+        bool rc = s.StartsWith(prefix, &rest);
+        printf("StartsWith('%s') = %s", prefix.c_str(), rc ? "TRUE" : "FALSE");
+        if ( rc )
+        {
+            printf(" (the rest is '%s')\n", rest.c_str());
+        }
+        else
+        {
+            putchar('\n');
+        }
+    }
+
     puts("");
 }
 
@@ -2688,15 +2714,15 @@ int main(int argc, char **argv)
         TestPChar();
         TestString();
     }
+        TestStringSub();
     if ( 0 )
     {
         TestStringConstruction();
-        TestStringSub();
         TestStringFormat();
         TestStringFind();
         TestStringTokenizer();
+        TestStringReplace();
     }
-    TestStringReplace();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS

@@ -598,9 +598,14 @@ public:
       // if nCount = default value)
   wxString Mid(size_t nFirst, size_t nCount = wxSTRING_MAXLEN) const;
 
-    // operator version of Mid()
+      // operator version of Mid()
   wxString  operator()(size_t start, size_t len) const
     { return Mid(start, len); }
+
+      // check that the tring starts with prefix and return the rest of the
+      // string in the provided pointer if it is not NULL, otherwise return
+      // FALSE
+  bool StartsWith(const wxChar *prefix, wxString *rest = NULL) const;
 
       // get first nCount characters
   wxString Left(size_t nCount) const;

@@ -93,16 +93,22 @@ insensitive comparisons you should use \helpref{CmpNoCase}{wxstringcmpnocase} or
 give a second parameter to IsSameAs. This last function is may be more
 convenient if only equality of the strings matters because it returns a boolean
 true value if the strings are the same and not 0 (which is usually FALSE in C)
-as Cmp does.
+as {\tt Cmp()} does.
 
 \helpref{Matches}{wxstringmatches} is a poor man's regular expression matcher:
 it only understands '*' and '?' metacharacters in the sense of DOS command line
 interpreter.
 
+\helpref{StartsWith}{wxstringstartswith} is helpful when parsing a line of
+text which should start with some predefined prefix and is more efficient than
+doing direct string comparaison as you would also have to precalculate the
+length of the prefix then.
+
 \helpref{Cmp}{wxstringcmp}\\
 \helpref{CmpNoCase}{wxstringcmpnocase}\\
 \helpref{IsSameAs}{wxstringissameas}\\
-\helpref{Matches}{wxstringmatches}
+\helpref{Matches}{wxstringmatches}\\
+\helpref{StartsWith}{wxstringstartswith}
 
 \membersection{Substring extraction}
 
@@ -117,7 +123,8 @@ substring.
 \helpref{BeforeFirst}{wxstringbeforefirst}\\
 \helpref{BeforeLast}{wxstringbeforelast}\\
 \helpref{AfterFirst}{wxstringafterfirst}\\
-\helpref{AfterLast}{wxstringafterlast}
+\helpref{AfterLast}{wxstringafterlast}\\
+\helpref{StartsWith}{wxstringstartswith}
 
 \membersection{Case conversion}
 
@@ -868,6 +875,16 @@ Minimizes the string's memory. This can be useful after a call to
 \func{void}{sprintf}{\param{const char* }{ fmt}}
 
 The same as Printf.
+
+\membersection{wxString::StartsWith}\label{wxstringstartswith}
+
+\constfunc{bool}{StartsWith}{\param{const wxChar }{*prefix}, \param{wxString }{*rest = NULL}}
+
+This function can be used to test if the string starts with the specified 
+{\it prefix}. If it does, the function will return {\tt TRUE} and put the rest
+of the string (i.e. after the prefix) into {\it rest} string if it is not 
+{\tt NULL}. Otherwise, the function returns {\tt FALSE} and doesn't modify the 
+{\it rest}.
 
 \membersection{wxString::Strip}\label{wxstringstrip}
 
