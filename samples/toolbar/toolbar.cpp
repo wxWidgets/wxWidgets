@@ -30,6 +30,7 @@
 
 #include <wx/toolbar.h>
 #include <wx/log.h>
+#include <wx/image.h>
 
 // define this to 1 to use wxToolBarSimple instead of the native one
 #define USE_GENERIC_TBAR 0
@@ -218,14 +219,24 @@ void MyFrame::RecreateToolbar()
 
     toolBarBitmaps[0] = wxBITMAP(new);
     toolBarBitmaps[1] = wxBITMAP(open);
+    toolBarBitmaps[2] = wxBITMAP(save);
+    toolBarBitmaps[3] = wxBITMAP(copy);
+    toolBarBitmaps[4] = wxBITMAP(cut);
+    toolBarBitmaps[5] = wxBITMAP(paste);
+    toolBarBitmaps[6] = wxBITMAP(print);
+    toolBarBitmaps[7] = wxBITMAP(help);
+
     if ( !m_smallToolbar )
     {
-        toolBarBitmaps[2] = wxBITMAP(save);
-        toolBarBitmaps[3] = wxBITMAP(copy);
-        toolBarBitmaps[4] = wxBITMAP(cut);
-        toolBarBitmaps[5] = wxBITMAP(paste);
-        toolBarBitmaps[6] = wxBITMAP(print);
-        toolBarBitmaps[7] = wxBITMAP(help);
+        int w = 2*toolBarBitmaps[0].GetWidth(),
+            h = 2*toolBarBitmaps[0].GetHeight();
+        for ( size_t n = 0; n < WXSIZEOF(toolBarBitmaps); n++ )
+        {
+            toolBarBitmaps[n] =
+                wxImage(toolBarBitmaps[n]).Scale(w, h).ConvertToBitmap();
+        }
+
+        toolBar->SetToolBitmapSize(wxSize(w, h));
     }
 
 #ifdef __WXMSW__
@@ -255,22 +266,19 @@ void MyFrame::RecreateToolbar()
     }
 #endif // toolbars which don't support controls
 
-    if ( !m_smallToolbar )
-    {
-        currentX += width + 5;
-        toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
-        currentX += width + 5;
-        toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
-        currentX += width + 5;
-        toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
-        currentX += width + 5;
-        toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
-        currentX += width + 5;
-        toolBar->AddTool(wxID_PRINT, toolBarBitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Delete this tool");
-        currentX += width + 5;
-        toolBar->AddSeparator();
-        toolBar->AddTool(wxID_HELP, toolBarBitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
-    }
+    currentX += width + 5;
+    toolBar->AddTool(wxID_SAVE, toolBarBitmaps[2], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 1");
+    currentX += width + 5;
+    toolBar->AddTool(wxID_COPY, toolBarBitmaps[3], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Toggle button 2");
+    currentX += width + 5;
+    toolBar->AddTool(wxID_CUT, toolBarBitmaps[4], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Toggle/Untoggle help button");
+    currentX += width + 5;
+    toolBar->AddTool(wxID_PASTE, toolBarBitmaps[5], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
+    currentX += width + 5;
+    toolBar->AddTool(wxID_PRINT, toolBarBitmaps[6], wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Delete this tool");
+    currentX += width + 5;
+    toolBar->AddSeparator();
+    toolBar->AddTool(wxID_HELP, toolBarBitmaps[7], wxNullBitmap, TRUE, currentX, -1, (wxObject *) NULL, "Help button");
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -294,7 +302,7 @@ MyFrame::MyFrame(wxFrame* parent,
 {
     m_textWindow = new wxTextCtrl(this, -1, "", wxPoint(0, 0), wxSize(-1, -1), wxTE_MULTILINE);
 
-    m_smallToolbar = FALSE;
+    m_smallToolbar = TRUE;
     m_horzToolbar = TRUE;
     m_rows = 1;
 
