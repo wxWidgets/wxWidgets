@@ -48,7 +48,10 @@ inline void wxSetCCUnicodeFormat(HWND hwnd)
 {
 #ifndef __WXWINCE__
     ::SendMessage(hwnd, CCM_SETUNICODEFORMAT, wxUSE_UNICODE, 0);
-#endif // __WXWINCE__
+#else // !__WXWINCE__
+    // here it should be already in Unicode anyhow
+    hwnd;
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 // Return the default font for the common controls
