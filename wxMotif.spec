@@ -12,7 +12,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: X11/Libraries
-Source: wxMotif-%{ver}.tgz
+Source: wxMotif-%{ver}.tar.bz2
 URL: http://www.wxwindows.org
 Packager: Robert Fendt <rfendt@myokay.net>
 BuildRoot: /tmp/wxmotif_root

@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver 2.2.8
+%define ver 2.2.9
 %define rel 0
 
 Summary: wxBase library - non-GUI support classes of wxWindows toolkit
@@ -8,7 +8,7 @@ Version: %{ver}
 Release: %{rel}
 Copyright: wxWindows Licence
 Group: Development/Libraries
-Source: wxBase-%{ver}.tar.gz
+Source: wxBase-%{ver}.tar.bz2
 URL: http://www.wxwindows.org/
 Packager: Vadim Zeitlin <vadim@wxwindows.org>
 Prefix: %{pref}
