@@ -172,9 +172,7 @@ bool wxNotebook::Create(wxWindow *parent,
     tabStyle |= TCS_VERTICAL|TCS_RIGHT;
 
 
-  if ( !MSWCreate(GetId(), GetParent(), WC_TABCONTROL,
-                  this, NULL, pos.x, pos.y, size.x, size.y,
-                  tabStyle, NULL, 0) )
+  if ( !MSWCreateControl(WC_TABCONTROL, tabStyle, pos, size) )
   {
     return FALSE;
   }

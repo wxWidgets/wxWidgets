@@ -92,20 +92,21 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    // create the control of the given class with the given style, returns FALSE
-    // if creation failed
+    // create the control of the given class with the given style (combination
+    // of WS_XXX flags, i.e. Windows style, not wxWindows one), returns
+    // FALSE if creation failed
     //
     // All parameters except classname and style are optional, if the
-    // size/position are not given, they should be set later with SetSize() and,
-    // label (the title of the window), of course, is left empty. The extended
-    // style is determined from the style and the app 3D settings automatically
-    // if it's not specified explicitly.
+    // size/position are not given, they should be set later with SetSize()
+    // and, label (the title of the window), of course, is left empty. The
+    // extended style is determined from the style and the app 3D settings
+    // automatically if it's not specified explicitly.
     bool MSWCreateControl(const wxChar *classname,
-            WXDWORD style,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            const wxString& label = wxEmptyString,
-            WXDWORD exstyle = (WXDWORD)-1);
+                          WXDWORD style,
+                          const wxPoint& pos = wxDefaultPosition,
+                          const wxSize& size = wxDefaultSize,
+                          const wxString& label = wxEmptyString,
+                          WXDWORD exstyle = (WXDWORD)-1);
 
     // determine the extended styles combination for this window (may slightly
     // modify style parameter, this is why it's non const)

@@ -25,6 +25,24 @@
 // elsewhere because the functions, unlike the macros, respect the scope.
 // ----------------------------------------------------------------------------
 
+// CreateDialog
+
+#ifdef CreateDialog
+    #undef CreateDialog
+
+    inline HWND CreateDialog(HINSTANCE hInstance,
+                             LPCTSTR pTemplate,
+                             HWND hwndParent,
+                             DLGPROC pDlgProc)
+    {
+        #ifdef _UNICODE
+            return CreateDialogW(hInstance, pTemplate, hwndParent, pDlgProc);
+        #else
+            return CreateDialogA(hInstance, pTemplate, hwndParent, pDlgProc);
+        #endif
+    }
+#endif
+
 // GetCharWidth
 
 #ifdef GetCharWidth

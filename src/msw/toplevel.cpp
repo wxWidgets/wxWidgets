@@ -56,9 +56,30 @@ static inline bool IsZoomed(HWND WXUNUSED(hwnd)) { return FALSE; }
 // list of all frames and modeless dialogs
 wxWindowList wxModelessWindows;
 
+// the name of the default wxWindows class
+extern const wxChar *wxCanvasClassName;
+
 // ============================================================================
 // wxTopLevelWindowMSW implementation
 // ============================================================================
+
+// Dialog window proc
+LONG APIENTRY _EXPORT
+wxDlgProc(HWND WXUNUSED(hWnd), UINT message, WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
+{
+    if ( message == WM_INITDIALOG )
+    {
+        // for this message, returning TRUE tells system to set focus to the
+        // first control in the dialog box
+        return TRUE;
+    }
+    else
+    {
+        // for all the other ones, FALSE means that we didn't process the
+        // message
+        return FALSE;
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW creation
@@ -68,6 +89,180 @@ void wxTopLevelWindowMSW::Init()
 {
     m_iconized =
     m_maximizeOnShow = FALSE;
+
+    // unlike (almost?) all other windows, frames are created hidden
+    m_isShown = FALSE;
+}
+
+long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
+{
+    long style = GetWindowStyle();
+    long msflags = 0;
+
+    // first select the kind of window being created
+    if ( style & wxCAPTION )
+    {
+        if ( style & wxFRAME_TOOL_WINDOW )
+            msflags |= WS_POPUPWINDOW;
+        else
+            msflags |= WS_OVERLAPPED;
+    }
+    else
+    {
+        msflags |= WS_POPUP;
+    }
+
+    // next translate the individual flags
+    if ( style & wxMINIMIZE_BOX )
+        msflags |= WS_MINIMIZEBOX;
+    if ( style & wxMAXIMIZE_BOX )
+        msflags |= WS_MAXIMIZEBOX;
+    if ( style & wxTHICK_FRAME )
+        msflags |= WS_THICKFRAME;
+    if ( style & wxSYSTEM_MENU )
+        msflags |= WS_SYSMENU;
+    if ( style & wxMINIMIZE )
+        msflags |= WS_MINIMIZE;
+    if ( style & wxMAXIMIZE )
+        msflags |= WS_MAXIMIZE;
+    if ( style & wxCAPTION )
+        msflags |= WS_CAPTION;
+    if ( style & wxCLIP_CHILDREN )
+        msflags |= WS_CLIPCHILDREN;
+
+    // Keep this here because it saves recoding this function in wxTinyFrame
+#if wxUSE_ITSY_BITSY && !defined(__WIN32__)
+    if ( style & wxTINY_CAPTION_VERT )
+        msflags |= IBS_VERTCAPTION;
+    if ( style & wxTINY_CAPTION_HORIZ )
+        msflags |= IBS_HORZCAPTION;
+#else
+    if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
+        msflags |= WS_CAPTION;
+#endif
+
+    if ( exflags )
+    {
+        *exflags = MakeExtendedStyle(style);
+
+        // make all frames appear in the win9x shell taskbar unless
+        // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without giving
+        // them WS_EX_APPWINDOW style, the child (i.e. owned) frames wouldn't
+        // appear in it
+#if !defined(__WIN16__) && !defined(__SC__)
+        if ( (style & wxFRAME_TOOL_WINDOW) || (style & wxFRAME_NO_TASKBAR) )
+            *exflags |= WS_EX_TOOLWINDOW;
+        else if ( !(style & wxFRAME_NO_TASKBAR) )
+            *exflags |= WS_EX_APPWINDOW;
+#endif
+
+        if ( style & wxSTAY_ON_TOP )
+            *exflags |= WS_EX_TOPMOST;
+
+#ifdef __WIN32__
+      if ( m_exStyle & wxFRAME_EX_CONTEXTHELP )
+        *exflags |= WS_EX_CONTEXTHELP;
+#endif // __WIN32__
+    }
+
+    return msflags;
+}
+
+bool wxTopLevelWindowMSW::CreateDialog(const wxChar *dlgTemplate,
+                                       const wxString& title,
+                                       const wxPoint& pos,
+                                       const wxSize& size)
+{
+#ifdef __WXMICROWIN__
+    // no dialogs support under MicroWin yet
+    return CreateFrame(title, pos, size);
+#else // !__WXMICROWIN__
+    wxWindow *parent = GetParent();
+
+    // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
+    // app window as parent - this avoids creating modal dialogs without
+    // parent
+    if ( !parent && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
+    {
+        parent = wxTheApp->GetTopWindow();
+    }
+
+    m_hWnd = (WXHWND)::CreateDialog(wxGetInstance(),
+                                    dlgTemplate,
+                                    parent ? GetHwndOf(parent) : NULL,
+                                    (DLGPROC)wxDlgProc);
+
+    if ( !m_hWnd )
+    {
+        wxFAIL_MSG(_("Did you forget to include wx/msw/wx.rc in your resources?"));
+
+        wxLogSysError(_("Can't create dialog using template '%s'"), dlgTemplate);
+
+        return FALSE;
+    }
+
+    long exflags;
+    (void)MSWGetCreateWindowFlags(&exflags);
+
+    if ( exflags )
+    {
+        ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, exflags);
+        ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
+                       SWP_NOSIZE |
+                       SWP_NOMOVE |
+                       SWP_NOZORDER |
+                       SWP_NOACTIVATE);
+    }
+
+#if defined(__WIN95__)
+    // For some reason, the system menu is activated when we use the
+    // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
+    if ( exflags & WS_EX_CONTEXTHELP )
+    {
+        wxFrame *winTop = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
+        if ( winTop )
+        {
+            wxIcon icon = winTop->GetIcon();
+            if ( icon.Ok() )
+            {
+                ::SendMessage(GetHwnd(), WM_SETICON,
+                              (WPARAM)TRUE,
+                              (LPARAM)GetHiconOf(icon));
+            }
+        }
+    }
+#endif // __WIN95__
+
+    // move the dialog to its initial position without forcing repainting
+    int x, y, w, h;
+    if ( MSWGetCreateWindowCoords(pos, size, x, y, w, h) )
+    {
+        if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
+        {
+            wxLogLastError(wxT("MoveWindow"));
+        }
+    }
+    //else: leave it at default position
+
+    if ( !title.empty() )
+    {
+        ::SetWindowText(GetHwnd(), title);
+    }
+
+    SubclassWin(m_hWnd);
+
+    return TRUE;
+#endif // __WXMICROWIN__/!__WXMICROWIN__
+}
+
+bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
+                                      const wxPoint& pos,
+                                      const wxSize& size)
+{
+    long exflags;
+    long flags = MSWGetCreateWindowFlags(&exflags);
+
+    return MSWCreate(wxCanvasClassName, title, pos, size, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,
@@ -92,7 +287,35 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
-    return TRUE;
+    if ( GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
+    {
+        // TODO: it would be better to construct the dialog template in memory
+        //       during run-time than to rely on the limited number of
+        //       templates in wx.rc because:
+        //          a) you wouldn't have to include wx.rc in all wxWin programs
+        //             (and the number of complaints about it would dtop)
+        //          b) we'd be able to provide more templates simply, i.e.
+        //             we could generate the templates for all style
+        //             combinations
+
+        // we have different dialog templates to allows creation of dialogs
+        // with & without captions under MSWindows, resizeable or not (but a
+        // resizeable dialog always has caption - otherwise it would look too
+        // strange)
+        const wxChar *dlgTemplate;
+        if ( style & wxRESIZE_BORDER )
+            dlgTemplate = wxT("wxResizeableDialog");
+        else if ( style & wxCAPTION )
+            dlgTemplate = wxT("wxCaptionDialog");
+        else
+            dlgTemplate = wxT("wxNoCaptionDialog");
+
+        return CreateDialog(dlgTemplate, title, pos, size);
+    }
+    else // !dialog
+    {
+        return CreateFrame(title, pos, size);
+    }
 }
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()

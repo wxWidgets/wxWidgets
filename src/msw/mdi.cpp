@@ -67,8 +67,6 @@ extern const wxChar *wxMDIFrameClassName;   // from app.cpp
 extern const wxChar *wxMDIChildFrameClassName;
 extern const wxChar *wxMDIChildFrameClassNameNoRedraw;
 
-extern wxWindow *wxWndHook;                 // from window.cpp
-
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 extern void wxRemoveHandleAssociation(wxWindow *win);
 
@@ -192,44 +190,22 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   SetName(name);
   m_windowStyle = style;
 
-  if (parent) parent->AddChild(this);
+  if ( parent )
+      parent->AddChild(this);
 
   if ( id > -1 )
     m_windowId = id;
   else
-    m_windowId = (int)NewControlId();
+    m_windowId = NewControlId();
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+  long exflags;
+  long msflags = MSWGetCreateWindowFlags(&exflags);
 
-  DWORD msflags = WS_OVERLAPPED;
-  if (style & wxMINIMIZE_BOX)
-    msflags |= WS_MINIMIZEBOX;
-  if (style & wxMAXIMIZE_BOX)
-    msflags |= WS_MAXIMIZEBOX;
-  if (style & wxTHICK_FRAME)
-    msflags |= WS_THICKFRAME;
-  if (style & wxSYSTEM_MENU)
-    msflags |= WS_SYSMENU;
-  if ((style & wxMINIMIZE) || (style & wxICONIZE))
-    msflags |= WS_MINIMIZE;
-  if (style & wxMAXIMIZE)
-    msflags |= WS_MAXIMIZE;
-  if (style & wxCAPTION)
-    msflags |= WS_CAPTION;
-
-  if (style & wxCLIP_CHILDREN)
-    msflags |= WS_CLIPCHILDREN;
-
-  if ( !wxWindow::MSWCreate(m_windowId,
-                            parent,
-                            wxMDIFrameClassName,
-                            this,
+  if ( !wxWindow::MSWCreate(wxMDIFrameClassName,
                             title,
-                            x, y, width, height,
-                            msflags) )
+                            pos, size,
+                            msflags,
+                            exflags) )
   {
       return FALSE;
   }
@@ -662,8 +638,6 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
       parent->AddChild(this);
   }
 
-  wxWndHook = this;
-
   int x = pos.x;
   int y = pos.y;
   int width = size.x;
@@ -716,14 +690,12 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   mcs.lParam = 0;
 
+  wxWindowCreationHook hook(this);
+
   m_hWnd = (WXHWND)::SendMessage(GetWinHwnd(parent->GetClientWindow()),
                                  WM_MDICREATE, 0, (LONG)(LPSTR)&mcs);
 
-  wxWndHook = NULL;
   wxAssociateWinWithHandle((HWND) GetHWND(), this);
-
-  // VZ: what's this? an act of piracy?
-  //SetWindowLong(GetHwnd(), 0, (long)this);
 
   wxModelessWindows.Append(this);
 
@@ -1195,7 +1167,7 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     DWORD exStyle = 0;
 #endif
 
-    wxWndHook = this;
+    wxWindowCreationHook hook(this);
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         exStyle,
@@ -1215,7 +1187,6 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
     }
 
     SubclassWin(m_hWnd);
-    wxWndHook = NULL;
 
     return TRUE;
 }

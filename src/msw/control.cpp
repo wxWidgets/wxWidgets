@@ -128,7 +128,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     }
 #endif // wxUSE_CTL3D
 
-    // subclass again for purposes of dialog editing mode
+    // install wxWindows window proc for this window
     SubclassWin(m_hWnd);
 
     // controls use the same font and colours as their parent dialog by default

@@ -433,11 +433,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
         m_isShown = FALSE;
     }
 
-    return MSWCreate(m_windowId, parent, wxCanvasClassName,
-                     (wxWindow *)this, NULL,
-                     pos.x, pos.y,
-                     WidthDefault(size.x), HeightDefault(size.y),
-                     msflags, NULL, exStyle);
+    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exStyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -986,11 +982,19 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_oldWndProc = (WXFARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
+    m_oldWndProc = (WXFARPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
 
-    wxASSERT( (WXFARPROC) m_oldWndProc != (WXFARPROC) wxWndProc );
-
-    SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
+    // we don't need to subclass the window of our own class (in the Windows
+    // sense of the word)
+    if ( (WXFARPROC) m_oldWndProc != (WXFARPROC) wxWndProc )
+    {
+        ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) wxWndProc);
+    }
+    else
+    {
+        // don't bother restoring it neither
+        m_oldWndProc = NULL;
+    }
 }
 
 void wxWindowMSW::UnsubclassWin()
@@ -1005,11 +1009,15 @@ void wxWindowMSW::UnsubclassWin()
 
         wxCHECK_RET( ::IsWindow(hwnd), wxT("invalid HWND in UnsubclassWin") );
 
-        FARPROC farProc = (FARPROC) GetWindowLong(hwnd, GWL_WNDPROC);
-        if ( (m_oldWndProc != 0) && (farProc != (FARPROC) m_oldWndProc) )
+        if ( m_oldWndProc )
         {
-            SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
-            m_oldWndProc = 0;
+            FARPROC wndProc = (FARPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
+            if ( wndProc != (FARPROC) m_oldWndProc )
+            {
+                ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) m_oldWndProc);
+            }
+
+            m_oldWndProc = NULL;
         }
     }
 }
@@ -1035,6 +1043,7 @@ WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
             exStyle |= WS_EX_STATICEDGE;
 #endif
     }
+
     return exStyle;
 }
 
@@ -1042,7 +1051,7 @@ WXDWORD wxWindowMSW::MakeExtendedStyle(long style, bool eliminateBorders)
 // applying a default border style if required, and returning an extended
 // style to pass to CreateWindowEx.
 WXDWORD wxWindowMSW::Determine3DEffects(WXDWORD defaultBorderStyle,
-                                     bool *want3D) const
+                                        bool *want3D) const
 {
     // If matches certain criteria, then assume no 3D effects
     // unless specifically requested (dealt with in MakeExtendedStyle)
@@ -1053,7 +1062,7 @@ WXDWORD wxWindowMSW::Determine3DEffects(WXDWORD defaultBorderStyle,
             || (m_windowStyle & wxNO_BORDER) )
     {
         *want3D = FALSE;
-        return MakeExtendedStyle(m_windowStyle, FALSE);
+        return MakeExtendedStyle(m_windowStyle);
     }
 
     // Determine whether we should be using 3D effects or not.
@@ -2007,7 +2016,19 @@ void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
 
 // Hook for new window just as it's being created, when the window isn't yet
 // associated with the handle
-wxWindowMSW *wxWndHook = NULL;
+static wxWindowMSW *gs_winBeingCreated = NULL;
+
+// implementation of wxWindowCreationHook class: it just sets gs_winBeingCreated to the
+// window being created and insures that it's always unset back later
+wxWindowCreationHook::wxWindowCreationHook(wxWindowMSW *winBeingCreated)
+{
+    gs_winBeingCreated = winBeingCreated;
+}
+
+wxWindowCreationHook::~wxWindowCreationHook()
+{
+    gs_winBeingCreated = NULL;
+}
 
 // Main window proc
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2021,38 +2042,21 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     wxWindowMSW *wnd = wxFindWinFromHandle((WXHWND) hWnd);
 
     // when we get the first message for the HWND we just created, we associate
-    // it with wxWindow stored in wxWndHook
-    if ( !wnd && wxWndHook )
+    // it with wxWindow stored in gs_winBeingCreated
+    if ( !wnd && gs_winBeingCreated )
     {
-#if 0 // def __WXDEBUG__
-        char buf[512];
-        ::GetClassNameA((HWND) hWnd, buf, 512);
-        wxString className(buf);
-#endif
-
-        wxAssociateWinWithHandle(hWnd, wxWndHook);
-        wnd = wxWndHook;
-        wxWndHook = NULL;
+        wxAssociateWinWithHandle(hWnd, gs_winBeingCreated);
+        wnd = gs_winBeingCreated;
+        gs_winBeingCreated = NULL;
         wnd->SetHWND((WXHWND)hWnd);
     }
 
     LRESULT rc;
 
-    // Stop right here if we don't have a valid handle in our wxWindow object.
-    if ( wnd && !wnd->GetHWND() )
-    {
-        // FIXME: why do we do this?
-        wnd->SetHWND((WXHWND) hWnd);
-        rc = wnd->MSWDefWindowProc(message, wParam, lParam );
-        wnd->SetHWND(0);
-    }
+    if ( wnd )
+        rc = wnd->MSWWindowProc(message, wParam, lParam);
     else
-    {
-        if ( wnd )
-            rc = wnd->MSWWindowProc(message, wParam, lParam);
-        else
-            rc = DefWindowProc( hWnd, message, wParam, lParam );
-    }
+        rc = ::DefWindowProc(hWnd, message, wParam, lParam);
 
     return rc;
 }
@@ -2583,25 +2587,12 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
     return rc.result;
 }
 
-// Dialog window proc
-LONG APIENTRY _EXPORT
-wxDlgProc(HWND WXUNUSED(hWnd), UINT message, WPARAM WXUNUSED(wParam), LPARAM WXUNUSED(lParam))
-{
-    if ( message == WM_INITDIALOG )
-    {
-        // for this message, returning TRUE tells system to set focus to the
-        // first control in the dialog box
-        return TRUE;
-    }
-    else
-    {
-        // for all the other ones, FALSE means that we didn't process the
-        // message
-        return 0;
-    }
-}
+// ----------------------------------------------------------------------------
+// wxWindow <-> HWND map
+// ----------------------------------------------------------------------------
 
 wxList *wxWinHandleList = NULL;
+
 wxWindow *wxFindWinFromHandle(WXHWND hWnd)
 {
     wxNode *node = wxWinHandleList->Find((long)hWnd);
@@ -2610,10 +2601,6 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd)
     return (wxWindow *)node->Data();
 }
 
-#if 0 // def __WXDEBUG__
-static int gs_AssociationCount = 0;
-#endif
-
 void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
 {
     // adding NULL hWnd is (first) surely a result of an error and
@@ -2621,35 +2608,29 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win)
     wxCHECK_RET( hWnd != (HWND)NULL,
                  wxT("attempt to add a NULL hWnd to window list ignored") );
 
-
     wxWindow *oldWin = wxFindWinFromHandle((WXHWND) hWnd);
+#ifdef __WXDEBUG__
     if ( oldWin && (oldWin != win) )
     {
-        wxString str(win->GetClassInfo()->GetClassName());
-        wxLogError(wxT("Bug! Found existing HWND %X for new window of class %s"), (int) hWnd, (const wxChar*) str);
+        wxLogDebug(wxT("HWND %X already associated with another window (%s)"),
+                   hWnd, win->GetClassInfo()->GetClassName());
     }
-    else if (!oldWin)
+    else
+#endif // __WXDEBUG__
+    if (!oldWin)
     {
-#if 0 // def __WXDEBUG__
-        gs_AssociationCount ++;
-        wxLogDebug("+ Association %d", gs_AssociationCount);
-#endif
-
         wxWinHandleList->Append((long)hWnd, win);
     }
 }
 
 void wxRemoveHandleAssociation(wxWindowMSW *win)
 {
-#if 0 // def __WXDEBUG__
-    if (wxWinHandleList->Member(win))
-    {
-        wxLogDebug("- Association %d", gs_AssociationCount);
-        gs_AssociationCount --;
-    }
-#endif
     wxWinHandleList->DeleteObject(win);
 }
+
+// ----------------------------------------------------------------------------
+// various MSW speciic class dependent functions
+// ----------------------------------------------------------------------------
 
 // Default destroyer - override if you destroy it in some other way
 // (e.g. with MDI child windows)
@@ -2686,61 +2667,75 @@ void wxWindowMSW::MSWDetachWindowMenu()
             }
         }
     }
-#endif
+#endif // __WXUNIVERSAL__
 }
 
-bool wxWindowMSW::MSWCreate(int id,
-                            wxWindow *parent,
-                            const wxChar *wclass,
-                            wxWindow * WXUNUSED(wx_win),
+bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
+                                           const wxSize& size,
+                                           int& x, int& y,
+                                           int& w, int& h) const
+{
+    bool nonDefault = FALSE;
+
+    if ( pos.x == -1 )
+    {
+        // if set x to CW_USEDEFAULT, y parameter is ignored anyhow so we can
+        // just as well set it to CW_USEDEFAULT as well
+        x =
+        y = CW_USEDEFAULT;
+    }
+    else
+    {
+        x = pos.x;
+        y = pos.y == -1 ? CW_USEDEFAULT : pos.y;
+
+        nonDefault = TRUE;
+    }
+
+    if ( size.x == -1 || size.y == -1 )
+    {
+        // Find parent's size, if it exists, to set up a possible default panel
+        // size the size of the parent window
+        wxWindow *parent = GetParent();
+        if ( parent )
+        {
+            RECT rectParent;
+            ::GetClientRect(GetHwndOf(parent), &rectParent);
+
+            w = size.x == -1 ? rectParent.right - rectParent.left : size.x;
+            h = size.y == -1 ? rectParent.bottom - rectParent.top : size.y;
+        }
+        else
+        {
+            w =
+            h = CW_USEDEFAULT;
+        }
+    }
+    else
+    {
+        w = size.x;
+        h = size.y;
+
+        nonDefault = TRUE;
+    }
+
+    return nonDefault;
+}
+
+bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                             const wxChar *title,
-                            int x,
-                            int y,
-                            int width,
-                            int height,
+                            const wxPoint& pos,
+                            const wxSize& size,
                             WXDWORD style,
-                            const wxChar *dialog_template,
                             WXDWORD extendedStyle)
 {
-    int x1 = CW_USEDEFAULT;
-    int y1 = 0;
-    int width1 = CW_USEDEFAULT;
-    int height1 = 100;
+    // choose the position/size for the new window
+    int x, y, w, h;
+    (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
 
-    // Find parent's size, if it exists, to set up a possible default
-    // panel size the size of the parent window
-    RECT rectParent;
-    if ( parent )
-    {
-        ::GetClientRect(GetHwndOf(parent), &rectParent);
-
-        width1 = rectParent.right - rectParent.left;
-        height1 = rectParent.bottom - rectParent.top;
-    }
-
-    if ( x != -1 )
-        x1 = x;
-    if ( y != -1 )
-        y1 = y;
-    if ( width != -1 )
-        width1 = width;
-    if ( height != -1 )
-        height1 = height;
-
-    // unfortunately, setting WS_EX_CONTROLPARENT only for some windows in the
-    // hierarchy with several embedded panels (and not all of them) causes the
-    // program to hang during the next call to IsDialogMessage() due to the bug
-    // in this function (at least in Windows NT 4.0, it seems to work ok in
-    // Win2K)
-#if 0
-    // if we have wxTAB_TRAVERSAL style, we want WS_EX_CONTROLPARENT or
-    // IsDialogMessage() won't work for us
-    if ( GetWindowStyleFlag() & wxTAB_TRAVERSAL )
-    {
-        extendedStyle |= WS_EX_CONTROLPARENT;
-    }
-#endif // 0
-
+    // find the correct parent HWND
+    wxWindow *parent = GetParent();
+    bool isChild = (style & WS_CHILD) != 0;
     HWND hParent;
     if ( GetWindowStyleFlag() & wxPOPUP_WINDOW )
     {
@@ -2748,147 +2743,78 @@ bool wxWindowMSW::MSWCreate(int id,
         // be limited to the parents client area as child windows usually are
         hParent = ::GetDesktopWindow();
     }
-    else if ( parent )
+    else // !popup
     {
-        hParent = GetHwndOf(parent);
-    }
-    else
-    {
-        // top level window
-        hParent = NULL;
-    }
-
-    wxWndHook = this;
-
-#ifndef __WXMICROWIN__
-    if ( dialog_template )
-    {
-        // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
-        // app window as parent - this avoids creating modal dialogs without
-        // parent
-        if ( !hParent && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
+        if ( (isChild || (style & WS_POPUPWINDOW)) && parent )
         {
-            wxWindow *winTop = wxTheApp->GetTopWindow();
-            if ( winTop )
-                hParent = GetHwndOf(winTop);
+            // this is either a normal child window or a top level window with
+            // wxFRAME_TOOL_WINDOW style (see below)
+            hParent = GetHwndOf(parent);
         }
-
-        m_hWnd = (WXHWND)::CreateDialog(wxGetInstance(),
-                                        dialog_template,
-                                        hParent,
-                                        (DLGPROC)wxDlgProc);
-
-        if ( m_hWnd == 0 )
+        else
         {
-            wxLogError(_("Can't find dialog template '%s'!\nCheck resource include path for finding wx.rc."),
-                       dialog_template);
-
-            return FALSE;
-        }
-
-        if ( extendedStyle != 0 )
-        {
-            ::SetWindowLong(GetHwnd(), GWL_EXSTYLE, extendedStyle);
-            ::SetWindowPos(GetHwnd(), NULL, 0, 0, 0, 0,
-                           SWP_NOSIZE |
-                           SWP_NOMOVE |
-                           SWP_NOZORDER |
-                           SWP_NOACTIVATE);
-        }
-
-#if defined(__WIN95__)
-        // For some reason, the system menu is activated when we use the
-        // WS_EX_CONTEXTHELP style, so let's set a reasonable icon
-        if (extendedStyle & WS_EX_CONTEXTHELP)
-        {
-            wxFrame *winTop = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
-            if ( winTop )
-            {
-                wxIcon icon = winTop->GetIcon();
-                if ( icon.Ok() )
-                {
-                    ::SendMessage(GetHwnd(), WM_SETICON,
-                                  (WPARAM)TRUE,
-                                  (LPARAM)GetHiconOf(icon));
-                }
-            }
-        }
-#endif // __WIN95__
-
-
-        // JACS: is the following still necessary? The above seems to work.
-
-        // ::SetWindowLong(GWL_EXSTYLE) doesn't work for the dialogs, so try
-        // to take care of (at least some) extended style flags ourselves
-        if ( extendedStyle & WS_EX_TOPMOST )
-        {
-            if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
-                                 SWP_NOSIZE | SWP_NOMOVE) )
-            {
-                wxLogLastError(wxT("SetWindowPos"));
-            }
-        }
-
-        // move the dialog to its initial position without forcing repainting
-        if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
+            // this is either a window for which no parent was specified (not
+            // much we can do then) or a frame without wxFRAME_TOOL_WINDOW
+            // style: we should use NULL parent HWND for it or it would be
+            // always on top of its parent which is not what we usually want
+            // (in fact, we only want it for frames with the special
+            // wxFRAME_TOOL_WINDOW style translated into WS_POPUPWINDOW we test
+            // against above)
+            hParent = NULL;
         }
 
     }
-    else // creating a normal window, not a dialog
-#endif // !__WXMICROWIN__
+
+    // controlId is menu handle for the top level windows, so set it to 0
+    // unless we're creating a child window
+    int controlId;
+    if ( isChild )
     {
-        int controlId = 0;
-        if ( style & WS_CHILD )
+        controlId = GetId();
+
+        if ( GetWindowStyleFlag() & wxCLIP_SIBLINGS )
         {
-            controlId = id;
-
-            if ( GetWindowStyleFlag() & wxCLIP_SIBLINGS )
-            {
-                style |= WS_CLIPSIBLINGS;
-            }
-        }
-
-        wxString className(wclass);
-        if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
-        {
-            className += wxT("NR");
-        }
-
-        m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
-                                        className,
-                                        title ? title : wxT(""),
-                                        style,
-                                        x1, y1,
-                                        width1, height1,
-                                        hParent, (HMENU)controlId,
-                                        wxGetInstance(),
-                                        NULL);
-
-        if ( !m_hWnd )
-        {
-            wxLogSysError(_("Can't create window of class %s"), wclass);
-
-            return FALSE;
+            style |= WS_CLIPSIBLINGS;
         }
     }
-
-    wxWndHook = NULL;
-
-#ifdef __WXDEBUG__
-    wxNode* node = wxWinHandleList->Member(this);
-    if (node)
+    else // !child
     {
-        HWND hWnd = (HWND) node->GetKeyInteger();
-        if (hWnd != (HWND) m_hWnd)
-        {
-            wxLogError(wxT("A second HWND association is being added for the same window!"));
-        }
+        controlId = 0;
     }
-#endif // Debug
 
-    wxAssociateWinWithHandle((HWND) m_hWnd, this);
+    // for each class "Foo" we have we also have "FooNR" ("no repaint") class
+    // which is the same but without CS_[HV]REDRAW class styles so using it
+    // ensures that the window is not fully repainted on each resize
+    wxString className(wclass);
+    if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
+    {
+        className += wxT("NR");
+    }
+
+    // do create the window
+    wxWindowCreationHook hook(this);
+
+    m_hWnd = (WXHWND)::CreateWindowEx
+             (
+                extendedStyle,
+                className,
+                title ? title : wxT(""),
+                style,
+                x, y, w, h,
+                hParent,
+                (HMENU)controlId,
+                wxGetInstance(),
+                NULL                        // no extra data
+             );
+
+    if ( !m_hWnd )
+    {
+        wxLogSysError(_("Can't create window of class %s"), wclass);
+
+        return FALSE;
+    }
+
+    SubclassWin(m_hWnd);
 
     SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 

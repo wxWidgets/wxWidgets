@@ -217,16 +217,26 @@ public:
     // MSW only: TRUE if this control is part of the main control
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
-    // returns TRUE if the window has been created
-    bool MSWCreate(int id,
-                   wxWindow *parent,
-                   const wxChar *wclass,
-                   wxWindow *wx_win,
-                   const wxChar *title,
-                   int x, int y, int width, int height,
-                   WXDWORD style,
-                   const wxChar *dialog_template = NULL,
+    // translate wxWindows coords into Windows ones suitable to be passed to
+    // ::CreateWindow()
+    //
+    // returns TRUE if non default coords are returned, FALSE otherwise
+    bool MSWGetCreateWindowCoords(const wxPoint& pos,
+                                  const wxSize& size,
+                                  int& x, int& y,
+                                  int& w, int& h) const;
+
+    // creates the window of specified Windows class with given style, extended
+    // style, title and geometry (default values
+    //
+    // returns TRUE if the window has been created, FALSE if creation failed
+    bool MSWCreate(const wxChar *wclass,
+                   const wxChar *title = NULL,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   WXDWORD style = 0,
                    WXDWORD exendedStyle = 0);
+
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 
 #if WXWIN_COMPATIBILITY
@@ -462,6 +472,16 @@ private:
 // kbd code translation
 WXDLLEXPORT int wxCharCodeMSWToWX(int keySym);
 WXDLLEXPORT int wxCharCodeWXToMSW(int id, bool *IsVirtual);
+
+// window creation helper class: before creating a new HWND, instantiate an
+// object of this class on stack - this allows to process the messages sent to
+// the window even before CreateWindow() returns
+class wxWindowCreationHook
+{
+public:
+    wxWindowCreationHook(wxWindowMSW *winBeingCreated);
+    ~wxWindowCreationHook();
+};
 
 #endif
     // _WX_WINDOW_H_

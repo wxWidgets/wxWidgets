@@ -21,8 +21,8 @@
 #include <windows.h>
 
 #ifdef __WXMICROWIN__
-/* Extra prototypes and symbols not defined by MicroWindows */
-#include "wx/msw/microwin.h"
+    // Extra prototypes and symbols not defined by MicroWindows
+    #include "wx/msw/microwin.h"
 #endif
 
 // undefine conflicting symbols which were defined in windows.h

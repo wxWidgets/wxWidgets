@@ -113,86 +113,14 @@ bool wxDialog::Create(wxWindow *parent,
 
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
-    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
-        return FALSE;
-
+    // save focus before doing anything which can potentially change it
     m_oldFocus = FindFocus();
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
-    if (x < 0)
-        x = wxDIALOG_DEFAULT_X;
-    if (y < 0)
-        y = wxDIALOG_DEFAULT_Y;
-
-    if (width < 0)
-        width = wxDIALOG_DEFAULT_WIDTH;
-    if (height < 0)
-        height = wxDIALOG_DEFAULT_HEIGHT;
-
     // All dialogs should really have this style
-    m_windowStyle |= wxTAB_TRAVERSAL;
+    style |= wxTAB_TRAVERSAL;
 
-    WXDWORD extendedStyle = MakeExtendedStyle(m_windowStyle);
-    if (m_windowStyle & wxSTAY_ON_TOP)
-        extendedStyle |= WS_EX_TOPMOST;
-
-#ifndef __WIN16__
-    if (m_exStyle & wxDIALOG_EX_CONTEXTHELP)
-        extendedStyle |= WS_EX_CONTEXTHELP;
-#endif
-
-    // Allows creation of dialogs with & without captions under MSWindows,
-    // resizeable or not (but a resizeable dialog always has caption -
-    // otherwise it would look too strange)
-    const wxChar *dlg;
-    if ( style & wxRESIZE_BORDER )
-        dlg = wxT("wxResizeableDialog");
-    else if ( style & wxCAPTION )
-        dlg = wxT("wxCaptionDialog");
-    else
-        dlg = wxT("wxNoCaptionDialog");
-
-#ifdef __WXMICROWIN__
-    extern const wxChar *wxFrameClassName;
-
-    int msflags = WS_OVERLAPPED|WS_POPUP;
-    if (style & wxCAPTION)
-        msflags |= WS_CAPTION;
-    if (style & wxCLIP_CHILDREN)
-        msflags |= WS_CLIPCHILDREN;
-    if ((style & wxTHICK_FRAME) == 0)
-      msflags |= WS_BORDER;
-    MSWCreate(m_windowId, parent, wxFrameClassName, this, NULL,
-              x, y, width, height,
-              msflags,
-              NULL,
-              extendedStyle);
-
-#else
-    MSWCreate(m_windowId, parent, NULL, this, NULL,
-              x, y, width, height,
-              0, // style is not used if we have dlg template
-              dlg,
-              extendedStyle);
-#endif
-    HWND hwnd = (HWND)GetHWND();
-
-    if ( !hwnd )
-    {
-        wxFAIL_MSG(_("Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your resources."));
-
+    if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
-    }
-
-#ifndef __WXMICROWIN__
-    SubclassWin(GetHWND());
-#endif
-
-    SetWindowText(hwnd, title);
 
     return TRUE;
 }

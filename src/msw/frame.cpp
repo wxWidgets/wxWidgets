@@ -119,9 +119,6 @@ void wxFrameMSW::Init()
     m_fsIsShowing = FALSE;
 
     m_winLastFocused = (wxWindow *)NULL;
-
-    // unlike (almost?) all other windows, frames are created hidden
-    m_isShown = FALSE;
 }
 
 bool wxFrameMSW::Create(wxWindow *parent,
@@ -133,13 +130,6 @@ bool wxFrameMSW::Create(wxWindow *parent,
                      const wxString& name)
 {
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
-        return FALSE;
-
-    // the frame must have NULL parent HWND or it would be always on top of its
-    // parent which is not what we usually want (in fact, we only want it for
-    // frames with the special wxFRAME_TOOL_WINDOW style handled elsewhere)
-    if ( !MSWCreate(m_windowId, NULL, wxFrameClassName, this, title,
-                    pos.x, pos.y, size.x, size.y, style) )
         return FALSE;
 
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
@@ -467,98 +457,6 @@ bool wxFrameMSW::ShowFullScreen(bool show, long style)
 
         return TRUE;
     }
-}
-
-/*
- * Frame window
- *
- */
-
-bool wxFrameMSW::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow *wx_win, const wxChar *title,
-                   int x, int y, int width, int height, long style)
-
-{
-  // If child windows aren't properly drawn initially, WS_CLIPCHILDREN
-  // could be the culprit. But without it, you can get a lot of flicker.
-
-  DWORD msflags = 0;
-  if ( style & wxCAPTION )
-  {
-    if ( style & wxFRAME_TOOL_WINDOW )
-        msflags |= WS_POPUPWINDOW;
-    else
-        msflags |= WS_OVERLAPPED;
-  }
-  else
-  {
-    msflags |= WS_POPUP;
-  }
-
-  if (style & wxMINIMIZE_BOX)
-    msflags |= WS_MINIMIZEBOX;
-  if (style & wxMAXIMIZE_BOX)
-    msflags |= WS_MAXIMIZEBOX;
-  if (style & wxTHICK_FRAME)
-    msflags |= WS_THICKFRAME;
-  if (style & wxSYSTEM_MENU)
-    msflags |= WS_SYSMENU;
-  if ( style & wxMINIMIZE )
-    msflags |= WS_MINIMIZE;
-  if (style & wxMAXIMIZE)
-    msflags |= WS_MAXIMIZE;
-  if (style & wxCAPTION)
-    msflags |= WS_CAPTION;
-  if (style & wxCLIP_CHILDREN)
-    msflags |= WS_CLIPCHILDREN;
-
-  // Keep this in wxFrameMSW because it saves recoding this function
-  // in wxTinyFrame
-#if wxUSE_ITSY_BITSY && !defined(__WIN32__)
-  if (style & wxTINY_CAPTION_VERT)
-    msflags |= IBS_VERTCAPTION;
-  if (style & wxTINY_CAPTION_HORIZ)
-    msflags |= IBS_HORZCAPTION;
-#else
-  if (style & wxTINY_CAPTION_VERT)
-    msflags |= WS_CAPTION;
-  if (style & wxTINY_CAPTION_HORIZ)
-    msflags |= WS_CAPTION;
-#endif
-  if ((style & wxTHICK_FRAME) == 0)
-    msflags |= WS_BORDER;
-
-  WXDWORD extendedStyle = MakeExtendedStyle(style);
-
-  // make all frames appear in the win9x shell taskbar unless
-  // wxFRAME_TOOL_WINDOW or wxFRAME_NO_TASKBAR is given - without giving them
-  // WS_EX_APPWINDOW style, the child (i.e. owned) frames wouldn't appear in it
-#if !defined(__WIN16__) && !defined(__SC__)
-  if ( (style & wxFRAME_TOOL_WINDOW) ||
-       (style & wxFRAME_NO_TASKBAR) )
-      extendedStyle |= WS_EX_TOOLWINDOW;
-  else if ( !(style & wxFRAME_NO_TASKBAR) )
-      extendedStyle |= WS_EX_APPWINDOW;
-#endif
-
-  if (style & wxSTAY_ON_TOP)
-    extendedStyle |= WS_EX_TOPMOST;
-
-#ifndef __WIN16__
-  if (m_exStyle & wxFRAME_EX_CONTEXTHELP)
-    extendedStyle |= WS_EX_CONTEXTHELP;
-#endif
-
-  m_iconized = FALSE;
-  if ( !wxWindow::MSWCreate(id, parent, wclass, wx_win, title, x, y, width, height,
-         msflags, NULL, extendedStyle) )
-         return FALSE;
-
-  // Seems to be necessary if we use WS_POPUP
-  // style instead of WS_OVERLAPPED
-  if (width > -1 && height > -1)
-    ::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(width, height));
-
-  return TRUE;
 }
 
 // Default activation behaviour - set the focus for the first child

@@ -70,11 +70,29 @@ protected:
     // common part of all ctors
     void Init();
 
+    // create a new frame, return FALSE if it couldn't be created
+    bool CreateFrame(const wxString& title,
+                     const wxPoint& pos,
+                     const wxSize& size);
+
+    // create a new dialog using the given dialog template from resources,
+    // return FALSE if it couldn't be created
+    bool CreateDialog(const wxChar *dlgTemplate,
+                      const wxString& title,
+                      const wxPoint& pos,
+                      const wxSize& size);
+
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
 
     // implement the geometry-related methods for a top level window
     virtual void DoSetClientSize(int width, int height);
+
+    // get the MSW window flags corresponding to wxWindows ones
+    //
+    // the functions returns the flags (WS_XXX) directly and puts the ext
+    // (WS_EX_XXX) flags into the provided pointer if not NULL
+    long MSWGetCreateWindowFlags(long *exflags) const;
 
     // is the frame currently iconized?
     bool m_iconized;

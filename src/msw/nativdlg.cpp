@@ -43,7 +43,6 @@
 // global functions
 // ---------------------------------------------------------------------------
 
-extern wxWindow *wxWndHook;
 extern LONG APIENTRY _EXPORT wxDlgProc(HWND hWnd, UINT message,
                                        WPARAM wParam, LPARAM lParam);
 
@@ -54,12 +53,12 @@ extern LONG APIENTRY _EXPORT wxDlgProc(HWND hWnd, UINT message,
 bool wxWindow::LoadNativeDialog(wxWindow* parent, wxWindowID& id)
 {
     m_windowId = id;
-    wxWndHook = this;
+
+    wxWindowCreationHook hook(this);
     m_hWnd = (WXHWND)::CreateDialog((HINSTANCE)wxGetInstance(),
                                     MAKEINTRESOURCE(id),
                                     parent ? (HWND)parent->GetHWND() : 0,
                                     (DLGPROC) wxDlgProc);
-    wxWndHook = NULL;
 
     if ( !m_hWnd )
         return FALSE;
@@ -93,12 +92,11 @@ bool wxWindow::LoadNativeDialog(wxWindow* parent, const wxString& name)
 {
     SetName(name);
 
-    wxWndHook = this;
+    wxWindowCreationHook hook(this);
     m_hWnd = (WXHWND)::CreateDialog((HINSTANCE) wxGetInstance(),
                                     name.c_str(),
                                     parent ? (HWND)parent->GetHWND() : 0,
                                     (DLGPROC)wxDlgProc);
-    wxWndHook = NULL;
 
     if ( !m_hWnd )
         return FALSE;

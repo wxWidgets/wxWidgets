@@ -75,9 +75,9 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
     long styleOrig = 0,
          exstyleOrig = 0;
 
+    // FIXME -- wxUniv should provide a way to force non-native decorations!
     if ( ms_drawDecorations == -1 )
         ms_drawDecorations = !wxSystemSettings::HasFrameDecorations();
-        // FIXME -- wxUniv should provide a way to force non-native decorations!
 
     if ( ms_drawDecorations )
     {
@@ -96,15 +96,6 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
     if ( !wxTopLevelWindowNative::Create(parent, id, title, pos,
                                          size, style, name) )
         return FALSE;
-
-    // FIXME: to be removed as soon as wxTLW/wxFrame/wxDialog creation code in
-    //        wxMSW is rationalized
-#ifdef __WXMSW__
-    extern const wxChar *wxFrameClassName;
-    if ( !MSWCreate(id, NULL, wxFrameClassName, this, title,
-                    pos.x, pos.y, size.x, size.y, style) )
-        return FALSE;
-#endif // __WXMSW__
 
     if ( ms_drawDecorations )
     {
