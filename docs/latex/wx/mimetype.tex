@@ -36,6 +36,15 @@ No base class.
 
 \latexignore{\rtfignore{\wxheading{Function groups}}}
 
+\membersection{Helper functions}
+
+All of these functions are static (i.e. don't need a wxMimeTypesManager object
+to call them) and provide some useful operations for string representations of
+MIME types. Their usage is recommended instead of directly working with MIME
+types using wxString functions.
+
+\helpref{IsOfType}{wxmimetypesmanagerisoftype}
+
 \membersection{Constructor and destructor}
 
 NB: You won't normally need to use more than one wxMimeTypesManager object in a
@@ -99,6 +108,18 @@ is unknown.
 Gather information about the files with given MIME type and return the
 corresponding \helpref{wxFileType}{wxfiletype} object or NULL if the MIME type
 is unknown.
+
+\membersection{wxMimeTypesManager::IsOfType}\label{wxmimetypesmanagerisoftype}
+
+\func{bool}{IsOfType}{\param{const wxString\&}{ mimeType}, \param{const wxString\&}{ wildcard}}
+
+This function returns TRUE if either the given {\it mimeType} is exactly the
+same as {\it wildcard} or if it has the same category and the subtype of
+{\it wildcard} is '*'. Note that the '*' wildcard is not allowed in
+{\it mimeType} itself.
+
+The comparaison don by this function is case insensitive so it is not
+necessary to convert the strings to the same case before calling it.
 
 \membersection{wxMimeTypesManager::ReadMailcap}\label{wxmimetypesmanagerreadmailcap}
 

@@ -448,6 +448,28 @@ wxFileType::GetPrintCommand(wxString *printCmd,
 // wxMimeTypesManager
 // ----------------------------------------------------------------------------
 
+bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
+                                  const wxString& wildcard)
+{
+    wxASSERT_MSG( mimeType.Find('*') == wxNOT_FOUND,
+                  "first MIME type can't contain wildcards" );
+
+    // all comparaisons are case insensitive (2nd arg of IsSameAs() is FALSE)
+    if ( wildcard.BeforeFirst('/').IsSameAs(mimeType.BeforeFirst('/'), FALSE) )
+    {
+        wxString strSubtype = wildcard.AfterFirst('/');
+
+        if ( strSubtype == '*' ||
+             strSubtype.IsSameAs(mimeType.AfterFirst('/'), FALSE) )
+        {
+            // matches (either exactly or it's a wildcard)
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 wxMimeTypesManager::wxMimeTypesManager()
 {
     m_impl = new wxMimeTypesManagerImpl;
