@@ -392,6 +392,12 @@ class wxListEventPtr(wxNotifyEventPtr):
     def GetCacheTo(self, *_args, **_kwargs):
         val = controls2c.wxListEvent_GetCacheTo(self, *_args, **_kwargs)
         return val
+    def IsEditCancelled(self, *_args, **_kwargs):
+        val = controls2c.wxListEvent_IsEditCancelled(self, *_args, **_kwargs)
+        return val
+    def SetEditCanceled(self, *_args, **_kwargs):
+        val = controls2c.wxListEvent_SetEditCanceled(self, *_args, **_kwargs)
+        return val
     def __setattr__(self,name,value):
         if name == "m_code" :
             controls2c.wxListEvent_m_code_set(self,value)
