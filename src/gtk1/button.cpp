@@ -22,6 +22,7 @@
 #include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -69,8 +70,36 @@ gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), w
     if (g_isIdle)
         wxapp_install_idle_handler();
     
-    if (GTK_WIDGET_REALIZED(m_widget))
-        win->SetSize( win->m_x, win->m_y, win->m_width, win->m_height );
+    int left_border = 0;
+    int right_border = 0;
+    int top_border = 0;
+    int bottom_border = 0;
+        
+    /* the default button has a border around it */
+    if (GTK_WIDGET_CAN_DEFAULT(m_widget))
+    {
+#ifdef __WXGTK20__
+        GtkBorder *default_border = NULL;
+        gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
+        if (default_border)
+        {
+            left_border += default_border->left;
+            right_border += default_border->right;
+            top_border += default_border->top;
+            bottom_border += default_border->bottom;
+            g_free( default_border );
+        }
+#else
+        left_border = 6;
+        right_border = 6;
+        top_border = 6;
+        bottom_border = 5;
+#endif
+        win->DoMoveWindow( win->m_x-top_border,
+                           win->m_y-left_border,
+                           win->m_width+left_border+right_border,
+                           win->m_height+top_border+bottom_border );
+    }      
 
     return FALSE;
 }
@@ -184,8 +213,9 @@ void wxButton::SetDefault()
     
     GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
     gtk_widget_grab_default( m_widget );
-
-    SetSize( m_x, m_y, m_width, m_height );
+    
+    // resize for default border
+    gtk_button_style_set_callback( m_widget, NULL, this );
 }
 
 /* static */

@@ -3111,15 +3111,15 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
         if (GTK_WIDGET_CAN_DEFAULT(m_widget))
         {
 #ifdef __WXGTK20__
-            GtkBorder *default_outside_border = NULL;
-            gtk_widget_style_get( m_widget, "default_outside_border", &default_outside_border, NULL );
-            if (default_outside_border)
+            GtkBorder *default_border = NULL;
+            gtk_widget_style_get( m_widget, "default_border", &default_border, NULL );
+            if (default_border)
             {
-                left_border += default_outside_border->left;
-                right_border += default_outside_border->right;
-                top_border += default_outside_border->top;
-                bottom_border += default_outside_border->bottom;
-                g_free( default_outside_border );
+                left_border += default_border->left;
+                right_border += default_border->right;
+                top_border += default_border->top;
+                bottom_border += default_border->bottom;
+                g_free( default_border );
             }
 #else
             left_border = 6;
