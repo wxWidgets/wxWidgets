@@ -45,6 +45,8 @@
             $wxHTML{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "U" ) {
             $wxUNIX{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "I" ) {
+            $wxINCLUDE{$fields[0]} = $fields[2];
         } else {
             warn "Unknown file type $fields[1] for $fields[0], ignoring.\n";
             next line;

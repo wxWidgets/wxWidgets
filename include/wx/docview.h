@@ -92,8 +92,8 @@ public:
     virtual ostream& SaveObject(ostream& stream);
     virtual istream& LoadObject(istream& stream);
 #else
-    virtual bool SaveObject(wxOutputStream& stream);
-    virtual bool LoadObject(wxInputStream& stream);
+    virtual wxOutputStream& SaveObject(wxOutputStream& stream);
+    virtual wxInputStream& LoadObject(wxInputStream& stream);
 #endif
 
     // Called by wxWindows

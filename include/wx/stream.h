@@ -38,10 +38,10 @@ WXDLLEXPORT wxOutputStream& wxEndL(wxOutputStream& o_stream);
 // wxStream: base classes
 // ---------------------------------------------------------------------------
 
-#define wxStream_NOERROR    wxSTR_NOERROR
-#define wxStream_EOF        wxSTR_EOF
-#define wxStream_WRITE_ERR  wxSTR_WRITE_ERROR
-#define wxStream_READ_ERR   wxSTR_READ_ERROR
+#define wxStream_NOERROR    wxSTREAM_NOERROR
+#define wxStream_EOF        wxSTREAM_EOF
+#define wxStream_WRITE_ERR  wxSTREAM_WRITE_ERROR
+#define wxStream_READ_ERR   wxSTREAM_READ_ERROR
   
 typedef enum {
   wxStream_NOERROR = 0,
@@ -55,7 +55,7 @@ class WXDLLEXPORT wxStreamBase {
   wxStreamBase();
   virtual ~wxStreamBase();
 
-  bool operator!() const { return (LastError() != wxSTR_NOERROR); }
+  bool operator!() const { return (LastError() != wxSTREAM_NOERROR); }
   wxStreamError LastError() const { return m_lasterror; }
   virtual size_t GetSize() const { return ~((size_t)0); }
   size_t StreamSize() const { return GetSize(); }

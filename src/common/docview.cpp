@@ -294,7 +294,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         // Saving error
         return FALSE;
     }
-    if (SaveObject(store)==FALSE)
+    if (!SaveObject(store))
     {
         (void)wxMessageBox(_("Sorry, could not save this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
                            GetDocumentWindow());
@@ -329,7 +329,7 @@ bool wxDocument::OnOpenDocument(const wxString& file)
                            GetDocumentWindow());
         return FALSE;
     }
-    if (LoadObject(store)==FALSE)
+    if (!LoadObject(store))
     {
         (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
                            GetDocumentWindow());
@@ -346,25 +346,21 @@ bool wxDocument::OnOpenDocument(const wxString& file)
 
 #if wxUSE_STD_IOSTREAM
 istream& wxDocument::LoadObject(istream& stream)
-{
-    return stream;
-}
-
-ostream& wxDocument::SaveObject(ostream& stream)
-{
-    return stream;
-}
 #else
-bool wxDocument::LoadObject(wxInputStream& stream)
+wxInputStream& wxDocument::LoadObject(wxInputStream& stream)
+#endif
 {
-    return TRUE;
+    return stream;
 }
 
-bool wxDocument::SaveObject(wxOutputStream& stream)
-{
-    return TRUE;
-}
+#if wxUSE_STD_IOSTREAM
+ostream& wxDocument::SaveObject(ostream& stream)
+#else
+wxOutputStream& wxDocument::SaveObject(wxOutputStream& stream)
 #endif
+{
+    return stream;
+}
 
 bool wxDocument::Revert()
 {

@@ -29,6 +29,7 @@ cp ltmain.sh ~/wxmotif_dist/wxMotif
 cp missing ~/wxmotif_dist/wxMotif
 cp mkinstalldirs ~/wxmotif_dist/wxMotif
 cp wx-config.in ~/wxmotif_dist/wxMotif
+cp makefile.unx.in ~/wxmotif_dist/wxMotif
 cp setup.h.in ~/wxmotif_dist/wxMotif
 cp stamp-h.in ~/wxmotif_dist/wxMotif
 cp Makefile.in ~/wxmotif_dist/wxMotif
@@ -68,11 +69,11 @@ cp Makefile.am ~/wxmotif_dist/wxMotif/include/wx/generic
 cp Makefile.in ~/wxmotif_dist/wxMotif/include/wx/generic
 cd ..
 
-mkdir ~/wxgtk_dist/wxGTK/include/wx/html
+mkdir ~/wxmotif_dist/wxMotif/include/wx/html
 cd html
-cp *.h ~/wxgtk_dist/wxGTK/include/wx/html
-cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/html
-cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/html
+cp *.h ~/wxmotif_dist/wxMotif/include/wx/html
+cp Makefile.am ~/wxmotif_dist/wxMotif/include/wx/html
+cp Makefile.in ~/wxmotif_dist/wxMotif/include/wx/html
 cd ..
 
 mkdir ~/wxmotif_dist/wxMotif/include/wx/unix
@@ -143,7 +144,6 @@ cp Makefile.am ~/wxmotif_dist/wxMotif/src/motif
 cp Makefile.in ~/wxmotif_dist/wxMotif/src/motif
 cp *.xbm ~/wxmotif_dist/wxMotif/src/motif
 cp *.c ~/wxmotif_dist/wxMotif/src/motif
-cp *.inc ~/wxmotif_dist/wxMotif/src/motif
 cp *.cpp ~/wxmotif_dist/wxMotif/src/motif
 cd ..
 
@@ -153,21 +153,24 @@ cp glob.inc ~/wxmotif_dist/wxMotif/src/common
 cp lexer.l ~/wxmotif_dist/wxMotif/src/common
 cp parser.y ~/wxmotif_dist/wxMotif/src/common
 cp extended.c ~/wxmotif_dist/wxMotif/src/common
+cp unzip.* ~/wxmotif_dist/wxMotif/src/common
 cp *.cpp ~/wxmotif_dist/wxMotif/src/common
 cd ..
 
 cd html
-mkdir ~/wxgtk_dist/wxGTK/src/html
-cp *.cpp ~/wxgtk_dist/wxGTK/src/html
-cp *.h ~/wxgtk_dist/wxGTK/src/html
+mkdir ~/wxmotif_dist/wxMotif/src/html
+cp *.cpp ~/wxmotif_dist/wxMotif/src/html
+cp *.h ~/wxmotif_dist/wxMotif/src/html
 cd bitmaps
-mkdir ~/wxgtk_dist/wxGTK/src/html/bitmaps
-cp *.xpm ~/wxgtk_dist/wxGTK/src/html/bitmaps
+mkdir ~/wxmotif_dist/wxMotif/src/html/bitmaps
+cp *.xpm ~/wxmotif_dist/wxMotif/src/html/bitmaps
 cd ../..
 
 cd unix
 mkdir ~/wxmotif_dist/wxMotif/src/unix
 cp *.cpp ~/wxmotif_dist/wxMotif/src/unix
+cp *.h ~/wxmotif_dist/wxMotif/src/unix
+cp *.c ~/wxmotif_dist/wxMotif/src/unix
 cd ..
 
 cd generic
@@ -400,6 +403,42 @@ cd doc
 mkdir ~/wxmotif_dist/wxMotif/samples/help/doc
 cp * ~/wxmotif_dist/wxMotif/samples/help/doc
 cd ../..
+
+echo HTML samples..
+
+cd html
+mkdir ~/wxmotif_dist/wxMotif/samples/html
+cp Makefile.* ~/wxmotif_dist/wxMotif/samples/html
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/about
+cp about/Makefile.* ~/wxmotif_dist/wxMotif/samples/html/about
+cp about/about.* ~/wxmotif_dist/wxMotif/samples/html/about
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/about/data
+cp about/data/*.* ~/wxmotif_dist/wxMotif/samples/html/about/data
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/help
+cp help/Makefile.* ~/wxmotif_dist/wxMotif/samples/html/help
+cp help/help.* ~/wxmotif_dist/wxMotif/samples/html/help
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/help/helpfiles
+cp help/helpfiles/*.* ~/wxmotif_dist/wxMotif/samples/html/help/helpfiles
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/printing
+cp printing/*.* ~/wxmotif_dist/wxMotif/samples/html/printing
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/test
+cp test/*.* ~/wxmotif_dist/wxMotif/samples/html/test
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/virtual
+cp virtual/*.* ~/wxgtk_dist/wxGTK/samples/html/virtual
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/widget
+cp widget/*.* ~/wxmotif_dist/wxMotif/samples/html/widget
+
+mkdir ~/wxmotif_dist/wxMotif/samples/html/zip
+cp zip/*.* ~/wxmotif_dist/wxMotif/samples/html/zip
+cd ..
 
 echo Image sample..
 

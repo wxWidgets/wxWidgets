@@ -40,11 +40,11 @@ class DoodleSegment: public wxObject
 
   void Draw(wxDC *dc);
 #if wxUSE_STD_IOSTREAM
-  ostream& SaveObject(ostream& stream);
-  istream& LoadObject(istream& stream);
+  ostream& SaveObject(ostream& text_stream);
+  istream& LoadObject(istream& text_stream);
 #else
-  bool SaveObject(wxOutputStream& stream);
-  bool LoadObject(wxInputStream& stream);
+  wxOutputStream& SaveObject(wxOutputStream& stream);
+  wxInputStream& LoadObject(wxInputStream& stream);
 #endif
 
 };
@@ -60,11 +60,11 @@ class DrawingDocument: public wxDocument
   ~DrawingDocument(void);
 
 #if wxUSE_STD_IOSTREAM
-  ostream& SaveObject(ostream& stream);
-  istream& LoadObject(istream& stream);
+  ostream& SaveObject(ostream& text_stream);
+  istream& LoadObject(istream& text_stream);
 #else
-  bool SaveObject(wxOutputStream& stream);
-  bool LoadObject(wxInputStream& stream);
+  wxOutputStream& SaveObject(wxOutputStream& stream);
+  wxInputStream& LoadObject(wxInputStream& stream);
 #endif
 
   inline wxList& GetDoodleSegments(void) const { return (wxList&) doodleSegments; };

@@ -494,6 +494,10 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
   assert(socket != NULL);
 
   socket->m_timeout = millisec;
+  /* Neither GLIBC 2.0 nor the kernel 2.0.36 define SO_SNDTIMEO or
+     SO_RCVTIMEO. The man pages, that these flags should exist but
+     are read only. RR. */
+#ifndef __LINUX__
   if (socket->m_fd != -1) {
     struct timeval tval;
 
@@ -502,6 +506,7 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
     setsockopt(socket->m_fd, SOL_SOCKET, SO_SNDTIMEO, &tval, sizeof(tval));
     setsockopt(socket->m_fd, SOL_SOCKET, SO_RCVTIMEO, &tval, sizeof(tval));
   }
+#endif
 }
 
 /*

@@ -86,6 +86,7 @@ cd ..
 mkdir ~/wxgtk_dist/wxGTK/include/wx/gtk
 cd gtk
 cp *.h ~/wxgtk_dist/wxGTK/include/wx/gtk
+cp *.xpm ~/wxgtk_dist/wxGTK/include/wx/gtk
 rm ~/wxgtk_dist/wxGTK/include/wx/gtk/setup.h
 cp Makefile.am ~/wxgtk_dist/wxGTK/include/wx/gtk
 cp Makefile.in ~/wxgtk_dist/wxGTK/include/wx/gtk
@@ -144,7 +145,6 @@ cp Makefile.am ~/wxgtk_dist/wxGTK/src/gtk
 cp Makefile.in ~/wxgtk_dist/wxGTK/src/gtk
 cp *.xbm ~/wxgtk_dist/wxGTK/src/gtk
 cp *.c ~/wxgtk_dist/wxGTK/src/gtk
-cp *.inc ~/wxgtk_dist/wxGTK/src/gtk
 cp *.cpp ~/wxgtk_dist/wxGTK/src/gtk
 cd ..
 
@@ -154,12 +154,15 @@ cp glob.inc ~/wxgtk_dist/wxGTK/src/common
 cp lexer.l ~/wxgtk_dist/wxGTK/src/common
 cp parser.y ~/wxgtk_dist/wxGTK/src/common
 cp extended.c ~/wxgtk_dist/wxGTK/src/common
+cp unzip.* ~/wxgtk_dist/wxGTK/src/common
 cp *.cpp ~/wxgtk_dist/wxGTK/src/common
 cd ..
 
 cd unix
 mkdir ~/wxgtk_dist/wxGTK/src/unix
 cp *.cpp ~/wxgtk_dist/wxGTK/src/unix
+cp *.h ~/wxgtk_dist/wxGTK/src/unix
+cp *.c ~/wxgtk_dist/wxGTK/src/unix
 cd ..
 
 cd html
@@ -515,6 +518,42 @@ cd doc
 mkdir ~/wxgtk_dist/wxGTK/samples/help/doc
 cp * ~/wxgtk_dist/wxGTK/samples/help/doc
 cd ../..
+
+echo HTML samples..
+
+cd html
+mkdir ~/wxgtk_dist/wxGTK/samples/html
+cp Makefile.* ~/wxgtk_dist/wxGTK/samples/html
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/about
+cp about/Makefile.* ~/wxgtk_dist/wxGTK/samples/html/about
+cp about/about.* ~/wxgtk_dist/wxGTK/samples/html/about
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/about/data
+cp about/data/*.* ~/wxgtk_dist/wxGTK/samples/html/about/data
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/help
+cp help/Makefile.* ~/wxgtk_dist/wxGTK/samples/html/help
+cp help/help.* ~/wxgtk_dist/wxGTK/samples/html/help
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/help/helpfiles
+cp help/helpfiles/*.* ~/wxgtk_dist/wxGTK/samples/html/help/helpfiles
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/printing
+cp printing/*.* ~/wxgtk_dist/wxGTK/samples/html/printing
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/test
+cp test/*.* ~/wxgtk_dist/wxGTK/samples/html/test
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/virtual
+cp virtual/*.* ~/wxgtk_dist/wxGTK/samples/html/virtual
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/widget
+cp widget/*.* ~/wxgtk_dist/wxGTK/samples/html/widget
+
+mkdir ~/wxgtk_dist/wxGTK/samples/html/zip
+cp zip/*.* ~/wxgtk_dist/wxGTK/samples/html/zip
+cd ..
 
 echo Image sample..
 
