@@ -86,7 +86,7 @@ public:
 };
 
 #include <wx/dynarray.h>
-WX_DEFINE_ARRAY(wxFoldPanelItem *, wxFoldPanelItemArray);
+WX_DEFINE_ARRAY_PTR(wxFoldPanelItem *, wxFoldPanelItemArray);
 
 /** \class wxFoldPanelBar
     The wxFoldPanelBar is a class which can maintain a list of collapsable panels. Once a panel is collapsed, only
