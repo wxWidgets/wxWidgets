@@ -1200,7 +1200,7 @@ wxString wxMacUnicodeTextControl::GetStringValue() const
         wxMacCFStringHolder cf(value) ;
         result = cf.AsString() ;
     }
-#if TARGET_API_MAC_OSX
+#if '\n' == 10
     wxMacConvertNewlines13To10( &result ) ;
 #else
     wxMacConvertNewlines10To13( &result ) ;
@@ -1378,7 +1378,7 @@ wxString wxMacMLTEControl::GetStringValue() const
         }
 #endif
     }
-#if TARGET_API_MAC_OSX
+#if '\n' == 10
     wxMacConvertNewlines13To10( &result ) ;
 #else
     wxMacConvertNewlines10To13( &result ) ;
