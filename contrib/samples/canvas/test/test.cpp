@@ -59,6 +59,11 @@ class MyApp: public wxApp
 {
 public:
     virtual bool OnInit();
+
+    const wxString& GetFontPath() const { return m_fontpath; }
+
+private:
+    wxString m_fontpath;
 };
 
 // main program
@@ -100,28 +105,29 @@ MyFrame::MyFrame()
 
   m_canvas->SetArea( 400, 600 );
   m_canvas->SetColour( 255, 255, 255 );
-  
+
   wxBitmap bitmap( smile_xpm );
   wxImage image( bitmap );
-  
+
   m_sm1 = new wxCanvasImage( image, 0, 70 );
   m_canvas->Append( m_sm1 );
-  
+
   int i;
   for (i = 10; i < 300; i+=10)
       m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
-  
+
   m_sm2 = new wxCanvasImage( image, 0, 140 );
   m_canvas->Append( m_sm2 );
-  
+
   for (i = 15; i < 300; i+=10)
       m_canvas->Append( new wxCanvasRect( i,50,3,140, 255,0,0 ) );
-      
+
   wxButton *button = new wxButton( m_canvas, -1, "Hello", wxPoint(80,50) );
   m_canvas->Append( new wxCanvasControl( button ) );
 
-  m_canvas->Append( new wxCanvasText( "Hello", 180, 50, "/home/robert/TrueType/times.ttf", 20 ) );
-  
+  m_canvas->Append( new wxCanvasText( "Hello", 180, 50,
+                    wxGetApp().GetFontPath() + "/times.ttf", 20 ) );
+
   m_timer = new wxTimer( this );
   m_timer->Start( 100, FALSE );
 }
@@ -156,6 +162,15 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 bool MyApp::OnInit()
 {
+  m_fontpath = getenv("TRUETYPE");
+  if ( !m_fontpath )
+  {
+      wxLogError("Please set env var TRUETYPE to the path where times.ttf lives.");
+
+      return FALSE;
+
+  }
+
 #if wxUSE_LIBPNG
   wxImage::AddHandler( new wxPNGHandler );
 #endif
