@@ -17,7 +17,7 @@
 // ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
-    #pragma interface "choicebase.h"
+    #pragma interface "ctrlcmn.h"
 #endif
 
 #include "wx/window.h"      // base class

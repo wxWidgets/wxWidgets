@@ -6,9 +6,17 @@
 # Version: $Id$
 #
 # Format of this file: TAB separated columns. The first column contains the
-# filename, the second 'G', 'C' or 'M' for generic/common/msw files. Flags
-# column may be empty or contain some additional info about this file (only
-# compile it in 16bit mode, don't compile it with this or that compiler, &c)
+# filename, the second a letter corresonding a directory:
+#  G	/src/generic 
+#  C	/src/common
+#  M	/src/msw
+#  U	/src/unix
+#  R	/src/gtk
+#  H	/src/html
+#
+# The third column may be empty or contain some additional info about this 
+# file (only compile it in 16bit mode, don't compile it with this or that 
+# compiler, &c)
 #
 # Known flags:
 #  16	a generic file implementing Win32 control for Win16
@@ -18,23 +26,25 @@
 #  U	Unix-ish file, normally not compiled under Windows
 #  O	OLE file (needs Win32 and a decent compiler)
 #  S	Socket file (currently doesn't compile under Win16 nor with GNU)
+#  R	Not required for the GTK port
 ###############################################################################
 
 # File name 	Type	Flags
 
 busyinfo.cpp	G
-choicdgg.cpp	G
+caret.cpp	G	U
+choicdgg.cpp	G	R
 colrdlgg.cpp	G	G
 dirdlgg.cpp	G	16
 extdlgg.cpp	G
 fontdlgg.cpp	G	G
 gridg.cpp	G
-helpxlp.cpp	G	G
+helpxlp.cpp	G	G,R
 imaglist.cpp	G	16
 laywin.cpp	G
 listctrl.cpp	G	16
-msgdlgg.cpp	G	G
-notebook.cpp	G	16
+msgdlgg.cpp	G	G,R
+notebook.cpp	G	16,R
 panelg.cpp	G
 printps.cpp	G	PS
 prntdlgg.cpp	G	PS,U
@@ -46,16 +56,16 @@ sashwin.cpp	G
 scrolwin.cpp	G
 splitter.cpp	G
 statusbr.cpp	G
-tabg.cpp	G
+tabg.cpp	G	R
 numdlgg.cpp	G
-textdlgg.cpp	G
+textdlgg.cpp	G	R
 tipdlg.cpp	G
 treectrl.cpp	G	16
 
-choiccmn.cpp	C
+choiccmn.cpp	C	R
 cmndata.cpp	C
 config.cpp	C
-ctrlcmn.cpp	C
+ctrlcmn.cpp	C	R
 date.cpp	C
 datstrm.cpp	C
 db.cpp	C
@@ -97,7 +107,7 @@ module.cpp	C
 mstream.cpp	C
 object.cpp	C
 objstrm.cpp	C
-odbc.cpp	C
+odbc.cpp	C	R
 paper.cpp	C
 prntbase.cpp	C
 process.cpp	C	32
@@ -226,5 +236,88 @@ uuid.cpp	M	O
 wave.cpp	M
 window.cpp	M
 xpmhand.cpp	M
+
+threadpsx.cpp	U
+utilsunx.cpp	U
+gsocket.c	U
+
+gsockgtk.c	R
+win_gtk.c	R
+accel.cpp	R
+app.cpp	R
+bitmap.cpp	R
+bmpbuttn.cpp	R
+brush.cpp	R
+button.cpp	R
+checkbox.cpp	R
+checklst.cpp	R
+choice.cpp	R
+choicdlg.cpp	R
+clipbrd.cpp	R
+colour.cpp	R
+combobox.cpp	R
+control.cpp	R
+cursor.cpp	R
+data.cpp	R
+dataobj.cpp	R
+dc.cpp	R
+dcclient.cpp	R
+dcmemory.cpp 	R
+dcscreen.cpp	R
+dialog.cpp	R
+dnd.cpp	R
+filedlg.cpp	R
+font.cpp	R
+frame.cpp	R
+gauge.cpp	R
+gdiobj.cpp	R
+icon.cpp	R
+listbox.cpp	R
+main.cpp	R
+mdi.cpp	R
+menu.cpp	R
+minifram.cpp	R
+msgdlg.cpp	R
+notebook.cpp	R
+palette.cpp	R
+pen.cpp	R
+radiobox.cpp	R
+radiobut.cpp	R
+region.cpp	R
+scrolbar.cpp	R
+settings.cpp	R
+slider.cpp	R
+spinbutt.cpp	R
+statbmp.cpp	R
+statbox.cpp	R
+statline.cpp	R
+stattext.cpp	R
+tbargtk.cpp	R
+textctrl.cpp	R
+textdlg.cpp	R
+timer.cpp	R
+tooltip.cpp	R
+utilsgtk.cpp	R
+utilsres.cpp	R
+wave.cpp	R
+window.cpp	R
+
+htmlcell.cpp	H
+htmlfilter.cpp	H
+htmlhelp.cpp	H
+htmlhelp_io.cpp	H
+htmlparser.cpp	H
+htmltag.cpp	H
+htmlwin.cpp	H
+htmlwinparser.cpp	H
+mod_fonts.cpp	H
+mod_hline.cpp	H
+mod_image.cpp	H
+mod_layout.cpp	H
+mod_links.cpp 	H
+mod_list.cpp	H
+mod_pre.cpp	H
+mod_tables.cpp	H
+search.cpp	H
 
 # vi: set noet ts=16 nolist:
