@@ -72,7 +72,16 @@ public:
         , m_baseInfo1(0)
         , m_baseInfo2(0)
         , m_next(sm_first)
-    { sm_first = this; }
+        {
+#ifdef __WXDEBUG__
+            if (sm_classTable != NULL) {
+                wxString msg(_T("too late binding of class info (lazy binding) for "));
+                msg += className;
+                wxFAIL_MSG(msg);
+            }
+#endif
+            sm_first = this;
+        }
 
     wxObject *CreateObject() { return m_objectConstructor ? (*m_objectConstructor)() : 0; }
 
@@ -132,6 +141,8 @@ public:
 private:
     // InitializeClasses() helper
     static wxClassInfo *GetBaseByName(const wxChar *name);
+
+    DECLARE_NO_COPY_CLASS(wxClassInfo)
 };
 
 WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
@@ -366,7 +377,7 @@ inline void wxCheckCast(void *ptr)
 #endif
 
 // Only VC++ 6.0 and CodeWarrior compilers get overloaded delete that matches new
-#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || defined(__MWERKS__)
+#if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || (defined(__MWERKS__) && (__MWERKS__ >= 0x2400))
     #define _WX_WANT_DELETE_VOID_WXCHAR_INT
 #endif
 
@@ -399,12 +410,13 @@ inline void wxCheckCast(void *ptr)
 
 class WXDLLEXPORT wxObject
 {
-DECLARE_ABSTRACT_CLASS(wxObject)
+    DECLARE_ABSTRACT_CLASS(wxObject)
+    DECLARE_NO_COPY_CLASS(wxObject)
 
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
-
+    
     bool IsKindOf(wxClassInfo *info) const;
 
 
