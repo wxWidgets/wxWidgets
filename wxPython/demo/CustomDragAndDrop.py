@@ -46,7 +46,7 @@ class DoodlePad(wx.Window):
         dc.SetPen(wx.Pen(wx.BLUE, 3))
         for line in self.lines:
             for coords in line:
-                dc.DrawLineXY(*coords)
+                dc.DrawLine(*coords)
         dc.EndDrawing()
 
 
@@ -76,9 +76,9 @@ class DoodlePad(wx.Window):
             dc = wx.ClientDC(self)
             dc.BeginDrawing()
             dc.SetPen(wx.Pen(wx.BLUE, 3))
-            coords = ((self.x, self.y), event.GetPosition())
+            coords = ((self.x, self.y), event.GetPositionTuple())
             self.curLine.append(coords)
-            dc.DrawLineXY(*coords)
+            dc.DrawLine(*coords)
             self.x, self.y = event.GetPositionTuple()
             dc.EndDrawing()
 
@@ -171,7 +171,7 @@ class DoodleDropTarget(wx.PyDropTarget):
         if self.GetData():
             # convert it back to a list of lines and give it to the viewer
             linesdata = self.data.GetData()
-            lines = wx.InputStream(cPickle.loads(linesdata))
+            lines = cPickle.loads(linesdata)
             self.dv.SetLines(lines)
             
         # what is returned signals the source what to do
@@ -207,7 +207,7 @@ class DoodleViewer(wx.Window):
 
         for line in self.lines:
             for coords in line:
-                dc.DrawLineXY(*coords)
+                dc.DrawLine(*coords)
         dc.EndDrawing()
 
 #----------------------------------------------------------------------
