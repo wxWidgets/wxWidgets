@@ -212,7 +212,7 @@ wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
 
 bool wxMenuBase::Delete(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Delete") );
+    wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Delete") );
 
     return DoDelete(item);
 }
@@ -232,7 +232,7 @@ bool wxMenuBase::DoDelete(wxMenuItem *item)
 
 bool wxMenuBase::Destroy(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, NULL, wxT("invalid item in wxMenu::Destroy") );
+    wxCHECK_MSG( item, FALSE, wxT("invalid item in wxMenu::Destroy") );
 
     return DoDestroy(item);
 }
