@@ -514,13 +514,13 @@ except ImportError:
         def GetText(self):
             return self.GetValue()
 
-        def GetPositionFromLine(line):
+        def GetPositionFromLine(self, line):
             return self.XYToPosition(0,line)
 
         def GotoLine(self, line):
-            pos = self.editor.GetPositionFromLine(line)
-            self.editor.SetInsertionPoint(pos)
-            self.editor.ShowPosition(pos)
+            pos = self.GetPositionFromLine(line)
+            self.SetInsertionPoint(pos)
+            self.ShowPosition(pos)
 
         def SelectLine(self, line):
             start = self.GetPositionFromLine(line)
