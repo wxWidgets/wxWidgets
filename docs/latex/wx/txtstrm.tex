@@ -76,12 +76,41 @@ Reads a 32 bit integer from the stream.
 
 Reads a double (IEEE encoded) from the stream.
 
+\membersection{wxTextInputStream::ReadLine}\label{wxtextinputstreamreadline}
+
+\func{wxString}{wxTextInputStream::ReadLine}{\void}
+
+Reads a line from the input stream and returns it (without the end of line
+character).
+
 \membersection{wxTextInputStream::ReadString}
 
 \func{wxString}{wxTextInputStream::ReadString}{\void}
 
-Reads a line from the stream. A line is a string which ends with 
-$\backslash$n or $\backslash$r$\backslash$n or $\backslash$r.
+{\bf NB:} This method is deprecated, use \helpref{ReadLine}{wxtextinputstreamreadline} 
+or \helpref{ReadWord}{wxtextinputstreamreadword} instead.
+
+Same as \helpref{ReadLine}{wxtextinputstreamreadline}.
+
+\membersection{wxTextInputStream::ReadLine}\label{wxtextinputstreamreadline}
+
+\func{wxString}{wxTextInputStream::ReadLine}{\void}
+
+Reads a word (a sequence of characters until the next separator) from the
+input stream.
+
+\wxheading{See also}
+
+\helpref{SetStringSeparators}{wxtextinputstreamsetstringseparators}
+
+\membersection{wxTextInputStream::SetStringSeparators}{wxtextinputstreamsetstringseparators}
+
+\func{void}{SetStringSeparators}{\param{const wxString\& }{sep}}
+
+Sets the characters which are used to define the word boundaries in 
+\helpref{ReadWord}{wxtextinputstreamreadword}.
+
+The default separators are the space and {\tt TAB} characters.
 
 % ----------------------------------------------------------------------------
 % wxTextOutputStream
