@@ -902,6 +902,7 @@ public:
     bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
 
     void DrawGridCellArea( wxDC& dc );
+    void DrawGridSpace( wxDC& dc );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );

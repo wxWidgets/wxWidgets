@@ -2579,6 +2579,7 @@ void wxGridWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxRegion reg = GetUpdateRegion();
     m_owner->CalcCellsExposed( reg );
     m_owner->DrawGridCellArea( dc );
+    m_owner->DrawGridSpace( dc );
 #if WXGRID_DRAW_LINES
     m_owner->DrawAllGridLines( dc, reg );
 #endif
@@ -2608,40 +2609,9 @@ void wxGridWindow::OnKeyDown( wxKeyEvent& event )
     if ( !m_owner->ProcessEvent( event ) ) event.Skip();
 }
 
-// We are trapping erase background events to reduce flicker under MSW
-// and GTK but this can leave junk in the space beyond the last row and
-// col.  So here we paint these spaces if they are visible.
-//
+
 void wxGridWindow::OnEraseBackground(wxEraseEvent& event)
 {
-    int cw, ch;
-    GetClientSize( &cw, &ch );
-
-    int right, bottom;
-    m_owner->CalcUnscrolledPosition( cw, ch, &right, &bottom );
-
-    wxRect rightRect;
-    rightRect = m_owner->CellToRect( 0, m_owner->GetNumberCols()-1 );
-
-    wxRect bottomRect;
-    bottomRect = m_owner->CellToRect( m_owner->GetNumberRows()-1, 0 );
-
-    if ( right > rightRect.GetRight()  ||  bottom > bottomRect.GetBottom() )
-    {
-        int left, top;
-        m_owner->CalcUnscrolledPosition( 0, 0, &left, &top );
-
-        wxClientDC dc( this );
-        m_owner->PrepareDC( dc );
-        dc.SetBrush( wxBrush(m_owner->GetDefaultCellBackgroundColour(), wxSOLID) );
-        dc.SetPen( *wxTRANSPARENT_PEN );
-
-        if ( right > rightRect.GetRight() )
-            dc.DrawRectangle( rightRect.GetRight()+1, top, right - rightRect.GetRight(), ch );
-
-        if ( bottom > bottomRect.GetBottom() )
-            dc.DrawRectangle( left, bottomRect.GetBottom()+1, cw, bottom - bottomRect.GetBottom() );
-    }
 }
 
 
@@ -4829,6 +4799,37 @@ void wxGrid::DrawGridCellArea( wxDC& dc )
 }
 
 
+void wxGrid::DrawGridSpace( wxDC& dc )
+{
+    if ( m_numRows  &&  m_numCols )
+    {
+        int cw, ch;
+        m_gridWin->GetClientSize( &cw, &ch );
+
+        int right, bottom;
+        CalcUnscrolledPosition( cw, ch, &right, &bottom );
+
+        if ( right > GetColRight(m_numCols-1)  ||
+             bottom > GetRowBottom(m_numRows-1) )
+        {
+            int left, top;
+            CalcUnscrolledPosition( 0, 0, &left, &top );
+
+            dc.SetBrush( wxBrush(GetDefaultCellBackgroundColour(), wxSOLID) );
+            dc.SetPen( *wxTRANSPARENT_PEN );
+
+            if ( right > GetColRight(m_numCols-1) )
+                dc.DrawRectangle( GetColRight(m_numCols-1)+1, top,
+                                  right - GetColRight(m_numCols-1), ch );
+
+            if ( bottom > GetRowBottom(m_numRows-1) )
+                dc.DrawRectangle( left, GetRowBottom(m_numRows-1)+1,
+                                  cw, bottom - GetRowBottom(m_numRows-1) );
+        }
+    }
+}
+
+
 void wxGrid::DrawCell( wxDC& dc, const wxGridCellCoords& coords )
 {
     int row = coords.GetRow();
@@ -5399,7 +5400,6 @@ void wxGrid::HideCellEditControl()
         m_gridWin->SetFocus();
     }
 }
-
 
 
 void wxGrid::SaveEditControlValue()
