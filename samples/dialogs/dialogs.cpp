@@ -206,10 +206,6 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
 #endif
 
-#if defined(__WXGTK__) && defined(wxUSE_UNICODE)
-    wxConvCurrent = &wxConvLibc;
-#endif
-
     m_canvasTextColour = wxColour(_T("BLACK"));
     m_canvasFont = *wxNORMAL_FONT;
 
@@ -222,130 +218,129 @@ bool MyApp::OnInit()
     file_menu->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
 
 
-    #if wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
+#if wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
 
-        wxMenu *choices_menu = new wxMenu;
+    wxMenu *choices_menu = new wxMenu;
 
-        #if wxUSE_COLOURDLG
-            choices_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose colour"));
-        #endif // wxUSE_COLOURDLG
+    #if wxUSE_COLOURDLG
+        choices_menu->Append(DIALOGS_CHOOSE_COLOUR, _T("&Choose colour"));
+    #endif // wxUSE_COLOURDLG
 
-        #if wxUSE_FONTDLG
-            choices_menu->Append(DIALOGS_CHOOSE_FONT, _T("Choose &font"));
-        #endif // wxUSE_FONTDLG
+    #if wxUSE_FONTDLG
+        choices_menu->Append(DIALOGS_CHOOSE_FONT, _T("Choose &font"));
+    #endif // wxUSE_FONTDLG
 
-        #if wxUSE_CHOICEDLG
-            choices_menu->Append(DIALOGS_SINGLE_CHOICE,  _T("&Single choice\tCtrl-C"));
-            choices_menu->Append(DIALOGS_MULTI_CHOICE,  _T("M&ultiple choice\tCtrl-U"));
-        #endif // wxUSE_CHOICEDLG
+    #if wxUSE_CHOICEDLG
+        choices_menu->Append(DIALOGS_SINGLE_CHOICE,  _T("&Single choice\tCtrl-C"));
+        choices_menu->Append(DIALOGS_MULTI_CHOICE,  _T("M&ultiple choice\tCtrl-U"));
+    #endif // wxUSE_CHOICEDLG
 
-        #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
-            choices_menu->AppendSeparator();
-        #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
+    #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
+        choices_menu->AppendSeparator();
+    #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
 
-        #if USE_COLOURDLG_GENERIC
-            choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, _T("&Choose colour (generic)"));
-        #endif // USE_COLOURDLG_GENERIC
+    #if USE_COLOURDLG_GENERIC
+        choices_menu->Append(DIALOGS_CHOOSE_COLOUR_GENERIC, _T("&Choose colour (generic)"));
+    #endif // USE_COLOURDLG_GENERIC
 
-        #if USE_FONTDLG_GENERIC
-            choices_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose &font (generic)"));
-        #endif // USE_FONTDLG_GENERIC
+    #if USE_FONTDLG_GENERIC
+        choices_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose &font (generic)"));
+    #endif // USE_FONTDLG_GENERIC
 
-        file_menu->Append(wxID_ANY,_T("Choices and selectors"),choices_menu);
-
-    #endif // wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
-
-
-    #if wxUSE_TEXTDLG || wxUSE_NUMBERDLG
-
-        wxMenu *entry_menu = new wxMenu;
-
-        #if wxUSE_TEXTDLG
-            entry_menu->Append(DIALOGS_TEXT_ENTRY,  _T("Text &entry\tCtrl-E"));
-            entry_menu->Append(DIALOGS_PASSWORD_ENTRY,  _T("&Password entry\tCtrl-P"));
-        #endif // wxUSE_TEXTDLG
-
-        #if wxUSE_NUMBERDLG
-            entry_menu->Append(DIALOGS_NUM_ENTRY, _T("&Numeric entry\tCtrl-N"));
-        #endif // wxUSE_NUMBERDLG
-
-        file_menu->Append(wxID_ANY,_T("Entry dialogs"),entry_menu);
-
-    #endif // wxUSE_TEXTDLG || wxUSE_NUMBERDLG
+    file_menu->Append(wxID_ANY,_T("&Choices and selectors"),choices_menu);
+#endif // wxUSE_COLOURDLG || wxUSE_FONTDLG || wxUSE_CHOICEDLG
 
 
-    #if wxUSE_FILEDLG
+#if wxUSE_TEXTDLG || wxUSE_NUMBERDLG
 
-        wxMenu *filedlg_menu = new wxMenu;
-        filedlg_menu->Append(DIALOGS_FILE_OPEN,  _T("&Open file\tCtrl-O"));
-        filedlg_menu->Append(DIALOGS_FILE_OPEN2,  _T("&Second open file\tCtrl-2"));
-        filedlg_menu->Append(DIALOGS_FILES_OPEN,  _T("Open &files\tCtrl-Q"));
-        filedlg_menu->Append(DIALOGS_FILE_SAVE,  _T("Sa&ve file\tCtrl-S"));
+    wxMenu *entry_menu = new wxMenu;
 
-        #if USE_FILEDLG_GENERIC
-            filedlg_menu->AppendSeparator();
-            filedlg_menu->Append(DIALOGS_FILE_OPEN_GENERIC,  _T("&Open file (generic)"));
-            filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC,  _T("Open &files (generic)"));
-            filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC,  _T("Sa&ve file (generic)"));
-        #endif // USE_FILEDLG_GENERIC
+    #if wxUSE_TEXTDLG
+        entry_menu->Append(DIALOGS_TEXT_ENTRY,  _T("Text &entry\tCtrl-E"));
+        entry_menu->Append(DIALOGS_PASSWORD_ENTRY,  _T("&Password entry\tCtrl-P"));
+    #endif // wxUSE_TEXTDLG
 
-        file_menu->Append(wxID_ANY,_T("File operations"),filedlg_menu);
+    #if wxUSE_NUMBERDLG
+        entry_menu->Append(DIALOGS_NUM_ENTRY, _T("&Numeric entry\tCtrl-N"));
+    #endif // wxUSE_NUMBERDLG
 
-    #endif // wxUSE_FILEDLG
+    file_menu->Append(wxID_ANY,_T("&Entry dialogs"),entry_menu);
 
-    #if wxUSE_DIRDLG
-        wxMenu *dir_menu = new wxMenu;
-
-        dir_menu->Append(DIALOGS_DIR_CHOOSE,  _T("&Choose a directory\tCtrl-D"));
-        dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  _T("Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D"));
-        file_menu->Append(wxID_ANY,_T("Directory operations"),dir_menu);
-
-        #if USE_DIRDLG_GENERIC
-            dir_menu->AppendSeparator();
-            dir_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  _T("&Choose a directory (generic)"));
-        #endif // USE_DIRDLG_GENERIC
-
-    #endif // wxUSE_DIRDLG
+#endif // wxUSE_TEXTDLG || wxUSE_NUMBERDLG
 
 
-    #if wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
+#if wxUSE_FILEDLG
 
-        wxMenu *info_menu = new wxMenu;
+    wxMenu *filedlg_menu = new wxMenu;
+    filedlg_menu->Append(DIALOGS_FILE_OPEN,  _T("&Open file\tCtrl-O"));
+    filedlg_menu->Append(DIALOGS_FILE_OPEN2,  _T("&Second open file\tCtrl-2"));
+    filedlg_menu->Append(DIALOGS_FILES_OPEN,  _T("Open &files\tCtrl-Q"));
+    filedlg_menu->Append(DIALOGS_FILE_SAVE,  _T("Sa&ve file\tCtrl-S"));
 
-        #if wxUSE_STARTUP_TIPS
-            info_menu->Append(DIALOGS_TIP,  _T("&Tip of the day\tCtrl-T"));
-        #endif // wxUSE_STARTUP_TIPS
+    #if USE_FILEDLG_GENERIC
+        filedlg_menu->AppendSeparator();
+        filedlg_menu->Append(DIALOGS_FILE_OPEN_GENERIC,  _T("&Open file (generic)"));
+        filedlg_menu->Append(DIALOGS_FILES_OPEN_GENERIC,  _T("Open &files (generic)"));
+        filedlg_menu->Append(DIALOGS_FILE_SAVE_GENERIC,  _T("Sa&ve file (generic)"));
+    #endif // USE_FILEDLG_GENERIC
 
-        #if wxUSE_PROGRESSDLG
-            info_menu->Append(DIALOGS_PROGRESS, _T("Pro&gress dialog\tCtrl-G"));
-        #endif // wxUSE_PROGRESSDLG
+    file_menu->Append(wxID_ANY,_T("&File operations"),filedlg_menu);
 
-        #if wxUSE_BUSYINFO
-           info_menu->Append(DIALOGS_BUSYINFO, _T("&Busy info dialog\tCtrl-B"));
-        #endif // wxUSE_BUSYINFO
+#endif // wxUSE_FILEDLG
 
-        #if wxUSE_LOG_DIALOG
-           info_menu->Append(DIALOGS_LOG_DIALOG, _T("&Log dialog\tCtrl-L"));
-        #endif // wxUSE_LOG_DIALOG
+#if wxUSE_DIRDLG
+    wxMenu *dir_menu = new wxMenu;
 
-        file_menu->Append(wxID_ANY,_T("Informative dialogs"),info_menu);
+    dir_menu->Append(DIALOGS_DIR_CHOOSE,  _T("&Choose a directory\tCtrl-D"));
+    dir_menu->Append(DIALOGS_DIRNEW_CHOOSE,  _T("Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D"));
+    file_menu->Append(wxID_ANY,_T("&Directory operations"),dir_menu);
 
-    #endif // wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
+    #if USE_DIRDLG_GENERIC
+        dir_menu->AppendSeparator();
+        dir_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  _T("&Choose a directory (generic)"));
+    #endif // USE_DIRDLG_GENERIC
+
+#endif // wxUSE_DIRDLG
 
 
-    #if wxUSE_FINDREPLDLG
-        wxMenu *find_menu = new wxMenu;
-        find_menu->AppendCheckItem(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"));
-        find_menu->AppendCheckItem(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"));
-        file_menu->Append(wxID_ANY,_T("Searching"),find_menu);
-    #endif // wxUSE_FINDREPLDLG
+#if wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
 
-    #if USE_MODAL_PRESENTATION
-        wxMenu *modal_menu = new wxMenu;
-        modal_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
-        modal_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"));
-        file_menu->Append(wxID_ANY,_T("Modal/Modeless"),modal_menu);
-    #endif // USE_MODAL_PRESENTATION
+    wxMenu *info_menu = new wxMenu;
+
+    #if wxUSE_STARTUP_TIPS
+        info_menu->Append(DIALOGS_TIP,  _T("&Tip of the day\tCtrl-T"));
+    #endif // wxUSE_STARTUP_TIPS
+
+    #if wxUSE_PROGRESSDLG
+        info_menu->Append(DIALOGS_PROGRESS, _T("Pro&gress dialog\tCtrl-G"));
+    #endif // wxUSE_PROGRESSDLG
+
+    #if wxUSE_BUSYINFO
+       info_menu->Append(DIALOGS_BUSYINFO, _T("&Busy info dialog\tCtrl-B"));
+    #endif // wxUSE_BUSYINFO
+
+    #if wxUSE_LOG_DIALOG
+       info_menu->Append(DIALOGS_LOG_DIALOG, _T("&Log dialog\tCtrl-L"));
+    #endif // wxUSE_LOG_DIALOG
+
+    file_menu->Append(wxID_ANY,_T("&Informative dialogs"),info_menu);
+
+#endif // wxUSE_STARTUP_TIPS || wxUSE_PROGRESSDLG || wxUSE_BUSYINFO || wxUSE_LOG_DIALOG
+
+
+#if wxUSE_FINDREPLDLG
+    wxMenu *find_menu = new wxMenu;
+    find_menu->AppendCheckItem(DIALOGS_FIND, _T("&Find dialog\tCtrl-F"));
+    find_menu->AppendCheckItem(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"));
+    file_menu->Append(wxID_ANY,_T("&Searching"),find_menu);
+#endif // wxUSE_FINDREPLDLG
+
+#if USE_MODAL_PRESENTATION
+    wxMenu *modal_menu = new wxMenu;
+    modal_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
+    modal_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"));
+    file_menu->Append(wxID_ANY,_T("&Modal/Modeless"),modal_menu);
+#endif // USE_MODAL_PRESENTATION
 
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
