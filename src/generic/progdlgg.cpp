@@ -64,12 +64,12 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label);
 // event tables
 // ----------------------------------------------------------------------------
 
-    BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
-       EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
-       EVT_CLOSE(wxProgressDialog::OnClose)
-    END_EVENT_TABLE()
+BEGIN_EVENT_TABLE(wxProgressDialog, wxDialog)
+   EVT_BUTTON(wxID_CANCEL, wxProgressDialog::OnCancel)
+   EVT_CLOSE(wxProgressDialog::OnClose)
+END_EVENT_TABLE()
 
-    IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
+IMPLEMENT_CLASS(wxProgressDialog, wxDialog)
 
 // ============================================================================
 // implementation
@@ -148,21 +148,21 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     {
         nTimeLabels++;
 
-        m_elapsed = CreateLabel(wxT("Elapsed time : "), &lastWindow);
+        m_elapsed = CreateLabel(_("Elapsed time : "), &lastWindow);
     }
 
     if ( style & wxPD_ESTIMATED_TIME )
     {
         nTimeLabels++;
 
-        m_estimated = CreateLabel(wxT("Estimated time : "), &lastWindow);
+        m_estimated = CreateLabel(_("Estimated time : "), &lastWindow);
     }
 
     if ( style & wxPD_REMAINING_TIME )
     {
         nTimeLabels++;
 
-        m_remaining = CreateLabel(wxT("Remaining time : "), &lastWindow);
+        m_remaining = CreateLabel(_("Remaining time : "), &lastWindow);
     }
 
     if ( nTimeLabels > 0 )
@@ -209,7 +209,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     Centre(wxCENTER_FRAME | wxBOTH);
 
-    if (m_disableParentOnly )
+    if ( m_disableParentOnly )
     {
         if ( m_parent )
             m_parent->Enable(FALSE);
@@ -224,9 +224,10 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     // Update the display (especially on X, GTK)
     wxYield();
-    #ifdef __WXMAC__
-    MacUpdateImmediately() ;
-    #endif
+
+#ifdef __WXMAC__
+    MacUpdateImmediately();
+#endif
 }
 
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
@@ -234,7 +235,7 @@ wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
 {
     wxLayoutConstraints *c;
 
-    wxStaticText *label = new wxStaticText(this, -1, wxT("unknown"));
+    wxStaticText *label = new wxStaticText(this, -1, _("unknown"));
     c = new wxLayoutConstraints;
 
     // VZ: I like the labels be centered - if the others don't mind, you may
@@ -313,9 +314,10 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
        // update the display
        wxYield();
    }
-    #ifdef __WXMAC__
-    MacUpdateImmediately() ;
-    #endif
+
+#ifdef __WXMAC__
+    MacUpdateImmediately();
+#endif
 
    return m_state != Canceled;
 }
@@ -337,6 +339,10 @@ void wxProgressDialog::OnCancel(wxCommandEvent& event)
         // request to cancel was received, the next time Update() is called we
         // will handle it
         m_state = Canceled;
+
+        // update the button state immediately so that the user knows that the
+        // request has been noticed
+        m_btnAbort->Disable();
     }
 }
 

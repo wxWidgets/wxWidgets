@@ -46,17 +46,17 @@ wxWindowList wxModalDialogs;
 wxWindowList wxModelessWindows;  // Frames and modeless dialogs
 extern wxList WXDLLEXPORT wxPendingDelete;
 
-    IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxPanel)
 
-    BEGIN_EVENT_TABLE(wxDialog, wxPanel)
-        EVT_SIZE(wxDialog::OnSize)
-        EVT_BUTTON(wxID_OK, wxDialog::OnOK)
-        EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
-        EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
-        EVT_CHAR_HOOK(wxDialog::OnCharHook)
-        EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
-        EVT_CLOSE(wxDialog::OnCloseWindow)
-    END_EVENT_TABLE()
+BEGIN_EVENT_TABLE(wxDialog, wxPanel)
+    EVT_SIZE(wxDialog::OnSize)
+    EVT_BUTTON(wxID_OK, wxDialog::OnOK)
+    EVT_BUTTON(wxID_APPLY, wxDialog::OnApply)
+    EVT_BUTTON(wxID_CANCEL, wxDialog::OnCancel)
+    EVT_CHAR_HOOK(wxDialog::OnCharHook)
+    EVT_SYS_COLOUR_CHANGED(wxDialog::OnSysColourChanged)
+    EVT_CLOSE(wxDialog::OnCloseWindow)
+END_EVENT_TABLE()
 
 wxDialog::wxDialog()
 {
@@ -171,6 +171,9 @@ wxDialog::~wxDialog()
 
   Show(FALSE);
 
+  // VZ: this is bogus and breaks focus handling - it won't be returned to the
+  //     window which had it previosuly if we do this
+#if 0
   if (m_modalShowing)
   {
     // For some reason, wxWindows can activate another task altogether
@@ -182,6 +185,7 @@ wxDialog::~wxDialog()
     if (GetParent() && GetParent()->GetHWND())
       ::BringWindowToTop((HWND) GetParent()->GetHWND());
   }
+#endif // 0
 
   m_modalShowing = FALSE;
 
