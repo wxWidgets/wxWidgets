@@ -469,7 +469,7 @@ void wxPluginLibrary::RegisterModules()
     wxASSERT_MSG( m_linkcount == 1,
                   _T("RegisterModules should only be called for the first load") );
 
-    for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    for ( wxClassInfo *info = m_after; info != m_before; info = info->m_next)
     {
         if( info->IsKindOf(CLASSINFO(wxModule)) )
         {
@@ -484,7 +484,9 @@ void wxPluginLibrary::RegisterModules()
 
     // FIXME: Likewise this is (well was) very similar to InitializeModules()
 
-    for(wxModuleList::Node *node = m_wxmodules.GetFirst(); node; node->GetNext())
+    for ( wxModuleList::Node *node = m_wxmodules.GetFirst();
+          node;
+          node = node->GetNext())
     {
         if( !node->GetData()->Init() )
         {
@@ -515,10 +517,10 @@ void wxPluginLibrary::UnregisterModules()
 {
     wxModuleList::Node  *node;
 
-    for(node = m_wxmodules.GetFirst(); node; node->GetNext())
+    for ( node = m_wxmodules.GetFirst(); node; node = node->GetNext() )
         node->GetData()->Exit();
 
-    for(node = m_wxmodules.GetFirst(); node; node->GetNext())
+    for ( node = m_wxmodules.GetFirst(); node; node = node->GetNext() )
         wxModule::UnregisterModule( node->GetData() );
 
     m_wxmodules.DeleteContents(TRUE);
