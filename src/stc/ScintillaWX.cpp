@@ -21,6 +21,11 @@
 #include "PlatWX.h"
 #include <wx/textbuf.h>
 
+#ifdef __WXMSW__
+    // GetHwndOf()
+    #include <wx/msw/private.h>
+#endif
+
 //----------------------------------------------------------------------
 // Helper classes
 
@@ -841,7 +846,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     bool shift = evt.ShiftDown(),
          ctrl  = evt.ControlDown(),
          alt   = evt.AltDown();
- 
+
     if (ctrl && key >= 1 && key <= 26)
         key += 'A' - 1;
 
