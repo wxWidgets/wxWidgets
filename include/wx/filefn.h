@@ -462,9 +462,7 @@ WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(int fd);
 WXDLLIMPEXP_BASE wxFileKind wxGetFileKind(FILE *fp);
 
 // compatibility defines, don't use in new code
-#if WXWIN_COMPATIBILITY_2_4
-    #define wxDirExists wxPathExists
-#endif
+#define wxDirExists wxPathExists
 
 // ----------------------------------------------------------------------------
 // separators in file names
