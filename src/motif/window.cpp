@@ -572,7 +572,7 @@ void wxWindow::DestroyScrollbar(wxOrientation orientation)
             XtDestroyWidget((Widget) m_vScrollBar);
         }
         m_vScrollBar = (WXWidget) 0;
-        m_vScroll = TRUE;
+        m_vScroll = FALSE;
 
         XtVaSetValues((Widget) m_scrolledWindow,
             XmNverticalScrollBar, (Widget) 0,
