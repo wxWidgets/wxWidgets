@@ -1484,8 +1484,8 @@ wxFont wxResourceInterpretFontSpec(wxExpr *expr)
     if (faceNameExpr)
         faceName = faceNameExpr->StringValue();
 
-    wxFont font(point, family, style, weight, (underline != 0), faceName);
-    return font;
+    return *wxTheFontList->FindOrCreateFont(point, family, style, weight,
+                                            (underline != 0), faceName);
 }
 
 // Separate file for the remainder of this, for BC++/Win16
