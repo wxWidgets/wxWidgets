@@ -77,7 +77,7 @@ public:
 
     // TODO: virtual void SetTitle(const wxString& title);
 
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
     wxMenu(const wxString& title, const wxFunction func)
         : wxMenuBase(title)
     {

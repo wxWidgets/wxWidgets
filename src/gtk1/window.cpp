@@ -2815,15 +2815,16 @@ static void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
     menu->SetInvokingWindow( win );
-    wxNode *node = menu->GetItems().First();
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
     {
-        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
         {
             SetInvokingWindow( menuitem->GetSubMenu(), win );
         }
-        node = node->Next();
+
+        node = node->GetNext();
     }
 }
 

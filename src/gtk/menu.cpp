@@ -128,13 +128,13 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
     gtk_accel_group_detach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
 #endif
 
-    wxNode *node = menu->GetItems().First();
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
     {
-        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu(), win );
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -151,13 +151,13 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
     gtk_accel_group_attach( menu->m_accel, GTK_OBJECT(top_frame->m_widget) );
 #endif
 
-    wxNode *node = menu->GetItems().First();
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
     {
-        wxMenuItem *menuitem = (wxMenuItem*)node->Data();
+        wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
             wxMenubarSetInvokingWindow( menuitem->GetSubMenu(), win );
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -173,12 +173,12 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
     gtk_accel_group_attach( m_accel, GTK_OBJECT(top_frame->m_widget) );
 #endif
 
-    wxNode *node = m_menus.First();
+    wxMenuList::Node *node = m_menus.GetFirst();
     while (node)
     {
-        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenu *menu = node->GetData();
         wxMenubarSetInvokingWindow( menu, win );
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -194,12 +194,12 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     gtk_accel_group_detach( m_accel, GTK_OBJECT(top_frame->m_widget) );
 #endif
 
-    wxNode *node = m_menus.First();
+    wxMenuList::Node *node = m_menus.GetFirst();
     while (node)
     {
-        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenu *menu = node->GetData();
         wxMenubarUnsetInvokingWindow( menu, win );
-        node = node->Next();
+        node = node->GetNext();
     }
 }
 
@@ -330,14 +330,14 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
             return res;
     }
 
-    wxNode *node = ((wxMenu *)menu)->GetItems().First();    // const_cast
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while (node)
     {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
+        wxMenuItem *item = node->GetData();
         if (item->IsSubMenu())
             return FindMenuItemRecursive(item->GetSubMenu(), menuString, itemString);
 
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return wxNOT_FOUND;
@@ -345,15 +345,17 @@ static int FindMenuItemRecursive( const wxMenu *menu, const wxString &menuString
 
 int wxMenuBar::FindMenuItem( const wxString &menuString, const wxString &itemString ) const
 {
-    wxNode *node = m_menus.First();
+    wxMenuList::Node *node = m_menus.GetFirst();
     while (node)
     {
-        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenu *menu = node->GetData();
         int res = FindMenuItemRecursive( menu, menuString, itemString);
-        if (res != -1) return res;
-        node = node->Next();
+        if (res != -1)
+            return res;
+        node = node->GetNext();
     }
-    return -1;
+
+    return wxNOT_FOUND;
 }
 
 // Find a wxMenuItem using its id. Recurses down into sub-menus
@@ -361,15 +363,15 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 {
     wxMenuItem* result = menu->FindChildItem(id);
 
-    wxNode *node = ((wxMenu *)menu)->GetItems().First(); // const_cast
+    wxMenuItemList::Node *node = menu->GetMenuItems().GetFirst();
     while ( node && result == NULL )
     {
-        wxMenuItem *item = (wxMenuItem*)node->Data();
+        wxMenuItem *item = node->GetData();
         if (item->IsSubMenu())
         {
             result = FindMenuItemByIdRecursive( item->GetSubMenu(), id );
         }
-        node = node->Next();
+        node = node->GetNext();
     }
 
     return result;
@@ -378,12 +380,12 @@ static wxMenuItem* FindMenuItemByIdRecursive(const wxMenu* menu, int id)
 wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 {
     wxMenuItem* result = 0;
-    wxNode *node = m_menus.First();
+    wxMenuList::Node *node = m_menus.GetFirst();
     while (node && result == 0)
     {
-        wxMenu *menu = (wxMenu*)node->Data();
+        wxMenu *menu = node->GetData();
         result = FindMenuItemByIdRecursive( menu, id );
-        node = node->Next();
+        node = node->GetNext();
     }
 
     if ( menuForItem )
@@ -467,11 +469,13 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     event.SetEventObject( menu );
     event.SetInt(id );
 
+#if WXWIN_COMPATIBILITY
     if (menu->GetCallback())
     {
         (void) (*(menu->GetCallback())) (*menu, event);
         return;
     }
+#endif // WXWIN_COMPATIBILITY
 
     if (menu->GetEventHandler()->ProcessEvent(event))
         return;
@@ -607,7 +611,7 @@ void wxMenuItem::SetText( const wxString& str )
         gtk_label_set( label, m_text.mb_str());
 
         /* reparse key accel */
-        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), m_text.mb_str() );
+        (void)gtk_label_parse_uline (GTK_LABEL(label), m_text.mb_str() );
         gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
     }
 }
@@ -653,7 +657,7 @@ void wxMenuItem::DoSetText( const wxString& str )
 
 wxAcceleratorEntry *wxMenuItem::GetAccel() const
 {
-    if ( !item.GetHotKey() )
+    if ( !GetHotKey() )
     {
         // nothing
         return (wxAcceleratorEntry *)NULL;
@@ -661,7 +665,7 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
 
     // as wxGetAccelFromString() looks for TAB, insert a dummy one here
     wxString label;
-    label << wxT('\t') << item.GetHotKey();
+    label << wxT('\t') << GetHotKey();
 
     return wxGetAccelFromString(label);
 }
@@ -760,7 +764,7 @@ wxMenu::~wxMenu()
    // the menu items are deleted by the base class dtor
 }
 
-virtual bool wxMenu::DoAppend(wxMenuItem *mitem)
+bool wxMenu::DoAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
@@ -802,12 +806,12 @@ virtual bool wxMenu::DoAppend(wxMenuItem *mitem)
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
         wxString path( mitem->GetFactoryPath() );
-        GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
+        menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
 #else // GTK+ 1.0
-        GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
+        menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
 #endif // GTK 1.2/1.0
 
-        gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), subMenu->m_menu );
+        gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
     }
     else // a normal item
     {
@@ -824,7 +828,7 @@ virtual bool wxMenu::DoAppend(wxMenuItem *mitem)
         entry.path = buf;
         entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
         entry.callback_action = 0;
-        if (checkable)
+        if ( mitem->IsCheckable() )
             entry.item_type = "<CheckItem>";
         else
             entry.item_type = "<Item>";
@@ -843,10 +847,10 @@ virtual bool wxMenu::DoAppend(wxMenuItem *mitem)
         gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
         wxString path( mitem->GetFactoryPath() );
-        GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
+        menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
 #else // GTK+ 1.0
-        GtkWidget *menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
-                                        : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
+        menuItem = checkable ? gtk_check_menu_item_new_with_label( mitem->GetText().mb_str() )
+                             : gtk_menu_item_new_with_label( mitem->GetText().mb_str() );
 
         gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
                             GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),

@@ -310,7 +310,7 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
 
     if ( ppos )
     {
-        *ppos = item ? pos : wxNOT_FOUND;
+        *ppos = item ? pos : (size_t)wxNOT_FOUND;
     }
 
     return item;

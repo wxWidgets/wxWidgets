@@ -182,6 +182,11 @@ public:
     wxFunction m_callback;
 #endif // WXWIN_COMPATIBILITY
 
+    // unlike FindItem(), this function doesn't recurse but only looks through
+    // our direct children and also may return the index of the found child if
+    // pos != NULL
+    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
+
 protected:
     // virtuals to override in derived classes
     // ---------------------------------------
@@ -198,11 +203,6 @@ protected:
 
     // common part of all ctors
     void Init(long style);
-
-    // unlike FindItem(), this function doesn't recurse but only looks through
-    // our direct children and also may return the index of the found child if
-    // pos != NULL
-    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
 
 protected:
     wxMenuBar     *m_menuBar;           // menubar we belong to or NULL

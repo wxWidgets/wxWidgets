@@ -313,7 +313,7 @@ void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAppendMenu(wxCommandEvent& WXUNUSED(event))
 {
-    static s_count = 0;
+    static int s_count = 0;
 
     wxString title;
     title.Printf("Dummy menu &%d", ++s_count);
@@ -354,7 +354,7 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
     size_t count = mbar->GetMenuCount();
 
     wxLogMessage("The label of the last menu item is '%s'",
-                 mbar->GetLabelTop(count - 1));
+                 mbar->GetLabelTop(count - 1).c_str());
 }
 
 void MyFrame::OnSetLabelMenu(wxCommandEvent& WXUNUSED(event))
@@ -448,7 +448,7 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
     if ( item )
     {
         wxLogMessage("The label of the last menu item is '%s'",
-                     item->GetLabel());
+                     item->GetLabel().c_str());
     }
 }
 

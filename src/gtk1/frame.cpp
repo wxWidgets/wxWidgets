@@ -1070,10 +1070,10 @@ void wxFrame::Command( int id )
     wxMenuBar *bar = GetMenuBar();
     if (!bar) return;
 
-    wxMenuItem *item = bar->FindItemForId(id) ;
+    wxMenuItem *item = bar->FindItem(id) ;
     if (item && item->IsCheckable())
     {
-        bar->Check(id,!bar->Checked(id)) ;
+        bar->Check(id, !bar->IsChecked(id)) ;
     }
 
     wxEvtHandler* evtHandler = GetEventHandler();
