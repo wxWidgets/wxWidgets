@@ -1462,9 +1462,9 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 
 	long xx = XLOG2DEVMAC(x);
 	long yy = YLOG2DEVMAC(y);
-	
+#if TARGET_CARBON	
 	bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
-  
+#endif
 	MacInstallFont() ;
     if ( 0 ) 
     {
@@ -1476,7 +1476,9 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
 	
+#if TARGET_CARBON	
 	if ( !useDrawThemeText )
+#endif
 	    yy += fi.ascent ;
 	    
 	::MoveTo( xx , yy );
@@ -1515,6 +1517,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     	{
     		if( text[i] == 13 || text[i] == 10)
     		{
+#if TARGET_CARBON
             	if ( useDrawThemeText )
             	{
     	            Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
@@ -1530,6 +1533,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             	    line++ ;
                 }
     		    else
+#endif
     		    {
         			::DrawText( text , laststop , i - laststop ) ;
             	    line++ ;
@@ -1539,6 +1543,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     		}
     		i++ ;
     	}
+#if TARGET_CARBON
         if ( useDrawThemeText )
     	{
     	    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 1000 } ;
@@ -1553,6 +1558,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
             CFRelease( mString ) ;
         }
         else
+#endif
         {	
     	    ::DrawText( text , laststop , i - laststop ) ;
         }
