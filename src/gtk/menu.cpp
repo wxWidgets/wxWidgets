@@ -1335,6 +1335,33 @@ static wxString GetHotKey( const wxMenuItem& item )
             case WXK_DELETE:
                 hotkey << wxT("Delete" );
                 break;
+            case WXK_UP:
+                hotkey << wxT("Up" );
+                break;
+            case WXK_DOWN:
+                hotkey << wxT("Down" );
+                break;
+            case WXK_PAGEUP:
+                hotkey << wxT("Prior" );
+                break;
+            case WXK_PAGEDOWN:
+                hotkey << wxT("Next" );
+                break;
+            case WXK_LEFT:
+                hotkey << wxT("Left" );
+                break;
+            case WXK_RIGHT:
+                hotkey << wxT("Right" );
+                break;
+            case WXK_HOME:
+                hotkey << wxT("Home" );
+                break;
+            case WXK_END:
+                hotkey << wxT("End" );
+                break;
+            case WXK_RETURN:
+                hotkey << wxT("Return" );
+                break;
 
                 // if there are any other keys wxGetAccelFromString() may
                 // return, we should process them here
