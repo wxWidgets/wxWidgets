@@ -272,10 +272,10 @@ wxWindow::~wxWindow()
 
     MSWDetachWindowMenu();
 
+    DestroyChildren();
+
     if ( m_parent )
         m_parent->RemoveChild(this);
-
-    DestroyChildren();
 
     if ( m_hWnd )
     {

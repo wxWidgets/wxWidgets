@@ -96,6 +96,8 @@ public:
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
 
+    virtual void RemoveChild(wxWindowBase *child);
+
     // event handlers
     bool HandlePaint();
     bool HandleSize(int x, int y, WXUINT flag);

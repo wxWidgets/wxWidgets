@@ -334,8 +334,8 @@ void wxFrame::Maximize(bool maximize)
     // maximizing a hidden frame shows it - which is often much worse than not
     // maximizing it at all
     //
-    // the correct workaround this bug breaks binary compatibility and so is
-    // only in 2.3
+    // the correct workaround for this bug breaks binary compatibility and so
+    // is only in 2.3
     if ( IsShown() )
     {
         DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
@@ -699,6 +699,14 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
     ::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(width, height));
 
   return TRUE;
+}
+
+void wxFrame::RemoveChild(wxWindowBase *child)
+{
+    if ( child == m_winLastFocused )
+        m_winLastFocused = NULL;
+
+    wxFrameBase::RemoveChild(child);
 }
 
 // Default activation behaviour - set the focus for the first child
