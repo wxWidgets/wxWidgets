@@ -1757,10 +1757,21 @@ class TextCtrl(_core.Control):
         """
         HitTest(Point pt) -> (result, row, col)
 
-        Find the character at position given in pixels. NB: pt is in device
-        coords but is not adjusted for the client area origin nor scrolling
+        Find the row, col coresponding to the character at the point given in
+        pixels. NB: pt is in device coords but is not adjusted for the client
+        area origin nor scrolling.
         """
         return _controls_.TextCtrl_HitTest(*args, **kwargs)
+
+    def HitTestPos(*args, **kwargs):
+        """
+        HitTestPos(Point pt) -> (result, position)
+
+        Find the character position in the text coresponding to the point
+        given in pixels. NB: pt is in device coords but is not adjusted for
+        the client area origin nor scrolling. 
+        """
+        return _controls_.TextCtrl_HitTestPos(*args, **kwargs)
 
     def Copy(*args, **kwargs):
         """Copy(self)"""

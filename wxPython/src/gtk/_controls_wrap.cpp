@@ -9289,6 +9289,46 @@ static PyObject *_wrap_TextCtrl_HitTest(PyObject *self, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_TextCtrl_HitTestPos(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
+    wxPoint *arg2 = 0 ;
+    long *arg3 = (long *) 0 ;
+    int result;
+    wxPoint temp2 ;
+    long temp3 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "pt", NULL 
+    };
+    
+    arg3 = &temp3;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TextCtrl_HitTestPos",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxTextCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = &temp2;
+        if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxTextCtrl const *)arg1)->HitTest((wxPoint const &)*arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    {
+        PyObject *o = PyInt_FromLong((long) (*arg3));
+        resultobj = t_output_helper(resultobj,o);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_TextCtrl_Copy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTextCtrl *arg1 = (wxTextCtrl *) 0 ;
@@ -31383,6 +31423,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextCtrl_PositionToXY", (PyCFunction) _wrap_TextCtrl_PositionToXY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_ShowPosition", (PyCFunction) _wrap_TextCtrl_ShowPosition, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_HitTest", (PyCFunction) _wrap_TextCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TextCtrl_HitTestPos", (PyCFunction) _wrap_TextCtrl_HitTestPos, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_Copy", (PyCFunction) _wrap_TextCtrl_Copy, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_Cut", (PyCFunction) _wrap_TextCtrl_Cut, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_Paste", (PyCFunction) _wrap_TextCtrl_Paste, METH_VARARGS | METH_KEYWORDS },
