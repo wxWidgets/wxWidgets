@@ -77,7 +77,7 @@ class MyBluePanelXmlHandler(wxXmlResourceHandler):
         # instance, then you can make the handle much simpler.  I'll
         # show both methods below.
 
-        if 0:
+        if 1:
             # The simple method assumes that there is no existing
             # instance.  Be sure of that with an assert.
             assert self.GetInstance() is None
