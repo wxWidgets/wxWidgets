@@ -74,8 +74,11 @@ class RunDemoApp(wx.App):
             # otherwise the demo made its own frame, so just put a
             # button in this one
             if hasattr(frame, 'otherWin'):
-                b = wx.Button(frame, -1, " Exit ")
-                frame.SetSize((200, 100))
+                p = wx.Panel(frame, -1)
+                b = wx.Button(p, -1, " Exit ", (10,10))
+                p.Fit()
+                frame.SetClientSize(p.GetSize())
+                #frame.SetSize((200, 100))
                 wx.EVT_BUTTON(frame, b.GetId(), self.OnButton)
             else:
                 # It was probably a dialog or something that is already
