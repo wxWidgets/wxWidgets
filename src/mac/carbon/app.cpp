@@ -366,11 +366,7 @@ static const EventTypeSpec eventList[] =
 
 static pascal OSStatus
 wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
-{
-    EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
-    EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
-    wxTheApp->MacSetCurrentEvent( event , handler ) ;
-    
+{    
     wxMacCarbonEvent cEvent( event ) ;
     MenuRef menuRef = cEvent.GetParameter<MenuRef>(kEventParamDirectObject) ;
     wxMenu* menu = wxFindMenuFromMacMenu( menuRef ) ;
@@ -416,8 +412,6 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
             }
     }
     
-    wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
-
     return eventNotHandledErr;
 }
 
@@ -502,6 +496,10 @@ static pascal OSStatus wxMacAppApplicationEventHandler( EventHandlerCallRef hand
 
 pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
+    EventRef formerEvent = (EventRef) wxTheApp->MacGetCurrentEvent() ;
+    EventHandlerCallRef formerEventHandlerCallRef = (EventHandlerCallRef) wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+    wxTheApp->MacSetCurrentEvent( event , handler ) ;
+
     OSStatus result = eventNotHandledErr ;
     switch( GetEventClass( event ) )
     {
@@ -527,6 +525,8 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
         default :
             break ;
     }
+
+    wxTheApp->MacSetCurrentEvent( formerEvent, formerEventHandlerCallRef ) ;
 
     return result ;
 }
