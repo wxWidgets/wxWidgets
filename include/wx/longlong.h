@@ -909,8 +909,15 @@ inline bool operator>=(long l, const wxLongLong& ll) { return ll > l; }
 inline bool operator==(long l, const wxLongLong& ll) { return ll > l; }
 inline bool operator!=(long l, const wxLongLong& ll) { return ll > l; }
 
-inline wxLongLong operator+(long l, const wxLongLong& ll) { return ll + l; }
-inline wxLongLong operator-(long l, const wxLongLong& ll) { return ll - l; }
+inline wxLongLong operator+(long l, const wxLongLong& ll)
+{
+    return ll + wxLongLong(l);
+}
+
+inline wxLongLong operator-(long l, const wxLongLong& ll)
+{
+    return ll - wxLongLong(l);
+}
 
 inline bool operator<(unsigned long l, const wxULongLong& ll) { return ll > l; }
 inline bool operator>(unsigned long l, const wxULongLong& ll) { return ll > l; }
