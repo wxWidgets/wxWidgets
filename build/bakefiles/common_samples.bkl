@@ -30,6 +30,7 @@
     <template id="wx_util" template="wx_util_b">
         <app-type>gui</app-type>
         <mac-res cond="FORMAT=='autoconf'">$(MACOSX_RESOURCES)</mac-res>
+        <include>$(WXTOPDIR)samples</include> <!-- for .rc files -->
         <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
     </template>
     
