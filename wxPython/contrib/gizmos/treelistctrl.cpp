@@ -1646,11 +1646,16 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
                                         const wxTreeListMainWindow *theCtrl,
                                         int &flags, int& column, int level)
 {
-    column = -1;
+    column = theCtrl->GetMainColumn(); //-1;
     wxTreeListItem* res = HitTest(point, theCtrl, flags, level);
 
-    if(!res) return res;
-    if(flags & wxTREE_HITTEST_ONITEMINDENT) {
+    if(!res) {
+        column = -1;
+        return res;
+    }
+    if (point.x >= theCtrl->m_owner->GetHeaderWindow()->GetWidth())
+        column = -1;
+    else if(flags & wxTREE_HITTEST_ONITEMINDENT) {
         int x = 0;
         for(size_t i = 0; i < theCtrl->GetMainColumn(); ++i) {
             int w = theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
@@ -3754,6 +3759,7 @@ wxTreeItemId wxTreeListMainWindow::HitTest(const wxPoint& point, int& flags,
     int w, h;
     GetSize(&w, &h);
     flags=0;
+    column = -1;
     if (point.x<0) flags |= wxTREE_HITTEST_TOLEFT;
     if (point.x>w) flags |= wxTREE_HITTEST_TORIGHT;
     if (point.y<0) flags |= wxTREE_HITTEST_ABOVE;
