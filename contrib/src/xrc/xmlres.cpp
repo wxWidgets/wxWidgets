@@ -131,18 +131,19 @@ wxMenu *wxXmlResource::LoadMenu(const wxString& name)
 
 
 
-wxMenuBar *wxXmlResource::LoadMenuBar(const wxString& name)
+wxMenuBar *wxXmlResource::LoadMenuBar(wxWindow *parent, const wxString& name)
 {
-    return (wxMenuBar*)CreateResFromNode(FindResource(name, wxT("wxMenuBar")), NULL, NULL);
+    return (wxMenuBar*)CreateResFromNode(FindResource(name, wxT("wxMenuBar")), parent, NULL);
 }
 
 
 
+#if wxUSE_TOOLBAR
 wxToolBar *wxXmlResource::LoadToolBar(wxWindow *parent, const wxString& name)
 {
     return (wxToolBar*)CreateResFromNode(FindResource(name, wxT("wxToolBar")), parent, NULL);
 }
-
+#endif
 
 
 wxDialog *wxXmlResource::LoadDialog(wxWindow *parent, const wxString& name)

@@ -125,7 +125,8 @@ public:
     wxMenu *LoadMenu(const wxString& name);
 
     // Loads menubar from resource. Returns NULL on failure.
-    wxMenuBar *LoadMenuBar(const wxString& name);
+    wxMenuBar *LoadMenuBar(wxWindow *parent, const wxString& name);
+    wxMenuBar *LoadMenuBar(const wxString& name) { return LoadMenuBar(NULL, name); }
 
 #if wxUSE_TOOLBAR
     // Loads toolbar
