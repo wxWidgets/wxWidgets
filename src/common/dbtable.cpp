@@ -71,6 +71,7 @@
 #   define wxUSE_ODBC 1
 #endif
 
+
 #if wxUSE_ODBC
 
 #include <stdio.h>
@@ -184,7 +185,7 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
 
     // Set the cursor type for the statement handles
     cursorType = SQL_CURSOR_STATIC;
-    //cursorType = SQL_CURSOR_FORWARD_ONLY;
+   
     if (SQLSetStmtOption(hstmtInternal, SQL_CURSOR_TYPE, cursorType) != SQL_SUCCESS)
       {	
         // Check to see if cursor type is supported
@@ -358,8 +359,9 @@ bool wxDbTable::bindInsertParams(void)
             continue;
         switch(colDefs[i].DbDataType)
         {
+	 
         case DB_DATA_TYPE_VARCHAR:
-            fSqlType = pDb->GetTypeInfVarchar().FsqlType;
+            fSqlType = pDb->GetTypeInfVarchar().FsqlType;	   
             precision = colDefs[i].SzDataObj;
             scale = 0;
             colDefs[i].CbValue = SQL_NTS;
@@ -394,10 +396,11 @@ bool wxDbTable::bindInsertParams(void)
             colDefs[i].CbValue = SQL_NULL_DATA;
             colDefs[i].Null = FALSE;
         }
-        if (SQLBindParameter(hstmtInsert, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
-                                    fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
-                                    precision+1,&colDefs[i].CbValue) != SQL_SUCCESS)
-            return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
+
+	if (SQLBindParameter(hstmtInsert, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
+			     fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
+			     precision+1,&colDefs[i].CbValue) != SQL_SUCCESS)
+ 	  return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
     }
 
     // Completed successfully
@@ -440,7 +443,7 @@ bool wxDbTable::bindUpdateParams(void)
         case DB_DATA_TYPE_FLOAT:
             fSqlType = pDb->GetTypeInfFloat().FsqlType;
             precision = pDb->GetTypeInfFloat().Precision;
-            scale = pDb->GetTypeInfFloat().MaximumScale;
+            scale = pDb->GetTypeInfFloat().MaximumScale;	   
             // SQL Sybase Anywhere v5.5 returned a negative number for the
             // MaxScale.  This caused ODBC to kick out an error on ibscale.
             // I check for this here and set the scale = precision.
@@ -455,10 +458,11 @@ bool wxDbTable::bindUpdateParams(void)
             colDefs[i].CbValue = 0;
             break;
         }
-        if (SQLBindParameter(hstmtUpdate, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
-                             fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
-                             precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
-            return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
+	
+	if (SQLBindParameter(hstmtUpdate, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
+			     fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
+			     precision+1, &colDefs[i].CbValue) != SQL_SUCCESS)
+	  return(pDb->DispAllErrors(henv, hdbc, hstmtUpdate));
     }
 
     // Completed successfully
@@ -475,11 +479,11 @@ bool wxDbTable::bindCols(HSTMT cursor)
     // Bind each column of the table to a memory address for fetching data
     int i;
     for (i = 0; i < noCols; i++)
-    {
-        if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-                       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)
-            return(pDb->DispAllErrors(henv, hdbc, cursor));
-    }
+      {
+	if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
+		       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)     
+	  return (pDb->DispAllErrors(henv, hdbc, cursor));
+      }
 
     // Completed successfully
     return(TRUE);
@@ -615,10 +619,10 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
 bool wxDbTable::Open(void)
 {
     if (!pDb)
-        return FALSE;
-
+        return FALSE;   
     int i;
     wxString sqlStmt;
+   
 
     // Verify that the table exists in the database
     if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
@@ -640,15 +644,21 @@ bool wxDbTable::Open(void)
     // the wxDbTable object and the ODBC record.
     if (!queryOnly)
     {
+
         if (!bindInsertParams())                    // Inserts
             return(FALSE);
+       
         if (!bindUpdateParams())                    // Updates
             return(FALSE);
+	
     }
     if (!bindCols(*hstmtDefault))                   // Selects
         return(FALSE);
+	
     if (!bindCols(hstmtInternal))                   // Internal use only
         return(FALSE);
+	
+
     /*
      * Do NOT bind the hstmtCount cursor!!!
      */
@@ -1115,13 +1125,14 @@ bool wxDbTable::DropTable()
     {
         // Check for "Base table not found" error and ignore
         pDb->GetNextError(henv, hdbc, hstmt);	
-        if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found"
-        {
+        if (wxStrcmp(pDb->sqlState,"S0002"))  // "Base table not found" 
+        {	 
             // Check for product specific error codes
-            if (!((pDb->Dbms() == dbmsSYBASE_ASA && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
-		  (pDb->Dbms() == dbmsSYBASE_ASE && !wxStrcmp(pDb->sqlState,"37000"))   ||
-                  (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // untested
-                  (pDb->Dbms() == dbmsPOSTGRES   && !wxStrcmp(pDb->sqlState,"08S01"))))     // untested
+            if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000"))   ||  // 5.x (and lower?)
+		  (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000"))   ||
+		  (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,"S1000"))   ||  // BJO20000427 with OpenLinkDriver
+                  (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,"S1000"))   ||   
+                  (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,"08S01"))))     
             {
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);
@@ -1241,10 +1252,13 @@ bool wxDbTable::DropIndex(const char * idxName)
         if (wxStrcmp(pDb->sqlState,"S0012"))  // "Index not found"
         {
             // Check for product specific error codes
-            if (!((pDb->Dbms() == dbmsSYBASE_ASA  && !wxStrcmp(pDb->sqlState,"42000")) ||  // v5.x (and lower?)
-                   (pDb->Dbms() == dbmsSYBASE_ASE && !wxStrcmp(pDb->sqlState,"S0002")) ||  // Base table not found
-                   (pDb->Dbms() == dbmsMY_SQL     && !wxStrcmp(pDb->sqlState,"42S02"))     // untested
-                    ))
+	  if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,"42000")) ||  // v5.x (and lower?)
+		(pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"37000"))   ||
+		(pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,"S1000"))   ||
+		(pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,"S0002")) ||  // Base table not found
+		(pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,"42S02")) ||    // untested
+		(pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,"08S01"))
+		))
             {
                 pDb->DispNextError();
                 pDb->DispAllErrors(henv, hdbc, hstmt);

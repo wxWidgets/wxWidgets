@@ -388,6 +388,7 @@ bool wxDb::Open(char *Dsn, char *Uid, char *AuthStr)
 
     // Float
     if (! getDataTypeInfo(SQL_DOUBLE, typeInfFloat))
+
         if (! getDataTypeInfo(SQL_REAL, typeInfFloat))
             if (! getDataTypeInfo(SQL_FLOAT, typeInfFloat))
                 if (! getDataTypeInfo(SQL_DECIMAL, typeInfFloat))
@@ -403,6 +404,7 @@ bool wxDb::Open(char *Dsn, char *Uid, char *AuthStr)
             typeInfFloat.FsqlType = SQL_REAL;
     else
         typeInfFloat.FsqlType = SQL_DOUBLE;
+
 
     // Integer
     if (! getDataTypeInfo(SQL_INTEGER, typeInfInteger))
@@ -836,6 +838,11 @@ bool wxDb::getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "middleint")) wxStrcpy(structSQLTypeInfo.TypeName, "mediumint");
         if (!wxStrcmp(structSQLTypeInfo.TypeName, "varchar")) wxStrcpy(structSQLTypeInfo.TypeName, "char");
     }
+
+// BJO 20000427 : OpenLink driver (at least for unix)
+#ifdef _IODBC_    
+    if (!wxStrcmp(structSQLTypeInfo.TypeName, "double precision")) wxStrcpy(structSQLTypeInfo.TypeName, "real");
+#endif
 
     if (SQLGetData(hstmt, 3, SQL_C_LONG, (UCHAR*) &structSQLTypeInfo.Precision, 0, &cbRet) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc, hstmt));
@@ -1682,7 +1689,7 @@ wxDbColInf *wxDb::GetColumns(char *tableName[], const char *userID)
                         GetData(10, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].numPrecRadix, 0,                        &cb);
                         GetData(11, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].nullable,     0,                        &cb);
                         GetData(12, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].remarks,      254+1,                    &cb);
-
+		
                         // Determine the wxDb data type that is used to represent the native data type of this data source
                         colInf[colNo].dbDataType = 0;
                         if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
@@ -1856,39 +1863,41 @@ wxDbColInf *wxDb::GetColumns(char *tableName, int *numCols, const char *userID)
                     colInf[colNo].FkCol = 0;           // Foreign key column   0=No; 1= First Key, 2 = Second Key etc.
                     colInf[colNo].FkTableName[0] = 0;  // Foreign key table name
 
-                    // Determine the wxDb data type that is used to represent the native data type of this data source
-                    colInf[colNo].dbDataType = 0;
-                    if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
-                    {
-                        if (colInf[colNo].columnSize < 1)
-                        {
-                             // IODBC does not return a correct columnSize, so we set
-                             // columnSize = bufferLength if no column size was returned
-                             colInf[colNo].columnSize = colInf[colNo].bufferLength;
-                        }
-                        colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
-                    }
-                    else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
-                        colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
-                    else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
-                        colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
-                    else if (!wxStricmp(typeInfDate.TypeName,colInf[colNo].typeName))
-                        colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
-
+		    
+		    
+		    // Determine the wxDb data type that is used to represent the native data type of this data source
+		    colInf[colNo].dbDataType = 0;
+		    if (!wxStricmp(typeInfVarchar.TypeName,colInf[colNo].typeName))
+		      {
+			if (colInf[colNo].columnSize < 1)
+			  {
+				// IODBC does not return a correct columnSize, so we set
+				// columnSize = bufferLength if no column size was returned
+			    colInf[colNo].columnSize = colInf[colNo].bufferLength;
+			  }
+			colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
+		      }
+		    else if (!wxStricmp(typeInfInteger.TypeName,colInf[colNo].typeName))
+		      colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
+		    else if (!wxStricmp(typeInfFloat.TypeName,colInf[colNo].typeName))
+		      colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
+		    else if (!wxStricmp(typeInfDate.TypeName,colInf[colNo].typeName))
+		      colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;		
+		    
                     colNo++;
                 }
             }
         }
         if (retcode != SQL_NO_DATA_FOUND)
-        {  // Error occured, abort
+	  {  // Error occured, abort
             DispAllErrors(henv, hdbc, hstmt);
             if (colInf)
-                delete [] colInf;
+	      delete [] colInf;
             SQLFreeStmt(hstmt, SQL_CLOSE);
             if (numCols)
-                *numCols = 0;
+	      *numCols = 0;
             return(0);
-        }
+	  }
     }
 
     SQLFreeStmt(hstmt, SQL_CLOSE);
@@ -2068,6 +2077,8 @@ wxDbInf *wxDb::GetCatalog(char *userID)
     // Pass 2 - Create the Table array and fill it
     //        - Create the Cols array = NULL
     //-------------------------------------------------------------
+
+    
     for (pass = 1; pass <= 2; pass++)
     {
         SQLFreeStmt(hstmt, SQL_CLOSE);   // Close if Open
@@ -2077,6 +2088,7 @@ wxDbInf *wxDb::GetCatalog(char *userID)
              Dbms() != dbmsMY_SQL &&
              Dbms() != dbmsACCESS)
         {
+
             retcode = SQLTables(hstmt,
                                 NULL, 0,                             // All qualifiers
                                 (UCHAR *) UserID.c_str(), SQL_NTS, // User specified
@@ -2085,22 +2097,26 @@ wxDbInf *wxDb::GetCatalog(char *userID)
         }
         else
         {
+
             retcode = SQLTables(hstmt,
                                 NULL, 0,           // All qualifiers
                                 NULL, 0,           // User specified
                                 NULL, 0,           // All tables
                                 NULL, 0);          // All columns
         }
+
         if (retcode != SQL_SUCCESS)
         {
+	  
             DispAllErrors(henv, hdbc, hstmt);
             pDbInf = NULL;
             SQLFreeStmt(hstmt, SQL_CLOSE);
             return pDbInf;
         }
-
+	
         while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)   // Table Information
         {
+	 
             if (pass == 1)  // First pass, just count the Tables
             {
                 if (pDbInf->numTables == 0)
@@ -2124,10 +2140,12 @@ wxDbInf *wxDb::GetCatalog(char *userID)
                         (pDbInf->pTableInf+noTab)->pColInf         = NULL;
                     }
                     noTab = 0;
-                } // if (pDbInf->pTableInf == NULL)   // Has the Table Array been created
+                } // if (pDbInf->pTableInf == NULL)   // Has the Table Array been created	
+
                 GetData( 3, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableName,    DB_MAX_TABLE_NAME_LEN+1, &cb);
                 GetData( 4, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableType,    30+1,                    &cb);
                 GetData( 5, SQL_C_CHAR,   (UCHAR*)  (pDbInf->pTableInf+noTab)->tableRemarks, 254+1,                   &cb);
+		
                 noTab++;
             }  // if (pass == 2)  We now know the amount of Tables
         }   // while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
@@ -2465,11 +2483,17 @@ wxDBMS wxDb::Dbms(void)
 {
     wxChar baseName[25+1];
     wxStrncpy(baseName,dbInf.dbmsName,25);
-  
+
+
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
-    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server
-        return(dbmsSYBASE_ASE);
+    
+    // BJO 20000427 : The "SQL Server" string is also returned by SQLServer when connected trough an OpenLink driver.
+    // Is it also returned by Sybase?    
+    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))       
+      if (!wxStricmp(dbInf.driverName, "oplodbc.so")) return dbmsMS_SQL_SERVER; else return dbmsSYBASE_ASE;
+     
+
     if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
         return(dbmsMS_SQL_SERVER);
     if (!wxStricmp(dbInf.dbmsName,"MySQL"))
