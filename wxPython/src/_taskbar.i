@@ -61,7 +61,14 @@ class wxTaskBarIcon : public wxEvtHandler
 public:
     wxTaskBarIcon();
     ~wxTaskBarIcon();
-   
+
+    %extend {
+        void Destroy() {
+        #ifndef __WXMAC__
+            self->RemoveIcon();
+        #endif
+        }
+    }
 
 #ifndef __WXMAC__
     bool IsOk() const;

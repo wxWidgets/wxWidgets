@@ -609,8 +609,9 @@ enum wxStretch
     wxGROW,
     wxEXPAND,
     wxSHAPED,
-    wxADJUST_MINSIZE,
+    wxFIXED_SIZE,
     wxTILE,
+    wxADJUST_MINSIZE,
 };
 
 

@@ -552,26 +552,32 @@ windows without an interior sizer. This function similarly won't do
 anything if there are no subwindows.");
     
 
-
-    DocDeclStr(
-        virtual void , SetSizeHints( int minW, int minH,
-                                     int maxW = -1, int maxH = -1,
-                                     int incW = -1, int incH = -1 ),
+    
+    %nokwargs SetSizeHints;
+    DocStr(SetSizeHints,
         "Allows specification of minimum and maximum window sizes, and window
 size increments. If a pair of values is not set (or set to -1), the
 default values will be used.  If this function is called, the user
 will not be able to size the window outside the given bounds. The
 resizing increments are only significant under Motif or Xt.");
-    
+    virtual void SetSizeHints( int minW, int minH,
+                               int maxW = -1, int maxH = -1,
+                               int incW = -1, int incH = -1 );
+    void SetSizeHints( const wxSize& minSize,
+                       const wxSize& maxSize=wxDefaultSize,
+                       const wxSize& incSize=wxDefaultSize);
 
-    DocDeclStr(
-        virtual void , SetVirtualSizeHints( int minW, int minH,
-                                            int maxW = -1, int maxH = -1 ),
+    
+    %nokwargs SetVirtualSizeHints;
+    DocStr(SetVirtualSizeHints,
         "Allows specification of minimum and maximum virtual window sizes. If a
 pair of values is not set (or set to -1), the default values will be
 used.  If this function is called, the user will not be able to size
 the virtual area of the window outside the given bounds.");
-    
+    virtual void SetVirtualSizeHints( int minW, int minH,
+                                      int maxW = -1, int maxH = -1 );
+    void SetVirtualSizeHints( const wxSize& minSize,
+                              const wxSize& maxSize=wxDefaultSize);
     
     DocDeclStr(
         virtual int , GetMinWidth() const,
@@ -595,6 +601,10 @@ the virtual area of the window outside the given bounds.");
         "");
     
 
+    DocDeclStr(
+        virtual wxSize , GetMinSize() const,
+        "");
+    
     
     DocStr(SetVirtualSize,
            "Set the the virtual size of a window in pixels.  For most windows this
