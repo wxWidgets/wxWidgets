@@ -39,6 +39,14 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
    EVT_LEFT_DOWN(wxLayoutWindow::OnLeftMouseClick)
    EVT_RIGHT_DOWN(wxLayoutWindow::OnRightMouseClick)
    EVT_LEFT_DCLICK(wxLayoutWindow::OnMouseDblClick)
+   EVT_MENU(WXLOWIN_MENU_LARGER, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_SMALLER, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_UNDERLINE, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_BOLD, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_ITALICS, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_ROMAN, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_TYPEWRITER, wxLayoutWindow::OnMenu)
+   EVT_MENU(WXLOWIN_MENU_SANSSERIF, wxLayoutWindow::OnMenu)
 END_EVENT_TABLE()
 
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
@@ -49,8 +57,9 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_ScrollbarsSet = false;
    m_doSendEvents = false;
    m_ViewStartX = 0; m_ViewStartY = 0;
-
-
+   m_DoPopupMenu = true;
+   m_PopupMenu = NULL;
+   
    CoordType
       max_x, max_y, lineHeight;
    m_llist.GetSize(&max_x, &max_y, &lineHeight);
@@ -90,7 +99,7 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    wxPaintDC dc( this );
    PrepareDC( dc );     
    SetFocus();
-
+   
    wxPoint findPos;
    findPos.x = dc.DeviceToLogicalX(event.GetX());
    findPos.y = dc.DeviceToLogicalY(event.GetY());
@@ -98,6 +107,13 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    TRACEMESSAGE(("wxLayoutWindow::OnMouse: (%d, %d) -> (%d, %d)",
                  event.GetX(), event.GetY(), findPos.x, findPos.y));
 
+   if(eventId == WXLOWIN_MENU_RCLICK && m_DoPopupMenu && m_llist.IsEditable())
+   {
+      // when does this menu get freed?
+      // how do we handle toggling? FIXME
+      PopupMenu(MakeFormatMenu(), event.GetX(), event.GetY());
+      return;
+   }
    // find the object at this position
    wxLayoutObjectBase *obj = m_llist.Find(findPos);
    if(obj)
@@ -288,5 +304,63 @@ wxLayoutWindow::Print(void)
       //dc.SetUserScale(1.0, 1.0);
       m_llist.Draw(dc);
       dc.EndDoc();
+   }
+}
+
+wxMenu *
+wxLayoutWindow::MakeFormatMenu()
+{
+   if(m_PopupMenu)
+      return m_PopupMenu;
+   
+   wxMenu *m = new wxMenu();
+
+   m->Append(WXLOWIN_MENU_LARGER   ,_("&Larger"),_("Switch to larger font."), false);
+   m->Append(WXLOWIN_MENU_SMALLER  ,_("&Smaller"),_("Switch to smaller font."), false);
+   m->AppendSeparator();
+   m->Append(WXLOWIN_MENU_UNDERLINE,_("&Underline"),_("Toggle underline mode."), true);
+   m->Append(WXLOWIN_MENU_BOLD     ,_("&Bold"),_("Toggle bold mode."), true);
+   m->Append(WXLOWIN_MENU_ITALICS  ,_("&Italics"),_("Toggle italics mode."), true);
+   m->AppendSeparator();
+   m->Append(WXLOWIN_MENU_ROMAN     ,_("&Roman"),_("Toggle underline mode."), false);
+   m->Append(WXLOWIN_MENU_TYPEWRITER,_("&Typewriter"),_("Toggle bold mode."), false);
+   m->Append(WXLOWIN_MENU_SANSSERIF ,_("&Sans Serif"),_("Toggle italics mode."), false);
+
+   return m_PopupMenu = m;
+}
+
+void wxLayoutWindow::OnMenu(wxCommandEvent& event)
+{
+   if(! m_llist.IsEditable())
+      return;
+   
+   switch (event.GetId())
+   {
+   case WXLOWIN_MENU_LARGER:
+      m_llist.SetFontLarger();
+      break;
+   case WXLOWIN_MENU_SMALLER:
+      m_llist.SetFontSmaller();
+      break;
+   case WXLOWIN_MENU_UNDERLINE:
+      m_llist.SetFontUnderline(
+         m_PopupMenu->IsChecked(WXLOWIN_MENU_UNDERLINE) ? false : true
+            );
+         break;
+   case WXLOWIN_MENU_BOLD:
+      m_llist.SetFontWeight(
+         m_PopupMenu->IsChecked(WXLOWIN_MENU_BOLD) ? wxNORMAL : wxBOLD
+            );
+   case WXLOWIN_MENU_ITALICS:
+      m_llist.SetFontStyle(
+         m_PopupMenu->IsChecked(WXLOWIN_MENU_ITALICS) ? wxNORMAL : wxITALIC
+            );
+      break;
+   case WXLOWIN_MENU_ROMAN:
+      m_llist.SetFontFamily(wxROMAN); break;
+   case WXLOWIN_MENU_TYPEWRITER:
+      m_llist.SetFontFamily(wxFIXED); break;
+   case WXLOWIN_MENU_SANSSERIF:
+      m_llist.SetFontFamily(wxSWISS); break;
    }
 }

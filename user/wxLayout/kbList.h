@@ -161,7 +161,9 @@ public:
    void *pop_front(void);
 
    /** Insert an element into the list.
-       @param i an iterator pointing to the element, before which the new one should be inserted
+       @param i an iterator pointing to the element, before which the
+       new one should be inserted. After the insert operation i will
+       point to the newly inserted element.
        @param element the element data
    */
    void insert(iterator & i, void *element);

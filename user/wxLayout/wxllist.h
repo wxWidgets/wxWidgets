@@ -280,6 +280,13 @@ public:
                 int weight=-1, int underline = -1,
                 char const *fg = NULL,
                 char const *bg = NULL);
+   /// changes to the next larger font size
+   inline void SetFontLarger(void)
+      { SetFont(-1,(12*m_FontPtSize)/10); }
+   /// changes to the next smaller font size
+   inline void SetFontSmaller(void)
+      { SetFont(-1,(10*m_FontPtSize)/12); }
+   
    /// set font family
    inline void SetFontFamily(int family) { SetFont(family); }
    /// set font size
@@ -345,11 +352,11 @@ public:
    bool IsEditable(void) const { return m_Editable; }
    /// move cursor, returns true if it could move to the desired position
    bool MoveCursor(int dx = 0, int dy = 0);
-   void SetCursor(wxPoint const &p) { m_CursorPosition = p; }
+   void SetCursor(wxPoint const &p) { m_CursorPos = p; }
    void DrawCursor(wxDC &dc, bool erase = false);
    
    /// Get current cursor position cursor coords
-   wxPoint GetCursor(void) const { return m_CursorPosition; }
+   wxPoint GetCursor(void) const { return m_CursorPos; }
    /// Gets graphical coordinates of cursor
    wxPoint GetCursorCoords(void) const { return m_CursorCoords; }
    
@@ -404,12 +411,16 @@ protected:
 
    //---- this is needed for editing:
    /// where is the text cursor (column,line):
-   wxPoint   m_CursorPosition;
+   wxPoint   m_CursorPos;
    /// where to draw the cursor
    wxPoint   m_CursorCoords;
    /// how large to draw it
    wxPoint   m_CursorSize;
-
+   /// object iterator for current cursor position:
+   iterator  m_CursorObject;
+   /// position of cursor within m_CursorObject:
+   int       m_CursorOffset;
+   
    /// to store content overwritten by cursor
    wxMemoryDC m_CursorMemDC;
 
@@ -435,9 +446,7 @@ class wxLayoutPrintout: public wxPrintout
 {
  public:
    wxLayoutPrintout(wxLayoutList &llist, wxString const & title =
-                    "wxLayout Printout")
-      :wxPrintout(title)
-      { m_llist = &llist; m_title = title;}
+                    "wxLayout Printout");
    bool OnPrintPage(int page);
    bool HasPage(int page);
    bool OnBeginDocument(int startPage, int endPage);
