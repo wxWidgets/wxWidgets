@@ -594,10 +594,10 @@ any or-combination of the following constants:
 \twocolitem{{\bf wxPATH\_NORM\_ENV\_VARS}}{replace env vars with their values}
 \twocolitem{{\bf wxPATH\_NORM\_DOTS}}{squeeze all .. and . and prepend cwd}
 \twocolitem{{\bf wxPATH\_NORM\_TILDE}}{Unix only: replace ~ and ~user}
-\twocolitem{{\bf wxPATH\_NORM\_CASE}}{if case insensitive => tolower}
+\twocolitem{{\bf wxPATH\_NORM\_CASE}}{if filesystem is case insensitive, transform to tolower case}
 \twocolitem{{\bf wxPATH\_NORM\_ABSOLUTE}}{make the path absolute}
 \twocolitem{{\bf wxPATH\_NORM\_LONG}}{make the path the long form}
-\twocolitem{{\bf wxPATH\_NORM\_ALL}}{all of previous flags}
+\twocolitem{{\bf wxPATH\_NORM\_ALL}}{all of previous flags except \texttt{wxPATH\_NORM\_CASE}}
 \end{twocollist}
 }
 

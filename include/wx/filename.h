@@ -72,7 +72,7 @@ enum wxPathNormalize
     wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
     wxPATH_NORM_LONG =     0x0020,  // make the path the long form
-    wxPATH_NORM_ALL      = 0x003f
+    wxPATH_NORM_ALL      = 0x003f & ~wxPATH_NORM_CASE
 };
 
 // what exactly should GetPath() return?
