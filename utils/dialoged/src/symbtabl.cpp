@@ -121,6 +121,13 @@ bool wxResourceSymbolTable::WriteIncludeFile(const wxString& filename)
     if (!file.Open(filename, wxFile::write))
         return FALSE;
 
+    wxString fileOnly(wxFileNameFromPath(filename));
+    wxString line;
+    line.Printf("/*\n * %s\n * Window identifiers file written by Dialog Editor\n */\n\n",
+        (const char*) fileOnly);
+
+    file.Write(line, line.Length());
+
     m_hashTable.BeginFind();
 
     wxNode* node = m_hashTable.Next();

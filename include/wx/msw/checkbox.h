@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CHECKBOXH__
-#define __CHECKBOXH__
+#ifndef _WX_CHECKBOX_H_
+#define _WX_CHECKBOX_H_
 
 #ifdef __GNUG__
 #pragma interface "checkbox.h"
@@ -81,4 +81,4 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
   virtual void SetLabel(const wxBitmap *bitmap);
 };
 #endif
-    // __CHECKBOXH__
+    // _WX_CHECKBOX_H_

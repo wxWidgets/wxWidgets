@@ -5,13 +5,13 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __METAFIILEH__
-#define __METAFIILEH__
+#ifndef _WX_METAFIILE_H_
+#define _WX_METAFIILE_H_
 
 #ifdef __GNUG__
 #pragma interface "metafile.h"
@@ -101,4 +101,4 @@ bool WXDLLEXPORT wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y
 
 #endif // USE_METAFILE
 #endif
-    // __METAFIILEH__
+    // _WX_METAFIILE_H_

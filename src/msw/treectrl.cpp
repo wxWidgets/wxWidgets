@@ -53,6 +53,7 @@ wxTreeCtrl::wxTreeCtrl(void)
 {
   m_imageListNormal = NULL;
   m_imageListState = NULL;
+  m_textCtrl = NULL;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -67,6 +68,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
 
   m_imageListNormal = NULL;
   m_imageListState = NULL;
+  m_textCtrl = NULL;
 
   int x = pos.x;
   int y = pos.y;
@@ -131,7 +133,12 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
 
 wxTreeCtrl::~wxTreeCtrl(void)
 {
-  m_textCtrl.SetHWND((WXHWND) NULL);
+    if (m_textCtrl)
+    {
+        m_textCtrl->UnsubclassWin();
+        m_textCtrl->SetHWND((WXHWND) 0);
+        delete m_textCtrl;
+    }
 }
 
 // Attributes
@@ -412,11 +419,9 @@ bool wxTreeCtrl::GetItemRect(long item, wxRectangle& rect, bool textOnly) const
   return success;
 }
 
-wxTextCtrl& wxTreeCtrl::GetEditControl(void) const
+wxTextCtrl* wxTreeCtrl::GetEditControl(void) const
 {
-  HWND hWnd = (HWND) TreeView_GetEditControl((HWND) GetHWND());
-  ((wxTreeCtrl *)this)->m_textCtrl.SetHWND((WXHWND) hWnd);
-  return (wxTextCtrl&) m_textCtrl;
+    return m_textCtrl;
 }
 
 // Operations
@@ -527,11 +532,40 @@ bool wxTreeCtrl::DeleteAllItems(void)
   return (TreeView_DeleteAllItems((HWND) GetHWND()) != 0);
 }
 
-wxTextCtrl& wxTreeCtrl::Edit(long item)
+wxTextCtrl* wxTreeCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
-  HWND hWnd = (HWND) TreeView_EditLabel((HWND) GetHWND(), item);
-  m_textCtrl.SetHWND((WXHWND) hWnd);
-  return m_textCtrl;
+    wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
+
+    HWND hWnd = (HWND) TreeView_EditLabel((HWND) GetHWND(), item);
+
+    if (m_textCtrl)
+    {
+      m_textCtrl->UnsubclassWin();
+      m_textCtrl->SetHWND(0);
+      delete m_textCtrl;
+      m_textCtrl = NULL;
+    }
+
+    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
+    m_textCtrl->SetHWND((WXHWND) hWnd);
+    m_textCtrl->SubclassWin((WXHWND) hWnd);
+
+    return m_textCtrl;
+}
+
+// End label editing, optionally cancelling the edit
+bool wxTreeCtrl::EndEditLabel(bool cancel)
+{
+    bool success = (TreeView_EndEditLabelNow((HWND) GetHWND(), cancel) != 0);
+
+    if (m_textCtrl)
+    {
+      m_textCtrl->UnsubclassWin();
+      m_textCtrl->SetHWND(0);
+      delete m_textCtrl;
+      m_textCtrl = NULL;
+    }
+    return success;
 }
 
 long wxTreeCtrl::HitTest(const wxPoint& point, int& flags)

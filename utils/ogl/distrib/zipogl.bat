@@ -1,17 +1,19 @@
 @echo off
 rem Zip up an external distribution of OGL
+set src=d:\wx2\wxWindows\utils\ogl
+set dest=%src\deliver
 
-if "%1" == "" goto usage
-if "%2" == "" goto usage
+if "%src" == "" goto usage
+if "%dest" == "" goto usage
 echo About to archive an external OGL distribution:
-echo   From   %1
-echo   To     %2\ogl.zip
+echo   From   %src
+echo   To     %dest\ogl.zip
 echo CTRL-C if this is not correct.
 inkey /W4 `Press any key to continue...` %%input
 
-erase %2\ogl.zip
-cd %1
-zip -P %3 %4 %5 %6 %7 %8 %2\ogl.zip @%1\distrib\ogl.rsp
+erase %dest\ogl.zip
+cd %src
+zip32 -@ %dest\ogl.zip < %src\distrib\ogl.rsp
 
 echo OGL archived.
 goto end

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SETUPH__
-#define __SETUPH__
+#ifndef _WX_SETUP_H_
+#define _WX_SETUP_H_
 
 /*
  * General features
@@ -19,7 +19,7 @@
 
 #define USE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-#define __GOODCOMPILER__
+#define _WX_GOODCOMPILER__
                                 // gcc can have problems, but Windows compilers
                                 // are generally OK.
 #define WXWIN_COMPATIBILITY  1
@@ -328,4 +328,4 @@
 #endif
 
 #endif
-    // __SETUPH__
+    // _WX_SETUP_H_

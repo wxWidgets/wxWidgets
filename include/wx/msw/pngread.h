@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef __PNGREAD__
-#define __PNGREAD__
+#ifndef _WX_PNGREAD__
+#define _WX_PNGREAD__
 
 #ifdef __GNUG__
 #pragma interface "pngread.h"

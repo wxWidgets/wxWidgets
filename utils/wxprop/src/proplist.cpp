@@ -396,7 +396,7 @@ bool wxPropertyListView::CreateControls(void)
 {
   wxPanel *panel = (wxPanel *)propertyWindow;
 
-  int largeButtonWidth = 50;
+  int largeButtonWidth = 60;
   int largeButtonHeight = 25;
 
   int smallButtonWidth = 25;
@@ -424,11 +424,17 @@ bool wxPropertyListView::CreateControls(void)
   wxSystemSettings settings;
   wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
+#ifdef __WXMSW__
+  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxNORMAL, FALSE, "Courier New");
+#else
   wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL);
+#endif
 
   // May need to be changed in future to eliminate clashes with app.
   panel->SetClientData((char *)this);
 
+  // These buttons are at the bottom of the window, but create them now
+  // so the constraints are evaluated in the correct order
   if (buttonFlags & wxPROP_BUTTON_OK)
   {
     windowCloseButton = new wxButton(panel, wxID_OK, "OK",
@@ -436,7 +442,7 @@ bool wxPropertyListView::CreateControls(void)
     windowCloseButton->SetDefault();
     windowCloseButton->SetFocus();
   }
-  if (buttonFlags & wxPROP_BUTTON_CLOSE)
+  else if (buttonFlags & wxPROP_BUTTON_CLOSE)
   {
     windowCloseButton = new wxButton(panel, wxID_OK, "Close",
      wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
@@ -455,8 +461,9 @@ bool wxPropertyListView::CreateControls(void)
   if (windowCloseButton)
   {
     wxLayoutConstraints *c1 = new wxLayoutConstraints;
+
     c1->left.SameAs       (panel, wxLeft, 2);
-    c1->top.SameAs        (panel, wxTop, 2);
+    c1->bottom.SameAs        (panel, wxBottom, 2);
     c1->width.AsIs();
     c1->height.AsIs();
     windowCloseButton->SetConstraints(c1);
@@ -465,12 +472,9 @@ bool wxPropertyListView::CreateControls(void)
   if (windowCancelButton)
   {
     wxLayoutConstraints *c2 = new wxLayoutConstraints;
-    if (leftMostWindow == panel)
-      c2->left.SameAs       (panel, wxLeft, 2);
-    else
-      c2->left.RightOf      (leftMostWindow, 2);
-      
-    c2->top.SameAs          (panel, wxTop, 2);
+
+    c2->right.SameAs       (panel, wxRight, 2);
+    c2->bottom.SameAs          (panel, wxBottom, 2);
     c2->width.AsIs();
     c2->height.AsIs();
     windowCancelButton->SetConstraints(c2);
@@ -484,7 +488,7 @@ bool wxPropertyListView::CreateControls(void)
     else
       c2->left.RightOf      (leftMostWindow, 2);
       
-    c2->top.SameAs          (panel, wxTop, 2);
+    c2->bottom.SameAs          (panel, wxBottom, 2);
     c2->width.AsIs();
     c2->height.AsIs();
     windowHelpButton->SetConstraints(c2);
@@ -530,9 +534,11 @@ bool wxPropertyListView::CreateControls(void)
 
     wxLayoutConstraints *c = new wxLayoutConstraints;
     c->left.SameAs         (panel, wxLeft, 2);
+/*
     if (windowCloseButton)
       c->top.Below         (windowCloseButton, 2);
     else
+*/
       c->top.SameAs        (panel, wxTop, 2);
 
     c->width.AsIs();
@@ -559,9 +565,11 @@ bool wxPropertyListView::CreateControls(void)
     editButton->Enable(FALSE);
     wxLayoutConstraints *c = new wxLayoutConstraints;
 
+/*
     if (windowCloseButton)
       c->top.Below           (windowCloseButton, 2);
     else
+*/
       c->top.SameAs          (panel, wxTop, 2);
 
     c->right.SameAs          (panel, wxRight, 2);
@@ -579,10 +587,11 @@ bool wxPropertyListView::CreateControls(void)
     c->left.RightOf        (confirmButton, 2);
   else
     c->left.SameAs         (panel, wxLeft, 2);
-
+/*
   if (windowCloseButton)
     c->top.Below           (windowCloseButton, 2);
   else
+*/
     c->top.SameAs          (panel, wxTop, 2);
 
   if (editButton)
@@ -619,9 +628,14 @@ bool wxPropertyListView::CreateControls(void)
     c->top.Below         (valueList, 2);
 
   c->right.SameAs        (panel, wxRight, 2);
-  c->bottom.SameAs       (panel, wxBottom, 2);
+
+  if (windowCloseButton)
+    c->bottom.Above       (windowCloseButton, -2);
+  else
+    c->bottom.SameAs       (panel, wxBottom, 2);
 
   propertyScrollingList->SetConstraints(c);
+
 
   // Note: if this is called now, it causes a GPF.
   // Why?
@@ -830,6 +844,10 @@ bool wxPropertyListDialog::ProcessEvent(wxEvent& event)
  
 IMPLEMENT_CLASS(wxPropertyListPanel, wxPanel)
 
+BEGIN_EVENT_TABLE(wxPropertyListPanel, wxPanel)
+    EVT_SIZE(wxPropertyListPanel::OnSize)
+END_EVENT_TABLE()
+
 void wxPropertyListPanel::OnDefaultAction(wxControl *item)
 {
 /*
@@ -847,6 +865,11 @@ bool wxPropertyListPanel::ProcessEvent(wxEvent& event)
 		return TRUE;
 }
 
+void wxPropertyListPanel::OnSize(wxSizeEvent& event)
+{
+    Layout();
+}
+
 /*
  * Property frame
  */
@@ -856,12 +879,18 @@ IMPLEMENT_CLASS(wxPropertyListFrame, wxFrame)
 bool wxPropertyListFrame::OnClose(void)
 {
   if (view)
-    return view->OnClose();
+  {
+    if (propertyPanel)
+        propertyPanel->SetView(NULL);
+    view->OnClose();
+    view = NULL;
+    return TRUE;
+  }
   else
     return FALSE;
 }
 
-wxPanel *wxPropertyListFrame::OnCreatePanel(wxFrame *parent, wxPropertyListView *v)
+wxPropertyListPanel *wxPropertyListFrame::OnCreatePanel(wxFrame *parent, wxPropertyListView *v)
 {
   return new wxPropertyListPanel(v, parent);
 }

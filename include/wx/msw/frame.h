@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FRAMEH__
-#define __FRAMEH__
+#ifndef _WX_FRAME_H_
+#define _WX_FRAME_H_
 
 #ifdef __GNUG__
 #pragma interface "frame.h"
@@ -172,4 +172,4 @@ protected:
 };
 
 #endif
-    // __FRAMEH__
+    // _WX_FRAME_H_

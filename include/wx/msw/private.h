@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PRIVATEH__
-#define __PRIVATEH__
+#ifndef _WX_PRIVATE_H_
+#define _WX_PRIVATE_H_
 
 #include "wx/defs.h"
 
@@ -152,4 +152,4 @@ void WXDLLEXPORT wxAddControlHandle(WXHWND hWnd, wxWindow *item);
 #endif
 
 #endif
-    // __PRIVATEH__
+    // _WX_PRIVATE_H_

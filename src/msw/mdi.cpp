@@ -1223,7 +1223,7 @@ long wxMDIClientWindow::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPa
 long wxMDIClientWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
 	if ( MSWGetOldWndProc() != 0)
-  		return ::CallWindowProc((FARPROC)MSWGetOldWndProc(), (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  		return ::CallWindowProc(CASTWNDPROC MSWGetOldWndProc(), (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
 	else
 		return ::DefWindowProc((HWND) m_hWnd, (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
 }

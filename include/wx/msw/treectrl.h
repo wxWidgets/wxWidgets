@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TREECTRLH__
-#define __TREECTRLH__
+#ifndef _WX_TREECTRL_H_
+#define _WX_TREECTRL_H_
 
 #ifdef __GNUG__
 #pragma interface "treectrl.h"
@@ -192,7 +192,7 @@ public:
       // bounding rect
     bool GetItemRect(long item, wxRectangle& rect, bool textOnly = FALSE) const;
       //
-    wxTextCtrl& GetEditControl() const;
+    wxTextCtrl* GetEditControl() const;
     
     // operations
     // ----------
@@ -217,7 +217,13 @@ public:
     bool SelectItem(long item);
     bool ScrollTo(long item);
     bool DeleteAllItems();
-    wxTextCtrl& Edit(long item);
+
+    // Edit the label (tree must have the focus)
+    wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+
+    // End label editing, optionally cancelling the edit
+    bool EndEditLabel(bool cancel);
+
     long HitTest(const wxPoint& point, int& flags);
     //  wxImageList *CreateDragImage(long item);
     bool SortChildren(long item);
@@ -229,9 +235,9 @@ public:
     bool MSWNotify(WXWPARAM wParam, WXLPARAM lParam);
     
 protected:
-    wxTextCtrl m_textCtrl;
-    wxImageList *m_imageListNormal;
-    wxImageList *m_imageListState;
+    wxTextCtrl*  m_textCtrl;
+    wxImageList* m_imageListNormal;
+    wxImageList* m_imageListState;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };
@@ -289,4 +295,4 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 #define EVT_TREE_KEY_DOWN(id, fn) { wxEVT_COMMAND_TREE_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 
 #endif
-    // __TREECTRLH__
+    // _WX_TREECTRL_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SPINBUTTH__
-#define __SPINBUTTH__
+#ifndef _WX_SPINBUTT_H_
+#define _WX_SPINBUTT_H_
 
 #ifdef __GNUG__
 #pragma interface "spinbutt.h"
@@ -102,6 +102,6 @@ typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
   { wxEVT_SCROLL_THUMBTRACK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxSpinEventFunction) & func },
 
 #endif
-    // __WIN95__
+    // _WX_WIN95__
 #endif
-    // __SPINBUTTH__
+    // _WX_SPINBUTT_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __HELPWINH__
-#define __HELPWINH__
+#ifndef _WX_HELPWIN_H_
+#define _WX_HELPWIN_H_
 
 #ifdef __GNUG__
 #pragma interface "helpwin.h"
@@ -51,4 +51,4 @@ protected:
 
 #endif // USE_HELP
 #endif
-    // __HELPWINH__
+    // _WX_HELPWIN_H_

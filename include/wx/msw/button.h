@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __BUTTONH__
-#define __BUTTONH__
+#ifndef _WX_BUTTON_H_
+#define _WX_BUTTON_H_
 
 #ifdef __GNUG__
 #pragma interface "button.h"
@@ -53,4 +53,4 @@ class WXDLLEXPORT wxButton: public wxControl
 };
 
 #endif
-    // __BUTTONH__
+    // _WX_BUTTON_H_

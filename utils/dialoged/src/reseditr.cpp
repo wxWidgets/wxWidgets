@@ -141,7 +141,7 @@ bool wxResourceManager::Initialize()
   m_optionsResourceFilename = buf;
 #elif defined(__X__)
   char buf[500];
-  ()wxGetHomeDir(buf);
+  wxGetHomeDir(buf);
   strcat(buf, "/.dialogedrc");
   m_optionsResourceFilename = buf;
 #else
@@ -329,6 +329,7 @@ bool wxResourceManager::Save(const wxString& filename)
   InstantiateAllResourcesFromWindows();
   if (m_resourceTable.Save(filename))
   {
+    m_symbolTable.WriteIncludeFile(m_symbolFilename);
     Modify(FALSE);
     return TRUE;
   }
@@ -345,6 +346,15 @@ bool wxResourceManager::SaveAs()
     return FALSE;
     
   m_currentFilename = s;
+  wxStripExtension(m_currentFilename);
+  m_currentFilename += ".wxr";
+
+  // Construct include filename from this file
+  m_symbolFilename = m_currentFilename;
+
+  wxStripExtension(m_symbolFilename);
+  m_symbolFilename += ".h";
+
   Save(m_currentFilename);
   return TRUE;
 }
@@ -401,6 +411,8 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     {
         wxString str("Could not find include file ");
         str += m_symbolFilename;
+        str += ".\nDialog Editor maintains a header file containing id symbols to be used in the application.\n";
+        str += "The next time this .wxr file is saved, a header file will be saved also.";
         wxMessageBox(str, "Dialog Editor Warning", MB_OK);
 
         m_symbolIdCounter = 99;
@@ -410,6 +422,19 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
         // Set the id counter to the last known id
         m_symbolIdCounter = m_symbolTable.FindHighestId();
     }
+
+    // Now check in case some (or all) resources don't have resource ids, or they
+    // don't match the .h file, or something of that nature.
+    bool altered = RepairResourceIds();
+    if (altered)
+    {
+        wxMessageBox("Some resources have had new identifiers associated with them, since they were missing.", "Dialog Editor Warning", MB_OK);
+        Modify(TRUE);
+    }
+    else
+        Modify(FALSE);
+
+    return TRUE;
   }
   else
   {
@@ -885,11 +910,10 @@ bool wxResourceManager::CreateNewPanel()
   ClearCurrentDialog();
 
   char buf[256];
-  MakeUniqueName("panel", buf);
+  MakeUniqueName("dialog", buf);
   
   wxItemResource *resource = new wxItemResource;
-//  resource->SetType(wxTYPE_PANEL);
-  resource->SetType("wxPanel");
+  resource->SetType("wxDialog");
   resource->SetName(buf);
   resource->SetTitle(buf);
 
@@ -904,10 +928,10 @@ bool wxResourceManager::CreateNewPanel()
 
   wxPanel *panel = new wxPanel(m_editorPanel, -1,
      wxPoint(m_editorPanel->GetMarginX(), m_editorPanel->GetMarginY()),
-     wxSize(400, 300), wxRAISED_BORDER, buf);
+     wxSize(400, 300), wxRAISED_BORDER|wxDEFAULT_DIALOG_STYLE, buf);
   m_editorPanel->m_childWindow = panel;
 
-  resource->SetStyle(0); // panel->GetWindowStyleFlag());
+  resource->SetStyle(panel->GetWindowStyleFlag());
   resource->SetSize(10, 10, 400, 300);
 
   // For editing in situ we will need to use the hash table to ensure
@@ -992,7 +1016,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   else if (itemType == "wxListBox")
     {
-      prefix = "ID_LISTBIX";
+      prefix = "ID_LISTBOX";
       MakeUniqueName("listbox", buf);
       res->SetName(buf);
       newItem = new wxListBox(panel, -1, wxPoint(x, y), wxSize(-1, -1), 0, NULL, 0, wxDefaultValidator, buf);
@@ -1114,14 +1138,14 @@ bool wxResourceManager::TestCurrentDialog(wxWindow* parent)
     wxDialog* dialog = new wxDialog;
     long oldStyle = item->GetStyle();
     bool success = FALSE;
-    item->SetStyle(wxDEFAULT_DIALOG_STYLE);
+//    item->SetStyle(wxDEFAULT_DIALOG_STYLE);
     if (dialog->LoadFromResource(parent, item->GetName(), & m_resourceTable))
     {
         dialog->Centre();
         dialog->ShowModal();
         success = TRUE;
     }
-    item->SetStyle(oldStyle);
+//    item->SetStyle(oldStyle);
     return success;
   }
   return FALSE;
@@ -1521,12 +1545,13 @@ bool wxResourceManager::IsSymbolUsed(wxItemResource* thisResource, wxWindowID id
   while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
-    if ((res != thisResource) && (res->GetId() == id))
-        return TRUE;
 
     wxString resType(res->GetType());
     if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
     {
+      if ((res != thisResource) && (res->GetId() == id))
+          return TRUE;
+
       wxNode *node1 = res->GetChildren().First();
       while (node1)
       {
@@ -1563,12 +1588,13 @@ void wxResourceManager::ChangeIds(int oldId, int newId)
   while (node = m_resourceTable.Next())
   {
     wxItemResource *res = (wxItemResource *)node->Data();
-    if (res->GetId() == oldId)
-        res->SetId(newId);
 
     wxString resType(res->GetType());
     if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
     {
+      if (res->GetId() == oldId)
+          res->SetId(newId);
+
       wxNode *node1 = res->GetChildren().First();
       while (node1)
       {
@@ -1581,6 +1607,71 @@ void wxResourceManager::ChangeIds(int oldId, int newId)
     }
   }
 }
+
+// If any resource ids were missing (or their symbol was missing),
+// repair them i.e. give them new ids. Returns TRUE if any resource
+// needed repairing.
+bool wxResourceManager::RepairResourceIds()
+{
+  bool repaired = FALSE;
+
+  m_resourceTable.BeginFind();
+  wxNode *node;
+  while (node = m_resourceTable.Next())
+  {
+    wxItemResource *res = (wxItemResource *)node->Data();
+    wxString resType(res->GetType());
+    if (resType == "wxDialog" || resType == "wxDialogBox" || resType == "wxPanel")
+    {
+
+      if ( (res->GetId() == 0) || ((res->GetId() > 0) && !m_symbolTable.IdExists(res->GetId())) )
+      {
+          wxString newSymbolName;
+          int newId = GenerateWindowId("ID_DIALOG", newSymbolName) ;
+
+          if (res->GetId() == 0)
+          {
+              res->SetId(newId);
+              m_symbolTable.AddSymbol(newSymbolName, newId);
+          }
+          else
+          {
+              m_symbolTable.AddSymbol(newSymbolName, res->GetId());
+          }
+
+          repaired = TRUE;
+      }
+
+      wxNode *node1 = res->GetChildren().First();
+      while (node1)
+      {
+        wxItemResource *child = (wxItemResource *)node1->Data();
+
+        if ( (child->GetId() == 0) || ((child->GetId() > 0) && !m_symbolTable.IdExists(child->GetId())) )
+        {
+            wxString newSymbolName;
+            int newId = GenerateWindowId("ID_CONTROL", newSymbolName) ;
+
+            if (child->GetId() == 0)
+            {
+                child->SetId(newId);
+                m_symbolTable.AddSymbol(newSymbolName, newId);
+            }
+            else
+            {
+                m_symbolTable.AddSymbol(newSymbolName, child->GetId());
+            }
+
+            repaired = TRUE;
+        }
+
+        node1 = node1->Next();
+      }
+    }
+  }
+  return repaired;
+}
+
 
  // Deletes 'win' and creates a new window from the resource that
  // was associated with it. E.g. if you can't change properties on the

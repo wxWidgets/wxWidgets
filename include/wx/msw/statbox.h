@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __STATBOXH__
-#define __STATBOXH__
+#ifndef _WX_STATBOX_H_
+#define _WX_STATBOX_H_
 
 #ifdef __GNUG__
 #pragma interface "statbox.h"
@@ -60,4 +60,4 @@ DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // __STATBOXH__
+    // _WX_STATBOX_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DCMEMORYH__
-#define __DCMEMORYH__
+#ifndef _WX_DCMEMORY_H_
+#define _WX_DCMEMORY_H_
 
 #ifdef __GNUG__
 #pragma interface "dcmemory.h"
@@ -32,4 +32,4 @@ class WXDLLEXPORT wxMemoryDC: public wxDC
 };
 
 #endif
-    // __DCMEMORYH__
+    // _WX_DCMEMORY_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DCPRINTH__
-#define __DCPRINTH__
+#ifndef _WX_DCPRINT_H_
+#define _WX_DCPRINT_H_
 
 #ifdef __GNUG__
 #pragma interface "dcprint.h"
@@ -34,5 +34,5 @@ class WXDLLEXPORT wxPrinterDC: public wxDC
 WXHDC WXDLLEXPORT wxGetPrinterDC(int orientation);
 
 #endif
-    // __DCPRINTH__
+    // _WX_DCPRINT_H_
 

@@ -303,8 +303,16 @@ class wxPropertyListPanel: public wxPanel
   }
   void OnDefaultAction(wxControl *item);
 
+  inline void SetView(wxPropertyListView* v) { view = v; }
+  inline wxPropertyListView* GetView() const { return view; }
+
   // Extend event processing to search the view's event table
   virtual bool ProcessEvent(wxEvent& event);
+
+  // Call Layout()
+  void OnSize(wxSizeEvent& event);
+
+DECLARE_EVENT_TABLE()
 };
 
 /*
@@ -316,7 +324,7 @@ class wxPropertyListFrame: public wxFrame
   DECLARE_CLASS(wxPropertyListFrame)
  private:
   wxPropertyListView *view;
-  wxPanel *propertyPanel;
+  wxPropertyListPanel *propertyPanel;
  public:
   wxPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -330,8 +338,8 @@ class wxPropertyListFrame: public wxFrame
 
   // Must call this to create panel and associate view
   virtual bool Initialize(void);
-  virtual wxPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
-  inline virtual wxPanel *GetPropertyPanel(void) { return propertyPanel; }
+  virtual wxPropertyListPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
+  inline virtual wxPropertyListPanel *GetPropertyPanel(void) { return propertyPanel; }
 };
 
 /*

@@ -74,6 +74,7 @@ wxWindow *wxPropertyInfo::sm_propertyWindow;
  * wxDialogEditorPropertyListDialog
  */
 
+ /*
 wxDialogEditorPropertyListDialog::wxDialogEditorPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
         const wxPoint& pos, const wxSize& size,
         long style, const wxString& name):
@@ -84,6 +85,23 @@ wxDialogEditorPropertyListDialog::wxDialogEditorPropertyListDialog(wxPropertyLis
 }
 
 wxDialogEditorPropertyListDialog::~wxDialogEditorPropertyListDialog()
+{
+    delete m_propSheet;
+    delete m_propInfo;
+    wxPropertyInfo::sm_propertyWindow = NULL;
+}
+*/
+
+wxDialogEditorPropertyListFrame::wxDialogEditorPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
+        const wxPoint& pos, const wxSize& size,
+        long style, const wxString& name):
+            wxPropertyListFrame(v, parent, title, pos, size, style, name)
+{
+        m_propSheet = NULL;
+        m_propInfo = NULL;
+}
+
+wxDialogEditorPropertyListFrame::~wxDialogEditorPropertyListFrame()
 {
     delete m_propSheet;
     delete m_propInfo;
@@ -127,32 +145,32 @@ bool wxPropertyInfo::Edit(wxWindow *parent, const wxString& title)
   propSheet->SetAllModified(FALSE);
 
   wxResourcePropertyListView *view = new wxResourcePropertyListView(this, NULL,
-#ifdef __XVIEW__
      wxPROP_BUTTON_OK | wxPROP_BUTTON_CANCEL |
-#endif
      wxPROP_BUTTON_CHECK_CROSS|wxPROP_DYNAMIC_VALUE_FIELD|wxPROP_PULLDOWN|wxPROP_SHOWVALUES);
 
-  wxDialogEditorPropertyListDialog *propDialog = new wxDialogEditorPropertyListDialog(view,
+  wxDialogEditorPropertyListFrame *propWin = new wxDialogEditorPropertyListFrame(view,
     wxResourceManager::GetCurrentResourceManager()->GetEditorFrame(), title, wxPoint(x, y),
-    wxSize(width, height), wxDEFAULT_DIALOG_STYLE);
-  sm_propertyWindow = propDialog;
+    wxSize(width, height), wxDEFAULT_FRAME_STYLE);
+  sm_propertyWindow = propWin;
 
-  propDialog->m_registry.RegisterValidator((wxString)"real", new wxRealListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"string", new wxStringListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"integer", new wxIntegerListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"filename", new wxFilenameListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"stringlist", new wxListOfStringsListValidator);
-  propDialog->m_registry.RegisterValidator((wxString)"window_id", new wxResourceSymbolValidator);
+  propWin->m_registry.RegisterValidator((wxString)"real", new wxRealListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"string", new wxStringListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"integer", new wxIntegerListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"filename", new wxFilenameListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"stringlist", new wxListOfStringsListValidator);
+  propWin->m_registry.RegisterValidator((wxString)"window_id", new wxResourceSymbolValidator);
 
-  propDialog->m_propInfo = this;
-  propDialog->m_propSheet = propSheet;
+  propWin->m_propInfo = this;
+  propWin->m_propSheet = propSheet;
 
-//  view->propertyWindow = propDialog;
-  view->AddRegistry(&(propDialog->m_registry));
-  view->ShowView(propSheet, propDialog);
+//  view->propertyWindow = propWin;
+  view->AddRegistry(&(propWin->m_registry));
 
-  propDialog->Show(TRUE);
+  propWin->Initialize();
+  view->ShowView(propSheet, propWin->GetPropertyPanel());
+
+  propWin->Show(TRUE);
   return TRUE;
 }
 
@@ -511,6 +529,27 @@ bool wxWindowPropertyInfo::InstantiateResource(wxItemResource *resource)
   return TRUE;
 }
 
+// Set the window style
+void wxWindowPropertyInfo::SetWindowStyle(wxWindow* win, long style, bool set)
+{
+    if (style == 0)
+        return;
+
+    if ((win->GetWindowStyleFlag() & style) == style)
+    {
+        if (!set)
+        {
+            win->SetWindowStyleFlag(win->GetWindowStyleFlag() - style);
+        }
+    }
+    else
+    {
+        if (set)
+        {
+            win->SetWindowStyleFlag(win->GetWindowStyleFlag() | style);
+        }
+    }
+}
 
 /*
  * Controls
@@ -594,8 +633,8 @@ bool wxButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxButtonPropertyInfo::GetPropertyNames(wxStringList& names)
 {
-  names.Add("label");
   wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("label");
 }
 
 bool wxButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -696,8 +735,8 @@ bool wxStaticTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxStaticTextPropertyInfo::GetPropertyNames(wxStringList& names)
 {
-  names.Add("label");
   wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("label");
 }
 
 bool wxStaticTextPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -772,8 +811,8 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
 
 void wxStaticBitmapPropertyInfo::GetPropertyNames(wxStringList& names)
 {
-  names.Add("label");
   wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("label");
 }
 
 bool wxStaticBitmapPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -856,10 +895,10 @@ bool wxTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxTextPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("value");
   names.Add("readonly");
   names.Add("password");
-  wxItemPropertyInfo::GetPropertyNames(names);  
 }
 
 bool wxTextPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -955,9 +994,9 @@ bool wxListBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxListBoxPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("values");
   names.Add("multiple");
-  wxItemPropertyInfo::GetPropertyNames(names);  
 }
 
 bool wxListBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1024,8 +1063,8 @@ bool wxChoicePropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxChoicePropertyInfo::GetPropertyNames(wxStringList& names)
 {
-  names.Add("values");
   wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("values");
 }
 
 bool wxChoicePropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1144,11 +1183,11 @@ bool wxRadioBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxRadioBoxPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("label");
   names.Add("values");
   names.Add("orientation");
   names.Add("numberRowsOrCols");
-  wxItemPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxRadioBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1190,8 +1229,8 @@ bool wxGroupBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxGroupBoxPropertyInfo::GetPropertyNames(wxStringList& names)
 {  
-  names.Add("label");
   wxItemPropertyInfo::GetPropertyNames(names);
+  names.Add("label");
 }
 
 bool wxGroupBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1227,9 +1266,9 @@ bool wxCheckBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxCheckBoxPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("label");
   names.Add("value");
-  wxItemPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxCheckBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1266,9 +1305,9 @@ bool wxRadioButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property
 
 void wxRadioButtonPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("label");
   names.Add("value");
-  wxItemPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxRadioButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1363,11 +1402,11 @@ bool wxSliderPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxSliderPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("value");
   names.Add("orientation");
   names.Add("min_value");
   names.Add("max_value");
-  wxItemPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxSliderPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1413,9 +1452,9 @@ bool wxGaugePropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxGaugePropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("value");
   names.Add("max_value");
-  wxItemPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxGaugePropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1533,12 +1572,12 @@ bool wxScrollBarPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxScrollBarPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxItemPropertyInfo::GetPropertyNames(names);
   names.Add("orientation");
   names.Add("value");
   names.Add("pageSize");
   names.Add("viewLength");
   names.Add("objectLength");
-  wxItemPropertyInfo::GetPropertyNames(names);
 
   // Remove some properties we don't inherit
   names.Delete("fontPoints");
@@ -1608,6 +1647,21 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
     else
         return new wxProperty(name, "Could not get title", "string");
   }
+  else if (name == "caption")
+  {
+    return new wxProperty(name, ((panelWindow->GetWindowStyleFlag() & wxCAPTION) == wxCAPTION),
+        "bool");
+  }
+  else if (name == "systemMenu")
+  {
+    return new wxProperty(name, ((panelWindow->GetWindowStyleFlag() & wxSYSTEM_MENU) == wxSYSTEM_MENU),
+        "bool");
+  }
+  else if (name == "thickFrame")
+  {
+    return new wxProperty(name, ((panelWindow->GetWindowStyleFlag() & wxTHICK_FRAME) == wxTHICK_FRAME),
+        "bool");
+  }
   else
     return wxWindowPropertyInfo::GetProperty(name);
 }
@@ -1676,6 +1730,30 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     else
         return FALSE;
   }
+  else if (name == "caption")
+  {
+    SetWindowStyle(panelWindow, wxCAPTION, property->GetValue().BoolValue());
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+    resource->SetStyle(panelWindow->GetWindowStyleFlag());
+    return TRUE;
+  }
+  else if (name == "thickFrame")
+  {
+    SetWindowStyle(panelWindow, wxTHICK_FRAME, property->GetValue().BoolValue());
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+    resource->SetStyle(panelWindow->GetWindowStyleFlag());
+    return TRUE;
+  }
+  else if (name == "systemMenu")
+  {
+    SetWindowStyle(panelWindow, wxSYSTEM_MENU, property->GetValue().BoolValue());
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+    resource->SetStyle(panelWindow->GetWindowStyleFlag());
+    return TRUE;
+  }
   else
     return wxWindowPropertyInfo::SetProperty(name, property);
 }
@@ -1687,6 +1765,9 @@ void wxPanelPropertyInfo::GetPropertyNames(wxStringList& names)
   names.Add("title");
   names.Add("no3D");
   names.Add("backgroundColour");
+  names.Add("caption");
+  names.Add("systemMenu");
+  names.Add("thickFrame");
 }
 
 bool wxPanelPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1742,10 +1823,9 @@ bool wxDialogPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 
 void wxDialogPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  wxPanelPropertyInfo::GetPropertyNames(names);
   names.Add("title");
   names.Add("modal");
-
-  wxPanelPropertyInfo::GetPropertyNames(names);
 }
 
 bool wxDialogPropertyInfo::InstantiateResource(wxItemResource *resource)
@@ -1884,24 +1964,6 @@ void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView 
     view->UpdatePropertyDisplayInList(property);
     view->OnPropertyChanged(property);
   }
-
-#if 0
-  char *s = wxFileSelector(
-     filenameMessage.GetData(),
-     wxPathOnly(property->GetValue().StringValue()),
-     wxFileNameFromPath(property->GetValue().StringValue()),
-     NULL,
-     filenameWildCard.GetData(),
-     0,
-     parentWindow);
-  if (s)
-  {
-    property->GetValue() = wxString(s);
-    view->DisplayProperty(property);
-    view->UpdatePropertyDisplayInList(property);
-    view->OnPropertyChanged(property);
-  }
-#endif
 }
 
 BEGIN_EVENT_TABLE(wxResourceSymbolDialog, wxDialog)
@@ -1922,7 +1984,7 @@ wxResourceSymbolDialog::wxResourceSymbolDialog(wxWindow* parent, const wxWindowI
     x += 80;
 
     m_nameCtrl = new wxComboBox(this, ID_SYMBOLNAME_COMBOBOX, "",
-        wxPoint(x, y), wxSize(200, -1), 0, NULL, wxCB_DROPDOWN);
+        wxPoint(x, y), wxSize(200, -1), 0, NULL, wxCB_DROPDOWN|wxCB_SORT);
 
     y += 30;
     x = 5;
@@ -2041,7 +2103,7 @@ bool wxResourceSymbolDialog::CheckValues()
 
 void wxResourceSymbolDialog::OnComboBoxSelect(wxCommandEvent& event)
 {
-    wxString str(m_nameCtrl->GetValue());
+    wxString str(m_nameCtrl->GetStringSelection());
     if (wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().IsStandardSymbol(str))
     {
         int id = wxResourceManager::GetCurrentResourceManager()->GetSymbolTable().GetIdForSymbol(str);

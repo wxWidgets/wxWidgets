@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DCH__
-#define __DCH__
+#ifndef _WX_DC_H_
+#define _WX_DC_H_
 
 #ifdef __GNUG__
 #pragma interface "dc.h"
@@ -412,4 +412,4 @@ extern int wxPageNumber;
 
 
 #endif
-    // __DCH__
+    // _WX_DC_H_

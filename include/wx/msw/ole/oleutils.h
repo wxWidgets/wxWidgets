@@ -6,11 +6,11 @@
 // Created:     19.02.1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _OLEUTILS_H
-#define   _OLEUTILS_H
+#ifndef   _WX_OLEUTILS_H
+#define   _WX_OLEUTILS_H
 
 #ifdef __GNUG__
 #pragma interface "oleutils.h"
@@ -143,4 +143,4 @@ void wxLogRelease(const char *szInterface, ULONG cRef);
   #define   wxLogRelease(szInterface, cRef)
 #endif  //WXDEBUG
 
-#endif  //_OLEUTILS_H
+#endif  //_WX_OLEUTILS_H

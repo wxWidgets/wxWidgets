@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLORDLGH__
-#define __COLORDLGH__
+#ifndef _WX_COLORDLG_H_
+#define _WX_COLORDLG_H_
 
 #ifdef __GNUG__
 #pragma interface "colordlg.h"
@@ -26,19 +26,20 @@
 
 class WXDLLEXPORT wxColourDialog: public wxDialog
 {
- DECLARE_DYNAMIC_CLASS(wxColourDialog)
- protected:
-  wxColourData colourData;
-  wxWindow *dialogParent;
- public:
-  wxColourDialog(void);
-  wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
+DECLARE_DYNAMIC_CLASS(wxColourDialog)
+public:
+    wxColourDialog(void);
+    wxColourDialog(wxWindow *parent, wxColourData *data = NULL);
 
-  bool Create(wxWindow *parent, wxColourData *data = NULL);
+    bool Create(wxWindow *parent, wxColourData *data = NULL);
 
-  int ShowModal(void);
-  wxColourData& GetColourData(void) { return colourData; }
+    int ShowModal(void);
+    wxColourData& GetColourData(void) { return m_colourData; }
+
+protected:
+    wxColourData        m_colourData;
+    wxWindow*           m_dialogParent;
 };
 
 #endif
-    // __COLORDLGH__
+    // _WX_COLORDLG_H_

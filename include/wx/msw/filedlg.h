@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FILEDLGH__
-#define __FILEDLGH__
+#ifndef _WX_FILEDLG_H_
+#define _WX_FILEDLG_H_
 
 #ifdef __GNUG__
 #pragma interface "filedlg.h"
@@ -86,4 +86,4 @@ char* WXDLLEXPORT wxLoadFileSelector(const char *what, const char *extension, co
 char* WXDLLEXPORT wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);
 
 #endif
-    // __FILEDLGH__
+    // _WX_FILEDLG_H_

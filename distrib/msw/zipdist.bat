@@ -1,27 +1,29 @@
 @echo off
 rem Zip up an external, generic + Windows distribution of wxWindows 2.0
-if "%1" == "" goto usage
-if "%2" == "" goto usage
+set src=d:\wx2\wxWindows
+set dest=%src\deliver
+if "%src" == "" goto usage
+if "%dest" == "" goto usage
 echo About to archive an external wxWindows distribution:
-echo   From   %1
-echo   To     %2\wx200gen.zip, %2\wx200doc.zip, %2\wx200msw.zip, %2\wx200ps.zip, %2\wx200hlp.zip, %2\wx200htm.zip, %2\wx200pdf.zip
+echo   From   %src
+echo   To     %dest\wx200gen.zip, %dest\wx200doc.zip, %dest\wx200msw.zip, %dest\wx200ps.zip, %dest\wx200hlp.zip, %dest\wx200htm.zip, %dest\wx200pdf.zip
 echo CTRL-C if this is not correct.
 pause
 
-erase %2\wx200*.zip
+erase %dest\wx200*.zip
 
-cd %1
+cd %src
 echo Zipping...
-zip32 -@ %2\wx200gen.zip < %1\distrib\msw\generic.rsp
-zip32 -@ %2\wx200msw.zip < %1\distrib\msw\msw.rsp
-zip32 -@ %2\wx200gtk.zip < %1\distrib\msw\gtk.rsp
-zip32 -@ %2\wx200doc.zip < %1\distrib\msw\docsrc.rsp
+zip32 -@ %dest\wx200gen.zip < %src\distrib\msw\generic.rsp
+zip32 -@ %dest\wx200msw.zip < %src\distrib\msw\msw.rsp
+zip32 -@ %dest\wx200gtk.zip < %src\distrib\msw\gtk.rsp
+zip32 -@ %dest\wx200doc.zip < %src\distrib\msw\docsrc.rsp
 
-zip32 -@ %2\wx200hlp.zip < %1\distrib\msw\wx_hlp.rsp
-zip32 -@ %2\wx200htm.zip < %1\distrib\msw\wx_html.rsp
-zip32 -@ %2\wx200pdf.zip < %1\distrib\msw\wx_pdf.rsp
+zip32 -@ %dest\wx200hlp.zip < %src\distrib\msw\wx_hlp.rsp
+zip32 -@ %dest\wx200htm.zip < %src\distrib\msw\wx_html.rsp
+zip32 -@ %dest\wx200pdf.zip < %src\distrib\msw\wx_pdf.rsp
 
-cd %2
+cd %dest
 
 echo wxWindows archived.
 goto end

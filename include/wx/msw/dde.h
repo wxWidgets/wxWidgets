@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DDEH__
-#define __DDEH__
+#ifndef _WX_DDE_H_
+#define _WX_DDE_H_
 
 #ifdef __GNUG__
 #pragma interface "dde.h"
@@ -159,4 +159,4 @@ void WXDLLEXPORT wxDDECleanUp();
 #endif
 
 #endif
-    // __DDEH__
+    // _WX_DDE_H_

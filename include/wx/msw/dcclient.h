@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DCCLIENTH__
-#define __DCCLIENTH__
+#ifndef _WX_DCCLIENT_H_
+#define _WX_DCCLIENT_H_
 
 #ifdef __GNUG__
 #pragma interface "dcclient.h"
@@ -62,4 +62,4 @@ class WXDLLEXPORT wxPaintDC: public wxDC
 };
 
 #endif
-    // __DCCLIENTH__
+    // _WX_DCCLIENT_H_

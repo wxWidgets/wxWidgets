@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TABCTRLH__
-#define __TABCTRLH__
+#ifndef _WX_TABCTRL_H_
+#define _WX_TABCTRL_H_
 
 #ifdef __GNUG__
 #pragma interface "tabctrl.h"
@@ -150,4 +150,4 @@ typedef void (wxEvtHandler::*wxTabEventFunction)(wxTabEvent&);
   id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTabEventFunction) & fn, NULL },
 
 #endif
-    // __TABCTRLH__
+    // _WX_TABCTRL_H_

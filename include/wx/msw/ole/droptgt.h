@@ -6,14 +6,14 @@
 // Created:     06.03.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
 // prolog
 // ============================================================================
-#ifndef   _OLEDROPTGT_H
-#define   _OLEDROPTGT_H
+#ifndef   _WX_OLEDROPTGT_H
+#define   _WX_OLEDROPTGT_H
 
 #ifdef __GNUG__
 #pragma interface "droptgt.h"
@@ -108,4 +108,4 @@ protected:
 };
 
 // ============================================================================
-#endif  //_OLEDROPTGT_H
+#endif  //_WX_OLEDROPTGT_H

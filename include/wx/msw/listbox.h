@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LISTBOXH__
-#define __LISTBOXH__
+#ifndef _WX_LISTBOX_H_
+#define _WX_LISTBOX_H_
 
 #ifdef __GNUG__
 #pragma interface "listbox.h"
@@ -18,7 +18,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 
 #if USE_OWNER_DRAWN
@@ -134,4 +133,4 @@ class WXDLLEXPORT wxListBox: public wxControl
 };
 
 #endif
-    // __LISTBOXH__
+    // _WX_LISTBOX_H_

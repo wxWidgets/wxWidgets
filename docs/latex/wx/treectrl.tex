@@ -111,11 +111,34 @@ Deletes all the items in the control.
 
 Deletes the specified item.
 
-\membersection{wxTreeCtrl::Edit}\label{wxtreectrledit}
+\membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
-\func{wxTextCtrl\&}{Edit}{\param{long }{item}}
+\func{wxTextCtrl*}{EditLabel}{\param{long }{item}, \param{wxClassInfo*}{ textControlClass = CLASSINFO(wxTextCtrl)}}
 
 Starts editing the label of the given item, returning the text control that the tree control uses for editing.
+
+Pass another {\it textControlClass} if a derived class is required. It usually will be, in order for
+the application to detect when editing has finished and to call \helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}.
+
+Do not delete the text control yourself.
+
+This function is currently supported under Windows only.
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl::EndEditLabel}{wxtreectrlendeditlabel}
+
+\membersection{wxTreeCtrl::EndEditLabel}\label{wxtreectrlendeditlabel}
+
+\func{bool}{EndEditLabel}{\param{bool }{cancelEdit}}
+
+Ends label editing. If {\it cancelEdit} is TRUE, the edit will be cancelled.
+
+This function is currently supported under Windows only.
+
+\wxheading{See also}
+
+\helpref{wxTreeCtrl::EditLabel}{wxtreectrleditlabel}
 
 \membersection{wxTreeCtrl::EnsureVisible}\label{wxtreectrlensurevisible}
 

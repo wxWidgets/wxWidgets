@@ -6,11 +6,11 @@
 // Created:     06.03.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _OLEDROPSRC_H
-#define   _OLEDROPSRC_H
+#ifndef   _WX_OLEDROPSRC_H
+#define   _WX_OLEDROPSRC_H
 
 #ifdef __GNUG__
 #pragma interface
@@ -68,4 +68,4 @@ private:
   wxIDropSource *m_pIDropSource;  // the pointer to COM interface
 };
 
-#endif  //_OLEDROPSRC_H
+#endif  //_WX_OLEDROPSRC_H

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __BITMAPH__
-#define __BITMAPH__
+#ifndef _WX_BITMAP_H_
+#define _WX_BITMAP_H_
 
 #ifdef __GNUG__
 #pragma interface "bitmap.h"
@@ -199,4 +199,4 @@ public:
 
 };
 #endif
-  // __BITMAPH__
+  // _WX_BITMAP_H_

@@ -58,7 +58,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
   if (parent) parent->AddChild(this);
   SetBackgroundColour(parent->GetDefaultBackgroundColour()) ;
   SetForegroundColour(parent->GetDefaultForegroundColour()) ;
-  no_strings = n;
+  m_noStrings = n;
 
   m_windowStyle = style;
 
@@ -121,19 +121,19 @@ void wxChoice::Append(const wxString& item)
 {
   SendMessage((HWND) GetHWND(), CB_ADDSTRING, 0, (LONG)(const char *)item);
 
-  no_strings ++;
+  m_noStrings ++;
 }
 
 void wxChoice::Delete(int n)
 {
-  no_strings = (int)SendMessage((HWND) GetHWND(), CB_DELETESTRING, n, 0);
+  m_noStrings = (int)SendMessage((HWND) GetHWND(), CB_DELETESTRING, n, 0);
 }
 
 void wxChoice::Clear(void)
 {
   SendMessage((HWND) GetHWND(), CB_RESETCONTENT, 0, 0);
 
-  no_strings = 0;
+  m_noStrings = 0;
 }
 
 
@@ -218,14 +218,14 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (width <= 0)
   {
     // Find the longest string
-    if (no_strings == 0)
+    if (m_noStrings == 0)
       control_width = (float)100.0;
     else
     {
       int len, ht;
       float longest = (float)0.0;
       int i;
-      for (i = 0; i < no_strings; i++)
+      for (i = 0; i < m_noStrings; i++)
       {
         wxString str(GetString(i));
         GetTextExtent(str, &len, &ht, NULL, NULL,GetFont());
@@ -239,9 +239,9 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
   // Choice drop-down list depends on number of items (limited to 10)
   if (h1 <= 0)
   {
-    if (no_strings == 0)
+    if (m_noStrings == 0)
       h1 = (int)(EDIT_CONTROL_FACTOR*cy*10.0);
-    else h1 = (int)(EDIT_CONTROL_FACTOR*cy*(wxMin(10, no_strings) + 1));
+    else h1 = (int)(EDIT_CONTROL_FACTOR*cy*(wxMin(10, m_noStrings) + 1));
   }
 
   // If non-default width...

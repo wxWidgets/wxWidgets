@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FONTDLGH__
-#define __FONTDLGH__
+#ifndef _WX_FONTDLG_H_
+#define _WX_FONTDLG_H_
 
 #ifdef __GNUG__
 #pragma interface "fontdlg.h"
@@ -25,20 +25,22 @@
  
 class WXDLLEXPORT wxFontDialog: public wxDialog
 {
- DECLARE_DYNAMIC_CLASS(wxFontDialog)
- protected:
-  wxWindow *dialogParent;
-  wxFontData fontData;
- public:
-  wxFontDialog(void);
-  wxFontDialog(wxWindow *parent, wxFontData *data = NULL);
+DECLARE_DYNAMIC_CLASS(wxFontDialog)
 
-  bool Create(wxWindow *parent, wxFontData *data = NULL);
+public:
+    wxFontDialog(void);
+    wxFontDialog(wxWindow *parent, wxFontData *data = NULL);
 
-  int ShowModal(void);
-  wxFontData& GetFontData(void) { return fontData; }
+    bool Create(wxWindow *parent, wxFontData *data = NULL);
+
+    int ShowModal(void);
+    wxFontData& GetFontData(void) { return m_fontData; }
+
+protected:
+    wxWindow *m_dialogParent;
+    wxFontData m_fontData;
 };
 
 #endif
-    // __FONTDLGH__
+    // _WX_FONTDLG_H_
 

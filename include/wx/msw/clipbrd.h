@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CLIPBRDH__
-#define __CLIPBRDH__
+#ifndef _WX_CLIPBRD_H_
+#define _WX_CLIPBRD_H_
 
 #ifdef __GNUG__
 #pragma interface "clipbrd.h"
@@ -108,4 +108,4 @@ extern wxClipboard* WXDLLEXPORT wxTheClipboard;
 
 #endif // USE_CLIPBOARD
 #endif
-    // __CLIPBRDH__
+    // _WX_CLIPBRD_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SETTINGSH__
-#define __SETTINGSH__
+#ifndef _WX_SETTINGS_H_
+#define _WX_SETTINGS_H_
 
 #ifdef __GNUG__
 #pragma interface "settings.h"
@@ -126,4 +126,4 @@ public:
 };
 
 #endif
-    // __SETTINGSH__
+    // _WX_SETTINGS_H_

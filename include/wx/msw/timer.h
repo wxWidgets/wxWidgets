@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TIMERH__
-#define __TIMERH_
+#ifndef _WX_TIMER_H_
+#define _WX_TIMER_H_
 
 #ifdef __GNUG__
 #pragma interface "timer.h"
@@ -49,4 +49,4 @@ bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
 long WXDLLEXPORT wxGetCurrentTime(void);
 
 #endif
-    // __TIMERH_
+    // _WX_TIMERH_

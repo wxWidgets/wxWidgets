@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TEXTCTRLH__
-#define __TEXTCTRLH__
+#ifndef _WX_TEXTCTRL_H_
+#define _WX_TEXTCTRL_H_
 
 #ifdef __GNUG__
 #pragma interface "textctrl.h"
@@ -153,4 +153,4 @@ protected:
 };
 
 #endif
-    // __TEXTCTRLH__
+    // _WX_TEXTCTRL_H_

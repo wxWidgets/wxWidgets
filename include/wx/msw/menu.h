@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MENUH__
-#define __MENUH__
+#ifndef _WX_MENU_H_
+#define _WX_MENU_H_
 
 #ifdef __GNUG__
 #pragma interface "menu.h"
@@ -19,9 +19,9 @@
 #include "wx/defs.h"
 #include "wx/event.h"
 
-class wxMenuItem;
-class wxMenuBar;
-class wxMenu;
+class WXDLLEXPORT wxMenuItem;
+class WXDLLEXPORT wxMenuBar;
+class WXDLLEXPORT wxMenu;
 
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
@@ -125,7 +125,7 @@ public:
 // ----------------------------------------------------------------------------
 // Menu Bar (a la Windows)
 // ----------------------------------------------------------------------------
-class wxFrame;
+class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxMenuBar: public wxEvtHandler
 {
   DECLARE_DYNAMIC_CLASS(wxMenuBar)
@@ -177,4 +177,4 @@ public:
   WXHMENU                   m_hMenu;
 };
 
-#endif // __MENUH__
+#endif // _WX_MENU_H_

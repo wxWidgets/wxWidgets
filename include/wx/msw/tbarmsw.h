@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TBARMSWH__
-#define __TBARMSWH__
+#ifndef _WX_TBARMSW_H_
+#define _WX_TBARMSW_H_
 
 #ifdef __GNUG__
 #pragma interface "tbarmsw.h"
@@ -120,4 +120,4 @@ DECLARE_EVENT_TABLE()
 
 #endif // USE_TOOL/BUTTONBAR
 #endif
-    // __TBARMSWH__
+    // _WX_TBARMSW_H_

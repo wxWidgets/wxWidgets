@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GDIOBJH__
-#define __GDIOBJH__
+#ifndef _WX_GDIOBJ_H_
+#define _WX_GDIOBJ_H_
 
 #include "wx/object.h"
 
@@ -64,4 +64,4 @@ protected:
 };
 
 #endif
-    // __GDIOBJH__
+    // _WX_GDIOBJ_H_

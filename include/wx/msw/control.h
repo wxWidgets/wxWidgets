@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CONTROLH__
-#define __CONTROLH__
+#ifndef _WX_CONTROL_H_
+#define _WX_CONTROL_H_
 
 #ifdef __GNUG__
 #pragma interface "control.h"
@@ -83,4 +83,4 @@ inline void wxControl::SetButtonFont(const wxFont& font) { SetFont(font); }
 #endif
 
 #endif
-    // __CONTROLH__
+    // _WX_CONTROL_H_

@@ -6,11 +6,11 @@
 // Created:     10.05.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _OLEDATAOBJ_H
-#define   _OLEDATAOBJ_H
+#ifndef   _WX_OLEDATAOBJ_H
+#define   _WX_OLEDATAOBJ_H
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -106,4 +106,4 @@ private:
 // @@@ TODO: wx{Bitmap|Metafile|...}DataObject
 // ----------------------------------------------------------------------------
 
-#endif  //_OLEDATAOBJ_H
+#endif  //_WX_OLEDATAOBJ_H

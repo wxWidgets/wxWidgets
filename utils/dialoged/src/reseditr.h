@@ -27,6 +27,7 @@
 
 #include "proplist.h"
 #include "symbtabl.h"
+#include "winstyle.h"
 
 #define RESED_DELETE            1
 #define RESED_RECREATE          3
@@ -112,14 +113,16 @@ class wxResourceTableWithSaving: public wxResourceTable
  public:
   wxResourceTableWithSaving():wxResourceTable()
   {
+    // Add all known window styles
+    m_styleTable.Init();
   }
   virtual bool Save(const wxString& filename);
   virtual bool SaveResource(ostream& stream, wxItemResource *item);
 
-  void GenerateWindowStyleString(long windowStyle, char *buf);
   void GeneratePanelStyleString(long windowStyle, char *buf);
   void GenerateDialogStyleString(long windowStyle, char *buf);
 
+/*
   void GenerateRadioBoxStyleString(long windowStyle, char *buf);
   void GenerateMessageStyleString(long windowStyle, char *buf);
   void GenerateTextStyleString(long windowStyle, char *buf);
@@ -131,13 +134,21 @@ class wxResourceTableWithSaving: public wxResourceTable
   void GenerateGroupBoxStyleString(long windowStyle, char *buf);
   void GenerateGaugeStyleString(long windowStyle, char *buf);
   void GenerateChoiceStyleString(long windowStyle, char *buf);
+  void GenerateComboBoxStyleString(long windowStyle, char *buf);
   void GenerateScrollBarStyleString(long windowStyle, char *buf);
-  void GenerateItemStyleString(long windowStyle, char *buf);
-  
+*/
+
+  void GenerateControlStyleString(const wxString& windowClass, long windowStyle, char *buf);
+
+/*
   bool GenerateStyle(char *buf, long windowStyle, long flag, char *strStyle);
+*/
 
   void OutputFont(ostream& stream, wxFont *font);
   wxControl *CreateItem(wxPanel *panel, wxItemResource *childResource);
+
+protected:
+  wxWindowStyleTable    m_styleTable;
 };
  
 class wxResourceEditorScrolledWindow;
@@ -231,6 +242,11 @@ public:
    // This is necessary if an id is changed for one resource - all resources
    // must be changed.
    void ChangeIds(int oldId, int newId);
+
+   // If any resource ids were missing (or their symbol was missing),
+   // repair them i.e. give them new ids. Returns TRUE if any resource
+   // needed repairing.
+   bool RepairResourceIds();
 
    // Deletes 'win' and creates a new window from the resource that
    // was associated with it. E.g. if you can't change properties on the

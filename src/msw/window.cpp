@@ -1874,7 +1874,7 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 long wxWindow::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   if ( m_oldWndProc )
-  	return ::CallWindowProc((FARPROC)m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  	return ::CallWindowProc(CASTWNDPROC m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
   else
   	return ::DefWindowProc((HWND) GetHWND(), nMsg, wParam, lParam);
 }

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MSGBOXDLGH__
-#define __MSGBOXDLGH__
+#ifndef _WX_MSGBOXDLG_H_
+#define _WX_MSGBOXDLG_H_
 
 #ifdef __GNUG__
 #pragma interface "msgdlg.h"
@@ -46,4 +46,4 @@ int WXDLLEXPORT wxMessageBox(const wxString& message, const wxString& caption = 
   wxWindow *parent = NULL, int x = -1, int y = -1);
 
 #endif
-    // __MSGBOXDLGH__
+    // _WX_MSGBOXDLG_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __RADIOBUTH__
-#define __RADIOBUTH__
+#ifndef _WX_RADIOBUT_H_
+#define _WX_RADIOBUT_H_
 
 #ifdef __GNUG__
 #pragma interface "radiobut.h"
@@ -89,4 +89,4 @@ class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
 #endif
 
 #endif
-    // __RADIOBUTH__
+    // _WX_RADIOBUT_H_

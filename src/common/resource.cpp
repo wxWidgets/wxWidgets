@@ -672,6 +672,10 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, PrologExpr *ex
   expr->AssignAttributeValue("label_colour", &labelColourHex);
   expr->AssignAttributeValue("button_colour", &buttonColourHex);
 
+  long id = 0;
+  expr->GetAttributeValue("id", id);
+  dialogItem->SetId(id);
+
   if (style)
   {
     windowStyle = wxParseWindowStyle(style);
@@ -1845,6 +1849,7 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   /* wxTreeCtrl */
   { "wxTR_HAS_BUTTONS", wxTR_HAS_BUTTONS },
   { "wxTR_EDIT_LABELS", wxTR_EDIT_LABELS },
+  { "wxTR_LINES_AT_ROOT", wxTR_LINES_AT_ROOT },
 
   /* wxListCtrl */
   { "wxLC_ICON", wxLC_ICON },
@@ -1892,6 +1897,9 @@ static wxResourceBitListStruct wxResourceBitListTable[] =
   
   /* wxToolBar */
   { "wxTB_3DBUTTONS", wxTB_3DBUTTONS},
+  { "wxTB_HORIZONTAL", wxTB_HORIZONTAL},
+  { "wxTB_VERTICAL", wxTB_VERTICAL},
+  { "wxTB_FLAT", wxTB_FLAT},
 
   /* Generic */
   { "wxVSCROLL", wxVSCROLL },
@@ -2907,6 +2915,7 @@ bool wxWindow::LoadFromResource(wxWindow *parent, const wxString& resourceName, 
 	long modalStyle = isModal ? wxDIALOG_MODAL : 0;
     if (!dialogBox->Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), theWindowStyle|modalStyle, name))
       return FALSE;
+    dialogBox->SetClientSize(width, height);
   }
   else
   {

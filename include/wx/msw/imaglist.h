@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __IMAGLISTH__
-#define __IMAGLISTH__
+#ifndef _WX_IMAGLIST_H_
+#define _WX_IMAGLIST_H_
 
 #ifdef __GNUG__
 #pragma interface "imaglist.h"
@@ -223,4 +223,4 @@ protected:
 };
 
 #endif
-    // __IMAGLISTH__
+    // _WX_IMAGLIST_H_

@@ -6,13 +6,13 @@
 // Created:     11.07.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 //
 // Notes:       you should link your project with RPCRT4.LIB!
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _OLEUUID_H
-#define   _OLEUUID_H
+#ifndef   _WX_OLEUUID_H
+#define   _WX_OLEUUID_H
 
 #ifdef __GNUG__
 #pragma interface "uuid.h"
@@ -88,4 +88,4 @@ public:
   const char *CForm() const    { return m_pszCForm;          }
 };
 
-#endif //_OLEUUID_H
+#endif //_WX_OLEUUID_H

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
+// Copyright:   (c) Julian Smart
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLOURH__
-#define __COLOURH__
+#ifndef _WX_COLOUR_H_
+#define _WX_COLOUR_H_
 
 #ifdef __GNUG__
 #pragma interface "colour.h"
@@ -68,4 +68,4 @@ public:
 #define wxColor wxColour
 
 #endif
-	// __COLOURH__
+	// _WX_COLOUR_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PRINTWINH__
-#define __PRINTWINH__
+#ifndef _WX_PRINTWIN_H_
+#define _WX_PRINTWIN_H_
 
 #ifdef __GNUG__
 #pragma interface "printwin.h"
@@ -55,4 +55,4 @@ class WXDLLEXPORT wxWindowsPrintPreview: public wxPrintPreviewBase
 };
 
 #endif
-    // __PRINTWINH__
+    // _WX_PRINTWIN_H_

@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TBAR95H__
-#define __TBAR95H__
+#ifndef _WX_TBAR95_H_
+#define _WX_TBAR95_H_
 
 #ifdef __GNUG__
 #pragma interface "tbar95.h"
@@ -93,4 +93,4 @@ DECLARE_EVENT_TABLE()
 
 #endif // USE_TOOL/BUTTONBAR
 #endif
-    // __TBAR95H__
+    // _WX_TBAR95_H_

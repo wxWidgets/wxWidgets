@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __ICONH__
-#define __ICONH__
+#ifndef _WX_ICON_H_
+#define _WX_ICON_H_
 
 #ifdef __GNUG__
 #pragma interface "icon.h"
@@ -99,4 +99,4 @@ public:
 };
 
 #endif
-    // __ICONH__
+    // _WX_ICON_H_

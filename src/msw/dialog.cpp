@@ -59,7 +59,7 @@ END_EVENT_TABLE()
 
 long wxDialog::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-  return ::CallWindowProc((FARPROC)m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+  return ::CallWindowProc(CASTWNDPROC m_oldWndProc, (HWND) GetHWND(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
 }
 
 bool wxDialog::MSWProcessMessage(WXMSG* pMsg)

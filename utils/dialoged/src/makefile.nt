@@ -26,7 +26,7 @@ LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
 PROGRAM=dialoged
  
 OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj\
-  winprop.obj edtree.obj edlist.obj symbtabl.obj
+  winprop.obj edtree.obj edlist.obj symbtabl.obj winstyle.obj
 
 all:    wxprop dialoged.exe
 
@@ -84,6 +84,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
 symbtabl.obj:      symbtabl.h symbtabl.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+winstyle.obj:      winstyle.h winstyle.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<

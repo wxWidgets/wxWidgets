@@ -54,6 +54,7 @@ wxListCtrl::wxListCtrl(void)
 	m_imageListState = NULL;
 	m_baseStyle = 0;
     m_colCount = 0;
+    m_textCtrl = NULL;
 }
 
 bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -62,6 +63,7 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
   m_imageListNormal = NULL;
   m_imageListSmall = NULL;
   m_imageListState = NULL;
+  m_textCtrl = NULL;
   m_colCount = 0;
 
   wxSystemSettings settings;
@@ -129,7 +131,13 @@ bool wxListCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, con
 
 wxListCtrl::~wxListCtrl(void)
 {
-	m_textCtrl.SetHWND((WXHWND) NULL);
+    if (m_textCtrl)
+    {
+      m_textCtrl->UnsubclassWin();
+      m_textCtrl->SetHWND(0);
+      delete m_textCtrl;
+      m_textCtrl = NULL;
+    }
 }
 
 // Add or remove a single window style
@@ -441,11 +449,9 @@ int wxListCtrl::GetCountPerPage(void) const
 }
 
 // Gets the edit control for editing labels.
-wxTextCtrl& wxListCtrl::GetEditControl(void) const
+wxTextCtrl* wxListCtrl::GetEditControl(void) const
 {
-	HWND hWnd = (HWND) ListView_GetEditControl((HWND) GetHWND());
-	((wxListCtrl *)this)->m_textCtrl.SetHWND((WXHWND) hWnd);
-	return (wxTextCtrl&)m_textCtrl;
+    return m_textCtrl;
 }
 
 // Gets information about the item
@@ -806,13 +812,48 @@ void wxListCtrl::ClearAll(void)
         DeleteAllColumns();
 }
 
-// Edits a label
-wxTextCtrl& wxListCtrl::Edit(long item)
+wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
-	HWND hWnd = (HWND) ListView_EditLabel((HWND) GetHWND(), (int) item);
-	m_textCtrl.SetHWND((WXHWND) hWnd);
-	return m_textCtrl;
+    wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
+
+    HWND hWnd = (HWND) ListView_EditLabel((HWND) GetHWND(), item);
+
+    if (m_textCtrl)
+    {
+      m_textCtrl->UnsubclassWin();
+      m_textCtrl->SetHWND(0);
+      delete m_textCtrl;
+      m_textCtrl = NULL;
+    }
+
+    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
+    m_textCtrl->SetHWND((WXHWND) hWnd);
+    m_textCtrl->SubclassWin((WXHWND) hWnd);
+
+    return m_textCtrl;
 }
+
+// End label editing, optionally cancelling the edit
+bool wxListCtrl::EndEditLabel(bool cancel)
+{
+    wxASSERT( FALSE);
+
+/* I don't know how to implement this: there's no such macro as ListView_EndEditLabelNow.
+ * ???
+    bool success = (ListView_EndEditLabelNow((HWND) GetHWND(), cancel) != 0);
+
+    if (m_textCtrl)
+    {
+      m_textCtrl->UnsubclassWin();
+      m_textCtrl->SetHWND(0);
+      delete m_textCtrl;
+      m_textCtrl = NULL;
+    }
+    return success;
+*/
+  return FALSE;
+}
+
 
 // Ensures this item is visible
 bool wxListCtrl::EnsureVisible(long item)

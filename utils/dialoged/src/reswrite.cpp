@@ -108,14 +108,14 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
       else
       {
         stream << "static char *" << item->GetName() << " = \"panel(name = '" << item->GetName() << "',\\\n";
-        GeneratePanelStyleString(item->GetStyle(), styleBuf);
+        GenerateDialogStyleString(item->GetStyle(), styleBuf);
       }
       stream << "  style = '" << styleBuf << "',\\\n";
       stream << "  title = '" << item->GetTitle() << "',\\\n";
+      stream << "  id = " << item->GetId() << ",\\\n";
       stream << "  x = " << item->GetX() << ", y = " << item->GetY();
       stream << ", width = " << item->GetWidth() << ", height = " << item->GetHeight();
-//      stream << "  modal = " << item->GetValue1();
-      
+
       if (1) // item->GetStyle() & wxNO_3D)
       {
         if (item->GetBackgroundColour())
@@ -128,29 +128,6 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
 
           stream << ",\\\n  " << "background_colour = '" << buf << "'";
         }
-#if 0
-        if (item->GetLabelColour())
-        {
-          char buf[7];
-          wxDecToHex(item->GetLabelColour()->Red(), buf);
-          wxDecToHex(item->GetLabelColour()->Green(), buf+2);
-          wxDecToHex(item->GetLabelColour()->Blue(), buf+4);
-          buf[6] = 0;
-
-          stream << ",\\\n  " << "label_colour = '" << buf << "'";
-        }
-        if (item->GetButtonColour())
-        {
-          char buf[7];
-          wxDecToHex(item->GetButtonColour()->Red(), buf);
-          wxDecToHex(item->GetButtonColour()->Green(), buf+2);
-          wxDecToHex(item->GetButtonColour()->Blue(), buf+4);
-          buf[6] = 0;
-
-          stream << ",\\\n  " << "button_colour = '" << buf << "'";
-        }
-#endif
-
       }
       
       if (item->GetFont() && item->GetFont()->Ok())
@@ -182,8 +159,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxButton" || itemType == "wxBitmapButton")
     {
-      GenerateButtonStyleString(item->GetStyle(), styleBuf);
-      stream << itemType << ", " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << itemType << ", " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetValue4())
@@ -196,8 +173,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxStaticText" || itemType == "wxStaticBitmap")
     {
-      GenerateMessageStyleString(item->GetStyle(), styleBuf);
-      stream << itemType << ", " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << itemType << ", " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetValue4())
@@ -210,8 +187,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxCheckBox")
     {
-      GenerateCheckBoxStyleString(item->GetStyle(), styleBuf);
-      stream << "wxCheckBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxCheckBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1();
@@ -223,8 +200,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxRadioButton")
     {
-      GenerateRadioButtonStyleString(item->GetStyle(), styleBuf);
-      stream << "wxRadioButton, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxRadioButton, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1();
@@ -236,8 +213,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxStaticBox")
     {
-      GenerateGroupBoxStyleString(item->GetStyle(), styleBuf);
-      stream << "wxGroupBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxGroupBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       if (item->GetFont())
@@ -248,8 +225,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxText" || itemType == "wxMultiText" || itemType == "wxTextCtrl")
     {
-      GenerateTextStyleString(item->GetStyle(), styleBuf);
-      stream << "wxTextCtrl, ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxTextCtrl, ";
       stream << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
@@ -262,8 +239,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxGauge")
     {
-      GenerateGaugeStyleString(item->GetStyle(), styleBuf);
-      stream << "wxGauge, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxGauge, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1() << ", " << item->GetValue2();
@@ -275,8 +252,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxSlider")
     {
-      GenerateSliderStyleString(item->GetStyle(), styleBuf);
-      stream << "wxSlider, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxSlider, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1() << ", " << item->GetValue2() << ", " << item->GetValue3();
@@ -288,8 +265,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxScrollBar")
     {
-      GenerateScrollBarStyleString(item->GetStyle(), styleBuf);
-      stream << "wxScrollBar, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxScrollBar, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
       stream << ", " << item->GetValue1() << ", " << item->GetValue2() << ", " << item->GetValue3() << ", ";
@@ -297,8 +274,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
     }
   else if (itemType == "wxListBox")
     {
-      GenerateListBoxStyleString(item->GetStyle(), styleBuf);
-      stream << "wxListBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxListBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
 
@@ -343,12 +320,16 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         OutputFont(stream, item->GetFont());
       }
     }
-  else if (itemType == "wxChoice")
+  else if (itemType == "wxChoice" || itemType == "wxComboBox")
     {
-      GenerateChoiceStyleString(item->GetStyle(), styleBuf);
-      stream << "wxChoice, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+
+      stream << item->GetId() << ", " << itemType << ", " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
+
+      if (itemType == "wxComboBox")
+        stream << SafeWord(item->GetValue4()) << ", ";
 
       // Default list of values
 
@@ -375,8 +356,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
   else if (itemType == "wxRadioBox")
     {
       // Must write out the orientation and number of rows/cols!!
-      GenerateRadioBoxStyleString(item->GetStyle(), styleBuf);
-      stream << "wxRadioBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      GenerateControlStyleString(itemType, item->GetStyle(), styleBuf);
+      stream << item->GetId() << ", " << "wxRadioBox, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
       stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
       stream << item->GetWidth() << ", " << item->GetHeight();
 
@@ -531,31 +512,13 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
   return TRUE;
 }
 
-void wxResourceTableWithSaving::GenerateWindowStyleString(long windowStyle, char *buf)
-{
-  GenerateStyle(buf, windowStyle, wxNO_3D, "wxNO_3D");
-  GenerateStyle(buf, windowStyle, wxVSCROLL, "wxVSCROLL");
-  GenerateStyle(buf, windowStyle, wxHSCROLL, "wxHSCROLL");
-  GenerateStyle(buf, windowStyle, wxBORDER, "wxBORDER");
-}
-
 void wxResourceTableWithSaving::GenerateDialogStyleString(long windowStyle, char *buf)
 {
   buf[0] = 0;
-  GenerateWindowStyleString(windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxWindow", windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxPanel", windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxDialog", windowStyle, buf);
 
-/*
-  GenerateStyle(buf, windowStyle, wxRETAINED, "wxRETAINED");
-*/
-  if (!GenerateStyle(buf, windowStyle, wxDEFAULT_DIALOG_STYLE, "wxDEFAULT_DIALOG_STYLE"))
-  {
-    GenerateStyle(buf, windowStyle, wxCAPTION, "wxCAPTION");
-    GenerateStyle(buf, windowStyle, wxTHICK_FRAME, "wxTHICK_FRAME");
-    GenerateStyle(buf, windowStyle, wxRESIZE_BORDER, "wxRESIZE_BORDER");
-    GenerateStyle(buf, windowStyle, wxSYSTEM_MENU, "wxSYSTEM_MENU");
-    GenerateStyle(buf, windowStyle, wxMINIMIZE_BOX, "wxMINIMIZE_BOX");
-    GenerateStyle(buf, windowStyle, wxMAXIMIZE_BOX, "wxMAXIMIZE_BOX");
-  }
   if (strlen(buf) == 0)
     strcat(buf, "0");
 }
@@ -563,156 +526,23 @@ void wxResourceTableWithSaving::GenerateDialogStyleString(long windowStyle, char
 void wxResourceTableWithSaving::GeneratePanelStyleString(long windowStyle, char *buf)
 {
   buf[0] = 0;
-  GenerateWindowStyleString(windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxWindow", windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxPanel", windowStyle, buf);
 
-/*
-  GenerateStyle(buf, windowStyle, wxRETAINED, "wxRETAINED");
-*/
   if (strlen(buf) == 0)
     strcat(buf, "0");
 }
 
 
-void wxResourceTableWithSaving::GenerateItemStyleString(long windowStyle, char *buf)
-{
-  GenerateWindowStyleString(windowStyle, buf);
-  
-  GenerateStyle(buf, windowStyle, wxHORIZONTAL, "wxHORIZONTAL");
-  GenerateStyle(buf, windowStyle, wxVERTICAL, "wxVERTICAL");
-}
-
-void wxResourceTableWithSaving::GenerateRadioBoxStyleString(long windowStyle, char *buf)
+void wxResourceTableWithSaving::GenerateControlStyleString(const wxString& windowClass, long windowStyle, char *buf)
 {
   buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateMessageStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateTextStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  GenerateStyle(buf, windowStyle, wxTE_PROCESS_ENTER, "wxTE_PROCESS_ENTER");
-  GenerateStyle(buf, windowStyle, wxTE_READONLY, "wxTE_READONLY");
-  GenerateStyle(buf, windowStyle, wxTE_PASSWORD, "wxTE_PASSWORD");
-  GenerateStyle(buf, windowStyle, wxTE_MULTILINE, "wxTE_MULTILINE");
+  m_styleTable.GenerateStyleStrings("wxWindow", windowStyle, buf);
+  m_styleTable.GenerateStyleStrings("wxControl", windowStyle, buf);
+  m_styleTable.GenerateStyleStrings(windowClass, windowStyle, buf);
 
   if (strlen(buf) == 0)
     strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateButtonStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateCheckBoxStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateRadioButtonStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateListBoxStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  GenerateStyle(buf, windowStyle, wxLB_ALWAYS_SB, "wxLB_ALWAYS_SB");
-  GenerateStyle(buf, windowStyle, wxLB_SORT,      "wxLB_SORT");
-//  GenerateStyle(buf, windowStyle, wxLB_SINGLE,    "wxLB_SINGLE"); // Done already
-  GenerateStyle(buf, windowStyle, wxLB_MULTIPLE,  "wxLB_MULTIPLE");
-  GenerateStyle(buf, windowStyle, wxLB_EXTENDED,  "wxLB_EXTENDED");
-
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateSliderStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateGroupBoxStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateGaugeStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  GenerateStyle(buf, windowStyle, wxGA_PROGRESSBAR, "wxGA_PROGRESSBAR");
-
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateChoiceStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-void wxResourceTableWithSaving::GenerateScrollBarStyleString(long windowStyle, char *buf)
-{
-  buf[0] = 0;
-  GenerateItemStyleString(windowStyle, buf);
-  
-  if (strlen(buf) == 0)
-    strcat(buf, "0");
-}
-
-bool wxResourceTableWithSaving::GenerateStyle(char *buf, long windowStyle, long flag, char *strStyle)
-{
-  if ((windowStyle & flag) == flag)
-  {
-    if (strlen(buf) > 0)
-      strcat(buf, " | ");
-    strcat(buf, strStyle);
-    return TRUE;
-  }
-  else
-    return FALSE;
 }
 
 // Returns quoted string or "NULL"

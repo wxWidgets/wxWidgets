@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __BMPBUTTNH__
-#define __BMPBUTTNH__
+#ifndef _WX_BMPBUTTN_H_
+#define _WX_BMPBUTTN_H_
 
 #ifdef __GNUG__
 #pragma interface "bmpbuttn.h"
@@ -82,4 +82,4 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
 };
 
 #endif
-    // __BMPBUTTNH__
+    // _WX_BMPBUTTN_H_

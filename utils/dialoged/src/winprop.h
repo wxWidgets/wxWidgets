@@ -20,14 +20,14 @@
 
 class wxPropertyInfo;
 
-class wxDialogEditorPropertyListDialog: public wxPropertyListDialog
+class wxDialogEditorPropertyListFrame: public wxPropertyListFrame
 {
     friend class wxPropertyInfo;
 public:
-    wxDialogEditorPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
+    wxDialogEditorPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
-    ~wxDialogEditorPropertyListDialog();
+        long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
+    ~wxDialogEditorPropertyListFrame();
 
 private:
     wxPropertySheet*            m_propSheet;
@@ -57,7 +57,7 @@ class wxResourcePropertyListView: public wxPropertyListView
 // them with separate classes.
 class wxPropertyInfo: public wxObject
 {
-    friend class wxDialogEditorPropertyListDialog;
+    friend class wxDialogEditorPropertyListFrame;
  protected:
   static wxWindow *sm_propertyWindow;
   wxPropertyInfo(void)
@@ -97,6 +97,9 @@ class wxWindowPropertyInfo: public wxPropertyInfo
   
   // Fill in the wxItemResource members to mirror the current window settings
   virtual bool InstantiateResource(wxItemResource *resource);
+
+  // Set the window style
+  void SetWindowStyle(wxWindow* win, long style, bool set);
 };
 
 // For panel items

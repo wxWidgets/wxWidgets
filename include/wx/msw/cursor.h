@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CURSORH__
-#define __CURSORH__
+#ifndef _WX_CURSOR_H_
+#define _WX_CURSOR_H_
 
 #ifdef __GNUG__
 #pragma interface "cursor.h"
@@ -66,4 +66,4 @@ public:
 };
 
 #endif
-    // __CURSORH__
+    // _WX_CURSOR_H_

@@ -59,7 +59,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 
 wxColourDialog::wxColourDialog(void)
 {
-  dialogParent = NULL;
+  m_dialogParent = NULL;
 }
 
 wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
@@ -69,10 +69,10 @@ wxColourDialog::wxColourDialog(wxWindow *parent, wxColourData *data)
 
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
-  dialogParent = parent;
-  
+  m_dialogParent = parent;
+
   if (data)
-    colourData = *data;
+    m_colourData = *data;
   return TRUE;
 }
 
@@ -84,16 +84,16 @@ int wxColourDialog::ShowModal(void)
 
     int i;
     for (i = 0; i < 16; i++)
-      custColours[i] = RGB(colourData.custColours[i].Red(), colourData.custColours[i].Green(), colourData.custColours[i].Blue());
+      custColours[i] = RGB(m_colourData.custColours[i].Red(), m_colourData.custColours[i].Green(), m_colourData.custColours[i].Blue());
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
-    chooseColorStruct.hwndOwner = (HWND) (dialogParent ? (HWND) dialogParent->GetHWND() : NULL);
-    chooseColorStruct.rgbResult = RGB(colourData.dataColour.Red(), colourData.dataColour.Green(), colourData.dataColour.Blue());
+    chooseColorStruct.hwndOwner = (HWND) (m_dialogParent ? (HWND) m_dialogParent->GetHWND() : NULL);
+    chooseColorStruct.rgbResult = RGB(m_colourData.dataColour.Red(), m_colourData.dataColour.Green(), m_colourData.dataColour.Blue());
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT;
 
-    if (!colourData.GetChooseFull())
+    if (!m_colourData.GetChooseFull())
       chooseColorStruct.Flags |= CC_PREVENTFULLOPEN;
 
     // Do the modal dialog
@@ -112,11 +112,11 @@ int wxColourDialog::ShowModal(void)
     // Restore values
     for (i = 0; i < 16; i++)
     {
-      colourData.custColours[i].Set(GetRValue(custColours[i]), GetGValue(custColours[i]),
+      m_colourData.custColours[i].Set(GetRValue(custColours[i]), GetGValue(custColours[i]),
          GetBValue(custColours[i]));
     }
 
-    colourData.dataColour.Set(GetRValue(chooseColorStruct.rgbResult), GetGValue(chooseColorStruct.rgbResult),
+    m_colourData.dataColour.Set(GetRValue(chooseColorStruct.rgbResult), GetGValue(chooseColorStruct.rgbResult),
      GetBValue(chooseColorStruct.rgbResult));
 
     return success ? wxID_OK : wxID_CANCEL;

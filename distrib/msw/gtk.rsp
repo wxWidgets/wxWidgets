@@ -8,6 +8,7 @@ docs/gtk/*.html
 src/mkdirs
 src/Makefile
 src/Makefile.in
+src/*.inc
 
 src/gtk/*.cpp
 src/gtk/*.c
@@ -27,6 +28,18 @@ src/gdk_imlib/AUDIT
 src/gdk_imlib/COPYING.LIB
 src/gdk_imlib/README
 src/gdk_imlib/ChangeLog
+
+src/iodbc/*.c
+src/iodbc/*.ci
+src/iodbc/*.h
+src/iodbc/IAFA-PACKAGE
+src/iodbc/README
+src/iodbc/*.exp
+src/iodbc/*.mk
+src/iodbc/autoconfig
+src/iodbc/build
+src/iodbc/Changes.log
+src/iodbc/postgres/*.h
 
 install/gtk/*
 

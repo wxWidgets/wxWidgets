@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WINDOWH__
-#define __WINDOWH__
+#ifndef _WX_WINDOW_H_
+#define _WX_WINDOW_H_
 
 #ifdef __GNUG__
 #pragma interface "window.h"
@@ -84,7 +84,6 @@ class WXDLLEXPORT wxWindow: public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxWindow)
 
-  friend class wxUpdateIterator;
   friend class wxDC;
   friend class wxPaintDC;
 
@@ -604,7 +603,7 @@ protected:
   bool                  m_useCtl3D;             // Using CTL3D for this control
 
   bool                  m_inOnSize; 			// Protection against OnSize reentry
-#ifndef __WIN32__
+#ifndef _WX_WIN32__
   // Pointer to global memory, for EDIT controls that need
   // special treatment to reduce USER area consumption.
   WXHGLOBAL             m_globalHandle;
@@ -732,32 +731,6 @@ inline bool wxWindow::IsBeingDeleted(void) { return m_isBeingDeleted; }
 // Window specific (so far)
 wxWindow* WXDLLEXPORT wxGetActiveWindow(void);
 
-// OBSOLETE
-#if 0
-// Allows iteration through damaged rectangles in OnPaint
-class WXDLLEXPORT wxUpdateIterator
-{
-  int rects;						// How many rects in Update region
-  int current;					        // Current rectangle index
-  void *rp;						// current rectangle
-#ifdef	__WIN32__
-  WXRGNDATA *rlist;					// Storage for regiondata
-#endif
-
- public:
-  wxUpdateIterator(wxWindow* wnd);
-  ~wxUpdateIterator(void);
-
-  operator int (void);
-  wxUpdateIterator* operator ++(int);
-  void GetRect(wxRectangle *rect);
-  int GetX();
-  int GetY();
-  int GetW();
-  int GetH();
-};
-#endif
-
 WXDLLEXPORT_DATA(extern wxList) wxTopLevelWindows;
 
 int WXDLLEXPORT wxCharCodeMSWToWX(int keySym);
@@ -767,4 +740,4 @@ int WXDLLEXPORT wxCharCodeWXToMSW(int id, bool *IsVirtual);
 int WXDLLEXPORT NewControlId(void);
 
 #endif
-    // __WINDOWH__
+    // _WX_WINDOW_H_

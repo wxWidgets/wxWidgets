@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CHOICEH__
-#define __CHOICEH__
+#ifndef _WX_CHOICE_H_
+#define _WX_CHOICE_H_
 
 #ifdef __GNUG__
 #pragma interface "choice.h"
@@ -26,9 +26,7 @@ class WXDLLEXPORT wxChoice: public wxControl
   DECLARE_DYNAMIC_CLASS(wxChoice)
 
  public:
-  int no_strings;
-
-  inline wxChoice(void) { no_strings = 0; }
+  inline wxChoice(void) { m_noStrings = 0; }
 
   inline wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -60,7 +58,7 @@ class WXDLLEXPORT wxChoice: public wxControl
   virtual wxString GetStringSelection(void) const ;
   virtual bool SetStringSelection(const wxString& sel);
 
-  virtual inline int Number(void) const { return no_strings; }
+  virtual inline int Number(void) const { return m_noStrings; }
   virtual void Command(wxCommandEvent& event);
 
   virtual bool MSWCommand(WXUINT param, WXWORD id);
@@ -72,7 +70,11 @@ class WXDLLEXPORT wxChoice: public wxControl
 			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
+protected:
+  int       m_noStrings;
+
 };
 
 #endif
-	// __CHOICEH__
+	// _WX_CHOICE_H_

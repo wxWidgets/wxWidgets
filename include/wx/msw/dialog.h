@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOGH__
-#define __DIALOGH__
+#ifndef _WX_DIALOG_H_
+#define _WX_DIALOG_H_
 
 #ifdef __GNUG__
 #pragma interface "dialog.h"
@@ -118,4 +118,4 @@ DECLARE_EVENT_TABLE()
 };
 
 #endif
-    // __DIALOGH__
+    // _WX_DIALOG_H_

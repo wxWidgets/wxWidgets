@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __FONTH__
-#define __FONTH__
+#ifndef _WX_FONT_H_
+#define _WX_FONT_H_
 
 #ifdef __GNUG__
 #pragma interface "font.h"
@@ -95,4 +95,4 @@ public:
 };
 
 #endif
-    // __FONTH__
+    // _WX_FONT_H_

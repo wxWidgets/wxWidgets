@@ -16,7 +16,7 @@ include $(WXDIR)/src/makeg95.env
 
 OBJECTS = $(OBJDIR)/dialoged.$(OBJSUFF) $(OBJDIR)/reseditr.$(OBJSUFF)\
  $(OBJDIR)/dlghndlr.$(OBJSUFF) $(OBJDIR)/reswrite.$(OBJSUFF) $(OBJDIR)/winprop.$(OBJSUFF)\
- $(OBJDIR)/edlist.$(OBJSUFF) $(OBJDIR)/edtree.$(OBJSUFF)\
+ $(OBJDIR)/edlist.$(OBJSUFF) $(OBJDIR)/edtree.$(OBJSUFF) $(OBJDIR)/winstyle.$(OBJSUFF) $(OBJDIR)/symbtabl.$(OBJSUFF)\
  $(OBJDIR)/dialoged_resources.$(OBJSUFF)
 
 EXTRAINC = -I../../wxprop/src
@@ -56,6 +56,12 @@ $(OBJDIR)/edlist.$(OBJSUFF):	winprop.h edlist.h edlist.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ edlist.$(SRCSUFF)
 
 $(OBJDIR)/edtree.$(OBJSUFF):	winprop.h edtree.h edtree.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
+
+$(OBJDIR)/winstyle.$(OBJSUFF):	winstyle.h winstyle.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
+
+$(OBJDIR)/symbtabl.$(OBJSUFF):	symbtabl.h symbtabl.$(SRCSUFF)
 	$(CC) -c $(CPPFLAGS) -o $@ edtree.$(SRCSUFF)
 
 $(OBJDIR)/dialoged_resources.o:  dialoged.rc

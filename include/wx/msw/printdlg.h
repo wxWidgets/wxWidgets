@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PRINTDLGH__
-#define __PRINTDLGH__
+#ifndef _WX_PRINTDLG_H_
+#define _WX_PRINTDLG_H_
 
 #ifdef __GNUG__
 #pragma interface "printdlg.h"
@@ -68,4 +68,4 @@ class WXDLLEXPORT wxPageSetupDialog: public wxDialog
 };
 
 #endif
-    // __PRINTDLGH__
+    // _WX_PRINTDLG_H_

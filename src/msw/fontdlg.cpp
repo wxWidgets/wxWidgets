@@ -56,7 +56,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 wxFontDialog::wxFontDialog(void)
 {
-  dialogParent = NULL;
+  m_dialogParent = NULL;
 }
 
 wxFontDialog::wxFontDialog(wxWindow *parent, wxFontData *data)
@@ -66,10 +66,10 @@ wxFontDialog::wxFontDialog(wxWindow *parent, wxFontData *data)
 
 bool wxFontDialog::Create(wxWindow *parent, wxFontData *data)
 {
-  dialogParent = parent;
-  
+  m_dialogParent = parent;
+
   if (data)
-    fontData = *data;
+    m_fontData = *data;
   return TRUE;
 }
 
@@ -83,28 +83,28 @@ int wxFontDialog::ShowModal(void)
     memset(&chooseFontStruct, 0, sizeof(CHOOSEFONT));
 
     chooseFontStruct.lStructSize = sizeof(CHOOSEFONT);
-    chooseFontStruct.hwndOwner = (HWND) (dialogParent ? (HWND) dialogParent->GetHWND() : NULL);
+    chooseFontStruct.hwndOwner = (HWND) (m_dialogParent ? (HWND) m_dialogParent->GetHWND() : NULL);
     chooseFontStruct.lpLogFont = &logFont;
 
-    if (fontData.initialFont.Ok())
+    if (m_fontData.initialFont.Ok())
     {
       flags |= CF_INITTOLOGFONTSTRUCT;
-      wxFillLogFont(&logFont, & fontData.initialFont);
+      wxFillLogFont(&logFont, & m_fontData.initialFont);
     }
 
     chooseFontStruct.iPointSize = 0;
-    chooseFontStruct.rgbColors = RGB((BYTE)fontData.fontColour.Red(), (BYTE)fontData.fontColour.Green(), (BYTE)fontData.fontColour.Blue());
+    chooseFontStruct.rgbColors = RGB((BYTE)m_fontData.fontColour.Red(), (BYTE)m_fontData.fontColour.Green(), (BYTE)m_fontData.fontColour.Blue());
 
-    if (!fontData.GetAllowSymbols())
+    if (!m_fontData.GetAllowSymbols())
       flags |= CF_ANSIONLY;
-    if (fontData.GetEnableEffects())
+    if (m_fontData.GetEnableEffects())
       flags |= CF_EFFECTS;
-    if (fontData.GetShowHelp())
+    if (m_fontData.GetShowHelp())
       flags |= CF_SHOWHELP;
-    if (!(fontData.minSize == 0 && fontData.maxSize == 0))
+    if (!(m_fontData.minSize == 0 && m_fontData.maxSize == 0))
     {
-      chooseFontStruct.nSizeMin = fontData.minSize;
-      chooseFontStruct.nSizeMax = fontData.maxSize;
+      chooseFontStruct.nSizeMin = m_fontData.minSize;
+      chooseFontStruct.nSizeMax = m_fontData.maxSize;
       flags |= CF_LIMITSIZE;
     }
 
@@ -115,9 +115,9 @@ int wxFontDialog::ShowModal(void)
     // Restore values
     if (success)
     {
-      fontData.fontColour.Set(GetRValue(chooseFontStruct.rgbColors), GetGValue(chooseFontStruct.rgbColors),
+      m_fontData.fontColour.Set(GetRValue(chooseFontStruct.rgbColors), GetGValue(chooseFontStruct.rgbColors),
        GetBValue(chooseFontStruct.rgbColors));
-      fontData.chosenFont = wxCreateFontFromLogFont(&logFont);
+      m_fontData.chosenFont = wxCreateFontFromLogFont(&logFont);
     }
 
     return success ? wxID_OK : wxID_CANCEL;

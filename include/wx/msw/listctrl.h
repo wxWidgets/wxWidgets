@@ -5,12 +5,12 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LISTCTRLH__
-#define __LISTCTRLH__
+#ifndef _WX_LISTCTRL_H_
+#define _WX_LISTCTRL_H_
 
 #ifdef __GNUG__
 #pragma interface "listctrl.h"
@@ -225,7 +225,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   int GetCountPerPage(void) const;
 
   // Gets the edit control for editing labels.
-  wxTextCtrl& GetEditControl(void) const;
+  wxTextCtrl* GetEditControl(void) const;
 
   // Gets information about the item
   bool GetItem(wxListItem& info) const ;
@@ -341,8 +341,11 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   // Clears items, and columns if there are any.
   void ClearAll(void);
 
-  // Edits a label
-  wxTextCtrl& Edit(long item) ;
+  // Edit the label
+  wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+
+  // End label editing, optionally cancelling the edit
+  bool EndEditLabel(bool cancel);
 
   // Ensures this item is visible
   bool EnsureVisible(long item) ;
@@ -426,7 +429,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   char *AddPool(const wxString& str);
 
 protected:
-  wxTextCtrl        m_textCtrl;        // The control used for editing a label
+  wxTextCtrl*       m_textCtrl;        // The control used for editing a label
   wxImageList *     m_imageListNormal; // The image list for normal icons
   wxImageList *     m_imageListSmall;  // The image list for small icons
   wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
@@ -473,4 +476,4 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_COL_CLICK(id, fn) { wxEVT_COMMAND_LIST_COL_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, NULL },
 
 #endif
-    // __LISTCTRLH__
+    // _WX_LISTCTRL_H_
