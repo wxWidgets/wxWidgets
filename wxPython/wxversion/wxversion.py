@@ -85,6 +85,7 @@ def require(versions):
 _pattern = "wx-[0-9].*"
 def _find_installed():
     installed = []
+    toRemove = []
     for pth in sys.path:
 
         # empty means to look in the current dir
@@ -97,8 +98,10 @@ def _find_installed():
         
         base = os.path.basename(pth)
 
-        # if it's a wx path that's already in the sys.path then skip it
+        # if it's a wx path that's already in the sys.path then mark
+        # it for removal and then skip it
         if fnmatch.fnmatchcase(base, _pattern):
+            toRemove.append(pth)
             continue
 
         # now look in the dir for matching subdirs
@@ -111,6 +114,9 @@ def _find_installed():
                 continue
             installed.append(_wxPackageInfo(name, True))
 
+    for rem in toRemove:
+        del sys.path[sys.path.index(rem)]
+        
     installed.sort()
     installed.reverse()
     return installed
@@ -156,10 +162,13 @@ class _wxPackageInfo(object):
 
 
 if __name__ == '__main__':
+    import pprint
     def test(version):
         savepath = sys.path[:]
         require(version)
         print "Asked for %s:\t got: %s" % (version, sys.path[0])
+        pprint.pprint(sys.path)
+        print
         sys.path = savepath[:]
         
         
