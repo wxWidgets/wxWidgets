@@ -21,7 +21,7 @@
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
-class WXDLLEXPORT wxScrolledWindow: public wxPanel
+class WXDLLEXPORT wxScrolledWindow : public wxPanel
 {
   DECLARE_ABSTRACT_CLASS(wxScrolledWindow)
 
@@ -36,7 +36,7 @@ public:
       Create(parent, id, pos, size, style, name);
   }
 
-  ~wxScrolledWindow() {}
+  ~wxScrolledWindow() { }
 
   bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -64,6 +64,7 @@ public:
 
 #if WXWIN_COMPATIBILITY
   virtual void GetScrollUnitsPerPage(int *x_page, int *y_page) const;
+  virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const ;
 #endif
 
   int GetScrollPageSize(int orient) const ;
@@ -85,30 +86,28 @@ public:
   virtual void GetVirtualSize(int *x, int *y) const;
 
   // Set the scale factor, used in PrepareDC
-  inline void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
-  inline double GetScaleX() const { return m_scaleX; }
-  inline double GetScaleY() const { return m_scaleY; }
+  void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
+  double GetScaleX() const { return m_scaleX; }
+  double GetScaleY() const { return m_scaleY; }
 
   virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const ;
-  virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const ;
+  virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const ;
 
   // Adjust the scrollbars
   virtual void AdjustScrollbars(void);
 
-  void OnScroll(wxScrollWinEvent& event);
-  void OnSize(wxSizeEvent& event);
-  void OnPaint(wxPaintEvent& event);
-
-  // Override this function to draw the graphic.
+  // Override this function to draw the graphic (or just process EVT_PAINT)
   virtual void OnDraw(wxDC& WXUNUSED(dc)) {};
 
   // Override this function if you don't want to have wxScrolledWindow
   // automatically change the origin according to the scroll position.
   virtual void PrepareDC(wxDC& dc);
 
-public:
-  // IMPLEMENTATION
-  
+  // implementation from now on
+  void OnScroll(wxScrollWinEvent& event);
+  void OnSize(wxSizeEvent& event);
+  void OnPaint(wxPaintEvent& event);
+
   // Calculate scroll increment
   virtual int CalcScrollInc(wxScrollWinEvent& event);
 

@@ -390,12 +390,22 @@ void wxScrolledWindow::GetScrollUnitsPerPage (int *x_page, int *y_page) const
       *x_page = GetScrollPageSize(wxHORIZONTAL);
       *y_page = GetScrollPageSize(wxVERTICAL);
 }
-#endif
+
+void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
+{
+    if ( xx )
+        *xx = (float)(x + m_xScrollPosition * m_xScrollPixelsPerLine);
+    if ( yy )
+        *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);
+}
+#endif // WXWIN_COMPATIBILITY
 
 void wxScrolledWindow::GetScrollPixelsPerUnit (int *x_unit, int *y_unit) const
 {
-      *x_unit = m_xScrollPixelsPerLine;
-      *y_unit = m_yScrollPixelsPerLine;
+    if ( x_unit )
+        *x_unit = m_xScrollPixelsPerLine;
+    if ( y_unit )
+        *y_unit = m_yScrollPixelsPerLine;
 }
 
 int wxScrolledWindow::GetScrollPageSize(int orient) const
@@ -475,27 +485,33 @@ void wxScrolledWindow::EnableScrolling (bool x_scroll, bool y_scroll)
 
 void wxScrolledWindow::GetVirtualSize (int *x, int *y) const
 {
-    *x = m_xScrollPixelsPerLine * m_xScrollLines;
-    *y = m_yScrollPixelsPerLine * m_yScrollLines;
+    if ( x )
+        *x = m_xScrollPixelsPerLine * m_xScrollLines;
+    if ( y )
+        *y = m_yScrollPixelsPerLine * m_yScrollLines;
 }
 
 // Where the current view starts from
 void wxScrolledWindow::ViewStart (int *x, int *y) const
 {
-    *x = m_xScrollPosition;
-    *y = m_yScrollPosition;
+    if ( x )
+        *x = m_xScrollPosition;
+    if ( y )
+        *y = m_yScrollPosition;
 }
 
 void wxScrolledWindow::CalcScrolledPosition(int x, int y, int *xx, int *yy) const
 {
-    *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
-    *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
+    if ( xx )
+        *xx = x - m_xScrollPosition * m_xScrollPixelsPerLine;
+    if ( yy )
+        *yy = y - m_yScrollPosition * m_yScrollPixelsPerLine;
 }
 
-void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const
+void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const
 {
-    *xx = (float)(x + m_xScrollPosition * m_xScrollPixelsPerLine);
-    *yy = (float)(y + m_yScrollPosition * m_yScrollPixelsPerLine);
+    if ( xx )
+        *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
+    if ( yy )
+        *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
 }
-
-
