@@ -297,6 +297,7 @@ void wxWindowMSW::Init()
     m_oldWndProc = 0;
     m_useCtl3D = FALSE;
     m_mouseInWindow = FALSE;
+    m_lastKeydownProcessed = FALSE;
 
     // wxWnd
     m_hMenu = 0;
@@ -2463,12 +2464,13 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
         case WM_SYSKEYDOWN:
         case WM_KEYDOWN:
+            m_lastKeydownProcessed = FALSE;
             // If this has been processed by an event handler,
             // return 0 now (we've handled it).
             if ( HandleKeyDown((WORD) wParam, lParam) )
             {
                 processed = TRUE;
-
+                m_lastKeydownProcessed = TRUE;
                 break;
             }
 
@@ -2476,7 +2478,6 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
             if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
             {
                 processed = TRUE;
-
                 break;
             }
 
@@ -4035,6 +4036,14 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
 // WM_KEYDOWN one
 bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 {
+    if (m_lastKeydownProcessed) {
+        // The key was handled in the EVT_KEY_DOWN.  Handling a key in an
+        // EVT_KEY_DOWN handler is meant, by design, to prevent EVT_CHARs
+        // from happening, so just bail out at this point.
+        m_lastKeydownProcessed = FALSE;
+        return TRUE;
+    }
+
     bool ctrlDown = FALSE;
 
     int id;
