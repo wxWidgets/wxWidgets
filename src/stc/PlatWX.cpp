@@ -456,7 +456,7 @@ class wxSTCListBox : public wxListBox {
 public:
     wxSTCListBox(wxWindow* parent, wxWindowID id)
         : wxListBox(parent, id, wxDefaultPosition, wxDefaultSize,
-                    0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER)
+                    0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER | wxLB_SORT )
         {}
 
     void OnFocus(wxFocusEvent& event) {
@@ -464,7 +464,7 @@ public:
         event.Skip();
     }
 
-#ifdef __WXGTK__
+#if 0 // #ifdef __WXGTK__
     void DoSetFirstItem(int n);
 #endif
 
@@ -479,7 +479,7 @@ END_EVENT_TABLE()
 
 
 
-#ifdef __WXGTK__
+#if 0 // #ifdef __WXGTK__
     // This can be removed after 2.2.2 I think
 void wxSTCListBox::DoSetFirstItem( int n )
 {
@@ -535,15 +535,21 @@ void ListBox::Create(Window &parent, int ctrlID) {
 //                       0, NULL, wxLB_SINGLE | wxLB_SORT | wxSIMPLE_BORDER);
 }
 
+void ListBox::SetVisibleRows(int rows) {
+	desiredVisibleRows = rows;
+        printf("SetVisibleRows: %d\n", rows);
+}
+
 PRectangle ListBox::GetDesiredRect() {
     wxSize sz = ((wxListBox*)id)->GetBestSize();
+    printf("GetDesiredRect: %d, %d\n", sz.x, sz.y);
     PRectangle rc;
     rc.top = 0;
     rc.left = 0;
-    if (sz.x > 150)   // TODO: A better way to determine these max sizes
-        sz.x = 150;
-    if (sz.y > 100)
-        sz.y = 100;
+    if (sz.x > 400)
+        sz.x = 400;
+    if (sz.y > 150)
+        sz.y = 150;
     rc.right = sz.x;
     rc.bottom = sz.y;
 

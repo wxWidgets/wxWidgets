@@ -421,10 +421,7 @@ void ScintillaWX::DoButtonMove(Point pt) {
 
 
 void ScintillaWX::DoAddChar(char ch) {
-    //bool acActiveBeforeCharAdded = ac.Active();
     AddChar(ch);
-    //if (acActiveBeforeCharAdded)
-    //    AutoCompleteChanged(ch);
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
@@ -465,9 +462,6 @@ int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* cons
     }
 
     int rv = KeyDown(key, shift, ctrl, alt, consumed);
-
-//      printf("key: %d  shift: %d  ctrl: %d  alt: %d  rv: %d  consumed: %d\n",
-//             key, shift, ctrl, alt, rv, *consumed);
 
     if (key)
         return rv;

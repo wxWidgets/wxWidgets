@@ -380,19 +380,40 @@ void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     long key = evt.KeyCode();
-    if (key <= 0xff && !iscntrl(key) && !m_lastKeyDownConsumed) {
+
+//      printf("OnChar  key:%%d  consumed:%%d  ctrl:%%d  alt:%%d\n",
+//             key, m_lastKeyDownConsumed, evt.ControlDown(), evt.AltDown());
+
+    // AltGr keys???
+    // \|@#¬[]{}?£$~  ã,õ,Ã,Õ, ñ, Ñ
+
+    // On (some?) non-US keyboards the AltGr key is required to enter some
+    // common characters.  It comes to us as both Alt and Ctrl down so we need
+    // to let the char through in that case, otherwise if only ctrl or only
+    // alt let's skip it.
+    bool ctrl = evt.ControlDown();
+    bool alt  = evt.AltDown();
+    bool skip = (ctrl || alt && ! (ctrl && alt));
+
+    if (key <= 0xff && !iscntrl(key) && !m_lastKeyDownConsumed && !skip) {
         m_swx->DoAddChar(key);
+        return;
     }
+    evt.Skip();
 }
 
 
 void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
     long key = evt.KeyCode();
-    int processed = m_swx->DoKeyDown(key,
-                                     evt.ShiftDown(),
-                                     evt.ControlDown(),
-                                     evt.AltDown(),
-                                     &m_lastKeyDownConsumed);
+    bool shift = evt.ShiftDown(),
+        ctrl  = evt.ControlDown(),
+        alt   = evt.AltDown();
+
+    int processed = m_swx->DoKeyDown(key, shift, ctrl, alt, &m_lastKeyDownConsumed);
+
+//      printf("key: %%d  shift: %%d  ctrl: %%d  alt: %%d  processed: %%d  consumed: %%d\n",
+//             key, shift, ctrl, alt, processed, m_lastKeyDownConsumed);
+
     if (!processed && !m_lastKeyDownConsumed)
         evt.Skip();
 }
