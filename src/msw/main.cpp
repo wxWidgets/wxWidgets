@@ -55,9 +55,6 @@
 // function prototypes
 // ----------------------------------------------------------------------------
 
-// from src/msw/app.cpp
-extern void WXDLLEXPORT wxEntryCleanup();
-
 static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
 
 // ============================================================================
