@@ -25,6 +25,7 @@
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/mbarman.h"
+#include "wx/cocoa/NSApplication.h"
 
 #if wxUSE_WX_RESOURCES
 #  include "wx/resource.h"
@@ -119,18 +120,6 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 // ========================================================================
 // wxNSApplicationDelegate
 // ========================================================================
-@interface wxNSApplicationDelegate : NSObject
-{
-}
-
-// Delegate methods
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication;
-- (void)applicationWillBecomeActive:(NSNotification *)notification;
-- (void)applicationDidBecomeActive:(NSNotification *)notification;
-- (void)applicationWillResignActive:(NSNotification *)notification;
-- (void)applicationDidResignActive:(NSNotification *)notification;
-@end // interface wxNSApplicationDelegate : NSObject
-
 @implementation wxNSApplicationDelegate : NSObject
 
 // NOTE: Terminate means that the event loop does NOT return and thus
