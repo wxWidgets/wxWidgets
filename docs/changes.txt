@@ -76,6 +76,7 @@ All GUI ports:
 
 - added wxVScrolledWindow, wxVListBox and wxHtmlLbox classes
 - added alpha channel support to wxImage
+- added wxRenderer class allowing to customize the drawing of generic controls
 - added wxCLOSE_BOX style for dialogs and frames
 - added wxSplitterWindow and wxWizard handlers to XRC
 - wxWizard is now sizer-friendly and may b resizeable (Robert Vazan)
