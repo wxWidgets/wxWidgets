@@ -39,6 +39,7 @@ class TestListCtrlPanel(wxPanel):
             self.list.InsertImageStringItem(x, "This is item %d" % x, idx1)
             self.list.SetStringItem(x, 1, "Col 1, item %d" % x)
             self.list.SetStringItem(x, 2, "item %d in column 2" % x)
+            self.list.SetItemData(x, x*2)
 
         self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
@@ -79,20 +80,24 @@ class TestListCtrlPanel(wxPanel):
 
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
-        self.menu = wxMenu()
+        menu = wxMenu()
         tPopupID1 = 0
         tPopupID2 = 1
         tPopupID3 = 2
         tPopupID4 = 3
-        self.menu.Append(tPopupID1, "One")
-        self.menu.Append(tPopupID2, "Two")
-        self.menu.Append(tPopupID3, "Three")
-        self.menu.Append(tPopupID4, "DeleteAllItems")
+        tPopupID5 = 5
+        menu.Append(tPopupID1, "One")
+        menu.Append(tPopupID2, "Two")
+        menu.Append(tPopupID3, "Three")
+        menu.Append(tPopupID4, "DeleteAllItems")
+        menu.Append(tPopupID5, "GetItem")
         EVT_MENU(self, tPopupID1, self.OnPopupOne)
         EVT_MENU(self, tPopupID2, self.OnPopupTwo)
         EVT_MENU(self, tPopupID3, self.OnPopupThree)
         EVT_MENU(self, tPopupID4, self.OnPopupFour)
-        self.PopupMenu(self.menu, wxPoint(self.x, self.y))
+        EVT_MENU(self, tPopupID5, self.OnPopupFive)
+        self.PopupMenu(menu, wxPoint(self.x, self.y))
+        menu.Destroy()
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")
@@ -105,6 +110,10 @@ class TestListCtrlPanel(wxPanel):
 
     def OnPopupFour(self, event):
         self.list.DeleteAllItems()
+
+    def OnPopupFive(self, event):
+        item = self.list.GetItem(self.currentItem)
+        print item.m_text, item.m_itemId, self.list.GetItemData(self.currentItem)
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

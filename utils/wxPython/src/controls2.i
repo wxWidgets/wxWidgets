@@ -158,9 +158,10 @@ public:
     long GetItemData(long item);
 
     %addmethods {
-        %new wxListItem* GetItem(long itemId) {
+        %new wxListItem* GetItem(long itemId, int col=0) {
             wxListItem* info = new wxListItem;
             info->m_itemId = itemId;
+            info->m_col = col;
             self->GetItem(*info);
             return info;
         }

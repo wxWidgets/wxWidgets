@@ -4,8 +4,8 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 class MyCanvas(wxScrolledWindow):
-    def __init__(self, parent):
-        wxScrolledWindow.__init__(self, parent, -1, wxPoint(0, 0), wxPyDefaultSize, wxSUNKEN_BORDER)
+    def __init__(self, parent, id = -1, size = wxDefaultSize):
+        wxScrolledWindow.__init__(self, parent, id, wxPoint(0, 0), size, wxSUNKEN_BORDER)
 
         self.lines = []
         self.maxWidth  = 1000

@@ -135,12 +135,15 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
         return val
     def GetContainer(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetContainer,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
         return val
     def OpenContainer(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_OpenContainer,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
         return val
     def CloseContainer(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_CloseContainer,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
         return val
     def GetFontSize(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_GetFontSize,(self,) + _args, _kwargs)
@@ -268,6 +271,148 @@ class wxHtmlWinTagHandler(wxHtmlWinTagHandlerPtr):
 
 
 
+class wxHtmlCellPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetParent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetParent,(self,) + _args, _kwargs)
+        return val
+    def GetParent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetParent,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
+        return val
+    def GetPosX(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetPosX,(self,) + _args, _kwargs)
+        return val
+    def GetPosY(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetPosY,(self,) + _args, _kwargs)
+        return val
+    def GetWidth(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetWidth,(self,) + _args, _kwargs)
+        return val
+    def GetHeight(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetHeight,(self,) + _args, _kwargs)
+        return val
+    def GetDescent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetDescent,(self,) + _args, _kwargs)
+        return val
+    def GetLink(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetLink,(self,) + _args, _kwargs)
+        return val
+    def GetNext(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetNext,(self,) + _args, _kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def SetPos(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetPos,(self,) + _args, _kwargs)
+        return val
+    def SetLink(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetLink,(self,) + _args, _kwargs)
+        return val
+    def SetNext(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetNext,(self,) + _args, _kwargs)
+        return val
+    def Layout(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_Layout,(self,) + _args, _kwargs)
+        return val
+    def Draw(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_Draw,(self,) + _args, _kwargs)
+        return val
+    def DrawInvisible(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_DrawInvisible,(self,) + _args, _kwargs)
+        return val
+    def Find(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_Find,(self,) + _args, _kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxHtmlCell instance at %s>" % (self.this,)
+class wxHtmlCell(wxHtmlCellPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlCell,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxHtmlContainerCellPtr(wxHtmlCellPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def InsertCell(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_InsertCell,(self,) + _args, _kwargs)
+        return val
+    def SetAlignHor(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetAlignHor,(self,) + _args, _kwargs)
+        return val
+    def GetAlignHor(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetAlignHor,(self,) + _args, _kwargs)
+        return val
+    def SetAlignVer(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetAlignVer,(self,) + _args, _kwargs)
+        return val
+    def GetAlignVer(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetAlignVer,(self,) + _args, _kwargs)
+        return val
+    def SetIndent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetIndent,(self,) + _args, _kwargs)
+        return val
+    def GetIndent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetIndent,(self,) + _args, _kwargs)
+        return val
+    def GetIndentUnits(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetIndentUnits,(self,) + _args, _kwargs)
+        return val
+    def SetAlign(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetAlign,(self,) + _args, _kwargs)
+        return val
+    def SetWidthFloat(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetWidthFloat,(self,) + _args, _kwargs)
+        return val
+    def SetWidthFloatFromTag(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetWidthFloatFromTag,(self,) + _args, _kwargs)
+        return val
+    def SetMinHeight(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetMinHeight,(self,) + _args, _kwargs)
+        return val
+    def GetMaxLineWidth(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetMaxLineWidth,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetBorder(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_SetBorder,(self,) + _args, _kwargs)
+        return val
+    def GetFirstCell(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlContainerCell_GetFirstCell,(self,) + _args, _kwargs)
+        if val: val = wxHtmlCellPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxHtmlContainerCell instance at %s>" % (self.this,)
+class wxHtmlContainerCell(wxHtmlContainerCellPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlContainerCell,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxHtmlWidgetCellPtr(wxHtmlCellPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxHtmlWidgetCell instance at %s>" % (self.this,)
+class wxHtmlWidgetCell(wxHtmlWidgetCellPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlWidgetCell,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class HtmlHistoryItemPtr :
     def __init__(self,this):
         self.this = this
@@ -346,6 +491,11 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         return val
     def GetInternalRepresentation(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_GetInternalRepresentation,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
+        return val
+    def GetParser(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_GetParser,(self,) + _args, _kwargs)
+        if val: val = wxHtmlWinParserPtr(val) 
         return val
     def base_OnLinkClicked(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWindow_base_OnLinkClicked,(self,) + _args, _kwargs)
@@ -375,3 +525,39 @@ wxHtmlWindow_AddFilter = htmlc.wxHtmlWindow_AddFilter
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+HTML_ALIGN_LEFT = htmlc.HTML_ALIGN_LEFT
+HTML_ALIGN_CENTER = htmlc.HTML_ALIGN_CENTER
+HTML_ALIGN_RIGHT = htmlc.HTML_ALIGN_RIGHT
+HTML_ALIGN_BOTTOM = htmlc.HTML_ALIGN_BOTTOM
+HTML_ALIGN_TOP = htmlc.HTML_ALIGN_TOP
+HTML_CLR_FOREGROUND = htmlc.HTML_CLR_FOREGROUND
+HTML_CLR_BACKGROUND = htmlc.HTML_CLR_BACKGROUND
+HTML_UNITS_PIXELS = htmlc.HTML_UNITS_PIXELS
+HTML_UNITS_PERCENT = htmlc.HTML_UNITS_PERCENT
+HTML_INDENT_LEFT = htmlc.HTML_INDENT_LEFT
+HTML_INDENT_RIGHT = htmlc.HTML_INDENT_RIGHT
+HTML_INDENT_TOP = htmlc.HTML_INDENT_TOP
+HTML_INDENT_BOTTOM = htmlc.HTML_INDENT_BOTTOM
+HTML_INDENT_HORIZONTAL = htmlc.HTML_INDENT_HORIZONTAL
+HTML_INDENT_VERTICAL = htmlc.HTML_INDENT_VERTICAL
+HTML_INDENT_ALL = htmlc.HTML_INDENT_ALL
+HTML_COND_ISANCHOR = htmlc.HTML_COND_ISANCHOR
+HTML_COND_ISIMAGEMAP = htmlc.HTML_COND_ISIMAGEMAP
+HTML_COND_USER = htmlc.HTML_COND_USER
+
+
+#-------------- USER INCLUDE -----------------------
+
+
+# Stuff these names into the wx namespace so wxPyConstructObject can find them
+import wx
+wx.wxHtmlTagPtr             = wxHtmlTag
+wx.wxHtmlParserPtr          = wxHtmlParserPtr
+wx.wxHtmlWinParserPtr       = wxHtmlWinParserPtr
+wx.wxHtmlTagHandlerPtr      = wxHtmlTagHandlerPtr
+wx.wxHtmlWinTagHandlerPtr   = wxHtmlWinTagHandlerPtr
+wx.wxHtmlCellPtr            = wxHtmlCellPtr
+wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
+wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
+wx.HtmlHistoryItemPtr     = HtmlHistoryItemPtr
+wx.wxHtmlWindowPtr          = wxHtmlWindowPtr

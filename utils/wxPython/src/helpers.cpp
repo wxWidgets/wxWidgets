@@ -663,10 +663,9 @@ HELPEREXPORT wxBitmap** wxBitmap_LIST_helper(PyObject* source) {
     }
     for (int x=0; x<count; x++) {
         PyObject* o = PyList_GetItem(source, x);
-        if (PyString_Check(o)) {
-            char*       st = PyString_AsString(o);
+        if (PyInstance_Check(o)) {
             wxBitmap*    pt;
-            if (SWIG_GetPtr(st,(void **) &pt,"_wxBitmap_p")) {
+            if (SWIG_GetPtrObj(o, (void **) &pt,"_wxBitmap_p")) {
                 PyErr_SetString(PyExc_TypeError,"Expected _wxBitmap_p.");
                 return NULL;
             }
@@ -718,10 +717,9 @@ HELPEREXPORT wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source
     }
     for (int x=0; x<count; x++) {
         PyObject* o = PyList_GetItem(source, x);
-        if (PyString_Check(o)) {
-            char*               st = PyString_AsString(o);
+        if (PyInstance_Check(o)) {
             wxAcceleratorEntry* ae;
-            if (SWIG_GetPtr(st,(void **) &ae,"_wxAcceleratorEntry_p")) {
+            if (SWIG_GetPtrObj(o, (void **) &ae,"_wxAcceleratorEntry_p")) {
                 PyErr_SetString(PyExc_TypeError,"Expected _wxAcceleratorEntry_p.");
                 return NULL;
             }

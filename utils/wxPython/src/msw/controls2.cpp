@@ -1861,9 +1861,10 @@ static PyObject *_wrap_wxListCtrl_GetItemData(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-static wxListItem * wxListCtrl_GetItem(wxListCtrl *self,long  itemId) {
+static wxListItem * wxListCtrl_GetItem(wxListCtrl *self,long  itemId,int  col) {
             wxListItem* info = new wxListItem;
             info->m_itemId = itemId;
+            info->m_col = col;
             self->GetItem(*info);
             return info;
         }
@@ -1872,12 +1873,13 @@ static PyObject *_wrap_wxListCtrl_GetItem(PyObject *self, PyObject *args, PyObje
     wxListItem * _result;
     wxListCtrl * _arg0;
     long  _arg1;
+    int  _arg2 = (int ) 0;
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","itemId", NULL };
+    char *_kwnames[] = { "self","itemId","col", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxListCtrl_GetItem",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol|i:wxListCtrl_GetItem",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1888,7 +1890,7 @@ static PyObject *_wrap_wxListCtrl_GetItem(PyObject *self, PyObject *args, PyObje
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxListItem *)wxListCtrl_GetItem(_arg0,_arg1);
+        _result = (wxListItem *)wxListCtrl_GetItem(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {

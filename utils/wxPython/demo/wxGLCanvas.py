@@ -20,6 +20,7 @@ else:
 
     def runTest(frame, nb, log):
         #win = TestGLCanvas(nb)
+        #win.SetFocus()
         #return win
         win = wxFrame(frame, -1, "GL Cube", wxDefaultPosition, wxSize(400,300))
         canvas = TestGLCanvas(win)
@@ -34,6 +35,10 @@ else:
             wxGLCanvas.__init__(self, parent, -1)
             EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
             self.init = false
+            EVT_CHAR(self, self.MyOnChar)
+
+        def MyOnChar(self, event):
+            print "MyOnChar"
 
         def OnEraseBackground(self, event):
             pass # Do nothing, to avoid flashing.
@@ -50,7 +55,7 @@ else:
             dc = wxPaintDC(self)
 
             ctx = self.GetContext()
-            if ctx == "NULL": return
+            if not ctx: return
 
             self.SetCurrent()
 
@@ -125,6 +130,7 @@ else:
 
 
 
+#----------------------------------------------------------------------
 
 
 

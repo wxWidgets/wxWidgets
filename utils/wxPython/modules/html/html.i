@@ -52,6 +52,7 @@ wxSize wxPyDefaultSize(wxDefaultSize);
 
 %{
 
+#if 0
 static PyObject* mod_dict = NULL; // will be set by init
 
 #include <wx/html/mod_templ.h>
@@ -129,15 +130,44 @@ TAGS_MODULE_BEGIN(PythonTag)
 TAGS_MODULE_END(PythonTag)
 
 // Note: see also the init function where we add the module!
-
+#endif
 %}
 
 //---------------------------------------------------------------------------
+
+enum {
+    HTML_ALIGN_LEFT,
+    HTML_ALIGN_CENTER,
+    HTML_ALIGN_RIGHT,
+    HTML_ALIGN_BOTTOM,
+    HTML_ALIGN_TOP,
+
+    HTML_CLR_FOREGROUND,
+    HTML_CLR_BACKGROUND,
+
+    HTML_UNITS_PIXELS,
+    HTML_UNITS_PERCENT,
+
+    HTML_INDENT_LEFT,
+    HTML_INDENT_RIGHT,
+    HTML_INDENT_TOP,
+    HTML_INDENT_BOTTOM,
+
+    HTML_INDENT_HORIZONTAL,
+    HTML_INDENT_VERTICAL,
+    HTML_INDENT_ALL,
+
+    HTML_COND_ISANCHOR,
+    HTML_COND_ISIMAGEMAP,
+    HTML_COND_USER,
+};
+
+
 //---------------------------------------------------------------------------
 
 class wxHtmlTag {
 public:
-    // Never need to create a new tag...
+    // Never need to create a new tag from Python...
     //wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCache* cache);
 
     wxString GetName();
@@ -236,7 +266,6 @@ public:
 
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlTagHandler, wxHtmlTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
-
 %}
 
 
@@ -272,7 +301,6 @@ public:
 
 IMP_PYCALLBACK_STRING__pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, GetSupportedTags);
 IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleTag);
-
 %}
 
 
@@ -315,9 +343,11 @@ public:
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
+        bool doSave = wxPyRestoreThread();
         PyObject* arg = Py_BuildValue("()");
         PyObject* obj = PyInstance_New(m_tagHandlerClass, arg, NULL);
         Py_DECREF(arg);
+        wxPySaveThread(doSave);
 
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
@@ -347,6 +377,63 @@ private:
         new wxPyHtmlTagsModule(tagHandlerClass);
     }
 %}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+class wxHtmlCell {
+public:
+    wxHtmlCell();
+
+    void SetParent(wxHtmlContainerCell *p);
+    wxHtmlContainerCell* GetParent();
+    int GetPosX();
+    int GetPosY();
+    int GetWidth();
+    int GetHeight();
+    int GetDescent();
+    wxString GetLink(int x = 0, int y = 0);
+    wxHtmlCell* GetNext();
+    void SetPos(int x, int y);
+    void SetLink(const wxString& link);
+    void SetNext(wxHtmlCell *cell);
+    void Layout(int w);
+    void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
+    void DrawInvisible(wxDC& dc, int x, int y);
+    const wxHtmlCell* Find(int condition, const void* param);
+};
+
+
+class wxHtmlContainerCell : public wxHtmlCell {
+public:
+    wxHtmlContainerCell(wxHtmlContainerCell *parent);
+
+    void InsertCell(wxHtmlCell *cell);
+    void SetAlignHor(int al);
+    int GetAlignHor();
+    void SetAlignVer(int al);
+    int GetAlignVer();
+    void SetIndent(int i, int what, int units = HTML_UNITS_PIXELS);
+    int GetIndent(int ind);
+    int GetIndentUnits(int ind);
+    void SetAlign(const wxHtmlTag& tag);
+    void SetWidthFloat(int w, int units);
+    %name(SetWidthFloatFromTag)void SetWidthFloat(const wxHtmlTag& tag);
+    void SetMinHeight(int h, int align = HTML_ALIGN_TOP);
+    int GetMaxLineWidth();
+    void SetBackgroundColour(const wxColour& clr);
+    void SetBorder(const wxColour& clr1, const wxColour& clr2);
+    wxHtmlCell* GetFirstCell();
+};
+
+
+
+
+class wxHtmlWidgetCell : public wxHtmlCell {
+public:
+    wxHtmlWidgetCell(wxWindow* wnd, int w = 0);
+
+};
 
 
 
@@ -461,6 +548,8 @@ public:
                 // Returns pointer to conteiners/cells structure.
                 // It should be used ONLY when printing
 
+    wxHtmlWinParser* GetParser();
+
 
     void base_OnLinkClicked(const char* link);
                 // called when users clicked on hypertext link. Default behavior is to
@@ -486,18 +575,22 @@ public:
 
 %init %{
 
+#if 0
     /* This is a bit cheesy. SWIG happens to call the dictionary d...
      * I save it here, 'cause I don't know how to get it back later! */
     mod_dict = d;
+#endif
 
     //inithtmlhelpc();
 
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
+#if 0
     /* specifically add our python tag handler; it doesn't seem to
      * happen by itself... */
     wxHtmlWinParser::AddModule(new HTML_ModulePythonTag());
+#endif
 
     // Until wxFileSystem is wrapped...
     #if wxUSE_FS_ZIP
@@ -505,4 +598,11 @@ public:
     #endif
 %}
 
+//----------------------------------------------------------------------
+// And this gets appended to the shadow class file.
+//----------------------------------------------------------------------
+
+%pragma(python) include="_extras.py";
+
 //---------------------------------------------------------------------------
+
