@@ -83,7 +83,7 @@ extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 // Keys are pairs "key_name = value" where value may be of string or integer
 // (long) type (@@@ doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
-class wxConfigBase
+class WXDLLEXPORT wxConfigBase
 {
 public:
   // static functions

@@ -73,7 +73,7 @@
 #define wxID_PROP_VALUE_SELECT  3005
 
 // Mediates between a physical panel and the property sheet
-class wxPropertyListView: public wxPropertyView
+class WXDLLEXPORT wxPropertyListView: public wxPropertyView
 {
  DECLARE_DYNAMIC_CLASS(wxPropertyListView)
  public:
@@ -188,7 +188,7 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
-class wxPropertyTextEdit: public wxTextCtrl
+class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
 {
  DECLARE_CLASS(wxPropertyTextEdit)
  public:
@@ -207,7 +207,7 @@ class wxPropertyTextEdit: public wxTextCtrl
  * The type of validator used for property lists (Visual Basic style)
  */
  
-class wxPropertyListValidator: public wxPropertyValidator
+class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 {
   DECLARE_DYNAMIC_CLASS(wxPropertyListValidator)
  protected:
@@ -269,7 +269,7 @@ class wxPropertyListValidator: public wxPropertyValidator
  * A default dialog box class to use.
  */
  
-class wxPropertyListDialog: public wxDialog
+class WXDLLEXPORT wxPropertyListDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyListDialog)
  public:
@@ -293,7 +293,7 @@ DECLARE_EVENT_TABLE()
  * A default panel class to use.
  */
  
-class wxPropertyListPanel: public wxPanel
+class WXDLLEXPORT wxPropertyListPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyListPanel)
  public:
@@ -326,7 +326,7 @@ DECLARE_EVENT_TABLE()
  * A default frame class to use.
  */
  
-class wxPropertyListFrame: public wxFrame
+class WXDLLEXPORT wxPropertyListFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyListFrame)
  public:
@@ -354,7 +354,7 @@ class wxPropertyListFrame: public wxFrame
  * Some default validators
  */
  
-class wxRealListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxRealListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealListValidator)
  public:
@@ -381,7 +381,7 @@ class wxRealListValidator: public wxPropertyListValidator
   float     m_realMax;
 };
 
-class wxIntegerListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxIntegerListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxIntegerListValidator)
  public:
@@ -408,7 +408,7 @@ class wxIntegerListValidator: public wxPropertyListValidator
   long m_integerMax;
 };
 
-class wxBoolListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxBoolListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxBoolListValidator)
  protected:
@@ -437,7 +437,7 @@ class wxBoolListValidator: public wxPropertyListValidator
    virtual bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 };
 
-class wxStringListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxStringListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxStringListValidator)
  public:
@@ -471,7 +471,7 @@ class wxStringListValidator: public wxPropertyListValidator
   wxStringList*     m_strings;
 };
  
-class wxFilenameListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxFilenameListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxFilenameListValidator)
  public:
@@ -502,7 +502,7 @@ class wxFilenameListValidator: public wxPropertyListValidator
   
 };
 
-class wxColourListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxColourListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxColourListValidator)
  protected:
@@ -523,7 +523,7 @@ class wxColourListValidator: public wxPropertyListValidator
    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 };
 
-class wxListOfStringsListValidator: public wxPropertyListValidator
+class WXDLLEXPORT wxListOfStringsListValidator: public wxPropertyListValidator
 {
   DECLARE_DYNAMIC_CLASS(wxListOfStringsListValidator)
  protected:

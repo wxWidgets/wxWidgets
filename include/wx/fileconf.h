@@ -95,7 +95,7 @@
    IsExpandingEnvVars function).
 */
 
-class wxFileConfig : public wxConfigBase
+class WXDLLEXPORT wxFileConfig : public wxConfigBase
 {
 public:
   // construct the "standard" full name for global (system-wide) and

@@ -26,7 +26,7 @@
 #define wxID_PROP_UPDATE        3101
 
 // Mediates between a physical panel and the property sheet
-class wxPropertyFormView: public wxPropertyView
+class WXDLLEXPORT wxPropertyFormView: public wxPropertyView
 {
  DECLARE_DYNAMIC_CLASS(wxPropertyFormView)
  public:
@@ -109,7 +109,7 @@ DECLARE_EVENT_TABLE()
  * assocated with a window. It's that kinda thing.
  */
 
-class wxPropertyFormValidator: public wxPropertyValidator
+class WXDLLEXPORT wxPropertyFormValidator: public wxPropertyValidator
 {
   DECLARE_DYNAMIC_CLASS(wxPropertyFormValidator)
  protected:
@@ -143,7 +143,7 @@ class wxPropertyFormValidator: public wxPropertyValidator
  * Some default validators
  */
  
-class wxRealFormValidator: public wxPropertyFormValidator
+class WXDLLEXPORT wxRealFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxRealFormValidator)
  public:
@@ -164,7 +164,7 @@ class wxRealFormValidator: public wxPropertyFormValidator
   float         m_realMax;
 };
 
-class wxIntegerFormValidator: public wxPropertyFormValidator
+class WXDLLEXPORT wxIntegerFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxIntegerFormValidator)
  public:
@@ -184,7 +184,7 @@ class wxIntegerFormValidator: public wxPropertyFormValidator
   long          m_integerMax;
 };
 
-class wxBoolFormValidator: public wxPropertyFormValidator
+class WXDLLEXPORT wxBoolFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxBoolFormValidator)
  protected:
@@ -199,7 +199,7 @@ class wxBoolFormValidator: public wxPropertyFormValidator
    bool OnDisplayValue(wxProperty *property, wxPropertyFormView *view, wxWindow *parentWindow);
 };
 
-class wxStringFormValidator: public wxPropertyFormValidator
+class WXDLLEXPORT wxStringFormValidator: public wxPropertyFormValidator
 {
   DECLARE_DYNAMIC_CLASS(wxStringFormValidator)
  public:
@@ -223,7 +223,7 @@ class wxStringFormValidator: public wxPropertyFormValidator
  * A default dialog box class to use.
  */
  
-class wxPropertyFormDialog: public wxDialog
+class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
 {
   DECLARE_CLASS(wxPropertyFormDialog)
  public:
@@ -245,7 +245,7 @@ class wxPropertyFormDialog: public wxDialog
  * A default panel class to use.
  */
  
-class wxPropertyFormPanel: public wxPanel
+class WXDLLEXPORT wxPropertyFormPanel: public wxPanel
 {
   DECLARE_CLASS(wxPropertyFormPanel)
  public:
@@ -269,7 +269,7 @@ class wxPropertyFormPanel: public wxPanel
  * A default frame class to use.
  */
  
-class wxPropertyFormFrame: public wxFrame
+class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
 {
   DECLARE_CLASS(wxPropertyFormFrame)
  public:
