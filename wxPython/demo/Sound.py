@@ -18,16 +18,16 @@ class TestPanel(wx.Panel):
 
     def OnButton1(self, evt):
         try:
-            wave = wx.Wave(opj('data/anykey.wav'))
-            wave.Play()
+            sound = wx.Sound(opj('data/anykey.wav'))
+            sound.Play()
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
 
 
     def OnButton2(self, evt):
         try:
-            wave = wx.Wave(opj('data/plan.wav'))
-            wave.Play()
+            sound = wx.Sound(opj('data/plan.wav'))
+            sound.Play()
         except NotImplementedError, v:
             wx.MessageBox(str(v), "Exception Message")
 
@@ -40,14 +40,16 @@ def runTest(frame, nb, log):
 #----------------------------------------------------------------------
 
 
-overview = """\
+overview = """<html><body>
+<h2>Sound</h2>
 This class represents a short wave file, in Windows WAV format, that can 
 be stored in memory and played. Currently this class is implemented on Windows 
 and GTK (Linux) only.
-
+<p>
 This demo offers two examples, both driven by buttons, but obviously the event
 that drives the playing of the sound can come from anywhere.
 
+</body></html>
 """
 
 

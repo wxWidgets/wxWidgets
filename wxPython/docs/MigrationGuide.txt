@@ -414,3 +414,6 @@ wxPyTypeCast at all.
 
 If you use the old wxPython package and wxPython.wx namespace then
 there are compatibility aliases for much of the above items.
+
+The wxWave class has been renamed to wxSound, and now has a slightly
+different API.

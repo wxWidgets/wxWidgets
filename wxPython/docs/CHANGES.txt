@@ -49,6 +49,8 @@ for the Demo, PyCrust and XRCed) are now top-level items in the disk
 image (.dmg file) that users can just drag and drop to wherever they
 want to put them.
 
+The wxWave class has been renamed to wxSound, and now has a slightly
+different API.
 
 
 

@@ -42,7 +42,7 @@ MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 %include _log.i
 %include _process.i
 %include _joystick.i
-%include _wave.i
+%include _sound.i
 %include _mimetype.i
 %include _artprov.i
 %include _config.i

@@ -209,8 +209,8 @@ _treeList = [
         'OGL',
         'PrintFramework',
         'ShapedWindow',
+        'Sound',
         'Unicode',
-        'Wave',
         ]),
 
     # need libs not coming with the demo

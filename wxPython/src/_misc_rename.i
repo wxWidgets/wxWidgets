@@ -259,7 +259,10 @@
 %rename(JOY_BUTTON4)                        wxJOY_BUTTON4;
 %rename(Joystick)                           wxJoystick;
 %rename(JoystickEvent)                      wxJoystickEvent;
-%rename(Wave)                               wxWave;
+%rename(SOUND_SYNC)                         wxSOUND_SYNC;
+%rename(SOUND_ASYNC)                        wxSOUND_ASYNC;
+%rename(SOUND_LOOP)                         wxSOUND_LOOP;
+%rename(Sound)                              wxSound;
 %rename(MAILCAP_STANDARD)                   wxMAILCAP_STANDARD;
 %rename(MAILCAP_NETSCAPE)                   wxMAILCAP_NETSCAPE;
 %rename(MAILCAP_KDE)                        wxMAILCAP_KDE;
