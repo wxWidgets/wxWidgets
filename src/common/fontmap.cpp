@@ -36,6 +36,7 @@
     #include "wx/intl.h"
 #endif // PCH
 
+#include "wx/module.h"
 #include "wx/fontmap.h"
 
 #if wxUSE_CONFIG
@@ -181,11 +182,23 @@ static const wxChar* gs_encodingNames[] =
 // global data
 // ----------------------------------------------------------------------------
 
-// private object
-static wxFontMapper gs_fontMapper;
+wxFontMapper * wxTheFontMapper = NULL;
 
-// and public pointer
-wxFontMapper * wxTheFontMapper = &gs_fontMapper;
+class wxFontMapperModule: public wxModule
+{
+public:
+    wxFontMapperModule() : wxModule() { }
+    virtual bool OnInit() { wxTheFontMapper = new wxFontMapper; return TRUE; }
+    virtual void OnExit()
+    {
+        delete wxTheFontMapper;
+        wxTheFontMapper = NULL;
+    }
+
+    DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxFontMapperModule, wxModule)
 
 // ----------------------------------------------------------------------------
 // private classes

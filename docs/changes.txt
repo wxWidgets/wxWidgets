@@ -151,6 +151,8 @@ wxMSW:
 - the separators are not seen behind the controls added to the toolbar any more
 - wxLB_SORT style can be used with wxCheckListBox
 - wxWindowDC and wxClientDC::GetSize() works correctly now
+- Added wxTB_NODIVIDER and wxTB_NOALIGN so native toolbar can
+  be used in FL
 
 wxGTK:
 

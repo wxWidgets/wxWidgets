@@ -306,7 +306,7 @@ helpchm.cpp	MSW	Win32Only
 helpwin.cpp	MSW
 icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only,LowLevel
-iniconf.cpp	MSW	NotWin32
+iniconf.cpp	MSW
 joystick.cpp	MSW
 listbox.cpp	MSW
 listctrl.cpp	MSW	Win32Only

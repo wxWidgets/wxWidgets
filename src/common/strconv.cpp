@@ -42,6 +42,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/module.h"
 #include "wx/strconv.h"
 
 // ----------------------------------------------------------------------------
@@ -57,6 +58,22 @@
 #endif // wxUSE_WCHAR_T
 
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
+
+class wxStrConvModule: public wxModule
+{
+public:
+    wxStrConvModule() : wxModule() { }
+    virtual bool OnInit() { return TRUE; }
+    virtual void OnExit()
+    {
+        wxConvLocal.Clear();
+    }
+
+    DECLARE_DYNAMIC_CLASS(wxStrConvModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxStrConvModule, wxModule)
+
 
 // ----------------------------------------------------------------------------
 // headers
@@ -898,8 +915,17 @@ wxCSConv::wxCSConv(const wxChar *charset)
 
 wxCSConv::~wxCSConv()
 {
-    free(m_name);
-    delete m_cset;
+    Clear();
+}
+
+void wxCSConv::Clear()
+{
+    if (m_name)
+        free(m_name);
+    if (m_cset)
+        delete m_cset;
+    m_name = NULL;
+    m_cset = NULL;
 }
 
 void wxCSConv::SetName(const wxChar *charset)

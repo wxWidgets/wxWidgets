@@ -1122,6 +1122,8 @@ enum wxBorder
 #define wxTB_DOCKABLE       0x0040          // use native docking under GTK
 #define wxTB_NOICONS        0x0080          // don't show the icons
 #define wxTB_TEXT           0x0100          // show the text
+#define wxTB_NODIVIDER      0x0200          // don't show the divider (Windows)
+#define wxTB_NOALIGN        0x0400          // no automatic alignment (Windows)
 
 /*
  * wxStatusBar95 flags

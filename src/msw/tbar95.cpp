@@ -262,6 +262,10 @@ bool wxToolBar::Create(wxWindow *parent,
             msflags |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
         }
     }
+    if (style & wxTB_NODIVIDER)
+        msflags |= CCS_NODIVIDER;
+    if (style & wxTB_NOALIGN)
+        msflags |= CCS_NOPARENTALIGN;
 
     // MSW-specific initialisation
     if ( !wxControl::MSWCreateControl(TOOLBARCLASSNAME, msflags) )
@@ -1184,7 +1188,11 @@ bool wxToolBar::HandleSize(WXWPARAM wParam, WXLPARAM lParam)
             if ( m_maxRows )
             {
                 // FIXME: 6 is hardcoded separator line height...
-                h += 6;
+                //h += 6;
+                if (HasFlag(wxTB_NODIVIDER))
+                    h += 3;
+                else
+                    h += 6;
                 h *= m_maxRows;
             }
         }

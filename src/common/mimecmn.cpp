@@ -626,6 +626,7 @@ public:
         {
             delete gs_mimeTypesManager.m_impl;
             gs_mimeTypesManager.m_impl = NULL;
+            gs_mimeTypesManager.m_fallbacks.Clear();
         }
     }
 

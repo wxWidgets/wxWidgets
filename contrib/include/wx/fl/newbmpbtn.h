@@ -19,6 +19,9 @@
 #include "wx/button.h"
 #include "wx/string.h"
 
+// defaults
+#define NB_DEFAULT_MARGIN 2
+
 // button label-text alignment types
 
 #define NB_ALIGN_TEXT_RIGHT  0
@@ -111,8 +114,8 @@ public:
                        bool  isFlat                = TRUE,
                        // this is the default type of fired events
                        int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
-                       int marginX        = 2,
-                       int marginY        = 2,
+                       int marginX        = NB_DEFAULT_MARGIN,
+                       int marginY        = NB_DEFAULT_MARGIN,
                        int textToLabelGap = 2,
                        bool isSticky      = FALSE
                      );
@@ -125,8 +128,8 @@ public:
                            bool  isFlat                   = TRUE,
                            // this is the default type of fired events
                            int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
-                           int marginX        = 2,
-                           int marginY        = 2,
+                           int marginX        = NB_DEFAULT_MARGIN,
+                           int marginY        = NB_DEFAULT_MARGIN,
                            int textToLabelGap = 2,
                            bool isSticky      = FALSE
                              );
@@ -143,8 +146,8 @@ public:
 
         // Sets the text alignment and margins.
     virtual void SetAlignments( int alignText = NB_ALIGN_TEXT_BOTTOM,
-                                int marginX        = 2,
-                                int marginY        = 2,
+                                int marginX        = NB_DEFAULT_MARGIN,
+                                int marginY        = NB_DEFAULT_MARGIN,
                                 int textToLabelGap = 2);
 
         // Draws the decorations.
@@ -193,6 +196,11 @@ public:
 
         // Responds to a kill focus event.
     void OnKillFocus( wxFocusEvent& event );
+
+        // Maps bitmap to current system colours on Windows
+#ifdef __WXMSW__
+    WXHBITMAP MapBitmap(WXHBITMAP bitmap, int width, int height);
+#endif
 
     DECLARE_EVENT_TABLE()
 };
