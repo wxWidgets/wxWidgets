@@ -860,7 +860,9 @@ bool wxTopLevelWindowMac::Show(bool show)
 
     if (show)
     {
-      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
+      // this is leading to incorrect window layering in some situations
+      // ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
+      ::ShowWindow( (WindowRef)m_macWindow ) ;
       ::SelectWindow( (WindowRef)m_macWindow ) ;
       // no need to generate events here, they will get them triggered by macos
       // actually they should be , but apparently they are not
@@ -871,7 +873,9 @@ bool wxTopLevelWindowMac::Show(bool show)
     }
     else
     {
-      ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
+      // this is leading to incorrect window layering in some situations
+      // ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowHideTransitionAction,nil);
+      ::HideWindow( (WindowRef)m_macWindow ) ;
     }
 
     if ( !show )
