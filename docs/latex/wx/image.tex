@@ -397,12 +397,6 @@ available images.
 Number of available images. For most image handlers, this is 1 (exceptions
 are TIFF and ICO formats).
 
-\membersection{wxImage::GetRed}\label{wximagegetred}
-
-\constfunc{unsigned char}{GetRed}{\param{int}{ x}, \param{int}{ y}}
-
-Returns the red intensity at the given coordinate.
-
 \membersection{wxImage::GetHandlers}
 
 \func{static wxList\&}{GetHandlers}{\void}
@@ -445,6 +439,12 @@ Returns the palette associated with the image. Currently the palette is only
 used when converting to wxBitmap under Windows.
 
 Eventually wxImage handlers will set the palette if one exists in the image file.
+
+\membersection{wxImage::GetRed}\label{wximagegetred}
+
+\constfunc{unsigned char}{GetRed}{\param{int}{ x}, \param{int}{ y}}
+
+Returns the red intensity at the given coordinate.
 
 \membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
 
