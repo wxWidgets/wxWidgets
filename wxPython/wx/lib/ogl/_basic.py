@@ -814,7 +814,7 @@ class Shape(ShapeEvtHandler):
 
         for line in self._lines:
             if attachment == -1 or (line.GetTo() == self and line.GetAttachmentTo() == attachment or line.GetFrom() == self and line.GetAttachmentFrom() == attachment):
-                line.GetEventHandler().Draw(dc)
+                line.Draw(dc)
                 
         if recurse:
             for child in self._children:
