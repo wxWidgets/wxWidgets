@@ -81,6 +81,7 @@ bool wxIcon::LoadFile(const wxString& filename, long type,
 
 bool wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
 {
-    // TODO
-    return FALSE;
+    wxIcon* icon = (wxIcon*) (& bitmap);
+    *this = *icon;
+    return TRUE;
 }

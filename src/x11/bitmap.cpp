@@ -1044,6 +1044,9 @@ wxImage wxBitmap::ConvertToImage() const
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
-    // TODO
-    return FALSE;
+    wxBitmap* bitmap = (wxBitmap*) & icon;
+
+    *this = *bitmap;
+
+    return TRUE;
 }
