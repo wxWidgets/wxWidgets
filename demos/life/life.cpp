@@ -240,11 +240,19 @@ void LifeFrame::UpdateInfoText()
 // way to do this.
 void LifeFrame::UpdateUI()
 {
+    // start / stop
     GetToolBar()->EnableTool(ID_START, !m_running);
     GetToolBar()->EnableTool(ID_STOP,  m_running);
     GetMenuBar()->GetMenu(1)->Enable(ID_START, !m_running);
     GetMenuBar()->GetMenu(1)->Enable(ID_STEP,  !m_running);
     GetMenuBar()->GetMenu(1)->Enable(ID_STOP,  m_running);
+
+    // zooming
+    int cellsize = m_canvas->GetCellSize();
+    GetToolBar()->EnableTool(ID_ZOOMIN,  cellsize < 32);
+    GetToolBar()->EnableTool(ID_ZOOMOUT, cellsize > 1);
+    GetMenuBar()->GetMenu(1)->Enable(ID_ZOOMIN,  cellsize < 32);
+    GetMenuBar()->GetMenu(1)->Enable(ID_ZOOMOUT, cellsize > 1);
 }
 
 // event handlers
@@ -260,14 +268,20 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
         {
             int cellsize = m_canvas->GetCellSize();
             if (cellsize < 32)
+            {
                 m_canvas->SetCellSize(cellsize * 2);
+                UpdateUI();
+            }
             break;
         }
         case ID_ZOOMOUT :
         {
             int cellsize = m_canvas->GetCellSize();
             if (cellsize > 1)
+            {
                 m_canvas->SetCellSize(cellsize / 2);
+                UpdateUI();
+            }
             break;
         }
         case ID_TOPSPEED:
