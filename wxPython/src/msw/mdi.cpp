@@ -408,6 +408,76 @@ static PyObject *_wrap_wxMDIParentFrame_GetToolBar(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxMDIParentFrame_GetWindowMenu(_swigobj)  (_swigobj->GetWindowMenu())
+static PyObject *_wrap_wxMDIParentFrame_GetWindowMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMenu * _result;
+    wxMDIParentFrame * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMDIParentFrame_GetWindowMenu",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMDIParentFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIParentFrame_GetWindowMenu. Expected _wxMDIParentFrame_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxMenu *)wxMDIParentFrame_GetWindowMenu(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenu_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxMDIParentFrame_SetWindowMenu(_swigobj,_swigarg0)  (_swigobj->SetWindowMenu(_swigarg0))
+static PyObject *_wrap_wxMDIParentFrame_SetWindowMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMDIParentFrame * _arg0;
+    wxMenu * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","menu", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMDIParentFrame_SetWindowMenu",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMDIParentFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIParentFrame_SetWindowMenu. Expected _wxMDIParentFrame_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMDIParentFrame_SetWindowMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxMDIParentFrame_SetWindowMenu(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxMDIParentFrame_SetToolBar(_swigobj,_swigarg0)  (_swigobj->SetToolBar(_swigarg0))
 static PyObject *_wrap_wxMDIParentFrame_SetToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -706,6 +776,8 @@ static PyMethodDef mdicMethods[] = {
 	 { "new_wxMDIChildFrame", (PyCFunction) _wrap_new_wxMDIChildFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMDIParentFrame_Tile", (PyCFunction) _wrap_wxMDIParentFrame_Tile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMDIParentFrame_SetToolBar", (PyCFunction) _wrap_wxMDIParentFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMDIParentFrame_SetWindowMenu", (PyCFunction) _wrap_wxMDIParentFrame_SetWindowMenu, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMDIParentFrame_GetWindowMenu", (PyCFunction) _wrap_wxMDIParentFrame_GetWindowMenu, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMDIParentFrame_GetToolBar", (PyCFunction) _wrap_wxMDIParentFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMDIParentFrame_GetClientWindow", (PyCFunction) _wrap_wxMDIParentFrame_GetClientWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMDIParentFrame_GetActiveChild", (PyCFunction) _wrap_wxMDIParentFrame_GetActiveChild, METH_VARARGS | METH_KEYWORDS },

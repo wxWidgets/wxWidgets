@@ -317,8 +317,9 @@ public:
             return list;
         }
     }
-
-    //void AddFile(const wxString &filename);
+#ifdef __WXMSW__
+    void AddFile(const wxString &filename);
+#endif
 };
 
 

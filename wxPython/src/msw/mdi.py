@@ -45,6 +45,13 @@ class wxMDIParentFramePtr(wxFramePtr):
         val = apply(mdic.wxMDIParentFrame_GetToolBar,(self,) + _args, _kwargs)
         if val: val = wxWindowPtr(val) 
         return val
+    def GetWindowMenu(self, *_args, **_kwargs):
+        val = apply(mdic.wxMDIParentFrame_GetWindowMenu,(self,) + _args, _kwargs)
+        if val: val = wxMenuPtr(val) 
+        return val
+    def SetWindowMenu(self, *_args, **_kwargs):
+        val = apply(mdic.wxMDIParentFrame_SetWindowMenu,(self,) + _args, _kwargs)
+        return val
     def SetToolBar(self, *_args, **_kwargs):
         val = apply(mdic.wxMDIParentFrame_SetToolBar,(self,) + _args, _kwargs)
         return val

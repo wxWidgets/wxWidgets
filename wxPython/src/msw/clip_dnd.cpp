@@ -1679,6 +1679,46 @@ static PyObject *_wrap_wxFileDataObject_GetFilenames(PyObject *self, PyObject *a
     return _resultobj;
 }
 
+#define wxFileDataObject_AddFile(_swigobj,_swigarg0)  (_swigobj->AddFile(_swigarg0))
+static PyObject *_wrap_wxFileDataObject_AddFile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFileDataObject * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFileDataObject_AddFile",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFileDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFileDataObject_AddFile. Expected _wxFileDataObject_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFileDataObject_AddFile(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxCustomDataObjectTowxDataObjectSimple(void *ptr) {
     wxCustomDataObject *src;
     wxDataObjectSimple *dest;
@@ -3297,6 +3337,7 @@ static PyMethodDef clip_dndcMethods[] = {
 	 { "wxCustomDataObject_SetData", (PyCFunction) _wrap_wxCustomDataObject_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCustomDataObject_TakeData", (PyCFunction) _wrap_wxCustomDataObject_TakeData, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCustomDataObject", (PyCFunction) _wrap_new_wxCustomDataObject, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileDataObject_AddFile", (PyCFunction) _wrap_wxFileDataObject_AddFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileDataObject_GetFilenames", (PyCFunction) _wrap_wxFileDataObject_GetFilenames, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFileDataObject", (PyCFunction) _wrap_new_wxFileDataObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyBitmapDataObject__setSelf", (PyCFunction) _wrap_wxPyBitmapDataObject__setSelf, METH_VARARGS | METH_KEYWORDS },

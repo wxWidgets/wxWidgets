@@ -1552,13 +1552,12 @@ static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginBottomRight(PyObject *s
 static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPageSetupDialogData * _arg0;
-    wxPaperSize * _arg1;
+    wxPaperSize  _arg1;
     PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
     char *_kwnames[] = { "self","id", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPageSetupDialogData_SetPaperId",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxPageSetupDialogData_SetPaperId",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1567,16 +1566,9 @@ static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject
         return NULL;
         }
     }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxPaperSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetPaperId. Expected _wxPaperSize_p.");
-        return NULL;
-        }
-    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetPaperId(_arg0,*_arg1);
+        wxPageSetupDialogData_SetPaperId(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
