@@ -43,7 +43,7 @@
 #endif
 #include <oleauto.h>
 
-#ifndef __WIN32__  
+#ifndef __WIN32__
   #include <ole2.h>
   #include <olestd.h>
 #endif
@@ -482,10 +482,11 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
 #endif // Debug
     }
     else {
+#ifdef __WXDEBUG__
         wxLogTrace(wxTRACE_OleCalls,
                    wxT("wxIDataObject::QueryGetData: %s unsupported"),
                    wxDataObject::GetFormatName(format));
-
+#endif
         return DV_E_FORMATETC;
     }
 
