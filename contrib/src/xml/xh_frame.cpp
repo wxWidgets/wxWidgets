@@ -30,6 +30,7 @@ wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
     ADD_STYLE(wxSTAY_ON_TOP);
     ADD_STYLE(wxCAPTION);
     ADD_STYLE(wxDEFAULT_DIALOG_STYLE);
+    ADD_STYLE(wxDEFAULT_FRAME_STYLE);
     ADD_STYLE(wxTHICK_FRAME);
     ADD_STYLE(wxSYSTEM_MENU);
     ADD_STYLE(wxRESIZE_BORDER);
