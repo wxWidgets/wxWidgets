@@ -214,51 +214,52 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxHtmlRenderingStyle swig_types[5] 
 #define  SWIGTYPE_p_wxMouseEvent swig_types[6] 
 #define  SWIGTYPE_p_wxHtmlWordCell swig_types[7] 
-#define  SWIGTYPE_p_wxHtmlHelpData swig_types[8] 
-#define  SWIGTYPE_p_char swig_types[9] 
-#define  SWIGTYPE_p_wxHtmlWinParser swig_types[10] 
-#define  SWIGTYPE_p_wxHtmlParser swig_types[11] 
-#define  SWIGTYPE_p_wxPanel swig_types[12] 
-#define  SWIGTYPE_p_wxFont swig_types[13] 
-#define  SWIGTYPE_p_wxHtmlColourCell swig_types[14] 
-#define  SWIGTYPE_p_wxPyHtmlWindow swig_types[15] 
-#define  SWIGTYPE_p_wxScrolledWindow swig_types[16] 
-#define  SWIGTYPE_p_wxWindow swig_types[17] 
-#define  SWIGTYPE_p_wxTopLevelWindow swig_types[18] 
-#define  SWIGTYPE_p_wxHtmlFontCell swig_types[19] 
-#define  SWIGTYPE_p_wxHtmlEasyPrinting swig_types[20] 
-#define  SWIGTYPE_p_wxHtmlSelection swig_types[21] 
-#define  SWIGTYPE_p_wxHtmlRenderingInfo swig_types[22] 
-#define  SWIGTYPE_p_wxHtmlWidgetCell swig_types[23] 
-#define  SWIGTYPE_p_wxObject swig_types[24] 
-#define  SWIGTYPE_p_wxString swig_types[25] 
-#define  SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[26] 
-#define  SWIGTYPE_p_wxHtmlTagHandler swig_types[27] 
-#define  SWIGTYPE_p_wxPyHtmlTagHandler swig_types[28] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[29] 
-#define  SWIGTYPE_p_wxPoint swig_types[30] 
-#define  SWIGTYPE_p_wxHtmlHelpController swig_types[31] 
-#define  SWIGTYPE_p_wxCursor swig_types[32] 
-#define  SWIGTYPE_p_wxFileSystem swig_types[33] 
-#define  SWIGTYPE_p_wxHtmlBookRecArray swig_types[34] 
-#define  SWIGTYPE_p_wxPyPrintout swig_types[35] 
-#define  SWIGTYPE_p_wxHtmlPrintout swig_types[36] 
-#define  SWIGTYPE_p_wxHtmlSearchStatus swig_types[37] 
-#define  SWIGTYPE_p_wxHtmlContentsItem swig_types[38] 
-#define  SWIGTYPE_p_wxConfigBase swig_types[39] 
-#define  SWIGTYPE_p_wxPrintData swig_types[40] 
-#define  SWIGTYPE_p_wxHtmlHelpFrame swig_types[41] 
-#define  SWIGTYPE_p_wxHtmlRenderingState swig_types[42] 
-#define  SWIGTYPE_p_wxFrame swig_types[43] 
-#define  SWIGTYPE_p_wxPyHtmlFilter swig_types[44] 
-#define  SWIGTYPE_p_wxHtmlFilter swig_types[45] 
-#define  SWIGTYPE_p_wxHtmlCell swig_types[46] 
-#define  SWIGTYPE_p_wxHtmlContainerCell swig_types[47] 
-#define  SWIGTYPE_p_wxHtmlTag swig_types[48] 
-#define  SWIGTYPE_p_wxHtmlLinkInfo swig_types[49] 
-#define  SWIGTYPE_p_int swig_types[50] 
-#define  SWIGTYPE_p_wxHtmlBookRecord swig_types[51] 
-static swig_type_info *swig_types[53];
+#define  SWIGTYPE_p_wxVisualAttributes swig_types[8] 
+#define  SWIGTYPE_p_wxHtmlHelpData swig_types[9] 
+#define  SWIGTYPE_p_char swig_types[10] 
+#define  SWIGTYPE_p_wxHtmlWinParser swig_types[11] 
+#define  SWIGTYPE_p_wxHtmlParser swig_types[12] 
+#define  SWIGTYPE_p_wxPanel swig_types[13] 
+#define  SWIGTYPE_p_wxFont swig_types[14] 
+#define  SWIGTYPE_p_wxHtmlColourCell swig_types[15] 
+#define  SWIGTYPE_p_wxPyHtmlWindow swig_types[16] 
+#define  SWIGTYPE_p_wxScrolledWindow swig_types[17] 
+#define  SWIGTYPE_p_wxWindow swig_types[18] 
+#define  SWIGTYPE_p_wxTopLevelWindow swig_types[19] 
+#define  SWIGTYPE_p_wxHtmlFontCell swig_types[20] 
+#define  SWIGTYPE_p_wxHtmlEasyPrinting swig_types[21] 
+#define  SWIGTYPE_p_wxHtmlSelection swig_types[22] 
+#define  SWIGTYPE_p_wxHtmlRenderingInfo swig_types[23] 
+#define  SWIGTYPE_p_wxHtmlWidgetCell swig_types[24] 
+#define  SWIGTYPE_p_wxObject swig_types[25] 
+#define  SWIGTYPE_p_wxString swig_types[26] 
+#define  SWIGTYPE_p_wxPyHtmlWinTagHandler swig_types[27] 
+#define  SWIGTYPE_p_wxHtmlTagHandler swig_types[28] 
+#define  SWIGTYPE_p_wxPyHtmlTagHandler swig_types[29] 
+#define  SWIGTYPE_p_wxEvtHandler swig_types[30] 
+#define  SWIGTYPE_p_wxPoint swig_types[31] 
+#define  SWIGTYPE_p_wxHtmlHelpController swig_types[32] 
+#define  SWIGTYPE_p_wxCursor swig_types[33] 
+#define  SWIGTYPE_p_wxFileSystem swig_types[34] 
+#define  SWIGTYPE_p_wxHtmlBookRecArray swig_types[35] 
+#define  SWIGTYPE_p_wxPyPrintout swig_types[36] 
+#define  SWIGTYPE_p_wxHtmlPrintout swig_types[37] 
+#define  SWIGTYPE_p_wxHtmlSearchStatus swig_types[38] 
+#define  SWIGTYPE_p_wxHtmlContentsItem swig_types[39] 
+#define  SWIGTYPE_p_wxConfigBase swig_types[40] 
+#define  SWIGTYPE_p_wxPrintData swig_types[41] 
+#define  SWIGTYPE_p_wxHtmlHelpFrame swig_types[42] 
+#define  SWIGTYPE_p_wxHtmlRenderingState swig_types[43] 
+#define  SWIGTYPE_p_wxFrame swig_types[44] 
+#define  SWIGTYPE_p_wxPyHtmlFilter swig_types[45] 
+#define  SWIGTYPE_p_wxHtmlFilter swig_types[46] 
+#define  SWIGTYPE_p_wxHtmlCell swig_types[47] 
+#define  SWIGTYPE_p_wxHtmlContainerCell swig_types[48] 
+#define  SWIGTYPE_p_wxHtmlTag swig_types[49] 
+#define  SWIGTYPE_p_wxHtmlLinkInfo swig_types[50] 
+#define  SWIGTYPE_p_int swig_types[51] 
+#define  SWIGTYPE_p_wxHtmlBookRecord swig_types[52] 
+static swig_type_info *swig_types[54];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -7163,6 +7164,38 @@ static PyObject *_wrap_HtmlWindow_base_OnCellClicked(PyObject *self, PyObject *a
 }
 
 
+static PyObject *_wrap_HtmlWindow_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:HtmlWindow_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxPyHtmlWindow::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * HtmlWindow_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -10714,6 +10747,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlWindow_base_OnSetTitle", (PyCFunction) _wrap_HtmlWindow_base_OnSetTitle, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_base_OnCellMouseHover", (PyCFunction) _wrap_HtmlWindow_base_OnCellMouseHover, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_base_OnCellClicked", (PyCFunction) _wrap_HtmlWindow_base_OnCellClicked, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlWindow_GetClassDefaultAttributes", (PyCFunction) _wrap_HtmlWindow_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlWindow_swigregister", HtmlWindow_swigregister, METH_VARARGS },
 	 { (char *)"new_HtmlDCRenderer", (PyCFunction) _wrap_new_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"delete_HtmlDCRenderer", (PyCFunction) _wrap_delete_HtmlDCRenderer, METH_VARARGS | METH_KEYWORDS },
@@ -11736,6 +11770,7 @@ static swig_type_info _swigt__p_wxDefaultHtmlRenderingStyle[] = {{"_p_wxDefaultH
 static swig_type_info _swigt__p_wxHtmlRenderingStyle[] = {{"_p_wxHtmlRenderingStyle", 0, "wxHtmlRenderingStyle *", 0, 0, 0, 0},{"_p_wxHtmlRenderingStyle", 0, 0, 0, 0, 0, 0},{"_p_wxDefaultHtmlRenderingStyle", _p_wxDefaultHtmlRenderingStyleTo_p_wxHtmlRenderingStyle, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMouseEvent[] = {{"_p_wxMouseEvent", 0, "wxMouseEvent *", 0, 0, 0, 0},{"_p_wxMouseEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxHtmlWordCell[] = {{"_p_wxHtmlWordCell", 0, "wxHtmlWordCell *", 0, 0, 0, 0},{"_p_wxHtmlWordCell", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxVisualAttributes[] = {{"_p_wxVisualAttributes", 0, "wxVisualAttributes *", 0, 0, 0, 0},{"_p_wxVisualAttributes", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxHtmlHelpData[] = {{"_p_wxHtmlHelpData", 0, "wxHtmlHelpData *", 0, 0, 0, 0},{"_p_wxHtmlHelpData", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxHtmlWinParser[] = {{"_p_wxHtmlWinParser", 0, "wxHtmlWinParser *", 0, 0, 0, 0},{"_p_wxHtmlWinParser", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -11790,6 +11825,7 @@ _swigt__p_wxDefaultHtmlRenderingStyle,
 _swigt__p_wxHtmlRenderingStyle, 
 _swigt__p_wxMouseEvent, 
 _swigt__p_wxHtmlWordCell, 
+_swigt__p_wxVisualAttributes, 
 _swigt__p_wxHtmlHelpData, 
 _swigt__p_char, 
 _swigt__p_wxHtmlWinParser, 

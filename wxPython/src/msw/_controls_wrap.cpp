@@ -1323,6 +1323,38 @@ static PyObject *_wrap_Button_GetDefaultSize(PyObject *self, PyObject *args, PyO
 }
 
 
+static PyObject *_wrap_Button_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Button_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxButton::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Button_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2352,6 +2384,38 @@ static PyObject *_wrap_CheckBox_Is3rdStateAllowedForUser(PyObject *self, PyObjec
 }
 
 
+static PyObject *_wrap_CheckBox_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:CheckBox_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxCheckBox::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * CheckBox_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2765,6 +2829,38 @@ static PyObject *_wrap_Choice_SetString(PyObject *self, PyObject *args, PyObject
         if (temp3)
         delete arg3;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_Choice_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Choice_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxChoice::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -3622,6 +3718,38 @@ static PyObject *_wrap_ComboBox_Remove(PyObject *self, PyObject *args, PyObject 
 }
 
 
+static PyObject *_wrap_ComboBox_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:ComboBox_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxComboBox::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * ComboBox_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4107,6 +4235,38 @@ static PyObject *_wrap_Gauge_GetBezelFace(PyObject *self, PyObject *args, PyObje
 }
 
 
+static PyObject *_wrap_Gauge_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Gauge_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxGauge::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Gauge_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4388,6 +4548,38 @@ static PyObject *_wrap_StaticBox_Create(PyObject *self, PyObject *args, PyObject
 }
 
 
+static PyObject *_wrap_StaticBox_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:StaticBox_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxStaticBox::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * StaticBox_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4623,6 +4815,38 @@ static PyObject *_wrap_StaticLine_GetDefaultSize(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_StaticLine_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:StaticLine_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxStaticLine::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * StaticLine_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -4836,6 +5060,38 @@ static PyObject *_wrap_StaticText_Create(PyObject *self, PyObject *args, PyObjec
         if (temp8)
         delete arg8;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StaticText_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:StaticText_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxStaticText::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -5135,6 +5391,38 @@ static PyObject *_wrap_StaticBitmap_SetIcon(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StaticBitmap_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:StaticBitmap_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxStaticBitmap::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9528,6 +9816,38 @@ static PyObject *_wrap_TextCtrl_GetString(PyObject *self, PyObject *args, PyObje
 }
 
 
+static PyObject *_wrap_TextCtrl_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:TextCtrl_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxTextCtrl::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * TextCtrl_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -10100,6 +10420,38 @@ static PyObject *_wrap_ScrollBar_SetScrollbar(PyObject *self, PyObject *args, Py
 }
 
 
+static PyObject *_wrap_ScrollBar_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:ScrollBar_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxScrollBar::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * ScrollBar_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -10548,6 +10900,38 @@ static PyObject *_wrap_SpinButton_IsVertical(PyObject *self, PyObject *args, PyO
     }
     {
         resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SpinButton_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:SpinButton_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxSpinButton::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
     }
     return resultobj;
     fail:
@@ -11026,6 +11410,38 @@ static PyObject *_wrap_SpinCtrl_SetSelection(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_SpinCtrl_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:SpinCtrl_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxSpinCtrl::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11927,6 +12343,38 @@ static PyObject *_wrap_RadioBox_GetNextItem(PyObject *self, PyObject *args, PyOb
 }
 
 
+static PyObject *_wrap_RadioBox_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:RadioBox_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxRadioBox::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * RadioBox_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -12219,6 +12667,38 @@ static PyObject *_wrap_RadioButton_SetValue(PyObject *self, PyObject *args, PyOb
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_RadioButton_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:RadioButton_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxRadioButton::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -13066,6 +13546,38 @@ static PyObject *_wrap_Slider_SetSelection(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_Slider_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Slider_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxSlider::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Slider_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -13421,6 +13933,38 @@ static PyObject *_wrap_ToggleButton_SetLabel(PyObject *self, PyObject *args, PyO
         if (temp2)
         delete arg2;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToggleButton_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:ToggleButton_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxToggleButton::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -14118,6 +14662,38 @@ static PyObject *_wrap_BookCtrl_AdvanceSelection(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_BookCtrl_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:BookCtrl_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxBookCtrl::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * BookCtrl_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -14669,6 +15245,38 @@ static PyObject *_wrap_Notebook_ApplyThemeBackground(PyObject *self, PyObject *a
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Notebook_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:Notebook_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxNotebook::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -17909,6 +18517,38 @@ static PyObject *_wrap_ToolBar_FindToolForPosition(PyObject *self, PyObject *arg
     }
     {
         resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToolBar_GetClassDefaultAttributes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 = (int) wxWINDOW_VARIANT_NORMAL ;
+    wxVisualAttributes result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "variant", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:ToolBar_GetClassDefaultAttributes",kwnames,&obj0)) goto fail;
+    if (obj0) {
+        arg1 = (wxWindowVariant) SWIG_AsInt(obj0); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = wxToolBar::GetClassDefaultAttributes((wxWindowVariant )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        wxVisualAttributes * resultptr;
+        resultptr = new wxVisualAttributes((wxVisualAttributes &) result);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxVisualAttributes, 1);
     }
     return resultobj;
     fail:
@@ -30523,6 +31163,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Button_Create", (PyCFunction) _wrap_Button_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_SetDefault", (PyCFunction) _wrap_Button_SetDefault, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_GetDefaultSize", (PyCFunction) _wrap_Button_GetDefaultSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Button_GetClassDefaultAttributes", (PyCFunction) _wrap_Button_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_swigregister", Button_swigregister, METH_VARARGS },
 	 { (char *)"new_BitmapButton", (PyCFunction) _wrap_new_BitmapButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreBitmapButton", (PyCFunction) _wrap_new_PreBitmapButton, METH_VARARGS | METH_KEYWORDS },
@@ -30549,6 +31190,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CheckBox_Set3StateValue", (PyCFunction) _wrap_CheckBox_Set3StateValue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckBox_Is3State", (PyCFunction) _wrap_CheckBox_Is3State, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckBox_Is3rdStateAllowedForUser", (PyCFunction) _wrap_CheckBox_Is3rdStateAllowedForUser, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CheckBox_GetClassDefaultAttributes", (PyCFunction) _wrap_CheckBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckBox_swigregister", CheckBox_swigregister, METH_VARARGS },
 	 { (char *)"new_Choice", (PyCFunction) _wrap_new_Choice, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreChoice", (PyCFunction) _wrap_new_PreChoice, METH_VARARGS | METH_KEYWORDS },
@@ -30556,6 +31198,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Choice_SetSelection", (PyCFunction) _wrap_Choice_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_SetStringSelection", (PyCFunction) _wrap_Choice_SetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_SetString", (PyCFunction) _wrap_Choice_SetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Choice_GetClassDefaultAttributes", (PyCFunction) _wrap_Choice_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Choice_swigregister", Choice_swigregister, METH_VARARGS },
 	 { (char *)"new_ComboBox", (PyCFunction) _wrap_new_ComboBox, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreComboBox", (PyCFunction) _wrap_new_PreComboBox, METH_VARARGS | METH_KEYWORDS },
@@ -30576,6 +31219,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_SetInsertionPointEnd", (PyCFunction) _wrap_ComboBox_SetInsertionPointEnd, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_Remove", (PyCFunction) _wrap_ComboBox_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ComboBox_GetClassDefaultAttributes", (PyCFunction) _wrap_ComboBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ComboBox_swigregister", ComboBox_swigregister, METH_VARARGS },
 	 { (char *)"new_Gauge", (PyCFunction) _wrap_new_Gauge, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreGauge", (PyCFunction) _wrap_new_PreGauge, METH_VARARGS | METH_KEYWORDS },
@@ -30589,20 +31233,24 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Gauge_GetShadowWidth", (PyCFunction) _wrap_Gauge_GetShadowWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Gauge_SetBezelFace", (PyCFunction) _wrap_Gauge_SetBezelFace, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Gauge_GetBezelFace", (PyCFunction) _wrap_Gauge_GetBezelFace, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Gauge_GetClassDefaultAttributes", (PyCFunction) _wrap_Gauge_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Gauge_swigregister", Gauge_swigregister, METH_VARARGS },
 	 { (char *)"new_StaticBox", (PyCFunction) _wrap_new_StaticBox, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreStaticBox", (PyCFunction) _wrap_new_PreStaticBox, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticBox_Create", (PyCFunction) _wrap_StaticBox_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBox_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticBox_swigregister", StaticBox_swigregister, METH_VARARGS },
 	 { (char *)"new_StaticLine", (PyCFunction) _wrap_new_StaticLine, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreStaticLine", (PyCFunction) _wrap_new_PreStaticLine, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticLine_Create", (PyCFunction) _wrap_StaticLine_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticLine_IsVertical", (PyCFunction) _wrap_StaticLine_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticLine_GetDefaultSize", (PyCFunction) _wrap_StaticLine_GetDefaultSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticLine_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticLine_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticLine_swigregister", StaticLine_swigregister, METH_VARARGS },
 	 { (char *)"new_StaticText", (PyCFunction) _wrap_new_StaticText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreStaticText", (PyCFunction) _wrap_new_PreStaticText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticText_Create", (PyCFunction) _wrap_StaticText_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticText_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticText_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticText_swigregister", StaticText_swigregister, METH_VARARGS },
 	 { (char *)"new_StaticBitmap", (PyCFunction) _wrap_new_StaticBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreStaticBitmap", (PyCFunction) _wrap_new_PreStaticBitmap, METH_VARARGS | METH_KEYWORDS },
@@ -30610,6 +31258,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StaticBitmap_GetBitmap", (PyCFunction) _wrap_StaticBitmap_GetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticBitmap_SetBitmap", (PyCFunction) _wrap_StaticBitmap_SetBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticBitmap_SetIcon", (PyCFunction) _wrap_StaticBitmap_SetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StaticBitmap_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticBitmap_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StaticBitmap_swigregister", StaticBitmap_swigregister, METH_VARARGS },
 	 { (char *)"new_ListBox", (PyCFunction) _wrap_new_ListBox, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreListBox", (PyCFunction) _wrap_new_PreListBox, METH_VARARGS | METH_KEYWORDS },
@@ -30728,6 +31377,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TextCtrl_HideNativeCaret", (PyCFunction) _wrap_TextCtrl_HideNativeCaret, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_write", (PyCFunction) _wrap_TextCtrl_write, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_GetString", (PyCFunction) _wrap_TextCtrl_GetString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"TextCtrl_GetClassDefaultAttributes", (PyCFunction) _wrap_TextCtrl_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextCtrl_swigregister", TextCtrl_swigregister, METH_VARARGS },
 	 { (char *)"new_TextUrlEvent", (PyCFunction) _wrap_new_TextUrlEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TextUrlEvent_GetMouseEvent", (PyCFunction) _wrap_TextUrlEvent_GetMouseEvent, METH_VARARGS | METH_KEYWORDS },
@@ -30744,6 +31394,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScrollBar_IsVertical", (PyCFunction) _wrap_ScrollBar_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrollBar_SetThumbPosition", (PyCFunction) _wrap_ScrollBar_SetThumbPosition, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrollBar_SetScrollbar", (PyCFunction) _wrap_ScrollBar_SetScrollbar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ScrollBar_GetClassDefaultAttributes", (PyCFunction) _wrap_ScrollBar_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrollBar_swigregister", ScrollBar_swigregister, METH_VARARGS },
 	 { (char *)"new_SpinButton", (PyCFunction) _wrap_new_SpinButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreSpinButton", (PyCFunction) _wrap_new_PreSpinButton, METH_VARARGS | METH_KEYWORDS },
@@ -30756,6 +31407,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SpinButton_SetMax", (PyCFunction) _wrap_SpinButton_SetMax, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinButton_SetRange", (PyCFunction) _wrap_SpinButton_SetRange, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinButton_IsVertical", (PyCFunction) _wrap_SpinButton_IsVertical, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SpinButton_GetClassDefaultAttributes", (PyCFunction) _wrap_SpinButton_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinButton_swigregister", SpinButton_swigregister, METH_VARARGS },
 	 { (char *)"new_SpinCtrl", (PyCFunction) _wrap_new_SpinCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreSpinCtrl", (PyCFunction) _wrap_new_PreSpinCtrl, METH_VARARGS | METH_KEYWORDS },
@@ -30767,6 +31419,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SpinCtrl_GetMin", (PyCFunction) _wrap_SpinCtrl_GetMin, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinCtrl_GetMax", (PyCFunction) _wrap_SpinCtrl_GetMax, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinCtrl_SetSelection", (PyCFunction) _wrap_SpinCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"SpinCtrl_GetClassDefaultAttributes", (PyCFunction) _wrap_SpinCtrl_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinCtrl_swigregister", SpinCtrl_swigregister, METH_VARARGS },
 	 { (char *)"new_SpinEvent", (PyCFunction) _wrap_new_SpinEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"SpinEvent_GetPosition", (PyCFunction) _wrap_SpinEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
@@ -30788,12 +31441,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RadioBox_GetColumnCount", (PyCFunction) _wrap_RadioBox_GetColumnCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioBox_GetRowCount", (PyCFunction) _wrap_RadioBox_GetRowCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioBox_GetNextItem", (PyCFunction) _wrap_RadioBox_GetNextItem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RadioBox_GetClassDefaultAttributes", (PyCFunction) _wrap_RadioBox_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioBox_swigregister", RadioBox_swigregister, METH_VARARGS },
 	 { (char *)"new_RadioButton", (PyCFunction) _wrap_new_RadioButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreRadioButton", (PyCFunction) _wrap_new_PreRadioButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioButton_Create", (PyCFunction) _wrap_RadioButton_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioButton_GetValue", (PyCFunction) _wrap_RadioButton_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioButton_SetValue", (PyCFunction) _wrap_RadioButton_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"RadioButton_GetClassDefaultAttributes", (PyCFunction) _wrap_RadioButton_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"RadioButton_swigregister", RadioButton_swigregister, METH_VARARGS },
 	 { (char *)"new_Slider", (PyCFunction) _wrap_new_Slider, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreSlider", (PyCFunction) _wrap_new_PreSlider, METH_VARARGS | METH_KEYWORDS },
@@ -30819,6 +31474,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Slider_GetSelEnd", (PyCFunction) _wrap_Slider_GetSelEnd, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Slider_GetSelStart", (PyCFunction) _wrap_Slider_GetSelStart, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Slider_SetSelection", (PyCFunction) _wrap_Slider_SetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Slider_GetClassDefaultAttributes", (PyCFunction) _wrap_Slider_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Slider_swigregister", Slider_swigregister, METH_VARARGS },
 	 { (char *)"new_ToggleButton", (PyCFunction) _wrap_new_ToggleButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreToggleButton", (PyCFunction) _wrap_new_PreToggleButton, METH_VARARGS | METH_KEYWORDS },
@@ -30826,6 +31482,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ToggleButton_SetValue", (PyCFunction) _wrap_ToggleButton_SetValue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToggleButton_GetValue", (PyCFunction) _wrap_ToggleButton_GetValue, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToggleButton_SetLabel", (PyCFunction) _wrap_ToggleButton_SetLabel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_GetClassDefaultAttributes", (PyCFunction) _wrap_ToggleButton_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToggleButton_swigregister", ToggleButton_swigregister, METH_VARARGS },
 	 { (char *)"BookCtrl_GetPageCount", (PyCFunction) _wrap_BookCtrl_GetPageCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_GetPage", (PyCFunction) _wrap_BookCtrl_GetPage, METH_VARARGS | METH_KEYWORDS },
@@ -30846,6 +31503,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"BookCtrl_InsertPage", (PyCFunction) _wrap_BookCtrl_InsertPage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_SetSelection", (PyCFunction) _wrap_BookCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_AdvanceSelection", (PyCFunction) _wrap_BookCtrl_AdvanceSelection, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"BookCtrl_GetClassDefaultAttributes", (PyCFunction) _wrap_BookCtrl_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_swigregister", BookCtrl_swigregister, METH_VARARGS },
 	 { (char *)"new_BookCtrlEvent", (PyCFunction) _wrap_new_BookCtrlEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrlEvent_GetSelection", (PyCFunction) _wrap_BookCtrlEvent_GetSelection, METH_VARARGS | METH_KEYWORDS },
@@ -30862,6 +31520,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Notebook_HitTest", (PyCFunction) _wrap_Notebook_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Notebook_CalcSizeFromPage", (PyCFunction) _wrap_Notebook_CalcSizeFromPage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Notebook_ApplyThemeBackground", (PyCFunction) _wrap_Notebook_ApplyThemeBackground, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Notebook_GetClassDefaultAttributes", (PyCFunction) _wrap_Notebook_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Notebook_swigregister", Notebook_swigregister, METH_VARARGS },
 	 { (char *)"new_NotebookEvent", (PyCFunction) _wrap_new_NotebookEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"NotebookEvent_swigregister", NotebookEvent_swigregister, METH_VARARGS },
@@ -30961,6 +31620,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PreToolBar", (PyCFunction) _wrap_new_PreToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBar_Create", (PyCFunction) _wrap_ToolBar_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBar_FindToolForPosition", (PyCFunction) _wrap_ToolBar_FindToolForPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToolBar_GetClassDefaultAttributes", (PyCFunction) _wrap_ToolBar_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToolBar_swigregister", ToolBar_swigregister, METH_VARARGS },
 	 { (char *)"new_ListItemAttr", (PyCFunction) _wrap_new_ListItemAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ListItemAttr_SetTextColour", (PyCFunction) _wrap_ListItemAttr_SetTextColour, METH_VARARGS | METH_KEYWORDS },

@@ -41,6 +41,23 @@ class Panel(_core.Window):
         """
         return _windows_.Panel_InitDialog(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class PanelPtr(Panel):
     def __init__(self, this):
@@ -54,6 +71,22 @@ def PrePanel(*args, **kwargs):
     val = _windows_.new_PrePanel(*args, **kwargs)
     val.thisown = 1
     return val
+
+def Panel_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Panel_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -179,6 +212,23 @@ class ScrolledWindow(Panel):
         """GetTargetRect(self) -> Rect"""
         return _windows_.ScrolledWindow_GetTargetRect(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class ScrolledWindowPtr(ScrolledWindow):
     def __init__(self, this):
@@ -192,6 +242,22 @@ def PreScrolledWindow(*args, **kwargs):
     val = _windows_.new_PreScrolledWindow(*args, **kwargs)
     val.thisown = 1
     return val
+
+def ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    ScrolledWindow_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -415,6 +481,23 @@ class Frame(TopLevelWindow):
         """DoMenuUpdates(self, Menu menu=None)"""
         return _windows_.Frame_DoMenuUpdates(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class FramePtr(Frame):
     def __init__(self, this):
@@ -428,6 +511,22 @@ def PreFrame(*args, **kwargs):
     val = _windows_.new_PreFrame(*args, **kwargs)
     val.thisown = 1
     return val
+
+def Frame_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Frame_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -482,6 +581,23 @@ class Dialog(TopLevelWindow):
         """EndModal(self, int retCode)"""
         return _windows_.Dialog_EndModal(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class DialogPtr(Dialog):
     def __init__(self, this):
@@ -495,6 +611,22 @@ def PreDialog(*args, **kwargs):
     val = _windows_.new_PreDialog(*args, **kwargs)
     val.thisown = 1
     return val
+
+def Dialog_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    Dialog_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -668,6 +800,23 @@ class StatusBar(_core.Window):
         """GetBorderY(self) -> int"""
         return _windows_.StatusBar_GetBorderY(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class StatusBarPtr(StatusBar):
     def __init__(self, this):
@@ -681,6 +830,22 @@ def PreStatusBar(*args, **kwargs):
     val = _windows_.new_PreStatusBar(*args, **kwargs)
     val.thisown = 1
     return val
+
+def StatusBar_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    StatusBar_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
 #---------------------------------------------------------------------------
 
@@ -983,6 +1148,23 @@ class SplitterWindow(_core.Window):
         """GetNeedUpdating(self) -> bool"""
         return _windows_.SplitterWindow_GetNeedUpdating(*args, **kwargs)
 
+    def GetClassDefaultAttributes(*args, **kwargs):
+        """
+        GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+        Get the default attributes for this class.  This is useful if
+        you want to use the same font or colour in your own control as
+        in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out
+        of place on the users system, especially if it uses themes.
+
+        The variant parameter is only relevant under Mac currently and is
+        ignore under other platforms. Under Mac, it will change the size of the
+        returned font. See SetWindowVariant for more about this.
+        """
+        return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
+
+    GetClassDefaultAttributes = staticmethod(GetClassDefaultAttributes)
 
 class SplitterWindowPtr(SplitterWindow):
     def __init__(self, this):
@@ -1001,6 +1183,22 @@ def PreSplitterWindow(*args, **kwargs):
     val = _windows_.new_PreSplitterWindow(*args, **kwargs)
     val.thisown = 1
     return val
+
+def SplitterWindow_GetClassDefaultAttributes(*args, **kwargs):
+    """
+    SplitterWindow_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
+
+    Get the default attributes for this class.  This is useful if
+    you want to use the same font or colour in your own control as
+    in a standard control -- which is a much better idea than hard
+    coding specific colours or fonts which might look completely out
+    of place on the users system, especially if it uses themes.
+
+    The variant parameter is only relevant under Mac currently and is
+    ignore under other platforms. Under Mac, it will change the size of the
+    returned font. See SetWindowVariant for more about this.
+    """
+    return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
 class SplitterEvent(_core.NotifyEvent):
     """This class represents the events generated by a splitter control."""
