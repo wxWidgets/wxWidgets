@@ -36,6 +36,16 @@
 
 LFUNC(OpenArray, void, (char **data, xpmData *mdata));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateImageFromData(
+  Display*       display
+, char**         data
+, XImage**       image_return
+, XImage**       shapeimage_return
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateImageFromData(display, data, image_return,
 		       shapeimage_return, attributes)
@@ -44,6 +54,7 @@ XpmCreateImageFromData(display, data, image_return,
     XImage **image_return;
     XImage **shapeimage_return;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage image;
     XpmInfo info;
@@ -79,11 +90,21 @@ XpmCreateImageFromData(display, data, image_return,
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int
+XpmCreateXpmImageFromData(
+  char**    data
+, XpmImage* image
+, XpmInfo*  info
+)
+#else
 int
 XpmCreateXpmImageFromData(data, image, info)
     char **data;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     xpmData mdata;
     int ErrorStatus;
@@ -104,10 +125,15 @@ XpmCreateXpmImageFromData(data, image, info)
 /*
  * open the given array to be read or written as an xpmData which is returned
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void OpenArray(char** data, xpmData* mdata)
+#else
 static void
 OpenArray(data, mdata)
     char **data;
     xpmData *mdata;
+#endif
 {
     mdata->type = XPMARRAY;
     mdata->stream.data = data;

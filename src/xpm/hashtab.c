@@ -38,10 +38,16 @@
 LFUNC(AtomMake, xpmHashAtom, (char *name, void *data));
 LFUNC(HashTableGrows, int, (xpmHashTable * table));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static xpmHashAtom
+AtomMake(char* name, void* data)			/* makes an atom */
+#else
 static xpmHashAtom
 AtomMake(name, data)			/* makes an atom */
     char *name;				/* WARNING: is just pointed to */
     void *data;
+#endif
 {
     xpmHashAtom object = (xpmHashAtom) XpmMalloc(sizeof(struct _xpmHashAtom));
 
@@ -103,10 +109,15 @@ AtomMake(name, data)			/* makes an atom */
  *
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+xpmHashAtom* xpmHashSlot(xpmHashTable* table, char* s)
+#else
 xpmHashAtom *
 xpmHashSlot(table, s)
     xpmHashTable *table;
     char *s;
+#endif
 {
     xpmHashAtom *atomTable = table->atomTable;
     unsigned int hash;
@@ -130,9 +141,14 @@ xpmHashSlot(table, s)
     return p;
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int HashTableGrows(xpmHashTable* table)
+#else
 static int
 HashTableGrows(table)
     xpmHashTable *table;
+#endif
 {
     xpmHashAtom *atomTable = table->atomTable;
     int size = table->size;
@@ -165,11 +181,16 @@ HashTableGrows(table)
  * an xpmHashAtom is created if name doesn't exist, with the given data.
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmHashIntern(xpmHashTable* table, char* tag, void* data)
+#else
 int
 xpmHashIntern(table, tag, data)
     xpmHashTable *table;
     char *tag;
     void *data;
+#endif
 {
     xpmHashAtom *slot;
 
@@ -194,9 +215,14 @@ xpmHashIntern(table, tag, data)
  *  must be called before allocating any atom
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmHashTableInit(xpmHashTable* table)
+#else
 int
 xpmHashTableInit(table)
     xpmHashTable *table;
+#endif
 {
     xpmHashAtom *p;
     xpmHashAtom *atomTable;
@@ -217,9 +243,15 @@ xpmHashTableInit(table)
  *   frees a hashtable and all the stored atoms
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+xpmHashTableFree(xpmHashTable* table)
+#else
 void
 xpmHashTableFree(table)
     xpmHashTable *table;
+#endif
 {
     xpmHashAtom *p;
     xpmHashAtom *atomTable = table->atomTable;

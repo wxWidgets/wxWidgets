@@ -37,9 +37,15 @@
 /*
  * Init returned data to free safely later on
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+xpmInitXpmImage(XpmImage* image)
+#else
 void
 xpmInitXpmImage(image)
     XpmImage *image;
+#endif
 {
     image->ncolors = 0;
     image->colorTable = NULL;
@@ -49,9 +55,15 @@ xpmInitXpmImage(image)
 /*
  * Free the XpmImage data which have been allocated
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+XpmFreeXpmImage(XpmImage* image)
+#else
 void
 XpmFreeXpmImage(image)
     XpmImage *image;
+#endif
 {
     if (image->colorTable)
 	xpmFreeColorTable(image->colorTable, image->ncolors);

@@ -34,10 +34,15 @@
 
 #include "XpmI.h"
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmWriteFileFromData(char* filename, char** data)
+#else
 int
 XpmWriteFileFromData(filename, data)
     char *filename;
     char **data;
+#endif
 {
     XpmImage image;
     XpmInfo info;

@@ -49,6 +49,16 @@ LFUNC(WriteExtensions, void, (char *dataptr, unsigned int *used_size,
 LFUNC(ExtensionsSize, int, (XpmExtension *ext, unsigned int num));
 LFUNC(CommentsSize, int, (XpmInfo *info));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateBufferFromImage(
+  Display*       display
+, char**         buffer_return
+, XImage*        image
+, XImage*        shapeimage
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateBufferFromImage(display, buffer_return, image, shapeimage, attributes)
     Display *display;
@@ -56,6 +66,7 @@ XpmCreateBufferFromImage(display, buffer_return, image, shapeimage, attributes)
     XImage *image;
     XImage *shapeimage;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -94,11 +105,16 @@ XpmCreateBufferFromImage(display, buffer_return, image, shapeimage, attributes)
       goto error; \
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateBufferFromXpmImage(char** buffer_return, XpmImage* image, XpmInfo* info)
+#else
 int
 XpmCreateBufferFromXpmImage(buffer_return, image, info)
     char **buffer_return;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     /* calculation variables */
     int ErrorStatus;
@@ -198,7 +214,7 @@ XpmCreateBufferFromXpmImage(buffer_return, image, info)
     }
     ErrorStatus = WriteColors(&ptr, &ptr_size, &used_size,
 			      image->colorTable, image->ncolors, image->cpp);
- 
+
     if (ErrorStatus != XpmSuccess)
 	RETURN(ErrorStatus);
 
@@ -246,6 +262,17 @@ error:
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int WriteColors(
+  char**        dataptr
+, unsigned int* data_size
+, unsigned int* used_size
+, XpmColor*     colors
+, unsigned int  ncolors
+, unsigned int  cpp
+)
+#else
 static int
 WriteColors(dataptr, data_size, used_size, colors, ncolors, cpp)
     char **dataptr;
@@ -254,6 +281,7 @@ WriteColors(dataptr, data_size, used_size, colors, ncolors, cpp)
     XpmColor *colors;
     unsigned int ncolors;
     unsigned int cpp;
+#endif
 {
     char buf[BUFSIZ];
     unsigned int a, key, l;
@@ -292,6 +320,18 @@ WriteColors(dataptr, data_size, used_size, colors, ncolors, cpp)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void WritePixels(
+  char*         dataptr
+, unsigned int* used_size
+, unsigned int  width
+, unsigned int  height
+, unsigned int  cpp
+, unsigned int* pixels
+, XpmColor*     colors
+)
+#else
 static void
 WritePixels(dataptr, used_size, width, height, cpp, pixels, colors)
     char *dataptr;
@@ -301,6 +341,7 @@ WritePixels(dataptr, used_size, width, height, cpp, pixels, colors)
     unsigned int cpp;
     unsigned int *pixels;
     XpmColor *colors;
+#endif
 {
     char *s = dataptr;
     unsigned int x, y, h;
@@ -325,10 +366,16 @@ WritePixels(dataptr, used_size, width, height, cpp, pixels, colors)
     *used_size += s - dataptr;
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+ExtensionsSize(XpmExtension* ext, unsigned int num)
+#else
 static int
 ExtensionsSize(ext, num)
     XpmExtension *ext;
     unsigned int num;
+#endif
 {
     unsigned int x, y, a, size;
     char **line;
@@ -346,12 +393,22 @@ ExtensionsSize(ext, num)
     return size + 13;
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void WriteExtensions(
+  char*         dataptr
+, unsigned int* used_size
+, XpmExtension* ext
+, unsigned int  num
+)
+#else
 static void
 WriteExtensions(dataptr, used_size, ext, num)
     char *dataptr;
     unsigned int *used_size;
     XpmExtension *ext;
     unsigned int num;
+#endif
 {
     unsigned int x, y, a;
     char **line;
@@ -380,9 +437,13 @@ WriteExtensions(dataptr, used_size, ext, num)
     *used_size += s - dataptr + 13;
 }
 
-static int
-CommentsSize(info)
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int CommentsSize(XpmInfo* info)
+#else
+static int CommentsSize(info)
     XpmInfo *info;
+#endif
 {
     int size = 0;
 

@@ -43,11 +43,17 @@ LFUNC(FreeOldColorTable, void, (XpmColor **colorTable, int ncolors));
 /*
  * Create a colortable compatible with the old style colortable
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+CreateOldColorTable(XpmColor* ct, int ncolors, XpmColor*** oldct)
+#else
 static int
 CreateOldColorTable(ct, ncolors, oldct)
     XpmColor *ct;
     int ncolors;
     XpmColor ***oldct;
+#endif
 {
     XpmColor **colorTable, **color;
     int a;
@@ -63,10 +69,15 @@ CreateOldColorTable(ct, ncolors, oldct)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void FreeOldColorTable(XpmColor** colorTable, int ncolors)
+#else
 static void
 FreeOldColorTable(colorTable, ncolors)
     XpmColor **colorTable;
     int ncolors;
+#endif
 {
     int a, b;
     XpmColor **color;
@@ -88,10 +99,15 @@ FreeOldColorTable(colorTable, ncolors)
 /*
  * Free the computed color table
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpmFreeColorTable(XpmColor* colorTable, int ncolors)
+#else
 void
 xpmFreeColorTable(colorTable, ncolors)
     XpmColor *colorTable;
     int ncolors;
+#endif
 {
     int a, b;
     XpmColor *color;
@@ -110,10 +126,15 @@ xpmFreeColorTable(colorTable, ncolors)
 /*
  * Free array of extensions
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void XpmFreeExtensions(XpmExtension* extensions, int nextensions)
+#else
 void
 XpmFreeExtensions(extensions, nextensions)
     XpmExtension *extensions;
     int nextensions;
+#endif
 {
     unsigned int i, j, nlines;
     XpmExtension *ext;
@@ -147,9 +168,15 @@ XpmAttributesSize()
 /*
  * Init returned data to free safely later on
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+xpmInitAttributes(XpmAttributes* attributes)
+#else
 void
 xpmInitAttributes(attributes)
     XpmAttributes *attributes;
+#endif
 {
     if (attributes) {
 	attributes->pixels = NULL;
@@ -175,11 +202,16 @@ xpmInitAttributes(attributes)
 /*
  * Fill in the XpmAttributes with the XpmImage and the XpmInfo
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpmSetAttributes(XpmAttributes* attributes, XpmImage* image, XpmInfo* info)
+#else
 void
 xpmSetAttributes(attributes, image, info)
     XpmAttributes *attributes;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     if (attributes->valuemask & XpmReturnColorTable) {
 	attributes->colorTable = image->colorTable;
@@ -245,9 +277,14 @@ xpmSetAttributes(attributes, image, info)
  * Free the XpmAttributes structure members
  * but the structure itself
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void XpmFreeAttributes(XpmAttributes* attributes)
+#else
 void
 XpmFreeAttributes(attributes)
     XpmAttributes *attributes;
+#endif
 {
     if (attributes->valuemask & XpmReturnPixels && attributes->npixels) {
 	XpmFree(attributes->pixels);

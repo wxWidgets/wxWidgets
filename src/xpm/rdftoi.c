@@ -48,6 +48,16 @@ LFUNC(OpenReadFile, int, (char *filename, xpmData *mdata));
 LFUNC(xpmDataClose, void, (xpmData *mdata));
 
 #ifndef CXPMPROG
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmReadFileToImage(
+  Display*       display
+, char*          filename
+, XImage**       image_return
+, XImage**       shapeimage_return
+, XpmAttributes* attributes
+)
+#else
 int
 XpmReadFileToImage(display, filename,
 		   image_return, shapeimage_return, attributes)
@@ -56,6 +66,7 @@ XpmReadFileToImage(display, filename,
     XImage **image_return;
     XImage **shapeimage_return;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage image;
     XpmInfo info;
@@ -93,11 +104,22 @@ XpmReadFileToImage(display, filename,
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+#define popen fopen
+#define pclose fclose
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmReadFileToXpmImage(
+  char*     filename
+, XpmImage* image
+, XpmInfo*  info
+)
+#else
 int
 XpmReadFileToXpmImage(filename, image, info)
     char *filename;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     xpmData mdata;
     int ErrorStatus;
@@ -122,10 +144,15 @@ XpmReadFileToXpmImage(filename, image, info)
 /*
  * open the given file to be read as an xpmData which is returned.
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int OpenReadFile(char* filename, xpmData* mdata)
+#else
 static int
 OpenReadFile(filename, mdata)
     char *filename;
     xpmData *mdata;
+#endif
 {
 #ifndef NO_ZPIPE
     char *compressfile, buf[BUFSIZ];
@@ -204,9 +231,15 @@ OpenReadFile(filename, mdata)
 /*
  * close the file related to the xpmData if any
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void
+xpmDataClose(xpmData* mdata)
+#else
 static void
 xpmDataClose(mdata)
     xpmData *mdata;
+#endif
 {
     switch (mdata->type) {
     case XPMFILE:

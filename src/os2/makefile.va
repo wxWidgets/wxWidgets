@@ -573,7 +573,7 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:  $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
+all:  $(OBJECTS) $(PERIPH_TARGET) png zlib $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 

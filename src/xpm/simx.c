@@ -121,13 +121,26 @@ XDefaultScreen(Display *d)
 
 /* I get only 1 plane but 8 bits per pixel,
    so I think BITSPIXEL should be depth */
-int 
+int
 XDefaultDepth(Display *display, Screen *screen)
 {
     int d, b;
+#ifdef __OS2__
+    HPS                             hpsScreen;
+    HDC                             hdcScreen;
+    LONG                            lPlanes;
+    LONG                            lBitsPerPixel;
+    LONG                            nDepth;
 
+    hpsScreen = WinGetScreenPS(HWND_DESKTOP);
+    hdcScreen = GpiQueryDevice(hpsScreen);
+    DevQueryCaps(hdcScreen, CAPS_COLOR_PLANES, 1L, &lPlanes);
+    DevQueryCaps(hdcScreen, CAPS_COLOR_BITCOUNT, 1L, &lBitsPerPixel);
+    b = (int)lBitsPerPixel;
+#else
     b = GetDeviceCaps(*display, BITSPIXEL);
     d = GetDeviceCaps(*display, PLANES);
+#endif
     return (b);
 }
 
@@ -139,8 +152,8 @@ XDefaultColormap(Display *display, Screen *screen)
 
 /* convert hex color names,
    wrong digits (not a-f,A-F,0-9) are treated as zero */
-static int 
-hexCharToInt(c)
+static int
+hexCharToInt(char c)
 {
     int r;
 
@@ -156,7 +169,7 @@ hexCharToInt(c)
     return (r);
 }
 
-static int 
+static int
 rgbFromHex(char *hex, int *r, int *g, int *b)
 {
     int len;
@@ -186,7 +199,7 @@ rgbFromHex(char *hex, int *r, int *g, int *b)
 }
 
 /* Color related functions */
-int 
+int
 XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
 {
     int r, g, b;			/* only 8 bit values used */
@@ -204,7 +217,11 @@ XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
     }
 
     if (okay) {
+#ifdef __OS2__
+	color->pixel = OS2RGB(r, g, b);
+#else
 	color->pixel = RGB(r, g, b);
+#endif
 	color->red = (BYTE) r;
 	color->green = (BYTE) g;
 	color->blue = (BYTE) b;
@@ -216,14 +233,14 @@ XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
 
 /* GRG: 2nd arg is Colormap*, not Colormap */
 
-int 
+int
 XAllocColor(Display *d, Colormap *cmap, XColor *color)
 {
 /* colormap not used yet so color->pixel is the real COLORREF (RBG) and not an
    index in some colormap as in X */
     return (1);
 }
-void 
+void
 XQueryColors(Display *display, Colormap *colormap,
 	     XColor *xcolors, int ncolors)
 {
@@ -239,7 +256,7 @@ XQueryColors(Display *display, Colormap *colormap,
     }
     return;
 }
-int 
+int
 XFreeColors(Display *d, Colormap cmap,
 	    unsigned long pixels[], int npixels, unsigned long planes)
 {
@@ -255,6 +272,18 @@ XCreateImage(Display *d, Visual *v,
 	     int pad, int foo)
 {
     XImage *img = (XImage *) XpmMalloc(sizeof(XImage));
+#ifdef __OS2__
+    HPS                  hps;
+    BITMAPINFOHEADER2    bmih;
+
+    hps = WinGetScreenPS(HWND_DESKTOP);
+    memset(&bmih, 0, sizeof(BITMAPINFOHEADER2));
+    bmih.cbFix = sizeof(BITMAPINFOHEADER2);
+    bmih.cx = width;
+    bmih.cy = height;
+    bmih.cPlanes = 1;
+    bmih.cBitCount = depth;
+#endif
 
     if (img) {
 	/*JW: This is what it should be, but the picture comes out
@@ -264,8 +293,12 @@ XCreateImage(Display *d, Visual *v,
 	  if ( depth == GetDeviceCaps(*d, BITSPIXEL) ) {
 	    img->bitmap = CreateCompatibleBitmap(*d, width, height);
         } else*/ {
+#ifdef __OS2__
+     img->bitmap = GpiCreateBitmap(hps, &bmih, 0L, NULL, NULL);
+#else
 	    img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,
 				       depth /* bits per pixel */ , NULL);
+#endif
 	}
 	img->width = width;
 	img->height = height;
@@ -275,18 +308,22 @@ XCreateImage(Display *d, Visual *v,
 
 }
 
-void 
+void
 XImageFree(XImage *img)
 {
     if (img) {
 	XpmFree(img);
     }
 }
-void 
+void
 XDestroyImage(XImage *img)
 {
     if (img) {
+#ifdef __OS2__
+     GpiDeleteBitmap(img->bitmap);
+#else
 	DeleteObject(img->bitmap);	/* check return ??? */
+#endif
 	XImageFree(img);
     }
 }

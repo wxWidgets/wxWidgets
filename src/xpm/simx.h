@@ -39,7 +39,21 @@
 
 #ifdef FOR_MSW
 
+#if !defined(__OS2__)
 #include "windows.h"			/* MS windows GDI types */
+#else
+#define INCL_PM
+#define INCL_GPI
+#include<os2.h>
+typedef unsigned long COLORREF;
+// RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
+#define OS2RGB(r,g,b) ((ULONG ((BYTE) (r) | ((UINT) (g) << 8)) | (((ULONG)(BYTE)(b)) << 16)))
+#define GetBValue(rgb) ((BYTE)((rgb) >> 16))
+#define GetGValue(rgb) ((BYTE)(((WORD)(rgb)) >> 8))
+#define GetRValue(rgb) ((BYTE)(rgb))
+typedef UINT    WORD;
+#endif
+
 
 /*
  * minimal portability layer between ansi and KR C
@@ -49,11 +63,11 @@
 /* these defines get undefed at the end of this file */
 #if __STDC__ || defined(__cplusplus) || defined(c_plusplus)
  /* ANSI || C++ */
-#define FUNC(f, t, p) extern t f p
-#define LFUNC(f, t, p) static t f p
+#  define FUNC(f, t, p) extern t f p
+#  define LFUNC(f, t, p) static t f p
 #else /* k&R */
-#define FUNC(f, t, p) extern t f()
-#define LFUNC(f, t, p) static t f()
+#  define FUNC(f, t, p) extern t f()
+#  define LFUNC(f, t, p) static t f()
 #endif
 
 

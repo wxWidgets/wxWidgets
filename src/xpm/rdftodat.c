@@ -34,10 +34,15 @@
 
 #include "XpmI.h"
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmReadFileToData(char* filename, char*** data_return)
+#else
 int
 XpmReadFileToData(filename, data_return)
     char *filename;
     char ***data_return;
+#endif
 {
     XpmImage image;
     XpmInfo info;

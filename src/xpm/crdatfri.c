@@ -50,6 +50,17 @@ LFUNC(CreateExtensions, void, (char **dataptr, unsigned int offset,
 			       XpmExtension *ext, unsigned int num,
 			       unsigned int ext_nlines));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int
+XpmCreateDataFromImage(
+  Display*       display
+, char***        data_return
+, XImage*        image
+, XImage*        shapeimage
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
     Display *display;
@@ -57,6 +68,7 @@ XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
     XImage *image;
     XImage *shapeimage;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -92,11 +104,17 @@ XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
       goto exit; \
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int
+XpmCreateDataFromXpmImage(char*** data_return, XpmImage* image, XpmInfo* info)
+#else
 int
 XpmCreateDataFromXpmImage(data_return, image, info)
     char ***data_return;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     /* calculation variables */
     int ErrorStatus;
@@ -209,6 +227,17 @@ exit:
     return(ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+CreateColors(
+  char**        dataptr
+, unsigned int* data_size
+, XpmColor*     colors
+, unsigned int  ncolors
+, unsigned int  cpp
+)
+#else
 static int
 CreateColors(dataptr, data_size, colors, ncolors, cpp)
     char **dataptr;
@@ -216,6 +245,7 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
     XpmColor *colors;
     unsigned int ncolors;
     unsigned int cpp;
+#endif
 {
     char buf[BUFSIZ];
     unsigned int a, key, l;
@@ -249,6 +279,17 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void CreatePixels(
+  char**        dataptr
+, unsigned int  width
+, unsigned int  height
+, unsigned int  cpp
+, unsigned int* pixels
+, XpmColor*     colors
+)
+#else
 static void
 CreatePixels(dataptr, width, height, cpp, pixels, colors)
     char **dataptr;
@@ -257,6 +298,7 @@ CreatePixels(dataptr, width, height, cpp, pixels, colors)
     unsigned int cpp;
     unsigned int *pixels;
     XpmColor *colors;
+#endif
 {
     char *s;
     unsigned int x, y, h, offset;
@@ -281,12 +323,22 @@ CreatePixels(dataptr, width, height, cpp, pixels, colors)
     *s = '\0';
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void CountExtensions(
+  XpmExtension* ext
+, unsigned int  num
+, unsigned int* ext_size
+, unsigned int* ext_nlines
+)
+#else
 static void
 CountExtensions(ext, num, ext_size, ext_nlines)
     XpmExtension *ext;
     unsigned int num;
     unsigned int *ext_size;
     unsigned int *ext_nlines;
+#endif
 {
     unsigned int x, y, a, size, nlines;
     char **line;
@@ -307,6 +359,17 @@ CountExtensions(ext, num, ext_size, ext_nlines)
     *ext_nlines = nlines + 1;
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void
+CreateExtensions(
+  char**        dataptr
+, unsigned int  offset
+, XpmExtension* ext
+, unsigned int  num
+, unsigned int  ext_nlines
+)
+#else
 static void
 CreateExtensions(dataptr, offset, ext, num, ext_nlines)
     char **dataptr;
@@ -314,6 +377,7 @@ CreateExtensions(dataptr, offset, ext, num, ext_nlines)
     XpmExtension *ext;
     unsigned int num;
     unsigned int ext_nlines;
+#endif
 {
     unsigned int x, y, a, b;
     char **line;

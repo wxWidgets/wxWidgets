@@ -48,9 +48,15 @@ static char *RCS_Id = "$Id$";
 #define Ungetc(data, c, file) ungetc(c, file)
 #endif
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+ParseComment(xpmData* data)
+#else
 static int
 ParseComment(data)
     xpmData *data;
+#endif
 {
     if (data->type == XPMBUFFER) {
 	register char c;
@@ -175,9 +181,14 @@ ParseComment(data)
 /*
  * skip to the end of the current string and the beginning of the next one
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmNextString(xpmData* data)
+#else
 int
 xpmNextString(data)
     xpmData *data;
+#endif
 {
     if (!data->type)
 	data->cptr = (data->stream.data)[++data->line];
@@ -231,11 +242,20 @@ xpmNextString(data)
 /*
  * skip whitespace and return the following word
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+unsigned int xpmNextWord(
+  xpmData*     data
+, char*        buf
+, unsigned int buflen
+)
+#else
 unsigned int
 xpmNextWord(data, buf, buflen)
     xpmData *data;
     char *buf;
     unsigned int buflen;
+#endif
 {
     register unsigned int n = 0;
     int c;
@@ -268,10 +288,16 @@ xpmNextWord(data, buf, buflen)
  * skip whitespace and compute the following unsigned int,
  * returns 1 if one is found and 0 if not
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int
+xpmNextUI(xpmData* data, unsigned int* ui_return)
+#else
 int
 xpmNextUI(data, ui_return)
     xpmData *data;
     unsigned int *ui_return;
+#endif
 {
     char buf[BUFSIZ];
     int l;
@@ -283,11 +309,16 @@ xpmNextUI(data, ui_return)
 /*
  * return end of string - WARNING: malloc!
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmGetString(xpmData* data, char** sptr, unsigned int* l)
+#else
 int
 xpmGetString(data, sptr, l)
     xpmData *data;
     char **sptr;
     unsigned int *l;
+#endif
 {
     unsigned int i, n = 0;
     int c;
@@ -367,10 +398,15 @@ xpmGetString(data, sptr, l)
 /*
  * get the current comment line
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmGetCmt(xpmData* data, char** cmt)
+#else
 int
 xpmGetCmt(data, cmt)
     xpmData *data;
     char **cmt;
+#endif
 {
     if (!data->type)
 	*cmt = NULL;
@@ -399,9 +435,14 @@ xpmDataType xpmDataTypes[] =
 /*
  * parse xpm header
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseHeader(xpmData* data)
+#else
 int
 xpmParseHeader(data)
     xpmData *data;
+#endif
 {
     char buf[BUFSIZ];
     int l, n = 0;

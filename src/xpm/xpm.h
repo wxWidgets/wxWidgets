@@ -298,11 +298,8 @@ typedef struct {
 
 /* macros for forward declarations of functions with prototypes */
 #if NeedFunctionPrototypes
-#define FUNC(f, t, p) extern t f p
-#define LFUNC(f, t, p) static t f p
-#else
-#define FUNC(f, t, p) extern t f()
-#define LFUNC(f, t, p) static t f()
+#  define FUNC(f, t, p) extern t f p
+#  define LFUNC(f, t, p) static t f p
 #endif
 
 

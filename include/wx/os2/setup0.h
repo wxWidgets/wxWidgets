@@ -33,7 +33,7 @@
 #define wxUSE_GIF              1 // Utilize GIF images
 
 #if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
-#define wxUSE_LONG_LONG        1
+#define wxUSE_LONGLONG        1
 #endif
 
 #define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's

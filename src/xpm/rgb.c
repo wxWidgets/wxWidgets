@@ -69,7 +69,7 @@ xpmReadRgbNames(rgb_fname, rgbn)
 
     /* Loop reading each line in the file. */
     n = 0;
-    rgb = rgbn; 
+    rgb = rgbn;
     /* Quit if rgb text file has too many entries. */
     while (fgets(line, sizeof(line), rgbf) && n < MAX_RGBNAMES) {
 
@@ -158,10 +158,15 @@ xpmFreeRgbNames(rgbn, rgbn_max)
 
 #include "rgbtab.h"			/* hard coded rgb.txt table */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmReadRgbNames(char* rgb_fname, xpmRgbName rgbn[])
+#else
 int
 xpmReadRgbNames(rgb_fname, rgbn)
     char *rgb_fname;
     xpmRgbName rgbn[];
+#endif
 {
     /*
      * check for consistency???
@@ -174,13 +179,17 @@ xpmReadRgbNames(rgb_fname, rgbn)
  * MSW rgb values are made from 3 BYTEs, this is different from X XColor.red,
  * which has something like #0303 for one color
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+char* xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
+#else
 char *
 xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
     xpmRgbName rgbn[];			/* rgb mnemonics from rgb text file
 					 * not used */
     int rgbn_max;			/* not used */
     int red, green, blue;		/* rgb values */
-
+#endif
 {
     int i;
     unsigned long rgbVal;
@@ -198,10 +207,15 @@ xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
 }
 
 /* used in XParseColor in simx.c */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmGetRGBfromName(char* inname, int* r, int* g, int* b)
+#else
 int
 xpmGetRGBfromName(inname, r, g, b)
     char *inname;
     int *r, *g, *b;
+#endif
 {
     int left, right, middle;
     int cmp;
@@ -270,11 +284,15 @@ xpmGetRGBfromName(inname, r, g, b)
     return (1);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpmFreeRgbNames(xpmRgbName rgbn[], int rgbn_max)
+#else
 void
 xpmFreeRgbNames(rgbn, rgbn_max)
     xpmRgbName rgbn[];
     int rgbn_max;
-
+#endif
 {
     /* nothing to do */
 }

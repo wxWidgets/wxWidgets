@@ -37,9 +37,15 @@
 /*
  * Init returned data to free safely later on
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+xpmInitXpmInfo(XpmInfo* info)
+#else
 void
 xpmInitXpmInfo(info)
     XpmInfo *info;
+#endif
 {
     if (info) {
 	info->hints_cmt = NULL;
@@ -53,9 +59,15 @@ xpmInitXpmInfo(info)
 /*
  * Free the XpmInfo data which have been allocated
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+XpmFreeXpmInfo(XpmInfo* info)
+#else
 void
 XpmFreeXpmInfo(info)
     XpmInfo *info;
+#endif
 {
     if (info) {
 	if (info->valuemask & XpmComments) {
@@ -84,10 +96,15 @@ XpmFreeXpmInfo(info)
 /*
  * Set the XpmInfo valuemask to retrieve required info
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpmSetInfoMask(XpmInfo* info, XpmAttributes* attributes)
+#else
 void
 xpmSetInfoMask(info, attributes)
     XpmInfo *info;
     XpmAttributes *attributes;
+#endif
 {
     info->valuemask = 0;
     if (attributes->valuemask & XpmReturnInfos)
@@ -99,10 +116,16 @@ xpmSetInfoMask(info, attributes)
 /*
  * Fill in the XpmInfo with the XpmAttributes
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+xpmSetInfo(XpmInfo* info, XpmAttributes* attributes)
+#else
 void
 xpmSetInfo(info, attributes)
     XpmInfo *info;
     XpmAttributes *attributes;
+#endif
 {
     info->valuemask = 0;
     if (attributes->valuemask & XpmInfos) {

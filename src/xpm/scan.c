@@ -111,11 +111,16 @@ LFUNC(ScanOtherColors, int, (Display *display, XpmColor *colors, int ncolors,
  * This function stores the given pixel in the given arrays which are grown
  * if not large enough.
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int storePixel(Pixel pixel, PixelsMap* pmap, unsigned int* index_return)
+#else
 static int
 storePixel(pixel, pmap, index_return)
     Pixel pixel;
     PixelsMap *pmap;
     unsigned int *index_return;
+#endif
 {
     unsigned int i;
     Pixel *p;
@@ -146,11 +151,16 @@ storePixel(pixel, pmap, index_return)
     return 0;
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int storeMaskPixel(Pixel pixel, PixelsMap* pmap, unsigned int* index_return)
+#else
 static int
 storeMaskPixel(pixel, pmap, index_return)
     Pixel pixel;
     PixelsMap *pmap;
     unsigned int *index_return;
+#endif
 {
     if (!pixel) {
 	if (!pmap->ncolors) {
@@ -176,6 +186,16 @@ storeMaskPixel(pixel, pmap, index_return)
  * This function scans the given image and stores the found informations in
  * the given XpmImage structure.
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateXpmImageFromImage(
+  Display*       display
+, XImage*        image
+, XImage*        shapeimage
+, XpmImage*      xpmimage
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateXpmImageFromImage(display, image, shapeimage,
 			   xpmimage, attributes)
@@ -184,6 +204,7 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
     XImage *shapeimage;
     XpmImage *xpmimage;
     XpmAttributes *attributes;
+#endif
 {
     /* variables stored in the XpmAttributes structure */
     unsigned int cpp;
@@ -250,8 +271,13 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 				      storeMaskPixel);
 # endif
 #else
+
+#ifndef __OS2__
 	ErrorStatus = MSWGetImagePixels(display, shapeimage, width, height,
 					&pmap, storeMaskPixel);
+/* calling convention all messed up OS/2 -- figure out later */
+#endif
+
 #endif
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
@@ -259,10 +285,10 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 
     /*
      * scan the image data
-     * 
+     *
      * In case depth is 1 or bits_per_pixel is 4, 6, 8, 24 or 32 use optimized
      * functions, otherwise use slower but sure general one.
-     * 
+     *
      */
 
     if (image) {
@@ -286,8 +312,12 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 				      storePixel);
 # endif
 #else
+
+#ifndef __OS2__
 	ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 					storePixel);
+#endif
+
 #endif
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
@@ -345,11 +375,16 @@ error:
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int ScanTransparentColor(XpmColor* color, unsigned int cpp, XpmAttributes* attributes)
+#else
 static int
 ScanTransparentColor(color, cpp, attributes)
     XpmColor *color;
     unsigned int cpp;
     XpmAttributes *attributes;
+#endif
 {
     char *s;
     unsigned int a, b, c;
@@ -399,6 +434,18 @@ ScanTransparentColor(color, cpp, attributes)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int ScanOtherColors(
+  Display*       display
+, XpmColor*      colors
+, int            ncolors
+, Pixel*         pixels
+, unsigned int   mask
+, unsigned int   cpp
+, XpmAttributes* attributes
+)
+#else
 static int
 ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
     Display *display;
@@ -408,6 +455,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
     unsigned int mask;
     unsigned int cpp;
     XpmAttributes *attributes;
+#endif
 {
     /* variables stored in the XpmAttributes structure */
     Colormap colormap;
@@ -416,8 +464,8 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
 #ifndef FOR_MSW
     xpmRgbName rgbn[MAX_RGBNAMES];
 #else
-    xpmRgbName *rgbn = NULL; 
-#endif    
+    xpmRgbName *rgbn = NULL;
+#endif
     int rgbn_max = 0;
     unsigned int i, j, c, i2;
     XpmColor *color;
@@ -465,7 +513,11 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
 
 	xcolor->pixel = *pixels;
     }
+#ifdef __OS2__
+    XQueryColors(display, &colormap, xcolors, ncolors);
+#else
     XQueryColors(display, colormap, xcolors, ncolors);
+#endif
 
 #ifndef FOR_MSW
     /* read the rgb file if any was specified */
@@ -540,7 +592,7 @@ ScanOtherColors(display, colors, ncolors, pixels, mask, cpp, attributes)
 #ifndef FOR_MSW
 		sprintf(buf, "#%04X%04X%04X",
 			xcolor->red, xcolor->green, xcolor->blue);
-#else   
+#else
 		sprintf(buf, "#%02x%02x%02x",
 			xcolor->red, xcolor->green, xcolor->blue);
 #endif			
@@ -592,12 +644,22 @@ static unsigned long Const low_bits_table[] = {
  *
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int GetImagePixels(
+  XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+)
+#else
 static int
 GetImagePixels(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
+#endif
 {
     char *src;
     char *dst;
@@ -695,12 +757,22 @@ GetImagePixels(image, width, height, pmap)
 static unsigned long byteorderpixel = MSBFirst << 24;
 #endif
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int GetImagePixels32(
+  XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+)
+#else
 static int
 GetImagePixels32(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
+#endif
 {
     unsigned char *addr;
     unsigned char *data;
@@ -760,12 +832,22 @@ GetImagePixels32(image, width, height, pmap)
  * scan pixels of a 16-bits Z image data structure
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int GetImagePixels16(
+  XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+)
+#else
 static int
 GetImagePixels16(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
+#endif
 {
     unsigned char *addr;
     unsigned char *data;
@@ -806,12 +888,23 @@ GetImagePixels16(image, width, height, pmap)
  * scan pixels of a 8-bits Z image data structure
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+GetImagePixels8(image, width, height, pmap)
+  XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+)
+#else
 static int
 GetImagePixels8(image, width, height, pmap)
     XImage *image;
     unsigned int width;
     unsigned int height;
     PixelsMap *pmap;
+#endif
 {
     unsigned int *iptr;
     unsigned char *data;
@@ -839,6 +932,17 @@ GetImagePixels8(image, width, height, pmap)
  * scan pixels of a 1-bit depth Z image data structure
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+GetImagePixels1(
+  XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+, int          (*storeFunc) ()
+)
+#else
 static int
 GetImagePixels1(image, width, height, pmap, storeFunc)
     XImage *image;
@@ -846,6 +950,7 @@ GetImagePixels1(image, width, height, pmap, storeFunc)
     unsigned int height;
     PixelsMap *pmap;
     int (*storeFunc) ();
+#endif
 {
     unsigned int *iptr;
     int x, y;
@@ -902,15 +1007,15 @@ AGetImagePixels (
     unsigned int    x, y;
     unsigned char  *pixels;
     XImage         *tmp_img;
-    
+
     pixels = XpmMalloc ((((width+15)>>4)<<4)*sizeof (*pixels));
     if (pixels == NULL)
 	return XpmNoMemory;
-    
+
     tmp_img = AllocXImage ((((width+15)>>4)<<4), 1, image->rp->BitMap->Depth);
     if (tmp_img == NULL)
 	CLEAN_UP (XpmNoMemory)
-    
+
     iptr = pmap->pixelindex;
     for (y = 0; y < height; ++y)
     {
@@ -921,7 +1026,7 @@ AGetImagePixels (
 		CLEAN_UP (XpmNoMemory)
 	}
     }
-    
+
     CLEAN_UP (XpmSuccess)
 }
 
@@ -929,6 +1034,18 @@ AGetImagePixels (
 
 # endif/* AMIGA */
 #else  /* ndef FOR_MSW */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+MSWGetImagePixels(
+  Display*     display
+, XImage*      image
+, unsigned int width
+, unsigned int height
+, PixelsMap*   pmap
+, int          (*storeFunc) ()
+)
+#else
 static int
 MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
     Display *display;
@@ -937,19 +1054,42 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
     unsigned int height;
     PixelsMap *pmap;
     int (*storeFunc) ();
+#endif
 {
     unsigned int *iptr;
     unsigned int x, y;
     Pixel pixel;
+#ifdef __OS2__
+     HAB          hab;
+     HPS          hps;
+     DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+     SIZEL        sizl = {0, 0};
+     POINTL       point;
+#endif
 
     iptr = pmap->pixelindex;
 
+#ifdef __OS2__
+    hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC | PU_PELS);
+    GpiSetBitmap(hps, image->bitmap);
+#else
     SelectObject(*display, image->bitmap);
+#endif
+
     for (y = 0; y < height; y++) {
 	for (x = 0; x < width; x++, iptr++) {
+#ifdef __OS2__
+     point.x = x;
+     point.y = y;
+     pixel = GpiQueryPel(hps, &point);
+#else
 	    pixel = GetPixel(*display, x, y);
+#endif
+#ifndef __OS2__
+/* calling convention all messed up under OS/2 */
 	    if ((*storeFunc) (pixel, pmap, iptr))
 		return (XpmNoMemory);
+#endif
 	}
     }
     return (XpmSuccess);

@@ -59,6 +59,16 @@ LFUNC(WriteExtensions, void, (FILE *file, XpmExtension *ext,
 LFUNC(OpenWriteFile, int, (char *filename, xpmData *mdata));
 LFUNC(xpmDataClose, void, (xpmData *mdata));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmWriteFileFromImage(
+  Display*       display
+, char*          filename
+, XImage*        image
+, XImage*        shapeimage
+, XpmAttributes* attributes
+)
+#else
 int
 XpmWriteFileFromImage(display, filename, image, shapeimage, attributes)
     Display *display;
@@ -66,6 +76,7 @@ XpmWriteFileFromImage(display, filename, image, shapeimage, attributes)
     XImage *image;
     XImage *shapeimage;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -90,11 +101,20 @@ XpmWriteFileFromImage(display, filename, image, shapeimage, attributes)
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmWriteFileFromXpmImage(
+  char*     filename
+, XpmImage* image
+, XpmInfo*  info
+)
+#else
 int
 XpmWriteFileFromXpmImage(filename, image, info)
     char *filename;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     xpmData mdata;
     char *name, *dot, *s, new_name[BUFSIZ];
@@ -152,12 +172,23 @@ XpmWriteFileFromXpmImage(filename, image, info)
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+xpmWriteFile(
+  FILE*     file
+, XpmImage* image
+, char*     name
+, XpmInfo*  info
+)
+#else
 static int
 xpmWriteFile(file, image, name, info)
     FILE *file;
     XpmImage *image;
     char *name;
     XpmInfo *info;
+#endif
 {
     /* calculation variables */
     unsigned int cmts, extensions;
@@ -210,11 +241,21 @@ xpmWriteFile(file, image, name, info)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void
+WriteColors(
+  FILE*        file
+, XpmColor*    colors
+, unsigned int ncolors
+)
+#else
 static void
 WriteColors(file, colors, ncolors)
     FILE *file;
     XpmColor *colors;
     unsigned int ncolors;
+#endif
 {
     unsigned int a, key;
     char *s;
@@ -233,7 +274,17 @@ WriteColors(file, colors, ncolors)
     }
 }
 
-
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int WritePixels(
+  FILE*         file
+, unsigned int  width
+, unsigned int  height
+, unsigned int  cpp
+, unsigned int* pixels
+, XpmColor*     colors
+)
+#else
 static int
 WritePixels(file, width, height, cpp, pixels, colors)
     FILE *file;
@@ -242,6 +293,7 @@ WritePixels(file, width, height, cpp, pixels, colors)
     unsigned int cpp;
     unsigned int *pixels;
     XpmColor *colors;
+#endif
 {
     char *s, *p, *buf;
     unsigned int x, y, h;
@@ -276,11 +328,20 @@ WritePixels(file, width, height, cpp, pixels, colors)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void WriteExtensions(
+  FILE*         file
+, XpmExtension* ext
+, unsigned int  num
+)
+#else
 static void
 WriteExtensions(file, ext, num)
     FILE *file;
     XpmExtension *ext;
     unsigned int num;
+#endif
 {
     unsigned int x, y, n;
     char **line;
@@ -297,10 +358,20 @@ WriteExtensions(file, ext, num)
 /*
  * open the given file to be written as an xpmData which is returned
  */
+#ifdef __OS2__
+#define popen fopen
+#define pclose fclose
+/* Visual Age cannot deal with old, non-ansi, code */
+static int OpenWriteFile(
+  char*    filename
+, xpmData* mdata
+)
+#else
 static int
 OpenWriteFile(filename, mdata)
     char *filename;
     xpmData *mdata;
+#endif
 {
 #ifndef NO_ZPIPE
     char buf[BUFSIZ];
@@ -341,9 +412,14 @@ OpenWriteFile(filename, mdata)
 /*
  * close the file related to the xpmData if any
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void xpmDataClose(xpmData* mdata)
+#else
 static void
 xpmDataClose(mdata)
     xpmData *mdata;
+#endif
 {
     switch (mdata->type) {
     case XPMFILE:

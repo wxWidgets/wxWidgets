@@ -90,14 +90,57 @@ OBJECTS = \
   ..\xpm\$D\wrffrdat.obj \
   ..\xpm\$D\wrffri.obj
 
+LIBOBJECTS = \
+  attrib.obj \
+  crbuffri.obj \
+  crdatfri.obj \
+  create.obj \
+  crifrbuf.obj \
+  crifrdat.obj \
+  data.obj \
+  image.obj \
+  info.obj \
+  hashtab.obj \
+  misc.obj \
+  parse.obj \
+  rdftodat.obj \
+  rdftoi.obj \
+  rgb.obj \
+  scan.obj \
+  simx.obj \
+  wrffrdat.obj \
+  wrffri.obj
+
+$(LIBOBJECTS):
+  copy ..\xpm\$D\attrib.obj
+  copy ..\xpm\$D\crbuffri.obj
+  copy ..\xpm\$D\crdatfri.obj
+  copy ..\xpm\$D\create.obj
+  copy ..\xpm\$D\crifrbuf.obj
+  copy ..\xpm\$D\crifrdat.obj
+  copy ..\xpm\$D\data.obj
+  copy ..\xpm\$D\image.obj
+  copy ..\xpm\$D\info.obj
+  copy ..\xpm\$D\hashtab.obj
+  copy ..\xpm\$D\misc.obj
+  copy ..\xpm\$D\parse.obj
+  copy ..\xpm\$D\rdftodat.obj
+  copy ..\xpm\$D\rdftoi.obj
+  copy ..\xpm\$D\rgb.obj
+  copy ..\xpm\$D\scan.obj
+  copy ..\xpm\$D\simx.obj
+  copy ..\xpm\$D\wrffrdat.obj
+  copy ..\xpm\$D\wrffri.obj
+
 all:  $(OS2XPMLIB)
 
-$(WXDIR)\lib\os2xpm.lib: $(OBJECTS)
+$(WXDIR)\lib\os2xpm.lib: $(LIBOBJECTS)
  touch $(WXDIR)\lib\os2xpm.lib
  del $(WXDIR)\lib\os2xpm.lib
  ilib $(OS2LIBFLAGS) $@ @<<
     $**;
 <<
+  del *.obj
 
 clean:
         del      $(OS2XPMLIB)

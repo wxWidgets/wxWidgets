@@ -39,8 +39,8 @@ $(PROGRAM).exe:      $(DUMMYOBJ) $(WXLIB) $(OBJECTS) $(PROGRAM).res
 <<
   $(RC) $(PROGRAM).res $(PROGRAM).exe
 
-$(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\os2\wx.rc
-    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRAM).rc $(PROGRAM).res
+$(PROGRAM).res :      $(PROGRAM).rcO $(WXDIR)\include\wx\os2\wx.rc
+    $(RC) -I $(WXDIR)\include -D __VISAGECPP__ -r $(PROGRAM).rcO $(PROGRAM).res
 
 clean:
         -erase $(OBJECTS)

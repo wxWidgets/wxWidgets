@@ -141,9 +141,21 @@ LFUNC(APutImagePixels, void, (XImage *ximage, unsigned int width,
 # endif/* AMIGA */
 #else  /* FOR_MSW */
 /* FOR_MSW pixel routine */
+#ifdef __OS2__
+LFUNC(MSWPutImagePixels, void, (
+  HPS           hps
+, Display*      dc
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+));
+#else
 LFUNC(MSWPutImagePixels, void, (Display *dc, XImage *image,
 				unsigned int width, unsigned int height,
 				unsigned int *pixelindex, Pixel *pixels));
+#endif
 #endif /* FOR_MSW */
 
 #ifdef NEED_STRCASECMP
@@ -153,9 +165,14 @@ FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
  * in case strcasecmp is not provided by the system here is one
  * which does the trick
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmstrcasecmp(register char* s1, register char* s2)
+#else
 int
 xpmstrcasecmp(s1, s2)
     register char *s1, *s2;
+#endif
 {
     register int c1, c2;
 
@@ -175,9 +192,14 @@ xpmstrcasecmp(s1, s2)
 /*
  * return the default color key related to the given visual
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int xpmVisualType(Visual* visual)
+#else
 static int
 xpmVisualType(visual)
     Visual *visual;
+#endif
 {
 #ifndef FOR_MSW
 # ifndef AMIGA
@@ -211,9 +233,14 @@ typedef struct {
     long closeness;
 }      CloseColor;
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int closeness_cmp(Const void* a, Const void* b)
+#else
 static int
 closeness_cmp(a, b)
     Const void *a, *b;
+#endif
 {
     CloseColor *x = (CloseColor *) a, *y = (CloseColor *) b;
 
@@ -226,19 +253,37 @@ closeness_cmp(a, b)
  *   call XParseColor if colorname is given, return negative value if failure
  *   call XAllocColor and return 0 if failure, positive otherwise
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+AllocColor(
+  Display*      display
+, Colormap      colormap
+, char*         colorname
+, XColor*       xcolor
+, void*         closure
+)
+#else
 static int
 AllocColor(display, colormap, colorname, xcolor, closure)
     Display *display;
-    Colormap colormap;
+    Colormap* colormap;
     char *colorname;
     XColor *xcolor;
     void *closure;		/* not used */
+#endif
 {
     int status;
     if (colorname)
+#ifdef __OS2__
+	if (!XParseColor(display, &colormap, colorname, xcolor))
+	    return -1;
+    status = XAllocColor(display, &colormap, xcolor);
+#else
 	if (!XParseColor(display, colormap, colorname, xcolor))
 	    return -1;
     status = XAllocColor(display, colormap, xcolor);
+#endif
     return status != 0 ? 1 : 0;
 }
 
@@ -304,17 +349,17 @@ SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
      * occurred, so we try the next closest color, and so on, until no more
      * colors are within closeness of the target. If we knew that the
      * colormap had changed, we could skip this sequence.
-     * 
+     *
      * If _none_ of the colors within closeness of the target can be allocated,
      * then we can finally be pretty sure that the colormap has actually
      * changed. In this case we try to allocate the original color (again),
      * then try the closecolor stuff (again)...
-     * 
+     *
      * In theory it would be possible for an infinite loop to occur if another
      * process kept changing the colormap every time we sorted it, so we set
      * a maximum on the number of iterations. After this many tries, we use
      * XGrabServer() to ensure that the colormap remains unchanged.
-     * 
+     *
      * This approach gives particularly bad worst case performance - as many as
      * <MaximumIterations> colormap reads and sorts may be needed, and as
      * many as <MaximumIterations> * <ColormapSize> attempted allocations
@@ -434,6 +479,29 @@ SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
  * return 0 if success, 1 otherwise.
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+SetColor(
+  Display*          display
+, Colormap          colormap
+, Visual*           visual
+, char*             colorname
+, unsigned int      color_index
+, Pixel*            image_pixel
+, Pixel*            mask_pixel
+, unsigned int*     mask_pixel_index
+, Pixel*            alloc_pixels
+, unsigned int*     nalloc_pixels
+, Pixel*            used_pixels
+, unsigned int*     nused_pixels
+, XpmAttributes*    attributes
+, XColor*           cols
+, int               ncols
+, XpmAllocColorFunc allocColor
+, void*             closure
+)
+#else
 static int
 SetColor(display, colormap, visual, colorname, color_index,
 	 image_pixel, mask_pixel, mask_pixel_index,
@@ -455,6 +523,7 @@ SetColor(display, colormap, visual, colorname, color_index,
     int ncols;
     XpmAllocColorFunc allocColor;
     void *closure;
+#endif
 {
     XColor xcolor;
     int status;
@@ -481,7 +550,11 @@ SetColor(display, colormap, visual, colorname, color_index,
 #ifndef FOR_MSW
 	*mask_pixel = 1;
 #else
+#ifdef __OS2__
+	*mask_pixel = OS2RGB(0,0,0);
+#else
 	*mask_pixel = RGB(0,0,0);
+#endif
 #endif
 	used_pixels[(*nused_pixels)++] = xcolor.pixel;
     } else {
@@ -489,7 +562,11 @@ SetColor(display, colormap, visual, colorname, color_index,
 #ifndef FOR_MSW
 	*mask_pixel = 0;
 #else
-  	*mask_pixel = RGB(255,255,255);
+#ifdef __OS2__
+	*mask_pixel = OS2RGB(0,0,0);
+#else
+	*mask_pixel = RGB(0,0,0);
+#endif
 #endif
 	/* store the color table index */
 	*mask_pixel_index = color_index;
@@ -497,7 +574,23 @@ SetColor(display, colormap, visual, colorname, color_index,
     return (0);
 }
 
-
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+CreateColors(
+  Display*          display
+, XpmAttributes*    attributes
+, XpmColor*         colors
+, unsigned int      ncolors
+, Pixel*            image_pixels
+, Pixel*            mask_pixels
+, unsigned int*     mask_pixel_index
+, Pixel*            alloc_pixels
+, unsigned int*     nalloc_pixels
+, Pixel*            used_pixels
+, unsigned int*     nused_pixels
+)
+#else
 static int
 CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
              mask_pixel_index, alloc_pixels, nalloc_pixels,
@@ -513,6 +606,7 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
     unsigned int *nalloc_pixels;
     Pixel *used_pixels;
     unsigned int *nused_pixels;
+#endif
 {
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
@@ -730,6 +824,17 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
 
 
 /* default FreeColors function, simply call XFreeColors */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+FreeColors(
+  Display*      display
+, Colormap      colormap
+, Pixel*        pixels
+, int           n
+, void*         closure
+)
+#else
 static int
 FreeColors(display, colormap, pixels, n, closure)
     Display *display;
@@ -737,6 +842,7 @@ FreeColors(display, colormap, pixels, n, closure)
     Pixel *pixels;
     int n;
     void *closure;		/* not used */
+#endif
 {
     return XFreeColors(display, colormap, pixels, n, 0);
 }
@@ -750,6 +856,16 @@ FreeColors(display, colormap, pixels, n, closure)
       goto error; \
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateImageFromXpmImage(
+  Display*       display
+, XpmImage*      image
+, XImage**       image_return
+, XImage**       shapeimage_return
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateImageFromXpmImage(display, image,
 			   image_return, shapeimage_return, attributes)
@@ -758,7 +874,13 @@ XpmCreateImageFromXpmImage(display, image,
     XImage **image_return;
     XImage **shapeimage_return;
     XpmAttributes *attributes;
+#endif
 {
+#ifdef __OS2__
+     HAB          hab;
+     HPS          hps;
+     SIZEL        sizl = {0, 0};
+#endif
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
     Colormap colormap;
@@ -886,8 +1008,14 @@ XpmCreateImageFromXpmImage(display, image,
 			image->data, image_pixels);
 # endif
 #else  /* FOR_MSW */
+#ifdef __OS2__
+ hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC|PU_PELS);
+	MSWPutImagePixels(hps, display, ximage, image->width, image->height,
+			  image->data, image_pixels);
+#else
 	MSWPutImagePixels(display, ximage, image->width, image->height,
 			  image->data, image_pixels);
+#endif
 #endif
     }
     /* create the shape mask image */
@@ -906,8 +1034,14 @@ XpmCreateImageFromXpmImage(display, image,
 			image->data, mask_pixels);
 # endif
 #else  /* FOR_MSW */
+#ifdef __OS2__
+ hps = GpiCreatePS(hab, *display, &sizl, GPIA_ASSOC|PU_PELS);
+	MSWPutImagePixels(hps, display, shapeimage, image->width, image->height,
+			  image->data, mask_pixels);
+#else
 	MSWPutImagePixels(display, shapeimage, image->width, image->height,
 			  image->data, mask_pixels);
+#endif
 #endif
 
     }
@@ -964,6 +1098,18 @@ error:
 /*
  * Create an XImage with its data
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int CreateXImage(
+  Display*      display
+, Visual*       visual
+, unsigned int  depth
+, int           format
+, unsigned int  width
+, unsigned int  height
+, XImage**      image_return
+)
+#else
 static int
 CreateXImage(display, visual, depth, format, width, height, image_return)
     Display *display;
@@ -973,6 +1119,7 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
     unsigned int width;
     unsigned int height;
     XImage **image_return;
+#endif
 {
     int bitmap_pad;
 
@@ -1057,10 +1204,16 @@ static unsigned char Const _reverse_byte[0x100] = {
     0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff
 };
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+_XReverse_Bytes(register unsigned char* bpt, register int nb)
+#else
 static int
 _XReverse_Bytes(bpt, nb)
     register unsigned char *bpt;
     register int nb;
+#endif
 {
     do {
 	*bpt = _reverse_byte[*bpt];
@@ -1070,10 +1223,15 @@ _XReverse_Bytes(bpt, nb)
 }
 
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpm_xynormalizeimagebits(register unsigned char* bp, register XImage* img)
+#else
 void
 xpm_xynormalizeimagebits(bp, img)
     register unsigned char *bp;
     register XImage *img;
+#endif
 {
     register unsigned char c;
 
@@ -1100,10 +1258,15 @@ xpm_xynormalizeimagebits(bp, img)
 	_XReverse_Bytes(bp, img->bitmap_unit >> 3);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void xpm_znormalizeimagebits(register unsigned char* bp, register XImage* img)
+#else
 void
 xpm_znormalizeimagebits(bp, img)
     register unsigned char *bp;
     register XImage *img;
+#endif
 {
     register unsigned char c;
 
@@ -1145,6 +1308,15 @@ static unsigned char Const _lomask[0x09] = {
 static unsigned char Const _himask[0x09] = {
 0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80, 0x00};
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void _putbits(
+  register char* src
+, int            dstoffset
+, register int   numbits
+, register char* dst
+)
+#else
 static void
 _putbits(src, dstoffset, numbits, dst)
     register char *src;			/* address of source bit string */
@@ -1153,6 +1325,7 @@ _putbits(src, dstoffset, numbits, dst)
     register int numbits;		/* number of bits to copy to
 					 * destination */
     register char *dst;			/* address of destination bit string */
+#endif
 {
     register unsigned char chlo, chhi;
     int hibits;
@@ -1193,6 +1366,16 @@ _putbits(src, dstoffset, numbits, dst)
  *	copy the temp back into the destination image data
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void PutImagePixels(
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 PutImagePixels(image, width, height, pixelindex, pixels)
     XImage *image;
@@ -1200,6 +1383,7 @@ PutImagePixels(image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     register char *src;
     register char *dst;
@@ -1280,6 +1464,17 @@ static unsigned long byteorderpixel = MSBFirst << 24;
    3.2e code - by default you get the speeded-up version.
 */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void
+PutImagePixels32(
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 PutImagePixels32(image, width, height, pixelindex, pixels)
     XImage *image;
@@ -1287,6 +1482,7 @@ PutImagePixels32(image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     unsigned char *data;
     unsigned int *iptr;
@@ -1390,6 +1586,16 @@ PutImagePixels32(image, width, height, pixelindex, pixels)
  * write pixels into a 16-bits Z image data structure
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void PutImagePixels16(
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 PutImagePixels16(image, width, height, pixelindex, pixels)
     XImage *image;
@@ -1397,6 +1603,7 @@ PutImagePixels16(image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     unsigned char *data;
     unsigned int *iptr;
@@ -1471,6 +1678,16 @@ PutImagePixels16(image, width, height, pixelindex, pixels)
  * write pixels into a 8-bits Z image data structure
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void PutImagePixels8(
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 PutImagePixels8(image, width, height, pixelindex, pixels)
     XImage *image;
@@ -1478,6 +1695,7 @@ PutImagePixels8(image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     char *data;
     unsigned int *iptr;
@@ -1518,6 +1736,16 @@ PutImagePixels8(image, width, height, pixelindex, pixels)
  * write pixels into a 1-bit depth image data structure and **offset null**
  */
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void PutImagePixels1(
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 PutImagePixels1(image, width, height, pixelindex, pixels)
     XImage *image;
@@ -1525,6 +1753,7 @@ PutImagePixels1(image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     if (image->byte_order != image->bitmap_bit_order)
 	PutImagePixels(image, width, height, pixelindex, pixels);
@@ -1632,6 +1861,16 @@ PutImagePixels1(image, width, height, pixelindex, pixels)
     }
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreatePixmapFromXpmImage(
+, Display*       display
+, Drawable       d
+, XpmImage*      image
+, Pixmap*        pixmap_return
+, Pixmap*        shapemask_return
+, XpmAttributes* attributes
+#else
 int
 XpmCreatePixmapFromXpmImage(display, d, image,
 			    pixmap_return, shapemask_return, attributes)
@@ -1641,6 +1880,7 @@ XpmCreatePixmapFromXpmImage(display, d, image,
     Pixmap *pixmap_return;
     Pixmap *shapemask_return;
     XpmAttributes *attributes;
+#endif
 {
     XImage *ximage, *shapeimage;
     int ErrorStatus;
@@ -1687,7 +1927,7 @@ APutImagePixels (
     unsigned char  *array;
     XImage         *tmp_img;
     BOOL            success = FALSE;
-    
+
     array = XpmMalloc ((((width+15)>>4)<<4)*sizeof (*array));
     if (array != NULL)
     {
@@ -1706,7 +1946,7 @@ APutImagePixels (
 	}
 	XpmFree (array);
     }
-    
+
     if (!success)
     {
 	for (y = 0; y < height; ++y)
@@ -1717,6 +1957,19 @@ APutImagePixels (
 
 # endif/* AMIGA */
 #else  /* FOR_MSW part follows */
+
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void MSWPutImagePixels(
+  HPS           hps
+, Display*      dc
+, XImage*       image
+, unsigned int  width
+, unsigned int  height
+, unsigned int* pixelindex
+, Pixel*        pixels
+)
+#else
 static void
 MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
     Display *dc;
@@ -1725,18 +1978,38 @@ MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
     unsigned int height;
     unsigned int *pixelindex;
     Pixel *pixels;
+#endif
 {
     unsigned int *data = pixelindex;
     unsigned int x, y;
     HBITMAP obm;
 
+#ifdef __OS2__
+    POINTL                                point;
+
+    obm = GpiSetBitmap(hps, image->bitmap);
+#else
     obm = SelectObject(*dc, image->bitmap);
+#endif
+
     for (y = 0; y < height; y++) {
 	for (x = 0; x < width; x++) {
+#ifdef __OS2__
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)pixels[*(data++)]);
+     GpiSetPel(hps, &point);
+#else
+
 	    SetPixel(*dc, x, y, pixels[*(data++)]); /* data is [x+y*width] */
+#endif
 	}
     }
+#ifdef __OS2__
+    GpiSetBitmap(hps, obm);
+#else
     SelectObject(*dc, obm);
+#endif
 }
 
 #endif /* FOR_MSW */
@@ -1870,7 +2143,7 @@ PutPixel16MSB(ximage, x, y, pixel)
     unsigned long pixel;
 {
     unsigned char *addr;
-    
+
     addr = &((unsigned char *)ximage->data) [ZINDEX16(x, y, ximage)];
     addr[0] = pixel >> 8;
     addr[1] = pixel;
@@ -1885,7 +2158,7 @@ PutPixel16LSB(ximage, x, y, pixel)
     unsigned long pixel;
 {
     unsigned char *addr;
-    
+
     addr = &((unsigned char *)ximage->data) [ZINDEX16(x, y, ximage)];
     addr[1] = pixel >> 8;
     addr[0] = pixel;
@@ -1936,6 +2209,18 @@ PutPixel1LSB(ximage, x, y, pixel)
 /*
  * This function parses an Xpm file or data and directly create an XImage
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseDataAndCreate(
+  Display*       display
+, xpmData*       data
+, XImage**       image_return
+, XImage**       shapeimage_return
+, XpmImage*      image
+, XpmInfo*       info
+, XpmAttributes* attributes
+)
+#else
 int
 xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 		      image, info, attributes)
@@ -1946,6 +2231,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
     XpmImage *image;
     XpmInfo *info;
     XpmAttributes *attributes;
+#endif
 {
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
@@ -2275,6 +2561,23 @@ error:
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int ParseAndPutPixels(
+  Display*      dc
+, xpmData*      data
+, unsigned int  width
+, unsigned int  height
+, unsigned int  ncolors
+, unsigned int  cpp
+, XpmColor*     colorTable
+, xpmHashTable* hashtable
+, XImage*       image
+, Pixel*        image_pixels
+, XImage*       shapeimage
+, Pixel*        shape_pixels
+)
+#else
 static int
 ParseAndPutPixels(
 #ifdef FOR_MSW
@@ -2296,8 +2599,16 @@ ParseAndPutPixels(
     Pixel *image_pixels;
     XImage *shapeimage;
     Pixel *shape_pixels;
+#endif
 {
     unsigned int a, x, y;
+#ifdef __OS2__
+     HAB          hab;
+     HPS          hps;
+     DEVOPENSTRUC dop = {NULL, "DISPLAY", NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+     SIZEL        sizl = {0, 0};
+     POINTL       point;
+#endif
 
     switch (cpp) {
 
@@ -2310,12 +2621,23 @@ ParseAndPutPixels(
 	    HBITMAP obm, sobm;
 
 	    if ( shapeimage ) {
+#ifdef __OS2__
+      shapedc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+      hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
+      sobm = GpiSetBitmap(hps, shapeimage->bitmap);
+#else
 		shapedc = CreateCompatibleDC(*dc);
 		sobm = SelectObject(shapedc, shapeimage->bitmap);
+#endif
 	    } else {
 	        shapedc = NULL;
 	    }
+#ifdef __OS2__
+     obm = GpiSetBitmap(hps, image->bitmap);
+#else
 	    obm = SelectObject(*dc, image->bitmap);
+#endif
+
 #endif
 
 
@@ -2335,9 +2657,23 @@ ParseAndPutPixels(
 			    XPutPixel(shapeimage, x, y,
 				      shape_pixels[colidx[c] - 1]);
 #else
+#ifdef __OS2__
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)image_pixels[colidx[c] - 1]);
+     GpiSetPel(hps, &point);
+#else
 			SetPixel(*dc, x, y, image_pixels[colidx[c] - 1]);
+#endif
 			if (shapedc) {
+#ifdef __OS2__
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)shape_pixels[colidx[c] - 1]);
+     GpiSetPel(hps, &point);
+#else
 			    SetPixel(shapedc, x, y, shape_pixels[colidx[c] - 1]);
+#endif
 			}
 #endif
 		    } else
@@ -2346,10 +2682,19 @@ ParseAndPutPixels(
 	    }
 #ifdef FOR_MSW
 	    if ( shapedc ) {
+#ifdef __OS2__
+         GpiSetBitmap(hps, sobm);
+         DevCloseDC(shapedc);
+#else
 	        SelectObject(shapedc, sobm);
 		DeleteDC(shapedc);
+#endif
 	    }
+#ifdef __OS2__
+     GpiSetBitmap(hps, obm);
+#else
 	    SelectObject(*dc, obm);
+#endif
 #endif
 	}
 	break;
@@ -2357,7 +2702,6 @@ ParseAndPutPixels(
     case (2):				/* Optimize for double character
 					 * colors */
 	{
-
 /* free all allocated pointers at all exits */
 #define FREE_CIDX {int f; for (f = 0; f < 256; f++) \
 if (cidx[f]) XpmFree(cidx[f]);}
@@ -2395,12 +2739,31 @@ if (cidx[f]) XpmFree(cidx[f]);}
 				XPutPixel(shapeimage, x, y,
 					  shape_pixels[cidx[cc1][cc2] - 1]);
 #else
+#ifdef __OS2__
+     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
+
+     GpiSetBitmap(hps, image->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)image_pixels[cidx[cc1][cc2] - 1]);
+     GpiSetPel(hps, &point);
+#else
 			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y, image_pixels[cidx[cc1][cc2] - 1]);
+#endif
 			if (shapeimage) {
+#ifdef __OS2__
+     GpiSetBitmap(hps, shapeimage->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)shape_pixels[cidx[cc1][cc2] - 1]);
+     GpiSetPel(hps, &point);
+#else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y,
 				     shape_pixels[cidx[cc1][cc2] - 1]);
+#endif
 			}
 #endif
 			} else {
@@ -2442,13 +2805,32 @@ if (cidx[f]) XpmFree(cidx[f]);}
 			    XPutPixel(shapeimage, x, y,
 				      shape_pixels[HashColorIndex(slot)]);
 #else
+#ifdef __OS2__
+     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
+
+     GpiSetBitmap(hps, image->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)image_pixels[HashColorIndex(slot)]);
+     GpiSetPel(hps, &point);
+#else
 			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y,
 				 image_pixels[HashColorIndex(slot)]);
+#endif
 			if (shapeimage) {
+#ifdef __OS2__
+     GpiSetBitmap(hps, shapeimage->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)shape_pixels[HashColorIndex(slot)]);
+     GpiSetPel(hps, &point);
+#else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y,
 				     shape_pixels[HashColorIndex(slot)]);
+#endif
 			}
 #endif
 		    }
@@ -2469,11 +2851,30 @@ if (cidx[f]) XpmFree(cidx[f]);}
 			if (shapeimage)
 			    XPutPixel(shapeimage, x, y, shape_pixels[a]);
 #else
+#ifdef __OS2__
+     *dc = DevOpenDC(hab, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&dop, NULLHANDLE);
+     hps = GpiCreatePS(hab, *dc, &sizl, GPIA_ASSOC | PU_PELS);
+
+     GpiSetBitmap(hps, image->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)image_pixels[a]);
+     GpiSetPel(hps, &point);
+#else
 			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y, image_pixels[a]);
+#endif
 			if (shapeimage) {
+#ifdef __OS2__
+     GpiSetBitmap(hps, image->bitmap);
+     point.x = x;
+     point.y = y;
+     GpiSetColor(hps, (LONG)shape_pixels[a]);
+     GpiSetPel(hps, &point);
+#else
 			    SelectObject(*dc, shapeimage->bitmap);
 			    SetPixel(*dc, x, y, shape_pixels[a]);
+#endif
 			}
 #endif
 		    }

@@ -33,7 +33,7 @@
 #define wxUSE_GIF              1 // Utilize GIF images
 
 #if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
-#define wxUSE_LONG_LONG        1
+#define wxUSE_LONGLONG        1
 #endif
 
 #define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's
@@ -103,7 +103,6 @@
 
 #define wxUSE_CHECKLISTBOX 1
                                     // Define 1 to compile check listbox
-
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
 #define wxUSE_XPM_IN_OS2  1
@@ -160,7 +159,7 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define wxUSE_ODBC                1
+#define wxUSE_ODBC                0
                                   // Define 1 to use ODBC classes
 
 #define wxODBC_FWD_ONLY_CURSORS   1
@@ -257,11 +256,11 @@
 #define wxUSE_TOOLBAR 1
 #define wxUSE_TOOLBAR_NATIVE 1
 
-// wxSpinCtrl class
-#define wxUSE_SPINCTRL 1
-
 // wxStatusBar class
 #define wxUSE_STATUSBAR 1
+
+// wxSpinCtrl class
+#define wxUSE_SPINCTRL 1
 
 // progress dialog class for lengthy operations
 #define wxUSE_PROGRESSDLG 1

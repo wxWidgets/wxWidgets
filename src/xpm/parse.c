@@ -54,6 +54,20 @@ char *xpmColorKeys[] = {
     "c",				/* key #5: color visual */
 };
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseValues(
+  xpmData*      data
+, unsigned int* width
+, unsigned int* height
+, unsigned int* ncolors
+, unsigned int* cpp
+, unsigned int* x_hotspot
+, unsigned int* y_hotspot
+, unsigned int* hotspot
+, unsigned int* extensions
+)
+#else
 int
 xpmParseValues(data, width, height, ncolors, cpp,
 	    x_hotspot, y_hotspot, hotspot, extensions)
@@ -61,6 +75,7 @@ xpmParseValues(data, width, height, ncolors, cpp,
     unsigned int *width, *height, *ncolors, *cpp;
     unsigned int *x_hotspot, *y_hotspot, *hotspot;
     unsigned int *extensions;
+#endif
 {
     unsigned int l;
     char buf[BUFSIZ];
@@ -164,6 +179,16 @@ xpmParseValues(data, width, height, ncolors, cpp,
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseColors(
+  xpmData*      data
+, unsigned int  ncolors
+, unsigned int  cpp
+, XpmColor**    colorTablePtr
+, xpmHashTable* hashtable
+)
+#else
 int
 xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     xpmData *data;
@@ -171,6 +196,7 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     unsigned int cpp;
     XpmColor **colorTablePtr;
     xpmHashTable *hashtable;
+#endif
 {
     unsigned int key, l, a, b;
     unsigned int curkey;		/* current color key */
@@ -324,6 +350,20 @@ xpmParseColors(data, ncolors, cpp, colorTablePtr, hashtable)
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static int
+ParsePixels(
+  xpmData*       data
+, unsigned int   width
+, unsigned int   height
+, unsigned int   ncolors
+, unsigned int   cpp
+, XpmColor*      colorTable
+, xpmHashTable*  hashtable
+, unsigned int** pixels
+)
+#else
 static int
 ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
     xpmData *data;
@@ -334,6 +374,7 @@ ParsePixels(data, width, height, ncolors, cpp, colorTable, hashtable, pixels)
     XpmColor *colorTable;
     xpmHashTable *hashtable;
     unsigned int **pixels;
+#endif
 {
     unsigned int *iptr, *iptr2;
     unsigned int a, x, y;
@@ -480,11 +521,20 @@ if (cidx[f]) XpmFree(cidx[f]);}
     return (XpmSuccess);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseExtensions(
+  xpmData*        data
+, XpmExtension** extensions
+, unsigned int*  nextensions
+)
+#else
 int
 xpmParseExtensions(data, extensions, nextensions)
     xpmData *data;
     XpmExtension **extensions;
     unsigned int *nextensions;
+#endif
 {
     XpmExtension *exts = NULL, *ext;
     unsigned int num = 0;
@@ -601,11 +651,20 @@ xpmParseExtensions(data, extensions, nextensions)
  * This function parses an Xpm file or data and store the found informations
  * in an an XpmImage structure which is returned.
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int xpmParseData(
+  xpmData*  data
+, XpmImage* image
+, XpmInfo*  info
+)
+#else
 int
 xpmParseData(data, image, info)
     xpmData *data;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     /* variables to return */
     unsigned int width, height, ncolors, cpp;

@@ -39,9 +39,14 @@
  * in case strdup is not provided by the system here is one
  * which does the trick
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+char* xpmstrdup(char* s1)
+#else
 char *
 xpmstrdup(s1)
     char *s1;
+#endif
 {
     char *s2;
     int l = strlen(s1) + 1;
@@ -53,11 +58,21 @@ xpmstrdup(s1)
 
 #endif
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+unsigned int
+xpmatoui(
+  register char* p
+, unsigned int   l
+, unsigned int*  ui_return
+)
+#else
 unsigned int
 xpmatoui(p, l, ui_return)
     register char *p;
     unsigned int l;
     unsigned int *ui_return;
+#endif
 {
     register unsigned int n, i;
 
@@ -78,9 +93,14 @@ xpmatoui(p, l, ui_return)
 /*
  * Function returning a character string related to an error code.
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+char* XpmGetErrorString(int errcode)
+#else
 char *
 XpmGetErrorString(errcode)
     int errcode;
+#endif
 {
     switch (errcode) {
     case XpmColorError:
@@ -116,9 +136,15 @@ XpmLibraryVersion()
 #undef XpmFree
 #endif
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+void
+XpmFree(void* ptr)
+#else
 void
 XpmFree(ptr)
     void *ptr;
+#endif
 {
     free(ptr);
 }

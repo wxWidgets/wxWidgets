@@ -36,6 +36,16 @@
 
 LFUNC(OpenBuffer, void, (char *buffer, xpmData *mdata));
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateImageFromBuffer(
+  Display*       display
+, char*          buffer
+, XImage**       image_return
+, XImage**       shapeimage_return
+, XpmAttributes* attributes
+)
+#else
 int
 XpmCreateImageFromBuffer(display, buffer, image_return,
 			 shapeimage_return, attributes)
@@ -44,6 +54,7 @@ XpmCreateImageFromBuffer(display, buffer, image_return,
     XImage **image_return;
     XImage **shapeimage_return;
     XpmAttributes *attributes;
+#endif
 {
     XpmImage image;
     XpmInfo info;
@@ -79,11 +90,20 @@ XpmCreateImageFromBuffer(display, buffer, image_return,
     return (ErrorStatus);
 }
 
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+int XpmCreateXpmImageFromBuffer(
+  char*     buffer
+, XpmImage* image
+, XpmInfo*  info
+)
+#else
 int
 XpmCreateXpmImageFromBuffer(buffer, image, info)
     char *buffer;
     XpmImage *image;
     XpmInfo *info;
+#endif
 {
     xpmData mdata;
     int ErrorStatus;
@@ -104,10 +124,15 @@ XpmCreateXpmImageFromBuffer(buffer, image, info)
 /*
  * open the given buffer to be read or written as an xpmData which is returned
  */
+#ifdef __OS2__
+/* Visual Age cannot deal with old, non-ansi, code */
+static void OpenBuffer(char* buffer, xpmData* mdata)
+#else
 static void
 OpenBuffer(buffer, mdata)
     char *buffer;
     xpmData *mdata;
+#endif
 {
     mdata->type = XPMBUFFER;
     mdata->cptr = buffer;

@@ -47,8 +47,11 @@ typedef struct {
 #define myRGB(r,g,b) \
 	((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
 */
+#ifndef __OS2__
 #define myRGB(r,g,b)	RGB(r,g,b)	/* MSW has this macro */
-
+#else
+#define myRGB(r,g,b)    OS2RGB(r,g,b)
+#endif
 
 static rgbRecord theRGBRecords[] =
 {
