@@ -196,6 +196,7 @@ void GarbageCollector::ArrangeCollection()
                 pNode = pNode->Next();
             }
 
+            mAllNodes.Clear();
             break;
         }
 
@@ -217,8 +218,7 @@ wxList& GarbageCollector::GetCycledObjects()
 void GarbageCollector::Reset()
 {
     DestroyItemList( mAllNodes   );
-
-    mRegularLst.Clear();
-    mCycledLst.Clear();
+    DestroyItemList( mRegularLst );
+    DestroyItemList( mCycledLst );
 }
 
