@@ -70,7 +70,7 @@ struct wxHtmlHelpFrameCfg
     bool navig_on;
 };
 
-class wxHtmlHelpMergedIndexItem;
+struct wxHtmlHelpMergedIndexItem;
 class wxHtmlHelpMergedIndex;
 
 class WXDLLIMPEXP_CORE wxHelpControllerBase;
