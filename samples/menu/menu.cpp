@@ -25,12 +25,12 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <wx/app.h>
-    #include <wx/frame.h>
-    #include <wx/menu.h>
-    #include <wx/msgdlg.h>
-    #include <wx/log.h>
-    #include <wx/textctrl.h>
+    #include "wx/app.h"
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+    #include "wx/msgdlg.h"
+    #include "wx/log.h"
+    #include "wx/textctrl.h"
 #endif
 
 #if !wxUSE_MENUS
