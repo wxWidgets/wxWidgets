@@ -184,7 +184,7 @@ class wxListCtrlAutoWidthMixin:
 	    We automatically resize the last column in the list.
 	"""
 	self._doResize()
-
+        event.Skip()
 
     def _onEndColDrag(self, event):
 	""" Respond to the user resizing one of our columns.
@@ -194,6 +194,7 @@ class wxListCtrlAutoWidthMixin:
 	    actually have to do the column resize in idle time.
 	"""
 	self._needResize = true
+        event.Skip()
 
 
     def _onIdle(self, event):
@@ -205,6 +206,7 @@ class wxListCtrlAutoWidthMixin:
 	    self._doResize()
 	    self.Refresh() # Fixes redraw problem under MS Windows.
 	    self._needResize = false
+        event.Skip()
 
 
     def _doResize(self):
@@ -237,14 +239,19 @@ class wxListCtrlAutoWidthMixin:
 
 	lastColWidth = self.GetColumnWidth(numCols - 1)
 
-	margin = 6 # NOTE: This is the extra number of pixels required to make
-		   #       the wxListCtrl size correctly, at least under
-		   #       Windows 2000.  Unfortunately, different OSs and
-		   #       even different versions of the same OS may implement
-		   #       the wxListCtrl differently, so different margins may
-		   #       be needed to get the columns resized correctly.  No
-		   #       doubt the margin could be calculated in a more
-		   #       intelligent manner...
+        # NOTE: This is the extra number of pixels required to make the
+        #      wxListCtrl size correctly, at least under Windows 2000.
+        #      Unfortunately, different OSs and even different versions of the
+        #      same OS may implement the wxListCtrl differently, so different
+        #      margins may be needed to get the columns resized correctly.  No
+        #      doubt the margin could be calculated in a more intelligent
+        #      manner...
+        if wxPlatform == '__WXMSW__':
+            margin = 6
+        elif wxPlatform == '__WXGTK__':
+            margin = 8
+        else:
+            margin = 0
 
 	if totColWidth + self._lastColMinWidth > listWidth - margin:
 	    # We haven't got the width to show the last column at its minimum
