@@ -229,9 +229,10 @@ All:
 - A new data type specific to wxWidgets called SQL_C_WXCHAR has been introduced.
   SQL_C_WXCHAR should be used rather than SQL_C_CHAR to ensure transparent 
   behavior between Unicode and non-unicode builds
-- BLOB example added to samples\db (thanks to Casey ODonnell)
+- BLOB example added to samples/db (thanks to Casey ODonnell)
 - use wxStream::GetLength() instead of deprecated GetSize()
 - wxGetOsDescription() is now more precise (Olly Betts)
+- XRC supports system fonts and colours (Ray Gilbert)
 
 All (GUI):
 

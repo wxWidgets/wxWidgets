@@ -226,6 +226,55 @@ Boolean
 Boolean value, either "0" (false) or "1" (true).
 
 
+Font
+----
+Font value. A font can be described either in terms of its elementary
+properties, or it can be derived from one of system fonts. The font node
+may contain following subnodes (the table lists subnode name on the left and
+variable type as per the definitions above on the right side):
+
+size            UnsignedInteger
+style           normal | italic | slant
+weight          normal | bold | light
+family          roman | script | decorative | swiss | modern | teletype
+underlined      Boolean
+face            comma-separated list of faces
+encoding        charset of the font (meaningless in Unicode build), as string
+sysfont         symbolic name of system standard font
+                (one of wxSYS_*_FONT constants)
+relativesize    Float, font size relative to choosen system font's size;
+                can only be used when 'sysfont' is used and when 'size' is not
+                used
+
+All of them are optional, if they are missing, wxFont default is used.
+
+Examples:
+    
+    <font>
+        <face>arial,helvetica</face>
+        <size>12</size>
+    </font>
+    
+    <font>
+        <sysfont>wxSYS_DEFAULT_GUI_FONT</sysfont>
+        <weight>bold</weight>
+        <relativesize>1.5</relativesize>
+    </font>
+
+
+Colour
+------
+A colour value is either explicit RGB value in the standard #rrggbb format
+where rr, gg and bb are hexadecimal case-insensitive values in the 00..FF
+range, or a symbolic name. Symbolic names are wxSYS_COLOUR_* constants defined
+by wxWidgets, written as strings.
+
+Example:
+
+    <bg>wxSYS_COLOUR_SCROLLBAR</bg>
+    <fg>#FF0000</fg>
+
+
 
 4. Supported classes
 ====================

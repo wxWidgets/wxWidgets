@@ -21,6 +21,8 @@
 
 #if wxUSE_XRC
 
+#include <locale.h>
+
 #include "wx/dialog.h"
 #include "wx/panel.h"
 #include "wx/frame.h"
@@ -649,7 +651,6 @@ public:
 
 
 
-
 wxXmlResourceHandler::wxXmlResourceHandler()
         : m_node(NULL), m_parent(NULL), m_instance(NULL),
           m_parentAsWindow(NULL)
@@ -858,7 +859,21 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 
     return value;
 }
+    
+float wxXmlResourceHandler::GetFloat(const wxString& param, float defaultv)
+{
+    double value;
+    wxString str1 = GetParamValue(param);
 
+    const char *prevlocale = setlocale(LC_NUMERIC, "C");
+    
+    if (!str1.ToDouble(&value))
+        value = defaultv;
+
+    setlocale(LC_NUMERIC, prevlocale);
+
+    return value;
+}
 
 
 int wxXmlResourceHandler::GetID()
@@ -884,15 +899,71 @@ bool wxXmlResourceHandler::GetBool(const wxString& param, bool defaultv)
 }
 
 
+static wxColour GetSystemColour(const wxString& name)
+{
+    if (!name.empty())
+    {
+        #define SYSCLR(clr) \
+            if (name == _T(#clr)) return wxSystemSettings::GetColour(clr);
+        SYSCLR(wxSYS_COLOUR_SCROLLBAR)
+        SYSCLR(wxSYS_COLOUR_BACKGROUND)
+        SYSCLR(wxSYS_COLOUR_DESKTOP)
+        SYSCLR(wxSYS_COLOUR_ACTIVECAPTION)
+        SYSCLR(wxSYS_COLOUR_INACTIVECAPTION)
+        SYSCLR(wxSYS_COLOUR_MENU)
+        SYSCLR(wxSYS_COLOUR_WINDOW)
+        SYSCLR(wxSYS_COLOUR_WINDOWFRAME)
+        SYSCLR(wxSYS_COLOUR_MENUTEXT)
+        SYSCLR(wxSYS_COLOUR_WINDOWTEXT)
+        SYSCLR(wxSYS_COLOUR_CAPTIONTEXT)
+        SYSCLR(wxSYS_COLOUR_ACTIVEBORDER)
+        SYSCLR(wxSYS_COLOUR_INACTIVEBORDER)
+        SYSCLR(wxSYS_COLOUR_APPWORKSPACE)
+        SYSCLR(wxSYS_COLOUR_HIGHLIGHT)
+        SYSCLR(wxSYS_COLOUR_HIGHLIGHTTEXT)
+        SYSCLR(wxSYS_COLOUR_BTNFACE)
+        SYSCLR(wxSYS_COLOUR_3DFACE)
+        SYSCLR(wxSYS_COLOUR_BTNSHADOW)
+        SYSCLR(wxSYS_COLOUR_3DSHADOW)
+        SYSCLR(wxSYS_COLOUR_GRAYTEXT)
+        SYSCLR(wxSYS_COLOUR_BTNTEXT)
+        SYSCLR(wxSYS_COLOUR_INACTIVECAPTIONTEXT)
+        SYSCLR(wxSYS_COLOUR_BTNHIGHLIGHT)
+        SYSCLR(wxSYS_COLOUR_BTNHILIGHT)
+        SYSCLR(wxSYS_COLOUR_3DHIGHLIGHT)
+        SYSCLR(wxSYS_COLOUR_3DHILIGHT)
+        SYSCLR(wxSYS_COLOUR_3DDKSHADOW)
+        SYSCLR(wxSYS_COLOUR_3DLIGHT)
+        SYSCLR(wxSYS_COLOUR_INFOTEXT)
+        SYSCLR(wxSYS_COLOUR_INFOBK)
+        SYSCLR(wxSYS_COLOUR_LISTBOX)
+        SYSCLR(wxSYS_COLOUR_HOTLIGHT)
+        SYSCLR(wxSYS_COLOUR_GRADIENTACTIVECAPTION)
+        SYSCLR(wxSYS_COLOUR_GRADIENTINACTIVECAPTION)
+        SYSCLR(wxSYS_COLOUR_MENUHILIGHT)
+        SYSCLR(wxSYS_COLOUR_MENUBAR)
+        #undef SYSCLR
+    }
+
+    return wxNullColour;
+}
 
 wxColour wxXmlResourceHandler::GetColour(const wxString& param)
 {
     wxString v = GetParamValue(param);
+
+    // find colour using HTML syntax (#RRGGBB)
     unsigned long tmp = 0;
 
     if (v.Length() != 7 || v[0u] != wxT('#') ||
         wxSscanf(v.c_str(), wxT("#%lX"), &tmp) != 1)
     {
+        // the colour doesn't use #RRGGBB format, check if it is symbolic
+        // colour name:
+        wxColour clr = GetSystemColour(v);
+        if (clr.Ok())
+            return clr;
+ 
         wxLogError(_("XRC resource: Incorrect colour specification '%s' for property '%s'."),
                    v.c_str(), param.c_str());
         return wxNullColour;
@@ -949,7 +1020,8 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
 
     if (!img.Ok())
     {
-        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."), param.c_str());
+        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
+                   param.c_str());
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
@@ -1084,6 +1156,26 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
 }
 
 
+// Get system font index using indexname
+static wxFont GetSystemFont(const wxString& name)
+{
+    if (!name.empty())
+    {
+        #define SYSFNT(fnt) \
+            if (name == _T(#fnt)) return wxSystemSettings::GetFont(fnt);
+        SYSFNT(wxSYS_OEM_FIXED_FONT)
+        SYSFNT(wxSYS_ANSI_FIXED_FONT)
+        SYSFNT(wxSYS_ANSI_VAR_FONT)
+        SYSFNT(wxSYS_SYSTEM_FONT)
+        SYSFNT(wxSYS_DEVICE_DEFAULT_FONT)
+        SYSFNT(wxSYS_DEFAULT_PALETTE)
+        SYSFNT(wxSYS_SYSTEM_FIXED_FONT)
+        SYSFNT(wxSYS_DEFAULT_GUI_FONT)
+        #undef SYSFNT
+    }
+
+    return wxNullFont;
+}
 
 wxFont wxXmlResourceHandler::GetFont(const wxString& param)
 {
@@ -1097,53 +1189,122 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxXmlNode *oldnode = m_node;
     m_node = font_node;
 
-    long size = GetLong(wxT("size"), 12);
+    // font attributes:
 
-    wxString style = GetParamValue(wxT("style"));
-    wxString weight = GetParamValue(wxT("weight"));
-    int istyle = wxNORMAL, iweight = wxNORMAL;
-    if (style == wxT("italic")) istyle = wxITALIC;
-    else if (style == wxT("slant")) istyle = wxSLANT;
-    if (weight == wxT("bold")) iweight = wxBOLD;
-    else if (weight == wxT("light")) iweight = wxLIGHT;
+    // size
+    int isize = wxDEFAULT;
+    bool hasSize = HasParam(wxT("size"));
+    if (hasSize) 
+        isize = GetLong(wxT("size"), wxDEFAULT);
 
-    wxString family = GetParamValue(wxT("family"));
-    int ifamily = wxDEFAULT;
-         if (family == wxT("decorative")) ifamily = wxDECORATIVE;
-    else if (family == wxT("roman")) ifamily = wxROMAN;
-    else if (family == wxT("script")) ifamily = wxSCRIPT;
-    else if (family == wxT("swiss")) ifamily = wxSWISS;
-    else if (family == wxT("modern")) ifamily = wxMODERN;
-
-    bool underlined = GetBool(wxT("underlined"), false);
-
-    wxString encoding = GetParamValue(wxT("encoding"));
-    wxFontMapper mapper;
-    wxFontEncoding enc = wxFONTENCODING_DEFAULT;
-    if (!encoding.IsEmpty())
-        enc = mapper.CharsetToEncoding(encoding);
-    if (enc == wxFONTENCODING_SYSTEM)
-        enc = wxFONTENCODING_DEFAULT;
-
-    wxString faces = GetParamValue(wxT("face"));
-    wxString facename = wxEmptyString;
-    wxFontEnumerator enu;
-    enu.EnumerateFacenames();
-    wxStringTokenizer tk(faces, wxT(","));
-    while (tk.HasMoreTokens())
+    // style
+    int istyle = wxNORMAL;
+    bool hasStyle = HasParam(wxT("style"));
+    if (hasStyle)
     {
-        int index = enu.GetFacenames()->Index(tk.GetNextToken(), false);
-        if (index != wxNOT_FOUND)
+        wxString style = GetParamValue(wxT("style"));
+        if (style == wxT("italic")) 
+            istyle = wxITALIC;
+        else if (style == wxT("slant")) 
+            istyle = wxSLANT;
+    }
+
+    // weight
+    int iweight = wxNORMAL;
+    bool hasWeight = HasParam(wxT("weight"));
+    if (hasWeight)
+    {
+        wxString weight = GetParamValue(wxT("weight"));
+        if (weight == wxT("bold")) 
+            iweight = wxBOLD;
+        else if (weight == wxT("light")) 
+            iweight = wxLIGHT;
+    }
+   
+    // underline
+    bool hasUnderlined = HasParam(wxT("underlined"));
+    bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
+
+    // family and facename
+    int ifamily = wxDEFAULT;
+    bool hasFamily = HasParam(wxT("family"));
+    if (hasFamily)
+    {
+        wxString family = GetParamValue(wxT("family"));
+             if (family == wxT("decorative")) ifamily = wxDECORATIVE;
+        else if (family == wxT("roman")) ifamily = wxROMAN;
+        else if (family == wxT("script")) ifamily = wxSCRIPT;
+        else if (family == wxT("swiss")) ifamily = wxSWISS;
+        else if (family == wxT("modern")) ifamily = wxMODERN;
+        else if (family == wxT("teletype")) ifamily = wxTELETYPE;
+    }
+    
+    
+    wxString facename;
+    bool hasFacename = HasParam(wxT("face"));
+    if (hasFacename)
+    {
+        wxString faces = GetParamValue(wxT("face"));
+        wxFontEnumerator enu;
+        enu.EnumerateFacenames();
+        wxStringTokenizer tk(faces, wxT(","));
+        while (tk.HasMoreTokens())
         {
-            facename = (*enu.GetFacenames())[index];
-            break;
+            int index = enu.GetFacenames()->Index(tk.GetNextToken(), false);
+            if (index != wxNOT_FOUND)
+            {
+                facename = (*enu.GetFacenames())[index];
+                break;
+            }
         }
     }
 
-    m_node = oldnode;
+    // encoding
+    wxFontEncoding enc = wxFONTENCODING_DEFAULT;
+    bool hasEncoding = HasParam(wxT("encoding"));
+    if (hasEncoding)
+    {
+        wxString encoding = GetParamValue(wxT("encoding"));
+        wxFontMapper mapper;
+        if (!encoding.IsEmpty())
+            enc = mapper.CharsetToEncoding(encoding);
+        if (enc == wxFONTENCODING_SYSTEM)
+            enc = wxFONTENCODING_DEFAULT;
+    }
 
-    wxFont font(size, ifamily, istyle, iweight, underlined, facename, enc);
-    return font;
+    // is this font based on a system font?
+    wxFont sysfont = GetSystemFont(GetParamValue(wxT("sysfont")));
+    
+    if (sysfont.Ok())
+    {
+        if (hasSize)
+            sysfont.SetPointSize(isize);
+        else if (HasParam(wxT("relativesize")))
+            sysfont.SetPointSize(int(sysfont.GetPointSize() *
+                                     GetFloat(wxT("relativesize"))));
+        
+        if (hasStyle)
+            sysfont.SetStyle(istyle);
+        if (hasWeight)
+            sysfont.SetWeight(iweight);
+        if (hasUnderlined)
+            sysfont.SetUnderlined(underlined);
+        if (hasFamily)
+            sysfont.SetFamily(ifamily);
+        if (hasFacename)
+            sysfont.SetFaceName(facename);
+        if (hasEncoding)
+            sysfont.SetDefaultEncoding(enc);
+
+        m_node = oldnode;
+        return sysfont;
+    }
+    else
+    {
+        m_node = oldnode;
+        return wxFont(isize, ifamily, istyle, iweight,
+                      underlined, facename, enc);
+    }
 }
 
 

@@ -387,8 +387,11 @@ protected:
     // Gets a bool flag (1, t, yes, on, true are true, everything else is false).
     bool GetBool(const wxString& param, bool defaultv = false);
 
-    // Gets the integer value from the parameter.
-    long GetLong( const wxString& param, long defaultv = 0 );
+    // Gets an integer value from the parameter.
+    long GetLong(const wxString& param, long defaultv = 0);
+    
+    // Gets a float value from the parameter.
+    float GetFloat(const wxString& param, float defaultv = 0);
 
     // Gets colour in HTML syntax (#RRGGBB).
     wxColour GetColour(const wxString& param);
