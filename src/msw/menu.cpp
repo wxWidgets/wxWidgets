@@ -1045,8 +1045,11 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     if ( !menu )
         return NULL;
 
+    size_t arraypos = pos;
+
     if ( IsAttached() )
     {
+
 #ifdef __WXWINCE__
         if (GetToolBar())
         {
@@ -1056,6 +1059,78 @@ wxMenu *wxMenuBar::Remove(size_t pos)
             }
         }
 #else
+        //MDI - window menu stuff
+        if (GetFrame() && GetFrame()->IsKindOf(CLASSINFO(wxMDIParentFrame)))
+        {
+            //There's two cases which we need to deal with in order
+            //to remove at the correct index with MDI windows
+
+            //#1 is due to the fact that wxWindows sneakely creates
+            //a new menu item "Window" on the menu bar natively, without
+            //notifying the actual wxMenuBar.  Therefore, the Window
+            //menu never go into the actual calculations...
+            //So if a user tries to insert a menu after the Window menu
+            //his/her calculations will be one(1) index off, since the
+            //Window menu is before the to-be-removed menu and
+            //wxMenuBar doesn't know about the existance of it.
+
+            //There are two ways to deal with this -
+            //1 - is to force the window menu to always be at the end
+            //of the menu bar (rightmost, greatest index), I.E.
+            //override remove and insert functions to force
+            //the window (and help) menus to be at the rightmost positions
+            //2 - is to increment pos here if the user is trying
+            //to remove a menu after the Window menu
+
+            //Solution #2 (which if chosen would go here)
+            //is a little involved
+            //1.  Search for Window menu 
+            //2.  If found note where it is
+            //3.  If the removal point is at or above where the Window 
+            //    menu is, ++pos
+
+
+            //Case #2 is a MSW MDI "feature", where if a child MDI
+            //frame is maximized, the system menu of the child MDI
+            //frame is inserted at index 0 of the parent frame.
+
+            //To deal with this we simply check to see if a child MDI
+            //frame is maximized, then increment the position we
+            //are going to remove the menu at.
+
+            //Get a pointer to the children of the wxMDIParentFrame
+            wxWindowList* pParentsChildren = &(GetFrame()->GetChildren());
+
+            //Iterate through the children
+            for (size_t n = 0; n < pParentsChildren->GetCount(); ++n)
+            {
+                //Check to see if this particular child window is a 
+                //MDI child
+                if(pParentsChildren->Item(n)->GetData()->IsKindOf(CLASSINFO(wxMDIChildFrame)))
+                {
+                    //If so then we need to see if it's maximized
+
+                    //Get a pointer to the child...
+                    wxMDIChildFrame* pData = (wxMDIChildFrame*) pParentsChildren->Item(n)->GetData();
+
+                    //Is it maximized?
+                    if(pData->IsMaximized())
+                    {
+                        //Increase the removal position by one
+                        ++pos;
+
+                        //Note that in Windows there can
+                        //Only be one maximized child window
+                        //(well not technically, but there
+                        //can only be one child system menu
+                        //prepended to the parent's menu
+                        //bar, which is what we're concerned about)
+                        break;
+                    }
+                }//end if child == wxMDIChildFrame
+            }//end children iteration loop
+        }//end if GetFrame()->IsKindOf(CLASSINFO(wxMDIParentFrame))
+
         if ( !::RemoveMenu(GetHmenu(), (UINT)pos, MF_BYPOSITION) )
         {
             wxLogLastError(wxT("RemoveMenu"));
@@ -1072,7 +1147,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         Refresh();
     }
 
-    m_titles.RemoveAt(pos);
+    m_titles.RemoveAt(arraypos);
 
     return menu;
 }
