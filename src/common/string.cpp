@@ -42,7 +42,10 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+
+#ifndef __WXMSW__
 #include <errno.h>
+#endif
 
 #ifdef __SALFORDC__
   #include <clib.h>
@@ -1838,7 +1841,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // buffer were large enough
         // also, it may return an errno may be something like EILSEQ,
         // in which case we need to break out
-        if ( (len >= 0 && len <= size) || errno != EOVERFLOW )
+        if ( (len >= 0 && len <= size) 
+        // No EOVERFLOW on Windows
+#ifndef __WXMSW__
+            || errno != EOVERFLOW
+#endif
+            )
         {
             // ok, there was enough space
             break;
