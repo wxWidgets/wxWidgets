@@ -919,19 +919,9 @@ int wxSprintf( wxChar *str, const wxChar *format, ... )
     va_list argptr;
     va_start(argptr, format);
 
-    // callers of wxSprintf() deserve what they get
-    //int ret = vswprintf( str, UINT_MAX, wxFormatConverter(format), argptr );
-
-    // ... true, but if we are going to implement it, they probably still
-    // deserve something a little better than absolutely guaranteed silent
-    // failure.  For some (very mysterious) reason, this call fails under glibc
-    // 2.3.2 if str was allocated on the heap and maxsize is larger than this.
-    // Even more mysterious is that it does still succeed if str was allocated
-    // on the stack.  This should still be plenty large enough for people who
-    // want to overflow a buffer.  The bug was first noticed in unicode builds
-    // of tex2rtf, but I'm going to fix that to not use this unsafe function
-    // instead of wasting time diagnosing this further right now.
-    int ret = vswprintf( str, INT_MAX / 4, wxFormatConverter(format), argptr );
+    // note that wxString::Format() uses wxVsnprintf(), not wxSprintf(), so
+    // it's safe to implement this one in terms of it
+    wxStrcpy(str, wxString::Format(format, argptr));
 
     va_end(argptr);
 
