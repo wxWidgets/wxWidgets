@@ -84,6 +84,16 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxPen(wxNamedColour('RED')))
         dc.DrawEllipticArc(200, 500, 50, 75, 0, 90)
 
+        y = 20
+        for style in [wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, wxUSER_DASH]:
+            pen = wxPen("DARK ORCHID", 1, style)
+            if style == wxUSER_DASH:
+                pen.SetDashes([0, 1, 2, 3, 4, 5, 6, 7, 8])
+            dc.SetPen(pen)
+            dc.DrawLine(300, y, 400, y)
+            y = y + 10
+
+
         self.DrawSavedLines(dc)
         dc.EndDrawing()
 
