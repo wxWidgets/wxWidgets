@@ -207,7 +207,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             try:
                 value = eval(value, self.ctx.classMod.__dict__)
             except:
-                value = saveValue
+                value = saveVal
 
         # convert to wxColour
         elif value[0] == '#':
