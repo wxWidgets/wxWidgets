@@ -352,12 +352,6 @@ protected:
     // Returns the XRCID.
     int GetID();
 
-    // Returns the wxArtID for a wxArtProvider-managed bitmap.
-    wxArtID GetStockID(const wxString& param);
-    
-    // Returns the wxArtClient for a wxArtProvider-managed bitmap.
-    wxArtClient GetStockClient(const wxString& param);
-
     // Returns the resource name.
     wxString GetName();
 
@@ -381,10 +375,12 @@ protected:
 
     // Gets a bitmap.
     wxBitmap GetBitmap(const wxString& param = wxT("bitmap"),
+                       const wxArtClient& defaultArtClient = wxART_OTHER,
                        wxSize size = wxDefaultSize);
 
     // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
+                   const wxArtClient& defaultArtClient = wxART_OTHER,
                    wxSize size = wxDefaultSize);
 
     // Gets a font.
