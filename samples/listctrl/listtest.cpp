@@ -65,7 +65,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxListCtrl Test", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, "wxListCtrl Test", 50, 50, 450, 340);
 
   // This reduces flicker effects - even better would be to define OnEraseBackground
   // to do nothing. When the list control's scrollbars are show or hidden, the
@@ -159,8 +159,8 @@ bool MyApp::OnInit(void)
 
   for ( int i=0; i < 30; i++)
 	{
-		char buf[20];
-		sprintf(buf, "Item %d", i);
+		wxChar buf[20];
+		wxSprintf(buf, _T("Item %d"), i);
 		frame->m_listCtrl->InsertItem(i, buf);
 	}
 
@@ -228,8 +228,8 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 30; i++)
 	{
-		char buf[20];
-		sprintf(buf, "Item %d", i);
+		wxChar buf[20];
+		wxSprintf(buf, _T("Item %d"), i);
 		m_listCtrl->InsertItem(i, buf);
 	}
 }
@@ -247,11 +247,11 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 30; i++)
 	{
-		char buf[20];
-		sprintf(buf, "Item %d, col 1", i);
+		wxChar buf[50];
+		wxSprintf(buf, _T("Item %d, col 1"), i);
 		long tmp = m_listCtrl->InsertItem(i, buf, 0);
 
-		sprintf(buf, "Item %d, col 2", i);
+		wxSprintf(buf, _T("Item %d, broad column 2"), i);
 		tmp = m_listCtrl->SetItem(i, 1, buf);
 	}
 }
@@ -280,8 +280,8 @@ void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 9; i++)
 	{
-		char buf[20];
-		sprintf(buf, "Label %d", i);
+		wxChar buf[20];
+		wxSprintf(buf, _T("Label %d"), i);
 		m_listCtrl->InsertItem(i, buf, i);
 	}
 }

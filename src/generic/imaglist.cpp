@@ -55,7 +55,7 @@ int wxImageList::Add( const wxBitmap &bitmap )
         m_images.Append( new wxIcon( (const wxIcon&) bitmap ) );
     else
         m_images.Append( new wxBitmap(bitmap) );
-    return m_images.Number();
+    return m_images.Number()-1;
 }
 
 const wxBitmap *wxImageList::GetBitmap( int index ) const 
