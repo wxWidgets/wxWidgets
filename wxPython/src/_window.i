@@ -857,14 +857,14 @@ by pressing <Enter> such as the OK button on a wx.Dialog.", "");
         "Does keyboard navigation from this window to another, by sending a
 `wx.NavigationKeyEvent`.", "
  
-    :param flags: A combination of the ``IsForward`` and ``WinChange``
-        values in the `wx.NavigationKeyEvent` class, which determine
-        if the navigation should be in forward or reverse order, and
-        if it should be able to cross parent window boundaries, such
-        as between notebook pages or MDI child frames.  Typically the
-        status of the Shift key (for forward or reverse) or the
-        Control key (for WinChange) would be used to determine how to
-        set the flags.
+    :param flags: A combination of the ``IsForward`` or ``IsBackward``
+        and the ``WinChange`` values in the `wx.NavigationKeyEvent`
+        class, which determine if the navigation should be in forward
+        or reverse order, and if it should be able to cross parent
+        window boundaries, such as between notebook pages or MDI child
+        frames.  Typically the status of the Shift key (for forward or
+        backward) or the Control key (for WinChange) would be used to
+        determine how to set the flags.
 
 One situation in which you may wish to call this method is from a text
 control custom keypress handler to do the default navigation behaviour
