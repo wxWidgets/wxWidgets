@@ -2503,17 +2503,17 @@ bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const w
 {
     wxCHECK_MSG( !m_needParent || parent, FALSE, wxT("Need complete parent.") );
 
-    /* this turns -1 into 20 so that a minimal window is
-       visible even although -1,-1 has been given as the
-       size of the window. the same trick is used in other
-       ports and should make debugging easier */
-    m_width = WidthDefault(size.x);
+    // This turns -1 into 30 so that a minimal window is
+    // visible even although -1,-1 has been given as the
+    // size of the window. the same trick is used in other
+    // ports and should make debugging easier.
+    m_width = WidthDefault(size.x) ;
     m_height = HeightDefault(size.y);
 
     m_x = (int)pos.x;
     m_y = (int)pos.y;
 
-    /* some reasonable defaults */
+    // some reasonable defaults
     if (!parent)
     {
         if (m_x == -1)
@@ -3316,11 +3316,12 @@ void wxWindowGTK::WarpPointer( int x, int y )
         gdk_window_warp_pointer( window, x, y );
 }
 
+
 void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
 {
     if (!m_widget) return;
     if (!m_widget->window) return;
-
+    
 #ifndef __WXGTK20__
     if (g_isIdle)
         wxapp_install_idle_handler();
