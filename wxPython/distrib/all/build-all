@@ -24,7 +24,7 @@ WIN_BUILD=/c/BUILD
 # Just like the above
 OSX_HOST_panther=bigmac
 OSX_HOST_jaguar=whopper
-OSX_BUILD=/tmp/BUILD
+OSX_BUILD=/BUILD
 
 
 # Alsmost the same...  See below for hosts and other info
@@ -58,6 +58,7 @@ function usage {
     echo "   skipsource   Don't build the source archives, use the ones"
     echo "                already in the staging dir."
     echo "   onlysource   Exit after building the source archives"
+    echo "   skipdocs     Don't rebuild the docs"
     echo "   skipwin      Don't do the remote Windows build"
     echo "   skiposx      Don't do the remote OSX build"
     echo "   skiplinux    Don't do the remote Linux build"
@@ -84,6 +85,7 @@ KIND=dryrun
 PYVER=2.3
 skipsource=no
 onlysource=no
+skipdocs=no
 skipwin=no
 skiposx=no
 skiplinux=no
@@ -101,6 +103,7 @@ for flag in $*; do
 
 	skipsource)  skipsource=yes              ;;
 	onlysource)  onlysource=yes              ;;
+	skipdocs)    skipdocs=yes                ;;
 	skipwin)     skipwin=yes                 ;;
 	skiposx)     skiposx=yes                 ;;
 	skiplinux)   skiplinux=yes               ;;
@@ -140,42 +143,39 @@ if [ $skipsource != yes -o $onlysource = yes ]; then
     # clean out the local dist dir
     rm -f dist/*
 
-    # Regenerate the reST docs
-    echo "Regenerating the reST docs..."
-    cd docs
-    for x in *.txt; do
-	docutils-html $x `basename $x .txt`.html
-    done
-    cd -
-       
-    # build the doc and demo tarballs
-    distrib/makedemo
-    distrib/makedocs
+    if [ $skipdocs != yes ]; then 
+        # Regenerate the reST docs
+	echo "Regenerating the reST docs..."
+	cd docs
+	for x in *.txt; do
+	    docutils-html $x `basename $x .txt`.html
+	done
+	cd -
+	
+        # build the doc and demo tarballs
+	distrib/makedemo
+	distrib/makedocs
 
-    # build the new docs too
-    docs/bin/everything
+        # build the new docs too
+	docs/bin/everything
+    fi
 
-    # make the source tarball
-    distrib/makerpm 2.3 skipclean skiprpm gtk2
-
-    # make the source RPMs
-    for ver in $PYVER; do 
-	distrib/makerpm $ver skipclean skipcopy skiptar srpm
-	distrib/makerpm $ver skipclean skipcopy skiptar srpm gtk2
-    done
+    # make the source tarball and srpm
+    distrib/makerpm 2.3 srpm
 
     # Copy everything to the staging dir
     echo "Moving stuff to $STAGING_DIR..."
-    rm -f dist/*.spec
     mv dist/* $STAGING_DIR
-    for doc in CHANGES BUILD INSTALL MigrationGuide default; do
-	cp docs/$doc.* $STAGING_DIR
-    done
+
+    if [ $skipdocs != yes ]; then 
+	for doc in CHANGES BUILD INSTALL MigrationGuide default; do
+	    cp docs/$doc.* $STAGING_DIR
+	done
+    fi
 
     # cleanup
     echo "Cleaning up..."
     rm -f dist/*
-    rm -rf _build_rpm
 fi 
 
 if [ $KIND = daily ]; then
@@ -193,18 +193,18 @@ if [ $skipwin != yes ]; then
     echo "-=-=- Starting Windows build..."
 
     echo "Copying source file and build script..."
-    scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
 	distrib/all/build-windows \
 	$WIN_HOST:$WIN_BUILD
     
      echo "Running build script on $WIN_HOST..."
-     wxdir=$WIN_BUILD/wxPythonSrc-$VERSION
+     wxdir=$WIN_BUILD/wxPython-src-$VERSION
      cmd=./build-windows
      ssh $WIN_HOST "cd $WIN_BUILD && $cmd $wxdir $WIN_BUILD $skipclean $VERSION $PYVER && rm $cmd"
 
      echo "Fetching the results..."
-     scp $WIN_HOST:$WIN_BUILD/wxPythonWIN32*  $STAGING_DIR
-     ssh $WIN_HOST "rm $WIN_BUILD/wxPythonWIN32*"
+     scp $WIN_HOST:$WIN_BUILD/wxPython*-win32*  $STAGING_DIR
+     ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
 fi
 
 
@@ -231,20 +231,21 @@ function DoOSXBuild {
 
     echo "Copying source files and build script..."
     ssh root@$host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/* || true"
-    scp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz \
-	$STAGING_DIR/wxPythonDocs-$VERSION.tar.gz \
-	$STAGING_DIR/wxPythonDemo-$VERSION.tar.gz \
+    #ssh root@$host "mkdir -p $OSX_BUILD  || true"
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
+	$STAGING_DIR/wxPython-docs-$VERSION.tar.gz \
+	$STAGING_DIR/wxPython-demo-$VERSION.tar.gz \
 	distrib/all/build-osx \
 	root@$host:$OSX_BUILD
 
      echo "Running build script on $host..."
-     wxdir=$OSX_BUILD/wxPythonSrc-$VERSION
+     wxdir=$OSX_BUILD/wxPython-src-$VERSION
      cmd=./build-osx
      ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $PYVER && rm $cmd"
 
      echo "Fetching the results..."
-     scp "root@$host:$OSX_BUILD/wxPythonOSX*"  $STAGING_DIR
-     ssh root@$host "rm $OSX_BUILD/wxPythonOSX*"
+     scp "root@$host:$OSX_BUILD/wxPython*-osx*"  $STAGING_DIR
+     ssh root@$host "rm $OSX_BUILD/wxPython*-osx*"
 
 }
 
@@ -285,7 +286,7 @@ function DoLinuxBuild {
 	
     echo "Copying source files and build script..."
     ssh root@$host "mkdir -p $LINUX_BUILD && rm -rf $LINUX_BUILD/*"
-    scp $STAGING_DIR/wxPython*.src.rpm \
+    scp $STAGING_DIR/wxPython-src* $STAGING_DIR/wxPython.spec\
 	distrib/all/build-linux \
 	root@$host:$LINUX_BUILD
 
@@ -294,15 +295,15 @@ function DoLinuxBuild {
     ssh root@$host "cd $LINUX_BUILD && ./build-linux $reltag $skipclean $VERSION $pyver"
     
     echo "Fetching the results..."
-    scp "root@$host:$LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm"  $STAGING_DIR
-    ssh root@$host "rm $LINUX_BUILD/wxPythonGTK*.i[0-9]86.rpm"
+    scp "root@$host:$LINUX_BUILD/wxPython*.i[0-9]86.rpm"  $STAGING_DIR
+    ssh root@$host "rm $LINUX_BUILD/wxPython*.i[0-9]86.rpm"
 
 }
 
 if [ $skiplinux != yes ]; then
 
-    DoLinuxBuild co-rh9 RH9 $PYVER
-    DoLinuxBuild co-fc2 FC2 2.3
+    DoLinuxBuild co-rh9 rh9 $PYVER
+    DoLinuxBuild co-fc2 fc2 2.3
 
 fi
 

@@ -33,7 +33,7 @@ PYVER=$@
 
 # WXDIR is the cygwin path, WXWIN is the DOS path
 WXWIN_OLD=$WXWIN
-WXWIN=`cygpath -m $WXDIR`
+WXWIN=`cygpath -w $WXDIR`
 export WXWIN
 
 
@@ -47,16 +47,16 @@ export WXWIN
 
 
 # untar the source 
-echo "Unarchiving wxPythonSrc-$VERSION.tar.gz"
+echo "Unarchiving wxPython-src-$VERSION.tar.gz"
 cd $DESTDIR
-tar xzf wxPythonSrc-$VERSION.tar.gz 
-rm wxPythonSrc-$VERSION.tar.gz
+tar xzf wxPython-src-$VERSION.tar.gz 
+rm wxPython-src-$VERSION.tar.gz
 
 
 # Fix line endings
 echo "Converting wxPython line endings to CRLF..."
 cd $WXDIR
-names=`find wxPython -name "*.py" -o -name "*.txt" -o -name "*.htm*" -o -name "*.css" -o -name "*.h" -o -name "*.cpp" -o -name "*.c" -o -name "*.xml" `
+names=`find wxPython -name "*.py" -o -name "*.txt" -o -name "*.htm*" -o -name "*.css" -o -name "*.xml" `
 unix2dos -D $names
 
 
@@ -86,11 +86,11 @@ echo "Building the wx DLLs..."
 .make hybrid-uni
 
 
-echo "Building the wx tools..."
-.make_tools
+#echo "Building the wx tools..."
+#.make_tools
 
 # cheat and just copy the .CHM files from the regular project dir
-# TODO:  Copy over the wxPythonDocs fle and run hhc on the contents of that.
+# TODO:  Copy over the wxPython-docs fle and run hhc on the contents of that.
 mkdir -p $WXDIR/docs/htmlhelp
 cp `cygpath $WXWIN_OLD/docs/htmlhelp`/*.chm $WXDIR/docs/htmlhelp
 
@@ -102,10 +102,10 @@ mkdir -p dist
 for ver in $PYVER; do
     echo $ver
     b $ver d USE_SWIG=0
-    b $ver h USE_SWIG=0
+    b $ver h USE_SWIG=0 EP_ADD_OPTS=1
     b $ver r USE_SWIG=0
     b $ver d UNICODE=1 USE_SWIG=0
-    b $ver h UNICODE=1 USE_SWIG=0
+    b $ver h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
     b $ver r UNICODE=1 USE_SWIG=0
 done
 
@@ -116,7 +116,7 @@ export WXWIN
 
 
 echo "Copying installers to $DESTDIR..."
-mv dist/wxPythonWIN32* $DESTDIR
+mv dist/wxPython* $DESTDIR
 cd $DESTDIR
 
 

@@ -84,7 +84,7 @@ PYVER=`$PYTHON -c "import sys; print sys.version[:3]"`
 PYPREFIX=`$PYTHON -c "import sys; print sys.exec_prefix"`
 PYLIB=$PYPREFIX/lib/python$PYVER
 SITEPACKAGES=$PYLIB/site-packages
-
+SHORTVER=`echo $VERSION | cut -c 1,2,3`
 
 
 if [ -z "$TARBALLDIR" ]; then
@@ -93,21 +93,21 @@ if [ -z "$TARBALLDIR" ]; then
     # TARBALLDIR before invoking this script...
     TARBALLDIR=/stuff/Development/wxPython/dist/$VERSION
 fi
-TARBALL=$TARBALLDIR/wxPythonSrc-$VERSION.tar.gz
+TARBALL=$TARBALLDIR/wxPython-src-$VERSION.tar.gz
 
-if [ ! -e $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz ]; then 
+if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.gz ]; then 
     echo "-------------------------------------------------------"
     echo " WARNING:  Demo tarball not found, will skip building "
     echo "           the Demo app bundle and etc."
-    echo " $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz"
+    echo " $TARBALLDIR/wxPython-demo-$VERSION.tar.gz"
     echo "-------------------------------------------------------"
 fi
 
-if [ ! -e $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz ]; then
+if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.gz ]; then
     echo "-------------------------------------------------------"
     echo " WARNING:  Docs tarball not found, will skip building "
     echo "           the the wxDocsViewer app bundle and etc."
-    echo " $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz"
+    echo " $TARBALLDIR/wxPython-docs-$VERSION.tar.gz"
     echo "-------------------------------------------------------"
 fi
 
@@ -127,7 +127,7 @@ INSTALLDEVEL=$TMPDIR/install-devel
 DMGDIR=$TMPDIR/dmg
 RESOURCEDIR=$PROGDIR/resources
 DESTDIR=$PWD/dist
-SRCROOT=$BUILDROOT/wxPythonSrc-$VERSION
+SRCROOT=$BUILDROOT/wxPython-src-$VERSION
 
 
 #----------------------------------------------------------------------
@@ -155,7 +155,7 @@ fi
 
 if [ $inplace = no ]; then
     # make a build dir and cd to it.
-    cd wxPythonSrc-$VERSION
+    cd wxPython-src-$VERSION
     WXDIR=`pwd`
     mkdir -p $WXDIR/bld
     cd $WXDIR/bld
@@ -184,10 +184,10 @@ if [ $skipconfig != yes ]; then
 	--enable-sound \
 	--enable-display \
 	--enable-geometry \
+	--enable-debug_flag \
 	--enable-precomp=no \
-	--enable-debug_flag
+	--enable-optimise \
 
-##	--enable-optimise \
 ##	--with-libjpeg=builtin \
 ##	--with-libpng=builtin \
 ##	--with-libtiff=builtin \
@@ -199,26 +199,24 @@ fi
 if [ $skipbuild != yes ]; then
 
     # Make wxWidgets and some contribs
+
+    # For some reason Rez and DeRez have started locking up if run as root...
+    chmod a+w lib
+    su robind -c "make lib/libwx_macd-2.5.3.r"
+
     make
     make -C contrib/src/gizmos
     make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0"
     make -C contrib/src/stc
-    make -C contrib/src/xrc
 
     # Build wxPython
     cd $WXDIR/wxPython
     $PYTHON setup.py \
 	NO_SCRIPTS=1 \
+	EP_ADD_OPTS=1 \
 	WX_CONFIG="$WXBLD/wx-config --inplace" \
 	BUILD_BASE=$WXBLD/wxPython \
 	build
-
-
-    # Build wxrc (XRC resource tool)
-    cd $WXBLD/contrib/utils/wxrc
-    make
-    strip wxrc
-
 fi
 
 #----------------------------------------------------------------------
@@ -230,13 +228,18 @@ if [ $skipinstall != yes ]; then
     make -C contrib/src/gizmos prefix=$INSTALLROOT$PREFIX install
     make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$INSTALLROOT/$PREFIX install
     make -C contrib/src/stc prefix=$INSTALLROOT$PREFIX install
-    make -C contrib/src/xrc prefix=$INSTALLROOT$PREFIX install
 
+
+    # relink wx-config with a relative link
+    cd $INSTALLROOT$PREFIX/bin
+    rm wx-config
+    ln -s ../lib/wx/config/* wx-config
 
     # and wxPython
     cd $WXDIR/wxPython
     $PYTHON setup.py \
 	NO_SCRIPTS=1 \
+	EP_ADD_OPTS=1 \
 	WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT/$PREFIX" \
 	BUILD_BASE=$WXBLD/wxPython \
 	install \
@@ -263,16 +266,14 @@ if [ $skipinstall != yes ]; then
     python$PYVER CreateMacScripts.py $INSTALLROOT $BINPREFIX
 
 
-    # Install wxrc
-    cp $WXBLD/contrib/utils/wxrc/wxrc $INSTALLROOT$BINPREFIX
-
-
     # Set premissions for files in $INSTALLROOT
     if [ "$UID" = "0" ]; then
 	chown -R root:admin $INSTALLROOT
 	chmod -R g+w        $INSTALLROOT
     fi
 fi
+
+PKGDIR=`cat $INSTALLROOT/Library/Python/$PYVER/wx.pth`
 
 popd
 
@@ -307,6 +308,7 @@ EOF
 # Cleanup any old install of the wxPython package
 rm -rf \$2$SITEPACKAGES/wxPython
 rm -rf \$2$SITEPACKAGES/wx
+rm -rf \$2$SITEPACKAGES/$PKGDIR
 exit 0
 EOF
     chmod +x $RESOURCEDIR/preflight
@@ -315,17 +317,13 @@ EOF
     cat > $RESOURCEDIR/postflight <<EOF
 #!/bin/sh -e
 # Compile the .py files in the wxPython pacakge
-$PYTHON \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wxPython
-$PYTHON \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wx
-$PYTHON -O \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wxPython
-$PYTHON -O \$2$PYLIB/compileall.py \$2$SITEPACKAGES/wx
+$PYTHON \$2$PYLIB/compileall.py \$2$SITEPACKAGES/$PKGDIR
+$PYTHON -O \$2$PYLIB/compileall.py \$2$SITEPACKAGES/$PKGDIR
 
 
 # and all of the wxPython pacakge should be group writable
-chgrp -R admin \$2$SITEPACKAGES/wxPython
-chmod -R g+w \$2$SITEPACKAGES/wxPython
-chgrp -R admin \$2$SITEPACKAGES/wx
-chmod -R g+w \$2$SITEPACKAGES/wx
+chgrp -R admin \$2$SITEPACKAGES/$PKGDIR
+chmod -R g+w \$2$SITEPACKAGES/$PKGDIR
 
 exit 0
 EOF
@@ -334,9 +332,9 @@ EOF
 
 
     # Build the main Installer Package...
-    rm -rf wxPythonOSX-$KIND.pkg
+    rm -rf wxPython${SHORTVER}-osx-$KIND.pkg
     python $PROGDIR/../buildpkg.py \
-	--Title=wxPythonOSX-$KIND \
+	--Title=wxPython${SHORTVER}-osx-$KIND \
 	--Version=$VERSION \
 	--Description="wxPython $VERSION for $W_MSG MacPython-OSX $PYVER" \
 	--NeedsAuthorization="YES" \
@@ -345,7 +343,7 @@ EOF
 	$INSTALLROOT \
 	$RESOURCEDIR
 
-    mv wxPythonOSX-$KIND.pkg $DMGDIR/root
+    mv wxPython${SHORTVER}-osx-$KIND.pkg $DMGDIR/root
 
 
 
@@ -355,7 +353,7 @@ Welcome to wxPython!
 
 On this disk image you will find the installer for wxPython $VERSION for $W_MSG MacPython-OSX $PYVER.  MacPython-OSX is not included.
 
-   wxPython-$KIND.pkg   The installer package.  It contains the wxPython
+   wxPython${SHORTVER}-osx-$KIND.pkg   The installer package.  It contains the wxPython
                         extension modules, wxMac dynamic libraries and
                         headers, and some scripts for the command-line
                         tools.
@@ -399,16 +397,16 @@ EOF
 
 
     # wxDocs
-    if [ ! -e $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz ]; then
+    if [ ! -e $TARBALLDIR/wxPython-docs-$VERSION.tar.gz ]; then
 	cat > "$DMGDIR/root/Docs/Build ERROR.txt" <<EOF
 
-The wxPythonDocs tarball was not found when building this disk image!
+The wxPython-docs tarball was not found when building this disk image!
 
 EOF
 
     else
 	pushd $BUILDROOT
-	tar xzvf $TARBALLDIR/wxPythonDocs-$VERSION.tar.gz
+	tar xzvf $TARBALLDIR/wxPython-docs-$VERSION.tar.gz
 	popd
 
         # Make an app to launch viewdocs.py
@@ -441,10 +439,10 @@ EOF
     popd
 
 
-    if [ ! -e $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz ]; then
+    if [ ! -e $TARBALLDIR/wxPython-demo-$VERSION.tar.gz ]; then
 	cat > "$DMGDIR/root/Samples/Build ERROR.txt" <<EOF
 
-The wxPythonDemo tarball was not found when building this disk image!
+The wxPython-demo tarball was not found when building this disk image!
 
 EOF
 	cp "$DMGDIR/root/Samples/Build ERROR.txt" $DMGDIR/root/Apps
@@ -453,7 +451,7 @@ EOF
 
         # Copy the demo and samples to the disk image from the tarball
 	pushd $DMGDIR/root/Samples
-	tar xzvf $TARBALLDIR/wxPythonDemo-$VERSION.tar.gz
+	tar xzvf $TARBALLDIR/wxPython-demo-$VERSION.tar.gz
 	mv wxPython-$VERSION/* .
 	rm -rf wxPython-$VERSION
 	rm demo/b demo/.setup.sh
@@ -498,10 +496,10 @@ EOF
 
 
     # and then finally make a disk image containing the packages and etc.
-    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPythonOSX-$VERSION-$KIND-Py$PYVER
+    $PROGDIR/../makedmg $DMGDIR/root $DMGDIR wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER
 
-    echo Moving $DMGDIR/wxPythonOSX-$VERSION-$KIND-Py$PYVER.dmg to $DESTDIR
-    mv $DMGDIR/wxPythonOSX-$VERSION-$KIND-Py$PYVER.dmg  $DESTDIR
+    echo Moving $DMGDIR/wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER.dmg to $DESTDIR
+    mv $DMGDIR/wxPython${SHORTVER}-osx-$VERSION-$KIND-py$PYVER.dmg  $DESTDIR
 fi
 
 
