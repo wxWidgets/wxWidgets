@@ -814,7 +814,7 @@ bool wxGnomePrinter::Setup( wxWindow *parent )
 // wxGnomePrintDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGnomePrintDC, wxDCBase)
+IMPLEMENT_CLASS(wxGnomePrintDC, wxDC)
 
 wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
 {
