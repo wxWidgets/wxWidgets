@@ -202,7 +202,7 @@ public:
     void CentreOnScreen(int direction = wxBOTH );
     void CenterOnScreen(int direction = wxBOTH );
 
-    void Clear();
+    void ClearBackground();
 
     // (uses apply'ed INOUT typemap, see above)
     %name(ClientToScreenXY)void ClientToScreen(int* x, int* y);
