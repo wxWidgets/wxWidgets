@@ -125,6 +125,9 @@ public:
     // if present. Returns empty string if the tag is missing.
     // For wxHTML's internal use.
     static wxString ExtractCharsetInformation(const wxString& markup);
+    
+    // Returns entity parser object, used to substitute HTML &entities;
+    wxHtmlEntitiesParser *GetEntitiesParser() const { return m_entitiesParser; }
 
 protected:
     // DOM structure
@@ -147,9 +150,6 @@ protected:
     // ignored if no hander is found.
     // Derived class is *responsible* for filling in m_Handlers table.
     virtual void AddTag(const wxHtmlTag& tag);
-    
-    // Returns entity parser object, used to substitute HTML &entities;
-    wxHtmlEntitiesParser *GetEntitiesParser() const { return m_entitiesParser; }
 
 protected:
     // DOM tree:
