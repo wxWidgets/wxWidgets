@@ -154,6 +154,9 @@ Creates a new instance of the associated document class. If you have not supplie
 a wxClassInfo parameter to the template constructor, you will need to override this
 function to return an appropriate document instance.
 
+This function calls wxDocTemplate::InitDocument which in turns
+calls wxDocument::OnCreate.
+
 \membersection{wxDocTemplate::CreateView}
 
 \func{wxView *}{CreateView}{\param{wxDocument *}{doc}, \param{long}{ flags = 0}}
@@ -209,6 +212,13 @@ Returns the flags, as passed to the document template constructor.
 \func{wxString}{GetViewName}{\void}
 
 Returns the view type name, as passed to the document template constructor.
+
+\membersection{wxDocTemplate::InitDocument}
+
+\func{bool}{InitDocument}{\param{wxDocument* }{doc}, \param{const wxString\& }{path}, \param{long}{ flags = 0}}
+
+Initialises the document, calling wxDocument::OnCreate. This is called from
+wxDocTemplate::CreateDocument.
 
 \membersection{wxDocTemplate::IsVisible}
 

@@ -691,18 +691,31 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
     if (!m_docClassInfo)
         return (wxDocument *) NULL;
     wxDocument *doc = (wxDocument *)m_docClassInfo->CreateObject();
+    
+    if (InitDocument(doc, path, flags))
+    {
+        return doc;
+    }
+    else
+    {
+        return (wxDocument *) NULL;
+    }
+}
+
+bool wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
+{
     doc->SetFilename(path);
     doc->SetDocumentTemplate(this);
     GetDocumentManager()->AddDocument(doc);
     doc->SetCommandProcessor(doc->OnCreateCommandProcessor());
 
     if (doc->OnCreate(path, flags))
-        return doc;
+        return true;
     else
     {
         if (GetDocumentManager()->GetDocuments().Member(doc))
             doc->DeleteAllViews();
-        return (wxDocument *) NULL;
+        return false;
     }
 }
 

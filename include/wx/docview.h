@@ -254,6 +254,10 @@ public:
     virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
     virtual wxView *CreateView(wxDocument *doc, long flags = 0);
 
+    // Helper method for CreateDocument; also allows you to do your own document
+    // creation
+    virtual bool InitDocument(wxDocument* doc, const wxString& path, long flags = 0);
+
     wxString GetDefaultExtension() const { return m_defaultExt; };
     wxString GetDescription() const { return m_description; }
     wxString GetDirectory() const { return m_directory; };
