@@ -349,7 +349,6 @@ typedef int wxWindowID;
 #else
     // no stdcall under Unix nor Win16
     #define wxCALLBACK
-
 #endif // platform
 
 // callling convention for the qsort(3) callback
@@ -1800,6 +1799,8 @@ typedef WXHWND WXWidget;
             #define FAR _far
         #endif
     #endif // no FAR
+#else // Win32
+    #define FAR
 #endif // Win16/32
 
 #endif // MSW

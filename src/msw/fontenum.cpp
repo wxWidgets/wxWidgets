@@ -110,10 +110,12 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
     return TRUE;
 }
 
-#if defined(__GNUWIN32__)    
-    //BJ : FIXME? I have the second implementation in 2.95. Does it work with other versions?
-   // #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
-    #define wxFONTENUMPROC int(*)(const LOGFONTA *, const TEXTMETRICA *, long unsigned int, LPARAM)
+#if defined(__GNUWIN32__)
+    #if defined(__MINGW32__) && ((__GNUC__>2) ||((__GNUC__==2) && (__GNUC_MINOR__>=95)))
+        #define wxFONTENUMPROC int(*)(const LOGFONTA *, const TEXTMETRICA *, long unsigned int, LPARAM)
+    #else
+        #define wxFONTENUMPROC int(*)(ENUMLOGFONTEX *, NEWTEXTMETRICEX*, int, LPARAM)
+    #endif
 #else
     #define wxFONTENUMPROC FONTENUMPROC
 #endif
