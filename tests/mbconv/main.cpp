@@ -64,7 +64,7 @@ void MBConvTestCase::WC2CP1250()
         }
         else
         {
-            CPPUNIT_ASSERT( cs1250.cWC2MB(d.wc) == NULL );
+            CPPUNIT_ASSERT( (const char*)cs1250.cWC2MB(d.wc) == NULL );
         }
     }
 }
