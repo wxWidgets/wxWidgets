@@ -121,14 +121,20 @@ void wxPanel::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 {
+    // the event is propagated downwards if the event emitter was our parent
+    bool goingDown = event.GetEventObject() == GetParent();
+
     const wxWindowList& children = GetChildren();
 
     // there is not much to do if we don't have children and we're not
     // interested in "notebook page change" events here
     if ( !children.GetCount() || event.IsWindowChange() )
     {
+        // let the parent process it unless it already comes from our parent
+        // of we don't have any
         wxWindow *parent = GetParent();
-        if ( !parent || !parent->GetEventHandler()->ProcessEvent(event) )
+        if ( goingDown ||
+             !parent || !parent->GetEventHandler()->ProcessEvent(event) )
         {
             event.Skip();
         }
@@ -142,9 +148,6 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     // the node of the children list from which we should start looking for the
     // next acceptable child
     wxWindowList::Node *node, *start_node;
-
-    // the event is propagated downwards if the event emitter was our parent
-    bool goingDown = event.GetEventObject() == GetParent();
 
     // we should start from the first/last control and not from the one which
     // had focus the last time if we're propagating the event downwards because
