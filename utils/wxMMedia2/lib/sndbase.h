@@ -23,7 +23,8 @@ enum {
 typedef enum {
   wxSOUND_NOFORMAT,
   wxSOUND_PCM,
-  wxSOUND_ULAW
+  wxSOUND_ULAW,
+  wxSOUND_G72X
 } wxSoundFormatType;
 
 typedef enum {

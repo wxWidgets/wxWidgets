@@ -402,12 +402,16 @@ void MyFrame::OnIdle(wxIdleEvent &event)
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
     size_t count = m_threads.Count();
+    m_critsect.Enter();
     for ( size_t i = 0; i < count; i++ )
     {
+        wxThread *thread = m_threads[0];
+        m_threads.Remove(thread);
 	// We must always use 0 because Delete() calls OnThreadExit() and 
-        // OnThreadExit() removed 0 from the array.
-        m_threads[0]->Delete();
+        // OnThreadExit() removes 0 from the array.
+        thread->Delete();
     }
+    m_critsect.Leave();
 
     Close(TRUE);
 }
@@ -430,7 +434,4 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnThreadExit(wxThread *thread)
 {
-    wxCriticalSectionLocker enter(m_critsect);
-
-    m_threads.Remove(thread);
 }
