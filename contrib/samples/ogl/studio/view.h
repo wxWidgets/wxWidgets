@@ -132,7 +132,7 @@ class csDiagramView: public wxView
 DECLARE_EVENT_TABLE()
 
 public:
-  wxFrame*      frame;
+  wxMDIChildFrame*      frame;
   csCanvas*     canvas;
   wxList        m_selections;
 };

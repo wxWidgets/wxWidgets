@@ -288,7 +288,7 @@ wxMDIChildFrame *csApp::CreateChildFrame(wxDocument *doc, wxView *view, wxMenu**
 }
 
 // Creates a canvas. Called by OnInit as a child of the main window
-csCanvas *csApp::CreateCanvas(wxView *view, wxFrame *parent)
+csCanvas *csApp::CreateCanvas(wxView *view, wxMDIChildFrame *parent)
 {
   int width, height;
   parent->GetClientSize(&width, &height);

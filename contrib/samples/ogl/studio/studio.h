@@ -60,7 +60,7 @@ public:
     void CreateDiagramToolBar(wxFrame* parent);
 
     wxMDIChildFrame *CreateChildFrame(wxDocument *doc, wxView *view, wxMenu** editMenu);
-    csCanvas *CreateCanvas(wxView *view, wxFrame *parent);
+    csCanvas *CreateCanvas(wxView *view, wxMDIChildFrame *parent);
 
     // Fill out the project tree control
     void FillProjectTreeCtrl();
