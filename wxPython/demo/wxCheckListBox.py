@@ -33,17 +33,17 @@ class TestPanel(wxPanel):
     def OnDoPopup(self, evt):
         menu = wxMenu()
         # Make this first item bold
-        item = wxMenuItem(menu, 101, "If supported, this is &bold")
+        item = wxMenuItem(menu, wxNewId(), "If supported, this is &bold")
         df = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
         nf = wxFont(df.GetPointSize(), df.GetFamily(), df.GetStyle(), wxBOLD,
                     false, df.GetFaceName())
         item.SetFont(nf)
         menu.AppendItem(item)
 
-        menu.AppendItem(wxMenuItem(menu, 102, "Normal Item &1"))
-        menu.AppendItem(wxMenuItem(menu, 103, "Normal Item &2"))
-        menu.AppendItem(wxMenuItem(menu, 104, "Normal Item &3"))
-        menu.AppendItem(wxMenuItem(menu, 105, "Normal Item &4"))
+        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &1"))
+        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &2"))
+        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &3"))
+        menu.AppendItem(wxMenuItem(menu, wxNewId(), "Normal Item &4"))
 
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
