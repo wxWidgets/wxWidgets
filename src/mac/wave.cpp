@@ -41,6 +41,11 @@ wxWave::~wxWave()
     Free();
 }
 
+wxWave::wxWave(int size, const wxByte* data)
+  : m_sndChan(0), m_hSnd(NULL), m_waveLength(0), m_isResource(false)
+{
+    //TODO convert data
+}
 
 bool wxWave::Create(const wxString& fileName, bool isResource)
 {
