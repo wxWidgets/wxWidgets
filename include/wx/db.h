@@ -77,7 +77,11 @@
         #include "wx/isqlext.h"
         // Not available in v2.x of iODBC
         #ifndef __WXMSW__
-            typedef wxChar SQLTCHAR;
+          #if wxUSE_UNICODE
+          typedef wxChar SQLTCHAR;
+          #else
+          typedef UCHAR SQLTCHAR;
+          #endif
         #endif
     #else
         #include <sql.h>
