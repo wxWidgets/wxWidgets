@@ -36,7 +36,16 @@ wxPanelXmlHandler::wxPanelXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxPanelXmlHandler::DoCreateResource()
 { 
-    wxPanel *panel = new wxPanel(m_ParentAsWindow,
+    wxPanel *panel = wxDynamicCast(m_Instance, wxPanel);
+
+    if (panel == NULL)
+        panel = new wxPanel(m_ParentAsWindow,
+                                 GetID(),
+                                 GetPosition(), GetSize(),
+                                 GetStyle(_T("style"), 0),
+                                 GetName());
+    else
+        panel->Create(m_ParentAsWindow,
                                  GetID(),
                                  GetPosition(), GetSize(),
                                  GetStyle(_T("style"), 0),

@@ -167,10 +167,7 @@ bool wxXmlResource::LoadDialog(wxDialog *dlg, wxWindow *parent, const wxString& 
 
 wxPanel *wxXmlResource::LoadPanel(wxWindow *parent, const wxString& name)
 {
-    wxPanel *panel = new wxPanel;
-    if (!LoadPanel(panel, parent, name))
-        { delete panel; return NULL; }
-    else return panel;
+    return (wxPanel*)CreateResFromNode(FindResource(name, wxT("panel")), parent, NULL);
 }
 
 bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& name)
