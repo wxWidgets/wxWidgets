@@ -5,9 +5,13 @@
 // Modified by:
 // Created:     20/07/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux
+// Copyright:   (c) 1998 Guilhem Lavaux
+//                  2000-2005 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+//FIXME:  This class isn't really common at all, it should be moved into
+//        platform dependent files (already done for Windows and Unix)
 
 // ============================================================================
 // declarations
@@ -50,134 +54,26 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
 // implementation
 // ============================================================================
 
-#if defined(__DARWIN__)
-// ---------------------------------------------------------------------------
-// For Darwin/Mac OS X
-//   supply the sun style dlopen functions in terms of Darwin NS*
-// ---------------------------------------------------------------------------
-
-/* Porting notes:
- *   The dlopen port is a port from dl_next.xs by Anno Siegel.
- *   dl_next.xs is itself a port from dl_dlopen.xs by Paul Marquess.
- *   The method used here is just to supply the sun style dlopen etc.
- *   functions in terms of Darwin NS*.
- */
-
-#include <stdio.h>
-#include <mach-o/dyld.h>
-
-static char dl_last_error[1024];
-
-static
-void TranslateError(const char *path, int number)
-{
-    unsigned int index;
-    static char *OFIErrorStrings[] =
-    {
-        "%s(%d): Object Image Load Failure\n",
-        "%s(%d): Object Image Load Success\n",
-        "%s(%d): Not an recognisable object file\n",
-        "%s(%d): No valid architecture\n",
-        "%s(%d): Object image has an invalid format\n",
-        "%s(%d): Invalid access (permissions?)\n",
-        "%s(%d): Unknown error code from NSCreateObjectFileImageFromFile\n",
-    };
-#define NUM_OFI_ERRORS (sizeof(OFIErrorStrings) / sizeof(OFIErrorStrings[0]))
-
-    index = number;
-    if (index > NUM_OFI_ERRORS - 1) {
-        index = NUM_OFI_ERRORS - 1;
-    }
-    sprintf(dl_last_error, OFIErrorStrings[index], path, number);
-}
-
-const char *dlerror()
-{
-    return dl_last_error;
-}
-
-void *dlopen(const char *path, int WXUNUSED(mode) /* mode is ignored */)
-{
-    NSObjectFileImage ofile;
-    NSModule handle = NULL;
-
-    int dyld_result = NSCreateObjectFileImageFromFile(path, &ofile);
-    if ( dyld_result != NSObjectFileImageSuccess )
-    {
-        handle = NULL;
-    }
-    else
-    {
-        handle = NSLinkModule
-                 (
-                    ofile,
-                    path,
-                    NSLINKMODULE_OPTION_BINDNOW |
-                    NSLINKMODULE_OPTION_RETURN_ON_ERROR
-                 );
-    }
-
-    if ( !handle )
-        TranslateError(path, dyld_result);
-
-    return handle;
-}
-
-int dlclose(void *handle)
-{
-    NSUnLinkModule( handle, NSUNLINKMODULE_OPTION_NONE);
-    return 0;
-}
-
-void *dlsym(void *handle, const char *symbol)
-{
-    // as on many other systems, C symbols have prepended underscores under
-    // Darwin but unlike the normal dlopen(), NSLookupSymbolInModule() is not
-    // aware of this
-    wxCharBuffer buf(strlen(symbol) + 1);
-    char *p = buf.data();
-    p[0] = '_';
-    strcpy(p + 1, symbol);
-
-    NSSymbol nsSymbol = NSLookupSymbolInModule( handle, p );
-    return nsSymbol ? NSAddressOfSymbol(nsSymbol) : NULL;
-}
-
-#endif // defined(__DARWIN__)
-
-
 // ---------------------------------------------------------------------------
 // wxDynamicLibrary
 // ---------------------------------------------------------------------------
-
-//FIXME:  This class isn't really common at all, it should be moved into
-//        platform dependent files (already done for Windows)
 
 #if defined(__WXPM__) || defined(__EMX__)
     const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     const wxChar *wxDynamicLibrary::ms_dllext = _T("");
-#elif defined(__UNIX__)
-    #if defined(__HPUX__)
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
-    #elif defined(__DARWIN__)
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".bundle");
-    #else
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
-    #endif
 #endif
+
+// for Unix it is in src/unix/dlunix.cpp
+#ifndef __UNIX__
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
-#if defined( HAVE_DLOPEN ) && !defined(__EMX__)
-   return dlopen(0, RTLD_LAZY);
-#elif defined (HAVE_SHL_LOAD)
-   return PROG_HANDLE;
-#else
-   wxFAIL_MSG( wxT("This method is not implemented under Windows or OS/2"));
+   wxFAIL_MSG( wxT("GetProgramHandle() is not implemented under this platform"));
    return 0;
-#endif
 }
+
+#endif // __UNIX__
 
 bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 {
@@ -224,99 +120,32 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 #elif defined(__WXPM__) || defined(__EMX__)
     char    err[256] = "";
     DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
-
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-
-#if defined(__VMS) || defined(__DARWIN__)
-    m_handle = dlopen(libname.fn_str(), 0);  // The second parameter is ignored
-#else // !__VMS  && !__DARWIN__
-    int rtldFlags = 0;
-
-    if ( flags & wxDL_LAZY )
-    {
-        wxASSERT_MSG( (flags & wxDL_NOW) == 0,
-                      _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
-#ifdef RTLD_LAZY
-        rtldFlags |= RTLD_LAZY;
 #else
-        wxLogDebug(_T("wxDL_LAZY is not supported on this platform"));
-#endif
-    }
-    else if ( flags & wxDL_NOW )
-    {
-#ifdef RTLD_NOW
-        rtldFlags |= RTLD_NOW;
-#else
-        wxLogDebug(_T("wxDL_NOW is not supported on this platform"));
-#endif
-    }
-
-    if ( flags & wxDL_GLOBAL )
-    {
-#ifdef RTLD_GLOBAL
-        rtldFlags |= RTLD_GLOBAL;
-#else
-        wxLogDebug(_T("RTLD_GLOBAL is not supported on this platform."));
-#endif
-    }
-
-    m_handle = dlopen(libname.fn_str(), rtldFlags);
-#endif  // __VMS || __DARWIN__ ?
-
-#elif defined(HAVE_SHL_LOAD)
-    int shlFlags = 0;
-
-    if( flags & wxDL_LAZY )
-    {
-        wxASSERT_MSG( (flags & wxDL_NOW) == 0,
-                      _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
-        shlFlags |= BIND_DEFERRED;
-    }
-    else if( flags & wxDL_NOW )
-    {
-        shlFlags |= BIND_IMMEDIATE;
-    }
-    m_handle = shl_load(libname.fn_str(), BIND_DEFERRED, 0);
-
-#elif defined(__WINDOWS__)
-    m_handle = RawLoad(libname);
-#else
-    #error  "runtime shared lib support not implemented on this platform"
+    m_handle = RawLoad(libname, flags);
 #endif
 
     if ( m_handle == 0 )
     {
-        wxString msg(_("Failed to load shared library '%s'"));
-#if defined(HAVE_DLERROR) && !defined(__EMX__)
-
-#if wxUSE_UNICODE
-        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
-        const wxChar *err = buffer;
+#ifdef wxHAVE_DYNLIB_ERROR
+        Error();
 #else
-        const wxChar *err = dlerror();
-#endif
-
-        if( err )
-            wxLogError( msg, err );
-#else
-        wxLogSysError( msg, libname.c_str() );
+        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
 #endif
     }
 
     return IsLoaded();
 }
 
-#ifndef __WXMSW__
+// for MSW and Unix this is implemented in the platform-specific file
+//
+// TODO: move the rest to os2/dlpm.cpp and mac/dlmac.cpp!
+#if !defined(__WXMSW__) && !defined(__UNIX__)
 
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
 #if defined(__WXPM__) || defined(__EMX__)
     DosFreeModule( handle );
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-    dlclose( handle );
-#elif defined(HAVE_SHL_LOAD)
-    shl_unload( handle );
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     CloseConnection( (CFragConnectionID*) &handle );
 #else
@@ -324,7 +153,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 #endif
 }
 
-#endif // !__WXMSW__
+#endif // !(__WXMSW__ || __UNIX__)
 
 void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 {
@@ -346,24 +175,10 @@ void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 #endif
     if( FindSymbol( m_handle, symName, &symAddress, &symClass ) == noErr )
         symbol = (void *)symAddress;
-
 #elif defined(__WXPM__) || defined(__EMX__)
     DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
-
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-    symbol = dlsym( m_handle, name.fn_str() );
-
-#elif defined(HAVE_SHL_LOAD)
-    // use local variable since shl_findsym modifies the handle argument
-    // to indicate where the symbol was found (GD)
-    wxDllType the_handle = m_handle;
-    if( shl_findsym( &the_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
-        symbol = 0;
-
-#elif defined(__WINDOWS__)
-    symbol = RawGetSymbol(m_handle, name);
 #else
-#error  "runtime shared lib support not implemented"
+    symbol = RawGetSymbol(m_handle, name);
 #endif
 
     if ( success )
@@ -377,19 +192,8 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
     void *symbol = DoGetSymbol(name, success);
     if ( !symbol )
     {
-#if defined(HAVE_DLERROR) && !defined(__EMX__)
-
-#if wxUSE_UNICODE
-        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
-        const wxChar *err = buffer;
-#else
-        const wxChar *err = dlerror();
-#endif
-
-        if( err )
-        {
-            wxLogError(wxT("%s"), err);
-        }
+#ifdef wxHAVE_DYNLIB_ERROR
+        Error();
 #else
         wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
                       name.c_str());
@@ -406,13 +210,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
 /*static*/
 wxString
 wxDynamicLibrary::CanonicalizeName(const wxString& name,
-                                   wxDynamicLibraryCategory
-#ifdef __UNIX__
-                                        cat
-#else // !__UNIX__
-                                        WXUNUSED(cat)
-#endif // __UNIX__/!__UNIX__
-                                   )
+                                   wxDynamicLibraryCategory cat)
 {
     wxString nameCanonic;
 
@@ -433,7 +231,9 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
             nameCanonic = _T("lib");
             break;
     }
-#endif // __UNIX__
+#else // !__UNIX__
+    wxUnusedVar(cat);
+#endif // __UNIX__/!__UNIX__
 
     nameCanonic << name << GetDllExt();
     return nameCanonic;

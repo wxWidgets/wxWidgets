@@ -247,7 +247,8 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(PSTR name,
 // ----------------------------------------------------------------------------
 
 /* static */
-wxDllType wxDynamicLibrary::RawLoad(const wxString& libname)
+wxDllType
+wxDynamicLibrary::RawLoad(const wxString& libname, int WXUNUSED(flags))
 {
     return ::LoadLibrary(libname);
 }

@@ -49,6 +49,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_SRC" hints="files">
     src/unix/baseunix.cpp
     src/unix/dir.cpp
+    src/unix/dlunix.cpp
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
@@ -167,6 +168,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
 <set var="BASE_MAC_OSX_SRC" hints="files">
     src/unix/baseunix.cpp
+    src/unix/dlunix.cpp
     src/unix/stdpaths.cpp
 </set>
 <set var="BASE_MAC_OSX_HDR" hints="files">

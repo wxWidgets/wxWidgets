@@ -33,6 +33,10 @@
 #include "wx/msw/private.h"
 #endif
 
+#if defined(HAVE_DLERROR) && !defined(__EMX__)
+    #define wxHAVE_DYNLIB_ERROR
+#endif
+
 class WXDLLIMPEXP_BASE wxDynamicLibraryDetailsCreator;
 
 // ----------------------------------------------------------------------------
@@ -196,8 +200,8 @@ public:
     // raw function for loading dynamic libs: always behaves as if
     // wxDL_VERBATIM were specified and doesn't log error message if the
     // library couldn't be loaded but simply returns NULL
-    static wxDllType RawLoad(const wxString& libname);
-    
+    static wxDllType RawLoad(const wxString& libname, int flags = wxDL_DEFAULT);
+
     // detach the library object from its handle, i.e. prevent the object from
     // unloading the library in its dtor -- the caller is now responsible for
     // doing this
@@ -270,6 +274,11 @@ public:
 protected:
     // common part of GetSymbol() and HasSymbol()
     void *DoGetSymbol(const wxString& name, bool *success = 0) const;
+
+#ifdef wxHAVE_DYNLIB_ERROR
+    // log the error after a dlxxx() function failure
+    static void Error();
+#endif // wxHAVE_DYNLIB_ERROR
 
 
     // platform specific shared lib suffix.
