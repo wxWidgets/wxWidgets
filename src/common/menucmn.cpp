@@ -266,7 +266,10 @@ int wxMenuBase::FindItem(const wxString& text) const
             if ( rc != wxNOT_FOUND )
                 return rc;
         }
-        else if ( !item->IsSeparator() )
+
+        // we execute this code for submenus as well to alllow finding them by
+        // name just like the ordinary items
+        if ( !item->IsSeparator() )
         {
             if ( item->GetLabel() == label )
                 return item->GetId();
