@@ -60,6 +60,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
     EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
+    EVT_MENU(DIALOGS_MULTI_CHOICE,                  MyFrame::MultiChoice)
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
     EVT_MENU(DIALOGS_FILE_OPEN2,                    MyFrame::FileOpen2)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
@@ -127,6 +128,7 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_PASSWORD_ENTRY,  "&Password entry\tCtrl-P");
   file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
   file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-C");
+  file_menu->Append(DIALOGS_MULTI_CHOICE,  "M&ultiple choice\tCtrl-U");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_TIP,  "&Tip of the day\tCtrl-T");
   file_menu->AppendSeparator();
@@ -347,6 +349,30 @@ void MyFrame::SingleChoice(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, dialog.GetStringSelection(), "Got string");
         dialog2.ShowModal();
     }
+}
+
+void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
+{
+    const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
+    int n = 5;
+
+    wxArrayInt selections;
+    size_t count = wxGetMultipleChoices(selections,
+                                        "This is a small sample\n"
+                                        "A multi-choice convenience dialog",
+                                        "Please select a value",
+                                        n, (const wxString *)choices,
+                                        this);
+    if ( count )
+    {
+        wxLogMessage("You selected %u items:", count);
+        for ( size_t n = 0; n < count; n++ )
+        {
+            wxLogMessage("\t%u: %u (%s)", n, selections[n],
+                         choices[selections[n]].c_str());
+        }
+    }
+    //else: cancelled or nothing selected
 }
 
 void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )

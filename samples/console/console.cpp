@@ -35,7 +35,7 @@
 
 // what to test (in alphabetic order)?
 
-//#define TEST_ARRAYS
+#define TEST_ARRAYS
 //#define TEST_CMDLINE
 //#define TEST_DATETIME
 //#define TEST_DIR
@@ -3117,9 +3117,55 @@ static void PrintArray(const char* name, const wxArrayString& array)
     }
 }
 
-static int StringLenCompare(const wxString& first, const wxString& second)
+static void PrintArray(const char* name, const wxArrayInt& array)
+{
+    printf("Dump of the array '%s'\n", name);
+
+    size_t nCount = array.GetCount();
+    for ( size_t n = 0; n < nCount; n++ )
+    {
+        printf("\t%s[%u] = %d\n", name, n, array[n]);
+    }
+}
+
+int wxCMPFUNC_CONV StringLenCompare(const wxString& first,
+                                    const wxString& second)
 {
     return first.length() - second.length();
+}
+
+int wxCMPFUNC_CONV IntCompare(int *first,
+                              int *second)
+{
+    return *first - *second;
+}
+
+int wxCMPFUNC_CONV IntRevCompare(int *first,
+                              int *second)
+{
+    return *second - *first;
+}
+
+static void TestArrayOfInts()
+{
+    puts("*** Testing wxArrayInt ***\n");
+
+    wxArrayInt a;
+    a.Add(1);
+    a.Add(17);
+    a.Add(5);
+    a.Add(3);
+
+    puts("Initially:");
+    PrintArray("a", a);
+
+    puts("After sort:");
+    a.Sort(IntCompare);
+    PrintArray("a", a);
+
+    puts("After reverse sort:");
+    a.Sort(IntRevCompare);
+    PrintArray("a", a);
 }
 
 #include "wx/dynarray.h"
@@ -3581,6 +3627,8 @@ int main(int argc, char **argv)
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
+    if ( 0 )
+    {
     wxArrayString a1;
     a1.Add("tiger");
     a1.Add("cat");
@@ -3624,6 +3672,8 @@ int main(int argc, char **argv)
     PrintArray("a1", a1);
 
     TestArrayOfObjects();
+    }
+    TestArrayOfInts();
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR

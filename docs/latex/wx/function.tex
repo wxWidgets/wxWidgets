@@ -630,6 +630,45 @@ is valid) if the dialog was cancelled.
 
 <wx/colordlg.h>
 
+\membersection{::wxGetMultipleChoices}\label{wxgetmultiplechoices}
+
+\func{size\_t}{wxGetMultipleChoices}{\\
+ \param{wxArrayInt\& }{selections},\\
+ \param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{const wxArrayString\& }{aChoices},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE},\\
+ \param{int }{width=150}, \param{int }{height=200}}
+
+\func{size\_t}{wxGetMultipleChoices}{\\
+ \param{wxArrayInt\& }{selections},\\
+ \param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE},\\
+ \param{int }{width=150}, \param{int }{height=200}}
+
+Pops up a dialog box containing a message, OK/Cancel buttons and a
+multiple-selection listbox. The user may choose an arbitrary (including 0)
+number of items in the listbox whose indices will be returned in 
+{\it selection} array. The initial contents of this array will be used to
+select the items when the dialog is shown.
+
+You may pass the list of strings to choose from either using {\it choices} 
+which is an array of {\it n} strings for the listbox or by using a single
+{\it aChoices} parameter of type \helpref{wxArrayString}{wxarraystring}.
+
+If {\it centre} is TRUE, the message text (which may include new line
+characters) is centred; if FALSE, the message is left-justified.
+
+\wxheading{Include files}
+
+<wx/choicdlg.h>
+
 \membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
 
 \func{long}{wxGetNumberFromUser}{
@@ -715,18 +754,34 @@ is centred; if FALSE, the message is left-justified.
 
 \membersection{::wxGetSingleChoice}\label{wxgetsinglechoice}
 
-\func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
- \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+\func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{const wxArrayString\& }{aChoices},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE},\\
+ \param{int }{width=150}, \param{int }{height=200}}
 
-Pops up a dialog box containing a message, OK/Cancel buttons and a single-selection
-listbox. The user may choose an item and press OK to return a string or
-Cancel to return the empty string.
+\func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE},\\
+ \param{int }{width=150}, \param{int }{height=200}}
 
-{\it choices} is an array of {\it n} strings for the listbox.
+Pops up a dialog box containing a message, OK/Cancel buttons and a
+single-selection listbox. The user may choose an item and press OK to return a
+string or Cancel to return the empty string. Use 
+\helpref{wxGetSingleChoiceIndex}{wxgetsinglechoiceindex} if empty string is a
+valid choice and if you want to be able to detect pressing Cancel reliably.
 
-If {\it centre} is TRUE, the message text (which may include new line characters)
-is centred; if FALSE, the message is left-justified.
+You may pass the list of strings to choose from either using {\it choices} 
+which is an array of {\it n} strings for the listbox or by using a single
+{\it aChoices} parameter of type \helpref{wxArrayString}{wxarraystring}.
+
+If {\it centre} is TRUE, the message text (which may include new line
+characters) is centred; if FALSE, the message is left-justified.
 
 \wxheading{Include files}
 
@@ -734,12 +789,20 @@ is centred; if FALSE, the message is left-justified.
 
 \membersection{::wxGetSingleChoiceIndex}\label{wxgetsinglechoiceindex}
 
-\func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+\func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{const wxArrayString\& }{aChoices},\\
  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
-As {\bf wxGetSingleChoice} but returns the index representing the selected string.
-If the user pressed cancel, -1 is returned.
+\func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+ \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+As {\bf wxGetSingleChoice} but returns the index representing the selected
+string. If the user pressed cancel, -1 is returned.
 
 \wxheading{Include files}
 
@@ -747,12 +810,26 @@ If the user pressed cancel, -1 is returned.
 
 \membersection{::wxGetSingleChoiceData}\label{wxgetsinglechoicedata}
 
-\func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
- \param{const wxString\& }{client\_data[]}, \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1},\\
- \param{int}{ y = -1}, \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+\func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{const wxArrayString\& }{aChoices},\\
+ \param{const wxString\& }{client\_data[]},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+
+\func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message},\\
+ \param{const wxString\& }{caption},\\
+ \param{int}{ n}, \param{const wxString\& }{choices[]},\\
+ \param{const wxString\& }{client\_data[]},\\
+ \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
 As {\bf wxGetSingleChoice} but takes an array of client data pointers
-corresponding to the strings, and returns one of these pointers.
+corresponding to the strings, and returns one of these pointers or NULL if
+Cancel was pressed. The {\it client\_data} array must have the same number of
+elements as {\it choices} or {\it aChoices}!
 
 \wxheading{Include files}
 

@@ -61,6 +61,7 @@ public:
     void LogDialog(wxCommandEvent& event);
     void MessageBox(wxCommandEvent& event);
     void SingleChoice(wxCommandEvent& event);
+    void MultiChoice(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
     void PasswordEntry(wxCommandEvent& event);
     void NumericEntry(wxCommandEvent& event);
@@ -110,6 +111,7 @@ enum
     DIALOGS_CHOOSE_FONT_GENERIC,
     DIALOGS_MESSAGE_BOX,
     DIALOGS_SINGLE_CHOICE,
+    DIALOGS_MULTI_CHOICE,
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
     DIALOGS_FILE_OPEN,

@@ -67,6 +67,16 @@ public:
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
     // event handlers (these functions should _not_ be virtual)
+    void OnPaint(wxPaintEvent& event)
+    {
+        wxPaintDC dc(this);
+        dc.DrawRectangle(20, 20, 100, 100);
+        dc.SetPen(*wxRED_PEN);
+        dc.SetDeviceOrigin(20, 20);
+        dc.SetClippingRegion(0, 0, 100, 100);
+        dc.DrawLine(0, 0, 1000, 1000);
+    }
+
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -95,6 +105,7 @@ enum
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_PAINT(MyFrame::OnPaint)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
