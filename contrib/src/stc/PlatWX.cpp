@@ -652,6 +652,11 @@ void Window::SetTitle(const char *s) {
 //----------------------------------------------------------------------
 // Helper classes for ListBox
 
+
+// #undef  wxSTC_USE_POPUP
+// #define wxSTC_USE_POPUP 0
+
+
 // A wxListBox that gives focus back to its parent if it gets it.
 class wxSTCListBox : public wxListBox {
 public:
@@ -660,9 +665,10 @@ public:
                     0, NULL, wxLB_SINGLE | wxSIMPLE_BORDER)
         {}
 
-    void OnFocus(wxFocusEvent& event) {
-        GetParent()->SetFocus();
-        event.Skip();
+    void OnKeyDown(wxKeyEvent& event) {
+        // Give the key events to the STC.  It will then update
+        // the listbox as needed.
+        GetGrandParent()->GetEventHandler()->ProcessEvent(event);
     }
 
 private:
@@ -670,11 +676,10 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSTCListBox, wxListBox)
-    EVT_SET_FOCUS(wxSTCListBox::OnFocus)
+    EVT_KEY_DOWN(wxSTCListBox::OnKeyDown)
+    EVT_CHAR(wxSTCListBox::OnKeyDown)
 END_EVENT_TABLE()
 
-#undef wxSTC_USE_POPUP
-#define wxSTC_USE_POPUP 0  // Leave it off for this one...
 
 
 // A window to place the listbox upon.  If wxPopupWindow is supported then
@@ -695,17 +700,14 @@ public:
         : wxSTCListBoxWinBase(parent, param2) {
         lb = new wxSTCListBox(this, id);
         lb->SetCursor(wxCursor(wxCURSOR_ARROW));
+        lb->SetFocus();
     }
 
     void OnSize(wxSizeEvent& event) {
         lb->SetSize(GetSize());
     }
-    void OnFocus(wxFocusEvent& event) {
-        GetParent()->SetFocus();
-        event.Skip();
-    }
 
-        wxListBox* GetLB() { return lb; }
+    wxListBox* GetLB() { return lb; }
 
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     virtual void DoSetSize(int x, int y,
@@ -725,8 +727,7 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxSTCListBoxWin, wxSTCListBoxWinBase)
-    EVT_SIZE       (wxSTCListBoxWin::OnSize)
-    EVT_SET_FOCUS  (wxSTCListBoxWin::OnFocus)
+    EVT_SIZE(wxSTCListBoxWin::OnSize)
 END_EVENT_TABLE()
 
 

@@ -88,6 +88,11 @@ public:
         delete surfaceWindow;
     }
 
+    void OnFocus(wxFocusEvent& event) {
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     virtual void DoSetSize(int x, int y,
                            int width, int height,
@@ -122,6 +127,7 @@ private:
 
 BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
     EVT_PAINT(wxSTCCallTip::OnPaint)
+    EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
 #endif
