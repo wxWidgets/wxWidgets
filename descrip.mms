@@ -76,8 +76,6 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richedit]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	set default [--.utils.dialoged.src]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--]
 
 univ : [.include.wx]setup.h
@@ -131,8 +129,6 @@ univ : [.include.wx]setup.h
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 #	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
-#	set default [--.utils.dialoged.src]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1,__WXUNIVERSAL__=1)
 	set default [--]
 
 motif : [.include.wx]setup.h
@@ -167,8 +163,6 @@ motif : [.include.wx]setup.h
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
-	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	set default [--.utils.dialoged.src]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [--]
 
