@@ -36,6 +36,7 @@ public:
     virtual void Stop(void);
 
     inline virtual bool IsRunning(void) const { return m_ulId != 0L; }
+    inline        ULONG GetTimerId(void) const { return m_ulId; }
 
 protected:
     void Init(void);

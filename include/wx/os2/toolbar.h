@@ -200,8 +200,9 @@ private:
 
     wxTimer                         m_vToolTimer;
     wxTimer                         m_vToolExpTimer;
-    ULONG                           m_ulToolTimer;
-    ULONG                           m_ulToolExpTimer;
+    wxToolTip*                      m_pToolTip;
+    wxCoord                         m_vXMouse;
+    wxCoord                         m_vYMouse;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)

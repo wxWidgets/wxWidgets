@@ -13,37 +13,29 @@ class wxToolTip : public wxObject
 {
 public:
     // ctor & dtor
-    wxToolTip(const wxString &tip);
+    wxToolTip(const wxString &rsTip);
     virtual ~wxToolTip();
 
-    // accessors
-        // tip text
-    void SetTip(const wxString& tip);
-    const wxString& GetTip() const { return m_text; }
+    //
+    // Accessors
+    //
+    inline const wxString& GetTip(void) const { return m_sText; }
+    inline wxWindow*       GetWindow(void) const { return m_pWindow; }
 
-        // the window we're associated with
-    void SetWindow(wxWindow *win);
-    wxWindow *GetWindow() const { return m_window; }
+           void            SetTip(const wxString& rsTip);
+    inline void            SetWindow(wxWindow* pWin) { m_pWindow = pWin; }
 
-    // controlling tooltip behaviour: globally change tooltip parameters
-        // enable or disable the tooltips globally
-    static void Enable(bool flag);
-        // set the delay after which the tooltip appears
-    static void SetDelay(long milliseconds);
-
-    // implementation
-    void RelayEvent(WXMSG *msg);
+    //
+    // Implementation
+    //
+    void DisplayToolTipWindow(const wxPoint& rPos);
+    void HideToolTipWindow(void);
 
 private:
-    static WXHWND hwndTT;
-    // create the tooltip ctrl for our parent frame if it doesn't exist yet
-    // and return its window handle
-    WXHWND GetToolTipCtrl();
+    void Create(const wxString &rsTip);
 
-    // remove this tooltip from the tooltip control
-    void Remove();
-
-    wxString  m_text;           // tooltip text
-    wxWindow *m_window;         // window we're associated with
-};
+    HWND                            m_hWnd;
+    wxString                        m_sText;           // tooltip text
+    wxWindow*                       m_pWindow;         // window we're associated with
+}; // end of CLASS wxToolTip
 

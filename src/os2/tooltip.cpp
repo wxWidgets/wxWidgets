@@ -32,183 +32,109 @@
 // global variables
 // ----------------------------------------------------------------------------
 
-// the tooltip parent window
-WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
-
-// ----------------------------------------------------------------------------
-// private classes
-// ----------------------------------------------------------------------------
-
-
-// a simple wrapper around TOOLINFO Win32 structure
-class wxToolInfo // define a TOOLINFO for OS/2 here : public TOOLINFO
-{
-public:
-    wxToolInfo(wxWindow *win)
-    {
-        // initialize all members
-//        ::ZeroMemory(this, sizeof(TOOLINFO));
-
-        cbSize = sizeof(this);
-        uFlags = 0; // TTF_IDISHWND;
-        uId = (UINT)win->GetHWND();
-    }
-    size_t        cbSize;
-    ULONG         uFlags;
-    UINT          uId;
-    HWND          hwnd;
-    char*         lpszText;
-};
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// send a message to the tooltip control
-inline MRESULT SendTooltipMessage(WXHWND hwnd,
-                                  UINT msg,
-                                  MPARAM wParam,
-                                  MPARAM lParam)
-{
-//    return hwnd ? ::SendMessage((HWND)hwnd, msg, wParam, (MPARAM)lParam)
-//                : 0;
-    return (MRESULT)0;
-}
-
-// send a message to all existing tooltip controls
-static void SendTooltipMessageToAll(WXHWND hwnd,
-                                    UINT msg,
-                                    MPARAM wParam,
-                                    MPARAM lParam)
-{
-   if ( hwnd )
-     (void)SendTooltipMessage((WXHWND)hwnd, msg, wParam, lParam);
-}
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// static functions
-// ----------------------------------------------------------------------------
-
-void wxToolTip::Enable(bool flag)
-{
-//    SendTooltipMessageToAll((WXHWND)hwndTT,TTM_ACTIVATE, flag, 0);
-}
-
-void wxToolTip::SetDelay(long milliseconds)
-{
-//    SendTooltipMessageToAll((WXHWND)hwndTT,TTM_SETDELAYTIME, TTDT_INITIAL, milliseconds);
-}
-
-// ---------------------------------------------------------------------------
-// implementation helpers
-// ---------------------------------------------------------------------------
-
-// create the tooltip ctrl for our parent frame if it doesn't exist yet
-WXHWND wxToolTip::GetToolTipCtrl()
-{
-// TODO:
-/*
-    if ( !hwndTT )
-    {
-        hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
-                                (LPSTR)NULL,
-                                TTS_ALWAYSTIP,
-                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                NULL, (HMENU)NULL,
-                                wxGetInstance(),
-                                NULL);
-       if ( hwndTT )
-       {
-           SetWindowPos((HWND)hwndTT, HWND_TOPMOST, 0, 0, 0, 0,
-                        SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-       }
-
-    }
-    return (WXHWND)hwndTT;
-*/
-    return (WXHWND)0;
-}
-
-void wxToolTip::RelayEvent(WXMSG *msg)
-{
-//  (void)SendTooltipMessage(GetToolTipCtrl(), TTM_RELAYEVENT, 0, msg);
-}
-
 // ----------------------------------------------------------------------------
 // ctor & dtor
 // ----------------------------------------------------------------------------
 
-wxToolTip::wxToolTip(const wxString &tip)
-         : m_text(tip)
+wxToolTip::wxToolTip(
+  const wxString&                   rsTip
+)
+: m_sText(rsTip)
+, m_pWindow(NULL)
 {
-    m_window = NULL;
-}
+    Create(rsTip);
+} // end of wxToolTip::wxToolTip
 
 wxToolTip::~wxToolTip()
 {
-    // there is no need to Remove() this tool - it will be done automatically
-    // anyhow
-}
+    if (m_hWnd)
+        ::WinDestroyWindow(m_hWnd);
+} // end of wxToolTip::~wxToolTip
 
-// ----------------------------------------------------------------------------
-// others
-// ----------------------------------------------------------------------------
-
-void wxToolTip::Remove()
+void wxToolTip::Create(
+  const wxString&                   rsTip
+)
 {
-    // remove this tool from the tooltip control
-    if ( m_window )
-    {
-        wxToolInfo ti(m_window);
-//      (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, 0, &ti);
-    }
-}
+    ULONG                           lStyle = ES_READONLY | ES_MARGIN | ES_CENTER;
+    wxColour                        vColor;
+    LONG                            lColor;
+    char                            zFont[128];
 
-void wxToolTip::SetWindow(wxWindow *win)
+    m_hWnd = ::WinCreateWindow( HWND_DESKTOP
+                               ,WC_ENTRYFIELD
+                               ,rsTip.c_str()
+                               ,lStyle
+                               ,0, 0, 0, 0
+                               ,NULLHANDLE
+                               ,HWND_TOP
+                               ,1
+                               ,NULL
+                               ,NULL
+                              );
+    if (!m_hWnd)
+        wxLogError("Unable to create tooltip window");
+
+    vColor.InitFromName("YELLOW");
+    lColor = (LONG)vColor.GetPixel();
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    strcpy(zFont, "10.Helv");
+    ::WinSetPresParam( m_hWnd
+                      ,PP_FONTNAMESIZE
+                      ,strlen(zFont) + 1
+                      ,(PVOID)zFont
+                     );
+} // end of wxToolTip::Create
+
+void wxToolTip::DisplayToolTipWindow(
+  const wxPoint&                    rPoint
+)
 {
-    Remove();
+    LONG                            lX = rPoint.x;
+    LONG                            lY = rPoint.y - 30;
+    LONG                            lWidth = 0L;
+    LONG                            lHeight = 0L;
 
-    m_window = win;
+    lWidth = m_sText.Length() * 13;
+    lHeight = 15;
+    ::WinSetWindowPos( m_hWnd
+                      ,HWND_TOP
+                      ,lX
+                      ,lY
+                      ,lWidth
+                      ,lHeight
+                      ,SWP_MOVE | SWP_SIZE | SWP_SHOW
+                     );
+} // end of wxToolTip::DisplayToolTipWindow
 
-    if ( m_window )
-    {
-        wxToolInfo ti(m_window);
-
-        // as we store our text anyhow, it seems useless to waste system memory
-        // by asking the tooltip ctrl to remember it too - instead it will send
-        // us TTN_NEEDTEXT (via WM_NOTIFY) when it is about to be shown
-        ti.hwnd = (HWND)m_window->GetHWND();
-//        ti.lpszText = LPSTR_TEXTCALLBACK;
-        // instead of: ti.lpszText = (char *)m_text.c_str();
-
-// TODO:
-/*
-        if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
-        {
-            wxLogSysError(_("Failed to create the tooltip '%s'"),
-                          m_text.c_str());
-        }
-*/
-    }
-}
-
-void wxToolTip::SetTip(const wxString& tip)
+void wxToolTip::HideToolTipWindow()
 {
-    m_text = tip;
+    ::WinShowWindow(m_hWnd, FALSE);
+} // end of wxToolTip::HideToolTipWindow
 
-    if ( m_window )
-    {
-        // update it immediately
-        wxToolInfo ti(m_window);
-        ti.lpszText = (wxChar *)m_text.c_str();
+void wxToolTip::SetTip(
+  const wxString&                   rsTip
+)
+{
+    SWP                             vSwp;
+    LONG                            lWidth = 0L;
+    LONG                            lHeight = 0L;
 
-//      (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);
-    }
-}
+    ::WinQueryWindowPos(m_hWnd, &vSwp);
+    m_sText = rsTip;
+    lWidth = rsTip.Length() * 13;
+    lHeight = 15;
+    ::WinSetWindowPos( m_hWnd
+                      ,HWND_TOP
+                      ,vSwp.cx
+                      ,vSwp.cy
+                      ,lWidth
+                      ,lHeight
+                      ,SWP_MOVE | SWP_SIZE | SWP_SHOW
+                     );
+} // end of wxToolTip::SetTip
 
 #endif // wxUSE_TOOLTIPS

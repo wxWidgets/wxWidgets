@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\Lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1946,7 +1946,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6150,7 +6150,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -14746,25 +14746,17 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxToolTip::wxToolTip(const wxString&)
       __ct__9wxToolTipFRC8wxString
-      ;wxToolTip::SetWindow(wxWindow*)
-      SetWindow__9wxToolTipFP8wxWindow
       __vft9wxToolTip8wxObject
-      ;wxToolTip::RelayEvent(void**)
-      RelayEvent__9wxToolTipFPPv
       ;wxToolTip::~wxToolTip()
       __dt__9wxToolTipFv
-      ;wxToolTip::Enable(unsigned long)
-      Enable__9wxToolTipFUl
-      ;wxToolTip::SetDelay(long)
-      SetDelay__9wxToolTipFl
+      ;wxToolTip::HideToolTipWindow()
+      HideToolTipWindow__9wxToolTipFv
       ;wxToolTip::SetTip(const wxString&)
       SetTip__9wxToolTipFRC8wxString
-      ;wxToolTip::GetToolTipCtrl()
-      GetToolTipCtrl__9wxToolTipFv
-      ;wxToolTip::Remove()
-      Remove__9wxToolTipFv
-      ;wxToolTip::hwndTT
-      hwndTT__9wxToolTip
+      ;wxToolTip::DisplayToolTipWindow(const wxPoint&)
+      DisplayToolTipWindow__9wxToolTipFRC7wxPoint
+      ;wxToolTip::Create(const wxString&)
+      Create__9wxToolTipFRC8wxString
   ;From object file:  ..\os2\toplevel.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTopLevelWindowOS2::OS2GetStyle(long,unsigned long*) const

@@ -876,21 +876,6 @@ bool wxApp::ProcessMessage(
     wxWindow*                       pWndThis = wxFindWinFromHandle((WXHWND)hWnd);
     wxWindow*                       pWnd;
 
-#if wxUSE_TOOLTIPS
-    //
-    // We must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
-    // popup the tooltip bubbles
-    //
-    if (pWndThis && (pMsg->msg == WM_MOUSEMOVE))
-    {
-        wxToolTip*                  pToolTip = pWndThis->GetToolTip();
-        if (pToolTip)
-        {
-            pToolTip->RelayEvent(pWxmsg);
-        }
-    }
-#endif // wxUSE_TOOLTIPS
-
     //
     // Pass non-system timer messages to the wxTimerProc
     //

@@ -2330,17 +2330,6 @@ bool wxWindowOS2::OS2ProcessMessage(
     pMsg = pMsg; // just shut up the compiler
 #endif // __WXUNIVERSAL__
 
-#if wxUSE_TOOLTIPS
-    if ( m_tooltip )
-    {
-        // relay mouse move events to the tooltip control
-        QMSG*                       pQMsg = (QMSG*)pMsg;
-
-        if (pQMsg->msg == WM_MOUSEMOVE )
-            m_tooltip->RelayEvent(pMsg);
-    }
-#endif // wxUSE_TOOLTIPS
-
     return FALSE;
 } // end of wxWindowOS2::OS2ProcessMessage
 

@@ -21,6 +21,7 @@
     #include "wx/dcmemory.h"
 #endif
 
+#include "wx/tooltip.h"
 #include "wx/toolbar.h"
 
 bool                                wxToolBar::m_bInitialized = FALSE;
@@ -366,6 +367,8 @@ void wxToolBar::Init()
 
     m_defaultWidth = 16;
     m_defaultHeight = 15;
+
+    m_pToolTip = NULL;
 } // end of wxToolBar::Init
 
 wxToolBarToolBase* wxToolBar::DoAddTool(
@@ -635,6 +638,11 @@ bool wxToolBar::Create(
 
 wxToolBar::~wxToolBar()
 {
+    if (m_pToolTip)
+    {
+        delete m_pToolTip;
+        m_pToolTip = NULL;
+    }
 } // end of wxToolBar::~wxToolBar
 
 bool wxToolBar::Realize()
@@ -887,11 +895,21 @@ void wxToolBar::OnMouseEvent(
   wxMouseEvent&                     rEvent
 )
 {
+    POINTL                          vPoint;
+    HWND                            hWnd;
     wxCoord                         vX;
     wxCoord                         vY;
     HPOINTER                        hPtr = ::WinQuerySysPointer(HWND_DESKTOP, SPTR_ARROW, FALSE);
 
     ::WinSetPointer(HWND_DESKTOP, hPtr);
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+    hWnd = ::WinWindowFromPoint(HWND_DESKTOP, &vPoint, TRUE);
+    if (hWnd != (HWND)GetHwnd())
+    {
+        m_vToolTimer.Stop();
+        return;
+    }
+
     rEvent.GetPosition(&vX, &vY);
 
     wxToolBarTool*            pTool = (wxToolBarTool *)FindToolForPosition( vX
@@ -907,10 +925,14 @@ void wxToolBar::OnMouseEvent(
         ReleaseMouse();
     }
 
-    m_vToolTimer.Stop();
-    m_vToolTimer.Start(3000L, FALSE);
     if (!pTool)
     {
+        m_vToolTimer.Stop();
+        if (m_pToolTip)
+        {
+            delete m_pToolTip;
+            m_pToolTip = NULL;
+        }
         if (m_nCurrentTool > -1)
         {
             if (rEvent.LeftIsDown())
@@ -952,6 +974,13 @@ void wxToolBar::OnMouseEvent(
                          );
             m_nCurrentTool = pTool->GetId();
             OnMouseEnter(m_nCurrentTool);
+            if (!pTool->GetShortHelp().IsEmpty())
+            {
+                m_pToolTip = new wxToolTip(pTool->GetShortHelp());
+                m_vXMouse = (wxCoord)vPoint.x;
+                m_vYMouse = (wxCoord)vPoint.y;
+                m_vToolTimer.Start(3000L, TRUE);
+            }
             if (!pTool->IsToggled())
                 RaiseTool(pTool);
         }
@@ -1413,13 +1442,18 @@ void wxToolBar::OnTimer (
   wxTimerEvent&                     rEvent
 )
 {
-    if (rEvent.GetId() == (int)m_ulToolTimer)
+    if (rEvent.GetId() == (int)m_vToolTimer.GetTimerId())
     {
-        (void)wxMessageBox("wxWindows toolbar timer", "ToolTimer");
+        wxPoint                     vPos( m_vXMouse
+                                         ,m_vYMouse
+                                        );
+
+        m_pToolTip->DisplayToolTipWindow(vPos);
+        m_vToolExpTimer.Start(3000L, TRUE);
     }
-    else if (rEvent.GetId() == (int)m_ulToolExpTimer)
+    else if (rEvent.GetId() == (int)m_vToolExpTimer.GetTimerId())
     {
-        (void)wxMessageBox("wxWindows toolbar timer", "ToolExpTimer");
+        m_pToolTip->HideToolTipWindow();
     }
 } // end of wxToolBar::OnTimer
 
