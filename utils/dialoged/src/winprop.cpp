@@ -2008,6 +2008,10 @@ bool wxScrollBarPropertyInfo::InstantiateResource(wxItemResource *resource)
 /*
 * Panels
 */
+#ifdef __VMS
+// next functions may contain unreacheable code
+# pragma message disable codcauunr
+#endif
 
 wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
 {
@@ -2237,6 +2241,9 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     else
         return wxWindowPropertyInfo::SetProperty(name, property);
 }
+#ifdef __VMS
+# pragma message enable codcauunr
+#endif
 
 void wxPanelPropertyInfo::GetPropertyNames(wxStringList& names)
 {

@@ -2894,6 +2894,10 @@ bool wxListMainWindow::OnRenameAccept(size_t itemEdit, const wxString& value)
                 le.IsAllowed();
 }
 
+#ifdef __VMS__ // Ignore unreacheable code
+# pragma message disable initnotreach
+#endif
+
 void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 {
     // wxMSW seems not to notify the program about
@@ -2917,6 +2921,9 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
     GetEventHandler()->ProcessEvent( le );
 }
+#ifdef __VMS__
+# pragma message enable initnotreach
+#endif
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
