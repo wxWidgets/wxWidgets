@@ -113,6 +113,7 @@ public: \
     void OnFocus(wxFocusEvent& event); \
     virtual void OnChildFocus(wxChildFocusEvent& event); \
     virtual void SetFocus(); \
+    virtual void SetFocusIgnoringChildren(); \
     virtual void RemoveChild(wxWindowBase *child); \
     virtual wxWindow *GetDefaultItem() const; \
     virtual wxWindow *SetDefaultItem(wxWindow *child); \
@@ -160,6 +161,11 @@ void classname::RemoveChild(wxWindowBase *child) \
 void classname::SetFocus() \
 { \
     if ( !m_container.DoSetFocus() ) \
+        wxWindow::SetFocus(); \
+} \
+ \
+void classname::SetFocusIgnoringChildren() \
+{ \
         wxWindow::SetFocus(); \
 } \
  \

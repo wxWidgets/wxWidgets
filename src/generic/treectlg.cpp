@@ -415,7 +415,7 @@ void wxTreeTextCtrl::Finish()
 
         m_finished = true;
 
-        m_owner->SetFocus(); // This doesn't work. TODO.
+        m_owner->SetFocusIgnoringChildren();
     }
 }
 

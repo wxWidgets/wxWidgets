@@ -128,6 +128,7 @@ propagate the notification to child windows and controls.
 
 \helpref{wxSysColourChangedEvent}{wxsyscolourchangedevent}
 
+
 \membersection{wxPanel::SetDefaultItem}\label{wxpanelsetdefaultitem}
 
 \func{void}{SetDefaultItem}{\param{wxButton }{*btn}}
@@ -137,4 +138,34 @@ Changes the default button for the panel.
 \wxheading{See also}
 
 \helpref{GetDefaultItem}{wxpanelgetdefaultitem}
+
+
+\membersection{wxPanel::SetFocus}\label{wxpanelsetfocus}
+
+\func{virtual void}{SetFocus}{\void}
+
+Overrides \helpref{wxWindow::SetFocus}{wxwindowsetfocus}. This method
+uses the (undocumented) mix-in class wxControlContainer which manages
+the focus and TAB logic for controls which usually have child controls.
+In practice, if you call this method and the control has at least
+one child window, the focus will be given to the child window.
+
+\wxheading{See also}
+
+\helpref{wxFocusEvent}{wxfocusevent}
+\helpref{wxWindow::SetFocus}{wxwindowsetfocus}
+
+
+\membersection{wxPanel::SetFocusIgnoringChildren}\label{wxpanelsetfocusignoringchildren}
+
+\func{virtual void}{SetFocusIgnoringChildren}{\void}
+
+In contrast to \helpref{wxPanel::SetFocus}{wxpanelsetfocus} (see above)
+this will set the focus to the panel even of there are child windows
+in the panel. This is only rarely needed.
+
+\wxheading{See also}
+
+\helpref{wxFocusEvent}{wxfocusevent}
+\helpref{wxPanel::SetFocus}{wxpanelsetfocus}
 

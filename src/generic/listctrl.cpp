@@ -606,8 +606,6 @@ public:
     void Freeze();
     void Thaw();
 
-    void SetFocus();
-
     void OnRenameTimer();
     bool OnRenameAccept(size_t itemEdit, const wxString& value);
     void OnRenameCancelled(size_t itemEdit);
@@ -2047,7 +2045,7 @@ void wxListTextCtrl::Finish()
 
         m_finished = true;
 
-        m_owner->SetFocus();
+        m_owner->SetFocusIgnoringChildren();
     }
 }
 
@@ -3298,26 +3296,6 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
 // ----------------------------------------------------------------------------
 // focus handling
 // ----------------------------------------------------------------------------
-
-void wxListMainWindow::SetFocus()
-{
-    // VS: wxListMainWindow derives from wxPanel (via wxScrolledWindow) and wxPanel
-    //     overrides SetFocus in such way that it does never change focus from
-    //     panel's child to the panel itself. Unfortunately, we must be able to change
-    //     focus to the panel from wxListTextCtrl because the text control should
-    //     disappear when the user clicks outside it.
-
-    wxWindow *oldFocus = DoFindFocus();
-
-    if ( oldFocus && oldFocus->GetParent() == this )
-    {
-        wxWindow::SetFocus();
-    }
-    else
-    {
-        wxScrolledWindow::SetFocus();
-    }
-}
 
 void wxListMainWindow::OnSetFocus( wxFocusEvent &WXUNUSED(event) )
 {
