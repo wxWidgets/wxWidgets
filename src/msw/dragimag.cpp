@@ -6,8 +6,16 @@
 // Created:     08/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
 #pragma implementation "dragimag.h"
@@ -39,11 +47,25 @@
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) || defined(__TWIN32__))
 #include <commctrl.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxDragImage, wxObject)
+
+#define GetHimageList() ((HIMAGELIST) m_hImageList)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDragImage ctors/dtor
+// ----------------------------------------------------------------------------
 
 wxDragImage::wxDragImage()
 {
@@ -52,9 +74,8 @@ wxDragImage::wxDragImage()
 
 wxDragImage::~wxDragImage()
 {
-	if ( m_hImageList )
-		ImageList_Destroy((HIMAGELIST) m_hImageList);
-	m_hImageList = 0;
+    if ( m_hImageList )
+        ImageList_Destroy(GetHimageList());
 }
 
 
@@ -68,24 +89,24 @@ wxDragImage::~wxDragImage()
 // Create a drag image from a bitmap and optional cursor
 bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wxPoint& hotspot)
 {
-	if ( m_hImageList )
-		ImageList_Destroy((HIMAGELIST) m_hImageList);
-	m_hImageList = 0;
+    if ( m_hImageList )
+        ImageList_Destroy(GetHimageList());
+    m_hImageList = 0;
 
-	UINT flags = 0;
+    UINT flags = 0;
     bool mask = TRUE; // ?
-	if ( mask )
-		flags |= ILC_MASK;
+    if ( mask )
+        flags |= ILC_MASK;
 
-	m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
+    m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
 
-	HBITMAP hBitmap1 = (HBITMAP) image.GetHBITMAP();
-	HBITMAP hBitmap2 = 0;
-	if ( image.GetMask() )
-	    hBitmap2 = (HBITMAP) image.GetMask()->GetMaskBitmap();
+    HBITMAP hBitmap1 = (HBITMAP) image.GetHBITMAP();
+    HBITMAP hBitmap2 = 0;
+    if ( image.GetMask() )
+        hBitmap2 = (HBITMAP) image.GetMask()->GetMaskBitmap();
 
-    int index = ImageList_Add((HIMAGELIST) m_hImageList, hBitmap1, hBitmap2);
-	if ( index == -1 )
+    int index = ImageList_Add(GetHimageList(), hBitmap1, hBitmap2);
+    if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
     }
@@ -95,25 +116,25 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wx
 
     return (index != -1) ;
 }
-    
+
 // Create a drag image from an icon and optional cursor
 bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPoint& hotspot)
 {
-	if ( m_hImageList )
-		ImageList_Destroy((HIMAGELIST) m_hImageList);
-	m_hImageList = 0;
+    if ( m_hImageList )
+        ImageList_Destroy(GetHimageList());
+    m_hImageList = 0;
 
-	UINT flags = 0;
+    UINT flags = 0;
     bool mask = TRUE; // ?
-	if ( mask )
-		flags |= ILC_MASK;
+    if ( mask )
+        flags |= ILC_MASK;
 
-	m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
+    m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
 
-	HICON hIcon = (HICON) image.GetHICON();
+    HICON hIcon = (HICON) image.GetHICON();
 
-    int index = ImageList_AddIcon((HIMAGELIST) m_hImageList, hIcon);
-	if ( index == -1 )
+    int index = ImageList_AddIcon(GetHimageList(), hIcon);
+    if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
     }
@@ -123,7 +144,7 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPo
 
     return (index != -1) ;
 }
-    
+
 // Create a drag image from a string and optional cursor
 bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPoint& hotspot)
 {
@@ -151,8 +172,8 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPo
 // Create a drag image for the given tree control item
 bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
 {
-	if ( m_hImageList )
-		ImageList_Destroy((HIMAGELIST) m_hImageList);
+    if ( m_hImageList )
+        ImageList_Destroy(GetHimageList());
     m_hImageList = (WXHIMAGELIST) TreeView_CreateDragImage((HWND) treeCtrl.GetHWND(), (HTREEITEM) (WXHTREEITEM) id);
     return TRUE;
 }
@@ -160,8 +181,8 @@ bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
 // Create a drag image for the given list control item
 bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
 {
-	if ( m_hImageList )
-		ImageList_Destroy((HIMAGELIST) m_hImageList);
+    if ( m_hImageList )
+        ImageList_Destroy(GetHimageList());
     POINT pt;
     pt.x = 0; pt.y = 0;
     m_hImageList = (WXHIMAGELIST) ListView_CreateDragImage((HWND) listCtrl.GetHWND(), id, & pt);
@@ -169,35 +190,38 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
 }
 
 // Begin drag
-bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* WXUNUSED(window))
+bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window)
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in BeginDrag."));
 
-    bool ret = (ImageList_BeginDrag((HIMAGELIST) m_hImageList, 0, hotspot.x, hotspot.y) != 0);
-
-    wxASSERT_MSG( (ret), wxT("BeginDrag failed."));
+    bool ret = (ImageList_BeginDrag(GetHimageList(), 0, hotspot.x, hotspot.y) != 0);
 
     if (!ret)
+    {
+        wxFAIL_MSG( _T("BeginDrag failed.") );
+
         return FALSE;
+    }
 
     if (m_cursor.Ok())
     {
         // First add the cursor to the image list
-        int cursorIndex = ImageList_AddIcon((HIMAGELIST) m_hImageList, (HICON) m_cursor.GetHCURSOR());
+        int cursorIndex = ImageList_AddIcon(GetHimageList(), (HICON) m_cursor.GetHCURSOR());
 
         wxASSERT_MSG( (cursorIndex != -1), wxT("ImageList_AddIcon failed in BeginDrag."));
 
         if (cursorIndex != -1)
         {
-            ImageList_SetDragCursorImage((HIMAGELIST) m_hImageList, cursorIndex, m_hotspot.x, m_hotspot.y);
+            ImageList_SetDragCursorImage(GetHimageList(), cursorIndex, m_hotspot.x, m_hotspot.y);
         }
     }
 
     ::ShowCursor(FALSE);
+    ::SetCapture(GetHwndOf(window));
 
     return TRUE;
 }
-    
+
 // End drag
 bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
 {
@@ -205,11 +229,16 @@ bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
 
     ImageList_EndDrag();
 
+    if ( !::ReleaseCapture() )
+    {
+        wxLogLastError("ReleaseCapture");
+    }
+
     ::ShowCursor(TRUE);
 
     return TRUE;
 }
-    
+
 // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
 // is non-NULL, or in screen coordinates if NULL.
 bool wxDragImage::Move(const wxPoint& pt, wxWindow* window)

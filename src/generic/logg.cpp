@@ -210,48 +210,62 @@ void wxLogGui::Flush()
         style = wxICON_INFORMATION;
     }
 
-#if wxUSE_LOG_DIALOG
-    wxLogDialog dlg(wxTheApp->GetTopWindow(),
-                    m_aMessages, m_aSeverity, m_aTimes,
-                    title, style);
+    // this is the best we can do here
+    wxWindow *parent = wxTheApp->GetTopWindow();
 
-    // clear the message list before showing the dialog because while it's
-    // shown some new messages may appear
-    Clear();
+    size_t nMsgCount = m_aMessages.Count();
 
-    (void)dlg.ShowModal();
-
-#else // !wxUSE_LOG_DIALOG
-    // concatenate all strings (but not too many to not overfill the msg box)
     wxString str;
-    size_t nLines = 0,
-    nMsgCount = m_aMessages.Count();
+    if ( nMsgCount == 1 )
+    {
+        str = m_aMessages[0];
+    }
+    else // more than one message
+    {
+#if wxUSE_LOG_DIALOG
+        wxLogDialog dlg(parent,
+                        m_aMessages, m_aSeverity, m_aTimes,
+                        title, style);
 
-    // start from the most recent message
-    for ( size_t n = nMsgCount; n > 0; n-- ) {
-        // for Windows strings longer than this value are wrapped (NT 4.0)
-        const size_t nMsgLineWidth = 156;
+        // clear the message list before showing the dialog because while it's
+        // shown some new messages may appear
+        Clear();
 
-        nLines += (m_aMessages[n - 1].Len() + nMsgLineWidth - 1) / nMsgLineWidth;
+        (void)dlg.ShowModal();
+#else // !wxUSE_LOG_DIALOG
+        // concatenate all strings (but not too many to not overfill the msg box)
+        size_t nLines = 0;
 
-        if ( nLines > 25 )  // don't put too many lines in message box
-            break;
+        // start from the most recent message
+        for ( size_t n = nMsgCount; n > 0; n-- ) {
+            // for Windows strings longer than this value are wrapped (NT 4.0)
+            const size_t nMsgLineWidth = 156;
 
-        str << m_aMessages[n - 1] << wxT("\n");
+            nLines += (m_aMessages[n - 1].Len() + nMsgLineWidth - 1) / nMsgLineWidth;
+
+            if ( nLines > 25 )  // don't put too many lines in message box
+                break;
+
+            str << m_aMessages[n - 1] << wxT("\n");
+        }
+#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
     }
 
-    wxMessageBox(str, title, wxOK | style);
+    // this catches both cases of 1 message with wxUSE_LOG_DIALOG and any
+    // situation without it
+    if ( !!str )
+    {
+        wxMessageBox(str, title, wxOK | style, parent);
 
-    // no undisplayed messages whatsoever
-    Clear();
-#endif // wxUSE_LOG_DIALOG/!wxUSE_LOG_DIALOG
+        // no undisplayed messages whatsoever
+        Clear();
+    }
 
     // do it here again
     m_bHasMessages = FALSE;
 }
 
-// the default behaviour is to discard all informational messages if there
-// are any errors/warnings.
+// log all kinds of messages
 void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 {
     switch ( level ) {
@@ -696,12 +710,15 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
     btnOk->SetFocus();
 
+    // this can't happen any more as we don't use this dialog in this case
+#if 0
     if ( count == 1 )
     {
         // no details... it's easier to disable a button than to change the
         // dialog layout depending on whether we have details or not
         m_btnDetails->Disable();
     }
+#endif // 0
 
     Centre();
 }

@@ -34,6 +34,7 @@ typedef long wxDataType;
 
 // fwd decl
 class  WXDLLEXPORT wxImageList;
+class  WXDLLEXPORT wxDragImage;
 struct WXDLLEXPORT wxTreeViewItem;
 
 // a callback function used for sorting tree items, it should return -1 if the
@@ -439,6 +440,7 @@ public:
 
     // implementation
     // --------------
+    virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
@@ -497,6 +499,9 @@ private:
 
     // TRUE if the hash above is not empty
     bool m_hasAnyAttr;
+
+    // used for dragging
+    wxDragImage *m_dragImage;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
 };

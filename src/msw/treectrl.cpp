@@ -27,7 +27,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/window.h"
 #include "wx/msw/private.h"
 
 // Mingw32 is a bit mental even though this is done in winundef
@@ -46,6 +45,8 @@
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
 #include "wx/settings.h"
+
+#include "wx/msw/dragimag.h"
 
 #ifdef __GNUWIN32_OLD__
     #include "wx/msw/gnuwin32/extra.h"
@@ -237,10 +238,23 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
+{
+    TVHITTESTINFO tvht;
+    tvht.pt.x = x;
+    tvht.pt.y = y;
+
+    return TreeView_HitTest(hwndTV, &tvht);
+}
+
+// ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
 
 // ----------------------------------------------------------------------------
 // variables
@@ -298,6 +312,7 @@ void wxTreeCtrl::Init()
     m_imageListState = NULL;
     m_textCtrl = NULL;
     m_hasAnyAttr = FALSE;
+    m_dragImage = NULL;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent,
@@ -1462,6 +1477,62 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id)
     return TRUE;
 }
 
+// we hook into WndProc to process WM_MOUSEMOVE/WM_BUTTONUP messages - as we
+// only do it during dragging, minimize wxWin overhead (this is important for
+// WM_MOUSEMOVE as they're a lot of them) by catching Windows messages directly
+// instead of passing by wxWin events
+long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( m_dragImage )
+    {
+        switch ( nMsg )
+        {
+            case WM_MOUSEMOVE:
+                {
+                    int x = GET_X_LPARAM(lParam),
+                        y = GET_Y_LPARAM(lParam);
+
+                    m_dragImage->Move(wxPoint(x, y), this);
+
+                    HTREEITEM htiTarget = GetItemFromPoint(GetHwnd(), x, y);
+                    if ( htiTarget )
+                    {
+                        // highlight the item as target (hiding drag image is
+                        // necessary - otherwise the display will be corrupted)
+                        m_dragImage->Hide(this);
+                        TreeView_SelectDropTarget(GetHwnd(), htiTarget);
+                        m_dragImage->Show(this);
+                    }
+                }
+                break;
+
+            case WM_LBUTTONUP:
+            case WM_RBUTTONUP:
+                {
+                    m_dragImage->EndDrag(this);
+                    delete m_dragImage;
+                    m_dragImage = NULL;
+
+                    // generate the drag end event
+                    wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, m_windowId);
+
+                    int x = GET_X_LPARAM(lParam),
+                        y = GET_Y_LPARAM(lParam);
+
+                    event.m_item
+                        = (WXHTREEITEM)GetItemFromPoint(GetHwnd(), x, y);
+                    event.m_pointDrag = wxPoint(x, y);
+                    event.SetEventObject(this);
+
+                    (void)GetEventHandler()->ProcessEvent(event);
+                }
+                break;
+        }
+    }
+
+    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
 // process WM_NOTIFY Windows message
 bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
@@ -1504,6 +1575,11 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 event.m_item = (WXHTREEITEM) tv->itemNew.hItem;
                 event.m_pointDrag = wxPoint(tv->ptDrag.x, tv->ptDrag.y);
+
+                // don't allow dragging by default: the user code must
+                // explicitly say that it wants to allow it to avoid breaking
+                // the old apps
+                event.Veto();
             }
             break;
 
@@ -1736,6 +1812,20 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // post processing
     switch ( hdr->code )
     {
+        case TVN_BEGINDRAG:
+        case TVN_BEGINRDRAG:
+            if ( event.IsAllowed() )
+            {
+                // normally this is impossible because the m_dragImage is
+                // deleted once the drag operation is over
+                wxASSERT_MSG( !m_dragImage, _T("starting to drag once again?") );
+
+                m_dragImage = new wxDragImage(*this, event.m_item);
+                m_dragImage->BeginDrag(wxPoint(0, 0), this);
+                m_dragImage->Show(this);
+            }
+            break;
+
         case TVN_DELETEITEM:
             {
                 // NB: we might process this message using wxWindows event

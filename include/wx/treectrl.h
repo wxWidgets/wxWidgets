@@ -149,7 +149,7 @@ public:
     const wxString& GetLabel() const { return m_label; }
 
 private:
-    // TODO we could save some space by using union here
+    // we could probably save some space by using union here
     int           m_code;
     wxTreeItemId  m_item,
                   m_itemOld;
@@ -166,8 +166,15 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 // ----------------------------------------------------------------------------
 
 // GetItem() returns the item being dragged, GetPoint() the mouse coords
+//
+// if you call event.Allow(), the drag operation will start and a
+// EVT_TREE_END_DRAG event will be sent when the drag is over.
 #define EVT_TREE_BEGIN_DRAG(id, fn) { wxEVT_COMMAND_TREE_BEGIN_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 #define EVT_TREE_BEGIN_RDRAG(id, fn) { wxEVT_COMMAND_TREE_BEGIN_RDRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
+
+// GetItem() is the item on which the drop occured (if any) and GetPoint() the
+// current mouse coords
+#define EVT_TREE_END_DRAG(id, fn) { wxEVT_COMMAND_TREE_END_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, (wxObject *) NULL },
 
 // GetItem() returns the itme whose label is being edited, GetLabel() returns
 // the current item label for BEGIN and the would be new one for END.

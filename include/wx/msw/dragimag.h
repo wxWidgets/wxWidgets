@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dragimag.h
+// Name:        wx/msw/dragimag.h
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
 // Author:      Julian Smart
@@ -7,7 +7,7 @@
 // Created:     08/04/99
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DRAGIMAG_H_
@@ -100,9 +100,8 @@
 
 class WXDLLEXPORT wxDragImage: public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxDragImage)
 public:
-    
+
     // Ctors & dtor
     ////////////////////////////////////////////////////////////////////////////
 
@@ -133,19 +132,19 @@ public:
         Create(listCtrl, id);
     }
     ~wxDragImage();
-    
+
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
-    
+
     // Operations
     ////////////////////////////////////////////////////////////////////////////
-    
+
     // Create a drag image from a bitmap and optional cursor
     bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
-    
+
     // Create a drag image from an icon and optional cursor
     bool Create(const wxIcon& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
-    
+
     // Create a drag image from a string and optional cursor
     bool Create(const wxString& str, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
 
@@ -158,10 +157,10 @@ public:
     // Begin drag. hotspot is the location of the drag position relative to the upper-left
     // corner of the image.
     bool BeginDrag(const wxPoint& hotspot, wxWindow* window);
-    
+
     // End drag
     bool EndDrag(wxWindow* window);
-    
+
     // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
     // is non-NULL, or in screen coordinates if NULL.
     bool Move(const wxPoint& pt, wxWindow* window);
@@ -171,18 +170,21 @@ public:
 
     // Hide the image
     bool Hide(wxWindow* window);
-    
+
     // Implementation
     ////////////////////////////////////////////////////////////////////////////
-    
+
     // Returns the native image list handle
-    inline WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
-    
+    WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
+
 protected:
     WXHIMAGELIST    m_hImageList;
     wxCursor        m_cursor;
     wxPoint         m_hotspot;
     wxPoint         m_position;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDragImage)
 };
 
 #endif

@@ -5,7 +5,7 @@
 //              source such as opening and closing the data source.
 // Author:      Doug Card
 // Modified by: George Tasker
-// Mods:        Dec, 1998: 
+// Mods:        Dec, 1998:
 //                -Added support for SQL statement logging and database cataloging
 // Mods:        April, 1999
 //                -Added QUERY_ONLY mode support to reduce default number of cursors
@@ -111,7 +111,7 @@ char *SQLLOGfn         = (char*) SQL_LOG_FILENAME;
 // database object is closed.  This is necessary if the database
 // connection fails so the calling application can show the operator
 // why the connection failed.  Note: as each wxDB object is closed, it
-// will overwrite the errors of the previously destroyed wxDB object in 
+// will overwrite the errors of the previously destroyed wxDB object in
 // this variable.
 char DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
@@ -225,7 +225,7 @@ wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
     fpSqlLog      = 0;            // Sql Log file pointer
     sqlLogState   = sqlLogOFF;    // By default, logging is turned off
     nTables       = 0;
-    
+
     wxStrcpy(sqlState,"");
     wxStrcpy(errorMsg,"");
     nativeError = cbErrorMsg = 0;
@@ -256,10 +256,10 @@ wxDB::wxDB(HENV &aHenv, bool FwdOnlyCursors)
     typeInfDate.Precision     = 0;
     typeInfDate.CaseSensitive = 0;
     typeInfDate.MaximumScale  = 0;
-    
+
     // Error reporting is turned OFF by default
     silent = TRUE;
-    
+
     // Copy the HENV into the db class
     henv = aHenv;
     fwdOnlyCursors = FwdOnlyCursors;
@@ -454,12 +454,12 @@ bool wxDB::setConnectionOptions(void)
     // Display the connection options to verify them
 #ifdef DBDEBUG_CONSOLE
     long l;
-    cout << ">>>>> CONNECTION OPTIONS <<<<<<" << endl;
-    
+    cout << "****** CONNECTION OPTIONS ******" << endl;
+
     if (SQLGetConnectOption(hdbc, SQL_AUTOCOMMIT, &l) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
     cout << "AUTOCOMMIT: " << (l == SQL_AUTOCOMMIT_OFF ? "OFF" : "ON") << endl;
-    
+
     if (SQLGetConnectOption(hdbc, SQL_ODBC_CURSORS, &l) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
     cout << "ODBC CURSORS: ";
@@ -476,7 +476,7 @@ bool wxDB::setConnectionOptions(void)
             break;
         }
         cout << endl;
-    
+
     if (SQLGetConnectOption(hdbc, SQL_OPT_TRACE, &l) != SQL_SUCCESS)
         return(DispAllErrors(henv, hdbc));
     cout << "TRACING: " << (l == SQL_OPT_TRACE_OFF ? "OFF" : "ON") << endl;
@@ -593,7 +593,7 @@ bool wxDB::getDbInfo(void)
         return(DispAllErrors(henv, hdbc));
 
 #ifdef DBDEBUG_CONSOLE
-    cout << ">>>>> DATA SOURCE INFORMATION <<<<<" << endl;
+    cout << "***** DATA SOURCE INFORMATION *****" << endl;
     cout << "SERVER Name: " << dbInf.serverName << endl;
     cout << "DBMS Name: " << dbInf.dbmsName << "; DBMS Version: " << dbInf.dbmsVer << endl;
     cout << "ODBC Version: " << dbInf.odbcVer << "; Driver Version: " << dbInf.driverVer << endl;
@@ -1218,7 +1218,7 @@ int wxDB::TranslateSqlState(const char *SQLState)
 
 }  // wxDB::TranslateSqlState()
 
-    
+
 /**********  wxDB::Grant() **********/
 bool wxDB::Grant(int privileges, const char *tableName, const char *userList)
 {
@@ -1286,7 +1286,7 @@ bool wxDB::CreateView(const char *viewName, const char *colList, const char *pSq
     // Build the create view statement
     sqlStmt  = "CREATE VIEW ";
     sqlStmt += viewName;
-    
+
     if (wxStrlen(colList))
     {
         sqlStmt += " (";
@@ -1560,7 +1560,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
  *        userID != ""    ... UserID set equal to 'userID'
  *
  * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance 
+ *       by this function.  This function should use its own wxDB instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -1588,7 +1588,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -1617,7 +1617,7 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
         for (tbl = 0; tableName[tbl]; tbl++)
         {
             TableName = tableName[tbl];
-            // Oracle table names are uppercase only, so force 
+            // Oracle table names are uppercase only, so force
             // the name to uppercase just in case programmer forgot to do this
             if (Dbms() == dbmsORACLE)
                 TableName = TableName.Upper();
@@ -1720,7 +1720,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
  *        userID != ""    ... UserID set equal to 'userID'
  *
  * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance 
+ *       by this function.  This function should use its own wxDB instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -1748,7 +1748,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -1774,7 +1774,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
         }
 
         TableName = tableName;
-        // Oracle table names are uppercase only, so force 
+        // Oracle table names are uppercase only, so force
         // the name to uppercase just in case programmer forgot to do this
         if (Dbms() == dbmsORACLE)
             TableName = TableName.Upper();
@@ -1829,7 +1829,7 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
                     GetData( 6, SQL_C_CHAR,   (UCHAR*)  colInf[colNo].typeName,     128+1,                    &cb);
                     GetData( 7, SQL_C_SLONG,  (UCHAR*) &colInf[colNo].columnSize,   0,                        &cb);
                     // BJO 991214 : SQL_C_SSHORT instead of SQL_C_SLONG, otherwise fails on Sparc (probably all 64 bit architectures)
-                    GetData( 8, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].bufferLength, 0,                        &cb);    
+                    GetData( 8, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].bufferLength, 0,                        &cb);
                     GetData( 9, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].decimalDigits,0,                        &cb);
                     GetData(10, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].numPrecRadix, 0,                        &cb);
                     GetData(11, SQL_C_SSHORT, (UCHAR*) &colInf[colNo].nullable,     0,                        &cb);
@@ -1892,7 +1892,7 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
  *        userID != ""    ... UserID set equal to 'userID'
  *
  * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance 
+ *       by this function.  This function should use its own wxDB instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -1917,7 +1917,7 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -1926,7 +1926,7 @@ int wxDB::GetColumnCount(char *tableName, const char *userID)
         // Loop through each table name
         {
             TableName = tableName;
-            // Oracle table names are uppercase only, so force 
+            // Oracle table names are uppercase only, so force
             // the name to uppercase just in case programmer forgot to do this
             if (Dbms() == dbmsORACLE)
                 TableName = TableName.Upper();
@@ -1999,7 +1999,7 @@ wxDbInf *wxDB::GetCatalog(char *userID)
  *        userID != ""    ... UserID set equal to 'userID'
  *
  * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance 
+ *       by this function.  This function should use its own wxDB instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -2027,7 +2027,7 @@ wxDbInf *wxDB::GetCatalog(char *userID)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -2132,7 +2132,7 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
  *        userID != ""    ... UserID set equal to 'userID'
  *
  * NOTE: ALL column bindings associated with this wxDB instance are unbound
- *       by this function.  This function should use its own wxDB instance 
+ *       by this function.  This function should use its own wxDB instance
  *       to avoid undesired unbinding of columns.
  */
 {
@@ -2169,7 +2169,7 @@ bool wxDB::Catalog(const char *userID, const char *fileName)
     if (Dbms() == dbmsDBASE)
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
@@ -2295,13 +2295,13 @@ bool wxDB::TableExists(const char *tableName, const char *userID, const char *ta
     else
         UserID = "";
 
-    // Oracle user names may only be in uppercase, so force 
+    // Oracle user names may only be in uppercase, so force
     // the name to uppercase
     if (Dbms() == dbmsORACLE)
         UserID = UserID.Upper();
 
     TableName = tableName;
-    // Oracle table names are uppercase only, so force 
+    // Oracle table names are uppercase only, so force
     // the name to uppercase just in case programmer forgot to do this
     if (Dbms() == dbmsORACLE)
         TableName = TableName.Upper();
@@ -2434,7 +2434,7 @@ DBMS wxDB::Dbms(void)
  *        - Cannot support selecting for update [::CanSelectForUpdate()].  Always returns FALSE
  *
  * POSTGRES
- *        - Does not support the keywords 'ASC' or 'DESC' as of release v6.5.0 
+ *        - Does not support the keywords 'ASC' or 'DESC' as of release v6.5.0
  *
  *
  */
@@ -2444,7 +2444,7 @@ DBMS wxDB::Dbms(void)
     wxStrncpy(baseName,dbInf.dbmsName,25);
     if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
         return(dbmsSYBASE_ASA);
-    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server 
+    if (!wxStricmp(dbInf.dbmsName,"SQL Server"))  // Sybase Adaptive Server
         return(dbmsSYBASE_ASE);
     if (!wxStricmp(dbInf.dbmsName,"Microsoft SQL Server"))
         return(dbmsMS_SQL_SERVER);
@@ -2559,7 +2559,7 @@ bool WXDLLEXPORT FreeDbConnection(wxDB *pDb)
 void WXDLLEXPORT CloseDbConnections(void)
 {
     DbList *pList, *pNext;
-    
+
     // Traverse the linked list closing database connections and freeing memory as I go.
     for (pList = PtrBegDbList; pList; pList = pNext)
     {

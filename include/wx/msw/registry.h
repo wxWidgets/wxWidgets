@@ -2,7 +2,7 @@
 // Name:        msw/registry.h
 // Purpose:     Registry classes and functions
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     03.04.198
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -56,7 +56,8 @@ public:
                                      // (with environment variable references)
     Type_Binary,                     // Free form binary
     Type_Dword,                      // 32-bit number
-    Type_Dword_little_endian,        // 32-bit number (same as Type_DWORD)
+    Type_Dword_little_endian         // 32-bit number
+        = Type_Dword,                // (same as Type_DWORD)
     Type_Dword_big_endian,           // 32-bit number
     Type_Link,                       // Symbolic Link (unicode)
     Type_Multi_String,               // Multiple Unicode strings
@@ -69,15 +70,17 @@ public:
   // predefined registry keys
   enum StdKey
   {
-    HKCR     // classes root
+    HKCR        // classes root
 #ifdef  __WIN32__
-    , HKCU,     // current user
-    HKLM,     // local machine
-    HKUSR,    // users
-    HKPD     // performance data (@@ NT only?)
-#if    WINVER >= 0x0400
-    , HKCC,     // current config
-    HKDD     // dynamic data
+    ,
+    HKCU,       // current user
+    HKLM,       // local machine
+    HKUSR,      // users
+    HKPD        // performance data (WinNT/2K only)
+#if WINVER >= 0x0400
+    ,
+    HKCC,       // current config (starting from Win95/NT 4.0)
+    HKDD        // dynamic data (Win95/98 only)
 #endif  // Winver
 #endif  // Win32/16
   };
@@ -124,18 +127,10 @@ public:
     // return true if the key exists
   bool  Exists() const;
     // get the info about key (any number of these pointers may be NULL)
-
-#if defined( __GNUWIN32_OLD__ )
   bool  GetKeyInfo(size_t *pnSubKeys,      // number of subkeys
                    size_t *pnMaxKeyLen,    // max len of subkey name
                    size_t *pnValues,       // number of values
                    size_t *pnMaxValueLen) const;
-#else
-  bool  GetKeyInfo(ulong *pnSubKeys,      // number of subkeys
-                   ulong *pnMaxKeyLen,    // max len of subkey name
-                   ulong *pnValues,       // number of values
-                   ulong *pnMaxValueLen) const;
-#endif
     // return true if the key is opened
   bool  IsOpened() const { return m_hKey != 0; }
     // for "if ( !key ) wxLogError(...)" kind of expressions
@@ -145,8 +140,18 @@ public:
     // explicitly open the key (will be automatically done by all functions
     // which need the key to be opened if the key is not opened yet)
   bool  Open();
-    // create the key: will fail if the key already exists and bOkIfExists
+    // create the key: will fail if the key already exists and !bOkIfExists
   bool  Create(bool bOkIfExists = TRUE);
+    // rename a value from old name to new one
+  bool  RenameValue(const wxChar *szValueOld, const wxChar *szValueNew);
+    // copy value to another key possibly changing its name (by default it will
+    // remain the same)
+  bool  CopyValue(const wxChar *szValue, wxRegKey& keyDst,
+                  const wxChar *szNewName = NULL);
+    // copy the entire contents of the key recursively to another location
+  bool  Copy(const wxString& strNewName);
+    // same as Copy() but using a key and not the name
+  bool  Copy(wxRegKey& keyDst);
     // close the key (will be automatically done in dtor)
   bool  Close();
 
