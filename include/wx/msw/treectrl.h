@@ -410,8 +410,7 @@ public:
     wxTreeItemId HitTest(const wxPoint& point, int& flags);
 
         // get the bounding rectangle of the item (or of its label only)
-        // @@@ do we really need to expose this functions to the application?
-    void GetBoundingRect(const wxTreeItemId& item,
+    bool GetBoundingRect(const wxTreeItemId& item,
                          wxRect& rect,
                          bool textOnly = FALSE) const;
 

@@ -806,9 +806,29 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     return wxTreeItemId((WXHTREEITEM) hitTestInfo.hItem);
 }
 
+bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
+                                 wxRect& rect,
+                                 bool textOnly) const
+{
+    RECT rc;
+    if ( TreeView_GetItemRect(wxhWnd, (HTREEITEM)(WXHTREEITEM)item,
+                              &rc, textOnly) )
+    {
+        rect = wxRect(wxPoint(rc.left, rc.top), wxPoint(rc.right, rc.bottom));
+
+        return TRUE;
+    }
+    else
+    {
+        // couldn't retrieve rect: for example, item isn't visible
+        return FALSE;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // sorting stuff
 // ----------------------------------------------------------------------------
+
 static int CALLBACK TreeView_CompareCallback(wxTreeItemData *pItem1,
                                              wxTreeItemData *pItem2,
                                              wxTreeCtrl *tree)
