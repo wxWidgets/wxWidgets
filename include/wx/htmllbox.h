@@ -61,9 +61,9 @@ public:
     // destructor cleans up whatever resources we use
     virtual ~wxHtmlListBox();
 
-    // refresh everything
+    // override some base class virtuals
     virtual void RefreshAll();
-
+    virtual void SetItemCount(size_t count);
 
 protected:
     // this method must be implemented in the derived class and should return

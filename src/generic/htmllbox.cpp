@@ -262,6 +262,14 @@ void wxHtmlListBox::RefreshAll()
     wxVListBox::RefreshAll();
 }
 
+void wxHtmlListBox::SetItemCount(size_t count)
+{
+    // the items are going to change, forget the old ones
+    m_cache->Clear();
+
+    wxVListBox::SetItemCount(count);
+}
+
 // ----------------------------------------------------------------------------
 // wxHtmlListBox implementation of wxVListBox pure virtuals
 // ----------------------------------------------------------------------------

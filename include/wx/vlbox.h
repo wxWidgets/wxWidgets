@@ -130,7 +130,7 @@ public:
     // set the number of items to be shown in the control
     //
     // this is just a synonym for wxVScrolledWindow::SetLineCount()
-    void SetItemCount(size_t count);
+    virtual void SetItemCount(size_t count);
 
     // delete all items from the control
     void Clear() { SetItemCount(0); }
