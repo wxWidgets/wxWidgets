@@ -1,6 +1,8 @@
 Installing latest headers (and Carbon Support)
 ----------------------------------------------
 
+NOTE : these steps are not necessary for Pro 6, only for Pro 5.3
+
 the latest build for carbon support lead to a few changes you will have to follow, in order
 to successfully compile the code (also necessary if you don't want to build the carbon targets)
 
@@ -20,6 +22,11 @@ MSL from Metrowerks, at the time of writing, this meant applying the changes fro
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
+
+Project Files
+-------------
+
+there are always the makemac.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
 
 Problems with .xpm files
 ------------------------
