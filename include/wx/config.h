@@ -3,16 +3,16 @@
 // Purpose:     declaration of the base class of all config implementations
 //              (see also: fileconf.h and msw/regconf.h)
 // Author:      Karsten Ballüder & Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     07.04.98 (adapted from appconf.h)
 // RCS-ID:      $Id$
-// Copyright:   (c) 1997 Karsten Ballüder   Ballueder@usa.net  
+// Copyright:   (c) 1997 Karsten Ballüder   Ballueder@usa.net
 //                       Vadim Zeitlin      <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _APPCONF_H
-#define   _APPCONF_H
+#ifndef   _wxCONFIG_H
+#define   _wxCONFIG_H
 
 #ifdef __GNUG__
 #pragma interface "config.h"
@@ -32,23 +32,26 @@
 // ----------------------------------------------------------------------------
 
 /// shall we be case sensitive in parsing variable names?
-#ifndef APPCONF_CASE_SENSITIVE
-  #define  APPCONF_CASE_SENSITIVE       FALSE
+#ifndef wxCONFIG_CASE_SENSITIVE
+  #define  wxCONFIG_CASE_SENSITIVE       FALSE
 #endif
 
-/// separates group and entry names
-#ifndef APPCONF_PATH_SEPARATOR
-  #define   APPCONF_PATH_SEPARATOR     '/'
+/// separates group and entry names (probably shouldn't be changed)
+#ifndef wxCONFIG_PATH_SEPARATOR
+  #define   wxCONFIG_PATH_SEPARATOR     '/'
 #endif
 
 /// introduces immutable entries
-#ifndef APPCONF_IMMUTABLE_PREFIX
-  #define   APPCONF_IMMUTABLE_PREFIX   '!'
+// (i.e. the ones which can't be changed from the local config file)
+#ifndef wxCONFIG_IMMUTABLE_PREFIX
+  #define   wxCONFIG_IMMUTABLE_PREFIX   '!'
 #endif
 
 /// should we use registry instead of configuration files under Win32?
-#ifndef   APPCONF_WIN32_NATIVE
-  #define APPCONF_WIN32_NATIVE          TRUE
+// (i.e. whether wxConfig::Create() will create a wxFileConfig (if it's FALSE) or
+// wxRegConfig (if it's true and we're under Win32) or wxIniConfig (Win16))
+#ifndef   wxCONFIG_WIN32_NATIVE
+  #define wxCONFIG_WIN32_NATIVE          TRUE
 #endif
 
 // ----------------------------------------------------------------------------
@@ -70,8 +73,8 @@ extern void wxSplitPath(wxArrayString& aParts, const char *sz);
 // ----------------------------------------------------------------------------
 // abstract base class wxConfig which defines the interface for derived classes
 //
-// wxConfig organizes the items in a tree-like structure (modeled after the 
-// Unix/Dos filesystem). There are groups (directories) and keys (files). 
+// wxConfig organizes the items in a tree-like structure (modeled after the
+// Unix/Dos filesystem). There are groups (directories) and keys (files).
 // There is always one current group given by the current path.
 //
 // Keys are pairs "key_name = value" where value may be of string or integer
@@ -85,16 +88,21 @@ public:
   static wxConfig *Set(wxConfig *pConfig);
     // get the config object, creates it on demand
   static wxConfig *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
-    // create a new config object
-  static void Create();
+    // create a new config object: this function will create the "best"
+    // implementation of wxConfig available for the current platform, see
+    // comments near definition wxCONFIG_WIN32_NATIVE for details. It returns
+    // the created object and also sets it as ms_pConfig.
+  static wxConfig *Create();
 
   // ctor & virtual dtor
+    // environment variable expansion is on by default
   wxConfig() { m_bExpandEnvVars = TRUE; }
-  virtual ~wxConfig();
+    // empty but ensures that dtor of all derived classes is virtual
+  virtual ~wxConfig() { }
 
   // path management
     // set current path: if the first character is '/', it's the absolute path,
-    // otherwise it's a relative path. '..' is supported. If the strPath 
+    // otherwise it's a relative path. '..' is supported. If the strPath
     // doesn't exist it is created.
   virtual void SetPath(const wxString& strPath) = 0;
     // retrieve the current path (always as absolute path)
@@ -171,8 +179,8 @@ public:
     }
 
 protected:
-  static bool IsImmutable(const char *szKey) 
-    { return *szKey == APPCONF_IMMUTABLE_PREFIX; }
+  static bool IsImmutable(const char *szKey)
+    { return *szKey == wxCONFIG_IMMUTABLE_PREFIX; }
 
   // a handy little class which changes current path to the path of given entry
   // and restores it in dtor: so if you declare a local variable of this type,
@@ -186,7 +194,7 @@ protected:
    ~PathChanger();
 
     // get the key name
-   const wxString& Name() const { return m_strName; }
+    const wxString& Name() const { return m_strName; }
 
   private:
     wxConfig *m_pContainer;   // object we live in
@@ -203,5 +211,5 @@ private:
   static wxConfig *ms_pConfig;
 };
 
-#endif  //_APPCONF_H
+#endif  //_wxCONFIG_H
 

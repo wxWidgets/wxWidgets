@@ -58,7 +58,7 @@
 // ----------------------------------------------------------------------------
 
 // is 'c' a valid character in group name?
-// NB: APPCONF_IMMUTABLE_PREFIX and APPCONF_PATH_SEPARATOR must be valid chars,
+// NB: wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR must be valid chars,
 //     but _not_ ']' (group name delimiter)
 inline bool IsValid(char c) { return isalnum(c) || strchr("@_/-!.*%", c); }
 
@@ -79,26 +79,67 @@ static wxString FilterOut(const wxString& str);
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
-wxString wxFileConfig::GetGlobalFileName(const char *szFile)
+wxString wxFileConfig::GetGlobalDir()
 {
-  wxString str;
+  wxString strDir;
 
-  bool bNoExt = strchr(szFile, '.') == NULL;
-
-  #ifdef  __UNIX__
-    str << "/etc/" << szFile;
-    if ( bNoExt )
-      str << ".conf";
-  #else   // Windows
+  #ifdef __UNIX__
+    strDir = "/etc/";
+  #else // Windows
     #ifndef _MAX_PATH
       #define _MAX_PATH 512
     #endif
 
     char szWinDir[_MAX_PATH];
     ::GetWindowsDirectory(szWinDir, _MAX_PATH);
-    str << szWinDir <<  "\\" << szFile;
-    if ( bNoExt )
-      str << ".ini";
+
+    strDir = szWinDir;
+    strDir << '\\';
+  #endif // Unix/Windows
+
+  return strDir;
+}
+
+wxString wxFileConfig::GetLocalDir()
+{
+  wxString strDir;
+
+  #ifdef __UNIX__
+    const char *szHome = getenv("HOME");
+    if ( szHome == NULL ) {
+      // we're homeless...
+      wxLogWarning(_("can't find user's HOME, using current directory."));
+      strDir = ".";
+    }
+    else
+      strDir = szHome;
+  #else   // Windows
+    #ifdef  __WIN32__
+      const char *szHome = getenv("HOMEDRIVE");
+      if ( szHome != NULL )
+        strDir << szHome;
+      szHome = getenv("HOMEPATH");
+      if ( szHome != NULL )
+        strDir << szHome;
+    #else   // Win16
+      // Win16 has no idea about home, so use the current directory instead
+      strDir = ".\\";
+    #endif  // WIN16/32
+  #endif  // UNIX/Win
+
+  return strDir;
+}
+
+wxString wxFileConfig::GetGlobalFileName(const char *szFile)
+{
+  wxString str = GetLocalDir();
+  str << szFile;
+
+  if ( strchr(szFile, '.') == NULL )
+  #ifdef  __UNIX__
+    str << ".conf";
+  #else   // Windows
+    str << ".ini";
   #endif  // UNIX/Win
 
   return str;
@@ -106,32 +147,17 @@ wxString wxFileConfig::GetGlobalFileName(const char *szFile)
 
 wxString wxFileConfig::GetLocalFileName(const char *szFile)
 {
-  wxString str;
+  wxString str = GetLocalDir();
 
   #ifdef  __UNIX__
-    const char *szHome = getenv("HOME");
-    if ( szHome == NULL ) {
-      // we're homeless...
-      wxLogWarning(_("can't find user's HOME, using current directory."));
-      szHome = ".";
-    }
-    str << szHome << "/." << szFile;
-  #else   // Windows
-    #ifdef  __WIN32__
-      const char *szHome = getenv("HOMEDRIVE");
-      if ( szHome != NULL )
-        str << szHome;
-      szHome = getenv("HOMEPATH");
-      if ( szHome != NULL )
-        str << szHome;
-      str << szFile;
-      if ( strchr(szFile, '.') == NULL )
-        str << ".ini";
-    #else   // Win16
-      // Win16 has no idea about home, so use the current directory instead
-      str << ".\\" << szFile;
-    #endif  // WIN16/32
-  #endif  // UNIX/Win
+    str << '.';
+  #endif
+
+  str << szFile;
+
+  #ifdef __WXMSW__
+    str << ".ini";
+  #endif
 
   return str;
 }
@@ -148,47 +174,64 @@ void wxFileConfig::Init()
   m_linesHead =
   m_linesTail = NULL;
 
-  m_strPath.Empty();
-}
-
-wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
-            : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
-{
-  Init();
-
   // it's not an error if (one of the) file(s) doesn't exist
 
   // parse the global file
-  if ( !strGlobal.IsEmpty() ) {
-    if ( wxFile::Exists(strGlobal) ) {
-      wxTextFile fileGlobal(strGlobal);
+  if ( !m_strGlobalFile.IsEmpty() && wxFile::Exists(m_strGlobalFile) ) {
+    wxTextFile fileGlobal(m_strGlobalFile);
 
-      if ( fileGlobal.Open() ) {
-        Parse(fileGlobal, FALSE /* global */);
-        SetRootPath();
-      }
-      else
-        wxLogWarning(_("can't open global configuration file '%s'."),
-                     strGlobal.c_str());
+    if ( fileGlobal.Open() ) {
+      Parse(fileGlobal, FALSE /* global */);
+      SetRootPath();
     }
+    else
+      wxLogWarning(_("can't open global configuration file '%s'."),
+                   m_strGlobalFile.c_str());
   }
 
   // parse the local file
-  if ( wxFile::Exists(strLocal) ) {
-    wxTextFile fileLocal(strLocal);
+  if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) ) {
+    wxTextFile fileLocal(m_strLocalFile);
     if ( fileLocal.Open() ) {
       Parse(fileLocal, TRUE /* local */);
       SetRootPath();
     }
     else
       wxLogWarning(_("can't open user configuration file '%s'."),
-                   strLocal.c_str());
+                   m_strLocalFile.c_str());
   }
 }
 
-wxFileConfig::~wxFileConfig()
+wxFileConfig::wxFileConfig(const char *szAppName, bool bLocalOnly)
 {
-  Flush();
+  wxASSERT( !IsEmpty(szAppName) ); // invent a name for your application!
+
+  m_strLocalFile = GetLocalFileName(szAppName);
+  if ( !bLocalOnly )
+    m_strGlobalFile = GetGlobalFileName(szAppName);
+  //else: it's going to be empty and we won't use the global file
+
+  Init();
+}
+
+wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
+            : m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
+{
+  // if the path is not absolute, prepend the standard directory to it
+
+  if ( !strLocal.IsEmpty() && !wxIsPathSeparator(strLocal[0u]) )
+    m_strLocalFile = GetLocalDir();
+  m_strLocalFile << strLocal;
+
+  if ( !strGlobal.IsEmpty() && !wxIsPathSeparator(strGlobal[0u]) )
+    m_strGlobalFile = GetGlobalDir();
+  m_strGlobalFile << strGlobal;
+
+  Init();
+}
+
+void wxFileConfig::CleanUp()
+{
   delete m_pRootGroup;
 
   LineList *pCur = m_linesHead;
@@ -197,6 +240,13 @@ wxFileConfig::~wxFileConfig()
     delete pCur;
     pCur = pNext;
   }
+}
+
+wxFileConfig::~wxFileConfig()
+{
+  Flush();
+
+  CleanUp();
 }
 
 // ----------------------------------------------------------------------------
@@ -242,7 +292,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       // group name here is always considered as abs path
       wxString strGroup;
       pStart++;
-      strGroup << APPCONF_PATH_SEPARATOR << wxString(pStart, pEnd - pStart);
+      strGroup << wxCONFIG_PATH_SEPARATOR << wxString(pStart, pEnd - pStart);
 
       // will create it if doesn't yet exist
       SetPath(strGroup);
@@ -349,14 +399,14 @@ void wxFileConfig::SetPath(const wxString& strPath)
     return;
   }
 
-  if ( strPath[0] == APPCONF_PATH_SEPARATOR ) {
+  if ( strPath[0] == wxCONFIG_PATH_SEPARATOR ) {
     // absolute path
     wxSplitPath(aParts, strPath);
   }
   else {
     // relative path, combine with current one
     wxString strFullPath = m_strPath;
-    strFullPath << APPCONF_PATH_SEPARATOR << strPath;
+    strFullPath << wxCONFIG_PATH_SEPARATOR << strPath;
     wxSplitPath(aParts, strFullPath);
   }
 
@@ -373,7 +423,7 @@ void wxFileConfig::SetPath(const wxString& strPath)
   // recombine path parts in one variable
   m_strPath.Empty();
   for ( n = 0; n < aParts.Count(); n++ ) {
-    m_strPath << APPCONF_PATH_SEPARATOR << aParts[n];
+    m_strPath << wxCONFIG_PATH_SEPARATOR << aParts[n];
   }
 }
 
@@ -527,9 +577,9 @@ bool wxFileConfig::Write(const char *szKey, const char *szValue)
     // writing an entry
 
     // check that the name is reasonable
-    if ( strName[0u] == APPCONF_IMMUTABLE_PREFIX ) {
+    if ( strName[0u] == wxCONFIG_IMMUTABLE_PREFIX ) {
       wxLogError(_("Entry name can't start with '%c'."),
-                 APPCONF_IMMUTABLE_PREFIX);
+                 wxCONFIG_IMMUTABLE_PREFIX);
       return FALSE;
     }
 
@@ -614,9 +664,12 @@ bool wxFileConfig::DeleteGroup(const char *szKey)
 
 bool wxFileConfig::DeleteAll()
 {
-  const char *szFile = m_strLocalFile;
-  delete m_pRootGroup;
+  CleanUp();
+
+  m_strLocalFile = m_strGlobalFile = "";
   Init();
+
+  const char *szFile = m_strLocalFile;
 
   if ( remove(szFile) == -1 )
     wxLogSysError(_("can't delete user configuration file '%s'"), szFile);
@@ -849,7 +902,7 @@ wxFileConfig::LineList *wxFileConfig::ConfigGroup::GetLastEntryLine()
 wxString wxFileConfig::ConfigGroup::GetFullName() const
 {
   if ( Parent() )
-    return Parent()->GetFullName() + APPCONF_PATH_SEPARATOR + Name();
+    return Parent()->GetFullName() + wxCONFIG_PATH_SEPARATOR + Name();
   else
     return "";
 }
@@ -872,7 +925,7 @@ wxFileConfig::ConfigGroup::FindEntry(const char *szName) const
     i = (lo + hi)/2;
     pEntry = m_aEntries[i];
 
-    #if APPCONF_CASE_SENSITIVE
+    #if wxCONFIG_CASE_SENSITIVE
       res = strcmp(pEntry->Name(), szName);
     #else
       res = Stricmp(pEntry->Name(), szName);
@@ -902,7 +955,7 @@ wxFileConfig::ConfigGroup::FindSubgroup(const char *szName) const
     i = (lo + hi)/2;
     pGroup = m_aSubgroups[i];
 
-    #if APPCONF_CASE_SENSITIVE
+    #if wxCONFIG_CASE_SENSITIVE
       res = strcmp(pGroup->Name(), szName);
     #else
       res = Stricmp(pGroup->Name(), szName);
@@ -1097,7 +1150,7 @@ wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
 
   m_bDirty  = FALSE;
 
-  m_bImmutable = strName[0] == APPCONF_IMMUTABLE_PREFIX;
+  m_bImmutable = strName[0] == wxCONFIG_IMMUTABLE_PREFIX;
   if ( m_bImmutable )
     m_strName.erase(0, 1);  // remove first character
 }
@@ -1172,7 +1225,7 @@ void wxFileConfig::ConfigEntry::SetDirty()
 int CompareEntries(wxFileConfig::ConfigEntry *p1,
                    wxFileConfig::ConfigEntry *p2)
 {
-  #if APPCONF_CASE_SENSITIVE
+  #if wxCONFIG_CASE_SENSITIVE
     return strcmp(p1->Name(), p2->Name());
   #else
     return Stricmp(p1->Name(), p2->Name());
@@ -1182,7 +1235,7 @@ int CompareEntries(wxFileConfig::ConfigEntry *p1,
 int CompareGroups(wxFileConfig::ConfigGroup *p1,
                   wxFileConfig::ConfigGroup *p2)
 {
-  #if APPCONF_CASE_SENSITIVE
+  #if wxCONFIG_CASE_SENSITIVE
     return strcmp(p1->Name(), p2->Name());
   #else
     return Stricmp(p1->Name(), p2->Name());

@@ -37,9 +37,19 @@
 #include  <wx/log.h>
 #include  <wx/textfile.h>
 #include  <wx/config.h>
-#include  <wx/fileconf.h>
-#include <stdlib.h>
 
+// we must include (one of) these files for wxConfig::Create
+#if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
+  #ifdef __WIN32__
+    #include  <wx/msw/regconf.h>
+  #else  //WIN16
+    #include  <wx/msw/iniconf.h>
+  #endif
+#else // either we're under Unix or wish to use files even under Windows
+  #include  <wx/fileconf.h>
+#endif
+
+#include  <stdlib.h>
 #include  <ctype.h>       // for isalnum()
 
 // ----------------------------------------------------------------------------
@@ -55,9 +65,6 @@ wxConfig *wxConfig::ms_pConfig = NULL;
 // ----------------------------------------------------------------------------
 // wxConfig
 // ----------------------------------------------------------------------------
-wxConfig::~wxConfig()
-{
-}
 
 wxConfig *wxConfig::Set(wxConfig *pConfig)
 {
@@ -66,9 +73,19 @@ wxConfig *wxConfig::Set(wxConfig *pConfig)
   return pOld;
 }
 
-void wxConfig::Create()
+wxConfig *wxConfig::Create()
 {
-  ms_pConfig = wxTheApp->CreateConfig();
+  return ms_pConfig =
+#if defined(__MSWIN__) && defined(wxCONFIG_WIN32_NATIVE)
+  #ifdef __WIN32__
+    new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+  #else  //WIN16
+    #error "Sorry, no wxIniConfig yet..."
+    //new wxIniConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+  #endif
+#else // either we're under Unix or wish to use files even under Windows
+  new wxFileConfig(wxTheApp->GetAppName());
+#endif
 }
 
 const char *wxConfig::Read(const char *szKey, const char *szDefault) const
@@ -89,18 +106,18 @@ wxConfig::PathChanger::PathChanger(const wxConfig *pContainer,
                                  const wxString& strEntry)
 {
   m_pContainer = (wxConfig *)pContainer;
-  wxString strPath = strEntry.Before(APPCONF_PATH_SEPARATOR);
+  wxString strPath = strEntry.Before(wxCONFIG_PATH_SEPARATOR);
 
   // special case of "/keyname" when there is nothing before "/"
-  if ( strPath.IsEmpty() && strEntry[0] == APPCONF_PATH_SEPARATOR )
-    strPath = APPCONF_PATH_SEPARATOR;
+  if ( strPath.IsEmpty() && strEntry[0] == wxCONFIG_PATH_SEPARATOR )
+    strPath = wxCONFIG_PATH_SEPARATOR;
 
   if ( !strPath.IsEmpty() ) {
     // do change the path
     m_bChanged = TRUE;
-    m_strName = strEntry.Right(APPCONF_PATH_SEPARATOR);
+    m_strName = strEntry.Right(wxCONFIG_PATH_SEPARATOR);
     m_strOldPath = m_pContainer->GetPath();
-    m_strOldPath += APPCONF_PATH_SEPARATOR;
+    m_strOldPath += wxCONFIG_PATH_SEPARATOR;
     m_pContainer->SetPath(strPath);
   }
   else {
@@ -231,7 +248,7 @@ void wxSplitPath(wxArrayString& aParts, const char *sz)
   wxString strCurrent;
   const char *pc = sz;
   for ( ;; ) {
-    if ( *pc == '\0' || *pc == APPCONF_PATH_SEPARATOR ) {
+    if ( *pc == '\0' || *pc == wxCONFIG_PATH_SEPARATOR ) {
       if ( strCurrent == "." ) {
         // ignore
       }

@@ -1,17 +1,14 @@
-/*****************************************************************************\
- * Project:   CppLib: C++ library for Windows/UNIX platfroms                 *
- * File:      fileconf.h - file based implementation of Config               *
- *---------------------------------------------------------------------------*
- * Language:  C++                                                            *
- * Platfrom:  Any                                                            *
- *---------------------------------------------------------------------------*
- * Classes:                                                                  *
- *---------------------------------------------------------------------------*
- * Author:    Vadim Zeitlin zeitlin@dptmaths.ens-cachan.fr>                  *
- *            adapted from earlier class by VZ & Karsten Ballüder            *
- * History:                                                                  *
- *  27.04.98  created                                                        *
-\*****************************************************************************/
+///////////////////////////////////////////////////////////////////////////////
+// Name:        fileconf.h
+// Purpose:     wxFileConfig derivation of wxConfig
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     07.04.98 (adapted from appconf.cpp)
+// RCS-ID:      $Id$
+// Copyright:   (c) 1997 Karsten Ballüder   &  Vadim Zeitlin
+//                       Ballueder@usa.net     <zeitlin@dptmaths.ens-cachan.fr>
+// Licence:     wxWindows license
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef   _FILECONF_H
 #define   _FILECONF_H
@@ -83,7 +80,19 @@
   and local value is ignored. Of course, the changes are always written to local
   file only.
 
-  @@@@ describe environment variable expansion
+  The names of these files can be specified in a number of ways. First of all,
+  you can use the standard convention: using the ctor which takes 'strAppName'
+  parameter will probably be sufficient for 90% of cases. If, for whatever
+  reason you wish to use the files with some other names, you can always use the
+  second ctor.
+
+  wxFileConfig also may automatically expand the values of environment variables
+  in the entries it reads: for example, if you have an entry
+    score_file = $HOME/.score
+  a call to Read(&str, "score_file") will return a complete path to .score file
+  unless the expansion was previousle disabled with SetExpandEnvVars(FALSE) call
+  (it's on by default, the current status can be retrieved with
+   IsExpandingEnvVars function).
 */
 
 class wxFileConfig : public wxConfig
@@ -103,9 +112,17 @@ public:
   static wxString GetLocalFileName(const char *szFile);
 
   // ctor & dtor
-    // if strGlobal is empty, only local config file is used
-  wxFileConfig(const wxString& strLocal,
-               const wxString& strGlobal = "");
+    // the names of local and global (if not disabled) config files are
+    // constructed using Get{Local|Global}FileName functions described above
+    // (szAppName is just the (short) name of your application)
+  wxFileConfig(const char *szAppName, bool bLocalOnly = FALSE);
+    // this ctor allows you to specify custom names for both files (if strGlobal
+    // isn't a full path, it's considered to be relative to the standard
+    // directory, i.e. /etc under Unix and %windir% under Windows, if strLocal
+    // is not an absolute path, it's considered to be relative to the user's
+    // directory). If either of strings is empty, the corresponding file is not
+    // used.
+  wxFileConfig(const wxString& strLocal, const wxString& strGlobal);
     // dtor will save unsaved data
   virtual ~wxFileConfig();
 
@@ -176,8 +193,16 @@ public:
   bool      LineListIsEmpty();
 
 private:
-  // put the object in the initial state
+  // GetXXXFileame helpers: return ('/' terminated) directory names
+  static wxString GetGlobalDir();
+  static wxString GetLocalDir();
+
+  // common part of all ctors (assumes that m_str{Local|Global}File are already
+  // initialized
   void Init();
+
+  // common part of from dtor and DeleteAll
+  void CleanUp();
 
   // parse the whole file
   void Parse(wxTextFile& file, bool bLocal);
