@@ -30,6 +30,7 @@
     #include "wx/dialog.h"
     #include "wx/settings.h"
     #include "wx/dcclient.h"
+    #include "wx/mdi.h"
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
