@@ -688,7 +688,8 @@ bool wxRegConfig::RenameGroup(const wxString& oldName, const wxString& newName)
 // ----------------------------------------------------------------------------
 // deleting
 // ----------------------------------------------------------------------------
-bool wxRegConfig::DeleteEntry(const wxString& value, bool WXUNUSED(bGroupIfEmptyAlso))
+
+bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
 {
   wxConfigPathChanger path(this, value);
 
@@ -696,7 +697,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool WXUNUSED(bGroupIfEmpty
     if ( !m_keyLocal.DeleteValue(path.Name()) )
       return FALSE;
 
-    if ( m_keyLocal.IsEmpty() ) {
+    if ( bGroupIfEmptyAlso && m_keyLocal.IsEmpty() ) {
       wxString strKey = GetPath().AfterLast(wxCONFIG_PATH_SEPARATOR);
       SetPath(_T(".."));  // changes m_keyLocal
       return LocalKey().DeleteKey(strKey);
