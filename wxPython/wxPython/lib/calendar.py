@@ -2,10 +2,11 @@
 # Name:         calendar.py
 # Purpose:      Calendar display control
 #
-# Author:       Lorne White (email: lwhite1@planet.eon.net)
+# Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.6 2000/03/30
+# Version       0.8 
+# Date:         Feb 27, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -23,6 +24,14 @@ BusCalDays = [0, 1, 2, 3, 4, 5, 6]
 
 # calendar drawing routing
 
+def GetMonthList():
+    monthlist = []
+    for i in range(13):
+        name = Month[i]
+        if name != None:
+            monthlist.append(name)
+    return monthlist
+    
 class CalDraw:
     def __init__(self, parent):
         self.pwidth = 1
@@ -626,5 +635,105 @@ class wxCalendar(wxWindow):
 
     def ClearDsp(self):
         self.Clear()
+        
+class CalenDlg(wxDialog):
+    def __init__(self, parent, month=None, day = None, year=None):
+        wxDialog.__init__(self, parent, -1, "Event Calendar", wxPyDefaultPosition, wxSize(280, 360))
+
+    # set the calendar and attributes
+        self.calend = wxCalendar(self, -1, wxPoint(20, 60), wxSize(240, 200))
+        if month == None:
+            self.calend.SetCurrentDay()
+            start_month = self.calend.GetMonth()
+            start_year = self.calend.GetYear()
+        else:
+            start_month = month
+            start_year = year
+            self.calend.SetDayValue(day)
+
+        self.calend.HideTitle()
+        self.ResetDisplay()
+
+    # get month list from DateTime
+        monthlist = GetMonthList()
+
+    # select the month
+        mID = NewId()
+        self.date = wxComboBox(self, mID, Month[start_month], wxPoint(20, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
+        EVT_COMBOBOX(self, mID, self.EvtComboBox)
+
+    # alternate spin button to control the month
+        mID = NewId()
+        h = self.date.GetSize().height
+        self.m_spin = wxSpinButton(self, mID, wxPoint(130, 20), wxSize(h*2, h), wxSP_VERTICAL)
+        self.m_spin.SetRange(1, 12)
+        self.m_spin.SetValue(start_month)
+
+        EVT_SPIN(self, mID, self.OnMonthSpin)
+
+    # spin button to control the year
+        mID = NewId()
+        self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(160, 20), wxSize(60, -1))
+        h = self.dtext.GetSize().height
+
+        self.y_spin = wxSpinButton(self, mID, wxPoint(220, 20), wxSize(h*2, h), wxSP_VERTICAL)
+        self.y_spin.SetRange(1980, 2010)
+        self.y_spin.SetValue(start_year)
+
+        EVT_SPIN(self, mID, self.OnYrSpin)
+
+        self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
+
+        x_pos = 50
+        y_pos = 280
+        but_size = wxSize(60, 25)
+
+        mID = NewId()
+        wxButton(self, mID, ' Ok ', wxPoint(x_pos, y_pos), but_size)
+        EVT_BUTTON(self, mID, self.OnOk)
+        
+        mID = NewId()
+        wxButton(self, mID, ' Close ', wxPoint(x_pos + 120, y_pos), but_size)
+        EVT_BUTTON(self, mID, self.OnCancel)
+
+    def OnOk(self, event):
+        self.EndModal(wxID_OK)
+
+    def OnCancel(self, event):
+        self.EndModal(wxID_CANCEL)
+
+# log the mouse clicks
+    def MouseClick(self, evt):
+        self.result = [evt.click, str(evt.day), Month[evt.month], str(evt.year)]  # result click type and date
+
+        if evt.click == 'DLEFT':
+            self.EndModal(wxID_OK)
+
+# month and year spin selection routines
+    def OnMonthSpin(self, event):
+        month = event.GetPosition()
+        self.date.SetValue(Month[month])
+        self.calend.SetMonth(month)
+        self.calend.Refresh()
+
+    def OnYrSpin(self, event):
+        year = event.GetPosition()
+        self.dtext.SetValue(str(year))
+        self.calend.SetYear(year)
+        self.calend.Refresh()
+
+    def EvtComboBox(self, event):
+        name = event.GetString()
+        monthval = self.date.FindString(name)
+        self.m_spin.SetValue(monthval+1)
+
+        self.calend.SetMonth(monthval+1)
+        self.ResetDisplay()
+
+# set the calendar for highlighted days
+
+    def ResetDisplay(self):
+        month = self.calend.GetMonth()
+        self.calend.Refresh()
 
 

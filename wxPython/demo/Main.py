@@ -20,7 +20,7 @@ from   wxPython.html import wxHtmlWindow
 
 
 _treeList = [
-    ('New since last release', ['LayoutAnchors', "FancyText",
+    ('New since last release', ['ColourSelect', 'ImageBrowser',
                                 ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
@@ -57,7 +57,7 @@ _treeList = [
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
                           'FileBrowseButton', 'GenericButtons', 'wxEditor',
-                          'PyShellWindow',
+                          'PyShellWindow', 'ColourSelect', 'ImageBrowser',
                           ]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),

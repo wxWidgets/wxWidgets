@@ -4,13 +4,13 @@
 #
 # Author:       Lorne White (email: lwhite1@planet.eon.net)
 #
-# Created:
-# Version       0.8 2000/04/16
+# Version       0.9 
+# Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
 from wxPython.wx           import *
-from wxPython.lib.calendar import wxCalendar, Month, PrtCalDraw
+from wxPython.lib.calendar import wxCalendar, Month, PrtCalDraw, CalenDlg
 
 import os
 dir_path = os.getcwd()
@@ -51,15 +51,19 @@ class TestPanel(wxPanel):
 
         self.calend = wxCalendar(self, -1, wxPoint(100, 50), wxSize(200, 180))
 
-        start_month = 11
-        start_year = 1999
+#        start_month = 2        # preselect the date for calendar
+#        start_year = 2001
+
+        start_month = self.calend.GetMonth()        # get the current month & year
+        start_year = self.calend.GetYear()
 
 # month list from DateTime module
 
         monthlist = GetMonthList()
 
-        self.date = wxComboBox(self, 10, Month[start_month], wxPoint(100, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, 10, self.EvtComboBox)
+        mID = NewId()
+        self.date = wxComboBox(self, mID, Month[start_month], wxPoint(100, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
+        EVT_COMBOBOX(self, mID, self.EvtComboBox)
 
 # set start month and year
 
@@ -82,49 +86,61 @@ class TestPanel(wxPanel):
 
 # scroll bar for month selection
 
-        self.scroll = wxScrollBar(self, 40, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
+        mID = NewId()
+        self.scroll = wxScrollBar(self, mID, wxPoint(100, 240), wxSize(200, 20), wxSB_HORIZONTAL)
         self.scroll.SetScrollbar(start_month-1, 1, 12, 1, TRUE)
-        EVT_COMMAND_SCROLL(self, 40, self.Scroll)
+        EVT_COMMAND_SCROLL(self, mID, self.Scroll)
 
 # spin control for year selection
 
         self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(200, 20), wxSize(60, -1))
         h = self.dtext.GetSize().height
 
-        self.spin = wxSpinButton(self, 20, wxPoint(270, 20), wxSize(h*2, h))
+        mID = NewId()
+        self.spin = wxSpinButton(self, mID, wxPoint(270, 20), wxSize(h*2, h))
         self.spin.SetRange(1980, 2010)
         self.spin.SetValue(start_year)
-        EVT_SPIN(self, 20, self.OnSpin)
+        EVT_SPIN(self, mID, self.OnSpin)
 
 # button for calendar dialog test
 
         wxStaticText(self, -1, "Test Calendar Dialog", wxPoint(350, 50), wxSize(150, -1))
 
+        mID = NewId()
         bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
-        self.but = wxBitmapButton(self, 60, bmp, wxPoint(380, 80))#, wxSize(30, 30))
-        EVT_BUTTON(self, 60, self.TestDlg)
+        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 80))#, wxSize(30, 30))
+        EVT_BUTTON(self, mID, self.TestDlg)
 
 # button for calendar window test
 
         wxStaticText(self, -1, "Test Calendar Window", wxPoint(350, 150), wxSize(150, -1))
 
+        mID = NewId()
         bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
-        self.but = wxBitmapButton(self, 160, bmp, wxPoint(380, 180))#, wxSize(30, 30))
-        EVT_BUTTON(self, 160, self.TestFrame)
+        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 180))#, wxSize(30, 30))
+        EVT_BUTTON(self, mID, self.TestFrame)
 
         wxStaticText(self, -1, "Test Calendar Print", wxPoint(350, 250), wxSize(150, -1))
 
+        mID = NewId()
         bmp = wxBitmap('bitmaps/Calend.bmp', wxBITMAP_TYPE_BMP)
-        self.but = wxBitmapButton(self, 170, bmp, wxPoint(380, 280))#, wxSize(30, 30))
-        EVT_BUTTON(self, 170, self.OnPreview)
+        self.but = wxBitmapButton(self, mID, bmp, wxPoint(380, 280))#, wxSize(30, 30))
+        EVT_BUTTON(self, mID, self.OnPreview)
 
 # calendar dialog
 
-    def TestDlg(self, event):
-        dlg = CalenDlg(self, self.log)
+    def TestDlg(self, event):       # test the date dialog
+        dlg = CalenDlg(self)
         dlg.Centre()
-        dlg.ShowModal()
-        dlg.Destroy()
+        if dlg.ShowModal() == wxID_OK:
+            result = dlg.result
+            day = result[1]
+            month = result[2]
+            year = result[3]
+            new_date = str(month) + '/'+ str(day) + '/'+ str(year)
+            self.log.WriteText('Date Selected: %s\n' % new_date)
+        else:
+            self.log.WriteText('No Date Selected')
 
 # calendar window test
 
@@ -210,105 +226,6 @@ class TestPanel(wxPanel):
     def OnCurrent(self, event):
         self.calend.SetCurrentDay()
         self.ResetDisplay()
-
-# test the calendar control in a dialog
-
-class CalenDlg(wxDialog):
-    def __init__(self, parent, log):
-        self.log = log
-        wxDialog.__init__(self, parent, -1, "Test Calendar", wxPyDefaultPosition, wxSize(280, 300))
-
-        start_month = 2
-        start_year = 1999
-
-# get month list from DateTime
-
-        monthlist = GetMonthList()
-
-# select the month
-
-        self.date = wxComboBox(self, 100, Month[start_month], wxPoint(20, 20), wxSize(90, -1), monthlist, wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, 100, self.EvtComboBox)
-
-# alternate spin button to control the month
-
-        h = self.date.GetSize().height
-        self.m_spin = wxSpinButton(self, 120, wxPoint(120, 20), wxSize(h*2, h), wxSP_VERTICAL)
-        self.m_spin.SetRange(1, 12)
-        self.m_spin.SetValue(start_month)
-
-        EVT_SPIN(self, 120, self.OnMonthSpin)
-
-# spin button to conrol the year
-
-        self.dtext = wxTextCtrl(self, -1, str(start_year), wxPoint(160, 20), wxSize(60, -1))
-        h = self.dtext.GetSize().height
-
-        self.y_spin = wxSpinButton(self, 20, wxPoint(220, 20), wxSize(h*2, h), wxSP_VERTICAL)
-        self.y_spin.SetRange(1980, 2010)
-        self.y_spin.SetValue(start_year)
-
-        EVT_SPIN(self, 20, self.OnYrSpin)
-
-# set the calendar and attributes
-
-        self.calend = wxCalendar(self, -1, wxPoint(20, 60), wxSize(240, 200))
-        self.calend.SetMonth(start_month)
-        self.calend.SetYear(start_year)
-
-        self.calend.HideTitle()
-        self.calend.ShowWeekEnd()
-
-        self.ResetDisplay()
-
-        self.Connect(self.calend.GetId(), -1, 2100, self.MouseClick)
-
-# log the mouse clicks
-
-    def MouseClick(self, evt):
-        text = '%s CLICK   %02d/%02d/%d' % (evt.click, evt.day, evt.month, evt.year)  # format date
-        self.log.WriteText('Date Selected: ' + text + '\n')
-
-        if evt.click == 'DLEFT':
-            self.EndModal(wxID_OK)
-
-# month and year spin selection routines
-
-    def OnMonthSpin(self, event):
-        month = event.GetPosition()
-        if month >= 0 and month <= 12:
-            self.date.SetValue(Month[month])
-            self.calend.SetMonth(month)
-            self.calend.Refresh()
-
-    def OnYrSpin(self, event):
-        year = event.GetPosition()
-        self.dtext.SetValue(str(year))
-        self.calend.SetYear(year)
-        self.calend.Refresh()
-
-    def EvtComboBox(self, event):
-        name = event.GetString()
-        self.log.WriteText('EvtComboBox: %s\n' % name)
-        monthval = self.date.FindString(name)
-        self.m_spin.SetValue(monthval+1)
-
-        self.calend.SetMonth(monthval+1)
-        self.ResetDisplay()
-
-# set the calendar for highlighted days
-
-    def ResetDisplay(self):
-        month = self.calend.GetMonth()
-        try:
-            set_days = test_days[month]
-        except:
-            set_days = [1, 5, 12]
-
-        self.calend.AddSelect([4, 11], 'BLUE', 'WHITE')
-
-        self.calend.SetSelDay(set_days)
-        self.calend.Refresh()
 
 # test of full window calendar control functions
 
@@ -400,20 +317,26 @@ class CalendFrame(wxFrame):
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
 
         bmp_path = 'bitmaps/'
-        SetToolPath(self, tb, 10, bmp_path + 'DbDec.bmp', 'Dec Year')
-        EVT_TOOL(self, 10, self.OnDecYear)
 
-        SetToolPath(self, tb, 15, bmp_path + 'Dec.bmp', 'Dec Month')
-        EVT_TOOL(self, 15, self.OnDecMonth)
+        mID = NewId()
+        SetToolPath(self, tb, mID, bmp_path + 'DbDec.bmp', 'Dec Year')
+        EVT_TOOL(self, mID, self.OnDecYear)
 
-        SetToolPath(self, tb, 30, bmp_path + 'Pt.bmp', 'Current Month')
-        EVT_TOOL(self, 30, self.OnCurrent)
+        mID = NewId()
+        SetToolPath(self, tb, mID, bmp_path + 'Dec.bmp', 'Dec Month')
+        EVT_TOOL(self, mID, self.OnDecMonth)
 
-        SetToolPath(self, tb, 40, bmp_path + 'Inc.bmp', 'Inc Month')
-        EVT_TOOL(self, 40, self.OnIncMonth)
+        mID = NewId()
+        SetToolPath(self, tb, mID, bmp_path + 'Pt.bmp', 'Current Month')
+        EVT_TOOL(self, mID, self.OnCurrent)
 
-        SetToolPath(self, tb, 45, bmp_path + 'DbInc.bmp', 'Inc Year')
-        EVT_TOOL(self, 45, self.OnIncYear)
+        mID = NewId()
+        SetToolPath(self, tb, mID, bmp_path + 'Inc.bmp', 'Inc Month')
+        EVT_TOOL(self, mID, self.OnIncMonth)
+
+        mID = NewId()
+        SetToolPath(self, tb, mID, bmp_path + 'DbInc.bmp', 'Inc Year')
+        EVT_TOOL(self, mID, self.OnIncYear)
 
         tb.Realize()
 
