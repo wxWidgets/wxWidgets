@@ -49,10 +49,11 @@
 
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
+
 #if wxUSE_THREADS
 extern wxList wxPendingEvents;
-extern wxList wxPendingEventsLocker;
-#endif
+extern wxCriticalSection wxPendingEventsLocker;
+#endif // wxUSE_THREADS
 
 wxApp *wxTheApp = NULL;
 
@@ -494,7 +495,7 @@ void wxApp::DeletePendingObjects()
 
 #if wxUSE_THREADS
 void wxApp::ProcessPendingEvents()
-
+{
     wxNode *node = wxPendingEvents.First();
     wxCriticalSectionLocker locker(wxPendingEventsLocker);
 
@@ -507,8 +508,8 @@ void wxApp::ProcessPendingEvents()
         delete node;
         node = wxPendingEvents.First();
     }
-
-#endif
+}
+#endif // wxUSE_THREADS
 
 wxLog* wxApp::CreateLogTarget()
 {

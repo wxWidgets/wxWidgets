@@ -6,7 +6,7 @@
 // Created:     17/09/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CONTROL_H_
@@ -24,6 +24,7 @@
 class WXDLLEXPORT wxControl: public wxWindow
 {
     DECLARE_ABSTRACT_CLASS(wxControl)
+
 public:
     wxControl();
     ~wxControl();
@@ -36,11 +37,12 @@ public:
 
     // Places item in centre of panel - so can't be used BEFORE panel->Fit()
     void Centre(int direction = wxHORIZONTAL);
-    inline void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
+    void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
 
-    inline wxFunction GetCallback() { return m_callback; }
+    wxFunction GetCallback() { return m_callback; }
 
-    inline bool InSetValue() const { return m_inSetValue; }
+    bool InSetValue() const { return m_inSetValue; }
+
 protected:
     wxFunction          m_callback;     // Callback associated with the window
 

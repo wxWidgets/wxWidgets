@@ -462,8 +462,8 @@ void wxXMergeDatabases (wxApp * theApp, Display * display)
         size_t len;
         environment = GetIniFile (filename, NULL);
         len = strlen (environment);
-        wxString hostname;
-        if ( wxGetHostName(hostname) )
+        wxString hostname = wxGetHostName();
+        if ( !!hostname )
             strncat(environment, hostname, 1024 - len);
     }
     homeDB = XrmGetFileDatabase (environment);
