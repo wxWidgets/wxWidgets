@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        combobox.cpp
+// Name:        msw/combobox.cpp
 // Purpose:     wxComboBox class
 // Author:      Julian Smart
 // Modified by:
@@ -8,6 +8,14 @@
 // Copyright:   (c) Julian Smart and Markus Holzem
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #ifdef __GNUG__
 #pragma implementation "combobox.h"
@@ -30,7 +38,55 @@
 #include "wx/clipbrd.h"
 #include "wx/msw/private.h"
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+
+// ----------------------------------------------------------------------------
+// function prototypes
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
+                                            UINT message,
+                                            WPARAM wParam,
+                                            LPARAM lParam);
+
+// ---------------------------------------------------------------------------
+// global vars
+// ---------------------------------------------------------------------------
+
+// the pointer to standard radio button wnd proc
+static WXFARPROC gs_wndprocEdit = (WXFARPROC)NULL;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wnd proc for subclassed edit control
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
+                                            UINT message,
+                                            WPARAM wParam,
+                                            LPARAM lParam)
+{
+    if ( message == WM_CHAR )
+    {
+        HWND hwndCombo = ::GetParent(hWnd);
+        wxCHECK_MSG( hwndCombo, 0, _T("should have combo as parent") );
+
+        ::SendMessage(hwndCombo, message, wParam, lParam);
+    }
+
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
+}
+
+// ----------------------------------------------------------------------------
+// wxComboBox
+// ----------------------------------------------------------------------------
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
@@ -71,89 +127,71 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator& validator,
                         const wxString& name)
 {
-  SetName(name);
-#if wxUSE_VALIDATORS
-  SetValidator(validator);
-#endif // wxUSE_VALIDATORS
-  if (parent) parent->AddChild(this);
-//  SetBackgroundColour(parent->GetBackgroundColour()) ;
+    // first create wxWin object
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return FALSE;
 
-  // A choice/combobox normally has a white background (or other, depending
-  // on global settings) rather than inheriting the parent's background colour.
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
+    // get the right style
+    long msStyle = WS_TABSTOP | WS_VSCROLL | WS_HSCROLL |
+                   CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT;
+    if ( style & wxCB_READONLY )
+        msStyle |= CBS_DROPDOWNLIST;
+    else if ( style & wxCB_SIMPLE )
+        msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
+    else
+        msStyle |= CBS_DROPDOWN;
 
-  SetForegroundColour(parent->GetForegroundColour()) ;
+    if ( style & wxCB_SORT )
+        msStyle |= CBS_SORT;
 
-  m_windowStyle = style;
+    // and now create the MSW control
+    if ( !MSWCreateControl(_T("COMBOBOX"), msStyle) )
+        return FALSE;
 
-  if ( id == -1 )
-    m_windowId = (int)NewControlId();
-  else
-    m_windowId = id;
+    SetSize(pos.x, pos.y, size.x, size.y);
 
-  int x = pos.x;
-  int y = pos.y;
-  int width = size.x;
-  int height = size.y;
+    // A choice/combobox normally has a white background (or other, depending
+    // on global settings) rather than inheriting the parent's background colour.
+    SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
 
-  long msStyle = WS_CHILD | WS_TABSTOP | WS_VISIBLE |
-                 WS_VSCROLL | WS_HSCROLL | CBS_AUTOHSCROLL | CBS_NOINTEGRALHEIGHT;
+    for ( int i = 0; i < n; i++ )
+    {
+        Append(choices[i]);
+    }
 
-  if (m_windowStyle & wxCB_READONLY)
-    msStyle |= CBS_DROPDOWNLIST;
-  else if (m_windowStyle & wxCB_SIMPLE)
-    msStyle |= CBS_SIMPLE; // A list (shown always) and edit control
-  else
-    msStyle |= CBS_DROPDOWN;
+    if ( !value.IsEmpty() )
+    {
+        SetValue(value);
+    }
 
-  if (m_windowStyle & wxCB_SORT)
-    msStyle |= CBS_SORT;
+    // a (not read only) combobox is, in fact, 2 controls: the combobox itself
+    // and an edit control inside it and if we want to catch events from this
+    // edit control, we must subclass it as well
+    if ( !(style & wxCB_READONLY) )
+    {
+        // first find the child edit
+        POINT pt;
+        pt.x = pt.y = 4;
+        HWND hwndEdit = ::ChildWindowFromPoint(GetHwnd(), pt);
+        if ( !hwndEdit || hwndEdit == GetHwnd() )
+        {
+            wxFAIL_MSG(_T("not read only combobox without edit control?"));
+        }
+        else
+        {
+            gs_wndprocEdit = (WXFARPROC)::SetWindowLong
+                                          (
+                                            hwndEdit,
+                                            GWL_WNDPROC,
+                                            (LPARAM)wxComboEditWndProc
+                                          );
+        }
+    }
 
-  bool want3D;
-  WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
-
-  // Even with extended styles, need to combine with WS_BORDER
-  // for them to look right.
-  if ( want3D || wxStyleHasBorder(m_windowStyle) )
-    msStyle |= WS_BORDER;
-
-  m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("COMBOBOX"), NULL,
-                   msStyle,
-                   0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,
-                   wxGetInstance(), NULL);
-
-  wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create combobox") );
-
-/*
-#if wxUSE_CTL3D
-  if (want3D)
-  {
-    Ctl3dSubclassCtl(wx_combo);
-    m_useCtl3D = TRUE;
-  }
-#endif
-*/
-
-  // Subclass again for purposes of dialog editing mode
-  SubclassWin(m_hWnd);
-
-  SetFont(parent->GetFont());
-  int i;
-  for (i = 0; i < n; i++)
-  {
-    Append(choices[i]);
-  }
-
-  SetSelection(i);
-
-  SetSize(x, y, width, height);
-  if ( !value.IsEmpty() )
-  {
-    SetValue(value);
-  }
-
-  return TRUE;
+    return TRUE;
 }
+
+// TODO: update and clear all this horrible mess (VZ)
 
 void wxComboBox::SetValue(const wxString& value)
 {

@@ -22,6 +22,10 @@
 // #  error "MBCS is not supported by wxChar"
 #endif
 
+// ----------------------------------------------------------------------------
+// first deal with Unicode setting
+// ----------------------------------------------------------------------------
+
 // set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined
 #if defined(_UNICODE) || defined(UNICODE)
 #  undef wxUSE_UNICODE
@@ -30,7 +34,7 @@
 #  ifndef wxUSE_UNICODE
 #    define wxUSE_UNICODE 0
 #  endif
-#endif
+#endif // Unicode
 
 // and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1...
 #if wxUSE_UNICODE
@@ -40,7 +44,13 @@
 #  ifndef UNICODE
 #    define UNICODE
 #  endif
-#endif
+#endif // Unicode
+
+// Unicode support requires wchar_t
+#if wxUSE_UNICODE
+#   undef wxUSE_WCHAR_T
+#   define wxUSE_WCHAR_T 1
+#endif // Unicode
 
 // ----------------------------------------------------------------------------
 // define wxHAVE_TCHAR_FUNCTIONS for the compilers which support the
@@ -98,9 +108,7 @@
     // time.h functions  -- none defined in tchar.h
     #define  wxAsctime   asctime
     #define  wxCtime     ctime
-
-
-#endif
+#endif // compilers with (good) TCHAR support
 
 #ifdef wxHAVE_TCHAR_FUNCTIONS
 #  define HAVE_WCSLEN 1
@@ -116,9 +124,11 @@ typedef  _TUCHAR     wxUChar;
 #    define wxSChar signed char
 #    define wxUChar unsigned char
 #  endif
-   // wchar_t is available
-#  undef wxUSE_WCHAR_T
-#  define wxUSE_WCHAR_T 1
+
+    // wchar_t is available
+    #ifndef wxUSE_WCHAR_T
+        #define wxUSE_WCHAR_T 1
+    #endif // !defined(wxUSE_WCHAR_T)
 
    // ctype.h functions
 #ifndef wxNO_TCHAR_CTYPE
@@ -239,10 +249,7 @@ typedef  _TUCHAR     wxUChar;
 #else // !TCHAR-aware compilers
 
 // check whether we should include wchar.h or equivalent
-#  if wxUSE_UNICODE
-#    undef wxUSE_WCHAR_T
-#    define wxUSE_WCHAR_T 1 // wchar_t *must* be available in Unicode mode
-#  elif !defined(wxUSE_WCHAR_T)
+#  if !defined(wxUSE_WCHAR_T)
 #    if defined(__VISUALC__) && (__VISUALC__ < 900)
 #      define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
 #    elif defined(__UNIX__)
@@ -263,7 +270,7 @@ typedef  _TUCHAR     wxUChar;
   // add additional compiler checks if this fails
 #      define wxUSE_WCHAR_T 1
 #    endif
-#  endif//wxUSE_UNICODE
+#  endif // !defined(wxUSE_WCHAR_T)
 
 #  if wxUSE_WCHAR_T
 #    ifdef HAVE_WCSTR_H
@@ -627,6 +634,10 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm);
 #endif
+
+// ----------------------------------------------------------------------------
+// common macros which are always defined
+// ----------------------------------------------------------------------------
 
 // although global macros with such names are really bad, we want to have
 // another name for _T() which should be used to avoid confusion between _T()
