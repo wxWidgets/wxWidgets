@@ -41,6 +41,14 @@ Fix some incorrect clipping regions in wxSTC on wxGTK.
 
 Added wrapper for wx.grid.Grid.GetOrCreateCellAttr.
 
+Removed my copy of distutils from the wxPython source tree.  Now that
+I am no longer doing builds on Python 2.1 the newest distutils is no
+longer needed.  (There is still one small bug in Python 2.2 distutils
+on win32, but it is easily worked around.) This sovles the problem of
+incorrect builds on some systems where the system installed distutils
+has been patched to behave slightly differently, for example SuSE on
+x86_64 or Chandler's build.
+
 
 
 
