@@ -219,6 +219,10 @@ SOURCE=.\rtfutils.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\symbols.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\table.cpp
 
 !IF  "$(CFG)" == "Tex2RTFVC - Win32 Release"

@@ -1,6 +1,6 @@
 
-+++++                      Announcing Tex2RTF                         +++++
-+++++  A Free LaTeX to RTF, Windows Help RTF, HTML & wxHelp converter +++++
++++++                    Announcing Tex2RTF                      +++++
++++++  A Free LaTeX to RTF, Windows Help RTF, and HTML converter +++++
 
 Purpose
 =======
@@ -32,7 +32,7 @@ Output
 
   *  HTML (the World Wide Web hypertext format)
 
-  *  wxHelp (the wxWindows GUI library help file format)
+  *  wxHTML Help (the wxWindows GUI library help file format)
 
 Installation
 ============
@@ -45,37 +45,34 @@ own documents. See the online manual for further details.
 Platforms supported
 ===================
 
-  *  SPARC Open Look
+  *  Windows (all 32-bit desktop versions)
 
-  *  SPARC Motif
+  *  Any Unix supporting wxWindows
 
-  *  Windows 3.1
+  *  Mac OS X
 
 Where to get it
 ===============
 
-The latest version of Tex2RTF can be accessed by anonymous ftp from
-ftp.aiai.ed.ac.uk in the directory /pub/packages/tex2rtf.
-The WWW pages are at http://www.aiai.ed.ac.uk/~jacs/tex2rtf.html.
+The latest version of Tex2RTF can be accessed by anonymous ftp
+from:
 
-Tex2RTF was developed using the free Open Look/Motif/Windows 3.1 C++
-class library wxWindows, also available from the above FTP site in the
-/pub/packages/wxwin directory.
-The wxWindows WWW pages are at http://www.aiai.ed.ac.uk/~jacs/wxwin.html.
+    ftp://biolpc22.york.ac.uk/pub/tex2rtf
 
+The WWW pages are at:
+
+    http://www.wxwindows.org/tex2rtf
+
+Tex2RTF was developed using the free, cross-platform GUI toolkit
+wxWindows, at http://www.wxwindows.org. To compile Tex2RTF
+for platforms for which there are no Tex2RTF binaries,
+you need to download an appropriate version of wxWindows,
+configure and compile the library, then compile Tex2RTF
+in utils/tex2rtf/src.
 
 ------------------------------------------------------------------
-Julian Smart, November 1995
-
-Artificial Intelligence Applications Institute
-University of Edinburgh
-80 South Bridge
-Edinburgh
-Scotland
-EH1 1HN
-
-EMAIL: J.Smart@ed.ac.uk
-TEL:   0131 650 2746
+Julian Smart, August 2002
+julian.smart@btopenworld.com
 
 
 

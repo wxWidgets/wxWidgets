@@ -1,0 +1,136 @@
+
+
+LaCheck(1)                 Unix Programmer's Manual                 LaCheck(1)
+
+
+NAME
+     lacheck - A consistency checker for LaTeX documents.
+
+SYNOPSIS
+     lacheck filename [ .tex ]
+             --------    ---
+
+DESCRIPTION
+     lacheck is a general purpose consistency checker for LaTeX documents.  It
+     reads  a  LaTeX  document  and displays warning messages, if it finds bad
+     sequences. It should be noted, that the badness is very subjective.
+                                                        ----
+
+     The things checked are:
+
+     Mismatched groups (braces), environments and math mode delimiters.   When
+     a  mismatch is found, line numbers for both start and end of the mismatch
+                                            ----
+     is given. The error messages comes in pairs, one for the  end  match  and
+     one for the beginning, marked with `<-' and `->' respectively.
+
+     Bad spacing. This is: missing a `\ ' after an  abbreviation,  missing  an
+     `\@' before a punctuation mark in a paragraph that is ended by an capital
+     letter, double spaces like ` \~', bad usage of ellipsis (like  using  ...
+     instead of \ldots, or using \ldots where \cdots should be used)
+
+     lacheck will read files that are input using \input or  \include.   Files
+     with suffix `.sty' are omitted, as they probably will cause errors.
+
+     lacheck may be invoked from within Emacs(1) using compile:
+
+     To run: M-x compile <ret> , and then C-x ` to parse the messages
+
+
+OUTPUT
+     The output is UNIX-error like, and may be parsed using  Emacs(1)  compile
+     mode. Here is a sample:
+
+     lacheck compiler
+     "/usr/mef/compiler.tex", line 34: missing `\\\\ ' after "etc."
+     "/usr/mef/compiler.tex", line 179: double space at " ~"
+     "/usr/mef/compiler.tex", line 186: <- unmatched "}"
+     "/usr/mef/compiler.tex", line 181: -> unmatched "$$"
+
+     A control space `\ ' should be inserted at line 34, to prevent an end-of-
+     sentence  space.  Also, at line 179, the first space of the sequence " ~"
+     should probably be deleted.  The last two lines is an example, where  the
+     user mistyped, and probably inserted an extra "}" somewhere.
+
+
+DIAGNOSTICS
+     Some special cases should be explained. In cases where  a  sentence  ends
+     with  something  that  lacheck  thinks is an abbreviation an missing `\ '
+     error may also occur, if the following sentence  begins  with  a  capital
+     letter.
+
+     A mismatch error may cause more to follow, due to the  chosen  algorithm.
+     In such cases just correct the first error and run lacheck again
+                                    -----
+
+
+
+                                May 23, 1991                                 1
+
+
+
+
+LaCheck(1)                 Unix Programmer's Manual                 LaCheck(1)
+
+
+     Braces, environments and math mode must be balanced within a file.
+
+SEE ALSO
+     tex(1), Emacs(1), latex(1)
+
+BUGS
+     Lots... Ideas for improvements and bug reports  are  very  welcome.  Such
+     should be directed to the author.
+
+AUTHOR
+     Kresten Krab Thorup,  Email <krab@iesd.auc.dk>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                May 23, 1991                                 2
+
+

@@ -44,12 +44,13 @@
 #include "tex2any.h"
 #include "tex2rtf.h"
 #include "rtfutils.h"
+#include "symbols.h"
 
 #if (defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)) && !defined(NO_GUI)
 #include "tex2rtf.xpm"
 #endif
 
-const float versionNo = 2.0;
+const float versionNo = TEX2RTF_VERSION_NUMBER;
 
 TexChunk *currentMember = NULL;
 bool startedSections = FALSE;
@@ -380,7 +381,7 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menuBar);
     frame->textWindow = new wxTextCtrl(frame, -1, "", wxPoint(-1, -1), wxSize(-1, -1), wxTE_READONLY|wxTE_MULTILINE);
 
-    (*frame->textWindow) << "Welcome to Julian Smart's LaTeX to RTF converter.\n";
+    (*frame->textWindow) << "Welcome to Tex2RTF.\n";
 //    ShowOptions();
 
 #if wxUSE_HELP
@@ -829,7 +830,7 @@ void MyFrame::OnAbout(wxCommandEvent& event)
       char *platform = "";
 #endif
 #endif
-      sprintf(buf, "Tex2RTF Version %.2f%s\nLaTeX to RTF, WinHelp, HTML and wxHelp Conversion\n\n(c) Julian Smart 1999", versionNo, platform);
+      sprintf(buf, "Tex2RTF Version %.2f%s\nLaTeX to RTF, WinHelp, and HTML Conversion\n\n(c) Julian Smart, George Tasker and others, 1999-2002", versionNo, platform);
       wxMessageBox(buf, "About Tex2RTF");
 }
 

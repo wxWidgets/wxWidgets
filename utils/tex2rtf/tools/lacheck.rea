@@ -1,0 +1,9 @@
+To compile, do as folows:
+
+	flex -8 lacheck.lex
+	cc lex.yy.c -ll -O -o lacheck
+
+This should make a executable file called lacheck.
+Further documentation is in the manualpage.
+
+/Kresten
