@@ -96,7 +96,9 @@ public:
     void UpdateClock();
 
     // event handlers
+#if wxUSE_TIMER
     void OnTimer(wxTimerEvent& WXUNUSED(event)) { UpdateClock(); }
+#endif
     void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
     void OnButton(wxCommandEvent& event);
@@ -116,9 +118,13 @@ private:
         Field_Max
     };
 
+#if wxUSE_TIMER
     wxTimer m_timer;
+#endif
 
+#if wxUSE_CHECKBOX
     wxCheckBox *m_checkbox;
+#endif
 #ifdef USE_STATIC_BITMAP
     wxStaticBitmap *m_statbmp;
 #else
@@ -234,9 +240,13 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_SIZE(MyStatusBar::OnSize)
+#if wxUSE_CHECKBOX
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
+#endif
     EVT_BUTTON(wxID_ANY, MyStatusBar::OnButton)
+#if wxUSE_TIMER
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
+#endif
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -584,15 +594,23 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
 #endif
 
 MyStatusBar::MyStatusBar(wxWindow *parent)
-           : wxStatusBar(parent, wxID_ANY), m_timer(this), m_checkbox(NULL)
+           : wxStatusBar(parent, wxID_ANY)
+#if wxUSE_TIMER
+             , m_timer(this)
+#endif
+#if wxUSE_CHECKBOX
+             , m_checkbox(NULL)
+#endif
 {
     static const int widths[Field_Max] = { -1, 150, BITMAP_SIZE_X, 100 };
 
     SetFieldsCount(Field_Max);
     SetStatusWidths(Field_Max, widths);
 
+#if wxUSE_CHECKBOX
     m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, _T("&Toggle clock"));
     m_checkbox->SetValue(true);
+#endif
 
 #ifdef USE_STATIC_BITMAP
     m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxIcon(green_xpm));
@@ -602,7 +620,9 @@ MyStatusBar::MyStatusBar(wxWindow *parent)
                                    wxBU_EXACTFIT);
 #endif
 
+#if wxUSE_TIMER
     m_timer.Start(1000);
+#endif
 
     SetMinHeight(BITMAP_SIZE_Y);
 
@@ -615,10 +635,12 @@ MyStatusBar::MyStatusBar(wxWindow *parent)
 
 MyStatusBar::~MyStatusBar()
 {
+#if wxUSE_TIMER
     if ( m_timer.IsRunning() )
     {
         m_timer.Stop();
     }
+#endif
 }
 
 wxBitmap MyStatusBar::CreateBitmapForButton(bool on)
@@ -640,13 +662,17 @@ wxBitmap MyStatusBar::CreateBitmapForButton(bool on)
 
 void MyStatusBar::OnSize(wxSizeEvent& event)
 {
+#if wxUSE_CHECKBOX
     if ( !m_checkbox )
         return;
+#endif
 
     wxRect rect;
     GetFieldRect(Field_Checkbox, rect);
 
+#if wxUSE_CHECKBOX
     m_checkbox->SetSize(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4);
+#endif
 
     GetFieldRect(Field_Bitmap, rect);
     wxSize size = m_statbmp->GetSize();
@@ -659,7 +685,9 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
 
 void MyStatusBar::OnButton(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_CHECKBOX
     m_checkbox->SetValue(!m_checkbox->GetValue());
+#endif
 
     DoToggle();
 }
@@ -671,9 +699,12 @@ void MyStatusBar::OnToggleClock(wxCommandEvent& WXUNUSED(event))
 
 void MyStatusBar::DoToggle()
 {
+#if wxUSE_CHECKBOX
     if ( m_checkbox->GetValue() )
     {
+#if wxUSE_TIMER
         m_timer.Start(1000);
+#endif
 
 #ifdef USE_STATIC_BITMAP
         m_statbmp->SetIcon(wxIcon(green_xpm));
@@ -686,7 +717,9 @@ void MyStatusBar::DoToggle()
     }
     else // don't show clock
     {
+#if wxUSE_TIMER
         m_timer.Stop();
+#endif
 
 #ifdef USE_STATIC_BITMAP
         m_statbmp->SetIcon(wxIcon(red_xpm));
@@ -697,6 +730,7 @@ void MyStatusBar::DoToggle()
 
         SetStatusText(wxEmptyString, Field_Clock);
     }
+#endif
 }
 
 void MyStatusBar::UpdateClock()
