@@ -59,7 +59,8 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
             dummy[0] = 0; i = 0;
-            while (src[pos] != wxT('>') &&
+            while (pos < lng && 
+                   src[pos] != wxT('>') &&
                    src[pos] != wxT(' ') && src[pos] != wxT('\r') && 
                    src[pos] != wxT('\n') && src[pos] != wxT('\t')) {
                 dummy[i] = src[pos++];
@@ -70,7 +71,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             m_Cache[tg].Name = new wxChar[i+1];
             memcpy(m_Cache[tg].Name, dummy, (i+1)*sizeof(wxChar));
 
-            while (src[pos] != wxT('>')) pos++;
+            while (pos < lng && src[pos] != wxT('>')) pos++;
 
             if (src[stpos+1] == wxT('/')) { // ending tag:
                 m_Cache[tg].End1 = m_Cache[tg].End2 = -2;
