@@ -271,8 +271,9 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
              pieces[m_CurTextPiece].m_pos < m_CurTag->GetBeginPos()))
         {
             // Add text:
-            AddText(m_Source.Mid(pieces[m_CurTextPiece].m_pos,
-                                 pieces[m_CurTextPiece].m_lng));
+            AddText(GetEntitiesParser()->Parse(
+                       m_Source.Mid(pieces[m_CurTextPiece].m_pos,
+                                    pieces[m_CurTextPiece].m_lng)));
             begin_pos = pieces[m_CurTextPiece].m_pos +
                         pieces[m_CurTextPiece].m_lng;
             m_CurTextPiece++;
