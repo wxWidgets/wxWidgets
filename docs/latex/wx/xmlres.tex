@@ -3,13 +3,17 @@
 % xmlres.h at 22/Jan/02 23:08:28
 %
 
-
 \section{\class{wxXmlResource}}\label{wxxmlresource}
 
+This is the main class for interacting with the XML-based resource system.
 
-This class holds XML resources from one or more .xml files
-(or derived forms, either binary or zipped -- see manual for
-details).
+The class holds XML resources from one or more .xml files, binary files or zip archive files.
+
+See \helpref{XML-based resource system overview}{xrcoverview} for details.
+
+{\bf NOTE:} XRC is not yet a part of the core wxWindows library, so
+please see the overview for how to compile and link it. Otherwise if you
+try to use it, you will get link errors.
 
 \wxheading{Derived from}
 
@@ -17,34 +21,40 @@ details).
 
 \wxheading{Include files}
 
-<xmlres.h>
+<wx/xrc/xmlres.h>
 
 \wxheading{Data structures}
 
-\latexignore{\rtfignore{\wxheading{Members}}}
+\begin{enumerate}
+enum wxXmlResourceFlags
+{
+    wxXRC_USE_LOCALE     = 1,
+    wxXRC_NO_SUBCLASSING = 2
+};
+\end{enumerate}
 
+\latexignore{\rtfignore{\wxheading{Members}}}
 
 \membersection{wxXmlResource::wxXmlResource}\label{wxxmlresourcewxxmlresource}
 
 \func{}{wxXmlResource}{\param{const wxString\& }{filemask}, \param{int }{flags = wxXRC\_USE\_LOCALE}}
 
 Constructor.
-Flags: wxXRC\_USE\_LOCALE
-translatable strings will be translated via \_()
-wxXRC\_NO\_SUBCLASSING
-subclass property of object nodes will be ignored
-(useful for previews in XRC editors)
 
+\docparam{filemask}{The XRC file, archive file, or wildcard specification that will be used to
+load all resource files inside a zip archive.}
+
+\docparam{flags}{wxXRC\_USE\_LOCALE: translatable strings will be translated via \_().
+wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
+(useful for previews in XRC editors).}
 
 \func{}{wxXmlResource}{\param{int }{flags = wxXRC\_USE\_LOCALE}}
 
 Constructor.
-Flags: wxXRC\_USE\_LOCALE
-translatable strings will be translated via \_()
-wxXRC\_NO\_SUBCLASSING
-subclass property of object nodes will be ignored
-(useful for previews in XRC editors)
 
+\docparam{flags}{wxXRC\_USE\_LOCALE: translatable strings will be translated via \_().
+wxXRC\_NO\_SUBCLASSING: subclass property of object nodes will be ignored
+(useful for previews in XRC editors).}
 
 \membersection{wxXmlResource::\destruct{wxXmlResource}}\label{wxxmlresourcedtor}
 
@@ -52,17 +62,15 @@ subclass property of object nodes will be ignored
 
 Destructor.
 
-
 \membersection{wxXmlResource::AddHandler}\label{wxxmlresourceaddhandler}
 
 \func{void}{AddHandler}{\param{wxXmlResourceHandler* }{handler}}
 
-Initialize only a specific handler (or custom handler). Convention says
-that handler name is equal to the control's name plus 'XmlHandler', for example
+Initializes only a specific handler (or custom handler). Convention says
+that the handler name is equal to the control's name plus 'XmlHandler', for example
 wxTextCtrlXmlHandler, wxHtmlWindowXmlHandler. The XML resource compiler
-(xmlres) can create include file that contains initialization code for
+(wxxrc) can create include file that contains initialization code for
 all controls used within the resource.
-
 
 \membersection{wxXmlResource::AttachUnknownControl}\label{wxxmlresourceattachunknowncontrol}
 
@@ -71,21 +79,18 @@ all controls used within the resource.
 Attaches an unknown control to the given panel/window/dialog.
 Unknown controls are used in conjunction with <object class="unknown">.
 
-
 \membersection{wxXmlResource::ClearHandlers}\label{wxxmlresourceclearhandlers}
 
 \func{void}{ClearHandlers}{\void}
 
-Removes all handlers
-
+Removes all handlers.
 
 \membersection{wxXmlResource::CompareVersion}\label{wxxmlresourcecompareversion}
 
 \constfunc{int}{CompareVersion}{\param{int }{major}, \param{int }{minor}, \param{int }{release}, \param{int }{revision}}
 
-Compares resources version to argument. Returns -1 if resources version
-is less than the argument, +1 if greater and 0 if they equal.
-
+Compares the XRC version to the argument. Returns -1 if the XRC version
+is less than the argument, +1 if greater, and 0 if they equal.
 
 \membersection{wxXmlResource::CreateResFromNode}\label{wxxmlresourcecreateresfromnode}
 
@@ -93,13 +98,11 @@ is less than the argument, +1 if greater and 0 if they equal.
 
 Creates a resource from information in the given node.
 
-
 \membersection{wxXmlResource::DoFindResource}\label{wxxmlresourcedofindresource}
 
 \func{wxXmlNode*}{DoFindResource}{\param{wxXmlNode* }{parent}, \param{const wxString\& }{name}, \param{const wxString\& }{classname}, \param{bool }{recursive}}
 
 Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
-
 
 \membersection{wxXmlResource::FindResource}\label{wxxmlresourcefindresource}
 
@@ -107,14 +110,11 @@ Helper function: finds a resource (calls UpdateResources) and returns a node con
 
 Finds a resource (calls UpdateResources) and returns a node containing it.
 
-
 \membersection{wxXmlResource::Get}\label{wxxmlresourceget}
 
 \func{wxXmlResource*}{Get}{\void}
 
-Singleton accessors.
 Gets the global resources object or creates one if none exists.
-
 
 \membersection{wxXmlResource::GetFlags}\label{wxxmlresourcegetflags}
 
@@ -122,31 +122,27 @@ Gets the global resources object or creates one if none exists.
 
 Returns flags, which may be a bitlist of wxXRC\_USE\_LOCALE and wxXRC\_NO\_SUBCLASSING.
 
-
 \membersection{wxXmlResource::GetVersion}\label{wxxmlresourcegetversion}
 
 \constfunc{long}{GetVersion}{\void}
 
 Returns version information (a.b.c.d = d+ 256*c + 256\verb|^|2*b + 256\verb|^|3*a).
 
-
 \membersection{wxXmlResource::GetXMLID}\label{wxxmlresourcegetxmlid}
 
 \func{int}{GetXMLID}{\param{const wxChar* }{str\_id}}
 
-Returns a numeric ID that is equivalent to the string id used in an XML
+Returns a numeric ID that is equivalent to the string ID used in an XML
 resource. To be used in event tables.
-Macro XMLID is provided for convenience
-
+The macro \verb$XMLID(name)$ is provided for convenience.
 
 \membersection{wxXmlResource::InitAllHandlers}\label{wxxmlresourceinitallhandlers}
 
 \func{void}{InitAllHandlers}{\void}
 
-Initialize handlers for all supported controls/windows. This will
+Initializes handlers for all supported controls/windows. This will
 make the executable quite big because it forces linking against
 most of the wxWindows library.
-
 
 \membersection{wxXmlResource::Load}\label{wxxmlresourceload}
 
@@ -155,31 +151,32 @@ most of the wxWindows library.
 Loads resources from XML files that match given filemask.
 This method understands VFS (see filesys.h).
 
-
 \membersection{wxXmlResource::LoadBitmap}\label{wxxmlresourceloadbitmap}
 
 \func{wxBitmap}{LoadBitmap}{\param{const wxString\& }{name}}
 
 Loads a bitmap resource from a file.
 
-
 \membersection{wxXmlResource::LoadDialog}\label{wxxmlresourceloaddialog}
 
 \func{wxDialog*}{LoadDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads a dialog. dlg points to parent window (if any).
-
+Loads a dialog. {\it dlg} points to a parent window (if any).
 
 \func{bool}{LoadDialog}{\param{wxDialog* }{dlg}, \param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads a dialog. dlg points to parent window (if any). This form
-is used to finish creation of already existing instance (main reason
-for this is that you may want to use derived class with new event table)
-Example (typical usage):
-MyDialog dlg;
-wxTheXmlResource->LoadDialog(\&dlg, mainFrame, "my\_dialog");
-dlg->ShowModal();
+Loads a dialog. {\it dlg} points to parent window (if any).
 
+This form is used to finish creation of an already existing instance (the main reason
+for this is that you may want to use derived class with a new event table).
+
+Example:
+
+\begin{verbatim}
+  MyDialog dlg;
+  wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
+  dlg->ShowModal();
+\end{verbatim}
 
 \membersection{wxXmlResource::LoadFrame}\label{wxxmlresourceloadframe}
 
@@ -187,13 +184,11 @@ dlg->ShowModal();
 
 Loads a frame.
 
-
 \membersection{wxXmlResource::LoadIcon}\label{wxxmlresourceloadicon}
 
 \func{wxIcon}{LoadIcon}{\param{const wxString\& }{name}}
 
 Loads an icon resource from a file.
-
 
 \membersection{wxXmlResource::LoadMenu}\label{wxxmlresourceloadmenu}
 
@@ -201,31 +196,26 @@ Loads an icon resource from a file.
 
 Loads menu from resource. Returns NULL on failure.
 
-
 \membersection{wxXmlResource::LoadMenuBar}\label{wxxmlresourceloadmenubar}
 
 \func{wxMenuBar*}{LoadMenuBar}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads menubar from resource. Returns NULL on failure.
-
+Loads a menubar from resource. Returns NULL on failure.
 
 \func{wxMenuBar*}{LoadMenuBar}{\param{const wxString\& }{name}}
 
-Loads menubar from resource. Returns NULL on failure.
-
+Loads a menubar from resource. Returns NULL on failure.
 
 \membersection{wxXmlResource::LoadPanel}\label{wxxmlresourceloadpanel}
 
 \func{wxPanel*}{LoadPanel}{\param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads a panel. panel points to parent window (if any).
-
+Loads a panel. {\it panel} points to parent window (if any).
 
 \func{bool}{LoadPanel}{\param{wxPanel* }{panel}, \param{wxWindow* }{parent}, \param{const wxString\& }{name}}
 
-Loads a panel. panel points to parent window (if any). This form
-is used to finish creation of already existing instance.
-
+Loads a panel. {\it panel} points to parent window (if any). This form
+is used to finish creation of an already existing instance.
 
 \membersection{wxXmlResource::LoadToolBar}\label{wxxmlresourceloadtoolbar}
 
@@ -233,18 +223,16 @@ is used to finish creation of already existing instance.
 
 Loads a toolbar.
 
-
 \membersection{wxXmlResource::Set}\label{wxxmlresourceset}
 
 \func{wxXmlResource*}{Set}{\param{wxXmlResource* }{res}}
 
 Sets the global resources object and returns a pointer to the previous one (may be NULL).
 
-
 \membersection{wxXmlResource::UpdateResources}\label{wxxmlresourceupdateresources}
 
 \func{void}{UpdateResources}{\void}
 
 Scans the resources list for unloaded files and loads them. Also reloads
-files that have been modified since last loading.
+files that have been modified since the last load.
 

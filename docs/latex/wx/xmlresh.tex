@@ -8,6 +8,12 @@
 wxXmlResourceHandler is an abstract base class for resource handlers
 capable of creating a control from an XML node.
 
+See \helpref{XML-based resource system overview}{xrcoverview} for details.
+
+{\bf NOTE:} XRC is not yet a part of the core wxWindows library, so
+please see the overview for how to compile and link it. Otherwise if you
+try to use it, you will get link errors.
+
 \wxheading{Derived from}
 
 \helpref{wxObject}{wxobject}
@@ -16,24 +22,19 @@ capable of creating a control from an XML node.
 
 <wx/xrc/xmlres.h>
 
-\wxheading{Data structures}
-
 \latexignore{\rtfignore{\wxheading{Members}}}
-
 
 \membersection{wxXmlResourceHandler::wxXmlResourceHandler}\label{wxxmlresourcehandlerwxxmlresourcehandler}
 
 \func{}{wxXmlResourceHandler}{\void}
 
-Constructor.
-
+Default constructor.
 
 \membersection{wxXmlResourceHandler::\destruct{wxXmlResourceHandler}}\label{wxxmlresourcehandlerdtor}
 
 \func{}{\destruct{wxXmlResourceHandler}}{\void}
 
 Destructor.
-
 
 \membersection{wxXmlResourceHandler::AddStyle}\label{wxxmlresourcehandleraddstyle}
 
@@ -42,13 +43,11 @@ Destructor.
 Add a style flag (e.g. wxMB\_DOCKABLE) to the list of flags
 understood by this handler.
 
-
 \membersection{wxXmlResourceHandler::AddWindowStyles}\label{wxxmlresourcehandleraddwindowstyles}
 
 \func{void}{AddWindowStyles}{\void}
 
 Add styles common to all wxWindow-derived classes.
-
 
 \membersection{wxXmlResourceHandler::CanHandle}\label{wxxmlresourcehandlercanhandle}
 
@@ -57,13 +56,11 @@ Add styles common to all wxWindow-derived classes.
 Returns TRUE if it understands this node and can create
 a resource from it, FALSE otherwise.
 
-
 \membersection{wxXmlResourceHandler::CreateChildren}\label{wxxmlresourcehandlercreatechildren}
 
 \func{void}{CreateChildren}{\param{wxObject* }{parent}, \param{bool }{this\_hnd\_only = FALSE}}
 
 Creates children.
-
 
 \membersection{wxXmlResourceHandler::CreateChildrenPrivately}\label{wxxmlresourcehandlercreatechildrenprivately}
 
@@ -71,33 +68,28 @@ Creates children.
 
 Helper function.
 
-
 \membersection{wxXmlResourceHandler::CreateResFromNode}\label{wxxmlresourcehandlercreateresfromnode}
 
 \func{wxObject*}{CreateResFromNode}{\param{wxXmlNode* }{node}, \param{wxObject* }{parent}, \param{wxObject* }{instance = NULL}}
 
 Creates a resource from a node.
 
-
 \membersection{wxXmlResourceHandler::CreateResource}\label{wxxmlresourcehandlercreateresource}
 
 \func{wxObject*}{CreateResource}{\param{wxXmlNode* }{node}, \param{wxObject* }{parent}, \param{wxObject* }{instance}}
 
 Creates an object (menu, dialog, control, ...) from an XML node.
-Should check for validity.
-parent is a higher-level object (usually window, dialog or panel)
+Should check for validity. {\it parent} is a higher-level object (usually window, dialog or panel)
 that is often neccessary to create the resource.
-If instance is non-NULL it should not create a new instance via 'new' but
+If {\bf instance} is non-NULL it should not create a new instance via 'new' but
 should rather use this one, and call its Create method.
-
 
 \membersection{wxXmlResourceHandler::DoCreateResource}\label{wxxmlresourcehandlerdocreateresource}
 
 \func{wxObject*}{DoCreateResource}{\void}
 
-This one is called from CreateResource after variables
+Called from CreateResource after variables
 were filled.
-
 
 \membersection{wxXmlResourceHandler::GetBitmap}\label{wxxmlresourcehandlergetbitmap}
 
@@ -105,13 +97,11 @@ were filled.
 
 Gets a bitmap.
 
-
 \membersection{wxXmlResourceHandler::GetBool}\label{wxxmlresourcehandlergetbool}
 
 \func{bool}{GetBool}{\param{const wxString\& }{param}, \param{bool }{defaultv = FALSE}}
 
 Gets a bool flag (1, t, yes, on, true are TRUE, everything else is FALSE).
-
 
 \membersection{wxXmlResourceHandler::GetColour}\label{wxxmlresourcehandlergetcolour}
 
@@ -119,11 +109,11 @@ Gets a bool flag (1, t, yes, on, true are TRUE, everything else is FALSE).
 
 Gets colour in HTML syntax (\#RRGGBB).
 
-
 \membersection{wxXmlResourceHandler::GetCurFileSystem}\label{wxxmlresourcehandlergetcurfilesystem}
 
 \func{wxFileSystem\&}{GetCurFileSystem}{\void}
 
+Returns the current file system.
 
 \membersection{wxXmlResourceHandler::GetDimension}\label{wxxmlresourcehandlergetdimension}
 
@@ -131,13 +121,11 @@ Gets colour in HTML syntax (\#RRGGBB).
 
 Gets a dimension (may be in dialog units).
 
-
 \membersection{wxXmlResourceHandler::GetFont}\label{wxxmlresourcehandlergetfont}
 
 \func{wxFont}{GetFont}{\param{const wxString\& }{param = wxT("font")}}
 
 Gets a font.
-
 
 \membersection{wxXmlResourceHandler::GetID}\label{wxxmlresourcehandlergetid}
 
@@ -145,13 +133,11 @@ Gets a font.
 
 Returns the XMLID.
 
-
 \membersection{wxXmlResourceHandler::GetIcon}\label{wxxmlresourcehandlergeticon}
 
 \func{wxIcon}{GetIcon}{\param{const wxString\& }{param = wxT("icon")}, \param{wxSize }{size = wxDefaultSize}}
 
-Gets an icon.
-
+Returns an icon.
 
 \membersection{wxXmlResourceHandler::GetLong}\label{wxxmlresourcehandlergetlong}
 
@@ -159,24 +145,17 @@ Gets an icon.
 
 Gets the integer value from the parameter.
 
-
 \membersection{wxXmlResourceHandler::GetName}\label{wxxmlresourcehandlergetname}
 
 \func{wxString}{GetName}{\void}
 
 Returns the resource name.
 
-
 \membersection{wxXmlResourceHandler::GetNodeContent}\label{wxxmlresourcehandlergetnodecontent}
 
 \func{wxString}{GetNodeContent}{\param{wxXmlNode* }{node}}
 
-Gets node content from wxXML\_ENTITY\_NODE
-The problem is, <tag>content<tag> is represented as
-wxXML\_ENTITY\_NODE name="tag", content=""
-|-- wxXML\_TEXT\_NODE or
-wxXML\_CDATA\_SECTION\_NODE name="" content="content"
-
+Gets node content from wxXML\_ENTITY\_NODE.
 
 \membersection{wxXmlResourceHandler::GetParamNode}\label{wxxmlresourcehandlergetparamnode}
 
@@ -184,13 +163,11 @@ wxXML\_CDATA\_SECTION\_NODE name="" content="content"
 
 Finds the node or returns NULL.
 
-
 \membersection{wxXmlResourceHandler::GetParamValue}\label{wxxmlresourcehandlergetparamvalue}
 
 \func{wxString}{GetParamValue}{\param{const wxString\& }{param}}
 
 Finds the parameter value or returns the empty string.
-
 
 \membersection{wxXmlResourceHandler::GetPosition}\label{wxxmlresourcehandlergetposition}
 
@@ -198,21 +175,18 @@ Finds the parameter value or returns the empty string.
 
 Gets the position (may be in dialog units).
 
-
 \membersection{wxXmlResourceHandler::GetSize}\label{wxxmlresourcehandlergetsize}
 
 \func{wxSize}{GetSize}{\param{const wxString\& }{param = wxT("size")}}
 
 Gets the size (may be in dialog units).
 
-
 \membersection{wxXmlResourceHandler::GetStyle}\label{wxxmlresourcehandlergetstyle}
 
 \func{int}{GetStyle}{\param{const wxString\& }{param = wxT("style")}, \param{int }{defaults = 0}}
 
 Gets style flags from text in form "flag | flag2| flag3 |..."
-Only understads flags added with AddStyle
-
+Only understands flags added with AddStyle.
 
 \membersection{wxXmlResourceHandler::GetText}\label{wxxmlresourcehandlergettext}
 
@@ -233,7 +207,6 @@ translation because of XML syntax)
 
 Check to see if a parameter exists.
 
-
 \membersection{wxXmlResourceHandler::IsOfClass}\label{wxxmlresourcehandlerisofclass}
 
 \func{bool}{IsOfClass}{\param{wxXmlNode* }{node}, \param{const wxString\& }{classname}}
@@ -241,13 +214,11 @@ Check to see if a parameter exists.
 Convenience function. Returns true if the node has a property class equal to classname,
 e.g. <object class="wxDialog">.
 
-
 \membersection{wxXmlResourceHandler::SetParentResource}\label{wxxmlresourcehandlersetparentresource}
 
 \func{void}{SetParentResource}{\param{wxXmlResource* }{res}}
 
 Sets the parent resource.
-
 
 \membersection{wxXmlResourceHandler::SetupWindow}\label{wxxmlresourcehandlersetupwindow}
 
