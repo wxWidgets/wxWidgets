@@ -411,12 +411,29 @@ inline void wxCheckCast(void *ptr)
 class WXDLLEXPORT wxObject
 {
     DECLARE_ABSTRACT_CLASS(wxObject)
-    DECLARE_NO_COPY_CLASS(wxObject)
 
+private:
+    void InitFrom(const wxObject& other);
+    
 public:
     wxObject() { m_refData = NULL; }
     virtual ~wxObject() { UnRef(); }
     
+    wxObject(const wxObject& other)
+        {
+            InitFrom(other);
+        }
+    
+    wxObject& operator=(const wxObject& other)
+    {
+        if ( this != &other )
+        {
+            UnRef();
+            InitFrom(other);
+        }
+        return *this;
+    }
+
     bool IsKindOf(wxClassInfo *info) const;
 
 

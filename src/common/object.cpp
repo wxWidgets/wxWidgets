@@ -82,7 +82,6 @@ void wxObject::Dump(wxSTD ostream& str)
 #endif
 
 
-
 #ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
 void *wxObject::operator new ( size_t size, const wxChar *fileName, int lineNum )
 {
@@ -247,8 +246,17 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 
 
 // ----------------------------------------------------------------------------
-// wxClassInfo
+// wxObject
 // ----------------------------------------------------------------------------
+
+// Initialize ref data from another object (needed for copy constructor and
+// assignment operator)
+void wxObject::InitFrom(const wxObject& other)
+{
+    m_refData = other.m_refData;
+    if ( m_refData )
+        m_refData->m_count++;
+}
 
 void wxObject::Ref(const wxObject& clone)
 {
