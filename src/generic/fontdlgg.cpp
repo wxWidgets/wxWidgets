@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -44,73 +44,73 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGenericFontDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
-	EVT_CHECKBOX(wxID_FONT_UNDERLINE, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_STYLE, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_FAMILY, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
-	EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
-	EVT_PAINT(wxGenericFontDialog::OnPaint)
-	EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
+    EVT_CHECKBOX(wxID_FONT_UNDERLINE, wxGenericFontDialog::OnChangeFont)
+    EVT_CHOICE(wxID_FONT_STYLE, wxGenericFontDialog::OnChangeFont)
+    EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
+    EVT_CHOICE(wxID_FONT_FAMILY, wxGenericFontDialog::OnChangeFont)
+    EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
+    EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
+    EVT_PAINT(wxGenericFontDialog::OnPaint)
+    EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 #endif
 
 #define NUM_COLS 48
 static wxString wxColourDialogNames[NUM_COLS]={_T("ORANGE"),
-				    _T("GOLDENROD"),
-				    _T("WHEAT"),
-				    _T("SPRING GREEN"),
-				    _T("SKY BLUE"),
-				    _T("SLATE BLUE"),
-				    _T("MEDIUM VIOLET RED"),
-				    _T("PURPLE"),
+                    _T("GOLDENROD"),
+                    _T("WHEAT"),
+                    _T("SPRING GREEN"),
+                    _T("SKY BLUE"),
+                    _T("SLATE BLUE"),
+                    _T("MEDIUM VIOLET RED"),
+                    _T("PURPLE"),
 
-				    _T("RED"),
-				    _T("YELLOW"),
-				    _T("MEDIUM SPRING GREEN"),
-				    _T("PALE GREEN"),
-				    _T("CYAN"),
-				    _T("LIGHT STEEL BLUE"),
-				    _T("ORCHID"),
-				    _T("LIGHT MAGENTA"),
-				    
-				    _T("BROWN"),
-				    _T("YELLOW"),
-				    _T("GREEN"),
-				    _T("CADET BLUE"),
-				    _T("MEDIUM BLUE"),
-				    _T("MAGENTA"),
-				    _T("MAROON"),
-				    _T("ORANGE RED"),
+                    _T("RED"),
+                    _T("YELLOW"),
+                    _T("MEDIUM SPRING GREEN"),
+                    _T("PALE GREEN"),
+                    _T("CYAN"),
+                    _T("LIGHT STEEL BLUE"),
+                    _T("ORCHID"),
+                    _T("LIGHT MAGENTA"),
 
-				    _T("FIREBRICK"),
-				    _T("CORAL"),
-				    _T("FOREST GREEN"),
-				    _T("AQUARAMINE"),
-				    _T("BLUE"),
-				    _T("NAVY"),
-				    _T("THISTLE"),
-				    _T("MEDIUM VIOLET RED"),
-				    
-				    _T("INDIAN RED"),
-				    _T("GOLD"),
-				    _T("MEDIUM SEA GREEN"),
-				    _T("MEDIUM BLUE"),
-				    _T("MIDNIGHT BLUE"),
-				    _T("GREY"),
-				    _T("PURPLE"),
-				    _T("KHAKI"),
-				    
-				    _T("BLACK"),
-				    _T("MEDIUM FOREST GREEN"),
-				    _T("KHAKI"),
-				    _T("DARK GREY"),
-				    _T("SEA GREEN"),
-				    _T("LIGHT GREY"),
-				    _T("MEDIUM SLATE BLUE"),
-				    _T("WHITE")
-				    };
+                    _T("BROWN"),
+                    _T("YELLOW"),
+                    _T("GREEN"),
+                    _T("CADET BLUE"),
+                    _T("MEDIUM BLUE"),
+                    _T("MAGENTA"),
+                    _T("MAROON"),
+                    _T("ORANGE RED"),
+
+                    _T("FIREBRICK"),
+                    _T("CORAL"),
+                    _T("FOREST GREEN"),
+                    _T("AQUARAMINE"),
+                    _T("BLUE"),
+                    _T("NAVY"),
+                    _T("THISTLE"),
+                    _T("MEDIUM VIOLET RED"),
+
+                    _T("INDIAN RED"),
+                    _T("GOLD"),
+                    _T("MEDIUM SEA GREEN"),
+                    _T("MEDIUM BLUE"),
+                    _T("MIDNIGHT BLUE"),
+                    _T("GREY"),
+                    _T("PURPLE"),
+                    _T("KHAKI"),
+
+                    _T("BLACK"),
+                    _T("MEDIUM FOREST GREEN"),
+                    _T("KHAKI"),
+                    _T("DARK GREY"),
+                    _T("SEA GREEN"),
+                    _T("LIGHT GREY"),
+                    _T("MEDIUM SLATE BLUE"),
+                    _T("WHITE")
+                    };
 
 /*
  * Generic wxFontDialog
@@ -137,17 +137,17 @@ void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
   EndModal(wxID_CANCEL);
 }
- 
+
 bool wxGenericFontDialog::Create(wxWindow *parent, wxFontData *data)
 {
   dialogParent = parent;
-  
+
   if (data)
     fontData = *data;
 
   InitializeFont();
   CreateWidgets();
-  
+
   return TRUE;
 }
 
@@ -160,14 +160,12 @@ int wxGenericFontDialog::ShowModal(void)
       fontData.chosenFont = dialogFont;
     }
 
-	return ret;
+    return ret;
 }
 
 
 void wxGenericFontDialog::OnPaint(wxPaintEvent& event)
 {
-  wxDialog::OnPaint(event);
-
   wxPaintDC dc(this);
   PaintFontBackground(dc);
   PaintFont(dc);
@@ -202,7 +200,7 @@ void wxGenericFontDialog::CreateWidgets(void)
     static char *styles[] = { "Normal", "Italic", "Slant" };
     static char *weights[] = { "Normal", "Light", "Bold" };
   */
-  
+
   wxString
      *families = new wxString[6],
      *styles = new wxString[3],
@@ -219,7 +217,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   weights[0] = _("Normal");
   weights[1] = _("Light");
   weights[2] = _("Bold");
-  
+
   int x=-1;
   int y=40;
   familyChoice = new wxChoice(this, wxID_FONT_FAMILY, wxPoint(10, 10), wxSize(120, -1), 5, families);
@@ -230,16 +228,16 @@ void wxGenericFontDialog::CreateWidgets(void)
 #if 0 // def __WXMOTIF__ // TODO: This necessary now?
   // We want the pointSizeText to line up on the y axis with the colourChoice
   colourChoice->GetPosition(&fontRect.x, &y); //NL mod
-  y+=3;	//NL mod
+  y+=3;    //NL mod
 #endif
 
   wxString *pointSizes = new wxString[40];
   int i;
   for ( i = 0; i < 40; i++)
   {
-	char buf[5];
-	sprintf(buf, "%d", i + 1);
-	pointSizes[i] = buf;
+    char buf[5];
+    sprintf(buf, "%d", i + 1);
+    pointSizes[i] = buf;
   }
 
   pointSizeChoice = new wxChoice(this, wxID_FONT_SIZE, wxPoint(230, y), wxSize(50, -1), 40, pointSizes);
@@ -251,7 +249,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   pointSizeChoice->GetSize(&x, &y); //NL mod
 
   // Calculate the position of the bottom of the pointSizeChoice, and place
-  // the fontRect there  (+5 for a nice gap) 
+  // the fontRect there  (+5 for a nice gap)
 
   fontRect.y+=y+5; //NL mod
 
@@ -265,7 +263,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   weightChoice->SetStringSelection(wxFontWeightIntToString(dialogFont.GetWeight()));
   wxString name(wxTheColourDatabase->FindName(fontData.fontColour));
   colourChoice->SetStringSelection(name);
-    
+
   underLineCheckBox->SetValue(dialogFont.GetUnderlined());
   pointSizeChoice->SetSelection(dialogFont.GetPointSize()-1);
 
@@ -328,7 +326,7 @@ void wxGenericFontDialog::PaintFont(wxDC& dc)
     dc.SetClippingRegion( fontRect.x, fontRect.y, (long)(fontRect.width-2.0), (long)(fontRect.height-2.0));
     dc.DrawText(_("ABCDEFGabcdefg12345"), (long)cx, (long)cy);
     dc.DestroyClippingRegion();
-	dc.SetFont(wxNullFont);
+    dc.SetFont(wxNullFont);
   }
   dc.EndDrawing();
 }
@@ -336,7 +334,7 @@ void wxGenericFontDialog::PaintFont(wxDC& dc)
 void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
 {
   if (!m_useEvents) return;
-  
+
   int fontFamily = 0;  /* shut up buggy egcs warnings */
   fontFamily = wxFontFamilyStringToInt(WXSTRINGCAST familyChoice->GetStringSelection());
   int fontWeight = 0;
@@ -416,7 +414,7 @@ int wxFontFamilyStringToInt(wxChar *family)
 {
   if (!family)
     return wxSWISS;
-    
+
   if (wxStrcmp(family, _T("Roman")) == 0)
     return wxROMAN;
   else if (wxStrcmp(family, _T("Decorative")) == 0)

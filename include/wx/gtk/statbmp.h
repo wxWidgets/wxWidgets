@@ -67,7 +67,12 @@ public:
     const wxBitmap& GetBitmap() const { return m_bitmap; }
 
     // for compatibility with wxMSW
-    wxIcon& GetIcon();
+    const wxIcon& GetIcon() const
+    {
+        // don't use wxDynamicCast, icons and bitmaps are really the same thing
+        // in wxGTK
+        return (const wxIcon &)m_bitmap;
+    }
 
 private:
     wxBitmap   m_bitmap;

@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -40,13 +40,13 @@
 IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
-  	EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
-	EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
-	EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
-	EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
-	EVT_PAINT(wxGenericColourDialog::OnPaint)
-	EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
-	EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
+    EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
+    EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
+    EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
+    EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
+    EVT_PAINT(wxGenericColourDialog::OnPaint)
+    EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
+    EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 #endif
@@ -57,59 +57,59 @@ END_EVENT_TABLE()
 
 #define NUM_COLS 48
 static wxString wxColourDialogNames[NUM_COLS]={_T("ORANGE"),
-				    _T("GOLDENROD"),
-				    _T("WHEAT"),
-				    _T("SPRING GREEN"),
-				    _T("SKY BLUE"),
-				    _T("SLATE BLUE"),
-				    _T("MEDIUM VIOLET RED"),
-				    _T("PURPLE"),
+            _T("GOLDENROD"),
+            _T("WHEAT"),
+            _T("SPRING GREEN"),
+            _T("SKY BLUE"),
+            _T("SLATE BLUE"),
+            _T("MEDIUM VIOLET RED"),
+            _T("PURPLE"),
 
-				    _T("RED"),
-				    _T("YELLOW"),
-				    _T("MEDIUM SPRING GREEN"),
-				    _T("PALE GREEN"),
-				    _T("CYAN"),
-				    _T("LIGHT STEEL BLUE"),
-				    _T("ORCHID"),
-				    _T("LIGHT MAGENTA"),
-				    
-				    _T("BROWN"),
-				    _T("YELLOW"),
-				    _T("GREEN"),
-				    _T("CADET BLUE"),
-				    _T("MEDIUM BLUE"),
-				    _T("MAGENTA"),
-				    _T("MAROON"),
-				    _T("ORANGE RED"),
+            _T("RED"),
+            _T("YELLOW"),
+            _T("MEDIUM SPRING GREEN"),
+            _T("PALE GREEN"),
+            _T("CYAN"),
+            _T("LIGHT STEEL BLUE"),
+            _T("ORCHID"),
+            _T("LIGHT MAGENTA"),
 
-				    _T("FIREBRICK"),
-				    _T("CORAL"),
-				    _T("FOREST GREEN"),
-				    _T("AQUAMARINE"),
-				    _T("BLUE"),
-				    _T("NAVY"),
-				    _T("THISTLE"),
-				    _T("MEDIUM VIOLET RED"),
-				    
-				    _T("INDIAN RED"),
-				    _T("GOLD"),
-				    _T("MEDIUM SEA GREEN"),
-				    _T("MEDIUM BLUE"),
-				    _T("MIDNIGHT BLUE"),
-				    _T("GREY"),
-				    _T("PURPLE"),
-				    _T("KHAKI"),
-				    
-				    _T("BLACK"),
-				    _T("MEDIUM FOREST GREEN"),
-				    _T("KHAKI"),
-				    _T("DARK GREY"),
-				    _T("SEA GREEN"),
-				    _T("LIGHT GREY"),
-				    _T("MEDIUM SLATE BLUE"),
-				    _T("WHITE")
-				    };
+            _T("BROWN"),
+            _T("YELLOW"),
+            _T("GREEN"),
+            _T("CADET BLUE"),
+            _T("MEDIUM BLUE"),
+            _T("MAGENTA"),
+            _T("MAROON"),
+            _T("ORANGE RED"),
+
+            _T("FIREBRICK"),
+            _T("CORAL"),
+            _T("FOREST GREEN"),
+            _T("AQUAMARINE"),
+            _T("BLUE"),
+            _T("NAVY"),
+            _T("THISTLE"),
+            _T("MEDIUM VIOLET RED"),
+
+            _T("INDIAN RED"),
+            _T("GOLD"),
+            _T("MEDIUM SEA GREEN"),
+            _T("MEDIUM BLUE"),
+            _T("MIDNIGHT BLUE"),
+            _T("GREY"),
+            _T("PURPLE"),
+            _T("KHAKI"),
+
+            _T("BLACK"),
+            _T("MEDIUM FOREST GREEN"),
+            _T("KHAKI"),
+            _T("DARK GREY"),
+            _T("SEA GREEN"),
+            _T("LIGHT GREY"),
+            _T("MEDIUM SLATE BLUE"),
+            _T("WHITE")
+            };
 
 wxGenericColourDialog::wxGenericColourDialog(void)
 {
@@ -138,14 +138,14 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
   dialogParent = parent;
-  
+
   if (data)
     colourData = *data;
 
   InitializeColours();
   CalculateMeasurements();
   CreateWidgets();
-  
+
   return TRUE;
 }
 
@@ -229,7 +229,7 @@ void wxGenericColourDialog::CalculateMeasurements(void)
 void wxGenericColourDialog::CreateWidgets(void)
 {
   wxBeginBusyCursor();
-  
+
   wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(okButtonX, buttonY), wxSize(75,-1) );
   int bw, bh;
   okButton->GetSize(&bw, &bh);
@@ -246,7 +246,7 @@ void wxGenericColourDialog::CreateWidgets(void)
   int sliderSpacing = 45;
   int sliderHeight = 160;
 #endif
-  
+
   redSlider = new wxSlider(this, wxID_RED_SLIDER, 0, 0, 255,
    wxPoint(sliderX, 10), wxSize(-1, sliderHeight), wxVERTICAL|wxSL_LABELS);
   greenSlider = new wxSlider(this, wxID_GREEN_SLIDER, 0, 0, 255,
@@ -297,7 +297,7 @@ void wxGenericColourDialog::PaintBasicColours(wxDC& dc)
     for (j = 0; j < 8; j++)
     {
       int ptr = i*8 + j;
-      
+
       int x = (j*(smallRectangleSize.x+gridSpacing) + standardColoursRect.x);
       int y = (i*(smallRectangleSize.y+gridSpacing) + standardColoursRect.y);
 
@@ -322,7 +322,7 @@ void wxGenericColourDialog::PaintCustomColours(wxDC& dc)
     for (j = 0; j < 8; j++)
     {
       int ptr = i*8 + j;
-      
+
       int x = (j*(smallRectangleSize.x+gridSpacing)) + customColoursRect.x;
       int y = (i*(smallRectangleSize.y+gridSpacing)) + customColoursRect.y;
 
@@ -376,18 +376,18 @@ void wxGenericColourDialog::PaintHighlight(wxDC& dc, bool draw)
       dc.SetPen(*wxBLACK_PEN);
     else
       dc.SetPen(*wxLIGHT_GREY_PEN);
-      
+
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle( x, y, (smallRectangleSize.x + (2*deltaX)), (smallRectangleSize.y + (2*deltaY)));
   }
-  
+
   dc.EndDrawing();
 }
 
 void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 {
   dc.BeginDrawing();
-  
+
   dc.SetPen(*wxBLACK_PEN);
 
   wxBrush *brush = new wxBrush(singleCustomColour, wxSOLID);
@@ -452,7 +452,7 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
   customColours[colourSelection].Set(singleCustomColour.Red(), singleCustomColour.Green(), singleCustomColour.Blue());
   colourData.SetColour(customColours[colourSelection]);
   colourData.SetCustomColour(colourSelection, customColours[colourSelection]);
-  
+
   PaintCustomColours(dc);
 }
 
@@ -460,7 +460,7 @@ void wxGenericColourDialog::OnRedSlider(wxCommandEvent& WXUNUSED(event))
 {
   if (!redSlider)
     return;
-    
+
   wxClientDC dc(this);
   singleCustomColour.Set(redSlider->GetValue(), singleCustomColour.Green(), singleCustomColour.Blue());
   PaintCustomColour(dc);
