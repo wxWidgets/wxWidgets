@@ -99,16 +99,36 @@ Log: 1) fixed compilation of wxBitmap, wxIcon toplevel nodes
 http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
 
 
-9 Use ES_DISABLENOSCROLL to work around the vertical scrollbar bug
+9 Use ES_DISABLENOSCROLL to work around the vertical scrollbar bug in
+  wxTE_RICH2 text control.
 
 Checking in src/msw/textctrl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
 new revision: 1.157; previous revision: 1.156
 done
 
+10. Fixes for compilation with OpenWatcom
 
+http://sf.net/tracker/index.php?func=detail&aid=665959&group_id=9863&atid=309863
 
-10 wxMotif filedialog/wildcard corrections
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.230; previous revision: 1.229
+done
+Checking in src/common/imagjpeg.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/common/imagjpeg.cpp,v  <--  imagjpeg.cpp
+new revision: 1.31; previous revision: 1.30
+done
+Checking in include/wx/msw/missing.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/missing.h,v  <--  missing.h
+new revision: 1.8; previous revision: 1.7
+done
+Checking in include/wx/msw/setup0.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/setup0.h,v  <--  setup0.h
+new revision: 1.128; previous revision: 1.127
+done
+
+11 wxMotif filedialog/wildcard corrections
 
   Documented wxMotif filedialog limitations WRT wildcard syntax.
 Modified filedialog to either extract the wildcard (if only one wildcard
@@ -126,4 +146,3 @@ cvs diff: [15:36:24] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindow
 Checking in src/motif/filedlg.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/motif/filedlg.cpp,v  <--  filedlg.cpp
 new revision: 1.16; previous revision: 1.15
-done
