@@ -1164,12 +1164,15 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
                 break;
         }
 
+        // wxUniv doesn't use Windows dialog navigation functions at all
+#ifndef __WXUNIVERSAL__
         // to make the dialog navigation work with the nested panels we must
-        // use this style
-        if ( flags & wxTAB_TRAVERSAL )
+        // use this style (top level windows such as dialogs don't need it)
+        if ( (flags & wxTAB_TRAVERSAL) && !IsTopLevel() )
         {
             *exstyle |= WS_EX_CONTROLPARENT;
         }
+#endif // __WXUNIVERSAL__
     }
 
     return style;
