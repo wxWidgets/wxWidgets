@@ -300,7 +300,7 @@ private:
 
 wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
 {
-#ifndef __WXWINCE__
+#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 300)
     if ( maxcount == 0 )
     {
         // make it practically infinite
@@ -353,7 +353,7 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long milliseconds)
 
 wxSemaError wxSemaphoreInternal::Post()
 {
-#ifndef __WXWINCE__
+#if !defined(_WIN32_WCE) || (_WIN32_WCE >= 300)
     if ( !::ReleaseSemaphore(m_semaphore, 1, NULL /* ptr to previous count */) )
 #endif
     {
