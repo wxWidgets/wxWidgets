@@ -129,7 +129,15 @@ public:
   
   static void SetResolution(int ppi);
   static int GetResolution();
-  
+
+  void PsPrintf( const wxChar* fmt, ... );
+  void PsPrint( const char* psdata );
+  void PsPrint( int ch );
+
+#if wxUSE_UNICODE
+  void PsPrint( const wxChar* psdata ) { PsPrint( wxConvUTF8.cWX2MB( psdata ) ); }
+#endif
+
 private:  
     static float ms_PSScaleFactor;
 

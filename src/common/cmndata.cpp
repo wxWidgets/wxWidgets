@@ -213,6 +213,10 @@ wxPrintData::wxPrintData()
     m_printerTranslateX = 0;
     m_printerTranslateY = 0;
     m_printMode = wxPRINT_MODE_FILE;
+
+#ifdef wxUSE_STREAMS
+    m_outputstream = NULL;
+#endif
 }
 
 wxPrintData::wxPrintData(const wxPrintData& printData)
@@ -712,6 +716,9 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_printQuality = data.m_printQuality;
     m_paperId = data.m_paperId;
     m_paperSize = data.m_paperSize;
+#ifdef wxUSE_STREAMS
+    m_outputstream = data.m_outputstream;
+#endif
 
     // PostScript-specific data
     m_printerCommand = data.m_printerCommand;

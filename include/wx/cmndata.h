@@ -22,6 +22,10 @@
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
 
+#if wxUSE_STREAMS
+#include "wx/stream.h"
+#endif
+
 class WXDLLEXPORT wxColourData: public wxObject
 {
 public:
@@ -203,6 +207,11 @@ public:
     void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
     void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
 
+#if wxUSE_STREAMS
+    wxOutputStream* GetOutputStream() { return m_outputstream; }
+    void SetOutputStream(wxOutputStream* outputstream) { m_outputstream = outputstream; }
+#endif
+
     void operator=(const wxPrintData& data);
 
 #if defined(__WXMSW__)
@@ -224,6 +233,9 @@ public:
     void*           m_devNames;
 #elif defined(__WXMAC__)
     wxNativePrintData* m_nativePrintData ;
+#endif
+#if wxUSE_STREAMS
+    wxOutputStream* m_outputstream;
 #endif
 
 private:
@@ -251,7 +263,7 @@ private:
     long            m_printerTranslateX;
     long            m_printerTranslateY;
     wxPrintMode     m_printMode;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPrintData)
 };

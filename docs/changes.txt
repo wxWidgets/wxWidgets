@@ -197,6 +197,7 @@ Unix:
 - added XFree86 resolution changing using xf86vidmode extensions (Ryan Norton)
 - implemented asynchronous playback in wxSound and added SDL backend in
   addition to existing OSS one
+- it is now possible to send PostScript to any output stream (Zoltan Kovacs)
 
 
 2.5.0
