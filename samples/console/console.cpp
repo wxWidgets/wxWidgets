@@ -1702,9 +1702,9 @@ static void TestMimeAssociate()
                             _T("application/x-xyz"),
                             _T("xyzview '%s'"), // open cmd
                             _T(""),             // print cmd
-                            _T("XYZ File")  // description
-                            _T(".xyz"),     // extensions
-                            NULL            // end of extensions
+                            _T("XYZ File"),     // description
+                            _T(".xyz"),         // extensions
+                            NULL                // end of extensions
                          );
     ftInfo.SetShortDesc(_T("XYZFile")); // used under Win32 only
 
