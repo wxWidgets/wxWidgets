@@ -36,12 +36,12 @@ bool MyApp::OnInit()
 #if defined(__WXMOTIF__)
     int width, height;
     frame->GetSize(& width, & height);
-    frame->SetSize(-1, -1, width, height);
+    frame->SetSize(wxDefaultPosition.x, wxDefaultPosition.y, width, height);
 #endif
 
     frame->Show();
 
-    return TRUE;
+    return true;
 }
 
 MyNotebook::MyNotebook(wxWindow *parent, wxWindowID id,
@@ -92,8 +92,8 @@ wxPanel *MyNotebook::CreateUserCreatedPage()
 {
     wxPanel *panel = new wxPanel(this);
 
-    (void) new wxButton( panel, -1, wxT("Button"),
-        wxPoint(10, 10), wxSize(-1, -1) );
+    (void) new wxButton( panel, wxID_ANY, wxT("Button"),
+        wxPoint(10, 10), wxDefaultSize );
 
     return panel;
 }
@@ -105,13 +105,13 @@ wxPanel *MyNotebook::CreateRadioButtonsPage()
     wxString animals[] = { wxT("Fox"), wxT("Hare"), wxT("Rabbit"),
         wxT("Sabre-toothed tiger"), wxT("T Rex") };
 
-    wxRadioBox *radiobox1 = new wxRadioBox(panel, -1, wxT("Choose one"),
+    wxRadioBox *radiobox1 = new wxRadioBox(panel, wxID_ANY, wxT("Choose one"),
         wxDefaultPosition, wxDefaultSize, 5, animals, 2, wxRA_SPECIFY_ROWS);
 
     wxString computers[] = { wxT("Amiga"), wxT("Commodore 64"), wxT("PET"),
         wxT("Another") };
 
-    wxRadioBox *radiobox2 = new wxRadioBox(panel, -1,
+    wxRadioBox *radiobox2 = new wxRadioBox(panel, wxID_ANY,
         wxT("Choose your favourite"), wxDefaultPosition, wxDefaultSize,
         4, computers, 0, wxRA_SPECIFY_COLS);
 
@@ -127,7 +127,7 @@ wxPanel *MyNotebook::CreateVetoPage()
 {
     wxPanel *panel = new wxPanel(this);
 
-    (void) new wxStaticText( panel, -1,
+    (void) new wxStaticText( panel, wxID_ANY,
         wxT("This page intentionally left blank"), wxPoint(10, 10) );
 
     return panel;
@@ -137,7 +137,7 @@ wxPanel *MyNotebook::CreateBigButtonPage()
 {
     wxPanel *panel = new wxPanel(this);
 
-    wxButton *buttonBig = new wxButton( panel, -1, wxT("Maximized button"),
+    wxButton *buttonBig = new wxButton( panel, wxID_ANY, wxT("Maximized button"),
         wxPoint(0, 0), wxSize(480, 360) );
 
     wxBoxSizer *sizerPanel = new wxBoxSizer(wxVERTICAL);
@@ -153,7 +153,7 @@ wxPanel *MyNotebook::CreateInsertPage()
     wxPanel *panel = new wxPanel(this);
 
     panel->SetBackgroundColour( wxColour( wxT("MAROON") ) );
-    (void) new wxStaticText( panel, -1,
+    (void) new wxStaticText( panel, wxID_ANY,
         wxT("This page has been inserted, not added."), wxPoint(10, 10) );
 
     return panel;
@@ -164,16 +164,16 @@ void MyNotebook::CreateInitialPages()
     // Create and add some panels to the notebook
 
     wxPanel *panel = CreateRadioButtonsPage();
-    AddPage( panel, RADIOBUTTONS_PAGE_NAME, FALSE, GetIconIndex() );
+    AddPage( panel, RADIOBUTTONS_PAGE_NAME, false, GetIconIndex() );
 
     panel = CreateVetoPage();
-    AddPage( panel, VETO_PAGE_NAME, FALSE, GetIconIndex() );
+    AddPage( panel, VETO_PAGE_NAME, false, GetIconIndex() );
 
     panel = CreateBigButtonPage();
-    AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, FALSE, GetIconIndex() );
+    AddPage( panel, MAXIMIZED_BUTTON_PAGE_NAME, false, GetIconIndex() );
 
     panel = CreateInsertPage();
-    InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, FALSE, GetIconIndex() );
+    InsertPage( 0, panel, I_WAS_INSERTED_PAGE_NAME, false, GetIconIndex() );
 
 
     SetSelection(1);
@@ -195,7 +195,7 @@ int MyNotebook::GetIconIndex() const
 
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
                  long style)
-    : wxFrame((wxWindow *) NULL, -1, title, pos, size, style)
+    : wxFrame((wxWindow *) NULL, wxID_ANY, title, pos, size, style)
 {
     m_panel = (wxPanel *) NULL;
     m_notebook = (MyNotebook *) NULL;
@@ -226,7 +226,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
             wxArtProvider::GetIcon(wxART_ERROR, wxART_OTHER, imageSize)
         );
 
-    m_panel = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
+    m_panel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTAB_TRAVERSAL | wxCLIP_CHILDREN | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
 
     // Create remaining controls
@@ -276,7 +276,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_btnExit = new wxButton( m_panel, wxID_OK, wxT("&Exit") );
     m_btnExit->SetDefault();
 
-    m_text = new wxTextCtrl(m_panel, -1, wxEmptyString,
+    m_text = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 
     m_logTargetOld = wxLog::SetActiveTarget( new wxLogTextCtrl(m_text) );
@@ -316,7 +316,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
     m_panel->SetSizer(m_sizerFrame);
 
-    m_panel->SetAutoLayout(TRUE);
+    m_panel->SetAutoLayout(true);
 
     m_sizerFrame->Fit(this);
 
@@ -389,7 +389,7 @@ void MyFrame::ReInitNotebook()
             wxString str = notebook->GetPageText(n);
 
             wxWindow *page = m_notebook->CreatePage(str);
-            m_notebook->AddPage(page, str, FALSE, m_notebook->GetIconIndex() );
+            m_notebook->AddPage(page, str, false, m_notebook->GetIconIndex() );
         }
 
         if (m_sizerNotebook)
@@ -445,14 +445,14 @@ void MyFrame::OnButtonAddPage( wxCommandEvent& WXUNUSED(event) )
 {
     static unsigned s_pageAdded = 0;
 
-    wxPanel *panel = new wxPanel( m_notebook, -1 );
-    (void) new wxButton( panel, -1, wxT("First button"),
-        wxPoint(10, 10), wxSize(-1, -1) );
-    (void) new wxButton( panel, -1, wxT("Second button"),
-        wxPoint(50, 100), wxSize(-1, -1) );
+    wxPanel *panel = new wxPanel( m_notebook, wxID_ANY );
+    (void) new wxButton( panel, wxID_ANY, wxT("First button"),
+        wxPoint(10, 10), wxDefaultSize );
+    (void) new wxButton( panel, wxID_ANY, wxT("Second button"),
+        wxPoint(50, 100), wxDefaultSize );
 
     m_notebook->AddPage(panel, wxString::Format(ADDED_PAGE_NAME wxT("%u"),
-        ++s_pageAdded), TRUE, m_notebook->GetIconIndex() );
+        ++s_pageAdded), true, m_notebook->GetIconIndex() );
 }
 
 void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )
@@ -462,7 +462,7 @@ void MyFrame::OnButtonInsertPage( wxCommandEvent& WXUNUSED(event) )
     wxPanel *panel = m_notebook->CreateUserCreatedPage();
 
     m_notebook->InsertPage( 0, panel,
-        wxString::Format(INSERTED_PAGE_NAME wxT("%u"), ++s_pageIns), FALSE,
+        wxString::Format(INSERTED_PAGE_NAME wxT("%u"), ++s_pageIns), false,
         m_notebook->GetIconIndex() );
 
     m_notebook->SetSelection(0);
