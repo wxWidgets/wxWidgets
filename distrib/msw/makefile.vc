@@ -89,6 +89,7 @@ allpdfrtf: pdfrtf
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx
+	-mkdir $(DOCDIR)\winhelp
         -erase wx.ph
         hc wx
         -erase $(DOCDIR)\winhelp\wx.hlp
@@ -104,6 +105,7 @@ $(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/late
 
 $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
+	-mkdir $(DOCDIR)\pdf
         -copy *.wmf $(DOCDIR)\pdf
         -copy *.bmp $(DOCDIR)\pdf
         -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
