@@ -12,12 +12,12 @@
 
 ### Variables: ###
 
-LIFE_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
+LIFE_CXXFLAGS = /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\life.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
-	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(CXXFLAGS) \
-	$(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9)
+	/W4 /I. $(__DLLFLAG_p) /D_WINDOWS /I.\..\..\samples $(__EXCEPTIONSFLAG_8) \
+	$(__EXCEPTIONSFLAG_9) $(CPPFLAGS) $(CXXFLAGS)
 LIFE_OBJECTS =  \
 	$(OBJS)\life_life.obj \
 	$(OBJS)\life_dialogs.obj \
@@ -268,7 +268,7 @@ clean:
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (samples.inc breeder.lif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (breeder.lif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\life.exe: $(LIFE_OBJECTS) $(OBJS)\life_life.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<

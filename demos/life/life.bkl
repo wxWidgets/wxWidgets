@@ -17,7 +17,7 @@
 
     <wx-data id="data">
         <files>
-            samples.inc breeder.lif
+            breeder.lif
         </files>
     </wx-data> 
     

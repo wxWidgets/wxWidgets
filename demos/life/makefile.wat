@@ -167,10 +167,10 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-LIFE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
-	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) &
-	-i=.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_7)
+LIFE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm $(__RUNTIME_LIBS_5) &
+	-d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) &
+	-i=.\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
+	$(__EXCEPTIONSFLAG_7) $(CPPFLAGS) $(CXXFLAGS)
 LIFE_OBJECTS =  &
 	$(OBJS)\life_life.obj &
 	$(OBJS)\life_dialogs.obj &
@@ -214,7 +214,7 @@ clean : .SYMBOLIC
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (samples.inc breeder.lif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (breeder.lif) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\life.exe :  $(LIFE_OBJECTS) $(OBJS)\life_life.res
 	@%create $(OBJS)\life.lbc

@@ -12,11 +12,10 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIFE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_4) \
-	$(__EXCEPTIONSFLAG_5)
+LIFE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) -DHAVE_W32API_H \
+	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I.\..\..\include -I$(SETUPHDIR) -Wall -I. $(__DLLFLAG_p) -I.\..\..\samples \
+	$(__EXCEPTIONSFLAG_4) $(__EXCEPTIONSFLAG_5) $(CPPFLAGS) $(CXXFLAGS)
 LIFE_OBJECTS =  \
 	$(OBJS)\life_life.o \
 	$(OBJS)\life_dialogs.o \
@@ -184,7 +183,7 @@ clean:
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (samples.inc breeder.lif) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (breeder.lif) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\life.exe: $(LIFE_OBJECTS) $(OBJS)\life_life_rc.o
 	$(CXX) -o $@ $(LIFE_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32

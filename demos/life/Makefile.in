@@ -118,7 +118,7 @@ clean:
 
 data: 
 	@mkdir -p .
-	@for f in samples.inc breeder.lif; do \
+	@for f in breeder.lif; do \
 	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
 	cp -pRf $(srcdir)/$$f . ; \
 	fi; \
