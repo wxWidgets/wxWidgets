@@ -18,18 +18,18 @@ class Crust(wx.wxSplitterWindow):
     name = 'PyCrust Crust'
     revision = __revision__
 
-    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition,
-                 size=wx.wxDefaultSize, style=wx.wxSP_3D, name='Crust Window',
-                 rootObject=None, rootLabel=None, rootIsNamespace=1,
-                 intro='', locals=None,
+    def __init__(self, parent, id=-1, pos=wx.wxDefaultPosition, 
+                 size=wx.wxDefaultSize, style=wx.wxSP_3D, name='Crust Window', 
+                 rootObject=None, rootLabel=None, rootIsNamespace=1, 
+                 intro='', locals=None, 
                  InterpClass=None, *args, **kwds):
         """Create a PyCrust Crust instance."""
         wx.wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
-        self.shell = Shell(parent=self, introText=intro,
-                           locals=locals, InterpClass=InterpClass,
+        self.shell = Shell(parent=self, introText=intro, 
+                           locals=locals, InterpClass=InterpClass, 
                            *args, **kwds)
-        self.filling = Filling(parent=self,
-                               rootObject=self.shell.interp.locals,
+        self.filling = Filling(parent=self, 
+                               rootObject=self.shell.interp.locals, 
                                rootLabel=rootLabel, rootIsNamespace=1)
         """Add 'filling' to the interpreter's locals."""
         self.shell.interp.locals['filling'] = self.filling
@@ -43,10 +43,10 @@ class CrustFrame(wx.wxFrame, ShellMenu):
     name = 'PyCrust Frame'
     revision = __revision__
 
-    def __init__(self, parent=None, id=-1, title='PyCrust',
-                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize,
-                 style=wx.wxDEFAULT_FRAME_STYLE,
-                 rootObject=None, rootLabel=None, rootIsNamespace=1,
+    def __init__(self, parent=None, id=-1, title='PyCrust', 
+                 pos=wx.wxDefaultPosition, size=wx.wxDefaultSize, 
+                 style=wx.wxDEFAULT_FRAME_STYLE, 
+                 rootObject=None, rootLabel=None, rootIsNamespace=1, 
                  locals=None, InterpClass=None, *args, **kwds):
         """Create a PyCrust CrustFrame instance."""
         wx.wxFrame.__init__(self, parent, id, title, pos, size, style)
@@ -56,11 +56,11 @@ class CrustFrame(wx.wxFrame, ShellMenu):
         self.SetStatusText(intro.replace('\n', ', '))
         import images
         self.SetIcon(images.getPyCrustIcon())
-        self.crust = Crust(parent=self, intro=intro,
-                           rootObject=rootObject,
-                           rootLabel=rootLabel,
-                           rootIsNamespace=rootIsNamespace,
-                           locals=locals,
+        self.crust = Crust(parent=self, intro=intro, 
+                           rootObject=rootObject, 
+                           rootLabel=rootLabel, 
+                           rootIsNamespace=rootIsNamespace, 
+                           locals=locals, 
                            InterpClass=InterpClass, *args, **kwds)
         # Override the filling so that status messages go to the status bar.
         self.crust.filling.fillingTree.setStatusText = self.SetStatusText

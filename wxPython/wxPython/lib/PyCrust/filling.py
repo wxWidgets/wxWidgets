@@ -114,11 +114,15 @@ class FillingTree(wx.wxTreeCtrl):
 
     def OnSelChanged(self, event):
         busy = wx.wxBusyCursor()
+        self.setText('')
         item = event.GetItem()
         if item == self.root:
-            self.setText('')
+            del busy
             return
         o = self.GetPyData(item)
+        if o is None: # Windows bug fix.
+            del busy
+            return
         otype = type(o)
         text = ''
         text += self.getFullName(item)
@@ -130,25 +134,24 @@ class FillingTree(wx.wxTreeCtrl):
         if otype is types.StringType or otype is types.UnicodeType:
             value = repr(o)
         text += '\n\nValue: ' + value
+        try:
+            text += '\n\nDocstring:\n\n"""\n' + inspect.getdoc(o).strip() + '\n"""'
+        except:
+            pass
         if otype is types.InstanceType:
             try:
                 text += '\n\nClass Definition:\n\n' + \
                         inspect.getsource(o.__class__)
             except:
-                try:
-                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
-                except:
-                    pass
+                pass
         else:
             try:
                 text += '\n\nSource Code:\n\n' + \
                         inspect.getsource(o)
             except:
-                try:
-                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
-                except:
-                    pass
+                pass
         self.setText(text)
+        del busy
 
     def getFullName(self, item, partial=''):
         """Return a syntactically proper name for item."""
@@ -322,11 +325,8 @@ class FillingFrame(wx.wxFrame):
         intro = 'Welcome To PyFilling - The Tastiest Namespace Inspector'
         self.CreateStatusBar()
         self.SetStatusText(intro)
-        if wx.wxPlatform == '__WXMSW__':
-            import os
-            filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-            icon = wx.wxIcon(filename, wx.wxBITMAP_TYPE_ICO)
-            self.SetIcon(icon)
+        import images
+        self.SetIcon(images.getPyCrustIcon())
         self.filling = Filling(parent=self, rootObject=rootObject, 
                                rootLabel=rootLabel, 
                                rootIsNamespace=rootIsNamespace)
@@ -338,6 +338,7 @@ class App(wx.wxApp):
     """PyFilling standalone application."""
     
     def OnInit(self):
+        wx.wxInitAllImageHandlers()
         self.fillingFrame = FillingFrame()
         self.fillingFrame.Show(True)
         self.SetTopWindow(self.fillingFrame)

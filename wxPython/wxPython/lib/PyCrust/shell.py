@@ -8,8 +8,6 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-from wxPython import wx
-from wxPython import stc
 import keyword
 import os
 import sys
@@ -19,6 +17,16 @@ from pseudo import PseudoFileOut
 from pseudo import PseudoFileErr
 from shellmenu import ShellMenu
 from version import VERSION
+
+try:
+    from deco.wxpy import wx
+except ImportError:
+    from wxPython import wx
+
+try:
+    from deco.wxpy import stc
+except ImportError:
+    from wxPython import stc
 
 True, False = 1, 0
 
@@ -64,9 +72,8 @@ class ShellFrame(wx.wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-        filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
-        icon = wx.wxIcon(filename, wx.wxBITMAP_TYPE_ICO)
-        self.SetIcon(icon)
+        import images
+        self.SetIcon(images.getPyCrustIcon())
         self.shell = Shell(parent=self, id=-1, introText=intro, 
                            locals=locals, InterpClass=InterpClass, 
                            *args, **kwds)
@@ -432,6 +439,8 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
             # Usually the dot (period) key activates auto completion.
             # Get the command between the prompt and the cursor.
             # Add the autocomplete character to the end of the command.
+            if self.AutoCompActive(): 
+                self.AutoCompCancel()
             command = self.GetTextRange(stoppos, currpos) + chr(key)
             self.write(chr(key))
             if self.autoComplete: 
@@ -455,12 +464,12 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
     def OnKeyDown(self, event):
         """Key down event handler."""
 
+        key = event.KeyCode()
         # If the auto-complete window is up let it do its thing.
         if self.AutoCompActive():
             event.Skip()
             return
         # Prevent modification of previously submitted commands/responses.
-        key = event.KeyCode()
         controlDown = event.ControlDown()
         altDown = event.AltDown()
         shiftDown = event.ShiftDown()
