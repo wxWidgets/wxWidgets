@@ -47,7 +47,7 @@ public:
                ,int             nId = wxID_SEPARATOR
                ,const wxString& rStrName = ""
                ,const wxString& rWxHelp = ""
-               ,bool            bCheckable = FALSE
+               ,wxItemKind      kind = wxItem_Normal
                ,wxMenu*         pSubMenu = NULL
               );
     virtual ~wxMenuItem();

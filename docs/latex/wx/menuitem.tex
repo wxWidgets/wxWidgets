@@ -1,8 +1,11 @@
 \section{\class{wxMenuItem}}\label{wxmenuitem}
 
-A menu item represents an item in a popup menu. Note that the majority of this
-class is only implemented under Windows so far, but everything except fonts, colours and
-bitmaps can be achieved via wxMenu on all platforms.
+A menu item represents an item in a menu. Note that you usually don't have to
+deal with it directly as \helpref{wxMenu}{wxmenu} methods usually construct an
+object of this class for you.
+
+Also please note that the methods related to fonts and bitmaps are currently
+only implemented for Windows.
 
 \wxheading{Derived from}
 
@@ -23,7 +26,7 @@ wxOwnerDrawn (Windows only)\\
 
 \func{}{wxMenuItem}{\param{wxMenu*}{ parentMenu = NULL}, \param{int}{ id = ID\_SEPARATOR},
  \param{const wxString\& }{text = ""},  \param{const wxString\& }{helpString = ""},
- \param{bool }{checkable = FALSE}, \param{wxMenu*}{ subMenu = NULL}, }
+ \param{wxItemKind }{kind = wxItem\_Normal}, \param{wxMenu*}{ subMenu = NULL}, }
 
 Constructs a wxMenuItem object.
 
@@ -37,7 +40,8 @@ Constructs a wxMenuItem object.
 
 \docparam{helpString}{Optional help string that will be shown on the status bar.}
 
-\docparam{checkable}{TRUE if this menu item is checkable.}
+\docparam{kind}{May be {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
+{\tt wxItem\_Check} or {\tt wxItem\_Radio}}
 
 \docparam{subMenu}{If non-NULL, indicates that the menu item is a submenu.}
 
@@ -94,6 +98,13 @@ Returns the help string associated with the menu item.
 \constfunc{int}{GetId}{\void}
 
 Returns the menu item identifier.
+
+\membersection{wxMenuItem::GetKind}\label{wxmenuitemgetkind}
+
+\constfunc{wxItemKind}{GetKind}{\void}
+
+Returns the item kind, one of {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
+{\tt wxItem\_Check} or {\tt wxItem\_Radio}.
 
 \membersection{wxMenuItem::GetLabel}\label{wxmenuitemgetlabel}
 

@@ -107,6 +107,7 @@ Unix (Base/GUI):
 
 All (GUI):
 
+- implemented radio menu items
 - significantly improved native font support
 - wxImage::ComputeHistogram() now uses wxImageHistogram instead of type-unsafe
   wxHashTable

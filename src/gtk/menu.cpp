@@ -699,27 +699,20 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
                                 const wxString& help,
-                                bool isCheckable,
+                                wxItemKind kind,
                                 wxMenu *subMenu)
 {
-    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+    return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
 
 wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        int id,
                        const wxString& text,
                        const wxString& help,
-                       bool isCheckable,
+                       wxItemKind kind,
                        wxMenu *subMenu)
+          : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
-    m_id = id;
-    m_isCheckable = isCheckable;
-    m_isChecked = FALSE;
-    m_isEnabled = TRUE;
-    m_subMenu = subMenu;
-    m_parentMenu = parentMenu;
-    m_help = help;
-
     m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
@@ -948,6 +941,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     bool appended = FALSE;
 #endif
 
+#if GTK_CHECK_VERSION(1, 2, 0)
+    // is this a radio item?
+    bool isRadio = FALSE;
+#endif // GTK+ >= 1.2
+
     if ( mitem->IsSeparator() )
     {
 #if GTK_CHECK_VERSION(1, 2, 0)
@@ -1046,16 +1044,52 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         /* local buffer in multibyte form */
         char buf[200];
         strcpy( buf, "/" );
-        strcat( buf, text.mb_str() );
+        strncat( buf, text.mb_str(), WXSIZEOF(buf) - 2 );
+        buf[WXSIZEOF(buf) - 1] = '\0';
 
         GtkItemFactoryEntry entry;
         entry.path = buf;
         entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
         entry.callback_action = 0;
-        if ( mitem->IsCheckable() )
-            entry.item_type = (char *)"<CheckItem>";
-        else
-            entry.item_type = (char *)"<Item>";
+
+        wxString pathRadio;
+        const char *item_type;
+        switch ( mitem->GetKind() )
+        {
+            case wxItem_Check:
+                item_type = "<CheckItem>";
+                break;
+
+            case wxItem_Radio:
+                if ( m_pathLastRadio.empty() )
+                {
+                    // start of a new radio group
+                    item_type = "<RadioItem>";
+                    m_pathLastRadio = buf + 1;
+                }
+                else // continue the radio group
+                {
+                    pathRadio = m_pathLastRadio;
+                    pathRadio.Replace("_", "");
+                    pathRadio.Prepend("<main>/");
+                    item_type = pathRadio;
+                }
+
+                // remember that this one was a radio item to avoid resetting
+                // m_pathLastRadio below
+                isRadio = TRUE;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unexpected menu item kind") );
+                // fall through
+
+            case wxItem_Normal:
+                item_type = "<Item>";
+                break;
+        }
+
+        entry.item_type = (char *)item_type; // cast needed for GTK+
         entry.accelerator = (gchar*) NULL;
 
 #if wxUSE_ACCEL
@@ -1104,6 +1138,13 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 #endif // GTK+ 1.0
 
     mitem->SetMenuItem(menuItem);
+
+#if GTK_CHECK_VERSION(1, 2, 0)
+    if ( !isRadio )
+    {
+        m_pathLastRadio.clear();
+    }
+#endif // GTK+ >= 1.2
 
     return TRUE;
 }

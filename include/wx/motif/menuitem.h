@@ -29,11 +29,11 @@ class wxMenuItem : public wxMenuItemBase
 public:
     // ctor & dtor
     wxMenuItem(wxMenu *parentMenu = (wxMenu *)NULL,
-        int id = wxID_SEPARATOR,
-        const wxString& text = wxEmptyString,
-        const wxString& help = wxEmptyString,
-        bool isCheckable = FALSE,
-        wxMenu *subMenu = (wxMenu *)NULL);
+               int id = wxID_SEPARATOR,
+               const wxString& text = wxEmptyString,
+               const wxString& help = wxEmptyString,
+               wxItemKind kind = wxItem_Normal,
+               wxMenu *subMenu = (wxMenu *)NULL);
     ~wxMenuItem();
     
     // accessors (some more are inherited from wxOwnerDrawn or are below)

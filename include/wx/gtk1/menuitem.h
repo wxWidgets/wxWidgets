@@ -27,7 +27,7 @@ public:
                int id = wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& help = wxEmptyString,
-               bool isCheckable = FALSE,
+               wxItemKind kind = wxItem_Normal,
                wxMenu *subMenu = (wxMenu *)NULL);
     ~wxMenuItem();
 

@@ -175,23 +175,15 @@ int wxMenuItem::MacBuildMenuString(StringPtr outMacItemText, SInt16 *outMacShort
 // ctor & dtor
 // -----------
 
-wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
-                       const wxString& text, const wxString& strHelp,
-                       bool bCheckable,
+wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
+                       int id,
+                       const wxString& text,
+                       const wxString& strHelp,
+                       wxItemKind kind,
                        wxMenu *pSubMenu) 
+          : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 {
-    wxASSERT( pParentMenu != NULL );
-
-    m_parentMenu  = pParentMenu;
-    m_subMenu     = pSubMenu;
-    m_isEnabled   = TRUE;
-    m_isChecked   = FALSE;
-    m_id          = id;
-    m_text        = text;
-    m_isCheckable = bCheckable;
-    m_help        = strHelp;
-
-
+    // VZ: what about translations?? (FIXME)
     if ( m_text ==  "E&xit"  ||m_text == "Exit"  ||m_text.Left(5) == "Exit\t" || m_text.Left(6) == "E&xit\t" )
     {
         m_text = "Quit\tCtrl+Q" ;
@@ -348,8 +340,8 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
                                 const wxString& help,
-                                bool isCheckable,
+                                wxItemKind kind,
                                 wxMenu *subMenu)
 {
-    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+    return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }

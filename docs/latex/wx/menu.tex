@@ -77,7 +77,7 @@ and recreation of internal data structures.
 \membersection{wxMenu::Append}\label{wxmenuappend}
 
 \func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
-\param{const bool}{ checkable = FALSE}}
+\param{wxItemKind}{ kind = wxItem\_Normal}}
 
 Adds a string item to the end of the menu.
 
@@ -101,7 +101,8 @@ such as bitmaps and fonts.
 
 \docparam{menu}{Pull-right submenu.}
 
-\docparam{checkable}{If TRUE, this item is checkable.}
+\docparam{kind}{May be {\tt wxItem\_Separator}, {\tt wxItem\_Normal}, 
+{\tt wxItem\_Check} or {\tt wxItem\_Radio}}
 
 \docparam{helpString}{An optional help string associated with the item.
 By default, \helpref{wxFrame::OnMenuHighlight}{wxframeonmenuhighlight} displays
@@ -118,6 +119,8 @@ creation of a menu or menubar.
 \wxheading{See also}
 
 \helpref{wxMenu::AppendSeparator}{wxmenuappendseparator},\rtfsp
+\helpref{wxMenu::AppendCheckItem}{wxmenuappendcheckitem},\rtfsp
+\helpref{wxMenu::AppendRadioItem}{wxmenuappendradioitem},\rtfsp
 \helpref{wxMenu::Insert}{wxmenuinsert},\rtfsp
 \helpref{wxMenu::SetLabel}{wxmenusetlabel}, \helpref{wxMenu::GetHelpString}{wxmenugethelpstring},\rtfsp
 \helpref{wxMenu::SetHelpString}{wxmenusethelpstring}, \helpref{wxMenuItem}{wxmenuitem}
@@ -131,6 +134,35 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\membersection{wxMenu::AppendCheckItem}\label{wxmenuappendcheckitem}
+
+\func{void}{AppendCheckItem}{\param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Adds a checkable item to the end of the menu.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend},\rtfsp
+\helpref{wxMenu::InsertCheckItem}{wxmenuinsertcheckitem}
+
+\membersection{wxMenu::AppendRadioItem}\label{wxmenuappendradioitem}
+
+\func{void}{AppendRadioItem}{\param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Adds a radio item to the end of the menu. All consequent radio items form a
+group and when an item in the group is checked, all the others are
+automatically unchecked.
+
+{\bf NB:} Currently only implemented under Windows and GTK, use
+{\tt #if wxHAS\_RADIO\_MENU\_ITEMS} to test for availability of this feature.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend},\rtfsp
+\helpref{wxMenu::InsertRadioItem}{wxmenuinsertradioitem}
+
 \membersection{wxMenu::AppendSeparator}\label{wxmenuappendseparator}
 
 \func{void}{AppendSeparator}{\void}
@@ -139,7 +171,8 @@ Adds a separator to the end of the menu.
 
 \wxheading{See also}
 
-\helpref{wxMenu::Append}{wxmenuappend}
+\helpref{wxMenu::Append}{wxmenuappend},\rtfsp
+\helpref{wxMenu::InsertSeparator}{wxmenuinsertseparator}
 
 \membersection{wxMenu::Break}\label{wxmenubreak}
 
@@ -329,13 +362,53 @@ This is relevant only to popup menus.
 
 \func{bool}{Insert}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
 
+\func{void}{Insert}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\param{wxItemKind}{ kind = wxItem\_Normal}}
+
 Inserts the given {\it item} before the position {\it pos}. Inserting the item
 at the position \helpref{GetMenuItemCount}{wxmenugetmenuitemcount} is the same
 as appending it.
 
 \wxheading{See also}
 
-\helpref{wxMenu::Append}{wxmenuappend}
+\helpref{wxMenu::Append}{wxmenuappend},\rtfsp
+\helpref{wxMenu::Prepend}{wxmenuprepend}
+
+\membersection{wxMenu::InsertCheckItem}\label{wxmenuinsertcheckitem}
+
+\func{void}{InsertCheckItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Inserts a checkable item at the given position.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Insert}{wxmenuinsert},\rtfsp
+\helpref{wxMenu::AppendCheckItem}{wxmenuappendcheckitem}
+
+\membersection{wxMenu::InsertRadioItem}\label{wxmenuinsertradioitem}
+
+\func{void}{InsertRadioItem}{\param{size\_t }{pos}, \param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Inserts a radio item at the given position.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Insert}{wxmenuinsert},\rtfsp
+\helpref{wxMenu::AppendRadioItem}{wxmenuappendradioitem}
+
+\membersection{wxMenu::InsertSeparator}\label{wxmenuinsertseparator}
+
+\func{void}{InsertSeparator}{\param{size\_t }{pos}}
+
+Inserts a separator at the given position.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Insert}{wxmenuinsert},\rtfsp
+\helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}
 
 \membersection{wxMenu::IsChecked}\label{wxmenuischecked}
 
@@ -372,6 +445,56 @@ TRUE if the menu item is enabled, FALSE otherwise.
 \wxheading{See also}
 
 \helpref{wxMenu::Enable}{wxmenuenable}
+
+\membersection{wxMenu::Prepend}\label{wxmenuprepend}
+
+\func{bool}{Prepend}{\param{size\_t }{pos}, \param{wxMenuItem *}{item}}
+
+\func{void}{Prepend}{\param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""},\rtfsp
+\param{wxItemKind}{ kind = wxItem\_Normal}}
+
+Inserts the given {\it item} at the position $0$.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Append}{wxmenuappend},\rtfsp
+\helpref{wxMenu::Inserts}{wxmenuinsert}
+
+\membersection{wxMenu::PrependCheckItem}\label{wxmenuprependcheckitem}
+
+\func{void}{PrependCheckItem}{\param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Inserts a checkable item at the position $0$.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Prepend}{wxmenuprepend},\rtfsp
+\helpref{wxMenu::AppendCheckItem}{wxmenuappendcheckitem}
+
+\membersection{wxMenu::PrependRadioItem}\label{wxmenuprependradioitem}
+
+\func{void}{PrependRadioItem}{\param{int}{ id},\rtfsp
+\param{const wxString\& }{ item}, \param{const wxString\& }{helpString = ""}}
+
+Inserts a radio item at the position $0$.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Prepend}{wxmenuprepend},\rtfsp
+\helpref{wxMenu::AppendRadioItem}{wxmenuappendradioitem}
+
+\membersection{wxMenu::PrependSeparator}\label{wxmenuprependseparator}
+
+\func{void}{PrependSeparator}{\param{size\_t }{pos}}
+
+Inserts a separator at the position $0$.
+
+\wxheading{See also}
+
+\helpref{wxMenu::Prepend}{wxmenuprepend},\rtfsp
+\helpref{wxMenu::AppendSeparator}{wxmenuappendseparator}
 
 \membersection{wxMenu::Remove}\label{wxmenuremove}
 

@@ -62,7 +62,7 @@ static void wxMenuItemDisarmCallback(Widget w, XtPointer clientData, XtPointer p
 // dynamic classes implementation
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 
 // ----------------------------------------------------------------------------
 // wxMenuItem
@@ -71,23 +71,14 @@ static void wxMenuItemDisarmCallback(Widget w, XtPointer clientData, XtPointer p
 // ctor & dtor
 // -----------
 
-wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
-                       const wxString& strName, const wxString& strHelp,
-                       bool bCheckable,
+wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
+                       int id,
+                       const wxString& strName,
+                       const wxString& strHelp,
+                       wxItemKind kind,
                        wxMenu *pSubMenu)
+          : wxMenuItemBase(pParentMenu, id, strName, strHelp, kind, pSubMenu)
 {
-    wxASSERT_MSG( pParentMenu != NULL, wxT("menuitem should have a menu") );
-
-    // common init
-    m_parentMenu  = pParentMenu;
-    m_subMenu     = pSubMenu;
-    m_id          = id;
-    m_isEnabled   = TRUE;
-    m_isChecked   = FALSE;
-    m_help        = strHelp;
-    m_isCheckable = bCheckable;
-    m_text        = strName;
-
     // Motif-specific
     m_menuBar      = NULL;
     m_buttonWidget = (WXWidget) NULL;
@@ -170,10 +161,10 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
                                 const wxString& help,
-                                bool isCheckable,
+                                wxItemKind kind,
                                 wxMenu *subMenu)
 {
-    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+    return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
 
 // ----------------------------------------------------------------------------

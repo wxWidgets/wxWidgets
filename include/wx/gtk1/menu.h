@@ -107,6 +107,10 @@ private:
     // common part of Append and Insert
     bool GtkAppend(wxMenuItem *item);
 
+    // if the last menu item was a radio one, this field contains its path,
+    // otherwise it is empty
+    wxString m_pathLastRadio;
+
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
 

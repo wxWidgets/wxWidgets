@@ -85,10 +85,11 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        int id,
                        const wxString& text,
                        const wxString& strHelp,
-                       bool bCheckable,
+                       wxItemKind kind,
                        wxMenu *pSubMenu)
+          : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 #if wxUSE_OWNER_DRAWN
-                       : wxOwnerDrawn(GetLabelFromText(text), bCheckable)
+            , wxOwnerDrawn(GetLabelFromText(text), kind == wxItem_Check)
 #endif // owner drawn
 {
     wxASSERT_MSG( pParentMenu != NULL, wxT("a menu item should have a parent") );
@@ -108,15 +109,6 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     // tell the owner drawing code to to show the accel string as well
     SetAccelString(text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
-
-    m_parentMenu  = pParentMenu;
-    m_subMenu     = pSubMenu;
-    m_isEnabled   = TRUE;
-    m_isChecked   = FALSE;
-    m_id          = id;
-    m_text        = text;
-    m_isCheckable = bCheckable;
-    m_help        = strHelp;
 }
 
 wxMenuItem::~wxMenuItem()
@@ -170,7 +162,7 @@ void wxMenuItem::Enable(bool enable)
 
 void wxMenuItem::Check(bool check)
 {
-    wxCHECK_RET( m_isCheckable, wxT("only checkable items may be checked") );
+    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
 
     if ( m_isChecked == check )
         return;
@@ -256,10 +248,10 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
                                 int id,
                                 const wxString& name,
                                 const wxString& help,
-                                bool isCheckable,
+                                wxItemKind kind,
                                 wxMenu *subMenu)
 {
-    return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
+    return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
 
 #endif // wxUSE_MENUS

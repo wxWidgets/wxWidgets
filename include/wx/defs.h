@@ -35,6 +35,9 @@
 #endif // Unix/!Unix
 #endif
 
+// include the feature test macros
+#include "wx/features.h"
+
 // suppress some Visual C++ warnings
 #ifdef __VISUALC__
 #   pragma warning(disable:4201)    // nonstandard extension used: nameless struct/union
@@ -1275,6 +1278,16 @@ enum wxBorder
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
+
+// menu and toolbar item kinds
+enum wxItemKind
+{
+    wxItem_Separator = -1,
+    wxItem_Normal,
+    wxItem_Check,
+    wxItem_Radio,
+    wxItem_Max
+};
 
 // hit test results
 enum wxHitTest

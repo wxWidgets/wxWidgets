@@ -88,6 +88,10 @@ protected:
     void OnGetLabelMenu(wxCommandEvent& event);
     void OnSetLabelMenu(wxCommandEvent& event);
 
+    void OnTestNormal(wxCommandEvent& event);
+    void OnTestCheck(wxCommandEvent& event);
+    void OnTestRadio(wxCommandEvent& event);
+
 #ifdef __WXMSW__
     void OnContextMenu(wxContextMenuEvent& event)
         { ShowContextMenu(ScreenToClient(event.GetPosition())); }
@@ -174,7 +178,13 @@ enum
     Menu_Menu_SetLabel,
     Menu_Menu_GetInfo,
 
-    Menu_Dummy_First = 400,
+    Menu_Test_Normal = 400,
+    Menu_Test_Check,
+    Menu_Test_Radio1,
+    Menu_Test_Radio2,
+    Menu_Test_Radio3,
+
+    Menu_Dummy_First = 500,
     Menu_Dummy_Second,
     Menu_Dummy_Third,
     Menu_Dummy_Fourth,
@@ -217,6 +227,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Menu_GetLabel,  MyFrame::OnGetLabelMenuItem)
     EVT_MENU(Menu_Menu_SetLabel,  MyFrame::OnSetLabelMenuItem)
     EVT_MENU(Menu_Menu_GetInfo,   MyFrame::OnGetMenuItemInfo)
+
+    EVT_MENU(Menu_Test_Normal,    MyFrame::OnTestNormal)
+    EVT_MENU(Menu_Test_Check,     MyFrame::OnTestCheck)
+    EVT_MENU(Menu_Test_Radio1,    MyFrame::OnTestRadio)
+    EVT_MENU(Menu_Test_Radio2,    MyFrame::OnTestRadio)
+    EVT_MENU(Menu_Test_Radio3,    MyFrame::OnTestRadio)
 
     EVT_MENU_RANGE(Menu_Dummy_First, Menu_Dummy_Last, MyFrame::OnDummy)
 
@@ -335,6 +351,15 @@ MyFrame::MyFrame()
     menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
                      "Show the state of the last menu item");
 
+    wxMenu *testMenu = new wxMenu;
+    testMenu->Append(Menu_Test_Normal, "&Normal item");
+    testMenu->AppendSeparator();
+    testMenu->AppendCheckItem(Menu_Test_Check, "&Check item");
+    testMenu->AppendSeparator();
+    testMenu->AppendRadioItem(Menu_Test_Radio1, "Radio item &1");
+    testMenu->AppendRadioItem(Menu_Test_Radio2, "Radio item &2");
+    testMenu->AppendRadioItem(Menu_Test_Radio3, "Radio item &3");
+
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Menu_Help_About, "&About\tF1", "About menu sample");
 
@@ -343,6 +368,7 @@ MyFrame::MyFrame()
     menuBar->Append(fileMenu, "&File");
     menuBar->Append(menubarMenu, "Menu&bar");
     menuBar->Append(menuMenu, "&Menu");
+    menuBar->Append(testMenu, "&Test");
     menuBar->Append(helpMenu, "&Help");
 
     // these items should be initially checked
@@ -748,6 +774,23 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
 
     PopupMenu( &menu, event.GetX(), event.GetY() );
 #endif // 0
+}
+
+void MyFrame::OnTestNormal(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Normal item selected"));
+}
+
+void MyFrame::OnTestCheck(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Check item %schecked"),
+                 event.IsChecked() ? _T("") : _T("un"));
+}
+
+void MyFrame::OnTestRadio(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Radio item %d selected"),
+                 event.GetId() - Menu_Test_Radio1 + 1);
 }
 
 void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)

@@ -75,17 +75,33 @@ public:
     // menu construction
     // -----------------
 
-    // append a normal item to the menu
+    // append any kind of item (normal/check/radio/separator)
     void Append(int id,
                 const wxString& text,
                 const wxString& help = wxEmptyString,
-                bool isCheckable = FALSE)
+                wxItemKind kind = wxItem_Normal)
     {
-        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, isCheckable));
+        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, kind));
     }
 
     // append a separator to the menu
     void AppendSeparator() { Append(wxID_SEPARATOR, wxEmptyString); }
+
+    // append a check item
+    void AppendCheckItem(int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString)
+    {
+        Append(id, text, help, wxItem_Check);
+    }
+
+    // append a radio item
+    void AppendRadioItem(int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString)
+    {
+        Append(id, text, help, wxItem_Radio);
+    }
 
     // append a submenu
     void Append(int id,
@@ -105,19 +121,39 @@ public:
 
     // insert an item before given position
     bool Insert(size_t pos, wxMenuItem *item);
+
+    // insert an item before given position
     void Insert(size_t pos,
                 int id,
                 const wxString& text,
                 const wxString& help = wxEmptyString,
-                bool isCheckable = FALSE)
+                wxItemKind kind = wxItem_Normal)
     {
-        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, isCheckable));
+        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, kind));
     }
 
     // insert a separator
     void InsertSeparator(size_t pos)
     {
         Insert(pos, wxMenuItem::New((wxMenu *)this));
+    }
+
+    // insert a check item
+    void InsertCheckItem(size_t pos,
+                         int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString)
+    {
+        Insert(pos, id, text, help, wxItem_Check);
+    }
+
+    // insert a radio item
+    void InsertRadioItem(size_t pos,
+                         int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString)
+    {
+        Insert(pos, id, text, help, wxItem_Radio);
     }
 
     // insert a submenu
@@ -136,21 +172,38 @@ public:
         Insert(0u, item);
     }
 
+    // prepend any item to the menu
     void Prepend(int id,
                  const wxString& text,
                  const wxString& help = wxEmptyString,
-                 bool isCheckable = FALSE)
+                 wxItemKind kind = wxItem_Normal)
     {
-        Insert(0u, id, text, help, isCheckable);
+        Insert(0u, id, text, help, kind);
     }
 
-    // insert a separator
+    // prepend a separator
     void PrependSeparator()
     {
         InsertSeparator(0u);
     }
 
-    // insert a submenu
+    // prepend a check item
+    void PrependCheckItem(int id,
+                          const wxString& text,
+                          const wxString& help = wxEmptyString)
+    {
+        InsertCheckItem(0u, id, text, help);
+    }
+
+    // prepend a radio item
+    void PrependRadioItem(int id,
+                          const wxString& text,
+                          const wxString& help = wxEmptyString)
+    {
+        InsertRadioItem(0u, id, text, help);
+    }
+
+    // prepend a submenu
     void Prepend(int id,
                  const wxString& text,
                  wxMenu *submenu,
@@ -241,8 +294,51 @@ public:
     void SetParent(wxMenu *parent) { m_menuParent = parent; }
     wxMenu *GetParent() const { return m_menuParent; }
 
-#if WXWIN_COMPATIBILITY
+    // implementation only from now on
+    // -------------------------------
+
+    // unlike FindItem(), this function doesn't recurse but only looks through
+    // our direct children and also may return the index of the found child if
+    // pos != NULL
+    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
+
+    // called to generate a wxCommandEvent, return TRUE if it was processed,
+    // FALSE otherwise
+    //
+    // the checked parameter may have boolean value or -1 for uncheckable items
+    bool SendEvent(int id, int checked = -1);
+
     // compatibility: these functions are deprecated, use the new ones instead
+    // -----------------------------------------------------------------------
+
+    // use the versions taking wxItem_XXX now instead, they're more readable
+    // and allow adding the radio items as well
+    void Append(int id,
+                const wxString& text,
+                const wxString& help,
+                bool isCheckable)
+    {
+        Append(id, text, help, isCheckable ? wxItem_Check : wxItem_Normal);
+    }
+
+    void Insert(size_t pos,
+                int id,
+                const wxString& text,
+                const wxString& help,
+                bool isCheckable)
+    {
+        Insert(pos, id, text, help, isCheckable ? wxItem_Check : wxItem_Normal);
+    }
+
+    void Prepend(int id,
+                 const wxString& text,
+                 const wxString& help,
+                 bool isCheckable)
+    {
+        Insert(0u, id, text, help, isCheckable);
+    }
+
+#if WXWIN_COMPATIBILITY
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
 
@@ -259,17 +355,6 @@ public:
 
     wxFunction m_callback;
 #endif // wxUSE_MENU_CALLBACK
-
-    // unlike FindItem(), this function doesn't recurse but only looks through
-    // our direct children and also may return the index of the found child if
-    // pos != NULL
-    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
-
-    // called to generate a wxCommandEvent, return TRUE if it was processed,
-    // FALSE otherwise
-    //
-    // the checked parameter may have boolean value or -1 for uncheckable items
-    bool SendEvent(int id, int checked = -1);
 
 protected:
     // virtuals to override in derived classes

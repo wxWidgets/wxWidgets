@@ -55,6 +55,25 @@ WX_DEFINE_LIST(wxMenuItemList);
 // wxMenuItem
 // ----------------------------------------------------------------------------
 
+wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
+                               int id,
+                               const wxString& text,
+                               const wxString& help,
+                               wxItemKind kind,
+                               wxMenu *subMenu)
+              : m_text(text),
+                m_help(help)
+{
+    wxASSERT_MSG( parentMenu != NULL, wxT("menuitem should have a menu") );
+
+    m_parentMenu  = parentMenu;
+    m_subMenu     = subMenu;
+    m_isEnabled   = TRUE;
+    m_isChecked   = FALSE;
+    m_id          = id;
+    m_kind        = kind;
+}
+
 wxMenuItemBase::~wxMenuItemBase()
 {
     delete m_subMenu;

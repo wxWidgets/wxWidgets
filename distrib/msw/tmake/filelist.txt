@@ -807,6 +807,7 @@ encconv.h	WXH	Base
 event.h	WXH	Base
 expr.h	WXH
 fdrepdlg.h	WXH
+features.h	WXH	Base
 ffile.h	WXH	Base
 file.h	WXH	Base
 fileconf.h	WXH	Base

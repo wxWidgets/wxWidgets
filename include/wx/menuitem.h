@@ -41,7 +41,7 @@ public:
                            int id = wxID_SEPARATOR,
                            const wxString& text = wxEmptyString,
                            const wxString& help = wxEmptyString,
-                           bool isCheckable = FALSE,
+                           wxItemKind kind = wxItem_Normal,
                            wxMenu *subMenu = (wxMenu *)NULL);
 
     // destruction: wxMenuItem will delete its submenu
@@ -69,8 +69,10 @@ public:
     static wxString GetLabelFromText(const wxString& text);
 
     // what kind of menu item we are
-    virtual void SetCheckable(bool checkable) { m_isCheckable = checkable; }
-    bool IsCheckable() const { return m_isCheckable; }
+    wxItemKind GetKind() const { return m_kind; }
+
+    virtual void SetCheckable(bool checkable) { m_kind = wxItem_Check; }
+    bool IsCheckable() const { return m_kind == wxItem_Check; }
 
     bool IsSubMenu() const { return m_subMenu != NULL; }
     void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
@@ -105,18 +107,34 @@ public:
     void SetName(const wxString& str) { SetText(str); }
     const wxString& GetName() const { return GetText(); }
 
+    static wxMenuItem *New(wxMenu *parentMenu,
+                           int id,
+                           const wxString& text,
+                           const wxString& help,
+                           bool isCheckable,
+                           wxMenu *subMenu = (wxMenu *)NULL)
+    {
+        return New(parentMenu, id, text, help,
+                   isCheckable ? wxItem_Check : wxItem_Normal, subMenu);
+    }
+
 protected:
     int           m_id;             // numeric id of the item >= 0 or -1
     wxMenu       *m_parentMenu,     // the menu we belong to
                  *m_subMenu;        // our sub menu or NULL
     wxString      m_text,           // label of the item
                   m_help;           // the help string for the item
-    bool          m_isCheckable;    // can be checked?
+    wxItemKind    m_kind;           // seperator/normal/check/radio item?
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?
 
-    // some compilers need a default constructor here, do not remove
-    wxMenuItemBase() { }
+    // this ctor is for the derived classes only, we're never created directly
+    wxMenuItemBase(wxMenu *parentMenu = (wxMenu *)NULL,
+                   int id = wxID_SEPARATOR,
+                   const wxString& text = wxEmptyString,
+                   const wxString& help = wxEmptyString,
+                   wxItemKind kind = wxItem_Normal,
+                   wxMenu *subMenu = (wxMenu *)NULL);
 
 private:
     // and, if we have one ctor, compiler won't generate a default copy one, so

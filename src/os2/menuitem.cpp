@@ -110,11 +110,12 @@ wxMenuItem::wxMenuItem(
 , int                               nId
 , const wxString&                   rText
 , const wxString&                   rStrHelp
-, bool                              bCheckable
+, wxItemKind                        kind
 , wxMenu*                           pSubMenu
 )
+: wxMenuItemBase(pParentMenu, nId, rText, rStrHelp, kind, pSubMenu)
 #if wxUSE_OWNER_DRAWN
-:  wxOwnerDrawn( TextToLabel(rText)
+,  wxOwnerDrawn( TextToLabel(rText)
                 ,bCheckable
                )
 #endif // owner drawn
@@ -139,14 +140,8 @@ wxMenuItem::wxMenuItem(
     #undef  SYS_COLOR
 #endif // wxUSE_OWNER_DRAWN
 
-    m_parentMenu  = pParentMenu;
-    m_subMenu     = pSubMenu;
-    m_isEnabled   = TRUE;
-    m_isChecked   = FALSE;
-    m_id          = nId;
     m_text        = TextToLabel(rText);
-    m_isCheckable = bCheckable;
-    m_help        = rStrHelp;
+
     memset(&m_vMenuData, '\0', sizeof(m_vMenuData));
     m_vMenuData.id= nId;
 } // end of wxMenuItem::wxMenuItem
@@ -236,7 +231,7 @@ void wxMenuItem::Check(
 {
     bool                            bOk;
 
-    wxCHECK_RET( m_isCheckable, wxT("only checkable items may be checked") );
+    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
     if (m_isChecked == bCheck)
         return;
     if (bCheck)
@@ -359,7 +354,7 @@ wxMenuItem* wxMenuItemBase::New(
 , int                               nId
 , const wxString&                   rName
 , const wxString&                   rHelp
-, bool                              bIsCheckable
+, wxItemKind                        kind
 , wxMenu*                           pSubMenu
 )
 {
@@ -367,7 +362,7 @@ wxMenuItem* wxMenuItemBase::New(
                           ,nId
                           ,rName
                           ,rHelp
-                          ,bIsCheckable
+                          ,kind
                           ,pSubMenu
                          );
 } // end of wxMenuItemBase::New

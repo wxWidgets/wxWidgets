@@ -1397,20 +1397,10 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        int id,
                        const wxString& text,
                        const wxString& help,
-                       bool isCheckable,
+                       wxItemKind kind,
                        wxMenu *subMenu)
+          : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
-    m_id = id;
-    m_parentMenu = parentMenu;
-    m_subMenu = subMenu;
-
-    m_text = text;
-    m_help = help;
-
-    m_isCheckable = isCheckable;
-    m_isEnabled = TRUE;
-    m_isChecked = FALSE;
-
     m_posY =
     m_height = -1;
 
@@ -1474,7 +1464,7 @@ void wxMenuItem::SetText(const wxString& text)
 
 void wxMenuItem::SetCheckable(bool checkable)
 {
-    if ( checkable != m_isCheckable )
+    if ( checkable != IsCheckable() )
     {
         wxMenuItemBase::SetCheckable(checkable);
 
