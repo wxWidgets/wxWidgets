@@ -3,28 +3,28 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <set var="GENERIC_FILES">
+    <set var="GENERIC_DIALOGS_IN_NATIVE_BUILDS">
         <if cond="TOOLKIT=='MSW' and WXUNIV=='0' and SHARED=='0'">
-            ../../src/generic/colrdlgg.cpp
-            ../../src/generic/dirdlgg.cpp
-            ../../src/generic/filedlgg.cpp
-            ../../src/generic/fontdlgg.cpp
+            $(WXTOPDIR)src/generic/colrdlgg.cpp
+            $(WXTOPDIR)src/generic/dirdlgg.cpp
+            $(WXTOPDIR)src/generic/filedlgg.cpp
+            $(WXTOPDIR)src/generic/fontdlgg.cpp
         </if>
         <if cond="TOOLKIT=='MAC' and WXUNIV=='0' and SHARED=='0'">
-            ../../src/generic/colrdlgg.cpp
-            ../../src/generic/dirdlgg.cpp
-            ../../src/generic/filedlgg.cpp
+            $(WXTOPDIR)src/generic/colrdlgg.cpp
+            $(WXTOPDIR)src/generic/dirdlgg.cpp
+            $(WXTOPDIR)src/generic/filedlgg.cpp
         </if>
         <if cond="TOOLKIT=='PM' and WXUNIV=='0' and SHARED=='0'">
-            ../../src/generic/fontdlgg.cpp
-            ../../src/generic/filedlgg.cpp
+            $(WXTOPDIR)src/generic/fontdlgg.cpp
+            $(WXTOPDIR)src/generic/filedlgg.cpp
         </if>
     </set>
 
     <exe id="dialogs" template="wx_sample" template_append="wx_append">
         <sources>
             dialogs.cpp
-            $(GENERIC_FILES)
+            $(GENERIC_DIALOGS_IN_NATIVE_BUILDS)
         </sources>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
