@@ -132,7 +132,7 @@ private:
 
 class WXDLLEXPORT wxTextCtrlBase : public wxControl
 #ifndef NO_TEXT_WINDOW_STREAM
-                                 , public streambuf
+                                 , public wxSTD streambuf
 #endif
 
 {
