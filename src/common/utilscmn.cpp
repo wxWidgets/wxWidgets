@@ -180,14 +180,14 @@ extern "C"
 #endif  /* __WXMSW__ */
 
 
-char *
-copystring (const char *s)
+wxChar *
+copystring (const wxChar *s)
 {
-  if (s == NULL) s = "";
-  size_t len = strlen (s) + 1;
+  if (s == NULL) s = _T("");
+  size_t len = wxStrlen (s) + 1;
 
-  char *news = new char[len];
-  memcpy (news, s, len);    // Should be the fastest
+  wxChar *news = new wxChar[len];
+  memcpy (news, s, len * sizeof(wxChar));    // Should be the fastest
 
   return news;
 }
@@ -212,50 +212,50 @@ wxRegisterId (long id)
 }
 
 void
-StringToFloat (char *s, float *number)
+StringToFloat (wxChar *s, float *number)
 {
   if (s && *s && number)
-    *number = (float) strtod (s, (char **) NULL);
+    *number = (float) wxStrtod (s, (wxChar **) NULL);
 }
 
 void
-StringToDouble (char *s, double *number)
+StringToDouble (wxChar *s, double *number)
 {
   if (s && *s && number)
-    *number = strtod (s, (char **) NULL);
+    *number = wxStrtod (s, (wxChar **) NULL);
 }
 
-char *
-FloatToString (float number, const char *fmt)
+wxChar *
+FloatToString (float number, const wxChar *fmt)
 {
-  static char buf[256];
+  static wxChar buf[256];
 
 //  sprintf (buf, "%.2f", number);
-  sprintf (buf, fmt, number);
+  wxSprintf (buf, fmt, number);
   return buf;
 }
 
-char *
-DoubleToString (double number, const char *fmt)
+wxChar *
+DoubleToString (double number, const wxChar *fmt)
 {
-  static char buf[256];
+  static wxChar buf[256];
 
-  sprintf (buf, fmt, number);
+  wxSprintf (buf, fmt, number);
   return buf;
 }
 
 void
-StringToInt (char *s, int *number)
+StringToInt (wxChar *s, int *number)
 {
   if (s && *s && number)
-    *number = (int) strtol (s, (char **) NULL, 10);
+    *number = (int) wxStrtol (s, (wxChar **) NULL, 10);
 }
 
 void
-StringToLong (char *s, long *number)
+StringToLong (wxChar *s, long *number)
 {
   if (s && *s && number)
-    *number = strtol (s, (char **) NULL, 10);
+    *number = wxStrtol (s, (wxChar **) NULL, 10);
 }
 
 wxChar *
@@ -369,25 +369,25 @@ wxString wxNow( void )
  * Strip out any menu codes
  */
 
-char *wxStripMenuCodes (char *in, char *out)
+wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
 {
   if (!in)
-    return (char *) NULL;
+    return (wxChar *) NULL;
 
   if (!out)
     out = copystring(in);
 
-  char *tmpOut = out;
+  wxChar *tmpOut = out;
 
   while (*in)
     {
-      if (*in == '&')
+      if (*in == _T('&'))
         {
           // Check && -> &, &x -> x
-          if (*++in == '&')
+          if (*++in == _T('&'))
             *out++ = *in++;
         }
-      else if (*in == '\t')
+      else if (*in == _T('\t'))
         {
           // Remove all stuff after \t in X mode, and let the stuff as is
           // in Windows mode.
@@ -399,7 +399,7 @@ char *wxStripMenuCodes (char *in, char *out)
         *out++ = *in++;
     }                                // while
 
-  *out = '\0';
+  *out = _T('\0');
 
   return tmpOut;
 }
