@@ -223,7 +223,7 @@ void MyTextCtrl::LogEvent(const char *name, wxKeyEvent& event) const
 {
     wxString key;
     long keycode = event.KeyCode();
-    if ( isascii((int)keycode) )
+    if ( isprint((int)keycode) )
         key.Printf("'%c'", (char)keycode);
     else
     {
@@ -235,7 +235,6 @@ void MyTextCtrl::LogEvent(const char *name, wxKeyEvent& event) const
             case WXK_ESCAPE: key = "ESCAPE"; break;
             case WXK_SPACE: key = "SPACE"; break;
             case WXK_DELETE: key = "DELETE"; break;
-
             case WXK_START: key = "START"; break;
             case WXK_LBUTTON: key = "LBUTTON"; break;
             case WXK_RBUTTON: key = "RBUTTON"; break;
