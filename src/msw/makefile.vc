@@ -17,6 +17,10 @@
 #
 !include <..\makevc.env>
 
+!if "$(RM)" == ""
+RM= erase
+!endif
+
 THISDIR=$(WXWIN)\src\msw
 
 !if "$(WXMAKINGDLL)" == "1"
@@ -429,7 +433,7 @@ pch1:   dirs $(DUMMYOBJ)
 ### Static library
 
 $(WXDIR)\lib\$(WXLIBNAME).lib:      $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
-	-erase $(LIBTARGET)
+	-$(RM) $(LIBTARGET)
 	$(implib) @<<
 -out:$@
 -machine:$(CPU)
@@ -631,36 +635,37 @@ rcparser:
     cd $(WXDIR)\src\msw
 
 cleanall: clean clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).pdb
-        -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).ilk
+        -$(RM) ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
+        -$(RM) ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
+        -$(RM) ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
+        -$(RM) ..\..\lib\wx$(WXVERSION)$(LIBEXT).pdb
+        -$(RM) ..\..\lib\wx$(WXVERSION)$(LIBEXT).ilk
 
 
 clean: $(PERIPH_CLEAN_TARGET)
-        -erase $(LIBTARGET)
-        -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
-        -erase *.pdb
-        -erase *.sbr
-        -erase $(WXLIBNAME).pch
-        -erase $(GENDIR)\$D\*.obj
-        -erase $(GENDIR)\$D\*.pdb
-        -erase $(GENDIR)\$D\*.sbr
-        -erase $(COMMDIR)\$D\*.obj
-        -erase $(COMMDIR)\$D\*.pdb
-        -erase $(COMMDIR)\$D\*.sbr
-        -erase $(COMMDIR)\y_tab.c
-        -erase $(COMMDIR)\lex_yy.c
-        -erase $(MSWDIR)\$D\*.obj
-        -erase $(MSWDIR)\$D\*.sbr
-        -erase $(MSWDIR)\$D\*.pdb
-        -erase $(OLEDIR)\$D\*.obj
-        -erase $(OLEDIR)\$D\*.sbr
-        -erase $(OLEDIR)\$D\*.pdb
-        -erase $(HTMLDIR)\$D\*.obj
-        -erase $(HTMLDIR)\$D\*.sbr
-        -erase $(HTMLDIR)\$D\*.pdb
+        -$(RM) $(LIBTARGET)
+        -$(RM) $(WXDIR)\lib\$(WXLIBNAME).pdb
+        -$(RM) *.pdb
+        -$(RM) *.sbr
+        -$(RM) $(WXLIBNAME).pch
+        -$(RM) $(GENDIR)\$D\*.obj
+        -$(RM) $(GENDIR)\$D\*.pdb
+        -$(RM) $(GENDIR)\$D\*.sbr
+        -$(RM) $(COMMDIR)\$D\*.obj
+        -$(RM) $(COMMDIR)\$D\*.pdb
+        -$(RM) $(COMMDIR)\$D\*.sbr
+        -$(RM) $(COMMDIR)\y_tab.c
+        -$(RM) $(COMMDIR)\lex_yy.c
+        -$(RM) $(MSWDIR)\$D\*.obj
+        -$(RM) $(MSWDIR)\$D\*.sbr
+        -$(RM) $(MSWDIR)\$D\*.pdb
+        -$(RM) $(OLEDIR)\$D\*.obj
+        -$(RM) $(OLEDIR)\$D\*.sbr
+        -$(RM) $(OLEDIR)\$D\*.pdb
+        -$(RM) $(HTMLDIR)\$D\*.obj
+        -$(RM) $(HTMLDIR)\$D\*.sbr
+        -$(RM) $(HTMLDIR)\$D\*.pdb
+        -$(RM) $(D)\*.pch
         -rmdir $(D)
         -rmdir ole\$(D)
         -rmdir ..\generic\$(D)
@@ -707,17 +712,17 @@ allpdfrtf: pdfrtf
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
         cd $(DOCDIR)/latex/wx
-        -erase wx.ph
+        -$(RM) wx.ph
         hc wx
-        -erase $(DOCDIR)\winhelp\wx.hlp
-        -erase $(DOCDIR)\winhelp\wx.cnt
+        -$(RM) $(DOCDIR)\winhelp\wx.hlp
+        -$(RM) $(DOCDIR)\winhelp\wx.cnt
         move wx.hlp $(DOCDIR)\winhelp\wx.hlp
         move wx.cnt $(DOCDIR)\winhelp\wx.cnt
         cd $(THISDIR)
 
 $(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
         cd $(DOCDIR)/latex/techref
-        -erase techref.ph
+        -$(RM) techref.ph
         hc techref
         move techref.hlp $(DOCDIR)\winhelp\techref.hlp
         move techref.cnt $(DOCDIR)\winhelp\techref.cnt
@@ -752,17 +757,17 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
         -mkdir $(DOCDIR)\html\wx
         copy *.gif $(DOCDIR)\html\wx
         -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
-        -erase $(DOCDIR)\html\wx\*.con
-        -erase $(DOCDIR)\html\wx\*.ref
-        -erase $(DOCDIR)\latex\wx\*.con
-        -erase $(DOCDIR)\latex\wx\*.ref
+        -$(RM) $(DOCDIR)\html\wx\*.con
+        -$(RM) $(DOCDIR)\html\wx\*.ref
+        -$(RM) $(DOCDIR)\latex\wx\*.con
+        -$(RM) $(DOCDIR)\latex\wx\*.ref
          cd $(THISDIR)
 
 $(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
 	cd $(DOCDIR)\html\wx
 	-hhc wx.hhp
     -mkdir ..\..\htmlhelp
-    -erase $(DOCDIR)\htmlhelp\wx.chm
+    -$(RM) $(DOCDIR)\htmlhelp\wx.chm
     move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
@@ -804,7 +809,7 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 # Optionally, a cached version of the .hhp file can be generated with hhp2cached.
 $(DOCDIR)\htb\wx.htb: $(DOCDIR)\html\wx\wx.htm
 	cd $(WXDIR)\docs\html\wx
-    -erase wx.zip wx.htb
+    -$(RM) wx.zip wx.htb
     zip wx.zip *.htm *.gif *.hhp *.hhc *.hhk
     -mkdir $(DOCDIR)\htb
     move wx.zip $(DOCDIR)\htb\wx.htb
@@ -817,14 +822,14 @@ touchmanual:
 updatedocs: touchmanual alldocs
 
 cleandocs:
-    -erase $(DOCDIR)\winhelp\wx.hlp
-    -erase $(DOCDIR)\winhelp\wx.cnt
-    -erase $(DOCDIR)\html\wx\*.htm
-    -erase $(DOCDIR)\pdf\wx.rtf
-    -erase $(DOCDIR)\latex\wx\wx.rtf
-    -erase $(DOCDIR)\latex\wx\WX.PH
-    -erase $(DOCDIR)\htmlhelp\wx.chm
-    -erase $(DOCDIR)\htb\wx.htb
+    -$(RM) $(DOCDIR)\winhelp\wx.hlp
+    -$(RM) $(DOCDIR)\winhelp\wx.cnt
+    -$(RM) $(DOCDIR)\html\wx\*.htm
+    -$(RM) $(DOCDIR)\pdf\wx.rtf
+    -$(RM) $(DOCDIR)\latex\wx\wx.rtf
+    -$(RM) $(DOCDIR)\latex\wx\WX.PH
+    -$(RM) $(DOCDIR)\htmlhelp\wx.chm
+    -$(RM) $(DOCDIR)\htb\wx.htb
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
