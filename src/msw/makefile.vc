@@ -124,6 +124,7 @@ GENERICOBJS= $(GENDIR)\$D\busyinfo.obj \
 # but sometimes it's useful to do so for testing purposes.
 NONESSENTIALOBJS= $(GENDIR)\$D\colrdlgg.obj \
 		$(GENDIR)\$D\dirdlgg.obj \
+		$(GENDIR)\$D\filedlgg.obj \
 		$(GENDIR)\$D\fontdlgg.obj \
 		$(GENDIR)\$D\helpext.obj \
 		$(GENDIR)\$D\helphtml.obj \
@@ -848,11 +849,11 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
 
 $(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.hhp
 	cd $(DOCDIR)\mshtml\wx
-    copy $(DOCDIR)\latex\wx\wx.css .
+	copy $(DOCDIR)\latex\wx\wx.css .
 	-hhc wx.hhp
-    -mkdir ..\..\htmlhelp
-    -erase $(DOCDIR)\htmlhelp\wx.chm
-    move wx.chm ..\..\htmlhelp
+	-mkdir ..\..\htmlhelp
+	-erase $(DOCDIR)\htmlhelp\wx.chm
+	move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
