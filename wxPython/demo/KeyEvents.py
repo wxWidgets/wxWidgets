@@ -197,22 +197,27 @@ class KeySink(wx.Window):
 #----------------------------------------------------------------------
 
 class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
+    colHeaders = [ "Event Type",
+                   "Key Name", 
+                   "Key Code",   
+                   "Modifiers",
+                   "Unicode",    
+                   "RawKeyCode",
+                   "RawKeyFlags",
+                   ]     
 
     def __init__(self, parent):
         wx.ListCtrl.__init__(self, parent, -1,
                             style = wx.LC_REPORT|wx.LC_VRULES|wx.LC_HRULES)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
 
-        self.InsertColumn(0, "Event Type")
-        self.InsertColumn(1, "Key Name")
-        self.InsertColumn(2, "Key Code")
-        self.InsertColumn(3, "Modifiers")
-        self.InsertColumn(4, "Unicode")
-        self.InsertColumn(5, "RawKeyCode")
-        self.InsertColumn(6, "RawKeyFlags")
-        self.InsertColumn(7, "")
+        for idx, header in enumerate(self.colHeaders):
+            self.InsertColumn(idx, header)
+        idx += 1
+        print idx
+        self.InsertColumn(idx, "")
 
-        for x in range(7):
+        for x in range(idx):
             self.SetColumnWidth(x, wx.LIST_AUTOSIZE_USEHEADER)
 
         self.SetColumnWidth(1, 125)
@@ -258,6 +263,32 @@ class KeyLog(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def ClearLog(self):
         self.DeleteAllItems()
 
+    def CopyLog(self):
+        # build a newline and tab delimited string to put into the clipboard
+        if "unicode" in wx.PlatformInfo:
+            st = u""
+        else:
+            st = ""
+        for h in self.colHeaders:
+            st += h + "\t"
+        st += "\n"
+
+        for idx in range(self.GetItemCount()):
+            for col in range(self.GetColumnCount()):
+                item = self.GetItem(idx, col)
+                st += item.GetText() + "\t"
+            st += "\n"
+
+        data = wx.TextDataObject()
+        data.SetText(st)
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Close()
+        else:
+            wx.MessageBox("Unable to open the clipboard", "Error")
+       
+        
+
 
 #----------------------------------------------------------------------
 
@@ -270,26 +301,30 @@ class TestPanel(wx.Panel):
         self.keysink.SetMinSize((100, 65))
         self.keylog = KeyLog(self)
 
-        btn = wx.Button(self, -1, "Clear Log")
+        btn = wx.Button(self, -1, "Clear", style=wx.BU_EXACTFIT)
         self.Bind(wx.EVT_BUTTON, self.OnClearBtn, btn)
 
-        cb1 = wx.CheckBox(self, -1, "Call evt.Skip for Key Up/Dn events")
+        btn2 = wx.Button(self, -1, "Copy", style=wx.BU_EXACTFIT)
+        self.Bind(wx.EVT_BUTTON, self.OnCopyBtn, btn2)
+
+        cb1 = wx.CheckBox(self, -1, "Call evt.Skip in Key* events")
         self.Bind(wx.EVT_CHECKBOX, self.OnSkipCB, cb1)
 
-        cb2 = wx.CheckBox(self, -1, "EVT_KEY_UP")
+        cb2 = wx.CheckBox(self, -1, "KEY_UP")
         self.Bind(wx.EVT_CHECKBOX, self.OnKeyUpCB, cb2)
         cb2.SetValue(True)
 
-        cb3 = wx.CheckBox(self, -1, "EVT_KEY_DOWN")
+        cb3 = wx.CheckBox(self, -1, "KEY_DOWN")
         self.Bind(wx.EVT_CHECKBOX, self.OnKeyDnCB, cb3)
         cb3.SetValue(True)
 
-        cb4 = wx.CheckBox(self, -1, "EVT_CHAR")
+        cb4 = wx.CheckBox(self, -1, "CHAR")
         self.Bind(wx.EVT_CHECKBOX, self.OnCharCB, cb4)
         cb4.SetValue(True)
 
         buttons = wx.BoxSizer(wx.HORIZONTAL)
         buttons.Add(btn, 0, wx.ALL, 4)
+        buttons.Add(btn2, 0, wx.ALL, 4)
         buttons.Add(cb1, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 6)
         buttons.Add(cb2, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 6)
         buttons.Add(cb3, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 6)
@@ -305,6 +340,9 @@ class TestPanel(wx.Panel):
 
     def OnClearBtn(self, evt):
         self.keylog.ClearLog()
+
+    def OnCopyBtn(self, evt):
+        self.keylog.CopyLog()
 
     def OnSkipCB(self, evt):
         self.keysink.SetCallSkip(evt.GetInt())
