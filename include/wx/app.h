@@ -595,8 +595,7 @@ public:
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     // we need HINSTANCE declaration to define WinMain()
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
+    #include "wx/msw/wrapwin.h"
 
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry(HINSTANCE hInstance,                               \
