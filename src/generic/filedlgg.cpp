@@ -28,9 +28,13 @@
 #pragma hdrstop
 #endif
 
+#ifdef __EMX__
+#define __OS2__
+#endif
+
 #if wxUSE_FILEDLG
 
-#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__)
+#if !defined(__UNIX__) && !defined(__DOS__) && !defined(__WIN32__) && !defined(__OS2__)
 #error wxFileDialog currently only supports Unix, win32 and DOS
 #endif
 
@@ -419,15 +423,15 @@ int ListCompare( long data1, long data2, long WXUNUSED(data))
      return wxStrcmp( fd1->GetName(), fd2->GetName() );
 }
 
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__OS2__)
 #define IsTopMostDir(dir)   (dir == wxT("/"))
 #endif
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined (__OS2__)
 #define IsTopMostDir(dir)   (dir.IsEmpty())
 #endif
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
 extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif
 
@@ -440,7 +444,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     m_name = name;
     m_fileName = fname;
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
     // VS: In case the file is root directory of a volume (e.g. "C:"),
     //     we don't want it stat()ed, since the drive may not be in:
     if (name.length() == 2 && name[1u] == wxT(':'))
@@ -455,7 +459,7 @@ wxFileData::wxFileData( const wxString &name, const wxString &fname )
     wxStructStat buff;
     wxStat( m_fileName, &buff );
 
-#if defined(__UNIX__) && (!defined( __EMX__ ) && !defined(__VMS))
+#if defined(__UNIX__) && (!defined( __OS2__ ) && !defined(__VMS))
     struct stat lbuff;
     lstat( m_fileName.fn_str(), &lbuff );
     m_isLink = S_ISLNK( lbuff.st_mode );
@@ -697,8 +701,10 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
 void wxFileCtrl::UpdateFiles()
 {
     // don't do anything before ShowModal() call which sets m_dirName
+#ifndef __OS2__
     if ( m_dirName.empty() )
         return;
+#endif
 
     wxBusyCursor bcur; // this may take a while...
 
@@ -729,7 +735,7 @@ void wxFileCtrl::UpdateFiles()
     item.m_itemId = 0;
     item.m_col = 0;
 
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
     if ( IsTopMostDir(m_dirName) )
     {
         // Pseudo-directory with all available drives listed...
@@ -753,7 +759,7 @@ void wxFileCtrl::UpdateFiles()
         if ( !IsTopMostDir(m_dirName) )
         {
             wxString p(wxPathOnly(m_dirName));
-#ifdef __UNIX__
+#if defined(__UNIX__) && !defined(__OS2__)
             if (p.IsEmpty()) p = wxT("/");
 #endif
             fd = new wxFileData( wxT(".."), p );
@@ -762,7 +768,7 @@ void wxFileCtrl::UpdateFiles()
         }
 
         wxString dirname(m_dirName);
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
         if (dirname.length() == 2 && dirname[1u] == wxT(':'))
             dirname << wxT('\\');
 #endif
@@ -770,7 +776,9 @@ void wxFileCtrl::UpdateFiles()
 
         if ( dir.IsOpened() )
         {
-            wxString dirPrefix(dirname + wxFILE_SEP_PATH);
+            wxString dirPrefix(dirname);
+	    if (!wxIsPathSeparator(dirPrefix.Last()))
+                dirPrefix << wxFILE_SEP_PATH;
             int hiddenFlag = m_showHidden ? wxDIR_HIDDEN : 0;
 
             bool cont;
@@ -816,7 +824,7 @@ void wxFileCtrl::UpdateFiles()
     // Finally, enable/disable context-dependent controls:
     if ( m_goToParentControl )
         m_goToParentControl->Enable(!IsTopMostDir(m_dirName));
-#if defined(__DOS__) || defined(__WINDOWS__)
+#if defined(__DOS__) || defined(__WINDOWS__) || defined(__OS2__)
     if ( m_newDirControl )
         m_newDirControl->Enable(!IsTopMostDir(m_dirName));
 #endif
@@ -883,7 +891,10 @@ void wxFileCtrl::GoToParentDir()
             m_dirName.Remove( len-1, 1 );
         wxString fname( wxFileNameFromPath(m_dirName) );
         m_dirName = wxPathOnly( m_dirName );
-#ifdef __UNIX__
+#if defined(__OS2__)
+        if (!m_dirName.IsEmpty() && fname.IsEmpty())
+            m_dirName = wxT("");
+#elif defined(__UNIX__)
         if (m_dirName.IsEmpty())
             m_dirName = wxT("/");
 #endif
