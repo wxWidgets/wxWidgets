@@ -35,6 +35,8 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 
+static bool   gs_typedSelection = FALSE;
+
 //-----------------------------------------------------------------------------
 // "select-child" - click/cursor get select-child, changed, select-child
 //-----------------------------------------------------------------------------
@@ -45,16 +47,24 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!combo->m_hasVMT) return;
-
+    
     if (g_blockEventsOnDrag) return;
 
+    if (!gs_typedSelection)
+    {
+        
     if (combo->m_alreadySent)
     {
         combo->m_alreadySent = FALSE;
         return;
     }
-
+        
     combo->m_alreadySent = TRUE;
+    }
+    else
+    {
+        gs_typedSelection = FALSE;
+    }
 
     int curSelection = combo->GetSelection();
 
@@ -86,6 +96,15 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 
     if (!combo->m_hasVMT) return;
 
+     if ((combo->FindString(combo->GetValue()) != wxNOT_FOUND) && !combo->m_alreadySent)
+     {
+         gs_typedSelection = TRUE;
+         
+         // Do we send a TEXT_UPDATE event if we send a CMOBOBOX event 
+         // anyways? I think so.
+         // return;
+     }
+        
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );
@@ -155,9 +174,9 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     ConnectWidget( GTK_COMBO(m_widget)->button );
 
-    // MSW's combo box starts empty
+    // MSW's combo box shows the value and the selection is -1
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-    gtk_entry_set_text( GTK_ENTRY(entry), "" );
+    gtk_entry_set_text( GTK_ENTRY(entry), wxGTK_CONV(value) );
 
     if (style & wxCB_READONLY)
         gtk_entry_set_editable( GTK_ENTRY( GTK_COMBO(m_widget)->entry ), FALSE );
